@@ -12,9 +12,10 @@ import type { BridgeEdge } from './edge.js';
 import {
   DIMENSION_RENAMES,
   SYNONYM_GROUPS,
-  SynonymDisagreementError,
+  synonymDisagreement,
   type DimensionRename,
 } from '../dimensional/formula-names.js';
+import { foldName } from '../dimensional/quantity-registry.js';
 
 /**
  * The one name table.
@@ -91,7 +92,7 @@ export function editDistance(a: string, b: string): number {
   return prev[n]!;
 }
 
-const fold = (s: string): string => s.toLowerCase().replace(/_/g, '-');
+const fold = (s: string): string => foldName(s.toLowerCase());
 
 /**
  * Catalog names within one edit of `query`. A shared token such as
@@ -160,15 +161,9 @@ export function collapseSynonymGovernors(
     const present = group.filter((n) => names.includes(n));
     if (present.length < 2) continue;
     if (values !== null) {
-      const nums = present.map((n) => values[n]);
-      if (nums.some((n) => n === undefined)) continue;
-      const first = nums[0]!;
-      if (nums.some((n) => n !== first)) {
-        const shown = present.map((n) => `${n}=${values[n]}`).join(', ');
-        throw new SynonymDisagreementError(
-          `${present.join(' and ')} are one quantity and disagree (${shown})`,
-        );
-      }
+      if (present.some((n) => values[n] === undefined)) continue;
+      const disagreement = synonymDisagreement(present, values);
+      if (disagreement !== null) throw disagreement;
     }
     const sources = present.filter((n) => sourceNames.has(n));
     const keep = sources[0] ?? present[0]!;

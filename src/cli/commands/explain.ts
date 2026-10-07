@@ -22,7 +22,7 @@ import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
 import { readNamedBinding } from '../../numerical/binding-value.js';
 import { UnitError } from '../../dimensional/units.js';
-import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
+import { constantRecord } from '../../dimensional/symbolic-constants.js';
 import {
   aliasesForTarget,
   nearQuantityNames,
@@ -209,9 +209,6 @@ function valuesAgree(a: number | undefined, b: number | undefined): boolean | un
   return Math.abs(a - b) / scale <= 1e-6;
 }
 
-/** Extra spellings of a registered constant, beside its registry name. */
-const CONSTANT_ALIASES: Readonly<Record<string, string>> = { 'wien-constant': 'b', 'stefan-boltzmann-constant': 'sigma_sb' };
-
 /** Relative tolerance within which a stated constant agrees with the registered value (textbook roundings such as 2.9e-3 pass). */
 const CONSTANT_AGREEMENT = 5e-3;
 
@@ -221,8 +218,7 @@ const CONSTANT_AGREEMENT = 5e-3;
  * value is checked against it rather than bound.
  */
 function constantNamed(key: string): string | null {
-  const name = CONSTANT_ALIASES[key] ?? key;
-  return Object.hasOwn(CONSTANTS, name) ? name : null;
+  return constantRecord(key)?.name ?? null;
 }
 
 function rebind(
@@ -246,7 +242,7 @@ function rebind(
     if (resolveQuantityName(key, graphNames, aliases) === null) {
       const constant = constantNamed(key);
       if (constant !== null) {
-        const registered = CONSTANTS[constant]!.value;
+        const registered = constantRecord(constant)!.value;
         if (Math.abs(value - registered) > CONSTANT_AGREEMENT * Math.abs(registered)) {
           throw new CliError(
             `upt explain: '${key}' is the registered constant ${constant} = ${registered}; ` +

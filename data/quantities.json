@@ -20,7 +20,7 @@
     },
     {
       "id": "acdrude-conduct",
-      "symbol": "Re \u03c3",
+      "symbol": "Re σ",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -56,7 +56,7 @@
     },
     {
       "id": "acdrude-radian",
-      "symbol": "\u03c9",
+      "symbol": "ω",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -74,7 +74,7 @@
     },
     {
       "id": "acdrude-scatter",
-      "symbol": "\u03c4",
+      "symbol": "τ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -92,7 +92,7 @@
     },
     {
       "id": "active-noise-energy",
-      "symbol": "\u03a3_active",
+      "symbol": "Σ_active",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -145,7 +145,7 @@
     },
     {
       "id": "ambegaokar-gap",
-      "symbol": "\u0394",
+      "symbol": "Δ",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -181,7 +181,7 @@
     },
     {
       "id": "anthropic-model-parameter",
-      "symbol": "\u03b1_anth",
+      "symbol": "α_anth",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -198,7 +198,7 @@
     },
     {
       "id": "anthropic-probability",
-      "symbol": "P(\u039b)",
+      "symbol": "P(Λ)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -215,7 +215,7 @@
     },
     {
       "id": "area-law-coefficient",
-      "symbol": "\u03b1",
+      "symbol": "α",
       "dimension": {
         "L": -1,
         "M": 0,
@@ -251,7 +251,7 @@
     },
     {
       "id": "attempt-frequency",
-      "symbol": "\u03bd\u2080",
+      "symbol": "ν₀",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -268,7 +268,7 @@
     },
     {
       "id": "barrier-height",
-      "symbol": "V\u2212E",
+      "symbol": "V−E",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -302,7 +302,7 @@
     },
     {
       "id": "bcs-heat-jump",
-      "symbol": "\u0394C/C_n",
+      "symbol": "ΔC/C_n",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -320,7 +320,7 @@
     },
     {
       "id": "bcs-quartic",
-      "symbol": "\u03b6",
+      "symbol": "ζ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -447,7 +447,7 @@
     },
     {
       "id": "blochlaw-deficit",
-      "symbol": "\u0394M",
+      "symbol": "ΔM",
       "dimension": {
         "L": -1,
         "M": 0,
@@ -483,7 +483,7 @@
     },
     {
       "id": "blochlaw-mub",
-      "symbol": "\u03bc_B",
+      "symbol": "μ_B",
       "dimension": {
         "L": 2,
         "M": 0,
@@ -520,7 +520,7 @@
     },
     {
       "id": "blochlaw-zeta",
-      "symbol": "\u03b6(3/2)",
+      "symbol": "ζ(3/2)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -666,7 +666,7 @@
     },
     {
       "id": "brane-tension",
-      "symbol": "\u03c3",
+      "symbol": "σ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -829,7 +829,7 @@
     },
     {
       "id": "capacitor-voltage-variance",
-      "symbol": "\u27e8v\u00b2\u27e9",
+      "symbol": "⟨v²⟩",
       "dimension": {
         "L": 4,
         "M": 2,
@@ -1121,7 +1121,7 @@
     },
     {
       "id": "coax-liner",
-      "symbol": "\u03b5",
+      "symbol": "ε",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -1246,7 +1246,7 @@
     },
     {
       "id": "comb-dielectric",
-      "symbol": "\u03b5",
+      "symbol": "ε",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -1318,7 +1318,7 @@
     },
     {
       "id": "composite-higgs-alpha",
-      "symbol": "\u03b1",
+      "symbol": "α",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1336,7 +1336,7 @@
     },
     {
       "id": "composite-higgs-beta",
-      "symbol": "\u03b2",
+      "symbol": "β",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1372,7 +1372,7 @@
     },
     {
       "id": "conditional-probability",
-      "symbol": "p(s\u0303|s)",
+      "symbol": "p(s̃|s)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1407,7 +1407,7 @@
     },
     {
       "id": "cosmological-constant-curvature",
-      "symbol": "\u039b",
+      "symbol": "Λ",
       "dimension": {
         "L": -2,
         "M": 0,
@@ -1426,7 +1426,7 @@
     },
     {
       "id": "cosmological-constant-dimensionless",
-      "symbol": "\u03bb",
+      "symbol": "λ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1444,7 +1444,7 @@
     },
     {
       "id": "einstein-coupling-prefactor-squared",
-      "symbol": "(c\u2074/8\u03c0G)\u00b2",
+      "symbol": "(c⁴/8πG)²",
       "dimension": {
         "L": 2,
         "M": 2,
@@ -1461,7 +1461,7 @@
     },
     {
       "id": "critical-density",
-      "symbol": "\u03c1_crit",
+      "symbol": "ρ_crit",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -1479,7 +1479,7 @@
     },
     {
       "id": "cross-field-alpha",
-      "symbol": "\u03b1",
+      "symbol": "α",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1497,7 +1497,7 @@
     },
     {
       "id": "cross-field-ratio",
-      "symbol": "D_\u22a5/D_\u2225",
+      "symbol": "D_⊥/D_∥",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1551,7 +1551,7 @@
     },
     {
       "id": "curie-magneton",
-      "symbol": "\u03bc_B",
+      "symbol": "μ_B",
       "dimension": {
         "L": 2,
         "M": 0,
@@ -1606,7 +1606,7 @@
     },
     {
       "id": "curie-weiss-susceptibility",
-      "symbol": "\u03c7",
+      "symbol": "χ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1624,7 +1624,7 @@
     },
     {
       "id": "cutoff-cyclotron",
-      "symbol": "\u03c9_c",
+      "symbol": "ω_c",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1642,7 +1642,7 @@
     },
     {
       "id": "cutoff-plasma",
-      "symbol": "\u03c9_p",
+      "symbol": "ω_p",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1660,7 +1660,7 @@
     },
     {
       "id": "cutoff-r-frequency",
-      "symbol": "\u03c9_R",
+      "symbol": "ω_R",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1732,7 +1732,7 @@
     },
     {
       "id": "damping-zeta",
-      "symbol": "\u03b6",
+      "symbol": "ζ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1769,7 +1769,7 @@
     },
     {
       "id": "dark-reaction-rate-coefficient",
-      "symbol": "\u27e8\u03c3v\u27e9_dark",
+      "symbol": "⟨σv⟩_dark",
       "dimension": {
         "L": 3,
         "M": 0,
@@ -1786,7 +1786,7 @@
     },
     {
       "id": "dark-species-density",
-      "symbol": "n_\u03c7",
+      "symbol": "n_χ",
       "dimension": {
         "L": -3,
         "M": 0,
@@ -1803,7 +1803,7 @@
     },
     {
       "id": "darwinism-decay-exponent",
-      "symbol": "\u03b2_QD",
+      "symbol": "β_QD",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1820,7 +1820,7 @@
     },
     {
       "id": "darwinism-magnitude",
-      "symbol": "\u03b1_QD",
+      "symbol": "α_QD",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1873,7 +1873,7 @@
     },
     {
       "id": "debye-cutoff-frequency",
-      "symbol": "\u03c9_D",
+      "symbol": "ω_D",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1928,7 +1928,7 @@
     },
     {
       "id": "debye-sphere-argument",
-      "symbol": "\u039b",
+      "symbol": "Λ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1964,7 +1964,7 @@
     },
     {
       "id": "debye-sphere-length",
-      "symbol": "\u03bb_D",
+      "symbol": "λ_D",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -2001,7 +2001,7 @@
     },
     {
       "id": "debye-theta",
-      "symbol": "\u03b8_D",
+      "symbol": "θ_D",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2020,7 +2020,7 @@
     },
     {
       "id": "decoherence-rate",
-      "symbol": "\u0393_dec",
+      "symbol": "Γ_dec",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2069,7 +2069,7 @@
     },
     {
       "id": "deflection-angle",
-      "symbol": "\u03b1",
+      "symbol": "α",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2231,7 +2231,7 @@
     },
     {
       "id": "dynamic-viscosity",
-      "symbol": "\u03bc",
+      "symbol": "μ",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -2380,7 +2380,7 @@
     },
     {
       "id": "einstein-theta",
-      "symbol": "\u03b8_E",
+      "symbol": "θ_E",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2399,7 +2399,7 @@
     },
     {
       "id": "electrical-mobility",
-      "symbol": "\u03bc",
+      "symbol": "μ",
       "dimension": {
         "L": 0,
         "M": -1,
@@ -2418,7 +2418,7 @@
     },
     {
       "id": "entanglement-entropy-variation",
-      "symbol": "\u03b4S_EE",
+      "symbol": "δS_EE",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2546,7 +2546,7 @@
     },
     {
       "id": "fast-magnetosonic-speed",
-      "symbol": "|\u03c9/k|",
+      "symbol": "|ω/k|",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -2654,7 +2654,7 @@
     },
     {
       "id": "fermioffset-muoff",
-      "symbol": "\u0394E",
+      "symbol": "ΔE",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -2691,7 +2691,7 @@
     },
     {
       "id": "filling-fraction",
-      "symbol": "\u03bd",
+      "symbol": "ν",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2709,7 +2709,7 @@
     },
     {
       "id": "fin-adiabatic",
-      "symbol": "\u03b7",
+      "symbol": "η",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2801,7 +2801,7 @@
     },
     {
       "id": "firehose-beta-parallel",
-      "symbol": "\u03b2_\u2225",
+      "symbol": "β_∥",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2819,7 +2819,7 @@
     },
     {
       "id": "firehose-beta-perp",
-      "symbol": "\u03b2_\u22a5",
+      "symbol": "β_⊥",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2837,7 +2837,7 @@
     },
     {
       "id": "firehose-margin",
-      "symbol": "\u03b2_\u2225\u2212\u03b2_\u22a5",
+      "symbol": "β_∥−β_⊥",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -2976,7 +2976,7 @@
     },
     {
       "id": "fret-efficiency",
-      "symbol": "\u03b7",
+      "symbol": "η",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3012,7 +3012,7 @@
     },
     {
       "id": "gl-kappa",
-      "symbol": "\u03ba",
+      "symbol": "κ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3030,7 +3030,7 @@
     },
     {
       "id": "gl-trial-factor",
-      "symbol": "1/\u03ba\u00b2\u22122",
+      "symbol": "1/κ²−2",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3122,7 +3122,7 @@
     },
     {
       "id": "gradb-drift",
-      "symbol": "v_\u2207B",
+      "symbol": "v_∇B",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -3158,7 +3158,7 @@
     },
     {
       "id": "gradb-gradient",
-      "symbol": "|\u2207B|",
+      "symbol": "|∇B|",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -3194,7 +3194,7 @@
     },
     {
       "id": "gradb-perp-speed",
-      "symbol": "v_\u22a5",
+      "symbol": "v_⊥",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -3212,7 +3212,7 @@
     },
     {
       "id": "gravitational-frequency-ratio",
-      "symbol": "\u03bd1/\u03bd2",
+      "symbol": "ν1/ν2",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3248,7 +3248,7 @@
     },
     {
       "id": "grw-localization-rate",
-      "symbol": "\u03bb_GRW",
+      "symbol": "λ_GRW",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3265,7 +3265,7 @@
     },
     {
       "id": "gw-photon-speed-ratio",
-      "symbol": "\u0394v/c",
+      "symbol": "Δv/c",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3283,7 +3283,7 @@
     },
     {
       "id": "hall-conductance",
-      "symbol": "\u03c3_xy",
+      "symbol": "σ_xy",
       "dimension": {
         "L": -2,
         "M": -1,
@@ -3374,7 +3374,7 @@
     },
     {
       "id": "hubble-rate-squared",
-      "symbol": "H\u00b2",
+      "symbol": "H²",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3410,7 +3410,7 @@
     },
     {
       "id": "incidence-angle",
-      "symbol": "\u03b8",
+      "symbol": "θ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3463,7 +3463,7 @@
     },
     {
       "id": "ion-acoustic-debye",
-      "symbol": "\u03bb_De",
+      "symbol": "λ_De",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -3481,7 +3481,7 @@
     },
     {
       "id": "ion-acoustic-frequency",
-      "symbol": "\u03c9",
+      "symbol": "ω",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3607,7 +3607,7 @@
     },
     {
       "id": "joukowsky-closure",
-      "symbol": "\u0394v",
+      "symbol": "Δv",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -3625,7 +3625,7 @@
     },
     {
       "id": "joukowsky-jump",
-      "symbol": "\u0394p",
+      "symbol": "Δp",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -3643,7 +3643,7 @@
     },
     {
       "id": "joukowsky-rho",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -3697,7 +3697,7 @@
     },
     {
       "id": "lambda-mass-density",
-      "symbol": "\u03c1_\u039b",
+      "symbol": "ρ_Λ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -3715,7 +3715,7 @@
     },
     {
       "id": "landau-gamma",
-      "symbol": "\u03b3",
+      "symbol": "γ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3733,7 +3733,7 @@
     },
     {
       "id": "landau-omega",
-      "symbol": "\u03c9",
+      "symbol": "ω",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3805,7 +3805,7 @@
     },
     {
       "id": "landauer-transmission",
-      "symbol": "\u03a3 T_n",
+      "symbol": "Σ T_n",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3823,7 +3823,7 @@
     },
     {
       "id": "landscape-parameter",
-      "symbol": "\u039b_land",
+      "symbol": "Λ_land",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3840,7 +3840,7 @@
     },
     {
       "id": "lane-emden-omega-3",
-      "symbol": "\u03c9\u2083\u2070",
+      "symbol": "ω₃⁰",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -3891,7 +3891,7 @@
     },
     {
       "id": "lawson-product",
-      "symbol": "n\u03c4",
+      "symbol": "nτ",
       "dimension": {
         "L": -3,
         "M": 0,
@@ -3909,7 +3909,7 @@
     },
     {
       "id": "lawson-reactivity",
-      "symbol": "\u27e8\u03c3v\u27e9",
+      "symbol": "⟨σv⟩",
       "dimension": {
         "L": 3,
         "M": 0,
@@ -3946,7 +3946,7 @@
     },
     {
       "id": "london-penetration-depth",
-      "symbol": "\u03bb_L",
+      "symbol": "λ_L",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -3983,7 +3983,7 @@
     },
     {
       "id": "lorentz-coulomb-log",
-      "symbol": "ln\u039b",
+      "symbol": "lnΛ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4019,7 +4019,7 @@
     },
     {
       "id": "lorentz-resistivity",
-      "symbol": "\u03b7",
+      "symbol": "η",
       "dimension": {
         "L": 3,
         "M": 1,
@@ -4074,7 +4074,7 @@
     },
     {
       "id": "loss-cone-pitch",
-      "symbol": "sin\u00b2\u03b8_lc",
+      "symbol": "sin²θ_lc",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4110,7 +4110,7 @@
     },
     {
       "id": "lower-hybrid-electron-cyclotron",
-      "symbol": "\u03c9_ce",
+      "symbol": "ω_ce",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4128,7 +4128,7 @@
     },
     {
       "id": "lower-hybrid-frequency",
-      "symbol": "\u03c9_LH",
+      "symbol": "ω_LH",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4146,7 +4146,7 @@
     },
     {
       "id": "lower-hybrid-ion-cyclotron",
-      "symbol": "\u03c9_ci",
+      "symbol": "ω_ci",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4164,7 +4164,7 @@
     },
     {
       "id": "lower-hybrid-ion-plasma",
-      "symbol": "\u03c9_pi",
+      "symbol": "ω_pi",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4200,7 +4200,7 @@
     },
     {
       "id": "lowercrit-pen",
-      "symbol": "\u03bb",
+      "symbol": "λ",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -4218,7 +4218,7 @@
     },
     {
       "id": "lowercrit-xi",
-      "symbol": "\u03be",
+      "symbol": "ξ",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -4236,7 +4236,7 @@
     },
     {
       "id": "lst-infinity",
-      "symbol": "\u03b5(\u221e)",
+      "symbol": "ε(∞)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4254,7 +4254,7 @@
     },
     {
       "id": "lst-ratio",
-      "symbol": "\u03c9_LO\u00b2/\u03c9_TO\u00b2",
+      "symbol": "ω_LO²/ω_TO²",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4272,7 +4272,7 @@
     },
     {
       "id": "lst-static",
-      "symbol": "\u03b5(0)",
+      "symbol": "ε(0)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4329,7 +4329,7 @@
     },
     {
       "id": "marginal-probability",
-      "symbol": "p(s\u0303)",
+      "symbol": "p(s̃)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4401,7 +4401,7 @@
     },
     {
       "id": "mass-density",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -4434,7 +4434,7 @@
     },
     {
       "id": "matthsum-scatter1",
-      "symbol": "\u03c4_1",
+      "symbol": "τ_1",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4452,7 +4452,7 @@
     },
     {
       "id": "matthsum-scatter2",
-      "symbol": "\u03c4_2",
+      "symbol": "τ_2",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4470,7 +4470,7 @@
     },
     {
       "id": "matthsum-scatter",
-      "symbol": "\u03c4",
+      "symbol": "τ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4506,7 +4506,7 @@
     },
     {
       "id": "mean-molecular-weight-per-electron",
-      "symbol": "\u03bc_e",
+      "symbol": "μ_e",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4556,7 +4556,7 @@
     },
     {
       "id": "microscopic-relaxation-time",
-      "symbol": "\u03c4_0",
+      "symbol": "τ_0",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4573,7 +4573,7 @@
     },
     {
       "id": "minimal-surface-area",
-      "symbol": "A(\u03b3)",
+      "symbol": "A(γ)",
       "dimension": {
         "L": 2,
         "M": 0,
@@ -4591,7 +4591,7 @@
     },
     {
       "id": "mirror-beta-perp",
-      "symbol": "\u03b2_\u22a5",
+      "symbol": "β_⊥",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4609,7 +4609,7 @@
     },
     {
       "id": "mirror-margin",
-      "symbol": "\u03b2_\u22a5(T_\u22a5/T_\u2225\u22121)",
+      "symbol": "β_⊥(T_⊥/T_∥−1)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4627,7 +4627,7 @@
     },
     {
       "id": "mirror-t-parallel",
-      "symbol": "T_\u2225",
+      "symbol": "T_∥",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4646,7 +4646,7 @@
     },
     {
       "id": "mirror-t-perp",
-      "symbol": "T_\u22a5",
+      "symbol": "T_⊥",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4665,7 +4665,7 @@
     },
     {
       "id": "model-a-mobility",
-      "symbol": "\u0393",
+      "symbol": "Γ",
       "dimension": {
         "L": 2,
         "M": 0,
@@ -4683,7 +4683,7 @@
     },
     {
       "id": "modular-hamiltonian-variation",
-      "symbol": "\u03b4\u27e8H_R\u27e9",
+      "symbol": "δ⟨H_R⟩",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4755,7 +4755,7 @@
     },
     {
       "id": "mott-mobility",
-      "symbol": "\u03bc",
+      "symbol": "μ",
       "dimension": {
         "L": 0,
         "M": -1,
@@ -4773,7 +4773,7 @@
     },
     {
       "id": "mott-permittivity",
-      "symbol": "\u03b5",
+      "symbol": "ε",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -4827,7 +4827,7 @@
     },
     {
       "id": "multi-debye-1",
-      "symbol": "\u03bb_1",
+      "symbol": "λ_1",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -4845,7 +4845,7 @@
     },
     {
       "id": "multi-debye-2",
-      "symbol": "\u03bb_2",
+      "symbol": "λ_2",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -4863,7 +4863,7 @@
     },
     {
       "id": "multi-debye-length",
-      "symbol": "\u03bb_D",
+      "symbol": "λ_D",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -4881,7 +4881,7 @@
     },
     {
       "id": "mutation-rate",
-      "symbol": "\u0393_mut",
+      "symbol": "Γ_mut",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -4933,7 +4933,7 @@
     },
     {
       "id": "newton-coupling-beta",
-      "symbol": "\u03b2_g",
+      "symbol": "β_g",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5039,7 +5039,7 @@
     },
     {
       "id": "oblique-angle",
-      "symbol": "\u03b8",
+      "symbol": "θ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5219,7 +5219,7 @@
     },
     {
       "id": "pauli-magneton",
-      "symbol": "\u03bc_B",
+      "symbol": "μ_B",
       "dimension": {
         "L": 2,
         "M": 0,
@@ -5237,7 +5237,7 @@
     },
     {
       "id": "pauli-susceptibility",
-      "symbol": "\u03c7_P",
+      "symbol": "χ_P",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5255,7 +5255,7 @@
     },
     {
       "id": "peltier-coefficient",
-      "symbol": "\u03a0",
+      "symbol": "Π",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -5292,7 +5292,7 @@
     },
     {
       "id": "perihelion-advance",
-      "symbol": "\u0394\u03c6",
+      "symbol": "Δφ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5328,7 +5328,7 @@
     },
     {
       "id": "pipe-pressure-drop",
-      "symbol": "\u0394P",
+      "symbol": "ΔP",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -5365,7 +5365,7 @@
     },
     {
       "id": "planck-length",
-      "symbol": "\u2113_P",
+      "symbol": "ℓ_P",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -5419,7 +5419,7 @@
     },
     {
       "id": "plasma-beta",
-      "symbol": "\u03b2",
+      "symbol": "β",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5437,7 +5437,7 @@
     },
     {
       "id": "plasma-mass-density",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -5527,7 +5527,7 @@
     },
     {
       "id": "probe-potential-ratio",
-      "symbol": "e\u03a6/kT",
+      "symbol": "eΦ/kT",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5653,7 +5653,7 @@
     },
     {
       "id": "quantum-correlation-length",
-      "symbol": "\u03be_quantum",
+      "symbol": "ξ_quantum",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -5670,7 +5670,7 @@
     },
     {
       "id": "quench-timescale",
-      "symbol": "\u03c4_Q",
+      "symbol": "τ_Q",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5741,7 +5741,7 @@
     },
     {
       "id": "reference-correlation-length",
-      "symbol": "\u03be_0",
+      "symbol": "ξ_0",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -5758,7 +5758,7 @@
     },
     {
       "id": "reference-coupling",
-      "symbol": "\u03bb\u2080",
+      "symbol": "λ₀",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5775,7 +5775,7 @@
     },
     {
       "id": "reference-mass",
-      "symbol": "m\u2080",
+      "symbol": "m₀",
       "dimension": {
         "L": 0,
         "M": 1,
@@ -5846,7 +5846,7 @@
     },
     {
       "id": "relaxation-rate",
-      "symbol": "\u03b3_relax",
+      "symbol": "γ_relax",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5861,7 +5861,7 @@
     },
     {
       "id": "rescaled-cosmological-constant",
-      "symbol": "\u039b",
+      "symbol": "Λ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -5878,7 +5878,7 @@
     },
     {
       "id": "residual-resistivity",
-      "symbol": "\u03c1_0",
+      "symbol": "ρ_0",
       "dimension": {
         "L": 3,
         "M": 1,
@@ -5896,7 +5896,7 @@
     },
     {
       "id": "resistivity",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": 3,
         "M": 1,
@@ -5949,7 +5949,7 @@
     },
     {
       "id": "scalar-field-reference",
-      "symbol": "\u03c6\u2080",
+      "symbol": "φ₀",
       "dimension": {
         "L": 0,
         "M": 1,
@@ -5966,7 +5966,7 @@
     },
     {
       "id": "scalar-field-value",
-      "symbol": "\u03c6",
+      "symbol": "φ",
       "dimension": {
         "L": 0,
         "M": 1,
@@ -6057,7 +6057,7 @@
     },
     {
       "id": "shapiro-delay",
-      "symbol": "\u0394t",
+      "symbol": "Δt",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6220,7 +6220,7 @@
     },
     {
       "id": "slab-conductivity",
-      "symbol": "\u03c3",
+      "symbol": "σ",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -6238,7 +6238,7 @@
     },
     {
       "id": "slab-time",
-      "symbol": "\u03c4",
+      "symbol": "τ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6274,7 +6274,7 @@
     },
     {
       "id": "sm-reaction-rate-coefficient",
-      "symbol": "\u27e8\u03c3v\u27e9_SM",
+      "symbol": "⟨σv⟩_SM",
       "dimension": {
         "L": 3,
         "M": 0,
@@ -6398,7 +6398,7 @@
     },
     {
       "id": "specific-volume-change",
-      "symbol": "\u0394v",
+      "symbol": "Δv",
       "dimension": {
         "L": 3,
         "M": -1,
@@ -6417,7 +6417,7 @@
     },
     {
       "id": "spin-density-squared",
-      "symbol": "S\u00b2_spin",
+      "symbol": "S²_spin",
       "dimension": {
         "L": -2,
         "M": 2,
@@ -6434,7 +6434,7 @@
     },
     {
       "id": "spiral-colatitude",
-      "symbol": "\u03b8",
+      "symbol": "θ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6452,7 +6452,7 @@
     },
     {
       "id": "spiral-omega",
-      "symbol": "\u03a9",
+      "symbol": "Ω",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6506,7 +6506,7 @@
     },
     {
       "id": "spiral-ratio",
-      "symbol": "B_\u03c6/B_r",
+      "symbol": "B_φ/B_r",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6524,7 +6524,7 @@
     },
     {
       "id": "standoff-density",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -6614,7 +6614,7 @@
     },
     {
       "id": "static-exponent-nu",
-      "symbol": "\u03bd",
+      "symbol": "ν",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6632,7 +6632,7 @@
     },
     {
       "id": "stonerchi-enhanced",
-      "symbol": "\u03c7",
+      "symbol": "χ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6668,7 +6668,7 @@
     },
     {
       "id": "stonerchi-pauli",
-      "symbol": "\u03c7_P",
+      "symbol": "χ_P",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6721,7 +6721,7 @@
     },
     {
       "id": "superposition-extent",
-      "symbol": "\u0394x",
+      "symbol": "Δx",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -6738,7 +6738,7 @@
     },
     {
       "id": "swampland-coefficient",
-      "symbol": "\u03b1_swamp",
+      "symbol": "α_swamp",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6755,7 +6755,7 @@
     },
     {
       "id": "swampland-tower-mass",
-      "symbol": "m(\u03c6)",
+      "symbol": "m(φ)",
       "dimension": {
         "L": 0,
         "M": 1,
@@ -6845,7 +6845,7 @@
     },
     {
       "id": "syk-coefficient",
-      "symbol": "\u03b1_SYK",
+      "symbol": "α_SYK",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6862,7 +6862,7 @@
     },
     {
       "id": "system-environment-coupling",
-      "symbol": "\u03bb",
+      "symbol": "λ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6879,7 +6879,7 @@
     },
     {
       "id": "tcc-correction-coefficient",
-      "symbol": "\u03b3_tcc",
+      "symbol": "γ_tcc",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6915,7 +6915,7 @@
     },
     {
       "id": "teg-optimum",
-      "symbol": "\u03b7",
+      "symbol": "η",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7064,7 +7064,7 @@
     },
     {
       "id": "thermal-de-broglie-wavelength",
-      "symbol": "\u03bb_T",
+      "symbol": "λ_T",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -7081,7 +7081,7 @@
     },
     {
       "id": "thomson-coefficient",
-      "symbol": "\u03bc_T",
+      "symbol": "μ_T",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -7168,7 +7168,7 @@
     },
     {
       "id": "tolman-invariant",
-      "symbol": "T\u221a(\u2212g_00)",
+      "symbol": "T√(−g_00)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7187,7 +7187,7 @@
     },
     {
       "id": "topological-entanglement-entropy",
-      "symbol": "\u03b3",
+      "symbol": "γ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7206,7 +7206,7 @@
     },
     {
       "id": "torsion-contraction-scalar",
-      "symbol": "T\u00b7T",
+      "symbol": "T·T",
       "dimension": {
         "L": -4,
         "M": 0,
@@ -7241,7 +7241,7 @@
     },
     {
       "id": "transfer-efficiency",
-      "symbol": "\u03b5",
+      "symbol": "ε",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7347,7 +7347,7 @@
     },
     {
       "id": "upper-critical-length",
-      "symbol": "\u03be",
+      "symbol": "ξ",
       "dimension": {
         "L": 1,
         "M": 0,
@@ -7401,7 +7401,7 @@
     },
     {
       "id": "upper-hybrid-frequency",
-      "symbol": "\u03c9_UH",
+      "symbol": "ω_UH",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7473,7 +7473,7 @@
     },
     {
       "id": "viscosity-entropy-ratio",
-      "symbol": "\u03b7/s",
+      "symbol": "η/s",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7509,7 +7509,7 @@
     },
     {
       "id": "weiss-temperature",
-      "symbol": "\u03b8",
+      "symbol": "θ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7566,7 +7566,7 @@
     },
     {
       "id": "yang-mills-beta",
-      "symbol": "\u03b2(g)",
+      "symbol": "β(g)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -7623,11 +7623,11 @@
       "id": "boltzmann-constant",
       "symbol": "boltzmann-constant",
       "dimension": {
-        "L": 0,
-        "M": 0,
-        "T": 0,
+        "L": 2,
+        "M": 1,
+        "T": -2,
         "I": 0,
-        "Theta": 0,
+        "Theta": -1,
         "N": 0,
         "J": 0
       },
@@ -7812,7 +7812,7 @@
     },
     {
       "id": "eyringbarrier",
-      "symbol": "\u0394G^\u2021",
+      "symbol": "ΔG^‡",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -7867,7 +7867,7 @@
     },
     {
       "id": "vanthoffenthalpy",
-      "symbol": "\u0394H\u00b0",
+      "symbol": "ΔH°",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -7959,7 +7959,7 @@
     },
     {
       "id": "gibbsisodg",
-      "symbol": "\u0394G\u00b0",
+      "symbol": "ΔG°",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -7977,7 +7977,7 @@
     },
     {
       "id": "nernstge0",
-      "symbol": "E\u00b0",
+      "symbol": "E°",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -8068,7 +8068,7 @@
     },
     {
       "id": "clapintlatent",
-      "symbol": "\u0394H",
+      "symbol": "ΔH",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -8196,7 +8196,7 @@
     },
     {
       "id": "prandtlmu",
-      "symbol": "\u03bc",
+      "symbol": "μ",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -8268,7 +8268,7 @@
     },
     {
       "id": "reynumrho",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -8322,7 +8322,7 @@
     },
     {
       "id": "reynummu",
-      "symbol": "\u03bc",
+      "symbol": "μ",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -8502,7 +8502,7 @@
     },
     {
       "id": "schmidtmu",
-      "symbol": "\u03bc",
+      "symbol": "μ",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -8520,7 +8520,7 @@
     },
     {
       "id": "schmidtrho",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -8738,7 +8738,7 @@
     },
     {
       "id": "newtonrho",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -8846,7 +8846,7 @@
     },
     {
       "id": "newtontheta0",
-      "symbol": "\u03b8(0)",
+      "symbol": "θ(0)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -8865,7 +8865,7 @@
     },
     {
       "id": "newtontheta",
-      "symbol": "\u03b8(t)",
+      "symbol": "θ(t)",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -8902,7 +8902,7 @@
     },
     {
       "id": "ottogamma",
-      "symbol": "\u03b3",
+      "symbol": "γ",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -8920,7 +8920,7 @@
     },
     {
       "id": "ottoeta",
-      "symbol": "\u03b7",
+      "symbol": "η",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -8938,7 +8938,7 @@
     },
     {
       "id": "jtcdvdt",
-      "symbol": "(\u2202v/\u2202T)_p",
+      "symbol": "(∂v/∂T)_p",
       "dimension": {
         "L": 3,
         "M": -1,
@@ -9011,7 +9011,7 @@
     },
     {
       "id": "jtcmu",
-      "symbol": "\u03bc_{JT}",
+      "symbol": "μ_{JT}",
       "dimension": {
         "L": 1,
         "M": -1,
@@ -9030,7 +9030,7 @@
     },
     {
       "id": "planckfreq",
-      "symbol": "\u03bd",
+      "symbol": "ν",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -9067,7 +9067,7 @@
     },
     {
       "id": "plancku",
-      "symbol": "u_\u03bd",
+      "symbol": "u_ν",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -9085,7 +9085,7 @@
     },
     {
       "id": "stefansigma",
-      "symbol": "\u03c3",
+      "symbol": "σ",
       "dimension": {
         "L": 0,
         "M": 1,
@@ -9322,7 +9322,7 @@
     },
     {
       "id": "richardsphi",
-      "symbol": "\u03c6",
+      "symbol": "φ",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -9540,7 +9540,7 @@
     },
     {
       "id": "electrical-conductivity",
-      "symbol": "\u03c3",
+      "symbol": "σ",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -9577,7 +9577,7 @@
     },
     {
       "id": "thermal-conductivity",
-      "symbol": "\u03ba",
+      "symbol": "κ",
       "dimension": {
         "L": 1,
         "M": 1,
@@ -9614,7 +9614,7 @@
     },
     {
       "id": "gap-energy",
-      "symbol": "\u0394",
+      "symbol": "Δ",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -9687,7 +9687,7 @@
     },
     {
       "id": "jeans-density",
-      "symbol": "\u03c1",
+      "symbol": "ρ",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -9705,7 +9705,7 @@
     },
     {
       "id": "mean-molecular-weight",
-      "symbol": "\u03bc",
+      "symbol": "μ",
       "dimension": {
         "L": 0,
         "M": 0,

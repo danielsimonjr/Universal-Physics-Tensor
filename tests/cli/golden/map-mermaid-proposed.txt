@@ -753,8 +753,6 @@ flowchart LR
     q_vacuum_expectation_value --> j_IC_dark_fermion_mass__rest_energy__mass
     j_IC_dark_fermion_mass__rest_energy__mass --> q_mass
     j_IC_classical_electron_radius__hubble_distance__hubble_rate["IC-classical-electron-radius--hubble-distance--hubble-rate"]:::proposed
-    q_m_e(["m_e"]):::qty
-    q_m_e --> j_IC_classical_electron_radius__hubble_distance__hubble_rate
     j_IC_classical_electron_radius__hubble_distance__hubble_rate --> q_hubble_rate
     j_IC_compton_wavelength_full__hubble_distance__hubble_rate["IC-compton-wavelength-full--hubble-distance--hubble-rate"]:::proposed
     q_mass --> j_IC_compton_wavelength_full__hubble_distance__hubble_rate

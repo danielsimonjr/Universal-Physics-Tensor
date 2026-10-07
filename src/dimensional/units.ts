@@ -42,7 +42,7 @@ import { toSiDimensionVector } from '@danielsimonjr/mathts-core';
 import { unit } from '@danielsimonjr/mathts-functions';
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
-import { C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../core/constants.js';
+import { C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI, M_U_SI } from '../core/constants.js';
 
 type AffineTemperature = 'celsius' | 'fahrenheit';
 
@@ -167,9 +167,9 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   // Molar concentration: 1 M = 1 mol/L. Bare `M` is the molar; `MPa` is still a megapascal.
   ['M', [1000, D({ N: 1, L: -3 }), true]],
   // Unified atomic mass unit (CODATA 2018). A bare `u` is this; `um` is still a micrometre.
-  ['u', [1.66053906660e-27, D({ M: 1 }), false]],
-  ['amu', [1.66053906660e-27, D({ M: 1 }), false]],
-  ['Da', [1.66053906660e-27, D({ M: 1 }), true]],
+  ['u', [M_U_SI, D({ M: 1 }), false]],
+  ['amu', [M_U_SI, D({ M: 1 }), false]],
+  ['Da', [M_U_SI, D({ M: 1 }), true]],
   // CGS and astronomy. Solar and planetary radii and masses are the IAU 2015 B3 nominal values.
   ['erg', [1e-7, JOULE, false]],
   ['cc', [1e-6, D({ L: 3 }), false]],
@@ -508,7 +508,7 @@ export function unitConventionNotes(given: string): string[] {
   if (symbols.includes('A')) notes.push('bare A is the ampere, not the angstrom; write angstrom or Å for 10^-10 m');
   if (symbols.includes('P')) notes.push('bare P is the poise (0.1 Pa·s); PV is still a petavolt');
   if (symbols.includes('M')) notes.push('bare M is the molar (1000 mol/m^3); MPa is still a megapascal');
-  if (symbols.includes('u')) notes.push('bare u is the atomic mass unit (1.66053906660e-27 kg); um is still a micrometre');
+  if (symbols.includes('u')) notes.push(`bare u is the atomic mass unit (${M_U_SI} kg); um is still a micrometre`);
   return notes;
 }
 

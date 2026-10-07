@@ -14,7 +14,7 @@ import { unitConventionNotes, UnitError, type TemperatureReading } from '../dime
 import {
   resolveQuantityName,
   synonymGroup,
-  SynonymDisagreementError,
+  synonymDisagreement,
   temperatureQuantityRole,
 } from '../dimensional/formula-names.js';
 import { readNamedBinding, type NamedBindingSibling } from '../numerical/binding-value.js';
@@ -115,9 +115,7 @@ export function resolveEvaluatorInputs(
         group !== undefined && earlierName !== key && group.includes(earlierName) && group.includes(key);
       if (synonymRepeat && earlier.value === value) continue;
       if (synonymRepeat) {
-        throw new SynonymDisagreementError(
-          `${earlierName} and ${key} are one quantity and disagree (${earlierName}=${earlier.value}, ${key}=${value})`,
-        );
+        throw synonymDisagreement([earlierName, key], { [earlierName]: earlier.value, [key]: value })!;
       }
       const throughAlternate = direct === undefined || earlier.via !== undefined;
       throw new UnitError(`'${p.key}' is given twice${throughAlternate ? ' (once through an alternate)' : ''}`);

@@ -101,8 +101,8 @@ const HELP = `upt eval "<formula>" name=value ...
         --debug prints the parser and its version to stderr.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
-        e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \\
-                       c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23`;
+        e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
+              (hbar, c, G and k_B are registered constants; M is bound)`;
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err } = ctx;

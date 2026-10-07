@@ -33,7 +33,8 @@ interface QuantityFile {
   readonly quantities: readonly QuantityRecord[];
 }
 
-const foldName = (s: string): string => s.replace(/_/g, '-');
+/** `_` written as `-`: the one fold every spelling comparison uses. */
+export const foldName = (s: string): string => s.replace(/_/g, '-');
 
 function loadQuantities(): readonly QuantityRecord[] {
   const path = join(dirname(fileURLToPath(import.meta.url)), '../../data/quantities.json');

@@ -11,6 +11,8 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-10-07
 
+- **One constants owner.** `core/constants.ts` holds every value; `CONSTANT_REGISTRY` in `src/dimensional/symbolic-constants.ts` has 29 rows, 17 canonical. Measured against MathTS 0.68.0 (CODATA 2022): `c`, `h`, `ħ`, `k_B`, `e`, `N_A`, `F` and `R` agree to the last bit; the largest relative moves of the recorded CODATA 2018 values are `sigma_T` 4.1e-9, `m_e`, `m_p` and `m_u` about 1.4e-9, `mu_0` 6.8e-10, `b` 6e-11, `sigma_sb` 3e-11, `G` 0. `boltzmann-constant` in `data/quantities.json` is J/K. `PhysicalConstants.H0` is `H0_SI`. The sentence that `H0` is `2.184e-18`, and that `boltzmann-constant` is dimensionless, is the record from before this owner.
+
 - **Persona rotation.** The rotation and the report template are `docs/persona-sessions/README.md`. The last recorded round is session 16, acoustics and continuum mechanics (position 6 of 6). The next round starts the list again at the condensed-matter physicist. Issue 348.
 
 ## As of 2026-10-06

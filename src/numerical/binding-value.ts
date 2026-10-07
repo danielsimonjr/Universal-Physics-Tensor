@@ -18,9 +18,8 @@
  * @internal
  */
 
-import { K_B_SI, M_SUN_SI } from '../core/constants.js';
+import { K_B_SI } from '../core/constants.js';
 import {
-  FORMULA_NAMED,
   assertSynonymAgreement,
   isTemperatureName,
   synonymGroup,
@@ -28,9 +27,9 @@ import {
 } from '../dimensional/formula-names.js';
 import { quantityConventionUnit } from '../dimensional/unit-convention.js';
 import { naturalConstantOverrides, type UnitMode } from '../dimensional/natural-units.js';
-import { CONSTANTS as SYMBOLIC } from '../dimensional/symbolic-constants.js';
+import { CONSTANT_REGISTRY, constantRecord } from '../dimensional/symbolic-constants.js';
 import { divide, equals, format, multiply, power } from '../dimensional/algebra.js';
-import { DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, type Dimension } from '../dimensional/types.js';
+import { DIMENSIONLESS, ENERGY, TEMPERATURE, type Dimension } from '../dimensional/types.js';
 import {
   affineAbsoluteOffsetK,
   convertValue,
@@ -97,7 +96,7 @@ function boltzmannBindingScale(
   pending: readonly { name: string; read: BindingValue }[],
 ): number {
   const group = synonymGroup('boltzmann-constant') ?? [];
-  const dim = SYMBOLIC.k_B.dim;
+  const dim = constantRecord('k_B')!.dim;
   const hits = pending.filter((entry) => {
     if (!group.some((member) => sameSpelling(member, entry.name))) return false;
     return !entry.read.dimensioned || equals(entry.read.dimension, dim);
@@ -138,22 +137,13 @@ function finite(raw: string, value: number): number {
 
 function scopeFor(mode: UnitMode): Map<string, Qty> {
   const m = new Map<string, Qty>();
-  const put = (name: string, value: number, dim: Dimension): void => {
-    m.set(name, { value, dim });
-  };
-  put('pi', Math.PI, DIMENSIONLESS);
-  put('tau', 2 * Math.PI, DIMENSIONLESS);
-  for (const [name, c] of Object.entries(SYMBOLIC)) put(name, c.value, c.dim);
-  for (const n of FORMULA_NAMED) put(n.name, n.value, n.dim);
-  const eps = m.get('epsilon_0');
-  if (eps !== undefined) put('eps0', eps.value, eps.dim);
-  const mu = m.get('mu_0');
-  if (mu !== undefined) put('mu0', mu.value, mu.dim);
-  const kb = m.get('k_B');
-  if (kb !== undefined) put('kB', kb.value, kb.dim);
-  put('M_sun', M_SUN_SI, MASS);
+  m.set('pi', { value: Math.PI, dim: DIMENSIONLESS });
+  m.set('tau', { value: 2 * Math.PI, dim: DIMENSIONLESS });
+  for (const record of CONSTANT_REGISTRY) {
+    for (const spelling of [record.name, ...record.spellings]) m.set(spelling, { value: record.value, dim: record.dim });
+  }
   if (mode !== 'si') {
-    for (const [name, value] of Object.entries(naturalConstantOverrides(mode))) put(name, value, DIMENSIONLESS);
+    for (const [name, value] of Object.entries(naturalConstantOverrides(mode))) m.set(name, { value, dim: DIMENSIONLESS });
   }
   return m;
 }

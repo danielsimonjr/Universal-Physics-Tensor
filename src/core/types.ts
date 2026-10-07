@@ -4,7 +4,7 @@
  * These types define the fundamental structure of the tensor and its components.
  */
 
-import { HBAR_SI } from './constants.js';
+import { ALPHA, C_SI, E_SI, G_SI, H0_SI, H_SI, HBAR_SI, K_B_SI, L_P_SI, M_P_SI, T_P_SI } from './constants.js';
 
 /**
  * Physical scales represented in the tensor
@@ -175,23 +175,25 @@ export interface EmergentPhenomenon {
 }
 
 /**
- * Physical constants used in computations
+ * Physical constants used in computations: a projection of `core/constants.ts`,
+ * the one owner of the values.
  */
 export const PhysicalConstants = {
   // Fundamental constants
-  c: 299792458,              // Speed of light (m/s)
-  h: 6.62607015e-34,         // Planck constant (J⋅s)
-  hbar: HBAR_SI,             // Reduced Planck constant h/(2π) (J⋅s)
-  G: 6.67430e-11,            // Gravitational constant (m³/kg⋅s²)
-  kB: 1.380649e-23,          // Boltzmann constant (J/K)
-  e: 1.602176634e-19,        // Elementary charge (C)
+  c: C_SI,
+  h: H_SI,
+  hbar: HBAR_SI,
+  G: G_SI,
+  kB: K_B_SI,
+  e: E_SI,
 
   // Derived constants
-  alpha: 7.2973525693e-3,    // Fine structure constant (≈1/137)
-  lP: 1.616255e-35,          // Planck length (m)
-  tP: 5.391247e-44,          // Planck time (s)
-  mP: 2.176434e-8,           // Planck mass (kg)
+  alpha: ALPHA,
+  lP: L_P_SI,
+  tP: T_P_SI,
+  mP: M_P_SI,
 
-  // Cosmological
-  H0: 2.184e-18,             // Hubble constant (s⁻¹) ≈ 67.4 km/s/Mpc (Planck 2018 CMB, Aghanim et al. A&A 641 A6 2020; SH0ES local measurement gives ~73.0 ± 1.0 km/s/Mpc — the "Hubble tension")
+  // Cosmological. Planck 2018 CMB, Aghanim et al. A&A 641 A6 2020; SH0ES local
+  // measurement gives ~73.0 ± 1.0 km/s/Mpc (the "Hubble tension").
+  H0: H0_SI,
 } as const;

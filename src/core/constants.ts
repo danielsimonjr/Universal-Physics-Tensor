@@ -14,8 +14,10 @@
  *   • CODATA 2018 best estimates for measured constants (`G_SI`, `ALPHA`, Planck units).
  *   • Planck 2018 best estimate for `H0_SI`.
  *
- * The `PhysicalConstants` namespace in `src/core/types.ts` is retained for
- * backwards-compat; new code should prefer these flat exports.
+ * This file is the one owner of every value. `PhysicalConstants` in
+ * `src/core/types.ts` and the constant registry in
+ * `src/dimensional/symbolic-constants.ts` are projections of it, and a test
+ * refuses a CODATA literal anywhere else under `src/`.
  *
  * @module core/constants
  * @public
@@ -46,6 +48,15 @@ export const E_SI = 1.602176634e-19;
 
 /** Fine-structure constant α (dimensionless). CODATA 2018. */
 export const ALPHA = 7.2973525693e-3;
+
+/** Vacuum permittivity ε₀ (F/m). CODATA 2018. @internal */
+export const EPS0_SI = 8.8541878128e-12;
+
+/** Vacuum permeability μ₀ = 1/(ε₀ c²) (H/m), from ε₀ and the exact c. @internal */
+export const MU0_SI = 1 / (EPS0_SI * C_SI * C_SI);
+
+/** Stefan–Boltzmann constant σ (W m⁻² K⁻⁴). CODATA 2018. @internal */
+export const SIGMA_SB_SI = 5.670374419e-8;
 
 /** Planck mass √(ℏc/G) (kg). CODATA 2018. */
 export const M_P_SI = 2.176434e-8;

@@ -9,11 +9,8 @@
  * @internal
  */
 
-import { E_SI, FARADAY_SI, K_B_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI } from '../core/constants.js';
-import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
-import { MU0_SI } from '../dimensional/formula-names.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
-import type { UnitMode } from '../dimensional/natural-units.js';
+import { constantScope } from '../dimensional/symbolic-constants.js';
+import { naturalConstantOverrides, type UnitMode } from '../dimensional/natural-units.js';
 
 /** ħ in eval is the exact quotient H_SI/(2π). */
 export const HBAR_TRUNCATION_NOTE =
@@ -21,12 +18,9 @@ export const HBAR_TRUNCATION_NOTE =
   'The CODATA display 1.054571817e-34 is that quotient truncated (relative difference 6.127e-10).';
 
 /**
- * Registered constants an eval may omit, taken from {@link CONSTANTS} so a
- * new registry leaf is a formula name without a second list. Aliases below
- * are spellings that are not registry keys. `m_p` and `m_proton` are the
- * proton mass, `N_A` is the Avogadro constant, and `F` is the Faraday
- * constant `N_A * e`. Bare `sigma` is not an alias of `sigma_sb`. Explicit
- * `name=` wins over these.
+ * Registered constants an eval may omit: every spelling of the constant
+ * registry, plus `pi` and `tau`. A hyphenated spelling is not an identifier
+ * the parser can read and is left out. Explicit `name=` wins over these.
  *
  * `2pi`, `4pi` and `8pi` are in the scope. The MathTS parser reads those
  * spellings as n·pi before the scope is consulted. The scope values match
@@ -35,32 +29,11 @@ export const HBAR_TRUNCATION_NOTE =
  */
 export function codataScope(mode: UnitMode): Record<string, number> {
   const scope: Record<string, number> = {};
-  for (const [name, c] of Object.entries(CONSTANTS)) scope[name] = c.value;
-  scope.e_charge = E_SI;
-  scope.m_e = M_E_SI;
-  scope.m_p = M_PROTON_SI;
-  scope.m_proton = M_PROTON_SI;
-  scope.N_A = N_A_SI;
-  scope.F = FARADAY_SI;
-  // R = N_A k_B, the molar gas constant the thermochemical records state in their titles.
-  scope.R = N_A_SI * K_B_SI;
-  scope.M_sun = M_SUN_SI;
-  for (const { names } of CONSTANT_SPELLINGS) {
-    const canonical = names[0]!;
-    const fromRegistry = (CONSTANTS as Record<string, { value: number } | undefined>)[canonical]?.value;
-    const value = fromRegistry ?? (canonical === 'mu_0' ? MU0_SI : undefined);
-    if (value === undefined) continue;
-    for (const alias of names) {
-      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(alias)) continue;
-      if (scope[alias] === undefined) scope[alias] = value;
-    }
+  for (const [name, value] of Object.entries(constantScope())) {
+    // A hyphenated spelling (`wien-constant`) is not a formula identifier; `8pi` is read as 8·pi.
+    if (!name.includes('-')) scope[name] = value;
   }
-  if (mode !== 'si') {
-    scope.c = 1;
-    scope.hbar = 1;
-    scope.h = 2 * Math.PI;
-  }
-  if (mode === 'geometrized') scope.G = 1;
+  if (mode !== 'si') Object.assign(scope, naturalConstantOverrides(mode));
   return scope;
 }
 
