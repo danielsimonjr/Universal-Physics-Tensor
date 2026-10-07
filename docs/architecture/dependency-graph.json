@@ -4850,6 +4850,7 @@
               "CatalogConfrontation",
               "CatalogEntry",
               "CatalogEvaluator",
+              "CatalogEvaluatorParameter",
               "CatalogFile",
               "CatalogRelation"
             ],
@@ -24109,7 +24110,7 @@
   "statistics": {
     "totalTypeScriptFiles": 351,
     "totalModules": 13,
-    "totalLinesOfCode": 77085,
+    "totalLinesOfCode": 77138,
     "totalExports": 2363,
     "totalClasses": 64,
     "totalInterfaces": 433,

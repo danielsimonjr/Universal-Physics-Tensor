@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 351,
-    "totalTestFiles": 521,
+    "totalTestFiles": 522,
     "testedCount": 333,
     "untestedCount": 18,
     "coveragePercent": "94.9"
@@ -1117,6 +1117,7 @@
     "src/bridges/catalog-load.ts": [
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/bridges/catalog-domains.test.ts",
       "tests/bridges/catalog-filing-ledger.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/tensor-index.test.ts",
@@ -1202,6 +1203,7 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/bridges/catalog-domains.test.ts",
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -9385,6 +9387,10 @@
       "src/bridges/catalog-adapter.ts",
       "src/core/tensor.ts",
       "src/core/types.ts"
+    ],
+    "tests/bridges/catalog-domains.test.ts": [
+      "src/bridges/evaluators.ts",
+      "src/bridges/catalog-load.ts"
     ],
     "tests/bridges/catalog-filing-ledger.test.ts": [
       "src/bridges/catalog-load.ts"
