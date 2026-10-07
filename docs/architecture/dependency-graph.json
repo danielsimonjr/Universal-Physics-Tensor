@@ -4,7 +4,7 @@
     "version": "8.0.0",
     "totalFiles": 352,
     "totalModules": 13,
-    "totalExports": 2370
+    "totalExports": 2372
   },
   "entryPoints": [
     {
@@ -10935,6 +10935,7 @@
               "kerrEquatorialCircular",
               "kerrGeodesic",
               "kerrTurningPointOrbit",
+              "MetricMassError",
               "schwarzschildCircularOrbit",
               "type MetricId"
             ],
@@ -11175,6 +11176,7 @@
           "kerrEquatorialCircular",
           "kerrGeodesic",
           "kerrTurningPointOrbit",
+          "MetricMassError",
           "schwarzschildCircularOrbit",
           "type MetricId",
           "readBinding",
@@ -11416,6 +11418,7 @@
           "kerrEquatorialCircular",
           "kerrGeodesic",
           "kerrTurningPointOrbit",
+          "MetricMassError",
           "schwarzschildCircularOrbit",
           "type MetricId",
           "readBinding",
@@ -23411,7 +23414,11 @@
           "kerrChristoffelFdGap",
           "kerrGeodesic",
           "schwarzschildGeodesic",
-          "kerrEquatorialCircular"
+          "kerrEquatorialCircular",
+          "MetricMassError"
+        ],
+        "classes": [
+          "MetricMassError"
         ],
         "interfaces": [
           "Component",
@@ -24189,15 +24196,15 @@
   "statistics": {
     "totalTypeScriptFiles": 352,
     "totalModules": 13,
-    "totalLinesOfCode": 77568,
-    "totalExports": 2370,
-    "totalClasses": 65,
+    "totalLinesOfCode": 77604,
+    "totalExports": 2372,
+    "totalClasses": 66,
     "totalInterfaces": 433,
     "totalFunctions": 725,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 377,
-    "totalReExports": 1204,
+    "totalReExports": 1205,
     "totalTypeOnlyImports": 498,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

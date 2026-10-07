@@ -3168,7 +3168,7 @@ The codebase is organized into the following modules:
 | `./atlas/model.js` | `AtlasModel, ModelId` | Re-export |
 | `./atlas/catalog-formal-ref.js` | `catalogFormalRef` | Re-export |
 | `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
-| `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
+| `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, MetricMassError, schwarzschildCircularOrbit, type MetricId` | Re-export |
 | `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding` | Re-export |
 | `./index.js` | `resolveQuantityName` | Re-export |
 | `./composition/evaluate-relation.js` | `evaluatorOutput, resolveEvaluable` | Re-export |
@@ -3222,10 +3222,11 @@ The codebase is organized into the following modules:
   horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim,
   AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
   ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
-  kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding,
-  bindingInUnit, readNamedBinding, resolveQuantityName, evaluatorOutput, resolveEvaluable,
-  unusedInputKeys, SynonymDisagreementError, builtinFormulaDimensionChecker, missingEvaluatorMessage,
-  C_SI, G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
+  kerrGeodesic, kerrTurningPointOrbit, MetricMassError, schwarzschildCircularOrbit, type MetricId,
+  readBinding, bindingInUnit, readNamedBinding, resolveQuantityName, evaluatorOutput,
+  resolveEvaluable, unusedInputKeys, SynonymDisagreementError, builtinFormulaDimensionChecker,
+  missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
+  EquationAnalysis
   ```
 
 
@@ -6368,6 +6369,7 @@ The codebase is organized into the following modules:
 | `./binding-value.js` | `readParameter` | Import |
 
 **Exports:**
+- Classes: `MetricMassError`
 - Interfaces: `Component`, `CurvatureReport`, `KerrGeodesicSample`
 - Functions:
 
@@ -6710,10 +6712,10 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77568 |
-| Total Exports | 2370 |
-| Total Re-exports | 1204 |
-| Total Classes | 65 |
+| Total Lines of Code | 77604 |
+| Total Exports | 2372 |
+| Total Re-exports | 1205 |
+| Total Classes | 66 |
 | Total Interfaces | 433 |
 | Total Functions | 725 |
 | Total Type Guards | 6 |

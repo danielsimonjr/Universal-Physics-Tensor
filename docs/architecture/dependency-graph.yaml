@@ -3,7 +3,7 @@ metadata:
   version: 8.0.0
   totalFiles: 352
   totalModules: 13
-  totalExports: 2370
+  totalExports: 2372
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7308,6 +7308,7 @@ modules:
             - kerrEquatorialCircular
             - kerrGeodesic
             - kerrTurningPointOrbit
+            - MetricMassError
             - schwarzschildCircularOrbit
             - type MetricId
           reExport: true
@@ -7509,6 +7510,7 @@ modules:
         - kerrEquatorialCircular
         - kerrGeodesic
         - kerrTurningPointOrbit
+        - MetricMassError
         - schwarzschildCircularOrbit
         - type MetricId
         - readBinding
@@ -7749,6 +7751,7 @@ modules:
         - kerrEquatorialCircular
         - kerrGeodesic
         - kerrTurningPointOrbit
+        - MetricMassError
         - schwarzschildCircularOrbit
         - type MetricId
         - readBinding
@@ -16118,6 +16121,9 @@ modules:
         - kerrGeodesic
         - schwarzschildGeodesic
         - kerrEquatorialCircular
+        - MetricMassError
+      classes:
+        - MetricMassError
       interfaces:
         - Component
         - CurvatureReport
@@ -16750,15 +16756,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 352
   totalModules: 13
-  totalLinesOfCode: 77568
-  totalExports: 2370
-  totalClasses: 65
+  totalLinesOfCode: 77604
+  totalExports: 2372
+  totalClasses: 66
   totalInterfaces: 433
   totalFunctions: 725
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 377
-  totalReExports: 1204
+  totalReExports: 1205
   totalTypeOnlyImports: 498
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
