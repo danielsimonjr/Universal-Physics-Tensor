@@ -34,6 +34,10 @@ export interface ResolvedInput {
 /** 15 significant digits: the value itself is passed unrounded. */
 const show = (v: number): number => Number(v.toPrecision(15));
 
+/** Hz and rpm count cycles; an angular-frequency slot counts radians, so they need 2π. */
+const CYCLIC_FREQUENCY = /^\s*[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?\s*(?:da|[YZEPTGMkhdcmuµμnpfazy])?(?:Hz|rpm)\s*$/;
+const cyclicFrequencyUnit = (raw: string): boolean => CYCLIC_FREQUENCY.test(raw);
+
 /** Disclosures that a unit symbol does not carry by itself. */
 function unitAside(given: string): string {
   const notes = unitConventionNotes(given);
@@ -66,9 +70,12 @@ function convert(
         : fahrenheit
           ? ' (a difference: × 5/9, no offset)'
           : '';
-  const base = `${raw.trim()} → ${show(read.value)} ${p.unit || '(dimensionless)'}${offset}${unitAside(raw)}`;
+  const cycles = p.angular === true && cyclicFrequencyUnit(raw);
+  const value = cycles ? read.value * 2 * Math.PI : read.value;
+  const turns = cycles ? ' (cycles: × 2π)' : '';
+  const base = `${raw.trim()} → ${show(value)} ${p.unit || '(dimensionless)'}${offset}${turns}${unitAside(raw)}`;
   const temperature = read.notes.find((note) => note.includes('k_B T'));
-  return { value: read.value, note: temperature === undefined ? base : `${base}. ${temperature}` };
+  return { value, note: temperature === undefined ? base : `${base}. ${temperature}` };
 }
 
 /**
@@ -97,7 +104,8 @@ export function resolveEvaluatorInputs(
     const p = direct ?? viaAlt ?? viaSynonym;
     if (p === undefined) throw new UnitError(`'${key}' is not an input here; the inputs are: ${known.join(', ')}`);
     const earlier = resolved.find((r) => r.key === p.key);
-    const c = convert(p, raw, temperatureQuantityRole(key), siblings, key);
+    const role = temperatureQuantityRole(p.quantity) === 'difference' ? 'difference' : temperatureQuantityRole(key);
+    const c = convert(p, raw, role, siblings, key);
     const alt = direct === undefined && viaAlt !== undefined ? p.alternates!.find((a) => a.key === key)! : undefined;
     const value = alt === undefined ? c.value : c.value * alt.toKey;
     if (earlier !== undefined) {

@@ -90,6 +90,8 @@ export interface CatalogEvaluatorParameter {
    * rule. An absolute temperature is `nonnegative` when no sign is stated.
    */
   readonly sign?: 'positive' | 'nonnegative' | 'any';
+  /** An angular frequency in rad/s. A cycle unit (Hz, rpm) given to it is multiplied by 2π. */
+  readonly angular?: true;
   readonly alternates?: readonly { readonly key: string; readonly meaning: string; readonly toKey: number }[];
   readonly optional?: true;
 }

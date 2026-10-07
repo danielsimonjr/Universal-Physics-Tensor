@@ -107,10 +107,10 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   // terasecond. The prefix flag is what lets `nT` and `uT` parse.
   ['T', [1, D({ M: 1, T: -2, I: -1 }), true]],
   // Gauss = 10⁻⁴ T. Exact, so `GPa` stays gigapascal (prefix G + Pa) and bare `G` is gauss.
-  // The spelled name is the same unit. It does not take a prefix (`kgauss` is not a kilogauss).
-  ['G', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
-  ['gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
-  ['Gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
+  // The gauss takes an SI prefix: `uG` and `ugauss` are a microgauss, not a product of other units.
+  ['G', [1e-4, D({ M: 1, T: -2, I: -1 }), true]],
+  ['gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), true]],
+  ['Gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), true]],
   ['bar', [1e5, D({ L: -1, M: 1, T: -2 }), true]],
   ['atm', [101325, D({ L: -1, M: 1, T: -2 }), false]],
   ['angstrom', [1e-10, D({ L: 1 }), false]],
@@ -146,7 +146,86 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   ['rpm', [1 / 60, D({ T: -1 }), true]],
   // Mechanical horsepower = 550 ft·lbf/s. ft = 0.3048 m.
   ['hp', [550 * 0.3048 * 0.45359237 * 9.80665, D({ L: 2, M: 1, T: -3 }), false]],
+  // Named SI derived units the dogfood rounds found missing.
+  ['H', [1, D({ L: 2, M: 1, T: -2, I: -2 }), true]],
+  ['Wb', [1, D({ L: 2, M: 1, T: -2, I: -1 }), true]],
+  ['Ohm', [1, D({ L: 2, M: 1, T: -3, I: -2 }), true]],
+  // Plane and solid angle, photometry, and ratios. The steradian and the radian are dimensionless here.
+  ['sr', [1, DIMENSIONLESS, false]],
+  ['cd', [1, D({ J: 1 }), true]],
+  ['lm', [1, D({ J: 1 }), true]],
+  ['lx', [1, D({ J: 1, L: -2 }), true]],
+  ['arcsec', [Math.PI / 648000, DIMENSIONLESS, false]],
+  ['arcmin', [Math.PI / 10800, DIMENSIONLESS, false]],
+  // `mas` would otherwise be metre times attosecond, so the angular spellings are exact.
+  ['mas', [Math.PI / 648000e3, DIMENSIONLESS, false]],
+  ['uas', [Math.PI / 648000e6, DIMENSIONLESS, false]],
+  ['%', [1e-2, DIMENSIONLESS, false]],
+  ['percent', [1e-2, DIMENSIONLESS, false]],
+  ['ppm', [1e-6, DIMENSIONLESS, false]],
+  ['ppb', [1e-9, DIMENSIONLESS, false]],
+  // Molar concentration: 1 M = 1 mol/L. Bare `M` is the molar; `MPa` is still a megapascal.
+  ['M', [1000, D({ N: 1, L: -3 }), true]],
+  // Unified atomic mass unit (CODATA 2018). A bare `u` is this; `um` is still a micrometre.
+  ['u', [1.66053906660e-27, D({ M: 1 }), false]],
+  ['amu', [1.66053906660e-27, D({ M: 1 }), false]],
+  ['Da', [1.66053906660e-27, D({ M: 1 }), true]],
+  // CGS and astronomy. Solar and planetary radii and masses are the IAU 2015 B3 nominal values.
+  ['erg', [1e-7, JOULE, false]],
+  ['cc', [1e-6, D({ L: 3 }), false]],
+  ['dyn', [1e-5, D({ L: 1, M: 1, T: -2 }), true]],
+  ['Jy', [1e-26, D({ M: 1, T: -2 }), true]],
+  ['Lsun', [3.828e26, D({ L: 2, M: 1, T: -3 }), false]],
+  ['Rsun', [6.957e8, D({ L: 1 }), false]],
+  ['Rearth', [6.3781e6, D({ L: 1 }), false]],
+  ['Rjup', [7.1492e7, D({ L: 1 }), false]],
+  ['Mearth', [5.9722e24, D({ M: 1 }), false]],
+  ['Mjup', [1.89813e27, D({ M: 1 }), false]],
+  ['day', [86400, D({ T: 1 }), false]],
+  ['hr', [3600, D({ T: 1 }), false]],
+  // Acoustics and fluids. Poise, stokes, and rayl are exact in SI.
+  ['poise', [0.1, D({ L: -1, M: 1, T: -1 }), true]],
+  ['St', [1e-4, D({ L: 2, T: -1 }), true]],
+  ['rayl', [1, D({ L: -2, M: 1, T: -1 }), true]],
+  // Imperial and pressure units. psi = lbf/in²; ksi is a kilopsi.
+  ['in', [0.0254, D({ L: 1 }), false]],
+  ['inch', [0.0254, D({ L: 1 }), false]],
+  ['ft', [0.3048, D({ L: 1 }), false]],
+  ['mil', [2.54e-5, D({ L: 1 }), false]],
+  ['lb', [0.45359237, D({ M: 1 }), false]],
+  ['lbm', [0.45359237, D({ M: 1 }), false]],
+  ['lbf', [0.45359237 * 9.80665, D({ L: 1, M: 1, T: -2 }), false]],
+  ['kgf', [9.80665, D({ L: 1, M: 1, T: -2 }), false]],
+  ['mph', [0.44704, D({ L: 1, T: -1 }), false]],
+  ['knot', [1852 / 3600, D({ L: 1, T: -1 }), false]],
+  ['psia', [(0.45359237 * 9.80665) / (0.0254 * 0.0254), D({ L: -1, M: 1, T: -2 }), false]],
+  ['ksi', [(1000 * (0.45359237 * 9.80665)) / (0.0254 * 0.0254), D({ L: -1, M: 1, T: -2 }), false]],
+  ['mmH2O', [9.80665, D({ L: -1, M: 1, T: -2 }), false]],
+  ['inHg', [133.322387415 * 25.4, D({ L: -1, M: 1, T: -2 }), false]],
+  ['tonne', [1000, D({ M: 1 }), false]],
+  // US therm (EC therm is 1.05506e8 J). Spelled out so the choice is visible.
+  ['therm', [105480400, JOULE, false]],
 ]);
+
+/** Units that are a ratio or a log scale, and the reason each is not a plain factor. */
+const REFUSED_UNITS: ReadonlyMap<string, string> = new Map([
+  ['dB', 'dB is a logarithmic unit; give the quantity in its linear unit, or a reference level'],
+  ['dBm', 'dBm is a logarithmic unit (decibels over 1 mW); give watts'],
+  ['dBW', 'dBW is a logarithmic unit (decibels over 1 W); give watts'],
+  ['Np', 'Np is a logarithmic unit (the neper); give the quantity in its linear unit, or a reference level'],
+  ['Mach', 'Mach is a ratio to the local speed of sound; give m/s, or the ratio as a bare number'],
+  ['mach', 'mach is a ratio to the local speed of sound; give m/s, or the ratio as a bare number'],
+  ['ton', "'ton' is ambiguous: short ton (907.185 kg), long ton (1016.047 kg), or metric tonne (1000 kg); write tonne"],
+]);
+
+/**
+ * Letters that are both an SI prefix and a unit of their own (tesla, gauss,
+ * poise, hour, day, molar, atomic mass). Such a token reads as the prefix
+ * reading and not as the unit times the rest: `Gyr` is a gigayear, `TW` a
+ * terawatt, `hPa` a hectopascal. `m` is left out on purpose: `mK` in a
+ * denominator is millikelvin or metre·kelvin, and a target dimension chooses.
+ */
+const PREFIX_LETTER_UNITS: ReadonlySet<string> = new Set(['T', 'G', 'P', 'h', 'd', 'M', 'u']);
 
 const CELSIUS_OFFSET_K = 273.15;
 const FAHRENHEIT_SCALE = 5 / 9;
@@ -160,7 +239,7 @@ interface AffineRow {
 
 /** Lone spellings. A compound that contains one is refused. */
 const AFFINE: readonly AffineRow[] = [
-  { id: 'celsius', scale: 1, offset: CELSIUS_OFFSET_K, symbols: ['degC', '°C'] },
+  { id: 'celsius', scale: 1, offset: CELSIUS_OFFSET_K, symbols: ['degC', '°C', '℃'] },
   {
     id: 'fahrenheit',
     scale: FAHRENHEIT_SCALE,
@@ -279,10 +358,18 @@ function segmentations(token: string): FactorReading[][] {
  * does not also split it. Inside a compound, a prefixed factor also competes
  * with each heterogeneous product. A homogeneous power does not.
  */
-function tokenWays(token: string, compete: boolean): FactorReading[][] {
+function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denominator'): FactorReading[][] {
+  const refused = REFUSED_UNITS.get(token);
+  if (refused !== undefined) throw new UnitError(refused);
   const single = tryOneFactor(token);
   if (single !== null && !compete) return [[single]];
-  const products = segmentations(token).filter((way) => way.length > 1);
+  // A prefixed numerator token is the prefix reading: `mN/m` is millinewton per metre.
+  // A denominator keeps the product readings (`W/mK`), and a target dimension chooses.
+  if (single !== null && side === 'numerator') return [[single]];
+  const prefixWins = single !== null && PREFIX_LETTER_UNITS.has(token[0]!) && attachedUnit(single.base) !== null;
+  const products = segmentations(token)
+    .filter((way) => way.length > 1)
+    .filter(() => !prefixWins);
   const extra = single === null ? products : products.filter((way) => !homogeneousPower(single, way));
   const ways: FactorReading[][] = [];
   if (single !== null) ways.push([single]);
@@ -309,7 +396,7 @@ interface UnitReading extends ParsedUnit {
 }
 
 function sideTokens(text: string): string[] {
-  return text.split(/[*·\s]+/).filter((part) => part.length > 0);
+  return text.split(/[*·\s]+|(?<=[A-Za-zµμΩ])\.(?=[A-Za-zµμΩ])/).filter((part) => part.length > 0);
 }
 
 function formatSide(tokens: readonly (readonly FactorReading[])[]): string {
@@ -324,6 +411,16 @@ function formatExpression(
   if (den.length === 0) return numerator;
   const denominator = formatSide(den);
   return denominator.includes('·') ? `${numerator}/(${denominator})` : `${numerator}/${denominator}`;
+}
+
+/**
+ * A product of decimal scales picks up float noise (`1e-3 / (1e-2)^3` is
+ * 999.9999999999999). Snap to 15 significant digits when that is within a few
+ * ulps of the computed value, so `1 g/cm^3` is exactly 1000.
+ */
+function tidy(x: number): number {
+  const snapped = Number(x.toPrecision(15));
+  return Math.abs(snapped - x) <= 4 * Number.EPSILON * Math.abs(x) ? snapped : x;
 }
 
 function accumulate(tokens: readonly (readonly FactorReading[])[], sign: 1 | -1): { scale: number; dim: Dimension } {
@@ -353,16 +450,19 @@ function unitReadings(text: string): UnitReading[] {
   ) {
     throw new UnitError('an affine temperature cannot be part of a compound unit; give K');
   }
+  // A chain reads left to right: `km/s/Mpc` is km/(s·Mpc), the way the Hubble constant is written.
   const parts = t.split('/');
-  if (parts.length > 2) throw new UnitError(`'${t}' has more than one '/'; put the whole denominator after one '/'`);
   const compete = /[*·/\s]/.test(t);
   const numerator = sideTokens(parts[0]!);
-  const denominatorText = parts.length === 1 ? '' : parts[1]!.replace(/^\((.*)\)$/, '$1');
+  const denominatorText = parts
+    .slice(1)
+    .map((part) => part.replace(/^\((.*)\)$/, '$1'))
+    .join('*');
   const denominator = denominatorText === '' ? [] : sideTokens(denominatorText);
   // `/s` is a dimensionless numerator over seconds. A bare `/` is not a unit.
   if (numerator.length === 0 && denominator.length === 0) throw new UnitError(`unknown unit '${t}'`);
-  const numWays = numerator.map((token) => tokenWays(token, compete));
-  const denWays = denominator.map((token) => tokenWays(token, compete));
+  const numWays = numerator.map((token) => tokenWays(token, compete, 'numerator'));
+  const denWays = denominator.map((token) => tokenWays(token, compete, 'denominator'));
   const numCombos = numerator.length === 0 ? [[]] : cartesian(numWays);
   const denCombos = denominator.length === 0 ? [[]] : cartesian(denWays);
   const unique = new Map<string, UnitReading>();
@@ -371,7 +471,10 @@ function unitReadings(text: string): UnitReading[] {
       const n = accumulate(num, 1);
       const d = accumulate(den, -1);
       const label = formatExpression(num, den);
-      unique.set(label, { scale: n.scale * d.scale, dim: multiply(n.dim, d.dim), label });
+      // One factor keeps its exact table scale; a product is snapped.
+      const factors = [...num, ...den].reduce((count, way) => count + way.length, 0);
+      const scale = n.scale * d.scale;
+      unique.set(label, { scale: factors > 1 ? tidy(scale) : scale, dim: multiply(n.dim, d.dim), label });
     }
   }
   return [...unique.values()];
@@ -404,6 +507,8 @@ export function unitConventionNotes(given: string): string[] {
   if (symbols.includes('T')) notes.push('bare T is the tesla; Ts is a terasecond');
   if (symbols.includes('A')) notes.push('bare A is the ampere, not the angstrom; write angstrom or Å for 10^-10 m');
   if (symbols.includes('P')) notes.push('bare P is the poise (0.1 Pa·s); PV is still a petavolt');
+  if (symbols.includes('M')) notes.push('bare M is the molar (1000 mol/m^3); MPa is still a megapascal');
+  if (symbols.includes('u')) notes.push('bare u is the atomic mass unit (1.66053906660e-27 kg); um is still a micrometre');
   return notes;
 }
 
@@ -449,6 +554,8 @@ export function convertValue(
   target: string,
   reading: TemperatureReading = 'absolute',
 ): { value: number; given: string } {
+  const fraction = /^\s*([+-]?(?:\d+\.?\d*|\.\d+))\s*\/\s*((?:\d+\.?\d*|\.\d+))\s*$/.exec(raw);
+  if (fraction !== null && Number(fraction[2]) !== 0) return { value: Number(fraction[1]) / Number(fraction[2]), given: '' };
   const m = /^\s*([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)\s*$/.exec(raw);
   if (m === null) throw new UnitError(`'${raw}' is not a number with an optional unit`);
   const v = Number(m[1]);
@@ -472,8 +579,8 @@ export function convertValue(
   // `bit` is ln 2 nat here; MathTS reads `bit` as 1. Symbols MathTS does not
   // have (a solar mass, a Julian year, the gauss) stay on the table above.
   const via = mathTsRatio(v, given, target);
-  if (via !== undefined && sameQuantity(via, local)) return { value: via, given };
-  return { value: local, given };
+  if (via !== undefined && sameQuantity(via, local)) return { value: tidy(via), given };
+  return { value: tidy(local), given };
 }
 
 /** Spellings MathTS's unit parser accepts for the same UPT symbol. */

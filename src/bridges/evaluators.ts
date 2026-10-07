@@ -32,6 +32,8 @@ export interface EvaluatorParameter {
   readonly temperature?: 'absolute';
   /** The sign this input must have; the catalog loader turns it into a validity clause. */
   readonly sign?: 'positive' | 'nonnegative' | 'any';
+  /** An angular frequency in rad/s. A cycle unit (Hz, rpm) given to it is multiplied by 2π. */
+  readonly angular?: true;
   readonly alternates?: readonly ParameterAlternate[];
   readonly optional?: true;
 }
@@ -55,6 +57,7 @@ function toParameter(row: CatalogEvaluatorParameter): EvaluatorParameter {
     ...(row.geometry !== undefined ? { geometry: row.geometry } : {}),
     ...(row.temperature !== undefined ? { temperature: row.temperature } : {}),
     ...(row.sign !== undefined ? { sign: row.sign } : {}),
+    ...(row.angular === true ? { angular: true as const } : {}),
     ...(row.alternates !== undefined ? { alternates: row.alternates } : {}),
     ...(row.optional === true ? { optional: true as const } : {}),
   };

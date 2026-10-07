@@ -14,6 +14,7 @@ import {
   C_SI,
   E_SI,
   FARADAY_SI,
+  K_B_SI,
   LANE_EMDEN_OMEGA3,
   M_E_SI,
   M_PROTON_SI,
@@ -28,6 +29,8 @@ const PERMEABILITY: Dimension = { L: 1, M: 1, T: -2, I: -2, Theta: 0, N: 0, J: 0
 /** N_A — [N⁻¹]. */
 const PER_AMOUNT: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: -1, J: 0 };
 /** Faraday constant — charge per amount, [T I N⁻¹]. */
+/** J/(mol·K). */
+const MOLAR_GAS: Dimension = { L: 2, M: 1, T: -2, I: 0, Theta: -1, N: -1, J: 0 };
 const FARADAY: Dimension = { L: 0, M: 0, T: 1, I: 1, Theta: 0, N: -1, J: 0 };
 /** Thomson cross-section — area. */
 const AREA: Dimension = { L: 2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
@@ -59,6 +62,8 @@ export const FORMULA_NAMED: readonly FormulaName[] = [
   { name: 'm_proton', dim: MASS, value: M_PROTON_SI },
   { name: 'N_A', dim: PER_AMOUNT, value: N_A_SI },
   { name: 'F', dim: FARADAY, value: FARADAY_SI },
+  // R = N_A k_B, the molar gas constant the thermochemical records state in their titles.
+  { name: 'R', dim: MOLAR_GAS, value: N_A_SI * K_B_SI },
   { name: 'curvature_k', dim: DIMENSIONLESS, value: 0 },
   { name: 'scale_factor', dim: LENGTH, value: 1 },
   { name: 'sigma_T', dim: AREA, value: THOMSON_CROSS_SECTION_SI },

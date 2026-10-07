@@ -9,7 +9,7 @@
  * @internal
  */
 
-import { E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI } from '../core/constants.js';
+import { E_SI, FARADAY_SI, K_B_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI } from '../core/constants.js';
 import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
 import { MU0_SI } from '../dimensional/formula-names.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
@@ -42,6 +42,8 @@ export function codataScope(mode: UnitMode): Record<string, number> {
   scope.m_proton = M_PROTON_SI;
   scope.N_A = N_A_SI;
   scope.F = FARADAY_SI;
+  // R = N_A k_B, the molar gas constant the thermochemical records state in their titles.
+  scope.R = N_A_SI * K_B_SI;
   scope.M_sun = M_SUN_SI;
   for (const { names } of CONSTANT_SPELLINGS) {
     const canonical = names[0]!;
