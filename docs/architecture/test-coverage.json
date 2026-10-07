@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 352,
-    "totalTestFiles": 525,
+    "totalTestFiles": 526,
     "testedCount": 334,
     "untestedCount": 18,
     "coveragePercent": "94.9"
@@ -1778,7 +1778,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/audit.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -1869,7 +1870,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/axes.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -1960,7 +1962,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/candidates.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2051,7 +2054,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/canonical.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2142,7 +2146,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/chain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2233,7 +2238,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/confront.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2324,7 +2330,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/connectors.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2415,7 +2422,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/coverage.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2506,7 +2514,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/derive.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2597,7 +2606,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/discover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2688,7 +2698,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/eval.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2779,7 +2790,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/evaluate.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2871,7 +2883,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/explain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2962,7 +2975,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/frontier.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3053,7 +3067,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/ground.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3144,7 +3159,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/index.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3235,7 +3251,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/map.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3326,7 +3343,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/metric.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3417,7 +3435,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/path.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3508,7 +3527,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/predict.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3599,7 +3619,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/priority.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3690,7 +3711,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/probe.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3782,7 +3804,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/recover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3873,7 +3896,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/regime.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3964,7 +3988,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/retrieve.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -4055,7 +4080,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/search.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -4146,7 +4172,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/symbolic.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -4237,7 +4264,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/testplan.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -4328,7 +4356,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/conventions.ts": [],
     "src/cli/determination.ts": [],
@@ -4440,7 +4469,8 @@
       "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/composition/evaluate-boundary.test.ts",
+      "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/map-evidence.ts": [
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -6493,6 +6523,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/dimensional/algebra-properties.test.ts",
       "tests/dimensional/algebra.test.ts",
+      "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-inference.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/dimensionful-power-ad.test.ts",
@@ -6800,6 +6831,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-spec-grouping.test.ts",
       "tests/dimensional/dimension-spec.test.ts"
     ],
@@ -6858,6 +6890,7 @@
       "tests/dimensional/algebra.test.ts",
       "tests/dimensional/connection-validators.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
+      "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-inference.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/dimensionful-power-ad.test.ts",
@@ -15398,6 +15431,41 @@
       "src/dimensional/ast-types.ts",
       "src/dimensional/metric.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/dimensional/derive-grammar.test.ts": [
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
+      "src/dimensional/dimension-spec.ts",
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/dimensional/dimension-inference.test.ts": [
       "src/dimensional/dimension-inference.ts",

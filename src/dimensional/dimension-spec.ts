@@ -98,6 +98,8 @@ export const CONSTANT_SPELLINGS: readonly { readonly names: readonly string[]; r
   { names: ['e'], dim: CHARGE },
   { names: ['mu_0', 'mu0'], dim: d(1, 1, -2, 0, -2) },
   { names: ['epsilon_0', 'epsilon0', 'eps0'], dim: d(-3, -1, 4, 0, 2) },
+  // W/(m^2 K^4)
+  { names: ['sigma_sb'], dim: d(0, 1, -3, -4) },
 ];
 
 /** Fundamental constants by their SI dimension — matched EXACT-case, so
@@ -173,6 +175,11 @@ function parseGroupedProduct(s: string): Dimension {
     if (s[i] === '+' || s[i] === '-') i++;
     if (!/\d/.test(s[i] ?? '')) throw new DimensionSpecError(`bad exponent in '${s}'`);
     while (/\d/.test(s[i] ?? '')) i++;
+    // A decimal exponent: `time^0.5`. A dot not followed by a digit is not part of it.
+    if (s[i] === '.' && /\d/.test(s[i + 1] ?? '')) {
+      i++;
+      while (/\d/.test(s[i] ?? '')) i++;
+    }
     if (s[i] === '/' && /\d/.test(s[i + 1] ?? '')) {
       i++;
       while (/\d/.test(s[i] ?? '')) i++;
@@ -188,6 +195,11 @@ function parseGroupedProduct(s: string): Dimension {
       if (s[i] !== ')') throw new DimensionSpecError(`unbalanced '(' in '${s}'`);
       i++;
       return inner;
+    }
+    // A leading literal 1 is the dimensionless numerator: `1/time`.
+    if (s[i] === '1' && !/[\d.]/.test(s[i + 1] ?? '')) {
+      i++;
+      return d();
     }
     const start = i;
     while (i < s.length && /[A-Za-zΘ_]/.test(s[i]!)) i++;
@@ -227,8 +239,17 @@ function parseGroupedProduct(s: string): Dimension {
   return out;
 }
 
+/** A word that names a dimension and is not a base spelling (`length`, not `L` or `Theta`). */
+const NAMED_WORD = /[A-Za-z_]{2,}/g;
+function namesADimension(s: string): boolean {
+  return (s.match(NAMED_WORD) ?? []).some((word) => BASES[word.toUpperCase()] === undefined && BASES[word] === undefined);
+}
+
 function wantsGroupedProduct(s: string): boolean {
   if (/[()]/.test(s)) return true;
+  // `1/time`, and a named dimension with a power on its own (`length^2`).
+  if (/^\s*1\s*\//.test(s)) return true;
+  if (/\^/.test(s) && namesADimension(s)) return true;
   if (/\/\s*[(A-Za-zΘ]/.test(s)) return true;
   return /\*/.test(s) && /[A-Za-z]{2,}/.test(s);
 }
@@ -249,9 +270,10 @@ export function parseDimensionSpec(spec: string): Dimension {
 
   // (4) explicit base exponents.
   const out = d();
-  const parts = s.split(/[.*\s]+/).filter(Boolean);
+  // A dot separates factors (`L^3.M^-1`) unless a digit follows it: `T^-2.5` is a decimal exponent.
+  const parts = s.split(/[*\s]+|\.(?!\d)/).filter(Boolean);
   for (const part of parts) {
-    const m = /^([A-Za-zΘ]+)\^?(-?\d+(?:\/\d+)?)?$/.exec(part);
+    const m = /^([A-Za-zΘ]+)\^?(-?\d+(?:\.\d+)?(?:\/\d+)?)?$/.exec(part);
     if (!m) throw new DimensionSpecError(`unrecognized dimension term '${part}'`);
     const baseKey = BASES[m[1].toUpperCase()] ?? BASES[m[1]];
     if (!baseKey) {
