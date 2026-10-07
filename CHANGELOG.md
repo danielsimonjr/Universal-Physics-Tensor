@@ -12,6 +12,10 @@ The Documented, Migration, Breaking, and Fixed notes that were already under thi
 
 ### Fixed
 
+- **`upt explain` accepts a registered constant (`b`, `wien-constant`, `sigma_sb`, `h`, `k_B`, …) as an input that must agree with the registry.** `upt explain peak-wavelength b=2.9e-3 temperature=5800` exited 1 with "did not resolve to a quantity", although `b` is a constant the equation already uses. A stated value within 0.5% of the registered one is accepted and not rebound; a different value is refused and names the registered value, because the equations cannot take another. Nothing is recovered from the constant, so a wrong value cannot silently pass. An unknown name still fails. Issue 473.
+
+### Fixed
+
 - **`CE-bernoulli` is the total pressure `P + ρ v²/2 + ρ g h`, and the criterion 3 corpus is re-pinned to it.** The scalar AST dropped the `½` on the dynamic term and the entry was `scalar-up-to-constant`, so `evaluateRelation('CE-bernoulli', …)` returned `kind: 'unset'` even when every input was given, although the sum of three dimensionful terms with every input supplied has a well-defined value (issue 470). The `½` is exact and sourced by the equation itself, so the AST now carries a `0.5` factor and the entry is `fully-quantitative`: 1000 kg/m³, 2 m/s, 9.81 m/s², 1 m, and 100 kPa give 111810 Pa. The test that asserted `unset` recorded the earlier decision that the dropped `½` was not the law; it is replaced by one that asserts the value, with `CE-sound-speed` without `γ` as the control that `unset` still exists. The frozen criterion 3 corpus pins the registry's `scalarAst`, so `bun run atlas:c3-export` re-pinned `docs/research/criterion3/corpus.json` and `freeze.json` after the source change was committed: only the Bernoulli expression, the pinned commit, the `src/canonical` tree hash, and the corpus sha256 changed. The owner authorized the re-pin on 2026-10-07. Amendment 8 still hashes the corpus the labelers saw, and the study stays closed. The first attempt at this change was reverted in the same session because the corpus tests failed; this is that change with the re-pin.
 
 ### Fixed

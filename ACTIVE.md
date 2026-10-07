@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] `upt explain` accepts a registered constant as an input that must agree with the registry.
+  `upt explain peak-wavelength b=2.9e-3 temperature=5800 --source=canonical` exits 1 with "did not resolve to a quantity"; so do `wien-constant` and `sigma_sb` where they are not a governing variable. Issue 473.
+  Done: a constant within 0.5% of the registry value is accepted and not rebound, a different value is refused naming the registered one, an unknown name still fails. `tests/cli/explain-constants.test.ts` failed 4 of 6 before the change. Filed after the first edit, not before it.
+
 - [x] `CE-bernoulli` is the total pressure `P + ρ v²/2 + ρ g h`, and the frozen criterion 3 corpus is re-pinned to it.
   `evaluateRelation('CE-bernoulli', { density: 1000, 'flow-velocity': 2, 'gravitational-acceleration': 9.81, height: 1, 'static-pressure': 1e5 })` returns `kind: 'unset'` because the scalar AST drops the `½` on the dynamic term. The corpus pins that expression. Issue 470.
   Done: the AST carries a `0.5` factor on the `ρ v²` term and the entry is `fully-quantitative`. The example returns 111810 Pa. `bun run atlas:c3-export` re-pinned `docs/research/criterion3/corpus.json` and `freeze.json`: only the Bernoulli expression, the pinned commit, the `src/canonical` tree hash, and the corpus sha256 changed. The owner authorized the re-pin on 2026-10-07.
