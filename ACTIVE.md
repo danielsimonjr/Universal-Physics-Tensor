@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] The dogfood process records the persona rotation and a report template.
+  Issue 348 asks that the process doc and template name the rotation. No such doc existed under `docs/`.
+  Done: `docs/persona-sessions/README.md` holds the six-persona rotation, the per-round rules and the template; `NOTES.md` holds which persona ran last and which is next.
+
 - [x] `upt explain` accepts a registered constant as an input that must agree with the registry.
   `upt explain peak-wavelength b=2.9e-3 temperature=5800 --source=canonical` exits 1 with "did not resolve to a quantity"; so do `wien-constant` and `sigma_sb` where they are not a governing variable. Issue 473.
   Done: a constant within 0.5% of the registry value is accepted and not rebound, a different value is refused naming the registered one, an unknown name still fails. `tests/cli/explain-constants.test.ts` failed 4 of 6 before the change. Filed after the first edit, not before it.

@@ -10,6 +10,10 @@ from v0.1.0 onward.
 
 The Documented, Migration, Breaking, and Fixed notes that were already under this heading are the working record summarized in [6.1.0] and [6.0.0]. The Changed notes are the same resolver change [7.0.0] releases. ~~Nothing under this heading is waiting on a version.~~ Retracted: the Fixed and Breaking notes added below for issues 434–438 are not in a release. This change does not bump the version, tag, or publish.
 
+### Added
+
+- **`docs/persona-sessions/README.md` records the persona rotation and a report template.** The dogfood rounds had no process document, so the persona repeated (the applied physicist ran twice running) and each round found fewer candidate bridges. The file lists six personas in order, what every round must look for (candidates that units cannot establish), and where the next persona is recorded (`NOTES.md`). Issue 348.
+
 ### Fixed
 
 - **`upt explain` accepts a registered constant (`b`, `wien-constant`, `sigma_sb`, `h`, `k_B`, …) as an input that must agree with the registry.** `upt explain peak-wavelength b=2.9e-3 temperature=5800` exited 1 with "did not resolve to a quantity", although `b` is a constant the equation already uses. A stated value within 0.5% of the registered one is accepted and not rebound; a different value is refused and names the registered value, because the equations cannot take another. Nothing is recovered from the constant, so a wrong value cannot silently pass. An unknown name still fails. Issue 473.
