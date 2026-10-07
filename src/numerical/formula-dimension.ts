@@ -221,6 +221,22 @@ function evalConstPNode(node: PNode): number {
   }
 }
 
+/**
+ * `base ^ exponent`. A numeric-constant exponent is the dimensional power. An
+ * input-dependent exponent is built as a `^` node and the validator decides:
+ * it is legal only on a dimensionless base, with a dimensionless exponent.
+ */
+function powOf(base: ExprNode, exponent: PNode, dims: Readonly<Record<string, Dimension>>): ExprNode {
+  let constant: number | undefined;
+  try {
+    constant = pnodeConstant(exponent);
+  } catch (error) {
+    if (!(error instanceof FormulaDimensionError)) throw error;
+  }
+  if (constant !== undefined) return powExpr(base, constant);
+  return op('^', [base, normToExpr(exponent, dims)]);
+}
+
 /** The ONE transpiler: normalized parse node → dimensional `ExprNode`. */
 function normToExpr(node: PNode, dims: Readonly<Record<string, Dimension>>): ExprNode {
   switch (node.kind) {
@@ -233,12 +249,12 @@ function normToExpr(node: PNode, dims: Readonly<Record<string, Dimension>>): Exp
     case 'op':
       return op(node.op, node.args.map((a) => normToExpr(a, dims)));
     case 'pow':
-      return powExpr(normToExpr(node.base, dims), pnodeConstant(node.exp));
+      return powOf(normToExpr(node.base, dims), node.exp, dims);
     case 'call': {
       const fn = node.fn;
       if (fn === 'sqrt') return powExpr(normToExpr(node.args[0], dims), 0.5);
       if (fn === 'cbrt') return powExpr(normToExpr(node.args[0], dims), 1 / 3);
-      if (fn === 'pow') return powExpr(normToExpr(node.args[0], dims), pnodeConstant(node.args[1]));
+      if (fn === 'pow') return powOf(normToExpr(node.args[0], dims), node.args[1], dims);
       const fnNode = transpileFunction(fn, normToExpr(node.args[0], dims));
       if (fnNode) return fnNode;
       throw new FormulaDimensionError(`unsupported function '${fn}'`);
