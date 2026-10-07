@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] `upt metric` refuses r = 0, a non-positive mass, and a pole or out-of-range polar angle.
+  `upt metric schwarzschild M=1Msun r=0` is read as "not supplied" and prints the 10 r_s default. A negative mass is accepted unless `--geodesic` is given. `theta=pi` prints Kretschmann 8.9e31 where the closed form is 1e-40, and `theta=3.5` is accepted. Issue 478.
+  Done: r is `NaN` when not supplied, so a given `r=0` is a point and is refused with the horizon message, and the default 10 r_s still applies when r is omitted. A non-positive or non-finite mass is refused for Schwarzschild and Kerr with or without `--geodesic`, at exit 1. The polar angle must be strictly inside (0, π), so `theta=pi`, `0`, `3.5`, and `-0.1` exit 2.
+
 - [x] `upt derive` and `upt map` read a power of a named dimension, a decimal exponent, `1/time`, `sigma_sb`, and a symbolic exponent on a dimensionless base.
   `upt derive x:length^2` exits 2 with "unknown base dimension 'length' (use … a named dimension …)". `T^-2.5` is split at the dot and names `'5'`. `rp^gam` with both dimensionless exits 3 with "exponent must be a numeric constant", `upt map --equation "eta = 1 - r^(1-gamma)"` exits 2, and `sigma_sb` is not a derive dimension. Issues 456, 457, 486.
   Done: a named dimension with a power on its own (`length^2`, `time^-1`, `temperature^4`) and `1/time` parse. A dot that is not followed by a digit separates factors, so `L^2.M.T^-2.5` is `L² M T^-2.5`, and a named dimension takes a decimal exponent (`power/time^0.5`). `sigma_sb` is a derive dimension. A symbolic exponent is built as a `^` node and the validator decides: legal on a dimensionless base, refused with a framed note on a dimensionful one.

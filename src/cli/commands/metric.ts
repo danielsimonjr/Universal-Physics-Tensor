@@ -63,6 +63,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     report = api.curvatureReport(name, pairs);
   } catch (e) {
+    // A mass that is not positive is a bad value (exit 1), as for --geodesic. The rest is a point off the chart.
+    if (e instanceof api.MetricMassError) throw new CliError((e as Error).message);
     throw new UsageError((e as Error).message);
   }
   let geodesic:
