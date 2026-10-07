@@ -57,9 +57,12 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
       name: 'Bernoulli equation',
       domain: 'mechanics',
       formula_latex: '\\tfrac12 \\rho v^2 + \\rho g h + P = \\text{const}',
-      epistemicStatus: 'scalar-up-to-constant', // exact form known; the ½ on the dynamic term is dropped
+      epistemicStatus: 'fully-quantitative', // P + ½ρv² + ρgh, the exact total pressure
       scalarAst: op('+', [
-        op('*', [sym('density', DENSITY), pow(sym('flow-velocity', VELOCITY), '2')]),
+        op('*', [
+          sym('0.5', DIMENSIONLESS),
+          op('*', [sym('density', DENSITY), pow(sym('flow-velocity', VELOCITY), '2')]),
+        ]),
         op('*', [
           sym('density', DENSITY),
           op('*', [
@@ -344,7 +347,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
       id: 'CE-first-law-thermodynamics',
       name: 'First law of thermodynamics',
       domain: 'thermodynamics',
-      formula_latex: '\Delta U = Q - W',
+      formula_latex: '\\Delta U = Q - W',
       epistemicStatus: 'fully-quantitative',
       // A genuine DIFFERENCE of two same-dimensioned terms: dimensional
       // analysis alone cannot pin it (three energies), so the engine reports
@@ -400,7 +403,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
       name: 'Normal (Gaussian) distribution',
       domain: 'statistical',
       formula_latex:
-        'p(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-(x-\mu)^2 / 2\sigma^2}',
+        'p(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-(x-\\mu)^2 / 2\\sigma^2}',
       // The 1/√(2π) normalisation is a pure numeric prefactor, recorded the way
       // the other prefactors in this registry are.
       epistemicStatus: 'scalar-up-to-constant',

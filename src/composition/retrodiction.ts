@@ -32,7 +32,7 @@
 import { CarrierSignError } from '../bridges/carrier-sign.js';
 import type { BridgeEdge } from './edge.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
-import { evaluateEdge } from './edge.js';
+import { DomainViolationError, evaluateEdge } from './edge.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
@@ -89,6 +89,11 @@ export interface RetrodictionResult {
   /** (max − min)/|mean| across predictions; 0 when fewer than two. */
   readonly relativeSpread: number;
   readonly tolerance: number;
+  /**
+   * Derivations that refused the inputs as outside their validity domain.
+   * A refusal is not an unset coefficient and not a missing input.
+   */
+  readonly refusals?: readonly { readonly edge: string; readonly reason: string }[];
   /** `outcome !== 'inconsistent'` — the falsification gate. */
   readonly pass: boolean;
   /** Supplied external value, when scored. */
@@ -190,6 +195,7 @@ export function retrodictNode(
   const values = forwardEvaluate(edgesMinusIntoTarget, groundTruth, idents);
 
   const predictions: RetrodictionPrediction[] = [];
+  const refusals: { edge: string; reason: string }[] = [];
   for (const e of edges) {
     if (e.target.name !== target) continue;
     if (!e.sources.every((s) => values.has(s.name))) continue;
@@ -201,6 +207,7 @@ export function retrodictNode(
       // A sign rejection is the answer for this target. Swallowing it would
       // report the quantity as unrecoverable. A domain miss still skips.
       if (err instanceof CarrierSignError) throw err;
+      if (err instanceof DomainViolationError) refusals.push({ edge: e.id, reason: err.message });
       continue;
     }
     if (Number.isFinite(v)) predictions.push({ edge: e.id, value: v });
@@ -231,6 +238,7 @@ export function retrodictNode(
     predictions,
     relativeSpread,
     tolerance,
+    ...(refusals.length > 0 ? { refusals } : {}),
     pass: outcome !== 'inconsistent',
   };
 

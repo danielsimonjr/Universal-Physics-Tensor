@@ -77,6 +77,9 @@ import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
 import { evalExpr } from './expr-eval.js';
+import { CANONICAL_DOMAINS } from '../canonical/domains.js';
+import { HoldsError, holds } from '../bridges/holds.js';
+import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
 
 /** A universal constant a canonical `governing` list may name: SI value + dim. */
 interface ConstantDef {
@@ -142,6 +145,26 @@ const PERMISSIVE_DOMAIN: ValidityDomain = {
   description: 'standard-physics regime (canonical L-layer)',
   predicate: () => true,
 };
+
+/**
+ * The validity domain of `eq`: its stated condition over the source names, or
+ * the permissive domain when none is stated. An unbound name is a violation.
+ */
+function domainOf(eq: CanonicalEquation, sourceNames: readonly string[]): ValidityDomain {
+  const text = CANONICAL_DOMAINS[eq.id];
+  if (text === undefined) return PERMISSIVE_DOMAIN;
+  return {
+    description: text,
+    predicate: (inputs) => {
+      try {
+        return holds(text, inputs, formulaScope(), [...formulaNames(), ...sourceNames]);
+      } catch (error) {
+        if (error instanceof HoldsError) return false;
+        throw error;
+      }
+    },
+  };
+}
 
 /** A registered or literal dimensionless number, or undefined when `name` is not one. */
 function dimensionlessLeaf(name: string): number | undefined {
@@ -535,7 +558,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
     sources,
     target,
     confidence: 'established',
-    domain: PERMISSIVE_DOMAIN,
+    domain: domainOf(eq, sources.map((source) => source.name)),
     evaluate: (inputs) => evaluateRaw(applyCarrierSignPolicy(monomial, inputs, even)),
     citation: eq.references[0] ?? eq.id,
     ...(eq.epistemicStatus === 'dimensional' && canonicalPrefactor(eq.id) === undefined

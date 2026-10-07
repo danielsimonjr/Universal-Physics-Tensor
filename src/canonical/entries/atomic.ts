@@ -212,7 +212,7 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     id: 'CE-uncertainty-principle',
     name: 'Heisenberg uncertainty principle',
     domain: 'quantum',
-    formula_latex: '\Delta x \, \Delta p \geq \hbar/2',
+    formula_latex: '\\Delta x \\, \\Delta p \\geq \\hbar/2',
     epistemicStatus: 'scalar-up-to-constant', // the ½ is the dropped prefactor
     scalarAst: sym('hbar', ACTION),
     regime: { scale: 'quantum' },
