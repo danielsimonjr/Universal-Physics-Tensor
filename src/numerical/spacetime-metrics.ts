@@ -403,6 +403,33 @@ export function kerrKretschmann(M: number, r: number, a: number, theta: number):
   return num / Sigma ** 6;
 }
 
+/** A metric parameter that is not a point of the manifold: a mass that is not positive. */
+export class MetricMassError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'MetricMassError';
+  }
+}
+
+/** A mass that is not positive is not a source. */
+function requirePositiveMass(M: number): void {
+  if (!(M > 0)) throw new MetricMassError(`${M <= 0 ? 'a non-positive' : 'a non-finite'} mass is not a source: the metric needs a positive mass`);
+}
+
+/**
+ * The polar angle is a point of the spherical chart only on the open interval
+ * (0, π). The poles are coordinate singularities: `sin π` is 1.2e-16, not 0, so
+ * a test for exact zero lets θ = π through and the finite-difference stencil
+ * divides by it.
+ */
+function requirePolarInterior(theta: number): void {
+  if (!(theta > 0 && theta < Math.PI && Math.sin(theta) > 1e-9)) {
+    throw new Error(
+      `θ must be strictly between 0 and π (got ${theta}): the poles are coordinate singularities of the spherical chart`,
+    );
+  }
+}
+
 /** SI dimension of each metric parameter. A bare number is already in that unit. */
 const PARAM_DIM: Readonly<Record<string, Dimension>> = {
   M: MASS,
@@ -463,9 +490,12 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     ]));
   }
   if (metric === 'schwarzschild') {
-    const { values: p, notes } = metricParams(pairs, { M: M_SUN_SI, c: C_SI, G: G_SI, r: 0, theta: Math.PI / 2, phi: 0, t: 0 });
+    // NaN marks r as not supplied. A supplied r = 0 is a point, not the default.
+    const { values: p, notes } = metricParams(pairs, { M: M_SUN_SI, c: C_SI, G: G_SI, r: Number.NaN, theta: Math.PI / 2, phi: 0, t: 0 });
+    requirePositiveMass(p.M!);
+    requirePolarInterior(p.theta!);
     const rs = (2 * p.G! * p.M!) / (p.c! * p.c!);
-    if (p.r === 0) p.r = 10 * rs;
+    if (Number.isNaN(p.r)) p.r = 10 * rs;
     if (!(p.r! > rs)) throw new Error(`r must be outside the horizon (r_s = ${rs})`);
     const g = schwarzschildMetric(p.M!, p.c!, p.G!);
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
@@ -537,13 +567,16 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     a: 0,
     c: C_SI,
     G: G_SI,
-    r: 0,
+    r: Number.NaN,
     theta: Math.PI / 2,
     phi: 0,
     t: 0,
   });
+  requirePositiveMass(p.M!);
+  requirePolarInterior(p.theta!);
   const Mgeom = (p.G! * p.M!) / (p.c! * p.c!);
-  if (p.r === 0) p.r = 10 * Mgeom;
+  if (Number.isNaN(p.r)) p.r = 10 * Mgeom;
+  if (!(p.r! > 0)) throw new Error(`r must be positive and outside the singularity (got ${p.r})`);
   if (Math.abs(p.a!) >= p.r!) throw new Error('Kerr finite difference wants |a| < r and r outside the ring');
   const g = kerrMetric(Mgeom, p.a!);
   const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
