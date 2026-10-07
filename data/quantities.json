@@ -9738,6 +9738,42 @@
         "force": "gravitational"
       },
       "graphNode": true
+    },
+    {
+      "id": "photon-frequency",
+      "symbol": "ν",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true,
+      "aliases": [
+        "nu"
+      ]
+    },
+    {
+      "id": "planck-constant",
+      "symbol": "h",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true,
+      "aliases": [
+        "h"
+      ]
     }
   ]
 }
