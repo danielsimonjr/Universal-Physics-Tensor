@@ -3,7 +3,7 @@ metadata:
   version: 8.0.0
   totalFiles: 352
   totalModules: 13
-  totalExports: 2371
+  totalExports: 2370
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7325,6 +7325,9 @@ modules:
           imports:
             - evaluatorOutput
             - resolveEvaluable
+          reExport: true
+        - file: ./bridges/evaluators.js
+          imports:
             - unusedInputKeys
           reExport: true
         - file: ./dimensional/formula-names.js
@@ -8825,7 +8828,6 @@ modules:
           imports:
             - BRIDGE_EVALUATORS
             - sourceOfParameter
-            - unusedInputKeys
             - EvaluatorSpec
         - file: ../bridges/catalog-load.js
           imports:
@@ -8850,7 +8852,6 @@ modules:
             - evaluateEdge
             - BridgeEdge
       exports:
-        - unusedInputKeys
         - evaluatorOutput
         - resolveEvaluable
         - evaluateRelation
@@ -16749,8 +16750,8 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 352
   totalModules: 13
-  totalLinesOfCode: 77531
-  totalExports: 2371
+  totalLinesOfCode: 77530
+  totalExports: 2370
   totalClasses: 65
   totalInterfaces: 433
   totalFunctions: 725

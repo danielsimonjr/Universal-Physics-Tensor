@@ -3171,7 +3171,8 @@ The codebase is organized into the following modules:
 | `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
 | `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding` | Re-export |
 | `./index.js` | `resolveQuantityName` | Re-export |
-| `./composition/evaluate-relation.js` | `evaluatorOutput, resolveEvaluable, unusedInputKeys` | Re-export |
+| `./composition/evaluate-relation.js` | `evaluatorOutput, resolveEvaluable` | Re-export |
+| `./bridges/evaluators.js` | `unusedInputKeys` | Re-export |
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
@@ -3732,7 +3733,7 @@ The codebase is organized into the following modules:
 | `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/units.js` | `parseUnit` | Import |
-| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, sourceOfParameter, unusedInputKeys, EvaluatorSpec` | Import |
+| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, sourceOfParameter, EvaluatorSpec` | Import |
 | `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId, primaryRelation` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
@@ -6709,8 +6710,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77531 |
-| Total Exports | 2371 |
+| Total Lines of Code | 77530 |
+| Total Exports | 2370 |
 | Total Re-exports | 1204 |
 | Total Classes | 65 |
 | Total Interfaces | 433 |

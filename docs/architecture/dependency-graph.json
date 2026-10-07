@@ -4,7 +4,7 @@
     "version": "8.0.0",
     "totalFiles": 352,
     "totalModules": 13,
-    "totalExports": 2371
+    "totalExports": 2370
   },
   "entryPoints": [
     {
@@ -10960,7 +10960,13 @@
             "file": "./composition/evaluate-relation.js",
             "imports": [
               "evaluatorOutput",
-              "resolveEvaluable",
+              "resolveEvaluable"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/evaluators.js",
+            "imports": [
               "unusedInputKeys"
             ],
             "reExport": true
@@ -13126,7 +13132,6 @@
             "imports": [
               "BRIDGE_EVALUATORS",
               "sourceOfParameter",
-              "unusedInputKeys",
               "EvaluatorSpec"
             ]
           },
@@ -13172,7 +13177,6 @@
           }
         ],
         "exports": [
-          "unusedInputKeys",
           "evaluatorOutput",
           "resolveEvaluable",
           "evaluateRelation",
@@ -24185,8 +24189,8 @@
   "statistics": {
     "totalTypeScriptFiles": 352,
     "totalModules": 13,
-    "totalLinesOfCode": 77531,
-    "totalExports": 2371,
+    "totalLinesOfCode": 77530,
+    "totalExports": 2370,
     "totalClasses": 65,
     "totalInterfaces": 433,
     "totalFunctions": 725,
