@@ -8,7 +8,8 @@
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { primaryRelation } from './catalog-load.js';
 import { catalogEvaluators } from './catalog-load.js';
-import type { CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
+import type { CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
+import { evaluateFormula } from './expr-parse.js';
 import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
 
 /** How a length input is read: radius, diameter, separation, impact parameter, or semi-major axis. @public */
@@ -44,6 +45,8 @@ export interface EvaluatorSpec {
   readonly name: string;
   readonly inputKeys: readonly string[];
   readonly parameters: readonly EvaluatorParameter[];
+  /** Further numbers `run` returns beside `value`, keyed by `name`. */
+  readonly outputs: readonly CatalogEvaluatorOutput[];
   run(inputs: Readonly<Record<string, number>>): unknown;
 }
 
@@ -89,11 +92,13 @@ export function unusedInputKeys(spec: EvaluatorSpec): string[] {
     if (rest.includes(source)) used.add(source);
     rest = rest.split(source).join(' ');
   }
+  const readByOutput = (key: string): boolean =>
+    spec.outputs.some((output) => new RegExp(`(^|[^A-Za-z0-9_])${key}($|[^A-Za-z0-9_])`).test(output.expression));
   return spec.parameters
     .filter((parameter) => {
       const source = sourceOfParameter(relation, parameter);
-      // A parameter that owns no relation source is read by nothing.
-      return source === undefined || !used.has(source);
+      // A parameter that owns no relation source is read only by an extra output.
+      return (source === undefined || !used.has(source)) && !readByOutput(parameter.key);
     })
     .map((parameter) => parameter.key);
 }
@@ -129,12 +134,18 @@ export function bindRelationInputs(
   return bound;
 }
 
-function buildSpec(catalogId: number, name: string, parameters: readonly EvaluatorParameter[]): EvaluatorSpec {
+function buildSpec(
+  catalogId: number,
+  name: string,
+  parameters: readonly EvaluatorParameter[],
+  outputs: readonly CatalogEvaluatorOutput[],
+): EvaluatorSpec {
   return {
     bridgeId: catalogId,
     name,
     inputKeys: parameters.filter((parameter) => parameter.optional !== true).map((parameter) => parameter.key),
     parameters,
+    outputs,
     run(inputs) {
       const relation = primaryRelation(catalogId);
       if (relation === undefined) {
@@ -144,7 +155,19 @@ function buildSpec(catalogId: number, name: string, parameters: readonly Evaluat
       if (!relationHolds(relation, bound)) {
         throw new Error(`${relation.id}: inputs violate validity domain (${relation.domain})`);
       }
-      return { value: evaluateCatalogRelation(relation, bound) };
+      for (const parameter of parameters) {
+        const given = inputs[parameter.key];
+        if (parameter.optional === true && parameter.sign === 'positive' && given !== undefined && !(given > 0)) {
+          throw new Error(`${relation.id}: ${parameter.key} must be > 0`);
+        }
+      }
+      const value = evaluateCatalogRelation(relation, bound);
+      const result: Record<string, number> = { value };
+      for (const output of outputs) {
+        if ((output.requires ?? []).some((key) => !Number.isFinite(inputs[key]))) continue;
+        result[output.name] = evaluateFormula(output.expression, { ...inputs, value });
+      }
+      return result;
     },
   };
 }
@@ -153,7 +176,7 @@ function buildSpec(catalogId: number, name: string, parameters: readonly Evaluat
 export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
   catalogEvaluators().map((row) => {
     const parameters = row.parameters.map(toParameter);
-    return [row.catalogId, buildSpec(row.catalogId, row.name, parameters)] as const;
+    return [row.catalogId, buildSpec(row.catalogId, row.name, parameters, row.outputs ?? [])] as const;
   }),
 );
 

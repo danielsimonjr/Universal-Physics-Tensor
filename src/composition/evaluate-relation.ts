@@ -213,6 +213,10 @@ function closedFormEvaluation(
   if (expected === undefined) {
     throw new Error(`evaluateRelation: be-${spec.bridgeId} has no catalog dimension`);
   }
+  const primary = (raw as Record<string, unknown>).value;
+  if (spec.outputs.length > 0 && typeof primary === 'number' && Number.isFinite(primary)) {
+    return { kind: 'value', value: primary, dimension: expected };
+  }
   const inputs = new Set(spec.inputKeys);
   const numeric = Object.entries(raw as Record<string, unknown>).filter(
     (entry): entry is [string, number] =>

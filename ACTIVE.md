@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A catalog evaluator may return extra outputs beside its `value`.
+  `upt evaluate be-88` returns k_F only; the Fermi energy and velocity, the conduction edge above E_F, the Matthiessen resistivity, the London depth λ(T), and Mercury's precession per century are not returned, and be-139's `Nc_per_m3` and `ND_per_m3` are required inputs that change nothing. Issues 451, 479.
+  Done: `outputs` on an evaluator record (`name`, `unit`, `meaning`, `expression`, optional `requires`), evaluated over the parameter keys, the constants and `value`; `T_yr` is an optional be-52 parameter; `unusedInputKeys` counts a parameter an output reads. `tests/bridges/evaluator-extra-outputs.test.ts` failed 4 of 6 before the change. Filed after the first edit, not before it.
+
 - [x] The dogfood process records the persona rotation and a report template.
   Issue 348 asks that the process doc and template name the rotation. No such doc existed under `docs/`.
   Done: `docs/persona-sessions/README.md` holds the six-persona rotation, the per-round rules and the template; `NOTES.md` holds which persona ran last and which is next.

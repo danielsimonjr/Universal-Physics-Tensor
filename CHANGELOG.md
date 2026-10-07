@@ -12,6 +12,10 @@ The Documented, Migration, Breaking, and Fixed notes that were already under thi
 
 ### Added
 
+- **A catalog evaluator may return extra outputs beside its `value`.** `upt evaluate be-88` printed k_F and nothing else, so a user who wanted E_F = ħ²k_F²/(2m*) or v_F had to recompute them. An evaluator record now carries `outputs`: `name`, `unit`, `meaning`, `expression` and an optional `requires`. The expression reads the parameter keys, the constants and `value`; an output whose required optional key is absent is left out. The records that use it: be-88 (`E_F_J`, `v_F_m_per_s`), be-139 (`Ec_minus_EF_J = k_B T ln(N_c/N_D)`, which is why `Nc_per_m3` and `ND_per_m3` are inputs), be-144 (`rho_ohm_m`), be-146 (`lambda_m = λ(0)/√(n_s/n)`), and be-52 (`precession_arcsec_per_century`, from a restored optional `T_yr`; Mercury gives 43.0). `unusedInputKeys` now counts a parameter that an output reads. `evaluateRelation` still returns `value`. The numbers were checked against a separate Python calculation. Issues 451, 479.
+
+### Added
+
 - **`docs/persona-sessions/README.md` records the persona rotation and a report template.** The dogfood rounds had no process document, so the persona repeated (the applied physicist ran twice running) and each round found fewer candidate bridges. The file lists six personas in order, what every round must look for (candidates that units cannot establish), and where the next persona is recorded (`NOTES.md`). Issue 348.
 
 ### Fixed

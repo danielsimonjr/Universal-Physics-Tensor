@@ -576,6 +576,7 @@ async function run(ctx: CommandCtx): Promise<number> {
             name: outputLabel.name,
             ...(outputLabel.unit === undefined ? {} : { unit: outputLabel.unit, dimension: outputDescriptor.dimension }),
           },
+          ...(spec.outputs.length === 0 ? {} : { extraOutputs: spec.outputs.map(({ name, unit, meaning }) => ({ name, unit, meaning })) }),
           ...(unused.length === 0 ? {} : { unusedInputs: unused }),
           ...(domainNote === undefined ? {} : { domainNote }),
           ...(formulaNote === undefined ? {} : { formulaNote }),
@@ -590,8 +591,15 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`\n● be-${id}  ${spec.name}`);
   printInputs(out, spec.parameters, inputs, resolved);
   for (const [k, v] of Object.entries(result as Record<string, unknown>)) {
+    const extra = spec.outputs.find((o) => o.name === k);
     const label =
-      k === 'value' ? (outputLabel.unit === undefined ? outputLabel.name : `${outputLabel.name} [${outputLabel.unit}]`) : k;
+      k === 'value'
+        ? outputLabel.unit === undefined
+          ? outputLabel.name
+          : `${outputLabel.name} [${outputLabel.unit}]`
+        : extra === undefined
+          ? k
+          : `${k} [${extra.unit}] (${extra.meaning})`;
     out(`  ${label} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
   }
   for (const key of unused) {
