@@ -9504,6 +9504,7 @@
             "imports": [
               "E_SI",
               "FARADAY_SI",
+              "K_B_SI",
               "M_E_SI",
               "M_PROTON_SI",
               "M_SUN_SI",
@@ -18156,6 +18157,7 @@
               "C_SI",
               "E_SI",
               "FARADAY_SI",
+              "K_B_SI",
               "LANE_EMDEN_OMEGA3",
               "M_E_SI",
               "M_PROTON_SI",
@@ -21554,6 +21556,7 @@
           {
             "file": "./formula-dimension.js",
             "imports": [
+              "FormulaDimensionError",
               "parseFormulaPNode",
               "FormulaPNode"
             ]
@@ -24144,7 +24147,7 @@
   "statistics": {
     "totalTypeScriptFiles": 352,
     "totalModules": 13,
-    "totalLinesOfCode": 77245,
+    "totalLinesOfCode": 77376,
     "totalExports": 2364,
     "totalClasses": 64,
     "totalInterfaces": 433,

@@ -1,14 +1,13 @@
 {
   "metadata": {
     "totalSourceFiles": 352,
-    "totalTestFiles": 523,
-    "testedCount": 333,
-    "untestedCount": 19,
-    "coveragePercent": "94.6"
+    "totalTestFiles": 524,
+    "testedCount": 334,
+    "untestedCount": 18,
+    "coveragePercent": "94.9"
   },
   "untestedFiles": [
     "src/bridges/catalog-types.ts",
-    "src/bridges/expr-parse.ts",
     "src/bridges/holds.ts",
     "src/canonical/domains.ts",
     "src/cases/quadrature.ts",
@@ -109,6 +108,7 @@
     "src/bridges/confrontations.ts",
     "src/bridges/evaluator-inputs.ts",
     "src/bridges/evaluators.ts",
+    "src/bridges/expr-parse.ts",
     "src/bridges/index.ts",
     "src/bridges/membership.ts",
     "src/bridges/observations/types.ts",
@@ -1198,6 +1198,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/units.test.ts"
     ],
     "src/bridges/evaluators.ts": [
@@ -1219,11 +1220,14 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
-    "src/bridges/expr-parse.ts": [],
+    "src/bridges/expr-parse.ts": [
+      "tests/dimensional/unit-closure.test.ts"
+    ],
     "src/bridges/holds.ts": [],
     "src/bridges/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -7276,6 +7280,7 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -7434,6 +7439,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/dimensional/synonym-groups.test.ts",
+      "tests/dimensional/unit-closure.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/euler-rejected.test.ts"
     ],
@@ -15659,6 +15665,13 @@
       "src/dimensional/algebra.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/dimensional/unit-closure.test.ts": [
+      "src/dimensional/units.ts",
+      "src/numerical/binding-value.ts",
+      "src/bridges/evaluator-inputs.ts",
+      "src/bridges/evaluators.ts",
+      "src/bridges/expr-parse.ts"
     ],
     "tests/dimensional/unit-grammar.test.ts": [
       "src/dimensional/algebra.ts",
