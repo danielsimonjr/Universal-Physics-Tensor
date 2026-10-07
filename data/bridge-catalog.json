@@ -12625,7 +12625,8 @@
           "quantity": "cyclotron frequency",
           "symbol": "ω_c",
           "unit": "rad/s",
-          "meaning": "ω_c ≥ 0; the Stix index is a hypothesis"
+          "meaning": "ω_c ≥ 0; the Stix index is a hypothesis",
+          "angular": true
         },
         {
           "key": "omega_p_rad_s",
@@ -12633,7 +12634,8 @@
           "symbol": "ω_p",
           "unit": "rad/s",
           "meaning": "plasma frequency",
-          "sign": "nonnegative"
+          "sign": "nonnegative",
+          "angular": true
         }
       ]
     },
@@ -12647,21 +12649,24 @@
           "symbol": "ω_pi",
           "unit": "rad/s",
           "meaning": "ion plasma frequency",
-          "sign": "nonnegative"
+          "sign": "nonnegative",
+          "angular": true
         },
         {
           "key": "omega_ci_rad_s",
           "quantity": "ion cyclotron frequency",
           "symbol": "ω_ci",
           "unit": "rad/s",
-          "meaning": "ion cyclotron frequency"
+          "meaning": "ion cyclotron frequency",
+          "angular": true
         },
         {
           "key": "omega_ce_rad_s",
           "quantity": "electron cyclotron frequency",
           "symbol": "ω_ce",
           "unit": "rad/s",
-          "meaning": "electron cyclotron frequency"
+          "meaning": "electron cyclotron frequency",
+          "angular": true
         }
       ]
     },
@@ -12817,7 +12822,8 @@
           "quantity": "wave frequency",
           "symbol": "ω",
           "unit": "rad/s",
-          "meaning": "real frequency; the residue formula is a hypothesis"
+          "meaning": "real frequency; the residue formula is a hypothesis",
+          "angular": true
         },
         {
           "key": "k_per_m",
@@ -12971,7 +12977,8 @@
           "quantity": "rotation rate",
           "symbol": "Ω",
           "unit": "rad/s",
-          "meaning": "stellar rotation"
+          "meaning": "stellar rotation",
+          "angular": true
         },
         {
           "key": "r_m",
@@ -13649,7 +13656,8 @@
           "quantity": "angular drive",
           "symbol": "ω",
           "unit": "rad/s",
-          "meaning": "angular frequency"
+          "meaning": "angular frequency",
+          "angular": true
         }
       ]
     },

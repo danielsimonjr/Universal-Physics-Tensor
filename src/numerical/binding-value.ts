@@ -41,7 +41,7 @@ import {
   type TemperatureReading,
 } from '../dimensional/units.js';
 import { callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
-import { parseFormulaPNode, type FormulaPNode } from './formula-dimension.js';
+import { FormulaDimensionError, parseFormulaPNode, type FormulaPNode } from './formula-dimension.js';
 
 /**
  * A temperature binding speaks kelvin. An energy is `k_B T` (the joules
@@ -78,7 +78,8 @@ function alignTemperatureBinding(
     };
   }
   throw new UnitError(
-    `'${raw.trim()}' is ${format(read.dimension)}, but ${name} is a temperature. An energy on a temperature is k_B T.`,
+    `'${raw.trim()}' is ${format(read.dimension)}, but ${name} is a temperature.` +
+      (/^(?:L\^2 M T\^-2|\[L\^2 M T\^-2\])$/.test(format(read.dimension)) ? ' An energy on a temperature is k_B T.' : ' Give kelvin, degC, or an energy (read as k_B T).'),
   );
 }
 
@@ -160,7 +161,7 @@ function scopeFor(mode: UnitMode): Map<string, Qty> {
 /** A unit the parser recognized and refused, rather than a prefix that is not a unit. */
 function unitRefusal(e: unknown): UnitError | null {
   if (!(e instanceof UnitError)) return null;
-  return /affine|more than one|ambiguous/.test(e.message) ? e : null;
+  return /affine|more than one|ambiguous|logarithmic|speed of sound/.test(e.message) ? e : null;
 }
 
 /** The longest unit expression at the start of `rest`, or null. */
@@ -176,7 +177,7 @@ function longestUnit(rest: string): string | null {
       // `deg` is a unit, but `degF` is Fahrenheit. Do not keep a prefix whose
       // next character continues the same token.
       const next = rest[n];
-      if (next !== undefined && /[A-Za-z0-9µμ°ÅΩ]/.test(next)) continue;
+      if (next !== undefined && /[A-Za-z0-9_µμ°ÅΩ]/.test(next)) continue;
       best = prefix;
     } catch (e) {
       const refused = unitRefusal(e);
@@ -491,6 +492,9 @@ export function readBinding(
   try {
     ast = parseFormulaPNode(spliced.expr);
   } catch (e) {
+    if (e instanceof FormulaDimensionError && /AccessorNode/.test(e.message)) {
+      throw new UnitError(`'${trimmed}' is not a number with an optional unit`);
+    }
     if (e instanceof FormulaError) {
       // `euler` names the refused constant. Keep that sentence; a bare unknown
       // word is not an expression, and a token with an operator (`2*`) is.

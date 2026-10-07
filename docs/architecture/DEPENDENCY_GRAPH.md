@@ -2830,7 +2830,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI` | Import |
+| `../core/constants.js` | `E_SI, FARADAY_SI, K_B_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI` | Import |
 | `../dimensional/dimension-spec.js` | `CONSTANT_SPELLINGS` | Import |
 | `../dimensional/formula-names.js` | `MU0_SI` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
@@ -5145,7 +5145,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./types.js` | `CHARGE, DIMENSIONLESS, FREQUENCY, LENGTH, MASS, TEMPERATURE` | Import |
-| `../core/constants.js` | `C_SI, E_SI, FARADAY_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, N_A_SI, THOMSON_CROSS_SECTION_SI` | Import |
+| `../core/constants.js` | `C_SI, E_SI, FARADAY_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, N_A_SI, THOMSON_CROSS_SECTION_SI` | Import |
 | `./quantity-registry.js` | `allQuantityRecords, quantityRecord, synonymGroupsFromRegistry` | Import |
 
 **Exports:**
@@ -5765,7 +5765,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, Dimension` | Import |
 | `../dimensional/units.js` | `affineAbsoluteOffsetK, convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
 | `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
-| `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
+| `./formula-dimension.js` | `FormulaDimensionError, parseFormulaPNode, FormulaPNode` | Import |
 
 **Exports:**
 - Interfaces: `BindingValue`, `NamedBindingSibling`
@@ -6705,7 +6705,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77245 |
+| Total Lines of Code | 77376 |
 | Total Exports | 2364 |
 | Total Re-exports | 1202 |
 | Total Classes | 64 |

@@ -76,9 +76,11 @@ describe('parseUnit', () => {
   });
 
   it('refuses what it cannot read rather than guessing', () => {
-    expect(() => parseUnit('cd')).toThrow(UnitError);
+    // The candela is a unit now (issue 475); an unknown letter run still refuses.
+    expect(() => parseUnit('cdx')).toThrow(UnitError);
     expect(() => parseUnit('furlong')).toThrow(/unknown unit 'furlong'/);
-    expect(() => parseUnit('m/s/s')).toThrow(/more than one '\/'/);
+    // A chain of slashes reads left to right (issue 477): m/s/s is m/s².
+    expect(parseUnit('m/s/s')).toEqual(parseUnit('m/s^2'));
     expect(parseUnit('degF').affine).toBe('fahrenheit');
     expect(parseUnit('degF').scale).toBeCloseTo(5 / 9, 12);
     expect(() => parseUnit('degC/s')).toThrow(/affine/);
