@@ -3,7 +3,7 @@ metadata:
   version: 8.0.0
   totalFiles: 352
   totalModules: 13
-  totalExports: 2372
+  totalExports: 2380
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3535,7 +3535,7 @@ modules:
           imports:
             - resolveQuantityName
             - synonymGroup
-            - SynonymDisagreementError
+            - synonymDisagreement
             - temperatureQuantityRole
         - file: ../numerical/binding-value.js
           imports:
@@ -5672,7 +5672,7 @@ modules:
             - UnitError
         - file: ../../dimensional/symbolic-constants.js
           imports:
-            - CONSTANTS
+            - constantRecord
         - file: ../../composition/aliases.js
           imports:
             - aliasesForTarget
@@ -6388,28 +6388,13 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - E_SI
-            - FARADAY_SI
-            - K_B_SI
-            - M_E_SI
-            - M_PROTON_SI
-            - M_SUN_SI
-            - N_A_SI
-        - file: ../dimensional/dimension-spec.js
-          imports:
-            - CONSTANT_SPELLINGS
-        - file: ../dimensional/formula-names.js
-          imports:
-            - MU0_SI
         - file: ../dimensional/symbolic-constants.js
           imports:
-            - CONSTANTS
+            - constantScope
         - file: ../dimensional/natural-units.js
           imports:
+            - naturalConstantOverrides
             - UnitMode
-          typeOnly: true
       exports:
         - HBAR_TRUNCATION_NOTE
         - codataScope
@@ -7818,8 +7803,11 @@ modules:
           imports:
             - DIMENSION_RENAMES
             - SYNONYM_GROUPS
-            - SynonymDisagreementError
+            - synonymDisagreement
             - DimensionRename
+        - file: ../dimensional/quantity-registry.js
+          imports:
+            - foldName
       exports:
         - NAME_TABLE
         - aliasesForTarget
@@ -7909,7 +7897,10 @@ modules:
       internalDependencies:
         - file: ../core/constants.js
           imports:
-            - HBAR_SI
+            - ALPHA
+        - file: ../dimensional/symbolic-constants.js
+          imports:
+            - constantRecord
         - file: ../dimensional/buckingham.js
           imports:
             - buckinghamPi
@@ -7925,9 +7916,6 @@ modules:
           imports:
             - equals
             - format
-        - file: ../dimensional/ast-builders.js
-          imports:
-            - dim
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -8132,12 +8120,9 @@ modules:
             - applyCarrierSignPolicy
         - file: ../dimensional/symbolic-constants.js
           imports:
+            - CONSTANT_REGISTRY
             - CONSTANTS
             - piMultipleValue
-        - file: ../core/constants.js
-          imports:
-            - E_SI
-            - M_E_SI
         - file: ../dimensional/types.js
           imports:
             - Dimension
@@ -11433,6 +11418,9 @@ modules:
         - K_B_SI
         - E_SI
         - ALPHA
+        - EPS0_SI
+        - MU0_SI
+        - SIGMA_SB_SI
         - M_P_SI
         - L_P_SI
         - T_P_SI
@@ -11461,6 +11449,9 @@ modules:
         - K_B_SI
         - E_SI
         - ALPHA
+        - EPS0_SI
+        - MU0_SI
+        - SIGMA_SB_SI
         - M_P_SI
         - L_P_SI
         - T_P_SI
@@ -11696,7 +11687,17 @@ modules:
       internalDependencies:
         - file: ./constants.js
           imports:
+            - ALPHA
+            - C_SI
+            - E_SI
+            - G_SI
+            - H0_SI
+            - H_SI
             - HBAR_SI
+            - K_B_SI
+            - L_P_SI
+            - M_P_SI
+            - T_P_SI
       exports:
         - PhysicalConstants
       interfaces:
@@ -11730,9 +11731,9 @@ modules:
             - ExprNode
             - TranscendentalFn
           typeOnly: true
-        - file: ../core/types.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
-            - PhysicalConstants
+            - constantScope
         - file: ../numerical/errors.js
           imports:
             - EngineCapabilityError
@@ -12056,17 +12057,17 @@ modules:
       functions:
         - christoffel
     src/dimensional/constants.ts:
-      description: SI dimensional signatures of fundamental physical constants.
+      description: SI dimensional signatures of fundamental physical constants, projected
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
         - file: ./types.js
           imports:
-            - Dimension
             - LENGTH
-            - VELOCITY
-            - ACTION
-            - CHARGE
+            - Dimension
+        - file: ./symbolic-constants.js
+          imports:
+            - constantRecord
       exports:
         - hbar
         - c
@@ -12234,6 +12235,12 @@ modules:
             - divide
             - multiply
             - power
+        - file: ./ast-builders.js
+          imports:
+            - dim
+        - file: ./symbolic-constants.js
+          imports:
+            - CONSTANT_REGISTRY
       exports:
         - CONSTANT_SPELLINGS
         - parseDimensionSpec
@@ -12341,7 +12348,7 @@ modules:
         - validateComponentDimension
         - validateTensorSymmetry
     src/dimensional/formula-names.ts:
-      description: Names a formula may use that are not leaves of {@link CONSTANTS}.
+      description: "Names a formula may use that are not leaves of {@link CONSTANTS}: the"
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -12351,28 +12358,22 @@ modules:
           typeOnly: true
         - file: ./types.js
           imports:
-            - CHARGE
-            - DIMENSIONLESS
-            - FREQUENCY
-            - LENGTH
             - MASS
             - TEMPERATURE
-        - file: ../core/constants.js
+        - file: ./symbolic-constants.js
           imports:
-            - C_SI
-            - E_SI
-            - FARADAY_SI
-            - K_B_SI
-            - LANE_EMDEN_OMEGA3
-            - M_E_SI
-            - M_PROTON_SI
-            - N_A_SI
-            - THOMSON_CROSS_SECTION_SI
+            - CONSTANT_REGISTRY
         - file: ./quantity-registry.js
           imports:
             - allQuantityRecords
+            - foldName
             - quantityRecord
             - synonymGroupsFromRegistry
+        - file: ../core/constants.js
+          imports:
+            - EPS0_SI
+            - MU0_SI
+          reExport: true
       exports:
         - EPS0_SI
         - MU0_SI
@@ -12384,10 +12385,14 @@ modules:
         - synonymGroup
         - isTemperatureName
         - temperatureQuantityRole
+        - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
         - resolveQuantityName
         - SynonymDisagreementError
+      reExported:
+        - EPS0_SI
+        - MU0_SI
       classes:
         - SynonymDisagreementError
       interfaces:
@@ -12399,12 +12404,11 @@ modules:
         - synonymGroup
         - isTemperatureName
         - temperatureQuantityRole
+        - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
         - resolveQuantityName
       constants:
-        - EPS0_SI
-        - MU0_SI
         - FORMULA_NAMED
         - DIMENSION_RENAMES
         - SYNONYM_GROUPS
@@ -12686,6 +12690,7 @@ modules:
             - Dimension
           typeOnly: true
       exports:
+        - foldName
         - allQuantityRecords
         - quantityRecord
         - synonymGroupsFromRegistry
@@ -12695,6 +12700,8 @@ modules:
         - allQuantityRecords
         - quantityRecord
         - synonymGroupsFromRegistry
+      constants:
+        - foldName
     src/dimensional/rg-flow.ts:
       description: Renormalization-group (RG) flow primitives — `RGCouplingNode` +
       externalDependencies: []
@@ -12761,7 +12768,7 @@ modules:
         - validateStressEnergyTensor
         - validateCosmologicalConstant
     src/dimensional/symbolic-constants.ts:
-      description: Symbolic-composition constant registry (v0.12 symbolic composition).
+      description: "The constant registry: one row per physical constant a formula may name."
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -12769,33 +12776,47 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ./types.js
+        - file: ./units.js
           imports:
-            - ACTION
-            - CHARGE
-            - DIMENSIONLESS
-            - MASS
-            - VELOCITY
+            - parseUnit
         - file: ../core/constants.js
           imports:
+            - B_WIEN_SI
             - C_SI
             - E_SI
+            - EPS0_SI
+            - FARADAY_SI
             - G_SI
             - GM_SUN_SI
-            - HBAR_SI
             - H_SI
+            - HBAR_SI
             - K_B_SI
-            - B_WIEN_SI
+            - LANE_EMDEN_OMEGA3
+            - M_E_SI
+            - M_PROTON_SI
+            - M_SUN_SI
             - M_U_SI
+            - MU0_SI
+            - N_A_SI
+            - SIGMA_SB_SI
+            - THOMSON_CROSS_SECTION_SI
       exports:
+        - CONSTANT_REGISTRY
         - CONSTANTS
         - CONSTANT_PROVENANCE
+        - constantRecord
+        - constantScope
         - piMultipleValue
       interfaces:
+        - ConstantRecord
+        - NamedConstantValue
         - ConstantProvenance
       functions:
+        - constantRecord
+        - constantScope
         - piMultipleValue
       constants:
+        - CONSTANT_REGISTRY
         - CONSTANTS
         - CONSTANT_PROVENANCE
     src/dimensional/tensor-trace.ts:
@@ -12980,6 +13001,7 @@ modules:
             - G_SI
             - GM_SUN_SI
             - M_SUN_SI
+            - M_U_SI
       exports:
         - unitConventionNotes
         - parseUnit
@@ -14903,10 +14925,8 @@ modules:
         - file: ../core/constants.js
           imports:
             - K_B_SI
-            - M_SUN_SI
         - file: ../dimensional/formula-names.js
           imports:
-            - FORMULA_NAMED
             - assertSynonymAgreement
             - isTemperatureName
             - synonymGroup
@@ -14920,7 +14940,8 @@ modules:
             - UnitMode
         - file: ../dimensional/symbolic-constants.js
           imports:
-            - CONSTANTS
+            - CONSTANT_REGISTRY
+            - constantRecord
         - file: ../dimensional/algebra.js
           imports:
             - divide
@@ -14932,7 +14953,6 @@ modules:
           imports:
             - DIMENSIONLESS
             - ENERGY
-            - MASS
             - TEMPERATURE
             - Dimension
         - file: ../dimensional/units.js
@@ -16764,16 +16784,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 352
   totalModules: 13
-  totalLinesOfCode: 77687
-  totalExports: 2372
+  totalLinesOfCode: 77651
+  totalExports: 2380
   totalClasses: 66
-  totalInterfaces: 434
-  totalFunctions: 725
+  totalInterfaces: 436
+  totalFunctions: 728
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 377
-  totalReExports: 1205
-  totalTypeOnlyImports: 498
+  totalConstants: 380
+  totalReExports: 1207
+  totalTypeOnlyImports: 497
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

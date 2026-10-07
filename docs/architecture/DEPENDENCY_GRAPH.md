@@ -1456,7 +1456,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/units.js` | `unitConventionNotes, UnitError, TemperatureReading` | Import |
-| `../dimensional/formula-names.js` | `resolveQuantityName, synonymGroup, SynonymDisagreementError, temperatureQuantityRole` | Import |
+| `../dimensional/formula-names.js` | `resolveQuantityName, synonymGroup, synonymDisagreement, temperatureQuantityRole` | Import |
 | `../numerical/binding-value.js` | `readNamedBinding, NamedBindingSibling` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
@@ -2485,7 +2485,7 @@ The codebase is organized into the following modules:
 | `../search-index.js` | `searchNameWords` | Import |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 | `../../dimensional/units.js` | `UnitError` | Import |
-| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../../dimensional/symbolic-constants.js` | `constantRecord` | Import |
 | `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Import |
 | `../../dimensional/formula-names.js` | `assertSynonymAgreement, resolveQuantityName, SynonymDisagreementError` | Import |
 | `../../composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
@@ -2833,11 +2833,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `E_SI, FARADAY_SI, K_B_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI` | Import |
-| `../dimensional/dimension-spec.js` | `CONSTANT_SPELLINGS` | Import |
-| `../dimensional/formula-names.js` | `MU0_SI` | Import |
-| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
-| `../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../dimensional/symbolic-constants.js` | `constantScope` | Import |
+| `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 
 **Exports:**
 - Functions: `codataScope`
@@ -3256,7 +3253,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
-| `../dimensional/formula-names.js` | `DIMENSION_RENAMES, SYNONYM_GROUPS, SynonymDisagreementError, DimensionRename` | Import |
+| `../dimensional/formula-names.js` | `DIMENSION_RENAMES, SYNONYM_GROUPS, synonymDisagreement, DimensionRename` | Import |
+| `../dimensional/quantity-registry.js` | `foldName` | Import |
 
 **Exports:**
 - Functions: `aliasesForTarget`, `editDistance`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
@@ -3310,12 +3308,12 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `HBAR_SI` | Import |
+| `../core/constants.js` | `ALPHA` | Import |
+| `../dimensional/symbolic-constants.js` | `constantRecord` | Import |
 | `../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
 | `../dimensional/algebra.js` | `equals, format` | Import |
-| `../dimensional/ast-builders.js` | `dim` | Import |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./formula-shape.js` | `formulaShape` | Import |
 | `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
@@ -3399,8 +3397,7 @@ The codebase is organized into the following modules:
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../bridges/carrier-sign.js` | `applyCarrierSignPolicy` | Import |
-| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
-| `../core/constants.js` | `E_SI, M_E_SI` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANT_REGISTRY, CONSTANTS, piMultipleValue` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../core/types.js` | `InformationMeasure` | Import (type-only) |
 | `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, MASS` | Import |
@@ -4710,10 +4707,10 @@ The codebase is organized into the following modules:
 - Constants:
 
   ```text
-  C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG,
-  VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI, LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3,
-  THOMSON_CROSS_SECTION_SI, GM_SUN_SI, GM_SUN_SOURCE, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI,
-  B_WIEN_SI, M_U_SI
+  C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, EPS0_SI, MU0_SI, SIGMA_SB_SI, M_P_SI, L_P_SI,
+  T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI, LORENZ_NUMBER_SI,
+  BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, GM_SUN_SI, GM_SUN_SOURCE, M_E_SI,
+  M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
   ```
 
 
@@ -4815,7 +4812,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./constants.js` | `HBAR_SI` | Import |
+| `./constants.js` | `ALPHA, C_SI, E_SI, G_SI, H0_SI, H_SI, HBAR_SI, K_B_SI, L_P_SI, M_P_SI, T_P_SI` | Import |
 
 **Exports:**
 - Interfaces: `TensorConfig`, `TensorIndices`, `PhysicalLaw`, `BridgeEquation`, `EmergentPhenomenon`
@@ -4839,7 +4836,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode, TranscendentalFn` | Import (type-only) |
-| `../core/types.js` | `PhysicalConstants` | Import |
+| `../dimensional/symbolic-constants.js` | `constantScope` | Import |
 | `../numerical/errors.js` | `EngineCapabilityError` | Import |
 | `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID, parseBridgeId` | Import |
 | `../numerical/quadrature.js` | `GAUSS_LEGENDRE_16` | Import |
@@ -5001,12 +4998,13 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/dimensional/constants.ts` - SI dimensional signatures of fundamental physical constants.
+### `src/dimensional/constants.ts` - SI dimensional signatures of fundamental physical constants, projected
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `Dimension, LENGTH, VELOCITY, ACTION, CHARGE` | Import |
+| `./types.js` | `LENGTH, Dimension` | Import |
+| `./symbolic-constants.js` | `constantRecord` | Import |
 
 **Exports:**
 - Constants: `hbar`, `c`, `G`, `k_B`, `e`, `l_P`
@@ -5082,6 +5080,8 @@ The codebase is organized into the following modules:
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./types.js` | `DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE` | Import |
 | `./algebra.js` | `divide, multiply, power` | Import |
+| `./ast-builders.js` | `dim` | Import |
+| `./symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
 
 **Exports:**
 - Classes: `DimensionSpecError`
@@ -5146,21 +5146,30 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/dimensional/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}.
+### `src/dimensional/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}: the
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./types.js` | `CHARGE, DIMENSIONLESS, FREQUENCY, LENGTH, MASS, TEMPERATURE` | Import |
-| `../core/constants.js` | `C_SI, E_SI, FARADAY_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, N_A_SI, THOMSON_CROSS_SECTION_SI` | Import |
-| `./quantity-registry.js` | `allQuantityRecords, quantityRecord, synonymGroupsFromRegistry` | Import |
+| `./types.js` | `MASS, TEMPERATURE` | Import |
+| `./symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
+| `./quantity-registry.js` | `allQuantityRecords, foldName, quantityRecord, synonymGroupsFromRegistry` | Import |
+| `../core/constants.js` | `EPS0_SI, MU0_SI` | Re-export |
 
 **Exports:**
 - Classes: `SynonymDisagreementError`
 - Interfaces: `FormulaName`, `DimensionRename`
-- Functions: `formulaNameDimensions`, `quantityIdForSpelling`, `synonymGroup`, `isTemperatureName`, `temperatureQuantityRole`, `assertSynonymAgreement`, `expandSynonymValues`, `resolveQuantityName`
-- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`, `DIMENSION_RENAMES`, `SYNONYM_GROUPS`
+- Functions:
+
+  ```text
+  formulaNameDimensions, quantityIdForSpelling, synonymGroup, isTemperatureName,
+  temperatureQuantityRole, synonymDisagreement, assertSynonymAgreement, expandSynonymValues,
+  resolveQuantityName
+  ```
+
+- Constants: `FORMULA_NAMED`, `DIMENSION_RENAMES`, `SYNONYM_GROUPS`
+- Re-exports: `EPS0_SI`, `MU0_SI`
 
 ---
 
@@ -5307,6 +5316,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `QuantityRecord`
 - Functions: `allQuantityRecords`, `quantityRecord`, `synonymGroupsFromRegistry`
+- Constants: `foldName`
 
 ---
 
@@ -5342,19 +5352,19 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/dimensional/symbolic-constants.ts` - Symbolic-composition constant registry (v0.12 symbolic composition).
+### `src/dimensional/symbolic-constants.ts` - The constant registry: one row per physical constant a formula may name.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./types.js` | `ACTION, CHARGE, DIMENSIONLESS, MASS, VELOCITY` | Import |
-| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI, M_U_SI` | Import |
+| `./units.js` | `parseUnit` | Import |
+| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
 
 **Exports:**
-- Interfaces: `ConstantProvenance`
-- Functions: `piMultipleValue`
-- Constants: `CONSTANTS`, `CONSTANT_PROVENANCE`
+- Interfaces: `ConstantRecord`, `NamedConstantValue`, `ConstantProvenance`
+- Functions: `constantRecord`, `constantScope`, `piMultipleValue`
+- Constants: `CONSTANT_REGISTRY`, `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -5433,7 +5443,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./algebra.js` | `equals, format, multiply, power` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
-| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI` | Import |
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI, M_U_SI` | Import |
 
 **Exports:**
 - Classes: `UnitError`
@@ -5764,13 +5774,13 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `K_B_SI, M_SUN_SI` | Import |
-| `../dimensional/formula-names.js` | `FORMULA_NAMED, assertSynonymAgreement, isTemperatureName, synonymGroup, temperatureQuantityRole` | Import |
+| `../core/constants.js` | `K_B_SI` | Import |
+| `../dimensional/formula-names.js` | `assertSynonymAgreement, isTemperatureName, synonymGroup, temperatureQuantityRole` | Import |
 | `../dimensional/unit-convention.js` | `quantityConventionUnit` | Import |
 | `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
-| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANT_REGISTRY, constantRecord` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
-| `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, Dimension` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, TEMPERATURE, Dimension` | Import |
 | `../dimensional/units.js` | `affineAbsoluteOffsetK, convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
 | `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
 | `./formula-dimension.js` | `FormulaDimensionError, parseFormulaPNode, FormulaPNode` | Import |
@@ -6714,15 +6724,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77687 |
-| Total Exports | 2372 |
-| Total Re-exports | 1205 |
+| Total Lines of Code | 77651 |
+| Total Exports | 2380 |
+| Total Re-exports | 1207 |
 | Total Classes | 66 |
-| Total Interfaces | 434 |
-| Total Functions | 725 |
+| Total Interfaces | 436 |
+| Total Functions | 728 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 498 |
+| Type-only Imports | 497 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

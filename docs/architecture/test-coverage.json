@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 352,
-    "totalTestFiles": 530,
+    "totalTestFiles": 532,
     "testedCount": 334,
     "untestedCount": 18,
     "coveragePercent": "94.9"
@@ -6329,13 +6329,17 @@
       "tests/composition/identifiability.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
+      "tests/composition/name-table.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
+      "tests/composition/user-equation.test.ts",
+      "tests/core/constants-owner.test.ts",
       "tests/core/constants.test.ts",
       "tests/dimensional/bridge-derivation-audit.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/dimensional/synonym-groups.test.ts",
       "tests/dimensional/units.test.ts",
@@ -6497,6 +6501,7 @@
       "tests/core/addCell.test.ts",
       "tests/core/populated-cells.test.ts",
       "tests/diff/bridge-ast-reencode.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -6615,6 +6620,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/dimensional/algebra-properties.test.ts",
       "tests/dimensional/algebra.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-inference.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
@@ -6923,6 +6929,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-spec-grouping.test.ts",
       "tests/dimensional/dimension-spec.test.ts"
@@ -6981,6 +6988,7 @@
       "tests/dimensional/algebra-properties.test.ts",
       "tests/dimensional/algebra.test.ts",
       "tests/dimensional/connection-validators.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-inference.test.ts",
@@ -7071,6 +7079,7 @@
       "tests/composition/retrodiction.test.ts",
       "tests/composition/user-equation.test.ts",
       "tests/dimensional/bridge-derivation-audit.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/dimensional/synonym-groups.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -7180,6 +7189,7 @@
     "src/dimensional/natural-units.ts": [],
     "src/dimensional/quantity-registry.ts": [
       "tests/bridges/evaluators.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/quantity-default-unit.test.ts"
     ],
     "src/dimensional/rg-flow.ts": [
@@ -7221,7 +7231,8 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
-      "tests/composition/symbolic-constants-extra.test.ts"
+      "tests/composition/symbolic-constants-extra.test.ts",
+      "tests/dimensional/constant-registry.test.ts"
     ],
     "src/dimensional/tensor-trace.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -7358,6 +7369,7 @@
       "tests/dimensional/buckingham.test.ts",
       "tests/dimensional/christoffel-helper.test.ts",
       "tests/dimensional/connection-validators.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/covariant-derivative-node.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/dimensional/derivation-benchmark.test.ts",
@@ -15104,7 +15116,8 @@
     ],
     "tests/composition/name-table.test.ts": [
       "src/composition/aliases.ts",
-      "src/dimensional/formula-names.ts"
+      "src/dimensional/formula-names.ts",
+      "src/core/constants.ts"
     ],
     "tests/composition/orphan-connectors.test.ts": [
       "src/composition/bridge-analysis.ts",
@@ -15390,6 +15403,7 @@
     "tests/composition/user-equation.test.ts": [
       "src/composition/user-equation.ts",
       "src/dimensional/formula-names.ts",
+      "src/core/constants.ts",
       "src/dimensional/types.ts",
       "src/composition/graph-viz.ts",
       "src/composition/edge.ts",
@@ -15405,6 +15419,9 @@
     ],
     "tests/core/cell.test.ts": [
       "src/core/cell.ts"
+    ],
+    "tests/core/constants-owner.test.ts": [
+      "src/core/constants.ts"
     ],
     "tests/core/constants.test.ts": [
       "src/core/constants.ts"
@@ -15560,6 +15577,17 @@
       "src/dimensional/tensor.ts",
       "src/dimensional/metric.ts",
       "src/dimensional/types.ts",
+      "src/dimensional/errors.ts"
+    ],
+    "tests/dimensional/constant-registry.test.ts": [
+      "src/core/constants.ts",
+      "src/core/types.ts",
+      "src/dimensional/dimension-spec.ts",
+      "src/dimensional/formula-names.ts",
+      "src/dimensional/quantity-registry.ts",
+      "src/dimensional/symbolic-constants.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/algebra.ts",
       "src/dimensional/errors.ts"
     ],
     "tests/dimensional/constants-surface.test.ts": [
@@ -15939,8 +15967,8 @@
     ],
     "tests/dimensional/synonym-groups.test.ts": [
       "src/dimensional/formula-names.ts",
-      "src/numerical/binding-value.ts",
-      "src/core/constants.ts"
+      "src/core/constants.ts",
+      "src/numerical/binding-value.ts"
     ],
     "tests/dimensional/tensor-ast-serialization.test.ts": [
       "src/dimensional/validator.ts",
