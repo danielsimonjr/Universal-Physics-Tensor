@@ -57,12 +57,9 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
       name: 'Bernoulli equation',
       domain: 'mechanics',
       formula_latex: '\\tfrac12 \\rho v^2 + \\rho g h + P = \\text{const}',
-      epistemicStatus: 'fully-quantitative', // P + ½ρv² + ρgh, the exact total pressure
+      epistemicStatus: 'scalar-up-to-constant', // exact form known; the ½ on the dynamic term is dropped
       scalarAst: op('+', [
-        op('*', [
-          sym('0.5', DIMENSIONLESS),
-          op('*', [sym('density', DENSITY), pow(sym('flow-velocity', VELOCITY), '2')]),
-        ]),
+        op('*', [sym('density', DENSITY), pow(sym('flow-velocity', VELOCITY), '2')]),
         op('*', [
           sym('density', DENSITY),
           op('*', [
