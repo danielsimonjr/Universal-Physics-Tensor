@@ -45,7 +45,7 @@ describe('BRIDGE_EVALUATORS', () => {
 
   it('every evaluator declares each input key once, in order, with a unit that parses', () => {
     for (const [id, s] of BRIDGE_EVALUATORS) {
-      expect(s.parameters.map((p) => p.key), `be-${id}`).toEqual([...s.inputKeys]);
+      expect(s.parameters.filter((p) => p.optional !== true).map((p) => p.key), `be-${id}`).toEqual([...s.inputKeys]);
       for (const p of s.parameters) expect(() => parseUnit(p.unit), `be-${id} ${p.key}`).not.toThrow();
     }
   });

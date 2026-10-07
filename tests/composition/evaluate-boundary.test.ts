@@ -46,7 +46,7 @@ describe('an unknown key and a non-number are refused (issue 455)', () => {
   });
 });
 
-describe('a declared alternate works in the library, and T_yr is not an input (issue 479)', () => {
+describe('a declared alternate works in the library, and T_yr only adds the per-century output (issue 479)', () => {
   it('major_axis_m is 2a', () => {
     const a = evaluateRelation('be-52', MERCURY);
     const b = evaluateRelation('be-52', { M_kg: 1.989e30, major_axis_m: 2 * 5.7909e10, e: 0.2056 });
@@ -55,9 +55,13 @@ describe('a declared alternate works in the library, and T_yr is not an input (i
   it('a_m and major_axis_m together are an error', () => {
     expect(() => evaluateRelation('be-52', { ...MERCURY, major_axis_m: 3e10 })).toThrow(/given twice/);
   });
-  it('T_yr has no effect on the value, so it is not an input', () => {
-    expect(() => evaluateRelation('be-52', { ...MERCURY, T_yr: 0.2408 })).toThrow(/'T_yr' is not an input/);
-    expect(BRIDGE_EVALUATORS.get(52)!.parameters.map((p) => p.key)).not.toContain('T_yr');
+  it('T_yr is optional, leaves the value unchanged, and is read by the per-century output', () => {
+    const plain = evaluateRelation('be-52', MERCURY);
+    const withPeriod = evaluateRelation('be-52', { ...MERCURY, T_yr: 0.2408 });
+    expect(plain.kind === 'value' && withPeriod.kind === 'value' && plain.value === withPeriod.value).toBe(true);
+    const spec = BRIDGE_EVALUATORS.get(52)!;
+    expect(spec.inputKeys).not.toContain('T_yr');
+    expect(unusedInputKeys(spec)).not.toContain('T_yr');
   });
 });
 
@@ -94,24 +98,21 @@ describe('the help names what be-55 prints (issue 448)', () => {
 });
 
 describe('a required input that does not enter the formula is said so (issue 451)', () => {
-  it.each([
-    [88, ['m_kg']],
-    [139, ['Nc_per_m3', 'ND_per_m3']],
-    [144, ['C_ohm_m_s']],
-    [146, ['lambda0_m']],
-  ])('be-%i', (id, keys) => {
-    expect(unusedInputKeys(BRIDGE_EVALUATORS.get(id)!)).toEqual(expect.arrayContaining(keys));
+  it.each([88, 139, 144, 146])('be-%i: every input is read by the value or by an extra output', (id) => {
+    expect(unusedInputKeys(BRIDGE_EVALUATORS.get(id)!)).toEqual([]);
   });
   it('be-133 uses every input (control)', () => {
     expect(unusedInputKeys(BRIDGE_EVALUATORS.get(133)!)).toEqual([]);
   });
-  it('the unused list is exactly the five evaluators above, so a new one is a decision (control against a blanket flag)', () => {
+  it('the unused list is exactly the one evaluator below, so a new one is a decision (control against a blanket flag)', () => {
     const rows = [...BRIDGE_EVALUATORS].filter(([, spec]) => unusedInputKeys(spec).length > 0).map(([id]) => id);
-    expect(rows).toEqual([88, 139, 144, 146, 170]);
+    expect(rows).toEqual([170]);
   });
-  it('the CLI prints the note', async () => {
+  it('the CLI prints the note for the evaluator that still has an unused input', async () => {
+    const key = unusedInputKeys(BRIDGE_EVALUATORS.get(170)!)[0]!;
     const cap = capture();
-    await runCli(['evaluate', 'be-88', 'n_per_m3=8.47e28', 'm_kg=9.1093837015e-31'], cap.io);
-    expect(cap.lines.join('')).toMatch(/m_kg.*does not enter/);
+    // onsager_B_T is a validity condition (B = 0), not a term of the value
+    await runCli(['evaluate', 'be-170', 'L12=3', 'onsager_B_T=0'], cap.io);
+    expect(cap.lines.join('')).toMatch(new RegExp(`${key}.*does not enter`));
   });
 });
