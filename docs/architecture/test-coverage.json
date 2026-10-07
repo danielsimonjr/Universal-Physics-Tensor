@@ -1,15 +1,16 @@
 {
   "metadata": {
-    "totalSourceFiles": 351,
-    "totalTestFiles": 522,
+    "totalSourceFiles": 352,
+    "totalTestFiles": 523,
     "testedCount": 333,
-    "untestedCount": 18,
-    "coveragePercent": "94.9"
+    "untestedCount": 19,
+    "coveragePercent": "94.6"
   },
   "untestedFiles": [
     "src/bridges/catalog-types.ts",
     "src/bridges/expr-parse.ts",
     "src/bridges/holds.ts",
+    "src/canonical/domains.ts",
     "src/cases/quadrature.ts",
     "src/cli/commands/_atlas-route.ts",
     "src/cli/commands/_discovery-opts.ts",
@@ -1453,6 +1454,7 @@
     "src/canonical/dimensional-fields.ts": [
       "tests/canonical/dimensional-fields.test.ts"
     ],
+    "src/canonical/domains.ts": [],
     "src/canonical/entries/_l1-build.ts": [
       "tests/composition/gr-formula-compare.test.ts"
     ],
@@ -1540,6 +1542,7 @@
       "tests/atlas/models.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/canonical-count-prose.test.ts",
+      "tests/canonical/canonical-domains.test.ts",
       "tests/canonical/invariants.test.ts",
       "tests/canonical/linkage.test.ts",
       "tests/canonical/nonmonomial.test.ts",
@@ -4593,6 +4596,7 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/canonical/canonical-domains.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -5008,6 +5012,7 @@
       "tests/atlas/path-bound.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/canonical/canonical-domains.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -5104,6 +5109,7 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/canonical/canonical-domains.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -5151,6 +5157,7 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/canonical/canonical-domains.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -9612,6 +9619,13 @@
     ],
     "tests/canonical/canonical-count-prose.test.ts": [
       "src/canonical/registry.ts"
+    ],
+    "tests/canonical/canonical-domains.test.ts": [
+      "src/canonical/registry.ts",
+      "src/composition/edge.ts",
+      "src/composition/evaluate-relation.ts",
+      "src/composition/explain.ts",
+      "src/composition/canonical-graph.ts"
     ],
     "tests/canonical/carrier-sign.test.ts": [
       "src/composition/canonical-graph.ts",
