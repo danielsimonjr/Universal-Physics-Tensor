@@ -39,7 +39,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 72 files
-- **bridges**: 22 files
+- **bridges**: 23 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
@@ -917,7 +917,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `FormalRef, FormalRefKind` | Import (type-only) |
-| `../bridges/catalog-load.js` | `catalogEdgeKey` | Import |
+| `../bridges/catalog-load.js` | `catalogEntry, parseBridgeId` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT, PHYSJS_MATHLIB, PHYSJS_PHYS_LIB, PHYSJS_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT` | Re-export |
 
@@ -1553,6 +1553,19 @@ The codebase is organized into the following modules:
 - Interfaces: `CatalogAdjudicationReport`
 - Functions: `adjudicateBridgeEntry`, `adjudicateCatalog`
 - Re-exports: `REJECTED_BRIDGE_ADJUDICATIONS`, `REJECTED_BRIDGE_IDS`, `RejectedBridgeAdjudication`
+
+---
+
+### `src/bridges/notices.ts` - The caveats printed beside a relation's value: the record's own notice, and
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/symbolic-constants.js` | `constantNotes` | Import |
+| `./catalog-types.js` | `CatalogRelation` | Import (type-only) |
+
+**Exports:**
+- Functions: `relationNotices`
 
 ---
 
@@ -2427,7 +2440,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/formula-names.js` | `expandSynonymValues, SynonymDisagreementError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
-| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
+| `../eval-numbers.js` | `codataScope` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
@@ -2453,12 +2466,10 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
-| `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
 | `../closed-form-range.js` | `closedFormRangeLabel` | Import |
-| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
 
 **Exports:**
-- Functions: `weakFieldDomainNote`, `propagateEvaluatorUncertainty`
+- Functions: `propagateEvaluatorUncertainty`
 - Constants: `command`
 
 ---
@@ -2794,7 +2805,6 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `canonicalCheckFailed`, `conventionLines`
-- Constants: `JEANS_FORMULA_NOTE`
 
 ---
 
@@ -2836,7 +2846,6 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `codataScope`
-- Constants: `HBAR_TRUNCATION_NOTE`
 
 ---
 
@@ -3173,7 +3182,8 @@ The codebase is organized into the following modules:
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
-| `./core/constants.js` | `C_SI, G_SI` | Re-export |
+| `./bridges/notices.js` | `relationNotices` | Re-export |
+| `./dimensional/symbolic-constants.js` | `constantNotes` | Re-export |
 | `./composition/edge.js` | `BridgeEdge` | Re-export |
 | `./composition/graph-viz.js` | `VizJunction, VizModel` | Re-export |
 | `./atlas/types.js` | `EvidenceTag, RelationType` | Re-export |
@@ -3222,8 +3232,8 @@ The codebase is organized into the following modules:
   kerrGeodesic, kerrTurningPointOrbit, MetricMassError, schwarzschildCircularOrbit, type MetricId,
   readBinding, bindingInUnit, readNamedBinding, resolveQuantityName, evaluatorOutput,
   resolveEvaluable, unusedInputKeys, SynonymDisagreementError, builtinFormulaDimensionChecker,
-  missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
-  EquationAnalysis
+  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
+  EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -4711,10 +4721,10 @@ The codebase is organized into the following modules:
 - Constants:
 
   ```text
-  C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, EPS0_SI, MU0_SI, SIGMA_SB_SI, M_P_SI, L_P_SI,
-  T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI, LORENZ_NUMBER_SI,
-  BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, GM_SUN_SI, GM_SUN_SOURCE, M_E_SI,
-  M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
+  C_SI, G_SI, H_SI, HBAR_SI, HBAR_CODATA_DISPLAY, K_B_SI, E_SI, ALPHA, EPS0_SI, MU0_SI, SIGMA_SB_SI,
+  M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI,
+  LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, GM_SUN_SI,
+  GM_SUN_SOURCE, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
   ```
 
 
@@ -5363,11 +5373,11 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./units.js` | `parseUnit` | Import |
-| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
+| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
 
 **Exports:**
 - Interfaces: `ConstantRecord`, `NamedConstantValue`, `ConstantProvenance`
-- Functions: `constantRecord`, `constantScope`, `piMultipleValue`
+- Functions: `constantRecord`, `constantNotes`, `constantScope`, `piMultipleValue`
 - Constants: `CONSTANT_REGISTRY`, `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
@@ -6599,7 +6609,7 @@ graph TD
         N8[catalog-adapter]
         N9[catalog-load]
         N10[catalog-types]
-        N11[...17 more]
+        N11[...18 more]
     end
 
     subgraph Canonical
@@ -6726,17 +6736,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 351 |
+| Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77618 |
+| Total Lines of Code | 77601 |
 | Total Exports | 2379 |
 | Total Re-exports | 1207 |
 | Total Classes | 66 |
 | Total Interfaces | 438 |
-| Total Functions | 728 |
+| Total Functions | 729 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 497 |
+| Type-only Imports | 498 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

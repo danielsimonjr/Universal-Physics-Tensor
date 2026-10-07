@@ -1,7 +1,7 @@
 metadata:
   name: universal-physics-tensor
   version: 8.0.0
-  totalFiles: 351
+  totalFiles: 352
   totalModules: 13
   totalExports: 2379
 entryPoints:
@@ -2310,7 +2310,8 @@ modules:
           typeOnly: true
         - file: ../bridges/catalog-load.js
           imports:
-            - catalogEdgeKey
+            - catalogEntry
+            - parseBridgeId
         - file: ./physjs-entries.generated.js
           imports:
             - PHYSJS_COMMIT
@@ -3771,6 +3772,22 @@ modules:
       functions:
         - adjudicateBridgeEntry
         - adjudicateCatalog
+    src/bridges/notices.ts:
+      description: "The caveats printed beside a relation's value: the record's own notice, and"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/symbolic-constants.js
+          imports:
+            - constantNotes
+        - file: ./catalog-types.js
+          imports:
+            - CatalogRelation
+          typeOnly: true
+      exports:
+        - relationNotices
+      functions:
+        - relationNotices
     src/bridges/observations/types.ts:
       description: Typed observation + confrontation-outcome layer for `upt confront`.
       externalDependencies: []
@@ -5555,7 +5572,6 @@ modules:
             - withParser
         - file: ../eval-numbers.js
           imports:
-            - HBAR_TRUNCATION_NOTE
             - codataScope
         - file: ../../dimensional/natural-units.js
           imports:
@@ -5604,21 +5620,13 @@ modules:
             - CaseResult
             - EvaluatorParameter
           typeOnly: true
-        - file: ../conventions.js
-          imports:
-            - JEANS_FORMULA_NOTE
         - file: ../closed-form-range.js
           imports:
             - closedFormRangeLabel
-        - file: ../eval-numbers.js
-          imports:
-            - HBAR_TRUNCATION_NOTE
       exports:
         - command
-        - weakFieldDomainNote
         - propagateEvaluatorUncertainty
       functions:
-        - weakFieldDomainNote
         - propagateEvaluatorUncertainty
       constants:
         - command
@@ -6334,14 +6342,11 @@ modules:
           imports:
             - canonicalById
       exports:
-        - JEANS_FORMULA_NOTE
         - canonicalCheckFailed
         - conventionLines
       functions:
         - canonicalCheckFailed
         - conventionLines
-      constants:
-        - JEANS_FORMULA_NOTE
     src/cli/determination.ts:
       description: One exit for a result the user asked to have determined.
       externalDependencies: []
@@ -6392,12 +6397,9 @@ modules:
             - naturalConstantOverrides
             - UnitMode
       exports:
-        - HBAR_TRUNCATION_NOTE
         - codataScope
       functions:
         - codataScope
-      constants:
-        - HBAR_TRUNCATION_NOTE
     src/cli/expr-print.ts:
       description: "The three printed forms of a scalar composed AST (`upt symbolic`, audit F12 and I10):"
       externalDependencies: []
@@ -7332,10 +7334,13 @@ modules:
           imports:
             - missingEvaluatorMessage
           reExport: true
-        - file: ./core/constants.js
+        - file: ./bridges/notices.js
           imports:
-            - C_SI
-            - G_SI
+            - relationNotices
+          reExport: true
+        - file: ./dimensional/symbolic-constants.js
+          imports:
+            - constantNotes
           reExport: true
         - file: ./composition/edge.js
           imports:
@@ -7512,8 +7517,8 @@ modules:
         - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
-        - C_SI
-        - G_SI
+        - relationNotices
+        - constantNotes
         - ConfrontationEntry
         - RigorTier
         - ConfrontationOutcome
@@ -7753,8 +7758,8 @@ modules:
         - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
-        - C_SI
-        - G_SI
+        - relationNotices
+        - constantNotes
         - BridgeEdge
         - VizJunction
         - VizModel
@@ -11417,6 +11422,7 @@ modules:
         - G_SI
         - H_SI
         - HBAR_SI
+        - HBAR_CODATA_DISPLAY
         - K_B_SI
         - E_SI
         - ALPHA
@@ -11448,6 +11454,7 @@ modules:
         - G_SI
         - H_SI
         - HBAR_SI
+        - HBAR_CODATA_DISPLAY
         - K_B_SI
         - E_SI
         - ALPHA
@@ -12791,6 +12798,7 @@ modules:
             - G_SI
             - GM_SUN_SI
             - H_SI
+            - HBAR_CODATA_DISPLAY
             - HBAR_SI
             - K_B_SI
             - LANE_EMDEN_OMEGA3
@@ -12807,6 +12815,7 @@ modules:
         - CONSTANTS
         - CONSTANT_PROVENANCE
         - constantRecord
+        - constantNotes
         - constantScope
         - piMultipleValue
       interfaces:
@@ -12815,6 +12824,7 @@ modules:
         - ConstantProvenance
       functions:
         - constantRecord
+        - constantNotes
         - constantScope
         - piMultipleValue
       constants:
@@ -16495,6 +16505,7 @@ dependencyGraph:
         - src/bridges/holds.ts
         - src/bridges/index.ts
         - src/bridges/membership.ts
+        - src/bridges/notices.ts
         - src/bridges/observations/types.ts
         - src/bridges/registry.ts
         - src/bridges/rejected.ts
@@ -16783,18 +16794,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 351
+  totalTypeScriptFiles: 352
   totalModules: 13
-  totalLinesOfCode: 77618
+  totalLinesOfCode: 77601
   totalExports: 2379
   totalClasses: 66
   totalInterfaces: 438
-  totalFunctions: 728
+  totalFunctions: 729
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 379
+  totalConstants: 378
   totalReExports: 1207
-  totalTypeOnlyImports: 497
+  totalTypeOnlyImports: 498
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
