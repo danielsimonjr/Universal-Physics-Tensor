@@ -201,7 +201,7 @@ describe('explain temperature bindings', () => {
       ),
     ).toBe(0);
     const valueLine = (body: string): string => {
-      const line = body.split('\n').find((row) => /^\s*value = /.test(row));
+      const line = body.split('\n').find((row) => /^\s*\S+ \[[^\]]*\] = /.test(row));
       if (line === undefined) throw new Error(`no value line in:\n${body}`);
       return line;
     };

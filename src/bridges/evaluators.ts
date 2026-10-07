@@ -65,6 +65,39 @@ function toParameter(row: CatalogEvaluatorParameter): EvaluatorParameter {
 
 const NAMED_DEFAULT = new Map(FORMULA_NAMED.map((named) => [named.name, named.value]));
 
+/** The relation source a parameter is the input for, or undefined when it owns none. */
+export function sourceOfParameter(relation: CatalogRelation, parameter: EvaluatorParameter): string | undefined {
+  for (const source of relation.sources) {
+    if (source === parameter.key || (relation.aliases[source] ?? []).includes(parameter.key)) return source;
+  }
+  return relation.sources.includes(parameter.quantity) ? parameter.quantity : undefined;
+}
+
+/**
+ * Keys of the parameters whose source does not appear in the relation's
+ * expression. They are checked against the validity domain and do not change
+ * the value, so a caller who varies one sees no effect.
+ */
+export function unusedInputKeys(spec: EvaluatorSpec): string[] {
+  const relation = primaryRelation(spec.bridgeId);
+  if (relation === undefined) return [];
+  // Names carry hyphens, and a hyphen is also a minus. Blank out each source
+  // name longest first, so `a-b` inside `a-b-c` is not read as `a-b`.
+  let rest = relation.expression;
+  const used = new Set<string>();
+  for (const source of [...relation.sources].sort((x, y) => y.length - x.length)) {
+    if (rest.includes(source)) used.add(source);
+    rest = rest.split(source).join(' ');
+  }
+  return spec.parameters
+    .filter((parameter) => {
+      const source = sourceOfParameter(relation, parameter);
+      // A parameter that owns no relation source is read by nothing.
+      return source === undefined || !used.has(source);
+    })
+    .map((parameter) => parameter.key);
+}
+
 /** Map evaluator keys onto catalog quantity names. A named constant fills a source no parameter owns. */
 export function bindRelationInputs(
   relation: CatalogRelation,

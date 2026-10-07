@@ -79,7 +79,7 @@ const CASES: readonly Case[] = [
   { id: 'CE-clausius-entropy', good: { heat: 100, temperature: 300 }, bad: [['T<0', { temperature: -300 }]] },
   { id: 'CE-equipartition', good: { 'boltzmann-constant': 1.380649e-23, temperature: 300 }, bad: [['T<0', { temperature: -300 }]] },
   { id: 'CE-boltzmann-entropy', good: { 'boltzmann-constant': 1.380649e-23, 'microstate-count': 10 }, bad: [['W<1', { 'microstate-count': 0.5 }], ['W=0', { 'microstate-count': 0 }]] },
-  { id: 'CE-ideal-gas', good: { 'boltzmann-constant': 1.380649e-23, temperature: 300, V: 1, N: 1e23 }, bad: [['T<0', { temperature: -300 }], ['V<0', { V: -1 }]] },
+  { id: 'CE-ideal-gas', good: { temperature: 300, V: 1, N: 1e23 }, bad: [['T<0', { temperature: -300 }], ['V<0', { V: -1 }]] },
   { id: 'CE-heat-capacity', good: { mass: 1, 'specific-heat': 4180, 'temperature-change': 10 }, bad: [['m<0', { mass: -1 }]] },
   { id: 'CE-latent-heat', good: { mass: 1, 'specific-latent-heat': 2.26e6 }, bad: [['m<0', { mass: -1 }]] },
   { id: 'CE-jarzynski', good: { temperature: 300 }, bad: [['T<0', { temperature: -300 }]] },
