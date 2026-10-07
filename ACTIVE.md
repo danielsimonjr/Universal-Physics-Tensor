@@ -20,8 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
-- [ ] `upt explain` reads `nu` and `photon-frequency`, and `h` and `planck-constant`, as one quantity each.
+- [x] `upt explain` reads `nu` and `photon-frequency`, and `h` and `planck-constant`, as one quantity each.
   `upt explain photon-energy planck-constant=6.62607015e-34 nu=5e14 --source=canonical` recovers 3.313e-19 J. The same call with `photon-frequency=5e14` says the energy cannot be determined and that knowing `nu` would unblock it, and `h=…` does not resolve to a quantity. Issue 473.
+  Done: `photon-frequency` (alias `nu`) and `planck-constant` (alias `h`) are rows of `data/quantities.json`, so the synonym projection reads each pair as one quantity. All three spellings recover 3.313e-19 J, two different numbers under two spellings are an error, and a plain `frequency` is still a different quantity. The Wien constant, the Stefan–Boltzmann constant, and `b` stay unresolved: they are constants in the canonical equations and not graph quantities.
 
 - [x] `upt metric` refuses r = 0, a non-positive mass, and a pole or out-of-range polar angle.
   `upt metric schwarzschild M=1Msun r=0` is read as "not supplied" and prints the 10 r_s default. A negative mass is accepted unless `--geodesic` is given. `theta=pi` prints Kretschmann 8.9e31 where the closed form is 1e-40, and `theta=3.5` is accepted. Issue 478.
