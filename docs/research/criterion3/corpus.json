@@ -4958,10 +4958,10 @@
           "args": [
             {
               "kind": "symbol",
-              "name": "density",
+              "name": "0.5",
               "dim": {
-                "L": -3,
-                "M": 1,
+                "L": 0,
+                "M": 0,
                 "T": 0,
                 "I": 0,
                 "Theta": 0,
@@ -4971,15 +4971,15 @@
             },
             {
               "kind": "op",
-              "op": "^",
+              "op": "*",
               "args": [
                 {
                   "kind": "symbol",
-                  "name": "flow-velocity",
+                  "name": "density",
                   "dim": {
-                    "L": 1,
-                    "M": 0,
-                    "T": -1,
+                    "L": -3,
+                    "M": 1,
+                    "T": 0,
                     "I": 0,
                     "Theta": 0,
                     "N": 0,
@@ -4987,17 +4987,36 @@
                   }
                 },
                 {
-                  "kind": "symbol",
-                  "name": "2",
-                  "dim": {
-                    "L": 0,
-                    "M": 0,
-                    "T": 0,
-                    "I": 0,
-                    "Theta": 0,
-                    "N": 0,
-                    "J": 0
-                  }
+                  "kind": "op",
+                  "op": "^",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "flow-velocity",
+                      "dim": {
+                        "L": 1,
+                        "M": 0,
+                        "T": -1,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "2",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    }
+                  ]
                 }
               ]
             }
