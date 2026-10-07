@@ -64,15 +64,20 @@ describe('closed-form evaluation', () => {
     if (factor.kind === 'value') expect(factor.value).toBeCloseTo(Math.exp(-1), 12);
   });
 
-  it('Bernoulli stays unset when every input is finite', () => {
+  it('Bernoulli is the total pressure P + ρv²/2 + ρgh when every input is given', () => {
     const result = evaluateRelation('CE-bernoulli', {
-      density: 1,
-      'flow-velocity': 1,
-      'gravitational-acceleration': 1,
+      density: 1000,
+      'flow-velocity': 2,
+      'gravitational-acceleration': 9.81,
       height: 1,
-      'static-pressure': 1,
+      'static-pressure': 1e5,
     });
-    expect(result).toMatchObject({ kind: 'unset' });
+    expect(result.kind).toBe('value');
+    if (result.kind === 'value') expect(result.value).toBeCloseTo(111810, 6);
+  });
+
+  it('an entry whose prefactor has no source stays unset (control: unset still exists)', () => {
+    expect(evaluateRelation('CE-sound-speed', { pressure: 1e5, density: 1.2 })).toMatchObject({ kind: 'unset' });
   });
 
   it('every catalog and canonical edge accepts a complete finite input without throwing', () => {
