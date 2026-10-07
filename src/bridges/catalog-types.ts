@@ -84,6 +84,12 @@ export interface CatalogEvaluatorParameter {
   readonly meaning: string;
   readonly geometry?: 'radius' | 'diameter' | 'separation' | 'impact-parameter' | 'semi-major-axis';
   readonly temperature?: 'absolute';
+  /**
+   * The sign this input must have. `positive` is `> 0`, `nonnegative` is `>= 0`,
+   * and `any` states that the quantity is signed and overrides the temperature
+   * rule. An absolute temperature is `nonnegative` when no sign is stated.
+   */
+  readonly sign?: 'positive' | 'nonnegative' | 'any';
   readonly alternates?: readonly { readonly key: string; readonly meaning: string; readonly toKey: number }[];
   readonly optional?: true;
 }

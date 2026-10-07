@@ -30,6 +30,8 @@ export interface EvaluatorParameter {
   readonly meaning: string;
   readonly geometry?: GeometryRole;
   readonly temperature?: 'absolute';
+  /** The sign this input must have; the catalog loader turns it into a validity clause. */
+  readonly sign?: 'positive' | 'nonnegative' | 'any';
   readonly alternates?: readonly ParameterAlternate[];
   readonly optional?: true;
 }
@@ -52,6 +54,7 @@ function toParameter(row: CatalogEvaluatorParameter): EvaluatorParameter {
     meaning: row.meaning,
     ...(row.geometry !== undefined ? { geometry: row.geometry } : {}),
     ...(row.temperature !== undefined ? { temperature: row.temperature } : {}),
+    ...(row.sign !== undefined ? { sign: row.sign } : {}),
     ...(row.alternates !== undefined ? { alternates: row.alternates } : {}),
     ...(row.optional === true ? { optional: true as const } : {}),
   };
