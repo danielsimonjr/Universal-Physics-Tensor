@@ -28,6 +28,12 @@ export interface CatalogEntry extends BridgeEquationEntry {
   readonly derivedFrom?: readonly string[];
   readonly basis?: true;
   readonly formalKey?: string;
+  /**
+   * The reviewed kind of the PhysJS reference `formalKey` names, when it is
+   * not the first word of the covers line: `bridge` when the theorem states
+   * the catalogued equation, `property` when it states a property of it.
+   */
+  readonly formalKind?: 'bridge' | 'property';
   readonly assumptions?: readonly string[];
   readonly scopeLimits?: readonly string[];
   readonly dimension?: Dimension;
@@ -69,8 +75,8 @@ export interface CatalogRelation {
   readonly conventions?: Conventions;
   readonly counterexamples?: readonly Counterexample[];
   readonly reference?: CatalogReference;
-  /** A named evaluation notice. The text lives with the notice, not with an id switch. */
-  readonly notice?: string;
+  /** A caveat the record states beside its value. The text is the record's; nothing switches on it. */
+  readonly notice?: { readonly text: string };
   /** A generic numerical method this record calls. Never a bridge number. */
   readonly method?: string;
 }

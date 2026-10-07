@@ -14,9 +14,7 @@ import { siUnitOf } from '../expr-print.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
-import { JEANS_FORMULA_NOTE } from '../conventions.js';
 import { closedFormRangeLabel } from '../closed-form-range.js';
-import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -64,10 +62,10 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         --sigma is treated as exact. Not included: the evaluator's numerical
         error and model discrepancy (whether the bridge applies).
         e.g.  upt evaluate be-58 T_K=300 R_ohm=1000 --sigma T_K=3 --sigma R_ohm=10
-        be-51 and be-52 are weak-field formulas. When the impact parameter, or
-        the periapsis a(1-e), is not above 10 Schwarzschild radii, the number
-        is still printed and a warning names that cut (the same b ≥ 10 r_s cut
-        be-51's graph domain already uses). Exit stays 0.`;
+        An input outside a relation's validity domain is refused and the message
+        names the condition (a weak-field formula inside 10 Schwarzschild radii,
+        a negative temperature). A relation's recorded caveat, and the note of a
+        registered constant it names, print beside the value.`;
 
 /** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2). */
 function resolveInputs(api: CommandCtx['api'], label: string, parameters: readonly EvaluatorParameter[], args: readonly string[]) {
@@ -100,50 +98,6 @@ function describeParameter(p: EvaluatorParameter): string {
 
 /** A curvature term above this fraction of the linear term marks the linearization unreliable. */
 const NONLINEAR_FRACTION = 0.1;
-
-/**
- * be-51's graph domain already refuses `b < 10 r_s`. `upt evaluate` calls the
- * closed form anyway (`b > 0` is the only throw). This note names that cut
- * when the impact parameter, or a periapsis `a(1−e)`, is inside it. The
- * number is unchanged. Solar-limb deflection and Mercury sit far outside it.
- * @internal
- */
-export function weakFieldDomainNote(
-  api: CommandCtx['api'],
-  bridgeId: number,
-  inputs: Readonly<Record<string, number>>,
-): string | undefined {
-  const mass = inputs.M_kg;
-  if (!(mass > 0) || !Number.isFinite(mass)) return undefined;
-  const rs = (2 * api.G_SI * mass) / (api.C_SI * api.C_SI);
-  if (!(rs > 0) || !Number.isFinite(rs)) return undefined;
-  const notice = api.primaryRelation(bridgeId)?.notice;
-  if (notice === 'weak-field-impact') {
-    const b = inputs.b_m;
-    if (b > 0 && b <= 10 * rs) {
-      return (
-        `WARNING: weak-field formula α = 4GM/(b c²) assumes b ≫ r_s = 2GM/c² ` +
-        `(the graph domain requires b ≥ 10 r_s). Here b = ${b} m and r_s = ${rs} m ` +
-        `(b/r_s = ${b / rs}). The number above is that formula anyway; it is not the strong-field deflection.`
-      );
-    }
-  }
-  if (notice === 'weak-field-periapsis') {
-    const a = inputs.a_m;
-    const e = inputs.e;
-    if (a > 0 && e >= 0 && e < 1) {
-      const peri = a * (1 - e);
-      if (peri <= 10 * rs) {
-        return (
-          `WARNING: weak-field formula for the perihelion advance assumes periapsis a(1−e) ≫ r_s = 2GM/c² ` +
-          `(the same 10 r_s cut). Here a(1−e) = ${peri} m and r_s = ${rs} m ` +
-          `(a(1−e)/r_s = ${peri / rs}). The number above is that formula anyway.`
-        );
-      }
-    }
-  }
-  return undefined;
-}
 
 interface Contribution {
   readonly sensitivity: number | null;
@@ -551,10 +505,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i) as Record<string, unknown>, NOT_INCLUDED);
-  const domainNote = weakFieldDomainNote(api, id, inputs);
-  const notice = api.primaryRelation(id)?.notice;
-  const formulaNote = notice === 'jeans-formula' ? JEANS_FORMULA_NOTE : undefined;
-  const hbarNote = notice === 'hbar-truncation' ? HBAR_TRUNCATION_NOTE : undefined;
+  const relation = api.primaryRelation(id);
+  const notices = relation === undefined ? [] : api.relationNotices(relation);
 
   const outputDescriptor = api.evaluatorOutput(spec);
   const outputLabel = {
@@ -578,9 +530,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           },
           ...(spec.outputs.length === 0 ? {} : { extraOutputs: spec.outputs.map(({ name, unit, meaning }) => ({ name, unit, meaning })) }),
           ...(unused.length === 0 ? {} : { unusedInputs: unused }),
-          ...(domainNote === undefined ? {} : { domainNote }),
-          ...(formulaNote === undefined ? {} : { formulaNote }),
-          ...(hbarNote === undefined ? {} : { hbarNote }),
+          ...(notices.length === 0 ? {} : { notices }),
           ...(u === null ? {} : { uncertainty: u.block }),
         },
       },
@@ -605,9 +555,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const key of unused) {
     out(`  note: ${key} is required and does not enter the value; the closed form does not use it, so changing it changes nothing`);
   }
-  if (domainNote !== undefined) out(`  ${domainNote}`);
-  if (formulaNote !== undefined) out(`  ${formulaNote}`);
-  if (hbarNote !== undefined) out(`  ${hbarNote}`);
+  for (const notice of notices) out(`  ${notice}`);
   if (u !== null) printUncertainty(out, u);
   return 0;
 }

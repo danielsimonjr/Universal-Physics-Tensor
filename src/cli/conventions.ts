@@ -40,8 +40,3 @@ export function conventionLines(ids: readonly string[]): string[] {
   }
   return lines;
 }
-
-/** Printed beside be-65. The number is the coded formula; the 5 is convention-dependent. */
-export const JEANS_FORMULA_NOTE =
-  'formula: M_J = (5 k_B T / (G μ m_u))^{3/2} · (3/(4π ρ))^{1/2}. ' +
-  'The leading 5 is convention-dependent; the number above is this formula, not a checked universal prefactor.';

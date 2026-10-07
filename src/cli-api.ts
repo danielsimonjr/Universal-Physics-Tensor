@@ -271,12 +271,10 @@ export { builtinFormulaDimensionChecker } from './numerical/formula-dimension.js
  */
 export { missingEvaluatorMessage } from './bridges/evaluators.js';
 
-/**
- * SI constants the evaluate command uses in the weak-field note.
- *
- * @internal
- */
-export { C_SI, G_SI } from './core/constants.js';
+/** The caveats printed beside a relation's value: its own notice and the notes of the constants it names. */
+export { relationNotices } from './bridges/notices.js';
+/** The notes of the registered constants a formula names. */
+export { constantNotes } from './dimensional/symbolic-constants.js';
 
 /** Quantity-graph edge type for `upt map`. @internal */
 export type { BridgeEdge } from './composition/edge.js';

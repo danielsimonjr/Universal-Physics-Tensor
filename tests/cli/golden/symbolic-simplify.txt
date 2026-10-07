@@ -15,7 +15,7 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
         mass  input quantity mass (symbol M), [mass]  1.989e+30              kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
         G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
       value @ mass = M_sun:  5.9031e-31  (= composed, [energy])
-      confidence: highly-speculative. This chain stays provisional. upt atlas be-16 shows the kind-bridge formalRef; that page is not this grade.
+      confidence: highly-speculative. This chain stays provisional. upt atlas be-42 and be-16 show those edges' formalRefs; neither page is this grade.
 
   ● CT-1b (Schwarzschild radius composed with Hawking temperature, name-match junction)
       composed:   hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))
@@ -30,6 +30,7 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
         G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
         mass  input quantity mass (symbol M), [mass]  1.989e+30              kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
       value @ mass = M_sun:  6.1684e-8  (= composed, [temperature])
+      confidence: highly-speculative. This chain stays provisional. upt atlas be-42 shows that edge's formalRef; that page is not this grade.
 
   Both compose by AST substitution at the junction and match the numeric composeEdges
   pipeline to float precision. --simplify folds the composed AST via MathTS (k_B cancels), guarded by re-validation.

@@ -211,11 +211,16 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`      dimension: ${api.format(obs.dim)}   (validated on the composed AST)`);
       out(`      value @ mass = M_sun:  ${num.toExponential(4)}`);
     }
-    if (!isJson && (first.beId === 16 || second.beId === 16)) {
+    // Every edge whose catalog status is below established grades the chain; name each one.
+    const graded = [first, second].filter(
+      (edge) => edge.beId !== null && api.catalogEntry(edge.beId)?.status !== 'established',
+    );
+    if (!isJson && graded.length > 0) {
       const composed = api.composeEdges(first, second);
+      const pages = graded.map((edge) => `be-${edge.beId}`).join(' and ');
       out(
         `      confidence: ${composed.confidence}. This chain stays provisional. ` +
-          'upt atlas be-16 shows the kind-bridge formalRef; that page is not this grade.',
+          `upt atlas ${pages} ${graded.length === 1 ? "shows that edge's formalRef; that page is not" : "show those edges' formalRefs; neither page is"} this grade.`,
       );
     }
     if (!isJson) out('');

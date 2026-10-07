@@ -14,7 +14,7 @@ import { CliError, UsageError } from '../errors.js';
 import { expandSynonymValues, SynonymDisagreementError } from '../../dimensional/formula-names.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
-import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
+import { codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 
 const FLAGS: FlagSpec[] = [
@@ -162,7 +162,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const notes: string[] = [...parsed.notes];
-  if (mode === 'si' && cf.variables.includes('hbar')) notes.push(HBAR_TRUNCATION_NOTE);
+  if (mode === 'si') for (const note of api.constantNotes(cf.variables)) notes.push(`note: ${note}`);
   for (const note of notes) err(note);
 
   let value: number;

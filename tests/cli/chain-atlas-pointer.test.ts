@@ -63,7 +63,7 @@ describe('chain pointer and Landauer confidence', () => {
     expect(await runCli(['symbolic'], cap.io)).toBe(0);
     const text = cap.lines.join('');
     expect(text).toMatch(/confidence: highly-speculative/);
-    expect(text).toMatch(/upt atlas be-16/);
+    expect(text).toMatch(/upt atlas be-42 and be-16/);
     expect(text).toMatch(/provisional/);
   });
 });

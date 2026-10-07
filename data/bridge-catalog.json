@@ -90,7 +90,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 13,
@@ -284,7 +285,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 17,
@@ -515,7 +517,8 @@
         "Theta": 1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 22,
@@ -800,7 +803,8 @@
         "Theta": 1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 28,
@@ -837,7 +841,8 @@
         "Theta": -1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "property"
     },
     {
       "id": 29,
@@ -1065,7 +1070,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 34,
@@ -1303,7 +1309,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 38,
@@ -1438,7 +1445,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 41,
@@ -1568,7 +1576,8 @@
         "Theta": -1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 44,
@@ -1867,7 +1876,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 51,
@@ -2036,7 +2046,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 53,
@@ -2119,7 +2130,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 56,
@@ -2282,7 +2294,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 60,
@@ -2320,7 +2333,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 61,
@@ -2427,7 +2441,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 64,
@@ -2534,7 +2549,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 67,
@@ -2569,7 +2585,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 68,
@@ -2604,7 +2621,8 @@
         "Theta": 1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 69,
@@ -2638,7 +2656,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 70,
@@ -2672,7 +2691,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 71,
@@ -2706,7 +2726,8 @@
         "Theta": -1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 72,
@@ -2740,7 +2761,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 73,
@@ -2774,7 +2796,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 74,
@@ -2808,7 +2831,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 75,
@@ -2842,7 +2866,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 76,
@@ -2878,7 +2903,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 77,
@@ -2912,7 +2938,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 78,
@@ -2946,7 +2973,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 79,
@@ -2980,7 +3008,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 80,
@@ -3014,7 +3043,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 81,
@@ -3048,7 +3078,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 82,
@@ -3082,7 +3113,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 83,
@@ -3118,7 +3150,8 @@
         "Theta": -1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 84,
@@ -3152,7 +3185,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 85,
@@ -3186,7 +3220,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 86,
@@ -3220,7 +3255,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 87,
@@ -3254,7 +3290,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 88,
@@ -3288,7 +3325,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 89,
@@ -3322,7 +3360,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 90,
@@ -3356,7 +3395,8 @@
         "Theta": -1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 91,
@@ -3390,7 +3430,8 @@
         "Theta": -1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 92,
@@ -3424,7 +3465,8 @@
         "Theta": -1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 93,
@@ -3458,7 +3500,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 94,
@@ -3492,7 +3535,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 95,
@@ -3526,7 +3570,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 96,
@@ -3560,7 +3605,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 97,
@@ -3594,7 +3640,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 98,
@@ -3628,7 +3675,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 99,
@@ -3662,7 +3710,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 100,
@@ -3696,7 +3745,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 101,
@@ -3730,7 +3780,8 @@
         "Theta": 1,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 102,
@@ -3764,7 +3815,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 103,
@@ -3798,7 +3850,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 104,
@@ -3832,7 +3885,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 105,
@@ -3866,7 +3920,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 106,
@@ -3900,7 +3955,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 107,
@@ -3934,7 +3990,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 108,
@@ -3968,7 +4025,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 109,
@@ -4002,7 +4060,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 110,
@@ -4036,7 +4095,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 111,
@@ -4070,7 +4130,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 112,
@@ -4104,7 +4165,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 113,
@@ -4138,7 +4200,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 114,
@@ -4172,7 +4235,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 115,
@@ -4206,7 +4270,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 116,
@@ -4240,7 +4305,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 117,
@@ -4274,7 +4340,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 118,
@@ -4308,7 +4375,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 119,
@@ -4342,7 +4410,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 120,
@@ -4376,7 +4445,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 121,
@@ -4410,7 +4480,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 122,
@@ -4444,7 +4515,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 123,
@@ -4478,7 +4550,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 124,
@@ -4512,7 +4585,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 125,
@@ -4546,7 +4620,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 126,
@@ -4580,7 +4655,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 127,
@@ -4614,7 +4690,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 128,
@@ -4648,7 +4725,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 129,
@@ -4682,7 +4760,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 130,
@@ -4716,7 +4795,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 131,
@@ -4750,7 +4830,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 132,
@@ -4784,7 +4865,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 133,
@@ -4818,7 +4900,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 134,
@@ -4852,7 +4935,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 135,
@@ -4886,7 +4970,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 136,
@@ -4920,7 +5005,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 137,
@@ -4954,7 +5040,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 138,
@@ -4988,7 +5075,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 139,
@@ -5022,7 +5110,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 140,
@@ -5056,7 +5145,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 141,
@@ -5090,7 +5180,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 142,
@@ -5124,7 +5215,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 143,
@@ -5158,7 +5250,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 144,
@@ -5192,7 +5285,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 145,
@@ -5226,7 +5320,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 146,
@@ -5260,7 +5355,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "formalKind": "bridge"
     },
     {
       "id": 147,
@@ -6488,8 +6584,7 @@
           "impact-parameter": 1
         },
         "value": 2.9704641076474662e-27
-      },
-      "notice": "weak-field-impact"
+      }
     },
     {
       "id": "be-52",
@@ -6514,8 +6609,8 @@
           "e"
         ]
       },
-      "holds": "finite(mass) &&\n      mass > 0 &&\n      finite(semi-major-axis) &&\n      semi-major-axis > 0 &&\n      finite(eccentricity) &&\n      eccentricity >= 0 &&\n      eccentricity < 1",
-      "domain": "M > 0, a > 0, 0 ≤ e < 1 (bound elliptical orbit)",
+      "holds": "finite(mass) &&\n      mass > 0 &&\n      finite(semi-major-axis) &&\n      semi-major-axis > 0 &&\n      finite(eccentricity) &&\n      eccentricity >= 0 &&\n      eccentricity < 1 &&\n      semi-major-axis * (1 - eccentricity) >= (10 * 2 * G * mass) / (c * c)",
+      "domain": "M > 0, a > 0, 0 ≤ e < 1 (bound elliptical orbit); weak field a(1−e) ≥ 10·r_s",
       "confidence": "established",
       "citation": "Einstein 1915 Preuss. Akad. Wiss. 831",
       "relation": {
@@ -6566,8 +6661,7 @@
           "eccentricity": 0.5
         },
         "value": 1.866397643667488e-26
-      },
-      "notice": "weak-field-periapsis"
+      }
     },
     {
       "id": "law-schwarzschild-radius",
@@ -11214,7 +11308,6 @@
       "domain": "plate separation > 0",
       "confidence": "established",
       "citation": "Casimir 1948 Proc. Kon. Ned. Akad. Wet. 51:793",
-      "notice": "hbar-truncation",
       "reference": {
         "inputs": {
           "plate-separation": 1e-06
@@ -11389,7 +11482,9 @@
       "domain": "temperature, density, and mean molecular weight are positive",
       "confidence": "established",
       "citation": "Jeans 1902 Phil. Trans. R. Soc. A 199:1",
-      "notice": "jeans-formula",
+      "notice": {
+        "text": "formula: M_J = (5 k_B T / (G μ m_u))^{3/2} · (3/(4π ρ))^{1/2}. The leading 5 is convention-dependent; the number above is this formula, not a checked universal prefactor."
+      },
       "reference": {
         "inputs": {
           "jeans-temperature": 20,

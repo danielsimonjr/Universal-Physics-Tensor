@@ -12,11 +12,6 @@
 import { constantScope } from '../dimensional/symbolic-constants.js';
 import { naturalConstantOverrides, type UnitMode } from '../dimensional/natural-units.js';
 
-/** ħ in eval is the exact quotient H_SI/(2π). */
-export const HBAR_TRUNCATION_NOTE =
-  'note: hbar is HBAR_SI = H_SI/(2π), the exact reduced Planck constant. ' +
-  'The CODATA display 1.054571817e-34 is that quotient truncated (relative difference 6.127e-10).';
-
 /**
  * Registered constants an eval may omit: every spelling of the constant
  * registry, plus `pi` and `tau`. A hyphenated spelling is not an identifier

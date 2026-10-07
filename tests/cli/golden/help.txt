@@ -310,10 +310,10 @@ Flags:
         --sigma is treated as exact. Not included: the evaluator's numerical
         error and model discrepancy (whether the bridge applies).
         e.g.  upt evaluate be-58 T_K=300 R_ohm=1000 --sigma T_K=3 --sigma R_ohm=10
-        be-51 and be-52 are weak-field formulas. When the impact parameter, or
-        the periapsis a(1-e), is not above 10 Schwarzschild radii, the number
-        is still printed and a warning names that cut (the same b ≥ 10 r_s cut
-        be-51's graph domain already uses). Exit stays 0.
+        An input outside a relation's validity domain is refused and the message
+        names the condition (a weak-field formula inside 10 Schwarzschild radii,
+        a negative temperature). A relation's recorded caveat, and the note of a
+        registered constant it names, print beside the value.
 Flags:
   --sigma=VALUE (repeatable) (or --sigma VALUE)
         One input uncertainty as key=u, in the input's unit. A temperature uncertainty in degC or degF is a difference.

@@ -37,6 +37,7 @@ import {
   G_SI,
   GM_SUN_SI,
   H_SI,
+  HBAR_CODATA_DISPLAY,
   HBAR_SI,
   K_B_SI,
   LANE_EMDEN_OMEGA3,
@@ -64,9 +65,12 @@ export interface ConstantRecord {
   readonly source: string;
   /** A universal constant a canonical `governing` list may bake. */
   readonly canonical: boolean;
+  /** A caveat printed wherever the constant is used (`upt eval`, a relation that names it). */
+  readonly note?: string;
 }
 
-type RowInput = Omit<ConstantRecord, 'dim' | 'spellings' | 'canonical'> & {
+type RowInput = Omit<ConstantRecord, 'dim' | 'spellings' | 'canonical' | 'note'> & {
+  readonly note?: string;
   readonly spellings?: readonly string[];
   readonly canonical?: boolean;
 };
@@ -84,7 +88,10 @@ const OWNER = 'core/constants.ts';
 export const CONSTANT_REGISTRY: readonly ConstantRecord[] = [
   // ── universal constants a canonical equation may bake ──────────────────
   row({ name: 'hbar', spellings: ['ℏ'], value: HBAR_SI, unit: 'J*s', canonical: true,
-    meaning: 'reduced Planck constant h/(2π)', source: `exact H_SI/(2π) (${OWNER} HBAR_SI)` }),
+    meaning: 'reduced Planck constant h/(2π)', source: `exact H_SI/(2π) (${OWNER} HBAR_SI)`,
+    note:
+      `hbar is HBAR_SI = H_SI/(2π), the exact reduced Planck constant. The CODATA display ${HBAR_CODATA_DISPLAY} ` +
+      `is that quotient truncated (relative difference ${(Math.abs(HBAR_CODATA_DISPLAY - HBAR_SI) / HBAR_SI).toExponential(3)}).` }),
   row({ name: 'h', value: H_SI, unit: 'J*s', canonical: true,
     meaning: 'Planck constant', source: `exact SI, 2019 redefinition (${OWNER} H_SI)` }),
   row({ name: 'c', value: C_SI, unit: 'm/s', canonical: true,
@@ -164,6 +171,16 @@ for (const record of CONSTANT_REGISTRY) {
 /** The registered constant `spelling` names, or undefined. @internal */
 export function constantRecord(spelling: string): ConstantRecord | undefined {
   return BY_SPELLING.get(spelling);
+}
+
+/** The notes of the registered constants among `names`, each once, in registry order. @internal */
+export function constantNotes(names: Iterable<string>): string[] {
+  const seen = new Set<ConstantRecord>();
+  for (const name of names) {
+    const record = BY_SPELLING.get(name);
+    if (record?.note !== undefined) seen.add(record);
+  }
+  return CONSTANT_REGISTRY.filter((record) => seen.has(record)).map((record) => record.note!);
 }
 
 /** Every spelling → SI value, for a numeric scope. `pi` and `tau` are added. @internal */

@@ -51,8 +51,8 @@ const VALUE_NAMES: Record<string, readonly string[]> = {
     'kerrTurningPointOrbit',
     'schwarzschildCircularOrbit',
   ],
-  'src/cli/commands/eval.ts': ['builtinFormulaDimensionChecker', 'readNamedBinding', 'UnitError'],
-  'src/cli/commands/evaluate.ts': ['readNamedBinding', 'resolveEvaluable', 'C_SI', 'G_SI', 'missingEvaluatorMessage'],
+  'src/cli/commands/eval.ts': ['builtinFormulaDimensionChecker', 'readNamedBinding', 'UnitError', 'constantNotes'],
+  'src/cli/commands/evaluate.ts': ['readNamedBinding', 'resolveEvaluable', 'relationNotices', 'missingEvaluatorMessage'],
   'src/cli/commands/regime.ts': ['readNamedBinding'],
   'src/cli/commands/path.ts': ['readBinding', 'readNamedBinding'],
   'src/cli/commands/map.ts': [],
@@ -91,7 +91,7 @@ describe('commands read finding-5 names from ctx.api', () => {
     const index = sourceOf('src/index.ts');
     expect(index).not.toContain("from './cli-api.js'");
     expect(index).not.toContain('from "./cli-api.js"');
-    expect(sourceOf('src/cli-api.ts')).toContain("export { C_SI, G_SI } from './core/constants.js'");
+    expect(sourceOf('src/cli-api.ts')).toContain("export { relationNotices } from './bridges/notices.js'");
     expect(sourceOf('src/cli-api.ts')).not.toContain("export { C_SI, G_SI } from './index.js'");
   });
 });

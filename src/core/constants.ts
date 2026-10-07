@@ -40,6 +40,9 @@ export const H_SI = 6.62607015e-34;
  */
 export const HBAR_SI = H_SI / (2 * Math.PI);
 
+/** The CODATA 2018 display value of ħ: {@link HBAR_SI} truncated. Kept so the difference is computed, not typed. @internal */
+export const HBAR_CODATA_DISPLAY = 1.054571817e-34;
+
 /** Boltzmann constant (J/K). Exact SI definition since 2019. */
 export const K_B_SI = 1.380649e-23;
 

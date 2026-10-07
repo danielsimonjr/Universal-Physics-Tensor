@@ -43186,7 +43186,7 @@
     ],
     "target": "perihelion-advance:Δφ",
     "confidence": "established",
-    "domainDescription": "(μ_e > 0 and ω₃⁰ finite) AND, on the piped mass, (M > 0, a > 0, 0 ≤ e < 1 (bound elliptical orbit))",
+    "domainDescription": "(μ_e > 0 and ω₃⁰ finite) AND, on the piped mass, (M > 0, a > 0, 0 ≤ e < 1 (bound elliptical orbit); weak field a(1−e) ≥ 10·r_s)",
     "citation": "Chandrasekhar 1931 ApJ 74:81 | Einstein 1915 Preuss. Akad. Wiss. 831",
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
