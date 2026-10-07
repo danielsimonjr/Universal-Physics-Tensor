@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A canonical entry states its validity domain, an invalid input is a domain violation and not an unset coefficient, and `formula_latex` is valid TeX.
+  `evaluateRelation('CE-schwarzschild-radius', { mass: -1.989e30 })` returns a negative radius. `CE-string-wave-speed` with a negative tension returns `kind: 'unset'`, the tag for a coefficient with no source. A negative temperature, density, radius, or mass, a Carnot efficiency of 1.5, `n_lower > n_upper`, an angle given in degrees, and `v ≥ c` are all accepted or reported as unset. `CE-normal-distribution` carries a form feed and two other entries lost their backslashes. Issues 470, 474, 480, 483, 484.
+  Done: `src/canonical/domains.ts` states 40 entry domains and the canonical graph enforces them with `DomainViolationError`. `upt explain` names the refused domain. The three TeX strings are valid and a test scans every entry. `CE-bernoulli` is not changed: the frozen criterion 3 corpus pins its expression.
+
 - [x] Catalog validity domains are derived from the parameter flags, and a regime inequality is stated where a formula has one.
   A temperature input documented as absolute accepts a negative value on be-82, be-87, be-127, and be-130. Duty, diameter, viscosity, density, mass, and heat-transfer inputs accept an unphysical sign on the engineering, plasma, condensed-matter, and thermal records. be-110 accepts a mirror ratio above 1, be-122 an ion lighter than the electron, be-93 a point below the Weiss temperature, be-90 and be-92 a point outside the Debye and Sommerfeld limits, be-167 the degenerate regime, and be-166 a non-root in (4, 5). Issues 447, 449, 452, 453, 463, 467, 482.
   Done: each evaluator parameter carries a `sign`, and `src/bridges/catalog-load.ts` appends that clause to the relation it evaluates. An absolute temperature is nonnegative unless it says `any`. The regime inequalities are in the records. `tests/bridges/catalog-domains.test.ts` pairs each rejected point with an accepted control.

@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 8.0.0
-  totalFiles: 351
+  totalFiles: 352
   totalModules: 13
-  totalExports: 2363
+  totalExports: 2364
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3970,6 +3970,15 @@ modules:
         - dimensionalFields
       functions:
         - dimensionalFields
+    src/canonical/domains.ts:
+      description: The validity domain of a canonical equation, as a condition over its source
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - CANONICAL_DOMAINS
+      constants:
+        - CANONICAL_DOMAINS
     src/canonical/entries/_l1-build.ts:
       description: Shared builders for L1 (scalar-AST) canonical entries. Keeps the entry files
       externalDependencies: []
@@ -8129,6 +8138,17 @@ modules:
         - file: ./expr-eval.js
           imports:
             - evalExpr
+        - file: ../canonical/domains.js
+          imports:
+            - CANONICAL_DOMAINS
+        - file: ../bridges/holds.js
+          imports:
+            - HoldsError
+            - holds
+        - file: ../bridges/expr-parse.js
+          imports:
+            - formulaNames
+            - formulaScope
       exports:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
@@ -11163,6 +11183,7 @@ modules:
             - CANONICAL_GROUP_PREFACTORS
         - file: ./edge.js
           imports:
+            - DomainViolationError
             - evaluateEdge
         - file: ./compose.js
           imports:
@@ -16418,6 +16439,7 @@ dependencyGraph:
       files:
         - src/canonical/canonical-equation.ts
         - src/canonical/dimensional-fields.ts
+        - src/canonical/domains.ts
         - src/canonical/entries/_l1-build.ts
         - src/canonical/entries/atomic.ts
         - src/canonical/entries/condensed-matter.ts
@@ -16694,16 +16716,16 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 351
+  totalTypeScriptFiles: 352
   totalModules: 13
-  totalLinesOfCode: 77138
-  totalExports: 2363
+  totalLinesOfCode: 77245
+  totalExports: 2364
   totalClasses: 64
   totalInterfaces: 433
   totalFunctions: 722
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 376
+  totalConstants: 377
   totalReExports: 1202
   totalTypeOnlyImports: 498
   runtimeCircularDeps: 0

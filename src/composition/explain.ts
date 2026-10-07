@@ -117,6 +117,8 @@ export interface QuantityExplanation {
   /** Whether the KNOWN set dimensionally fixes the target (Buckingham-π);
    *  absent when the target has no resolvable dimension. */
   readonly dimensional?: DimensionalDeterminationResult;
+  /** Derivations that refused the given values as outside their validity domain. */
+  readonly refusals?: readonly { readonly edge: string; readonly reason: string }[];
   /** Upstream gaps for an under-determined target (from the classifier). */
   readonly blockingFrontier: readonly string[];
   /** Plain-language synthesis of the above. */
@@ -434,6 +436,7 @@ export function explainQuantity(
   const byId = new Map(edges.map((e) => [e.id, e] as const));
 
   let consistency: RetrodictionResult | undefined;
+  let refusals: RetrodictionResult['refusals'];
   let recoveredValue: number | undefined;
   const valueByEdge = new Map<string, number>();
   if (values) {
@@ -444,6 +447,7 @@ export function explainQuantity(
       tolerance: opts.tolerance,
       references,
     });
+    refusals = retro.refusals;
     for (const p of retro.predictions) valueByEdge.set(p.edge, p.value);
     if (retro.predictions.length >= 2) consistency = retro;
     if (
@@ -622,6 +626,10 @@ export function explainQuantity(
     unsetSentence,
     magnitudeNames(firedEdges),
   );
+  const refusalSentence =
+    refusals === undefined || recoveredValue !== undefined
+      ? ''
+      : ` No recovered value: ${refusals.map((r) => r.reason).join('; ')}.`;
 
   return {
     target,
@@ -632,7 +640,8 @@ export function explainQuantity(
     ...(recoveredValue !== undefined ? { recoveredValue } : {}),
     ...(coefficient !== undefined ? { coefficient } : {}),
     ...(dimensional ? { dimensional } : {}),
+    ...(refusals !== undefined ? { refusals } : {}),
     blockingFrontier: identifiability.blockingFrontier,
-    summary,
+    summary: summary + refusalSentence,
   };
 }
