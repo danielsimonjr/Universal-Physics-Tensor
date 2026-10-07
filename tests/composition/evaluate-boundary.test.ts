@@ -65,8 +65,8 @@ describe('the output carries its name and unit (issue 460)', () => {
   it('evaluatorOutput names the target and its SI unit', () => {
     const o = evaluatorOutput(BRIDGE_EVALUATORS.get(120)!);
     expect(o.name).toBe('standoff-sixth');
-    expect(siUnitOf(o.dimension)).toBe('1');
-    expect(siUnitOf(evaluatorOutput(BRIDGE_EVALUATORS.get(67)!).dimension)).toBe('m/s');
+    expect(siUnitOf(o.dimension!)).toBe('1');
+    expect(siUnitOf(evaluatorOutput(BRIDGE_EVALUATORS.get(67)!).dimension!)).toBe('m/s');
   });
   it('the text line names it', async () => {
     const cap = capture();
