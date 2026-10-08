@@ -31,29 +31,6 @@ const siDimension = (u: MathTsUnit): Dimension => {
   return { L: v[0]!, M: v[1]!, T: v[2]!, I: v[3]!, Theta: v[4]!, N: v[5]!, J: v[6]! };
 };
 
-/** Registry name → MathTS export. The registry records CODATA 2018; MathTS ships CODATA 2022. */
-const MATHTS_COUNTERPART: Readonly<Record<string, string>> = {
-  hbar: 'reducedPlanckConstant',
-  h: 'planckConstant',
-  c: 'speedOfLight',
-  G: 'gravitationConstant',
-  k_B: 'boltzmann',
-  e: 'elementaryCharge',
-  sigma_sb: 'stefanBoltzmann',
-  b: 'wienDisplacement',
-  m_u: 'atomicMass',
-  m_e: 'electronMass',
-  m_p: 'protonMass',
-  N_A: 'avogadro',
-  F: 'faraday',
-  R: 'gasConstant',
-  mu_0: 'magneticConstant',
-  sigma_T: 'thomsonCrossSection',
-};
-
-/** Exact in the 2019 SI, or a product of exact constants: the two libraries agree to the last bit. */
-const EXACT = new Set(['hbar', 'h', 'c', 'k_B', 'e', 'N_A', 'F', 'R']);
-
 /**
  * The largest relative move between CODATA 2018 and CODATA 2022 among the
  * measured constants above is the Thomson cross section, about 4e-9. A
@@ -103,14 +80,26 @@ describe('the constant registry is the one owner of spellings, units and provena
   });
 });
 
+/** The rows whose provenance names a MathTS export. The registry, not this file, says which. */
+const WITH_MATHTS = CONSTANT_REGISTRY.filter((row) => row.mathts !== undefined);
+
 describe('MathTS states the same constants (the independent second method)', () => {
-  it.each(Object.entries(MATHTS_COUNTERPART))('%s agrees with MathTS %s in dimension and value', (name, counterpart) => {
-    const row = constantRecord(name)!;
+  it('the registry names a MathTS counterpart for every CODATA and exact-SI row, and for no convention', () => {
+    expect(WITH_MATHTS.length).toBeGreaterThanOrEqual(16);
+    for (const row of CONSTANT_REGISTRY) {
+      const physical = /CODATA|exact SI|N_A_SI|H_SI\/\(2π\)|1\/\(EPS0_SI/.test(row.source);
+      expect(row.mathts !== undefined || !physical || row.name === 'epsilon_0', `${row.name}: ${row.source}`).toBe(true);
+      if (row.exact) expect(row.mathts, row.name).toBeDefined();
+    }
+  });
+
+  it.each(WITH_MATHTS.map((row) => [row.name, row.mathts!, row] as const))('%s agrees with MathTS %s in dimension and value', (name, counterpart, row) => {
     const unit = unitOf(counterpart);
+    expect(unit, `MathTS has no export ${counterpart}`).toBeDefined();
     expect(equals(siDimension(unit), row.dim), `dimension of ${name}`).toBe(true);
     const theirs = siValue(unit);
     const relative = Math.abs(row.value - theirs) / Math.abs(theirs);
-    if (EXACT.has(name)) expect(relative).toBeLessThan(1e-15);
+    if (row.exact) expect(relative).toBeLessThan(1e-15);
     else expect(relative, `${name}: ${row.value} vs ${theirs}`).toBeLessThan(VINTAGE_DRIFT);
   });
 

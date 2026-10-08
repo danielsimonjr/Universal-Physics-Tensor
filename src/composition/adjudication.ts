@@ -52,6 +52,7 @@ export function candidateIdIfSlug(a: string, b: string): string | undefined {
   return candidateId(a, b);
 }
 
+/** The verdict vocabulary and the record type of the ledger: the catalog file's, re-exported under the ledger's public names. */
 export type { AdjudicationVerdict, CatalogAdjudication as CandidateAdjudication } from '../bridges/catalog-types.js';
 
 const VERDICTS: ReadonlySet<string> = new Set(['genuine', 'decoy', 'entailed', 'deferred']);

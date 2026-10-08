@@ -67,10 +67,16 @@ export interface ConstantRecord {
   readonly canonical: boolean;
   /** A caveat printed wherever the constant is used (`upt eval`, a relation that names it). */
   readonly note?: string;
+  /** The `@danielsimonjr/mathts-functions` export that states the same constant (CODATA 2022 there), when one exists. The second method. */
+  readonly mathts?: string;
+  /** The two libraries agree to the last bit: exact in the 2019 SI, or a product of exact constants. */
+  readonly exact?: true;
 }
 
-type RowInput = Omit<ConstantRecord, 'dim' | 'spellings' | 'canonical' | 'note'> & {
+type RowInput = Omit<ConstantRecord, 'dim' | 'spellings' | 'canonical' | 'note' | 'mathts' | 'exact'> & {
   readonly note?: string;
+  readonly mathts?: string;
+  readonly exact?: true;
   readonly spellings?: readonly string[];
   readonly canonical?: boolean;
 };
@@ -87,18 +93,18 @@ const OWNER = 'core/constants.ts';
 /** Every registered constant. Order is the order the tables print. @internal */
 export const CONSTANT_REGISTRY: readonly ConstantRecord[] = [
   // ── universal constants a canonical equation may bake ──────────────────
-  row({ name: 'hbar', spellings: ['ℏ'], value: HBAR_SI, unit: 'J*s', canonical: true,
+  row({ name: 'hbar', spellings: ['ℏ'], value: HBAR_SI, unit: 'J*s', canonical: true, mathts: 'reducedPlanckConstant', exact: true,
     meaning: 'reduced Planck constant h/(2π)', source: `exact H_SI/(2π) (${OWNER} HBAR_SI)`,
     note:
       `hbar is HBAR_SI = H_SI/(2π), the exact reduced Planck constant. The CODATA display ${HBAR_CODATA_DISPLAY} ` +
       `is that quotient truncated (relative difference ${(Math.abs(HBAR_CODATA_DISPLAY - HBAR_SI) / HBAR_SI).toExponential(3)}).` }),
-  row({ name: 'h', value: H_SI, unit: 'J*s', canonical: true,
+  row({ name: 'h', value: H_SI, unit: 'J*s', canonical: true, mathts: 'planckConstant', exact: true,
     meaning: 'Planck constant', source: `exact SI, 2019 redefinition (${OWNER} H_SI)` }),
-  row({ name: 'c', value: C_SI, unit: 'm/s', canonical: true,
+  row({ name: 'c', value: C_SI, unit: 'm/s', canonical: true, mathts: 'speedOfLight', exact: true,
     meaning: 'speed of light in vacuum', source: `exact SI (${OWNER} C_SI)` }),
-  row({ name: 'G', value: G_SI, unit: 'm^3/(kg*s^2)', canonical: true,
+  row({ name: 'G', value: G_SI, unit: 'm^3/(kg*s^2)', canonical: true, mathts: 'gravitationConstant',
     meaning: 'Newtonian gravitational constant', source: `CODATA 2018 (${OWNER} G_SI)` }),
-  row({ name: 'k_B', spellings: ['kB', 'boltzmann'], value: K_B_SI, unit: 'J/K', canonical: true,
+  row({ name: 'k_B', spellings: ['kB', 'boltzmann'], value: K_B_SI, unit: 'J/K', canonical: true, mathts: 'boltzmann', exact: true,
     meaning: 'Boltzmann constant', source: `exact SI, 2019 redefinition (${OWNER} K_B_SI)` }),
   row({ name: 'ln2', value: Math.LN2, unit: '1', canonical: true,
     meaning: 'natural logarithm of 2', source: 'mathematical constant (Math.LN2)' }),
@@ -111,34 +117,34 @@ export const CONSTANT_REGISTRY: readonly ConstantRecord[] = [
   // ISO 80000 / CODATA: a bare e is the elementary charge. Eccentricity is
   // one_minus_e_sq. The canonical dimension guard still refuses to bake a
   // dimensionless governing name e.
-  row({ name: 'e', spellings: ['e_charge'], value: E_SI, unit: 'C', canonical: true,
+  row({ name: 'e', spellings: ['e_charge'], value: E_SI, unit: 'C', canonical: true, mathts: 'elementaryCharge', exact: true,
     meaning: 'elementary charge', source: `exact SI, 2019 redefinition (${OWNER} E_SI)` }),
   row({ name: 'epsilon_0', spellings: ['epsilon0', 'eps0'], value: EPS0_SI, unit: 'F/m', canonical: true,
     meaning: 'vacuum permittivity', source: `CODATA 2018 (${OWNER} EPS0_SI)` }),
-  row({ name: 'sigma_sb', spellings: ['stefan-boltzmann-constant'], value: SIGMA_SB_SI, unit: 'W/(m^2*K^4)', canonical: true,
+  row({ name: 'sigma_sb', spellings: ['stefan-boltzmann-constant'], value: SIGMA_SB_SI, unit: 'W/(m^2*K^4)', canonical: true, mathts: 'stefanBoltzmann',
     meaning: 'Stefan–Boltzmann constant', source: `CODATA 2018 (${OWNER} SIGMA_SB_SI)` }),
-  row({ name: 'b', spellings: ['wien-constant'], value: B_WIEN_SI, unit: 'm*K', canonical: true,
+  row({ name: 'b', spellings: ['wien-constant'], value: B_WIEN_SI, unit: 'm*K', canonical: true, mathts: 'wienDisplacement',
     meaning: 'Wien displacement constant', source: `CODATA 2018 (${OWNER} B_WIEN_SI)` }),
   // IAU 2015 nominal solar parameter. M_sun in eval stays the rounded kilogram M_SUN_SI.
   row({ name: 'GM_sun', value: GM_SUN_SI, unit: 'm^3/s^2', canonical: true,
     meaning: 'IAU nominal solar gravitational parameter (GM)☉', source: `IAU 2015 Resolution B3 (${OWNER} GM_SUN_SI)` }),
   row({ name: 'Msun_iau', value: GM_SUN_SI / G_SI, unit: 'kg', canonical: true,
     meaning: 'IAU solar mass (GM)☉/G, the mass that reproduces GM_sun with G_SI', source: `GM_SUN_SI/G_SI (${OWNER})` }),
-  row({ name: 'm_u', value: M_U_SI, unit: 'kg', canonical: true,
+  row({ name: 'm_u', value: M_U_SI, unit: 'kg', canonical: true, mathts: 'atomicMass',
     meaning: 'unified atomic mass unit (atomic mass constant)', source: `CODATA 2018 (${OWNER} M_U_SI)` }),
-  row({ name: 'm_e', spellings: ['electron_mass'], value: M_E_SI, unit: 'kg', canonical: true,
+  row({ name: 'm_e', spellings: ['electron_mass'], value: M_E_SI, unit: 'kg', canonical: true, mathts: 'electronMass',
     meaning: 'electron mass', source: `CODATA 2018 (${OWNER} M_E_SI)` }),
   // ── overlay names for `upt eval` and the dimensional assignment only ────
-  row({ name: 'mu_0', spellings: ['mu0'], value: MU0_SI, unit: 'H/m',
+  row({ name: 'mu_0', spellings: ['mu0'], value: MU0_SI, unit: 'H/m', mathts: 'magneticConstant',
     meaning: 'vacuum permeability 1/(ε₀ c²)', source: `1/(EPS0_SI·C_SI²) (${OWNER} MU0_SI)` }),
-  row({ name: 'm_p', spellings: ['m_proton'], value: M_PROTON_SI, unit: 'kg',
+  row({ name: 'm_p', spellings: ['m_proton'], value: M_PROTON_SI, unit: 'kg', mathts: 'protonMass',
     meaning: 'proton mass', source: `CODATA 2018 (${OWNER} M_PROTON_SI)` }),
-  row({ name: 'N_A', value: N_A_SI, unit: 'mol^-1',
+  row({ name: 'N_A', value: N_A_SI, unit: 'mol^-1', mathts: 'avogadro', exact: true,
     meaning: 'Avogadro constant', source: `exact SI, 2019 redefinition (${OWNER} N_A_SI)` }),
-  row({ name: 'F', value: FARADAY_SI, unit: 'C/mol',
+  row({ name: 'F', value: FARADAY_SI, unit: 'C/mol', mathts: 'faraday', exact: true,
     meaning: 'Faraday constant N_A e', source: `N_A_SI·E_SI (${OWNER} FARADAY_SI)` }),
   // R = N_A k_B, the molar gas constant the thermochemical records state in their titles.
-  row({ name: 'R', value: N_A_SI * K_B_SI, unit: 'J/(mol*K)',
+  row({ name: 'R', value: N_A_SI * K_B_SI, unit: 'J/(mol*K)', mathts: 'gasConstant', exact: true,
     meaning: 'molar gas constant N_A k_B', source: `N_A_SI·K_B_SI (${OWNER})` }),
   row({ name: 'M_sun', value: M_SUN_SI, unit: 'kg',
     meaning: 'solar mass, the repo-conventional kilogram value', source: `${OWNER} M_SUN_SI` }),
@@ -148,7 +154,7 @@ export const CONSTANT_REGISTRY: readonly ConstantRecord[] = [
     meaning: 'Friedmann curvature index, flat by default', source: 'this registry (flat default 0)' }),
   row({ name: 'scale_factor', value: 1, unit: 'm',
     meaning: 'Friedmann scale factor, unit by default', source: 'this registry (default 1)' }),
-  row({ name: 'sigma_T', value: THOMSON_CROSS_SECTION_SI, unit: 'm^2',
+  row({ name: 'sigma_T', value: THOMSON_CROSS_SECTION_SI, unit: 'm^2', mathts: 'thomsonCrossSection',
     meaning: 'Thomson cross section', source: `CODATA 2018 (${OWNER} THOMSON_CROSS_SECTION_SI)` }),
   row({ name: 'lane_emden_omega_3', value: LANE_EMDEN_OMEGA3, unit: '1',
     meaning: 'Lane–Emden n = 3 dimensionless radius', source: `${OWNER} LANE_EMDEN_OMEGA3` }),

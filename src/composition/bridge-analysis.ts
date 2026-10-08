@@ -673,8 +673,11 @@ export function proposeOrphanConnectors(
   }
   const orphanEdgeOf = (q: string): string | undefined =>
     (qToEdges.get(q) ?? []).find((id) => isolated.has(id));
+  // The core is an anchored cluster of more than one edge. An established
+  // bridge that is itself isolated is an orphan, not the core, so a pair of
+  // orphans is not a connector.
   const anchoredEdgeOf = (q: string): string | undefined =>
-    (qToEdges.get(q) ?? []).find((id) => edgeAnchored.get(id) === true);
+    (qToEdges.get(q) ?? []).find((id) => edgeAnchored.get(id) === true && !isolated.has(id));
 
   const connectors: OrphanConnector[] = [];
   for (const c of proposeLinkCandidates(edges)) {
