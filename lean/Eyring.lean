@@ -22,9 +22,9 @@ k = (k_B T / h) exp(−ΔG‡ / (k_B T))
 ```
 
 `eyring_eq` is that formula. For a molar barrier, `R = N_A k_B` identifies
-it with the molecular exponential, the same bridge as
-`PhysJS.Arrhenius.arrhenius_eq`. The effective Arrhenius energy is the
-logarithmic derivative
+it with the molecular exponential through `PhysJS.Arrhenius.molar_exponent`,
+the step `PhysJS.Arrhenius.arrhenius_eq` uses. The effective Arrhenius
+energy is the logarithmic derivative
 
 ```
 Ea = R T² d(ln k)/dT = ΔH‡ + R T
@@ -53,16 +53,14 @@ theorem eyring_eq (k hpl dG kB T : ℝ) (hh : hpl ≠ 0) (hkB : kB ≠ 0) (hT : 
 
 /-- Molar and molecular barriers agree when `R = N_A k_B` and `ΔG_molar = N_A ΔG`.
 
-This is `PhysJS.Arrhenius.arrhenius_eq` with prefactor `k_B T / h`. -/
+This is the `R = N_A k_B` step `PhysJS.Arrhenius.molar_exponent` of
+`PhysJS.Arrhenius.arrhenius_eq`, with prefactor `k_B T / h`. -/
 theorem molar_matches_molecular (k A dGmol dG R T NA kB hpl : ℝ)
-    (hT : 0 < T) (hNA : NA ≠ 0) (hkB : kB ≠ 0) (hh : hpl ≠ 0)
-    (hR : R = NA * kB) (hmol : dGmol = NA * dG)
+    (hNA : NA ≠ 0) (hR : R = NA * kB) (hmol : dGmol = NA * dG)
     (hA : A = kB * T / hpl)
     (hk : k = A * Real.exp (-dGmol / (R * T))) :
     k = (kB * T / hpl) * Real.exp (-dG / (kB * T)) := by
-  have hpair := arrhenius_eq k A dGmol R T NA kB dG hT hNA hkB hR
-    (by rw [hmol]; field_simp [hNA]) hk
-  rw [hpair.2, hA]
+  rw [hk, hA, molar_exponent dGmol R T NA kB dG hR (by rw [hmol]; field_simp [hNA])]
 
 /-- Logarithmic derivative of the Eyring rate at constant `ΔH‡` and `ΔS‡`.
 
