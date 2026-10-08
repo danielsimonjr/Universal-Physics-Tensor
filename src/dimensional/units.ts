@@ -48,6 +48,7 @@ import {
   powerScale,
   ratioScale,
   scaleToNumber,
+  solidusSides,
   UNIT_SCALE,
   type ExactScale,
 } from './exact-scale.js';
@@ -367,15 +368,11 @@ function unitReadings(text: string): UnitReading[] {
   ) {
     throw new UnitRefusedError('an affine temperature cannot be part of a compound unit; give K');
   }
-  // A chain reads left to right: `km/s/Mpc` is km/(s·Mpc), the way the Hubble constant is written.
-  const parts = t.split('/');
+  // A chain is one denominator: `km/s/Mpc` is km/(s·Mpc), the way the Hubble constant is written.
+  const sides = solidusSides(t);
   const compete = /[*·/\s]/.test(t);
-  const numerator = sideTokens(parts[0]!);
-  const denominatorText = parts
-    .slice(1)
-    .map((part) => part.replace(/^\((.*)\)$/, '$1'))
-    .join('*');
-  const denominator = denominatorText === '' ? [] : sideTokens(denominatorText);
+  const numerator = sideTokens(sides.numerator);
+  const denominator = sides.denominator === '' ? [] : sideTokens(sides.denominator);
   // `/s` is a dimensionless numerator over seconds. A bare `/` is not a unit.
   if (numerator.length === 0 && denominator.length === 0) throw new UnknownUnitError(t);
   const numWays = numerator.map((token) => tokenWays(token, compete, 'numerator'));

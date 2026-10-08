@@ -11,9 +11,9 @@ import { describe, expect, it } from 'vitest';
 import { constantTables } from '../../src/cli/record-tables.js';
 import { M_SUN_IAU_SI, M_SUN_SI } from '../../src/core/constants.js';
 import { schemaProblems, type JsonSchema } from '../../src/core/json-schema.js';
-import { decimalScale, ratioScale, readScaleExpression, scaleToNumber } from '../../src/dimensional/exact-scale.js';
+import { decimalScale, ratioScale, readScaleExpression, scaleToNumber, solidusSides } from '../../src/dimensional/exact-scale.js';
 import { readUnitFile, UNIT_DATA } from '../../src/dimensional/unit-data.js';
-import { convertValue, parseUnit, unitConventionNotes, unitTables } from '../../src/dimensional/units.js';
+import { convertValue, parseUnit, readUnit, unitConventionNotes, unitTables } from '../../src/dimensional/units.js';
 import { constantRecord } from '../../src/dimensional/symbolic-constants.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -118,6 +118,32 @@ describe('a unit file that breaks a rule does not load', () => {
 
   it('a shared scale defined through itself is an error', () => {
     expect(() => readUnitFile(edited((f) => ((f.scales as Record<string, string>).inch = 'inch*2')), schema)).toThrow(/in terms of itself/);
+  });
+});
+
+describe('a scale expression and a unit text read a / the same way', () => {
+  const none = () => undefined;
+
+  it('everything after the first / is the denominator (ISO 80000-1)', () => {
+    expect(solidusSides('W/m*K')).toEqual({ numerator: 'W', denominator: 'm*K' });
+    expect(solidusSides('km/s/Mpc')).toEqual({ numerator: 'km', denominator: 's*Mpc' });
+    expect(solidusSides('W/(m*K)')).toEqual({ numerator: 'W', denominator: 'm*K' });
+    expect(solidusSides('m*s')).toEqual({ numerator: 'm*s', denominator: '' });
+  });
+
+  it('a/b*c is a/(b*c) in a scale, as W/m*K is W/(m*K) in a unit', () => {
+    expect(readScaleExpression('8/2*2', none)).toEqual(ratioScale(2, 1));
+    expect(readScaleExpression('8/2/2', none)).toEqual(ratioScale(2, 1));
+    expect(readScaleExpression('3*4/6', none)).toEqual(ratioScale(2, 1));
+    expect(readUnit('W/m*K').dim).toEqual(readUnit('W/(m*K)').dim);
+    // The same text through both readers: 1000 g per (100 cm · 10 mm) is 1 kg/m².
+    expect(readScaleExpression('1000/100*10', none)).toEqual(ratioScale(1, 1));
+    expect(parseUnit('kg/cm*mm').scale).toBe(readUnit('kg/(cm*mm)').scale);
+  });
+
+  it('a factor that is not a decimal or a name is an error', () => {
+    expect(() => readScaleExpression('2/', none)).toThrow(/not a product of factors/);
+    expect(() => readScaleExpression('/2', none)).toThrow(/not a product of factors/);
   });
 });
 

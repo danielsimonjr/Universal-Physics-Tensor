@@ -102,7 +102,7 @@
   "$defs": {
     "decimal": { "type": "string", "pattern": "^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$" },
     "scale": {
-      "description": "An exact scale: factors joined by * and /, each a decimal literal or a name, with an optional integer power ^n.",
+      "description": "An exact scale: factors joined by *, optionally / and the denominator's factors, each a decimal literal or a name, with an optional integer power ^n. Everything after the first / is the denominator (ISO 80000-1, as a unit text reads): a/b*c is a/(b*c).",
       "type": "string",
       "pattern": "^[^*/^\\s]+(\\^[+-]?\\d+)?([*/][^*/^\\s]+(\\^[+-]?\\d+)?)*$"
     },

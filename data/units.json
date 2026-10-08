@@ -1,7 +1,7 @@
 {
   "$schema": "./units.schema.json",
   "schemaVersion": 1,
-  "description": "The unit table units.ts reads: every symbol's exact scale to SI base units, its dimension, whether it takes an SI prefix and whether it counts cycles; the SI prefixes; the refused spellings; the letters that are both a prefix and a unit; the affine temperatures; and the notes a spelling prints. A scale is an exact expression: decimal literals, names in `scales`, `pi`, and registered constants under their registry spelling (`c`, `e`, `m_u`, `M_sun`, `Msun_iau`, `ln2`; src/dimensional/constant-rows.ts), joined by `*` and `/`, each with an optional integer power `^n`. src/dimensional/exact-scale.ts reads it.",
+  "description": "The unit table units.ts reads: every symbol's exact scale to SI base units, its dimension, whether it takes an SI prefix and whether it counts cycles; the SI prefixes; the refused spellings; the letters that are both a prefix and a unit; the affine temperatures; and the notes a spelling prints. A scale is an exact expression: decimal literals, names in `scales`, `pi`, and registered constants under their registry spelling (`c`, `e`, `m_u`, `M_sun`, `Msun_iau`, `ln2`; src/dimensional/constant-rows.ts), joined by `*`, optionally `/` and the denominator's factors (everything after the first `/` is the denominator, as in a unit text), each with an optional integer power `^n`. src/dimensional/exact-scale.ts reads it.",
   "scales": {
     "inch": "0.0254",
     "foot": "0.3048",
