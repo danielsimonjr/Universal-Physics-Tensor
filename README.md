@@ -252,7 +252,7 @@ Bridge equations connect different physical regimes:
 - Universal Emergence Equation
 - Complexity-Entropy Production Relation
 
-Parts I–II of the formal specification document the original BE-11…54 corpus; later established additions BE-55…68 are captured in the live code/research record. The **authoritative current catalog** is the versioned, test-pinned JSON artifact at [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json), which currently spans BE-11…68. Part III covers algorithmic implementation.
+Parts I–II of the formal specification write up the cross-domain bridges; a standard bridge is a catalog record and has no specification heading. The **authoritative current catalog** is the versioned, schema-checked JSON file [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json); its id range and counts are the generated Bridge catalog row of the Development Status table below. Part III covers algorithmic implementation.
 
 ### Composing Bridges (v0.8.0)
 
