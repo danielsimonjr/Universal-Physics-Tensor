@@ -12,16 +12,21 @@
  *     2019 SI redefinition fixed their values exactly.
  *   • `HBAR_SI` is the exact quotient `H_SI / (2π)`, not the truncated CODATA display.
  *   • CODATA 2018 best estimates for measured constants (`G_SI`, `ALPHA`, Planck units).
- *   • Planck 2018 best estimate for `H0_SI`.
+ *   • Planck 2018 best estimate for `H0_SI`, in SI through the unit table's parsec.
  *
  * This file is the one owner of every value. `PhysicalConstants` in
  * `src/core/types.ts` and the constant registry in
  * `src/dimensional/symbolic-constants.ts` are projections of it, and a test
- * refuses a CODATA literal anywhere else under `src/`.
+ * refuses a CODATA literal anywhere else under `src/`. A unit is the unit
+ * table's: `H0_SI` reads the parsec from `data/units.json` rather than
+ * restating it, so the Hubble rate here and `67.4 km/s/Mpc` read through the
+ * unit table are one number.
  *
  * @module core/constants
  * @public
  */
+
+import { checkedDataFile } from './data-file.js';
 
 /** Speed of light in vacuum (m/s). Exact SI definition since 1983. */
 export const C_SI = 299792458;
@@ -70,13 +75,25 @@ export const L_P_SI = 1.616255e-35;
 /** Planck time √(ℏG/c⁵) (s). CODATA 2018. */
 export const T_P_SI = 5.391247e-44;
 
+/** The `scale` of the `symbol` row in `data/units.json`, which must be a plain decimal (metres for a length). */
+function unitTableDecimal(symbol: string): number {
+  const file = checkedDataFile('units.json') as { readonly units: readonly { readonly symbols: readonly string[]; readonly scale: string }[] };
+  const scale = file.units.find((row) => row.symbols.includes(symbol))?.scale;
+  const value = scale === undefined ? Number.NaN : Number(scale);
+  if (!Number.isFinite(value)) throw new Error(`data/units.json: the '${symbol}' row must state a decimal scale (got ${scale ?? 'no row'})`);
+  return value;
+}
+
 /**
  * Hubble parameter H₀ (s⁻¹).
  *
  * Planck 2018 TT,TE,EE+lowE+lensing best estimate: 67.4 km/s/Mpc, converted
- * to SI using 1 Mpc = 3.0857×10²² m.
+ * with the parsec of the unit table (`data/units.json`, 648000/π au), so it is
+ * the value `convertValue('67.4km/s/Mpc', 'Hz')` reads: one Hubble rate,
+ * 2.1842852410855023e-18 s⁻¹. The unit table is the one place the parsec is
+ * written; this module reads it rather than restating it.
  */
-export const H0_SI = 67.4e3 / 3.0857e22;
+export const H0_SI = 67.4e3 / (1e6 * unitTableDecimal('pc'));
 
 /**
  * Solar mass (kg). IAU 2015 nominal value rounded to the

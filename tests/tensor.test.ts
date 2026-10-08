@@ -346,9 +346,9 @@ describe('PhysicalConstants — CODATA accuracy', () => {
   });
 
   it('Hubble constant matches Planck 2018 value (67.4 km/s/Mpc)', () => {
-    // 2.184e-18 s^-1 * 3.0857e22 m/Mpc / 1000 m/km ≈ 67.4 km/s/Mpc
-    const kmSMpc = (PhysicalConstants.H0 * 3.0857e22) / 1000;
-    expect(kmSMpc).toBeCloseTo(67.4, 1);
+    // H0 s^-1 * 3.085677581491367e22 m/Mpc (the unit table's parsec) / 1000 m/km = 67.4 km/s/Mpc
+    const kmSMpc = (PhysicalConstants.H0 * 3.085677581491367e22) / 1000;
+    expect(kmSMpc).toBeCloseTo(67.4, 12);
   });
 
   it('Planck length is consistent with ℏ, G, c (relative error < 1e-5)', () => {

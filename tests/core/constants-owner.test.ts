@@ -10,6 +10,8 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import * as OWNER from '../../src/core/constants.js';
+import { PhysicalConstants } from '../../src/core/types.js';
+import { convertValue } from '../../src/dimensional/units.js';
 
 const ROOT = join(import.meta.dirname, '../../src');
 const OWNER_FILE = join(ROOT, 'core/constants.ts');
@@ -71,8 +73,10 @@ describe('core/constants.ts is the one owner of physical-constant values', () =>
     expect(hits).toEqual([]);
   });
 
-  it('H0 has one value', () => {
-    expect(OWNER.H0_SI).toBe(67.4e3 / 3.0857e22);
+  it('H0 has one value: the unit table\'s reading of 67.4 km/s/Mpc', () => {
+    expect(OWNER.H0_SI).toBe(convertValue('67.4km/s/Mpc', 'Hz').value);
+    expect(PhysicalConstants.H0).toBe(OWNER.H0_SI);
+    expect(OWNER.H0_SI).toBe(2.1842852410855023e-18);
   });
 
   it('the vacuum constants are related by c exactly', () => {
