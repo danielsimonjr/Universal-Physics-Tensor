@@ -216,6 +216,7 @@ export { DuplicateInputError, InputTypeError, MissingInputError, UnknownInputErr
 export type { Evaluation } from './composition/index.js';
 
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
+/** The input contract an evaluator's `run` checks before the domain, and what a caller asks `run` for. */
 export type { ContractAlternate, EvaluationWant, InputContract, InputSlot } from './bridges/input-contract.js';
 
 // v0.4.0 connection layer — Christoffel formula builder and covariant derivative
@@ -330,6 +331,7 @@ export { validateKleinGordonEquation } from './dimensional/klein-gordon-equation
 // Every symbol re-exported in this block is `@public` — the consumer-facing
 // dimensional/metric surface (stabilised in v0.3.0).
 export type { Dimension } from './dimensional/types.js';
+/** The one unit reader: parse a unit, convert a value exactly, and the typed errors it throws. */
 export {
   AmbiguousUnitError,
   convertValue,
@@ -338,6 +340,7 @@ export {
   UnitRefusedError,
   UnknownUnitError,
 } from './dimensional/units.js';
+/** A parsed unit, a converted value, and how a temperature is read. */
 export type { AffineTemperature, ConvertedValue, ParsedUnit, TemperatureReading } from './dimensional/units.js';
 export {
   DIMENSIONLESS,

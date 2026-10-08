@@ -80,6 +80,7 @@ export type { ConfrontationOutcome } from './bridges/observations/types.js';
 export { decidingMeasurement } from './bridges/sensitivity.js';
 // Bridge-evaluator dispatch (`upt evaluate`) + axis-discrimination audit (`upt axes`).
 export { BRIDGE_EVALUATORS, evaluateBridge } from './bridges/evaluators.js';
+/** The input-contract errors `upt evaluate` reports as usage errors: an absent, unknown or twice-given input. */
 export { DuplicateInputError, MissingInputError, UnknownInputError } from './bridges/evaluation-errors.js';
 export type { EvaluatorSpec, EvaluatorParameter } from './bridges/evaluators.js';
 export { resolveEvaluatorInputs } from './bridges/evaluator-inputs.js';
