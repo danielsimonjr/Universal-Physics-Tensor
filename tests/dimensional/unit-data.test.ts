@@ -13,7 +13,7 @@ import { M_SUN_IAU_SI, M_SUN_SI } from '../../src/core/constants.js';
 import { schemaProblems, type JsonSchema } from '../../src/core/json-schema.js';
 import { decimalScale, ratioScale, readScaleExpression, scaleToNumber, solidusSides } from '../../src/dimensional/exact-scale.js';
 import { readUnitFile, UNIT_DATA } from '../../src/dimensional/unit-data.js';
-import { convertValue, parseUnit, readUnit, unitConventionNotes, unitTables } from '../../src/dimensional/units.js';
+import { convertValue, parseUnit, readUnit, unitConventionNotes, unitTables, type AffineTemperature } from '../../src/dimensional/units.js';
 import { constantRecord } from '../../src/dimensional/symbolic-constants.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -77,6 +77,15 @@ describe('data/units.json is the unit table', () => {
     expect(unitConventionNotes('Msun')[0]).toContain(`${M_SUN_SI} kg`);
     expect(unitConventionNotes('u')[0]).toContain(`${constantRecord('m_u')!.value} kg`);
     expect(unitConventionNotes('kg')).toEqual([]);
+  });
+
+  it('the affine id enum is the public AffineTemperature type, both ways', () => {
+    // A Record over the union fails to compile when the type gains or loses an id.
+    const typed: Record<AffineTemperature, true> = { celsius: true, fahrenheit: true };
+    const affine = (schema.properties as Record<string, JsonSchema>).affine!;
+    const row = ((affine.properties as Record<string, JsonSchema>).scales!.items as JsonSchema).properties as Record<string, JsonSchema>;
+    expect([...(row.id!.enum as string[])].sort()).toEqual(Object.keys(typed).sort());
+    expect(UNIT_DATA.affine.map((r) => r.id).sort()).toEqual(Object.keys(typed).sort());
   });
 
   it('is covered by the CLI record fingerprint, file and rows', async () => {

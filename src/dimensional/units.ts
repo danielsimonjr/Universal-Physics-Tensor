@@ -124,7 +124,11 @@ interface AffineRow extends UnitDataAffineRow {
   readonly id: AffineTemperature;
 }
 
-/** Lone spellings. A compound that contains one is refused. The schema holds `id` to the two scales. */
+/**
+ * Lone spellings. A compound that contains one is refused. The schema's `id`
+ * enum is {@link AffineTemperature}, held equal by a test: the public type
+ * promises callers these ids, so a new affine scale is an API change.
+ */
 const AFFINE = UNIT_DATA.affine as readonly AffineRow[];
 
 /** Kelvin at a reading of zero, exactly: 273.15 − icePoint × scale. */

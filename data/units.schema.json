@@ -76,7 +76,7 @@
             "required": ["id", "scale", "icePoint", "symbols"],
             "additionalProperties": false,
             "properties": {
-              "id": { "enum": ["celsius", "fahrenheit"] },
+              "id": { "enum": ["celsius", "fahrenheit"], "description": "Deliberately the public TypeScript type AffineTemperature in src/dimensional/units.ts, which promises callers exactly these ids; a new affine scale is a public API change, so it is a code edit here and there. tests/dimensional/unit-data.test.ts holds the two lists equal." },
               "scale": { "$ref": "#/$defs/scale" },
               "icePoint": { "$ref": "#/$defs/scale" },
               "symbols": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
