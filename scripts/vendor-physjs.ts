@@ -1,19 +1,27 @@
 /**
- * Write `formal/physjs/theorem-files.json`: the Lean file each theorem the
- * vendored PhysJS manifest names is declared in, at the manifest's commit.
+ * Vendor the PhysJS files UPT pins, from a PhysJS checkout at the pinned commit,
+ * or check that the committed copies are exactly that.
+ *
+ * Three files under `formal/physjs/`, all read from PhysJS at one commit:
+ *
+ * - `manifest.json`: PhysJS `manifest/bridges.json`, with the commit appended
+ *   as `commit` (the pin; `toolchain`, `mathlib` and `physlib` come with it);
+ * - `lean-files.json`: every `.lean` file under `lean/` at the commit, sorted;
+ * - `theorem-files.json`: the Lean file each manifest theorem is declared in.
  *
  * A namespace is not a file: `PhysJS.Einstein.friedmann_corollary` is in
  * `lean/VacuumFriedmann.lean`, and `PhysJS.SpringLc` is a namespace inside
  * `lean/OscillatorDictionary.lean`. So the file is read from the sources,
- * not from the theorem's name. Every file in `formal/physjs/lean-files.json`
- * is read at the pinned commit from a PhysJS checkout, its `namespace`,
- * `section` and `end` lines are tracked, and each `theorem` or `lemma` is
- * recorded under its full name. A manifest theorem declared in no file, or in
- * two, is an error. `bun run physjs:table` then copies the result into the
- * generated table.
+ * not from the theorem's name: every listed file is read at the commit, its
+ * `namespace`, `section` and `end` lines are tracked, and each `theorem` or
+ * `lemma` is recorded under its full name. A manifest theorem declared in no
+ * file, or in two, is an error. `bun run physjs:table` then copies the result
+ * into the generated table. CI's docs-fresh job runs `--check` against a
+ * shallow fetch of PhysJS at the pinned commit.
  *
- *   bun scripts/vendor-physjs-theorem-files.ts --physjs ../PhysJS           # write the file
- *   bun scripts/vendor-physjs-theorem-files.ts --physjs ../PhysJS --check   # exit 1 when it is stale
+ *   bun scripts/vendor-physjs.ts --physjs ../PhysJS --commit <sha>   # pin <sha>: write all three
+ *   bun scripts/vendor-physjs.ts --physjs ../PhysJS                  # rewrite them at the current pin
+ *   bun scripts/vendor-physjs.ts --physjs ../PhysJS --check          # exit 1 when one is not PhysJS's at the pin
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -22,8 +30,6 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifestPath = resolve(root, 'formal/physjs/manifest.json');
-const leanFilesPath = resolve(root, 'formal/physjs/lean-files.json');
-const outPath = resolve(root, 'formal/physjs/theorem-files.json');
 
 interface Statement {
   readonly theorem: string;
@@ -124,26 +130,58 @@ export function theoremFiles(
   return { commit: manifest.commit, files };
 }
 
+/** A PhysJS checkout read at one commit. */
+export interface PhysjsAtCommit {
+  /** The text of `path` at the commit. */
+  show(path: string): string;
+  /** Every file path at the commit. */
+  paths(): readonly string[];
+}
+
+const json = (value: unknown): string => `${JSON.stringify(value, null, 2)}\n`;
+
+/** The three vendored files, path under the repository → text, rendered from PhysJS at `commit`. */
+export function vendoredFiles(commit: string, physjs: PhysjsAtCommit): Readonly<Record<string, string>> {
+  const manifest = { ...(JSON.parse(physjs.show('manifest/bridges.json')) as Omit<Manifest, 'commit'>), commit } as Manifest;
+  const leanFiles = physjs
+    .paths()
+    .filter((path) => path.startsWith('lean/') && path.endsWith('.lean'))
+    .sort();
+  return {
+    'formal/physjs/manifest.json': json(manifest),
+    'formal/physjs/lean-files.json': json(leanFiles),
+    'formal/physjs/theorem-files.json': json(theoremFiles(manifest, leanFiles, (path) => physjs.show(path))),
+  };
+}
+
 function main(argv: readonly string[]): number {
-  const at = argv.indexOf('--physjs');
-  const physjs = at >= 0 ? argv[at + 1] : undefined;
-  if (physjs === undefined) {
-    process.stderr.write('usage: bun scripts/vendor-physjs-theorem-files.ts --physjs <PhysJS checkout> [--check]\n');
+  const option = (name: string): string | undefined => {
+    const at = argv.indexOf(name);
+    return at >= 0 ? argv[at + 1] : undefined;
+  };
+  const checkout = option('--physjs');
+  if (checkout === undefined) {
+    process.stderr.write('usage: bun scripts/vendor-physjs.ts --physjs <PhysJS checkout> [--commit <sha>] [--check]\n');
     return 2;
   }
-  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as Manifest;
-  const leanFiles = JSON.parse(readFileSync(leanFilesPath, 'utf8')) as readonly string[];
-  const read = (path: string): string =>
-    execFileSync('git', ['-C', physjs, 'show', `${manifest.commit}:${path}`], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-  const rendered = `${JSON.stringify(theoremFiles(manifest, leanFiles, read), null, 2)}\n`;
+  const commit = option('--commit') ?? (JSON.parse(readFileSync(manifestPath, 'utf8')) as Manifest).commit;
+  const git = (args: readonly string[]): string =>
+    execFileSync('git', ['-C', checkout, ...args], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  const files = vendoredFiles(commit, {
+    show: (path) => git(['show', `${commit}:${path}`]),
+    paths: () => git(['ls-tree', '-r', '--name-only', commit]).split('\n').filter((path) => path !== ''),
+  });
   if (argv.includes('--check')) {
-    if (readFileSync(outPath, 'utf8') !== rendered) {
-      process.stderr.write('formal/physjs/theorem-files.json is stale. Run bun scripts/vendor-physjs-theorem-files.ts --physjs <checkout>.\n');
+    const stale = Object.entries(files)
+      .filter(([path, text]) => readFileSync(resolve(root, path), 'utf8') !== text)
+      .map(([path]) => path);
+    if (stale.length > 0) {
+      process.stderr.write(`not PhysJS's at ${commit}: ${stale.join(', ')}. Run bun scripts/vendor-physjs.ts --physjs <checkout>.\n`);
       return 1;
     }
     return 0;
   }
-  writeFileSync(outPath, rendered);
+  for (const [path, text] of Object.entries(files)) writeFileSync(resolve(root, path), text);
   return 0;
 }
 

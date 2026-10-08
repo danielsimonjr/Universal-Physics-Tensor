@@ -1,7 +1,7 @@
 /**
  * Write the TypeScript table `physjsFormalRef` reads from the vendored
  * PhysJS manifest and the theorem → file table vendored beside it
- * (`scripts/vendor-physjs-theorem-files.ts`). The manifest is the pin. This
+ * (`scripts/vendor-physjs.ts`). The manifest is the pin. This
  * script writes that table and nothing else. A manifest field outside the base
  * set is a nested statement when it has exactly the statement fields, and an
  * error otherwise; no list of nested names is kept here.

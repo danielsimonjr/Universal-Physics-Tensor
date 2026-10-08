@@ -20,7 +20,7 @@ import { describe, expect, it } from 'vitest';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { PHYSJS_COMMIT, physjsFormalRef, physjsLeanFile, physjsNestedStatements, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
-import { declaredTheorems, manifestTheorems } from '../../scripts/vendor-physjs-theorem-files.js';
+import { declaredTheorems, manifestTheorems, vendoredFiles } from '../../scripts/vendor-physjs.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -161,5 +161,27 @@ describe('the Lean file of a theorem is where it is declared, read from data', (
       'PhysJS.Einstein.helper',
       'PhysJS.SpringLc.time_rescale_equationOfMotion',
     ]);
+  });
+
+  it('the vendor script renders all three pinned files from PhysJS at one commit', () => {
+    const tree: Record<string, string> = {
+      'manifest/bridges.json': JSON.stringify({ schema: 'physjs-bridge-manifest/v1', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }] }),
+      'lean/B.lean': 'namespace PhysJS.B\ntheorem u : True := trivial\nend PhysJS.B',
+      'lean/A.lean': 'namespace PhysJS.A\ntheorem t : True := trivial\nend PhysJS.A',
+      'README.md': 'not Lean',
+    };
+    const files = vendoredFiles('abc123', { show: (path) => tree[path]!, paths: () => Object.keys(tree) });
+    expect(JSON.parse(files['formal/physjs/manifest.json']!)).toEqual({ schema: 'physjs-bridge-manifest/v1', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }], commit: 'abc123' });
+    expect(JSON.parse(files['formal/physjs/lean-files.json']!)).toEqual(['lean/A.lean', 'lean/B.lean']);
+    expect(JSON.parse(files['formal/physjs/theorem-files.json']!)).toEqual({ commit: 'abc123', files: { 'PhysJS.A.t': 'lean/A.lean' } });
+  });
+
+  it('the committed manifest and lean-files.json have the shape the vendor script writes', () => {
+    // CI's docs-fresh job checks them byte for byte against a fetch of PhysJS at the pin.
+    const manifestText = readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8');
+    const manifest = JSON.parse(manifestText) as { commit: string };
+    expect(Object.keys(manifest).at(-1)).toBe('commit');
+    expect(manifestText).toBe(`${JSON.stringify(manifest, null, 2)}\n`);
+    expect([...leanFiles]).toEqual([...leanFiles].sort());
   });
 });
