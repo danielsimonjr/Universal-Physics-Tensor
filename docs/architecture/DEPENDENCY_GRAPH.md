@@ -1475,7 +1475,8 @@ The codebase is organized into the following modules:
 | `./catalog-load.js` | `primaryRelation` | Import |
 | `./catalog-load.js` | `catalogEvaluators` | Import |
 | `./catalog-types.js` | `CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation` | Import (type-only) |
-| `./expr-parse.js` | `evaluateFormula` | Import |
+| `./expr-parse.js` | `evaluateFormula, parseCatalogExpression` | Import |
+| `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
 | `./relation-eval.js` | `evaluateCatalogRelation, relationHolds` | Import |
 
 **Exports:**
@@ -1485,7 +1486,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/expr-parse.ts` - One expression parser for a catalog formula.
+### `src/bridges/expr-parse.ts` - One expression parser for a catalog formula: MathTS.
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1498,6 +1499,7 @@ The codebase is organized into the following modules:
 | `../dimensional/hyphen-names.js` | `rewriteCatalogHyphens` | Import |
 | `../dimensional/quantity-registry.js` | `allQuantityRecords` | Import |
 | `../numerical/formula-mathts.js` | `parseFormula` | Import |
+| `../numerical/formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
 **Exports:**
 - Functions: `formulaNames`, `formulaScope`, `evaluateFormula`, `parseCatalogExpression`
@@ -1506,9 +1508,19 @@ The codebase is organized into the following modules:
 
 ### `src/bridges/holds.ts` - Interpreter for a catalog validity condition.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `parse` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/hyphen-names.js` | `rewriteCatalogHyphens` | Import |
+
 **Exports:**
 - Classes: `HoldsError`
-- Functions: `rewriteHoldsNames`, `holds`
+- Functions: `holds`
 
 ---
 
@@ -6738,15 +6750,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77601 |
-| Total Exports | 2379 |
+| Total Lines of Code | 77358 |
+| Total Exports | 2378 |
 | Total Re-exports | 1207 |
 | Total Classes | 66 |
 | Total Interfaces | 438 |
-| Total Functions | 729 |
+| Total Functions | 728 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 498 |
+| Type-only Imports | 499 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 81
+- **Potentially unused exports**: 80
 
 ## Potentially Unused Files
 
@@ -51,10 +51,6 @@ These exports are not imported by any other file in the codebase:
 ### `src/bridges/evaluators.ts`
 
 - `bindRelationInputs` (function)
-
-### `src/bridges/holds.ts`
-
-- `rewriteHoldsNames` (function)
 
 ### `src/bridges/registry.ts`
 

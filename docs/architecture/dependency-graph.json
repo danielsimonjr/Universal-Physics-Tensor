@@ -4,7 +4,7 @@
     "version": "8.0.0",
     "totalFiles": 352,
     "totalModules": 13,
-    "totalExports": 2379
+    "totalExports": 2378
   },
   "entryPoints": [
     {
@@ -5098,8 +5098,16 @@
           {
             "file": "./expr-parse.js",
             "imports": [
-              "evaluateFormula"
+              "evaluateFormula",
+              "parseCatalogExpression"
             ]
+          },
+          {
+            "file": "../dimensional/ast-types.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
           },
           {
             "file": "./relation-eval.js",
@@ -5134,7 +5142,7 @@
         ]
       },
       "src/bridges/expr-parse.ts": {
-        "description": "One expression parser for a catalog formula.",
+        "description": "One expression parser for a catalog formula: MathTS.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -5188,6 +5196,13 @@
             "imports": [
               "parseFormula"
             ]
+          },
+          {
+            "file": "../numerical/formula-dimension.js",
+            "imports": [
+              "parseFormulaPNode",
+              "FormulaPNode"
+            ]
           }
         ],
         "exports": [
@@ -5205,11 +5220,24 @@
       },
       "src/bridges/holds.ts": {
         "description": "Interpreter for a catalog validity condition.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "parse"
+            ]
+          }
+        ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/hyphen-names.js",
+            "imports": [
+              "rewriteCatalogHyphens"
+            ]
+          }
+        ],
         "exports": [
-          "rewriteHoldsNames",
           "holds",
           "HoldsError"
         ],
@@ -5217,7 +5245,6 @@
           "HoldsError"
         ],
         "functions": [
-          "rewriteHoldsNames",
           "holds"
         ]
       },
@@ -24260,19 +24287,19 @@
   "statistics": {
     "totalTypeScriptFiles": 352,
     "totalModules": 13,
-    "totalLinesOfCode": 77601,
-    "totalExports": 2379,
+    "totalLinesOfCode": 77358,
+    "totalExports": 2378,
     "totalClasses": 66,
     "totalInterfaces": 438,
-    "totalFunctions": 729,
+    "totalFunctions": 728,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 378,
     "totalReExports": 1207,
-    "totalTypeOnlyImports": 498,
+    "totalTypeOnlyImports": 499,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 81
+    "unusedExportsCount": 80
   }
 }

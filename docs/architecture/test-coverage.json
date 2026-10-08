@@ -1,14 +1,13 @@
 {
   "metadata": {
     "totalSourceFiles": 352,
-    "totalTestFiles": 534,
-    "testedCount": 335,
-    "untestedCount": 17,
-    "coveragePercent": "95.2"
+    "totalTestFiles": 535,
+    "testedCount": 336,
+    "untestedCount": 16,
+    "coveragePercent": "95.5"
   },
   "untestedFiles": [
     "src/bridges/catalog-types.ts",
-    "src/bridges/holds.ts",
     "src/cases/quadrature.ts",
     "src/cli/commands/_atlas-route.ts",
     "src/cli/commands/_discovery-opts.ts",
@@ -108,6 +107,7 @@
     "src/bridges/evaluator-inputs.ts",
     "src/bridges/evaluators.ts",
     "src/bridges/expr-parse.ts",
+    "src/bridges/holds.ts",
     "src/bridges/index.ts",
     "src/bridges/membership.ts",
     "src/bridges/notices.ts",
@@ -1123,6 +1123,7 @@
       "tests/bridges/catalog-filing-ledger.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/notice-record.test.ts",
+      "tests/bridges/one-grammar.test.ts",
       "tests/bridges/tensor-index.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -1210,6 +1211,7 @@
       "tests/bridges/catalog-domains.test.ts",
       "tests/bridges/evaluator-extra-outputs.test.ts",
       "tests/bridges/evaluators.test.ts",
+      "tests/bridges/one-grammar.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -1230,9 +1232,12 @@
       "tests/tensor.test.ts"
     ],
     "src/bridges/expr-parse.ts": [
+      "tests/bridges/one-grammar.test.ts",
       "tests/dimensional/unit-closure.test.ts"
     ],
-    "src/bridges/holds.ts": [],
+    "src/bridges/holds.ts": [
+      "tests/bridges/one-grammar.test.ts"
+    ],
     "src/bridges/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
@@ -1366,6 +1371,7 @@
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/relation-eval.ts": [
+      "tests/bridges/one-grammar.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts"
     ],
@@ -1559,6 +1565,7 @@
       "tests/atlas/diffusion.test.ts",
       "tests/atlas/model.test.ts",
       "tests/atlas/models.test.ts",
+      "tests/bridges/one-grammar.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/canonical-count-prose.test.ts",
       "tests/canonical/canonical-domains.test.ts",
@@ -9735,6 +9742,14 @@
     ],
     "tests/bridges/observation-types.test.ts": [
       "src/bridges/observations/types.ts"
+    ],
+    "tests/bridges/one-grammar.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/bridges/expr-parse.ts",
+      "src/bridges/holds.ts",
+      "src/bridges/relation-eval.ts",
+      "src/bridges/evaluators.ts",
+      "src/canonical/registry.ts"
     ],
     "tests/bridges/orphan-dimensional-signature.test.ts": [
       "src/bridges/index.ts",
