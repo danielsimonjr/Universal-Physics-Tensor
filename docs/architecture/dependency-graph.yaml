@@ -2313,7 +2313,7 @@ modules:
             - FORMAL_REF_KINDS
         - file: ../bridges/catalog-load.js
           imports:
-            - catalogEntry
+            - catalogEntries
             - catalogIdNumber
         - file: ./physjs-entries.generated.js
           imports:
@@ -17226,7 +17226,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 360
   totalModules: 13
-  totalLinesOfCode: 79737
+  totalLinesOfCode: 79789
   totalExports: 2472
   totalClasses: 79
   totalInterfaces: 451

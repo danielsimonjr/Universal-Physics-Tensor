@@ -16,7 +16,11 @@ import { fileURLToPath } from 'node:url';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { bridgeSeedKeys, physjsAheadOfCatalog, physjsFormalRef, physjsKeysAheadOfCatalog } from '../../src/atlas/physjs-ref.js';
-import { catalogEntry, parseBridgeId } from '../../src/bridges/catalog-load.js';
+import { catalogEntries, catalogEntry, parseBridgeId } from '../../src/bridges/catalog-load.js';
+import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
+
+/** A covers line that opens with a kind word, which the v2 manifest does not write. */
+const KIND_PREFIX = new RegExp(`^(${FORMAL_REF_KINDS.join('|')}): `);
 
 const MANIFEST = JSON.parse(
   readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../formal/physjs/manifest.json'), 'utf8'),
@@ -55,7 +59,7 @@ describe('bridge seeds are kind bridge only', () => {
     expect(physjsFormalRef('be-16').kind).toBe('bridge');
     expect(physjsFormalRef('be-43').kind).toBe('bridge');
     for (const entry of MANIFEST.entries) {
-      expect(entry.covers, entry.key).not.toMatch(/^(bridge|reduction|limit|derivation-step|property|cross-check): /);
+      expect(entry.covers, entry.key).not.toMatch(KIND_PREFIX);
       if (entry.kind !== 'bridge' || physjsAheadOfCatalog(entry.key)) continue;
       expect(seeds, entry.key).toContain(entry.key);
       expect(physjsFormalRef(entry.key).kind, entry.key).toBe('bridge');
@@ -70,6 +74,15 @@ describe('bridge seeds are kind bridge only', () => {
     }
     for (const key of ATLAS_KEYS) expect(physjsAheadOfCatalog(key), key).toBe(false);
     expect(physjsAheadOfCatalog('be-16')).toBe(false);
+  });
+
+  it('the keys ahead of the catalog are one unbroken run right after its highest id', () => {
+    const highest = Math.max(...catalogEntries().map((entry) => entry.id));
+    const ahead = physjsKeysAheadOfCatalog().map((key) => parseBridgeId(key));
+    expect(ahead).toEqual(Array.from({ length: ahead.length }, (_, i) => highest + 1 + i));
+    // At this pin that run is PhysJS's be-171 to be-249, which the catalog has
+    // not taken in yet; cataloguing them empties it.
+    expect(physjsKeysAheadOfCatalog()).toEqual(Array.from({ length: 79 }, (_, i) => `be-${171 + i}`));
   });
 
   it('the live list is the kind-bridge entries that resolve, in manifest order', () => {

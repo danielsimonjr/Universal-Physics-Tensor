@@ -17,6 +17,7 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { PHYSJS_COMMIT, physjsFileUrl, physjsFormalRef, physjsLeanFile, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { catalogEntries } from '../../src/bridges/catalog-load.js';
+import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,6 +25,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const MANIFEST = JSON.parse(readFileSync(resolve(ROOT, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
 const KIND_OF = new Map(MANIFEST.entries.map((entry) => [entry.key, entry.kind]));
+/** A covers line that opens with a kind word, which the v2 manifest does not write. */
+const KIND_PREFIX = new RegExp(`^(${FORMAL_REF_KINDS.join('|')}): `);
 
 /**
  * Catalog ids whose manifest entry has one of `kinds`. The kind is the
@@ -36,7 +39,7 @@ function idsOfKind(...kinds: readonly string[]): number[] {
     .map((entry) => entry.id);
 }
 
-const PROPERTIES = idsOfKind('property').filter((id) => id !== 28);
+const PROPERTIES = idsOfKind('property');
 const CROSS_CHECKS = idsOfKind('cross-check');
 const COUNTED = idsOfKind('reduction', 'limit', 'derivation-step');
 /** Theorem states the catalogued equation. */
@@ -51,13 +54,13 @@ function row(id: number) {
 
 describe('formalRef kind — formally-proved is a bridge only', () => {
   it('the catalog references exist (otherwise the next assertions pass vacuously)', () => {
-    expect(PROPERTIES).toEqual([11, 29]);
-    expect(CROSS_CHECKS).toEqual([19, 24, 42]);
-    expect(COUNTED).toEqual(expect.arrayContaining([13, 14, 38, 58, 64]));
+    // The counts are the proof-status record at this pin (3 property, 3
+    // cross-check, 16 counted, 119 bridge); the ids come from the manifest.
+    expect(PROPERTIES.length).toBe(3);
+    expect(CROSS_CHECKS.length).toBe(3);
     expect(COUNTED.length).toBe(16);
-    expect(CATALOG_EQUATION).toEqual(expect.arrayContaining([12, 16, 43, 147, 170]));
     expect(CATALOG_EQUATION.length).toBe(119);
-    expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED, ...CATALOG_EQUATION, 28].every((id) => row(id).formalRef !== undefined)).toBe(true);
+    expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED, ...CATALOG_EQUATION].every((id) => row(id).formalRef !== undefined)).toBe(true);
   });
 
   it('a property derives its own label and not formally-proved', () => {
@@ -84,16 +87,9 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     for (const id of CATALOG_EQUATION) {
       const tags = deriveEvidence(row(id), NO_PASSING_WITNESSES);
       expect(row(id).formalRef?.kind, `be-${id}`).toBe('bridge');
-      expect(row(id).formalRef?.covers, `be-${id}`).not.toMatch(/^(bridge|reduction|limit|derivation-step|property|cross-check): /);
+      expect(row(id).formalRef?.covers, `be-${id}`).not.toMatch(KIND_PREFIX);
       expect(tags.has('formally-proved'), `be-${id}`).toBe(true);
     }
-  });
-
-  it('BE-28 derives the property label and not formally-proved', () => {
-    const tags = deriveEvidence(row(28), NO_PASSING_WITNESSES);
-    expect(row(28).formalRef?.kind).toBe('property');
-    expect(tags.has('formally-proved')).toBe(false);
-    expect(tags.has('formally-proved-property')).toBe(true);
   });
 
   it('a counted catalog reference derives neither label', () => {

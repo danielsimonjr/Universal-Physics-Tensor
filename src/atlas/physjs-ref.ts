@@ -26,9 +26,10 @@
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
- * `corollary` on `be-13` and has no key. Each entry's `kind` is the manifest's
- * own field (schema `physjs-bridge-manifest/v2`), which PhysJS reads from the
- * kind line of the Lean file that declares the theorem; this module keeps no
+ * `corollary` on `be-13` and has no key. Each statement's `kind`, nested ones
+ * included, is the manifest's own field (schema `physjs-bridge-manifest/v2`),
+ * which PhysJS reads from the kind line of the Lean file that declares the
+ * theorem; this module keeps no
  * override and does not parse the covers line for it. The sentence that a
  * counted covers line begins with `reduction`, `limit`, or `derivation-step`,
  * and that a catalog entry's `formalKind` overrides that word, is the record
@@ -53,7 +54,7 @@
 
 import type { FormalRef, FormalRefKind } from './types.js';
 import { FORMAL_REF_KINDS } from '../relations/types.js';
-import { catalogEntry, catalogIdNumber } from '../bridges/catalog-load.js';
+import { catalogEntries, catalogIdNumber } from '../bridges/catalog-load.js';
 import {
   PHYSJS_COMMIT,
   PHYSJS_MATHLIB,
@@ -78,6 +79,8 @@ const PHYSJS_COVERAGE = 'covers its statement only';
 /** One statement the manifest records: an entry's own, or a nested one. */
 interface PhysjsStatement {
   readonly theorem: string;
+  /** How the theorem relates to the equation the key names, as the manifest writes it. */
+  readonly kind: string;
   readonly covers: string;
   readonly coverage: string;
   readonly leanProof: string;
@@ -88,7 +91,7 @@ interface PhysjsStatement {
 const BASE_FIELDS = new Set<string>(['key', 'bridgeId', 'theorem', 'kind', 'covers', 'coverage', 'leanProof', 'axioms', 'imports']);
 
 /** The fields of a statement, sorted. A nested field with exactly these is a statement. */
-const STATEMENT_FIELDS = ['axioms', 'coverage', 'covers', 'leanProof', 'theorem'] as const;
+const STATEMENT_FIELDS = ['axioms', 'coverage', 'covers', 'kind', 'leanProof', 'theorem'] as const;
 
 /** A compiled statement: the manifest's fields and the Lean file that declares its theorem. */
 interface PhysjsCompiledStatement extends PhysjsStatement {
@@ -99,6 +102,7 @@ interface PhysjsCompiledStatement extends PhysjsStatement {
 /** A nested statement, named by its manifest field. No key. Not a `formalRef`. */
 interface PhysjsNestedStatement extends PhysjsCompiledStatement {
   readonly name: string;
+  readonly kind: FormalRefKind;
 }
 
 /** One compiled entry: its own statement, and every nested statement by name. */
@@ -215,17 +219,30 @@ function physjsStatementUrl(theorem: string): string {
   return physjsFileUrl(physjsLeanFile(theorem));
 }
 
+/** The highest id in the bridge catalog. */
+const CATALOG_MAX_ID = Math.max(...catalogEntries().map((entry) => entry.id));
+
 /**
- * True when `key` names a catalog id the catalog does not have yet: PhysJS
- * proved the statement ahead of the catalog. Such an entry is vendored and
- * compared, and it is not a seed and not a problem until the catalog entry
- * exists. An atlas key never is.
+ * True when `key` is ahead of the catalog: PhysJS proved the statement for a
+ * catalog id the catalog has not reached yet. That is an id above the
+ * catalog's highest, with every id between them also a key of `keys` (the
+ * manifest's), so the ahead keys are one unbroken run that starts right after
+ * the catalog. Such an entry is vendored and compared, and it is not a seed
+ * and not a problem until the catalog entry exists. A missing id inside the
+ * catalog's range is not ahead, nor is an id past a gap in the run (a typo
+ * such as an extra digit), nor an atlas key.
  *
  * @internal
  */
-export function physjsAheadOfCatalog(key: string): boolean {
+export function physjsAheadOfCatalog(
+  key: string,
+  keys: readonly string[] = PHYSJS_ENTRIES.map((entry) => entry.key),
+): boolean {
   const id = catalogIdNumber(key);
-  return id !== undefined && catalogEntry(id) === undefined;
+  if (id === undefined || id <= CATALOG_MAX_ID) return false;
+  const ids = new Set(keys.map(catalogIdNumber));
+  for (let n = CATALOG_MAX_ID + 1; n < id; n++) if (!ids.has(n)) return false;
+  return true;
 }
 
 /**
@@ -276,6 +293,7 @@ function sameAxioms(recorded: readonly string[], manifest: readonly string[]): b
 function sameStatement(compiled: PhysjsStatement, manifest: PhysjsStatement): boolean {
   return (
     compiled.theorem === manifest.theorem &&
+    compiled.kind === manifest.kind &&
     compiled.covers === manifest.covers &&
     compiled.coverage === manifest.coverage &&
     compiled.leanProof === manifest.leanProof &&
@@ -310,8 +328,9 @@ function isFormalRefKind(kind: unknown): kind is FormalRefKind {
  * and compared; naming it as the `formalRef` is a problem. The top-level
  * theorem stays the reference. The reference's kind is the entry's
  * `kind`; a kind outside the formal-reference kinds is a problem. A `be-`
- * key whose catalog entry does not exist yet is ahead of the catalog and
- * is not a problem (`physjsAheadOfCatalog`).
+ * key in the unbroken run above the catalog's highest id is ahead of the
+ * catalog and is not a problem (`physjsAheadOfCatalog`); any other key with
+ * no bridge is.
  *
  * @internal
  */
@@ -342,6 +361,7 @@ export function physjsManifestProblems(input: {
   const compiledByKey = new Map((input.compiledEntries ?? PHYSJS_ENTRIES).map((entry) => [entry.key, entry]));
   const byId = new Map(input.bridges.map((bridge) => [bridge.id, bridge]));
   const seen = new Set<string>();
+  const manifestKeys = manifest.entries.map((entry) => entry.key);
   for (const entry of manifest.entries) {
     if (seen.has(entry.key)) problems.push(`manifest key '${entry.key}' is duplicated`);
     seen.add(entry.key);
@@ -362,6 +382,11 @@ export function physjsManifestProblems(input: {
       problems.push(`manifest key '${entry.key}' kind '${String(entry.kind)}' is not one of ${FORMAL_REF_KINDS.join(', ')}`);
     }
     for (const statement of nested) {
+      if (!isFormalRefKind(statement.kind)) {
+        problems.push(
+          `${statement.name} kind for '${entry.key}' is '${String(statement.kind)}', not one of ${FORMAL_REF_KINDS.join(', ')}`,
+        );
+      }
       if (statement.coverage !== PHYSJS_COVERAGE) {
         problems.push(
           `${statement.name} coverage phrase for '${entry.key}' is '${statement.coverage}', expected '${PHYSJS_COVERAGE}'`,
@@ -373,7 +398,7 @@ export function physjsManifestProblems(input: {
     }
     const bridge = byId.get(entry.key);
     if (bridge === undefined) {
-      if (!physjsAheadOfCatalog(entry.key)) problems.push(`manifest key '${entry.key}' does not resolve to a bridge`);
+      if (!physjsAheadOfCatalog(entry.key, manifestKeys)) problems.push(`manifest key '${entry.key}' does not resolve to a bridge`);
       continue;
     }
     const ref = bridge.formalRef;

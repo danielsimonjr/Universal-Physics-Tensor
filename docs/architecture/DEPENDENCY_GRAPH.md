@@ -918,7 +918,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `FormalRef, FormalRefKind` | Import (type-only) |
 | `../relations/types.js` | `FORMAL_REF_KINDS` | Import |
-| `../bridges/catalog-load.js` | `catalogEntry, catalogIdNumber` | Import |
+| `../bridges/catalog-load.js` | `catalogEntries, catalogIdNumber` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT, PHYSJS_MATHLIB, PHYSJS_PHYS_LIB, PHYSJS_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT` | Re-export |
 
@@ -6881,7 +6881,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 360 |
 | Total Modules | 13 |
-| Total Lines of Code | 79737 |
+| Total Lines of Code | 79789 |
 | Total Exports | 2472 |
 | Total Re-exports | 1252 |
 | Total Classes | 79 |

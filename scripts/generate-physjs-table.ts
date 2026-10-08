@@ -23,14 +23,15 @@ const outPath = resolve(root, 'src/atlas/physjs-entries.generated.ts');
 /** The fields every manifest entry may carry. Any other field is a nested statement, or an error. */
 const BASE_FIELDS = new Set<string>(['key', 'bridgeId', 'theorem', 'kind', 'covers', 'coverage', 'leanProof', 'axioms', 'imports']);
 
-/** The kinds a manifest entry may carry: how its theorem relates to the catalog equation its key names. */
+/** The kinds a statement may carry: how its theorem relates to the catalog equation its key names. */
 const KINDS = new Set<string>(FORMAL_REF_KINDS);
 
 /** The fields of a statement: the top-level one, and each nested one. */
-const STATEMENT_KEYS = ['theorem', 'covers', 'coverage', 'leanProof', 'axioms'] as const;
+const STATEMENT_KEYS = ['theorem', 'kind', 'covers', 'coverage', 'leanProof', 'axioms'] as const;
 
 interface Statement {
   readonly theorem: string;
+  readonly kind: string;
   readonly covers: string;
   readonly coverage: string;
   readonly leanProof: string;
@@ -40,7 +41,6 @@ interface Statement {
 interface Entry extends Statement {
   readonly key: string;
   readonly bridgeId: string;
-  readonly kind: string;
   readonly imports?: string;
   readonly [field: string]: unknown;
 }
@@ -89,8 +89,10 @@ function fileOf(files: TheoremFiles, theorem: string): string {
   return path.slice('lean/'.length);
 }
 
-function emitStatementFields(statement: Statement, file: string, indent: string): string[] {
+function emitStatementFields(label: string, statement: Statement, file: string, indent: string): string[] {
+  if (!KINDS.has(statement.kind)) throw new Error(`manifest statement '${label}' kind '${String(statement.kind)}' is not one of ${[...KINDS].join(', ')}`);
   return [
+    `${indent}kind: ${quote(statement.kind)},`,
     `${indent}theorem: ${quote(statement.theorem)},`,
     `${indent}file: ${quote(file)},`,
     `${indent}covers: ${quote(statement.covers)},`,
@@ -101,9 +103,8 @@ function emitStatementFields(statement: Statement, file: string, indent: string)
 }
 
 function emitEntry(entry: Entry, files: TheoremFiles): string {
-  if (!KINDS.has(entry.kind)) throw new Error(`manifest entry '${entry.key}' kind '${String(entry.kind)}' is not one of ${[...KINDS].join(', ')}`);
-  const lines = ['  {', `    key: ${quote(entry.key)},`, `    bridgeId: ${quote(entry.bridgeId)},`, `    kind: ${quote(entry.kind)},`];
-  lines.push(...emitStatementFields(entry, fileOf(files, entry.theorem), '    '));
+  const lines = ['  {', `    key: ${quote(entry.key)},`, `    bridgeId: ${quote(entry.bridgeId)},`];
+  lines.push(...emitStatementFields(entry.key, entry, fileOf(files, entry.theorem), '    '));
   if (entry.imports !== undefined) lines.push(`    imports: ${quote(entry.imports)},`);
   const nested = nestedStatements(entry);
   if (nested.length === 0) {
@@ -111,7 +112,7 @@ function emitEntry(entry: Entry, files: TheoremFiles): string {
   } else {
     lines.push('    nested: [');
     for (const { name, statement } of nested) {
-      lines.push('      {', `        name: ${quote(name)},`, ...emitStatementFields(statement, fileOf(files, statement.theorem), '        '), '      },');
+      lines.push('      {', `        name: ${quote(name)},`, ...emitStatementFields(`${entry.key}.${name}`, statement, fileOf(files, statement.theorem), '        '), '      },');
     }
     lines.push('    ],');
   }
@@ -147,9 +148,9 @@ export const PHYSJS_MATHLIB = ${quote(manifest.mathlib)};
 export const PHYSJS_PHYS_LIB = ${quote(manifest.physlib)};
 
 /**
- * Compiled entry table copied from the vendored manifest entries. Each entry
- * carries its manifest kind; each statement carries the Lean file that declares
- * it; each nested statement is named by its manifest field.
+ * Compiled entry table copied from the vendored manifest entries. Each
+ * statement, nested ones included, carries its manifest kind and the Lean file
+ * that declares it; each nested statement is named by its manifest field.
  */
 export const PHYSJS_ENTRIES = [
 ${body}

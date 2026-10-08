@@ -1150,6 +1150,7 @@
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/catalog-domains.test.ts",
       "tests/bridges/catalog-filing-ledger.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
@@ -8883,6 +8884,7 @@
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/composition-table.test.ts",
@@ -8891,6 +8893,7 @@
       "tests/atlas/error-algebra.test.ts",
       "tests/atlas/evidence-rule.test.ts",
       "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/link-prediction.test.ts",
       "tests/atlas/oscillators-limits.test.ts",
@@ -9425,7 +9428,8 @@
       "src/atlas/derive-evidence.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts",
-      "src/bridges/catalog-load.ts"
+      "src/bridges/catalog-load.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/canonical-links.test.ts": [
       "src/atlas/families.ts",
@@ -9671,7 +9675,8 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
-      "src/bridges/catalog-load.ts"
+      "src/bridges/catalog-load.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/gr-spine-regime.test.ts": [
       "src/cli/main.ts",
@@ -9884,6 +9889,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/catalog-load.ts",
       "src/relations/types.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts"

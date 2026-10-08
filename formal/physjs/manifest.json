@@ -19,6 +19,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.KgSchrodinger.planeWave_iff_dispersion",
+        "kind": "derivation-step",
         "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
@@ -44,6 +45,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.KleinGordonWave.planeWave_iff_dispersion",
+        "kind": "derivation-step",
         "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
@@ -69,6 +71,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.StiffString.planeWave_iff_dispersion",
+        "kind": "derivation-step",
         "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
@@ -94,6 +97,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.TelegraphDiffusion.planeWave_iff_dispersion",
+        "kind": "derivation-step",
         "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
@@ -119,6 +123,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.TelegraphWave.planeWave_iff_dispersion",
+        "kind": "derivation-step",
         "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
@@ -229,7 +234,8 @@
       ],
       "oneLoop": {
         "theorem": "PhysJS.YangMills.alphaRun_hasDerivAt",
-        "covers": "derivation-step: α(t) = α₀ / (1 + b₀ α₀ t / (2π)) solves the one-loop running equation where the denominator is positive",
+        "kind": "derivation-step",
+        "covers": "α(t) = α₀ / (1 + b₀ α₀ t / (2π)) solves the one-loop running equation where the denominator is positive",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -268,7 +274,8 @@
       ],
       "inversion": {
         "theorem": "PhysJS.Mond.mu_inversion",
-        "covers": "derivation-step: for z > 0, y = z ν(z) satisfies y² / √(1 + y²) = z, which inverts μ(x) = x / √(1 + x²)",
+        "kind": "derivation-step",
+        "covers": "for z > 0, y = z ν(z) satisfies y² / √(1 + y²) = z, which inverts μ(x) = x / √(1 + x²)",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -293,7 +300,8 @@
       ],
       "vacuum": {
         "theorem": "PhysJS.Einstein.vacuum_density",
-        "covers": "reduction: with κ = 8πG/c⁴, T_μν = −ρ c² g_μν and Λ g = −κ T rearrange to ρ = c² Λ / (8π G). The opposite sign does not. This is the BE-20 density; BE-20 has no reference of its own",
+        "kind": "reduction",
+        "covers": "with κ = 8πG/c⁴, T_μν = −ρ c² g_μν and Λ g = −κ T rearrange to ρ = c² Λ / (8π G). The opposite sign does not. This is the BE-20 density; BE-20 has no reference of its own",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -304,7 +312,8 @@
       },
       "corollary": {
         "theorem": "PhysJS.Einstein.friedmann_corollary",
-        "covers": "derivation-step: the vacuum density gives (8πG/3) ρ = Λ c² / 3, the cosmological term of FirstOrderFriedmann. A fluid of this density added to matter, with the explicit Λ set to zero, is that equation at k = 0. The Einstein-static density Λ c²/(4π G) is twice that term. Dropping c² fails when c² ≠ 1. The density is not reproved. BE-20 has no reference of its own",
+        "kind": "derivation-step",
+        "covers": "the vacuum density gives (8πG/3) ρ = Λ c² / 3, the cosmological term of FirstOrderFriedmann. A fluid of this density added to matter, with the explicit Λ set to zero, is that equation at k = 0. The Einstein-static density Λ c²/(4π G) is twice that term. Dropping c² fails when c² ≠ 1. The density is not reproved. BE-20 has no reference of its own",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -581,7 +590,8 @@
       ],
       "friedmann": {
         "theorem": "PhysJS.RandallSundrum.flat_friedmann",
-        "covers": "derivation-step: H²_FRW with the module Λ equal to Physlib's Λ c² is FirstOrderFriedmann at k = 0. Identifying the two Λ symbols and dropping c² fails when c² ≠ 1 and Λ ≠ 0",
+        "kind": "derivation-step",
+        "covers": "H²_FRW with the module Λ equal to Physlib's Λ c² is FirstOrderFriedmann at k = 0. Identifying the two Λ symbols and dropping c² fails when c² ≠ 1 and Λ ≠ 0",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -606,7 +616,8 @@
       ],
       "torsionMonomial": {
         "theorem": "PhysJS.EinsteinCartan.torsion_monomial",
-        "covers": "derivation-step: [κ] and [S] are independent base dimensions and [T] = [κ][S]. If a positive component is dimensionally homogeneous in those dimensions, every positive pair is a unit change of (1, 1) and T = C κ S with C = f(1, 1). C is not fixed. Not the Einstein–Cartan field equation",
+        "kind": "derivation-step",
+        "covers": "[κ] and [S] are independent base dimensions and [T] = [κ][S]. If a positive component is dimensionally homogeneous in those dimensions, every positive pair is a unit change of (1, 1) and T = C κ S with C = f(1, 1). C is not fixed. Not the Einstein–Cartan field equation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -617,7 +628,8 @@
       },
       "coefficientNotFixed": {
         "theorem": "PhysJS.EinsteinCartan.coefficient_not_fixed",
-        "covers": "derivation-step: if C ≠ 1 and κ S ≠ 0, then C κ S ≠ κ S. A factor other than 1 is not the catalog coefficient",
+        "kind": "derivation-step",
+        "covers": "if C ≠ 1 and κ S ≠ 0, then C κ S ≠ κ S. A factor other than 1 is not the catalog coefficient",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -628,7 +640,8 @@
       },
       "unitCoefficient": {
         "theorem": "PhysJS.EinsteinCartan.inversion_of_unit_coefficient",
-        "covers": "derivation-step: if C = 1 and every component satisfies T = C κ S, then inversion gives S·S = T·T / κ². C = 1 is a hypothesis. The Einstein trace stays a hypothesis of PhysJS.Einstein.trace_eq",
+        "kind": "derivation-step",
+        "covers": "if C = 1 and every component satisfies T = C κ S, then inversion gives S·S = T·T / κ². C = 1 is a hypothesis. The Einstein trace stays a hypothesis of PhysJS.Einstein.trace_eq",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -681,7 +694,8 @@
       ],
       "lengthMonomial": {
         "theorem": "PhysJS.Coarsening.length_monomial_at",
-        "covers": "derivation-step: if L is a dimensionally homogeneous function of Γ and t alone and [Γ] = L^z T⁻¹ for a positive rational z, then L = C (Γ t)^{1/z} with C = f(1, 1). C is not fixed. Every positive rational z is allowed, so z = 2 is not derived. Not the Model A Langevin equation",
+        "kind": "derivation-step",
+        "covers": "if L is a dimensionally homogeneous function of Γ and t alone and [Γ] = L^z T⁻¹ for a positive rational z, then L = C (Γ t)^{1/z} with C = f(1, 1). C is not fixed. Every positive rational z is allowed, so z = 2 is not derived. Not the Model A Langevin equation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -706,7 +720,8 @@
       ],
       "scalingShape": {
         "theorem": "PhysJS.QuantumCritical.scaling_shape",
-        "covers": "derivation-step: if ξ is a dimensionally homogeneous function of a length ξ₀ and two temperatures, then ξ = ξ₀ φ(T/T₀) with φ(u) = f(1, u, 1). φ is not fixed. Not Hertz–Millis theory",
+        "kind": "derivation-step",
+        "covers": "if ξ is a dimensionally homogeneous function of a length ξ₀ and two temperatures, then ξ = ξ₀ φ(T/T₀) with φ(u) = f(1, u, 1). φ is not fixed. Not Hertz–Millis theory",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -717,7 +732,8 @@
       },
       "everyPower": {
         "theorem": "PhysJS.QuantumCritical.every_power_homogeneous",
-        "covers": "derivation-step: for every real p and positive scale factors, (λ_s ξ₀) ((λ_e T)/(λ_e T₀))^p = λ_s (ξ₀ (T/T₀)^p). The exponent p is not chosen. Not Hertz–Millis theory",
+        "kind": "derivation-step",
+        "covers": "for every real p and positive scale factors, (λ_s ξ₀) ((λ_e T)/(λ_e T₀))^p = λ_s (ξ₀ (T/T₀)^p). The exponent p is not chosen. Not Hertz–Millis theory",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -882,7 +898,8 @@
       ],
       "perpendicularQuartic": {
         "theorem": "PhysJS.FastMagnetosonic.perpendicular_of_dispersion",
-        "covers": "derivation-step: if ω⁴ − ω² k² (c_s² + v_A²) + c_s² v_A² k² k_∥² = 0 and k_∥ = 0, then ω² = 0 or ω² = (c_s² + v_A²) k². The quartic is a hypothesis. The compressional polarization selects the second root",
+        "kind": "derivation-step",
+        "covers": "if ω⁴ − ω² k² (c_s² + v_A²) + c_s² v_A² k² k_∥² = 0 and k_∥ = 0, then ω² = 0 or ω² = (c_s² + v_A²) k². The quartic is a hypothesis. The compressional polarization selects the second root",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -935,7 +952,8 @@
       ],
       "tolmanRatio": {
         "theorem": "PhysJS.GravitationalRedshift.tolman_same_ratio",
-        "covers": "derivation-step: if T √(−g_00) agrees at two static observers and the frequency ratio equals √(−g2)/√(−g1), then T1/T2 = ν1/ν2. Neither factor is derived from the other",
+        "kind": "derivation-step",
+        "covers": "if T √(−g_00) agrees at two static observers and the frequency ratio equals √(−g2)/√(−g1), then T1/T2 = ν1/ν2. Neither factor is derived from the other",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1380,7 +1398,8 @@
       ],
       "warmSound": {
         "theorem": "PhysJS.BohmSheath.warm_sound_eq",
-        "covers": "derivation-step: isothermal electrons and p ∝ n³ give c_s² = (k_B T_e + 3 k_B T_i)/m_i. γ_i = 5/3 is not that one-dimensional closure",
+        "kind": "derivation-step",
+        "covers": "isothermal electrons and p ∝ n³ give c_s² = (k_B T_e + 3 k_B T_i)/m_i. γ_i = 5/3 is not that one-dimensional closure",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1433,7 +1452,8 @@
       ],
       "cutoffL": {
         "theorem": "PhysJS.ColdPlasmaCutoff.cutoff_L",
-        "covers": "derivation-step: n_L² = 1 − ω_p²/(ω(ω + ω_c)) is a hypothesis. For ω_c ≥ 0 the nonnegative root of ω(ω + ω_c) = ω_p² is ω_L = (−ω_c + sqrt(ω_c² + 4 ω_p²))/2",
+        "kind": "derivation-step",
+        "covers": "n_L² = 1 − ω_p²/(ω(ω + ω_c)) is a hypothesis. For ω_c ≥ 0 the nonnegative root of ω(ω + ω_c) = ω_p² is ω_L = (−ω_c + sqrt(ω_c² + 4 ω_p²))/2",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1444,7 +1464,8 @@
       },
       "whistlerLimit": {
         "theorem": "PhysJS.ColdPlasmaCutoff.whistler_limit",
-        "covers": "derivation-step: dropping the leading 1 and replacing ω_c − ω by ω_c are hypotheses, leaving n² = ω_p²/(ω ω_c). With n = c k/ω and d_e = c/ω_p this is ω = ω_c (k d_e)²",
+        "kind": "derivation-step",
+        "covers": "dropping the leading 1 and replacing ω_c − ω by ω_c are hypotheses, leaving n² = ω_p²/(ω ω_c). With n = c k/ω and d_e = c/ω_p this is ω = ω_c (k d_e)²",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1497,7 +1518,8 @@
       ],
       "equalTemperature": {
         "theorem": "PhysJS.BennettPinch.equal_temperature_current",
-        "covers": "derivation-step: N_e = N_i = N and T_e = T_i = T read the Bennett integral as 2 N k_B T, so I = sqrt(16 π N k_B T / μ0) for I ≥ 0. The factor 8 is the single-population current",
+        "kind": "derivation-step",
+        "covers": "N_e = N_i = N and T_e = T_i = T read the Bennett integral as 2 N k_B T, so I = sqrt(16 π N k_B T / μ0) for I ≥ 0. The factor 8 is the single-population current",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1564,7 +1586,8 @@
       ],
       "bohmGross": {
         "theorem": "PhysJS.LandauDamping.bohm_gross_exponent",
-        "covers": "derivation-step: ω² = ω_p² (1 + 3 k² λ_D²) and λ_D² = v_t²/ω_p² give ω²/(2 k² v_t²) = 3/2 + 1/(2 k² λ_D²). This does not set ω = ω_p",
+        "kind": "derivation-step",
+        "covers": "ω² = ω_p² (1 + 3 k² λ_D²) and λ_D² = v_t²/ω_p² give ω²/(2 k² v_t²) = 3/2 + 1/(2 k² λ_D²). This does not set ω = ω_p",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1617,7 +1640,8 @@
       ],
       "referenceResistivity": {
         "theorem": "PhysJS.LorentzResistivity.reference_resistivity",
-        "covers": "derivation-step: the conventional link 1/τ_e = (4/(3 √π)) ν(v_T), not a derived moment, and η = m/(n_e e² τ) give η_ref = (4 √(2π)/3) times the same monomial. On one ν, η_ref = (32/(3π)) η_kin",
+        "kind": "derivation-step",
+        "covers": "the conventional link 1/τ_e = (4/(3 √π)) ν(v_T), not a derived moment, and η = m/(n_e e² τ) give η_ref = (4 √(2π)/3) times the same monomial. On one ν, η_ref = (32/(3π)) η_kin",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1642,7 +1666,8 @@
       ],
       "lundquist": {
         "theorem": "PhysJS.ResistiveSlab.lundquist_ratio",
-        "covers": "derivation-step: Rm = μ0 σ v L and S = μ0 σ v_A L give S/Rm = v_A/v when v ≠ 0",
+        "kind": "derivation-step",
+        "covers": "Rm = μ0 σ v L and S = μ0 σ v_A L give S/Rm = v_A/v when v ≠ 0",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1723,7 +1748,8 @@
       ],
       "bohmFlux": {
         "theorem": "PhysJS.LangmuirProbe.bohm_flux",
-        "covers": "derivation-step: a presheath drop e Δφ = k_B T_e/2 multiplies the cold Bohm flux by exp(−1/2), so Γ_i = n0 exp(−1/2) sqrt(k_B T_e/m_i)",
+        "kind": "derivation-step",
+        "covers": "a presheath drop e Δφ = k_B T_e/2 multiplies the cold Bohm flux by exp(−1/2), so Γ_i = n0 exp(−1/2) sqrt(k_B T_e/m_i)",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -1902,7 +1928,8 @@
       ],
       "heisenberg_fraction": {
         "theorem": "PhysJS.BlochLaw.heisenberg_fraction",
-        "covers": "derivation-step: D = 2 J S a² and M(0) = μ_B S/a³ turn the Bloch deficit into ΔM/M(0) = (1/S) ζ(3/2) (k_B T/(8 π J S))^{3/2}",
+        "kind": "derivation-step",
+        "covers": "D = 2 J S a² and M(0) = μ_B S/a³ turn the Bloch deficit into ΔM/M(0) = (1/S) ζ(3/2) (k_B T/(8 π J S))^{3/2}",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -3523,5 +3550,5 @@
       ]
     }
   ],
-  "commit": "341ed65cb6385d825420f71d668f2150208fe3fc"
+  "commit": "909404fe73c53e9d4b596ad5d042cb5e1870c5f5"
 }
