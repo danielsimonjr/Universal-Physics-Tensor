@@ -6604,9 +6604,6 @@
         ],
         "semi-major-axis": [
           "a_m"
-        ],
-        "eccentricity": [
-          "e"
         ]
       },
       "holds": "isFinite(mass) and\n      mass > 0 and\n      isFinite(semi-major-axis) and\n      semi-major-axis > 0 and\n      isFinite(eccentricity) and\n      eccentricity >= 0 and\n      eccentricity < 1 and\n      semi-major-axis * (1 - eccentricity) >= (10 * 2 * G * mass) / (c * c)",
@@ -11571,7 +11568,7 @@
           ]
         },
         {
-          "key": "e",
+          "key": "eccentricity",
           "quantity": "eccentricity",
           "symbol": "e",
           "unit": "",

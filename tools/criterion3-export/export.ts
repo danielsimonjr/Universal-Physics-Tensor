@@ -20,8 +20,10 @@
  *   excluded-field value, or a verdict word, in any id, text or expression of either file. A scan
  *   that finds nothing proves nothing, so the report also runs the scanner on a control string that
  *   carries known tokens.
- * - `freeze.json`: the pinned commit, the git tree hashes of the inputs, the SHA-256 of both files,
- *   the counts and the join rules.
+ * - `freeze.json`: the pinned commit, the SHA-256 of both files, the counts and the join rules.
+ *   It records no git tree hash of the inputs: nothing read one, a squash merge drops the commit it
+ *   was taken at, and every later edit under `src/canonical` made it stale. The SHA-256 binds the
+ *   files, and `tests/tools/criterion3-export.test.ts` binds them to a fresh export of the registry.
  *
  * Run from a tree whose inputs match HEAD (the export refuses otherwise, so the pin is true):
  *   bun tools/criterion3-export/export.ts [--copy <dir>]
@@ -265,7 +267,6 @@ async function main(argv: readonly string[]): Promise<number> {
     return 1;
   }
   const commit = git(root, ['rev-parse', 'HEAD']);
-  const trees = Object.fromEntries(inputs.map((p) => [p, git(root, ['rev-parse', `HEAD:${p}`])]));
 
   const { CANONICAL_EQUATIONS } = await import('../../src/canonical/registry.js');
   const { ATLAS_FAMILIES } = await import('../../src/atlas/families.js');
@@ -300,7 +301,6 @@ async function main(argv: readonly string[]): Promise<number> {
   const report = leakageReport(corpusHits, queryHits, tokens, controlFound);
   const freeze = {
     pinnedCommit: commit,
-    inputTrees: trees,
     files: {
       'corpus.json': { sha256: sha256(corpusText), records: corpus.length, withExpr: corpus.filter((r) => r.expr).length },
       'queries.json': { sha256: sha256(queriesText), records: queries.length },

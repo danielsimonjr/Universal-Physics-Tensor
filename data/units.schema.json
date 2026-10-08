@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "units.schema.json",
+  "title": "UPT unit table",
+  "description": "The shape of data/units.json. src/dimensional/unit-data.ts validates the file against this schema when it loads, with the keyword subset src/core/json-schema.ts reads.",
+  "type": "object",
+  "required": ["schemaVersion", "description", "scales", "prefixes", "units", "refused", "prefixLetterUnits", "affine", "spellingNotes"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "scales": {
+      "description": "Named exact scales the unit rows share (inch, pound, standard gravity). A name is lowercase; an uppercase name is a src/core/constants.ts export.",
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][A-Za-z0-9_]*$" },
+      "additionalProperties": { "$ref": "#/$defs/scale" }
+    },
+    "prefixes": {
+      "description": "SI prefix → exact decimal factor.",
+      "type": "object",
+      "propertyNames": { "minLength": 1 },
+      "additionalProperties": { "$ref": "#/$defs/decimal" }
+    },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["symbols", "scale", "dimension", "prefixable"],
+        "additionalProperties": false,
+        "properties": {
+          "symbols": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "scale": { "$ref": "#/$defs/scale" },
+          "dimension": { "$ref": "#/$defs/dimension" },
+          "prefixable": { "type": "boolean" },
+          "cycles": { "const": true, "description": "The unit counts cycles (turns), not radians: an angular input in rad/s takes 2π per cycle." },
+          "comment": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "refused": {
+      "description": "Spellings the reader recognizes and refuses, each with the message it prints.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "symbol": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "prefixLetterUnits": {
+      "type": "object",
+      "required": ["comment", "letters"],
+      "additionalProperties": false,
+      "properties": {
+        "comment": { "type": "string", "minLength": 1 },
+        "letters": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "affine": {
+      "type": "object",
+      "required": ["comment", "iceKelvin", "scales"],
+      "additionalProperties": false,
+      "properties": {
+        "comment": { "type": "string", "minLength": 1 },
+        "iceKelvin": { "$ref": "#/$defs/scale" },
+        "scales": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "scale", "icePoint", "symbols"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "enum": ["celsius", "fahrenheit"] },
+              "scale": { "$ref": "#/$defs/scale" },
+              "icePoint": { "$ref": "#/$defs/scale" },
+              "symbols": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+            }
+          }
+        }
+      }
+    },
+    "spellingNotes": {
+      "description": "A note printed when a unit text contains the spelling. {NAME} is replaced by that src/core/constants.ts export.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["spelling", "note"],
+        "additionalProperties": false,
+        "properties": {
+          "spelling": { "type": "string", "minLength": 1 },
+          "note": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "decimal": { "type": "string", "pattern": "^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$" },
+    "scale": {
+      "description": "An exact scale: factors joined by * and /, each a decimal literal or a name, with an optional integer power ^n.",
+      "type": "string",
+      "pattern": "^[^*/^\\s]+(\\^[+-]?\\d+)?([*/][^*/^\\s]+(\\^[+-]?\\d+)?)*$"
+    },
+    "dimension": {
+      "description": "SI base exponents. An omitted base is 0; {} is dimensionless.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "L": { "type": "integer" },
+        "M": { "type": "integer" },
+        "T": { "type": "integer" },
+        "I": { "type": "integer" },
+        "Theta": { "type": "integer" },
+        "N": { "type": "integer" },
+        "J": { "type": "integer" }
+      }
+    }
+  }
+}

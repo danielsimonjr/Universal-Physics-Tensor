@@ -1,0 +1,1149 @@
+{
+  "$schema": "./units.schema.json",
+  "schemaVersion": 1,
+  "description": "The unit table units.ts reads: every symbol's exact scale to SI base units, its dimension, whether it takes an SI prefix and whether it counts cycles; the SI prefixes; the refused spellings; the letters that are both a prefix and a unit; the affine temperatures; and the notes a spelling prints. A scale is an exact expression: decimal literals, names in `scales`, `pi`, `ln2`, and the numeric exports of src/core/constants.ts, joined by `*` and `/`, each with an optional integer power `^n`. src/dimensional/exact-scale.ts reads it.",
+  "scales": {
+    "inch": "0.0254",
+    "foot": "0.3048",
+    "pound": "0.45359237",
+    "standard_gravity": "9.80665",
+    "lbf": "pound*standard_gravity",
+    "psi": "lbf/inch^2",
+    "julian_year": "365.25*86400",
+    "mmHg": "133.322387415"
+  },
+  "prefixes": {
+    "Y": "1e24",
+    "Z": "1e21",
+    "E": "1e18",
+    "P": "1e15",
+    "T": "1e12",
+    "G": "1e9",
+    "M": "1e6",
+    "k": "1e3",
+    "h": "1e2",
+    "da": "1e1",
+    "d": "1e-1",
+    "c": "1e-2",
+    "m": "1e-3",
+    "u": "1e-6",
+    "µ": "1e-6",
+    "μ": "1e-6",
+    "n": "1e-9",
+    "p": "1e-12",
+    "f": "1e-15",
+    "a": "1e-18",
+    "z": "1e-21",
+    "y": "1e-24"
+  },
+  "units": [
+    {
+      "symbols": [
+        "m"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "g"
+      ],
+      "scale": "1e-3",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "s"
+      ],
+      "scale": "1",
+      "dimension": {
+        "T": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "K"
+      ],
+      "scale": "1",
+      "dimension": {
+        "Theta": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "A"
+      ],
+      "scale": "1",
+      "dimension": {
+        "I": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "mol"
+      ],
+      "scale": "1",
+      "dimension": {
+        "N": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "Hz"
+      ],
+      "scale": "1",
+      "dimension": {
+        "T": -1
+      },
+      "prefixable": true,
+      "cycles": true,
+      "comment": "A hertz is one cycle per second."
+    },
+    {
+      "symbols": [
+        "N"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "Pa"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "J"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "W"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "C"
+      ],
+      "scale": "1",
+      "dimension": {
+        "T": 1,
+        "I": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "V"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "ohm",
+        "Ω",
+        "Ohm"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "S"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": -2,
+        "M": -1,
+        "T": 3,
+        "I": 2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "F"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": -2,
+        "M": -1,
+        "T": 4,
+        "I": 2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "eV"
+      ],
+      "scale": "E_SI",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true,
+      "comment": "The elementary charge times one volt. Takes an SI prefix, so GeV is 10^9 eV."
+    },
+    {
+      "symbols": [
+        "nat"
+      ],
+      "scale": "1",
+      "dimension": {},
+      "prefixable": false,
+      "comment": "Information. A nat is the coherent dimensionless unit. Exact, so it takes no prefix."
+    },
+    {
+      "symbols": [
+        "bit"
+      ],
+      "scale": "ln2",
+      "dimension": {},
+      "prefixable": false,
+      "comment": "A bit is ln 2 nat. Exact, so kbit is not a kilobit."
+    },
+    {
+      "symbols": [
+        "rad"
+      ],
+      "scale": "1",
+      "dimension": {},
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "deg"
+      ],
+      "scale": "pi/180",
+      "dimension": {},
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "min"
+      ],
+      "scale": "60",
+      "dimension": {
+        "T": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "h"
+      ],
+      "scale": "3600",
+      "dimension": {
+        "T": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "d"
+      ],
+      "scale": "86400",
+      "dimension": {
+        "T": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "yr"
+      ],
+      "scale": "julian_year",
+      "dimension": {
+        "T": 1
+      },
+      "prefixable": true,
+      "comment": "The Julian year, the year the orbital evaluators take. myr is a milliyear."
+    },
+    {
+      "symbols": [
+        "au",
+        "AU"
+      ],
+      "scale": "149597870700",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false,
+      "comment": "IAU 2012 astronomical unit, an exact metre count. AU is the same row."
+    },
+    {
+      "symbols": [
+        "Msun"
+      ],
+      "scale": "M_SUN_SI",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": false,
+      "comment": "The solar mass the evaluators use, not the IAU nominal value."
+    },
+    {
+      "symbols": [
+        "Msun_iau"
+      ],
+      "scale": "M_SUN_IAU_SI",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": false,
+      "comment": "GM_SUN_SI / G_SI, so G × Msun_iau is the IAU solar mass parameter. A ratio of two measured constants: the double the constant registry holds, not a decimal quotient."
+    },
+    {
+      "symbols": [
+        "T"
+      ],
+      "scale": "1",
+      "dimension": {
+        "M": 1,
+        "T": -2,
+        "I": -1
+      },
+      "prefixable": true,
+      "comment": "Tesla. An exact T still wins over the tera prefix, so Ts is a terasecond. The prefix flag is what lets nT and uT parse."
+    },
+    {
+      "symbols": [
+        "G",
+        "gauss",
+        "Gauss"
+      ],
+      "scale": "1e-4",
+      "dimension": {
+        "M": 1,
+        "T": -2,
+        "I": -1
+      },
+      "prefixable": true,
+      "comment": "Gauss = 10^-4 T. Exact, so GPa stays a gigapascal and bare G is the gauss. It takes an SI prefix: uG and ugauss are a microgauss."
+    },
+    {
+      "symbols": [
+        "bar"
+      ],
+      "scale": "1e5",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "atm"
+      ],
+      "scale": "101325",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "angstrom",
+        "Angstrom",
+        "Å"
+      ],
+      "scale": "1e-10",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "pc"
+      ],
+      "scale": "3.085677581491367e16",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": true,
+      "comment": "IAU-style parsec, the shortest decimal of the double 648000/π au. Prefixable, so Mpc is a megaparsec."
+    },
+    {
+      "symbols": [
+        "ly"
+      ],
+      "scale": "C_SI*julian_year",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false,
+      "comment": "The light year: c times the Julian year."
+    },
+    {
+      "symbols": [
+        "L",
+        "l"
+      ],
+      "scale": "1e-3",
+      "dimension": {
+        "L": 3
+      },
+      "prefixable": true,
+      "comment": "CGPM 1964: 1 L = 1 dm^3 = 10^-3 m^3 exactly. Prefixable, so mL is a millilitre. Bare mL stays the prefix; mol/mL competes with metre·litre."
+    },
+    {
+      "symbols": [
+        "cal"
+      ],
+      "scale": "4.184",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true,
+      "comment": "Thermochemical calorie, 4.184 J exactly (NIST). Not cal_IT = 4.1868 J. Prefixable, so kcal is 4184 J."
+    },
+    {
+      "symbols": [
+        "BTU"
+      ],
+      "scale": "4.1868*453.59237/1.8",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "International Steam Table BTU: cal_IT × (lb/g) / (°F per 1.8 °C). Not the thermochemical calorie."
+    },
+    {
+      "symbols": [
+        "psi"
+      ],
+      "scale": "psi",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "lbf/in^2."
+    },
+    {
+      "symbols": [
+        "torr"
+      ],
+      "scale": "101325/760",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true,
+      "comment": "1/760 of a standard atmosphere, exactly. Prefixable (mtorr)."
+    },
+    {
+      "symbols": [
+        "mmHg"
+      ],
+      "scale": "mmHg",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "Conventional millimetre of mercury, 133.322387415 Pa exactly (NIST SP 811). Not the torr, and not mm × Hg."
+    },
+    {
+      "symbols": [
+        "P"
+      ],
+      "scale": "0.1",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -1
+      },
+      "prefixable": true,
+      "comment": "Poise = 0.1 Pa·s exactly. Prefixable, so cP = 10^-3 Pa·s. An exact P wins over peta."
+    },
+    {
+      "symbols": [
+        "degR",
+        "°R"
+      ],
+      "scale": "5/9",
+      "dimension": {
+        "Theta": 1
+      },
+      "prefixable": false,
+      "comment": "Rankine is proportional: K = °R × 5/9. Not affine."
+    },
+    {
+      "symbols": [
+        "rpm"
+      ],
+      "scale": "1/60",
+      "dimension": {
+        "T": -1
+      },
+      "prefixable": true,
+      "cycles": true,
+      "comment": "Revolutions per minute = 1/60 Hz, a cycle count. Prefixable, so krpm is a kilorevolution per minute."
+    },
+    {
+      "symbols": [
+        "hp"
+      ],
+      "scale": "550*foot*lbf",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3
+      },
+      "prefixable": false,
+      "comment": "Mechanical horsepower = 550 ft·lbf/s."
+    },
+    {
+      "symbols": [
+        "H"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": -2
+      },
+      "prefixable": true,
+      "comment": "Henry."
+    },
+    {
+      "symbols": [
+        "Wb"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": -1
+      },
+      "prefixable": true,
+      "comment": "Weber."
+    },
+    {
+      "symbols": [
+        "sr"
+      ],
+      "scale": "1",
+      "dimension": {},
+      "prefixable": false,
+      "comment": "Steradian. The steradian and the radian are dimensionless here."
+    },
+    {
+      "symbols": [
+        "cd"
+      ],
+      "scale": "1",
+      "dimension": {
+        "J": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "lm"
+      ],
+      "scale": "1",
+      "dimension": {
+        "J": 1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "lx"
+      ],
+      "scale": "1",
+      "dimension": {
+        "J": 1,
+        "L": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "arcsec"
+      ],
+      "scale": "pi/648000",
+      "dimension": {},
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "arcmin"
+      ],
+      "scale": "pi/10800",
+      "dimension": {},
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "mas"
+      ],
+      "scale": "pi/648000000",
+      "dimension": {},
+      "prefixable": false,
+      "comment": "mas would otherwise be metre times attosecond, so the angular spellings are exact."
+    },
+    {
+      "symbols": [
+        "uas"
+      ],
+      "scale": "pi/648000000000",
+      "dimension": {},
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "%",
+        "percent"
+      ],
+      "scale": "1e-2",
+      "dimension": {},
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "ppm"
+      ],
+      "scale": "1e-6",
+      "dimension": {},
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "ppb"
+      ],
+      "scale": "1e-9",
+      "dimension": {},
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "M"
+      ],
+      "scale": "1000",
+      "dimension": {
+        "N": 1,
+        "L": -3
+      },
+      "prefixable": true,
+      "comment": "Molar concentration: 1 M = 1 mol/L. Bare M is the molar; MPa is still a megapascal."
+    },
+    {
+      "symbols": [
+        "u",
+        "amu"
+      ],
+      "scale": "M_U_SI",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": false,
+      "comment": "Unified atomic mass unit (CODATA 2018). A bare u is this; um is still a micrometre."
+    },
+    {
+      "symbols": [
+        "Da"
+      ],
+      "scale": "M_U_SI",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": true,
+      "comment": "The dalton, the same mass as u. Takes an SI prefix (kDa)."
+    },
+    {
+      "symbols": [
+        "erg"
+      ],
+      "scale": "1e-7",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "CGS and astronomy. Solar and planetary radii and masses are the IAU 2015 B3 nominal values."
+    },
+    {
+      "symbols": [
+        "cc"
+      ],
+      "scale": "1e-6",
+      "dimension": {
+        "L": 3
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "dyn"
+      ],
+      "scale": "1e-5",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "Jy"
+      ],
+      "scale": "1e-26",
+      "dimension": {
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "Lsun"
+      ],
+      "scale": "3.828e26",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "Rsun"
+      ],
+      "scale": "6.957e8",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "Rearth"
+      ],
+      "scale": "6.3781e6",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "Rjup"
+      ],
+      "scale": "7.1492e7",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "Mearth"
+      ],
+      "scale": "5.9722e24",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "Mjup"
+      ],
+      "scale": "1.89813e27",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "day"
+      ],
+      "scale": "86400",
+      "dimension": {
+        "T": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "hr"
+      ],
+      "scale": "3600",
+      "dimension": {
+        "T": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "poise"
+      ],
+      "scale": "0.1",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -1
+      },
+      "prefixable": true,
+      "comment": "Acoustics and fluids. Poise, stokes and rayl are exact in SI."
+    },
+    {
+      "symbols": [
+        "St"
+      ],
+      "scale": "1e-4",
+      "dimension": {
+        "L": 2,
+        "T": -1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "rayl"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": -2,
+        "M": 1,
+        "T": -1
+      },
+      "prefixable": true
+    },
+    {
+      "symbols": [
+        "in",
+        "inch"
+      ],
+      "scale": "inch",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "ft"
+      ],
+      "scale": "foot",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "mil"
+      ],
+      "scale": "2.54e-5",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "lb",
+        "lbm"
+      ],
+      "scale": "pound",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "lbf"
+      ],
+      "scale": "lbf",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "kgf"
+      ],
+      "scale": "standard_gravity",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "Kilogram-force: one kilogram times standard gravity."
+    },
+    {
+      "symbols": [
+        "mph"
+      ],
+      "scale": "0.44704",
+      "dimension": {
+        "L": 1,
+        "T": -1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "knot"
+      ],
+      "scale": "1852/3600",
+      "dimension": {
+        "L": 1,
+        "T": -1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "psia"
+      ],
+      "scale": "psi",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "ksi"
+      ],
+      "scale": "1000*psi",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "A kilopsi."
+    },
+    {
+      "symbols": [
+        "mmH2O"
+      ],
+      "scale": "standard_gravity",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "A millimetre of water: 1 kg/m^2 times standard gravity."
+    },
+    {
+      "symbols": [
+        "inHg"
+      ],
+      "scale": "mmHg*25.4",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "tonne"
+      ],
+      "scale": "1000",
+      "dimension": {
+        "M": 1
+      },
+      "prefixable": false
+    },
+    {
+      "symbols": [
+        "therm"
+      ],
+      "scale": "105480400",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2
+      },
+      "prefixable": false,
+      "comment": "US therm (the EC therm is 1.05506e8 J). Spelled out so the choice is visible."
+    }
+  ],
+  "refused": [
+    {
+      "symbol": "dB",
+      "reason": "dB is a logarithmic unit; give the quantity in its linear unit, or a reference level"
+    },
+    {
+      "symbol": "dBm",
+      "reason": "dBm is a logarithmic unit (decibels over 1 mW); give watts"
+    },
+    {
+      "symbol": "dBW",
+      "reason": "dBW is a logarithmic unit (decibels over 1 W); give watts"
+    },
+    {
+      "symbol": "Np",
+      "reason": "Np is a logarithmic unit (the neper); give the quantity in its linear unit, or a reference level"
+    },
+    {
+      "symbol": "Mach",
+      "reason": "Mach is a ratio to the local speed of sound; give m/s, or the ratio as a bare number"
+    },
+    {
+      "symbol": "mach",
+      "reason": "mach is a ratio to the local speed of sound; give m/s, or the ratio as a bare number"
+    },
+    {
+      "symbol": "ton",
+      "reason": "'ton' is ambiguous: short ton (907.185 kg), long ton (1016.047 kg), or metric tonne (1000 kg); write tonne"
+    }
+  ],
+  "prefixLetterUnits": {
+    "comment": "Letters that are both an SI prefix and a unit of their own (tesla, gauss, poise, hour, day, molar, atomic mass). Such a token reads as the prefix reading and not as the unit times the rest: Gyr is a gigayear, TW a terawatt, hPa a hectopascal. m is left out on purpose: mK in a denominator is millikelvin or metre·kelvin, and a target dimension chooses.",
+    "letters": [
+      "T",
+      "G",
+      "P",
+      "h",
+      "d",
+      "M",
+      "u"
+    ]
+  },
+  "affine": {
+    "comment": "Lone spellings only; a compound that contains one is refused. The kelvin value of an absolute reading is (reading − icePoint) × scale + iceKelvin; a difference is reading × scale.",
+    "iceKelvin": "273.15",
+    "scales": [
+      {
+        "id": "celsius",
+        "scale": "1",
+        "icePoint": "0",
+        "symbols": [
+          "degC",
+          "°C",
+          "℃"
+        ]
+      },
+      {
+        "id": "fahrenheit",
+        "scale": "5/9",
+        "icePoint": "32",
+        "symbols": [
+          "degF",
+          "°F"
+        ]
+      }
+    ]
+  },
+  "spellingNotes": [
+    {
+      "spelling": "myr",
+      "note": "myr is a milliyear (the SI prefix m on yr = 0.001 yr), not a million years; a million years is Myr"
+    },
+    {
+      "spelling": "Msun",
+      "note": "Msun is {M_SUN_SI} kg (M_SUN_SI), not GM☉/G; G×Msun is about 3.0e-4 high versus the IAU GM☉. Use the unit Msun_iau, or the eval name GM_sun, for GM_SUN_SI"
+    },
+    {
+      "spelling": "G",
+      "note": "bare G is the gauss (1e-4 T); GPa is still a gigapascal"
+    },
+    {
+      "spelling": "T",
+      "note": "bare T is the tesla; Ts is a terasecond"
+    },
+    {
+      "spelling": "A",
+      "note": "bare A is the ampere, not the angstrom; write angstrom or Å for 10^-10 m"
+    },
+    {
+      "spelling": "P",
+      "note": "bare P is the poise (0.1 Pa·s); PV is still a petavolt"
+    },
+    {
+      "spelling": "M",
+      "note": "bare M is the molar (1000 mol/m^3); MPa is still a megapascal"
+    },
+    {
+      "spelling": "u",
+      "note": "bare u is the atomic mass unit ({M_U_SI} kg); um is still a micrometre"
+    }
+  ]
+}

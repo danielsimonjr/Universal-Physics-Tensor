@@ -7632,12 +7632,7 @@
         "J": 0
       },
       "attributes": {},
-      "graphNode": false,
-      "aliases": [
-        "k_B",
-        "kB",
-        "boltzmann"
-      ]
+      "graphNode": false
     },
     {
       "id": "specific-heat",
@@ -9770,10 +9765,7 @@
         "J": 0
       },
       "attributes": {},
-      "graphNode": true,
-      "aliases": [
-        "h"
-      ]
+      "graphNode": true
     }
   ]
 }

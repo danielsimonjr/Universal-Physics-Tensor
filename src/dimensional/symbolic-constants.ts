@@ -9,7 +9,9 @@
  * `CONSTANT_SPELLINGS`, {@link CONSTANT_PROVENANCE}, `CANONICAL_CONSTANTS`,
  * the `upt eval` scope, the binding scope, the gradient constants) is a
  * projection of this array, so a spelling, a value and a dimension cannot
- * disagree between two files.
+ * disagree between two files. A constant that is also a quantity names its
+ * `data/quantities.json` row in `quantity`; the quantity registry derives that
+ * row's aliases from here, so the file states no constant spelling.
  *
  * `canonical` marks a universal constant a canonical equation's `governing`
  * list may bake as a leaf. A row that is an overlay for `upt eval` and the
@@ -43,6 +45,7 @@ import {
   LANE_EMDEN_OMEGA3,
   M_E_SI,
   M_PROTON_SI,
+  M_SUN_IAU_SI,
   M_SUN_SI,
   M_U_SI,
   MU0_SI,
@@ -71,9 +74,16 @@ export interface ConstantRecord {
   readonly mathts?: string;
   /** The two libraries agree to the last bit: exact in the 2019 SI, or a product of exact constants. */
   readonly exact?: true;
+  /**
+   * The `data/quantities.json` id this constant is also a quantity of. The
+   * quantity registry takes the constant's spellings as that row's aliases;
+   * the file does not repeat them, so a spelling has one owner.
+   */
+  readonly quantity?: string;
 }
 
-type RowInput = Omit<ConstantRecord, 'dim' | 'spellings' | 'canonical' | 'note' | 'mathts' | 'exact'> & {
+type RowInput = Omit<ConstantRecord, 'dim' | 'spellings' | 'canonical' | 'note' | 'mathts' | 'exact' | 'quantity'> & {
+  readonly quantity?: string;
   readonly note?: string;
   readonly mathts?: string;
   readonly exact?: true;
@@ -98,13 +108,13 @@ export const CONSTANT_REGISTRY: readonly ConstantRecord[] = [
     note:
       `hbar is HBAR_SI = H_SI/(2π), the exact reduced Planck constant. The CODATA display ${HBAR_CODATA_DISPLAY} ` +
       `is that quotient truncated (relative difference ${(Math.abs(HBAR_CODATA_DISPLAY - HBAR_SI) / HBAR_SI).toExponential(3)}).` }),
-  row({ name: 'h', value: H_SI, unit: 'J*s', canonical: true, mathts: 'planckConstant', exact: true,
+  row({ name: 'h', quantity: 'planck-constant', value: H_SI, unit: 'J*s', canonical: true, mathts: 'planckConstant', exact: true,
     meaning: 'Planck constant', source: `exact SI, 2019 redefinition (${OWNER} H_SI)` }),
   row({ name: 'c', value: C_SI, unit: 'm/s', canonical: true, mathts: 'speedOfLight', exact: true,
     meaning: 'speed of light in vacuum', source: `exact SI (${OWNER} C_SI)` }),
   row({ name: 'G', value: G_SI, unit: 'm^3/(kg*s^2)', canonical: true, mathts: 'gravitationConstant',
     meaning: 'Newtonian gravitational constant', source: `CODATA 2018 (${OWNER} G_SI)` }),
-  row({ name: 'k_B', spellings: ['kB', 'boltzmann'], value: K_B_SI, unit: 'J/K', canonical: true, mathts: 'boltzmann', exact: true,
+  row({ name: 'k_B', spellings: ['kB', 'boltzmann'], quantity: 'boltzmann-constant', value: K_B_SI, unit: 'J/K', canonical: true, mathts: 'boltzmann', exact: true,
     meaning: 'Boltzmann constant', source: `exact SI, 2019 redefinition (${OWNER} K_B_SI)` }),
   row({ name: 'ln2', value: Math.LN2, unit: '1', canonical: true,
     meaning: 'natural logarithm of 2', source: 'mathematical constant (Math.LN2)' }),
@@ -128,8 +138,8 @@ export const CONSTANT_REGISTRY: readonly ConstantRecord[] = [
   // IAU 2015 nominal solar parameter. M_sun in eval stays the rounded kilogram M_SUN_SI.
   row({ name: 'GM_sun', value: GM_SUN_SI, unit: 'm^3/s^2', canonical: true,
     meaning: 'IAU nominal solar gravitational parameter (GM)☉', source: `IAU 2015 Resolution B3 (${OWNER} GM_SUN_SI)` }),
-  row({ name: 'Msun_iau', value: GM_SUN_SI / G_SI, unit: 'kg', canonical: true,
-    meaning: 'IAU solar mass (GM)☉/G, the mass that reproduces GM_sun with G_SI', source: `GM_SUN_SI/G_SI (${OWNER})` }),
+  row({ name: 'Msun_iau', value: M_SUN_IAU_SI, unit: 'kg', canonical: true,
+    meaning: 'IAU solar mass (GM)☉/G, the mass that reproduces GM_sun with G_SI', source: `GM_SUN_SI/G_SI (${OWNER} M_SUN_IAU_SI)` }),
   row({ name: 'm_u', value: M_U_SI, unit: 'kg', canonical: true, mathts: 'atomicMass',
     meaning: 'unified atomic mass unit (atomic mass constant)', source: `CODATA 2018 (${OWNER} M_U_SI)` }),
   row({ name: 'm_e', spellings: ['electron_mass'], value: M_E_SI, unit: 'kg', canonical: true, mathts: 'electronMass',
@@ -156,7 +166,7 @@ export const CONSTANT_REGISTRY: readonly ConstantRecord[] = [
     meaning: 'Friedmann scale factor, unit by default', source: 'this registry (default 1)' }),
   row({ name: 'sigma_T', value: THOMSON_CROSS_SECTION_SI, unit: 'm^2', mathts: 'thomsonCrossSection',
     meaning: 'Thomson cross section', source: `CODATA 2018 (${OWNER} THOMSON_CROSS_SECTION_SI)` }),
-  row({ name: 'lane_emden_omega_3', value: LANE_EMDEN_OMEGA3, unit: '1',
+  row({ name: 'lane_emden_omega_3', quantity: 'lane-emden-omega-3', value: LANE_EMDEN_OMEGA3, unit: '1',
     meaning: 'Lane–Emden n = 3 dimensionless radius', source: `${OWNER} LANE_EMDEN_OMEGA3` }),
   // GRW mass amplification: λ = λ₀ · (m / m₀), with λ₀ a rate and m₀ a mass.
   // The two numbers are the catalog expression's, so the rate is unchanged.

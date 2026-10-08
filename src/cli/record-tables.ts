@@ -9,7 +9,8 @@
  * - **module exports** — every numeric export of `core/constants` and of each module under
  *   `bridges/` and `cases/`, found by listing those directories, so a module added later is
  *   fingerprinted without being listed here;
- * - **object tables** — the unit and prefix tables of `dimensional/units`, and the constant
+ * - **object tables** — the unit and prefix tables of `dimensional/units` (with the SHA-256 of
+ *   `data/units.json`, the file they are read from), and the constant
  *   registries `dimensional/symbolic-constants` and `composition/canonical-graph`, flattened to
  *   `key.field` entries.
  *
@@ -79,7 +80,7 @@ export const tableName = (file: string): string =>
 
 function objectTables(): Record<string, Record<string, TableValue>> {
   const units: Record<string, TableValue> = {};
-  const { units: unitMap, prefixes, celsiusOffsetK } = unitTables();
+  const { units: unitMap, prefixes, celsiusOffsetK, sourceSha256 } = unitTables();
   for (const [sym, [scale, dim, prefixable, cycles]] of unitMap) {
     units[`${sym}.scale`] = scale;
     units[`${sym}.dimension`] = dimensionText(dim);
@@ -89,6 +90,8 @@ function objectTables(): Record<string, Record<string, TableValue>> {
   }
   for (const [p, f] of prefixes) units[`prefix.${p}`] = f;
   units['degC.offsetK'] = celsiusOffsetK;
+  // The whole file, so a refused spelling, a prefix letter, an affine row or a note is covered too.
+  units['data/units.json.sha256'] = sourceSha256;
   const registry = (table: Readonly<Record<string, { value: number; dim: Dimension }>>): Record<string, TableValue> => {
     const out: Record<string, TableValue> = {};
     for (const [k, c] of Object.entries(table)) {

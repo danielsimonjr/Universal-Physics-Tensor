@@ -1,0 +1,139 @@
+/**
+ * A JSON Schema reader for the keyword subset the repository's data schemas use.
+ *
+ * The library adds no runtime dependency for this, so the schema a data file
+ * names is checked here, at load, and not only by a test. A keyword outside
+ * the subset is an error in the schema, not a keyword silently ignored, so a
+ * schema cannot state a rule this reader does not enforce.
+ *
+ * Subset: `type`, `required`, `properties`, `additionalProperties` (boolean or
+ * schema), `propertyNames`, `items`, `minItems`, `uniqueItems`, `minLength`,
+ * `pattern`, `enum`, `const`, and `$ref` to `#/$defs/<name>`. `$schema`,
+ * `$id`, `$defs`, `title` and `description` are annotations.
+ *
+ * @module core/json-schema
+ */
+
+/** A JSON Schema document or subschema, as parsed from JSON. @internal */
+export type JsonSchema = { readonly [keyword: string]: unknown };
+
+const ANNOTATIONS = new Set(['$schema', '$id', '$defs', 'title', 'description']);
+const KEYWORDS = new Set([
+  'type',
+  'required',
+  'properties',
+  'additionalProperties',
+  'propertyNames',
+  'items',
+  'minItems',
+  'uniqueItems',
+  'minLength',
+  'pattern',
+  'enum',
+  'const',
+  '$ref',
+]);
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function typeMatches(type: string, value: unknown): boolean {
+  switch (type) {
+    case 'object':
+      return isObject(value);
+    case 'array':
+      return Array.isArray(value);
+    case 'string':
+      return typeof value === 'string';
+    case 'boolean':
+      return typeof value === 'boolean';
+    case 'number':
+      return typeof value === 'number' && Number.isFinite(value);
+    case 'integer':
+      return typeof value === 'number' && Number.isInteger(value);
+    case 'null':
+      return value === null;
+    default:
+      throw new Error(`json-schema: unsupported type '${type}'`);
+  }
+}
+
+function resolveRef(root: JsonSchema, ref: string): JsonSchema {
+  const m = /^#\/\$defs\/([^/]+)$/.exec(ref);
+  const defs = root['$defs'];
+  const target = m === null || !isObject(defs) ? undefined : defs[m[1]!];
+  if (!isObject(target)) throw new Error(`json-schema: unresolved $ref '${ref}'`);
+  return target;
+}
+
+function check(root: JsonSchema, schema: JsonSchema, value: unknown, path: string, problems: string[]): void {
+  for (const keyword of Object.keys(schema)) {
+    if (!KEYWORDS.has(keyword) && !ANNOTATIONS.has(keyword)) {
+      throw new Error(`json-schema: keyword '${keyword}' at ${path} is outside the supported subset`);
+    }
+  }
+  if (typeof schema['$ref'] === 'string') check(root, resolveRef(root, schema['$ref']), value, path, problems);
+  if (typeof schema['type'] === 'string' && !typeMatches(schema['type'], value)) {
+    problems.push(`${path}: expected ${schema['type']}`);
+    return;
+  }
+  if ('const' in schema && JSON.stringify(schema['const']) !== JSON.stringify(value)) {
+    problems.push(`${path}: expected ${JSON.stringify(schema['const'])}`);
+  }
+  if (Array.isArray(schema['enum']) && !schema['enum'].some((option) => JSON.stringify(option) === JSON.stringify(value))) {
+    problems.push(`${path}: ${JSON.stringify(value)} is not one of ${JSON.stringify(schema['enum'])}`);
+  }
+  if (typeof value === 'string') {
+    if (typeof schema['minLength'] === 'number' && [...value].length < schema['minLength']) {
+      problems.push(`${path}: shorter than ${schema['minLength']}`);
+    }
+    if (typeof schema['pattern'] === 'string' && !new RegExp(schema['pattern'], 'u').test(value)) {
+      problems.push(`${path}: '${value}' does not match ${schema['pattern']}`);
+    }
+  }
+  if (Array.isArray(value)) {
+    if (typeof schema['minItems'] === 'number' && value.length < schema['minItems']) {
+      problems.push(`${path}: fewer than ${schema['minItems']} items`);
+    }
+    if (schema['uniqueItems'] === true) {
+      const seen = new Set(value.map((item) => JSON.stringify(item)));
+      if (seen.size !== value.length) problems.push(`${path}: items are not unique`);
+    }
+    if (isObject(schema['items'])) {
+      const items = schema['items'];
+      value.forEach((item, i) => check(root, items, item, `${path}[${i}]`, problems));
+    }
+  }
+  if (isObject(value)) {
+    const properties = isObject(schema['properties']) ? schema['properties'] : {};
+    if (Array.isArray(schema['required'])) {
+      for (const key of schema['required'] as readonly string[]) {
+        if (!(key in value)) problems.push(`${path}: missing '${key}'`);
+      }
+    }
+    for (const [key, child] of Object.entries(value)) {
+      const where = `${path}.${key}`;
+      if (isObject(schema['propertyNames'])) check(root, schema['propertyNames'], key, `${where} (name)`, problems);
+      const declared = properties[key];
+      if (isObject(declared)) {
+        check(root, declared, child, where, problems);
+      } else if (schema['additionalProperties'] === false) {
+        problems.push(`${where}: unexpected property`);
+      } else if (isObject(schema['additionalProperties'])) {
+        check(root, schema['additionalProperties'], child, where, problems);
+      }
+    }
+  }
+}
+
+/**
+ * Every place `value` breaks `schema`, as `$.path: reason` lines. Empty when it conforms.
+ * Throws when the schema uses a keyword outside the subset.
+ * @internal
+ */
+export function schemaProblems(schema: JsonSchema, value: unknown): string[] {
+  const problems: string[] = [];
+  check(schema, schema, value, '$', problems);
+  return problems;
+}

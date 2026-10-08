@@ -10,7 +10,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   CANONICAL_GROUP_PREFACTORS,
-  CANONICAL_PREFACTORS,
   canonicalGroupPrefactor,
   canonicalPrefactor,
 } from '../../src/composition/canonical-prefactors.js';
@@ -59,9 +58,15 @@ function hasNumericConstant(n: ExprNode): boolean {
   return args.some(hasNumericConstant);
 }
 
+/** The sourced prefactors, read from the owner: each entry's `prefactor` field. */
+const CANONICAL_PREFACTORS = CANONICAL_EQUATIONS.flatMap((e) =>
+  e.prefactor === undefined ? [] : [{ id: e.id, prefactor: e.prefactor.value, quote: e.prefactor.quote, locator: e.prefactor.locator }],
+);
+
 describe('the canonical prefactor table', () => {
   it('holds exactly the sourced entries, with the textbook prefactors', () => {
     expect(Object.fromEntries(CANONICAL_PREFACTORS.map((p) => [p.id, p.prefactor]))).toEqual(EXPECTED);
+    for (const p of CANONICAL_PREFACTORS) expect(canonicalPrefactor(p.id), p.id).toBe(p.prefactor);
   });
 
   it('every entry names a real canonical equation that does NOT already record its prefactor', () => {

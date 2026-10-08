@@ -19,7 +19,8 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
-import { PHYSJS_COMMIT, physjsFormalRef } from '../../src/atlas/physjs-ref.js';
+import { PHYSJS_COMMIT, physjsFormalRef, physjsLeanFile, physjsNestedStatements, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
+import { declaredTheorems, manifestTheorems } from '../../scripts/vendor-physjs-theorem-files.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -108,5 +109,57 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
     const urls = storedUrls();
     expect(urls.length).toBeGreaterThan(0);
     for (const url of urls) expectLeanFile(url);
+  });
+});
+
+describe('the Lean file of a theorem is where it is declared, read from data', () => {
+  const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
+  const vendored = JSON.parse(readFileSync(resolve(root, 'formal/physjs/theorem-files.json'), 'utf-8')) as {
+    commit: string;
+    files: Record<string, string>;
+  };
+
+  it('theorem-files.json is for the manifest commit and names a listed file for every manifest statement', () => {
+    expect(vendored.commit).toBe(manifest.commit);
+    const theorems = [...new Set(manifestTheorems(manifest))].sort();
+    expect(Object.keys(vendored.files).sort()).toEqual(theorems);
+    for (const theorem of theorems) {
+      expect(leanFiles.has(vendored.files[theorem]!), theorem).toBe(true);
+      expect(`lean/${physjsLeanFile(theorem)}`, theorem).toBe(vendored.files[theorem]);
+    }
+  });
+
+  it('a nested statement links to its own file, not to its namespace', () => {
+    // The first run of this check failed: physjsLeanFile read the namespace, so this was Einstein.lean.
+    expect(physjsLeanFile('PhysJS.Einstein.friedmann_corollary')).toBe('VacuumFriedmann.lean');
+    expect(physjsLeanFile('PhysJS.Einstein.trace_eq')).toBe('Einstein.lean');
+    expect(physjsLeanFile('PhysJS.SpringLc.time_rescale_equationOfMotion')).toBe('OscillatorDictionary.lean');
+    const be13 = manifest.entries.find((entry) => entry.key === 'be-13')!;
+    expect(physjsNestedStatements(be13).nested.map((n) => [n.name, physjsLeanFile(n.theorem)])).toEqual([
+      ['vacuum', 'Einstein.lean'],
+      ['corollary', 'VacuumFriedmann.lean'],
+    ]);
+    expect(() => physjsLeanFile('PhysJS.NoSuch.theorem')).toThrow(/not a statement of the vendored manifest/);
+  });
+
+  it('the vendor script reads namespaces, sections and comments the way Lean scopes them', () => {
+    const source = [
+      'namespace PhysJS.Einstein',
+      '/- theorem not_this : True -/',
+      '-- theorem nor_this : True',
+      'section Inner',
+      'theorem friedmann_corollary (x : ℝ) : x = x := rfl',
+      'end Inner',
+      '@[simp] lemma helper : True := trivial',
+      'end PhysJS.Einstein',
+      'namespace PhysJS.SpringLc',
+      'protected theorem time_rescale_equationOfMotion : True := trivial',
+      'end PhysJS.SpringLc',
+    ].join('\n');
+    expect(declaredTheorems(source)).toEqual([
+      'PhysJS.Einstein.friedmann_corollary',
+      'PhysJS.Einstein.helper',
+      'PhysJS.SpringLc.time_rescale_equationOfMotion',
+    ]);
   });
 });

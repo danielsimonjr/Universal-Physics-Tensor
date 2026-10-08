@@ -119,7 +119,7 @@ describe('the input contract runs before the domain, on every entry', () => {
 
   it('an alternate converts onto its key', () => {
     const spec = BRIDGE_EVALUATORS.get(52)!;
-    const mercury = { M_kg: 1.989e30, e: 0.2056 };
+    const mercury = { M_kg: 1.989e30, eccentricity: 0.2056 };
     expect(spec.run({ ...mercury, major_axis_m: 2 * 5.79e10 }).value).toBe(spec.run({ ...mercury, a_m: 5.79e10 }).value);
     expect(() => spec.run({ ...mercury, a_m: 5.79e10, major_axis_m: 1.158e11 })).toThrow(/given twice/);
   });
@@ -170,5 +170,26 @@ describe('unusedInputKeys reads the output expressions through the formula gramm
     const unused = unusedInputKeys(BRIDGE_EVALUATORS.get(139)!);
     expect(unused).not.toContain('Nc_per_m3');
     expect(unused).not.toContain('ND_per_m3');
+  });
+});
+
+describe('a bare e is the elementary charge in every input contract', () => {
+  it('no evaluator spells e for a slot that is not a charge in coulombs', () => {
+    const misuses: string[] = [];
+    for (const [id, spec] of BRIDGE_EVALUATORS) {
+      for (const slot of spec.contract.slots) {
+        if (![...slot.spellings, ...slot.alternates.map((a) => a.key)].includes('e')) continue;
+        const parameter = spec.parameters.find((p) => p.key === slot.key);
+        if (parameter?.unit !== 'C') misuses.push(`be-${id} ${slot.key}`);
+      }
+    }
+    expect(misuses).toEqual([]);
+  });
+
+  it('be-52 reads the eccentricity as eccentricity, and e binds nothing there', () => {
+    const spec = BRIDGE_EVALUATORS.get(52)!;
+    const orbit = { M_kg: 1.989e30, a_m: 5.79e10 };
+    expect(spec.run({ ...orbit, eccentricity: 0.2056 }).value).toBeGreaterThan(0);
+    expect(() => spec.run({ ...orbit, e: 0.2056 })).toThrow(UnknownInputError);
   });
 });

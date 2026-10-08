@@ -69,7 +69,7 @@ export type AssociationKind =
  */
 export interface Association {
   /**
-   * Stable identity. For a seeded entry this is the `CandidateAdjudication.id`
+   * Stable identity. For a seeded entry this is the `CatalogAdjudication.id`
    * it came from — `candidateId(a, b)`, the two names sorted and joined with
    * `~` — so the association and the verdict that produced it share a key.
    */

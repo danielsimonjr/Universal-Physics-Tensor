@@ -28,15 +28,13 @@
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
  * `corollary` on `be-13` and has no key. A counted covers line begins with
  * `reduction`, `limit`, or `derivation-step`. A labeled covers line begins
- * with `property` or `cross-check`. A nested object (`planeWave`, `oneLoop`,
- * `inversion`, `vacuum`, `corollary`, `friedmann`, `lengthMonomial`,
- * `torsionMonomial`, `coefficientNotFixed`, `unitCoefficient`, `scalingShape`,
- * `everyPower`, `perpendicularQuartic`, `tolmanRatio`) is recorded and is not
- * a `formalRef`. The sentence that those fourteen names are the whole nested
- * set is the record from before BE-103 through BE-125. That ingestion adds
- * `warmSound`, `cutoffL`, `whistlerLimit`, `equalTemperature`, `bohmGross`,
- * `referenceResistivity`, `lundquist`, and `bohmFlux`. PhysJS #66 adds
- * be-103 through be-125. The sentence that the pin is
+ * with `property` or `cross-check`. A field of a manifest entry outside the
+ * base fields is a nested statement: a second theorem on the same entry,
+ * named by the field, with no key. It is recorded and compared, and it is not
+ * a `formalRef`. The generator reads it by its shape, so a new nested name
+ * needs no edit here. The sentence that the nested names are a fixed list in
+ * this module and in the generator is the record from before that change.
+ * PhysJS #66 adds be-103 through be-125. The sentence that the pin is
  * `03e8bb77c952f720bdd2730af2afc6a7f2d36243` and that the table stops at
  * be-102 is the record from before that pin. PhysJS #67 adds be-126 through
  * be-133. The sentence that the pin is
@@ -44,8 +42,7 @@
  * be-125 is the record from before that pin. PhysJS #68 adds be-134 through
  * be-146. The sentence that the pin is
  * `8515c621d1c6e6d31c2eea4467181eb85d58234b` and that the table stops at
- * be-133 is the record from before that pin. That ingestion adds
- * `heisenberg_fraction`.
+ * be-133 is the record from before that pin.
  *
  * @module atlas/physjs-ref
  */
@@ -73,8 +70,8 @@ export { PHYSJS_COMMIT } from './physjs-entries.generated.js';
  */
 const PHYSJS_COVERAGE = 'covers its statement only';
 
-/** A second statement on the same entry. No key. Not a `formalRef`. */
-interface PhysjsNestedStatement {
+/** One statement the manifest records: an entry's own, or a nested one. */
+interface PhysjsStatement {
   readonly theorem: string;
   readonly covers: string;
   readonly coverage: string;
@@ -82,46 +79,11 @@ interface PhysjsNestedStatement {
   readonly axioms: readonly string[];
 }
 
-/** Nested objects the manifest schema records. A new name is a problem. */
-const NESTED_FIELDS = [
-  'planeWave',
-  'oneLoop',
-  'inversion',
-  'vacuum',
-  'corollary',
-  'friedmann',
-  'lengthMonomial',
-  'torsionMonomial',
-  'coefficientNotFixed',
-  'unitCoefficient',
-  'scalingShape',
-  'everyPower',
-  'perpendicularQuartic',
-  'tolmanRatio',
-  'warmSound',
-  'cutoffL',
-  'whistlerLimit',
-  'equalTemperature',
-  'bohmGross',
-  'referenceResistivity',
-  'lundquist',
-  'bohmFlux',
-  'heisenberg_fraction',
-] as const;
+/** The fields of a manifest entry. Any other field is a nested statement. */
+const BASE_FIELDS = new Set<string>(['key', 'bridgeId', 'theorem', 'covers', 'coverage', 'leanProof', 'axioms', 'imports']);
 
-type NestedField = (typeof NESTED_FIELDS)[number];
-
-const ENTRY_FIELDS = new Set<string>([
-  'key',
-  'bridgeId',
-  'theorem',
-  'covers',
-  'coverage',
-  'leanProof',
-  'axioms',
-  'imports',
-  ...NESTED_FIELDS,
-]);
+/** The fields of a statement, sorted. A nested field with exactly these is a statement. */
+const STATEMENT_FIELDS = ['axioms', 'coverage', 'covers', 'leanProof', 'theorem'] as const;
 
 /** Counted catalog kinds. Not a property and not a cross-check. */
 const COUNTED_KIND = /^(reduction|limit|derivation-step): /;
@@ -132,66 +94,56 @@ const COUNTED_KIND = /^(reduction|limit|derivation-step): /;
  */
 const LABELED_KIND = /^(property|cross-check): /;
 
-/** One manifest entry, reduced to the fields a `formalRef` is built from. */
-interface PhysjsEntry {
+/** A compiled statement: the manifest's fields and the Lean file that declares its theorem. */
+interface PhysjsCompiledStatement extends PhysjsStatement {
+  /** `<File>.lean` under `lean/` at the pin, from `formal/physjs/theorem-files.json`. */
+  readonly file: string;
+}
+
+/** A nested statement, named by its manifest field. No key. Not a `formalRef`. */
+interface PhysjsNestedStatement extends PhysjsCompiledStatement {
+  readonly name: string;
+}
+
+/** One compiled entry: its own statement, and every nested statement by name. */
+interface PhysjsEntry extends PhysjsCompiledStatement {
   readonly key: string;
   readonly bridgeId: string;
-  readonly theorem: string;
-  /** What the top-level theorem certifies. The pendulum entry is not `bound.delta`. */
-  readonly covers: string;
-  readonly coverage: string;
-  readonly leanProof: string;
-  readonly axioms: readonly string[];
   readonly imports?: string;
-  /** Present on the five rank-1 entries. Absent elsewhere. Not a `formalRef`. */
-  readonly planeWave?: PhysjsNestedStatement;
-  /** BE-53. The running solution. Not the reference. */
-  readonly oneLoop?: PhysjsNestedStatement;
-  /** BE-38. The μ inversion. Not the reference. */
-  readonly inversion?: PhysjsNestedStatement;
-  /** BE-13. The BE-20 vacuum density. Not a reference, and not a `be-20` key. */
-  readonly vacuum?: PhysjsNestedStatement;
-  /** BE-13. The Friedmann corollary of that density. Not a reference, and not a `be-20` key. */
-  readonly corollary?: PhysjsNestedStatement;
-  /** BE-54. The flat Friedmann identification. Not the reference. */
-  readonly friedmann?: PhysjsNestedStatement;
-  /**
-   * BE-15. L = C (Γ t)^{1/z} under dimensional homogeneity with [Γ] = L^z T⁻¹.
-   * C is not fixed, and z = 2 is not derived. Not the reference.
-   */
-  readonly lengthMonomial?: PhysjsNestedStatement;
-  /** BE-17. T = C κ S from dimensions. C is not fixed. Not the reference. */
-  readonly torsionMonomial?: PhysjsNestedStatement;
-  /** BE-17. A factor other than 1 is not the catalog coefficient. Not the reference. */
-  readonly coefficientNotFixed?: PhysjsNestedStatement;
-  /** BE-17. Inversion under the hypothesis C = 1. Not the reference. */
-  readonly unitCoefficient?: PhysjsNestedStatement;
-  /** BE-33. ξ = ξ₀ φ(T/T₀). φ is not fixed. Not the reference. */
-  readonly scalingShape?: PhysjsNestedStatement;
-  /** BE-33. Every real power of the temperature ratio is homogeneous. The exponent is not chosen. Not the reference. */
-  readonly everyPower?: PhysjsNestedStatement;
-  /** BE-69. The perpendicular root of the MHD quartic. Not the reference. */
-  readonly perpendicularQuartic?: PhysjsNestedStatement;
-  /** BE-72. Equal Tolman products imply equal ratios. Not the reference, and not BE-68. */
-  readonly tolmanRatio?: PhysjsNestedStatement;
-  /** BE-103. Warm sound with γ_i = 3. Not the cold threshold. */
-  readonly warmSound?: PhysjsNestedStatement;
-  /** BE-106. The L cutoff. The Stix index is a hypothesis. Not the reference. */
-  readonly cutoffL?: PhysjsNestedStatement;
-  /** BE-106. The whistler limit. A hypothesis. Not the reference. */
-  readonly whistlerLimit?: PhysjsNestedStatement;
-  /** BE-109. Equal-temperature current. The factor 8 is not this value. */
-  readonly equalTemperature?: PhysjsNestedStatement;
-  /** BE-113. Bohm–Gross. It does not replace ω by ω_p in the damping prefactor. */
-  readonly bohmGross?: PhysjsNestedStatement;
-  /** BE-116. The reference resistivity. Not the kinetic catalog value. */
-  readonly referenceResistivity?: PhysjsNestedStatement;
-  /** BE-117. Lundquist over magnetic Reynolds. Not the slab time. */
-  readonly lundquist?: PhysjsNestedStatement;
-  /** BE-122. Bohm ion flux. Not the floating potential. */
-  readonly bohmFlux?: PhysjsNestedStatement;
-  /** BE-134. D = 2 J S a² and M(0) = μ_B S/a³. Not the Bloch deficit. */
-  readonly heisenberg_fraction?: PhysjsNestedStatement;
+  readonly nested: readonly PhysjsNestedStatement[];
+}
+
+/**
+ * One manifest entry as PhysJS writes it: the base fields, and each nested
+ * statement under a field of its own (`planeWave`, `corollary`).
+ * @internal
+ */
+export interface PhysjsManifestEntry extends PhysjsStatement {
+  readonly key: string;
+  readonly bridgeId: string;
+  readonly imports?: string;
+  readonly [field: string]: unknown;
+}
+
+/**
+ * The nested statements of a manifest entry, in field order: every field
+ * outside the base fields whose value has exactly the statement fields. A
+ * field that is neither is returned in `problems`.
+ * @internal
+ */
+export function physjsNestedStatements(entry: PhysjsManifestEntry): {
+  readonly nested: readonly (PhysjsStatement & { readonly name: string })[];
+  readonly problems: readonly string[];
+} {
+  const nested: (PhysjsStatement & { readonly name: string })[] = [];
+  const problems: string[] = [];
+  for (const [field, value] of Object.entries(entry)) {
+    if (BASE_FIELDS.has(field)) continue;
+    const keys = typeof value === 'object' && value !== null && !Array.isArray(value) ? Object.keys(value).sort() : [];
+    if (keys.join() === STATEMENT_FIELDS.join()) nested.push({ name: field, ...(value as PhysjsStatement) });
+    else problems.push(`manifest entry '${entry.key}' has unexpected field '${field}'`);
+  }
+  return { nested, problems };
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -201,12 +153,17 @@ export interface PhysjsManifestFile {
   readonly toolchain: string;
   readonly mathlib: string;
   readonly physlib: string;
-  readonly entries: readonly PhysjsEntry[];
+  readonly entries: readonly PhysjsManifestEntry[];
 }
 
 const PHYSJS_ENTRIES: readonly PhysjsEntry[] = GENERATED_PHYSJS_ENTRIES;
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
+
+/** Theorem → its Lean file, for every statement of the compiled table, nested ones included. */
+const FILE_BY_THEOREM: ReadonlyMap<string, string> = new Map(
+  PHYSJS_ENTRIES.flatMap((entry) => [entry, ...entry.nested].map((statement) => [statement.theorem, statement.file] as const)),
+);
 
 /**
  * Theorem name on the compiled manifest copy for `key`.
@@ -226,28 +183,20 @@ function physjsVersion(): string {
 }
 
 /**
- * Namespaces whose theorems live in another Lean file at this pin.
- * `SpringLc` and `DampedRlc` are namespaces inside `lean/OscillatorDictionary.lean`,
- * not their own files. Rechecked at this pin.
- */
-const PHYSJS_FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
-  SpringLc: 'OscillatorDictionary.lean',
-  DampedRlc: 'OscillatorDictionary.lean',
-};
-
-/**
  * Lean file name that contains `theorem` at the pinned commit.
  *
- * `SpringLc` and `DampedRlc` are namespaces inside `OscillatorDictionary.lean`.
+ * Read from the compiled table, which copies `formal/physjs/theorem-files.json`:
+ * the file is where the theorem is declared, not its namespace
+ * (`PhysJS.Einstein.friedmann_corollary` is in `VacuumFriedmann.lean`;
+ * `PhysJS.SpringLc` is a namespace inside `OscillatorDictionary.lean`).
+ * Throws for a theorem the manifest does not name.
  *
  * @internal
  */
 export function physjsLeanFile(theorem: string): string {
-  const parts = theorem.split('.');
-  if (parts.length < 3 || parts[0] !== 'PhysJS' || parts[1] === undefined) {
-    throw new Error(`PhysJS theorem '${theorem}' is not PhysJS.<module>.<name>`);
-  }
-  return PHYSJS_FILE_BY_NAMESPACE[parts[1]] ?? `${parts[1]}.lean`;
+  const file = FILE_BY_THEOREM.get(theorem);
+  if (file === undefined) throw new Error(`PhysJS theorem '${theorem}' is not a statement of the vendored manifest`);
+  return file;
 }
 
 /**
@@ -349,15 +298,24 @@ function sameAxioms(recorded: readonly string[], manifest: readonly string[]): b
   return recorded.length === manifest.length && recorded.every((axiom, i) => axiom === manifest[i]);
 }
 
-function sameNested(compiled: PhysjsNestedStatement | undefined, manifest: PhysjsNestedStatement | undefined): boolean {
-  if (compiled === undefined && manifest === undefined) return true;
-  if (compiled === undefined || manifest === undefined) return false;
+function sameStatement(compiled: PhysjsStatement, manifest: PhysjsStatement): boolean {
   return (
     compiled.theorem === manifest.theorem &&
     compiled.covers === manifest.covers &&
     compiled.coverage === manifest.coverage &&
     compiled.leanProof === manifest.leanProof &&
     sameAxioms(compiled.axioms, manifest.axioms)
+  );
+}
+
+/** The compiled nested statements are the manifest's: the same names, in order, each the same statement. */
+function sameNested(
+  compiled: readonly PhysjsNestedStatement[],
+  manifest: readonly (PhysjsStatement & { readonly name: string })[],
+): boolean {
+  return (
+    compiled.length === manifest.length &&
+    compiled.every((statement, i) => statement.name === manifest[i]!.name && sameStatement(statement, manifest[i]!))
   );
 }
 
@@ -418,11 +376,8 @@ export function physjsManifestProblems(input: {
   for (const entry of manifest.entries) {
     if (seen.has(entry.key)) problems.push(`manifest key '${entry.key}' is duplicated`);
     seen.add(entry.key);
-    for (const field of Object.keys(entry)) {
-      if (!ENTRY_FIELDS.has(field)) {
-        problems.push(`manifest entry '${entry.key}' has unexpected field '${field}'`);
-      }
-    }
+    const { nested, problems: fieldProblems } = physjsNestedStatements(entry);
+    problems.push(...fieldProblems);
     if (entry.key !== entry.bridgeId) {
       problems.push(`manifest key '${entry.key}' does not equal bridgeId '${entry.bridgeId}'`);
     }
@@ -436,18 +391,16 @@ export function physjsManifestProblems(input: {
     }
     const coversProblems = catalogCoversProblems(entry.key, entry.covers, 'manifest key');
     problems.push(...coversProblems);
-    for (const field of NESTED_FIELDS) {
-      const nested = entry[field];
-      if (nested === undefined) continue;
-      if (nested.coverage !== PHYSJS_COVERAGE) {
+    for (const statement of nested) {
+      if (statement.coverage !== PHYSJS_COVERAGE) {
         problems.push(
-          `${field} coverage phrase for '${entry.key}' is '${nested.coverage}', expected '${PHYSJS_COVERAGE}'`,
+          `${statement.name} coverage phrase for '${entry.key}' is '${statement.coverage}', expected '${PHYSJS_COVERAGE}'`,
         );
       }
-      if (nested.leanProof !== 'complete') {
-        problems.push(`${field} leanProof for '${entry.key}' is '${nested.leanProof}', expected 'complete'`);
+      if (statement.leanProof !== 'complete') {
+        problems.push(`${statement.name} leanProof for '${entry.key}' is '${statement.leanProof}', expected 'complete'`);
       }
-      problems.push(...catalogCoversProblems(entry.key, nested.covers, `${field} covers`));
+      problems.push(...catalogCoversProblems(entry.key, statement.covers, `${statement.name} covers`));
     }
     const bridge = byId.get(entry.key);
     if (bridge === undefined) {
@@ -461,17 +414,10 @@ export function physjsManifestProblems(input: {
       );
       continue;
     }
-    if (entry.planeWave !== undefined && ref.statement === entry.planeWave.theorem) {
-      problems.push(
-        `bridge '${entry.key}' formalRef names the nested planeWave theorem '${entry.planeWave.theorem}'; the top-level theorem stays the reference`,
-      );
-    }
-    for (const field of NESTED_FIELDS) {
-      if (field === 'planeWave') continue;
-      const nested = entry[field];
-      if (nested !== undefined && ref.statement === nested.theorem) {
+    for (const statement of nested) {
+      if (ref.statement === statement.theorem) {
         problems.push(
-          `bridge '${entry.key}' formalRef names the nested ${field} theorem '${nested.theorem}'; the top-level theorem stays the reference`,
+          `bridge '${entry.key}' formalRef names the nested ${statement.name} theorem '${statement.theorem}'; the top-level theorem stays the reference`,
         );
       }
     }
@@ -500,9 +446,11 @@ export function physjsManifestProblems(input: {
     if (kind !== undefined && ref.kind !== kind) {
       problems.push(`bridge '${entry.key}' kind is '${ref.kind}', expected '${kind}'`);
     }
-    const url = physjsStatementUrl(entry.theorem);
-    if (ref.url !== url) {
-      problems.push(`bridge '${entry.key}' url is '${ref.url}', expected '${url}'`);
+    const file = FILE_BY_THEOREM.get(entry.theorem);
+    if (file === undefined) {
+      problems.push(`manifest theorem '${entry.theorem}' has no Lean file in formal/physjs/theorem-files.json`);
+    } else if (ref.url !== physjsFileUrl(file)) {
+      problems.push(`bridge '${entry.key}' url is '${ref.url}', expected '${physjsFileUrl(file)}'`);
     }
     const compiled = compiledByKey.get(entry.key);
     if (compiled === undefined) {
@@ -511,7 +459,7 @@ export function physjsManifestProblems(input: {
       compiled.theorem !== entry.theorem ||
       compiled.covers !== entry.covers ||
       compiled.coverage !== entry.coverage ||
-      NESTED_FIELDS.some((field) => !sameNested(compiled[field], entry[field]))
+      !sameNested(compiled.nested, nested)
     ) {
       problems.push(`compiled entry for '${entry.key}' disagrees with the vendored manifest`);
     }

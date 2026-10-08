@@ -45,9 +45,9 @@ The codebase is organized into the following modules:
 - **cli**: 55 files
 - **root**: 1 file
 - **composition**: 74 files
-- **core**: 11 files
+- **core**: 12 files
 - **diff**: 3 files
-- **dimensional**: 39 files
+- **dimensional**: 40 files
 - **entry**: 1 file
 - **numerical**: 39 files
 - **relations**: 8 files
@@ -904,7 +904,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/physjs-entries.generated.ts` - Generated from `formal/physjs/manifest.json`. Do not edit by hand.
+### `src/atlas/physjs-entries.generated.ts` - Generated from `formal/physjs/manifest.json` and `formal/physjs/theorem-files.json`.
 
 **Exports:**
 - Constants: `PHYSJS_COMMIT`, `PHYSJS_TOOLCHAIN`, `PHYSJS_MATHLIB`, `PHYSJS_PHYS_LIB`, `PHYSJS_ENTRIES`
@@ -922,8 +922,8 @@ The codebase is organized into the following modules:
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT` | Re-export |
 
 **Exports:**
-- Interfaces: `PhysjsManifestFile`
-- Functions: `physjsTheorem`, `physjsLeanFile`, `physjsFileUrl`, `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
+- Interfaces: `PhysjsManifestEntry`, `PhysjsManifestFile`
+- Functions: `physjsNestedStatements`, `physjsTheorem`, `physjsLeanFile`, `physjsFileUrl`, `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
 - Re-exports: `PHYSJS_COMMIT`
 
 ---
@@ -2449,7 +2449,8 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `../../composition/discovery.js` | `VettedCandidate` | Import (type-only) |
-| `../../composition/adjudication.js` | `AnnotatedCandidate, AdjudicationVerdict` | Import (type-only) |
+| `../../composition/adjudication.js` | `AnnotatedCandidate` | Import (type-only) |
+| `../../bridges/catalog-types.js` | `AdjudicationVerdict` | Import (type-only) |
 | `../published-url.js` | `adjudicationSourceUrls` | Import |
 | `../../composition/consequence.js` | `ConsequenceSignal, ConsequenceEvidence` | Import (type-only) |
 
@@ -3169,7 +3170,8 @@ The codebase is organized into the following modules:
 | `./cli/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
 | `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
-| `./composition/adjudication.js` | `AnnotatedCandidate, CandidateAdjudication` | Re-export |
+| `./composition/adjudication.js` | `AnnotatedCandidate` | Re-export |
+| `./bridges/catalog-types.js` | `CatalogAdjudication` | Re-export |
 | `./composition/consequence.js` | `annotateConsequences` | Re-export |
 | `./composition/consequence.js` | `ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence` | Re-export |
 | `./atlas/conventions.js` | `checkConventions, unknownConventionKeys` | Re-export |
@@ -3255,7 +3257,7 @@ The codebase is organized into the following modules:
   formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
   formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
   runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
-  AnnotatedCandidate, CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
+  AnnotatedCandidate, CatalogAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
   ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
   describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
   compareUserEquation, describeComparison, describeComparisons, describeKnownRelation,
@@ -3295,12 +3297,10 @@ The codebase is organized into the following modules:
 | `./discovery.js` | `VettedCandidate` | Import (type-only) |
 | `../bridges/catalog-load.js` | `bridgeCatalog` | Import |
 | `../bridges/catalog-types.js` | `CatalogAdjudication` | Import (type-only) |
-| `../bridges/catalog-types.js` | `AdjudicationVerdict, CatalogAdjudication` | Re-export |
 
 **Exports:**
 - Functions: `candidateId`, `candidateIdIfSlug`, `adjudicationFor`, `annotateAdjudications`
 - Constants: `ADJUDICATIONS`
-- Re-exports: `AdjudicationVerdict`, `CatalogAdjudication`
 
 ---
 
@@ -3498,9 +3498,9 @@ The codebase is organized into the following modules:
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 
 **Exports:**
-- Interfaces: `CanonicalPrefactor`, `CanonicalGroupPrefactor`
+- Interfaces: `CanonicalGroupPrefactor`
 - Functions: `canonicalPrefactor`, `canonicalGroupPrefactor`
-- Constants: `CANONICAL_PREFACTORS`, `CANONICAL_GROUP_PREFACTORS`
+- Constants: `CANONICAL_GROUP_PREFACTORS`
 
 ---
 
@@ -4777,7 +4777,7 @@ The codebase is organized into the following modules:
   C_SI, G_SI, H_SI, HBAR_SI, HBAR_CODATA_DISPLAY, K_B_SI, E_SI, ALPHA, EPS0_SI, MU0_SI, SIGMA_SB_SI,
   M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI,
   LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, GM_SUN_SI,
-  GM_SUN_SOURCE, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
+  M_SUN_IAU_SI, GM_SUN_SOURCE, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
   ```
 
 
@@ -4796,6 +4796,13 @@ The codebase is organized into the following modules:
 - Interfaces: `FluxDiagnostic`, `FluxReport`, `FluxRuleResult`, `FluxRule`
 - Functions: `checkLBECoordinate`, `checkCausality`, `runRules`, `installRegimeConsistencyRule`
 - Constants: `V07_CELL_RULES`
+
+---
+
+### `src/core/json-schema.ts` - A JSON Schema reader for the keyword subset the repository's data schemas use.
+
+**Exports:**
+- Functions: `schemaProblems`
 
 ---
 
@@ -5210,7 +5217,7 @@ The codebase is organized into the following modules:
 
   ```text
   decimalScale, scaleOf, ratioScale, irrationalScale, multiplyScales, divideScales, powerScale,
-  addScales, scaleToNumber
+  addScales, scaleToNumber, readScaleExpression
   ```
 
 - Constants: `UNIT_SCALE`
@@ -5238,7 +5245,6 @@ The codebase is organized into the following modules:
 | `./types.js` | `MASS, TEMPERATURE` | Import |
 | `./symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
 | `./quantity-registry.js` | `allQuantityRecords, foldName, quantityRecord, synonymGroupsFromRegistry` | Import |
-| `../core/constants.js` | `EPS0_SI, MU0_SI` | Re-export |
 
 **Exports:**
 - Classes: `SynonymDisagreementError`
@@ -5252,7 +5258,6 @@ The codebase is organized into the following modules:
   ```
 
 - Constants: `FORMULA_NAMED`, `DIMENSION_RENAMES`, `SYNONYM_GROUPS`
-- Re-exports: `EPS0_SI`, `MU0_SI`
 
 ---
 
@@ -5395,6 +5400,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
+| `./symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
 
 **Exports:**
 - Interfaces: `QuantityRecord`
@@ -5442,7 +5448,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./units.js` | `parseUnit` | Import |
-| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
+| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
 
 **Exports:**
 - Classes: `ConstantDisagreementError`
@@ -5514,6 +5520,31 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/unit-data.ts` - The unit table, loaded from `data/units.json` and validated once.
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `crypto` | `createHash` |
+| `fs` | `readFileSync` |
+| `path` | `dirname, join` |
+| `url` | `fileURLToPath` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `C_SI, E_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI` | Import |
+| `../core/json-schema.js` | `schemaProblems, JsonSchema` | Import |
+| `./types.js` | `Dimension` | Import (type-only) |
+| `./exact-scale.js` | `decimalScale, irrationalScale, readScaleExpression, scaleOf, ExactScale` | Import |
+
+**Exports:**
+- Interfaces: `UnitRow`, `AffineRow`, `UnitTableData`
+- Functions: `readUnitFile`
+- Constants: `UNIT_DATA`
+
+---
+
 ### `src/dimensional/units.ts` - Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.
 
 **Internal Dependencies:**
@@ -5521,8 +5552,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./algebra.js` | `equals, format, multiply, power` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
-| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI, M_U_SI` | Import |
-| `./exact-scale.js` | `addScales, decimalScale, divideScales, irrationalScale, multiplyScales, powerScale, ratioScale, scaleOf, scaleToNumber, UNIT_SCALE, ExactScale` | Import |
+| `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, UNIT_SCALE, ExactScale` | Import |
+| `./unit-data.js` | `UNIT_DATA, AffineRow` | Import |
 
 **Exports:**
 - Classes: `UnitError`, `UnknownUnitError`, `UnitRefusedError`, `AmbiguousUnitError`
@@ -5733,7 +5764,8 @@ The codebase is organized into the following modules:
 | `./canonical/linkage.js` | `classifyLinkage, scanLinkages` | Re-export |
 | `./canonical/linkage.js` | `LinkageResult, RecoveryOutcome` | Re-export |
 | `./composition/adjudication.js` | `candidateId, ADJUDICATIONS, adjudicationFor, annotateAdjudications` | Re-export |
-| `./composition/adjudication.js` | `AdjudicationVerdict, CandidateAdjudication, AnnotatedCandidate` | Re-export |
+| `./composition/adjudication.js` | `AnnotatedCandidate` | Re-export |
+| `./bridges/catalog-types.js` | `AdjudicationVerdict, CatalogAdjudication` | Re-export |
 | `./composition/consequence.js` | `annotateConsequences, classifyProposal` | Re-export |
 | `./composition/consequence.js` | `ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence` | Re-export |
 | `./composition/grounding.js` | `describeGrounding` | Re-export |
@@ -5828,8 +5860,8 @@ The codebase is organized into the following modules:
   bridgesWithoutCanonicalPartner, canonicalToLaw, seedCanonicalLaws, CANONICAL_TENSOR_CONFIG,
   CanonicalEquation, CanonicalDomain, EpistemicStatus, CanonicalForms, FieldEquationNode, normalForm,
   structurallyEqual, classifyLinkage, scanLinkages, LinkageResult, RecoveryOutcome, candidateId,
-  ADJUDICATIONS, adjudicationFor, annotateAdjudications, AdjudicationVerdict, CandidateAdjudication,
-  AnnotatedCandidate, annotateConsequences, classifyProposal, ConsequenceAnnotatedCandidate,
+  ADJUDICATIONS, adjudicationFor, annotateAdjudications, AnnotatedCandidate, AdjudicationVerdict,
+  CatalogAdjudication, annotateConsequences, classifyProposal, ConsequenceAnnotatedCandidate,
   ConsequenceSignal, ConsequenceEvidence, describeGrounding, CandidateGrounding, rankDiscoveries,
   VettedCandidate, residualInSigma, combineInQuadrature, consistencyComparison, ConsistencyComparison,
   ObservationProvenance, SigmaComponent, ObservationKind, ConfrontationOutcome,
@@ -6748,8 +6780,8 @@ graph TD
         N38[cell]
         N39[constants]
         N40[flux-rules]
-        N41[labeled-tensor]
-        N42[...6 more]
+        N41[json-schema]
+        N42[...7 more]
     end
 
     subgraph Diff
@@ -6764,7 +6796,7 @@ graph TD
         N48[ast-types]
         N49[bridge-check]
         N50[buckingham]
-        N51[...34 more]
+        N51[...35 more]
     end
 
     subgraph Entry
@@ -6827,17 +6859,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 356 |
+| Total TypeScript Files | 358 |
 | Total Modules | 13 |
-| Total Lines of Code | 77993 |
-| Total Exports | 2457 |
-| Total Re-exports | 1256 |
+| Total Lines of Code | 78513 |
+| Total Exports | 2458 |
+| Total Re-exports | 1252 |
 | Total Classes | 79 |
-| Total Interfaces | 447 |
-| Total Functions | 744 |
+| Total Interfaces | 450 |
+| Total Functions | 748 |
 | Total Type Guards | 7 |
 | Total Enums | 0 |
-| Type-only Imports | 503 |
+| Type-only Imports | 505 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

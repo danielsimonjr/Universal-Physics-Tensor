@@ -147,6 +147,9 @@ describe('criterion 3 export — the frozen files', () => {
     expect(JSON.parse(queriesText)).toHaveLength(125);
     expect(freeze.files['corpus.json'].records).toBe(109);
     expect(freeze.pinnedCommit).toMatch(/^[0-9a-f]{40}$/);
+    // No git tree hash: nothing read one, and it went stale on every src/canonical edit.
+    // The SHA-256 above and the fresh-export test below are what bind the files.
+    expect(freeze).not.toHaveProperty('inputTrees');
   });
 
   it('equal a fresh export of the live canonical registry', () => {

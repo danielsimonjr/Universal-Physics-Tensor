@@ -1,7 +1,10 @@
 /**
  * Write the TypeScript table `physjsFormalRef` reads from the vendored
- * PhysJS manifest. The manifest is the pin. This script writes that table
- * and nothing else.
+ * PhysJS manifest and the theorem → file table vendored beside it
+ * (`scripts/vendor-physjs-theorem-files.ts`). The manifest is the pin. This
+ * script writes that table and nothing else. A manifest field outside the base
+ * set is a nested statement when it has exactly the statement fields, and an
+ * error otherwise; no list of nested names is kept here.
  *
  *   bun scripts/generate-physjs-table.ts           # write the committed file
  *   bun scripts/generate-physjs-table.ts --check   # exit 1 when the file is stale
@@ -13,49 +16,16 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifestPath = resolve(root, 'formal/physjs/manifest.json');
+const theoremFilesPath = resolve(root, 'formal/physjs/theorem-files.json');
 const outPath = resolve(root, 'src/atlas/physjs-entries.generated.ts');
 
-const NESTED_FIELDS = [
-  'planeWave',
-  'oneLoop',
-  'inversion',
-  'vacuum',
-  'corollary',
-  'friedmann',
-  'lengthMonomial',
-  'torsionMonomial',
-  'coefficientNotFixed',
-  'unitCoefficient',
-  'scalingShape',
-  'everyPower',
-  'perpendicularQuartic',
-  'tolmanRatio',
-  'warmSound',
-  'cutoffL',
-  'whistlerLimit',
-  'equalTemperature',
-  'bohmGross',
-  'referenceResistivity',
-  'lundquist',
-  'bohmFlux',
-  'heisenberg_fraction',
-] as const;
+/** The fields every manifest entry may carry. Any other field is a nested statement, or an error. */
+const BASE_FIELDS = new Set<string>(['key', 'bridgeId', 'theorem', 'covers', 'coverage', 'leanProof', 'axioms', 'imports']);
 
-const ENTRY_FIELDS = new Set<string>([
-  'key',
-  'bridgeId',
-  'theorem',
-  'covers',
-  'coverage',
-  'leanProof',
-  'axioms',
-  'imports',
-  ...NESTED_FIELDS,
-]);
+/** The fields of a statement: the top-level one, and each nested one. */
+const STATEMENT_KEYS = ['theorem', 'covers', 'coverage', 'leanProof', 'axioms'] as const;
 
-const NESTED_KEYS = ['theorem', 'covers', 'coverage', 'leanProof', 'axioms'] as const;
-
-interface Nested {
+interface Statement {
   readonly theorem: string;
   readonly covers: string;
   readonly coverage: string;
@@ -63,16 +33,11 @@ interface Nested {
   readonly axioms: readonly string[];
 }
 
-interface Entry {
+interface Entry extends Statement {
   readonly key: string;
   readonly bridgeId: string;
-  readonly theorem: string;
-  readonly covers: string;
-  readonly coverage: string;
-  readonly leanProof: string;
-  readonly axioms: readonly string[];
   readonly imports?: string;
-  readonly [field: string]: string | readonly string[] | Nested | undefined;
+  readonly [field: string]: unknown;
 }
 
 interface Manifest {
@@ -84,6 +49,12 @@ interface Manifest {
   readonly entries: readonly Entry[];
 }
 
+/** `formal/physjs/theorem-files.json`: theorem → the Lean file that declares it, at `commit`. */
+interface TheoremFiles {
+  readonly commit: string;
+  readonly files: Readonly<Record<string, string>>;
+}
+
 function quote(value: string): string {
   return JSON.stringify(value);
 }
@@ -92,61 +63,67 @@ function emitAxioms(axioms: readonly string[]): string {
   return `[${axioms.map(quote).join(', ')}]`;
 }
 
-function emitNested(nested: Nested): string {
-  for (const field of Object.keys(nested)) {
-    if (!(NESTED_KEYS as readonly string[]).includes(field)) {
-      throw new Error(`nested statement has unexpected field '${field}'`);
+/** The nested statements of `entry`, in manifest order: every field outside the base set. */
+function nestedStatements(entry: Entry): { readonly name: string; readonly statement: Statement }[] {
+  const out: { name: string; statement: Statement }[] = [];
+  for (const [field, value] of Object.entries(entry)) {
+    if (BASE_FIELDS.has(field)) continue;
+    const keys = typeof value === 'object' && value !== null && !Array.isArray(value) ? Object.keys(value).sort() : [];
+    if (keys.join() !== [...STATEMENT_KEYS].sort().join()) {
+      throw new Error(`manifest entry '${entry.key}' has unexpected field '${field}': not a statement {${STATEMENT_KEYS.join(', ')}}`);
     }
+    out.push({ name: field, statement: value as Statement });
   }
-  return [
-    '{',
-    `      theorem: ${quote(nested.theorem)},`,
-    `      covers: ${quote(nested.covers)},`,
-    `      coverage: ${quote(nested.coverage)},`,
-    `      leanProof: ${quote(nested.leanProof)},`,
-    `      axioms: ${emitAxioms(nested.axioms)},`,
-    '    }',
-  ].join('\n');
+  return out;
 }
 
-function emitEntry(entry: Entry): string {
-  for (const field of Object.keys(entry)) {
-    if (!ENTRY_FIELDS.has(field)) {
-      throw new Error(`manifest entry '${entry.key}' has unexpected field '${field}'`);
-    }
-  }
-  const lines = [
-    '  {',
-    `    key: ${quote(entry.key)},`,
-    `    bridgeId: ${quote(entry.bridgeId)},`,
-    `    theorem: ${quote(entry.theorem)},`,
-    `    covers: ${quote(entry.covers)},`,
-    `    coverage: ${quote(entry.coverage)},`,
-    `    leanProof: ${quote(entry.leanProof)},`,
-    `    axioms: ${emitAxioms(entry.axioms)},`,
+function fileOf(files: TheoremFiles, theorem: string): string {
+  const path = files.files[theorem];
+  if (path === undefined) throw new Error(`formal/physjs/theorem-files.json has no file for '${theorem}'`);
+  if (!/^lean\/[^/]+\.lean$/.test(path)) throw new Error(`'${theorem}' file '${path}' is not lean/<File>.lean`);
+  return path.slice('lean/'.length);
+}
+
+function emitStatementFields(statement: Statement, file: string, indent: string): string[] {
+  return [
+    `${indent}theorem: ${quote(statement.theorem)},`,
+    `${indent}file: ${quote(file)},`,
+    `${indent}covers: ${quote(statement.covers)},`,
+    `${indent}coverage: ${quote(statement.coverage)},`,
+    `${indent}leanProof: ${quote(statement.leanProof)},`,
+    `${indent}axioms: ${emitAxioms(statement.axioms)},`,
   ];
-  if (entry.imports !== undefined) {
-    lines.push(`    imports: ${quote(entry.imports)},`);
-  }
-  for (const field of NESTED_FIELDS) {
-    const nested = entry[field];
-    if (nested === undefined) continue;
-    if (typeof nested === 'string' || Array.isArray(nested)) {
-      throw new Error(`manifest entry '${entry.key}' field '${field}' is not an object`);
+}
+
+function emitEntry(entry: Entry, files: TheoremFiles): string {
+  const lines = ['  {', `    key: ${quote(entry.key)},`, `    bridgeId: ${quote(entry.bridgeId)},`];
+  lines.push(...emitStatementFields(entry, fileOf(files, entry.theorem), '    '));
+  if (entry.imports !== undefined) lines.push(`    imports: ${quote(entry.imports)},`);
+  const nested = nestedStatements(entry);
+  if (nested.length === 0) {
+    lines.push('    nested: [],');
+  } else {
+    lines.push('    nested: [');
+    for (const { name, statement } of nested) {
+      lines.push('      {', `        name: ${quote(name)},`, ...emitStatementFields(statement, fileOf(files, statement.theorem), '        '), '      },');
     }
-    lines.push(`    ${field}: ${emitNested(nested)},`);
+    lines.push('    ],');
   }
   lines.push('  },');
   return lines.join('\n');
 }
 
-export function renderPhysjsTable(manifest: Manifest): string {
+export function renderPhysjsTable(manifest: Manifest, files: TheoremFiles): string {
   if (manifest.schema !== 'physjs-bridge-manifest/v1') {
     throw new Error(`manifest schema is '${manifest.schema}', expected 'physjs-bridge-manifest/v1'`);
   }
-  const body = manifest.entries.map(emitEntry).join('\n');
+  if (files.commit !== manifest.commit) {
+    throw new Error(`formal/physjs/theorem-files.json is for '${files.commit}', the manifest is '${manifest.commit}'`);
+  }
+  const body = manifest.entries.map((entry) => emitEntry(entry, files)).join('\n');
   return `/**
- * Generated from \`formal/physjs/manifest.json\`. Do not edit by hand.
+ * Generated from \`formal/physjs/manifest.json\` and \`formal/physjs/theorem-files.json\`.
+ * Do not edit by hand.
  * \`bun run physjs:table\` rewrites this file. A stale copy fails the docs gate,
  * and a hand-edited theorem fails \`atlas:formal-gate\`.
  */
@@ -163,7 +140,11 @@ export const PHYSJS_MATHLIB = ${quote(manifest.mathlib)};
 /** PhysLib commit recorded by the vendored manifest. */
 export const PHYSJS_PHYS_LIB = ${quote(manifest.physlib)};
 
-/** Compiled entry table copied from the vendored manifest entries. */
+/**
+ * Compiled entry table copied from the vendored manifest entries. Each statement
+ * carries the Lean file that declares it; each nested statement is named by its
+ * manifest field.
+ */
 export const PHYSJS_ENTRIES = [
 ${body}
 ] as const;
@@ -172,7 +153,8 @@ ${body}
 
 function main(): void {
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as Manifest;
-  const rendered = renderPhysjsTable(manifest);
+  const files = JSON.parse(readFileSync(theoremFilesPath, 'utf8')) as TheoremFiles;
+  const rendered = renderPhysjsTable(manifest, files);
   const stdout = process.argv.includes('--stdout');
   const check = process.argv.includes('--check');
   if (stdout) {

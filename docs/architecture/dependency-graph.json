@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "8.0.0",
-    "totalFiles": 356,
+    "totalFiles": 358,
     "totalModules": 13,
-    "totalExports": 2457
+    "totalExports": 2458
   },
   "entryPoints": [
     {
@@ -3215,7 +3215,7 @@
         ]
       },
       "src/atlas/physjs-entries.generated.ts": {
-        "description": "Generated from `formal/physjs/manifest.json`. Do not edit by hand.",
+        "description": "Generated from `formal/physjs/manifest.json` and `formal/physjs/theorem-files.json`.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
@@ -3274,6 +3274,7 @@
         ],
         "exports": [
           "PHYSJS_COMMIT",
+          "physjsNestedStatements",
           "physjsTheorem",
           "physjsLeanFile",
           "physjsFileUrl",
@@ -3285,9 +3286,11 @@
           "PHYSJS_COMMIT"
         ],
         "interfaces": [
+          "PhysjsManifestEntry",
           "PhysjsManifestFile"
         ],
         "functions": [
+          "physjsNestedStatements",
           "physjsTheorem",
           "physjsLeanFile",
           "physjsFileUrl",
@@ -8157,7 +8160,13 @@
           {
             "file": "../../composition/adjudication.js",
             "imports": [
-              "AnnotatedCandidate",
+              "AnnotatedCandidate"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../bridges/catalog-types.js",
+            "imports": [
               "AdjudicationVerdict"
             ],
             "typeOnly": true
@@ -10697,8 +10706,14 @@
           {
             "file": "./composition/adjudication.js",
             "imports": [
-              "AnnotatedCandidate",
-              "CandidateAdjudication"
+              "AnnotatedCandidate"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/catalog-types.js",
+            "imports": [
+              "CatalogAdjudication"
             ],
             "reExport": true
           },
@@ -11364,7 +11379,7 @@
           "PosterGraph",
           "PosterValidation",
           "AnnotatedCandidate",
-          "CandidateAdjudication",
+          "CatalogAdjudication",
           "ConsequenceAnnotatedCandidate",
           "ConsequenceSignal",
           "ConsequenceEvidence",
@@ -11513,7 +11528,7 @@
           "candidateId",
           "ADJUDICATIONS",
           "AnnotatedCandidate",
-          "CandidateAdjudication",
+          "CatalogAdjudication",
           "annotateConsequences",
           "ConsequenceAnnotatedCandidate",
           "ConsequenceSignal",
@@ -11658,14 +11673,6 @@
               "CatalogAdjudication"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../bridges/catalog-types.js",
-            "imports": [
-              "AdjudicationVerdict",
-              "CatalogAdjudication"
-            ],
-            "reExport": true
           }
         ],
         "exports": [
@@ -11673,13 +11680,7 @@
           "candidateId",
           "candidateIdIfSlug",
           "adjudicationFor",
-          "annotateAdjudications",
-          "AdjudicationVerdict",
-          "CatalogAdjudication"
-        ],
-        "reExported": [
-          "AdjudicationVerdict",
-          "CatalogAdjudication"
+          "annotateAdjudications"
         ],
         "functions": [
           "candidateId",
@@ -12364,13 +12365,11 @@
           }
         ],
         "exports": [
-          "CANONICAL_PREFACTORS",
           "CANONICAL_GROUP_PREFACTORS",
           "canonicalPrefactor",
           "canonicalGroupPrefactor"
         ],
         "interfaces": [
-          "CanonicalPrefactor",
           "CanonicalGroupPrefactor"
         ],
         "functions": [
@@ -12378,7 +12377,6 @@
           "canonicalGroupPrefactor"
         ],
         "constants": [
-          "CANONICAL_PREFACTORS",
           "CANONICAL_GROUP_PREFACTORS"
         ]
       },
@@ -17148,6 +17146,7 @@
           "LANE_EMDEN_OMEGA3",
           "THOMSON_CROSS_SECTION_SI",
           "GM_SUN_SI",
+          "M_SUN_IAU_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
           "M_PROTON_SI",
@@ -17181,6 +17180,7 @@
           "LANE_EMDEN_OMEGA3",
           "THOMSON_CROSS_SECTION_SI",
           "GM_SUN_SI",
+          "M_SUN_IAU_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
           "M_PROTON_SI",
@@ -17238,6 +17238,18 @@
         ],
         "constants": [
           "V07_CELL_RULES"
+        ]
+      },
+      "src/core/json-schema.ts": {
+        "description": "A JSON Schema reader for the keyword subset the repository's data schemas use.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "schemaProblems"
+        ],
+        "functions": [
+          "schemaProblems"
         ]
       },
       "src/core/labeled-tensor.ts": {
@@ -18464,7 +18476,8 @@
           "divideScales",
           "powerScale",
           "addScales",
-          "scaleToNumber"
+          "scaleToNumber",
+          "readScaleExpression"
         ],
         "interfaces": [
           "ExactScale"
@@ -18478,7 +18491,8 @@
           "divideScales",
           "powerScale",
           "addScales",
-          "scaleToNumber"
+          "scaleToNumber",
+          "readScaleExpression"
         ],
         "constants": [
           "UNIT_SCALE"
@@ -18541,19 +18555,9 @@
               "quantityRecord",
               "synonymGroupsFromRegistry"
             ]
-          },
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "EPS0_SI",
-              "MU0_SI"
-            ],
-            "reExport": true
           }
         ],
         "exports": [
-          "EPS0_SI",
-          "MU0_SI",
           "FORMULA_NAMED",
           "DIMENSION_RENAMES",
           "SYNONYM_GROUPS",
@@ -18567,10 +18571,6 @@
           "expandSynonymValues",
           "resolveQuantityName",
           "SynonymDisagreementError"
-        ],
-        "reExported": [
-          "EPS0_SI",
-          "MU0_SI"
         ],
         "classes": [
           "SynonymDisagreementError"
@@ -19010,6 +19010,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./symbolic-constants.js",
+            "imports": [
+              "CONSTANT_REGISTRY"
+            ]
           }
         ],
         "exports": [
@@ -19164,6 +19170,7 @@
               "LANE_EMDEN_OMEGA3",
               "M_E_SI",
               "M_PROTON_SI",
+              "M_SUN_IAU_SI",
               "M_SUN_SI",
               "M_U_SI",
               "MU0_SI",
@@ -19412,6 +19419,88 @@
           "QUANTITY_CONVENTION_UNIT"
         ]
       },
+      "src/dimensional/unit-data.ts": {
+        "description": "The unit table, loaded from `data/units.json` and validated once.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "dirname",
+              "join"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "E_SI",
+              "M_SUN_IAU_SI",
+              "M_SUN_SI",
+              "M_U_SI"
+            ]
+          },
+          {
+            "file": "../core/json-schema.js",
+            "imports": [
+              "schemaProblems",
+              "JsonSchema"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./exact-scale.js",
+            "imports": [
+              "decimalScale",
+              "irrationalScale",
+              "readScaleExpression",
+              "scaleOf",
+              "ExactScale"
+            ]
+          }
+        ],
+        "exports": [
+          "UNIT_DATA",
+          "readUnitFile"
+        ],
+        "interfaces": [
+          "UnitRow",
+          "AffineRow",
+          "UnitTableData"
+        ],
+        "functions": [
+          "readUnitFile"
+        ],
+        "constants": [
+          "UNIT_DATA"
+        ]
+      },
       "src/dimensional/units.ts": {
         "description": "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.",
         "externalDependencies": [],
@@ -19434,30 +19523,24 @@
             "typeOnly": true
           },
           {
-            "file": "../core/constants.js",
-            "imports": [
-              "C_SI",
-              "E_SI",
-              "G_SI",
-              "GM_SUN_SI",
-              "M_SUN_SI",
-              "M_U_SI"
-            ]
-          },
-          {
             "file": "./exact-scale.js",
             "imports": [
               "addScales",
               "decimalScale",
               "divideScales",
-              "irrationalScale",
               "multiplyScales",
               "powerScale",
               "ratioScale",
-              "scaleOf",
               "scaleToNumber",
               "UNIT_SCALE",
               "ExactScale"
+            ]
+          },
+          {
+            "file": "./unit-data.js",
+            "imports": [
+              "UNIT_DATA",
+              "AffineRow"
             ]
           }
         ],
@@ -20933,9 +21016,15 @@
           {
             "file": "./composition/adjudication.js",
             "imports": [
-              "AdjudicationVerdict",
-              "CandidateAdjudication",
               "AnnotatedCandidate"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/catalog-types.js",
+            "imports": [
+              "AdjudicationVerdict",
+              "CatalogAdjudication"
             ],
             "reExport": true
           },
@@ -21458,9 +21547,9 @@
           "FieldEquationNode",
           "LinkageResult",
           "RecoveryOutcome",
-          "AdjudicationVerdict",
-          "CandidateAdjudication",
           "AnnotatedCandidate",
+          "AdjudicationVerdict",
+          "CatalogAdjudication",
           "ConsequenceAnnotatedCandidate",
           "ConsequenceSignal",
           "ConsequenceEvidence",
@@ -21866,9 +21955,9 @@
           "ADJUDICATIONS",
           "adjudicationFor",
           "annotateAdjudications",
-          "AdjudicationVerdict",
-          "CandidateAdjudication",
           "AnnotatedCandidate",
+          "AdjudicationVerdict",
+          "CatalogAdjudication",
           "annotateConsequences",
           "classifyProposal",
           "ConsequenceAnnotatedCandidate",
@@ -24549,6 +24638,7 @@
           "src/core/cell.ts",
           "src/core/constants.ts",
           "src/core/flux-rules.ts",
+          "src/core/json-schema.ts",
           "src/core/labeled-tensor.ts",
           "src/core/regime-registry.ts",
           "src/core/regime-rule-install.ts",
@@ -24604,6 +24694,7 @@
           "src/dimensional/tensor.ts",
           "src/dimensional/types.ts",
           "src/dimensional/unit-convention.ts",
+          "src/dimensional/unit-data.ts",
           "src/dimensional/units.ts",
           "src/dimensional/validator-registry.ts",
           "src/dimensional/validator.ts",
@@ -24676,18 +24767,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 356,
+    "totalTypeScriptFiles": 358,
     "totalModules": 13,
-    "totalLinesOfCode": 77993,
-    "totalExports": 2457,
+    "totalLinesOfCode": 78513,
+    "totalExports": 2458,
     "totalClasses": 79,
-    "totalInterfaces": 447,
-    "totalFunctions": 744,
+    "totalInterfaces": 450,
+    "totalFunctions": 748,
     "totalTypeGuards": 7,
     "totalEnums": 0,
-    "totalConstants": 379,
-    "totalReExports": 1256,
-    "totalTypeOnlyImports": 503,
+    "totalConstants": 380,
+    "totalReExports": 1252,
+    "totalTypeOnlyImports": 505,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

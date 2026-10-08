@@ -179,3 +179,29 @@ export function scaleToNumber(s: ExactScale): number {
   const rational = rationalToNumber(s.num, s.den);
   return s.irrational === 1 ? rational : rational * s.irrational;
 }
+
+const FACTOR = /^([^*/^\s]+)(?:\^([+-]?\d+))?$/;
+
+/**
+ * The exact value of a scale expression, the form `data/units.json` stores:
+ * factors joined by `*` and `/`, left to right, each a decimal literal or a
+ * name with an optional integer power (`4.1868*453.59237/1.8`, `pi/180`,
+ * `lbf/inch^2`). `resolve` gives a name its scale and returns undefined for
+ * a name it does not know, which throws here. A decimal literal is read digit
+ * for digit, so the result is the rational the text states.
+ * @internal
+ */
+export function readScaleExpression(text: string, resolve: (name: string) => ExactScale | undefined): ExactScale {
+  const parts = text.trim().split(/([*/])/);
+  let scale = UNIT_SCALE;
+  for (let i = 0; i < parts.length; i += 2) {
+    const m = FACTOR.exec(parts[i]!);
+    if (m === null) throw new RangeError(`exact scale: '${text}' is not a product of factors`);
+    const atom = m[1]!;
+    const base = decimalScale(atom) ?? resolve(atom);
+    if (base === undefined) throw new RangeError(`exact scale: '${text}' names '${atom}', which is not a known scale`);
+    const factor = m[2] === undefined ? base : powerScale(base, Number(m[2]));
+    scale = i > 0 && parts[i - 1] === '/' ? divideScales(scale, factor) : multiplyScales(scale, factor);
+  }
+  return scale;
+}

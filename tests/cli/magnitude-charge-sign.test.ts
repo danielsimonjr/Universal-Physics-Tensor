@@ -9,8 +9,7 @@
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
-import { E_SI, M_E_SI } from '../../src/core/constants.js';
-import { EPS0_SI } from '../../src/dimensional/formula-names.js';
+import { E_SI, EPS0_SI, M_E_SI } from '../../src/core/constants.js';
 
 const edge = (id: string) => {
   const found = CANONICAL_GRAPH.find((e) => e.id === id);

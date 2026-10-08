@@ -2,6 +2,9 @@
  * One registry row per constant. Every other table is a projection of it, and
  * MathTS is the second, independent statement of the same values and units.
  */
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { toSiDimensionVector } from '@danielsimonjr/mathts-core';
 import * as mathts from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
@@ -9,7 +12,7 @@ import { C_SI } from '../../src/core/constants.js';
 import { PhysicalConstants } from '../../src/core/types.js';
 import { CONSTANT_SPELLINGS } from '../../src/dimensional/dimension-spec.js';
 import { FORMULA_NAMED } from '../../src/dimensional/formula-names.js';
-import { quantityRecord } from '../../src/dimensional/quantity-registry.js';
+import { foldName, quantityRecord, synonymGroupsFromRegistry } from '../../src/dimensional/quantity-registry.js';
 import {
   CONSTANT_PROVENANCE,
   CONSTANT_REGISTRY,
@@ -71,6 +74,33 @@ describe('the constant registry is the one owner of spellings, units and provena
     }
     // The control: the row this test was written against.
     expect(quantityRecord('k_B')?.id).toBe('boltzmann-constant');
+  });
+
+  it('no constant spelling is also written in data/quantities.json: the registry owns it and the quantity derives it', () => {
+    const file = JSON.parse(
+      readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../data/quantities.json'), 'utf8'),
+    ) as { quantities: { id: string; aliases?: string[] }[] };
+    const owner = new Map(CONSTANT_REGISTRY.flatMap((row) => [row.name, ...row.spellings].map((s) => [foldName(s), row] as const)));
+    // An alias that is a constant spelling is a second definition. A quantity id that is one
+    // is the quantity's identity (a graph node), allowed only when the constant names it.
+    const twice = file.quantities.flatMap((q) => [
+      ...(q.aliases ?? []).filter((s) => owner.has(foldName(s))).map((s) => `${q.id} alias ${s}`),
+      ...(owner.has(foldName(q.id)) && owner.get(foldName(q.id))!.quantity !== q.id ? [`${q.id} id`] : []),
+    ]);
+    expect(twice).toEqual([]);
+    const linked = CONSTANT_REGISTRY.filter((row) => row.quantity !== undefined);
+    expect(linked.map((row) => [row.name, row.quantity])).toEqual([
+      ['h', 'planck-constant'],
+      ['k_B', 'boltzmann-constant'],
+      ['lane_emden_omega_3', 'lane-emden-omega-3'],
+    ]);
+    for (const row of linked) {
+      for (const spelling of [row.name, ...row.spellings]) expect(quantityRecord(spelling)?.id, spelling).toBe(row.quantity);
+    }
+    expect(synonymGroupsFromRegistry()).toContainEqual(['boltzmann-constant', 'k_B', 'kB', 'boltzmann']);
+    expect(synonymGroupsFromRegistry()).toContainEqual(['planck-constant', 'h']);
+    // A spelling that only restates the id adds no group.
+    expect(synonymGroupsFromRegistry().some((group) => group[0] === 'lane-emden-omega-3')).toBe(false);
   });
 
   it('PhysicalConstants is a projection of the owner', () => {

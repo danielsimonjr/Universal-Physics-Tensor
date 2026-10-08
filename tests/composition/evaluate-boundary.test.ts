@@ -6,7 +6,7 @@ import { siUnitOf } from '../../src/cli/expr-print.js';
 import { runCli } from '../../dist/cli/main.js';
 
 const DAMPING_INPUTS = { c_kg_per_s: 2, k_N_per_m: 1, m_kg: 1 };
-const MERCURY = { M_kg: 1.989e30, a_m: 5.7909e10, e: 0.2056 };
+const MERCURY = { M_kg: 1.989e30, a_m: 5.7909e10, eccentricity: 0.2056 };
 
 function capture() {
   const lines: string[] = [];
@@ -49,7 +49,7 @@ describe('an unknown key and a non-number are refused (issue 455)', () => {
 describe('a declared alternate works in the library, and T_yr only adds the per-century output (issue 479)', () => {
   it('major_axis_m is 2a', () => {
     const a = evaluateRelation('be-52', MERCURY);
-    const b = evaluateRelation('be-52', { M_kg: 1.989e30, major_axis_m: 2 * 5.7909e10, e: 0.2056 });
+    const b = evaluateRelation('be-52', { M_kg: 1.989e30, major_axis_m: 2 * 5.7909e10, eccentricity: 0.2056 });
     expect(a.kind === 'value' && b.kind === 'value' && a.value === b.value).toBe(true);
   });
   it('a_m and major_axis_m together are an error', () => {

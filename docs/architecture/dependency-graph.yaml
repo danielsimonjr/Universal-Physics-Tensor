@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 8.0.0
-  totalFiles: 356
+  totalFiles: 358
   totalModules: 13
-  totalExports: 2457
+  totalExports: 2458
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2282,7 +2282,7 @@ modules:
         - familyChangeBlocksHorizon
         - horizonOnRoute
     src/atlas/physjs-entries.generated.ts:
-      description: Generated from `formal/physjs/manifest.json`. Do not edit by hand.
+      description: Generated from `formal/physjs/manifest.json` and `formal/physjs/theorem-files.json`.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies: []
@@ -2325,6 +2325,7 @@ modules:
           reExport: true
       exports:
         - PHYSJS_COMMIT
+        - physjsNestedStatements
         - physjsTheorem
         - physjsLeanFile
         - physjsFileUrl
@@ -2334,8 +2335,10 @@ modules:
       reExported:
         - PHYSJS_COMMIT
       interfaces:
+        - PhysjsManifestEntry
         - PhysjsManifestFile
       functions:
+        - physjsNestedStatements
         - physjsTheorem
         - physjsLeanFile
         - physjsFileUrl
@@ -5580,6 +5583,9 @@ modules:
         - file: ../../composition/adjudication.js
           imports:
             - AnnotatedCandidate
+          typeOnly: true
+        - file: ../../bridges/catalog-types.js
+          imports:
             - AdjudicationVerdict
           typeOnly: true
         - file: ../published-url.js
@@ -7168,7 +7174,10 @@ modules:
         - file: ./composition/adjudication.js
           imports:
             - AnnotatedCandidate
-            - CandidateAdjudication
+          reExport: true
+        - file: ./bridges/catalog-types.js
+          imports:
+            - CatalogAdjudication
           reExport: true
         - file: ./composition/consequence.js
           imports:
@@ -7657,7 +7666,7 @@ modules:
         - PosterGraph
         - PosterValidation
         - AnnotatedCandidate
-        - CandidateAdjudication
+        - CatalogAdjudication
         - ConsequenceAnnotatedCandidate
         - ConsequenceSignal
         - ConsequenceEvidence
@@ -7805,7 +7814,7 @@ modules:
         - candidateId
         - ADJUDICATIONS
         - AnnotatedCandidate
-        - CandidateAdjudication
+        - CatalogAdjudication
         - annotateConsequences
         - ConsequenceAnnotatedCandidate
         - ConsequenceSignal
@@ -7939,22 +7948,12 @@ modules:
           imports:
             - CatalogAdjudication
           typeOnly: true
-        - file: ../bridges/catalog-types.js
-          imports:
-            - AdjudicationVerdict
-            - CatalogAdjudication
-          reExport: true
       exports:
         - ADJUDICATIONS
         - candidateId
         - candidateIdIfSlug
         - adjudicationFor
         - annotateAdjudications
-        - AdjudicationVerdict
-        - CatalogAdjudication
-      reExported:
-        - AdjudicationVerdict
-        - CatalogAdjudication
       functions:
         - candidateId
         - candidateIdIfSlug
@@ -8379,18 +8378,15 @@ modules:
           imports:
             - CANONICAL_EQUATIONS
       exports:
-        - CANONICAL_PREFACTORS
         - CANONICAL_GROUP_PREFACTORS
         - canonicalPrefactor
         - canonicalGroupPrefactor
       interfaces:
-        - CanonicalPrefactor
         - CanonicalGroupPrefactor
       functions:
         - canonicalPrefactor
         - canonicalGroupPrefactor
       constants:
-        - CANONICAL_PREFACTORS
         - CANONICAL_GROUP_PREFACTORS
     src/composition/catalog-graph.ts:
       description: The composition graph is the relation projection of the bridge catalog.
@@ -11634,6 +11630,7 @@ modules:
         - LANE_EMDEN_OMEGA3
         - THOMSON_CROSS_SECTION_SI
         - GM_SUN_SI
+        - M_SUN_IAU_SI
         - GM_SUN_SOURCE
         - M_E_SI
         - M_PROTON_SI
@@ -11666,6 +11663,7 @@ modules:
         - LANE_EMDEN_OMEGA3
         - THOMSON_CROSS_SECTION_SI
         - GM_SUN_SI
+        - M_SUN_IAU_SI
         - GM_SUN_SOURCE
         - M_E_SI
         - M_PROTON_SI
@@ -11710,6 +11708,15 @@ modules:
         - installRegimeConsistencyRule
       constants:
         - V07_CELL_RULES
+    src/core/json-schema.ts:
+      description: A JSON Schema reader for the keyword subset the repository's data schemas use.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - schemaProblems
+      functions:
+        - schemaProblems
     src/core/labeled-tensor.ts:
       description: "`LabeledTensor` — engine-level tensor wrapped with"
       externalDependencies: []
@@ -12551,6 +12558,7 @@ modules:
         - powerScale
         - addScales
         - scaleToNumber
+        - readScaleExpression
       interfaces:
         - ExactScale
       functions:
@@ -12563,6 +12571,7 @@ modules:
         - powerScale
         - addScales
         - scaleToNumber
+        - readScaleExpression
       constants:
         - UNIT_SCALE
     src/dimensional/field-equation-helpers.ts:
@@ -12604,14 +12613,7 @@ modules:
             - foldName
             - quantityRecord
             - synonymGroupsFromRegistry
-        - file: ../core/constants.js
-          imports:
-            - EPS0_SI
-            - MU0_SI
-          reExport: true
       exports:
-        - EPS0_SI
-        - MU0_SI
         - FORMULA_NAMED
         - DIMENSION_RENAMES
         - SYNONYM_GROUPS
@@ -12625,9 +12627,6 @@ modules:
         - expandSynonymValues
         - resolveQuantityName
         - SynonymDisagreementError
-      reExported:
-        - EPS0_SI
-        - MU0_SI
       classes:
         - SynonymDisagreementError
       interfaces:
@@ -12924,6 +12923,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ./symbolic-constants.js
+          imports:
+            - CONSTANT_REGISTRY
       exports:
         - foldName
         - allQuantityRecords
@@ -13030,6 +13032,7 @@ modules:
             - LANE_EMDEN_OMEGA3
             - M_E_SI
             - M_PROTON_SI
+            - M_SUN_IAU_SI
             - M_SUN_SI
             - M_U_SI
             - MU0_SI
@@ -13216,6 +13219,57 @@ modules:
         - conventionFactor
       constants:
         - QUANTITY_CONVENTION_UNIT
+    src/dimensional/unit-data.ts:
+      description: The unit table, loaded from `data/units.json` and validated once.
+      externalDependencies: []
+      nodeDependencies:
+        - module: crypto
+          imports:
+            - createHash
+        - module: fs
+          imports:
+            - readFileSync
+        - module: path
+          imports:
+            - dirname
+            - join
+        - module: url
+          imports:
+            - fileURLToPath
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - C_SI
+            - E_SI
+            - M_SUN_IAU_SI
+            - M_SUN_SI
+            - M_U_SI
+        - file: ../core/json-schema.js
+          imports:
+            - schemaProblems
+            - JsonSchema
+        - file: ./types.js
+          imports:
+            - Dimension
+          typeOnly: true
+        - file: ./exact-scale.js
+          imports:
+            - decimalScale
+            - irrationalScale
+            - readScaleExpression
+            - scaleOf
+            - ExactScale
+      exports:
+        - UNIT_DATA
+        - readUnitFile
+      interfaces:
+        - UnitRow
+        - AffineRow
+        - UnitTableData
+      functions:
+        - readUnitFile
+      constants:
+        - UNIT_DATA
     src/dimensional/units.ts:
       description: "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`."
       externalDependencies: []
@@ -13231,27 +13285,21 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ../core/constants.js
-          imports:
-            - C_SI
-            - E_SI
-            - G_SI
-            - GM_SUN_SI
-            - M_SUN_SI
-            - M_U_SI
         - file: ./exact-scale.js
           imports:
             - addScales
             - decimalScale
             - divideScales
-            - irrationalScale
             - multiplyScales
             - powerScale
             - ratioScale
-            - scaleOf
             - scaleToNumber
             - UNIT_SCALE
             - ExactScale
+        - file: ./unit-data.js
+          imports:
+            - UNIT_DATA
+            - AffineRow
       exports:
         - affineReadingNote
         - unitConventionNotes
@@ -14275,9 +14323,12 @@ modules:
           reExport: true
         - file: ./composition/adjudication.js
           imports:
-            - AdjudicationVerdict
-            - CandidateAdjudication
             - AnnotatedCandidate
+          reExport: true
+        - file: ./bridges/catalog-types.js
+          imports:
+            - AdjudicationVerdict
+            - CatalogAdjudication
           reExport: true
         - file: ./composition/consequence.js
           imports:
@@ -14755,9 +14806,9 @@ modules:
         - FieldEquationNode
         - LinkageResult
         - RecoveryOutcome
-        - AdjudicationVerdict
-        - CandidateAdjudication
         - AnnotatedCandidate
+        - AdjudicationVerdict
+        - CatalogAdjudication
         - ConsequenceAnnotatedCandidate
         - ConsequenceSignal
         - ConsequenceEvidence
@@ -15162,9 +15213,9 @@ modules:
         - ADJUDICATIONS
         - adjudicationFor
         - annotateAdjudications
-        - AdjudicationVerdict
-        - CandidateAdjudication
         - AnnotatedCandidate
+        - AdjudicationVerdict
+        - CatalogAdjudication
         - annotateConsequences
         - classifyProposal
         - ConsequenceAnnotatedCandidate
@@ -17023,6 +17074,7 @@ dependencyGraph:
         - src/core/cell.ts
         - src/core/constants.ts
         - src/core/flux-rules.ts
+        - src/core/json-schema.ts
         - src/core/labeled-tensor.ts
         - src/core/regime-registry.ts
         - src/core/regime-rule-install.ts
@@ -17072,6 +17124,7 @@ dependencyGraph:
         - src/dimensional/tensor.ts
         - src/dimensional/types.ts
         - src/dimensional/unit-convention.ts
+        - src/dimensional/unit-data.ts
         - src/dimensional/units.ts
         - src/dimensional/validator-registry.ts
         - src/dimensional/validator.ts
@@ -17131,18 +17184,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 356
+  totalTypeScriptFiles: 358
   totalModules: 13
-  totalLinesOfCode: 77993
-  totalExports: 2457
+  totalLinesOfCode: 78513
+  totalExports: 2458
   totalClasses: 79
-  totalInterfaces: 447
-  totalFunctions: 744
+  totalInterfaces: 450
+  totalFunctions: 748
   totalTypeGuards: 7
   totalEnums: 0
-  totalConstants: 379
-  totalReExports: 1256
-  totalTypeOnlyImports: 503
+  totalConstants: 380
+  totalReExports: 1252
+  totalTypeOnlyImports: 505
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

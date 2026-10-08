@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "totalSourceFiles": 356,
-    "totalTestFiles": 541,
-    "testedCount": 345,
-    "untestedCount": 11,
-    "coveragePercent": "96.9"
+    "totalSourceFiles": 358,
+    "totalTestFiles": 542,
+    "testedCount": 348,
+    "untestedCount": 10,
+    "coveragePercent": "97.2"
   },
   "untestedFiles": [
     "src/cases/quadrature.ts",
@@ -13,7 +13,6 @@
     "src/cli/conventions.ts",
     "src/cli/determination.ts",
     "src/cli/record-reach.ts",
-    "src/cli/record-tables.ts",
     "src/cli/record.ts",
     "src/cli/top-level-help.ts",
     "src/composition/formula-shape.ts",
@@ -189,6 +188,7 @@
     "src/cli/output.ts",
     "src/cli/poster-source.ts",
     "src/cli/published-url.ts",
+    "src/cli/record-tables.ts",
     "src/cli/search-index.ts",
     "src/cli/statuses.ts",
     "src/cli/version.ts",
@@ -269,6 +269,7 @@
     "src/core/cell.ts",
     "src/core/constants.ts",
     "src/core/flux-rules.ts",
+    "src/core/json-schema.ts",
     "src/core/labeled-tensor.ts",
     "src/core/regime-registry.ts",
     "src/core/regime-rule-install.ts",
@@ -314,6 +315,7 @@
     "src/dimensional/tensor.ts",
     "src/dimensional/types.ts",
     "src/dimensional/unit-convention.ts",
+    "src/dimensional/unit-data.ts",
     "src/dimensional/units.ts",
     "src/dimensional/validator-registry.ts",
     "src/dimensional/validator.ts",
@@ -1166,7 +1168,6 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
-      "tests/atlas/association.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -1178,14 +1179,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
-      "tests/composition/adjudication-annotate.test.ts",
-      "tests/composition/adjudication-id.test.ts",
-      "tests/composition/adjudication-registry.test.ts",
-      "tests/composition/discovery-calibration.test.ts",
       "tests/composition/evaluate-relation.test.ts",
-      "tests/composition/one-copy.test.ts",
-      "tests/composition/orphan-connectors.test.ts",
-      "tests/composition/probe/modules.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -4781,7 +4775,9 @@
       "tests/cli/published-citation.test.ts"
     ],
     "src/cli/record-reach.ts": [],
-    "src/cli/record-tables.ts": [],
+    "src/cli/record-tables.ts": [
+      "tests/dimensional/unit-data.test.ts"
+    ],
     "src/cli/record.ts": [],
     "src/cli/search-index.ts": [
       "tests/cli/regime-search.test.ts",
@@ -6587,19 +6583,18 @@
       "tests/composition/identifiability.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
-      "tests/composition/name-table.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
-      "tests/composition/user-equation.test.ts",
       "tests/core/constants-owner.test.ts",
       "tests/core/constants.test.ts",
       "tests/dimensional/bridge-derivation-audit.test.ts",
       "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/dimensional/synonym-groups.test.ts",
+      "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/fixtures/perfect-fluid.test.ts",
@@ -6651,6 +6646,9 @@
       "tests/core/regime-rule-install.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
+    ],
+    "src/core/json-schema.ts": [
+      "tests/dimensional/unit-data.test.ts"
     ],
     "src/core/labeled-tensor.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -7312,7 +7310,8 @@
       "tests/tensor.test.ts"
     ],
     "src/dimensional/exact-scale.ts": [
-      "tests/dimensional/exact-unit-scale.test.ts"
+      "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/unit-data.test.ts"
     ],
     "src/dimensional/field-equation-helpers.ts": [
       "tests/dimensional/field-equation-helpers.test.ts"
@@ -7331,12 +7330,9 @@
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/chain-atlas-pointer.test.ts",
-      "tests/cli/eval-si-prefix-constants.test.ts",
-      "tests/cli/evaluate-dimensionful-units.test.ts",
       "tests/cli/evaluate-uncertainty-name.test.ts",
       "tests/cli/explain-temperature-binding.test.ts",
       "tests/cli/graphs.test.ts",
-      "tests/cli/magnitude-charge-sign.test.ts",
       "tests/cli/map-atlas-results.test.ts",
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/recover-conventions.test.ts",
@@ -7541,7 +7537,8 @@
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/composition/symbolic-constants-extra.test.ts",
-      "tests/dimensional/constant-registry.test.ts"
+      "tests/dimensional/constant-registry.test.ts",
+      "tests/dimensional/unit-data.test.ts"
     ],
     "src/dimensional/tensor-trace.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -7744,6 +7741,9 @@
     "src/dimensional/unit-convention.ts": [
       "tests/composition/retrodiction.test.ts"
     ],
+    "src/dimensional/unit-data.ts": [
+      "tests/dimensional/unit-data.test.ts"
+    ],
     "src/dimensional/units.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
@@ -7766,6 +7766,7 @@
       "tests/composition/evaluate-relation.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
+      "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -8858,6 +8859,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -8907,7 +8909,6 @@
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -8966,6 +8967,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -9015,7 +9017,6 @@
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -9076,6 +9077,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -9125,7 +9127,6 @@
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -9150,7 +9151,6 @@
     "tests/atlas/association.test.ts": [
       "src/atlas/association.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
@@ -10114,6 +10114,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -10160,7 +10161,6 @@
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -10253,6 +10253,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -10290,7 +10291,6 @@
       "src/dimensional/formula-names.ts",
       "src/dimensional/ast-types.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts",
       "src/dimensional/metric.ts"
@@ -10778,6 +10778,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -10881,7 +10882,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
@@ -10980,6 +10980,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -11087,7 +11088,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -11607,8 +11607,7 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
-      "src/core/constants.ts",
-      "src/dimensional/formula-names.ts"
+      "src/core/constants.ts"
     ],
     "tests/cli/eval-temperature-binding.test.ts": [
       "src/cli/main.ts",
@@ -11742,8 +11741,7 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
-      "src/core/constants.ts",
-      "src/dimensional/formula-names.ts"
+      "src/core/constants.ts"
     ],
     "tests/cli/evaluate-repro-built-cli.test.ts": [],
     "tests/cli/evaluate-uncertainty-name.test.ts": [
@@ -12171,6 +12169,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -12278,7 +12277,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -12446,6 +12444,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -12553,7 +12552,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -12812,8 +12810,7 @@
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
       "src/composition/canonical-graph.ts",
-      "src/core/constants.ts",
-      "src/dimensional/formula-names.ts"
+      "src/core/constants.ts"
     ],
     "tests/cli/main-dispatch.test.ts": [
       "src/cli/main.ts",
@@ -12915,6 +12912,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -13022,7 +13020,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -13120,6 +13117,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -13227,7 +13225,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -13912,6 +13909,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -14019,7 +14017,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -14182,6 +14179,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -14289,7 +14287,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -14686,6 +14683,7 @@
       "src/cli/poster-source.ts",
       "src/composition/probe/index.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/atlas/conventions.ts",
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
@@ -14793,7 +14791,6 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
-      "src/bridges/catalog-types.ts",
       "src/relations/conventions.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
@@ -15102,16 +15099,13 @@
     "tests/cli/upt-probe-hardening.test.ts": [],
     "tests/composition/adjudication-annotate.test.ts": [
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/discovery.ts"
     ],
     "tests/composition/adjudication-id.test.ts": [
-      "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts"
+      "src/composition/adjudication.ts"
     ],
     "tests/composition/adjudication-registry.test.ts": [
-      "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts"
+      "src/composition/adjudication.ts"
     ],
     "tests/composition/attribute-audit.test.ts": [
       "src/composition/quantities.ts",
@@ -15440,8 +15434,7 @@
       "src/composition/discovery.ts",
       "src/composition/canonical-graph.ts",
       "src/composition/catalog-graph.ts",
-      "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts"
+      "src/composition/adjudication.ts"
     ],
     "tests/composition/discovery-canonical-kind.test.ts": [
       "src/composition/discovery.ts",
@@ -15577,6 +15570,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -15625,7 +15619,6 @@
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts",
       "src/bridges/catalog-load.ts"
@@ -15790,12 +15783,10 @@
     ],
     "tests/composition/name-table.test.ts": [
       "src/composition/aliases.ts",
-      "src/dimensional/formula-names.ts",
-      "src/core/constants.ts"
+      "src/dimensional/formula-names.ts"
     ],
     "tests/composition/one-copy.test.ts": [
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/bridges/catalog-load.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/not-composable-seeds.ts",
@@ -15806,7 +15797,6 @@
     "tests/composition/orphan-connectors.test.ts": [
       "src/composition/bridge-analysis.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
@@ -15956,7 +15946,6 @@
       "src/composition/catalog-graph.ts",
       "src/composition/canonical-graph.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -16092,7 +16081,6 @@
     "tests/composition/user-equation.test.ts": [
       "src/composition/user-equation.ts",
       "src/dimensional/formula-names.ts",
-      "src/core/constants.ts",
       "src/dimensional/types.ts",
       "src/composition/graph-viz.ts",
       "src/composition/edge.ts",
@@ -16665,8 +16653,8 @@
     ],
     "tests/dimensional/synonym-groups.test.ts": [
       "src/dimensional/formula-names.ts",
-      "src/core/constants.ts",
-      "src/numerical/binding-value.ts"
+      "src/numerical/binding-value.ts",
+      "src/core/constants.ts"
     ],
     "tests/dimensional/tensor-ast-serialization.test.ts": [
       "src/dimensional/validator.ts",
@@ -16728,6 +16716,15 @@
       "src/bridges/evaluator-inputs.ts",
       "src/bridges/evaluators.ts",
       "src/bridges/expr-parse.ts"
+    ],
+    "tests/dimensional/unit-data.test.ts": [
+      "src/cli/record-tables.ts",
+      "src/core/constants.ts",
+      "src/core/json-schema.ts",
+      "src/dimensional/exact-scale.ts",
+      "src/dimensional/unit-data.ts",
+      "src/dimensional/units.ts",
+      "src/dimensional/symbolic-constants.ts"
     ],
     "tests/dimensional/unit-grammar.test.ts": [
       "src/dimensional/algebra.ts",
@@ -16834,6 +16831,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -16883,7 +16881,6 @@
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -17470,6 +17467,7 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -17519,7 +17517,6 @@
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/bridges/rejected.ts",
-      "src/bridges/catalog-types.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
