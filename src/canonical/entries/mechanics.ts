@@ -135,7 +135,7 @@ export const MECHANICS: readonly CanonicalEquation[] = [
   ], {
     id: 'CE-gravitational-potential-energy',
     conventionNote: 'gravitational potential energy is U = −G m1 m2/r. The minus is in the scalar AST; a positive formula differs by the factor −1.',
-    holds: 'mass >= 0 && secondary-mass >= 0 && r > 0',
+    holds: 'mass >= 0 and secondary-mass >= 0 and r > 0',
     name: 'Gravitational potential energy',
     domain: 'mechanics',
     formula_latex: 'U = -G m_1 m_2 / r',
@@ -318,7 +318,7 @@ export const MECHANICS: readonly CanonicalEquation[] = [
       quote: String.raw`\omega = \sqrt{\frac k m}.`,
       locator: "Wikipedia, 'Harmonic oscillator', revision 1373924880, wikitext line 44",
     },
-    holds: 'spring-constant > 0 && mass > 0',
+    holds: 'spring-constant > 0 and mass > 0',
     name: 'Simple-harmonic angular frequency',
     domain: 'mechanics',
     formula_latex: '\\omega = \\sqrt{k/m}',

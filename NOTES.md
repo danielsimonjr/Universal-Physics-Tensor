@@ -9,7 +9,9 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
-## As of 2026-10-07
+## As of 2026-10-08
+
+- **One expression grammar.** Conditions are MathTS syntax; `holds()` compares exactly. MathTS 0.68.0 `config()` is `relTol 1e-12, absTol 1e-15`, so its `1e-18 > 0` is false and `1.6e-19 != 0` is false; the interpreter's comparisons do not use them. `tests/fixtures/oracles/` holds the retired hand parser and interpreter as the equivalence oracles. The two remaining hand tokenizers are `dimensional/dimension-spec.ts` (dimension terms) and `dimensional/units.ts` (unit text); they read grammars MathTS does not. The sentence that four tokenizers read the formula vocabulary is the record from before this change.
 
 - **One catalog notice, 96 formal kinds on entries.** be-65 is the only relation with a `notice`. be-51 and be-52 both refuse inside 10 r_s. The hbar caveat is the registry row's `note`. 95 entries record `formalKind: bridge` and be-28 `property`; 64 entries with a formal key take the covers prefix. The sentence that four notices are strings the CLI switches on, and that the reviewed bridge list is in code, is the record from before this change.
 

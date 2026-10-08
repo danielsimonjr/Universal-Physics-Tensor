@@ -119,7 +119,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-photoelectric',
-      holds: 'planck-constant * photon-frequency >= work-function && work-function >= 0',
+      holds: 'planck-constant * photon-frequency >= work-function and work-function >= 0',
       name: 'Photoelectric equation',
       domain: 'quantum',
       formula_latex: 'K_{\\max} = h f - W',
@@ -142,7 +142,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-carnot-efficiency',
-      holds: 'cold-reservoir-temperature >= 0 && hot-reservoir-temperature > 0 && cold-reservoir-temperature <= hot-reservoir-temperature',
+      holds: 'cold-reservoir-temperature >= 0 and hot-reservoir-temperature > 0 and cold-reservoir-temperature <= hot-reservoir-temperature',
       name: 'Carnot efficiency',
       domain: 'thermodynamics',
       formula_latex: '\\eta = 1 - \\tfrac{T_c}{T_h}',
@@ -233,7 +233,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-compton-shift',
-      holds: 'scattering-angle >= 0 && scattering-angle <= pi',
+      holds: 'scattering-angle >= 0 and scattering-angle <= pi',
       name: 'Compton shift',
       domain: 'quantum',
       formula_latex: '\\Delta\\lambda = \\tfrac{h}{m_e c}(1 - \\cos\\theta)',
@@ -264,7 +264,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-rydberg-formula',
-      holds: 'integer(lower-level-n) && integer(upper-level-n) && lower-level-n >= 1 && upper-level-n > lower-level-n',
+      holds: 'isInteger(lower-level-n) and isInteger(upper-level-n) and lower-level-n >= 1 and upper-level-n > lower-level-n',
       name: 'Rydberg formula',
       domain: 'quantum',
       formula_latex: '\\tfrac{1}{\\lambda} = R\\left(\\tfrac{1}{n_1^2} - \\tfrac{1}{n_2^2}\\right)',
@@ -292,7 +292,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-snell-law',
-      holds: 'incident-index > 0 && angle-of-incidence >= 0 && angle-of-incidence <= pi / 2 && angle-of-refraction > 0 && angle-of-refraction <= pi / 2',
+      holds: 'incident-index > 0 and angle-of-incidence >= 0 and angle-of-incidence <= pi / 2 and angle-of-refraction > 0 and angle-of-refraction <= pi / 2',
       name: "Snell's law",
       domain: 'electromagnetism', // optics
       formula_latex: 'n_2 = n_1 \\sin\\theta_1 / \\sin\\theta_2', // solved for n2

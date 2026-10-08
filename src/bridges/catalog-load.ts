@@ -60,10 +60,10 @@ function deriveDomains(file: CatalogFile): CatalogFile {
       if (clause !== undefined && !relation.holds.includes(clause)) clauses.push(clause);
     }
     if (clauses.length === 0) return relation;
-    const stated = relation.holds.trim() === 'true' ? '' : `${relation.holds} && `;
+    const stated = relation.holds.trim() === 'true' ? '' : `${relation.holds} and `;
     return {
       ...relation,
-      holds: `${stated}${clauses.join(' && ')}`,
+      holds: `${stated}${clauses.join(' and ')}`,
       domain: relation.domain === '' ? clauses.join(', ') : `${relation.domain}; ${clauses.join(', ')}`,
     };
   });

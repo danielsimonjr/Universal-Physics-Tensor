@@ -185,7 +185,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'V', dim: VOLUME },
   ], {
     id: 'CE-ideal-gas',
-    holds: 'temperature > 0 && V > 0 && N >= 0',
+    holds: 'temperature > 0 and V > 0 and N >= 0',
     name: 'Ideal gas law',
     domain: 'thermodynamics',
     formula_latex: 'P = N k_B T/V',
@@ -261,7 +261,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'specific-heat-capacity', dim: SPECIFIC_HEAT },
   ], {
     id: 'CE-thermal-diffusivity',
-    holds: 'thermal-conductivity > 0 && density > 0 && specific-heat-capacity > 0',
+    holds: 'thermal-conductivity > 0 and density > 0 and specific-heat-capacity > 0',
     name: 'Thermal diffusivity',
     domain: 'thermodynamics',
     formula_latex: '\\alpha = k/(\\rho c_p)',

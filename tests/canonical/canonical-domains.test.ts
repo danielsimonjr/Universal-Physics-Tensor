@@ -137,7 +137,7 @@ describe('explain says why there is no recovered value', () => {
     const { CANONICAL_GRAPH } = await import('../../src/composition/canonical-graph.js');
     const bad = explainQuantity(CANONICAL_GRAPH, 'sound-speed', { pressure: 101325, density: -1.204, gamma: 1.4 });
     expect(bad.recoveredValue).toBeUndefined();
-    expect(bad.summary).toMatch(/validity domain \(pressure >= 0 && density > 0\)/);
+    expect(bad.summary).toMatch(/validity domain \(pressure >= 0 and density > 0\)/);
     const good = explainQuantity(CANONICAL_GRAPH, 'sound-speed', { pressure: 101325, density: 1.204, gamma: 1.4 });
     expect(good.recoveredValue).toBeGreaterThan(300);
     expect(good.summary).not.toMatch(/validity domain/);

@@ -171,7 +171,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-friedmann-curvature',
-      holds: 'rho >= 0 && scale-factor > 0 && 8 * pi * G * rho / 3 - curvature-k * c ^ 2 / scale-factor ^ 2 >= 0',
+      holds: 'rho >= 0 and scale-factor > 0 and 8 * pi * G * rho / 3 - curvature-k * c ^ 2 / scale-factor ^ 2 >= 0',
       name: 'Friedmann equation (with curvature)',
       domain: 'cosmology',
       formula_latex: 'H^2 = 8\\pi G \\rho/3 - k c^2/a^2',
@@ -338,7 +338,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-newton-gravitation',
-      holds: 'mass >= 0 && secondary-mass >= 0 && r > 0',
+      holds: 'mass >= 0 and secondary-mass >= 0 and r > 0',
       name: "Newton's law of gravitation",
       domain: 'gravitation',
       formula_latex: 'F = G m_1 m_2/r^2',
