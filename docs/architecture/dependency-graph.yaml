@@ -3361,6 +3361,9 @@ modules:
         - file: ../dimensional/bridge-check.js
           imports:
             - EXPECTED_DIMENSION_BY_BRIDGE
+        - file: ./catalog-load.js
+          imports:
+            - catalogEntries
         - file: ../dimensional/algebra.js
           imports:
             - format
@@ -3464,6 +3467,7 @@ modules:
         - CatalogEvaluator
         - CatalogConfrontation
         - CatalogFile
+        - CatalogAdjudication
     src/bridges/coefficient-statement.ts:
       description: Sign of the one-loop coefficient, read from the catalog expression.
       externalDependencies: []
@@ -7841,14 +7845,29 @@ modules:
           imports:
             - VettedCandidate
           typeOnly: true
+        - file: ../bridges/catalog-load.js
+          imports:
+            - bridgeCatalog
+        - file: ../bridges/catalog-types.js
+          imports:
+            - CatalogAdjudication
+          typeOnly: true
+        - file: ../bridges/catalog-types.js
+          imports:
+            - AdjudicationVerdict
+            - CatalogAdjudication
+          reExport: true
       exports:
         - ADJUDICATIONS
         - candidateId
         - candidateIdIfSlug
         - adjudicationFor
         - annotateAdjudications
-      interfaces:
-        - CandidateAdjudication
+        - AdjudicationVerdict
+        - CatalogAdjudication
+      reExported:
+        - AdjudicationVerdict
+        - CatalogAdjudication
       functions:
         - candidateId
         - candidateIdIfSlug
@@ -12874,7 +12893,6 @@ modules:
             - THOMSON_CROSS_SECTION_SI
       exports:
         - CONSTANT_REGISTRY
-        - CONSTANT_AGREEMENT
         - CONSTANTS
         - CONSTANT_PROVENANCE
         - constantRecord
@@ -12897,7 +12915,6 @@ modules:
         - piMultipleValue
       constants:
         - CONSTANT_REGISTRY
-        - CONSTANT_AGREEMENT
         - CONSTANTS
         - CONSTANT_PROVENANCE
     src/dimensional/tensor-trace.ts:
@@ -15382,7 +15399,6 @@ modules:
       nodeDependencies: []
       internalDependencies: []
       exports:
-        - NONLINEAR_FRACTION
         - propagateEvaluatorUncertainty
         - correlationIsPositiveSemidefinite
       interfaces:
@@ -15391,8 +15407,6 @@ modules:
       functions:
         - propagateEvaluatorUncertainty
         - correlationIsPositiveSemidefinite
-      constants:
-        - NONLINEAR_FRACTION
     src/numerical/formula-contract.ts:
       description: Scalar-formula contract shared by the MathTS parser.
       externalDependencies: []
@@ -16894,17 +16908,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 353
   totalModules: 13
-  totalLinesOfCode: 77412
+  totalLinesOfCode: 77350
   totalExports: 2409
   totalClasses: 69
   totalInterfaces: 440
   totalFunctions: 732
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 380
-  totalReExports: 1229
-  totalTypeOnlyImports: 502
+  totalConstants: 378
+  totalReExports: 1231
+  totalTypeOnlyImports: 503
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  unusedFilesCount: 1
-  unusedExportsCount: 82
+  unusedFilesCount: 0
+  unusedExportsCount: 80

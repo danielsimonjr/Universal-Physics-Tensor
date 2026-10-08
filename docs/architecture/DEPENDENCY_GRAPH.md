@@ -1363,6 +1363,7 @@ The codebase is organized into the following modules:
 | `../core/tensor.js` | `UniversalTensor` | Import (type-only) |
 | `../core/flux-rules.js` | `FluxDiagnostic, FluxReport` | Import (type-only) |
 | `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
+| `./catalog-load.js` | `catalogEntries` | Import |
 | `../dimensional/algebra.js` | `format` | Import |
 | `../core/types.js` | `PhysicalScale, TensorIndices` | Import (type-only) |
 
@@ -3260,11 +3261,14 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./discovery.js` | `VettedCandidate` | Import (type-only) |
+| `../bridges/catalog-load.js` | `bridgeCatalog` | Import |
+| `../bridges/catalog-types.js` | `CatalogAdjudication` | Import (type-only) |
+| `../bridges/catalog-types.js` | `AdjudicationVerdict, CatalogAdjudication` | Re-export |
 
 **Exports:**
-- Interfaces: `CandidateAdjudication`
 - Functions: `candidateId`, `candidateIdIfSlug`, `adjudicationFor`, `annotateAdjudications`
 - Constants: `ADJUDICATIONS`
+- Re-exports: `AdjudicationVerdict`, `CatalogAdjudication`
 
 ---
 
@@ -5391,7 +5395,7 @@ The codebase is organized into the following modules:
 - Classes: `ConstantDisagreementError`
 - Interfaces: `ConstantRecord`, `NamedConstantValue`, `ConstantProvenance`
 - Functions: `constantRecord`, `constantAgreement`, `constantNotes`, `constantScope`, `piMultipleValue`
-- Constants: `CONSTANT_REGISTRY`, `CONSTANT_AGREEMENT`, `CONSTANTS`, `CONSTANT_PROVENANCE`
+- Constants: `CONSTANT_REGISTRY`, `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -5984,7 +5988,6 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `UncertaintyContribution`, `PropagatedOutput`
 - Functions: `propagateEvaluatorUncertainty`, `correlationIsPositiveSemidefinite`
-- Constants: `NONLINEAR_FRACTION`
 
 ---
 
@@ -6733,6 +6736,7 @@ graph TD
     N8 --> N38
     N8 --> N40
     N8 --> N49
+    N8 --> N9
     N8 --> N46
     N9 --> N10
     N12 --> N50
@@ -6756,7 +6760,6 @@ graph TD
     N21 --> N39
     N21 --> N9
     N22 --> N39
-    N26 --> N24
 ```
 
 ---
@@ -6767,15 +6770,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 353 |
 | Total Modules | 13 |
-| Total Lines of Code | 77412 |
+| Total Lines of Code | 77350 |
 | Total Exports | 2409 |
-| Total Re-exports | 1229 |
+| Total Re-exports | 1231 |
 | Total Classes | 69 |
 | Total Interfaces | 440 |
 | Total Functions | 732 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 502 |
+| Type-only Imports | 503 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

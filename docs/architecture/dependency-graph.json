@@ -4785,6 +4785,12 @@
             ]
           },
           {
+            "file": "./catalog-load.js",
+            "imports": [
+              "catalogEntries"
+            ]
+          },
+          {
             "file": "../dimensional/algebra.js",
             "imports": [
               "format"
@@ -4925,7 +4931,8 @@
           "CatalogEvaluatorOutput",
           "CatalogEvaluator",
           "CatalogConfrontation",
-          "CatalogFile"
+          "CatalogFile",
+          "CatalogAdjudication"
         ]
       },
       "src/bridges/coefficient-statement.ts": {
@@ -11520,6 +11527,27 @@
               "VettedCandidate"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../bridges/catalog-load.js",
+            "imports": [
+              "bridgeCatalog"
+            ]
+          },
+          {
+            "file": "../bridges/catalog-types.js",
+            "imports": [
+              "CatalogAdjudication"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../bridges/catalog-types.js",
+            "imports": [
+              "AdjudicationVerdict",
+              "CatalogAdjudication"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -11527,10 +11555,13 @@
           "candidateId",
           "candidateIdIfSlug",
           "adjudicationFor",
-          "annotateAdjudications"
+          "annotateAdjudications",
+          "AdjudicationVerdict",
+          "CatalogAdjudication"
         ],
-        "interfaces": [
-          "CandidateAdjudication"
+        "reExported": [
+          "AdjudicationVerdict",
+          "CatalogAdjudication"
         ],
         "functions": [
           "candidateId",
@@ -18946,7 +18977,6 @@
         ],
         "exports": [
           "CONSTANT_REGISTRY",
-          "CONSTANT_AGREEMENT",
           "CONSTANTS",
           "CONSTANT_PROVENANCE",
           "constantRecord",
@@ -18973,7 +19003,6 @@
         ],
         "constants": [
           "CONSTANT_REGISTRY",
-          "CONSTANT_AGREEMENT",
           "CONSTANTS",
           "CONSTANT_PROVENANCE"
         ]
@@ -22248,7 +22277,6 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
-          "NONLINEAR_FRACTION",
           "propagateEvaluatorUncertainty",
           "correlationIsPositiveSemidefinite"
         ],
@@ -22259,9 +22287,6 @@
         "functions": [
           "propagateEvaluatorUncertainty",
           "correlationIsPositiveSemidefinite"
-        ],
-        "constants": [
-          "NONLINEAR_FRACTION"
         ]
       },
       "src/numerical/formula-contract.ts": {
@@ -24373,19 +24398,19 @@
   "statistics": {
     "totalTypeScriptFiles": 353,
     "totalModules": 13,
-    "totalLinesOfCode": 77412,
+    "totalLinesOfCode": 77350,
     "totalExports": 2409,
     "totalClasses": 69,
     "totalInterfaces": 440,
     "totalFunctions": 732,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 380,
-    "totalReExports": 1229,
-    "totalTypeOnlyImports": 502,
+    "totalConstants": 378,
+    "totalReExports": 1231,
+    "totalTypeOnlyImports": 503,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "unusedFilesCount": 1,
-    "unusedExportsCount": 82
+    "unusedFilesCount": 0,
+    "unusedExportsCount": 80
   }
 }
