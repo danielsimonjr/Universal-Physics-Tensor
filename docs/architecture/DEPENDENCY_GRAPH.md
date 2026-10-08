@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 8.0.0
+**Version**: 9.0.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -3746,8 +3746,8 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `format` | Import |
 
 **Exports:**
-- Interfaces: `VettedCandidate`, `DiscoveryOptions`
-- Functions: `vetLinkCandidate`, `rankDiscoveries`
+- Interfaces: `VettedCandidate`, `DiscoveryOptions`, `DiscoveryContext`
+- Functions: `buildDiscoveryContext`, `vetLinkCandidate`, `vetInContext`, `rankDiscoveries`
 - Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`
 
 ---
@@ -6881,12 +6881,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 360 |
 | Total Modules | 13 |
-| Total Lines of Code | 79789 |
-| Total Exports | 2472 |
+| Total Lines of Code | 79791 |
+| Total Exports | 2474 |
 | Total Re-exports | 1252 |
 | Total Classes | 79 |
-| Total Interfaces | 451 |
-| Total Functions | 759 |
+| Total Interfaces | 452 |
+| Total Functions | 761 |
 | Total Type Guards | 7 |
 | Total Enums | 0 |
 | Type-only Imports | 506 |
@@ -6895,4 +6895,4 @@ graph TD
 
 ---
 
-*Version*: 8.0.0
+*Version*: 9.0.0

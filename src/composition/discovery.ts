@@ -314,11 +314,13 @@ function nameSubsumes(a: string, b: string): boolean {
  * candidate. Computed once by `buildDiscoveryContext` and shared across every
  * candidate so `rankDiscoveries` does loop-invariant work once instead of N
  * times. Holds read-only structures — `vetInContext` never mutates them, so
- * sharing is safe (pinned by the equivalence-guard test).
+ * sharing is safe. `tests/composition/discovery.test.ts` pins that directly:
+ * two builds are equal, and vetting every candidate leaves the context equal
+ * to a snapshot taken before.
  *
  * @internal
  */
-interface DiscoveryContext {
+export interface DiscoveryContext {
   readonly baseIdents: readonly QuantityIdentification[];
   readonly groundTruth: Readonly<Record<string, number>>;
   /** `Object.keys(groundTruth)` — the anchor known-set names. */
@@ -347,7 +349,7 @@ interface DiscoveryContext {
 
 /** Resolve options and compute the candidate-invariant discovery state once.
  *  @internal */
-function buildDiscoveryContext(
+export function buildDiscoveryContext(
   edges: readonly BridgeEdge[],
   opts: DiscoveryOptions,
 ): DiscoveryContext {
@@ -404,7 +406,7 @@ export function vetLinkCandidate(
  *
  * @internal
  */
-function vetInContext(
+export function vetInContext(
   edges: readonly BridgeEdge[],
   candidate: LinkCandidate,
   ctx: DiscoveryContext,

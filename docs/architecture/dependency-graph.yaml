@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
-  version: 8.0.0
+  version: 9.0.0
   totalFiles: 360
   totalModules: 13
-  totalExports: 2472
+  totalExports: 2474
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8879,13 +8879,18 @@ modules:
       exports:
         - REGISTRY_ATTRIBUTES_BY_NAME
         - ANCHOR_DEFAULT
+        - buildDiscoveryContext
         - vetLinkCandidate
+        - vetInContext
         - rankDiscoveries
       interfaces:
         - VettedCandidate
         - DiscoveryOptions
+        - DiscoveryContext
       functions:
+        - buildDiscoveryContext
         - vetLinkCandidate
+        - vetInContext
         - rankDiscoveries
       constants:
         - REGISTRY_ATTRIBUTES_BY_NAME
@@ -17226,11 +17231,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 360
   totalModules: 13
-  totalLinesOfCode: 79789
-  totalExports: 2472
+  totalLinesOfCode: 79791
+  totalExports: 2474
   totalClasses: 79
-  totalInterfaces: 451
-  totalFunctions: 759
+  totalInterfaces: 452
+  totalFunctions: 761
   totalTypeGuards: 7
   totalEnums: 0
   totalConstants: 383

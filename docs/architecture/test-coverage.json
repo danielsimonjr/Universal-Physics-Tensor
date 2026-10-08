@@ -15697,6 +15697,8 @@
     ],
     "tests/composition/discovery.test.ts": [
       "src/composition/discovery.ts",
+      "src/composition/identifiability.ts",
+      "src/composition/retrodiction.ts",
       "src/composition/bridge-analysis.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
@@ -15709,8 +15711,6 @@
       "src/composition/canonical-graph.ts",
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
-      "src/composition/identifiability.ts",
-      "src/composition/retrodiction.ts",
       "src/composition/explain.ts",
       "src/composition/evaluate-relation.ts",
       "src/composition/compose-symbolic.ts",
