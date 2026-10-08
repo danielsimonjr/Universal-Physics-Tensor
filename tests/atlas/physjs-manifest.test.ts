@@ -17,8 +17,11 @@ import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evi
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { catalogEntries } from '../../src/bridges/catalog-load.js';
+import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 import {
   PHYSJS_COMMIT,
+  physjsAheadOfCatalog,
   physjsFormalRef,
   physjsManifestProblems,
   physjsNestedStatements,
@@ -34,44 +37,50 @@ const carriers = [
 ];
 
 /**
- * The reviewed manifest, pinned as one hash of its `[key, theorem, covers]`
- * rows in file order. A swapped theorem or key, a reworded covers line, or an
- * added or dropped entry changes it. The failure message prints the current
+ * The reviewed manifest, pinned as one hash of its `[key, theorem, kind, covers]`
+ * rows in file order. A swapped theorem or key, a changed kind, a reworded
+ * covers line, or an added or dropped entry changes it. The failure message prints the current
  * hash: update the pin only after reading the manifest diff. The sentence
  * that this file held every row as a literal is the record from before this
  * pin.
  */
-const REVIEWED_ROWS_SHA256 = '047029aef67cc1b92a805c4f7643d98d98e0d99755910b071db1f3c5b2be1d91';
+const REVIEWED_ROWS_SHA256 = '2bc29b3bb63f125364186f66d3f430292b2cdb88e78447dc4187287a66731e92';
 
-const rowsOf = (entries: readonly { key: string; theorem: string; covers: string }[]): string[][] =>
-  entries.map((entry) => [entry.key, entry.theorem, entry.covers]);
+const rowsOf = (entries: readonly { key: string; theorem: string; kind: string; covers: string }[]): string[][] =>
+  entries.map((entry) => [entry.key, entry.theorem, entry.kind, entry.covers]);
 const sha256 = (rows: readonly (readonly string[])[]): string =>
   createHash('sha256').update(JSON.stringify(rows)).digest('hex');
 
 /** Rows whose covers text carries a reviewed caveat: what the theorem is NOT. Each is a sentinel the hash alone would not name. */
-const SENTINELS: readonly (readonly [string, string, RegExp])[] = [
-  ['ab-pendulum-linear', 'PhysJS.Pendulum.linearizedEquationOfMotion_iff', /^the transformation, not bound\.delta$/],
-  ['ab-kg-oscillator', 'PhysJS.KgOscillator.uniform_solves_equationOfMotion', /^the restriction, in Physlib's own terms$/],
-  ['ab-spring-lc', 'PhysJS.SpringLc.time_rescale_equationOfMotion', /^the oscillator dictionary$/],
-  ['ab-damped-rlc', 'PhysJS.DampedRlc.time_rescale_equationOfMotion', /^the oscillator dictionary$/],
-  ['ab-wave-dalembert', 'PhysJS.WaveDalembert.solution_eq_profiles', /^the missing direction of d'Alembert's formula$/],
-  ['be-16', 'PhysJS.Landauer.erasure_eq', /^derivation-step: .*Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation$/],
-  ['be-28', 'PhysJS.EntropyProduction.nonneg', /^derivation-step: .*Not the variational maximum-entropy-production principle\./],
-  ['be-29', 'PhysJS.Jarzynski.jensen_work', /^property: .*Not Jarzynski's theorem/],
-  ['be-33', 'PhysJS.QuantumCritical.thermal_scaling', /^derivation-step: .*Not Hertz–Millis theory/],
-  ['be-42', 'PhysJS.HawkingUnruh.dictionary', /^cross-check: .*Not the Hawking effect$/],
-  ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', /^derivation-step: .*The id is contested\./],
-  ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', /^derivation-step: .*Not a derivation from the five-dimensional Einstein equation$/],
-  ['be-60', 'PhysJS.Laughlin.filling_fraction', /^derivation-step: .*Not the Laughlin wavefunction, and not the anyon charge e\/3$/],
+const SENTINELS: readonly (readonly [string, string, string, RegExp])[] = [
+  ['ab-pendulum-linear', 'PhysJS.Pendulum.linearizedEquationOfMotion_iff', 'bridge', /^the transformation, not bound\.delta$/],
+  ['ab-kg-oscillator', 'PhysJS.KgOscillator.uniform_solves_equationOfMotion', 'bridge', /^the restriction, in Physlib's own terms$/],
+  ['ab-spring-lc', 'PhysJS.SpringLc.time_rescale_equationOfMotion', 'bridge', /^the oscillator dictionary$/],
+  ['ab-damped-rlc', 'PhysJS.DampedRlc.time_rescale_equationOfMotion', 'bridge', /^the oscillator dictionary$/],
+  ['ab-wave-dalembert', 'PhysJS.WaveDalembert.solution_eq_profiles', 'bridge', /^the missing direction of d'Alembert's formula$/],
+  ['be-16', 'PhysJS.Landauer.erasure_eq', 'bridge', /Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation$/],
+  ['be-28', 'PhysJS.EntropyProduction.nonneg', 'property', /Not the variational maximum-entropy-production principle\./],
+  ['be-29', 'PhysJS.Jarzynski.jensen_work', 'property', /Not Jarzynski's theorem/],
+  ['be-33', 'PhysJS.QuantumCritical.thermal_scaling', 'bridge', /Not Hertz–Millis theory/],
+  ['be-42', 'PhysJS.HawkingUnruh.dictionary', 'cross-check', /Not the Hawking effect$/],
+  ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', 'bridge', /The id is contested\./],
+  ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', 'bridge', /Not a derivation from the five-dimensional Einstein equation$/],
+  ['be-60', 'PhysJS.Laughlin.filling_fraction', 'bridge', /Not the Laughlin wavefunction, and not the anyon charge e\/3$/],
 ];
 
-const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
-  ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.planeWave_iff_dispersion'],
-  ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.planeWave_iff_dispersion'],
-  ['ab-stiff-string', 'PhysJS.StiffString.planeWave_iff_dispersion'],
-  ['ab-telegraph-diffusion', 'PhysJS.TelegraphDiffusion.planeWave_iff_dispersion'],
-  ['ab-telegraph-wave', 'PhysJS.TelegraphWave.planeWave_iff_dispersion'],
-];
+/** A covers line that opens with a kind word, which the v2 manifest does not write. */
+const KIND_PREFIX = new RegExp(`^(${FORMAL_REF_KINDS.join('|')}): `);
+
+/** The kinds that are counted: a step toward the equation, not the equation. */
+const COUNTED_KINDS: readonly string[] = ['reduction', 'limit', 'derivation-step'];
+
+/** Every nested statement in the manifest, with its entry. */
+const nestedRows = manifest.entries.flatMap((entry) =>
+  physjsNestedStatements(entry).nested.map((statement) => ({ entry, statement })),
+);
+
+/** The rank-1 entries: atlas keys whose reviewed theorem is `covers_bound_delta`. */
+const RANK1_KEYS = manifest.entries.filter((entry) => entry.theorem.endsWith('.covers_bound_delta')).map((entry) => entry.key);
 
 const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispersion relation';
 
@@ -96,17 +105,23 @@ describe('vendored PhysJS manifest', () => {
   });
 
   it('each reviewed sentinel row names its theorem and keeps its caveat', () => {
-    for (const [key, theorem, covers] of SENTINELS) {
+    for (const [key, theorem, kind, covers] of SENTINELS) {
       const entry = manifest.entries.find((candidate) => candidate.key === key);
       expect(entry, key).toBeDefined();
       expect(entry!.theorem, key).toBe(theorem);
+      expect(entry!.kind, key).toBe(kind);
       expect(entry!.covers, key).toMatch(covers);
+      expect(entry!.covers, key).not.toMatch(KIND_PREFIX);
     }
   });
 
-  it('every manifest entry resolves to a bridge whose formalRef is that entry', () => {
+  it('every manifest entry resolves to a bridge whose formalRef is that entry, or is ahead of the catalog', () => {
     expect(physjsManifestProblems({ manifest, bridges: carriers })).toEqual([]);
     for (const entry of manifest.entries) {
+      if (physjsAheadOfCatalog(entry.key)) {
+        expect(carriers.find((candidate) => candidate.id === entry.key), entry.key).toBeUndefined();
+        continue;
+      }
       const bridge = carriers.find((candidate) => candidate.id === entry.key);
       expect(bridge, entry.key).toBeDefined();
       expect(entry.bridgeId).toBe(entry.key);
@@ -116,10 +131,8 @@ describe('vendored PhysJS manifest', () => {
       expect(bridge!.formalRef?.covers).toContain(COVERAGE);
       expect(bridge!.formalRef?.version).toContain(`physjs@${manifest.commit}`);
       expect(bridge!.formalRef?.fidelity).not.toBe('unreviewed');
-      const kind = entry.covers.split(':')[0];
-      if (entry.key.startsWith('be-')) {
-        expect(['reduction', 'limit', 'derivation-step', 'property', 'cross-check']).toContain(kind);
-      }
+      expect(FORMAL_REF_KINDS, entry.key).toContain(entry.kind);
+      expect(bridge!.formalRef?.kind, entry.key).toBe(entry.kind);
     }
   });
 
@@ -131,18 +144,10 @@ describe('vendored PhysJS manifest', () => {
 
   it('ten reviewed formalRefs derive formally-proved, and none of them stores the tag', () => {
     const reviewed = atlasBridges.filter((bridge) => bridge.formalRef !== undefined && bridge.formalRef.fidelity !== 'unreviewed');
-    expect(reviewed.map((bridge) => bridge.id)).toEqual([
-      'ab-spring-lc',
-      'ab-damped-rlc',
-      'ab-pendulum-linear',
-      'ab-telegraph-diffusion',
-      'ab-telegraph-wave',
-      'ab-wave-dalembert',
-      'ab-klein-gordon-wave',
-      'ab-kg-schrodinger',
-      'ab-kg-oscillator',
-      'ab-stiff-string',
-    ]);
+    expect(reviewed).toHaveLength(10);
+    expect(reviewed.map((bridge) => bridge.id).sort()).toEqual(
+      manifest.entries.filter((entry) => atlasBridges.some((bridge) => bridge.id === entry.key)).map((entry) => entry.key).sort(),
+    );
     for (const bridge of reviewed) {
       expect(deriveEvidence(bridge, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
       expect(bridge.evidence.has('formally-proved')).toBe(false);
@@ -171,6 +176,31 @@ describe('vendored PhysJS manifest', () => {
       /'ab-no-such-bridge' does not resolve to a bridge/,
     );
 
+    // A catalog id the catalog has is not ahead of it: dropping its bridge is a problem.
+    const catalogued = carriers.filter((bridge) => bridge.id !== 'be-16');
+    expect(physjsManifestProblems({ manifest, bridges: catalogued }).join('\n')).toMatch(/'be-16' does not resolve to a bridge/);
+    // A key with no bridge is ahead of the catalog only in the unbroken run
+    // right after the catalog's highest id. The next id after that run is
+    // ahead and not a problem; a missing id inside the catalog's range, and an
+    // id past a gap (a typo with an extra digit), are problems.
+    const ids = new Set(catalogEntries().map((entry) => entry.id));
+    const highest = Math.max(...ids);
+    const manifestIds = new Set(manifest.entries.map((entry) => entry.key));
+    let next = highest + 1;
+    while (manifestIds.has(`be-${next}`)) next++;
+    const gap = Array.from({ length: highest }, (_, i) => i + 1).find((id) => !ids.has(id) && !manifestIds.has(`be-${id}`))!;
+    expect(gap).toBeDefined();
+    const template = manifest.entries.find((entry) => entry.key === 'be-16')!;
+    const withKey = (id: number) => ({ ...manifest, entries: [...manifest.entries, { ...template, key: `be-${id}`, bridgeId: `be-${id}` }] });
+    const keysOf = (m: PhysjsManifestFile) => m.entries.map((entry) => entry.key);
+    expect(physjsAheadOfCatalog(`be-${next}`, keysOf(withKey(next)))).toBe(true);
+    expect(physjsManifestProblems({ manifest: withKey(next), bridges: carriers }).join('\n')).not.toMatch(new RegExp(`'be-${next}'`));
+    expect(physjsAheadOfCatalog(`be-${gap}`, keysOf(withKey(gap)))).toBe(false);
+    expect(physjsManifestProblems({ manifest: withKey(gap), bridges: carriers }).join('\n')).toMatch(new RegExp(`'be-${gap}' does not resolve to a bridge`));
+    const typo = next * 10;
+    expect(physjsAheadOfCatalog(`be-${typo}`, keysOf(withKey(typo)))).toBe(false);
+    expect(physjsManifestProblems({ manifest: withKey(typo), bridges: carriers }).join('\n')).toMatch(new RegExp(`'be-${typo}' does not resolve to a bridge`));
+
     const wrongCoverage = {
       ...manifest,
       entries: manifest.entries.map((entry) => ({ ...entry, coverage: 'covers the whole bridge' })),
@@ -181,10 +211,13 @@ describe('vendored PhysJS manifest', () => {
   it('carries nested planeWave objects on the five rank-1 entries and does not promote them', () => {
     const planeWave = (entry: PhysjsManifestFile['entries'][number] | undefined) =>
       entry === undefined ? undefined : physjsNestedStatements(entry).nested.find((statement) => statement.name === 'planeWave');
-    expect(manifest.entries.filter((entry) => planeWave(entry) !== undefined)).toHaveLength(RANK1_PLANE_WAVE.length);
-    for (const [key, theorem] of RANK1_PLANE_WAVE) {
+    expect(RANK1_KEYS).toHaveLength(5);
+    expect(manifest.entries.filter((entry) => planeWave(entry) !== undefined).map((entry) => entry.key)).toEqual(RANK1_KEYS);
+    for (const key of RANK1_KEYS) {
       const entry = manifest.entries.find((candidate) => candidate.key === key);
+      const theorem = entry!.theorem.replace(/covers_bound_delta$/, 'planeWave_iff_dispersion');
       expect(planeWave(entry)?.theorem).toBe(theorem);
+      expect(planeWave(entry)?.kind).toBe('derivation-step');
       expect(planeWave(entry)?.covers).toBe(PLANE_WAVE_COVERS);
       expect(planeWave(entry)?.coverage).toBe(COVERAGE);
       expect(entry?.theorem.endsWith('covers_bound_delta')).toBe(true);
@@ -193,7 +226,9 @@ describe('vendored PhysJS manifest', () => {
       expect(bridge?.formalRef?.statement).not.toBe(theorem);
       expect(bridge?.formalRef?.covers).toContain('bound.delta exactly, at the dispersion relation');
     }
-    for (const key of ['ab-pendulum-linear', 'ab-kg-oscillator', 'ab-spring-lc', 'ab-damped-rlc', 'ab-wave-dalembert']) {
+    const otherAtlas = atlasBridges.map((bridge) => bridge.id).filter((id) => manifest.entries.some((entry) => entry.key === id) && !RANK1_KEYS.includes(id));
+    expect(otherAtlas).toHaveLength(5);
+    for (const key of otherAtlas) {
       expect(manifest.entries.find((entry) => entry.key === key)?.planeWave).toBeUndefined();
     }
   });
@@ -228,7 +263,7 @@ describe('vendored PhysJS manifest', () => {
 
   it('reads a nested statement by its shape, not from a list of names', () => {
     const entry = manifest.entries.find((candidate) => candidate.key === 'be-13')!;
-    const statement = { theorem: 'PhysJS.Einstein.trace_eq', covers: entry.covers, coverage: COVERAGE, leanProof: 'complete', axioms: entry.axioms };
+    const statement = { theorem: 'PhysJS.Einstein.trace_eq', kind: entry.kind, covers: entry.covers, coverage: COVERAGE, leanProof: 'complete', axioms: entry.axioms };
     expect(physjsNestedStatements({ ...entry, aNameNoListHolds: statement }).problems).toEqual([]);
     expect(physjsNestedStatements({ ...entry, aNameNoListHolds: statement }).nested.map((n) => n.name)).toContain('aNameNoListHolds');
     expect(physjsNestedStatements({ ...entry, notAStatement: { theorem: 'x' } }).problems).toEqual([
@@ -244,32 +279,32 @@ describe('vendored PhysJS manifest', () => {
     );
   });
 
-  it('records the milestone 2b nested statements and does not promote them', () => {
-    const nested: readonly (readonly [string, string, string])[] = [
-      ['be-53', 'oneLoop', 'PhysJS.YangMills.alphaRun_hasDerivAt'],
-      ['be-38', 'inversion', 'PhysJS.Mond.mu_inversion'],
-      ['be-13', 'vacuum', 'PhysJS.Einstein.vacuum_density'],
-      ['be-13', 'corollary', 'PhysJS.Einstein.friedmann_corollary'],
-      ['be-54', 'friedmann', 'PhysJS.RandallSundrum.flat_friedmann'],
-      ['be-15', 'lengthMonomial', 'PhysJS.Coarsening.length_monomial_at'],
-      ['be-17', 'torsionMonomial', 'PhysJS.EinsteinCartan.torsion_monomial'],
-      ['be-17', 'coefficientNotFixed', 'PhysJS.EinsteinCartan.coefficient_not_fixed'],
-      ['be-17', 'unitCoefficient', 'PhysJS.EinsteinCartan.inversion_of_unit_coefficient'],
-      ['be-33', 'scalingShape', 'PhysJS.QuantumCritical.scaling_shape'],
-      ['be-33', 'everyPower', 'PhysJS.QuantumCritical.every_power_homogeneous'],
-    ];
-    for (const [key, field, theorem] of nested) {
-      const entry = manifest.entries.find((candidate) => candidate.key === key) as
-        | (PhysjsManifestFile['entries'][number] & Record<string, { theorem?: string; covers?: string } | undefined>)
-        | undefined;
-      expect(entry?.[field]?.theorem).toBe(theorem);
-      expect(entry?.[field]?.covers?.split(':')[0]).toMatch(/^(reduction|limit|derivation-step)$/);
-      const formalRef = catalogFormalRef(Number(key.slice(3)));
-      expect(formalRef?.statement).toBe(entry?.theorem);
-      expect(formalRef?.statement).not.toBe(theorem);
+  it('records every nested statement with its own kind, and does not promote it', () => {
+    expect(nestedRows.length).toBeGreaterThan(RANK1_KEYS.length);
+    for (const { entry, statement } of nestedRows) {
+      const label = `${entry.key}.${statement.name}`;
+      expect(FORMAL_REF_KINDS, label).toContain(statement.kind);
+      expect(statement.covers, label).not.toMatch(KIND_PREFIX);
+      const bridge = carriers.find((candidate) => candidate.id === entry.key);
+      if (bridge === undefined) continue;
+      expect(bridge.formalRef?.statement, label).toBe(entry.theorem);
+      expect(bridge.formalRef?.statement, label).not.toBe(statement.theorem);
     }
     expect(catalogFormalRef(20)).toBeUndefined();
     expect(manifest.entries.some((entry) => entry.key === 'be-20')).toBe(false);
+  });
+
+  it('a nested kind outside the formal-reference kinds fails', () => {
+    const host = nestedRows[0]!;
+    const unkind = {
+      ...manifest,
+      entries: manifest.entries.map((entry) =>
+        entry.key === host.entry.key ? { ...entry, [host.statement.name]: { ...(entry[host.statement.name] as object), kind: 'the whole bridge' } } : entry,
+      ),
+    };
+    expect(physjsManifestProblems({ manifest: unkind, bridges: carriers }).join('\n')).toMatch(
+      new RegExp(`${host.statement.name} kind for '${host.entry.key}' is 'the whole bridge'`),
+    );
   });
 
   it('the Buckingham nested covers name the assumed hypothesis', () => {
@@ -286,7 +321,7 @@ describe('vendored PhysJS manifest', () => {
         | (PhysjsManifestFile['entries'][number] & Record<string, { covers?: string } | undefined>)
         | undefined;
       const covers = entry?.[field]?.covers ?? '';
-      expect(covers.startsWith('derivation-step: '), `${key} ${field}`).toBe(true);
+      expect(physjsNestedStatements(entry!).nested.find((n) => n.name === field)?.kind, `${key} ${field}`).toBe('derivation-step');
       for (const phrase of phrases) {
         expect(covers, `${key} ${field}`).toContain(phrase);
       }
@@ -323,26 +358,29 @@ describe('vendored PhysJS manifest', () => {
     );
   });
 
-  it('keeps property and cross-check as their own kinds, and a missing kind word fails', () => {
-    const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
-    const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
-    const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76', 'be-77', 'be-78', 'be-79', 'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-85', 'be-86', 'be-87', 'be-88', 'be-89', 'be-90', 'be-91', 'be-92', 'be-93', 'be-94', 'be-95', 'be-96', 'be-97', 'be-98', 'be-99', 'be-100', 'be-101', 'be-102', 'be-103', 'be-104', 'be-105', 'be-106', 'be-107', 'be-108', 'be-109', 'be-110', 'be-111', 'be-112', 'be-113', 'be-114', 'be-115', 'be-116', 'be-117', 'be-118', 'be-119', 'be-120', 'be-121', 'be-122', 'be-123', 'be-124', 'be-125', 'be-126', 'be-127', 'be-128', 'be-129', 'be-130', 'be-131', 'be-132', 'be-133', 'be-134', 'be-135', 'be-136', 'be-137', 'be-138', 'be-139', 'be-140', 'be-141', 'be-142', 'be-143', 'be-144', 'be-145', 'be-146', 'be-147', 'be-148', 'be-149', 'be-150', 'be-151', 'be-152', 'be-153', 'be-154', 'be-155', 'be-156', 'be-157', 'be-158', 'be-159', 'be-160', 'be-161', 'be-162', 'be-163', 'be-164', 'be-165', 'be-166', 'be-167', 'be-168', 'be-169', 'be-170']);
-    expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
-    expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
-    expect(counted.length + crossChecks.length + properties.length).toBe(141);
-    // 117 is the record from before be-147..170.
-    // 104 is the record from before be-134..146.
-    // 96 is the record from before be-126..133.
-    // 73 is the record from before be-103..125. 58 is the record from before be-88..102.
+  it('keeps property and cross-check as their own kinds, and a missing kind fails', () => {
+    const ofKind = (...kinds: string[]) => manifest.entries.filter((entry) => kinds.includes(entry.kind)).map((entry) => entry.key);
+    // Each key of a kind other than bridge carries that kind on its reference.
+    // The counts are the record at this pin; the keys come from the manifest.
+    expect(ofKind(...COUNTED_KINDS)).toHaveLength(16);
+    expect(ofKind('cross-check')).toHaveLength(3);
+    expect(ofKind('property')).toHaveLength(3);
+    for (const key of ofKind(...COUNTED_KINDS, 'cross-check', 'property')) {
+      expect(physjsFormalRef(key).kind, key).toBe(manifest.entries.find((entry) => entry.key === key)!.kind);
+    }
+    expect(manifest.entries.every((entry) => !KIND_PREFIX.test(entry.covers))).toBe(true);
+    // The sentence that a covers line opened with the kind word, and that 141
+    // entries were counted that way, is the record from before schema v2.
 
     const unlabeled = {
       ...manifest,
-      entries: manifest.entries.map((entry) =>
-        entry.key === 'be-16' ? { ...entry, covers: 'the two-state entropy equals k_B log 2' } : entry,
-      ),
+      entries: manifest.entries.map((entry) => {
+        if (entry.key !== 'be-16') return entry;
+        const { kind: _kind, ...rest } = entry;
+        return rest as typeof entry;
+      }),
     };
-    expect(physjsManifestProblems({ manifest: unlabeled, bridges: carriers }).join('\n')).toMatch(/catalog kind/);
+    expect(physjsManifestProblems({ manifest: unlabeled, bridges: carriers }).join('\n')).toMatch(/'be-16' kind 'undefined' is not one of/);
 
     const dropped = carriers.map((bridge) => (bridge.id === 'be-16' ? { ...bridge, formalRef: undefined } : bridge));
     expect(physjsManifestProblems({ manifest, bridges: dropped }).join('\n')).toMatch(
@@ -350,24 +388,30 @@ describe('vendored PhysJS manifest', () => {
     );
   });
 
-  it('a catalog covers line that is not a catalog kind fails', () => {
+  it('a kind outside the formal-reference kinds fails', () => {
     const unkind = {
       ...manifest,
       entries: manifest.entries.map((entry) =>
-        entry.key === 'be-64' ? { ...entry, covers: 'the whole bridge' } : entry,
+        entry.key === 'be-64' ? { ...entry, kind: 'the whole bridge' } : entry,
       ),
     };
-    expect(physjsManifestProblems({ manifest: unkind, bridges: carriers }).join('\n')).toMatch(/catalog kind/);
+    expect(physjsManifestProblems({ manifest: unkind, bridges: carriers }).join('\n')).toMatch(/'be-64' kind 'the whole bridge' is not one of/);
   });
 
   it('catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
-    const countedIds = [64, 53, 58, 38, 13, 34, 65, 51, 61];
-    const labeledIds = [42, 24, 19, 29, 11];
+    const idsOf = (kinds: readonly string[]) =>
+      manifest.entries
+        .filter((entry) => kinds.includes(entry.kind) && catalogFormalRef(Number(entry.key.slice(3))) !== undefined)
+        .map((entry) => Number(entry.key.slice(3)));
+    const countedIds = idsOf(COUNTED_KINDS);
+    const labeledIds = idsOf(['property', 'cross-check']);
+    expect(countedIds.length).toBeGreaterThan(0);
+    expect(labeledIds.length).toBeGreaterThan(0);
     for (const id of countedIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
       const formalRef = catalogFormalRef(id);
       expect(formalRef?.system).toBe('lean4-physjs');
-      expect(formalRef?.covers).toMatch(/^(reduction|limit|derivation-step): /);
+      expect(COUNTED_KINDS).toContain(formalRef?.kind);
       expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
@@ -375,7 +419,7 @@ describe('vendored PhysJS manifest', () => {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
       const formalRef = catalogFormalRef(id);
       expect(formalRef?.system).toBe('lean4-physjs');
-      expect(formalRef?.covers).toMatch(/^(property|cross-check): /);
+      expect(['property', 'cross-check']).toContain(formalRef?.kind);
       expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
@@ -383,7 +427,7 @@ describe('vendored PhysJS manifest', () => {
     expect(landauer?.statement).toBe('PhysJS.Landauer.erasure_eq');
     expect(landauer?.kind).toBe('bridge');
     expect(landauer?.axioms).toEqual(['propext', 'Classical.choice', 'Quot.sound']);
-    expect(landauer?.covers.startsWith('derivation-step: ')).toBe(true);
+    expect(landauer?.covers).not.toMatch(KIND_PREFIX);
     expect(deriveEvidence({ formalRef: landauer }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
     expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(true);
     const reviewed = atlasBridges.filter(

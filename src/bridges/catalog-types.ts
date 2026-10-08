@@ -27,13 +27,8 @@ export interface CatalogEntry extends BridgeEquationEntry {
   readonly type: CatalogFiling;
   readonly derivedFrom?: readonly string[];
   readonly basis?: true;
+  /** The PhysJS manifest key. The reference and its kind are that entry's. */
   readonly formalKey?: string;
-  /**
-   * The reviewed kind of the PhysJS reference `formalKey` names, when it is
-   * not the first word of the covers line: `bridge` when the theorem states
-   * the catalogued equation, `property` when it states a property of it.
-   */
-  readonly formalKind?: 'bridge' | 'property';
   readonly assumptions?: readonly string[];
   readonly scopeLimits?: readonly string[];
   readonly dimension?: Dimension;

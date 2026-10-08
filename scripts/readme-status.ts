@@ -46,8 +46,6 @@ export interface StatusFacts {
   readonly kindBridge: number;
   readonly crossCheck: number;
   readonly property: number;
-  readonly plainProperty: number;
-  readonly derivationStepProperties: readonly number[];
   readonly circular: number;
   readonly unusedFiles: number;
   readonly unusedExports: number;
@@ -113,17 +111,7 @@ export function statusFacts(): StatusFacts {
   }
   const ofKind = (kind: FormalRefKind): RefRow[] => rows.filter((row) => row.kind === kind);
   const kindBridge = ofKind('bridge');
-  if (kindBridge.some((row) => !row.covers.startsWith('derivation-step'))) {
-    const offenders = kindBridge
-      .filter((row) => !row.covers.startsWith('derivation-step'))
-      .map((row) => `be-${row.id}`)
-      .join(', ');
-    throw new Error(`kind bridge whose covers line does not begin with derivation-step: ${offenders}`);
-  }
   const properties = ofKind('property');
-  const derivationStepProperties = properties
-    .filter((row) => row.covers.startsWith('derivation-step'))
-    .map((row) => row.id);
   return {
     catalog: BRIDGE_EQUATIONS.length,
     idMin,
@@ -141,8 +129,6 @@ export function statusFacts(): StatusFacts {
     kindBridge: kindBridge.length,
     crossCheck: ofKind('cross-check').length,
     property: properties.length,
-    plainProperty: properties.length - derivationStepProperties.length,
-    derivationStepProperties,
     circular: circularCount(),
     unusedFiles: generatedCount('docs/architecture/unused-analysis.md', 'Potentially unused files'),
     unusedExports: generatedCount('docs/architecture/unused-analysis.md', 'Potentially unused exports'),
@@ -177,23 +163,14 @@ function catalogCell(facts: StatusFacts): string {
   );
 }
 
-function propertyClause(facts: StatusFacts): string {
-  if (facts.derivationStepProperties.length === 0) return '';
-  const ids = facts.derivationStepProperties.map((id) => `\`be-${id}\``).join(' and ');
-  const verb = facts.derivationStepProperties.length === 1 ? 'is' : 'are';
-  const noun = facts.derivationStepProperties.length === 1 ? 'a property' : 'properties';
-  const line = facts.derivationStepProperties.length === 1 ? 'line begins' : 'lines begin';
-  return `, and ${ids} ${verb} ${noun} whose covers ${line} with \`derivation-step\``;
-}
-
 export function formalCell(facts: StatusFacts): string {
   return (
     `**${facts.provedAtlas}** atlas bridges derive \`formally-proved\` from a reviewed \`lean4-physjs\` reference. ` +
     `**${facts.counted}** catalog equations carry a counted reference and do not light that tag. ` +
-    `**${facts.kindBridge}** state the catalogued equation, so the kind is \`bridge\` while the covers line still begins with \`derivation-step\`; ` +
+    `**${facts.kindBridge}** state the catalogued equation, kind \`bridge\`; ` +
     'the catalog path passes that reference, so catalog evidence and edge evidence include `formally-proved`, except an unadjudicated row, which stays `proposed`. ' +
-    `**${facts.crossCheck}** carry a cross-check and **${facts.plainProperty}** carry a property` +
-    `${propertyClause(facts)}. Nested statements are not second references. The pin and the split are ` +
+    `**${facts.crossCheck}** carry a cross-check and **${facts.property}** carry a property. ` +
+    'Each kind is the PhysJS manifest entry\'s own field. Nested statements are not second references. The pin and the split are ' +
     '[`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md)'
   );
 }
@@ -246,17 +223,12 @@ export function membershipSentence(facts: StatusFacts): string {
 }
 
 export function phase4Sentence(facts: StatusFacts): string {
-  const named = facts.derivationStepProperties.map((id) => `\`be-${id}\``).join(' and ');
-  const including =
-    facts.derivationStepProperties.length === 0
-      ? ''
-      : `, including ${named}, whose covers line begins with \`derivation-step\``;
   return (
     `Atlas reviewed \`formalRef\` is ${facts.provedAtlas}, kind \`bridge\`, which meets the ≥5 gate. ` +
     `Catalog kind \`bridge\` is ${facts.kindBridge}. ` +
     `Catalog references that stay a reduction, a limit, or a derivation-step are ${facts.counted} and do not light \`formally-proved\`. ` +
     `Catalog cross-check \`formalRef\`s are ${facts.crossCheck}. ` +
-    `Catalog property \`formalRef\`s are ${facts.property}${including}. ` +
+    `Catalog property \`formalRef\`s are ${facts.property}. ` +
     'Only kind `bridge` lights `formally-proved`. The catalog path passes that reference, except an unadjudicated row stays `proposed`. '
   );
 }

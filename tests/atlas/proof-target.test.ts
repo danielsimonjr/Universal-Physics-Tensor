@@ -38,7 +38,11 @@ const manifest = JSON.parse(
 
 const THREE_AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 
-type DraftEntry = PhysjsManifestFile['entries'][number];
+/** A draft is not a manifest entry: it has no `kind`. The manifest check reads it as one and refuses it. */
+type DraftEntry = Pick<
+  PhysjsManifestFile['entries'][number],
+  'key' | 'bridgeId' | 'theorem' | 'covers' | 'coverage' | 'leanProof' | 'axioms'
+>;
 
 const carriers = [
   ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
@@ -93,7 +97,7 @@ function draftEntry(text: string): DraftEntry {
 
 function problemsFor(entry: DraftEntry): string[] {
   return physjsManifestProblems({
-    manifest: { ...manifest, entries: [entry] },
+    manifest: { ...manifest, entries: [entry as PhysjsManifestFile['entries'][number]] },
     bridges: carriers,
   });
 }

@@ -12,6 +12,7 @@ import { constantRecord } from '../../src/dimensional/symbolic-constants.js';
 import { DomainViolationError } from '../../src/bridges/evaluation-errors.js';
 import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
+import { dataSchema, dataText, parseDataFile } from '../../src/core/data-file.js';
 import { runCli } from '../../dist/cli/main.js';
 
 const SRC = join(import.meta.dirname, '../../src');
@@ -68,13 +69,19 @@ describe('a notice is data (issue: notice strings were an id switch)', () => {
   });
 });
 
-describe('the formal reference kind is a field of the catalog entry', () => {
-  it('every reviewed override is recorded on the entry, and the derived kind agrees', () => {
-    const overrides = catalogEntries().filter((e) => e.formalKind !== undefined);
-    expect(overrides.length).toBe(96);
-    expect(overrides.filter((e) => e.formalKind === 'property').map((e) => e.id)).toEqual([28]);
+describe('the formal reference kind is the PhysJS manifest entry\'s, and the catalog stores none', () => {
+  it('no catalog entry records a kind, and the reference takes the manifest kind', () => {
+    expect(dataText('bridge-catalog.json')).not.toContain('"formalKind"');
+    expect(catalogEntries().some((e) => 'formalKind' in e)).toBe(false);
     expect(catalogFormalRef(16)?.kind).toBe('bridge');
     expect(catalogFormalRef(28)?.kind).toBe('property');
     expect(catalogFormalRef(13)?.kind).toBe('reduction');
+    expect(catalogFormalRef(14)?.kind).toBe('derivation-step');
+  });
+
+  it('the catalog schema refuses a kind override on an entry', () => {
+    const file = JSON.parse(dataText('bridge-catalog.json')) as { entries: Record<string, unknown>[] };
+    file.entries[0] = { ...file.entries[0], formalKind: 'bridge' };
+    expect(() => parseDataFile('bridge-catalog.json', JSON.stringify(file), dataSchema('bridge-catalog.json'))).toThrow(/formalKind/);
   });
 });

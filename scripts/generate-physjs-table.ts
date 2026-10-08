@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { FORMAL_REF_KINDS } from '../src/relations/types.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifestPath = resolve(root, 'formal/physjs/manifest.json');
@@ -20,13 +21,17 @@ const theoremFilesPath = resolve(root, 'formal/physjs/theorem-files.json');
 const outPath = resolve(root, 'src/atlas/physjs-entries.generated.ts');
 
 /** The fields every manifest entry may carry. Any other field is a nested statement, or an error. */
-const BASE_FIELDS = new Set<string>(['key', 'bridgeId', 'theorem', 'covers', 'coverage', 'leanProof', 'axioms', 'imports']);
+const BASE_FIELDS = new Set<string>(['key', 'bridgeId', 'theorem', 'kind', 'covers', 'coverage', 'leanProof', 'axioms', 'imports']);
+
+/** The kinds a statement may carry: how its theorem relates to the catalog equation its key names. */
+const KINDS = new Set<string>(FORMAL_REF_KINDS);
 
 /** The fields of a statement: the top-level one, and each nested one. */
-const STATEMENT_KEYS = ['theorem', 'covers', 'coverage', 'leanProof', 'axioms'] as const;
+const STATEMENT_KEYS = ['theorem', 'kind', 'covers', 'coverage', 'leanProof', 'axioms'] as const;
 
 interface Statement {
   readonly theorem: string;
+  readonly kind: string;
   readonly covers: string;
   readonly coverage: string;
   readonly leanProof: string;
@@ -84,8 +89,10 @@ function fileOf(files: TheoremFiles, theorem: string): string {
   return path.slice('lean/'.length);
 }
 
-function emitStatementFields(statement: Statement, file: string, indent: string): string[] {
+function emitStatementFields(label: string, statement: Statement, file: string, indent: string): string[] {
+  if (!KINDS.has(statement.kind)) throw new Error(`manifest statement '${label}' kind '${String(statement.kind)}' is not one of ${[...KINDS].join(', ')}`);
   return [
+    `${indent}kind: ${quote(statement.kind)},`,
     `${indent}theorem: ${quote(statement.theorem)},`,
     `${indent}file: ${quote(file)},`,
     `${indent}covers: ${quote(statement.covers)},`,
@@ -97,7 +104,7 @@ function emitStatementFields(statement: Statement, file: string, indent: string)
 
 function emitEntry(entry: Entry, files: TheoremFiles): string {
   const lines = ['  {', `    key: ${quote(entry.key)},`, `    bridgeId: ${quote(entry.bridgeId)},`];
-  lines.push(...emitStatementFields(entry, fileOf(files, entry.theorem), '    '));
+  lines.push(...emitStatementFields(entry.key, entry, fileOf(files, entry.theorem), '    '));
   if (entry.imports !== undefined) lines.push(`    imports: ${quote(entry.imports)},`);
   const nested = nestedStatements(entry);
   if (nested.length === 0) {
@@ -105,7 +112,7 @@ function emitEntry(entry: Entry, files: TheoremFiles): string {
   } else {
     lines.push('    nested: [');
     for (const { name, statement } of nested) {
-      lines.push('      {', `        name: ${quote(name)},`, ...emitStatementFields(statement, fileOf(files, statement.theorem), '        '), '      },');
+      lines.push('      {', `        name: ${quote(name)},`, ...emitStatementFields(`${entry.key}.${name}`, statement, fileOf(files, statement.theorem), '        '), '      },');
     }
     lines.push('    ],');
   }
@@ -114,8 +121,8 @@ function emitEntry(entry: Entry, files: TheoremFiles): string {
 }
 
 export function renderPhysjsTable(manifest: Manifest, files: TheoremFiles): string {
-  if (manifest.schema !== 'physjs-bridge-manifest/v1') {
-    throw new Error(`manifest schema is '${manifest.schema}', expected 'physjs-bridge-manifest/v1'`);
+  if (manifest.schema !== 'physjs-bridge-manifest/v2') {
+    throw new Error(`manifest schema is '${manifest.schema}', expected 'physjs-bridge-manifest/v2'`);
   }
   if (files.commit !== manifest.commit) {
     throw new Error(`formal/physjs/theorem-files.json is for '${files.commit}', the manifest is '${manifest.commit}'`);
@@ -141,9 +148,9 @@ export const PHYSJS_MATHLIB = ${quote(manifest.mathlib)};
 export const PHYSJS_PHYS_LIB = ${quote(manifest.physlib)};
 
 /**
- * Compiled entry table copied from the vendored manifest entries. Each statement
- * carries the Lean file that declares it; each nested statement is named by its
- * manifest field.
+ * Compiled entry table copied from the vendored manifest entries. Each
+ * statement, nested ones included, carries its manifest kind and the Lean file
+ * that declares it; each nested statement is named by its manifest field.
  */
 export const PHYSJS_ENTRIES = [
 ${body}

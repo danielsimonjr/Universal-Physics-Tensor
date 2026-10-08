@@ -3,7 +3,7 @@ metadata:
   version: 8.0.0
   totalFiles: 360
   totalModules: 13
-  totalExports: 2469
+  totalExports: 2472
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2308,10 +2308,13 @@ modules:
             - FormalRef
             - FormalRefKind
           typeOnly: true
+        - file: ../relations/types.js
+          imports:
+            - FORMAL_REF_KINDS
         - file: ../bridges/catalog-load.js
           imports:
-            - catalogEntry
-            - parseBridgeId
+            - catalogEntries
+            - catalogIdNumber
         - file: ./physjs-entries.generated.js
           imports:
             - PHYSJS_COMMIT
@@ -2329,7 +2332,9 @@ modules:
         - physjsTheorem
         - physjsLeanFile
         - physjsFileUrl
+        - physjsAheadOfCatalog
         - bridgeSeedKeys
+        - physjsKeysAheadOfCatalog
         - physjsFormalRef
         - physjsManifestProblems
       reExported:
@@ -2342,7 +2347,9 @@ modules:
         - physjsTheorem
         - physjsLeanFile
         - physjsFileUrl
+        - physjsAheadOfCatalog
         - bridgeSeedKeys
+        - physjsKeysAheadOfCatalog
         - physjsFormalRef
         - physjsManifestProblems
     src/atlas/poster/associations.ts:
@@ -16811,6 +16818,7 @@ modules:
           typeOnly: true
       exports:
         - ALL_EVIDENCE_TAGS
+        - FORMAL_REF_KINDS
       interfaces:
         - FormalRef
         - RegimeInequality
@@ -16820,6 +16828,7 @@ modules:
         - Conventions
       constants:
         - ALL_EVIDENCE_TAGS
+        - FORMAL_REF_KINDS
 dependencyGraph:
   circularDependencies:
     runtime: []
@@ -17217,14 +17226,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 360
   totalModules: 13
-  totalLinesOfCode: 78673
-  totalExports: 2469
+  totalLinesOfCode: 79789
+  totalExports: 2472
   totalClasses: 79
   totalInterfaces: 451
-  totalFunctions: 757
+  totalFunctions: 759
   totalTypeGuards: 7
   totalEnums: 0
-  totalConstants: 382
+  totalConstants: 383
   totalReExports: 1252
   totalTypeOnlyImports: 506
   runtimeCircularDeps: 0

@@ -90,13 +90,15 @@ export type FormalFidelity =
  *
  * @internal
  */
-export type FormalRefKind =
-  | 'bridge'
-  | 'property'
-  | 'cross-check'
-  | 'reduction'
-  | 'limit'
-  | 'derivation-step';
+export const FORMAL_REF_KINDS = ['bridge', 'property', 'cross-check', 'reduction', 'limit', 'derivation-step'] as const;
+
+/**
+ * One of {@link FORMAL_REF_KINDS}. A PhysJS reference takes the `kind` its
+ * manifest entry records.
+ *
+ * @internal
+ */
+export type FormalRefKind = (typeof FORMAL_REF_KINDS)[number];
 
 /**
  * A machine-checked counterpart of a record's claim in a proof assistant.
