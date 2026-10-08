@@ -4,7 +4,7 @@
     "version": "8.0.0",
     "totalFiles": 360,
     "totalModules": 13,
-    "totalExports": 2469
+    "totalExports": 2472
   },
   "entryPoints": [
     {
@@ -3248,10 +3248,16 @@
             "typeOnly": true
           },
           {
+            "file": "../relations/types.js",
+            "imports": [
+              "FORMAL_REF_KINDS"
+            ]
+          },
+          {
             "file": "../bridges/catalog-load.js",
             "imports": [
               "catalogEntry",
-              "parseBridgeId"
+              "catalogIdNumber"
             ]
           },
           {
@@ -3278,7 +3284,9 @@
           "physjsTheorem",
           "physjsLeanFile",
           "physjsFileUrl",
+          "physjsAheadOfCatalog",
           "bridgeSeedKeys",
+          "physjsKeysAheadOfCatalog",
           "physjsFormalRef",
           "physjsManifestProblems"
         ],
@@ -3294,7 +3302,9 @@
           "physjsTheorem",
           "physjsLeanFile",
           "physjsFileUrl",
+          "physjsAheadOfCatalog",
           "bridgeSeedKeys",
+          "physjsKeysAheadOfCatalog",
           "physjsFormalRef",
           "physjsManifestProblems"
         ]
@@ -24344,7 +24354,8 @@
           }
         ],
         "exports": [
-          "ALL_EVIDENCE_TAGS"
+          "ALL_EVIDENCE_TAGS",
+          "FORMAL_REF_KINDS"
         ],
         "interfaces": [
           "FormalRef",
@@ -24355,7 +24366,8 @@
           "Conventions"
         ],
         "constants": [
-          "ALL_EVIDENCE_TAGS"
+          "ALL_EVIDENCE_TAGS",
+          "FORMAL_REF_KINDS"
         ]
       }
     }
@@ -24799,14 +24811,14 @@
   "statistics": {
     "totalTypeScriptFiles": 360,
     "totalModules": 13,
-    "totalLinesOfCode": 78673,
-    "totalExports": 2469,
+    "totalLinesOfCode": 79737,
+    "totalExports": 2472,
     "totalClasses": 79,
     "totalInterfaces": 451,
-    "totalFunctions": 757,
+    "totalFunctions": 759,
     "totalTypeGuards": 7,
     "totalEnums": 0,
-    "totalConstants": 382,
+    "totalConstants": 383,
     "totalReExports": 1252,
     "totalTypeOnlyImports": 506,
     "runtimeCircularDeps": 0,

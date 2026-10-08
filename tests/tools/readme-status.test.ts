@@ -53,12 +53,9 @@ describe('readme-status stamps', () => {
     expect(stamped.readme).not.toContain('TypeScript-6.0+');
     expect(phase4Sentence(facts)).toContain(`Catalog kind \`bridge\` is ${facts.kindBridge}`);
     expect(phase4Sentence(facts)).toContain(`Catalog property \`formalRef\`s are ${facts.property}`);
-    // 25 is the record from before be-77..87. Each of those eleven is kind bridge.
-    // 51 is the record from before be-103..125. Each of those twenty-three is kind bridge.
-    expect(facts.kindBridge).toBe(95);
-    // 82 is the record from before be-134..146. Each of those thirteen is kind bridge.
-    // 74 is the record from before be-126..133. Each of those eight is kind bridge.
-    // 36 is the record from before be-88..102.
+    // 95 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that
+    // state their equations were labelled derivation-step.
+    expect(facts.kindBridge).toBe(119);
     expect(facts.property).toBe(3);
     expect(stamped.roadmap).toContain(phase4Sentence(facts));
   });

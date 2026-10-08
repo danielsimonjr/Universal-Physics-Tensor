@@ -256,7 +256,7 @@ missing `1/a^d` prefactor is not repaired here.
 
 A catalog `formalRef` of this kind follows
 [`docs/planning/Catalog-FormalRef-Design-Note.md`](../planning/Catalog-FormalRef-Design-Note.md).
-The covers word is `property`.
+The PhysJS manifest `kind` is `property`.
 
 **BE-16, the `ln 2` only.** Property. Size S. Physlib's two-state
 canonical ensemble. The intended lemma is `twoState_entropy_eq`; this
@@ -302,7 +302,7 @@ nonzero. Born–Markov coarse-graining is not this entry.
 #### Cross-checks
 
 A catalog `formalRef` of this kind follows the catalog design note. The
-covers word is `cross-check`. Each has a negative control. One entry, not
+PhysJS manifest `kind` is `cross-check`. Each has a negative control. One entry, not
 a second key.
 
 **BE-42, `be-42-via-rs`, BE-57.** Cross-check. Size S. Plain reals. One

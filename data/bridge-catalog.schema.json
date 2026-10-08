@@ -149,6 +149,7 @@
           "tractability_class",
           "notes"
         ],
+        "additionalProperties": false,
         "properties": {
           "id": {
             "type": "integer",
@@ -289,6 +290,54 @@
               "covers": {
                 "type": "string"
               }
+            }
+          },
+          "context": {
+            "type": "string"
+          },
+          "source_part": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          },
+          "relation": {
+            "type": "object",
+            "description": "The relation record the row was filed with, when it has one."
+          },
+          "formalKey": {
+            "type": "string",
+            "pattern": "^(be|ab)-[a-z0-9-]+$",
+            "description": "The PhysJS manifest key. formalRef, its kind included, is read from that manifest entry. The catalog stores no kind of its own."
+          },
+          "dimension": {
+            "type": "object"
+          },
+          "conventions": {
+            "type": "object"
+          },
+          "counterexamples": {
+            "type": "array"
+          },
+          "regime": {
+            "type": "object"
+          },
+          "callerTable": {
+            "const": true
+          },
+          "statement": {
+            "type": "string"
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scopeLimits": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           }
         }

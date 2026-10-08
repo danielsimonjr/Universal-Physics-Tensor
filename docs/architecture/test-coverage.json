@@ -1146,7 +1146,9 @@
       "tests/tensor.test.ts"
     ],
     "src/bridges/catalog-load.ts": [
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
+      "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/catalog-domains.test.ts",
       "tests/bridges/catalog-filing-ledger.test.ts",
@@ -6684,6 +6686,7 @@
       "tests/tools/readme-status.test.ts"
     ],
     "src/core/data-file.ts": [
+      "tests/bridges/notice-record.test.ts",
       "tests/core/data-file.test.ts"
     ],
     "src/core/flux-rules.ts": [
@@ -8893,6 +8896,7 @@
       "tests/atlas/oscillators-limits.test.ts",
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/statement-derivation.test.ts",
@@ -9420,7 +9424,8 @@
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
       "src/atlas/physjs-ref.ts",
-      "src/atlas/physjs-entries.generated.ts"
+      "src/atlas/physjs-entries.generated.ts",
+      "src/bridges/catalog-load.ts"
     ],
     "tests/atlas/canonical-links.test.ts": [
       "src/atlas/families.ts",
@@ -9665,7 +9670,8 @@
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts"
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/catalog-load.ts"
     ],
     "tests/atlas/gr-spine-regime.test.ts": [
       "src/cli/main.ts",
@@ -9878,6 +9884,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/relations/types.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts"
     ],
@@ -10140,6 +10147,7 @@
       "src/bridges/evaluation-errors.ts",
       "src/composition/evaluate-relation.ts",
       "src/atlas/catalog-formal-ref.ts",
+      "src/core/data-file.ts",
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
       "src/cli/commands/priority.ts",

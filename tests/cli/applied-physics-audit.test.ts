@@ -138,11 +138,9 @@ describe('F09 — a proof badge carries its theorem scope', () => {
 // Already true when the audit ran (it read the text view only); pinned across every export so a
 // later change cannot merge "no overlay metadata" into "did not match".
 describe('F10 — an evidence-filtered export keeps absent evidence apart from non-matching evidence', () => {
-  const split = /94 of 267 kept; 63 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
-  // 94 of 236 is the record from before the catalog graph held every relation.
-  // 81 of 223 is the record from before be-134..146. Those thirteen are formally-proved, so they are kept.
-  // 73 of 215 is the record from before be-126..133. Those eight are formally-proved, so they are kept.
-  // 50 of 192 is the record from before be-103..125. Those twenty-three are formally-proved, so they are kept.
+  const split = /118 of 267 kept; 39 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
+  // 94 kept and 63 dropped is the record from before the PhysJS manifest carried kind: twenty-four catalog
+  // theorems that state their equations were labelled derivation-step.
   for (const format of ['text', 'mermaid', 'dot']) {
     it(`--format=${format}`, async () => {
       const { text } = await run(['map', '--source=both', '--evidence=formally-proved', `--format=${format}`]);
@@ -154,8 +152,8 @@ describe('F10 — an evidence-filtered export keeps absent evidence apart from n
     await runCli(['map', '--source=both', '--evidence=formally-proved', '--json'], c.io);
     expect(JSON.parse(c.lines.join('')).result.filter).toEqual({
       total: 267,
-      kept: 94,
-      droppedNotMatching: 63,
+      kept: 118,
+      droppedNotMatching: 39,
       droppedMissingMetadata: 110,
       evidence: 'formally-proved',
     });

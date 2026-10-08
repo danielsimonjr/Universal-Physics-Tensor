@@ -82,12 +82,13 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
     expect(leanFiles.has('lean/LondonPenetration.lean')).toBe(true);
     expect(leanFiles.has('lean/PlasmaBeta.lean')).toBe(true);
     expect([...leanFiles].every((path) => /^lean\/[^/]+\.lean$/.test(path))).toBe(true);
-    // 130 is the record from before the thermal Lean files at pin 10e48f14.
-    // 60 is the record from before PhysJS #64 added the eleven Lean files.
-    expect(leanFiles.size).toBe(154);
-    // 117 is the record from before PhysJS #68 added the thirteen Lean files.
-    // 109 is the record from before be-126..133.
-    // 86 is the record from before be-103..125. 71 is the record from before PhysJS #65.
+    // Every file a manifest theorem is declared in is in the listing. The
+    // listing's size is PhysJS's, not a number kept here; the hand-kept
+    // count that grew with each pin is the record from before this check.
+    const files = JSON.parse(readFileSync(resolve(root, 'formal/physjs/theorem-files.json'), 'utf-8')) as {
+      readonly files: Readonly<Record<string, string>>;
+    };
+    for (const path of Object.values(files.files)) expect(leanFiles.has(path), path).toBe(true);
   });
 
   it('every formalRef URL is a file in that tree', () => {
@@ -165,13 +166,13 @@ describe('the Lean file of a theorem is where it is declared, read from data', (
 
   it('the vendor script renders all three pinned files from PhysJS at one commit', () => {
     const tree: Record<string, string> = {
-      'manifest/bridges.json': JSON.stringify({ schema: 'physjs-bridge-manifest/v1', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }] }),
+      'manifest/bridges.json': JSON.stringify({ schema: 'physjs-bridge-manifest/v2', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }] }),
       'lean/B.lean': 'namespace PhysJS.B\ntheorem u : True := trivial\nend PhysJS.B',
       'lean/A.lean': 'namespace PhysJS.A\ntheorem t : True := trivial\nend PhysJS.A',
       'README.md': 'not Lean',
     };
     const files = vendoredFiles('abc123', { show: (path) => tree[path]!, paths: () => Object.keys(tree) });
-    expect(JSON.parse(files['formal/physjs/manifest.json']!)).toEqual({ schema: 'physjs-bridge-manifest/v1', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }], commit: 'abc123' });
+    expect(JSON.parse(files['formal/physjs/manifest.json']!)).toEqual({ schema: 'physjs-bridge-manifest/v2', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }], commit: 'abc123' });
     expect(JSON.parse(files['formal/physjs/lean-files.json']!)).toEqual(['lean/A.lean', 'lean/B.lean']);
     expect(JSON.parse(files['formal/physjs/theorem-files.json']!)).toEqual({ commit: 'abc123', files: { 'PhysJS.A.t': 'lean/A.lean' } });
   });

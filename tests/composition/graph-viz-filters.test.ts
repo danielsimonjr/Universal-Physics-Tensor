@@ -110,11 +110,8 @@ describe('buildVizModel — evidence filter', () => {
     const proposed = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('proposed'));
     const proved = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('formally-proved'));
     expect(proposed.length).toBeGreaterThan(0);
-    // 24 is the record from before be-77..87. Each new edge derives formally-proved.
-    expect(proved.length).toBe(94);
-    // 81 is the record from before be-134..146.
-    // 73 is the record from before be-126..133.
-    // 50 is the record from before be-103..125. 35 is the record from before be-88..102.
+    // 94 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that state their equations were labelled derivation-step.
+    expect(proved.length).toBe(118);
     expect(proposed.length + proved.length).toBe(withBeId.length);
     const model = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'proposed' }));
     expect(model.filterStats.kept).toBe(proposed.length);

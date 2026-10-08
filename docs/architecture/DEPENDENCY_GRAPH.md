@@ -917,13 +917,20 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `FormalRef, FormalRefKind` | Import (type-only) |
-| `../bridges/catalog-load.js` | `catalogEntry, parseBridgeId` | Import |
+| `../relations/types.js` | `FORMAL_REF_KINDS` | Import |
+| `../bridges/catalog-load.js` | `catalogEntry, catalogIdNumber` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT, PHYSJS_MATHLIB, PHYSJS_PHYS_LIB, PHYSJS_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT` | Re-export |
 
 **Exports:**
 - Interfaces: `PhysjsManifestEntry`, `PhysjsManifestFile`
-- Functions: `physjsNestedStatements`, `physjsTheorem`, `physjsLeanFile`, `physjsFileUrl`, `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
+- Functions:
+
+  ```text
+  physjsNestedStatements, physjsTheorem, physjsLeanFile, physjsFileUrl, physjsAheadOfCatalog,
+  bridgeSeedKeys, physjsKeysAheadOfCatalog, physjsFormalRef, physjsManifestProblems
+  ```
+
 - Re-exports: `PHYSJS_COMMIT`
 
 ---
@@ -6678,7 +6685,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `FormalRef`, `RegimeInequality`, `Regime`, `ApproximationBound`, `Counterexample`, `Conventions`
-- Constants: `ALL_EVIDENCE_TAGS`
+- Constants: `ALL_EVIDENCE_TAGS`, `FORMAL_REF_KINDS`
 
 ---
 
@@ -6874,12 +6881,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 360 |
 | Total Modules | 13 |
-| Total Lines of Code | 78673 |
-| Total Exports | 2469 |
+| Total Lines of Code | 79737 |
+| Total Exports | 2472 |
 | Total Re-exports | 1252 |
 | Total Classes | 79 |
 | Total Interfaces | 451 |
-| Total Functions | 757 |
+| Total Functions | 759 |
 | Total Type Guards | 7 |
 | Total Enums | 0 |
 | Type-only Imports | 506 |
