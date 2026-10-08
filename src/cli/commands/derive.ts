@@ -13,7 +13,7 @@ import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { classifyDetermination } from '../determination.js';
 import { formulaParserLabel } from '../version.js';
-import { withParser } from '../euler-guard.js';
+import { FormulaUsageError } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { Dimension } from '../../dimensional/types.js';
 
@@ -23,11 +23,12 @@ const formulaSymbol = (name: string): string => name.replace(/-/g, '_');
 
 /**
  * A hyphen that remains after declared names are rewritten is subtraction.
- * The undeclared-symbol error otherwise names only the first piece.
+ * The undeclared-symbol error otherwise names only the first piece. The
+ * checker says the symbol was undeclared on its own field, not in its text.
  */
-function hyphenSubtractionNote(error: string | undefined, formula: string): string {
-  if (error === undefined) return '';
-  if (!error.includes('undeclared symbol')) return error;
+function hyphenSubtractionNote(check: { readonly error?: string; readonly undeclaredSymbol?: string }, formula: string): string {
+  const error = check.error ?? '';
+  if (check.undeclaredSymbol === undefined) return error;
   if (!/[A-Za-z0-9_]-[A-Za-z0-9_]/.test(formula)) return error;
   return `${error} A hyphen between names is subtraction. A name from a dimension argument is one symbol.`;
 }
@@ -156,7 +157,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     formulaCheck = r;
     if (!r.ok) {
       failed = true;
-      textOut(`  formula dimensional check: ✗ ${hyphenSubtractionNote(r.error, formula)}`);
+      textOut(`  formula dimensional check: ✗ ${hyphenSubtractionNote(r, formula)}`);
     } else {
       const matches = dimsEqualTol(r.dim!, target.dim);
       if (!matches) failed = true;
@@ -170,7 +171,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     try {
       cf = parser.parse(formulaSymbols);
     } catch (e) {
-      throw new UsageError(withParser('  formula parse error: ' + (e as Error).message, await api.getFormulaParserKind()));
+      throw new FormulaUsageError('  formula parse error: ' + (e as Error).message, await api.getFormulaParserKind());
     }
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This

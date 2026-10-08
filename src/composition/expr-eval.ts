@@ -82,7 +82,8 @@ function scopeFor(
 
 function asSymbolic(err: unknown): Error {
   if (err instanceof ScalarEvalError || err instanceof ScalarBuildError) {
-    return new SymbolicEvalError(err.message.replace(/^(?:evaluateScalar|scalar builder):/, 'evalExpr:'));
+    // MathTS names its own function first (`evaluateScalar:`); the message is kept whole, not rewritten.
+    return new SymbolicEvalError(`evalExpr: ${err.message}`);
   }
   return err instanceof Error ? err : new SymbolicEvalError(String(err));
 }

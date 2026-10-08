@@ -41,6 +41,17 @@ export class UnsupportedSyntaxError extends FormulaDimensionError {
 }
 
 /**
+ * A formula names a symbol with no declared dimension and no known one. A
+ * caller reads it through the check result's `undeclaredSymbol`. @internal
+ */
+class UndeclaredSymbolError extends FormulaDimensionError {
+  constructor(readonly symbol: string) {
+    super(`undeclared symbol '${symbol}' — declare its dimension (a separate name:dimension argument, for example x:length)`);
+    this.name = 'UndeclaredSymbolError';
+  }
+}
+
+/**
  * A sum is not homogeneous because a bare `e`, read as the elementary charge,
  * meets a dimensionless term (`1 - e^2`). @internal
  */
@@ -100,9 +111,7 @@ function resolveSymbol(name: string, dims: Readonly<Record<string, Dimension>>):
   if (name in dims) return sym(name, dims[name]);
   const known = formulaSymbolDimension(name);
   if (known !== undefined) return sym(name, known);
-  throw new FormulaDimensionError(
-    `undeclared symbol '${name}' — declare its dimension (a separate name:dimension argument, for example x:length)`,
-  );
+  throw new UndeclaredSymbolError(name);
 }
 
 const CHARGE_SQUARED = multiply(CHARGE, CHARGE);
@@ -293,6 +302,8 @@ interface FormulaDimensionResult {
   readonly error?: string;
   /** Set when `!ok` because a bare `e` (the elementary charge) met a dimensionless term. */
   readonly elementaryChargeMixed?: true;
+  /** Set when `!ok` because the formula names this symbol with no dimension declared or known. */
+  readonly undeclaredSymbol?: string;
 }
 
 /** A parsed physics expression: its dimensional `ExprNode` + inferred dimension. */
@@ -343,6 +354,7 @@ function createFormulaDimensionChecker(
           ok: false,
           error: e instanceof Error ? e.message : String(e),
           ...(e instanceof ElementaryChargeMixError ? { elementaryChargeMixed: true as const } : {}),
+          ...(e instanceof UndeclaredSymbolError ? { undeclaredSymbol: e.symbol } : {}),
         };
       }
     },

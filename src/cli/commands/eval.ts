@@ -12,7 +12,7 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { CliError, UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
-import { withParser } from '../euler-guard.js';
+import { FormulaUsageError } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 
@@ -130,7 +130,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     cf = parser.parse(expr);
   } catch (e) {
-    throw new UsageError(withParser('parse error: ' + (e as Error).message, kind));
+    throw new FormulaUsageError('parse error: ' + (e as Error).message, kind);
   }
 
   const mode: UnitMode = args.flags.has('geometrized') ? 'geometrized' : args.flags.has('natural') ? 'natural' : 'si';
@@ -142,11 +142,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     const energyHint = missing.includes('E')
       ? ' E is energy. The binding is its own argument: upt eval E E=1eV.'
       : '';
-    throw new UsageError(
-      withParser(
-        `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}`,
-        kind,
-      ),
+    throw new FormulaUsageError(
+      `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}`,
+      kind,
     );
   }
 
@@ -156,7 +154,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   if (!('e' in parsed.scope)) {
     const checked = api.builtinFormulaDimensionChecker().check(expr, {});
     if (!checked.ok && checked.elementaryChargeMixed === true) {
-      throw new UsageError(withParser(checked.error!, kind));
+      throw new FormulaUsageError(checked.error!, kind);
     }
   }
 
@@ -168,7 +166,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     value = cf.evaluate(scope);
   } catch (e) {
-    throw new UsageError(withParser((e as Error).message, kind));
+    throw new FormulaUsageError((e as Error).message, kind);
   }
 
   if (isJson) {

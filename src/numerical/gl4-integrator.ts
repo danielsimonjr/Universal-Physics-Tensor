@@ -23,7 +23,7 @@
  *
  * @module numerical/gl4-integrator
  */
-import { gaussLegendre4 } from '@danielsimonjr/mathts-functions';
+import { gaussLegendre4, GL4ConvergenceError as MathTsGL4ConvergenceError } from '@danielsimonjr/mathts-functions';
 import { GL4ConvergenceError, NumericalBackendError } from './errors.js';
 
 /**
@@ -208,9 +208,8 @@ function advanceGl4(
       { steps: 1, picardTol: opts.picardTol, picardMaxIter: opts.picardMaxIter },
     );
   } catch (err) {
-    if (err instanceof Error && /Picard iteration did not converge/i.test(err.message)) {
-      throw new GL4ConvergenceError(err.message);
-    }
+    // MathTS throws its own typed GL4ConvergenceError for a Picard step that does not converge.
+    if (err instanceof MathTsGL4ConvergenceError) throw new GL4ConvergenceError(err.message);
     throw err;
   }
   const y1 = solved.y[solved.y.length - 1];

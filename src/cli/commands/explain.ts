@@ -97,11 +97,9 @@ function parseKnown(api: CommandCtx['api'], args: readonly string[]): { known: s
     }
     values[a.name] = read.value;
     // Unit-convention notes were already on the binding and explain did not
-    // print them. The temperature reading adds a note; that one is new.
-    for (const note of read.notes) {
-      if (!note.includes('k_B T') || notes.includes(note)) continue;
-      notes.push(note);
-    }
+    // print them. The temperature reading adds a note; the reader returns that
+    // one on its own field.
+    if (read.temperatureNote !== undefined && !notes.includes(read.temperatureNote)) notes.push(read.temperatureNote);
   }
   return { known: values, notes };
 }

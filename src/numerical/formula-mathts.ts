@@ -150,6 +150,10 @@ function createMathtsFormulaParser(
           } catch (err) {
             // `compileExpr` quotes the name (`Undefined symbol "process"`).
             // The interpreter path reports `Undefined symbol process`.
+            // The one place src/ reads MathTS message text: MathTS throws a plain `Error` with no
+            // symbol field, and a pre-check against the scope cannot stand in because MathTS resolves
+            // some names itself (`hbar` reads as a unit). It only normalizes the text; nothing branches on it.
+            // Tracked in ACTIVE.md as a MathTS follow-up (a typed undefined-symbol error).
             const message = err instanceof Error ? err.message : String(err);
             throw new FormulaError(message.replace(/^Undefined symbol "([^"]+)"$/, 'Undefined symbol $1'));
           }
