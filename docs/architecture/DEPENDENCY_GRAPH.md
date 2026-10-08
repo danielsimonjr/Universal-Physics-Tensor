@@ -45,9 +45,9 @@ The codebase is organized into the following modules:
 - **cli**: 55 files
 - **root**: 1 file
 - **composition**: 74 files
-- **core**: 12 files
+- **core**: 13 files
 - **diff**: 3 files
-- **dimensional**: 40 files
+- **dimensional**: 41 files
 - **entry**: 1 file
 - **numerical**: 39 files
 - **relations**: 8 files
@@ -1376,16 +1376,10 @@ The codebase is organized into the following modules:
 
 ### `src/bridges/catalog-load.ts` - The catalog loader. This module is the only place that parses a bridge id
 
-**Node.js Built-in Dependencies:**
-| Module | Import |
-|--------|--------|
-| `fs` | `readFileSync` |
-| `path` | `dirname, join` |
-| `url` | `fileURLToPath` |
-
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../core/data-file.js` | `checkedDataFile` | Import |
 | `./catalog-types.js` | `CatalogConfrontation, CatalogEntry, CatalogEvaluator, CatalogEvaluatorParameter, CatalogFile, CatalogRelation` | Import (type-only) |
 
 **Exports:**
@@ -2068,7 +2062,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `runAppliedCase`
-- Constants: `APPLIED_CASES`
+- Constants: `APPLIED_CASES`, `CASE_CONTRACTS`
 - Re-exports: `AppliedCase`, `CaseCheck`, `CaseComparison`, `CaseExample`, `CaseOutput`, `CaseResult`
 
 ---
@@ -3806,7 +3800,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `Evaluable`
-- Functions: `evaluatorOutput`, `resolveEvaluable`, `evaluateRelation`
+- Functions: `evaluatorOutput`, `evaluableContract`, `resolveEvaluable`, `evaluateRelation`
 
 ---
 
@@ -4783,6 +4777,25 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/core/data-file.ts` - The packaged data files under `data/`, read and checked against their schemas.
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `fs` | `readFileSync` |
+| `path` | `dirname, join` |
+| `url` | `fileURLToPath` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./json-schema.js` | `schemaProblems, JsonSchema` | Import |
+
+**Exports:**
+- Functions: `schemaFileOf`, `dataText`, `dataSchema`, `parseDataFile`, `checkedDataFile`
+
+---
+
 ### `src/core/flux-rules.ts` - Flux-rule scaffolding for v0.7 Proposal 2 — Sparse Semantic Catalog.
 
 **Internal Dependencies:**
@@ -4994,16 +5007,10 @@ The codebase is organized into the following modules:
 
 ### `src/dimensional/bridge-check.ts` - Expected catalog dimensions, projected from the catalog record.
 
-**Node.js Built-in Dependencies:**
-| Module | Import |
-|--------|--------|
-| `fs` | `readFileSync` |
-| `path` | `dirname, join` |
-| `url` | `fileURLToPath` |
-
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../core/data-file.js` | `checkedDataFile` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./algebra.js` | `equals` | Import |
 | `./validator.js` | `ExprNode` | Import (type-only) |
@@ -5069,6 +5076,20 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `christoffel`
+
+---
+
+### `src/dimensional/constant-rows.ts` - The constant registry's rows as written: name, spellings, SI value, SI unit
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
+
+**Exports:**
+- Interfaces: `ConstantRow`
+- Functions: `constantRow`
+- Constants: `CONSTANT_ROWS`
 
 ---
 
@@ -5217,7 +5238,7 @@ The codebase is organized into the following modules:
 
   ```text
   decimalScale, scaleOf, ratioScale, irrationalScale, multiplyScales, divideScales, powerScale,
-  addScales, scaleToNumber, readScaleExpression
+  addScales, scaleToNumber, solidusSides, readScaleExpression
   ```
 
 - Constants: `UNIT_SCALE`
@@ -5389,22 +5410,16 @@ The codebase is organized into the following modules:
 
 ### `src/dimensional/quantity-registry.ts` - The quantity registry. Canonical id, aliases, dimension, and whether an
 
-**Node.js Built-in Dependencies:**
-| Module | Import |
-|--------|--------|
-| `fs` | `readFileSync` |
-| `path` | `dirname, join` |
-| `url` | `fileURLToPath` |
-
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../core/data-file.js` | `checkedDataFile` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
 
 **Exports:**
 - Interfaces: `QuantityRecord`
-- Functions: `allQuantityRecords`, `quantityRecord`, `synonymGroupsFromRegistry`
+- Functions: `quantitySpellingIndex`, `allQuantityRecords`, `quantityRecord`, `synonymGroupsFromRegistry`
 - Constants: `foldName`
 
 ---
@@ -5448,7 +5463,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./units.js` | `parseUnit` | Import |
-| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
+| `./constant-rows.js` | `CONSTANT_ROWS, constantRow, ConstantRow` | Import |
 
 **Exports:**
 - Classes: `ConstantDisagreementError`
@@ -5526,15 +5541,13 @@ The codebase is organized into the following modules:
 | Module | Import |
 |--------|--------|
 | `crypto` | `createHash` |
-| `fs` | `readFileSync` |
-| `path` | `dirname, join` |
-| `url` | `fileURLToPath` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `C_SI, E_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI` | Import |
-| `../core/json-schema.js` | `schemaProblems, JsonSchema` | Import |
+| `../core/data-file.js` | `dataSchema, dataText, parseDataFile` | Import |
+| `../core/json-schema.js` | `JsonSchema` | Import (type-only) |
+| `./constant-rows.js` | `constantRow` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./exact-scale.js` | `decimalScale, irrationalScale, readScaleExpression, scaleOf, ExactScale` | Import |
 
@@ -5552,7 +5565,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./algebra.js` | `equals, format, multiply, power` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, UNIT_SCALE, ExactScale` | Import |
+| `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, solidusSides, UNIT_SCALE, ExactScale` | Import |
 | `./unit-data.js` | `UNIT_DATA, AffineRow` | Import |
 
 **Exports:**
@@ -6779,9 +6792,9 @@ graph TD
         N37[axes-registry]
         N38[cell]
         N39[constants]
-        N40[flux-rules]
-        N41[json-schema]
-        N42[...7 more]
+        N40[data-file]
+        N41[flux-rules]
+        N42[...8 more]
     end
 
     subgraph Diff
@@ -6796,7 +6809,7 @@ graph TD
         N48[ast-types]
         N49[bridge-check]
         N50[buckingham]
-        N51[...35 more]
+        N51[...36 more]
     end
 
     subgraph Entry
@@ -6825,10 +6838,11 @@ graph TD
     N3 --> N48
     N4 --> N3
     N8 --> N38
-    N8 --> N40
+    N8 --> N41
     N8 --> N49
     N8 --> N9
     N8 --> N46
+    N9 --> N40
     N9 --> N10
     N12 --> N50
     N13 --> N50
@@ -6850,7 +6864,6 @@ graph TD
     N20 --> N22
     N21 --> N39
     N21 --> N9
-    N22 --> N39
 ```
 
 ---
@@ -6859,17 +6872,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 358 |
+| Total TypeScript Files | 360 |
 | Total Modules | 13 |
-| Total Lines of Code | 78514 |
-| Total Exports | 2458 |
+| Total Lines of Code | 78673 |
+| Total Exports | 2469 |
 | Total Re-exports | 1252 |
 | Total Classes | 79 |
-| Total Interfaces | 450 |
-| Total Functions | 748 |
+| Total Interfaces | 451 |
+| Total Functions | 757 |
 | Total Type Guards | 7 |
 | Total Enums | 0 |
-| Type-only Imports | 505 |
+| Type-only Imports | 506 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

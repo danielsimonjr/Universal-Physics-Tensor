@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "8.0.0",
-    "totalFiles": 358,
+    "totalFiles": 360,
     "totalModules": 13,
-    "totalExports": 2458
+    "totalExports": 2469
   },
   "entryPoints": [
     {
@@ -4832,28 +4832,14 @@
       "src/bridges/catalog-load.ts": {
         "description": "The catalog loader. This module is the only place that parses a bridge id",
         "externalDependencies": [],
-        "nodeDependencies": [
-          {
-            "module": "fs",
-            "imports": [
-              "readFileSync"
-            ]
-          },
-          {
-            "module": "path",
-            "imports": [
-              "dirname",
-              "join"
-            ]
-          },
-          {
-            "module": "url",
-            "imports": [
-              "fileURLToPath"
-            ]
-          }
-        ],
+        "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/data-file.js",
+            "imports": [
+              "checkedDataFile"
+            ]
+          },
           {
             "file": "./catalog-types.js",
             "imports": [
@@ -6965,6 +6951,7 @@
         ],
         "exports": [
           "APPLIED_CASES",
+          "CASE_CONTRACTS",
           "runAppliedCase",
           "AppliedCase",
           "CaseCheck",
@@ -6985,7 +6972,8 @@
           "runAppliedCase"
         ],
         "constants": [
-          "APPLIED_CASES"
+          "APPLIED_CASES",
+          "CASE_CONTRACTS"
         ]
       },
       "src/cases/kepler-rv.ts": {
@@ -13405,6 +13393,7 @@
         ],
         "exports": [
           "evaluatorOutput",
+          "evaluableContract",
           "resolveEvaluable",
           "evaluateRelation"
         ],
@@ -13413,6 +13402,7 @@
         ],
         "functions": [
           "evaluatorOutput",
+          "evaluableContract",
           "resolveEvaluable",
           "evaluateRelation"
         ]
@@ -17190,6 +17180,54 @@
           "M_U_SI"
         ]
       },
+      "src/core/data-file.ts": {
+        "description": "The packaged data files under `data/`, read and checked against their schemas.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "dirname",
+              "join"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "./json-schema.js",
+            "imports": [
+              "schemaProblems",
+              "JsonSchema"
+            ]
+          }
+        ],
+        "exports": [
+          "schemaFileOf",
+          "dataText",
+          "dataSchema",
+          "parseDataFile",
+          "checkedDataFile"
+        ],
+        "functions": [
+          "schemaFileOf",
+          "dataText",
+          "dataSchema",
+          "parseDataFile",
+          "checkedDataFile"
+        ]
+      },
       "src/core/flux-rules.ts": {
         "description": "Flux-rule scaffolding for v0.7 Proposal 2 — Sparse Semantic Catalog.",
         "externalDependencies": [],
@@ -17811,28 +17849,14 @@
       "src/dimensional/bridge-check.ts": {
         "description": "Expected catalog dimensions, projected from the catalog record.",
         "externalDependencies": [],
-        "nodeDependencies": [
-          {
-            "module": "fs",
-            "imports": [
-              "readFileSync"
-            ]
-          },
-          {
-            "module": "path",
-            "imports": [
-              "dirname",
-              "join"
-            ]
-          },
-          {
-            "module": "url",
-            "imports": [
-              "fileURLToPath"
-            ]
-          }
-        ],
+        "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/data-file.js",
+            "imports": [
+              "checkedDataFile"
+            ]
+          },
           {
             "file": "./types.js",
             "imports": [
@@ -18055,6 +18079,52 @@
         ],
         "functions": [
           "christoffel"
+        ]
+      },
+      "src/dimensional/constant-rows.ts": {
+        "description": "The constant registry's rows as written: name, spellings, SI value, SI unit",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "B_WIEN_SI",
+              "C_SI",
+              "E_SI",
+              "EPS0_SI",
+              "FARADAY_SI",
+              "G_SI",
+              "GM_SUN_SI",
+              "H_SI",
+              "HBAR_CODATA_DISPLAY",
+              "HBAR_SI",
+              "K_B_SI",
+              "LANE_EMDEN_OMEGA3",
+              "M_E_SI",
+              "M_PROTON_SI",
+              "M_SUN_IAU_SI",
+              "M_SUN_SI",
+              "M_U_SI",
+              "MU0_SI",
+              "N_A_SI",
+              "SIGMA_SB_SI",
+              "THOMSON_CROSS_SECTION_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "CONSTANT_ROWS",
+          "constantRow"
+        ],
+        "interfaces": [
+          "ConstantRow"
+        ],
+        "functions": [
+          "constantRow"
+        ],
+        "constants": [
+          "CONSTANT_ROWS"
         ]
       },
       "src/dimensional/constants.ts": {
@@ -18477,6 +18547,7 @@
           "powerScale",
           "addScales",
           "scaleToNumber",
+          "solidusSides",
           "readScaleExpression"
         ],
         "interfaces": [
@@ -18492,6 +18563,7 @@
           "powerScale",
           "addScales",
           "scaleToNumber",
+          "solidusSides",
           "readScaleExpression"
         ],
         "constants": [
@@ -18982,28 +19054,14 @@
       "src/dimensional/quantity-registry.ts": {
         "description": "The quantity registry. Canonical id, aliases, dimension, and whether an",
         "externalDependencies": [],
-        "nodeDependencies": [
-          {
-            "module": "fs",
-            "imports": [
-              "readFileSync"
-            ]
-          },
-          {
-            "module": "path",
-            "imports": [
-              "dirname",
-              "join"
-            ]
-          },
-          {
-            "module": "url",
-            "imports": [
-              "fileURLToPath"
-            ]
-          }
-        ],
+        "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/data-file.js",
+            "imports": [
+              "checkedDataFile"
+            ]
+          },
           {
             "file": "./types.js",
             "imports": [
@@ -19020,6 +19078,7 @@
         ],
         "exports": [
           "foldName",
+          "quantitySpellingIndex",
           "allQuantityRecords",
           "quantityRecord",
           "synonymGroupsFromRegistry"
@@ -19028,6 +19087,7 @@
           "QuantityRecord"
         ],
         "functions": [
+          "quantitySpellingIndex",
           "allQuantityRecords",
           "quantityRecord",
           "synonymGroupsFromRegistry"
@@ -19154,29 +19214,11 @@
             ]
           },
           {
-            "file": "../core/constants.js",
+            "file": "./constant-rows.js",
             "imports": [
-              "B_WIEN_SI",
-              "C_SI",
-              "E_SI",
-              "EPS0_SI",
-              "FARADAY_SI",
-              "G_SI",
-              "GM_SUN_SI",
-              "H_SI",
-              "HBAR_CODATA_DISPLAY",
-              "HBAR_SI",
-              "K_B_SI",
-              "LANE_EMDEN_OMEGA3",
-              "M_E_SI",
-              "M_PROTON_SI",
-              "M_SUN_IAU_SI",
-              "M_SUN_SI",
-              "M_U_SI",
-              "MU0_SI",
-              "N_A_SI",
-              "SIGMA_SB_SI",
-              "THOMSON_CROSS_SECTION_SI"
+              "CONSTANT_ROWS",
+              "constantRow",
+              "ConstantRow"
             ]
           }
         ],
@@ -19428,43 +19470,28 @@
             "imports": [
               "createHash"
             ]
-          },
-          {
-            "module": "fs",
-            "imports": [
-              "readFileSync"
-            ]
-          },
-          {
-            "module": "path",
-            "imports": [
-              "dirname",
-              "join"
-            ]
-          },
-          {
-            "module": "url",
-            "imports": [
-              "fileURLToPath"
-            ]
           }
         ],
         "internalDependencies": [
           {
-            "file": "../core/constants.js",
+            "file": "../core/data-file.js",
             "imports": [
-              "C_SI",
-              "E_SI",
-              "M_SUN_IAU_SI",
-              "M_SUN_SI",
-              "M_U_SI"
+              "dataSchema",
+              "dataText",
+              "parseDataFile"
             ]
           },
           {
             "file": "../core/json-schema.js",
             "imports": [
-              "schemaProblems",
               "JsonSchema"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./constant-rows.js",
+            "imports": [
+              "constantRow"
             ]
           },
           {
@@ -19532,6 +19559,7 @@
               "powerScale",
               "ratioScale",
               "scaleToNumber",
+              "solidusSides",
               "UNIT_SCALE",
               "ExactScale"
             ]
@@ -24637,6 +24665,7 @@
           "src/core/axes-registry.ts",
           "src/core/cell.ts",
           "src/core/constants.ts",
+          "src/core/data-file.ts",
           "src/core/flux-rules.ts",
           "src/core/json-schema.ts",
           "src/core/labeled-tensor.ts",
@@ -24666,6 +24695,7 @@
           "src/dimensional/buckingham.ts",
           "src/dimensional/connection-validators.ts",
           "src/dimensional/connection.ts",
+          "src/dimensional/constant-rows.ts",
           "src/dimensional/constants.ts",
           "src/dimensional/curvature-composite.ts",
           "src/dimensional/curvature-invariants.ts",
@@ -24767,21 +24797,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 358,
+    "totalTypeScriptFiles": 360,
     "totalModules": 13,
-    "totalLinesOfCode": 78514,
-    "totalExports": 2458,
+    "totalLinesOfCode": 78673,
+    "totalExports": 2469,
     "totalClasses": 79,
-    "totalInterfaces": 450,
-    "totalFunctions": 748,
+    "totalInterfaces": 451,
+    "totalFunctions": 757,
     "totalTypeGuards": 7,
     "totalEnums": 0,
-    "totalConstants": 380,
+    "totalConstants": 382,
     "totalReExports": 1252,
-    "totalTypeOnlyImports": 505,
+    "totalTypeOnlyImports": 506,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 78
+    "unusedExportsCount": 77
   }
 }
