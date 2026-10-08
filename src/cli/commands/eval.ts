@@ -11,7 +11,6 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { CliError, UsageError } from '../errors.js';
-import { expandSynonymValues, SynonymDisagreementError } from '../../dimensional/formula-names.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
@@ -59,15 +58,15 @@ function parseScope(
       scope[a.name] = read.value;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
-      if (e instanceof SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
+      if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
       const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
       throw new CliError(`upt eval: '${a.assignment}' is not a finite number or a known unit. ${msg}`);
     }
   }
   try {
-    return { scope: expandSynonymValues(scope), notes };
+    return { scope: api.expandSynonymValues(scope), notes };
   } catch (e) {
-    if (e instanceof SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
+    if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
     throw e;
   }
 }

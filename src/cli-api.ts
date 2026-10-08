@@ -70,8 +70,8 @@ export {
 } from './bridges/confrontations.js';
 /** Ask for a caller-table confrontation. The catalog status does not change. */
 export { requestCallerTableConfrontation } from './bridges/caller-table.js';
-/** The catalog row, the id parser, and the relation a numeric id evaluates. */
-export { catalogEntry, parseBridgeId, primaryRelation } from './bridges/catalog-load.js';
+/** The catalog row, the id parser (and its non-throwing form), and the relation a numeric id evaluates. */
+export { catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation } from './bridges/catalog-load.js';
 /** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
@@ -247,7 +247,33 @@ export {
  *
  * @internal
  */
-export { readBinding, bindingInUnit, readNamedBinding } from './numerical/binding-value.js';
+export { readBinding, bindingInUnit, readNamedBinding, BindingNumberError, TemperatureBindingError } from './numerical/binding-value.js';
+/** GUM propagation through a closed-form evaluator, and the correlation-matrix check, for `upt evaluate --sigma/--corr`. */
+export { propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite } from './numerical/evaluator-uncertainty.js';
+/** One propagated output, and one input's share of it. */
+export type { PropagatedOutput, UncertaintyContribution } from './numerical/evaluator-uncertainty.js';
+/** A stated constant checked against the registry; a disagreement is its own error. */
+export { constantAgreement, ConstantDisagreementError } from './dimensional/symbolic-constants.js';
+/** The quantity names a target is bound under, the near names of a miss, and the synonym fold. */
+export { aliasesForTarget, nearQuantityNames, shareSynonyms } from './composition/aliases.js';
+/** Synonym agreement and expansion of a binding set. */
+export { assertSynonymAgreement, expandSynonymValues } from './dimensional/formula-names.js';
+/** A dimensionless group a canonical equation multiplies (sound-speed's gamma): an input, not a graph node. */
+export { CANONICAL_GROUP_PREFACTORS } from './composition/canonical-prefactors.js';
+/** The one number formatter of explain text. */
+export { formatQuantity } from './composition/explain.js';
+/** A monomial odd in both carrier charge and mobility with opposite signs. */
+export { CarrierSignError } from './bridges/carrier-sign.js';
+/** The constant values a natural-unit mode overrides. */
+export { naturalConstantOverrides } from './dimensional/natural-units.js';
+/** The constant-value mode a formula is evaluated in: SI, natural, or geometrized. */
+export type { UnitMode } from './dimensional/natural-units.js';
+/** Kebab catalog names rewritten to one symbol each before a formula is parsed. */
+export { rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
+/** A recovered prefactor that is a vacuum constant rewritten through α. */
+export { vacuumConstantThroughAlpha } from './composition/bridge-analysis.js';
+/** The ledger id of an orphan-connector pair, when both names are slugs. */
+export { candidateIdIfSlug } from './composition/adjudication.js';
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */
 export { resolveQuantityName } from './index.js';
 /** The edge and the closed-form evaluator for an id. An evaluator with no edge is not unknown. */

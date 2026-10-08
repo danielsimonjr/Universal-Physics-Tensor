@@ -34,7 +34,7 @@ import type {
 } from '../../cli-api.js';
 import type { SourceName } from '../graphs.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
-import { naturalConstantOverrides, type UnitMode } from '../../dimensional/natural-units.js';
+import type { UnitMode } from '../../cli-api.js';
 import { withCatalogEvidence } from '../map-evidence.js';
 
 const FLAGS: FlagSpec[] = [
@@ -240,7 +240,7 @@ function proposedJunctions(
   graph: readonly BridgeEdge[],
   flags: ParsedArgs['flags']
 ): VizJunction[] {
-  const opts = parseDiscoveryOpts(flags);
+  const opts = parseDiscoveryOpts(api, flags);
   const ranked = api.rankDiscoveries(graph, opts);
   return api.deriveProposedBridges(ranked).map((p) => ({
     id: p.id,
@@ -272,7 +272,7 @@ async function analyzeEquation(
     ? []
     : await api.compareUserEquation(equation, catalogDims, {
         bindShortNames: options?.bindShortNames,
-        ...(options?.units === undefined ? {} : { constantOverrides: naturalConstantOverrides(options.units) }),
+        ...(options?.units === undefined ? {} : { constantOverrides: api.naturalConstantOverrides(options.units) }),
       });
   return { user, comparisons };
 }
@@ -592,7 +592,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     ? null
     : {
         core: coreAnchor(graph),
-        ...(args.flags.has('proposed') ? { groundTruth: groundTruthAnchor(api, parseDiscoveryOpts(args.flags)) } : {}),
+        ...(args.flags.has('proposed') ? { groundTruth: groundTruthAnchor(api, parseDiscoveryOpts(api, args.flags)) } : {}),
       };
   const edgeLegend = api.formatFilterLegend(edgeStats);
 

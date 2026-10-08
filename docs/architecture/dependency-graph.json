@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "8.0.0",
-    "totalFiles": 352,
+    "totalFiles": 353,
     "totalModules": 13,
-    "totalExports": 2378
+    "totalExports": 2409
   },
   "entryPoints": [
     {
@@ -4867,6 +4867,7 @@
           "catalogEntry",
           "relationsForCatalog",
           "primaryRelation",
+          "catalogIdNumber",
           "parseBridgeId",
           "catalogEdgeKey"
         ],
@@ -4879,6 +4880,7 @@
           "catalogEntry",
           "relationsForCatalog",
           "primaryRelation",
+          "catalogIdNumber",
           "parseBridgeId",
           "catalogEdgeKey"
         ]
@@ -7440,6 +7442,13 @@
             "typeOnly": true
           },
           {
+            "file": "../command.js",
+            "imports": [
+              "CommandCtx"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "../errors.js",
             "imports": [
               "CliError",
@@ -7452,38 +7461,6 @@
               "DiscoveryOptions"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../../numerical/binding-value.js",
-            "imports": [
-              "readNamedBinding"
-            ]
-          },
-          {
-            "file": "../../dimensional/units.js",
-            "imports": [
-              "UnitError"
-            ]
-          },
-          {
-            "file": "../../composition/canonical-graph.js",
-            "imports": [
-              "CANONICAL_GRAPH"
-            ]
-          },
-          {
-            "file": "../../composition/catalog-graph.js",
-            "imports": [
-              "CATALOG_GRAPH"
-            ]
-          },
-          {
-            "file": "../../dimensional/formula-names.js",
-            "imports": [
-              "assertSynonymAgreement",
-              "resolveQuantityName",
-              "SynonymDisagreementError"
-            ]
           }
         ],
         "exports": [
@@ -7605,12 +7582,6 @@
             "file": "../statuses.js",
             "imports": [
               "statusMeaning"
-            ]
-          },
-          {
-            "file": "../../composition/bridge-analysis.js",
-            "imports": [
-              "vacuumConstantThroughAlpha"
             ]
           }
         ],
@@ -7905,13 +7876,6 @@
             "imports": [
               "publishedUrl"
             ]
-          },
-          {
-            "file": "../../composition/adjudication.js",
-            "imports": [
-              "adjudicationFor",
-              "candidateIdIfSlug"
-            ]
           }
         ],
         "exports": [
@@ -8027,12 +7991,6 @@
             ]
           },
           {
-            "file": "../../composition/user-equation.js",
-            "imports": [
-              "rewriteCatalogHyphens"
-            ]
-          },
-          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -8105,15 +8063,15 @@
           {
             "file": "../../composition/adjudication.js",
             "imports": [
-              "ADJUDICATIONS",
               "AnnotatedCandidate",
               "AdjudicationVerdict"
-            ]
+            ],
+            "typeOnly": true
           },
           {
             "file": "../published-url.js",
             "imports": [
-              "publishedUrl"
+              "adjudicationSourceUrls"
             ]
           },
           {
@@ -8173,13 +8131,6 @@
             ]
           },
           {
-            "file": "../../dimensional/formula-names.js",
-            "imports": [
-              "expandSynonymValues",
-              "SynonymDisagreementError"
-            ]
-          },
-          {
             "file": "../version.js",
             "imports": [
               "formulaParserLabel"
@@ -8214,14 +8165,7 @@
       },
       "src/cli/commands/evaluate.ts": {
         "description": "`upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /",
-        "externalDependencies": [
-          {
-            "package": "@danielsimonjr/mathts-functions",
-            "imports": [
-              "propagateUncertainty"
-            ]
-          }
-        ],
+        "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -8275,7 +8219,8 @@
             "imports": [
               "AppliedCase",
               "CaseResult",
-              "EvaluatorParameter"
+              "EvaluatorParameter",
+              "PropagatedOutput"
             ],
             "typeOnly": true
           },
@@ -8287,11 +8232,7 @@
           }
         ],
         "exports": [
-          "command",
-          "propagateEvaluatorUncertainty"
-        ],
-        "functions": [
-          "propagateEvaluatorUncertainty"
+          "command"
         ],
         "constants": [
           "command"
@@ -8338,12 +8279,6 @@
             ]
           },
           {
-            "file": "../../bridges/carrier-sign.js",
-            "imports": [
-              "CarrierSignError"
-            ]
-          },
-          {
             "file": "../errors.js",
             "imports": [
               "UsageError",
@@ -8354,52 +8289,6 @@
             "file": "../search-index.js",
             "imports": [
               "searchNameWords"
-            ]
-          },
-          {
-            "file": "../../numerical/binding-value.js",
-            "imports": [
-              "readNamedBinding"
-            ]
-          },
-          {
-            "file": "../../dimensional/units.js",
-            "imports": [
-              "UnitError"
-            ]
-          },
-          {
-            "file": "../../dimensional/symbolic-constants.js",
-            "imports": [
-              "constantRecord"
-            ]
-          },
-          {
-            "file": "../../composition/aliases.js",
-            "imports": [
-              "aliasesForTarget",
-              "nearQuantityNames",
-              "shareSynonyms"
-            ]
-          },
-          {
-            "file": "../../dimensional/formula-names.js",
-            "imports": [
-              "assertSynonymAgreement",
-              "resolveQuantityName",
-              "SynonymDisagreementError"
-            ]
-          },
-          {
-            "file": "../../composition/canonical-prefactors.js",
-            "imports": [
-              "CANONICAL_GROUP_PREFACTORS"
-            ]
-          },
-          {
-            "file": "../../composition/explain.js",
-            "imports": [
-              "formatQuantity"
             ]
           }
         ],
@@ -8805,11 +8694,11 @@
             ]
           },
           {
-            "file": "../../dimensional/natural-units.js",
+            "file": "../../cli-api.js",
             "imports": [
-              "naturalConstantOverrides",
               "UnitMode"
-            ]
+            ],
+            "typeOnly": true
           },
           {
             "file": "../map-evidence.js",
@@ -9915,12 +9804,21 @@
         "description": "A path in this repository, as a GitHub blob URL on `master`.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../composition/adjudication.js",
+            "imports": [
+              "ADJUDICATIONS"
+            ]
+          }
+        ],
         "exports": [
-          "publishedUrl"
+          "publishedUrl",
+          "adjudicationSourceUrls"
         ],
         "functions": [
-          "publishedUrl"
+          "publishedUrl",
+          "adjudicationSourceUrls"
         ]
       },
       "src/cli/record-reach.ts": {
@@ -10457,6 +10355,7 @@
             "file": "./bridges/catalog-load.js",
             "imports": [
               "catalogEntry",
+              "catalogIdNumber",
               "parseBridgeId",
               "primaryRelation"
             ],
@@ -10964,7 +10863,106 @@
             "imports": [
               "readBinding",
               "bindingInUnit",
-              "readNamedBinding"
+              "readNamedBinding",
+              "BindingNumberError",
+              "TemperatureBindingError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./numerical/evaluator-uncertainty.js",
+            "imports": [
+              "propagateEvaluatorUncertainty",
+              "correlationIsPositiveSemidefinite"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./numerical/evaluator-uncertainty.js",
+            "imports": [
+              "PropagatedOutput",
+              "UncertaintyContribution"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/symbolic-constants.js",
+            "imports": [
+              "constantAgreement",
+              "ConstantDisagreementError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/aliases.js",
+            "imports": [
+              "aliasesForTarget",
+              "nearQuantityNames",
+              "shareSynonyms"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/formula-names.js",
+            "imports": [
+              "assertSynonymAgreement",
+              "expandSynonymValues"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/canonical-prefactors.js",
+            "imports": [
+              "CANONICAL_GROUP_PREFACTORS"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/explain.js",
+            "imports": [
+              "formatQuantity"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/carrier-sign.js",
+            "imports": [
+              "CarrierSignError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/natural-units.js",
+            "imports": [
+              "naturalConstantOverrides"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/natural-units.js",
+            "imports": [
+              "UnitMode"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/hyphen-names.js",
+            "imports": [
+              "rewriteCatalogHyphens"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/bridge-analysis.js",
+            "imports": [
+              "vacuumConstantThroughAlpha"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/adjudication.js",
+            "imports": [
+              "candidateIdIfSlug"
             ],
             "reExport": true
           },
@@ -11096,6 +11094,7 @@
           "rigorDistribution",
           "requestCallerTableConfrontation",
           "catalogEntry",
+          "catalogIdNumber",
           "parseBridgeId",
           "primaryRelation",
           "demonstrationEdges",
@@ -11206,6 +11205,24 @@
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
+          "BindingNumberError",
+          "TemperatureBindingError",
+          "propagateEvaluatorUncertainty",
+          "correlationIsPositiveSemidefinite",
+          "constantAgreement",
+          "ConstantDisagreementError",
+          "aliasesForTarget",
+          "nearQuantityNames",
+          "shareSynonyms",
+          "assertSynonymAgreement",
+          "expandSynonymValues",
+          "CANONICAL_GROUP_PREFACTORS",
+          "formatQuantity",
+          "CarrierSignError",
+          "naturalConstantOverrides",
+          "rewriteCatalogHyphens",
+          "vacuumConstantThroughAlpha",
+          "candidateIdIfSlug",
           "resolveQuantityName",
           "evaluatorOutput",
           "resolveEvaluable",
@@ -11253,6 +11270,9 @@
           "Witness",
           "AtlasModel",
           "ModelId",
+          "PropagatedOutput",
+          "UncertaintyContribution",
+          "UnitMode",
           "BridgeEdge",
           "VizJunction",
           "VizModel",
@@ -11300,6 +11320,7 @@
           "rigorDistribution",
           "requestCallerTableConfrontation",
           "catalogEntry",
+          "catalogIdNumber",
           "parseBridgeId",
           "primaryRelation",
           "demonstrationEdges",
@@ -11448,6 +11469,27 @@
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
+          "BindingNumberError",
+          "TemperatureBindingError",
+          "propagateEvaluatorUncertainty",
+          "correlationIsPositiveSemidefinite",
+          "PropagatedOutput",
+          "UncertaintyContribution",
+          "constantAgreement",
+          "ConstantDisagreementError",
+          "aliasesForTarget",
+          "nearQuantityNames",
+          "shareSynonyms",
+          "assertSynonymAgreement",
+          "expandSynonymValues",
+          "CANONICAL_GROUP_PREFACTORS",
+          "formatQuantity",
+          "CarrierSignError",
+          "naturalConstantOverrides",
+          "UnitMode",
+          "rewriteCatalogHyphens",
+          "vacuumConstantThroughAlpha",
+          "candidateIdIfSlug",
           "resolveQuantityName",
           "evaluatorOutput",
           "resolveEvaluable",
@@ -13137,12 +13179,6 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../dimensional/algebra.js",
-            "imports": [
-              "equals"
-            ]
-          },
-          {
             "file": "../dimensional/bridge-check.js",
             "imports": [
               "EXPECTED_DIMENSION_BY_BRIDGE"
@@ -13154,12 +13190,6 @@
               "Dimension"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../dimensional/units.js",
-            "imports": [
-              "parseUnit"
-            ]
           },
           {
             "file": "../bridges/evaluators.js",
@@ -16392,6 +16422,12 @@
             ]
           },
           {
+            "file": "../bridges/catalog-load.js",
+            "imports": [
+              "catalogIdNumber"
+            ]
+          },
+          {
             "file": "../canonical/normal-form.js",
             "imports": [
               "normalForm"
@@ -18910,12 +18946,18 @@
         ],
         "exports": [
           "CONSTANT_REGISTRY",
+          "CONSTANT_AGREEMENT",
           "CONSTANTS",
           "CONSTANT_PROVENANCE",
           "constantRecord",
+          "constantAgreement",
           "constantNotes",
           "constantScope",
-          "piMultipleValue"
+          "piMultipleValue",
+          "ConstantDisagreementError"
+        ],
+        "classes": [
+          "ConstantDisagreementError"
         ],
         "interfaces": [
           "ConstantRecord",
@@ -18924,12 +18966,14 @@
         ],
         "functions": [
           "constantRecord",
+          "constantAgreement",
           "constantNotes",
           "constantScope",
           "piMultipleValue"
         ],
         "constants": [
           "CONSTANT_REGISTRY",
+          "CONSTANT_AGREEMENT",
           "CONSTANTS",
           "CONSTANT_PROVENANCE"
         ]
@@ -21702,7 +21746,13 @@
           "readNamedBinding",
           "readBinding",
           "bindingInUnit",
-          "readParameter"
+          "readParameter",
+          "TemperatureBindingError",
+          "BindingNumberError"
+        ],
+        "classes": [
+          "TemperatureBindingError",
+          "BindingNumberError"
         ],
         "interfaces": [
           "BindingValue",
@@ -22177,6 +22227,41 @@
           "NumericalBackendError",
           "EngineCapabilityError",
           "GL4ConvergenceError"
+        ]
+      },
+      "src/numerical/evaluator-uncertainty.ts": {
+        "description": "First-order propagation of input uncertainties through a closed-form",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "propagateUncertainty"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-matrix",
+            "imports": [
+              "eigvals"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "NONLINEAR_FRACTION",
+          "propagateEvaluatorUncertainty",
+          "correlationIsPositiveSemidefinite"
+        ],
+        "interfaces": [
+          "UncertaintyContribution",
+          "PropagatedOutput"
+        ],
+        "functions": [
+          "propagateEvaluatorUncertainty",
+          "correlationIsPositiveSemidefinite"
+        ],
+        "constants": [
+          "NONLINEAR_FRACTION"
         ]
       },
       "src/numerical/formula-contract.ts": {
@@ -24239,6 +24324,7 @@
           "src/numerical/einstein-equation.ts",
           "src/numerical/engine-registry.ts",
           "src/numerical/errors.ts",
+          "src/numerical/evaluator-uncertainty.ts",
           "src/numerical/formula-contract.ts",
           "src/numerical/formula-dimension.ts",
           "src/numerical/formula-mathts.ts",
@@ -24285,21 +24371,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 352,
+    "totalTypeScriptFiles": 353,
     "totalModules": 13,
-    "totalLinesOfCode": 77358,
-    "totalExports": 2378,
-    "totalClasses": 66,
-    "totalInterfaces": 438,
-    "totalFunctions": 728,
+    "totalLinesOfCode": 77409,
+    "totalExports": 2409,
+    "totalClasses": 69,
+    "totalInterfaces": 440,
+    "totalFunctions": 732,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 378,
-    "totalReExports": 1207,
-    "totalTypeOnlyImports": 499,
+    "totalConstants": 380,
+    "totalReExports": 1229,
+    "totalTypeOnlyImports": 502,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 80
+    "unusedExportsCount": 82
   }
 }

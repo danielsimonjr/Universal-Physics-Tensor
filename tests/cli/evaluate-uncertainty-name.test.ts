@@ -1,13 +1,14 @@
 /**
- * The CLI uncertainty helper is not the graph-layer `propagateUncertainty`.
- * Correlations and the curvature ratio stay on the CLI helper. The helper
- * does not call the graph-layer function.
+ * The evaluator uncertainty engine is a numerical module, not a CLI helper,
+ * and it is not the graph-layer `propagateUncertainty`. Correlations and the
+ * curvature ratio stay on the engine. The CLI module defines no numerics.
  */
 
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import * as engine from '../../src/numerical/evaluator-uncertainty.js';
 import * as evaluateCommand from '../../src/cli/commands/evaluate.js';
 import { propagateUncertainty } from '../../src/composition/uncertainty.js';
 import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
@@ -17,20 +18,21 @@ const edge42 = catalogEdge(catalogEdgeKey(42));
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
-describe('CLI evaluator uncertainty', () => {
-  it('is not named propagateUncertainty and does not call the graph-layer function', () => {
-    expect('propagateUncertainty' in evaluateCommand).toBe(false);
-    expect(typeof evaluateCommand.propagateEvaluatorUncertainty).toBe('function');
-    expect(evaluateCommand.propagateEvaluatorUncertainty).not.toBe(propagateUncertainty);
-    const source = readFileSync(resolve(root, 'src/cli/commands/evaluate.ts'), 'utf8');
-    expect(source).not.toContain('composition/uncertainty');
-    expect(source).not.toMatch(/export function propagateUncertainty\b/);
+describe('evaluator uncertainty engine', () => {
+  it('lives in numerical/, is not named propagateUncertainty, and the CLI module defines none of it', () => {
+    expect('propagateUncertainty' in engine).toBe(false);
+    expect(typeof engine.propagateEvaluatorUncertainty).toBe('function');
+    expect(engine.propagateEvaluatorUncertainty).not.toBe(propagateUncertainty);
+    expect('propagateEvaluatorUncertainty' in evaluateCommand).toBe(false);
+    const engineSource = readFileSync(resolve(root, 'src/numerical/evaluator-uncertainty.ts'), 'utf8');
+    expect(engineSource).not.toContain('composition/uncertainty');
+    expect(engineSource).not.toMatch(/export function propagateUncertainty\b/);
     const publicSurface = readFileSync(resolve(root, 'src/index.ts'), 'utf8');
     expect(publicSurface).toContain('propagateUncertainty');
   });
 
   it('keeps pairwise correlations and the curvature ratio', () => {
-    const linear = evaluateCommand.propagateEvaluatorUncertainty(
+    const linear = engine.propagateEvaluatorUncertainty(
       (inputs) => ({ y: (inputs.x ?? 0) + (inputs.z ?? 0) }),
       { x: 2, z: 3 },
       { x: 1, z: 1 },
@@ -42,7 +44,7 @@ describe('CLI evaluator uncertainty', () => {
     expect(linear.y?.contributions.z?.curvatureRatio).toBeCloseTo(0, 8);
     expect(linear.y?.unreliable).toEqual([]);
 
-    const curved = evaluateCommand.propagateEvaluatorUncertainty(
+    const curved = engine.propagateEvaluatorUncertainty(
       (inputs) => ({ y: (inputs.x ?? 0) ** 2 }),
       { x: 2 },
       { x: 1 },

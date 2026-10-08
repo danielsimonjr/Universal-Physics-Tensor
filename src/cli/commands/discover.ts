@@ -12,8 +12,8 @@ import { resolveGraph, groundTruthAnchor, groundTruthLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import type { VettedCandidate } from '../../composition/discovery.js';
-import { ADJUDICATIONS, type AnnotatedCandidate, type AdjudicationVerdict } from '../../composition/adjudication.js';
-import { publishedUrl } from '../published-url.js';
+import type { AnnotatedCandidate, AdjudicationVerdict } from '../../composition/adjudication.js';
+import { adjudicationSourceUrls } from '../published-url.js';
 import type { ConsequenceSignal, ConsequenceEvidence } from '../../composition/consequence.js';
 
 /** `annotated` (adjudication layer) composed with the consequence layer —
@@ -59,7 +59,7 @@ const FLAGS: FlagSpec[] = [
   JSON_FLAG,
 ];
 
-const ADJUDICATION_URLS = [...new Set(ADJUDICATIONS.map((a) => publishedUrl(a.source)))].join('\n        ');
+const ADJUDICATION_URLS = adjudicationSourceUrls().join('\n        ');
 
 const HELP = `upt discover [--source=catalog|canonical|both]
         VET the link candidates through the inference suite: hypothesise
@@ -265,7 +265,7 @@ function readinessOf(api: CommandCtx['api'], candidates: readonly FullyAnnotated
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, label, source } = resolveGraph(api, args.flags);
-  const opts = parseDiscoveryOpts(args.flags);
+  const opts = parseDiscoveryOpts(api, args.flags);
   const anchor = groundTruthAnchor(api, opts);
   const ranked = api.rankDiscoveries(graph, opts);
   const isDerive = args.flags.has('derive');

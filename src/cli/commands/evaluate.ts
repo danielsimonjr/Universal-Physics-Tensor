@@ -5,7 +5,6 @@
  * did not exist. With no bridge id, lists the evaluable bridges + their inputs.
  * `upt evaluate case-<id> …` runs an applied case (`src/cases/`).
  */
-import { propagateUncertainty as propagateScalarUncertainty } from '@danielsimonjr/mathts-functions';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
@@ -13,7 +12,7 @@ import { emitJson } from '../output.js';
 import { siUnitOf } from '../expr-print.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
-import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
+import type { AppliedCase, CaseResult, EvaluatorParameter, PropagatedOutput } from '../../cli-api.js';
 import { closedFormRangeLabel } from '../closed-form-range.js';
 
 const FLAGS: FlagSpec[] = [
@@ -96,127 +95,6 @@ function describeParameter(p: EvaluatorParameter): string {
   );
 }
 
-/** A curvature term above this fraction of the linear term marks the linearization unreliable. */
-const NONLINEAR_FRACTION = 0.1;
-
-interface Contribution {
-  readonly sensitivity: number | null;
-  readonly contribution: number | null;
-  /** |f(x+u) + f(x−u) − 2f(x)| / 2 over |c·u|: the second-order term against the first. */
-  readonly curvatureRatio: number | null;
-  readonly note?: string;
-}
-
-/**
- * First-order propagation of input uncertainties through `f`, GUM's law of
- * propagation: u² = Σᵢⱼ cᵢ cⱼ ρᵢⱼ uᵢ uⱼ, with cᵢ by central difference. Each
- * input is also stepped by ±uᵢ, so a curvature term comparable to the linear
- * term is reported rather than hidden in a small-looking σ.
- *
- * This is not the public graph-layer `propagateUncertainty`. That function
- * takes a bridge edge and does not fold correlations or a curvature ratio.
- *
- * @internal
- */
-export function propagateEvaluatorUncertainty(
-  f: (inputs: Record<string, number>) => Record<string, unknown>,
-  inputs: Readonly<Record<string, number>>,
-  sigma: Readonly<Record<string, number>>,
-  corr: ReadonlyMap<string, number>,
-): Record<string, { value: number; u: number | null; relative: number | null; contributions: Record<string, Contribution>; unreliable: string[] }> {
-  const base = f({ ...inputs });
-  const keys = Object.keys(sigma);
-  const out: ReturnType<typeof propagateEvaluatorUncertainty> = {};
-  for (const [name, v] of Object.entries(base)) {
-    if (typeof v !== 'number' || name in inputs) continue;
-    const contributions: Record<string, Contribution> = {};
-    const c: Record<string, number | null> = {};
-    const unreliable: string[] = [];
-    for (const k of keys) {
-      const u = sigma[k]!;
-      const x = inputs[k]!;
-      // The CLI step is per input (`u·10⁻³`, or a relative step when u is 0).
-      // MathTS differentiates every key of `values` with one `relativeStep`, so
-      // this call's values object is only `k`. The callback puts the other
-      // inputs back. Passing them as values would step an exact input (f_lo = 0
-      // goes negative) and discard this partial. The correlation sum stays here.
-      const h = u > 0 ? u * 1e-3 : Math.abs(x) * 1e-6 || 1e-6;
-      const relativeStep = h / Math.max(Math.abs(x), 1e-30);
-      let probed: ReturnType<typeof propagateScalarUncertainty> | undefined;
-      try {
-        probed = propagateScalarUncertainty(
-          (vals) => {
-            const out = f({ ...inputs, ...vals })[name];
-            if (typeof out !== 'number' || !Number.isFinite(out)) throw new Error('non-numeric');
-            return out;
-          },
-          { [k]: x },
-          { [k]: u },
-          u > 0
-            ? { relativeStep, curvatureOffsets: { [k]: u } }
-            : { relativeStep },
-        );
-      } catch {
-        probed = undefined;
-      }
-      const ck = probed?.partials[k];
-      if (probed === undefined || typeof ck !== 'number' || !Number.isFinite(ck)) {
-        c[k] = null;
-        contributions[k] = { sensitivity: null, contribution: null, curvatureRatio: null, note: 'the evaluator is undefined next to this input' };
-        unreliable.push(k);
-        continue;
-      }
-      c[k] = ck;
-      let curvatureRatio: number | null = null;
-      let note: string | undefined;
-      if (u > 0 && ck * u !== 0) {
-        const reported = probed.curvature?.[k];
-        if (reported === undefined || reported === null || !Number.isFinite(reported)) {
-          note = '±u reaches outside the evaluator\'s domain';
-          unreliable.push(k);
-        } else {
-          curvatureRatio = reported;
-          if (curvatureRatio > NONLINEAR_FRACTION) unreliable.push(k);
-        }
-      }
-      contributions[k] = { sensitivity: ck, contribution: ck * u, curvatureRatio, ...(note === undefined ? {} : { note }) };
-    }
-    let variance: number | null = 0;
-    for (const i of keys) {
-      for (const j of keys) {
-        const rho = i === j ? 1 : (corr.get(`${i},${j}`) ?? corr.get(`${j},${i}`) ?? 0);
-        if (rho === 0) continue;
-        if (c[i] === null || c[j] === null) variance = null;
-        if (variance !== null) variance += c[i]! * c[j]! * rho * sigma[i]! * sigma[j]!;
-      }
-    }
-    const u = variance === null ? null : Math.sqrt(Math.max(variance, 0));
-    out[name] = { value: v, u, relative: u === null || v === 0 ? null : u / Math.abs(v), contributions, unreliable };
-  }
-  return out;
-}
-
-/** A correlation matrix that is not positive semidefinite describes no joint distribution. */
-function isPositiveSemidefinite(keys: readonly string[], corr: ReadonlyMap<string, number>): boolean {
-  const n = keys.length;
-  const a = keys.map((ki) => keys.map((kj) => (ki === kj ? 1 : (corr.get(`${ki},${kj}`) ?? corr.get(`${kj},${ki}`) ?? 0))));
-  const l: number[][] = a.map(() => new Array<number>(n).fill(0));
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j <= i; j++) {
-      let sum = a[i]![j]!;
-      for (let k = 0; k < j; k++) sum -= l[i]![k]! * l[j]![k]!;
-      if (i === j) {
-        if (sum < -1e-12) return false;
-        l[i]![i] = Math.sqrt(Math.max(sum, 0));
-      } else {
-        l[i]![j] = l[j]![j]! === 0 ? 0 : sum / l[j]![j]!;
-        if (l[j]![j]! === 0 && Math.abs(sum) > 1e-12) return false;
-      }
-    }
-  }
-  return true;
-}
-
 function parseUncertainty(
   api: CommandCtx['api'],
   spec: { readonly parameters: readonly EvaluatorParameter[] },
@@ -241,7 +119,7 @@ function parseUncertainty(
         u = api.readNamedBinding(given!, m[2]!, { reading: 'difference', declaredUnit: p.unit }).value;
       } catch (e) {
         if (!(e instanceof api.UnitError)) throw e;
-        if (!/is not a (finite )?number/.test(e.message)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);
+        if (!(e instanceof api.BindingNumberError)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);
       }
     }
     if (m === null || key === undefined || !Number.isFinite(u) || u < 0) {
@@ -261,7 +139,7 @@ function parseUncertainty(
     }
     corr.set(`${x},${y}`, rho);
   }
-  if (!isPositiveSemidefinite(Object.keys(sigma), corr)) {
+  if (!api.correlationIsPositiveSemidefinite(Object.keys(sigma), corr)) {
     throw new CliError('upt evaluate: the --corr values are not a valid correlation matrix (not positive semidefinite)');
   }
   return { sigma, corr };
@@ -274,7 +152,7 @@ const CASE_NOT_INCLUDED =
 
 interface Uncertainty {
   readonly block: Record<string, unknown>;
-  readonly propagated: ReturnType<typeof propagateEvaluatorUncertainty>;
+  readonly propagated: Record<string, PropagatedOutput>;
   readonly exactInputs: string[];
   readonly notIncluded: string;
 }
@@ -291,7 +169,7 @@ function uncertaintyOf(
   if (sigmaArgs.length === 0 && corrArgs.length > 0) throw new CliError('upt evaluate: --corr needs --sigma for both inputs');
   if (sigmaArgs.length === 0) return null;
   const { sigma, corr } = parseUncertainty(ctx.api, spec, sigmaArgs, corrArgs, inputs);
-  const propagated = propagateEvaluatorUncertainty(f, inputs, sigma, corr);
+  const propagated = ctx.api.propagateEvaluatorUncertainty(f, inputs, sigma, corr);
   const exactInputs = Object.keys(inputs).filter((k) => !(k in sigma));
   return {
     block: {

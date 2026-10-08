@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 80
+- **Potentially unused exports**: 82
 
 ## Potentially Unused Files
 
@@ -172,6 +172,10 @@ These exports are not imported by any other file in the codebase:
 - `G` (constant)
 - `e` (constant)
 
+### `src/dimensional/symbolic-constants.ts`
+
+- `CONSTANT_AGREEMENT` (constant)
+
 ### `src/dimensional/unit-convention.ts`
 
 - `QUANTITY_CONVENTION_UNIT` (constant)
@@ -179,6 +183,10 @@ These exports are not imported by any other file in the codebase:
 ### `src/dimensional/units.ts`
 
 - `unitDimension` (function)
+
+### `src/numerical/evaluator-uncertainty.ts`
+
+- `NONLINEAR_FRACTION` (constant)
 
 ### `src/numerical/formula-dimension.ts`
 

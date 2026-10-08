@@ -126,6 +126,17 @@ export function primaryRelation(id: number): CatalogRelation | undefined {
 }
 
 /**
+ * The catalog number a piece of text names (`42`, `be-42`, `BE-42`), or
+ * undefined when it names none (an atlas id, a canonical id, a quantity).
+ * The one place a bridge id is read from text; {@link parseBridgeId} throws
+ * where this returns undefined.
+ */
+export function catalogIdNumber(raw: string): number | undefined {
+  const match = /^(?:be-)?(\d+)$/i.exec(raw.trim());
+  return match === null ? undefined : Number(match[1]);
+}
+
+/**
  * Parse a catalog id from a number or from text the caller typed.
  * Accepts `42`, `be-42`, and `BE-42`. This is the only such parser.
  */
@@ -136,11 +147,11 @@ export function parseBridgeId(bridgeId: number | string): number {
     }
     return bridgeId;
   }
-  const match = /^(?:be-)?(\d+)$/i.exec(bridgeId.trim());
-  if (match === null) {
+  const id = catalogIdNumber(bridgeId);
+  if (id === undefined) {
     throw new TypeError(`parseBridgeId: '${bridgeId}' is not a catalog id`);
   }
-  return Number(match[1]);
+  return id;
 }
 
 /** Graph id for a catalog number: the stable key, not a switch. */

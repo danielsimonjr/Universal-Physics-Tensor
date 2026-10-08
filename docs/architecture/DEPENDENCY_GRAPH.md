@@ -49,7 +49,7 @@ The codebase is organized into the following modules:
 - **diff**: 3 files
 - **dimensional**: 38 files
 - **entry**: 1 file
-- **numerical**: 38 files
+- **numerical**: 39 files
 - **relations**: 8 files
 
 ---
@@ -1392,7 +1392,7 @@ The codebase is organized into the following modules:
 
   ```text
   bridgeCatalog, catalogEntries, catalogRelations, catalogEvaluators, catalogConfrontations,
-  catalogEntry, relationsForCatalog, primaryRelation, parseBridgeId, catalogEdgeKey
+  catalogEntry, relationsForCatalog, primaryRelation, catalogIdNumber, parseBridgeId, catalogEdgeKey
   ```
 
 
@@ -2233,13 +2233,9 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../args.js` | `ParsedArgs` | Import (type-only) |
+| `../command.js` | `CommandCtx` | Import (type-only) |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
-| `../../numerical/binding-value.js` | `readNamedBinding` | Import |
-| `../../dimensional/units.js` | `UnitError` | Import |
-| `../../composition/canonical-graph.js` | `CANONICAL_GRAPH` | Import |
-| `../../composition/catalog-graph.js` | `CATALOG_GRAPH` | Import |
-| `../../dimensional/formula-names.js` | `assertSynonymAgreement, resolveQuantityName, SynonymDisagreementError` | Import |
 
 **Exports:**
 - Functions: `parseDiscoveryOpts`
@@ -2276,7 +2272,6 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../statuses.js` | `statusMeaning` | Import |
-| `../../composition/bridge-analysis.js` | `vacuumConstantThroughAlpha` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2374,7 +2369,6 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
-| `../../composition/adjudication.js` | `adjudicationFor, candidateIdIfSlug` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2410,7 +2404,6 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
-| `../../composition/user-equation.js` | `rewriteCatalogHyphens` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -2430,8 +2423,8 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `../../composition/discovery.js` | `VettedCandidate` | Import (type-only) |
-| `../../composition/adjudication.js` | `ADJUDICATIONS, AnnotatedCandidate, AdjudicationVerdict` | Import |
-| `../published-url.js` | `publishedUrl` | Import |
+| `../../composition/adjudication.js` | `AnnotatedCandidate, AdjudicationVerdict` | Import (type-only) |
+| `../published-url.js` | `adjudicationSourceUrls` | Import |
 | `../../composition/consequence.js` | `ConsequenceSignal, ConsequenceEvidence` | Import (type-only) |
 
 **Exports:**
@@ -2449,7 +2442,6 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
-| `../../dimensional/formula-names.js` | `expandSynonymValues, SynonymDisagreementError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `codataScope` | Import |
@@ -2462,11 +2454,6 @@ The codebase is organized into the following modules:
 
 ### `src/cli/commands/evaluate.ts` - `upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /
 
-**External Dependencies:**
-| Package | Import |
-|---------|--------|
-| `@danielsimonjr/mathts-functions` | `propagateUncertainty` |
-
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -2477,11 +2464,10 @@ The codebase is organized into the following modules:
 | `../expr-print.js` | `siUnitOf` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
-| `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
+| `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter, PropagatedOutput` | Import (type-only) |
 | `../closed-form-range.js` | `closedFormRangeLabel` | Import |
 
 **Exports:**
-- Functions: `propagateEvaluatorUncertainty`
 - Constants: `command`
 
 ---
@@ -2496,16 +2482,8 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../bridges/carrier-sign.js` | `CarrierSignError` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../search-index.js` | `searchNameWords` | Import |
-| `../../numerical/binding-value.js` | `readNamedBinding` | Import |
-| `../../dimensional/units.js` | `UnitError` | Import |
-| `../../dimensional/symbolic-constants.js` | `constantRecord` | Import |
-| `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Import |
-| `../../dimensional/formula-names.js` | `assertSynonymAgreement, resolveQuantityName, SynonymDisagreementError` | Import |
-| `../../composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
-| `../../composition/explain.js` | `formatQuantity` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2604,7 +2582,7 @@ The codebase is organized into the following modules:
 | `../../cli-api.js` | `BridgeEdge, CanonicalComparison, EquationAnalysis, EvidenceTag, RelationType, VizJunction, VizModel` | Import (type-only) |
 | `../graphs.js` | `SourceName` | Import (type-only) |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
-| `../../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../../cli-api.js` | `UnitMode` | Import (type-only) |
 | `../map-evidence.js` | `withCatalogEvidence` | Import |
 
 **Exports:**
@@ -2973,8 +2951,13 @@ The codebase is organized into the following modules:
 
 ### `src/cli/published-url.ts` - A path in this repository, as a GitHub blob URL on `master`.
 
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../composition/adjudication.js` | `ADJUDICATIONS` | Import |
+
 **Exports:**
-- Functions: `publishedUrl`
+- Functions: `publishedUrl`, `adjudicationSourceUrls`
 
 ---
 
@@ -3127,7 +3110,7 @@ The codebase is organized into the following modules:
 | `./composition/audit-coverage.js` | `auditCoverage` | Re-export |
 | `./bridges/confrontations.js` | `CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution` | Re-export |
 | `./bridges/caller-table.js` | `requestCallerTableConfrontation` | Re-export |
-| `./bridges/catalog-load.js` | `catalogEntry, parseBridgeId, primaryRelation` | Re-export |
+| `./bridges/catalog-load.js` | `catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation` | Re-export |
 | `./composition/catalog-graph.js` | `demonstrationEdges` | Re-export |
 | `./bridges/confrontations.js` | `ConfrontationEntry, RigorTier` | Re-export |
 | `./bridges/observations/types.js` | `consistencyComparison` | Re-export |
@@ -3187,7 +3170,20 @@ The codebase is organized into the following modules:
 | `./atlas/catalog-formal-ref.js` | `catalogFormalRef` | Re-export |
 | `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
 | `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, MetricMassError, schwarzschildCircularOrbit, type MetricId` | Re-export |
-| `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding` | Re-export |
+| `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding, BindingNumberError, TemperatureBindingError` | Re-export |
+| `./numerical/evaluator-uncertainty.js` | `propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite` | Re-export |
+| `./numerical/evaluator-uncertainty.js` | `PropagatedOutput, UncertaintyContribution` | Re-export |
+| `./dimensional/symbolic-constants.js` | `constantAgreement, ConstantDisagreementError` | Re-export |
+| `./composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Re-export |
+| `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues` | Re-export |
+| `./composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Re-export |
+| `./composition/explain.js` | `formatQuantity` | Re-export |
+| `./bridges/carrier-sign.js` | `CarrierSignError` | Re-export |
+| `./dimensional/natural-units.js` | `naturalConstantOverrides` | Re-export |
+| `./dimensional/natural-units.js` | `UnitMode` | Re-export |
+| `./dimensional/hyphen-names.js` | `rewriteCatalogHyphens` | Re-export |
+| `./composition/bridge-analysis.js` | `vacuumConstantThroughAlpha` | Re-export |
+| `./composition/adjudication.js` | `candidateIdIfSlug` | Re-export |
 | `./index.js` | `resolveQuantityName` | Re-export |
 | `./composition/evaluate-relation.js` | `evaluatorOutput, resolveEvaluable` | Re-export |
 | `./bridges/evaluators.js` | `unusedInputKeys` | Re-export |
@@ -3212,11 +3208,11 @@ The codebase is organized into the following modules:
   getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges,
   catalogFrontierAccount, formatFrontierAccount, rankDiscoveries, ANCHOR_DEFAULT, BRIDGE_EQUATIONS,
   auditCoverage, CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor,
-  rigorDistribution, requestCallerTableConfrontation, catalogEntry, parseBridgeId, primaryRelation,
-  demonstrationEdges, ConfrontationEntry, RigorTier, consistencyComparison, ConfrontationOutcome,
-  decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec, EvaluatorParameter,
-  resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck, CaseResult,
-  convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
+  rigorDistribution, requestCallerTableConfrontation, catalogEntry, catalogIdNumber, parseBridgeId,
+  primaryRelation, demonstrationEdges, ConfrontationEntry, RigorTier, consistencyComparison,
+  ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
+  EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck,
+  CaseResult, convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
   simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
   scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
   deriveEdgeEvidence, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
@@ -3242,10 +3238,15 @@ The codebase is organized into the following modules:
   AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
   ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
   kerrGeodesic, kerrTurningPointOrbit, MetricMassError, schwarzschildCircularOrbit, type MetricId,
-  readBinding, bindingInUnit, readNamedBinding, resolveQuantityName, evaluatorOutput,
-  resolveEvaluable, unusedInputKeys, SynonymDisagreementError, builtinFormulaDimensionChecker,
-  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
-  EvidenceTag, RelationType, EquationAnalysis
+  readBinding, bindingInUnit, readNamedBinding, BindingNumberError, TemperatureBindingError,
+  propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite, PropagatedOutput,
+  UncertaintyContribution, constantAgreement, ConstantDisagreementError, aliasesForTarget,
+  nearQuantityNames, shareSynonyms, assertSynonymAgreement, expandSynonymValues,
+  CANONICAL_GROUP_PREFACTORS, formatQuantity, CarrierSignError, naturalConstantOverrides, UnitMode,
+  rewriteCatalogHyphens, vacuumConstantThroughAlpha, candidateIdIfSlug, resolveQuantityName,
+  evaluatorOutput, resolveEvaluable, unusedInputKeys, SynonymDisagreementError,
+  builtinFormulaDimensionChecker, missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge,
+  VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -3754,10 +3755,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/algebra.js` | `equals` | Import |
 | `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/units.js` | `parseUnit` | Import |
 | `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, sourceOfParameter, EvaluatorSpec` | Import |
 | `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId, primaryRelation` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
@@ -4571,6 +4570,7 @@ The codebase is organized into the following modules:
 | `../canonical/registry.js` | `canonicalByTarget, canonicalById` | Import |
 | `../bridges/index.js` | `KnownIssue` | Import (type-only) |
 | `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+| `../bridges/catalog-load.js` | `catalogIdNumber` | Import |
 | `../canonical/normal-form.js` | `normalForm` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
@@ -5388,9 +5388,10 @@ The codebase is organized into the following modules:
 | `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
 
 **Exports:**
+- Classes: `ConstantDisagreementError`
 - Interfaces: `ConstantRecord`, `NamedConstantValue`, `ConstantProvenance`
-- Functions: `constantRecord`, `constantNotes`, `constantScope`, `piMultipleValue`
-- Constants: `CONSTANT_REGISTRY`, `CONSTANTS`, `CONSTANT_PROVENANCE`
+- Functions: `constantRecord`, `constantAgreement`, `constantNotes`, `constantScope`, `piMultipleValue`
+- Constants: `CONSTANT_REGISTRY`, `CONSTANT_AGREEMENT`, `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -5812,6 +5813,7 @@ The codebase is organized into the following modules:
 | `./formula-dimension.js` | `FormulaDimensionError, parseFormulaPNode, FormulaPNode` | Import |
 
 **Exports:**
+- Classes: `TemperatureBindingError`, `BindingNumberError`
 - Interfaces: `BindingValue`, `NamedBindingSibling`
 - Functions: `readNamedBinding`, `readBinding`, `bindingInUnit`, `readParameter`
 
@@ -5968,6 +5970,21 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `NumericalBackendError`, `EngineCapabilityError`, `GL4ConvergenceError`
+
+---
+
+### `src/numerical/evaluator-uncertainty.ts` - First-order propagation of input uncertainties through a closed-form
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `propagateUncertainty` |
+| `@danielsimonjr/mathts-matrix` | `eigvals` |
+
+**Exports:**
+- Interfaces: `UncertaintyContribution`, `PropagatedOutput`
+- Functions: `propagateEvaluatorUncertainty`, `correlationIsPositiveSemidefinite`
+- Constants: `NONLINEAR_FRACTION`
 
 ---
 
@@ -6698,7 +6715,7 @@ graph TD
         N55[christoffel-flat]
         N56[connection-lowering-helpers]
         N57[covariant-eikonal]
-        N58[...33 more]
+        N58[...34 more]
     end
 
     subgraph Relations
@@ -6748,17 +6765,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 352 |
+| Total TypeScript Files | 353 |
 | Total Modules | 13 |
-| Total Lines of Code | 77358 |
-| Total Exports | 2378 |
-| Total Re-exports | 1207 |
-| Total Classes | 66 |
-| Total Interfaces | 438 |
-| Total Functions | 728 |
+| Total Lines of Code | 77409 |
+| Total Exports | 2409 |
+| Total Re-exports | 1229 |
+| Total Classes | 69 |
+| Total Interfaces | 440 |
+| Total Functions | 732 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 499 |
+| Type-only Imports | 502 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

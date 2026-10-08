@@ -173,6 +173,45 @@ export function constantRecord(spelling: string): ConstantRecord | undefined {
   return BY_SPELLING.get(spelling);
 }
 
+/**
+ * Relative tolerance within which a stated constant agrees with the registered
+ * value. Textbook roundings such as `b = 2.9e-3` pass.
+ * @internal
+ */
+export const CONSTANT_AGREEMENT = 5e-3;
+
+/** A stated value for a registered constant disagrees with the registry. The equations use the registered value. @internal */
+export class ConstantDisagreementError extends Error {
+  constructor(
+    readonly key: string,
+    readonly constant: string,
+    readonly registered: number,
+    readonly given: number,
+  ) {
+    super(
+      `'${key}' is the registered constant ${constant} = ${registered}; ` +
+        `${given} disagrees, and the equations use the registered value, so it cannot be rebound.`,
+    );
+    this.name = 'ConstantDisagreementError';
+  }
+}
+
+/**
+ * The registered constant `key` names when `value` agrees with it within
+ * {@link CONSTANT_AGREEMENT}, or null when `key` names no constant. A value
+ * that disagrees throws {@link ConstantDisagreementError}: a constant is not
+ * a graph quantity, so a stated value is checked, never bound.
+ * @internal
+ */
+export function constantAgreement(key: string, value: number): string | null {
+  const record = BY_SPELLING.get(key);
+  if (record === undefined) return null;
+  if (Math.abs(value - record.value) > CONSTANT_AGREEMENT * Math.abs(record.value)) {
+    throw new ConstantDisagreementError(key, record.name, record.value, value);
+  }
+  return record.name;
+}
+
 /** The notes of the registered constants among `names`, each once, in registry order. @internal */
 export function constantNotes(names: Iterable<string>): string[] {
   const seen = new Set<ConstantRecord>();

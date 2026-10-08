@@ -17,6 +17,7 @@
 import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
 
+/** A condition could not be evaluated: it names an unbound symbol, or its text does not parse. @internal */
 export class HoldsError extends Error {
   constructor(message: string) {
     super(message);

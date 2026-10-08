@@ -42,6 +42,7 @@ import type { BridgeEquationStatus } from '../bridges/index.js';
 import { canonicalByTarget, canonicalById } from '../canonical/registry.js';
 import type { KnownIssue } from '../bridges/index.js';
 import { BRIDGE_EQUATIONS } from '../bridges/index.js';
+import { catalogIdNumber } from '../bridges/catalog-load.js';
 import { normalForm } from '../canonical/normal-form.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { evalExpr } from './expr-eval.js';
@@ -585,8 +586,8 @@ interface ProposedBridgeEntry {
 function equationMeta(id: string): { domain: string; references: readonly string[] } {
   const ce = canonicalById(id);
   if (ce) return { domain: ce.domain, references: ce.references };
-  const n = id.startsWith('BE-') ? Number(id.slice(3)) : NaN;
-  const be = BRIDGE_EQUATIONS.find((e) => e.id === n);
+  const n = catalogIdNumber(id);
+  const be = n === undefined ? undefined : BRIDGE_EQUATIONS.find((e) => e.id === n);
   if (be) return { domain: `${be.bridges[0]}↔${be.bridges[1]} (${be.status})`, references: be.references };
   return { domain: 'unknown', references: [] };
 }

@@ -53,7 +53,7 @@ const ALL_SOURCES: readonly SourceName[] = ['catalog', 'canonical', 'both'];
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, label, source } = resolveGraph(api, args.flags);
-  const opts = parseDiscoveryOpts(args.flags);
+  const opts = parseDiscoveryOpts(api, args.flags);
   const [a, b] = args.positionals;
   if (!a || !b) {
     throw new UsageError('upt ground needs two quantity names (a b). See `upt help`.');

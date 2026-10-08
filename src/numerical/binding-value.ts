@@ -42,6 +42,22 @@ import {
 import { callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
 import { FormulaDimensionError, parseFormulaPNode, type FormulaPNode } from './formula-dimension.js';
 
+/** A value on a temperature slot has a dimension that is neither a temperature nor an energy, or a temperature was read onto a dimensionless slot. @internal */
+export class TemperatureBindingError extends UnitError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'TemperatureBindingError';
+  }
+}
+
+/** The text is not a number, with or without a unit, or the number is not finite. @internal */
+export class BindingNumberError extends UnitError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'BindingNumberError';
+  }
+}
+
 /**
  * A temperature binding speaks kelvin. An energy is `k_B T` (the joules
  * divided by `kB`). Any other dimension is refused. A bare number, a
@@ -63,7 +79,7 @@ function alignTemperatureBinding(
   }
   if (equals(read.dimension, ENERGY)) {
     if (!(kB > 0) || !Number.isFinite(kB)) {
-      throw new UnitError(`cannot read '${raw.trim()}' as a temperature: k_B is not a positive finite number`);
+      throw new TemperatureBindingError(`cannot read '${raw.trim()}' as a temperature: k_B is not a positive finite number`);
     }
     const kelvin = read.value / kB;
     return {
@@ -76,7 +92,7 @@ function alignTemperatureBinding(
       ],
     };
   }
-  throw new UnitError(
+  throw new TemperatureBindingError(
     `'${raw.trim()}' is ${format(read.dimension)}, but ${name} is a temperature.` +
       (/^(?:L\^2 M T\^-2|\[L\^2 M T\^-2\])$/.test(format(read.dimension)) ? ' An energy on a temperature is k_B T.' : ' Give kelvin, degC, or an energy (read as k_B T).'),
   );
@@ -131,7 +147,7 @@ const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
 const NUMBER_UNIT = /^([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)$/;
 const GLUED_NUMBER = /(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/g;
 function finite(raw: string, value: number): number {
-  if (!Number.isFinite(value)) throw new UnitError(`'${raw}' is not a finite number`);
+  if (!Number.isFinite(value)) throw new BindingNumberError(`'${raw}' is not a finite number`);
   return value;
 }
 
@@ -433,7 +449,7 @@ export function readNamedBinding(
     aligned.dimensioned && equals(aligned.dimension, TEMPERATURE) && !equals(read.dimension, TEMPERATURE);
   if (energyBecameTemperature) {
     if (target === '') {
-      throw new UnitError(`'${raw.trim()}' is a temperature, but this input is dimensionless`);
+      throw new TemperatureBindingError(`'${raw.trim()}' is a temperature, but this input is dimensionless`);
     }
     const to = parseUnit(target);
     if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
@@ -470,7 +486,7 @@ export function readBinding(
   const trimmed = raw.trim();
   const mode = opts?.mode ?? 'si';
   const reading = opts?.reading ?? 'absolute';
-  if (trimmed === '') throw new UnitError(`'${raw}' is not a finite number`);
+  if (trimmed === '') throw new BindingNumberError(`'${raw}' is not a finite number`);
   if (NUMBER.test(trimmed)) {
     return { value: finite(trimmed, Number(trimmed)), dimensioned: false, dimension: DIMENSIONLESS, notes: [] };
   }
@@ -483,13 +499,13 @@ export function readBinding(
     ast = parseFormulaPNode(spliced.expr);
   } catch (e) {
     if (e instanceof FormulaDimensionError && /AccessorNode/.test(e.message)) {
-      throw new UnitError(`'${trimmed}' is not a number with an optional unit`);
+      throw new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
     }
     if (e instanceof FormulaError) {
       // `euler` names the refused constant. Keep that sentence; a bare unknown
       // word is not an expression, and a token with an operator (`2*`) is.
       if (e.message.includes('exp(x)')) throw new UnitError(e.message);
-      if (!/[+\-*/^()]/.test(trimmed)) throw new UnitError(`'${trimmed}' is not a number with an optional unit`);
+      if (!/[+\-*/^()]/.test(trimmed)) throw new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
       throw new UnitError(e.message);
     }
     throw e;
@@ -504,7 +520,7 @@ export function readBinding(
       spliced.slots.size === 0 &&
       !/[+\-*/^()]/.test(trimmed)
     ) {
-      throw new UnitError(`'${trimmed}' is not a number with an optional unit`);
+      throw new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
     }
     throw e;
   }

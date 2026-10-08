@@ -130,10 +130,8 @@ type CatalogEquation = CommandCtx['api']['BRIDGE_EQUATIONS'][number];
  * `be-16`, `BE-16`, and `16` name a catalog equation by its integer id.
  * An atlas id (`ab-…`) does not match.
  */
-function catalogEquationNumber(raw: string): number | undefined {
-  const m = /^(?:be-)?(\d+)$/i.exec(raw);
-  if (m === null) return undefined;
-  return Number(m[1]);
+function catalogEquationNumber(api: CommandCtx['api'], raw: string): number | undefined {
+  return api.catalogIdNumber(raw);
 }
 
 /**
@@ -237,7 +235,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const row = rows.find((r) => r.bridge.id === id);
   if (row === undefined) {
-    const catalogN = catalogEquationNumber(id);
+    const catalogN = catalogEquationNumber(api, id);
     if (catalogN !== undefined) {
       const entry = api.BRIDGE_EQUATIONS.find((e) => e.id === catalogN);
       if (entry !== undefined) {

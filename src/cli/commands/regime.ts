@@ -117,7 +117,7 @@ export function parseAt(
       }
     } catch (e) {
       if (e instanceof CliError) throw e;
-      if (e instanceof api.UnitError && /is a temperature/.test(e.message)) {
+      if (e instanceof api.TemperatureBindingError) {
         throw new CliError(`upt ${command}: '${a.token}' is not a temperature. ${e.message}`);
       }
       throw new CliError(`upt ${command}: '${a.token}' is not a finite number. ${(e as Error).message}`);

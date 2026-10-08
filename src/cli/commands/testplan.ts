@@ -144,13 +144,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   let plan: Plan;
   if (caseHit !== undefined) plan = fromCase(api, caseHit);
   else {
-    const m = /^(?:be-)?(\d+)$/.exec(target);
-    if (m === null || !api.CONFRONTATIONS.has(Number(m[1]))) {
+    const n = api.catalogIdNumber(target);
+    if (n === undefined || !api.CONFRONTATIONS.has(n)) {
       throw new CliError(
         `upt testplan: '${target}' is not a case (${[...api.APPLIED_CASES.keys()].join(', ')}) or a confrontation id.`,
       );
     }
-    plan = fromConfrontation(api, Number(m[1]));
+    plan = fromConfrontation(api, n);
   }
   if (args.flags.has('json')) {
     emitJson({ command: 'testplan', result: plan }, ctx.write);

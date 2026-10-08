@@ -15,7 +15,6 @@ import { classifyDetermination } from '../determination.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
-import { rewriteCatalogHyphens } from '../../composition/user-equation.js';
 import type { Dimension } from '../../dimensional/types.js';
 
 /** The parser's symbol for a declared name. A hyphen is subtraction, so a
@@ -151,7 +150,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
     const checker = await api.getFormulaDimensionChecker();
     const declared = new Set(governing.map((g) => g.name));
-    const formulaSymbols = rewriteCatalogHyphens(formula, declared);
+    const formulaSymbols = api.rewriteCatalogHyphens(formula, declared);
     const dims = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), g.dim]));
     const r = checker.check(formulaSymbols, dims);
     formulaCheck = r;
