@@ -80,10 +80,12 @@ export const tableName = (file: string): string =>
 function objectTables(): Record<string, Record<string, TableValue>> {
   const units: Record<string, TableValue> = {};
   const { units: unitMap, prefixes, celsiusOffsetK } = unitTables();
-  for (const [sym, [scale, dim, prefixable]] of unitMap) {
+  for (const [sym, [scale, dim, prefixable, cycles]] of unitMap) {
     units[`${sym}.scale`] = scale;
     units[`${sym}.dimension`] = dimensionText(dim);
     units[`${sym}.prefixable`] = prefixable;
+    // A cycle-counting row multiplies an angular input by 2π, so it changes a result like a scale does.
+    units[`${sym}.cycles`] = cycles;
   }
   for (const [p, f] of prefixes) units[`prefix.${p}`] = f;
   units['degC.offsetK'] = celsiusOffsetK;

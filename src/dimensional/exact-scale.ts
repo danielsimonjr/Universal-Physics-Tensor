@@ -120,34 +120,57 @@ export function addScales(a: ExactScale, b: ExactScale): ExactScale {
   return irrationalScale(scaleToNumber(a) + scaleToNumber(b));
 }
 
-/** Significant digits kept before the sticky digit; far beyond a double's 17. */
-const DIGITS = 40;
+/** The fewest significant digits kept before the sticky digit; far beyond a double's 17. */
+const MIN_DIGITS = 40;
+
+/** Decimal places of `1 / den` when it terminates (`den` = 2^a·5^b): max(a, b). Null otherwise. */
+function terminatingPlaces(den: bigint): number | null {
+  let d = den;
+  let twos = 0;
+  let fives = 0;
+  while (d % 2n === 0n) {
+    d /= 2n;
+    twos++;
+  }
+  while (d % 5n === 0n) {
+    d /= 5n;
+    fives++;
+  }
+  return d === 1n ? Math.max(twos, fives) : null;
+}
 
 /**
- * The rational `num / den` rounded once to the nearest double. A terminating
- * decimal is read exactly; any other quotient is truncated to 40 significant
- * digits and a sticky `1` is appended, so the string lies strictly between
- * the truncation and the next decimal and rounds the way the quotient does.
+ * The rational `num / den` (`den > 0`), reduced, rounded once to the nearest double.
+ *
+ * A terminating quotient (`den` = 2^a·5^b) is written out exactly, every digit,
+ * and parsed: a tie between two doubles is a dyadic rational, so it always
+ * lands here and rounds half to even. Any other quotient is not a tie, and it
+ * is at least `1 / (den·2^54)` of its magnitude away from every tie; truncating
+ * it to `max(40, digits(den) + 20)` significant digits stays closer than that,
+ * and a sticky `1` puts the string strictly inside the truncation interval, so
+ * the string rounds the way the quotient does for any denominator.
  */
 function rationalToNumber(num: bigint, den: bigint): number {
   if (num === 0n) return 0;
   const negative = num < 0n;
-  const a = negative ? -num : num;
-  const shift = DIGITS - (a.toString().length - den.toString().length);
-  let q: bigint;
-  let r: bigint;
-  if (shift >= 0) {
-    const t = a * 10n ** BigInt(shift);
-    q = t / den;
-    r = t % den;
-  } else {
-    const d = den * 10n ** BigInt(-shift);
-    q = a / d;
-    r = a % d;
+  const g = gcd(num, den);
+  const a = (negative ? -num : num) / g;
+  den /= g;
+  const places = terminatingPlaces(den);
+  if (places !== null) {
+    const value = Number(`${(a * 10n ** BigInt(places)) / den}e-${places}`);
+    return negative ? -value : value;
   }
-  const digits = r === 0n ? q.toString() : `${q.toString()}1`;
-  const exponent = -(shift + (r === 0n ? 0 : 1));
-  const value = Number(`${digits}e${exponent}`);
+  const digits = Math.max(MIN_DIGITS, den.toString().length + 20);
+  const shift = digits - (a.toString().length - den.toString().length);
+  let q: bigint;
+  if (shift >= 0) {
+    q = (a * 10n ** BigInt(shift)) / den;
+  } else {
+    q = a / (den * 10n ** BigInt(-shift));
+  }
+  // Not terminating, so the remainder is never zero: the sticky digit is always due.
+  const value = Number(`${q.toString()}1e${-(shift + 1)}`);
   return negative ? -value : value;
 }
 

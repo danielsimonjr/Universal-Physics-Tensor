@@ -302,22 +302,40 @@ const FAHRENHEIT_SCALE = ratioScale(5, 9);
 
 interface AffineRow {
   readonly id: AffineTemperature;
+  /** Kelvin per degree, exactly. */
   readonly scale: ExactScale;
-  /** Kelvin at a reading of zero, exactly. */
-  readonly offset: ExactScale;
+  /** The reading at the ice point (0 °C, 273.15 K), exactly. */
+  readonly icePoint: ExactScale;
   readonly symbols: readonly string[];
 }
 
 /** Lone spellings. A compound that contains one is refused. */
 const AFFINE: readonly AffineRow[] = [
-  { id: 'celsius', scale: UNIT_SCALE, offset: CELSIUS_OFFSET_K, symbols: ['degC', '°C', '℃'] },
-  {
-    id: 'fahrenheit',
-    scale: FAHRENHEIT_SCALE,
-    offset: addScales(CELSIUS_OFFSET_K, multiplyScales(x('-32'), FAHRENHEIT_SCALE)),
-    symbols: ['degF', '°F'],
-  },
+  { id: 'celsius', scale: UNIT_SCALE, icePoint: x('0'), symbols: ['degC', '°C', '℃'] },
+  { id: 'fahrenheit', scale: FAHRENHEIT_SCALE, icePoint: x('32'), symbols: ['degF', '°F'] },
 ];
+
+/** Kelvin at a reading of zero, exactly: 273.15 − icePoint × scale. */
+function affineOffset(row: AffineRow): ExactScale {
+  return addScales(CELSIUS_OFFSET_K, multiplyScales(x('-1'), row.icePoint, row.scale));
+}
+
+const fractionText = (s: ExactScale): string => (s.den === 1n ? String(s.num) : `${s.num}/${s.den}`);
+
+/**
+ * How a reading on an affine scale becomes kelvin, from the row's scale and
+ * ice point: `absolute: (degF − 32) × 5/9 + 273.15`, `a difference: × 5/9, no offset`.
+ * @internal
+ */
+export function affineReadingNote(affine: AffineTemperature, reading: TemperatureReading): string {
+  const row = AFFINE.find((candidate) => candidate.id === affine)!;
+  const unitScale = row.scale.num === row.scale.den;
+  if (reading === 'difference') return unitScale ? 'a difference: no offset' : `a difference: × ${fractionText(row.scale)}, no offset`;
+  const kelvin = String(scaleToNumber(CELSIUS_OFFSET_K));
+  if (unitScale && row.icePoint.num === 0n) return `absolute: + ${kelvin}`;
+  const shifted = row.icePoint.num === 0n ? row.symbols[0]! : `(${row.symbols[0]!} − ${fractionText(row.icePoint)})`;
+  return `absolute: ${unitScale ? shifted : `${shifted} × ${fractionText(row.scale)}`} + ${kelvin}`;
+}
 
 function affineRow(text: string): AffineRow | undefined {
   return AFFINE.find((candidate) => candidate.symbols.includes(text));
@@ -622,7 +640,7 @@ export type TemperatureReading = 'absolute' | 'difference';
 function siMagnitude(magnitude: ExactScale, unit: UnitReading, temperature: TemperatureReading): ExactScale {
   const scaled = multiplyScales(magnitude, unit.exact);
   const row = unit.affine === undefined ? undefined : AFFINE.find((candidate) => candidate.id === unit.affine);
-  return row !== undefined && temperature === 'absolute' ? addScales(scaled, row.offset) : scaled;
+  return row !== undefined && temperature === 'absolute' ? addScales(scaled, affineOffset(row)) : scaled;
 }
 
 const FRACTION = /^\s*([+-]?(?:\d+\.?\d*|\.\d+))\s*\/\s*((?:\d+\.?\d*|\.\d+))\s*$/;
@@ -750,14 +768,19 @@ export function unitRows(): ReadonlyMap<string, { readonly scale: ExactScale; re
   return UNITS;
 }
 
-/** The tables conversion reads, for the CLI record's fingerprint (`src/cli/record-tables.ts`). @internal */
+/**
+ * The tables conversion reads, for the CLI record's fingerprint (`src/cli/record-tables.ts`):
+ * each row's scale, dimension, prefixability and `cycles` flag (which multiplies an angular
+ * input by 2π), the prefixes, and the Celsius offset.
+ * @internal
+ */
 export function unitTables(): {
-  units: ReadonlyMap<string, readonly [number, Dimension, boolean]>;
+  units: ReadonlyMap<string, readonly [number, Dimension, boolean, boolean]>;
   prefixes: ReadonlyMap<string, number>;
   celsiusOffsetK: number;
 } {
   return {
-    units: new Map([...UNITS].map(([symbol, r]) => [symbol, [scaleToNumber(r.scale), r.dim, r.prefixable] as const])),
+    units: new Map([...UNITS].map(([symbol, r]) => [symbol, [scaleToNumber(r.scale), r.dim, r.prefixable, r.cycles === true] as const])),
     prefixes: new Map([...PREFIXES].map(([prefix, f]) => [prefix, scaleToNumber(f)] as const)),
     celsiusOffsetK: scaleToNumber(CELSIUS_OFFSET_K),
   };

@@ -10,7 +10,7 @@
  *
  * @module bridges/evaluator-inputs
  */
-import { unitConventionNotes, UnitError, type AffineTemperature, type TemperatureReading } from '../dimensional/units.js';
+import { affineReadingNote, unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
 import {
   resolveQuantityName,
   synonymGroup,
@@ -47,12 +47,6 @@ const splitArg = (a: string): [string, string] => {
   return [a.slice(0, eq), a.slice(eq + 1)];
 };
 
-/** How an affine reading was applied, for the conversion note. */
-const AFFINE_NOTE: Readonly<Record<AffineTemperature, Readonly<Record<TemperatureReading, string>>>> = {
-  celsius: { absolute: ' (absolute: + 273.15)', difference: ' (a difference: no offset)' },
-  fahrenheit: { absolute: ' (absolute: (degF − 32) × 5/9 + 273.15)', difference: ' (a difference: × 5/9, no offset)' },
-};
-
 function convert(
   p: EvaluatorParameter,
   raw: string,
@@ -62,7 +56,8 @@ function convert(
 ): { value: number; note?: string } {
   const read = readNamedBinding(givenName, raw, { reading, siblings, declaredUnit: p.unit });
   if (!read.dimensioned) return { value: read.value };
-  const offset = read.affine === undefined ? '' : AFFINE_NOTE[read.affine][reading];
+  // How an affine reading was applied comes from the unit table's own row (scale and ice point).
+  const offset = read.affine === undefined ? '' : ` (${affineReadingNote(read.affine, reading)})`;
   // An angular input counts radians; a cycle-counting unit (the `cycles` flag on its row) takes 2π per cycle.
   const turns = p.angular === true ? read.cycles : 0;
   if (Number.isNaN(turns)) {
