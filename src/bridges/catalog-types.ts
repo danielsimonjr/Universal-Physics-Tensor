@@ -100,6 +100,8 @@ export interface CatalogEvaluatorParameter {
 /**
  * A second number the same record returns beside its `value`. The expression
  * reads evaluator parameter keys, the constants, and `value`.
+ *
+ * @public
  */
 export interface CatalogEvaluatorOutput {
   /** The result key, with its unit as a suffix (`E_F_J`). */

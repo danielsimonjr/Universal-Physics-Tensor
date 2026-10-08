@@ -261,10 +261,12 @@ Bridges are edges in a typed quantity graph, and compatible edges
 domains carried through, and confidence demoted to the weakest link:
 
 ```typescript
-import { composeEdges, be42Edge, be16Edge, M_SUN_KG } from 'universal-physics-tensor';
+import { CATALOG_GRAPH, composeEdges, M_SUN_KG } from 'universal-physics-tensor';
+
+const edge = (id: string) => CATALOG_GRAPH.find((e) => e.id === id)!;
 
 // Hawking temperature (M → T_H) ∘ Landauer bound (T → E_min)
-const erasureCost = composeEdges(be42Edge, be16Edge);
+const erasureCost = composeEdges(edge('be-42'), edge('be-16'));
 erasureCost.evaluate({ mass: M_SUN_KG }); // ≈ 5.9e-31 J — E_min(M) = ℏc³ln2/(8πGM)
 erasureCost.confidence;                   // 'highly-speculative' (min of the operands)
 ```
@@ -275,7 +277,7 @@ erasureCost.confidence;                   // 'highly-speculative' (min of the op
 import { GM_SUN_SI, convertValue } from 'universal-physics-tensor';
 
 GM_SUN_SI;                    // 1.3271244e20
-convertValue('25degC', 'K'); // { value: 298.15, given: 'degC' }
+convertValue('25degC', 'K'); // { value: 298.15, given: 'degC', affine: 'celsius' }
 ```
 
 That derived relation — the minimum erasure cost at a black-hole

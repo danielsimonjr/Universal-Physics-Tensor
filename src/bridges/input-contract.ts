@@ -89,7 +89,7 @@ function spellingIndex(contract: InputContract): SpellingIndex {
  * alternate binds exactly one slot.
  *
  * @throws Error when a spelling or an alternate names two slots.
- * @internal
+ * @public
  */
 export function inputContract(id: string, slots: readonly InputSlot[]): InputContract {
   const contract: InputContract = { id, slots };
