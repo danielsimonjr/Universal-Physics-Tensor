@@ -1,10 +1,10 @@
 {
   "metadata": {
     "totalSourceFiles": 356,
-    "totalTestFiles": 540,
-    "testedCount": 344,
-    "untestedCount": 12,
-    "coveragePercent": "96.6"
+    "totalTestFiles": 541,
+    "testedCount": 345,
+    "untestedCount": 11,
+    "coveragePercent": "96.9"
   },
   "untestedFiles": [
     "src/cases/quadrature.ts",
@@ -12,7 +12,6 @@
     "src/cli/commands/_discovery-opts.ts",
     "src/cli/conventions.ts",
     "src/cli/determination.ts",
-    "src/cli/euler-guard.ts",
     "src/cli/record-reach.ts",
     "src/cli/record-tables.ts",
     "src/cli/record.ts",
@@ -180,6 +179,7 @@
     "src/cli/commands/symbolic.ts",
     "src/cli/commands/testplan.ts",
     "src/cli/errors.ts",
+    "src/cli/euler-guard.ts",
     "src/cli/eval-numbers.ts",
     "src/cli/expr-print.ts",
     "src/cli/flag-help.ts",
@@ -4630,10 +4630,13 @@
     "src/cli/determination.ts": [],
     "src/cli/errors.ts": [
       "tests/cli/args.test.ts",
+      "tests/cli/formula-usage-error.test.ts",
       "tests/cli/graphs.test.ts",
       "tests/cli/main-dispatch.test.ts"
     ],
-    "src/cli/euler-guard.ts": [],
+    "src/cli/euler-guard.ts": [
+      "tests/cli/formula-usage-error.test.ts"
+    ],
     "src/cli/eval-numbers.ts": [
       "tests/cli/eval-registered-constants.test.ts"
     ],
@@ -12336,6 +12339,10 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts"
+    ],
+    "tests/cli/formula-usage-error.test.ts": [
+      "src/cli/euler-guard.ts",
+      "src/cli/errors.ts"
     ],
     "tests/cli/frontier.test.ts": [
       "src/cli/main.ts",
