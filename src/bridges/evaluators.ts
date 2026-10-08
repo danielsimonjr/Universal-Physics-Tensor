@@ -14,11 +14,11 @@ import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { primaryRelation } from './catalog-load.js';
 import { catalogEvaluators } from './catalog-load.js';
 import type { CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
-import { evaluateFormula, parseCatalogExpression } from './expr-parse.js';
+import { evaluateFormula, formulaVariables, parseCatalogExpression } from './expr-parse.js';
 import type { ExprNode } from '../dimensional/ast-types.js';
 import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
 import { DomainViolationError } from './evaluation-errors.js';
-import { checkInputs, type EvaluationWant, type InputContract, type InputSlot } from './input-contract.js';
+import { checkInputs, inputContract, type EvaluationWant, type InputContract, type InputSlot } from './input-contract.js';
 
 /** How a length input is read: radius, diameter, separation, impact parameter, or semi-major axis. @public */
 export type GeometryRole = 'radius' | 'diameter' | 'separation' | 'impact-parameter' | 'semi-major-axis';
@@ -110,8 +110,9 @@ export function unusedInputKeys(spec: EvaluatorSpec): string[] {
   const relation = primaryRelation(spec.bridgeId);
   if (relation === undefined) return [];
   const used = new Set(symbolNames(parseCatalogExpression(relation.expression)));
-  const readByOutput = (key: string): boolean =>
-    spec.outputs.some((output) => new RegExp(`(^|[^A-Za-z0-9_])${key}($|[^A-Za-z0-9_])`).test(output.expression));
+  // An output reads the scope names its parsed expression names, the same parse `run` evaluates.
+  const outputReads = new Set(spec.outputs.flatMap((output) => formulaVariables(output.expression)));
+  const readByOutput = (key: string): boolean => outputReads.has(key.replaceAll('-', '_'));
   return spec.parameters
     .filter((parameter) => {
       const source = sourceOfParameter(relation, parameter);
@@ -126,6 +127,7 @@ export function unusedInputKeys(spec: EvaluatorSpec): string[] {
  * by its key, its relation source and that source's aliases, and its quantity
  * when no other slot shares it; then one optional, unlisted slot per relation
  * source no parameter owns, which a named constant fills when not given.
+ * Building it throws when one spelling would bind two slots.
  */
 function evaluatorContract(catalogId: number, relation: CatalogRelation, parameters: readonly EvaluatorParameter[]): InputContract {
   const quantityCount = new Map<string, number>();
@@ -159,7 +161,7 @@ function evaluatorContract(catalogId: number, relation: CatalogRelation, paramet
       listed: false,
     });
   }
-  return { id: `be-${catalogId}`, slots };
+  return inputContract(`be-${catalogId}`, slots);
 }
 
 /**
@@ -220,7 +222,7 @@ function buildSpec(
       const result: Record<string, number> = { value };
       if (want === 'value') return result;
       for (const output of outputs) {
-        if ((output.requires ?? []).some((key) => !Number.isFinite(given[key]))) continue;
+        if ((output.requires ?? []).some((key) => given[key] === undefined)) continue;
         result[output.name] = evaluateFormula(output.expression, { ...given, value });
       }
       return result;

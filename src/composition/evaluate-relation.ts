@@ -14,7 +14,7 @@
 import { EXPECTED_DIMENSION_BY_BRIDGE } from '../dimensional/bridge-check.js';
 import type { Dimension } from '../dimensional/types.js';
 import { BRIDGE_EVALUATORS, type EvaluatorSpec } from '../bridges/evaluators.js';
-import { checkInputs, type InputContract } from '../bridges/input-contract.js';
+import { checkInputs, inputContract, type InputContract } from '../bridges/input-contract.js';
 import { catalogEdgeKey, parseBridgeId, primaryRelation } from '../bridges/catalog-load.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
@@ -73,38 +73,24 @@ function canonicalNames(id: string): string[] {
 /**
  * The declared inputs of an edge with no evaluator: each source under its name
  * and aliases, required; and, optional, its formula factors, the canonical
- * equation's governing names and a bound dimensionless group.
+ * equation's governing names and a bound dimensionless group. A name that
+ * already spells a source binds that source, so it is not a second slot.
  */
 function edgeContract(id: string, edge: BridgeEdge): InputContract {
-  const sources = edge.sources.map((source) => source.name);
-  const optional = [...Object.keys(edge.formulaFactors ?? {}), ...canonicalNames(id)].filter((name) => !sources.includes(name));
-  return {
-    id,
-    slots: [
-      ...sources.map((name) => ({
-        key: name,
-        spellings: [name, ...(edge.aliases?.[name] ?? [])],
-        alternates: [],
-        optional: false,
-        readBy: 'value' as const,
-        listed: true,
-      })),
-      ...[...new Set(optional)].map((name) => ({ key: name, spellings: [name], alternates: [], optional: true, readBy: 'value' as const, listed: false })),
-    ],
-  };
-}
-
-/** Every source is present and finite, under its name or an alias. */
-function sourcesFinite(edge: BridgeEdge, bindings: Readonly<Record<string, number>>): boolean {
-  for (const source of edge.sources) {
-    const keys = [source.name, ...(edge.aliases?.[source.name] ?? [])];
-    const present = keys.some((key) => {
-      const value = bindings[key];
-      return value !== undefined && Number.isFinite(value);
-    });
-    if (!present) return false;
-  }
-  return true;
+  const sourceSlots = edge.sources.map((source) => ({
+    key: source.name,
+    spellings: [source.name, ...(edge.aliases?.[source.name] ?? [])],
+    alternates: [],
+    optional: false,
+    readBy: 'value' as const,
+    listed: true,
+  }));
+  const spelled = new Set(sourceSlots.flatMap((slot) => slot.spellings));
+  const optional = [...Object.keys(edge.formulaFactors ?? {}), ...canonicalNames(id)].filter((name) => !spelled.has(name));
+  return inputContract(id, [
+    ...sourceSlots,
+    ...[...new Set(optional)].map((name) => ({ key: name, spellings: [name], alternates: [], optional: true, readBy: 'value' as const, listed: false })),
+  ]);
 }
 
 function idOf(id: string | number): { key: string; numeric: number | undefined } {
@@ -151,11 +137,9 @@ function closedFormEvaluation(
   if (dimension === undefined) {
     throw new Error(`evaluateRelation: be-${spec.bridgeId} has no catalog dimension`);
   }
-  if (typeof value === 'number' && Number.isFinite(value)) return { kind: 'value', value, dimension };
-  if (Object.values(bindings).every((given) => Number.isFinite(given))) {
-    return { kind: 'unset', formula: edge?.label ?? primaryRelation(spec.bridgeId)?.label ?? spec.name };
-  }
-  throw new Error(`evaluateRelation: be-${spec.bridgeId} is missing a finite input`);
+  if (Number.isFinite(value)) return { kind: 'value', value, dimension };
+  // `run` refused a non-finite input, so a non-finite value here comes from the closed form.
+  return { kind: 'unset', formula: edge?.label ?? primaryRelation(spec.bridgeId)?.label ?? spec.name };
 }
 
 /**
@@ -164,8 +148,9 @@ function closedFormEvaluation(
  * A catalog id is `be-70` or `70`. A canonical id is `CE-sound-speed`.
  * Binding keys are the inputs' keys, quantity names or aliases.
  * The bindings are checked before the domain: an unknown key throws
- * `UnknownInputError`, a non-number `InputTypeError` (a `TypeError`), a key
- * given twice `DuplicateInputError`, an absent input `MissingInputError`.
+ * `UnknownInputError`, a non-number `InputTypeError` (a `TypeError`), a
+ * `NaN` or an infinity `NonFiniteInputError`, a key given twice
+ * `DuplicateInputError`, an absent input `MissingInputError`.
  * A domain failure throws `DomainViolationError`.
  * An unset coefficient returns `{ kind: 'unset', formula }` and no number.
  * A complete finite input whose closed form is not finite (a dropped factor,
@@ -183,10 +168,8 @@ export function evaluateRelation(
   const checked = checkInputs(edgeContract(found.id, edge), bindings);
   try {
     const value = evaluateEdge(edge, { ...checked });
-    if (!Number.isFinite(value)) {
-      if (sourcesFinite(edge, checked)) return { kind: 'unset', formula: edge.label };
-      throw new Error(`evaluateRelation: ${edge.id} is missing a finite input`);
-    }
+    // `checkInputs` refused a non-finite input, so a non-finite value comes from the formula.
+    if (!Number.isFinite(value)) return { kind: 'unset', formula: edge.label };
     return { kind: 'value', value, dimension: edge.target.dim };
   } catch (error) {
     if (error instanceof CoefficientUnsetError) return { kind: 'unset', formula: error.formula };

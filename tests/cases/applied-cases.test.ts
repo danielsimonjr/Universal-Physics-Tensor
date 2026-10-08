@@ -12,6 +12,7 @@ import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { canonicalById } from '../../src/canonical/registry.js';
 import { parseUnit } from '../../src/dimensional/units.js';
+import { MissingInputError, NonFiniteInputError, UnknownInputError } from '../../src/bridges/evaluation-errors.js';
 
 const cases = [...APPLIED_CASES.values()];
 const runExample = (id: string, args: readonly string[]) =>
@@ -87,6 +88,20 @@ describe('APPLIED_CASES', () => {
 
   it('refuses an unknown case and a missing input', () => {
     expect(() => runAppliedCase('case-none', {})).toThrow(/no case 'case-none'/);
-    expect(() => runAppliedCase(cases[0]!.id, {})).toThrow(/missing\/non-finite/);
+    expect(() => runAppliedCase(cases[0]!.id, {})).toThrow(MissingInputError);
+  });
+
+  it('checks a case input through the same contract as an evaluator: unknown key, non-finite, missing', () => {
+    for (const c of cases) {
+      const valid = resolveEvaluatorInputs(c.parameters, c.examples.valid.args).inputs;
+      const first = Object.keys(valid)[0]!;
+      expect(() => runAppliedCase(c.id, { ...valid, no_such_input: 1 })).toThrow(UnknownInputError);
+      for (const bad of [NaN, Infinity, -Infinity]) {
+        expect(() => runAppliedCase(c.id, { ...valid, [first]: bad })).toThrow(NonFiniteInputError);
+      }
+      const { [first]: _dropped, ...rest } = valid;
+      const required = c.parameters.find((p) => p.key === first)?.optional !== true;
+      if (required) expect(() => runAppliedCase(c.id, rest)).toThrow(MissingInputError);
+    }
   });
 });

@@ -4,7 +4,9 @@
  * checks the bindings against the evaluator's input contract before the domain.
  */
 import { describe, expect, it } from 'vitest';
-import { BRIDGE_EVALUATORS, evaluateBridge } from '../../src/bridges/evaluators.js';
+import { BRIDGE_EVALUATORS, evaluateBridge, unusedInputKeys } from '../../src/bridges/evaluators.js';
+import { inputContract } from '../../src/bridges/input-contract.js';
+import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { primaryRelation } from '../../src/bridges/catalog-load.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { evaluateEdge } from '../../src/composition/edge.js';
@@ -14,6 +16,7 @@ import {
   evaluateRelation,
   InputTypeError,
   MissingInputError,
+  NonFiniteInputError,
   UnknownInputError,
 } from '../../src/index.js';
 
@@ -47,6 +50,37 @@ describe('the input contract runs before the domain, on every entry', () => {
   it.each(entries)('%s: a value outside the domain is a DomainViolationError, so the input check can fail', (_, call) => {
     expect(() => call(133, { ...DAMPING, k_N_per_m: -1 })).toThrow(DomainViolationError);
     expect(() => call(133, { ...DAMPING, k_N_per_m: -1 })).not.toThrow(MissingInputError);
+  });
+
+  it.each(entries)('%s: NaN and ±Infinity are a NonFiniteInputError, before the domain', (_, call) => {
+    for (const bad of [NaN, Infinity, -Infinity]) {
+      let caught: unknown;
+      try {
+        call(133, { ...DAMPING, c_kg_per_s: bad });
+      } catch (e) {
+        caught = e;
+      }
+      expect(caught).toBeInstanceOf(NonFiniteInputError);
+      expect(caught).not.toBeInstanceOf(DomainViolationError);
+      expect((caught as NonFiniteInputError).key).toBe('c_kg_per_s');
+      expect(Object.is((caught as NonFiniteInputError).value, bad)).toBe(true);
+    }
+  });
+
+  it.each(entries)('%s: a non-finite input on be-126 is refused before its formula runs', (_, call) => {
+    const inputs = { ...primaryRelation(126)!.reference!.inputs };
+    const key = Object.keys(inputs)[0]!;
+    for (const bad of [NaN, Infinity, -Infinity]) {
+      expect(() => call(126, { ...inputs, [key]: bad })).toThrow(NonFiniteInputError);
+    }
+  });
+
+  it('evaluateRelation on an edge with no evaluator refuses a non-finite input the same way', () => {
+    const edge = CANONICAL_GRAPH.find((candidate) => candidate.sources.length > 0)!;
+    const bindings = Object.fromEntries(edge.sources.map((source) => [source.name, 1]));
+    for (const bad of [NaN, Infinity, -Infinity]) {
+      expect(() => evaluateRelation(edge.id, { ...bindings, [edge.sources[0]!.name]: bad })).toThrow(NonFiniteInputError);
+    }
   });
 
   it('the issue 454 ids name their absent inputs, never the domain', () => {
@@ -106,5 +140,35 @@ describe('the closed form and the graph edge are one number', () => {
     const result = evaluateRelation(`be-${id}`, inputs);
     if (result.kind === 'value') expect(result.value).toBe(viaEdge);
     else expect(Number.isFinite(viaEdge)).toBe(false);
+  });
+});
+
+describe('an input contract binds each spelling to one slot', () => {
+  it('building a contract whose spelling names two slots fails at once', () => {
+    const slot = (key: string, spellings: string[]) => ({ key, spellings, alternates: [], optional: false, readBy: 'value' as const, listed: true });
+    expect(() => inputContract('t', [slot('a', ['a', 'x']), slot('b', ['b', 'x'])])).toThrow(/spells 'x' for both 'a' and 'b'/);
+    expect(() =>
+      inputContract('t', [slot('a', ['a']), { ...slot('b', ['b']), alternates: [{ key: 'a', toKey: 2 }] }]),
+    ).toThrow(/spells 'a' for both 'a' and 'b'/);
+    expect(() => inputContract('t', [slot('a', ['a']), slot('b', ['b'])])).not.toThrow();
+  });
+
+  it('every catalog and canonical edge builds its contract (an absent input, never a spelling clash)', () => {
+    for (const edge of [...CATALOG_GRAPH, ...CANONICAL_GRAPH]) {
+      try {
+        evaluateRelation(edge.id, {});
+      } catch (e) {
+        expect((e as Error).message).not.toMatch(/input contract spells/);
+      }
+    }
+  });
+});
+
+describe('unusedInputKeys reads the output expressions through the formula grammar', () => {
+  it('an input an extra output reads is not unused', () => {
+    // be-139: Nc_per_m3 and ND_per_m3 own no relation source; an extra output reads them.
+    const unused = unusedInputKeys(BRIDGE_EVALUATORS.get(139)!);
+    expect(unused).not.toContain('Nc_per_m3');
+    expect(unused).not.toContain('ND_per_m3');
   });
 });

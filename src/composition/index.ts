@@ -29,6 +29,7 @@ export {
   DuplicateInputError,
   InputTypeError,
   MissingInputError,
+  NonFiniteInputError,
   UnknownInputError,
 } from '../bridges/evaluation-errors.js';
 

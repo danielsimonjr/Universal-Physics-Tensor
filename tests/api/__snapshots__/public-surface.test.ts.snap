@@ -71,6 +71,7 @@ exports[`Public API stability — v0.4.0 surface > runtime exports match the v0.
   "M_SUN_KG",
   "M_SUN_SI",
   "MissingInputError",
+  "NonFiniteInputError",
   "NonGeometrizableDimensionError",
   "NumericalBackendError",
   "PERIHELION_ADVANCE_DIFF",

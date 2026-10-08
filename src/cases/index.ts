@@ -10,6 +10,7 @@ import { LUMPED_COOLING_CASE } from './lumped-cooling.js';
 import { RESISTOR_NOISE_CASE } from './resistor-noise.js';
 import { SKIN_DEPTH_CASE } from './skin-depth.js';
 import type { AppliedCase, CaseResult } from './types.js';
+import { checkInputs, inputContract, type InputContract } from '../bridges/input-contract.js';
 
 export type { AppliedCase, CaseCheck, CaseComparison, CaseExample, CaseOutput, CaseResult } from './types.js';
 
@@ -19,16 +20,40 @@ export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = new Map(
 );
 
 /**
- * Run a case with a numeric input record.
- * @throws Error on an unknown id, a missing input, or an input outside the model's domain.
+ * The declared inputs of a case: one listed slot per parameter, spelled by its
+ * key and converted from its alternates, required unless the parameter is optional.
+ */
+function caseContract(c: AppliedCase): InputContract {
+  return inputContract(
+    c.id,
+    c.parameters.map((p) => ({
+      key: p.key,
+      spellings: [p.key],
+      alternates: (p.alternates ?? []).map((alt) => ({ key: alt.key, toKey: alt.toKey })),
+      optional: p.optional === true,
+      readBy: 'value' as const,
+      listed: true,
+    })),
+  );
+}
+
+/** Case id → its input contract, built once at load (a contract that spells one key twice fails here). */
+const CASE_CONTRACTS: ReadonlyMap<string, InputContract> = new Map([...APPLIED_CASES].map(([id, c]) => [id, caseContract(c)]));
+
+/**
+ * Run a case with a numeric input record. The inputs go through the same
+ * {@link checkInputs} contract as a catalog evaluator before the case's model runs.
+ * @throws Error on an unknown id.
+ * @throws UnknownInputError, InputTypeError, NonFiniteInputError, DuplicateInputError or
+ *   MissingInputError on an input the contract refuses.
+ * @throws Error from the case's model on an input outside its domain.
  * @internal
  */
 export function runAppliedCase(id: string, inputs: Readonly<Record<string, number>>): CaseResult {
   const c = APPLIED_CASES.get(id);
-  if (c === undefined) throw new Error(`runAppliedCase: no case '${id}' (cases: ${[...APPLIED_CASES.keys()].join(', ')})`);
-  const missing = c.parameters.filter((p) => p.optional !== true || p.key in inputs).map((p) => p.key).filter((k) => !(k in inputs) || !Number.isFinite(inputs[k]));
-  if (missing.length > 0) {
-    throw new Error(`${id} needs {${c.parameters.map((p) => p.key).join(', ')}}; missing/non-finite: ${missing.join(', ')}`);
+  const contract = CASE_CONTRACTS.get(id);
+  if (c === undefined || contract === undefined) {
+    throw new Error(`runAppliedCase: no case '${id}' (cases: ${[...APPLIED_CASES.keys()].join(', ')})`);
   }
-  return c.run(inputs);
+  return c.run(checkInputs(contract, inputs));
 }

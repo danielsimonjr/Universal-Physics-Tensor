@@ -61,6 +61,15 @@ export function formulaScope(inputs: Readonly<Record<string, number>> = {}): Rec
   return scope;
 }
 
+/**
+ * The free variables of a catalog expression, read from the same MathTS parse
+ * {@link evaluateFormula} evaluates: the scope names it reads, a hyphenated
+ * quantity written with underscores.
+ */
+export function formulaVariables(expression: string): readonly string[] {
+  return parseFormula(rewriteCatalogHyphens(expression, formulaNames())).variables;
+}
+
 /** Evaluate a catalog expression with MathTS. Inputs are quantity names. */
 export function evaluateFormula(
   expression: string,

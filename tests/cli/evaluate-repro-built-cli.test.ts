@@ -50,6 +50,28 @@ describe('upt evaluate names a missing input before any domain check (issue 454,
   });
 });
 
+describe('upt evaluate refuses a non-finite input, and every input error has one prefix', () => {
+  it.each(['NaN', 'Infinity', '-Infinity'])('c_kg_per_s=%s is a bad value, not a domain failure', (bad) => {
+    const { status, stderr } = upt(['evaluate', 'be-133', `c_kg_per_s=${bad}`, 'k_N_per_m=1', 'm_kg=1']);
+    expect(status).toBe(1);
+    expect(stderr).toMatch(/^upt evaluate: be-133: /);
+    expect(stderr).toMatch(/finite/);
+    expect(stderr).not.toMatch(/validity domain/);
+  });
+
+  it.each([
+    [['be-133', 'c_kg_per_s=2', 'k_N_per_m=1'], /^upt evaluate: be-133: missing input 'm_kg'/],
+    [['be-133', 'c_kg_per_s=2', 'k_N_per_m=1', 'm_kg=1', 'zz=1'], /^upt evaluate: be-133: 'zz' is not an input here/],
+    [['be-133', 'c_kg_per_s=2', 'c_kg_per_s=3', 'k_N_per_m=1', 'm_kg=1'], /^upt evaluate: be-133: 'c_kg_per_s' is given twice/],
+    [['be-133', 'c_kg_per_s=NaN', 'k_N_per_m=1', 'm_kg=1'], /^upt evaluate: be-133: 'NaN' is not a finite number/],
+    [['case-resistor-noise', 'T_K=300'], /^upt evaluate: case-resistor-noise: missing input 'R_ohm'/],
+  ])('upt evaluate %j exits 1 under the one prefix', (args, pattern) => {
+    const { status, stderr } = upt(['evaluate', ...args]);
+    expect(status).toBe(1);
+    expect(stderr).toMatch(pattern);
+  });
+});
+
 describe('upt eval reads a unit literal exactly (issue 458, the CLI path)', () => {
   it.each([
     [['eval', 'rho', 'rho=1g/cm^3'], '1000'],

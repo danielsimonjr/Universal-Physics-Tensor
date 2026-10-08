@@ -211,7 +211,13 @@ export {
  */
 export { evaluateRelation, CoefficientUnsetError } from './composition/index.js';
 /** The input errors {@link evaluateRelation} throws before any domain check; a domain failure is `DomainViolationError`. */
-export { DuplicateInputError, InputTypeError, MissingInputError, UnknownInputError } from './composition/index.js';
+export {
+  DuplicateInputError,
+  InputTypeError,
+  MissingInputError,
+  NonFiniteInputError,
+  UnknownInputError,
+} from './composition/index.js';
 /** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
 export type { Evaluation } from './composition/index.js';
 
