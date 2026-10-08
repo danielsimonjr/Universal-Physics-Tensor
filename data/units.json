@@ -1,7 +1,7 @@
 {
   "$schema": "./units.schema.json",
   "schemaVersion": 1,
-  "description": "The unit table units.ts reads: every symbol's exact scale to SI base units, its dimension, whether it takes an SI prefix and whether it counts cycles; the SI prefixes; the refused spellings; the letters that are both a prefix and a unit; the affine temperatures; and the notes a spelling prints. A scale is an exact expression: decimal literals, names in `scales`, `pi`, `ln2`, and the numeric exports of src/core/constants.ts, joined by `*` and `/`, each with an optional integer power `^n`. src/dimensional/exact-scale.ts reads it.",
+  "description": "The unit table units.ts reads: every symbol's exact scale to SI base units, its dimension, whether it takes an SI prefix and whether it counts cycles; the SI prefixes; the refused spellings; the letters that are both a prefix and a unit; the affine temperatures; and the notes a spelling prints. A scale is an exact expression: decimal literals, names in `scales`, `pi`, and registered constants under their registry spelling (`c`, `e`, `m_u`, `M_sun`, `Msun_iau`, `ln2`; src/dimensional/constant-rows.ts), joined by `*` and `/`, each with an optional integer power `^n`. src/dimensional/exact-scale.ts reads it.",
   "scales": {
     "inch": "0.0254",
     "foot": "0.3048",
@@ -226,7 +226,7 @@
       "symbols": [
         "eV"
       ],
-      "scale": "E_SI",
+      "scale": "e",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -326,7 +326,7 @@
       "symbols": [
         "Msun"
       ],
-      "scale": "M_SUN_SI",
+      "scale": "M_sun",
       "dimension": {
         "M": 1
       },
@@ -337,7 +337,7 @@
       "symbols": [
         "Msun_iau"
       ],
-      "scale": "M_SUN_IAU_SI",
+      "scale": "Msun_iau",
       "dimension": {
         "M": 1
       },
@@ -423,7 +423,7 @@
       "symbols": [
         "ly"
       ],
-      "scale": "C_SI*julian_year",
+      "scale": "c*julian_year",
       "dimension": {
         "L": 1
       },
@@ -700,7 +700,7 @@
         "u",
         "amu"
       ],
-      "scale": "M_U_SI",
+      "scale": "m_u",
       "dimension": {
         "M": 1
       },
@@ -711,7 +711,7 @@
       "symbols": [
         "Da"
       ],
-      "scale": "M_U_SI",
+      "scale": "m_u",
       "dimension": {
         "M": 1
       },
@@ -1119,7 +1119,7 @@
     },
     {
       "spelling": "Msun",
-      "note": "Msun is {M_SUN_SI} kg (M_SUN_SI), not GM☉/G; G×Msun is about 3.0e-4 high versus the IAU GM☉. Use the unit Msun_iau, or the eval name GM_sun, for GM_SUN_SI"
+      "note": "Msun is {M_sun} kg (M_SUN_SI), not GM☉/G; G×Msun is about 3.0e-4 high versus the IAU GM☉. Use the unit Msun_iau, or the eval name GM_sun, for GM_SUN_SI"
     },
     {
       "spelling": "G",
@@ -1143,7 +1143,7 @@
     },
     {
       "spelling": "u",
-      "note": "bare u is the atomic mass unit ({M_U_SI} kg); um is still a micrometre"
+      "note": "bare u is the atomic mass unit ({m_u} kg); um is still a micrometre"
     }
   ]
 }

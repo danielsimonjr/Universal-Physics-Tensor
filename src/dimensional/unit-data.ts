@@ -9,14 +9,13 @@
  * file that breaks one throws here, so `units.ts` never reads a half-valid table.
  *
  * A scale is an exact expression, read by `exact-scale.ts`. A name in it is a
- * shared scale from the file's `scales`, `pi`, `ln2`, or one of the constants
- * of `core/constants.ts` in `UNIT_CONSTANTS`, read through its shortest decimal
- * (`scaleOf`). Those constants are imported by name, not as a namespace, so the
- * CLI record's static reach (`cli/record-reach.ts`) names the constants the unit
- * table can read instead of the whole constants table; a name outside them is
- * refused when the file loads. The raw
- * rows are strings and integer exponents, so another exact reader (MathTS)
- * replaces this loader without touching the file.
+ * shared scale from the file's `scales`, `pi`, or a constant under its registry
+ * spelling (`c`, `e`, `m_u`, `M_sun`, `Msun_iau`, `ln2`; `constant-rows.ts`),
+ * the same spelling a `{NAME}` note placeholder uses. A constant is read through
+ * its shortest decimal (`scaleOf`), or as the irrational factor when its row is
+ * `irrational`. A shared scale may not reuse a constant's spelling, so a name
+ * has one meaning. The raw rows are strings and integer exponents, so another
+ * exact reader (MathTS) replaces this loader without touching the file.
  *
  * @module dimensional/unit-data
  */
@@ -25,8 +24,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { C_SI, E_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI } from '../core/constants.js';
 import { schemaProblems, type JsonSchema } from '../core/json-schema.js';
+import { constantRow } from './constant-rows.js';
 import type { Dimension } from './types.js';
 import { decimalScale, irrationalScale, readScaleExpression, scaleOf, type ExactScale } from './exact-scale.js';
 
@@ -99,18 +98,15 @@ export interface UnitTableData {
 
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '../../data');
 const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
-const IRRATIONAL: Readonly<Record<string, ExactScale>> = { pi: irrationalScale(Math.PI), ln2: irrationalScale(Math.LN2) };
+/** π, which the registry does not spell (a formula scope adds `pi` itself), as the irrational factor. */
+const PI = 'pi';
+const PI_SCALE = irrationalScale(Math.PI);
 
-/**
- * The `core/constants.ts` values `data/units.json` names (in a scale or a note
- * placeholder). The file is checked against this set at load, so a row naming
- * another constant fails until it is imported here.
- */
-const UNIT_CONSTANTS: Readonly<Record<string, number>> = { C_SI, E_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI };
-
-/** A constant the unit file may name, or undefined. */
-function constantValue(name: string): number | undefined {
-  return Object.hasOwn(UNIT_CONSTANTS, name) ? UNIT_CONSTANTS[name] : undefined;
+/** The registered constant `name` spells, exactly: its irrational factor or its shortest decimal; undefined when no constant has that spelling. */
+function constantScale(name: string): ExactScale | undefined {
+  const constant = constantRow(name);
+  if (constant === undefined) return undefined;
+  return constant.irrational === true ? irrationalScale(constant.value) : scaleOf(constant.value);
 }
 
 function dimension(d: DimensionFile): Dimension {
@@ -129,12 +125,16 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
   const problems = schemaProblems(schema, raw);
   if (problems.length > 0) throw new Error(`data/units.json does not match data/units.schema.json:\n${problems.join('\n')}`);
   const file = raw as UnitFile;
+  for (const name of Object.keys(file.scales)) {
+    if (name === PI || constantRow(name) !== undefined) {
+      throw new Error(`data/units.json: shared scale '${name}' is also ${name === PI ? 'π' : 'a registered constant'}; a name has one meaning`);
+    }
+  }
 
   const named = new Map<string, ExactScale>();
   const reading = new Set<string>();
   const resolve = (name: string): ExactScale | undefined => {
-    const irrational = IRRATIONAL[name];
-    if (irrational !== undefined) return irrational;
+    if (name === PI) return PI_SCALE;
     const shared = file.scales[name];
     if (shared !== undefined) {
       const done = named.get(name);
@@ -146,8 +146,7 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
       named.set(name, scale);
       return scale;
     }
-    const value = constantValue(name);
-    return value === undefined ? undefined : scaleOf(value);
+    return constantScale(name);
   };
   const read = (text: string, where: string): ExactScale => {
     try {
@@ -186,9 +185,9 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
   const spellingNotes = new Map<string, string>();
   for (const { spelling, note } of file.spellingNotes) {
     const filled = note.replace(/\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (_, name: string) => {
-      const value = constantValue(name);
-      if (value === undefined) throw new Error(`data/units.json: note for '${spelling}' names '${name}', which is not a constant`);
-      return String(value);
+      const constant = constantRow(name);
+      if (constant === undefined) throw new Error(`data/units.json: note for '${spelling}' names '${name}', which is not a registered constant`);
+      return String(constant.value);
     });
     spellingNotes.set(spelling, filled);
   }

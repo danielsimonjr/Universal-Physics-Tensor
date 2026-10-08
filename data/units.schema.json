@@ -11,7 +11,7 @@
     "schemaVersion": { "const": 1 },
     "description": { "type": "string", "minLength": 1 },
     "scales": {
-      "description": "Named exact scales the unit rows share (inch, pound, standard gravity). A name is lowercase; an uppercase name is a src/core/constants.ts export.",
+      "description": "Named exact scales the unit rows share (inch, pound, standard gravity). A name starts lowercase and is neither `pi` nor a registered constant's spelling (src/dimensional/constant-rows.ts), which unit-data.ts checks at load.",
       "type": "object",
       "propertyNames": { "pattern": "^[a-z][A-Za-z0-9_]*$" },
       "additionalProperties": { "$ref": "#/$defs/scale" }
@@ -86,7 +86,7 @@
       }
     },
     "spellingNotes": {
-      "description": "A note printed when a unit text contains the spelling. {NAME} is replaced by that src/core/constants.ts export.",
+      "description": "A note printed when a unit text contains the spelling. {NAME} is replaced by the value of the registered constant spelled NAME (src/dimensional/constant-rows.ts).",
       "type": "array",
       "items": {
         "type": "object",

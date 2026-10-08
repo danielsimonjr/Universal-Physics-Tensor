@@ -62,12 +62,20 @@ describe('data/units.json is the unit table', () => {
     expect(scaleToNumber(exact('Msun_iau'))).toBe(M_SUN_IAU_SI);
     expect(scaleToNumber(exact('Msun'))).toBe(M_SUN_SI);
     expect(exact('Msun_iau')).toEqual(decimalScale(String(constantRecord('Msun_iau')!.value)));
+    // Constants are named by their registry spelling: e is the elementary charge, c the speed of light.
+    expect(file.units.find((row) => row.symbols.includes('eV'))!.scale).toBe('e');
+    expect(scaleToNumber(exact('eV'))).toBe(constantRecord('e')!.value);
+    expect(scaleToNumber(exact('ly'))).toBe(constantRecord('c')!.value * 365.25 * 86400);
+    // ln 2 is an irrational row of the registry, so the bit carries it as the irrational factor, not a decimal.
+    expect(constantRecord('ln2')!.irrational).toBe(true);
+    expect(exact('bit')).toEqual({ num: 1n, den: 1n, irrational: Math.LN2 });
     expect(convertValue('1 g/cm^3', 'kg/m^3').value).toBe(1000);
     expect(parseUnit('kcal').scale).toBe(4184);
   });
 
-  it('fills a note placeholder from core/constants', () => {
+  it('fills a note placeholder from the registered constant of that spelling', () => {
     expect(unitConventionNotes('Msun')[0]).toContain(`${M_SUN_SI} kg`);
+    expect(unitConventionNotes('u')[0]).toContain(`${constantRecord('m_u')!.value} kg`);
     expect(unitConventionNotes('kg')).toEqual([]);
   });
 
@@ -91,7 +99,7 @@ describe('a unit file that breaks a rule does not load', () => {
   it('a symbol spelled twice, an unknown scale name, and a refused unit are errors', () => {
     expect(() => readUnitFile(edited((f) => f.units.push({ ...f.units[0]! })), schema)).toThrow(/spelled by two rows/);
     expect(() => readUnitFile(edited((f) => (f.units[0]!.scale = 'furlong')), schema)).toThrow(/names 'furlong'/);
-    // A constant of core/constants.ts the unit table does not import by name is refused, so the CLI record's static reach stays exact.
+    // A constant is named by its registry spelling; a core/constants.ts export name is not a spelling.
     expect(() => readUnitFile(edited((f) => (f.units[0]!.scale = 'G_SI')), schema)).toThrow(/names 'G_SI'/);
     expect(() => readUnitFile(edited((f) => f.refused.push({ symbol: 'm', reason: 'no' })), schema)).toThrow(/refused 'm' is also a unit/);
   });
@@ -101,6 +109,11 @@ describe('a unit file that breaks a rule does not load', () => {
     expect(() => readUnitFile(edited((f) => f.spellingNotes.push({ spelling: 'x', note: '{NOT_A_CONSTANT}' })), schema)).toThrow(
       /names 'NOT_A_CONSTANT'/,
     );
+  });
+
+  it('a shared scale may not reuse pi or a registered constant spelling', () => {
+    expect(() => readUnitFile(edited((f) => ((f.scales as Record<string, string>).c = '2')), schema)).toThrow(/shared scale 'c' is also a registered constant/);
+    expect(() => readUnitFile(edited((f) => ((f.scales as Record<string, string>).pi = '3')), schema)).toThrow(/shared scale 'pi' is also π/);
   });
 
   it('a shared scale defined through itself is an error', () => {
