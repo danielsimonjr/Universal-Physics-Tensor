@@ -4,7 +4,7 @@
     "version": "9.0.0",
     "totalFiles": 360,
     "totalModules": 13,
-    "totalExports": 2474
+    "totalExports": 2476
   },
   "entryPoints": [
     {
@@ -3477,6 +3477,13 @@
             "file": "../composition/chain-candidate.js",
             "imports": [
               "ChainCandidate"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../relations/types.js",
+            "imports": [
+              "FormalRefKind"
             ],
             "typeOnly": true
           },
@@ -17125,7 +17132,14 @@
         "description": "Canonical CODATA 2018 + SI-defined physical constants for UPT (v0.5.1).",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./data-file.js",
+            "imports": [
+              "checkedDataFile"
+            ]
+          }
+        ],
         "exports": [
           "C_SI",
           "G_SI",
@@ -20288,12 +20302,26 @@
             "reExport": true
           },
           {
+            "file": "./bridges/catalog-types.js",
+            "imports": [
+              "CatalogEvaluatorOutput"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/input-contract.js",
             "imports": [
               "ContractAlternate",
               "EvaluationWant",
               "InputContract",
               "InputSlot"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/input-contract.js",
+            "imports": [
+              "inputContract"
             ],
             "reExport": true
           },
@@ -20674,31 +20702,6 @@
               "DomainViolationError",
               "M_SUN_KG"
             ],
-            "reExport": true
-          },
-          {
-            "file": "./composition/index.js",
-            "imports": [],
-            "reExport": true
-          },
-          {
-            "file": "./composition/index.js",
-            "imports": [],
-            "reExport": true
-          },
-          {
-            "file": "./composition/index.js",
-            "imports": [],
-            "reExport": true
-          },
-          {
-            "file": "./composition/index.js",
-            "imports": [],
-            "reExport": true
-          },
-          {
-            "file": "./composition/index.js",
-            "imports": [],
             "reExport": true
           },
           {
@@ -21268,6 +21271,7 @@
           "MissingInputError",
           "NonFiniteInputError",
           "UnknownInputError",
+          "inputContract",
           "christoffel",
           "ricci",
           "einstein",
@@ -21473,6 +21477,7 @@
           "EvaluatorParameter",
           "ParameterAlternate",
           "GeometryRole",
+          "CatalogEvaluatorOutput",
           "ContractAlternate",
           "EvaluationWant",
           "InputContract",
@@ -21740,10 +21745,12 @@
           "EvaluatorParameter",
           "ParameterAlternate",
           "GeometryRole",
+          "CatalogEvaluatorOutput",
           "ContractAlternate",
           "EvaluationWant",
           "InputContract",
           "InputSlot",
+          "inputContract",
           "christoffel",
           "CovariantDerivativeNode",
           "ricci",
@@ -24816,16 +24823,16 @@
   "statistics": {
     "totalTypeScriptFiles": 360,
     "totalModules": 13,
-    "totalLinesOfCode": 79791,
-    "totalExports": 2474,
+    "totalLinesOfCode": 79797,
+    "totalExports": 2476,
     "totalClasses": 79,
     "totalInterfaces": 452,
     "totalFunctions": 761,
     "totalTypeGuards": 7,
     "totalEnums": 0,
     "totalConstants": 383,
-    "totalReExports": 1252,
-    "totalTypeOnlyImports": 506,
+    "totalReExports": 1254,
+    "totalTypeOnlyImports": 507,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
