@@ -10,7 +10,7 @@
  *
  * @module bridges/evaluator-inputs
  */
-import { unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
+import { unitConventionNotes, UnitError, type AffineTemperature, type TemperatureReading } from '../dimensional/units.js';
 import {
   resolveQuantityName,
   synonymGroup,
@@ -19,6 +19,7 @@ import {
 } from '../dimensional/formula-names.js';
 import { readNamedBinding, type NamedBindingSibling } from '../numerical/binding-value.js';
 import type { EvaluatorParameter } from './evaluators.js';
+import { DuplicateInputError, UnknownInputError } from './evaluation-errors.js';
 
 /** One input as it was given and as the evaluator receives it. @internal */
 export interface ResolvedInput {
@@ -34,10 +35,6 @@ export interface ResolvedInput {
 /** 15 significant digits: the value itself is passed unrounded. */
 const show = (v: number): number => Number(v.toPrecision(15));
 
-/** Hz and rpm count cycles; an angular-frequency slot counts radians, so they need 2π. */
-const CYCLIC_FREQUENCY = /^\s*[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?\s*(?:da|[YZEPTGMkhdcmuµμnpfazy])?(?:Hz|rpm)\s*$/;
-const cyclicFrequencyUnit = (raw: string): boolean => CYCLIC_FREQUENCY.test(raw);
-
 /** Disclosures that a unit symbol does not carry by itself. */
 function unitAside(given: string): string {
   const notes = unitConventionNotes(given);
@@ -50,6 +47,12 @@ const splitArg = (a: string): [string, string] => {
   return [a.slice(0, eq), a.slice(eq + 1)];
 };
 
+/** How an affine reading was applied, for the conversion note. */
+const AFFINE_NOTE: Readonly<Record<AffineTemperature, Readonly<Record<TemperatureReading, string>>>> = {
+  celsius: { absolute: ' (absolute: + 273.15)', difference: ' (a difference: no offset)' },
+  fahrenheit: { absolute: ' (absolute: (degF − 32) × 5/9 + 273.15)', difference: ' (a difference: × 5/9, no offset)' },
+};
+
 function convert(
   p: EvaluatorParameter,
   raw: string,
@@ -59,33 +62,29 @@ function convert(
 ): { value: number; note?: string } {
   const read = readNamedBinding(givenName, raw, { reading, siblings, declaredUnit: p.unit });
   if (!read.dimensioned) return { value: read.value };
-  const celsius = /degC|°C/.test(raw);
-  const fahrenheit = /degF|°F/.test(raw);
-  const offset = celsius && reading === 'absolute'
-    ? ' (absolute: + 273.15)'
-    : celsius
-      ? ' (a difference: no offset)'
-      : fahrenheit && reading === 'absolute'
-        ? ' (absolute: (degF − 32) × 5/9 + 273.15)'
-        : fahrenheit
-          ? ' (a difference: × 5/9, no offset)'
-          : '';
-  const cycles = p.angular === true && cyclicFrequencyUnit(raw);
-  const value = cycles ? read.value * 2 * Math.PI : read.value;
-  const turns = cycles ? ' (cycles: × 2π)' : '';
-  const base = `${raw.trim()} → ${show(value)} ${p.unit || '(dimensionless)'}${offset}${turns}${unitAside(raw)}`;
-  const temperature = read.notes.find((note) => note.includes('k_B T'));
-  return { value, note: temperature === undefined ? base : `${base}. ${temperature}` };
+  const offset = read.affine === undefined ? '' : AFFINE_NOTE[read.affine][reading];
+  // An angular input counts radians; a cycle-counting unit (the `cycles` flag on its row) takes 2π per cycle.
+  const turns = p.angular === true ? read.cycles : 0;
+  if (Number.isNaN(turns)) {
+    throw new UnitError(`'${raw.trim()}' adds a cycle rate to a plain rate, so its radians per second are not defined`);
+  }
+  const value = turns === 0 ? read.value : read.value * (2 * Math.PI) ** turns;
+  const turnsNote = turns === 0 ? '' : turns === 1 ? ' (cycles: × 2π)' : ` (cycles: × (2π)^${turns})`;
+  const base = `${raw.trim()} → ${show(value)} ${p.unit || '(dimensionless)'}${offset}${turnsNote}${unitAside(raw)}`;
+  return { value, note: read.temperatureNote === undefined ? base : `${base}. ${read.temperatureNote}` };
 }
 
 /**
- * Resolve `args` against `parameters`.
- * @throws UnitError on an unknown key, a repeated input, or a unit that does not fit.
+ * Resolve `args` against `parameters`. `id` names the evaluated id in an input error.
+ * @throws UnknownInputError on an unknown key.
+ * @throws DuplicateInputError on an input given twice.
+ * @throws UnitError on a unit that does not fit.
  * @internal
  */
 export function resolveEvaluatorInputs(
   parameters: readonly EvaluatorParameter[],
   args: readonly string[],
+  id?: string,
 ): { inputs: Record<string, number>; resolved: ResolvedInput[] } {
   const inputs: Record<string, number> = {};
   const resolved: ResolvedInput[] = [];
@@ -102,7 +101,7 @@ export function resolveEvaluatorInputs(
     const viaName = direct === undefined && viaAlt === undefined ? resolveQuantityName(key, parameterNames) : null;
     const viaSynonym = viaName === null ? undefined : parameters.find((p) => p.key === viaName);
     const p = direct ?? viaAlt ?? viaSynonym;
-    if (p === undefined) throw new UnitError(`'${key}' is not an input here; the inputs are: ${known.join(', ')}`);
+    if (p === undefined) throw new UnknownInputError(id, key, known);
     const earlier = resolved.find((r) => r.key === p.key);
     const role = temperatureQuantityRole(p.quantity) === 'difference' ? 'difference' : temperatureQuantityRole(key);
     const c = convert(p, raw, role, siblings, key);
@@ -117,8 +116,7 @@ export function resolveEvaluatorInputs(
       if (synonymRepeat) {
         throw synonymDisagreement([earlierName, key], { [earlierName]: earlier.value, [key]: value })!;
       }
-      const throughAlternate = direct === undefined || earlier.via !== undefined;
-      throw new UnitError(`'${p.key}' is given twice${throughAlternate ? ' (once through an alternate)' : ''}`);
+      throw new DuplicateInputError(id, p.key, [earlierName, key]);
     }
     inputs[p.key] = value;
     resolved.push({

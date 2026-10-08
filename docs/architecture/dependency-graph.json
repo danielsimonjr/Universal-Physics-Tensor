@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "8.0.0",
-    "totalFiles": 353,
+    "totalFiles": 356,
     "totalModules": 13,
-    "totalExports": 2409
+    "totalExports": 2447
   },
   "entryPoints": [
     {
@@ -5025,6 +5025,26 @@
           "CONFRONTATIONS"
         ]
       },
+      "src/bridges/evaluation-errors.ts": {
+        "description": "The errors one evaluation throws, in the order it checks: the bindings",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "MissingInputError",
+          "UnknownInputError",
+          "InputTypeError",
+          "DuplicateInputError",
+          "DomainViolationError"
+        ],
+        "classes": [
+          "MissingInputError",
+          "UnknownInputError",
+          "InputTypeError",
+          "DuplicateInputError",
+          "DomainViolationError"
+        ]
+      },
       "src/bridges/evaluator-inputs.ts": {
         "description": "`key=value[unit]` arguments → an evaluator's numeric inputs, through the",
         "externalDependencies": [],
@@ -5035,6 +5055,7 @@
             "imports": [
               "unitConventionNotes",
               "UnitError",
+              "AffineTemperature",
               "TemperatureReading"
             ]
           },
@@ -5060,6 +5081,13 @@
               "EvaluatorParameter"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./evaluation-errors.js",
+            "imports": [
+              "DuplicateInputError",
+              "UnknownInputError"
+            ]
           }
         ],
         "exports": [
@@ -5124,13 +5152,26 @@
               "evaluateCatalogRelation",
               "relationHolds"
             ]
+          },
+          {
+            "file": "./evaluation-errors.js",
+            "imports": [
+              "DomainViolationError"
+            ]
+          },
+          {
+            "file": "./input-contract.js",
+            "imports": [
+              "checkInputs",
+              "EvaluationWant",
+              "InputContract",
+              "InputSlot"
+            ]
           }
         ],
         "exports": [
           "BRIDGE_EVALUATORS",
-          "sourceOfParameter",
           "unusedInputKeys",
-          "bindRelationInputs",
           "missingEvaluatorMessage",
           "evaluateBridge"
         ],
@@ -5140,9 +5181,7 @@
           "EvaluatorSpec"
         ],
         "functions": [
-          "sourceOfParameter",
           "unusedInputKeys",
-          "bindRelationInputs",
           "missingEvaluatorMessage",
           "evaluateBridge"
         ],
@@ -5364,6 +5403,33 @@
         "constants": [
           "BRIDGE_EQUATIONS",
           "SPINE_CONFRONTATION_POINTS"
+        ]
+      },
+      "src/bridges/input-contract.ts": {
+        "description": "The one check of a binding record against an id's declared inputs.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./evaluation-errors.js",
+            "imports": [
+              "DuplicateInputError",
+              "InputTypeError",
+              "MissingInputError",
+              "UnknownInputError"
+            ]
+          }
+        ],
+        "exports": [
+          "checkInputs"
+        ],
+        "interfaces": [
+          "ContractAlternate",
+          "InputSlot",
+          "InputContract"
+        ],
+        "functions": [
+          "checkInputs"
         ]
       },
       "src/bridges/membership.ts": {
@@ -10413,6 +10479,15 @@
             "reExport": true
           },
           {
+            "file": "./bridges/evaluation-errors.js",
+            "imports": [
+              "DuplicateInputError",
+              "MissingInputError",
+              "UnknownInputError"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/evaluators.js",
             "imports": [
               "EvaluatorSpec",
@@ -11109,6 +11184,9 @@
           "decidingMeasurement",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
+          "DuplicateInputError",
+          "MissingInputError",
+          "UnknownInputError",
           "resolveEvaluatorInputs",
           "APPLIED_CASES",
           "runAppliedCase",
@@ -11338,6 +11416,9 @@
           "decidingMeasurement",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
+          "DuplicateInputError",
+          "MissingInputError",
+          "UnknownInputError",
           "EvaluatorSpec",
           "EvaluatorParameter",
           "resolveEvaluatorInputs",
@@ -12673,8 +12754,13 @@
               "CompositionAliasError",
               "CompositionDimensionError",
               "CompositionJunctionError",
-              "DomainViolationError",
               "UndefinedCompositionError"
+            ]
+          },
+          {
+            "file": "../bridges/evaluation-errors.js",
+            "imports": [
+              "DomainViolationError"
             ]
           },
           {
@@ -13109,6 +13195,12 @@
               "RelationContract"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../bridges/evaluation-errors.js",
+            "imports": [
+              "DomainViolationError"
+            ]
           }
         ],
         "exports": [
@@ -13116,7 +13208,6 @@
           "evaluateEdge",
           "CompositionJunctionError",
           "CompositionDimensionError",
-          "DomainViolationError",
           "CoefficientUnsetError",
           "CompositionAliasError",
           "UndefinedCompositionError"
@@ -13124,7 +13215,6 @@
         "classes": [
           "CompositionJunctionError",
           "CompositionDimensionError",
-          "DomainViolationError",
           "CoefficientUnsetError",
           "CompositionAliasError",
           "UndefinedCompositionError"
@@ -13226,8 +13316,14 @@
             "file": "../bridges/evaluators.js",
             "imports": [
               "BRIDGE_EVALUATORS",
-              "sourceOfParameter",
               "EvaluatorSpec"
+            ]
+          },
+          {
+            "file": "../bridges/input-contract.js",
+            "imports": [
+              "checkInputs",
+              "InputContract"
             ]
           },
           {
@@ -13274,11 +13370,7 @@
         "exports": [
           "evaluatorOutput",
           "resolveEvaluable",
-          "evaluateRelation",
-          "MissingInputError"
-        ],
-        "classes": [
-          "MissingInputError"
+          "evaluateRelation"
         ],
         "interfaces": [
           "Evaluable"
@@ -13859,9 +13951,19 @@
               "CompositionAliasError",
               "CompositionDimensionError",
               "CompositionJunctionError",
-              "DomainViolationError",
               "UndefinedCompositionError",
               "evaluateEdge"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "../bridges/evaluation-errors.js",
+            "imports": [
+              "DomainViolationError",
+              "DuplicateInputError",
+              "InputTypeError",
+              "MissingInputError",
+              "UnknownInputError"
             ],
             "reExport": true
           },
@@ -14126,9 +14228,13 @@
           "CompositionAliasError",
           "CompositionDimensionError",
           "CompositionJunctionError",
-          "DomainViolationError",
           "UndefinedCompositionError",
           "evaluateEdge",
+          "DomainViolationError",
+          "DuplicateInputError",
+          "InputTypeError",
+          "MissingInputError",
+          "UnknownInputError",
           "composeEdges",
           "minConfidence",
           "QUANTITY_IDENTIFICATIONS",
@@ -14214,9 +14320,13 @@
           "CompositionAliasError",
           "CompositionDimensionError",
           "CompositionJunctionError",
-          "DomainViolationError",
           "UndefinedCompositionError",
           "evaluateEdge",
+          "DomainViolationError",
+          "DuplicateInputError",
+          "InputTypeError",
+          "MissingInputError",
+          "UnknownInputError",
           "ComposeOptions",
           "QuantityIdentification",
           "composeEdges",
@@ -16651,8 +16761,13 @@
           {
             "file": "./edge.js",
             "imports": [
-              "DomainViolationError",
               "evaluateEdge"
+            ]
+          },
+          {
+            "file": "../bridges/evaluation-errors.js",
+            "imports": [
+              "DomainViolationError"
             ]
           },
           {
@@ -18159,6 +18274,13 @@
             "imports": [
               "CONSTANT_REGISTRY"
             ]
+          },
+          {
+            "file": "../numerical/formula-dimension.js",
+            "imports": [
+              "parseFormulaPNode",
+              "FormulaPNode"
+            ]
           }
         ],
         "exports": [
@@ -18284,6 +18406,41 @@
           "KroneckerVarianceError",
           "PartialDerivativeIndexVarianceError",
           "DuplicateCoordinateWarning"
+        ]
+      },
+      "src/dimensional/exact-scale.ts": {
+        "description": "Exact unit scales.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "UNIT_SCALE",
+          "decimalScale",
+          "scaleOf",
+          "ratioScale",
+          "irrationalScale",
+          "multiplyScales",
+          "divideScales",
+          "powerScale",
+          "addScales",
+          "scaleToNumber"
+        ],
+        "interfaces": [
+          "ExactScale"
+        ],
+        "functions": [
+          "decimalScale",
+          "scaleOf",
+          "ratioScale",
+          "irrationalScale",
+          "multiplyScales",
+          "divideScales",
+          "powerScale",
+          "addScales",
+          "scaleToNumber"
+        ],
+        "constants": [
+          "UNIT_SCALE"
         ]
       },
       "src/dimensional/field-equation-helpers.ts": {
@@ -19216,20 +19373,7 @@
       },
       "src/dimensional/units.ts": {
         "description": "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.",
-        "externalDependencies": [
-          {
-            "package": "@danielsimonjr/mathts-core",
-            "imports": [
-              "toSiDimensionVector"
-            ]
-          },
-          {
-            "package": "@danielsimonjr/mathts-functions",
-            "imports": [
-              "unit"
-            ]
-          }
-        ],
+        "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -19258,31 +19402,58 @@
               "M_SUN_SI",
               "M_U_SI"
             ]
+          },
+          {
+            "file": "./exact-scale.js",
+            "imports": [
+              "addScales",
+              "decimalScale",
+              "divideScales",
+              "irrationalScale",
+              "multiplyScales",
+              "powerScale",
+              "ratioScale",
+              "scaleOf",
+              "scaleToNumber",
+              "UNIT_SCALE",
+              "ExactScale"
+            ]
           }
         ],
         "exports": [
           "unitConventionNotes",
+          "readUnit",
           "parseUnit",
-          "affineAbsoluteOffsetK",
+          "readQuantityLiteral",
           "convertValue",
-          "mathTsAgreedQuantity",
           "unitDimension",
+          "unitRows",
           "unitTables",
-          "UnitError"
+          "UnitError",
+          "UnknownUnitError",
+          "UnitRefusedError",
+          "AmbiguousUnitError"
         ],
         "classes": [
-          "UnitError"
+          "UnitError",
+          "UnknownUnitError",
+          "UnitRefusedError",
+          "AmbiguousUnitError"
         ],
         "interfaces": [
-          "ParsedUnit"
+          "ParsedUnit",
+          "UnitReading",
+          "QuantityLiteral",
+          "ConvertedValue"
         ],
         "functions": [
           "unitConventionNotes",
+          "readUnit",
           "parseUnit",
-          "affineAbsoluteOffsetK",
+          "readQuantityLiteral",
           "convertValue",
-          "mathTsAgreedQuantity",
           "unitDimension",
+          "unitRows",
           "unitTables"
         ]
       },
@@ -19922,6 +20093,16 @@
           {
             "file": "./composition/index.js",
             "imports": [
+              "DuplicateInputError",
+              "InputTypeError",
+              "MissingInputError",
+              "UnknownInputError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/index.js",
+            "imports": [
               "Evaluation"
             ],
             "reExport": true
@@ -19933,6 +20114,16 @@
               "EvaluatorParameter",
               "ParameterAlternate",
               "GeometryRole"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/input-contract.js",
+            "imports": [
+              "ContractAlternate",
+              "EvaluationWant",
+              "InputContract",
+              "InputSlot"
             ],
             "reExport": true
           },
@@ -20124,15 +20315,20 @@
           {
             "file": "./dimensional/units.js",
             "imports": [
+              "AmbiguousUnitError",
               "convertValue",
               "parseUnit",
-              "UnitError"
+              "UnitError",
+              "UnitRefusedError",
+              "UnknownUnitError"
             ],
             "reExport": true
           },
           {
             "file": "./dimensional/units.js",
             "imports": [
+              "AffineTemperature",
+              "ConvertedValue",
               "ParsedUnit",
               "TemperatureReading"
             ],
@@ -20891,6 +21087,10 @@
           "CarrierSignError",
           "evaluateRelation",
           "CoefficientUnsetError",
+          "DuplicateInputError",
+          "InputTypeError",
+          "MissingInputError",
+          "UnknownInputError",
           "christoffel",
           "ricci",
           "einstein",
@@ -20913,9 +21113,12 @@
           "validateGaugeField",
           "validateTimeSymmetryPredicate",
           "validateKleinGordonEquation",
+          "AmbiguousUnitError",
           "convertValue",
           "parseUnit",
           "UnitError",
+          "UnitRefusedError",
+          "UnknownUnitError",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -21093,6 +21296,10 @@
           "EvaluatorParameter",
           "ParameterAlternate",
           "GeometryRole",
+          "ContractAlternate",
+          "EvaluationWant",
+          "InputContract",
+          "InputSlot",
           "CovariantDerivativeNode",
           "RicciTensorNode",
           "EinsteinTensorNode",
@@ -21118,6 +21325,8 @@
           "KleinGordonEquationNode",
           "KleinGordonEquationValidationResult",
           "Dimension",
+          "AffineTemperature",
+          "ConvertedValue",
           "ParsedUnit",
           "TemperatureReading",
           "ExprNode",
@@ -21344,11 +21553,19 @@
           "CarrierSignError",
           "evaluateRelation",
           "CoefficientUnsetError",
+          "DuplicateInputError",
+          "InputTypeError",
+          "MissingInputError",
+          "UnknownInputError",
           "Evaluation",
           "EvaluatorSpec",
           "EvaluatorParameter",
           "ParameterAlternate",
           "GeometryRole",
+          "ContractAlternate",
+          "EvaluationWant",
+          "InputContract",
+          "InputSlot",
           "christoffel",
           "CovariantDerivativeNode",
           "ricci",
@@ -21396,9 +21613,14 @@
           "KleinGordonEquationValidationResult",
           "validateKleinGordonEquation",
           "Dimension",
+          "AmbiguousUnitError",
           "convertValue",
           "parseUnit",
           "UnitError",
+          "UnitRefusedError",
+          "UnknownUnitError",
+          "AffineTemperature",
+          "ConvertedValue",
           "ParsedUnit",
           "TemperatureReading",
           "DIMENSIONLESS",
@@ -21745,12 +21967,15 @@
           {
             "file": "../dimensional/units.js",
             "imports": [
-              "affineAbsoluteOffsetK",
+              "AmbiguousUnitError",
               "convertValue",
-              "mathTsAgreedQuantity",
               "parseUnit",
+              "readQuantityLiteral",
+              "readUnit",
               "unitConventionNotes",
               "UnitError",
+              "UnitRefusedError",
+              "AffineTemperature",
               "TemperatureReading"
             ]
           },
@@ -21758,15 +21983,15 @@
             "file": "./formula-contract.js",
             "imports": [
               "callBuiltinFunction",
-              "EULER_NUMBER_ERROR",
+              "EulerNumberError",
               "FormulaError"
             ]
           },
           {
             "file": "./formula-dimension.js",
             "imports": [
-              "FormulaDimensionError",
               "parseFormulaPNode",
+              "UnsupportedSyntaxError",
               "FormulaPNode"
             ]
           }
@@ -22301,10 +22526,12 @@
           "BUILTIN_FUNCTION_LIST",
           "unknownFunctionMessage",
           "callBuiltinFunction",
-          "FormulaError"
+          "FormulaError",
+          "EulerNumberError"
         ],
         "classes": [
-          "FormulaError"
+          "FormulaError",
+          "EulerNumberError"
         ],
         "interfaces": [
           "CompiledFormula",
@@ -22380,6 +22607,7 @@
             "file": "./formula-contract.js",
             "imports": [
               "EULER_NUMBER_ERROR",
+              "EulerNumberError",
               "FormulaError"
             ]
           }
@@ -22389,10 +22617,12 @@
           "formulaSymbolDimension",
           "parseFormulaPNode",
           "builtinFormulaDimensionChecker",
-          "FormulaDimensionError"
+          "FormulaDimensionError",
+          "UnsupportedSyntaxError"
         ],
         "classes": [
-          "FormulaDimensionError"
+          "FormulaDimensionError",
+          "UnsupportedSyntaxError"
         ],
         "interfaces": [
           "ParsedPhysics",
@@ -22433,7 +22663,7 @@
             "imports": [
               "BUILTIN_FUNCTION_NAMES",
               "callBuiltinFunction",
-              "EULER_NUMBER_ERROR",
+              "EulerNumberError",
               "FormulaError",
               "unknownFunctionMessage"
             ]
@@ -24063,11 +24293,13 @@
           "src/bridges/coefficient-statement.ts",
           "src/bridges/confrontation-coverage.ts",
           "src/bridges/confrontations.ts",
+          "src/bridges/evaluation-errors.ts",
           "src/bridges/evaluator-inputs.ts",
           "src/bridges/evaluators.ts",
           "src/bridges/expr-parse.ts",
           "src/bridges/holds.ts",
           "src/bridges/index.ts",
+          "src/bridges/input-contract.ts",
           "src/bridges/membership.ts",
           "src/bridges/notices.ts",
           "src/bridges/observations/types.ts",
@@ -24305,6 +24537,7 @@
           "src/dimensional/dimension-spec.ts",
           "src/dimensional/einstein-equation.ts",
           "src/dimensional/errors.ts",
+          "src/dimensional/exact-scale.ts",
           "src/dimensional/field-equation-helpers.ts",
           "src/dimensional/formula-names.ts",
           "src/dimensional/fresh-label.ts",
@@ -24396,21 +24629,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 353,
+    "totalTypeScriptFiles": 356,
     "totalModules": 13,
-    "totalLinesOfCode": 77360,
-    "totalExports": 2409,
-    "totalClasses": 69,
-    "totalInterfaces": 440,
-    "totalFunctions": 732,
+    "totalLinesOfCode": 77794,
+    "totalExports": 2447,
+    "totalClasses": 77,
+    "totalInterfaces": 447,
+    "totalFunctions": 741,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 378,
-    "totalReExports": 1231,
+    "totalConstants": 379,
+    "totalReExports": 1251,
     "totalTypeOnlyImports": 503,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 80
+    "unusedExportsCount": 78
   }
 }

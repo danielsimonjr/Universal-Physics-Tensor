@@ -2,6 +2,11 @@
  * Closed-form evaluators projected from the catalog. `run` evaluates the
  * relation expression. It does not switch on a catalog id.
  *
+ * `run` is the one evaluation of a catalog closed form: `evaluateRelation`,
+ * the CLI and the uncertainty probes all call it. It checks the bindings
+ * against the evaluator's {@link InputContract} before the validity domain,
+ * so an absent input is a {@link MissingInputError}, never a domain failure.
+ *
  * @module bridges/evaluators
  */
 
@@ -12,6 +17,8 @@ import type { CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation
 import { evaluateFormula, parseCatalogExpression } from './expr-parse.js';
 import type { ExprNode } from '../dimensional/ast-types.js';
 import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
+import { DomainViolationError } from './evaluation-errors.js';
+import { checkInputs, type EvaluationWant, type InputContract, type InputSlot } from './input-contract.js';
 
 /** How a length input is read: radius, diameter, separation, impact parameter, or semi-major axis. @public */
 export type GeometryRole = 'radius' | 'diameter' | 'separation' | 'impact-parameter' | 'semi-major-axis';
@@ -48,7 +55,16 @@ export interface EvaluatorSpec {
   readonly parameters: readonly EvaluatorParameter[];
   /** Further numbers `run` returns beside `value`, keyed by `name`. */
   readonly outputs: readonly CatalogEvaluatorOutput[];
-  run(inputs: Readonly<Record<string, number>>): unknown;
+  /** Every spelling that binds an input, and which inputs are required. `run` checks it first. */
+  readonly contract: InputContract;
+  /**
+   * Evaluate at `inputs`, keyed by parameter key, quantity, relation source,
+   * alias or alternate. Throws `UnknownInputError`, `InputTypeError`,
+   * `DuplicateInputError` or `MissingInputError` before any
+   * `DomainViolationError`. With `want` `'value'` it returns `{ value }`
+   * alone, and an input only an extra output reads is not required.
+   */
+  run(inputs: Readonly<Record<string, number>>, want?: EvaluationWant): Record<string, number>;
 }
 
 function toParameter(row: CatalogEvaluatorParameter): EvaluatorParameter {
@@ -70,7 +86,7 @@ function toParameter(row: CatalogEvaluatorParameter): EvaluatorParameter {
 const NAMED_DEFAULT = new Map(FORMULA_NAMED.map((named) => [named.name, named.value]));
 
 /** The relation source a parameter is the input for, or undefined when it owns none. */
-export function sourceOfParameter(relation: CatalogRelation, parameter: EvaluatorParameter): string | undefined {
+function sourceOfParameter(relation: CatalogRelation, parameter: EvaluatorParameter): string | undefined {
   for (const source of relation.sources) {
     if (source === parameter.key || (relation.aliases[source] ?? []).includes(parameter.key)) return source;
   }
@@ -105,32 +121,68 @@ export function unusedInputKeys(spec: EvaluatorSpec): string[] {
     .map((parameter) => parameter.key);
 }
 
-/** Map evaluator keys onto catalog quantity names. A named constant fills a source no parameter owns. */
-export function bindRelationInputs(
+/**
+ * The declared inputs of a catalog evaluator: one slot per parameter, spelled
+ * by its key, its relation source and that source's aliases, and its quantity
+ * when no other slot shares it; then one optional, unlisted slot per relation
+ * source no parameter owns, which a named constant fills when not given.
+ */
+function evaluatorContract(catalogId: number, relation: CatalogRelation, parameters: readonly EvaluatorParameter[]): InputContract {
+  const quantityCount = new Map<string, number>();
+  for (const p of parameters) quantityCount.set(p.quantity, (quantityCount.get(p.quantity) ?? 0) + 1);
+  const owned = new Set<string>();
+  const slots: InputSlot[] = parameters.map((p) => {
+    const source = sourceOfParameter(relation, p);
+    if (source !== undefined) owned.add(source);
+    const spellings = [
+      p.key,
+      ...(source === undefined ? [] : [source, ...(relation.aliases[source] ?? [])]),
+      ...(quantityCount.get(p.quantity) === 1 ? [p.quantity] : []),
+    ];
+    return {
+      key: p.key,
+      spellings: [...new Set(spellings)],
+      alternates: (p.alternates ?? []).map((alt) => ({ key: alt.key, toKey: alt.toKey })),
+      optional: p.optional === true,
+      readBy: source === undefined ? ('outputs' as const) : ('value' as const),
+      listed: true,
+    };
+  });
+  for (const source of relation.sources) {
+    if (owned.has(source)) continue;
+    slots.push({
+      key: source,
+      spellings: [source, ...(relation.aliases[source] ?? [])],
+      alternates: [],
+      optional: NAMED_DEFAULT.has(source.replaceAll('-', '_')),
+      readBy: 'value',
+      listed: false,
+    });
+  }
+  return { id: `be-${catalogId}`, slots };
+}
+
+/**
+ * Checked inputs (keyed by slot key) onto catalog source names. A source no
+ * parameter owns takes its given value, else its named constant.
+ */
+function bindRelationInputs(
   relation: CatalogRelation,
   parameters: readonly EvaluatorParameter[],
   inputs: Readonly<Record<string, number>>,
 ): Record<string, number> {
-  const sourceOfKey = new Map<string, string>();
-  for (const source of relation.sources) {
-    sourceOfKey.set(source, source);
-    for (const alias of relation.aliases[source] ?? []) sourceOfKey.set(alias, source);
-  }
   const bound: Record<string, number> = {};
   const owned = new Set<string>();
   for (const parameter of parameters) {
-    const source =
-      sourceOfKey.get(parameter.key) ??
-      (relation.sources.includes(parameter.quantity) ? parameter.quantity : undefined);
+    const source = sourceOfParameter(relation, parameter);
     if (source === undefined) continue;
     owned.add(source);
     const value = inputs[parameter.key];
-    if (value === undefined || !Number.isFinite(value)) continue;
-    bound[source] = value;
+    if (value !== undefined) bound[source] = value;
   }
   for (const source of relation.sources) {
-    if (bound[source] !== undefined || owned.has(source)) continue;
-    const value = NAMED_DEFAULT.get(source.replaceAll('-', '_'));
+    if (owned.has(source)) continue;
+    const value = inputs[source] ?? NAMED_DEFAULT.get(source.replaceAll('-', '_'));
     if (value !== undefined) bound[source] = value;
   }
   return bound;
@@ -142,32 +194,34 @@ function buildSpec(
   parameters: readonly EvaluatorParameter[],
   outputs: readonly CatalogEvaluatorOutput[],
 ): EvaluatorSpec {
+  const relation = primaryRelation(catalogId);
+  if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
+  const contract = evaluatorContract(catalogId, relation, parameters);
   return {
     bridgeId: catalogId,
     name,
     inputKeys: parameters.filter((parameter) => parameter.optional !== true).map((parameter) => parameter.key),
     parameters,
     outputs,
-    run(inputs) {
-      const relation = primaryRelation(catalogId);
-      if (relation === undefined) {
-        throw new Error(missingEvaluatorMessage(catalogId));
-      }
-      const bound = bindRelationInputs(relation, parameters, inputs);
+    contract,
+    run(inputs, want = 'all') {
+      const given = checkInputs(contract, inputs, want);
+      const bound = bindRelationInputs(relation, parameters, given);
       if (!relationHolds(relation, bound)) {
-        throw new Error(`${relation.id}: inputs violate validity domain (${relation.domain})`);
+        throw new DomainViolationError(`${relation.id}: inputs violate validity domain (${relation.domain})`);
       }
       for (const parameter of parameters) {
-        const given = inputs[parameter.key];
-        if (parameter.optional === true && parameter.sign === 'positive' && given !== undefined && !(given > 0)) {
-          throw new Error(`${relation.id}: ${parameter.key} must be > 0`);
+        const value = given[parameter.key];
+        if (parameter.optional === true && parameter.sign === 'positive' && value !== undefined && !(value > 0)) {
+          throw new DomainViolationError(`${relation.id}: ${parameter.key} must be > 0`);
         }
       }
       const value = evaluateCatalogRelation(relation, bound);
       const result: Record<string, number> = { value };
+      if (want === 'value') return result;
       for (const output of outputs) {
-        if ((output.requires ?? []).some((key) => !Number.isFinite(inputs[key]))) continue;
-        result[output.name] = evaluateFormula(output.expression, { ...inputs, value });
+        if ((output.requires ?? []).some((key) => !Number.isFinite(given[key]))) continue;
+        result[output.name] = evaluateFormula(output.expression, { ...given, value });
       }
       return result;
     },
@@ -188,22 +242,16 @@ export function missingEvaluatorMessage(bridgeId: number): string {
 }
 
 /**
- * Evaluate a catalog id with a numeric input record. Throws on an unknown id
- * or a missing required input.
+ * Evaluate a catalog id with a numeric input record: the evaluator's `run`,
+ * which checks the inputs first. Throws on an unknown id.
  *
  * @internal
  */
 export function evaluateBridge(
   bridgeId: number,
   inputs: Readonly<Record<string, number>>,
-): unknown {
+): Record<string, number> {
   const spec = BRIDGE_EVALUATORS.get(bridgeId);
   if (spec === undefined) throw new Error(missingEvaluatorMessage(bridgeId));
-  const missing = spec.inputKeys.filter((key) => !(key in inputs) || !Number.isFinite(inputs[key]));
-  if (missing.length > 0) {
-    throw new Error(
-      `evaluateBridge: catalog id ${bridgeId} (${spec.name}) needs {${spec.inputKeys.join(', ')}}; missing/non-finite: ${missing.join(', ')}`,
-    );
-  }
   return spec.run(inputs);
 }

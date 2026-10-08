@@ -74,7 +74,12 @@ function resolveInputs(api: CommandCtx['api'], label: string, parameters: readon
   try {
     return api.resolveEvaluatorInputs(parameters, args);
   } catch (e) {
-    if (e instanceof api.UnitError || e instanceof api.SynonymDisagreementError) {
+    if (
+      e instanceof api.UnitError ||
+      e instanceof api.SynonymDisagreementError ||
+      e instanceof api.UnknownInputError ||
+      e instanceof api.DuplicateInputError
+    ) {
       throw new CliError(`upt evaluate: ${label}: ${e.message}`);
     }
     throw e;
@@ -374,15 +379,16 @@ async function run(ctx: CommandCtx): Promise<number> {
   const spec = found.evaluator;
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 
-  let result: unknown;
+  // The one evaluation: `run` checks the inputs (missing, unknown, type) before the domain.
+  let result: Record<string, number>;
   try {
     result = spec.run(inputs);
   } catch (e) {
-    // unknown-id / missing-input / out-of-range → bad value, exit 1 (documented contract).
+    // A missing input, a domain failure or a carrier-sign failure is a bad value: exit 1 (documented contract).
     throw new CliError((e as Error).message);
   }
 
-  const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i) as Record<string, unknown>, NOT_INCLUDED);
+  const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i), NOT_INCLUDED);
   const relation = api.primaryRelation(id);
   const notices = relation === undefined ? [] : api.relationNotices(relation);
 
@@ -402,7 +408,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           parameters: spec.parameters,
           conversions: conversionsOf(resolved),
           output: {
-            ...(result as Record<string, unknown>),
+            ...result,
             name: outputLabel.name,
             ...(outputLabel.unit === undefined ? {} : { unit: outputLabel.unit, dimension: outputDescriptor.dimension }),
           },
@@ -418,7 +424,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   out(`\n● be-${id}  ${spec.name}`);
   printInputs(out, spec.parameters, inputs, resolved);
-  for (const [k, v] of Object.entries(result as Record<string, unknown>)) {
+  for (const [k, v] of Object.entries(result)) {
     const extra = spec.outputs.find((o) => o.name === k);
     const label =
       k === 'value'

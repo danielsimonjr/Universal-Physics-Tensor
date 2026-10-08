@@ -18,6 +18,15 @@
  *      separated by `.`, `*`, or spaces; `^` optional; fractional exponents
  *      like `T^1/2` allowed).
  *
+ * Forms 3 and 4 are one grammar, the formula grammar MathTS parses
+ * ({@link parseFormulaPNode}). The dimension notation differs from a formula
+ * only in spelling, and {@link formulaSyntax} rewrites those spellings
+ * before the parse: a `.` between factors is `*`, a space between factors is
+ * `*`, a glued exponent (`L2`, `T-2`) takes its `^`, a fractional exponent
+ * (`T^1/2`) is parenthesized, and a hyphen inside a name (`magnetic-field`)
+ * is `_`. There is no subtraction in a dimension, so `-` after a name is
+ * always an exponent's sign.
+ *
  * @module dimensional/dimension-spec
  */
 
@@ -42,6 +51,7 @@ import {
 import { divide, multiply, power } from './algebra.js';
 import { dim } from './ast-builders.js';
 import { CONSTANT_REGISTRY } from './symbolic-constants.js';
+import { parseFormulaPNode, type FormulaPNode } from '../numerical/formula-dimension.js';
 
 /** A bad dimension spec. */
 export class DimensionSpecError extends Error {
@@ -107,27 +117,12 @@ const BASES: Record<string, keyof Dimension> = {
   J: 'J',
 };
 
-function parseExponent(raw: string): number {
-  if (raw === '') return 1;
-  if (raw.includes('/')) {
-    const [n, den] = raw.split('/');
-    const num = Number(n);
-    const dd = Number(den);
-    if (!Number.isFinite(num) || !Number.isFinite(dd) || dd === 0) {
-      throw new DimensionSpecError(`bad exponent '${raw}'`);
-    }
-    return num / dd;
-  }
-  const v = Number(raw);
-  if (!Number.isFinite(v)) throw new DimensionSpecError(`bad exponent '${raw}'`);
-  return v;
-}
-
-/** Resolve one atom: constant (exact case) or named dimension (case-insensitive). */
+/** Resolve one atom: constant (exact case, `_` or `-`) or named dimension (case-insensitive). */
 function resolveAtom(raw: string): Dimension | null {
   const s = raw.trim();
   if (!s) return null;
-  if (CONST_DIMS[s]) return CONST_DIMS[s]!;
+  const constant = CONST_DIMS[s] ?? CONST_DIMS[s.replaceAll('_', '-')];
+  if (constant) return constant;
   const key = s.toLowerCase().replace(/[\s-]+/g, '_');
   return NAMED_DIMS[key] ?? NAMED_DIMS[s.toLowerCase()] ?? null;
 }
@@ -135,142 +130,107 @@ function resolveAtom(raw: string): Dimension | null {
 function baseAtom(id: string): Dimension | null {
   const baseKey = BASES[id.toUpperCase()] ?? BASES[id];
   if (!baseKey) return null;
-  const dim = d();
-  dim[baseKey] = 1;
-  return dim;
-}
-
-/**
- * Parse a product/quotient of named dims and constants: `power/area`,
- * `length*temperature`, `L*Theta` is NOT this path (bases go to step 4).
- * Only `*` and `/` as top-level operators; no parentheses, no `^` on names.
- * Returns `null` when the string is not this form (so the base-exponent path
- * can try).
- */
-/**
- * A product/quotient with parentheses and exponents: `power/(area*temperature^4)`,
- * `mass/length^3`, `M/L^3`. A slash followed by a digit is a fractional
- * exponent on the explicit-base path (`T^1/2`), not this one.
- */
-function parseGroupedProduct(s: string): Dimension {
-  let i = 0;
-  const skip = (): void => {
-    while (s[i] === ' ') i++;
-  };
-  const parseExponentToken = (): number => {
-    skip();
-    const start = i;
-    if (s[i] === '+' || s[i] === '-') i++;
-    if (!/\d/.test(s[i] ?? '')) throw new DimensionSpecError(`bad exponent in '${s}'`);
-    while (/\d/.test(s[i] ?? '')) i++;
-    // A decimal exponent: `time^0.5`. A dot not followed by a digit is not part of it.
-    if (s[i] === '.' && /\d/.test(s[i + 1] ?? '')) {
-      i++;
-      while (/\d/.test(s[i] ?? '')) i++;
-    }
-    if (s[i] === '/' && /\d/.test(s[i + 1] ?? '')) {
-      i++;
-      while (/\d/.test(s[i] ?? '')) i++;
-    }
-    return parseExponent(s.slice(start, i));
-  };
-  const parseAtom = (): Dimension => {
-    skip();
-    if (s[i] === '(') {
-      i++;
-      const inner = parseProduct();
-      skip();
-      if (s[i] !== ')') throw new DimensionSpecError(`unbalanced '(' in '${s}'`);
-      i++;
-      return inner;
-    }
-    // A leading literal 1 is the dimensionless numerator: `1/time`.
-    if (s[i] === '1' && !/[\d.]/.test(s[i + 1] ?? '')) {
-      i++;
-      return d();
-    }
-    const start = i;
-    while (i < s.length && /[A-Za-zΘ_]/.test(s[i]!)) i++;
-    const id = s.slice(start, i);
-    if (!id) throw new DimensionSpecError(`unrecognized dimension term '${s.slice(start)}'`);
-    const named = resolveAtom(id);
-    if (named) return named;
-    const base = baseAtom(id);
-    if (base) return base;
-    throw new DimensionSpecError(
-      `unrecognized dimension term '${id}' (use a named dimension, a constant, ` +
-        `or bases L M T I Theta N J)`,
-    );
-  };
-  const parsePower = (): Dimension => {
-    const base = parseAtom();
-    skip();
-    if (s[i] !== '^') return base;
-    i++;
-    return power(base, parseExponentToken());
-  };
-  const parseProduct = (): Dimension => {
-    let acc = parsePower();
-    while (true) {
-      skip();
-      const op = s[i];
-      if (op !== '*' && op !== '/') break;
-      i++;
-      const rhs = parsePower();
-      acc = op === '*' ? multiply(acc, rhs) : divide(acc, rhs);
-    }
-    return acc;
-  };
-  const out = parseProduct();
-  skip();
-  if (i !== s.length) throw new DimensionSpecError(`unrecognized dimension term '${s.slice(i)}'`);
+  const out = d();
+  out[baseKey] = 1;
   return out;
 }
 
-/** A word that names a dimension and is not a base spelling (`length`, not `L` or `Theta`). */
-const NAMED_WORD = /[A-Za-z_]{2,}/g;
-function namesADimension(s: string): boolean {
-  return (s.match(NAMED_WORD) ?? []).some((word) => BASES[word.toUpperCase()] === undefined && BASES[word] === undefined);
+/**
+ * The dimension notation in formula syntax. Each rewrite is a spelling the
+ * notation allows and a formula does not; none adds an operator a reader
+ * did not write.
+ */
+function formulaSyntax(spec: string): string {
+  return (
+    spec
+      // A hyphen inside a name: `magnetic-field` is `magnetic_field`.
+      .replace(/(?<=[A-Za-zΘ])-(?=[A-Za-zΘ])/g, '_')
+      // Spaces around an operator carry nothing; between two factors they multiply.
+      .replace(/\s*([*/^().])\s*/g, '$1')
+      .replace(/\s+/g, '*')
+      // A glued exponent: `L2`, `T-2`, `T-2.5` (a name's own digits follow `_`, as in `mu_0`).
+      .replace(/(?<=[A-Za-zΘ])([+-]?\d)/g, '^$1')
+      // A fractional exponent: `T^1/2` is `T^(1/2)`.
+      .replace(/\^([+-]?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)/g, '^($1/$2)')
+      // A dot between factors is a product; a dot before a digit is a decimal point.
+      .replace(/\.(?!\d)/g, '*')
+  );
 }
 
-function wantsGroupedProduct(s: string): boolean {
-  if (/[()]/.test(s)) return true;
-  // `1/time`, and a named dimension with a power on its own (`length^2`).
-  if (/^\s*1\s*\//.test(s)) return true;
-  if (/\^/.test(s) && namesADimension(s)) return true;
-  if (/\/\s*[(A-Za-zΘ]/.test(s)) return true;
-  return /\*/.test(s) && /[A-Za-z]{2,}/.test(s);
+/** A numeric exponent: a number, a signed number, or a quotient or product of numbers. */
+function exponentOf(node: FormulaPNode, spec: string): number {
+  switch (node.kind) {
+    case 'num':
+      return node.value;
+    case 'neg':
+      return -exponentOf(node.arg, spec);
+    case 'op': {
+      const values = node.args.map((arg) => exponentOf(arg, spec));
+      if (node.op === '/') return values.reduce((a, b) => a / b);
+      if (node.op === '*') return values.reduce((a, b) => a * b, 1);
+      if (node.op === '+') return values.reduce((a, b) => a + b, 0);
+      return values.length === 1 ? -values[0]! : values.reduce((a, b) => a - b);
+    }
+    default:
+      throw new DimensionSpecError(`bad exponent in '${spec}'`);
+  }
+}
+
+function unknownTerm(id: string): DimensionSpecError {
+  return new DimensionSpecError(
+    `unknown base dimension '${id}' (use L M T I Theta N J, a named dimension, a constant name, ` +
+      'or a named product/quotient like power/area)',
+  );
+}
+
+/** The dimension a parsed spec states. */
+function dimensionOf(node: FormulaPNode, spec: string): Dimension {
+  switch (node.kind) {
+    case 'sym': {
+      const found = resolveAtom(node.name) ?? baseAtom(node.name);
+      if (found === null) throw unknownTerm(node.name);
+      return { ...found };
+    }
+    case 'num':
+      // A literal 1 is the dimensionless numerator: `1/time`.
+      if (node.value === 1) return d();
+      throw new DimensionSpecError(`a number is not a dimension term ('${node.value}' in '${spec}')`);
+    case 'pow': {
+      const exponent = exponentOf(node.exp, spec);
+      if (!Number.isFinite(exponent)) throw new DimensionSpecError(`bad exponent in '${spec}'`);
+      return { ...power(dimensionOf(node.base, spec), exponent) };
+    }
+    case 'op': {
+      if (node.op !== '*' && node.op !== '/') {
+        throw new DimensionSpecError(`unrecognized dimension term '${spec}' (a dimension has no '${node.op}')`);
+      }
+      const [first, ...rest] = node.args.map((arg) => dimensionOf(arg, spec));
+      return { ...rest.reduce((acc, next) => (node.op === '*' ? multiply(acc, next) : divide(acc, next)), first!) };
+    }
+    case 'neg':
+      throw new DimensionSpecError(`unrecognized dimension term '${spec}' (a dimension has no sign)`);
+    case 'call':
+      throw new DimensionSpecError(`unrecognized dimension term '${node.fn}' in '${spec}'`);
+  }
 }
 
 /** Parse a dimension spec string into a {@link Dimension}. @internal */
 export function parseDimensionSpec(spec: string): Dimension {
   const s = spec.trim();
   if (!s) throw new DimensionSpecError('empty dimension spec');
-
-  // (1) fundamental constant — EXACT case (G ≠ g).
-  if (CONST_DIMS[s]) return CONST_DIMS[s];
-  // (2) named dimension — case-insensitive.
-  const named = NAMED_DIMS[s.toLowerCase()];
-  if (named) return named;
-
-  // (3) product/quotient, including parentheses and named exponents.
-  if (wantsGroupedProduct(s)) return parseGroupedProduct(s);
-
-  // (4) explicit base exponents.
-  const out = d();
-  // A dot separates factors (`L^3.M^-1`) unless a digit follows it: `T^-2.5` is a decimal exponent.
-  const parts = s.split(/[*\s]+|\.(?!\d)/).filter(Boolean);
-  for (const part of parts) {
-    const m = /^([A-Za-zΘ]+)\^?(-?\d+(?:\.\d+)?(?:\/\d+)?)?$/.exec(part);
-    if (!m) throw new DimensionSpecError(`unrecognized dimension term '${part}'`);
-    const baseKey = BASES[m[1].toUpperCase()] ?? BASES[m[1]];
-    if (!baseKey) {
-      throw new DimensionSpecError(
-        `unknown base dimension '${m[1]}' (use L M T I Theta N J, a named ` +
-          `dimension, a constant name, or a named product/quotient like power/area)`,
-      );
-    }
-    out[baseKey] += parseExponent(m[2] ?? '');
+  // A whole name: a constant (exact case, so G is not g) or a named dimension.
+  const whole = resolveAtom(s);
+  if (whole) return whole;
+  let node: FormulaPNode;
+  try {
+    node = parseFormulaPNode(formulaSyntax(s));
+  } catch (error) {
+    throw new DimensionSpecError(
+      `unrecognized dimension spec '${s}' (${error instanceof Error ? error.message : String(error)})`,
+    );
   }
+  const out = dimensionOf(node, s);
+  // A zero exponent raised to a negative power is -0; a dimension has no signed zero.
+  for (const key of Object.keys(out) as (keyof Dimension)[]) if (out[key] === 0) out[key] = 0;
   return out;
 }

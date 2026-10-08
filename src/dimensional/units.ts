@@ -38,20 +38,32 @@
  *
  * @module dimensional/units
  */
-import { toSiDimensionVector } from '@danielsimonjr/mathts-core';
-import { unit } from '@danielsimonjr/mathts-functions';
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
 import { C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI, M_U_SI } from '../core/constants.js';
+import {
+  addScales,
+  decimalScale,
+  divideScales,
+  irrationalScale,
+  multiplyScales,
+  powerScale,
+  ratioScale,
+  scaleOf,
+  scaleToNumber,
+  UNIT_SCALE,
+  type ExactScale,
+} from './exact-scale.js';
 
-type AffineTemperature = 'celsius' | 'fahrenheit';
+/** An affine temperature scale: a lone `degC` or `degF`. @public */
+export type AffineTemperature = 'celsius' | 'fahrenheit';
 
 /** A unit, as a scale to SI base units and a dimension. @public */
 export interface ParsedUnit {
   readonly scale: number;
   readonly dim: Dimension;
   /** Set only for a lone affine temperature, which needs a reading. */
-  readonly affine?: 'celsius' | 'fahrenheit';
+  readonly affine?: AffineTemperature;
 }
 
 /** Thrown for any input that does not parse as a value with a known unit. @public */
@@ -62,149 +74,207 @@ export class UnitError extends Error {
   }
 }
 
+/** A symbol no table row and no prefix spells. @public */
+export class UnknownUnitError extends UnitError {
+  constructor(readonly symbol: string) {
+    super(`unknown unit '${symbol}'`);
+    this.name = 'UnknownUnitError';
+  }
+}
+
+/**
+ * A unit the reader recognizes and refuses: a logarithmic or ratio unit, an
+ * ambiguous name such as `ton`, or an affine temperature inside a compound.
+ * @public
+ */
+export class UnitRefusedError extends UnitError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UnitRefusedError';
+  }
+}
+
+/** A unit expression with more than one dimensionally distinct reading. @public */
+export class AmbiguousUnitError extends UnitError {
+  constructor(readonly text: string, readonly readings: readonly string[]) {
+    super(`'${text}' is ambiguous: ${readings.join(' or ')}`);
+    this.name = 'AmbiguousUnitError';
+  }
+}
+
 const D = (p: Partial<Dimension>): Dimension => ({ L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0, ...p });
 const JOULE = D({ L: 2, M: 1, T: -2 });
 const DIMENSIONLESS = D({});
 
-/** symbol → [scale to SI base, dimension, takes an SI prefix]. */
-const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Map([
-  ['m', [1, D({ L: 1 }), true]],
-  ['g', [1e-3, D({ M: 1 }), true]],
-  ['s', [1, D({ T: 1 }), true]],
-  ['K', [1, D({ Theta: 1 }), true]],
-  ['A', [1, D({ I: 1 }), true]],
-  ['mol', [1, D({ N: 1 }), true]],
-  ['Hz', [1, D({ T: -1 }), true]],
-  ['N', [1, D({ L: 1, M: 1, T: -2 }), true]],
-  ['Pa', [1, D({ L: -1, M: 1, T: -2 }), true]],
-  ['J', [1, JOULE, true]],
-  ['W', [1, D({ L: 2, M: 1, T: -3 }), true]],
-  ['C', [1, D({ T: 1, I: 1 }), true]],
-  ['V', [1, D({ L: 2, M: 1, T: -3, I: -1 }), true]],
-  ['ohm', [1, D({ L: 2, M: 1, T: -3, I: -2 }), true]],
-  ['Ω', [1, D({ L: 2, M: 1, T: -3, I: -2 }), true]],
-  ['S', [1, D({ L: -2, M: -1, T: 3, I: 2 }), true]],
-  ['F', [1, D({ L: -2, M: -1, T: 4, I: 2 }), true]],
-  ['eV', [E_SI, JOULE, true]],
+/** One unit symbol. */
+interface UnitRow {
+  /** Exact scale to SI base units. */
+  readonly scale: ExactScale;
+  readonly dim: Dimension;
+  /** Takes an SI prefix. */
+  readonly prefixable: boolean;
+  /**
+   * The unit counts cycles (turns), not radians. An angular-frequency input in
+   * rad/s takes 2π per cycle; the radian itself does not.
+   */
+  readonly cycles?: true;
+}
+
+const x = (scale: string | ExactScale): ExactScale => (typeof scale === 'string' ? decimalScale(scale)! : scale);
+const row = (scale: string | ExactScale, dim: Dimension, prefixable: boolean, cycles?: true): UnitRow =>
+  cycles === true ? { scale: x(scale), dim, prefixable, cycles } : { scale: x(scale), dim, prefixable };
+
+const PI = irrationalScale(Math.PI);
+const INCH = x('0.0254');
+const FOOT = x('0.3048');
+const POUND = x('0.45359237');
+const STANDARD_GRAVITY = x('9.80665');
+const LBF = multiplyScales(POUND, STANDARD_GRAVITY);
+const PSI = divideScales(LBF, powerScale(INCH, 2));
+const JULIAN_YEAR_S = multiplyScales(x('365.25'), x('86400'));
+const MM_HG = x('133.322387415');
+
+/** symbol → exact scale to SI base, dimension, prefixability, cycle count. */
+const UNITS: ReadonlyMap<string, UnitRow> = new Map([
+  ['m', row('1', D({ L: 1 }), true)],
+  ['g', row('1e-3', D({ M: 1 }), true)],
+  ['s', row('1', D({ T: 1 }), true)],
+  ['K', row('1', D({ Theta: 1 }), true)],
+  ['A', row('1', D({ I: 1 }), true)],
+  ['mol', row('1', D({ N: 1 }), true)],
+  // A hertz is one cycle per second.
+  ['Hz', row('1', D({ T: -1 }), true, true)],
+  ['N', row('1', D({ L: 1, M: 1, T: -2 }), true)],
+  ['Pa', row('1', D({ L: -1, M: 1, T: -2 }), true)],
+  ['J', row('1', JOULE, true)],
+  ['W', row('1', D({ L: 2, M: 1, T: -3 }), true)],
+  ['C', row('1', D({ T: 1, I: 1 }), true)],
+  ['V', row('1', D({ L: 2, M: 1, T: -3, I: -1 }), true)],
+  ['ohm', row('1', D({ L: 2, M: 1, T: -3, I: -2 }), true)],
+  ['Ω', row('1', D({ L: 2, M: 1, T: -3, I: -2 }), true)],
+  ['S', row('1', D({ L: -2, M: -1, T: 3, I: 2 }), true)],
+  ['F', row('1', D({ L: -2, M: -1, T: 4, I: 2 }), true)],
+  ['eV', row(scaleOf(E_SI), JOULE, true)],
   // Information. A nat is the coherent dimensionless unit; a bit is ln 2 nat.
   // Exact, so neither takes a prefix (`kbit` is not a kilobit).
-  ['nat', [1, DIMENSIONLESS, false]],
-  ['bit', [Math.LN2, DIMENSIONLESS, false]],
-  ['rad', [1, DIMENSIONLESS, true]],
-  ['deg', [Math.PI / 180, DIMENSIONLESS, false]],
-  ['min', [60, D({ T: 1 }), false]],
-  ['h', [3600, D({ T: 1 }), false]],
-  ['d', [86400, D({ T: 1 }), false]],
+  ['nat', row('1', DIMENSIONLESS, false)],
+  ['bit', row(irrationalScale(Math.LN2), DIMENSIONLESS, false)],
+  ['rad', row('1', DIMENSIONLESS, true)],
+  ['deg', row(multiplyScales(PI, ratioScale(1, 180)), DIMENSIONLESS, false)],
+  ['min', row('60', D({ T: 1 }), false)],
+  ['h', row('3600', D({ T: 1 }), false)],
+  ['d', row('86400', D({ T: 1 }), false)],
   // The Julian year, the year the orbital evaluators take.
-  ['yr', [365.25 * 86400, D({ T: 1 }), true]],
-  ['au', [149597870700, D({ L: 1 }), false]],
-  ['AU', [149597870700, D({ L: 1 }), false]],
+  ['yr', row(JULIAN_YEAR_S, D({ T: 1 }), true)],
+  ['au', row('149597870700', D({ L: 1 }), false)],
+  ['AU', row('149597870700', D({ L: 1 }), false)],
   // The solar mass the evaluators use, not the IAU nominal value.
-  ['Msun', [M_SUN_SI, D({ M: 1 }), false]],
+  ['Msun', row(scaleOf(M_SUN_SI), D({ M: 1 }), false)],
   // GM☉/G, so G × Msun_iau is the IAU solar mass parameter.
-  ['Msun_iau', [GM_SUN_SI / G_SI, D({ M: 1 }), false]],
+  // A ratio of two measured constants, so it is the double the registry's Msun_iau holds, not a decimal quotient.
+  ['Msun_iau', row(scaleOf(GM_SUN_SI / G_SI), D({ M: 1 }), false)],
   // Tesla. An exact `T` still wins over the tera prefix, so `Ts` is a
   // terasecond. The prefix flag is what lets `nT` and `uT` parse.
-  ['T', [1, D({ M: 1, T: -2, I: -1 }), true]],
+  ['T', row('1', D({ M: 1, T: -2, I: -1 }), true)],
   // Gauss = 10⁻⁴ T. Exact, so `GPa` stays gigapascal (prefix G + Pa) and bare `G` is gauss.
   // The gauss takes an SI prefix: `uG` and `ugauss` are a microgauss, not a product of other units.
-  ['G', [1e-4, D({ M: 1, T: -2, I: -1 }), true]],
-  ['gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), true]],
-  ['Gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), true]],
-  ['bar', [1e5, D({ L: -1, M: 1, T: -2 }), true]],
-  ['atm', [101325, D({ L: -1, M: 1, T: -2 }), false]],
-  ['angstrom', [1e-10, D({ L: 1 }), false]],
-  ['Angstrom', [1e-10, D({ L: 1 }), false]],
-  ['Å', [1e-10, D({ L: 1 }), false]],
+  ['G', row('1e-4', D({ M: 1, T: -2, I: -1 }), true)],
+  ['gauss', row('1e-4', D({ M: 1, T: -2, I: -1 }), true)],
+  ['Gauss', row('1e-4', D({ M: 1, T: -2, I: -1 }), true)],
+  ['bar', row('1e5', D({ L: -1, M: 1, T: -2 }), true)],
+  ['atm', row('101325', D({ L: -1, M: 1, T: -2 }), false)],
+  ['angstrom', row('1e-10', D({ L: 1 }), false)],
+  ['Angstrom', row('1e-10', D({ L: 1 }), false)],
+  ['Å', row('1e-10', D({ L: 1 }), false)],
   // IAU-style parsec; the prefix applies, so `Mpc` is a megaparsec.
-  ['pc', [3.0856775814913673e16, D({ L: 1 }), true]],
-  ['ly', [C_SI * 365.25 * 86400, D({ L: 1 }), false]],
+  ['pc', row(scaleOf(3.0856775814913673e16), D({ L: 1 }), true)],
+  ['ly', row(multiplyScales(scaleOf(C_SI), JULIAN_YEAR_S), D({ L: 1 }), false)],
   // CGPM 1964: 1 L = 1 dm³ = 10⁻³ m³ exactly. Prefixable, so mL is a millilitre.
   // `l` is the same litre. Bare `mL` stays the prefix; `mol/mL` competes with metre·litre.
-  ['L', [1e-3, D({ L: 3 }), true]],
-  ['l', [1e-3, D({ L: 3 }), true]],
+  ['L', row('1e-3', D({ L: 3 }), true)],
+  ['l', row('1e-3', D({ L: 3 }), true)],
   // Thermochemical calorie: 1 cal_th = 4.184 J exactly (NIST). Not cal_IT = 4.1868 J.
   // Prefixable, so kcal is 4184 J.
-  ['cal', [4.184, JOULE, true]],
+  ['cal', row('4.184', JOULE, true)],
   // International Steam Table BTU: cal_IT × (lb/g) / (°F per 1.8 °C).
   // 4.1868 × 453.59237 / 1.8 J exactly. Not the thermochemical calorie.
-  ['BTU', [(4.1868 * 453.59237) / 1.8, JOULE, false]],
+  ['BTU', row(divideScales(multiplyScales(x('4.1868'), x('453.59237')), x('1.8')), JOULE, false)],
   // psi = lbf/in². lbf = 0.45359237 kg × 9.80665 m/s² (1959 pound × standard gravity).
   // inch = 0.0254 m exactly.
-  ['psi', [(0.45359237 * 9.80665) / (0.0254 * 0.0254), D({ L: -1, M: 1, T: -2 }), false]],
+  ['psi', row(PSI, D({ L: -1, M: 1, T: -2 }), false)],
   // torr = 1/760 of a standard atmosphere = 101325/760 Pa exactly. Prefixable (mtorr).
-  ['torr', [101325 / 760, D({ L: -1, M: 1, T: -2 }), true]],
+  ['torr', row(ratioScale(101325, 760), D({ L: -1, M: 1, T: -2 }), true)],
   // Conventional millimetre of mercury, 133.322387415 Pa exactly (NIST SP 811).
   // Not the torr, and not `mm` × `Hg`.
-  ['mmHg', [133.322387415, D({ L: -1, M: 1, T: -2 }), false]],
+  ['mmHg', row(MM_HG, D({ L: -1, M: 1, T: -2 }), false)],
   // Poise = 0.1 Pa·s exactly. Prefixable, so cP = 10⁻³ Pa·s. Exact `P` wins over peta.
-  ['P', [0.1, D({ L: -1, M: 1, T: -1 }), true]],
+  ['P', row('0.1', D({ L: -1, M: 1, T: -1 }), true)],
   // Rankine is proportional: K = °R × 5/9. Not affine.
-  ['degR', [5 / 9, D({ Theta: 1 }), false]],
-  ['°R', [5 / 9, D({ Theta: 1 }), false]],
-  // Revolutions per minute = 1/60 Hz. Prefixable, so krpm is a kilorevolution per minute.
-  ['rpm', [1 / 60, D({ T: -1 }), true]],
+  ['degR', row(ratioScale(5, 9), D({ Theta: 1 }), false)],
+  ['°R', row(ratioScale(5, 9), D({ Theta: 1 }), false)],
+  // Revolutions per minute = 1/60 Hz, a cycle count. Prefixable, so krpm is a kilorevolution per minute.
+  ['rpm', row(ratioScale(1, 60), D({ T: -1 }), true, true)],
   // Mechanical horsepower = 550 ft·lbf/s. ft = 0.3048 m.
-  ['hp', [550 * 0.3048 * 0.45359237 * 9.80665, D({ L: 2, M: 1, T: -3 }), false]],
+  ['hp', row(multiplyScales(x('550'), FOOT, LBF), D({ L: 2, M: 1, T: -3 }), false)],
   // Named SI derived units the dogfood rounds found missing.
-  ['H', [1, D({ L: 2, M: 1, T: -2, I: -2 }), true]],
-  ['Wb', [1, D({ L: 2, M: 1, T: -2, I: -1 }), true]],
-  ['Ohm', [1, D({ L: 2, M: 1, T: -3, I: -2 }), true]],
+  ['H', row('1', D({ L: 2, M: 1, T: -2, I: -2 }), true)],
+  ['Wb', row('1', D({ L: 2, M: 1, T: -2, I: -1 }), true)],
+  ['Ohm', row('1', D({ L: 2, M: 1, T: -3, I: -2 }), true)],
   // Plane and solid angle, photometry, and ratios. The steradian and the radian are dimensionless here.
-  ['sr', [1, DIMENSIONLESS, false]],
-  ['cd', [1, D({ J: 1 }), true]],
-  ['lm', [1, D({ J: 1 }), true]],
-  ['lx', [1, D({ J: 1, L: -2 }), true]],
-  ['arcsec', [Math.PI / 648000, DIMENSIONLESS, false]],
-  ['arcmin', [Math.PI / 10800, DIMENSIONLESS, false]],
+  ['sr', row('1', DIMENSIONLESS, false)],
+  ['cd', row('1', D({ J: 1 }), true)],
+  ['lm', row('1', D({ J: 1 }), true)],
+  ['lx', row('1', D({ J: 1, L: -2 }), true)],
+  ['arcsec', row(multiplyScales(PI, ratioScale(1, 648000)), DIMENSIONLESS, false)],
+  ['arcmin', row(multiplyScales(PI, ratioScale(1, 10800)), DIMENSIONLESS, false)],
   // `mas` would otherwise be metre times attosecond, so the angular spellings are exact.
-  ['mas', [Math.PI / 648000e3, DIMENSIONLESS, false]],
-  ['uas', [Math.PI / 648000e6, DIMENSIONLESS, false]],
-  ['%', [1e-2, DIMENSIONLESS, false]],
-  ['percent', [1e-2, DIMENSIONLESS, false]],
-  ['ppm', [1e-6, DIMENSIONLESS, false]],
-  ['ppb', [1e-9, DIMENSIONLESS, false]],
+  ['mas', row(multiplyScales(PI, ratioScale(1, 648000000)), DIMENSIONLESS, false)],
+  ['uas', row(multiplyScales(PI, ratioScale(1, 648000000000)), DIMENSIONLESS, false)],
+  ['%', row('1e-2', DIMENSIONLESS, false)],
+  ['percent', row('1e-2', DIMENSIONLESS, false)],
+  ['ppm', row('1e-6', DIMENSIONLESS, false)],
+  ['ppb', row('1e-9', DIMENSIONLESS, false)],
   // Molar concentration: 1 M = 1 mol/L. Bare `M` is the molar; `MPa` is still a megapascal.
-  ['M', [1000, D({ N: 1, L: -3 }), true]],
+  ['M', row('1000', D({ N: 1, L: -3 }), true)],
   // Unified atomic mass unit (CODATA 2018). A bare `u` is this; `um` is still a micrometre.
-  ['u', [M_U_SI, D({ M: 1 }), false]],
-  ['amu', [M_U_SI, D({ M: 1 }), false]],
-  ['Da', [M_U_SI, D({ M: 1 }), true]],
+  ['u', row(scaleOf(M_U_SI), D({ M: 1 }), false)],
+  ['amu', row(scaleOf(M_U_SI), D({ M: 1 }), false)],
+  ['Da', row(scaleOf(M_U_SI), D({ M: 1 }), true)],
   // CGS and astronomy. Solar and planetary radii and masses are the IAU 2015 B3 nominal values.
-  ['erg', [1e-7, JOULE, false]],
-  ['cc', [1e-6, D({ L: 3 }), false]],
-  ['dyn', [1e-5, D({ L: 1, M: 1, T: -2 }), true]],
-  ['Jy', [1e-26, D({ M: 1, T: -2 }), true]],
-  ['Lsun', [3.828e26, D({ L: 2, M: 1, T: -3 }), false]],
-  ['Rsun', [6.957e8, D({ L: 1 }), false]],
-  ['Rearth', [6.3781e6, D({ L: 1 }), false]],
-  ['Rjup', [7.1492e7, D({ L: 1 }), false]],
-  ['Mearth', [5.9722e24, D({ M: 1 }), false]],
-  ['Mjup', [1.89813e27, D({ M: 1 }), false]],
-  ['day', [86400, D({ T: 1 }), false]],
-  ['hr', [3600, D({ T: 1 }), false]],
+  ['erg', row('1e-7', JOULE, false)],
+  ['cc', row('1e-6', D({ L: 3 }), false)],
+  ['dyn', row('1e-5', D({ L: 1, M: 1, T: -2 }), true)],
+  ['Jy', row('1e-26', D({ M: 1, T: -2 }), true)],
+  ['Lsun', row('3.828e26', D({ L: 2, M: 1, T: -3 }), false)],
+  ['Rsun', row('6.957e8', D({ L: 1 }), false)],
+  ['Rearth', row('6.3781e6', D({ L: 1 }), false)],
+  ['Rjup', row('7.1492e7', D({ L: 1 }), false)],
+  ['Mearth', row('5.9722e24', D({ M: 1 }), false)],
+  ['Mjup', row('1.89813e27', D({ M: 1 }), false)],
+  ['day', row('86400', D({ T: 1 }), false)],
+  ['hr', row('3600', D({ T: 1 }), false)],
   // Acoustics and fluids. Poise, stokes, and rayl are exact in SI.
-  ['poise', [0.1, D({ L: -1, M: 1, T: -1 }), true]],
-  ['St', [1e-4, D({ L: 2, T: -1 }), true]],
-  ['rayl', [1, D({ L: -2, M: 1, T: -1 }), true]],
+  ['poise', row('0.1', D({ L: -1, M: 1, T: -1 }), true)],
+  ['St', row('1e-4', D({ L: 2, T: -1 }), true)],
+  ['rayl', row('1', D({ L: -2, M: 1, T: -1 }), true)],
   // Imperial and pressure units. psi = lbf/in²; ksi is a kilopsi.
-  ['in', [0.0254, D({ L: 1 }), false]],
-  ['inch', [0.0254, D({ L: 1 }), false]],
-  ['ft', [0.3048, D({ L: 1 }), false]],
-  ['mil', [2.54e-5, D({ L: 1 }), false]],
-  ['lb', [0.45359237, D({ M: 1 }), false]],
-  ['lbm', [0.45359237, D({ M: 1 }), false]],
-  ['lbf', [0.45359237 * 9.80665, D({ L: 1, M: 1, T: -2 }), false]],
-  ['kgf', [9.80665, D({ L: 1, M: 1, T: -2 }), false]],
-  ['mph', [0.44704, D({ L: 1, T: -1 }), false]],
-  ['knot', [1852 / 3600, D({ L: 1, T: -1 }), false]],
-  ['psia', [(0.45359237 * 9.80665) / (0.0254 * 0.0254), D({ L: -1, M: 1, T: -2 }), false]],
-  ['ksi', [(1000 * (0.45359237 * 9.80665)) / (0.0254 * 0.0254), D({ L: -1, M: 1, T: -2 }), false]],
-  ['mmH2O', [9.80665, D({ L: -1, M: 1, T: -2 }), false]],
-  ['inHg', [133.322387415 * 25.4, D({ L: -1, M: 1, T: -2 }), false]],
-  ['tonne', [1000, D({ M: 1 }), false]],
+  ['in', row(INCH, D({ L: 1 }), false)],
+  ['inch', row(INCH, D({ L: 1 }), false)],
+  ['ft', row(FOOT, D({ L: 1 }), false)],
+  ['mil', row('2.54e-5', D({ L: 1 }), false)],
+  ['lb', row(POUND, D({ M: 1 }), false)],
+  ['lbm', row(POUND, D({ M: 1 }), false)],
+  ['lbf', row(LBF, D({ L: 1, M: 1, T: -2 }), false)],
+  ['kgf', row(STANDARD_GRAVITY, D({ L: 1, M: 1, T: -2 }), false)],
+  ['mph', row('0.44704', D({ L: 1, T: -1 }), false)],
+  ['knot', row(ratioScale(1852, 3600), D({ L: 1, T: -1 }), false)],
+  ['psia', row(PSI, D({ L: -1, M: 1, T: -2 }), false)],
+  ['ksi', row(multiplyScales(x('1000'), PSI), D({ L: -1, M: 1, T: -2 }), false)],
+  ['mmH2O', row(STANDARD_GRAVITY, D({ L: -1, M: 1, T: -2 }), false)],
+  ['inHg', row(multiplyScales(MM_HG, x('25.4')), D({ L: -1, M: 1, T: -2 }), false)],
+  ['tonne', row('1000', D({ M: 1 }), false)],
   // US therm (EC therm is 1.05506e8 J). Spelled out so the choice is visible.
-  ['therm', [105480400, JOULE, false]],
+  ['therm', row('105480400', JOULE, false)],
 ]);
 
 /** Units that are a ratio or a log scale, and the reason each is not a plain factor. */
@@ -227,50 +297,57 @@ const REFUSED_UNITS: ReadonlyMap<string, string> = new Map([
  */
 const PREFIX_LETTER_UNITS: ReadonlySet<string> = new Set(['T', 'G', 'P', 'h', 'd', 'M', 'u']);
 
-const CELSIUS_OFFSET_K = 273.15;
-const FAHRENHEIT_SCALE = 5 / 9;
+const CELSIUS_OFFSET_K = x('273.15');
+const FAHRENHEIT_SCALE = ratioScale(5, 9);
 
 interface AffineRow {
   readonly id: AffineTemperature;
-  readonly scale: number;
-  readonly offset: number;
+  readonly scale: ExactScale;
+  /** Kelvin at a reading of zero, exactly. */
+  readonly offset: ExactScale;
   readonly symbols: readonly string[];
 }
 
 /** Lone spellings. A compound that contains one is refused. */
 const AFFINE: readonly AffineRow[] = [
-  { id: 'celsius', scale: 1, offset: CELSIUS_OFFSET_K, symbols: ['degC', '°C', '℃'] },
+  { id: 'celsius', scale: UNIT_SCALE, offset: CELSIUS_OFFSET_K, symbols: ['degC', '°C', '℃'] },
   {
     id: 'fahrenheit',
     scale: FAHRENHEIT_SCALE,
-    offset: CELSIUS_OFFSET_K - 32 * FAHRENHEIT_SCALE,
+    offset: addScales(CELSIUS_OFFSET_K, multiplyScales(x('-32'), FAHRENHEIT_SCALE)),
     symbols: ['degF', '°F'],
   },
 ];
 
 function affineRow(text: string): AffineRow | undefined {
-  return AFFINE.find((row) => row.symbols.includes(text));
+  return AFFINE.find((candidate) => candidate.symbols.includes(text));
 }
 
-const PREFIXES: ReadonlyMap<string, number> = new Map([
-  ['Y', 1e24], ['Z', 1e21], ['E', 1e18], ['P', 1e15], ['T', 1e12], ['G', 1e9], ['M', 1e6], ['k', 1e3],
-  ['h', 1e2], ['da', 1e1], ['d', 1e-1], ['c', 1e-2], ['m', 1e-3], ['u', 1e-6], ['µ', 1e-6], ['μ', 1e-6],
-  ['n', 1e-9], ['p', 1e-12], ['f', 1e-15], ['a', 1e-18], ['z', 1e-21], ['y', 1e-24],
-]);
+const PREFIXES: ReadonlyMap<string, ExactScale> = new Map(
+  (
+    [
+      ['Y', '1e24'], ['Z', '1e21'], ['E', '1e18'], ['P', '1e15'], ['T', '1e12'], ['G', '1e9'], ['M', '1e6'], ['k', '1e3'],
+      ['h', '1e2'], ['da', '1e1'], ['d', '1e-1'], ['c', '1e-2'], ['m', '1e-3'], ['u', '1e-6'], ['µ', '1e-6'], ['μ', '1e-6'],
+      ['n', '1e-9'], ['p', '1e-12'], ['f', '1e-15'], ['a', '1e-18'], ['z', '1e-21'], ['y', '1e-24'],
+    ] as const
+  ).map(([prefix, scale]) => [prefix, x(scale)] as const),
+);
 
-function parseSymbol(sym: string): readonly [number, Dimension] {
-  const parsed = trySymbol(sym);
-  if (parsed !== null) return parsed;
-  throw new UnitError(`unknown unit '${sym}'`);
+interface SymbolReading {
+  readonly scale: ExactScale;
+  readonly dim: Dimension;
+  readonly cycles: number;
 }
 
-function trySymbol(sym: string): readonly [number, Dimension] | null {
+function trySymbol(sym: string): SymbolReading | null {
   const exact = UNITS.get(sym);
-  if (exact !== undefined) return [exact[0], exact[1]];
+  if (exact !== undefined) return { scale: exact.scale, dim: exact.dim, cycles: exact.cycles === true ? 1 : 0 };
   for (const [p, f] of PREFIXES) {
     if (!sym.startsWith(p) || sym.length === p.length) continue;
     const base = UNITS.get(sym.slice(p.length));
-    if (base !== undefined && base[2]) return [f * base[0], base[1]];
+    if (base !== undefined && base.prefixable) {
+      return { scale: multiplyScales(f, base.scale), dim: base.dim, cycles: base.cycles === true ? 1 : 0 };
+    }
   }
   return null;
 }
@@ -278,8 +355,9 @@ function trySymbol(sym: string): readonly [number, Dimension] | null {
 interface FactorReading {
   readonly base: string;
   readonly exp: number;
-  readonly scale: number;
+  readonly scale: ExactScale;
   readonly dim: Dimension;
+  readonly cycles: number;
 }
 
 /** One factor, or null when `token` is not exactly one unit with an optional exponent. */
@@ -306,7 +384,7 @@ function tryOneFactor(token: string): FactorReading | null {
   }
   const parsed = trySymbol(base);
   if (parsed === null || !Number.isFinite(exp)) return null;
-  return { base, exp, scale: parsed[0], dim: parsed[1] };
+  return { base, exp, scale: parsed.scale, dim: parsed.dim, cycles: parsed.cycles };
 }
 
 function formatReading(factors: readonly FactorReading[]): string {
@@ -319,8 +397,8 @@ function attachedUnit(symbol: string): string | null {
   for (const [prefix] of PREFIXES) {
     if (!symbol.startsWith(prefix) || symbol.length === prefix.length) continue;
     const base = symbol.slice(prefix.length);
-    const row = UNITS.get(base);
-    if (row !== undefined && row[2]) return base;
+    const unitRow = UNITS.get(base);
+    if (unitRow !== undefined && unitRow.prefixable) return base;
   }
   return null;
 }
@@ -360,7 +438,7 @@ function segmentations(token: string): FactorReading[][] {
  */
 function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denominator'): FactorReading[][] {
   const refused = REFUSED_UNITS.get(token);
-  if (refused !== undefined) throw new UnitError(refused);
+  if (refused !== undefined) throw new UnitRefusedError(refused);
   const single = tryOneFactor(token);
   if (single !== null && !compete) return [[single]];
   // A prefixed numerator token is the prefix reading: `mN/m` is millinewton per metre.
@@ -377,7 +455,7 @@ function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denomin
   const unique = new Map<string, FactorReading[]>();
   for (const way of ways) unique.set(formatReading(way), way);
   const list = [...unique.values()];
-  if (list.length === 0) throw new UnitError(`unknown unit '${token}'`);
+  if (list.length === 0) throw new UnknownUnitError(token);
   return list;
 }
 
@@ -391,8 +469,12 @@ function cartesian<T>(lists: readonly (readonly T[])[]): T[][] {
   return acc;
 }
 
-interface UnitReading extends ParsedUnit {
+/** One reading of a unit expression, with its exact scale. @internal */
+export interface UnitReading extends ParsedUnit {
   readonly label: string;
+  readonly exact: ExactScale;
+  /** Net power of cycle-counting units (Hz, rpm): 1 for a lone `kHz`, 0 for `1/s`. */
+  readonly cycles: number;
 }
 
 function sideTokens(text: string): string[] {
@@ -413,42 +495,56 @@ function formatExpression(
   return denominator.includes('·') ? `${numerator}/(${denominator})` : `${numerator}/${denominator}`;
 }
 
-/**
- * A product of decimal scales picks up float noise (`1e-3 / (1e-2)^3` is
- * 999.9999999999999). Snap to 15 significant digits when that is within a few
- * ulps of the computed value, so `1 g/cm^3` is exactly 1000.
- */
-function tidy(x: number): number {
-  const snapped = Number(x.toPrecision(15));
-  return Math.abs(snapped - x) <= 4 * Number.EPSILON * Math.abs(x) ? snapped : x;
-}
-
-function accumulate(tokens: readonly (readonly FactorReading[])[], sign: 1 | -1): { scale: number; dim: Dimension } {
-  let scale = 1;
+function accumulate(
+  tokens: readonly (readonly FactorReading[])[],
+  sign: 1 | -1,
+): { scale: ExactScale; dim: Dimension; cycles: number } {
+  let scale = UNIT_SCALE;
   let dim = DIMENSIONLESS;
+  let cycles = 0;
   for (const factors of tokens) {
     for (const factor of factors) {
       const n = sign * factor.exp;
-      scale *= factor.scale ** n;
+      scale = multiplyScales(scale, powerScale(factor.scale, n));
       dim = multiply(dim, power(factor.dim, n));
+      cycles += factor.cycles * n;
     }
   }
-  return { scale, dim };
+  return { scale, dim, cycles };
 }
 
-/** Every dimensionally distinct spelling of one unit expression. */
+function reading(exact: ExactScale, dim: Dimension, label: string, cycles: number, affine?: AffineTemperature): UnitReading {
+  return {
+    scale: scaleToNumber(exact),
+    exact,
+    dim,
+    label,
+    cycles,
+    ...(affine === undefined ? {} : { affine }),
+  };
+}
+
+/**
+ * Every dimensionally distinct reading of one unit expression.
+ *
+ * The unit grammar is not the formula grammar, and the difference is
+ * deliberate: a unit symbol is not an identifier (a prefix, a glued product
+ * or a glued power lives inside one token: `mN`, `m2K`, `Vs`, `K²`, `°C`,
+ * `%`), and everything after the first `/` is the denominator, the
+ * single-solidus convention of ISO 80000-1 (`W/m*K` is W·m⁻¹·K⁻¹), where the
+ * formula grammar would read `(W/m)·K`.
+ * @internal
+ */
 function unitReadings(text: string): UnitReading[] {
   const t = text.trim();
-  if (t === '' || t === '1') return [{ scale: 1, dim: DIMENSIONLESS, label: '1' }];
+  if (t === '' || t === '1') return [reading(UNIT_SCALE, DIMENSIONLESS, '1', 0)];
   const affine = affineRow(t);
-  if (affine !== undefined) {
-    return [{ scale: affine.scale, dim: D({ Theta: 1 }), affine: affine.id, label: t }];
-  }
+  if (affine !== undefined) return [reading(affine.scale, D({ Theta: 1 }), t, 0, affine.id)];
   if (
-    AFFINE.some((row) => row.symbols.some((symbol) => t.includes(symbol))) ||
+    AFFINE.some((candidate) => candidate.symbols.some((symbol) => t.includes(symbol))) ||
     /deg\s+[CFcf]|°\s*[CFcf]/.test(t)
   ) {
-    throw new UnitError('an affine temperature cannot be part of a compound unit; give K');
+    throw new UnitRefusedError('an affine temperature cannot be part of a compound unit; give K');
   }
   // A chain reads left to right: `km/s/Mpc` is km/(s·Mpc), the way the Hubble constant is written.
   const parts = t.split('/');
@@ -460,7 +556,7 @@ function unitReadings(text: string): UnitReading[] {
     .join('*');
   const denominator = denominatorText === '' ? [] : sideTokens(denominatorText);
   // `/s` is a dimensionless numerator over seconds. A bare `/` is not a unit.
-  if (numerator.length === 0 && denominator.length === 0) throw new UnitError(`unknown unit '${t}'`);
+  if (numerator.length === 0 && denominator.length === 0) throw new UnknownUnitError(t);
   const numWays = numerator.map((token) => tokenWays(token, compete, 'numerator'));
   const denWays = denominator.map((token) => tokenWays(token, compete, 'denominator'));
   const numCombos = numerator.length === 0 ? [[]] : cartesian(numWays);
@@ -471,17 +567,10 @@ function unitReadings(text: string): UnitReading[] {
       const n = accumulate(num, 1);
       const d = accumulate(den, -1);
       const label = formatExpression(num, den);
-      // One factor keeps its exact table scale; a product is snapped.
-      const factors = [...num, ...den].reduce((count, way) => count + way.length, 0);
-      const scale = n.scale * d.scale;
-      unique.set(label, { scale: factors > 1 ? tidy(scale) : scale, dim: multiply(n.dim, d.dim), label });
+      unique.set(label, reading(multiplyScales(n.scale, d.scale), multiply(n.dim, d.dim), label, n.cycles + d.cycles));
     }
   }
   return [...unique.values()];
-}
-
-function ambiguousMessage(text: string, readings: readonly UnitReading[]): string {
-  return `'${text}' is ambiguous: ${readings.map((reading) => reading.label).join(' or ')}`;
 }
 
 const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3 };
@@ -512,153 +601,153 @@ export function unitConventionNotes(given: string): string[] {
   return notes;
 }
 
-/** Parse a unit expression; the empty string is dimensionless. @public */
-export function parseUnit(text: string): ParsedUnit {
+/** The one reading of a unit expression; more than one is refused. @internal */
+export function readUnit(text: string): UnitReading {
   const t = text.trim();
   const readings = unitReadings(t);
-  if (readings.length !== 1) throw new UnitError(ambiguousMessage(t, readings));
-  const reading = readings[0]!;
-  return {
-    scale: reading.scale,
-    dim: reading.dim,
-    ...(reading.affine !== undefined ? { affine: reading.affine } : {}),
-  };
+  if (readings.length !== 1) throw new AmbiguousUnitError(t, readings.map((r) => r.label));
+  return readings[0]!;
+}
+
+/** Parse a unit expression; the empty string is dimensionless. @public */
+export function parseUnit(text: string): ParsedUnit {
+  const r = readUnit(text);
+  return { scale: r.scale, dim: r.dim, ...(r.affine !== undefined ? { affine: r.affine } : {}) };
 }
 
 /** How a temperature value is read: as a point on the scale, or as a difference. @public */
 export type TemperatureReading = 'absolute' | 'difference';
 
-/** Kelvin added when this affine unit is an absolute point. @internal */
-export function affineAbsoluteOffsetK(id: 'celsius' | 'fahrenheit'): number {
-  const row = AFFINE.find((candidate) => candidate.id === id);
-  if (row === undefined) throw new UnitError(`unknown affine temperature '${id}'`);
-  return row.offset;
+/** The SI magnitude of `magnitude` in `unit`, exactly. An absolute affine reading adds its offset. */
+function siMagnitude(magnitude: ExactScale, unit: UnitReading, temperature: TemperatureReading): ExactScale {
+  const scaled = multiplyScales(magnitude, unit.exact);
+  const row = unit.affine === undefined ? undefined : AFFINE.find((candidate) => candidate.id === unit.affine);
+  return row !== undefined && temperature === 'absolute' ? addScales(scaled, row.offset) : scaled;
 }
 
-/** Kelvin from an affine or proportional reading. A difference drops the offset. */
-function kelvinFrom(value: number, unit: ParsedUnit, reading: TemperatureReading): number {
-  const row = unit.affine === undefined ? undefined : AFFINE.find((candidate) => candidate.id === unit.affine);
-  const offset = row !== undefined && reading === 'absolute' ? row.offset : 0;
-  return value * unit.scale + offset;
+const FRACTION = /^\s*([+-]?(?:\d+\.?\d*|\.\d+))\s*\/\s*((?:\d+\.?\d*|\.\d+))\s*$/;
+const NUMBER_THEN_REST = /^\s*([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)\s*$/;
+
+/**
+ * `raw` split into an exact decimal magnitude and the unit text after it, or
+ * null when `raw` is not a number followed by an optional unit. A plain
+ * fraction (`1/3`) is a number. Text that begins with an operator (`*h`,
+ * `·c`) is an expression, not a unit.
+ * @internal
+ */
+function splitQuantityLiteral(raw: string): { readonly magnitude: ExactScale; readonly unit: string } | null {
+  const fraction = FRACTION.exec(raw);
+  if (fraction !== null) {
+    const den = decimalScale(fraction[2]!)!;
+    if (den.num !== 0n) return { magnitude: divideScales(decimalScale(fraction[1]!)!, den), unit: '' };
+  }
+  const m = NUMBER_THEN_REST.exec(raw);
+  if (m === null) return null;
+  const unit = m[2]!;
+  if (unit.startsWith('*') || unit.startsWith('·')) return null;
+  const magnitude = decimalScale(m[1]!);
+  return magnitude === null ? null : { magnitude, unit };
+}
+
+/** A number with a unit, read exactly and rounded once. @internal */
+export interface QuantityLiteral {
+  /** SI value; a bare number is unchanged. */
+  readonly value: number;
+  readonly dim: Dimension;
+  /** The unit text as given; `''` for a bare number. */
+  readonly unit: string;
+  readonly cycles: number;
+  readonly affine?: AffineTemperature;
+}
+
+function finiteLiteral(raw: string, value: number): number {
+  if (!Number.isFinite(value)) throw new UnitError(`'${raw}' is not a finite number`);
+  return value;
+}
+
+/**
+ * Read `raw` as one number with an optional unit, in SI. Null when `raw` is
+ * not that form or names a unit no row spells, so the caller can read it as
+ * an expression. A refused unit and an ambiguous one throw. The value may be
+ * non-finite (`1e999`); the caller owns that refusal and its error class.
+ * @internal
+ */
+export function readQuantityLiteral(raw: string, temperature: TemperatureReading = 'absolute'): QuantityLiteral | null {
+  const literal = splitQuantityLiteral(raw);
+  if (literal === null) return null;
+  if (literal.unit === '') {
+    return { value: scaleToNumber(literal.magnitude), dim: DIMENSIONLESS, unit: '', cycles: 0 };
+  }
+  let unit: UnitReading;
+  try {
+    unit = readUnit(literal.unit);
+  } catch (error) {
+    if (error instanceof UnknownUnitError) return null;
+    throw error;
+  }
+  return {
+    value: scaleToNumber(siMagnitude(literal.magnitude, unit, temperature)),
+    dim: unit.dim,
+    unit: literal.unit,
+    cycles: unit.cycles,
+    ...(unit.affine === undefined ? {} : { affine: unit.affine }),
+  };
+}
+
+/** A value converted into a declared unit. @public */
+export interface ConvertedValue {
+  readonly value: number;
+  /** The unit the user gave; `''` for a bare number. */
+  readonly given: string;
+  /** Net power of cycle-counting units in `given` (1 for `Hz` or `rpm`); absent when 0. */
+  readonly cycles?: number;
+  /** Set when `given` is a lone affine temperature. */
+  readonly affine?: AffineTemperature;
 }
 
 /**
  * Convert `raw` (`<number>[unit]`) into `target` (a unit expression). A bare
  * number is taken to be in `target` already. The dimensions must agree.
  *
+ * The magnitude, the unit scales and the target scale are multiplied as
+ * exact rationals and rounded once, so `1 g/cm^3` in `kg/m^3` is 1000.
+ *
  * @returns the value in `target`, and the unit the user gave (`''` for none).
  * @public
  */
-export function convertValue(
-  raw: string,
-  target: string,
-  reading: TemperatureReading = 'absolute',
-): { value: number; given: string } {
-  const fraction = /^\s*([+-]?(?:\d+\.?\d*|\.\d+))\s*\/\s*((?:\d+\.?\d*|\.\d+))\s*$/.exec(raw);
-  if (fraction !== null && Number(fraction[2]) !== 0) return { value: Number(fraction[1]) / Number(fraction[2]), given: '' };
-  const m = /^\s*([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)\s*$/.exec(raw);
-  if (m === null) throw new UnitError(`'${raw}' is not a number with an optional unit`);
-  const v = Number(m[1]);
-  const given = m[2]!;
-  if (!Number.isFinite(v)) throw new UnitError(`'${raw}' is not a finite number`);
-  if (given === '') return { value: v, given };
+export function convertValue(raw: string, target: string, temperature: TemperatureReading = 'absolute'): ConvertedValue {
+  const literal = splitQuantityLiteral(raw);
+  if (literal === null) throw new UnitError(`'${raw}' is not a number with an optional unit`);
+  if (literal.unit === '') return { value: finiteLiteral(raw, scaleToNumber(literal.magnitude)), given: '' };
+  const given = literal.unit;
   const readings = unitReadings(given);
-  const to = parseUnit(target);
+  const to = readUnit(target);
   if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
   const matched = readings.filter((candidate) => equals(candidate.dim, to.dim));
   if (matched.length !== 1) {
-    if (readings.length > 1) throw new UnitError(ambiguousMessage(given, readings));
+    if (readings.length > 1) throw new AmbiguousUnitError(given, readings.map((r) => r.label));
     const from = readings[0];
-    if (from === undefined) throw new UnitError(`unknown unit '${given}'`);
+    if (from === undefined) throw new UnknownUnitError(given);
     throw new UnitError(`'${given}' is ${format(from.dim)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`);
   }
   const from = matched[0]!;
-  const local = kelvinFrom(v, from, reading) / to.scale;
-  // MathTS `unit` + `toSI` is the conversion when it reads the same quantity.
-  // A temperature difference must not take the absolute offset `toSI` adds.
-  // `bit` is ln 2 nat here; MathTS reads `bit` as 1. Symbols MathTS does not
-  // have (a solar mass, a Julian year, the gauss) stay on the table above.
-  const via = mathTsRatio(v, given, target);
-  if (via !== undefined && sameQuantity(via, local)) return { value: tidy(via), given };
-  return { value: tidy(local), given };
-}
-
-/** Spellings MathTS's unit parser accepts for the same UPT symbol. */
-function mathTsSpelling(text: string): string {
-  return text
-    .replaceAll('µ', 'u')
-    .replaceAll('μ', 'u')
-    .replaceAll('Ω', 'ohm')
-    .replaceAll('Å', 'angstrom')
-    .replaceAll('°C', 'degC');
-}
-
-interface MathTsUnit {
-  toSI(): { value: unknown };
-  dimensions: readonly number[];
-}
-
-/** The 7-base record for a MathTS length-10 exponent vector. Angle, bit, and solid angle are dropped. */
-function dimensionFromUnitVector(vector: readonly number[]): Dimension {
-  const v = toSiDimensionVector(vector, { ignoreExtra: true });
-  return { L: v[0], M: v[1], T: v[2], I: v[3], Theta: v[4], N: v[5], J: v[6] };
-}
-
-function mathTsReading(value: number, unitText: string): { si: number; dim: Dimension } {
-  // `unit` is a typed-function; its declared return is `unknown`.
-  const created = unit(value, mathTsSpelling(unitText)) as MathTsUnit;
-  const n = Number(created.toSI().value);
-  if (!Number.isFinite(n)) throw new Error('non-finite SI magnitude');
-  return { si: n, dim: dimensionFromUnitVector(created.dimensions) };
-}
-
-function mathTsRatio(value: number, given: string, target: string): number | undefined {
-  try {
-    const from = mathTsReading(value, given);
-    const to = mathTsReading(1, target);
-    if (to.si === 0) return undefined;
-    // A scale match is not enough when the 7-base dimensions differ.
-    if (!equals(from.dim, parseUnit(given).dim)) return undefined;
-    if (!equals(to.dim, parseUnit(target).dim)) return undefined;
-    return from.si / to.si;
-  } catch {
-    return undefined;
-  }
-}
-
-/**
- * MathTS's SI value for `magnitude` of `unitText`, when that value and the
- * 7-base dimension agree with `local`. Affine °C stays on the local offset.
- * A symbol MathTS lacks, or a scale it disagrees with (`bit` is 1 there and
- * ln 2 here; a solar mass, a Julian year, and the gauss are absent), returns
- * undefined so the caller keeps the local table.
- *
- * @internal
- */
-export function mathTsAgreedQuantity(
-  magnitude: number,
-  unitText: string,
-  local: ParsedUnit,
-): { value: number; dim: Dimension } | undefined {
-  if (local.affine !== undefined) return undefined;
-  try {
-    const read = mathTsReading(magnitude, unitText);
-    if (!sameQuantity(read.si, magnitude * local.scale)) return undefined;
-    if (!equals(read.dim, local.dim)) return undefined;
-    return { value: read.si, dim: read.dim };
-  } catch {
-    return undefined;
-  }
-}
-
-function sameQuantity(got: number, expected: number): boolean {
-  const scale = Math.max(Math.abs(got), Math.abs(expected));
-  return Math.abs(got - expected) <= 1e-9 * scale;
+  const value = scaleToNumber(divideScales(siMagnitude(literal.magnitude, from, temperature), to.exact));
+  return {
+    value: finiteLiteral(raw, value),
+    given,
+    ...(from.cycles === 0 ? {} : { cycles: from.cycles }),
+    ...(from.affine === undefined ? {} : { affine: from.affine }),
+  };
 }
 
 /** The dimension of a declared unit expression. @internal */
 export function unitDimension(unit: string): Dimension {
   return parseUnit(unit).dim;
+}
+
+/** The symbols the unit table spells, with their exact scales, for the agreement test against MathTS. @internal */
+export function unitRows(): ReadonlyMap<string, { readonly scale: ExactScale; readonly dim: Dimension; readonly prefixable: boolean }> {
+  return UNITS;
 }
 
 /** The tables conversion reads, for the CLI record's fingerprint (`src/cli/record-tables.ts`). @internal */
@@ -667,5 +756,9 @@ export function unitTables(): {
   prefixes: ReadonlyMap<string, number>;
   celsiusOffsetK: number;
 } {
-  return { units: UNITS, prefixes: PREFIXES, celsiusOffsetK: CELSIUS_OFFSET_K };
+  return {
+    units: new Map([...UNITS].map(([symbol, r]) => [symbol, [scaleToNumber(r.scale), r.dim, r.prefixable] as const])),
+    prefixes: new Map([...PREFIXES].map(([prefix, f]) => [prefix, scaleToNumber(f)] as const)),
+    celsiusOffsetK: scaleToNumber(CELSIUS_OFFSET_K),
+  };
 }

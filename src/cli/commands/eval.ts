@@ -155,8 +155,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   // A caller who bound e chose a different quantity.
   if (!('e' in parsed.scope)) {
     const checked = api.builtinFormulaDimensionChecker().check(expr, {});
-    if (!checked.ok && checked.error?.includes('elementary charge')) {
-      throw new UsageError(withParser(checked.error, kind));
+    if (!checked.ok && checked.elementaryChargeMixed === true) {
+      throw new UsageError(withParser(checked.error!, kind));
     }
   }
 

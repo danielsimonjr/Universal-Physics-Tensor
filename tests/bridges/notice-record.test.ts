@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { catalogEntries, catalogRelations, primaryRelation } from '../../src/bridges/catalog-load.js';
 import { relationNotices } from '../../src/bridges/notices.js';
 import { constantRecord } from '../../src/dimensional/symbolic-constants.js';
-import { DomainViolationError } from '../../src/composition/edge.js';
+import { DomainViolationError } from '../../src/bridges/evaluation-errors.js';
 import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { runCli } from '../../dist/cli/main.js';

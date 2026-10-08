@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
-import { DomainViolationError } from '../../src/composition/edge.js';
+import { DomainViolationError } from '../../src/bridges/evaluation-errors.js';
 import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
 import { K_B_SI } from '../../src/core/constants.js';
 

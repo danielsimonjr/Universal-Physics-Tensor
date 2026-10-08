@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
-import { DomainViolationError } from '../../src/composition/edge.js';
+import { DomainViolationError } from '../../src/bridges/evaluation-errors.js';
 import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
 
 const C = 299792458;

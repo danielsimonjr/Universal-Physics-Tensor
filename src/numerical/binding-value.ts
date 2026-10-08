@@ -31,16 +31,19 @@ import { CONSTANT_REGISTRY, constantRecord } from '../dimensional/symbolic-const
 import { divide, equals, format, multiply, power } from '../dimensional/algebra.js';
 import { DIMENSIONLESS, ENERGY, TEMPERATURE, type Dimension } from '../dimensional/types.js';
 import {
-  affineAbsoluteOffsetK,
+  AmbiguousUnitError,
   convertValue,
-  mathTsAgreedQuantity,
   parseUnit,
+  readQuantityLiteral,
+  readUnit,
   unitConventionNotes,
   UnitError,
+  UnitRefusedError,
+  type AffineTemperature,
   type TemperatureReading,
 } from '../dimensional/units.js';
-import { callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
-import { FormulaDimensionError, parseFormulaPNode, type FormulaPNode } from './formula-dimension.js';
+import { callBuiltinFunction, EulerNumberError, FormulaError } from './formula-contract.js';
+import { parseFormulaPNode, UnsupportedSyntaxError, type FormulaPNode } from './formula-dimension.js';
 
 /** A value on a temperature slot has a dimension that is neither a temperature nor an energy, or a temperature was read onto a dimensionless slot. @internal */
 export class TemperatureBindingError extends UnitError {
@@ -55,6 +58,14 @@ export class BindingNumberError extends UnitError {
   constructor(message: string) {
     super(message);
     this.name = 'BindingNumberError';
+  }
+}
+
+/** An expression names something that is neither a registered constant nor a unit literal. @internal */
+class UnknownNameError extends UnitError {
+  constructor(readonly symbol: string) {
+    super(`unknown name '${symbol}'`);
+    this.name = 'UnknownNameError';
   }
 }
 
@@ -82,19 +93,19 @@ function alignTemperatureBinding(
       throw new TemperatureBindingError(`cannot read '${raw.trim()}' as a temperature: k_B is not a positive finite number`);
     }
     const kelvin = read.value / kB;
+    const temperatureNote = `${name}=${raw.trim()} is read as k_B T, so ${name} is ${kelvin.toExponential(6)} K`;
     return {
       value: kelvin,
       dimensioned: true,
       dimension: TEMPERATURE,
-      notes: [
-        ...read.notes,
-        `${name}=${raw.trim()} is read as k_B T, so ${name} is ${kelvin.toExponential(6)} K`,
-      ],
+      notes: [...read.notes, temperatureNote],
+      cycles: 0,
+      temperatureNote,
     };
   }
+  // An energy returned above, so this dimension is neither a temperature nor an energy.
   throw new TemperatureBindingError(
-    `'${raw.trim()}' is ${format(read.dimension)}, but ${name} is a temperature.` +
-      (/^(?:L\^2 M T\^-2|\[L\^2 M T\^-2\])$/.test(format(read.dimension)) ? ' An energy on a temperature is k_B T.' : ' Give kelvin, degC, or an energy (read as k_B T).'),
+    `'${raw.trim()}' is ${format(read.dimension)}, but ${name} is a temperature. Give kelvin, degC, or an energy (read as k_B T).`,
   );
 }
 
@@ -136,15 +147,24 @@ export interface BindingValue {
   readonly dimensioned: boolean;
   readonly dimension: Dimension;
   readonly notes: readonly string[];
+  /**
+   * Net power of cycle-counting units (Hz, rpm) in the value: 1 for `10kHz`
+   * and `2*1kHz`, 0 for `1/s`. NaN when a sum mixes cycles with plain rates.
+   * An angular-frequency input takes 2π per cycle.
+   */
+  readonly cycles: number;
+  /** Set when the value is a lone affine temperature (`25degC`). */
+  readonly affine?: AffineTemperature;
+  /** Set when an energy on a temperature slot was read as k_B T: the sentence that says so. */
+  readonly temperatureNote?: string;
 }
 
 interface Qty {
   readonly value: number;
   readonly dim: Dimension;
+  readonly cycles: number;
 }
 
-const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
-const NUMBER_UNIT = /^([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)$/;
 const GLUED_NUMBER = /(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/g;
 function finite(raw: string, value: number): number {
   if (!Number.isFinite(value)) throw new BindingNumberError(`'${raw}' is not a finite number`);
@@ -153,22 +173,24 @@ function finite(raw: string, value: number): number {
 
 function scopeFor(mode: UnitMode): Map<string, Qty> {
   const m = new Map<string, Qty>();
-  m.set('pi', { value: Math.PI, dim: DIMENSIONLESS });
-  m.set('tau', { value: 2 * Math.PI, dim: DIMENSIONLESS });
+  m.set('pi', { value: Math.PI, dim: DIMENSIONLESS, cycles: 0 });
+  m.set('tau', { value: 2 * Math.PI, dim: DIMENSIONLESS, cycles: 0 });
   for (const record of CONSTANT_REGISTRY) {
-    for (const spelling of [record.name, ...record.spellings]) m.set(spelling, { value: record.value, dim: record.dim });
+    for (const spelling of [record.name, ...record.spellings]) m.set(spelling, { value: record.value, dim: record.dim, cycles: 0 });
   }
   if (mode !== 'si') {
-    for (const [name, value] of Object.entries(naturalConstantOverrides(mode))) m.set(name, { value, dim: DIMENSIONLESS });
+    for (const [name, value] of Object.entries(naturalConstantOverrides(mode))) m.set(name, { value, dim: DIMENSIONLESS, cycles: 0 });
   }
   return m;
 }
 
 /** A unit the parser recognized and refused, rather than a prefix that is not a unit. */
 function unitRefusal(e: unknown): UnitError | null {
-  if (!(e instanceof UnitError)) return null;
-  return /affine|more than one|ambiguous|logarithmic|speed of sound/.test(e.message) ? e : null;
+  return e instanceof UnitRefusedError || e instanceof AmbiguousUnitError ? e : null;
 }
+
+/** The text has an operator, so it is an expression rather than a lone word. */
+const hasOperator = (text: string): boolean => /[+\-*/^()]/.test(text);
 
 /** The longest unit expression at the start of `rest`, or null. */
 function longestUnit(rest: string): string | null {
@@ -179,7 +201,7 @@ function longestUnit(rest: string): string | null {
     const prefix = rest.slice(0, n);
     if (/[/*^·+\-(\s]$/.test(prefix)) continue;
     try {
-      parseUnit(prefix);
+      readUnit(prefix);
       // `deg` is a unit, but `degF` is Fahrenheit. Do not keep a prefix whose
       // next character continues the same token.
       const next = rest[n];
@@ -218,13 +240,12 @@ function spliceUnits(src: string): Splice {
       last = end;
       continue;
     }
-    const parsed = parseUnit(unit);
+    const parsed = readUnit(unit);
     if (parsed.affine !== undefined) {
-      throw new UnitError('an affine temperature cannot be part of an expression; give it alone, or use K');
+      throw new UnitRefusedError('an affine temperature cannot be part of an expression; give it alone, or use K');
     }
-    const agreed = mathTsAgreedQuantity(1, unit, parsed);
     const name = `__u${slots.size}`;
-    slots.set(name, { value: agreed?.value ?? parsed.scale, dim: agreed?.dim ?? parsed.dim });
+    slots.set(name, { value: parsed.scale, dim: parsed.dim, cycles: parsed.cycles });
     for (const note of unitConventionNotes(unit)) {
       if (!notes.includes(note)) notes.push(note);
     }
@@ -239,18 +260,18 @@ function spliceUnits(src: string): Splice {
 function evalAst(node: FormulaPNode, scope: ReadonlyMap<string, Qty>, slots: ReadonlyMap<string, Qty>): Qty {
   switch (node.kind) {
     case 'num':
-      return { value: node.value, dim: DIMENSIONLESS };
+      return { value: node.value, dim: DIMENSIONLESS, cycles: 0 };
     case 'sym': {
-      if (node.name === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
+      if (node.name === 'euler') throw new EulerNumberError();
       const slot = slots.get(node.name);
       if (slot !== undefined) return slot;
       const known = scope.get(node.name);
       if (known !== undefined) return known;
-      throw new UnitError(`unknown name '${node.name}'`);
+      throw new UnknownNameError(node.name);
     }
     case 'neg': {
       const a = evalAst(node.arg, scope, slots);
-      return { value: -a.value, dim: a.dim };
+      return { value: -a.value, dim: a.dim, cycles: a.cycles };
     }
     case 'op':
       return evalOp(node.op, node.args.map((a) => evalAst(a, scope, slots)));
@@ -258,10 +279,10 @@ function evalAst(node: FormulaPNode, scope: ReadonlyMap<string, Qty>, slots: Rea
       const base = evalAst(node.base, scope, slots);
       const exp = evalAst(node.exp, scope, slots);
       if (!equals(exp.dim, DIMENSIONLESS)) throw new UnitError('an exponent must be dimensionless');
-      return { value: Math.pow(base.value, exp.value), dim: power(base.dim, exp.value) };
+      return { value: Math.pow(base.value, exp.value), dim: power(base.dim, exp.value), cycles: base.cycles * exp.value };
     }
     case 'call':
-      if (node.fn === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
+      if (node.fn === 'euler') throw new EulerNumberError();
       return evalCall(node.fn, node.args.map((a) => evalAst(a, scope, slots)));
   }
 }
@@ -271,33 +292,40 @@ function evalOp(op: '+' | '-' | '*' | '/', args: readonly Qty[]): Qty {
   if (op === '+' || op === '-') {
     const first = args[0]!;
     if (args.length === 1) {
-      return op === '-' ? { value: -first.value, dim: first.dim } : first;
+      return op === '-' ? { value: -first.value, dim: first.dim, cycles: first.cycles } : first;
     }
     let value = first.value;
+    let cycles = first.cycles;
     for (const next of args.slice(1)) {
       if (!equals(first.dim, next.dim)) {
         throw new UnitError(`cannot ${op === '+' ? 'add' : 'subtract'} ${format(first.dim)} and ${format(next.dim)}`);
       }
       value = op === '+' ? value + next.value : value - next.value;
+      // A sum of a cycle rate and a plain rate has no single cycle count.
+      if (next.cycles !== cycles) cycles = Number.NaN;
     }
-    return { value, dim: first.dim };
+    return { value, dim: first.dim, cycles };
   }
   if (op === '*') {
     let value = 1;
     let dim = DIMENSIONLESS;
+    let cycles = 0;
     for (const a of args) {
       value *= a.value;
       dim = multiply(dim, a.dim);
+      cycles += a.cycles;
     }
-    return { value, dim };
+    return { value, dim, cycles };
   }
   let value = args[0]!.value;
   let dim = args[0]!.dim;
+  let cycles = args[0]!.cycles;
   for (const next of args.slice(1)) {
     value /= next.value;
     dim = divide(dim, next.dim);
+    cycles -= next.cycles;
   }
-  return { value, dim };
+  return { value, dim, cycles };
 }
 
 function evalCall(fn: string, args: readonly Qty[]): Qty {
@@ -305,62 +333,56 @@ function evalCall(fn: string, args: readonly Qty[]): Qty {
     if (args.length !== 1) throw new UnitError(`${fn} expected 1 argument`);
     const n = fn === 'sqrt' ? 0.5 : 1 / 3;
     const value = fn === 'sqrt' ? Math.sqrt(args[0]!.value) : Math.cbrt(args[0]!.value);
-    return { value, dim: power(args[0]!.dim, n) };
+    return { value, dim: power(args[0]!.dim, n), cycles: args[0]!.cycles * n };
   }
   if (fn === 'abs') {
     if (args.length !== 1) throw new UnitError('abs expected 1 argument');
-    return { value: Math.abs(args[0]!.value), dim: args[0]!.dim };
+    return { value: Math.abs(args[0]!.value), dim: args[0]!.dim, cycles: args[0]!.cycles };
   }
   if (fn === 'pow') {
     if (args.length !== 2) throw new UnitError('pow expects 2 arguments');
     if (!equals(args[1]!.dim, DIMENSIONLESS)) throw new UnitError('an exponent must be dimensionless');
-    return { value: Math.pow(args[0]!.value, args[1]!.value), dim: power(args[0]!.dim, args[1]!.value) };
+    return {
+      value: Math.pow(args[0]!.value, args[1]!.value),
+      dim: power(args[0]!.dim, args[1]!.value),
+      cycles: args[0]!.cycles * args[1]!.value,
+    };
   }
   if (fn === 'atan2') {
     if (args.length !== 2) throw new UnitError('atan2 expects 2 arguments');
     if (!equals(args[0]!.dim, args[1]!.dim)) throw new UnitError('atan2 arguments must have the same dimension');
-    return { value: Math.atan2(args[0]!.value, args[1]!.value), dim: DIMENSIONLESS };
+    return { value: Math.atan2(args[0]!.value, args[1]!.value), dim: DIMENSIONLESS, cycles: 0 };
   }
   for (const a of args) {
     if (!equals(a.dim, DIMENSIONLESS)) throw new UnitError(`${fn} expects a dimensionless argument`);
   }
   try {
-    return { value: callBuiltinFunction(fn, args.map((a) => a.value)), dim: DIMENSIONLESS };
+    return { value: callBuiltinFunction(fn, args.map((a) => a.value)), dim: DIMENSIONLESS, cycles: 0 };
   } catch (e) {
     if (e instanceof FormulaError) throw new UnitError(e.message);
     throw e;
   }
 }
 
-function plainUnit(raw: string, reading: TemperatureReading): BindingValue | null {
-  const m = NUMBER_UNIT.exec(raw);
-  // A leading `*` is multiplication (`2*h`, `0.6*c`). `parseUnit` would drop
-  // it and read the name as a unit (`h` the hour). A leading `/` is a unit
-  // (`1/s`) when the remainder parses, and an expression otherwise.
-  if (m === null || m[2] === undefined || m[2] === '' || m[2].startsWith('*') || m[2].startsWith('·')) return null;
-  let unit;
+/** The literal path: a number with an optional unit, read exactly by the one unit reader. */
+function literalBinding(raw: string, reading: TemperatureReading): BindingValue | null {
+  let literal;
   try {
-    unit = parseUnit(m[2]);
+    literal = readQuantityLiteral(raw, reading);
   } catch (e) {
     const refused = unitRefusal(e);
     if (refused !== null) throw refused;
-    return null;
+    throw e;
   }
-  const v = finite(raw, Number(m[1]));
-  const offset = unit.affine !== undefined && reading === 'absolute' ? affineAbsoluteOffsetK(unit.affine) : 0;
-  const agreed = offset === 0 ? mathTsAgreedQuantity(v, m[2], unit) : undefined;
+  if (literal === null) return null;
   return {
-    value: agreed?.value ?? v * unit.scale + offset,
-    dimensioned: true,
-    dimension: agreed?.dim ?? unit.dim,
-    notes: unitConventionNotes(m[2]),
+    value: finite(raw, literal.value),
+    dimensioned: literal.unit !== '',
+    dimension: literal.dim,
+    notes: unitConventionNotes(literal.unit),
+    cycles: literal.cycles,
+    ...(literal.affine === undefined ? {} : { affine: literal.affine }),
   };
-}
-
-function looksLikeNumberUnit(raw: string): boolean {
-  const matched = NUMBER_UNIT.exec(raw.trim());
-  if (matched === null || matched[2] === undefined || matched[2] === '') return false;
-  return !matched[2].startsWith('*') && !matched[2].startsWith('·');
 }
 
 /**
@@ -374,19 +396,19 @@ function declaredUnitReading(
   target: string,
   reading: TemperatureReading,
 ): BindingValue | undefined {
-  if (!looksLikeNumberUnit(raw)) return undefined;
   try {
     const converted = convertValue(raw, target, reading);
     if (converted.given === '') return undefined;
-    const to = parseUnit(target);
     return {
       value: converted.value,
       dimensioned: true,
-      dimension: to.dim,
+      dimension: parseUnit(target).dim,
       notes: unitConventionNotes(converted.given),
+      cycles: converted.cycles ?? 0,
+      ...(converted.affine === undefined ? {} : { affine: converted.affine }),
     };
   } catch (error) {
-    if (error instanceof UnitError && /ambiguous/.test(error.message)) throw error;
+    if (error instanceof AmbiguousUnitError) throw error;
     return undefined;
   }
 }
@@ -458,12 +480,7 @@ export function readNamedBinding(
         `'${raw.trim()}' is ${format(aligned.dimension)}, but this input is ${format(to.dim)} (${target})`,
       );
     }
-    return {
-      value: aligned.value / to.scale,
-      dimensioned: true,
-      dimension: to.dim,
-      notes: aligned.notes,
-    };
+    return { ...aligned, value: aligned.value / to.scale, dimensioned: true, dimension: to.dim };
   }
   const converted = bindingInUnit(raw, target, reading, mode);
   return {
@@ -471,6 +488,8 @@ export function readNamedBinding(
     dimensioned: converted.given !== '',
     dimension: target === '' ? DIMENSIONLESS : parseUnit(target).dim,
     notes: unitConventionNotes(converted.given),
+    cycles: converted.cycles ?? 0,
+    ...(converted.affine === undefined ? {} : { affine: converted.affine }),
   };
 }
 
@@ -487,25 +506,22 @@ export function readBinding(
   const mode = opts?.mode ?? 'si';
   const reading = opts?.reading ?? 'absolute';
   if (trimmed === '') throw new BindingNumberError(`'${raw}' is not a finite number`);
-  if (NUMBER.test(trimmed)) {
-    return { value: finite(trimmed, Number(trimmed)), dimensioned: false, dimension: DIMENSIONLESS, notes: [] };
-  }
-  const plain = plainUnit(trimmed, reading);
-  if (plain !== null) return plain;
+  const literal = literalBinding(trimmed, reading);
+  if (literal !== null) return literal;
 
   const spliced = spliceUnits(trimmed);
+  const notANumber = (): BindingNumberError => new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
   let ast: FormulaPNode;
   try {
     ast = parseFormulaPNode(spliced.expr);
   } catch (e) {
-    if (e instanceof FormulaDimensionError && /AccessorNode/.test(e.message)) {
-      throw new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
-    }
+    // Syntax the normalized form has no shape for (`1.2.3`, `a.b`) is not a value.
+    if (e instanceof UnsupportedSyntaxError) throw notANumber();
+    // `euler` names the refused constant; keep that sentence.
+    if (e instanceof EulerNumberError) throw new UnitError(e.message);
     if (e instanceof FormulaError) {
-      // `euler` names the refused constant. Keep that sentence; a bare unknown
-      // word is not an expression, and a token with an operator (`2*`) is.
-      if (e.message.includes('exp(x)')) throw new UnitError(e.message);
-      if (!/[+\-*/^()]/.test(trimmed)) throw new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
+      // A bare unknown word is not an expression; a token with an operator (`2*`) is.
+      if (!hasOperator(trimmed)) throw notANumber();
       throw new UnitError(e.message);
     }
     throw e;
@@ -514,14 +530,7 @@ export function readBinding(
   try {
     qty = evalAst(ast, scopeFor(mode), spliced.slots);
   } catch (e) {
-    if (
-      e instanceof UnitError &&
-      /unknown name '/.test(e.message) &&
-      spliced.slots.size === 0 &&
-      !/[+\-*/^()]/.test(trimmed)
-    ) {
-      throw new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
-    }
+    if (e instanceof UnknownNameError && spliced.slots.size === 0 && !hasOperator(trimmed)) throw notANumber();
     throw e;
   }
   return {
@@ -529,6 +538,7 @@ export function readBinding(
     dimensioned: spliced.slots.size > 0 || !equals(qty.dim, DIMENSIONLESS),
     dimension: qty.dim,
     notes: spliced.notes,
+    cycles: qty.cycles,
   };
 }
 
@@ -542,10 +552,10 @@ export function bindingInUnit(
   target: string,
   reading: TemperatureReading = 'absolute',
   mode: UnitMode = 'si',
-): { value: number; given: string } {
-  if (NUMBER.test(raw.trim()) || looksLikeNumberUnit(raw)) {
-    return convertValue(raw, target, reading);
-  }
+): { value: number; given: string; cycles?: number; affine?: AffineTemperature } {
+  // A literal the one unit reader accepts converts exactly, unit to unit; anything else
+  // (an expression such as `1Hz + 1/(1s)`) is read as an expression and converted from SI.
+  if (readQuantityLiteral(raw, reading) !== null) return convertValue(raw, target, reading);
   const b = readBinding(raw, { reading, mode });
   if (!b.dimensioned) return { value: b.value, given: '' };
   const to = parseUnit(target);
@@ -555,7 +565,7 @@ export function bindingInUnit(
       `'${raw.trim()}' is ${format(b.dimension)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`,
     );
   }
-  return { value: b.value / to.scale, given: raw.trim() };
+  return { value: b.value / to.scale, given: raw.trim(), ...(b.cycles === 0 ? {} : { cycles: b.cycles }) };
 }
 
 /**
