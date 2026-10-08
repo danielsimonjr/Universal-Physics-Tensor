@@ -42,6 +42,13 @@ describe('every condition is written in the MathTS grammar', () => {
     const offenders = catalogRelations().filter((r) => OLD_GRAMMAR.test(r.holds)).map((r) => r.id);
     expect(offenders).toEqual([]);
   });
+  it('catalog domain text reads "and", not a code operator, on every relation', () => {
+    const relations = catalogRelations();
+    expect(relations.every((r) => typeof r.domain === 'string')).toBe(true);
+    const offenders = relations.filter((r) => OLD_GRAMMAR.test(r.domain)).map((r) => `${r.id}: ${r.domain}`);
+    expect(offenders).toEqual([]);
+    expect(OLD_GRAMMAR.test('boost-duty >= 0 && boost-duty < 1')).toBe(true);
+  });
   it('canonical holds', () => {
     const offenders = CANONICAL_EQUATIONS.filter((e) => e.holds !== undefined && OLD_GRAMMAR.test(e.holds)).map((e) => e.id);
     expect(offenders).toEqual([]);

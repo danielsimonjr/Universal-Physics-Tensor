@@ -7606,7 +7606,7 @@
         ]
       },
       "holds": "isFinite(poynting-flux) and\n      poynting-flux >= 0 and\n      isFinite(reflectance) and\n      reflectance >= 0 and\n      reflectance <= 1 and\n      isFinite(incidence-angle) and incidence-angle >= 0 and incidence-angle < pi / 2",
-      "domain": "I ≥ 0, R on [0, 1], θ finite; transmission 0; incidence-angle >= 0 && incidence-angle < pi / 2",
+      "domain": "I ≥ 0, R on [0, 1], θ finite; transmission 0; incidence-angle >= 0 and incidence-angle < pi / 2",
       "confidence": "established",
       "citation": "OpenStax University Physics Volume 2, https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog's assembly.",
       "reference": {
@@ -9716,7 +9716,7 @@
         ]
       },
       "holds": "isFinite(boost-duty) and boost-duty != 1 and boost-duty >= 0 and boost-duty < 1",
-      "domain": "D ≠ 1; boost-duty >= 0 && boost-duty < 1",
+      "domain": "D ≠ 1; boost-duty >= 0 and boost-duty < 1",
       "confidence": "established",
       "citation": "PhysJS.BoostConverter.boost_ratio. Volt-second balance. No real duty equals both this ratio and the buck ratio D.",
       "reference": {
@@ -10575,7 +10575,7 @@
         ]
       },
       "holds": "isFinite(raoultsat) and raoultsat > 0 and raoultmole >= 0 and raoultmole <= 1",
-      "domain": "P* > 0; raoultmole >= 0 && raoultmole <= 1",
+      "domain": "P* > 0; raoultmole >= 0 and raoultmole <= 1",
       "confidence": "established",
       "citation": "PhysJS.Raoult.raoult_eq. Not a second proof of the Gibbs isotherm.",
       "reference": {
