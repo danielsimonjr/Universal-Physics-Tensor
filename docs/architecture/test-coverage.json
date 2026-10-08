@@ -1248,6 +1248,7 @@
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/canonical-domains.test.ts",
+      "tests/cases/applied-cases.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/chain-atlas-pointer.test.ts",
@@ -10053,6 +10054,8 @@
     ],
     "tests/bridges/one-evaluate-path.test.ts": [
       "src/bridges/evaluators.ts",
+      "src/bridges/input-contract.ts",
+      "src/composition/canonical-graph.ts",
       "src/bridges/catalog-load.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/edge.ts",
@@ -10074,7 +10077,6 @@
       "src/bridges/index.ts",
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
-      "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/curvature.ts",
@@ -10130,7 +10132,6 @@
       "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
-      "src/composition/canonical-graph.ts",
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/identifiability.ts",
@@ -10534,7 +10535,8 @@
       "src/bridges/carrier-sign.ts",
       "src/atlas/families.ts",
       "src/canonical/registry.ts",
-      "src/dimensional/units.ts"
+      "src/dimensional/units.ts",
+      "src/bridges/evaluation-errors.ts"
     ],
     "tests/cases/brownian-sphere.test.ts": [
       "src/cases/brownian-sphere.ts",

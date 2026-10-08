@@ -4,7 +4,7 @@
     "version": "8.0.0",
     "totalFiles": 356,
     "totalModules": 13,
-    "totalExports": 2447
+    "totalExports": 2457
   },
   "entryPoints": [
     {
@@ -5031,9 +5031,11 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
+          "isInputContractError",
           "MissingInputError",
           "UnknownInputError",
           "InputTypeError",
+          "NonFiniteInputError",
           "DuplicateInputError",
           "DomainViolationError"
         ],
@@ -5041,8 +5043,12 @@
           "MissingInputError",
           "UnknownInputError",
           "InputTypeError",
+          "NonFiniteInputError",
           "DuplicateInputError",
           "DomainViolationError"
+        ],
+        "functions": [
+          "isInputContractError"
         ]
       },
       "src/bridges/evaluator-inputs.ts": {
@@ -5053,9 +5059,9 @@
           {
             "file": "../dimensional/units.js",
             "imports": [
+              "affineReadingNote",
               "unitConventionNotes",
               "UnitError",
-              "AffineTemperature",
               "TemperatureReading"
             ]
           },
@@ -5136,6 +5142,7 @@
             "file": "./expr-parse.js",
             "imports": [
               "evaluateFormula",
+              "formulaVariables",
               "parseCatalogExpression"
             ]
           },
@@ -5163,6 +5170,7 @@
             "file": "./input-contract.js",
             "imports": [
               "checkInputs",
+              "inputContract",
               "EvaluationWant",
               "InputContract",
               "InputSlot"
@@ -5256,12 +5264,14 @@
         "exports": [
           "formulaNames",
           "formulaScope",
+          "formulaVariables",
           "evaluateFormula",
           "parseCatalogExpression"
         ],
         "functions": [
           "formulaNames",
           "formulaScope",
+          "formulaVariables",
           "evaluateFormula",
           "parseCatalogExpression"
         ]
@@ -5416,11 +5426,13 @@
               "DuplicateInputError",
               "InputTypeError",
               "MissingInputError",
+              "NonFiniteInputError",
               "UnknownInputError"
             ]
           }
         ],
         "exports": [
+          "inputContract",
           "checkInputs"
         ],
         "interfaces": [
@@ -5429,6 +5441,7 @@
           "InputContract"
         ],
         "functions": [
+          "inputContract",
           "checkInputs"
         ]
       },
@@ -6927,6 +6940,14 @@
             "typeOnly": true
           },
           {
+            "file": "../bridges/input-contract.js",
+            "imports": [
+              "checkInputs",
+              "inputContract",
+              "InputContract"
+            ]
+          },
+          {
             "file": "./types.js",
             "imports": [
               "AppliedCase",
@@ -8053,7 +8074,7 @@
           {
             "file": "../euler-guard.js",
             "imports": [
-              "withParser"
+              "FormulaUsageError"
             ]
           },
           {
@@ -8212,7 +8233,7 @@
           {
             "file": "../euler-guard.js",
             "imports": [
-              "withParser"
+              "FormulaUsageError"
             ]
           },
           {
@@ -9504,12 +9525,19 @@
         "description": "Name the active formula parser on an error a script can read.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "withParser"
+        "internalDependencies": [
+          {
+            "file": "./errors.js",
+            "imports": [
+              "UsageError"
+            ]
+          }
         ],
-        "functions": [
-          "withParser"
+        "exports": [
+          "FormulaUsageError"
+        ],
+        "classes": [
+          "FormulaUsageError"
         ]
       },
       "src/cli/eval-numbers.ts": {
@@ -10482,7 +10510,10 @@
             "file": "./bridges/evaluation-errors.js",
             "imports": [
               "DuplicateInputError",
+              "InputTypeError",
+              "isInputContractError",
               "MissingInputError",
+              "NonFiniteInputError",
               "UnknownInputError"
             ],
             "reExport": true
@@ -11185,7 +11216,10 @@
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "DuplicateInputError",
+          "InputTypeError",
+          "isInputContractError",
           "MissingInputError",
+          "NonFiniteInputError",
           "UnknownInputError",
           "resolveEvaluatorInputs",
           "APPLIED_CASES",
@@ -11417,7 +11451,10 @@
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "DuplicateInputError",
+          "InputTypeError",
+          "isInputContractError",
           "MissingInputError",
+          "NonFiniteInputError",
           "UnknownInputError",
           "EvaluatorSpec",
           "EvaluatorParameter",
@@ -13323,6 +13360,7 @@
             "file": "../bridges/input-contract.js",
             "imports": [
               "checkInputs",
+              "inputContract",
               "InputContract"
             ]
           },
@@ -13963,6 +14001,7 @@
               "DuplicateInputError",
               "InputTypeError",
               "MissingInputError",
+              "NonFiniteInputError",
               "UnknownInputError"
             ],
             "reExport": true
@@ -14234,6 +14273,7 @@
           "DuplicateInputError",
           "InputTypeError",
           "MissingInputError",
+          "NonFiniteInputError",
           "UnknownInputError",
           "composeEdges",
           "minConfidence",
@@ -14326,6 +14366,7 @@
           "DuplicateInputError",
           "InputTypeError",
           "MissingInputError",
+          "NonFiniteInputError",
           "UnknownInputError",
           "ComposeOptions",
           "QuantityIdentification",
@@ -19421,6 +19462,7 @@
           }
         ],
         "exports": [
+          "affineReadingNote",
           "unitConventionNotes",
           "readUnit",
           "parseUnit",
@@ -19447,6 +19489,7 @@
           "ConvertedValue"
         ],
         "functions": [
+          "affineReadingNote",
           "unitConventionNotes",
           "readUnit",
           "parseUnit",
@@ -20096,6 +20139,7 @@
               "DuplicateInputError",
               "InputTypeError",
               "MissingInputError",
+              "NonFiniteInputError",
               "UnknownInputError"
             ],
             "reExport": true
@@ -21090,6 +21134,7 @@
           "DuplicateInputError",
           "InputTypeError",
           "MissingInputError",
+          "NonFiniteInputError",
           "UnknownInputError",
           "christoffel",
           "ricci",
@@ -21556,6 +21601,7 @@
           "DuplicateInputError",
           "InputTypeError",
           "MissingInputError",
+          "NonFiniteInputError",
           "UnknownInputError",
           "Evaluation",
           "EvaluatorSpec",
@@ -22810,7 +22856,8 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "gaussLegendre4"
+              "gaussLegendre4",
+              "GL4ConvergenceError"
             ]
           }
         ],
@@ -24631,15 +24678,15 @@
   "statistics": {
     "totalTypeScriptFiles": 356,
     "totalModules": 13,
-    "totalLinesOfCode": 77798,
-    "totalExports": 2447,
-    "totalClasses": 77,
+    "totalLinesOfCode": 77993,
+    "totalExports": 2457,
+    "totalClasses": 79,
     "totalInterfaces": 447,
-    "totalFunctions": 741,
-    "totalTypeGuards": 6,
+    "totalFunctions": 744,
+    "totalTypeGuards": 7,
     "totalEnums": 0,
     "totalConstants": 379,
-    "totalReExports": 1251,
+    "totalReExports": 1256,
     "totalTypeOnlyImports": 503,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
