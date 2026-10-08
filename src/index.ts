@@ -222,8 +222,12 @@ export {
 export type { Evaluation } from './composition/index.js';
 
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
+/** An extra output an `EvaluatorSpec` returns beside its `value`. */
+export type { CatalogEvaluatorOutput } from './bridges/catalog-types.js';
 /** The input contract an evaluator's `run` checks before the domain, and what a caller asks `run` for. */
 export type { ContractAlternate, EvaluationWant, InputContract, InputSlot } from './bridges/input-contract.js';
+/** Build an input contract; throws when one spelling or alternate would bind two slots. */
+export { inputContract } from './bridges/input-contract.js';
 
 // v0.4.0 connection layer — Christoffel formula builder and covariant derivative
 // AST node type. `christoffel` is public because bridge modules and downstream
@@ -483,22 +487,6 @@ export {
   DomainViolationError,
   // Calibration edges (pre-registered CT-1/CT-1b/CT-2/CT-3 targets)
   M_SUN_KG,
-  // v0.10.0 T5 — catalog-tranche edges (BE-14/19/21/48/53/54)
-} from './composition/index.js';
-/** Composition edges for radiation pressure, the Alfvén speed, and Tolman–Ehrenfest. */
-export {
-} from './composition/index.js';
-/** Composition edges for the Fermi sea through Landauer conductance, BE-88 through BE-102. */
-export {
-} from './composition/index.js';
-/** Composition edges for the Bohm sheath through the mirror threshold, BE-103 through BE-125. */
-export {
-} from './composition/index.js';
-/** Composition edges for the comb drive through the damping ratio, BE-126 through BE-133. */
-export {
-} from './composition/index.js';
-/** Composition edges for the Bloch deficit through the Gorter–Casimir fraction, BE-134 through BE-146. */
-export {
 } from './composition/index.js';
 export type {
   BridgeEdge,

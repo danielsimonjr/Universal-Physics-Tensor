@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 8.0.0
+**Version**: 9.0.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -989,6 +989,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../composition/chain-candidate.js` | `ChainCandidate` | Import (type-only) |
+| `../relations/types.js` | `FormalRefKind` | Import (type-only) |
 | `./physjs-ref.js` | `physjsTheorem` | Import |
 
 **Exports:**
@@ -3746,8 +3747,8 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `format` | Import |
 
 **Exports:**
-- Interfaces: `VettedCandidate`, `DiscoveryOptions`
-- Functions: `vetLinkCandidate`, `rankDiscoveries`
+- Interfaces: `VettedCandidate`, `DiscoveryOptions`, `DiscoveryContext`
+- Functions: `buildDiscoveryContext`, `vetLinkCandidate`, `vetInContext`, `rankDiscoveries`
 - Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`
 
 ---
@@ -4771,6 +4772,11 @@ The codebase is organized into the following modules:
 
 ### `src/core/constants.ts` - Canonical CODATA 2018 + SI-defined physical constants for UPT (v0.5.1).
 
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./data-file.js` | `checkedDataFile` | Import |
+
 **Exports:**
 - Constants:
 
@@ -5698,7 +5704,9 @@ The codebase is organized into the following modules:
 | `./composition/index.js` | `DuplicateInputError, InputTypeError, MissingInputError, NonFiniteInputError, UnknownInputError` | Re-export |
 | `./composition/index.js` | `Evaluation` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
+| `./bridges/catalog-types.js` | `CatalogEvaluatorOutput` | Re-export |
 | `./bridges/input-contract.js` | `ContractAlternate, EvaluationWant, InputContract, InputSlot` | Re-export |
+| `./bridges/input-contract.js` | `inputContract` | Re-export |
 | `./dimensional/connection.js` | `christoffel` | Re-export |
 | `./dimensional/validator.js` | `CovariantDerivativeNode` | Re-export |
 | `./dimensional/curvature.js` | `ricci` | Re-export |
@@ -5739,11 +5747,6 @@ The codebase is organized into the following modules:
 | `./numerical/index.js` | `evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport, evaluateCovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion` | Re-export |
 | `./numerical/index.js` | `NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options, PerihelionResult, FindPerihelionOptions, CovariantEikonalInputs, CovariantEikonalResult` | Re-export |
 | `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, M_SUN_KG` | Re-export |
-| `./composition/index.js` | `` | Re-export |
-| `./composition/index.js` | `` | Re-export |
-| `./composition/index.js` | `` | Re-export |
-| `./composition/index.js` | `` | Re-export |
-| `./composition/index.js` | `` | Re-export |
 | `./composition/index.js` | `BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
 | `./bridges/membership.js` | `adjudicateBridgeEntry, adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS` | Re-export |
 | `./bridges/membership.js` | `BridgeVerdict, CatalogAdjudicationReport, RejectedBridgeAdjudication` | Re-export |
@@ -5827,18 +5830,18 @@ The codebase is organized into the following modules:
   LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, M_PROTON_SI,
   CarrierSignError, evaluateRelation, CoefficientUnsetError, DuplicateInputError, InputTypeError,
   MissingInputError, NonFiniteInputError, UnknownInputError, Evaluation, EvaluatorSpec,
-  EvaluatorParameter, ParameterAlternate, GeometryRole, ContractAlternate, EvaluationWant,
-  InputContract, InputSlot, christoffel, CovariantDerivativeNode, ricci, RicciTensorNode, einstein,
-  EinsteinTensorNode, bianchiResidual, BianchiResidualNode, verifyKillingEquation,
-  checkKillingEquation, evaluateConservedCharge, KillingEquationOptions, KillingEquationCheck,
-  ChristoffelAccess, integrateGeodesic, type GeodesicIntegratorInputs, type GeodesicIntegratorResult,
-  toGeometrized, fromGeometrized, geometrizedFactor, NonGeometrizableDimensionError,
-  TracableTensorNode, TensorTraceNode, TensorTraceValidationResult, TensorTraceOptions,
-  validateTensorTrace, FriedmannVariant, FriedmannEquationNode, FriedmannEquationValidationResult,
-  validateFriedmannEquation, RGCouplingNode, BetaFunctionNode, BetaFunctionValidationResult,
-  rgCoupling, validateRGCoupling, validateBetaFunction, ArrowOfTime, GaugeFieldNode,
-  TimeSymmetryPredicateNode, TimeSymmetryPredicateValidationResult, validateGaugeField,
-  validateTimeSymmetryPredicate, ScalarFieldNode, KleinGordonEquationNode,
+  EvaluatorParameter, ParameterAlternate, GeometryRole, CatalogEvaluatorOutput, ContractAlternate,
+  EvaluationWant, InputContract, InputSlot, inputContract, christoffel, CovariantDerivativeNode,
+  ricci, RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual, BianchiResidualNode,
+  verifyKillingEquation, checkKillingEquation, evaluateConservedCharge, KillingEquationOptions,
+  KillingEquationCheck, ChristoffelAccess, integrateGeodesic, type GeodesicIntegratorInputs,
+  type GeodesicIntegratorResult, toGeometrized, fromGeometrized, geometrizedFactor,
+  NonGeometrizableDimensionError, TracableTensorNode, TensorTraceNode, TensorTraceValidationResult,
+  TensorTraceOptions, validateTensorTrace, FriedmannVariant, FriedmannEquationNode,
+  FriedmannEquationValidationResult, validateFriedmannEquation, RGCouplingNode, BetaFunctionNode,
+  BetaFunctionValidationResult, rgCoupling, validateRGCoupling, validateBetaFunction, ArrowOfTime,
+  GaugeFieldNode, TimeSymmetryPredicateNode, TimeSymmetryPredicateValidationResult,
+  validateGaugeField, validateTimeSymmetryPredicate, ScalarFieldNode, KleinGordonEquationNode,
   KleinGordonEquationValidationResult, validateKleinGordonEquation, Dimension, AmbiguousUnitError,
   convertValue, parseUnit, UnitError, UnitRefusedError, UnknownUnitError, AffineTemperature,
   ConvertedValue, ParsedUnit, TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS,
@@ -6881,18 +6884,18 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 360 |
 | Total Modules | 13 |
-| Total Lines of Code | 79789 |
-| Total Exports | 2472 |
-| Total Re-exports | 1252 |
+| Total Lines of Code | 79797 |
+| Total Exports | 2476 |
+| Total Re-exports | 1254 |
 | Total Classes | 79 |
-| Total Interfaces | 451 |
-| Total Functions | 759 |
+| Total Interfaces | 452 |
+| Total Functions | 761 |
 | Total Type Guards | 7 |
 | Total Enums | 0 |
-| Type-only Imports | 506 |
+| Type-only Imports | 507 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
 ---
 
-*Version*: 8.0.0
+*Version*: 9.0.0

@@ -197,7 +197,8 @@ describe('runChainPipeline', () => {
     expect(stub!.edgeIds).toEqual(['be-21', 'be-27']);
     expect(stub!.text).toContain('-- PROOF TARGET');
     expect(stub!.text).toContain('import PhysJS.Dimensional');
-    expect(stub!.text).toContain('derivation-step:');
+    expect(stub!.text).toContain('-- kind: derivation-step');
+    expect(stub!.text).not.toContain('-- covers: derivation-step:');
     expect(stub!.text).toContain(physjsTheorem('be-21'));
     expect(stub!.text).toContain(physjsTheorem('be-27'));
     const thermal = stub!.text.indexOf(physjsTheorem('be-21') as string);

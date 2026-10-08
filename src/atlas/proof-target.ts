@@ -6,16 +6,20 @@
  * body is absent. Nothing here is written into the catalog, the
  * formal-reference overlay, or the vendored manifest.
  *
- * A units-only survivor carries a covers line that begins with
- * `derivation-step:` and names the hypothesis the dimensional theorem
- * leaves open. The import `PhysJS.Dimensional` is present when that
- * filter named one of its theorems. `Dim` is fixed at `n = 7` in the
- * base order `src/dimensional/types.ts` declares.
+ * A draft is a new target, so its `kind` is `derivation-step`, one of
+ * `FORMAL_REF_KINDS`, stated as its own field and its own `-- kind:` line.
+ * The covers line names the hypothesis the dimensional theorem leaves open
+ * and does not begin with a kind word. A confirmation of a catalog id and a
+ * restatement of a bridge are not new targets: no draft is made for them.
+ * The import `PhysJS.Dimensional` is present when that filter named one of
+ * its theorems. `Dim` is fixed at `n = 7` in the base order
+ * `src/dimensional/types.ts` declares.
  *
  * @module atlas/proof-target
  */
 
 import type { ChainCandidate } from '../composition/chain-candidate.js';
+import type { FormalRefKind } from '../relations/types.js';
 import { physjsTheorem } from './physjs-ref.js';
 
 /** Marker before the draft object the manifest checker can read. @internal */
@@ -43,44 +47,33 @@ function dimensionalTheorem(candidate: ChainCandidate): string | undefined {
   return undefined;
 }
 
-/** Covers line. Units-only survivors start with `derivation-step:`. */
+/**
+ * The kind of the target `candidate` would be. A unique monomial and an
+ * unfixed shape are a step a derivation still has to close. A confirmation
+ * names an id the catalog has and a restatement names a bridge it has, so
+ * neither is a new target and both are refused.
+ */
+function draftKind(candidate: ChainCandidate): FormalRefKind {
+  if (candidate.kind === 'confirmation' || candidate.kind === 'restatement') {
+    throw new Error(`proof target: a ${candidate.kind} is not a new target; no draft is made for chain ${candidate.edgeIds.join(', ')}`);
+  }
+  return 'derivation-step';
+}
+
+/** Covers line: the hypothesis left open. It does not begin with a kind word; the kind is its own field. */
 function coversLine(candidate: ChainCandidate): string {
   const theorem = dimensionalTheorem(candidate);
   if (theorem === MONOMIAL) {
     return (
-      'derivation-step: PhysJS.Dimensional.monomial_form. The constant is unfixed. ' +
+      'PhysJS.Dimensional.monomial_form. The constant is unfixed. ' +
       'f(1,…,1) is unfixed. The exponent vector is a hypothesis. ' +
       'A unit change that can reach every positive tuple is a hypothesis.'
     );
   }
-  if (theorem === PRODUCT) {
-    return (
-      'derivation-step: PhysJS.Dimensional.product_shape. The constant is unfixed. f(1,1) is unfixed.'
-    );
-  }
-  if (theorem === RATIO) {
-    return (
-      'derivation-step: PhysJS.Dimensional.ratio_shape. The function of the ratio is unfixed.'
-    );
-  }
-  if (theorem === POWER) {
-    return (
-      'derivation-step: PhysJS.Dimensional.ratio_power_invariant. The real power p is unfixed.'
-    );
-  }
-  if (candidate.kind === 'unfixed-shape') {
-    return 'derivation-step: the constant is unfixed.';
-  }
-  if (candidate.kind === 'confirmation') {
-    const id = candidate.catalogId === undefined ? '' : ` ${candidate.catalogId}`;
-    return `confirmation: catalog id${id}. The run reports the id and writes nothing.`;
-  }
-  if (candidate.kind === 'restatement') {
-    const canon = candidate.canonicalId ?? '';
-    const bridge = candidate.restatesBridge ?? '';
-    return `restatement: ${canon} restates ${bridge}. Not a new equation.`;
-  }
-  return 'statement skeleton only';
+  if (theorem === PRODUCT) return 'PhysJS.Dimensional.product_shape. The constant is unfixed. f(1,1) is unfixed.';
+  if (theorem === RATIO) return 'PhysJS.Dimensional.ratio_shape. The function of the ratio is unfixed.';
+  if (theorem === POWER) return 'PhysJS.Dimensional.ratio_power_invariant. The real power p is unfixed.';
+  return 'The constant is unfixed.';
 }
 
 function targetKey(candidate: ChainCandidate): string {
@@ -115,8 +108,10 @@ function assertTheorems(candidate: ChainCandidate, seedTheorems: readonly string
 /**
  * The draft the comment block renders.
  *
- * The fields are the ones the comment's JSON already carries.
- * `leanProof` stays `absent`. This value is not a manifest entry.
+ * The fields are the ones the comment's JSON already carries. `kind` is a
+ * {@link FormalRefKind}, `derivation-step` for every draft, and `covers`
+ * does not repeat it. `leanProof` stays `absent`. This value is not a
+ * manifest entry.
  *
  * @internal
  */
@@ -124,6 +119,7 @@ export interface ProofTargetDraft {
   readonly key: string;
   readonly bridgeId: string;
   readonly theorem: string;
+  readonly kind: FormalRefKind;
   readonly covers: string;
   readonly coverage: string;
   readonly leanProof: 'absent';
@@ -134,7 +130,8 @@ export interface ProofTargetDraft {
  * The draft `emitProofTarget` renders into the comment block.
  *
  * `seedTheorems` is one PhysJS theorem name per seed step, in chain order.
- * A name that disagrees with the compiled manifest copy is refused.
+ * A name that disagrees with the compiled manifest copy is refused, and so
+ * is a confirmation or a restatement candidate, which is not a new target.
  * The object is not written anywhere.
  *
  * @internal
@@ -143,12 +140,14 @@ export function proofTargetDraft(
   candidate: ChainCandidate,
   seedTheorems: readonly string[],
 ): ProofTargetDraft {
+  const kind = draftKind(candidate);
   assertTheorems(candidate, seedTheorems);
   const key = targetKey(candidate);
   return {
     key,
     bridgeId: key,
     theorem: leanIdent(key),
+    kind,
     covers: coversLine(candidate),
     coverage: 'statement skeleton only',
     leanProof: 'absent',
@@ -185,7 +184,7 @@ export function emitProofTarget(
   for (const name of seedTheorems) {
     lines.push(`-- theorem: ${name}`);
   }
-  lines.push('', `-- covers: ${draft.covers}`, '');
+  lines.push('', `-- kind: ${draft.kind}`, `-- covers: ${draft.covers}`, '');
   if (theorem !== undefined) {
     lines.push(
       '-- Dim : Fin 7 → ℚ',

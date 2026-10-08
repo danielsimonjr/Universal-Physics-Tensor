@@ -66,7 +66,8 @@ describe('Flat CODATA / SI constants — src/core/constants.ts', () => {
   });
 
   it('H0_SI matches Planck 2018 Hubble parameter (s⁻¹)', () => {
-    expect(H0_SI).toBeCloseTo(67.4e3 / 3.0857e22, 25);
+    // 67.4 km/s/Mpc with the unit table's parsec, 3.085677581491367e16 m.
+    expect(H0_SI).toBe(67.4e3 / 3.085677581491367e22);
   });
 
   // ── Cross-consistency checks ─────────────────────────────────────────────

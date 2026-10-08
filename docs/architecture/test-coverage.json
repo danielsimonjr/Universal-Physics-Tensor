@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 360,
-    "totalTestFiles": 543,
+    "totalTestFiles": 545,
     "testedCount": 349,
     "untestedCount": 11,
     "coveragePercent": "96.9"
@@ -467,6 +467,7 @@
     "src/atlas/composition-table.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/composition-table.test.ts",
@@ -582,6 +583,7 @@
     "src/atlas/error-algebra.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
@@ -660,6 +662,7 @@
     "src/atlas/model.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/applicability.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
@@ -830,6 +833,7 @@
     "src/atlas/public.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -850,6 +854,7 @@
     "src/atlas/regime.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
@@ -919,6 +924,7 @@
     "src/atlas/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/applicability.test.ts",
       "tests/atlas/audited-catalog.test.ts",
@@ -1058,6 +1064,7 @@
     "src/bridges/caller-table.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1078,6 +1085,7 @@
     "src/bridges/carrier-sign.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1127,6 +1135,7 @@
     "src/bridges/catalog-adapter.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -1181,6 +1190,7 @@
     "src/bridges/catalog-types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1201,6 +1211,7 @@
     "src/bridges/coefficient-statement.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1225,6 +1236,7 @@
     "src/bridges/confrontations.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
       "tests/bridges/confrontation-rigor.test.ts",
@@ -1249,6 +1261,7 @@
     "src/bridges/evaluation-errors.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -1316,6 +1329,7 @@
     "src/bridges/evaluators.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/catalog-domains.test.ts",
       "tests/bridges/evaluator-extra-outputs.test.ts",
@@ -1353,6 +1367,7 @@
     "src/bridges/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1401,6 +1416,7 @@
     "src/bridges/input-contract.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1421,6 +1437,7 @@
     "src/bridges/membership.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -1459,6 +1476,7 @@
     "src/bridges/observations/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
       "tests/bridges/confrontation-source-refs.test.ts",
@@ -1485,6 +1503,7 @@
     "src/bridges/rejected.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -1530,6 +1549,7 @@
     "src/bridges/sensitivity.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1554,6 +1574,7 @@
     "src/bridges/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1602,6 +1623,7 @@
     "src/canonical/canonical-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1662,6 +1684,7 @@
     "src/canonical/linkage.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1684,6 +1707,7 @@
     "src/canonical/normal-form.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1707,6 +1731,7 @@
     "src/canonical/registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/audited-catalog.test.ts",
@@ -1766,6 +1791,7 @@
     "src/canonical/seed-l-layer.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -4840,6 +4866,7 @@
     "src/composition/adjudication.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -4973,6 +5000,7 @@
     "src/composition/canonical-graph.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5067,6 +5095,7 @@
     "src/composition/catalog-graph.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/audited-catalog.test.ts",
@@ -5148,6 +5177,7 @@
     "src/composition/compose-surface.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -5168,6 +5198,7 @@
     "src/composition/compose-symbolic.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5215,6 +5246,7 @@
     "src/composition/compose.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5272,6 +5304,7 @@
     "src/composition/consequence.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -5293,6 +5326,7 @@
     "src/composition/consistency.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5341,6 +5375,7 @@
     "src/composition/dimension-adjacency.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5387,6 +5422,7 @@
     "src/composition/discovery.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -5417,6 +5453,7 @@
     "src/composition/edge.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5472,6 +5509,7 @@
     "src/composition/enumerate.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5519,6 +5557,7 @@
     "src/composition/evaluate-relation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5572,6 +5611,7 @@
     "src/composition/explain.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5624,6 +5664,7 @@
     "src/composition/expr-eval.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/association.test.ts",
@@ -5708,6 +5749,7 @@
     "src/composition/graph-viz-svg.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5754,6 +5796,7 @@
     "src/composition/graph-viz.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5805,6 +5848,7 @@
     "src/composition/grounding.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -5826,6 +5870,7 @@
     "src/composition/identifiability.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -5871,6 +5916,7 @@
     "src/composition/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -6316,6 +6362,7 @@
     "src/composition/quantity.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -6379,6 +6426,7 @@
     "src/composition/retrodiction.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -6424,6 +6472,7 @@
     "src/composition/uncertainty.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -6470,6 +6519,7 @@
     "src/composition/user-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -6520,6 +6570,7 @@
     "src/core/axes-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6544,6 +6595,7 @@
     "src/core/cell.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6569,6 +6621,7 @@
     "src/core/constants.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/audited-catalog.test.ts",
@@ -6693,6 +6746,7 @@
     "src/core/flux-rules.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6720,6 +6774,7 @@
     "src/core/labeled-tensor.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6743,6 +6798,7 @@
     "src/core/regime-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6766,6 +6822,7 @@
     "src/core/regime-rule-install.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6779,6 +6836,7 @@
     "src/core/regimes-builtins.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6793,6 +6851,7 @@
     "src/core/tensor.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -6818,6 +6877,7 @@
     "src/core/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -6835,6 +6895,7 @@
       "tests/composition/bridge-prediction.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/core/addCell.test.ts",
+      "tests/core/constants-owner.test.ts",
       "tests/core/populated-cells.test.ts",
       "tests/diff/bridge-ast-reencode.test.ts",
       "tests/dimensional/constant-registry.test.ts",
@@ -6844,6 +6905,7 @@
     "src/core/universal-index.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6867,6 +6929,7 @@
     "src/diff/bridge-ast-gradient.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6892,6 +6955,7 @@
     "src/diff/bridge-gradient.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6913,6 +6977,7 @@
     "src/diff/bridge-specs.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6934,6 +6999,7 @@
     "src/dimensional/algebra.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/diffusion.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
@@ -7011,6 +7077,7 @@
     "src/dimensional/ast-types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/applicability.test.ts",
@@ -7131,6 +7198,7 @@
     "src/dimensional/bridge-check.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7151,6 +7219,7 @@
     "src/dimensional/buckingham.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -7185,6 +7254,7 @@
     "src/dimensional/connection.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7214,6 +7284,7 @@
     "src/dimensional/curvature-invariants.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7237,6 +7308,7 @@
     "src/dimensional/curvature.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7262,6 +7334,7 @@
     "src/dimensional/dimension-inference.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7298,6 +7371,7 @@
     "src/dimensional/einstein-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7320,6 +7394,7 @@
     "src/dimensional/errors.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/diffusion.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
@@ -7407,6 +7482,7 @@
     "src/dimensional/formula-names.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
@@ -7460,6 +7536,7 @@
     "src/dimensional/friedmann-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7481,6 +7558,7 @@
     "src/dimensional/gauge-field.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7516,6 +7594,7 @@
     "src/dimensional/klein-gordon-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7591,6 +7670,7 @@
     "src/dimensional/rg-flow.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7639,6 +7719,7 @@
     "src/dimensional/tensor-trace.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7693,6 +7774,7 @@
     "src/dimensional/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/canonical-links.test.ts",
@@ -7845,6 +7927,7 @@
     "src/dimensional/units.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -7863,6 +7946,7 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/core/constants-owner.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
@@ -7878,6 +7962,7 @@
     "src/dimensional/validator.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
@@ -7980,6 +8065,7 @@
     "src/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8000,6 +8086,7 @@
     "src/numerical/bianchi-residual.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8051,6 +8138,7 @@
     "src/numerical/covariant-eikonal.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8102,6 +8190,7 @@
     "src/numerical/einstein-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8125,6 +8214,7 @@
     "src/numerical/engine-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8162,6 +8252,7 @@
     "src/numerical/errors.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8231,6 +8322,7 @@
     "src/numerical/formula-dimension.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8265,6 +8357,7 @@
     "src/numerical/formula-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8289,6 +8382,7 @@
     "src/numerical/geodesic-integrator.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8311,6 +8405,7 @@
     "src/numerical/geometrized.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8333,6 +8428,7 @@
     "src/numerical/gl4-integrator.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8376,6 +8472,7 @@
     "src/numerical/grid-field.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8414,6 +8511,7 @@
     "src/numerical/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8452,6 +8550,7 @@
     "src/numerical/killing.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8475,6 +8574,7 @@
     "src/numerical/klein-gordon.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8496,6 +8596,7 @@
     "src/numerical/kretschmann.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8567,6 +8668,7 @@
     "src/numerical/metric-inverse.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8624,6 +8726,7 @@
     "src/numerical/perihelion-finder.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8682,6 +8785,7 @@
     "src/numerical/tensor-engine.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8730,6 +8834,7 @@
     "src/numerical/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8782,6 +8887,7 @@
     "src/relations/composition-table.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/composition-table.test.ts",
@@ -8848,6 +8954,7 @@
     "src/relations/regime.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
@@ -8879,6 +8986,7 @@
     "src/relations/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/applicability.test.ts",
       "tests/atlas/audited-catalog.test.ts",
@@ -8900,6 +9008,7 @@
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/statement-derivation.test.ts",
@@ -8950,6 +9059,7 @@
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -8985,7 +9095,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -9058,6 +9167,7 @@
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -9093,7 +9203,114 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
+      "src/composition/consequence.ts",
+      "src/composition/grounding.ts",
+      "src/composition/discovery.ts",
+      "src/bridges/observations/types.ts",
+      "src/bridges/coefficient-statement.ts",
+      "src/bridges/confrontations.ts",
+      "src/bridges/sensitivity.ts",
+      "src/atlas/types.ts",
+      "src/atlas/model.ts",
+      "src/atlas/regime.ts",
+      "src/atlas/error-algebra.ts",
+      "src/atlas/composition-table.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
+      "src/bridges/types.ts",
+      "src/bridges/carrier-sign.ts",
+      "src/composition/quantity.ts",
+      "src/composition/edge.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/composition/compose.ts",
+      "src/composition/consistency.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/canonical-graph.ts",
+      "src/composition/enumerate.ts",
+      "src/composition/uncertainty.ts",
+      "src/composition/identifiability.ts",
+      "src/composition/retrodiction.ts",
+      "src/composition/explain.ts",
+      "src/composition/evaluate-relation.ts",
+      "src/composition/compose-symbolic.ts",
+      "src/composition/expr-eval.ts",
+      "src/composition/graph-viz.ts",
+      "src/composition/graph-viz-svg.ts",
+      "src/composition/dimension-adjacency.ts",
+      "src/composition/user-equation.ts",
+      "src/dimensional/formula-names.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
+      "src/numerical/tensor-engine.ts",
+      "src/numerical/types.ts",
+      "src/numerical/grid-field.ts",
+      "src/numerical/engine-registry.ts",
+      "src/numerical/errors.ts",
+      "src/numerical/metric-inverse.ts",
+      "src/numerical/covariant-eikonal.ts",
+      "src/numerical/gl4-integrator.ts",
+      "src/numerical/perihelion-finder.ts",
+      "src/bridges/rejected.ts",
+      "src/core/regime-rule-install.ts",
+      "src/core/regimes-builtins.ts"
+    ],
+    "tests/api/hand-built-evaluator.test.ts": [
+      "src/index.ts",
+      "src/atlas/public.ts",
+      "src/core/tensor.ts",
+      "src/core/constants.ts",
+      "src/core/types.ts",
+      "src/core/cell.ts",
+      "src/core/flux-rules.ts",
+      "src/bridges/catalog-adapter.ts",
+      "src/core/universal-index.ts",
+      "src/core/axes-registry.ts",
+      "src/core/labeled-tensor.ts",
+      "src/core/regime-registry.ts",
+      "src/diff/bridge-gradient.ts",
+      "src/diff/bridge-ast-gradient.ts",
+      "src/diff/bridge-specs.ts",
+      "src/bridges/index.ts",
+      "src/bridges/caller-table.ts",
+      "src/composition/index.ts",
+      "src/bridges/evaluators.ts",
       "src/bridges/catalog-types.ts",
+      "src/bridges/input-contract.ts",
+      "src/dimensional/connection.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/curvature.ts",
+      "src/numerical/bianchi-residual.ts",
+      "src/numerical/killing.ts",
+      "src/numerical/geodesic-integrator.ts",
+      "src/numerical/geometrized.ts",
+      "src/dimensional/tensor-trace.ts",
+      "src/dimensional/friedmann-equation.ts",
+      "src/dimensional/rg-flow.ts",
+      "src/dimensional/gauge-field.ts",
+      "src/dimensional/klein-gordon-equation.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/bridge-check.ts",
+      "src/numerical/einstein-equation.ts",
+      "src/dimensional/einstein-equation.ts",
+      "src/dimensional/curvature-invariants.ts",
+      "src/numerical/kretschmann.ts",
+      "src/numerical/index.ts",
+      "src/bridges/membership.ts",
+      "src/numerical/formula-registry.ts",
+      "src/numerical/formula-dimension.ts",
+      "src/dimensional/dimension-inference.ts",
+      "src/dimensional/buckingham.ts",
+      "src/composition/compose-surface.ts",
+      "src/numerical/klein-gordon.ts",
+      "src/canonical/registry.ts",
+      "src/canonical/seed-l-layer.ts",
+      "src/canonical/canonical-equation.ts",
+      "src/canonical/normal-form.ts",
+      "src/canonical/linkage.ts",
+      "src/composition/adjudication.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -9168,6 +9385,7 @@
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -9203,7 +9421,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -9912,6 +10129,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/relations/types.ts",
       "src/composition/chain-candidate.ts"
     ],
     "tests/atlas/quantum-support.test.ts": [
@@ -10223,6 +10441,7 @@
       "src/bridges/index.ts",
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
+      "src/bridges/catalog-types.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/curvature.ts",
@@ -10253,7 +10472,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -10356,6 +10574,7 @@
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -10390,7 +10609,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -10710,6 +10928,7 @@
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -10745,7 +10964,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -15697,6 +15915,8 @@
     ],
     "tests/composition/discovery.test.ts": [
       "src/composition/discovery.ts",
+      "src/composition/identifiability.ts",
+      "src/composition/retrodiction.ts",
       "src/composition/bridge-analysis.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
@@ -15709,8 +15929,6 @@
       "src/composition/canonical-graph.ts",
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
-      "src/composition/identifiability.ts",
-      "src/composition/retrodiction.ts",
       "src/composition/explain.ts",
       "src/composition/evaluate-relation.ts",
       "src/composition/compose-symbolic.ts",
@@ -15779,6 +15997,7 @@
       "src/bridges/index.ts",
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -15814,7 +16033,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -16342,7 +16560,9 @@
       "src/core/cell.ts"
     ],
     "tests/core/constants-owner.test.ts": [
-      "src/core/constants.ts"
+      "src/core/constants.ts",
+      "src/core/types.ts",
+      "src/dimensional/units.ts"
     ],
     "tests/core/constants.test.ts": [
       "src/core/constants.ts"
@@ -17045,6 +17265,7 @@
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -17080,7 +17301,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -17681,6 +17901,7 @@
       "src/bridges/caller-table.ts",
       "src/composition/index.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/input-contract.ts",
       "src/dimensional/connection.ts",
       "src/dimensional/validator.ts",
@@ -17716,7 +17937,6 @@
       "src/canonical/normal-form.ts",
       "src/canonical/linkage.ts",
       "src/composition/adjudication.ts",
-      "src/bridges/catalog-types.ts",
       "src/composition/consequence.ts",
       "src/composition/grounding.ts",
       "src/composition/discovery.ts",
@@ -17799,6 +18019,7 @@
     "tests/tools/pre-push-executable.test.ts": [],
     "tests/tools/publish-version-guard.test.ts": [],
     "tests/tools/pushed-head.test.ts": [],
+    "tests/tools/readme-examples.test.ts": [],
     "tests/tools/readme-links.test.ts": [],
     "tests/tools/readme-status.test.ts": [
       "src/composition/catalog-graph.ts",

@@ -252,7 +252,7 @@ Bridge equations connect different physical regimes:
 - Universal Emergence Equation
 - Complexity-Entropy Production Relation
 
-Parts I–II of the formal specification document the original BE-11…54 corpus; later established additions BE-55…68 are captured in the live code/research record. The **authoritative current catalog** is the versioned, test-pinned JSON artifact at [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json), which currently spans BE-11…68. Part III covers algorithmic implementation.
+Parts I–II of the formal specification write up the cross-domain bridges; a standard bridge is a catalog record and has no specification heading. The **authoritative current catalog** is the versioned, schema-checked JSON file [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json); its id range and counts are the generated Bridge catalog row of the Development Status table below. Part III covers algorithmic implementation.
 
 ### Composing Bridges (v0.8.0)
 
@@ -261,10 +261,12 @@ Bridges are edges in a typed quantity graph, and compatible edges
 domains carried through, and confidence demoted to the weakest link:
 
 ```typescript
-import { composeEdges, be42Edge, be16Edge, M_SUN_KG } from 'universal-physics-tensor';
+import { CATALOG_GRAPH, composeEdges, M_SUN_KG } from 'universal-physics-tensor';
+
+const edge = (id: string) => CATALOG_GRAPH.find((e) => e.id === id)!;
 
 // Hawking temperature (M → T_H) ∘ Landauer bound (T → E_min)
-const erasureCost = composeEdges(be42Edge, be16Edge);
+const erasureCost = composeEdges(edge('be-42'), edge('be-16'));
 erasureCost.evaluate({ mass: M_SUN_KG }); // ≈ 5.9e-31 J — E_min(M) = ℏc³ln2/(8πGM)
 erasureCost.confidence;                   // 'highly-speculative' (min of the operands)
 ```
@@ -275,7 +277,7 @@ erasureCost.confidence;                   // 'highly-speculative' (min of the op
 import { GM_SUN_SI, convertValue } from 'universal-physics-tensor';
 
 GM_SUN_SI;                    // 1.3271244e20
-convertValue('25degC', 'K'); // { value: 298.15, given: 'degC' }
+convertValue('25degC', 'K'); // { value: 298.15, given: 'degC', affine: 'celsius' }
 ```
 
 That derived relation — the minimum erasure cost at a black-hole

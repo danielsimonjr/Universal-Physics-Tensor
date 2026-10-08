@@ -27,6 +27,7 @@ import {
   type PhysjsManifestFile,
 } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 import type { ChainCandidate } from '../../src/composition/chain-candidate.js';
 import { scanFileImports } from '../../tools/layer-order/check.js';
 
@@ -38,11 +39,14 @@ const manifest = JSON.parse(
 
 const THREE_AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 
-/** A draft is not a manifest entry: it has no `kind`. The manifest check reads it as one and refuses it. */
+/** A draft carries the manifest entry's fields, `kind` included, but is not an entry: its proof is absent, so the manifest check refuses it. */
 type DraftEntry = Pick<
   PhysjsManifestFile['entries'][number],
-  'key' | 'bridgeId' | 'theorem' | 'covers' | 'coverage' | 'leanProof' | 'axioms'
+  'key' | 'bridgeId' | 'theorem' | 'kind' | 'covers' | 'coverage' | 'leanProof' | 'axioms'
 >;
+
+/** A covers text that opens with a kind word (`derivation-step:`, `confirmation:`, …). */
+const LEADING_KIND = /^[a-z-]+:/;
 
 const carriers = [
   ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
@@ -137,7 +141,12 @@ describe('emitProofTarget', () => {
   it('a dimensional survivor is a derivation-step and imports PhysJS.Dimensional', () => {
     const text = emitProofTarget(monomial, [thermal as string, hall as string]);
     const covers = coversOf(text);
-    expect(covers.startsWith('derivation-step:')).toBe(true);
+    const draft = proofTargetDraft(monomial, [thermal as string, hall as string]);
+    expect(draft.kind).toBe('derivation-step');
+    expect((FORMAL_REF_KINDS as readonly string[]).includes(draft.kind)).toBe(true);
+    expect(text).toContain('-- kind: derivation-step');
+    expect(covers).not.toMatch(LEADING_KIND);
+    for (const kind of FORMAL_REF_KINDS) expect(covers.startsWith(kind), kind).toBe(false);
     expect(covers).toContain('PhysJS.Dimensional.monomial_form');
     expect(covers).toContain('unfixed');
     expect(covers).toContain('f(1,…,1)');
@@ -173,7 +182,9 @@ describe('emitProofTarget', () => {
         [thermal as string],
       );
       const covers = coversOf(text);
-      expect(covers.startsWith('derivation-step:'), shape.theorem).toBe(true);
+      expect(covers, shape.theorem).not.toMatch(LEADING_KIND);
+      expect(text, shape.theorem).toContain('-- kind: derivation-step');
+      expect(draftEntry(text).kind, shape.theorem).toBe('derivation-step');
       expect(covers, shape.theorem).toContain(shape.theorem);
       expect(covers, shape.theorem).toContain('unfixed');
       expect(covers, shape.theorem).toContain(shape.needle);
@@ -233,18 +244,23 @@ describe('emitProofTarget', () => {
     expect(problemsFor(forged).length).toBeGreaterThan(0);
   });
 
-  it('a confirmation reports the catalog id and does not import PhysJS.Dimensional', () => {
-    const text = emitProofTarget(
-      { kind: 'confirmation', edgeIds: ['be-55', 'be-12'], catalogId: 12 },
-      [hall as string, thermal as string],
-    );
-    expect(coversOf(text).startsWith('confirmation:')).toBe(true);
-    expect(coversOf(text)).toContain('12');
-    expect(coversOf(text).startsWith('derivation-step:')).toBe(false);
+  it('an unfixed shape with no named theorem is a derivation-step and does not import PhysJS.Dimensional', () => {
+    const text = emitProofTarget({ kind: 'unfixed-shape', edgeIds: ['be-12'] }, [thermal as string]);
+    expect(coversOf(text)).toBe('The constant is unfixed.');
+    expect(draftEntry(text).kind).toBe('derivation-step');
     expect(text).not.toContain('import PhysJS.Dimensional');
-    expect(theoremChain(text)).toEqual([hall, thermal]);
-    expect(draftEntry(text).leanProof).toBe('absent');
-    expect(leanProofProblem(problemsFor(draftEntry(text)))).toBe(true);
+  });
+
+  it('refuses a confirmation and a restatement: neither is a new target', () => {
+    expect(() =>
+      emitProofTarget({ kind: 'confirmation', edgeIds: ['be-55', 'be-12'], catalogId: 12 }, [hall as string, thermal as string]),
+    ).toThrow(/a confirmation is not a new target/);
+    expect(() =>
+      proofTargetDraft(
+        { kind: 'restatement', edgeIds: ['be-12'], canonicalId: 'CE-x', restatesBridge: 'be-12' },
+        [thermal as string],
+      ),
+    ).toThrow(/a restatement is not a new target/);
   });
 
   it('refuses a theorem name that is not the manifest copy', () => {
@@ -256,7 +272,7 @@ describe('emitProofTarget', () => {
   it('does not call the formal-reference builder and does not write a catalog or a manifest', () => {
     const body = codeWithoutComments(sourceText());
     expect(scanFileImports(sourceText()).sort()).toEqual(
-      ['../composition/chain-candidate.js', './physjs-ref.js'].sort(),
+      ['../composition/chain-candidate.js', '../relations/types.js', './physjs-ref.js'].sort(),
     );
     for (const word of [
       'physjsFormalRef(',

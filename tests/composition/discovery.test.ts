@@ -12,7 +12,11 @@ import { describe, it, expect } from 'vitest';
 import {
   vetLinkCandidate,
   rankDiscoveries,
+  buildDiscoveryContext,
+  vetInContext,
 } from '../../src/composition/discovery.js';
+import { forwardClosure } from '../../src/composition/identifiability.js';
+import { retrodict } from '../../src/composition/retrodiction.js';
 import {
   proposeLinkCandidates,
   type LinkCandidate,
@@ -337,29 +341,78 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
   });
 });
 
-describe('rankDiscoveries — hoisted-context equivalence guard', () => {
-  // rankDiscoveries shares one candidate-invariant context (anchorValues,
-  // base components, base closure) across all candidates; vetLinkCandidate
-  // builds a fresh context per call. The two paths MUST agree byte-for-byte —
-  // any divergence means the shared context leaked mutable state between
-  // candidates (the one real failure mode of the loop-invariant hoist).
-  // 60s is the record from before the candidate pool grew past 2518.
-  it('produces results identical to vetting each candidate independently', () => {
-    const candidates = proposeLinkCandidates(CATALOG_GRAPH);
-    const independent = candidates
-      .map((c) => vetLinkCandidate(CATALOG_GRAPH, c))
-      .sort(
-        (x, y) =>
-          x.a.localeCompare(y.a) ||
-          x.b.localeCompare(y.b) ||
-          x.dim.localeCompare(y.dim),
-      );
-    const shared = rankDiscoveries(CATALOG_GRAPH).slice().sort(
-      (x, y) =>
-        x.a.localeCompare(y.a) ||
-        x.b.localeCompare(y.b) ||
-        x.dim.localeCompare(y.dim),
-    );
-    expect(shared).toEqual(independent);
-  }, 300_000);
+describe('rankDiscoveries — one shared context', () => {
+  // rankDiscoveries builds the candidate-invariant context once and vets every
+  // candidate in it; vetLinkCandidate builds a fresh one per call. The two
+  // agree exactly when the build is a function of (edges, opts) and vetting
+  // never mutates the context, so those two facts are what this block checks.
+  // The record from before this change vetted all 4196 candidates through
+  // vetLinkCandidate, rebuilding the context (a retrodiction, two forward
+  // evaluations, the components and the closure, about 32 ms) once per
+  // candidate: 158 s on Node 22 and 227 s on the CI runner, under a 300 s cap.
+  const candidates = proposeLinkCandidates(CATALOG_GRAPH);
+  const byPair = (x: { a: string; b: string; dim: string }, y: { a: string; b: string; dim: string }) =>
+    x.a.localeCompare(y.a) || x.b.localeCompare(y.b) || x.dim.localeCompare(y.dim);
+
+  it('two builds of the context are equal', () => {
+    expect(buildDiscoveryContext(CATALOG_GRAPH, {})).toEqual(buildDiscoveryContext(CATALOG_GRAPH, {}));
+  });
+
+  it('vetting every candidate leaves the shared context unchanged, and rankDiscoveries is that vetting', () => {
+    const ctx = buildDiscoveryContext(CATALOG_GRAPH, {});
+    const before = structuredClone(ctx);
+    const shared = candidates.map((c) => vetInContext(CATALOG_GRAPH, c, ctx)).sort(byPair);
+    expect(ctx).toEqual(before);
+    expect(rankDiscoveries(CATALOG_GRAPH).slice().sort(byPair)).toEqual(shared);
+  });
+
+  it('vetLinkCandidate, with its own context, agrees on the first candidate of every verdict', () => {
+    const ranked = rankDiscoveries(CATALOG_GRAPH);
+    const firsts = new Map<string, (typeof ranked)[number]>();
+    for (const r of ranked) if (!firsts.has(r.verdict)) firsts.set(r.verdict, r);
+    expect(firsts.size).toBeGreaterThan(2);
+    for (const r of firsts.values()) {
+      const c = candidates.find((x) => x.a === r.a && x.b === r.b && x.dim === r.dim)!;
+      expect(vetLinkCandidate(CATALOG_GRAPH, c), `${r.a} ≡ ${r.b}`).toEqual(r);
+    }
+  });
+
+  it('an identification with neither endpoint in the anchor closure does not move the closure', () => {
+    // vetInContext reuses the base retrodiction for such a candidate. The
+    // closure is the determinable set retrodiction checks; it stays the base
+    // closure for every one of these candidates.
+    const ctx = buildDiscoveryContext(CATALOG_GRAPH, {});
+    const outside = candidates.filter((c) => !ctx.closureBase.has(c.a) && !ctx.closureBase.has(c.b));
+    expect(outside.length).toBeGreaterThan(0);
+    const base = [...ctx.closureBase].sort();
+    for (const c of outside) {
+      const withHyp = [
+        ...ctx.baseIdents,
+        { from: c.a, to: c.b, rationale: 'test' },
+        { from: c.b, to: c.a, rationale: 'test' },
+      ];
+      expect([...forwardClosure(CATALOG_GRAPH, ctx.anchor, withHyp)].sort(), `${c.a} ≡ ${c.b}`).toEqual(base);
+    }
+  });
+
+  it('a full retrodiction agrees with the reused base report on evenly spaced candidates outside the closure', () => {
+    const ctx = buildDiscoveryContext(CATALOG_GRAPH, {});
+    const outside = candidates.filter((c) => !ctx.closureBase.has(c.a) && !ctx.closureBase.has(c.b));
+    const step = Math.max(1, Math.floor(outside.length / 24));
+    for (let i = 0; i < outside.length; i += step) {
+      const c = outside[i]!;
+      const report = retrodict(CATALOG_GRAPH, ctx.groundTruth, {
+        identifications: [
+          ...ctx.baseIdents,
+          { from: c.a, to: c.b, rationale: 'test' },
+          { from: c.b, to: c.a, rationale: 'test' },
+        ],
+      });
+      const inconsistent = report.results.filter((r) => r.outcome === 'inconsistent').map((r) => r.target).sort();
+      expect([report.allConsistent, inconsistent], `${c.a} ≡ ${c.b}`).toEqual([
+        ctx.baseNumericallyConsistent,
+        [...ctx.baseInconsistentNodes],
+      ]);
+    }
+  });
 });

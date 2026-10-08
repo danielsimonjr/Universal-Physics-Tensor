@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0",
-  "packageVersion": "8.0.0",
+  "packageVersion": "9.0.0",
   "families": [
     {
       "$schema": "../schemas/atlas-record.v0.json",

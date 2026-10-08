@@ -180,6 +180,7 @@ exports[`Public API stability — v0.4.0 surface > runtime exports match the v0.
   "inferUnknownDimension",
   "ingestCatalog",
   "ingestionReportToFluxReport",
+  "inputContract",
   "integrateGeodesic",
   "integrateGeodesicGL4",
   "listConfrontations",

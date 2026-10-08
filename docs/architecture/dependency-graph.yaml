@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
-  version: 8.0.0
+  version: 9.0.0
   totalFiles: 360
   totalModules: 13
-  totalExports: 2472
+  totalExports: 2476
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2472,6 +2472,10 @@ modules:
         - file: ../composition/chain-candidate.js
           imports:
             - ChainCandidate
+          typeOnly: true
+        - file: ../relations/types.js
+          imports:
+            - FormalRefKind
           typeOnly: true
         - file: ./physjs-ref.js
           imports:
@@ -8879,13 +8883,18 @@ modules:
       exports:
         - REGISTRY_ATTRIBUTES_BY_NAME
         - ANCHOR_DEFAULT
+        - buildDiscoveryContext
         - vetLinkCandidate
+        - vetInContext
         - rankDiscoveries
       interfaces:
         - VettedCandidate
         - DiscoveryOptions
+        - DiscoveryContext
       functions:
+        - buildDiscoveryContext
         - vetLinkCandidate
+        - vetInContext
         - rankDiscoveries
       constants:
         - REGISTRY_ATTRIBUTES_BY_NAME
@@ -11608,7 +11617,10 @@ modules:
       description: Canonical CODATA 2018 + SI-defined physical constants for UPT (v0.5.1).
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ./data-file.js
+          imports:
+            - checkedDataFile
       exports:
         - C_SI
         - G_SI
@@ -13841,12 +13853,20 @@ modules:
             - ParameterAlternate
             - GeometryRole
           reExport: true
+        - file: ./bridges/catalog-types.js
+          imports:
+            - CatalogEvaluatorOutput
+          reExport: true
         - file: ./bridges/input-contract.js
           imports:
             - ContractAlternate
             - EvaluationWant
             - InputContract
             - InputSlot
+          reExport: true
+        - file: ./bridges/input-contract.js
+          imports:
+            - inputContract
           reExport: true
         - file: ./dimensional/connection.js
           imports:
@@ -14106,21 +14126,6 @@ modules:
             - CompositionJunctionError
             - DomainViolationError
             - M_SUN_KG
-          reExport: true
-        - file: ./composition/index.js
-          imports: []
-          reExport: true
-        - file: ./composition/index.js
-          imports: []
-          reExport: true
-        - file: ./composition/index.js
-          imports: []
-          reExport: true
-        - file: ./composition/index.js
-          imports: []
-          reExport: true
-        - file: ./composition/index.js
-          imports: []
           reExport: true
         - file: ./composition/index.js
           imports:
@@ -14520,6 +14525,7 @@ modules:
         - MissingInputError
         - NonFiniteInputError
         - UnknownInputError
+        - inputContract
         - christoffel
         - ricci
         - einstein
@@ -14725,6 +14731,7 @@ modules:
         - EvaluatorParameter
         - ParameterAlternate
         - GeometryRole
+        - CatalogEvaluatorOutput
         - ContractAlternate
         - EvaluationWant
         - InputContract
@@ -14991,10 +14998,12 @@ modules:
         - EvaluatorParameter
         - ParameterAlternate
         - GeometryRole
+        - CatalogEvaluatorOutput
         - ContractAlternate
         - EvaluationWant
         - InputContract
         - InputSlot
+        - inputContract
         - christoffel
         - CovariantDerivativeNode
         - ricci
@@ -17226,16 +17235,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 360
   totalModules: 13
-  totalLinesOfCode: 79789
-  totalExports: 2472
+  totalLinesOfCode: 79797
+  totalExports: 2476
   totalClasses: 79
-  totalInterfaces: 451
-  totalFunctions: 759
+  totalInterfaces: 452
+  totalFunctions: 761
   totalTypeGuards: 7
   totalEnums: 0
   totalConstants: 383
-  totalReExports: 1252
-  totalTypeOnlyImports: 506
+  totalReExports: 1254
+  totalTypeOnlyImports: 507
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

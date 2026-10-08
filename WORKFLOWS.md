@@ -107,14 +107,14 @@ tag matching `v*` (for example `v0.48.0`) and on `workflow_dispatch` of that sam
 not run from a branch. The three `tools/*/package.json` packages are local utilities and are
 not published.
 
-1. Bump `package.json` to `X.Y.Z`.
+1. Bump `package.json` to `X.Y.Z`, set `packageVersion` in `data/bridge-catalog.json` to the same value (`npm run catalog:json` checks the two agree), and turn `[Unreleased]` into `## [X.Y.Z] - <date>` in `CHANGELOG.md`. `tests/dimensional/part-viii-spec-vs-impl.test.ts` fails when `package.json` is not the newest dated CHANGELOG heading.
 2. `bun run atlas:json` — AFTER the bump: `data/atlas/oscillators.json` embeds `packageVersion`,
    and `tests/atlas/atlas-json.test.ts` fails on a stale artifact.
 3. `bun run docs:deps` — AFTER the bump: `DEPENDENCY_GRAPH.md` embeds the version, and the
    `docs-fresh` job fails on a release commit that regenerated first.
 4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
-5. Commit, merge to `master`, and wait until CI on that commit is green.
+5. Commit and open the release PR. Tom deep-reviews it (the full diff and every file name) before it merges; an agent does not merge its own PR (owner rule, 2026-10-06). After the merge, wait until CI on the merge commit is green.
 6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
    workflow checks out the tag, fetches `origin/master` (the layer-order gate reads that ref,
    and a tag checkout does not have it), installs, builds, typechecks, runs the test suite, and
