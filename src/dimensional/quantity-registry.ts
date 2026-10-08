@@ -7,9 +7,7 @@
  * @module dimensional/quantity-registry
  */
 
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { checkedDataFile } from '../core/data-file.js';
 import type { Dimension } from './types.js';
 import { CONSTANT_REGISTRY } from './symbolic-constants.js';
 
@@ -44,8 +42,7 @@ export const foldName = (s: string): string => s.replace(/_/g, '-');
  * the constant registry owns them and the file does not repeat them.
  */
 function loadQuantities(): readonly QuantityRecord[] {
-  const path = join(dirname(fileURLToPath(import.meta.url)), '../../data/quantities.json');
-  const parsed = JSON.parse(readFileSync(path, 'utf8')) as QuantityFile;
+  const parsed = checkedDataFile('quantities.json') as QuantityFile;
   const ids = new Set(parsed.quantities.map((row) => row.id));
   const derived = new Map<string, string[]>();
   for (const constant of CONSTANT_REGISTRY) {
@@ -64,15 +61,26 @@ function loadQuantities(): readonly QuantityRecord[] {
 
 const QUANTITIES = loadQuantities();
 
-const BY_KEY = new Map<string, QuantityRecord>();
-for (const row of QUANTITIES) {
-  BY_KEY.set(row.id, row);
-  BY_KEY.set(foldName(row.id), row);
-  for (const alias of row.aliases ?? []) {
-    BY_KEY.set(alias, row);
-    BY_KEY.set(foldName(alias), row);
+/**
+ * Folded spelling → row, over every id and alias. Two rows that one folded
+ * spelling names throw: the later row would silently shadow the earlier.
+ * @internal
+ */
+export function quantitySpellingIndex(rows: readonly QuantityRecord[]): ReadonlyMap<string, QuantityRecord> {
+  const index = new Map<string, QuantityRecord>();
+  for (const row of rows) {
+    for (const spelling of new Set([row.id, ...(row.aliases ?? [])].map(foldName))) {
+      const other = index.get(spelling);
+      if (other !== undefined) {
+        throw new Error(`data/quantities.json: '${spelling}' spells both '${other.id}' and '${row.id}' (\`_\` and \`-\` are one character)`);
+      }
+      index.set(spelling, row);
+    }
   }
+  return index;
 }
+
+const BY_KEY = quantitySpellingIndex(QUANTITIES);
 
 /** Every quantity record, graph nodes and spellings. */
 export function allQuantityRecords(): readonly QuantityRecord[] {
@@ -81,7 +89,7 @@ export function allQuantityRecords(): readonly QuantityRecord[] {
 
 /** The record `name` spells, comparing `_` and `-` as the same character. */
 export function quantityRecord(name: string): QuantityRecord | undefined {
-  return BY_KEY.get(name) ?? BY_KEY.get(foldName(name));
+  return BY_KEY.get(foldName(name));
 }
 
 /**

@@ -6,10 +6,11 @@
  * the subset is an error in the schema, not a keyword silently ignored, so a
  * schema cannot state a rule this reader does not enforce.
  *
- * Subset: `type`, `required`, `properties`, `additionalProperties` (boolean or
- * schema), `propertyNames`, `items`, `minItems`, `uniqueItems`, `minLength`,
- * `pattern`, `enum`, `const`, and `$ref` to `#/$defs/<name>`. `$schema`,
- * `$id`, `$defs`, `title` and `description` are annotations.
+ * Subset: `type` (a name or an array of names), `required`, `properties`,
+ * `additionalProperties` (boolean or schema), `propertyNames`, `items`,
+ * `minItems`, `maxItems`, `uniqueItems`, `minLength`, `pattern`, `minimum`,
+ * `enum`, `const`, and `$ref` to `#/$defs/<name>`. `$schema`, `$id`, `$defs`,
+ * `title` and `description` are annotations.
  *
  * @module core/json-schema
  */
@@ -26,9 +27,11 @@ const KEYWORDS = new Set([
   'propertyNames',
   'items',
   'minItems',
+  'maxItems',
   'uniqueItems',
   'minLength',
   'pattern',
+  'minimum',
   'enum',
   'const',
   '$ref',
@@ -74,15 +77,24 @@ function check(root: JsonSchema, schema: JsonSchema, value: unknown, path: strin
     }
   }
   if (typeof schema['$ref'] === 'string') check(root, resolveRef(root, schema['$ref']), value, path, problems);
-  if (typeof schema['type'] === 'string' && !typeMatches(schema['type'], value)) {
-    problems.push(`${path}: expected ${schema['type']}`);
-    return;
+  if (schema['type'] !== undefined) {
+    const types = Array.isArray(schema['type']) ? (schema['type'] as unknown[]) : [schema['type']];
+    if (types.length === 0 || types.some((type) => typeof type !== 'string')) {
+      throw new Error(`json-schema: 'type' at ${path} is not a type name or an array of type names`);
+    }
+    if (!types.some((type) => typeMatches(type as string, value))) {
+      problems.push(`${path}: expected ${types.join(' or ')}`);
+      return;
+    }
   }
   if ('const' in schema && JSON.stringify(schema['const']) !== JSON.stringify(value)) {
     problems.push(`${path}: expected ${JSON.stringify(schema['const'])}`);
   }
   if (Array.isArray(schema['enum']) && !schema['enum'].some((option) => JSON.stringify(option) === JSON.stringify(value))) {
     problems.push(`${path}: ${JSON.stringify(value)} is not one of ${JSON.stringify(schema['enum'])}`);
+  }
+  if (typeof value === 'number' && typeof schema['minimum'] === 'number' && value < schema['minimum']) {
+    problems.push(`${path}: ${value} is less than ${schema['minimum']}`);
   }
   if (typeof value === 'string') {
     if (typeof schema['minLength'] === 'number' && [...value].length < schema['minLength']) {
@@ -95,6 +107,9 @@ function check(root: JsonSchema, schema: JsonSchema, value: unknown, path: strin
   if (Array.isArray(value)) {
     if (typeof schema['minItems'] === 'number' && value.length < schema['minItems']) {
       problems.push(`${path}: fewer than ${schema['minItems']} items`);
+    }
+    if (typeof schema['maxItems'] === 'number' && value.length > schema['maxItems']) {
+      problems.push(`${path}: more than ${schema['maxItems']} items`);
     }
     if (schema['uniqueItems'] === true) {
       const seen = new Set(value.map((item) => JSON.stringify(item)));

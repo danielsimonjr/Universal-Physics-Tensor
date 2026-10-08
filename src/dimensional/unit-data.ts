@@ -2,7 +2,7 @@
  * The unit table, loaded from `data/units.json` and validated once.
  *
  * The file is checked against `data/units.schema.json` when this module
- * loads (`core/json-schema`), then against the rules a schema cannot state:
+ * loads (`core/data-file`), then against the rules a schema cannot state:
  * every scale expression reads, a symbol is spelled by one row, a refused
  * spelling and an affine spelling are not also a unit, every prefix letter is
  * both a prefix and a unit, and every `{NAME}` in a note is a constant. A
@@ -21,10 +21,8 @@
  */
 
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { schemaProblems, type JsonSchema } from '../core/json-schema.js';
+import { dataSchema, dataText, parseDataFile } from '../core/data-file.js';
+import type { JsonSchema } from '../core/json-schema.js';
 import { constantRow } from './constant-rows.js';
 import type { Dimension } from './types.js';
 import { decimalScale, irrationalScale, readScaleExpression, scaleOf, type ExactScale } from './exact-scale.js';
@@ -96,7 +94,6 @@ export interface UnitTableData {
   readonly sha256: string;
 }
 
-const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '../../data');
 const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
 /** π, which the registry does not spell (a formula scope adds `pi` itself), as the irrational factor. */
 const PI = 'pi';
@@ -121,10 +118,7 @@ function dimension(d: DimensionFile): Dimension {
  * @internal
  */
 export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
-  const raw: unknown = JSON.parse(text);
-  const problems = schemaProblems(schema, raw);
-  if (problems.length > 0) throw new Error(`data/units.json does not match data/units.schema.json:\n${problems.join('\n')}`);
-  const file = raw as UnitFile;
+  const file = parseDataFile('units.json', text, schema) as UnitFile;
   for (const name of Object.keys(file.scales)) {
     if (name === PI || constantRow(name) !== undefined) {
       throw new Error(`data/units.json: shared scale '${name}' is also ${name === PI ? 'π' : 'a registered constant'}; a name has one meaning`);
@@ -204,7 +198,4 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
 }
 
 /** The unit table, read once from `data/units.json`. @internal */
-export const UNIT_DATA: UnitTableData = readUnitFile(
-  readFileSync(join(DATA_DIR, 'units.json'), 'utf8'),
-  JSON.parse(readFileSync(join(DATA_DIR, 'units.schema.json'), 'utf8')) as JsonSchema,
-);
+export const UNIT_DATA: UnitTableData = readUnitFile(dataText('units.json'), dataSchema('units.json'));
