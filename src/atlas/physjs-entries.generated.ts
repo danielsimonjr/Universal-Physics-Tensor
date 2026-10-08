@@ -6,7 +6,7 @@
  */
 
 /** PhysJS commit recorded by the vendored manifest. */
-export const PHYSJS_COMMIT = "909404fe73c53e9d4b596ad5d042cb5e1870c5f5";
+export const PHYSJS_COMMIT = "a239a7085722f71f8d84b57407ccb1acdeda7b5b";
 
 /** Lean toolchain recorded by the vendored manifest. */
 export const PHYSJS_TOOLCHAIN = "leanprover/lean4:v4.34.1";

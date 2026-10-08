@@ -600,7 +600,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -608,7 +608,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/OscillatorDictionary.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/OscillatorDictionary.lean",
             "covers": "the oscillator dictionary — covers its statement only"
           },
           "normTransports": [
@@ -727,7 +727,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.DampedRlc.time_rescale_equationOfMotion",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -735,7 +735,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/OscillatorDictionary.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/OscillatorDictionary.lean",
             "covers": "the oscillator dictionary — covers its statement only"
           }
         },
@@ -830,7 +830,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -838,7 +838,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/Pendulum.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/Pendulum.lean",
             "covers": "the transformation, not bound.delta — covers its statement only"
           }
         },
@@ -1954,7 +1954,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -1962,7 +1962,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/TelegraphDiffusion.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/TelegraphDiffusion.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2049,7 +2049,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.TelegraphWave.covers_bound_delta",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2057,7 +2057,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/TelegraphWave.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/TelegraphWave.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2562,7 +2562,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.WaveDalembert.solution_eq_profiles",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2570,7 +2570,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/WaveDalembert.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/WaveDalembert.lean",
             "covers": "the missing direction of d'Alembert's formula — covers its statement only"
           }
         },
@@ -2753,7 +2753,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KleinGordonWave.covers_bound_delta",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2761,7 +2761,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/KleinGordonWave.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/KleinGordonWave.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2862,7 +2862,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KgSchrodinger.covers_bound_delta",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2870,7 +2870,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/KgSchrodinger.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/KgSchrodinger.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2928,7 +2928,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KgOscillator.uniform_solves_equationOfMotion",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2936,7 +2936,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/KgOscillator.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/KgOscillator.lean",
             "covers": "the restriction, in Physlib's own terms — covers its statement only"
           }
         },
@@ -3025,7 +3025,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.StiffString.covers_bound_delta",
-            "version": "physjs@909404fe73c53e9d4b596ad5d042cb5e1870c5f5 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -3033,7 +3033,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/PhysJS/blob/909404fe73c53e9d4b596ad5d042cb5e1870c5f5/lean/StiffString.lean",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/StiffString.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         }
