@@ -40,8 +40,7 @@ namespace PhysJS.SchottkyMott
 semiconductor conduction edge at the interface `E_c = E_vac + δ − χ_s`.
 `hφ` is the barrier `φ_Bn = E_c − E_FM`. `hideal` is `δ = 0`.
 
-Kind `bridge` on `PhysJS.SchottkyMott.schottky_mott_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of the absence of interface states. -/
 theorem schottky_mott_eq (φBn ΦM χs Evac EFM Ec δ : ℝ)
     (hFM : EFM = Evac - ΦM)

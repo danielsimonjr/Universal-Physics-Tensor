@@ -126,8 +126,7 @@ lemma exp_Phi (g : ℝ) (h0 : 0 < g) (h2 : g < 2) :
 `k_B T_K = D(ℓ₁) = D₀ exp(−ℓ₁)`. `K` is the convention constant
 `exp(−Φ(g₁))`.
 
-Kind `bridge` on `PhysJS.KondoTemperature.kondo_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. The flow, its
+The flow, its
 two-loop coefficient and the convention for `g` are hypotheses; the constant
 `K(g₁)` depends on the reference coupling and is not fixed. -/
 theorem kondo_eq (g : ℝ → ℝ) (ℓ1 g0 g1 D0 kTK : ℝ)

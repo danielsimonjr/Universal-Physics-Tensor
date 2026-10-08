@@ -66,10 +66,7 @@ theorem bose_factor (x : ℝ) (hx : 0 < x) :
 
 /-- Spectral energy density of one mode, times the proved Bose factor.
 
-`hmode` is `8 π ν² / c³`. `hu` multiplies by `h ν` and by `bose_factor`.
-
-Kind `bridge` on `PhysJS.PlanckSpectrum.planck_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. -/
+`hmode` is `8 π ν² / c³`. `hu` multiplies by `h ν` and by `bose_factor`. -/
 theorem planck_eq (u mode h ν c kB T : ℝ)
     (hc : c ≠ 0) (hkB : kB ≠ 0) (hh : h ≠ 0) (hT : 0 < T)
     (hx : 0 < h * ν / (kB * T))

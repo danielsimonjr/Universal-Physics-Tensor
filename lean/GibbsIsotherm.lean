@@ -30,10 +30,7 @@ namespace PhysJS.GibbsIsotherm
 
 `hμ` is `μ_i = μ_i° + R T ln a_i`. `hequil` is `Σ ν_i μ_i = 0`.
 `hlogK` is the definition `ln K = Σ ν_i ln a_i`, and `hdG` is
-`ΔG° = Σ ν_i μ_i°`.
-
-Kind `bridge` on `PhysJS.GibbsIsotherm.gibbs_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. -/
+`ΔG° = Σ ν_i μ_i°`. -/
 theorem gibbs_eq {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ) (R T K dG : ℝ)
     (hT : T ≠ 0) (hR : R ≠ 0) (hK : 0 < K)
     (hact : ∀ i ∈ s, 0 < a i)

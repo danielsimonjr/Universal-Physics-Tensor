@@ -44,8 +44,7 @@ The arguments through `hΔV` are the fixed-current solenoid expansion of
 `pressure_eq`. `hβ` defines `β` as gas pressure over that magnetic pressure.
 `hgas` is the ideal-gas closure.
 
-Kind `bridge` on `PhysJS.PlasmaBeta.beta_eq`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not a unique monomial,
+Not a unique monomial,
 and not an inequality. -/
 theorem beta_eq
     (U1 U2 : ℝ → ℝ)

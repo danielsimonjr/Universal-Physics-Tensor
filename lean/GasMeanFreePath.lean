@@ -46,8 +46,7 @@ open Real
 /-- Mean free path from the collision cylinder, `λ = v̄ / (n π d² v_rel)`,
 `v_rel = √2 v̄`, `n = p / (k_B T)`.
 
-Kind `bridge` on `PhysJS.GasMeanFreePath.mean_free_path_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. The
+The
 relative-speed factor `√2` is a stated hypothesis. -/
 theorem mean_free_path_eq (lam vbar vrel z n σ d p kB T : ℝ)
     (hv : 0 < vbar) (hd : 0 < d) (hp : 0 < p) (hkT : 0 < kB * T)

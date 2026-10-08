@@ -6,8 +6,10 @@ Released under MIT license as described in the file LICENSE.
 import Physlib.ClassicalMechanics.DampedHarmonicOscillator.Basic
 
 /-!
-`ab-spring-lc` and `ab-damped-rlc`. Time rescaling takes a solution of one
-oscillator to a solution of the other.
+`ab-spring-lc`. Bridge.
+`ab-damped-rlc`. Bridge.
+
+Time rescaling takes a solution of one oscillator to a solution of the other.
 
 Physlib states both sides. An LC circuit is the harmonic oscillator with
 `m ↦ L` and `k ↦ 1/C`. An RLC circuit is the damped oscillator with the same

@@ -73,8 +73,6 @@ theorem lorentzian_integral (c m : ℝ) (hc : 0 < c) (hm : 0 < m) :
 classical equipartition for the kinetic term. `hS1` is the one-sided
 convention `S_F = 2 S₂`.
 
-Kind `bridge` on `PhysJS.ThermomechanicalNoise.force_noise_eq`, once the
-catalog entry exists. The covers line still begins with `derivation-step`.
 Not the quantum spectrum, and not a frequency-dependent damper. -/
 theorem force_noise_eq (m c kB T S₂ S₁ v2 : ℝ) (hm : 0 < m) (hc : 0 < c)
     (hv : v2 = (1 / (2 * Real.pi)) * ∫ ω : ℝ, S₂ / (c ^ 2 + m ^ 2 * ω ^ 2))

@@ -23,10 +23,7 @@ correlation.
 
 namespace PhysJS.Schmidt
 
-/-- `Sc = ν / D` is `Sc ρ D = μ`, and `Le = Sc / Pr`.
-
-Kind `bridge` on `PhysJS.Schmidt.schmidt_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. -/
+/-- `Sc = ν / D` is `Sc ρ D = μ`, and `Le = Sc / Pr`. -/
 theorem schmidt_eq (Sc Le Pr ν α D μ ρ : ℝ)
     (hρ : ρ ≠ 0) (hD : D ≠ 0) (hα : α ≠ 0) (hPr : Pr ≠ 0) (hν : ν ≠ 0)
     (hkin : ν = μ / ρ)

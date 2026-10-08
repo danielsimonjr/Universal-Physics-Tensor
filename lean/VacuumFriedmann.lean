@@ -10,6 +10,8 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 /-!
+`be-13.corollary`. Derivation step. `friedmann_corollary`.
+
 `be-20`, the Friedmann corollary only. The density is already
 `PhysJS.Einstein.vacuum_density`. There is no `be-20` key.
 

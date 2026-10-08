@@ -24,10 +24,7 @@ criterion.
 
 namespace PhysJS.Biot
 
-/-- Conduction resistance over convection resistance.
-
-Kind `bridge` on `PhysJS.Biot.biot_eq`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. -/
+/-- Conduction resistance over convection resistance. -/
 theorem biot_eq (Bi hcoeff k Lc V A Rcond Rconv : ℝ)
     (hk : k ≠ 0) (hh : hcoeff ≠ 0) (hA : A ≠ 0) (hLc : Lc ≠ 0)
     (hLcdef : Lc = V / A)

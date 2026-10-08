@@ -11,9 +11,6 @@ import Mathlib.Tactic.Linarith
 /-!
 `be-28`. Property. The finite sum. This is the definition of `σ`.
 
-UPT stores a `formalRef` of kind `property` on `PhysJS.EntropyProduction.nonneg`.
-The covers line still begins with `derivation-step`.
-
 For a finite family,
 
 ```
@@ -36,9 +33,7 @@ noncomputable def sigma (s : Finset ι) (J X : ι → ℝ) : ℝ :=
 
 /-- If every product is nonnegative, then `σ ≥ 0`.
 
-The equality `σ = Σ_i J_i X_i` is the definition of `σ`. Kind `property`
-on `PhysJS.EntropyProduction.nonneg`. The covers line still begins with
-`derivation-step`. Not the maximum-entropy-production principle. -/
+The equality `σ = Σ_i J_i X_i` is the definition of `σ`. Not the maximum-entropy-production principle. -/
 theorem nonneg (s : Finset ι) (J X : ι → ℝ) (h : ∀ i ∈ s, 0 ≤ J i * X i) :
     sigma s J X = ∑ i ∈ s, J i * X i ∧ 0 ≤ sigma s J X := by
   refine ⟨rfl, ?_⟩

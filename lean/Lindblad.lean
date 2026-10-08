@@ -9,7 +9,7 @@ import Mathlib.LinearAlgebra.Matrix.Hermitian
 import Mathlib.LinearAlgebra.Matrix.Trace
 
 /-!
-`be-11`. Property. UPT `formalRef` of kind `property` on `PhysJS.Lindblad.preserve`.
+`be-11`. Property.
 
 The encoded scalar is the rate `γ(λ) = γ₀ (λ/λ₀)²`. The entry is the
 displayed GKSL generator, one channel, which the AST does not encode:

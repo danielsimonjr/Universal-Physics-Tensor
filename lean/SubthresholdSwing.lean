@@ -32,8 +32,7 @@ namespace PhysJS.SubthresholdSwing
 `ln(I2/I1) = e (ψ2 − ψ1) / (k_B T)`. `hdiv` is the capacitive divider
 `ψ2 − ψ1 = C_ox / (C_ox + C_d) · (Vg2 − Vg1)`. `hdecade` is one decade.
 
-Kind `bridge` on `PhysJS.SubthresholdSwing.swing_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not
+Not
 `be-82`. -/
 theorem swing_eq (S I1 I2 ψ1 ψ2 Vg1 Vg2 e kB T Cd Cox : ℝ)
     (he : e ≠ 0) (hkT : kB * T ≠ 0) (hCox : Cox ≠ 0) (hsum : Cox + Cd ≠ 0) (_hI1 : I1 ≠ 0)

@@ -65,8 +65,7 @@ theorem delta_n_eq (n r E Δn : ℝ) (hn : n ≠ 0)
 `hΓ` is the phase for `Δn = −(1/2) n³ r E`, `E = V/d`. `Vπ` is the voltage
 with `Γ = π`.
 
-Kind `bridge` on `PhysJS.PockelsHalfWave.half_wave_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of `r` or of the crystal tensor. -/
 theorem half_wave_eq (lam d n r L V Γ Vπ : ℝ) (hlam : 0 < lam) (hd : 0 < d)
     (hn : 0 < n) (hr : 0 < r) (hL : 0 < L)

@@ -74,8 +74,7 @@ equivalent of the film.
 `Δh = Δm / (ρ_q A)`. `hΔf` is the first-order shift
 `Δf = (df/dh) Δh`.
 
-Kind `bridge` on `PhysJS.SauerbreyMass.sauerbrey_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 viscoelastic or liquid load, and not valid for `Δm` comparable to the
 crystal mass. -/
 theorem sauerbrey_eq (f0 v h Δh Δm A ρ μ Δf : ℝ)

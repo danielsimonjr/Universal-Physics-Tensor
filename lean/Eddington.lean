@@ -10,7 +10,7 @@ import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Ring
 
 /-!
-`be-64`. The Eddington balance cancels `r²`.
+`be-64`. Derivation step. The Eddington balance cancels `r²`.
 
 The encoded luminosity is `L = 4 π G M m_p c / σ_T`. For `r > 0`, `σ_T > 0`,
 and `c > 0`, that luminosity is exactly the one at which the Thomson force on

@@ -37,8 +37,7 @@ open Real
 `hλ` is `PhysJS.ThermalDeBroglie.wavelength`, and the proof rewrites it
 with `wavelength_eq`.
 
-Kind `bridge` on `PhysJS.SackurTetrode.sackur_tetrode`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 second proof of `be-12`. -/
 theorem sackur_tetrode (S N kB nQ n V lam m ℏ hpl T U F Z : ℝ)
     (hm : 0 < m) (hkB : 0 < kB) (hT : 0 < T) (hℏ : 0 < ℏ) (hN : 0 < N) (hV : 0 < V)

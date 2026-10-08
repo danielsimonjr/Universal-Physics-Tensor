@@ -72,8 +72,7 @@ theorem quartic_heat (U : ℝ → ℝ) (A T C : ℝ)
 `hI` is `∫₀^∞ x³/(exp(x)−1) dx = π⁴/15`, not proved in this file.
 `hquart` writes that energy as `A T⁴`, and `hC` is `dU/dT`.
 
-Kind `bridge` on `PhysJS.DebyeHeat.debye_heat`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not an
+Not an
 evaluation of the Bose integral. -/
 theorem debye_heat
     (U : ℝ → ℝ) (N kB T θ I A C : ℝ)

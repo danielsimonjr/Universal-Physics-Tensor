@@ -35,8 +35,7 @@ open MeasureTheory ProbabilityTheory
 /-- Full shot noise. `hpoisson` is `Var(N) = ⟨N⟩`. `hband` is the one-sided
 window `Δf = 1/(2 T)`.
 
-Kind `bridge` on `PhysJS.ShotNoise.shot_eq`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not a spectral theorem. -/
+Not a spectral theorem. -/
 theorem shot_eq {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) (N : Ω → ℝ) (e I T : ℝ)
     (he : e ≠ 0) (hT : T ≠ 0)
     (hmean : ∫ ω, N ω ∂μ = (I / e) * T)

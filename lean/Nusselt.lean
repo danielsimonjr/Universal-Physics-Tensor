@@ -23,10 +23,7 @@ Nu = L (∂T/∂n) / ΔT
 
 namespace PhysJS.Nusselt
 
-/-- `Nu = h L / k` agrees with the wall gradient.
-
-Kind `bridge` on `PhysJS.Nusselt.nusselt_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. -/
+/-- `Nu = h L / k` agrees with the wall gradient. -/
 theorem nusselt_eq (Nu hcoeff k L dTdn ΔT : ℝ)
     (hk : k ≠ 0) (hΔ : ΔT ≠ 0)
     (hfilm : hcoeff = k * dTdn / ΔT)

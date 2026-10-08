@@ -42,8 +42,6 @@ noncomputable def roundTrip (R₁ R₂ g α L : ℝ) : ℝ :=
 
 `hbal` is steady oscillation: the round-trip factor equals 1.
 
-Kind `bridge` on `PhysJS.LaserThreshold.threshold_gain_eq`, once the
-catalog entry exists. The covers line still begins with `derivation-step`.
 Not saturation, not non-uniform gain, and not a prediction of `α_i`. -/
 theorem threshold_gain_eq (R₁ R₂ g α L : ℝ) (hR₁ : 0 < R₁) (hR₂ : 0 < R₂)
     (hL : 0 < L) (hbal : roundTrip R₁ R₂ g α L = 1) :

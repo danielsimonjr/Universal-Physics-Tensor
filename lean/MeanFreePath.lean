@@ -52,8 +52,7 @@ lemma linear_of_hasDerivAt (x : ℝ → ℝ) (v : ℝ) (hx : ∀ t, HasDerivAt x
 `hpF` is `ℏ k_F = m* v_F`. `hflight` is free flight at the Fermi speed.
 `hℓ` is `ℓ = x(τ) − x(0)`. `hEF` is `E_F = ℏ² k_F² / (2 m*)`.
 
-Kind `bridge` on `PhysJS.MeanFreePath.mean_free_path_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of `τ`, and not a statement about anisotropic bands. -/
 theorem mean_free_path_eq (x : ℝ → ℝ) (ℓ vF τ ħ kF m EF : ℝ)
     (hħ : 0 < ħ) (hm : 0 < m) (hτ : 0 < τ) (hkF : 0 < kF)

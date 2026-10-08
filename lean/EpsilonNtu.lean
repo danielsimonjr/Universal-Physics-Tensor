@@ -90,8 +90,7 @@ lemma exp_le_one_of_nonpos' {x : ℝ} (hx : 0 ≤ x) : Real.exp (-x) ≤ 1 := by
 `Cmin = min C_h C_c`, `Cmax = max C_h C_c`, `ε = Q/(C_min (T_h,in − T_c,in))`
 with `Q = C_h (T_h(0) − T_h(L))`; `T_h,in = T_h(0)`, `T_c,in = T_c(L)`.
 
-Kind `bridge` on `PhysJS.EpsilonNtu.eps_ntu_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of `U`; `C_r = 1` is `eps_ntu_balanced`. -/
 theorem eps_ntu_eq (Th Tc : ℝ → ℝ) (Ch Cc a L Cmin Cmax ε : ℝ)
     (hCh : 0 < Ch) (hCc : 0 < Cc) (ha : 0 < a) (hL : 0 < L)

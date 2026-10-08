@@ -129,8 +129,7 @@ theorem wall_integral_zero
 excess `(1/κ² − 2)` times the gradient integral of that same profile.
 `0 < gradSq` keeps the profile from being constant.
 
-Kind `bridge` on `PhysJS.GinzburgLandau.type_boundary`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. The
+The
 positive side is this trial profile, not every minimizer. -/
 theorem type_boundary (κ trial gradSq crit : ℝ) (hκ : 0 < κ) (hgrad : 0 < gradSq)
     (hcrit : crit = 0)

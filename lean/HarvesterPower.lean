@@ -149,8 +149,7 @@ theorem mean_dissipation (ce ω a b : ℝ) (hω : 0 < ω) :
 
 `hP` is the cycle-averaged dissipation in the electrical damper.
 
-Kind `bridge` on `PhysJS.HarvesterPower.harvester_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not the
+Not the
 power into a rectified circuit load, and not off-resonance. -/
 theorem harvester_eq (z z1 z2 : ℝ → ℝ) (m ζe ζm A ωn a b P : ℝ)
     (hm : 0 < m) (hζe : 0 < ζe) (hζm : 0 < ζm) (hωn : 0 < ωn)

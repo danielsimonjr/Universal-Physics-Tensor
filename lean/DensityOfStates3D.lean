@@ -113,8 +113,7 @@ theorem dos_factor (g n E C : ℝ) (hE : 0 < E)
 `hcount` is the two-spin sphere, the same integer as `be-88`. `hband` is
 one isotropic parabola. `m > 0`, `ℏ ≠ 0`, and `E > 0`.
 
-Kind `bridge` on `PhysJS.DensityOfStates3D.dos_3d`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not one spin. -/
+Not one spin. -/
 theorem dos_3d (g n k E m hbar : ℝ) (hk : 0 ≤ k) (hm : 0 < m) (hh : hbar ≠ 0)
     (hE : 0 < E) (hcount : k ^ 3 = 3 * Real.pi ^ 2 * n)
     (hband : E = hbar ^ 2 * k ^ 2 / (2 * m))

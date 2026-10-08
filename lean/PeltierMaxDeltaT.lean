@@ -103,8 +103,7 @@ theorem max_heat (S R K Tc ΔT I : ℝ) (hR : 0 < R) :
 
 `hZ` is `Z = S² / (R K)`.
 
-Kind `bridge` on `PhysJS.PeltierMaxDeltaT.max_delta_t_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 multistage cooler, and not temperature-dependent properties. -/
 theorem max_delta_t_eq (S R K Tc ΔT Z : ℝ) (hR : 0 < R) (hK : 0 < K)
     (hZ : Z = S ^ 2 / (R * K)) :

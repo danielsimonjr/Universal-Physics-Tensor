@@ -40,8 +40,7 @@ the tangential magnetic field with `H = n E Y0`, `Y0 = 1/(μ0 c)`, the sign
 of the reflected wave reversed. `R` is the intensity reflectance `(E_r/E_i)²`
 and `T` the energy flux ratio `n₂ E_t² / (n₁ E_i²)`.
 
-Kind `bridge` on `PhysJS.FresnelNormal.reflectance_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not
+Not
 oblique incidence and not absorbing media. -/
 theorem reflectance_eq (n₁ n₂ Y0 Ei Er Et R T : ℝ)
     (hn₁ : 0 < n₁) (hn₂ : 0 < n₂) (hY0 : Y0 ≠ 0) (hEi : Ei ≠ 0)

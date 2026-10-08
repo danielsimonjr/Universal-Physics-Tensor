@@ -118,8 +118,7 @@ theorem fold_curvature (g0 : ℝ) :
 /-- Pull-in. The fold of `k (g0 − g) = ε0 A V² / (2 g²)` is `g = 2 g0 / 3`,
 and both writings of `V_pi²` are the equilibrium voltage there.
 
-Kind `bridge` on `PhysJS.PullIn.pull_in_eq`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not a fringing field,
+Not a fringing field,
 and not `g = g0 / 2`. -/
 theorem pull_in_eq (k ε0 A g0 : ℝ) (hk : 0 < k) (hε : 0 < ε0) (hA : 0 < A) (hg0 : 0 < g0) :
     let g := (2 : ℝ) * g0 / 3

@@ -44,9 +44,7 @@ open MeasureTheory ProbabilityTheory
 
 `hU` is the spring law `dU/dx = k x`, `h0` is `U(0) = 0`.
 
-Kind `bridge` on `PhysJS.EquipartitionDisplacement.displacement_eq`, once
-the catalog entry exists. The covers line still begins with
-`derivation-step`. Not the quantum variance, and not `(3/2) k_B T`. -/
+Not the quantum variance, and not `(3/2) k_B T`. -/
 theorem displacement_eq (U : ℝ → ℝ) (k kB T : ℝ) (hk : 0 < k) (hkB : 0 < kB) (hT : 0 < T)
     (hU : ∀ y, HasDerivAt U (k * y) y) (h0 : U 0 = 0) :
     (∀ x, U x = (k / 2) * x ^ 2) ∧

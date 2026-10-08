@@ -43,8 +43,7 @@ namespace PhysJS.AbbeResolution
 written with `si = n sin θ_i` and `s1 = n sin θ₁`. `hlo`, `hhi` say both
 orders lie in the numerical aperture, `NA`, and the setting is symmetric.
 
-Kind `bridge` on `PhysJS.AbbeResolution.resolution_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not
+Not
 axial illumination, which gives `λ/NA`. -/
 theorem resolution_eq (lam d NA si s1 : ℝ) (hlam : 0 < lam) (hd : 0 < d)
     (hNA : 0 < NA)

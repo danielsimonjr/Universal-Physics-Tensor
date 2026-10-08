@@ -14,6 +14,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-116`. Bridge. Lorentz resistivity. The typed prefactor is a different closure.
 
+`be-116.referenceResistivity`. Derivation step. `reference_resistivity`.
+
 Proved under these hypotheses. The transport cross section is the
 Rutherford hypothesis `σ_tr = 4π b₀² ln Λ`, with
 `b₀ = Z e² / (4π ε0 m v²)`. The angular integral that produces `4π b₀² ln Λ`

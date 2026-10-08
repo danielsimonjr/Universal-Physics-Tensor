@@ -87,8 +87,7 @@ theorem wavevector_squared
 `hcum` is the parabolic cumulative whose value is
 `PhysJS.FermiSea.dos_factor`. `e` is the elementary charge.
 
-Kind `bridge` on `PhysJS.ThomasFermi.thomas_fermi`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not the
+Not the
 prefactor of `be-135`, and not a classical Debye length. -/
 theorem thomas_fermi
     (k e eps gF n EF δn φ0 x : ℝ) (he : e ≠ 0) (heps : eps ≠ 0) (hφ : φ0 ≠ 0)

@@ -146,8 +146,7 @@ theorem sine_shape (y v : ℝ → ℝ) (ω : ℝ) (hω : ω ≠ 0)
 /-- The pinned sine is an eigenfunction at `π² E I / L²`, and no smaller
 positive load has a nontrivial pinned solution.
 
-Kind `bridge` on `PhysJS.EulerBuckling.critical_load`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a cantilever. -/
+Not a cantilever. -/
 theorem critical_load (E I L : ℝ) (hE : 0 < E) (hI : 0 < I) (hL : 0 < L) :
     let y : ℝ → ℝ := fun x => Real.sin (Real.pi * x / L)
     let v : ℝ → ℝ := fun x => (Real.pi / L) * Real.cos (Real.pi * x / L)

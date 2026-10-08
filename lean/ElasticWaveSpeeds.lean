@@ -99,8 +99,7 @@ theorem travelling_wave_modulus (f f1 f2 : ℝ → ℝ) (ρ c M : ℝ)
 with `λ = K − 2G/3` holds for a travelling profile of speed `c > 0` with a
 non-vanishing `f''`; then `c = √((K + 4G/3)/ρ)`.
 
-Kind `bridge` on `PhysJS.ElasticWaveSpeeds.pwave_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a derivation
+Not a derivation
 of the Navier-Cauchy equation. -/
 theorem pwave_eq (f f1 f2 : ℝ → ℝ) (ρ c K G lam : ℝ)
     (hρ : 0 < ρ) (hc : 0 < c) (hlam : lam = K - 2 * G / 3)

@@ -60,8 +60,7 @@ theorem classical_curie (χ C μ0 n μmom kB T moment2 : ℝ) (hk : kB ≠ 0) (h
 /-- Curie–Weiss. `hcurie` is `M = (C/(μ₀ T)) B_eff`. `hfield` is the
 mean-field shift. `hθ` names `θ = C λ / μ₀`.
 
-Kind `bridge` on `PhysJS.CurieWeiss.curie_weiss`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a measured
+Not a measured
 susceptibility curve. -/
 theorem curie_weiss (χ M B Beff C μ0 T θ lam : ℝ)
     (hT : T ≠ 0) (hB : B ≠ 0) (hden : T - θ ≠ 0) (hμ : μ0 ≠ 0)

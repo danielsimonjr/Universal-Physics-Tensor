@@ -64,8 +64,7 @@ theorem area_entropy (S kB a R : ℝ) (_ha : 0 < a) (_hR : a < R)
 /-- BKT temperature. `hE` is the vortex integral. `hS` is the area count.
 `hzero` is indifference, `F = 0`, at one radius past the core.
 
-Kind `bridge` on `PhysJS.BktJump.bkt_jump`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not the
+Not the
 renormalization-group flow. -/
 theorem bkt_jump (E S F J kB T a R : ℝ) (ha : 0 < a) (hR : a < R)
     (hE : E = ∫ r in a..R, (J / 2) * (1 / r) ^ 2 * (2 * Real.pi * r))

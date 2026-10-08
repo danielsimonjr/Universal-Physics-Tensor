@@ -9,7 +9,7 @@ import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Positivity
 
 /-!
-`be-58`. The classical Johnson–Nyquist spectrum is the low-frequency limit of
+`be-58`. Limit. The classical Johnson–Nyquist spectrum is the low-frequency limit of
 the quantum parent.
 
 The catalog encodes `S_V = 4 k_B T R`. The quantum spectrum is a premise, not

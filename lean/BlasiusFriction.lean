@@ -42,8 +42,7 @@ open Real
 
 `hbal`: `Δp (π D² / 4) = τ_w (π D L)`. `hf`: `τ_w = f ρ v² / 8`.
 
-Kind `bridge` on `PhysJS.BlasiusFriction.darcy_weisbach_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 model of `f`. -/
 theorem darcy_weisbach_eq (Δp τw f ρ v D L : ℝ) (hD : 0 < D)
     (hbal : Δp * (π * D ^ 2 / 4) = τw * (π * D * L))
@@ -97,8 +96,7 @@ theorem blasius_eq (Δp f c ρ v D L μ : ℝ) (hρ : 0 < ρ) (hv : 0 < v) (hD :
 /-- Force balance, wall-shear definition of `f`, and the empirical Blasius law
 together: the catalog pair `Δp = f (L / D) ρ v² / 2`, `f = c Re^(−1/4)`.
 
-Kind `bridge` on `PhysJS.BlasiusFriction.darcy_blasius_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. The
+The
 constant `c` (0.316) and the exponent are empirical hypotheses. -/
 theorem darcy_blasius_eq (Δp τw f c ρ v D L μ : ℝ) (hρ : 0 < ρ) (hv : 0 < v)
     (hD : 0 < D) (hμ : 0 < μ)

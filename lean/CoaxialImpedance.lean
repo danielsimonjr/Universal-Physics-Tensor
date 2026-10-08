@@ -102,8 +102,7 @@ theorem lc_product (a b μ ε : ℝ) (ha : 0 < a) (hb : 0 < b) (hab : a ≠ b) (
 `be-132` capacitance per length. `hZ` is the wave relation `Z₀² C' = L'`
 (`impedance_sq`), with `Z₀ > 0`.
 
-Kind `bridge` on `PhysJS.CoaxialImpedance.impedance_from_gauss`, once the
-catalog entry exists (`impedance_eq` is the same with `C'` assumed). The covers line still begins with `derivation-step`. Not a
+`impedance_eq` is the same with `C'` assumed. Not a
 lossy line, and not the decimal `59.96 Ω`. -/
 theorem impedance_eq (a b μ ε I Φ L' C' Z : ℝ)
     (ha : 0 < a) (hb : 0 < b) (hab : a < b) (hμ : 0 < μ) (hε : 0 < ε) (hI : I ≠ 0)

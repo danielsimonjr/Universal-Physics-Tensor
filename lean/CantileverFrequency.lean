@@ -287,8 +287,7 @@ theorem mode_exists (β L : ℝ) (hβ : 0 < β) (hL : 0 < L)
 conditions are clamp and free end. `hfund` says `λ = β L` is the smallest
 positive root, which is what the fundamental mode is.
 
-Kind `bridge` on `PhysJS.CantileverFrequency.frequency_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 decimal for `λ₁`, and not an added-mass or damped frequency. -/
 theorem frequency_eq (E I ρ A L ω β a b c d : ℝ)
     (hE : 0 < E) (hI : 0 < I) (hρ : 0 < ρ) (hA : 0 < A) (hL : 0 < L)

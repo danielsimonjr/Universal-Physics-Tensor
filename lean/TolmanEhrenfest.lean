@@ -103,8 +103,7 @@ theorem product_deriv_zero (T lapse logT logLapse p : ℝ → ℝ) (ρp : ℝ) (
 equation is not derived from `∇_μ T^{μν} = 0`, and the Gibbs relation is
 not derived from an equation of state.
 
-Kind `bridge` on `PhysJS.TolmanEhrenfest.hydrostatic_constant`. The covers
-line still begins with `derivation-step`. Not a horizon temperature, and
+Not a horizon temperature, and
 not `T ‖ξ‖ = const`. -/
 theorem hydrostatic_constant (T lapse g00 logT logLapse p ρp : ℝ → ℝ) {a b : ℝ}
     (hab : a < b) (hT : ∀ y, T y = Real.exp (logT y))

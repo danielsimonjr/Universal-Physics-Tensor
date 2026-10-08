@@ -103,10 +103,7 @@ theorem isothermal_peltier (L11 L12 L21 L22 T E : ℝ) (hT : T ≠ 0) (hL : L11 
 /-- The second Thomson relation: `Π = S T`.
 
 `Eopen / dTopen` is the Seebeck coefficient. The ratio of isothermal
-currents is the Peltier coefficient. `R.onsager` identifies them.
-
-Kind `bridge` on `PhysJS.KelvinRelation.peltier_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. -/
+currents is the Peltier coefficient. `R.onsager` identifies them. -/
 theorem peltier_eq (R : ThermoelectricOnsager) (Eopen dTopen Eiso : ℝ)
     (hdT : dTopen ≠ 0)
     (hopen : electricCurrent R.L11 R.L12 R.T Eopen dTopen = 0)

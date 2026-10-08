@@ -42,8 +42,7 @@ adiabatic cavity restoring force forces `ω² = c² A / (V L)`.
 
 `hx` and `hv` say `v = x'` and `a = x''`; `hN` is `ρ A L a = −(ρ c² A² / V) x`.
 
-Kind `bridge` on `PhysJS.HelmholtzResonator.frequency_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of the lumped-element model. -/
 theorem frequency_eq (x v a : ℝ → ℝ) (X ω ρ c A V L : ℝ)
     (hρ : 0 < ρ) (hA : 0 < A) (hV : 0 < V) (hL : 0 < L) (hX : X ≠ 0)

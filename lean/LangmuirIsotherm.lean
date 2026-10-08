@@ -78,8 +78,7 @@ lemma exp_decay (g : ℝ → ℝ) (κ L : ℝ)
 `hbal`: adsorption flux equals desorption flux, `k_a P (1 − θ) = k_d θ`.
 `hK`: `K = k_a / k_d`.
 
-Kind `bridge` on `PhysJS.LangmuirIsotherm.langmuir_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a model of
+Not a model of
 `k_a`, `k_d`, multilayers or interactions. -/
 theorem langmuir_eq (θ K P ka kd : ℝ) (hkd : 0 < kd) (hka : 0 < ka) (hP : 0 ≤ P)
     (hK : K = ka / kd) (hbal : ka * P * (1 - θ) = kd * θ) :

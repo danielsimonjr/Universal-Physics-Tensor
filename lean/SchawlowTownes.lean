@@ -93,8 +93,7 @@ theorem linewidth_general (hpl ν Δνc P N γ Rsp nsp m V Δν : ℝ)
 
 `hm` is the phase average of `sin²`, taken from `meanSinSq`.
 
-Kind `bridge` on `PhysJS.SchawlowTownes.linewidth_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 quantum-noise derivation of the model, and the coefficient is that of the
 stated phase-diffusion model. -/
 theorem linewidth_eq (hpl ν Δνc P N γ Rsp m V Δν : ℝ)

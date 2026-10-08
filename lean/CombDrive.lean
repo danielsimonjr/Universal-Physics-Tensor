@@ -51,8 +51,7 @@ theorem capacitance_slope (n ε h g x : ℝ) (hg : g ≠ 0) :
 /-- Comb-drive force. The derivative is `capacitance_slope`. The coenergy
 force is `(1/2) V²` times that slope.
 
-Kind `bridge` on `PhysJS.CombDrive.force_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not `be-79`. -/
+Not `be-79`. -/
 theorem force_eq (n ε h g V : ℝ) (hg : g ≠ 0) :
     (∀ x, HasDerivAt (fun y => capacitance n ε h g y) (2 * n * ε * h / g) x) ∧
       (1 / 2) * V ^ 2 * (2 * n * ε * h / g) = n * ε * h * V ^ 2 / g := by

@@ -42,8 +42,6 @@ theorem hasDerivAt_current (Ic : ℝ) (φ : ℝ → ℝ) (t dφ : ℝ) (hφ : Ha
 `hV` is `V = (ℏ / 2 e) dφ/dt`. `hL` is `V = L dI/dt` with `dI/dt` the
 derivative of `I_c sin φ`. `hzero` is the phase at which the cosine is `1`.
 
-Kind `bridge` on `PhysJS.JosephsonInductance.inductance_eq`, once the
-catalog entry exists. The covers line still begins with `derivation-step`.
 Not a finite-phase inductance, and not the frequency of `be-59`. -/
 theorem inductance_eq
     (Ic e hbar h Φ0 L V dφ t : ℝ) (φ : ℝ → ℝ)

@@ -79,8 +79,7 @@ theorem charge_density_slope {ι : Type*} (s : Finset ι) (n z : ι → ℝ) (e 
 `n_i = N_A c_i` and ionic strength `I = ½ Σ c_i z_i²`, the charge density
 vanishes at `φ = 0` and has slope `−ε κ²` with `κ² = 2 N_A e² I / (ε k_B T)`.
 
-Kind `bridge` on `PhysJS.DebyeHuckel.kappa_sq_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Point ions and
+Point ions and
 the linearised regime only. -/
 theorem kappa_sq_eq {ι : Type*} (s : Finset ι) (c z : ι → ℝ) (NA e kB T ε I : ℝ)
     (hε : ε ≠ 0)
@@ -167,8 +166,7 @@ theorem self_potential_limit (q κ ε : ℝ) :
 definition of the activity coefficient through the charging work,
 `k_B T ln γ = ∫₀^{z e} V(q) dq`.
 
-Kind `bridge` on `PhysJS.DebyeHuckel.lnGamma_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Linearised
+Linearised
 Poisson–Boltzmann and point ions only. -/
 theorem lnGamma_eq (lnγ κ ε kB T z e : ℝ) (V : ℝ → ℝ) (hε : 0 < ε) (hkT : 0 < kB * T)
     (hV : ∀ q : ℝ, Tendsto (fun r : ℝ => q / (4 * π * ε) * (Real.exp (-κ * r) - 1) / r)

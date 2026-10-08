@@ -30,10 +30,7 @@ is not this row. This is not a second proof of `be-150`.
 
 namespace PhysJS.Raoult
 
-/-- Partial pressure of an ideal component, from the Gibbs isotherm.
-
-Kind `bridge` on `PhysJS.Raoult.raoult_eq`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. -/
+/-- Partial pressure of an ideal component, from the Gibbs isotherm. -/
 theorem raoult_eq (μ0v μ0l R T P x Psat Pstd : ℝ)
     (hT : T ≠ 0) (hR : R ≠ 0) (hPstd : 0 < Pstd) (hx : 0 < x) (hP : 0 < P)
     (hPsat : 0 < Psat)

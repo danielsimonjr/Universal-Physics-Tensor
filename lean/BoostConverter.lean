@@ -30,8 +30,7 @@ namespace PhysJS.BoostConverter
 /-- Ideal boost. `hbal` is volt-second balance:
 `V_in D + (V_in − V_out) (1 − D) = 0`.
 
-Kind `bridge` on `PhysJS.BoostConverter.boost_ratio`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not
+Not
 the buck ratio `D`. -/
 theorem boost_ratio (Vin Vout D : ℝ) (hVin : Vin ≠ 0) (hD : D ≠ 1)
     (hbal : Vin * D + (Vin - Vout) * (1 - D) = 0) :

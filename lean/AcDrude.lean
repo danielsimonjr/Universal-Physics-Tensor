@@ -158,8 +158,7 @@ theorem lorentz_scale (τ ω : ℝ) (hτ : τ ≠ 0) :
 `hσ0` is the DC monomial `n e² τ / m`. The limit is the in-phase part of
 `(σ₀ / τ) exp(−s / τ)`.
 
-Kind `bridge` on `PhysJS.AcDrude.ac_drude`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not `be-123`. -/
+Not `be-123`. -/
 theorem ac_drude (σ0 n e m τ ω : ℝ) (hτ : 0 < τ) (hm : m ≠ 0)
     (hσ0 : σ0 = n * e ^ 2 * τ / m) :
     Tendsto (fun R => ∫ s in (0 : ℝ)..R,

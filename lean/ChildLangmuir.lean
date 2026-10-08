@@ -136,8 +136,7 @@ theorem poisson_current (ε0 ρ v φ'' J : ℝ) (hε : ε0 ≠ 0)
 /-- Child–Langmuir. Energy, Poisson, and `J = ρ v` on `φ = V (x/d)^{4/3}`
 at any `x > 0`.
 
-Kind `bridge` on `PhysJS.ChildLangmuir.current_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not
+Not
 Mott–Gurney. `e` is the elementary charge. -/
 theorem current_eq (V d e m ε0 ρ v J x : ℝ)
     (hV : 0 < V) (hd : 0 < d) (he : 0 < e) (hm : 0 < m) (hε : 0 < ε0) (hx : 0 < x)

@@ -10,9 +10,6 @@ import Mathlib.Tactic.Linarith
 /-!
 `be-27`. Bridge. The sum `T + Σ_active / k_B`.
 
-UPT stores a `formalRef` of kind `bridge` on `PhysJS.EffectiveTemperature.sum_eq`.
-The covers line still begins with `derivation-step`.
-
 The encoded scalar is the product
 
 ```
@@ -39,8 +36,7 @@ noncomputable def teff (T kB active : ℝ) : ℝ :=
 /-- The encoded product is the sum, and the sum equals `T` iff the active
 term vanishes.
 
-Kind `bridge` on `PhysJS.EffectiveTemperature.sum_eq`. The covers line
-still begins with `derivation-step`. Not `T_eff(ω)`. -/
+Not `T_eff(ω)`. -/
 theorem sum_eq (T kB active : ℝ) (hT : T ≠ 0) (hk : kB ≠ 0) :
     encoded T kB active = teff T kB active ∧ (teff T kB active = T ↔ active = 0) := by
   refine ⟨?_, ?_⟩

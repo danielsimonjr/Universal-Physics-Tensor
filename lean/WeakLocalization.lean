@@ -64,8 +64,6 @@ lemma return_integral (D τ τφ : ℝ) (hD : 0 < D) (hτ : 0 < τ) (hτφ : 0 <
 `hweight` is the Cooperon weight (convention-dependent premise). `hh` is
 `h = 2 π ℏ`.
 
-Kind `bridge` on `PhysJS.WeakLocalization.weak_localization_eq`, once the
-catalog entry exists. The covers line still begins with `derivation-step`.
 The weight and the symmetry class are hypotheses, not derived. -/
 theorem weak_localization_eq (Δσ e D ħ h τ τφ : ℝ)
     (hD : 0 < D) (hħ : 0 < ħ) (hτ : 0 < τ) (hτφ : 0 < τφ)

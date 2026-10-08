@@ -97,8 +97,7 @@ theorem kelvin_poynting_eq (μl μv μl0 μv0 Pl P P0 Vm γ r kB T : ℝ)
 /-- Kelvin equation: the catalog form, with the Poynting term dropped as a
 hypothesis `hneglect : V_m (P − P₀) = 0`.
 
-Kind `bridge` on `PhysJS.KelvinDroplet.kelvin_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Bulk surface
+Bulk surface
 tension and an ideal vapor; the Poynting correction is a stated hypothesis. -/
 theorem kelvin_eq (μl μv μl0 μv0 Pl P P0 Vm γ r kB T : ℝ)
     (_hP : 0 < P) (_hP0 : 0 < P0) (hr : 0 < r) (hkT : 0 < kB * T)
@@ -118,10 +117,7 @@ theorem kelvin_eq (μl μv μl0 μv0 Pl P P0 Vm γ r kB T : ℝ)
   linarith
 
 /-- The whole chain: virtual work gives the Laplace pressure, the chemical
-potentials give the Kelvin equation.
-
-Kind `bridge` on `PhysJS.KelvinDroplet.kelvin_laplace_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. -/
+potentials give the Kelvin equation. -/
 theorem kelvin_laplace_eq (μl μv μl0 μv0 Pl P P0 Vm γ ΔP r kB T : ℝ)
     (hP : 0 < P) (hP0 : 0 < P0) (hr : 0 < r) (hkT : 0 < kB * T)
     (hwork : ΔP * deriv vol r = γ * deriv area r)

@@ -54,8 +54,7 @@ theorem heat_from_energy (c g kB T : ℝ)
 /-- Parabolic rewriting. `hcorr` is the Sommerfeld energy correction's
 temperature derivative, `c_V = (π²/3) k_B² T g(E_F)`. `hdos` is the parabola.
 
-Kind `bridge` on `PhysJS.SommerfeldHeat.electronic_heat`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not the
+Not the
 Wiedemann–Franz law. -/
 theorem electronic_heat (c n EF g kB T : ℝ) (hEF : EF ≠ 0)
     (hcorr : c = (Real.pi ^ 2 / 3) * kB ^ 2 * T * g)

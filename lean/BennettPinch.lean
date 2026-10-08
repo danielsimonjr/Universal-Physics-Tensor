@@ -16,6 +16,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-109`. Bridge. The Bennett pinch relation.
 
+`be-109.equalTemperature`. Derivation step. `equal_temperature_current`.
+
 Proved under these hypotheses. The pinch is a steady z-pinch.
 Ampère's law for the enclosed current is `B_θ = μ0 I / (2 π r)`.
 The axial current density satisfies `dI/dr = 2 π r j_z`. Radial force

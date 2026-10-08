@@ -12,6 +12,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-134`. Bridge. Bloch `T^{3/2}` law.
 
+`be-134.heisenberg_fraction`. Derivation step. `heisenberg_fraction`.
+
 The catalog equation is
 
 ```
@@ -112,8 +114,7 @@ the phase-space measure times that integral. `hmoment` is one Bohr magneton
 per magnon. `D > 0` and `k_B T ≥ 0` keep the real power on a nonnegative
 base.
 
-Kind `bridge` on `PhysJS.BlochLaw.bloch_law`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not an evaluation of
+Not an evaluation of
 `ζ(3/2)`. Not the Landé assignment `g μ_B` at `g = 2`. -/
 theorem bloch_law (dM nMag muB kT D zeta I : ℝ) (hD : 0 < D) (hkT : 0 ≤ kT)
     (hI : I = zeta * Real.sqrt Real.pi / 4)

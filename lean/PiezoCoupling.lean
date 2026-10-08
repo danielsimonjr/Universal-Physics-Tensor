@@ -49,8 +49,7 @@ noncomputable def energy (sE d εT T E : ℝ) : ℝ :=
 /-- The coupling factor squared from the energy partition,
 `U_m² / (U_e U_d)`, equals `d² / (ε^T s^E)`.
 
-Kind `bridge` on `PhysJS.PiezoCoupling.coupling_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a derivation
+Not a derivation
 of the constitutive law and one mode only. -/
 theorem coupling_eq (sE d εT T E : ℝ) (hs : 0 < sE) (hε : 0 < εT)
     (hT : T ≠ 0) (hE : E ≠ 0) :

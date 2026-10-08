@@ -7,7 +7,7 @@ import Mathlib.Analysis.Real.Sqrt
 import Physlib.ClassicalMechanics.Pendulum.SimplePendulum.SmallAngle
 
 /-!
-`ab-pendulum-linear`. Covers the transformation, not `bound.delta`.
+`ab-pendulum-linear`. Bridge. Covers the transformation, not `bound.delta`.
 
 Physlib proves that a smooth lift satisfies the linearized pendulum equation
 `θ̈ + ω² θ = 0` if and only if it is the equation of motion of the associated

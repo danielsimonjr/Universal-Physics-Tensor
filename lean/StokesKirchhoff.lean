@@ -66,8 +66,7 @@ catalog prefactor.
 `hre` and `him` are the real and imaginary parts of
 `k² (ρ c² − i ω b) = ρ ω²` at `k = a + i α`, with `a, α > 0`.
 
-Kind `bridge` on `PhysJS.StokesKirchhoff.attenuation_bounds`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of the bracket from the fluid equations and not a relaxation
 (`ω τ ~ 1`) result. -/
 theorem attenuation_bounds (ρ c ω b a α : ℝ)

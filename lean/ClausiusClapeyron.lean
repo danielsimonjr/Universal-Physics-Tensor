@@ -55,10 +55,7 @@ theorem ideal_vapor_slope (g1 g2 P : ℝ → ℝ) (s1 s2 v1 v2 L R T0 : ℝ)
 /-- Constant latent heat integrates the ideal-vapor slope.
 
 `hslope` is `ideal_vapor_slope` at every temperature between `T1` and `T2`.
-Both temperatures are positive, so the segment does not contain `0`.
-
-Kind `bridge` on `PhysJS.ClausiusClapeyron.integrated_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. -/
+Both temperatures are positive, so the segment does not contain `0`. -/
 theorem integrated_eq (P : ℝ → ℝ) (L R T1 T2 : ℝ)
     (hR : R ≠ 0) (hT1 : 0 < T1) (hT2 : 0 < T2) (hP1 : 0 < P T1) (hP2 : 0 < P T2)
     (hslope : ∀ t ∈ Set.uIcc T1 T2,

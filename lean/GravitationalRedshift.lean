@@ -13,6 +13,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-72`. Bridge. Gravitational frequency shift in a static spacetime.
 
+`be-72.tolmanRatio`. Derivation step. `tolman_same_ratio`.
+
 The catalog equation is the ratio of proper frequencies of one coordinate
 period, in the signature `(−,+,+,+)`,
 
@@ -49,10 +51,7 @@ open PhysJS.TolmanEhrenfest Real
 /-- Proper frequencies of one coordinate period stand in the metric ratio.
 
 `h1` and `h2` are the static identification `ν √(−g_00) = 1/Δt`. The
-common `Δt` is the coordinate period. Both metric components are negative.
-
-Kind `bridge` on `PhysJS.GravitationalRedshift.frequency_ratio`, once the
-catalog entry exists. The covers line still begins with `derivation-step`. -/
+common `Δt` is the coordinate period. Both metric components are negative. -/
 theorem frequency_ratio (ν1 ν2 g1 g2 Δt : ℝ) (hg1 : g1 < 0) (hg2 : g2 < 0)
     (hΔ : Δt ≠ 0) (hν2 : ν2 ≠ 0)
     (h1 : ν1 * Real.sqrt (-g1) = 1 / Δt) (h2 : ν2 * Real.sqrt (-g2) = 1 / Δt) :

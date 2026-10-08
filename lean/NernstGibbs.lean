@@ -32,10 +32,7 @@ namespace PhysJS.NernstGibbs
 /-- Nernst equation, and the same potential with `R / F = k_B / e`.
 
 `hadd` is the reaction split `ΔG = ΔG° + R T ln Q`. `hwork` and `hstd`
-are `ΔG = −n F E` and `ΔG° = −n F E°`. `e` is the elementary charge.
-
-Kind `bridge` on `PhysJS.NernstGibbs.nernst_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. -/
+are `ΔG = −n F E` and `ΔG° = −n F E°`. `e` is the elementary charge. -/
 theorem nernst_eq (E E0 R T n F Q dG dG0 NA kB e : ℝ)
     (hn : n ≠ 0) (hF : F ≠ 0) (hT : T ≠ 0) (hR : R ≠ 0) (he : e ≠ 0) (hNA : NA ≠ 0)
     (hQ : 0 < Q)

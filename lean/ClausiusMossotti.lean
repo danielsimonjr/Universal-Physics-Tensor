@@ -40,8 +40,6 @@ namespace PhysJS.ClausiusMossotti
 `hdef` is `P = ε₀ (ε_r − 1) E`. `hpol` is `P = N α E_loc`. `hlorentz` is
 `E_loc = E + P / (3 ε₀)`.
 
-Kind `bridge` on `PhysJS.ClausiusMossotti.clausius_mossotti_eq`, once the
-catalog entry exists. The covers line still begins with `derivation-step`.
 Not a derivation of the Lorentz field or of `α`. -/
 theorem clausius_mossotti_eq (εr N α ε0 E P Eloc : ℝ)
     (hε0 : 0 < ε0) (hE : E ≠ 0) (hden : εr + 2 ≠ 0)

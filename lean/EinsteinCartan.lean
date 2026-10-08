@@ -11,6 +11,10 @@ import Mathlib.Tactic.FieldSimp
 /-!
 `be-17`. Derivation step. The torsion–spin inversion, not the field equation.
 
+`be-17.torsionMonomial`. Derivation step. `torsion_monomial`.
+`be-17.coefficientNotFixed`. Derivation step. `coefficient_not_fixed`.
+`be-17.unitCoefficient`. Derivation step. `inversion_of_unit_coefficient`.
+
 `κ` is `PhysJS.Einstein.kappa`, `8πG/c⁴`. If every component satisfies
 `T = κ S` and `κ ≠ 0`, the squared contractions obey
 

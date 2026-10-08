@@ -31,10 +31,7 @@ namespace PhysJS.NewtonCooling
 /-- The lumped Newton balance integrates to an exponential.
 
 `hode` is `ρ c V dθ/dt = −h A θ`. The time constant in the conclusion is
-`τ = ρ c V / (h A)`.
-
-Kind `bridge` on `PhysJS.NewtonCooling.newton_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. -/
+`τ = ρ c V / (h A)`. -/
 theorem newton_eq (θ : ℝ → ℝ) (ρ c V hcoeff A t θ0 : ℝ)
     (hcap : ρ * c * V ≠ 0) (hconv : hcoeff * A ≠ 0)
     (hode : ∀ s, HasDerivAt θ (-(hcoeff * A) / (ρ * c * V) * θ s) s)

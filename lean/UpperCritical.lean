@@ -38,8 +38,7 @@ open Real
 /-- Upper critical field. `hll` is the Landau-level ground energy of charge
 `q`. `hξ` is the GL length. `hinst` is the linear instability.
 
-Kind `bridge` on `PhysJS.UpperCritical.critical_field`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not the
+Not the
 harmonic-oscillator spectrum. -/
 theorem critical_field
     (B ξ Φ0 hbar h e m α q eigenvalue : ℝ)

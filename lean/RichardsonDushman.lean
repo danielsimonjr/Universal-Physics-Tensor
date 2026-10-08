@@ -101,10 +101,7 @@ theorem exp_tail (c a : ℝ) (hc : 0 < c) :
 /-- Richardson–Dushman current from the two energy tails.
 
 `hpref` is `4 π m e / h³`. `e` is the elementary charge. The two integrals
-are `exp_tail`.
-
-Kind `bridge` on `PhysJS.RichardsonDushman.richardson_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. -/
+are `exp_tail`. -/
 theorem richardson_eq (J pref hpl φ kB T m e : ℝ)
     (hh : hpl ≠ 0) (hk : 0 < kB) (hT : 0 < T) (he : e ≠ 0)
     (hpref : pref = 4 * π * m * e / hpl ^ 3)

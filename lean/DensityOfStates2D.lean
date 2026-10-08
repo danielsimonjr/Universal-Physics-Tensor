@@ -57,8 +57,7 @@ theorem hasDerivAt_cumulative (m hbar E : ℝ) (hh : hbar ≠ 0) :
 
 `hcount` is two spins in the disk. `hband` is one isotropic parabola.
 
-Kind `bridge` on `PhysJS.DensityOfStates2D.dos_2d`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a valley
+Not a valley
 degeneracy. -/
 theorem dos_2d (n g k E m hbar : ℝ) (hm : m ≠ 0) (hh : hbar ≠ 0)
     (hcount : n = 2 * (Real.pi * k ^ 2) / (2 * Real.pi) ^ 2)

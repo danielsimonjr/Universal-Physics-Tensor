@@ -13,7 +13,9 @@ import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 
 /-!
-`be-53`. The sign of the one-loop coefficient, and the closed form of the running.
+`be-53`. Derivation step. The sign of the one-loop coefficient, and the closed form of the running.
+
+`be-53.oneLoop`. Derivation step. `alphaRun_hasDerivAt`.
 
 `b₀ = (11/3) N_c − (2/3) N_f` for SU(`N_c`) fundamentals. For SU(3),
 `0 < b₀` if and only if `N_f ≤ 16`. At 16 the value is `1/3`. At 17 it is

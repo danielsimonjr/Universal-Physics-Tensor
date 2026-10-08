@@ -184,8 +184,6 @@ theorem efficiency_value (S R K Th Tc I P Q η Z Tm m Δ : ℝ)
 square root of `1 + Z T_m`. Power and heat are `electricPower` and
 `hotHeat`. Stationarity is `P' Q = P Q'`.
 
-Kind `bridge` on `PhysJS.ThermoelectricGenerator.efficiency_eq`, once the
-catalog entry exists. The covers line still begins with `derivation-step`.
 Not Carnot alone, and not the matched load `m = 1`. -/
 theorem efficiency_eq
     (S R K Th Tc I P Q η Z Tm m Δ ΔT : ℝ)

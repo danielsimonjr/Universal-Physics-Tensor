@@ -92,8 +92,7 @@ theorem exciton_minimum (ħ μ k aX EX : ℝ) (hħ : 0 < ħ) (hμ : 0 < μ) (hk 
 `hRy` is `R_y = m k₀² / (2 ℏ²)`, `haB` is `a_B = ℏ² / (m k₀)`, and `hk` is the
 screened strength `k = k₀ / ε_r`. `EbX` is the binding energy `−E_X`.
 
-Kind `bridge` on `PhysJS.WannierExciton.exciton_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. The 1s trial
+The 1s trial
 energy is a premise; no band-structure or lattice-constant check. -/
 theorem exciton_eq (ħ μ m k0 k εr aX EX Ry aB : ℝ)
     (hħ : 0 < ħ) (hμ : 0 < μ) (hm : 0 < m) (hk0 : 0 < k0) (hεr : 0 < εr)

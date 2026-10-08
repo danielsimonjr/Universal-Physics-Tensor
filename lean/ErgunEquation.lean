@@ -41,8 +41,7 @@ namespace PhysJS.ErgunEquation
 `hgrad`: `Δp / L = f_p (ρ v² / d) (1 − ε) / ε³`.
 `hfp`: `f_p = k₁ / Re_p + k₂`. `hRe`: `Re_p = ρ v d / (μ (1 − ε))`.
 
-Kind `bridge` on `PhysJS.ErgunEquation.ergun_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. `k₁`, `k₂` are
+`k₁`, `k₂` are
 empirical hypotheses. -/
 theorem ergun_eq (G fp Re k₁ k₂ ρ μ v d ε : ℝ)
     (hρ : ρ ≠ 0) (hv : v ≠ 0) (hd : d ≠ 0)

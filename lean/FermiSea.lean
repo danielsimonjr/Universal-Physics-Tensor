@@ -164,8 +164,7 @@ theorem dos_factor (gF n EF : ℝ) (hEF : 0 < EF)
 isotropic parabola. `v` is `(1/ℏ) dE/dk` at `k_F`, and `invMass` is
 `ℏ⁻²` times the second derivative.
 
-Kind `bridge` on `PhysJS.FermiSea.fermi_sea`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not a lattice band. -/
+Not a lattice band. -/
 theorem fermi_sea
     (kF n EF v invMass hbar m : ℝ)
     (hk : 0 ≤ kF) (hm : m ≠ 0) (hh : hbar ≠ 0)

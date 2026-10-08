@@ -41,8 +41,7 @@ noncomputable def intensity (p Z : ℝ) : ℝ := p ^ 2 / (2 * Z)
 /-- Reflected pressure ratio and intensity reflection from pressure and
 velocity continuity.
 
-Kind `bridge` on `PhysJS.ImpedanceReflection.reflection_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not an
+Not an
 oblique-incidence or lossy result. -/
 theorem reflection_eq (pi pr pt Z₁ Z₂ : ℝ)
     (hZ₁ : 0 < Z₁) (hZ₂ : 0 < Z₂) (hpi : pi ≠ 0)

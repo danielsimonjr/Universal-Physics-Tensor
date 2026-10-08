@@ -14,6 +14,9 @@ import Mathlib.Tactic.Ring
 /-!
 `be-106`. Bridge. The R and L cutoffs, and the whistler limit.
 
+`be-106.cutoffL`. Derivation step. `cutoff_L`.
+`be-106.whistlerLimit`. Derivation step. `whistler_limit`.
+
 Proved under these hypotheses. The cold-plasma refractive indices are
 the Stix values
 

@@ -91,8 +91,7 @@ theorem debye_coefficients (ξ ξ' : ℝ → ℝ) (A B ω τ : ℝ) (hω : 0 < �
 /-- Loss tangent of a standard linear solid: with `E' = E + ΔE (1 − A)`
 and `E'' = ΔE B`, `ΔE = Δ E`, `x = ω τ`: `E''/E' = Δ x / (1 + (1+Δ) x²)`.
 
-Kind `bridge` on `PhysJS.ZenerDamping.loss_tangent_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a derivation
+Not a derivation
 of `Δ = E α² T / C_v` or of `τ` from heat conduction. -/
 theorem loss_tangent_eq (A B ω τ E dE α T Cv : ℝ)
     (hE : 0 < E) (hα : α ≠ 0) (hT : 0 < T) (hCv : 0 < Cv)

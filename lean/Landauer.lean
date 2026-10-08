@@ -11,9 +11,7 @@ import Physlib.StatisticalMechanics.CanonicalEnsemble.TwoState
 /-!
 `be-16`. Bridge. The encoded Landauer scale.
 
-UPT stores a `formalRef` of kind `bridge` on `PhysJS.Landauer.erasure_eq`,
-the equal-level two-state case. The covers line still begins with
-`derivation-step`.
+`PhysJS.Landauer.erasure_eq` is the equal-level two-state case.
 
 The encoded scalar is
 
@@ -135,8 +133,7 @@ lemma deficit_eq_temp_mul_entropy (E₀ E₁ : ℝ) (T : Temperature) (hT : 0 < 
 
 /-- The equal-level deficit is the encoded scale `k_B T log 2`.
 
-Kind `bridge` on `PhysJS.Landauer.erasure_eq`. The covers line still
-begins with `derivation-step`. Not `E ≥ T ΔS` for an arbitrary
+Not `E ≥ T ΔS` for an arbitrary
 protocol, and not the Bérut confrontation. -/
 theorem erasure_eq (E : ℝ) (T : Temperature) (hT : 0 < T.val) :
     erasureEnergy E T = kB * (T.val : ℝ) * log 2 := by

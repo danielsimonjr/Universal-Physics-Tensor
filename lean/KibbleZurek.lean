@@ -10,7 +10,7 @@ import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Ring
 
 /-!
-`be-34`. The Kibble–Zurek power, not the Boltzmann factor.
+`be-34`. Derivation step. The Kibble–Zurek power, not the Boltzmann factor.
 
 From `τ(ε) = τ₀ ε^{−zν}`, `ξ(ε) = ξ₀ ε^{−ν}`, and freeze-out
 `τ(ε̂) = ε̂ τ_Q`, with positive parameters:

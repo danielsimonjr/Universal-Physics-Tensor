@@ -18,6 +18,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-113`. Bridge. Landau damping of a Maxwellian, as an algebraic residue.
 
+`be-113.bohmGross`. Derivation step. `bohm_gross_exponent`.
+
 Proved under these hypotheses. The distribution is the one-dimensional
 Maxwellian
 

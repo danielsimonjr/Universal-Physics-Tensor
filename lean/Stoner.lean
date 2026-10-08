@@ -40,8 +40,7 @@ theorem pole (I gF : ℝ) : 1 - I * gF = 0 ↔ I * gF = 1 := by
 `hseries` is the geometric series of the contact bubbles. `|x| < 1` is the
 paramagnetic side, where the series converges. `x = I g(E_F)`.
 
-Kind `bridge` on `PhysJS.Stoner.stoner`, once the catalog entry exists. The
-covers line still begins with `derivation-step`. Not a second proof of
+Not a second proof of
 `be-94`. The pole is `PhysJS.Stoner.pole`. -/
 theorem stoner (χ χP I gF x : ℝ) (hx : |x| < 1) (hxI : x = I * gF)
     (hseries : χ = χP * ∑' n : ℕ, x ^ n) :

@@ -10,9 +10,6 @@ import Mathlib.Tactic.Linarith
 /-!
 `be-55`. Bridge. The integer Hall reciprocal, not TKNN.
 
-UPT stores a `formalRef` of kind `bridge` on `PhysJS.QuantumHall.reciprocal`.
-The covers line still begins with `derivation-step`.
-
 The encoded scalar, for a nonzero integer plateau index `C` and `e ≠ 0`, is
 
 ```
@@ -41,8 +38,7 @@ noncomputable def vonKlitzing (e h : ℝ) : ℝ :=
 
 /-- `σ_xy R_H = 1` and `R_H = R_K / C`.
 
-Kind `bridge` on `PhysJS.QuantumHall.reciprocal`. The covers line still
-begins with `derivation-step`. Not the TKNN theorem. -/
+Not the TKNN theorem. -/
 theorem reciprocal (C : ℤ) (e h : ℝ) (hC : C ≠ 0) (he : e ≠ 0) (hh : h ≠ 0) :
     sigma C e h = (C : ℝ) * e ^ 2 / h ∧
       hallResistance C e h = h / ((C : ℝ) * e ^ 2) ∧

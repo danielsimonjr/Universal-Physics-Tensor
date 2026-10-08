@@ -155,8 +155,7 @@ theorem sHalf_pos (R : ℝ) (hR₀ : 0 < R) (hR₁ : R < 1) : 0 < sHalf R := by
 difference is the full width in phase; one free spectral range is `2π`, and
 `F = 2π / (δp − δm)`.
 
-Kind `bridge` on `PhysJS.FabryPerot.finesse_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. The exact
+The exact
 finesse is `π / (2 arcsin s)`; the catalog form `π√R/(1−R)` is its
 small-width limit and an upper bound. -/
 theorem finesse_eq (R δm δp F : ℝ) (hR₀ : 0 < R) (hR₁ : R < 1)

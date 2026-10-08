@@ -12,9 +12,6 @@ import Mathlib.Tactic.Ring
 /-!
 `be-63`. Bridge. The polytropic prefactor. `ω₃⁰` stays symbolic.
 
-UPT stores a `formalRef` of kind `bridge` on `PhysJS.Chandrasekhar.prefactor`.
-The covers line still begins with `derivation-step`.
-
 From
 
 ```
@@ -205,8 +202,7 @@ lemma mass_from_k (hbar c G μ mU omega : ℝ) (hh : 0 < hbar) (hc : 0 < c) (hG 
 /-- The degeneracy pressure is `K_ρ ρ^{4/3}`, the `n = 3` central density cancels,
 and the mass is the Chandrasekhar prefactor. `ω₃⁰` stays symbolic.
 
-Kind `bridge` on `PhysJS.Chandrasekhar.prefactor`. The covers line still
-begins with `derivation-step`. Not rotation or magnetic support. -/
+Not rotation or magnetic support. -/
 theorem prefactor (hbar c G μ mU ρ n ρc omega : ℝ) (hh : 0 < hbar) (hc : 0 < c) (hG : 0 < G)
     (hμ : 0 < μ) (hm : 0 < mU) (hρ : 0 < ρ) (hn : 0 < n) (hρc : 0 < ρc) (homega : 0 < omega)
     (hdens : n = ρ / (μ * mU)) :

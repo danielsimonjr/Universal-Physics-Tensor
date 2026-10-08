@@ -29,10 +29,7 @@ namespace PhysJS.FourierConduction
 
 /-- Constant flux integrates to the slab drop.
 
-`hflux` is `dT/dx = −q / k` at every point.
-
-Kind `bridge` on `PhysJS.FourierConduction.fourier_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. -/
+`hflux` is `dT/dx = −q / k` at every point. -/
 theorem fourier_eq (T : ℝ → ℝ) (q k L : ℝ) (hk : k ≠ 0)
     (hflux : ∀ x, HasDerivAt T (-q / k) x) :
     q * L = -k * (T L - T 0) := by

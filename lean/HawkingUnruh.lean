@@ -9,6 +9,8 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 /-!
+`be-42`. Cross-check.
+
 `be-42`, with BE-57 and the edge `be-42-via-rs`. One entry, key `be-42`.
 
 ```
@@ -20,8 +22,7 @@ T_U(a)   = ℏ a / (2 π c k_B)
 `T_H(2 G M / c²) = T_H(M)` and `T_U(c⁴ / (4 G M)) = T_H(M)`. The
 acceleration `c⁴ / (2 G M)` is not that dictionary. This certifies the
 `8π`, `4π`, and `2π` under that dictionary. It does not certify the
-Hawking effect. It is a cross-check. UPT stores a `formalRef` of kind
-`cross-check` on `PhysJS.HawkingUnruh.dictionary`.
+Hawking effect. It is a cross-check.
 -/
 
 namespace PhysJS.HawkingUnruh

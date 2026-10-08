@@ -91,8 +91,7 @@ theorem jump_from_quadratic (F : ℝ → ℝ) (K Tc T C : ℝ)
 `ζ`. `hjump` is `ΔC = T_c α₀² / (2 β)`, the value of `−T F''` at `T_c`.
 `hCn` is the Sommerfeld normal heat capacity.
 
-Kind `bridge` on `PhysJS.BcsJump.heat_jump`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not `2π exp(−γ)`. -/
+Not `2π exp(−γ)`. -/
 theorem heat_jump (ΔC Cn N0 Tc ζ α0 β : ℝ)
     (hN : N0 ≠ 0) (hT : Tc ≠ 0) (hζ : ζ ≠ 0)
     (hα : α0 = N0 / Tc)

@@ -38,8 +38,7 @@ open Real
 `hn` and `hp` are the Boltzmann tails of the two majority densities measured
 from the intrinsic potential. `hproduct` is `n_p N_A = n_i²`.
 
-Kind `bridge` on `PhysJS.BuiltinVoltage.builtin_voltage`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 second proof of `be-99`, and not the ideal diode of `be-82`. -/
 theorem builtin_voltage
     (Vbi φn φp φi NA ND ni np e kT : ℝ)

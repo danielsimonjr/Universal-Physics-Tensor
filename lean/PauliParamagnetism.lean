@@ -32,8 +32,7 @@ open Real
 /-- Pauli susceptibility. `hM` is the Zeeman imbalance of the two spin
 spheres. `hdos` is the parabolic density at the Fermi energy.
 
-Kind `bridge` on `PhysJS.PauliParamagnetism.pauli`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not Landau
+Not Landau
 diamagnetism. -/
 theorem pauli (χP μ0 μB gF n EF B M : ℝ) (hB : B ≠ 0) (hEF : EF ≠ 0)
     (hM : M = μB * (gF * μB * B))

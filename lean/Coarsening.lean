@@ -14,6 +14,8 @@ import Mathlib.Tactic.Linarith
 /-!
 `be-15`. Derivation step. `z = 2` if and only if `L² ∝ t`.
 
+`be-15.lengthMonomial`. Derivation step. `length_monomial_at`.
+
 For `Γ > 0`, `t > 0`, and `z > 0`,
 
 ```

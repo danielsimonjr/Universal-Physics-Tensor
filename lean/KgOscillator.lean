@@ -6,7 +6,7 @@ Released under MIT license as described in the file LICENSE.
 import Physlib.ClassicalMechanics.HarmonicOscillator.Basic
 
 /-!
-`ab-kg-oscillator`. A spatially uniform solution of the Klein–Gordon equation
+`ab-kg-oscillator`. Bridge. A spatially uniform solution of the Klein–Gordon equation
 solves Physlib's harmonic oscillator.
 
 The field `u : ℝ → Time → ℝ` is uniform when it does not depend on `x`:

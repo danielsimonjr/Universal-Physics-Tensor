@@ -36,8 +36,6 @@ theorem channel_rate (L h v : ℝ) (hh : h ≠ 0) (hv : v ≠ 0) (hL : L ≠ 0) 
 /-- Landauer conductance. `hrate` is `channel_rate`. `hspin` is two spin
 states. `hbias` is the window `Δμ = e V`. `Tsum` is `Σ_n T_n`.
 
-Kind `bridge` on `PhysJS.LandauerConductance.conductance_eq`, once the
-catalog entry exists. The covers line still begins with `derivation-step`.
 Not the Hall conductance. -/
 theorem conductance_eq (G I V e h Tsum Δμ rate spin : ℝ)
     (he : e ≠ 0) (hh : h ≠ 0) (hV : V ≠ 0)

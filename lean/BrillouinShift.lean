@@ -65,8 +65,7 @@ catalog `2 n v / λ₀`.
 
 `hk` is `k = 2π n / λ₀`, `hΩ` is `Ω = v q`, `hν` is `ν = Ω / (2π)`.
 
-Kind `bridge` on `PhysJS.BrillouinShift.brillouin_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a derivation
+Not a derivation
 of the acoustic dispersion or of the scattering strength. -/
 theorem brillouin_eq (ν Ω q k θ n v lam₀ : ℝ)
     (hn : 0 < n) (hv : 0 < v) (hlam : 0 < lam₀) (hθ : 0 ≤ θ) (hθ' : θ ≤ π)

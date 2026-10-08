@@ -87,7 +87,6 @@ theorem halfTrace_eq (n₁ n₂ φ₁ φ₂ : ℝ) (h₁ : n₁ ≠ 0) (h₂ : n
     field_simp
     ring
 
-
 /-- `k = (n₁² + n₂²) / (2 n₁ n₂)`. -/
 noncomputable def kk (n₁ n₂ : ℝ) : ℝ := (n₁ ^ 2 + n₂ ^ 2) / (2 * n₁ * n₂)
 
@@ -221,8 +220,7 @@ theorem edge_iff_u (n₁ n₂ u : ℝ) (hn₁ : 0 < n₁) (hn₂ : 0 < n₂) (hu
 frequencies in the first band pair `(0, 2ω₀)` at which the half trace of the
 unit cell equals `−1`, the Bloch band edges.
 
-Kind `bridge` on `PhysJS.PhotonicBandGap.gap_width_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not
+Not
 higher-order gaps, oblique incidence, or a finite stack. -/
 theorem gap_width_eq (n₁ n₂ ω₀ ωlo ωhi : ℝ) (hn₁ : 0 < n₁) (hn₂ : 0 < n₂)
     (hω₀ : 0 < ω₀) (hlo₀ : 0 < ωlo) (hlo₁ : ωlo < 2 * ω₀)

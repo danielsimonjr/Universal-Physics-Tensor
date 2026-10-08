@@ -60,8 +60,7 @@ theorem stanton_friction
 /-- Reynolds analogy. `hmatch` is the shared wall gradient of a boundary
 layer whose momentum and heat diffusivities agree.
 
-Kind `bridge` on `PhysJS.ReynoldsAnalogy.reynolds_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 Nusselt correlation. -/
 theorem reynolds_eq
     (μ k ρ U ΔT cp slopeU slopeT τ q Cf heat St Pr : ℝ)

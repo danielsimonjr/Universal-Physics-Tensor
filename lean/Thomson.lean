@@ -39,8 +39,7 @@ namespace PhysJS.Thomson
 the conclusion of `PhysJS.KelvinRelation.peltier_eq` read as a function.
 `hμ` is the Thomson split of the Peltier slope.
 
-Kind `bridge` on `PhysJS.Thomson.thomson_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not
+Not
 `PhysJS.KelvinRelation.peltier_eq` itself. -/
 theorem thomson_eq (S Pel : ℝ → ℝ) (T μ S' dPel : ℝ)
     (hkelvin : ∀ t, Pel t = S t * t)

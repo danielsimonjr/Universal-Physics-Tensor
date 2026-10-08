@@ -57,8 +57,7 @@ theorem rate_sum (τ τ1 τ2 : ℝ) (hτ : τ ≠ 0) (hτ1 : τ1 ≠ 0) (hτ2 : 
 `hsurv` is independence of the two Poisson processes. `hρ`, `hρ1`, and
 `hρ2` are one Drude factor `C` on each lifetime.
 
-Kind `bridge` on `PhysJS.Matthiessen.matthiessen`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a collision
+Not a collision
 integral. -/
 theorem matthiessen (τ τ1 τ2 ρ ρ1 ρ2 C : ℝ)
     (hτ : τ ≠ 0) (hτ1 : τ1 ≠ 0) (hτ2 : τ2 ≠ 0)

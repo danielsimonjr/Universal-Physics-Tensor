@@ -55,8 +55,7 @@ lemma thermal_concentration (ℏ hpl m kB T : ℝ)
 
 /-- Saha constant from the thermal wavelength.
 
-Kind `bridge` on `PhysJS.Saha.saha_eq`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. Not a second proof
+Not a second proof
 of `be-12`. The factor `2` for electron spin is not included. -/
 theorem saha_eq (K nQ I kB T m ℏ hpl : ℝ)
     (hm : 0 < m) (hkB : 0 < kB) (hT : 0 < T) (hℏ : 0 < ℏ) (hh : hpl = 2 * π * ℏ)

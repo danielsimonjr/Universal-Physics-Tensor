@@ -234,9 +234,7 @@ lemma scaled_integral (h kB T : ℝ) (hh : 0 < h) (hk : 0 < kB) (hT : 0 < T) :
 statement). `hκ` is `κ = ∫ h ν (∂n/∂T) dν`, the temperature derivative of
 `J = ∫ h ν n dν`.
 
-Kind `bridge` on `PhysJS.ThermalConductanceQuantum.thermal_conductance_eq`,
-once the catalog entry exists. The covers line still begins with
-`derivation-step`. Not a derivation of the exchange of `d/dT` and the
+Not a derivation of the exchange of `d/dT` and the
 integral, of phonon transmission, or of the adiabatic contacts. -/
 theorem thermal_conductance_eq (κ h kB T : ℝ) (d : ℝ → ℝ)
     (hh : 0 < h) (hk : 0 < kB) (hT : 0 < T)

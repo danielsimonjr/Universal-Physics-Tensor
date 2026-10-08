@@ -47,9 +47,7 @@ theorem voltage_drop (a b lam ε : ℝ) (ha : 0 < a) (hb : 0 < b) (hε : ε ≠ 
 /-- Coaxial capacitance per length. `hV` is the integral of the Gauss field
 from `a` to `b`. `hC` is `C' = λ / ΔV`.
 
-Kind `bridge` on `PhysJS.CoaxialCapacitance.capacitance_per_length`, once
-the catalog entry exists. The covers line still begins with
-`derivation-step`. Not `ε A / d`. -/
+Not `ε A / d`. -/
 theorem capacitance_per_length (a b lam ε V C : ℝ)
     (ha : 0 < a) (hb : 0 < b) (hab : a ≠ b) (hε : ε ≠ 0) (hlam : lam ≠ 0)
     (hV : V = ∫ r in a..b, lam / (2 * Real.pi * ε * r))

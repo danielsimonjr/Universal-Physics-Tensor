@@ -208,8 +208,7 @@ theorem catalog_value (j : ℝ) (hj : j = 38317 / 10000) :
 `hj` and `hfirst` say `j` is the first positive zero of `J1`; `harg` is
 the first dark ring `x = π D sin θ / λ = j`; `hsmall` is `sin θ = θ`.
 
-Kind `bridge` on `PhysJS.RayleighCriterion.rayleigh_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of the disc diffraction integral, not a proof that `j` is the
 first zero, and the decimal `1.22` is the hypothesised `3.8317 / π`. -/
 theorem rayleigh_eq (lam D j s θ : ℝ) (hlam : 0 < lam) (hD : 0 < D)

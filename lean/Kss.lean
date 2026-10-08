@@ -10,9 +10,6 @@ import Mathlib.Tactic.Linarith
 /-!
 `be-21`. Bridge. The KSS saturating value, not the bound.
 
-UPT stores a `formalRef` of kind `bridge` on `PhysJS.Kss.saturating`.
-The covers line still begins with `derivation-step`.
-
 The encoded scalar is the equality
 
 ```
@@ -34,8 +31,7 @@ noncomputable def ratio (ℏ kB : ℝ) : ℝ :=
 
 /-- Clearing the denominator recovers `ℏ`.
 
-Kind `bridge` on `PhysJS.Kss.saturating`. The covers line still begins
-with `derivation-step`. Not the inequality. -/
+Not the inequality. -/
 theorem saturating (ℏ kB : ℝ) (hk : kB ≠ 0) :
     ratio ℏ kB = ℏ / (4 * π * kB) ∧ 4 * π * kB * ratio ℏ kB = ℏ := by
   unfold ratio

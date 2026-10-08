@@ -57,8 +57,7 @@ lemma work_eq (C Q : ℝ) (hC : C ≠ 0) : work C Q = Q ^ 2 / (2 * C) := by
 
 `hE` is the work to bring in the charge `e` through the voltage `q / C`.
 
-Kind `bridge` on `PhysJS.ChargingEnergy.charging_energy_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not a
+Not a
 derivation of the regime `k_B T ≪ E_C`. -/
 theorem charging_energy_eq (EC e C : ℝ) (hC : C ≠ 0)
     (hE : EC = ∫ q in (0 : ℝ)..e, q / C) :

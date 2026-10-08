@@ -15,6 +15,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-103`. Bridge. Bohm sheath for cold ions, and the one-dimensional warm-ion speed.
 
+`be-103.warmSound`. Derivation step. `warm_sound_eq`.
+
 Proved under these hypotheses. Ions are singly charged with `e > 0`. The sheath
 potential is zero at the edge and negative in the sheath. Cold ions fall from
 the edge speed `u₀`, so

@@ -15,6 +15,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-122`. Bridge. Langmuir probe: Bohm flux and floating potential.
 
+`be-122.bohmFlux`. Derivation step. `bohm_flux`.
+
 Proved under these hypotheses. Ions are cold. A presheath drop
 `e Δφ = k_B T_e / 2` and Boltzmann electrons give the sheath-edge
 density `n_s = n₀ exp(−1/2)`. Ions cross the edge at the cold Bohm

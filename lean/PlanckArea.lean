@@ -8,12 +8,11 @@ import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 
 /-!
-`be-14` and `be-43`. One lemma. The Planck-area form of the area law.
+`be-14`. Derivation step.
+`be-43`. Bridge.
 
-`be-14` is a counted derivation step. `be-43` is a UPT `formalRef` of kind
-`bridge` on the same theorem, `PhysJS.PlanckArea.area_law`, because that
-equality is the catalogued wormhole-area equation. Both covers lines still
-begin with `derivation-step`.
+One lemma, `PhysJS.PlanckArea.area_law`: the Planck-area form of the area
+law. For `be-43` that equality is the catalogued wormhole-area equation.
 
 The encoded SI scalar, with the area an input, is
 
@@ -55,8 +54,7 @@ noncomputable def entropyPlanck (kB ℓ2 A : ℝ) : ℝ :=
 /-- The SI form equals the Planck-area form. BE-43 is this equality on a
 wormhole area.
 
-`be-14` is kind `derivation-step`. `be-43` is kind `bridge` on this same
-theorem. Both covers lines still begin with `derivation-step`. Not a
+Not a
 minimal surface, and not ER=EPR. -/
 theorem area_law (kB c G ℏ A : ℝ) (hc : c ≠ 0) (hG : G ≠ 0) (hℏ : ℏ ≠ 0) :
     planckArea ℏ G c = ℏ * G / c ^ 3 ∧

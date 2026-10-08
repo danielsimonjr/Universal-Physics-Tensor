@@ -44,8 +44,7 @@ namespace PhysJS.QuarterBridge
 `Ia` and `Ib` are the divider currents. The output is the difference of the
 two midpoint voltages. `hRg` is `R_g = R (1 + x)` with `x = GF ε`.
 
-Kind `bridge` on `PhysJS.QuarterBridge.bridge_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a
+Not a
 half or full bridge, and not lead-wire compensation. -/
 theorem bridge_eq (R Rg x Vex Ia Ib Va Vb Vout : ℝ) (hR : 0 < R) (hx : 0 < 1 + x)
     (hRg : Rg = R * (1 + x))

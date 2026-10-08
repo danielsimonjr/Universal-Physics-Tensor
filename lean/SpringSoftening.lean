@@ -88,8 +88,7 @@ noncomputable def netForce (k ε0 A V g x : ℝ) : ℝ := -k * x + force ε0 A V
 
 /-- Effective stiffness `k_eff = −dF/dx = k − ε0 A V² / (g − x)³`.
 
-Kind `bridge` on `PhysJS.SpringSoftening.stiffness_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not
+Not
 charge control, and not a fringing field. `pull_in_gap_eq` ties the zero of
 this stiffness to the `be-79` pull-in. -/
 theorem stiffness_eq (k ε0 A V g x : ℝ) (hx : g - x ≠ 0) :

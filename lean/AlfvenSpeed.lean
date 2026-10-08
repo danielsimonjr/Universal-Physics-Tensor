@@ -158,8 +158,7 @@ theorem dispersion_eq (A C k ω φ B μ0 ρ : ℝ) (hk : k ≠ 0) (hμ : μ0 ≠
 /-- Phase speed of that wave. For `B > 0` it is the catalog value
 `B / √(μ0 ρ)`.
 
-Kind `bridge` on `PhysJS.AlfvenSpeed.speed_eq`. The covers line still
-begins with `derivation-step`. `ρ` is the density in the momentum
+`ρ` is the density in the momentum
 premise, read as the total mass density. Not a kinetic dispersion. -/
 theorem speed_eq (A C k ω φ B μ0 ρ : ℝ) (hk : k ≠ 0) (hμ : 0 < μ0) (hρ : 0 < ρ)
     (hB : 0 < B) (hnt : ∃ z t, planeWave A k ω φ z t ≠ 0)

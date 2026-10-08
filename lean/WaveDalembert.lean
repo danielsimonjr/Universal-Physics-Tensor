@@ -7,7 +7,7 @@ import lean.ScalarWave
 import Physlib.ClassicalMechanics.WaveEquation.Basic
 
 /-!
-`ab-wave-dalembert`. The missing direction of d'Alembert's formula.
+`ab-wave-dalembert`. Bridge. The missing direction of d'Alembert's formula.
 
 Physlib proves that a plane wave solves `WaveEquation`. A jointly `C²`
 solution in one dimension is the sum of two profiles, `F(x − c t) + G(x + c t)`.

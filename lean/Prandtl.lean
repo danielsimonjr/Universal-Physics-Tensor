@@ -24,8 +24,7 @@ namespace PhysJS.Prandtl
 
 /-- `Pr = ν / α` is `Pr k = μ c_p`.
 
-Kind `bridge` on `PhysJS.Prandtl.prandtl_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. The row is
+The row is
 the ratio of momentum diffusivity to thermal diffusivity. -/
 theorem prandtl_eq (Pr ν α μ ρ k cp : ℝ)
     (hρ : ρ ≠ 0) (hk : k ≠ 0) (hα : α ≠ 0)

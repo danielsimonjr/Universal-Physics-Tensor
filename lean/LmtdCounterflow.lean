@@ -91,8 +91,7 @@ and `ΔT₂ = T_h(L) − T_c(L)` (hot outlet, cold inlet).
 `hTh`, `hTc` are the steady stream energy equations. `hΔ` requires the
 terminal difference at the hot inlet to be positive.
 
-Kind `bridge` on `PhysJS.LmtdCounterflow.lmtd_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a derivation
+Not a derivation
 of `U`, and no phase change or heat loss. -/
 theorem lmtd_eq (Th Tc : ℝ → ℝ) (Ch Cc a L : ℝ)
     (hCh : 0 < Ch) (hCc : 0 < Cc) (ha : 0 < a) (hL : 0 < L)

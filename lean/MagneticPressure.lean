@@ -122,8 +122,7 @@ current and same turns per length. `hBattery` is `I` times the change in flux
 linkage. `hBalance` splits that work into the rise in stored energy and the
 mechanical work. `hMech` is `p ΔV`. `μ0 ≠ 0` and `ΔV ≠ 0`.
 
-Kind `bridge` on `PhysJS.MagneticPressure.pressure_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a kinetic
+Not a kinetic
 pressure, and not a Lagrangian derivation of the Maxwell stress tensor. -/
 theorem pressure_eq
     (U1 U2 : ℝ → ℝ)

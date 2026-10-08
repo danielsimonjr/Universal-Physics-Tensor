@@ -35,8 +35,7 @@ namespace PhysJS.ShockleyDiode
 equals the forward flux at `V = 0`. Low injection is that this reverse flux
 is the reverse flux at the operating bias.
 
-Kind `bridge` on `PhysJS.ShockleyDiode.shockley_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not ideality 2. -/
+Not ideality 2. -/
 theorem shockley_eq (I Ifwd Irev Is e V kB T η : ℝ)
     (_hkT : kB * T ≠ 0) (_hη : η ≠ 0)
     (hboltzmann : Ifwd = Is * Real.exp (e * V / (η * kB * T)))

@@ -28,10 +28,7 @@ namespace PhysJS.Otto
 /-- Cold-air standard efficiency.
 
 `h2` and `h3` are the isentropic temperature ratios. `hη` is
-`η = 1 − Q_out / Q_in`.
-
-Kind `bridge` on `PhysJS.Otto.otto_eq`, once the catalog entry exists.
-The covers line still begins with `derivation-step`. -/
+`η = 1 − Q_out / Q_in`. -/
 theorem otto_eq (η r γ T1 T2 T3 T4 cv Qin Qout : ℝ)
     (hr : 0 < r) (hcv : cv ≠ 0) (hspan : T3 - T2 ≠ 0)
     (h2 : T2 = T1 * r ^ (γ - 1))

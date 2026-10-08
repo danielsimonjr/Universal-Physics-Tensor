@@ -7,7 +7,9 @@ import lean.Inequalities
 import lean.PlaneWave
 
 /-!
-`ab-klein-gordon-wave`. Covers `bound.delta` exactly, at the dispersion relation.
+`ab-klein-gordon-wave`. Bridge. Covers `bound.delta` exactly, at the dispersion relation.
+
+`ab-klein-gordon-wave.planeWave`. Derivation step. `planeWave_iff_dispersion`.
 
 `ω(k) = √(c²k² + ω₀²)` against the dispersion-free speed `ck`. The relative
 phase-velocity error is `√(1 + r²) - 1` with `r = ω₀/(ck)`. UPT's

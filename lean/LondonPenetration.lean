@@ -136,8 +136,7 @@ theorem length_squared
 
 /-- The penetration depth is the positive square root of that coefficient.
 
-Kind `bridge` on `PhysJS.LondonPenetration.depth_eq`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a unique
+Not a unique
 monomial, and not the classical skin depth. -/
 theorem depth_eq
     (j : ℝ → ℝ) (B0 lam m μ0 n e x : ℝ)

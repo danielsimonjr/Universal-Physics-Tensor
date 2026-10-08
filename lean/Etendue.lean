@@ -45,8 +45,7 @@ open Real
 `hsnell` is Snell's law for all angles of the function `θ₂`; `hd` is its
 derivative at `θ₁`.
 
-Kind `bridge` on `PhysJS.Etendue.etendue_density_eq`, once the catalog
-entry exists. The covers line still begins with `derivation-step`. Not
+Not
 absorbing or scattering optics. -/
 theorem etendue_density_eq (n₁ n₂ θ₁ θ₂' : ℝ) (θ₂ : ℝ → ℝ)
     (hsnell : ∀ t, n₁ * sin t = n₂ * sin (θ₂ t))

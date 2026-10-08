@@ -63,8 +63,7 @@ theorem hasDerivAt_oscillator (kB θ T : ℝ) (hT : T ≠ 0)
 /-- Einstein heat capacity. `hC` says `C` is the temperature derivative of
 three Planck oscillators per atom.
 
-Kind `bridge` on `PhysJS.EinsteinSolid.einstein_heat`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not one oscillator. -/
+Not one oscillator. -/
 theorem einstein_heat (N kB θ T C : ℝ) (hT : T ≠ 0) (hden : Real.exp (θ / T) ≠ 1)
     (hC : HasDerivAt (fun t => 3 * N * (kB * θ / (Real.exp (θ / t) - 1))) C T) :
     C = 3 * N * kB * (θ / T) ^ 2 * Real.exp (θ / T) /

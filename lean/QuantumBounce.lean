@@ -9,6 +9,8 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
 
 /-!
+`be-19`. Cross-check.
+
 `be-19`, naming BE-54. One entry, key `be-19`.
 
 `Λ` is the modules' `[T⁻²]` symbol. With `ρ_c ≠ 0`,
@@ -22,8 +24,7 @@ H²_RS  = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3
 `σ = −ρ_c/2`. As `ρ_c → ∞` and as `σ → ∞`, both tend to
 `(8πG/3) ρ + Λ/3`. At `ρ = ρ_c` and `Λ = 0`, `H²_LQC = 0`.
 `σ = +ρ_c/2` is not the LQC polynomial. `σ < 0` is not a physical
-Randall–Sundrum brane. This is a cross-check. UPT stores a `formalRef`
-of kind `cross-check` on `PhysJS.QuantumBounce.dictionary`.
+Randall–Sundrum brane.
 -/
 
 namespace PhysJS.QuantumBounce

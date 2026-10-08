@@ -33,8 +33,7 @@ namespace PhysJS.LyddaneSachsTeller
 
 /-- Undamped LST. `hzero` is `ε(ω_LO) = 0`. `hstatic` is `ε(0)`.
 
-Kind `bridge` on `PhysJS.LyddaneSachsTeller.lst`, once the catalog entry
-exists. The covers line still begins with `derivation-step`. Not a damped
+Not a damped
 oscillator. -/
 theorem lst (ε0 εinf S ωLO ωTO : ℝ)
     (hinf : εinf ≠ 0) (hTO : ωTO ≠ 0) (hdiff : ωTO ^ 2 - ωLO ^ 2 ≠ 0)

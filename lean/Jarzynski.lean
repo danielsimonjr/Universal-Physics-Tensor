@@ -9,7 +9,7 @@ import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 /-!
-`be-29`. Property. UPT `formalRef` of kind `property` on `PhysJS.Jarzynski.jensen_work`.
+`be-29`. Property.
 
 `rejected.ts` marks the row not-a-bridge. The equality is the definition
 of `ΔF`, not a theorem of dynamics. For a finite probability and `β > 0`,

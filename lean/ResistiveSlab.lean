@@ -15,6 +15,8 @@ import Mathlib.Tactic.Ring
 /-!
 `be-117`. Bridge. Resistive decay of a slab, with `Rm` and the Lundquist number.
 
+`be-117.lundquist`. Derivation step. `lundquist_ratio`.
+
 Proved under these hypotheses. The magnetic diffusivity is
 `η_m = 1 / (μ0 σ)`, and the induction equation has already been reduced
 to `∂B/∂t = η_m ∂²B/∂x²`. The fundamental slab mode on a layer of
