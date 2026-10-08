@@ -112,7 +112,7 @@ import { evaluatePerihelionPrecession } from 'universal-physics-tensor';
 const result = evaluatePerihelionPrecession({
   M_kg: 1.989e30,  // kg — central mass
   a_m: 5.79e10,    // m — orbital semi-major axis
-  e: 0.205,        // eccentricity
+  eccentricity: 0.205, // orbital eccentricity (a bare e is the elementary charge)
   T_yr: 0.2408,    // orbital period in years (per-century conversion)
 });
 // result.dphi_rad_per_orbit: radians per orbit

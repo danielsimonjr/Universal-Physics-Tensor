@@ -93,6 +93,17 @@ function edgeContract(id: string, edge: BridgeEdge): InputContract {
   ]);
 }
 
+/**
+ * The declared inputs of an evaluable id: the closed-form evaluator's contract
+ * when it has one, else its edge's. {@link evaluateRelation} checks bindings
+ * against exactly this contract.
+ * @internal
+ */
+export function evaluableContract(found: Evaluable): InputContract {
+  if (found.evaluator !== undefined) return found.evaluator.contract;
+  return edgeContract(found.id, found.edge!);
+}
+
 function idOf(id: string | number): { key: string; numeric: number | undefined } {
   if (typeof id === 'number') return { key: catalogEdgeKey(id), numeric: id };
   try {
@@ -165,7 +176,7 @@ export function evaluateRelation(
   const found = resolveEvaluable(id);
   if (found.evaluator !== undefined) return closedFormEvaluation(found.evaluator, found.edge, bindings);
   const edge = found.edge!;
-  const checked = checkInputs(edgeContract(found.id, edge), bindings);
+  const checked = checkInputs(evaluableContract(found), bindings);
   try {
     const value = evaluateEdge(edge, { ...checked });
     // `checkInputs` refused a non-finite input, so a non-finite value comes from the formula.

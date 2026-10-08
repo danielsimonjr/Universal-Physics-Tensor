@@ -290,7 +290,7 @@ The engine architecture follows a strict three-part structure:
 
 ## Bridge Catalog Architecture
 
-A catalog record in `data/bridge-catalog.json` is the equation. `src/bridges/catalog-load.ts` reads it. `src/bridges/expr-parse.ts` builds the expression tree. `src/bridges/relation-eval.ts` evaluates it. `evaluateRelation` is that evaluation. A record may name a numerical method. The covariant-eikonal method in `src/numerical/covariant-eikonal.ts` is used by catalog relation be-37.
+A catalog record in `data/bridge-catalog.json` is the equation. `src/bridges/catalog-load.ts` reads it through `src/core/data-file.ts`, which checks every data file against the schema beside it (`data/<name>.schema.json`) when it loads. `src/bridges/expr-parse.ts` builds the expression tree. `src/bridges/relation-eval.ts` evaluates it. `evaluateRelation` is that evaluation. A record may name a numerical method. The covariant-eikonal method in `src/numerical/covariant-eikonal.ts` is used by catalog relation be-37.
 
 `src/bridges/index.ts` exports `BRIDGE_EQUATIONS`, the projection of the catalog rows. Bridge metadata (`dimensional_signature`, `status`, `known_issues`, `type`, `formalKey`) lives on the record. `membership.ts` adjudicates bridge-vs-law membership mechanically, with the `rejected.ts` negative catalog as overlay (see `v0.8.0-catalog-adjudication.md`). The sentence that each equation was a module under `src/bridges/equations/` is the record from before the catalog engine.
 

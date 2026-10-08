@@ -12,7 +12,6 @@ import { describe, expect, it } from 'vitest';
 import { canonicalById, CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import {
   CANONICAL_GROUP_PREFACTORS,
-  CANONICAL_PREFACTORS,
   canonicalGroupPrefactor,
   canonicalPrefactor,
 } from '../../src/composition/canonical-prefactors.js';
@@ -57,8 +56,8 @@ describe('a canonical equation is one record', () => {
   it('the prefactor tables are projections of the entries', () => {
     const withPrefactor = CANONICAL_EQUATIONS.filter((e) => e.prefactor !== undefined);
     expect(withPrefactor.length).toBe(27);
-    expect(CANONICAL_PREFACTORS.map((p) => p.id).sort()).toEqual(withPrefactor.map((e) => e.id).sort());
     for (const e of withPrefactor) expect(canonicalPrefactor(e.id)).toBe(e.prefactor!.value);
+    for (const e of CANONICAL_EQUATIONS.filter((x) => x.prefactor === undefined)) expect(canonicalPrefactor(e.id), e.id).toBeUndefined();
     const grouped = CANONICAL_EQUATIONS.filter((e) => e.groupPrefactor !== undefined);
     expect(grouped.map((e) => e.id)).toEqual(['CE-sound-speed']);
     expect(CANONICAL_GROUP_PREFACTORS.map((g) => g.id)).toEqual(['CE-sound-speed']);

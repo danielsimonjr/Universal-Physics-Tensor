@@ -1,9 +1,4 @@
 {
-  "pinnedCommit": "f622935ad115cb1b1279a640cc8ae924a7dd7cf0",
-  "inputTrees": {
-    "src/canonical": "8bb4666078d736e0baf0a0ff8c15d7207d5bd64a",
-    "tests/fixtures/atlas/benchmark/public/items.json": "3c938aa3ac9cbd7a6573735324335c99e3774071"
-  },
   "files": {
     "corpus.json": {
       "sha256": "c5f639beaaa04f350f262dd3fe620719eaf6222f099c1753e713231140fee31a",

@@ -5,7 +5,15 @@
  */
 import { describe, expect, it } from 'vitest';
 import { BRIDGE_EVALUATORS, evaluateBridge, unusedInputKeys } from '../../src/bridges/evaluators.js';
-import { inputContract } from '../../src/bridges/input-contract.js';
+import { inputContract, type InputSlot } from '../../src/bridges/input-contract.js';
+import { APPLIED_CASES, CASE_CONTRACTS } from '../../src/cases/index.js';
+import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
+import { evaluableContract, resolveEvaluable } from '../../src/composition/evaluate-relation.js';
+import { equals } from '../../src/dimensional/algebra.js';
+import { quantityRecord } from '../../src/dimensional/quantity-registry.js';
+import { constantRecord } from '../../src/dimensional/symbolic-constants.js';
+import type { Dimension } from '../../src/dimensional/types.js';
+import { unitDimension } from '../../src/dimensional/units.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { primaryRelation } from '../../src/bridges/catalog-load.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
@@ -119,7 +127,7 @@ describe('the input contract runs before the domain, on every entry', () => {
 
   it('an alternate converts onto its key', () => {
     const spec = BRIDGE_EVALUATORS.get(52)!;
-    const mercury = { M_kg: 1.989e30, e: 0.2056 };
+    const mercury = { M_kg: 1.989e30, eccentricity: 0.2056 };
     expect(spec.run({ ...mercury, major_axis_m: 2 * 5.79e10 }).value).toBe(spec.run({ ...mercury, a_m: 5.79e10 }).value);
     expect(() => spec.run({ ...mercury, a_m: 5.79e10, major_axis_m: 1.158e11 })).toThrow(/given twice/);
   });
@@ -170,5 +178,57 @@ describe('unusedInputKeys reads the output expressions through the formula gramm
     const unused = unusedInputKeys(BRIDGE_EVALUATORS.get(139)!);
     expect(unused).not.toContain('Nc_per_m3');
     expect(unused).not.toContain('ND_per_m3');
+  });
+});
+
+describe('a bare e is the elementary charge in every input contract', () => {
+  const CHARGE = constantRecord('e')!.dim;
+  const spellsE = (slot: InputSlot): boolean => [...slot.spellings, ...slot.alternates.map((a) => a.key)].includes('e');
+
+  /**
+   * Every slot that spells `e`, on every surface that takes keyed inputs: the
+   * catalog evaluators, the applied cases, and the edges `evaluateRelation`
+   * checks (catalog and canonical), with the dimension that slot reads.
+   */
+  function slotsSpellingE(): { where: string; dim: Dimension | undefined }[] {
+    const found: { where: string; dim: Dimension | undefined }[] = [];
+    const parameterDim = (parameters: readonly { key: string; unit: string }[], key: string) => {
+      const parameter = parameters.find((p) => p.key === key);
+      return parameter === undefined ? undefined : unitDimension(parameter.unit);
+    };
+    for (const [id, spec] of BRIDGE_EVALUATORS) {
+      for (const slot of spec.contract.slots.filter(spellsE)) found.push({ where: `be-${id} ${slot.key}`, dim: parameterDim(spec.parameters, slot.key) });
+    }
+    for (const [id, contract] of CASE_CONTRACTS) {
+      for (const slot of contract.slots.filter(spellsE)) found.push({ where: `${id} ${slot.key}`, dim: parameterDim(APPLIED_CASES.get(id)!.parameters, slot.key) });
+    }
+    for (const edge of [...CATALOG_GRAPH, ...CANONICAL_GRAPH]) {
+      const governing = CANONICAL_EQUATIONS.find((e) => e.id === edge.id)?.dimensional.governing ?? [];
+      for (const slot of evaluableContract(resolveEvaluable(edge.id)).slots.filter(spellsE)) {
+        const dim = edge.sources.find((s) => s.name === slot.key)?.dim ?? governing.find((g) => g.name === slot.key)?.dim;
+        found.push({ where: `${edge.id} ${slot.key}`, dim });
+      }
+    }
+    return found;
+  }
+
+  it('every slot spelling e, on every keyed input surface, reads a charge', () => {
+    const found = slotsSpellingE();
+    // The canonical atomic entries bind e as the charge, so the walk reaches real slots.
+    expect(found.length).toBeGreaterThan(0);
+    expect(found.filter((slot) => slot.dim === undefined || !equals(slot.dim, CHARGE)).map((slot) => slot.where)).toEqual([]);
+  });
+
+  it('e names the elementary charge in the constant registry and no other quantity', () => {
+    expect(constantRecord('e')!.unit).toBe('C');
+    const quantity = quantityRecord('e');
+    if (quantity !== undefined) expect(equals(quantity.dimension, CHARGE)).toBe(true);
+  });
+
+  it('be-52 reads the eccentricity as eccentricity, and e binds nothing there', () => {
+    const spec = BRIDGE_EVALUATORS.get(52)!;
+    const orbit = { M_kg: 1.989e30, a_m: 5.79e10 };
+    expect(spec.run({ ...orbit, eccentricity: 0.2056 }).value).toBeGreaterThan(0);
+    expect(() => spec.run({ ...orbit, e: 0.2056 })).toThrow(UnknownInputError);
   });
 });

@@ -15,7 +15,7 @@
 
 import type { VettedCandidate } from './discovery.js';
 import { bridgeCatalog } from '../bridges/catalog-load.js';
-import type { CatalogAdjudication as CandidateAdjudication } from '../bridges/catalog-types.js';
+import type { CatalogAdjudication } from '../bridges/catalog-types.js';
 
 /** Quantity names are ASCII kebab-case slugs; enforced so `~` cannot collide
  *  (Adam/Eve vet r1: guard the character-set assumption, don't assume it). */
@@ -52,9 +52,6 @@ export function candidateIdIfSlug(a: string, b: string): string | undefined {
   return candidateId(a, b);
 }
 
-/** The verdict vocabulary and the record type of the ledger: the catalog file's, re-exported under the ledger's public names. */
-export type { AdjudicationVerdict, CatalogAdjudication as CandidateAdjudication } from '../bridges/catalog-types.js';
-
 const VERDICTS: ReadonlySet<string> = new Set(['genuine', 'decoy', 'entailed', 'deferred']);
 
 /**
@@ -65,7 +62,7 @@ const VERDICTS: ReadonlySet<string> = new Set(['genuine', 'decoy', 'entailed', '
  *
  * @public
  */
-export const ADJUDICATIONS: readonly CandidateAdjudication[] = bridgeCatalog().adjudications.map((row) => {
+export const ADJUDICATIONS: readonly CatalogAdjudication[] = bridgeCatalog().adjudications.map((row) => {
   if (!VERDICTS.has(row.verdict)) throw new Error(`adjudication ${row.id}: verdict '${row.verdict}' is not genuine, decoy, entailed or deferred`);
   const [a, b, extra] = row.id.split('~');
   if (a === undefined || b === undefined || extra !== undefined || candidateId(a, b) !== row.id) {
@@ -74,7 +71,7 @@ export const ADJUDICATIONS: readonly CandidateAdjudication[] = bridgeCatalog().a
   return row;
 });
 
-const BY_ID: ReadonlyMap<string, CandidateAdjudication> = new Map(
+const BY_ID: ReadonlyMap<string, CatalogAdjudication> = new Map(
   ADJUDICATIONS.map((a) => [a.id, a]),
 );
 
@@ -82,7 +79,7 @@ const BY_ID: ReadonlyMap<string, CandidateAdjudication> = new Map(
 export function adjudicationFor(
   a: string,
   b: string,
-): CandidateAdjudication | undefined {
+): CatalogAdjudication | undefined {
   return BY_ID.get(candidateId(a, b));
 }
 
@@ -94,7 +91,7 @@ export function adjudicationFor(
  * @public
  */
 export type AnnotatedCandidate = VettedCandidate & {
-  readonly adjudication?: CandidateAdjudication;
+  readonly adjudication?: CatalogAdjudication;
 };
 
 /**

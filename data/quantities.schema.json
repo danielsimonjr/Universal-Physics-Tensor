@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "quantities.schema.json",
+  "title": "UPT quantity registry",
+  "description": "The shape of data/quantities.json. src/dimensional/quantity-registry.ts validates the file against this schema when it loads, with the keyword subset src/core/json-schema.ts reads. A constant's spellings are not written here: the constant registry names its quantity and the quantity registry derives those aliases.",
+  "type": "object",
+  "required": ["quantities"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "quantities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "symbol", "dimension", "attributes", "graphNode"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^\\S+$", "description": "The canonical id, or a spelling row (graphNode false). `_` and `-` are one character to every lookup, so two rows may not differ only there; the loader checks it." },
+          "symbol": { "type": "string", "minLength": 1 },
+          "dimension": { "$ref": "#/$defs/dimension" },
+          "attributes": {
+            "description": "Axis → value. The axes and their values are the attribute registry's; this file only states strings.",
+            "type": "object",
+            "additionalProperties": { "type": "string", "minLength": 1 }
+          },
+          "kind": { "enum": ["absolute", "interval"], "description": "The QuantityKind of a temperature-like quantity." },
+          "aliases": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "signRole": { "enum": ["charge", "mobility"], "description": "The SignRole of a signed quantity." },
+          "graphNode": { "type": "boolean" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "dimension": {
+      "description": "SI base exponents, all seven stated.",
+      "type": "object",
+      "required": ["L", "M", "T", "I", "Theta", "N", "J"],
+      "additionalProperties": false,
+      "properties": {
+        "L": { "type": "integer" },
+        "M": { "type": "integer" },
+        "T": { "type": "integer" },
+        "I": { "type": "integer" },
+        "Theta": { "type": "integer" },
+        "N": { "type": "integer" },
+        "J": { "type": "integer" }
+      }
+    }
+  }
+}

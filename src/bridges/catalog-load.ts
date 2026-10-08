@@ -5,9 +5,7 @@
  * @module bridges/catalog-load
  */
 
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { checkedDataFile } from '../core/data-file.js';
 import type {
   CatalogConfrontation,
   CatalogEntry,
@@ -17,13 +15,15 @@ import type {
   CatalogRelation,
 } from './catalog-types.js';
 
+/**
+ * `data/bridge-catalog.json`, checked against `data/bridge-catalog.schema.json`
+ * (every record's `type`, the relation, evaluator, parameter and confrontation
+ * shapes) and against what a schema cannot state: `count` is the number of entries.
+ */
 function loadFile(): CatalogFile {
-  const path = join(dirname(fileURLToPath(import.meta.url)), '../../data/bridge-catalog.json');
-  const file = JSON.parse(readFileSync(path, 'utf8')) as CatalogFile;
-  for (const entry of file.entries) {
-    if (entry.type !== 'standard' && entry.type !== 'cross-domain') {
-      throw new Error(`catalog record ${entry.id} has no type`);
-    }
+  const file = checkedDataFile('bridge-catalog.json') as CatalogFile & { readonly count: number };
+  if (file.count !== file.entries.length) {
+    throw new Error(`data/bridge-catalog.json: count is ${file.count} but the file has ${file.entries.length} entries`);
   }
   return file;
 }

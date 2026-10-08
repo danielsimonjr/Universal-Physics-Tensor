@@ -179,3 +179,56 @@ export function scaleToNumber(s: ExactScale): number {
   const rational = rationalToNumber(s.num, s.den);
   return s.irrational === 1 ? rational : rational * s.irrational;
 }
+
+const FACTOR = /^([^*/^\s]+)(?:\^([+-]?\d+))?$/;
+
+/**
+ * The two sides of a unit text or a scale expression under the single-solidus
+ * convention of ISO 80000-1: everything after the first `/` is the
+ * denominator, so a chain is one denominator (`km/s/Mpc` is km/(s·Mpc), and
+ * `W/m*K` is W/(m·K), not (W/m)·K). The denominator comes back as one
+ * `*`-joined product, each `/`-part's outer parentheses dropped. `units.ts`
+ * and {@link readScaleExpression} both split here, so a unit text and a scale
+ * expression in `data/units.json` read a `/` the same way.
+ * @internal
+ */
+export function solidusSides(text: string): { readonly numerator: string; readonly denominator: string } {
+  const parts = text.split('/');
+  return {
+    numerator: parts[0]!,
+    denominator: parts
+      .slice(1)
+      .map((part) => part.replace(/^\((.*)\)$/, '$1'))
+      .join('*'),
+  };
+}
+
+/**
+ * The exact value of a scale expression, the form `data/units.json` stores:
+ * factors joined by `*`, then optionally `/` and the denominator's factors,
+ * each a decimal literal or a name with an optional integer power
+ * (`4.1868*453.59237/1.8`, `pi/180`, `lbf/inch^2`). A `/` follows the unit
+ * grammar ({@link solidusSides}): `a/b*c` is a/(b·c). `resolve` gives a name
+ * its scale and returns undefined for a name it does not know, which throws
+ * here. A decimal literal is read digit for digit, so the result is the
+ * rational the text states.
+ * @internal
+ */
+export function readScaleExpression(text: string, resolve: (name: string) => ExactScale | undefined): ExactScale {
+  const product = (side: string): ExactScale => {
+    let scale = UNIT_SCALE;
+    for (const part of side.split('*')) {
+      const m = FACTOR.exec(part);
+      if (m === null) throw new RangeError(`exact scale: '${text}' is not a product of factors`);
+      const atom = m[1]!;
+      const base = decimalScale(atom) ?? resolve(atom);
+      if (base === undefined) throw new RangeError(`exact scale: '${text}' names '${atom}', which is not a known scale`);
+      scale = multiplyScales(scale, m[2] === undefined ? base : powerScale(base, Number(m[2])));
+    }
+    return scale;
+  };
+  const trimmed = text.trim();
+  const { numerator, denominator } = solidusSides(trimmed);
+  const top = product(numerator);
+  return trimmed.includes('/') ? divideScales(top, product(denominator)) : top;
+}

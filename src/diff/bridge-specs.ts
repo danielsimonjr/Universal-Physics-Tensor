@@ -39,7 +39,8 @@ interface ShapiroInput {
 interface PerihelionInput {
   readonly M_kg: number;
   readonly a_m: number;
-  readonly e: number;
+  /** Orbital eccentricity, 0 ≤ e < 1. A bare `e` is the elementary charge, so it is not this key. */
+  readonly eccentricity: number;
   readonly T_yr?: number;
 }
 
@@ -74,7 +75,7 @@ export const SHAPIRO_DELAY_DIFF: BridgeDiffSpec<ShapiroInput> = {
 export const PERIHELION_ADVANCE_DIFF: BridgeDiffSpec<PerihelionInput> = {
   bridgeId: catalogEdgeKey(perihelion.catalogId ?? 0),
   name: 'Perihelion advance (radian per orbit)',
-  paramNames: ['M_kg', 'a_m', 'e'],
+  paramNames: ['M_kg', 'a_m', 'eccentricity'],
   defaults: {},
   evaluate: (input) => evaluateAliased(perihelion, input),
 };

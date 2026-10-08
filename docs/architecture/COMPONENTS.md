@@ -117,7 +117,7 @@ Classifies how computationally tractable a bridge equation is: `'closed-form'` (
 
 ### Catalog engine (`src/bridges/catalog-load.ts`, `src/bridges/evaluators.ts`, `src/bridges/relation-eval.ts`)
 
-`catalog-load.ts` reads `data/bridge-catalog.json`. `BRIDGE_EVALUATORS` in `evaluators.ts` is the input contract of each catalog evaluator, projected from that file. `run` evaluates the relation expression. It does not switch on a catalog id. `evaluateRelation` is the public evaluation. `BRIDGE_RHS_BY_ID` in `rhs-registry.ts` is the expression tree of each primary relation. The covariant-eikonal method lives in `src/numerical/covariant-eikonal.ts` and is used by catalog relation be-37. The sentence that each equation was a module under `src/bridges/equations/` is the record from before the catalog engine.
+`catalog-load.ts` reads `data/bridge-catalog.json` through `src/core/data-file.ts`, which checks it against `data/bridge-catalog.schema.json` at load. `BRIDGE_EVALUATORS` in `evaluators.ts` is the input contract of each catalog evaluator, projected from that file. `run` evaluates the relation expression. It does not switch on a catalog id. `evaluateRelation` is the public evaluation. `BRIDGE_RHS_BY_ID` in `rhs-registry.ts` is the expression tree of each primary relation. The covariant-eikonal method lives in `src/numerical/covariant-eikonal.ts` and is used by catalog relation be-37. The sentence that each equation was a module under `src/bridges/equations/` is the record from before the catalog engine.
 
 ### `adjudicateBridgeEntry` / `adjudicateCatalog` (`src/bridges/membership.ts`)
 
@@ -185,7 +185,7 @@ Compares a composed chain's prediction against an independent direct route and r
 
 ### Graph quantity nodes (`src/composition/quantities.ts`)
 
-Every graph endpoint is a projection of `data/quantities.json` through `src/dimensional/quantity-registry.ts`. `quantities.ts` builds one `Quantity` object per registry row whose `graphNode` is true. Name uniqueness is pinned by `tests/composition/quantities.test.ts`. The sentence that the nodes were hand constants under `src/composition/quantities/` is the record from before the registry.
+Every graph endpoint is a projection of `data/quantities.json` (checked against `data/quantities.schema.json` at load by `src/core/data-file.ts`) through `src/dimensional/quantity-registry.ts`, which refuses two rows that one folded spelling names. `quantities.ts` builds one `Quantity` object per registry row whose `graphNode` is true. Name uniqueness is pinned by `tests/composition/quantities.test.ts`. The sentence that the nodes were hand constants under `src/composition/quantities/` is the record from before the registry.
 
 ### `enumerateCompositions(...)` (`src/composition/enumerate.ts`)
 

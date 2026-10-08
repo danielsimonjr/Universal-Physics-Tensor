@@ -5,9 +5,7 @@
  * @module dimensional/bridge-check
  */
 
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { checkedDataFile } from '../core/data-file.js';
 import type { Dimension } from './types.js';
 import { equals } from './algebra.js';
 import type { ExprNode } from './validator.js';
@@ -18,8 +16,8 @@ interface CatalogDimensionFile {
 }
 
 function loadExpected(): ReadonlyMap<number, Dimension> {
-  const path = join(dirname(fileURLToPath(import.meta.url)), '../../data/bridge-catalog.json');
-  const parsed = JSON.parse(readFileSync(path, 'utf8')) as CatalogDimensionFile;
+  // The same checked read as `bridges/catalog-load.ts`; this layer cannot import that module.
+  const parsed = checkedDataFile('bridge-catalog.json') as CatalogDimensionFile;
   const map = new Map<number, Dimension>();
   for (const entry of parsed.entries) {
     if (entry.dimension !== undefined) map.set(entry.id, entry.dimension);

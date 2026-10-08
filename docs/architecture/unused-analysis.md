@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 78
+- **Potentially unused exports**: 77
 
 ## Potentially Unused Files
 
@@ -166,10 +166,6 @@ These exports are not imported by any other file in the codebase:
 ### `src/dimensional/unit-convention.ts`
 
 - `QUANTITY_CONVENTION_UNIT` (constant)
-
-### `src/dimensional/units.ts`
-
-- `unitDimension` (function)
 
 ### `src/numerical/formula-dimension.ts`
 

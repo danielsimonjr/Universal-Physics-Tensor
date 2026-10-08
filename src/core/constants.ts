@@ -122,6 +122,14 @@ export const THOMSON_CROSS_SECTION_SI = 6.6524587321e-29;
  */
 export const GM_SUN_SI = 1.3271244e20;
 
+/**
+ * The solar mass (kg) that reproduces {@link GM_SUN_SI} with {@link G_SI}:
+ * the double `GM_SUN_SI / G_SI`. The unit `Msun_iau` and the registry name
+ * `Msun_iau` both read this one value.
+ * @internal
+ */
+export const M_SUN_IAU_SI = GM_SUN_SI / G_SI;
+
 /** Where {@link GM_SUN_SI} comes from. @internal */
 export const GM_SUN_SOURCE = 'IAU 2015 Resolution B3, nominal solar mass parameter (GM)☉ = 1.3271244e20 m³ s⁻²';
 

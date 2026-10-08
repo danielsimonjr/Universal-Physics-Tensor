@@ -21,6 +21,7 @@ import {
   PHYSJS_COMMIT,
   physjsFormalRef,
   physjsManifestProblems,
+  physjsNestedStatements,
   type PhysjsManifestFile,
 } from '../../src/atlas/physjs-ref.js';
 
@@ -178,12 +179,14 @@ describe('vendored PhysJS manifest', () => {
   });
 
   it('carries nested planeWave objects on the five rank-1 entries and does not promote them', () => {
-    expect(manifest.entries.filter((entry) => entry.planeWave !== undefined)).toHaveLength(RANK1_PLANE_WAVE.length);
+    const planeWave = (entry: PhysjsManifestFile['entries'][number] | undefined) =>
+      entry === undefined ? undefined : physjsNestedStatements(entry).nested.find((statement) => statement.name === 'planeWave');
+    expect(manifest.entries.filter((entry) => planeWave(entry) !== undefined)).toHaveLength(RANK1_PLANE_WAVE.length);
     for (const [key, theorem] of RANK1_PLANE_WAVE) {
       const entry = manifest.entries.find((candidate) => candidate.key === key);
-      expect(entry?.planeWave?.theorem).toBe(theorem);
-      expect(entry?.planeWave?.covers).toBe(PLANE_WAVE_COVERS);
-      expect(entry?.planeWave?.coverage).toBe(COVERAGE);
+      expect(planeWave(entry)?.theorem).toBe(theorem);
+      expect(planeWave(entry)?.covers).toBe(PLANE_WAVE_COVERS);
+      expect(planeWave(entry)?.coverage).toBe(COVERAGE);
       expect(entry?.theorem.endsWith('covers_bound_delta')).toBe(true);
       const bridge = atlasBridges.find((candidate) => candidate.id === key);
       expect(bridge?.formalRef?.statement).toBe(entry?.theorem);
@@ -221,6 +224,17 @@ describe('vendored PhysJS manifest', () => {
     expect(physjsManifestProblems({ manifest, bridges: promoted }).join('\n')).toMatch(
       /formalRef names the nested planeWave theorem/,
     );
+  });
+
+  it('reads a nested statement by its shape, not from a list of names', () => {
+    const entry = manifest.entries.find((candidate) => candidate.key === 'be-13')!;
+    const statement = { theorem: 'PhysJS.Einstein.trace_eq', covers: entry.covers, coverage: COVERAGE, leanProof: 'complete', axioms: entry.axioms };
+    expect(physjsNestedStatements({ ...entry, aNameNoListHolds: statement }).problems).toEqual([]);
+    expect(physjsNestedStatements({ ...entry, aNameNoListHolds: statement }).nested.map((n) => n.name)).toContain('aNameNoListHolds');
+    expect(physjsNestedStatements({ ...entry, notAStatement: { theorem: 'x' } }).problems).toEqual([
+      "manifest entry 'be-13' has unexpected field 'notAStatement'",
+    ]);
+    expect(physjsNestedStatements({ ...entry, notAStatement: 'text' }).problems).toHaveLength(1);
   });
 
   it('does not skip a lean4-physjs reference the manifest does not name', () => {

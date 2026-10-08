@@ -7632,12 +7632,7 @@
         "J": 0
       },
       "attributes": {},
-      "graphNode": false,
-      "aliases": [
-        "k_B",
-        "kB",
-        "boltzmann"
-      ]
+      "graphNode": false
     },
     {
       "id": "specific-heat",
@@ -7692,22 +7687,6 @@
     {
       "id": "delta-T",
       "symbol": "delta-T",
-      "dimension": {
-        "L": 0,
-        "M": 0,
-        "T": 0,
-        "I": 0,
-        "Theta": 1,
-        "N": 0,
-        "J": 0
-      },
-      "attributes": {},
-      "kind": "interval",
-      "graphNode": false
-    },
-    {
-      "id": "temperature_change",
-      "symbol": "temperature_change",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -9770,10 +9749,7 @@
         "J": 0
       },
       "attributes": {},
-      "graphNode": true,
-      "aliases": [
-        "h"
-      ]
+      "graphNode": true
     }
   ]
 }

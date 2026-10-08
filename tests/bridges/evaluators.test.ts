@@ -132,7 +132,7 @@ describe('BRIDGE_EVALUATORS', () => {
 
   it('every spec run is callable with its declared inputs', () => {
     const sample: Record<string, number> = {
-      M_kg: 1.989e30, b_m: 7e8, a_m: 5.79e10, e: 0.2056, T_yr: 0.24, temperature_K: 300,
+      M_kg: 1.989e30, b_m: 7e8, a_m: 5.79e10, eccentricity: 0.2056, T_yr: 0.24, temperature_K: 300,
       C: 1, d_m: 1e-6, a_m_s2: 9.8, T_K: 300, R_ohm: 1000, V_volts: 1e-3,
       nu: 1 / 3, sigma_S_per_m: 6e7, T_c_K: 1.2, mu_e: 2, rho_kg_per_m3: 3.8e-16, mu: 2.3,
       I_W_per_m2: 1e6, R: 0, theta_rad: 0, B_T: 12e-9, g_00: -0.81,

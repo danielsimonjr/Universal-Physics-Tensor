@@ -6,8 +6,8 @@
  * Each entry that records only dimensionally, or only up to a constant, states
  * its exact prefactor as `prefactor` with a verbatim quote and a revision-pinned
  * locator; a test holds that neither its AST nor its monomial carries a constant
- * of its own. The arrays and functions here are projections of those fields,
- * kept for callers; the entry owns the fact.
+ * of its own. The lookups here read those fields; the entry owns the fact, and
+ * a caller that wants the quote or the locator reads the entry.
  *
  * A prefactor that depends on a dimensionless group the entry's dimensional
  * record does not carry (CE-sound-speed's √γ) is not a constant: it is the
@@ -19,26 +19,10 @@
 
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 
-/** One sourced prefactor, as a row keyed by the entry id. @internal */
-export interface CanonicalPrefactor {
-  /** A `CanonicalEquation.id`. */
-  readonly id: string;
-  /** The exact dimensionless factor in front of the entry's AST or monomial. */
-  readonly prefactor: number;
-  /** Verbatim source text the factor is read from. */
-  readonly quote: string;
-  /** Where the quote is: page, revision id and wikitext line. */
-  readonly locator: string;
-}
-
-/** The sourced prefactors, one row per entry that records one. @internal */
-export const CANONICAL_PREFACTORS: readonly CanonicalPrefactor[] = CANONICAL_EQUATIONS.flatMap((e) =>
-  e.prefactor === undefined
-    ? []
-    : [{ id: e.id, prefactor: e.prefactor.value, quote: e.prefactor.quote, locator: e.prefactor.locator }],
+/** Entry id → the exact factor in front of its AST or monomial, read from the entry's `prefactor`. */
+const PREFACTOR_BY_ID: ReadonlyMap<string, number> = new Map(
+  CANONICAL_EQUATIONS.flatMap((e) => (e.prefactor === undefined ? [] : [[e.id, e.prefactor.value] as const])),
 );
-
-const PREFACTOR_BY_ID = new Map(CANONICAL_PREFACTORS.map((p) => [p.id, p.prefactor]));
 
 /** The sourced prefactor of a canonical entry, or `undefined`. @internal */
 export function canonicalPrefactor(id: string): number | undefined {

@@ -30,7 +30,7 @@ describe('a record may return a second number beside its value (issues 451, 479)
     expect(r.lambda_m).toBeCloseTo(5e-8 / Math.sqrt(0.9375), 20);
   });
   it('gives Mercury about 43 arcsec per century only when T_yr is supplied', () => {
-    const base = { M_kg: 1.989e30, a_m: 5.79e10, e: 0.2056 };
+    const base = { M_kg: 1.989e30, a_m: 5.79e10, eccentricity: 0.2056 };
     expect(run(52, base).precession_arcsec_per_century).toBeUndefined();
     const r = run(52, { ...base, T_yr: 0.2408 });
     expect(r.precession_arcsec_per_century).toBeGreaterThan(42.9);

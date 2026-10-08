@@ -251,8 +251,8 @@ describe('I6 — every evaluator declares its inputs; units convert only when th
   });
 
   it('the full major axis is a declared alternate of the semi-major axis, halved and said so', async () => {
-    const viaMajor = await json(['evaluate', 'be-52', 'M_kg=1Msun', 'major_axis_m=1.158e11', 'e=0.2056']);
-    const direct = await json(['evaluate', 'be-52', 'M_kg=1.989e30', 'a_m=5.79e10', 'e=0.2056']);
+    const viaMajor = await json(['evaluate', 'be-52', 'M_kg=1Msun', 'major_axis_m=1.158e11', 'eccentricity=0.2056']);
+    const direct = await json(['evaluate', 'be-52', 'M_kg=1.989e30', 'a_m=5.79e10', 'eccentricity=0.2056']);
     expect(viaMajor.result.inputs.a_m).toBeCloseTo(5.79e10, 0);
     expect(viaMajor.result.output.value).toBeCloseTo(direct.result.output.value, 18);
     expect(viaMajor.result.conversions.find((c: any) => c.key === 'a_m').via).toBe('major_axis_m');
@@ -267,7 +267,7 @@ describe('I6 — every evaluator declares its inputs; units convert only when th
     await bad(['be-56', 'd_m=1kg'], /be-56: 'kg' is \[mass\], but this input is \[length\] \(m\)/);
     await bad(['be-63', 'mu_e=2m'], /'m' is \[length\], but this input is \[1\] \(dimensionless\)/);
     await bad(['be-56', 'radius_m=1um'], /'radius_m' is not an input here; the inputs are: d_m/);
-    await bad(['be-52', 'M_kg=1Msun', 'a_m=5.79e10', 'major_axis_m=1.158e11', 'e=0.2'], /'a_m' is given twice \(once through an alternate\)/);
+    await bad(['be-52', 'M_kg=1Msun', 'a_m=5.79e10', 'major_axis_m=1.158e11', 'eccentricity=0.2'], /'a_m' is given twice \(once through an alternate\)/);
     const fahrenheit = (80 - 32) * (5 / 9) + 273.15;
     const viaF = await out(['evaluate', 'be-58', 'T_K=80degF', 'R_ohm=1']);
     const viaK = await out(['evaluate', 'be-58', `T_K=${fahrenheit}`, 'R_ohm=1']);

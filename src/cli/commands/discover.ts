@@ -12,7 +12,8 @@ import { resolveGraph, groundTruthAnchor, groundTruthLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import type { VettedCandidate } from '../../composition/discovery.js';
-import type { AnnotatedCandidate, AdjudicationVerdict } from '../../composition/adjudication.js';
+import type { AnnotatedCandidate } from '../../composition/adjudication.js';
+import type { AdjudicationVerdict } from '../../bridges/catalog-types.js';
 import { adjudicationSourceUrls } from '../published-url.js';
 import type { ConsequenceSignal, ConsequenceEvidence } from '../../composition/consequence.js';
 

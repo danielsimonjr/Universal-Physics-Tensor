@@ -42,9 +42,9 @@ describe('a notice is data (issue: notice strings were an id switch)', () => {
 
   it('be-51 and be-52 refuse the same way inside 10 r_s', () => {
     expect(() => evaluateRelation(51, { M_kg: SUN, b_m: INSIDE })).toThrow(DomainViolationError);
-    expect(() => evaluateRelation(52, { M_kg: SUN, a_m: INSIDE, e: 0 })).toThrow(DomainViolationError);
+    expect(() => evaluateRelation(52, { M_kg: SUN, a_m: INSIDE, eccentricity: 0 })).toThrow(DomainViolationError);
     // the control: Mercury is far outside the cut
-    expect(evaluateRelation(52, { M_kg: SUN, a_m: 5.79e10, e: 0.2056 }).kind).toBe('value');
+    expect(evaluateRelation(52, { M_kg: SUN, a_m: 5.79e10, eccentricity: 0.2056 }).kind).toBe('value');
   });
 
   it('the CLI has no notice switch, no weak-field physics, and no bridge-number branch', () => {

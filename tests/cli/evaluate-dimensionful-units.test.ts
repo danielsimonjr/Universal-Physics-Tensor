@@ -6,8 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-import { E_SI, K_B_SI } from '../../src/core/constants.js';
-import { EPS0_SI } from '../../src/dimensional/formula-names.js';
+import { E_SI, EPS0_SI, K_B_SI } from '../../src/core/constants.js';
 
 async function run(args: string[]): Promise<{ code: number; text: string }> {
   const lines: string[] = [];

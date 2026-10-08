@@ -13,9 +13,6 @@ import { MASS, TEMPERATURE } from './types.js';
 import { CONSTANT_REGISTRY } from './symbolic-constants.js';
 import { allQuantityRecords, foldName, quantityRecord, synonymGroupsFromRegistry } from './quantity-registry.js';
 
-/** Vacuum permittivity and permeability, re-exported from the owner `core/constants.ts`. */
-export { EPS0_SI, MU0_SI } from '../core/constants.js';
-
 /** One formula-only name. @internal */
 export interface FormulaName {
   readonly name: string;

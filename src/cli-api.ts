@@ -161,7 +161,9 @@ export {
   candidateId,
   ADJUDICATIONS,
 } from './composition/adjudication.js';
-export type { AnnotatedCandidate, CandidateAdjudication } from './composition/adjudication.js';
+export type { AnnotatedCandidate } from './composition/adjudication.js';
+/** One record of the adjudication ledger, exported from its owner, the catalog file's types. */
+export type { CatalogAdjudication } from './bridges/catalog-types.js';
 
 // Consequence propagation (composition/consequence.ts) — annotates discovery
 // candidates with the entailed/novel-consequence/inconclusive signal; never

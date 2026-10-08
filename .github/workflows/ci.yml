@@ -94,6 +94,18 @@ jobs:
         run: bun scripts/cli-reference.ts --check
       - name: Fail when the PhysJS table is stale
         run: bun scripts/generate-physjs-table.ts --check
+      # The pinned PhysJS files (manifest, lean/ listing, theorem -> file table) are copies of
+      # PhysJS at the manifest's commit. Without a PhysJS checkout nothing compared them, so a hand
+      # edit or a half-done re-pin passed every job. A depth-1 fetch of that one commit is enough:
+      # the script reads only `git show` and `git ls-tree` at it. PhysJS is public; no token.
+      - name: Fetch PhysJS at the pinned commit
+        run: |
+          commit=$(node -p "require('./formal/physjs/manifest.json').commit")
+          git init -q "$RUNNER_TEMP/PhysJS"
+          git -C "$RUNNER_TEMP/PhysJS" fetch -q --depth=1 https://github.com/danielsimonjr/PhysJS.git "$commit"
+          echo "PHYSJS_CHECKOUT=$RUNNER_TEMP/PhysJS" >> "$GITHUB_ENV"
+      - name: Fail when the vendored PhysJS files are not PhysJS's at the pin
+        run: bun scripts/vendor-physjs.ts --physjs "$PHYSJS_CHECKOUT" --check
 
   # Non-required on purpose. The local pre-push hook still runs the private
   # code_docs.py against .githooks/code-docs-baseline.txt. A GitHub-UI merge

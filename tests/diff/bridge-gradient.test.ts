@@ -308,7 +308,7 @@ describe('bridge evaluators (sanity — confirms struct-arg signatures)', () => 
     const result = PERIHELION_ADVANCE_DIFF.evaluate({
       M_kg: 1.989e30,
       a_m: 5.7909e10,
-      e: 0.20563,
+      eccentricity: 0.20563,
       T_yr: 0.2408,
     });
     // 43 arcsec/century × (π/180) × (1/3600) × (0.2408 yr / 100 yr_per_century)
