@@ -713,7 +713,7 @@ export {
   annotateAdjudications,
 } from './composition/adjudication.js';
 export type { AnnotatedCandidate } from './composition/adjudication.js';
-// The ledger's verdict and record types are the catalog file's; exported from that owner.
+/** The adjudication ledger's verdict and record types, exported from their owner, the catalog file's types. */
 export type { AdjudicationVerdict, CatalogAdjudication } from './bridges/catalog-types.js';
 
 // Consequence propagation — the machine pre-classifier for the human
