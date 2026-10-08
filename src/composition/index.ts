@@ -93,7 +93,7 @@ export type {
 } from './explain.js';
 export { explainQuantity } from './explain.js';
 /** The result of {@link evaluateRelation}. A value carries a dimension. An unset coefficient carries the formula. */
-export type { Evaluation } from './evaluate-relation.js';
+export type { Evaluation, ExtraOutput } from './evaluate-relation.js';
 /** Evaluate a catalog id or a canonical id. A sourced number is `kind: 'value'`. An unset coefficient is `kind: 'unset'`. */
 export { evaluateRelation } from './evaluate-relation.js';
 

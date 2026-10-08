@@ -22,8 +22,8 @@ function labeled(text: string, key: string): string {
 }
 
 function output(text: string, key: string): number {
-  // The result line is `<output name> [unit] = N`; the output name is the evaluator's target, not `value`.
-  const match = new RegExp(key === 'value' ? '\\] = ([^\\n]+)' : `${key} = ([^\\n]+)`).exec(text);
+  // The result line is `<output name> [unit] = N — meaning`; the output name is the evaluator's target, not `value`.
+  const match = new RegExp(key === 'value' ? '\\] = (\\S+)' : `${key} = (\\S+)`).exec(text);
   if (match === null) throw new Error(`no ${key} in:\n${text}`);
   return Number(match[1]);
 }

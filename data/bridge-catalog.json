@@ -11493,10 +11493,7 @@
           "name": "precession_arcsec_per_century",
           "unit": "arcsec/century",
           "meaning": "Δφ per orbit times orbits per century, in arcseconds",
-          "expression": "value*100/T_yr*180*3600/pi",
-          "requires": [
-            "T_yr"
-          ]
+          "expression": "value*100/T_yr*180*3600/pi"
         }
       ]
     },

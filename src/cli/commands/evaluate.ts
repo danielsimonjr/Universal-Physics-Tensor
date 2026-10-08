@@ -9,7 +9,6 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { siUnitOf } from '../expr-print.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter, PropagatedOutput } from '../../cli-api.js';
@@ -384,10 +383,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   const spec = found.evaluator;
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 
-  // The one evaluation: `run` checks the inputs (missing, unknown, type) before the domain.
-  let result: Record<string, number>;
+  // The one evaluation, the library's result builder: `run` checks the inputs (missing, unknown,
+  // type) before the domain, and the result carries the output's name, unit, meaning and extras.
+  let evaluation: ReturnType<typeof api.evaluateResolved>;
   try {
-    result = spec.run(inputs);
+    evaluation = api.evaluateResolved(found, inputs, 'all');
   } catch (e) {
     // An input error, a domain failure or a carrier-sign failure is a bad value: exit 1 (documented contract).
     // Input errors carry the one `upt evaluate:` prefix.
@@ -397,12 +397,6 @@ async function run(ctx: CommandCtx): Promise<number> {
   const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i), NOT_INCLUDED);
   const relation = api.primaryRelation(id);
   const notices = relation === undefined ? [] : api.relationNotices(relation);
-
-  const outputDescriptor = api.evaluatorOutput(spec);
-  const outputLabel = {
-    name: outputDescriptor.name,
-    ...(outputDescriptor.dimension === undefined ? {} : { unit: siUnitOf(outputDescriptor.dimension) }),
-  };
   const unused = api.unusedInputKeys(spec);
   if (args.flags.has('json')) {
     emitJson(
@@ -413,12 +407,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           inputs,
           parameters: spec.parameters,
           conversions: conversionsOf(resolved),
-          output: {
-            ...result,
-            name: outputLabel.name,
-            ...(outputLabel.unit === undefined ? {} : { unit: outputLabel.unit, dimension: outputDescriptor.dimension }),
-          },
-          ...(spec.outputs.length === 0 ? {} : { extraOutputs: spec.outputs.map(({ name, unit, meaning }) => ({ name, unit, meaning })) }),
+          output: evaluation,
           ...(unused.length === 0 ? {} : { unusedInputs: unused }),
           ...(notices.length === 0 ? {} : { notices }),
           ...(u === null ? {} : { uncertainty: u.block }),
@@ -430,17 +419,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   out(`\n● be-${id}  ${spec.name}`);
   printInputs(out, spec.parameters, inputs, resolved);
-  for (const [k, v] of Object.entries(result)) {
-    const extra = spec.outputs.find((o) => o.name === k);
-    const label =
-      k === 'value'
-        ? outputLabel.unit === undefined
-          ? outputLabel.name
-          : `${outputLabel.name} [${outputLabel.unit}]`
-        : extra === undefined
-          ? k
-          : `${k} [${extra.unit}] (${extra.meaning})`;
-    out(`  ${label} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
+  if (evaluation.kind === 'unset') {
+    out(`  value is unset: ${evaluation.formula} is not finite at these inputs (a dropped factor or a singularity)`);
+  } else {
+    out(`  ${evaluation.name} [${evaluation.unit}] = ${evaluation.value} — ${evaluation.meaning}`);
+    for (const extra of evaluation.extras) out(`  ${extra.name} [${extra.unit}] = ${extra.value} — ${extra.meaning}`);
   }
   for (const key of unused) {
     out(`  note: ${key} is required and does not enter the value; the closed form does not use it, so changing it changes nothing`);

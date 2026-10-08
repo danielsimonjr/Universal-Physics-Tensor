@@ -2490,7 +2490,6 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../expr-print.js` | `siUnitOf` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter, PropagatedOutput` | Import (type-only) |
@@ -2790,7 +2789,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `../expr-print.js` | `EVAL_STUBS, printDisplay, printEval, printLatex, latexName, siUnitOf` | Import |
+| `../expr-print.js` | `EVAL_STUBS, printDisplay, printEval, printLatex, latexName` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2879,10 +2878,9 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
-- Functions: `latexName`, `printLatex`, `siUnitOf`
+- Functions: `latexName`, `printLatex`
 - Constants: `EVAL_STUBS`, `printDisplay`, `printEval`
 
 ---
@@ -3221,7 +3219,8 @@ The codebase is organized into the following modules:
 | `./composition/bridge-analysis.js` | `vacuumConstantThroughAlpha` | Re-export |
 | `./composition/adjudication.js` | `candidateIdIfSlug` | Re-export |
 | `./index.js` | `resolveQuantityName` | Re-export |
-| `./composition/evaluate-relation.js` | `evaluatorOutput, resolveEvaluable` | Re-export |
+| `./composition/evaluate-relation.js` | `evaluateResolved, resolveEvaluable` | Re-export |
+| `./dimensional/algebra.js` | `siUnitOf` | Re-export |
 | `./bridges/evaluators.js` | `unusedInputKeys` | Re-export |
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
@@ -3281,7 +3280,7 @@ The codebase is organized into the following modules:
   nearQuantityNames, shareSynonyms, assertSynonymAgreement, expandSynonymValues,
   CANONICAL_GROUP_PREFACTORS, formatQuantity, CarrierSignError, naturalConstantOverrides, UnitMode,
   rewriteCatalogHyphens, vacuumConstantThroughAlpha, candidateIdIfSlug, resolveQuantityName,
-  evaluatorOutput, resolveEvaluable, unusedInputKeys, SynonymDisagreementError,
+  evaluateResolved, resolveEvaluable, siUnitOf, unusedInputKeys, SynonymDisagreementError,
   builtinFormulaDimensionChecker, missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge,
   VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
@@ -3796,9 +3795,10 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
+| `../dimensional/algebra.js` | `siUnitOf` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, EvaluatorSpec` | Import |
-| `../bridges/input-contract.js` | `checkInputs, inputContract, InputContract` | Import |
+| `../bridges/input-contract.js` | `checkInputs, inputContract, EvaluationWant, InputContract` | Import |
 | `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId, primaryRelation` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
@@ -3807,8 +3807,8 @@ The codebase is organized into the following modules:
 | `./edge.js` | `CoefficientUnsetError, evaluateEdge, BridgeEdge` | Import |
 
 **Exports:**
-- Interfaces: `Evaluable`
-- Functions: `evaluatorOutput`, `evaluableContract`, `resolveEvaluable`, `evaluateRelation`
+- Interfaces: `ExtraOutput`, `Evaluable`
+- Functions: `evaluableContract`, `resolveEvaluable`, `evaluateResolved`, `evaluateRelation`
 
 ---
 
@@ -4009,7 +4009,7 @@ The codebase is organized into the following modules:
 | `./retrodiction.js` | `retrodict, retrodictNode` | Re-export |
 | `./explain.js` | `DerivationExplanation, ExplainOptions, QuantityExplanation` | Re-export |
 | `./explain.js` | `explainQuantity` | Re-export |
-| `./evaluate-relation.js` | `Evaluation` | Re-export |
+| `./evaluate-relation.js` | `Evaluation, ExtraOutput` | Re-export |
 | `./evaluate-relation.js` | `evaluateRelation` | Re-export |
 | `./compose-symbolic.js` | `Observable, ComposeSymbolicOptions` | Re-export |
 | `./compose-symbolic.js` | `composeSymbolic, SymbolicCompositionError` | Re-export |
@@ -4039,7 +4039,7 @@ The codebase is organized into the following modules:
   IdentifiabilityResult, IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure,
   RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionReport,
   RetrodictionOptions, retrodict, retrodictNode, DerivationExplanation, ExplainOptions,
-  QuantityExplanation, explainQuantity, Evaluation, evaluateRelation, Observable,
+  QuantityExplanation, explainQuantity, Evaluation, ExtraOutput, evaluateRelation, Observable,
   ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, VizStatus,
   VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel, edgeToJunction,
   renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation,
@@ -4989,7 +4989,7 @@ The codebase is organized into the following modules:
 | `./errors.js` | `DimensionMismatchError` | Re-export |
 
 **Exports:**
-- Functions: `multiply`, `divide`, `power`, `equals`, `add`, `subtract`, `format`
+- Functions: `multiply`, `divide`, `power`, `equals`, `add`, `subtract`, `format`, `siUnitOf`
 - Constants: `EXPONENT_TOL`
 - Re-exports: `DimensionMismatchError`
 
@@ -5702,7 +5702,7 @@ The codebase is organized into the following modules:
 | `./bridges/index.js` | `VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI, LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, M_PROTON_SI, CarrierSignError` | Re-export |
 | `./composition/index.js` | `evaluateRelation, CoefficientUnsetError` | Re-export |
 | `./composition/index.js` | `DuplicateInputError, InputTypeError, MissingInputError, NonFiniteInputError, UnknownInputError` | Re-export |
-| `./composition/index.js` | `Evaluation` | Re-export |
+| `./composition/index.js` | `Evaluation, ExtraOutput` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./bridges/catalog-types.js` | `CatalogEvaluatorOutput` | Re-export |
 | `./bridges/input-contract.js` | `ContractAlternate, EvaluationWant, InputContract, InputSlot` | Re-export |
@@ -5829,7 +5829,7 @@ The codebase is organized into the following modules:
   BridgeIssueSeverity, BridgeIssueFixable, KnownIssue, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI,
   LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, M_PROTON_SI,
   CarrierSignError, evaluateRelation, CoefficientUnsetError, DuplicateInputError, InputTypeError,
-  MissingInputError, NonFiniteInputError, UnknownInputError, Evaluation, EvaluatorSpec,
+  MissingInputError, NonFiniteInputError, UnknownInputError, Evaluation, ExtraOutput, EvaluatorSpec,
   EvaluatorParameter, ParameterAlternate, GeometryRole, CatalogEvaluatorOutput, ContractAlternate,
   EvaluationWant, InputContract, InputSlot, inputContract, christoffel, CovariantDerivativeNode,
   ricci, RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual, BianchiResidualNode,
@@ -6884,15 +6884,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 360 |
 | Total Modules | 13 |
-| Total Lines of Code | 79797 |
-| Total Exports | 2476 |
-| Total Re-exports | 1254 |
+| Total Lines of Code | 79843 |
+| Total Exports | 2479 |
+| Total Re-exports | 1257 |
 | Total Classes | 79 |
-| Total Interfaces | 452 |
+| Total Interfaces | 453 |
 | Total Functions | 761 |
 | Total Type Guards | 7 |
 | Total Enums | 0 |
-| Type-only Imports | 507 |
+| Type-only Imports | 506 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

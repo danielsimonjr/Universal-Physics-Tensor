@@ -9,7 +9,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import type { ExprNode } from '../../dimensional/validator.js';
-import { EVAL_STUBS, printDisplay, printEval, printLatex, latexName, siUnitOf } from '../expr-print.js';
+import { EVAL_STUBS, printDisplay, printEval, printLatex, latexName } from '../expr-print.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -112,7 +112,7 @@ function symbolTable(
       symbol: name,
       meaning: `input quantity ${q.name} (symbol ${q.symbol}), ${api.format(q.dim)}`,
       value: v,
-      unit: siUnitOf(q.dim),
+      unit: api.siUnitOf(q.dim),
       source: name === 'mass' && v === api.M_SUN_KG ? SOLAR_MASS_SOURCE : 'evaluation point',
     });
   }

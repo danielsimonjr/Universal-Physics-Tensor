@@ -219,7 +219,7 @@ export {
   UnknownInputError,
 } from './composition/index.js';
 /** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
-export type { Evaluation } from './composition/index.js';
+export type { Evaluation, ExtraOutput } from './composition/index.js';
 
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
 /** An extra output an `EvaluatorSpec` returns beside its `value`. */

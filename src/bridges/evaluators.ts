@@ -61,8 +61,9 @@ export interface EvaluatorSpec {
    * Evaluate at `inputs`, keyed by parameter key, quantity, relation source,
    * alias or alternate. Throws `UnknownInputError`, `InputTypeError`,
    * `DuplicateInputError` or `MissingInputError` before any
-   * `DomainViolationError`. With `want` `'value'` it returns `{ value }`
-   * alone, and an input only an extra output reads is not required.
+   * `DomainViolationError`. Returns `value` and every extra output whose
+   * expression's inputs are all given. With `want` `'value'` an input only an
+   * extra output reads is not required; with `'all'` every non-optional one is.
    */
   run(inputs: Readonly<Record<string, number>>, want?: EvaluationWant): Record<string, number>;
 }
@@ -190,6 +191,16 @@ function bindRelationInputs(
   return bound;
 }
 
+/**
+ * The parameter keys an extra output's expression reads, from the same parse
+ * `run` evaluates. The output is computed exactly when all of them are given,
+ * so no record states that list a second time.
+ */
+function outputInputKeys(output: CatalogEvaluatorOutput, parameters: readonly EvaluatorParameter[]): readonly string[] {
+  const reads = new Set(formulaVariables(output.expression));
+  return parameters.filter((parameter) => reads.has(parameter.key.replaceAll('-', '_'))).map((parameter) => parameter.key);
+}
+
 function buildSpec(
   catalogId: number,
   name: string,
@@ -199,6 +210,7 @@ function buildSpec(
   const relation = primaryRelation(catalogId);
   if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
   const contract = evaluatorContract(catalogId, relation, parameters);
+  const outputKeys = new Map(outputs.map((output) => [output, outputInputKeys(output, parameters)] as const));
   return {
     bridgeId: catalogId,
     name,
@@ -220,9 +232,8 @@ function buildSpec(
       }
       const value = evaluateCatalogRelation(relation, bound);
       const result: Record<string, number> = { value };
-      if (want === 'value') return result;
       for (const output of outputs) {
-        if ((output.requires ?? []).some((key) => given[key] === undefined)) continue;
+        if (outputKeys.get(output)!.some((key) => given[key] === undefined)) continue;
         result[output.name] = evaluateFormula(output.expression, { ...given, value });
       }
       return result;

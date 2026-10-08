@@ -108,9 +108,8 @@ export interface CatalogEvaluatorOutput {
   readonly name: string;
   readonly unit: string;
   readonly meaning: string;
+  /** Read over the evaluator's inputs and `value`. The output is computed when every input it reads is given. */
   readonly expression: string;
-  /** Optional parameter keys this output needs. It is left out when one is not given. */
-  readonly requires?: readonly string[];
 }
 
 /** The input contract of one catalog evaluator. */
