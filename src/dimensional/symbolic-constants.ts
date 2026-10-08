@@ -178,7 +178,7 @@ export function constantRecord(spelling: string): ConstantRecord | undefined {
  * value. Textbook roundings such as `b = 2.9e-3` pass.
  * @internal
  */
-export const CONSTANT_AGREEMENT = 5e-3;
+const CONSTANT_AGREEMENT = 5e-3;
 
 /** A stated value for a registered constant disagrees with the registry. The equations use the registered value. @internal */
 export class ConstantDisagreementError extends Error {

@@ -14,7 +14,7 @@ import { propagateUncertainty as propagateScalarUncertainty } from '@danielsimon
 import { eigvals } from '@danielsimonjr/mathts-matrix';
 
 /** A curvature term above this fraction of the linear term marks the linearization unreliable. */
-export const NONLINEAR_FRACTION = 0.1;
+const NONLINEAR_FRACTION = 0.1;
 
 /** One input's share of an output's uncertainty. */
 export interface UncertaintyContribution {

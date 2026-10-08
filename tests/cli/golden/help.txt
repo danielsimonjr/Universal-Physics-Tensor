@@ -258,8 +258,8 @@ Flags:
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). T, temperature, temp, and
         T_K are kelvin: an energy on that name is k_B T, and any other
-        dimension is an error. Bindings use the built-in
-        parser, so write 2*pi; a bare e there is the elementary charge.
+        dimension is an error. A binding is read by the same MathTS
+        parser as the formula, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.

@@ -3,23 +3,57 @@
   "title": "UPT Bridge Catalog Artifact",
   "description": "The bridge catalog. data/bridge-catalog.json is the source. type is required on every record. derivedFrom and basis are absent until a derivation theorem is pinned. formalRef is derived from formalKey and is not stored. npm run catalog:json checks the file.",
   "type": "object",
-  "required": ["schemaVersion", "packageVersion", "count", "entries", "confrontations", "adjudications"],
+  "required": [
+    "schemaVersion",
+    "packageVersion",
+    "count",
+    "entries",
+    "confrontations",
+    "adjudications"
+  ],
   "properties": {
-    "$schema": { "type": "string" },
-    "schemaVersion": { "const": 3 },
-    "packageVersion": { "type": "string" },
-    "count": { "type": "integer", "minimum": 1 },
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 3
+    },
+    "packageVersion": {
+      "type": "string"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 1
+    },
     "confrontations": {
       "type": "array",
       "description": "Committed real-data confrontations (predicted vs observed) — the empirical spine.",
       "items": {
         "type": "object",
-        "required": ["bridgeId", "title", "kind", "outcome"],
+        "required": [
+          "bridgeId",
+          "title",
+          "kind",
+          "outcome"
+        ],
         "properties": {
-          "bridgeId": { "type": "integer" },
-          "title": { "type": "string" },
-          "kind": { "enum": ["value", "upper-bound", "consistency", "table"] },
-          "outcome": { "type": "object" }
+          "bridgeId": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "value",
+              "upper-bound",
+              "consistency",
+              "table"
+            ]
+          },
+          "outcome": {
+            "type": "object"
+          }
         }
       }
     },
@@ -28,10 +62,40 @@
       "description": "Human adjudication ledger — recorded verdicts on discovery candidates (genuine/decoy/entailed/deferred).",
       "items": {
         "type": "object",
-        "required": ["id", "verdict"],
+        "required": [
+          "id",
+          "verdict",
+          "grounds",
+          "source",
+          "date"
+        ],
+        "additionalProperties": false,
         "properties": {
-          "id": { "type": "string" },
-          "verdict": { "enum": ["genuine", "decoy", "entailed", "deferred"] }
+          "id": {
+            "type": "string",
+            "description": "candidateId(a, b): the two slugs in sorted order, joined by ~"
+          },
+          "verdict": {
+            "enum": [
+              "genuine",
+              "decoy",
+              "entailed",
+              "deferred"
+            ]
+          },
+          "grounds": {
+            "type": "string",
+            "description": "Why, condensed from the adjudication document"
+          },
+          "source": {
+            "type": "string",
+            "description": "Repo-relative path of the adjudication document"
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "ISO date the verdict was recorded"
+          }
         }
       }
     },
@@ -56,20 +120,41 @@
           "notes"
         ],
         "properties": {
-          "id": { "type": "integer", "minimum": 11 },
-          "type": { "enum": ["standard", "cross-domain"] },
+          "id": {
+            "type": "integer",
+            "minimum": 11
+          },
+          "type": {
+            "enum": [
+              "standard",
+              "cross-domain"
+            ]
+          },
           "derivedFrom": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Direct derivation imports. Absent until a derivation theorem is pinned."
           },
-          "basis": { "const": true },
-          "name": { "type": "string", "minLength": 1 },
-          "category": { "type": "string" },
-          "category_name": { "type": "string" },
+          "basis": {
+            "const": true
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string"
+          },
+          "category_name": {
+            "type": "string"
+          },
           "bridges": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "minItems": 2,
             "maxItems": 2
           },
@@ -81,32 +166,99 @@
               "invalid"
             ]
           },
-          "formula_latex": { "type": ["string", "null"] },
-          "dimensional_signature": { "type": ["string", "null"] },
-          "encoded_form": { "type": "string" },
+          "formula_latex": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dimensional_signature": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "encoded_form": {
+            "type": "string"
+          },
           "scalarExpression": {
             "type": "string",
             "description": "Scalar expression for a row that has no relation. Parsed into the structural registry. Not a graph edge."
           },
-          "references": { "type": "array", "items": { "type": "string" } },
-          "dependencies": { "type": "array", "items": { "type": "integer" } },
-          "known_issues": { "type": "array" },
-          "tractability_class": { "type": "string" },
-          "notes": { "type": "string" },
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "known_issues": {
+            "type": "array"
+          },
+          "tractability_class": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
           "formalRef": {
             "type": "object",
             "description": "A PhysJS reference for one part of the equation. Optional. kind bridge is the only kind that lights formally-proved. A property lights formally-proved-property and a cross-check lights formally-proved-cross-check. A reduction, a limit, or a derivation-step lights neither. url is the theorem file at the pinned commit.",
-            "required": ["system", "statement", "version", "axioms", "fidelity", "kind", "url", "covers"],
+            "required": [
+              "system",
+              "statement",
+              "version",
+              "axioms",
+              "fidelity",
+              "kind",
+              "url",
+              "covers"
+            ],
             "additionalProperties": false,
             "properties": {
-              "system": { "enum": ["lean4-physlib", "lean4-physjs", "other"] },
-              "statement": { "type": "string" },
-              "version": { "type": "string" },
-              "axioms": { "type": "array", "items": { "type": "string" } },
-              "fidelity": { "type": "string" },
-              "kind": { "enum": ["bridge", "property", "cross-check", "reduction", "limit", "derivation-step"] },
-              "url": { "type": "string" },
-              "covers": { "type": "string" }
+              "system": {
+                "enum": [
+                  "lean4-physlib",
+                  "lean4-physjs",
+                  "other"
+                ]
+              },
+              "statement": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "axioms": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "fidelity": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "bridge",
+                  "property",
+                  "cross-check",
+                  "reduction",
+                  "limit",
+                  "derivation-step"
+                ]
+              },
+              "url": {
+                "type": "string"
+              },
+              "covers": {
+                "type": "string"
+              }
             }
           }
         }

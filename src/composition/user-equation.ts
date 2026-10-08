@@ -5,9 +5,8 @@
  * injected junction lands in a built {@link VizModel}.
  *
  * Free-form means no dimensions: source quantities are the RHS's free variables
- * — extracted by the active formula parser via {@link getFormulaParser} (the
- * MathTS expression parser when the optional peer is installed, else the built-in
- * one; both already drop constants like `pi`/`tau`, numbers, and functions) —
+ * — extracted by the MathTS expression parser via {@link getFormulaParser},
+ * which already drops constants like `pi`/`tau`, numbers, and functions —
  * minus the physics {@link CONSTANTS}. Multi-word quantities may be typed with
  * underscores **or** the catalog's own hyphens (`planck-length`): before parse,
  * {@link rewriteCatalogHyphens} rewrites kebab catalog names to underscores so
