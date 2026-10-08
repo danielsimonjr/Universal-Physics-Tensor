@@ -20,16 +20,16 @@
  *   excluded-field value, or a verdict word, in any id, text or expression of either file. A scan
  *   that finds nothing proves nothing, so the report also runs the scanner on a control string that
  *   carries known tokens.
- * - `freeze.json`: the pinned commit, the SHA-256 of both files, the counts and the join rules.
- *   It records no git tree hash of the inputs: nothing read one, a squash merge drops the commit it
- *   was taken at, and every later edit under `src/canonical` made it stale. The SHA-256 binds the
- *   files, and `tests/tools/criterion3-export.test.ts` binds them to a fresh export of the registry.
+ * - `freeze.json`: the SHA-256 of both files, the counts and the join rules. It records no commit
+ *   and no git tree hash of the inputs: nothing read either, a squash merge drops the commit an
+ *   export ran at (the old `pinnedCommit` was unreachable from master), and every later edit under
+ *   `src/canonical` made a tree hash stale. The SHA-256 binds the files, and
+ *   `tests/tools/criterion3-export.test.ts` binds them to a fresh export of the live registry, so a
+ *   stale export fails that test whatever tree it ran from.
  *
- * Run from a tree whose inputs match HEAD (the export refuses otherwise, so the pin is true):
  *   bun tools/criterion3-export/export.ts [--copy <dir>]
  */
 
-import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -250,23 +250,10 @@ export function leakageReport(
 
 // ---------------------------------------------------------------- I/O (the command line)
 
-function git(root: string, args: readonly string[]): string {
-  const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
-  if (r.status !== 0) throw new Error(`git ${args.join(' ')}: ${r.stderr}`);
-  return r.stdout.trim();
-}
-
 const json = (v: unknown): string => `${JSON.stringify(v, null, 2)}\n`;
 
 async function main(argv: readonly string[]): Promise<number> {
   const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-  const inputs = ['src/canonical', 'tests/fixtures/atlas/benchmark/public/items.json'];
-  const dirty = git(root, ['status', '--porcelain', '--', ...inputs]);
-  if (dirty) {
-    console.error(`refusing to export: the inputs differ from HEAD, so the pin would be false:\n${dirty}`);
-    return 1;
-  }
-  const commit = git(root, ['rev-parse', 'HEAD']);
 
   const { CANONICAL_EQUATIONS } = await import('../../src/canonical/registry.js');
   const { ATLAS_FAMILIES } = await import('../../src/atlas/families.js');
@@ -300,7 +287,6 @@ async function main(argv: readonly string[]): Promise<number> {
   const queriesText = json(queries);
   const report = leakageReport(corpusHits, queryHits, tokens, controlFound);
   const freeze = {
-    pinnedCommit: commit,
     files: {
       'corpus.json': { sha256: sha256(corpusText), records: corpus.length, withExpr: corpus.filter((r) => r.expr).length },
       'queries.json': { sha256: sha256(queriesText), records: queries.length },
