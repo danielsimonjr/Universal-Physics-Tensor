@@ -66,18 +66,27 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         a negative temperature). A relation's recorded caveat, and the note of a
         registered constant it names, print beside the value.`;
 
+/**
+ * An input-contract error (absent, unknown, non-number, non-finite or twice-given
+ * input) as the CLI reports it: a bad value (exit 1) under the one `upt evaluate:`
+ * prefix. Its message already names the id.
+ */
+function inputErrorOrSelf(api: CommandCtx['api'], e: unknown): unknown {
+  return api.isInputContractError(e) ? new CliError(`upt evaluate: ${e.message}`) : e;
+}
+
 /** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2). */
 function resolveInputs(api: CommandCtx['api'], label: string, parameters: readonly EvaluatorParameter[], args: readonly string[]) {
   for (const a of args) {
     if (a.indexOf('=') <= 0) throw new UsageError(`upt evaluate: '${a}' must be key=value (e.g. mu_e=2). See \`upt help\`.`);
   }
   try {
-    return api.resolveEvaluatorInputs(parameters, args);
+    return api.resolveEvaluatorInputs(parameters, args, label);
   } catch (e) {
     if (e instanceof api.UnitError || e instanceof api.SynonymDisagreementError) {
       throw new CliError(`upt evaluate: ${label}: ${e.message}`);
     }
-    throw e;
+    throw inputErrorOrSelf(api, e);
   }
 }
 
@@ -233,7 +242,8 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   try {
     result = api.runAppliedCase(c.id, inputs);
   } catch (e) {
-    throw new CliError((e as Error).message);
+    // An input error carries the one `upt evaluate:` prefix; a domain refusal is a bad value too (exit 1).
+    throw api.isInputContractError(e) ? inputErrorOrSelf(api, e) : new CliError((e as Error).message);
   }
   const u = uncertaintyOf(ctx, c, inputs, (i) => ({ ...api.runAppliedCase(c.id, i).outputs }), CASE_NOT_INCLUDED);
   const failed = result.checks.filter((k) => !k.holds).map((k) => k.id);
@@ -374,15 +384,17 @@ async function run(ctx: CommandCtx): Promise<number> {
   const spec = found.evaluator;
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 
-  let result: unknown;
+  // The one evaluation: `run` checks the inputs (missing, unknown, type) before the domain.
+  let result: Record<string, number>;
   try {
     result = spec.run(inputs);
   } catch (e) {
-    // unknown-id / missing-input / out-of-range → bad value, exit 1 (documented contract).
-    throw new CliError((e as Error).message);
+    // An input error, a domain failure or a carrier-sign failure is a bad value: exit 1 (documented contract).
+    // Input errors carry the one `upt evaluate:` prefix.
+    throw api.isInputContractError(e) ? inputErrorOrSelf(api, e) : new CliError((e as Error).message);
   }
 
-  const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i) as Record<string, unknown>, NOT_INCLUDED);
+  const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i), NOT_INCLUDED);
   const relation = api.primaryRelation(id);
   const notices = relation === undefined ? [] : api.relationNotices(relation);
 
@@ -402,7 +414,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           parameters: spec.parameters,
           conversions: conversionsOf(resolved),
           output: {
-            ...(result as Record<string, unknown>),
+            ...result,
             name: outputLabel.name,
             ...(outputLabel.unit === undefined ? {} : { unit: outputLabel.unit, dimension: outputDescriptor.dimension }),
           },
@@ -418,7 +430,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   out(`\n● be-${id}  ${spec.name}`);
   printInputs(out, spec.parameters, inputs, resolved);
-  for (const [k, v] of Object.entries(result as Record<string, unknown>)) {
+  for (const [k, v] of Object.entries(result)) {
     const extra = spec.outputs.find((o) => o.name === k);
     const label =
       k === 'value'

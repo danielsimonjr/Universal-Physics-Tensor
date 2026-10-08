@@ -21,6 +21,7 @@ import type {
   Regime,
   RelationContract,
 } from '../relations/types.js';
+import { DomainViolationError } from '../bridges/evaluation-errors.js';
 
 /**
  * First-class validity domain (v0.8.0 G-8). The predicate receives the
@@ -190,24 +191,6 @@ export class CompositionDimensionError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'CompositionDimensionError';
-  }
-}
-
-/**
- * Evaluation refused: inputs fall outside an edge's validity domain.
- *
- * Honest deviation from design D-3's "domain-incompatible at compose
- * time": domain predicates are opaque functions, so incompatibility is
- * detectable only at evaluation — this error is thrown by
- * {@link evaluateEdge} (and by composed edges internally), not by
- * `composeEdges`.
- *
- * @public
- */
-export class DomainViolationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'DomainViolationError';
   }
 }
 

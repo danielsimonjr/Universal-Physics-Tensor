@@ -22,7 +22,7 @@ describe('package root exports GM_SUN_SI and unit conversion', () => {
   });
 
   it('convertValue and parseUnit read a temperature and a length', () => {
-    expect(convertValue('25degC', 'K')).toEqual({ value: 298.15, given: 'degC' });
+    expect(convertValue('25degC', 'K')).toEqual({ value: 298.15, given: 'degC', affine: 'celsius' });
     const metres: ParsedUnit = parseUnit('m');
     expect(metres.dim.L).toBe(1);
     const reading: TemperatureReading = 'difference';

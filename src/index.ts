@@ -210,10 +210,20 @@ export {
  * @public
  */
 export { evaluateRelation, CoefficientUnsetError } from './composition/index.js';
+/** The input errors {@link evaluateRelation} throws before any domain check; a domain failure is `DomainViolationError`. */
+export {
+  DuplicateInputError,
+  InputTypeError,
+  MissingInputError,
+  NonFiniteInputError,
+  UnknownInputError,
+} from './composition/index.js';
 /** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
 export type { Evaluation } from './composition/index.js';
 
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
+/** The input contract an evaluator's `run` checks before the domain, and what a caller asks `run` for. */
+export type { ContractAlternate, EvaluationWant, InputContract, InputSlot } from './bridges/input-contract.js';
 
 // v0.4.0 connection layer — Christoffel formula builder and covariant derivative
 // AST node type. `christoffel` is public because bridge modules and downstream
@@ -327,12 +337,17 @@ export { validateKleinGordonEquation } from './dimensional/klein-gordon-equation
 // Every symbol re-exported in this block is `@public` — the consumer-facing
 // dimensional/metric surface (stabilised in v0.3.0).
 export type { Dimension } from './dimensional/types.js';
+/** The one unit reader: parse a unit, convert a value exactly, and the typed errors it throws. */
 export {
+  AmbiguousUnitError,
   convertValue,
   parseUnit,
   UnitError,
+  UnitRefusedError,
+  UnknownUnitError,
 } from './dimensional/units.js';
-export type { ParsedUnit, TemperatureReading } from './dimensional/units.js';
+/** A parsed unit, a converted value, and how a temperature is read. */
+export type { AffineTemperature, ConvertedValue, ParsedUnit, TemperatureReading } from './dimensional/units.js';
 export {
   DIMENSIONLESS,
   LENGTH,

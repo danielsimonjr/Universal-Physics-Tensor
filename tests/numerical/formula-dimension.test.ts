@@ -44,3 +44,13 @@ function runChecks(checker: FormulaDimensionChecker, label: string): void {
 }
 
 runChecks(builtinFormulaDimensionChecker(), 'mathts');
+
+describe('the checker states an undeclared symbol on its own field', () => {
+  it('names the symbol in undeclaredSymbol, and leaves it unset for another failure', () => {
+    const checker = builtinFormulaDimensionChecker();
+    expect(checker.check('mass * foo', { mass: D(0, 1) }).undeclaredSymbol).toBe('foo');
+    const mismatch = checker.check('a + b', { a: D(1), b: D(0, 0, 1) });
+    expect(mismatch.ok).toBe(false);
+    expect(mismatch.undeclaredSymbol).toBeUndefined();
+  });
+});

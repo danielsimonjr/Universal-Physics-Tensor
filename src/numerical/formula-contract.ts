@@ -40,6 +40,14 @@ export interface FormulaParser {
 export const EULER_NUMBER_ERROR =
   "euler is not Euler's number. Write it as exp(x), for example exp(1). A bare e is the elementary charge. E is energy.";
 
+/** The name `euler` was written for Euler's number. @internal */
+export class EulerNumberError extends FormulaError {
+  constructor() {
+    super(EULER_NUMBER_ERROR);
+    this.name = 'EulerNumberError';
+  }
+}
+
 type Fn = (args: number[]) => number;
 const arity1 = (f: (x: number) => number): Fn => (a) => {
   if (a.length !== 1) throw new FormulaError('expected 1 argument');

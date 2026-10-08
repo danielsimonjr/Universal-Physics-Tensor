@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 80
+- **Potentially unused exports**: 78
 
 ## Potentially Unused Files
 
@@ -46,10 +46,6 @@ These exports are not imported by any other file in the codebase:
 ### `src/atlas/poster/statements.ts`
 
 - `POSTER_5_IDENTIFICATION_NOTE` (constant)
-
-### `src/bridges/evaluators.ts`
-
-- `bindRelationInputs` (function)
 
 ### `src/bridges/registry.ts`
 
@@ -144,10 +140,6 @@ These exports are not imported by any other file in the codebase:
 ### `src/composition/bridge-analysis.ts`
 
 - `anchoringDistance` (function)
-
-### `src/composition/evaluate-relation.ts`
-
-- `MissingInputError` (class)
 
 ### `src/composition/frontier-account.ts`
 

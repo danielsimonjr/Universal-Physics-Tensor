@@ -32,7 +32,8 @@
 import { CarrierSignError } from '../bridges/carrier-sign.js';
 import type { BridgeEdge } from './edge.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
-import { DomainViolationError, evaluateEdge } from './edge.js';
+import { evaluateEdge } from './edge.js';
+import { DomainViolationError } from '../bridges/evaluation-errors.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';

@@ -180,6 +180,7 @@ export function ollamaEmbedder(options: OllamaEmbedderOptions): Embedder {
         if (controller.signal.aborted) throw new EmbeddingUnavailable('call-did-not-finish');
         throw new EmbeddingUnavailable('process-not-there');
       }
+      // Ollama answers an unknown model with 404; the status is the signal, not the body's text.
       if (response.status === 404) throw new EmbeddingUnavailable('model-not-there');
       let body: unknown;
       try {
@@ -187,11 +188,7 @@ export function ollamaEmbedder(options: OllamaEmbedderOptions): Embedder {
       } catch {
         throw new EmbeddingUnavailable('reply-not-a-vector');
       }
-      if (!response.ok) {
-        const message = typeof body === 'object' && body !== null ? JSON.stringify(body) : '';
-        if (/not found/i.test(message)) throw new EmbeddingUnavailable('model-not-there');
-        throw new EmbeddingUnavailable('reply-not-a-vector');
-      }
+      if (!response.ok) throw new EmbeddingUnavailable('reply-not-a-vector');
       const embeddings = (body as { embeddings?: unknown }).embeddings;
       if (!Array.isArray(embeddings) || embeddings.length !== texts.length) {
         throw new EmbeddingUnavailable('reply-not-a-vector');

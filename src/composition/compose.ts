@@ -39,9 +39,9 @@ import {
   CompositionAliasError,
   CompositionDimensionError,
   CompositionJunctionError,
-  DomainViolationError,
   UndefinedCompositionError,
 } from './edge.js';
+import { DomainViolationError } from '../bridges/evaluation-errors.js';
 // Atlas Phase 1 overlay. The composition table is a leaf module (pure, no
 // registry reads, no import from `src/composition/`), so this does not close a
 // cycle — same rule as the type-only atlas import in `./edge.ts`.

@@ -20,10 +20,18 @@ export {
   CompositionAliasError,
   CompositionDimensionError,
   CompositionJunctionError,
-  DomainViolationError,
   UndefinedCompositionError,
   evaluateEdge,
 } from './edge.js';
+/** The errors one evaluation throws: the input checks, then the validity domain. */
+export {
+  DomainViolationError,
+  DuplicateInputError,
+  InputTypeError,
+  MissingInputError,
+  NonFiniteInputError,
+  UnknownInputError,
+} from '../bridges/evaluation-errors.js';
 
 export type { ComposeOptions, QuantityIdentification } from './compose.js';
 export {

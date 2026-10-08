@@ -20,7 +20,7 @@
 
 import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import type { CompiledFormula, FormulaParser } from './formula-contract.js';
-import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage } from './formula-contract.js';
+import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage } from './formula-contract.js';
 
 /** Bare `e` is the SI magnitude, not the coulomb Unit. */
 const PHYSICS_SCALAR = { physics: true, charge: 'scalar' } as const;
@@ -123,7 +123,7 @@ function createMathtsFormulaParser(
         .map((n) => n.name)
         .filter((n): n is string => typeof n === 'string');
       if (symbolNames.includes('euler') || callees.has('euler')) {
-        throw new FormulaError(EULER_NUMBER_ERROR);
+        throw new EulerNumberError();
       }
       const unknownCallee = [...callees].find((n) => !(n in shims) && !isBuiltin(n));
       const variables = [
@@ -150,6 +150,10 @@ function createMathtsFormulaParser(
           } catch (err) {
             // `compileExpr` quotes the name (`Undefined symbol "process"`).
             // The interpreter path reports `Undefined symbol process`.
+            // The one place src/ reads MathTS message text: MathTS throws a plain `Error` with no
+            // symbol field, and a pre-check against the scope cannot stand in because MathTS resolves
+            // some names itself (`hbar` reads as a unit). It only normalizes the text; nothing branches on it.
+            // Tracked in ACTIVE.md as a MathTS follow-up (a typed undefined-symbol error).
             const message = err instanceof Error ? err.message : String(err);
             throw new FormulaError(message.replace(/^Undefined symbol "([^"]+)"$/, 'Undefined symbol $1'));
           }

@@ -15,6 +15,7 @@ import {
   formatConnectedSummary,
   analyzeUserEquation,
   rewriteCatalogHyphens,
+  hyphenSubtractHint,
   UserEquationError,
 } from '../../src/composition/user-equation.js';
 import { resolveQuantityName } from '../../src/dimensional/formula-names.js';
@@ -284,5 +285,30 @@ describe('analyzeUserEquation — dimensional validation + hints', () => {
 
   it('throws UserEquationError on a structurally malformed equation', async () => {
     await expect(analyzeUserEquation('no equals', cat)).rejects.toThrow(UserEquationError);
+  });
+});
+
+describe('the hyphen-subtraction hint is decided from the parse, not an error message', () => {
+  const names = new Set(['thermal_mass', 'thermal', 'mass']);
+
+  it('a run the parser split into variables, whose joined name is a quantity, gets the hint', () => {
+    expect(hyphenSubtractHint('2*thermal-mass', ['thermal', 'mass'], names)).toMatch(/thermal-mass → thermal_mass/);
+  });
+
+  it('no hint when the run is one variable, names no quantity, or is a number exponent', () => {
+    expect(hyphenSubtractHint('thermal_mass', ['thermal_mass'], names)).toBeNull();
+    expect(hyphenSubtractHint('foo-bar', ['foo', 'bar'], names)).toBeNull();
+    expect(hyphenSubtractHint('1e-5*mass', ['mass'], names)).toBeNull();
+  });
+
+  it('analyzeUserEquation attaches it when the subtraction fails the dimensional check', async () => {
+    const dims = new Map([
+      ['thermal_mass', ENERGY],
+      ['thermal', LENGTH],
+      ['mass', MASS],
+    ]);
+    const r = await analyzeUserEquation('E = thermal-mass', dims);
+    expect(r.parseError).toMatch(/'-' is arithmetic here/);
+    expect(r.parseError).toMatch(/thermal-mass → thermal_mass/);
   });
 });

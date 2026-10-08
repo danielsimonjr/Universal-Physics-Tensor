@@ -74,29 +74,35 @@ import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
 /** Rewrite a catalog hyphenated name to underscores before the expression parse. */
 export { rewriteCatalogHyphens };
 
+/** A hyphen-joined run of names, `a-b` or `a-b-c`, not the exponent of `1e-5`. */
+const HYPHEN_RUN = /(?<![A-Za-z0-9_.])[A-Za-z_][A-Za-z0-9_]*(?:-[A-Za-z0-9_]+)+/g;
+
 /**
- * When a subtract/dimension error still names a hyphenated token that is a
- * catalog quantity, tell the user `-` is arithmetic and to use underscores.
- * Persona finding I2 — clarity even if a rewrite path was skipped.
+ * When the parse read a hyphen-joined run (`thermal-mass`) as a subtraction of
+ * its pieces, and the run read as one name is a catalog quantity, tell the user
+ * `-` is arithmetic here and to use underscores. Persona finding I2.
+ *
+ * Decided from the parse, not from an error's text: `variables` are the free
+ * variables the formula parser read from `rhs`. The parser has no hyphenated
+ * identifier, so a run whose underscored name is not a variable and whose
+ * pieces are was parsed as a subtraction.
  *
  * @internal
  */
 export function hyphenSubtractHint(
-  parseError: string,
   rhs: string,
+  variables: readonly string[],
   catalogNames: ReadonlySet<string>,
 ): string | null {
-  if (!/subtract/i.test(parseError) && !/dimension mismatch/i.test(parseError)) return null;
-  const kebabs = [...catalogNames].filter((n) => n.includes('-') && rhs.includes(n));
-  if (kebabs.length === 0) {
-    // RHS may already have been split; look for catalog prefixes joined by -
-    const tokens = rhs.match(/[A-Za-z_][A-Za-z0-9_]*(?:-[A-Za-z0-9_]+)+/g) ?? [];
-    for (const t of tokens) {
-      if (catalogNames.has(t)) kebabs.push(t);
-    }
-  }
-  if (kebabs.length === 0) return null;
-  const example = kebabs.sort((a, b) => b.length - a.length)[0]!;
+  const read = new Set(variables);
+  const split = (rhs.match(HYPHEN_RUN) ?? []).filter(
+    (run) =>
+      !read.has(run.replace(/-/g, '_')) &&
+      run.split('-').some((piece) => read.has(piece)) &&
+      resolveQuantityName(run, catalogNames) !== null,
+  );
+  if (split.length === 0) return null;
+  const example = split.sort((a, b) => b.length - a.length)[0]!;
   return (
     `'-' is arithmetic here; multi-word catalog names use underscores ` +
     `(${example} → ${example.replace(/-/g, '_')})`
@@ -172,12 +178,8 @@ export async function parseUserEquation(
     const parser = await getFormulaParser();
     ({ variables } = parser.parse(rhs));
   } catch (e) {
-    const base = `could not parse the right-hand side '${rhs}': ${(e as Error).message}`;
-    const hint =
-      names === undefined
-        ? null
-        : hyphenSubtractHint(String((e as Error).message), equation.slice(equation.indexOf('=') + 1), names);
-    throw new UserEquationError(hint ? `${base}. ${hint}` : base);
+    // No parse tree, so no subtraction was read: the hyphen hint needs the parsed variables.
+    throw new UserEquationError(`could not parse the right-hand side '${rhs}': ${(e as Error).message}`);
   }
   const sources = variables.filter(
     (v) => !Object.prototype.hasOwnProperty.call(CONSTANTS, v),
@@ -469,7 +471,9 @@ export async function analyzeUserEquation(
     exprForInference = parsed.expr;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    const hint = hyphenSubtractHint(msg, equation.slice(equation.indexOf('=') + 1), catalogNames);
+    // The formula parser already read this right-hand side (parseUserEquation), so its variables are the tree's.
+    const { variables } = (await getFormulaParser()).parse(rhsText);
+    const hint = hyphenSubtractHint(rhsText, variables, catalogNames);
     parseError = hint ? `${msg}. ${hint}` : msg;
   }
 

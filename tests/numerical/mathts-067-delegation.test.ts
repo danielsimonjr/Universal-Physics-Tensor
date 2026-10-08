@@ -54,7 +54,6 @@ describe('MathTS 0.67.0 delegation', () => {
     expect(gl4).not.toMatch(/solveODE/);
   });
 
-  it('a MathTS unit dimension is read with toSiDimensionVector', () => {
-    expect(source('../../src/dimensional/units.ts')).toMatch(/toSiDimensionVector/);
-  });
+  // The MathTS unit reading (`unit`, `toSI`, `toSiDimensionVector`) is the second method of the unit
+  // table, checked row by row in tests/dimensional/exact-unit-scale.test.ts; conversion itself is exact.
 });

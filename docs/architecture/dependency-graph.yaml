@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 8.0.0
-  totalFiles: 353
+  totalFiles: 356
   totalModules: 13
-  totalExports: 2409
+  totalExports: 2457
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3528,6 +3528,28 @@ modules:
       constants:
         - CONFRONTATION_RIGOR
         - CONFRONTATIONS
+    src/bridges/evaluation-errors.ts:
+      description: "The errors one evaluation throws, in the order it checks: the bindings"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - isInputContractError
+        - MissingInputError
+        - UnknownInputError
+        - InputTypeError
+        - NonFiniteInputError
+        - DuplicateInputError
+        - DomainViolationError
+      classes:
+        - MissingInputError
+        - UnknownInputError
+        - InputTypeError
+        - NonFiniteInputError
+        - DuplicateInputError
+        - DomainViolationError
+      functions:
+        - isInputContractError
     src/bridges/evaluator-inputs.ts:
       description: "`key=value[unit]` arguments → an evaluator's numeric inputs, through the"
       externalDependencies: []
@@ -3535,6 +3557,7 @@ modules:
       internalDependencies:
         - file: ../dimensional/units.js
           imports:
+            - affineReadingNote
             - unitConventionNotes
             - UnitError
             - TemperatureReading
@@ -3552,6 +3575,10 @@ modules:
           imports:
             - EvaluatorParameter
           typeOnly: true
+        - file: ./evaluation-errors.js
+          imports:
+            - DuplicateInputError
+            - UnknownInputError
       exports:
         - resolveEvaluatorInputs
       interfaces:
@@ -3581,6 +3608,7 @@ modules:
         - file: ./expr-parse.js
           imports:
             - evaluateFormula
+            - formulaVariables
             - parseCatalogExpression
         - file: ../dimensional/ast-types.js
           imports:
@@ -3590,11 +3618,19 @@ modules:
           imports:
             - evaluateCatalogRelation
             - relationHolds
+        - file: ./evaluation-errors.js
+          imports:
+            - DomainViolationError
+        - file: ./input-contract.js
+          imports:
+            - checkInputs
+            - inputContract
+            - EvaluationWant
+            - InputContract
+            - InputSlot
       exports:
         - BRIDGE_EVALUATORS
-        - sourceOfParameter
         - unusedInputKeys
-        - bindRelationInputs
         - missingEvaluatorMessage
         - evaluateBridge
       interfaces:
@@ -3602,9 +3638,7 @@ modules:
         - EvaluatorParameter
         - EvaluatorSpec
       functions:
-        - sourceOfParameter
         - unusedInputKeys
-        - bindRelationInputs
         - missingEvaluatorMessage
         - evaluateBridge
       constants:
@@ -3648,11 +3682,13 @@ modules:
       exports:
         - formulaNames
         - formulaScope
+        - formulaVariables
         - evaluateFormula
         - parseCatalogExpression
       functions:
         - formulaNames
         - formulaScope
+        - formulaVariables
         - evaluateFormula
         - parseCatalogExpression
     src/bridges/holds.ts:
@@ -3755,6 +3791,28 @@ modules:
       constants:
         - BRIDGE_EQUATIONS
         - SPINE_CONFRONTATION_POINTS
+    src/bridges/input-contract.ts:
+      description: The one check of a binding record against an id's declared inputs.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./evaluation-errors.js
+          imports:
+            - DuplicateInputError
+            - InputTypeError
+            - MissingInputError
+            - NonFiniteInputError
+            - UnknownInputError
+      exports:
+        - inputContract
+        - checkInputs
+      interfaces:
+        - ContractAlternate
+        - InputSlot
+        - InputContract
+      functions:
+        - inputContract
+        - checkInputs
     src/bridges/membership.ts:
       description: Bridge-membership criterion (v0.8.0 G-2) — the computable form.
       externalDependencies: []
@@ -4721,6 +4779,11 @@ modules:
             - AppliedCase
             - CaseResult
           typeOnly: true
+        - file: ../bridges/input-contract.js
+          imports:
+            - checkInputs
+            - inputContract
+            - InputContract
         - file: ./types.js
           imports:
             - AppliedCase
@@ -5467,7 +5530,7 @@ modules:
             - formulaParserLabel
         - file: ../euler-guard.js
           imports:
-            - withParser
+            - FormulaUsageError
         - file: ../conventions.js
           imports:
             - canonicalCheckFailed
@@ -5561,7 +5624,7 @@ modules:
             - formulaParserLabel
         - file: ../euler-guard.js
           imports:
-            - withParser
+            - FormulaUsageError
         - file: ../eval-numbers.js
           imports:
             - codataScope
@@ -6338,11 +6401,14 @@ modules:
       description: Name the active formula parser on an error a script can read.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ./errors.js
+          imports:
+            - UsageError
       exports:
-        - withParser
-      functions:
-        - withParser
+        - FormulaUsageError
+      classes:
+        - FormulaUsageError
     src/cli/eval-numbers.ts:
       description: "Numbers `upt eval` understands: a bare numeral, a numeral with a unit, and"
       externalDependencies: []
@@ -6974,6 +7040,15 @@ modules:
             - BRIDGE_EVALUATORS
             - evaluateBridge
           reExport: true
+        - file: ./bridges/evaluation-errors.js
+          imports:
+            - DuplicateInputError
+            - InputTypeError
+            - isInputContractError
+            - MissingInputError
+            - NonFiniteInputError
+            - UnknownInputError
+          reExport: true
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
@@ -7433,6 +7508,12 @@ modules:
         - decidingMeasurement
         - BRIDGE_EVALUATORS
         - evaluateBridge
+        - DuplicateInputError
+        - InputTypeError
+        - isInputContractError
+        - MissingInputError
+        - NonFiniteInputError
+        - UnknownInputError
         - resolveEvaluatorInputs
         - APPLIED_CASES
         - runAppliedCase
@@ -7661,6 +7742,12 @@ modules:
         - decidingMeasurement
         - BRIDGE_EVALUATORS
         - evaluateBridge
+        - DuplicateInputError
+        - InputTypeError
+        - isInputContractError
+        - MissingInputError
+        - NonFiniteInputError
+        - UnknownInputError
         - EvaluatorSpec
         - EvaluatorParameter
         - resolveEvaluatorInputs
@@ -8559,8 +8646,10 @@ modules:
             - CompositionAliasError
             - CompositionDimensionError
             - CompositionJunctionError
-            - DomainViolationError
             - UndefinedCompositionError
+        - file: ../bridges/evaluation-errors.js
+          imports:
+            - DomainViolationError
         - file: ../relations/composition-table.js
           imports:
             - composeRelation
@@ -8826,19 +8915,20 @@ modules:
             - Regime
             - RelationContract
           typeOnly: true
+        - file: ../bridges/evaluation-errors.js
+          imports:
+            - DomainViolationError
       exports:
         - withBoundAliases
         - evaluateEdge
         - CompositionJunctionError
         - CompositionDimensionError
-        - DomainViolationError
         - CoefficientUnsetError
         - CompositionAliasError
         - UndefinedCompositionError
       classes:
         - CompositionJunctionError
         - CompositionDimensionError
-        - DomainViolationError
         - CoefficientUnsetError
         - CompositionAliasError
         - UndefinedCompositionError
@@ -8905,8 +8995,12 @@ modules:
         - file: ../bridges/evaluators.js
           imports:
             - BRIDGE_EVALUATORS
-            - sourceOfParameter
             - EvaluatorSpec
+        - file: ../bridges/input-contract.js
+          imports:
+            - checkInputs
+            - inputContract
+            - InputContract
         - file: ../bridges/catalog-load.js
           imports:
             - catalogEdgeKey
@@ -8933,9 +9027,6 @@ modules:
         - evaluatorOutput
         - resolveEvaluable
         - evaluateRelation
-        - MissingInputError
-      classes:
-        - MissingInputError
       interfaces:
         - Evaluable
       functions:
@@ -9300,9 +9391,17 @@ modules:
             - CompositionAliasError
             - CompositionDimensionError
             - CompositionJunctionError
-            - DomainViolationError
             - UndefinedCompositionError
             - evaluateEdge
+          reExport: true
+        - file: ../bridges/evaluation-errors.js
+          imports:
+            - DomainViolationError
+            - DuplicateInputError
+            - InputTypeError
+            - MissingInputError
+            - NonFiniteInputError
+            - UnknownInputError
           reExport: true
         - file: ./compose.js
           imports:
@@ -9471,9 +9570,14 @@ modules:
         - CompositionAliasError
         - CompositionDimensionError
         - CompositionJunctionError
-        - DomainViolationError
         - UndefinedCompositionError
         - evaluateEdge
+        - DomainViolationError
+        - DuplicateInputError
+        - InputTypeError
+        - MissingInputError
+        - NonFiniteInputError
+        - UnknownInputError
         - composeEdges
         - minConfidence
         - QUANTITY_IDENTIFICATIONS
@@ -9558,9 +9662,14 @@ modules:
         - CompositionAliasError
         - CompositionDimensionError
         - CompositionJunctionError
-        - DomainViolationError
         - UndefinedCompositionError
         - evaluateEdge
+        - DomainViolationError
+        - DuplicateInputError
+        - InputTypeError
+        - MissingInputError
+        - NonFiniteInputError
+        - UnknownInputError
         - ComposeOptions
         - QuantityIdentification
         - composeEdges
@@ -11297,8 +11406,10 @@ modules:
             - CANONICAL_GROUP_PREFACTORS
         - file: ./edge.js
           imports:
-            - DomainViolationError
             - evaluateEdge
+        - file: ../bridges/evaluation-errors.js
+          imports:
+            - DomainViolationError
         - file: ./compose.js
           imports:
             - QuantityIdentification
@@ -12331,6 +12442,10 @@ modules:
         - file: ./symbolic-constants.js
           imports:
             - CONSTANT_REGISTRY
+        - file: ../numerical/formula-dimension.js
+          imports:
+            - parseFormulaPNode
+            - FormulaPNode
       exports:
         - CONSTANT_SPELLINGS
         - parseDimensionSpec
@@ -12420,6 +12535,36 @@ modules:
         - KroneckerVarianceError
         - PartialDerivativeIndexVarianceError
         - DuplicateCoordinateWarning
+    src/dimensional/exact-scale.ts:
+      description: Exact unit scales.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - UNIT_SCALE
+        - decimalScale
+        - scaleOf
+        - ratioScale
+        - irrationalScale
+        - multiplyScales
+        - divideScales
+        - powerScale
+        - addScales
+        - scaleToNumber
+      interfaces:
+        - ExactScale
+      functions:
+        - decimalScale
+        - scaleOf
+        - ratioScale
+        - irrationalScale
+        - multiplyScales
+        - divideScales
+        - powerScale
+        - addScales
+        - scaleToNumber
+      constants:
+        - UNIT_SCALE
     src/dimensional/field-equation-helpers.ts:
       description: Shared validation helpers for field-equation predicate AST nodes
       externalDependencies: []
@@ -13073,13 +13218,7 @@ modules:
         - QUANTITY_CONVENTION_UNIT
     src/dimensional/units.ts:
       description: "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`."
-      externalDependencies:
-        - package: "@danielsimonjr/mathts-core"
-          imports:
-            - toSiDimensionVector
-        - package: "@danielsimonjr/mathts-functions"
-          imports:
-            - unit
+      externalDependencies: []
       nodeDependencies: []
       internalDependencies:
         - file: ./algebra.js
@@ -13100,26 +13239,52 @@ modules:
             - GM_SUN_SI
             - M_SUN_SI
             - M_U_SI
+        - file: ./exact-scale.js
+          imports:
+            - addScales
+            - decimalScale
+            - divideScales
+            - irrationalScale
+            - multiplyScales
+            - powerScale
+            - ratioScale
+            - scaleOf
+            - scaleToNumber
+            - UNIT_SCALE
+            - ExactScale
       exports:
+        - affineReadingNote
         - unitConventionNotes
+        - readUnit
         - parseUnit
-        - affineAbsoluteOffsetK
+        - readQuantityLiteral
         - convertValue
-        - mathTsAgreedQuantity
         - unitDimension
+        - unitRows
         - unitTables
         - UnitError
+        - UnknownUnitError
+        - UnitRefusedError
+        - AmbiguousUnitError
       classes:
         - UnitError
+        - UnknownUnitError
+        - UnitRefusedError
+        - AmbiguousUnitError
       interfaces:
         - ParsedUnit
+        - UnitReading
+        - QuantityLiteral
+        - ConvertedValue
       functions:
+        - affineReadingNote
         - unitConventionNotes
+        - readUnit
         - parseUnit
-        - affineAbsoluteOffsetK
+        - readQuantityLiteral
         - convertValue
-        - mathTsAgreedQuantity
         - unitDimension
+        - unitRows
         - unitTables
     src/dimensional/validator-registry.ts:
       description: Validator registry for curvature- and GR-object node kinds.
@@ -13575,6 +13740,14 @@ modules:
           reExport: true
         - file: ./composition/index.js
           imports:
+            - DuplicateInputError
+            - InputTypeError
+            - MissingInputError
+            - NonFiniteInputError
+            - UnknownInputError
+          reExport: true
+        - file: ./composition/index.js
+          imports:
             - Evaluation
           reExport: true
         - file: ./bridges/evaluators.js
@@ -13583,6 +13756,13 @@ modules:
             - EvaluatorParameter
             - ParameterAlternate
             - GeometryRole
+          reExport: true
+        - file: ./bridges/input-contract.js
+          imports:
+            - ContractAlternate
+            - EvaluationWant
+            - InputContract
+            - InputSlot
           reExport: true
         - file: ./dimensional/connection.js
           imports:
@@ -13702,12 +13882,17 @@ modules:
           reExport: true
         - file: ./dimensional/units.js
           imports:
+            - AmbiguousUnitError
             - convertValue
             - parseUnit
             - UnitError
+            - UnitRefusedError
+            - UnknownUnitError
           reExport: true
         - file: ./dimensional/units.js
           imports:
+            - AffineTemperature
+            - ConvertedValue
             - ParsedUnit
             - TemperatureReading
           reExport: true
@@ -14243,6 +14428,11 @@ modules:
         - CarrierSignError
         - evaluateRelation
         - CoefficientUnsetError
+        - DuplicateInputError
+        - InputTypeError
+        - MissingInputError
+        - NonFiniteInputError
+        - UnknownInputError
         - christoffel
         - ricci
         - einstein
@@ -14265,9 +14455,12 @@ modules:
         - validateGaugeField
         - validateTimeSymmetryPredicate
         - validateKleinGordonEquation
+        - AmbiguousUnitError
         - convertValue
         - parseUnit
         - UnitError
+        - UnitRefusedError
+        - UnknownUnitError
         - DIMENSIONLESS
         - LENGTH
         - AREA
@@ -14445,6 +14638,10 @@ modules:
         - EvaluatorParameter
         - ParameterAlternate
         - GeometryRole
+        - ContractAlternate
+        - EvaluationWant
+        - InputContract
+        - InputSlot
         - CovariantDerivativeNode
         - RicciTensorNode
         - EinsteinTensorNode
@@ -14470,6 +14667,8 @@ modules:
         - KleinGordonEquationNode
         - KleinGordonEquationValidationResult
         - Dimension
+        - AffineTemperature
+        - ConvertedValue
         - ParsedUnit
         - TemperatureReading
         - ExprNode
@@ -14695,11 +14894,20 @@ modules:
         - CarrierSignError
         - evaluateRelation
         - CoefficientUnsetError
+        - DuplicateInputError
+        - InputTypeError
+        - MissingInputError
+        - NonFiniteInputError
+        - UnknownInputError
         - Evaluation
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
         - GeometryRole
+        - ContractAlternate
+        - EvaluationWant
+        - InputContract
+        - InputSlot
         - christoffel
         - CovariantDerivativeNode
         - ricci
@@ -14747,9 +14955,14 @@ modules:
         - KleinGordonEquationValidationResult
         - validateKleinGordonEquation
         - Dimension
+        - AmbiguousUnitError
         - convertValue
         - parseUnit
         - UnitError
+        - UnitRefusedError
+        - UnknownUnitError
+        - AffineTemperature
+        - ConvertedValue
         - ParsedUnit
         - TemperatureReading
         - DIMENSIONLESS
@@ -15055,22 +15268,25 @@ modules:
             - Dimension
         - file: ../dimensional/units.js
           imports:
-            - affineAbsoluteOffsetK
+            - AmbiguousUnitError
             - convertValue
-            - mathTsAgreedQuantity
             - parseUnit
+            - readQuantityLiteral
+            - readUnit
             - unitConventionNotes
             - UnitError
+            - UnitRefusedError
+            - AffineTemperature
             - TemperatureReading
         - file: ./formula-contract.js
           imports:
             - callBuiltinFunction
-            - EULER_NUMBER_ERROR
+            - EulerNumberError
             - FormulaError
         - file: ./formula-dimension.js
           imports:
-            - FormulaDimensionError
             - parseFormulaPNode
+            - UnsupportedSyntaxError
             - FormulaPNode
       exports:
         - readNamedBinding
@@ -15420,8 +15636,10 @@ modules:
         - unknownFunctionMessage
         - callBuiltinFunction
         - FormulaError
+        - EulerNumberError
       classes:
         - FormulaError
+        - EulerNumberError
       interfaces:
         - CompiledFormula
         - FormulaParser
@@ -15469,6 +15687,7 @@ modules:
         - file: ./formula-contract.js
           imports:
             - EULER_NUMBER_ERROR
+            - EulerNumberError
             - FormulaError
       exports:
         - ELEMENTARY_CHARGE_MIX_MESSAGE
@@ -15476,8 +15695,10 @@ modules:
         - parseFormulaPNode
         - builtinFormulaDimensionChecker
         - FormulaDimensionError
+        - UnsupportedSyntaxError
       classes:
         - FormulaDimensionError
+        - UnsupportedSyntaxError
       interfaces:
         - ParsedPhysics
         - FormulaDimensionChecker
@@ -15505,7 +15726,7 @@ modules:
           imports:
             - BUILTIN_FUNCTION_NAMES
             - callBuiltinFunction
-            - EULER_NUMBER_ERROR
+            - EulerNumberError
             - FormulaError
             - unknownFunctionMessage
       exports:
@@ -15600,6 +15821,7 @@ modules:
         - package: "@danielsimonjr/mathts-functions"
           imports:
             - gaussLegendre4
+            - GL4ConvergenceError
       nodeDependencies: []
       internalDependencies:
         - file: ./errors.js
@@ -16610,11 +16832,13 @@ dependencyGraph:
         - src/bridges/coefficient-statement.ts
         - src/bridges/confrontation-coverage.ts
         - src/bridges/confrontations.ts
+        - src/bridges/evaluation-errors.ts
         - src/bridges/evaluator-inputs.ts
         - src/bridges/evaluators.ts
         - src/bridges/expr-parse.ts
         - src/bridges/holds.ts
         - src/bridges/index.ts
+        - src/bridges/input-contract.ts
         - src/bridges/membership.ts
         - src/bridges/notices.ts
         - src/bridges/observations/types.ts
@@ -16828,6 +17052,7 @@ dependencyGraph:
         - src/dimensional/dimension-spec.ts
         - src/dimensional/einstein-equation.ts
         - src/dimensional/errors.ts
+        - src/dimensional/exact-scale.ts
         - src/dimensional/field-equation-helpers.ts
         - src/dimensional/formula-names.ts
         - src/dimensional/fresh-label.ts
@@ -16906,19 +17131,19 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 353
+  totalTypeScriptFiles: 356
   totalModules: 13
-  totalLinesOfCode: 77360
-  totalExports: 2409
-  totalClasses: 69
-  totalInterfaces: 440
-  totalFunctions: 732
-  totalTypeGuards: 6
+  totalLinesOfCode: 77993
+  totalExports: 2457
+  totalClasses: 79
+  totalInterfaces: 447
+  totalFunctions: 744
+  totalTypeGuards: 7
   totalEnums: 0
-  totalConstants: 378
-  totalReExports: 1231
+  totalConstants: 379
+  totalReExports: 1256
   totalTypeOnlyImports: 503
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 80
+  unusedExportsCount: 78

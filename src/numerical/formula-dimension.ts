@@ -20,7 +20,7 @@ import { equals, format, multiply } from '../dimensional/algebra.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/validator.js';
 import { validate } from '../dimensional/validator.js';
 import { sym } from '../dimensional/ast-builders.js';
-import { EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
+import { EULER_NUMBER_ERROR, EulerNumberError, FormulaError } from './formula-contract.js';
 
 /** A formula cannot be dimensionally analyzed (undeclared symbol, variable
  *  exponent, transcendental of a dimensional argument, unsupported node).
@@ -29,6 +29,36 @@ export class FormulaDimensionError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'FormulaDimensionError';
+  }
+}
+
+/** The parse tree holds a node the normalized form has no shape for (`a.b`, `[1, 2]`, `x > 2`). @internal */
+export class UnsupportedSyntaxError extends FormulaDimensionError {
+  constructor(readonly nodeType: string, detail: string) {
+    super(detail);
+    this.name = 'UnsupportedSyntaxError';
+  }
+}
+
+/**
+ * A formula names a symbol with no declared dimension and no known one. A
+ * caller reads it through the check result's `undeclaredSymbol`. @internal
+ */
+class UndeclaredSymbolError extends FormulaDimensionError {
+  constructor(readonly symbol: string) {
+    super(`undeclared symbol '${symbol}' — declare its dimension (a separate name:dimension argument, for example x:length)`);
+    this.name = 'UndeclaredSymbolError';
+  }
+}
+
+/**
+ * A sum is not homogeneous because a bare `e`, read as the elementary charge,
+ * meets a dimensionless term (`1 - e^2`). @internal
+ */
+class ElementaryChargeMixError extends FormulaDimensionError {
+  constructor(note: string) {
+    super(`${ELEMENTARY_CHARGE_MIX_MESSAGE} ${note}`);
+    this.name = 'ElementaryChargeMixError';
   }
 }
 
@@ -81,9 +111,7 @@ function resolveSymbol(name: string, dims: Readonly<Record<string, Dimension>>):
   if (name in dims) return sym(name, dims[name]);
   const known = formulaSymbolDimension(name);
   if (known !== undefined) return sym(name, known);
-  throw new FormulaDimensionError(
-    `undeclared symbol '${name}' — declare its dimension (a separate name:dimension argument, for example x:length)`,
-  );
+  throw new UndeclaredSymbolError(name);
 }
 
 const CHARGE_SQUARED = multiply(CHARGE, CHARGE);
@@ -183,12 +211,12 @@ function mathtsToPNode(node: MathNode): PNode {
       if (node.op === '+' || node.op === '-' || node.op === '*' || node.op === '/') {
         return { kind: 'op', op: node.op, args };
       }
-      throw new FormulaDimensionError(`unsupported operator '${node.op}'`);
+      throw new UnsupportedSyntaxError(node.type, `unsupported operator '${node.op}'`);
     }
     case 'FunctionNode':
       return { kind: 'call', fn: node.fn?.name ?? node.name ?? '', args: (node.args ?? []).map(mathtsToPNode) };
     default:
-      throw new FormulaDimensionError(`unsupported node '${node.type}'`);
+      throw new UnsupportedSyntaxError(node.type, `unsupported node '${node.type}'`);
   }
 }
 
@@ -272,6 +300,10 @@ interface FormulaDimensionResult {
   readonly dim?: Dimension;
   /** Human-readable reason when `!ok`. */
   readonly error?: string;
+  /** Set when `!ok` because a bare `e` (the elementary charge) met a dimensionless term. */
+  readonly elementaryChargeMixed?: true;
+  /** Set when `!ok` because the formula names this symbol with no dimension declared or known. */
+  readonly undeclaredSymbol?: string;
 }
 
 /** A parsed physics expression: its dimensional `ExprNode` + inferred dimension. */
@@ -308,7 +340,7 @@ function createFormulaDimensionChecker(
         formulaHasBareE(expr) &&
         eIsElementaryCharge(dims) &&
         r.violations.some((v) => dimensionIsCharge(v.expected) || dimensionIsCharge(v.actual));
-      throw new FormulaDimensionError(chargeMixed ? `${ELEMENTARY_CHARGE_MIX_MESSAGE} ${note}` : note);
+      throw chargeMixed ? new ElementaryChargeMixError(note) : new FormulaDimensionError(note);
     }
     return { expr: exprNode, dimension: r.inferredDimension };
   };
@@ -318,7 +350,12 @@ function createFormulaDimensionChecker(
       try {
         return { ok: true, dim: parse(expr, dims).dimension };
       } catch (e) {
-        return { ok: false, error: e instanceof Error ? e.message : String(e) };
+        return {
+          ok: false,
+          error: e instanceof Error ? e.message : String(e),
+          ...(e instanceof ElementaryChargeMixError ? { elementaryChargeMixed: true as const } : {}),
+          ...(e instanceof UndeclaredSymbolError ? { undeclaredSymbol: e.symbol } : {}),
+        };
       }
     },
   };
@@ -346,7 +383,7 @@ export function parseFormulaPNode(expr: string): PNode {
 function refuseEuler(node: PNode): void {
   switch (node.kind) {
     case 'sym':
-      if (node.name === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
+      if (node.name === 'euler') throw new EulerNumberError();
       return;
     case 'neg':
       refuseEuler(node.arg);
@@ -359,7 +396,7 @@ function refuseEuler(node: PNode): void {
       refuseEuler(node.exp);
       return;
     case 'call':
-      if (node.fn === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
+      if (node.fn === 'euler') throw new EulerNumberError();
       for (const a of node.args) refuseEuler(a);
       return;
     case 'num':
