@@ -38,6 +38,12 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     { name: 'temperature', dim: TEMPERATURE },
   ], {
     id: 'CE-equipartition',
+    prefactor: {
+      value: 1.5,
+      quote: String.raw`\langle H_{\mathrm{kin}} \rangle = \left\langle \frac{p^2}{2m} \right\rangle = \langle \tfrac{1}{2} m v^{2} \rangle = \tfrac{3}{2} k_\text{B} T.`,
+      locator: "Wikipedia, 'Equipartition theorem', revision 1373697867, wikitext line 304",
+    },
+    holds: 'temperature >= 0',
     name: 'Equipartition (mean kinetic energy)',
     domain: 'statistical',
     formula_latex: '\\langle E \\rangle = \\tfrac{3}{2} k_B T',
@@ -58,6 +64,12 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     { name: 'particle-radius', dim: PARTICLE_RADIUS },
   ], {
     id: 'CE-stokes-einstein',
+    prefactor: {
+      value: 1 / (6 * Math.PI),
+      quote: String.raw`D = \frac{k_\text{B} T}{6\pi\,\eta\,r}.`,
+      locator: "Wikipedia, 'Einstein relation (kinetic theory)', revision 1353047788, wikitext line 79",
+    },
+    holds: 'temperature > 0 and dynamic-viscosity > 0 and particle-radius > 0',
     name: 'Stokes-Einstein diffusion',
     domain: 'statistical',
     formula_latex: 'D = k_B T/(6\\pi\\mu r)',
@@ -83,6 +95,12 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     { name: 'mean-square-speed', dim: MEAN_SQUARE_SPEED },
   ], {
     id: 'CE-kinetic-pressure',
+    prefactor: {
+      value: 1 / 3,
+      quote: String.raw`= \frac{1}{3} n mv_\text{rms}^2`,
+      locator: "Wikipedia, 'Kinetic theory of gases', revision 1371478093, wikitext line 173",
+    },
+    holds: 'number-density >= 0 and molecular-mass > 0 and mean-square-speed >= 0',
     name: 'Kinetic pressure of an ideal gas',
     domain: 'statistical',
     formula_latex: 'P = \\tfrac{1}{3} n m \\langle v^2 \\rangle',
@@ -105,6 +123,7 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     { name: 'molecular-mass', dim: MASS },
   ], {
     id: 'CE-mb-most-probable-speed',
+    holds: 'temperature >= 0 and molecular-mass > 0',
     name: 'Maxwell-Boltzmann most-probable speed',
     domain: 'statistical',
     formula_latex: 'v_p = \\sqrt{2 k_B T/m}',

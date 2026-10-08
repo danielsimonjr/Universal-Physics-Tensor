@@ -89,6 +89,11 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     { name: 'speed', dim: VELOCITY },
   ], {
     id: 'CE-kinetic-energy',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`E_\text{k} = \frac{1}{2} mv^2`,
+      locator: "Wikipedia, 'Kinetic energy', revision 1370969006, wikitext line 56",
+    },
     name: 'Kinetic energy',
     domain: 'mechanics',
     formula_latex: 'K = \\tfrac{1}{2} m v^2',
@@ -104,6 +109,11 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     { name: 'angular-velocity', dim: FREQUENCY },
   ], {
     id: 'CE-rotational-kinetic-energy',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`E_\text{rotational} = \tfrac{1}{2} I \omega^2`,
+      locator: "Wikipedia, 'Rotational energy', revision 1258577842, wikitext line 3",
+    },
     name: 'Rotational kinetic energy',
     domain: 'mechanics',
     formula_latex: 'K = \\tfrac{1}{2} I \\omega^2',
@@ -124,6 +134,8 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     { name: 'r', dim: LENGTH },
   ], {
     id: 'CE-gravitational-potential-energy',
+    conventionNote: 'gravitational potential energy is U = −G m1 m2/r. The minus is in the scalar AST; a positive formula differs by the factor −1.',
+    holds: 'mass >= 0 and secondary-mass >= 0 and r > 0',
     name: 'Gravitational potential energy',
     domain: 'mechanics',
     formula_latex: 'U = -G m_1 m_2 / r',
@@ -160,6 +172,11 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     { name: 'displacement', dim: LENGTH },
   ], {
     id: 'CE-spring-potential-energy',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`U_\mathrm{el}(x) = \tfrac 1 2 kx^2`,
+      locator: "Wikipedia, 'Hooke's law', revision 1375736650, wikitext line 146",
+    },
     name: 'Elastic potential energy',
     domain: 'mechanics',
     formula_latex: 'U = \\tfrac{1}{2} k x^2',
@@ -214,6 +231,7 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     { name: 'displacement', dim: LENGTH },
   ], {
     id: 'CE-hooke-law',
+    conventionNote: 'Hooke\'s law is F = −kx. The minus is in the scalar AST; a positive formula differs by the factor −1.',
     name: "Hooke's law",
     domain: 'mechanics',
     formula_latex: 'F = -k x',
@@ -295,6 +313,12 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     { name: 'mass', dim: MASS },
   ], {
     id: 'CE-simple-harmonic-frequency',
+    prefactor: {
+      value: 1,
+      quote: String.raw`\omega = \sqrt{\frac k m}.`,
+      locator: "Wikipedia, 'Harmonic oscillator', revision 1373924880, wikitext line 44",
+    },
+    holds: 'spring-constant > 0 and mass > 0',
     name: 'Simple-harmonic angular frequency',
     domain: 'mechanics',
     formula_latex: '\\omega = \\sqrt{k/m}',

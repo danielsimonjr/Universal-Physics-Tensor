@@ -7,14 +7,13 @@
 
 ## Summary
 
-- **Potentially unused files**: 1
-- **Potentially unused exports**: 81
+- **Potentially unused files**: 0
+- **Potentially unused exports**: 80
 
 ## Potentially Unused Files
 
 These files are not imported by any other file in the codebase:
 
-- `src/composition/not-composable-seeds.ts`
 
 ## Potentially Unused Exports
 
@@ -51,10 +50,6 @@ These exports are not imported by any other file in the codebase:
 ### `src/bridges/evaluators.ts`
 
 - `bindRelationInputs` (function)
-
-### `src/bridges/holds.ts`
-
-- `rewriteHoldsNames` (function)
 
 ### `src/bridges/registry.ts`
 

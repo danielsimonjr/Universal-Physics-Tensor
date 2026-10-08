@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 8.0.0
-  totalFiles: 352
+  totalFiles: 353
   totalModules: 13
-  totalExports: 2372
+  totalExports: 2409
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2310,7 +2310,8 @@ modules:
           typeOnly: true
         - file: ../bridges/catalog-load.js
           imports:
-            - catalogEdgeKey
+            - catalogEntry
+            - parseBridgeId
         - file: ./physjs-entries.generated.js
           imports:
             - PHYSJS_COMMIT
@@ -3360,6 +3361,9 @@ modules:
         - file: ../dimensional/bridge-check.js
           imports:
             - EXPECTED_DIMENSION_BY_BRIDGE
+        - file: ./catalog-load.js
+          imports:
+            - catalogEntries
         - file: ../dimensional/algebra.js
           imports:
             - format
@@ -3417,6 +3421,7 @@ modules:
         - catalogEntry
         - relationsForCatalog
         - primaryRelation
+        - catalogIdNumber
         - parseBridgeId
         - catalogEdgeKey
       functions:
@@ -3428,6 +3433,7 @@ modules:
         - catalogEntry
         - relationsForCatalog
         - primaryRelation
+        - catalogIdNumber
         - parseBridgeId
         - catalogEdgeKey
     src/bridges/catalog-types.ts:
@@ -3461,6 +3467,7 @@ modules:
         - CatalogEvaluator
         - CatalogConfrontation
         - CatalogFile
+        - CatalogAdjudication
     src/bridges/coefficient-statement.ts:
       description: Sign of the one-loop coefficient, read from the catalog expression.
       externalDependencies: []
@@ -3535,7 +3542,7 @@ modules:
           imports:
             - resolveQuantityName
             - synonymGroup
-            - SynonymDisagreementError
+            - synonymDisagreement
             - temperatureQuantityRole
         - file: ../numerical/binding-value.js
           imports:
@@ -3574,6 +3581,11 @@ modules:
         - file: ./expr-parse.js
           imports:
             - evaluateFormula
+            - parseCatalogExpression
+        - file: ../dimensional/ast-types.js
+          imports:
+            - ExprNode
+          typeOnly: true
         - file: ./relation-eval.js
           imports:
             - evaluateCatalogRelation
@@ -3598,7 +3610,7 @@ modules:
       constants:
         - BRIDGE_EVALUATORS
     src/bridges/expr-parse.ts:
-      description: One expression parser for a catalog formula.
+      description: "One expression parser for a catalog formula: MathTS."
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -3629,6 +3641,10 @@ modules:
         - file: ../numerical/formula-mathts.js
           imports:
             - parseFormula
+        - file: ../numerical/formula-dimension.js
+          imports:
+            - parseFormulaPNode
+            - FormulaPNode
       exports:
         - formulaNames
         - formulaScope
@@ -3641,17 +3657,21 @@ modules:
         - parseCatalogExpression
     src/bridges/holds.ts:
       description: Interpreter for a catalog validity condition.
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - parse
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../dimensional/hyphen-names.js
+          imports:
+            - rewriteCatalogHyphens
       exports:
-        - rewriteHoldsNames
         - holds
         - HoldsError
       classes:
         - HoldsError
       functions:
-        - rewriteHoldsNames
         - holds
     src/bridges/index.ts:
       description: Bridge catalog projection. Rows, regimes, and the spine are loaded from
@@ -3771,6 +3791,22 @@ modules:
       functions:
         - adjudicateBridgeEntry
         - adjudicateCatalog
+    src/bridges/notices.ts:
+      description: "The caveats printed beside a relation's value: the record's own notice, and"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/symbolic-constants.js
+          imports:
+            - constantNotes
+        - file: ./catalog-types.js
+          imports:
+            - CatalogRelation
+          typeOnly: true
+      exports:
+        - relationNotices
+      functions:
+        - relationNotices
     src/bridges/observations/types.ts:
       description: Typed observation + confrontation-outcome layer for `upt confront`.
       externalDependencies: []
@@ -3961,6 +3997,8 @@ modules:
       exports: []
       interfaces:
         - CanonicalForms
+        - SourcedPrefactor
+        - SourcedGroupPrefactor
         - CanonicalEquation
     src/canonical/dimensional-fields.ts:
       description: Compute the L0 dimensional fields of a canonical entry FROM the Buckingham-π
@@ -3979,15 +4017,6 @@ modules:
         - dimensionalFields
       functions:
         - dimensionalFields
-    src/canonical/domains.ts:
-      description: The validity domain of a canonical equation, as a condition over its source
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - CANONICAL_DOMAINS
-      constants:
-        - CANONICAL_DOMAINS
     src/canonical/entries/_l1-build.ts:
       description: Shared builders for L1 (scalar-AST) canonical entries. Keeps the entry files
       externalDependencies: []
@@ -5115,6 +5144,10 @@ modules:
           imports:
             - ParsedArgs
           typeOnly: true
+        - file: ../command.js
+          imports:
+            - CommandCtx
+          typeOnly: true
         - file: ../errors.js
           imports:
             - CliError
@@ -5123,23 +5156,6 @@ modules:
           imports:
             - DiscoveryOptions
           typeOnly: true
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readNamedBinding
-        - file: ../../dimensional/units.js
-          imports:
-            - UnitError
-        - file: ../../composition/canonical-graph.js
-          imports:
-            - CANONICAL_GRAPH
-        - file: ../../composition/catalog-graph.js
-          imports:
-            - CATALOG_GRAPH
-        - file: ../../dimensional/formula-names.js
-          imports:
-            - assertSynonymAgreement
-            - resolveQuantityName
-            - SynonymDisagreementError
       exports:
         - parseDiscoveryOpts
       functions:
@@ -5214,9 +5230,6 @@ modules:
         - file: ../statuses.js
           imports:
             - statusMeaning
-        - file: ../../composition/bridge-analysis.js
-          imports:
-            - vacuumConstantThroughAlpha
       exports:
         - command
       constants:
@@ -5393,10 +5406,6 @@ modules:
         - file: ../published-url.js
           imports:
             - publishedUrl
-        - file: ../../composition/adjudication.js
-          imports:
-            - adjudicationFor
-            - candidateIdIfSlug
       exports:
         - command
       constants:
@@ -5463,9 +5472,6 @@ modules:
           imports:
             - canonicalCheckFailed
             - conventionLines
-        - file: ../../composition/user-equation.js
-          imports:
-            - rewriteCatalogHyphens
         - file: ../../dimensional/types.js
           imports:
             - Dimension
@@ -5510,12 +5516,12 @@ modules:
           typeOnly: true
         - file: ../../composition/adjudication.js
           imports:
-            - ADJUDICATIONS
             - AnnotatedCandidate
             - AdjudicationVerdict
+          typeOnly: true
         - file: ../published-url.js
           imports:
-            - publishedUrl
+            - adjudicationSourceUrls
         - file: ../../composition/consequence.js
           imports:
             - ConsequenceSignal
@@ -5550,10 +5556,6 @@ modules:
           imports:
             - CliError
             - UsageError
-        - file: ../../dimensional/formula-names.js
-          imports:
-            - expandSynonymValues
-            - SynonymDisagreementError
         - file: ../version.js
           imports:
             - formulaParserLabel
@@ -5562,7 +5564,6 @@ modules:
             - withParser
         - file: ../eval-numbers.js
           imports:
-            - HBAR_TRUNCATION_NOTE
             - codataScope
         - file: ../../dimensional/natural-units.js
           imports:
@@ -5574,10 +5575,7 @@ modules:
         - command
     src/cli/commands/evaluate.ts:
       description: "`upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /"
-      externalDependencies:
-        - package: "@danielsimonjr/mathts-functions"
-          imports:
-            - propagateUncertainty
+      externalDependencies: []
       nodeDependencies: []
       internalDependencies:
         - file: ../args.js
@@ -5610,23 +5608,13 @@ modules:
             - AppliedCase
             - CaseResult
             - EvaluatorParameter
+            - PropagatedOutput
           typeOnly: true
-        - file: ../conventions.js
-          imports:
-            - JEANS_FORMULA_NOTE
         - file: ../closed-form-range.js
           imports:
             - closedFormRangeLabel
-        - file: ../eval-numbers.js
-          imports:
-            - HBAR_TRUNCATION_NOTE
       exports:
         - command
-        - weakFieldDomainNote
-        - propagateEvaluatorUncertainty
-      functions:
-        - weakFieldDomainNote
-        - propagateEvaluatorUncertainty
       constants:
         - command
     src/cli/commands/explain.ts:
@@ -5654,9 +5642,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../bridges/carrier-sign.js
-          imports:
-            - CarrierSignError
         - file: ../errors.js
           imports:
             - UsageError
@@ -5664,31 +5649,6 @@ modules:
         - file: ../search-index.js
           imports:
             - searchNameWords
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readNamedBinding
-        - file: ../../dimensional/units.js
-          imports:
-            - UnitError
-        - file: ../../dimensional/symbolic-constants.js
-          imports:
-            - CONSTANTS
-        - file: ../../composition/aliases.js
-          imports:
-            - aliasesForTarget
-            - nearQuantityNames
-            - shareSynonyms
-        - file: ../../dimensional/formula-names.js
-          imports:
-            - assertSynonymAgreement
-            - resolveQuantityName
-            - SynonymDisagreementError
-        - file: ../../composition/canonical-prefactors.js
-          imports:
-            - CANONICAL_GROUP_PREFACTORS
-        - file: ../../composition/explain.js
-          imports:
-            - formatQuantity
       exports:
         - command
       constants:
@@ -5917,10 +5877,10 @@ modules:
           imports:
             - canonicalCheckFailed
             - conventionLines
-        - file: ../../dimensional/natural-units.js
+        - file: ../../cli-api.js
           imports:
-            - naturalConstantOverrides
             - UnitMode
+          typeOnly: true
         - file: ../map-evidence.js
           imports:
             - withCatalogEvidence
@@ -6336,16 +6296,16 @@ modules:
       description: Convention lines the CLI prints beside a comparison.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../canonical/registry.js
+          imports:
+            - canonicalById
       exports:
-        - JEANS_FORMULA_NOTE
         - canonicalCheckFailed
         - conventionLines
       functions:
         - canonicalCheckFailed
         - conventionLines
-      constants:
-        - JEANS_FORMULA_NOTE
     src/cli/determination.ts:
       description: One exit for a result the user asked to have determined.
       externalDependencies: []
@@ -6388,35 +6348,17 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - E_SI
-            - FARADAY_SI
-            - K_B_SI
-            - M_E_SI
-            - M_PROTON_SI
-            - M_SUN_SI
-            - N_A_SI
-        - file: ../dimensional/dimension-spec.js
-          imports:
-            - CONSTANT_SPELLINGS
-        - file: ../dimensional/formula-names.js
-          imports:
-            - MU0_SI
         - file: ../dimensional/symbolic-constants.js
           imports:
-            - CONSTANTS
+            - constantScope
         - file: ../dimensional/natural-units.js
           imports:
+            - naturalConstantOverrides
             - UnitMode
-          typeOnly: true
       exports:
-        - HBAR_TRUNCATION_NOTE
         - codataScope
       functions:
         - codataScope
-      constants:
-        - HBAR_TRUNCATION_NOTE
     src/cli/expr-print.ts:
       description: "The three printed forms of a scalar composed AST (`upt symbolic`, audit F12 and I10):"
       externalDependencies: []
@@ -6641,11 +6583,16 @@ modules:
       description: A path in this repository, as a GitHub blob URL on `master`.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../composition/adjudication.js
+          imports:
+            - ADJUDICATIONS
       exports:
         - publishedUrl
+        - adjudicationSourceUrls
       functions:
         - publishedUrl
+        - adjudicationSourceUrls
     src/cli/record-reach.ts:
       description: "Static attribution for an experiment record: which constants a command's code can reach"
       externalDependencies: []
@@ -6997,6 +6944,7 @@ modules:
         - file: ./bridges/catalog-load.js
           imports:
             - catalogEntry
+            - catalogIdNumber
             - parseBridgeId
             - primaryRelation
           reExport: true
@@ -7325,6 +7273,66 @@ modules:
             - readBinding
             - bindingInUnit
             - readNamedBinding
+            - BindingNumberError
+            - TemperatureBindingError
+          reExport: true
+        - file: ./numerical/evaluator-uncertainty.js
+          imports:
+            - propagateEvaluatorUncertainty
+            - correlationIsPositiveSemidefinite
+          reExport: true
+        - file: ./numerical/evaluator-uncertainty.js
+          imports:
+            - PropagatedOutput
+            - UncertaintyContribution
+          reExport: true
+        - file: ./dimensional/symbolic-constants.js
+          imports:
+            - constantAgreement
+            - ConstantDisagreementError
+          reExport: true
+        - file: ./composition/aliases.js
+          imports:
+            - aliasesForTarget
+            - nearQuantityNames
+            - shareSynonyms
+          reExport: true
+        - file: ./dimensional/formula-names.js
+          imports:
+            - assertSynonymAgreement
+            - expandSynonymValues
+          reExport: true
+        - file: ./composition/canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
+          reExport: true
+        - file: ./composition/explain.js
+          imports:
+            - formatQuantity
+          reExport: true
+        - file: ./bridges/carrier-sign.js
+          imports:
+            - CarrierSignError
+          reExport: true
+        - file: ./dimensional/natural-units.js
+          imports:
+            - naturalConstantOverrides
+          reExport: true
+        - file: ./dimensional/natural-units.js
+          imports:
+            - UnitMode
+          reExport: true
+        - file: ./dimensional/hyphen-names.js
+          imports:
+            - rewriteCatalogHyphens
+          reExport: true
+        - file: ./composition/bridge-analysis.js
+          imports:
+            - vacuumConstantThroughAlpha
+          reExport: true
+        - file: ./composition/adjudication.js
+          imports:
+            - candidateIdIfSlug
           reExport: true
         - file: ./index.js
           imports:
@@ -7351,10 +7359,13 @@ modules:
           imports:
             - missingEvaluatorMessage
           reExport: true
-        - file: ./core/constants.js
+        - file: ./bridges/notices.js
           imports:
-            - C_SI
-            - G_SI
+            - relationNotices
+          reExport: true
+        - file: ./dimensional/symbolic-constants.js
+          imports:
+            - constantNotes
           reExport: true
         - file: ./composition/edge.js
           imports:
@@ -7414,6 +7425,7 @@ modules:
         - rigorDistribution
         - requestCallerTableConfrontation
         - catalogEntry
+        - catalogIdNumber
         - parseBridgeId
         - primaryRelation
         - demonstrationEdges
@@ -7524,6 +7536,24 @@ modules:
         - readBinding
         - bindingInUnit
         - readNamedBinding
+        - BindingNumberError
+        - TemperatureBindingError
+        - propagateEvaluatorUncertainty
+        - correlationIsPositiveSemidefinite
+        - constantAgreement
+        - ConstantDisagreementError
+        - aliasesForTarget
+        - nearQuantityNames
+        - shareSynonyms
+        - assertSynonymAgreement
+        - expandSynonymValues
+        - CANONICAL_GROUP_PREFACTORS
+        - formatQuantity
+        - CarrierSignError
+        - naturalConstantOverrides
+        - rewriteCatalogHyphens
+        - vacuumConstantThroughAlpha
+        - candidateIdIfSlug
         - resolveQuantityName
         - evaluatorOutput
         - resolveEvaluable
@@ -7531,8 +7561,8 @@ modules:
         - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
-        - C_SI
-        - G_SI
+        - relationNotices
+        - constantNotes
         - ConfrontationEntry
         - RigorTier
         - ConfrontationOutcome
@@ -7571,6 +7601,9 @@ modules:
         - Witness
         - AtlasModel
         - ModelId
+        - PropagatedOutput
+        - UncertaintyContribution
+        - UnitMode
         - BridgeEdge
         - VizJunction
         - VizModel
@@ -7617,6 +7650,7 @@ modules:
         - rigorDistribution
         - requestCallerTableConfrontation
         - catalogEntry
+        - catalogIdNumber
         - parseBridgeId
         - primaryRelation
         - demonstrationEdges
@@ -7765,6 +7799,27 @@ modules:
         - readBinding
         - bindingInUnit
         - readNamedBinding
+        - BindingNumberError
+        - TemperatureBindingError
+        - propagateEvaluatorUncertainty
+        - correlationIsPositiveSemidefinite
+        - PropagatedOutput
+        - UncertaintyContribution
+        - constantAgreement
+        - ConstantDisagreementError
+        - aliasesForTarget
+        - nearQuantityNames
+        - shareSynonyms
+        - assertSynonymAgreement
+        - expandSynonymValues
+        - CANONICAL_GROUP_PREFACTORS
+        - formatQuantity
+        - CarrierSignError
+        - naturalConstantOverrides
+        - UnitMode
+        - rewriteCatalogHyphens
+        - vacuumConstantThroughAlpha
+        - candidateIdIfSlug
         - resolveQuantityName
         - evaluatorOutput
         - resolveEvaluable
@@ -7772,8 +7827,8 @@ modules:
         - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
-        - C_SI
-        - G_SI
+        - relationNotices
+        - constantNotes
         - BridgeEdge
         - VizJunction
         - VizModel
@@ -7790,14 +7845,29 @@ modules:
           imports:
             - VettedCandidate
           typeOnly: true
+        - file: ../bridges/catalog-load.js
+          imports:
+            - bridgeCatalog
+        - file: ../bridges/catalog-types.js
+          imports:
+            - CatalogAdjudication
+          typeOnly: true
+        - file: ../bridges/catalog-types.js
+          imports:
+            - AdjudicationVerdict
+            - CatalogAdjudication
+          reExport: true
       exports:
         - ADJUDICATIONS
         - candidateId
         - candidateIdIfSlug
         - adjudicationFor
         - annotateAdjudications
-      interfaces:
-        - CandidateAdjudication
+        - AdjudicationVerdict
+        - CatalogAdjudication
+      reExported:
+        - AdjudicationVerdict
+        - CatalogAdjudication
       functions:
         - candidateId
         - candidateIdIfSlug
@@ -7818,8 +7888,14 @@ modules:
           imports:
             - DIMENSION_RENAMES
             - SYNONYM_GROUPS
-            - SynonymDisagreementError
+            - synonymDisagreement
             - DimensionRename
+        - file: ../dimensional/quantity-registry.js
+          imports:
+            - foldName
+        - file: ../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
       exports:
         - NAME_TABLE
         - aliasesForTarget
@@ -7909,7 +7985,10 @@ modules:
       internalDependencies:
         - file: ../core/constants.js
           imports:
-            - HBAR_SI
+            - ALPHA
+        - file: ../dimensional/symbolic-constants.js
+          imports:
+            - constantRecord
         - file: ../dimensional/buckingham.js
           imports:
             - buckinghamPi
@@ -7925,9 +8004,6 @@ modules:
           imports:
             - equals
             - format
-        - file: ../dimensional/ast-builders.js
-          imports:
-            - dim
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -8132,12 +8208,9 @@ modules:
             - applyCarrierSignPolicy
         - file: ../dimensional/symbolic-constants.js
           imports:
+            - CONSTANT_REGISTRY
             - CONSTANTS
             - piMultipleValue
-        - file: ../core/constants.js
-          imports:
-            - E_SI
-            - M_E_SI
         - file: ../dimensional/types.js
           imports:
             - Dimension
@@ -8166,9 +8239,6 @@ modules:
         - file: ./expr-eval.js
           imports:
             - evalExpr
-        - file: ../canonical/domains.js
-          imports:
-            - CANONICAL_DOMAINS
         - file: ../bridges/holds.js
           imports:
             - HoldsError
@@ -8214,10 +8284,13 @@ modules:
         - captureEnvironment
         - captureEnvironment
     src/composition/canonical-prefactors.ts:
-      description: Exact prefactors for canonical equations that `src/canonical` records only
+      description: Sourced prefactors of canonical equations, projected from the entries.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
       exports:
         - CANONICAL_PREFACTORS
         - CANONICAL_GROUP_PREFACTORS
@@ -8822,9 +8895,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../dimensional/algebra.js
-          imports:
-            - equals
         - file: ../dimensional/bridge-check.js
           imports:
             - EXPECTED_DIMENSION_BY_BRIDGE
@@ -8832,9 +8902,6 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ../dimensional/units.js
-          imports:
-            - parseUnit
         - file: ../bridges/evaluators.js
           imports:
             - BRIDGE_EVALUATORS
@@ -8913,6 +8980,9 @@ modules:
         - file: ./canonical-prefactors.js
           imports:
             - CANONICAL_GROUP_PREFACTORS
+        - file: ../canonical/registry.js
+          imports:
+            - canonicalById
         - file: ../dimensional/buckingham.js
           imports:
             - DimensionalDeterminationResult
@@ -11096,6 +11166,9 @@ modules:
         - file: ../bridges/index.js
           imports:
             - BRIDGE_EQUATIONS
+        - file: ../bridges/catalog-load.js
+          imports:
+            - catalogIdNumber
         - file: ../canonical/normal-form.js
           imports:
             - normalForm
@@ -11430,9 +11503,13 @@ modules:
         - G_SI
         - H_SI
         - HBAR_SI
+        - HBAR_CODATA_DISPLAY
         - K_B_SI
         - E_SI
         - ALPHA
+        - EPS0_SI
+        - MU0_SI
+        - SIGMA_SB_SI
         - M_P_SI
         - L_P_SI
         - T_P_SI
@@ -11458,9 +11535,13 @@ modules:
         - G_SI
         - H_SI
         - HBAR_SI
+        - HBAR_CODATA_DISPLAY
         - K_B_SI
         - E_SI
         - ALPHA
+        - EPS0_SI
+        - MU0_SI
+        - SIGMA_SB_SI
         - M_P_SI
         - L_P_SI
         - T_P_SI
@@ -11696,7 +11777,17 @@ modules:
       internalDependencies:
         - file: ./constants.js
           imports:
+            - ALPHA
+            - C_SI
+            - E_SI
+            - G_SI
+            - H0_SI
+            - H_SI
             - HBAR_SI
+            - K_B_SI
+            - L_P_SI
+            - M_P_SI
+            - T_P_SI
       exports:
         - PhysicalConstants
       interfaces:
@@ -11730,9 +11821,9 @@ modules:
             - ExprNode
             - TranscendentalFn
           typeOnly: true
-        - file: ../core/types.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
-            - PhysicalConstants
+            - constantScope
         - file: ../numerical/errors.js
           imports:
             - EngineCapabilityError
@@ -12056,17 +12147,17 @@ modules:
       functions:
         - christoffel
     src/dimensional/constants.ts:
-      description: SI dimensional signatures of fundamental physical constants.
+      description: SI dimensional signatures of fundamental physical constants, projected
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
         - file: ./types.js
           imports:
-            - Dimension
             - LENGTH
-            - VELOCITY
-            - ACTION
-            - CHARGE
+            - Dimension
+        - file: ./symbolic-constants.js
+          imports:
+            - constantRecord
       exports:
         - hbar
         - c
@@ -12234,6 +12325,12 @@ modules:
             - divide
             - multiply
             - power
+        - file: ./ast-builders.js
+          imports:
+            - dim
+        - file: ./symbolic-constants.js
+          imports:
+            - CONSTANT_REGISTRY
       exports:
         - CONSTANT_SPELLINGS
         - parseDimensionSpec
@@ -12341,7 +12438,7 @@ modules:
         - validateComponentDimension
         - validateTensorSymmetry
     src/dimensional/formula-names.ts:
-      description: Names a formula may use that are not leaves of {@link CONSTANTS}.
+      description: "Names a formula may use that are not leaves of {@link CONSTANTS}: the"
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -12351,28 +12448,22 @@ modules:
           typeOnly: true
         - file: ./types.js
           imports:
-            - CHARGE
-            - DIMENSIONLESS
-            - FREQUENCY
-            - LENGTH
             - MASS
             - TEMPERATURE
-        - file: ../core/constants.js
+        - file: ./symbolic-constants.js
           imports:
-            - C_SI
-            - E_SI
-            - FARADAY_SI
-            - K_B_SI
-            - LANE_EMDEN_OMEGA3
-            - M_E_SI
-            - M_PROTON_SI
-            - N_A_SI
-            - THOMSON_CROSS_SECTION_SI
+            - CONSTANT_REGISTRY
         - file: ./quantity-registry.js
           imports:
             - allQuantityRecords
+            - foldName
             - quantityRecord
             - synonymGroupsFromRegistry
+        - file: ../core/constants.js
+          imports:
+            - EPS0_SI
+            - MU0_SI
+          reExport: true
       exports:
         - EPS0_SI
         - MU0_SI
@@ -12384,10 +12475,14 @@ modules:
         - synonymGroup
         - isTemperatureName
         - temperatureQuantityRole
+        - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
         - resolveQuantityName
         - SynonymDisagreementError
+      reExported:
+        - EPS0_SI
+        - MU0_SI
       classes:
         - SynonymDisagreementError
       interfaces:
@@ -12399,12 +12494,11 @@ modules:
         - synonymGroup
         - isTemperatureName
         - temperatureQuantityRole
+        - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
         - resolveQuantityName
       constants:
-        - EPS0_SI
-        - MU0_SI
         - FORMULA_NAMED
         - DIMENSION_RENAMES
         - SYNONYM_GROUPS
@@ -12686,6 +12780,7 @@ modules:
             - Dimension
           typeOnly: true
       exports:
+        - foldName
         - allQuantityRecords
         - quantityRecord
         - synonymGroupsFromRegistry
@@ -12695,6 +12790,8 @@ modules:
         - allQuantityRecords
         - quantityRecord
         - synonymGroupsFromRegistry
+      constants:
+        - foldName
     src/dimensional/rg-flow.ts:
       description: Renormalization-group (RG) flow primitives — `RGCouplingNode` +
       externalDependencies: []
@@ -12761,7 +12858,7 @@ modules:
         - validateStressEnergyTensor
         - validateCosmologicalConstant
     src/dimensional/symbolic-constants.ts:
-      description: Symbolic-composition constant registry (v0.12 symbolic composition).
+      description: "The constant registry: one row per physical constant a formula may name."
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -12769,33 +12866,55 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ./types.js
+        - file: ./units.js
           imports:
-            - ACTION
-            - CHARGE
-            - DIMENSIONLESS
-            - MASS
-            - VELOCITY
+            - parseUnit
         - file: ../core/constants.js
           imports:
+            - B_WIEN_SI
             - C_SI
             - E_SI
+            - EPS0_SI
+            - FARADAY_SI
             - G_SI
             - GM_SUN_SI
-            - HBAR_SI
             - H_SI
+            - HBAR_CODATA_DISPLAY
+            - HBAR_SI
             - K_B_SI
-            - B_WIEN_SI
+            - LANE_EMDEN_OMEGA3
+            - M_E_SI
+            - M_PROTON_SI
+            - M_SUN_SI
             - M_U_SI
+            - MU0_SI
+            - N_A_SI
+            - SIGMA_SB_SI
+            - THOMSON_CROSS_SECTION_SI
       exports:
+        - CONSTANT_REGISTRY
         - CONSTANTS
         - CONSTANT_PROVENANCE
+        - constantRecord
+        - constantAgreement
+        - constantNotes
+        - constantScope
         - piMultipleValue
+        - ConstantDisagreementError
+      classes:
+        - ConstantDisagreementError
       interfaces:
+        - ConstantRecord
+        - NamedConstantValue
         - ConstantProvenance
       functions:
+        - constantRecord
+        - constantAgreement
+        - constantNotes
+        - constantScope
         - piMultipleValue
       constants:
+        - CONSTANT_REGISTRY
         - CONSTANTS
         - CONSTANT_PROVENANCE
     src/dimensional/tensor-trace.ts:
@@ -12980,6 +13099,7 @@ modules:
             - G_SI
             - GM_SUN_SI
             - M_SUN_SI
+            - M_U_SI
       exports:
         - unitConventionNotes
         - parseUnit
@@ -14903,10 +15023,8 @@ modules:
         - file: ../core/constants.js
           imports:
             - K_B_SI
-            - M_SUN_SI
         - file: ../dimensional/formula-names.js
           imports:
-            - FORMULA_NAMED
             - assertSynonymAgreement
             - isTemperatureName
             - synonymGroup
@@ -14920,7 +15038,8 @@ modules:
             - UnitMode
         - file: ../dimensional/symbolic-constants.js
           imports:
-            - CONSTANTS
+            - CONSTANT_REGISTRY
+            - constantRecord
         - file: ../dimensional/algebra.js
           imports:
             - divide
@@ -14932,7 +15051,6 @@ modules:
           imports:
             - DIMENSIONLESS
             - ENERGY
-            - MASS
             - TEMPERATURE
             - Dimension
         - file: ../dimensional/units.js
@@ -14959,6 +15077,11 @@ modules:
         - readBinding
         - bindingInUnit
         - readParameter
+        - TemperatureBindingError
+        - BindingNumberError
+      classes:
+        - TemperatureBindingError
+        - BindingNumberError
       interfaces:
         - BindingValue
         - NamedBindingSibling
@@ -15264,6 +15387,26 @@ modules:
         - NumericalBackendError
         - EngineCapabilityError
         - GL4ConvergenceError
+    src/numerical/evaluator-uncertainty.ts:
+      description: First-order propagation of input uncertainties through a closed-form
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - propagateUncertainty
+        - package: "@danielsimonjr/mathts-matrix"
+          imports:
+            - eigvals
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - propagateEvaluatorUncertainty
+        - correlationIsPositiveSemidefinite
+      interfaces:
+        - UncertaintyContribution
+        - PropagatedOutput
+      functions:
+        - propagateEvaluatorUncertainty
+        - correlationIsPositiveSemidefinite
     src/numerical/formula-contract.ts:
       description: Scalar-formula contract shared by the MathTS parser.
       externalDependencies: []
@@ -16473,6 +16616,7 @@ dependencyGraph:
         - src/bridges/holds.ts
         - src/bridges/index.ts
         - src/bridges/membership.ts
+        - src/bridges/notices.ts
         - src/bridges/observations/types.ts
         - src/bridges/registry.ts
         - src/bridges/rejected.ts
@@ -16485,7 +16629,6 @@ dependencyGraph:
       files:
         - src/canonical/canonical-equation.ts
         - src/canonical/dimensional-fields.ts
-        - src/canonical/domains.ts
         - src/canonical/entries/_l1-build.ts
         - src/canonical/entries/atomic.ts
         - src/canonical/entries/condensed-matter.ts
@@ -16723,6 +16866,7 @@ dependencyGraph:
         - src/numerical/einstein-equation.ts
         - src/numerical/engine-registry.ts
         - src/numerical/errors.ts
+        - src/numerical/evaluator-uncertainty.ts
         - src/numerical/formula-contract.ts
         - src/numerical/formula-dimension.ts
         - src/numerical/formula-mathts.ts
@@ -16762,19 +16906,19 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 352
+  totalTypeScriptFiles: 353
   totalModules: 13
-  totalLinesOfCode: 77687
-  totalExports: 2372
-  totalClasses: 66
-  totalInterfaces: 434
-  totalFunctions: 725
+  totalLinesOfCode: 77360
+  totalExports: 2409
+  totalClasses: 69
+  totalInterfaces: 440
+  totalFunctions: 732
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 377
-  totalReExports: 1205
-  totalTypeOnlyImports: 498
+  totalConstants: 378
+  totalReExports: 1231
+  totalTypeOnlyImports: 503
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  unusedFilesCount: 1
-  unusedExportsCount: 81
+  unusedFilesCount: 0
+  unusedExportsCount: 80

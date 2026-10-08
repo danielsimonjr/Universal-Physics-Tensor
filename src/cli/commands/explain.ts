@@ -17,24 +17,8 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
-import { CarrierSignError } from '../../bridges/carrier-sign.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
-import { readNamedBinding } from '../../numerical/binding-value.js';
-import { UnitError } from '../../dimensional/units.js';
-import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
-import {
-  aliasesForTarget,
-  nearQuantityNames,
-  shareSynonyms,
-} from '../../composition/aliases.js';
-import {
-  assertSynonymAgreement,
-  resolveQuantityName,
-  SynonymDisagreementError,
-} from '../../dimensional/formula-names.js';
-import { CANONICAL_GROUP_PREFACTORS } from '../../composition/canonical-prefactors.js';
-import { formatQuantity } from '../../composition/explain.js';
 
 /** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
 const SEARCH_HITS_SHOWN = 5;
@@ -77,7 +61,7 @@ const HELP = `upt explain <quantity> [name=value | name] ...
  * `mass=1e500`→∞, and a bare name alongside a valued one were all silent
  * wrong-physics footguns.
  */
-function parseKnown(args: readonly string[]): { known: string[] | Record<string, number>; notes: string[] } {
+function parseKnown(api: CommandCtx['api'], args: readonly string[]): { known: string[] | Record<string, number>; notes: string[] } {
   const valued = args.filter((a) => a.includes('='));
   if (valued.length === 0) return { known: [...args], notes: [] }; // names mode
 
@@ -98,12 +82,12 @@ function parseKnown(args: readonly string[]): { known: string[] | Record<string,
   const values: Record<string, number> = {};
   const notes: string[] = [];
   for (const a of assignments) {
-    let read: ReturnType<typeof readNamedBinding>;
+    let read: ReturnType<CommandCtx['api']['readNamedBinding']>;
     try {
-      read = readNamedBinding(a.name, a.raw, { siblings });
+      read = api.readNamedBinding(a.name, a.raw, { siblings });
     } catch (e) {
-      if (e instanceof SynonymDisagreementError) throw new CliError(`upt explain: ${e.message}`);
-      if (e instanceof UnitError && /is a temperature/.test(e.message)) {
+      if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt explain: ${e.message}`);
+      if (e instanceof api.TemperatureBindingError) {
         throw new CliError(`upt explain: '${a.assignment}' is not a temperature. ${e.message}`);
       }
       throw new UsageError(`upt: '${a.assignment}' is not a finite number. Expected ${a.name}=<number>. See \`upt help\`.`);
@@ -134,9 +118,8 @@ function bridgeRedirect(
   api: CommandCtx['api'],
   target: string,
 ): { id: number; tier: string; hasGraphEdge: boolean; hasDataConfrontation: boolean; hint: string } | null {
-  const m = /^be-(\d+)$/i.exec(target);
-  if (!m) return null;
-  const id = Number(m[1]);
+  const id = api.catalogIdNumber(target);
+  if (id === undefined) return null;
   const b = api.auditCoverage().bridges.find((x) => x.id === id);
   if (!b) return null;
 
@@ -179,6 +162,7 @@ function restatementPartner(
 }
 
 function printExplanation(
+  api: CommandCtx['api'],
   out: CommandCtx['out'],
   target: string,
   label: string,
@@ -189,7 +173,7 @@ function printExplanation(
   if (x.derivations.length) {
     out('  derivations:');
     for (const d of x.derivations) {
-      const val = d.value !== undefined ? ` = ${formatQuantity(d.value)}` : '';
+      const val = d.value !== undefined ? ` = ${api.formatQuantity(d.value)}` : '';
       const chain =
         d.leafInputs.join(',') !== d.sources.join(',') ? `  [from leaves: ${d.leafInputs.join(', ')}]` : '';
       out(`    - ${d.edge} (${d.label})${val}${chain}`);
@@ -209,29 +193,14 @@ function valuesAgree(a: number | undefined, b: number | undefined): boolean | un
   return Math.abs(a - b) / scale <= 1e-6;
 }
 
-/** Extra spellings of a registered constant, beside its registry name. */
-const CONSTANT_ALIASES: Readonly<Record<string, string>> = { 'wien-constant': 'b', 'stefan-boltzmann-constant': 'sigma_sb' };
-
-/** Relative tolerance within which a stated constant agrees with the registered value (textbook roundings such as 2.9e-3 pass). */
-const CONSTANT_AGREEMENT = 5e-3;
-
-/**
- * The registered constant a key names, or null. A constant is not a graph
- * quantity: the equation already uses the registered value, so a stated
- * value is checked against it rather than bound.
- */
-function constantNamed(key: string): string | null {
-  const name = CONSTANT_ALIASES[key] ?? key;
-  return Object.hasOwn(CONSTANTS, name) ? name : null;
-}
-
 function rebind(
+  api: CommandCtx['api'],
   known: string[] | Record<string, number>,
   aliases: ReadonlyMap<string, string>,
   graphNames: ReadonlySet<string>,
 ): string[] | Record<string, number> {
   const rewrite = (key: string): string => {
-    const hit = resolveQuantityName(key, graphNames, aliases);
+    const hit = api.resolveQuantityName(key, graphNames, aliases);
     if (hit === null) {
       throw new CliError(
         `upt explain: '${key}' did not resolve to a quantity. ` +
@@ -243,18 +212,17 @@ function rebind(
   if (Array.isArray(known)) return known.map(rewrite);
   const out: Record<string, number> = {};
   for (const [key, value] of Object.entries(known)) {
-    if (resolveQuantityName(key, graphNames, aliases) === null) {
-      const constant = constantNamed(key);
-      if (constant !== null) {
-        const registered = CONSTANTS[constant]!.value;
-        if (Math.abs(value - registered) > CONSTANT_AGREEMENT * Math.abs(registered)) {
-          throw new CliError(
-            `upt explain: '${key}' is the registered constant ${constant} = ${registered}; ` +
-              `${value} disagrees, and the equations use the registered value, so it cannot be rebound.`,
-          );
-        }
-        continue;
+    if (api.resolveQuantityName(key, graphNames, aliases) === null) {
+      // A constant is not a graph quantity: the equation already uses the
+      // registered value, so a stated value is checked, never bound.
+      let constant: string | null;
+      try {
+        constant = api.constantAgreement(key, value);
+      } catch (e) {
+        if (e instanceof api.ConstantDisagreementError) throw new CliError(`upt explain: ${e.message}`);
+        throw e;
       }
+      if (constant !== null) continue;
     }
     const name = rewrite(key);
     if (Object.hasOwn(out, name) && out[name] !== value) {
@@ -295,12 +263,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   // optional input, not a graph node. It resolves as a binding and not as a target.
   const inputNames = new Set(names);
   const edgeIds = new Set(graph.map((e) => e.id));
-  for (const group of CANONICAL_GROUP_PREFACTORS) {
+  for (const group of api.CANONICAL_GROUP_PREFACTORS) {
     if (edgeIds.has(group.id)) inputNames.add(group.group);
   }
-  let resolvedTarget = resolveQuantityName(target, names);
+  let resolvedTarget = api.resolveQuantityName(target, names);
   if (resolvedTarget === null) {
-    const near = nearQuantityNames(target, names);
+    const near = api.nearQuantityNames(target, names);
     // A single token one edit from exactly one quantity is that quantity.
     // A hyphenated miss stays a suggestion: `hawkng-temperature` exits 1.
     if (!/[-_\s]/.test(target) && near.length === 1) {
@@ -308,7 +276,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
   if (resolvedTarget === null) {
-    const near = nearQuantityNames(target, names);
+    const near = api.nearQuantityNames(target, names);
     // Audit I5: a law or model name (`schrodinger-equation`) is not a quantity; name what
     // `upt search` finds for its words. A shared token is not a near name.
     const found = searchNameWords(api, target);
@@ -327,24 +295,24 @@ async function run(ctx: CommandCtx): Promise<number> {
         searchLine,
     );
   }
-  const aliases = aliasesForTarget(graph, resolvedTarget);
-  const parsed = parseKnown(rest);
+  const aliases = api.aliasesForTarget(graph, resolvedTarget);
+  const parsed = parseKnown(api, rest);
   for (const note of parsed.notes) ctx.err(note);
   if (!Array.isArray(parsed.known)) {
     try {
-      assertSynonymAgreement(parsed.known);
+      api.assertSynonymAgreement(parsed.known);
     } catch (e) {
-      if (e instanceof SynonymDisagreementError) throw new CliError(`upt explain: ${e.message}`);
+      if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt explain: ${e.message}`);
       throw e;
     }
   }
-  const rebound = rebind(parsed.known, aliases, inputNames);
-  const known = shareSynonyms(rebound, names);
+  const rebound = rebind(api, parsed.known, aliases, inputNames);
+  const known = api.shareSynonyms(rebound, names);
   let x;
   try {
     x = api.explainQuantity(graph, resolvedTarget, known);
   } catch (e) {
-    if (e instanceof CarrierSignError || e instanceof SynonymDisagreementError) {
+    if (e instanceof api.CarrierSignError || e instanceof api.SynonymDisagreementError) {
       throw new CliError(`upt explain: ${e.message}`);
     }
     throw e;
@@ -378,9 +346,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  printExplanation(out, target, label, x);
+  printExplanation(api, out, target, label, x);
   if (partner !== null && partnerExplanation !== undefined) {
-    printExplanation(out, partner.name, label, partnerExplanation);
+    printExplanation(api, out, partner.name, label, partnerExplanation);
     const who = `${partner.canonicalId} restates be-${partner.bridgeId}`;
     if (agree === true) {
       out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}). Values agree.`);
@@ -388,7 +356,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       const ratio = x.recoveredValue! / partnerExplanation.recoveredValue!;
       out(
         `  ${resolvedTarget} and ${partner.name} are one restatement (${who}). ` +
-          `Values DISAGREE: ${resolvedTarget} / ${partner.name} = ${formatQuantity(ratio)}.`,
+          `Values DISAGREE: ${resolvedTarget} / ${partner.name} = ${api.formatQuantity(ratio)}.`,
       );
     } else {
       out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}).`);

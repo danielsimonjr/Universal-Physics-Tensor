@@ -10,7 +10,6 @@ import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { statusMeaning } from '../statuses.js';
-import { vacuumConstantThroughAlpha } from '../../composition/bridge-analysis.js';
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both.'),
@@ -90,7 +89,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const { e, d } of derived) {
     const tag = d.cleanPrefactor
       ? ''
-      : vacuumConstantThroughAlpha(d.subset, d.prefactor)
+      : api.vacuumConstantThroughAlpha(d.subset, d.prefactor)
         ? '  (vacuum constant; μ0 rewritten through α)'
         : '  (empirical/tuned constant)';
     out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${d.prefactor!.toExponential(3)}${tag}`);

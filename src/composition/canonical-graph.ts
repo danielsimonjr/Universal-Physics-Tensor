@@ -68,8 +68,7 @@ import type { Quantity, RegimeAttributes } from './quantity.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { applyCarrierSignPolicy } from '../bridges/carrier-sign.js';
-import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
-import { E_SI, M_E_SI } from '../core/constants.js';
+import { CONSTANT_REGISTRY, CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import type { Dimension } from '../dimensional/types.js';
 import type { InformationMeasure } from '../core/types.js';
 import { CHARGE, DIMENSIONLESS, MASS } from '../dimensional/types.js';
@@ -77,7 +76,6 @@ import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
 import { evalExpr } from './expr-eval.js';
-import { CANONICAL_DOMAINS } from '../canonical/domains.js';
 import { HoldsError, holds } from '../bridges/holds.js';
 import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
 
@@ -88,24 +86,19 @@ interface ConstantDef {
 }
 
 /**
- * The universal constants a canonical `governing` list may name, with SI value
- * AND dimension. Reuses the symbolic-composition `CONSTANTS` registry (single
- * source for ℏ/c/G/k_B/ε₀/σ_sb/b and the elementary charge `e`) and adds the
- * `boltzmann` alias, repeats `e`, and adds the electron mass `m_e` — all universal constants,
- * not observables. A governing entry is BAKED into the evaluator iff its name
- * AND dimension match an entry here; everything else is a physical variable (a
- * graph node). The dimension guard is load-bearing: it stops a future
- * same-named physical variable (e.g. orbital eccentricity `e`, dimensionless)
- * from being silently replaced by a constant of the same name.
+ * The universal constants a canonical `governing` list may name, under every
+ * registered spelling, with SI value AND dimension: the canonical rows of the
+ * constant registry. A governing entry is BAKED into the evaluator iff its
+ * name AND dimension match an entry here; everything else is a physical
+ * variable (a graph node). The dimension guard is load-bearing: it stops a
+ * future same-named physical variable (e.g. orbital eccentricity `e`,
+ * dimensionless) from being silently replaced by a constant of the same name.
  */
-export const CANONICAL_CONSTANTS: Readonly<Record<string, ConstantDef>> = {
-  ...Object.fromEntries(
-    Object.entries(CONSTANTS).map(([name, c]) => [name, { value: c.value, dim: c.dim }]),
+export const CANONICAL_CONSTANTS: Readonly<Record<string, ConstantDef>> = Object.fromEntries(
+  CONSTANT_REGISTRY.filter((row) => row.canonical).flatMap((row) =>
+    [row.name, ...row.spellings].map((spelling) => [spelling, { value: row.value, dim: row.dim }]),
   ),
-  boltzmann: { value: CONSTANTS.k_B.value, dim: CONSTANTS.k_B.dim },
-  e: { value: E_SI, dim: CHARGE },
-  m_e: { value: M_E_SI, dim: MASS },
-};
+);
 
 /**
  * Map camelCase `InformationMeasure` (from canonical regime) to kebab-case
@@ -151,7 +144,7 @@ const PERMISSIVE_DOMAIN: ValidityDomain = {
  * the permissive domain when none is stated. An unbound name is a violation.
  */
 function domainOf(eq: CanonicalEquation, sourceNames: readonly string[]): ValidityDomain {
-  const text = CANONICAL_DOMAINS[eq.id];
+  const text = eq.holds;
   if (text === undefined) return PERMISSIVE_DOMAIN;
   return {
     description: text,

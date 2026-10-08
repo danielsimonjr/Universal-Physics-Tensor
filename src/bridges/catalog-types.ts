@@ -28,6 +28,12 @@ export interface CatalogEntry extends BridgeEquationEntry {
   readonly derivedFrom?: readonly string[];
   readonly basis?: true;
   readonly formalKey?: string;
+  /**
+   * The reviewed kind of the PhysJS reference `formalKey` names, when it is
+   * not the first word of the covers line: `bridge` when the theorem states
+   * the catalogued equation, `property` when it states a property of it.
+   */
+  readonly formalKind?: 'bridge' | 'property';
   readonly assumptions?: readonly string[];
   readonly scopeLimits?: readonly string[];
   readonly dimension?: Dimension;
@@ -69,8 +75,8 @@ export interface CatalogRelation {
   readonly conventions?: Conventions;
   readonly counterexamples?: readonly Counterexample[];
   readonly reference?: CatalogReference;
-  /** A named evaluation notice. The text lives with the notice, not with an id switch. */
-  readonly notice?: string;
+  /** A caveat the record states beside its value. The text is the record's; nothing switches on it. */
+  readonly notice?: { readonly text: string };
   /** A generic numerical method this record calls. Never a bridge number. */
   readonly method?: string;
 }
@@ -137,8 +143,31 @@ export interface CatalogFile {
   readonly relations: readonly CatalogRelation[];
   readonly evaluators: readonly CatalogEvaluator[];
   readonly confrontations: readonly CatalogConfrontation[];
-  readonly adjudications: readonly { readonly id: string; readonly verdict: string }[];
+  /** The adjudication ledger: recorded verdicts on identification hypotheses. `composition/adjudication.ts` projects it. */
+  readonly adjudications: readonly CatalogAdjudication[];
   readonly spine: Readonly<Record<string, Readonly<Record<string, number>>>>;
+}
+
+/**
+ * A recorded human verdict on an identification hypothesis `a ≟ b`.
+ * - `genuine`  — real physics AND a new link (nothing recorded qualifies yet).
+ * - `entailed` — real physics already carried by the L-layer; not a new link.
+ * - `decoy`    — dimensional coincidence / no mechanism, including trivial and definitional identifications.
+ * - `deferred` — reviewed and consciously parked (not the same as absent, which means never reviewed).
+ */
+export type AdjudicationVerdict = 'genuine' | 'decoy' | 'entailed' | 'deferred';
+
+/** One record of the adjudication ledger in `data/bridge-catalog.json`. */
+export interface CatalogAdjudication {
+  /** `candidateId(a, b)` of the identification: the two slugs in sorted order, joined by `~`. */
+  readonly id: string;
+  readonly verdict: AdjudicationVerdict;
+  /** Why, condensed from the adjudication document; never machine-generated. */
+  readonly grounds: string;
+  /** Repo-relative path of the adjudication document. */
+  readonly source: string;
+  /** ISO date the verdict was recorded. */
+  readonly date: string;
 }
 
 /** Lifecycle status of a catalog row. */

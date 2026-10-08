@@ -11,19 +11,11 @@
  * green and untouched) — do not reword them.
  */
 import type { ParsedArgs } from '../args.js';
+import type { CommandCtx } from '../command.js';
 import { CliError, UsageError } from '../errors.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
-import { readNamedBinding } from '../../numerical/binding-value.js';
-import { UnitError } from '../../dimensional/units.js';
-import { CANONICAL_GRAPH } from '../../composition/canonical-graph.js';
-import { CATALOG_GRAPH } from '../../composition/catalog-graph.js';
-import {
-  assertSynonymAgreement,
-  resolveQuantityName,
-  SynonymDisagreementError,
-} from '../../dimensional/formula-names.js';
 
-export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions {
+export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
 
   const moValues = flags.get('max-orders');
@@ -56,30 +48,30 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
   const rawValues: Record<string, number> = {};
   for (const p of pairs) {
     try {
-      const read = readNamedBinding(p.name, p.raw, { siblings });
+      const read = api.readNamedBinding(p.name, p.raw, { siblings });
       if (!Number.isFinite(read.value)) {
         throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
       }
       rawValues[p.name] = read.value;
     } catch (e) {
       if (e instanceof UsageError) throw e;
-      if (e instanceof UnitError && /is a temperature/.test(e.message)) {
+      if (e instanceof api.TemperatureBindingError) {
         throw new CliError(`upt: --anchor '${p.pair}' is not a temperature. ${e.message}`);
       }
       throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
     }
   }
   try {
-    assertSynonymAgreement(rawValues);
+    api.assertSynonymAgreement(rawValues);
   } catch (e) {
-    if (e instanceof SynonymDisagreementError) throw new CliError(`upt: ${e.message}`);
+    if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt: ${e.message}`);
     throw e;
   }
   const quantityNames = new Set(
-    [...CATALOG_GRAPH, ...CANONICAL_GRAPH].flatMap((edge) => [edge.target.name, ...edge.sources.map((s) => s.name)]),
+    [...api.CATALOG_GRAPH, ...api.CANONICAL_GRAPH].flatMap((edge) => [edge.target.name, ...edge.sources.map((s) => s.name)]),
   );
   for (const [name, value] of Object.entries(rawValues)) {
-    const key = resolveQuantityName(name, quantityNames) ?? name;
+    const key = api.resolveQuantityName(name, quantityNames) ?? name;
     gt[key] = value;
   }
   if (Object.keys(gt).length) opts.groundTruth = gt;

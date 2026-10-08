@@ -40,6 +40,8 @@ import {
   CHARGE,
 } from './types.js';
 import { divide, multiply, power } from './algebra.js';
+import { dim } from './ast-builders.js';
+import { CONSTANT_REGISTRY } from './symbolic-constants.js';
 
 /** A bad dimension spec. */
 export class DimensionSpecError extends Error {
@@ -49,13 +51,8 @@ export class DimensionSpecError extends Error {
   }
 }
 
-const d = (
-  L = 0,
-  M = 0,
-  T = 0,
-  Theta = 0,
-  I = 0,
-): Dimension => ({ L, M, T, I, Theta, N: 0, J: 0 });
+/** `dim(L, M, T, I, Θ)`, the one builder, from `ast-builders`. */
+const d = dim;
 
 /** Named dimensions — matched case-insensitively. */
 const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
@@ -78,29 +75,20 @@ const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
   density: d(-3, 1),
   volume: d(3),
   viscosity: d(-1, 1, -1),
-  resistance: d(2, 1, -3, 0, -2),
-  magnetic_field: d(0, 1, -2, 0, -1),
-  permeability: d(1, 1, -2, 0, -2),
+  resistance: d(2, 1, -3, -2, 0),
+  magnetic_field: d(0, 1, -2, -1, 0),
+  permeability: d(1, 1, -2, -2, 0),
 };
 
 /**
- * One constant's exact-case spellings. The first name is the formula name
- * the equation path rewrites the others to. `upt eval` binds the same
- * names. A dimension term reads this record; it does not keep a second list.
+ * One constant's exact-case spellings, projected from the constant registry.
+ * The first name is the formula name the equation path rewrites the others
+ * to. `upt eval` binds the same names. A dimension term reads this record.
  *
  * @internal
  */
-export const CONSTANT_SPELLINGS: readonly { readonly names: readonly string[]; readonly dim: Dimension }[] = [
-  { names: ['hbar', 'ℏ'], dim: ACTION },
-  { names: ['c'], dim: VELOCITY },
-  { names: ['G'], dim: d(3, -1, -2) },
-  { names: ['k_B', 'kB'], dim: ENTROPY },
-  { names: ['e'], dim: CHARGE },
-  { names: ['mu_0', 'mu0'], dim: d(1, 1, -2, 0, -2) },
-  { names: ['epsilon_0', 'epsilon0', 'eps0'], dim: d(-3, -1, 4, 0, 2) },
-  // W/(m^2 K^4)
-  { names: ['sigma_sb'], dim: d(0, 1, -3, -4) },
-];
+export const CONSTANT_SPELLINGS: readonly { readonly names: readonly string[]; readonly dim: Dimension }[] =
+  CONSTANT_REGISTRY.map((row) => ({ names: [row.name, ...row.spellings], dim: row.dim }));
 
 /** Fundamental constants by their SI dimension — matched EXACT-case, so
  *  `G` (Newton's constant) is never confused with `g` (acceleration). */

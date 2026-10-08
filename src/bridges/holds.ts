@@ -2,11 +2,22 @@
  * Interpreter for a catalog validity condition.
  *
  * A condition is a boolean expression over quantity names, the registered
- * constants, `finite`, and `integer`. It is not JavaScript `eval`.
+ * constants, `isFinite` and `isInteger`, written in MathTS's grammar
+ * (`and`, `or`, `not`, `<`, `<=`, `>`, `>=`, `==`, `!=`). MathTS parses it,
+ * and MathTS evaluates every arithmetic sub-expression. The comparisons and
+ * the logical operators are evaluated here, exactly: MathTS's own comparison
+ * operators are tolerance-based (`absTol` 1e-15), so under them `1e-18 > 0`
+ * is false, which no condition over SI magnitudes can accept.
+ *
+ * It is not JavaScript `eval`.
  *
  * @module bridges/holds
  */
 
+import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
+import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
+
+/** A condition could not be evaluated: it names an unbound symbol, or its text does not parse. @internal */
 export class HoldsError extends Error {
   constructor(message: string) {
     super(message);
@@ -14,259 +25,128 @@ export class HoldsError extends Error {
   }
 }
 
-type Tok =
-  | { t: 'num'; v: number }
-  | { t: 'id'; v: string }
-  | { t: 'op'; v: string }
-  | { t: 'lp' }
-  | { t: 'rp' };
+/** The MathTS node shape this interpreter reads. */
+interface MathNode {
+  readonly type: string;
+  readonly op?: string;
+  readonly fn?: string | { readonly name?: string };
+  readonly name?: string;
+  readonly value?: unknown;
+  readonly args?: readonly MathNode[];
+  readonly content?: MathNode;
+  evaluate(scope: Record<string, unknown>): unknown;
+}
 
-const OPS = ['>=', '<=', '===', '!==', '==', '!=', '&&', '||', '>', '<', '!'];
+type Scope = Record<string, number>;
+type Compiled = (scope: Scope) => boolean | number;
 
-function tokenize(source: string): Tok[] {
-  const out: Tok[] = [];
-  let i = 0;
-  while (i < source.length) {
-    const c = source[i]!;
-    if (c === ' ' || c === '\n' || c === '\t' || c === '\r') {
-      i += 1;
-      continue;
+const COMPARISONS: Readonly<Record<string, (a: number, b: number) => boolean>> = {
+  '<': (a, b) => a < b,
+  '<=': (a, b) => a <= b,
+  '>': (a, b) => a > b,
+  '>=': (a, b) => a >= b,
+  '==': (a, b) => a === b,
+  '!=': (a, b) => a !== b,
+};
+
+const PREDICATES: Readonly<Record<string, (x: number) => boolean>> = {
+  isFinite: (x) => Number.isFinite(x),
+  isInteger: (x) => Number.isInteger(x),
+};
+
+function functionName(node: MathNode): string {
+  return typeof node.fn === 'string' ? node.fn : (node.fn?.name ?? node.name ?? '');
+}
+
+/** Evaluate an arithmetic sub-tree through MathTS; the result must be a number. */
+function arithmetic(node: MathNode, source: string): Compiled {
+  return (scope) => {
+    let v: unknown;
+    try {
+      v = node.evaluate(scope);
+    } catch (error) {
+      throw new HoldsError(`${error instanceof Error ? error.message : String(error)} in ${source}`);
     }
-    if (c === '(') {
-      out.push({ t: 'lp' });
-      i += 1;
-      continue;
-    }
-    if (c === ')') {
-      out.push({ t: 'rp' });
-      i += 1;
-      continue;
-    }
-    const op = OPS.find((candidate) => source.startsWith(candidate, i));
-    if (op !== undefined) {
-      out.push({ t: 'op', v: op });
-      i += op.length;
-      continue;
-    }
-    if (c === '+' || c === '-' || c === '*' || c === '/' || c === '^') {
-      out.push({ t: 'op', v: c });
-      i += 1;
-      continue;
-    }
-    if (/[0-9.]/.test(c)) {
-      const m = /^[0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?/.exec(source.slice(i));
-      if (m === null) throw new HoldsError(`bad number at ${i} in ${source}`);
-      out.push({ t: 'num', v: Number(m[0]) });
-      i += m[0].length;
-      continue;
-    }
-    if (/[A-Za-z_]/.test(c)) {
-      const m = /^[A-Za-z_][A-Za-z0-9_]*/.exec(source.slice(i));
-      if (m === null) throw new HoldsError(`bad name at ${i} in ${source}`);
-      out.push({ t: 'id', v: m[0] });
-      i += m[0].length;
-      continue;
-    }
-    throw new HoldsError(`unexpected '${c}' in ${source}`);
-  }
-  return out;
-}
-
-/**
- * Names in `holds` may contain hyphens. Rewrite the declared names to
- * underscores, longest first, before the lexer treats `-` as subtraction.
- */
-export function rewriteHoldsNames(source: string, names: readonly string[]): string {
-  const ordered = [...names].sort((a, b) => b.length - a.length);
-  let out = source;
-  for (const name of ordered) {
-    if (!name.includes('-')) continue;
-    out = out.split(name).join(name.replace(/-/g, '_'));
-  }
-  return out;
-}
-
-interface Parser {
-  toks: Tok[];
-  i: number;
-}
-
-function peek(p: Parser): Tok | undefined {
-  return p.toks[p.i];
-}
-
-function peekOp(p: Parser): string | undefined {
-  const tok = peek(p);
-  return tok !== undefined && tok.t === 'op' ? tok.v : undefined;
-}
-
-function eat(p: Parser): Tok {
-  const tok = p.toks[p.i];
-  if (tok === undefined) throw new HoldsError('unexpected end of condition');
-  p.i += 1;
-  return tok;
-}
-
-function asBool(value: number | boolean, op: string): boolean {
-  if (typeof value !== 'boolean') throw new HoldsError(`${op} needs a condition`);
-  return value;
-}
-
-function parseOr(p: Parser, env: Env): number | boolean {
-  let left = parseAnd(p, env);
-  while (peekOp(p) === '||') {
-    eat(p);
-    const right = parseAnd(p, env);
-    left = asBool(left, '||') || asBool(right, '||');
-  }
-  return left;
-}
-
-function parseAnd(p: Parser, env: Env): number | boolean {
-  let left = parseNot(p, env);
-  while (peekOp(p) === '&&') {
-    eat(p);
-    const right = parseNot(p, env);
-    left = asBool(left, '&&') && asBool(right, '&&');
-  }
-  return left;
-}
-
-function parseNot(p: Parser, env: Env): number | boolean {
-  if (peekOp(p) === '!') {
-    eat(p);
-    return !asBool(parseNot(p, env), '!');
-  }
-  return parseCmp(p, env);
-}
-
-function parseCmp(p: Parser, env: Env): number | boolean {
-  const left = parseAdd(p, env);
-  const op = peek(p);
-  if (op?.t === 'op' && ['>', '<', '>=', '<=', '==', '!=', '===', '!=='].includes(op.v)) {
-    eat(p);
-    const right = parseAdd(p, env);
-    if (typeof left === 'boolean' || typeof right === 'boolean') {
-      throw new HoldsError('comparison of a condition');
-    }
-    switch (op.v) {
-      case '>':
-        return left > right;
-      case '<':
-        return left < right;
-      case '>=':
-        return left >= right;
-      case '<=':
-        return left <= right;
-      case '==':
-      case '===':
-        return left === right;
-      case '!=':
-      case '!==':
-        return left !== right;
-      default:
-        throw new HoldsError(`bad comparison ${op.v}`);
-    }
-  }
-  return left;
-}
-
-function parseAdd(p: Parser, env: Env): number | boolean {
-  let left = parseMul(p, env);
-  while (peekOp(p) === '+' || peekOp(p) === '-') {
-    const op = eat(p);
-    const right = parseMul(p, env);
-    if (typeof left !== 'number' || typeof right !== 'number' || op.t !== 'op') {
-      throw new HoldsError('arithmetic on a condition');
-    }
-    left = op.v === '+' ? left + right : left - right;
-  }
-  return left;
-}
-
-function parseMul(p: Parser, env: Env): number | boolean {
-  let left = parseUnary(p, env);
-  while (peekOp(p) === '*' || peekOp(p) === '/') {
-    const op = eat(p);
-    const right = parseUnary(p, env);
-    if (typeof left !== 'number' || typeof right !== 'number' || op.t !== 'op') {
-      throw new HoldsError('arithmetic on a condition');
-    }
-    left = op.v === '*' ? left * right : left / right;
-  }
-  return left;
-}
-
-function parseUnary(p: Parser, env: Env): number | boolean {
-  if (peekOp(p) === '-') {
-    eat(p);
-    const v = parsePow(p, env);
-    if (typeof v !== 'number') throw new HoldsError('negation of a condition');
-    return -v;
-  }
-  if (peekOp(p) === '+') {
-    eat(p);
-    return parsePow(p, env);
-  }
-  return parsePow(p, env);
-}
-
-function parsePow(p: Parser, env: Env): number | boolean {
-  const base = parsePrimary(p, env);
-  if (peekOp(p) === '^') {
-    eat(p);
-    const exp = parseUnary(p, env);
-    if (typeof base !== 'number' || typeof exp !== 'number') throw new HoldsError('power of a condition');
-    return base ** exp;
-  }
-  return base;
-}
-
-function parsePrimary(p: Parser, env: Env): number | boolean {
-  const tok = peek(p);
-  if (tok?.t === 'num') {
-    eat(p);
-    return tok.v;
-  }
-  if (tok?.t === 'id') {
-    eat(p);
-    if (tok.v === 'true') return true;
-    if (tok.v === 'false') return false;
-    if (peek(p)?.t === 'lp') {
-      eat(p);
-      const arg = parseAdd(p, env);
-      if (peek(p)?.t !== 'rp') throw new HoldsError(`unclosed ${tok.v}`);
-      eat(p);
-      if (typeof arg !== 'number') throw new HoldsError(`${tok.v} needs a number`);
-      if (tok.v === 'finite') return Number.isFinite(arg);
-      if (tok.v === 'integer') return Number.isInteger(arg);
-      if (tok.v === 'sqrt') return Math.sqrt(arg);
-      if (tok.v === 'abs') return Math.abs(arg);
-      if (tok.v === 'exp') return Math.exp(arg);
-      throw new HoldsError(`unknown predicate ${tok.v}`);
-    }
-    if (Object.hasOwn(env.values, tok.v)) return env.values[tok.v]!;
-    if (Object.hasOwn(env.constants, tok.v)) return env.constants[tok.v]!;
-    throw new HoldsError(`unbound '${tok.v}'`);
-  }
-  if (tok?.t === 'lp') {
-    eat(p);
-    const v = parseOr(p, env);
-    if (peek(p)?.t !== 'rp') throw new HoldsError('unclosed group');
-    eat(p);
+    if (typeof v !== 'number') throw new HoldsError(`operand is not a number: ${node.toString()} in ${source}`);
     return v;
-  }
-  throw new HoldsError('expected a value');
+  };
 }
 
-interface Env {
-  values: Record<string, number>;
-  constants: Record<string, number>;
+function compile(node: MathNode, source: string): Compiled {
+  switch (node.type) {
+    case 'ParenthesisNode':
+      return compile(node.content!, source);
+    case 'ConstantNode':
+      if (typeof node.value === 'boolean') return () => node.value as boolean;
+      return arithmetic(node, source);
+    case 'OperatorNode': {
+      const op = node.op ?? '';
+      const args = node.args ?? [];
+      if (op === 'and' || op === 'or') {
+        const parts = args.map((a) => compile(a, source));
+        return (scope) => {
+          const values = parts.map((p) => p(scope));
+          if (values.some((v) => typeof v !== 'boolean')) throw new HoldsError(`'${op}' of a number in ${source}`);
+          return op === 'and' ? values.every(Boolean) : values.some(Boolean);
+        };
+      }
+      if (op === 'not') {
+        const inner = compile(args[0]!, source);
+        return (scope) => {
+          const v = inner(scope);
+          if (typeof v !== 'boolean') throw new HoldsError(`'not' of a number in ${source}`);
+          return !v;
+        };
+      }
+      const compare = COMPARISONS[op];
+      if (compare !== undefined) {
+        const [left, right] = args.map((a) => compile(a, source));
+        return (scope) => {
+          const a = left!(scope);
+          const b = right!(scope);
+          if (typeof a !== 'number' || typeof b !== 'number') throw new HoldsError(`'${op}' of a boolean in ${source}`);
+          return compare(a, b);
+        };
+      }
+      return arithmetic(node, source);
+    }
+    case 'FunctionNode': {
+      const predicate = PREDICATES[functionName(node)];
+      if (predicate !== undefined) {
+        const arg = compile(node.args![0]!, source);
+        return (scope) => {
+          const v = arg(scope);
+          if (typeof v !== 'number') throw new HoldsError(`${functionName(node)} of a boolean in ${source}`);
+          return predicate(v);
+        };
+      }
+      return arithmetic(node, source);
+    }
+    default:
+      return arithmetic(node, source);
+  }
+}
+
+const COMPILED = new Map<string, Compiled>();
+
+function compiled(rewritten: string, source: string): Compiled {
+  const hit = COMPILED.get(rewritten);
+  if (hit !== undefined) return hit;
+  let node: MathNode;
+  try {
+    node = parseMathTs(rewritten) as unknown as MathNode;
+  } catch (error) {
+    throw new HoldsError(`${error instanceof Error ? error.message : String(error)} in ${source}`);
+  }
+  const fn = compile(node, source);
+  COMPILED.set(rewritten, fn);
+  return fn;
 }
 
 /**
  * Whether `holds` is true for `values`.
- * Hyphenated quantity names are rewritten with `names` before parsing.
+ * Hyphenated quantity names are rewritten with `names` before parsing; an
+ * unbound name, a non-boolean result, and a syntax error are a {@link HoldsError}.
  */
 export function holds(
   source: string,
@@ -274,12 +154,10 @@ export function holds(
   constants: Readonly<Record<string, number>>,
   names: readonly string[],
 ): boolean {
-  const rewritten = rewriteHoldsNames(source, names);
-  const folded: Record<string, number> = {};
-  for (const [key, value] of Object.entries(values)) folded[key.replace(/-/g, '_')] = value;
-  const p: Parser = { toks: tokenize(rewritten), i: 0 };
-  const result = parseOr(p, { values: folded, constants });
-  if (p.i !== p.toks.length) throw new HoldsError(`trailing input in ${source}`);
+  const rewritten = rewriteCatalogHyphens(source, names);
+  const scope: Scope = { ...constants };
+  for (const [key, value] of Object.entries(values)) scope[key.replace(/-/g, '_')] = value;
+  const result = compiled(rewritten, source)(scope);
   if (typeof result !== 'boolean') throw new HoldsError(`condition is not boolean: ${source}`);
   return result;
 }

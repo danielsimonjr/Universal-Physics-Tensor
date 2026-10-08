@@ -8,10 +8,8 @@
  * @module composition/evaluate-relation
  */
 
-import { equals } from '../dimensional/algebra.js';
 import { EXPECTED_DIMENSION_BY_BRIDGE } from '../dimensional/bridge-check.js';
 import type { Dimension } from '../dimensional/types.js';
-import { parseUnit } from '../dimensional/units.js';
 import {
   BRIDGE_EVALUATORS,
   sourceOfParameter,
@@ -180,26 +178,10 @@ export function resolveEvaluable(id: string | number): Evaluable {
   };
 }
 
-/** Unit dimensions a result key's suffix can be read as. `mK` stays millikelvin. */
-function suffixDimensions(key: string): Dimension[] {
-  const parts = key.split('_');
-  const dims: Dimension[] = [];
-  for (let i = 1; i < parts.length; i++) {
-    const expr = parts.slice(i).join('_').replace(/_per_/g, '/').replaceAll('_', '*');
-    try {
-      const parsed = parseUnit(expr);
-      if (parsed.affine === undefined) dims.push(parsed.dim);
-    } catch {
-      // This suffix is not a unit expression.
-    }
-  }
-  return dims;
-}
-
 /**
- * The result field whose dimension is the catalog signature.
- * Input keys are echoed and are not candidates. A single remaining number
- * is that output when no suffix parses to the signature.
+ * The closed form's primary output. A record's `value` is the catalog
+ * signature; any other number it returns is an extra output, named by
+ * `spec.outputs`. A record with no finite `value` is not a result.
  */
 function closedFormEvaluation(
   spec: EvaluatorSpec,
@@ -214,20 +196,10 @@ function closedFormEvaluation(
     throw new Error(`evaluateRelation: be-${spec.bridgeId} has no catalog dimension`);
   }
   const primary = (raw as Record<string, unknown>).value;
-  if (spec.outputs.length > 0 && typeof primary === 'number' && Number.isFinite(primary)) {
-    return { kind: 'value', value: primary, dimension: expected };
+  if (typeof primary !== 'number' || !Number.isFinite(primary)) {
+    throw new Error(`evaluateRelation: be-${spec.bridgeId} returned no finite value`);
   }
-  const inputs = new Set(spec.inputKeys);
-  const numeric = Object.entries(raw as Record<string, unknown>).filter(
-    (entry): entry is [string, number] =>
-      typeof entry[1] === 'number' && Number.isFinite(entry[1]) && !inputs.has(entry[0]),
-  );
-  const matched = numeric.filter(([key]) => suffixDimensions(key).some((dim) => equals(dim, expected)));
-  const chosen = matched.length === 1 ? matched[0] : matched.length === 0 && numeric.length === 1 ? numeric[0] : undefined;
-  if (chosen === undefined) {
-    throw new Error(`evaluateRelation: be-${spec.bridgeId} has no unique output of the catalog dimension`);
-  }
-  return { kind: 'value', value: chosen[1], dimension: expected };
+  return { kind: 'value', value: primary, dimension: expected };
 }
 
 /**

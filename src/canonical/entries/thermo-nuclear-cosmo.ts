@@ -50,6 +50,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'temperature-change', dim: TEMPERATURE },
   ], {
     id: 'CE-heat-capacity',
+    holds: 'mass > 0',
     name: 'Sensible heat (heat capacity)',
     domain: 'thermodynamics',
     formula_latex: 'Q = m c \\Delta T',
@@ -68,6 +69,11 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'decay-constant', dim: FREQUENCY },
   ], {
     id: 'CE-half-life',
+    prefactor: {
+      value: Math.log(2),
+      quote: String.raw`t_{1/2} = \frac{\ln (2)}{\lambda} = \tau \ln(2)`,
+      locator: "Wikipedia, 'Half-life', revision 1373221894, wikitext line 64",
+    },
     name: 'Radioactive half-life',
     domain: 'quantum',
     formula_latex: 't_{1/2} = \\ln 2 / \\lambda',
@@ -83,6 +89,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'hubble-rate', dim: FREQUENCY },
   ], {
     id: 'CE-hubble-distance',
+    holds: 'hubble-rate > 0',
     name: 'Hubble distance',
     domain: 'cosmology',
     formula_latex: 'D_H = c / H_0',
@@ -101,6 +108,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'temperature', dim: TEMPERATURE },
   ], {
     id: 'CE-landauer',
+    holds: 'temperature >= 0',
     name: 'Landauer erasure bound',
     domain: 'information',
     formula_latex: 'E = k_B T \\ln 2',
@@ -125,6 +133,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'temperature', dim: TEMPERATURE },
   ], {
     id: 'CE-jarzynski',
+    holds: 'temperature > 0',
     name: 'Jarzynski free-energy equality',
     domain: 'statistical',
     formula_latex: '\\Delta F = -k_B T \\ln \\langle \\exp(-W/(k_B T)) \\rangle',
@@ -157,6 +166,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'temperature', dim: TEMPERATURE },
   ], {
     id: 'CE-stefan-boltzmann',
+    holds: 'temperature >= 0',
     name: 'Stefan–Boltzmann law',
     domain: 'thermodynamics',
     formula_latex: 'j = \\sigma T^4',
@@ -175,6 +185,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'V', dim: VOLUME },
   ], {
     id: 'CE-ideal-gas',
+    holds: 'temperature > 0 and V > 0 and N >= 0',
     name: 'Ideal gas law',
     domain: 'thermodynamics',
     formula_latex: 'P = N k_B T/V',
@@ -194,6 +205,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'temperature', dim: dim(0, 0, 0, 0, 1) },
   ], {
     id: 'CE-wien',
+    holds: 'temperature > 0',
     name: "Wien's displacement law",
     domain: 'thermodynamics',
     formula_latex: '\\lambda_{max} = b/T',
@@ -211,6 +223,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'specific-latent-heat', dim: SPECIFIC_LATENT_HEAT },
   ], {
     id: 'CE-latent-heat',
+    holds: 'mass > 0',
     name: 'Latent heat of phase transition',
     domain: 'thermodynamics',
     formula_latex: 'Q = m L',
@@ -230,6 +243,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'temperature', dim: TEMPERATURE },
   ], {
     id: 'CE-clausius-entropy',
+    holds: 'temperature > 0',
     name: 'Clausius entropy change',
     domain: 'thermodynamics',
     formula_latex: '\\Delta S = Q/T',
@@ -247,6 +261,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     { name: 'specific-heat-capacity', dim: SPECIFIC_HEAT },
   ], {
     id: 'CE-thermal-diffusivity',
+    holds: 'thermal-conductivity > 0 and density > 0 and specific-heat-capacity > 0',
     name: 'Thermal diffusivity',
     domain: 'thermodynamics',
     formula_latex: '\\alpha = k/(\\rho c_p)',

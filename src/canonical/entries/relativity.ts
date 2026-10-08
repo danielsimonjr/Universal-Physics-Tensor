@@ -143,6 +143,7 @@ const FRIEDMANN_GOV = [
 export const RELATIVITY: readonly CanonicalEquation[] = [
   l1(EFE_TARGET, EFE_GOV, {
     id: 'CE-einstein-field-eq',
+    conventionNote: 'the Einstein-equation metric node is mostly-plus (−,+,+,+), the same signature as upt metric. The 8π is in the scalar AST, so a comparison checks it.',
     name: 'Einstein field equation',
     domain: 'general-relativity',
     formula_latex: 'G_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = (8\\pi G/c^4) T_{\\mu\\nu}',
@@ -170,6 +171,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-friedmann-curvature',
+      holds: 'rho >= 0 and scale-factor > 0 and 8 * pi * G * rho / 3 - curvature-k * c ^ 2 / scale-factor ^ 2 >= 0',
       name: 'Friedmann equation (with curvature)',
       domain: 'cosmology',
       formula_latex: 'H^2 = 8\\pi G \\rho/3 - k c^2/a^2',
@@ -192,6 +194,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
   ),
   l1(FRIEDMANN_TARGET, FRIEDMANN_GOV, {
     id: 'CE-friedmann',
+    holds: 'rho >= 0',
     name: 'Friedmann equation (flat, matter-dominated)',
     domain: 'cosmology',
     formula_latex: 'H^2 = 8\\pi G \\rho/3',
@@ -216,6 +219,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-hawking-temperature',
+      holds: 'mass > 0',
       name: 'Hawking temperature',
       domain: 'general-relativity',
       formula_latex: 'T_H = \\hbar c^3/(8\\pi G M k_B)',
@@ -305,6 +309,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-bekenstein-hawking',
+      holds: 'A >= 0',
       name: 'Bekenstein–Hawking entropy',
       domain: 'general-relativity',
       formula_latex: 'S = k_B c^3 A/(4 G \\hbar)',
@@ -333,6 +338,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-newton-gravitation',
+      holds: 'mass >= 0 and secondary-mass >= 0 and r > 0',
       name: "Newton's law of gravitation",
       domain: 'gravitation',
       formula_latex: 'F = G m_1 m_2/r^2',

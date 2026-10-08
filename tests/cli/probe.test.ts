@@ -7,6 +7,8 @@ import { dirname, join } from 'node:path';
 import { writeFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { runCli } from '../../dist/cli/main.js';
+import { scanWithExpressionGaps } from '../../dist/composition/probe/index.js';
+import { CATALOG_GRAPH } from '../../dist/composition/catalog-graph.js';
 
 function capture() {
   const lines: string[] = [];
@@ -91,18 +93,25 @@ describe('upt probe', () => {
     expect(t).toMatch(/not-searchable/);
   });
 
-  it('scan --json reports the same catalog split as the library pin', async () => {
+  it('scan --json reports the same catalog split as the library', async () => {
+    // The library's own scan is the expected value: the CLI is a projection
+    // of it, and a catalog growth moves both. The typed totals this test once
+    // carried, from 364 to 8260, are the record from before this comparison.
+    const library = scanWithExpressionGaps(CATALOG_GRAPH);
+    const byKind = (gaps: readonly { kind: string }[]) => {
+      const counts: Record<string, number> = {};
+      for (const g of gaps) counts[g.kind] = (counts[g.kind] ?? 0) + 1;
+      return counts;
+    };
+    const searchable = library.filter((g) => g.searchability.searchable).length;
+    expect(searchable).toBeGreaterThan(0);
+    expect(library.length).toBeGreaterThan(searchable);
+
     const c = capture();
     expect(await runCli(['probe', 'scan', '--json'], c.io)).toBe(0);
     const env = JSON.parse(text(c));
-    // 364 is the record from before be-77..87 (358 wrappers + 6 expression gaps).
-    // 730 is the record from before be-88..102.
-    // 4935 is the record from before be-147..170.
-    expect(env.options.scan).toEqual({ total: 8260, searchable: 6, showing: 'searchable-only' });
-    // 1370 is the record from before be-103..125. 2980 is 2974 wrappers plus 6 expression gaps.
-    // 3835 is 3829 wrappers plus 6 expression gaps. 2980 is the record from before be-126..133.
-    // 4935 is 4929 wrappers plus 6 expression gaps. 3835 is the record from before be-134..146.
-    expect(env.result).toHaveLength(6);
+    expect(env.options.scan).toEqual({ total: library.length, searchable, showing: 'searchable-only' });
+    expect(env.result).toHaveLength(searchable);
     expect(env.result.every((g: { kind: string; observations: unknown[]; searchability: { searchable: boolean; reasons: string[] } }) =>
       g.kind === 'prediction-residual' &&
       g.searchability.searchable &&
@@ -114,19 +123,14 @@ describe('upt probe', () => {
     const all = capture();
     expect(await runCli(['probe', 'scan', '--all', '--json'], all.io)).toBe(0);
     const envAll = JSON.parse(text(all));
-    expect(envAll.options.scan).toEqual({ total: 8260, searchable: 6, showing: 'all' });
-    // 3835 is the record from before be-134..146.
-    // 1370 is the record from before be-103..125.
+    expect(envAll.options.scan).toEqual({ total: library.length, searchable, showing: 'all' });
     const kinds: Record<string, number> = {};
     for (const g of envAll.result as { kind: string; searchability: { searchable: boolean } }[]) {
       kinds[g.kind] = (kinds[g.kind] ?? 0) + 1;
       if (g.kind !== 'prediction-residual') expect(g.searchability.searchable).toBe(false);
     }
-    // 343 relation-links is the record from before be-77..87.
-    // 1349 relation-links is the record from before be-103..125.
-    expect(kinds).toEqual({ 'relation-link': 8239, 'regime-transition': 15, 'prediction-residual': 6 });
-    // 3814 relation-links is the record from before be-134..146.
-    // 2959 relation-links is the record from before be-126..133.
+    expect(kinds).toEqual(byKind(library));
+    expect(kinds['prediction-residual']).toBe(searchable);
   });
 
   it('show a missing gap → exit 1', async () => {

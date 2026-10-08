@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { CATALOG_GRAPH } from '../../../src/composition/catalog-graph.js';
 import { APPLIED_CASES } from '../../../src/cases/index.js';
 import { expressionSearchGaps, scanFrontier, scanWithExpressionGaps } from '../../../src/composition/probe/index.js';
+import { wrapConnectorGaps, wrapRegimeGaps, wrapRelationLinkGaps } from '../../../src/composition/probe/frontier.js';
 
 /** `fg-expr-<case id>` for every registered case, sorted, with no duplicate. */
 function expectedExpressionIds(): string[] {
@@ -60,7 +61,7 @@ describe('expression search gaps', () => {
     expect(combined.filter((g) => g.searchability.searchable)).toHaveLength(extra.length);
   });
 
-  it('pins the catalog split the Tier 8 measurement recorded', () => {
+  it('the catalog split is the sum of its Product A wrappers, none searchable, plus one residual per applied case', () => {
     const wrappers = scanFrontier(CATALOG_GRAPH);
     const extra = expressionSearchGaps();
     const byKind = (gaps: readonly { kind: string }[]) => {
@@ -68,22 +69,23 @@ describe('expression search gaps', () => {
       for (const g of gaps) counts[g.kind] = (counts[g.kind] ?? 0) + 1;
       return counts;
     };
-    expect(extra).toHaveLength(6);
-    // 344 wrappers and 329 relation-links are the record from before be-74..76.
-    // 358 wrappers and 343 relation-links are the record from before be-77..87.
-    // 724 wrappers and 709 relation-links are the record from before be-88..102.
-    // The fifteen new edges are isolated, so each new quantity opens relation-links.
-    // 1364 wrappers and 1349 relation-links are the record from before be-103..125.
-    // 4929 wrappers and 4914 relation-links are the record from before be-147..170.
-    expect(wrappers).toHaveLength(8254);
-    // 2974 wrappers and 2959 relation-links are the record from before be-126..133.
-    // 3829 wrappers and 3814 relation-links are the record from before be-134..146.
-    expect(byKind(wrappers)).toEqual({ 'relation-link': 8239, 'regime-transition': 15 });
+    // The split is derived from the same library functions the scan composes,
+    // not typed: a catalog growth moves the numbers and not this test. The
+    // typed counts this test once carried, from 344 wrappers to 8254, are
+    // the record from before this derivation.
+    const relationLinks = wrapRelationLinkGaps(CATALOG_GRAPH).length + wrapConnectorGaps(CATALOG_GRAPH).length;
+    const regimeTransitions = wrapRegimeGaps(CATALOG_GRAPH).length;
+    expect(relationLinks).toBeGreaterThan(0);
+    expect(regimeTransitions).toBeGreaterThan(0);
+    expect(extra).toHaveLength(APPLIED_CASES.size);
+    expect(wrappers).toHaveLength(relationLinks + regimeTransitions);
+    expect(byKind(wrappers)).toEqual({ 'relation-link': relationLinks, 'regime-transition': regimeTransitions });
     expect(wrappers.every((g) => g.searchability.searchable === false)).toBe(true);
+    expect(new Set(wrappers.map((g) => g.id)).size).toBe(wrappers.length);
     expect(byKind(scanWithExpressionGaps(CATALOG_GRAPH))).toEqual({
-      'relation-link': 8239,
-      'regime-transition': 15,
-      'prediction-residual': 6,
+      'relation-link': relationLinks,
+      'regime-transition': regimeTransitions,
+      'prediction-residual': APPLIED_CASES.size,
     });
   });
 });

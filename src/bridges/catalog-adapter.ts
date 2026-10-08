@@ -39,6 +39,7 @@ import type {
   FluxReport,
 } from '../core/flux-rules.js';
 import { EXPECTED_DIMENSION_BY_BRIDGE } from '../dimensional/bridge-check.js';
+import { catalogEntries } from './catalog-load.js';
 import { format } from '../dimensional/algebra.js';
 import type { PhysicalScale, TensorIndices } from '../core/types.js';
 
@@ -230,10 +231,9 @@ function entryToBridgeCell(entry: BridgeEquationEntry): BridgeCell | null {
  *   - 'error' diagnostic: dimensional_signature is structurally null,
  *     or non-null but does not match the expected dimension from
  *     `EXPECTED_DIMENSION_BY_BRIDGE`.
- *   - 'info' diagnostic: no expected entry for this bridge ID (the
- *     EXPECTED_DIMENSION_BY_BRIDGE table covers 40 of 42 bridges
- *     per Phase 0 Task 0.3); we can't enforce, but we record the
- *     gap.
+ *   - 'info' diagnostic: no expected entry for this bridge ID; the
+ *     message states how many catalog rows the table covers, counted
+ *     when it is printed. We can't enforce, but we record the gap.
  *
  * @internal
  */
@@ -264,7 +264,7 @@ function checkDimensionalConsistency(
       cellId,
       message:
         `BE-${entry.id} ('${entry.name}') has no entry in ` +
-        `EXPECTED_DIMENSION_BY_BRIDGE (40 of 42 covered at HEAD); ` +
+        `EXPECTED_DIMENSION_BY_BRIDGE (${EXPECTED_DIMENSION_BY_BRIDGE.size} of ${catalogEntries().length} catalog rows covered); ` +
         `dimensional-consistency check skipped for this entry.`,
     };
   }

@@ -12,16 +12,18 @@ import type { BridgeEdge } from './edge.js';
 import {
   DIMENSION_RENAMES,
   SYNONYM_GROUPS,
-  SynonymDisagreementError,
+  synonymDisagreement,
   type DimensionRename,
 } from '../dimensional/formula-names.js';
+import { foldName } from '../dimensional/quantity-registry.js';
+import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 
 /**
  * The one name table.
  *
  * Synonym groups are {@link SYNONYM_GROUPS}: the same array, not a copy.
  * A comparison target is a name an entry answers to besides its frozen
- * target word. `speed` answers for the sound-speed equation in a comparison
+ * target word, projected from each entry's `targetAliases`. `speed` answers for the sound-speed equation in a comparison
  * and is not a synonym of `sound-speed`. A dimension rename applies only
  * for that dimension, so a time coordinate named `T` stays `T`.
  * Spelling resolution is `resolveQuantityName`, not a second table.
@@ -32,16 +34,10 @@ export const NAME_TABLE: {
   readonly dimensionRenames: readonly DimensionRename[];
 } = {
   synonyms: SYNONYM_GROUPS,
-  canonicalTargets: {
-    'CE-schwarzschild-radius': ['schwarzschild-radius'],
-    // The equation's quantity is sound-speed. A formula written for speed, with
-    // pressure and density, is still this law. speed is not a synonym of sound-speed.
-    'CE-sound-speed': ['speed'],
-    // The L0 id keeps the catalog name. The reduced name is the same entry.
-    // The non-reduced entry also answers to that catalog name when the formula uses h.
-    'CE-compton-wavelength': ['reduced-compton-wavelength'],
-    'CE-compton-wavelength-full': ['compton-wavelength'],
-  },
+  canonicalTargets: Object.fromEntries(
+    CANONICAL_EQUATIONS.flatMap((e) => (e.targetAliases === undefined ? [] : [[e.id, e.targetAliases]])),
+  ),
+
   dimensionRenames: DIMENSION_RENAMES,
 };
 
@@ -91,7 +87,7 @@ export function editDistance(a: string, b: string): number {
   return prev[n]!;
 }
 
-const fold = (s: string): string => s.toLowerCase().replace(/_/g, '-');
+const fold = (s: string): string => foldName(s.toLowerCase());
 
 /**
  * Catalog names within one edit of `query`. A shared token such as
@@ -160,15 +156,9 @@ export function collapseSynonymGovernors(
     const present = group.filter((n) => names.includes(n));
     if (present.length < 2) continue;
     if (values !== null) {
-      const nums = present.map((n) => values[n]);
-      if (nums.some((n) => n === undefined)) continue;
-      const first = nums[0]!;
-      if (nums.some((n) => n !== first)) {
-        const shown = present.map((n) => `${n}=${values[n]}`).join(', ');
-        throw new SynonymDisagreementError(
-          `${present.join(' and ')} are one quantity and disagree (${shown})`,
-        );
-      }
+      if (present.some((n) => values[n] === undefined)) continue;
+      const disagreement = synonymDisagreement(present, values);
+      if (disagreement !== null) throw disagreement;
     }
     const sources = present.filter((n) => sourceNames.has(n));
     const keep = sources[0] ?? present[0]!;

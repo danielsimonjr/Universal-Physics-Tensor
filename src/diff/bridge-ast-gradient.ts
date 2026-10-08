@@ -26,7 +26,7 @@
  */
 
 import type { ExprNode, TranscendentalFn } from '../dimensional/validator.js';
-import { PhysicalConstants } from '../core/types.js';
+import { constantScope } from '../dimensional/symbolic-constants.js';
 import { EngineCapabilityError } from '../numerical/errors.js';
 import { BRIDGE_RHS_BY_ID, parseBridgeId } from '../bridges/rhs-registry.js';
 import { GAUSS_LEGENDRE_16 } from '../numerical/quadrature.js';
@@ -114,23 +114,12 @@ interface TensorModuleLike {
 }
 
 /**
- * Named physical constants the bridge encodings reference as bare symbols.
- * Sourced from `PhysicalConstants` so a traced AST evaluates to the SAME number
- * as the corresponding hand-written evaluator. Callers can override or extend
- * via the `bindings` argument.
+ * Named physical constants the bridge encodings reference as bare symbols:
+ * every registered spelling, from the constant registry, plus π and its
+ * registered multiples, so a traced AST evaluates to the SAME number as the
+ * numeric evaluator. Callers can override or extend via the `bindings` argument.
  */
-const NAMED_CONSTANTS: Readonly<Record<string, number>> = {
-  h: PhysicalConstants.h,
-  hbar: PhysicalConstants.hbar,
-  c: PhysicalConstants.c,
-  G: PhysicalConstants.G,
-  k_B: PhysicalConstants.kB,
-  kB: PhysicalConstants.kB,
-  pi: Math.PI,
-  '2pi': 2 * Math.PI,
-  '4pi': 4 * Math.PI,
-  '8pi': 8 * Math.PI,
-};
+const NAMED_CONSTANTS: Readonly<Record<string, number>> = constantScope();
 
 /** Resolve a symbol's numeric value: caller bindings → named constants → numeric literal. */
 function resolveConstant(

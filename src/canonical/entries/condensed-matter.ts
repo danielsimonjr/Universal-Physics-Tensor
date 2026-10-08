@@ -141,6 +141,7 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
     { name: 'carrier-density', dim: CARRIER_DENSITY },
   ], {
     id: 'CE-fermi-energy',
+    unsetFactorNote: 'The standard factor (1/2)(3π²)^{2/3} is unset.',
     name: 'Fermi energy',
     domain: 'condensed-matter',
     formula_latex: 'E_F \\propto \\hbar^2 n^{2/3}/m',
@@ -156,6 +157,7 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
     { name: 'carrier-density', dim: CARRIER_DENSITY },
   ], {
     id: 'CE-fermi-velocity',
+    unsetFactorNote: 'The standard factor (3π²)^{1/3} is unset.',
     name: 'Fermi velocity',
     domain: 'condensed-matter',
     formula_latex: 'v_F \\propto (\\hbar/m) n^{1/3}',
@@ -193,6 +195,7 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
     { name: 'number-density', dim: CARRIER_DENSITY },
   ], {
     id: 'CE-debye-frequency',
+    unsetFactorNote: 'The standard factor (6π²)^{1/3} is unset.',
     name: 'Debye frequency',
     domain: 'condensed-matter',
     formula_latex: '\\omega_D \\propto v_s n^{1/3}',

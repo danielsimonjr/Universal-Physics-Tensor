@@ -63,6 +63,25 @@ export interface CanonicalForms {
   readonly quantityKind?: 'flux' | 'power' | 'energy';
 }
 
+/** One sourced prefactor: the exact dimensionless factor and the verbatim text it is read from. */
+export interface SourcedPrefactor {
+  readonly value: number;
+  /** Verbatim source text the factor is read from. */
+  readonly quote: string;
+  /** Where the quote is: page, revision id and wikitext line. */
+  readonly locator: string;
+}
+
+/** A sourced prefactor that is `coefficient · group^exponent` of a dimensionless group the record does not carry. */
+export interface SourcedGroupPrefactor {
+  /** The group as the entry's formula names it (`'gamma'` for γ). */
+  readonly group: string;
+  readonly coefficient: number;
+  readonly exponent: number;
+  readonly quote: string;
+  readonly locator: string;
+}
+
 /** A canonical (textbook) physics equation. */
 export interface CanonicalEquation {
   /** Stable id, e.g. 'CE-newton-gravitation'. */
@@ -103,6 +122,22 @@ export interface CanonicalEquation {
   /** Set when this law is LITERALLY a bridge's own relation (BH≡BE-21, …);
    *  Sub-project B uses it to discount the trivial X≡X match (finding F4). */
   readonly restatesBridge?: string;
+
+  // ── facts of this equation that side tables once held ──────────────────
+  /** Validity condition over the governing names, in the holds grammar. Absent: permissive. */
+  readonly holds?: string;
+  /** The exact dimensionless prefactor in front of the AST or monomial, with its verbatim source. */
+  readonly prefactor?: SourcedPrefactor;
+  /** A prefactor that is a power of a dimensionless group the record does not carry (√γ). */
+  readonly groupPrefactor?: SourcedGroupPrefactor;
+  /** Disclosure printed when the factor is unset: the textbook factor the unit monomial is not. */
+  readonly unsetFactorNote?: string;
+  /** Convention line a comparison prints beside this entry. */
+  readonly conventionNote?: string;
+  /** Entries that share a group are one law under different conventions; a formula agreeing with any of them has matched that law. */
+  readonly conventionGroup?: string;
+  /** Target names this entry answers to in a comparison besides its own target. */
+  readonly targetAliases?: readonly string[];
 
   // ── Atlas Phase 1 overlay (OPTIONAL; an entry without it is unchanged) ──
   /**

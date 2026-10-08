@@ -317,9 +317,10 @@ describe('module sources', () => {
     symlinkSync(join(repo, 'data'), join(copy, 'data'), 'junction');
     const evaluateSource = join(copy, 'dist', `${evaluateModule}.js`);
     const before = readFileSync(evaluateSource, 'utf8');
-    const after = before.replace('const NONLINEAR_FRACTION = 0.1;', 'const NONLINEAR_FRACTION = 0.2;');
+    // NOT_INCLUDED is a literal evaluate.js keeps private: it is printed only beside a --sigma result.
+    const after = before.replace("the evaluator's numerical error; model discrepancy", "the evaluator's numerical error; MODEL discrepancy");
     expect(after).not.toBe(before);
-    expect(before).not.toMatch(/export const NONLINEAR_FRACTION/);
+    expect(before).not.toMatch(/export const NOT_INCLUDED/);
     writeFileSync(evaluateSource, after);
 
     const r = spawnSync(process.execPath, [join(copy, 'bin', 'upt.mjs'), `--replay=${session}`, '--json'], { encoding: 'utf8' });

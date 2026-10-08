@@ -11,10 +11,9 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { CliError, UsageError } from '../errors.js';
-import { expandSynonymValues, SynonymDisagreementError } from '../../dimensional/formula-names.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
-import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
+import { codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 
 const FLAGS: FlagSpec[] = [
@@ -59,15 +58,15 @@ function parseScope(
       scope[a.name] = read.value;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
-      if (e instanceof SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
+      if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
       const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
       throw new CliError(`upt eval: '${a.assignment}' is not a finite number or a known unit. ${msg}`);
     }
   }
   try {
-    return { scope: expandSynonymValues(scope), notes };
+    return { scope: api.expandSynonymValues(scope), notes };
   } catch (e) {
-    if (e instanceof SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
+    if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
     throw e;
   }
 }
@@ -93,16 +92,16 @@ const HELP = `upt eval "<formula>" name=value ...
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). T, temperature, temp, and
         T_K are kelvin: an energy on that name is k_B T, and any other
-        dimension is an error. Bindings use the built-in
-        parser, so write 2*pi; a bare e there is the elementary charge.
+        dimension is an error. A binding is read by the same MathTS
+        parser as the formula, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
-        e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \\
-                       c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23`;
+        e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
+              (hbar, c, G and k_B are registered constants; M is bound)`;
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err } = ctx;
@@ -162,7 +161,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const notes: string[] = [...parsed.notes];
-  if (mode === 'si' && cf.variables.includes('hbar')) notes.push(HBAR_TRUNCATION_NOTE);
+  if (mode === 'si') for (const note of api.constantNotes(cf.variables)) notes.push(`note: ${note}`);
   for (const note of notes) err(note);
 
   let value: number;

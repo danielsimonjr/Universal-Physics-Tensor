@@ -11,7 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { printDisplay, printEval, printLatex, siUnitOf } from '../../src/cli/expr-print.js';
 import { evalExpr } from '../../src/composition/expr-eval.js';
 import { parseFormula } from '../../src/numerical/formula-mathts.js';
-import { CONSTANTS, CONSTANT_PROVENANCE } from '../../src/dimensional/symbolic-constants.js';
+import { CONSTANT_REGISTRY, CONSTANTS, CONSTANT_PROVENANCE } from '../../src/dimensional/symbolic-constants.js';
 import { parseUnit } from '../../src/dimensional/units.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
@@ -102,8 +102,9 @@ describe('audit I10: every printed form evaluates to the AST value', () => {
 });
 
 describe('audit I10: the constant table, checked against the constants it describes', () => {
-  it('describes exactly the registered constants', () => {
-    expect(Object.keys(CONSTANT_PROVENANCE).sort()).toEqual(Object.keys(CONSTANTS).sort());
+  it('describes exactly the registered constants, canonical leaves and overlay names alike', () => {
+    expect(Object.keys(CONSTANT_PROVENANCE).sort()).toEqual(CONSTANT_REGISTRY.map((row) => row.name).sort());
+    for (const name of Object.keys(CONSTANTS)) expect(CONSTANT_PROVENANCE[name]).toBeDefined();
   });
 
   it.each(Object.keys(CONSTANTS))('%s: its unit parses to its registered dimension, at SI scale 1', (name) => {

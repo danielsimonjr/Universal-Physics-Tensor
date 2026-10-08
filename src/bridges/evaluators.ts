@@ -9,7 +9,8 @@ import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { primaryRelation } from './catalog-load.js';
 import { catalogEvaluators } from './catalog-load.js';
 import type { CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
-import { evaluateFormula } from './expr-parse.js';
+import { evaluateFormula, parseCatalogExpression } from './expr-parse.js';
+import type { ExprNode } from '../dimensional/ast-types.js';
 import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
 
 /** How a length input is read: radius, diameter, separation, impact parameter, or semi-major axis. @public */
@@ -76,6 +77,14 @@ export function sourceOfParameter(relation: CatalogRelation, parameter: Evaluato
   return relation.sources.includes(parameter.quantity) ? parameter.quantity : undefined;
 }
 
+/** Every symbol name in an expression tree. */
+function symbolNames(node: ExprNode): string[] {
+  if (node.kind === 'symbol') return [node.name];
+  if (node.kind === 'op') return node.args.flatMap(symbolNames);
+  if (node.kind === 'abs' || node.kind === 'transcendental') return symbolNames(node.arg);
+  return [];
+}
+
 /**
  * Keys of the parameters whose source does not appear in the relation's
  * expression. They are checked against the validity domain and do not change
@@ -84,14 +93,7 @@ export function sourceOfParameter(relation: CatalogRelation, parameter: Evaluato
 export function unusedInputKeys(spec: EvaluatorSpec): string[] {
   const relation = primaryRelation(spec.bridgeId);
   if (relation === undefined) return [];
-  // Names carry hyphens, and a hyphen is also a minus. Blank out each source
-  // name longest first, so `a-b` inside `a-b-c` is not read as `a-b`.
-  let rest = relation.expression;
-  const used = new Set<string>();
-  for (const source of [...relation.sources].sort((x, y) => y.length - x.length)) {
-    if (rest.includes(source)) used.add(source);
-    rest = rest.split(source).join(' ');
-  }
+  const used = new Set(symbolNames(parseCatalogExpression(relation.expression)));
   const readByOutput = (key: string): boolean =>
     spec.outputs.some((output) => new RegExp(`(^|[^A-Za-z0-9_])${key}($|[^A-Za-z0-9_])`).test(output.expression));
   return spec.parameters

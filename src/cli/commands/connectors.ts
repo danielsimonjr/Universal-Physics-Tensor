@@ -11,7 +11,6 @@ import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, coreAnchor, coreLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { publishedUrl } from '../published-url.js';
-import { adjudicationFor, candidateIdIfSlug } from '../../composition/adjudication.js';
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('both', 'Which graph to read: catalog, canonical, or both. This command defaults to both.'),
@@ -58,12 +57,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   );
   const rows = r.connectors;
   const verdict = (c: (typeof rows)[number]) => {
-    if (candidateIdIfSlug(c.orphanQuantity, c.coreQuantity) === undefined) return undefined;
-    return adjudicationFor(c.orphanQuantity, c.coreQuantity);
+    if (api.candidateIdIfSlug(c.orphanQuantity, c.coreQuantity) === undefined) return undefined;
+    return api.adjudicationFor(c.orphanQuantity, c.coreQuantity);
   };
-  printVerdict(out, '  DECOY (recorded verdict):', rows.filter((c) => verdict(c)?.verdict === 'decoy'));
-  printVerdict(out, '  ENTAILED (recorded verdict):', rows.filter((c) => verdict(c)?.verdict === 'entailed'));
+  printVerdict(api, out, '  DECOY (recorded verdict):', rows.filter((c) => verdict(c)?.verdict === 'decoy'));
+  printVerdict(api, out, '  ENTAILED (recorded verdict):', rows.filter((c) => verdict(c)?.verdict === 'entailed'));
   printVerdict(
+    api,
     out,
     '  UNADJUDICATED (a shared token is a token):',
     rows.filter((c) => c.sameKind && verdict(c) === undefined),
@@ -74,6 +74,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 }
 
 function printVerdict(
+  api: CommandCtx['api'],
   out: (line?: string) => void,
   heading: string,
   rows: readonly {
@@ -93,9 +94,9 @@ function printVerdict(
       lastOrphan = c.orphanEdge;
     }
     out(`        ${(c.orphanQuantity + ' ≟ ' + c.coreQuantity).padEnd(54)} [${c.dim}]  → ${c.coreEdge}`);
-    const row = candidateIdIfSlug(c.orphanQuantity, c.coreQuantity) === undefined
+    const row = api.candidateIdIfSlug(c.orphanQuantity, c.coreQuantity) === undefined
       ? undefined
-      : adjudicationFor(c.orphanQuantity, c.coreQuantity);
+      : api.adjudicationFor(c.orphanQuantity, c.coreQuantity);
     if (row !== undefined) out(`          ${row.grounds}`);
   }
   out('');

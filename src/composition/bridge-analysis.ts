@@ -24,12 +24,12 @@
  * @module composition/bridge-analysis
  */
 
-import { HBAR_SI } from '../core/constants.js';
+import { ALPHA } from '../core/constants.js';
+import { constantRecord } from '../dimensional/symbolic-constants.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { equals, format } from '../dimensional/algebra.js';
-import { dim } from '../dimensional/ast-builders.js';
 import type { BridgeEdge } from './edge.js';
 import { formulaShape } from './formula-shape.js';
 import { BRIDGE_EQUATIONS } from '../bridges/index.js';
@@ -44,14 +44,11 @@ interface NamedConstant {
   readonly si: number;
 }
 
-/** ℏ, c, G, k_B, e — the constants the audit/triage may invoke. */
-const FUNDAMENTAL_CONSTANTS: readonly NamedConstant[] = [
-  { name: 'ℏ', dim: dim(2, 1, -1), si: HBAR_SI },
-  { name: 'c', dim: dim(1, 0, -1), si: 299792458 },
-  { name: 'G', dim: dim(3, -1, -2), si: 6.6743e-11 },
-  { name: 'k_B', dim: dim(2, 1, -2, 0, -1), si: 1.380649e-23 }, // M L² T⁻² Θ⁻¹
-  { name: 'e', dim: dim(0, 0, 1, 1, 0), si: 1.602176634e-19 },   // I T (charge)
-];
+/** ℏ, c, G, k_B, e — the constants the audit/triage may invoke, from the registry. */
+const FUNDAMENTAL_CONSTANTS: readonly NamedConstant[] = ['ℏ', 'c', 'G', 'k_B', 'e'].map((name) => {
+  const record = constantRecord(name)!;
+  return { name, dim: record.dim, si: record.value };
+});
 
 function subsetsBySize<T>(arr: readonly T[]): T[][] {
   let out: T[][] = [[]];
@@ -145,10 +142,9 @@ const isCleanPrefactor = (p: number): boolean =>
   CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);
 
 /**
- * CODATA fine-structure constant. `μ0 = 2 α h / (e² c)` rewrites a vacuum
- * factor as a number times a monomial in `{ℏ, c, e}`.
+ * CODATA fine-structure constant, from the owner. `μ0 = 2 α h / (e² c)`
+ * rewrites a vacuum factor as a number times a monomial in `{ℏ, c, e}`.
  */
-const ALPHA = 7.2973525693e-3;
 
 /**
  * True when a derived prefactor on `{ℏ, c, e}` times `α` is a recognized
@@ -677,8 +673,11 @@ export function proposeOrphanConnectors(
   }
   const orphanEdgeOf = (q: string): string | undefined =>
     (qToEdges.get(q) ?? []).find((id) => isolated.has(id));
+  // The core is an anchored cluster of more than one edge. An established
+  // bridge that is itself isolated is an orphan, not the core, so a pair of
+  // orphans is not a connector.
   const anchoredEdgeOf = (q: string): string | undefined =>
-    (qToEdges.get(q) ?? []).find((id) => edgeAnchored.get(id) === true);
+    (qToEdges.get(q) ?? []).find((id) => edgeAnchored.get(id) === true && !isolated.has(id));
 
   const connectors: OrphanConnector[] = [];
   for (const c of proposeLinkCandidates(edges)) {
