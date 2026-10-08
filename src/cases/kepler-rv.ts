@@ -44,7 +44,7 @@ export const KEPLER_RV_CASE: AppliedCase = {
     { key: 'M_star_kg', quantity: 'stellar mass', symbol: 'M_*', unit: 'kg', meaning: 'mass of the star whose radial velocity is measured (1Msun = 1.989e30 kg), > 0' },
     { key: 'm_p_kg', quantity: 'companion mass', symbol: 'm_p', unit: 'kg', meaning: 'true mass of the companion (Jupiter ≈ 1.898e27 kg), > 0' },
     { key: 'P_s', quantity: 'orbital period', symbol: 'P', unit: 's', meaning: 'the orbital period the RV curve repeats with, > 0' },
-    { key: 'e', quantity: 'eccentricity', symbol: 'e', unit: '', meaning: 'orbital eccentricity, 0 ≤ e < 1' },
+    { key: 'eccentricity', quantity: 'eccentricity', symbol: 'e', unit: '', meaning: 'orbital eccentricity e, 0 ≤ e < 1 (a bare e is the elementary charge, so the key is spelled out)' },
     { key: 'sin_i', quantity: 'sine of the inclination', symbol: 'sin i', unit: '', meaning: 'sin of the angle between the orbit normal and the line of sight, 0 < sin i ≤ 1 (1 is edge-on)' },
     { key: 'R_star_m', quantity: 'stellar radius', symbol: 'R_*', unit: 'm', meaning: 'radius of the star (the Sun ≈ 6.957e8 m), > 0' },
     { key: 'T_obs_s', quantity: 'observing baseline', symbol: 'T_obs', unit: 's', meaning: 'time span of the RV record fitted with one fixed ellipse, > 0' },
@@ -112,18 +112,18 @@ export const KEPLER_RV_CASE: AppliedCase = {
   ],
   examples: {
     valid: {
-      args: ['M_star_kg=1Msun', 'm_p_kg=1.898e27', 'P_s=4332.59d', 'e=0.0489', 'sin_i=1', 'R_star_m=6.957e8', 'T_obs_s=12yr'],
+      args: ['M_star_kg=1Msun', 'm_p_kg=1.898e27', 'P_s=4332.59d', 'eccentricity=0.0489', 'sin_i=1', 'R_star_m=6.957e8', 'T_obs_s=12yr'],
       note: 'the Sun\'s reflex motion from Jupiter, seen edge-on over one orbit: K ≈ 12.5 m/s',
       fails: [],
     },
     failures: [
       {
-        args: ['M_star_kg=1.434Msun', 'm_p_kg=2.79e27', 'P_s=1.09142d', 'e=0', 'sin_i=0.993', 'R_star_m=1.153e9', 'T_obs_s=10yr'],
+        args: ['M_star_kg=1.434Msun', 'm_p_kg=2.79e27', 'P_s=1.09142d', 'eccentricity=0', 'sin_i=0.993', 'R_star_m=1.153e9', 'T_obs_s=10yr'],
         note: 'WASP-12 b, a 1.47 M_J planet on a 1.09 d orbit: the star\'s radius is a third of the separation, and the orbit is observed to decay by tides',
         fails: ['point-mass'],
       },
       {
-        args: ['M_star_kg=1.3381Msun', 'm_p_kg=1.2489Msun', 'P_s=0.10225156248d', 'e=0.0877775', 'sin_i=0.99974', 'R_star_m=12km', 'T_obs_s=1yr'],
+        args: ['M_star_kg=1.3381Msun', 'm_p_kg=1.2489Msun', 'P_s=0.10225156248d', 'eccentricity=0.0877775', 'sin_i=0.99974', 'R_star_m=12km', 'T_obs_s=1yr'],
         note: 'the double pulsar PSR J0737−3039A/B timed for a year: equal masses, and a GR apsidal advance of ≈ 17°/yr',
         fails: ['test-mass', 'apsidal'],
       },
@@ -132,8 +132,8 @@ export const KEPLER_RV_CASE: AppliedCase = {
   /** Evaluate the test-mass radial-velocity amplitude and checks for the supplied binary inputs. */
   run(i) {
     requirePositive(ID, i, ['M_star_kg', 'm_p_kg', 'P_s', 'sin_i', 'R_star_m', 'T_obs_s']);
-    const { M_star_kg: M, m_p_kg: m, P_s: P, e, sin_i: sinI, R_star_m: R, T_obs_s: tObs } = i as Record<string, number>;
-    if (!Number.isFinite(e) || e < 0 || e >= 1) throw new Error(`${ID}: e must be in [0, 1) (got ${e})`);
+    const { M_star_kg: M, m_p_kg: m, P_s: P, eccentricity: e, sin_i: sinI, R_star_m: R, T_obs_s: tObs } = i as Record<string, number>;
+    if (!Number.isFinite(e) || e < 0 || e >= 1) throw new Error(`${ID}: eccentricity must be in [0, 1) (got ${e})`);
     if (sinI > 1) throw new Error(`${ID}: sin_i must be in (0, 1] (got ${sinI})`);
     const total = M + m;
     const a = Math.cbrt((G_SI * total * P * P) / (4 * Math.PI * Math.PI));

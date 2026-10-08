@@ -5,7 +5,15 @@
  */
 import { describe, expect, it } from 'vitest';
 import { BRIDGE_EVALUATORS, evaluateBridge, unusedInputKeys } from '../../src/bridges/evaluators.js';
-import { inputContract } from '../../src/bridges/input-contract.js';
+import { inputContract, type InputSlot } from '../../src/bridges/input-contract.js';
+import { APPLIED_CASES, CASE_CONTRACTS } from '../../src/cases/index.js';
+import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
+import { evaluableContract, resolveEvaluable } from '../../src/composition/evaluate-relation.js';
+import { equals } from '../../src/dimensional/algebra.js';
+import { quantityRecord } from '../../src/dimensional/quantity-registry.js';
+import { constantRecord } from '../../src/dimensional/symbolic-constants.js';
+import type { Dimension } from '../../src/dimensional/types.js';
+import { unitDimension } from '../../src/dimensional/units.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { primaryRelation } from '../../src/bridges/catalog-load.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
@@ -174,16 +182,47 @@ describe('unusedInputKeys reads the output expressions through the formula gramm
 });
 
 describe('a bare e is the elementary charge in every input contract', () => {
-  it('no evaluator spells e for a slot that is not a charge in coulombs', () => {
-    const misuses: string[] = [];
+  const CHARGE = constantRecord('e')!.dim;
+  const spellsE = (slot: InputSlot): boolean => [...slot.spellings, ...slot.alternates.map((a) => a.key)].includes('e');
+
+  /**
+   * Every slot that spells `e`, on every surface that takes keyed inputs: the
+   * catalog evaluators, the applied cases, and the edges `evaluateRelation`
+   * checks (catalog and canonical), with the dimension that slot reads.
+   */
+  function slotsSpellingE(): { where: string; dim: Dimension | undefined }[] {
+    const found: { where: string; dim: Dimension | undefined }[] = [];
+    const parameterDim = (parameters: readonly { key: string; unit: string }[], key: string) => {
+      const parameter = parameters.find((p) => p.key === key);
+      return parameter === undefined ? undefined : unitDimension(parameter.unit);
+    };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
-      for (const slot of spec.contract.slots) {
-        if (![...slot.spellings, ...slot.alternates.map((a) => a.key)].includes('e')) continue;
-        const parameter = spec.parameters.find((p) => p.key === slot.key);
-        if (parameter?.unit !== 'C') misuses.push(`be-${id} ${slot.key}`);
+      for (const slot of spec.contract.slots.filter(spellsE)) found.push({ where: `be-${id} ${slot.key}`, dim: parameterDim(spec.parameters, slot.key) });
+    }
+    for (const [id, contract] of CASE_CONTRACTS) {
+      for (const slot of contract.slots.filter(spellsE)) found.push({ where: `${id} ${slot.key}`, dim: parameterDim(APPLIED_CASES.get(id)!.parameters, slot.key) });
+    }
+    for (const edge of [...CATALOG_GRAPH, ...CANONICAL_GRAPH]) {
+      const governing = CANONICAL_EQUATIONS.find((e) => e.id === edge.id)?.dimensional.governing ?? [];
+      for (const slot of evaluableContract(resolveEvaluable(edge.id)).slots.filter(spellsE)) {
+        const dim = edge.sources.find((s) => s.name === slot.key)?.dim ?? governing.find((g) => g.name === slot.key)?.dim;
+        found.push({ where: `${edge.id} ${slot.key}`, dim });
       }
     }
-    expect(misuses).toEqual([]);
+    return found;
+  }
+
+  it('every slot spelling e, on every keyed input surface, reads a charge', () => {
+    const found = slotsSpellingE();
+    // The canonical atomic entries bind e as the charge, so the walk reaches real slots.
+    expect(found.length).toBeGreaterThan(0);
+    expect(found.filter((slot) => slot.dim === undefined || !equals(slot.dim, CHARGE)).map((slot) => slot.where)).toEqual([]);
+  });
+
+  it('e names the elementary charge in the constant registry and no other quantity', () => {
+    expect(constantRecord('e')!.unit).toBe('C');
+    const quantity = quantityRecord('e');
+    if (quantity !== undefined) expect(equals(quantity.dimension, CHARGE)).toBe(true);
   });
 
   it('be-52 reads the eccentricity as eccentricity, and e binds nothing there', () => {

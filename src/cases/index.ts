@@ -37,8 +37,8 @@ function caseContract(c: AppliedCase): InputContract {
   );
 }
 
-/** Case id → its input contract, built once at load (a contract that spells one key twice fails here). */
-const CASE_CONTRACTS: ReadonlyMap<string, InputContract> = new Map([...APPLIED_CASES].map(([id, c]) => [id, caseContract(c)]));
+/** Case id → its input contract, built once at load (a contract that spells one key twice fails here). @internal */
+export const CASE_CONTRACTS: ReadonlyMap<string, InputContract> = new Map([...APPLIED_CASES].map(([id, c]) => [id, caseContract(c)]));
 
 /**
  * Run a case with a numeric input record. The inputs go through the same
