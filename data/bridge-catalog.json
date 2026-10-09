@@ -6246,11 +6246,11 @@
       },
       "reference": {
         "inputs": {
-          "relaxation-rate": 1,
-          "superposition-extent": 1,
-          "thermal-de-broglie-wavelength": 1
+          "relaxation-rate": 0.001,
+          "superposition-extent": 0.000001,
+          "thermal-de-broglie-wavelength": 2e-11
         },
-        "value": 1
+        "value": 2500000
       }
     },
     {
@@ -6270,10 +6270,10 @@
       "citation": "Pathria 2011 Statistical Mechanics §7.1; de Broglie 1924",
       "reference": {
         "inputs": {
-          "mass": 1,
+          "mass": 9.1093837015e-31,
           "temperature": 300
         },
-        "value": 4.107369998431901e-24
+        "value": 4.303475439595208e-9
       }
     },
     {
@@ -6364,11 +6364,11 @@
       },
       "reference": {
         "inputs": {
-          "mass": 1,
-          "far-radius": 1,
-          "near-radius": 1
+          "mass": 1.989e+30,
+          "far-radius": 149600000000,
+          "near-radius": 695700000
         },
-        "value": 0
+        "value": 0.000052923373587891635
       },
       "method": "covariant-eikonal"
     },
@@ -6392,9 +6392,9 @@
       "citation": "Hawking 1975 CMP 43:199",
       "reference": {
         "inputs": {
-          "mass": 1
+          "mass": 1.989e+30
         },
-        "value": 1.2269006705940173e+23
+        "value": 6.168429716410344e-8
       }
     },
     {
@@ -6413,9 +6413,9 @@
       "citation": "Hawking 1975 CMP 43:199 (r_s parameterization)",
       "reference": {
         "inputs": {
-          "schwarzschild-radius": 1
+          "schwarzschild-radius": 2953.25
         },
-        "value": 0.00018222322028240676
+        "value": 6.170260569962136e-8
       }
     },
     {
@@ -6477,10 +6477,10 @@
       },
       "reference": {
         "inputs": {
-          "mass": 1,
-          "impact-parameter": 1
+          "mass": 1.989e+30,
+          "impact-parameter": 695700000
         },
-        "value": 2.9704641076474662e-27
+        "value": 0.000008492529984347865
       }
     },
     {
@@ -6573,9 +6573,9 @@
       "citation": "Schwarzschild 1916; Carroll 2004 Spacetime and Geometry §5.4",
       "reference": {
         "inputs": {
-          "mass": 1
+          "mass": 1.989e+30
         },
-        "value": 1.4852320538237331e-27
+        "value": 2954.126555055405
       }
     },
     {
@@ -6594,9 +6594,9 @@
       "citation": "Ryu & Takayanagi 2006 PRL 96:181602",
       "reference": {
         "inputs": {
-          "minimal-surface-area": 1
+          "minimal-surface-area": 1e-60
         },
-        "value": 1.3213063294731335e+46
+        "value": 1.3213063294731339e-14
       }
     },
     {
@@ -6617,11 +6617,11 @@
       "citation": "Ashtekar, Pawlowski & Singh 2006 PRD 74:084003",
       "reference": {
         "inputs": {
-          "mass-density": 1,
-          "critical-density": 1,
-          "rescaled-cosmological-constant": 1
+          "mass-density": 1e-27,
+          "critical-density": 2.1e+96,
+          "rescaled-cosmological-constant": 1e-35
         },
-        "value": 0.3333333333333333
+        "value": 3.892478182609449e-36
       }
     },
     {
@@ -6665,9 +6665,9 @@
       },
       "reference": {
         "inputs": {
-          "mass": 1
+          "mass": 1e-20
         },
-        "value": 59880239520.95808
+        "value": 5.988023952095807e-10
       }
     },
     {
@@ -6713,11 +6713,11 @@
       "citation": "Randall & Sundrum 1999 PRL 83:4690; Binétruy et al. 2000 PLB 477:285",
       "reference": {
         "inputs": {
-          "mass-density": 1,
-          "brane-tension": 1,
-          "rescaled-cosmological-constant": 1
+          "mass-density": 1e-27,
+          "brane-tension": 100000000000000000000,
+          "rescaled-cosmological-constant": 1e-35
         },
-        "value": 0.3333333341720506
+        "value": 3.892478182609449e-36
       }
     },
     {
@@ -6752,11 +6752,11 @@
       },
       "reference": {
         "inputs": {
-          "relaxation-rate": 1,
-          "system-environment-coupling": 2,
+          "relaxation-rate": 0.001,
+          "system-environment-coupling": 3,
           "reference-coupling": 2
         },
-        "value": 1
+        "value": 0.0022500000000000003
       }
     },
     {
@@ -6776,10 +6776,10 @@
       "citation": "Jacobson 1995 PRL 75:1260; MTW Gravitation §17.4",
       "reference": {
         "inputs": {
-          "cosmological-constant-curvature": 1,
-          "stress-energy-trace": 1
+          "cosmological-constant-curvature": 1.1e-52,
+          "stress-energy-trace": -9e-11
         },
-        "value": 4
+        "value": 4.586898269856047e-52
       }
     },
     {
@@ -6799,10 +6799,10 @@
       "citation": "Kawasaki & Gunton 1976 PRA 13:2294; Hohenberg & Halperin 1977 RMP 49:435",
       "reference": {
         "inputs": {
-          "model-a-mobility": 1,
-          "time": 1
+          "model-a-mobility": 1e-9,
+          "time": 100
         },
-        "value": 1
+        "value": 0.00031622776601683794
       }
     },
     {
@@ -6822,10 +6822,10 @@
       "citation": "Hehl et al. 1976 RMP 48:393; Cartan 1922 C. R. Acad. Sci. 174:593",
       "reference": {
         "inputs": {
-          "einstein-coupling-prefactor-squared": 1,
-          "torsion-contraction-scalar": 1
+          "einstein-coupling-prefactor-squared": 2.318e+85,
+          "torsion-contraction-scalar": 1e-40
         },
-        "value": 1
+        "value": 2.318e+45
       }
     },
     {
@@ -6845,10 +6845,10 @@
       "citation": "Peskin & Schroeder 1995 QFT §20.1",
       "reference": {
         "inputs": {
-          "yukawa-coupling": 2,
-          "vacuum-expectation-value": 1
+          "yukawa-coupling": 0.7,
+          "vacuum-expectation-value": 246
         },
-        "value": 2
+        "value": 172.2
       }
     },
     {
@@ -6867,9 +6867,9 @@
       "citation": "Carroll 2001 Living Rev. Relativity 4:1; Planck 2020 A&A 641:A6",
       "reference": {
         "inputs": {
-          "cosmological-constant-curvature": 1
+          "cosmological-constant-curvature": 1.1e-52
         },
-        "value": 5.3579150369853185e+25
+        "value": 5.89370654068385e-27
       }
     },
     {
@@ -6890,11 +6890,11 @@
       "citation": "Kitaev & Preskill 2006 PRL 96:110404; Levin & Wen 2006 PRL 96:110405",
       "reference": {
         "inputs": {
-          "area-law-coefficient": 1,
-          "boundary-length": 1,
-          "topological-entanglement-entropy": 2
+          "area-law-coefficient": 0.3,
+          "boundary-length": 20,
+          "topological-entanglement-entropy": 0.6931471805599453
         },
-        "value": -1
+        "value": 5.306852819440055
       }
     },
     {
@@ -6917,13 +6917,13 @@
       "citation": "Sachdev & Ye 1993 PRL 70:3339; Hartnoll 2015 Nature Phys. 11:54",
       "reference": {
         "inputs": {
-          "residual-resistivity": 1,
-          "effective-mass": 1,
-          "carrier-density": 1,
+          "residual-resistivity": 1e-8,
+          "effective-mass": 9.1093837015e-31,
+          "carrier-density": 1e+28,
           "temperature": 300,
-          "syk-coefficient": 2
+          "syk-coefficient": 0.5
         },
-        "value": 3.060113850190811e+51
+        "value": 7.968937807915649e-8
       }
     },
     {
@@ -6943,10 +6943,10 @@
       "citation": "Förster 1948 Ann. Phys. 437:55; Lakowicz 2006 Princ. Fluoresc. Spectrosc. Ch.13",
       "reference": {
         "inputs": {
-          "donor-acceptor-distance": 1,
-          "foerster-radius": 1
+          "donor-acceptor-distance": 6e-9,
+          "foerster-radius": 5e-9
         },
-        "value": 0.5
+        "value": 0.250879080297362
       }
     },
     {
@@ -6966,10 +6966,10 @@
       "citation": "Tononi 2008 Biol. Bull. 215:216; Oizumi, Albantakis & Tononi 2014 PLoS Comput. Biol. 10:e1003588",
       "reference": {
         "inputs": {
-          "conditional-probability": 1,
-          "marginal-probability": 1
+          "conditional-probability": 0.8,
+          "marginal-probability": 0.5
         },
-        "value": 0
+        "value": 0.5424575240901102
       }
     },
     {
@@ -6992,13 +6992,13 @@
       "citation": "Löwdin 1963 Adv. Quantum Chem. 2:213; Gamow 1928",
       "reference": {
         "inputs": {
-          "attempt-frequency": 300,
-          "tunneling-mass": 1,
-          "barrier-height": 1,
-          "barrier-width": 1,
-          "biological-rate-correction": 2
+          "attempt-frequency": 10000000000000,
+          "tunneling-mass": 9.1093837015e-31,
+          "barrier-height": 1.602176634e-19,
+          "barrier-width": 3e-10,
+          "biological-rate-correction": 0.5
         },
-        "value": 0
+        "value": 231202247925.3068
       }
     },
     {
@@ -7019,9 +7019,9 @@
       "reference": {
         "inputs": {
           "temperature": 300,
-          "active-noise-energy": 1
+          "active-noise-energy": 2e-21
         },
-        "value": 7.24297051603992e+22
+        "value": 444.8594103207984
       }
     },
     {
@@ -7065,13 +7065,13 @@
       "citation": "Benincasa & Dowker 2010 PRL 104:181301",
       "reference": {
         "inputs": {
-          "causal-set-count-0": 2,
-          "causal-set-count-1": 2,
-          "causal-set-count-2": 2,
-          "causal-set-count-3": 2,
-          "planck-length": 1
+          "causal-set-count-0": 50,
+          "causal-set-count-1": 20,
+          "causal-set-count-2": 10,
+          "causal-set-count-3": 5,
+          "planck-length": 1.616255e-35
         },
-        "value": 1.6329931618554523
+        "value": -5.626095667649292e+70
       }
     },
     {
@@ -7085,22 +7085,20 @@
         "reference-correlation-length",
         "temperature",
         "reference-temperature",
-        "static-exponent-nu",
         "dynamic-exponent-z"
       ],
       "aliases": {},
-      "holds": "isFinite(reference-correlation-length) and\n      reference-correlation-length > 0 and\n      isFinite(temperature) and\n      temperature > 0 and\n      isFinite(reference-temperature) and\n      reference-temperature > 0 and\n      isFinite(static-exponent-nu) and\n      isFinite(dynamic-exponent-z) and\n      dynamic-exponent-z != 0",
+      "holds": "isFinite(reference-correlation-length) and\n      reference-correlation-length > 0 and\n      isFinite(temperature) and\n      temperature > 0 and\n      isFinite(reference-temperature) and\n      reference-temperature > 0 and\n      isFinite(dynamic-exponent-z) and\n      dynamic-exponent-z != 0",
       "domain": "ξ_0 > 0, T > 0, T_0 > 0, ν finite, z ≠ 0",
       "citation": "Hertz 1976 PRB 14:1165; Millis 1993 PRB 48:7183; Sachdev 2011 QPT 2nd ed. Ch.11",
       "reference": {
         "inputs": {
-          "reference-correlation-length": 1,
+          "reference-correlation-length": 1e-9,
           "temperature": 100,
           "reference-temperature": 200,
-          "static-exponent-nu": 2,
           "dynamic-exponent-z": 2
         },
-        "value": 1.414213562373095
+        "value": 1.4142135623730951e-9
       }
     },
     {
@@ -7125,15 +7123,15 @@
       "citation": "Kibble 1976 J. Phys. A 9:1387; Zurek 1985 Nature 317:505",
       "reference": {
         "inputs": {
-          "quench-timescale": 1,
-          "microscopic-relaxation-time": 1,
-          "spatial-dimension": 2,
-          "static-exponent-nu": 2,
+          "quench-timescale": 0.001,
+          "microscopic-relaxation-time": 0.000001,
+          "spatial-dimension": 3,
+          "static-exponent-nu": 0.5,
           "dynamic-exponent-z": 2,
-          "defect-rest-mass": 1,
-          "reheating-temperature": 300
+          "defect-rest-mass": 1e-27,
+          "reheating-temperature": 1000000000000
         },
-        "value": 0
+        "value": 0.000008373205934595397
       }
     },
     {
@@ -7152,9 +7150,9 @@
       "citation": "Abbott et al. 2017 ApJ Lett. 848:L13; Boran et al. 2018 PRD 97:041501",
       "reference": {
         "inputs": {
-          "gravitational-wave-speed": 1
+          "gravitational-wave-speed": 299792458.3
         },
-        "value": -0.999999996664359
+        "value": 1.000692325358395e-9
       }
     },
     {
@@ -7175,11 +7173,11 @@
       "citation": "Milgrom 1983 ApJ 270:365; Famaey & McGaugh 2012 Living Rev. Relativity 15:10",
       "reference": {
         "inputs": {
-          "newtonian-force": 1,
-          "mass": 1,
-          "mond-acceleration-scale": 1
+          "newtonian-force": 1e-10,
+          "mass": 2,
+          "mond-acceleration-scale": 1.2e-10
         },
-        "value": 1.272019649514069
+        "value": 1.718001785338494e-10
       }
     },
     {
@@ -7231,13 +7229,13 @@
       "citation": "Ooguri & Vafa 2007 Nucl. Phys. B 766:21; Vafa 2005 (hep-th/0509212)",
       "reference": {
         "inputs": {
-          "reference-mass": 1,
-          "swampland-coefficient": 2,
-          "scalar-field-value": 1,
-          "scalar-field-reference": 1,
-          "planck-mass": 1
+          "reference-mass": 1e-27,
+          "swampland-coefficient": 0.5,
+          "scalar-field-value": 3e-9,
+          "scalar-field-reference": 2e-9,
+          "planck-mass": 2.176434e-8
         },
-        "value": 1
+        "value": 9.772885192000917e-28
       }
     },
     {
@@ -7256,9 +7254,9 @@
       "citation": "Maldacena & Susskind 2013 Fortschr. Phys. 61:781; Bekenstein 1973 PRD 7:2333",
       "reference": {
         "inputs": {
-          "wormhole-cross-section-area": 1
+          "wormhole-cross-section-area": 1e-60
         },
-        "value": 1.3213063294731335e+46
+        "value": 1.3213063294731339e-14
       }
     },
     {
@@ -7280,12 +7278,12 @@
       "citation": "Bedroya & Vafa 2019 (arXiv:1909.11063)",
       "reference": {
         "inputs": {
-          "planck-mass-energy": 1,
-          "inflation-hubble-energy": 1,
-          "tensor-to-scalar-ratio": 2,
-          "tcc-correction-coefficient": 2
+          "planck-mass-energy": 12200000000000000000,
+          "inflation-hubble-energy": 100000000000000,
+          "tensor-to-scalar-ratio": 0.03,
+          "tcc-correction-coefficient": 0.5
         },
-        "value": -10.596634733096073
+        "value": 11.162470179381339
       }
     },
     {
@@ -7336,16 +7334,16 @@
       "citation": "Kolb & Turner 1990 §5.2; Pitrou et al. 2018 Phys. Rep. 754:1",
       "reference": {
         "inputs": {
-          "hubble-rate": 1,
-          "nucleon-yield-density": 1,
-          "sm-reaction-rate-coefficient": 1,
-          "proton-density": 1,
-          "neutron-density": 1,
-          "dark-reaction-rate-coefficient": 1,
-          "dark-species-density": 1,
-          "transfer-efficiency": 2
+          "hubble-rate": 0.3,
+          "nucleon-yield-density": 0.25,
+          "sm-reaction-rate-coefficient": 0.002,
+          "proton-density": 0.7,
+          "neutron-density": 0.1,
+          "dark-reaction-rate-coefficient": 0.0005,
+          "dark-species-density": 0.2,
+          "transfer-efficiency": 0.5
         },
-        "value": -4
+        "value": -0.22487
       }
     },
     {
@@ -7392,10 +7390,10 @@
       "citation": "Wheeler & Feynman 1945 RMP 17:157; Cramer 1986 RMP 58:647",
       "reference": {
         "inputs": {
-          "retarded-field-amplitude": 1,
-          "advanced-field-amplitude": 1
+          "retarded-field-amplitude": 0.3,
+          "advanced-field-amplitude": 0.5
         },
-        "value": 1
+        "value": 0.4
       }
     },
     {
@@ -7417,12 +7415,12 @@
       "citation": "Kaplan & Georgi 1984 PLB 136:183; Giudice, Grojean, Pomarol & Rattazzi 2007 JHEP 0706:045",
       "reference": {
         "inputs": {
-          "higgs-field": 1,
-          "higgs-decay-constant": 1,
-          "composite-higgs-alpha": 2,
-          "composite-higgs-beta": 2
+          "higgs-field": 125,
+          "higgs-decay-constant": 800,
+          "composite-higgs-alpha": 0.3,
+          "composite-higgs-beta": 0.2
         },
-        "value": -0.826821810431806
+        "value": -4863363736.50657
       }
     },
     {
@@ -7478,9 +7476,9 @@
       },
       "reference": {
         "inputs": {
-          "voltage": 1
+          "voltage": 0.000001
         },
-        "value": 483597848416983.6
+        "value": 483597848.4169836
       }
     },
     {
@@ -7565,11 +7563,11 @@
       "citation": "OpenStax University Physics Volume 2, https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog's assembly.",
       "reference": {
         "inputs": {
-          "poynting-flux": 2,
-          "reflectance": 1,
-          "incidence-angle": 1
+          "poynting-flux": 1361,
+          "reflectance": 0.5,
+          "incidence-angle": 0.3
         },
-        "value": 3.895049043914625e-9
+        "value": 0.000006215004010938307
       }
     },
     {
@@ -7596,10 +7594,10 @@
       "citation": "Alfvén 1942 Nature 150:405. SI form B/√(μ0 ρ); ρ is the total mass density.",
       "reference": {
         "inputs": {
-          "magnetic-flux-density": 1,
-          "plasma-mass-density": 1
+          "magnetic-flux-density": 1e-8,
+          "plasma-mass-density": 1.67e-21
         },
-        "value": 892.0620578335577
+        "value": 218291.50359208556
       }
     },
     {
@@ -7626,10 +7624,10 @@
       "citation": "Tolman & Ehrenfest 1930 Phys. Rev. 36:1791 (T0 √g_44). Catalog form T √(−g_00).",
       "reference": {
         "inputs": {
-          "proper-temperature": 300,
-          "metric-g00": -1
+          "proper-temperature": 5800,
+          "metric-g00": -0.9999957549948597
         },
-        "value": 300
+        "value": 5799.987689472028
       }
     },
     {
@@ -7661,11 +7659,11 @@
       "citation": "PhysJS.FastMagnetosonic.speed_eq. Perpendicular compressional phase speed. c_s = 0 is the Alfvén number of a different polarization.",
       "reference": {
         "inputs": {
-          "sound-speed": 1,
-          "magnetic-flux-density": 1,
-          "plasma-mass-density": 1
+          "sound-speed": 10000,
+          "magnetic-flux-density": 1e-8,
+          "plasma-mass-density": 1.67e-21
         },
-        "value": 892.0626183325035
+        "value": 218520.4350638482
       }
     },
     {
@@ -7696,11 +7694,11 @@
       "citation": "PhysJS.EinsteinRelation.diffusion_eq. Drift cancels diffusion on a Boltzmann profile.",
       "reference": {
         "inputs": {
-          "electrical-mobility": 2,
-          "einstein-temperature": 1,
-          "carrier-charge": 1.602176634e-19
+          "electrical-mobility": -0.14,
+          "einstein-temperature": 300,
+          "carrier-charge": -1.602176634e-19
         },
-        "value": 0.00017234666524290358
+        "value": 0.0036192799701009757
       }
     },
     {
@@ -7731,11 +7729,11 @@
       "citation": "PhysJS.Clapeyron.slope_eq. L = T (s2−s1) is already substituted. The entropy slope is not a second edge.",
       "reference": {
         "inputs": {
-          "specific-latent-heat": 1,
-          "clapeyron-temperature": 300,
-          "specific-volume-change": 1
+          "specific-latent-heat": 2260000,
+          "clapeyron-temperature": 373.15,
+          "specific-volume-change": 1.67
         },
-        "value": 0.0033333333333333335
+        "value": 3626.6740269962556
       }
     },
     {
@@ -7762,10 +7760,10 @@
       "citation": "PhysJS.GravitationalRedshift.frequency_ratio. Not PhysJS.TolmanEhrenfest.hydrostatic_constant. tolman_same_ratio is nested and is not this edge.",
       "reference": {
         "inputs": {
-          "redshift-metric-g00-1": -1,
-          "redshift-metric-g00-2": -1
+          "redshift-metric-g00-1": -0.9999957549948597,
+          "redshift-metric-g00-2": -0.9999999999
         },
-        "value": 1
+        "value": 1.0000021224593276
       }
     },
     {
@@ -7792,10 +7790,10 @@
       "citation": "PhysJS.KelvinRelation.peltier_eq. L12 = L21 is ThermoelectricOnsager.onsager, a structure field, not an axiom and not an input.",
       "reference": {
         "inputs": {
-          "seebeck-coefficient": 1,
+          "seebeck-coefficient": 0.0002,
           "peltier-temperature": 300
         },
-        "value": 300
+        "value": 0.060000000000000005
       }
     },
     {
@@ -7819,9 +7817,9 @@
       "citation": "PhysJS.MagneticPressure.pressure_eq. U = (L/2) I². C = 1 is the battery work per volume, not this pressure.",
       "reference": {
         "inputs": {
-          "magnetic-flux-density": 1
+          "magnetic-flux-density": 1e-8
         },
-        "value": 397887.35751312086
+        "value": 3.9788735751312084e-11
       }
     },
     {
@@ -7850,10 +7848,10 @@
       "citation": "PhysJS.LondonPenetration.depth_eq. Units also admit μ0 e²/m. Not the classical skin depth.",
       "reference": {
         "inputs": {
-          "effective-mass": 1,
-          "carrier-density": 1
+          "effective-mass": 9.1093837015e-31,
+          "carrier-density": 1e+28
         },
-        "value": 5.567813428950292e+21
+        "value": 5.314093261582035e-8
       }
     },
     {
@@ -7887,11 +7885,11 @@
       "citation": "PhysJS.PlasmaBeta.beta_eq. p_B is PhysJS.MagneticPressure.pressure_eq. Using B²/μ0 is half of this beta. Not a plasma-β inequality.",
       "reference": {
         "inputs": {
-          "carrier-density": 1,
+          "carrier-density": 100000000000000000000,
           "temperature": 300,
-          "magnetic-pressure": 1
+          "magnetic-pressure": 398000
         },
-        "value": 4.141947e-21
+        "value": 0.0000010406902010050252
       }
     },
     {
@@ -7929,12 +7927,12 @@
       "citation": "PhysJS.HagenPoiseuille.flow_eq. f_D Re = 64 follows from Darcy definitions. The Fanning factor is 16. Not a square duct.",
       "reference": {
         "inputs": {
-          "pipe-radius": 1,
-          "pipe-pressure-drop": 1,
-          "dynamic-viscosity": 1,
-          "pipe-length": 1
+          "pipe-radius": 0.01,
+          "pipe-pressure-drop": 1000,
+          "dynamic-viscosity": 0.001,
+          "pipe-length": 2
         },
-        "value": 0.39269908169872414
+        "value": 0.0019634954084936204
       }
     },
     {
@@ -7967,11 +7965,11 @@
       "citation": "PhysJS.EulerBuckling.critical_load. The beam equation is a hypothesis. The clamped-free load is π² E I / (4 L²), not this load.",
       "reference": {
         "inputs": {
-          "youngs-modulus": 1,
-          "area-moment": 1,
-          "column-length": 1
+          "youngs-modulus": 200000000000,
+          "area-moment": 1e-8,
+          "column-length": 2
         },
-        "value": 9.869604401089358
+        "value": 4934.802200544679
       }
     },
     {
@@ -8005,11 +8003,11 @@
       "citation": "PhysJS.PullIn.pull_in_eq. C = ε0 A/g and the linear spring are hypotheses. g = g0/2 is not the fold.",
       "reference": {
         "inputs": {
-          "pull-in-stiffness": 1,
-          "pull-in-gap": 1,
-          "pull-in-area": 1
+          "pull-in-stiffness": 10,
+          "pull-in-gap": 0.000002,
+          "pull-in-area": 1e-8
         },
-        "value": 182931.6057071822
+        "value": 16.361900223777916
       }
     },
     {
@@ -8047,12 +8045,12 @@
       "citation": "PhysJS.MottGurney.current_eq. Drift, Poisson, and the injecting contact are hypotheses. Not Child–Langmuir.",
       "reference": {
         "inputs": {
-          "mott-permittivity": 1,
-          "mott-mobility": 1,
-          "mott-voltage": 1,
-          "mott-thickness": 1
+          "mott-permittivity": 3e-11,
+          "mott-mobility": 0.0001,
+          "mott-voltage": 5,
+          "mott-thickness": 1e-7
         },
-        "value": 1.125
+        "value": 84375000.00000001
       }
     },
     {
@@ -8086,11 +8084,11 @@
       "citation": "PhysJS.ChildLangmuir.current_eq. e is the elementary charge. Not a drift-only solid.",
       "reference": {
         "inputs": {
-          "child-carrier-mass": 1,
-          "child-voltage": 1,
-          "child-gap": 1
+          "child-carrier-mass": 9.1093837015e-31,
+          "child-voltage": 100,
+          "child-gap": 0.001
         },
-        "value": 2.2275958825383832e-21
+        "value": 2333.951938468463
       }
     },
     {
@@ -8124,11 +8122,11 @@
       "citation": "PhysJS.ShockleyDiode.shockley_eq. Quasi-equilibrium, detailed balance at V = 0, and low injection are hypotheses. Ideality 2 is not this current.",
       "reference": {
         "inputs": {
-          "shockley-saturation": 1,
-          "shockley-voltage": 1,
+          "shockley-saturation": 1e-12,
+          "shockley-voltage": 0.7,
           "shockley-temperature": 300
         },
-        "value": 62988405950449510
+        "value": 0.5747545691036854
       }
     },
     {
@@ -8158,9 +8156,9 @@
       "reference": {
         "inputs": {
           "thomson-temperature": 300,
-          "seebeck-slope": 1
+          "seebeck-slope": 0.000001
         },
-        "value": 300
+        "value": 0.0003
       }
     },
     {
@@ -8189,10 +8187,10 @@
       "citation": "PhysJS.FourPoint.sheet_eq. The Laplace field and linear superposition are hypotheses. A sink at 4s is 2π/ln 3. Not PhysJS.Crossing.antisymmetry.",
       "reference": {
         "inputs": {
-          "four-point-voltage": 1,
-          "four-point-current": 1
+          "four-point-voltage": 0.001,
+          "four-point-current": 0.002
         },
-        "value": 4.532360141827194
+        "value": 2.266180070913597
       }
     },
     {
@@ -8216,9 +8214,9 @@
       "citation": "PhysJS.ShotNoise.shot_eq. e is the elementary charge. The two-sided bandwidth gives e I. Not Johnson–Nyquist.",
       "reference": {
         "inputs": {
-          "shot-current": 1
+          "shot-current": 0.001
         },
-        "value": 3.204353268e-19
+        "value": 3.2043532679999997e-22
       }
     },
     {
@@ -8273,9 +8271,9 @@
       "reference": {
         "inputs": {
           "capacitor-temperature": 300,
-          "capacitance": 1
+          "capacitance": 1e-12
         },
-        "value": 4.141947e-21
+        "value": 4.1419470000000004e-9
       }
     },
     {
@@ -8286,26 +8284,21 @@
       "expression": "(3*pi^2*fermi-sea-density)^0.3333333333333333",
       "target": "fermi-wavevector",
       "sources": [
-        "fermi-sea-density",
-        "fermi-sea-mass"
+        "fermi-sea-density"
       ],
       "aliases": {
         "fermi-sea-density": [
           "n_per_m3"
-        ],
-        "fermi-sea-mass": [
-          "m_kg"
         ]
       },
-      "holds": "isFinite(fermi-sea-density) and fermi-sea-density > 0 and isFinite(fermi-sea-mass) and fermi-sea-mass > 0",
+      "holds": "isFinite(fermi-sea-density) and fermi-sea-density > 0",
       "domain": "n > 0, m* > 0; two spins, T = 0, isotropic parabola",
       "citation": "PhysJS.FermiSea.fermi_sea. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses.",
       "reference": {
         "inputs": {
-          "fermi-sea-density": 1,
-          "fermi-sea-mass": 1
+          "fermi-sea-density": 8.47e+28
         },
-        "value": 3.0936677262801355
+        "value": 13586308449.709091
       }
     },
     {
@@ -8332,10 +8325,10 @@
       "citation": "PhysJS.DebyeCutoff.debye_cutoff. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses.",
       "reference": {
         "inputs": {
-          "debye-sound-speed": 1,
-          "debye-atom-density": 1
+          "debye-sound-speed": 3000,
+          "debye-atom-density": 5e+28
         },
-        "value": 3.8977770897207535
+        "value": 43078600719630.28
       }
     },
     {
@@ -8366,11 +8359,11 @@
       "citation": "PhysJS.DebyeHeat.debye_heat. I = π⁴/15 is a hypothesis, not an evaluation of the Bose integral. The energy prefactor 3 π⁴/5 is not the heat capacity.",
       "reference": {
         "inputs": {
-          "debye-atom-count": 2,
-          "debye-temperature": 1,
-          "debye-theta": 10
+          "debye-atom-count": 6.02214076e+23,
+          "debye-temperature": 10,
+          "debye-theta": 343
         },
-        "value": 6.4554126780962135e-24
+        "value": 0.048168437348591844
       }
     },
     {
@@ -8401,11 +8394,11 @@
       "citation": "PhysJS.EinsteinSolid.einstein_heat. The high-temperature limit is 3 N k_B. One oscillator tends to N k_B. The zero-point is constant.",
       "reference": {
         "inputs": {
-          "einstein-atom-count": 2,
+          "einstein-atom-count": 6.02214076e+23,
           "einstein-solid-temperature": 300,
-          "einstein-theta": 1
+          "einstein-theta": 240
         },
-        "value": 8.283886329732378e-23
+        "value": 23.654586464248833
       }
     },
     {
@@ -8436,11 +8429,11 @@
       "citation": "PhysJS.SommerfeldHeat.electronic_heat. A flat density leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61.",
       "reference": {
         "inputs": {
-          "sommerfeld-density": 1,
+          "sommerfeld-density": 8.47e+28,
           "sommerfeld-temperature": 300,
-          "sommerfeld-fermi-energy": 1
+          "sommerfeld-fermi-energy": 1.12e-18
         },
-        "value": 2.822003641306384e-43
+        "value": 21341.40253737953
       }
     },
     {
@@ -8483,14 +8476,14 @@
       "citation": "PhysJS.CurieWeiss.curie_weiss. θ = 0 is C/T. Not an su(2) derivation. The second moment and the mean-field shift are hypotheses.",
       "reference": {
         "inputs": {
-          "curie-density": 1,
+          "curie-density": 2e+28,
           "curie-g-factor": 2,
-          "curie-spin": 2,
-          "curie-magneton": 1,
-          "curie-temperature": 200,
+          "curie-spin": 2.5,
+          "curie-magneton": 9.274e-24,
+          "curie-temperature": 300,
           "weiss-temperature": 100
         },
-        "value": 7281428152238865
+        "value": 0.009132875856972988
       }
     },
     {
@@ -8521,11 +8514,11 @@
       "citation": "PhysJS.PauliParamagnetism.pauli. A flat density leaves the factor 1. Not Landau diamagnetism.",
       "reference": {
         "inputs": {
-          "pauli-density": 1,
-          "pauli-fermi-energy": 1,
-          "pauli-magneton": 1
+          "pauli-density": 8.47e+28,
+          "pauli-fermi-energy": 1.12e-18,
+          "pauli-magneton": 9.274e-24
         },
-        "value": 0.0000018849555931800819
+        "value": 0.000012260288621294371
       }
     },
     {
@@ -8573,9 +8566,9 @@
       "citation": "PhysJS.UpperCritical.critical_field. Charge e instead of 2e is a different field. Not the spectrum of the covariant Laplacian.",
       "reference": {
         "inputs": {
-          "upper-critical-length": 1
+          "upper-critical-length": 1e-8
         },
-        "value": 3.2910597847545335e-16
+        "value": 3.291059784754533
       }
     },
     {
@@ -8598,9 +8591,9 @@
       "citation": "PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff. A coefficient other than π/2 fails. Not the finite-temperature tanh factor.",
       "reference": {
         "inputs": {
-          "ambegaokar-gap": 1
+          "ambegaokar-gap": 2e-22
         },
-        "value": 9804139527819980000
+        "value": 0.0019608279055639962
       }
     },
     {
@@ -8660,12 +8653,12 @@
       "citation": "PhysJS.MassAction.mass_action. Dropping the 2 in the exponent is a different density. Not a Fermi–Dirac integral.",
       "reference": {
         "inputs": {
-          "conduction-dos": 1,
-          "valence-dos": 1,
-          "mass-action-gap": 1,
+          "conduction-dos": 2.8e+25,
+          "valence-dos": 1.04e+25,
+          "mass-action-gap": 1.79e-19,
           "mass-action-temperature": 300
         },
-        "value": 0
+        "value": 7043291631960667
       }
     },
     {
@@ -8718,9 +8711,9 @@
       "citation": "PhysJS.BktJump.bkt_jump. Circumference entropy unbinds at π J. Not the renormalization-group flow.",
       "reference": {
         "inputs": {
-          "bkt-stiffness": 1
+          "bkt-stiffness": 1e-22
         },
-        "value": 1.1377231481679242e+23
+        "value": 11.377231481679242
       }
     },
     {
@@ -8772,10 +8765,10 @@
       "citation": "PhysJS.BohmSheath.cold_bohm_threshold. The sound-speed root is the non-negative one. γ_i = 5/3 is not the warm closure.",
       "reference": {
         "inputs": {
-          "bohm-electron-temperature": 300,
-          "bohm-ion-mass": 1
+          "bohm-electron-temperature": 100000,
+          "bohm-ion-mass": 1.67262192369e-27
         },
-        "value": 6.435795988065501e-11
+        "value": 28730.4712051947
       }
     },
     {
@@ -8806,11 +8799,11 @@
       "citation": "PhysJS.IonAcoustic.dispersion_eq. Warm ions and a kinetic dispersion are not this row.",
       "reference": {
         "inputs": {
-          "ion-acoustic-wavenumber": 1,
-          "ion-acoustic-sound": 1,
-          "ion-acoustic-debye": 1
+          "ion-acoustic-wavenumber": 100,
+          "ion-acoustic-sound": 10000,
+          "ion-acoustic-debye": 0.001
         },
-        "value": 0.7071067811865476
+        "value": 995037.1902099891
       }
     },
     {
@@ -8841,11 +8834,11 @@
       "citation": "PhysJS.UpperHybrid.upper_hybrid_eq. e is the elementary charge. Not a cyclotron monomial.",
       "reference": {
         "inputs": {
-          "upper-hybrid-density": 1,
-          "upper-hybrid-field": 1,
-          "upper-hybrid-mass": 1
+          "upper-hybrid-density": 10000000000000000,
+          "upper-hybrid-field": 0.1,
+          "upper-hybrid-mass": 9.1093837015e-31
         },
-        "value": 5.3843840463930105e-14
+        "value": 18470810934.26198
       }
     },
     {
@@ -8872,10 +8865,10 @@
       "citation": "PhysJS.ColdPlasmaCutoff.cutoff_R. The cold Stix index n_R² = 1 − ω_p²/(ω(ω − ω_c)) is a hypothesis. The Stix dielectric is not re-derived.",
       "reference": {
         "inputs": {
-          "cutoff-cyclotron": 1,
-          "cutoff-plasma": 1
+          "cutoff-cyclotron": 17600000000,
+          "cutoff-plasma": 5640000000
         },
-        "value": 1.618033988749895
+        "value": 19252253345.57099
       }
     },
     {
@@ -8906,11 +8899,11 @@
       "citation": "PhysJS.LowerHybrid.lower_hybrid_eq. Dropping the leading 1 leaves ω² = ω_ci ω_ce.",
       "reference": {
         "inputs": {
-          "lower-hybrid-ion-plasma": 1,
-          "lower-hybrid-ion-cyclotron": 1,
-          "lower-hybrid-electron-cyclotron": 1
+          "lower-hybrid-ion-plasma": 130000000,
+          "lower-hybrid-ion-cyclotron": 9600000,
+          "lower-hybrid-electron-cyclotron": 17600000000
         },
-        "value": 0.7071067811865476
+        "value": 123948802.79364647
       }
     },
     {
@@ -8941,11 +8934,11 @@
       "citation": "PhysJS.ObliqueMagnetosonic.phase_speed_eq. The be-69 quartic with k_∥ = k cos θ is a hypothesis.",
       "reference": {
         "inputs": {
-          "oblique-sound": 1,
-          "oblique-alfven": 1,
-          "oblique-angle": 2
+          "oblique-sound": 10000,
+          "oblique-alfven": 20000,
+          "oblique-angle": 0.5
         },
-        "value": 1.3817732906760363
+        "value": 20688.836558608553
       }
     },
     {
@@ -8972,10 +8965,10 @@
       "citation": "PhysJS.BennettPinch.equal_temperature_current. N_e = N_i = N and T_e = T_i = T. The factor 8 is the single-population current.",
       "reference": {
         "inputs": {
-          "bennett-line-density": 1,
-          "bennett-temperature": 300
+          "bennett-line-density": 1000000000000000000,
+          "bennett-temperature": 1000000
         },
-        "value": 4.070354774584174e-7
+        "value": 23500.204248034508
       }
     },
     {
@@ -9002,10 +8995,10 @@
       "citation": "PhysJS.LossCone.loss_cone_eq. Pitch-angle scattering is not this statement.",
       "reference": {
         "inputs": {
-          "loss-cone-throat": 1,
-          "loss-cone-mirror": 1
+          "loss-cone-throat": 0.05,
+          "loss-cone-mirror": 0.2
         },
-        "value": 1
+        "value": 0.25
       }
     },
     {
@@ -9044,13 +9037,13 @@
       "citation": "PhysJS.GradBDrift.drift_magnitude. q is the signed charge. High-β curvature is a different vector.",
       "reference": {
         "inputs": {
-          "gradb-mass": 1,
-          "gradb-perp-speed": 1,
-          "gradb-gradient": 1,
-          "gradb-charge": -1.602176634e-19,
-          "gradb-field": 1
+          "gradb-mass": 1.67262192369e-27,
+          "gradb-perp-speed": 100000,
+          "gradb-gradient": 1e-7,
+          "gradb-charge": 1.602176634e-19,
+          "gradb-field": 0.00005
         },
-        "value": -3120754537230381600
+        "value": 2087.9369829706307
       }
     },
     {
@@ -9081,11 +9074,11 @@
       "citation": "PhysJS.ExBDrift.drift_eq. v_x = E_y/B and v_y = −E_x/B. Not a finite-Larmor-radius drift.",
       "reference": {
         "inputs": {
-          "exb-field-x": 1,
-          "exb-field-y": 1,
-          "exb-field": 1
+          "exb-field-x": 300,
+          "exb-field-y": 400,
+          "exb-field": 0.05
         },
-        "value": 1.4142135623730951
+        "value": 10000
       }
     },
     {
@@ -9116,11 +9109,11 @@
       "citation": "PhysJS.LandauDamping.damping_eq. The residue formula γ = (π ω³/(2 n k²)) (∂f/∂v)|_{ω/k} is a hypothesis, not a contour integral.",
       "reference": {
         "inputs": {
-          "landau-omega": 1,
-          "landau-wavenumber": 1,
-          "landau-thermal": 1
+          "landau-omega": 200000000,
+          "landau-wavenumber": 100,
+          "landau-thermal": 1000000
         },
-        "value": -0.38008672526657017
+        "value": -135694099.00643528
       }
     },
     {
@@ -9147,10 +9140,10 @@
       "citation": "PhysJS.DebyeSphere.coulomb_argument. The angular integral and ln Λ are not evaluated.",
       "reference": {
         "inputs": {
-          "debye-sphere-density": 1,
-          "debye-sphere-length": 1
+          "debye-sphere-density": 10000000000000000,
+          "debye-sphere-length": 0.00007
         },
-        "value": 37.69911184307752
+        "value": 129307.95362175585
       }
     },
     {
@@ -9177,10 +9170,10 @@
       "citation": "PhysJS.MultiDebye.debye_two. Dropping a responding species leaves a different length.",
       "reference": {
         "inputs": {
-          "multi-debye-1": 1,
-          "multi-debye-2": 1
+          "multi-debye-1": 0.00007,
+          "multi-debye-2": 0.00003
         },
-        "value": 0.7071067811865475
+        "value": 0.000027574350900541734
       }
     },
     {
@@ -9215,12 +9208,12 @@
       "citation": "PhysJS.LorentzResistivity.resistivity_eq. σ_tr = 4π b0² ln Λ and the conductivity moment are hypotheses. The typed reference closure is nested.",
       "reference": {
         "inputs": {
-          "lorentz-charge-state": 1,
-          "lorentz-coulomb-log": 2,
-          "lorentz-temperature": 300,
-          "lorentz-mass": 1
+          "lorentz-charge-state": 2,
+          "lorentz-coulomb-log": 15,
+          "lorentz-temperature": 1000000,
+          "lorentz-mass": 9.1093837015e-31
         },
-        "value": 15313575677686.691
+        "value": 0.0000011391849743171435
       }
     },
     {
@@ -9247,10 +9240,10 @@
       "citation": "PhysJS.ResistiveSlab.decay_time. A denominator 4π is not π². Not the Reynolds analogy.",
       "reference": {
         "inputs": {
-          "slab-conductivity": 1,
-          "slab-width": 1
+          "slab-conductivity": 60000000,
+          "slab-width": 0.01
         },
-        "value": 1.2732395454283388e-7
+        "value": 0.0007639437272570034
       }
     },
     {
@@ -9277,10 +9270,10 @@
       "citation": "PhysJS.ParkerCritical.critical_radius. The critical point also has v² = c_s².",
       "reference": {
         "inputs": {
-          "parker-sound": 1,
-          "parker-mass": 1
+          "parker-sound": 100000,
+          "parker-mass": 1.989e+30
         },
-        "value": 3.33715e-11
+        "value": 6637591349.999999
       }
     },
     {
@@ -9315,12 +9308,12 @@
       "citation": "PhysJS.ParkerSpiral.spiral_ratio. Dropping the sign is a different spiral.",
       "reference": {
         "inputs": {
-          "spiral-omega": 1,
-          "spiral-radius": 1,
-          "spiral-colatitude": 2,
-          "spiral-radial-speed": 1
+          "spiral-omega": 0.0000029,
+          "spiral-radius": 149600000000,
+          "spiral-colatitude": 1.2,
+          "spiral-radial-speed": 400000
         },
-        "value": -0.9092974268256817
+        "value": -1.0108895926400536
       }
     },
     {
@@ -9351,11 +9344,11 @@
       "citation": "PhysJS.ChapmanFerraro.standoff_eq. A doubled dipole is a hypothesis. Specular 2 ρ v² replaces the numerator 2 by 1.",
       "reference": {
         "inputs": {
-          "standoff-field": 1,
-          "standoff-density": 1,
-          "standoff-speed": 1
+          "standoff-field": 0.000031,
+          "standoff-density": 1.67e-20,
+          "standoff-speed": 400000
         },
-        "value": 1591549.4300524835
+        "value": 572409.8062426782
       }
     },
     {
@@ -9386,11 +9379,11 @@
       "citation": "PhysJS.LawsonBreakeven.breakeven_eq. The 12 is 4 × 3. The Maxwellian average is not computed.",
       "reference": {
         "inputs": {
-          "lawson-temperature": 300,
-          "lawson-reactivity": 1,
-          "lawson-energy": 1
+          "lawson-temperature": 150000000,
+          "lawson-reactivity": 1.1e-22,
+          "lawson-energy": 2.8e-12
         },
-        "value": 4.9703364000000004e-20
+        "value": 80687279220779220000
       }
     },
     {
@@ -9417,10 +9410,10 @@
       "citation": "PhysJS.LangmuirProbe.floating_potential. The ion flux is the nested bohmFlux object. Not Child–Langmuir.",
       "reference": {
         "inputs": {
-          "probe-electron-mass": 1,
-          "probe-ion-mass": 1836
+          "probe-electron-mass": 9.1093837015e-31,
+          "probe-ion-mass": 1.67262192369e-27
         },
-        "value": -3.338733752385545
+        "value": -3.3387753283911383
       }
     },
     {
@@ -9472,10 +9465,10 @@
       "citation": "PhysJS.Firehose.firehose_threshold. The CGL root is a hypothesis. With β = 2 μ0 p/B² the threshold is β_∥ − β_⊥ > 2.",
       "reference": {
         "inputs": {
-          "firehose-beta-parallel": 2,
-          "firehose-beta-perp": 2
+          "firehose-beta-parallel": 1.5,
+          "firehose-beta-perp": 0.8
         },
-        "value": 0
+        "value": 0.7
       }
     },
     {
@@ -9506,11 +9499,11 @@
       "citation": "PhysJS.MirrorInstability.mirror_threshold. The threshold β_⊥ (T_⊥/T_∥ − 1) > 1 is a hypothesis. The kinetic integral is not evaluated.",
       "reference": {
         "inputs": {
-          "mirror-beta-perp": 2,
-          "mirror-t-perp": 1,
-          "mirror-t-parallel": 1
+          "mirror-beta-perp": 0.8,
+          "mirror-t-perp": 120000,
+          "mirror-t-parallel": 100000
         },
-        "value": 0
+        "value": 0.15999999999999998
       }
     },
     {
@@ -9549,13 +9542,13 @@
       "citation": "PhysJS.CombDrive.force_eq. Both sidewalls and the coenergy 1/2 cancel. One sidewall leaves the 1/2. Not be-79.",
       "reference": {
         "inputs": {
-          "comb-finger-count": 2,
-          "comb-dielectric": 1,
-          "comb-overlap": 1,
-          "comb-bias": 1,
-          "comb-airgap": 1
+          "comb-finger-count": 50,
+          "comb-dielectric": 8.8541878128e-12,
+          "comb-overlap": 0.00002,
+          "comb-bias": 10,
+          "comb-airgap": 0.000002
         },
-        "value": 2
+        "value": 4.4270939064000013e-7
       }
     },
     {
@@ -9587,10 +9580,10 @@
       "reference": {
         "inputs": {
           "swing-kelvin": 300,
-          "swing-depletion": 1,
-          "swing-oxide": 1
+          "swing-depletion": 1e-12,
+          "swing-oxide": 3e-12
         },
-        "value": 0.11905285866466345
+        "value": 0.07936857244310896
       }
     },
     {
@@ -9650,12 +9643,12 @@
       "citation": "PhysJS.FinEfficiency.efficiency_eq. One face is not that m. tanh is not 1, so this is not an infinite fin.",
       "reference": {
         "inputs": {
-          "fin-convection": 1,
-          "fin-conductivity": 1,
-          "fin-web": 1,
-          "fin-span": 1
+          "fin-convection": 25,
+          "fin-conductivity": 200,
+          "fin-web": 0.002,
+          "fin-span": 0.05
         },
-        "value": 0.6281834549054398
+        "value": 0.9073923048115554
       }
     },
     {
@@ -9686,11 +9679,11 @@
       "citation": "PhysJS.ThermoelectricGenerator.efficiency_eq. Matched load m = 1 is not stationary when Z T_m ≠ 0. The Carnot factor alone is not this efficiency.",
       "reference": {
         "inputs": {
-          "teg-source": 1,
-          "teg-sink": 1,
-          "teg-figure": 1
+          "teg-source": 500,
+          "teg-sink": 300,
+          "teg-figure": 0.003
         },
-        "value": 0
+        "value": 0.09278619220204086
       }
     },
     {
@@ -9733,14 +9726,14 @@
       "citation": "PhysJS.Joukowsky.joukowsky_eq. ρ (Δv)² is not ρ c Δv when c ≠ Δv. Dropping the wall term is the rigid-pipe speed.",
       "reference": {
         "inputs": {
-          "joukowsky-rho": 1,
-          "joukowsky-closure": 1,
-          "joukowsky-bulk": 1,
-          "joukowsky-wallmod": 1,
-          "joukowsky-bore": 1,
-          "joukowsky-thk": 1
+          "joukowsky-rho": 1000,
+          "joukowsky-closure": 2,
+          "joukowsky-bulk": 2200000000,
+          "joukowsky-wallmod": 200000000000,
+          "joukowsky-bore": 0.5,
+          "joukowsky-thk": 0.01
         },
-        "value": 0.7071067811865475
+        "value": 2382733.5887250826
       }
     },
     {
@@ -9771,11 +9764,11 @@
       "citation": "PhysJS.CoaxialCapacitance.capacitance_per_length. Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d.",
       "reference": {
         "inputs": {
-          "coax-liner": 1,
-          "coax-inner": 1,
-          "coax-outer": 2
+          "coax-liner": 2.1e-11,
+          "coax-inner": 0.0005,
+          "coax-outer": 0.0017
         },
-        "value": 9.064720283654388
+        "value": 1.0781952966311439e-10
       }
     },
     {
@@ -9806,11 +9799,11 @@
       "citation": "PhysJS.DampingRatio.damping_ratio. For c ≥ 0 the discriminant vanishes iff ζ = 1. Dropping the 2 is not this ratio.",
       "reference": {
         "inputs": {
-          "damping-dashpot": 1,
-          "damping-spring": 1,
-          "damping-inertia": 1
+          "damping-dashpot": 20,
+          "damping-spring": 1000,
+          "damping-inertia": 2
         },
-        "value": 0.5
+        "value": 0.22360679774997896
       }
     },
     {
@@ -9845,12 +9838,12 @@
       "citation": "PhysJS.BlochLaw.bloch_law. ζ(3/2) is not evaluated. g μ_B at g = 2 is not one Bohr magneton.",
       "reference": {
         "inputs": {
-          "blochlaw-mub": 1,
-          "blochlaw-zeta": 2,
+          "blochlaw-mub": 9.274e-24,
+          "blochlaw-zeta": 2.612,
           "blochlaw-warmth": 300,
-          "blochlaw-dstiff": 1
+          "blochlaw-dstiff": 5e-40
         },
-        "value": 1.196801171758704e-32
+        "value": 12965.141701610004
       }
     },
     {
@@ -9877,10 +9870,10 @@
       "citation": "PhysJS.DensityOfStates3D.dos_3d. One spin replaces 1/(2 π²) by 1/(4 π²). Not be-88.",
       "reference": {
         "inputs": {
-          "dos3d-bandmass": 1,
-          "dos3d-abscissa": 1
+          "dos3d-bandmass": 9.1093837015e-31,
+          "dos3d-abscissa": 1.602176634e-19
         },
-        "value": 1.2217624386103392e+101
+        "value": 4.2518257669893766e+46
       }
     },
     {
@@ -9903,9 +9896,9 @@
       "citation": "PhysJS.DensityOfStates2D.dos_2d. A valley factor other than 1 is not this density.",
       "reference": {
         "inputs": {
-          "dos2d-bandmass": 1
+          "dos2d-bandmass": 9.1093837015e-31
         },
-        "value": 2.862185684064117e+67
+        "value": 2.6072747621080297e+37
       }
     },
     {
@@ -9932,10 +9925,10 @@
       "citation": "PhysJS.ThomasFermi.thomas_fermi. A flat density leaves the factor 1. Not the Debye length.",
       "reference": {
         "inputs": {
-          "tfscreen-n3": 1,
-          "tfscreen-chemical": 1
+          "tfscreen-n3": 8.47e+28,
+          "tfscreen-chemical": 1.12e-18
         },
-        "value": 4.348738733819231e-27
+        "value": 328873366745079350000
       }
     },
     {
@@ -9971,11 +9964,11 @@
       "reference": {
         "inputs": {
           "builtin-warmth": 300,
-          "builtin-acceptor": 1,
-          "builtin-donor": 1,
-          "builtin-ni": 1
+          "builtin-acceptor": 1e+22,
+          "builtin-donor": 1e+22,
+          "builtin-ni": 10000000000000000
         },
-        "value": 0
+        "value": 0.7143171519879805
       }
     },
     {
@@ -10007,10 +10000,10 @@
       "reference": {
         "inputs": {
           "fermioffset-warmth": 300,
-          "fermioffset-holemass": 1,
-          "fermioffset-elecmass": 1
+          "fermioffset-holemass": 7.4e-31,
+          "fermioffset-elecmass": 9.8e-31
         },
-        "value": 0
+        "value": -8.726120945815563e-22
       }
     },
     {
@@ -10033,9 +10026,9 @@
       "citation": "PhysJS.OnsagerFrequency.onsager_frequency. γ cancels. Δ(1/B) = 1/F.",
       "reference": {
         "inputs": {
-          "onsagerk-karea": 1
+          "onsagerk-karea": 100000000000000000000
         },
-        "value": 1.0475768655092661e-16
+        "value": 10475.768655092661
       }
     },
     {
@@ -10058,9 +10051,9 @@
       "citation": "PhysJS.JosephsonInductance.inductance_eq. cos φ = 1 at φ = 0. Not be-59.",
       "reference": {
         "inputs": {
-          "josephsonl-ic": 1
+          "josephsonl-ic": 0.000001
         },
-        "value": 3.2910597847545335e-16
+        "value": 3.2910597847545334e-10
       }
     },
     {
@@ -10087,10 +10080,10 @@
       "citation": "PhysJS.LowerCritical.lower_critical. Not be-96.",
       "reference": {
         "inputs": {
-          "lowercrit-pen": 2,
-          "lowercrit-xi": 1
+          "lowercrit-pen": 1e-7,
+          "lowercrit-xi": 1e-8
         },
-        "value": 2.851486013571031e-17
+        "value": 0.037889726002639915
       }
     },
     {
@@ -10125,12 +10118,12 @@
       "citation": "PhysJS.AcDrude.ac_drude. Dropping the DC 1 is not this conductivity. Not be-123.",
       "reference": {
         "inputs": {
-          "acdrude-n3": 1,
-          "acdrude-bandmass": 1,
-          "acdrude-scatter": 1,
-          "acdrude-radian": 1
+          "acdrude-n3": 8.47e+28,
+          "acdrude-bandmass": 9.1093837015e-31,
+          "acdrude-scatter": 2.5e-14,
+          "acdrude-radian": 10000000000000
         },
-        "value": 1.2834849832677847e-38
+        "value": 56159893.05873311
       }
     },
     {
@@ -10157,10 +10150,10 @@
       "citation": "PhysJS.Matthiessen.matthiessen. The edge value is τ. ρ = ρ₁ + ρ₂ is the same rate sum.",
       "reference": {
         "inputs": {
-          "matthsum-scatter1": 1,
-          "matthsum-scatter2": 1
+          "matthsum-scatter1": 2e-14,
+          "matthsum-scatter2": 5e-14
         },
-        "value": 0.5
+        "value": 1.4285714285714284e-14
       }
     },
     {
@@ -10380,12 +10373,12 @@
       "citation": "PhysJS.NernstGibbs.nernst_eq. e is the elementary charge.",
       "reference": {
         "inputs": {
-          "nernstge0": 0,
+          "nernstge0": 0.34,
           "nernstgn": 2,
           "nernstgq": 10,
           "nernstgwarmth": 298.15
         },
-        "value": -0.029579674842391164
+        "value": 0.31042032515760887
       }
     },
     {
@@ -10860,7 +10853,7 @@
           "planckfreq": 100000000000000,
           "planckwarmth": 2273.15
         },
-        "value": 8.514740991722427e-17
+        "value": 8.514740991722424e-17
       }
     },
     {
@@ -10877,7 +10870,7 @@
       "citation": "PhysJS.StefanBoltzmann.stefan_boltzmann_eq. Not equal to the Stefan constant symbol when that symbol omits this quotient.",
       "reference": {
         "inputs": {},
-        "value": 5.67037441918443e-8
+        "value": 5.6703744191844294e-8
       }
     },
     {
@@ -11029,13 +11022,13 @@
           "onsager_B_T"
         ]
       },
-      "holds": "isFinite(onsagerb0) and onsagerb0 == 0 and isFinite(onsagerl12)",
-      "domain": "B = 0",
+      "holds": "isFinite(onsagerb0) and abs(onsagerb0) <= 1e-12 and isFinite(onsagerl12)",
+      "domain": "|B| ≤ 1 pT (zero field at measurement precision)",
       "citation": "PhysJS.OnsagerReciprocity.onsager_eq. L12(B) = L21(−B) is not this row.",
       "reference": {
         "inputs": {
           "onsagerl12": 3,
-          "onsagerb0": 0
+          "onsagerb0": 5e-13
         },
         "value": 3
       }
@@ -11062,7 +11055,7 @@
         "inputs": {
           "plate-separation": 0.000001
         },
-        "value": -0.0013001257732443655
+        "value": -0.0013001257732443657
       }
     },
     {
@@ -14290,7 +14283,7 @@
           "quantity": "onsagerb0",
           "symbol": "onsager_B_T",
           "unit": "T",
-          "meaning": "magnetic field, must be 0"
+          "meaning": "magnetic field, |B| ≤ 1 pT"
         }
       ]
     }
