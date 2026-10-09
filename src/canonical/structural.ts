@@ -113,6 +113,41 @@ function bridgeRank(id: string): number {
 }
 
 /**
+ * A bridge RHS reduced to its comparison-ready, canonical-invariant form: its
+ * validated dimension (`null` when validation failed) and its normal-form
+ * hash. Both depend only on the bridge.
+ *
+ * @internal
+ */
+export interface BridgeShape {
+  readonly rhs: ExprNode;
+  readonly dim: Dimension | null;
+  readonly normal: string;
+}
+
+let bridgeShapeTable: ReadonlyMap<number, BridgeShape> | undefined;
+
+/**
+ * Every bridge RHS, validated and normal-formed ONCE for the process.
+ * `BRIDGE_RHS_BY_ID` is static, so the table is computed on first use and
+ * kept; a chain classification and a linkage scan both read it instead of
+ * re-validating every entry per call (9.0.0 audit §4 Low).
+ *
+ * @internal
+ */
+export function bridgeShapes(): ReadonlyMap<number, BridgeShape> {
+  if (bridgeShapeTable === undefined) {
+    const table = new Map<number, BridgeShape>();
+    for (const [id, rhs] of BRIDGE_RHS_BY_ID) {
+      const v = validate(rhs);
+      table.set(id, { rhs, dim: v.ok ? v.inferredDimension : null, normal: normalForm(rhs) });
+    }
+    bridgeShapeTable = table;
+  }
+  return bridgeShapeTable;
+}
+
+/**
  * Provisional id for a chain. The edge ids stay in the order the caller
  * passed, which is the chain order. They are not sorted.
  */
@@ -161,14 +196,14 @@ function classifyChain(expr: ExprNode, edgeIds: readonly string[]): ChainClassif
   }
 
   const confirmations: number[] = [];
-  for (const [id, rhs] of BRIDGE_RHS_BY_ID) {
-    const bridge = validate(rhs);
+  for (const [id, bridge] of bridgeShapes()) {
     const relation = comparePair({
       left: expr,
       leftDim,
       leftNormal,
-      right: rhs,
-      rightDim: bridge.ok ? bridge.inferredDimension : null,
+      right: bridge.rhs,
+      rightDim: bridge.dim,
+      rightNormal: bridge.normal,
       restatesBridge: undefined,
       bridgeId: String(id),
     });

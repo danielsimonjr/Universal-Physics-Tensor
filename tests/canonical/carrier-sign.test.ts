@@ -62,9 +62,12 @@ describe('carrier charge and mobility share a sign on a positive product', () =>
     expect(() => syntheticEdge.evaluate({ charge: -Q, 'carrier-mobility': MU })).toThrow(
       /charge and carrier-mobility must have the same sign/,
     );
-    expect(() =>
-      explainQuantity(CANONICAL_GRAPH, 'electrical-conductivity', inputs),
-    ).toThrow(/same sign/);
+    // The graph reader records the rejection as a refusal of the point, under its own kind,
+    // and recovers nothing (Tom's review of #502: a throw here crashed `upt discover`).
+    const x = explainQuantity(CANONICAL_GRAPH, 'electrical-conductivity', inputs);
+    expect(x.recoveredValue).toBeUndefined();
+    expect(x.refusals?.map((r) => r.kind)).toEqual(['carrier-sign']);
+    expect(x.refusals?.[0]?.reason).toMatch(/charge and carrier-mobility must have the same sign/);
   });
 
   it('keeps a matching pair positive, and a zero mobility at zero', () => {

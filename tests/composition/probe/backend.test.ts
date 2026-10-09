@@ -2,9 +2,10 @@
  * NDJSON worker protocol: argv spawn, timeout/kill, malformed output.
  */
 import { describe, it, expect } from 'vitest';
+import { EventEmitter } from 'node:events';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { runBackendWorker } from '../../../src/composition/probe/backend-protocol.js';
+import { runBackendWorker, type WorkerLauncher } from '../../../src/composition/probe/backend-protocol.js';
 import { REAL_WORKER_HANG_GUARD_MS } from './worker-hang-guard.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -50,11 +51,37 @@ describe('runBackendWorker', () => {
     expect(r.error).toMatch(/malformed/);
   });
 
-  it('kills a hung worker', async () => {
+  it('kills a worker that has started and never answers (injected launcher)', async () => {
+    // A real child at a 200 ms budget could be killed before it had started, and "timed out"
+    // would be reported either way. The launcher below hands back a child that exists from the
+    // first instant and never closes, so the only way to the result is the timeout path, and
+    // the kill it issues is observed.
+    let killed = 0;
+    const launch: WorkerLauncher = () => {
+      const child = Object.assign(new EventEmitter(), {
+        stdout: new EventEmitter(),
+        stderr: new EventEmitter(),
+        kill: (signal: 'SIGKILL') => {
+          killed++;
+          // A killed process closes with the signal, as node:child_process reports it.
+          queueMicrotask(() => child.emit('close', null, signal));
+          return true;
+        },
+        stdin: { write: () => true, end: () => {} },
+      });
+      return child;
+    };
+    const r = await runBackendWorker(['hung-worker'], req, { spawn: launch, timeoutMs: 20 });
+    expect(r.ok).toBe(false);
+    expect(r.error).toMatch(/timed out/);
+    expect(killed).toBeGreaterThan(0);
+  });
+
+  it('a real hung worker is killed too (process smoke; the budget is the hang guard)', async () => {
     const r = await runBackendWorker([process.execPath, join(workers, 'hang-worker.mjs')], req, {
-      timeoutMs: 200,
+      timeoutMs: REAL_WORKER_HANG_GUARD_MS,
     });
     expect(r.ok).toBe(false);
     expect(r.error).toMatch(/timed out/);
-  });
+  }, REAL_WORKER_HANG_GUARD_MS * 2);
 });

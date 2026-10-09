@@ -31,8 +31,15 @@ import { telegraphSlowRateRatio, telegraphWaveFrequencyRatio } from '../../src/a
 import { BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_WAVE_DALEMBERT, KG_MAX_DISPERSION_RATIO } from '../../src/atlas/waves/bridges.js';
 import { BRIDGE_KG_OSCILLATOR, BRIDGE_KG_SCHRODINGER, BRIDGE_STIFF_STRING, KG_NR_MAX_X, STIFF_MAX_BETA } from '../../src/atlas/waves/bridges-closure.js';
 import { kgNonrelativisticError, kleinGordonPhaseError, stiffStringPhaseError } from '../../src/atlas/waves/numerics.js';
-import { PHYSJS_COMMIT } from '../../src/atlas/physjs-ref.js';
+import { PHYSJS_COMMIT, physjsFormalRef } from '../../src/atlas/physjs-ref.js';
+import { PHYSJS_SANITY_LEMMA_KEYS } from '../../src/atlas/physjs-reviewed.js';
 import type { AtlasBridge } from '../../src/atlas/types.js';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+/** Whether this file names `key` in a lemma title: `describe('<key> ↔ …')` or `it('<key>: …')`. */
+const lemmaNamed = (source: string, key: string): boolean =>
+  new RegExp(`(describe|it)\\(['"]${key}( ↔ |: )`).test(source);
 
 /** A known pendulum: m = 0.3 kg, g = 9.81 m/s², ℓ = 1.2 m. */
 const PENDULUM = { m: 0.3, g: 9.81, ell: 1.2 } as const;
@@ -87,8 +94,8 @@ describe('ab-pendulum-linear ↔ PhysJS.Pendulum.linearizedEquationOfMotion_iff'
 
   it('the formal statement is about the DYNAMICS dictionary, not the period bound — and the record’s bound is not claimed', () => {
     // Physlib's period results (`smallAnglePeriod_le_periodFormula`,
-    // `strictMonoOn_periodFormula`) concern `periodFormula`, which Physlib's own
-    // TODO has not yet identified with the period of the motion. They are
+    // `strictMonoOn_periodFormula`) concern `periodFormula`, which an open note in
+    // Physlib has not yet identified with the period of the motion. They are
     // consistent with the record's bound — checked here — but they are NOT the
     // referenced statement, and the reference does not certify `delta`.
     expect(pendulumPeriodErrorAt({ theta0: 0 })).toBeCloseTo(0, 15);
@@ -331,25 +338,32 @@ describe("ab-wave-dalembert ↔ PhysJS.WaveDalembert.solution_eq_profiles", () =
 describe('formally-proved is derived, and reachable only from a reviewed reference', () => {
   it('ab-pendulum-linear derives formally-proved from its reference and stores nothing', () => {
     expect(deriveEvidence(AB_PENDULUM_LINEAR, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
-    // The record's stored set never carries it: `derived-tag-literals.test.ts`
-    // forbids spelling it anywhere a record could set it.
-    expect(AB_PENDULUM_LINEAR.evidence.has('formally-proved')).toBe(false);
+    // The record stores no evidence set at all: `derived-tag-literals.test.ts`
+    // forbids spelling the tag anywhere a record could set it, and the type
+    // has no field to set.
+    expect(Object.hasOwn(AB_PENDULUM_LINEAR, 'evidence')).toBe(false);
   });
 
-  it('every bridge with a formalRef has a sanity lemma here, or a fidelity that is not sanity-lemmas', () => {
+  it('the sanity-lemma keys are exactly the atlas bridges with a formalRef, and each has a lemma in THIS file', () => {
     const withRef = ATLAS_FAMILIES.flatMap((f) => f.bridges).filter((b) => b.formalRef !== undefined);
-    expect(withRef.map((b) => b.id)).toEqual([
-      'ab-spring-lc',
-      'ab-damped-rlc',
-      'ab-pendulum-linear',
-      'ab-telegraph-diffusion',
-      'ab-telegraph-wave',
-      'ab-wave-dalembert',
-      'ab-klein-gordon-wave',
-      'ab-kg-schrodinger',
-      'ab-kg-oscillator',
-      'ab-stiff-string',
-    ]);
-    for (const bridge of withRef) expect(bridge.formalRef!.fidelity).toBe('sanity-lemmas');
+    expect([...withRef.map((b) => b.id)].sort()).toEqual([...PHYSJS_SANITY_LEMMA_KEYS].sort());
+    // A key earns `sanity-lemmas` only through a lemma here: a describe
+    // header `'<key> ↔ …'`, or an `it('<key>: …')` inside the rank-1 block.
+    const source = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+    for (const key of PHYSJS_SANITY_LEMMA_KEYS) {
+      expect(lemmaNamed(source, key), `${key} is listed in PHYSJS_SANITY_LEMMA_KEYS and has no lemma in formal-sanity.test.ts`).toBe(true);
+    }
+    for (const bridge of withRef) expect(bridge.formalRef!.fidelity, bridge.id).toBe('sanity-lemmas');
+    // A catalog key has no lemma here and does not carry this fidelity.
+    expect(PHYSJS_SANITY_LEMMA_KEYS.some((key) => key.startsWith('be-'))).toBe(false);
+    expect(physjsFormalRef('be-16').fidelity).not.toBe('sanity-lemmas');
+  });
+
+  it('CONTROL: the lemma scan finds a named key and not an absent one', () => {
+    const source = readFileSync(fileURLToPath(import.meta.url), 'utf8');
+    expect(lemmaNamed(source, 'ab-pendulum-linear')).toBe(true);
+    expect(lemmaNamed(source, 'ab-kg-schrodinger')).toBe(true);
+    expect(lemmaNamed(source, 'be-16')).toBe(false);
+    expect(lemmaNamed(source, 'ab-chain-wave')).toBe(false);
   });
 });

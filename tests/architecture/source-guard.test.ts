@@ -4,8 +4,9 @@
  * The filename scan covers the whole tree. The identifier scan covers code.
  * A string whose entire content is `be-<digits>` is a branch key in `src/`;
  * tests still name a catalog record with that literal, and this file records
- * that limit. `data/`, `formal/`, the generated PhysJS table, and the catalog
- * loader are the places a key is allowed to be written out.
+ * that limit. `data/`, `formal/`, the generated PhysJS table, the reviewed-row
+ * table it is pinned by, and the catalog loader are the places a key is
+ * allowed to be written out.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -14,10 +15,15 @@ import { describe, expect, it } from 'vitest';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
-const SKIP_DIRS = new Set(['.git', 'node_modules', 'dist', 'coverage']);
+const SKIP_DIRS = new Set(['node_modules', 'dist', 'coverage']);
+/** A dot-directory holds other checkouts (`.claude/worktrees/`) or tool state, never this tree's source. */
+const skipEntry = (entry: string): boolean => SKIP_DIRS.has(entry) || entry.startsWith('.');
 const CODE_EXT = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs']);
 const EXEMPT = new Set([
   'src/atlas/physjs-entries.generated.ts',
+  // The per-key reviewed-row pins: a data table keyed by manifest key, read
+  // by `physjsFidelity`, never branched on.
+  'src/atlas/physjs-reviewed.ts',
   'src/bridges/catalog-load.ts',
 ]);
 
@@ -30,6 +36,8 @@ const FILE_NAME = [
 ];
 
 const IDENTIFIER = /\b(BE\d+|confrontBE\d+|evaluateBE\d+)\b/g;
+/** A single- or double-quoted string, or a template literal with no `${`; replaced before the identifier scan. */
+const STRING_LITERAL = /'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"|`(?:[^`$]|\$(?!\{))*`/g;
 
 export function filenameOffender(name: string): boolean {
   return FILE_NAME.some((pattern) => pattern.test(name));
@@ -37,7 +45,7 @@ export function filenameOffender(name: string): boolean {
 
 function walk(dir: string, out: string[]): void {
   for (const entry of readdirSync(dir)) {
-    if (SKIP_DIRS.has(entry)) continue;
+    if (skipEntry(entry)) continue;
     const abs = join(dir, entry);
     const rel = relative(root, abs);
     if (statSync(abs).isDirectory()) {
@@ -57,7 +65,7 @@ function codeFiles(): string[] {
   const found: string[] = [];
   const visit = (dir: string): void => {
     for (const entry of readdirSync(dir)) {
-      if (SKIP_DIRS.has(entry)) continue;
+      if (skipEntry(entry)) continue;
       const abs = join(dir, entry);
       if (statSync(abs).isDirectory()) visit(abs);
       else {
@@ -143,7 +151,9 @@ describe('source guard', () => {
   it('no code file outside the loader carries a BE-keyed identifier', () => {
     const hits: string[] = [];
     for (const rel of codeFiles()) {
-      const text = readFileSync(join(root, rel), 'utf8');
+      // An identifier, not a string literal: a test that lists a removed export by name as a
+      // string ("confrontBE52" in an ABSENT list) does not carry the identifier.
+      const text = readFileSync(join(root, rel), 'utf8').replace(STRING_LITERAL, "''");
       const found = text.match(IDENTIFIER);
       if (found) hits.push(`${rel}: ${found.join(', ')}`);
     }
@@ -174,7 +184,7 @@ describe('source guard', () => {
     const hits: string[] = [];
     const visit = (dir: string): void => {
       for (const entry of readdirSync(dir)) {
-        if (SKIP_DIRS.has(entry)) continue;
+        if (skipEntry(entry)) continue;
         const abs = join(dir, entry);
         if (statSync(abs).isDirectory()) visit(abs);
         else if (entry.endsWith('.ts')) {

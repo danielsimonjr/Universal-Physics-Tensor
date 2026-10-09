@@ -20,6 +20,7 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { adjudicateBridgeEntry } from '../../src/bridges/membership.js';
 import { REJECTED_BRIDGE_IDS } from '../../src/bridges/rejected.js';
+import { CENSUS } from '../helpers/census.js';
 
 const set = (...tags: EvidenceTag[]): ReadonlySet<EvidenceTag> => new Set(tags);
 
@@ -58,7 +59,7 @@ describe('summarizeEvidence', () => {
 });
 
 describe('coverage of the live catalog — the Sprint 1 baseline', () => {
-  it('is 55 rows: contradicted iff the row carries an unresolved counterexample', () => {
+  it('covers every catalog row: contradicted iff the row carries an unresolved counterexample', () => {
     // NO_PASSING_WITNESSES is passed EXPLICITLY: no catalog row carries a
     // witness overlay yet, so nothing is verified. Stating it is the point —
     // this argument used to be defaulted, and the result below was then the
@@ -80,11 +81,11 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
     const refuted = BRIDGE_EQUATIONS.filter(
       (e) => (e.counterexamples ?? []).length > 0,
     ).length;
-    expect(report.records).toBe(160);
+    expect(report.records).toBe(CENSUS.catalog.entries);
     expect(report.byTag.contradicted).toBe(refuted);
     // 94 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that state their equations were labelled derivation-step.
-    expect(report.byTag['formally-proved']).toBe(118);
-    expect(report.byTag.proposed).toBe(160 - refuted - 118);
+    expect(report.byTag['formally-proved']).toBe(CENSUS.evidence.formallyProved);
+    expect(report.byTag.proposed).toBe(CENSUS.catalog.entries - refuted - CENSUS.evidence.formallyProved);
     for (const tag of ALL_EVIDENCE_TAGS) {
       if (tag === 'proposed' || tag === 'contradicted' || tag === 'formally-proved') continue;
       expect(report.byTag[tag]).toBe(0);
@@ -132,7 +133,7 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
   it('CONTROL: a counted catalog formalRef does not light formally-proved, and a bridge kind does', () => {
     const row = BRIDGE_EQUATIONS.find((entry) => entry.id === 64);
     const formalRef = catalogFormalRef(64);
-    expect(formalRef?.fidelity).toBe('sanity-lemmas');
+    expect(formalRef?.fidelity).toBe('reviewed-manifest');
     expect(formalRef?.kind).toBe('derivation-step');
     expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
     expect(deriveEvidence(catalogEvidenceInput(row!), NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
@@ -148,6 +149,6 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
       ),
     );
     // 94 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that state their equations were labelled derivation-step.
-    expect(report.byTag['formally-proved']).toBe(118);
+    expect(report.byTag['formally-proved']).toBe(CENSUS.evidence.formallyProved);
   });
 });

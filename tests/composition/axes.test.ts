@@ -3,9 +3,13 @@
  * @module tests/composition/axes
  */
 import { describe, it, expect } from 'vitest';
+import { CANONICAL_TENSOR_CONFIG } from '../../src/canonical/seed-l-layer.js';
 import {
   AXES,
   GATE_AXES,
+  FORCE_AXIS_VALUES,
+  SCALE_AXIS_VALUES,
+  SYMMETRY_AXIS_VALUES,
   type ScaleAxis,
   type ForceAxis,
   type InformationAxis,
@@ -48,5 +52,13 @@ describe('axis registry', () => {
     for (const name of ['information', 'symmetry', 'topology', 'statistics']) {
       expect(AXES.find((a) => a.name === name)?.gated).toBe(false);
     }
+  });
+
+  it('the canonical tensor config lists the same scales, forces and symmetries as the registry', () => {
+    // seed-l-layer.ts writes the lists itself because the canonical layer may not import this
+    // registry (layer:check); this comparison is what keeps the two copies from drifting.
+    expect(CANONICAL_TENSOR_CONFIG.scales).toEqual([...SCALE_AXIS_VALUES]);
+    expect(CANONICAL_TENSOR_CONFIG.forces).toEqual([...FORCE_AXIS_VALUES]);
+    expect(CANONICAL_TENSOR_CONFIG.symmetries).toEqual([...SYMMETRY_AXIS_VALUES]);
   });
 });

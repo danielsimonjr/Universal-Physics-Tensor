@@ -20,6 +20,7 @@
  * @module tests/numerical/gl4-integrator
  */
 import { describe, it, expect } from 'vitest';
+import { gl4LongScope, isGl4Long } from '../helpers/gl4-long.js';
 import { integrateGeodesicGL4 } from '../../src/numerical/gl4-integrator.js';
 import {
   schwarzschildGInverseFn,
@@ -162,7 +163,7 @@ describe('GL4 integrator: end-to-end on Schwarzschild', () => {
 });
 
 describe('GL4 integrator: gated long-run tests (GL4_LONG=1)', () => {
-  const isLong = process.env.GL4_LONG === '1';
+  const isLong = isGl4Long();
 
   // v0.5.1 PD-4: Real Mercury N-orbit Picard-convergence test. Default-skipped;
   // opt-in via `GL4_LONG=1`. Pragmatic step-budget tradeoff:
@@ -173,11 +174,9 @@ describe('GL4 integrator: gated long-run tests (GL4_LONG=1)', () => {
   //     fitting in ~6 min on a dev box. The orbit count is overridable via
   //     `GL4_LONG_ORBITS` for full-100 release-prep runs.
   //
-  // NOT EXERCISED IN COMMIT: this test is gated `it.skip` in default mode;
-  // the integrator wire-up was sanity-checked by the unchanged non-gated
-  // tests above (which still drive the same code path through
-  // integrateGeodesicGL4 + solveGL4Stage). The GL4_LONG=1 path will be
-  // exercised at release-prep time, not per-commit.
+  // Per commit this test is `it.skip`; the non-gated tests above drive the same code path
+  // through integrateGeodesicGL4 + gl4Step. The GL4_LONG=1 path runs in the nightly
+  // `long-tests` job (.github/workflows/ci.yml) and on a hand run with GL4_LONG=1.
   (isLong ? it : it.skip)(
     'Mercury N-orbit Picard convergence succeeds on >99.9% of steps',
     () => {
@@ -202,9 +201,12 @@ describe('GL4 integrator: gated long-run tests (GL4_LONG=1)', () => {
 
       // --- Integration window: N Mercury orbits at ~50k steps/orbit. ---
       const T_orbit = 2 * Math.PI * Math.sqrt((a_m * a_m * a_m) / (G * M_kg));
-      const orbits = Number(process.env.GL4_LONG_ORBITS ?? 20);
-      const stepsPerOrbit = 50_000;
-      const steps = orbits * stepsPerOrbit;
+      // 20 orbits at 50k steps each is the one scope (this test runs only under GL4_LONG=1);
+      // GL4_LONG_ORBITS / GL4_LONG_STEPS override it for a hand run.
+      const { orbits, steps } = gl4LongScope({
+        short: { orbits: 20, steps: 20 * 50_000 },
+        long: { orbits: 20, steps: 20 * 50_000 },
+      });
       const tauMax = orbits * T_orbit;
 
       let failures = 0; // steps that required at least one step-halving

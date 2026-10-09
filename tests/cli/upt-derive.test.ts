@@ -1,6 +1,7 @@
 /** Regression: `upt derive --formula` crashed with `ReferenceError: api is not
  *  defined` (bin/upt.mjs:363 used api.format; the import is destructured
  *  `format`). Pins the documented cli/README.md worked example. */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';

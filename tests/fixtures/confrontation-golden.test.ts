@@ -17,6 +17,11 @@
  * So the expected values live in a COMMITTED artifact, captured at
  * 2026-09-21 07:40 on `8520228`, before any Sprint 2 edit existed.
  *
+ * One row moved after that capture, on purpose: be-52's recorded inputs did not reproduce its
+ * predicted value in the stated unit (9.0.0 audit §3, Low); the 2026-10-09 fix made them, and the
+ * predicted value and residual moved by one unit in the last place. The golden carries the new
+ * bytes for that row only; every other row is the original capture.
+ *
  * ## Zero tolerance, deliberately
  *
  * There is no `toBeCloseTo` here. The claim under test is "the description

@@ -22,6 +22,8 @@ import {
   probedTheorems,
 } from '../../tools/formalref-axiom-gate/gate.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
+import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (p: string) => readFileSync(resolve(root, p), 'utf-8');
@@ -79,8 +81,21 @@ describe('formalRef axiom gate — parsing', () => {
     expect(probedTheorems(probeSource)).toHaveLength(6);
   });
 
-  it('the live atlas has no lean4-physlib formalRef; the pendulum reference is PhysJS', () => {
-    expect(lean4PhyslibReferences(ATLAS_FAMILIES)).toEqual([]);
+  it('no live atlas bridge or catalog row has a lean4-physlib formalRef; the pendulum reference is PhysJS', () => {
+    const bridges = [
+      ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
+      ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
+    ];
+    expect(bridges.length).toBeGreaterThan(ATLAS_FAMILIES.flatMap((family) => family.bridges).length);
+    expect(lean4PhyslibReferences(bridges)).toEqual([]);
+  });
+
+  it('CONTROL: a catalog-shaped row carrying a lean4-physlib reference is found, so the scan is not atlas-only', () => {
+    const row = {
+      id: 'be-999',
+      formalRef: { system: 'lean4-physlib', statement: 'Foo.bar: a description', axioms: ['propext'], version: 'physlib@abc' },
+    };
+    expect(lean4PhyslibReferences([row])).toEqual([{ statement: 'Foo.bar', axioms: ['propext'], version: 'physlib@abc' }]);
   });
 });
 

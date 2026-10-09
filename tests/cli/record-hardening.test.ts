@@ -4,27 +4,18 @@
  * attribution of the constants its command's code can reach. Design:
  * `docs/planning/Experiment-Record-Replay-Design-Note.md`.
  */
+import '../helpers/dist.js';
+import { run } from '../helpers/cli-run.js';
 import { describe, it, expect, beforeAll } from 'vitest';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, symlinkSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { cpSync, mkdirSync, readFileSync, readdirSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runCli } from '../../dist/cli/main.js';
 import { listCommandNames } from '../../dist/cli/command.js';
+import { tempDir } from '../helpers/tmp.js';
 
 const repo = fileURLToPath(new URL('../../', import.meta.url));
-
-async function run(argv: string[]) {
-  const o = { stdout: '', stderr: '' };
-  const code = await runCli(argv, {
-    out: (l?: string) => void (o.stdout += (l ?? '') + '\n'),
-    err: (l?: string) => void (o.stderr += (l ?? '') + '\n'),
-    write: (s: string) => void (o.stdout += s),
-  });
-  return { code, ...o };
-}
 
 const readEntries = (file: string) =>
   readFileSync(file, 'utf8')
@@ -50,7 +41,7 @@ let dir: string;
 let session: string;
 
 beforeAll(async () => {
-  dir = mkdtempSync(join(tmpdir(), 'upt-record-hardening-'));
+  dir = tempDir('upt-record-hardening-');
   session = join(dir, 'session.jsonl');
   for (const argv of [THERMAL, FORMULA, ['version']]) await run([`--record=${session}`, ...argv]);
 });
@@ -215,7 +206,7 @@ describe('static attribution', () => {
   });
 
   it('SECOND METHOD — a real change to K_B_SI in a copy of dist differs on every command that can reach it', () => {
-    const copy = mkdtempSync(join(tmpdir(), 'upt-perturbed-'));
+    const copy = tempDir('upt-perturbed-');
     cpSync(join(repo, 'dist'), join(copy, 'dist'), { recursive: true, filter: (s) => !/\.(d\.ts|map)$/.test(s) });
     mkdirSync(join(copy, 'bin'));
     cpSync(join(repo, 'bin', 'upt.mjs'), join(copy, 'bin', 'upt.mjs'));

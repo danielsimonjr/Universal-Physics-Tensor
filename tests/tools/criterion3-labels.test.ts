@@ -9,7 +9,6 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -37,26 +36,17 @@ const queryIds = (readJson('queries.json') as { id: string }[]).map((q) => q.id)
 const corpusIds = new Set((readJson('corpus.json') as { id: string }[]).map((r) => r.id));
 
 /**
- * The exported corpus the labelers saw. Amendment 8 names the canonical tree at c144150;
- * the file itself landed in 1263bce and was not edited after that. The working-tree
- * corpus.json is the live registry export.
- *
- * GitHub Actions checks out the pull request with fetch-depth 1, so this ancestor is
- * not in the local object store until it is fetched.
+ * The exported corpus the labelers saw. Amendment 8 names the canonical tree at c144150; the
+ * file itself landed in 1263bce and was not edited after that, and its bytes are vendored as
+ * `tests/fixtures/criterion3/labelled-corpus.json` (119388 bytes). The working-tree corpus.json
+ * is the live registry export. The test once read the bytes with `git show` and, in a depth-1
+ * clone, fetched the commit from GitHub, so its verdict depended on the network; the vendored
+ * copy is bound to the amendment's hash below, so an edit to either fails here.
  */
-const LABELLED_CORPUS_COMMIT = '1263bce2d2253d6a38ba319e74cacfbee5451fcd';
-const LABELLED_CORPUS_SPEC = `${LABELLED_CORPUS_COMMIT}:docs/research/criterion3/corpus.json`;
+const LABELLED_CORPUS = resolve(root, 'tests/fixtures/criterion3/labelled-corpus.json');
 
 function labelledCorpusBytes(): Buffer {
-  const show = () => execFileSync('git', ['show', LABELLED_CORPUS_SPEC]);
-  try {
-    return show();
-  } catch {
-    execFileSync('git', ['fetch', '--depth=1', 'origin', LABELLED_CORPUS_COMMIT], {
-      stdio: ['ignore', 'ignore', 'pipe'],
-    });
-    return show();
-  }
+  return readFileSync(LABELLED_CORPUS);
 }
 
 describe('criterion 3 — Amendment 8 freezes the files', () => {

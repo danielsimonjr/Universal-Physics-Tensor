@@ -30,7 +30,7 @@ function hyphenSubtractionNote(check: { readonly error?: string; readonly undecl
   const error = check.error ?? '';
   if (check.undeclaredSymbol === undefined) return error;
   if (!/[A-Za-z0-9_]-[A-Za-z0-9_]/.test(formula)) return error;
-  return `${error} A hyphen between names is subtraction. A name from a dimension argument is one symbol.`;
+  return `${error}. A hyphen between names is subtraction. A name from a dimension argument is one symbol.`;
 }
 
 const FLAGS: FlagSpec[] = [
@@ -101,18 +101,21 @@ async function run(ctx: CommandCtx): Promise<number> {
   const governing = specs.slice(1);
   const det = api.dimensionallyDetermines(target, governing);
 
-  // Text lines follow the OLD bin's exact interleaving (bin/upt.mjs lines
-  // 340-385): the header/determination block — and the dimensional-check
-  // line — hit stdout BEFORE the formula parse/evaluate error sites, so a
-  // failing formula still leaves the partial report on stdout (the
-  // error-conversion fidelity rule: output emitted before the old
-  // `process.exit(2)` stays emitted before the throw). In --json mode text
-  // is suppressed and errors emit no JSON, so nothing precedes a throw.
-  const textOut = isJson ? () => {} : out;
+  // Text is buffered and written only when the command reaches a result, so an
+  // error (exit 1 or 2) leaves stdout empty, as every command's does; a result,
+  // exit 0 or 3, prints the whole report. In --json mode text is suppressed.
+  const lines: string[] = [];
+  const textOut = isJson ? () => {} : (line: string) => void lines.push(line);
+  const flush = (): void => {
+    for (const line of lines) out(line);
+  };
 
   let full: ReturnType<typeof api.buckinghamPi> | undefined;
   let formulaCheck: ReturnType<Awaited<ReturnType<typeof api.getFormulaDimensionChecker>>['check']> | undefined;
+  // The recovered prefactor, and whether the formula has the monomial's input-dependence.
+  // `mean` is kept only when it does: a prefactor of a formula that does not match is not a number.
   let mean: number | undefined;
+  let matchesMonomial: boolean | undefined;
   let canonicalComparisons: ReturnType<typeof api.compareWithCanonical> | undefined;
   let catalogEdges: ReturnType<typeof api.matchingCatalogEdges> | undefined;
   // The formula's checks: dimension, monomial, canonical comparison. Any failure exits 3.
@@ -126,7 +129,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           determination: det,
           ...(full !== undefined ? { buckingham: full } : {}),
           ...(formulaCheck !== undefined ? { formulaCheck } : {}),
-          ...(mean !== undefined ? { prefactor: mean } : {}),
+          ...(matchesMonomial === undefined ? {} : { matchesMonomial, prefactor: matchesMonomial ? mean! : null }),
           ...(canonicalComparisons !== undefined ? { canonicalComparisons } : {}),
           ...(catalogEdges !== undefined ? { catalogEdges } : {}),
         },
@@ -158,6 +161,16 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (!r.ok) {
       failed = true;
       textOut(`  formula dimensional check: ✗ ${hyphenSubtractionNote(r, formula)}`);
+      // An undeclared symbol is a malformed invocation on either branch: the caller
+      // declares it as an argument. A registered constant is declared as itself (c:c).
+      if (r.undeclaredSymbol !== undefined) {
+        const sym = r.undeclaredSymbol;
+        const asConstant = api.CONSTANTS[sym] === undefined ? '' : ` ${sym}:${sym} for the registered constant, or`;
+        // The checker's own sentence first (with the hyphen note when one remains in the
+        // formula), then how to declare the symbol. The report above is not printed: an error
+        // leaves stdout empty.
+        throw new UsageError(`upt derive: ${hyphenSubtractionNote(r, formula)}. Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
+      }
     } else {
       const matches = dimsEqualTol(r.dim!, target.dim);
       if (!matches) failed = true;
@@ -171,7 +184,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     try {
       cf = parser.parse(formulaSymbols);
     } catch (e) {
-      throw new FormulaUsageError('  formula parse error: ' + (e as Error).message, await api.getFormulaParserKind());
+      // The parser's message carries its own `parse error:` label.
+      throw new FormulaUsageError('upt derive: --formula: ' + (e as Error).message, await api.getFormulaParserKind());
     }
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This
@@ -210,6 +224,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       textOut('  formula given, but with no unique monomial there is no single prefactor to recover.');
       printComparisons();
       if (isJson) emitEnvelope();
+      else flush();
       return classifyDetermination({
         asked: true,
         agrees: canonicalComparisons.some((c) => c.kind === 'agrees'),
@@ -230,21 +245,27 @@ async function run(ctx: CommandCtx): Promise<number> {
       try {
         ratios.push(cf.evaluate(scope) / cand);
       } catch (e) {
-        throw new UsageError('  formula uses an undeclared variable: ' + (e as Error).message);
+        // Every symbol is declared (checked above). The scope is this command's own generic
+        // positive inputs, so a failure here is the formula itself (a literal division by zero,
+        // an unknown function), not a value the caller gave: a malformed formula, exit 2.
+        throw new UsageError('upt derive: the formula could not be evaluated at generic inputs: ' + (e as Error).message);
       }
     }
-    mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-    const cv = Math.sqrt(ratios.reduce((a, b) => a + (b - mean!) ** 2, 0) / ratios.length) / Math.abs(mean);
-    if (!(cv < 1e-9)) failed = true;
+    const ratioMean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+    const cv = Math.sqrt(ratios.reduce((a, b) => a + (b - ratioMean) ** 2, 0) / ratios.length) / Math.abs(ratioMean);
+    matchesMonomial = cv < 1e-9;
+    if (matchesMonomial) mean = ratioMean;
+    else failed = true;
     textOut(
-      cv < 1e-9
-        ? `  formula MATCHES the dimensional form — recovered prefactor ≈ ${mean.toExponential(4)}`
+      matchesMonomial
+        ? `  formula MATCHES the dimensional form — recovered prefactor ≈ ${api.formatQuantity(mean!)}`
         : `  formula does NOT match the dimensional monomial (different input-dependence — a decoy or different physics).`
     );
     printComparisons();
   }
 
   if (isJson) emitEnvelope();
+  else flush();
   return classifyDetermination({
     asked: true,
     agrees: (canonicalComparisons ?? []).some((c) => c.kind === 'agrees'),

@@ -65,8 +65,43 @@ export function makeResidualGap(
   };
 }
 
-function varFromJson(raw: { name: string; dim: string }): DimensionalVariableRef {
-  return { name: raw.name, dim: parseDimensionSpec(raw.dim) };
+/**
+ * A JSON file that is not a search-problem file: a field it must carry is missing or holds a
+ * value of another kind. The message names the field; it never reports what a JavaScript engine
+ * said on reading it. @internal
+ */
+export class ProblemFileError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ProblemFileError';
+  }
+}
+
+/** What a JSON value is, in the words a file author would use. */
+function kindOf(v: unknown): string {
+  if (v === null) return 'null';
+  if (Array.isArray(v)) return 'a list';
+  if (typeof v === 'string') return 'text';
+  if (typeof v === 'number') return 'a number';
+  if (typeof v === 'boolean') return 'true or false';
+  return typeof v === 'object' ? 'an object' : typeof v;
+}
+
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/** A `{"name", "dim"}` variable, read from `raw` and located by `where` in any refusal. */
+function varFromJson(raw: unknown, where: string): DimensionalVariableRef {
+  if (!isRecord(raw)) {
+    throw new ProblemFileError(`${where} must be {"name": text, "dim": text} (found ${kindOf(raw)})`);
+  }
+  const { name, dim } = raw;
+  if (typeof name !== 'string' || name === '') {
+    throw new ProblemFileError(`${where} needs a "name" (text)${name === undefined ? '' : `, found ${kindOf(name)}`}`);
+  }
+  if (typeof dim !== 'string' || dim === '') {
+    throw new ProblemFileError(`${where} needs a "dim" (text)${dim === undefined ? '' : `, found ${kindOf(dim)}`}`);
+  }
+  return { name, dim: parseDimensionSpec(dim) };
 }
 
 export interface ProblemFile {
@@ -107,17 +142,40 @@ export function resolveObservationsPath(raw: Pick<ProblemFile, 'observationsPath
 
 /** Build a SearchProblem from an already-parsed problem file. @internal */
 export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): SearchProblem {
+  // `ProblemFile` is what a well-formed file holds; a file read from disk is any JSON value, so
+  // each field is checked here before it is read, and a refusal names the field.
+  const file: unknown = raw;
+  if (!isRecord(file)) {
+    throw new ProblemFileError(`the top level must be a JSON object with "target" and "governing" (found ${kindOf(file)})`);
+  }
+  if (file.target === undefined) throw new ProblemFileError('it has no "target" ({"name": text, "dim": text})');
+  if (file.governing === undefined) throw new ProblemFileError('it has no "governing" list ([{"name": text, "dim": text}, ...])');
+  if (!Array.isArray(file.governing)) {
+    throw new ProblemFileError(`"governing" must be a list of {"name": text, "dim": text} (found ${kindOf(file.governing)})`);
+  }
+  if (file.gap !== undefined && !isRecord(file.gap)) {
+    throw new ProblemFileError(`"gap" must be an object (found ${kindOf(file.gap)})`);
+  }
+  for (const field of ['id', 'kind', 'summary'] as const) {
+    const v: unknown = raw.gap?.[field];
+    if (v !== undefined && typeof v !== 'string') {
+      throw new ProblemFileError(`gap.${field} must be text (found ${kindOf(v)})`);
+    }
+  }
   const kindRaw = raw.gap?.kind ?? 'unexplained-observation';
   if (!isGapKind(kindRaw)) {
-    throw new RangeError(`unknown gap kind '${kindRaw}'`);
+    throw new ProblemFileError(`unknown gap kind '${kindRaw}' in gap.kind (see \`upt help probe\`, PROBLEM FILE)`);
   }
-  const gap = makeResidualGap(
-    raw.gap?.id ?? 'fg-inline',
-    raw.gap?.summary ?? `search problem from ${source}`,
-    kindRaw,
-  );
-  const target = varFromJson(raw.target);
-  const governing = raw.governing.map(varFromJson);
+  if (kindRaw === 'relation-link' || kindRaw === 'regime-transition') {
+    throw new ProblemFileError(`gap.kind '${kindRaw}' is a Product A gap: use \`upt discover\`, not probe`);
+  }
+  const gapId = raw.gap?.id ?? 'fg-inline';
+  if (!gapId.startsWith('fg-')) {
+    throw new ProblemFileError(`gap.id '${gapId}' must start with "fg-"`);
+  }
+  const gap = makeResidualGap(gapId, raw.gap?.summary ?? `search problem from ${source}`, kindRaw);
+  const target = varFromJson(raw.target, '"target"');
+  const governing = raw.governing.map((g, i) => varFromJson(g, `governing[${i}]`));
   let exploratory: ProbeDataset | undefined;
   let holdout: ProbeDataset | undefined;
   const observationsPath = resolveObservationsPath(raw, source);
@@ -146,23 +204,23 @@ export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): Sear
 
 function assertMinimalExprNode(raw: unknown, path: string): ExprNode {
   if (!raw || typeof raw !== 'object' || !('kind' in raw)) {
-    throw new Error(`parseExprJson: ${path} is not an ExprNode JSON object`);
+    throw new Error(`${path} is not an ExprNode JSON object`);
   }
   const node = raw as { kind: unknown };
   if (node.kind === 'symbol') {
     const sym = raw as { name?: unknown; dim?: unknown };
     if (typeof sym.name !== 'string' || sym.name.length === 0) {
-      throw new Error(`parseExprJson: ${path} symbol node missing name`);
+      throw new Error(`${path} symbol node missing name`);
     }
     if (!sym.dim || typeof sym.dim !== 'object') {
-      throw new Error(`parseExprJson: ${path} symbol node missing dim`);
+      throw new Error(`${path} symbol node missing dim`);
     }
     return raw as ExprNode;
   }
   if (node.kind === 'op') {
     const op = raw as { op?: unknown; args?: unknown };
     if (typeof op.op !== 'string' || !Array.isArray(op.args)) {
-      throw new Error(`parseExprJson: ${path} op node missing op/args`);
+      throw new Error(`${path} op node missing op/args`);
     }
     for (let i = 0; i < op.args.length; i++) {
       assertMinimalExprNode(op.args[i], `${path}#args[${i}]`);
@@ -170,7 +228,7 @@ function assertMinimalExprNode(raw: unknown, path: string): ExprNode {
     return raw as ExprNode;
   }
   if (typeof node.kind !== 'string' || node.kind.length === 0) {
-    throw new Error(`parseExprJson: ${path} has invalid kind`);
+    throw new Error(`${path} has invalid kind`);
   }
   return raw as ExprNode;
 }
@@ -187,5 +245,5 @@ export function parseExprJson(path: string): ExprNode {
   ) {
     return assertMinimalExprNode((raw as { expression: unknown }).expression, path);
   }
-  throw new Error(`parseExprJson: ${path} is not an ExprNode JSON object`);
+  throw new Error(`${path} is not an ExprNode JSON object`);
 }

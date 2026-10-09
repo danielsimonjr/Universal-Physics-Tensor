@@ -15,7 +15,9 @@ import {
 } from '../../src/composition/retrodiction.js';
 import { QUANTITY_IDENTIFICATIONS } from '../../src/composition/compose.js';
 import { conventionFactor } from '../../src/dimensional/unit-convention.js';
-import { CATALOG_GRAPH, M_SUN_KG } from '../../src/composition/index.js';
+import { CANONICAL_GRAPH, CATALOG_GRAPH, M_SUN_KG } from '../../src/composition/index.js';
+import { CarrierSignError } from '../../src/bridges/carrier-sign.js';
+import { FormulaError } from '../../src/numerical/formula-contract.js';
 import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 
@@ -222,5 +224,86 @@ describe('retrodiction — pre-registered {mass: M_sun} anchor', () => {
     expect(report.checked).toBeGreaterThanOrEqual(1);
     const ht = report.results.find((x) => x.target === 'hawking-temperature');
     expect(ht?.outcome).toBe('consistent');
+  });
+});
+
+describe('an evaluator error keeps its kind (9.0.0 audit §4 C6)', () => {
+  // `forwardEvaluate` once swallowed every error as "the edge did not fire",
+  // so a programming error (a TypeError in an evaluator) read as a quiet
+  // non-derivation, and an unset coefficient read the same as a domain miss.
+  const q = (name: string): Quantity => ({ name, symbol: name, dim: DIMENSIONLESS, attributes: {} });
+  const mk = (id: string, sources: string[], target: string, evaluate: (i: Record<string, number>) => number, over: Partial<BridgeEdge> = {}): BridgeEdge => ({
+    id,
+    beId: null,
+    kind: 'bridge',
+    label: id,
+    sources: sources.map(q),
+    target: q(target),
+    confidence: 'speculative',
+    domain: { description: 'any', predicate: () => true },
+    evaluate,
+    citation: 'synthetic',
+    ...over,
+  });
+
+  it('forwardEvaluate rethrows a TypeError from an evaluator instead of reporting the edge as not fired', () => {
+    const edges = [mk('broken', ['x'], 'y', () => { throw new TypeError('evaluator bug'); })];
+    expect(() => forwardEvaluate(edges, { x: 1 }, [])).toThrow(TypeError);
+  });
+
+  it('forwardEvaluate skips a domain miss and an unset coefficient: the edge does not fire, nothing else is said', () => {
+    const edges = [
+      mk('outside', ['x'], 'y', (i) => i['x'] * 2, { domain: { description: 'x < 0', predicate: (i) => i['x'] < 0 } }),
+      mk('unset', ['x'], 'z', (i) => i['x'] * 3, { coefficientUnset: true }),
+    ];
+    const values = forwardEvaluate(edges, { x: 1 }, []);
+    expect(values.has('y')).toBe(false);
+    expect(values.has('z')).toBe(false);
+  });
+
+  it('forwardEvaluate treats a carrier-sign rejection and a formula refusal as the edge not firing', () => {
+    // Both are the edge refusing THIS point (opposite carrier signs; a 0/0 at the point),
+    // the same fact as a domain miss. Rethrowing them crashed `upt discover --anchor` on a
+    // signed carrier and on a 0/0 catalog formula (Tom's review of #502).
+    const edges = [
+      mk('signed', ['x'], 'y', () => { throw new CarrierSignError('charge and carrier-mobility must have the same sign'); }),
+      mk('nan', ['x'], 'z', () => { throw new FormulaError('formula did not evaluate to a finite number (got NaN)'); }),
+    ];
+    const values = forwardEvaluate(edges, { x: 1 }, []);
+    expect(values.has('y')).toBe(false);
+    expect(values.has('z')).toBe(false);
+  });
+
+  it('retrodictNode records a carrier-sign rejection and a formula refusal as refusals of their own kind', () => {
+    const edges = [
+      mk('a', ['x'], 't', (i) => i['x']),
+      mk('b', ['x'], 't', () => { throw new CarrierSignError('charge and carrier-mobility must have the same sign'); }),
+      mk('c', ['x'], 't', () => { throw new FormulaError('formula did not evaluate to a finite number (got NaN)'); }),
+    ];
+    const r = retrodictNode(edges, { x: 1 }, 't', { identifications: [] });
+    expect(r.predictions.map((p) => p.edge)).toEqual(['a']);
+    expect(r.refusals!.map((f) => [f.edge, f.kind])).toEqual([['b', 'carrier-sign'], ['c', 'formula']]);
+  });
+
+  it('the shipped graphs: a signed-carrier anchor and a 0/0 anchor propagate without throwing', () => {
+    // The two `upt discover --anchor` crashes, at the crash site (`buildDiscoveryContext`
+    // calls `forwardEvaluate` on the whole graph).
+    const signed = { charge: -1.6e-19, 'carrier-mobility': 0.003, 'carrier-density': 1e28 };
+    expect(() => forwardEvaluate(CANONICAL_GRAPH, signed, QUANTITY_IDENTIFICATIONS)).not.toThrow();
+    const zeroOverZero = { 'conditional-probability': 0, 'marginal-probability': 0 };
+    expect(() => forwardEvaluate(CATALOG_GRAPH, zeroOverZero, QUANTITY_IDENTIFICATIONS)).not.toThrow();
+    // Control: the signed anchor does refuse somewhere — the conductivity edge throws on its own.
+    const conductivity = CANONICAL_GRAPH.find((e) => e.target.name === 'electrical-conductivity')!;
+    expect(() => conductivity.evaluate({ charge: -1.6e-19, 'carrier-mobility': 0.003, 'carrier-density': 1e28 })).toThrow(CarrierSignError);
+  });
+
+  it('retrodictNode rethrows a TypeError and records a domain miss or an unset coefficient as a refusal', () => {
+    const broken = [mk('a', ['x'], 't', (i) => i['x']), mk('b', ['x'], 't', () => { throw new TypeError('evaluator bug'); })];
+    expect(() => retrodictNode(broken, { x: 1 }, 't', { identifications: [] })).toThrow(TypeError);
+    const unset = [mk('a', ['x'], 't', (i) => i['x']), mk('b', ['x'], 't', (i) => i['x'], { coefficientUnset: true })];
+    const r = retrodictNode(unset, { x: 1 }, 't', { identifications: [] });
+    expect(r.predictions.map((p) => p.edge)).toEqual(['a']);
+    expect(r.refusals).toBeDefined();
+    expect(r.refusals!.map((f) => f.edge)).toEqual(['b']);
   });
 });

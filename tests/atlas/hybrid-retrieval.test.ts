@@ -158,9 +158,16 @@ describe('Ollama fallback', () => {
   ];
 
   it('a closed port falls back to the atlas ranking and names the process', async () => {
+    // The refusal is injected, not dialled: a real connect to 127.0.0.1:1 is refused on a host
+    // that answers, but a sandbox that DROPS the packet reaches the 1000 ms timeout instead and
+    // reports `call-did-not-finish`, a different reason for a different fact.
+    const refused = async (): Promise<Response> => {
+      throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNREFUSED' } });
+    };
     const embedder = ollamaEmbedder({
       baseUrl: 'http://127.0.0.1:1',
       timeoutMs: 1000,
+      fetchImpl: refused,
     });
     const result = await retrieveHybrid({ query, corpus, embeddings: true, embedder });
     expect(result.embeddings).toBe('fallback');
@@ -176,6 +183,15 @@ describe('Ollama fallback', () => {
       fetchImpl: async () => new Response(JSON.stringify({ error: 'model not found' }), { status: 404 }),
     });
     await expect(model(['claim'])).rejects.toMatchObject({ reason: 'model-not-there' });
+
+    // A non-404 error status from a server that IS there is neither an absent
+    // model nor a malformed vector: it is the server refusing the call.
+    const serverError = ollamaEmbedder({
+      baseUrl: 'http://127.0.0.1:9',
+      fetchImpl: async () => new Response('internal error', { status: 500 }),
+    });
+    await expect(serverError(['claim'])).rejects.toMatchObject({ reason: 'server-error' });
+    await expect(serverError(['claim'])).rejects.toThrow(/status 500/);
 
     const bad = ollamaEmbedder({
       baseUrl: 'http://127.0.0.1:9',

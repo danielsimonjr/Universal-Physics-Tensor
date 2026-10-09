@@ -12,6 +12,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { CliError, UsageError } from '../errors.js';
+import { splitAssignments } from '../bindings.js';
 import type { MetricId } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
@@ -50,6 +51,19 @@ function isMetric(s: string | undefined): s is MetricId {
   return (NAMES as readonly string[]).includes(s ?? '');
 }
 
+/**
+ * The metric library refuses a bad value (a non-positive mass, a point inside
+ * the horizon, an unknown parameter, a start the integrator cannot take, a
+ * parameter in the wrong unit) with `MetricMassError`, a `UnitError`, or a
+ * plain `Error`. Each is a bad value, exit 1. Any other class (a TypeError, a
+ * RangeError) is a defect and is not converted.
+ */
+function metricValueError(api: CommandCtx['api'], e: unknown): unknown {
+  if (e instanceof api.MetricMassError || e instanceof api.UnitError) return new CliError(`upt metric: ${e.message}`);
+  if (e instanceof Error && e.constructor === Error) return new CliError(`upt metric: ${e.message}`);
+  return e;
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const name = args.positionals[0];
@@ -59,13 +73,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
   const pairs = args.positionals.slice(1);
+  // A token with no `=` is usage (exit 2); a parameter given twice is refused (exit 1).
+  splitAssignments('metric', pairs, 'key=value');
   let report;
   try {
     report = api.curvatureReport(name, pairs);
   } catch (e) {
-    // A mass that is not positive is a bad value (exit 1), as for --geodesic. The rest is a point off the chart.
-    if (e instanceof api.MetricMassError) throw new CliError((e as Error).message);
-    throw new UsageError((e as Error).message);
+    throw metricValueError(api, e);
   }
   let geodesic:
     | {
@@ -84,6 +98,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         readonly QEnd?: number;
         readonly norm0?: number;
         readonly normEnd?: number;
+        readonly note?: string;
       }
     | undefined;
   if (args.flags.has('geodesic')) {
@@ -105,9 +120,28 @@ async function run(ctx: CommandCtx): Promise<number> {
         const rOverM = (r ?? 10 * Mgeom) / Mgeom;
         const aOverM = a / Mgeom;
         if (!(Math.abs(aOverM) <= 1)) throw new CliError('Kerr geodesic wants |a| ≤ GM/c²');
+        const equatorial = Math.abs(theta - Math.PI / 2) < 1e-6;
+        if (a === 0) {
+          // At a = 0 the Kerr metric is Schwarzschild. The Boyer–Lindquist integrator refuses the
+          // circular start there ("radial potential is negative at the start"): the two terms of
+          // its radial potential cancel to below its tolerance at a = 0, and only at a = 0. The
+          // equatorial circular orbit is the Schwarzschild one and is integrated as that, so the
+          // default parameters (a = 0) run. An inclined start has no Schwarzschild routine here.
+          if (!equatorial) {
+            throw new CliError(
+              'upt metric: at a = 0 an inclined Kerr orbit is a tilted Schwarzschild circular orbit, and this integrator needs a ≠ 0 for an inclined start; give a, or theta=pi/2',
+            );
+          }
+          const M = report.parameters.M;
+          geodesic = {
+            kind: 'circular' as const,
+            note: 'a = 0: the Kerr metric is Schwarzschild; the equatorial circular orbit is integrated by the Schwarzschild routine',
+            ...api.schwarzschildCircularOrbit({ ...(M === undefined ? {} : { M }), ...(r === undefined ? {} : { r }) }),
+          };
+        } else {
         const shared = { M: Mgeom, aOverM, rOverM, fraction: 0.005, steps: 40 };
         geodesic =
-          Math.abs(theta - Math.PI / 2) < 1e-6
+          equatorial
             ? { kind: 'circular' as const, ...api.kerrEquatorialCircular(shared) }
             : {
                 kind: 'inclined' as const,
@@ -118,12 +152,13 @@ async function run(ctx: CommandCtx): Promise<number> {
                   mu2: 1,
                 }),
               };
+        }
       } else {
         throw new UsageError('upt metric: --geodesic is for schwarzschild or kerr.');
       }
     } catch (e) {
       if (e instanceof UsageError || e instanceof CliError) throw e;
-      throw new UsageError((e as Error).message);
+      throw metricValueError(api, e);
     }
   }
   if (args.flags.has('json')) {
@@ -156,6 +191,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(
       `  geodesic: ${label} r0=${geodesic.r0} rEnd=${geodesic.rEnd}${polar} Δφ=${geodesic.phiAdvance} over ${geodesic.steps} steps${cons}`,
     );
+    if (geodesic.note !== undefined) out(`    ${geodesic.note}`);
   }
   return 0;
 }

@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 77
+- **Potentially unused exports**: 66
 
 ## Potentially Unused Files
 
@@ -47,14 +47,9 @@ These exports are not imported by any other file in the codebase:
 
 - `POSTER_5_IDENTIFICATION_NOTE` (constant)
 
-### `src/bridges/registry.ts`
+### `src/bridges/expr-parse.ts`
 
-- `registerBridge` (function)
-- `bridgeRegistry` (constant)
-
-### `src/bridges/relation-eval.ts`
-
-- `solveCatalogRelation` (function)
+- `withoutUnreadConstants` (function)
 
 ### `src/cases/brownian-sphere.ts`
 
@@ -126,10 +121,6 @@ These exports are not imported by any other file in the codebase:
 - `flagHeading` (function)
 - `BUILTIN_VERBS` (constant)
 
-### `src/cli/record-reach.ts`
-
-- `REACH_METHOD` (constant)
-
 ### `src/cli/record.ts`
 
 - `entryFingerprint` (function)
@@ -137,43 +128,17 @@ These exports are not imported by any other file in the codebase:
 - `sha256` (constant)
 - `argvFingerprint` (constant)
 
-### `src/composition/bridge-analysis.ts`
+### `src/cli/statuses.ts`
 
-- `anchoringDistance` (function)
+- `statusMeaning` (function)
 
-### `src/composition/frontier-account.ts`
+### `src/composition/axes.ts`
 
-- `CONTESTED_BRIDGE_IDS` (constant)
-
-### `src/composition/probe/study.ts`
-
-- `exprToInfix` (function)
-
-### `src/composition/quantities.ts`
-
-- `temperatureQ` (constant)
-- `massQ` (constant)
-
-### `src/core/constants.ts`
-
-- `GM_SUN_SOURCE` (constant)
-
-### `src/dimensional/constants.ts`
-
-- `G` (constant)
-- `e` (constant)
-
-### `src/dimensional/unit-convention.ts`
-
-- `QUANTITY_CONVENTION_UNIT` (constant)
-
-### `src/numerical/formula-dimension.ts`
-
-- `ELEMENTARY_CHARGE_MIX_MESSAGE` (constant)
+- `INFORMATION_AXIS_VALUES` (constant)
+- `TOPOLOGY_AXIS_VALUES` (constant)
+- `STATISTICS_AXIS_VALUES` (constant)
 
 ### `src/numerical/spacetime-metrics.ts`
 
-- `metricParams` (function)
 - `METRIC_SIGNATURE` (constant)
-- `METRIC_SIGNATURE_NOTE` (constant)
 

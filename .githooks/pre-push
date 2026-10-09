@@ -12,12 +12,12 @@
 #   501b86c    red for 2 commits. Same job. My own recorded recurrence.
 #   8a3359b    red for 1 commit: "the typecheck failed and I pushed it anyway."
 #
-# MEASURED COST, because "too slow" needed a number and not an impression:
-#   typecheck            2s
-#   install + docs:deps  3s
-#   staleness check      1s
-#   TOTAL                ~6s
-# Six seconds would have prevented all three. There is no speed argument.
+# MEASURED COST, because "too slow" needed a number and not an impression. When
+# this gate held typecheck and the docs check only, it measured ~6 s (typecheck
+# 2 s, install + docs:deps 3 s, staleness 1 s), and six seconds would have
+# prevented all three. The full suite was added below on 2026-09-21; its cost is
+# stated there, with its date, and it is minutes, not seconds. The argument did
+# not change: a red master costs more than the gate.
 #
 # Bypass with `git push --no-verify`. That is deliberate: a gate nobody can skip
 # gets disabled wholesale, and a skip that must be typed is VISIBLE in a way that
@@ -52,8 +52,10 @@ if ! bun run build; then
   exit 1
 fi
 
-echo "pre-push gate: typecheck"
-if ! bun run typecheck; then
+# The build above IS the src typecheck (`tsc` exits non-zero on a type error, emit or not), so
+# only the tests project is checked here. `bun run typecheck` would compile src a second time.
+echo "pre-push gate: typecheck (tests project)"
+if ! bun run typecheck:tests; then
   echo ""
   echo "PRE-PUSH GATE FAILED: typecheck."
   echo "Read the MESSAGE above, not an error count — on 2026-09-21 I piped this"
@@ -70,13 +72,17 @@ fi
 # defect lives in `tests/api/`. A scoped boundary is a gate with a hole shaped
 # exactly like the directories you did not think of.
 #
-# I HAD ASSUMED THIS WAS TOO SLOW AND THE ASSUMPTION WAS WRONG. CLAUDE.md warns
-# of "3-5 min cold-start on Windows", and I had carried that as the steady-state
-# cost. MEASURED WARM: 58s for 4,144 tests. That is affordable to prevent a red
-# master; the cold-start figure is real but applies to the first run after a
-# reboot, not to every push.
-echo "pre-push gate: full test suite (~60s warm)"
-if ! bun run test; then
+# THE COST IS MINUTES. When this step was added it measured 58 s warm for 4,144
+# tests; the suite has grown since. The 9.0.0 run on the CI runner measured
+# 654 s wall for 6,531 tests (2026-10-09). The first run after a reboot is slower
+# still. Quote the current figure with its date, never the one from a smaller
+# suite: the 58 s number was once carried as the steady-state cost and used to
+# justify a scoped subset, and the directory the subset skipped is where a defect
+# reached master (TOOLS.md, Test). The suite is run through vitest directly: the
+# `test` script's `pretest` would compile src a third time, and the build above
+# already did.
+echo "pre-push gate: full test suite (minutes; CI measured 654 s at 9.0.0)"
+if ! bunx vitest run; then
   echo ""
   echo "PRE-PUSH GATE FAILED: tests."
   echo "Read which SUITE failed — a scoped local run may not have covered it."
@@ -87,8 +93,24 @@ echo "pre-push gate: architecture docs freshness"
 # --frozen-lockfile FIRST. The nine-commit red was caused by regenerating with a
 # js-yaml that differed from the lockfile's: the generator's own version is an
 # input, and an idempotent run with the wrong input is stable at a wrong answer.
-bun install --frozen-lockfile >/dev/null 2>&1 || true
-bun run docs:deps >/dev/null 2>&1 || true
+#
+# Neither command may have its status swallowed: with `|| true` a crashed
+# generator left the tree unchanged, the diff below was empty, and the gate
+# printed OK while CI's docs-fresh job failed on the same commit. A failing
+# generator is a failing gate, and its output is the diagnosis, so it is not
+# sent to /dev/null either. (A tool that is NOT INSTALLED is a different
+# outcome, handled by the two skip branches further down.)
+if ! bun install --frozen-lockfile >/dev/null; then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: bun install --frozen-lockfile."
+  exit 1
+fi
+if ! bun run docs:deps; then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: docs:deps (the generator) did not finish."
+  echo "Read its output above. An unchanged docs/architecture/ after a crash is NOT freshness."
+  exit 1
+fi
 
 if ! git diff --quiet -- docs/architecture/; then
   echo ""
@@ -127,15 +149,23 @@ fi
 # count rises above the committed baseline. The baseline is a file in the repo,
 # so lowering it is a visible, reviewed act — and a number sitting in version
 # control is pressure the backlog would not otherwise carry.
-CODE_DOCS="$HOME/Github/skills/code-docs/scripts/code_docs.py"
+#
+# Both private checkers live in the `skills` checkout. Its location is a machine
+# fact, not a repository fact: UPT_SKILLS_DIR names it, and $HOME/Github/skills
+# is only the default. The interpreter is python3 by name; a bare `python` is
+# Python 2, or nothing, on many hosts, and a checker that cannot start must not
+# read as "no findings".
+SKILLS_DIR="${UPT_SKILLS_DIR:-$HOME/Github/skills}"
+CODE_DOCS="$SKILLS_DIR/code-docs/scripts/code_docs.py"
 BASELINE_FILE="$(dirname "$0")/code-docs-baseline.txt"
 
 if [ -f "$CODE_DOCS" ] && [ -f "$BASELINE_FILE" ]; then
   echo "pre-push gate: code-docs ratchet"
   baseline=$(cat "$BASELINE_FILE")
   # `check` exits 1 whenever MUST issues exist, and this hook runs under `set -e`,
-  # so the exit status cannot be the verdict. The PASS/FAIL line is, below.
-  cd_out=$(python "$CODE_DOCS" check src 2>&1) || true
+  # so the exit status cannot be the verdict. The PASS/FAIL line is, below: a run
+  # that prints neither (a crash, a changed tool) fails the hook there.
+  cd_out=$(python3 "$CODE_DOCS" check src 2>&1) || true
   # Read the count ONLY from a line the tool writes on purpose. This used to be
   # `grep ... || echo 0`, so a crash, or a change in the tool's output, read as
   # "0 MUST issues" and the ratchet passed - and even reported an improvement.
@@ -171,7 +201,7 @@ else
   # Skip rather than block: code_docs.py lives outside this repo, and a gate that
   # fails because a SKILL is missing would train people to bypass it for reasons
   # that have nothing to do with this codebase.
-  echo "pre-push gate: code-docs SKIPPED (tool or baseline not found)"
+  echo "pre-push gate: code-docs SKIPPED (not found: $CODE_DOCS or $BASELINE_FILE; set UPT_SKILLS_DIR to the skills checkout)"
 fi
 
 # Architecture-docs CLAIMS: the `## Verification` tables in docs/architecture/
@@ -183,10 +213,10 @@ fi
 # This runs HERE and not in CI because repo_map.py lives in a private repository
 # that CI cannot read without a credential. That is a recorded decision, not an
 # oversight.
-REPO_MAP="$HOME/Github/skills/architecture-docs/scripts/repo_map.py"
+REPO_MAP="$SKILLS_DIR/architecture-docs/scripts/repo_map.py"
 if [ -f "$REPO_MAP" ]; then
   echo "pre-push gate: architecture-docs claims (repo_map check)"
-  if ! rm_out=$(python "$REPO_MAP" check . --docs docs/architecture 2>&1); then
+  if ! rm_out=$(python3 "$REPO_MAP" check . --docs docs/architecture 2>&1); then
     echo ""
     echo "PRE-PUSH GATE FAILED: architecture-docs claims do not match the source."
     printf '%s
@@ -196,7 +226,7 @@ if [ -f "$REPO_MAP" ]; then
     exit 1
   fi
 else
-  echo "pre-push gate: architecture-docs claims SKIPPED (repo_map.py not found)"
+  echo "pre-push gate: architecture-docs claims SKIPPED (not found: $REPO_MAP; set UPT_SKILLS_DIR to the skills checkout)"
 fi
 
 echo "pre-push gate: OK"

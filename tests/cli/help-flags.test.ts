@@ -8,6 +8,7 @@
  * flags and silently omits the rest reads as the complete usage (the audit's finding about `map`).
  * `--json` is global and documented once.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { listCommandNames, resolveCommand } from '../../dist/cli/command.js';

@@ -9,17 +9,13 @@
  *
  * @module tests/cli/map-filters
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-
 async function run(args: string[]): Promise<{ code: number; text: string }> {
-  const cap = capture();
+  const cap = captureMerged();
   const code = await runCli(args, cap.io);
   return { code, text: cap.lines.join('') };
 }

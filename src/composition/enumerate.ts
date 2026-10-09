@@ -136,7 +136,8 @@ export const REGISTERED_COMPOSITION_IDS: ReadonlySet<string> = new Set([
   'be-12>>be-11-zurek', // CT-3
 ]);
 
-type EnumerationOptions = ComposeOptions & {
+/** Options of {@link enumerateCompositions}: the compose options plus the registered and seed id sets. @public */
+export type EnumerationOptions = ComposeOptions & {
   readonly registeredIds?: ReadonlySet<string>;
   /** When set, only these edge ids are walked, and symbolic pairs are split. */
   readonly seedIds?: ReadonlySet<string>;

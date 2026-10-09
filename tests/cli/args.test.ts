@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { parseArgs } from '../../dist/cli/args.js';
 import { UsageError } from '../../dist/cli/errors.js';
@@ -125,7 +126,9 @@ describe('parseArgs', () => {
     expect(result.flags.size).toBe(0);
   });
 
-  it('treats a bare "--" token as an unknown flag', () => {
-    expect(() => parseArgs('discover', ['--'], SPECS)).toThrow(UsageError);
+  it('a bare "--" ends the options: every later token is a positional, flags included', () => {
+    const r = parseArgs('discover', ['a', '--', '--source=canonical', '--bogus', 'b'], SPECS);
+    expect(r.positionals).toEqual(['a', '--source=canonical', '--bogus', 'b']);
+    expect(r.flags.size).toBe(0);
   });
 });

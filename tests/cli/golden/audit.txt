@@ -2,50 +2,51 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (36) — recognized monomial, prefactor recovered:
-    be-12                  +[ℏ,k_B]  ×2.507e+0
-    be-16                  +[k_B]  ×6.931e-1
-    be-42-via-rs           +[ℏ,c,k_B]  ×7.958e-2
-    law-schwarzschild-radius +[c,G]  ×2.000e+0
-    be-21                  +[ℏ,k_B]  ×7.958e-2
-    be-48                  +[ℏ,c]  ×7.026e-41  (empirical/tuned constant)
-    be-15                  +[]  ×1.000e+0
-    be-17                  +[]  ×1.000e+0
-    be-20                  +[c,G]  ×3.979e-2
-    be-59                  +[ℏ,e]  ×3.183e-1  (empirical/tuned constant)
-    be-70                  +[k_B]  ×1.000e+0
-    be-71                  +[]  ×1.000e+0
-    be-73                  +[]  ×1.000e+0
-    be-74                  +[ℏ,c,e]  ×5.452e+0  (vacuum constant; μ0 rewritten through α)
-    be-80                  +[]  ×1.125e+0  (empirical/tuned constant)
-    be-83                  +[]  ×1.000e+0
-    be-84                  +[]  ×4.532e+0  (empirical/tuned constant)
-    be-85                  +[e]  ×2.000e+0
-    be-87                  +[k_B]  ×1.000e+0
-    be-88                  +[]  ×3.094e+0  (empirical/tuned constant)
-    be-89                  +[]  ×3.898e+0  (empirical/tuned constant)
-    be-96                  +[ℏ,e]  ×5.000e-1
-    be-97                  +[e]  ×1.571e+0  (empirical/tuned constant)
-    be-101                 +[k_B]  ×1.571e+0  (empirical/tuned constant)
-    be-103                 +[k_B]  ×1.000e+0
-    be-118                 +[G]  ×5.000e-1
-    be-135                 +[ℏ]  ×1.433e-1  (empirical/tuned constant)
-    be-136                 +[ℏ]  ×3.183e-1  (empirical/tuned constant)
-    be-140                 +[ℏ,e]  ×1.592e-1
-    be-141                 +[ℏ,e]  ×5.000e-1
-    be-165                 +[ℏ,c,k_B]  ×1.645e-1  (empirical/tuned constant)
-    be-56                  +[ℏ,c]  ×-4.112e-2  (empirical/tuned constant)
-    be-57                  +[ℏ,c,k_B]  ×1.592e-1
-    be-58                  +[k_B]  ×4.000e+0
-    be-61                  +[k_B,e]  ×3.290e+0  (empirical/tuned constant)
-    be-62                  +[k_B]  ×1.764e+0  (empirical/tuned constant)
+  DERIVED (37) — recognized monomial, prefactor recovered:
+    be-12                  +[ℏ,k_B]  ×2.506628274631
+    be-16                  +[k_B]  ×0.693147180559945
+    be-42-via-rs           +[ℏ,c,k_B]  ×0.0795774715459477
+    law-schwarzschild-radius +[c,G]  ×2
+    be-21                  +[ℏ,k_B]  ×0.0795774715459477
+    be-48                  +[ℏ,c]  ×7.02616402405127e-41  (empirical/tuned constant)
+    be-15                  +[]  ×1
+    be-17                  +[]  ×1
+    be-20                  +[c,G]  ×0.0397887357729738
+    be-59                  +[ℏ,e]  ×0.318309886183791  (empirical/tuned constant)
+    be-70                  +[k_B]  ×1
+    be-71                  +[]  ×1
+    be-73                  +[]  ×1
+    be-74                  +[c,epsilon_0]  ×0.5
+    be-80                  +[]  ×1.125  (empirical/tuned constant)
+    be-83                  +[]  ×1
+    be-84                  +[]  ×4.53236014182719  (empirical/tuned constant)
+    be-85                  +[e]  ×2
+    be-87                  +[k_B]  ×1
+    be-88                  +[]  ×3.09366772628014  (empirical/tuned constant)
+    be-89                  +[]  ×3.89777708972075  (empirical/tuned constant)
+    be-96                  +[ℏ,e]  ×0.5
+    be-97                  +[e]  ×1.5707963267949  (empirical/tuned constant)
+    be-101                 +[k_B]  ×1.5707963267949  (empirical/tuned constant)
+    be-103                 +[k_B]  ×1
+    be-109                 +[c,k_B,epsilon_0]  ×7.08981540362206  (empirical/tuned constant)
+    be-118                 +[G]  ×0.5
+    be-135                 +[ℏ]  ×0.143289792062689  (empirical/tuned constant)
+    be-136                 +[ℏ]  ×0.318309886183791  (empirical/tuned constant)
+    be-140                 +[ℏ,e]  ×0.159154943091895
+    be-141                 +[ℏ,e]  ×0.5
+    be-165                 +[ℏ,c,k_B]  ×0.164493406684823  (empirical/tuned constant)
+    be-56                  +[ℏ,c]  ×-0.0411233516712057  (empirical/tuned constant)
+    be-57                  +[ℏ,c,k_B]  ×0.159154943091895
+    be-58                  +[k_B]  ×4
+    be-61                  +[k_B,e]  ×3.28986813369645  (empirical/tuned constant)
+    be-62                  +[k_B]  ×1.76387698886205  (empirical/tuned constant)
 
   COEFFICIENT UNSET (0) — dimensional, and no sourced prefactor multiplies the monomial. The evaluator's 1 is that absence, not a recovered constant:
-    
+    none
     (not a recovered prefactor, not a failed reconstruction, and not a free dimensionless group)
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 23) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-109, be-117, be-120, be-121, be-137, be-147, be-148, be-149, be-164, be-168, be-169, be-64
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 22) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-117, be-120, be-121, be-137, be-147, be-148, be-149, be-164, be-168, be-169, be-64
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
   NOT A MONOMIAL (25) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
@@ -102,6 +103,7 @@ Deriving the bridge equations by dimensions
     cplx=2  be-22
     cplx=2  be-25
     cplx=2  be-26
+    cplx=2  be-33
     cplx=2  be-63
     cplx=2  be-66
     cplx=2  be-72
@@ -118,7 +120,6 @@ Deriving the bridge equations by dimensions
     cplx=2  be-145
     cplx=2  be-167
     cplx=3  be-53
-    cplx=3  be-33
     cplx=3  be-45
     cplx=3  be-46
     cplx=3  be-131
@@ -126,6 +127,6 @@ Deriving the bridge equations by dimensions
     cplx=4  be-31
     cplx=4  be-34
     cplx=5  be-39
-    cplx=Infinity  be-150
+    cplx=∞ (unspannable)  be-150
 
   (derivability is ORTHOGONAL to credibility — see the priority command)

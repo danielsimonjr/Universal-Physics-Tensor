@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 9.0.0
-  totalFiles: 360
+  totalFiles: 363
   totalModules: 13
-  totalExports: 2476
+  totalExports: 2558
 entryPoints:
   - file: src/index.ts
     type: main
@@ -364,9 +364,9 @@ modules:
           imports:
             - catalogFormalRef
       exports:
-        - getBridge
+        - catalogBridgeRecord
       functions:
-        - getBridge
+        - catalogBridgeRecord
     src/atlas/catalog-formal-ref.ts:
       description: Catalog formal references.
       externalDependencies: []
@@ -415,10 +415,6 @@ modules:
         - file: ../composition/enumerate.js
           imports:
             - enumerateCompositionsWithRefusals
-        - file: ../relations/composition-table.js
-          imports:
-            - CompositionResult
-          typeOnly: true
         - file: ../composition/buckingham-filter.js
           imports:
             - buckinghamFilter
@@ -450,7 +446,6 @@ modules:
             - scalarSymbolsFromMathTs
       exports:
         - governingOf
-        - categoryCompositionForChain
         - renderChainRecord
         - runChainPipeline
       interfaces:
@@ -460,7 +455,6 @@ modules:
         - ChainCompositionRefusal
       functions:
         - governingOf
-        - categoryCompositionForChain
         - renderChainRecord
         - runChainPipeline
     src/atlas/composition-table.ts:
@@ -745,7 +739,7 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../oscillators/index.js
+        - file: ../family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -875,19 +869,28 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
         - file: ./serialize.js
           imports:
+            - AtlasRecordJson
+          typeOnly: true
+        - file: ./serialize.js
+          imports:
             - toAtlasJson
+        - file: ./witness-artifact.js
+          imports:
+            - WitnessResultsArtifact
+          typeOnly: true
       exports:
         - ATLAS_ID_PREFIX
         - toCombinedAtlasJson
         - toAtlasJsonLd
       interfaces:
         - QudtResolution
+        - CombinedAtlasJson
       functions:
         - toCombinedAtlasJson
         - toAtlasJsonLd
@@ -907,14 +910,37 @@ modules:
         - file: ./waves/index.js
           imports:
             - WAVES_FAMILY
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
+        - file: ./regime.js
+          imports:
+            - admitApproximation
       exports:
         - ATLAS_FAMILIES
+        - admitFamilies
+      functions:
+        - admitFamilies
       constants:
         - ATLAS_FAMILIES
+    src/atlas/family.ts:
+      description: "The shape of one atlas family. A leaf module: every family index, the"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./model.js
+          imports:
+            - AtlasModel
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - AtlasBridge
+            - AtlasRejection
+          typeOnly: true
+      exports: []
+      interfaces:
+        - AtlasFamily
     src/atlas/index.ts:
       description: Atlas Phase 0 barrel — the oscillator pilot.
       externalDependencies: []
@@ -939,6 +965,7 @@ modules:
           reExport: true
         - file: ./types.js
           imports:
+            - MissingDeltaAtError
             - MissingHorizonError
             - MissingLipschitzError
           reExport: true
@@ -1032,7 +1059,7 @@ modules:
           imports:
             - OSCILLATOR_FAMILY
           reExport: true
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           reExport: true
@@ -1319,6 +1346,7 @@ modules:
             - NoCompositeReason
           reExport: true
       exports:
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - ALL_EVIDENCE_TAGS
@@ -1537,6 +1565,7 @@ modules:
         - FormalRef
         - FormalRefKind
         - NormTransport
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - ALL_EVIDENCE_TAGS
@@ -1731,7 +1760,7 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -1820,7 +1849,6 @@ modules:
         - file: ../types.js
           imports:
             - AtlasBridge
-            - EvidenceTag
             - Regime
             - RelationContract
           typeOnly: true
@@ -1930,14 +1958,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../types.js
+        - file: ../family.js
           imports:
-            - AtlasBridge
-            - AtlasRejection
-          typeOnly: true
-        - file: ../model.js
-          imports:
-            - AtlasModel
+            - AtlasFamily
           typeOnly: true
         - file: ./models.js
           imports:
@@ -1957,8 +1980,6 @@ modules:
             - ATLAS_REJECTIONS
       exports:
         - OSCILLATOR_FAMILY
-      interfaces:
-        - AtlasFamily
       constants:
         - OSCILLATOR_FAMILY
     src/atlas/oscillators/limit-witnesses.ts:
@@ -2247,7 +2268,7 @@ modules:
         - file: ./families.js
           imports:
             - ATLAS_FAMILIES
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -2301,10 +2322,14 @@ modules:
     src/atlas/physjs-ref.ts:
       description: Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
       externalDependencies: []
-      nodeDependencies: []
+      nodeDependencies:
+        - module: crypto
+          imports:
+            - createHash
       internalDependencies:
         - file: ./types.js
           imports:
+            - FormalFidelity
             - FormalRef
             - FormalRefKind
           typeOnly: true
@@ -2315,6 +2340,10 @@ modules:
           imports:
             - catalogEntries
             - catalogIdNumber
+        - file: ./physjs-reviewed.js
+          imports:
+            - PHYSJS_REVIEWED_ROWS
+            - PHYSJS_SANITY_LEMMA_KEYS
         - file: ./physjs-entries.generated.js
           imports:
             - PHYSJS_COMMIT
@@ -2335,6 +2364,9 @@ modules:
         - physjsAheadOfCatalog
         - bridgeSeedKeys
         - physjsKeysAheadOfCatalog
+        - physjsManifestRow
+        - physjsRowHash
+        - physjsFidelity
         - physjsFormalRef
         - physjsManifestProblems
       reExported:
@@ -2342,6 +2374,7 @@ modules:
       interfaces:
         - PhysjsManifestEntry
         - PhysjsManifestFile
+        - PhysjsReviewedRow
       functions:
         - physjsNestedStatements
         - physjsTheorem
@@ -2350,8 +2383,22 @@ modules:
         - physjsAheadOfCatalog
         - bridgeSeedKeys
         - physjsKeysAheadOfCatalog
+        - physjsManifestRow
+        - physjsRowHash
+        - physjsFidelity
         - physjsFormalRef
         - physjsManifestProblems
+    src/atlas/physjs-reviewed.ts:
+      description: The reviewed PhysJS manifest rows, pinned per key.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - PHYSJS_SANITY_LEMMA_KEYS
+        - PHYSJS_REVIEWED_ROWS
+      constants:
+        - PHYSJS_SANITY_LEMMA_KEYS
+        - PHYSJS_REVIEWED_ROWS
     src/atlas/poster/associations.ts:
       description: Atlas Phase 3 — the poster's two association-only lines.
       externalDependencies: []
@@ -2515,6 +2562,7 @@ modules:
           reExport: true
         - file: ./types.js
           imports:
+            - MissingDeltaAtError
             - MissingHorizonError
             - MissingLipschitzError
           reExport: true
@@ -2553,6 +2601,7 @@ modules:
             - NoCompositeClaim
           reExport: true
       exports:
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - regimeHolds
@@ -2587,6 +2636,7 @@ modules:
         - RegimeInequality
         - RelationType
         - Witness
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - AtlasModel
@@ -2676,10 +2726,20 @@ modules:
           imports:
             - AtlasModel
           typeOnly: true
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
+        - file: ./derive-evidence.js
+          imports:
+            - deriveEvidence
+        - file: ./witness-artifact.js
+          imports:
+            - WitnessResultsArtifact
+          typeOnly: true
+        - file: ./witness-artifact.js
+          imports:
+            - artifactPassingWitnessIds
       exports:
         - ATLAS_RECORD_SCHEMA_VERSION
         - toAtlasJson
@@ -2948,7 +3008,7 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../oscillators/index.js
+        - file: ../family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -3317,11 +3377,8 @@ modules:
       internalDependencies:
         - file: ./observations/types.js
           imports:
-            - ConfrontationOutcome
-          typeOnly: true
-        - file: ./observations/types.js
-          imports:
             - residualInSigma
+            - ConfrontationOutcome
       exports:
         - requestCallerTableConfrontation
       interfaces:
@@ -3350,13 +3407,14 @@ modules:
         - readCarrierSignPolicyCalls
         - applyCarrierSignPolicy
     src/bridges/catalog-adapter.ts:
-      description: "Catalog adapter: ingests the 44-entry `BRIDGE_EQUATIONS` array into"
+      description: "Catalog adapter: ingests `BRIDGE_EQUATIONS` into the v0.7-p2 sparse"
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
         - file: ./index.js
           imports:
             - BridgeEquationEntry
+            - BridgeEquationStatus
           typeOnly: true
         - file: ../core/cell.js
           imports:
@@ -3413,18 +3471,27 @@ modules:
         - file: ./catalog-types.js
           imports:
             - CatalogConfrontation
+            - CatalogConfrontationRecord
             - CatalogEntry
             - CatalogEvaluator
             - CatalogEvaluatorParameter
             - CatalogFile
+            - CatalogFileRecord
+            - CatalogRejection
             - CatalogRelation
           typeOnly: true
+        - file: ./observations/types.js
+          imports:
+            - ConfrontationOutcome
+          typeOnly: true
       exports:
+        - loadCatalog
         - bridgeCatalog
         - catalogEntries
         - catalogRelations
         - catalogEvaluators
         - catalogConfrontations
+        - catalogRejections
         - catalogEntry
         - relationsForCatalog
         - primaryRelation
@@ -3432,11 +3499,13 @@ modules:
         - parseBridgeId
         - catalogEdgeKey
       functions:
+        - loadCatalog
         - bridgeCatalog
         - catalogEntries
         - catalogRelations
         - catalogEvaluators
         - catalogConfrontations
+        - catalogRejections
         - catalogEntry
         - relationsForCatalog
         - primaryRelation
@@ -3452,12 +3521,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ../relations/types.js
+        - file: ./observations/types.js
           imports:
-            - Conventions
-            - Counterexample
-            - Regime
-            - RelationContract
+            - ConfrontationOutcome
           typeOnly: true
         - file: ./types.js
           imports:
@@ -3472,7 +3538,9 @@ modules:
         - CatalogEvaluatorParameter
         - CatalogEvaluatorOutput
         - CatalogEvaluator
+        - CatalogPrediction
         - CatalogConfrontation
+        - CatalogRejection
         - CatalogFile
         - CatalogAdjudication
     src/bridges/coefficient-statement.ts:
@@ -3546,6 +3614,7 @@ modules:
         - UnknownInputError
         - InputTypeError
         - NonFiniteInputError
+        - ConstantInputError
         - DuplicateInputError
         - DomainViolationError
       classes:
@@ -3553,6 +3622,7 @@ modules:
         - UnknownInputError
         - InputTypeError
         - NonFiniteInputError
+        - ConstantInputError
         - DuplicateInputError
         - DomainViolationError
       functions:
@@ -3602,12 +3672,13 @@ modules:
             - FORMULA_NAMED
         - file: ./catalog-load.js
           imports:
-            - primaryRelation
-        - file: ./catalog-load.js
-          imports:
+            - catalogEntries
+            - catalogEntry
             - catalogEvaluators
+            - primaryRelation
         - file: ./catalog-types.js
           imports:
+            - CatalogEvaluator
             - CatalogEvaluatorOutput
             - CatalogEvaluatorParameter
             - CatalogRelation
@@ -3617,6 +3688,7 @@ modules:
             - evaluateFormula
             - formulaVariables
             - parseCatalogExpression
+            - reservedFormulaNames
         - file: ../dimensional/ast-types.js
           imports:
             - ExprNode
@@ -3638,6 +3710,7 @@ modules:
       exports:
         - BRIDGE_EVALUATORS
         - unusedInputKeys
+        - buildEvaluatorSpec
         - missingEvaluatorMessage
         - evaluateBridge
       interfaces:
@@ -3646,6 +3719,7 @@ modules:
         - EvaluatorSpec
       functions:
         - unusedInputKeys
+        - buildEvaluatorSpec
         - missingEvaluatorMessage
         - evaluateBridge
       constants:
@@ -3657,11 +3731,8 @@ modules:
       internalDependencies:
         - file: ../dimensional/types.js
           imports:
-            - Dimension
-          typeOnly: true
-        - file: ../dimensional/types.js
-          imports:
             - DIMENSIONLESS
+            - Dimension
         - file: ../dimensional/ast-types.js
           imports:
             - ExprNode
@@ -3686,16 +3757,23 @@ modules:
           imports:
             - parseFormulaPNode
             - FormulaPNode
+        - file: ./evaluation-errors.js
+          imports:
+            - ConstantInputError
       exports:
         - formulaNames
+        - reservedFormulaNames
         - formulaScope
         - formulaVariables
+        - withoutUnreadConstants
         - evaluateFormula
         - parseCatalogExpression
       functions:
         - formulaNames
+        - reservedFormulaNames
         - formulaScope
         - formulaVariables
+        - withoutUnreadConstants
         - evaluateFormula
         - parseCatalogExpression
     src/bridges/holds.ts:
@@ -3709,6 +3787,9 @@ modules:
         - file: ../dimensional/hyphen-names.js
           imports:
             - rewriteCatalogHyphens
+        - file: ./evaluation-errors.js
+          imports:
+            - ConstantInputError
       exports:
         - holds
         - HoldsError
@@ -3717,7 +3798,7 @@ modules:
       functions:
         - holds
     src/bridges/index.ts:
-      description: Bridge catalog projection. Rows, regimes, and the spine are loaded from
+      description: Bridge catalog projection. The rows are loaded from
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -3725,15 +3806,9 @@ modules:
           imports:
             - BridgeEquationEntry
           typeOnly: true
-        - file: ../relations/types.js
-          imports:
-            - Regime
-          typeOnly: true
         - file: ./catalog-load.js
           imports:
-            - bridgeCatalog
             - catalogEntries
-            - catalogEntry
         - file: ./types.js
           imports:
             - BridgeEquationEntry
@@ -3741,10 +3816,6 @@ modules:
             - BridgeIssueFixable
             - BridgeIssueSeverity
             - KnownIssue
-          reExport: true
-        - file: ./types.js
-          imports:
-            - isActiveStatus
           reExport: true
         - file: ../core/constants.js
           imports:
@@ -3760,8 +3831,11 @@ modules:
           imports:
             - CarrierSignError
           reExport: true
+        - file: ./evaluation-errors.js
+          imports:
+            - ConstantInputError
+          reExport: true
       exports:
-        - isActiveStatus
         - BCS_GAP_RATIO
         - JOSEPHSON_CONSTANT_SI
         - LANE_EMDEN_OMEGA3
@@ -3770,9 +3844,8 @@ modules:
         - THOMSON_CROSS_SECTION_SI
         - VON_KLITZING_SI
         - CarrierSignError
+        - ConstantInputError
         - BRIDGE_EQUATIONS
-        - SPINE_CONFRONTATION_POINTS
-        - catalogRegime
         - BridgeEquationEntry
         - BridgeEquationStatus
         - BridgeIssueFixable
@@ -3784,7 +3857,6 @@ modules:
         - BridgeIssueFixable
         - BridgeIssueSeverity
         - KnownIssue
-        - isActiveStatus
         - BCS_GAP_RATIO
         - JOSEPHSON_CONSTANT_SI
         - LANE_EMDEN_OMEGA3
@@ -3793,11 +3865,9 @@ modules:
         - THOMSON_CROSS_SECTION_SI
         - VON_KLITZING_SI
         - CarrierSignError
-      functions:
-        - catalogRegime
+        - ConstantInputError
       constants:
         - BRIDGE_EQUATIONS
-        - SPINE_CONFRONTATION_POINTS
     src/bridges/input-contract.ts:
       description: The one check of a binding record against an id's declared inputs.
       externalDependencies: []
@@ -3831,26 +3901,14 @@ modules:
           typeOnly: true
         - file: ./rejected.js
           imports:
-            - REJECTED_BRIDGE_IDS
-        - file: ./rejected.js
-          imports:
             - REJECTED_BRIDGE_ADJUDICATIONS
             - REJECTED_BRIDGE_IDS
-          reExport: true
-        - file: ./rejected.js
-          imports:
             - RejectedBridgeAdjudication
-          reExport: true
       exports:
         - REJECTED_BRIDGE_ADJUDICATIONS
         - REJECTED_BRIDGE_IDS
         - adjudicateBridgeEntry
         - adjudicateCatalog
-        - RejectedBridgeAdjudication
-      reExported:
-        - REJECTED_BRIDGE_ADJUDICATIONS
-        - REJECTED_BRIDGE_IDS
-        - RejectedBridgeAdjudication
       interfaces:
         - CatalogAdjudicationReport
       functions:
@@ -3890,32 +3948,14 @@ modules:
         - residualInSigma
         - consistencyComparison
         - combineInQuadrature
-    src/bridges/registry.ts:
-      description: One registration for a catalog bridge.
+    src/bridges/rejected.ts:
+      description: Negative catalog — NOT-A-BRIDGE adjudications, projected from the
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../dimensional/validator.js
+        - file: ./catalog-load.js
           imports:
-            - ExprNode
-          typeOnly: true
-      exports:
-        - bridgeRegistry
-        - createBridgeRegistry
-        - registerBridge
-      interfaces:
-        - BridgeRegistration
-        - BridgeRegistry
-      functions:
-        - createBridgeRegistry
-        - registerBridge
-      constants:
-        - bridgeRegistry
-    src/bridges/rejected.ts:
-      description: Negative catalog (v0.8.0 P-4) — NOT-A-BRIDGE adjudications as
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
+            - catalogRejections
       exports:
         - REJECTED_BRIDGE_ADJUDICATIONS
         - REJECTED_BRIDGE_IDS
@@ -3953,11 +3993,9 @@ modules:
         - CarrierSignError
         - relationHolds
         - evaluateCatalogRelation
-        - solveCatalogRelation
       functions:
         - relationHolds
         - evaluateCatalogRelation
-        - solveCatalogRelation
     src/bridges/rhs-registry.ts:
       description: Right-hand side of each catalog id that has a relation, projected from
       externalDependencies: []
@@ -3988,17 +4026,20 @@ modules:
         - file: ./catalog-load.js
           imports:
             - catalogConfrontations
-        - file: ./expr-parse.js
+        - file: ./catalog-types.js
           imports:
-            - evaluateFormula
-        - file: ./catalog-load.js
+            - CatalogPrediction
+          typeOnly: true
+        - file: ./evaluators.js
           imports:
-            - primaryRelation
+            - BRIDGE_EVALUATORS
       exports:
+        - predictedAt
         - decidingMeasurement
       interfaces:
         - Elasticity
       functions:
+        - predictedAt
         - decidingMeasurement
     src/bridges/tensor-index.ts:
       description: §VI.6.1 tensor-index component for a catalog category.
@@ -4026,13 +4067,10 @@ modules:
             - Regime
             - RelationContract
           typeOnly: true
-      exports:
-        - isActiveStatus
+      exports: []
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
-      functions:
-        - isActiveStatus
   canonical:
     src/canonical/canonical-equation.ts:
       description: Canonical (textbook) physics equations — the ground-truth L-layer of the
@@ -4474,18 +4512,12 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ../dimensional/validator.js
-          imports:
-            - validate
         - file: ../composition/expr-eval.js
           imports:
             - evalExpr
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
-        - file: ../bridges/rhs-registry.js
-          imports:
-            - BRIDGE_RHS_BY_ID
         - file: ./canonical-equation.js
           imports:
             - CanonicalEquation
@@ -4500,14 +4532,21 @@ modules:
             - normalForm
         - file: ./structural.js
           imports:
+            - bridgeShapes
             - classifyStructure
+        - file: ./structural.js
+          imports:
+            - BridgeShape
+          typeOnly: true
       exports:
+        - numericalRecovery
         - classifyLinkage
         - scanLinkages
       interfaces:
         - RecoveryOutcome
         - LinkageResult
       functions:
+        - numericalRecovery
         - classifyLinkage
         - scanLinkages
     src/canonical/normal-form.ts:
@@ -4674,6 +4713,7 @@ modules:
           imports:
             - normalForm
       exports:
+        - bridgeShapes
         - classifyStructure
       interfaces:
         - StructuralPair
@@ -4681,7 +4721,9 @@ modules:
         - ChainConfirmation
         - ChainRestatement
         - ChainProvisional
+        - BridgeShape
       functions:
+        - bridgeShapes
         - classifyStructure
         - classifyStructure
         - classifyStructure
@@ -5002,12 +5044,32 @@ modules:
           imports:
             - UsageError
       exports:
+        - END_OF_OPTIONS
+        - optionTokens
         - parseArgs
       interfaces:
         - FlagSpec
         - ParsedArgs
       functions:
+        - optionTokens
         - parseArgs
+      constants:
+        - END_OF_OPTIONS
+    src/cli/bindings.ts:
+      description: The one reader of `name=value` tokens for every command that takes them
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./errors.js
+          imports:
+            - CliError
+            - UsageError
+      exports:
+        - splitAssignments
+      interfaces:
+        - Assignment
+      functions:
+        - splitAssignments
     src/cli/closed-form-range.ts:
       description: The closed-form range `upt evaluate` prints, read from the evaluator
       externalDependencies: []
@@ -5228,6 +5290,10 @@ modules:
           imports:
             - DiscoveryOptions
           typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
       exports:
         - parseDiscoveryOpts
       functions:
@@ -5299,9 +5365,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../statuses.js
-          imports:
-            - statusMeaning
       exports:
         - command
       constants:
@@ -5363,7 +5426,7 @@ modules:
             - emitJson
         - file: ../published-url.js
           imports:
-            - publishedUrl
+            - adjudicationSourceUrls
       exports:
         - command
       constants:
@@ -5444,6 +5507,10 @@ modules:
         - file: ../published-url.js
           imports:
             - publishedUrl
+        - file: ../../cli-api.js
+          imports:
+            - RigorTier
+          typeOnly: true
       exports:
         - command
       constants:
@@ -5594,6 +5661,9 @@ modules:
           imports:
             - AdjudicationVerdict
           typeOnly: true
+        - file: ../library-defaults.js
+          imports:
+            - DISCOVER_MAX_ORDERS_DEFAULT
         - file: ../published-url.js
           imports:
             - adjudicationSourceUrls
@@ -5640,6 +5710,9 @@ modules:
         - file: ../eval-numbers.js
           imports:
             - codataScope
+        - file: ../bindings.js
+          imports:
+            - splitAssignments
         - file: ../../dimensional/natural-units.js
           imports:
             - UnitMode
@@ -5671,7 +5744,12 @@ modules:
             - emitJson
         - file: ../expr-print.js
           imports:
+            - coherentUnits
+            - derivedUnitOf
             - siUnitOf
+        - file: ../bindings.js
+          imports:
+            - splitAssignments
         - file: ../errors.js
           imports:
             - UsageError
@@ -5717,6 +5795,9 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../bindings.js
+          imports:
+            - splitAssignments
         - file: ../errors.js
           imports:
             - UsageError
@@ -5788,6 +5869,9 @@ modules:
         - file: ./_discovery-opts.js
           imports:
             - parseDiscoveryOpts
+        - file: ../library-defaults.js
+          imports:
+            - DISCOVER_MAX_ORDERS_DEFAULT
       exports:
         - command
       constants:
@@ -5944,10 +6028,6 @@ modules:
             - VizJunction
             - VizModel
           typeOnly: true
-        - file: ../graphs.js
-          imports:
-            - SourceName
-          typeOnly: true
         - file: ../conventions.js
           imports:
             - canonicalCheckFailed
@@ -5959,6 +6039,9 @@ modules:
         - file: ../map-evidence.js
           imports:
             - withCatalogEvidence
+        - file: ../library-defaults.js
+          imports:
+            - DISCOVER_MAX_ORDERS_DEFAULT
       exports:
         - command
         - neighbourhood
@@ -5991,6 +6074,9 @@ modules:
           imports:
             - CliError
             - UsageError
+        - file: ../bindings.js
+          imports:
+            - splitAssignments
         - file: ../../cli-api.js
           imports:
             - MetricId
@@ -6149,6 +6235,12 @@ modules:
         - file: ../published-url.js
           imports:
             - publishedUrl
+        - file: ../library-defaults.js
+          imports:
+            - PROBE_BUDGET_MS_DEFAULT
+            - PROBE_CORRECTION_TERMS_MAX
+            - PROBE_HOLDOUT_TOL_DEFAULT
+            - PROBE_STUDY_ALPHA_DEFAULT
       exports:
         - command
         - emptySearchableWarning
@@ -6204,14 +6296,12 @@ modules:
             - CliError
             - EXIT_CHECK_FAILED
             - UsageError
-        - file: ../../dimensional/formula-names.js
-          imports:
-            - assertSynonymAgreement
-            - resolveQuantityName
-            - SynonymDisagreementError
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../bindings.js
+          imports:
+            - splitAssignments
       exports:
         - command
         - parseAt
@@ -6247,11 +6337,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../atlas/benchmark/hybrid-retrieval.js
-          imports:
-            - canonicalRetrievalCorpus
-            - ollamaEmbedder
-            - retrieveHybrid
       exports:
         - command
       constants:
@@ -6456,10 +6541,16 @@ modules:
         - printEval
         - latexName
         - printLatex
+        - coherentUnits
+        - derivedUnitOf
         - siUnitOf
+      interfaces:
+        - CoherentUnit
       functions:
         - latexName
         - printLatex
+        - coherentUnits
+        - derivedUnitOf
         - siUnitOf
       constants:
         - EVAL_STUBS
@@ -6527,6 +6618,34 @@ modules:
         - coreAnchor
         - groundTruthLine
         - coreLine
+    src/cli/library-defaults.ts:
+      description: The defaults and limits a command's help states, read from the library constants that hold
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../composition/discovery.js
+          imports:
+            - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
+        - file: ../composition/probe/types.js
+          imports:
+            - DEFAULT_HOLDOUT_TOL
+            - DEFAULT_SEARCH_BUDGET
+        - file: ../composition/probe/study.js
+          imports:
+            - DEFAULT_ALPHA
+            - MAX_CORRECTION_TERMS
+      exports:
+        - DISCOVER_MAX_ORDERS_DEFAULT
+        - PROBE_BUDGET_MS_DEFAULT
+        - PROBE_HOLDOUT_TOL_DEFAULT
+        - PROBE_STUDY_ALPHA_DEFAULT
+        - PROBE_CORRECTION_TERMS_MAX
+      constants:
+        - DISCOVER_MAX_ORDERS_DEFAULT
+        - PROBE_BUDGET_MS_DEFAULT
+        - PROBE_HOLDOUT_TOL_DEFAULT
+        - PROBE_STUDY_ALPHA_DEFAULT
+        - PROBE_CORRECTION_TERMS_MAX
     src/cli/main.ts:
       description: Verb-first dispatcher for the UPT CLI — `upt <command> [args...]`.
       externalDependencies: []
@@ -6541,6 +6660,7 @@ modules:
             - CliError
         - file: ./args.js
           imports:
+            - optionTokens
             - parseArgs
         - file: ./version.js
           imports:
@@ -6619,44 +6739,6 @@ modules:
       functions:
         - sanitize
         - emitJson
-    src/cli/poster-source.ts:
-      description: The POSTER source for the physics map — turn the Atlas Phase 3 poster index
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../atlas/association.js
-          imports:
-            - Association
-          typeOnly: true
-        - file: ../atlas/derivation.js
-          imports:
-            - Derivation
-            - DerivationId
-          typeOnly: true
-        - file: ../atlas/statement.js
-          imports:
-            - Statement
-            - StatementId
-          typeOnly: true
-        - file: ../composition/graph-viz.js
-          imports:
-            - VizJunction
-          typeOnly: true
-      exports:
-        - POSTER_GRAPH
-        - validatePoster
-        - posterJunctions
-        - describePosterSource
-      interfaces:
-        - PosterGraph
-        - DanglingPremise
-        - PosterValidation
-      functions:
-        - validatePoster
-        - posterJunctions
-        - describePosterSource
-      constants:
-        - POSTER_GRAPH
     src/cli/published-url.ts:
       description: A path in this repository, as a GitHub blob URL on `master`.
       externalDependencies: []
@@ -6697,11 +6779,13 @@ modules:
             - TableKind
       exports:
         - REACH_METHOD
+        - sourceHash
         - moduleSources
         - staticReach
       interfaces:
         - Attribution
       functions:
+        - sourceHash
         - moduleSources
         - staticReach
       constants:
@@ -6796,6 +6880,7 @@ modules:
         - file: ./errors.js
           imports:
             - CliError
+            - UsageError
         - file: ./output.js
           imports:
             - emitJson
@@ -6950,6 +7035,7 @@ modules:
             - M_SUN_KG
             - composeSymbolic
             - format
+            - equals
             - buildVizModel
             - renderDotToSvg
             - equationLanding
@@ -7085,6 +7171,7 @@ modules:
           imports:
             - convertValue
             - UnitError
+            - unitRows
           reExport: true
         - file: ./composition/axis-audit.js
           imports:
@@ -7133,18 +7220,6 @@ modules:
           imports:
             - deriveEdgeEvidence
           reExport: true
-        - file: ./cli/poster-source.js
-          imports:
-            - POSTER_GRAPH
-            - posterJunctions
-            - validatePoster
-            - describePosterSource
-          reExport: true
-        - file: ./cli/poster-source.js
-          imports:
-            - PosterGraph
-            - PosterValidation
-          reExport: true
         - file: ./composition/probe/index.js
           imports:
             - DEFAULT_SEARCH_BUDGET
@@ -7157,7 +7232,9 @@ modules:
             - loadSearchProblemFromJson
             - resolveObservationsPath
             - parseExprJson
+            - ProblemFileError
             - runProbeSearch
+            - nodeWorkerArgv
             - formatProbeReport
             - loadStudyFromJson
             - loadStudyFile
@@ -7283,7 +7360,7 @@ modules:
             - ObservableTranslation
             - PointCheck
           reExport: true
-        - file: ./atlas/oscillators/index.js
+        - file: ./atlas/family.js
           imports:
             - AtlasFamily
           reExport: true
@@ -7381,6 +7458,10 @@ modules:
             - constantAgreement
             - ConstantDisagreementError
           reExport: true
+        - file: ./numerical/formula-contract.js
+          imports:
+            - FormulaError
+          reExport: true
         - file: ./composition/aliases.js
           imports:
             - aliasesForTarget
@@ -7399,6 +7480,7 @@ modules:
         - file: ./composition/explain.js
           imports:
             - formatQuantity
+            - formatExact
           reExport: true
         - file: ./bridges/carrier-sign.js
           imports:
@@ -7415,10 +7497,6 @@ modules:
         - file: ./dimensional/hyphen-names.js
           imports:
             - rewriteCatalogHyphens
-          reExport: true
-        - file: ./composition/bridge-analysis.js
-          imports:
-            - vacuumConstantThroughAlpha
           reExport: true
         - file: ./composition/adjudication.js
           imports:
@@ -7440,6 +7518,12 @@ modules:
         - file: ./dimensional/formula-names.js
           imports:
             - SynonymDisagreementError
+          reExport: true
+        - file: ./atlas/benchmark/hybrid-retrieval.js
+          imports:
+            - canonicalRetrievalCorpus
+            - ollamaEmbedder
+            - retrieveHybrid
           reExport: true
         - file: ./numerical/formula-dimension.js
           imports:
@@ -7482,6 +7566,7 @@ modules:
         - M_SUN_KG
         - composeSymbolic
         - format
+        - equals
         - buildVizModel
         - renderDotToSvg
         - equationLanding
@@ -7534,6 +7619,7 @@ modules:
         - runAppliedCase
         - convertValue
         - UnitError
+        - unitRows
         - auditAxisDiscrimination
         - AXES
         - simplifyObservable
@@ -7546,10 +7632,6 @@ modules:
         - filterEdges
         - formatFilterLegend
         - deriveEdgeEvidence
-        - POSTER_GRAPH
-        - posterJunctions
-        - validatePoster
-        - describePosterSource
         - DEFAULT_SEARCH_BUDGET
         - scanFrontier
         - findFrontierGap
@@ -7560,7 +7642,9 @@ modules:
         - loadSearchProblemFromJson
         - resolveObservationsPath
         - parseExprJson
+        - ProblemFileError
         - runProbeSearch
+        - nodeWorkerArgv
         - formatProbeReport
         - loadStudyFromJson
         - loadStudyFile
@@ -7638,6 +7722,7 @@ modules:
         - correlationIsPositiveSemidefinite
         - constantAgreement
         - ConstantDisagreementError
+        - FormulaError
         - aliasesForTarget
         - nearQuantityNames
         - shareSynonyms
@@ -7645,16 +7730,19 @@ modules:
         - expandSynonymValues
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
+        - formatExact
         - CarrierSignError
         - naturalConstantOverrides
         - rewriteCatalogHyphens
-        - vacuumConstantThroughAlpha
         - candidateIdIfSlug
         - resolveQuantityName
         - evaluatorOutput
         - resolveEvaluable
         - unusedInputKeys
         - SynonymDisagreementError
+        - canonicalRetrievalCorpus
+        - ollamaEmbedder
+        - retrieveHybrid
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - relationNotices
@@ -7669,8 +7757,6 @@ modules:
         - CaseResult
         - AxisDiscrimination
         - AxisSpec
-        - PosterGraph
-        - PosterValidation
         - AnnotatedCandidate
         - CatalogAdjudication
         - ConsequenceAnnotatedCandidate
@@ -7713,6 +7799,7 @@ modules:
         - M_SUN_KG
         - composeSymbolic
         - format
+        - equals
         - buildVizModel
         - renderDotToSvg
         - equationLanding
@@ -7773,6 +7860,7 @@ modules:
         - CaseResult
         - convertValue
         - UnitError
+        - unitRows
         - auditAxisDiscrimination
         - AxisDiscrimination
         - AXES
@@ -7787,12 +7875,6 @@ modules:
         - filterEdges
         - formatFilterLegend
         - deriveEdgeEvidence
-        - POSTER_GRAPH
-        - posterJunctions
-        - validatePoster
-        - describePosterSource
-        - PosterGraph
-        - PosterValidation
         - DEFAULT_SEARCH_BUDGET
         - scanFrontier
         - findFrontierGap
@@ -7803,7 +7885,9 @@ modules:
         - loadSearchProblemFromJson
         - resolveObservationsPath
         - parseExprJson
+        - ProblemFileError
         - runProbeSearch
+        - nodeWorkerArgv
         - formatProbeReport
         - loadStudyFromJson
         - loadStudyFile
@@ -7909,6 +7993,7 @@ modules:
         - UncertaintyContribution
         - constantAgreement
         - ConstantDisagreementError
+        - FormulaError
         - aliasesForTarget
         - nearQuantityNames
         - shareSynonyms
@@ -7916,17 +8001,20 @@ modules:
         - expandSynonymValues
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
+        - formatExact
         - CarrierSignError
         - naturalConstantOverrides
         - UnitMode
         - rewriteCatalogHyphens
-        - vacuumConstantThroughAlpha
         - candidateIdIfSlug
         - resolveQuantityName
         - evaluatorOutput
         - resolveEvaluable
         - unusedInputKeys
         - SynonymDisagreementError
+        - canonicalRetrievalCorpus
+        - ollamaEmbedder
+        - retrieveHybrid
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - relationNotices
@@ -8027,11 +8115,23 @@ modules:
       nodeDependencies: []
       internalDependencies: []
       exports:
+        - SCALE_AXIS_VALUES
+        - FORCE_AXIS_VALUES
+        - INFORMATION_AXIS_VALUES
+        - SYMMETRY_AXIS_VALUES
+        - TOPOLOGY_AXIS_VALUES
+        - STATISTICS_AXIS_VALUES
         - AXES
         - GATE_AXES
       interfaces:
         - AxisSpec
       constants:
+        - SCALE_AXIS_VALUES
+        - FORCE_AXIS_VALUES
+        - INFORMATION_AXIS_VALUES
+        - SYMMETRY_AXIS_VALUES
+        - TOPOLOGY_AXIS_VALUES
+        - STATISTICS_AXIS_VALUES
         - AXES
         - GATE_AXES
     src/composition/axis-audit.ts:
@@ -8075,9 +8175,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - ALPHA
         - file: ../dimensional/symbolic-constants.js
           imports:
             - constantRecord
@@ -8117,9 +8214,7 @@ modules:
             - DATA_CONFRONTED_IDS
       exports:
         - dimensionalFreedom
-        - vacuumConstantThroughAlpha
         - attemptDerivation
-        - anchoringDistance
         - bridgePriority
         - linkageMap
         - proposeLinkCandidates
@@ -8128,9 +8223,7 @@ modules:
         - LinkCandidate
       functions:
         - dimensionalFreedom
-        - vacuumConstantThroughAlpha
         - attemptDerivation
-        - anchoringDistance
         - bridgePriority
         - linkageMap
         - proposeLinkCandidates
@@ -8157,6 +8250,10 @@ modules:
           imports:
             - Quantity
           typeOnly: true
+        - file: ./axes.js
+          imports:
+            - FORCE_AXIS_VALUES
+            - SCALE_AXIS_VALUES
       exports:
         - regimeKey
         - placeQuantity
@@ -8288,6 +8385,12 @@ modules:
             - Quantity
             - RegimeAttributes
           typeOnly: true
+        - file: ./quantity.js
+          imports:
+            - regimeAttributesOf
+        - file: ./axes.js
+          imports:
+            - AXES
         - file: ../canonical/canonical-equation.js
           imports:
             - CanonicalEquation
@@ -8331,6 +8434,9 @@ modules:
         - file: ./expr-eval.js
           imports:
             - evalExpr
+        - file: ./formula-shape.js
+          imports:
+            - monomialExponents
         - file: ../bridges/holds.js
           imports:
             - HoldsError
@@ -8343,6 +8449,8 @@ modules:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
         - canonicalToEdges
+      interfaces:
+        - ConstantDef
       functions:
         - canonicalToEdges
       constants:
@@ -8630,6 +8738,13 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ../dimensional/validator.js
+          imports:
+            - validate
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -8640,11 +8755,18 @@ modules:
             - Quantity
             - RegimeAttributes
           typeOnly: true
+        - file: ./quantity.js
+          imports:
+            - regimeAttributesOf
+        - file: ./axes.js
+          imports:
+            - AXES
         - file: ../dimensional/unit-convention.js
           imports:
             - conventionFactor
         - file: ./edge.js
           imports:
+            - assertCoefficientSet
             - CompositionAliasError
             - CompositionDimensionError
             - CompositionJunctionError
@@ -8652,6 +8774,12 @@ modules:
         - file: ../bridges/evaluation-errors.js
           imports:
             - DomainViolationError
+        - file: ./expr-subst.js
+          imports:
+            - substitute
+        - file: ./formula-shape.js
+          imports:
+            - monomialExponents
         - file: ../relations/composition-table.js
           imports:
             - composeRelation
@@ -8659,9 +8787,13 @@ modules:
         - file: ../relations/conventions.js
           imports:
             - checkConventions
+        - file: ../relations/regime.js
+          imports:
+            - intersectRegimes
         - file: ../relations/types.js
           imports:
             - Conventions
+            - Regime
             - RelationContract
             - RelationType
           typeOnly: true
@@ -8846,10 +8978,12 @@ modules:
           typeOnly: true
         - file: ./identifiability.js
           imports:
+            - classifyIdentifiability
             - forwardClosure
         - file: ./retrodiction.js
           imports:
             - retrodict
+            - retrodictNode
             - forwardEvaluate
         - file: ./bridge-analysis.js
           imports:
@@ -8883,6 +9017,7 @@ modules:
       exports:
         - REGISTRY_ATTRIBUTES_BY_NAME
         - ANCHOR_DEFAULT
+        - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
         - buildDiscoveryContext
         - vetLinkCandidate
         - vetInContext
@@ -8899,6 +9034,7 @@ modules:
       constants:
         - REGISTRY_ATTRIBUTES_BY_NAME
         - ANCHOR_DEFAULT
+        - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
     src/composition/edge.ts:
       description: Composition graph — edges (bridges and laws) + validity domains
       externalDependencies: []
@@ -8926,6 +9062,7 @@ modules:
           imports:
             - DomainViolationError
       exports:
+        - assertCoefficientSet
         - withBoundAliases
         - evaluateEdge
         - CompositionJunctionError
@@ -8943,6 +9080,7 @@ modules:
         - ValidityDomain
         - BridgeEdge
       functions:
+        - assertCoefficientSet
         - withBoundAliases
         - evaluateEdge
     src/composition/enumerate.ts:
@@ -9098,6 +9236,7 @@ modules:
             - formulaShape
       exports:
         - formatQuantity
+        - formatExact
         - explainQuantity
       interfaces:
         - DerivationExplanation
@@ -9105,6 +9244,7 @@ modules:
         - QuantityExplanation
       functions:
         - formatQuantity
+        - formatExact
         - explainQuantity
     src/composition/expr-eval.ts:
       description: Scalar `ExprNode` value evaluator (v0.12 symbolic composition).
@@ -9175,6 +9315,9 @@ modules:
         - file: ./mathts-scalar-symbols.js
           imports:
             - renderScalarLeaf
+        - file: ./mathts-quiet.js
+          imports:
+            - quietly
       exports:
         - isSimplifierAvailable
         - simplifyExpr
@@ -9222,8 +9365,10 @@ modules:
           imports:
             - DIMENSIONLESS
       exports:
+        - monomialExponents
         - formulaShape
       functions:
+        - monomialExponents
         - formulaShape
     src/composition/frontier-account.ts:
       description: "Two lists the catalog already knows how to tell apart: records that were"
@@ -9482,6 +9627,7 @@ modules:
             - RetrodictionOutcome
             - RetrodictionPrediction
             - RetrodictionResult
+            - RetrodictionRefusal
             - RetrodictionReport
             - RetrodictionOptions
           reExport: true
@@ -9641,6 +9787,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - DerivationExplanation
@@ -9708,6 +9855,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - retrodict
@@ -9747,6 +9895,17 @@ modules:
         - UserEquationError
         - resolveQuantityName
         - SynonymDisagreementError
+    src/composition/mathts-quiet.ts:
+      description: Load the MathTS peer without its console chatter reaching stderr.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - quietlySync
+        - quietly
+      functions:
+        - quietlySync
+        - quietly
     src/composition/mathts-scalar-symbols.ts:
       description: Scalar leaves of an `ExprNode`, read from a MathTS AST.
       externalDependencies: []
@@ -9758,6 +9917,9 @@ modules:
           imports:
             - fileURLToPath
       internalDependencies:
+        - file: ./mathts-quiet.js
+          imports:
+            - quietlySync
         - file: ../dimensional/validator.js
           imports:
             - ExprNode
@@ -10048,8 +10210,8 @@ modules:
             - evalExpr
         - file: ./types.js
           imports:
+            - DEFAULT_HOLDOUT_TOL
             - ProbeDataset
-          typeOnly: true
         - file: ./residual.js
           imports:
             - scalarDiscrepancy
@@ -10368,6 +10530,7 @@ modules:
             - searchProblemFromFile
             - resolveObservationsPath
             - parseExprJson
+            - ProblemFileError
           reExport: true
         - file: ./problem.js
           imports:
@@ -10376,6 +10539,7 @@ modules:
         - file: ./pipeline.js
           imports:
             - runProbeSearch
+            - nodeWorkerArgv
           reExport: true
         - file: ./pipeline.js
           imports:
@@ -10487,7 +10651,9 @@ modules:
         - searchProblemFromFile
         - resolveObservationsPath
         - parseExprJson
+        - ProblemFileError
         - runProbeSearch
+        - nodeWorkerArgv
         - formatProbeReport
         - formatFrontierScan
         - formatFrontierGap
@@ -10697,8 +10863,10 @@ modules:
         - searchProblemFromFile
         - resolveObservationsPath
         - parseExprJson
+        - ProblemFileError
         - ProblemFile
         - runProbeSearch
+        - nodeWorkerArgv
         - ProbeSearchOptions
         - ProbeSearchResult
         - formatProbeReport
@@ -10798,6 +10966,7 @@ modules:
           typeOnly: true
         - file: ./types.js
           imports:
+            - DEFAULT_HOLDOUT_TOL
             - DEFAULT_SEARCH_BUDGET
             - SCHEMA_VERSION
         - file: ./search-budget.js
@@ -10850,11 +11019,13 @@ modules:
             - runBackendWorker
       exports:
         - NO_HOLDOUT_WORDING
+        - nodeWorkerArgv
         - runProbeSearch
       interfaces:
         - ProbeSearchOptions
         - ProbeSearchResult
       functions:
+        - nodeWorkerArgv
         - runProbeSearch
       constants:
         - NO_HOLDOUT_WORDING
@@ -10901,6 +11072,9 @@ modules:
         - resolveObservationsPath
         - searchProblemFromFile
         - parseExprJson
+        - ProblemFileError
+      classes:
+        - ProblemFileError
       interfaces:
         - ProblemFile
       functions:
@@ -10972,6 +11146,7 @@ modules:
           typeOnly: true
         - file: ./types.js
           imports:
+            - DEFAULT_HOLDOUT_TOL
             - DEFAULT_SEARCH_BUDGET
             - SCHEMA_VERSION
         - file: ../canonical-json.js
@@ -11002,6 +11177,10 @@ modules:
           imports:
             - ProbeCandidateRecord
             - ScoreVector
+          typeOnly: true
+        - file: ./falsify.js
+          imports:
+            - FalsifyResult
           typeOnly: true
       exports:
         - scoreCandidate
@@ -11141,6 +11320,8 @@ modules:
             - canonicalJson
             - hashCanonical
       exports:
+        - DEFAULT_ALPHA
+        - MAX_CORRECTION_TERMS
         - parseStudy
         - loadStudyFromJson
         - loadStudyFile
@@ -11151,7 +11332,6 @@ modules:
         - chiSquareCdf
         - fSurvival
         - effectiveSigma
-        - exprToInfix
         - runProbeStudy
         - formatProbeStudy
         - StudyRefusal
@@ -11185,9 +11365,11 @@ modules:
         - chiSquareCdf
         - fSurvival
         - effectiveSigma
-        - exprToInfix
         - runProbeStudy
         - formatProbeStudy
+      constants:
+        - DEFAULT_ALPHA
+        - MAX_CORRECTION_TERMS
     src/composition/probe/types.ts:
       description: Product B (expression / residual search) experimental types.
       externalDependencies: []
@@ -11209,6 +11391,7 @@ modules:
         - SCHEMA_VERSION
         - PROBE_SCHEMA_VERSION
         - DEFAULT_SEARCH_BUDGET
+        - DEFAULT_HOLDOUT_TOL
       interfaces:
         - SearchBudget
         - DiscrepancyDefinition
@@ -11239,6 +11422,7 @@ modules:
         - SCHEMA_VERSION
         - PROBE_SCHEMA_VERSION
         - DEFAULT_SEARCH_BUDGET
+        - DEFAULT_HOLDOUT_TOL
     src/composition/proposed-bridges.ts:
       description: Identity-consequence surfacer — turns a `promising` discovery identification
       externalDependencies: []
@@ -11346,19 +11530,16 @@ modules:
         - file: ./quantity.js
           imports:
             - Quantity
-            - RegimeAttributes
           typeOnly: true
+        - file: ./quantity.js
+          imports:
+            - regimeAttributesOf
       exports:
-        - temperatureQ
-        - massQ
         - allQuantities
         - quantityByName
       functions:
         - allQuantities
         - quantityByName
-      constants:
-        - temperatureQ
-        - massQ
     src/composition/quantity.ts:
       description: Composition graph — quantity nodes (v0.8.0 T2, per
       externalDependencies: []
@@ -11377,12 +11558,17 @@ modules:
             - TopologyAxis
             - StatisticsAxis
           typeOnly: true
+        - file: ./axes.js
+          imports:
+            - AXES
       exports:
+        - regimeAttributesOf
         - regimesDiffer
       interfaces:
         - RegimeAttributes
         - Quantity
       functions:
+        - regimeAttributesOf
         - regimesDiffer
     src/composition/representative-values.ts:
       description: Order-of-magnitude representative values for the discovery falsifier.
@@ -11403,9 +11589,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../bridges/carrier-sign.js
-          imports:
-            - CarrierSignError
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -11415,10 +11598,17 @@ modules:
             - CANONICAL_GROUP_PREFACTORS
         - file: ./edge.js
           imports:
+            - CoefficientUnsetError
             - evaluateEdge
         - file: ../bridges/evaluation-errors.js
           imports:
             - DomainViolationError
+        - file: ../bridges/carrier-sign.js
+          imports:
+            - CarrierSignError
+        - file: ../numerical/formula-contract.js
+          imports:
+            - FormulaError
         - file: ./compose.js
           imports:
             - QuantityIdentification
@@ -11439,6 +11629,7 @@ modules:
       interfaces:
         - RetrodictionPrediction
         - RetrodictionOptions
+        - RetrodictionRefusal
         - RetrodictionResult
         - RetrodictionReport
       functions:
@@ -11614,7 +11805,7 @@ modules:
         - bridgeToCell
         - emergenceToCell
     src/core/constants.ts:
-      description: Canonical CODATA 2018 + SI-defined physical constants for UPT (v0.5.1).
+      description: Canonical CODATA 2018 + SI-defined physical constants for UPT.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -11642,12 +11833,12 @@ modules:
         - VON_KLITZING_SI
         - JOSEPHSON_CONSTANT_SI
         - LORENZ_NUMBER_SI
+        - EULER_GAMMA
         - BCS_GAP_RATIO
         - LANE_EMDEN_OMEGA3
         - THOMSON_CROSS_SECTION_SI
         - GM_SUN_SI
         - M_SUN_IAU_SI
-        - GM_SUN_SOURCE
         - M_E_SI
         - M_PROTON_SI
         - N_A_SI
@@ -11675,12 +11866,12 @@ modules:
         - VON_KLITZING_SI
         - JOSEPHSON_CONSTANT_SI
         - LORENZ_NUMBER_SI
+        - EULER_GAMMA
         - BCS_GAP_RATIO
         - LANE_EMDEN_OMEGA3
         - THOMSON_CROSS_SECTION_SI
         - GM_SUN_SI
         - M_SUN_IAU_SI
-        - GM_SUN_SOURCE
         - M_E_SI
         - M_PROTON_SI
         - N_A_SI
@@ -12010,32 +12201,16 @@ modules:
         - bridgeGradientASTById
         - astDifferentiableBridgeIds
     src/diff/bridge-gradient.ts:
-      description: Bridge-parameter differentiation — v0.9 Proposal 8 core layer.
+      description: Bridge-parameter differentiation by central finite differences.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies:
-        - file: ../numerical/tensor-engine.js
-          imports:
-            - EngineTensor
-            - TensorEngine
-          typeOnly: true
-        - file: ../numerical/tensor-engine.js
-          imports:
-            - hasAutogradSupport
-        - file: ../numerical/errors.js
-          imports:
-            - EngineCapabilityError
+      internalDependencies: []
       exports:
-        - bridgeGradient
-        - gradientToNamed
         - bridgeGradientNumerical
       interfaces:
         - BridgeDiffSpec
-        - BridgeGradientResult
         - BridgeNumericalGradientResult
       functions:
-        - bridgeGradient
-        - gradientToNamed
         - bridgeGradientNumerical
     src/diff/bridge-specs.ts:
       description: Differentiable relations projected from the catalog. The scalar is the
@@ -12063,6 +12238,14 @@ modules:
         - HAWKING_TEMPERATURE_DIFF
         - DECOHERENCE_RATE_DIFF
         - DIFFERENTIABLE_RELATIONS
+        - requireCatalogId
+      interfaces:
+        - ShapiroInput
+        - PerihelionInput
+        - HawkingInput
+        - DecoherenceInput
+      functions:
+        - requireCatalogId
       constants:
         - SHAPIRO_DELAY_DIFF
         - PERIHELION_ADVANCE_DIFF
@@ -12225,6 +12408,10 @@ modules:
           typeOnly: true
         - file: ./ast-types.js
           imports:
+            - ExprNode
+          typeOnly: true
+        - file: ./ast-types.js
+          imports:
             - Role
             - TensorSymbolNode
             - MetricTensorNode
@@ -12315,6 +12502,7 @@ modules:
             - C_SI
             - E_SI
             - EPS0_SI
+            - EULER_GAMMA
             - FARADAY_SI
             - G_SI
             - GM_SUN_SI
@@ -12342,7 +12530,7 @@ modules:
       constants:
         - CONSTANT_ROWS
     src/dimensional/constants.ts:
-      description: SI dimensional signatures of fundamental physical constants, projected
+      description: SI dimensional signatures of a few fundamental constants, projected from
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -12356,16 +12544,12 @@ modules:
       exports:
         - hbar
         - c
-        - G
         - k_B
-        - e
         - l_P
       constants:
         - hbar
         - c
-        - G
         - k_B
-        - e
         - l_P
     src/dimensional/curvature-composite.ts:
       description: Curvature composite-AST factory (v0.6.0 Phase 3, Task 3.9).
@@ -12506,6 +12690,7 @@ modules:
             - TIME
             - FREQUENCY
             - MASS
+            - MASS_DENSITY
             - VELOCITY
             - ACCELERATION
             - FORCE
@@ -12526,6 +12711,9 @@ modules:
         - file: ./symbolic-constants.js
           imports:
             - CONSTANT_REGISTRY
+        - file: ./units.js
+          imports:
+            - unitDimension
         - file: ../numerical/formula-dimension.js
           imports:
             - parseFormulaPNode
@@ -12791,7 +12979,10 @@ modules:
       description: Kebab catalog names are one token. A parser that treats `-` as subtraction
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ./symbolic-constants.js
+          imports:
+            - constantRecord
       exports:
         - rewriteCatalogHyphens
       functions:
@@ -12861,6 +13052,10 @@ modules:
         - file: ./types.js
           imports:
             - Dimension
+          typeOnly: true
+        - file: ./ast-types.js
+          imports:
+            - ExprNode
           typeOnly: true
         - file: ./ast-types.js
           imports:
@@ -13000,13 +13195,16 @@ modules:
             - CONSTANT_REGISTRY
       exports:
         - foldName
+        - readQuantityFile
         - quantitySpellingIndex
         - allQuantityRecords
         - quantityRecord
         - synonymGroupsFromRegistry
       interfaces:
         - QuantityRecord
+        - QuantityFile
       functions:
+        - readQuantityFile
         - quantitySpellingIndex
         - allQuantityRecords
         - quantityRecord
@@ -13265,7 +13463,6 @@ modules:
           imports:
             - parseUnit
       exports:
-        - QUANTITY_CONVENTION_UNIT
         - quantityConventionUnit
         - conventionScaleToSI
         - conventionFactor
@@ -13273,8 +13470,6 @@ modules:
         - quantityConventionUnit
         - conventionScaleToSI
         - conventionFactor
-      constants:
-        - QUANTITY_CONVENTION_UNIT
     src/dimensional/unit-data.ts:
       description: The unit table, loaded from `data/units.json` and validated once.
       externalDependencies: []
@@ -13580,7 +13775,6 @@ modules:
       interfaces:
         - Violation
         - ValidationResult
-        - DimensionValidationReport
       functions:
         - validate
         - validateInverseMetricPair
@@ -13765,14 +13959,11 @@ modules:
         - file: ./diff/bridge-gradient.js
           imports:
             - BridgeDiffSpec
-            - BridgeGradientResult
             - BridgeNumericalGradientResult
           reExport: true
         - file: ./diff/bridge-gradient.js
           imports:
-            - bridgeGradient
             - bridgeGradientNumerical
-            - gradientToNamed
           reExport: true
         - file: ./diff/bridge-ast-gradient.js
           imports:
@@ -13841,6 +14032,10 @@ modules:
             - MissingInputError
             - NonFiniteInputError
             - UnknownInputError
+          reExport: true
+        - file: ./bridges/index.js
+          imports:
+            - ConstantInputError
           reExport: true
         - file: ./composition/index.js
           imports:
@@ -14141,6 +14336,9 @@ modules:
           imports:
             - adjudicateBridgeEntry
             - adjudicateCatalog
+          reExport: true
+        - file: ./bridges/rejected.js
+          imports:
             - REJECTED_BRIDGE_ADJUDICATIONS
             - REJECTED_BRIDGE_IDS
           reExport: true
@@ -14148,6 +14346,9 @@ modules:
           imports:
             - BridgeVerdict
             - CatalogAdjudicationReport
+          reExport: true
+        - file: ./bridges/rejected.js
+          imports:
             - RejectedBridgeAdjudication
           reExport: true
         - file: ./composition/index.js
@@ -14184,6 +14385,7 @@ modules:
             - RetrodictionOutcome
             - RetrodictionPrediction
             - RetrodictionResult
+            - RetrodictionRefusal
             - RetrodictionReport
             - RetrodictionOptions
           reExport: true
@@ -14448,6 +14650,114 @@ modules:
           imports:
             - Elasticity
           reExport: true
+        - file: ./dimensional/errors.js
+          imports:
+            - UPTError
+          reExport: true
+        - file: ./dimensional/natural-units.js
+          imports:
+            - UnitMode
+          reExport: true
+        - file: ./dimensional/ast-types.js
+          imports:
+            - Variance
+            - Role
+            - TensorIndex
+            - UpperIndex
+            - CovariantIndex
+            - TensorSymbolNode
+            - TensorProductNode
+            - MetricTensorNode
+            - KroneckerDeltaNode
+            - TensorPartialDerivativeNode
+            - RiemannTensorNode
+            - WeylTensorNode
+            - KillingVectorNode
+            - ConservedChargeNode
+            - StressEnergyTensorNode
+            - CosmologicalConstantNode
+          reExport: true
+        - file: ./core/flux-rules.js
+          imports:
+            - FluxRuleKind
+          reExport: true
+        - file: ./core/axes-registry.js
+          imports:
+            - ScaleAxes
+            - ForceAxes
+            - SymmetryAxes
+            - InformationAxes
+          reExport: true
+        - file: ./core/regime-registry.js
+          imports:
+            - AxisConvenience
+          reExport: true
+        - file: ./diff/bridge-specs.js
+          imports:
+            - ShapiroInput
+            - PerihelionInput
+            - HawkingInput
+            - DecoherenceInput
+          reExport: true
+        - file: ./numerical/tensor-engine.js
+          imports:
+            - EinsumContraction
+            - EinsumFreeAxis
+          reExport: true
+        - file: ./numerical/killing.js
+          imports:
+            - KillingFn
+            - KillingMetricFn
+            - ChristoffelAtFn
+          reExport: true
+        - file: ./relations/types.js
+          imports:
+            - RelationContract
+            - Conventions
+          reExport: true
+        - file: ./composition/axes.js
+          imports:
+            - ScaleAxis
+            - ForceAxis
+            - InformationAxis
+            - SymmetryAxis
+            - TopologyAxis
+            - StatisticsAxis
+          reExport: true
+        - file: ./composition/enumerate.js
+          imports:
+            - EnumerationOptions
+          reExport: true
+        - file: ./composition/uncertainty.js
+          imports:
+            - UncertaintyOptions
+          reExport: true
+        - file: ./composition/user-equation.js
+          imports:
+            - AnalyzeUserEquationOptions
+            - ShortBinding
+          reExport: true
+        - file: ./composition/canonical-graph.js
+          imports:
+            - ConstantDef
+          reExport: true
+        - file: ./composition/proposed-bridges.js
+          imports:
+            - ProposedBridge
+          reExport: true
+        - file: ./composition/discovery.js
+          imports:
+            - DiscoveryOptions
+          reExport: true
+        - file: ./composition/representative-values.js
+          imports:
+            - RepresentativeValue
+          reExport: true
+        - file: ./canonical/canonical-equation.js
+          imports:
+            - SourcedPrefactor
+            - SourcedGroupPrefactor
+          reExport: true
       exports:
         - UniversalTensor
         - C_SI
@@ -14497,9 +14807,7 @@ modules:
         - attachRegimesToCell
         - getCellRegimes
         - RegimeCollisionError
-        - bridgeGradient
         - bridgeGradientNumerical
-        - gradientToNamed
         - bridgeGradientAST
         - bridgeGradientASTById
         - astDifferentiableBridgeIds
@@ -14525,6 +14833,7 @@ modules:
         - MissingInputError
         - NonFiniteInputError
         - UnknownInputError
+        - ConstantInputError
         - inputContract
         - christoffel
         - ricci
@@ -14711,7 +15020,6 @@ modules:
         - RegimeValueBase
         - RegimeSpec
         - BridgeDiffSpec
-        - BridgeGradientResult
         - BridgeNumericalGradientResult
         - ASTGradientResult
         - MeasuredCouplingRow
@@ -14813,6 +15121,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - DerivationExplanation
@@ -14872,6 +15181,57 @@ modules:
         - ConfrontationEntry
         - RigorTier
         - Elasticity
+        - UPTError
+        - UnitMode
+        - Variance
+        - Role
+        - TensorIndex
+        - UpperIndex
+        - CovariantIndex
+        - TensorSymbolNode
+        - TensorProductNode
+        - MetricTensorNode
+        - KroneckerDeltaNode
+        - TensorPartialDerivativeNode
+        - RiemannTensorNode
+        - WeylTensorNode
+        - KillingVectorNode
+        - ConservedChargeNode
+        - StressEnergyTensorNode
+        - CosmologicalConstantNode
+        - FluxRuleKind
+        - ScaleAxes
+        - ForceAxes
+        - SymmetryAxes
+        - InformationAxes
+        - AxisConvenience
+        - ShapiroInput
+        - PerihelionInput
+        - HawkingInput
+        - DecoherenceInput
+        - EinsumContraction
+        - EinsumFreeAxis
+        - KillingFn
+        - KillingMetricFn
+        - ChristoffelAtFn
+        - RelationContract
+        - Conventions
+        - ScaleAxis
+        - ForceAxis
+        - InformationAxis
+        - SymmetryAxis
+        - TopologyAxis
+        - StatisticsAxis
+        - EnumerationOptions
+        - UncertaintyOptions
+        - AnalyzeUserEquationOptions
+        - ShortBinding
+        - ConstantDef
+        - ProposedBridge
+        - DiscoveryOptions
+        - RepresentativeValue
+        - SourcedPrefactor
+        - SourcedGroupPrefactor
       reExported:
         - "* as atlas from ./atlas/public.js"
         - UniversalTensor
@@ -14950,11 +15310,8 @@ modules:
         - getCellRegimes
         - RegimeCollisionError
         - BridgeDiffSpec
-        - BridgeGradientResult
         - BridgeNumericalGradientResult
-        - bridgeGradient
         - bridgeGradientNumerical
-        - gradientToNamed
         - ASTGradientResult
         - bridgeGradientAST
         - bridgeGradientASTById
@@ -14993,6 +15350,7 @@ modules:
         - MissingInputError
         - NonFiniteInputError
         - UnknownInputError
+        - ConstantInputError
         - Evaluation
         - EvaluatorSpec
         - EvaluatorParameter
@@ -15174,6 +15532,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - explainQuantity
@@ -15296,6 +15655,57 @@ modules:
         - RigorTier
         - decidingMeasurement
         - Elasticity
+        - UPTError
+        - UnitMode
+        - Variance
+        - Role
+        - TensorIndex
+        - UpperIndex
+        - CovariantIndex
+        - TensorSymbolNode
+        - TensorProductNode
+        - MetricTensorNode
+        - KroneckerDeltaNode
+        - TensorPartialDerivativeNode
+        - RiemannTensorNode
+        - WeylTensorNode
+        - KillingVectorNode
+        - ConservedChargeNode
+        - StressEnergyTensorNode
+        - CosmologicalConstantNode
+        - FluxRuleKind
+        - ScaleAxes
+        - ForceAxes
+        - SymmetryAxes
+        - InformationAxes
+        - AxisConvenience
+        - ShapiroInput
+        - PerihelionInput
+        - HawkingInput
+        - DecoherenceInput
+        - EinsumContraction
+        - EinsumFreeAxis
+        - KillingFn
+        - KillingMetricFn
+        - ChristoffelAtFn
+        - RelationContract
+        - Conventions
+        - ScaleAxis
+        - ForceAxis
+        - InformationAxis
+        - SymmetryAxis
+        - TopologyAxis
+        - StatisticsAxis
+        - EnumerationOptions
+        - UncertaintyOptions
+        - AnalyzeUserEquationOptions
+        - ShortBinding
+        - ConstantDef
+        - ProposedBridge
+        - DiscoveryOptions
+        - RepresentativeValue
+        - SourcedPrefactor
+        - SourcedGroupPrefactor
   numerical:
     src/numerical/bianchi-residual.ts:
       description: Evaluator for the second-Bianchi-identity residual.
@@ -15372,18 +15782,25 @@ modules:
             - unitConventionNotes
             - UnitError
             - UnitRefusedError
+            - UnknownUnitError
             - AffineTemperature
             - TemperatureReading
         - file: ./formula-contract.js
           imports:
-            - callBuiltinFunction
+            - arityMessage
             - EulerNumberError
             - FormulaError
+            - SCALAR_FUNCTIONS
+            - unknownFunctionMessage
         - file: ./formula-dimension.js
           imports:
+            - constantExponent
             - parseFormulaPNode
             - UnsupportedSyntaxError
             - FormulaPNode
+        - file: ./formula-mathts.js
+          imports:
+            - mathtsFormulaParser
       exports:
         - readNamedBinding
         - readBinding
@@ -15538,6 +15955,8 @@ modules:
         - christoffelAt
         - dGammaAt
         - buildRiemann
+        - riemannUpperAt
+        - lowerFirstIndex
         - riemannLowerAt
         - covariantDerivRiemannLowerAt
         - contractRiemannJS
@@ -15548,6 +15967,8 @@ modules:
         - christoffelAt
         - dGammaAt
         - buildRiemann
+        - riemannUpperAt
+        - lowerFirstIndex
         - riemannLowerAt
         - covariantDerivRiemannLowerAt
         - contractRiemannJS
@@ -15720,15 +16141,21 @@ modules:
         - propagateEvaluatorUncertainty
         - correlationIsPositiveSemidefinite
     src/numerical/formula-contract.ts:
-      description: Scalar-formula contract shared by the MathTS parser.
+      description: "Scalar-formula contract: the parser types, the refusal of `euler`, and THE"
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../dimensional/ast-types.js
+          imports:
+            - TranscendentalFn
+          typeOnly: true
       exports:
         - EULER_NUMBER_ERROR
+        - SCALAR_FUNCTIONS
         - BUILTIN_FUNCTION_NAMES
         - FUNCTION_EQUIVALENTS
         - BUILTIN_FUNCTION_LIST
+        - arityMessage
         - unknownFunctionMessage
         - callBuiltinFunction
         - FormulaError
@@ -15739,11 +16166,14 @@ modules:
       interfaces:
         - CompiledFormula
         - FormulaParser
+        - ScalarFunction
       functions:
+        - arityMessage
         - unknownFunctionMessage
         - callBuiltinFunction
       constants:
         - EULER_NUMBER_ERROR
+        - SCALAR_FUNCTIONS
         - BUILTIN_FUNCTION_NAMES
         - FUNCTION_EQUIVALENTS
         - BUILTIN_FUNCTION_LIST
@@ -15785,9 +16215,11 @@ modules:
             - EULER_NUMBER_ERROR
             - EulerNumberError
             - FormulaError
+            - SCALAR_FUNCTIONS
+            - unknownFunctionMessage
       exports:
-        - ELEMENTARY_CHARGE_MIX_MESSAGE
         - formulaSymbolDimension
+        - constantExponent
         - parseFormulaPNode
         - builtinFormulaDimensionChecker
         - FormulaDimensionError
@@ -15800,10 +16232,9 @@ modules:
         - FormulaDimensionChecker
       functions:
         - formulaSymbolDimension
+        - constantExponent
         - parseFormulaPNode
         - builtinFormulaDimensionChecker
-      constants:
-        - ELEMENTARY_CHARGE_MIX_MESSAGE
     src/numerical/formula-mathts.ts:
       description: MathTS-backed scalar-formula parser.
       externalDependencies:
@@ -15934,7 +16365,7 @@ modules:
         - GL4_A
         - GL4_B
         - GL4_C
-        - solveGL4Stage
+        - gl4Step
         - integrateGeodesicGL4
       reExported:
         - GL4_A
@@ -15944,8 +16375,9 @@ modules:
         - GL4State
         - GL4Snapshot
         - GL4Options
+        - GL4StepResult
       functions:
-        - solveGL4Stage
+        - gl4Step
         - integrateGeodesicGL4
     src/numerical/grid-field.ts:
       description: GridField — a sampled field on a regular grid, for the 'grid' numericalForm
@@ -16263,8 +16695,10 @@ modules:
         - file: ../dimensional/validator.js
           imports:
             - ExprNode
-            - TranscendentalFn
           typeOnly: true
+        - file: ./formula-contract.js
+          imports:
+            - callBuiltinFunction
         - file: ../dimensional/validator.js
           imports:
             - validate
@@ -16551,7 +16985,8 @@ modules:
       externalDependencies:
         - package: "@danielsimonjr/mathts-functions"
           imports:
-            - solveODESystem
+            - det
+            - inv
       nodeDependencies: []
       internalDependencies:
         - file: ../core/constants.js
@@ -16568,17 +17003,39 @@ modules:
             - TIME
             - VELOCITY
             - Dimension
+        - file: ../dimensional/units.js
+          imports:
+            - UnitError
         - file: ./binding-value.js
           imports:
             - readParameter
+        - file: ./connection-lowering-helpers.js
+          imports:
+            - computeChristoffelTensor
+        - file: ./curvature-lowering-helpers.js
+          imports:
+            - christoffelAt
+            - lowerFirstIndex
+            - riemannUpperAt
+        - file: ./geodesic-integrator.js
+          imports:
+            - integrateGeodesic
+        - file: ./kretschmann.js
+          imports:
+            - computeKretschmann
+        - file: ./mathts-engine.js
+          imports:
+            - MathTSEngine
+        - file: ./types.js
+          imports:
+            - NestedArray
+          typeOnly: true
       exports:
         - METRIC_SIGNATURE
-        - METRIC_SIGNATURE_NOTE
         - schwarzschildKretschmann
         - flrwRicciScalar
         - friedmannSides
         - kerrKretschmann
-        - metricParams
         - curvatureReport
         - schwarzschildCircularOrbit
         - kerrIscoRadius
@@ -16602,7 +17059,6 @@ modules:
         - flrwRicciScalar
         - friedmannSides
         - kerrKretschmann
-        - metricParams
         - curvatureReport
         - schwarzschildCircularOrbit
         - kerrIscoRadius
@@ -16616,7 +17072,6 @@ modules:
         - kerrEquatorialCircular
       constants:
         - METRIC_SIGNATURE
-        - METRIC_SIGNATURE_NOTE
     src/numerical/strides.ts:
       description: Shared stride and flat-index utilities for row-major tensor storage.
       externalDependencies: []
@@ -16652,6 +17107,7 @@ modules:
       interfaces:
         - EngineTensor
         - EinsumContraction
+        - EinsumFreeAxis
         - EinsumSpec
         - ForwardGradResult
         - ReverseGradResult
@@ -16876,6 +17332,7 @@ dependencyGraph:
         - src/atlas/error-algebra.ts
         - src/atlas/export.ts
         - src/atlas/families.ts
+        - src/atlas/family.ts
         - src/atlas/index.ts
         - src/atlas/link-prediction.ts
         - src/atlas/model.ts
@@ -16897,6 +17354,7 @@ dependencyGraph:
         - src/atlas/path-bound.ts
         - src/atlas/physjs-entries.generated.ts
         - src/atlas/physjs-ref.ts
+        - src/atlas/physjs-reviewed.ts
         - src/atlas/poster/associations.ts
         - src/atlas/poster/derivations.ts
         - src/atlas/poster/statements.ts
@@ -16940,7 +17398,6 @@ dependencyGraph:
         - src/bridges/membership.ts
         - src/bridges/notices.ts
         - src/bridges/observations/types.ts
-        - src/bridges/registry.ts
         - src/bridges/rejected.ts
         - src/bridges/relation-eval.ts
         - src/bridges/rhs-registry.ts
@@ -16982,6 +17439,7 @@ dependencyGraph:
     - name: Cli
       files:
         - src/cli/args.ts
+        - src/cli/bindings.ts
         - src/cli/closed-form-range.ts
         - src/cli/command.ts
         - src/cli/commands/_atlas-map.ts
@@ -17024,10 +17482,10 @@ dependencyGraph:
         - src/cli/expr-print.ts
         - src/cli/flag-help.ts
         - src/cli/graphs.ts
+        - src/cli/library-defaults.ts
         - src/cli/main.ts
         - src/cli/map-evidence.ts
         - src/cli/output.ts
-        - src/cli/poster-source.ts
         - src/cli/published-url.ts
         - src/cli/record-reach.ts
         - src/cli/record-tables.ts
@@ -17081,6 +17539,7 @@ dependencyGraph:
         - src/composition/grounding.ts
         - src/composition/identifiability.ts
         - src/composition/index.ts
+        - src/composition/mathts-quiet.ts
         - src/composition/mathts-scalar-symbols.ts
         - src/composition/not-composable-seeds.ts
         - src/composition/probe/backend-protocol.ts
@@ -17233,19 +17692,19 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 360
+  totalTypeScriptFiles: 363
   totalModules: 13
-  totalLinesOfCode: 79797
-  totalExports: 2476
-  totalClasses: 79
-  totalInterfaces: 452
-  totalFunctions: 761
-  totalTypeGuards: 7
+  totalLinesOfCode: 81116
+  totalExports: 2558
+  totalClasses: 81
+  totalInterfaces: 462
+  totalFunctions: 776
+  totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 383
-  totalReExports: 1254
-  totalTypeOnlyImports: 507
+  totalConstants: 392
+  totalReExports: 1308
+  totalTypeOnlyImports: 510
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 77
+  unusedExportsCount: 66

@@ -96,6 +96,11 @@ describe('parseBackendResponse — a malformed answer is an ERROR, never a defau
     expect(parseBackendResponse(retrieve, { itemId: 'i1', ranking: ['b', 'a'] })).toEqual({ itemId: 'i1', ranking: ['b', 'a'] });
   });
 
+  it('returns only the validated fields: an extra field on the reply is not carried through', () => {
+    expect(parseBackendResponse(classify, { itemId: 'i1', outcome: 'reject', note: 'kept?' })).toEqual({ itemId: 'i1', outcome: 'reject' });
+    expect(parseBackendResponse(retrieve, { itemId: 'i1', ranking: ['b'], outcomeHint: 1 })).toEqual({ itemId: 'i1', ranking: ['b'] });
+  });
+
   it('rejects a missing outcome rather than reading it as abstain', () => {
     expect(parseBackendResponse(classify, { itemId: 'i1' })).toHaveProperty('error');
   });

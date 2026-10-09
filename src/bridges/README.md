@@ -8,10 +8,10 @@ The fields that decide what a row is:
 
 - `type` is required. It is `standard` or `cross-domain`. The catalog field is authoritative. The human-readable ledger is [`docs/architecture/bridge-type-classification.md`](../../docs/architecture/bridge-type-classification.md).
 - `formalKey` names a vendored PhysJS manifest entry. `formalRef` is derived from that key. It is not stored as its own object on the row.
-- A relation is the closed form: an expression string, a target, sources, a `holds` domain, and an optional reference value. Several relations may share one catalog id. The on-disk list is the catalog `relations` array.
-- `method` names a numerical method the record calls. The method is named by the method. A bridge number does not own it.
-
-`derivedFrom` and `basis` stay off the record until a derivation theorem is pinned.
+- A relation is the closed form: an expression string, a target, sources, a `holds` domain, and a reference point. Several relations may share one catalog id. The on-disk list is the catalog `relations` array. A relation's `confidence` is its row's `status`, derived when the catalog loads; the file stores one only on a relation with no row.
+- The row owns its relation contract, regime, conventions and counterexamples; a relation carries no copy.
+- `rejections` is the negative catalog (rows adjudicated not-a-bridge); `rejected.ts` projects it.
+- Every field the schema declares has a reader in `src/`. A field nothing reads is not declared.
 
 ## Engine
 

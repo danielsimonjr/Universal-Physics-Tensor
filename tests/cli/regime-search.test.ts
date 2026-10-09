@@ -2,28 +2,17 @@
  * Domain regime registrations are a search registry. Piezoelectricity is not
  * invisible because the word is absent from the other registries.
  */
+import { captureMerged } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { buildSearchIndex } from '../../src/cli/search-index.js';
 import * as api from '../../src/cli-api.js';
 import { registerRegimeDomain } from '../../src/relations/regime-registration.js';
 
-function capture() {
-  const lines: string[] = [];
-  return {
-    lines,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => lines.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-
 describe('upt search indexes domain regimes', () => {
   it('piezoelectric, its prefix, plasma, and tolman name upt regime', async () => {
     for (const word of ['piezoelectric', 'piezo', 'plasma', 'tolman']) {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['search', word], cap.io);
       const text = cap.lines.join('');
       expect(code, text).toBe(0);
@@ -54,8 +43,9 @@ describe('upt search indexes domain regimes', () => {
   });
 
   it('a miss names the regime registry', async () => {
-    const cap = capture();
-    expect(await runCli(['search', 'zzqqxx'], cap.io)).toBe(1);
+    const cap = captureMerged();
+    // No match is a result (exit 0); the scope line names every registry searched.
+    expect(await runCli(['search', 'zzqqxx'], cap.io)).toBe(0);
     expect(cap.lines.join('')).toMatch(/applied cases, \d+ regimes; this registry only/);
   });
 });

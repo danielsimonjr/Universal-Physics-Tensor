@@ -114,7 +114,6 @@ export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
       witness: 'W9',
     },
   ],
-  evidence: new Set(['proposed', 'dimension-checked', 'numerically-supported']),
   witnesses: [
     {
       id: 'W9',

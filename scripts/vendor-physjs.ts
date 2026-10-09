@@ -54,7 +54,17 @@ export function manifestTheorems(manifest: Manifest): string[] {
   return out;
 }
 
-const DECLARATION = /^\s*(?:@\[[^\]]*\]\s*)?(?:(?:private|protected|noncomputable)\s+)*(?:theorem|lemma)\s+([^\s(:{[]+)/;
+/**
+ * A theorem or lemma declaration at the start of a line: any number of
+ * attributes, an optional `open … in` on the same line, the modifiers, then
+ * the keyword and the name. An `open … in` on the line BEFORE is handled by
+ * `declaredTheorems`, which drops that line and reads the next.
+ */
+const DECLARATION =
+  /^\s*(?:@\[[^\]]*\]\s*)*(?:open\s+[^\n]*?\s+in\s+)?(?:(?:private|protected|noncomputable)\s+)*(?:theorem|lemma)\s+([^\s(:{[]+)/;
+
+/** A line that is only `open … in`: the declaration it scopes is on the next line. */
+const OPEN_IN_LINE = /^\s*open\s+[^\n]*?\s+in\s*$/;
 
 /** Full names of the theorems and lemmas `source` declares, from its namespace and section lines. */
 export function declaredTheorems(source: string): string[] {
@@ -96,6 +106,7 @@ export function declaredTheorems(source: string): string[] {
       scopes.length = at;
       continue;
     }
+    if (OPEN_IN_LINE.test(line)) continue;
     const decl = DECLARATION.exec(line);
     if (decl === null) continue;
     const name = decl[1]!;

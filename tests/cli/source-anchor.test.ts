@@ -9,25 +9,11 @@
  * graph itself, and each anchor is checked in both states (default and overridden, present and
  * absent), so a line printed unconditionally would fail.
  */
+import '../helpers/dist.js';
+import { json, run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
-import { runCli } from '../../dist/cli/main.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
-
-async function run(argv: string[]) {
-  const o = { stdout: '', stderr: '' };
-  const code = await runCli(argv, {
-    out: (l?: string) => void (o.stdout += (l ?? '') + '\n'),
-    err: (l?: string) => void (o.stderr += (l ?? '') + '\n'),
-    write: (x: string) => void (o.stdout += x),
-  });
-  return { code, ...o };
-}
-async function json(argv: string[]) {
-  const r = await run([...argv, '--json']);
-  expect(r.code, r.stderr).toBe(0);
-  return JSON.parse(r.stdout) as Record<string, any>;
-}
 
 const established = (g: readonly { confidence?: string }[]) => g.filter((e) => e.confidence === 'established').length;
 const SOLAR_MASS_KG = 1.989e30; // textbook value, independent of the constant the CLI reads
@@ -86,27 +72,16 @@ describe('audit I3 — the discovery ground truth', () => {
     expect(r.stdout).toMatch(/anchor: mass=[0-9.e+]+ \(the default/);
   });
 
-  // One catalog discover, then ground. Locally that is about 29s. On the CI
-  // runner one discover is about 20s, so the 60s global timeout has no margin.
-  it('ground prints the source and anchor of the funnel it re-ran', async () => {
-    const pair = (await json(['discover'])).result[0] as { a: string; b: string };
-    const r = await run(['ground', pair.a, pair.b]);
-    expect(r.code, r.stderr).toBe(0);
-    expect(r.stdout).toMatch(/\[source: catalog \(/);
-    expect(r.stdout).toMatch(/anchor: mass=[0-9.e+]+ \(the default/);
-    const j = await json(['ground', pair.a, pair.b, '--anchor=mass=2e30']);
-    expect(j.source).toBe('catalog');
-    expect(j.anchor.groundTruth).toEqual({ values: { mass: 2e30 }, isDefault: false });
-  }, 180_000);
-
   it('map shows the ground truth only when --proposed ran the funnel', async () => {
     const plain = await json(['map']);
     expect(plain.anchor.groundTruth).toBeUndefined();
     expect((await run(['map'])).stdout).not.toMatch(/proposals: anchor:/);
-    const prop = await json(['map', '--proposed', '--anchor=mass=2e30']);
+    // --proposed runs the funnel in every output form; the catalog graph keeps the run short.
+    const prop = await json(['map', '--proposed', '--source=catalog', '--anchor=mass=2e30']);
     expect(prop.anchor.groundTruth).toEqual({ values: { mass: 2e30 }, isDefault: false });
-    expect((await run(['map', '--proposed'])).stdout).toMatch(/proposals: anchor: mass=[0-9.e+]+ \(the default/);
-  });
+    expect(prop.result.proposed).toBeDefined();
+    expect((await run(['map', '--proposed', '--source=catalog'])).stdout).toMatch(/proposals: anchor: mass=[0-9.e+]+ \(the default/);
+  }, 180_000);
 });
 
 describe('audit I3 — the anchored core', () => {

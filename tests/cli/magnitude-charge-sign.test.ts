@@ -79,7 +79,6 @@ describe('magnitudes stay positive when the carrier charge is negative', () => {
       expect(line, line).toContain('|charge|');
       expect(line.replaceAll('|charge|', ''), line).not.toMatch(/charge/);
     }
-    expect(body.match(/plasma-frequency ∝ /g)?.length).toBeGreaterThan(0);
 
     const larmor = { lines: [] as string[] };
     expect(

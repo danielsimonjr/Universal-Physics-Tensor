@@ -8,14 +8,14 @@
  * fail this check, or the test would pass on an empty read.
  */
 
-import { mkdtempSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { scanFileImports } from '../../tools/layer-order/check.js';
+import { tempDir } from '../helpers/tmp.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const composition = join(root, 'src/composition');
@@ -56,7 +56,7 @@ describe('composition does not import the map atlas view', () => {
   });
 
   it('POSITIVE CONTROL: an import of any of the four modules is reported', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'composition-import-'));
+    const dir = tempDir('composition-import-');
     const source = [
       "import { catalogEvidenceInput } from '../atlas/derive-evidence.js';",
       "import type { Association } from '../atlas/association.js';",

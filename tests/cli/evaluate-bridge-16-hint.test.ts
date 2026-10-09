@@ -2,21 +2,11 @@
  * be-16 evaluates. The sentence that named BridgeEquations.landauerEnergy
  * is the record from before this evaluator.
  */
+import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { evaluateBridge } from '../../src/bridges/evaluators.js';
 import { K_B_SI } from '../../src/core/constants.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return {
-    lines,
-    err,
-    io: { out: sink, err: (s?: string) => err.push((s ?? '') + '\n'), write: (s: string) => lines.push(s) },
-  };
-}
 
 describe('upt evaluate be-16 returns the Landauer energy', () => {
   it('the registry and the CLI both return k_B T ln 2', async () => {

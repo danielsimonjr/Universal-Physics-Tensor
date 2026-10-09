@@ -27,7 +27,7 @@
  * @internal
  */
 
-import type { AtlasFamily } from './oscillators/index.js';
+import type { AtlasFamily } from './family.js';
 import type { AtlasModel } from './model.js';
 
 /** One held-out pair and whether each predictor recovered it. @internal */

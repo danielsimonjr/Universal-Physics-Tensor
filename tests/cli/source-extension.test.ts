@@ -4,8 +4,10 @@
  * (dist/cli/main.js) — NOT the old bin/upt.mjs, which never had `--source`
  * on `priority`/`audit`/`connectors`/`predict`, nor `--json` on any of them.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { CENSUS } from '../helpers/census.js';
 
 function makeIo() {
   const outLines: string[] = [];
@@ -77,12 +79,12 @@ describe('source-extension — --json envelopes', () => {
     expect(envelope.result.derived.length).toBeGreaterThan(0);
   });
 
-  it('coverage --json: result.total === 44', async () => {
+  it('coverage --json: result.total is the catalog entry count', async () => {
     const { status, envelope } = await runJson(['coverage', '--json']);
 
     expect(status).toBe(0);
     expect(envelope.command).toBe('coverage');
-    expect(envelope.result.total).toBe(160);
+    expect(envelope.result.total).toBe(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.

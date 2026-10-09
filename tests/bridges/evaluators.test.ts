@@ -8,6 +8,7 @@ import { parseUnit } from '../../src/dimensional/units.js';
 import { quantityRecord } from '../../src/dimensional/quantity-registry.js';
 import { M_SUN_SI } from '../../src/core/constants.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
+import { CENSUS } from '../helpers/census.js';
 
 describe('BRIDGE_EVALUATORS', () => {
   it('covers every catalog evaluator, and not a metadata-only id', () => {
@@ -19,7 +20,7 @@ describe('BRIDGE_EVALUATORS', () => {
     expect(ids).toContain(170);
     expect(ids).not.toContain(11);
     expect(ids).not.toContain(29);
-    expect(ids).toHaveLength(120);
+    expect(ids).toHaveLength(CENSUS.evaluators.count);
   });
 
   it('evaluateBridge(63, {mu_e:2}) → Chandrasekhar mass ≈ 1.44 M_⊙', () => {
@@ -135,7 +136,7 @@ describe('BRIDGE_EVALUATORS', () => {
       M_kg: 1.989e30, b_m: 7e8, a_m: 5.79e10, eccentricity: 0.2056, T_yr: 0.24, temperature_K: 300,
       C: 1, d_m: 1e-6, a_m_s2: 9.8, T_K: 300, R_ohm: 1000, V_volts: 1e-3,
       nu: 1 / 3, sigma_S_per_m: 6e7, T_c_K: 1.2, mu_e: 2, rho_kg_per_m3: 3.8e-16, mu: 2.3,
-      I_W_per_m2: 1e6, R: 0, theta_rad: 0, B_T: 12e-9, g_00: -0.81,
+      I_W_per_m2: 1e6, R: 0, theta_rad: 0, B_T: 5e-13, g_00: -0.81,
       cs_m_per_s: 1e5, mu_m2_per_Vs: 1e-8, q_C: 1.602176634e-19,
       L_J_per_kg: 2.26e6, delta_v_m3_per_kg: 1.672,
       g1: -1, g2: -4, S_V_per_K: 2e-4,
@@ -177,7 +178,7 @@ describe('BRIDGE_EVALUATORS', () => {
       T_L_K: 400, T_0_K: 300, c_J_per_kg_K: 4180, V_m3: 1e-3, t_s: 10,
       theta_difference_K: 20, r: 8, gamma: 1.4, dv_dT_m3_per_kg_K: 1e-6,
       v_m3_per_kg: 1e-3, nu_Hz: 1e14, wien_x: 4.965114231744276, nQ_per_m3: 1e32,
-      I_J: 2.18e-18, phi_J: 4e-19, L12: 3, onsager_B_T: 0,
+      I_J: 2.18e-18, phi_J: 4e-19, L12: 3,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

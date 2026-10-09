@@ -554,8 +554,9 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "formally-proved",
+        "symbolically-checked"
       ],
       "witnesses": [
         {
@@ -699,8 +700,8 @@
       },
       "counterexamples": [],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "formally-proved",
+        "symbolically-checked"
       ],
       "witnesses": [
         {
@@ -767,7 +768,8 @@
         "limitCharacter": "regular",
         "uniformity": [
           "one period, for θ0 in the stated domain"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "oscillators",
@@ -797,6 +799,8 @@
         }
       ],
       "evidence": [
+        "contradicted",
+        "formally-proved",
         "numerically-supported"
       ],
       "witnesses": [
@@ -871,7 +875,8 @@
         "uniformity": [
           "t ≥ 5 m/b, overdamped, at the witness normalisation b = k = 1",
           "m k / b² < 1/4, |v0| ≤ 5"
-        ]
+        ],
+        "deltaAtBasis": "numerically-supported"
       },
       "regime": {
         "family": "oscillators",
@@ -901,6 +906,7 @@
         }
       ],
       "evidence": [
+        "contradicted",
         "numerically-supported"
       ],
       "witnesses": [
@@ -984,9 +990,8 @@
         }
       ],
       "evidence": [
-        "dimension-checked",
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "numerically-supported"
       ],
       "witnesses": [
         {

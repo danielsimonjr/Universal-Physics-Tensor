@@ -19,8 +19,8 @@
 
 ## CLI dogfood, three personas (2026-09-29)
 
-Tier 10 `upt path` is on master. The reports are `docs/dogfood/2026-09-29-applied-physicist.md`,
-`docs/dogfood/2026-09-29-gr-qft.md` and `docs/dogfood/2026-09-29-engineering-physicist.md`.
+Tier 10 `upt path` is on master. The reports are `docs/persona-sessions/2026-09-29-applied-physicist.md`,
+`docs/persona-sessions/2026-09-29-gr-qft.md` and `docs/persona-sessions/2026-09-29-engineering-physicist.md`.
 
 - [x] The `--allow-euler` note names `charge`, and that symbol is not defined. Charge is `e_charge`.
 - [x] `map --equation` does not rewrite `mu0` to `mu_0`, so a wire formula is dimensioned as if permeability were dimensionless. `upt eval` accepts `mu0` and `eps0` and does not accept `mu_0` or `epsilon_0`.

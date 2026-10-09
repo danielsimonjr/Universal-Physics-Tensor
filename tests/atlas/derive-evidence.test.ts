@@ -26,6 +26,7 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { adjudicateBridgeEntry, type BridgeVerdict } from '../../src/bridges/membership.js';
 import { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS } from '../../src/bridges/rejected.js';
+import { CENSUS } from '../helpers/census.js';
 
 /**
  * Compile-time pin: the structural union in `derive-evidence.ts` and the real
@@ -218,7 +219,7 @@ describe('adjudication precedence — THREE verdicts, from REAL catalog entries 
 
 describe('catalog rows derive from the artifacts they carry', () => {
   it('kind bridge is formally-proved, except an unadjudicated row, and a partial stays proposed or contradicted', () => {
-    expect(BRIDGE_EQUATIONS.length).toBe(160);
+    expect(BRIDGE_EQUATIONS.length).toBe(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
@@ -246,7 +247,7 @@ describe('catalog rows derive from the artifacts they carry', () => {
     }
     expect(offenders).toEqual([]);
     // 94 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that state their equations were labelled derivation-step.
-    expect(proved).toBe(118);
+    expect(proved).toBe(CENSUS.evidence.formallyProved);
   });
 });
 
@@ -256,7 +257,7 @@ describe('ROADMAP §7 Phase 1 — a rejection LINKS its counterexample, and the 
 
   it('every rejected row derives {contradicted} from a REAL artifact, not a special case', () => {
     const rejected = BRIDGE_EQUATIONS.filter((e) => byId.has(e.id));
-    expect(rejected.length).toBe(5);
+    expect(rejected.length).toBe(CENSUS.evidence.rejectedRows);
     for (const row of rejected) {
       const cx = counterexamplesWithRejection(row, byId.get(row.id));
       expect(cx.length).toBeGreaterThan(0);

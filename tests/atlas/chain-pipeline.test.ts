@@ -16,7 +16,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { categoryCompositionForChain, runChainPipeline } from '../../src/atlas/chain-pipeline.js';
+import { runChainPipeline } from '../../src/atlas/chain-pipeline.js';
 import { bridgeSeedKeys, physjsFormalRef, physjsTheorem } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { BRIDGE_RHS_BY_ID } from '../../src/bridges/rhs-registry.js';
@@ -219,19 +219,19 @@ describe('runChainPipeline', () => {
     };
     expect(left.target.name).toBe('span');
     expect(right.sources.some((source) => source.name === 'span')).toBe(true);
-    expect(categoryCompositionForChain(left, right)).toBeUndefined();
-    expect(categoryCompositionForChain(rodToSpan, spanToPeriod)).toBeUndefined();
 
     const results = runChainPipeline([left, right]);
     expect(results.map((result) => result.edgeIds)).toEqual([['be-21', 'be-27']]);
     expect(results.some((result) => result.kind === 'stub')).toBe(true);
 
+    // A quantity edge stores a quantity name, not a category object id, so no
+    // step can invent a category claim: the pipeline has no function for it.
+    const pipeline = readFileSync(resolve(root, 'src/atlas/chain-pipeline.ts'), 'utf8');
+    expect(pipeline).not.toContain('categoryCompositionForChain');
     const index = readFileSync(resolve(root, 'src/index.ts'), 'utf8');
     const atlasPublic = readFileSync(resolve(root, 'src/atlas/public.ts'), 'utf8');
-    expect(index).not.toContain('categoryCompositionForChain');
     expect(index).not.toContain('composeMorphisms');
     expect(atlasPublic).not.toContain('composeMorphisms');
-    expect(atlasPublic).not.toContain('categoryCompositionForChain');
   });
 
   it('CONTROL: a write into BRIDGE_EQUATIONS fails the identity check', () => {

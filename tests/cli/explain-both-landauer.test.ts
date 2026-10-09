@@ -3,23 +3,11 @@
  * recovered values are k_B T ln 2. A catalog-only or canonical-only run still
  * prints only the graph that was asked for.
  */
+import '../helpers/dist.js';
+import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { K_B_SI } from '../../src/core/constants.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
 
 const EXPECTED = K_B_SI * 300 * Math.LN2;
 

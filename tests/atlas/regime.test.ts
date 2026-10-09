@@ -52,6 +52,7 @@ describe('regimeHolds', () => {
   it('holds when m·k·b^-2 = 1 > 0.25', () => {
     expect(regimeHolds(underdamped, { 'm · b^-2 · k': 1 })).toEqual({
       ok: true,
+      checked: 1,
       violated: [],
       unchecked: [],
     });

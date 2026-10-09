@@ -5,9 +5,9 @@
  * established textbook physics ALONE, with the speculative bridge catalog
  * excluded.
  *
- * WHY this exists: `CATALOG_GRAPH` mixes the 8 established bridges with 36
- * speculative ones, so a `promising` discovery there is polluted by
- * speculation. Feeding ONLY canonical equations gives (a) a new-candidate
+ * WHY this exists: `CATALOG_GRAPH` mixes established bridges with speculative
+ * ones (the counts per status are NOTES.md's), so a `promising` discovery
+ * there is polluted by speculation. Feeding ONLY canonical equations gives (a) a new-candidate
  * review surface motivated by textbook physics, and (b) a regression harness —
  * discovery on canonical-only must introduce no numerical contradiction
  * (standard physics, fed to the inference suite, stays self-consistent).
@@ -24,9 +24,9 @@
  *     `confidence: 'established'` — the canonical graph IS the anchored core.
  *   - `kind: 'law'` (within-domain ground truth, not a cross-regime bridge);
  *     `beId: null` (not a catalog bridge). **Annotation-correctness note:**
- *     `toEdge` hardcodes `kind:'law'` and `regimesDiffer` has zero call sites.
- *     The information-axis mapping is annotation-only; there is no edge-kind
- *     path and no delta to measure.
+ *     `toEdge` hardcodes `kind:'law'`; the attributes an edge carries do not
+ *     decide its kind here. The attribute mapping is annotation-only; there
+ *     is no edge-kind path and no delta to measure.
  *   - Evaluator: the dimensional MONOMIAL gives the power law over the variable
  *     sources, times the baked constant factor. A fully-quantitative scalar
  *     AST whose extra factors are a closed dimensionless coefficient
@@ -65,6 +65,8 @@
 
 import type { BridgeEdge, ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
+import { regimeAttributesOf } from './quantity.js';
+import { AXES } from './axes.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { applyCarrierSignPolicy } from '../bridges/carrier-sign.js';
@@ -76,11 +78,12 @@ import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
 import { evalExpr } from './expr-eval.js';
+import { monomialExponents } from './formula-shape.js';
 import { HoldsError, holds } from '../bridges/holds.js';
 import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
 
-/** A universal constant a canonical `governing` list may name: SI value + dim. */
-interface ConstantDef {
+/** A universal constant a canonical `governing` list may name: SI value + dim. Named by the public `CANONICAL_CONSTANTS`. @public */
+export interface ConstantDef {
   readonly value: number;
   readonly dim: Dimension;
 }
@@ -118,20 +121,22 @@ const constantValue = (name: string, dim: Dimension): number | null => {
 };
 
 /**
- * Carry the scale/force/information regime axes (shared with `RegimeAttributes`).
- * The registry's information enum spelling differs from `RegimeAttributes`,
- * so it is mapped via `INFO_MAP`.
+ * Carry every registry axis the canonical regime states under the same
+ * vocabulary (scale, force, symmetry), plus information through `INFO_MAP`,
+ * whose spelling differs. `TensorIndices.topology` is a number, not a
+ * `TopologyAxis`, and `dimension` is not a registry axis; neither is carried.
+ * The result is checked against the registry, so a canonical regime value
+ * outside an axis's value list is a load-time error, not an unstated axis.
  */
 function attributesOf(eq: CanonicalEquation): RegimeAttributes {
-  const attrs: {
-    scale?: RegimeAttributes['scale'];
-    force?: RegimeAttributes['force'];
-    information?: RegimeAttributes['information'];
-  } = {};
-  if (eq.regime.scale) attrs.scale = eq.regime.scale;
-  if (eq.regime.force) attrs.force = eq.regime.force;
-  if (eq.regime.information) attrs.information = INFO_MAP[eq.regime.information];
-  return attrs;
+  const stated: Record<string, string> = {};
+  for (const { name } of AXES) {
+    const value = (eq.regime as Readonly<Record<string, unknown>>)[name];
+    if (name === 'information' || typeof value !== 'string') continue;
+    stated[name] = value;
+  }
+  if (eq.regime.information) stated['information'] = INFO_MAP[eq.regime.information];
+  return regimeAttributesOf(stated, `canonical ${eq.id} regime`);
 }
 
 const PERMISSIVE_DOMAIN: ValidityDomain = {
@@ -150,7 +155,7 @@ function domainOf(eq: CanonicalEquation, sourceNames: readonly string[]): Validi
     description: text,
     predicate: (inputs) => {
       try {
-        return holds(text, inputs, formulaScope(), [...formulaNames(), ...sourceNames]);
+        return holds(text, inputs, formulaScope(), [...formulaNames(), ...sourceNames], sourceNames);
       } catch (error) {
         if (error instanceof HoldsError) return false;
         throw error;
@@ -241,45 +246,6 @@ function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undef
   if (c === undefined || !Number.isFinite(c) || c === 0) return undefined;
   if (Math.abs(c - 1) < 1e-12) return undefined;
   return c;
-}
-
-/**
- * Exponents of every symbol in a product, quotient, or integer power.
- * Undefined for a sum or any node that is not that monomial.
- */
-function monomialExponents(node: ExprNode | undefined): Map<string, number> | undefined {
-  if (node === undefined) return undefined;
-  if (node.kind === 'symbol') return new Map([[node.name, 1]]);
-  if (node.kind !== 'op') return undefined;
-  if (node.op === '*') {
-    const acc = new Map<string, number>();
-    for (const arg of node.args) {
-      const part = monomialExponents(arg);
-      if (part === undefined) return undefined;
-      for (const [name, exp] of part) acc.set(name, (acc.get(name) ?? 0) + exp);
-    }
-    return acc;
-  }
-  if (node.op === '/') {
-    if (node.args.length !== 2) return undefined;
-    const numerator = monomialExponents(node.args[0]);
-    const denominator = monomialExponents(node.args[1]);
-    if (numerator === undefined || denominator === undefined) return undefined;
-    for (const [name, exp] of denominator) numerator.set(name, (numerator.get(name) ?? 0) - exp);
-    return numerator;
-  }
-  if (node.op === '^') {
-    const base = node.args[0];
-    const expNode = node.args[1];
-    if (base === undefined || expNode === undefined || expNode.kind !== 'symbol') return undefined;
-    const exp = Number(expNode.name);
-    if (!Number.isFinite(exp)) return undefined;
-    const inner = monomialExponents(base);
-    if (inner === undefined) return undefined;
-    for (const [name, innerExp] of inner) inner.set(name, innerExp * exp);
-    return inner;
-  }
-  return undefined;
 }
 
 /**

@@ -9,6 +9,7 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import { publishedUrl } from '../published-url.js';
+import type { RigorTier } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--bridge', valueStyle: 'attached', description: 'Select one bridge id, the same selection as a positional be-XX.' },
@@ -47,7 +48,7 @@ const HELP = `upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|
         separately from its stated agreement bound.
         be-53 is not in that registry. \`upt confront be-53\` refuses: a
         confrontation needs a caller-supplied measured-coupling table and a
-        running procedure (requestYangMillsConfrontation). The refusal names
+        running procedure, neither of which the library ships. The refusal names
         each missing input, prints no residual, and does not change the
         catalog status. It is not a pass and not a fail. The one-loop
         coefficient's sign is oneLoopCoefficientStatement, not this command.`;
@@ -148,14 +149,23 @@ function statisticDistribution(outcomes: readonly Outcome[]) {
   return { sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'), tables: n('table') };
 }
 
-/** A fraction as a percentage; exponent form below 0.05% so a tiny nonzero value never prints as 0.0%. */
-function percent(x: number): string {
-  const p = x * 100;
-  return `${p !== 0 && Math.abs(p) < 0.05 ? p.toExponential(1) : p.toFixed(1)}%`;
+/** The one number formatter, as every command reads it: through `ctx.api`. */
+type Fmt = CommandCtx['api']['formatQuantity'];
+
+/** A fraction as a percentage: a statistic, three significant digits (`-43.7%`, `±150%`), never fifteen. */
+function percent(fmt: Fmt, x: number): string {
+  return `${fmt(x * 100, 3)}%`;
 }
 
-function signedPercent(x: number): string {
-  return `${x > 0 ? '+' : ''}${percent(x)}`;
+function signedPercent(fmt: Fmt, x: number): string {
+  return `${x > 0 ? '+' : ''}${percent(fmt, x)}`;
+}
+
+/** Count by rigor tier, over the confrontations given. */
+function rigorDistributionOf(tiers: readonly RigorTier[]): Record<RigorTier, number> {
+  const counts: Record<RigorTier, number> = { stringent: 0, moderate: 0, loose: 0 };
+  for (const tier of tiers) counts[tier] += 1;
+  return counts;
 }
 
 const NOT_RECORDED = 'not recorded — the record states nothing on this; that is not "none"';
@@ -233,7 +243,8 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`catalog id ${bridgeId} refused. Missing: ${missing}.`);
       out(`This is not a pass and not a fail. The catalog status of catalog id ${bridgeId} is unchanged.`);
     }
-    return 1;
+    // The refusal is the result the command computed: exit 0, as a path with no composite claim.
+    return 0;
   }
 
   let entries =
@@ -284,7 +295,8 @@ async function run(ctx: CommandCtx): Promise<number> {
       {
         command: 'confront',
         epistemics,
-        rigorDistribution: api.rigorDistribution(),
+        // Over the confrontations this invocation ran, as the other two distributions are.
+        rigorDistribution: rigorDistributionOf(results.map((r) => r.rigor)),
         statisticDistribution: statisticDistribution(results.map((r) => r.outcome)),
         dataHandlingDistribution: dataHandlingDistribution(results.map((r) => r.outcome)),
         result: jsonResults,
@@ -328,13 +340,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  be-${bridgeId} [${rigor}]: ${title}`);
     switch (outcome.kind) {
       case 'value': {
-        const margin = wantFrontier ? ` · margin ${(1 - outcome.residualInSigma).toFixed(2)}σ to the 1σ acceptance threshold` : '';
+        const margin = wantFrontier ? ` · margin ${api.formatQuantity(1 - outcome.residualInSigma, 3)}σ to the 1σ acceptance threshold` : '';
         // A derived "observed" value is labelled derived, and the quantity that
         // was actually measured is shown beside it (persona finding L6).
         const m = outcome.measured;
         const observedLabel = m ? `derived ${m.derivation} =` : 'observed';
         out(
-          `    predicted ${outcome.predicted} · ${observedLabel} ${outcome.observed} ± ${outcome.sigma} ${outcome.units} · residual ${outcome.residualInSigma.toFixed(2)}σ · ${outcome.withinObserved ? 'within 1σ ✓' : 'outside 1σ'}${margin}`
+          `    predicted ${api.formatQuantity(outcome.predicted)} · ${observedLabel} ${api.formatQuantity(outcome.observed)} ± ${api.formatQuantity(outcome.sigma)} ${outcome.units} · residual ${api.formatQuantity(outcome.residualInSigma, 3)}σ · ${outcome.withinObserved ? 'within 1σ ✓' : 'outside 1σ'}${margin}`
         );
         if (m) {
           out(`    measured: ${m.quantity} = ${m.value} ± ${m.sigma} (${m.source}); the value above is derived from it, not observed`);
@@ -372,11 +384,11 @@ async function run(ctx: CommandCtx): Promise<number> {
             ? `rule: ${c.rule} · ${c.withinBound ? 'compatible ✓' : 'BELOW THE LIMIT'}`
             : c.agreementBound === null
               ? 'no agreement bound in this outcome, so no compatibility decision'
-              : `agreement bound ±${percent(c.agreementBound)} (the record's stated tolerance, not a measured difference) · ` +
+              : `agreement bound ±${percent(api.formatQuantity, c.agreementBound)} (the record's stated tolerance, not a measured difference) · ` +
                 `|difference| ≤ bound: ${c.withinBound ? 'compatible ✓' : 'OUTSIDE BOUND'}`;
         out(
           `    predicted ${outcome.predicted} approaches ${outcome.approaches} ${outcome.units} · ` +
-            `actual difference ${signedPercent(c.relativeDifference)} = ${c.definition} · ${verdict}`,
+            `actual difference ${signedPercent(api.formatQuantity, c.relativeDifference)} = ${c.definition} · ${verdict}`,
         );
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);
         break;
@@ -385,7 +397,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         out(`    ${outcome.rows.length} rows (${outcome.units}):`);
         for (const row of outcome.rows) {
           out(
-            `      ${row.label}: predicted ${row.predicted} · observed ${row.observed} ± ${row.sigma} · ${row.residualInSigma.toFixed(2)}σ`
+            `      ${row.label}: predicted ${api.formatQuantity(row.predicted)} · observed ${api.formatQuantity(row.observed)} ± ${api.formatQuantity(row.sigma)} · ${api.formatQuantity(row.residualInSigma, 3)}σ`
           );
         }
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);

@@ -6,18 +6,18 @@
  * dimensionless argument is homogeneous.
  */
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, symlinkSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, readFileSync, symlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { tempDir } from '../helpers/tmp.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const readme = readFileSync(resolve(root, 'src/dimensional/README.md'), 'utf8');
 const fences = [...readme.matchAll(/```ts\n([\s\S]*?)```/g)].map((match) => match[1]!);
 
 function runFence(source: string): { status: number; stdout: string; stderr: string } {
-  const dir = mkdtempSync(join(tmpdir(), 'upt-dim-readme-'));
+  const dir = tempDir('upt-dim-readme-');
   mkdirSync(join(dir, 'node_modules'));
   symlinkSync(root, join(dir, 'node_modules', 'universal-physics-tensor'));
   writeFileSync(join(dir, 'snippet.ts'), source);
@@ -30,8 +30,9 @@ function runFence(source: string): { status: number; stdout: string; stderr: str
 
 describe('src/dimensional/README.md', () => {
   it('describes the live catalog and the transcendental node', () => {
-    expect(readme).toContain('77 entries, ids 11–87');
-    expect(readme).not.toContain('44 entries');
+    // The README carries no catalog count (the census does); it names the record and the projection.
+    expect(readme).toContain('data/bridge-catalog.json');
+    expect(readme).not.toMatch(/\b\d+ entries, ids \d+/);
     expect(readme).toContain("fn: 'sin'");
     expect(readme).toContain('import type { ExprNode }');
     expect(fences).toHaveLength(3);

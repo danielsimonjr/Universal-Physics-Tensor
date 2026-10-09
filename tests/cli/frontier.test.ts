@@ -2,18 +2,14 @@
  * `upt frontier` prints the two lists. The empty-list control lives on the
  * formatter; this file checks the command's text and JSON stay apart.
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-
 describe('upt frontier', () => {
   it('prints both headings and does not merge the lists into one score', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['frontier'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -25,7 +21,7 @@ describe('upt frontier', () => {
   });
 
   it('JSON carries two arrays', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['frontier', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));

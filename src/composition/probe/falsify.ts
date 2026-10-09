@@ -3,7 +3,7 @@
  *
  * Persist counterexamples. Failed limits are fatal only when the candidate
  * claims that domain (see limits.ts). Catalog retrodiction is Product A and
- * is not treated as a candidate-level verdict.
+ * is not a battery here.
  *
  * @internal
  */
@@ -25,7 +25,6 @@ export interface FalsifyInput {
   readonly prefactor?: number;
   readonly claimedRegimes?: Readonly<Record<string, string>>;
   readonly limits?: readonly DeclaredLimit[];
-  readonly observationalBoundIds?: readonly string[];
   readonly skipDimensional?: boolean;
 }
 
@@ -124,33 +123,18 @@ function limitsBattery(checks: readonly LimitCheckResult[]): FalsificationRecord
   };
 }
 
-function retrodictionBattery(): FalsificationRecord {
-  return {
-    battery: 'retrodiction',
-    outcome: 'inconclusive',
-    detail:
-      'catalog retrodiction is Product A (needs a composition graph + ground truth) — not a probe-candidate verdict',
-  };
-}
-
-function observationalBoundsBattery(
-  ids: readonly string[] | undefined,
-): FalsificationRecord {
-  if (!ids || ids.length === 0) {
-    return {
-      battery: 'observational-bounds',
-      outcome: 'pass',
-      detail: 'no observational bound ids supplied',
-    };
-  }
-  return {
-    battery: 'observational-bounds',
-    outcome: 'inconclusive',
-    detail: `bound ids ${ids.join(', ')} recorded; candidate-level bound evaluation is data-specific`,
-  };
-}
-
-/** Run the Product B falsification batteries. @internal */
+/**
+ * Run the Product B falsification batteries: dimensional, finiteness, limits.
+ *
+ * Every listed battery can fail. Two batteries once listed here, `retrodiction`
+ * and `observational-bounds`, returned `inconclusive` by construction (catalog
+ * retrodiction is Product A, and no bound was ever evaluated), so "survived
+ * five batteries" overstated what was checked; they are not listed until they
+ * are real (9.0.0 audit §4 Low). A problem's `observationalBoundIds` stay
+ * recorded on the problem and are not a battery.
+ *
+ * @internal
+ */
 export function runFalsification(input: FalsifyInput): FalsifyResult {
   const prefactor = input.prefactor ?? 1;
   const records: FalsificationRecord[] = [];
@@ -173,17 +157,13 @@ export function runFalsification(input: FalsifyInput): FalsifyResult {
   );
   records.push(limitsBattery(limitChecks));
 
-  records.push(retrodictionBattery());
-  records.push(observationalBoundsBattery(input.observationalBoundIds));
-
   const survived = records.every((r) => r.outcome !== 'fail');
   return { records, survived, counterexamples };
 }
 
+/** The batteries `runFalsification` runs, in order; each one can fail. @internal */
 export const DEFAULT_BATTERIES: readonly FalsificationBattery[] = [
   'dimensional',
   'finiteness',
   'limits',
-  'retrodiction',
-  'observational-bounds',
 ];

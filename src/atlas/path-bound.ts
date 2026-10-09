@@ -67,7 +67,7 @@ import { composeRelation, NO_COMPOSITE_CLAIM } from './composition-table.js';
 import type { CompositionResult } from './composition-table.js';
 import type { AtlasBridge, NormTransport, RelationType } from './types.js';
 import { ATLAS_FAMILIES } from './families.js';
-import type { AtlasFamily } from './oscillators/index.js';
+import type { AtlasFamily } from './family.js';
 
 /**
  * Families {@link findPath} can search: every registered family. This was the

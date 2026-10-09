@@ -17,6 +17,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
+import { splitAssignments } from '../bindings.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
 
@@ -73,11 +74,7 @@ function parseKnown(api: CommandCtx['api'], args: readonly string[]): { known: s
     );
   }
 
-  const assignments: { name: string; raw: string; assignment: string }[] = [];
-  for (const a of args) {
-    const eq = a.indexOf('=');
-    assignments.push({ name: a.slice(0, eq), raw: a.slice(eq + 1), assignment: a });
-  }
+  const assignments = splitAssignments('explain', args).map((a) => ({ name: a.name, raw: a.raw, assignment: a.token }));
   const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
   const values: Record<string, number> = {};
   const notes: string[] = [];
@@ -90,10 +87,11 @@ function parseKnown(api: CommandCtx['api'], args: readonly string[]): { known: s
       if (e instanceof api.TemperatureBindingError) {
         throw new CliError(`upt explain: '${a.assignment}' is not a temperature. ${e.message}`);
       }
-      throw new UsageError(`upt: '${a.assignment}' is not a finite number. Expected ${a.name}=<number>. See \`upt help\`.`);
+      // A bad value is exit 1, as on eval and evaluate; a missing `=` was refused as usage above.
+      throw new CliError(`upt explain: '${a.assignment}' is not a finite number or a known unit. ${(e as Error).message}`);
     }
     if (a.raw === '' || !Number.isFinite(read.value)) {
-      throw new UsageError(`upt: '${a.assignment}' is not a finite number. Expected ${a.name}=<number>. See \`upt help\`.`);
+      throw new CliError(`upt explain: '${a.assignment}' is not a finite number. Expected ${a.name}=<number or unit>.`);
     }
     values[a.name] = read.value;
     // Unit-convention notes were already on the binding and explain did not
@@ -314,6 +312,15 @@ async function run(ctx: CommandCtx): Promise<number> {
       throw new CliError(`upt explain: ${e.message}`);
     }
     throw e;
+  }
+  // Every route refused the point (a validity domain, opposite carrier signs, a formula with
+  // no finite value there) and no value recovered: the inputs are a bad value, exit 1, the
+  // code `upt evaluate` gives the same failure. A refusal beside a recovered value from
+  // another route stays in the report, and an unset coefficient is not a bad value: it is
+  // the edge's own state, reported as "no recovered number" (exit 0).
+  const refusals = x.refusals ?? [];
+  if (x.recoveredValue === undefined && refusals.length > 0 && refusals.every((r) => r.kind !== 'coefficient-unset')) {
+    throw new CliError(`upt explain: ${refusals.map((r) => r.reason).join('; ')}`);
   }
   const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;
   const partnerKnown = partner !== null && names.has(partner.name);

@@ -131,20 +131,12 @@ import './core/regime-rule-install.js';
 import './core/regimes-builtins.js';
 
 // v0.9 Proposal 8 — Bridge Parameter Differentiation (P8 Decision #1: lives
-// in src/diff/, doesn't touch src/bridges/). `bridgeGradient` is the AD path
-// (engine.reverseGrad), but it CANNOT trace the plain-JS catalog evaluators —
-// use `bridgeGradientNumerical` (central finite differences, engine-free) to
-// differentiate them. See the module doc for the full AD-limitation note.
-export type {
-  BridgeDiffSpec,
-  BridgeGradientResult,
-  BridgeNumericalGradientResult,
-} from './diff/bridge-gradient.js';
-export {
-  bridgeGradient,
-  bridgeGradientNumerical,
-  gradientToNamed,
-} from './diff/bridge-gradient.js';
+// in src/diff/, doesn't touch src/bridges/). `bridgeGradientNumerical` is
+// central finite differences over a spec, engine-free. Engine AD of a spec
+// is unreachable by construction (`evaluate` returns a number, which carries
+// no tape); the exact AD path is `bridgeGradientAST` over the symbolic RHS.
+export type { BridgeDiffSpec, BridgeNumericalGradientResult } from './diff/bridge-gradient.js';
+export { bridgeGradientNumerical } from './diff/bridge-gradient.js';
 // Exact bridge gradients via reverse-mode AD over the symbolic RHS AST
 // (traced lowering through mathts-autograd; faithful encodings only).
 export type { ASTGradientResult } from './diff/bridge-ast-gradient.js';
@@ -162,11 +154,11 @@ export {
   DIFFERENTIABLE_RELATIONS,
 } from './diff/bridge-specs.js';
 
-// Machine-readable bridge equation index — the 40+ catalogued equations.
-// `BridgeEquationEntry` is intentionally a different shape from the runtime
-// `BridgeEquation` interface above; the entry captures spec-level metadata
-// (status, known issues, references, dependencies), while `BridgeEquation`
-// describes a runtime bridge between two tensor regimes.
+// The catalog rows of `data/bridge-catalog.json`, in id order.
+// `BridgeEquationEntry` is a different shape from the runtime `BridgeEquation`
+// interface above: the entry is the catalog's record of an equation (status,
+// known issues, references, dependencies), while `BridgeEquation` describes a
+// runtime bridge between two tensor regimes.
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
 /** Request a caller-table confrontation. The catalog status does not change. */
 export {
@@ -218,6 +210,8 @@ export {
   NonFiniteInputError,
   UnknownInputError,
 } from './composition/index.js';
+/** A caller input that names a registered constant (`G`, `k_B`, `m_p`, …) is refused on every evaluation path. */
+export { ConstantInputError } from './bridges/index.js';
 /** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
 export type { Evaluation } from './composition/index.js';
 
@@ -499,17 +493,10 @@ export type {
 } from './composition/index.js';
 
 // v0.8.0 — Bridge-membership criterion + negative catalog (G-2 / P-4)
-export {
-  adjudicateBridgeEntry,
-  adjudicateCatalog,
-  REJECTED_BRIDGE_ADJUDICATIONS,
-  REJECTED_BRIDGE_IDS,
-} from './bridges/membership.js';
-export type {
-  BridgeVerdict,
-  CatalogAdjudicationReport,
-  RejectedBridgeAdjudication,
-} from './bridges/membership.js';
+export { adjudicateBridgeEntry, adjudicateCatalog } from './bridges/membership.js';
+export { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS } from './bridges/rejected.js';
+export type { BridgeVerdict, CatalogAdjudicationReport } from './bridges/membership.js';
+export type { RejectedBridgeAdjudication } from './bridges/rejected.js';
 
 // v0.8.0 — GW170817 → BE-36 real-data confrontation (G-3)
 
@@ -544,10 +531,12 @@ export type {
 // Retrodiction harness (the framework's own falsification benchmark —
 // Consequence 2 of the bridge-inference epistemics note)
 export { retrodict, retrodictNode } from './composition/index.js';
+/** The retrodiction harness's result, prediction, refusal, report and option types. */
 export type {
   RetrodictionOutcome,
   RetrodictionPrediction,
   RetrodictionResult,
+  RetrodictionRefusal,
   RetrodictionReport,
   RetrodictionOptions,
 } from './composition/index.js';
@@ -749,34 +738,12 @@ export type {
   SourceRefs,
 } from './bridges/observations/types.js';
 
-// BE-37 × Cassini — GR Shapiro-delay PPN-γ confrontation.
-
-// BE-51 × VLBI — GR light-deflection PPN-γ confrontation (third classic GR test).
-
 // BE-53 — one-loop coefficient, and a confrontation only when the caller supplies both inputs.
 export { oneLoopCoefficientStatement } from './bridges/coefficient-statement.js';
 export type { OneLoopCoefficientStatement, OneLoopCoefficientSign } from './bridges/coefficient-statement.js';
 
-// BE-21 × QGP — KSS viscosity-bound confrontation (the "most perfect fluid").
-
-// BE-35 × 3D Ising — conformal-bootstrap critical-exponent confrontation.
-
-// BE-11 × matter-wave interferometry — collisional-decoherence confrontation.
-
-// BE-55 × quantum-Hall universality — topological quantization confrontation.
-
-// BE-56 × Casimir force — quantum-vacuum-force confrontation.
-
-// BE-58 × Johnson Noise Thermometry — fluctuation-dissipation confrontation.
-
-// Condensed-matter cluster (2026-07-05) — four established confrontations.
-
-// Astrophysics cluster (2026-07-05) — three established confrontations.
-
-// BE-48 × LISA-Pathfinder — GRW collapse-rate vs CSL upper bound.
-
-// Unified confrontation registry (be-23/36/37/48/52) — single lookup surface
-// for `upt confront`.
+// The confrontation registry: every committed confrontation of
+// `data/bridge-catalog.json`, the single lookup surface for `upt confront`.
 export {
   CONFRONTATIONS,
   listConfrontations,
@@ -796,3 +763,72 @@ export type { Elasticity } from './bridges/sensitivity.js';
 // The PUBLIC atlas surface as a namespace (Atlas API review, Tier 1). The full
 // @internal surface stays on the universal-physics-tensor/atlas subpath.
 export * as atlas from './atlas/public.js';
+
+// ---------------------------------------------------------------------------
+// Closure under type references (tests/api/root-public-closure.test.ts).
+// Every type a root export names is itself importable from the root or from
+// a package.json subpath; the names below were reachable only through the
+// public declarations that mention them.
+// ---------------------------------------------------------------------------
+/** The base class of every error this package throws. */
+export type { UPTError } from './dimensional/errors.js';
+/** Which constants a natural-unit evaluation sets to one. */
+export type { UnitMode } from './dimensional/natural-units.js';
+/** The tensor and curvature node family of the dimensional AST. */
+export type {
+  Variance,
+  Role,
+  TensorIndex,
+  UpperIndex,
+  CovariantIndex,
+  TensorSymbolNode,
+  TensorProductNode,
+  MetricTensorNode,
+  KroneckerDeltaNode,
+  TensorPartialDerivativeNode,
+  RiemannTensorNode,
+  WeylTensorNode,
+  KillingVectorNode,
+  ConservedChargeNode,
+  StressEnergyTensorNode,
+  CosmologicalConstantNode,
+} from './dimensional/ast-types.js';
+/** The kind of a flux rule. */
+export type { FluxRuleKind } from './core/flux-rules.js';
+/** The per-axis value tables of the core axis registry. */
+export type { ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes } from './core/axes-registry.js';
+/** The convenience form a regime registration accepts for an axis. */
+export type { AxisConvenience } from './core/regime-registry.js';
+/** The named inputs of the four bridge differentiation specs. */
+export type { ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput } from './diff/bridge-specs.js';
+/** The contraction and free-axis records an einsum plan is made of. */
+export type { EinsumContraction, EinsumFreeAxis } from './numerical/tensor-engine.js';
+/** The callbacks a Killing-equation check takes: the vector field, the metric and the connection. */
+export type { KillingFn, KillingMetricFn, ChristoffelAtFn } from './numerical/killing.js';
+/** A relation's input contract and the sign and unit conventions it states. */
+export type { RelationContract, Conventions } from './relations/types.js';
+/** The classification axes of the composition registry. */
+export type {
+  ScaleAxis,
+  ForceAxis,
+  InformationAxis,
+  SymmetryAxis,
+  TopologyAxis,
+  StatisticsAxis,
+} from './composition/axes.js';
+/** Options of the chain enumerator. */
+export type { EnumerationOptions } from './composition/enumerate.js';
+/** Options of the uncertainty propagation. */
+export type { UncertaintyOptions } from './composition/uncertainty.js';
+/** Options of a user-equation analysis and the short form of a binding. */
+export type { AnalyzeUserEquationOptions, ShortBinding } from './composition/user-equation.js';
+/** A constant as the canonical graph declares it. */
+export type { ConstantDef } from './composition/canonical-graph.js';
+/** An identity consequence the surfacer proposes; never written to the catalog. */
+export type { ProposedBridge } from './composition/proposed-bridges.js';
+/** Options of the discovery funnel. */
+export type { DiscoveryOptions } from './composition/discovery.js';
+/** A representative value of a quantity with its source. */
+export type { RepresentativeValue } from './composition/representative-values.js';
+/** A canonical prefactor, scalar or per dimensionless group, with its source. */
+export type { SourcedPrefactor, SourcedGroupPrefactor } from './canonical/canonical-equation.js';

@@ -16,6 +16,7 @@
 
 import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
+import { ConstantInputError } from './evaluation-errors.js';
 
 /** A condition could not be evaluated: it names an unbound symbol, or its text does not parse. @internal */
 export class HoldsError extends Error {
@@ -143,20 +144,36 @@ function compiled(rewritten: string, source: string): Compiled {
   return fn;
 }
 
+const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
+
 /**
  * Whether `holds` is true for `values`.
  * Hyphenated quantity names are rewritten with `names` before parsing; an
  * unbound name, a non-boolean result, and a syntax error are a {@link HoldsError}.
+ * A value whose name is one of `constants` and which the condition reads is
+ * a {@link ConstantInputError}, a caller error and not a false condition,
+ * unless `declared` names it; one the condition does not read is dropped, as
+ * any other extra key is.
  */
 export function holds(
   source: string,
   values: Readonly<Record<string, number>>,
   constants: Readonly<Record<string, number>>,
   names: readonly string[],
+  declared: readonly string[] = [],
 ): boolean {
   const rewritten = rewriteCatalogHyphens(source, names);
+  const reads = new Set(rewritten.match(IDENTIFIER) ?? []);
   const scope: Scope = { ...constants };
-  for (const [key, value] of Object.entries(values)) scope[key.replace(/-/g, '_')] = value;
+  const allowed = new Set(declared.map((name) => name.replace(/-/g, '_')));
+  for (const [key, value] of Object.entries(values)) {
+    const name = key.replace(/-/g, '_');
+    if (name in constants && !allowed.has(name)) {
+      if (reads.has(name)) throw new ConstantInputError(key);
+      continue;
+    }
+    scope[name] = value;
+  }
   const result = compiled(rewritten, source)(scope);
   if (typeof result !== 'boolean') throw new HoldsError(`condition is not boolean: ${source}`);
   return result;

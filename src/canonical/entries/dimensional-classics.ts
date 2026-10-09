@@ -260,10 +260,10 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
       governing: [
         { name: 'hbar', dim: ACTION },
         { name: 'mass', dim: MASS },
-        { name: 'boltzmann', dim: ENTROPY },
+        { name: 'k_B', dim: ENTROPY },
         { name: 'temperature', dim: TEMPERATURE },
       ],
-      monomial: { hbar: 1, mass: -0.5, boltzmann: -0.5, temperature: -0.5 },
+      monomial: { hbar: 1, mass: -0.5, k_B: -0.5, temperature: -0.5 },
     },
     regime: { scale: 'quantum' },
     assumptions: ['non-relativistic', 'ideal gas'],

@@ -3,25 +3,11 @@
  * AST's dimensionless count is not in that monomial, so ideal-gas explain
  * returned `k_B T/V` and perihelion dropped `1-e²`. Issue #387.
  */
+import { capture, text } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { C_SI, G_SI, HBAR_SI, K_B_SI } from '../../src/core/constants.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 
 function recovered(body: string): number | undefined {
   const m = /Recovered value: ([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/.exec(body);
@@ -57,7 +43,9 @@ describe('canonical formula counts', () => {
     const body = text(cap);
     const expected = (N_A * K_B_SI * 300) / 0.0224;
     expect(recovered(body)).toBeCloseTo(expected, 4);
-    expect(body).toMatch(/∝ [^\n]*\bN\b/);
+    // k_B is baked (2026-10-09), so {temperature, V, N} alone do not fix the dimension and no ∝ line
+    // prints; the count N is a leaf of the derivation and the value is N k_B T / V.
+    expect(body).toMatch(/\[from leaves: N, V, temperature\]/);
     expect(recovered(body)).not.toBeCloseTo((K_B_SI * 300) / 0.0224, 6);
   });
 

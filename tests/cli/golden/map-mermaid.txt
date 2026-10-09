@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (114)"]
+  subgraph cl_0["anchored cluster (111)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -21,7 +21,7 @@ flowchart LR
     q_temperature --> j_be_16
     q_landauer_erasure_energy(["landauer-erasure-energy"]):::qty
     j_be_16 --> q_landauer_erasure_energy
-    j_be_37["BE-37"]:::established
+    j_be_37["BE-37"]:::speculative
     q_mass --> j_be_37
     q_far_radius(["far-radius"]):::qty
     q_far_radius --> j_be_37
@@ -95,8 +95,6 @@ flowchart LR
     q_temperature --> j_be_33
     q_reference_temperature(["reference-temperature"]):::qty
     q_reference_temperature --> j_be_33
-    q_static_exponent_nu(["static-exponent-nu"]):::qty
-    q_static_exponent_nu --> j_be_33
     q_dynamic_exponent_z(["dynamic-exponent-z"]):::qty
     q_dynamic_exponent_z --> j_be_33
     q_quantum_correlation_length(["quantum-correlation-length"]):::qty
@@ -108,6 +106,7 @@ flowchart LR
     q_microscopic_relaxation_time --> j_be_34
     q_spatial_dimension(["spatial-dimension"]):::qty
     q_spatial_dimension --> j_be_34
+    q_static_exponent_nu(["static-exponent-nu"]):::qty
     q_static_exponent_nu --> j_be_34
     q_dynamic_exponent_z --> j_be_34
     q_defect_rest_mass(["defect-rest-mass"]):::qty
@@ -440,8 +439,6 @@ flowchart LR
     j_CE_larmor_power["Larmor radiated power"]:::law
     q_charge --> j_CE_larmor_power
     q_acceleration --> j_CE_larmor_power
-    q_speed_of_light(["speed-of-light"]):::qty
-    q_speed_of_light --> j_CE_larmor_power
     q_larmor_power(["larmor-power"]):::qty
     j_CE_larmor_power --> q_larmor_power
     j_CE_field_energy_density["Electric-field energy density"]:::law
@@ -596,14 +593,11 @@ flowchart LR
     q_drift_velocity(["drift-velocity"]):::qty
     j_CE_drift_velocity --> q_drift_velocity
     j_CE_fermi_energy["Fermi energy"]:::law
-    q_reduced_planck_constant(["reduced-planck-constant"]):::qty
-    q_reduced_planck_constant --> j_CE_fermi_energy
     q_mass --> j_CE_fermi_energy
     q_carrier_density --> j_CE_fermi_energy
     q_fermi_energy(["fermi-energy"]):::qty
     j_CE_fermi_energy --> q_fermi_energy
     j_CE_fermi_velocity["Fermi velocity"]:::law
-    q_reduced_planck_constant --> j_CE_fermi_velocity
     q_mass --> j_CE_fermi_velocity
     q_carrier_density --> j_CE_fermi_velocity
     q_fermi_velocity(["fermi-velocity"]):::qty
@@ -611,8 +605,6 @@ flowchart LR
     j_CE_plasma_frequency["Plasma frequency"]:::law
     q_carrier_density --> j_CE_plasma_frequency
     q_charge --> j_CE_plasma_frequency
-    q_vacuum_permittivity(["vacuum-permittivity"]):::qty
-    q_vacuum_permittivity --> j_CE_plasma_frequency
     q_mass --> j_CE_plasma_frequency
     q_plasma_frequency(["plasma-frequency"]):::qty
     j_CE_plasma_frequency --> q_plasma_frequency
@@ -623,13 +615,10 @@ flowchart LR
     q_debye_frequency(["debye-frequency"]):::qty
     j_CE_debye_frequency --> q_debye_frequency
     j_CE_equipartition["Equipartition (mean kinetic energy)"]:::law
-    q_boltzmann_constant(["boltzmann-constant"]):::qty
-    q_boltzmann_constant --> j_CE_equipartition
     q_temperature --> j_CE_equipartition
     q_thermal_energy(["thermal-energy"]):::qty
     j_CE_equipartition --> q_thermal_energy
     j_CE_stokes_einstein["Stokes-Einstein diffusion"]:::law
-    q_boltzmann_constant --> j_CE_stokes_einstein
     q_temperature --> j_CE_stokes_einstein
     q_dynamic_viscosity --> j_CE_stokes_einstein
     q_particle_radius(["particle-radius"]):::qty
@@ -645,7 +634,6 @@ flowchart LR
     q_kinetic_pressure(["kinetic-pressure"]):::qty
     j_CE_kinetic_pressure --> q_kinetic_pressure
     j_CE_mb_most_probable_speed["Maxwell-Boltzmann most-probable speed"]:::law
-    q_boltzmann_constant --> j_CE_mb_most_probable_speed
     q_temperature --> j_CE_mb_most_probable_speed
     q_molecular_mass --> j_CE_mb_most_probable_speed
     q_most_probable_speed(["most-probable-speed"]):::qty
@@ -660,42 +648,16 @@ flowchart LR
     q_static_pressure --> j_CE_bernoulli
     q_bernoulli_total_pressure(["bernoulli-total-pressure"]):::qty
     j_CE_bernoulli --> q_bernoulli_total_pressure
-    j_CE_photoelectric["Photoelectric equation"]:::law
-    q_planck_constant(["planck-constant"]):::qty
-    q_planck_constant --> j_CE_photoelectric
-    q_photon_frequency(["photon-frequency"]):::qty
-    q_photon_frequency --> j_CE_photoelectric
-    q_work_function(["work-function"]):::qty
-    q_work_function --> j_CE_photoelectric
-    q_photoelectron_max_energy(["photoelectron-max-energy"]):::qty
-    j_CE_photoelectric --> q_photoelectron_max_energy
     j_CE_boltzmann_factor["Boltzmann factor"]:::law
     q_state_energy(["state-energy"]):::qty
     q_state_energy --> j_CE_boltzmann_factor
-    q_boltzmann_constant --> j_CE_boltzmann_factor
     q_temperature --> j_CE_boltzmann_factor
     q_boltzmann_factor(["boltzmann-factor"]):::qty
     j_CE_boltzmann_factor --> q_boltzmann_factor
     j_CE_lorentz_factor["Lorentz factor"]:::law
     q_velocity --> j_CE_lorentz_factor
-    q_speed_of_light --> j_CE_lorentz_factor
     q_lorentz_factor(["lorentz-factor"]):::qty
     j_CE_lorentz_factor --> q_lorentz_factor
-    j_CE_compton_shift["Compton shift"]:::law
-    q_planck_constant --> j_CE_compton_shift
-    q_electron_mass(["electron-mass"]):::qty
-    q_electron_mass --> j_CE_compton_shift
-    q_speed_of_light --> j_CE_compton_shift
-    q_scattering_angle(["scattering-angle"]):::qty
-    q_scattering_angle --> j_CE_compton_shift
-    q_compton_wavelength_shift(["compton-wavelength-shift"]):::qty
-    j_CE_compton_shift --> q_compton_wavelength_shift
-    j_CE_boltzmann_entropy["Boltzmann entropy"]:::law
-    q_boltzmann_constant --> j_CE_boltzmann_entropy
-    q_microstate_count(["microstate-count"]):::qty
-    q_microstate_count --> j_CE_boltzmann_entropy
-    q_boltzmann_entropy(["boltzmann-entropy"]):::qty
-    j_CE_boltzmann_entropy --> q_boltzmann_entropy
   end
   subgraph cl_1["anchored cluster (4)"]
     direction LR
@@ -836,7 +798,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (135)"]
+  subgraph cl_iso["isolated (138)"]
     direction LR
     j_be_100["BE-100"]:::law
     q_lst_static(["lst-static"]):::qty
@@ -1710,8 +1672,6 @@ flowchart LR
     j_be_88["BE-88"]:::law
     q_fermi_sea_density(["fermi-sea-density"]):::qty
     q_fermi_sea_density --> j_be_88
-    q_fermi_sea_mass(["fermi-sea-mass"]):::qty
-    q_fermi_sea_mass --> j_be_88
     q_fermi_wavevector(["fermi-wavevector"]):::qty
     j_be_88 --> q_fermi_wavevector
     j_be_89["BE-89"]:::law
@@ -1814,6 +1774,11 @@ flowchart LR
     j_CE_bohr_radius["Bohr radius"]:::law
     q_bohr_radius(["bohr-radius"]):::qty
     j_CE_bohr_radius --> q_bohr_radius
+    j_CE_boltzmann_entropy["Boltzmann entropy"]:::law
+    q_microstate_count(["microstate-count"]):::qty
+    q_microstate_count --> j_CE_boltzmann_entropy
+    q_boltzmann_entropy(["boltzmann-entropy"]):::qty
+    j_CE_boltzmann_entropy --> q_boltzmann_entropy
     j_CE_carnot_efficiency["Carnot efficiency"]:::law
     q_cold_reservoir_temperature(["cold-reservoir-temperature"]):::qty
     q_cold_reservoir_temperature --> j_CE_carnot_efficiency
@@ -1821,6 +1786,11 @@ flowchart LR
     q_hot_reservoir_temperature --> j_CE_carnot_efficiency
     q_carnot_efficiency(["carnot-efficiency"]):::qty
     j_CE_carnot_efficiency --> q_carnot_efficiency
+    j_CE_compton_shift["Compton shift"]:::law
+    q_scattering_angle(["scattering-angle"]):::qty
+    q_scattering_angle --> j_CE_compton_shift
+    q_compton_wavelength_shift(["compton-wavelength-shift"]):::qty
+    j_CE_compton_shift --> q_compton_wavelength_shift
     j_CE_einstein_field_eq["Einstein field equation"]:::law
     q_stress_energy_density(["stress-energy-density"]):::qty
     q_stress_energy_density --> j_CE_einstein_field_eq
@@ -1863,6 +1833,13 @@ flowchart LR
     q_deviation_from_mean --> j_CE_normal_distribution
     q_normal_probability_density(["normal-probability-density"]):::qty
     j_CE_normal_distribution --> q_normal_probability_density
+    j_CE_photoelectric["Photoelectric equation"]:::law
+    q_photon_frequency(["photon-frequency"]):::qty
+    q_photon_frequency --> j_CE_photoelectric
+    q_work_function(["work-function"]):::qty
+    q_work_function --> j_CE_photoelectric
+    q_photoelectron_max_energy(["photoelectron-max-energy"]):::qty
+    j_CE_photoelectric --> q_photoelectron_max_energy
     j_CE_planck_einstein["Planck–Einstein relation"]:::law
     q_nu(["nu"]):::qty
     q_nu --> j_CE_planck_einstein

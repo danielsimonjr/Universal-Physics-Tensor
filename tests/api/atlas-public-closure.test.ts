@@ -115,9 +115,9 @@ const atlasRefs = (text: string, self: string): string[] =>
   [...ATLAS_TYPE_NAMES].filter((t) => t !== self && new RegExp(`\\b${t}\\b`).test(text));
 
 describe('atlas public namespace — derived from the facade file', () => {
-  it('the facade lists 24 distinct names (the count is DERIVED here, stated nowhere else)', () => {
+  it('the facade lists 25 distinct names (the count is DERIVED here, stated nowhere else)', () => {
     expect(new Set(facadeNames).size).toBe(facadeNames.length);
-    expect(facadeNames.length).toBe(24);
+    expect(facadeNames.length).toBe(25);
   });
 
   it('the root exposes the namespace, and its runtime keys are exactly the facade VALUES', async () => {
@@ -128,6 +128,7 @@ describe('atlas public namespace — derived from the facade file', () => {
       [
         'COMPOSITION_TABLE',
         'IDENTITY_BOUND',
+        'MissingDeltaAtError',
         'MissingHorizonError',
         'MissingLipschitzError',
         'NO_COMPOSITE_CLAIM',
@@ -142,7 +143,7 @@ describe('atlas public namespace — derived from the facade file', () => {
 
 describe('the scan — proven before it is trusted', () => {
   it('POSITIVE CONTROL: it finds AtlasFamily → AtlasBridge, the leak that motivated this test', () => {
-    const src = readFileSync(resolve(SRC, 'atlas/oscillators/index.ts'), 'utf-8');
+    const src = readFileSync(resolve(SRC, 'atlas/family.ts'), 'utf-8');
     const text = declarationText(src, 'AtlasFamily');
     expect(text).toBeDefined();
     expect(atlasRefs(text!, 'AtlasFamily')).toContain('AtlasBridge');

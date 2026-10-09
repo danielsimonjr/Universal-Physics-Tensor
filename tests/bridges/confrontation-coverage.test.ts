@@ -1,13 +1,14 @@
 /**
  * Direction 4 — empirical-spine coverage audit. Pins the catalog's
  * grounding profile: the data-confronted bridges (BE-23, BE-36, BE-37,
- * BE-48, BE-52), the tier partition summing to the full 44, and the gap
+ * BE-48, BE-52), the tier partition summing to the full catalog, and the gap
  * counts the physicist review (CONTRIBUTING.md) should target. Reads the
  * catalog/graph only — no fabricated data.
  */
 import { describe, it, expect } from 'vitest';
 import { auditCoverage } from '../../src/composition/audit-coverage.js';
 import type { GroundingTier } from '../../src/composition/audit-coverage.js';
+import { CENSUS } from '../helpers/census.js';
 
 const TIERS: GroundingTier[] = [
   'data-confronted',
@@ -19,25 +20,26 @@ const TIERS: GroundingTier[] = [
 describe('auditCoverage — catalog grounding profile', () => {
   const report = auditCoverage();
 
-  it('audits all 58 catalogued bridges, sorted by id', () => {
+  it('audits every catalogued bridge, sorted by id', () => {
     // 66 is the record from before be-77..87.
-    expect(report.total).toBe(160);
+    expect(report.total).toBe(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
-    expect(report.bridges).toHaveLength(160);
+    expect(report.bridges).toHaveLength(CENSUS.catalog.entries);
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
     const ids = report.bridges.map((b) => b.id);
     expect(ids).toEqual([...ids].sort((a, b) => a - b));
   });
 
-  it('identifies exactly the nineteen data-confronted bridges (+BE-63..65)', () => {
+  it('identifies exactly the data-confronted bridges', () => {
     const confronted = report.bridges
       .filter((b) => b.hasDataConfrontation)
       .map((b) => b.id);
     expect(confronted).toEqual([11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65]);
     // 44 is the record from before be-74..76. None of those three is data-confronted.
     // 47 is the record from before be-77..87. None of those eleven is data-confronted.
-    expect(report.withoutDataConfrontation).toBe(141);
+    expect(confronted).toHaveLength(CENSUS.confrontations.dataConfronted);
+    expect(report.withoutDataConfrontation).toBe(CENSUS.confrontations.withoutDataConfrontation);
     // 104 is the record from before be-134..146.
     // 96 is the record from before be-126..133.
     // 73 is the record from before be-103..125. None of those twenty-three is data-confronted.
@@ -47,14 +49,14 @@ describe('auditCoverage — catalog grounding profile', () => {
     }
   });
 
-  it('partitions every bridge into one tier; the tiers sum to 48', () => {
+  it('partitions every bridge into one tier; the tiers sum to the whole catalog', () => {
     for (const b of report.bridges) expect(TIERS).toContain(b.tier);
     const sum = TIERS.reduce((n, t) => n + report.byTier[t], 0);
     // 66 is the record from before be-77..87.
-    expect(sum).toBe(160);
+    expect(sum).toBe(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
-    expect(report.byTier['data-confronted']).toBe(19);
+    expect(report.byTier['data-confronted']).toBe(CENSUS.confrontations.dataConfronted);
   });
 
   it('thin bridges are exactly those without a dimensional signature', () => {

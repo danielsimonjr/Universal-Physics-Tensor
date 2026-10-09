@@ -41,11 +41,11 @@ export function oneLoopCoefficientStatement(
   if (relation === undefined) {
     throw new Error('oneLoopCoefficientStatement: the statement has no expression');
   }
-  const beta = evaluateFormula(relation.expression, {
-    'gauge-coupling': 1,
-    'color-number': colorNumber,
-    'flavor-number': flavorNumber,
-  });
+  const beta = evaluateFormula(
+    relation.expression,
+    { 'gauge-coupling': 1, 'color-number': colorNumber, 'flavor-number': flavorNumber },
+    relation.sources,
+  );
   const b0 = -beta * 16 * Math.PI * Math.PI;
   const sign: OneLoopCoefficientSign = b0 > 0 ? 'positive' : b0 < 0 ? 'negative' : 'zero';
   return { label: 'one-loop coefficient', sign, b0 };

@@ -49,6 +49,14 @@ describe('mcnemar — a hand-computed table (b = 10, c = 2)', () => {
   it('is symmetric in b and c', () => {
     expect(mcnemar({ a: 1, b: 3, c: 9, d: 1 })).toEqual(mcnemar({ a: 1, b: 9, c: 3, d: 1 }));
   });
+
+  it('the continuity correction is clamped at zero: b = c gives χ² = 0, and |b − c| = 1 gives 0, never (−1)²/n', () => {
+    expect(mcnemar({ a: 0, b: 3, c: 3, d: 0 }).chiSquared).toBe(0);
+    expect(mcnemar({ a: 0, b: 4, c: 3, d: 0 }).chiSquared).toBe(0);
+    // One past the clamp: (2 − 1)² / 7.
+    expect(mcnemar({ a: 0, b: 5, c: 3, d: 0 }).chiSquared).toBeCloseTo(1 / 8, 12);
+    expect(mcnemar({ a: 0, b: 3, c: 3, d: 0 }).exactP).toBe(1);
+  });
 });
 
 describe('cohensKappa — a hand-computed matrix', () => {

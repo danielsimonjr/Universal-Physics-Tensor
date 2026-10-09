@@ -26,7 +26,8 @@ export type {
   RelationType,
   Witness,
 } from './types.js';
-export { MissingHorizonError, MissingLipschitzError } from './types.js';
+/** Thrown by a bound whose `deltaAt`, `horizonHolds` or Lipschitz constant is missing. */
+export { MissingDeltaAtError, MissingHorizonError, MissingLipschitzError } from './types.js';
 export type { AtlasModel } from './model.js';
 export { regimeHolds } from './regime.js';
 export type { RegimeCheck } from './regime.js';

@@ -1,12 +1,9 @@
 /**
  * Runtime input validation for numeric evaluators — `validateFiniteInputs`.
  *
- * A generic, dependency-free finite-and-in-range check shared by the numerical
- * evaluators (`klein-gordon.ts`) and the 42 bridge-equation evaluators
- * (`bridges/equations/be-*.ts`). It lived in `bridges/equations/_be-helpers.ts`,
- * which forced the lower numerical layer to import upward from `bridges`; moving
- * it here (a leaf module with no imports) removes that dependency while
- * `_be-helpers.ts` re-exports it so every bridge evaluator is unchanged.
+ * A generic, dependency-free finite-and-in-range check for a numeric
+ * evaluator's input record (`klein-gordon.ts` reads it). It is a leaf module
+ * with no imports, so any layer may read it without an upward edge.
  *
  * @module numerical/input-validation
  */
@@ -90,8 +87,7 @@ export function validateFiniteInputs<T extends object>(
   evaluatorName: string,
 ): void {
   for (const spec of fieldSpecs) {
-    const raw = (input as Record<string, unknown>)[spec.name];
-    const value = raw as number;
+    const value: unknown = (input as Record<string, unknown>)[spec.name];
 
     if (typeof value !== 'number' || !Number.isFinite(value)) {
       const range = describeRange(spec);

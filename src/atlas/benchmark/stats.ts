@@ -57,7 +57,7 @@ export interface PairedTable {
 
 /** McNemar's test on the discordant cells. @internal */
 export interface McNemarResult {
-  /** Continuity-corrected χ² = (|b − c| − 1)² / (b + c); 0 when b + c = 0. */
+  /** Continuity-corrected χ² = max(0, |b − c| − 1)² / (b + c); 0 when b + c = 0. The correction never goes negative (Edwards 1948). */
   readonly chiSquared: number;
   /** Exact two-sided p-value from Binomial(b + c, ½); 1 when b + c = 0. */
   readonly exactP: number;
@@ -79,7 +79,7 @@ function logChoose(n: number, k: number): number {
 export function mcnemar(table: PairedTable): McNemarResult {
   const n = table.b + table.c;
   if (n === 0) return { chiSquared: 0, exactP: 1 };
-  const chiSquared = (Math.abs(table.b - table.c) - 1) ** 2 / n;
+  const chiSquared = Math.max(0, Math.abs(table.b - table.c) - 1) ** 2 / n;
   const k = Math.min(table.b, table.c);
   let tail = 0;
   for (let i = 0; i <= k; i++) tail += Math.exp(logChoose(n, i) - n * Math.LN2);

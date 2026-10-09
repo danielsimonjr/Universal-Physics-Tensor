@@ -16,6 +16,7 @@ import {
   tensorIndexComponent,
   type TensorIndexComponent,
 } from '../../src/bridges/tensor-index.js';
+import { CENSUS } from '../helpers/census.js';
 
 const SPEC = 'docs/specification/Part-II.md';
 
@@ -76,9 +77,9 @@ describe('§VI.6.1 tensor index', () => {
   it('places every cross-domain id in exactly one component, matching its category', () => {
     const crossDomain = catalogEntries().filter((entry) => entry.type === 'cross-domain');
     // 136 is the record from before the specification dropped standard write-ups.
-    expect(BRIDGE_EQUATIONS).toHaveLength(160);
-    expect(crossDomain).toHaveLength(40);
-    expect(listed.size).toBe(40);
+    expect(BRIDGE_EQUATIONS).toHaveLength(CENSUS.catalog.entries);
+    expect(crossDomain).toHaveLength(CENSUS.catalog.crossDomain);
+    expect(listed.size).toBe(CENSUS.catalog.crossDomain);
     for (const entry of crossDomain) {
       expect(
         listed.get(entry.id),
@@ -176,11 +177,12 @@ describe('§VI.6.1 tensor index', () => {
     expect(tensorIndexComponent(be48.category)).toBe('emergence');
   });
 
-  it('does not let a stated tensor rank override the category', () => {
+  it('does not let the stated tensor rank override the category', () => {
+    // BE-13 is the scalar trace of a rank-2 equation and BE-17 a scalar of a rank-3 tensor (their formula_latex).
     const be13 = BRIDGE_EQUATIONS.find((e) => e.id === 13)!;
     const be17 = BRIDGE_EQUATIONS.find((e) => e.id === 17)!;
-    expect(be13.encoded_form).toMatch(/rank-2/);
-    expect(be17.encoded_form).toMatch(/rank-3/);
+    expect(be13.formula_latex).toMatch(/\\mu\\nu|R =/);
+    expect(be17.formula_latex).toMatch(/T/);
     expect(tensorIndexComponent(be13.category)).toBe('information-geometry');
     expect(tensorIndexComponent(be17.category)).toBe('field-unification');
   });

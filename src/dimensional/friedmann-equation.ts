@@ -51,9 +51,9 @@
  *
  * Status: PREDICATE node like `EinsteinFieldEquationNode` and
  * `KleinGordonEquationNode` — not a value-producing expression.
- * Numerical evaluation of a specific FRW history is out of scope
- * (numerical evaluators live alongside per-bridge encodings — e.g.
- * `evaluateQuantumBounce` in `src/bridges/equations/be-19-quantum-bounce.ts`).
+ * Numerical evaluation of a specific FRW history is out of scope; the
+ * catalog relation be-19 that consumes this node has no numerical
+ * evaluator (`src/bridges/README.md`).
  *
  * @module dimensional/friedmann-equation
  */

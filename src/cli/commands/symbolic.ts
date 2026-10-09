@@ -162,6 +162,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     const point = { mass: api.M_SUN_KG };
     const num = obs.evaluate(point);
     const inputs = [...first.sources, ...second.sources];
+    // Every edge whose catalog status is below established grades the chain; name each one.
+    const graded = [first, second].filter(
+      (edge) => edge.beId !== null && api.catalogEntry(edge.beId)?.status !== 'established',
+    );
+    const grade =
+      graded.length === 0
+        ? null
+        : { confidence: api.composeEdges(first, second).confidence, gradedBy: graded.map((edge) => `be-${edge.beId}`) };
 
     if (!isJson) {
       out(`  ● ${label}`);
@@ -182,15 +190,16 @@ async function run(ctx: CommandCtx): Promise<number> {
           symbols: symbolTable(s.expr, api, inputs, point),
           dim: api.format(s.dim),
           value: sNum,
+          ...(grade ?? {}),
           simplified: true,
         });
       } else {
-        const tag = s.expr === obs.expr ? '  (unchanged — minimal, MathTS absent, or not reducible here)' : '';
+        const tag = s.expr === obs.expr ? '  (unchanged — minimal, or not reducible here)' : '';
         out(`      simplified: ${s.name}(${s.leaves.join(',')}) = ${exprToString(s.expr)}${tag}`);
         out(`      latex:      ${latexOf(s.name, s.leaves, s.expr) ?? 'none (a node the printer cannot take)'}`);
         out(`      eval form:  ${showEvalForm(evalFormOf(s.expr, api.CONSTANTS, point))}`);
         showSymbolTable(symbolTable(s.expr, api, inputs, point), out);
-        out(`      value @ mass = M_sun:  ${sNum.toExponential(4)}  (= composed, ${api.format(s.dim)})`);
+        out(`      value @ mass = M_sun:  ${api.formatQuantity(sNum)}  (= composed, ${api.format(s.dim)})`);
       }
     } else if (isJson) {
       jsonResult.push({
@@ -203,23 +212,19 @@ async function run(ctx: CommandCtx): Promise<number> {
         symbols: symbolTable(obs.expr, api, inputs, point),
         dim: api.format(obs.dim),
         value: num,
+        ...(grade ?? {}),
       });
     } else {
       out(`      latex:      ${latexOf(obs.name, obs.leaves, obs.expr) ?? 'none (a node the printer cannot take)'}`);
       out(`      eval form:  ${showEvalForm(evalFormOf(obs.expr, api.CONSTANTS, point))}`);
       showSymbolTable(symbolTable(obs.expr, api, inputs, point), out);
       out(`      dimension: ${api.format(obs.dim)}   (validated on the composed AST)`);
-      out(`      value @ mass = M_sun:  ${num.toExponential(4)}`);
+      out(`      value @ mass = M_sun:  ${api.formatQuantity(num)}`);
     }
-    // Every edge whose catalog status is below established grades the chain; name each one.
-    const graded = [first, second].filter(
-      (edge) => edge.beId !== null && api.catalogEntry(edge.beId)?.status !== 'established',
-    );
-    if (!isJson && graded.length > 0) {
-      const composed = api.composeEdges(first, second);
-      const pages = graded.map((edge) => `be-${edge.beId}`).join(' and ');
+    if (!isJson && grade !== null) {
+      const pages = grade.gradedBy.join(' and ');
       out(
-        `      confidence: ${composed.confidence}. This chain stays provisional. ` +
+        `      confidence: ${grade.confidence}. This chain stays provisional. ` +
           `upt atlas ${pages} ${graded.length === 1 ? "shows that edge's formalRef; that page is not" : "show those edges' formalRefs; neither page is"} this grade.`,
       );
     }

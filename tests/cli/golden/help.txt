@@ -123,7 +123,7 @@ Flags:
         separately from its stated agreement bound.
         be-53 is not in that registry. `upt confront be-53` refuses: a
         confrontation needs a caller-supplied measured-coupling table and a
-        running procedure (requestYangMillsConfrontation). The refusal names
+        running procedure, neither of which the library ships. The refusal names
         each missing input, prints no residual, and does not change the
         catalog status. It is not a pass and not a fail. The one-loop
         coefficient's sign is oneLoopCoefficientStatement, not this command.
@@ -383,7 +383,7 @@ Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
 
-  upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
+  upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
         [--equation "TARGET = EXPR" [--equation-only] [--verbose] [--bind-short]
         [--natural] [--geometrized]] [--around=QUANTITY [--depth=N]]
@@ -395,15 +395,8 @@ Flags:
         --source defaults to 'both' (catalog + canonical) — a pure
         connectivity question gets the honest, all-known-physics answer by
         default; --source=catalog shows the bridge-catalog view alone.
-        --source=poster draws the ATLAS PHASE 3 POSTER INDEX instead of the
-        bridge graph: nodes are STATEMENTS (including the hidden supporting
-        nodes — action principle, Noether, the full Maxwell system, the
-        Lorentz group, the central limit theorem) and boxes are DERIVATIONS
-        (premises in, conclusion out). Associations are drawn DASHED because
-        they assert no relation at all. It also reports any premise naming a
-        statement the registry does not define, and says so out loud when the
-        index is not registered in this build rather than printing an empty
-        map as an answer.
+        --out=PATH writes whatever form was asked for (text, --json or a
+        visual format) to PATH instead of stdout; an empty PATH exits 1.
         --format=mermaid|dot|svg emits the VISUAL map (quantities = nodes,
         equations = junctions colored by status, one subgraph per component).
         text (default) is the unchanged linkage printout. svg renders the dot
@@ -482,7 +475,7 @@ Flags:
               upt map --observable=frequency --run
 Flags:
   --source=VALUE
-        Which graph to draw: catalog, canonical, both, or poster. poster is the Atlas Phase 3 statement index and is valid only here. This command defaults to both. Default: both.
+        Which graph to draw: catalog, canonical, or both. This command defaults to both. Default: both.
   --format=VALUE
         Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer. Default: text.
   --out=VALUE
@@ -819,7 +812,7 @@ Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
 
-  upt regime <family> [--at group=value ...] [--json]
+  upt regime <family> [--at group=value ...] [--assume premise ...] [--deny premise ...] [--json]
         Where in parameter space a family's models are claimed to apply.
         --at states a point in REGIME COORDINATES (π-group formulas, or a
         dimensionless input's own name, e.g. --at theta0=0.2). Every model AND
@@ -859,14 +852,15 @@ Flags:
 
   upt retrieve <claim> [--embed] [--ollama-url=URL]
         Propose canonical relations for a claim. The default is the atlas
-        search (rankByStructure) and does not call out of process. The output
+        search (typed structural ranking) and does not call out of process. The output
         says so. --embed asks a local Ollama model, qwen3-embedding:4b, for
         an order. That order is a proposal, not evidence. Acceptance stays
         the atlas search, and cosine similarity does not enter its score.
         If Ollama cannot be used, the same atlas search is printed and the
         reason is named: the process is not there, the model is not there,
-        the reply is not a vector or its length is not the length stored in
-        the frozen file, or the call does not finish. A fallback exits 0.
+        the server answered an error status, the reply is not a vector or its
+        length is not the length stored in the frozen file, or the call does
+        not finish. A fallback exits 0.
         --ollama-url is used only with --embed (default http://127.0.0.1:11434).
         A claim is text. It has no expression, so the structural score is
         zero and the atlas order is by id. The command does not invent one.
@@ -897,7 +891,7 @@ Flags:
         prefix, so landau is not reported as Landauer without saying so.
         A catalog bridge with no evaluator and a formalRef routes to
         upt atlas, and the hit quotes that reference's covers line.
-        No match exits 1 and names the registries searched.
+        No match is a result: exit 0, naming the registries searched.
         e.g.  upt search Schrödinger
               upt search thermal noise
 Flags:

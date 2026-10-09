@@ -20,6 +20,49 @@ type FormulaShape = 'monomial' | 'dimensional-sum';
 
 const NUMERIC_NAME = /^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/;
 
+/**
+ * Exponents of every symbol in a product, quotient, or literal integer power.
+ * Undefined for a sum or any node that is not that monomial. The one reader
+ * of a monomial's exponents: the canonical graph reads a count's exponent
+ * from it, and a composed edge reads the junction's exponent from it.
+ *
+ * @internal
+ */
+export function monomialExponents(node: ExprNode | undefined): Map<string, number> | undefined {
+  if (node === undefined) return undefined;
+  if (node.kind === 'symbol') return new Map([[node.name, 1]]);
+  if (node.kind !== 'op') return undefined;
+  if (node.op === '*') {
+    const acc = new Map<string, number>();
+    for (const arg of node.args) {
+      const part = monomialExponents(arg);
+      if (part === undefined) return undefined;
+      for (const [name, exp] of part) acc.set(name, (acc.get(name) ?? 0) + exp);
+    }
+    return acc;
+  }
+  if (node.op === '/') {
+    if (node.args.length !== 2) return undefined;
+    const numerator = monomialExponents(node.args[0]);
+    const denominator = monomialExponents(node.args[1]);
+    if (numerator === undefined || denominator === undefined) return undefined;
+    for (const [name, exp] of denominator) numerator.set(name, (numerator.get(name) ?? 0) - exp);
+    return numerator;
+  }
+  if (node.op === '^') {
+    const base = node.args[0];
+    const expNode = node.args[1];
+    if (base === undefined || expNode === undefined || expNode.kind !== 'symbol') return undefined;
+    const exp = Number(expNode.name);
+    if (!Number.isFinite(exp)) return undefined;
+    const inner = monomialExponents(base);
+    if (inner === undefined) return undefined;
+    for (const [name, innerExp] of inner) inner.set(name, innerExp * exp);
+    return inner;
+  }
+  return undefined;
+}
+
 /** A dimensionless symbol whose name is a number, the way a literal exponent is written. */
 function numericExponent(node: ExprNode): number | undefined {
   if (node.kind !== 'symbol' || !NUMERIC_NAME.test(node.name)) return undefined;

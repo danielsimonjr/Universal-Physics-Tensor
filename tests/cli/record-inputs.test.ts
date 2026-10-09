@@ -13,6 +13,8 @@
  *
  * Design: `docs/planning/Experiment-Record-Replay-Design-Note.md`.
  */
+import '../helpers/dist.js';
+import { run } from '../helpers/cli-run.js';
 import { describe, it, expect, beforeAll } from 'vitest';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -20,22 +22,11 @@ import { appendFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSyn
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runCli } from '../../dist/cli/main.js';
 
 const repo = fileURLToPath(new URL('../../', import.meta.url));
 const PROBLEM_FIXTURE = join(repo, 'tests', 'fixtures', 'discovery', 'pendulum-scaling', 'public', 'problem.json');
 const STUDY_FIXTURE = join(repo, 'tests', 'fixtures', 'probe-study', 'pendulum-small-angle.synthetic.json');
 const STORED = join(repo, 'data', 'atlas', 'witness-results.json');
-
-async function run(argv: string[]) {
-  const o = { stdout: '', stderr: '' };
-  const code = await runCli(argv, {
-    out: (l?: string) => void (o.stdout += (l ?? '') + '\n'),
-    err: (l?: string) => void (o.stderr += (l ?? '') + '\n'),
-    write: (s: string) => void (o.stdout += s),
-  });
-  return { code, ...o };
-}
 
 const sha = (s: string | Buffer) => createHash('sha256').update(s).digest('hex');
 

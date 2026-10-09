@@ -79,6 +79,9 @@ export const DEFAULT_SEARCH_BUDGET: SearchBudget = {
   maxExternalProcesses: 1,
 };
 
+/** Relative holdout RMSE cap a candidate must meet when a run states none. @internal */
+export const DEFAULT_HOLDOUT_TOL = 0.15;
+
 /** Explicit residual semantics for a run or correction. @internal */
 export interface DiscrepancyDefinition {
   readonly kind: DiscrepancyKind;
@@ -297,9 +300,7 @@ export interface DeclaredLimit {
 export type FalsificationBattery =
   | 'dimensional'
   | 'finiteness'
-  | 'limits'
-  | 'retrodiction'
-  | 'observational-bounds';
+  | 'limits';
 
 /** Outcome of one falsification battery. @internal */
 export interface FalsificationRecord {

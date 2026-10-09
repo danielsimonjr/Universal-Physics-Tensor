@@ -21,6 +21,7 @@ import {
 } from '../../src/bridges/catalog-adapter.js';
 import { UniversalTensor } from '../../src/core/tensor.js';
 import type { TensorConfig } from '../../src/core/types.js';
+import { CENSUS } from '../helpers/census.js';
 
 const baseConfig: TensorConfig = {
   rank: 3,
@@ -78,7 +79,7 @@ describe('catalogToCells', () => {
     // BE-164 through BE-169 name a PhysicalScale, so they are submittable.
     // 45 is the record from before those six. BE-170 does not.
     const cells = catalogToCells(BRIDGE_EQUATIONS);
-    expect(cells).toHaveLength(51);
+    expect(cells).toHaveLength(CENSUS.scaleCells.submitted);
   });
 
   it('assigns id as "BE-{number}" matching the catalog id field', () => {
@@ -95,14 +96,13 @@ describe('catalogToCells', () => {
         (e.bridges[0] === 'quantum' && e.bridges[1] === 'classical') ||
         (e.bridges[0] === 'classical' && e.bridges[1] === 'quantum'),
     );
-    if (quantumClassical) {
-      const cell = catalogToCells([quantumClassical])[0];
-      expect(cell.source.scale).toBeDefined();
-      expect(cell.target.scale).toBeDefined();
-    } else {
-      // If no such entry exists, skip; the test passes vacuously.
-      expect(true).toBe(true);
-    }
+    // The catalog holds such entries (be-11 is one); a catalog without one must fail here, not
+    // pass through an empty branch.
+    expect(quantumClassical).toBeDefined();
+    const cell = catalogToCells([quantumClassical!])[0];
+    expect(cell.source.scale).toBeDefined();
+    expect(cell.target.scale).toBeDefined();
+    expect(cell.source.scale).not.toBe(cell.target.scale);
   });
 });
 
@@ -116,14 +116,14 @@ describe('scanCatalog', () => {
     expect(report.entries).toHaveLength(BRIDGE_EQUATIONS.length);
     // Updated 2026-05-24 (parallel-agent dispatch): 42 → 44 after adding
     // BE-53 (Yang-Mills β) AND BE-54 (Randall-Sundrum).
-    expect(report.entries).toHaveLength(160);
+    expect(report.entries).toHaveLength(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
   });
 
-  it('counts unsubmitted entries as 21 (post-v0.8.0 adjudication)', () => {
+  it('lists the rows whose bridges tuple names no PhysicalScale, each with that reason', () => {
     // Updated 2026-05-23 (BRIDGE-PHYSICS-AUDIT §3 naming pass per
     // docs/architecture/archive/v0.7-physics-judgment-proposals.md §3).
     // Unsubmitted = entries with NEITHER axis mappable to strict
@@ -148,11 +148,18 @@ describe('scanCatalog', () => {
     // 84 is the record from before be-134..146. BE-137, BE-138, BE-140, BE-141,
     // BE-142, BE-143, and BE-146 name neither quantum nor classical.
     // BE-147 through BE-163 and BE-170 name no PhysicalScale. 91 is the record from before those eighteen.
-    expect(report.unsubmitted).toHaveLength(109);
+    expect(report.unsubmitted).toHaveLength(CENSUS.scaleCells.unsubmitted);
     // 53 is the record from before be-103..125. Those twenty-three tuples are fluid → plasma.
+    expect(report.skipped.map((s) => s.bridgeId)).toEqual(report.unsubmitted);
+    for (const { bridgeId, reason } of report.skipped) {
+      const entry = BRIDGE_EQUATIONS.find((e) => e.id === bridgeId)!;
+      expect(reason, `BE-${bridgeId}`).toBe(
+        `bridges tuple [${entry.bridges.join(', ')}] names no PhysicalScale (quantum, mesoscopic, classical, cosmological) on either end`,
+      );
+    }
   });
 
-  it('counts submittable entries as 23 (44 - 21 with at least one PhysicalScale axis)', () => {
+  it('submits the rows with a PhysicalScale on at least one end', () => {
     // Updated 2026-05-24 (parallel-agent dispatch): 20 → 22 after adding
     // BE-53 (Yang-Mills, ['quantum','classical']) AND BE-54 (Randall-Sundrum,
     // ['quantum','cosmological']) — both pairs PhysicalScale-mappable.
@@ -163,7 +170,7 @@ describe('scanCatalog', () => {
     // 39 is the record from before those six.
     const report = scanCatalog(BRIDGE_EQUATIONS);
     // BE-164 through BE-169 name a PhysicalScale. 45 is the record from before those six.
-    expect(report.submitted).toHaveLength(51);
+    expect(report.submitted).toHaveLength(CENSUS.scaleCells.submitted);
   });
 
   it('does NOT throw on a malformed entry', () => {
@@ -177,7 +184,6 @@ describe('scanCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     expect(() => scanCatalog([malformed])).not.toThrow();
@@ -194,7 +200,6 @@ describe('scanCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     const report = scanCatalog([malformed]);
@@ -216,7 +221,6 @@ describe('scanCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     const report = scanCatalog([uncovered]);
@@ -248,7 +252,7 @@ describe('ingestCatalog', () => {
     // 39 is the record from before those six.
     const cells = tensor.populatedCells().filter((c) => c.kind === 'bridge');
     // BE-164 through BE-169 name a PhysicalScale. 45 is the record from before those six.
-    expect(cells).toHaveLength(51);
+    expect(cells).toHaveLength(CENSUS.scaleCells.submitted);
   });
 
   it('throws CatalogIngestionError on any Rule 1 error AND leaves tensor untouched', () => {
@@ -264,7 +268,6 @@ describe('ingestCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     // Include both: should throw, and tensor must be untouched.
@@ -287,7 +290,6 @@ describe('ingestCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     try {
@@ -326,7 +328,7 @@ describe('ingestionReportToFluxReport', () => {
 // ---------------------------------------------------------------------------
 
 describe('Acceptance gate (proposals doc §3.5)', () => {
-  it('the live 43-entry catalog produces ZERO Rule 1 errors at HEAD', () => {
+  it('the live catalog produces ZERO Rule 1 errors at HEAD', () => {
     // This is the Eve-R1 lesson re-confirmed at the test level: at
     // HEAD, no catalog entry has structural dimensional_signature:
     // null (verified Phase 0 Task 0.3). Rule 1 should report zero
@@ -336,7 +338,7 @@ describe('Acceptance gate (proposals doc §3.5)', () => {
     expect(report.errors).toHaveLength(0);
   });
 
-  it('the 21 submittable bridges all clear Rule 2 + Rule 3 in fluxDiagnostics', () => {
+  it('the submitted rows all clear Rule 2 + Rule 3 in fluxDiagnostics', () => {
     const tensor = new UniversalTensor(baseConfig);
     ingestCatalog(tensor, BRIDGE_EQUATIONS);
     const flux = tensor.fluxDiagnostics();

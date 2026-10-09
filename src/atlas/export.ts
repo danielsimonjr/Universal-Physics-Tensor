@@ -25,8 +25,10 @@
  * @internal
  */
 
-import type { AtlasFamily } from './oscillators/index.js';
+import type { AtlasFamily } from './family.js';
+import type { AtlasRecordJson } from './serialize.js';
 import { toAtlasJson } from './serialize.js';
+import type { WitnessResultsArtifact } from './witness-artifact.js';
 
 /** The QUDT resolution table: `"<model-id>/<parameter>"` → IRI, or null when none resolves. @internal */
 export interface QudtResolution {
@@ -42,16 +44,33 @@ export const ATLAS_ID_PREFIX = 'urn:upt:atlas:';
 const modelIri = (id: string): string => `${ATLAS_ID_PREFIX}model:${id}`;
 const bridgeIri = (id: string): string => `${ATLAS_ID_PREFIX}bridge:${id}`;
 
+/** One family's record inside the combined artifact: the per-family record without its own version stamp. @internal */
+export type CombinedFamilyRecord = Omit<AtlasRecordJson, 'packageVersion'>;
+
 /** The combined artifact: every family's record under one version stamp. @internal */
-export function toCombinedAtlasJson(families: readonly AtlasFamily[], packageVersion: string): unknown {
+export interface CombinedAtlasJson {
+  readonly schemaVersion: '0';
+  readonly packageVersion: string;
+  readonly families: readonly CombinedFamilyRecord[];
+}
+
+/**
+ * The combined artifact: every family's record under one version stamp.
+ *
+ * @param witnessResults - forwarded to `toAtlasJson`, which derives each
+ * bridge's `evidence` against it.
+ * @internal
+ */
+export function toCombinedAtlasJson(
+  families: readonly AtlasFamily[],
+  packageVersion: string,
+  witnessResults: WitnessResultsArtifact,
+): CombinedAtlasJson {
   return {
     schemaVersion: '0',
     packageVersion,
     families: families.map((f) => {
-      const { packageVersion: _dropped, ...record } = toAtlasJson(f, packageVersion) as unknown as Record<
-        string,
-        unknown
-      >;
+      const { packageVersion: _dropped, ...record } = toAtlasJson(f, packageVersion, witnessResults);
       return record;
     }),
   };

@@ -234,20 +234,20 @@ function parseSubpathReachable(pkgPath: string): Set<string> {
 
 const PRE_V071_ACCEPTED_DRIFT = new Set<string>([
   // bridges/equations/be-13-einstein-trace.ts
-  ['BE', '13_STRESS_ENERGY_NODE'].join(''),
-  ['BE', '13_T_TRACE_NODE'].join(''),
+  'BE13_STRESS_ENERGY_NODE',
+  'BE13_T_TRACE_NODE',
   // bridges/equations/be-19-quantum-bounce.ts
-  ['BE', '19_LQC_FRIEDMANN_STRUCTURAL'].join(''),
+  'BE19_LQC_FRIEDMANN_STRUCTURAL',
   // bridges/equations/be-39-asymptotic-safety.ts
-  ['BE', '39_COUPLING_G'].join(''),
-  ['BE', '39_COUPLING_LAMBDA'].join(''),
-  ['BE', '39_BETA_G_STRUCTURAL'].join(''),
-  ['BE', '39_BETA_LAMBDA_STRUCTURAL'].join(''),
+  'BE39_COUPLING_G',
+  'BE39_COUPLING_LAMBDA',
+  'BE39_BETA_G_STRUCTURAL',
+  'BE39_BETA_LAMBDA_STRUCTURAL',
   // bridges/equations/be-50-wheeler-feynman.ts
-  ['BE', '50_TIME_SYMMETRY_PREDICATE_STRUCTURAL'].join(''),
+  'BE50_TIME_SYMMETRY_PREDICATE_STRUCTURAL',
   // bridges/equations/be-53-yang-mills-beta.ts
-  ['BE', '53_COUPLING_G'].join(''),
-  ['BE', '53_BETA_G_STRUCTURAL'].join(''),
+  'BE53_COUPLING_G',
+  'BE53_BETA_G_STRUCTURAL',
   'YangMillsBetaInputs',
   'evaluateYangMillsBeta',
   'computeB0',
@@ -256,7 +256,7 @@ const PRE_V071_ACCEPTED_DRIFT = new Set<string>([
   'RandallSundrumInputs',
   'evaluateRandallSundrumH2',
   'validateBraneFriedmannDimensions',
-  ['BE', '54_BRANE_FRIEDMANN_STRUCTURAL'].join(''),
+  'BE54_BRANE_FRIEDMANN_STRUCTURAL',
   // bridges/perihelion-precession-labeled.ts
   'evaluatePerihelionPrecessionLabeled',
   // dimensional/curvature-composite.ts
@@ -281,8 +281,8 @@ const PRE_V071_ACCEPTED_DRIFT = new Set<string>([
   // dimensional/tensor.ts
   'scale',
   // numerical/be37-covariant-eikonal.ts
-  ['BE', '37CovariantEikonalInputs'].join(''),
-  ['BE', '37CovariantEikonalResult'].join(''),
+  'BE37CovariantEikonalInputs',
+  'BE37CovariantEikonalResult',
   // numerical/errors.ts
   'GL4ConvergenceError',
   // numerical/null-ic.ts

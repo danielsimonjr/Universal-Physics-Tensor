@@ -20,10 +20,11 @@ Bridge triage — structural decidability against established physics
    T1     0   decoy        0        be-27                speculative
    T1     0   decoy        0        be-42                highly-speculative
    T1     0   open         1  DATA  be-23                speculative
+   T1     0   open         1  DATA  be-37                speculative
    T1     0   open         1        be-38                speculative
 
    ── Tier 2: anchored OR grounded — second pass
-   T2     0   open         3        be-33                speculative
+   T2     0   open         2        be-33                speculative
    T2     ∞   grounded     0        be-15                speculative
    T2     ∞   grounded     0        be-17                speculative
    T2     ∞   grounded     0        be-20                speculative
@@ -50,5 +51,5 @@ Bridge triage — structural decidability against established physics
    T3     ∞   open         5        be-39                speculative
    T3     ∞   open         6        be-47                speculative
 
-   Tiers: {"1":8,"2":4,"3":20}  (of 32 non-established bridges)
+   Tiers: {"1":9,"2":4,"3":20}  (of 33 non-established bridges)
    Reminder: tier ranks decidability/anchoring, not truth.

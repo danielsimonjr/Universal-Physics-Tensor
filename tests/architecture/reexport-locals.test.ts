@@ -71,14 +71,16 @@ describe('re-export locals', () => {
     expect(still).toEqual({});
   });
 
-  it('still reports getBridge and command in more than one file', () => {
-    // The walker is not vacant. These two stay more than one file:
-    // two real getBridge functions, and the command registration.
-    const stayed: Record<string, string[]> = {};
-    for (const name of ['getBridge', 'command'] as const) {
-      const files = locals.get(name) ?? [];
-      if (files.length < 2) stayed[name] = files;
-    }
-    expect(stayed).toEqual({});
+  it('still reports command in more than one file (the walker is not vacant)', () => {
+    // The command registration is one name in every command module.
+    expect((locals.get('command') ?? []).length).toBeGreaterThan(1);
+  });
+
+  it('getBridge is one function: the atlas record reader is catalogBridgeRecord', () => {
+    // The sentence that two real getBridge functions stayed in more than one
+    // file is the record from before the atlas one was renamed for what it
+    // returns (9.0.0 audit §1).
+    expect(locals.get('getBridge')).toEqual(['src/composition/descriptor.ts']);
+    expect(locals.get('catalogBridgeRecord')).toEqual(['src/atlas/bridge-record.ts']);
   });
 });

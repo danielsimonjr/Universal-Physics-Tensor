@@ -41,7 +41,8 @@ export type {
   FormalRefKind,
   NormTransport,
 } from './types.js';
-export { MissingHorizonError, MissingLipschitzError } from './types.js';
+/** Thrown by a bound whose `deltaAt`, `horizonHolds` or Lipschitz constant is missing. */
+export { MissingDeltaAtError, MissingHorizonError, MissingLipschitzError } from './types.js';
 export { ALL_EVIDENCE_TAGS } from './types.js';
 
 // The Phase 1–3 core. Absent from this barrel until the S6.7 API review found
@@ -80,7 +81,7 @@ export {
 export { ATLAS_MODELS, getAtlasModel } from './oscillators/models.js';
 
 export { OSCILLATOR_FAMILY } from './oscillators/index.js';
-export type { AtlasFamily } from './oscillators/index.js';
+export type { AtlasFamily } from './family.js';
 
 export { toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION } from './serialize.js';
 export type { AtlasRecordJson, JsonValue } from './serialize.js';

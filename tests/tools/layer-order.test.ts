@@ -248,7 +248,9 @@ export function jobFetchesMasterBeforeTests(yml: string, jobName: string): boole
   const next = rest.search(/\n  [a-z0-9-]+:/);
   const job = next < 0 ? rest : rest.slice(0, next);
   const fetchAt = job.indexOf('git fetch origin master --depth=1');
-  const testAt = job.indexOf('bun run test');
+  // The suite step is `bunx vitest run` (ci.yml) or `bun run test`; publish.yml runs it inside
+  // `npm publish` (prepublishOnly → validate), so that step counts as the suite there.
+  const testAt = job.search(/bunx vitest run|bun run test|npm publish/);
   return fetchAt >= 0 && testAt > fetchAt;
 }
 

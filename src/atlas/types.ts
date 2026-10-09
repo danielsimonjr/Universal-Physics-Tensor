@@ -125,7 +125,14 @@ export interface AtlasBridge {
   readonly bound?: ApproximationBound;
   readonly regime: Regime;
   readonly counterexamples: readonly Counterexample[];
-  readonly evidence: ReadonlySet<EvidenceTag>;
+  /**
+   * There is NO `evidence` field. Every evidence tag is derived at read time
+   * by `deriveEvidence` from the witnesses, the formal reference and the
+   * counterexamples a record carries, against the committed witness results;
+   * `toAtlasJson` writes that derivation into the artifact. The sentence
+   * that a record stored its own set is the record from before this field
+   * was removed.
+   */
   readonly witnesses: readonly Witness[];
   readonly citations: readonly string[];
   readonly reviewStatus: 'proposed' | 'reviewed';
@@ -166,7 +173,7 @@ export class MissingHorizonError extends Error {}
  * such a record is present and correct, and reporting a missing horizon for it
  * would send the next reader to the one field that is not the defect.
  *
- * @internal
+ * @public
  */
 export class MissingDeltaAtError extends Error {}
 

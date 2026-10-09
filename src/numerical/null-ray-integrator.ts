@@ -1,9 +1,9 @@
 /**
  * Fixed-step classical RK4 integrator for affine-parameterized null
- * geodesics. Used by `src/bridges/equations/be-37-shapiro-delay.ts` (the
- * closed-form bridge encoding); the v0.5.0 covariant-eikonal path uses
- * the symplectic `integrateGeodesicGL4` instead (see
- * `src/numerical/covariant-eikonal.ts`). The fixed steps are MathTS
+ * geodesics. No module under `src/` calls it: the covariant-eikonal path
+ * (`src/numerical/covariant-eikonal.ts`) uses the symplectic
+ * `integrateGeodesicGL4`, and the tests keep this one as the RK4 oracle
+ * the atlas ODE helper is compared against. The fixed steps are MathTS
  * `solveODESystem` with `dt` set. Operates on plain `number[]` state
  * vectors, no TensorEngine dependency.
  *

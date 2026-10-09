@@ -19,7 +19,7 @@ import type {
   SearchStopReason,
   DiscoveryRunManifest,
 } from './types.js';
-import { DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
+import { DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
 import { openBudget, budgetStopReason, type BudgetState } from './search-budget.js';
 import { generateNative, nativeDetermination, type RawCandidate } from './generator.js';
 import { fingerprintExpr, complexityOf, bodyExpression } from './fingerprint.js';
@@ -39,6 +39,14 @@ import { runBackendWorker } from './backend-protocol.js';
 
 /** Stop wording when the problem carried no holdout rows. @internal */
 export const NO_HOLDOUT_WORDING = 'no holdout observations: no candidate was tested on withheld data';
+
+/**
+ * The argv that runs a Node script as an NDJSON worker: this process's own Node, then the script.
+ * @internal
+ */
+export function nodeWorkerArgv(script: string): readonly string[] {
+  return [process.execPath, script];
+}
 
 export interface ProbeSearchOptions {
   readonly budget?: SearchBudget;
@@ -256,7 +264,7 @@ export async function runProbeSearch(
       ...(problem.exploratory ? [hashCanonical(problem.exploratory)] : []),
       ...(problem.holdout ? [hashCanonical(problem.holdout)] : []),
     ],
-    tolerances: { holdoutRmse: opts.holdoutTol ?? 0.15 },
+    tolerances: { holdoutRmse: opts.holdoutTol ?? DEFAULT_HOLDOUT_TOL },
     searchBudget: budget,
     startedAt: at,
     backendDescriptors: opts.backendArgv
@@ -356,7 +364,7 @@ export async function runProbeSearch(
         bodyExpression(rec.body),
         problem.exploratory!,
         problem.holdout,
-        opts.holdoutTol ?? 0.15,
+        opts.holdoutTol ?? DEFAULT_HOLDOUT_TOL,
       );
     } catch (err) {
       rec = applyStatus(
@@ -400,7 +408,7 @@ export async function runProbeSearch(
         corp,
         bodyExpression(rec.body),
         fit.prefactor,
-        opts.holdoutTol ?? 0.15,
+        opts.holdoutTol ?? DEFAULT_HOLDOUT_TOL,
       );
       rec = applyStatus(rec, 'equivalent-known', corpusRelativeWording(corp), runId, at);
       store.replace(rec);
@@ -413,7 +421,6 @@ export async function runProbeSearch(
       prefactor: fit.prefactor,
       claimedRegimes: problem.claimedRegimes,
       limits: problem.limits,
-      observationalBoundIds: problem.observationalBoundIds,
     });
     falsifications[rec.id] = fal;
     if (!fal.survived) {
@@ -436,7 +443,8 @@ export async function runProbeSearch(
         : 0;
     const corp = corpus[record.id];
     const dist = corp && corp.algebraicMatches.length > 0 ? 0 : 1;
-    return { record, scores: scoreCandidate(record, emp, dist) };
+    // Robustness is read from the batteries this record ran, not from its status.
+    return { record, scores: scoreCandidate(record, emp, dist, falsifications[record.id]) };
   });
   const ranked = rankPareto(scored);
 

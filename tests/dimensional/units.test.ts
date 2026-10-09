@@ -4,7 +4,7 @@
  * and a radius is never taken for a diameter.
  */
 import { describe, expect, it } from 'vitest';
-import { convertValue, parseUnit, UnitError } from '../../src/dimensional/units.js';
+import { AmbiguousUnitError, convertValue, parseUnit, readUnit, UnitError, UnknownUnitError } from '../../src/dimensional/units.js';
 import { C_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../../src/core/constants.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import type { EvaluatorParameter } from '../../src/bridges/evaluators.js';
@@ -187,5 +187,81 @@ describe('resolveEvaluatorInputs — geometry is declared, never guessed', () =>
   it('an undeclared key, or one input given twice, is refused', () => {
     expect(() => resolveEvaluatorInputs(SPHERE, ['size_m=1um'])).toThrow(/'size_m' is not an input here; the inputs are: radius_m, diameter_m/);
     expect(() => resolveEvaluatorInputs(SPHERE, ['radius_m=1um', 'diameter_m=2um'])).toThrow(/given twice \(once through an alternate\)/);
+  });
+});
+
+describe('a numerator 1 is the dimensionless unit (audit N6)', () => {
+  // `1` alone and `/s` alone were read; `1/s` was "unknown unit '1'".
+  it('1/s is a reciprocal second, the same reading as /s', () => {
+    expect(parseUnit('1/s')).toEqual(parseUnit('/s'));
+    expect(parseUnit('1/s').dim).toMatchObject({ T: -1 });
+    expect(parseUnit('1/s').scale).toBe(1);
+  });
+
+  it('1/m^3 is a number density', () => {
+    expect(parseUnit('1/m^3').dim).toMatchObject({ L: -3 });
+    expect(convertValue('2 1/cm^3', '1/m^3').value).toBeCloseTo(2e6, 6);
+  });
+
+  it('1Hz converts into 1/s, and the hertz keeps its cycle count', () => {
+    const c = convertValue('1Hz', '1/s');
+    expect(c.value).toBe(1);
+    expect(c.cycles).toBe(1);
+  });
+
+  it('the label of a reciprocal reads 1/s, not /s', () => {
+    expect(readUnit('1/s').label).toBe('1/s');
+    expect(readUnit('/s').label).toBe('1/s');
+  });
+
+  it('a bare 1 and an empty string stay dimensionless', () => {
+    expect(parseUnit('1')).toEqual(parseUnit(''));
+  });
+
+  it('a 1 that is not the whole numerator is not a unit symbol', () => {
+    expect(() => parseUnit('1*m')).toThrow(UnknownUnitError);
+    expect(() => parseUnit('m/1')).toThrow(UnknownUnitError);
+  });
+});
+
+describe('a homogeneous run does not compete inside a split either (audit N14)', () => {
+  // The doc says `m·m` never competes, but the rule ran only when the whole
+  // token was one factor; `mmin` listed `m·m·in` beside `m·min` and `mm·in`.
+  it('mmin names m·min and mm·in, and not m·m·in', () => {
+    let error: unknown;
+    try {
+      convertValue('1mmin', 's');
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeInstanceOf(AmbiguousUnitError);
+    const readings = (error as AmbiguousUnitError).readings;
+    expect(readings).toContain('m·min');
+    expect(readings).toContain('mm·in');
+    expect(readings).not.toContain('m·m·in');
+    expect(readings).toHaveLength(2);
+  });
+
+  it('a target dimension still picks the one reading of mmin', () => {
+    expect(convertValue('1mmin', 'm*s').value).toBe(60);
+    expect(convertValue('1mmin', 'm^2').value).toBeCloseTo(0.0254e-3, 12);
+  });
+
+  it('a prefixed power keeps its one reading, and a glued product still splits', () => {
+    expect(parseUnit('mm2').dim).toMatchObject({ L: 2 });
+    expect(parseUnit('mm2').scale).toBeCloseTo(1e-6, 18);
+    expect(parseUnit('m2K').dim).toMatchObject({ L: 2, Theta: 1 });
+    expect(parseUnit('kg/mm').scale).toBe(1000);
+  });
+
+  it('m2min is an area times a minute, and a power written as m2m is not a reading (write m3)', () => {
+    expect(parseUnit('m2min')).toMatchObject({ scale: 60, dim: { L: 2, T: 1 } });
+    expect(() => parseUnit('m2m')).toThrow(UnknownUnitError);
+    expect(parseUnit('m3').dim).toMatchObject({ L: 3 });
+  });
+
+  it('a unit that is not a prefix letter still juxtaposes with itself', () => {
+    expect(parseUnit('NN').dim).toEqual(parseUnit('N^2').dim);
+    expect(() => parseUnit('HzHz')).toThrow(AmbiguousUnitError);
   });
 });

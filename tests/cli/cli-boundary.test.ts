@@ -30,13 +30,26 @@ function tsFiles(dir: string): string[] {
 }
 
 describe('commands reach the library only through ctx.api', () => {
+  // A value import is `import <clause> from '../../…'` where the clause is not `type`. The clause may
+  // span lines (`import {\n  a,\n  b,\n} from '…'`), so the pattern runs over the whole file, not per line.
+  const VALUE_IMPORT = /^import\s+(?!type\b)[^;]*?\bfrom\s+'\.\.\/\.\.\/[^']*'/gm;
+  function libraryValueImports(text: string): string[] {
+    return [...text.matchAll(VALUE_IMPORT)].map((m) => m[0].replace(/\s+/g, ' '));
+  }
+
+  it('CONTROL: a multi-line value import is seen; a type import and a cli-local import are not', () => {
+    const multi = "import {\n  a,\n  b,\n} from '../../dimensional/x.js';\n";
+    expect(libraryValueImports(multi)).toEqual(["import { a, b, } from '../../dimensional/x.js'"]);
+    expect(libraryValueImports("import type { T } from '../../atlas/types.js';\n")).toEqual([]);
+    expect(libraryValueImports("import type {\n  T,\n} from '../../atlas/types.js';\n")).toEqual([]);
+    expect(libraryValueImports("import { x } from '../flag-help.js';\n")).toEqual([]);
+  });
+
   it('no command module imports a library value from outside src/cli', () => {
     const hits: string[] = [];
     for (const file of tsFiles(join(SRC, 'cli/commands'))) {
       const text = readFileSync(file, 'utf8');
-      for (const line of text.split('\n')) {
-        if (/^import (?!type\b).* from '\.\.\/\.\.\//.test(line)) hits.push(`${relative(SRC, file)}: ${line.trim()}`);
-      }
+      for (const hit of libraryValueImports(text)) hits.push(`${relative(SRC, file)}: ${hit}`);
     }
     expect(hits).toEqual([]);
   });

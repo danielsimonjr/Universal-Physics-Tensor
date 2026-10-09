@@ -142,7 +142,7 @@ describe('forwardClosure', () => {
 
 const FULL_GRAPH = CATALOG_GRAPH;
 
-describe('classifyIdentifiability — real 41-edge graph from {mass}', () => {
+describe('classifyIdentifiability — the real catalog graph from {mass}', () => {
   it('hawking-temperature is OVER-determined (be-42 and be-42-via-rs)', () => {
     const r = classifyIdentifiability(FULL_GRAPH, ['mass'], 'hawking-temperature');
     expect(r.verdict).toBe('over-determined');

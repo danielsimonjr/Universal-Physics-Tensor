@@ -3,8 +3,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { EventEmitter } from 'node:events';
-import { writeFileSync, mkdtempSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -58,6 +57,7 @@ import { REAL_WORKER_HANG_GUARD_MS } from './worker-hang-guard.js';
 import { canTransition } from '../../../src/composition/probe/candidate-store.js';
 import { compareToCorpus } from '../../../src/composition/probe/corpus.js';
 import { BRIDGE_RHS_BY_ID } from '../../../src/bridges/rhs-registry.js';
+import { tempDir } from '../../helpers/tmp.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -297,7 +297,7 @@ describe('pipeline extra gates', () => {
 
 describe('dataset / problem error paths', () => {
   it('throws on malformed JSON datasets and CSVs', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-ds-'));
+    const dir = tempDir('upt-ds-');
     expect(() => asDatasetSafe(null, 'n')).toThrow(/not an object/);
     expect(() => asDatasetSafe({ observable: 'y' }, 'n')).toThrow(/rows/);
     expect(() => asDatasetSafe({ rows: [], observable: '' }, 'n')).toThrow(/observable/);
@@ -331,7 +331,7 @@ describe('dataset / problem error paths', () => {
   });
 
   it('loads observationsPath and wrapped Expr JSON', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-pr-'));
+    const dir = tempDir('upt-pr-');
     const data = join(dir, 'd.json');
     writeFileSync(
       data,
@@ -370,7 +370,7 @@ describe('dataset / problem error paths', () => {
   });
 
   it('resolves observationsPath relative to the problem file', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-pr-rel-'));
+    const dir = tempDir('upt-pr-rel-');
     const data = join(dir, 'data.json');
     writeFileSync(
       data,
@@ -405,11 +405,9 @@ describe('falsify / limits / residual / fit extra branches', () => {
     const r = runFalsification({
       expr,
       skipDimensional: true,
-      observationalBoundIds: ['bound-1'],
     });
-    expect(r.records.some((b) => b.battery === 'observational-bounds' && b.outcome === 'inconclusive')).toBe(
-      true,
-    );
+    // The batteries that ran, and no battery that is inconclusive by construction.
+    expect(r.records.map((b) => b.battery)).toEqual(['finiteness', 'limits']);
     const empty = datasetFromRows([], 'y', 'falsification-only');
     const lim = checkDeclaredLimit(expr, empty, 1, { id: 'l', regime: { a: 'b' } }, true);
     expect(lim.detail).toMatch(/no observations/);
@@ -513,8 +511,9 @@ describe('backend nonzero exit + store illegal transition', () => {
 describe('corpus bridge-layer match', () => {
   it('matches a catalog RHS when one exists', () => {
     const first = [...BRIDGE_RHS_BY_ID.entries()][0];
-    if (!first) return;
-    const r = compareToCorpus(first[1], '0');
+    // An empty map must fail here, not pass vacuously: the test is about matching a catalog RHS.
+    expect(first).toBeDefined();
+    const r = compareToCorpus(first![1], '0');
     expect(r.algebraicMatches.some((m) => m.id === `be-${first[0]}`)).toBe(true);
   });
 });

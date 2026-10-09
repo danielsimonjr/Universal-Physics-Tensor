@@ -10,7 +10,7 @@ import type {
   SearchBudget,
   SearchStopReason,
 } from './types.js';
-import { DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
+import { DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
 import { captureEnvironment, hashCanonical } from '../canonical-json.js';
 
 /**
@@ -53,7 +53,7 @@ export function openManifest(draft: ManifestDraft): DiscoveryRunManifest {
       },
     ],
     randomSeeds: draft.randomSeeds ?? {},
-    tolerances: draft.tolerances ?? { holdoutRmse: 0.15 },
+    tolerances: draft.tolerances ?? { holdoutRmse: DEFAULT_HOLDOUT_TOL },
     environment: captureEnvironment(),
     searchBudget: draft.searchBudget ?? DEFAULT_SEARCH_BUDGET,
     startedAt: draft.startedAt ?? new Date().toISOString(),

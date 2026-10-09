@@ -1,21 +1,16 @@
 /**
  * In-process `upt probe` — experimental Product B CLI.
  */
+import '../helpers/dist.js';
+import { captureMerged, text } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { writeFileSync, mkdtempSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { writeFileSync } from 'node:fs';
 import { runCli } from '../../dist/cli/main.js';
 import { scanWithExpressionGaps } from '../../dist/composition/probe/index.js';
 import { CATALOG_GRAPH } from '../../dist/composition/catalog-graph.js';
-
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
+import { tempDir } from '../helpers/tmp.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const pendulum = join(here, '../fixtures/discovery/pendulum-scaling/public/problem.json');
@@ -23,13 +18,13 @@ const noise = join(here, '../fixtures/discovery/pure-noise/public/problem.json')
 
 describe('upt probe', () => {
   it('missing subverb is usage error → exit 2', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe'], c.io)).toBe(2);
     expect(text(c)).toMatch(/subverb/);
   });
 
   it('scan --json --source=canonical returns a JSON envelope instead of throwing', async () => {
-    const c = capture();
+    const c = captureMerged();
     const code = await runCli(['probe', '--json', 'scan', '--source=canonical'], c.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(text(c));
@@ -39,7 +34,7 @@ describe('upt probe', () => {
   });
 
   it('scan defaults to searchable expression gaps and hides relation-link wrappers', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'scan'], c.io)).toBe(0);
     const t = text(c);
     expect(t).toMatch(/fg-expr-case-skin-depth/);
@@ -52,19 +47,19 @@ describe('upt probe', () => {
   });
 
   it('scan rejects --searchable-only together with --all', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'scan', '--searchable-only', '--all'], c.io)).toBe(2);
     expect(text(c)).toMatch(/--searchable-only or --all/);
   });
 
   it('run without a problem file is a usage error', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'run'], c.io)).toBe(2);
     expect(text(c)).toMatch(/--problem=FILE is required/);
   });
 
   it('show resolves an expression gap and a wrapper from the combined list', async () => {
-    const expr = capture();
+    const expr = captureMerged();
     expect(await runCli(['probe', 'show', 'fg-expr-case-skin-depth'], expr.io)).toBe(0);
     const shown = text(expr);
     expect(shown).toMatch(/searchable: true/);
@@ -72,20 +67,20 @@ describe('upt probe', () => {
     expect(shown).toMatch(/no dataset/);
     expect(shown).toMatch(/not a detected prediction residual/);
 
-    const scan = capture();
+    const scan = captureMerged();
     expect(await runCli(['probe', 'scan', '--all', '--json'], scan.io)).toBe(0);
     const link = (JSON.parse(text(scan)).result as { id: string; kind: string }[]).find(
       (g) => g.kind === 'relation-link',
     );
     expect(link).toBeDefined();
-    const wrap = capture();
+    const wrap = captureMerged();
     expect(await runCli(['probe', 'show', link!.id], wrap.io)).toBe(0);
     expect(text(wrap)).toMatch(/searchable: false/);
     expect(text(wrap)).toMatch(/upt discover/);
   });
 
   it('scan --all lists not-searchable relation-link gaps', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'scan', '--all'], c.io)).toBe(0);
     const t = text(c);
     expect(t).toMatch(/fg-link-/);
@@ -107,7 +102,7 @@ describe('upt probe', () => {
     expect(searchable).toBeGreaterThan(0);
     expect(library.length).toBeGreaterThan(searchable);
 
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'scan', '--json'], c.io)).toBe(0);
     const env = JSON.parse(text(c));
     expect(env.options.scan).toEqual({ total: library.length, searchable, showing: 'searchable-only' });
@@ -120,7 +115,7 @@ describe('upt probe', () => {
       /no dataset/.test(g.searchability.reasons.join(' ')) &&
       /not a detected prediction residual/.test(g.searchability.reasons.join(' ')))).toBe(true);
 
-    const all = capture();
+    const all = captureMerged();
     expect(await runCli(['probe', 'scan', '--all', '--json'], all.io)).toBe(0);
     const envAll = JSON.parse(text(all));
     expect(envAll.options.scan).toEqual({ total: library.length, searchable, showing: 'all' });
@@ -134,35 +129,35 @@ describe('upt probe', () => {
   });
 
   it('show a missing gap → exit 1', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'show', 'fg-does-not-exist'], c.io)).toBe(1);
   });
 
   it('show a real gap from scan --all --json', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'scan', '--all', '--json'], c.io)).toBe(0);
     const env = JSON.parse(text(c));
     const id = env.result[0].id as string;
-    const c2 = capture();
+    const c2 = captureMerged();
     expect(await runCli(['probe', 'show', id], c2.io)).toBe(0);
     expect(text(c2)).toContain(id);
   });
 
   it('run pendulum fixture recovers a known corpus relation', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'run', `--problem=${pendulum}`], c.io)).toBe(0);
     expect(text(c)).toMatch(/CE-pendulum-period|equivalent|experimental/);
   });
 
   it('run --json on pure noise abstains', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'run', `--problem=${noise}`, '--json'], c.io)).toBe(0);
     const env = JSON.parse(text(c));
     expect(env.result.stopReason).toBe('no-credible-candidate');
   });
 
   it('design abstains without variables and never enters a forbidden region', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-probe-cli-'));
+    const dir = tempDir('upt-probe-cli-');
     const h1 = join(dir, 'h1.json');
     const h2 = join(dir, 'h2.json');
     const bounds = join(dir, 'b.json');
@@ -187,13 +182,13 @@ describe('upt probe', () => {
         sigma: 1,
       }),
     );
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'design', `--h1=${h1}`, `--h2=${h2}`, `--bounds=${bounds}`], c.io)).toBe(0);
     expect(text(c)).toMatch(/discrimination/);
   });
 
   it('help probe documents Product B vs discover', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['help', 'probe'], c.io)).toBe(0);
     const t = text(c);
     expect(t).toMatch(/Product B/);

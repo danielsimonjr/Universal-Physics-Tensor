@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { runLinkPrediction } from '../../src/atlas/link-prediction.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { mcnemar, pairedDifferenceInterval, wilsonInterval } from '../../src/atlas/benchmark/stats.js';
-import type { AtlasFamily } from '../../src/atlas/oscillators/index.js';
+import type { AtlasFamily } from '../../src/atlas/family.js';
 import type { AtlasBridge } from '../../src/atlas/types.js';
 import type { AtlasModel } from '../../src/atlas/model.js';
 
@@ -88,7 +88,6 @@ describe('the predictor itself', () => {
     sideConditions: [],
     regime: { family: 'toy', inequalities: [], groupDefinitions: {} },
     counterexamples: [],
-    evidence: new Set(),
     witnesses: [],
     citations: [],
     reviewStatus: 'proposed',

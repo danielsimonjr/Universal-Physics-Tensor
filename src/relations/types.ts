@@ -41,9 +41,11 @@ export type EvidenceTag =
  *
  * Lives HERE, not in `coverage.ts` (which re-exports it), because
  * `tests/atlas/derived-tag-literals.test.ts` allows the literals
- * `'formally-proved'` and `'symbolically-checked'` under `src/atlas/` in
- * exactly two files: this one and `derive-evidence.ts`. A tag that can only be
- * DERIVED must not be spellable anywhere a record could hand-set it.
+ * `'formally-proved'` and `'symbolically-checked'` under `src/atlas/` and
+ * `src/relations/` in exactly three files: this one (`src/relations/types.ts`,
+ * where the union and the tag list are declared), `src/atlas/types.ts`, and
+ * `src/atlas/derive-evidence.ts`. A tag that can only be DERIVED must not be
+ * spellable anywhere a record could hand-set it.
  *
  * @internal
  */
@@ -70,8 +72,19 @@ export const ALL_EVIDENCE_TAGS = [
  * - `'back-translation'` — a reviewer who had not seen the source translated
  *   the formal statement back to prose and it matched.
  * - `'sanity-lemmas'` — the statement was instantiated on known cases in
- *   `tests/atlas/formal-sanity.test.ts`.
+ *   `tests/atlas/formal-sanity.test.ts`. A PhysJS reference carries it only
+ *   when its key is in `PHYSJS_SANITY_LEMMA_KEYS` and its manifest row is
+ *   also reviewed (below).
+ * - `'reviewed-manifest'` — the manifest row (key, theorem, kind, covers
+ *   line, proof status, axioms, nested statements) was read against the
+ *   bridge it keys and pinned by its hash in `src/atlas/physjs-reviewed.ts`;
+ *   `physjsFormalRef` recomputes the hash and emits this value only on a
+ *   match. The statement was not instantiated on a known case.
  * - `'unreviewed'` — recorded, not checked. **Earns no tag, by construction.**
+ *   A PhysJS key whose row is not in the reviewed table, or that is ahead of
+ *   the catalog, derives this value.
+ *
+ * No value here is hand-set on a record: `physjsFormalRef` derives it.
  *
  * @internal
  */
@@ -79,6 +92,7 @@ export type FormalFidelity =
   | 'two-formalizers'
   | 'back-translation'
   | 'sanity-lemmas'
+  | 'reviewed-manifest'
   | 'unreviewed';
 
 /**

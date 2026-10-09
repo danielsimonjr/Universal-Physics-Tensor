@@ -9,26 +9,10 @@
  *
  * @module tests/cli/map-atlas-views
  */
+import '../helpers/dist.js';
+import { json, run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
-import { runCli } from '../../dist/cli/main.js';
 import { ATLAS_FAMILIES, CANONICAL_EQUATIONS } from '../../dist/cli-api.js';
-
-async function run(args: string[]): Promise<{ code: number; stdout: string; stderr: string }> {
-  const out: string[] = [];
-  const err: string[] = [];
-  const code = await runCli(args, {
-    out: (s?: string) => out.push((s ?? '') + '\n'),
-    err: (s?: string) => err.push((s ?? '') + '\n'),
-    write: (s: string) => out.push(s),
-  });
-  return { code, stdout: out.join(''), stderr: err.join('') };
-}
-
-async function json(args: string[]): Promise<any> {
-  const r = await run([...args, '--json']);
-  expect(r.code).toBe(0);
-  return JSON.parse(r.stdout);
-}
 
 const BRIDGES = ATLAS_FAMILIES.flatMap((f) => f.bridges);
 const MODELS = ATLAS_FAMILIES.flatMap((f) => f.models);
@@ -38,7 +22,7 @@ describe('upt map --route', () => {
     const { code, stdout } = await run(['map', '--route=model-pendulum,model-lc']);
     expect(code).toBe(0);
     expect(stdout).toContain(`shown: 2 of ${BRIDGES.length} atlas bridges, 3 of ${MODELS.length} models`);
-    expect(stdout).toContain('[source: atlas (ATLAS_FAMILIES, src/atlas/families.ts)]');
+    expect(stdout).toContain('[source: atlas (the models and bridges of every family, https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/src/atlas/families.ts)]');
     expect(stdout).toMatch(/step 1 {2}model-pendulum --\[approximation\]--> model-spring {2}\(ab-pendulum-linear\)/);
     expect(stdout).toMatch(/step 2 {2}model-spring --\[exact-equivalence\]--> model-lc {2}\(ab-spring-lc\)/);
     expect(stdout).toContain('assumptions: θ0 ≤ 0.5 rad');

@@ -28,6 +28,7 @@ import type {
   TopologyAxis,
   StatisticsAxis,
 } from './axes.js';
+import { AXES } from './axes.js';
 
 /**
  * Sparse regime attributes — the classification axes demoted from
@@ -69,13 +70,40 @@ export interface Quantity {
   readonly attributes: RegimeAttributes;
 }
 
-const REGIME_KEYS = ['scale', 'force', 'information'] as const;
+/** An attribute set read by axis name. The keys are the registry's axis names. */
+type AttributeRecord = Readonly<Record<string, string | undefined>>;
+
+/**
+ * The attribute set `record` states, checked against the axis registry.
+ *
+ * Every key must be a registry axis and every value one of that axis's
+ * values; anything else throws, so a misspelt axis or value in a data row
+ * cannot enter the gate as a silently unstated axis. An `undefined` value is
+ * an axis the record leaves open. The check is what makes the narrowing to
+ * `RegimeAttributes` true; nothing is assumed.
+ *
+ * @internal
+ */
+export function regimeAttributesOf(record: AttributeRecord, where = 'attributes'): RegimeAttributes {
+  const checked: Record<string, string> = {};
+  for (const [axis, value] of Object.entries(record)) {
+    if (value === undefined) continue;
+    const spec = AXES.find((a) => a.name === axis);
+    if (spec === undefined) throw new Error(`${where}: '${axis}' is not a registry axis`);
+    if (!spec.values.includes(value)) {
+      throw new Error(`${where}: '${value}' is not a value of the ${axis} axis (${spec.values.join(', ')})`);
+    }
+    checked[axis] = value;
+  }
+  return checked as RegimeAttributes;
+}
 
 /**
  * Graph-native membership criterion primitive (v0.8.0 G-2): two
- * attribute sets "differ" iff at least one regime axis is stated on
+ * attribute sets "differ" iff at least one registry axis is stated on
  * BOTH sides with different values. Axes stated on only one side are
- * inconclusive and do not count as a difference.
+ * inconclusive and do not count as a difference. The axes are the
+ * registry's (`AXES`), so an axis added there is read here.
  *
  * A bridge is an edge whose endpoint quantities differ; a law is an
  * edge whose endpoints share all mutually-stated attributes.
@@ -86,9 +114,11 @@ export function regimesDiffer(
   a: RegimeAttributes,
   b: RegimeAttributes,
 ): boolean {
-  for (const key of REGIME_KEYS) {
-    const av = a[key];
-    const bv = b[key];
+  const left = a as AttributeRecord;
+  const right = b as AttributeRecord;
+  for (const { name } of AXES) {
+    const av = left[name];
+    const bv = right[name];
     if (av !== undefined && bv !== undefined && av !== bv) return true;
   }
   return false;

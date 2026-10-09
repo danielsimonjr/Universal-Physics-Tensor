@@ -11,6 +11,7 @@
  */
 
 import type { Dimension } from './types.js';
+import type { ExprNode } from './ast-types.js';
 import type {
   Variance,
   Role,
@@ -199,7 +200,7 @@ export interface PartialDerivativeChildResult {
  */
 export function validatePartialDerivative(
   node: TensorPartialDerivativeNode,
-  validateChild: (child: unknown) => PartialDerivativeChildResult,
+  validateChild: (child: ExprNode) => PartialDerivativeChildResult,
 ): PartialDerivativeValidationResult {
   if (node.wrtIndex.variance !== 'lower') {
     throw new PartialDerivativeIndexVarianceError(node.wrtIndex.label);

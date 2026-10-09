@@ -5,18 +5,14 @@
  * helpfully — tailored by grounding tier (closed-form vs graph-computable,
  * data-confronted or not). Regression for the v0.41.0 PI-investigation finding.
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-
 describe('upt explain <bridge-id> redirect', () => {
   it('be-55 (graph-computable, data-confronted): redirects as a bridge + points to confront, exit 0', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['explain', 'be-55'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -27,7 +23,7 @@ describe('upt explain <bridge-id> redirect', () => {
   });
 
   it('be-57 (not confronted): notes the bridge and that it has no data confrontation, exit 0', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['explain', 'be-57'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -38,7 +34,7 @@ describe('upt explain <bridge-id> redirect', () => {
   });
 
   it('be-37 (graph-computable, data-confronted): redirects as a bridge + points to confront, exit 0', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['explain', 'be-37'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -49,7 +45,7 @@ describe('upt explain <bridge-id> redirect', () => {
   });
 
   it('a real quantity target still explains normally (no redirect)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['explain', 'schwarzschild-radius'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -57,7 +53,7 @@ describe('upt explain <bridge-id> redirect', () => {
   });
 
   it('--json on a bridge-id target carries a structured redirect envelope', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['explain', 'be-55', '--json'], cap.io);
     expect(code).toBe(0);
     const env = JSON.parse(cap.lines.join(''));

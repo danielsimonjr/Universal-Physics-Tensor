@@ -39,7 +39,7 @@ Historical plans and design notes. Three plans from 2026-05-04 are **superseded*
 - **[Implementation Plan](planning/Implementation-Plan.md)** — superseded.
 - **[System Requirements](planning/System-Requirements.md)** — superseded.
 
-Later planning lives in [`ROADMAP.md`](../ROADMAP.md), [`todo.md`](../todo.md), and [`planning/Future-Production-Hardening.md`](planning/Future-Production-Hardening.md). The other files under `planning/` are design and review records. Their unchecked boxes preserve those documents. `ACTIVE.md` is the live ledger.
+Later planning lives in [`ROADMAP.md`](../ROADMAP.md), [`ACTIVE.md`](../ACTIVE.md) (the live ledger and authorization gate), and [`planning/Future-Production-Hardening.md`](planning/Future-Production-Hardening.md); `todo.md` is the historical ledger. The other files under `planning/` are design and review records. Their unchecked boxes preserve those documents.
 
 ## Purpose
 

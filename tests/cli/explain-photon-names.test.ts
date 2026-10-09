@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 

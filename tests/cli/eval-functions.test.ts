@@ -4,19 +4,10 @@
  * a devDependency); `eval-functions-builtin.test.ts` runs the same checks on the builtin parser.
  * In-process against the built CLI (dist/cli/main.js).
  */
+import '../helpers/dist.js';
+import { run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
-import { runCli } from '../../dist/cli/main.js';
 import { BUILTIN_FUNCTION_LIST } from '../../dist/numerical/formula-contract.js';
-
-async function run(argv: string[]) {
-  const o = { stdout: '', stderr: '' };
-  const code = await runCli(argv, {
-    out: (l?: string) => void (o.stdout += (l ?? '') + '\n'),
-    err: (l?: string) => void (o.stderr += (l ?? '') + '\n'),
-    write: (s: string) => void (o.stdout += s),
-  });
-  return { code, ...o };
-}
 
 const collapse = (s: string) => s.replace(/\s+/g, ' ');
 

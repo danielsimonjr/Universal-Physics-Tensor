@@ -3,13 +3,14 @@
  *
  * @module tests/cli/upt-probe-hardening
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { tempDir } from '../helpers/tmp.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(here, '../../bin/upt.mjs');
@@ -29,14 +30,14 @@ function run(args: string[]): { status: number; stderr: string } {
 }
 
 describe('upt probe — flag validation', () => {
-  it('rejects non-finite --holdout-tol', () => {
+  it('rejects non-finite --holdout-tol as a bad value (exit 1)', () => {
     const { status, stderr } = run([
       'probe',
       'run',
       `--problem=${pendulum}`,
       '--holdout-tol=abc',
     ]);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
     expect(stderr).toContain('--holdout-tol');
   });
 
@@ -72,7 +73,7 @@ describe('upt probe — file errors', () => {
   });
 
   it('maps invalid problem JSON to exit 1', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-probe-'));
+    const dir = tempDir('upt-probe-');
     const bad = join(dir, 'bad.json');
     writeFileSync(bad, '{ not json');
     const { status, stderr } = run(['probe', 'run', `--problem=${bad}`]);
@@ -81,7 +82,7 @@ describe('upt probe — file errors', () => {
   });
 
   it('rejects malformed expr JSON in design --h1', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-probe-design-'));
+    const dir = tempDir('upt-probe-design-');
     const h1 = join(dir, 'h1.json');
     writeFileSync(h1, JSON.stringify({ kind: 'symbol' }));
     const h2 = join(dir, 'h2.json');
@@ -100,7 +101,7 @@ describe('upt probe — file errors', () => {
   });
 
   it('rejects design bounds missing variables', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-probe-bounds-'));
+    const dir = tempDir('upt-probe-bounds-');
     const h1 = join(dir, 'h1.json');
     writeFileSync(h1, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
     const h2 = join(dir, 'h2.json');

@@ -6,23 +6,10 @@
  * of temperature is `k_B T`, including a `--sigma` difference. `erasure-energy`
  * is the Landauer quantity on both sides of explain.
  */
+import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { E_SI, K_B_SI } from '../../src/core/constants.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
 
 const out = (c: ReturnType<typeof capture>) => c.lines.join('');
 const err = (c: ReturnType<typeof capture>) => c.err.join('');

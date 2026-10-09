@@ -29,11 +29,14 @@ function sameCarrierSign(a: number, b: number): boolean {
 
 /**
  * Reject opposite signs. `left` and `right` are the names in the message.
- * Only {@link applyCarrierSignPolicy} calls this.
+ * A value that is not a finite number has no sign to compare, so it is
+ * refused as such rather than passed. Only {@link applyCarrierSignPolicy}
+ * calls this.
  */
 function assertSameCarrierSign(a: number, b: number, left: string, right: string): void {
-  const opposite = Number.isFinite(a) && Number.isFinite(b) ? !sameCarrierSign(a, b) : a * b < 0;
-  if (opposite) throw new CarrierSignError(`${left} and ${right} must have the same sign`);
+  if (!Number.isFinite(a)) throw new RangeError(`${left} must be a finite number to carry a sign, got ${a}`);
+  if (!Number.isFinite(b)) throw new RangeError(`${right} must be a finite number to carry a sign, got ${b}`);
+  if (!sameCarrierSign(a, b)) throw new CarrierSignError(`${left} and ${right} must have the same sign`);
 }
 
 /** How many times the sign policy has run since the last reset. The once-check reads this. */

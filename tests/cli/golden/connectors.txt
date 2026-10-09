@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 235 established-confidence edge(s) of the 267 in this graph
+  anchored core: the clusters holding at least one of the 234 established-confidence edge(s) of the 267 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  67 of the isolated bridges share a name token with the core; 23 are truly unconnected.
+  70 of the isolated bridges share a name token with the core; 23 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -55,7 +55,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         bohm-electron-temperature ≟ wiedemann-temperature      [[temperature]]  → be-61
         bohm-ion-mass ≟ defect-rest-mass                       [[mass]]  → be-34
         bohm-ion-mass ≟ effective-mass                         [[mass]]  → be-23
-        bohm-ion-mass ≟ electron-mass                          [[mass]]  → CE-compton-shift
         bohm-ion-mass ≟ mass                                   [[mass]]  → be-12
         bohm-ion-mass ≟ molecular-mass                         [[mass]]  → CE-kinetic-pressure
         bohm-ion-mass ≟ planck-mass                            [[mass]]  → be-41
@@ -67,13 +66,11 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         bohm-ion-speed ≟ most-probable-speed                   [[velocity]]  → CE-mb-most-probable-speed
         bohm-ion-speed ≟ sound-speed                           [[velocity]]  → be-69
         bohm-ion-speed ≟ speed                                 [[velocity]]  → CE-string-wave-speed
-        bohm-ion-speed ≟ speed-of-light                        [[velocity]]  → CE-larmor-power
     ── be-104 (isolated):
         ion-acoustic-frequency ≟ angular-frequency             [[frequency]]  → CE-lc-resonance
         ion-acoustic-frequency ≟ cyclotron-frequency           [[frequency]]  → CE-cyclotron-frequency
         ion-acoustic-frequency ≟ debye-frequency               [[frequency]]  → CE-debye-frequency
         ion-acoustic-frequency ≟ frequency                     [[frequency]]  → be-59
-        ion-acoustic-frequency ≟ photon-frequency              [[frequency]]  → CE-photoelectric
         ion-acoustic-frequency ≟ plasma-frequency              [[frequency]]  → CE-plasma-frequency
         ion-acoustic-sound ≟ sound-speed                       [[velocity]]  → be-69
     ── be-105 (isolated):
@@ -89,11 +86,9 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         upper-hybrid-frequency ≟ cyclotron-frequency           [[frequency]]  → CE-cyclotron-frequency
         upper-hybrid-frequency ≟ debye-frequency               [[frequency]]  → CE-debye-frequency
         upper-hybrid-frequency ≟ frequency                     [[frequency]]  → be-59
-        upper-hybrid-frequency ≟ photon-frequency              [[frequency]]  → CE-photoelectric
         upper-hybrid-frequency ≟ plasma-frequency              [[frequency]]  → CE-plasma-frequency
         upper-hybrid-mass ≟ defect-rest-mass                   [[mass]]  → be-34
         upper-hybrid-mass ≟ effective-mass                     [[mass]]  → be-23
-        upper-hybrid-mass ≟ electron-mass                      [[mass]]  → CE-compton-shift
         upper-hybrid-mass ≟ mass                               [[mass]]  → be-12
         upper-hybrid-mass ≟ molecular-mass                     [[mass]]  → CE-kinetic-pressure
         upper-hybrid-mass ≟ planck-mass                        [[mass]]  → be-41
@@ -107,7 +102,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         cutoff-r-frequency ≟ cyclotron-frequency               [[frequency]]  → CE-cyclotron-frequency
         cutoff-r-frequency ≟ debye-frequency                   [[frequency]]  → CE-debye-frequency
         cutoff-r-frequency ≟ frequency                         [[frequency]]  → be-59
-        cutoff-r-frequency ≟ photon-frequency                  [[frequency]]  → CE-photoelectric
         cutoff-r-frequency ≟ plasma-frequency                  [[frequency]]  → CE-plasma-frequency
     ── be-107 (isolated):
         lower-hybrid-electron-cyclotron ≟ cyclotron-frequency  [[frequency]]  → CE-cyclotron-frequency
@@ -115,7 +109,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         lower-hybrid-frequency ≟ cyclotron-frequency           [[frequency]]  → CE-cyclotron-frequency
         lower-hybrid-frequency ≟ debye-frequency               [[frequency]]  → CE-debye-frequency
         lower-hybrid-frequency ≟ frequency                     [[frequency]]  → be-59
-        lower-hybrid-frequency ≟ photon-frequency              [[frequency]]  → CE-photoelectric
         lower-hybrid-frequency ≟ plasma-frequency              [[frequency]]  → CE-plasma-frequency
         lower-hybrid-ion-cyclotron ≟ cyclotron-frequency       [[frequency]]  → CE-cyclotron-frequency
         lower-hybrid-ion-plasma ≟ plasma-frequency             [[frequency]]  → CE-plasma-frequency
@@ -126,7 +119,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         oblique-fast-speed ≟ most-probable-speed               [[velocity]]  → CE-mb-most-probable-speed
         oblique-fast-speed ≟ sound-speed                       [[velocity]]  → be-69
         oblique-fast-speed ≟ speed                             [[velocity]]  → CE-string-wave-speed
-        oblique-fast-speed ≟ speed-of-light                    [[velocity]]  → CE-larmor-power
         oblique-sound ≟ sound-speed                            [[velocity]]  → be-69
     ── be-109 (isolated):
         bennett-current ≟ current                              [[I]]  → CE-ohm-law
@@ -147,7 +139,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         gradb-field ≟ solenoid-field                           [[M T^-2 I^-1]]  → CE-solenoid-field
         gradb-mass ≟ defect-rest-mass                          [[mass]]  → be-34
         gradb-mass ≟ effective-mass                            [[mass]]  → be-23
-        gradb-mass ≟ electron-mass                             [[mass]]  → CE-compton-shift
         gradb-mass ≟ mass                                      [[mass]]  → be-12
         gradb-mass ≟ molecular-mass                            [[mass]]  → CE-kinetic-pressure
         gradb-mass ≟ planck-mass                               [[mass]]  → be-41
@@ -159,7 +150,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         gradb-perp-speed ≟ most-probable-speed                 [[velocity]]  → CE-mb-most-probable-speed
         gradb-perp-speed ≟ sound-speed                         [[velocity]]  → be-69
         gradb-perp-speed ≟ speed                               [[velocity]]  → CE-string-wave-speed
-        gradb-perp-speed ≟ speed-of-light                      [[velocity]]  → CE-larmor-power
     ── be-112 (isolated):
         exb-field ≟ magnetic-field                             [[M T^-2 I^-1]]  → CE-magnetic-field-wire
         exb-field ≟ solenoid-field                             [[M T^-2 I^-1]]  → CE-solenoid-field
@@ -170,7 +160,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         exb-speed ≟ most-probable-speed                        [[velocity]]  → CE-mb-most-probable-speed
         exb-speed ≟ sound-speed                                [[velocity]]  → be-69
         exb-speed ≟ speed                                      [[velocity]]  → CE-string-wave-speed
-        exb-speed ≟ speed-of-light                             [[velocity]]  → CE-larmor-power
     ── be-114 (isolated):
         debye-sphere-density ≟ carrier-density                 [[L^-3]]  → be-23
         debye-sphere-density ≟ dark-species-density            [[L^-3]]  → be-47
@@ -194,7 +183,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-116 (isolated):
         lorentz-mass ≟ defect-rest-mass                        [[mass]]  → be-34
         lorentz-mass ≟ effective-mass                          [[mass]]  → be-23
-        lorentz-mass ≟ electron-mass                           [[mass]]  → CE-compton-shift
         lorentz-mass ≟ mass                                    [[mass]]  → be-12
         lorentz-mass ≟ molecular-mass                          [[mass]]  → CE-kinetic-pressure
         lorentz-mass ≟ planck-mass                             [[mass]]  → be-41
@@ -223,7 +211,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-118 (isolated):
         parker-mass ≟ defect-rest-mass                         [[mass]]  → be-34
         parker-mass ≟ effective-mass                           [[mass]]  → be-23
-        parker-mass ≟ electron-mass                            [[mass]]  → CE-compton-shift
         parker-mass ≟ mass                                     [[mass]]  → be-12
         parker-mass ≟ molecular-mass                           [[mass]]  → CE-kinetic-pressure
         parker-mass ≟ planck-mass                              [[mass]]  → be-41
@@ -245,7 +232,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         spiral-radial-speed ≟ most-probable-speed              [[velocity]]  → CE-mb-most-probable-speed
         spiral-radial-speed ≟ sound-speed                      [[velocity]]  → be-69
         spiral-radial-speed ≟ speed                            [[velocity]]  → CE-string-wave-speed
-        spiral-radial-speed ≟ speed-of-light                   [[velocity]]  → CE-larmor-power
         spiral-radius ≟ classical-electron-radius              [[length]]  → CE-classical-electron-radius
         spiral-radius ≟ far-radius                             [[length]]  → be-37
         spiral-radius ≟ larmor-radius                          [[length]]  → CE-larmor-radius
@@ -267,7 +253,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         standoff-speed ≟ most-probable-speed                   [[velocity]]  → CE-mb-most-probable-speed
         standoff-speed ≟ sound-speed                           [[velocity]]  → be-69
         standoff-speed ≟ speed                                 [[velocity]]  → CE-string-wave-speed
-        standoff-speed ≟ speed-of-light                        [[velocity]]  → CE-larmor-power
     ── be-121 (isolated):
         lawson-energy ≟ active-noise-energy                    [[energy]]  → be-27
         lawson-energy ≟ energy                                 [[energy]]  → CE-capacitor-energy
@@ -279,7 +264,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         lawson-energy ≟ kinetic-energy                         [[energy]]  → CE-kinetic-energy
         lawson-energy ≟ landauer-erasure-energy                [[energy]]  → be-16
         lawson-energy ≟ oscillator-energy                      [[energy]]  → CE-oscillator-energy
-        lawson-energy ≟ photoelectron-max-energy               [[energy]]  → CE-photoelectric
         lawson-energy ≟ rest-energy                            [[energy]]  → CE-mass-energy
         lawson-energy ≟ rotational-kinetic-energy              [[energy]]  → CE-rotational-kinetic-energy
         lawson-energy ≟ spring-potential-energy                [[energy]]  → CE-spring-potential-energy
@@ -297,7 +281,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-122 (isolated):
         probe-electron-mass ≟ defect-rest-mass                 [[mass]]  → be-34
         probe-electron-mass ≟ effective-mass                   [[mass]]  → be-23
-        probe-electron-mass ≟ electron-mass                    [[mass]]  → CE-compton-shift
         probe-electron-mass ≟ mass                             [[mass]]  → be-12
         probe-electron-mass ≟ molecular-mass                   [[mass]]  → CE-kinetic-pressure
         probe-electron-mass ≟ planck-mass                      [[mass]]  → be-41
@@ -306,7 +289,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         probe-electron-mass ≟ swampland-tower-mass             [[mass]]  → be-41
         probe-ion-mass ≟ defect-rest-mass                      [[mass]]  → be-34
         probe-ion-mass ≟ effective-mass                        [[mass]]  → be-23
-        probe-ion-mass ≟ electron-mass                         [[mass]]  → CE-compton-shift
         probe-ion-mass ≟ mass                                  [[mass]]  → be-12
         probe-ion-mass ≟ molecular-mass                        [[mass]]  → CE-kinetic-pressure
         probe-ion-mass ≟ planck-mass                           [[mass]]  → be-41
@@ -320,7 +302,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-133 (isolated):
         damping-spring ≟ spring-constant                       [[M T^-2]]  → CE-spring-potential-energy
     ── be-14 (isolated):
-        boundary-entanglement-entropy ≟ boltzmann-entropy      [[entropy]]  → CE-boltzmann-entropy
         boundary-entanglement-entropy ≟ entropy-change         [[entropy]]  → CE-clausius-entropy
         minimal-surface-area ≟ area                            [[area]]  → CE-resistance-material
         minimal-surface-area ≟ cross-sectional-area            [[area]]  → CE-volume-flow-rate
@@ -346,13 +327,11 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         attempt-frequency ≟ cyclotron-frequency                [[frequency]]  → CE-cyclotron-frequency
         attempt-frequency ≟ debye-frequency                    [[frequency]]  → CE-debye-frequency
         attempt-frequency ≟ frequency                          [[frequency]]  → be-59
-        attempt-frequency ≟ photon-frequency                   [[frequency]]  → CE-photoelectric
         attempt-frequency ≟ plasma-frequency                   [[frequency]]  → CE-plasma-frequency
         mutation-rate ≟ grw-localization-rate                  [[frequency]]  → be-48
         mutation-rate ≟ hubble-rate                            [[frequency]]  → be-47
         mutation-rate ≟ relaxation-rate                        [[frequency]]  → be-11-zurek
         tunneling-mass ≟ defect-rest-mass                      [[mass]]  → be-34
-        tunneling-mass ≟ electron-mass                         [[mass]]  → CE-compton-shift
         tunneling-mass ≟ mass                                  [[mass]]  → be-12
         tunneling-mass ≟ molecular-mass                        [[mass]]  → CE-kinetic-pressure
         tunneling-mass ≟ planck-mass                           [[mass]]  → be-41
@@ -365,12 +344,10 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         gravitational-wave-speed ≟ most-probable-speed         [[velocity]]  → CE-mb-most-probable-speed
         gravitational-wave-speed ≟ sound-speed                 [[velocity]]  → be-69
         gravitational-wave-speed ≟ speed                       [[velocity]]  → CE-string-wave-speed
-        gravitational-wave-speed ≟ speed-of-light              [[velocity]]  → CE-larmor-power
     ── be-43 (isolated):
         wormhole-cross-section-area ≟ area                     [[area]]  → CE-resistance-material
         wormhole-cross-section-area ≟ cross-sectional-area     [[area]]  → CE-volume-flow-rate
         wormhole-cross-section-area ≟ thomson-cross-section    [[area]]  → CE-thomson-cross-section
-        wormhole-entanglement-entropy ≟ boltzmann-entropy      [[entropy]]  → CE-boltzmann-entropy
         wormhole-entanglement-entropy ≟ entropy-change         [[entropy]]  → CE-clausius-entropy
     ── be-45 (isolated):
         inflation-hubble-energy ≟ active-noise-energy          [[energy]]  → be-27
@@ -383,7 +360,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         inflation-hubble-energy ≟ kinetic-energy               [[energy]]  → CE-kinetic-energy
         inflation-hubble-energy ≟ landauer-erasure-energy      [[energy]]  → be-16
         inflation-hubble-energy ≟ oscillator-energy            [[energy]]  → CE-oscillator-energy
-        inflation-hubble-energy ≟ photoelectron-max-energy     [[energy]]  → CE-photoelectric
         inflation-hubble-energy ≟ rest-energy                  [[energy]]  → CE-mass-energy
         inflation-hubble-energy ≟ rotational-kinetic-energy    [[energy]]  → CE-rotational-kinetic-energy
         inflation-hubble-energy ≟ spring-potential-energy      [[energy]]  → CE-spring-potential-energy
@@ -399,7 +375,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         planck-mass-energy ≟ kinetic-energy                    [[energy]]  → CE-kinetic-energy
         planck-mass-energy ≟ landauer-erasure-energy           [[energy]]  → be-16
         planck-mass-energy ≟ oscillator-energy                 [[energy]]  → CE-oscillator-energy
-        planck-mass-energy ≟ photoelectron-max-energy          [[energy]]  → CE-photoelectric
         planck-mass-energy ≟ rest-energy                       [[energy]]  → CE-mass-energy
         planck-mass-energy ≟ rotational-kinetic-energy         [[energy]]  → CE-rotational-kinetic-energy
         planck-mass-energy ≟ spring-potential-energy           [[energy]]  → CE-spring-potential-energy
@@ -447,7 +422,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         gap-energy ≟ kinetic-energy                            [[energy]]  → CE-kinetic-energy
         gap-energy ≟ landauer-erasure-energy                   [[energy]]  → be-16
         gap-energy ≟ oscillator-energy                         [[energy]]  → CE-oscillator-energy
-        gap-energy ≟ photoelectron-max-energy                  [[energy]]  → CE-photoelectric
         gap-energy ≟ rest-energy                               [[energy]]  → CE-mass-energy
         gap-energy ≟ rotational-kinetic-energy                 [[energy]]  → CE-rotational-kinetic-energy
         gap-energy ≟ spring-potential-energy                   [[energy]]  → CE-spring-potential-energy
@@ -456,7 +430,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-64 (isolated):
         accretor-mass ≟ defect-rest-mass                       [[mass]]  → be-34
         accretor-mass ≟ effective-mass                         [[mass]]  → be-23
-        accretor-mass ≟ electron-mass                          [[mass]]  → CE-compton-shift
         accretor-mass ≟ mass                                   [[mass]]  → be-12
         accretor-mass ≟ molecular-mass                         [[mass]]  → CE-kinetic-pressure
         accretor-mass ≟ planck-mass                            [[mass]]  → be-41
@@ -471,7 +444,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         jeans-density ≟ plasma-mass-density                    [[L^-3 M]]  → be-67
         jeans-mass ≟ defect-rest-mass                          [[mass]]  → be-34
         jeans-mass ≟ effective-mass                            [[mass]]  → be-23
-        jeans-mass ≟ electron-mass                             [[mass]]  → CE-compton-shift
         jeans-mass ≟ mass                                      [[mass]]  → be-12
         jeans-mass ≟ molecular-mass                            [[mass]]  → CE-kinetic-pressure
         jeans-mass ≟ planck-mass                               [[mass]]  → be-41
@@ -533,12 +505,10 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         pull-in-voltage ≟ voltage                              [[L^2 M T^-3 I^-1]]  → be-59
     ── be-80 (isolated):
         mott-mobility ≟ carrier-mobility                       [[M^-1 T^2 I]]  → CE-carrier-mobility
-        mott-permittivity ≟ vacuum-permittivity                [[L^-3 M^-1 T^4 I^2]]  → CE-plasma-frequency
         mott-voltage ≟ voltage                                 [[L^2 M T^-3 I^-1]]  → be-59
     ── be-81 (isolated):
         child-carrier-mass ≟ defect-rest-mass                  [[mass]]  → be-34
         child-carrier-mass ≟ effective-mass                    [[mass]]  → be-23
-        child-carrier-mass ≟ electron-mass                     [[mass]]  → CE-compton-shift
         child-carrier-mass ≟ mass                              [[mass]]  → be-12
         child-carrier-mass ≟ molecular-mass                    [[mass]]  → CE-kinetic-pressure
         child-carrier-mass ≟ planck-mass                       [[mass]]  → be-41
@@ -581,15 +551,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         fermi-sea-density ≟ nucleon-yield-density              [[L^-3]]  → be-47
         fermi-sea-density ≟ number-density                     [[L^-3]]  → CE-debye-frequency
         fermi-sea-density ≟ proton-density                     [[L^-3]]  → be-47
-        fermi-sea-mass ≟ defect-rest-mass                      [[mass]]  → be-34
-        fermi-sea-mass ≟ effective-mass                        [[mass]]  → be-23
-        fermi-sea-mass ≟ electron-mass                         [[mass]]  → CE-compton-shift
-        fermi-sea-mass ≟ mass                                  [[mass]]  → be-12
-        fermi-sea-mass ≟ molecular-mass                        [[mass]]  → CE-kinetic-pressure
-        fermi-sea-mass ≟ planck-mass                           [[mass]]  → be-41
-        fermi-sea-mass ≟ reference-mass                        [[mass]]  → be-41
-        fermi-sea-mass ≟ secondary-mass                        [[mass]]  → CE-newton-gravitation
-        fermi-sea-mass ≟ swampland-tower-mass                  [[mass]]  → be-41
     ── be-89 (isolated):
         debye-atom-density ≟ carrier-density                   [[L^-3]]  → be-23
         debye-atom-density ≟ dark-species-density              [[L^-3]]  → be-47
@@ -601,14 +562,12 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         debye-cutoff-frequency ≟ cyclotron-frequency           [[frequency]]  → CE-cyclotron-frequency
         debye-cutoff-frequency ≟ debye-frequency               [[frequency]]  → CE-debye-frequency
         debye-cutoff-frequency ≟ frequency                     [[frequency]]  → be-59
-        debye-cutoff-frequency ≟ photon-frequency              [[frequency]]  → CE-photoelectric
         debye-cutoff-frequency ≟ plasma-frequency              [[frequency]]  → CE-plasma-frequency
         debye-sound-speed ≟ alfven-speed                       [[velocity]]  → be-67
         debye-sound-speed ≟ fast-magnetosonic-speed            [[velocity]]  → be-69
         debye-sound-speed ≟ most-probable-speed                [[velocity]]  → CE-mb-most-probable-speed
         debye-sound-speed ≟ sound-speed                        [[velocity]]  → be-69
         debye-sound-speed ≟ speed                              [[velocity]]  → CE-string-wave-speed
-        debye-sound-speed ≟ speed-of-light                     [[velocity]]  → CE-larmor-power
     ── be-90 (isolated):
         debye-temperature ≟ capacitor-temperature              [[temperature]]  → be-87
         debye-temperature ≟ clapeyron-temperature              [[temperature]]  → be-71
@@ -646,7 +605,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         sommerfeld-fermi-energy ≟ kinetic-energy               [[energy]]  → CE-kinetic-energy
         sommerfeld-fermi-energy ≟ landauer-erasure-energy      [[energy]]  → be-16
         sommerfeld-fermi-energy ≟ oscillator-energy            [[energy]]  → CE-oscillator-energy
-        sommerfeld-fermi-energy ≟ photoelectron-max-energy     [[energy]]  → CE-photoelectric
         sommerfeld-fermi-energy ≟ rest-energy                  [[energy]]  → CE-mass-energy
         sommerfeld-fermi-energy ≟ rotational-kinetic-energy    [[energy]]  → CE-rotational-kinetic-energy
         sommerfeld-fermi-energy ≟ spring-potential-energy      [[energy]]  → CE-spring-potential-energy
@@ -703,7 +661,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         pauli-fermi-energy ≟ kinetic-energy                    [[energy]]  → CE-kinetic-energy
         pauli-fermi-energy ≟ landauer-erasure-energy           [[energy]]  → be-16
         pauli-fermi-energy ≟ oscillator-energy                 [[energy]]  → CE-oscillator-energy
-        pauli-fermi-energy ≟ photoelectron-max-energy          [[energy]]  → CE-photoelectric
         pauli-fermi-energy ≟ rest-energy                       [[energy]]  → CE-mass-energy
         pauli-fermi-energy ≟ rotational-kinetic-energy         [[energy]]  → CE-rotational-kinetic-energy
         pauli-fermi-energy ≟ spring-potential-energy           [[energy]]  → CE-spring-potential-energy
@@ -735,7 +692,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         mass-action-temperature ≟ temperature-change           [[temperature]]  → CE-heat-capacity
         mass-action-temperature ≟ wiedemann-temperature        [[temperature]]  → be-61
     ── CE-bekenstein-hawking (isolated):
-        bh-entropy ≟ boltzmann-entropy                         [[entropy]]  → CE-boltzmann-entropy
         bh-entropy ≟ entropy-change                            [[entropy]]  → CE-clausius-entropy
     ── CE-bohr-radius (isolated):
         bohr-radius ≟ classical-electron-radius                [[length]]  → CE-classical-electron-radius
@@ -746,6 +702,8 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         bohr-radius ≟ pipe-radius                              [[length]]  → be-77
         bohr-radius ≟ radius                                   [[length]]  → CE-schwarzschild-radius
         bohr-radius ≟ schwarzschild-radius                     [[length]]  → be-42-via-rs
+    ── CE-boltzmann-entropy (isolated):
+        boltzmann-entropy ≟ entropy-change                     [[entropy]]  → CE-clausius-entropy
     ── CE-carnot-efficiency (isolated):
         cold-reservoir-temperature ≟ capacitor-temperature     [[temperature]]  → be-87
         cold-reservoir-temperature ≟ clapeyron-temperature     [[temperature]]  → be-71
@@ -765,6 +723,12 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         hot-reservoir-temperature ≟ temperature                [[temperature]]  → be-12
         hot-reservoir-temperature ≟ temperature-change         [[temperature]]  → CE-heat-capacity
         hot-reservoir-temperature ≟ wiedemann-temperature      [[temperature]]  → be-61
+    ── CE-compton-shift (isolated):
+        compton-wavelength-shift ≟ compton-wavelength          [[length]]  → CE-compton-wavelength
+        compton-wavelength-shift ≟ compton-wavelength-full     [[length]]  → CE-compton-wavelength-full
+        compton-wavelength-shift ≟ peak-wavelength             [[length]]  → CE-wien
+        compton-wavelength-shift ≟ thermal-wavelength          [[length]]  → CE-thermal-de-broglie
+        compton-wavelength-shift ≟ wavelength                  [[length]]  → CE-wave-speed
     ── CE-einstein-field-eq (isolated):
         efe-curvature ≟ cosmological-constant-curvature        [[L^-2]]  → be-13
         stress-energy-density ≟ field-energy-density           [[L^-1 M T^-2]]  → CE-field-energy-density
@@ -784,14 +748,12 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         internal-energy-change ≟ kinetic-energy                [[energy]]  → CE-kinetic-energy
         internal-energy-change ≟ landauer-erasure-energy       [[energy]]  → be-16
         internal-energy-change ≟ oscillator-energy             [[energy]]  → CE-oscillator-energy
-        internal-energy-change ≟ photoelectron-max-energy      [[energy]]  → CE-photoelectric
         internal-energy-change ≟ rest-energy                   [[energy]]  → CE-mass-energy
         internal-energy-change ≟ rotational-kinetic-energy     [[energy]]  → CE-rotational-kinetic-energy
         internal-energy-change ≟ spring-potential-energy       [[energy]]  → CE-spring-potential-energy
         internal-energy-change ≟ state-energy                  [[energy]]  → CE-boltzmann-factor
         internal-energy-change ≟ thermal-energy                [[energy]]  → CE-equipartition
         work-done-by-system ≟ work                             [[energy]]  → CE-work
-        work-done-by-system ≟ work-function                    [[energy]]  → CE-photoelectric
     ── CE-laplace-pressure (isolated):
         droplet-radius ≟ classical-electron-radius             [[length]]  → CE-classical-electron-radius
         droplet-radius ≟ far-radius                            [[length]]  → be-37
@@ -817,6 +779,28 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         lorentz-force ≟ newtonian-force                        [[force]]  → be-38
     ── CE-normal-distribution (isolated):
         normal-probability-density ≟ turn-density              [[L^-1]]  → CE-solenoid-field
+    ── CE-photoelectric (isolated):
+        photoelectron-max-energy ≟ active-noise-energy         [[energy]]  → be-27
+        photoelectron-max-energy ≟ energy                      [[energy]]  → CE-capacitor-energy
+        photoelectron-max-energy ≟ erasure-energy              [[energy]]  → CE-landauer
+        photoelectron-max-energy ≟ fermi-energy                [[energy]]  → CE-fermi-energy
+        photoelectron-max-energy ≟ free-energy-difference      [[energy]]  → CE-jarzynski
+        photoelectron-max-energy ≟ gravitational-potential-energy [[energy]]  → CE-gravitational-potential-energy
+        photoelectron-max-energy ≟ heat-energy                 [[energy]]  → CE-heat-capacity
+        photoelectron-max-energy ≟ kinetic-energy              [[energy]]  → CE-kinetic-energy
+        photoelectron-max-energy ≟ landauer-erasure-energy     [[energy]]  → be-16
+        photoelectron-max-energy ≟ oscillator-energy           [[energy]]  → CE-oscillator-energy
+        photoelectron-max-energy ≟ rest-energy                 [[energy]]  → CE-mass-energy
+        photoelectron-max-energy ≟ rotational-kinetic-energy   [[energy]]  → CE-rotational-kinetic-energy
+        photoelectron-max-energy ≟ spring-potential-energy     [[energy]]  → CE-spring-potential-energy
+        photoelectron-max-energy ≟ state-energy                [[energy]]  → CE-boltzmann-factor
+        photoelectron-max-energy ≟ thermal-energy              [[energy]]  → CE-equipartition
+        photon-frequency ≟ angular-frequency                   [[frequency]]  → CE-lc-resonance
+        photon-frequency ≟ cyclotron-frequency                 [[frequency]]  → CE-cyclotron-frequency
+        photon-frequency ≟ debye-frequency                     [[frequency]]  → CE-debye-frequency
+        photon-frequency ≟ frequency                           [[frequency]]  → be-59
+        photon-frequency ≟ plasma-frequency                    [[frequency]]  → CE-plasma-frequency
+        work-function ≟ work                                   [[energy]]  → CE-work
     ── CE-planck-einstein (isolated):
         photon-energy ≟ active-noise-energy                    [[energy]]  → be-27
         photon-energy ≟ energy                                 [[energy]]  → CE-capacitor-energy
@@ -827,7 +811,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         photon-energy ≟ kinetic-energy                         [[energy]]  → CE-kinetic-energy
         photon-energy ≟ landauer-erasure-energy                [[energy]]  → be-16
         photon-energy ≟ oscillator-energy                      [[energy]]  → CE-oscillator-energy
-        photon-energy ≟ photoelectron-max-energy               [[energy]]  → CE-photoelectric
         photon-energy ≟ rotational-kinetic-energy              [[energy]]  → CE-rotational-kinetic-energy
         photon-energy ≟ spring-potential-energy                [[energy]]  → CE-spring-potential-energy
         photon-energy ≟ state-energy                           [[energy]]  → CE-boltzmann-factor
@@ -849,7 +832,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         rydberg-energy ≟ kinetic-energy                        [[energy]]  → CE-kinetic-energy
         rydberg-energy ≟ landauer-erasure-energy               [[energy]]  → be-16
         rydberg-energy ≟ oscillator-energy                     [[energy]]  → CE-oscillator-energy
-        rydberg-energy ≟ photoelectron-max-energy              [[energy]]  → CE-photoelectric
         rydberg-energy ≟ rest-energy                           [[energy]]  → CE-mass-energy
         rydberg-energy ≟ rotational-kinetic-energy             [[energy]]  → CE-rotational-kinetic-energy
         rydberg-energy ≟ spring-potential-energy               [[energy]]  → CE-spring-potential-energy

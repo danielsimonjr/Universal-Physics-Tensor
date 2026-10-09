@@ -116,7 +116,8 @@ export class StudyRefusal extends Error {
   }
 }
 
-const DEFAULT_ALPHA = 0.001;
+/** The χ² test level a study file states none of. @internal */
+export const DEFAULT_ALPHA = 0.001;
 const TOP_KEYS = new Set([
   'description', 'gap', 'provenance', 'target', 'governing', 'observations', 'baselines', 'criterion', 'design',
   'correction',
@@ -124,7 +125,8 @@ const TOP_KEYS = new Set([
 const ROW_KEYS = new Set(['id', 'role', 'source', 'values', 'observed', 'sigma', 'inputSigma', 'note']);
 /** The keys a separate replication file may carry; the rest belong in the study file. */
 const REPLICATION_KEYS = new Set(['description', 'provenance', 'target', 'governing', 'observations']);
-const MAX_CORRECTION_TERMS = 6;
+/** How many powers a study file's correction may list in all. @internal */
+export const MAX_CORRECTION_TERMS = 6;
 
 function refuse(where: string, why: string): never {
   throw new StudyRefusal(`study refused (${where}): ${why}`);
@@ -1216,7 +1218,7 @@ function admitCorrection(
 }
 
 /** Infix rendering of a scalar ExprNode for reports. */
-export function exprToInfix(e: ExprNode): string {
+function exprToInfix(e: ExprNode): string {
   if (e.kind === 'symbol') return e.name;
   if (e.kind === 'op') {
     const parts = e.args.map((a) => (a.kind === 'op' && a.op !== '^' ? `(${exprToInfix(a)})` : exprToInfix(a)));

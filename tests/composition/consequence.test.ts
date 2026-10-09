@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { annotateConsequences, classifyProposal } from '../../src/composition/consequence.js';
+import { annotateConsequences, classifyProposal, describeDerivedClaim } from '../../src/composition/consequence.js';
 import { rankDiscoveries } from '../../src/composition/discovery.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
+import { CENSUS } from '../helpers/census.js';
 
 describe('annotateConsequences', () => {
   it('attaches a consequence to every candidate; promising get a signal, non-promising get inconclusive/none', () => {
@@ -27,13 +28,15 @@ describe('annotateConsequences', () => {
     expect(novel).toBe(1);
   });
 
-  it('LIVE PIN: canonical promising yields 0 entailed, 5 novel-consequence', () => {
+  it('LIVE PIN: canonical promising yields 0 entailed, and the census novel-consequence count', () => {
     const annotated = annotateConsequences(rankDiscoveries(CANONICAL_GRAPH));
     const promising = annotated.filter((c) => c.verdict === 'promising');
     expect(promising.filter((c) => c.consequence?.signal === 'entailed').length).toBe(0);
     // Landauer photon, hν=mc², Wien/Hubble, Compton-full against Hubble distance,
     // and the classical electron radius against that distance once 1/(4π) is in the value.
-    expect(promising.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(5);
+    expect(promising.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(
+      CENSUS.discovery.canonical.promisingNovelConsequence,
+    );
   });
 
   it('annotation is order-preserving and non-mutating (same verdicts/scores as input)', () => {
@@ -73,5 +76,46 @@ describe('classifyProposal — same-target AND same-governing match (the r1-bug 
     };
     const res = classifyProposal(fakeProposal as never, CANONICAL_EQUATIONS);
     expect(res.signal).toBe('novel-consequence'); // not entailed; and there is no 'contradiction' signal at all
+  });
+});
+
+describe('describeDerivedClaim names both sides of the identification (9.0.0 audit §7 T1)', () => {
+  // A proposal derived from one canonical equation and one catalog bridge has
+  // one canonical source; the other side is the bridge. The meaning sentence
+  // once interpolated `(${other?.id})` with `other` undefined, printing
+  // "equals ? (undefined)" in `upt discover --derive`.
+  const landauer = CANONICAL_EQUATIONS.find((e) => e.id === 'CE-landauer')!;
+  const proposal = {
+    target: { name: 'temperature', dim: landauer.dimensional.governing.find((g) => g.name === 'temperature')!.dim },
+    governing: [],
+    scalarAst: landauer.scalarAst!,
+    derivedFrom: {
+      identification: { a: 'dark-fermion-mass', b: 'erasure-energy', dim: '[energy]' },
+      sourceEquationIds: ['BE-18', 'CE-landauer'] as const,
+      solvedFor: 'temperature',
+    },
+  };
+
+  it('with one canonical source, the other side is the identification endpoint that is not the home target, cited by its source id', () => {
+    const claim = describeDerivedClaim(proposal);
+    expect(claim.symbol.meaning).not.toMatch(/undefined/);
+    expect(claim.symbol.meaning).not.toMatch(/\?/);
+    expect(claim.symbol.meaning).toContain('erasure-energy equals dark-fermion-mass (BE-18)');
+    expect(claim.symbol.meaning).toContain('the dark-fermion-mass side is not given a temperature');
+  });
+
+  it('control: with two canonical sources the other side is that equation', () => {
+    const massEnergy = CANONICAL_EQUATIONS.find((e) => e.id === 'CE-mass-energy')!;
+    const claim = describeDerivedClaim({
+      ...proposal,
+      target: { name: 'mass', dim: massEnergy.dimensional.governing.find((g) => g.name === 'mass')!.dim },
+      scalarAst: massEnergy.scalarAst!,
+      derivedFrom: {
+        identification: { a: 'photon-energy', b: 'rest-energy', dim: '[energy]' },
+        sourceEquationIds: ['CE-planck-einstein', 'CE-mass-energy'] as const,
+        solvedFor: 'mass',
+      },
+    });
+    expect(claim.symbol.meaning).toContain('rest-energy equals photon-energy (CE-planck-einstein)');
   });
 });

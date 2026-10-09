@@ -28,11 +28,31 @@ export interface BoundPair {
 export const IDENTITY_BOUND: BoundPair = { K: 1, delta: 0 };
 
 /**
+ * A pair is a finite `K ≥ 0` and a finite `delta ≥ 0`: a Lipschitz constant
+ * and an offset. Anything else is not a bound, and composing it would
+ * propagate `NaN` or a negative error silently.
+ *
+ * @throws RangeError naming the offending field.
+ */
+function assertBoundPair(pair: BoundPair, which: 'outer' | 'inner'): void {
+  if (!Number.isFinite(pair.K) || pair.K < 0) {
+    throw new RangeError(`composeBounds: ${which}.K must be a finite number ≥ 0, got ${pair.K}`);
+  }
+  if (!Number.isFinite(pair.delta) || pair.delta < 0) {
+    throw new RangeError(`composeBounds: ${which}.delta must be a finite number ≥ 0, got ${pair.delta}`);
+  }
+}
+
+/**
  * Compose two bounds, `outer` after `inner`.
  *
+ * @throws RangeError when either pair has a `K` or `delta` that is not a
+ *   finite number ≥ 0.
  * @public
  */
 export function composeBounds(outer: BoundPair, inner: BoundPair): BoundPair {
+  assertBoundPair(outer, 'outer');
+  assertBoundPair(inner, 'inner');
   return { K: outer.K * inner.K, delta: outer.K * inner.delta + outer.delta };
 }
 
@@ -55,9 +75,16 @@ export interface ComposedPath {
  * composite would be unbounded, and {@link MissingLipschitzError} is thrown
  * rather than a number invented for it.
  *
+ * @throws RangeError on an empty path: a path of nothing composes nothing,
+ *   and returning the exact identity for it would state an error-free map
+ *   where no map was given. A step that is not a bound throws through
+ *   {@link composeBounds}.
  * @public
  */
 export function composeBoundPath(bounds: readonly (BoundPair | null)[]): ComposedPath {
+  if (bounds.length === 0) {
+    throw new RangeError('composeBoundPath: an empty path composes nothing; there is no bound to state');
+  }
   let acc: BoundPair = IDENTITY_BOUND;
   for (let i = 0; i < bounds.length; i++) {
     const step = bounds[i];

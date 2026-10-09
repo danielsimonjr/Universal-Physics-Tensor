@@ -5,7 +5,7 @@ it belongs in another file.
 
 ## Before non-trivial work
 
-Read `ACTIVE.md` (the live task list) and `NOTES.md` (current state). `todo.md` is the historical ledger.
+Read `ACTIVE.md` (the live task list) and `NOTES.md` (current state).
 
 ## Every commit-shaped change
 
@@ -68,15 +68,15 @@ count of the old file.
 
 ## Adding or changing a Lean `formalRef` (`lean4-physjs`)
 
-Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs. UPT does not run Lean for this system. `NOTES.md` records the reviewed count. Each reference is `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
+PhysJS holds the Lean proofs and UPT does not run Lean (`MEMORY.md`, Where things live). `NOTES.md` records the reviewed count. Each reference is `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
 
 1. Land the theorem in PhysJS. Its `manifest/bridges.json` entry (schema `physjs-bridge-manifest/v2`) names `key`, `bridgeId`, `theorem`, `kind`, `covers`, `coverage` (`covers its statement only`), `leanProof`, and `axioms`. PhysJS reads `kind` from the kind line of the Lean file's module docstring (`` `be-80`. Bridge. ``) and checks it in its own CI. A nested statement (`planeWave`, `vacuum`, …) carries its own `kind` the same way, from a line labelled by the key and the field (`` `be-13.vacuum`. Reduction. ``); UPT takes it as given and records no kind of its own. The axioms are what PhysJS measured with `#print axioms`. This repository does not re-measure them.
 2. Run `bun scripts/vendor-physjs.ts --physjs <PhysJS checkout> --commit <sha>` with the PhysJS commit being pinned. It writes the three pinned files from that commit: `formal/physjs/manifest.json` (PhysJS `manifest/bridges.json` with `commit` appended; its `commit`, `toolchain`, `mathlib`, and `physlib` are the pin), `formal/physjs/lean-files.json` (the `.lean` files under `lean/`), and `formal/physjs/theorem-files.json` (the Lean file that declares each manifest theorem, read from the sources; a namespace is not a file). CI's docs-fresh job fetches PhysJS at the pinned commit and runs the same script with `--check`, so a hand edit to any of the three fails.
-3. Run `bun run physjs:table`. It writes `src/atlas/physjs-entries.generated.ts` from the vendored manifest, including `PHYSJS_COMMIT`. Do not copy an entry by hand. A bridge obtains its reference with `physjsFormalRef(key)`. The module sets `system: 'lean4-physjs'` and `fidelity: 'sanity-lemmas'`. The bridge does not name a theorem of its own.
+3. Run `bun run physjs:table`. It writes `src/atlas/physjs-entries.generated.ts` from the vendored manifest, including `PHYSJS_COMMIT`. Do not copy an entry by hand. A bridge obtains its reference with `physjsFormalRef(key)`. The module sets `system: 'lean4-physjs'` and derives `fidelity` from `src/atlas/physjs-reviewed.ts` (`physjsFidelity`): `unreviewed` for an unpinned key, `sanity-lemmas` for a pinned key the sanity file instantiates, `reviewed-manifest` for every other pinned key. The bridge does not name a theorem of its own.
 4. Put `formalRef: physjsFormalRef('<key>')` on the atlas bridge, or, for a catalog id `be-<n>`, on `BridgeEquationEntry`. `deriveEvidence` turns a fidelity other than `unreviewed` into `formally-proved` when the reference is passed to it. The tag is not stored on the bridge. `catalogEvidenceInput` passes a kind-`bridge` reference and does not pass a derivation-step, a property, or a cross-check. A proof of one part does not tag the row. The reference's kind is the manifest entry's `kind`: `bridge`, `reduction`, `limit`, `derivation-step`, `property`, or `cross-check`. A catalog entry stores no kind; `data/bridge-catalog.schema.json` refuses any field it does not declare, so an override cannot come back. `reduction`, `limit`, and `derivation-step` are the counted kind. `property` and `cross-check` are catalog references of their own kind and are not that count. A nested object is recorded and is not a second reference. A cross-check of two ids is one entry; the covers line names the partner, and the partner does not get a second key.
-5. Run `bunx vitest run tests/atlas/physjs-manifest.test.ts`. It fails and prints the new hash of the manifest's `[key, theorem, kind, covers]` rows. Read the manifest diff, then set `REVIEWED_ROWS_SHA256` in that file to the printed value. A covers line that states what the theorem is NOT also gets a `SENTINELS` row there.
+5. Run `bunx vitest run tests/atlas/physjs-manifest.test.ts`. It fails and prints a `'<key>': '<sha256>'` line for each new or changed row. Read the manifest diff, then paste those lines into `PHYSJS_REVIEWED_ROWS` in `src/atlas/physjs-reviewed.ts`; a key with a lemma in `tests/atlas/formal-sanity.test.ts` also goes in `PHYSJS_SANITY_LEMMA_KEYS`. A covers line that states what the theorem is NOT also gets a `SENTINELS` row there.
 6. Run `bun run atlas:formal-gate`. With no `lean4-physlib` reference, the gate compares the vendored manifest to the bridges and does not run Lean. It must print `formalRef axiom gate: PASS (lean4-physjs manifest; no lean4-physlib formalRef)`. A wrong commit, theorem, key, axiom list, or coverage phrase fails. A manifest entry with no bridge fails. A `lean4-physjs` reference with no manifest entry fails.
-7. Commit the vendored manifest, `theorem-files.json`, the generated table, the bridge's `formalRef`, and the test's hash pin together. `bun scripts/generate-physjs-table.ts --check` fails when the table was not regenerated.
+7. Commit the vendored manifest, `theorem-files.json`, the generated table, the bridge's `formalRef`, and the reviewed-row table together. `bun scripts/generate-physjs-table.ts --check` fails when the table was not regenerated.
 
 ## Adding or changing a Lean `formalRef` (`lean4-physlib`)
 
@@ -114,12 +114,12 @@ not published.
    `docs-fresh` job fails on a release commit that regenerated first.
 4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
-5. Commit and open the release PR. Tom deep-reviews it (the full diff and every file name) before it merges; an agent does not merge its own PR (owner rule, 2026-10-06). After the merge, wait until CI on the merge commit is green.
+5. Commit and open the release PR. The review rule recorded in `ACTIVE.md` applies: Tom deep-reviews it before it merges, and an agent does not merge its own PR. After the merge, wait until CI on the merge commit is green.
 6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
    workflow checks out the tag, fetches `origin/master` (the layer-order gate reads that ref,
-   and a tag checkout does not have it), installs, builds, typechecks, runs the test suite, and
-   fails the job when the tag version (the leading `v` removed) is not `package.json`'s version.
-   It then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish).
+   and a tag checkout does not have it), installs, refuses a tag whose version (the leading `v` removed) is not
+   `package.json`'s, and then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish),
+   whose `prepublishOnly` runs the build, the typecheck and the suite once.
 7. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
    Plain `npm view` serves a stale cache right after a publish.
 

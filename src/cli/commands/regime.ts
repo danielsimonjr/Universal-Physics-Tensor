@@ -21,12 +21,8 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
-import {
-  assertSynonymAgreement,
-  resolveQuantityName,
-  SynonymDisagreementError,
-} from '../../dimensional/formula-names.js';
 import { emitJson } from '../output.js';
+import { splitAssignments } from '../bindings.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -50,7 +46,7 @@ const FLAGS: FlagSpec[] = [
   JSON_FLAG,
 ];
 
-const HELP = `upt regime <family> [--at group=value ...] [--json]
+const HELP = `upt regime <family> [--at group=value ...] [--assume premise ...] [--deny premise ...] [--json]
         Where in parameter space a family's models are claimed to apply.
         --at states a point in REGIME COORDINATES (π-group formulas, or a
         dimensionless input's own name, e.g. --at theta0=0.2). Every model AND
@@ -84,9 +80,10 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
  * positionals, so `--at theta0=0.2 T0=1 t=10` works as written: the parser
  * gives `--at` one value and leaves the rest as positionals.
  *
- * @throws CliError on a malformed or non-finite assignment. A dropped
- *   coordinate would silently turn a CHECKED inequality into an unchecked one,
- *   which is exactly the reading this command exists to keep honest.
+ * @throws UsageError on a token with no `=`, CliError on a non-finite value or
+ *   a group given twice. A dropped coordinate would silently turn a CHECKED
+ *   inequality into an unchecked one, which is exactly the reading this
+ *   command exists to keep honest.
  * @internal
  */
 export function parseAt(
@@ -95,14 +92,7 @@ export function parseAt(
   command: string,
   notes?: string[],
 ): Record<string, number> {
-  const assignments: { name: string; raw: string; token: string }[] = [];
-  for (const token of raw) {
-    const eq = token.indexOf('=');
-    if (eq <= 0) {
-      throw new CliError(`upt ${command}: '${token}' is not a group=value assignment`);
-    }
-    assignments.push({ name: token.slice(0, eq), raw: token.slice(eq + 1), token });
-  }
+  const assignments = splitAssignments(command, raw, 'group=value');
   const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
   const point: Record<string, number> = {};
   for (const a of assignments) {
@@ -124,9 +114,9 @@ export function parseAt(
     }
   }
   try {
-    assertSynonymAgreement(point);
+    api.assertSynonymAgreement(point);
   } catch (e) {
-    if (e instanceof SynonymDisagreementError) throw new CliError(`upt ${command}: ${e.message}`);
+    if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt ${command}: ${e.message}`);
     throw e;
   }
   return point;
@@ -145,6 +135,7 @@ const normalizeGroup = (name: string): string => name.replace(/\s+/g, '').replac
  * @internal
  */
 export function resolveAtPoint(
+  api: CommandCtx['api'],
   point: Readonly<Record<string, number>>,
   regimes: readonly { groupDefinitions: Readonly<Record<string, { exponents: Readonly<Record<string, number>> }>>; inequalities: readonly { group: string }[] }[],
 ): { values: Record<string, number>; unknown: string[] } {
@@ -162,7 +153,7 @@ export function resolveAtPoint(
   const values: Record<string, number> = {};
   const unknown: string[] = [];
   for (const [key, value] of Object.entries(point)) {
-    const resolved = resolveQuantityName(key, named) ?? key;
+    const resolved = api.resolveQuantityName(key, named) ?? key;
     const group = byNormal.get(normalizeGroup(resolved)) ?? byNormal.get(normalizeGroup(key));
     const stored = group ?? resolved;
     values[stored] = value;
@@ -252,7 +243,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   // check, so that case is labelled rather than left to read as a pass.
   const records = registration.records;
 
-  const { values: resolved, unknown } = resolveAtPoint(point, records.map((r) => r.regime));
+  const { values: resolved, unknown } = resolveAtPoint(api, point, records.map((r) => r.regime));
   const unmatched = [
     ...assume.map((d) => ({ flag: '--assume', d })),
     ...deny.map((d) => ({ flag: '--deny', d })),
@@ -326,12 +317,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   // The box is what --at states, and nothing else.
   const samples: Record<string, number[]> = {};
   for (const [group, value] of Object.entries(resolved)) samples[group] = [value];
-  // Coverage is asked of the records that actually CONSTRAIN something. An
-  // unconstrained model regime holds at every point, so including the models
-  // would make coverage vacuously total and the report would answer nothing.
+  // `uncoveredRegions` counts a record as covering a point only when it checked an
+  // inequality there, so an unconstrained model regime covers nothing and every record
+  // can be passed. The constraining count is the report's, not a filter.
   const constraining = records.filter((r) => r.regime.inequalities.length > 0);
   const uncovered =
-    stated.length === 0 ? null : api.uncoveredRegions(registration.name, constraining, samples);
+    stated.length === 0 ? null : api.uncoveredRegions(registration.name, records, samples);
 
   if (wantJson) {
     emitJson(
@@ -360,10 +351,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   out(`\nRegimes of family '${registration.name}'`);
+  // A family whose records state no inequality has nothing to check at any point: VACUOUS, not UNCHECKED.
+  const allVacuous = verdicts.every((v) => v.vacuous);
   out(
-    stated.length === 0
-      ? '(no --at point supplied: every inequality is UNCHECKED, which is not a pass)'
-      : `at ${stated.map((g) => `${g}=${point[g]}`).join(' · ')}`,
+    allVacuous
+      ? '(this family states no inequality: every record is VACUOUS, and no --at point could check it)'
+      : stated.length === 0
+        ? '(no --at point supplied: every inequality is UNCHECKED, which is not a pass)'
+        : `at ${stated.map((g) => `${g}=${point[g]}`).join(' · ')}`,
   );
   if (unknown.length > 0) {
     out(
@@ -439,7 +434,7 @@ export const command: Command = {
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Report where a family\'s models are valid, violated, or unknown.',
-  example: 'upt regime <name>',
+  example: 'upt regime oscillators --at theta0=0.2',
   group: 'explore',
   run,
 };

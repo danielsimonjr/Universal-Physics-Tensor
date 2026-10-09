@@ -7,6 +7,8 @@
  * printer) and compared with `evalExpr` on the AST itself. A printer that dropped a grouping, a
  * `\frac` argument or an exponent would give a different number.
  */
+import '../helpers/dist.js';
+import { run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
 import { printDisplay, printEval, printLatex, siUnitOf } from '../../src/cli/expr-print.js';
 import { evalExpr } from '../../src/composition/expr-eval.js';
@@ -15,7 +17,6 @@ import { CONSTANT_REGISTRY, CONSTANTS, CONSTANT_PROVENANCE } from '../../src/dim
 import { parseUnit } from '../../src/dimensional/units.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
-import { runCli } from '../../dist/cli/main.js';
 
 const s = (name: string): ExprNode => ({ kind: 'symbol', name, dim: { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 } } as ExprNode);
 const op = (o: '+' | '-' | '*' | '/' | '^', ...args: ExprNode[]): ExprNode => ({ kind: 'op', op: o, args });
@@ -122,16 +123,6 @@ describe('audit I10: the constant table, checked against the constants it descri
     }
   });
 });
-
-async function run(argv: string[]) {
-  const o = { stdout: '', stderr: '' };
-  const code = await runCli(argv, {
-    out: (l?: string) => void (o.stdout += (l ?? '') + '\n'),
-    err: (l?: string) => void (o.stderr += (l ?? '') + '\n'),
-    write: (x: string) => void (o.stdout += x),
-  });
-  return { code, ...o };
-}
 
 describe('audit I10: upt symbolic prints LaTeX and a symbol table', () => {
   it('--json: each chain has LaTeX that evaluates to its printed value, and a table row per symbol', async () => {

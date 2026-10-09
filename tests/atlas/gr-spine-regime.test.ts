@@ -27,22 +27,22 @@
  * confusion (`<` vs `<=`), which at these bounds is the difference between the
  * confrontation point being inside its own claim and outside it.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-import {
-  BRIDGE_EQUATIONS,
-  catalogRegime,
-  SPINE_CONFRONTATION_POINTS,
-} from '../../src/bridges/index.js';
-import { catalogConfrontations, catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { bridgeCatalog, catalogConfrontations, catalogEdgeKey, catalogEntry } from '../../src/bridges/catalog-load.js';
 import { catalogEdge } from '../../src/composition/index.js';
 import { regimeHolds } from '../../src/atlas/regime.js';
 import type { Regime } from '../../src/atlas/types.js';
 import { C_SI, G_SI, M_SUN_SI } from '../../src/core/constants.js';
 
+/** Dimensionless groups at the points the gravitational confrontations used, keyed by catalog id. */
+const SPINE_CONFRONTATION_POINTS = bridgeCatalog().spine;
+
 function regime(id: number): Regime {
-  const found = catalogRegime(id);
+  const found = catalogEntry(id)?.regime;
   if (found === undefined) throw new Error(`catalog ${id} has no regime`);
   return found;
 }
@@ -102,7 +102,8 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
     expect(residuals).toEqual({
       37: 0.9130434782629895,
       51: 0.6666666666669404,
-      52: 0.2876403060201148,
+      // 9.0.1: be-52's predicted is the evaluator's own number (one ulp from the stored one); the residual follows it.
+      52: 0.287640306020099,
     });
   });
 

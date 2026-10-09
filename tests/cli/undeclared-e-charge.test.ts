@@ -3,23 +3,14 @@
  * bare dimension mismatch. `e` is the elementary charge unless it is declared
  * or bound. Euler's number is `exp(x)`.
  */
+import '../helpers/dist.js';
+import { capture, text } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { E_SI } from '../../src/core/constants.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 import { builtinFormulaDimensionChecker } from '../../src/numerical/formula-dimension.js';
 
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return {
-    lines,
-    err,
-    io: { out: sink, err: (s?: string) => err.push((s ?? '') + '\n'), write: (s: string) => lines.push(s) },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 const errText = (c: ReturnType<typeof capture>) => c.err.join('');
 
 const PERIHELION = 'perihelion_precession = 6*pi*G*mass/(c^2*a*(1-e^2))';

@@ -53,28 +53,34 @@ gathered. Open an issue (or PR against the JSON/markdown directly):
    bound", or "the two `mass` inputs of this composed edge refer to the
    same object") with rationale and citation. Agree or rebut.
 6. **Review the centralized quantity naming** in
-   `src/composition/quantities.ts` — 131 nodes, each name a judgment
-   about which physical quantity a bridge input *is* (the file's header
+   `src/composition/quantities.ts` — each name is a judgment about
+   which physical quantity a bridge input *is* (the file's header
    also documents a known unit-heterogeneity hazard: GeV-valued energy
    nodes beside joule-valued ones, and a bits/nats/J·K⁻¹ information
    split). Misidentifications here silently change what compositions
    the enumerator proposes.
 7. **Assess the machine-proposed novel compositions** in
-   `docs/research/v0.11.0-novel-candidates.md` — 7 candidate
-   bridge-chains the enumerator found over the full 41-edge graph. Each
-   needs a physicist's call: physically meaningful, trivially true, or
-   nonsense?
+   `docs/research/v0.11.0-novel-candidates.md` — the candidate
+   bridge-chains the enumerator found over the composition graph of
+   that release (the note keeps the graph and count it was written
+   with). Each needs a physicist's call: physically meaningful,
+   trivially true, or nonsense?
 8. **Audit any bridge's `dimensional_signature` or references** in the
    JSON catalog (below). Errors found by inspection are the cheapest
    kind to fix.
 
 ### The JSON review surface
 
-`data/bridge-catalog.json` is a generated, schema-validated projection
-of the full 55-entry catalog (formulas, statuses, known issues,
-references, notes). Read it, annotate it, PR it — a maintainer will
-mirror accepted changes into the TypeScript source of truth
-(`src/bridges/index.ts`; regenerate with `bun run catalog:json`).
+`data/bridge-catalog.json` is the catalog record: every formula, status,
+known issue, reference and note lives there, and nowhere else.
+`src/bridges/catalog-load.ts` reads it and checks it against
+`data/bridge-catalog.schema.json` at load; `BRIDGE_EQUATIONS`, the
+composition graph and the evaluators are projections of it. Read it,
+annotate it, PR it — an accepted change is a change to that file.
+`bun run catalog:json` checks the file (schema version, `packageVersion`
+against `package.json`, every `formalKey` against the vendored PhysJS
+manifest); it does not regenerate it. The size and status counts are in
+`NOTES.md`.
 
 ### The negative catalog is reviewable too
 
@@ -88,15 +94,17 @@ reason with a citation.
 git clone https://github.com/danielsimonjr/universal-physics-tensor.git
 bun install        # Bun is the package manager; Node ≥ 18 remains the runtime
 bun run typecheck  # tsc --noEmit (+ tests project)
-bun run test       # vitest full suite (~15 s on a fast box; 3–5 min cold-start on Windows)
+bun run test       # vitest full suite; `pretest` runs tsc first
 ```
 
-- TypeScript 5.9+/6.x, ESM (`"type": "module"` — relative imports need
-  the `.js` extension), Node ≥ 18 (shipped runtime), Bun (install +
-  `bun run` scripts), vitest. Lockfile is `bun.lock` only.
+- TypeScript 7 (native compiler; no compiler API), ESM (`"type": "module"` — relative imports need
+  the `.js` extension), Node ≥ 18 (shipped runtime; the test suite needs
+  Node ≥ 22.6, `tests/node-floor.test.ts`), Bun (install + `bun run`
+  scripts), vitest. Lockfile is `bun.lock` only.
 - The default branch is `master`. CI runs type-check + full suite on
   every push/PR.
-- Conventions live in `CLAUDE.md`; the spec index is
+- The rules are `AGENTS.md` and the procedure is `WORKFLOWS.md`
+  (`CLAUDE.md` only loads them); the spec index is
   `docs/specification/README.md`.
 - Drift guards will catch you honestly: spec↔index prose pins, the
   public-surface snapshot, the JSON-artifact freshness pin, and the

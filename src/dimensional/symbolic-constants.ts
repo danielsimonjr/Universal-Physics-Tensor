@@ -51,9 +51,18 @@ export const CONSTANT_REGISTRY: readonly ConstantRecord[] = CONSTANT_ROWS.map((c
 
 const RECORD_OF_ROW = new Map<ConstantRow, ConstantRecord>(CONSTANT_ROWS.map((constant, i) => [constant, CONSTANT_REGISTRY[i]!]));
 
-/** Every spelling → its record; `constant-rows.ts` refuses a spelling written twice. */
+/**
+ * Every spelling → its record; `constant-rows.ts` refuses a spelling written twice. A constant
+ * that is also a quantity (`quantity`, e.g. `k_B` → `boltzmann-constant`) is reachable by that
+ * quantity id too, so a user who writes the quantity's name states the constant, and the value
+ * is checked against the registry rather than bound.
+ */
 const BY_SPELLING = new Map<string, ConstantRecord>(
-  CONSTANT_REGISTRY.flatMap((record) => [record.name, ...record.spellings].map((spelling) => [spelling, record] as const)),
+  CONSTANT_REGISTRY.flatMap((record) =>
+    [record.name, ...record.spellings, ...(record.quantity === undefined ? [] : [record.quantity])].map(
+      (spelling) => [spelling, record] as const,
+    ),
+  ),
 );
 
 /** The registered constant `spelling` names, or undefined. @internal */

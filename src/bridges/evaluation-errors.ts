@@ -67,6 +67,22 @@ export class NonFiniteInputError extends Error {
   }
 }
 
+/**
+ * A binding names π, a registered physical constant or a formula overlay
+ * (`G`, `k_B`, `m_p`, …). A constant is never an input: the value would
+ * silently replace the constant in the formula. A relation's own declared
+ * source may carry such a name (a named default the caller overrides); any
+ * other key with that name is refused before the formula is evaluated.
+ * @public
+ */
+export class ConstantInputError extends Error {
+  /** The key that was given. */
+  constructor(readonly key: string) {
+    super(`'${key}' names a registered constant and is not an input`);
+    this.name = 'ConstantInputError';
+  }
+}
+
 /** One input is given twice, under two of its spellings (its key, an alias, or an alternate). @public */
 export class DuplicateInputError extends Error {
   /** The id evaluated (absent when the reader was not told it), the input, and the two spellings it was given under. */
@@ -86,19 +102,20 @@ export class DuplicateInputError extends Error {
 
 /**
  * True for an error the input contract throws: an absent, unknown, non-number,
- * non-finite or twice-given input. A caller that reports input errors one way
+ * non-finite, twice-given or constant-named input. A caller that reports input errors one way
  * and domain errors another asks this, not the message.
  * @internal
  */
 export function isInputContractError(
   error: unknown,
-): error is MissingInputError | UnknownInputError | InputTypeError | NonFiniteInputError | DuplicateInputError {
+): error is MissingInputError | UnknownInputError | InputTypeError | NonFiniteInputError | DuplicateInputError | ConstantInputError {
   return (
     error instanceof MissingInputError ||
     error instanceof UnknownInputError ||
     error instanceof InputTypeError ||
     error instanceof NonFiniteInputError ||
-    error instanceof DuplicateInputError
+    error instanceof DuplicateInputError ||
+    error instanceof ConstantInputError
   );
 }
 

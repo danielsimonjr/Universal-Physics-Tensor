@@ -6,11 +6,21 @@
  * that cannot fail proves nothing.
  */
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { toAtlasJson } from '../../src/atlas/serialize.js';
 import { OSCILLATOR_FAMILY } from '../../src/atlas/oscillators/index.js';
+import { deriveEvidence } from '../../src/atlas/derive-evidence.js';
+import { artifactPassingWitnessIds, type WitnessResultsArtifact } from '../../src/atlas/witness-artifact.js';
+
+/** The committed witness results; `toAtlasJson` derives each bridge's evidence against them. */
+const witnessResults = JSON.parse(
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../data/atlas/witness-results.json'), 'utf-8'),
+) as WitnessResultsArtifact;
 
 const VERSION = '0.0.0-test';
-const record = toAtlasJson(OSCILLATOR_FAMILY, VERSION);
+const record = toAtlasJson(OSCILLATOR_FAMILY, VERSION, witnessResults);
 
 type Bridge = Record<string, unknown>;
 
@@ -42,7 +52,7 @@ describe('toAtlasJson — record shape', () => {
     expect(record.rejections.length).toBe(OSCILLATOR_FAMILY.rejections.length);
   });
 
-  it('serializes the evidence Set as a SORTED array, never as {}', () => {
+  it('emits the DERIVED evidence as a SORTED array, never as {} and never a stored set', () => {
     const bridges = record.bridges as unknown as Bridge[];
     for (const b of bridges) {
       const evidence = b['evidence'];
@@ -50,9 +60,32 @@ describe('toAtlasJson — record shape', () => {
       const tags = evidence as string[];
       expect(tags.length).toBeGreaterThan(0);
       expect(tags).toEqual([...tags].sort());
+      const bridge = OSCILLATOR_FAMILY.bridges.find((x) => x.id === b['id'])!;
+      expect(tags).toEqual([...deriveEvidence(bridge, artifactPassingWitnessIds(witnessResults, bridge.id))].sort());
     }
     // The trap this guards: a raw Set round-trips to an empty object.
     expect(JSON.parse(JSON.stringify(new Set(['a'])))).toEqual({});
+  });
+
+  it('CONTROL: an empty witness artifact strips the artifact-governed tags, so the derivation reads the results it is given', () => {
+    const empty: WitnessResultsArtifact = { schemaVersion: '0', results: [] };
+    const bridges = toAtlasJson(OSCILLATOR_FAMILY, VERSION, empty).bridges as unknown as Bridge[];
+    const spring = bridges.find((b) => b['id'] === 'ab-spring-lc')!['evidence'] as string[];
+    expect(spring).not.toContain('symbolically-checked');
+    const withResults = (record.bridges as unknown as Bridge[]).find((b) => b['id'] === 'ab-spring-lc')!['evidence'] as string[];
+    expect(withResults).toContain('symbolically-checked');
+  });
+
+  it('keeps deltaAtBasis on a bound: the artifact says whether the point value is closed-form or numerically-supported', () => {
+    const bridges = record.bridges as unknown as Bridge[];
+    const withBasis = OSCILLATOR_FAMILY.bridges.filter((b) => b.bound?.deltaAtBasis !== undefined);
+    expect(withBasis.length).toBeGreaterThan(0);
+    for (const bridge of withBasis) {
+      const emitted = bridges.find((b) => b['id'] === bridge.id)!['bound'] as Record<string, unknown>;
+      expect(emitted['deltaAtBasis'], bridge.id).toBe(bridge.bound!.deltaAtBasis);
+    }
+    const massless = bridges.find((b) => b['id'] === 'ab-damped-massless')!['bound'] as Record<string, unknown>;
+    expect(massless['deltaAtBasis']).toBe('numerically-supported');
   });
 
   it('drops horizonHolds — a predicate is not data', () => {
@@ -81,8 +114,8 @@ describe('toAtlasJson — record shape', () => {
 
 describe('toAtlasJson — determinism', () => {
   it('is stable across two calls, byte for byte', () => {
-    const a = JSON.stringify(toAtlasJson(OSCILLATOR_FAMILY, VERSION), null, 2);
-    const b = JSON.stringify(toAtlasJson(OSCILLATOR_FAMILY, VERSION), null, 2);
+    const a = JSON.stringify(toAtlasJson(OSCILLATOR_FAMILY, VERSION, witnessResults), null, 2);
+    const b = JSON.stringify(toAtlasJson(OSCILLATOR_FAMILY, VERSION, witnessResults), null, 2);
     expect(a).toBe(b);
   });
 

@@ -28,7 +28,7 @@ import type { ExprNode } from '../dimensional/validator.js';
 
 /** One bridge, joined across the catalog's three id-keyed registries. */
 interface BridgeDescriptor {
-  /** Catalog id (11–54). */
+  /** Catalog id (the range is the catalog's; NOTES.md records it). */
   readonly id: number;
   /** Catalog metadata (from `BRIDGE_EQUATIONS`). */
   readonly entry: BridgeEquationEntry;

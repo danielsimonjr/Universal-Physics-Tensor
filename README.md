@@ -47,7 +47,7 @@ npm install universal-physics-tensor
 npx upt help
 ```
 
-The npm package ships `dist/`, `bin/`, this README and the licence. The documentation and the
+The npm package ships `dist/`, `bin/`, `data/`, this README and the licence. The documentation and the
 examples live in the GitHub repository. From a clone, Bun is the package manager (`package.json`
 pins `bun@1.4.2`). Node does not install it: `corepack prepare bun@1.4.2 --activate` fails with
 `Unsupported package manager specification`. Install that Bun from <https://bun.sh/install>, then
@@ -81,14 +81,15 @@ npx upt search pendulum
 ```text
   dimensionally determined up to a constant:  period ∝ length^0.5·gravity^-0.5
   formula dimension: [time]  ✓ homogeneous, matches target
-  formula MATCHES the dimensional form — recovered prefactor ≈ 6.2832e+0
+  formula MATCHES the dimensional form — recovered prefactor ≈ 6.28318530717959
   ✓ agrees with CE-pendulum-period (Pendulum period), prefactor included: yours/canonical = 1 at 3 fixed points
 ```
 
-`upt explain hawking-temperature mass=1Msun` recovers `6.1684e-8` by the two routes of BE-42.
-`upt evaluate be-63 mu_e=2` prints `M_Ch_solar = 1.4558683960704613` for an ideal degenerate gas
-with `M_sun = 1.989e30` kg. `upt search pendulum` names the commands that open the pendulum
-records. Every flag of every command is in [`docs/CLI.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/CLI.md).
+`upt explain hawking-temperature mass=1Msun` prints `Recovered value: 6.16842971641034e-8`, reached
+by the two routes of BE-42 (`be-42` and `be-42-via-rs`). `upt evaluate be-63 mu_e=2` prints
+`mass [kg] = 2.895722239784147e+30`, the Chandrasekhar mass of an ideal degenerate gas, about
+1.456 solar masses at M_sun = 1.989e30 kg. `upt search pendulum` names `CE-pendulum-period`,
+`model-pendulum`, and `ab-pendulum-linear`, each with the command that opens its record. Every flag of every command is in [`docs/CLI.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/CLI.md).
 
 ## Commands
 
@@ -254,7 +255,7 @@ Bridge equations connect different physical regimes:
 
 Parts I–II of the formal specification write up the cross-domain bridges; a standard bridge is a catalog record and has no specification heading. The **authoritative current catalog** is the versioned, schema-checked JSON file [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json); its id range and counts are the generated Bridge catalog row of the Development Status table below. Part III covers algorithmic implementation.
 
-### Composing Bridges (v0.8.0)
+### Composing Bridges
 
 Bridges are edges in a typed quantity graph, and compatible edges
 **compose** — with an exact dimensional check at the junction, validity
@@ -290,11 +291,11 @@ adjudicates the catalog — <!-- readme-status:membership -->152 bridges · 5 no
 with rejections recorded in a reviewable negative catalog
 (`src/bridges/rejected.ts`).
 
-Since v0.12, composition is also **symbolic** (`composeSymbolic`): bridges may
+Composition is also **symbolic** (`composeSymbolic`): bridges may
 carry an optional `symbolic` `ExprNode` form, and composing two of them
 substitutes one AST into the other's junction, dimensionally validated and
 numerically evaluable — not just a chained numeric closure. The composed form
-can be folded by MathTS `simplify` (optional peer), so CT-1 reduces to
+can be folded by MathTS `simplify`, so CT-1 reduces to
 `ℏc³ln2/(8πGM)` with `k_B` cancelled. See `upt symbolic --simplify`.
 
 ## Documentation
@@ -305,8 +306,8 @@ see the **[specification index](https://github.com/danielsimonjr/universal-physi
 reader's map and the **[spec revision history](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/CHANGELOG.md)**
 for how the documents evolved.
 
-- **[Part I: Foundation & Mathematical Framework](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-I.md)** - Tensor structure, Π = L + B + E decomposition, Bridge Equations 11-20
-- **[Part II: Extended Bridge Equation Catalog](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-II.md)** - Bridge Equations 21-54 across condensed matter, quantum biology, emergent spacetime
+- **[Part I: Foundation & Mathematical Framework](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-I.md)** - Theoretical foundation: the rank-6 catalog `Π`, framing commitment, consistency invariants, and the cross-domain bridges in categories A–E
+- **[Part II: Extended Bridge Equation Catalog](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-II.md)** - The remaining cross-domain bridge write-ups, plus the tensor-integration mapping
 - **[Part III: Computational Implementation](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-III.md)** - Algorithms, information-theoretic bounds, ML integration
 - **[Part IV: Validation & Implications](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-IV.md)** - Experimental pathways, philosophical implications, applications
 - **[Part V: Advanced Mathematics & Protocols](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-V.md)** - Category theory extensions, validation protocols, algorithmic analysis
@@ -321,8 +322,10 @@ for how the documents evolved.
 
 ### Architecture
 
-Grounded in a real parse of the code. Every authored document ends with a `## Verification` block,
-and `repo_map.py check` fails when a claim in one stops matching the source.
+Hand-written. Each document ends with a `## Verification` block that says what was re-measured
+for it and what was not. No checker runs over these documents in CI (the `repo_map.py` tool that
+once did is private and is not in this repository), so a claim in them is current only as far as
+its Verification block says.
 
 - **[Overview](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/OVERVIEW.md)** - What this is, what it does, how it is laid out
 - **[Architecture](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/ARCHITECTURE.md)** - Why it is built this way; principles and key decisions
@@ -373,7 +376,7 @@ The current machine-checked state is:
 | Empirical spine | **19 committed confrontations**, exposed through `upt confront` with rigor/caveat metadata |
 | Composition layer | **158 bridge edges** plus the canonical L-layer graph; dimensional, symbolic, discovery, consequence, and visualization tooling |
 | Canonical reference layer | **109 canonical equations** used as the non-speculative answer-key layer for bridge recovery/linkage |
-| Architecture | Generated dependency graph reports **0 circular dependencies**. The unused-analysis report lists **0** files and **77** exports with no importer. Both reports are regenerated by `bun run docs:deps`, and the `docs-fresh` job fails when they are stale |
+| Architecture | Generated dependency graph reports **0 circular dependencies**. The unused-analysis report lists **0** files and **66** exports with no importer. Both reports are regenerated by `bun run docs:deps`, and the `docs-fresh` job fails when they are stale |
 | Quality gates | Build, strict source+test TypeScript checks, full Vitest suite, active-plan audit, package-content smoke test, and nightly long-horizon GL4/Shapiro accuracy tests |
 | Formal references | **10** atlas bridges derive `formally-proved` from a reviewed `lean4-physjs` reference. **16** catalog equations carry a counted reference and do not light that tag. **119** state the catalogued equation, kind `bridge`; the catalog path passes that reference, so catalog evidence and edge evidence include `formally-proved`, except an unadjudicated row, which stays `proposed`. **3** carry a cross-check and **3** carry a property. Each kind is the PhysJS manifest entry's own field. Nested statements are not second references. The pin and the split are [`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md) |
 <!-- /readme-status:table -->

@@ -3,24 +3,9 @@
  * `reduced-planck-constant` was read as subtraction, then the error named
  * only the first piece.
  */
+import { allText, capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-
-const text = (c: ReturnType<typeof capture>) => c.lines.join('') + c.err.join('');
 
 describe('a declared hyphenated name is one symbol in upt derive --formula', () => {
   it('recovers the Fermi prefactor from the declared names', async () => {
@@ -37,9 +22,9 @@ describe('a declared hyphenated name is one symbol in upt derive --formula', () 
       ],
       cap.io,
     );
-    const out = text(cap);
+    const out = allText(cap);
     expect(code, out).toBe(0);
-    expect(out).toMatch(/4\.7854e\+0/);
+    expect(out).toMatch(/4\.78539/);
     expect(out).not.toMatch(/undeclared symbol/);
   });
 
@@ -53,13 +38,16 @@ describe('a declared hyphenated name is one symbol in upt derive --formula', () 
         'mass:mass',
         'n:L^-3',
         '--formula',
-        '(reduced-planck-constant^2/(2*mass))*(3*pi^2*n)^(2/3)',
+        // `carrier-density` is not declared and is not a constant's spelling, so its hyphens are
+        // subtractions (a constant's hyphenated spelling, such as reduced-planck-constant, is the
+        // constant itself and is not this case).
+        '(hbar^2/(2*mass))*(3*pi^2*carrier-density)^(2/3)',
       ],
       cap.io,
     );
-    const out = text(cap);
+    const out = allText(cap);
     expect(code, out).not.toBe(0);
-    expect(out).toMatch(/undeclared symbol 'reduced'/);
+    expect(out).toMatch(/undeclared symbol 'carrier'/);
     expect(out).toMatch(/hyphen between names is subtraction/);
   });
 });

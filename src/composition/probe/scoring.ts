@@ -5,10 +5,31 @@
  */
 
 import type { ProbeCandidateRecord, ScoreVector } from './types.js';
+import type { FalsifyResult } from './falsify.js';
 
 function clamp01(x: number): number {
   if (!Number.isFinite(x)) return 0;
   return Math.min(1, Math.max(0, x));
+}
+
+/**
+ * Robustness is what the falsification batteries recorded: the fraction of
+ * the batteries that ran and passed (an `inconclusive` battery did not pass).
+ * It is not read from the status label: a survivor awaiting expert review
+ * was once scored 1 by its label alone, while two of the five listed
+ * batteries could never fail (9.0.0 audit §4 Low). Without a falsification
+ * record only the holdout stage is known: 0.7 past the holdout, 0.2 before.
+ */
+function robustnessOf(record: ProbeCandidateRecord, falsification: FalsifyResult | undefined): number {
+  if (falsification !== undefined && falsification.records.length > 0) {
+    const passed = falsification.records.filter((r) => r.outcome === 'pass').length;
+    return passed / falsification.records.length;
+  }
+  return record.status === 'heldout-supported' ||
+    record.status === 'falsification-survivor' ||
+    record.status === 'expert-review-required'
+    ? 0.7
+    : 0.2;
 }
 
 /** Build a score vector. @internal */
@@ -16,15 +37,11 @@ export function scoreCandidate(
   record: ProbeCandidateRecord,
   empirical = 0,
   corpusDistance = 1,
+  falsification?: FalsifyResult,
 ): ScoreVector {
   const parsimony = clamp01(1 / (1 + record.complexity.astNodes / 8));
   const validity = record.fingerprint.dimensionalSignature === 'invalid' ? 0 : 1;
-  const robustness = record.status === 'falsification-survivor' ||
-    record.status === 'expert-review-required'
-    ? 1
-    : record.status === 'heldout-supported'
-      ? 0.7
-      : 0.2;
+  const robustness = robustnessOf(record, falsification);
   return {
     validity,
     empirical: clamp01(empirical),

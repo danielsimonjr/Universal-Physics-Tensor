@@ -52,6 +52,21 @@ const LITERALS = [
   '5.391247e-44',
   '6.6524587321e-29',
   '1.3271244e20',
+  '2.01824',
+  '0.5772156649015329',
+  '1.67e-27',
+];
+
+/**
+ * A literal that one other file is allowed to spell, with the reason. Each
+ * is a number that is NOT a copy of the owner's value: GRW's reference mass
+ * is the model's own 1.67e-27 kg, and the PhysJS covers text quotes 2.01824
+ * to say that decimal is not in the theorem. The test below proves each
+ * site still spells its literal, so an allowance cannot outlive its reason.
+ */
+const SECOND_SITES: ReadonlyArray<{ literal: string; file: string; reason: string }> = [
+  { literal: '1.67e-27', file: 'dimensional/constant-rows.ts', reason: "GRW's own reference mass m₀, the catalog expression's number, not CODATA m_p" },
+  { literal: '2.01824', file: 'atlas/physjs-entries.generated.ts', reason: 'the vendored PhysJS covers text says this decimal is not in the theorem' },
 ];
 
 describe('core/constants.ts is the one owner of physical-constant values', () => {
@@ -65,12 +80,21 @@ describe('core/constants.ts is the one owner of physical-constant values', () =>
     const hits: string[] = [];
     for (const file of tsFiles(ROOT)) {
       if (file === OWNER_FILE) continue;
+      const rel = relative(ROOT, file).replace(/\\/g, '/');
       const code = stripComments(readFileSync(file, 'utf8'));
       for (const literal of LITERALS) {
-        if (code.includes(literal)) hits.push(`${relative(ROOT, file)}: ${literal}`);
+        if (SECOND_SITES.some((site) => site.literal === literal && site.file === rel)) continue;
+        if (code.includes(literal)) hits.push(`${rel}: ${literal}`);
       }
     }
     expect(hits).toEqual([]);
+  });
+
+  it('every allowed second site still spells its literal (an allowance cannot go stale)', () => {
+    for (const site of SECOND_SITES) {
+      const code = stripComments(readFileSync(join(ROOT, site.file), 'utf8'));
+      expect(code.includes(site.literal), `${site.file}: ${site.literal} (${site.reason})`).toBe(true);
+    }
   });
 
   it('H0 has one value: the unit table\'s reading of 67.4 km/s/Mpc', () => {

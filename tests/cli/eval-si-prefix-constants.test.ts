@@ -6,6 +6,7 @@
  * were free. `upt derive ... mu0:permeability` exited 2. Bare `sigma` stays
  * unbound; `sigma_sb` is the Stefan–Boltzmann constant.
  */
+import { capture, text } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { E_SI, MU0_SI } from '../../src/core/constants.js';
@@ -13,20 +14,6 @@ import { E_SI, MU0_SI } from '../../src/core/constants.js';
 const M_PROTON_SI = 1.67262192369e-27;
 const N_A_SI = 6.02214076e23;
 
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 const errText = (c: ReturnType<typeof capture>) => c.err.join('');
 
 async function evalOf(args: string[]) {
@@ -106,6 +93,6 @@ describe('tesla prefixes and plasma constants', () => {
     );
     expect(code).toBe(0);
     expect(errText(cap)).not.toMatch(/unknown base dimension/);
-    expect(text(cap)).toMatch(/recovered prefactor ≈ 1\.0000e\+0/);
+    expect(text(cap)).toMatch(/recovered prefactor ≈ 1(?!\d)/);
   });
 });

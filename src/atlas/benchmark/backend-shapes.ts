@@ -76,5 +76,9 @@ export function parseBackendResponse(
     if (v['outcome'] !== undefined) problems.push('retrieve must not carry an outcome');
   }
   if (problems.length > 0) return { error: problems.join('; ') };
-  return v as unknown as BenchmarkBackendResponse;
+  // A typed pick of the validated fields: an extra field on the reply is not
+  // carried through, and no cast is needed.
+  return request.task === 'classify'
+    ? { itemId: request.itemId, outcome: v['outcome'] as 'accept' | 'reject' | 'abstain' }
+    : { itemId: request.itemId, ranking: [...(v['ranking'] as string[])] };
 }

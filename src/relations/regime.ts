@@ -85,6 +85,14 @@ export interface RegimeCheck {
   readonly violated: readonly RegimeInequality[];
   /** NOT checked: the π-group value was absent or non-finite. */
   readonly unchecked: readonly RegimeInequality[];
+  /**
+   * How many inequalities a finite value reached. `ok: true` with
+   * `checked: 0` is a VACUOUS pass: the regime states no inequality (the
+   * plasma, piezoelectricity and Tolman registrations), so nothing was
+   * checked and nothing held. That is a different fact from a pass over a
+   * non-empty list, and a coverage count must not add it (AGENTS law 4).
+   */
+  readonly checked: number;
 }
 
 function satisfies(value: number, ineq: RegimeInequality): boolean {
@@ -105,9 +113,11 @@ function satisfies(value: number, ineq: RegimeInequality): boolean {
  *
  * A group with no supplied value, or a non-finite one, is UNCHECKED — not
  * violated and not satisfied. See {@link RegimeCheck} for why the distinction
- * is load-bearing. A regime with no inequalities returns `true`: there was
- * nothing to check and nothing went unchecked, so the claim "every inequality
- * was checked and satisfied" is vacuously true rather than unknown.
+ * is load-bearing. A regime with no inequalities returns `true` with
+ * `checked: 0`: there was nothing to check and nothing went unchecked, so the
+ * claim "every inequality was checked and satisfied" is vacuously true rather
+ * than unknown, and `checked` says that nothing was checked. A caller that
+ * counts coverage reads `checked`, never `ok` alone.
  *
  * A violation outranks an absence: once one inequality is CHECKED and fails,
  * the regime does not hold, whatever the unmeasured coordinates would say.
@@ -120,16 +130,18 @@ export function regimeHolds(
 ): RegimeCheck {
   const violated: RegimeInequality[] = [];
   const unchecked: RegimeInequality[] = [];
+  let checked = 0;
   for (const ineq of regime.inequalities) {
     const value = groupValues[ineq.group];
     if (typeof value !== 'number' || !Number.isFinite(value)) {
       unchecked.push(ineq);
-    } else if (!satisfies(value, ineq)) {
-      violated.push(ineq);
+      continue;
     }
+    checked += 1;
+    if (!satisfies(value, ineq)) violated.push(ineq);
   }
   const ok = violated.length > 0 ? false : unchecked.length > 0 ? 'unknown' : true;
-  return { ok, violated, unchecked };
+  return { ok, violated, unchecked, checked };
 }
 
 // ── Sprint 2: regime algebra and admission ──────────────────────────────────
@@ -340,8 +352,6 @@ export function regimeOverlap(a: Regime, b: Regime): RegimeOverlap {
 export interface RegionSample {
   /** The π-group value at this cell, keyed by `PiGroup.formula`. */
   readonly point: Readonly<Record<string, number>>;
-  /** Ids of the records whose regime returned `true` here. */
-  readonly coveredBy: readonly string[];
 }
 
 /** A record carrying a regime — `AtlasModel` and `AtlasBridge` both fit. @internal */
@@ -359,9 +369,11 @@ export interface RegimeBearing {
  * library invented, so "uncovered" would measure the guess rather than the
  * atlas. The caller states where it wants to know about.
  *
- * COVERED means some regime returned `true`. An `'unknown'` is NOT coverage,
- * by the same rule that makes {@link regimeHolds} tri-state: a regime whose
- * groups the sample axes never mention has not been shown to apply anywhere.
+ * COVERED means some regime returned `true` with at least one inequality
+ * checked. An `'unknown'` is NOT coverage, by the same rule that makes
+ * {@link regimeHolds} tri-state: a regime whose groups the sample axes never
+ * mention has not been shown to apply anywhere. Neither is a vacuous pass: a
+ * regime that states no inequality has checked nothing at the point.
  *
  * Records of another family are skipped, so a mixed list is safe to pass.
  *
@@ -375,10 +387,16 @@ export function uncoveredRegions(
   const inFamily = models.filter((m) => m.regime.family === family);
   const uncovered: RegionSample[] = [];
   for (const point of gridPoints(samples)) {
-    const coveredBy = inFamily
-      .filter((m) => regimeHolds(m.regime, point).ok === true)
-      .map((m) => m.id);
-    if (coveredBy.length === 0) uncovered.push({ point, coveredBy });
+    // `checked > 0`: a regime with no inequality passes vacuously and has shown
+    // nothing about this point, so it covers nothing (the rule in `regimeHolds`'s
+    // doc comment: coverage reads `checked`, never `ok` alone).
+    const covered = inFamily.some((m) => {
+      const check = regimeHolds(m.regime, point);
+      return check.ok === true && check.checked > 0;
+    });
+    // An uncovered cell is covered by nothing, by definition; the sample
+    // carries the point and no list that could only ever be empty.
+    if (!covered) uncovered.push({ point });
   }
   return uncovered;
 }

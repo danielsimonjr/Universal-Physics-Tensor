@@ -54,7 +54,7 @@ import {
 
 type Api = CommandCtx['api'];
 
-export const ATLAS_SOURCE = 'atlas (ATLAS_FAMILIES, src/atlas/families.ts)';
+export const ATLAS_SOURCE = `atlas (the models and bridges of every family, ${publishedUrl('src/atlas/families.ts')})`;
 export const LINK_SOURCE = 'AtlasModel.canonicalRefs';
 const NO_LINK =
   'no canonical equation recorded in its canonicalRefs (an absent link, not a finding that none exists; ' +
@@ -153,6 +153,8 @@ function git(args: string[], cwd: string): string | null {
   try {
     return execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 5000 }).trim();
   } catch {
+    // git absent, no repository here (an installed package has none), a path git does not know, or
+    // a call that ran past its limit: each is "git cannot say", which the callers print as such.
     return null;
   }
 }
@@ -163,22 +165,57 @@ function git(args: string[], cwd: string): string | null {
  * an empty source would render every tag exactly as the default view does,
  * under a label claiming it had been observed.
  */
-export function loadStoredResults(command = 'upt map'): WitnessResults {
+export function loadStoredResults(command = 'upt map', file = storedResultsFile()): WitnessResults {
   const root = repoRoot();
-  const file = storedResultsFile();
   let raw: string;
   try {
     raw = readFileSync(file, 'utf8');
-  } catch {
+  } catch (e) {
+    const code = e instanceof Error && 'code' in e && typeof e.code === 'string' ? e.code : undefined;
+    // Only an absent file is "not present here". A file that is there and cannot be read
+    // (a directory, no permission) is another fact, and the refusal says which.
+    if (code !== 'ENOENT') {
+      throw new CliError(
+        `${command}: --stored could not read ${publishedUrl(STORED_RESULTS_PATH)} (${code ?? 'read error'}: ${e instanceof Error ? e.message : String(e)}). ` +
+          '--run executes the in-process registered witnesses instead',
+      );
+    }
     throw new CliError(
       `${command}: --stored reads ${publishedUrl(STORED_RESULTS_PATH)}. That artifact is not in the published package, and it is not ` +
         'present here. --run executes the in-process registered witnesses instead',
     );
   }
-  const artifact = JSON.parse(raw) as { schemaVersion?: string; results?: WitnessResultRow[] };
-  if (artifact.schemaVersion !== '0' || !Array.isArray(artifact.results)) {
-    throw new CliError(`${command}: ${publishedUrl(STORED_RESULTS_PATH)} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`);
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    // A corrupt artifact is refused as such, not thrown through as a SyntaxError with a stack.
+    throw new CliError(`${command}: ${publishedUrl(STORED_RESULTS_PATH)} is not valid JSON (${e instanceof Error ? e.message : String(e)})`);
   }
+  // `null`, a list or a number is valid JSON and is not the artifact.
+  const artifact: { schemaVersion?: unknown; results?: unknown } =
+    typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed) ? parsed : {};
+  if (artifact.schemaVersion !== '0' || !Array.isArray(artifact.results)) {
+    throw new CliError(
+      `${command}: ${publishedUrl(STORED_RESULTS_PATH)} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`,
+    );
+  }
+  const rows = artifact.results.map((r: unknown, i): WitnessResultRow => {
+    const row: Record<string, unknown> = typeof r === 'object' && r !== null && !Array.isArray(r) ? { ...r } : {};
+    const { recordId, witnessId, status, reason } = row;
+    if (
+      typeof recordId !== 'string' ||
+      typeof witnessId !== 'string' ||
+      (status !== 'checked' && status !== 'refuted' && status !== 'unresolved') ||
+      (reason !== undefined && typeof reason !== 'string')
+    ) {
+      throw new CliError(
+        `${command}: ${publishedUrl(STORED_RESULTS_PATH)} results[${i}] is not a witness result ` +
+          '(recordId and witnessId are text, status is checked, refuted or unresolved)',
+      );
+    }
+    return { recordId, witnessId, status, ...(reason === undefined ? {} : { reason }) };
+  });
   const log = git(['log', '-1', '--format=%H %cI', '--', STORED_RESULTS_PATH], root);
   const [hash, date] = log === null || log === '' ? [] : log.split(' ');
   const lastCommit = hash !== undefined && date !== undefined ? { hash, date } : null;
@@ -192,12 +229,7 @@ export function loadStoredResults(command = 'upt map'): WitnessResults {
       lastCommit,
       modifiedSinceCommit: status === null ? null : status !== '',
     },
-    rows: artifact.results.map((r) => ({
-      recordId: r.recordId,
-      witnessId: r.witnessId,
-      status: r.status,
-      ...(r.reason === undefined ? {} : { reason: r.reason }),
-    })),
+    rows,
   };
 }
 
@@ -214,7 +246,7 @@ export async function runResults(api: Api, bridgeIds: ReadonlySet<string>): Prom
   const artifact = await api.runWitnessRegistry(registered);
   return {
     mode: 'run',
-    provenance: { ran: 'runWitnessRegistry, in-process, by this invocation', registered: registered.length },
+    provenance: { ran: 'the registered witnesses, in-process, by this invocation', registered: registered.length },
     rows: artifact.results.map((r) => ({
       recordId: r.recordId,
       witnessId: r.witnessId,
@@ -398,11 +430,11 @@ const SELECTION =
 
 /** Parse a FROM,TO route flag into atlas model ids. */
 export function parseRoute(raw: string): [string, string] {
-  const parts = raw.split(',').map((s) => s.trim());
-  if (parts.length !== 2 || parts.some((p) => p === '')) {
+  const [from, to, ...extra] = raw.split(',').map((s) => s.trim());
+  if (from === undefined || to === undefined || extra.length > 0 || from === '' || to === '') {
     throw new CliError(`upt map: --route='${raw}' must be FROM,TO (two model ids), e.g. --route=model-pendulum,model-lc`);
   }
-  return parts as [string, string];
+  return [from, to];
 }
 
 function checkEndpoints(models: Map<string, AtlasModel>, from: string, to: string): void {
@@ -1325,7 +1357,8 @@ function edgeLabel(b: BridgeView, breaks: boolean): string {
 export function toMermaid(v: AtlasView): string {
   const d = diagramOf(v);
   const id = idMaker();
-  const out = ['flowchart LR', `%% ${d.title}`, `  legend["${mm(d.title)}"]:::legend`];
+  // The title carries the observable the user typed, so a line break in it must not end the comment.
+  const out = ['flowchart LR', `%% ${d.title.replace(/\r\n|\r|\n/g, ' ')}`, `  legend["${mm(d.title)}"]:::legend`];
   for (const m of d.models) out.push(`  ${id('m', m.id)}["${mm(`${m.id}: ${m.dynamics}`)}"]:::model`);
   for (const m of endpointsOutside(d)) out.push(`  ${id('m', m)}["${mm(m)}"]:::outside`);
   // linkStyle addresses links by definition order, so the bridge links are

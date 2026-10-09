@@ -38,7 +38,10 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '..');
 const PROV = resolve(repoRoot, 'tests', 'fixtures', 'atlas', 'benchmark', 'provenance');
-const ISO_CWD = 'F:/bench-iso';
+// The isolated working directory the model instances run in: outside this repository, so an
+// atlas-blind instance cannot read src/atlas/ (AGENTS.md, Boundaries). It is a machine fact;
+// UPT_BENCH_ISO_CWD names it, and the recorded Windows path is only the default.
+const ISO_CWD = process.env.UPT_BENCH_ISO_CWD ?? 'F:/bench-iso';
 export const MODEL = 'claude-fable-5-1';
 const CONCURRENCY = 8;
 

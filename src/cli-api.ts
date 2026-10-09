@@ -18,7 +18,7 @@
 // Domain names register when this barrel loads. The command reads the list.
 import './relations/domain-regimes.js';
 
-// Public-API symbols (already on the root surface).
+/** Public-API symbols (already on the root surface), plus `equals` as `dimensionsEqual`. */
 export {
   explainQuantity,
   CATALOG_GRAPH,
@@ -26,6 +26,7 @@ export {
   M_SUN_KG,
   composeSymbolic,
   format,
+  equals as dimensionsEqual,
   buildVizModel,
   renderDotToSvg,
   equationLanding,
@@ -96,7 +97,8 @@ export type { EvaluatorSpec, EvaluatorParameter } from './bridges/evaluators.js'
 export { resolveEvaluatorInputs } from './bridges/evaluator-inputs.js';
 export { APPLIED_CASES, runAppliedCase } from './cases/index.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
-export { convertValue, UnitError } from './dimensional/units.js';
+/** The unit reader's conversion, its refusal and the rows of the unit table. */
+export { convertValue, UnitError, unitRows } from './dimensional/units.js';
 export { auditAxisDiscrimination } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';
 export { AXES } from './composition/axes.js';
@@ -115,19 +117,11 @@ export { describeDerivedClaim } from './composition/consequence.js';
 // derivation lives in cli/map-evidence.ts, which is what calls it.
 export { filterEdges, formatFilterLegend } from './composition/graph-viz.js';
 export { deriveEdgeEvidence } from './cli/map-evidence.js';
-// `upt map --source=poster` (S3.4) — the Atlas Phase 3 poster index as viz
-// junctions, plus its dangling-premise check. Internal, CLI only. Not on
-// src/index.ts, which is the published v0.4.0 surface.
-export {
-  POSTER_GRAPH,
-  posterJunctions,
-  validatePoster,
-  describePosterSource,
-} from './cli/poster-source.js';
-export type { PosterGraph, PosterValidation } from './cli/poster-source.js';
 
-// Experimental Product B (expression / residual search). Not the identification
-// funnel (`rankDiscoveries`). CLI `upt probe` only.
+/**
+ * Experimental Product B (expression / residual search). Not the identification
+ * funnel (`rankDiscoveries`). CLI `upt probe` only.
+ */
 export {
   DEFAULT_SEARCH_BUDGET,
   scanFrontier,
@@ -139,7 +133,9 @@ export {
   loadSearchProblemFromJson,
   resolveObservationsPath,
   parseExprJson,
+  ProblemFileError,
   runProbeSearch,
+  nodeWorkerArgv,
   formatProbeReport,
   loadStudyFromJson,
   loadStudyFile,
@@ -216,7 +212,7 @@ export {
   translationsOf,
 } from './atlas/translation-registry.js';
 export type { ObservableCarriage, ObservableTranslation, PointCheck } from './atlas/translation.js';
-export type { AtlasFamily } from './atlas/oscillators/index.js';
+export type { AtlasFamily } from './atlas/family.js';
 export { collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export { domainRegimeRegistrations } from './relations/regime-registration.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
@@ -268,6 +264,8 @@ export { propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite } from
 export type { PropagatedOutput, UncertaintyContribution } from './numerical/evaluator-uncertainty.js';
 /** A stated constant checked against the registry; a disagreement is its own error. */
 export { constantAgreement, ConstantDisagreementError } from './dimensional/symbolic-constants.js';
+/** Thrown when a formula string does not parse or names an unbound symbol. */
+export { FormulaError } from './numerical/formula-contract.js';
 /** The quantity names a target is bound under, the near names of a miss, and the synonym fold. */
 export { aliasesForTarget, nearQuantityNames, shareSynonyms } from './composition/aliases.js';
 /** Synonym agreement and expansion of a binding set. */
@@ -275,7 +273,7 @@ export { assertSynonymAgreement, expandSynonymValues } from './dimensional/formu
 /** A dimensionless group a canonical equation multiplies (sound-speed's gamma): an input, not a graph node. */
 export { CANONICAL_GROUP_PREFACTORS } from './composition/canonical-prefactors.js';
 /** The one number formatter of explain text. */
-export { formatQuantity } from './composition/explain.js';
+export { formatQuantity, formatExact } from './composition/explain.js';
 /** A monomial odd in both carrier charge and mobility with opposite signs. */
 export { CarrierSignError } from './bridges/carrier-sign.js';
 /** The constant values a natural-unit mode overrides. */
@@ -284,8 +282,6 @@ export { naturalConstantOverrides } from './dimensional/natural-units.js';
 export type { UnitMode } from './dimensional/natural-units.js';
 /** Kebab catalog names rewritten to one symbol each before a formula is parsed. */
 export { rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
-/** A recovered prefactor that is a vacuum constant rewritten through α. */
-export { vacuumConstantThroughAlpha } from './composition/bridge-analysis.js';
 /** The ledger id of an orphan-connector pair, when both names are slugs. */
 export { candidateIdIfSlug } from './composition/adjudication.js';
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */
@@ -296,6 +292,8 @@ export { evaluatorOutput, resolveEvaluable } from './composition/evaluate-relati
 export { unusedInputKeys } from './bridges/evaluators.js';
 /** Two spellings of one quantity were given different numbers. The formula is not run. */
 export { SynonymDisagreementError } from './dimensional/formula-names.js';
+/** `upt retrieve`: the canonical corpus, the optional Ollama embedder, and the atlas-accepted hybrid search. */
+export { canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid } from './atlas/benchmark/hybrid-retrieval.js';
 
 /**
  * Builtin dimension checker for `upt eval`.

@@ -19,7 +19,16 @@ import { toAtlasJson } from '../../src/atlas/serialize.js';
 import { OSCILLATOR_FAMILY } from '../../src/atlas/oscillators/index.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import type { AtlasModel } from '../../src/atlas/model.js';
-import type { AtlasFamily } from '../../src/atlas/oscillators/index.js';
+import type { AtlasFamily } from '../../src/atlas/family.js';
+import type { WitnessResultsArtifact } from '../../src/atlas/witness-artifact.js';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/** The committed witness results; `toAtlasJson` derives each bridge's evidence against them. */
+const witnessResults = JSON.parse(
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../data/atlas/witness-results.json'), 'utf-8'),
+) as WitnessResultsArtifact;
 
 const PHASE_3_FIELDS = ['boundaryData', 'initialData', 'symmetryGroup'] as const;
 
@@ -67,7 +76,7 @@ describe('Model record — the three Phase 3 fields', () => {
 });
 
 describe('serializeModel — optional fields are appended, never spread', () => {
-  const emitted = toAtlasJson(OSCILLATOR_FAMILY, '0.0.0-test') as unknown as {
+  const emitted = toAtlasJson(OSCILLATOR_FAMILY, '0.0.0-test', witnessResults) as unknown as {
     models: Array<Record<string, unknown>>;
   };
 
@@ -105,7 +114,7 @@ describe('serializeModel — optional fields are appended, never spread', () => 
       ],
     };
     const [model] = (
-      toAtlasJson(family, '0.0.0-test') as unknown as {
+      toAtlasJson(family, '0.0.0-test', witnessResults) as unknown as {
         models: Array<Record<string, unknown>>;
       }
     ).models;

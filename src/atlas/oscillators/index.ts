@@ -13,28 +13,12 @@
  * @module atlas/oscillators
  */
 
-import type { AtlasBridge, AtlasRejection } from '../types.js';
-import type { AtlasModel } from '../model.js';
+import type { AtlasFamily } from '../family.js';
 import { ATLAS_MODELS } from './models.js';
 import { BRIDGE_SPRING_LC, BRIDGE_DAMPED_RLC } from './bridges-exact.js';
 import { LIMIT_BRIDGES } from './bridges-limits.js';
 import { BRIDGE_CHAIN_WAVE } from './bridges-coarse.js';
 import { ATLAS_REJECTIONS } from './rejections.js';
-
-/**
- * One atlas family: its models, the bridges between them, and the claimed
- * bridges that were refuted. A rejection is evidence, not an omission, so it
- * travels with the family rather than being dropped.
- *
- * @internal
- */
-export interface AtlasFamily {
-  /** `'oscillators'`. */
-  readonly family: string;
-  readonly models: readonly AtlasModel[];
-  readonly bridges: readonly AtlasBridge[];
-  readonly rejections: readonly AtlasRejection[];
-}
 
 /**
  * The oscillator pilot family, in design-note order: the two exact

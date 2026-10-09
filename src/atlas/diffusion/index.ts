@@ -6,7 +6,7 @@
  * @module atlas/diffusion
  */
 
-import type { AtlasFamily } from '../oscillators/index.js';
+import type { AtlasFamily } from '../family.js';
 import { DIFFUSION_BRIDGES } from './bridges.js';
 import { DIFFUSION_CLOSURE_BRIDGES } from './bridges-closure.js';
 import { DIFFUSION_FAMILY_NAME, DIFFUSION_MODELS } from './models.js';

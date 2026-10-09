@@ -24,7 +24,6 @@
  * @module composition/bridge-analysis
  */
 
-import { ALPHA } from '../core/constants.js';
 import { constantRecord } from '../dimensional/symbolic-constants.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -45,7 +44,11 @@ interface NamedConstant {
 }
 
 /** ℏ, c, G, k_B, e — the constants the audit/triage may invoke, from the registry. */
-const FUNDAMENTAL_CONSTANTS: readonly NamedConstant[] = ['ℏ', 'c', 'G', 'k_B', 'e'].map((name) => {
+// The constants a canonical or catalog relation bakes: a closure is searched over every subset.
+// `epsilon_0` and `m_e` joined on 2026-10-09, when the canonical entries that spelled them as
+// governing inputs (`vacuum-permittivity`, `electron-mass`) started baking them like every other
+// constant; without them CE-plasma-frequency read as a reconstruction mismatch.
+const FUNDAMENTAL_CONSTANTS: readonly NamedConstant[] = ['ℏ', 'c', 'G', 'k_B', 'e', 'epsilon_0', 'm_e'].map((name) => {
   const record = constantRecord(name)!;
   return { name, dim: record.dim, si: record.value };
 });
@@ -113,20 +116,51 @@ export function dimensionalFreedom(e: BridgeEdge): number {
   return Infinity;
 }
 
-/** Deterministic, domain-valid input sets with per-source variation. */
+/**
+ * Deterministic, domain-valid input sets with per-source variation.
+ *
+ * Each magnitude set is tried with every source positive first, then with
+ * each single source negated: a domain that holds only for a negative input
+ * (a signed charge, a potential below zero) once got positives only and was
+ * reported `no-samples` (9.0.0 audit §4 Low). The first sign pattern the
+ * domain admits is kept for that magnitude set, so a domain that admits the
+ * positives is sampled exactly as before.
+ */
 function makeInputs(e: BridgeEdge): Array<Record<string, number>> {
   if (e.sources.length === 0) return [{}];
   const sets: Array<Record<string, number>> = [];
-  for (let j = 0; j < 3; j++) {
-    const inp: Record<string, number> = {};
-    e.sources.forEach((s, i) => {
-      inp[s.name] = Math.pow(1.6 + i, 1 + 0.27 * j);
-    });
+  const inDomain = (inp: Record<string, number>): boolean => {
     try {
-      if (e.domain.predicate(inp) && Number.isFinite(e.evaluate(inp))) sets.push(inp);
+      return e.domain.predicate(inp);
     } catch {
-      /* skip */
+      return false;
     }
+  };
+  const finite = (inp: Record<string, number>): boolean => {
+    try {
+      return Number.isFinite(e.evaluate(inp));
+    } catch {
+      return false;
+    }
+  };
+  for (let j = 0; j < 3; j++) {
+    const magnitudes: Record<string, number> = {};
+    e.sources.forEach((s, i) => {
+      magnitudes[s.name] = Math.pow(1.6 + i, 1 + 0.27 * j);
+    });
+    // A negated source is tried only when the DOMAIN refuses the positive point (a carrier
+    // charge that must be negative). A positive point the domain admits but the evaluator
+    // cannot finish (an exponential that overflows, be-82) is a degenerate sample and not a
+    // reason to look for a sign at which the function happens to be flat: a monomial fitted
+    // on a saturated regime is not a derivation.
+    if (inDomain(magnitudes)) {
+      if (finite(magnitudes)) sets.push(magnitudes);
+      continue;
+    }
+    const negated = e.sources
+      .map((s) => ({ ...magnitudes, [s.name]: -magnitudes[s.name]! }))
+      .find((inp) => inDomain(inp) && finite(inp));
+    if (negated !== undefined) sets.push(negated);
   }
   return sets;
 }
@@ -142,53 +176,17 @@ const isCleanPrefactor = (p: number): boolean =>
   CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);
 
 /**
- * CODATA fine-structure constant, from the owner. `μ0 = 2 α h / (e² c)`
- * rewrites a vacuum factor as a number times a monomial in `{ℏ, c, e}`.
- */
-
-/**
- * True when a derived prefactor on `{ℏ, c, e}` times `α` is a recognized
- * constant. That factor is `μ0` rewritten through `α`. It is not an empirical
- * scale. The printed prefactor is not itself the recognized constant, so
- * `cleanPrefactor` stays false.
- * @internal
- */
-export function vacuumConstantThroughAlpha(
-  subset: readonly string[] | undefined,
-  prefactor: number | undefined,
-): boolean {
-  if (subset === undefined || prefactor === undefined || !Number.isFinite(prefactor)) return false;
-  if (subset.length !== 3 || !subset.includes('ℏ') || !subset.includes('c') || !subset.includes('e')) return false;
-  return isCleanPrefactor(Math.abs(prefactor) * ALPHA);
-}
-
-/**
  * A canonical closure more than ten times away from 1 is not a recovered
  * prefactor. Stefan–Boltzmann (≈0.1645) and Wien (≈1.265) stay inside that
  * window and keep the empirical/tuned mark. A G-closure of an atomic law
- * (10^21–10^25) and the ℏ, c, e stand-in for the field energy density
- * (≈10.9) do not. After the sourced ½ is applied, the same stand-in sits
- * near 5.45, inside the window, and times α is 1/(8π). That is μ0 rewritten
- * through α. A larger subset that still contains {ℏ, c, e} is the same
- * rewrite, so it is still not derived. A catalog id is not a canonical id,
- * so be-74 stays where the catalog audit put it.
- * A recognized constant (2π, ln 2, 4π, 1/(6π), …) stays even when it sits
- * outside the window. `ALPHA` is the fine-structure constant declared above.
+ * (10^21–10^25) does not. A recognized constant (2π, ln 2, 4π, 1/(6π), …)
+ * stays even when it sits outside the window. The search includes ε₀, so the
+ * field energy density derives on {ε₀} with its sourced ½; the {ℏ, c, e}
+ * stand-in it once closed on, μ0 rewritten through α, no longer arises, and
+ * the guard that rejected it is gone (it changed no row of either graph).
  */
-function recoveredCanonicalPrefactor(
-  id: string,
-  prefactor: number,
-  subset: readonly string[],
-): boolean {
+function recoveredCanonicalPrefactor(id: string, prefactor: number): boolean {
   if (!id.startsWith('CE-') || isCleanPrefactor(prefactor)) return true;
-  if (
-    subset.includes('ℏ') &&
-    subset.includes('c') &&
-    subset.includes('e') &&
-    isCleanPrefactor(Math.abs(prefactor) * ALPHA)
-  ) {
-    return false;
-  }
   const mag = Math.abs(prefactor);
   if (!(mag > 0) || !Number.isFinite(mag)) return false;
   return Math.abs(Math.log10(mag)) <= 1;
@@ -253,7 +251,7 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
     const cv =
       Math.sqrt(ratios.reduce((a, b) => a + (b - mean) ** 2, 0) / ratios.length) /
       Math.abs(mean);
-    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean, S.map((x) => x.name))) {
+    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean)) {
       return {
         status: 'derived',
         subset: S.map((x) => x.name),
@@ -270,9 +268,10 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
 /**
  * Graph distance from a bridge's quantities to the established-confidence
  * core (BFS over quantity co-occurrence). 0 = shares a quantity with an
- * established edge; Infinity = structurally isolated from it.
+ * established edge; Infinity = structurally isolated from it. Read by
+ * `bridgePriority` only; it was exported with no caller outside this file.
  */
-export function anchoringDistance(
+function anchoringDistance(
   edges: readonly BridgeEdge[],
   e: BridgeEdge,
 ): number {

@@ -10,6 +10,7 @@
  *
  * @module tests/cli/upt-explain-inputs
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -32,19 +33,20 @@ function run(args: string[]): { status: number; stderr: string } {
 }
 
 describe('upt explain — input validation (Round-2 HIGH)', () => {
+  // A bad value is exit 1 on every command (9.0.0 audit K10); mixing modes stays usage (2).
   it('rejects a non-numeric value (mass=abc)', () => {
     const { status } = run(['explain', 'hawking-temperature', 'mass=abc']);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
   });
 
   it('rejects an empty value (mass=)', () => {
     const { status } = run(['explain', 'hawking-temperature', 'mass=']);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
   });
 
   it('rejects a non-finite value (mass=1e500 → Infinity)', () => {
     const { status } = run(['explain', 'hawking-temperature', 'mass=1e500']);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
   });
 
   it('rejects mixing a bare name with a valued input (silent drop)', () => {

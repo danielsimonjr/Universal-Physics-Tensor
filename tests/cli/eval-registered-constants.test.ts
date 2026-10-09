@@ -4,6 +4,7 @@
  * A bare `sigma` stays unbound: the map hint names `sigma_sb`, and it is not
  * aliased.
  */
+import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { codataScope } from '../../src/cli/eval-numbers.js';

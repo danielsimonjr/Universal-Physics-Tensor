@@ -4,18 +4,14 @@
  * CLI (dist/cli/main.js). The comparison itself is pinned in
  * tests/composition/canonical-compare.test.ts; this file pins what the user sees.
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-
 /** Runs the CLI and checks the exit code: 3 when the formula's check fails (0.47.0), else 0. */
 async function text(args: string[], expected = 0): Promise<string> {
-  const cap = capture();
+  const cap = captureMerged();
   const code = await runCli(args, cap.io);
   expect(code).toBe(expected);
   return cap.lines.join('');
@@ -42,7 +38,7 @@ describe('upt map --equation — the canonical comparison', () => {
   });
 
   it('--json carries the comparisons', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['map', '--equation', 'hawking_temperature = hbar*c^3/(4*pi*G*mass*k_B)', '--json'], cap.io);
     const parsed = JSON.parse(cap.lines.join(''));
     const cmp = JSON.stringify(parsed);
@@ -55,7 +51,7 @@ describe('upt derive --formula — the canonical comparison', () => {
     const t = await text([
       'derive', 'period:time', 'length:length', 'gravity:acceleration', '--formula', 'pi*sqrt(length/gravity)',
     ], 3);
-    expect(t).toMatch(/formula MATCHES the dimensional form — recovered prefactor ≈ 3\.1416e\+0/);
+    expect(t).toMatch(/formula MATCHES the dimensional form — recovered prefactor ≈ 3\.14159265358979/);
     expect(t).toMatch(/⚠ differs from CE-pendulum-period \(Pendulum period\) by a constant factor: yours\/canonical = 0\.500000/);
   });
 });
@@ -84,7 +80,7 @@ describe('upt derive / map — the prefactor is never silently unchecked', () =>
 
 describe('upt derive — a variable is a constant only when its name AND dimension match', () => {
   it('c:length is a length called c, not the speed of light', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(
       ['derive', 'period:time', 'length:length', 'gravity:acceleration', 'c:length', '--formula', 'pi*sqrt(c/gravity)', '--json'],
       cap.io,
@@ -134,14 +130,14 @@ describe('W1: speed-of-light must not disable the E=mc² prefactor check', () =>
   it('map: E = 2 m speed_of_light² differs by the factor 2 and exits 3', async () => {
     const t = await text(['map', '--equation', 'rest_energy = 2*mass*speed_of_light^2'], 3);
     expect(t).toMatch(
-      /⚠ differs from CE-mass-energy \(Mass–energy equivalence; your speed-of-light as its c, paired by dimension\) by a constant factor: yours\/canonical = 2\.00000/,
+      /⚠ differs from CE-mass-energy \(Mass–energy equivalence\) by a constant factor: yours\/canonical = 2\.00000/,
     );
   });
 
   it('map: E = m speed_of_light² agrees', async () => {
     const t = await text(['map', '--equation', 'rest_energy = mass*speed_of_light^2']);
     expect(t).toMatch(
-      /✓ agrees with CE-mass-energy \(Mass–energy equivalence; your speed-of-light as its c, paired by dimension\)/,
+      /✓ agrees with CE-mass-energy \(Mass–energy equivalence\)/,
     );
   });
 
@@ -262,7 +258,7 @@ describe('persona retest: what map --equation prints', () => {
   });
 
   it('W5 control: an all-constant right-hand side whose target is no catalog quantity is still refused', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['map', '--equation', 'not_a_quantity = sqrt(hbar*G/c^3)'], cap.io)).toBe(2);
     expect(cap.lines.join('')).toMatch(/no source quantities/);
   });
@@ -302,10 +298,10 @@ describe('persona retest: what map --equation prints', () => {
   });
 
   it('L7: --equation-only needs --equation, and its JSON drops the linkage map', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['map', '--equation-only'], cap.io)).toBe(2);
     expect(cap.lines.join('')).toMatch(/--equation-only needs --equation/);
-    const j = capture();
+    const j = captureMerged();
     await runCli(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)', '--equation-only', '--json'], j.io);
     const parsed = JSON.parse(j.lines.join(''));
     expect(parsed.result.linkage).toBeUndefined();

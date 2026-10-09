@@ -1,15 +1,15 @@
 /**
- * PO-1 allocation diagnostic — `solveGL4Stage` Picard-iteration overhead.
+ * PO-1 allocation diagnostic — `gl4Step` Picard-iteration overhead.
  *
  * Carried forward from v0.5.1 (deferred per `todo.md` → "Bench harnesses").
- * Measures the per-call cost of `solveGL4Stage` on Mercury perihelion
+ * Measures the per-call cost of `gl4Step` on Mercury perihelion
  * canonical state — the hot path inside `integrateGeodesicGL4` whose
  * Picard inner solver allocates per-iteration `(x, p)` arrays.
  *
  * **What this bench is for**: providing a baseline that future allocator-
  * pressure refactors can compare against. If a future commit replaces the
  * Picard inner-loop's nested-array allocation with a `Float64Array` pool,
- * this bench's `solveGL4Stage` mean-time should drop measurably.
+ * this bench's `gl4Step` mean-time should drop measurably.
  *
  * **What this bench is NOT**: a gate. Per v0.6.1 Design Decision #5,
  * informational-only — there are no threshold assertions.
@@ -18,7 +18,7 @@
  * perihelion, canonical SI units). Inputs are built once outside the
  * bench callback (F4 discipline).
  *
- * @see src/numerical/gl4-integrator.ts  (solveGL4Stage internals)
+ * @see src/numerical/gl4-integrator.ts  (gl4Step internals)
  * @see bench/geodesic-conservation.bench.ts  (IC reference)
  */
 import { bench, describe } from 'vitest';
@@ -27,7 +27,7 @@ import {
   schwarzschildDgInverseFn,
   schwarzschildRs,
 } from '../tests/fixtures/schwarzschild.js';
-import { solveGL4Stage } from '../src/numerical/gl4-integrator.js';
+import { gl4Step } from '../src/numerical/gl4-integrator.js';
 import { C_SI, G_SI } from '../src/core/constants.js';
 
 // ---------------------------------------------------------------------------
@@ -64,14 +64,14 @@ const DG_INV_FN = schwarzschildDgInverseFn(M_KG);
 
 const PICARD_OPTS = { picardTol: 1e-12, picardMaxIter: 50 };
 
-describe('PO-1: solveGL4Stage allocation diagnostic (Mercury perihelion)', () => {
+describe('PO-1: gl4Step allocation diagnostic (Mercury perihelion)', () => {
   bench(
-    'solveGL4Stage — single stage solve at Mercury perihelion',
+    'gl4Step — one step at Mercury perihelion',
     () => {
-      // One stage solve per invocation. Picard inner-loop allocates per
+      // One step per invocation. Picard inner-loop allocates per
       // iteration; the bench accumulates allocator pressure across
       // iterations because each call's Picard solver may run 1-3 iters.
-      solveGL4Stage(
+      gl4Step(
         { x: X0 as readonly number[], p: P0 as readonly number[] },
         H_STEP,
         G_INV_FN,
@@ -83,17 +83,17 @@ describe('PO-1: solveGL4Stage allocation diagnostic (Mercury perihelion)', () =>
   );
 
   bench(
-    'solveGL4Stage — 100-stage batch (amortize bench overhead)',
+    'gl4Step — 100-step batch (amortize bench overhead)',
     () => {
-      // Batched form: 100 sequential stage solves with state-advance.
+      // Batched form: 100 sequential steps with state-advance.
       // Lets the bench measure steady-state allocator cost rather than
       // per-call setup overhead.
       let state = { x: X0 as readonly number[], p: P0 as readonly number[] };
       for (let i = 0; i < 100; i++) {
-        const result = solveGL4Stage(state, H_STEP, G_INV_FN, DG_INV_FN, PICARD_OPTS);
-        // Use stage 1's intermediate state as the new starting point.
+        const result = gl4Step(state, H_STEP, G_INV_FN, DG_INV_FN, PICARD_OPTS);
+        // Use the advanced state as the new starting point.
         // (Not a physically meaningful trajectory — bench-only.)
-        state = { x: result.stageX[1], p: result.stageP[1] };
+        state = { x: result.x, p: result.p };
       }
     },
     { iterations: 50, time: 10_000 },

@@ -3,6 +3,6 @@ Your equation:  period = mass
 
   ⚠ dimensional MISMATCH: RHS is [mass] but the target is [time]
   · no canonical equation has this target and these variables, so the prefactor is NOT checked
-  ● your equation joins the ANCHORED cluster of 85 via {mass, period}
-     nearest equations: CE-kepler-third, CE-carrier-mobility, CE-centripetal-force, CE-compton-wavelength, CE-compton-wavelength-full (+79 more)
+  ● your equation joins the ANCHORED cluster of 82 via {mass, period}
+     nearest equations: CE-kepler-third, CE-carrier-mobility, CE-centripetal-force, CE-compton-wavelength, CE-compton-wavelength-full (+76 more)
      (shared-quantity connectivity, not a physics claim)

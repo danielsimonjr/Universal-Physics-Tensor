@@ -5,30 +5,15 @@
  *
  * `landau` is a prefix of `landauer`. That hit is Landauer's principle.
  */
+import { allText, capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-
-const text = (c: ReturnType<typeof capture>) => c.lines.join('') + c.err.join('');
 
 describe('search names the formula and a prefix', () => {
   it('routes coherence length to the thermal-wavelength formula', async () => {
     const cap = capture();
     const code = await runCli(['search', 'coherence length'], cap.io);
-    const out = text(cap);
+    const out = allText(cap);
     expect(code, out).toBe(0);
     expect(out).toMatch(/upt atlas be-12/);
     expect(out).not.toMatch(/upt explain be-12/);
@@ -39,7 +24,7 @@ describe('search names the formula and a prefix', () => {
   it('says landau matched as a prefix of landauer', async () => {
     const cap = capture();
     const code = await runCli(['search', 'landau'], cap.io);
-    const out = text(cap);
+    const out = allText(cap);
     expect(code, out).toBe(0);
     expect(out).toMatch(/landau is a prefix of landauer/);
     expect(out).toMatch(/Landauer/);
@@ -48,8 +33,9 @@ describe('search names the formula and a prefix', () => {
   it('landau diamagnetism is not an entry', async () => {
     const cap = capture();
     const code = await runCli(['search', 'landau diamagnetism'], cap.io);
-    const out = text(cap);
-    expect(code, out).toBe(1);
+    const out = allText(cap);
+    // No match is a result (exit 0), not an error.
+    expect(code, out).toBe(0);
     expect(out).toMatch(/no entry matches/);
   });
 });

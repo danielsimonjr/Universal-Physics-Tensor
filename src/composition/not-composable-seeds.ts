@@ -15,7 +15,7 @@
  * @module composition/not-composable-seeds
  */
 
-/** One proved seed the composition graph does not carry, and why. */
+/** One proved seed the composition graph does not carry, and why. @internal */
 export interface NotComposableSeed {
   /** Manifest key, the same string `bridgeSeedKeys` returns. */
   readonly id: string;
@@ -27,6 +27,8 @@ export interface NotComposableSeed {
  * The ten atlas seeds. The list is the exemption the edge-validity
  * test checks against `bridgeSeedKeys`. A new atlas seed fails that
  * test until it has an edge or a row here.
+ *
+ * @internal
  */
 export const NOT_COMPOSABLE_SEEDS: readonly NotComposableSeed[] = [
   {

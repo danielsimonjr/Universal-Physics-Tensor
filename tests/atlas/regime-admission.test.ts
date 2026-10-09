@@ -328,7 +328,9 @@ describe('uncoveredRegions', () => {
       theta0: [0.2, 0.5, 0.9],
     });
     expect(gaps.map((g) => g.point['theta0'])).toEqual([0.9]);
-    expect(gaps[0].coveredBy).toEqual([]);
+    // An uncovered cell is, by definition, covered by nothing: the sample
+    // carries the point and no list that is always empty.
+    expect(Object.keys(gaps[0]!)).toEqual(['point']);
   });
 
   it('counts a covering regime by id', () => {
@@ -360,13 +362,18 @@ describe('uncoveredRegions', () => {
     expect(uncoveredRegions(FAMILY, [foreign], { theta0: [0.2] })).toHaveLength(1);
   });
 
-  it('records that an UNCONSTRAINED regime covers every sampled cell', () => {
-    // Not a gap in the algorithm: a regime with no inequalities makes no
-    // restriction, so it does hold everywhere. Pinned so the behaviour is a
-    // decision rather than a surprise at a call site.
+  it('an UNCONSTRAINED regime covers no sampled cell: nothing was checked, so nothing was shown to hold', () => {
+    // A regime with no inequality passes `regimeHolds` vacuously (`ok: true, checked: 0`).
+    // Coverage reads `checked`, never `ok` alone: a check that every such regime passes
+    // cannot fail, so it would say nothing about where the model applies (AGENTS law 2;
+    // the sentence in `regimeHolds`'s doc comment). Before Tom's review of #502 this test
+    // pinned the opposite decision, and the one CLI caller worked around it by filtering
+    // the unconstrained records out before the call.
     const open = { id: 'ab-spring-lc', regime: OSCILLATOR_FAMILY.bridges[0].regime };
     expect(open.regime.inequalities).toEqual([]);
-    expect(uncoveredRegions(FAMILY, [open], { theta0: [0.2, 0.9] })).toEqual([]);
+    expect(uncoveredRegions(FAMILY, [open], { theta0: [0.2, 0.9] })).toHaveLength(2);
+    // Control: the same points under a constraining regime that holds there are covered.
+    expect(uncoveredRegions(FAMILY, [AB_PENDULUM_LINEAR], { theta0: [0.2] })).toEqual([]);
   });
 });
 

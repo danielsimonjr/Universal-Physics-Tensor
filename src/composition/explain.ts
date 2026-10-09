@@ -36,13 +36,24 @@ import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { canonicalById } from '../canonical/registry.js';
 
 /**
- * Text form of a recovered quantity: 15 significant digits, the precision an
- * evaluator input is already passed at. JSON keeps the number; this is only
- * the printed form. An integer stays an integer (`1`, not `1.0000e+0`).
+ * Text form of a recovered quantity: `digits` significant digits (15 by default, the precision an
+ * evaluator input is already passed at; a statistic such as a residual in σ asks for 3). JSON keeps
+ * the number; this is only the printed form. An integer stays an integer (`1`, not `1.0000e+0`).
+ * Every command prints a number through this function or through {@link formatExact}.
  * @internal
  */
-export function formatQuantity(value: number): string {
-  return String(Number(value.toPrecision(15)));
+export function formatQuantity(value: number, digits = 15): string {
+  return String(Number(value.toPrecision(digits)));
+}
+
+/**
+ * Text form of a computed value that a reader may need to reproduce bit for bit: the shortest
+ * decimal that round-trips to the same double (`upt evaluate`'s outputs). A recovered or compared
+ * quantity prints through {@link formatQuantity} instead.
+ * @internal
+ */
+export function formatExact(value: number): string {
+  return String(value);
 }
 import type { DimensionalDeterminationResult } from '../dimensional/buckingham.js';
 import { dimensionallyDetermines } from '../dimensional/buckingham.js';
@@ -118,8 +129,8 @@ export interface QuantityExplanation {
   /** Whether the KNOWN set dimensionally fixes the target (Buckingham-π);
    *  absent when the target has no resolvable dimension. */
   readonly dimensional?: DimensionalDeterminationResult;
-  /** Derivations that refused the given values as outside their validity domain. */
-  readonly refusals?: readonly { readonly edge: string; readonly reason: string }[];
+  /** Derivations that refused the given values, each under its own kind (`RetrodictionRefusal`). */
+  readonly refusals?: RetrodictionResult['refusals'];
   /** Upstream gaps for an under-determined target (from the classifier). */
   readonly blockingFrontier: readonly string[];
   /** Plain-language synthesis of the above. */
@@ -309,6 +320,8 @@ function buildSummary(
   encodedMatchesMonomial: boolean,
   unsetSentence: string | undefined,
   even: ReadonlySet<string>,
+  /** The identification that determines the target when no edge does. */
+  viaIdentification: QuantityIdentification | undefined,
 ): string {
   const known = knownNames.length
     ? `{${knownNames.join(', ')}}`
@@ -334,12 +347,22 @@ function buildSummary(
         s += ` Knowing one of {${id.blockingFrontier.join(', ')}} would unblock it.`;
       }
       break;
-    case 'exactly-determined':
-      s = `'${target}' is determined from ${known} via ${derivations[0]?.edge} (${derivations[0]?.label}).`;
+    case 'exactly-determined': {
+      // No edge derives a target the identification alone determines; the
+      // sentence then names the identification, not an undefined edge
+      // (9.0.0 audit §4 C11).
+      const first = derivations[0];
+      s =
+        first !== undefined
+          ? `'${target}' is determined from ${known} via ${first.edge} (${first.label}).`
+          : viaIdentification !== undefined
+            ? `'${target}' is determined from ${known} by the identification ${viaIdentification.from} ≡ ${viaIdentification.to} (${viaIdentification.rationale}).`
+            : `'${target}' is determined from ${known}.`;
       if (recoveredValue !== undefined) {
         s += ` Recovered value: ${formatQuantity(recoveredValue)}.`;
       }
       break;
+    }
     case 'over-determined':
     default: {
       // Independence is counted by BRIDGE, not by edge: be-42 and be-42-via-rs
@@ -382,12 +405,14 @@ function buildSummary(
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional?.determined && dimensional.monomial) {
     s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial, even)}.`;
-    if (unsetSentence !== undefined) s += ` ${unsetSentence}`;
   } else if (dimensional?.outsideGoverningSpan && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional && !dimensional.determined && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix a unique monomial.`;
   }
+  // The unset factor is a fact about the edge, whatever the inputs span: it is said whether or
+  // not a ∝ line could be printed (a baked constant removes the ∝ line, not the unset factor).
+  if (unsetSentence !== undefined) s += ` ${unsetSentence}`;
   return s;
 }
 
@@ -608,6 +633,13 @@ export function explainQuantity(
           ? 'sourced'
           : undefined;
 
+  // A target with no derivation that is still determinable is reached by an
+  // identification whose `from` the known set determines.
+  const viaIdentification =
+    identifiability.verdict === 'exactly-determined' && derivations.length === 0
+      ? identifications.find((ident) => ident.to === target && determinable.has(ident.from))
+      : undefined;
+
   const summary = buildSummary(
     target,
     identifiability,
@@ -620,11 +652,16 @@ export function explainQuantity(
     encodedAgrees,
     unsetSentence,
     magnitudeNames(firedEdges),
+    viaIdentification,
   );
+  // A refusal of the point (a validity domain, opposite carrier signs, a formula with no
+  // finite value there) is a bad value and is named with the edge's own reason. An unset
+  // coefficient is not: `unsetSentence` already says it in words (AGENTS law 4).
+  const domainRefusals = (refusals ?? []).filter((r) => r.kind !== 'coefficient-unset');
   const refusalSentence =
-    refusals === undefined || recoveredValue !== undefined
+    domainRefusals.length === 0 || recoveredValue !== undefined
       ? ''
-      : ` No recovered value: ${refusals.map((r) => r.reason).join('; ')}.`;
+      : ` No recovered value: ${domainRefusals.map((r) => r.reason).join('; ')}.`;
 
   return {
     target,

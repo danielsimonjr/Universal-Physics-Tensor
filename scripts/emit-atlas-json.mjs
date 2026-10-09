@@ -2,7 +2,7 @@
  * Emit every atlas family as a versioned JSON artifact (Phase 0 S0.6; all
  * families since Phase 4 S4.4).
  *
- * Same discipline as `emit-catalog-json.mjs`: the committed artifact is the
+ * Same discipline as `check-catalog-json.mjs`: the committed artifact is the
  * reviewable surface, and `tests/atlas/atlas-json.test.ts` pins it against the
  * live family, so an atlas edit fails CI until `npm run atlas:json` is re-run.
  *
@@ -26,13 +26,18 @@ const { ATLAS_FAMILIES } = await distImport('atlas', 'families.js');
 const { toAtlasJson } = await distImport('atlas', 'serialize.js');
 const pkg = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf-8'));
 
+// The committed witness results decide which witnesses pass; each bridge's
+// `evidence` is derived against them at write time and never read from the
+// record. Re-run `npm run atlas:witness-results` first when a witness moved.
+const witnessResults = JSON.parse(readFileSync(resolve(repoRoot, 'data', 'atlas', 'witness-results.json'), 'utf-8'));
+
 // One artifact per registered family, named for the family. Every family in
 // ATLAS_FAMILIES is emitted, so a new family cannot be registered without its
 // reviewable artifact (tests/atlas/atlas-json.test.ts pins each one).
 const outDir = resolve(repoRoot, 'data', 'atlas');
 mkdirSync(outDir, { recursive: true });
 for (const family of ATLAS_FAMILIES) {
-  const record = toAtlasJson(family, pkg.version);
+  const record = toAtlasJson(family, pkg.version, witnessResults);
   const out = resolve(outDir, `${family.family}.json`);
   writeFileSync(out, JSON.stringify(record, null, 2) + '\n');
   console.log(
@@ -46,7 +51,7 @@ for (const family of ATLAS_FAMILIES) {
 const { toCombinedAtlasJson, toAtlasJsonLd } = await distImport('atlas', 'export.js');
 const qudt = JSON.parse(readFileSync(resolve(outDir, 'qudt-resolution.json'), 'utf-8'));
 const combined = resolve(outDir, 'atlas.json');
-writeFileSync(combined, JSON.stringify(toCombinedAtlasJson(ATLAS_FAMILIES, pkg.version), null, 2) + '\n');
+writeFileSync(combined, JSON.stringify(toCombinedAtlasJson(ATLAS_FAMILIES, pkg.version, witnessResults), null, 2) + '\n');
 console.log(`Wrote ${combined} (${ATLAS_FAMILIES.length} families)`);
 const jsonld = resolve(outDir, 'atlas.jsonld');
 writeFileSync(jsonld, JSON.stringify(toAtlasJsonLd(ATLAS_FAMILIES, pkg.version, qudt), null, 2) + '\n');

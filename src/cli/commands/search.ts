@@ -40,7 +40,7 @@ const HELP = `upt search <word> ...
         prefix, so landau is not reported as Landauer without saying so.
         A catalog bridge with no evaluator and a formalRef routes to
         upt atlas, and the hit quotes that reference's covers line.
-        No match exits 1 and names the registries searched.
+        No match is a result: exit 0, naming the registries searched.
         e.g.  upt search Schrödinger
               upt search thermal noise`;
 
@@ -83,11 +83,15 @@ async function run(ctx: CommandCtx): Promise<number> {
       },
       ctx.write,
     );
-    return matches.length === 0 ? 1 : 0;
+    return 0;
   }
 
+  // No match is the result the search computed, not an error: exit 0, and the
+  // scope is printed because an empty result is an absence from this registry.
   if (matches.length === 0) {
-    throw new CliError(`upt search: no entry matches every word of '${query.join(' ')}' — ${scope}`);
+    out(`upt search ${query.join(' ')} — no entry matches every word of '${query.join(' ')}'`);
+    out(`  ${scope}; an absence here is not an absence from physics`);
+    return 0;
   }
   out(`\nupt search ${query.join(' ')} — ${matches.length} match(es); every word matched`);
   out('  matched by words, symbols and genuine aliases; an equal dimension is never a match (a radius is not a wavelength)');

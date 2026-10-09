@@ -7,25 +7,14 @@
  * stays derived. A sourced factor of 1, such as the simple-harmonic frequency,
  * stays derived too.
  */
+import { captureMerged } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 
 const UNSET = ['CE-fermi-energy', 'CE-fermi-velocity', 'CE-debye-frequency', 'CE-sound-speed'] as const;
 
-function capture() {
-  const lines: string[] = [];
-  return {
-    lines,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => lines.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-
 async function run(args: string[]) {
-  const cap = capture();
+  const cap = captureMerged();
   const code = await runCli(args, cap.io);
   return { code, text: cap.lines.join('') };
 }
@@ -48,7 +37,7 @@ describe('an unset dimensional coefficient is not a recovered prefactor', () => 
       expect(unset, id).toContain(id);
     }
     expect(derived).toContain('CE-plasma-frequency');
-    expect(derived).toMatch(/CE-plasma-frequency\s+\+\[\]\s+×1\.000e\+0/);
+    expect(derived).toMatch(/CE-plasma-frequency\s+\+\[epsilon_0\]\s+×1\b/);
     expect(derived).toContain('CE-simple-harmonic-frequency');
     expect(derived).toContain('CE-electrical-conductivity');
     expect(unset).not.toContain('CE-plasma-frequency');

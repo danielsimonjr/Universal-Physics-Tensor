@@ -6,7 +6,7 @@
  */
 
 import type { Dimension } from '../dimensional/types.js';
-import type { Conventions, Counterexample, Regime, RelationContract } from '../relations/types.js';
+import type { ConfrontationOutcome } from './observations/types.js';
 import type {
   BridgeEquationEntry,
   BridgeEquationStatus,
@@ -20,17 +20,13 @@ import type {
 export type CatalogFiling = 'standard' | 'cross-domain';
 
 /**
- * One catalog row. `derivedFrom` and `basis` are optional until a nested
- * derivation is pinned. `basis: false` is not a state this record carries.
+ * One catalog row. The row owns the relation contract, the regime, the
+ * conventions and the counterexamples; its relations carry no copy.
  */
 export interface CatalogEntry extends BridgeEquationEntry {
   readonly type: CatalogFiling;
-  readonly derivedFrom?: readonly string[];
-  readonly basis?: true;
   /** The PhysJS manifest key. The reference and its kind are that entry's. */
   readonly formalKey?: string;
-  readonly assumptions?: readonly string[];
-  readonly scopeLimits?: readonly string[];
   readonly dimension?: Dimension;
   /** The confrontation is a caller-supplied table, not a stored outcome. */
   readonly callerTable?: true;
@@ -65,15 +61,9 @@ export interface CatalogRelation {
   readonly citation: string;
   readonly coefficientUnset?: boolean;
   readonly formulaFactors?: Readonly<Record<string, number>>;
-  readonly relation?: RelationContract;
-  readonly regime?: Regime;
-  readonly conventions?: Conventions;
-  readonly counterexamples?: readonly Counterexample[];
   readonly reference?: CatalogReference;
   /** A caveat the record states beside its value. The text is the record's; nothing switches on it. */
   readonly notice?: { readonly text: string };
-  /** A generic numerical method this record calls. Never a bridge number. */
-  readonly method?: string;
 }
 
 /** One named input of a catalog evaluator. */
@@ -94,12 +84,13 @@ export interface CatalogEvaluatorParameter {
   /** An angular frequency in rad/s. A cycle unit (Hz, rpm) given to it is multiplied by 2π. */
   readonly angular?: true;
   readonly alternates?: readonly { readonly key: string; readonly meaning: string; readonly toKey: number }[];
-  readonly optional?: true;
 }
 
 /**
  * A second number the same record returns beside its `value`. The expression
- * reads evaluator parameter keys, the constants, and `value`.
+ * reads evaluator parameter keys, the constants, and `value`. It is computed
+ * when every parameter key it reads was given; a parameter only an output
+ * reads is optional.
  *
  * @public
  */
@@ -109,8 +100,6 @@ export interface CatalogEvaluatorOutput {
   readonly unit: string;
   readonly meaning: string;
   readonly expression: string;
-  /** Optional parameter keys this output needs. It is left out when one is not given. */
-  readonly requires?: readonly string[];
 }
 
 /** The input contract of one catalog evaluator. */
@@ -121,18 +110,50 @@ export interface CatalogEvaluator {
   readonly outputs?: readonly CatalogEvaluatorOutput[];
 }
 
-/** One committed data confrontation of a catalog record. */
+/**
+ * The prediction point of a value-kind confrontation, in the evaluator's input
+ * spellings. The evaluator at these inputs returns the outcome's `predicted`:
+ * its value, or the extra output `output` names.
+ */
+export interface CatalogPrediction {
+  readonly inputs: Readonly<Record<string, number>>;
+  readonly output?: string;
+}
+
+/** One committed data confrontation of a catalog record, its outcome narrowed on `kind` when the catalog loads. */
 export interface CatalogConfrontation {
   readonly catalogId: number;
   readonly title: string;
   readonly kind: 'value' | 'upper-bound' | 'consistency' | 'table';
   readonly rigor: 'stringent' | 'moderate' | 'loose';
-  readonly outcome: Record<string, unknown>;
-  /** Inputs of the prediction, in catalog quantity names, when elasticity is defined. */
-  readonly prediction?: { readonly inputs: Readonly<Record<string, number>> };
+  readonly outcome: ConfrontationOutcome;
+  readonly prediction?: CatalogPrediction;
 }
 
-/** The on-disk catalog: schema 3, entries, relations, evaluators, and confrontations. */
+/** A confrontation as the file stores it: the outcome is checked arm by arm when the catalog loads. */
+export type CatalogConfrontationRecord = Omit<CatalogConfrontation, 'outcome'> & {
+  readonly outcome: Readonly<Record<string, unknown>>;
+};
+
+/** One row of the negative catalog: adjudicated not-a-bridge under the membership criterion. */
+export interface CatalogRejection {
+  readonly catalogId: number;
+  readonly name: string;
+  /** Why the endpoints do NOT differ in regime attributes. */
+  readonly reason: string;
+  readonly citation: string;
+}
+
+/**
+ * A relation as the file stores it. `confidence` is stored only on a relation
+ * that has no catalog row; a relation with a row takes its row's `status`
+ * when the catalog loads, so the two cannot drift.
+ */
+export type CatalogRelationRecord = Omit<CatalogRelation, 'confidence'> & {
+  readonly confidence?: CatalogRelation['confidence'];
+};
+
+/** The loaded catalog: schema 3, entries, relations, evaluators, confrontations, the two ledgers and the spine. */
 export interface CatalogFile {
   readonly schemaVersion: 3;
   readonly packageVersion: string;
@@ -142,8 +163,16 @@ export interface CatalogFile {
   readonly confrontations: readonly CatalogConfrontation[];
   /** The adjudication ledger: recorded verdicts on identification hypotheses. `composition/adjudication.ts` projects it. */
   readonly adjudications: readonly CatalogAdjudication[];
+  /** The negative catalog. `bridges/rejected.ts` projects it. */
+  readonly rejections: readonly CatalogRejection[];
   readonly spine: Readonly<Record<string, Readonly<Record<string, number>>>>;
 }
+
+/** The catalog as `data/bridge-catalog.json` stores it, before the loader derives the per-relation fields and narrows each outcome. */
+export type CatalogFileRecord = Omit<CatalogFile, 'relations' | 'confrontations'> & {
+  readonly relations: readonly CatalogRelationRecord[];
+  readonly confrontations: readonly CatalogConfrontationRecord[];
+};
 
 /**
  * A recorded human verdict on an identification hypothesis `a ≟ b`.

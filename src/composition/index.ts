@@ -3,9 +3,10 @@
  * `composeEdges()` beside the catalog (NOT replacing it; the catalog
  * in `src/bridges/index.ts` stays authoritative).
  *
- * See docs/planning/v0.8.0-Design.md and the calibration edges in
- * `./edges/calibration.js` for the pre-registered CT-1/CT-1b/CT-2
- * targets.
+ * See docs/planning/v0.8.0-Design.md for the design. The catalog edges are
+ * projected from `data/bridge-catalog.json` by `./catalog-graph.js`; the
+ * pre-registered CT-* composed ids are `REGISTERED_COMPOSITION_IDS` in
+ * `./enumerate.js`.
  *
  * @module composition
  */
@@ -77,10 +78,12 @@ export {
   forwardClosure,
 } from './identifiability.js';
 
+/** The retrodiction harness's result, prediction, refusal, report and option types. */
 export type {
   RetrodictionOutcome,
   RetrodictionPrediction,
   RetrodictionResult,
+  RetrodictionRefusal,
   RetrodictionReport,
   RetrodictionOptions,
 } from './retrodiction.js';

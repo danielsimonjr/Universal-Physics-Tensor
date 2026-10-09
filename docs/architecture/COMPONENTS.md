@@ -80,7 +80,7 @@ UPT follows a layered architecture. The TypeScript files under `src/` fall into 
 │                    │  + flat *_SI constants + Labeled-         │
 │                    │  Tensor / Cell / regime layer (11 files)  │
 ├────────────────────────────────────────────────────────────────┤
-│  diff/             │  bridgeGradient + AST gradient + bridge   │
+│  diff/             │  numerical + AST gradients + bridge       │
 │                    │  specs (3 files)                          │
 ├────────────────────────────────────────────────────────────────┤
 │  relations/        │  Shared relation vocabulary: types,      │
@@ -91,7 +91,7 @@ UPT follows a layered architecture. The TypeScript files under `src/` fall into 
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**Total** (`src/` scope): 471 TypeScript files, 3553 exports (1734 re-exports), and 92 bridge catalog entries. The catalog spans ids 11–102: 56 established, 33 speculative, 3 highly-speculative. The scope also has 83 composition-graph edges, plus one `CANONICAL_GRAPH` edge per canonical equation (109 canonical equations). The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
+**Total** (`src/` scope): 471 TypeScript files, 3553 exports (1734 re-exports) at the commit the Verification block names. The bridge catalog's size, id range and status split, and the `CATALOG_GRAPH` edge count, are `NOTES.md` (the record is `data/bridge-catalog.json`); `CANONICAL_GRAPH` has one edge per canonical equation (109 canonical equations). The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
 
 (The `src/`-scope file and export counts come from the Summary Statistics in `docs/architecture/DEPENDENCY_GRAPH.md`, which `bun run docs:deps` regenerates. The catalog, canonical, graph and confrontation counts come from the built package; see Verification below.)
 
@@ -535,7 +535,7 @@ Dimensionally CHECKS a user's formula by transpiling its AST into UPT's own dime
 
 ### `TensorEngine` interface (`src/numerical/tensor-engine.ts`)
 
-The compute contract. Methods: `fromNested`, `toNested`, `einsum`, `matMul`, `transpose`, `reshape`, `add`, `sub`, `mul`, `scale`, `identity`, `normInf`. Optional: `dispose`, `forwardGrad`, `reverseGrad`. Both engines (`Float64ReferenceEngine` and `MathTSEngine`) run the shared parameterized conformance suite `tests/numerical/engine-conformance.ts`.
+The compute contract. Methods: `fromNested`, `toNested`, `einsum`, `matMul`, `transpose`, `reshape`, `add`, `sub`, `mul`, `scale`, `identity`, `normInf`. Optional: `dispose`, `forwardGrad`, `reverseGrad`. `MathTSEngine`, the one engine, runs the shared parameterized conformance suite `tests/numerical/engine-conformance.ts`.
 
 ### `EngineTensor` interface (`src/numerical/tensor-engine.ts`)
 
@@ -557,9 +557,9 @@ Returns `true` iff the engine implements both `forwardGrad` and `reverseGrad`. U
 
 Thrown when an AD method is called on an engine that does not implement it. Also thrown when `hasAutogradSupport` returns false but the caller invokes an AD method anyway.
 
-### `Float64ReferenceEngine` (`src/numerical/float64-engine.ts`)
+### `Float64ReferenceEngine` — removed
 
-The zero-dependency reference implementation of `TensorEngine`. Backed by `Float64Array`. Its module header calls it a correctness baseline, not a performance target. AD implemented inline: forward mode via dual numbers (`EngineDualTensor` primal + tangent pair), reverse mode via a tape-record approach. Both modes are synchronous internally but return `Promise` for uniform consumer semantics.
+The entry that described this class (`src/numerical/float64-engine.ts`, a `Float64Array`-backed reference engine with inline dual-number and tape AD) is the record from before the MathTS packages became required dependencies; `src/numerical/float64-engine.ts` and the `Float64ReferenceEngine` class do not exist. `MathTSEngine` (`src/numerical/mathts-engine.ts`, below under the engine registry) is the one engine.
 
 ### `evaluateNumerical(node, inputs, options?)` (`src/numerical/index.ts`)
 
@@ -594,7 +594,7 @@ The lowering pass. Translates an `ExprNode` tree into a sequence of `TensorEngin
 
 ### `getActiveEngine()` / `setActiveEngine(engine)` (`src/numerical/engine-registry.ts`)
 
-Global active-engine management. `getActiveEngine()` returns a `Promise<TensorEngine>` — async to allow lazy initialization. `setActiveEngine()` is synchronous. The default engine is `MathTSEngine` when both `@danielsimonjr/mathts-tensor` and `@danielsimonjr/mathts-autograd` are installed, and `Float64ReferenceEngine` otherwise.
+Global active-engine management. `getActiveEngine()` returns a `Promise<TensorEngine>` — async to allow lazy initialization. `setActiveEngine()` is synchronous. The engine is `MathTSEngine` (`src/numerical/mathts-engine.ts`, reached through the `universal-physics-tensor/numerical/mathts-engine` subpath); the MathTS packages are required, so there is no absent-peer branch.
 
 ### `NumericalBackendError` (`src/numerical/errors.ts`)
 
@@ -720,7 +720,7 @@ These constants are the single source of truth for physical constants across the
 
 ### Intelligent-index / regime layer (`src/core/labeled-tensor.ts`, `axes-registry.ts`, `universal-index.ts`, `cell.ts`, `flux-rules.ts`, `regime-registry.ts`, …)
 
-The intelligent-index layer lives in `core/`. This layer has three parts: `LabeledTensor` (semantic axis labels — see `docs/architecture/intelligent-index-tutorial.md`), the axes/universal-index registries, and the `Cell`/flux-rule/regime-registry machinery. The `compose` Cell factory lives here — not to be confused with the `composeEdges` composition operator. Flux **Rule 3 (Causality) is ERROR-tier**: a reverse-arrow `BridgeCell` (coarser→finer scale) fail-atomics at `addCell` unless whitelisted. The sibling `diff/` module holds `bridgeGradient` + the bridge specs (see `docs/architecture/bridge-gradient-tutorial.md`).
+The intelligent-index layer lives in `core/`. This layer has three parts: `LabeledTensor` (semantic axis labels — see `docs/architecture/intelligent-index-tutorial.md`), the axes/universal-index registries, and the `Cell`/flux-rule/regime-registry machinery. The `compose` Cell factory lives here — not to be confused with the `composeEdges` composition operator. Flux **Rule 3 (Causality) is ERROR-tier**: a reverse-arrow `BridgeCell` (coarser→finer scale) fail-atomics at `addCell` unless whitelisted. The sibling `diff/` module holds `bridgeGradientNumerical`, `bridgeGradientAST` and the bridge specs (see `docs/architecture/bridge-gradient-tutorial.md`).
 
 **`LabeledTensor` axis order and reshape.** An explicit `axisOrder: readonly string[]` field (label keys in engine-axis order) is the authoritative label↔axis mapping, queried through `axisOf(key)`. `transpose`/`contract` can leave the engine axes in a non-sorted order. `axisOrder` records the real order; `AxisOrderError` guards a bad explicit order (an optional 4th constructor param). `mergeAxes(keys, merged)` / `splitAxis(key, parts)` add rank-changing reshape on top of this: they fuse a contiguous run of engine axes into one caller-labelled axis, and its inverse. `AxisMergeError` / `AxisSplitError` guard these two operations. All three error classes are `@public`.
 
@@ -818,7 +818,7 @@ src/index.ts
   ├── src/dimensional/curvature-invariants.ts  (validateKretschmannScalar)
   ├── src/numerical/index.ts        (evaluateNumerical, evaluateNumericalRaw,
   │   ├── src/numerical/tensor-engine.ts   evaluateMetricInverse, NumericalResult,
-  │   ├── src/numerical/float64-engine.ts  Float64ReferenceEngine, TensorEngine,
+  │   ├── src/numerical/mathts-engine.ts   MathTSEngine (subpath), TensorEngine,
   │   ├── src/numerical/engine-registry.ts getActiveEngine, setActiveEngine,
   │   ├── src/numerical/lowering.ts        NumericalBackendError, hasAutogradSupport,
   │   ├── src/numerical/gl4-integrator.ts  integrateGeodesicGL4, findPerihelion)

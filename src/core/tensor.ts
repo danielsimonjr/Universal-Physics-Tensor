@@ -32,6 +32,16 @@ import type { FluxRule, FluxReport, FluxDiagnostic } from './flux-rules.js';
 import { runRules, V07_CELL_RULES, FluxViolationError } from './flux-rules.js';
 
 /**
+ * The entry an `addCell` call is about to replace, held so a flux-rule
+ * failure can put it back (fail-atomic on a replacement, not only on a
+ * fresh id).
+ */
+type PreviousEntry =
+  | { readonly kind: 'law'; readonly law: PhysicalLaw }
+  | { readonly kind: 'bridge'; readonly bridge: BridgeEquation }
+  | { readonly kind: 'emergence'; readonly phenomenon: EmergentPhenomenon };
+
+/**
  * Map the string-vocabulary {@link CellConfidence} to a representative
  * numeric value in [0,1] for the legacy `addLaw` / `addBridge` /
  * `addEmergence` path (each validates `confidence >= 0 && <= 1`).
@@ -392,8 +402,11 @@ export class UniversalTensor {
     // v0.7-p2 Phase 2 Task 2.3: dispatch to legacy add method FIRST
     // (catches structural-validation throws on bad inputs), then run
     // flux rules. ERROR-tier diagnostics throw FluxViolationError and
-    // roll back the legacy add by removing the freshly-stored entry
-    // (fail-atomic per Decision #4).
+    // roll back the legacy add (fail-atomic per Decision #4). The add may
+    // REPLACE an entry with the same id, so the entry that was there is
+    // snapshotted first and put back on rollback; deleting the id would
+    // erase a good record because its replacement was bad.
+    const previous = this.snapshotEntry(cell);
     let newlyAdded: boolean;
     switch (cell.kind) {
       case 'law':
@@ -422,22 +435,48 @@ export class UniversalTensor {
       const errDiag = report.diagnostics.find((d) => d.severity === 'error');
       if (errDiag) {
         // Roll back the legacy add before throwing (fail-atomic).
-        this.rollbackCell(cell);
+        this.rollbackCell(cell, previous);
         throw new FluxViolationError(errDiag.ruleName, errDiag.cellId, errDiag.message);
       }
     }
     return newlyAdded;
   }
 
+  /** The stored entry `cell.id` currently names in its own kind's map, if any. */
+  private snapshotEntry(cell: Cell): PreviousEntry | undefined {
+    switch (cell.kind) {
+      case 'law': {
+        const law = this.knownLaws.get(cell.id);
+        return law === undefined ? undefined : { kind: 'law', law };
+      }
+      case 'bridge': {
+        const bridge = this.bridgeEquations.get(cell.id);
+        return bridge === undefined ? undefined : { kind: 'bridge', bridge };
+      }
+      case 'emergence': {
+        const phenomenon = this.emergentPhenomena.get(cell.id);
+        return phenomenon === undefined ? undefined : { kind: 'emergence', phenomenon };
+      }
+      default: {
+        const _exhaustive: never = cell;
+        void _exhaustive;
+        return undefined;
+      }
+    }
+  }
+
   /**
    * Internal helper: roll back the legacy `addLaw`/`addBridge`/
    * `addEmergence` storage for a cell that just failed a rule check.
-   * Used by `addCell` to maintain fail-atomic semantics on
-   * ERROR-tier rule violations.
+   * Removes the freshly stored entry and, when the add replaced an
+   * existing entry, stores that entry again through the same add path
+   * (it passed structural validation when it was first stored). Used by
+   * `addCell` to maintain fail-atomic semantics on ERROR-tier rule
+   * violations.
    *
    * @internal
    */
-  private rollbackCell(cell: Cell): void {
+  private rollbackCell(cell: Cell, previous: PreviousEntry | undefined): void {
     switch (cell.kind) {
       case 'law': {
         const law = this.knownLaws.get(cell.id);
@@ -448,6 +487,7 @@ export class UniversalTensor {
             this.removeFromCell(this.serializeIndices({ scale, force }), cell.id);
           }
         }
+        if (previous?.kind === 'law') this.addLaw(previous.law);
         return;
       }
       case 'bridge': {
@@ -455,6 +495,7 @@ export class UniversalTensor {
         if (!bridge) return;
         this.bridgeEquations.delete(cell.id);
         this.removeFromCell(this.bridgeCellKey(bridge.source, bridge.target), cell.id);
+        if (previous?.kind === 'bridge') this.addBridge(previous.bridge);
         return;
       }
       case 'emergence': {
@@ -465,6 +506,7 @@ export class UniversalTensor {
           const key = this.serializeIndices(indices);
           if (key) this.removeFromCell(key, cell.id);
         }
+        if (previous?.kind === 'emergence') this.addEmergence(previous.phenomenon);
         return;
       }
       default: {
@@ -723,8 +765,6 @@ export class UniversalTensor {
       occupiedCells: this.tensorData.size,
       totalEntries,
       sparse: this.config.sparse,
-      /** @deprecated use occupiedCells (cell count) or totalEntries (sum of set sizes) */
-      totalElements: this.tensorData.size,
     };
   }
 

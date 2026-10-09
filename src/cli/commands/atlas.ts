@@ -413,7 +413,6 @@ async function run(ctx: CommandCtx): Promise<number> {
           },
     preserves: [...b.preserves],
     doesNotPreserve: [...b.doesNotPreserve],
-    storedEvidence: [...b.evidence].sort(),
     formallyProved: derived.has('formally-proved'),
     derivedEvidence,
     provedWithUnresolvedCounterexample: unresolvedCounterexample,
@@ -471,7 +470,6 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   list('preserves', b.preserves);
   list('does NOT preserve', b.doesNotPreserve);
-  out(`stored evidence: ${report.storedEvidence.join(', ') || 'none'}`);
   out(`derived evidence: ${report.derivedEvidence.join(', ') || 'none'}`);
   out(
     `formally-proved (derived from formalRef): ${

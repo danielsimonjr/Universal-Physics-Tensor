@@ -116,9 +116,11 @@ export {
   listRelationMetadata,
   clearRelationMetadata,
 } from './metadata.js';
-export { makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson } from './problem.js';
+/** The problem-file readers and the error a file that is not a problem file raises, naming its field. */
+export { makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson, ProblemFileError } from './problem.js';
 export type { ProblemFile } from './problem.js';
-export { runProbeSearch } from './pipeline.js';
+/** The search pipeline and the argv a Node worker is spawned with. */
+export { runProbeSearch, nodeWorkerArgv } from './pipeline.js';
 export type { ProbeSearchOptions, ProbeSearchResult } from './pipeline.js';
 export { formatProbeReport, formatFrontierScan, formatFrontierGap } from './report.js';
 export {

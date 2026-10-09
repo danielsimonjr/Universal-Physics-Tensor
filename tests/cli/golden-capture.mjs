@@ -7,7 +7,8 @@
  * Committed so the corpus can be regenerated deliberately (after an
  * intentional CLI output change) with:
  *
- *   node tests/cli/golden-capture.mjs
+ *   node tests/cli/golden-capture.mjs            # every case
+ *   node tests/cli/golden-capture.mjs audit eval # only the named cases
  *
  * Requires a built `dist/` (`npm run build`) — the CLI refuses to run
  * against a stale/missing build.
@@ -58,7 +59,15 @@ function run(args) {
   };
 }
 
+const only = new Set(process.argv.slice(2));
+for (const wanted of only) {
+  if (!GOLDEN_CASES.some((c) => c.name === wanted)) {
+    console.error(`no golden case named '${wanted}' (see golden-cases.mjs)`);
+    process.exitCode = 1;
+  }
+}
 for (const { name, args, pinStderr, exitCode } of GOLDEN_CASES) {
+  if (only.size > 0 && !only.has(name)) continue;
   const result = run(args);
   if (result.status !== (exitCode ?? 0)) {
     console.error(`FAILED (exit ${result.status}): ${name} — args=${JSON.stringify(args)}`);

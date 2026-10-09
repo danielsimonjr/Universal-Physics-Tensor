@@ -13,11 +13,11 @@ import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { enumerateCompositions } from '../../src/composition/enumerate.js';
 import {
-  categoryCompositionForChain,
   runChainPipeline,
   type ChainStubRecord,
 } from '../../src/atlas/chain-pipeline.js';
 import { bridgeSeedKeys } from '../../src/atlas/physjs-ref.js';
+import { CENSUS } from '../helpers/census.js';
 
 const SNAPSHOT: unknown = JSON.parse(
   readFileSync(fileURLToPath(new URL('./chain-pipeline-catalog.golden.json', import.meta.url)), 'utf8'),
@@ -29,7 +29,7 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
 
   it('leaves the catalog array unchanged', () => {
     expect(BRIDGE_EQUATIONS.map((row) => row.id)).toEqual(before);
-    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+    expect(BRIDGE_EQUATIONS).toHaveLength(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
@@ -64,11 +64,7 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
     );
   });
 
-  it('records an unset category claim and one provisional stub', () => {
-    const seeded = enumerateCompositions(CATALOG_GRAPH, { seedIds: new Set(bridgeSeedKeys()) });
-    for (const target of seeded.proofTargets) {
-      expect(categoryCompositionForChain(target.first, target.second)).toBeUndefined();
-    }
+  it('records one provisional stub', () => {
     const stubs = result.filter((row): row is ChainStubRecord => row.kind === 'stub');
     expect(stubs.map((row) => row.edgeIds)).toEqual([['be-74', 'be-76']]);
   });

@@ -631,8 +631,18 @@ export async function compareUserEquation(
   try {
     await parsePhysics(rhs, dims);
     compiled = (await getFormulaParser()).parse(rhs);
-  } catch {
-    return [];
+  } catch (error) {
+    // "The equation could not be read" is a different fact from "no canonical
+    // equation has this target and these variables"; an empty list says the
+    // second. The row carries the parser's message (9.0.0 audit §4 C7).
+    return [
+      {
+        id: target,
+        name: equation,
+        kind: 'not-compared',
+        detail: `the equation did not parse: ${error instanceof Error ? error.message : String(error)}`,
+      },
+    ];
   }
   const overrides = options?.constantOverrides;
   const constantValues = Object.fromEntries(

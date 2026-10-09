@@ -16,6 +16,8 @@ import { NONMONOMIAL } from '../../src/canonical/entries/nonmonomial.js';
 import { canonicalById } from '../../src/canonical/registry.js';
 import { validate } from '../../src/dimensional/validator.js';
 import { equals } from '../../src/dimensional/algebra.js';
+import { evalExpr } from '../../src/composition/expr-eval.js';
+import { canonicalPrefactor } from '../../src/composition/canonical-prefactors.js';
 
 describe('NONMONOMIAL pilot entries', () => {
   it('all non-monomial entries are registered', () => {
@@ -148,5 +150,37 @@ describe('NONMONOMIAL pilot entries', () => {
     expect(
       equals(res.inferredDimension!, { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 }),
     ).toBe(true);
+  });
+});
+
+describe('CE-normal-distribution: one numeric point of the whole density', () => {
+  // p(x) = e^{-(x-μ)²/(2σ²)} / (σ √(2π)). At x − μ = 1, σ = 1 the exponential is e^{-1/2}.
+  // An AST that divides by σ² alone gives e^{-1}, a different function, not a prefactor.
+  const entry = canonicalById('CE-normal-distribution')!;
+  const point = { 'standard-deviation': 1, 'deviation-from-mean': 1 };
+
+  it('the AST carries the ½ inside the exponent: e^{-1/2} at (x−μ, σ) = (1, 1)', () => {
+    expect(evalExpr(entry.scalarAst!, point)).toBeCloseTo(Math.exp(-0.5), 12);
+  });
+
+  it('the sourced prefactor is 1/√(2π), so the whole density is 0.24197 at that point', () => {
+    expect(canonicalPrefactor(entry.id)).toBeCloseTo(1 / Math.sqrt(2 * Math.PI), 15);
+    const density = canonicalPrefactor(entry.id)! * evalExpr(entry.scalarAst!, point);
+    expect(density).toBeCloseTo(Math.exp(-0.5) / Math.sqrt(2 * Math.PI), 12);
+    expect(density).toBeCloseTo(0.24197072451914337, 12);
+  });
+
+  it('a σ ≠ 1 point: at (x−μ, σ) = (0.9, 0.7) the density is e^{-0.81/0.98}/(0.7√(2π)), so the 1/σ and the σ² are both pinned', () => {
+    const at = { 'standard-deviation': 0.7, 'deviation-from-mean': 0.9 };
+    expect(evalExpr(entry.scalarAst!, at)).toBeCloseTo(Math.exp(-0.81 / 0.98) / 0.7, 12);
+    const density = canonicalPrefactor(entry.id)! * evalExpr(entry.scalarAst!, at);
+    expect(density).toBeCloseTo(Math.exp(-0.81 / 0.98) / (0.7 * Math.sqrt(2 * Math.PI)), 12);
+    // Both points above have σ = 1, where 1/σ and 1/σ² are indistinguishable from 1.
+    expect(density).not.toBeCloseTo(Math.exp(-0.81 / 0.98) / Math.sqrt(2 * Math.PI), 6);
+  });
+
+  it('control: the density at (2, 1) is e^{-2}/√(2π), so a σ instead of a 2σ² would be caught there too', () => {
+    const at2 = canonicalPrefactor(entry.id)! * evalExpr(entry.scalarAst!, { ...point, 'deviation-from-mean': 2 });
+    expect(at2).toBeCloseTo(Math.exp(-2) / Math.sqrt(2 * Math.PI), 12);
   });
 });

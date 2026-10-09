@@ -24,6 +24,13 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import type { AtlasBridge, AtlasRejection, Witness } from '../../src/atlas/types.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
+import { deriveEvidence } from '../../src/atlas/derive-evidence.js';
+import { artifactPassingWitnessIds, type WitnessResultsArtifact } from '../../src/atlas/witness-artifact.js';
+
+/** The committed witness results: which witnesses pass is decided here, not on a record. */
+const witnessResults = JSON.parse(
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../data/atlas/witness-results.json'), 'utf-8'),
+) as WitnessResultsArtifact;
 
 /** The closed list of Phase 0 witness ids (design note §6). */
 const KNOWN_WITNESSES: readonly string[] = [
@@ -127,20 +134,34 @@ describe('evidence-rule — the scan is not vacuous', () => {
   });
 });
 
-describe('evidence-rule — every tag is witness-backed', () => {
-  it('gives every bridge carrying evidence at least one witness from the closed list', () => {
+describe('evidence-rule — every derived tag is witness-backed, and no record stores one', () => {
+  const derived = (b: AtlasBridge): ReadonlySet<string> => deriveEvidence(b, artifactPassingWitnessIds(witnessResults, b.id));
+
+  it('no record carries an evidence field: the set is derived, never stored', () => {
+    for (const b of bridges) expect(Object.hasOwn(b, 'evidence'), b.id).toBe(false);
+  });
+
+  it('every bridge deriving a witness-governed tag has that witness in the closed list and checked in the artifact', () => {
     const offenders: string[] = [];
     for (const b of bridges) {
-      if (b.evidence.size === 0) continue;
-      const backed = b.witnesses.some((w) => KNOWN_WITNESSES.includes(w.id));
-      if (!backed) offenders.push(`${b.id}: tags [${[...b.evidence].join(', ')}] have no witness`);
+      const tags = derived(b);
+      const governed = [...tags].filter((t) => t === 'numerically-supported' || t === 'symbolically-checked');
+      if (governed.length === 0) continue;
+      const checked = [...artifactPassingWitnessIds(witnessResults, b.id)];
+      const backed = checked.some((id) => KNOWN_WITNESSES.includes(id) && b.witnesses.some((w) => w.id === id));
+      if (!backed) offenders.push(`${b.id}: derived [${governed.join(', ')}] with no checked witness from the closed list`);
     }
     expect(offenders).toEqual([]);
   });
 
-  it('carries no evidence tag on a record with no witnesses at all', () => {
+  it('the rule is not vacuous: every bridge derives a witness-governed tag, and stripping the artifact removes them all', () => {
+    const withTags = bridges.filter((b) => [...derived(b)].some((t) => t === 'numerically-supported' || t === 'symbolically-checked'));
+    expect(withTags.length).toBeGreaterThan(0);
+    const empty: WitnessResultsArtifact = { schemaVersion: '0', results: [] };
     for (const b of bridges) {
-      if (b.witnesses.length === 0) expect(b.evidence.size).toBe(0);
+      const tags = deriveEvidence(b, artifactPassingWitnessIds(empty, b.id));
+      expect(tags.has('numerically-supported'), b.id).toBe(false);
+      expect(tags.has('symbolically-checked'), b.id).toBe(false);
     }
   });
 });

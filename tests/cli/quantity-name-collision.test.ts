@@ -6,18 +6,9 @@
  *
  * In-process against the built CLI (`dist/cli/main.js`).
  */
+import '../helpers/dist.js';
+import { run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
-import { runCli } from '../../dist/cli/main.js';
-
-async function run(argv: string[]) {
-  const o = { stdout: '', stderr: '' };
-  const code = await runCli(argv, {
-    out: (l?: string) => void (o.stdout += (l ?? '') + '\n'),
-    err: (l?: string) => void (o.stderr += (l ?? '') + '\n'),
-    write: (s: string) => void (o.stdout += s),
-  });
-  return { code, ...o };
-}
 
 describe('quantity names that collide with MathTS functions', () => {
   it('sound speed with gamma is dimensionally a velocity and is not refused', async () => {

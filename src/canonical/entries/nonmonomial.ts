@@ -113,19 +113,19 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
   l1(
     { name: 'photoelectron-max-energy', dim: ENERGY },
     [
-      { name: 'planck-constant', dim: PLANCK },
+      { name: 'h', dim: PLANCK },
       { name: 'photon-frequency', dim: FREQUENCY },
       { name: 'work-function', dim: ENERGY },
     ],
     {
       id: 'CE-photoelectric',
-      holds: 'planck-constant * photon-frequency >= work-function and work-function >= 0',
+      holds: 'h * photon-frequency >= work-function and work-function >= 0',
       name: 'Photoelectric equation',
       domain: 'quantum',
       formula_latex: 'K_{\\max} = h f - W',
       epistemicStatus: 'fully-quantitative', // exact: hf − W (both energy)
       scalarAst: op('-', [
-        op('*', [sym('planck-constant', PLANCK), sym('photon-frequency', FREQUENCY)]),
+        op('*', [sym('h', PLANCK), sym('photon-frequency', FREQUENCY)]),
         sym('work-function', ENERGY),
       ]),
       regime: { scale: 'quantum' },
@@ -165,7 +165,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     { name: 'boltzmann-factor', dim: DIMENSIONLESS },
     [
       { name: 'state-energy', dim: ENERGY },
-      { name: 'boltzmann-constant', dim: BOLTZMANN },
+      { name: 'k_B', dim: BOLTZMANN },
       { name: 'temperature', dim: TEMPERATURE },
     ],
     {
@@ -182,7 +182,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
           sym('-1', DIMENSIONLESS),
           op('/', [
             sym('state-energy', ENERGY),
-            op('*', [sym('boltzmann-constant', BOLTZMANN), sym('temperature', TEMPERATURE)]),
+            op('*', [sym('k_B', BOLTZMANN), sym('temperature', TEMPERATURE)]),
           ]),
         ]),
       },
@@ -196,11 +196,11 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     { name: 'lorentz-factor', dim: DIMENSIONLESS },
     [
       { name: 'velocity', dim: VELOCITY },
-      { name: 'speed-of-light', dim: VELOCITY },
+      { name: 'c', dim: VELOCITY },
     ],
     {
       id: 'CE-lorentz-factor',
-      holds: 'abs(velocity) < speed-of-light',
+      holds: 'abs(velocity) < c',
       name: 'Lorentz factor',
       domain: 'mechanics', // SR precedent — matches CE-mass-energy's domain
       formula_latex: '\\gamma = \\left(1 - \\tfrac{v^2}{c^2}\\right)^{-1/2}',
@@ -212,7 +212,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
           sym('1', DIMENSIONLESS),
           op('/', [
             pow(sym('velocity', VELOCITY), '2'),
-            pow(sym('speed-of-light', VELOCITY), '2'),
+            pow(sym('c', VELOCITY), '2'),
           ]),
         ]),
         '-0.5',
@@ -226,9 +226,9 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
   l1(
     { name: 'compton-wavelength-shift', dim: LENGTH },
     [
-      { name: 'planck-constant', dim: PLANCK },
-      { name: 'electron-mass', dim: MASS },
-      { name: 'speed-of-light', dim: VELOCITY },
+      { name: 'h', dim: PLANCK },
+      { name: 'm_e', dim: MASS },
+      { name: 'c', dim: VELOCITY },
       { name: 'scattering-angle', dim: DIMENSIONLESS },
     ],
     {
@@ -241,8 +241,8 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
       // (h/(m·c))·(1 − cos θ); the cos arg (scattering angle) is dimensionless.
       scalarAst: op('*', [
         op('/', [
-          sym('planck-constant', PLANCK),
-          op('*', [sym('electron-mass', MASS), sym('speed-of-light', VELOCITY)]),
+          sym('h', PLANCK),
+          op('*', [sym('m_e', MASS), sym('c', VELOCITY)]),
         ]),
         op('-', [
           sym('1', DIMENSIONLESS),
@@ -375,7 +375,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
   l1(
     { name: 'boltzmann-entropy', dim: BOLTZMANN },
     [
-      { name: 'boltzmann-constant', dim: BOLTZMANN },
+      { name: 'k_B', dim: BOLTZMANN },
       { name: 'microstate-count', dim: DIMENSIONLESS },
     ],
     {
@@ -386,7 +386,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
       formula_latex: 'S = k_B \ln W',
       epistemicStatus: 'fully-quantitative', // exact closed form
       scalarAst: op('*', [
-        sym('boltzmann-constant', BOLTZMANN),
+        sym('k_B', BOLTZMANN),
         {
           kind: 'transcendental',
           fn: 'ln',
@@ -408,12 +408,18 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-normal-distribution',
+      prefactor: {
+        value: 1 / Math.sqrt(2 * Math.PI),
+        quote: String.raw`\frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}`,
+        locator: "Wikipedia, 'Normal distribution', revision 1376230387, wikitext line 14",
+      },
       name: 'Normal (Gaussian) distribution',
       domain: 'statistical',
       formula_latex:
         'p(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-(x-\\mu)^2 / 2\\sigma^2}',
-      // The 1/√(2π) normalisation is a pure numeric prefactor, recorded the way
-      // the other prefactors in this registry are.
+      // The 1/√(2π) normalisation is the sourced prefactor above. The ½ in the
+      // exponent is NOT a prefactor: e^{-u²/(2σ²)} and e^{-u²/σ²} are different
+      // functions, so the 2 stays inside the AST.
       epistemicStatus: 'scalar-up-to-constant',
       scalarAst: op('/', [
         {
@@ -423,7 +429,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
             sym('-1', DIMENSIONLESS),
             op('/', [
               pow(sym('deviation-from-mean', LENGTH), '2'),
-              pow(sym('standard-deviation', LENGTH), '2'),
+              op('*', [sym('2', DIMENSIONLESS), pow(sym('standard-deviation', LENGTH), '2')]),
             ]),
           ]),
         },

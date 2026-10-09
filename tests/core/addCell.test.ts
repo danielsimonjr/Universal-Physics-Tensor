@@ -24,6 +24,7 @@ import type {
   EmergenceCell,
 } from '../../src/core/cell.js';
 import type { TensorConfig } from '../../src/core/types.js';
+import { FluxViolationError } from '../../src/core/flux-rules.js';
 
 const baseConfig: TensorConfig = {
   rank: 3,
@@ -165,5 +166,77 @@ describe('compose(L, B, E, config) factory', () => {
     expect(tensor.getLaws()[0].id).toBe(laws[0].id);
     expect(tensor.getBridges()[0].id).toBe(bridges[0].id);
     expect(tensor.getEmergence()[0].id).toBe(emergences[0].id);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fail-atomic on a REPLACEMENT (9.0.0 audit §2 N4). `addCell` replaces an
+// existing id first and runs the flux rules second; when a rule then fails,
+// the rollback used to delete the id instead of restoring the entry that was
+// there, so one bad replacement erased a good record.
+// ---------------------------------------------------------------------------
+
+describe('UniversalTensor.addCell is fail-atomic on a replacement (N4)', () => {
+  it('a law replacement that fails a flux rule leaves the previous law in place', () => {
+    const tensor = new UniversalTensor(baseConfig);
+    expect(tensor.addCell(sampleLaw)).toBe(true);
+    const before = tensor.getStats();
+
+    const bad: LawCell = { ...sampleLaw, name: 'broken replacement', forces: [] };
+    expect(() => tensor.addCell(bad)).toThrow(FluxViolationError);
+
+    const laws = tensor.getLaws();
+    expect(laws).toHaveLength(1);
+    expect(laws[0]!.name).toBe("Newton's Second Law");
+    expect(tensor.getStats()).toEqual(before);
+  });
+
+  it('a bridge replacement that fails the causality rule leaves the previous bridge in place', () => {
+    const tensor = new UniversalTensor(baseConfig);
+    expect(tensor.addCell(sampleBridge)).toBe(true);
+    const before = tensor.getStats();
+
+    // Coarser → finer scale is a reverse-causality arrow: Rule 3, ERROR tier.
+    const reversed: BridgeCell = { ...sampleBridge, source: { scale: 'classical' }, target: { scale: 'quantum' } };
+    expect(() => tensor.addCell(reversed)).toThrow(FluxViolationError);
+
+    const bridges = tensor.findBridges({ scale: 'quantum' }, { scale: 'classical' });
+    expect(bridges).toHaveLength(1);
+    expect(bridges[0]!.id).toBe('bridge-decoherence');
+    expect(tensor.findBridges({ scale: 'classical' }, { scale: 'quantum' })).toHaveLength(0);
+    expect(tensor.getStats()).toEqual(before);
+  });
+
+  it('an emergence replacement that fails a flux rule leaves the previous phenomenon in place', () => {
+    const tensor = new UniversalTensor(baseConfig);
+    expect(tensor.addCell(sampleEmergence)).toBe(true);
+    const before = tensor.getStats();
+
+    // Rule 2 wants at least two coordinates on an emergence cell.
+    const bad: EmergenceCell = { ...sampleEmergence, indices: [{ scale: 'mesoscopic', force: 'electromagnetic' }] };
+    expect(() => tensor.addCell(bad)).toThrow(FluxViolationError);
+
+    const emergences = tensor.getEmergence();
+    expect(emergences).toHaveLength(1);
+    expect(emergences[0]!.indices).toHaveLength(2);
+    expect(tensor.getStats()).toEqual(before);
+  });
+
+  it('a fresh id that fails a flux rule is still rolled back to nothing (control)', () => {
+    const tensor = new UniversalTensor(baseConfig);
+    const bad: LawCell = { ...sampleLaw, forces: [] };
+    expect(() => tensor.addCell(bad)).toThrow(FluxViolationError);
+    expect(tensor.getLaws()).toHaveLength(0);
+    expect(tensor.getStats().occupiedCells).toBe(0);
+  });
+});
+
+describe('getStats has one cell count', () => {
+  it('does not carry the deprecated duplicate totalElements', () => {
+    const tensor = new UniversalTensor(baseConfig);
+    tensor.addCell(sampleLaw);
+    const stats = tensor.getStats();
+    expect(stats.occupiedCells).toBe(1);
+    expect('totalElements' in stats).toBe(false);
   });
 });

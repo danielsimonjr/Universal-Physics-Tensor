@@ -14,12 +14,12 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
         8pi   8π                                      25.132741228718345     1             mathematical constant (8·Math.PI)
         mass  input quantity mass (symbol M), [mass]  1.989e+30              kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
         G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
-      value @ mass = M_sun:  5.9031e-31  (= composed, [energy])
+      value @ mass = M_sun:  5.90314382330208e-31  (= composed, [energy])
       confidence: highly-speculative. This chain stays provisional. upt atlas be-42 and be-16 show those edges' formalRefs; neither page is this grade.
 
   ● CT-1b (Schwarzschild radius composed with Hawking temperature, name-match junction)
       composed:   hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))
-      simplified: hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))  (unchanged — minimal, MathTS absent, or not reducible here)
+      simplified: hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))  (unchanged — minimal, or not reducible here)
       latex:      \text{hawking-temperature}(\mathrm{mass}) = \frac{\hbar \cdot c}{4\pi \cdot k_{\mathrm{B}} \cdot \frac{2 \cdot G \cdot \mathrm{mass}}{{c}^{2}}}
       eval form:  upt eval "hbar*c/((4*pi)*k_B*(2*G*mass/c^2))" hbar=1.0545718176461565e-34 c=299792458 k_B=1.380649e-23 G=6.6743e-11 mass=1.989e+30
       symbols:
@@ -29,7 +29,7 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
         k_B   Boltzmann constant                      1.380649e-23           J/K           exact SI, 2019 redefinition (core/constants.ts K_B_SI)
         G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
         mass  input quantity mass (symbol M), [mass]  1.989e+30              kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
-      value @ mass = M_sun:  6.1684e-8  (= composed, [temperature])
+      value @ mass = M_sun:  6.16842971641034e-8  (= composed, [temperature])
       confidence: highly-speculative. This chain stays provisional. upt atlas be-42 shows that edge's formalRef; that page is not this grade.
 
   Both compose by AST substitution at the junction and match the numeric composeEdges

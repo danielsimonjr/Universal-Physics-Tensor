@@ -82,7 +82,19 @@ export interface SearchMatch {
   readonly prefixes?: readonly PrefixMatch[];
 }
 
+/**
+ * Words `upt search` and the phrase matcher do not require of a field. A single letter is
+ * not one: `a` and `b` are symbols (`truncation-coefficient-a`, the impact parameter), and
+ * a word the query gave is either matched or reported, never dropped (Tom's review of #502).
+ */
 export const STOP_WORDS: ReadonlySet<string> = new Set(['of', 'the', 'and', 'for', 'in', 'an']);
+
+/**
+ * The wider list the NOT-COVERED suggestion drops from a failed `explain` name before it
+ * searches: a name's function words (`not-a-quantity`, `rate-of-change`) are not what the
+ * reader asked for. Only {@link searchNameWords} reads it.
+ */
+const SUGGESTION_STOP_WORDS: ReadonlySet<string> = new Set([...STOP_WORDS, 'a', 'not', 'is', 'to', 'by', 'on', 'at', 'with', 'from', 'or', 'as', 'no']);
 
 /**
  * The kind of thing a name asks for. A suggestion may not drop one of these,
@@ -429,7 +441,7 @@ export function searchNameWords(
 ): { readonly words: readonly string[]; readonly matches: readonly SearchMatch[] } | null {
   const all = name
     .split(/[-_\s]+/)
-    .filter((w) => w.length >= MIN_SUGGESTION_TOKEN && !STOP_WORDS.has(fold(w)))
+    .filter((w) => w.length >= MIN_SUGGESTION_TOKEN && !SUGGESTION_STOP_WORDS.has(fold(w)))
     .slice(0, 6);
   if (all.length === 0) return null;
   const index = buildSearchIndex(api);

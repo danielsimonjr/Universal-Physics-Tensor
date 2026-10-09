@@ -2,25 +2,20 @@
  * `upt probe study --data=FILE` (audit §14 I19), in-process. The fixtures are
  * SYNTHETIC controls (see tests/fixtures/probe-study/generate.mjs).
  */
+import '../helpers/dist.js';
+import { captureMerged, text } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { runCli } from '../../dist/cli/main.js';
-
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
+import { tempDir } from '../helpers/tmp.js';
 
 const dir = join(dirname(fileURLToPath(import.meta.url)), '../fixtures/probe-study');
 const fixture = (name: string) => join(dir, `${name}.synthetic.json`);
 
 async function study(name: string, ...extra: string[]) {
-  const c = capture();
+  const c = captureMerged();
   const code = await runCli(['probe', 'study', `--data=${fixture(name)}`, ...extra], c.io);
   return { code, out: text(c) };
 }
@@ -70,24 +65,24 @@ describe('upt probe study', () => {
   it('a unit mismatch refuses the file: exit 1, the row named, no stack trace', async () => {
     const raw = JSON.parse(readFileSync(fixture('pendulum-small-angle'), 'utf8'));
     raw.observations[0].observed = '2 kg';
-    const p = join(mkdtempSync(join(tmpdir(), 'upt-study-')), 'bad.json');
+    const p = join(tempDir('upt-study-'), 'bad.json');
     writeFileSync(p, JSON.stringify(raw));
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['probe', 'study', `--data=${p}`], c.io)).toBe(1);
     expect(text(c)).toMatch(/study refused \(observation e1 observed\): 'kg' is \[mass\]/);
     expect(text(c)).not.toMatch(/at \w+ \(/);
   });
 
-  it('usage errors: no --data, bad --alpha', async () => {
-    const c = capture();
+  it('a missing --data is usage (2); a bad --alpha is a bad value (1)', async () => {
+    const c = captureMerged();
     expect(await runCli(['probe', 'study'], c.io)).toBe(2);
     expect(text(c)).toMatch(/--data=FILE is required/);
-    const c2 = capture();
-    expect(await runCli(['probe', 'study', `--data=${fixture('pure-noise')}`, '--alpha=2'], c2.io)).toBe(2);
+    const c2 = captureMerged();
+    expect(await runCli(['probe', 'study', `--data=${fixture('pure-noise')}`, '--alpha=2'], c2.io)).toBe(1);
   });
 
   it('help probe documents the study file, the roles and the verdicts', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['help', 'probe'], c.io)).toBe(0);
     const t = text(c);
     expect(t).toMatch(/STUDY FILE/);
@@ -98,7 +93,7 @@ describe('upt probe study', () => {
   });
 
   it('help probe documents CSV, input σ, the correction family, --replication, and that no control is blind', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['help', 'probe'], c.io)).toBe(0);
     const t = text(c);
     expect(t).toMatch(/--replication=FILE/);
@@ -109,7 +104,7 @@ describe('upt probe study', () => {
   });
 
   it('help probe documents several correction families and the too-close replication outcome', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['help', 'probe'], c.io)).toBe(0);
     const t = text(c);
     expect(t).toMatch(/or a list of them, one per input \(at most 6 powers in all\)/);
@@ -124,7 +119,7 @@ describe('upt probe study — CSV, replication file', () => {
   const studyJson = file('pendulum-large-amplitude.synthetic.json');
   const repCsv = file('pendulum-large-amplitude.replication.synthetic.csv');
   const runArgs = async (...argv: string[]) => {
-    const c = capture();
+    const c = captureMerged();
     const code = await runCli(['probe', 'study', ...argv], c.io);
     return { code, out: text(c) };
   };
@@ -158,7 +153,7 @@ describe('upt probe study — CSV, replication file', () => {
         .filter((o: { role: string }) => o.role === 'exploratory')
         .map((o: { id: string }) => ({ ...o, id: `c-${o.id}`, role: 'replication' })),
     };
-    const p = join(mkdtempSync(join(tmpdir(), 'upt-study-')), 'renamed.json');
+    const p = join(tempDir('upt-study-'), 'renamed.json');
     writeFileSync(p, JSON.stringify(copy));
     const { code, out } = await runArgs(`--data=${studyJson}`, `--replication=${p}`);
     expect(code).toBe(1);
@@ -172,7 +167,7 @@ describe('upt probe study — CSV, replication file', () => {
     // The CLI names the resolved path, which on Windows carries a drive letter and backslashes.
     const resolvedMissing = resolve('/nonexistent/rep.json').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     expect(missing.out).toMatch(new RegExp(`file not found: ${resolvedMissing}`));
-    const p = join(mkdtempSync(join(tmpdir(), 'upt-study-')), 'broken.json');
+    const p = join(tempDir('upt-study-'), 'broken.json');
     writeFileSync(p, '{ not json');
     const broken = await runArgs(`--data=${studyJson}`, `--replication=${p}`);
     expect(broken.code).toBe(1);

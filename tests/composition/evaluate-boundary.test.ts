@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { DomainViolationError } from '../../src/bridges/evaluation-errors.js';
 import { evaluateRelation, evaluatorOutput } from '../../src/composition/evaluate-relation.js';
@@ -111,8 +112,8 @@ describe('a required input that does not enter the formula is said so (issue 451
   it('the CLI prints the note for the evaluator that still has an unused input', async () => {
     const key = unusedInputKeys(BRIDGE_EVALUATORS.get(170)!)[0]!;
     const cap = capture();
-    // onsager_B_T is a validity condition (B = 0), not a term of the value
-    await runCli(['evaluate', 'be-170', 'L12=3', 'onsager_B_T=0'], cap.io);
+    // B_T is a validity condition (|B| <= 1 pT), not a term of the value
+    await runCli(['evaluate', 'be-170', 'L12=3', 'B_T=0'], cap.io);
     expect(cap.lines.join('')).toMatch(new RegExp(`${key}.*does not enter`));
   });
 });

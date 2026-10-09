@@ -51,12 +51,14 @@ describe('canonical graph evaluator applies the sourced prefactor', () => {
     expect(lines.join('')).toContain('Recovered value: 144');
   });
 
-  it('keeps field energy and Larmor as decoys, and Stokes–Einstein derived at 1/(6π)', () => {
+  it('derives field energy on ε₀ and Larmor on {c, ε₀}, and Stokes–Einstein at 1/(6π)', () => {
     const field = attemptDerivation(edge('CE-field-energy-density'));
     const larmor = attemptDerivation(edge('CE-larmor-power'));
     const stokes = attemptDerivation(edge('CE-stokes-einstein'));
-    expect(field.status).toBe('decoy');
-    expect(larmor.status).toBe('decoy');
+    // ε₀ joined the closure constants on 2026-10-09 (the entries bake it); before that the audit
+    // closed these two on {ℏ, c, G, e} and called the mismatch a decoy.
+    expect(field.status).toBe('derived');
+    expect(larmor.status).toBe('derived');
     expect(stokes.status).toBe('derived');
     expect(stokes.cleanPrefactor).toBe(true);
     expect(stokes.prefactor).toBeCloseTo(1 / (6 * Math.PI), 12);

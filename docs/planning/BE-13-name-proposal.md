@@ -1,6 +1,6 @@
 # BE-13 name
 
-> **Status as of 2026-10-01.** The catalog name is `Einstein trace reduction`. The id is still 13. The module file is still `src/bridges/equations/be-13-einstein-trace.ts`. Jacobson stays in the context, the notes, and the references. `PhysJS.Einstein.trace_eq` is kind `reduction` and declines Jacobson's thermodynamic derivation. The paragraphs below are the proposal as written, before that rename.
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. The paragraphs below are the proposal as written, before the rename it asked for; the catalog name is the record in `data/bridge-catalog.json`.
 
 The catalog name this proposal was written against is `Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)`.
 

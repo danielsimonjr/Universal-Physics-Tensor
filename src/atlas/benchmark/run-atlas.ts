@@ -82,15 +82,26 @@ export const ABLATION_CONFIGS: ReadonlyArray<readonly [string, AtlasRunConfig]> 
   ['+ regimes', FULL_CONFIG],
 ];
 
-/** The instrument each applicability finding belongs to. */
-const FINDING_INSTRUMENT: Readonly<Record<ApplicabilityFindingKind, 'assumptions' | 'dimensionsAndConventions' | 'models'>> = {
+/**
+ * The instrument each applicability finding belongs to.
+ *
+ * `model-incompatibility` has no entry: a benchmark item carries model IDS,
+ * not model records with families, so this runner never passes `premises`
+ * or `conclusion` to `checkApplicability` and that finding cannot arise
+ * here. The sentence that it mapped to a `'models'` instrument no config
+ * field gated is the record from before this map was narrowed; a finding of
+ * that kind now throws below, because it would mean the instrument changed
+ * without this map.
+ */
+const FINDING_INSTRUMENT: Readonly<
+  Record<Exclude<ApplicabilityFindingKind, 'model-incompatibility'>, 'assumptions' | 'dimensionsAndConventions'>
+> = {
   'dimensional-inconsistency': 'dimensionsAndConventions',
   'convention-mismatch': 'dimensionsAndConventions',
   'convention-undeclared': 'dimensionsAndConventions',
   'division-unguarded': 'assumptions',
   'division-by-zero': 'assumptions',
   'squaring-adds-solutions': 'assumptions',
-  'model-incompatibility': 'models',
 };
 
 /** Which failure kind a BLOCKING applicability finding points to. */
@@ -165,6 +176,9 @@ export function runAtlasOnItem(item: BenchmarkItem, config: AtlasRunConfig = FUL
         : { conclusionConventions: item.conventions.conclusion }),
     });
     for (const f of findings) {
+      if (f.kind === 'model-incompatibility') {
+        throw new Error('runAtlasItem: checkApplicability reported model-incompatibility without being given models');
+      }
       const instrument = FINDING_INSTRUMENT[f.kind];
       if (instrument === 'assumptions' && !config.assumptions) continue;
       if (instrument === 'dimensionsAndConventions' && !config.dimensionsAndConventions) continue;

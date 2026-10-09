@@ -130,23 +130,6 @@ export interface ValidationResult {
   violations: Violation[];
 }
 
-/**
- * Per-bridge dimensional self-check report. Each `src/bridges/equations/`
- * module exports a `validate*Dimensions(): DimensionValidationReport` helper
- * that runs `validateEquation(LHS, RHS)` and returns LHS/RHS inferred dims
- * alongside the homogeneity verdict. Lifted here so the 9+ bridge modules
- * import a single shared shape rather than redeclaring it byte-for-byte.
- *
- * Source: simplifier F2 (Wave G), confidence 88. The interface satisfies
- * Karpathy's three extraction criteria — single semantic meaning, ≥9
- * consumers, future encodings will use it.
- */
-export interface DimensionValidationReport {
-  ok: boolean;
-  lhsDim: Dimension | null;
-  rhsDim: Dimension | null;
-}
-
 interface InferContext {
   path: string;
   violations: Violation[];
@@ -197,11 +180,9 @@ function formatFreeIndices(m: Map<string, { upper: number; lower: number }>): st
 
 /**
  * Merge every `{label → counts}` entry from `source` into `target`,
- * overwriting any existing entry for the same label. v0.7.1 Phase 4
- * Task 4.3 — consolidates the eight `for (const [label, counts] of …)
- * target.set(label, counts)` instances across the `infer()` switch arms
- * into a single helper (callsites at lines 465, 527, 549, 563, 571, 581,
- * 591, 624 in pre-extraction validator.ts).
+ * overwriting any existing entry for the same label. One helper for the
+ * `for (const [label, counts] of …) target.set(label, counts)` loop that
+ * the `infer()` switch arms each used to carry.
  *
  * The semantics are an "overwrite-style" merge — child results are
  * authoritative when their labels collide with the parent context.
@@ -311,10 +292,9 @@ function resolveChildForContraction(
  * pderiv validator can pass through `of.role` (Design §13 Q1).
  */
 function resolveChildForPartialDerivative(
-  node: unknown,
+  typed: ExprNode,
   parentCtx: InferContext,
 ): PartialDerivativeChildResult {
-  const typed = node as ExprNode;
   if (typed.kind === 'tensor-symbol') {
     const result = validateTensorSymbol(typed);
     return { dim: result.dim, freeIndices: result.freeIndices, role: typed.role };
@@ -349,6 +329,18 @@ function resolveChildForPartialDerivative(
  * Recursive dimension inference. On any sub-expression error we record a
  * violation, return `null`, and let parent ops propagate the null up.
  */
+/** A decimal literal: an optional sign, digits with an optional fraction, an optional exponent. */
+const DECIMAL_LITERAL = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
+
+/**
+ * A literal exponent: a symbol whose name is a decimal literal and whose
+ * dimension is dimensionless. The name is the number; the dimension says it
+ * is a number and not a quantity that happens to be spelled with digits.
+ */
+function isLiteralExponent(node: { readonly name: string; readonly dim: Dimension }): boolean {
+  return DECIMAL_LITERAL.test(node.name) && equals(node.dim, DIMENSIONLESS);
+}
+
 function infer(node: ExprNode, ctx: InferContext): Dimension | null {
   switch (node.kind) {
     case 'symbol':
@@ -378,14 +370,13 @@ function infer(node: ExprNode, ctx: InferContext): Dimension | null {
         if (baseProbe.freeIndices.size > 0) {
           throw new TensorInScalarOpError('^');
         }
-        // Classify the exponent. A numeric-literal symbol keeps the existing
-        // behavior — it supports a DIMENSIONFUL base (e.g. c^3, r_s = …/c^2).
-        const isLiteralExp =
-          !!expNode &&
-          expNode.kind === 'symbol' &&
-          Number.isFinite(Number(expNode.name));
-        if (isLiteralExp) {
-          return power(baseDim, Number((expNode as { name: string }).name));
+        // Classify the exponent. A numeric-literal symbol supports a
+        // DIMENSIONFUL base (e.g. c^3, r_s = …/c^2). A literal is a decimal
+        // literal (`2`, `-1`, `0.5`, `1e-3`) carried by a DIMENSIONLESS
+        // symbol: `''`, `' '` and `'0x2'` are not literals, and a `2` that
+        // carries a dimension is a dimensioned exponent, which no base takes.
+        if (expNode !== undefined && expNode.kind === 'symbol' && isLiteralExponent(expNode)) {
+          return power(baseDim, Number(expNode.name));
         }
 
         // Non-literal (input-dependent) exponent. SOUND only when the base is
@@ -420,7 +411,7 @@ function infer(node: ExprNode, ctx: InferContext): Dimension | null {
         if (expNode) {
           const probeCtx: InferContext = { path: joinPath(ctx.path, 'args[1]'), violations: [], freeIndices: new Map() };
           const probed = infer(expNode, probeCtx);
-          if (probed !== null && probed !== undefined && okFromViolations(probeCtx.violations)) {
+          if (probed !== null && okFromViolations(probeCtx.violations)) {
             actualDim = probed;
           }
         }
@@ -704,18 +695,14 @@ function infer(node: ExprNode, ctx: InferContext): Dimension | null {
       // shared ctx.freeIndices accumulator. This is what makes
       // (A·B)·C-style nested products correct: the inner product's dummy
       // indices stay scoped to the inner call.
-      try {
-        const result = computeContraction(node.args, (child) =>
-          resolveChildForContraction(child, ctx),
-        );
-        mergeFreeIndices(ctx.freeIndices, result.freeIndices);
-        return result.dim;
-      } catch (err) {
-        // Errors from the contraction (IndexLabelCollisionError,
-        // VarianceMismatchError) are part of the public surface — propagate
-        // them so callers / tests can catch by type.
-        throw err;
-      }
+      // Errors from the contraction (IndexLabelCollisionError,
+      // VarianceMismatchError) are part of the public surface and propagate
+      // so callers / tests can catch by type.
+      const result = computeContraction(node.args, (child) =>
+        resolveChildForContraction(child, ctx),
+      );
+      mergeFreeIndices(ctx.freeIndices, result.freeIndices);
+      return result.dim;
     }
 
     case 'metric-tensor': {
@@ -827,8 +814,8 @@ export function validate(expr: ExprNode): ValidationResult {
   const ctx: InferContext = { path: '', violations: [], freeIndices: new Map() };
   const dim = infer(expr, ctx);
   return {
-    ok: okFromViolations(ctx.violations) && dim !== null && dim !== undefined,
-    inferredDimension: dim ?? null,
+    ok: okFromViolations(ctx.violations) && dim !== null,
+    inferredDimension: dim,
     freeIndices: ctx.freeIndices,
     violations: ctx.violations,
   };

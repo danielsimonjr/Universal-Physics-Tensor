@@ -17,8 +17,10 @@ import {
   POWER,
   TEMPERATURE,
   DIMENSIONLESS,
+  MASS_DENSITY,
 } from '../../src/dimensional/types.js';
 import { divide, multiply } from '../../src/dimensional/algebra.js';
+import { unitDimension } from '../../src/dimensional/units.js';
 
 describe('parseDimensionSpec — named dimensions', () => {
   it('resolves named dimensions case-insensitively', () => {
@@ -89,5 +91,56 @@ describe('parseDimensionSpec — explicit base exponents', () => {
   it('rejects empty and unknown bases', () => {
     expect(() => parseDimensionSpec('')).toThrow(DimensionSpecError);
     expect(() => parseDimensionSpec('Q^2')).toThrow(/unknown base/);
+  });
+});
+
+describe('a constant spelling that ends in a digit survives inside a product (audit N5)', () => {
+  // The glued-exponent rewrite (`L2` → `L^2`) once fired on `mu0`, so
+  // `mu0*length` was read as `mu^0*length` and failed on the base `mu`.
+  it.each(['mu0*length', 'length*mu0', 'eps0*length', 'hbar*c/mu0', 'mu0^2'])('%s parses', (spec) => {
+    expect(() => parseDimensionSpec(spec)).not.toThrow();
+  });
+
+  it('mu0*length is permeability times length, the same as mu_0*length', () => {
+    expect(parseDimensionSpec('mu0*length')).toEqual(parseDimensionSpec('mu_0*length'));
+    expect(parseDimensionSpec('mu0*length')).toEqual(multiply(parseDimensionSpec('permeability'), LENGTH));
+  });
+
+  it('eps0*length matches epsilon_0*length, and mu0^2 is permeability squared', () => {
+    expect(parseDimensionSpec('eps0*length')).toEqual(parseDimensionSpec('epsilon_0*length'));
+    expect(parseDimensionSpec('mu0^2')).toEqual(multiply(parseDimensionSpec('mu_0'), parseDimensionSpec('mu_0')));
+  });
+
+  it('a glued exponent on a base letter or a named dimension still takes its ^', () => {
+    expect(parseDimensionSpec('L2*mu0')).toEqual(multiply(AREA, parseDimensionSpec('mu_0')));
+    expect(parseDimensionSpec('M T-2')).toEqual(parseDimensionSpec('M*T^-2'));
+    expect(parseDimensionSpec('length2')).toEqual(AREA);
+  });
+});
+
+describe('named dimensions are projected from one owner, and N and J have names (audit N22)', () => {
+  it('density is MASS_DENSITY', () => {
+    expect(parseDimensionSpec('density')).toEqual(MASS_DENSITY);
+  });
+
+  it.each([
+    ['pressure', 'Pa'],
+    ['viscosity', 'Pa*s'],
+    ['resistance', 'ohm'],
+    ['magnetic_field', 'T'],
+    ['magnetic-field', 'T'],
+    ['permeability', 'H/m'],
+    ['volume', 'm^3'],
+    ['current', 'A'],
+    ['amount', 'mol'],
+    ['amount-of-substance', 'mol'],
+    ['luminous-intensity', 'cd'],
+  ])('%s is the dimension of the unit %s', (name, unit) => {
+    expect(parseDimensionSpec(name)).toEqual(unitDimension(unit));
+  });
+
+  it('N and J bases are reachable by name inside a product', () => {
+    expect(parseDimensionSpec('energy/amount').N).toBe(-1);
+    expect(parseDimensionSpec('luminous-intensity/area').J).toBe(1);
   });
 });

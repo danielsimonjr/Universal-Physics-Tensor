@@ -1,18 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "UPT Bridge Catalog Artifact",
-  "description": "The bridge catalog. data/bridge-catalog.json is the source; src/bridges/catalog-load.ts (and the dimension projection in src/dimensional/bridge-check.ts, through the same src/core/data-file.ts reader) validates it against this schema when it loads, with the keyword subset src/core/json-schema.ts reads. type is required on every record. derivedFrom and basis are absent until a derivation theorem is pinned. formalRef is derived from formalKey and is not stored.",
+  "description": "The bridge catalog. data/bridge-catalog.json is the source; src/bridges/catalog-load.ts (and the dimension projection in src/dimensional/bridge-check.ts, through the same src/core/data-file.ts reader) validates it against this schema when it loads, with the keyword subset src/core/json-schema.ts reads, then derives each relation's confidence from its row and the sign clauses from the evaluator flags. type is required on every record. formalRef is derived from formalKey and is not stored. Every field declared here has a reader in src/; a field nothing reads is not declared.",
   "type": "object",
   "required": [
     "schemaVersion",
     "packageVersion",
-    "count",
     "entries",
     "relations",
     "evaluators",
     "confrontations",
     "adjudications",
-    "spine"
+    "spine",
+    "rejections"
   ],
   "properties": {
     "$schema": {
@@ -23,10 +23,6 @@
     },
     "packageVersion": {
       "type": "string"
-    },
-    "count": {
-      "type": "integer",
-      "minimum": 1
     },
     "confrontations": {
       "type": "array",
@@ -65,7 +61,132 @@
             ]
           },
           "outcome": {
-            "type": "object"
+            "type": "object",
+            "description": "src/bridges/observations/types.ts ConfrontationOutcome, discriminated on kind. The arm-specific fields are checked by src/bridges/catalog-load.ts when the catalog loads; the schema subset cannot state a union.",
+            "required": [
+              "kind",
+              "units",
+              "provenance",
+              "preprocessing",
+              "independence"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "value",
+                  "upper-bound",
+                  "consistency",
+                  "table"
+                ]
+              },
+              "units": {
+                "type": "string"
+              },
+              "provenance": {
+                "type": "object",
+                "required": [
+                  "citation",
+                  "year",
+                  "retrieved"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "citation": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "year": {
+                    "type": "integer"
+                  },
+                  "retrieved": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                }
+              },
+              "preprocessing": {
+                "type": "object",
+                "required": [
+                  "state"
+                ],
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "recorded",
+                      "not-recorded"
+                    ]
+                  }
+                }
+              },
+              "independence": {
+                "type": "object",
+                "required": [
+                  "state"
+                ],
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "no-fitted-parameter",
+                      "shares-input",
+                      "not-recorded"
+                    ]
+                  }
+                }
+              },
+              "predicted": {
+                "type": "number"
+              },
+              "observed": {
+                "type": "number"
+              },
+              "sigma": {
+                "type": "number"
+              },
+              "residualInSigma": {
+                "type": "number"
+              },
+              "withinObserved": {
+                "type": "boolean"
+              },
+              "measured": {
+                "type": "object"
+              },
+              "bound": {
+                "type": "number"
+              },
+              "satisfied": {
+                "type": "boolean"
+              },
+              "predictedIs": {
+                "enum": [
+                  "point",
+                  "encoded-bound",
+                  "reference",
+                  "lower-limit"
+                ]
+              },
+              "caveat": {
+                "type": "string"
+              },
+              "approaches": {
+                "type": "number"
+              },
+              "fractionalGap": {
+                "type": "number"
+              },
+              "fractionalGapIs": {
+                "enum": [
+                  "agreement-bound",
+                  "observed-difference"
+                ]
+              },
+              "rows": {
+                "type": "array"
+              }
+            }
           },
           "prediction": {
             "type": "object",
@@ -79,9 +200,13 @@
                 "additionalProperties": {
                   "type": "number"
                 }
+              },
+              "output": {
+                "type": "string",
+                "minLength": 1
               }
             },
-            "description": "Inputs of the prediction, in catalog quantity names, when elasticity is defined."
+            "description": "The prediction point, in the evaluator's input spellings. The evaluator at these inputs returns outcome.predicted: its value, or the extra output `output` names. src/bridges/sensitivity.ts ranks the inputs by elasticity."
           }
         },
         "additionalProperties": false
@@ -146,7 +271,6 @@
           "references",
           "dependencies",
           "known_issues",
-          "tractability_class",
           "notes"
         ],
         "additionalProperties": false,
@@ -161,22 +285,14 @@
               "cross-domain"
             ]
           },
-          "derivedFrom": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Direct derivation imports. Absent until a derivation theorem is pinned."
-          },
-          "basis": {
-            "const": true
-          },
           "name": {
             "type": "string",
             "minLength": 1
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-O]$",
+            "description": "The §VI.6.1 category letter; src/bridges/tensor-index.ts maps it to a component."
           },
           "category_name": {
             "type": "string"
@@ -209,9 +325,6 @@
               "null"
             ]
           },
-          "encoded_form": {
-            "type": "string"
-          },
           "scalarExpression": {
             "type": "string",
             "description": "Scalar expression for a row that has no relation. Parsed into the structural registry. Not a graph edge."
@@ -229,116 +342,206 @@
             }
           },
           "known_issues": {
-            "type": "array"
-          },
-          "tractability_class": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "severity",
+                "description",
+                "fixable"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "severity": {
+                  "enum": [
+                    "self-refuting",
+                    "dimensional",
+                    "index-structure",
+                    "sign",
+                    "undefined-quantity",
+                    "phenomenological-ansatz",
+                    "other"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fixable": {
+                  "enum": [
+                    "spec-edit",
+                    "reformulation",
+                    "unfixable-must-mark-invalid",
+                    "unknown"
+                  ]
+                }
+              }
+            }
           },
           "notes": {
             "type": "string"
-          },
-          "formalRef": {
-            "type": "object",
-            "description": "A PhysJS reference for one part of the equation. Optional. kind bridge is the only kind that lights formally-proved. A property lights formally-proved-property and a cross-check lights formally-proved-cross-check. A reduction, a limit, or a derivation-step lights neither. url is the theorem file at the pinned commit.",
-            "required": [
-              "system",
-              "statement",
-              "version",
-              "axioms",
-              "fidelity",
-              "kind",
-              "url",
-              "covers"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "system": {
-                "enum": [
-                  "lean4-physlib",
-                  "lean4-physjs",
-                  "other"
-                ]
-              },
-              "statement": {
-                "type": "string"
-              },
-              "version": {
-                "type": "string"
-              },
-              "axioms": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "fidelity": {
-                "type": "string"
-              },
-              "kind": {
-                "enum": [
-                  "bridge",
-                  "property",
-                  "cross-check",
-                  "reduction",
-                  "limit",
-                  "derivation-step"
-                ]
-              },
-              "url": {
-                "type": "string"
-              },
-              "covers": {
-                "type": "string"
-              }
-            }
           },
           "context": {
             "type": "string"
           },
           "source_part": {
-            "type": "string"
+            "enum": [
+              "I",
+              "II",
+              "III",
+              "IV",
+              "V",
+              "VI"
+            ]
           },
           "source_section": {
             "type": "string"
           },
           "relation": {
             "type": "object",
-            "description": "The relation record the row was filed with, when it has one."
+            "description": "The relation contract of the row (src/relations/types.ts RelationContract); src/composition/catalog-graph.ts puts it on the edge.",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "derivation",
+                  "exact-equivalence",
+                  "restriction",
+                  "approximation",
+                  "coarse-graining",
+                  "analytic-continuation",
+                  "structural-analogy",
+                  "deformation-quantization"
+                ]
+              }
+            }
           },
           "formalKey": {
             "type": "string",
-            "pattern": "^(be|ab)-[a-z0-9-]+$",
+            "pattern": "^be-[a-z0-9-]+$",
             "description": "The PhysJS manifest key. formalRef, its kind included, is read from that manifest entry. The catalog stores no kind of its own."
           },
           "dimension": {
             "type": "object"
           },
           "conventions": {
-            "type": "object"
+            "type": "object",
+            "description": "src/relations/types.ts Conventions; src/atlas/derive-evidence.ts reads it for convention-checked.",
+            "additionalProperties": false,
+            "properties": {
+              "heatWorkSign": {
+                "enum": [
+                  "Q-W",
+                  "Q+W"
+                ]
+              },
+              "metricSignature": {
+                "enum": [
+                  "-+++",
+                  "+---"
+                ]
+              },
+              "fourierNormalization": {
+                "enum": [
+                  "unitary",
+                  "physics",
+                  "none"
+                ]
+              },
+              "unitSystem": {
+                "enum": [
+                  "SI",
+                  "gaussian",
+                  "natural"
+                ]
+              },
+              "capacitorChargeSign": {
+                "enum": [
+                  "+",
+                  "-"
+                ]
+              }
+            }
           },
           "counterexamples": {
-            "type": "array"
+            "type": "array",
+            "description": "src/relations/types.ts Counterexample; src/atlas/derive-evidence.ts reads it for contradicted.",
+            "items": {
+              "type": "object",
+              "required": [
+                "description",
+                "witness"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "witness": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
           },
           "regime": {
-            "type": "object"
+            "type": "object",
+            "description": "The regime of the row (src/relations/types.ts Regime); src/composition/catalog-graph.ts puts it on the edge.",
+            "required": [
+              "family",
+              "inequalities",
+              "groupDefinitions"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "family": {
+                "type": "string",
+                "minLength": 1
+              },
+              "inequalities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "group",
+                    "op",
+                    "bound"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "group": {
+                      "type": "string"
+                    },
+                    "op": {
+                      "enum": [
+                        "<",
+                        "<=",
+                        ">",
+                        ">="
+                      ]
+                    },
+                    "bound": {
+                      "type": "number"
+                    },
+                    "alias": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "groupDefinitions": {
+                "type": "object"
+              }
+            }
           },
           "callerTable": {
             "const": true
           },
           "statement": {
             "type": "string"
-          },
-          "assumptions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "scopeLimits": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
       }
@@ -359,7 +562,6 @@
           "aliases",
           "holds",
           "domain",
-          "confidence",
           "citation"
         ],
         "additionalProperties": false,
@@ -419,7 +621,8 @@
               "established",
               "speculative",
               "highly-speculative"
-            ]
+            ],
+            "description": "Stored only on a relation with no catalog row (catalogId null). A relation with a row takes its row's status when the catalog loads; src/bridges/catalog-load.ts refuses a stored copy beside a catalog id."
           },
           "citation": {
             "type": "string"
@@ -432,18 +635,6 @@
             "additionalProperties": {
               "type": "number"
             }
-          },
-          "relation": {
-            "type": "object"
-          },
-          "regime": {
-            "type": "object"
-          },
-          "conventions": {
-            "type": "object"
-          },
-          "counterexamples": {
-            "type": "array"
           },
           "reference": {
             "type": "object",
@@ -476,12 +667,9 @@
                 "minLength": 1
               }
             }
-          },
-          "method": {
-            "type": "string",
-            "minLength": 1
           }
-        }
+        },
+        "description": "Closed forms. Several relations may share one catalog id; catalogId null is a law with no catalog row. The relation contract, regime, conventions and counterexamples live on the row."
       }
     },
     "evaluators": {
@@ -523,7 +711,8 @@
                 },
                 "quantity": {
                   "type": "string",
-                  "minLength": 1
+                  "minLength": 1,
+                  "description": "A quantity id of data/quantities.json: the relation source the parameter binds, or the quantity an extra output reads."
                 },
                 "symbol": {
                   "type": "string"
@@ -555,9 +744,6 @@
                   ]
                 },
                 "angular": {
-                  "const": true
-                },
-                "optional": {
                   "const": true
                 },
                 "alternates": {
@@ -614,16 +800,10 @@
                 "expression": {
                   "type": "string",
                   "minLength": 1
-                },
-                "requires": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "minLength": 1
-                  }
                 }
               }
-            }
+            },
+            "description": "Extra numbers beside value. An output is computed when every parameter key its expression reads was given; a parameter only an output reads is optional."
           }
         }
       }
@@ -635,6 +815,38 @@
         "type": "object",
         "additionalProperties": {
           "type": "number"
+        }
+      }
+    },
+    "rejections": {
+      "type": "array",
+      "description": "The negative catalog: rows adjudicated not-a-bridge under the membership criterion. src/bridges/rejected.ts projects it; src/bridges/membership.ts overlays it.",
+      "items": {
+        "type": "object",
+        "required": [
+          "catalogId",
+          "name",
+          "reason",
+          "citation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "catalogId": {
+            "type": "integer",
+            "minimum": 11
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 40
+          },
+          "citation": {
+            "type": "string",
+            "minLength": 10
+          }
         }
       }
     }

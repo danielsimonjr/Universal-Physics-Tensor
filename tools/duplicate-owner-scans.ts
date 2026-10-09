@@ -171,8 +171,8 @@ export function prefactorOwnerHits(root: string): string[] {
 }
 
 /**
- * A hand-maintained `BRIDGE_EQUATIONS = [` is a second catalog. The projection
- * is `registerBridge` then `equations()`.
+ * A hand-maintained `BRIDGE_EQUATIONS = [` is a second catalog. The one
+ * catalog is `data/bridge-catalog.json`, read by `catalog-load.ts`.
  */
 const BRIDGE_LITERAL = /BRIDGE_EQUATIONS\s*(?::[^=]+)?=\s*\[/;
 

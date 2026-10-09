@@ -22,6 +22,7 @@ import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { PHYSJS_COMMIT, physjsFormalRef, physjsLeanFile, physjsNestedStatements, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { declaredTheorems, manifestTheorems, vendoredFiles } from '../../scripts/vendor-physjs.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { CENSUS } from '../helpers/census.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const leanFiles = new Set(
@@ -95,7 +96,7 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
     const urls = emittedUrls();
     // 127 is the record from before be-147..170 each added a catalog formalRef.
     // 57 is the record from before be-77..87 each added a catalog formalRef.
-    expect(urls.length).toBe(151);
+    expect(urls.length).toBe(CENSUS.formalRefs.emitted);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.
@@ -155,12 +156,19 @@ describe('the Lean file of a theorem is where it is declared, read from data', (
       'end PhysJS.Einstein',
       'namespace PhysJS.SpringLc',
       'protected theorem time_rescale_equationOfMotion : True := trivial',
+      'open Real Nat in theorem opened : True := trivial',
+      '@[simp] @[nolint docBlame] lemma twoAttrs : True := trivial',
+      'open Real in',
+      'theorem openedOnPreviousLine : True := trivial',
       'end PhysJS.SpringLc',
     ].join('\n');
     expect(declaredTheorems(source)).toEqual([
       'PhysJS.Einstein.friedmann_corollary',
       'PhysJS.Einstein.helper',
       'PhysJS.SpringLc.time_rescale_equationOfMotion',
+      'PhysJS.SpringLc.opened',
+      'PhysJS.SpringLc.twoAttrs',
+      'PhysJS.SpringLc.openedOnPreviousLine',
     ]);
   });
 

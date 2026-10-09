@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (114)";
+    label="anchored cluster (111)";
     j_be_11_zurek [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-11"];
     q_relaxation_rate [shape=ellipse,label="relaxation-rate"];
     q_relaxation_rate -> j_be_11_zurek;
@@ -23,7 +23,7 @@ digraph PhysicsMap {
     q_temperature -> j_be_16;
     q_landauer_erasure_energy [shape=ellipse,label="landauer-erasure-energy"];
     j_be_16 -> q_landauer_erasure_energy;
-    j_be_37 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-37"];
+    j_be_37 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-37"];
     q_mass -> j_be_37;
     q_far_radius [shape=ellipse,label="far-radius"];
     q_far_radius -> j_be_37;
@@ -97,8 +97,6 @@ digraph PhysicsMap {
     q_temperature -> j_be_33;
     q_reference_temperature [shape=ellipse,label="reference-temperature"];
     q_reference_temperature -> j_be_33;
-    q_static_exponent_nu [shape=ellipse,label="static-exponent-nu"];
-    q_static_exponent_nu -> j_be_33;
     q_dynamic_exponent_z [shape=ellipse,label="dynamic-exponent-z"];
     q_dynamic_exponent_z -> j_be_33;
     q_quantum_correlation_length [shape=ellipse,label="quantum-correlation-length"];
@@ -110,6 +108,7 @@ digraph PhysicsMap {
     q_microscopic_relaxation_time -> j_be_34;
     q_spatial_dimension [shape=ellipse,label="spatial-dimension"];
     q_spatial_dimension -> j_be_34;
+    q_static_exponent_nu [shape=ellipse,label="static-exponent-nu"];
     q_static_exponent_nu -> j_be_34;
     q_dynamic_exponent_z -> j_be_34;
     q_defect_rest_mass [shape=ellipse,label="defect-rest-mass"];
@@ -442,8 +441,6 @@ digraph PhysicsMap {
     j_CE_larmor_power [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Larmor radiated power"];
     q_charge -> j_CE_larmor_power;
     q_acceleration -> j_CE_larmor_power;
-    q_speed_of_light [shape=ellipse,label="speed-of-light"];
-    q_speed_of_light -> j_CE_larmor_power;
     q_larmor_power [shape=ellipse,label="larmor-power"];
     j_CE_larmor_power -> q_larmor_power;
     j_CE_field_energy_density [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Electric-field energy density"];
@@ -598,14 +595,11 @@ digraph PhysicsMap {
     q_drift_velocity [shape=ellipse,label="drift-velocity"];
     j_CE_drift_velocity -> q_drift_velocity;
     j_CE_fermi_energy [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Fermi energy"];
-    q_reduced_planck_constant [shape=ellipse,label="reduced-planck-constant"];
-    q_reduced_planck_constant -> j_CE_fermi_energy;
     q_mass -> j_CE_fermi_energy;
     q_carrier_density -> j_CE_fermi_energy;
     q_fermi_energy [shape=ellipse,label="fermi-energy"];
     j_CE_fermi_energy -> q_fermi_energy;
     j_CE_fermi_velocity [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Fermi velocity"];
-    q_reduced_planck_constant -> j_CE_fermi_velocity;
     q_mass -> j_CE_fermi_velocity;
     q_carrier_density -> j_CE_fermi_velocity;
     q_fermi_velocity [shape=ellipse,label="fermi-velocity"];
@@ -613,8 +607,6 @@ digraph PhysicsMap {
     j_CE_plasma_frequency [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Plasma frequency"];
     q_carrier_density -> j_CE_plasma_frequency;
     q_charge -> j_CE_plasma_frequency;
-    q_vacuum_permittivity [shape=ellipse,label="vacuum-permittivity"];
-    q_vacuum_permittivity -> j_CE_plasma_frequency;
     q_mass -> j_CE_plasma_frequency;
     q_plasma_frequency [shape=ellipse,label="plasma-frequency"];
     j_CE_plasma_frequency -> q_plasma_frequency;
@@ -625,13 +617,10 @@ digraph PhysicsMap {
     q_debye_frequency [shape=ellipse,label="debye-frequency"];
     j_CE_debye_frequency -> q_debye_frequency;
     j_CE_equipartition [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Equipartition (mean kinetic energy)"];
-    q_boltzmann_constant [shape=ellipse,label="boltzmann-constant"];
-    q_boltzmann_constant -> j_CE_equipartition;
     q_temperature -> j_CE_equipartition;
     q_thermal_energy [shape=ellipse,label="thermal-energy"];
     j_CE_equipartition -> q_thermal_energy;
     j_CE_stokes_einstein [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Stokes-Einstein diffusion"];
-    q_boltzmann_constant -> j_CE_stokes_einstein;
     q_temperature -> j_CE_stokes_einstein;
     q_dynamic_viscosity -> j_CE_stokes_einstein;
     q_particle_radius [shape=ellipse,label="particle-radius"];
@@ -647,7 +636,6 @@ digraph PhysicsMap {
     q_kinetic_pressure [shape=ellipse,label="kinetic-pressure"];
     j_CE_kinetic_pressure -> q_kinetic_pressure;
     j_CE_mb_most_probable_speed [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Maxwell-Boltzmann most-probable speed"];
-    q_boltzmann_constant -> j_CE_mb_most_probable_speed;
     q_temperature -> j_CE_mb_most_probable_speed;
     q_molecular_mass -> j_CE_mb_most_probable_speed;
     q_most_probable_speed [shape=ellipse,label="most-probable-speed"];
@@ -662,42 +650,16 @@ digraph PhysicsMap {
     q_static_pressure -> j_CE_bernoulli;
     q_bernoulli_total_pressure [shape=ellipse,label="bernoulli-total-pressure"];
     j_CE_bernoulli -> q_bernoulli_total_pressure;
-    j_CE_photoelectric [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Photoelectric equation"];
-    q_planck_constant [shape=ellipse,label="planck-constant"];
-    q_planck_constant -> j_CE_photoelectric;
-    q_photon_frequency [shape=ellipse,label="photon-frequency"];
-    q_photon_frequency -> j_CE_photoelectric;
-    q_work_function [shape=ellipse,label="work-function"];
-    q_work_function -> j_CE_photoelectric;
-    q_photoelectron_max_energy [shape=ellipse,label="photoelectron-max-energy"];
-    j_CE_photoelectric -> q_photoelectron_max_energy;
     j_CE_boltzmann_factor [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Boltzmann factor"];
     q_state_energy [shape=ellipse,label="state-energy"];
     q_state_energy -> j_CE_boltzmann_factor;
-    q_boltzmann_constant -> j_CE_boltzmann_factor;
     q_temperature -> j_CE_boltzmann_factor;
     q_boltzmann_factor [shape=ellipse,label="boltzmann-factor"];
     j_CE_boltzmann_factor -> q_boltzmann_factor;
     j_CE_lorentz_factor [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Lorentz factor"];
     q_velocity -> j_CE_lorentz_factor;
-    q_speed_of_light -> j_CE_lorentz_factor;
     q_lorentz_factor [shape=ellipse,label="lorentz-factor"];
     j_CE_lorentz_factor -> q_lorentz_factor;
-    j_CE_compton_shift [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Compton shift"];
-    q_planck_constant -> j_CE_compton_shift;
-    q_electron_mass [shape=ellipse,label="electron-mass"];
-    q_electron_mass -> j_CE_compton_shift;
-    q_speed_of_light -> j_CE_compton_shift;
-    q_scattering_angle [shape=ellipse,label="scattering-angle"];
-    q_scattering_angle -> j_CE_compton_shift;
-    q_compton_wavelength_shift [shape=ellipse,label="compton-wavelength-shift"];
-    j_CE_compton_shift -> q_compton_wavelength_shift;
-    j_CE_boltzmann_entropy [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Boltzmann entropy"];
-    q_boltzmann_constant -> j_CE_boltzmann_entropy;
-    q_microstate_count [shape=ellipse,label="microstate-count"];
-    q_microstate_count -> j_CE_boltzmann_entropy;
-    q_boltzmann_entropy [shape=ellipse,label="boltzmann-entropy"];
-    j_CE_boltzmann_entropy -> q_boltzmann_entropy;
   }
   subgraph cluster_1 {
     label="anchored cluster (4)";
@@ -839,7 +801,7 @@ digraph PhysicsMap {
     j_CE_radioactive_decay -> q_remaining_nuclei;
   }
   subgraph cluster_iso {
-    label="isolated (135)";
+    label="isolated (138)";
     j_be_100 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-100"];
     q_lst_static [shape=ellipse,label="lst-static"];
     q_lst_static -> j_be_100;
@@ -1712,8 +1674,6 @@ digraph PhysicsMap {
     j_be_88 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-88"];
     q_fermi_sea_density [shape=ellipse,label="fermi-sea-density"];
     q_fermi_sea_density -> j_be_88;
-    q_fermi_sea_mass [shape=ellipse,label="fermi-sea-mass"];
-    q_fermi_sea_mass -> j_be_88;
     q_fermi_wavevector [shape=ellipse,label="fermi-wavevector"];
     j_be_88 -> q_fermi_wavevector;
     j_be_89 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-89"];
@@ -1816,6 +1776,11 @@ digraph PhysicsMap {
     j_CE_bohr_radius [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bohr radius"];
     q_bohr_radius [shape=ellipse,label="bohr-radius"];
     j_CE_bohr_radius -> q_bohr_radius;
+    j_CE_boltzmann_entropy [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Boltzmann entropy"];
+    q_microstate_count [shape=ellipse,label="microstate-count"];
+    q_microstate_count -> j_CE_boltzmann_entropy;
+    q_boltzmann_entropy [shape=ellipse,label="boltzmann-entropy"];
+    j_CE_boltzmann_entropy -> q_boltzmann_entropy;
     j_CE_carnot_efficiency [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Carnot efficiency"];
     q_cold_reservoir_temperature [shape=ellipse,label="cold-reservoir-temperature"];
     q_cold_reservoir_temperature -> j_CE_carnot_efficiency;
@@ -1823,6 +1788,11 @@ digraph PhysicsMap {
     q_hot_reservoir_temperature -> j_CE_carnot_efficiency;
     q_carnot_efficiency [shape=ellipse,label="carnot-efficiency"];
     j_CE_carnot_efficiency -> q_carnot_efficiency;
+    j_CE_compton_shift [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Compton shift"];
+    q_scattering_angle [shape=ellipse,label="scattering-angle"];
+    q_scattering_angle -> j_CE_compton_shift;
+    q_compton_wavelength_shift [shape=ellipse,label="compton-wavelength-shift"];
+    j_CE_compton_shift -> q_compton_wavelength_shift;
     j_CE_einstein_field_eq [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Einstein field equation"];
     q_stress_energy_density [shape=ellipse,label="stress-energy-density"];
     q_stress_energy_density -> j_CE_einstein_field_eq;
@@ -1865,6 +1835,13 @@ digraph PhysicsMap {
     q_deviation_from_mean -> j_CE_normal_distribution;
     q_normal_probability_density [shape=ellipse,label="normal-probability-density"];
     j_CE_normal_distribution -> q_normal_probability_density;
+    j_CE_photoelectric [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Photoelectric equation"];
+    q_photon_frequency [shape=ellipse,label="photon-frequency"];
+    q_photon_frequency -> j_CE_photoelectric;
+    q_work_function [shape=ellipse,label="work-function"];
+    q_work_function -> j_CE_photoelectric;
+    q_photoelectron_max_energy [shape=ellipse,label="photoelectron-max-energy"];
+    j_CE_photoelectric -> q_photoelectron_max_energy;
     j_CE_planck_einstein [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Planck–Einstein relation"];
     q_nu [shape=ellipse,label="nu"];
     q_nu -> j_CE_planck_einstein;

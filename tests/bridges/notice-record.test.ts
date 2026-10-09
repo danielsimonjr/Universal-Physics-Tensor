@@ -3,6 +3,7 @@
  * reference's kind is a field of the catalog entry. Nothing switches on a
  * bridge number or on a string that stands in for one.
  */
+import '../helpers/dist.js';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';

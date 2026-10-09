@@ -7,6 +7,7 @@
  * kelvin as explain, eval, a discovery anchor, a regime coordinate, and a
  * path sweep. `bindingInUnit` alone still rejects it.
  */
+import { capture, text } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import * as api from '../../src/cli-api.js';
 import { runCli } from '../../src/cli/main.js';
@@ -15,20 +16,6 @@ import { parseSweep } from '../../src/cli/commands/path.js';
 import { bindingInUnit, readNamedBinding } from '../../src/numerical/binding-value.js';
 import { E_SI, K_B_SI } from '../../src/core/constants.js';
 
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 const errText = (c: ReturnType<typeof capture>) => c.err.join('');
 
 const KELVIN_10EV = (10 * E_SI) / K_B_SI;
@@ -89,17 +76,18 @@ describe('explain temperature bindings', () => {
     expect(recovered(text(gasEnergy))).not.toBeCloseTo((N_A * K_B_SI * (10 * E_SI)) / V_M3, 0);
   });
 
-  it('uses the bound boltzmann-constant so kT stays 10 eV', async () => {
+  it('a boltzmann-constant that disagrees with k_B is refused; the registered one keeps kT at 10 eV', async () => {
+    // Constants win over inputs (9.0.0 audit §3 B2): a stated `boltzmann-constant` is checked against
+    // the registry, never bound. A doubled k_B is a disagreement, exit 1, naming the constant.
     const doubled = 2 * K_B_SI;
-    const energy = capture();
+    const refused = capture();
     expect(
       await runCli(
         ['explain', 'most-probable-speed', `boltzmann-constant=${doubled}`, 'temperature=10eV', `molecular-mass=${PROTON}`, '--source=canonical'],
-        energy.io,
+        refused.io,
       ),
-    ).toBe(0);
-    expect(text(energy)).not.toMatch(/Recovered value:/);
-    expect(text(energy)).toMatch(/factor is unset/);
+    ).toBe(1);
+    expect(errText(refused)).toMatch(/k_B/);
     const thermal = (k: number, temperature: string) => [
       'explain',
       'thermal-energy',
@@ -108,15 +96,12 @@ describe('explain temperature bindings', () => {
       '--source=canonical',
     ];
     const gasEnergy = capture();
-    expect(await runCli(thermal(doubled, '10eV'), gasEnergy.io)).toBe(0);
+    expect(await runCli(thermal(K_B_SI, '10eV'), gasEnergy.io)).toBe(0);
     const gasKelvin = capture();
-    expect(await runCli(thermal(doubled, String((10 * E_SI) / doubled)), gasKelvin.io)).toBe(0);
+    expect(await runCli(thermal(K_B_SI, String((10 * E_SI) / K_B_SI)), gasKelvin.io)).toBe(0);
     const expected = 1.5 * 10 * E_SI;
     expect(recovered(text(gasEnergy))).toBeCloseTo(expected, 4);
     expect(recovered(text(gasEnergy))).toBeCloseTo(recovered(text(gasKelvin)), 6);
-    const codata = capture();
-    expect(await runCli(thermal(K_B_SI, '10eV'), codata.io)).toBe(0);
-    expect(recovered(text(gasEnergy)) / recovered(text(codata))).toBeCloseTo(1, 6);
   });
 
   it('reads plasma-beta temperature=10eV as the same beta as that kelvin', async () => {
