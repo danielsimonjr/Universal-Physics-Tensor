@@ -113,20 +113,37 @@ export function dimensionalFreedom(e: BridgeEdge): number {
   return Infinity;
 }
 
-/** Deterministic, domain-valid input sets with per-source variation. */
+/**
+ * Deterministic, domain-valid input sets with per-source variation.
+ *
+ * Each magnitude set is tried with every source positive first, then with
+ * each single source negated: a domain that holds only for a negative input
+ * (a signed charge, a potential below zero) once got positives only and was
+ * reported `no-samples` (9.0.0 audit §4 Low). The first sign pattern the
+ * domain admits is kept for that magnitude set, so a domain that admits the
+ * positives is sampled exactly as before.
+ */
 function makeInputs(e: BridgeEdge): Array<Record<string, number>> {
   if (e.sources.length === 0) return [{}];
   const sets: Array<Record<string, number>> = [];
-  for (let j = 0; j < 3; j++) {
-    const inp: Record<string, number> = {};
-    e.sources.forEach((s, i) => {
-      inp[s.name] = Math.pow(1.6 + i, 1 + 0.27 * j);
-    });
+  const admitted = (inp: Record<string, number>): boolean => {
     try {
-      if (e.domain.predicate(inp) && Number.isFinite(e.evaluate(inp))) sets.push(inp);
+      return e.domain.predicate(inp) && Number.isFinite(e.evaluate(inp));
     } catch {
-      /* skip */
+      return false;
     }
+  };
+  for (let j = 0; j < 3; j++) {
+    const magnitudes: Record<string, number> = {};
+    e.sources.forEach((s, i) => {
+      magnitudes[s.name] = Math.pow(1.6 + i, 1 + 0.27 * j);
+    });
+    const patterns: Array<Record<string, number>> = [
+      magnitudes,
+      ...e.sources.map((s) => ({ ...magnitudes, [s.name]: -magnitudes[s.name]! })),
+    ];
+    const first = patterns.find(admitted);
+    if (first !== undefined) sets.push(first);
   }
   return sets;
 }
@@ -140,11 +157,6 @@ const CLEAN_PREFACTORS: readonly number[] = [
 ];
 const isCleanPrefactor = (p: number): boolean =>
   CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);
-
-/**
- * CODATA fine-structure constant, from the owner. `μ0 = 2 α h / (e² c)`
- * rewrites a vacuum factor as a number times a monomial in `{ℏ, c, e}`.
- */
 
 /**
  * True when a derived prefactor on `{ℏ, c, e}` times `α` is a recognized
@@ -270,9 +282,10 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
 /**
  * Graph distance from a bridge's quantities to the established-confidence
  * core (BFS over quantity co-occurrence). 0 = shares a quantity with an
- * established edge; Infinity = structurally isolated from it.
+ * established edge; Infinity = structurally isolated from it. Read by
+ * `bridgePriority` only; it was exported with no caller outside this file.
  */
-export function anchoringDistance(
+function anchoringDistance(
   edges: readonly BridgeEdge[],
   e: BridgeEdge,
 ): number {

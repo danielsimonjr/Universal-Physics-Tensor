@@ -449,9 +449,8 @@ export function composeEdges(
   // ── Atlas Phase 1 (S1.2b): the relation overlay, and NOTHING else. ────────
   // Entered only when BOTH operands carry a `relation`. An operand with no
   // relation skips this block, and the composed edge then has no `relation`
-  // key. Nine edges in `CATALOG_GRAPH` do carry one: `be-11-master` and
-  // `be-11-zurek` (`coarse-graining`), and `be-21`, `be-37`, `be-48`,
-  // `be-51`, `be-52`, `be-55`, and `be-59` (`derivation`). Those nine stay.
+  // key. The catalog edges that carry one are the catalog's `relation` rows
+  // (`tests/composition/compose-relation.test.ts` lists them); they stay.
   // When both operands carry a relation, a silent table cell throws
   // `UndefinedCompositionError`. The approximation cell throws the same
   // error, because an edge relation carries no norm transport and this

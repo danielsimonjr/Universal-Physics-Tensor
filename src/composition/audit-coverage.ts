@@ -32,6 +32,8 @@ import { CATALOG_GRAPH } from './catalog-graph.js';
  *      signature (numerically computable + dimensionally encoded).
  *   - `encoded-only` — has a dimensional signature but no graph edge.
  *   - `thin` — no dimensional signature (catalogued by label/prose only).
+ *
+ * @internal
  */
 export type GroundingTier =
   | 'data-confronted'

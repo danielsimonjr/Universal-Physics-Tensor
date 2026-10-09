@@ -297,9 +297,7 @@ export interface DeclaredLimit {
 export type FalsificationBattery =
   | 'dimensional'
   | 'finiteness'
-  | 'limits'
-  | 'retrodiction'
-  | 'observational-bounds';
+  | 'limits';
 
 /** Outcome of one falsification battery. @internal */
 export interface FalsificationRecord {

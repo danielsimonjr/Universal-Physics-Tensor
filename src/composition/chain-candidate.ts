@@ -68,6 +68,8 @@ export function compareChainEdgeIds(left: readonly string[], right: readonly str
 /**
  * Total order of chain candidates. Returns a new array of the same
  * objects. The input array is left as it was.
+ *
+ * @internal
  */
 export function orderChainCandidates(candidates: readonly ChainCandidate[]): ChainCandidate[] {
   return [...candidates].sort((a, b) => {

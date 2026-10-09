@@ -41,21 +41,14 @@ const UNIT = '1';
 /**
  * Spelled-out dimensionless numeric constants some encoders write as a named
  * symbol rather than a literal — genuine constants the eval `CONSTANTS`
- * registry happens not to list (it carries only `ln2`/`4pi`/`8pi`). The
- * `\d*pi` pattern covers `pi`/`2pi`/`6pi`/…; `ln_2_constant` is BE-16's spelling
- * of `ln 2`. These stay droppable; everything else dimensionless-and-named is a
- * PARAMETER stub (`alpha`, `lambda`, `g_dark`, `ln⟨e^−βW⟩`, …) and is kept.
+ * registry does not list under that spelling (its own keys are the canonical
+ * rows of the constant registry; `piMultipleValue` reads `pi`/`2pi`/`6pi`/…).
+ * `ln_2_constant` is BE-16's spelling of `ln 2`. These stay droppable;
+ * everything else dimensionless-and-named is a PARAMETER stub (`alpha`,
+ * `lambda`, `g_dark`, `ln⟨e^−βW⟩`, …) and is kept.
  */
 const NAMED_DIMENSIONLESS_CONSTANTS = new Set(['ln_2_constant']);
 
-/**
- * A dimensionless symbol is a droppable "up to a constant" factor only when it
- * is a numeric literal (`2`, `-1`, `0.5`), a registered named constant
- * (`ln2`, `4pi`, …), or a spelled-out numeric constant (`6pi`, `ln_2_constant`).
- * Any OTHER dimensionless symbol is a stub for an unknown dimensionless quantity
- * (a parameter or a functional like `ln⟨exp(−βW)⟩`) and is structural —
- * dropping it would conflate distinct interiors.
- */
 /**
  * Bridge ASTs still spell a governing quantity with the short symbol (`T`, `M`,
  * `m_1`, `m_2`). The registry uses one name. The structural hash treats the
@@ -71,6 +64,14 @@ export function canonicalQuantityName(name: string, dim: Dimension): string {
   return quantityIdForSpelling(name) ?? name;
 }
 
+/**
+ * A dimensionless symbol is a droppable "up to a constant" factor only when it
+ * is a numeric literal (`2`, `-1`, `0.5`), a registered named constant
+ * (`ln2`, `4pi`, …), or a spelled-out numeric constant (`6pi`, `ln_2_constant`).
+ * Any OTHER dimensionless symbol is a stub for an unknown dimensionless quantity
+ * (a parameter or a functional like `ln⟨exp(−βW)⟩`) and is structural —
+ * dropping it would conflate distinct interiors.
+ */
 function isDroppableConstant(name: string): boolean {
   return (
     name in CONSTANTS ||

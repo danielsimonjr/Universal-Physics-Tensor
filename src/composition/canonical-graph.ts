@@ -5,9 +5,9 @@
  * established textbook physics ALONE, with the speculative bridge catalog
  * excluded.
  *
- * WHY this exists: `CATALOG_GRAPH` mixes the 8 established bridges with 36
- * speculative ones, so a `promising` discovery there is polluted by
- * speculation. Feeding ONLY canonical equations gives (a) a new-candidate
+ * WHY this exists: `CATALOG_GRAPH` mixes established bridges with speculative
+ * ones (the counts per status are NOTES.md's), so a `promising` discovery
+ * there is polluted by speculation. Feeding ONLY canonical equations gives (a) a new-candidate
  * review surface motivated by textbook physics, and (b) a regression harness —
  * discovery on canonical-only must introduce no numerical contradiction
  * (standard physics, fed to the inference suite, stays self-consistent).
@@ -24,9 +24,9 @@
  *     `confidence: 'established'` — the canonical graph IS the anchored core.
  *   - `kind: 'law'` (within-domain ground truth, not a cross-regime bridge);
  *     `beId: null` (not a catalog bridge). **Annotation-correctness note:**
- *     `toEdge` hardcodes `kind:'law'` and `regimesDiffer` has zero call sites.
- *     The information-axis mapping is annotation-only; there is no edge-kind
- *     path and no delta to measure.
+ *     `toEdge` hardcodes `kind:'law'`; the attributes an edge carries do not
+ *     decide its kind here. The attribute mapping is annotation-only; there
+ *     is no edge-kind path and no delta to measure.
  *   - Evaluator: the dimensional MONOMIAL gives the power law over the variable
  *     sources, times the baked constant factor. A fully-quantitative scalar
  *     AST whose extra factors are a closed dimensionless coefficient

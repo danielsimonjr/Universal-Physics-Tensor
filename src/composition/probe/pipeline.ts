@@ -413,7 +413,6 @@ export async function runProbeSearch(
       prefactor: fit.prefactor,
       claimedRegimes: problem.claimedRegimes,
       limits: problem.limits,
-      observationalBoundIds: problem.observationalBoundIds,
     });
     falsifications[rec.id] = fal;
     if (!fal.survived) {
@@ -436,7 +435,8 @@ export async function runProbeSearch(
         : 0;
     const corp = corpus[record.id];
     const dist = corp && corp.algebraicMatches.length > 0 ? 0 : 1;
-    return { record, scores: scoreCandidate(record, emp, dist) };
+    // Robustness is read from the batteries this record ran, not from its status.
+    return { record, scores: scoreCandidate(record, emp, dist, falsifications[record.id]) };
   });
   const ranked = rankPareto(scored);
 

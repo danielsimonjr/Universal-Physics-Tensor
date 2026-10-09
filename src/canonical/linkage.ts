@@ -18,14 +18,13 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
-import { validate } from '../dimensional/validator.js';
 import { evalExpr } from '../composition/expr-eval.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
-import { BRIDGE_RHS_BY_ID } from '../bridges/rhs-registry.js';
 import type { CanonicalEquation } from './canonical-equation.js';
 import { CANONICAL_EQUATIONS, canonicalById } from './registry.js';
 import { canonicalQuantityName, normalForm } from './normal-form.js';
-import { classifyStructure } from './structural.js';
+import { bridgeShapes, classifyStructure } from './structural.js';
+import type { BridgeShape } from './structural.js';
 
 /** Best-effort numerical-recovery outcome. */
 export interface RecoveryOutcome {
@@ -147,40 +146,18 @@ export function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOu
 }
 
 /**
- * A bridge RHS reduced to its comparison-ready, canonical-invariant form:
- * its validated dimension and its normal-form hash. Both depend only on the
- * bridge, so `scanLinkages` computes them once per bridge instead of once per
- * (canonical × bridge) pair.
- */
-interface BridgePrecomp {
-  readonly rhs: ExprNode;
-  /** Inferred dimension when `validate` succeeded, else `null`. */
-  readonly dim: Dimension | null;
-  /** `normalForm(rhs)` — the structural hash. */
-  readonly normal: string;
-}
-
-/** Validate + normal-form a bridge RHS once. */
-function precomputeBridge(rhs: ExprNode): BridgePrecomp {
-  const v = validate(rhs);
-  return {
-    rhs,
-    dim: v.ok ? v.inferredDimension : null,
-    normal: normalForm(rhs),
-  };
-}
-
-/**
  * The comparison core, given a canonical entry (with its pre-computed
- * normal-form) and a pre-computed bridge. Pure: no AST re-walks except the
- * rare `numericalRecovery` that only fires on a structural match.
+ * normal-form) and a bridge's shape from the process-wide `bridgeShapes`
+ * table (validated dimension and normal-form hash, computed once). Pure: no
+ * AST re-walks except the rare `numericalRecovery` that only fires on a
+ * structural match.
  */
 function classifyAgainst(
   canon: CanonicalEquation,
   canonAst: ExprNode,
   canonNormal: string,
   bridgeId: number,
-  bridge: BridgePrecomp,
+  bridge: BridgeShape,
 ): LinkageResult {
   const relation = classifyStructure({
     left: canonAst,
@@ -219,9 +196,9 @@ export function classifyLinkage(
   bridgeId: number,
 ): LinkageResult {
   const canon = canonicalById(canonicalId);
-  const bridgeRhs = BRIDGE_RHS_BY_ID.get(bridgeId);
+  const bridge = bridgeShapes().get(bridgeId);
 
-  if (!canon || !bridgeRhs || !canon.scalarAst) {
+  if (!canon || !bridge || !canon.scalarAst) {
     return {
       canonicalId,
       bridgeId,
@@ -237,7 +214,7 @@ export function classifyLinkage(
     canon.scalarAst,
     normalForm(canon.scalarAst),
     bridgeId,
-    precomputeBridge(bridgeRhs),
+    bridge,
   );
 }
 
@@ -245,16 +222,14 @@ export function classifyLinkage(
  * Scan every canonical entry (with a scalar-AST) against every bridge RHS, and
  * return the non-`unrelated` results — the physicist's linkage worklist.
  *
- * Each bridge is validated and normal-formed ONCE (canonical-invariant), and
- * each canonical's normal-form is computed once per outer iteration
- * (bridge-invariant); the inner loop then only compares pre-computed strings
- * and dimensions. Reduces the per-pair AST walks (~3·C·B) to ~2·B + C.
+ * Each bridge's shape comes from the process-wide `bridgeShapes` table
+ * (validated and normal-formed once), and each canonical's normal-form is
+ * computed once per outer iteration (bridge-invariant); the inner loop then
+ * only compares pre-computed strings and dimensions.
  */
 export function scanLinkages(): LinkageResult[] {
   const results: LinkageResult[] = [];
-  const bridges: ReadonlyArray<readonly [number, BridgePrecomp]> = [
-    ...BRIDGE_RHS_BY_ID,
-  ].map(([id, rhs]) => [id, precomputeBridge(rhs)] as const);
+  const bridges = bridgeShapes();
 
   for (const ce of CANONICAL_EQUATIONS) {
     if (!ce.scalarAst) continue;

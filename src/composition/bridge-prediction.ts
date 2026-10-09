@@ -44,7 +44,7 @@ interface Regime {
   readonly force?: Force;
 }
 
-/** Canonical string key for a regime (set/Map identity). */
+/** Canonical string key for a regime (set/Map identity). @internal */
 export function regimeKey(r: Regime): string {
   const parts: string[] = [];
   if (r.scale !== undefined) parts.push(`scale=${r.scale}`);
@@ -56,6 +56,8 @@ export function regimeKey(r: Regime): string {
  * Project a quantity onto the regime plane. Returns null when neither a
  * scale nor a force is stated (the quantity is not placeable — an honest
  * limit: only regime-tagged quantities enter the map).
+ *
+ * @internal
  */
 export function placeQuantity(q: Quantity): Regime | null {
   const r: Regime = {
@@ -90,6 +92,8 @@ function toIndices(r: Regime): TensorIndices {
  * endpoint regimes. The namesake now carries the catalog's structure —
  * `getStats()`, `getBridges()`, `unpopulatedNeighborhoods()` all reflect
  * real data.
+ *
+ * @internal
  */
 export function buildRegimeTensor(edges: readonly BridgeEdge[]): UniversalTensor {
   const tensor = new UniversalTensor({

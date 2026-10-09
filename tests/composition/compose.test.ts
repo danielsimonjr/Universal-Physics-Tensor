@@ -18,6 +18,7 @@ import {
   CompositionJunctionError,
   DomainViolationError,
   CATALOG_GRAPH,
+  REGISTERED_COMPOSITION_IDS,
   SOURCE_ALIAS_DISPOSITIONS,
 } from '../../src/composition/index.js';
 import type {
@@ -331,6 +332,21 @@ describe('SOURCE_ALIAS_DISPOSITIONS (9.0.0 audit §4 C8)', () => {
       expect(a, key).toBeDefined();
       expect(b, key).toBeDefined();
       expect(() => composeEdges(a!, b!), key).not.toThrow(CompositionJunctionError);
+    }
+  });
+});
+
+describe('REGISTERED_COMPOSITION_IDS is checked against the graph it describes (9.0.0 audit §4 Low)', () => {
+  // The CT-* set is a pre-registration (v0.10.0) with no data home to derive it from, so the
+  // literal stays, and this guard binds every id to a composition the catalog graph can form.
+  it('each registered id composes over CATALOG_GRAPH', () => {
+    for (const key of REGISTERED_COMPOSITION_IDS) {
+      const [firstId, secondId] = key.split('>>');
+      const a = CATALOG_GRAPH.find((e) => e.id === firstId);
+      const b = CATALOG_GRAPH.find((e) => e.id === secondId);
+      expect(a, key).toBeDefined();
+      expect(b, key).toBeDefined();
+      expect(composeEdges(a!, b!).id, key).toBe(key);
     }
   });
 });

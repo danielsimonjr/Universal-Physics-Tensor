@@ -41,9 +41,11 @@ export type EvidenceTag =
  *
  * Lives HERE, not in `coverage.ts` (which re-exports it), because
  * `tests/atlas/derived-tag-literals.test.ts` allows the literals
- * `'formally-proved'` and `'symbolically-checked'` under `src/atlas/` in
- * exactly two files: this one and `derive-evidence.ts`. A tag that can only be
- * DERIVED must not be spellable anywhere a record could hand-set it.
+ * `'formally-proved'` and `'symbolically-checked'` under `src/atlas/` and
+ * `src/relations/` in exactly three files: this one (`src/relations/types.ts`,
+ * where the union and the tag list are declared), `src/atlas/types.ts`, and
+ * `src/atlas/derive-evidence.ts`. A tag that can only be DERIVED must not be
+ * spellable anywhere a record could hand-set it.
  *
  * @internal
  */
