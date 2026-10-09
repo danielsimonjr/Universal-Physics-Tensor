@@ -174,7 +174,7 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
     { key: 'T_surface_K', symbol: 'T(a, t)', unit: 'K', meaning: 'temperature at the surface from the series solution' },
     { key: 'h_rad_max_W_per_m2_K', symbol: 'h_rad', unit: 'W/(m^2*K)', meaning: 'εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run' },
     { key: 'Bi_radiating', symbol: 'Bi_r', unit: '', meaning: '(h + h_rad)(a/3)/k: the Biot number with the largest radiative conductance added' },
-    { key: 'T_radiating_K', symbol: 'T_r(t)', unit: 'K', meaning: 'the lumped temperature with the T⁴ loss kept (RK4). The linear-loss check does not apply to it; its premise is Bi_radiating ≤ 0.1, and it is null otherwise' },
+    { key: 'T_radiating_K', symbol: 'T_r(t)', unit: 'K', meaning: 'the lumped temperature with the T⁴ loss kept (RK4). The linear-loss check does not apply to it; its premise is Bi_radiating ≤ 0.1, and it is not defined otherwise' },
   ],
   conditions: [
     'initial condition: the sphere is at the uniform temperature T0 when it is immersed at t = 0',

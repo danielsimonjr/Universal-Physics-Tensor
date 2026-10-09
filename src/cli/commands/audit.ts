@@ -77,6 +77,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   out('\nDeriving the bridge equations by dimensions');
   out('(form by dimensions; the constant is recovered by matching the evaluator)\n');
   out(`  DERIVED (${derived.length}) — recognized monomial, prefactor recovered:`);
+  if (derived.length === 0) out('    none');
   for (const { e, d } of derived) {
     const tag = d.cleanPrefactor ? '' : '  (empirical/tuned constant)';
     out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${api.formatQuantity(d.prefactor!)}${tag}`);
@@ -85,21 +86,22 @@ async function run(ctx: CommandCtx): Promise<number> {
     `\n  COEFFICIENT UNSET (${coefficientUnset.length}) — dimensional, and no sourced prefactor multiplies the monomial. ` +
       "The evaluator's 1 is that absence, not a recovered constant:",
   );
-  out('    ' + coefficientUnset.map((x) => x.e.id).join(', '));
+  out('    ' + (coefficientUnset.length === 0 ? 'none' : coefficientUnset.map((x) => x.e.id).join(', ')));
   out('    (not a recovered prefactor, not a failed reconstruction, and not a free dimensionless group)');
   out(
     `\n  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, ${decoy.length}) — a set of constants closes the dimensions, ` +
       'but its monomial does not reproduce the evaluator:',
   );
-  out('    ' + decoy.map((x) => x.e.id).join(', '));
+  out('    ' + (decoy.length === 0 ? 'none' : decoy.map((x) => x.e.id).join(', ')));
   out('    (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)');
   out(
     `\n  NOT A MONOMIAL (${notAMonomial.length}) — the encoded formula adds dimensionful terms, so it is not a proportionality. ` +
       'A monomial reconstruction does not apply:',
   );
-  out('    ' + notAMonomial.map((x) => x.e.id).join(', '));
+  out('    ' + (notAMonomial.length === 0 ? 'none' : notAMonomial.map((x) => x.e.id).join(', ')));
   out('    (not a failed reconstruction of a monomial, and not a physical refutation)');
   out(`\n  OPEN (${open.length}) — irreducible free dimensionless group(s); by complexity:`);
+  if (open.length === 0) out('    none');
   for (const { e, c } of [...open].sort((a, b) => a.c - b.c)) {
     // An infinite complexity is a target outside the span of its governing variables: no
     // dimensionless group exists, so the row is unspannable, not merely hard.

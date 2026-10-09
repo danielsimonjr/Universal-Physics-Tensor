@@ -98,9 +98,9 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     { key: 'V_rms_parent_V', symbol: 'V_rms,parent', unit: 'V', meaning: 'the parent spectrum integrated over the band (adaptive Simpson)' },
     { key: 'parent_deviation', symbol: 'V_rms/V_rms,parent − 1', unit: '', meaning: signedRelativeDifference('scalar result', 'parent') },
     { key: 'V_rms_rel_sigma', symbol: 'σ(V_rms)/V_rms', unit: '', meaning: 'statistical scatter of an RMS averaged over t_avg: 1/(2√(B t_avg)) (Dicke radiometer relation)' },
-    { key: 'V_rms_total_V', symbol: 'V_rms,total', unit: 'V', meaning: 'what the instrument reads with its amplifier noise added in quadrature; null without e_n2/i_n2' },
-    { key: 'resistor_fraction', symbol: 'φ', unit: '', meaning: "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); null without e_n2/i_n2" },
-    { key: 'T_n_K', symbol: 'T_n', unit: 'K', meaning: "the amplifier's noise temperature for the source R_eff, (e_n² + i_n²R_eff²)/(4k_B R_eff); null without e_n2/i_n2" },
+    { key: 'V_rms_total_V', symbol: 'V_rms,total', unit: 'V', meaning: 'what the instrument reads with its amplifier noise added in quadrature; not defined without e_n2/i_n2' },
+    { key: 'resistor_fraction', symbol: 'φ', unit: '', meaning: "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); not defined without e_n2/i_n2" },
+    { key: 'T_n_K', symbol: 'T_n', unit: 'K', meaning: "the amplifier's noise temperature for the source R_eff, (e_n² + i_n²R_eff²)/(4k_B R_eff); not defined without e_n2/i_n2" },
   ],
   conditions: [
     'thermal equilibrium: R and the instrument input at one temperature T, no DC current through R',

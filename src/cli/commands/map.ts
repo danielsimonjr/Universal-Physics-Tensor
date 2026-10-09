@@ -35,21 +35,26 @@ import type {
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { UnitMode } from '../../cli-api.js';
 import { withCatalogEvidence } from '../map-evidence.js';
+import { DISCOVER_MAX_ORDERS_DEFAULT } from '../library-defaults.js';
+
+/** `--around` reaches this many shared-quantity hops when `--depth` is not given, and at most this many when it is. */
+const DEFAULT_DEPTH = 1;
+const MAX_DEPTH = 10;
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('both', 'Which graph to draw: catalog, canonical, or both. This command defaults to both.'),
   { name: '--format', valueStyle: 'attached', description: 'Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer.', defaultValue: 'text' },
   { name: '--out', valueStyle: 'attached', description: 'Write the report to PATH instead of stdout.' },
-  { name: '--max-orders', valueStyle: 'attached', description: 'Magnitude-clash threshold for the --proposed overlay.', defaultValue: '3' },
+  { name: '--max-orders', valueStyle: 'attached', description: 'Magnitude-clash threshold for the --proposed overlay.', defaultValue: DISCOVER_MAX_ORDERS_DEFAULT },
   { name: '--anchor', valueStyle: 'attached', repeatable: true, description: 'Override a numeric anchor as k=v for the --proposed overlay.', defaultValue: 'mass=M_sun' },
   { name: '--proposed', valueStyle: 'none', description: 'Overlay unadjudicated identity-consequence relations.' },
   { name: '--relation', valueStyle: 'attached', description: 'Keep atlas edges whose recorded relation is TYPE.' },
   { name: '--evidence', valueStyle: 'attached', description: 'Keep atlas edges whose derived evidence set contains TAG.' },
   { name: '--around', valueStyle: 'either', description: 'Keep edges within --depth shared-quantity hops of QUANTITY.' },
-  { name: '--depth', valueStyle: 'attached', description: 'Hop count for --around.', defaultValue: '1' },
+  { name: '--depth', valueStyle: 'attached', description: 'Hop count for --around.', defaultValue: String(DEFAULT_DEPTH) },
   { name: '--route', valueStyle: 'either', description: 'Map the atlas route FROM,TO instead of the equation graph.' },
   { name: '--all-routes', valueStyle: 'none', description: 'With --route, list every simple route, shortest first.' },
-  { name: '--max-routes', valueStyle: 'attached', description: 'Cap on --all-routes. The maximum accepted is 1000.', defaultValue: '20' },
+  { name: '--max-routes', valueStyle: 'attached', description: `Cap on --all-routes. The maximum accepted is ${atlasMap.MAX_ROUTES_CEILING}.`, defaultValue: String(atlasMap.DEFAULT_MAX_ROUTES) },
   { name: '--family', valueStyle: 'either', description: 'Map one atlas family by name.' },
   { name: '--observable', valueStyle: 'either', description: 'Map bridges whose recorded text names this observable.' },
   { name: '--stored', valueStyle: 'none', description: `Derive evidence from ${publishedUrl('data/atlas/witness-results.json')}. That file is not in the published package; the command then names --run.` },
@@ -117,7 +122,7 @@ const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|d
         from the edges that simply did not match — an unaudited graph must not
         render as a complete answer.
         --around=QUANTITY [--depth=N] keeps only the edges within N
-        shared-quantity hops of QUANTITY (default 1: the edges that use it),
+        shared-quantity hops of QUANTITY (default ${DEFAULT_DEPTH}: the edges that use it),
         in every output form, and prints how many of the source's edges it
         kept: the others are omitted from the view, not absent from the graph.
         --route=FROM,TO and --family=NAME map the ATLAS instead: models and
@@ -133,8 +138,8 @@ const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|d
         canonicalRefs record; nothing is inferred from shared quantities.
         --route=FROM,TO --all-routes lists every simple route (no model
         visited twice), shortest first, each with its composition and route
-        claim, and counts the claims; --max-routes=N (default 20, at most
-        1000) bounds the list, and a list cut short says so and says up to
+        claim, and counts the claims; --max-routes=N (default ${atlasMap.DEFAULT_MAX_ROUTES}, at most
+        ${atlasMap.MAX_ROUTES_CEILING}) bounds the list, and a list cut short says so and says up to
         which bridge count it is complete.
         --observable=NAME maps the bridges whose RECORDED preserves text, or
         declared bound translation, names that observable (a whole-word text
@@ -559,8 +564,8 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   let focus: { around: string; depth: number; kept: number; of: number } | null = null;
   let fullGraph = wholeGraph;
   if (around !== undefined) {
-    const depth = depthRaw === undefined ? 1 : Number(depthRaw);
-    if (!Number.isInteger(depth) || depth < 1 || depth > 10) throw new CliError(`upt map: --depth=${depthRaw} must be an integer from 1 to 10`);
+    const depth = depthRaw === undefined ? DEFAULT_DEPTH : Number(depthRaw);
+    if (!Number.isInteger(depth) || depth < 1 || depth > MAX_DEPTH) throw new CliError(`upt map: --depth=${depthRaw} must be an integer from 1 to ${MAX_DEPTH}`);
     const known = new Set(wholeGraph.flatMap((e) => [...e.sources.map((q) => q.name), e.target.name]));
     const name = api.resolveQuantityName(around, known);
     if (name === null) {
@@ -777,7 +782,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
     out(`     link hubs: ${c.hubs.join(', ')}\n`);
   }
   out(`  ○ isolated (${m.isolated.length}) — share no quantity with any other edge:`);
-  out(`     ${m.isolated.join(', ')}`);
+  out(`     ${m.isolated.length === 0 ? 'none' : m.isolated.join(', ')}`);
   out('\n  (a structural map — shared-quantity connectivity, NOT a credibility signal)');
   return exitCode;
 }

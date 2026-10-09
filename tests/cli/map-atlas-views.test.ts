@@ -22,7 +22,7 @@ describe('upt map --route', () => {
     const { code, stdout } = await run(['map', '--route=model-pendulum,model-lc']);
     expect(code).toBe(0);
     expect(stdout).toContain(`shown: 2 of ${BRIDGES.length} atlas bridges, 3 of ${MODELS.length} models`);
-    expect(stdout).toContain('[source: atlas (ATLAS_FAMILIES, src/atlas/families.ts)]');
+    expect(stdout).toContain('[source: atlas (the models and bridges of every family, https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/src/atlas/families.ts)]');
     expect(stdout).toMatch(/step 1 {2}model-pendulum --\[approximation\]--> model-spring {2}\(ab-pendulum-linear\)/);
     expect(stdout).toMatch(/step 2 {2}model-spring --\[exact-equivalence\]--> model-lc {2}\(ab-spring-lc\)/);
     expect(stdout).toContain('assumptions: θ0 ≤ 0.5 rad');

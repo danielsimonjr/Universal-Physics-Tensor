@@ -26,6 +26,7 @@
 import { det, inv } from '@danielsimonjr/mathts-functions';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
 import { DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
+import { UnitError } from '../dimensional/units.js';
 import { readParameter } from './binding-value.js';
 import { computeChristoffelTensor } from './connection-lowering-helpers.js';
 import { christoffelAt, lowerFirstIndex, riemannUpperAt } from './curvature-lowering-helpers.js';
@@ -323,7 +324,7 @@ export class MetricMassError extends Error {
 
 /** A mass that is not positive is not a source. */
 function requirePositiveMass(M: number): void {
-  if (!(M > 0)) throw new MetricMassError(`${M <= 0 ? 'a non-positive' : 'a non-finite'} mass is not a source: the metric needs a positive mass`);
+  if (!(M > 0)) throw new MetricMassError(`${M <= 0 ? 'a non-positive' : 'a non-finite'} mass (M = ${M} kg) is not a source: the metric needs a positive mass`);
 }
 
 /**
@@ -370,7 +371,14 @@ function metricParams(
     if (eq <= 0) throw new Error(`'${pair}' must be key=value`);
     const key = pair.slice(0, eq);
     if (!(key in defaults)) throw new Error(`unknown parameter '${key}' (expected ${Object.keys(defaults).join(', ')})`);
-    const read = readParameter(pair.slice(eq + 1), PARAM_DIM[key] ?? DIMENSIONLESS);
+    let read: ReturnType<typeof readParameter>;
+    try {
+      read = readParameter(pair.slice(eq + 1), PARAM_DIM[key] ?? DIMENSIONLESS);
+    } catch (e) {
+      // The reader knows the text and the dimension it was given, not which parameter held them.
+      if (e instanceof UnitError) throw new UnitError(`parameter ${key}: ${e.message}`);
+      throw e;
+    }
     values[key] = read.value;
     for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
   }
@@ -406,7 +414,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     requirePolarInterior(p.theta!);
     const rs = (2 * p.G! * p.M!) / (p.c! * p.c!);
     if (Number.isNaN(p.r)) p.r = 10 * rs;
-    if (!(p.r! > rs)) throw new Error(`r must be outside the horizon (r_s = ${rs})`);
+    if (!(p.r! > rs)) throw new Error(`r must be outside the horizon (r = ${p.r} m, r_s = ${rs} m)`);
     const g = schwarzschildMetric(p.M!, p.c!, p.G!);
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
     const t = tensorsOf(g, x);
@@ -486,7 +494,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
   requirePolarInterior(p.theta!);
   const Mgeom = (p.G! * p.M!) / (p.c! * p.c!);
   if (Number.isNaN(p.r)) p.r = 10 * Mgeom;
-  if (!(p.r! > 0)) throw new Error(`r must be positive and outside the singularity (got ${p.r})`);
+  if (!(p.r! > 0)) throw new Error(`r must be positive and outside the singularity (got r = ${p.r} m)`);
   if (Math.abs(p.a!) >= p.r!) throw new Error('Kerr finite difference wants |a| < r and r outside the ring');
   const g = kerrMetric(Mgeom, p.a!);
   const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];

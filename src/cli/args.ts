@@ -66,6 +66,12 @@ export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): P
 
     const spec = bySpecName.get(flagName);
     if (!spec) {
+      // The three file options belong to `upt`, not to a command, and are read only before the command.
+      if (flagName === '--record' || flagName === '--replay' || flagName === '--show-record') {
+        throw new UsageError(
+          `unknown flag '${flagName}' for '${command}' ${hint}; ${flagName} is an option of upt itself and goes before the command: upt ${flagName}=FILE ${command} ...`,
+        );
+      }
       throw new UsageError(`unknown flag '${flagName}' for '${command}' ${hint}`);
     }
 

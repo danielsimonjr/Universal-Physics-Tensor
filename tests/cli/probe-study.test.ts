@@ -73,12 +73,12 @@ describe('upt probe study', () => {
     expect(text(c)).not.toMatch(/at \w+ \(/);
   });
 
-  it('usage errors: no --data, bad --alpha', async () => {
+  it('a missing --data is usage (2); a bad --alpha is a bad value (1)', async () => {
     const c = captureMerged();
     expect(await runCli(['probe', 'study'], c.io)).toBe(2);
     expect(text(c)).toMatch(/--data=FILE is required/);
     const c2 = captureMerged();
-    expect(await runCli(['probe', 'study', `--data=${fixture('pure-noise')}`, '--alpha=2'], c2.io)).toBe(2);
+    expect(await runCli(['probe', 'study', `--data=${fixture('pure-noise')}`, '--alpha=2'], c2.io)).toBe(1);
   });
 
   it('help probe documents the study file, the roles and the verdicts', async () => {

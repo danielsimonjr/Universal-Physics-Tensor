@@ -6,7 +6,7 @@
 
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { evalExpr } from '../expr-eval.js';
-import type { ProbeDataset } from './types.js';
+import { DEFAULT_HOLDOUT_TOL, type ProbeDataset } from './types.js';
 import { scalarDiscrepancy } from './residual.js';
 import { canonicalJson } from './serialize.js';
 
@@ -54,7 +54,7 @@ export function fitPrefactor(
   expr: ExprNode,
   exploratory: ProbeDataset,
   holdout: ProbeDataset | undefined,
-  holdoutTol = 0.15,
+  holdoutTol = DEFAULT_HOLDOUT_TOL,
 ): FitResult {
   if (exploratory.role !== 'exploratory-fit') {
     throw new RangeError(`fit: exploratory role must be exploratory-fit (got '${exploratory.role}')`);

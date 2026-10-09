@@ -14,6 +14,7 @@ import type { ParsedArgs } from '../args.js';
 import type { CommandCtx } from '../command.js';
 import { CliError, UsageError } from '../errors.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
+import type { Dimension } from '../../dimensional/types.js';
 
 export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
@@ -24,9 +25,9 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
     const n = Number(raw);
     // Reject rather than silently ignore: an empty value coerces to 0 (every
     // pair would clash), a non-numeric one to NaN, and a negative threshold is
-    // meaningless.
+    // meaningless. The flag is well formed and its value is bad: exit 1, as for any bad value.
     if (raw === '' || !Number.isFinite(n) || n < 0) {
-      throw new UsageError(`upt: --max-orders must be a non-negative finite number, got "${raw}".`);
+      throw new CliError(`upt: --max-orders must be a non-negative finite number, got "${raw}".`);
     }
     opts.maxOrdersOfMagnitude = n;
   }
@@ -50,12 +51,31 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
     seenAnchor.add(p.name);
   }
   const siblings = pairs.map((p) => ({ name: p.name, raw: p.raw }));
+  // Every quantity either graph names, with its dimension: an anchor is a value of one of them.
+  const quantities = new Map<string, Dimension>();
+  for (const edge of [...api.CATALOG_GRAPH, ...api.CANONICAL_GRAPH]) {
+    for (const q of [edge.target, ...edge.sources]) quantities.set(q.name, q.dim);
+  }
+  const quantityNames = new Set(quantities.keys());
   const rawValues: Record<string, number> = {};
   for (const p of pairs) {
+    const resolved = api.resolveQuantityName(p.name, quantityNames);
+    const dim = resolved === null ? undefined : quantities.get(resolved);
+    if (resolved === null || dim === undefined) {
+      // An anchor on a name no graph holds would be read, printed as the anchor, and change nothing.
+      throw new CliError(`upt: --anchor '${p.pair}': '${p.name}' is not a quantity in either graph (\`upt search ${p.name}\` looks for one)`);
+    }
     try {
       const read = api.readNamedBinding(p.name, p.raw, { siblings });
       if (!Number.isFinite(read.value)) {
         throw new CliError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
+      }
+      // A bare number is already in SI. A value with a unit must be the quantity's dimension:
+      // `mass=1s` is not a mass of 1 kg.
+      if (read.dimensioned && !api.dimensionsEqual(read.dimension, dim)) {
+        throw new CliError(
+          `upt: --anchor '${p.pair}' is ${api.format(read.dimension)}, but ${resolved} is ${api.format(dim)}`,
+        );
       }
       rawValues[p.name] = read.value;
     } catch (e) {
@@ -64,7 +84,15 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
       if (e instanceof api.TemperatureBindingError) {
         throw new CliError(`upt: --anchor '${p.pair}' is not a temperature. ${e.message}`);
       }
-      throw new CliError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
+      // Not a number: the pinned sentence. Any other unit error (an unknown unit, an ambiguous
+      // one) says what it found, so it is passed on with the anchor it came from.
+      if (e instanceof api.BindingNumberError) {
+        throw new CliError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
+      }
+      if (e instanceof api.UnitError) {
+        throw new CliError(`upt: --anchor '${p.pair}': ${e.message}`);
+      }
+      throw e;
     }
   }
   try {
@@ -73,9 +101,6 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
     if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt: ${e.message}`);
     throw e;
   }
-  const quantityNames = new Set(
-    [...api.CATALOG_GRAPH, ...api.CANONICAL_GRAPH].flatMap((edge) => [edge.target.name, ...edge.sources.map((s) => s.name)]),
-  );
   for (const [name, value] of Object.entries(rawValues)) {
     const key = api.resolveQuantityName(name, quantityNames) ?? name;
     gt[key] = value;

@@ -14,6 +14,7 @@ import { parseDiscoveryOpts } from './_discovery-opts.js';
 import type { VettedCandidate } from '../../composition/discovery.js';
 import type { AnnotatedCandidate } from '../../composition/adjudication.js';
 import type { AdjudicationVerdict } from '../../bridges/catalog-types.js';
+import { DISCOVER_MAX_ORDERS_DEFAULT } from '../library-defaults.js';
 import { adjudicationSourceUrls } from '../published-url.js';
 import type { ConsequenceSignal, ConsequenceEvidence } from '../../composition/consequence.js';
 
@@ -33,7 +34,7 @@ const FLAGS: FlagSpec[] = [
     name: '--max-orders',
     valueStyle: 'attached',
     description: 'Magnitude-clash threshold. A larger value keeps more pairs promising.',
-    defaultValue: '3',
+    defaultValue: DISCOVER_MAX_ORDERS_DEFAULT,
   },
   {
     name: '--anchor',
@@ -73,7 +74,7 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         --derive emits, for each 'promising' identification, the ONE algebraic
         relation it implies (monomial elimination) as an UNADJUDICATED, math-only
         proposal — NOT a bridge (Part-VI §XXVII-B). Pairs with --source=canonical.
-        --max-orders=N tunes the magnitude-clash threshold (default 3); looser N
+        --max-orders=N tunes the magnitude-clash threshold (default ${DISCOVER_MAX_ORDERS_DEFAULT}); looser N
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
@@ -143,8 +144,11 @@ function deriveReport(
           .map((g) => `${g.name}=${sampleOf(g.name)!.value} [${sampleOf(g.name)!.source}]`)
           .join(', ');
         approx = `  ≈ ${api.formatQuantity(p.evaluate(vals))}${at ? ` (${at})` : ''}`;
-      } catch {
-        approx = '';
+      } catch (e) {
+        // A proposal that cannot be evaluated at its samples says so and why; it is not shown as
+        // though it had no sample. Only an `Error` is a refusal of the formula: anything else is a defect.
+        if (!(e instanceof Error)) throw e;
+        approx = `  (not evaluated at the sample values: ${e.message})`;
       }
     }
     out(`  ${p.id}`);
@@ -228,7 +232,6 @@ interface Readiness {
   entailedConsequence: number;
 }
 
-/** How far the `promising` set is from evidence, counted from candidate fields. */
 /** Encoded bridges that already carry a falsifier. Not discovery rows. */
 function encodedFalsifiers(api: CommandCtx['api']): readonly string[] {
   const lines: string[] = [];
@@ -250,6 +253,7 @@ function encodedFalsifiers(api: CommandCtx['api']): readonly string[] {
   return lines;
 }
 
+/** How far the `promising` set is from evidence, counted from candidate fields. */
 function readinessOf(api: CommandCtx['api'], candidates: readonly FullyAnnotatedCandidate[]): Readiness {
   const p = candidates.filter((c) => c.verdict === 'promising');
   const g = p.map((c) => api.describeGrounding(c, c.consequence?.signal));
@@ -298,7 +302,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       command: 'discover',
       source,
       anchor: { groundTruth: anchor },
-      options: opts as Record<string, unknown>,
+      options: { ...opts },
       epistemics: isDerive ? DERIVE_EPISTEMICS : EPISTEMICS,
       result,
       ...(requireFalsifier && !isDerive ? { encodedFalsifiers: encodedFalsifiers(api) } : {}),
@@ -412,7 +416,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(adjudicationSummaryLine(promising, promising.length));
     }
   } else {
-    out('  no candidate is `promising` from the default {mass} anchor.');
+    out('  no candidate is `promising` from the anchor above.');
   }
   if (clash.length) {
     out(`\n  MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):`);

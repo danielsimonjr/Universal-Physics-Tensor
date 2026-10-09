@@ -76,6 +76,18 @@ function inputErrorOrSelf(api: CommandCtx['api'], e: unknown): unknown {
   return api.isInputContractError(e) ? new CliError(`upt evaluate: ${e.message}`) : e;
 }
 
+/**
+ * What `run` threw, as the CLI reports it. An input error, a domain failure, a carrier-sign
+ * failure and a closed form that is not finite at the inputs are each a bad value: exit 1
+ * (documented contract), under the one `upt evaluate:` prefix, with the bridge or case named.
+ */
+function evaluationFailure(api: CommandCtx['api'], e: unknown, label: string): unknown {
+  if (api.isInputContractError(e)) return inputErrorOrSelf(api, e);
+  if (e instanceof api.FormulaError) return new CliError(`upt evaluate: ${label}: ${e.message}`);
+  if (e instanceof Error) return new CliError(`upt evaluate: ${e.message}`);
+  return e;
+}
+
 /** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2); a key twice is refused. */
 function resolveInputs(api: CommandCtx['api'], label: string, parameters: readonly EvaluatorParameter[], args: readonly string[]) {
   splitAssignments('evaluate', args, 'key=value (e.g. mu_e=2)');
@@ -248,8 +260,7 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   try {
     result = api.runAppliedCase(c.id, inputs);
   } catch (e) {
-    // An input error carries the one `upt evaluate:` prefix; a domain refusal is a bad value too (exit 1).
-    throw api.isInputContractError(e) ? inputErrorOrSelf(api, e) : new CliError((e as Error).message);
+    throw evaluationFailure(api, e, c.id);
   }
   const u = uncertaintyOf(ctx, c, inputs, (i) => ({ ...api.runAppliedCase(c.id, i).outputs }), CASE_NOT_INCLUDED);
   const failed = result.checks.filter((k) => !k.holds).map((k) => k.id);
@@ -395,9 +406,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     result = spec.run(inputs);
   } catch (e) {
-    // An input error, a domain failure or a carrier-sign failure is a bad value: exit 1 (documented contract).
-    // Input errors carry the one `upt evaluate:` prefix.
-    throw api.isInputContractError(e) ? inputErrorOrSelf(api, e) : new CliError((e as Error).message);
+    throw evaluationFailure(api, e, `be-${spec.bridgeId}`);
   }
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i), NOT_INCLUDED);
