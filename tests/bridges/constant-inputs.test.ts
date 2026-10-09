@@ -27,10 +27,22 @@ describe('a constant-named input is refused', () => {
     expect(() => evaluateCatalogRelation(hawking, { mass: 1, G: 1 })).toThrow(/'G' names a registered constant/);
   });
 
-  it('on the validity condition, as a caller error, not as a false condition', () => {
-    const hawking = relation('be-42');
-    expect(relationHolds(hawking, { mass: 1 })).toBe(true);
-    expect(() => relationHolds(hawking, { mass: 1, c: -1 })).toThrow(ConstantInputError);
+  it('on the validity condition that reads the constant, as a caller error, not as a false condition', () => {
+    // be-51's condition reads G and c (b >= 10 r_s); be-42's reads neither.
+    const lensing = relation('be-51');
+    const at = { mass: 1.989e30, 'impact-parameter': 6.957e8 };
+    expect(relationHolds(lensing, at)).toBe(true);
+    expect(() => relationHolds(lensing, { ...at, c: -1 })).toThrow(ConstantInputError);
+    expect(relationHolds(relation('be-42'), { mass: 1, c: -1 })).toBe(true);
+  });
+
+  it('a reserved key the formula does not read is an extra key, dropped as any other is on the graph path', () => {
+    // A composed edge forwards every input to each component: be-63 >> be-12 hands be-12 the Lane-Emden ω₃.
+    const thermal = relation('be-12');
+    const at = { mass: 9.1093837015e-31, temperature: 300 };
+    expect(evaluateCatalogRelation(thermal, { ...at, 'lane-emden-omega-3': 2 })).toBe(evaluateCatalogRelation(thermal, at));
+    expect(relationHolds(thermal, { ...at, 'lane-emden-omega-3': 2 })).toBe(true);
+    expect(() => evaluateCatalogRelation(thermal, { ...at, h: 1 })).toThrow(ConstantInputError);
   });
 
   it('on a bare formula, for π, a constant and a formula overlay', () => {
@@ -51,10 +63,12 @@ describe('a constant-named input is refused', () => {
         return error;
       }
     };
-    const constant = thrown(() => holds('mass > 0', { mass: 1, G: 1 }, formulaScope(), names));
+    const constant = thrown(() => holds('mass * G > 0', { mass: 1, G: 1 }, formulaScope(), names));
     expect(constant).toBeInstanceOf(ConstantInputError);
     expect(constant).not.toBeInstanceOf(HoldsError);
     expect(thrown(() => holds('mass > 0', {}, formulaScope(), names))).toBeInstanceOf(HoldsError);
+    // A condition that does not read G drops the key, as any other extra key.
+    expect(holds('mass > 0', { mass: 1, G: 1 }, formulaScope(), names)).toBe(true);
   });
 
   it('a declared source may carry a constant name: be-63 overrides the Lane-Emden default', () => {
@@ -65,7 +79,7 @@ describe('a constant-named input is refused', () => {
     const base = evaluateCatalogRelation(chandrasekhar, at);
     const doubled = evaluateCatalogRelation(chandrasekhar, { ...at, 'lane-emden-omega-3': 2 * at['lane-emden-omega-3']! });
     expect(doubled).toBeCloseTo(2 * base, 6);
-    expect(() => holds('mass > 0', { mass: 1, G: 1 }, formulaScope(), [...formulaNames()], ['G'])).not.toThrow();
+    expect(() => holds('mass * G > 0', { mass: 1, G: 1 }, formulaScope(), [...formulaNames()], ['G'])).not.toThrow();
   });
 
   it('an evaluator output may not read a parameter key that names a constant', () => {

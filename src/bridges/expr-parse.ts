@@ -67,6 +67,8 @@ const underscored = (name: string): string => name.replace(/-/g, '_');
  * An input whose name is reserved is refused with {@link ConstantInputError}
  * unless `declared` names it: a relation's own source may carry a constant's
  * name as a default the caller overrides (be-63's Lane-Emden ω₃).
+ * {@link evaluateFormula} first drops a reserved key its expression does not
+ * read; this builder refuses every undeclared one.
  */
 export function formulaScope(
   inputs: Readonly<Record<string, number>> = {},
@@ -93,10 +95,51 @@ export function formulaVariables(expression: string): readonly string[] {
   return parseFormula(rewriteCatalogHyphens(expression, formulaNames())).variables;
 }
 
+const VARIABLES = new Map<string, ReadonlySet<string>>();
+
+const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
+
+/** The names an expression mentions (π included, which MathTS does not list as a variable), cached per expression text. */
+function readNames(expression: string): ReadonlySet<string> {
+  let names = VARIABLES.get(expression);
+  if (names === undefined) {
+    names = new Set(rewriteCatalogHyphens(expression, formulaNames()).match(IDENTIFIER) ?? []);
+    VARIABLES.set(expression, names);
+  }
+  return names;
+}
+
+/**
+ * `inputs` without the reserved keys that `reads` does not name. A reserved
+ * key the formula reads and `declared` does not name is refused: the caller's
+ * number would replace the constant. One the formula does not read is not an
+ * input of this formula; it is dropped, as any other extra key is on the
+ * graph path (a composed edge forwards every input to each component).
+ */
+export function withoutUnreadConstants(
+  inputs: Readonly<Record<string, number>>,
+  reads: ReadonlySet<string>,
+  declared: readonly string[],
+): Record<string, number> {
+  const allowed = new Set(declared.map(underscored));
+  const kept: Record<string, number> = {};
+  for (const [key, value] of Object.entries(inputs)) {
+    const name = underscored(key);
+    if (RESERVED.has(name) && !allowed.has(name)) {
+      if (reads.has(name)) throw new ConstantInputError(key);
+      continue;
+    }
+    kept[key] = value;
+  }
+  return kept;
+}
+
 /**
  * Evaluate a catalog expression with MathTS. Inputs are quantity names.
  * `declared` are the names the caller may bind although they are reserved
- * (the relation's sources); see {@link formulaScope}.
+ * (the relation's sources); a reserved key the expression reads and
+ * `declared` does not name is a {@link ConstantInputError}, and one it does
+ * not read is dropped ({@link withoutUnreadConstants}).
  */
 export function evaluateFormula(
   expression: string,
@@ -104,7 +147,8 @@ export function evaluateFormula(
   declared: readonly string[] = [],
 ): number {
   const rewritten = rewriteCatalogHyphens(expression, formulaNames());
-  return parseFormula(rewritten).evaluate(formulaScope(inputs, declared));
+  const scope = formulaScope(withoutUnreadConstants(inputs, readNames(expression), declared), declared);
+  return parseFormula(rewritten).evaluate(scope);
 }
 
 /**

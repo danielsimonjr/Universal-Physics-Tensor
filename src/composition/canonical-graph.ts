@@ -150,7 +150,7 @@ function domainOf(eq: CanonicalEquation, sourceNames: readonly string[]): Validi
     description: text,
     predicate: (inputs) => {
       try {
-        return holds(text, inputs, formulaScope(), [...formulaNames(), ...sourceNames]);
+        return holds(text, inputs, formulaScope(), [...formulaNames(), ...sourceNames], sourceNames);
       } catch (error) {
         if (error instanceof HoldsError) return false;
         throw error;
