@@ -93,10 +93,23 @@ function collectLeaves(
   }
 }
 
-const SAMPLE_FACTORS = [1, 2, 3];
+/**
+ * The sample points: variable `i` (in sorted canonical-name order) takes the
+ * value `(1.3 + 0.7·i)^p` at exponent `p`. Each variable has its own base, so
+ * the RATIOS between variables change from point to point too. One common
+ * scale factor would leave every ratio such as y/x fixed, and two homogeneous
+ * expressions of the same degree (`x + 2y` and `x + y`) would then pass as a
+ * constant ratio at every point: a recovery that could not fail (9.0.0 audit
+ * §4 C3). `canonical-compare.ts` uses the same scheme.
+ */
+const SAMPLE_EXPONENTS = [1, 1.3, 1.6];
 
-/** Best-effort check that two ASTs agree up to a constant ratio. */
-function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOutcome {
+/**
+ * Best-effort check that two ASTs agree up to a constant ratio.
+ *
+ * @internal
+ */
+export function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOutcome {
   const vars = new Map<string, string>();
   const dimless = new Set<string>();
   collectLeaves(canon, vars, dimless);
@@ -106,10 +119,10 @@ function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOutcome {
   const canonicals = [...new Set(vars.values())].sort();
   const index = new Map(canonicals.map((n, i) => [n, i]));
   const ratios: number[] = [];
-  for (const s of SAMPLE_FACTORS) {
+  for (const p of SAMPLE_EXPONENTS) {
     const values: Record<string, number> = {};
     for (const [raw, canonName] of vars) {
-      values[raw] = (1.3 + 0.7 * index.get(canonName)!) * s;
+      values[raw] = Math.pow(1.3 + 0.7 * index.get(canonName)!, p);
     }
     // Hold unresolved dimensionless leaves fixed — recovery is "up to" them.
     for (const n of dimless) values[n] = 1;
