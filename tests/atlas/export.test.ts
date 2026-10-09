@@ -10,17 +10,19 @@ import { fileURLToPath } from 'node:url';
 import { ATLAS_ID_PREFIX, toAtlasJsonLd, toCombinedAtlasJson } from '../../src/atlas/export.js';
 import type { QudtResolution } from '../../src/atlas/export.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
+import type { WitnessResultsArtifact } from '../../src/atlas/witness-artifact.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dataDir = resolve(here, '../../data/atlas');
 const read = (f: string): unknown => JSON.parse(readFileSync(resolve(dataDir, f), 'utf-8'));
 const pkg = JSON.parse(readFileSync(resolve(here, '../../package.json'), 'utf-8')) as { version: string };
 const qudt = read('qudt-resolution.json') as QudtResolution;
+const witnessResults = read('witness-results.json') as WitnessResultsArtifact;
 const roundTrip = (x: unknown): unknown => JSON.parse(JSON.stringify(x));
 
 describe('data/atlas/atlas.json — the combined artifact', () => {
   it('FRESHNESS: deep-equals the live projection (re-run bun run atlas:json)', () => {
-    expect(read('atlas.json')).toEqual(roundTrip(toCombinedAtlasJson(ATLAS_FAMILIES, pkg.version)));
+    expect(read('atlas.json')).toEqual(roundTrip(toCombinedAtlasJson(ATLAS_FAMILIES, pkg.version, witnessResults)));
   });
 
   it('keeps schemaVersion 0 (the only Phase 4 field change, formalRef, is additive and optional)', () => {

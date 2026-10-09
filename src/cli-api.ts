@@ -216,7 +216,7 @@ export {
   translationsOf,
 } from './atlas/translation-registry.js';
 export type { ObservableCarriage, ObservableTranslation, PointCheck } from './atlas/translation.js';
-export type { AtlasFamily } from './atlas/oscillators/index.js';
+export type { AtlasFamily } from './atlas/family.js';
 export { collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export { domainRegimeRegistrations } from './relations/regime-registration.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';

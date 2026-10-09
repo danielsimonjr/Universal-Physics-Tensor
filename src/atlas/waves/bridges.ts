@@ -60,7 +60,6 @@ export const BRIDGE_STRING_WAVE: AtlasBridge = {
     ),
   },
   counterexamples: [],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WS1',
@@ -94,7 +93,6 @@ export const BRIDGE_WAVE_DALEMBERT: AtlasBridge = {
     groupDefinitions: deriveRegimeGroups(WAVES_FAMILY_NAME, [{ name: 'c', dim: VELOCITY }], []),
   },
   counterexamples: [],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WS2',
@@ -166,7 +164,6 @@ export const BRIDGE_SOUND_SPEED: AtlasBridge = {
       witness: 'WS3b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WS3',
@@ -263,7 +260,6 @@ export const BRIDGE_KLEIN_GORDON_WAVE: AtlasBridge = {
       witness: 'WS4b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WS4',

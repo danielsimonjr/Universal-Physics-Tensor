@@ -441,8 +441,8 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -518,7 +518,7 @@
       "counterexamples": [],
       "evidence": [
         "numerically-supported",
-        "proposed"
+        "symbolically-checked"
       ],
       "witnesses": [
         {
@@ -582,8 +582,8 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -672,8 +672,8 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -802,8 +802,7 @@
       },
       "counterexamples": [],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "symbolically-checked"
       ],
       "witnesses": [
         {
@@ -856,7 +855,8 @@
         "limitCharacter": "singular",
         "uniformity": [
           "slow-mode decay rate of one Fourier mode, for ε = τDq² ≤ 0.05"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "diffusion",
@@ -886,8 +886,9 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "formally-proved",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -953,7 +954,8 @@
         "limitCharacter": "regular",
         "uniformity": [
           "oscillation frequency of one Fourier mode, for ε = τDq² ≥ 25"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "diffusion",
@@ -988,8 +990,8 @@
       },
       "counterexamples": [],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "formally-proved",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -1063,8 +1065,7 @@
       },
       "counterexamples": [],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "numerically-supported"
       ],
       "witnesses": [
         {

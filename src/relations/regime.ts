@@ -340,8 +340,6 @@ export function regimeOverlap(a: Regime, b: Regime): RegimeOverlap {
 export interface RegionSample {
   /** The π-group value at this cell, keyed by `PiGroup.formula`. */
   readonly point: Readonly<Record<string, number>>;
-  /** Ids of the records whose regime returned `true` here. */
-  readonly coveredBy: readonly string[];
 }
 
 /** A record carrying a regime — `AtlasModel` and `AtlasBridge` both fit. @internal */
@@ -375,10 +373,10 @@ export function uncoveredRegions(
   const inFamily = models.filter((m) => m.regime.family === family);
   const uncovered: RegionSample[] = [];
   for (const point of gridPoints(samples)) {
-    const coveredBy = inFamily
-      .filter((m) => regimeHolds(m.regime, point).ok === true)
-      .map((m) => m.id);
-    if (coveredBy.length === 0) uncovered.push({ point, coveredBy });
+    const covered = inFamily.some((m) => regimeHolds(m.regime, point).ok === true);
+    // An uncovered cell is covered by nothing, by definition; the sample
+    // carries the point and no list that could only ever be empty.
+    if (!covered) uncovered.push({ point });
   }
   return uncovered;
 }

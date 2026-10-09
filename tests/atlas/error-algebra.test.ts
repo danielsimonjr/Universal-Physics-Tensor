@@ -45,8 +45,13 @@ describe('composeBounds', () => {
 });
 
 describe('composeBoundPath', () => {
-  it('folds an empty path to the identity, non-terminal', () => {
-    expect(composeBoundPath([])).toEqual({ bound: IDENTITY_BOUND, terminal: false });
+  it('throws RangeError on an empty path: a path of nothing has no bound to state', () => {
+    expect(() => composeBoundPath([])).toThrow(RangeError);
+    expect(() => composeBoundPath([])).toThrow(/empty/);
+  });
+
+  it('a single-step path is that step, non-terminal', () => {
+    expect(composeBoundPath([b(2, 1)])).toEqual({ bound: b(2, 1), terminal: false });
   });
 
   it('folds a path outer-after-inner in traversal order', () => {
@@ -75,5 +80,27 @@ describe('composeBoundPath', () => {
     expect(terminal).toBe(false);
     // delta = 0.1 · (2^9 + 2^8 + … + 2^0) = 0.1 · 1023
     expect(bound.delta).toBeCloseTo(102.3, 10);
+  });
+});
+
+describe('composeBounds — a pair is a finite, non-negative K and delta', () => {
+  it.each([
+    ['NaN K', { K: Number.NaN, delta: 0 }],
+    ['negative delta', { K: 1, delta: -1 }],
+    ['negative K', { K: -2, delta: 0 }],
+    ['infinite delta', { K: 1, delta: Number.POSITIVE_INFINITY }],
+    ['infinite K', { K: Number.POSITIVE_INFINITY, delta: 0 }],
+  ] as const)('throws RangeError on %s, in either position', (_label, bad) => {
+    expect(() => composeBounds(bad, b(1, 0))).toThrow(RangeError);
+    expect(() => composeBounds(b(1, 0), bad)).toThrow(RangeError);
+    expect(() => composeBoundPath([b(1, 0), bad])).toThrow(RangeError);
+  });
+
+  it('the audit probe {K: NaN, delta: -1} ∘ {K: -2, delta: Infinity} throws rather than returning NaN', () => {
+    expect(() => composeBounds({ K: Number.NaN, delta: -1 }, { K: -2, delta: Number.POSITIVE_INFINITY })).toThrow(RangeError);
+  });
+
+  it('CONTROL: K = 0 and delta = 0 are legal (an exact map that forgets its input)', () => {
+    expect(composeBounds(b(0, 0), b(3, 2))).toEqual({ K: 0, delta: 0 });
   });
 });

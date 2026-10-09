@@ -51,6 +51,7 @@ export const PROPOSAL_NOTE =
 const REASON_TEXT = {
   'process-not-there': 'the process is not there',
   'model-not-there': 'the model is not there',
+  'server-error': 'the server answered an error status',
   'reply-not-a-vector':
     'the reply is not a vector, or its length is not the length stored in the frozen file',
   'call-did-not-finish': 'the call does not finish',
@@ -62,8 +63,8 @@ export type EmbeddingFallbackReason = keyof typeof REASON_TEXT;
 /** An embedding request that cannot be used. The atlas search still answers. @internal */
 export class EmbeddingUnavailable extends Error {
   readonly reason: EmbeddingFallbackReason;
-  constructor(reason: EmbeddingFallbackReason) {
-    super(REASON_TEXT[reason]);
+  constructor(reason: EmbeddingFallbackReason, detail?: string) {
+    super(detail === undefined ? REASON_TEXT[reason] : `${REASON_TEXT[reason]} (${detail})`);
     this.name = 'EmbeddingUnavailable';
     this.reason = reason;
   }
@@ -182,13 +183,15 @@ export function ollamaEmbedder(options: OllamaEmbedderOptions): Embedder {
       }
       // Ollama answers an unknown model with 404; the status is the signal, not the body's text.
       if (response.status === 404) throw new EmbeddingUnavailable('model-not-there');
+      // Any other error status is the server refusing the call: not an absent
+      // model, and not a reply whose shape was read and found wanting.
+      if (!response.ok) throw new EmbeddingUnavailable('server-error', `status ${response.status}`);
       let body: unknown;
       try {
         body = await response.json();
       } catch {
         throw new EmbeddingUnavailable('reply-not-a-vector');
       }
-      if (!response.ok) throw new EmbeddingUnavailable('reply-not-a-vector');
       const embeddings = (body as { embeddings?: unknown }).embeddings;
       if (!Array.isArray(embeddings) || embeddings.length !== texts.length) {
         throw new EmbeddingUnavailable('reply-not-a-vector');

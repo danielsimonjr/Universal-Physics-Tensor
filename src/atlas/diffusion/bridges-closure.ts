@@ -107,7 +107,6 @@ export const BRIDGE_LANGEVIN_DIFFUSION: AtlasBridge = {
       witness: 'WD4b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WD4',
@@ -176,7 +175,6 @@ export const BRIDGE_STOKES_EINSTEIN: AtlasBridge = {
     ],
   ),
   counterexamples: [],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WD5',
@@ -264,7 +262,6 @@ export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
       witness: 'WD6b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WD6',
@@ -331,7 +328,6 @@ export const BRIDGE_TELEGRAPH_WAVE: AtlasBridge = {
     [{ group: 'tau · D · q^2', op: '>=', bound: TELEGRAPH_WAVE_MIN_EPS, alias: 'ε = τDq² ≥ 25' }],
   ),
   counterexamples: [],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WD7',
@@ -373,7 +369,6 @@ export const BRIDGE_HEAT_LAPLACE: AtlasBridge = {
     ],
   ),
   counterexamples: [],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WD8',

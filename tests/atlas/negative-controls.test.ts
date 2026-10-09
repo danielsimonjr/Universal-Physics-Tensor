@@ -235,14 +235,14 @@ const CAS_CONTROLS: ReadonlyArray<{ id: string; wrong: string; lhs: () => ExprNo
 
 for (const { id, wrong, lhs } of CAS_CONTROLS) {
   describe(`${id} — negative control`, () => {
-    it(`a WRONG dictionary does not check: ${wrong}`, async () => {
-      if (!peerPresent && !peerRequired) return;
+    // Skipped, and REPORTED as skipped, when the CAS is absent and not required;
+    // a `return` here would report a pass for a check that did not run.
+    it.skipIf(!peerPresent && !peerRequired)(`a WRONG dictionary does not check: ${wrong}`, async () => {
       const r = await runSymbolicWitness({ ...symbolic(id), id: `${id}-wrong`, lhs: lhs() });
       expect(r.status).not.toBe('checked');
     });
 
-    it('META-CHECK: the same assertion FAILS on the true claim (the control can fail)', async () => {
-      if (!peerPresent && !peerRequired) return;
+    it.skipIf(!peerPresent && !peerRequired)('META-CHECK: the same assertion FAILS on the true claim (the control can fail)', async () => {
       expect((await runSymbolicWitness(symbolic(id))).status).toBe('checked');
     });
   });

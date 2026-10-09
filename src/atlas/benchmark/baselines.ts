@@ -58,6 +58,14 @@ const jaccard = (a: ReadonlySet<string>, b: ReadonlySet<string>): number => {
   return inter / (a.size + b.size - inter);
 };
 
+/**
+ * Free symbol names of an expression, for the symbol-matching baseline.
+ *
+ * Stated, not hidden: the walk descends `op`, `transcendental` and `abs`
+ * only. A symbol inside an `integral`, a `derivative` or a tensor node is
+ * not collected, the same limit `leakage.ts` states for its dimension
+ * renaming. Widening it would change the frozen study's symbol baseline.
+ */
 function symbolNames(node: ExprNode | undefined, out = new Set<string>()): Set<string> {
   if (node === undefined) return out;
   if (node.kind === 'symbol') {

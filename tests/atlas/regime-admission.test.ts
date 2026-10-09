@@ -328,7 +328,9 @@ describe('uncoveredRegions', () => {
       theta0: [0.2, 0.5, 0.9],
     });
     expect(gaps.map((g) => g.point['theta0'])).toEqual([0.9]);
-    expect(gaps[0].coveredBy).toEqual([]);
+    // An uncovered cell is, by definition, covered by nothing: the sample
+    // carries the point and no list that is always empty.
+    expect(Object.keys(gaps[0]!)).toEqual(['point']);
   });
 
   it('counts a covering regime by id', () => {

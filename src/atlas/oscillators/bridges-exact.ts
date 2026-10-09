@@ -24,7 +24,7 @@
 import { physjsFormalRef } from '../physjs-ref.js';
 import { deriveRegimeGroups } from '../regime.js';
 import { getAtlasModel } from './models.js';
-import type { AtlasBridge, EvidenceTag, Regime, RelationContract } from '../types.js';
+import type { AtlasBridge, Regime, RelationContract } from '../types.js';
 import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT } from './norm-transport.js';
 
 const FAMILY = 'oscillators';
@@ -70,8 +70,6 @@ function bridgeRegime(premiseId: string, conclusionId: string): Regime {
   };
 }
 
-const evidence = (...tags: readonly EvidenceTag[]): ReadonlySet<EvidenceTag> => new Set(tags);
-
 /**
  * Bridge 1 — the lossless spring ↔ LC dictionary.
  *
@@ -114,7 +112,6 @@ export const BRIDGE_SPRING_LC: AtlasBridge = {
   // DERIVED from `data/atlas/witness-results.json`, where W1s records the CAS
   // check of this bridge's dictionary. A stored copy would be a second source
   // of truth that no run could falsify.
-  evidence: evidence('proposed', 'numerically-supported'),
   witnesses: [
     {
       id: 'W1',
@@ -178,7 +175,6 @@ export const BRIDGE_DAMPED_RLC: AtlasBridge = {
   ],
   regime: bridgeRegime('model-damped-spring', 'model-rlc'),
   counterexamples: [],
-  evidence: evidence('proposed', 'numerically-supported'),
   witnesses: [
     {
       id: 'W2',

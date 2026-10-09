@@ -21,7 +21,6 @@ preserves:
 does NOT preserve:
   - the amplitude dependence of the period
   - phase over times t ≳ 16 T0/θ0²
-stored evidence: numerically-supported
 derived evidence: formally-proved, contradicted
 formally-proved (derived from formalRef): YES — for the formal-reference statement only (fidelity sanity-lemmas); NOT the bound, regime, horizon or side conditions unless the statement says so
 proved, with unresolved counterexample: yes — formally-proved stands; the counterexample is not resolved

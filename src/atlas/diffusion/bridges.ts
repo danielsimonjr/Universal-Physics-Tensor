@@ -87,7 +87,6 @@ export const BRIDGE_WALK_DIFFUSION: AtlasBridge = {
       witness: 'WD1b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WD1',
@@ -149,7 +148,6 @@ export const BRIDGE_HEAT_DIFFUSION: AtlasBridge = {
     ),
   },
   counterexamples: [],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WD2',
@@ -213,7 +211,6 @@ export const BRIDGE_SCHRODINGER_DIFFUSION: AtlasBridge = {
       witness: 'WD3b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'W5',

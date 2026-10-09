@@ -103,23 +103,23 @@ export function checkPin(input: {
 }
 
 /**
- * Every `lean4-physlib` formalRef in the given families. The statement text starts with the
- * theorem name, followed by a colon and a description.
+ * Every `lean4-physlib` formalRef among the given bridges: atlas bridges and
+ * catalog rows alike, the same flat list `physjsManifestProblems` reads. The
+ * statement text starts with the theorem name, followed by a colon and a
+ * description. The sentence that this scanned only `ATLAS_FAMILIES`, so a
+ * catalog row carrying such a reference was silently excluded, is the record
+ * from before this signature.
  */
 export function lean4PhyslibReferences(
-  families: readonly {
-    readonly bridges: readonly {
-      readonly formalRef?: { system: string; statement: string; axioms: readonly string[]; version: string };
-    }[];
+  bridges: readonly {
+    readonly formalRef?: { system: string; statement: string; axioms: readonly string[]; version: string };
   }[],
 ): ProbedReference[] {
   const refs: ProbedReference[] = [];
-  for (const family of families) {
-    for (const bridge of family.bridges) {
-      const ref = bridge.formalRef;
-      if (ref?.system !== 'lean4-physlib') continue;
-      refs.push({ statement: ref.statement.split(':')[0]!.trim(), axioms: ref.axioms, version: ref.version });
-    }
+  for (const bridge of bridges) {
+    const ref = bridge.formalRef;
+    if (ref?.system !== 'lean4-physlib') continue;
+    refs.push({ statement: ref.statement.split(':')[0]!.trim(), axioms: ref.axioms, version: ref.version });
   }
   return refs;
 }
@@ -262,7 +262,7 @@ async function main(args: readonly string[]): Promise<number> {
   const physjsProblems = physjsManifestProblems({ manifest, bridges });
   for (const p of physjsProblems) console.error(`FAIL: ${p}`);
 
-  const references = lean4PhyslibReferences(ATLAS_FAMILIES);
+  const references = lean4PhyslibReferences(bridges);
   if (references.length === 0) {
     console.log(
       physjsProblems.length === 0

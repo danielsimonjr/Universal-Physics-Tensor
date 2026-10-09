@@ -289,10 +289,10 @@ describe('bridge records', () => {
     expect(BRIDGE_SPRING_LC.premises).toEqual(['model-spring']);
     expect(BRIDGE_SPRING_LC.conclusion).toBe('model-lc');
     expect(BRIDGE_SPRING_LC.inverse).toBe('x = x0 u, t = τ/ω0');
-    // `symbolically-checked` is no longer STORED: Phase 4 S4.3 derives it from
-    // data/atlas/witness-results.json (W1s). tests/atlas/witness-results.test.ts
-    // pins the derivation.
-    expect([...BRIDGE_SPRING_LC.evidence].sort()).toEqual(['numerically-supported', 'proposed']);
+    // No tag is STORED: every tag is derived from data/atlas/witness-results.json
+    // (W1s for `symbolically-checked`); tests/atlas/witness-results.test.ts and
+    // tests/atlas/atlas-json.test.ts pin the derivation.
+    expect(Object.hasOwn(BRIDGE_SPRING_LC, 'evidence')).toBe(false);
     expect(BRIDGE_SPRING_LC.witnesses.map((w) => w.id)).toEqual(['W1', 'W1a', 'W1b', 'W2b', 'W1s']);
     for (const w of BRIDGE_SPRING_LC.witnesses) {
       expect(w.test).toBe(w.id === 'W1s' ? 'tests/atlas/witness-results.test.ts' : TEST_PATH);
@@ -307,10 +307,7 @@ describe('bridge records', () => {
     expect(BRIDGE_DAMPED_RLC.premises).toEqual(['model-damped-spring']);
     expect(BRIDGE_DAMPED_RLC.conclusion).toBe('model-rlc');
     expect(BRIDGE_DAMPED_RLC.sideConditions[0]).toContain('b/√(mk) = R√(C/L)');
-    expect([...BRIDGE_DAMPED_RLC.evidence].sort()).toEqual([
-      'numerically-supported',
-      'proposed',
-    ]);
+    expect(Object.hasOwn(BRIDGE_DAMPED_RLC, 'evidence')).toBe(false);
     expect(BRIDGE_DAMPED_RLC.witnesses.map((w) => w.id)).toEqual(['W2', 'W2s']);
     for (const w of BRIDGE_DAMPED_RLC.witnesses) {
       expect(w.test).toBe(w.id === 'W2s' ? 'tests/atlas/witness-results.test.ts' : TEST_PATH);

@@ -26,6 +26,15 @@ import type { NumericWitnessSpec } from '../../src/atlas/witness-numeric.js';
 import { WITNESS_REGISTRY } from '../../src/atlas/witness-specs.js';
 import { OSCILLATOR_FAMILY } from '../../src/atlas/oscillators/index.js';
 import { toAtlasJson } from '../../src/atlas/serialize.js';
+import type { WitnessResultsArtifact } from '../../src/atlas/witness-artifact.js';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/** The committed witness results; `toAtlasJson` derives each bridge's evidence against them. */
+const witnessResults = JSON.parse(
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../data/atlas/witness-results.json'), 'utf-8'),
+) as WitnessResultsArtifact;
 
 function w1tau(): NumericWitnessSpec {
   const w = WITNESS_REGISTRY.find((r) => r.spec.id === 'W1τ');
@@ -128,7 +137,7 @@ describe('the restated horizon — t/T0 is invariant under the uniform time map'
 });
 
 describe('the declaration is data in the atlas artifact', () => {
-  const bridges = toAtlasJson(OSCILLATOR_FAMILY, '0.0.0').bridges as unknown as readonly Record<string, unknown>[];
+  const bridges = toAtlasJson(OSCILLATOR_FAMILY, '0.0.0', witnessResults).bridges as unknown as readonly Record<string, unknown>[];
   const spring = bridges.find((b) => b['id'] === 'ab-spring-lc')!;
 
   it('ab-spring-lc serializes its transport, with the functions left out', () => {

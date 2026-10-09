@@ -8,7 +8,14 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { ATLAS_FAMILIES, admitFamilies } from '../../src/atlas/families.js';
+import { OSCILLATOR_FAMILY } from '../../src/atlas/oscillators/index.js';
+import { AB_PENDULUM_LINEAR } from '../../src/atlas/oscillators/bridges-limits.js';
+import { MissingDeltaAtError, MissingHorizonError } from '../../src/atlas/types.js';
+import type { AtlasBridge } from '../../src/atlas/types.js';
 
 const models = ATLAS_FAMILIES.flatMap((f) => f.models);
 const bridges = ATLAS_FAMILIES.flatMap((f) => f.bridges);
@@ -43,6 +50,28 @@ describe('ATLAS_FAMILIES — cross-family integrity', () => {
     for (const f of ATLAS_FAMILIES) {
       for (const m of f.models) expect(m.family).toBe(f.family);
     }
+  });
+});
+
+describe('ATLAS_FAMILIES — registration is admission', () => {
+  const { deltaAt: _deltaAt, ...boundWithoutDeltaAt } = AB_PENDULUM_LINEAR.bound!;
+  const noDeltaAt: AtlasBridge = { ...AB_PENDULUM_LINEAR, id: 'ab-no-delta-at', bound: boundWithoutDeltaAt };
+  const noHorizon: AtlasBridge = { ...AB_PENDULUM_LINEAR, id: 'ab-no-horizon', bound: { ...AB_PENDULUM_LINEAR.bound!, horizon: '' } };
+
+  it('admitFamilies refuses an approximation with no deltaAt, and one with no horizon, naming the bridge', () => {
+    expect(() => admitFamilies([{ ...OSCILLATOR_FAMILY, bridges: [noDeltaAt] }])).toThrow(MissingDeltaAtError);
+    expect(() => admitFamilies([{ ...OSCILLATOR_FAMILY, bridges: [noDeltaAt] }])).toThrow(/ab-no-delta-at/);
+    expect(() => admitFamilies([OSCILLATOR_FAMILY, { ...OSCILLATOR_FAMILY, family: 'x', bridges: [noHorizon] }])).toThrow(MissingHorizonError);
+  });
+
+  it('admitFamilies returns the same family objects, so identity is preserved', () => {
+    expect(admitFamilies([OSCILLATOR_FAMILY])[0]).toBe(OSCILLATOR_FAMILY);
+    expect(ATLAS_FAMILIES[0]).toBe(OSCILLATOR_FAMILY);
+  });
+
+  it('the registry is built THROUGH admitFamilies (source), so no unadmitted bridge reaches it', () => {
+    const source = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../src/atlas/families.ts'), 'utf8');
+    expect(source).toMatch(/export const ATLAS_FAMILIES: readonly AtlasFamily\[\] = admitFamilies\(\[/);
   });
 });
 

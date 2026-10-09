@@ -5,9 +5,10 @@
  * `witness-numeric.ts` checks agreement with a target, which is the wrong
  * shape for a bound: a bound that holds is not equal to anything. Here each
  * resolution returns the measured quantity and the bound at the SAME samples.
- * At each sample the coarse-to-fine difference of the measurement is taken as
- * its numerical uncertainty `u`, and the fine margin `bound − measured` is
- * judged against it:
+ * At each sample the coarse-to-fine difference of the measurement, plus the
+ * coarse-to-fine difference of the bound when the bound itself is computed
+ * numerically, is taken as the numerical uncertainty `u`, and the fine margin
+ * `bound − measured` is judged against it:
  *
  * - `'refuted'` iff at some sample the measurement exceeds the bound by more
  *   than `u` there;
@@ -61,7 +62,16 @@ export function runDominanceWitness(spec: DominanceWitnessSpec): DominanceRunRes
   }
   const n = fine.measured.length;
   const finite = (xs: readonly number[]): boolean => xs.every(Number.isFinite);
-  if (n === 0 || coarse.measured.length !== n || fine.bound.length !== n || !finite(fine.measured) || !finite(coarse.measured) || !finite(fine.bound)) {
+  if (
+    n === 0 ||
+    coarse.measured.length !== n ||
+    fine.bound.length !== n ||
+    coarse.bound.length !== n ||
+    !finite(fine.measured) ||
+    !finite(coarse.measured) ||
+    !finite(fine.bound) ||
+    !finite(coarse.bound)
+  ) {
     return {
       ...base,
       status: 'unresolved',
@@ -78,7 +88,9 @@ export function runDominanceWitness(spec: DominanceWitnessSpec): DominanceRunRes
   for (let i = 0; i < n; i++) {
     const m = fine.measured[i]!;
     const b = fine.bound[i]!;
-    const u = Math.abs(m - coarse.measured[i]!);
+    // A closed-form bound is the same at both resolutions and adds nothing;
+    // a bound that moved between them is uncertain by that movement.
+    const u = Math.abs(m - coarse.measured[i]!) + Math.abs(b - coarse.bound[i]!);
     margin = Math.min(margin, b - m);
     uncertainty = Math.max(uncertainty, u);
     if (b > 0) tightness = Math.max(tightness, m / b);

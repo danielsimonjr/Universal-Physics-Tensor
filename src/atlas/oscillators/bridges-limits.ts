@@ -211,7 +211,6 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
       witness: 'W7b',
     },
   ],
-  evidence: new Set(['numerically-supported']),
   witnesses: [
     {
       id: 'W7',
@@ -320,7 +319,6 @@ export const AB_DAMPED_MASSLESS: AtlasBridge = {
       witness: 'W8b',
     },
   ],
-  evidence: new Set(['numerically-supported']),
   witnesses: [
     {
       id: 'W8',

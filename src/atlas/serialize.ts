@@ -1,18 +1,19 @@
 /**
  * JSON projection of an atlas family (Atlas Phase 0, S0.6).
  *
- * The in-memory record is not JSON. Two fields make that true, and both are
+ * The in-memory record is not JSON. Two things make that true, and both are
  * handled here rather than left to `JSON.stringify`:
  *
- * 1. `AtlasBridge.evidence` is a `ReadonlySet<EvidenceTag>`, and a `Set`
- *    stringifies to `{}` — the artifact would be silently empty exactly where
- *    the evidence lives. Design note §7 requires the emitter to serialize it
- *    explicitly; it is emitted as a SORTED array so the artifact is stable
- *    under insertion-order changes.
- * 2. `ApproximationBound.horizonHolds` is a function, which stringifies to
- *    nothing at all. Only the `horizon` PROSE crosses into JSON; the machine
- *    predicate stays in TypeScript, as `data/schemas/atlas-record.v0.json`
- *    states.
+ * 1. A bridge stores NO evidence set. The artifact's `evidence` is DERIVED
+ *    at write time by `deriveEvidence`, against the committed witness results
+ *    the caller passes in (`data/atlas/witness-results.json`), and emitted as
+ *    a SORTED array so the artifact is stable under insertion order. The
+ *    sentence that the record carried a `Set` the emitter copied is the
+ *    record from before the hand-set field was removed.
+ * 2. `ApproximationBound.horizonHolds` and `deltaAt` are functions, which
+ *    stringify to nothing at all. Only the `horizon` PROSE and the
+ *    `deltaAtBasis` label cross into JSON; the machine forms stay in
+ *    TypeScript, as `data/schemas/atlas-record.v0.json` states.
  *
  * Every record key order and every `Record<>` key order is fixed here, so two
  * calls on the same family produce byte-identical output. That is what lets
@@ -30,7 +31,10 @@ import type {
   Regime,
 } from './types.js';
 import type { AtlasModel } from './model.js';
-import type { AtlasFamily } from './oscillators/index.js';
+import type { AtlasFamily } from './family.js';
+import { deriveEvidence } from './derive-evidence.js';
+import type { WitnessResultsArtifact } from './witness-artifact.js';
+import { artifactPassingWitnessIds } from './witness-artifact.js';
 
 /** Record major version of the emitted artifact. @internal */
 export const ATLAS_RECORD_SCHEMA_VERSION = '0';
@@ -97,8 +101,10 @@ const serializeRegime = (regime: Regime): JsonValue => {
 /**
  * `horizonHolds` and `deltaAt` are deliberately absent: a predicate is not
  * data, and a serialized function would be a claim no reader could check.
- * `uniformity` IS data. `null` is the not-yet-analysed state and must be
- * present in the artifact, not dropped.
+ * `deltaAtBasis` IS data: it says whether the point value `deltaAt` returns
+ * is the closed-form error or a numerically supported one, which a reader of
+ * the artifact cannot otherwise tell. `uniformity` IS data. `null` is the
+ * not-yet-analysed state and must be present in the artifact, not dropped.
  */
 const serializeBound = (bound: ApproximationBound): JsonValue => ({
   K: zeroSafe(bound.K),
@@ -109,6 +115,7 @@ const serializeBound = (bound: ApproximationBound): JsonValue => ({
   ...(bound.parameterRange === undefined ? {} : { parameterRange: bound.parameterRange }),
   limitCharacter: bound.limitCharacter,
   uniformity: bound.uniformity === null ? null : [...bound.uniformity],
+  ...(bound.deltaAtBasis === undefined ? {} : { deltaAtBasis: bound.deltaAtBasis }),
 });
 
 /**
@@ -168,7 +175,7 @@ const serializeNormTransports = (
     basis: nt.basis,
   }));
 
-const serializeBridge = (bridge: AtlasBridge): JsonValue => ({
+const serializeBridge = (bridge: AtlasBridge, witnessResults: WitnessResultsArtifact): JsonValue => ({
   id: bridge.id,
   relation: bridge.relation,
   premises: [...bridge.premises],
@@ -184,9 +191,9 @@ const serializeBridge = (bridge: AtlasBridge): JsonValue => ({
     description: c.description,
     witness: c.witness,
   })),
-  // The Set, explicitly — sorted, so the artifact does not churn on
-  // insertion order.
-  evidence: [...bridge.evidence].sort(),
+  // DERIVED against the committed witness results, never read from the
+  // record — sorted, so the artifact does not churn on insertion order.
+  evidence: [...deriveEvidence(bridge, artifactPassingWitnessIds(witnessResults, bridge.id))].sort(),
   witnesses: serializeWitnesses(bridge.witnesses),
   citations: [...bridge.citations],
   reviewStatus: bridge.reviewStatus,
@@ -235,11 +242,16 @@ const serializeRejection = (rejection: AtlasRejection): JsonValue => ({
  *
  * Deterministic: equal inputs give byte-identical `JSON.stringify` output.
  *
+ * @param witnessResults - the committed `data/atlas/witness-results.json`.
+ * Each bridge's `evidence` is derived against it; it is REQUIRED, because a
+ * defaulted empty artifact would publish `proposed` for every bridge and
+ * read exactly like a measured negative.
  * @internal
  */
 export function toAtlasJson(
   family: AtlasFamily,
   packageVersion: string,
+  witnessResults: WitnessResultsArtifact,
 ): AtlasRecordJson {
   return {
     $schema: '../schemas/atlas-record.v0.json',
@@ -247,7 +259,7 @@ export function toAtlasJson(
     packageVersion,
     family: family.family,
     models: family.models.map(serializeModel),
-    bridges: family.bridges.map(serializeBridge),
+    bridges: family.bridges.map((bridge) => serializeBridge(bridge, witnessResults)),
     rejections: family.rejections.map(serializeRejection),
   };
 }

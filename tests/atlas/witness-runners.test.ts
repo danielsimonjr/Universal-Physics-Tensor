@@ -24,6 +24,11 @@ const LENGTH = dim(1);
 const x = sym('x', LENGTH);
 const spec = { id: 'W-test', lhs: x, rhs: x };
 
+// Gate on the SIMPLIFIER peer, not the parser registry: they are different
+// packages, and gating on the wrong one would skip or run for the wrong reason.
+const simplifierPresent = await isSimplifierAvailable();
+const peerRequired = process.env.UPT_REQUIRE_PEERS === '1';
+
 /** A simplifier that always returns the literal `value`, ignoring its input. */
 const constantSimplifier = (value: string): SymbolicSimplifier =>
   async () => ({ expr: sym(value, DIMENSIONLESS), simplified: true });
@@ -106,14 +111,9 @@ describe('runSymbolicWitness', () => {
     }
   });
 
-  it('runs against the REAL peer under the skip-when-absent pattern', async () => {
-    // Gate on the SIMPLIFIER peer, not the parser registry: they are different
-    // packages, and gating on the wrong one would skip or run for the wrong reason.
-    if (!(await isSimplifierAvailable()) && process.env.UPT_REQUIRE_PEERS !== '1') {
-      // Peer absent and not required: the injected-null test above already covers
-      // this path. Skipping here rather than asserting a peer-dependent outcome.
-      return;
-    }
+  // Peer absent and not required: the injected-null test above already covers
+  // that path, and this one is reported as skipped, not passed.
+  it.skipIf(!simplifierPresent && !peerRequired)('runs against the REAL peer under the skip-when-absent pattern', async () => {
     // x − x must vanish. This is the one test that uses the real `simplifyExpr`,
     // and it still does not touch the registry: it calls the default directly.
     const r = await runSymbolicWitness({ id: 'W-real', lhs: x, rhs: x }, simplifyExpr);
@@ -229,6 +229,40 @@ describe('runNumericWitness', () => {
     });
     expect(r.status).toBe('unresolved');
     expect(r.reason).toBe('parse-error');
+  });
+
+  it('a NaN target, a NaN tolerance, or a negative tolerance is UNRESOLVED, never checked', () => {
+    const base = { evaluate: firstOrder, coarseResolution: 10, fineResolution: 100 };
+    for (const [id, spec] of [
+      ['N7', { ...base, target: Number.NaN, tolerance: 0.05 }],
+      ['N8', { ...base, target: 1, tolerance: Number.NaN }],
+      ['N9', { ...base, target: 1, tolerance: -0.05 }],
+      ['N10', { ...base, target: Number.POSITIVE_INFINITY, tolerance: 0.05 }],
+    ] as const) {
+      const r = runNumericWitness({ id, ...spec });
+      expect(r.status, id).toBe('unresolved');
+      expect(r.reason, id).toBe('parse-error');
+      expect(r.convergence, id).toBeUndefined();
+    }
+    // The same evaluator with a finite target and tolerance IS checked, so the guard is doing the deciding.
+    expect(runNumericWitness({ id: 'N7c', ...base, target: 1, tolerance: 0.05 }).status).toBe('checked');
+  });
+
+  it('a scheme exact at BOTH resolutions is UNRESOLVED with its own reason, not "refinement did not reduce the error"', () => {
+    const r = runNumericWitness({
+      id: 'N11',
+      evaluate: () => 1,
+      target: 1,
+      coarseResolution: 10,
+      fineResolution: 100,
+      tolerance: 1e-9,
+    });
+    expect(r.status).toBe('unresolved');
+    expect(r.reason).toBe('no-error-to-reduce');
+    expect(r.convergence?.coarse).toBe(0);
+    expect(r.convergence?.fine).toBe(0);
+    expect(r.convergence?.ratio).toBeNaN();
+    expect(r.detail).not.toMatch(/did not reduce/);
   });
 });
 

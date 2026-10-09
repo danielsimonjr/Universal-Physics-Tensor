@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 72 files
+- **atlas**: 74 files
 - **bridges**: 25 files
 - **canonical**: 19 files
 - **cases**: 9 files
@@ -231,7 +231,7 @@ The codebase is organized into the following modules:
 | `./catalog-formal-ref.js` | `catalogFormalRef` | Import |
 
 **Exports:**
-- Functions: `getBridge`
+- Functions: `catalogBridgeRecord`
 
 ---
 
@@ -261,7 +261,6 @@ The codebase is organized into the following modules:
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
 | `../composition/enumerate.js` | `enumerateCompositionsWithRefusals` | Import |
-| `../relations/composition-table.js` | `CompositionResult` | Import (type-only) |
 | `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
 | `../composition/chain-match.js` | `matchChain` | Import |
 | `../composition/chain-candidate.js` | `compareChainEdgeIds, ChainCandidate` | Import |
@@ -273,7 +272,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`, `ChainCompositionRefusal`
-- Functions: `governingOf`, `categoryCompositionForChain`, `renderChainRecord`, `runChainPipeline`
+- Functions: `governingOf`, `renderChainRecord`, `runChainPipeline`
 
 ---
 
@@ -413,7 +412,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `../family.js` | `AtlasFamily` | Import (type-only) |
 | `./bridges.js` | `DIFFUSION_BRIDGES` | Import |
 | `./bridges-closure.js` | `DIFFUSION_CLOSURE_BRIDGES` | Import |
 | `./models.js` | `DIFFUSION_FAMILY_NAME, DIFFUSION_MODELS` | Import |
@@ -482,11 +481,13 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `./family.js` | `AtlasFamily` | Import (type-only) |
+| `./serialize.js` | `AtlasRecordJson` | Import (type-only) |
 | `./serialize.js` | `toAtlasJson` | Import |
+| `./witness-artifact.js` | `WitnessResultsArtifact` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `QudtResolution`
+- Interfaces: `QudtResolution`, `CombinedAtlasJson`
 - Functions: `toCombinedAtlasJson`, `toAtlasJsonLd`
 - Constants: `ATLAS_ID_PREFIX`
 
@@ -500,10 +501,22 @@ The codebase is organized into the following modules:
 | `./diffusion/index.js` | `DIFFUSION_FAMILY` | Import |
 | `./oscillators/index.js` | `OSCILLATOR_FAMILY` | Import |
 | `./waves/index.js` | `WAVES_FAMILY` | Import |
-| `./oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `./family.js` | `AtlasFamily` | Import (type-only) |
+| `./regime.js` | `admitApproximation` | Import |
 
 **Exports:**
+- Functions: `admitFamilies`
 - Constants: `ATLAS_FAMILIES`
+
+---
+
+### `src/atlas/family.ts` - The shape of one atlas family. A leaf module: every family index, the
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./model.js` | `AtlasModel` | Import (type-only) |
+| `./types.js` | `AtlasBridge, AtlasRejection` | Import (type-only) |
 
 ---
 
@@ -513,7 +526,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind, NormTransport` | Re-export |
-| `./types.js` | `MissingHorizonError, MissingLipschitzError` | Re-export |
+| `./types.js` | `MissingDeltaAtError, MissingHorizonError, MissingLipschitzError` | Re-export |
 | `./types.js` | `ALL_EVIDENCE_TAGS` | Re-export |
 | `./derive-evidence.js` | `deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample` | Re-export |
 | `./derive-evidence.js` | `CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike` | Re-export |
@@ -529,7 +542,7 @@ The codebase is organized into the following modules:
 | `./oscillators/dimensions.js` | `CAPACITANCE, CUBIC_STIFFNESS, DAMPING, INDUCTANCE, RESISTANCE, SPRING_CONSTANT` | Re-export |
 | `./oscillators/models.js` | `ATLAS_MODELS, getAtlasModel` | Re-export |
 | `./oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
-| `./oscillators/index.js` | `AtlasFamily` | Re-export |
+| `./family.js` | `AtlasFamily` | Re-export |
 | `./serialize.js` | `toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION` | Re-export |
 | `./serialize.js` | `AtlasRecordJson, JsonValue` | Re-export |
 | `./applicability.js` | `blockingFindings, checkApplicability` | Re-export |
@@ -584,7 +597,7 @@ The codebase is organized into the following modules:
   ```text
   RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness,
   Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind,
-  NormTransport, MissingHorizonError, MissingLipschitzError, ALL_EVIDENCE_TAGS,
+  NormTransport, MissingDeltaAtError, MissingHorizonError, MissingLipschitzError, ALL_EVIDENCE_TAGS,
   deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES,
   provedWithUnresolvedCounterexample, CounterexampleLike, EvidenceInput, MembershipVerdict,
   RejectionLike, WitnessLike, composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM,
@@ -631,7 +644,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `./family.js` | `AtlasFamily` | Import (type-only) |
 | `./model.js` | `AtlasModel` | Import (type-only) |
 
 **Exports:**
@@ -675,7 +688,7 @@ The codebase is organized into the following modules:
 | `../physjs-ref.js` | `physjsFormalRef` | Import |
 | `../regime.js` | `deriveRegimeGroups` | Import |
 | `./models.js` | `getAtlasModel` | Import |
-| `../types.js` | `AtlasBridge, EvidenceTag, Regime, RelationContract` | Import (type-only) |
+| `../types.js` | `AtlasBridge, Regime, RelationContract` | Import (type-only) |
 | `./norm-transport.js` | `SPRING_LC_RELATIVE_PERIOD_TRANSPORT` | Import |
 
 **Exports:**
@@ -722,8 +735,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../types.js` | `AtlasBridge, AtlasRejection` | Import (type-only) |
-| `../model.js` | `AtlasModel` | Import (type-only) |
+| `../family.js` | `AtlasFamily` | Import (type-only) |
 | `./models.js` | `ATLAS_MODELS` | Import |
 | `./bridges-exact.js` | `BRIDGE_SPRING_LC, BRIDGE_DAMPED_RLC` | Import |
 | `./bridges-limits.js` | `LIMIT_BRIDGES` | Import |
@@ -731,7 +743,6 @@ The codebase is organized into the following modules:
 | `./rejections.js` | `ATLAS_REJECTIONS` | Import |
 
 **Exports:**
-- Interfaces: `AtlasFamily`
 - Constants: `OSCILLATOR_FAMILY`
 
 ---
@@ -894,7 +905,7 @@ The codebase is organized into the following modules:
 | `./composition-table.js` | `CompositionResult` | Import (type-only) |
 | `./types.js` | `AtlasBridge, NormTransport, RelationType` | Import (type-only) |
 | `./families.js` | `ATLAS_FAMILIES` | Import |
-| `./oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `./family.js` | `AtlasFamily` | Import (type-only) |
 | `./error-algebra.js` | `IDENTITY_BOUND` | Re-export |
 
 **Exports:**
@@ -913,25 +924,39 @@ The codebase is organized into the following modules:
 
 ### `src/atlas/physjs-ref.ts` - Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
 
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `crypto` | `createHash` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `FormalRef, FormalRefKind` | Import (type-only) |
+| `./types.js` | `FormalFidelity, FormalRef, FormalRefKind` | Import (type-only) |
 | `../relations/types.js` | `FORMAL_REF_KINDS` | Import |
 | `../bridges/catalog-load.js` | `catalogEntries, catalogIdNumber` | Import |
+| `./physjs-reviewed.js` | `PHYSJS_REVIEWED_ROWS, PHYSJS_SANITY_LEMMA_KEYS` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT, PHYSJS_MATHLIB, PHYSJS_PHYS_LIB, PHYSJS_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT` | Re-export |
 
 **Exports:**
-- Interfaces: `PhysjsManifestEntry`, `PhysjsManifestFile`
+- Interfaces: `PhysjsManifestEntry`, `PhysjsManifestFile`, `PhysjsReviewedRow`
 - Functions:
 
   ```text
   physjsNestedStatements, physjsTheorem, physjsLeanFile, physjsFileUrl, physjsAheadOfCatalog,
-  bridgeSeedKeys, physjsKeysAheadOfCatalog, physjsFormalRef, physjsManifestProblems
+  bridgeSeedKeys, physjsKeysAheadOfCatalog, physjsManifestRow, physjsRowHash, physjsFidelity,
+  physjsFormalRef, physjsManifestProblems
   ```
 
 - Re-exports: `PHYSJS_COMMIT`
+
+---
+
+### `src/atlas/physjs-reviewed.ts` - The reviewed PhysJS manifest rows, pinned per key.
+
+**Exports:**
+- Constants: `PHYSJS_SANITY_LEMMA_KEYS`, `PHYSJS_REVIEWED_ROWS`
 
 ---
 
@@ -1010,7 +1035,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `ApproximationBound, AtlasRejection, Counterexample, EvidenceTag, LimitCharacter, Regime, RegimeInequality, RelationType, Witness` | Re-export |
-| `./types.js` | `MissingHorizonError, MissingLipschitzError` | Re-export |
+| `./types.js` | `MissingDeltaAtError, MissingHorizonError, MissingLipschitzError` | Re-export |
 | `./model.js` | `AtlasModel` | Re-export |
 | `./regime.js` | `regimeHolds` | Re-export |
 | `./regime.js` | `RegimeCheck` | Re-export |
@@ -1024,9 +1049,10 @@ The codebase is organized into the following modules:
 
   ```text
   ApproximationBound, AtlasRejection, Counterexample, EvidenceTag, LimitCharacter, Regime,
-  RegimeInequality, RelationType, Witness, MissingHorizonError, MissingLipschitzError, AtlasModel,
-  regimeHolds, RegimeCheck, composeBoundPath, composeBounds, IDENTITY_BOUND, BoundPair, ComposedPath,
-  composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM, CompositionResult, NoCompositeClaim
+  RegimeInequality, RelationType, Witness, MissingDeltaAtError, MissingHorizonError,
+  MissingLipschitzError, AtlasModel, regimeHolds, RegimeCheck, composeBoundPath, composeBounds,
+  IDENTITY_BOUND, BoundPair, ComposedPath, composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM,
+  CompositionResult, NoCompositeClaim
   ```
 
 
@@ -1063,7 +1089,10 @@ The codebase is organized into the following modules:
 | `../dimensional/buckingham.js` | `PiGroup` | Import (type-only) |
 | `./types.js` | `ApproximationBound, AtlasBridge, AtlasRejection, Regime` | Import (type-only) |
 | `./model.js` | `AtlasModel` | Import (type-only) |
-| `./oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `./family.js` | `AtlasFamily` | Import (type-only) |
+| `./derive-evidence.js` | `deriveEvidence` | Import |
+| `./witness-artifact.js` | `WitnessResultsArtifact` | Import (type-only) |
+| `./witness-artifact.js` | `artifactPassingWitnessIds` | Import |
 
 **Exports:**
 - Interfaces: `AtlasRecordJson`
@@ -1179,7 +1208,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `../family.js` | `AtlasFamily` | Import (type-only) |
 | `./bridges.js` | `WAVE_BRIDGES` | Import |
 | `./bridges-closure.js` | `WAVE_CLOSURE_BRIDGES` | Import |
 | `./models.js` | `WAVE_MODELS, WAVES_FAMILY_NAME` | Import |
@@ -3193,7 +3222,7 @@ The codebase is organized into the following modules:
 | `./atlas/witness-numeric.js` | `runNumericWitness` | Re-export |
 | `./atlas/translation-registry.js` | `OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf` | Re-export |
 | `./atlas/translation.js` | `ObservableCarriage, ObservableTranslation, PointCheck` | Re-export |
-| `./atlas/oscillators/index.js` | `AtlasFamily` | Re-export |
+| `./atlas/family.js` | `AtlasFamily` | Re-export |
 | `./atlas/regime.js` | `collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
 | `./relations/regime-registration.js` | `domainRegimeRegistrations` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
@@ -6711,12 +6740,12 @@ The codebase is organized into the following modules:
 | `types` | 2 files | 5 files |
 | `bridge-record` | 4 files | 0 files |
 | `catalog-formal-ref` | 3 files | 3 files |
-| `chain-pipeline` | 15 files | 0 files |
+| `chain-pipeline` | 14 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
 | `derivation` | 3 files | 3 files |
-| `derive-evidence` | 2 files | 3 files |
+| `derive-evidence` | 2 files | 4 files |
 | `bridges-closure` | 10 files | 2 files |
 | `bridges` | 5 files | 2 files |
 | `dimensions` | 2 files | 6 files |
@@ -6724,10 +6753,10 @@ The codebase is organized into the following modules:
 | `models` | 7 files | 5 files |
 | `numerics` | 0 files | 2 files |
 | `error-algebra` | 1 files | 3 files |
-| `export` | 2 files | 1 files |
-| `families` | 3 files | 3 files |
-| `index` | 38 files | 0 files |
-| `link-prediction` | 2 files | 1 files |
+| `export` | 3 files | 1 files |
+| `families` | 5 files | 3 files |
+| `family` | 2 files | 10 files |
+| `index` | 39 files | 0 files |
 
 ---
 
@@ -6746,7 +6775,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...67 more]
+        N5[...69 more]
     end
 
     subgraph Bridges
@@ -6882,17 +6911,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 360 |
+| Total TypeScript Files | 362 |
 | Total Modules | 13 |
-| Total Lines of Code | 79797 |
-| Total Exports | 2476 |
-| Total Re-exports | 1254 |
+| Total Lines of Code | 80279 |
+| Total Exports | 2483 |
+| Total Re-exports | 1256 |
 | Total Classes | 79 |
-| Total Interfaces | 452 |
-| Total Functions | 761 |
+| Total Interfaces | 454 |
+| Total Functions | 764 |
 | Total Type Guards | 7 |
 | Total Enums | 0 |
-| Type-only Imports | 507 |
+| Type-only Imports | 510 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

@@ -58,6 +58,24 @@
       "enum": ["regular", "singular", "unknown"]
     },
 
+    "evidenceTag": {
+      "description": "One derived evidence tag (`ALL_EVIDENCE_TAGS` in `src/relations/types.ts`, in declaration order). `formally-proved` is reachable only through a reviewed formal reference of kind `bridge`; `symbolically-checked` and `numerically-supported` only through a witness the committed results record as checked.",
+      "enum": [
+        "proposed",
+        "reviewed",
+        "dimension-checked",
+        "convention-checked",
+        "symbolically-checked",
+        "numerically-supported",
+        "formally-proved",
+        "formally-proved-property",
+        "formally-proved-cross-check",
+        "empirically-supported",
+        "contradicted",
+        "unresolved"
+      ]
+    },
+
     "approximationBound": {
       "type": "object",
       "description": "Quantitative error bound. `horizon` (prose) states where the approximation stops being usable; the machine predicate that decides it lives in the TypeScript source and is not serialisable, so only the prose form appears here.",
@@ -96,6 +114,10 @@
           "description": "What the error is uniform in. null or an empty array means not yet analysed; boundPath then returns no numeric bound.",
           "type": ["array", "null"],
           "items": { "type": "string", "minLength": 1 }
+        },
+        "deltaAtBasis": {
+          "description": "What the machine form `deltaAt` (TypeScript only, not serialisable) rests on: `closed-form` returns the exact error; `numerically-supported` returns a value a witness checked. Present on every approximation bound.",
+          "enum": ["closed-form", "numerically-supported"]
         }
       },
       "additionalProperties": false
@@ -179,8 +201,9 @@
           "items": { "$ref": "#/definitions/witness" }
         },
         "evidence": {
-          "type": "string",
-          "description": "Evidence tag for the claim (`proposed` … `contradicted`, `unresolved`)."
+          "type": "array",
+          "description": "The evidence tags the claim DERIVES (`deriveEvidence`, against `data/atlas/witness-results.json`), sorted. Never stored on a record; `toAtlasJson` computes it at write time.",
+          "items": { "$ref": "#/definitions/evidenceTag" }
         },
         "normTransports": {
           "type": "array",
