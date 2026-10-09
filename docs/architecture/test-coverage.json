@@ -1600,6 +1600,7 @@
       "tests/composition/evaluate-relation.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/bridges/coefficient-statement.ts": [
@@ -9925,7 +9926,8 @@
     "src/bridges/catalog-types.ts": [
       "tests/bridges/catalog-confidence.test.ts",
       "tests/bridges/catalog-record.test.ts",
-      "tests/bridges/derived-domains.test.ts"
+      "tests/bridges/derived-domains.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/bridges/coefficient-statement.ts": [],
     "src/bridges/confrontation-coverage.ts": [
@@ -20823,6 +20825,7 @@
       "src/bridges/carrier-sign.ts",
       "src/bridges/evaluation-errors.ts",
       "src/bridges/catalog-load.ts",
+      "src/bridges/catalog-types.ts",
       "src/bridges/expr-parse.ts",
       "src/canonical/normal-form.ts"
     ],
