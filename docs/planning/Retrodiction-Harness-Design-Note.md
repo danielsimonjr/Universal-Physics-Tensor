@@ -12,8 +12,8 @@
 > and its first run. The bar is stated in §"Pass bar" and must not be
 > loosened to fit a result.
 >
-> **Status: IMPLEMENTED** — `src/composition/retrodiction.ts`, tests in
-> `tests/composition/retrodiction.test.ts`.
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. The implementation is `src/composition/retrodiction.ts`,
+> with tests in `tests/composition/retrodiction.test.ts`.
 
 ## The idea
 

@@ -46,7 +46,7 @@ These items propagate the same honesty caveat: they are direction, not commitmen
 ### 2.1 Tensor Core
 
 * **FR-T1-P0: Basic tensor framework** — UPT MUST implement a rank-3+ `UniversalTensor` supporting addition, multiplication, contraction, and dimensional consistency validation, with memory-efficient storage for tensors up to 10^6 elements.
-  *Status: met at v0.1.0 (`src/core/tensor.ts`).*
+  *Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`; the implementation is `src/core/tensor.ts`.*
 
 * **FR-T2-P0: Essential bridge equations** — UPT MUST provide a minimum of 10 bridge equations as typed catalog entries, drawn from the spec's Established or Standard-extension tier. Implementation status need not be complete; metadata + dimensional check are sufficient for the catalog entry to count.
 

@@ -8,7 +8,7 @@
 > can tell a user whether their formula is **dimensionally homogeneous**
 > and what dimension it has, not just recover a prefactor.
 >
-> **Status: IMPLEMENTED 2026-06-14** — `src/numerical/formula-dimension.ts`.
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. The implementation is `src/numerical/formula-dimension.ts`.
 
 ## The payoff
 

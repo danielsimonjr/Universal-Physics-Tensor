@@ -1,7 +1,7 @@
 # Root-cause analysis
 
-Dogfood items 9–14 in `docs/dogfood/2026-10-03-applied-physicist-bridges.md`,
-the re-run in `docs/dogfood/2026-10-03-applied-physicist-bridges-r2.md`, and
+Dogfood items 9–14 in `docs/persona-sessions/2026-10-03-applied-physicist-bridges.md`,
+the re-run in `docs/persona-sessions/2026-10-03-applied-physicist-bridges-session-2.md`, and
 the same mechanisms where an earlier session left a second copy, are eight
 causes. A later report joins this note by adding its symptoms under the
 cause that produces them. A new symptom does not get its own cause when one

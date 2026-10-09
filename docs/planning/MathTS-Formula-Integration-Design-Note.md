@@ -9,15 +9,9 @@
 > working assembly. Written against a live investigation of the installed
 > MathTS packages (versions and the exact blocker are recorded below).
 >
-> **Status: IMPLEMENTED 2026-06-14.** The upstream gate was met by the
-> synced MathTS release (`mathts-core@0.1.3` now exports `Unit`;
-> `mathts-functions@0.2.2` ships the assembled `parse`/`evaluate`). Path A
-> shipped: `formula-mathts.ts`, `formula-registry.ts`, the
-> `mathts-functions.ambient.d.ts` optional-peer declaration, the shared
-> conformance suite run against both parsers, and the CLI wired through the
-> registry. The one accepted grammar divergence is `e` (MathTS = Euler's
-> number; Path B = a free variable). Phase 2 (§5, dimensional checking of
-> user formulas) remains future work under its own note.
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. The implementation is `src/numerical/formula-mathts.ts` and
+> `src/numerical/formula-registry.ts`; dimensional checking of user formulas (§5) is
+> `Formula-Dimensional-Check-Design-Note.md`.
 
 ## 0. Why Path A at all
 
