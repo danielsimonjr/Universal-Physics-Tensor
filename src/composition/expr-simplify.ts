@@ -37,6 +37,7 @@ import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { Observable } from './compose-symbolic.js';
 import { makeObservable } from './compose-symbolic.js';
 import { renderScalarLeaf } from './mathts-scalar-symbols.js';
+import { quietly } from './mathts-quiet.js';
 
 /** A simplification completed but produced a dimensionally/numerically wrong
  *  result (a real bug — not a graceful no-op). @internal */
@@ -74,29 +75,15 @@ class Unsupported extends Error {}
 
 let cached: Promise<MathtsSimplifyModule | null> | undefined;
 
-/** Run `fn` with MathTS's import-time WASM-fallback chatter suppressed. */
-async function quietly<T>(fn: () => Promise<T>): Promise<T> {
-  const origWarn = console.warn;
-  const origError = console.error;
-  const origWrite = process.stderr.write.bind(process.stderr);
-  console.warn = () => {};
-  console.error = () => {};
-  (process.stderr as { write: unknown }).write = () => true;
-  try {
-    return await fn();
-  } finally {
-    console.warn = origWarn;
-    console.error = origError;
-    (process.stderr as { write: unknown }).write = origWrite;
-  }
-}
-
 /** Load + smoke-test the peer. A peer with `parse` but a missing/broken
  *  `simplify` (it must actually CANCEL) is rejected → null (graceful no-op). */
 async function detect(): Promise<MathtsSimplifyModule | null> {
   try {
-    // Import AND smoke-test inside one suppression window (the WASM-fallback
-    // chatter fires lazily on first parse/simplify, not only at import).
+    // Import AND smoke-test inside the ONE suppression window this module
+    // opens (`mathts-quiet.ts` states the invariant): the WASM-fallback
+    // chatter fires lazily on first parse/simplify, not only at import, and
+    // the smoke below is that first use. Later calls run with the console
+    // untouched.
     return await quietly(async () => {
       const mod = (await import(
         '@danielsimonjr/mathts-functions'
@@ -118,24 +105,6 @@ async function detect(): Promise<MathtsSimplifyModule | null> {
 function loadSimplifier(): Promise<MathtsSimplifyModule | null> {
   cached ??= detect();
   return cached;
-}
-
-/** Synchronous variant of {@link quietly} for the parse+simplify calls (MathTS
- *  emits WASM-fallback chatter lazily on first use, not only at import). */
-function quietlySync<T>(fn: () => T): T {
-  const origWarn = console.warn;
-  const origError = console.error;
-  const origWrite = process.stderr.write.bind(process.stderr);
-  console.warn = () => {};
-  console.error = () => {};
-  (process.stderr as { write: unknown }).write = () => true;
-  try {
-    return fn();
-  } finally {
-    console.warn = origWarn;
-    console.error = origError;
-    (process.stderr as { write: unknown }).write = origWrite;
-  }
 }
 
 function collectMathSymbols(n: MathNode, out: Set<string>): void {
@@ -339,8 +308,9 @@ export async function simplifyExpr(expr: ExprNode): Promise<SimplifyResult> {
     const str = renderGensym(expr, gensymOf, meta);
     // The peer can THROW on some forms (e.g. a known mathts `simplify` BigInt
     // bug on nested `a/(b/c²)`); that, like an unsupported node, is a graceful
-    // no-op, not an error. WASM chatter is suppressed (the call is lazy).
-    const simplifiedNode = quietlySync(() => mod.simplify(mod.parse(str)));
+    // no-op, not an error. The console is not touched here: the peer's first
+    // use already ran inside `detect`'s load window.
+    const simplifiedNode = mod.simplify(mod.parse(str));
     candidate = walkBack(simplifiedNode, meta);
   } catch {
     return { expr, simplified: false }; // unsupported / unrepresentable / peer threw
