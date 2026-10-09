@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 24 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 55 files
+- **cli**: 56 files
 - **root**: 1 file
 - **composition**: 75 files
 - **core**: 13 files
@@ -2289,6 +2289,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `CommandCtx` | Import (type-only) |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
+| `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
 - Functions: `parseDiscoveryOpts`
@@ -2478,6 +2479,7 @@ The codebase is organized into the following modules:
 | `../../composition/discovery.js` | `VettedCandidate` | Import (type-only) |
 | `../../composition/adjudication.js` | `AnnotatedCandidate` | Import (type-only) |
 | `../../bridges/catalog-types.js` | `AdjudicationVerdict` | Import (type-only) |
+| `../library-defaults.js` | `DISCOVER_MAX_ORDERS_DEFAULT` | Import |
 | `../published-url.js` | `adjudicationSourceUrls` | Import |
 | `../../composition/consequence.js` | `ConsequenceSignal, ConsequenceEvidence` | Import (type-only) |
 
@@ -2574,6 +2576,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
+| `../library-defaults.js` | `DISCOVER_MAX_ORDERS_DEFAULT` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2640,6 +2643,7 @@ The codebase is organized into the following modules:
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../cli-api.js` | `UnitMode` | Import (type-only) |
 | `../map-evidence.js` | `withCatalogEvidence` | Import |
+| `../library-defaults.js` | `DISCOVER_MAX_ORDERS_DEFAULT` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -2734,6 +2738,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
+| `../library-defaults.js` | `PROBE_BUDGET_MS_DEFAULT, PROBE_CORRECTION_TERMS_MAX, PROBE_HOLDOUT_TOL_DEFAULT, PROBE_STUDY_ALPHA_DEFAULT` | Import |
 
 **Exports:**
 - Functions: `emptySearchableWarning`
@@ -2944,6 +2949,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/library-defaults.ts` - The defaults and limits a command's help states, read from the library constants that hold
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../composition/discovery.js` | `DEFAULT_MAX_ORDERS_OF_MAGNITUDE` | Import |
+| `../composition/probe/types.js` | `DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET` | Import |
+| `../composition/probe/study.js` | `DEFAULT_ALPHA, MAX_CORRECTION_TERMS` | Import |
+
+**Exports:**
+- Constants: `DISCOVER_MAX_ORDERS_DEFAULT`, `PROBE_BUDGET_MS_DEFAULT`, `PROBE_HOLDOUT_TOL_DEFAULT`, `PROBE_STUDY_ALPHA_DEFAULT`, `PROBE_CORRECTION_TERMS_MAX`
+
+---
+
 ### `src/cli/main.ts` - Verb-first dispatcher for the UPT CLI — `upt <command> [args...]`.
 
 **Internal Dependencies:**
@@ -3022,7 +3041,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `Attribution`
-- Functions: `moduleSources`, `staticReach`
+- Functions: `sourceHash`, `moduleSources`, `staticReach`
 - Constants: `REACH_METHOD`
 
 ---
@@ -3069,7 +3088,7 @@ The codebase is organized into the following modules:
 | `./args.js` | `parseArgs` | Import |
 | `./command.js` | `resolveCommand` | Import |
 | `./commands/_atlas-map.js` | `storedResultsFile` | Import |
-| `./errors.js` | `CliError` | Import |
+| `./errors.js` | `CliError, UsageError` | Import |
 | `./output.js` | `emitJson` | Import |
 | `./record-reach.js` | `moduleSources, staticReach, Attribution` | Import |
 | `./record-tables.js` | `constantTables, tableFingerprint, ConstantTable` | Import |
@@ -3142,7 +3161,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./relations/domain-regimes.js` | `*` | Import |
-| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
+| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, format, equals, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
 | `./index.js` | `composeEdges` | Re-export |
 | `./composition/user-equation.js` | `formatConnectedSummary` | Re-export |
 | `./composition/bridge-analysis.js` | `bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors` | Re-export |
@@ -3179,7 +3198,7 @@ The codebase is organized into the following modules:
 | `./composition/consequence.js` | `describeDerivedClaim` | Re-export |
 | `./composition/graph-viz.js` | `filterEdges, formatFilterLegend` | Re-export |
 | `./cli/map-evidence.js` | `deriveEdgeEvidence` | Re-export |
-| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
+| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, ProblemFileError, runProbeSearch, nodeWorkerArgv, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
 | `./composition/adjudication.js` | `AnnotatedCandidate` | Re-export |
 | `./bridges/catalog-types.js` | `CatalogAdjudication` | Re-export |
@@ -3219,6 +3238,7 @@ The codebase is organized into the following modules:
 | `./numerical/evaluator-uncertainty.js` | `propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite` | Re-export |
 | `./numerical/evaluator-uncertainty.js` | `PropagatedOutput, UncertaintyContribution` | Re-export |
 | `./dimensional/symbolic-constants.js` | `constantAgreement, ConstantDisagreementError` | Re-export |
+| `./numerical/formula-contract.js` | `FormulaError` | Re-export |
 | `./composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Re-export |
 | `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues` | Re-export |
 | `./composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Re-export |
@@ -3246,24 +3266,25 @@ The codebase is organized into the following modules:
 - Re-exports:
 
   ```text
-  explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, format, buildVizModel,
-  renderDotToSvg, equationLanding, analyzeUserEquation, suggestQuantities, buckinghamPi,
-  dimensionallyDetermines, composeEdges, formatConnectedSummary, bridgePriority, attemptDerivation,
-  dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser,
-  getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges,
-  catalogFrontierAccount, formatFrontierAccount, rankDiscoveries, ANCHOR_DEFAULT, BRIDGE_EQUATIONS,
-  auditCoverage, CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor,
-  rigorDistribution, requestCallerTableConfrontation, catalogEntry, catalogIdNumber, parseBridgeId,
-  primaryRelation, demonstrationEdges, ConfrontationEntry, RigorTier, consistencyComparison,
-  ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, DuplicateInputError,
-  InputTypeError, isInputContractError, MissingInputError, NonFiniteInputError, UnknownInputError,
-  EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase,
-  AppliedCase, CaseCheck, CaseResult, convertValue, UnitError, unitRows, auditAxisDiscrimination,
-  AxisDiscrimination, AXES, AxisSpec, simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS,
-  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
-  filterEdges, formatFilterLegend, deriveEdgeEvidence, DEFAULT_SEARCH_BUDGET, scanFrontier,
-  findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap,
-  makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
+  explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, format, equals,
+  buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, suggestQuantities,
+  buckinghamPi, dimensionallyDetermines, composeEdges, formatConnectedSummary, bridgePriority,
+  attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors,
+  getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec,
+  predictMissingBridges, catalogFrontierAccount, formatFrontierAccount, rankDiscoveries,
+  ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage, CONFRONTATIONS, listConfrontations,
+  runConfrontation, confrontationRigor, rigorDistribution, requestCallerTableConfrontation,
+  catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation, demonstrationEdges,
+  ConfrontationEntry, RigorTier, consistencyComparison, ConfrontationOutcome, decidingMeasurement,
+  BRIDGE_EVALUATORS, evaluateBridge, DuplicateInputError, InputTypeError, isInputContractError,
+  MissingInputError, NonFiniteInputError, UnknownInputError, EvaluatorSpec, EvaluatorParameter,
+  resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck, CaseResult,
+  convertValue, UnitError, unitRows, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
+  simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
+  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
+  deriveEdgeEvidence, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps,
+  scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson,
+  resolveObservationsPath, parseExprJson, ProblemFileError, runProbeSearch, nodeWorkerArgv,
   formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
   formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
   runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
@@ -3285,8 +3306,8 @@ The codebase is organized into the following modules:
   kerrGeodesic, kerrTurningPointOrbit, MetricMassError, schwarzschildCircularOrbit, type MetricId,
   readBinding, bindingInUnit, readNamedBinding, BindingNumberError, TemperatureBindingError,
   propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite, PropagatedOutput,
-  UncertaintyContribution, constantAgreement, ConstantDisagreementError, aliasesForTarget,
-  nearQuantityNames, shareSynonyms, assertSynonymAgreement, expandSynonymValues,
+  UncertaintyContribution, constantAgreement, ConstantDisagreementError, FormulaError,
+  aliasesForTarget, nearQuantityNames, shareSynonyms, assertSynonymAgreement, expandSynonymValues,
   CANONICAL_GROUP_PREFACTORS, formatQuantity, formatExact, CarrierSignError, naturalConstantOverrides,
   UnitMode, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluatorOutput,
   resolveEvaluable, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
@@ -3770,7 +3791,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `VettedCandidate`, `DiscoveryOptions`, `DiscoveryContext`
 - Functions: `buildDiscoveryContext`, `vetLinkCandidate`, `vetInContext`, `rankDiscoveries`
-- Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`
+- Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`, `DEFAULT_MAX_ORDERS_OF_MAGNITUDE`
 
 ---
 
@@ -4252,7 +4273,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
 | `../expr-eval.js` | `evalExpr` | Import |
-| `./types.js` | `ProbeDataset` | Import (type-only) |
+| `./types.js` | `DEFAULT_HOLDOUT_TOL, ProbeDataset` | Import |
 | `./residual.js` | `scalarDiscrepancy` | Import |
 | `./serialize.js` | `canonicalJson` | Import |
 
@@ -4335,9 +4356,9 @@ The codebase is organized into the following modules:
 | `./backend-protocol.js` | `runBackendWorker` | Re-export |
 | `./backend-protocol.js` | `BackendRequest, BackendCandidate, BackendResponse` | Re-export |
 | `./metadata.js` | `setRelationMetadata, getRelationMetadata, listRelationMetadata, clearRelationMetadata` | Re-export |
-| `./problem.js` | `makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson` | Re-export |
+| `./problem.js` | `makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson, ProblemFileError` | Re-export |
 | `./problem.js` | `ProblemFile` | Re-export |
-| `./pipeline.js` | `runProbeSearch` | Re-export |
+| `./pipeline.js` | `runProbeSearch, nodeWorkerArgv` | Re-export |
 | `./pipeline.js` | `ProbeSearchOptions, ProbeSearchResult` | Re-export |
 | `./report.js` | `formatProbeReport, formatFrontierScan, formatFrontierGap` | Re-export |
 | `./study.js` | `parseStudy, loadStudyFromJson, loadStudyFile, attachReplication, studyCsvToRaw, runProbeStudy, formatProbeStudy, chiSquareSurvival, fSurvival, effectiveSigma, StudyRefusal` | Re-export |
@@ -4370,13 +4391,13 @@ The codebase is organized into the following modules:
   ChangepointResult, ScaleSymmetryInput, runBackendWorker, BackendRequest, BackendCandidate,
   BackendResponse, setRelationMetadata, getRelationMetadata, listRelationMetadata,
   clearRelationMetadata, makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile,
-  resolveObservationsPath, parseExprJson, ProblemFile, runProbeSearch, ProbeSearchOptions,
-  ProbeSearchResult, formatProbeReport, formatFrontierScan, formatFrontierGap, parseStudy,
-  loadStudyFromJson, loadStudyFile, attachReplication, studyCsvToRaw, runProbeStudy, formatProbeStudy,
-  chiSquareSurvival, fSurvival, effectiveSigma, StudyRefusal, ProbeStudy, ProbeStudyOptions,
-  ProbeStudyResult, StudyVerdict, ReplicationOutcome, StudyRole, StudyProvenance, StudyObservation,
-  StudyBaseline, SetTest, ModelTest, CandidateTest, StudyDesignSuggestion, StudyCorrection,
-  StudyCorrectionReport, CorrectionStep
+  resolveObservationsPath, parseExprJson, ProblemFileError, ProblemFile, runProbeSearch,
+  nodeWorkerArgv, ProbeSearchOptions, ProbeSearchResult, formatProbeReport, formatFrontierScan,
+  formatFrontierGap, parseStudy, loadStudyFromJson, loadStudyFile, attachReplication, studyCsvToRaw,
+  runProbeStudy, formatProbeStudy, chiSquareSurvival, fSurvival, effectiveSigma, StudyRefusal,
+  ProbeStudy, ProbeStudyOptions, ProbeStudyResult, StudyVerdict, ReplicationOutcome, StudyRole,
+  StudyProvenance, StudyObservation, StudyBaseline, SetTest, ModelTest, CandidateTest,
+  StudyDesignSuggestion, StudyCorrection, StudyCorrectionReport, CorrectionStep
   ```
 
 
@@ -4417,7 +4438,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/validator.js` | `validate` | Import |
 | `../../dimensional/algebra.js` | `equals` | Import |
 | `./types.js` | `ProbeCandidateRecord, ProbeRejectionRecord, SearchBudget, SearchProblem, SearchStopReason, DiscoveryRunManifest` | Import (type-only) |
-| `./types.js` | `DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION` | Import |
+| `./types.js` | `DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION` | Import |
 | `./search-budget.js` | `openBudget, budgetStopReason, BudgetState` | Import |
 | `./generator.js` | `generateNative, nativeDetermination, RawCandidate` | Import |
 | `./fingerprint.js` | `fingerprintExpr, complexityOf, bodyExpression` | Import |
@@ -4432,7 +4453,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ProbeSearchOptions`, `ProbeSearchResult`
-- Functions: `runProbeSearch`
+- Functions: `nodeWorkerArgv`, `runProbeSearch`
 - Constants: `NO_HOLDOUT_WORDING`
 
 ---
@@ -4455,6 +4476,7 @@ The codebase is organized into the following modules:
 | `./dataset.js` | `asDatasetSafe, loadSplitDatasetsFromJson` | Import |
 
 **Exports:**
+- Classes: `ProblemFileError`
 - Interfaces: `ProblemFile`
 - Functions: `isGapKind`, `makeResidualGap`, `loadSearchProblemFromJson`, `resolveObservationsPath`, `searchProblemFromFile`, `parseExprJson`
 
@@ -4494,7 +4516,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `DiscoveryBackendDescriptor, DiscoveryRunManifest, SearchBudget, SearchStopReason` | Import (type-only) |
-| `./types.js` | `DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION` | Import |
+| `./types.js` | `DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION` | Import |
 | `../canonical-json.js` | `captureEnvironment, hashCanonical` | Import |
 | `../canonical-json.js` | `captureEnvironment` | Re-export |
 
@@ -4599,6 +4621,7 @@ The codebase is organized into the following modules:
   formatProbeStudy
   ```
 
+- Constants: `DEFAULT_ALPHA`, `MAX_CORRECTION_TERMS`
 
 ---
 
@@ -4623,7 +4646,7 @@ The codebase is organized into the following modules:
   ScoreVector, EvidenceAssessment, EvidenceProfile
   ```
 
-- Constants: `SCHEMA_VERSION`, `PROBE_SCHEMA_VERSION`, `DEFAULT_SEARCH_BUDGET`
+- Constants: `SCHEMA_VERSION`, `PROBE_SCHEMA_VERSION`, `DEFAULT_SEARCH_BUDGET`, `DEFAULT_HOLDOUT_TOL`
 
 ---
 
@@ -6610,6 +6633,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, Dimension` | Import |
+| `../dimensional/units.js` | `UnitError` | Import |
 | `./binding-value.js` | `readParameter` | Import |
 | `./connection-lowering-helpers.js` | `computeChristoffelTensor` | Import |
 | `./curvature-lowering-helpers.js` | `christoffelAt, lowerFirstIndex, riemannUpperAt` | Import |
@@ -6860,7 +6884,7 @@ graph TD
         N26[closed-form-range]
         N27[command]
         N28[_atlas-map]
-        N29[...50 more]
+        N29[...51 more]
     end
 
     subgraph Root
@@ -6960,14 +6984,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 362 |
+| Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 80797 |
-| Total Exports | 2540 |
-| Total Re-exports | 1302 |
-| Total Classes | 80 |
+| Total Lines of Code | 81045 |
+| Total Exports | 2558 |
+| Total Re-exports | 1308 |
+| Total Classes | 81 |
 | Total Interfaces | 462 |
-| Total Functions | 774 |
+| Total Functions | 776 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 510 |

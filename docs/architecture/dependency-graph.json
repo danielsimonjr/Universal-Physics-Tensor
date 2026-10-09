@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "9.0.0",
-    "totalFiles": 362,
+    "totalFiles": 363,
     "totalModules": 13,
-    "totalExports": 2540
+    "totalExports": 2558
   },
   "entryPoints": [
     {
@@ -7644,6 +7644,13 @@
               "DiscoveryOptions"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -8259,6 +8266,12 @@
             "typeOnly": true
           },
           {
+            "file": "../library-defaults.js",
+            "imports": [
+              "DISCOVER_MAX_ORDERS_DEFAULT"
+            ]
+          },
+          {
             "file": "../published-url.js",
             "imports": [
               "adjudicationSourceUrls"
@@ -8605,6 +8618,12 @@
             "imports": [
               "parseDiscoveryOpts"
             ]
+          },
+          {
+            "file": "../library-defaults.js",
+            "imports": [
+              "DISCOVER_MAX_ORDERS_DEFAULT"
+            ]
           }
         ],
         "exports": [
@@ -8907,6 +8926,12 @@
             "file": "../map-evidence.js",
             "imports": [
               "withCatalogEvidence"
+            ]
+          },
+          {
+            "file": "../library-defaults.js",
+            "imports": [
+              "DISCOVER_MAX_ORDERS_DEFAULT"
             ]
           }
         ],
@@ -9220,6 +9245,15 @@
             "file": "../published-url.js",
             "imports": [
               "publishedUrl"
+            ]
+          },
+          {
+            "file": "../library-defaults.js",
+            "imports": [
+              "PROBE_BUDGET_MS_DEFAULT",
+              "PROBE_CORRECTION_TERMS_MAX",
+              "PROBE_HOLDOUT_TOL_DEFAULT",
+              "PROBE_STUDY_ALPHA_DEFAULT"
             ]
           }
         ],
@@ -9804,6 +9838,47 @@
           "coreLine"
         ]
       },
+      "src/cli/library-defaults.ts": {
+        "description": "The defaults and limits a command's help states, read from the library constants that hold",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../composition/discovery.js",
+            "imports": [
+              "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
+            ]
+          },
+          {
+            "file": "../composition/probe/types.js",
+            "imports": [
+              "DEFAULT_HOLDOUT_TOL",
+              "DEFAULT_SEARCH_BUDGET"
+            ]
+          },
+          {
+            "file": "../composition/probe/study.js",
+            "imports": [
+              "DEFAULT_ALPHA",
+              "MAX_CORRECTION_TERMS"
+            ]
+          }
+        ],
+        "exports": [
+          "DISCOVER_MAX_ORDERS_DEFAULT",
+          "PROBE_BUDGET_MS_DEFAULT",
+          "PROBE_HOLDOUT_TOL_DEFAULT",
+          "PROBE_STUDY_ALPHA_DEFAULT",
+          "PROBE_CORRECTION_TERMS_MAX"
+        ],
+        "constants": [
+          "DISCOVER_MAX_ORDERS_DEFAULT",
+          "PROBE_BUDGET_MS_DEFAULT",
+          "PROBE_HOLDOUT_TOL_DEFAULT",
+          "PROBE_STUDY_ALPHA_DEFAULT",
+          "PROBE_CORRECTION_TERMS_MAX"
+        ]
+      },
       "src/cli/main.ts": {
         "description": "Verb-first dispatcher for the UPT CLI — `upt <command> [args...]`.",
         "externalDependencies": [],
@@ -10019,6 +10094,7 @@
         ],
         "exports": [
           "REACH_METHOD",
+          "sourceHash",
           "moduleSources",
           "staticReach"
         ],
@@ -10026,6 +10102,7 @@
           "Attribution"
         ],
         "functions": [
+          "sourceHash",
           "moduleSources",
           "staticReach"
         ],
@@ -10179,7 +10256,8 @@
           {
             "file": "./errors.js",
             "imports": [
-              "CliError"
+              "CliError",
+              "UsageError"
             ]
           },
           {
@@ -10402,6 +10480,7 @@
               "M_SUN_KG",
               "composeSymbolic",
               "format",
+              "equals",
               "buildVizModel",
               "renderDotToSvg",
               "equationLanding",
@@ -10709,7 +10788,9 @@
               "loadSearchProblemFromJson",
               "resolveObservationsPath",
               "parseExprJson",
+              "ProblemFileError",
               "runProbeSearch",
+              "nodeWorkerArgv",
               "formatProbeReport",
               "loadStudyFromJson",
               "loadStudyFile",
@@ -11053,6 +11134,13 @@
             "reExport": true
           },
           {
+            "file": "./numerical/formula-contract.js",
+            "imports": [
+              "FormulaError"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./composition/aliases.js",
             "imports": [
               "aliasesForTarget",
@@ -11223,6 +11311,7 @@
           "M_SUN_KG",
           "composeSymbolic",
           "format",
+          "equals",
           "buildVizModel",
           "renderDotToSvg",
           "equationLanding",
@@ -11298,7 +11387,9 @@
           "loadSearchProblemFromJson",
           "resolveObservationsPath",
           "parseExprJson",
+          "ProblemFileError",
           "runProbeSearch",
+          "nodeWorkerArgv",
           "formatProbeReport",
           "loadStudyFromJson",
           "loadStudyFile",
@@ -11376,6 +11467,7 @@
           "correlationIsPositiveSemidefinite",
           "constantAgreement",
           "ConstantDisagreementError",
+          "FormulaError",
           "aliasesForTarget",
           "nearQuantityNames",
           "shareSynonyms",
@@ -11453,6 +11545,7 @@
           "M_SUN_KG",
           "composeSymbolic",
           "format",
+          "equals",
           "buildVizModel",
           "renderDotToSvg",
           "equationLanding",
@@ -11538,7 +11631,9 @@
           "loadSearchProblemFromJson",
           "resolveObservationsPath",
           "parseExprJson",
+          "ProblemFileError",
           "runProbeSearch",
+          "nodeWorkerArgv",
           "formatProbeReport",
           "loadStudyFromJson",
           "loadStudyFile",
@@ -11644,6 +11739,7 @@
           "UncertaintyContribution",
           "constantAgreement",
           "ConstantDisagreementError",
+          "FormulaError",
           "aliasesForTarget",
           "nearQuantityNames",
           "shareSynonyms",
@@ -13293,6 +13389,7 @@
         "exports": [
           "REGISTRY_ATTRIBUTES_BY_NAME",
           "ANCHOR_DEFAULT",
+          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE",
           "buildDiscoveryContext",
           "vetLinkCandidate",
           "vetInContext",
@@ -13311,7 +13408,8 @@
         ],
         "constants": [
           "REGISTRY_ATTRIBUTES_BY_NAME",
-          "ANCHOR_DEFAULT"
+          "ANCHOR_DEFAULT",
+          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
         ]
       },
       "src/composition/edge.ts": {
@@ -15061,9 +15159,9 @@
           {
             "file": "./types.js",
             "imports": [
+              "DEFAULT_HOLDOUT_TOL",
               "ProbeDataset"
-            ],
-            "typeOnly": true
+            ]
           },
           {
             "file": "./residual.js",
@@ -15538,7 +15636,8 @@
               "loadSearchProblemFromJson",
               "searchProblemFromFile",
               "resolveObservationsPath",
-              "parseExprJson"
+              "parseExprJson",
+              "ProblemFileError"
             ],
             "reExport": true
           },
@@ -15552,7 +15651,8 @@
           {
             "file": "./pipeline.js",
             "imports": [
-              "runProbeSearch"
+              "runProbeSearch",
+              "nodeWorkerArgv"
             ],
             "reExport": true
           },
@@ -15679,7 +15779,9 @@
           "searchProblemFromFile",
           "resolveObservationsPath",
           "parseExprJson",
+          "ProblemFileError",
           "runProbeSearch",
+          "nodeWorkerArgv",
           "formatProbeReport",
           "formatFrontierScan",
           "formatFrontierGap",
@@ -15890,8 +15992,10 @@
           "searchProblemFromFile",
           "resolveObservationsPath",
           "parseExprJson",
+          "ProblemFileError",
           "ProblemFile",
           "runProbeSearch",
+          "nodeWorkerArgv",
           "ProbeSearchOptions",
           "ProbeSearchResult",
           "formatProbeReport",
@@ -16024,6 +16128,7 @@
           {
             "file": "./types.js",
             "imports": [
+              "DEFAULT_HOLDOUT_TOL",
               "DEFAULT_SEARCH_BUDGET",
               "SCHEMA_VERSION"
             ]
@@ -16112,6 +16217,7 @@
         ],
         "exports": [
           "NO_HOLDOUT_WORDING",
+          "nodeWorkerArgv",
           "runProbeSearch"
         ],
         "interfaces": [
@@ -16119,6 +16225,7 @@
           "ProbeSearchResult"
         ],
         "functions": [
+          "nodeWorkerArgv",
           "runProbeSearch"
         ],
         "constants": [
@@ -16190,7 +16297,11 @@
           "loadSearchProblemFromJson",
           "resolveObservationsPath",
           "searchProblemFromFile",
-          "parseExprJson"
+          "parseExprJson",
+          "ProblemFileError"
+        ],
+        "classes": [
+          "ProblemFileError"
         ],
         "interfaces": [
           "ProblemFile"
@@ -16294,6 +16405,7 @@
           {
             "file": "./types.js",
             "imports": [
+              "DEFAULT_HOLDOUT_TOL",
               "DEFAULT_SEARCH_BUDGET",
               "SCHEMA_VERSION"
             ]
@@ -16568,6 +16680,8 @@
           }
         ],
         "exports": [
+          "DEFAULT_ALPHA",
+          "MAX_CORRECTION_TERMS",
           "parseStudy",
           "loadStudyFromJson",
           "loadStudyFile",
@@ -16616,6 +16730,10 @@
           "effectiveSigma",
           "runProbeStudy",
           "formatProbeStudy"
+        ],
+        "constants": [
+          "DEFAULT_ALPHA",
+          "MAX_CORRECTION_TERMS"
         ]
       },
       "src/composition/probe/types.ts": {
@@ -16648,7 +16766,8 @@
         "exports": [
           "SCHEMA_VERSION",
           "PROBE_SCHEMA_VERSION",
-          "DEFAULT_SEARCH_BUDGET"
+          "DEFAULT_SEARCH_BUDGET",
+          "DEFAULT_HOLDOUT_TOL"
         ],
         "interfaces": [
           "SearchBudget",
@@ -16680,7 +16799,8 @@
         "constants": [
           "SCHEMA_VERSION",
           "PROBE_SCHEMA_VERSION",
-          "DEFAULT_SEARCH_BUDGET"
+          "DEFAULT_SEARCH_BUDGET",
+          "DEFAULT_HOLDOUT_TOL"
         ]
       },
       "src/composition/proposed-bridges.ts": {
@@ -24481,6 +24601,12 @@
             ]
           },
           {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "UnitError"
+            ]
+          },
+          {
             "file": "./binding-value.js",
             "imports": [
               "readParameter"
@@ -25096,6 +25222,7 @@
           "src/cli/expr-print.ts",
           "src/cli/flag-help.ts",
           "src/cli/graphs.ts",
+          "src/cli/library-defaults.ts",
           "src/cli/main.ts",
           "src/cli/map-evidence.ts",
           "src/cli/output.ts",
@@ -25333,21 +25460,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 362,
+    "totalTypeScriptFiles": 363,
     "totalModules": 13,
-    "totalLinesOfCode": 80797,
-    "totalExports": 2540,
-    "totalClasses": 80,
+    "totalLinesOfCode": 81045,
+    "totalExports": 2558,
+    "totalClasses": 81,
     "totalInterfaces": 462,
-    "totalFunctions": 774,
+    "totalFunctions": 776,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 383,
-    "totalReExports": 1302,
+    "totalConstants": 392,
+    "totalReExports": 1308,
     "totalTypeOnlyImports": 510,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 67
+    "unusedExportsCount": 66
   }
 }

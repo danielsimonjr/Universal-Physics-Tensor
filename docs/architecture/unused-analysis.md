@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 67
+- **Potentially unused exports**: 66
 
 ## Potentially Unused Files
 
@@ -120,10 +120,6 @@ These exports are not imported by any other file in the codebase:
 
 - `flagHeading` (function)
 - `BUILTIN_VERBS` (constant)
-
-### `src/cli/record-reach.ts`
-
-- `REACH_METHOD` (constant)
 
 ### `src/cli/record.ts`
 
