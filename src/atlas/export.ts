@@ -25,7 +25,7 @@
  * @internal
  */
 
-import type { AtlasFamily } from './oscillators/index.js';
+import type { AtlasFamily } from './family.js';
 import type { AtlasRecordJson } from './serialize.js';
 import { toAtlasJson } from './serialize.js';
 import type { WitnessResultsArtifact } from './witness-artifact.js';

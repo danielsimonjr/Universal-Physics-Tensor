@@ -6,7 +6,7 @@
  * @module atlas/waves
  */
 
-import type { AtlasFamily } from '../oscillators/index.js';
+import type { AtlasFamily } from '../family.js';
 import { WAVE_BRIDGES } from './bridges.js';
 import { WAVE_CLOSURE_BRIDGES } from './bridges-closure.js';
 import { WAVE_MODELS, WAVES_FAMILY_NAME } from './models.js';

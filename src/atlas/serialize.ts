@@ -31,7 +31,7 @@ import type {
   Regime,
 } from './types.js';
 import type { AtlasModel } from './model.js';
-import type { AtlasFamily } from './oscillators/index.js';
+import type { AtlasFamily } from './family.js';
 import { deriveEvidence } from './derive-evidence.js';
 import type { WitnessResultsArtifact } from './witness-artifact.js';
 import { artifactPassingWitnessIds } from './witness-artifact.js';

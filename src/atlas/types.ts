@@ -173,7 +173,7 @@ export class MissingHorizonError extends Error {}
  * such a record is present and correct, and reporting a missing horizon for it
  * would send the next reader to the one field that is not the defect.
  *
- * @internal
+ * @public
  */
 export class MissingDeltaAtError extends Error {}
 

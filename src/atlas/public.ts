@@ -26,7 +26,7 @@ export type {
   RelationType,
   Witness,
 } from './types.js';
-export { MissingHorizonError, MissingLipschitzError } from './types.js';
+export { MissingDeltaAtError, MissingHorizonError, MissingLipschitzError } from './types.js';
 export type { AtlasModel } from './model.js';
 export { regimeHolds } from './regime.js';
 export type { RegimeCheck } from './regime.js';

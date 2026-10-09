@@ -19,7 +19,7 @@ import { toAtlasJson } from '../../src/atlas/serialize.js';
 import { OSCILLATOR_FAMILY } from '../../src/atlas/oscillators/index.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import type { AtlasModel } from '../../src/atlas/model.js';
-import type { AtlasFamily } from '../../src/atlas/oscillators/index.js';
+import type { AtlasFamily } from '../../src/atlas/family.js';
 import type { WitnessResultsArtifact } from '../../src/atlas/witness-artifact.js';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
