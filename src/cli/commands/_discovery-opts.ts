@@ -44,21 +44,27 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
       pairs.push({ name: k, raw: v, pair });
     }
   }
+  const seenAnchor = new Set<string>();
+  for (const p of pairs) {
+    if (seenAnchor.has(p.name)) throw new CliError(`upt: --anchor '${p.name}' is given twice ('${p.pair}'); give one value per name`);
+    seenAnchor.add(p.name);
+  }
   const siblings = pairs.map((p) => ({ name: p.name, raw: p.raw }));
   const rawValues: Record<string, number> = {};
   for (const p of pairs) {
     try {
       const read = api.readNamedBinding(p.name, p.raw, { siblings });
       if (!Number.isFinite(read.value)) {
-        throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
+        throw new CliError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
       }
       rawValues[p.name] = read.value;
     } catch (e) {
-      if (e instanceof UsageError) throw e;
+      // A bad value is exit 1 on every command; a missing `=` was refused as usage above.
+      if (e instanceof CliError) throw e;
       if (e instanceof api.TemperatureBindingError) {
         throw new CliError(`upt: --anchor '${p.pair}' is not a temperature. ${e.message}`);
       }
-      throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
+      throw new CliError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
     }
   }
   try {

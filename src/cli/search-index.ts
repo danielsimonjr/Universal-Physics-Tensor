@@ -82,7 +82,7 @@ export interface SearchMatch {
   readonly prefixes?: readonly PrefixMatch[];
 }
 
-export const STOP_WORDS: ReadonlySet<string> = new Set(['of', 'the', 'and', 'for', 'in', 'an']);
+export const STOP_WORDS: ReadonlySet<string> = new Set(['of', 'the', 'and', 'for', 'in', 'an', 'a', 'not', 'is', 'to', 'by', 'on', 'at', 'with', 'from', 'or', 'as', 'no']);
 
 /**
  * The kind of thing a name asks for. A suggestion may not drop one of these,

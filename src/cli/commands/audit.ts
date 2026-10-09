@@ -9,7 +9,6 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
-import { statusMeaning } from '../statuses.js';
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both.'),
@@ -30,9 +29,6 @@ const HELP = `upt audit [--source=catalog|canonical|both]
         reconstruction and not a physical refutation.
         --source picks the graph (default catalog).`;
 
-const DECOY_DEFINITION = statusMeaning('decoy');
-const NOT_A_MONOMIAL_DEFINITION = statusMeaning('not-a-monomial');
-const COEFFICIENT_UNSET_DEFINITION = statusMeaning('coefficient-unset');
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -70,12 +66,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           coefficientUnset: coefficientUnset.map(({ e, c }) => ({ id: e.id, complexity: c })),
           decoy: decoy.map(({ e, c }) => ({ id: e.id, complexity: c })),
           notAMonomial: notAMonomial.map(({ e, c }) => ({ id: e.id, complexity: c })),
-          open: openSorted.map(({ e, c }) => ({ id: e.id, complexity: c })),
-          definitions: {
-            decoy: DECOY_DEFINITION,
-            'coefficient-unset': COEFFICIENT_UNSET_DEFINITION,
-            'not-a-monomial': NOT_A_MONOMIAL_DEFINITION,
-          },
+          open: openSorted.map(({ e, c }) => ({ id: e.id, complexity: c, ...(Number.isFinite(c) ? {} : { unspannable: true }) })),
         },
       },
       ctx.write
@@ -92,7 +83,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       : api.vacuumConstantThroughAlpha(d.subset, d.prefactor)
         ? '  (vacuum constant; μ0 rewritten through α)'
         : '  (empirical/tuned constant)';
-    out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${d.prefactor!.toExponential(3)}${tag}`);
+    out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${api.formatQuantity(d.prefactor!)}${tag}`);
   }
   out(
     `\n  COEFFICIENT UNSET (${coefficientUnset.length}) — dimensional, and no sourced prefactor multiplies the monomial. ` +
@@ -114,7 +105,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   out('    (not a failed reconstruction of a monomial, and not a physical refutation)');
   out(`\n  OPEN (${open.length}) — irreducible free dimensionless group(s); by complexity:`);
   for (const { e, c } of [...open].sort((a, b) => a.c - b.c)) {
-    out(`    cplx=${c}  ${e.id}`);
+    // An infinite complexity is a target outside the span of its governing variables: no
+    // dimensionless group exists, so the row is unspannable, not merely hard.
+    out(`    cplx=${Number.isFinite(c) ? c : '∞ (unspannable)'}  ${e.id}`);
   }
   out('\n  (derivability is ORTHOGONAL to credibility — see the priority command)');
   return 0;

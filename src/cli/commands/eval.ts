@@ -14,6 +14,7 @@ import { CliError, UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
+import { splitAssignments } from '../bindings.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 
 const FLAGS: FlagSpec[] = [
@@ -29,7 +30,8 @@ const FLAGS: FlagSpec[] = [
 ];
 
 /**
- * Read `name=value` bindings. A missing `=` is a usage error (exit 2).
+ * Read `name=value` bindings. A missing `=` is a usage error (exit 2) and a
+ * name given twice is refused (exit 1), by the one splitter every command uses.
  * A value that is not a finite number or a known unit is a bad value
  * (exit 1), the same code `upt evaluate` uses. A value is a number, a
  * unit (`1Msun`), or an expression of constants and units (`0.6*c`, `pi/2`).
@@ -43,14 +45,7 @@ function parseScope(
 ): { scope: Record<string, number>; notes: string[] } {
   const scope: Record<string, number> = {};
   const notes: string[] = [];
-  const assignments: { name: string; raw: string; assignment: string }[] = [];
-  for (const a of args) {
-    const eq = a.indexOf('=');
-    if (eq < 0) {
-      throw new UsageError(`upt eval: '${a}' must be name=value. See \`upt help\`.`);
-    }
-    assignments.push({ name: a.slice(0, eq), raw: a.slice(eq + 1), assignment: a });
-  }
+  const assignments = splitAssignments('eval', args).map((a) => ({ name: a.name, raw: a.raw, assignment: a.token }));
   const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
   for (const a of assignments) {
     try {

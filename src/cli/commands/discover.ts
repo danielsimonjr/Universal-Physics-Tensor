@@ -142,7 +142,7 @@ function deriveReport(
         const at = governing
           .map((g) => `${g.name}=${sampleOf(g.name)!.value} [${sampleOf(g.name)!.source}]`)
           .join(', ');
-        approx = `  ≈ ${p.evaluate(vals).toExponential(2)}${at ? ` (${at})` : ''}`;
+        approx = `  ≈ ${api.formatQuantity(p.evaluate(vals))}${at ? ` (${at})` : ''}`;
       } catch {
         approx = '';
       }
@@ -418,7 +418,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`\n  MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):`);
     for (const r of clash) {
       const basis = r.magnitudeUsedAnchor ? '  (anchor-derived)' : '';
-      out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ~${r.ordersApart!.toFixed(1)} orders apart${basis}`);
+      out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ${api.formatQuantity(r.ordersApart!)} orders apart${basis}`);
     }
   }
   const subsumed = inert.filter((r) => r.subsuming);

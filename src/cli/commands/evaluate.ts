@@ -9,7 +9,8 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { siUnitOf } from '../expr-print.js';
+import { coherentUnits, derivedUnitOf, siUnitOf } from '../expr-print.js';
+import { splitAssignments } from '../bindings.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter, PropagatedOutput } from '../../cli-api.js';
@@ -75,11 +76,9 @@ function inputErrorOrSelf(api: CommandCtx['api'], e: unknown): unknown {
   return api.isInputContractError(e) ? new CliError(`upt evaluate: ${e.message}`) : e;
 }
 
-/** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2). */
+/** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2); a key twice is refused. */
 function resolveInputs(api: CommandCtx['api'], label: string, parameters: readonly EvaluatorParameter[], args: readonly string[]) {
-  for (const a of args) {
-    if (a.indexOf('=') <= 0) throw new UsageError(`upt evaluate: '${a}' must be key=value (e.g. mu_e=2). See \`upt help\`.`);
-  }
+  splitAssignments('evaluate', args, 'key=value (e.g. mu_e=2)');
   try {
     return api.resolveEvaluatorInputs(parameters, args, label);
   } catch (e) {
@@ -112,6 +111,7 @@ function parseUncertainty(
   inputs: Readonly<Record<string, number>>,
 ): { sigma: Record<string, number>; corr: Map<string, number> } {
   const sigma: Record<string, number> = {};
+  splitAssignments('evaluate --sigma', sigmaArgs, 'key=u');
   for (const a of sigmaArgs) {
     const m = /^([^=]+)=(.+)$/.exec(a);
     const given = m?.[1];
@@ -134,6 +134,8 @@ function parseUncertainty(
     if (m === null || key === undefined || !Number.isFinite(u) || u < 0) {
       throw new CliError(`upt evaluate: --sigma '${a}' is not key=<finite u ≥ 0>`);
     }
+    // Two spellings of one input (`T_K`, `temperature`) are one key here.
+    if (key in sigma) throw new CliError(`upt evaluate --sigma: '${key}' is given twice ('${a}'); give one value per name`);
     sigma[key] = u;
   }
   const corr = new Map<string, number>();
@@ -195,11 +197,14 @@ function uncertaintyOf(
   };
 }
 
-function printUncertainty(out: CommandCtx['out'], u: Uncertainty): void {
-  const g = (x: number | null): string => (x === null ? 'unavailable' : Number(x.toPrecision(3)).toString());
+/** The one number formatter, as every command reads it: through `ctx.api`. */
+type Fmt = CommandCtx['api']['formatQuantity'];
+
+function printUncertainty(fmt: Fmt, out: CommandCtx['out'], u: Uncertainty): void {
+  const g = (x: number | null): string => (x === null ? 'unavailable' : fmt(x));
   out('  uncertainty (first-order, GUM law; a sensitivity is not an uncertainty, the contribution is c·u):');
   for (const [name, p] of Object.entries(u.propagated)) {
-    out(`    ${name} = ${p.value} ± ${g(p.u)} (1σ${p.relative === null ? '' : `; relative ${g(p.relative * 100)}%`})`);
+    out(`    ${name} = ${g(p.value)} ± ${g(p.u)} (1σ${p.relative === null ? '' : `; relative ${g(p.relative * 100)}%`})`);
     for (const [k, c] of Object.entries(p.contributions)) {
       out(
         `      from ${k}: c = ${g(c.sensitivity)}, c·u = ${g(c.contribution)}` +
@@ -224,15 +229,16 @@ const conversionsOf = (resolved: Resolved) =>
     .filter((r) => r.note !== undefined)
     .map((r) => ({ key: r.key, given: r.given, value: r.value, unit: r.unit, ...(r.via === undefined ? {} : { via: r.via }), note: r.note }));
 
-function printInputs(out: CommandCtx['out'], parameters: readonly EvaluatorParameter[], inputs: Readonly<Record<string, number>>, resolved: Resolved): void {
-  out('  inputs: ' + Object.entries(inputs).map(([k, v]) => `${k}=${v}`).join(', '));
+function printInputs(fmt: Fmt, out: CommandCtx['out'], parameters: readonly EvaluatorParameter[], inputs: Readonly<Record<string, number>>, resolved: Resolved): void {
+  out('  inputs: ' + Object.entries(inputs).map(([k, v]) => `${k}=${fmt(v)}`).join(', '));
   for (const p of parameters) {
     const r = resolved.find((x) => x.key === p.key);
     out(`    ${describeParameter(p)}${r?.note === undefined ? '' : `\n      converted: ${r.note}`}`);
   }
 }
 
-const withUnit = (v: number | null, unit: string): string => (v === null ? 'undefined here (its premise fails, or it needs an optional input not given)' : `${v}${unit === '' ? '' : ` ${unit}`}`);
+const withUnit = (fmt: Fmt, v: number | null, unit: string): string =>
+  v === null ? 'undefined here (its premise fails, or it needs an optional input not given)' : `${fmt(v)}${unit === '' ? '' : ` ${unit}`}`;
 
 /** A violated regime check is a check that ran and failed: exit 3. */
 async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[]): Promise<number> {
@@ -287,23 +293,23 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   out('  scalar simplification evaluated:');
   for (const e of c.governing.scalar) out(`    ${e}`);
   out(`  kept and dropped: ${c.governing.distinction}`);
-  printInputs(out, c.parameters, inputs, resolved);
+  printInputs(api.formatQuantity, out, c.parameters, inputs, resolved);
   out('  conditions (boundary, initial, equilibrium):');
   for (const s of c.conditions) out(`    - ${s}`);
   out('  outputs:');
-  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(result.outputs[o.key] ?? null, o.unit)} — ${o.meaning}`);
+  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(api.formatQuantity, result.outputs[o.key] ?? null, o.unit)} — ${o.meaning}`);
   const obs = c.outputs.find((o) => o.key === c.observable)!;
-  out(`  observable: ${obs.key} = ${withUnit(result.outputs[obs.key] ?? null, obs.unit)}`);
+  out(`  observable: ${obs.key} = ${withUnit(api.formatQuantity, result.outputs[obs.key] ?? null, obs.unit)}`);
   out('  regime checks (at the given inputs):');
   if (regimeLine !== '') out(`  regime coordinates: ${regimeLine}`);
   for (const k of result.checks) {
-    out(`    ${k.holds ? 'holds   ' : 'VIOLATED'}  ${k.id}: ${k.quantity} = ${Number(k.value.toPrecision(6))} ${k.op} ${k.bound} — ${k.premise} (${k.threshold})`);
+    out(`    ${k.holds ? 'holds   ' : 'VIOLATED'}  ${k.id}: ${k.quantity} = ${api.formatQuantity(k.value)} ${k.op} ${k.bound} — ${k.premise} (${k.threshold})`);
   }
   if (c.comparison !== undefined) {
     const d = result.outputs[c.comparison.deviationKey] ?? null;
     out(
       `  comparison (reported beside the checks, not one of them): ${c.comparison.valueKey} / ${c.comparison.referenceKey} − 1 = ` +
-        `${d === null ? 'undefined here' : Number(d.toPrecision(6))} — against ${c.comparison.reference}; ${c.comparison.method}`,
+        `${d === null ? 'undefined here' : api.formatQuantity(d)} — against ${c.comparison.reference}; ${c.comparison.method}`,
     );
   }
   if (result.unchecked.length > 0) {
@@ -316,7 +322,7 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
       : `  NOT QUALIFIED: ${failed.join(', ')} violated — the outputs above are outside the stated regime and are not a ` +
           'qualified prediction at these inputs.',
   );
-  if (u !== null) printUncertainty(out, u);
+  if (u !== null) printUncertainty(api.formatQuantity, out, u);
   out('  not included in the model:');
   for (const s of c.notIncluded) out(`    - ${s}`);
   out('  compare with a measurement:');
@@ -376,10 +382,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     found = api.resolveEvaluable(id);
   } catch {
-    throw new CliError(api.missingEvaluatorMessage(id));
+    throw new CliError(`upt evaluate: ${api.missingEvaluatorMessage(id)}`);
   }
   if (found.evaluator === undefined) {
-    throw new CliError(api.missingEvaluatorMessage(id));
+    throw new CliError(`upt evaluate: ${api.missingEvaluatorMessage(id)}`);
   }
   const spec = found.evaluator;
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
@@ -399,9 +405,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   const notices = relation === undefined ? [] : api.relationNotices(relation);
 
   const outputDescriptor = api.evaluatorOutput(spec);
+  // The label is a derived SI unit read from the unit table (`V^2/Hz`); the JSON keeps the
+  // base form `parseUnit` reads back, and the dimension itself, beside it.
   const outputLabel = {
     name: outputDescriptor.name,
-    ...(outputDescriptor.dimension === undefined ? {} : { unit: siUnitOf(outputDescriptor.dimension) }),
+    ...(outputDescriptor.dimension === undefined
+      ? {}
+      : { unit: siUnitOf(outputDescriptor.dimension), label: derivedUnitOf(outputDescriptor.dimension, coherentUnits(api.unitRows())) }),
   };
   const unused = api.unusedInputKeys(spec);
   if (args.flags.has('json')) {
@@ -429,24 +439,24 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
   out(`\n● be-${id}  ${spec.name}`);
-  printInputs(out, spec.parameters, inputs, resolved);
+  printInputs(api.formatQuantity, out, spec.parameters, inputs, resolved);
   for (const [k, v] of Object.entries(result)) {
     const extra = spec.outputs.find((o) => o.name === k);
     const label =
       k === 'value'
-        ? outputLabel.unit === undefined
+        ? outputLabel.label === undefined
           ? outputLabel.name
-          : `${outputLabel.name} [${outputLabel.unit}]`
+          : `${outputLabel.name} [${outputLabel.label}]`
         : extra === undefined
           ? k
           : `${k} [${extra.unit}] (${extra.meaning})`;
-    out(`  ${label} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
+    out(`  ${label} = ${typeof v === 'number' ? api.formatQuantity(v) : JSON.stringify(v)}`);
   }
   for (const key of unused) {
     out(`  note: ${key} is required and does not enter the value; the closed form does not use it, so changing it changes nothing`);
   }
   for (const notice of notices) out(`  ${notice}`);
-  if (u !== null) printUncertainty(out, u);
+  if (u !== null) printUncertainty(api.formatQuantity, out, u);
   return 0;
 }
 

@@ -22,6 +22,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
+import { splitAssignments } from '../bindings.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -45,7 +46,7 @@ const FLAGS: FlagSpec[] = [
   JSON_FLAG,
 ];
 
-const HELP = `upt regime <family> [--at group=value ...] [--json]
+const HELP = `upt regime <family> [--at group=value ...] [--assume premise ...] [--deny premise ...] [--json]
         Where in parameter space a family's models are claimed to apply.
         --at states a point in REGIME COORDINATES (π-group formulas, or a
         dimensionless input's own name, e.g. --at theta0=0.2). Every model AND
@@ -79,9 +80,10 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
  * positionals, so `--at theta0=0.2 T0=1 t=10` works as written: the parser
  * gives `--at` one value and leaves the rest as positionals.
  *
- * @throws CliError on a malformed or non-finite assignment. A dropped
- *   coordinate would silently turn a CHECKED inequality into an unchecked one,
- *   which is exactly the reading this command exists to keep honest.
+ * @throws UsageError on a token with no `=`, CliError on a non-finite value or
+ *   a group given twice. A dropped coordinate would silently turn a CHECKED
+ *   inequality into an unchecked one, which is exactly the reading this
+ *   command exists to keep honest.
  * @internal
  */
 export function parseAt(
@@ -90,14 +92,7 @@ export function parseAt(
   command: string,
   notes?: string[],
 ): Record<string, number> {
-  const assignments: { name: string; raw: string; token: string }[] = [];
-  for (const token of raw) {
-    const eq = token.indexOf('=');
-    if (eq <= 0) {
-      throw new CliError(`upt ${command}: '${token}' is not a group=value assignment`);
-    }
-    assignments.push({ name: token.slice(0, eq), raw: token.slice(eq + 1), token });
-  }
+  const assignments = splitAssignments(command, raw, 'group=value');
   const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
   const point: Record<string, number> = {};
   for (const a of assignments) {
@@ -356,10 +351,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   out(`\nRegimes of family '${registration.name}'`);
+  // A family whose records state no inequality has nothing to check at any point: VACUOUS, not UNCHECKED.
+  const allVacuous = verdicts.every((v) => v.vacuous);
   out(
-    stated.length === 0
-      ? '(no --at point supplied: every inequality is UNCHECKED, which is not a pass)'
-      : `at ${stated.map((g) => `${g}=${point[g]}`).join(' · ')}`,
+    allVacuous
+      ? '(this family states no inequality: every record is VACUOUS, and no --at point could check it)'
+      : stated.length === 0
+        ? '(no --at point supplied: every inequality is UNCHECKED, which is not a pass)'
+        : `at ${stated.map((g) => `${g}=${point[g]}`).join(' · ')}`,
   );
   if (unknown.length > 0) {
     out(
@@ -435,7 +434,7 @@ export const command: Command = {
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Report where a family\'s models are valid, violated, or unknown.',
-  example: 'upt regime <name>',
+  example: 'upt regime oscillators --at theta0=0.2',
   group: 'explore',
   run,
 };

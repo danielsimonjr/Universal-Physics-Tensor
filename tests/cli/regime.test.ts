@@ -86,9 +86,9 @@ describe('upt regime', () => {
     expect(await runCli(['regime', 'oscillators', '--at', 'theta0=abc'], cap.io)).toBe(1);
   });
 
-  it('an --at token that is not group=value → exit 1', async () => {
+  it('an --at token with no = is a malformed invocation → exit 2 (a bad value is 1)', async () => {
     const cap = capture();
-    expect(await runCli(['regime', 'oscillators', '--at', 'theta0'], cap.io)).toBe(1);
+    expect(await runCli(['regime', 'oscillators', '--at', 'theta0'], cap.io)).toBe(2);
   });
 
   it('an unknown flag is rejected by the parser → exit 2', async () => {

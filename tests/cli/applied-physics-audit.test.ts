@@ -176,12 +176,13 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
   it('--json keeps the decoy key and defines it', async () => {
     const c = capture();
     await runCli(['audit', '--json'], c.io);
-    const r = JSON.parse(c.lines.join('')).result;
+    const env = JSON.parse(c.lines.join(''));
+    const r = env.result;
     expect(r.decoy.map((d: { id: string }) => d.id)).toContain('be-51');
     expect(r.decoy.map((d: { id: string }) => d.id)).not.toContain('be-69');
     expect(r.notAMonomial.map((d: { id: string }) => d.id)).toContain('be-69');
-    expect(r.definitions.decoy).toMatch(/not a physical refutation/);
-    expect(r.definitions['not-a-monomial']).toMatch(/not a proportionality/);
+    expect(env.definitions.decoy).toMatch(/not a physical refutation/);
+    expect(env.definitions['not-a-monomial']).toMatch(/not a proportionality/);
   });
 });
 

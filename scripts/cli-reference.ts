@@ -1,8 +1,9 @@
 /**
- * Generate docs/CLI.md and the README command tables from the CLI registry.
+ * Generate docs/CLI.md, the README command tables, and the command and flag
+ * tables of cli/README.md from the CLI registry.
  *
- * `bun scripts/cli-reference.ts` rewrites both.
- * `bun scripts/cli-reference.ts --check` exits 1 when either is stale.
+ * `bun scripts/cli-reference.ts` rewrites all three.
+ * `bun scripts/cli-reference.ts --check` exits 1 when any is stale.
  * The `docs-fresh` job runs `--check`.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -180,12 +181,12 @@ function globalRows(): string {
   return ['| Option | Default | What it does |', '|---|---|---|', ...rows].join('\n');
 }
 
-function replaceSpan(text: string, name: string, body: string): string {
+function replaceSpan(text: string, name: string, body: string, file = 'README.md'): string {
   const start = `<!-- cli-reference:${name} -->`;
   const end = `<!-- /cli-reference:${name} -->`;
   const i = text.indexOf(start);
   const j = text.indexOf(end);
-  if (i < 0 || j < i) throw new Error(`README.md is missing ${start} … ${end}`);
+  if (i < 0 || j < i) throw new Error(`${file} is missing ${start} … ${end}`);
   return text.slice(0, i + start.length) + `\n${body}\n` + text.slice(j);
 }
 
@@ -196,13 +197,51 @@ export function stampReadme(readme: string, list: readonly Command[] = commands(
   return next;
 }
 
+/**
+ * Every flag a registered command parses, grouped by flag name: the commands
+ * that take it and its description. A flag whose description differs between
+ * commands lists each command's own sentence, so no sentence is invented.
+ */
+function flagRows(list: readonly Command[]): string {
+  const byFlag = new Map<string, { command: string; description: string }[]>();
+  for (const command of list) {
+    for (const flag of command.flags) {
+      const rows = byFlag.get(flag.name) ?? [];
+      rows.push({ command: command.name, description: flag.description ?? '' });
+      byFlag.set(flag.name, rows);
+    }
+  }
+  const lines = ['| Flag | Commands | What it does |', '|---|---|---|'];
+  for (const [name, rows] of [...byFlag].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
+    const commandsCell = rows.map((r) => `\`${r.command}\``).join(', ');
+    const descriptions = [...new Set(rows.map((r) => r.description))];
+    const effect =
+      descriptions.length === 1
+        ? cell(descriptions[0]!)
+        : rows.map((r) => `${r.command}: ${cell(r.description)}`).join(' ');
+    lines.push(`| \`${cell(name)}\` | ${commandsCell} | ${effect} |`);
+  }
+  return lines.join('\n');
+}
+
+/** Rewrite the marked spans of cli/README.md: the command tables and the flag table. */
+export function stampCliReadme(readme: string, list: readonly Command[] = commands()): string {
+  let next = replaceSpan(readme, 'commands', commandRows(list), 'cli/README.md');
+  next = replaceSpan(next, 'globals', globalRows(), 'cli/README.md');
+  next = replaceSpan(next, 'flags', flagRows(list), 'cli/README.md');
+  return next;
+}
+
 function main(): void {
   const check = process.argv.includes('--check');
   const cliPath = join(root, 'docs/CLI.md');
   const readmePath = join(root, 'README.md');
+  const cliReadmePath = join(root, 'cli/README.md');
   const nextCli = renderCliReference();
   const readme = readFileSync(readmePath, 'utf8');
   const nextReadme = stampReadme(readme);
+  const cliReadme = readFileSync(cliReadmePath, 'utf8');
+  const nextCliReadme = stampCliReadme(cliReadme);
   let currentCli = '';
   try {
     currentCli = readFileSync(cliPath, 'utf8');
@@ -212,16 +251,18 @@ function main(): void {
   }
   const cliStale = currentCli !== nextCli;
   const readmeStale = readme !== nextReadme;
-  if (!cliStale && !readmeStale) {
-    console.log('cli-reference: docs/CLI.md and the README spans match the registry.');
+  const cliReadmeStale = cliReadme !== nextCliReadme;
+  if (!cliStale && !readmeStale && !cliReadmeStale) {
+    console.log('cli-reference: docs/CLI.md, the README spans and the cli/README.md spans match the registry.');
     return;
   }
   if (check) {
-    console.error('cli-reference: docs/CLI.md or README.md is stale. Run `bun scripts/cli-reference.ts` and commit the result.');
+    console.error('cli-reference: docs/CLI.md, README.md or cli/README.md is stale. Run `bun scripts/cli-reference.ts` and commit the result.');
     process.exit(1);
   }
   if (cliStale) writeFileSync(cliPath, nextCli);
   if (readmeStale) writeFileSync(readmePath, nextReadme);
+  if (cliReadmeStale) writeFileSync(cliReadmePath, nextCliReadme);
   console.log('cli-reference: rewrote the stale file(s).');
 }
 

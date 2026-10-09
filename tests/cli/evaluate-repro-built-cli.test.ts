@@ -62,7 +62,8 @@ describe('upt evaluate refuses a non-finite input, and every input error has one
   it.each([
     [['be-133', 'c_kg_per_s=2', 'k_N_per_m=1'], /^upt evaluate: be-133: missing input 'm_kg'/],
     [['be-133', 'c_kg_per_s=2', 'k_N_per_m=1', 'm_kg=1', 'zz=1'], /^upt evaluate: be-133: 'zz' is not an input here/],
-    [['be-133', 'c_kg_per_s=2', 'c_kg_per_s=3', 'k_N_per_m=1', 'm_kg=1'], /^upt evaluate: be-133: 'c_kg_per_s' is given twice/],
+    // A key given twice is refused by the one binding splitter every command uses, before the evaluator sees it.
+    [['be-133', 'c_kg_per_s=2', 'c_kg_per_s=3', 'k_N_per_m=1', 'm_kg=1'], /^upt evaluate: 'c_kg_per_s' is given twice/],
     [['be-133', 'c_kg_per_s=NaN', 'k_N_per_m=1', 'm_kg=1'], /^upt evaluate: be-133: 'NaN' is not a finite number/],
     [['case-resistor-noise', 'T_K=300'], /^upt evaluate: case-resistor-noise: missing input 'R_ohm'/],
   ])('upt evaluate %j exits 1 under the one prefix', (args, pattern) => {

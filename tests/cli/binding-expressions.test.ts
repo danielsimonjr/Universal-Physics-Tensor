@@ -181,9 +181,10 @@ describe('binding expressions', () => {
 
   it('a garbage binding still fails, and the anchor error stays the pinned sentence', async () => {
     const explained = capture();
-    expect(await runCli(['explain', 'hawking-temperature', 'mass=abc'], explained.io)).toBe(2);
+    // A bad value is exit 1 on every command (9.0.0 audit K10); a missing `=` stays usage (2).
+    expect(await runCli(['explain', 'hawking-temperature', 'mass=abc'], explained.io)).toBe(1);
     const anchor = capture();
-    expect(await runCli(['discover', '--anchor=mass=abc'], anchor.io)).toBe(2);
+    expect(await runCli(['discover', '--anchor=mass=abc'], anchor.io)).toBe(1);
     expect(anchor.err.join('')).toMatch(
       /upt: --anchor expects k=v with a finite numeric value, got "mass=abc"\./,
     );

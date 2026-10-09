@@ -166,7 +166,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       if (r.undeclaredSymbol !== undefined) {
         const sym = r.undeclaredSymbol;
         const asConstant = api.CONSTANTS[sym] === undefined ? '' : ` ${sym}:${sym} for the registered constant, or`;
-        throw new UsageError(`upt derive: undeclared symbol '${sym}' in --formula. Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
+        // The checker's own sentence first (with the hyphen note when one remains in the
+        // formula), then how to declare the symbol. The report above is not printed: an error
+        // leaves stdout empty.
+        throw new UsageError(`upt derive: ${hyphenSubtractionNote(r, formula)} Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
       }
     } else {
       const matches = dimsEqualTol(r.dim!, target.dim);
@@ -255,7 +258,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     else failed = true;
     textOut(
       matchesMonomial
-        ? `  formula MATCHES the dimensional form — recovered prefactor ≈ ${mean!.toExponential(4)}`
+        ? `  formula MATCHES the dimensional form — recovered prefactor ≈ ${api.formatQuantity(mean!)}`
         : `  formula does NOT match the dimensional monomial (different input-dependence — a decoy or different physics).`
     );
     printComparisons();

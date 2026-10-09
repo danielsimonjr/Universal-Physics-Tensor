@@ -47,8 +47,8 @@ describe('upt discover — option validation', () => {
     expect(run(['discover', '--anchor=mass']).status).toBe(2);
   });
 
-  it('rejects a non-numeric --anchor value', () => {
-    expect(run(['discover', '--anchor=mass=abc']).status).toBe(2);
+  it('rejects a non-numeric --anchor value as a bad value (exit 1)', () => {
+    expect(run(['discover', '--anchor=mass=abc']).status).toBe(1);
   });
 
   it('accepts a well-formed --max-orders and --anchor', () => {
