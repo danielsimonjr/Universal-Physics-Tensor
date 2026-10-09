@@ -130,23 +130,6 @@ export interface ValidationResult {
   violations: Violation[];
 }
 
-/**
- * Per-bridge dimensional self-check report. Each `src/bridges/equations/`
- * module exports a `validate*Dimensions(): DimensionValidationReport` helper
- * that runs `validateEquation(LHS, RHS)` and returns LHS/RHS inferred dims
- * alongside the homogeneity verdict. Lifted here so the 9+ bridge modules
- * import a single shared shape rather than redeclaring it byte-for-byte.
- *
- * Source: simplifier F2 (Wave G), confidence 88. The interface satisfies
- * Karpathy's three extraction criteria — single semantic meaning, ≥9
- * consumers, future encodings will use it.
- */
-export interface DimensionValidationReport {
-  ok: boolean;
-  lhsDim: Dimension | null;
-  rhsDim: Dimension | null;
-}
-
 interface InferContext {
   path: string;
   violations: Violation[];

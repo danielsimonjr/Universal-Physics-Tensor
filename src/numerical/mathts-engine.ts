@@ -79,9 +79,14 @@ export class MathTSEngine implements TensorEngine {
     return new MathTSEngineTensor(unwrap(t, 'reshape').reshape(shape));
   }
 
+  // AD dispatch. `@danielsimonjr/mathts-autograd` wraps the traced input as a
+  // DualTensor (forward mode, carries `tangent`) or a TapedTensor (reverse
+  // mode, carries `tape`) and calls these methods with it. The autograd
+  // package is loaded at the AD call, not at module load, so its classes
+  // cannot be named here; the structural casts below state the invariant
+  // the package keeps: a wrapped tensor implements add/sub/mul/scale over
+  // another wrapped tensor and returns a wrapped tensor.
   add(a: EngineTensor, b: EngineTensor): EngineTensor {
-    // AD dispatch: DualTensor (forward-mode), duck-typed so this method can
-    // accept the wrapped tensor autograd passes in.
     if ('tangent' in a && 'tangent' in b) {
       return (a as unknown as { add(o: unknown): EngineTensor }).add(b);
     }

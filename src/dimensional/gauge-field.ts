@@ -36,7 +36,6 @@
  * pattern, Phase 1 of TensorEquationNode generalization).
  *
  * @see docs/architecture/archive/v0.7-be-x-reencoding-design-note.md §BE-50
- * @see src/bridges/equations/be-50-wheeler-feynman.ts
  * @module dimensional/gauge-field
  */
 
@@ -114,8 +113,8 @@ export interface GaugeFieldNode {
  *
  * This is a PREDICATE node (like `EinsteinFieldEquationNode`) —
  * not a value-producing expression. Numerical evaluation of the
- * residual for specific field amplitudes is handled separately by
- * `evaluateWFTimeSymmetry` in `src/bridges/equations/be-50-wheeler-feynman.ts`.
+ * residual for specific field amplitudes is out of scope; the catalog
+ * relation be-50 that consumes this node has no numerical evaluator.
  *
  * @public
  */

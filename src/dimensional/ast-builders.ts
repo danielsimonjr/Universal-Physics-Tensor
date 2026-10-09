@@ -22,10 +22,11 @@ export function sym(name: string, dim: Dimension): ExprNode {
 }
 
 /**
- * Build a `Dimension` from its first five base exponents. Arg order is
- * (L, M, T, **I**, **Θ**) — note I precedes Θ; the amount-of-substance (N) and
- * luminous-intensity (J) exponents default to 0.
+ * Build a `Dimension` from its base exponents. Arg order is
+ * (L, M, T, **I**, **Θ**, N, J) — note I precedes Θ; every omitted exponent
+ * is 0, so the amount-of-substance (N) and luminous-intensity (J) exponents
+ * are reachable from the one builder.
  */
-export function dim(L = 0, M = 0, T = 0, I = 0, Theta = 0): Dimension {
-  return { L, M, T, I, Theta, N: 0, J: 0 };
+export function dim(L = 0, M = 0, T = 0, I = 0, Theta = 0, N = 0, J = 0): Dimension {
+  return { L, M, T, I, Theta, N, J };
 }

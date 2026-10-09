@@ -199,6 +199,11 @@ export async function bridgeGradientAST(
   let autograd: AutogradModuleLike;
   let tensorMod: TensorModuleLike;
   try {
+    // The two modules are typed by the structural views above (the members
+    // this lowering calls: reverseGrad, TapedTensor, Tensor.fromNested …).
+    // The casts state that those members exist on the imported modules, which
+    // their own type declarations guarantee; the full MathTS types are not
+    // imported so this file compiles without the autograd types at hand.
     autograd =
       (await import('@danielsimonjr/mathts-autograd')) as unknown as AutogradModuleLike;
     tensorMod =

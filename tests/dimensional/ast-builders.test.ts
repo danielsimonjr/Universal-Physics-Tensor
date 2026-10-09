@@ -26,4 +26,10 @@ describe('dimensional/ast-builders', () => {
   it('dim defaults every omitted exponent to 0 (dimensionless)', () => {
     expect(dim()).toEqual({ L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 });
   });
+
+  it('dim takes the amount-of-substance and luminous-intensity exponents too', () => {
+    // molar entropy [M L^2 T^-2 Θ^-1 N^-1] and luminance [J L^-2]
+    expect(dim(2, 1, -2, 0, -1, -1)).toEqual({ L: 2, M: 1, T: -2, I: 0, Theta: -1, N: -1, J: 0 });
+    expect(dim(-2, 0, 0, 0, 0, 0, 1)).toEqual({ L: -2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 1 });
+  });
 });

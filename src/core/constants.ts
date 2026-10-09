@@ -1,11 +1,9 @@
 /**
- * Canonical CODATA 2018 + SI-defined physical constants for UPT (v0.5.1).
+ * Canonical CODATA 2018 + SI-defined physical constants for UPT.
  *
- * Single source of truth for fundamental physical constants used across the
- * numerical, dimensional, and bridge layers. Replaces the truncated local
- * literals (`c_SI = 2.998e8`, etc.) that drifted across `src/numerical/`,
- * `src/bridges/`, and `tests/fixtures/` — see audit `PC-1` in
- * `docs/architecture/archive/v0.5.1-audit.md`.
+ * The one owner of every fundamental physical constant used across the
+ * numerical, dimensional, and bridge layers; `tests/core/constants-owner.test.ts`
+ * fails on a second copy of any of these decimals elsewhere under `src/`.
  *
  * Values use:
  *   • Exact-SI definitions (`C_SI`, `H_SI`, `K_B_SI`, `E_SI`) where the
@@ -146,9 +144,6 @@ export const GM_SUN_SI = 1.3271244e20;
  * @internal
  */
 export const M_SUN_IAU_SI = GM_SUN_SI / G_SI;
-
-/** Where {@link GM_SUN_SI} comes from. @internal */
-export const GM_SUN_SOURCE = 'IAU 2015 Resolution B3, nominal solar mass parameter (GM)☉ = 1.3271244e20 m³ s⁻²';
 
 /**
  * Electron mass (kg), CODATA 2018. Added for the v0.11 namespacing

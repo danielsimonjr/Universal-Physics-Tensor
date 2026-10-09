@@ -183,6 +183,9 @@ function describeNonFinite(result: unknown): string {
 }
 
 const mathTsModule: MathtsFunctionsModule = {
+  // MathTS's Node type is not imported; `MathNode` is the structural subset
+  // this parser reads (`evaluate`, `filter`, `isSymbolNode`, `isFunctionNode`,
+  // `name`, `fn`), every member of which exists on a MathTS node.
   parse: (expr) => parseMathTs(expr) as unknown as MathNode,
 };
 

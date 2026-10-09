@@ -17,8 +17,8 @@
 import { equals } from './algebra.js';
 import { parseUnit } from './units.js';
 
-/** Quantity name → the unit its evaluator speaks. @internal */
-export const QUANTITY_CONVENTION_UNIT: ReadonlyMap<string, string> = new Map([
+/** Quantity name → the unit its evaluator speaks; read through {@link quantityConventionUnit}. */
+const QUANTITY_CONVENTION_UNIT: ReadonlyMap<string, string> = new Map([
   ['vacuum-expectation-value', 'GeV'],
   ['dark-fermion-mass', 'GeV'],
   ['planck-mass-energy', 'GeV'],

@@ -118,9 +118,8 @@ function dimensionIsCharge(dim: Dimension): boolean {
  * What to say when a bare `e` was the elementary charge inside a sum that is
  * not homogeneous. Declaring or binding `e` keeps a different quantity.
  * Euler's number is `exp(x)`.
- * @internal
  */
-export const ELEMENTARY_CHARGE_MIX_MESSAGE =
+const ELEMENTARY_CHARGE_MIX_MESSAGE =
   'e is the elementary charge and is not dimensionless here. Declare it or bind a value (e=<number>) if you mean a different quantity, or write Euler\'s number as exp(x). The catalog writes the eccentricity factor as one_minus_e_sq.';
 
 /** Inferred dimension of an `ExprNode`, or throw if not homogeneous. */
