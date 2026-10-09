@@ -3,7 +3,7 @@ metadata:
   version: 9.0.0
   totalFiles: 363
   totalModules: 13
-  totalExports: 2558
+  totalExports: 2560
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7461,6 +7461,7 @@ modules:
         - file: ./numerical/formula-contract.js
           imports:
             - FormulaError
+            - FormulaValueError
           reExport: true
         - file: ./composition/aliases.js
           imports:
@@ -7723,6 +7724,7 @@ modules:
         - constantAgreement
         - ConstantDisagreementError
         - FormulaError
+        - FormulaValueError
         - aliasesForTarget
         - nearQuantityNames
         - shareSynonyms
@@ -7994,6 +7996,7 @@ modules:
         - constantAgreement
         - ConstantDisagreementError
         - FormulaError
+        - FormulaValueError
         - aliasesForTarget
         - nearQuantityNames
         - shareSynonyms
@@ -16159,9 +16162,11 @@ modules:
         - unknownFunctionMessage
         - callBuiltinFunction
         - FormulaError
+        - FormulaValueError
         - EulerNumberError
       classes:
         - FormulaError
+        - FormulaValueError
         - EulerNumberError
       interfaces:
         - CompiledFormula
@@ -16256,6 +16261,7 @@ modules:
             - EulerNumberError
             - FormulaError
             - unknownFunctionMessage
+            - FormulaValueError
       exports:
         - mathtsFormulaParser
         - parseFormula
@@ -17694,15 +17700,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 363
   totalModules: 13
-  totalLinesOfCode: 81116
-  totalExports: 2558
-  totalClasses: 81
+  totalLinesOfCode: 81126
+  totalExports: 2560
+  totalClasses: 82
   totalInterfaces: 462
   totalFunctions: 776
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 392
-  totalReExports: 1308
+  totalReExports: 1309
   totalTypeOnlyImports: 510
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

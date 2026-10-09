@@ -439,7 +439,7 @@ describe('rankDiscoveries — one shared context', () => {
       });
       const inconsistent = report.results.filter((r) => r.outcome === 'inconsistent').map((r) => r.target).sort();
       expect([report.allConsistent, inconsistent], `${c.a} ≡ ${c.b}`).toEqual([
-        ctx.baseNumericallyConsistent,
+        ctx.baseInconsistentNodes.length === 0,
         [...ctx.baseInconsistentNodes],
       ]);
     }

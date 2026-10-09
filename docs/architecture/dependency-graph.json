@@ -4,7 +4,7 @@
     "version": "9.0.0",
     "totalFiles": 363,
     "totalModules": 13,
-    "totalExports": 2558
+    "totalExports": 2560
   },
   "entryPoints": [
     {
@@ -11136,7 +11136,8 @@
           {
             "file": "./numerical/formula-contract.js",
             "imports": [
-              "FormulaError"
+              "FormulaError",
+              "FormulaValueError"
             ],
             "reExport": true
           },
@@ -11468,6 +11469,7 @@
           "constantAgreement",
           "ConstantDisagreementError",
           "FormulaError",
+          "FormulaValueError",
           "aliasesForTarget",
           "nearQuantityNames",
           "shareSynonyms",
@@ -11740,6 +11742,7 @@
           "constantAgreement",
           "ConstantDisagreementError",
           "FormulaError",
+          "FormulaValueError",
           "aliasesForTarget",
           "nearQuantityNames",
           "shareSynonyms",
@@ -23302,10 +23305,12 @@
           "unknownFunctionMessage",
           "callBuiltinFunction",
           "FormulaError",
+          "FormulaValueError",
           "EulerNumberError"
         ],
         "classes": [
           "FormulaError",
+          "FormulaValueError",
           "EulerNumberError"
         ],
         "interfaces": [
@@ -23443,7 +23448,8 @@
               "callBuiltinFunction",
               "EulerNumberError",
               "FormulaError",
-              "unknownFunctionMessage"
+              "unknownFunctionMessage",
+              "FormulaValueError"
             ]
           }
         ],
@@ -25468,15 +25474,15 @@
   "statistics": {
     "totalTypeScriptFiles": 363,
     "totalModules": 13,
-    "totalLinesOfCode": 81116,
-    "totalExports": 2558,
-    "totalClasses": 81,
+    "totalLinesOfCode": 81126,
+    "totalExports": 2560,
+    "totalClasses": 82,
     "totalInterfaces": 462,
     "totalFunctions": 776,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 392,
-    "totalReExports": 1308,
+    "totalReExports": 1309,
     "totalTypeOnlyImports": 510,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

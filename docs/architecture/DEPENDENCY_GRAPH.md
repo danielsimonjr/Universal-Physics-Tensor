@@ -3238,7 +3238,7 @@ The codebase is organized into the following modules:
 | `./numerical/evaluator-uncertainty.js` | `propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite` | Re-export |
 | `./numerical/evaluator-uncertainty.js` | `PropagatedOutput, UncertaintyContribution` | Re-export |
 | `./dimensional/symbolic-constants.js` | `constantAgreement, ConstantDisagreementError` | Re-export |
-| `./numerical/formula-contract.js` | `FormulaError` | Re-export |
+| `./numerical/formula-contract.js` | `FormulaError, FormulaValueError` | Re-export |
 | `./composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Re-export |
 | `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues` | Re-export |
 | `./composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Re-export |
@@ -3307,13 +3307,13 @@ The codebase is organized into the following modules:
   readBinding, bindingInUnit, readNamedBinding, BindingNumberError, TemperatureBindingError,
   propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite, PropagatedOutput,
   UncertaintyContribution, constantAgreement, ConstantDisagreementError, FormulaError,
-  aliasesForTarget, nearQuantityNames, shareSynonyms, assertSynonymAgreement, expandSynonymValues,
-  CANONICAL_GROUP_PREFACTORS, formatQuantity, formatExact, CarrierSignError, naturalConstantOverrides,
-  UnitMode, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluatorOutput,
-  resolveEvaluable, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
-  ollamaEmbedder, retrieveHybrid, builtinFormulaDimensionChecker, missingEvaluatorMessage,
-  relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
-  EquationAnalysis
+  FormulaValueError, aliasesForTarget, nearQuantityNames, shareSynonyms, assertSynonymAgreement,
+  expandSynonymValues, CANONICAL_GROUP_PREFACTORS, formatQuantity, formatExact, CarrierSignError,
+  naturalConstantOverrides, UnitMode, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName,
+  evaluatorOutput, resolveEvaluable, unusedInputKeys, SynonymDisagreementError,
+  canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid, builtinFormulaDimensionChecker,
+  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
+  EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -6204,7 +6204,7 @@ The codebase is organized into the following modules:
 | `../dimensional/ast-types.js` | `TranscendentalFn` | Import (type-only) |
 
 **Exports:**
-- Classes: `FormulaError`, `EulerNumberError`
+- Classes: `FormulaError`, `FormulaValueError`, `EulerNumberError`
 - Interfaces: `CompiledFormula`, `FormulaParser`, `ScalarFunction`
 - Functions: `arityMessage`, `unknownFunctionMessage`, `callBuiltinFunction`
 - Constants: `EULER_NUMBER_ERROR`, `SCALAR_FUNCTIONS`, `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`
@@ -6247,7 +6247,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./formula-contract.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
-| `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage` | Import |
+| `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError` | Import |
 
 **Exports:**
 - Functions: `parseFormula`
@@ -6987,10 +6987,10 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 81116 |
-| Total Exports | 2558 |
-| Total Re-exports | 1308 |
-| Total Classes | 81 |
+| Total Lines of Code | 81126 |
+| Total Exports | 2560 |
+| Total Re-exports | 1309 |
+| Total Classes | 82 |
 | Total Interfaces | 462 |
 | Total Functions | 776 |
 | Total Type Guards | 6 |

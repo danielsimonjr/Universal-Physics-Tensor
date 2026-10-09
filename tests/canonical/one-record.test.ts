@@ -16,7 +16,6 @@ import {
   canonicalPrefactor,
 } from '../../src/composition/canonical-prefactors.js';
 import { NAME_TABLE } from '../../src/composition/aliases.js';
-import { CENSUS } from '../helpers/census.js';
 
 const ROOT = join(import.meta.dirname, '../../src');
 
@@ -56,7 +55,9 @@ describe('a canonical equation is one record', () => {
 
   it('the prefactor tables are projections of the entries', () => {
     const withPrefactor = CANONICAL_EQUATIONS.filter((e) => e.prefactor !== undefined);
-    expect(withPrefactor.length).toBe(CENSUS.canonical.withPrefactor);
+    // A typed literal, not a census field: a bridge ingest does not move it, so the census
+    // would only compare the expression to itself. A new sourced prefactor edits this line.
+    expect(withPrefactor.length).toBe(28);
     for (const e of withPrefactor) expect(canonicalPrefactor(e.id)).toBe(e.prefactor!.value);
     for (const e of CANONICAL_EQUATIONS.filter((x) => x.prefactor === undefined)) expect(canonicalPrefactor(e.id), e.id).toBeUndefined();
     const grouped = CANONICAL_EQUATIONS.filter((e) => e.groupPrefactor !== undefined);
@@ -66,14 +67,14 @@ describe('a canonical equation is one record', () => {
   });
 
   it('the validity conditions are entry fields', () => {
-    expect(CANONICAL_EQUATIONS.filter((e) => e.holds !== undefined).length).toBe(CENSUS.canonical.withHolds);
+    expect(CANONICAL_EQUATIONS.filter((e) => e.holds !== undefined).length).toBe(40);
     expect(canonicalById('CE-wien')?.holds).toBe('temperature > 0');
   });
 
   it('the comparison targets are entry fields that the name table projects', () => {
     expect(canonicalById('CE-sound-speed')?.targetAliases).toEqual(['speed']);
     expect(NAME_TABLE.canonicalTargets['CE-sound-speed']).toEqual(['speed']);
-    expect(Object.keys(NAME_TABLE.canonicalTargets).length).toBe(CENSUS.canonical.comparisonTargetRows);
+    expect(Object.keys(NAME_TABLE.canonicalTargets).length).toBe(4);
   });
 
   it('convention notes and the unset-factor disclosure are entry fields', () => {
@@ -81,9 +82,7 @@ describe('a canonical equation is one record', () => {
     expect(canonicalById('CE-compton-wavelength-full')?.conventionGroup).toBe('compton-wavelength');
     expect(canonicalById('CE-hooke-law')?.conventionNote).toMatch(/F = −kx/);
     expect(canonicalById('CE-fermi-energy')?.unsetFactorNote).toMatch(/\(1\/2\)\(3π²\)/);
-    expect(CANONICAL_EQUATIONS.filter((e) => e.unsetFactorNote !== undefined).length).toBe(
-      CENSUS.canonical.withUnsetFactorNote,
-    );
+    expect(CANONICAL_EQUATIONS.filter((e) => e.unsetFactorNote !== undefined).length).toBe(3);
   });
 
   it('a prefactor is recorded once: never on an entry whose AST already carries it', () => {

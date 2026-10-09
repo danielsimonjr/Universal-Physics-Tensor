@@ -109,6 +109,13 @@ describe('nits', () => {
     expect(r.code).toBe(1);
     expect(r.err).toMatch(/--anchor/);
   });
+  it('eval: a non-finite result is a bad value (exit 1); an unknown function stays a malformed formula (exit 2)', async () => {
+    const nonFinite = await run(['eval', 'ln(-1)']);
+    expect(nonFinite.code).toBe(1);
+    expect(nonFinite.err).toMatch(/^upt eval: formula did not evaluate to a finite number/);
+    expect((await run(['eval', '1/0'])).code).toBe(1);
+    expect((await run(['eval', 'foo(2)'])).code).toBe(2);
+  });
   it('derive: the undeclared-symbol message separates its two sentences', async () => {
     const r = await run(['derive', 'period:time', 'length:length', '--formula', 'sqrt(lenght/g)']);
     expect(r.code).toBe(2);

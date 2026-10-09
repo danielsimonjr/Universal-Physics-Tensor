@@ -24,6 +24,18 @@ export class FormulaError extends Error {
   }
 }
 
+/**
+ * A formula that parsed and evaluated, whose value is not a finite real number (`ln(-1)`,
+ * `1/0`, `sqrt(-1)`). A bad value at the point, not a malformed formula: the CLI exits 1 on
+ * it where a `FormulaError` is exit 2 (Tom's review, second round).
+ */
+export class FormulaValueError extends FormulaError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'FormulaValueError';
+  }
+}
+
 /** A parsed formula: its free variables and a safe evaluator. @internal */
 export interface CompiledFormula {
   /** The original source string. */
