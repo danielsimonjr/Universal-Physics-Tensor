@@ -5,6 +5,7 @@ import {
   type BridgeEquationStatus,
   type BridgeIssueSeverity,
 } from '../src/bridges/index.js';
+import { CENSUS } from './helpers/census.js';
 
 const VALID_STATUSES: ReadonlySet<BridgeEquationStatus> = new Set([
   'established',
@@ -33,15 +34,16 @@ const VALID_FIXABLE = new Set([
 const VALID_PARTS = new Set(['I', 'II', 'III', 'IV', 'V', 'VI']);
 
 describe('Bridge Equation Index', () => {
-  it('contains 160 entries, ids 11 through 170', () => {
+  it('contains every entry, from the first id to the last', () => {
     // 136 is the record from before ids 147 through 170.
-    expect(BRIDGE_EQUATIONS.length).toBe(160);
+    expect(BRIDGE_EQUATIONS.length).toBe(CENSUS.catalog.entries);
   });
 
-  it('has no duplicate IDs; IDs 11 through 170 with no gaps', () => {
+  it('has no duplicate IDs and no gaps between the first id and the last', () => {
     const ids = BRIDGE_EQUATIONS.map((e) => e.id).sort((a, b) => a - b);
-    expect(ids).toEqual(Array.from({ length: 160 }, (_, i) => i + 11));
-    expect(new Set(ids).size).toBe(160);
+    expect(ids).toEqual(Array.from({ length: CENSUS.catalog.entries }, (_, i) => CENSUS.catalog.idMin + i));
+    expect(ids[ids.length - 1]).toBe(CENSUS.catalog.idMax);
+    expect(new Set(ids).size).toBe(CENSUS.catalog.distinctIds);
     // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
   });
@@ -141,13 +143,13 @@ describe('Bridge Equation Index', () => {
     }
   });
 
-  it('expected categories A-O are all present (15 categories)', () => {
+  it('expected categories A-O are all present', () => {
     const letters = new Set(BRIDGE_EQUATIONS.map((e) => e.category));
     const expected = 'ABCDEFGHIJKLMNO'.split('');
     for (const L of expected) {
       expect(letters.has(L), `category ${L} is missing`).toBe(true);
     }
-    expect(letters.size).toBe(15);
+    expect(letters.size).toBe(CENSUS.catalog.categories);
   });
 
   it('every entry has a non-empty name', () => {

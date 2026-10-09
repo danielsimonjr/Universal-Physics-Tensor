@@ -26,6 +26,7 @@ import { deriveEdgeEvidence, withCatalogEvidence } from '../../src/cli/map-evide
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import type { EvidenceTag } from '../../src/atlas/types.js';
+import { CENSUS } from '../helpers/census.js';
 
 const BOTH = [...CATALOG_GRAPH, ...CANONICAL_GRAPH];
 
@@ -111,7 +112,7 @@ describe('buildVizModel — evidence filter', () => {
     const proved = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('formally-proved'));
     expect(proposed.length).toBeGreaterThan(0);
     // 94 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that state their equations were labelled derivation-step.
-    expect(proved.length).toBe(118);
+    expect(proved.length).toBe(CENSUS.evidence.formallyProved);
     expect(proposed.length + proved.length).toBe(withBeId.length);
     const model = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'proposed' }));
     expect(model.filterStats.kept).toBe(proposed.length);

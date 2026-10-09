@@ -133,7 +133,7 @@ describe('explainQuantity — controlled fixtures', () => {
   });
 });
 
-describe('explainQuantity — real 41-edge graph', () => {
+describe('explainQuantity — the real catalog graph', () => {
   it('hawking-temperature from {mass: M_sun}: over-determined, consistent, value, NOT dimensionally closed', () => {
     const x = explainQuantity(FULL_GRAPH, 'hawking-temperature', {
       mass: M_SUN_KG,

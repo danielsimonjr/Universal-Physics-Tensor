@@ -17,6 +17,7 @@ import {
   type ChainStubRecord,
 } from '../../src/atlas/chain-pipeline.js';
 import { bridgeSeedKeys } from '../../src/atlas/physjs-ref.js';
+import { CENSUS } from '../helpers/census.js';
 
 const SNAPSHOT: unknown = JSON.parse(
   readFileSync(fileURLToPath(new URL('./chain-pipeline-catalog.golden.json', import.meta.url)), 'utf8'),
@@ -28,7 +29,7 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
 
   it('leaves the catalog array unchanged', () => {
     expect(BRIDGE_EQUATIONS.map((row) => row.id)).toEqual(before);
-    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+    expect(BRIDGE_EQUATIONS).toHaveLength(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.

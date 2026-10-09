@@ -8,6 +8,7 @@ import { captureMerged } from '../helpers/cli.js';
 import { runText } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { CENSUS } from '../helpers/census.js';
 
 describe('F14 — help states no fixed isolated-bridge count', () => {
   it('top-level help does not hard-code "20 ISOLATED"', async () => {
@@ -130,7 +131,10 @@ describe('F09 — a proof badge carries its theorem scope', () => {
 // Already true when the audit ran (it read the text view only); pinned across every export so a
 // later change cannot merge "no overlay metadata" into "did not match".
 describe('F10 — an evidence-filtered export keeps absent evidence apart from non-matching evidence', () => {
-  const split = /118 of 267 kept; 39 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
+  const m = CENSUS.mapBothFormallyProved;
+  const split = new RegExp(
+    `${m.kept} of ${m.total} kept; ${m.droppedNotMatching} dropped \\(did not match\\); ${m.droppedMissingMetadata} dropped \\(no overlay metadata\\)`,
+  );
   // 94 kept and 63 dropped is the record from before the PhysJS manifest carried kind: twenty-four catalog
   // theorems that state their equations were labelled derivation-step.
   for (const format of ['text', 'mermaid', 'dot']) {
@@ -143,10 +147,10 @@ describe('F10 — an evidence-filtered export keeps absent evidence apart from n
     const c = captureMerged();
     await runCli(['map', '--source=both', '--evidence=formally-proved', '--json'], c.io);
     expect(JSON.parse(c.lines.join('')).result.filter).toEqual({
-      total: 267,
-      kept: 118,
-      droppedNotMatching: 39,
-      droppedMissingMetadata: 110,
+      total: CENSUS.mapBothFormallyProved.total,
+      kept: CENSUS.mapBothFormallyProved.kept,
+      droppedNotMatching: CENSUS.mapBothFormallyProved.droppedNotMatching,
+      droppedMissingMetadata: CENSUS.mapBothFormallyProved.droppedMissingMetadata,
       evidence: 'formally-proved',
     });
   });
@@ -156,7 +160,9 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
   it('the heading names the reconstruction that failed and disclaims refutation', async () => {
     const { text } = await runText(['audit']);
     expect(text).toMatch(
-      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 23\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
+      new RegExp(
+        `DIMENSIONAL-RECONSTRUCTION MISMATCH \\(DECOY, ${CENSUS.derivationAudit.decoy}\\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator`,
+      ),
       // 16 is the record from before the catalog graph held every relation.
       // 15 is the record from before be-134..146. be-137 is the new decoy.
       // 11 is the record from before be-103..125. be-109, be-117, be-120, and be-121 are the four new decoys.

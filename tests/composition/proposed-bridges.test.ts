@@ -19,6 +19,7 @@ import { validate } from '../../src/dimensional/validator.js';
 import { format } from '../../src/dimensional/algebra.js';
 import { CANONICAL_BY_ID } from '../../src/canonical/registry.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { CENSUS } from '../helpers/census.js';
 
 /** Minimal promising candidate (the generator only reads a/b/dim/verdict). */
 const promising = (a: string, b: string, dim = '[energy]'): VettedCandidate =>
@@ -61,7 +62,7 @@ describe('deriveProposedBridges — canonical-only pilot', () => {
     // distance: the Landauer photon, hν=mc² (photon-energy↔rest-energy via mass),
     // and c/H≟b/T (hubble-distance↔peak-wavelength). Order is registry-stable
     // (Landauer first).
-    expect(proposals).toHaveLength(5);
+    expect(proposals).toHaveLength(CENSUS.discovery.proposedBridges);
     expect(proposals.map((p) => p.id).sort()).toEqual([
       'IC-classical-electron-radius--hubble-distance--hubble-rate',
       'IC-compton-wavelength-full--hubble-distance--hubble-rate',
@@ -124,7 +125,7 @@ describe('epistemic firewall', () => {
     deriveProposedBridges();
     expect(BRIDGE_EQUATIONS).toBe(ref); // same array reference
     expect(JSON.stringify(BRIDGE_EQUATIONS)).toBe(before); // unchanged content
-    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+    expect(BRIDGE_EQUATIONS).toHaveLength(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
@@ -254,7 +255,7 @@ describe('bridge-source adapter + leaf canonicalization', () => {
 
 describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', () => {
   it('materializes the pilot as an unadjudicated, honest entry', () => {
-    expect(PROPOSED_BRIDGES).toHaveLength(5); // Landauer photon + 4 expansion IDs
+    expect(PROPOSED_BRIDGES).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + 4 expansion IDs
     const e = PROPOSED_BRIDGES.find(
       (b) => b.id === 'IC-erasure-energy--photon-energy--nu',
     )!;
@@ -277,8 +278,8 @@ describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', ()
     }
   });
 
-  it('is NOT the catalog — BRIDGE_EQUATIONS stays the faithful 44', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+  it('is NOT the catalog — BRIDGE_EQUATIONS stays the faithful catalog', () => {
+    expect(BRIDGE_EQUATIONS).toHaveLength(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.

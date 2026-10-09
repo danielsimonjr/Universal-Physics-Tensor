@@ -16,6 +16,7 @@ import {
   tensorIndexComponent,
   type TensorIndexComponent,
 } from '../../src/bridges/tensor-index.js';
+import { CENSUS } from '../helpers/census.js';
 
 const SPEC = 'docs/specification/Part-II.md';
 
@@ -76,9 +77,9 @@ describe('§VI.6.1 tensor index', () => {
   it('places every cross-domain id in exactly one component, matching its category', () => {
     const crossDomain = catalogEntries().filter((entry) => entry.type === 'cross-domain');
     // 136 is the record from before the specification dropped standard write-ups.
-    expect(BRIDGE_EQUATIONS).toHaveLength(160);
-    expect(crossDomain).toHaveLength(40);
-    expect(listed.size).toBe(40);
+    expect(BRIDGE_EQUATIONS).toHaveLength(CENSUS.catalog.entries);
+    expect(crossDomain).toHaveLength(CENSUS.catalog.crossDomain);
+    expect(listed.size).toBe(CENSUS.catalog.crossDomain);
     for (const entry of crossDomain) {
       expect(
         listed.get(entry.id),

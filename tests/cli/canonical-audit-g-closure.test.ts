@@ -10,6 +10,7 @@
 import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
+import { CENSUS } from '../helpers/census.js';
 
 const SPURIOUS = [
   'CE-rydberg-energy',
@@ -35,19 +36,19 @@ describe('canonical audit G-closures', () => {
     expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.265e\+0\s+\(empirical\/tuned constant\)/);
     expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
     expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
-    expect(text.stdout).toMatch(/DERIVED \(72\)/);
-    expect(text.stdout).toMatch(/COEFFICIENT UNSET \(6\)/);
+    expect(text.stdout).toContain(`DERIVED (${CENSUS.canonical.audit.derived})`);
+    expect(text.stdout).toContain(`COEFFICIENT UNSET (${CENSUS.canonical.audit.coefficientUnset})`);
     // Hawking, light deflection, perihelion, and Bekenstein–Hawking were OPEN
     // because a null monomial evaluated to NaN, so the audit had no samples.
     // The evaluator is the AST. The only closure the search accepts does not
     // reproduce it. The point-charge field is the same shape once its
     // evaluator multiplies 1/(4π): the closure does not reproduce that factor.
     // Those five are DECOY and OPEN is 19.
-    expect(text.stdout).toMatch(/DECOY, 12\)/);
+    expect(text.stdout).toContain(`DECOY, ${CENSUS.canonical.audit.decoy})`);
     expect(text.stdout).toMatch(
       /CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-bekenstein-hawking/,
     );
-    expect(text.stdout).toMatch(/OPEN \(19\)/);
+    expect(text.stdout).toContain(`OPEN (${CENSUS.canonical.audit.open})`);
     const decoy = text.stdout.split('OPEN (')[0] ?? '';
     for (const id of SPURIOUS) expect(decoy, id).toContain(id);
   });

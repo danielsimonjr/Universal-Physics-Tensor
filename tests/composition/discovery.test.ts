@@ -24,6 +24,7 @@ import {
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
 import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { CENSUS } from '../helpers/census.js';
 
 const q = (name: string): Quantity => ({
   name,
@@ -267,7 +268,7 @@ describe('vetLinkCandidate — generic↔specialization (subsuming) bar', () => 
 describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
   const ranked = rankDiscoveries(CATALOG_GRAPH);
 
-  it('vets every proposed candidate (1525) and tags each with a verdict', () => {
+  it('vets every proposed candidate and tags each with a verdict', () => {
     // 191 is the record from before be-74..76.
     // 199 is the record from before be-77..87.
     // 389 is the record from before be-88..102.
@@ -276,7 +277,7 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
     // 1964 is the record from before be-134..146.
     // 2518 is the record from before be-147..170.
     // 4196 is the record from before be-33 and be-88 dropped the sources their formulas never read.
-    expect(ranked.length).toBe(4169);
+    expect(ranked.length).toBe(CENSUS.discovery.catalog.total);
     const verdicts = new Set(ranked.map((r) => r.verdict));
     for (const v of verdicts) {
       expect(['promising', 'inert', 'contradictory', 'magnitude-clash', 'axis-clash']).toContain(v);

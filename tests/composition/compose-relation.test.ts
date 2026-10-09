@@ -43,6 +43,7 @@ import { composeRelation, NO_COMPOSITE_CLAIM } from '../../src/relations/composi
 import type { RelationContract } from '../../src/atlas/types.js';
 import { snapshotAllPairs, type PairSnapshot } from './compose-relation.snapshot.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { CENSUS } from '../helpers/census.js';
 
 const GOLDEN: readonly PairSnapshot[] = JSON.parse(
   readFileSync(fileURLToPath(new URL('./compose-relation.golden.json', import.meta.url)), 'utf8'),
@@ -156,7 +157,7 @@ const DEFQ: RelationContract = {
 };
 
 describe('S1.2b — the existing catalog composes EXACTLY as it did before', () => {
-  it('carries a relation on exactly the seven S1.5-audited edges, and no others', () => {
+  it('carries a relation on exactly the S1.5-audited edges, and no others', () => {
     // S1.2b asserted NO edge carried a relation, because at Wave 2 none did and
     // that made the unchanged-composition proof trivially sound. S1.5 audited
     // ten catalog rows and copied each relation onto the row's edges, so the
@@ -171,7 +172,7 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
     );
     // 127 is the record from before every catalog relation, including be-147..170, was an edge.
     // 57 is the record from before be-77..87.
-    expect(CATALOG_GRAPH.length).toBe(158);
+    expect(CATALOG_GRAPH.length).toBe(CENSUS.graph.edges);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125.

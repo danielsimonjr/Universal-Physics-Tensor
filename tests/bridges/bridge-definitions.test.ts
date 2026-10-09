@@ -19,36 +19,41 @@ import { describe, expect, it } from 'vitest';
 import { catalogEntries, catalogRelations } from '../../src/bridges/catalog-load.js';
 import { adjudicateCatalog } from '../../src/bridges/membership.js';
 import { allQuantityRecords } from '../../src/dimensional/quantity-registry.js';
+import { CENSUS } from '../helpers/census.js';
 
 describe('the three definitions of "bridge", measured', () => {
   const entries = catalogEntries();
   const relations = catalogRelations();
   const byId = new Map(entries.map((e) => [e.id, e]));
 
-  it('the row type: 40 cross-domain and 120 standard', () => {
-    expect(entries.filter((e) => e.type === 'cross-domain')).toHaveLength(40);
-    expect(entries.filter((e) => e.type === 'standard')).toHaveLength(120);
+  it('the row type: cross-domain and standard', () => {
+    expect(entries.filter((e) => e.type === 'cross-domain')).toHaveLength(CENSUS.catalog.crossDomain);
+    expect(entries.filter((e) => e.type === 'standard')).toHaveLength(CENSUS.catalog.standard);
   });
 
-  it('the relation kind: 52 bridge and 106 law', () => {
-    expect(relations.filter((r) => r.kind === 'bridge')).toHaveLength(52);
-    expect(relations.filter((r) => r.kind === 'law')).toHaveLength(106);
+  it('the relation kind: bridge and law', () => {
+    expect(relations.filter((r) => r.kind === 'bridge')).toHaveLength(CENSUS.relations.kindBridge);
+    expect(relations.filter((r) => r.kind === 'law')).toHaveLength(CENSUS.relations.kindLaw);
   });
 
-  it('the membership verdict: 152 bridge, 5 not-a-bridge, 3 unadjudicated', () => {
+  it('the membership verdict: bridge, not-a-bridge, unadjudicated', () => {
     const report = adjudicateCatalog(entries);
-    expect([report.bridges.length, report.notABridges.length, report.unadjudicated.length]).toEqual([152, 5, 3]);
+    expect([report.bridges.length, report.notABridges.length, report.unadjudicated.length]).toEqual([
+      CENSUS.membership.bridges,
+      CENSUS.membership.notABridges,
+      CENSUS.membership.unadjudicated,
+    ]);
   });
 
-  it('kind and type disagree on 43 relations: 27 standard rows with a bridge relation, 16 cross-domain rows with a law', () => {
+  it('kind and type disagree: standard rows with a bridge relation, cross-domain rows with a law', () => {
     const rows = relations.filter((r) => r.catalogId !== null);
     const bridgeOnStandard = rows.filter((r) => r.kind === 'bridge' && byId.get(r.catalogId!)!.type === 'standard');
     const lawOnCrossDomain = rows.filter((r) => r.kind === 'law' && byId.get(r.catalogId!)!.type === 'cross-domain');
-    expect(bridgeOnStandard).toHaveLength(27);
-    expect(lawOnCrossDomain).toHaveLength(16);
+    expect(bridgeOnStandard).toHaveLength(CENSUS.relations.bridgeOnStandardRow);
+    expect(lawOnCrossDomain).toHaveLength(CENSUS.relations.lawOnCrossDomainRow);
   });
 
-  it('kind and the quantity regime attributes disagree on 17 relations', () => {
+  it('kind and the quantity regime attributes disagree on some relations', () => {
     // The membership criterion in words: a bridge's endpoints differ in at least one regime attribute.
     const quantity = new Map(allQuantityRecords().map((q) => [q.id, q]));
     const differs = (r: (typeof relations)[number]): boolean => {
@@ -59,7 +64,7 @@ describe('the three definitions of "bridge", measured', () => {
       });
     };
     const disagree = relations.filter((r) => (differs(r) ? 'bridge' : 'law') !== r.kind).map((r) => r.id);
-    expect(disagree).toHaveLength(17);
+    expect(disagree).toHaveLength(CENSUS.relations.kindDisagreesWithRegimeAttributes);
     expect(disagree).toContain('law-schwarzschild-radius');
   });
 });

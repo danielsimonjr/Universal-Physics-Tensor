@@ -7,6 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { closedFormRangeLabel, formatClosedFormRange } from '../../src/cli/closed-form-range.js';
+import { CENSUS } from '../helpers/census.js';
 
 describe('formatClosedFormRange', () => {
   it('keeps a gap, and collapses a run of three or more', () => {
@@ -17,7 +18,7 @@ describe('formatClosedFormRange', () => {
   });
 
   it('reads the live evaluator registry', () => {
-    expect(closedFormRangeLabel()).toBe('BE-16/42/51/52/55..170');
+    expect(closedFormRangeLabel()).toBe(CENSUS.evaluators.rangeLabel);
     // BE-16/42/51/52/55..146 is the record from before be-147..170.
     // BE-16/42/51/52/55..133 is the record from before be-134..146.
     // BE-16/42/51/52/55..125 is the record from before be-126..133.

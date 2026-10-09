@@ -11,6 +11,7 @@
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { listCommandNames, resolveCommand } from '../../src/cli/command.js';
+import { CENSUS } from '../helpers/census.js';
 
 async function helpText(): Promise<string> {
   const lines: string[] = [];
@@ -74,7 +75,7 @@ describe('upt --help covers the command registry', () => {
     expect(help).toContain('upt eval E E=1eV');
     expect(help).not.toMatch(/E=<number>/);
     // BE-51/52/55..125 is the record from before be-16 and be-42 joined the registry.
-    expect(help).toMatch(/BE-16\/42\/51\/52\/55\.\.170/);
+    expect(help).toContain(CENSUS.evaluators.rangeLabel);
     // BE-16/42/51/52/55..146 is the record from before be-147..170.
     // BE-16/42/51/52/55..133 is the record from before be-134..146.
     // BE-16/42/51/52/55..125 is the record from before be-126..133.

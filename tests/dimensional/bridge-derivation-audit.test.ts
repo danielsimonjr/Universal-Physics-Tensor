@@ -31,6 +31,7 @@ import {
   dimensionalFreedom,
 } from '../../src/composition/bridge-analysis.js';
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
+import { CENSUS } from '../helpers/census.js';
 
 const ALL_EDGES = CATALOG_GRAPH;
 
@@ -124,7 +125,7 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // 39 of 83 is the record from before be-103..125. 46 of 106 admit a
     // closure. be-103 and be-118 are derived. be-105 is freedom 0 and not a
     // monomial. be-109, be-117, be-120, and be-121 are freedom 0 and decoys.
-    expect(closable.length).toBe(64);
+    expect(closable.length).toBe(CENSUS.derivationAudit.closable);
     // 51 of 127 is the record from before the catalog graph held every
     // relation (158 edges).
     // 46 of 106 is the record from before be-126..133. 46 of 114 admit a
@@ -134,7 +135,8 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // closure. be-135, be-136, be-140, and be-141 are derived. be-137 is a
     // decoy. be-134, be-138, be-139, be-142, be-143, be-144, be-145, and
     // be-146 are open.
-    expect(ALL_EDGES.length - closable.length).toBe(94);
+    expect(ALL_EDGES.length).toBe(CENSUS.graph.edges);
+    expect(ALL_EDGES.length - closable.length).toBe(CENSUS.graph.edges - CENSUS.derivationAudit.closable);
     // 76 = 127 − 51 is the record from before that growth.
   });
 
@@ -158,7 +160,7 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // 36 is the record from before 2026-10-09, when ε₀ and m_e joined the closure constants: be-109
     // (Bennett pinch) then closes on {c, k_B, ε₀} with prefactor √(16π), the formula's own; and
     // be-82 (Shockley) is no longer fitted at a saturated negative point (no-samples again).
-    expect(derived.length).toBe(37);
+    expect(derived.length).toBe(CENSUS.derivationAudit.derived);
     // 31 is the record from before the catalog graph held every relation.
     // 27 is the record from before be-134..146. be-135, be-136, be-140, and
     // be-141 match their evaluators. be-137 does not.
@@ -194,18 +196,18 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     expect(free('be-39')).toBe(5); // asymptotic safety
   });
 
-  it('the spectrum histogram is pinned (64 at 0; finite max 6; be-150 unspannable)', () => {
+  it('the spectrum histogram is pinned (be-150 unspannable)', () => {
     const hist: Record<number, number> = {};
     for (const e of ALL_EDGES) hist[dimensionalFreedom(e)] = (hist[dimensionalFreedom(e)] ?? 0) + 1;
-    expect(hist[0]).toBe(64); // the dimensionally-pinned set (derived + decoy + no-samples)
+    expect(hist[0]).toBe(CENSUS.derivationAudit.closable); // the dimensionally-pinned set (derived + decoy + no-samples)
     // 51 at complexity 0 is the record from before the catalog graph held every relation.
     // 46 is the record from before be-134..146. be-135, be-136, be-137,
     // be-140, and be-141 sit at 0.
     // 39 at complexity 0 is the record from before be-103..125.
     const finite = Object.keys(hist).map(Number).filter((n) => Number.isFinite(n));
-    expect(Math.max(...finite)).toBe(6);
+    expect(Math.max(...finite)).toBe(CENSUS.derivationAudit.maxFiniteFreedom);
     // be-150 (ΔG° = −R T ln K) is outside every constant subset.
-    expect(hist[Infinity]).toBe(1);
+    expect(hist[Infinity]).toBe(CENSUS.derivationAudit.unspannable);
     // 18 bridges are exactly one dimensionless ratio away from a monomial.
     // 14 is the record from before be-77..87. be-77, be-78, be-79, and be-86
     // each add one. be-68 is one: g_00 is dimensionless, so T √(−g_00) is
@@ -218,7 +220,7 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     // 22 at complexity 1 is the record from before be-103..125. be-104,
     // be-106, be-110, be-111, be-112, be-113, be-114, be-115, be-122, and
     // be-123 each add one.
-    expect(hist[1]).toBe(55);
+    expect(hist[1]).toBe(CENSUS.derivationAudit.freedomOne);
     // 42 at complexity 1 is the record from before the catalog graph held every relation.
     // 36 is the record from before be-134..146. be-134, be-139, be-142,
     // be-143, be-144, and be-146 each add one. be-138 sits at 2. be-145
