@@ -23,7 +23,7 @@
  * @internal
  */
 
-import { inv } from '@danielsimonjr/mathts-functions';
+import { det, inv } from '@danielsimonjr/mathts-functions';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
 import { DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
 import { readParameter } from './binding-value.js';
@@ -89,20 +89,18 @@ function mat4(): number[][] {
 const ENGINE = new MathTSEngine();
 
 /**
- * The metric inverse, MathTS `inv`; a singular metric is this module's error.
- * `inv` is typed over every MathTS matrix kind, so its result is read back as
- * the 4×4 number array it is for a number[][] input.
+ * The metric inverse, MathTS `inv`. A singular metric is this module's error,
+ * decided by MathTS `det` before the inverse is asked for, so no error text is
+ * read. `inv` and `det` are typed over every MathTS matrix kind, so their
+ * results are read back as the number and the 4×4 number array they are for a
+ * number[][] input.
  */
 function invert4(src: number[][]): number[][] {
-  let out: unknown;
-  try {
-    out = inv(src);
-  } catch (error) {
-    if (error instanceof Error && /determinant is zero/.test(error.message)) {
-      throw new Error('metric is singular at this point');
-    }
-    throw error;
+  const determinant: unknown = det(src);
+  if (typeof determinant !== 'number' || !Number.isFinite(determinant) || determinant === 0) {
+    throw new Error('metric is singular at this point');
   }
+  const out: unknown = inv(src);
   if (!Array.isArray(out) || out.length !== 4) throw new Error('metric inverse is not a 4×4 matrix');
   return out.map((row: unknown) => {
     if (!Array.isArray(row) || row.length !== 4) throw new Error('metric inverse is not a 4×4 matrix');
