@@ -81,9 +81,12 @@ describe('discovery calibration benchmark', () => {
   // and dos3d-abscissa, fermioffset-muoff, and tfscreen-chemical with
   // landauer-erasure-energy. A shared mass or energy dimension is not an
   // identification.
+  // 9.0.1: be-33 and be-88 dropped the sources their formulas never read (static-exponent-nu,
+  // fermi-sea-mass), and the 27 candidate pairs those two quantities made are gone: total
+  // 4196 → 4169, inert 2377 → 2360, axis-clash 1767 → 1757. promising and magnitude-clash stay.
   const EXPECTED = {
     // 2518 / 25 / 1307 / 1166 is the record from before be-147..170.
-    catalog: { total: 4196, promising: 32, inert: 2377, clash: 20, contradictory: 0, axisClash: 1767 },
+    catalog: { total: 4169, promising: 32, inert: 2360, clash: 20, contradictory: 0, axisClash: 1757 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -105,8 +108,8 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    // 1176 is the record from before be-147..170.
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1777);
+    // 1176 is the record from before be-147..170; 1777 the record from before be-33 and be-88 dropped two sources.
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1767);
     // 994 is the record from before be-134..146.
     // 796 is the record from before be-126..133.
     // 455 is the record from before be-103..125.
