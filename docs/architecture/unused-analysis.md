@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 77
+- **Potentially unused exports**: 75
 
 ## Potentially Unused Files
 
@@ -47,14 +47,9 @@ These exports are not imported by any other file in the codebase:
 
 - `POSTER_5_IDENTIFICATION_NOTE` (constant)
 
-### `src/bridges/registry.ts`
+### `src/bridges/expr-parse.ts`
 
-- `registerBridge` (function)
-- `bridgeRegistry` (constant)
-
-### `src/bridges/relation-eval.ts`
-
-- `solveCatalogRelation` (function)
+- `withoutUnreadConstants` (function)
 
 ### `src/cases/brownian-sphere.ts`
 

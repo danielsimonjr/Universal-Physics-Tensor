@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 360,
-    "totalTestFiles": 545,
-    "testedCount": 349,
+    "totalSourceFiles": 359,
+    "totalTestFiles": 552,
+    "testedCount": 348,
     "untestedCount": 11,
     "coveragePercent": "96.9"
   },
@@ -110,7 +110,6 @@
     "src/bridges/membership.ts",
     "src/bridges/notices.ts",
     "src/bridges/observations/types.ts",
-    "src/bridges/registry.ts",
     "src/bridges/rejected.ts",
     "src/bridges/relation-eval.ts",
     "src/bridges/rhs-registry.ts",
@@ -1100,6 +1099,7 @@
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
+      "tests/bridges/carrier-sign-finite.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
@@ -1160,12 +1160,17 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
-      "tests/bridges/catalog-domains.test.ts",
+      "tests/bridges/bridge-definitions.test.ts",
+      "tests/bridges/catalog-confidence.test.ts",
       "tests/bridges/catalog-filing-ledger.test.ts",
+      "tests/bridges/catalog-record.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
+      "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/derived-domains.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/one-grammar.test.ts",
+      "tests/bridges/output-only-inputs.test.ts",
       "tests/bridges/tensor-index.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -1192,6 +1197,9 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/bridges/catalog-confidence.test.ts",
+      "tests/bridges/catalog-record.test.ts",
+      "tests/bridges/derived-domains.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cases/kepler-rv.test.ts",
@@ -1264,16 +1272,41 @@
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
+      "tests/atlas/audited-catalog.test.ts",
+      "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/coverage.test.ts",
+      "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-generated-table.test.ts",
+      "tests/atlas/physjs-lean-path.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
+      "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/confrontation-registry.test.ts",
+      "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/descriptor-consistency.test.ts",
+      "tests/bridges/dimensional-signature-catalog.test.ts",
+      "tests/bridges/membership.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
+      "tests/bridges/orphan-dimensional-signature.test.ts",
+      "tests/bridges/output-only-inputs.test.ts",
+      "tests/bridges/overlay-registry-quote.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/bridges/tensor-index.test.ts",
+      "tests/bridges-index.test.ts",
       "tests/canonical/canonical-domains.test.ts",
+      "tests/canonical/invariants.test.ts",
+      "tests/canonical/structural-classifier.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/kepler-rv.test.ts",
+      "tests/cli/atlas-command.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/chain-atlas-pointer.test.ts",
@@ -1302,12 +1335,14 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/dimensional/bridge-derivation-audit.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
-      "tests/tensor.test.ts"
+      "tests/tensor.test.ts",
+      "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/evaluator-inputs.ts": [
       "tests/cases/applied-cases.test.ts",
@@ -1332,10 +1367,14 @@
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/catalog-domains.test.ts",
+      "tests/bridges/catalog-record.test.ts",
+      "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/derived-domains.test.ts",
       "tests/bridges/evaluator-extra-outputs.test.ts",
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/one-grammar.test.ts",
+      "tests/bridges/output-only-inputs.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -1358,10 +1397,14 @@
       "tests/tensor.test.ts"
     ],
     "src/bridges/expr-parse.ts": [
+      "tests/bridges/catalog-record.test.ts",
+      "tests/bridges/catalog-reference-golden.test.ts",
+      "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/dimensional/unit-closure.test.ts"
     ],
     "src/bridges/holds.ts": [
+      "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/one-grammar.test.ts"
     ],
     "src/bridges/index.ts": [
@@ -1443,6 +1486,7 @@
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/bridges/bridge-definitions.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -1497,39 +1541,16 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
-    "src/bridges/registry.ts": [
-      "tests/bridges/register-bridge.test.ts"
-    ],
     "src/bridges/rejected.ts": [
-      "tests/api/atlas-public-closure.test.ts",
-      "tests/api/gm-sun-units-public.test.ts",
-      "tests/api/hand-built-evaluator.test.ts",
-      "tests/api/public-surface.test.ts",
-      "tests/atlas/catalog-formal-ref.test.ts",
-      "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/bridges/catalog-record.test.ts",
       "tests/bridges/membership.test.ts",
-      "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/overlay-registry-quote.test.ts",
-      "tests/bridges/public-api-stability.test.ts",
-      "tests/cases/kepler-rv.test.ts",
-      "tests/cli/atlas-evidence.test.ts",
-      "tests/cli/audit-improvements.test.ts",
-      "tests/cli/explain-temperature-binding.test.ts",
-      "tests/cli/graphs.test.ts",
-      "tests/cli/map-atlas-results.test.ts",
-      "tests/cli/map-atlas-views.test.ts",
-      "tests/cli/recover-conventions.test.ts",
-      "tests/cli/regime-search.test.ts",
-      "tests/cli/suggest-token-length.test.ts",
-      "tests/composition/evaluate-relation.test.ts",
-      "tests/composition/frontier-account.test.ts",
-      "tests/fixtures/confrontation-golden.test.ts",
-      "tests/tensor.test.ts",
-      "tests/tools/readme-status.test.ts"
+      "tests/composition/frontier-account.test.ts"
     ],
     "src/bridges/relation-eval.ts": [
+      "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts"
@@ -1551,6 +1572,7 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/bridges/catalog-record.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/bridges/sensitivity.test.ts",
@@ -7092,6 +7114,7 @@
       "tests/atlas/witness-runners.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
+      "tests/bridges/one-grammar.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/atomic.test.ts",
       "tests/canonical/condensed-matter.test.ts",
@@ -7661,11 +7684,13 @@
       "tests/cli/suggest-token-length.test.ts"
     ],
     "src/dimensional/quantity-registry.ts": [
+      "tests/bridges/bridge-definitions.test.ts",
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/core/data-file.test.ts",
       "tests/dimensional/constant-registry.test.ts",
-      "tests/dimensional/quantity-default-unit.test.ts"
+      "tests/dimensional/quantity-default-unit.test.ts",
+      "tests/dimensional/quantity-kind.test.ts"
     ],
     "src/dimensional/rg-flow.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -9112,9 +9137,9 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -9143,7 +9168,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -9220,9 +9244,9 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -9251,7 +9275,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -9328,9 +9351,9 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -9359,7 +9382,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -9438,9 +9460,9 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -9469,7 +9491,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -9529,6 +9550,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/catalog-graph.ts",
       "src/canonical/registry.ts",
       "src/atlas/coverage.ts",
@@ -9664,8 +9686,8 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/membership.ts",
-      "src/bridges/rejected.ts",
       "src/cli/map-evidence.ts"
     ],
     "tests/atlas/catalog-proved-evidence.test.ts": [
@@ -9673,17 +9695,16 @@
       "src/atlas/derive-evidence.ts",
       "src/cli/map-evidence.ts",
       "src/bridges/membership.ts",
-      "src/bridges/rejected.ts",
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/bridges/catalog-load.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/canonical-graph.ts",
@@ -9706,6 +9727,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/enumerate.ts",
       "src/atlas/chain-pipeline.ts",
@@ -9751,12 +9773,12 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/rhs-registry.ts",
       "src/composition/enumerate.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -9816,6 +9838,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts"
     ],
@@ -9829,6 +9852,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts"
     ],
@@ -9892,6 +9916,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/catalog-load.ts",
       "src/relations/types.ts"
     ],
@@ -9930,11 +9955,11 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/catalog-load.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -10084,6 +10109,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts"
     ],
@@ -10095,7 +10121,8 @@
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts"
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts"
     ],
     "tests/atlas/physjs-manifest.test.ts": [
       "src/atlas/families.ts",
@@ -10106,6 +10133,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/catalog-load.ts",
       "src/relations/types.ts",
       "src/atlas/physjs-ref.ts",
@@ -10129,6 +10157,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/relations/types.ts",
       "src/composition/chain-candidate.ts"
     ],
@@ -10280,27 +10309,48 @@
       "src/atlas/witness-result.ts",
       "src/composition/expr-simplify.ts"
     ],
+    "tests/bridges/bridge-definitions.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/bridges/membership.ts",
+      "src/dimensional/quantity-registry.ts"
+    ],
     "tests/bridges/bridges-composition-imports.test.ts": [],
+    "tests/bridges/carrier-sign-finite.test.ts": [
+      "src/bridges/carrier-sign.ts"
+    ],
     "tests/bridges/catalog-adapter.test.ts": [
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/catalog-adapter.ts",
       "src/core/tensor.ts",
       "src/core/types.ts"
     ],
+    "tests/bridges/catalog-confidence.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/bridges/catalog-types.ts"
+    ],
     "tests/bridges/catalog-domains.test.ts": [
-      "src/bridges/evaluators.ts",
-      "src/bridges/catalog-load.ts"
+      "src/bridges/evaluators.ts"
     ],
     "tests/bridges/catalog-filing-ledger.test.ts": [
       "src/bridges/catalog-load.ts"
     ],
     "tests/bridges/catalog-json.test.ts": [],
     "tests/bridges/catalog-physjs-import.test.ts": [],
+    "tests/bridges/catalog-record.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/bridges/catalog-types.ts",
+      "src/bridges/evaluators.ts",
+      "src/bridges/rejected.ts",
+      "src/bridges/sensitivity.ts",
+      "src/bridges/expr-parse.ts"
+    ],
     "tests/bridges/catalog-reference-golden.test.ts": [
       "src/bridges/catalog-load.ts",
+      "src/bridges/expr-parse.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/edge.ts"
     ],
@@ -10314,6 +10364,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/observations/types.ts"
     ],
     "tests/bridges/confrontation-rigor.test.ts": [
@@ -10324,11 +10375,26 @@
       "src/bridges/confrontations.ts",
       "src/bridges/observations/types.ts"
     ],
+    "tests/bridges/constant-inputs.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/bridges/evaluators.ts",
+      "src/bridges/expr-parse.ts",
+      "src/bridges/holds.ts",
+      "src/bridges/relation-eval.ts"
+    ],
+    "tests/bridges/derived-domains.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/bridges/catalog-types.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/bridges/evaluators.ts"
+    ],
     "tests/bridges/descriptor-consistency.test.ts": [
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/rhs-registry.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/descriptor.ts"
@@ -10338,6 +10404,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
@@ -10361,6 +10428,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts"
     ],
@@ -10489,8 +10557,8 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
-      "src/composition/quantity.ts",
       "src/bridges/evaluation-errors.ts",
+      "src/composition/quantity.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/enumerate.ts",
@@ -10515,11 +10583,11 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
     "tests/bridges/one-grammar.test.ts": [
+      "src/dimensional/ast-types.ts",
       "src/bridges/catalog-load.ts",
       "src/bridges/expr-parse.ts",
       "src/bridges/holds.ts",
@@ -10532,13 +10600,20 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/rhs-registry.ts"
+    ],
+    "tests/bridges/output-only-inputs.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/bridges/evaluators.ts"
     ],
     "tests/bridges/overlay-registry-quote.test.ts": [
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/rejected.ts"
     ],
     "tests/bridges/public-api-stability.test.ts": [
@@ -10546,6 +10621,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/numerical/index.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -10626,7 +10702,6 @@
       "src/relations/composition-table.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -10645,13 +10720,9 @@
       "src/composition/user-equation.ts",
       "src/dimensional/formula-names.ts",
       "src/dimensional/ast-types.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts",
       "src/dimensional/metric.ts"
-    ],
-    "tests/bridges/register-bridge.test.ts": [
-      "src/bridges/registry.ts"
     ],
     "tests/bridges/sensitivity.test.ts": [
       "src/bridges/sensitivity.ts"
@@ -10662,6 +10733,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/catalog-load.ts",
       "src/bridges/tensor-index.ts"
     ],
@@ -10669,7 +10741,8 @@
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts"
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts"
     ],
     "tests/canonical/atomic.test.ts": [
       "src/canonical/entries/atomic.ts",
@@ -10769,6 +10842,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
@@ -10864,6 +10938,7 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/bridges/rhs-registry.ts",
       "src/canonical/linkage.ts",
       "src/canonical/normal-form.ts",
@@ -10891,10 +10966,10 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/atlas/families.ts",
       "src/canonical/registry.ts",
-      "src/dimensional/units.ts",
-      "src/bridges/evaluation-errors.ts"
+      "src/dimensional/units.ts"
     ],
     "tests/cases/brownian-sphere.test.ts": [
       "src/cases/brownian-sphere.ts",
@@ -10981,9 +11056,9 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -11012,7 +11087,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -11166,7 +11240,8 @@
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts"
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts"
     ],
     "tests/cli/atlas-evidence.test.ts": [
       "src/cli/main.ts",
@@ -11371,7 +11446,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts"
     ],
     "tests/cli/audit-improvements.test.ts": [
@@ -11578,7 +11652,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts"
     ],
     "tests/cli/binding-expressions.test.ts": [
@@ -12767,7 +12840,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts",
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
@@ -13042,7 +13114,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts"
     ],
     "tests/cli/hardening.test.ts": [],
@@ -13510,7 +13581,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts",
       "src/cli/commands/_atlas-map.ts"
     ],
@@ -13715,7 +13785,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts"
     ],
     "tests/cli/map-filters.test.ts": [
@@ -14507,7 +14576,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts",
       "src/cli/command.ts"
     ],
@@ -14777,7 +14845,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts"
     ],
     "tests/cli/regime.test.ts": [
@@ -15281,7 +15348,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/relations/domain-regimes.ts",
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
@@ -16049,9 +16115,9 @@
       "src/relations/regime.ts",
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -16080,7 +16146,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts",
       "src/bridges/catalog-load.ts"
@@ -16459,7 +16524,8 @@
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts"
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts"
     ],
     "tests/composition/quantities.test.ts": [
       "src/composition/quantities.ts",
@@ -17044,6 +17110,9 @@
     "tests/dimensional/quantity-default-unit.test.ts": [
       "src/dimensional/quantity-registry.ts"
     ],
+    "tests/dimensional/quantity-kind.test.ts": [
+      "src/dimensional/quantity-registry.ts"
+    ],
     "tests/dimensional/raise-lower.test.ts": [
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
@@ -17318,9 +17387,9 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -17349,7 +17418,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -17954,9 +18022,9 @@
       "src/relations/composition-table.ts",
       "src/bridges/types.ts",
       "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/catalog-graph.ts",
@@ -17985,7 +18053,6 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
-      "src/bridges/rejected.ts",
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
@@ -18024,11 +18091,11 @@
     "tests/tools/readme-status.test.ts": [
       "src/composition/catalog-graph.ts",
       "src/bridges/membership.ts",
-      "src/bridges/rejected.ts",
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts"
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts"
     ],
     "tests/tools/untracked-gate-inputs.test.ts": [],
     "tests/tools/vitest-coverage-alignment.test.ts": []

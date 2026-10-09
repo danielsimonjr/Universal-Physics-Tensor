@@ -39,7 +39,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 72 files
-- **bridges**: 25 files
+- **bridges**: 24 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
@@ -1344,8 +1344,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
-| `./observations/types.js` | `residualInSigma` | Import |
+| `./observations/types.js` | `residualInSigma, ConfrontationOutcome` | Import |
 
 **Exports:**
 - Interfaces: `MeasuredCouplingRow`, `RunningProcedureRecord`, `RunningProcedure`, `CallerTableRequest`, `CallerTableRefusal`, `CallerTableHit`
@@ -1361,12 +1360,12 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/catalog-adapter.ts` - Catalog adapter: ingests the 44-entry `BRIDGE_EQUATIONS` array into
+### `src/bridges/catalog-adapter.ts` - Catalog adapter: ingests `BRIDGE_EQUATIONS` into the v0.7-p2 sparse
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./index.js` | `BridgeEquationEntry` | Import (type-only) |
+| `./index.js` | `BridgeEquationEntry, BridgeEquationStatus` | Import (type-only) |
 | `../core/cell.js` | `BridgeCell, CellConfidence` | Import (type-only) |
 | `../core/tensor.js` | `UniversalTensor` | Import (type-only) |
 | `../core/flux-rules.js` | `FluxDiagnostic, FluxReport` | Import (type-only) |
@@ -1388,14 +1387,16 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/data-file.js` | `checkedDataFile` | Import |
-| `./catalog-types.js` | `CatalogConfrontation, CatalogEntry, CatalogEvaluator, CatalogEvaluatorParameter, CatalogFile, CatalogRelation` | Import (type-only) |
+| `./catalog-types.js` | `CatalogConfrontation, CatalogConfrontationRecord, CatalogEntry, CatalogEvaluator, CatalogEvaluatorParameter, CatalogFile, CatalogFileRecord, CatalogRejection, CatalogRelation` | Import (type-only) |
+| `./observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
 
 **Exports:**
 - Functions:
 
   ```text
-  bridgeCatalog, catalogEntries, catalogRelations, catalogEvaluators, catalogConfrontations,
-  catalogEntry, relationsForCatalog, primaryRelation, catalogIdNumber, parseBridgeId, catalogEdgeKey
+  loadCatalog, bridgeCatalog, catalogEntries, catalogRelations, catalogEvaluators,
+  catalogConfrontations, catalogRejections, catalogEntry, relationsForCatalog, primaryRelation,
+  catalogIdNumber, parseBridgeId, catalogEdgeKey
   ```
 
 
@@ -1407,7 +1408,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
+| `./observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
 | `./types.js` | `BridgeEquationEntry, BridgeEquationStatus` | Import (type-only) |
 
 ---
@@ -1456,7 +1457,7 @@ The codebase is organized into the following modules:
 ### `src/bridges/evaluation-errors.ts` - The errors one evaluation throws, in the order it checks: the bindings
 
 **Exports:**
-- Classes: `MissingInputError`, `UnknownInputError`, `InputTypeError`, `NonFiniteInputError`, `DuplicateInputError`, `DomainViolationError`
+- Classes: `MissingInputError`, `UnknownInputError`, `InputTypeError`, `NonFiniteInputError`, `ConstantInputError`, `DuplicateInputError`, `DomainViolationError`
 - Functions: `isInputContractError`
 
 ---
@@ -1484,10 +1485,9 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
-| `./catalog-load.js` | `primaryRelation` | Import |
-| `./catalog-load.js` | `catalogEvaluators` | Import |
-| `./catalog-types.js` | `CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation` | Import (type-only) |
-| `./expr-parse.js` | `evaluateFormula, formulaVariables, parseCatalogExpression` | Import |
+| `./catalog-load.js` | `catalogEvaluators, primaryRelation` | Import |
+| `./catalog-types.js` | `CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation` | Import (type-only) |
+| `./expr-parse.js` | `evaluateFormula, formulaVariables, parseCatalogExpression, reservedFormulaNames` | Import |
 | `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
 | `./relation-eval.js` | `evaluateCatalogRelation, relationHolds` | Import |
 | `./evaluation-errors.js` | `DomainViolationError` | Import |
@@ -1495,7 +1495,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
-- Functions: `unusedInputKeys`, `missingEvaluatorMessage`, `evaluateBridge`
+- Functions: `unusedInputKeys`, `buildEvaluatorSpec`, `missingEvaluatorMessage`, `evaluateBridge`
 - Constants: `BRIDGE_EVALUATORS`
 
 ---
@@ -1505,8 +1505,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, Dimension` | Import |
 | `../dimensional/ast-types.js` | `ExprNode, TranscendentalFn` | Import (type-only) |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
@@ -1514,9 +1513,10 @@ The codebase is organized into the following modules:
 | `../dimensional/quantity-registry.js` | `allQuantityRecords` | Import |
 | `../numerical/formula-mathts.js` | `parseFormula` | Import |
 | `../numerical/formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
+| `./evaluation-errors.js` | `ConstantInputError` | Import |
 
 **Exports:**
-- Functions: `formulaNames`, `formulaScope`, `formulaVariables`, `evaluateFormula`, `parseCatalogExpression`
+- Functions: `formulaNames`, `reservedFormulaNames`, `formulaScope`, `formulaVariables`, `withoutUnreadConstants`, `evaluateFormula`, `parseCatalogExpression`
 
 ---
 
@@ -1531,6 +1531,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/hyphen-names.js` | `rewriteCatalogHyphens` | Import |
+| `./evaluation-errors.js` | `ConstantInputError` | Import |
 
 **Exports:**
 - Classes: `HoldsError`
@@ -1538,28 +1539,26 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/index.ts` - Bridge catalog projection. Rows, regimes, and the spine are loaded from
+### `src/bridges/index.ts` - Bridge catalog projection. The rows are loaded from
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `BridgeEquationEntry` | Import (type-only) |
-| `../relations/types.js` | `Regime` | Import (type-only) |
-| `./catalog-load.js` | `bridgeCatalog, catalogEntries, catalogEntry` | Import |
+| `./catalog-load.js` | `catalogEntries` | Import |
 | `./types.js` | `BridgeEquationEntry, BridgeEquationStatus, BridgeIssueFixable, BridgeIssueSeverity, KnownIssue` | Re-export |
-| `./types.js` | `isActiveStatus` | Re-export |
 | `../core/constants.js` | `BCS_GAP_RATIO, JOSEPHSON_CONSTANT_SI, LANE_EMDEN_OMEGA3, LORENZ_NUMBER_SI, M_PROTON_SI, THOMSON_CROSS_SECTION_SI, VON_KLITZING_SI` | Re-export |
 | `./carrier-sign.js` | `CarrierSignError` | Re-export |
+| `./evaluation-errors.js` | `ConstantInputError` | Re-export |
 
 **Exports:**
-- Functions: `catalogRegime`
-- Constants: `BRIDGE_EQUATIONS`, `SPINE_CONFRONTATION_POINTS`
+- Constants: `BRIDGE_EQUATIONS`
 - Re-exports:
 
   ```text
   BridgeEquationEntry, BridgeEquationStatus, BridgeIssueFixable, BridgeIssueSeverity, KnownIssue,
-  isActiveStatus, BCS_GAP_RATIO, JOSEPHSON_CONSTANT_SI, LANE_EMDEN_OMEGA3, LORENZ_NUMBER_SI,
-  M_PROTON_SI, THOMSON_CROSS_SECTION_SI, VON_KLITZING_SI, CarrierSignError
+  BCS_GAP_RATIO, JOSEPHSON_CONSTANT_SI, LANE_EMDEN_OMEGA3, LORENZ_NUMBER_SI, M_PROTON_SI,
+  THOMSON_CROSS_SECTION_SI, VON_KLITZING_SI, CarrierSignError, ConstantInputError
   ```
 
 
@@ -1584,14 +1583,11 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./index.js` | `BridgeEquationEntry` | Import (type-only) |
-| `./rejected.js` | `REJECTED_BRIDGE_IDS` | Import |
-| `./rejected.js` | `REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS` | Re-export |
-| `./rejected.js` | `RejectedBridgeAdjudication` | Re-export |
+| `./rejected.js` | `REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, RejectedBridgeAdjudication` | Import |
 
 **Exports:**
 - Interfaces: `CatalogAdjudicationReport`
 - Functions: `adjudicateBridgeEntry`, `adjudicateCatalog`
-- Re-exports: `REJECTED_BRIDGE_ADJUDICATIONS`, `REJECTED_BRIDGE_IDS`, `RejectedBridgeAdjudication`
 
 ---
 
@@ -1616,21 +1612,12 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/registry.ts` - One registration for a catalog bridge.
+### `src/bridges/rejected.ts` - Negative catalog — NOT-A-BRIDGE adjudications, projected from the
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-
-**Exports:**
-- Interfaces: `BridgeRegistration`, `BridgeRegistry`
-- Functions: `createBridgeRegistry`, `registerBridge`
-- Constants: `bridgeRegistry`
-
----
-
-### `src/bridges/rejected.ts` - Negative catalog (v0.8.0 P-4) — NOT-A-BRIDGE adjudications as
+| `./catalog-load.js` | `catalogRejections` | Import |
 
 **Exports:**
 - Interfaces: `RejectedBridgeAdjudication`
@@ -1650,7 +1637,7 @@ The codebase is organized into the following modules:
 | `./holds.js` | `holds, HoldsError` | Import |
 
 **Exports:**
-- Functions: `relationHolds`, `evaluateCatalogRelation`, `solveCatalogRelation`
+- Functions: `relationHolds`, `evaluateCatalogRelation`
 
 ---
 
@@ -1674,12 +1661,12 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./catalog-load.js` | `catalogConfrontations` | Import |
-| `./expr-parse.js` | `evaluateFormula` | Import |
-| `./catalog-load.js` | `primaryRelation` | Import |
+| `./catalog-types.js` | `CatalogPrediction` | Import (type-only) |
+| `./evaluators.js` | `BRIDGE_EVALUATORS` | Import |
 
 **Exports:**
 - Interfaces: `Elasticity`
-- Functions: `decidingMeasurement`
+- Functions: `predictedAt`, `decidingMeasurement`
 
 ---
 
@@ -1697,10 +1684,6 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
-
-**Exports:**
-- Interfaces: `KnownIssue`, `BridgeEquationEntry`
-- Functions: `isActiveStatus`
 
 ---
 
@@ -4783,8 +4766,8 @@ The codebase is organized into the following modules:
   ```text
   C_SI, G_SI, H_SI, HBAR_SI, HBAR_CODATA_DISPLAY, K_B_SI, E_SI, ALPHA, EPS0_SI, MU0_SI, SIGMA_SB_SI,
   M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI,
-  LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, GM_SUN_SI,
-  M_SUN_IAU_SI, GM_SUN_SOURCE, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
+  LORENZ_NUMBER_SI, EULER_GAMMA, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI,
+  GM_SUN_SI, M_SUN_IAU_SI, GM_SUN_SOURCE, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
   ```
 
 
@@ -5097,7 +5080,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
+| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, EULER_GAMMA, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
 
 **Exports:**
 - Interfaces: `ConstantRow`
@@ -5431,8 +5414,8 @@ The codebase is organized into the following modules:
 | `./symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
 
 **Exports:**
-- Interfaces: `QuantityRecord`
-- Functions: `quantitySpellingIndex`, `allQuantityRecords`, `quantityRecord`, `synonymGroupsFromRegistry`
+- Interfaces: `QuantityRecord`, `QuantityFile`
+- Functions: `readQuantityFile`, `quantitySpellingIndex`, `allQuantityRecords`, `quantityRecord`, `synonymGroupsFromRegistry`
 - Constants: `foldName`
 
 ---
@@ -5702,6 +5685,7 @@ The codebase is organized into the following modules:
 | `./bridges/index.js` | `VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI, LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, M_PROTON_SI, CarrierSignError` | Re-export |
 | `./composition/index.js` | `evaluateRelation, CoefficientUnsetError` | Re-export |
 | `./composition/index.js` | `DuplicateInputError, InputTypeError, MissingInputError, NonFiniteInputError, UnknownInputError` | Re-export |
+| `./bridges/index.js` | `ConstantInputError` | Re-export |
 | `./composition/index.js` | `Evaluation` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./bridges/catalog-types.js` | `CatalogEvaluatorOutput` | Re-export |
@@ -5829,35 +5813,35 @@ The codebase is organized into the following modules:
   BridgeIssueSeverity, BridgeIssueFixable, KnownIssue, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI,
   LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI, M_PROTON_SI,
   CarrierSignError, evaluateRelation, CoefficientUnsetError, DuplicateInputError, InputTypeError,
-  MissingInputError, NonFiniteInputError, UnknownInputError, Evaluation, EvaluatorSpec,
-  EvaluatorParameter, ParameterAlternate, GeometryRole, CatalogEvaluatorOutput, ContractAlternate,
-  EvaluationWant, InputContract, InputSlot, inputContract, christoffel, CovariantDerivativeNode,
-  ricci, RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual, BianchiResidualNode,
-  verifyKillingEquation, checkKillingEquation, evaluateConservedCharge, KillingEquationOptions,
-  KillingEquationCheck, ChristoffelAccess, integrateGeodesic, type GeodesicIntegratorInputs,
-  type GeodesicIntegratorResult, toGeometrized, fromGeometrized, geometrizedFactor,
-  NonGeometrizableDimensionError, TracableTensorNode, TensorTraceNode, TensorTraceValidationResult,
-  TensorTraceOptions, validateTensorTrace, FriedmannVariant, FriedmannEquationNode,
-  FriedmannEquationValidationResult, validateFriedmannEquation, RGCouplingNode, BetaFunctionNode,
-  BetaFunctionValidationResult, rgCoupling, validateRGCoupling, validateBetaFunction, ArrowOfTime,
-  GaugeFieldNode, TimeSymmetryPredicateNode, TimeSymmetryPredicateValidationResult,
-  validateGaugeField, validateTimeSymmetryPredicate, ScalarFieldNode, KleinGordonEquationNode,
-  KleinGordonEquationValidationResult, validateKleinGordonEquation, Dimension, AmbiguousUnitError,
-  convertValue, parseUnit, UnitError, UnitRefusedError, UnknownUnitError, AffineTemperature,
-  ConvertedValue, ParsedUnit, TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS,
-  VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply,
-  divide, power, add, subtract, equals, format, DimensionMismatchError, ExprNode, TranscendentalFn,
-  ValidationResult, Violation, validate, validateEquation, validateInverseMetricPair,
-  inferDimensionForBridge, evaluateEinsteinEquationResidual, EinsteinEquationResidualInput,
-  MetricClosure, Vec4, validateEinsteinFieldEquation, EinsteinFieldEquationNode,
-  EinsteinFieldEquationValidationResult, KretschmannScalarNode, KretschmannScalarValidationResult,
-  validateKretschmannScalar, computeKretschmann, evaluateNumerical, evaluateNumericalRaw,
-  evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError,
-  DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
-  evaluateCovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion, NumericalResult,
-  NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec,
-  NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options,
-  PerihelionResult, FindPerihelionOptions, CovariantEikonalInputs, CovariantEikonalResult,
+  MissingInputError, NonFiniteInputError, UnknownInputError, ConstantInputError, Evaluation,
+  EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole, CatalogEvaluatorOutput,
+  ContractAlternate, EvaluationWant, InputContract, InputSlot, inputContract, christoffel,
+  CovariantDerivativeNode, ricci, RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual,
+  BianchiResidualNode, verifyKillingEquation, checkKillingEquation, evaluateConservedCharge,
+  KillingEquationOptions, KillingEquationCheck, ChristoffelAccess, integrateGeodesic,
+  type GeodesicIntegratorInputs, type GeodesicIntegratorResult, toGeometrized, fromGeometrized,
+  geometrizedFactor, NonGeometrizableDimensionError, TracableTensorNode, TensorTraceNode,
+  TensorTraceValidationResult, TensorTraceOptions, validateTensorTrace, FriedmannVariant,
+  FriedmannEquationNode, FriedmannEquationValidationResult, validateFriedmannEquation, RGCouplingNode,
+  BetaFunctionNode, BetaFunctionValidationResult, rgCoupling, validateRGCoupling,
+  validateBetaFunction, ArrowOfTime, GaugeFieldNode, TimeSymmetryPredicateNode,
+  TimeSymmetryPredicateValidationResult, validateGaugeField, validateTimeSymmetryPredicate,
+  ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult,
+  validateKleinGordonEquation, Dimension, AmbiguousUnitError, convertValue, parseUnit, UnitError,
+  UnitRefusedError, UnknownUnitError, AffineTemperature, ConvertedValue, ParsedUnit,
+  TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION,
+  FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply, divide, power, add, subtract,
+  equals, format, DimensionMismatchError, ExprNode, TranscendentalFn, ValidationResult, Violation,
+  validate, validateEquation, validateInverseMetricPair, inferDimensionForBridge,
+  evaluateEinsteinEquationResidual, EinsteinEquationResidualInput, MetricClosure, Vec4,
+  validateEinsteinFieldEquation, EinsteinFieldEquationNode, EinsteinFieldEquationValidationResult,
+  KretschmannScalarNode, KretschmannScalarValidationResult, validateKretschmannScalar,
+  computeKretschmann, evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine,
+  setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError,
+  hasAutogradSupport, evaluateCovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion,
+  NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor,
+  EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot,
+  GL4Options, PerihelionResult, FindPerihelionOptions, CovariantEikonalInputs, CovariantEikonalResult,
   composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer,
   QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError,
   M_SUN_KG, BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification,
@@ -6755,7 +6739,7 @@ graph TD
         N8[catalog-adapter]
         N9[catalog-load]
         N10[catalog-types]
-        N11[...20 more]
+        N11[...19 more]
     end
 
     subgraph Canonical
@@ -6882,17 +6866,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 360 |
+| Total TypeScript Files | 359 |
 | Total Modules | 13 |
-| Total Lines of Code | 79797 |
-| Total Exports | 2476 |
-| Total Re-exports | 1254 |
-| Total Classes | 79 |
-| Total Interfaces | 452 |
-| Total Functions | 761 |
-| Total Type Guards | 7 |
+| Total Lines of Code | 79870 |
+| Total Exports | 2478 |
+| Total Re-exports | 1252 |
+| Total Classes | 80 |
+| Total Interfaces | 453 |
+| Total Functions | 763 |
+| Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 507 |
+| Type-only Imports | 505 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

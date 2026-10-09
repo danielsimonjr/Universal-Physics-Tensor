@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 9.0.0
-  totalFiles: 360
+  totalFiles: 359
   totalModules: 13
-  totalExports: 2476
+  totalExports: 2478
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3317,11 +3317,8 @@ modules:
       internalDependencies:
         - file: ./observations/types.js
           imports:
-            - ConfrontationOutcome
-          typeOnly: true
-        - file: ./observations/types.js
-          imports:
             - residualInSigma
+            - ConfrontationOutcome
       exports:
         - requestCallerTableConfrontation
       interfaces:
@@ -3350,13 +3347,14 @@ modules:
         - readCarrierSignPolicyCalls
         - applyCarrierSignPolicy
     src/bridges/catalog-adapter.ts:
-      description: "Catalog adapter: ingests the 44-entry `BRIDGE_EQUATIONS` array into"
+      description: "Catalog adapter: ingests `BRIDGE_EQUATIONS` into the v0.7-p2 sparse"
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
         - file: ./index.js
           imports:
             - BridgeEquationEntry
+            - BridgeEquationStatus
           typeOnly: true
         - file: ../core/cell.js
           imports:
@@ -3413,18 +3411,27 @@ modules:
         - file: ./catalog-types.js
           imports:
             - CatalogConfrontation
+            - CatalogConfrontationRecord
             - CatalogEntry
             - CatalogEvaluator
             - CatalogEvaluatorParameter
             - CatalogFile
+            - CatalogFileRecord
+            - CatalogRejection
             - CatalogRelation
           typeOnly: true
+        - file: ./observations/types.js
+          imports:
+            - ConfrontationOutcome
+          typeOnly: true
       exports:
+        - loadCatalog
         - bridgeCatalog
         - catalogEntries
         - catalogRelations
         - catalogEvaluators
         - catalogConfrontations
+        - catalogRejections
         - catalogEntry
         - relationsForCatalog
         - primaryRelation
@@ -3432,11 +3439,13 @@ modules:
         - parseBridgeId
         - catalogEdgeKey
       functions:
+        - loadCatalog
         - bridgeCatalog
         - catalogEntries
         - catalogRelations
         - catalogEvaluators
         - catalogConfrontations
+        - catalogRejections
         - catalogEntry
         - relationsForCatalog
         - primaryRelation
@@ -3452,12 +3461,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ../relations/types.js
+        - file: ./observations/types.js
           imports:
-            - Conventions
-            - Counterexample
-            - Regime
-            - RelationContract
+            - ConfrontationOutcome
           typeOnly: true
         - file: ./types.js
           imports:
@@ -3472,7 +3478,9 @@ modules:
         - CatalogEvaluatorParameter
         - CatalogEvaluatorOutput
         - CatalogEvaluator
+        - CatalogPrediction
         - CatalogConfrontation
+        - CatalogRejection
         - CatalogFile
         - CatalogAdjudication
     src/bridges/coefficient-statement.ts:
@@ -3546,6 +3554,7 @@ modules:
         - UnknownInputError
         - InputTypeError
         - NonFiniteInputError
+        - ConstantInputError
         - DuplicateInputError
         - DomainViolationError
       classes:
@@ -3553,6 +3562,7 @@ modules:
         - UnknownInputError
         - InputTypeError
         - NonFiniteInputError
+        - ConstantInputError
         - DuplicateInputError
         - DomainViolationError
       functions:
@@ -3602,12 +3612,11 @@ modules:
             - FORMULA_NAMED
         - file: ./catalog-load.js
           imports:
-            - primaryRelation
-        - file: ./catalog-load.js
-          imports:
             - catalogEvaluators
+            - primaryRelation
         - file: ./catalog-types.js
           imports:
+            - CatalogEvaluator
             - CatalogEvaluatorOutput
             - CatalogEvaluatorParameter
             - CatalogRelation
@@ -3617,6 +3626,7 @@ modules:
             - evaluateFormula
             - formulaVariables
             - parseCatalogExpression
+            - reservedFormulaNames
         - file: ../dimensional/ast-types.js
           imports:
             - ExprNode
@@ -3638,6 +3648,7 @@ modules:
       exports:
         - BRIDGE_EVALUATORS
         - unusedInputKeys
+        - buildEvaluatorSpec
         - missingEvaluatorMessage
         - evaluateBridge
       interfaces:
@@ -3646,6 +3657,7 @@ modules:
         - EvaluatorSpec
       functions:
         - unusedInputKeys
+        - buildEvaluatorSpec
         - missingEvaluatorMessage
         - evaluateBridge
       constants:
@@ -3657,11 +3669,8 @@ modules:
       internalDependencies:
         - file: ../dimensional/types.js
           imports:
-            - Dimension
-          typeOnly: true
-        - file: ../dimensional/types.js
-          imports:
             - DIMENSIONLESS
+            - Dimension
         - file: ../dimensional/ast-types.js
           imports:
             - ExprNode
@@ -3686,16 +3695,23 @@ modules:
           imports:
             - parseFormulaPNode
             - FormulaPNode
+        - file: ./evaluation-errors.js
+          imports:
+            - ConstantInputError
       exports:
         - formulaNames
+        - reservedFormulaNames
         - formulaScope
         - formulaVariables
+        - withoutUnreadConstants
         - evaluateFormula
         - parseCatalogExpression
       functions:
         - formulaNames
+        - reservedFormulaNames
         - formulaScope
         - formulaVariables
+        - withoutUnreadConstants
         - evaluateFormula
         - parseCatalogExpression
     src/bridges/holds.ts:
@@ -3709,6 +3725,9 @@ modules:
         - file: ../dimensional/hyphen-names.js
           imports:
             - rewriteCatalogHyphens
+        - file: ./evaluation-errors.js
+          imports:
+            - ConstantInputError
       exports:
         - holds
         - HoldsError
@@ -3717,7 +3736,7 @@ modules:
       functions:
         - holds
     src/bridges/index.ts:
-      description: Bridge catalog projection. Rows, regimes, and the spine are loaded from
+      description: Bridge catalog projection. The rows are loaded from
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -3725,15 +3744,9 @@ modules:
           imports:
             - BridgeEquationEntry
           typeOnly: true
-        - file: ../relations/types.js
-          imports:
-            - Regime
-          typeOnly: true
         - file: ./catalog-load.js
           imports:
-            - bridgeCatalog
             - catalogEntries
-            - catalogEntry
         - file: ./types.js
           imports:
             - BridgeEquationEntry
@@ -3741,10 +3754,6 @@ modules:
             - BridgeIssueFixable
             - BridgeIssueSeverity
             - KnownIssue
-          reExport: true
-        - file: ./types.js
-          imports:
-            - isActiveStatus
           reExport: true
         - file: ../core/constants.js
           imports:
@@ -3760,8 +3769,11 @@ modules:
           imports:
             - CarrierSignError
           reExport: true
+        - file: ./evaluation-errors.js
+          imports:
+            - ConstantInputError
+          reExport: true
       exports:
-        - isActiveStatus
         - BCS_GAP_RATIO
         - JOSEPHSON_CONSTANT_SI
         - LANE_EMDEN_OMEGA3
@@ -3770,9 +3782,8 @@ modules:
         - THOMSON_CROSS_SECTION_SI
         - VON_KLITZING_SI
         - CarrierSignError
+        - ConstantInputError
         - BRIDGE_EQUATIONS
-        - SPINE_CONFRONTATION_POINTS
-        - catalogRegime
         - BridgeEquationEntry
         - BridgeEquationStatus
         - BridgeIssueFixable
@@ -3784,7 +3795,6 @@ modules:
         - BridgeIssueFixable
         - BridgeIssueSeverity
         - KnownIssue
-        - isActiveStatus
         - BCS_GAP_RATIO
         - JOSEPHSON_CONSTANT_SI
         - LANE_EMDEN_OMEGA3
@@ -3793,11 +3803,9 @@ modules:
         - THOMSON_CROSS_SECTION_SI
         - VON_KLITZING_SI
         - CarrierSignError
-      functions:
-        - catalogRegime
+        - ConstantInputError
       constants:
         - BRIDGE_EQUATIONS
-        - SPINE_CONFRONTATION_POINTS
     src/bridges/input-contract.ts:
       description: The one check of a binding record against an id's declared inputs.
       externalDependencies: []
@@ -3831,26 +3839,14 @@ modules:
           typeOnly: true
         - file: ./rejected.js
           imports:
-            - REJECTED_BRIDGE_IDS
-        - file: ./rejected.js
-          imports:
             - REJECTED_BRIDGE_ADJUDICATIONS
             - REJECTED_BRIDGE_IDS
-          reExport: true
-        - file: ./rejected.js
-          imports:
             - RejectedBridgeAdjudication
-          reExport: true
       exports:
         - REJECTED_BRIDGE_ADJUDICATIONS
         - REJECTED_BRIDGE_IDS
         - adjudicateBridgeEntry
         - adjudicateCatalog
-        - RejectedBridgeAdjudication
-      reExported:
-        - REJECTED_BRIDGE_ADJUDICATIONS
-        - REJECTED_BRIDGE_IDS
-        - RejectedBridgeAdjudication
       interfaces:
         - CatalogAdjudicationReport
       functions:
@@ -3890,32 +3886,14 @@ modules:
         - residualInSigma
         - consistencyComparison
         - combineInQuadrature
-    src/bridges/registry.ts:
-      description: One registration for a catalog bridge.
+    src/bridges/rejected.ts:
+      description: Negative catalog — NOT-A-BRIDGE adjudications, projected from the
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../dimensional/validator.js
+        - file: ./catalog-load.js
           imports:
-            - ExprNode
-          typeOnly: true
-      exports:
-        - bridgeRegistry
-        - createBridgeRegistry
-        - registerBridge
-      interfaces:
-        - BridgeRegistration
-        - BridgeRegistry
-      functions:
-        - createBridgeRegistry
-        - registerBridge
-      constants:
-        - bridgeRegistry
-    src/bridges/rejected.ts:
-      description: Negative catalog (v0.8.0 P-4) — NOT-A-BRIDGE adjudications as
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
+            - catalogRejections
       exports:
         - REJECTED_BRIDGE_ADJUDICATIONS
         - REJECTED_BRIDGE_IDS
@@ -3953,11 +3931,9 @@ modules:
         - CarrierSignError
         - relationHolds
         - evaluateCatalogRelation
-        - solveCatalogRelation
       functions:
         - relationHolds
         - evaluateCatalogRelation
-        - solveCatalogRelation
     src/bridges/rhs-registry.ts:
       description: Right-hand side of each catalog id that has a relation, projected from
       externalDependencies: []
@@ -3988,17 +3964,20 @@ modules:
         - file: ./catalog-load.js
           imports:
             - catalogConfrontations
-        - file: ./expr-parse.js
+        - file: ./catalog-types.js
           imports:
-            - evaluateFormula
-        - file: ./catalog-load.js
+            - CatalogPrediction
+          typeOnly: true
+        - file: ./evaluators.js
           imports:
-            - primaryRelation
+            - BRIDGE_EVALUATORS
       exports:
+        - predictedAt
         - decidingMeasurement
       interfaces:
         - Elasticity
       functions:
+        - predictedAt
         - decidingMeasurement
     src/bridges/tensor-index.ts:
       description: §VI.6.1 tensor-index component for a catalog category.
@@ -4026,13 +4005,10 @@ modules:
             - Regime
             - RelationContract
           typeOnly: true
-      exports:
-        - isActiveStatus
+      exports: []
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
-      functions:
-        - isActiveStatus
   canonical:
     src/canonical/canonical-equation.ts:
       description: Canonical (textbook) physics equations — the ground-truth L-layer of the
@@ -11642,6 +11618,7 @@ modules:
         - VON_KLITZING_SI
         - JOSEPHSON_CONSTANT_SI
         - LORENZ_NUMBER_SI
+        - EULER_GAMMA
         - BCS_GAP_RATIO
         - LANE_EMDEN_OMEGA3
         - THOMSON_CROSS_SECTION_SI
@@ -11675,6 +11652,7 @@ modules:
         - VON_KLITZING_SI
         - JOSEPHSON_CONSTANT_SI
         - LORENZ_NUMBER_SI
+        - EULER_GAMMA
         - BCS_GAP_RATIO
         - LANE_EMDEN_OMEGA3
         - THOMSON_CROSS_SECTION_SI
@@ -12315,6 +12293,7 @@ modules:
             - C_SI
             - E_SI
             - EPS0_SI
+            - EULER_GAMMA
             - FARADAY_SI
             - G_SI
             - GM_SUN_SI
@@ -13000,13 +12979,16 @@ modules:
             - CONSTANT_REGISTRY
       exports:
         - foldName
+        - readQuantityFile
         - quantitySpellingIndex
         - allQuantityRecords
         - quantityRecord
         - synonymGroupsFromRegistry
       interfaces:
         - QuantityRecord
+        - QuantityFile
       functions:
+        - readQuantityFile
         - quantitySpellingIndex
         - allQuantityRecords
         - quantityRecord
@@ -13842,6 +13824,10 @@ modules:
             - NonFiniteInputError
             - UnknownInputError
           reExport: true
+        - file: ./bridges/index.js
+          imports:
+            - ConstantInputError
+          reExport: true
         - file: ./composition/index.js
           imports:
             - Evaluation
@@ -14525,6 +14511,7 @@ modules:
         - MissingInputError
         - NonFiniteInputError
         - UnknownInputError
+        - ConstantInputError
         - inputContract
         - christoffel
         - ricci
@@ -14993,6 +14980,7 @@ modules:
         - MissingInputError
         - NonFiniteInputError
         - UnknownInputError
+        - ConstantInputError
         - Evaluation
         - EvaluatorSpec
         - EvaluatorParameter
@@ -16940,7 +16928,6 @@ dependencyGraph:
         - src/bridges/membership.ts
         - src/bridges/notices.ts
         - src/bridges/observations/types.ts
-        - src/bridges/registry.ts
         - src/bridges/rejected.ts
         - src/bridges/relation-eval.ts
         - src/bridges/rhs-registry.ts
@@ -17233,19 +17220,19 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 360
+  totalTypeScriptFiles: 359
   totalModules: 13
-  totalLinesOfCode: 79797
-  totalExports: 2476
-  totalClasses: 79
-  totalInterfaces: 452
-  totalFunctions: 761
-  totalTypeGuards: 7
+  totalLinesOfCode: 79870
+  totalExports: 2478
+  totalClasses: 80
+  totalInterfaces: 453
+  totalFunctions: 763
+  totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 383
-  totalReExports: 1254
-  totalTypeOnlyImports: 507
+  totalConstants: 382
+  totalReExports: 1252
+  totalTypeOnlyImports: 505
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 77
+  unusedExportsCount: 75
