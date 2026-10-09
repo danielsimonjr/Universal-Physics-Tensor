@@ -44,7 +44,7 @@ export function decidingMeasurement(catalogId: number): Elasticity[] {
   const relation = primaryRelation(catalogId);
   if (relation === undefined) return [];
   const point = { ...row.prediction.inputs };
-  const predict = (inputs: Record<string, number>): number => evaluateFormula(relation.expression, inputs);
+  const predict = (inputs: Record<string, number>): number => evaluateFormula(relation.expression, inputs, relation.sources);
   return Object.keys(point)
     .map((key) => ({ input: key, elasticity: elasticityOf(predict, point, key) }))
     .sort((a, b) => b.elasticity - a.elasticity);

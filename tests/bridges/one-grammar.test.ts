@@ -82,7 +82,7 @@ describe('holds() decides exactly as the old interpreter did', () => {
       }
       let actual: boolean;
       try {
-        actual = holds(r.holds, point, scope, names);
+        actual = holds(r.holds, point, scope, names, r.sources);
       } catch {
         actual = false;
       }

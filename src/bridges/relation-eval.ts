@@ -45,8 +45,8 @@ function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { cha
       let pos: number;
       let neg: number;
       try {
-        pos = evaluateFormula(rel.expression, { ...base, [name]: magnitude });
-        neg = evaluateFormula(rel.expression, { ...base, [name]: -magnitude });
+        pos = evaluateFormula(rel.expression, { ...base, [name]: magnitude }, rel.sources);
+        neg = evaluateFormula(rel.expression, { ...base, [name]: -magnitude }, rel.sources);
       } catch {
         continue;
       }
@@ -72,10 +72,14 @@ function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { cha
   return found;
 }
 
-/** Whether `inputs` satisfy the relation's validity condition. */
+/**
+ * Whether `inputs` satisfy the relation's validity condition. An unbound or
+ * unparsable condition is false; an input that names a constant the relation
+ * does not declare as a source throws `ConstantInputError`.
+ */
 export function relationHolds(rel: CatalogRelation, inputs: Readonly<Record<string, number>>): boolean {
   try {
-    return holds(rel.holds, inputs, formulaScope(), [...formulaNames()]);
+    return holds(rel.holds, inputs, formulaScope(), [...formulaNames()], rel.sources);
   } catch (error) {
     if (error instanceof HoldsError) return false;
     throw error;
@@ -105,7 +109,7 @@ export function evaluateCatalogRelation(
           right: named(rel, pair.mobility),
         },
   );
-  return evaluateFormula(rel.expression, adjusted);
+  return evaluateFormula(rel.expression, adjusted, rel.sources);
 }
 
 /**

@@ -218,6 +218,8 @@ export {
   NonFiniteInputError,
   UnknownInputError,
 } from './composition/index.js';
+/** A caller input that names a registered constant (`G`, `k_B`, `m_p`, …) is refused on every evaluation path. */
+export { ConstantInputError } from './bridges/index.js';
 /** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
 export type { Evaluation } from './composition/index.js';
 

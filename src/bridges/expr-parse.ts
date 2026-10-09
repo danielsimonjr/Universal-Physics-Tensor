@@ -19,6 +19,7 @@ import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
 import { allQuantityRecords } from '../dimensional/quantity-registry.js';
 import { parseFormula } from '../numerical/formula-mathts.js';
 import { parseFormulaPNode, type FormulaPNode } from '../numerical/formula-dimension.js';
+import { ConstantInputError } from './evaluation-errors.js';
 
 const TRANSCENDENTAL = new Set<TranscendentalFn>([
   'exp', 'ln', 'log2', 'log10', 'sin', 'cos', 'tan', 'sinh', 'cosh', 'tanh',
@@ -52,12 +53,34 @@ export function formulaNames(): ReadonlySet<string> {
   return names;
 }
 
-/** Numeric scope: constants, formula overlays, and π. Caller inputs overwrite. */
-export function formulaScope(inputs: Readonly<Record<string, number>> = {}): Record<string, number> {
+const RESERVED = new Set<string>(['pi', ...Object.keys(CONSTANTS), ...FORMULA_NAMED.map((named) => named.name)]);
+
+/** π, the registered constants and the formula overlays: names a caller may not bind. */
+export function reservedFormulaNames(): ReadonlySet<string> {
+  return RESERVED;
+}
+
+const underscored = (name: string): string => name.replace(/-/g, '_');
+
+/**
+ * Numeric scope: constants, formula overlays, and π, then the caller's inputs.
+ * An input whose name is reserved is refused with {@link ConstantInputError}
+ * unless `declared` names it: a relation's own source may carry a constant's
+ * name as a default the caller overrides (be-63's Lane-Emden ω₃).
+ */
+export function formulaScope(
+  inputs: Readonly<Record<string, number>> = {},
+  declared: readonly string[] = [],
+): Record<string, number> {
   const scope: Record<string, number> = { pi: Math.PI };
   for (const [name, constant] of Object.entries(CONSTANTS)) scope[name] = constant.value;
   for (const named of FORMULA_NAMED) scope[named.name] = named.value;
-  for (const [key, value] of Object.entries(inputs)) scope[key.replace(/-/g, '_')] = value;
+  const allowed = new Set(declared.map(underscored));
+  for (const [key, value] of Object.entries(inputs)) {
+    const name = underscored(key);
+    if (RESERVED.has(name) && !allowed.has(name)) throw new ConstantInputError(key);
+    scope[name] = value;
+  }
   return scope;
 }
 
@@ -70,13 +93,18 @@ export function formulaVariables(expression: string): readonly string[] {
   return parseFormula(rewriteCatalogHyphens(expression, formulaNames())).variables;
 }
 
-/** Evaluate a catalog expression with MathTS. Inputs are quantity names. */
+/**
+ * Evaluate a catalog expression with MathTS. Inputs are quantity names.
+ * `declared` are the names the caller may bind although they are reserved
+ * (the relation's sources); see {@link formulaScope}.
+ */
 export function evaluateFormula(
   expression: string,
   inputs: Readonly<Record<string, number>>,
+  declared: readonly string[] = [],
 ): number {
   const rewritten = rewriteCatalogHyphens(expression, formulaNames());
-  return parseFormula(rewritten).evaluate(formulaScope(inputs));
+  return parseFormula(rewritten).evaluate(formulaScope(inputs, declared));
 }
 
 /**

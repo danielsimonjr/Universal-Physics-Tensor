@@ -27,6 +27,8 @@ export {
 } from '../core/constants.js';
 /** Thrown when two carrier roles have opposite signs. */
 export { CarrierSignError } from './carrier-sign.js';
+/** Thrown when a caller input names a registered constant. */
+export { ConstantInputError } from './evaluation-errors.js';
 
 import type { BridgeEquationEntry } from './types.js';
 import type { Regime } from '../relations/types.js';

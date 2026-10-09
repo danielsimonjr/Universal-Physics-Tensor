@@ -11,10 +11,9 @@
  */
 
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
-import { primaryRelation } from './catalog-load.js';
-import { catalogEvaluators } from './catalog-load.js';
-import type { CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
-import { evaluateFormula, formulaVariables, parseCatalogExpression } from './expr-parse.js';
+import { catalogEvaluators, primaryRelation } from './catalog-load.js';
+import type { CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
+import { evaluateFormula, formulaVariables, parseCatalogExpression, reservedFormulaNames } from './expr-parse.js';
 import type { ExprNode } from '../dimensional/ast-types.js';
 import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
 import { DomainViolationError } from './evaluation-errors.js';
@@ -190,6 +189,18 @@ function bindRelationInputs(
   return bound;
 }
 
+/**
+ * The spec of one catalog evaluator row. An output expression reads the
+ * scope by parameter key, so a key that names a registered constant (be-66's
+ * reflectance `R`) may bind the relation's source but may not be read by an
+ * output: building the spec refuses it.
+ * @internal
+ */
+export function buildEvaluatorSpec(row: CatalogEvaluator): EvaluatorSpec {
+  const parameters = row.parameters.map(toParameter);
+  return buildSpec(row.catalogId, row.name, parameters, row.outputs ?? []);
+}
+
 function buildSpec(
   catalogId: number,
   name: string,
@@ -199,6 +210,16 @@ function buildSpec(
   const relation = primaryRelation(catalogId);
   if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
   const contract = evaluatorContract(catalogId, relation, parameters);
+  const keys = parameters.map((parameter) => parameter.key);
+  const reserved = reservedFormulaNames();
+  for (const output of outputs) {
+    const shadowed = formulaVariables(output.expression).find((name) => reserved.has(name) && keys.includes(name));
+    if (shadowed !== undefined) {
+      throw new Error(`be-${catalogId}: output '${output.name}' reads '${shadowed}', which names a registered constant`);
+    }
+  }
+  // An output reads the parameter keys and `value`; a key that shadows a constant is refused above.
+  const outputScope = [...keys, 'value'];
   return {
     bridgeId: catalogId,
     name,
@@ -223,7 +244,7 @@ function buildSpec(
       if (want === 'value') return result;
       for (const output of outputs) {
         if ((output.requires ?? []).some((key) => given[key] === undefined)) continue;
-        result[output.name] = evaluateFormula(output.expression, { ...given, value });
+        result[output.name] = evaluateFormula(output.expression, { ...given, value }, outputScope);
       }
       return result;
     },
@@ -232,10 +253,7 @@ function buildSpec(
 
 /** Bridge id → evaluator. @internal */
 export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
-  catalogEvaluators().map((row) => {
-    const parameters = row.parameters.map(toParameter);
-    return [row.catalogId, buildSpec(row.catalogId, row.name, parameters, row.outputs ?? [])] as const;
-  }),
+  catalogEvaluators().map((row) => [row.catalogId, buildEvaluatorSpec(row)] as const),
 );
 
 /** What to say when an id is not in {@link BRIDGE_EVALUATORS}. @internal */
