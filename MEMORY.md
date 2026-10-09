@@ -8,7 +8,6 @@ read it.
 
 - Repo `universal-physics-tensor`. Default branch is **`master`**, not `main`. **Direct-push
   workflow** for local work, no human PR flow; cloud and agent sessions land through auto-PRs.
-- SemVer applies from v0.1.0 onward.
 - The atlas public surface is a **namespace facade** — `export * as atlas from './atlas/public.js'`
   — added *alongside* the existing named exports in `src/index.ts`, changing none of them.
 - `src/atlas/public.ts` is the **single list** of public atlas names. The count is **derived from
@@ -19,8 +18,8 @@ read it.
 
 ## Stack
 
-- **TypeScript 7** (native compiler). It ships **no JavaScript compiler API**, so a test cannot
-  `import ts from 'typescript'`; scan source text instead, with controls.
+- **TypeScript, the native compiler** (the version is `package.json`'s). It ships **no JavaScript
+  compiler API**, so a test cannot `import ts from 'typescript'`; scan source text instead, with controls.
 - Node is the shipped runtime. ESM (`"type": "module"`): relative imports must include the `.js`
   extension.
 - **Bun** is the local and CI package manager and script driver (`bun install`, `bun run …`).
@@ -29,13 +28,14 @@ read it.
 - Test runner: **vitest**. No Python in the codebase.
 - **Required dependencies:** the `@danielsimonjr/mathts-*` packages (core, expression,
   functions, matrix, tensor, autograd, parallel, wasm, workerpool). The library does not
-  start without them. `@danielsimonjr/mathts-gpu` arrives as MathTS's dependency.
+  start without them.
   `@viz-js/viz` (SVG map rendering) stays an optional peer and must degrade when absent.
 - The lockfile is **`bun.lock` only** (no `package-lock.json`). Dependabot uses
-  **`package-ecosystem: npm`**. Do NOT switch it to `bun`: Dependabot's bun parser supports only
-  `bun.lock` lockfileVersion 1 while this repo writes version 2, so it would stop proposing updates
-  at all. The consequence of the npm ecosystem is that **Dependabot never writes `bun.lock`**, so
-  every Dependabot PR fails CI at `bun install --frozen-lockfile` until the lockfile is regenerated.
+  **`package-ecosystem: npm`**. Do NOT switch it to `bun`: Dependabot's bun parser reads an older
+  `bun.lock` format than this repo writes (the two lockfile versions are in `NOTES.md`), so it would
+  stop proposing updates at all. The consequence of the npm ecosystem is that **Dependabot never
+  writes `bun.lock`**, so every Dependabot PR fails CI at `bun install --frozen-lockfile` until the
+  lockfile is regenerated.
 
 ## Source map
 
@@ -45,9 +45,9 @@ Top-level layout; each subsystem's local `README.md` has depth.
 |---|---|
 | `src/index.ts` | Public-API manifest (every `@public` symbol). **`MathTSEngine` is intentionally NOT re-exported here**; it is reachable only through the `universal-physics-tensor/numerical/mathts-engine` subpath. |
 | `src/core/` | `UniversalTensor`, runtime law/bridge/emergent-phenomenon types (`tensor.ts`, `types.ts`). |
-| `src/bridges/` | The bridge catalog. `index.ts` is the catalog registry (`BRIDGE_EQUATIONS`); `equations/` holds per-bridge AST modules; closed-form evaluators (`gravitational-lensing.ts`, `perihelion-precession.ts`, `be55…be62-*.ts`) sit at this level. **Catalog ≠ graph:** catalog bridges project to composition-graph edges (`CATALOG_GRAPH`), and two DIFFERENT sets must not be conflated: bridges with no AST (no `BRIDGE_RHS_BY_ID` entry) and bridges with no graph edge. BE-51 and BE-52 have edges (`be51Edge`, `be52Edge` in `src/composition/edges/calibration.ts`) but no AST. The graph is sparse; most cross-cluster "links" are dimensional coincidences (`upt discover`, `docs/research/`), so the rank-6 tensor framing is aspirational about connectivity. `DATA_CONFRONTED_IDS` in `confrontation-coverage.ts` is a sorted projection of `CONFRONTATIONS`. |
+| `src/bridges/` | The bridge catalog, projected from the record `data/bridge-catalog.json` (schema `data/bridge-catalog.schema.json`). `catalog-load.ts` is the one parser of the record and of a bridge id; `index.ts` exposes `BRIDGE_EQUATIONS` as `catalogEntries()`; `rhs-registry.ts` (`BRIDGE_RHS_BY_ID`) holds each relation's expression as an AST; `evaluators.ts` holds the closed-form evaluators projected from the relations (`run` checks the input contract, the carrier-sign policy and the domain, then evaluates the expression; no per-id branch); `relation-eval.ts` evaluates one relation and `holds.ts` reads its condition through MathTS; `confrontations.ts` holds the data confrontations and `confrontation-coverage.ts` their sorted projection `DATA_CONFRONTED_IDS`; `membership.ts` the bridge / not-a-bridge verdicts; `notices.ts`, `rejected.ts`, `input-contract.ts` and `catalog-adapter.ts` the rest. **Catalog ≠ graph:** catalog relations project to composition-graph edges (`CATALOG_GRAPH`), and two DIFFERENT sets must not be conflated: bridges with no AST (no `BRIDGE_RHS_BY_ID` entry) and bridges with no graph edge. The graph is sparse; most cross-cluster "links" are dimensional coincidences (`upt discover`, `docs/research/`), so the rank-6 tensor framing is aspirational about connectivity. |
 | `src/dimensional/` | Scalar AST validator over the 7 base SI dimensions (L, M, T, I, Θ, N, J in `types.ts`'s `Dimension`; `NAMED_DIMENSIONS` adds named/derived shapes for `format()`). **`ast-types.ts` is the leaf module owning the `ExprNode` union and all node interfaces**; the origin modules re-export from it and keep only validation functions, which is what holds type-only circular dependencies at zero. `ast-builders.ts` is the single source of the `sym`/`dim` builders; `validator.ts` is the validation engine; `algebra.ts` the dimension calculus; `buckingham.ts` the exact-rational Buckingham-π enumerator (the float `nullspace` is not that basis); `units.ts` is the one unit reader (`readUnit`, `parseUnit`, `convertValue`, `readQuantityLiteral`) over exact scales from `exact-scale.ts`, rounded once, with MathTS `toSI` only as a test's second method, and the `Dimension` record stays; `bridge-check.ts` houses `inferDimensionForBridge` and `EXPECTED_DIMENSION_BY_BRIDGE`; `dimension-inference.ts` the single-unknown `inferUnknownDimension`; `connection.ts` (Christoffel) requires dimensionless (geometrized) metrics. |
-| `src/composition/` | The composition-graph layer. `edges/` holds the `BridgeEdge` definitions (`catalog-full.ts` is a barrel over `catalog-{quantum,gravitation-cosmology,fields,condensed-matter}.ts`; `quantities.ts` is a barrel over `quantities/{quantum,…,common}.ts`). `axes.ts` is the **extensible tensor-axis registry**, the single source for the classification axes (each a typed union plus an `AxisSpec` entry; `GATE_AXES` = `AXES.filter(gated)`). `axis-audit.ts` (`auditAxisDiscrimination`) is the anti-inert-metadata gate: an axis stays UNGATED until it MEASURABLY fires on the funnel. The SI `Dimension` axis is NOT a registry axis. `bridge-analysis.ts` (linkage map, priority, orphan connectors); `discovery.ts`, `retrodiction.ts`, `identifiability.ts` (the vetting funnel behind `upt discover`); `compose-symbolic.ts`/`expr-simplify.ts` (symbolic composition); `canonical-graph.ts` (textbook-only graph, `--source=canonical`); `proposed-bridges.ts` (identity-consequence surfacer, firewalled `'unadjudicated'`); `graph-viz*.ts` (`upt map --format=mermaid\|dot\|svg`); `user-equation.ts` (`--equation` injection, never written to the catalog); `chain-candidate.ts` (`orderChainCandidates`: confirmation, then restatement, then a unique monomial, then an unfixed PhysJS.Dimensional shape, then a shorter chain, then the ordered edge ids). `descriptor.ts` (`getBridge` / `BRIDGE_DESCRIPTORS`) joins catalog metadata, the RHS AST, and `CATALOG_GRAPH` into one per-bridge view. `audit-coverage.ts` (`auditCoverage`) scans that graph for the grounding report and reads `DATA_CONFRONTED_IDS` from `bridges/`. |
+| `src/composition/` | The composition-graph layer. `edge.ts` defines `BridgeEdge` and the validity domains; `catalog-graph.ts` builds `CATALOG_GRAPH` from `catalogRelations()` (the relation projection of the catalog); `quantities.ts` reads `data/quantities.json` into the `Quantity` registry; `canonical-graph.ts` projects the canonical registry the same way. `axes.ts` is the **extensible tensor-axis registry**, the single source for the classification axes (each a typed union plus an `AxisSpec` entry; `GATE_AXES` = `AXES.filter(gated)`). `axis-audit.ts` (`auditAxisDiscrimination`) is the anti-inert-metadata gate: an axis stays UNGATED until it MEASURABLY fires on the funnel. The SI `Dimension` axis is NOT a registry axis. `bridge-analysis.ts` (linkage map, priority, orphan connectors); `discovery.ts`, `retrodiction.ts`, `identifiability.ts` (the vetting funnel behind `upt discover`); `compose-symbolic.ts`/`expr-simplify.ts` (symbolic composition); `canonical-graph.ts` (textbook-only graph, `--source=canonical`); `proposed-bridges.ts` (identity-consequence surfacer, firewalled `'unadjudicated'`); `graph-viz*.ts` (`upt map --format=mermaid\|dot\|svg`); `user-equation.ts` (`--equation` injection, never written to the catalog); `chain-candidate.ts` (`orderChainCandidates`: confirmation, then restatement, then a unique monomial, then an unfixed PhysJS.Dimensional shape, then a shorter chain, then the ordered edge ids). `descriptor.ts` (`getBridge` / `BRIDGE_DESCRIPTORS`) joins catalog metadata, the RHS AST, and `CATALOG_GRAPH` into one per-bridge view. `audit-coverage.ts` (`auditCoverage`) scans that graph for the grounding report and reads `DATA_CONFRONTED_IDS` from `bridges/`. |
 | `src/composition/probe/` | **Product B** experimental expression/residual search (`upt probe`), orthogonal to Product A (`discovery.ts` / `VettedCandidate`). Native Buckingham monomial enumerator, MHC/holdout, budgets, corpus-relative novelty, optional NDJSON workers. Not re-exported from `src/index.ts`; subpath `universal-physics-tensor/probe`. Relation-link gaps are not searchable there; use `upt discover`. |
 | `src/diff/` | Bridge parameter gradients: `bridge-ast-gradient.ts` (exact reverse-mode AD over the symbolic RHS AST via the autograd peer; evaluators stay plain JS), `bridge-gradient.ts` (central-FD fallback and engine-AD wrapper). |
 | `src/cli/`, `bin/upt.mjs`, `src/cli-api.ts` | The `upt` CLI (reference in `cli/README.md`). `bin/upt.mjs` is a thin shim: it imports `dist/cli/main.js` and maps the returned exit code onto `process.exitCode` (not `process.exit`, so piped stdout is not truncated). All logic lives in typed `src/cli/`: the `FlagSpec` parser (`args.ts`) rejects unknown flags with exit 2; the command registry (`command.ts`, `commands/`); the `--json` envelope and non-finite-safe sanitizer (`output.ts`); `runCli` (`main.ts`, returns an exit code, never calls `process.exit`). `main.ts` is the one module that imports the `src/cli-api.ts` barrel; commands reach it only through the injected `CommandCtx.api`. A Kerr `--geodesic` with a non-positive mass or with `|a|` above GM/c² throws `CliError` (exit 1); a missing metric name stays `UsageError` (exit 2). Extend the barrel when the CLI needs a new internal module; never deep-import from `src/cli/`. |
@@ -105,7 +105,7 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   would also produce it. Each control therefore carries a meta-check that the *true* claim
   resolves, and the two result kinds are never merged into one count.
 - The public benchmark files never carry the answer; `kind` and `failureKind` live only in
-  `scorer/labels.json`.
+  `tests/fixtures/atlas/benchmark/scorer/labels.json`.
 
 ## Where things live
 

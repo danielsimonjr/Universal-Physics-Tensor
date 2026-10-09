@@ -18,6 +18,9 @@ pointed at the wrong thing.
 | Dependency graph and doc counts | `bun run docs:deps` | regenerates `docs/architecture/`; the `docs-fresh` CI job fails when it was not run |
 | PhysJS table | `bun run physjs:table` | writes `src/atlas/physjs-entries.generated.ts` from `formal/physjs/manifest.json`. `--check` exits 1 when the committed file differs. `docs-fresh` runs `--check`. The check proves the TypeScript table matches the vendored JSON. It does not prove the JSON matches PhysJS upstream, and it does not run Lean |
 | README and ROADMAP counts | `bun scripts/readme-status.ts` | rewrites the marked spans in `README.md` and `ROADMAP.md` from the registries and from the generated architecture reports. `--check` exits 1 when a span is stale. `docs-fresh` runs it after `docs:deps`. A span stamped before `docs:deps` records the previous unused-analysis counts |
+| CLI reference | `bun scripts/cli-reference.ts` | rewrites `docs/CLI.md` from the command registry. `--check` exits 1 when the file differs; `docs-fresh` runs it. It proves the reference matches the registry, not that a command does what its help says |
+| PhysJS vendoring check | `bun scripts/vendor-physjs.ts --physjs <checkout> --commit <sha> --check` | `docs-fresh` fetches PhysJS at the pinned commit and runs it; a hand edit to any of the three vendored files fails. Needs the PhysJS checkout, so it is not a local gate unless you have one |
+| Code-docs ratchet | `bun tools/code-docs-ratchet/check.ts` | the PR-only `code-docs ratchet (non-required)` CI job; counts MUST doc-comment issues on the changed paths. It does not read `.githooks/code-docs-baseline.txt`, and a direct push to `master` never runs it |
 | Bench | `bun run bench` / `bun run bench:ci` | vitest bench; baselines in `docs/architecture/benchmarks.md` |
 | Audit | `bun audit` | replaces `npm audit` (needs `bun.lock`) |
 | Plan-ledger audit | `bun run audit:plans` | audits `ACTIVE.md`; a release gate inside `validate` |

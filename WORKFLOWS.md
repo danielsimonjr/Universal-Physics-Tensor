@@ -5,7 +5,7 @@ it belongs in another file.
 
 ## Before non-trivial work
 
-Read `ACTIVE.md` (the live task list) and `NOTES.md` (current state). `todo.md` is the historical ledger.
+Read `ACTIVE.md` (the live task list) and `NOTES.md` (current state).
 
 ## Every commit-shaped change
 
@@ -68,7 +68,7 @@ count of the old file.
 
 ## Adding or changing a Lean `formalRef` (`lean4-physjs`)
 
-Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs. UPT does not run Lean for this system. `NOTES.md` records the reviewed count. Each reference is `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
+PhysJS holds the Lean proofs and UPT does not run Lean (`MEMORY.md`, Where things live). `NOTES.md` records the reviewed count. Each reference is `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
 
 1. Land the theorem in PhysJS. Its `manifest/bridges.json` entry (schema `physjs-bridge-manifest/v2`) names `key`, `bridgeId`, `theorem`, `kind`, `covers`, `coverage` (`covers its statement only`), `leanProof`, and `axioms`. PhysJS reads `kind` from the kind line of the Lean file's module docstring (`` `be-80`. Bridge. ``) and checks it in its own CI. A nested statement (`planeWave`, `vacuum`, …) carries its own `kind` the same way, from a line labelled by the key and the field (`` `be-13.vacuum`. Reduction. ``); UPT takes it as given and records no kind of its own. The axioms are what PhysJS measured with `#print axioms`. This repository does not re-measure them.
 2. Run `bun scripts/vendor-physjs.ts --physjs <PhysJS checkout> --commit <sha>` with the PhysJS commit being pinned. It writes the three pinned files from that commit: `formal/physjs/manifest.json` (PhysJS `manifest/bridges.json` with `commit` appended; its `commit`, `toolchain`, `mathlib`, and `physlib` are the pin), `formal/physjs/lean-files.json` (the `.lean` files under `lean/`), and `formal/physjs/theorem-files.json` (the Lean file that declares each manifest theorem, read from the sources; a namespace is not a file). CI's docs-fresh job fetches PhysJS at the pinned commit and runs the same script with `--check`, so a hand edit to any of the three fails.
@@ -114,7 +114,7 @@ not published.
    `docs-fresh` job fails on a release commit that regenerated first.
 4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
-5. Commit and open the release PR. Tom deep-reviews it (the full diff and every file name) before it merges; an agent does not merge its own PR (owner rule, 2026-10-06). After the merge, wait until CI on the merge commit is green.
+5. Commit and open the release PR. The review rule recorded in `ACTIVE.md` applies: Tom deep-reviews it before it merges, and an agent does not merge its own PR. After the merge, wait until CI on the merge commit is green.
 6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
    workflow checks out the tag, fetches `origin/master` (the layer-order gate reads that ref,
    and a tag checkout does not have it), installs, builds, typechecks, runs the test suite, and

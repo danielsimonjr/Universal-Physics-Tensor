@@ -12,7 +12,7 @@ loads it. **This file holds what is still true next year. Nothing dated, nothing
 > | `TOOLS.md` | instruments, and **how each one lies** | is it *what to run it with*? |
 > | `MEMORY.md` | **stateless** facts — names, shapes, invariants | true regardless of *when*? |
 > | `NOTES.md` | **stateful** — phase and criterion state, versions, open findings | carries an "as of"? |
-> | `todo.md` | actionable open work | can it be checked off? |
+> | `ACTIVE.md` | actionable open work, and the authorization gate | can it be checked off? |
 > | `CHANGELOG.md` | what landed | is it history? |
 > | `docs/planning/*` | **design and intent only** | would it read the same next month? |
 >
@@ -43,7 +43,7 @@ decorative.**
 5. **A NEGATIVE RESULT IS A RESULT.** Record it plainly. A repo that hides its own negative
    result misleads its next reader, who is you in a month.
 6. **DESIGN DOCS CARRY NO STATUS.** No MET/UNMET, no counts that change, no dates, no versions.
-   Those go to `NOTES.md`, `CHANGELOG.md` or `todo.md`. See the routing table above. Move a
+   Those go to `NOTES.md`, `CHANGELOG.md` or `ACTIVE.md`. See the routing table above. Move a
    statement; never copy it.
 7. **VERIFY BY A SECOND, INDEPENDENT METHOD** before any claim leaves this repo. An exit code is
    not an outcome; an empty result is not an absence.

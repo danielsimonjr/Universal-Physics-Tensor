@@ -9,8 +9,8 @@ exactly one of the files below, and `AGENTS.md` says which kind goes where.
 - `MEMORY.md` — stateless facts: stack, source map, grammar, invariants.
 - `NOTES.md` — dated state: criteria, results, open defects, measured counts.
 
-Open work is in `todo.md`, history in `CHANGELOG.md`, the authorized sprint ledger in
-`ACTIVE.md`, and the vision in `README.md`.
+Open work and the authorization gate are in `ACTIVE.md`, history in `CHANGELOG.md` (what landed)
+and `todo.md` (the closed task ledger), and the vision in `README.md`.
 
 @AGENTS.md
 @WORKFLOWS.md
