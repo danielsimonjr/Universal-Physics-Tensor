@@ -274,8 +274,6 @@ export { naturalConstantOverrides } from './dimensional/natural-units.js';
 export type { UnitMode } from './dimensional/natural-units.js';
 /** Kebab catalog names rewritten to one symbol each before a formula is parsed. */
 export { rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
-/** A recovered prefactor that is a vacuum constant rewritten through α. */
-export { vacuumConstantThroughAlpha } from './composition/bridge-analysis.js';
 /** The ledger id of an orphan-connector pair, when both names are slugs. */
 export { candidateIdIfSlug } from './composition/adjudication.js';
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */

@@ -162,56 +162,19 @@ export function coherentUnits(
 }
 
 /**
- * A dimension as a product of at most two coherent units (`V^2/Hz`, `J/K`,
- * `kg*m^2/s`), the fewest factors with the smallest exponents, a named unit
- * before a base unit (`V^2/Hz` over `V^2*s`), else the SI base form.
- * Presentation only: the dimension is the fact, the label is a reading of it.
+ * A dimension's label: the one coherent named unit whose dimension it is (`Pa`, `J`, `V`,
+ * `ohm`, `Hz`, `T`), else the SI base form (`m/s`, `kg^2*m^4/(s^5*A^2)`). A product of two
+ * named units is never chosen: a search over pairs once labelled a velocity `W/N` and a
+ * voltage-noise density `J*ohm`, readings that are dimensionally right and physically
+ * unreadable. Presentation only: the dimension is the fact, the label is a reading of it.
  */
 export function derivedUnitOf(dim: Dimension, units: readonly CoherentUnit[]): string {
   if (isDimensionless(dim)) return '1';
   const base = new Set(SI_BASE.map(([, u]) => u));
-  type Term = { readonly unit: CoherentUnit; readonly exp: number };
-  const label = (terms: readonly Term[]): string => {
-    const factor = (t: Term, e: number): string => (e === 1 ? t.unit.name : `${t.unit.name}^${e}`);
-    const num = terms.filter((t) => t.exp > 0).map((t) => factor(t, t.exp));
-    const den = terms.filter((t) => t.exp < 0).map((t) => factor(t, -t.exp));
-    if (num.length === 0) return terms.map((t) => factor(t, t.exp)).join('*');
-    if (den.length === 0) return num.join('*');
-    return `${num.join('*')}/${den.length === 1 ? den[0] : `(${den.join('*')})`}`;
-  };
-  // Score: factor count, then the sum of |exponents|, then base units used (fewer is better).
-  const score = (terms: readonly Term[]): number =>
-    terms.length * 1000 + terms.reduce((s, t) => s + Math.abs(t.exp), 0) * 10 + terms.filter((t) => base.has(t.unit.name)).length;
-  const EXPS = [1, -1, 2, -2, 3, -3, 4, -4];
-  let best: Term[] | null = null;
-  const consider = (terms: Term[]): void => {
-    if (best === null || score(terms) < score(best)) best = terms;
-  };
-  for (const u of units) {
-    for (const e of EXPS) {
-      if (dimEqual(dimPow(u.dim, e), dim)) consider([{ unit: u, exp: e }]);
-    }
-  }
-  if (best === null) {
-    for (let i = 0; i < units.length; i++) {
-      for (let j = i + 1; j < units.length; j++) {
-        for (const e1 of EXPS) {
-          for (const e2 of EXPS) {
-            if (dimEqual(dimMul(dimPow(units[i]!.dim, e1), dimPow(units[j]!.dim, e2)), dim)) {
-              consider([{ unit: units[i]!, exp: e1 }, { unit: units[j]!, exp: e2 }]);
-            }
-          }
-        }
-      }
-    }
-  }
-  return best === null ? siUnitOf(dim) : label(best);
+  const named = units.find((u) => !base.has(u.name) && dimEqual(u.dim, dim));
+  return named === undefined ? siUnitOf(dim) : named.name;
 }
 
-/**
- * A dimension as SI base units, numerator before one `/` (`m^3/(kg*s^2)`), a bare denominator as
- * negative powers (`s^-1`), and `1` when dimensionless: the forms `parseUnit` reads back.
- */
 export function siUnitOf(dim: Dimension): string {
   const factor = (u: string, e: number): string => (e === 1 ? u : `${u}^${e}`);
   const num = SI_BASE.filter(([k]) => dim[k] > 0).map(([k, u]) => factor(u, dim[k]));

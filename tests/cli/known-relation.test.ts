@@ -18,7 +18,7 @@ describe('one known-relation report for derive and map', () => {
       'poynting_flux/c',
     ]);
     expect(r.code).toBe(0);
-    expect(r.text).toMatch(/recovered prefactor ≈ 1\.0000e\+0/);
+    expect(r.text).toMatch(/recovered prefactor ≈ 1(?!\d)/);
     expect(r.text).toMatch(/no canonical equation has this target and these variables, so the prefactor is NOT checked/);
     expect(r.text).toMatch(/be-66 \(Radiation pressure/);
     expect(r.text).toMatch(/the target and the dimensionful sources are this catalog edge/);
@@ -34,7 +34,7 @@ describe('one known-relation report for derive and map', () => {
       'intensity/c',
     ]);
     expect(r.code).toBe(0);
-    expect(r.text).toMatch(/recovered prefactor ≈ 1\.0000e\+0/);
+    expect(r.text).toMatch(/recovered prefactor ≈ 1(?!\d)/);
     expect(r.text).not.toMatch(/be-66/);
   });
 

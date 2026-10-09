@@ -101,6 +101,6 @@ describe('name registry — explain, search, derive', () => {
     ]);
     expect(r.code).toBe(0);
     expect(r.text).not.toMatch(/unrecognized dimension term/);
-    expect(r.text).toMatch(/1\.0000e\+0/);
+    expect(r.text).toMatch(/recovered prefactor ≈ 1(?!\d)/);
   });
 });

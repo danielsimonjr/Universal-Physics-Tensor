@@ -78,11 +78,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   out('(form by dimensions; the constant is recovered by matching the evaluator)\n');
   out(`  DERIVED (${derived.length}) — recognized monomial, prefactor recovered:`);
   for (const { e, d } of derived) {
-    const tag = d.cleanPrefactor
-      ? ''
-      : api.vacuumConstantThroughAlpha(d.subset, d.prefactor)
-        ? '  (vacuum constant; μ0 rewritten through α)'
-        : '  (empirical/tuned constant)';
+    const tag = d.cleanPrefactor ? '' : '  (empirical/tuned constant)';
     out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${api.formatQuantity(d.prefactor!)}${tag}`);
   }
   out(

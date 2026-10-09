@@ -410,13 +410,13 @@ describe('§6 Lows and §7 Low: one number formatter, one definitions block, the
   });
   it('evaluate labels a derived output in a coherent SI unit, and the JSON keeps the base form and the dimension', async () => {
     const text = await run(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1']);
-    expect(text.out).toMatch(/voltage-noise-density \[V\^2\/Hz\]/);
+    expect(text.out).toMatch(/voltage-noise-density \[kg\^2\*m\^4\/\(s\^5\*A\^2\)\]/);
     const env = JSON.parse((await run(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1', '--json'])).out);
     expect(env.result.output.unit).toBe('kg^2*m^4/(s^5*A^2)');
     expect(env.result.output.dimension).toEqual({ L: 4, M: 2, T: -5, I: -2, Theta: 0, N: 0, J: 0 });
   });
   it('evaluate prints one number at one precision: the inputs line and the converted line agree', async () => {
     const r = await run(['evaluate', 'be-58', 'T_K=10eV', 'R_ohm=1']);
-    expect(r.out).toMatch(/inputs: T_K=116045\.181215501,/);
+    expect(r.out).toMatch(/inputs: T_K=116045\.18121550081,/);
   });
 });

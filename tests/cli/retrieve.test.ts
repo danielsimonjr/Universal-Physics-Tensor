@@ -75,7 +75,7 @@ describe('upt retrieve', () => {
     expect(t).toMatch(/--ollama-url/);
     expect(t).toMatch(/the process is not there/);
     expect(t).toMatch(/the model is not there/);
-    expect(t).toMatch(/the call does not finish/);
+    expect(t).toMatch(/the call does\s+not finish/);
     expect(t).toMatch(/not evidence/);
   });
 });

@@ -493,17 +493,10 @@ export type {
 } from './composition/index.js';
 
 // v0.8.0 — Bridge-membership criterion + negative catalog (G-2 / P-4)
-export {
-  adjudicateBridgeEntry,
-  adjudicateCatalog,
-  REJECTED_BRIDGE_ADJUDICATIONS,
-  REJECTED_BRIDGE_IDS,
-} from './bridges/membership.js';
-export type {
-  BridgeVerdict,
-  CatalogAdjudicationReport,
-  RejectedBridgeAdjudication,
-} from './bridges/membership.js';
+export { adjudicateBridgeEntry, adjudicateCatalog } from './bridges/membership.js';
+export { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS } from './bridges/rejected.js';
+export type { BridgeVerdict, CatalogAdjudicationReport } from './bridges/membership.js';
+export type { RejectedBridgeAdjudication } from './bridges/rejected.js';
 
 // v0.8.0 — GW170817 → BE-36 real-data confrontation (G-3)
 
@@ -542,6 +535,7 @@ export type {
   RetrodictionOutcome,
   RetrodictionPrediction,
   RetrodictionResult,
+  RetrodictionRefusal,
   RetrodictionReport,
   RetrodictionOptions,
 } from './composition/index.js';

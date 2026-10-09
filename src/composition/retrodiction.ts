@@ -80,14 +80,14 @@ export interface RetrodictionOptions {
   readonly referenceTolerance?: number;
 }
 
-/** The result of retrodicting one node. @public */
-/** One refused edge in a retrodiction, with the kind of refusal. @internal */
+/** One refused edge in a retrodiction, with the kind of refusal. @public */
 export interface RetrodictionRefusal {
   readonly edge: string;
   readonly kind: 'domain' | 'coefficient-unset';
   readonly reason: string;
 }
 
+/** The result of retrodicting one node. @public */
 export interface RetrodictionResult {
   readonly target: string;
   readonly outcome: RetrodictionOutcome;

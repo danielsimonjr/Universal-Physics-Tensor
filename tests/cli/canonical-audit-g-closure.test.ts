@@ -1,11 +1,13 @@
 /**
  * A G-closure of an atomic law is not a derived prefactor.
  *
- * `upt audit --source=canonical` listed CE-rydberg-energy, the Bohr radius,
+ * `upt audit --source=canonical` once listed CE-rydberg-energy, the Bohr radius,
  * the classical electron radius, and the Bohr magneton as DERIVED with
- * ℏ, c, G and factors from 10^-25 to 10^23. CE-field-energy-density was
- * the same shape at ×1.090e+1 with ℏ, c, e. Stefan–Boltzmann and Wien stay
- * empirical/tuned. Planck–Einstein and de Broglie stay ×2π.
+ * ℏ, c, G and factors from 10^-25 to 10^23, and CE-field-energy-density at
+ * ×1.090e+1 with ℏ, c, e. With ε₀ and m_e in the closure search each derives on
+ * the constants it bakes, with a clean factor; a closure through G stays
+ * spurious. Stefan–Boltzmann and Wien stay empirical/tuned. Planck–Einstein
+ * and de Broglie stay ×2π.
  */
 import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
@@ -26,30 +28,29 @@ async function audit(args: string[]) {
 }
 
 describe('canonical audit G-closures', () => {
-  it('does not list a G-closure or the field-energy stand-in as DERIVED', async () => {
+  it('derives the atomic laws on the constants they bake, never through G', async () => {
+    // Before 2026-10-09 the closure search knew only ℏ, c, G, k_B and e, so these entries
+    // closed on G with factors from 10^-25 to 10^23 and were listed as reconstruction
+    // mismatches (decoys). ε₀ and m_e now join the search, and each derives on its own
+    // constants with its own clean factor. A closure that names G is still spurious.
     const text = await audit([]);
     expect(text.code).toBe(0);
     const derived = text.stdout.split('DIMENSIONAL-RECONSTRUCTION')[0] ?? '';
-    for (const id of SPURIOUS) expect(derived, id).not.toContain(id);
-    expect(text.stdout).toMatch(/CE-stefan-boltzmann\s+\+\[ℏ,c,k_B\]\s+×1\.645e-1\s+\(empirical\/tuned constant\)/);
-    expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.265e\+0\s+\(empirical\/tuned constant\)/);
-    expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
-    expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
-    expect(text.stdout).toMatch(/DERIVED \(72\)/);
-    expect(text.stdout).toMatch(/COEFFICIENT UNSET \(6\)/);
-    // Hawking, light deflection, perihelion, and Bekenstein–Hawking were OPEN
-    // because a null monomial evaluated to NaN, so the audit had no samples.
-    // The evaluator is the AST. The only closure the search accepts does not
-    // reproduce it. The point-charge field is the same shape once its
-    // evaluator multiplies 1/(4π): the closure does not reproduce that factor.
-    // Those five are DECOY and OPEN is 19.
-    expect(text.stdout).toMatch(/DECOY, 12\)/);
-    expect(text.stdout).toMatch(
-      /CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-bekenstein-hawking/,
-    );
-    expect(text.stdout).toMatch(/OPEN \(19\)/);
-    const decoy = text.stdout.split('OPEN (')[0] ?? '';
-    for (const id of SPURIOUS) expect(decoy, id).toContain(id);
+    expect(derived).toMatch(/CE-classical-electron-radius\s+\+\[c,e,epsilon_0,m_e\]\s+×0\.0795774715459477$/m);
+    expect(derived).toMatch(/CE-bohr-magneton\s+\+\[ℏ,e,m_e\]\s+×0\.5$/m);
+    expect(derived).toMatch(/CE-bohr-radius\s+\+\[ℏ,e,epsilon_0,m_e\]\s+×12\.5663706143592$/m);
+    expect(derived).toMatch(/CE-field-energy-density\s+\+\[epsilon_0\]\s+×0\.5$/m);
+    for (const id of SPURIOUS) expect(derived, id).not.toMatch(new RegExp(`${id}\\s+\\+\\[[^\\]]*\\bG\\b`));
+    expect(text.stdout).toMatch(/CE-stefan-boltzmann\s+\+\[ℏ,c,k_B\]\s+×0\.164493406679472\s+\(empirical\/tuned constant\)/);
+    expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.26546641497325\s+\(empirical\/tuned constant\)/);
+    expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.28318530717959$/m);
+    expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.28318530717959$/m);
+    // Hawking, light deflection, perihelion and Bekenstein–Hawking: the only closure the search
+    // accepts does not reproduce the evaluator, so they stay DECOY; the Rydberg energy's
+    // 1/(32π²) is not a recognized factor and it stays there too.
+    const decoy = text.stdout.split('OPEN (')[0]?.split('DIMENSIONAL-RECONSTRUCTION')[1] ?? '';
+    expect(decoy).toMatch(/CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-bekenstein-hawking/);
+    expect(decoy).toContain('CE-rydberg-energy');
   });
 
   it('keeps the catalog empirical scale of be-48', async () => {

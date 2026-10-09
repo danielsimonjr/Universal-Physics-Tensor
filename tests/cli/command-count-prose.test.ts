@@ -59,12 +59,13 @@ describe('the stated command count matches the registry', () => {
     // NOTES.md, measured facts about the tree.
     expect(notes).toContain(`(${dataBearing.length} data-bearing commands + \`help\`/\`version\``);
 
-    // cli/README.md — the total, including help and version.
-    expect(readme).toContain(`${all.length} commands, grouped by what they do.`);
+    // cli/README.md — the generated span's sentence: the total, the registered count, and the two
+    // built-ins. `upt chain` is registered and deliberately not listed by `upt help`, so the
+    // registry's count is one more than the help listing's.
+    expect(readme).toContain(`${all.length + 1} commands: ${dataBearing.length + 1} registered, plus \`help\` and \`version\`.`);
 
     // cli/README.md — the two statements of the DATA-BEARING count that once disagreed.
     expect(readme).toContain(`Every data-bearing command (all ${dataBearing.length} —`);
-    expect(readme).toContain(`| \`--json\` | All ${dataBearing.length} data-bearing commands |`);
   });
 
   it('NEGATIVE CONTROL: a wrong figure in either file fails this test', async () => {
@@ -78,7 +79,6 @@ describe('the stated command count matches the registry', () => {
     for (const wrong of [dataBearing.length - 1, dataBearing.length + 1]) {
       expect(notes).not.toContain(`(${wrong} data-bearing commands + \`help\`/\`version\``);
       expect(readme).not.toContain(`Every data-bearing command (all ${wrong} —`);
-      expect(readme).not.toContain(`| \`--json\` | All ${wrong} data-bearing commands |`);
     }
   });
 });

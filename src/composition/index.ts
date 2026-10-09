@@ -82,6 +82,7 @@ export type {
   RetrodictionOutcome,
   RetrodictionPrediction,
   RetrodictionResult,
+  RetrodictionRefusal,
   RetrodictionReport,
   RetrodictionOptions,
 } from './retrodiction.js';

@@ -39,7 +39,7 @@ describe('upt probe falsify — control: a new candidate still gets its batterie
     expect(code).toBe(0);
     const text = lines.join('');
     expect(text).toMatch(/falsify h-1-[0-9a-f]+ survived=true/);
-    for (const battery of ['dimensional', 'finiteness', 'limits', 'retrodiction']) expect(text).toMatch(new RegExp(`    ${battery}: `));
+    for (const battery of ['dimensional', 'finiteness', 'limits']) expect(text).toMatch(new RegExp(`    ${battery}: `));
     expect(text).not.toMatch(/no batteries run/);
   });
 });

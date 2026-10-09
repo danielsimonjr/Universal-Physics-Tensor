@@ -268,7 +268,7 @@ export class CompositionAliasError extends Error {
  * where a cross-family chain applies). An edge with no relation overlay and no
  * regime composes exactly as it did before Atlas Phase 1.
  *
- * `@internal`, not `@public`: nothing atlas-related joins the published
+ * Internal, not public: nothing atlas-related joins the published
  * surface before ROADMAP Phase 6. It is reachable from the
  * `src/composition/index.ts` barrel, which is what internal consumers and
  * tests use. Promoting it is a public-surface change and goes through

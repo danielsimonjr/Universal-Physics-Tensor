@@ -64,9 +64,10 @@ describe('a symbolic exponent on a dimensionless base is legal (issue 486)', () 
     expect(r.text).not.toMatch(/exponent must be a numeric constant/);
   });
   it('a dimensionful base with a symbolic exponent is still refused, in a framed report (control)', async () => {
-    const r = await cli(['derive', 'x:length', 'y:dimensionless', '--formula', 'x^y']);
+    // The target is the first spec and is not a formula symbol, so x and y are declared after z.
+    const r = await cli(['derive', 'z:dimensionless', 'x:length', 'y:dimensionless', '--formula', 'x^y']);
     expect(r.code).not.toBe(0);
-    expect(r.text).toMatch(/dimensionless/);
+    expect(r.text).toMatch(/exponent must be a numeric literal symbol unless the base is dimensionless/);
   });
   it('the Stefan-Boltzmann flux derives with sigma_sb', async () => {
     const r = await cli(['derive', 'q:power/area', 'T:temperature', 'sig:sigma_sb', '--formula', 'sig*T^4']);

@@ -38,13 +38,16 @@ describe('a declared hyphenated name is one symbol in upt derive --formula', () 
         'mass:mass',
         'n:L^-3',
         '--formula',
-        '(reduced-planck-constant^2/(2*mass))*(3*pi^2*n)^(2/3)',
+        // `carrier-density` is not declared and is not a constant's spelling, so its hyphens are
+        // subtractions (a constant's hyphenated spelling, such as reduced-planck-constant, is the
+        // constant itself and is not this case).
+        '(hbar^2/(2*mass))*(3*pi^2*carrier-density)^(2/3)',
       ],
       cap.io,
     );
     const out = allText(cap);
     expect(code, out).not.toBe(0);
-    expect(out).toMatch(/undeclared symbol 'reduced'/);
+    expect(out).toMatch(/undeclared symbol 'carrier'/);
     expect(out).toMatch(/hyphen between names is subtraction/);
   });
 });

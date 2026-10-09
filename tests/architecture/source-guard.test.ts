@@ -36,6 +36,8 @@ const FILE_NAME = [
 ];
 
 const IDENTIFIER = /\b(BE\d+|confrontBE\d+|evaluateBE\d+)\b/g;
+/** A single- or double-quoted string, or a template literal with no `${`; replaced before the identifier scan. */
+const STRING_LITERAL = /'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"|`(?:[^`$]|\$(?!\{))*`/g;
 
 export function filenameOffender(name: string): boolean {
   return FILE_NAME.some((pattern) => pattern.test(name));
@@ -149,7 +151,9 @@ describe('source guard', () => {
   it('no code file outside the loader carries a BE-keyed identifier', () => {
     const hits: string[] = [];
     for (const rel of codeFiles()) {
-      const text = readFileSync(join(root, rel), 'utf8');
+      // An identifier, not a string literal: a test that lists a removed export by name as a
+      // string ("confrontBE52" in an ABSENT list) does not carry the identifier.
+      const text = readFileSync(join(root, rel), 'utf8').replace(STRING_LITERAL, "''");
       const found = text.match(IDENTIFIER);
       if (found) hits.push(`${rel}: ${found.join(', ')}`);
     }

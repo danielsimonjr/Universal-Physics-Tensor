@@ -51,7 +51,7 @@ describe('upt derive --formula — the canonical comparison', () => {
     const t = await text([
       'derive', 'period:time', 'length:length', 'gravity:acceleration', '--formula', 'pi*sqrt(length/gravity)',
     ], 3);
-    expect(t).toMatch(/formula MATCHES the dimensional form — recovered prefactor ≈ 3\.1416e\+0/);
+    expect(t).toMatch(/formula MATCHES the dimensional form — recovered prefactor ≈ 3\.14159265358979/);
     expect(t).toMatch(/⚠ differs from CE-pendulum-period \(Pendulum period\) by a constant factor: yours\/canonical = 0\.500000/);
   });
 });
@@ -130,14 +130,14 @@ describe('W1: speed-of-light must not disable the E=mc² prefactor check', () =>
   it('map: E = 2 m speed_of_light² differs by the factor 2 and exits 3', async () => {
     const t = await text(['map', '--equation', 'rest_energy = 2*mass*speed_of_light^2'], 3);
     expect(t).toMatch(
-      /⚠ differs from CE-mass-energy \(Mass–energy equivalence; your speed-of-light as its c, paired by dimension\) by a constant factor: yours\/canonical = 2\.00000/,
+      /⚠ differs from CE-mass-energy \(Mass–energy equivalence\) by a constant factor: yours\/canonical = 2\.00000/,
     );
   });
 
   it('map: E = m speed_of_light² agrees', async () => {
     const t = await text(['map', '--equation', 'rest_energy = mass*speed_of_light^2']);
     expect(t).toMatch(
-      /✓ agrees with CE-mass-energy \(Mass–energy equivalence; your speed-of-light as its c, paired by dimension\)/,
+      /✓ agrees with CE-mass-energy \(Mass–energy equivalence\)/,
     );
   });
 
