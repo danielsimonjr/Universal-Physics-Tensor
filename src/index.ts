@@ -531,6 +531,7 @@ export type {
 // Retrodiction harness (the framework's own falsification benchmark —
 // Consequence 2 of the bridge-inference epistemics note)
 export { retrodict, retrodictNode } from './composition/index.js';
+/** The retrodiction harness's result, prediction, refusal, report and option types. */
 export type {
   RetrodictionOutcome,
   RetrodictionPrediction,
@@ -769,8 +770,11 @@ export * as atlas from './atlas/public.js';
 // a package.json subpath; the names below were reachable only through the
 // public declarations that mention them.
 // ---------------------------------------------------------------------------
+/** The base class of every error this package throws. */
 export type { UPTError } from './dimensional/errors.js';
+/** Which constants a natural-unit evaluation sets to one. */
 export type { UnitMode } from './dimensional/natural-units.js';
+/** The tensor and curvature node family of the dimensional AST. */
 export type {
   Variance,
   Role,
@@ -789,13 +793,21 @@ export type {
   StressEnergyTensorNode,
   CosmologicalConstantNode,
 } from './dimensional/ast-types.js';
+/** The kind of a flux rule. */
 export type { FluxRuleKind } from './core/flux-rules.js';
+/** The per-axis value tables of the core axis registry. */
 export type { ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes } from './core/axes-registry.js';
+/** The convenience form a regime registration accepts for an axis. */
 export type { AxisConvenience } from './core/regime-registry.js';
+/** The named inputs of the four bridge differentiation specs. */
 export type { ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput } from './diff/bridge-specs.js';
+/** The contraction and free-axis records an einsum plan is made of. */
 export type { EinsumContraction, EinsumFreeAxis } from './numerical/tensor-engine.js';
+/** The callbacks a Killing-equation check takes: the vector field, the metric and the connection. */
 export type { KillingFn, KillingMetricFn, ChristoffelAtFn } from './numerical/killing.js';
+/** A relation's input contract and the sign and unit conventions it states. */
 export type { RelationContract, Conventions } from './relations/types.js';
+/** The classification axes of the composition registry. */
 export type {
   ScaleAxis,
   ForceAxis,
@@ -804,11 +816,19 @@ export type {
   TopologyAxis,
   StatisticsAxis,
 } from './composition/axes.js';
+/** Options of the chain enumerator. */
 export type { EnumerationOptions } from './composition/enumerate.js';
+/** Options of the uncertainty propagation. */
 export type { UncertaintyOptions } from './composition/uncertainty.js';
+/** Options of a user-equation analysis and the short form of a binding. */
 export type { AnalyzeUserEquationOptions, ShortBinding } from './composition/user-equation.js';
+/** A constant as the canonical graph declares it. */
 export type { ConstantDef } from './composition/canonical-graph.js';
+/** An identity consequence the surfacer proposes; never written to the catalog. */
 export type { ProposedBridge } from './composition/proposed-bridges.js';
+/** Options of the discovery funnel. */
 export type { DiscoveryOptions } from './composition/discovery.js';
+/** A representative value of a quantity with its source. */
 export type { RepresentativeValue } from './composition/representative-values.js';
+/** A canonical prefactor, scalar or per dimensionless group, with its source. */
 export type { SourcedPrefactor, SourcedGroupPrefactor } from './canonical/canonical-equation.js';

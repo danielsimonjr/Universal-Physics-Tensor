@@ -78,6 +78,7 @@ export {
   forwardClosure,
 } from './identifiability.js';
 
+/** The retrodiction harness's result, prediction, refusal, report and option types. */
 export type {
   RetrodictionOutcome,
   RetrodictionPrediction,

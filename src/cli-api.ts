@@ -96,6 +96,7 @@ export type { EvaluatorSpec, EvaluatorParameter } from './bridges/evaluators.js'
 export { resolveEvaluatorInputs } from './bridges/evaluator-inputs.js';
 export { APPLIED_CASES, runAppliedCase } from './cases/index.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
+/** The unit reader's conversion, its refusal and the rows of the unit table. */
 export { convertValue, UnitError, unitRows } from './dimensional/units.js';
 export { auditAxisDiscrimination } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';

@@ -175,6 +175,7 @@ export function derivedUnitOf(dim: Dimension, units: readonly CoherentUnit[]): s
   return named === undefined ? siUnitOf(dim) : named.name;
 }
 
+/** The SI base-unit form of a dimension (`m/s`, `kg*m^2/(s^3*A)`), `1` when dimensionless. */
 export function siUnitOf(dim: Dimension): string {
   const factor = (u: string, e: number): string => (e === 1 ? u : `${u}^${e}`);
   const num = SI_BASE.filter(([k]) => dim[k] > 0).map(([k, u]) => factor(u, dim[k]));

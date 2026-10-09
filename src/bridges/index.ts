@@ -8,6 +8,7 @@
 import type { BridgeEquationEntry } from './types.js';
 import { catalogEntries } from './catalog-load.js';
 
+/** The catalog row and its status, issue and severity unions. */
 export type {
   BridgeEquationEntry,
   BridgeEquationStatus,

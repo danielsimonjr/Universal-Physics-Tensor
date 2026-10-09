@@ -41,6 +41,7 @@ export type {
   FormalRefKind,
   NormTransport,
 } from './types.js';
+/** Thrown by a bound whose `deltaAt`, `horizonHolds` or Lipschitz constant is missing. */
 export { MissingDeltaAtError, MissingHorizonError, MissingLipschitzError } from './types.js';
 export { ALL_EVIDENCE_TAGS } from './types.js';
 
