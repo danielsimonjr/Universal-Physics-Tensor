@@ -198,8 +198,9 @@ Key rules:
 ## §X.7 Lowering status
 
 Every `ExprNode` union member of §X.2–§X.5 has numerical lowering in
-`src/numerical/` (reference engine: `Float64ReferenceEngine`; optional
-`MathTSEngine` via the subpath import). The §X.6 predicate families are
+`src/numerical/` (the engine is `MathTSEngine`, reached through
+`getActiveEngine()` or the `universal-physics-tensor/numerical/mathts-engine`
+subpath; the MathTS packages are required dependencies). The §X.6 predicate families are
 **symbolically validated only** — their numerical content lives in the
 catalog expression, evaluated by `evaluateRelation`, which is
 deliberate: the predicates pin structure and dimensions; bridges own the

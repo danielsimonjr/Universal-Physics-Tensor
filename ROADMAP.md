@@ -58,7 +58,7 @@ The inventory, so no phase rebuilds what exists:
 | Association layer (shared constants, symbols, history), never counted as a bridge | `docs/research/` repeatedly finds that cross-cluster links are dimensional coincidences; `upt discover` axis-clash gate rejects them | The finding exists as research prose and funnel verdicts, not as a typed `Association` record distinct from `BridgeEdge`. |
 | Authority rule: rules, search, LLMs propose; only independent validation promotes | The firewall: no machine verdict mutates `BRIDGE_EQUATIONS` or `CANONICAL_EQUATIONS`; `proposed-bridges.ts` is `'unadjudicated'`; Product B candidates are `h-*` with an append-only status history | Already the house rule. Keep it. |
 | Explorer with filters by relation type and evidence tag | `upt map --format=mermaid\|dot\|svg`, `--source`, `--proposed` | Filters by source and status only. |
-| Storage: one record per file in git, generated graph views | `src/bridges/equations/*.ts`, `src/canonical/entries/*.ts`, `data/bridge-catalog.json` + schema | Same shape. The catalog JSON is generated from TS, which is the proposal's "generated, not authoritative" view. |
+| Storage: one record per file in git, generated graph views | `data/bridge-catalog.json` is the catalog record, checked against `data/bridge-catalog.schema.json` at load; `src/canonical/entries/*.ts` hold the canonical equations; the graph views are generated from them | One JSON file holds every catalog record rather than one record per file. `CATALOG_GRAPH` and the evaluators are projections of that file, not a second source. |
 | Formal layer (Lean 4 / Physlib links) | None | Nothing links to a checked statement. |
 | Invalid-bridge benchmark, independently authored, κ-reported | `tests/composition/discovery-calibration.test.ts` (Product A's Family A pins), Family B fixtures under `tests/fixtures/discovery/` (five cases) | Both benchmark families test *identification* and *expression search*. Neither tests relation-type validity or the eight failure kinds. |
 | Pilot: oscillator family, five relation types | `CE-simple-harmonic-frequency`, `CE-lc-resonance`, `CE-oscillator-energy`, `CE-spring-potential-energy` in the canonical registry | The equations exist as L-layer laws. The spring↔LC bridge, its damping side condition, the cubic-spring rejection, the singular m→0 limit, and the chain→wave coarse-graining do not. |
@@ -132,8 +132,8 @@ following are binding (from `CLAUDE.md` and the discovery plan's second audit):
 
 | Proposal says | UPT does instead | Why |
 |---|---|---|
-| SymPy, NumPy/SciPy, `verify_pilot.py` | Vitest witnesses in TypeScript; symbolic checks via the optional `@danielsimonjr/mathts-expression` peer with graceful degradation to `unresolved` | No Python in the codebase; zero hard deps. |
-| YAML records, one per file | TypeScript modules (as `src/canonical/entries/`, `src/bridges/equations/`) with a generated JSON export + JSON Schema under `data/` | That is the existing authoritative-source / generated-view split; YAML adds a parser dependency. |
+| SymPy, NumPy/SciPy, `verify_pilot.py` | Vitest witnesses in TypeScript; symbolic checks via `@danielsimonjr/mathts-expression` (a required dependency), reporting `unresolved` when the simplifier cannot reduce a difference | No Python in the codebase. |
+| YAML records, one per file | One schema-checked JSON record for the catalog (`data/bridge-catalog.json` with its JSON Schema under `data/`); TypeScript modules under `src/canonical/entries/` for the canonical equations | A schema-checked data file is already the record; YAML adds a parser dependency. |
 | Lean 4 + Physlib in the toolchain; "≥5 formal proofs with no holes" | A `formalRef` field pointing at an external checked statement, with a statement-fidelity flag; no proof assistant in-tree | Out-of-tree tooling is the rule for every backend (discovery plan §10–11). Whether a proof "has no holes" is verified where the proof lives. UPT records the reference and the fidelity review, not the proof. |
 | Property-graph / RDF view, explorer web pages | `upt map` extensions and CLI reports; RDF/JSON-LD as an *export* only | In-package UI is parked in `Future-Production-Hardening.md`; no interactive viz here. |
 | Frontier-LLM baselines with a CAS tool | Run out of process; results land in `docs/research/` with the reproducer command | Untrusted external engines are plugins, never in-tree. |
@@ -486,7 +486,7 @@ record of the run that happened. The remaining engineering item is the public-AP
 
 ## 7. Phase status
 
-**UPT is DONE (owner, 2026-09-24; pre-registration Amendment 12).** DONE means that every criterion below is MEASURED and REPORTED: MET, NOT MET, amended or deferred. It does not mean that every criterion is met. Study criteria 2 and 3 are NOT MET, and they are the findings of the run that happened. On 2026-10-01 the owner dropped the human-dependent studies and removed the human-reviewer gates. Those gates are not open criteria. The harness stays.
+**UPT is DONE (owner, 2026-09-24; pre-registration Amendment 12).** DONE means that every criterion below is MEASURED and REPORTED: MET, NOT MET, amended or deferred. It does not mean that every criterion is met. Study criteria 2 and 3 are NOT MET, and they are the findings of the run that happened. On 2026-10-01 the owner dropped the two study gates (the human-dependent studies); those gates are not open criteria, and the harness stays. That decision did not remove review of changes: the standing review rule is in [`ACTIVE.md`](ACTIVE.md).
 
 | Phase | Status | Pointer |
 |---|---|---|
@@ -522,5 +522,5 @@ Subagent-driven execution plan for all seven phases:
 Related programs already recorded elsewhere and not restated here: the Product B
 expression/residual search (`Scientific-Bridge-Discovery-v1.md`, phases 0A–12, Product B
 shipped experimentally in v0.44.2, 2026-08-25), the v0.7 proposal set (`docs/planning/UPT v0.70 -
-Proposals.md`, P1–P3/P5/P8 shipped, P4 and P7 pending peers, P6 phases B–D awaiting an owner ruling on whether they are open or met), and the
+Proposals.md`, P1–P3/P5/P8 shipped, P4 and P7 pending peers, P6: Phase B's compose operator shipped as `composeEdges`, and whether phases C–D are met is the open owner decision in `ACTIVE.md`), and the
 parking lot in `Future-Production-Hardening.md`.

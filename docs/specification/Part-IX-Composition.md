@@ -83,10 +83,14 @@ Spivak (2019):
   too coarse — different cascades through ostensibly-equivalent
   intermediate regimes give different answers.
 
-## 4. Cascade-evaluation contract (deferred to Phase B)
+## 4. Cascade-evaluation contract
 
-Phase B will ship a `compose(B_A, B_B): CompositeBridge` operator
-in `src/composition/compose.ts`. Per Adam-F2, the precondition
+Phase B's compose operator shipped: `composeEdges(first, second)` in
+`src/composition/compose.ts` chains two typed `BridgeEdge`s through a
+shared quantity, with a dimensional check at the junction. Whether
+phases C–D are met is the open owner decision in `ACTIVE.md`. The
+rest of this section is the Phase A contract as it was written, before
+that operator existed. Per Adam-F2, the precondition
 is a shared `Observable` contract on bridge outputs that does NOT
 yet exist at HEAD. The existing evaluators
 (`evaluatePerihelionPrecession`, `evaluateGravitationalLensing`,
@@ -102,8 +106,8 @@ operator requires either:
 - (c) A purely numerical cascade on rank-1 tensors (treat each
   bridge as `numbers → numbers`, lose all type safety).
 
-Phase B will choose between (a) and (b) — the design of that
-choice IS Phase B's deliverable.
+Phase B was to choose between (a) and (b); the design it chose is
+`docs/planning/v0.8.0-Design.md`.
 
 ## 5. Calibration set (Phase B target, named here per Decision #3)
 
