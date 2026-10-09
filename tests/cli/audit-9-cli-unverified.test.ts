@@ -372,6 +372,30 @@ describe('discover: a bad value is exit 1, a unit is checked against the quantit
   });
 });
 
+describe('text mode: a heading over an empty list says none, and no line is indentation alone', () => {
+  const WHITESPACE_ONLY = /^[ \t]+$/;
+  const blankIndents = (text: string): string[] => text.split('\n').filter((l) => WHITESPACE_ONLY.test(l));
+
+  it('CONTROL: the scan sees an indent-only line and passes a line with content or a truly empty one', () => {
+    expect(blankIndents('  heading:\n    \n')).toEqual(['    ']);
+    expect(blankIndents('  heading:\n    none\n\n')).toEqual([]);
+  });
+
+  it('audit: the empty sections (COEFFICIENT UNSET (0) on the catalog) print none', async () => {
+    const r = await run(['audit']);
+    expect(r.code).toBe(0);
+    expect(r.out).toMatch(/COEFFICIENT UNSET \(0\)[^\n]*:\n {4}none\n/);
+    expect(blankIndents(r.out)).toEqual([]);
+  });
+
+  it('map --around with no isolated edge prints none under the isolated heading', async () => {
+    const r = await run(['map', '--around=temperature', '--depth=2', '--source=catalog']);
+    expect(r.code).toBe(0);
+    expect(r.out).toMatch(/isolated \(0\)[^\n]*:\n {5}none\n/);
+    expect(blankIndents(r.out)).toEqual([]);
+  });
+});
+
 describe('evaluate of a case: text mode does not speak JSON', () => {
   it('an output that needs an optional input is described without the word null', async () => {
     // No h_m: the wall outputs are undefined here, and their meanings used to end "; null without h_m".
@@ -383,6 +407,18 @@ describe('evaluate of a case: text mode does not speak JSON', () => {
     expect(r.out).toMatch(/D_parallel_m2_per_s = undefined here/);
     expect(r.out).toMatch(/not defined without h_m/);
     expect(r.out).not.toMatch(/\bnull\b/);
+  });
+
+  it('no case prints the word null on its own example, nor lists it in the case listing', async () => {
+    const listing = await run(['evaluate']);
+    expect(listing.out).not.toMatch(/\bnull\b/);
+    const examples = [...listing.out.matchAll(/^ {6}e\.g\. upt evaluate (case-\S+) (.*)$/gm)];
+    expect(examples.length).toBeGreaterThanOrEqual(6);
+    for (const [, id, rest] of examples) {
+      const r = await run(['evaluate', id!, ...rest!.split(' ')]);
+      expect([0, 3], `${id} exits 0, or 3 when its regime check fails`).toContain(r.code);
+      expect(r.out, id).not.toMatch(/\bnull\b/);
+    }
   });
 });
 

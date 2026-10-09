@@ -782,7 +782,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
     out(`     link hubs: ${c.hubs.join(', ')}\n`);
   }
   out(`  ○ isolated (${m.isolated.length}) — share no quantity with any other edge:`);
-  out(`     ${m.isolated.join(', ')}`);
+  out(`     ${m.isolated.length === 0 ? 'none' : m.isolated.join(', ')}`);
   out('\n  (a structural map — shared-quantity connectivity, NOT a credibility signal)');
   return exitCode;
 }
