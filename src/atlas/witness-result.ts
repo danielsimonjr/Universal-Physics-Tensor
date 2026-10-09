@@ -49,7 +49,13 @@ export type UnresolvedReason =
   /** The check ran to completion and neither confirmed nor refuted. */
   | 'not-simplified'
   /** Refinement did not improve the answer, so nothing is concluded. */
-  | 'no-convergence';
+  | 'no-convergence'
+  /**
+   * Both resolutions hit the target exactly, so there was no error for
+   * refinement to reduce and convergence cannot be shown. Not a failure of
+   * the scheme and not a demonstration of it.
+   */
+  | 'no-error-to-reduce';
 
 /** What one witness run produced. @internal */
 export interface WitnessRunResult {

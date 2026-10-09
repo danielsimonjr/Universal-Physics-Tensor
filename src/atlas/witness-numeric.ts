@@ -38,8 +38,10 @@ export interface Convergence {
   readonly fine: number;
   /**
    * `coarse / fine`. Greater than 1 ⇒ refinement helped. `Infinity` when the
-   * fine error is exactly zero, which is a legitimate outcome for an exact
-   * scheme and must not be reported as a failure.
+   * fine error is exactly zero and the coarse one is not, which is a
+   * legitimate outcome for an exact scheme and must not be reported as a
+   * failure. `NaN` when BOTH errors are exactly zero: `0/0` has no value,
+   * and the run is `'unresolved'` with reason `'no-error-to-reduce'`.
    */
   readonly ratio: number;
 }
@@ -54,14 +56,16 @@ export interface NumericWitnessSpec {
    * only requires that `fineResolution` is the more refined of the two.
    */
   readonly evaluate: (resolution: number) => number;
-  /** The value the claim should reproduce. */
+  /** The value the claim should reproduce. A non-finite target is `'unresolved'`. */
   readonly target: number;
   readonly coarseResolution: number;
   readonly fineResolution: number;
   /**
    * Absolute tolerance the FINE evaluation must meet. Required: a default
    * tolerance is a claim about accuracy that the caller, not this module,
-   * is entitled to make.
+   * is entitled to make. A tolerance that is not a finite number ≥ 0 is
+   * `'unresolved'`: `fine > NaN` is false, so a NaN here would otherwise
+   * report `'checked'` for any fine value.
    */
   readonly tolerance: number;
 }
@@ -86,6 +90,21 @@ export function runNumericWitness(spec: NumericWitnessSpec): NumericWitnessRunRe
   const started = Date.now();
   const base = { witnessId: spec.id, kind: 'numeric' as const };
   const elapsed = (): number => Date.now() - started;
+
+  // A NaN target or tolerance makes every comparison below false, which
+  // would read as `'checked'`. Nothing is evaluated against a claim that
+  // does not state a finite target and a finite, non-negative tolerance.
+  if (!Number.isFinite(spec.target) || !Number.isFinite(spec.tolerance) || spec.tolerance < 0) {
+    return {
+      ...base,
+      status: 'unresolved',
+      reason: 'parse-error',
+      detail:
+        `The claim does not state a finite target and a finite non-negative tolerance ` +
+        `(target ${spec.target}, tolerance ${spec.tolerance}). Nothing is concluded from it.`,
+      elapsedMs: elapsed(),
+    };
+  }
 
   let coarseValue: number;
   let fineValue: number;
@@ -117,9 +136,23 @@ export function runNumericWitness(spec: NumericWitnessSpec): NumericWitnessRunRe
   const coarse = Math.abs(coarseValue - spec.target);
   const fine = Math.abs(fineValue - spec.target);
   // fine === 0 ⇒ an exact scheme. Infinity is the honest ratio there, and the
-  // comparisons below treat it as "refinement helped", which it did.
-  const ratio = fine === 0 ? (coarse === 0 ? 1 : Infinity) : coarse / fine;
+  // comparisons below treat it as "refinement helped", which it did. Both
+  // zero is 0/0: no ratio exists, and that case is reported on its own below.
+  const ratio = fine === 0 ? (coarse === 0 ? Number.NaN : Infinity) : coarse / fine;
   const convergence: Convergence = { coarse, fine, ratio };
+
+  if (coarse === 0 && fine === 0) {
+    return {
+      ...base,
+      status: 'unresolved',
+      reason: 'no-error-to-reduce',
+      convergence,
+      detail:
+        'Both resolutions reproduce the target exactly, so there was no error for ' +
+        'refinement to reduce. Agreement is recorded; convergence is not shown.',
+      elapsedMs: elapsed(),
+    };
+  }
 
   if (fine > spec.tolerance) {
     return {

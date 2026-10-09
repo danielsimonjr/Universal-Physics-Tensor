@@ -230,6 +230,40 @@ describe('runNumericWitness', () => {
     expect(r.status).toBe('unresolved');
     expect(r.reason).toBe('parse-error');
   });
+
+  it('a NaN target, a NaN tolerance, or a negative tolerance is UNRESOLVED, never checked', () => {
+    const base = { evaluate: firstOrder, coarseResolution: 10, fineResolution: 100 };
+    for (const [id, spec] of [
+      ['N7', { ...base, target: Number.NaN, tolerance: 0.05 }],
+      ['N8', { ...base, target: 1, tolerance: Number.NaN }],
+      ['N9', { ...base, target: 1, tolerance: -0.05 }],
+      ['N10', { ...base, target: Number.POSITIVE_INFINITY, tolerance: 0.05 }],
+    ] as const) {
+      const r = runNumericWitness({ id, ...spec });
+      expect(r.status, id).toBe('unresolved');
+      expect(r.reason, id).toBe('parse-error');
+      expect(r.convergence, id).toBeUndefined();
+    }
+    // The same evaluator with a finite target and tolerance IS checked, so the guard is doing the deciding.
+    expect(runNumericWitness({ id: 'N7c', ...base, target: 1, tolerance: 0.05 }).status).toBe('checked');
+  });
+
+  it('a scheme exact at BOTH resolutions is UNRESOLVED with its own reason, not "refinement did not reduce the error"', () => {
+    const r = runNumericWitness({
+      id: 'N11',
+      evaluate: () => 1,
+      target: 1,
+      coarseResolution: 10,
+      fineResolution: 100,
+      tolerance: 1e-9,
+    });
+    expect(r.status).toBe('unresolved');
+    expect(r.reason).toBe('no-error-to-reduce');
+    expect(r.convergence?.coarse).toBe(0);
+    expect(r.convergence?.fine).toBe(0);
+    expect(r.convergence?.ratio).toBeNaN();
+    expect(r.detail).not.toMatch(/did not reduce/);
+  });
 });
 
 describe('passingWitnessIds', () => {
