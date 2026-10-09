@@ -48,7 +48,7 @@ export class EngineCapabilityError extends NumericalBackendError {
  * Picard convergence is linear with contraction rate ≈ h·|∂f/∂x|; failure
  * usually indicates the step size h is too large for the local curvature.
  * Adaptive step-halving (Task 5) is the production response — direct
- * callers of `solveGL4Stage` should adjust h or picardMaxIter.
+ * callers of `gl4Step` should adjust h or picardMaxIter.
  *
  * @public
  */

@@ -17,9 +17,9 @@
  * p_μ = g_μν dx^ν/dτ — not (x, v). This is what makes the flow symplectic
  * on T*M.
  *
- * This module holds the types, the Butcher constants, the implicit Picard
- * stage solver (`solveGL4Stage`, internal), and the integrator entry point
- * `integrateGeodesicGL4`.
+ * This module holds the types, the Butcher constants, the one-step driver
+ * (`gl4Step`, internal; the implicit Picard stages are MathTS
+ * `gaussLegendre4`'s), and the integrator entry point `integrateGeodesicGL4`.
  *
  * @module numerical/gl4-integrator
  */
@@ -118,22 +118,6 @@ export interface GL4Options {
 }
 
 /**
- * Result of `solveGL4Stage` — the two converged stage values plus the
- * iteration count actually consumed. Consumed by the
- * `integrateGeodesicGL4` step driver.
- *
- * v0.6.1: dropped export — internal-only result shape (was already
- * @internal-tagged but had no external consumer).
- */
-interface StageSolveResult {
-  readonly stageX: readonly [readonly number[], readonly number[]];
-  readonly stageP: readonly [readonly number[], readonly number[]];
-  readonly stageDx: readonly [readonly number[], readonly number[]];
-  readonly stageDp: readonly [readonly number[], readonly number[]];
-  readonly iterations: number;
-}
-
-/**
  * Geodesic Hamiltonian derivative, packed as `y = [x..., p...]`.
  *
  *   dx^μ = g^{μν} p_ν
@@ -141,18 +125,19 @@ interface StageSolveResult {
  *
  * `dg[μ*dim² + ν*dim + ρ] = ∂_μ g^{νρ}`. A coefficient that is exactly 0 is
  * skipped, so `0 * NaN` does not poison a component the term does not enter.
+ * `xBuf` is a reused coordinate buffer of length `dim`; it is the array the
+ * metric closures receive, so it is a plain `number[]` and needs no cast.
  */
 function geodesicDeriv(
   y: readonly number[],
   gInverseFn: (x: readonly number[]) => Float64Array,
   dgInverseFn: (x: readonly number[]) => Float64Array,
-  xBuf: Float64Array,
+  xBuf: number[],
 ): number[] {
   const dim = xBuf.length;
   for (let i = 0; i < dim; i++) xBuf[i] = y[i]!;
-  const coords = xBuf as unknown as readonly number[];
-  const gInv = gInverseFn(coords);
-  const dgInv = dgInverseFn(coords);
+  const gInv = gInverseFn(xBuf);
+  const dgInv = dgInverseFn(xBuf);
   const out = new Array<number>(dim * 2);
   for (let mu = 0; mu < dim; mu++) {
     let dx = 0;
@@ -178,27 +163,39 @@ function geodesicDeriv(
   return out;
 }
 
-interface Gl4Advance {
+/**
+ * The state after one GL4 step, with the Picard iteration count that step
+ * consumed. MathTS `gaussLegendre4` does not expose its two internal stage
+ * values, so this is the advanced state and nothing else.
+ * @internal
+ */
+export interface GL4StepResult {
   readonly x: readonly number[];
   readonly p: readonly number[];
   readonly iterations: number;
 }
 
-/** One GL4 step of the geodesic Hamiltonian, via MathTS `gaussLegendre4`. */
-function advanceGl4(
+/**
+ * One GL4 step of the geodesic Hamiltonian, via MathTS `gaussLegendre4`.
+ * Throws `GL4ConvergenceError` with a message matching
+ * `/Picard iteration did not converge/` when the Picard cap is exhausted;
+ * any other error from the metric closures propagates unchanged.
+ * @internal
+ */
+export function gl4Step(
   state: GL4State,
   h: number,
   gInverseFn: (x: readonly number[]) => Float64Array,
   dgInverseFn: (x: readonly number[]) => Float64Array,
   opts: { picardTol: number; picardMaxIter: number },
-): Gl4Advance {
+): GL4StepResult {
   const dim = state.x.length;
   const y0 = new Array<number>(dim * 2);
   for (let i = 0; i < dim; i++) {
     y0[i] = state.x[i]!;
     y0[dim + i] = state.p[i]!;
   }
-  const xBuf = new Float64Array(dim);
+  const xBuf = new Array<number>(dim).fill(0);
   let solved: ReturnType<typeof gaussLegendre4>;
   try {
     solved = gaussLegendre4(
@@ -220,36 +217,6 @@ function advanceGl4(
     );
   }
   return { x: y1.slice(0, dim), p: y1.slice(dim), iterations };
-}
-
-/**
- * One GL4 step, reported in the stage-result shape the stage tests read.
- *
- * The step itself is MathTS `gaussLegendre4`. In flat space `p` is constant,
- * so both stage momenta equal that advanced `p`. Throws `GL4ConvergenceError`
- * with a message matching `/Picard iteration did not converge/` when the
- * Picard cap is exhausted.
- *
- * @internal
- */
-export function solveGL4Stage(
-  state: GL4State,
-  h: number,
-  gInverseFn: (x: readonly number[]) => Float64Array,
-  dgInverseFn: (x: readonly number[]) => Float64Array,
-  opts: { picardTol: number; picardMaxIter: number },
-): StageSolveResult {
-  const step = advanceGl4(state, h, gInverseFn, dgInverseFn, opts);
-  const dim = step.p.length;
-  const zeros = new Array<number>(dim).fill(0);
-  // In flat space p is constant, so both stage momenta equal the advanced p.
-  return {
-    stageX: [step.x.slice(), step.x.slice()],
-    stageP: [step.p.slice(), step.p.slice()],
-    stageDx: [zeros, zeros.slice()],
-    stageDp: [zeros.slice(), zeros.slice()],
-    iterations: step.iterations,
-  };
 }
 
 // ---------------------------------------------------------------------------
@@ -301,10 +268,11 @@ export function solveGL4Stage(
  * @param initialState — canonical (x, p) at τ = 0. Units follow the
  *   `gInverseFn` convention (see above).
  * @param options — see {@link GL4Options}:
- *   - `steps` — integer step count (dimensionless).
- *   - `tauMax` — affine-parameter extent (seconds in canonical SI).
- *   - `gInverseFn(x)[μ][ν]` — inverse metric g^{μν}(x).
- *   - `dgInverseFn(x)[λ][μ][ν]` — ∂_λ g^{μν}(x).
+ *   - `steps` — positive integer step count (dimensionless).
+ *   - `tauMax` — positive finite affine-parameter extent (seconds in
+ *     canonical SI). The integrator runs forward from τ = 0 only.
+ *   - `gInverseFn(x)[μ*dim + ν]` — inverse metric g^{μν}(x), row-major flat.
+ *   - `dgInverseFn(x)[λ*dim² + μ*dim + ν]` — ∂_λ g^{μν}(x), flat.
  *   - `picardTol` — convergence tolerance (dimensionless, default 1e-12).
  *   - `picardMaxIter` — fixed-point iteration cap (dimensionless, default 50).
  *   - `hMin` — step-halving floor (same units as `tauMax / steps`).
@@ -312,8 +280,14 @@ export function solveGL4Stage(
  * @returns `steps + 1` snapshots: index `0` is the initial state, index `n`
  *   is the state after `n` steps (τ = n · h). Each snapshot carries `tau`,
  *   `x`, `p` (and optional `v` = g^{μν} p_ν) in the units chosen above.
- * @throws NumericalBackendError if `initialState.x[1] < domainMinRadius`.
+ * @throws NumericalBackendError if `steps` is not a positive integer, if
+ *   `tauMax` is not a positive finite number, or if
+ *   `initialState.x[1] < domainMinRadius`. The two option checks run before
+ *   any metric evaluation.
  * @throws GL4ConvergenceError if Picard fails even after step-halving to h_min.
+ *   Any other error thrown by `gInverseFn` or `dgInverseFn` (a domain
+ *   crossing the caller signals by throwing, or a programming error) is
+ *   rethrown unchanged; it is not halved away.
  *
  * @public
  */
@@ -333,6 +307,12 @@ export function integrateGeodesicGL4(
     onStep,
   } = options;
 
+  if (!Number.isInteger(steps) || steps <= 0) {
+    throw new NumericalBackendError(`GL4 integrator: steps must be a positive integer, got ${steps}`);
+  }
+  if (!Number.isFinite(tauMax) || tauMax <= 0) {
+    throw new NumericalBackendError(`GL4 integrator: tauMax must be a positive finite number, got ${tauMax}`);
+  }
   if (domainMinRadius !== undefined && initialState.x[1] < domainMinRadius) {
     throw new NumericalBackendError(
       `GL4 integrator: initial r=${initialState.x[1]} < domainMinRadius=${domainMinRadius} (domain violation)`,
@@ -341,11 +321,9 @@ export function integrateGeodesicGL4(
 
   const h = tauMax / steps;
   const hFloor = hMin ?? h * 1e-9;
-  const snapshots: GL4Snapshot[] = [
-    { tau: 0, x: initialState.x.slice() as number[], p: initialState.p.slice() as number[] },
-  ];
-  let x = initialState.x.slice() as number[];
-  let p = initialState.p.slice() as number[];
+  const snapshots: GL4Snapshot[] = [{ tau: 0, x: initialState.x.slice(), p: initialState.p.slice() }];
+  let x = initialState.x.slice();
+  let p = initialState.p.slice();
 
   const stateDim = x.length;
   let newX = new Array<number>(stateDim);
@@ -367,18 +345,21 @@ export function integrateGeodesicGL4(
     const remainEps = h * 1e-12;
     while (remaining > remainEps) {
       const trialH = Math.min(stepH, remaining);
-      let advanced: Gl4Advance | undefined;
+      let advanced: GL4StepResult | undefined;
       let stepSucceeded = false;
       let subH = trialH;
       while (subH >= hFloor) {
         try {
-          advanced = advanceGl4({ x, p }, subH, gInverseFn, dgInverseFn, {
+          advanced = gl4Step({ x, p }, subH, gInverseFn, dgInverseFn, {
             picardTol,
             picardMaxIter,
           });
           stepSucceeded = true;
           break;
-        } catch {
+        } catch (err) {
+          // Only a Picard failure is a reason to halve. A throw from the metric
+          // closures (a domain crossing the caller signals, or a bug) is that error.
+          if (!(err instanceof GL4ConvergenceError)) throw err;
           subH /= 2;
           halvings++;
         }
