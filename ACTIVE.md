@@ -25,6 +25,38 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
   Plan: `package.json` 9.0.0, the catalog `packageVersion` with it, and the version test reading the newest CHANGELOG heading instead of a literal; one `## [9.0.0] - 2026-10-08` entry stating the final behaviour, with every break and its migration; this file and the persona README corrected; the discovery equivalence test replaced by the two facts it stood for (the context build is a function of its inputs, and vetting does not mutate it) plus a check of the closure skip it never exercised.
   Not done here, by rule: the merge, the `v9.0.0` tag and the npm publish wait for Tom's review and the owner. Awaiting owner confirmation: the #495 Bernoulli re-pin authorization.
 
+- [ ] Core, dimensional, numerical and diff defects from the 9.0.0 audit (§2 of `docs/audit/2026-10-09-codebase-audit-9.0.0.md`).
+  The audit found a bare `catch {}` in the GL4 integrator, a negative `tauMax` accepted, `bridgeGradient` throwing for every spec, a glued-exponent regex corrupting `mu0*length`, `1/s` unparsable, a public type referencing an unexported one, three scalar-function tables, and the lows and stale comments listed there.
+  Plan: one PR; each defect gets a test proved red on the unmutated tree before the fix; the duplicated curvature stack in `spacetime-metrics.ts` routes through the one in `numerical/`; the three function tables become one.
+
+- [ ] Bridges and catalog data: one confidence per entry, constants that an input cannot override, references that can fail (§3 of the audit).
+  `be-37` carries `status: speculative` beside `relation.confidence: established`; a caller key named `G` overrides the constant on the graph path; 71 golden references evaluate at all-ones or zero inputs; `registry.ts` is dead; 91 catalog notes cite files removed at 8.0.0; the schema accepts free strings where the types are unions.
+  Plan: one PR; the catalog schema and loader refuse a confidence that disagrees with the status, constants win over inputs on every path, every golden reference has a non-unit input, dead fields and modules go, and the notes name the JSON record.
+
+- [ ] Composition, canonical and relations: `CE-normal-distribution`, the axis gate, the linkage recovery check, and composed edges that keep their regime (§4 of the audit).
+  The normal-distribution AST drops the ½ inside the exponent; the composed-attribute fold carries three of six axes so the anti-inert-metadata gate cannot see the other three; the linkage recovery check scales every variable by one factor and cannot fail; a composed edge drops `regime` and `coefficientUnset`; the forward evaluator swallows every error; seven canonical entries spell constants under unregistered names.
+  Plan: one PR; each fix preceded by its red test; the criterion-3 corpus re-pinned as an amendment for the normal-distribution change; the one unreachable `SOURCE_ALIAS_DISPOSITIONS` row retracted.
+
+- [ ] Atlas: evidence and fidelity derived, never hand-set (§5 of the audit).
+  Every generated PhysJS reference carries `fidelity: 'sanity-lemmas'` though the sanity test covers ten atlas bridges; `AtlasBridge.evidence` is hand-written and published in `data/atlas/*.json` while the derived tag differs on 20 of 20 bridges; the schema declares `evidence` as a string and an array is emitted; a NaN witness is recorded as checked; the formal gate skips structural checks for the 79 keys ahead of the catalog.
+  Plan: one PR; fidelity derived from what checks it; the hand field removed and the atlas JSON regenerated; a NaN witness is its own result; the gate checks every manifest key.
+
+- [ ] CLI: the contract the README states, and a boundary test that can fail (§6 of the audit).
+  The boundary test matches single-line imports only and two command modules import library values across lines; `derive --json` emits a prefactor for a non-matching formula; `search` and `confront` emit an envelope on a non-zero exit; `map --out` is ignored in text mode; `-h` runs the command; a registered example exits 1; `metric kerr --geodesic` fails on its defaults; duplicate inputs take the last value.
+  Plan: one PR; `cli/README.md` regenerated or pruned to what it claims to keep; one number formatter; a test that every registered example exits 0.
+
+- [ ] Tests, hooks and CI: goldens that pin bugs, titles that state wrong counts, a hook that swallows its generator (§7 of the audit).
+  `discover-derive.txt` pins `(undefined)`; twelve files title a count the body contradicts; 48 catalog-count literals are retyped per ingest; the pre-push hook runs `docs:deps || true`; a unit test fetches from GitHub; the coverage generator cannot see tests that import `dist/`; peer-gated controls pass instead of skipping; `GL4_LONG_ORBITS` is never set.
+  Plan: two PRs; first the hook, CI, generator, network test, peer skips, duplicate golden corpus and node floor; then the titles and one catalog-census fixture every count test reads.
+
+- [ ] Documentation re-measured after the 8.0.0 catalog-as-data move (§8 of the audit).
+  README's first example prints a line the CLI no longer prints; the architecture docs, `CONTRIBUTING.md`, `ROADMAP.md`, `cli/README.md` and Part X name `Float64ReferenceEngine`, `src/bridges/equations/`, an optional MathTS peer, and counts from 55 entries; eighteen design docs carry status lines; ten ticked rows in this file name `docs/dogfood/`.
+  Plan: one PR; every sentence that names removed code is struck or re-measured; counts leave hand-written prose; the README bash examples join the README-examples test.
+
+- [ ] Governance records: one fact in one file (§8 of the audit, D3, D4, D6, D8, D12, drift table).
+  `CHANGELOG.md` has two `[Unreleased]` headings and a 780-line stale block; `todo.md`'s role is stated four ways; MEMORY.md's source map names removed directories; NOTES.md holds 101 "record from before" tails with the live state in seven bullets.
+  Plan: one PR with the packages above; one `[Unreleased]`, history under its release, the source map rewritten, `todo.md` named once as the historical ledger, NOTES older than the last release under a Superseded heading.
+
 - [x] A formal-reference kind is written once, in PhysJS, from the Lean file (PR C after #499).
   PhysJS's manifest carried the kind as a hand-typed word at the front of `covers`, and it was wrong for most entries: 197 entries whose Lean header said Bridge had `derivation-step` typed in front, including all 79 from PhysJS #71. UPT kept a second writer to compensate: 96 `formalKind` overrides on catalog entries (95 `bridge`, be-28 `property`), a rule that an `ab-` key is a bridge, and a covers-prefix parser. Nobody overrode be-147 to be-170, so those 24 catalog references reported `derivation-step` and never lit `formally-proved`, while the specification's proof-status blocks for the cross-domain ones said they did.
   Plan: PhysJS schema v2 gives each keyed entry a `kind` field written by one script from the kind line in the Lean module docstring, and a check in PhysJS CI fails on any disagreement (PhysJS PR #73). UPT re-pins to that commit, reads `kind` from the manifest, and deletes the overrides, the `ab-` rule and the prefix parser. The catalog schema refuses undeclared entry fields, so `formalKind` cannot return. A manifest key `be-N` in the unbroken run right after the catalog's highest id is ahead of the catalog: compared and vendored, not a seed and not a gate problem. A missing id inside the catalog's range, or one past a gap, is still a problem. Nested statements carry their own `kind` from a Lean kind line labelled by key and field. That keeps PhysJS's be-171 to be-249 out of this change, as the owner asked.
