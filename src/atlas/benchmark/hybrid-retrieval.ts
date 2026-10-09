@@ -46,7 +46,7 @@ export const ATLAS_ONLY_NOTE = 'Embeddings were not requested. This is the atlas
 
 /** What the caller hears when an embedding order was computed and then not accepted. @internal */
 export const PROPOSAL_NOTE =
-  'The embedding order is a proposal, not evidence and not an acceptance. rankByStructure accepted a separate order. Cosine similarity does not enter that score.';
+  'The embedding order is a proposal, not evidence and not an acceptance. The atlas search accepted a separate order. Cosine similarity does not enter that score.';
 
 const REASON_TEXT = {
   'process-not-there': 'the process is not there',
@@ -230,7 +230,7 @@ function fallbackResult(query: RetrievalQuery, accepted: readonly string[], reas
     fallback: reason,
     proposals: null,
     accepted,
-    note: noteFor(`Embeddings were requested. ${REASON_TEXT[reason]}. This is the atlas search.`, query),
+    note: noteFor(`Embeddings were requested, but they could not be used: ${REASON_TEXT[reason]}. This is the atlas search.`, query),
   };
 }
 

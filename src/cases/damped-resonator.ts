@@ -108,12 +108,12 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
     { key: 'resolution_Hz', symbol: '1/t_obs', unit: 'Hz', meaning: 'frequency resolution of the record' },
     { key: 'linewidth_windowed_Hz', symbol: 'Δf_T', unit: 'Hz', meaning: 'FWHM of the power spectrum of the truncated ring-down (rectangular window, near resonance)' },
     { key: 'windowed_excess', symbol: 'Δf_T/Δf − 1', unit: '', meaning: 'how much the finite record broadens the measured line' },
-    { key: 'x_th_rms_m', symbol: '√⟨x²⟩_th', unit: 'm', meaning: 'thermal RMS displacement √(k_BT/k) of the mode (equipartition); null without T_K and k_N_per_m' },
+    { key: 'x_th_rms_m', symbol: '√⟨x²⟩_th', unit: 'm', meaning: 'thermal RMS displacement √(k_BT/k) of the mode (equipartition); not defined without T_K and k_N_per_m' },
     {
       key: 'envelope_rms_m',
       symbol: '√⟨A²⟩',
       unit: 'm',
-      meaning: 'RMS envelope with the thermal motion added: √(A² + 2k_BT/k), the Rice second moment; null without T_K and k_N_per_m',
+      meaning: 'RMS envelope with the thermal motion added: √(A² + 2k_BT/k), the Rice second moment; not defined without T_K and k_N_per_m',
     },
   ],
   conditions: [

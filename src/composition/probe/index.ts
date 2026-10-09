@@ -116,9 +116,9 @@ export {
   listRelationMetadata,
   clearRelationMetadata,
 } from './metadata.js';
-export { makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson } from './problem.js';
+export { makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson, ProblemFileError } from './problem.js';
 export type { ProblemFile } from './problem.js';
-export { runProbeSearch } from './pipeline.js';
+export { runProbeSearch, nodeWorkerArgv } from './pipeline.js';
 export type { ProbeSearchOptions, ProbeSearchResult } from './pipeline.js';
 export { formatProbeReport, formatFrontierScan, formatFrontierGap } from './report.js';
 export {

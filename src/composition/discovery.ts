@@ -224,7 +224,7 @@ export interface DiscoveryOptions {
   readonly identifications?: readonly QuantityIdentification[];
   /**
    * Max orders of magnitude two identified quantities may differ before the
-   * identification is falsified as a `magnitude-clash`. Default 3 — generous
+   * identification is falsified as a `magnitude-clash`. Default {@link DEFAULT_MAX_ORDERS_OF_MAGNITUDE} — generous
    * enough for O(1) dimensionless prefactors and unit-convention slack, strict
    * enough to kill the scale-clash decoys.
    */
@@ -282,6 +282,13 @@ function quantityComponents(
  * @internal
  */
 export const ANCHOR_DEFAULT: Readonly<Record<string, number>> = { mass: M_SUN_KG };
+
+/**
+ * The magnitude-clash threshold when the caller gives none: how many orders of magnitude two
+ * identified quantities may differ. Exported so the CLI states the default it runs with.
+ * @internal
+ */
+export const DEFAULT_MAX_ORDERS_OF_MAGNITUDE = 3;
 
 /**
  * Factor every anchor input is multiplied by to probe whether a magnitude ratio
@@ -366,7 +373,7 @@ export function buildDiscoveryContext(
     groundTruth,
     anchor,
     repVals: opts.representativeValues ?? REPRESENTATIVE_VALUES,
-    maxOrders: opts.maxOrdersOfMagnitude ?? 3,
+    maxOrders: opts.maxOrdersOfMagnitude ?? DEFAULT_MAX_ORDERS_OF_MAGNITUDE,
     attributesByName: opts.quantityAttributes ?? REGISTRY_ATTRIBUTES_BY_NAME,
     // Candidate-invariant: the anchor's forward evaluation, the base component
     // partition, and the base forward closure all depend only on (edges, opts).
