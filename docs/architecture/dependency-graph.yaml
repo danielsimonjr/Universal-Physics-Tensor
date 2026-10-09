@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 9.0.0
-  totalFiles: 360
+  totalFiles: 362
   totalModules: 13
-  totalExports: 2476
+  totalExports: 2483
 entryPoints:
   - file: src/index.ts
     type: main
@@ -364,9 +364,9 @@ modules:
           imports:
             - catalogFormalRef
       exports:
-        - getBridge
+        - catalogBridgeRecord
       functions:
-        - getBridge
+        - catalogBridgeRecord
     src/atlas/catalog-formal-ref.ts:
       description: Catalog formal references.
       externalDependencies: []
@@ -415,10 +415,6 @@ modules:
         - file: ../composition/enumerate.js
           imports:
             - enumerateCompositionsWithRefusals
-        - file: ../relations/composition-table.js
-          imports:
-            - CompositionResult
-          typeOnly: true
         - file: ../composition/buckingham-filter.js
           imports:
             - buckinghamFilter
@@ -450,7 +446,6 @@ modules:
             - scalarSymbolsFromMathTs
       exports:
         - governingOf
-        - categoryCompositionForChain
         - renderChainRecord
         - runChainPipeline
       interfaces:
@@ -460,7 +455,6 @@ modules:
         - ChainCompositionRefusal
       functions:
         - governingOf
-        - categoryCompositionForChain
         - renderChainRecord
         - runChainPipeline
     src/atlas/composition-table.ts:
@@ -745,7 +739,7 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../oscillators/index.js
+        - file: ../family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -875,19 +869,28 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
         - file: ./serialize.js
           imports:
+            - AtlasRecordJson
+          typeOnly: true
+        - file: ./serialize.js
+          imports:
             - toAtlasJson
+        - file: ./witness-artifact.js
+          imports:
+            - WitnessResultsArtifact
+          typeOnly: true
       exports:
         - ATLAS_ID_PREFIX
         - toCombinedAtlasJson
         - toAtlasJsonLd
       interfaces:
         - QudtResolution
+        - CombinedAtlasJson
       functions:
         - toCombinedAtlasJson
         - toAtlasJsonLd
@@ -907,14 +910,37 @@ modules:
         - file: ./waves/index.js
           imports:
             - WAVES_FAMILY
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
+        - file: ./regime.js
+          imports:
+            - admitApproximation
       exports:
         - ATLAS_FAMILIES
+        - admitFamilies
+      functions:
+        - admitFamilies
       constants:
         - ATLAS_FAMILIES
+    src/atlas/family.ts:
+      description: "The shape of one atlas family. A leaf module: every family index, the"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./model.js
+          imports:
+            - AtlasModel
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - AtlasBridge
+            - AtlasRejection
+          typeOnly: true
+      exports: []
+      interfaces:
+        - AtlasFamily
     src/atlas/index.ts:
       description: Atlas Phase 0 barrel — the oscillator pilot.
       externalDependencies: []
@@ -939,6 +965,7 @@ modules:
           reExport: true
         - file: ./types.js
           imports:
+            - MissingDeltaAtError
             - MissingHorizonError
             - MissingLipschitzError
           reExport: true
@@ -1032,7 +1059,7 @@ modules:
           imports:
             - OSCILLATOR_FAMILY
           reExport: true
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           reExport: true
@@ -1319,6 +1346,7 @@ modules:
             - NoCompositeReason
           reExport: true
       exports:
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - ALL_EVIDENCE_TAGS
@@ -1537,6 +1565,7 @@ modules:
         - FormalRef
         - FormalRefKind
         - NormTransport
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - ALL_EVIDENCE_TAGS
@@ -1731,7 +1760,7 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -1820,7 +1849,6 @@ modules:
         - file: ../types.js
           imports:
             - AtlasBridge
-            - EvidenceTag
             - Regime
             - RelationContract
           typeOnly: true
@@ -1930,14 +1958,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../types.js
+        - file: ../family.js
           imports:
-            - AtlasBridge
-            - AtlasRejection
-          typeOnly: true
-        - file: ../model.js
-          imports:
-            - AtlasModel
+            - AtlasFamily
           typeOnly: true
         - file: ./models.js
           imports:
@@ -1957,8 +1980,6 @@ modules:
             - ATLAS_REJECTIONS
       exports:
         - OSCILLATOR_FAMILY
-      interfaces:
-        - AtlasFamily
       constants:
         - OSCILLATOR_FAMILY
     src/atlas/oscillators/limit-witnesses.ts:
@@ -2247,7 +2268,7 @@ modules:
         - file: ./families.js
           imports:
             - ATLAS_FAMILIES
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -2301,10 +2322,14 @@ modules:
     src/atlas/physjs-ref.ts:
       description: Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
       externalDependencies: []
-      nodeDependencies: []
+      nodeDependencies:
+        - module: crypto
+          imports:
+            - createHash
       internalDependencies:
         - file: ./types.js
           imports:
+            - FormalFidelity
             - FormalRef
             - FormalRefKind
           typeOnly: true
@@ -2315,6 +2340,10 @@ modules:
           imports:
             - catalogEntries
             - catalogIdNumber
+        - file: ./physjs-reviewed.js
+          imports:
+            - PHYSJS_REVIEWED_ROWS
+            - PHYSJS_SANITY_LEMMA_KEYS
         - file: ./physjs-entries.generated.js
           imports:
             - PHYSJS_COMMIT
@@ -2335,6 +2364,9 @@ modules:
         - physjsAheadOfCatalog
         - bridgeSeedKeys
         - physjsKeysAheadOfCatalog
+        - physjsManifestRow
+        - physjsRowHash
+        - physjsFidelity
         - physjsFormalRef
         - physjsManifestProblems
       reExported:
@@ -2342,6 +2374,7 @@ modules:
       interfaces:
         - PhysjsManifestEntry
         - PhysjsManifestFile
+        - PhysjsReviewedRow
       functions:
         - physjsNestedStatements
         - physjsTheorem
@@ -2350,8 +2383,22 @@ modules:
         - physjsAheadOfCatalog
         - bridgeSeedKeys
         - physjsKeysAheadOfCatalog
+        - physjsManifestRow
+        - physjsRowHash
+        - physjsFidelity
         - physjsFormalRef
         - physjsManifestProblems
+    src/atlas/physjs-reviewed.ts:
+      description: The reviewed PhysJS manifest rows, pinned per key.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - PHYSJS_SANITY_LEMMA_KEYS
+        - PHYSJS_REVIEWED_ROWS
+      constants:
+        - PHYSJS_SANITY_LEMMA_KEYS
+        - PHYSJS_REVIEWED_ROWS
     src/atlas/poster/associations.ts:
       description: Atlas Phase 3 — the poster's two association-only lines.
       externalDependencies: []
@@ -2515,6 +2562,7 @@ modules:
           reExport: true
         - file: ./types.js
           imports:
+            - MissingDeltaAtError
             - MissingHorizonError
             - MissingLipschitzError
           reExport: true
@@ -2553,6 +2601,7 @@ modules:
             - NoCompositeClaim
           reExport: true
       exports:
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - regimeHolds
@@ -2587,6 +2636,7 @@ modules:
         - RegimeInequality
         - RelationType
         - Witness
+        - MissingDeltaAtError
         - MissingHorizonError
         - MissingLipschitzError
         - AtlasModel
@@ -2676,10 +2726,20 @@ modules:
           imports:
             - AtlasModel
           typeOnly: true
-        - file: ./oscillators/index.js
+        - file: ./family.js
           imports:
             - AtlasFamily
           typeOnly: true
+        - file: ./derive-evidence.js
+          imports:
+            - deriveEvidence
+        - file: ./witness-artifact.js
+          imports:
+            - WitnessResultsArtifact
+          typeOnly: true
+        - file: ./witness-artifact.js
+          imports:
+            - artifactPassingWitnessIds
       exports:
         - ATLAS_RECORD_SCHEMA_VERSION
         - toAtlasJson
@@ -2948,7 +3008,7 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../oscillators/index.js
+        - file: ../family.js
           imports:
             - AtlasFamily
           typeOnly: true
@@ -7283,7 +7343,7 @@ modules:
             - ObservableTranslation
             - PointCheck
           reExport: true
-        - file: ./atlas/oscillators/index.js
+        - file: ./atlas/family.js
           imports:
             - AtlasFamily
           reExport: true
@@ -16876,6 +16936,7 @@ dependencyGraph:
         - src/atlas/error-algebra.ts
         - src/atlas/export.ts
         - src/atlas/families.ts
+        - src/atlas/family.ts
         - src/atlas/index.ts
         - src/atlas/link-prediction.ts
         - src/atlas/model.ts
@@ -16897,6 +16958,7 @@ dependencyGraph:
         - src/atlas/path-bound.ts
         - src/atlas/physjs-entries.generated.ts
         - src/atlas/physjs-ref.ts
+        - src/atlas/physjs-reviewed.ts
         - src/atlas/poster/associations.ts
         - src/atlas/poster/derivations.ts
         - src/atlas/poster/statements.ts
@@ -17233,18 +17295,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 360
+  totalTypeScriptFiles: 362
   totalModules: 13
-  totalLinesOfCode: 79797
-  totalExports: 2476
+  totalLinesOfCode: 80279
+  totalExports: 2483
   totalClasses: 79
-  totalInterfaces: 452
-  totalFunctions: 761
+  totalInterfaces: 454
+  totalFunctions: 764
   totalTypeGuards: 7
   totalEnums: 0
-  totalConstants: 383
-  totalReExports: 1254
-  totalTypeOnlyImports: 507
+  totalConstants: 385
+  totalReExports: 1256
+  totalTypeOnlyImports: 510
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

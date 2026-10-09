@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "totalSourceFiles": 360,
+    "totalSourceFiles": 362,
     "totalTestFiles": 545,
-    "testedCount": 349,
+    "testedCount": 351,
     "untestedCount": 11,
-    "coveragePercent": "96.9"
+    "coveragePercent": "97.0"
   },
   "untestedFiles": [
     "src/cases/quadrature.ts",
@@ -48,6 +48,7 @@
     "src/atlas/error-algebra.ts",
     "src/atlas/export.ts",
     "src/atlas/families.ts",
+    "src/atlas/family.ts",
     "src/atlas/index.ts",
     "src/atlas/link-prediction.ts",
     "src/atlas/model.ts",
@@ -69,6 +70,7 @@
     "src/atlas/path-bound.ts",
     "src/atlas/physjs-entries.generated.ts",
     "src/atlas/physjs-ref.ts",
+    "src/atlas/physjs-reviewed.ts",
     "src/atlas/poster/associations.ts",
     "src/atlas/poster/derivations.ts",
     "src/atlas/poster/statements.ts",
@@ -454,7 +456,8 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
-      "tests/cli/suggest-token-length.test.ts"
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/tools/formalref-axiom-gate.test.ts"
     ],
     "src/atlas/chain-pipeline.ts": [
       "tests/atlas/chain-pipeline-catalog.test.ts",
@@ -523,17 +526,20 @@
       "tests/composition/poster-source.test.ts"
     ],
     "src/atlas/derive-evidence.ts": [
+      "tests/atlas/atlas-json.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/evidence-rule.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
       "tests/atlas/pendulum-position-translation.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/serialize.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
       "tests/atlas/witness-results.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -652,6 +658,20 @@
       "tests/composition/one-copy.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts"
     ],
+    "src/atlas/family.ts": [
+      "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/link-prediction.test.ts",
+      "tests/atlas/model.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/explain-temperature-binding.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-search.test.ts",
+      "tests/cli/suggest-token-length.test.ts"
+    ],
     "src/atlas/index.ts": [
       "tests/atlas/barrel-completeness.test.ts"
     ],
@@ -703,6 +723,7 @@
     "src/atlas/oscillators/bridges-limits.ts": [
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
+      "tests/atlas/families.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/oscillators-limits.test.ts",
       "tests/atlas/path-bound.test.ts",
@@ -725,7 +746,7 @@
       "tests/atlas/atlas-json.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
-      "tests/atlas/link-prediction.test.ts",
+      "tests/atlas/families.test.ts",
       "tests/atlas/model.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/serialize.test.ts",
@@ -817,6 +838,10 @@
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
       "tests/composition/one-copy.test.ts"
+    ],
+    "src/atlas/physjs-reviewed.ts": [
+      "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/physjs-manifest.test.ts"
     ],
     "src/atlas/poster/associations.ts": [
       "tests/atlas/poster.test.ts"
@@ -935,6 +960,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/error-algebra.test.ts",
       "tests/atlas/evidence-rule.test.ts",
+      "tests/atlas/families.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/link-prediction.test.ts",
@@ -992,7 +1018,13 @@
       "tests/atlas/waves.test.ts"
     ],
     "src/atlas/witness-artifact.ts": [
+      "tests/atlas/atlas-json.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/evidence-rule.test.ts",
+      "tests/atlas/export.test.ts",
+      "tests/atlas/model.test.ts",
+      "tests/atlas/serialize.test.ts",
+      "tests/atlas/spring-lc-norm-transport.test.ts",
       "tests/atlas/witness-results.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -1130,6 +1162,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts",
+      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/catalog-adapter.ts": [
@@ -1411,6 +1444,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts",
+      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/input-contract.ts": [
@@ -1618,6 +1652,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts",
+      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/canonical/canonical-equation.ts": [
@@ -6737,6 +6772,7 @@
       "tests/numerical/weyl-kerr-schild.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts",
       "tests/tensor.test.ts",
+      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/core/data-file.ts": [
@@ -8989,6 +9025,7 @@
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/applicability.test.ts",
+      "tests/atlas/atlas-json.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
@@ -9000,6 +9037,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/error-algebra.test.ts",
       "tests/atlas/evidence-rule.test.ts",
+      "tests/atlas/families.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
@@ -9522,7 +9560,10 @@
     "tests/atlas/atlas-json.test.ts": [
       "src/atlas/serialize.ts",
       "src/atlas/oscillators/index.ts",
-      "src/atlas/families.ts"
+      "src/atlas/families.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/witness-artifact.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/audited-catalog.test.ts": [
       "src/bridges/index.ts",
@@ -9551,6 +9592,7 @@
       "src/atlas/oscillators/dimensions.ts",
       "src/atlas/oscillators/models.ts",
       "src/atlas/oscillators/index.ts",
+      "src/atlas/family.ts",
       "src/atlas/serialize.ts",
       "src/atlas/applicability.ts",
       "src/atlas/witness-result.ts",
@@ -9857,15 +9899,22 @@
     "tests/atlas/evidence-rule.test.ts": [
       "src/atlas/types.ts",
       "src/relations/types.ts",
-      "src/atlas/families.ts"
+      "src/atlas/families.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/witness-artifact.ts"
     ],
     "tests/atlas/export.test.ts": [
       "src/atlas/export.ts",
-      "src/atlas/families.ts"
+      "src/atlas/families.ts",
+      "src/atlas/witness-artifact.ts"
     ],
     "tests/atlas/exports-subpath.test.ts": [],
     "tests/atlas/families.test.ts": [
-      "src/atlas/families.ts"
+      "src/atlas/families.ts",
+      "src/atlas/oscillators/index.ts",
+      "src/atlas/oscillators/bridges-limits.ts",
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/formal-sanity.test.ts": [
       "src/atlas/oscillators/bridges-exact.ts",
@@ -9879,6 +9928,7 @@
       "src/atlas/waves/numerics.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts",
+      "src/atlas/physjs-reviewed.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
     ],
@@ -9976,7 +10026,7 @@
       "src/atlas/link-prediction.ts",
       "src/atlas/families.ts",
       "src/atlas/benchmark/stats.ts",
-      "src/atlas/oscillators/index.ts",
+      "src/atlas/family.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts",
       "src/atlas/model.ts"
@@ -9986,7 +10036,9 @@
       "src/atlas/serialize.ts",
       "src/atlas/oscillators/index.ts",
       "src/canonical/registry.ts",
-      "src/atlas/model.ts"
+      "src/atlas/model.ts",
+      "src/atlas/family.ts",
+      "src/atlas/witness-artifact.ts"
     ],
     "tests/atlas/models.test.ts": [
       "src/atlas/oscillators/models.ts",
@@ -10108,8 +10160,9 @@
       "src/bridges/carrier-sign.ts",
       "src/bridges/catalog-load.ts",
       "src/relations/types.ts",
-      "src/atlas/physjs-ref.ts",
-      "src/atlas/physjs-entries.generated.ts"
+      "src/atlas/physjs-entries.generated.ts",
+      "src/atlas/physjs-reviewed.ts",
+      "src/atlas/physjs-ref.ts"
     ],
     "tests/atlas/poster.test.ts": [
       "src/atlas/statement.ts",
@@ -10168,7 +10221,9 @@
     "tests/atlas/schema-pin.test.ts": [],
     "tests/atlas/serialize.test.ts": [
       "src/atlas/serialize.ts",
-      "src/atlas/oscillators/index.ts"
+      "src/atlas/oscillators/index.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/witness-artifact.ts"
     ],
     "tests/atlas/spring-lc-norm-transport.test.ts": [
       "src/atlas/oscillators/bridges-exact.ts",
@@ -10178,7 +10233,8 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/witness-specs.ts",
       "src/atlas/oscillators/index.ts",
-      "src/atlas/serialize.ts"
+      "src/atlas/serialize.ts",
+      "src/atlas/witness-artifact.ts"
     ],
     "tests/atlas/spring-lc-phase-carriage.test.ts": [
       "src/atlas/oscillators/bridges-exact.ts",
@@ -11252,6 +11308,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -11457,6 +11514,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -12646,6 +12704,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -12921,6 +12980,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -13389,6 +13449,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -13594,6 +13655,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -14386,6 +14448,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -14656,6 +14719,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -15160,6 +15224,7 @@
       "src/atlas/witness-numeric.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/translation.ts",
+      "src/atlas/family.ts",
       "src/atlas/regime.ts",
       "src/relations/regime-registration.ts",
       "src/atlas/path-bound.ts",
@@ -18010,7 +18075,12 @@
     ],
     "tests/tools/export-star-as-deps.test.ts": [],
     "tests/tools/formalref-axiom-gate.test.ts": [
-      "src/atlas/families.ts"
+      "src/atlas/families.ts",
+      "src/bridges/index.ts",
+      "src/bridges/types.ts",
+      "src/core/constants.ts",
+      "src/bridges/carrier-sign.ts",
+      "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/tools/hook-git-env.test.ts": [],
     "tests/tools/layer-order.test.ts": [],

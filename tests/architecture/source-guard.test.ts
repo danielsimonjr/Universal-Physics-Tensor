@@ -4,8 +4,9 @@
  * The filename scan covers the whole tree. The identifier scan covers code.
  * A string whose entire content is `be-<digits>` is a branch key in `src/`;
  * tests still name a catalog record with that literal, and this file records
- * that limit. `data/`, `formal/`, the generated PhysJS table, and the catalog
- * loader are the places a key is allowed to be written out.
+ * that limit. `data/`, `formal/`, the generated PhysJS table, the reviewed-row
+ * table it is pinned by, and the catalog loader are the places a key is
+ * allowed to be written out.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -18,6 +19,9 @@ const SKIP_DIRS = new Set(['.git', 'node_modules', 'dist', 'coverage']);
 const CODE_EXT = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs']);
 const EXEMPT = new Set([
   'src/atlas/physjs-entries.generated.ts',
+  // The per-key reviewed-row pins: a data table keyed by manifest key, read
+  // by `physjsFidelity`, never branched on.
+  'src/atlas/physjs-reviewed.ts',
   'src/bridges/catalog-load.ts',
 ]);
 

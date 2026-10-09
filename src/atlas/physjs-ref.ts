@@ -59,9 +59,9 @@ const PHYSJS_COVERAGE = 'covers its statement only';
  * The axioms a complete Lean 4 proof over Mathlib may rest on. `#print axioms`
  * of a proof with a `sorry` adds `sorryAx`, and Lean still exits 0 (TOOLS.md),
  * so every statement's list is held to this set; PhysJS reports the list and
- * this repository does not re-measure it. @internal
+ * this repository does not re-measure it.
  */
-export const PHYSJS_ALLOWED_AXIOMS: ReadonlySet<string> = new Set(['propext', 'Classical.choice', 'Quot.sound']);
+const PHYSJS_ALLOWED_AXIOMS: ReadonlySet<string> = new Set(['propext', 'Classical.choice', 'Quot.sound']);
 
 /** One statement the manifest records: an entry's own, or a nested one. */
 interface PhysjsStatement {

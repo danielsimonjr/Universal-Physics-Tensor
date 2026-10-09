@@ -16,9 +16,9 @@ The graph's raw export lists collide because barrels re-export the same binding.
 
 Every module under `src/cli/commands/` that is a command exports `command`. Helpers (`index.ts`, `_atlas-route.ts`, `_atlas-map.ts`, `_discovery-opts.ts`) do not. `command.ts` defines the shape. The previous edition of this file said 23 files. The registry in `src/cli/commands/index.ts` now side-effect-imports 28 command modules.
 
-### `getBridge` — 2 files. Two functions.
+### `getBridge`
 
-`src/atlas/bridge-record.ts` and `src/composition/descriptor.ts` each define `getBridge`. They are not one binding.
+`getBridge` is `src/composition/descriptor.ts`. The atlas reader in `src/atlas/bridge-record.ts` is `catalogBridgeRecord`, named for what it returns: the joined catalog record with its canonical id, formal reference and evaluator. The sentence that two files each defined `getBridge`, two functions under one name, is the record from before that rename.
 
 ### `MASS_DENSITY`
 
