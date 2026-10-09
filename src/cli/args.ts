@@ -3,8 +3,9 @@
  *
  * Only tokens starting with `--` are treated as flags; everything else
  * (including `name=value` and `name:dim` positionals) passes through to
- * `positionals` untouched and in original order. Single left-to-right scan,
- * zero dependencies.
+ * `positionals` untouched and in original order. A bare `--` ends the
+ * options: every later token is a positional, whatever it starts with.
+ * Single left-to-right scan, zero dependencies.
  */
 
 import { UsageError } from './errors.js';
@@ -26,6 +27,15 @@ export interface FlagSpec {
   defaultValue?: string;
 }
 
+/** The token that ends option parsing. */
+export const END_OF_OPTIONS = '--';
+
+/** The tokens before a bare `--`: the ones the dispatcher may read as options. */
+export function optionTokens(argv: readonly string[]): readonly string[] {
+  const end = argv.indexOf(END_OF_OPTIONS);
+  return end === -1 ? argv : argv.slice(0, end);
+}
+
 export interface ParsedArgs {
   flags: Map<string, string[]>; // name (no dashes) -> raw values ('' for none-style)
   positionals: string[];
@@ -41,6 +51,10 @@ export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): P
 
   for (let i = 0; i < argv.length; i++) {
     const token = argv[i];
+    if (token === END_OF_OPTIONS) {
+      positionals.push(...argv.slice(i + 1));
+      break;
+    }
     if (!token.startsWith('--')) {
       positionals.push(token);
       continue;

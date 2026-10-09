@@ -6,7 +6,8 @@
  * lines. The CLI is exercised in-process against the built `dist/`, so a src
  * change needs `bun run build` before this file reports on it.
  */
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
@@ -157,5 +158,76 @@ describe('K3: a result carries the envelope and exits 0 or 3; an error (1, 2) wr
       }
     }
     expect(hits).toEqual([]);
+  });
+});
+
+describe('K4 and the map Lows: --out is honoured in every output form, poster is gone, --proposed lists, one unit mode', () => {
+  it('map --out=PATH writes the text report (and the --json envelope) to PATH; stdout stays empty', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'upt-map-out-'));
+    try {
+      const text = await run(['map', '--source=catalog', '--out=' + join(dir, 'map.txt')]);
+      expect(text.code).toBe(0);
+      expect(text.out).toBe('');
+      expect(text.err).toMatch(/wrote text to/);
+      expect(readFileSync(join(dir, 'map.txt'), 'utf8')).toMatch(/Linkage map/);
+      const json = await run(['map', '--source=catalog', '--json', '--out=' + join(dir, 'map.json')]);
+      expect(json.code).toBe(0);
+      expect(json.out).toBe('');
+      expect(JSON.parse(readFileSync(join(dir, 'map.json'), 'utf8')).command).toBe('map');
+      const empty = await run(['map', '--source=catalog', '--out=']);
+      expect(empty.code).toBe(1);
+      expect(existsSync(join(dir, 'none'))).toBe(false);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+  it('--source=poster is not a value: it exits 1 and the message lists the vocabulary', async () => {
+    const r = await run(['map', '--source=poster']);
+    expect(r.code).toBe(1);
+    expect(r.out).toBe('');
+    expect(r.err).toMatch(/catalog \| canonical \| both/);
+    expect(r.err).not.toMatch(/Poster index/);
+  });
+  it('map --proposed in text mode lists the proposed relations it overlays', async () => {
+    const r = await run(['map', '--proposed', '--source=catalog']);
+    expect(r.code).toBe(0);
+    expect(r.out).toMatch(/proposed relations \(\d+/);
+  });
+  it('--natural and --geometrized together are refused on eval and map', async () => {
+    const e = await run(['eval', 'x', 'x=1', '--natural', '--geometrized']);
+    expect(e.code).toBe(2);
+    expect(e.err).toMatch(/one unit mode/);
+    const m = await run(['map', '--equation', 'period = mass', '--natural', '--geometrized']);
+    expect(m.code).toBe(2);
+    expect(m.err).toMatch(/one unit mode/);
+  });
+  it('a bare -- ends the options: what follows is positional, even --help', async () => {
+    const r = await run(['search', '--', '--bogus']);
+    expect(r.code).toBe(0);
+    expect(r.out).toMatch(/no entry matches every word of '--bogus'|match/);
+    const h = await run(['search', '--', '--help']);
+    expect(h.code).toBe(0);
+    expect(h.out).not.toMatch(/Flags:/);
+  });
+});
+
+describe('K6: -h is --help on every command and on help itself', () => {
+  it('upt map -h prints the map help and does not draw the map', async () => {
+    const r = await run(['map', '-h']);
+    expect(r.code).toBe(0);
+    expect(r.out).toMatch(/^upt map \[--source/);
+    expect(r.out).not.toMatch(/Linkage map/);
+  });
+  it('upt help -h and upt help --help print the command list', async () => {
+    for (const argv of [['help', '-h'], ['help', '--help']]) {
+      const r = await run(argv);
+      expect(r.code).toBe(0);
+      expect(r.out).toMatch(/upt <command>|Commands/);
+    }
+  });
+  it('upt confront -h prints help without running a confrontation', async () => {
+    const r = await run(['confront', '-h']);
+    expect(r.code).toBe(0);
+    expect(r.out).not.toMatch(/Real-data confrontations/);
   });
 });

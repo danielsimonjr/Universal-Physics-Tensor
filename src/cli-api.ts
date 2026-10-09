@@ -115,16 +115,6 @@ export { describeDerivedClaim } from './composition/consequence.js';
 // derivation lives in cli/map-evidence.ts, which is what calls it.
 export { filterEdges, formatFilterLegend } from './composition/graph-viz.js';
 export { deriveEdgeEvidence } from './cli/map-evidence.js';
-// `upt map --source=poster` (S3.4) — the Atlas Phase 3 poster index as viz
-// junctions, plus its dangling-premise check. Internal, CLI only. Not on
-// src/index.ts, which is the published v0.4.0 surface.
-export {
-  POSTER_GRAPH,
-  posterJunctions,
-  validatePoster,
-  describePosterSource,
-} from './cli/poster-source.js';
-export type { PosterGraph, PosterValidation } from './cli/poster-source.js';
 
 // Experimental Product B (expression / residual search). Not the identification
 // funnel (`rankDiscoveries`). CLI `upt probe` only.

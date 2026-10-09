@@ -134,6 +134,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new FormulaUsageError((e as Error).message, kind);
   }
 
+  if (args.flags.has('geometrized') && args.flags.has('natural')) {
+    throw new UsageError('upt eval: pick one unit mode: --natural (ħ = c = 1) or --geometrized (ħ = c = G = 1)');
+  }
   const mode: UnitMode = args.flags.has('geometrized') ? 'geometrized' : args.flags.has('natural') ? 'natural' : 'si';
   const parsed = parseScope(api, positionals.slice(1), mode);
   const scope = { ...codataScope(mode), ...parsed.scope };

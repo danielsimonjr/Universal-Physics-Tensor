@@ -32,13 +32,12 @@ import type {
   VizJunction,
   VizModel,
 } from '../../cli-api.js';
-import type { SourceName } from '../graphs.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { UnitMode } from '../../cli-api.js';
 import { withCatalogEvidence } from '../map-evidence.js';
 
 const FLAGS: FlagSpec[] = [
-  sourceFlag('both', 'Which graph to draw: catalog, canonical, both, or poster. poster is the Atlas Phase 3 statement index and is valid only here. This command defaults to both.'),
+  sourceFlag('both', 'Which graph to draw: catalog, canonical, or both. This command defaults to both.'),
   { name: '--format', valueStyle: 'attached', description: 'Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer.', defaultValue: 'text' },
   { name: '--out', valueStyle: 'attached', description: 'Write the report to PATH instead of stdout.' },
   { name: '--max-orders', valueStyle: 'attached', description: 'Magnitude-clash threshold for the --proposed overlay.', defaultValue: '3' },
@@ -67,7 +66,7 @@ const FLAGS: FlagSpec[] = [
   JSON_FLAG,
 ];
 
-const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
+const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
         [--equation "TARGET = EXPR" [--equation-only] [--verbose] [--bind-short]
         [--natural] [--geometrized]] [--around=QUANTITY [--depth=N]]
@@ -79,15 +78,8 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         --source defaults to 'both' (catalog + canonical) — a pure
         connectivity question gets the honest, all-known-physics answer by
         default; --source=catalog shows the bridge-catalog view alone.
-        --source=poster draws the ATLAS PHASE 3 POSTER INDEX instead of the
-        bridge graph: nodes are STATEMENTS (including the hidden supporting
-        nodes — action principle, Noether, the full Maxwell system, the
-        Lorentz group, the central limit theorem) and boxes are DERIVATIONS
-        (premises in, conclusion out). Associations are drawn DASHED because
-        they assert no relation at all. It also reports any premise naming a
-        statement the registry does not define, and says so out loud when the
-        index is not registered in this build rather than printing an empty
-        map as an answer.
+        --out=PATH writes whatever form was asked for (text, --json or a
+        visual format) to PATH instead of stdout; an empty PATH exits 1.
         --format=mermaid|dot|svg emits the VISUAL map (quantities = nodes,
         equations = junctions colored by status, one subgraph per component).
         text (default) is the unchanged linkage printout. svg renders the dot
@@ -511,7 +503,38 @@ async function runAtlasView(
   return exitCode;
 }
 
+/**
+ * `--out=PATH` holds for every output form. A visual form writes its diagram
+ * source (handled by the branch that renders it); the text report and the
+ * `--json` envelope are captured here and written whole, so stdout stays
+ * empty and the file holds exactly what stdout would have carried. An empty
+ * PATH exits 1 in every form.
+ */
 async function run(ctx: CommandCtx): Promise<number> {
+  const path = lastValue(ctx.args.flags, 'out');
+  const fmt = lastValue(ctx.args.flags, 'format') ?? 'text';
+  if (path === undefined || fmt !== 'text') return runReport(ctx);
+  if (!path) throw new CliError('upt: --out= requires a non-empty PATH');
+  let captured = '';
+  const code = await runReport({
+    ...ctx,
+    out: (line?: string) => {
+      captured += (line ?? '') + '\n';
+    },
+    write: (s: string) => {
+      captured += s;
+    },
+  });
+  try {
+    writeFileSync(path, captured);
+  } catch (e) {
+    throw new CliError((e as Error).message);
+  }
+  ctx.err(`upt: wrote ${ctx.args.flags.has('json') ? 'json' : 'text'} to ${path}`);
+  return code;
+}
+
+async function runReport(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err, write } = ctx;
   const route = lastValue(args.flags, 'route');
   const family = lastValue(args.flags, 'family');
@@ -527,18 +550,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   // map asks a pure connectivity question, so it defaults to --source=both
   // (catalog + canonical) rather than graphs.ts's catalog fallback used by
   // the other --source commands (e.g. discover, which keeps catalog).
-  //
-  // `--source=poster` is a MAP-ONLY source and is resolved HERE, not in
-  // `resolveGraph`. That helper is shared by `discover`, `candidates` and the
-  // rest, and the poster index is not a `BridgeEdge` graph they could analyse;
-  // teaching it a value only one command can use would hand every other command
-  // a source that silently means nothing.
-  const posterMode = lastValue(args.flags, 'source') === 'poster';
   const sourceFlags = args.flags.has('source') ? args.flags : new Map(args.flags).set('source', ['both']);
-  const resolved: { graph: BridgeEdge[]; label: string; source: SourceName | 'poster' } = posterMode
-    ? { graph: [], label: 'poster (Atlas Phase 3 index)', source: 'poster' }
-    : resolveGraph(api, sourceFlags);
-  const { graph: wholeGraph, label, source } = resolved;
+  const { graph: wholeGraph, label, source } = resolveGraph(api, sourceFlags);
 
   const around = lastValue(args.flags, 'around');
   const depthRaw = lastValue(args.flags, 'depth');
@@ -546,7 +559,6 @@ async function run(ctx: CommandCtx): Promise<number> {
   let focus: { around: string; depth: number; kept: number; of: number } | null = null;
   let fullGraph = wholeGraph;
   if (around !== undefined) {
-    if (posterMode) throw new CliError('upt map: --around focuses a quantity graph; the poster index has statements, not quantities');
     const depth = depthRaw === undefined ? 1 : Number(depthRaw);
     if (!Number.isInteger(depth) || depth < 1 || depth > 10) throw new CliError(`upt map: --depth=${depthRaw} must be an integer from 1 to 10`);
     const known = new Set(wholeGraph.flatMap((e) => [...e.sources.map((q) => q.name), e.target.name]));
@@ -565,13 +577,6 @@ async function run(ctx: CommandCtx): Promise<number> {
       ? null
       : `focused: ${focus.kept} of ${focus.of} edges within ${focus.depth} hop(s) of '${focus.around}' [${label}]; ` +
         'the rest are omitted from this view, not absent from the graph';
-  // The poster's own report line: what it contributed, or why it contributed
-  // nothing (design note §6). Computed once; printed by every output form.
-  const posterValidation = posterMode ? api.validatePoster(api.POSTER_GRAPH) : null;
-  const posterNote = posterMode
-    ? api.describePosterSource(api.POSTER_GRAPH, posterValidation!)
-    : null;
-
   // The two overlay filters. Parsed BEFORE anything else is computed so a bad
   // value costs nothing and always exits 1.
   const relation = parseFilter(lastValue(args.flags, 'relation'), RELATION_TYPES, '--relation');
@@ -588,12 +593,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   // selects, only about how much they were asked to count.
   const { kept: graph, stats: edgeStats } = api.filterEdges(fullGraph, filterOpts);
   // Audit I3: what "anchored" means here, and the discovery ground truth when --proposed ran the funnel.
-  const anchor: AnchorScope | null = posterMode
-    ? null
-    : {
-        core: coreAnchor(graph),
-        ...(args.flags.has('proposed') ? { groundTruth: groundTruthAnchor(api, parseDiscoveryOpts(api, args.flags)) } : {}),
-      };
+  const anchor: AnchorScope = {
+    core: coreAnchor(graph),
+    ...(args.flags.has('proposed') ? { groundTruth: groundTruthAnchor(api, parseDiscoveryOpts(api, args.flags)) } : {}),
+  };
   const edgeLegend = api.formatFilterLegend(edgeStats);
 
   const fmtValues = args.flags.get('format');
@@ -625,6 +628,9 @@ async function run(ctx: CommandCtx): Promise<number> {
         : args.flags.has('natural')
           ? 'natural'
           : undefined;
+      if (args.flags.has('geometrized') && args.flags.has('natural')) {
+        throw new UsageError('upt map: pick one unit mode: --natural (ħ = c = 1) or --geometrized (ħ = c = G = 1)');
+      }
       ({ user, comparisons } = await analyzeEquation(api, equation, graph, {
         bindShortNames: args.flags.has('bind-short'),
         ...(units === undefined ? {} : { units }),
@@ -641,17 +647,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   // A catalog target that was not established exits 3. An unbound target stays 0.
   const exitCode = user === null ? 0 : equationDetermination(user, comparisons).exit;
 
-  const overlay = (extra: VizJunction[]): VizJunction[] => [
-    // Ranked from the UNFILTERED graph: the proposal set is a property of the
-    // whole catalog, and the model then judges each overlay junction under the
-    // same filter as every other junction.
-    ...(args.flags.has('proposed') ? proposedJunctions(api, wholeGraph, args.flags) : []),
-    // The poster enters as an overlay for exactly the reason the design note
-    // gives: an overlay is FILTERED, clustered and legended like every other
-    // junction, so a poster source cannot quietly bypass --relation/--evidence.
-    ...(posterMode ? api.posterJunctions(api.POSTER_GRAPH) : []),
-    ...extra,
-  ];
+  // Ranked from the UNFILTERED graph: the proposal set is a property of the
+  // whole catalog, and the model then judges each overlay junction under the
+  // same filter as every other junction. Computed once for every output form.
+  const proposed: VizJunction[] | null = args.flags.has('proposed') ? proposedJunctions(api, wholeGraph, args.flags) : null;
+  const overlay = (extra: VizJunction[]): VizJunction[] => [...(proposed ?? []), ...extra];
 
   if (isJson) {
     const linkage = api.linkageMap(graph);
@@ -680,10 +680,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       {
         command: 'map',
         source,
-        ...(anchor !== null ? { anchor } : {}),
+        anchor,
         result: {
           ...(equation != null && (equationOnly || !args.flags.has('verbose')) ? {} : { linkage }),
-          ...(posterMode ? { poster: { note: posterNote, ...posterValidation! } } : {}),
+          ...(proposed === null ? {} : { proposed: proposed.map((p) => ({ id: p.id, target: p.target, sources: p.sources })) }),
           ...(edgeLegend !== null ? { filter: edgeStats } : {}),
           ...(focus !== null ? { focus } : {}),
           ...(user ? { landing, userEquation } : {}),
@@ -729,7 +729,6 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
     // Legend and landing report go to stderr so stdout/--out stays pure diagram
     // source. The diagram itself also carries the legend (see `buildVizModel`).
-    if (posterNote !== null) err(`upt: ${posterNote}`);
     if (focusLine !== null) err(`upt: ${focusLine}`);
     if (model.filterLegend !== null) err(`upt: ${model.filterLegend}`);
     if (user) printEquationReport(api, model, user, err, comparisons);
@@ -737,32 +736,6 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   if (fmt !== 'text') {
     throw new CliError(`upt: unknown --format='${fmt}' (expected: text | mermaid | dot | svg)`);
-  }
-
-  if (posterMode) {
-    const model = api.buildVizModel(fullGraph, {
-      title: `UPT physics map — ${label}`,
-      extraJunctions: overlay(user ? [user.junction] : []),
-      ...filterOpts,
-    });
-    out(`
-Poster index — statements and the derivations between them  [source: ${label}]`);
-    out(`  ${posterNote}`);
-    out(
-      `  (${model.junctions.length} junctions over ${model.clusters.length} clusters; ` +
-        `${api.POSTER_GRAPH.derivations.length} derivations, ` +
-        `${api.POSTER_GRAPH.associations.length} associations)`,
-    );
-    if (model.filterLegend !== null) out(`  ${model.filterLegend}`);
-    for (const d of posterValidation!.dangling) {
-      out(`  ⚠ '${d.derivation}' names '${d.missing}' as a ${d.role}, and nothing defines it.`);
-    }
-    if (user) {
-      out(`
-Your equation:  ${user.junction.label}`);
-      printEquationReport(api, model, user, out, comparisons);
-    }
-    return exitCode;
   }
 
   // --equation: the verdict on the user's equation is the answer asked for, so it
@@ -785,8 +758,15 @@ Your equation:  ${user.junction.label}`);
       .join(', ');
   out(`\nLinkage map — how the equations connect via shared quantities  [source: ${label}]`);
   out(`(${m.componentCount} components over ${graph.length} edges; ${m.compositions} compose into chains)`);
-  out(`  ${coreLine(anchor!.core!)}`);
-  if (anchor!.groundTruth) out(`  proposals: ${groundTruthLine(anchor!.groundTruth)}`);
+  out(`  ${coreLine(anchor.core!)}`);
+  if (anchor.groundTruth) out(`  proposals: ${groundTruthLine(anchor.groundTruth)}`);
+  if (proposed !== null) {
+    // The overlay the visual forms draw, listed here: an unadjudicated identity consequence is a
+    // proposal, never a catalog edge. Each names its target and the quantities it would relate.
+    out(`  proposed relations (${proposed.length}, unadjudicated identity consequences; not catalog edges):`);
+    for (const p of proposed) out(`     ${p.id}: ${p.target} ← {${p.sources.join(', ')}}`);
+    if (proposed.length === 0) out('     (none at this anchor and --max-orders)');
+  }
   out('');
   if (focusLine !== null) out(`  ${focusLine}`);
   if (edgeLegend !== null) out(`  ${edgeLegend}`);
