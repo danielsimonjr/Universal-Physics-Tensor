@@ -34,6 +34,8 @@ import { equals, format } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import type { BridgeEdge, EdgeConfidence } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
+import { regimeAttributesOf } from './quantity.js';
+import { AXES } from './axes.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
 import {
   CompositionAliasError,
@@ -181,20 +183,19 @@ export function effectiveAttributes(
     if (folded) contributors.push(folded);
   }
 
-  // One-value-agrees, zero-or-conflicting-values-abstain, per axis. Written
-  // out per axis (rather than generically over `keyof RegimeAttributes`) so
-  // each axis's value type stays concrete — no cross-axis union widening.
-  const scales = new Set(contributors.map((c) => c.scale).filter((v) => v !== undefined));
-  const forces = new Set(contributors.map((c) => c.force).filter((v) => v !== undefined));
-  const infos = new Set(
-    contributors.map((c) => c.information).filter((v) => v !== undefined),
-  );
-
-  const result: { scale?: RegimeAttributes['scale']; force?: RegimeAttributes['force']; information?: RegimeAttributes['information'] } = {};
-  if (scales.size === 1) result.scale = [...scales][0];
-  if (forces.size === 1) result.force = [...forces][0];
-  if (infos.size === 1) result.information = [...infos][0];
-  return result;
+  // One-value-agrees, zero-or-conflicting-values-abstain, per REGISTRY axis.
+  // The fold reads `AXES`, so an axis the registry carries is folded here: a
+  // hand list once named scale, force and information only, and the
+  // discrimination audit then measured symmetry, topology and statistics as
+  // `checked: 0` whatever the data said (9.0.0 audit §4 C2).
+  const folded: Record<string, string> = {};
+  for (const { name } of AXES) {
+    const values = new Set(
+      contributors.map((c) => (c as Readonly<Record<string, string | undefined>>)[name]).filter((v) => v !== undefined),
+    );
+    if (values.size === 1) folded[name] = [...values][0]!;
+  }
+  return regimeAttributesOf(folded, `effectiveAttributes(${name})`);
 }
 
 /**

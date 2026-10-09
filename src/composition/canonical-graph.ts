@@ -65,6 +65,8 @@
 
 import type { BridgeEdge, ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
+import { regimeAttributesOf } from './quantity.js';
+import { AXES } from './axes.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { applyCarrierSignPolicy } from '../bridges/carrier-sign.js';
@@ -118,20 +120,22 @@ const constantValue = (name: string, dim: Dimension): number | null => {
 };
 
 /**
- * Carry the scale/force/information regime axes (shared with `RegimeAttributes`).
- * The registry's information enum spelling differs from `RegimeAttributes`,
- * so it is mapped via `INFO_MAP`.
+ * Carry every registry axis the canonical regime states under the same
+ * vocabulary (scale, force, symmetry), plus information through `INFO_MAP`,
+ * whose spelling differs. `TensorIndices.topology` is a number, not a
+ * `TopologyAxis`, and `dimension` is not a registry axis; neither is carried.
+ * The result is checked against the registry, so a canonical regime value
+ * outside an axis's value list is a load-time error, not an unstated axis.
  */
 function attributesOf(eq: CanonicalEquation): RegimeAttributes {
-  const attrs: {
-    scale?: RegimeAttributes['scale'];
-    force?: RegimeAttributes['force'];
-    information?: RegimeAttributes['information'];
-  } = {};
-  if (eq.regime.scale) attrs.scale = eq.regime.scale;
-  if (eq.regime.force) attrs.force = eq.regime.force;
-  if (eq.regime.information) attrs.information = INFO_MAP[eq.regime.information];
-  return attrs;
+  const stated: Record<string, string> = {};
+  for (const { name } of AXES) {
+    const value = (eq.regime as Readonly<Record<string, unknown>>)[name];
+    if (name === 'information' || typeof value !== 'string') continue;
+    stated[name] = value;
+  }
+  if (eq.regime.information) stated['information'] = INFO_MAP[eq.regime.information];
+  return regimeAttributesOf(stated, `canonical ${eq.id} regime`);
 }
 
 const PERMISSIVE_DOMAIN: ValidityDomain = {

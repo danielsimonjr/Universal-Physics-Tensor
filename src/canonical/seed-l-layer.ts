@@ -9,14 +9,17 @@ import type { CanonicalEquation } from './canonical-equation.js';
 import type { PhysicalLaw, TensorConfig } from '../core/types.js';
 import { UniversalTensor } from '../core/tensor.js';
 import { CANONICAL_EQUATIONS } from './registry.js';
+import { FORCE_AXIS_VALUES, SCALE_AXIS_VALUES, SYMMETRY_AXIS_VALUES } from '../composition/axes.js';
 
 /** A `TensorConfig` whose axes cover every regime the canonical registry uses,
- *  so `seedCanonicalLaws` never trips axis-membership validation. */
+ *  so `seedCanonicalLaws` never trips axis-membership validation. The scale,
+ *  force and symmetry lists are the axis registry's; the information measures
+ *  are the tensor's own camelCase vocabulary (`InformationMeasure`). */
 export const CANONICAL_TENSOR_CONFIG: TensorConfig = {
   rank: 6,
-  scales: ['quantum', 'mesoscopic', 'classical', 'cosmological'],
-  forces: ['gravitational', 'electromagnetic', 'weak', 'strong', 'emergent'],
-  symmetries: ['poincare', 'gauge', 'conformal', 'susy', 'emergent'],
+  scales: [...SCALE_AXIS_VALUES],
+  forces: [...FORCE_AXIS_VALUES],
+  symmetries: [...SYMMETRY_AXIS_VALUES],
   informationMeasures: ['vonNeumann', 'shannon', 'kolmogorov', 'quantumDiscord'],
 };
 

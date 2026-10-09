@@ -27,20 +27,12 @@ import { UniversalTensor } from '../core/tensor.js';
 import type { PhysicalScale, Force, TensorIndices } from '../core/types.js';
 import type { BridgeEdge } from './edge.js';
 import type { Quantity } from './quantity.js';
+import { FORCE_AXIS_VALUES, SCALE_AXIS_VALUES } from './axes.js';
 
-const ALL_SCALES: PhysicalScale[] = [
-  'quantum',
-  'mesoscopic',
-  'classical',
-  'cosmological',
-];
-const ALL_FORCES: Force[] = [
-  'gravitational',
-  'electromagnetic',
-  'weak',
-  'strong',
-  'emergent',
-];
+// The axis registry owns the value lists; `ScaleAxis` and `ForceAxis` are the
+// same unions as the tensor's `PhysicalScale` and `Force`.
+const ALL_SCALES: readonly PhysicalScale[] = SCALE_AXIS_VALUES;
+const ALL_FORCES: readonly Force[] = FORCE_AXIS_VALUES;
 
 /**
  * A regime coordinate on the (scale, force) plane — the two axes that map
@@ -102,8 +94,8 @@ function toIndices(r: Regime): TensorIndices {
 export function buildRegimeTensor(edges: readonly BridgeEdge[]): UniversalTensor {
   const tensor = new UniversalTensor({
     rank: 6,
-    scales: ALL_SCALES,
-    forces: ALL_FORCES,
+    scales: [...ALL_SCALES],
+    forces: [...ALL_FORCES],
   });
 
   // Diagonal: one law per complete occupied regime (both axes stated, so

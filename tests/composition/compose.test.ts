@@ -60,6 +60,15 @@ describe('regimesDiffer (graph-native membership primitive)', () => {
       regimesDiffer({ scale: 'quantum' }, { force: 'gravitational' }),
     ).toBe(false);
   });
+
+  it('reads every registry axis, not a hand list: a symmetry-only, topology-only or statistics-only difference differs', () => {
+    // 9.0.0 audit §4 Low: REGIME_KEYS was ['scale', 'force', 'information'], so the
+    // three later axes could never make two attribute sets differ.
+    expect(regimesDiffer({ symmetry: 'gauge' }, { symmetry: 'poincare' })).toBe(true);
+    expect(regimesDiffer({ topology: 'chern' }, { topology: 'trivial' })).toBe(true);
+    expect(regimesDiffer({ statistics: 'bosonic' }, { statistics: 'fermionic' })).toBe(true);
+    expect(regimesDiffer({ symmetry: 'gauge' }, { symmetry: 'gauge' })).toBe(false);
+  });
 });
 
 describe('minConfidence (demotion algebra)', () => {

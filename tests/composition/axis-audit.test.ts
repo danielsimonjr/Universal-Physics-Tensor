@@ -7,6 +7,8 @@
 import { describe, it, expect } from 'vitest';
 import { auditAxisDiscrimination } from '../../src/composition/axis-audit.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
+import { proposeLinkCandidates } from '../../src/composition/bridge-analysis.js';
+import { REGISTRY_ATTRIBUTES_BY_NAME } from '../../src/composition/discovery.js';
 
 describe('auditAxisDiscrimination', () => {
   const report = auditAxisDiscrimination(CATALOG_GRAPH);
@@ -48,6 +50,33 @@ describe('auditAxisDiscrimination', () => {
     for (const r of report) {
       if (r.gated) expect(r.discriminates).toBe(true);
     }
+  });
+
+  it('CONTROL: an injected symmetry clash on a real candidate pair is CHECKED and FIRES (the gate can see every axis)', () => {
+    // 9.0.0 audit §4 C2: `effectiveAttributes` once propagated only scale, force and
+    // information, so symmetry, topology and statistics measured `checked: 0` whatever
+    // the data said, and the anti-inert-metadata gate was itself inert for the axes it
+    // exists to earn. A clash planted on one real pair must register on every axis.
+    const [pair] = proposeLinkCandidates(CATALOG_GRAPH);
+    expect(pair).toBeDefined();
+    for (const [axis, left, right] of [
+      ['symmetry', 'gauge', 'poincare'],
+      ['topology', 'chern', 'trivial'],
+      ['statistics', 'bosonic', 'fermionic'],
+    ] as const) {
+      const injected = new Map(REGISTRY_ATTRIBUTES_BY_NAME);
+      injected.set(pair!.a, { ...(injected.get(pair!.a) ?? {}), [axis]: left });
+      injected.set(pair!.b, { ...(injected.get(pair!.b) ?? {}), [axis]: right });
+      const row = auditAxisDiscrimination(CATALOG_GRAPH, injected).find((r) => r.axis === axis)!;
+      expect(row.checked, axis).toBeGreaterThanOrEqual(1);
+      expect(row.fires, axis).toBeGreaterThanOrEqual(1);
+      expect(row.discriminates, axis).toBe(true);
+    }
+    // The same plant on scale is the positive control the old code already passed.
+    const scaleMap = new Map(REGISTRY_ATTRIBUTES_BY_NAME);
+    scaleMap.set(pair!.a, { ...(scaleMap.get(pair!.a) ?? {}), scale: 'quantum' });
+    scaleMap.set(pair!.b, { ...(scaleMap.get(pair!.b) ?? {}), scale: 'classical' });
+    expect(auditAxisDiscrimination(CATALOG_GRAPH, scaleMap).find((r) => r.axis === 'scale')!.fires).toBeGreaterThanOrEqual(1);
   });
 
   it('clashRate is fires/checked and bounded [0,1]', () => {
