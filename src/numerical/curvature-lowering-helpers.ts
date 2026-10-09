@@ -399,9 +399,11 @@ export function buildRiemann(
  * Γ + ∂Γ pipeline as the riemann-tensor lowering case. Encapsulates the
  * full christoffelAt + dGammaAt + buildRiemann sequence so callers (Task 9
  * Bianchi residual) can sample R at perturbed coordinates without
- * re-implementing the FD machinery.
+ * re-implementing the FD machinery. The curvature report of `upt metric`
+ * reads it too.
+ * @internal
  */
-function riemannUpperAt(
+export function riemannUpperAt(
   x: ReadonlyArray<number>,
   gFn: MetricFn,
   gInverseFn: MetricFn,
@@ -424,8 +426,9 @@ function riemannUpperAt(
  *
  * Output index order: `[a][σ][μ][ν]` — all four lower. (a is the freshly
  * lowered index in the first slot.)
+ * @internal
  */
-function lowerFirstIndex(
+export function lowerFirstIndex(
   R: number[][][][],
   gLowerFlat: ReadonlyArray<number>,
   N: number,

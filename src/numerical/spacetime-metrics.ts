@@ -6,33 +6,45 @@
  * node uses the same mostly-plus signature. The Kretschmann scalar does not
  * depend on that choice.
  *
- * Schwarzschild Christoffel symbols are the closed form. Riemann, Ricci and
- * Kretschmann are a 4th-order finite difference of the metric, checked in
- * tests against the closed forms (Schwarzschild Kretschmann, flat-dust FLRW
- * Ricci scalar, Kerr Kretschmann). Kerr geodesics in Boyer–Lindquist
- * coordinates, including inclined ones, take their initial data from the
- * Carter constant and are integrated with the second-order geodesic equation.
+ * Schwarzschild and Kerr Christoffel symbols are closed forms; the Kerr
+ * ones come from the analytic metric derivatives through the one Christoffel
+ * builder (`computeChristoffelTensor`). Riemann, Ricci and Kretschmann are
+ * the finite-difference curvature stack of `curvature-lowering-helpers.ts`
+ * (`christoffelAt`, `riemannUpperAt`, `lowerFirstIndex`) and
+ * `computeKretschmann`, checked in tests against the closed forms
+ * (Schwarzschild Kretschmann, flat-dust FLRW Ricci scalar, Kerr
+ * Kretschmann). The metric inverse is MathTS `inv`. Kerr geodesics in
+ * Boyer–Lindquist coordinates, including inclined ones, take their initial
+ * data from the Carter constant and are integrated with the second-order
+ * geodesic equation by `integrateGeodesic` (`geodesic-integrator.ts`).
+ * This module holds no curvature or geodesic arithmetic of its own.
  *
  * @module numerical/spacetime-metrics
  * @internal
  */
 
-import { solveODESystem } from '@danielsimonjr/mathts-functions';
+import { inv } from '@danielsimonjr/mathts-functions';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
 import { DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
 import { readParameter } from './binding-value.js';
+import { computeChristoffelTensor } from './connection-lowering-helpers.js';
+import { christoffelAt, lowerFirstIndex, riemannUpperAt } from './curvature-lowering-helpers.js';
+import { integrateGeodesic as integrateGeodesicRK4 } from './geodesic-integrator.js';
+import { computeKretschmann } from './kretschmann.js';
+import { MathTSEngine } from './mathts-engine.js';
+import type { NestedArray } from './types.js';
 
 /** Coordinate order (t, r, θ, φ). */
-export type Pt = [number, number, number, number];
+type Pt = [number, number, number, number];
 
-/** The signature this module differentiates. */
+/** The signature this module differentiates; `CurvatureReport.signature` is its type. */
 export const METRIC_SIGNATURE = '(-,+,+,+)';
 
 /**
  * Printed with every curvature report. The line element and the canonical
  * Einstein-equation metric node share this mostly-plus signature.
  */
-export const METRIC_SIGNATURE_NOTE =
+const METRIC_SIGNATURE_NOTE =
   'Line element signature (−,+,+,+), the same mostly-plus signature as the Schwarzschild fixture ' +
   'and as the canonical Einstein-equation metric node. ' +
   'The Kretschmann scalar does not depend on that choice.';
@@ -73,62 +85,43 @@ function mat4(): number[][] {
   return [zeros(4), zeros(4), zeros(4), zeros(4)];
 }
 
+/** The engine the curvature helpers carry their tensors on. */
+const ENGINE = new MathTSEngine();
+
+/**
+ * The metric inverse, MathTS `inv`; a singular metric is this module's error.
+ * `inv` is typed over every MathTS matrix kind, so its result is read back as
+ * the 4×4 number array it is for a number[][] input.
+ */
 function invert4(src: number[][]): number[][] {
-  const a = src.map((row, i) => {
-    const out = zeros(8);
-    for (let j = 0; j < 4; j++) out[j] = row[j]!;
-    out[4 + i] = 1;
-    return out;
-  });
-  for (let col = 0; col < 4; col++) {
-    let pivot = col;
-    for (let r = col + 1; r < 4; r++) {
-      if (Math.abs(a[r]![col]!) > Math.abs(a[pivot]![col]!)) pivot = r;
+  let out: unknown;
+  try {
+    out = inv(src);
+  } catch (error) {
+    if (error instanceof Error && /determinant is zero/.test(error.message)) {
+      throw new Error('metric is singular at this point');
     }
-    const tmp = a[col]!;
-    a[col] = a[pivot]!;
-    a[pivot] = tmp;
-    const div = a[col]![col]!;
-    if (!Number.isFinite(div) || Math.abs(div) < 1e-18) throw new Error('metric is singular at this point');
-    for (let j = 0; j < 8; j++) a[col]![j] = a[col]![j]! / div;
-    for (let r = 0; r < 4; r++) {
-      if (r === col) continue;
-      const f = a[r]![col]!;
-      for (let j = 0; j < 8; j++) a[r]![j] = a[r]![j]! - f * a[col]![j]!;
-    }
+    throw error;
   }
-  return a.map((row) => row.slice(4));
+  if (!Array.isArray(out) || out.length !== 4) throw new Error('metric inverse is not a 4×4 matrix');
+  return out.map((row: unknown) => {
+    if (!Array.isArray(row) || row.length !== 4) throw new Error('metric inverse is not a 4×4 matrix');
+    return row.map((v: unknown) => {
+      if (typeof v !== 'number') throw new Error('metric inverse is not a 4×4 matrix');
+      return v;
+    });
+  });
 }
 
 type MetricFn = (x: Pt) => number[][];
 
-function shift(x: Pt, mu: number, delta: number): Pt {
-  const y: Pt = [x[0], x[1], x[2], x[3]];
-  y[mu] += delta;
-  return y;
-}
-
-/** 4th-order central difference of a matrix-valued function. */
-function dMetric(g: MetricFn, x: Pt, mu: number, h: number): number[][] {
-  const at = (s: number) => g(shift(x, mu, s * h));
-  const a = at(-2);
-  const b = at(-1);
-  const c = at(1);
-  const d = at(2);
-  const out = mat4();
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      const av = a[i]![j]!;
-      const bv = b[i]![j]!;
-      const cv = c[i]![j]!;
-      const dv = d[i]![j]!;
-      // A component that does not change must not differentiate a huge constant
-      // (g_tt = −c²): the stencil cancels only up to a roundoff, and that
-      // roundoff divided by h is a fake Christoffel.
-      out[i]![j] = av === bv && bv === cv && cv === dv ? 0 : (-dv + 8 * cv - 8 * bv + av) / (12 * h);
-    }
-  }
-  return out;
+/** The nested-array closures the curvature helpers take, over a `MetricFn`. */
+function closuresOf(g: MetricFn): {
+  readonly gFn: (x: ReadonlyArray<number>) => NestedArray;
+  readonly gInverseFn: (x: ReadonlyArray<number>) => NestedArray;
+} {
+  const at = (x: ReadonlyArray<number>): number[][] => g([x[0]!, x[1]!, x[2]!, x[3]!]);
+  return { gFn: at, gInverseFn: (x) => invert4(at(x)) };
 }
 
 type Gamma = number[][][];
@@ -137,29 +130,10 @@ function blankGamma(): Gamma {
   return [0, 1, 2, 3].map(() => mat4());
 }
 
-/** A rank-4 array of numbers, indexed [a][b][c][d]. */
-function tensor4(): number[][][][] {
-  return [0, 1, 2, 3].map(() => [0, 1, 2, 3].map(() => [0, 1, 2, 3].map(() => [0, 0, 0, 0])));
-}
-
-function christoffelOf(g: MetricFn, x: Pt, steps: readonly number[]): Gamma {
-  const gi = invert4(g(x));
-  const dg = [0, 1, 2, 3].map((mu) => dMetric(g, x, mu, steps[mu]!));
-  const G: Gamma = blankGamma();
-  for (let rho = 0; rho < 4; rho++) {
-    for (let mu = 0; mu < 4; mu++) {
-      for (let nu = mu; nu < 4; nu++) {
-        let s = 0;
-        for (let sigma = 0; sigma < 4; sigma++) {
-          s += gi[rho]![sigma]! * (dg[mu]![nu]![sigma]! + dg[nu]![mu]![sigma]! - dg[sigma]![mu]![nu]!);
-        }
-        const v = 0.5 * s;
-        G[rho]![mu]![nu] = v;
-        G[rho]![nu]![mu] = v;
-      }
-    }
-  }
-  return G;
+/** Γ^ρ_{μν}(x) by the finite-difference Christoffel of the curvature helpers. */
+function christoffelOf(g: MetricFn, x: Pt): Gamma {
+  const { gFn, gInverseFn } = closuresOf(g);
+  return christoffelAt(x, gFn, gInverseFn, 4, ENGINE);
 }
 
 interface Tensors {
@@ -170,58 +144,18 @@ interface Tensors {
 }
 
 /**
- * R^ρ_{σμν} = ∂_μ Γ^ρ_{νσ} − ∂_ν Γ^ρ_{μσ} + Γ^ρ_{μλ} Γ^λ_{νσ} − Γ^ρ_{νλ} Γ^λ_{μσ}.
- * Christoffel comes from a 4th-order difference of the metric; its coordinate
- * derivative is a central difference of that. Checked against the Schwarzschild
- * Kretschmann closed form.
+ * Christoffel, Ricci, the Ricci scalar and the Kretschmann scalar at `x`:
+ * `christoffelAt` and `riemannUpperAt` (the finite-difference Γ and R^ρ_{σμν}
+ * of the curvature helpers), the Ricci contraction R_{σν} = R^ρ_{σρν}, and
+ * `computeKretschmann` over the lowered Riemann. Checked against the
+ * Schwarzschild Kretschmann closed form.
  */
-function tensorsOf(g: MetricFn, x: Pt, steps: readonly number[]): Tensors {
+function tensorsOf(g: MetricFn, x: Pt): Tensors {
+  const { gFn, gInverseFn } = closuresOf(g);
   const g0 = g(x);
   const gi = invert4(g0);
-  const gamma = christoffelOf(g, x, steps);
-  const partial: Gamma[] = [];
-  for (let mu = 0; mu < 4; mu++) {
-    const h = steps[mu]!;
-    const plus = christoffelOf(g, shift(x, mu, h), steps);
-    const minus = christoffelOf(g, shift(x, mu, -h), steps);
-    const d: Gamma = blankGamma();
-    for (let rho = 0; rho < 4; rho++) {
-      for (let a = 0; a < 4; a++) {
-        for (let b = 0; b < 4; b++) {
-          d[rho]![a]![b] = (plus[rho]![a]![b]! - minus[rho]![a]![b]!) / (2 * h);
-        }
-      }
-    }
-    partial.push(d);
-  }
-  const up = tensor4();
-  for (let rho = 0; rho < 4; rho++) {
-    for (let sigma = 0; sigma < 4; sigma++) {
-      for (let mu = 0; mu < 4; mu++) {
-        for (let nu = 0; nu < 4; nu++) {
-          let s = partial[mu]![rho]![nu]![sigma]! - partial[nu]![rho]![mu]![sigma]!;
-          for (let lam = 0; lam < 4; lam++) {
-            s +=
-              gamma[rho]![mu]![lam]! * gamma[lam]![nu]![sigma]! -
-              gamma[rho]![nu]![lam]! * gamma[lam]![mu]![sigma]!;
-          }
-          up[rho]![sigma]![mu]![nu] = s;
-        }
-      }
-    }
-  }
-  const lower = tensor4();
-  for (let a = 0; a < 4; a++) {
-    for (let b = 0; b < 4; b++) {
-      for (let c = 0; c < 4; c++) {
-        for (let d = 0; d < 4; d++) {
-          let s = 0;
-          for (let rho = 0; rho < 4; rho++) s += g0[a]![rho]! * up[rho]![b]![c]![d]!;
-          lower[a]![b]![c]![d] = s;
-        }
-      }
-    }
-  }
+  const gamma = christoffelAt(x, gFn, gInverseFn, 4, ENGINE);
+  const up = riemannUpperAt(x, gFn, gInverseFn, 4, ENGINE, gamma);
   const ricci = mat4();
   for (let sigma = 0; sigma < 4; sigma++) {
     for (let nu = 0; nu < 4; nu++) {
@@ -234,26 +168,8 @@ function tensorsOf(g: MetricFn, x: Pt, steps: readonly number[]): Tensors {
   for (let a = 0; a < 4; a++) {
     for (let b = 0; b < 4; b++) ricciScalar += gi[a]![b]! * ricci[a]![b]!;
   }
-  let kretschmann = 0;
-  for (let a = 0; a < 4; a++) {
-    for (let b = 0; b < 4; b++) {
-      for (let c = 0; c < 4; c++) {
-        for (let d = 0; d < 4; d++) {
-          let raised = 0;
-          for (let ap = 0; ap < 4; ap++) {
-            for (let bp = 0; bp < 4; bp++) {
-              for (let cp = 0; cp < 4; cp++) {
-                for (let dp = 0; dp < 4; dp++) {
-                  raised += gi[a]![ap]! * gi[b]![bp]! * gi[c]![cp]! * gi[d]![dp]! * lower[ap]![bp]![cp]![dp]!;
-                }
-              }
-            }
-          }
-          kretschmann += lower[a]![b]![c]![d]! * raised;
-        }
-      }
-    }
-  }
+  const lower = lowerFirstIndex(up, g0.flat(), 4);
+  const kretschmann = computeKretschmann(lower, gi);
   return { ricciScalar, kretschmann, ricci, christoffel: gamma };
 }
 
@@ -285,10 +201,6 @@ function nonzeroGamma(G: Gamma): Component[] {
     }
   }
   return out;
-}
-
-function stepsFor(x: Pt): number[] {
-  return [Math.max(Math.abs(x[0]), 1) * 1e-4, Math.max(Math.abs(x[1]), 1) * 1e-4, 1e-4, 1e-4];
 }
 
 function schwarzschildMetric(M: number, c: number, G: number): MetricFn {
@@ -449,7 +361,7 @@ const PARAM_DIM: Readonly<Record<string, Dimension>> = {
 };
 
 /** Parse `key=value` pairs. A value is a number, a unit, or a constant expression. @internal */
-export function metricParams(
+function metricParams(
   pairs: readonly string[],
   defaults: Readonly<Record<string, number>>,
 ): { values: Record<string, number>; notes: string[] } {
@@ -483,7 +395,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
       return m;
     };
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
-    const t = tensorsOf(g, x, stepsFor(x));
+    const t = tensorsOf(g, x);
     return stateCurvature(pack('minkowski', p, x, t, { ricciScalar: 0, kretschmann: 0 }, [
       'Minkowski in Cartesian-like coordinates (the angular part is not a sphere here; g_θθ = g_φφ = 1).',
       ...notes,
@@ -499,7 +411,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     if (!(p.r! > rs)) throw new Error(`r must be outside the horizon (r_s = ${rs})`);
     const g = schwarzschildMetric(p.M!, p.c!, p.G!);
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
-    const t = tensorsOf(g, x, stepsFor(x));
+    const t = tensorsOf(g, x);
     const K = schwarzschildKretschmann(p.M!, p.r!, p.c!, p.G!);
     return stateCurvature(pack('schwarzschild', p, x, t, { kretschmann: K, ricciScalar: 0, horizon_m: rs }, [
       'Closed form: Kretschmann = 48 G² M² / (c⁴ r⁶), Ricci = 0.',
@@ -532,8 +444,8 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     // Christoffel in the SI metric. Ricci and Kretschmann are computed at c = 1
     // and divided by c² and c⁴: g_tt = −c² makes those scalars smaller than the
     // roundoff of an SI finite difference.
-    const tSi = tensorsOf(g, x, stepsFor(x));
-    const t1 = p.c === 1 ? tSi : tensorsOf(flrwMetric(p.a0!, p.t0!, p.n!, p.k!, 1), x, stepsFor(x));
+    const tSi = tensorsOf(g, x);
+    const t1 = p.c === 1 ? tSi : tensorsOf(flrwMetric(p.a0!, p.t0!, p.n!, p.k!, 1), x);
     const c2 = p.c! * p.c!;
     const t = {
       christoffel: tSi.christoffel,
@@ -580,7 +492,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
   if (Math.abs(p.a!) >= p.r!) throw new Error('Kerr finite difference wants |a| < r and r outside the ring');
   const g = kerrMetric(Mgeom, p.a!);
   const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
-  const t = tensorsOf(g, x, stepsFor(x));
+  const t = tensorsOf(g, x);
   const K = kerrKretschmann(Mgeom, p.r!, p.a!, p.theta!);
   const aOverM = p.a! / Mgeom;
   const kerrNotes = [
@@ -685,51 +597,12 @@ export function schwarzschildCircularOrbit(opts?: {
   const uphi = Omega * ut;
   if (!(f > 0) || !Number.isFinite(ut)) throw new Error('circular orbit needs r > 1.5 r_s');
 
-  // Analytic Γ for the equatorial circular orbit (θ = π/2, sin = 1, cos = 0).
-  // Equatorial reduction. The polar symbols that carry cot θ are omitted:
-  // a floating-point step off θ = π/2 makes cot θ explode.
-  const gamma = (r: number): Gamma => {
-    const ff = 1 - rs / r;
-    const Gma: Gamma = blankGamma();
-    const set = (rho: number, mu: number, nu: number, v: number) => {
-      Gma[rho]![mu]![nu] = v;
-      Gma[rho]![nu]![mu] = v;
-    };
-    set(0, 0, 1, rs / (2 * r * (r - rs)));
-    set(1, 0, 0, (rs * ff) / (2 * r * r));
-    set(1, 1, 1, -rs / (2 * r * (r - rs)));
-    set(1, 2, 2, -(r - rs));
-    set(1, 3, 3, -(r - rs));
-    set(2, 1, 2, 1 / r);
-    set(3, 1, 3, 1 / r);
-    return Gma;
-  };
-
-  // state: t, r, th, phi, ut, ur, uth, uphi
-  let y = [0, r0, Math.PI / 2, 0, ut, 0, 0, uphi];
-  const accel = (s: number[]): number[] => {
-    const Gma = gamma(s[1]!);
-    const u = [s[4]!, s[5]!, s[6]!, s[7]!];
-    const du = [0, 0, 0, 0];
-    for (let rho = 0; rho < 4; rho++) {
-      let sum = 0;
-      for (let mu = 0; mu < 4; mu++) {
-        for (let nu = 0; nu < 4; nu++) sum += Gma[rho]![mu]![nu]! * u[mu]! * u[nu]!;
-      }
-      du[rho] = -sum;
-    }
-    return [u[0]!, u[1]!, u[2]!, u[3]!, du[0]!, du[1]!, du[2]!, du[3]!];
-  };
+  // The closed-form Schwarzschild Christoffel symbols, polar terms included:
+  // with u^θ = 0 and θ = π/2 the polar terms stay zero to roundoff.
   const period = (2 * Math.PI) / uphi;
   const fraction = opts?.fraction ?? 0.02;
   const steps = 400;
-  const h = (period * fraction) / steps;
-  for (let n = 0; n < steps; n++) {
-    const sol = solveODESystem((_t, s) => accel(s), y, [0, h], { dt: h });
-    y = (sol.y[sol.y.length - 1] ?? y).slice();
-    y[2] = Math.PI / 2;
-    y[6] = 0;
-  }
+  const y = integrateWithChristoffel((r, theta) => schwarzschildChristoffel(M, r, theta), [0, r0, Math.PI / 2, 0, ut, 0, 0, uphi], period * fraction, steps);
   return { r0, rEnd: y[1]!, phiAdvance: y[3]!, steps };
 }
 
@@ -1004,26 +877,15 @@ function kerrMetricDerivatives(M: number, a: number, r: number, theta: number): 
   return { dr, dth };
 }
 
+/**
+ * Γ^ρ_{μν} from a metric and its analytic partial derivatives, through the
+ * one Christoffel builder (`computeChristoffelTensor`). A `null` derivative
+ * is a coordinate the metric does not depend on.
+ */
 function christoffelFrom(g: number[][], dg: readonly (number[][] | null)[]): Gamma {
-  const gi = invert4(g);
-  const G: Gamma = blankGamma();
-  for (let rho = 0; rho < 4; rho++) {
-    for (let mu = 0; mu < 4; mu++) {
-      for (let nu = mu; nu < 4; nu++) {
-        let s = 0;
-        for (let sigma = 0; sigma < 4; sigma++) {
-          const dmu = dg[mu]?.[nu]![sigma] ?? 0;
-          const dnu = dg[nu]?.[mu]![sigma] ?? 0;
-          const dsig = dg[sigma]?.[mu]![nu] ?? 0;
-          s += gi[rho]![sigma]! * (dmu + dnu - dsig);
-        }
-        const v = 0.5 * s;
-        G[rho]![mu]![nu] = v;
-        G[rho]![nu]![mu] = v;
-      }
-    }
-  }
-  return G;
+  const gInverseFlat = invert4(g).flat();
+  const tensor = computeChristoffelTensor(gInverseFlat, (mu) => (dg[mu] ?? mat4()).flat(), 4, ENGINE);
+  return ENGINE.toNested(tensor) as Gamma;
 }
 
 function kerrChristoffel(M: number, a: number, r: number, theta: number): Gamma {
@@ -1035,7 +897,7 @@ function kerrChristoffel(M: number, a: number, r: number, theta: number): Gamma 
 export function kerrChristoffelFdGap(M: number, a: number, r: number, theta: number): number {
   const x: Pt = [0, r, theta, 0];
   const analytic = kerrChristoffel(M, a, r, theta);
-  const fd = christoffelOf(kerrMetric(M, a), x, stepsFor(x));
+  const fd = christoffelOf(kerrMetric(M, a), x);
   let gap = 0;
   for (let rho = 0; rho < 4; rho++) {
     for (let mu = 0; mu < 4; mu++) {
@@ -1114,22 +976,43 @@ function carterState(
   return [0, r, theta, 0, ut, ur, uth, uphi];
 }
 
-function integrateGeodesic(gammaAt: (r: number, theta: number) => Gamma, y0: readonly number[], fraction: number, steps: number): number[] {
-  const accel = (s: number[]): number[] => {
-    const Gma = gammaAt(s[1]!, s[2]!);
-    const u = [s[4]!, s[5]!, s[6]!, s[7]!];
-    const du = [0, 0, 0, 0];
-    for (let rho = 0; rho < 4; rho++) {
-      let sum = 0;
-      for (let mu = 0; mu < 4; mu++) for (let nu = 0; nu < 4; nu++) sum += Gma[rho]![mu]![nu]! * u[mu]! * u[nu]!;
-      du[rho] = -sum;
+/**
+ * The state `[t, r, θ, φ, u^t, u^r, u^θ, u^φ]` after `steps` RK4 steps of
+ * the second-order geodesic equation over an affine extent `tauEnd`, by
+ * `integrateGeodesic` of `geodesic-integrator.ts` with `gammaAt` packed into
+ * its flat layout `G[16·μ + 4·ν + ρ] = Γ^μ_{νρ}`.
+ */
+function integrateWithChristoffel(
+  gammaAt: (r: number, theta: number) => Gamma,
+  y0: readonly number[],
+  tauEnd: number,
+  steps: number,
+): number[] {
+  const christoffelFn = (x: ReadonlyArray<number>, out?: Float64Array): Float64Array => {
+    const flat = out ?? new Float64Array(64);
+    const gamma = gammaAt(x[1]!, x[2]!);
+    for (let mu = 0; mu < 4; mu++) {
+      for (let nu = 0; nu < 4; nu++) {
+        for (let rho = 0; rho < 4; rho++) flat[16 * mu + 4 * nu + rho] = gamma[mu]![nu]![rho]!;
+      }
     }
-    return [u[0]!, u[1]!, u[2]!, u[3]!, du[0]!, du[1]!, du[2]!, du[3]!];
+    return flat;
   };
+  const result = integrateGeodesicRK4({
+    christoffelFn,
+    x0: [y0[0]!, y0[1]!, y0[2]!, y0[3]!],
+    v0: [y0[4]!, y0[5]!, y0[6]!, y0[7]!],
+    tauStart: 0,
+    tauEnd,
+    steps,
+  });
+  return [...result.xFinal, ...result.vFinal];
+}
+
+/** `fraction` of an orbit's angular period, from the start's angular rate. */
+function orbitExtent(y0: readonly number[], fraction: number): number {
   const angular = Math.max(Math.abs(y0[7]!), Math.abs(y0[6]!), 1e-12);
-  const h = ((2 * Math.PI) / angular) * fraction / steps;
-  const sol = solveODESystem((_t, s) => accel(s), y0.slice(), [0, steps * h], { dt: h });
-  return sol.y[sol.y.length - 1] ?? y0.slice();
+  return ((2 * Math.PI) / angular) * fraction;
 }
 
 function sampleOf(metric: MetricFn, a: number, y0: readonly number[], y1: readonly number[], steps: number, mu2: number): KerrGeodesicSample {
@@ -1189,7 +1072,7 @@ export function kerrGeodesic(opts: {
   const fraction = opts.fraction ?? 0.01;
   const metric = kerrMetric(M, a);
   const y0 = carterState(M, a, r, theta, opts.E, opts.L, opts.Q, mu2, opts.signR ?? 1, opts.signTheta ?? 1, opts.allowOffShell === true);
-  const y1 = integrateGeodesic((rr, th) => kerrChristoffel(M, a, rr, th), y0, fraction, steps);
+  const y1 = integrateWithChristoffel((rr, th) => kerrChristoffel(M, a, rr, th), y0, orbitExtent(y0, fraction), steps);
   return sampleOf(metric, a, y0, y1, steps, mu2);
 }
 
@@ -1219,7 +1102,7 @@ export function schwarzschildGeodesic(opts: {
   const fraction = opts.fraction ?? 0.01;
   const metric = schwarzschildMetric(M, 1, 1);
   const y0 = carterState(M, 0, r, theta, opts.E, opts.L, opts.Q, 1, opts.signR ?? 1, opts.signTheta ?? 1, false);
-  const y1 = integrateGeodesic((rr, th) => schwarzschildChristoffel(M, rr, th), y0, fraction, steps);
+  const y1 = integrateWithChristoffel((rr, th) => schwarzschildChristoffel(M, rr, th), y0, orbitExtent(y0, fraction), steps);
   return sampleOf(metric, 0, y0, y1, steps, 1);
 }
 

@@ -31,3 +31,26 @@ describe('numerical partial derivative', () => {
       .toThrow(/no explicit derivative supplied for "S\/t"/);
   });
 });
+
+describe('pderivNumericalFn: a component that does not move differentiates to exactly 0', () => {
+  // g_tt = −c² is the same number at every stencil point. The stencil cancels
+  // it only up to the roundoff of 8·c², and that roundoff divided by h was a
+  // fake Christoffel of order 10 in an SI Minkowski report (the curvature
+  // report once carried this rule itself; it belongs in the one primitive).
+  const cSquared = 299792458 * 299792458;
+  const field = (coords: ReadonlyArray<number>): number[] => [-cSquared, coords[0]! * 2, 5];
+
+  it.each([2, 4] as const)('order %d', (order) => {
+    const d = pderivNumericalFn(field, [3, 1, 1, 1], 0, { order }) as number[];
+    expect(d[0]).toBe(0);
+    expect(Object.is(d[0], -0)).toBe(false);
+    expect(d[1]).toBeCloseTo(2, 6);
+    expect(d[2]).toBe(0);
+  });
+
+  it('a moving component of the same size is still differentiated (control)', () => {
+    const moving = (coords: ReadonlyArray<number>): number[] => [-cSquared * (1 + coords[0]! * 1e-3)];
+    const d = pderivNumericalFn(moving, [3, 0, 0, 0], 0, { order: 4 }) as number;
+    expect(d).toBeCloseTo(-cSquared * 1e-3, -6);
+  });
+});
