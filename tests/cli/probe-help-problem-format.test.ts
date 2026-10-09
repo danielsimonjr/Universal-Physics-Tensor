@@ -7,6 +7,7 @@
  * The example is taken out of the help text and loaded with the real loader, so a documented
  * example that does not load fails this test.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { searchProblemFromFile } from '../../src/composition/probe/problem.js';

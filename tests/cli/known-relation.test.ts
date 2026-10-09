@@ -4,19 +4,12 @@
  * canonical equation has that target. A shared quantity is not that report.
  * A canonical mismatch stays exit 3.
  */
+import { runText } from '../helpers/cli-run.js';
 import { describe, expect, it } from 'vitest';
-import { runCli } from '../../src/cli/main.js';
-
-async function run(args: string[]): Promise<{ code: number; text: string }> {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  const code = await runCli(args, { out: sink, err: sink, write: (s: string) => lines.push(s) });
-  return { code, text: lines.join('') };
-}
 
 describe('one known-relation report for derive and map', () => {
   it('names be-66 for the radiation-pressure monomial, and the canonical prefactor stays unchecked', async () => {
-    const r = await run([
+    const r = await runText([
       'derive',
       'radiation-pressure:pressure',
       'poynting_flux:power/area',
@@ -32,7 +25,7 @@ describe('one known-relation report for derive and map', () => {
   });
 
   it('does not name be-66 for a pressure monomial that is not that edge', async () => {
-    const r = await run([
+    const r = await runText([
       'derive',
       'pressure:pressure',
       'intensity:power/area',
@@ -46,7 +39,7 @@ describe('one known-relation report for derive and map', () => {
   });
 
   it('names be-66 on the map of the same quantities, and a canonical factor still exits 3', async () => {
-    const mapped = await run([
+    const mapped = await runText([
       'map',
       '--equation-only',
       '--equation',
@@ -56,7 +49,7 @@ describe('one known-relation report for derive and map', () => {
     expect(mapped.text).toMatch(/be-66 \(Radiation pressure/);
     expect(mapped.text).toMatch(/the target and the dimensionful sources are this catalog edge/);
 
-    const full = await run([
+    const full = await runText([
       'map',
       '--equation-only',
       '--equation',
@@ -66,7 +59,7 @@ describe('one known-relation report for derive and map', () => {
     expect(full.text).toMatch(/be-66 \(Radiation pressure/);
     expect(full.text).toMatch(/the target and the sources are this catalog edge/);
 
-    const mismatch = await run([
+    const mismatch = await runText([
       'derive',
       'hawking_temperature:temperature',
       'mass:mass',

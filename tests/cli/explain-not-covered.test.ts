@@ -7,6 +7,7 @@
  * not a quantity of the graph is now reported as NOT COVERED, with suggestions, and exits 1, as an
  * unknown model id does in `upt path`. A real quantity the inputs cannot reach is still an answer.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { formatQuantity } from '../../src/composition/explain.js';

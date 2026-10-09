@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';

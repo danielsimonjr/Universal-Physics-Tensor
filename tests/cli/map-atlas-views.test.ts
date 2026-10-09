@@ -9,26 +9,10 @@
  *
  * @module tests/cli/map-atlas-views
  */
+import '../helpers/dist.js';
+import { json, run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
-import { runCli } from '../../dist/cli/main.js';
 import { ATLAS_FAMILIES, CANONICAL_EQUATIONS } from '../../dist/cli-api.js';
-
-async function run(args: string[]): Promise<{ code: number; stdout: string; stderr: string }> {
-  const out: string[] = [];
-  const err: string[] = [];
-  const code = await runCli(args, {
-    out: (s?: string) => out.push((s ?? '') + '\n'),
-    err: (s?: string) => err.push((s ?? '') + '\n'),
-    write: (s: string) => out.push(s),
-  });
-  return { code, stdout: out.join(''), stderr: err.join('') };
-}
-
-async function json(args: string[]): Promise<any> {
-  const r = await run([...args, '--json']);
-  expect(r.code).toBe(0);
-  return JSON.parse(r.stdout);
-}
 
 const BRIDGES = ATLAS_FAMILIES.flatMap((f) => f.bridges);
 const MODELS = ATLAS_FAMILIES.flatMap((f) => f.models);

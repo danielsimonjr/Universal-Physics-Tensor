@@ -7,6 +7,7 @@
  * could not tell "no batteries ran" from "the command is broken". Every candidate without
  * batteries is now listed with the reason, its status.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';

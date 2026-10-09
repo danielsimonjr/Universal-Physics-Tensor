@@ -7,6 +7,7 @@
  * halves: the real registries produce no advisory, and a stubbed pair that
  * DOES disagree produces one. A gauge that cannot move is dead, not stable.
  */
+import { captureMerged, text } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { command as recoverCommand } from '../../src/cli/commands/recover.js';
@@ -14,13 +15,6 @@ import * as cliApi from '../../src/cli-api.js';
 import type { CommandCtx } from '../../src/cli/command.js';
 
 const ADVISORY = '⚠ conventions differ';
-
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 
 describe('upt recover — silent while declared conventions do not disagree', () => {
   it('the precondition holds: canonical rows declare none; a catalog edge may', () => {
@@ -46,7 +40,7 @@ describe('upt recover — silent while declared conventions do not disagree', ()
   });
 
   it('runCli(["recover"]) emits no advisory line anywhere in its output', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['recover'], c.io)).toBe(0);
     const out = text(c);
     expect(out).not.toContain(ADVISORY);
@@ -57,7 +51,7 @@ describe('upt recover — silent while declared conventions do not disagree', ()
   });
 
   it('every emitted line is free of the advisory marker, and no line is split by it', async () => {
-    const c = capture();
+    const c = captureMerged();
     await runCli(['recover'], c.io);
     // A second, independent method: per-line rather than whole-buffer. The
     // advisory is prefixed with a newline, so a leak would also show up as an
@@ -68,7 +62,7 @@ describe('upt recover — silent while declared conventions do not disagree', ()
   });
 
   it('--json output carries no convention field', async () => {
-    const c = capture();
+    const c = captureMerged();
     expect(await runCli(['recover', '--json'], c.io)).toBe(0);
     const parsed = JSON.parse(text(c)) as Record<string, unknown>;
     expect(JSON.stringify(parsed)).not.toContain('conventions');
@@ -90,7 +84,7 @@ describe('THE CONTROL — the advisory fires when a pair genuinely disagrees', (
       CATALOG_GRAPH: [{ beId: row!.bridgeId, conventions: { heatWorkSign: 'Q+W' } }],
     } as unknown as CommandCtx['api'];
 
-    const c = capture();
+    const c = captureMerged();
     const ctx: CommandCtx = {
       args: { flags: new Map(), positionals: [] } as unknown as CommandCtx['args'],
       api: stubApi,
@@ -115,7 +109,7 @@ describe('THE CONTROL — the advisory fires when a pair genuinely disagrees', (
       CATALOG_GRAPH: [{ beId: row!.bridgeId, conventions: {} }],
     } as unknown as CommandCtx['api'];
 
-    const c = capture();
+    const c = captureMerged();
     const ctx: CommandCtx = {
       args: { flags: new Map(), positionals: [] } as unknown as CommandCtx['args'],
       api: stubApi,

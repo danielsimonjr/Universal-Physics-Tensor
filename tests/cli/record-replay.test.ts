@@ -8,6 +8,7 @@
  * environment changes and edits to the record beside them. Design:
  * `docs/planning/Experiment-Record-Replay-Design-Note.md`.
  */
+import '../helpers/dist.js';
 import { describe, it, expect, beforeAll } from 'vitest';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, existsSync, writeFileSync, rmSync } from 'node:fs';

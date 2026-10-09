@@ -7,21 +7,11 @@
  * an envelope. A `upt path` whose regime or horizon was checked and failed
  * does not print the domain supremum.
  */
+import '../helpers/dist.js';
+import { capture, text } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { C_SI, M_SUN_SI } from '../../src/core/constants.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return {
-    lines,
-    err,
-    io: { out: sink, err: (s?: string) => err.push((s ?? '') + '\n'), write: (s: string) => lines.push(s) },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 
 describe('binding expressions', () => {
   it('upt metric accepts M=1Msun and theta=pi/2', async () => {

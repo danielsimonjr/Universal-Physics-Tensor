@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect } from 'vitest';
 import { sanitize, emitJson } from '../../dist/cli/output.js';

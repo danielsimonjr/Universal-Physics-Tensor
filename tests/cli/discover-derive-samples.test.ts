@@ -7,6 +7,7 @@
  * representative value, or the documented room temperature; an input with neither is not evaluated,
  * and the line says so.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 

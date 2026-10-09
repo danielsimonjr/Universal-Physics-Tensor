@@ -3,6 +3,7 @@
  * derives its required-file list from `package.json` `exports`, so this test
  * is what keeps the declared target paths honest against the build output.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

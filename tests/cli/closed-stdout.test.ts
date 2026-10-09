@@ -2,6 +2,7 @@
  * A reader that closes the pipe early (`upt map | head -1`) must end the run quietly, not crash
  * with an unhandled `write EPIPE` stack trace.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';

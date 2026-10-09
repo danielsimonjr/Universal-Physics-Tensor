@@ -8,22 +8,13 @@
  * sentence that merely contains "valid" counts for nothing. Every status found must be defined in the
  * same invocation's envelope, with the glossary's meaning.
  */
+import '../helpers/dist.js';
+import { run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { runCli } from '../../dist/cli/main.js';
 import { STATUS_GLOSSARY } from '../../src/cli/statuses.js';
-
-async function run(argv: string[]) {
-  const o = { stdout: '', stderr: '' };
-  const code = await runCli(argv, {
-    out: (l?: string) => void (o.stdout += (l ?? '') + '\n'),
-    err: (l?: string) => void (o.stderr += (l ?? '') + '\n'),
-    write: (x: string) => void (o.stdout += x),
-  });
-  return { code, ...o };
-}
 
 /**
  * The status a word names in `command`. A word may name different statuses in different commands

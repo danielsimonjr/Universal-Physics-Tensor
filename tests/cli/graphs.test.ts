@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { resolveGraph } from '../../dist/cli/graphs.js';
 import { CliError } from '../../dist/cli/errors.js';

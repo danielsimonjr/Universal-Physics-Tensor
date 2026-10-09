@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { DomainViolationError } from '../../src/bridges/evaluation-errors.js';
 import { evaluateRelation, evaluatorOutput } from '../../src/composition/evaluate-relation.js';

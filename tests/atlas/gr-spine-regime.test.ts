@@ -27,6 +27,7 @@
  * confusion (`<` vs `<=`), which at these bounds is the difference between the
  * confrontation point being inside its own claim and outside it.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 

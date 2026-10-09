@@ -14,6 +14,7 @@
  *
  * @module tests/api/public-surface
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import * as root from '../../src/index.js';
 
@@ -37,16 +38,16 @@ const PRESENT = [
 
 const ABSENT = [
   'evaluateBohmSheath',
-  ['evaluateBE', '37CovariantEikonalNumerical'].join(''),
+  'evaluateBE37CovariantEikonalNumerical',
   'CATALOG_FULL_EDGES',
   'APPLIED_PHYSICIST_EDGES',
-  ['BE', '37_SHAPIRO_DIFF'].join(''),
-  ['BE', '52_PERIHELION_DIFF'].join(''),
-  ['BE', '42_HAWKING_DIFF'].join(''),
-  ['BE', '11_DECOHERENCE_DIFF'].join(''),
+  'BE37_SHAPIRO_DIFF',
+  'BE52_PERIHELION_DIFF',
+  'BE42_HAWKING_DIFF',
+  'BE11_DECOHERENCE_DIFF',
   'DIFFERENTIABLE_BRIDGE_SPECS',
-  ['be', '42Edge'].join(''),
-  ['confrontBE', '52'].join(''),
+  'be42Edge',
+  'confrontBE52',
   'lawSchwarzschildRadius',
 ] as const;
 
@@ -332,22 +333,20 @@ describe('Public API stability — v0.4.0 type-only surface (src/index.ts source
       fileURLToPath(new URL('../../src/index.ts', import.meta.url)), 'utf8',
     );
     expect(indexSrc).not.toContain('isChristoffelSymmetric');
-    for (const typeName of ['CassiniObservation', ['BE', '37ConfrontationResult'].join(''), 'CollapseBoundObservation', ['BE', '48ConfrontationResult'].join('')]) {
+    for (const typeName of ['CassiniObservation', 'BE37ConfrontationResult', 'CollapseBoundObservation', 'BE48ConfrontationResult']) {
       expect(indexSrc, typeName).not.toContain(typeName);
     }
   });
 });
 
 describe('Public API stability — v0.4.0 type-only surface (dist/index.d.ts post-build)', () => {
+  // `tests/helpers/dist.js` (the first import of this file) throws on an absent or stale build;
+  // this test once warned and returned when dist/index.d.ts was missing, which vitest reported
+  // as a pass.
   it('dist/index.d.ts contains every v0.4.0 type-only symbol', async () => {
-    const { readFileSync, existsSync } = await import('node:fs');
+    const { readFileSync } = await import('node:fs');
     const { fileURLToPath } = await import('node:url');
     const dtsPath = fileURLToPath(new URL('../../dist/index.d.ts', import.meta.url));
-    if (!existsSync(dtsPath)) {
-      // dist not yet built — skip the post-build check (pre-build TDD phase)
-      console.warn('dist/index.d.ts not found — skipping post-build type check. Run npm run build first.');
-      return;
-    }
     const dtsSrc = readFileSync(dtsPath, 'utf8');
     for (const typeName of V040_TYPE_EXPORTS) {
       expect(dtsSrc, `dist/index.d.ts must declare type "${typeName}"`).toContain(typeName);
@@ -355,13 +354,9 @@ describe('Public API stability — v0.4.0 type-only surface (dist/index.d.ts pos
   });
 
   it('dist/index.d.ts does NOT declare isChristoffelSymmetric', async () => {
-    const { readFileSync, existsSync } = await import('node:fs');
+    const { readFileSync } = await import('node:fs');
     const { fileURLToPath } = await import('node:url');
     const dtsPath = fileURLToPath(new URL('../../dist/index.d.ts', import.meta.url));
-    if (!existsSync(dtsPath)) {
-      console.warn('dist/index.d.ts not found — skipping post-build check.');
-      return;
-    }
     const dtsSrc = readFileSync(dtsPath, 'utf8');
     expect(dtsSrc).not.toContain('isChristoffelSymmetric');
   });

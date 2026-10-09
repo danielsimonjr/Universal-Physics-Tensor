@@ -7,25 +7,14 @@
  * stays derived. A sourced factor of 1, such as the simple-harmonic frequency,
  * stays derived too.
  */
+import { captureMerged } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 
 const UNSET = ['CE-fermi-energy', 'CE-fermi-velocity', 'CE-debye-frequency', 'CE-sound-speed'] as const;
 
-function capture() {
-  const lines: string[] = [];
-  return {
-    lines,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => lines.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-
 async function run(args: string[]) {
-  const cap = capture();
+  const cap = captureMerged();
   const code = await runCli(args, cap.io);
   return { code, text: cap.lines.join('') };
 }

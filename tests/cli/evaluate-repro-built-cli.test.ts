@@ -8,6 +8,7 @@
  * binding reader `upt eval` uses took MathTS's float SI value. Both fixes were
  * library-only; these run the commands a user types.
  */
+import '../helpers/dist.js';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';

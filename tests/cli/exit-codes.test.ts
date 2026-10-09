@@ -9,6 +9,7 @@
  * was compared through an unresolved name exits 3. A derive that is not a
  * unique monomial exits 3.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
