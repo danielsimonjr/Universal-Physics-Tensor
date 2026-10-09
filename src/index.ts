@@ -131,20 +131,12 @@ import './core/regime-rule-install.js';
 import './core/regimes-builtins.js';
 
 // v0.9 Proposal 8 — Bridge Parameter Differentiation (P8 Decision #1: lives
-// in src/diff/, doesn't touch src/bridges/). `bridgeGradient` is the AD path
-// (engine.reverseGrad), but it CANNOT trace the plain-JS catalog evaluators —
-// use `bridgeGradientNumerical` (central finite differences, engine-free) to
-// differentiate them. See the module doc for the full AD-limitation note.
-export type {
-  BridgeDiffSpec,
-  BridgeGradientResult,
-  BridgeNumericalGradientResult,
-} from './diff/bridge-gradient.js';
-export {
-  bridgeGradient,
-  bridgeGradientNumerical,
-  gradientToNamed,
-} from './diff/bridge-gradient.js';
+// in src/diff/, doesn't touch src/bridges/). `bridgeGradientNumerical` is
+// central finite differences over a spec, engine-free. Engine AD of a spec
+// is unreachable by construction (`evaluate` returns a number, which carries
+// no tape); the exact AD path is `bridgeGradientAST` over the symbolic RHS.
+export type { BridgeDiffSpec, BridgeNumericalGradientResult } from './diff/bridge-gradient.js';
+export { bridgeGradientNumerical } from './diff/bridge-gradient.js';
 // Exact bridge gradients via reverse-mode AD over the symbolic RHS AST
 // (traced lowering through mathts-autograd; faithful encodings only).
 export type { ASTGradientResult } from './diff/bridge-ast-gradient.js';

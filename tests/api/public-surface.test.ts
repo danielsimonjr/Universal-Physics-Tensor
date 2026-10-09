@@ -48,6 +48,10 @@ const ABSENT = [
   ['be', '42Edge'].join(''),
   ['confrontBE', '52'].join(''),
   'lawSchwarzschildRadius',
+  // Engine AD of a plain-JS spec is unreachable by construction (audit N3): the
+  // function that offered it and its unpack helper were removed after 9.0.0.
+  'bridgeGradient',
+  'gradientToNamed',
 ] as const;
 
 const REMOVED_IN_6 = [
@@ -264,7 +268,6 @@ const ALL_TYPE_EXPORTS = [
   'RegimeSpec',
   // v0.9 Proposal 8 — Bridge Parameter Differentiation
   'BridgeDiffSpec',
-  'BridgeGradientResult',
   'BridgeNumericalGradientResult',
   'ASTGradientResult',
   // v0.7.1 M-1 Surface restoration — 5 v0.7 dimensional primitives

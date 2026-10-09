@@ -2,8 +2,8 @@
  * Exact bridge-gradients via reverse-mode AD over the symbolic RHS AST.
  *
  * The catalog's plain-JS evaluators cannot be differentiated by AD (they run
- * raw `Math.*` arithmetic; see `bridge-gradient.ts`), and `bridgeGradient`'s
- * engine path detaches them. But each bridge also carries a faithful symbolic
+ * raw `Math.*` arithmetic and return a number, which carries no tape; see
+ * `bridge-gradient.ts`). But each bridge also carries a faithful symbolic
  * encoding of its RHS (`*_RHS: ExprNode`). This module lowers that scalar AST
  * through `@danielsimonjr/mathts-autograd`'s `TapedTensor` ops — binding the
  * chosen variable to a traced input and every other symbol to a constant tape
@@ -18,9 +18,8 @@
  * `^` exponents must be constant (the differentiation variable may not appear in
  * an exponent).
  *
- * Requires the optional `@danielsimonjr/mathts-autograd` peer; throws
- * `EngineCapabilityError` when it is absent (same graceful-degradation contract
- * as `bridgeGradient`).
+ * Loads `@danielsimonjr/mathts-autograd` at the call and throws
+ * `EngineCapabilityError` when that import fails.
  *
  * @module diff/bridge-ast-gradient
  */

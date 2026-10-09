@@ -80,7 +80,7 @@ UPT follows a layered architecture. The TypeScript files under `src/` fall into 
 │                    │  + flat *_SI constants + Labeled-         │
 │                    │  Tensor / Cell / regime layer (11 files)  │
 ├────────────────────────────────────────────────────────────────┤
-│  diff/             │  bridgeGradient + AST gradient + bridge   │
+│  diff/             │  numerical + AST gradients + bridge       │
 │                    │  specs (3 files)                          │
 ├────────────────────────────────────────────────────────────────┤
 │  relations/        │  Shared relation vocabulary: types,      │
@@ -720,7 +720,7 @@ These constants are the single source of truth for physical constants across the
 
 ### Intelligent-index / regime layer (`src/core/labeled-tensor.ts`, `axes-registry.ts`, `universal-index.ts`, `cell.ts`, `flux-rules.ts`, `regime-registry.ts`, …)
 
-The intelligent-index layer lives in `core/`. This layer has three parts: `LabeledTensor` (semantic axis labels — see `docs/architecture/intelligent-index-tutorial.md`), the axes/universal-index registries, and the `Cell`/flux-rule/regime-registry machinery. The `compose` Cell factory lives here — not to be confused with the `composeEdges` composition operator. Flux **Rule 3 (Causality) is ERROR-tier**: a reverse-arrow `BridgeCell` (coarser→finer scale) fail-atomics at `addCell` unless whitelisted. The sibling `diff/` module holds `bridgeGradient` + the bridge specs (see `docs/architecture/bridge-gradient-tutorial.md`).
+The intelligent-index layer lives in `core/`. This layer has three parts: `LabeledTensor` (semantic axis labels — see `docs/architecture/intelligent-index-tutorial.md`), the axes/universal-index registries, and the `Cell`/flux-rule/regime-registry machinery. The `compose` Cell factory lives here — not to be confused with the `composeEdges` composition operator. Flux **Rule 3 (Causality) is ERROR-tier**: a reverse-arrow `BridgeCell` (coarser→finer scale) fail-atomics at `addCell` unless whitelisted. The sibling `diff/` module holds `bridgeGradientNumerical`, `bridgeGradientAST` and the bridge specs (see `docs/architecture/bridge-gradient-tutorial.md`).
 
 **`LabeledTensor` axis order and reshape.** An explicit `axisOrder: readonly string[]` field (label keys in engine-axis order) is the authoritative label↔axis mapping, queried through `axisOf(key)`. `transpose`/`contract` can leave the engine axes in a non-sorted order. `axisOrder` records the real order; `AxisOrderError` guards a bad explicit order (an optional 4th constructor param). `mergeAxes(keys, merged)` / `splitAxis(key, parts)` add rank-changing reshape on top of this: they fuse a contiguous run of engine axes into one caller-labelled axis, and its inverse. `AxisMergeError` / `AxisSplitError` guard these two operations. All three error classes are `@public`.
 

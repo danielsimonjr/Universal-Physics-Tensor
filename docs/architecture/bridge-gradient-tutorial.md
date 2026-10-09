@@ -6,110 +6,74 @@
 > The drift gate treats a missing Verification section as a failure. This document states
 > the opt-out here, so a reader does not have to infer it from its absence.
 
-> Five-minute walkthrough for differentiating UPT catalog bridges
+> Five-minute walkthrough for differentiating UPT catalog relations
 > with respect to their input parameters.
 
 ## What it does
 
-UPT's 55-bridge catalog contains many closed-form scalar formulas
-(Hawking temperature ∝ 1/M, Shapiro delay ∝ log(R_far/R_near), …).
-Four functions compute the gradient of a bridge with respect to
-its inputs:
+Many catalog relations are closed-form scalar formulas (Hawking
+temperature ∝ 1/M, Shapiro delay ∝ log(R_far/R_near), …). Two paths
+compute the gradient of such a relation with respect to its inputs:
 
 - `bridgeGradientNumerical(spec, params, opts?)` — central finite
-  differences over a registered bridge spec. No engine and no
-  optional peer. This function is the supported path for the
-  catalog's plain-JS evaluators.
+  differences over a registered `BridgeDiffSpec`. No engine. This is
+  the path for the catalog's plain-JS closed forms, which return a
+  `number` and so carry no autograd tape.
 - `bridgeGradientAST(rhs, varName, bindings)` and
   `bridgeGradientASTById(bridgeId, varName, bindings)` — exact
-  reverse-mode AD over a bridge's symbolic RHS AST, through the
-  optional `@danielsimonjr/mathts-autograd` peer (with `@danielsimonjr/mathts-tensor`).
-- `bridgeGradient(spec, engine, params)` — engine AD. It works only
-  for functions written in engine ops. The catalog evaluators use
-  plain JS `Math.*`, so `bridgeGradient` cannot trace them. With a
-  real engine it throws `NumericalBackendError`. With an engine
-  that lacks AD methods it throws `EngineCapabilityError`.
+  reverse-mode AD over a bridge's symbolic RHS AST, lowered through
+  `@danielsimonjr/mathts-autograd` (a required dependency).
+
+There is no engine-AD function over a spec: a spec's `evaluate` returns
+a number, and no tape survives that, so such a function could only
+throw. The one that once existed did, and was removed.
 
 ## Five-minute walkthrough
 
 ```typescript
 import {
   bridgeGradientNumerical,
-  BE42_HAWKING_DIFF,
+  HAWKING_TEMPERATURE_DIFF,
 } from 'universal-physics-tensor';
 
 const SUN_KG = 1.989e30;
 
 // Forward evaluation:
-const T_sun = BE42_HAWKING_DIFF.evaluate({ M_kg: SUN_KG });
+const T_sun = HAWKING_TEMPERATURE_DIFF.evaluate({ M_kg: SUN_KG });
 // → ~6.17e-8 K
 
 // Gradient by central finite differences:
 const { value, gradient } = bridgeGradientNumerical(
-  BE42_HAWKING_DIFF,
+  HAWKING_TEMPERATURE_DIFF,
   { M_kg: SUN_KG },
 );
 // value === T_sun
 // gradient → { M_kg: -3.10e-38 }   (dT/dM is negative — bigger BH = colder)
 ```
 
-## Shipped bridge specs (closed-form subset)
+## Shipped specs
 
-| Bridge spec | Differentiable params | Output |
+| Spec | Differentiable params | Output |
 |---|---|---|
-| `BE11_DECOHERENCE_DIFF` | `gamma0_per_s`, `lambda`, `lambda0` | Decoherence rate (s⁻¹) |
-| `BE37_SHAPIRO_DIFF` | `M_kg`, `R_far_m`, `R_near_m` | Time delay (s) |
-| `BE42_HAWKING_DIFF` | `M_kg` | Temperature (K) |
-| `BE52_PERIHELION_DIFF` | `M_kg`, `a_m`, `e` (with `T_yr` in defaults) | Perihelion advance (rad/orbit) |
+| `DECOHERENCE_RATE_DIFF` | `gamma0_per_s`, `lambda`, `lambda0` | Decoherence rate (s⁻¹) |
+| `SHAPIRO_DELAY_DIFF` | `M_kg`, `R_far_m`, `R_near_m` | Time delay (s) |
+| `HAWKING_TEMPERATURE_DIFF` | `M_kg` | Temperature (K) |
+| `PERIHELION_ADVANCE_DIFF` | `M_kg`, `a_m`, `eccentricity` (`T_yr` optional) | Perihelion advance (rad/orbit) |
 
-All four spec exports + the aggregate `DIFFERENTIABLE_BRIDGE_SPECS`
-array are `@public`.
+All four spec exports and the aggregate `DIFFERENTIABLE_RELATIONS`
+array are `@public`. Each spec's `bridgeId` is its relation's catalog
+id; a relation with no catalog id cannot be made a spec.
 
-## Honest limitations
+## Limitations
 
-- **Engine AD cannot trace the bridge evaluators.** Engine AD traces
-  only engine operations (`engine.add`, `engine.mul`, ...). The
-  bridge evaluators use plain JS `Math.*` calls, so `bridgeGradient`
-  fails on them with either engine. Use `bridgeGradientNumerical`,
-  or `bridgeGradientAST` for an exact gradient.
+- **Scalar output only.** A spec's evaluator returns one number. A
+  relation with several outputs needs a selector that extracts one.
 
-- **Optional peer for exact AD.** `mathts-autograd` is an optional peer
-  dependency, which a default install leaves out. Run
-  `npm install @danielsimonjr/mathts-autograd @danielsimonjr/mathts-tensor`
-  to install it. `bridgeGradientAST` needs both; `bridgeGradientNumerical`
-  does not.
+- **Non-smooth branches not supported.** Closed forms with `abs`,
+  `max` or a conditional on an input value give a one-sided or
+  subgradient value at the kink. There is no smoothing layer.
 
-- **Scalar output only.** Bridges returning structs (e.g.,
-  `PerihelionPrecessionResult` with 6 fields) need a selector
-  function that extracts a single scalar (the BE52 spec extracts
-  `dphi_rad_per_orbit`). Multi-output gradients are not supported.
-
-- **Non-smooth branches not supported.** Bridges with `Math.abs`,
-  `Math.max`, conditional branches based on input value, etc.,
-  may produce gradients that are technically defined as
-  subgradients. There is no smoothing layer.
-
-## Adding a new differentiable bridge
-
-```typescript
-import type { BridgeDiffSpec } from 'universal-physics-tensor';
-import { evaluateMyBridge, type MyInputs } from './my-bridge.js';
-
-export const MY_BRIDGE_DIFF: BridgeDiffSpec<MyInputs> = {
-  bridgeId: 'BE-NN',
-  name: 'My Bridge',
-  paramNames: ['p1', 'p2'] as const,
-  defaults: { /* non-differentiable inputs go here */ },
-  evaluate: evaluateMyBridge,
-};
-```
-
-Then call `bridgeGradientNumerical(MY_BRIDGE_DIFF, { p1, p2 })`.
-No registration step required — specs are passed by reference.
-
-## See also
-
-- `docs/architecture/archive/v0.7-p8-bridge-gradient-audit.md` —
-  the engine-capability audit (a dated record).
-- `docs/planning/v0.7-Proposal-8-Design.md` — full design with
-  Adam+Eve review notes.
+- **AST gradients differentiate the encoding.** A bridge encoded with a
+  typed stub (a transcendental absorbed into one symbol) differentiates
+  with respect to the stub, not the physics inside it. Only a fully
+  expanded encoding differentiates exactly.
