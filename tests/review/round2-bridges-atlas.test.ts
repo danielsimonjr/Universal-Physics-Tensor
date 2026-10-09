@@ -14,7 +14,8 @@ import { deriveCompositeEvidence } from '../../src/atlas/derive-evidence.js';
 import type { EvidenceTag } from '../../src/atlas/types.js';
 import { adjudicateBridgeEntry } from '../../src/bridges/membership.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
-import { loadCatalog, type CatalogFileRecord } from '../../src/bridges/catalog-load.js';
+import { loadCatalog } from '../../src/bridges/catalog-load.js';
+import type { CatalogFileRecord } from '../../src/bridges/catalog-types.js';
 import { parseCatalogExpression } from '../../src/bridges/expr-parse.js';
 import { structurallyEqual } from '../../src/canonical/normal-form.js';
 
@@ -64,7 +65,7 @@ describe('a confrontation verdict is recomputed at load, not trusted', () => {
   const file = (): CatalogFileRecord => json('data/bridge-catalog.json') as CatalogFileRecord;
   const tamper = (id: number, mutate: (o: Record<string, unknown>) => void): CatalogFileRecord => {
     const f = file();
-    const row = (f.confrontations as { catalogId: number; outcome: Record<string, unknown> }[]).find((c) => c.catalogId === id)!;
+    const row = (f.confrontations as readonly { catalogId: number; outcome: Record<string, unknown> }[]).find((c) => c.catalogId === id)!;
     mutate(row.outcome);
     return f;
   };
@@ -79,7 +80,7 @@ describe('a confrontation verdict is recomputed at load, not trusted', () => {
   });
   it('an upper-bound `satisfied` that disagrees with predicted ≤ bound is refused', () => {
     const f = file();
-    const row = (f.confrontations as { kind: string; catalogId: number; outcome: Record<string, unknown> }[]).find((c) => c.kind === 'upper-bound')!;
+    const row = (f.confrontations as readonly { kind: string; catalogId: number; outcome: Record<string, unknown> }[]).find((c) => c.kind === 'upper-bound')!;
     row.outcome['satisfied'] = !(row.outcome['satisfied'] as boolean);
     expect(() => loadCatalog(f)).toThrow(/satisfied/);
   });
