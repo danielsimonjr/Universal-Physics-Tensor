@@ -154,8 +154,8 @@ Caller provides ExprNode tree + NumericalInputs
 ┌─────────────────────────────────────────────────────────────┐
 │ 2. RESOLVE ENGINE                                            │
 │    engine = options?.engine ?? await getActiveEngine()      │
-│    // Default: MathTSEngine when both MathTS peers are      │
-│    // installed, otherwise Float64ReferenceEngine           │
+│    // Default: MathTSEngine (the MathTS packages are        │
+│    // required; there is no fallback engine)                │
 │    // Override: pass engine in EvaluateOptions              │
 └─────────────────────────────────────────────────────────────┘
           │
@@ -222,28 +222,28 @@ Caller wraps computation in a closure
           ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ 2a. FORWARD-MODE (forwardGrad)                               │
-│    Float64ReferenceEngine path:                             │
-│    ├── One zero-tangent probe run of fn: output shape       │
-│    │   and value                                            │
-│    ├── For each input element k: an EngineDualTensor        │
-│    │   with unit tangent e_k; run fn — arithmetic           │
-│    │   propagates primal and tangent per dual-number rules  │
-│    └── Scatter each output tangent into Jacobian column     │
-│        k; return { value, jacobian }                        │
+│    MathTSEngine path (the one engine):                      │
+│    ├── x is converted to a MathTS tensor; fn is passed      │
+│    │   UNCHANGED to mathts-autograd forwardGrad, which      │
+│    │   wraps x as a DualTensor and runs fn                  │
+│    ├── MathTSEngine's mul/add/sub/scale dispatch a          │
+│    │   DualTensor input to the dual arithmetic, so the      │
+│    │   tangent propagates through fn                        │
+│    └── { value, jacobian } converted back to EngineTensor   │
 │                                                             │
-│    MathTSEngine path: delegate to mathts-autograd forward   │
-│    mode; same result shape.                                 │
+│    A missing mathts-autograd import throws                  │
+│    EngineCapabilityError.                                   │
 └─────────────────────────────────────────────────────────────┘
           │    OR
 ┌─────────────────────────────────────────────────────────────┐
 │ 2b. REVERSE-MODE (reverseGrad)                               │
-│    Float64ReferenceEngine path:                             │
-│    ├── Record-mode forward pass: run fn(x) with a Tape      │
-│    │   that logs every operation and its input references  │
-│    ├── Backward pass: walk the Tape in reverse, accumulate │
-│    │   gradients via the chain rule per logged op type     │
-│    └── Return { value, gradient }                          │
-│        cotangent defaults to ones-like(value)              │
+│    MathTSEngine path (the one engine):                      │
+│    ├── x (and the cotangent, if given) converted to MathTS  │
+│    │   tensors; fn passed UNCHANGED to mathts-autograd     │
+│    │   reverseGrad, which wraps x as a TapedTensor         │
+│    ├── MathTSEngine's ops dispatch a TapedTensor input to  │
+│    │   the tape arithmetic; the backward pass is autograd's│
+│    └── { value, gradient } converted back to EngineTensor  │
 └─────────────────────────────────────────────────────────────┘
           │
           ▼
@@ -256,7 +256,7 @@ Caller wraps computation in a closure
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Honest note**: `forwardGrad` / `reverseGrad` operate on user-supplied closures, not on `ExprNode` trees. Exact AD over a bridge's scalar RHS AST is a separate path: `bridgeGradientAST` (`src/diff/bridge-ast-gradient.ts`) lowers the AST through the optional `@danielsimonjr/mathts-autograd` peer. In the AST evaluation path, the `derivativeStrategy: 'computed'` default on `MetricTensorNode` lowers ∂g to zero (`src/numerical/derivative-lowering.ts`). The reason: a metric-tensor input carries constant values. This path does not route through `forwardGrad` / `reverseGrad`.
+**Honest note**: `forwardGrad` / `reverseGrad` operate on user-supplied closures, not on `ExprNode` trees. Exact AD over a bridge's scalar RHS AST is a separate path: `bridgeGradientAST` (`src/diff/bridge-ast-gradient.ts`) lowers the AST through `@danielsimonjr/mathts-autograd`. In the AST evaluation path, the `derivativeStrategy: 'computed'` default on `MetricTensorNode` lowers ∂g to zero (`src/numerical/derivative-lowering.ts`). The reason: a metric-tensor input carries constant values. This path does not route through `forwardGrad` / `reverseGrad`.
 
 ---
 
@@ -488,7 +488,7 @@ The `verifyKillingEquation` flow is analogous. It takes caller-supplied exact Ch
 
 ## Flow 8: Bridge-Edge Composition
 
-**Purpose**: Chain two bridge edges through a shared quantity into a derived relation. The pool of composable edges is the 49-edge graph (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds + 3 applied-physicist).
+**Purpose**: Chain two bridge edges through a shared quantity into a derived relation. The pool of composable edges is `CATALOG_GRAPH`, projected from `data/bridge-catalog.json`; the edge count is `NOTES.md`. The sentence that named a 49-edge graph assembled from calibration, tranche, seed and applied-physicist files is the record from before the catalog engine.
 
 **Entry point**: `composeEdges(first: BridgeEdge, second: BridgeEdge, opts?: ComposeOptions): BridgeEdge`
 

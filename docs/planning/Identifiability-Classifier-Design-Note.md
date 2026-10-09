@@ -9,8 +9,8 @@
 > identification-bridged connectivity each have a wrong-but-plausible
 > formulation that this note rules out).
 >
-> **Status: IMPLEMENTED** — `src/composition/identifiability.ts`,
-> tests in `tests/composition/identifiability.test.ts`.
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. The implementation is `src/composition/identifiability.ts`,
+> with tests in `tests/composition/identifiability.test.ts`.
 
 ## What it computes (and what it deliberately does not)
 

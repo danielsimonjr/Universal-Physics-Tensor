@@ -68,9 +68,9 @@ Numbers extracted from `docs/architecture/DEPENDENCY_GRAPH.md` Summary Statistic
 | Source files | 471 TypeScript files under `src/` (`dependency-graph.json` `statistics.totalTypeScriptFiles`) |
 | Modules | 13 (`atlas`, `bridges`, `canonical`, `cases`, `cli`, `composition`, `core`, `diff`, `dimensional`, `entry`, `numerical`, `relations`, `root`) |
 | Total exports | 3553 (1734 re-exports) |
-| Bridge catalog entries | 92 (ids 11–102) |
-| Closed-form CLI evaluators | 50 ids in `BRIDGE_EVALUATORS` (51, 52, 55–102) |
-| Composition-graph edges | 83, assembled once as `CATALOG_GRAPH` |
+| Bridge catalog entries | the record is `data/bridge-catalog.json`; the count, id range and status split are `NOTES.md` |
+| Catalog evaluators | `BRIDGE_EVALUATORS` (`src/bridges/evaluators.ts`), projected from the catalog record; the count is `NOTES.md` |
+| Composition-graph edges | `CATALOG_GRAPH`, projected once from the catalog record; the count is `NOTES.md` |
 | Canonical equations | 109 |
 | Data-confronted bridges | 19 — BE-11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65 |
 | TensorEngine implementations | 1 (`MathTSEngine`) |
@@ -107,11 +107,11 @@ Capabilities that are not implemented are not claimed. The bridge catalog marks 
 
 ### 3. Interface + Conformance Suite
 
-The `TensorEngine` interface decouples the evaluation surface from any particular linear-algebra library. Both engines (`Float64ReferenceEngine` and `MathTSEngine`) satisfy a single parameterized conformance suite (`tests/numerical/engine-conformance.test.ts`) that runs the same test cases against either engine. Adding a new engine means implementing the interface and passing the suite — no changes to the evaluator.
+The `TensorEngine` interface decouples the evaluation surface from any particular linear-algebra library. The one engine, `MathTSEngine`, runs a parameterized conformance suite (`tests/numerical/engine-conformance.ts` and `ad-conformance.ts`, driven by `engine-conformance.test.ts`). Adding a new engine means implementing the interface and passing the suite — no changes to the evaluator. The sentence that a second engine, `Float64ReferenceEngine`, ran the same suite is the record from before the MathTS packages became required dependencies; `src/numerical/float64-engine.ts` and the `Float64ReferenceEngine` class do not exist.
 
 ### 4. Dependency-Shape Signal
 
-`MathTSEngine` lives behind an `optionalDependency` on `@danielsimonjr/mathts-tensor`. `MathTSEngine` is the active default when both `mathts-tensor` and `mathts-autograd` are present. The reason is not that the engine is faster than `Float64ReferenceEngine` today (it may not be). The reason instead: the engine signals the intended dependency shape of the UPT ecosystem and exercises the monorepo boundary between UPT and the MathTS packages.
+The `@danielsimonjr/mathts-*` packages are required `dependencies` in `package.json`, and `src/numerical/engine-registry.ts` has no absent-peer branch: `MathTSEngine` is the active engine. The engine exercises the boundary between UPT and the MathTS packages. The sentence that `MathTSEngine` lived behind an `optionalDependency` and was the default only when both peers were present, with `Float64ReferenceEngine` as the fallback, is the record from before those packages became required.
 
 ---
 
@@ -185,11 +185,9 @@ The validator is a recursive tree-walker that calls the algebra functions to inf
 
 The numerical module implements the evaluation backend.
 
-**TensorEngine interface** (`tensor-engine.ts`): The compute contract. Defines `EngineTensor` (an opaque rank-N tensor handle), `EinsumSpec` (the engine-agnostic contraction plan), and `TensorEngine` (the interface both engines satisfy). Also defines `ForwardGradResult` / `ReverseGradResult` and `hasAutogradSupport()`.
+**TensorEngine interface** (`tensor-engine.ts`): The compute contract. Defines `EngineTensor` (an opaque rank-N tensor handle), `EinsumSpec` (the engine-agnostic contraction plan), and `TensorEngine` (the interface an engine satisfies). Also defines `ForwardGradResult` / `ReverseGradResult` and `hasAutogradSupport()`.
 
-**Float64ReferenceEngine** (`float64-engine.ts`): The zero-dependency, Float64Array-backed reference implementation. Naive O(n) algorithms: a correctness baseline, not a performance target. Includes inline dual-number forward-mode AD and tape-recording reverse-mode AD.
-
-**MathTSEngine adapter** (available via the `universal-physics-tensor/numerical/mathts-engine` subpath export, not from the main index): The adapter wrapping `@danielsimonjr/mathts-tensor`. Not imported at main index level to avoid forcing the optional dependency on all consumers.
+**MathTSEngine adapter** (`mathts-engine.ts`, available via the `universal-physics-tensor/numerical/mathts-engine` subpath export, not from the main index): The adapter wrapping `@danielsimonjr/mathts-tensor`. It is the engine `getActiveEngine()` returns (`engine-registry.ts`). The paragraph that described a zero-dependency `Float64ReferenceEngine` (`float64-engine.ts`) with inline dual-number and tape AD is the record from before the MathTS packages became required dependencies; `src/numerical/float64-engine.ts` and the `Float64ReferenceEngine` class do not exist.
 
 **Lowering** (`lowering.ts`): Translates an `ExprNode` tree into a sequence of `TensorEngine` calls. The lowering is the bridge between the symbolic layer and the numeric layer. The deferred-evaluator node kinds are dispatched through `DEFERRED_EVALUATOR_REGISTRY` — a registry-consulting default arm with compile-time exhaustiveness — instead of five hand-written switch arms.
 
@@ -277,14 +275,15 @@ The main numerical entry point. The entry point takes an `ExprNode` and a `Numer
 
 The engine architecture follows a strict three-part structure:
 
-**1. Interface** (`tensor-engine.ts`): The `TensorEngine` interface is the only engine contract the evaluator (`numerical/index.ts`) and the lowering pass (`lowering.ts`) use. `lowering.ts` imports no concrete engine class. `numerical/index.ts` re-exports `Float64ReferenceEngine` for the public surface, but its evaluator code reaches an engine only through `getActiveEngine()` or the `EvaluateOptions.engine` override.
+**1. Interface** (`tensor-engine.ts`): The `TensorEngine` interface is the only engine contract the evaluator (`numerical/index.ts`) and the lowering pass (`lowering.ts`) use. `lowering.ts` imports no concrete engine class. `numerical/index.ts` re-exports no engine class; its evaluator code reaches an engine only through `getActiveEngine()` or the `EvaluateOptions.engine` override.
 
-**2. Implementations**: Two implementations exist:
+**2. Implementation**: One implementation exists:
 
-- `Float64ReferenceEngine`: Pure TypeScript, Float64Array-backed. Zero runtime dependencies. Available from the main package entry point. Its AD implementation uses dual numbers for forward mode and a tape-record approach for reverse mode, both implemented inline in `float64-engine.ts`.
-- `MathTSEngine`: Wraps `@danielsimonjr/mathts-tensor`. Available only via the `universal-physics-tensor/numerical/mathts-engine` exports subpath (a conditional import that keeps the optional dependency tree-shakeable). Its AD delegates to `@danielsimonjr/mathts-autograd`.
+- `MathTSEngine`: Wraps `@danielsimonjr/mathts-tensor`. Available via the `universal-physics-tensor/numerical/mathts-engine` exports subpath, and as the engine `getActiveEngine()` returns. Its AD delegates to `@danielsimonjr/mathts-autograd`.
 
-**3. Conformance suite**: A parameterized test suite (`tests/numerical/engine-conformance.test.ts`) defines the behavioral contract shared by both engines. The suite is run against each engine independently. Any engine that passes the suite is a valid drop-in for `evaluateNumerical()`.
+The `Float64ReferenceEngine` bullet that stood here is the record from before the MathTS packages became required dependencies; `src/numerical/float64-engine.ts` and the `Float64ReferenceEngine` class do not exist.
+
+**3. Conformance suite**: A parameterized test suite (`tests/numerical/engine-conformance.ts`, `ad-conformance.ts`) defines the behavioral contract an engine must meet. It is run against `MathTSEngine` by `engine-conformance.test.ts`. Any engine that passes the suite is a valid drop-in for `evaluateNumerical()`.
 
 ---
 
@@ -315,20 +314,18 @@ When a caller invokes `validate(node)`:
 
 ### What is implemented
 
-Both engines implement optional `forwardGrad` and `reverseGrad` methods on the `TensorEngine` interface. These operate on **user-supplied function closures** of the form `(x: EngineTensor) => EngineTensor`. The caller wraps the computation they want to differentiate in a closure; the engine handles the bookkeeping.
+`MathTSEngine` implements the optional `forwardGrad` and `reverseGrad` methods of the `TensorEngine` interface. These operate on **user-supplied function closures** of the form `(x: EngineTensor) => EngineTensor`. The caller wraps the computation they want to differentiate in a closure; the engine handles the bookkeeping.
 
 - `forwardGrad(fn, x)` returns `{ value, jacobian }` — the Jacobian-vector product with unit tangent.
 - `reverseGrad(fn, x, cotangent?)` returns `{ value, gradient }` — the vector-Jacobian product, defaulting to ones-like cotangent.
 
-Both return `Promise` for uniform async semantics, even though `Float64ReferenceEngine`'s implementations are synchronous internally.
+Both return `Promise`.
 
 ### What is NOT implemented
 
-AD does not differentiate `ExprNode` trees symbolically: differentiating an `ExprNode` to produce another `ExprNode` is not implemented. In the lowering, `derivativeStrategy: 'computed'` (the default) on a `MetricTensorNode` treats a raw-tensor metric as constant, ∂g = 0. Exact AD over a bridge's RHS AST exists as a separate numeric path, `bridgeGradientAST` (`src/diff/`), through the optional autograd peer.
+AD does not differentiate `ExprNode` trees symbolically: differentiating an `ExprNode` to produce another `ExprNode` is not implemented. In the lowering, `derivativeStrategy: 'computed'` (the default) on a `MetricTensorNode` treats a raw-tensor metric as constant, ∂g = 0. Exact AD over a bridge's RHS AST exists as a separate numeric path, `bridgeGradientAST` (`src/diff/`), through `@danielsimonjr/mathts-autograd`.
 
-### Float64ReferenceEngine internals
-
-Forward mode uses the dual-number representation: `EngineDualTensor` carries both a primal `Float64Array` and a tangent `Float64Array`. All arithmetic operations propagate both. Reverse mode uses a tape-record approach: the private `EngineTape` records closures during the forward pass; its `backward()` walks them in reverse, accumulating gradients.
+The section that described `Float64ReferenceEngine` internals (an `EngineDualTensor` for forward mode, an `EngineTape` for reverse mode) is the record from before the MathTS packages became required dependencies; `src/numerical/float64-engine.ts` and the `Float64ReferenceEngine` class do not exist.
 
 ### MathTSEngine delegation
 
@@ -338,9 +335,9 @@ Forward mode uses the dual-number representation: `EngineDualTensor` carries bot
 
 ## Key Design Decisions
 
-- **Dep-shape, not perf**: `MathTSEngine` is the intended default not for performance reasons but to exercise the monorepo dep boundary. `Float64ReferenceEngine` remains the zero-dep fallback and is what `getActiveEngine()` returns unless both optional MathTS peers are present.
+- **Dep-shape, not perf**: `MathTSEngine` is the engine because it exercises the boundary with the MathTS packages, not for performance. There is no fallback engine: the MathTS packages are required, and `getActiveEngine()` returns a `MathTSEngine` unless `setActiveEngine` replaced it.
 
-- **No entry-point coupling to optional deps**: `MathTSEngine` is excluded from the main `src/index.ts` re-export surface. Importing from the main entry point never triggers an optional-dependency resolution error.
+- **No engine class on the root entry**: `MathTSEngine` is excluded from the main `src/index.ts` re-export surface; it is reached through the `universal-physics-tensor/numerical/mathts-engine` subpath or through `getActiveEngine()`.
 
 - **`christoffel()` builds trees, not values**: The Christoffel formula builder returns an `ExprNode` composite, not a number. This keeps it in the symbolic layer and makes the result inspectable, validatable, and extensible before any numerical evaluation.
 
@@ -358,7 +355,7 @@ Forward mode uses the dual-number representation: `EngineDualTensor` carries bot
 |-----------|---------|
 | `tests/dimensional/` | Per-function validator and algebra tests |
 | `tests/bridges/` | Per-bridge dimension-validation and evaluator tests |
-| `tests/numerical/` | Engine conformance suite (runs against both engines) |
+| `tests/numerical/` | Engine conformance suite (runs against `MathTSEngine`) |
 | `tests/api/` | Public API stability snapshot (`public-surface.test.ts`) |
 | `tests/composition/probe/` | Product B expression-search unit + Family B fixture tests |
 

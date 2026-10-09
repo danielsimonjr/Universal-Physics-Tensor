@@ -304,7 +304,7 @@ Validates an `ExprNode` AST and evaluates it numerically. Throws `NumericalBacke
 **Stability**: `@public`
 
 ```typescript
-import { evaluateNumerical, Float64ReferenceEngine } from 'universal-physics-tensor';
+import { evaluateNumerical } from 'universal-physics-tensor';
 import type { NumericalInputs } from 'universal-physics-tensor';
 
 const inputs: NumericalInputs = {
@@ -331,17 +331,15 @@ Numerically checks g^{ab} g_{bc} ≈ δ^a_c. Returns `{ residualNorm, warning?: 
 **Kind**: async function
 **Stability**: `@public`
 
-### `Float64ReferenceEngine` — class
+### Engine classes
 
-The zero-dependency `TensorEngine` implementation. Default engine when no active engine has been set.
-
-**Kind**: class (implements `TensorEngine`)
-**Stability**: `@public`
+No engine class is exported from the package root. `MathTSEngine` (implements `TensorEngine`) is on the `universal-physics-tensor/numerical/mathts-engine` subpath and is the engine `getActiveEngine()` returns. The `Float64ReferenceEngine` entry that stood here, with its root import, is the record from before the MathTS packages became required dependencies; `src/numerical/float64-engine.ts` and the `Float64ReferenceEngine` class do not exist.
 
 ```typescript
-import { Float64ReferenceEngine, setActiveEngine } from 'universal-physics-tensor';
+import { setActiveEngine } from 'universal-physics-tensor';
+import { MathTSEngine } from 'universal-physics-tensor/numerical/mathts-engine';
 
-setActiveEngine(new Float64ReferenceEngine());
+setActiveEngine(new MathTSEngine());
 ```
 
 ### `getActiveEngine()` / `setActiveEngine(engine)` — functions

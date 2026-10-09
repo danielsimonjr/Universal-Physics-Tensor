@@ -37,8 +37,8 @@ UPT is organized into five conceptual layers that build on each other:
 │  machinery + EinsteinFieldEquationNode + Einstein residual   │
 ├──────────────────────────────────────────────────────────────┤
 │  Layer 4: Numerical Backend                                  │
-│  TensorEngine interface + Float64ReferenceEngine +           │
-│  MathTSEngine adapter (optional) + AD (forwardGrad /         │
+│  TensorEngine interface + MathTSEngine (the MathTS           │
+│  packages are required) + AD (forwardGrad /                  │
 │  reverseGrad) + RK4 geodesic integrator                      │
 ├──────────────────────────────────────────────────────────────┤
 │  Layer 3: Metric / Connection                                │

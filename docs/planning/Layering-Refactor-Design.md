@@ -1,6 +1,6 @@
 # Layering refactor
 
-> **Status as of 2026-10-02.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and fourteen catalog ids (be-12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `2e09357f9674bc60b60b378155a1623c27dc7b04`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). Stage 4 still says a catalog reference passed into `deriveEvidence` lights `formally-proved`, including a property and a cross-check, and the fifteen `physjsFormalRef` keys are this note's starting allowlist.
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. The gap list is [`Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). Stage 4 says a catalog reference passed into `deriveEvidence` lights `formally-proved`, including a property and a cross-check, and the fifteen `physjsFormalRef` keys are this note's starting allowlist; what the code does today is `src/atlas/derive-evidence.ts`.
 
 This note specifies a staged refactor of import direction. It changes no
 code, no public export, and no cell of the composition table. Approval is
@@ -311,7 +311,7 @@ This stage sequences after three pieces of formal-reference work, because
 each one edits the meaning or the reader of those call sites:
 
 1. The covers-kind rule for `deriveEvidence`. The library-API dogfood
-   (`docs/dogfood/2026-10-01-library-api.md`, the `deriveEvidence` section)
+   (`docs/persona-sessions/2026-10-01-library-api.md`, the `deriveEvidence` section)
    records that a catalog reference passed into `deriveEvidence` lights
    `formally-proved`, including a property and a cross-check. Teaching the
    predicate the covers kind is that work. It is not an open pull request

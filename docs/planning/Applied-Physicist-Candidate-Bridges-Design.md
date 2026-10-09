@@ -2,7 +2,7 @@
 
 This note records the decisions, the composition refusals, the Lean targets,
 and the open notes for three candidates named in
-[`docs/dogfood/2026-10-03-applied-physicist-bridges.md`](../dogfood/2026-10-03-applied-physicist-bridges.md).
+[`docs/persona-sessions/2026-10-03-applied-physicist-bridges.md`](../persona-sessions/2026-10-03-applied-physicist-bridges.md).
 The catalog text is Part II §V-C. Part XI is the machine-derived coincidence
 list and is the wrong home for a literature candidate.
 

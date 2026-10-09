@@ -1,8 +1,8 @@
 # Bridge Equation Remediation Plan
 
-> **Status as of 2026-10-02.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and fourteen catalog ids (be-12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `2e09357f9674bc60b60b378155a1623c27dc7b04`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). The BE-13 heading still names the equation Information-Geometry Equation (Jacobson 1995 thermodynamic derivation).
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. The gap list is [`Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). The BE-13 heading below names the equation as this plan called it; the catalog name is the record in `data/bridge-catalog.json`.
 
-> Status: 2026-05-04 | Source: `src/bridges/index.ts` @c276282 + `docs/specification/Part-I.md`, `Part-II.md` | Audit method: programmatic extract via compiled `dist/bridges/index.js` (40 entries, schema-conformant), tier classifier applied per the brief, narrative-concern (R4) gate verified by spot-reading `notes` text per equation.
+> Source: the catalog at commit `c276282` (`src/bridges/index.ts` then) + `docs/specification/Part-I.md`, `Part-II.md` | Audit method: programmatic extract via the compiled catalog, tier classifier applied per the brief, narrative-concern (R4) gate verified by spot-reading `notes` text per equation.
 
 This document is a prioritized work queue for fixing or dispositioning each of
 the 40 bridge equations catalogued in the UPT specification. It does **not**
@@ -27,7 +27,7 @@ speculative, the entry lands in R5. No severities or fix-paths were invented.
 | R5   | Healthy / ready to implement                                  | 11    | +3 from R1 fixes (BE-18, BE-29, BE-47) + BE-11 R0 → R5. (BE-40 demoted R5 → R2: dimensionally inhomogeneous; see `Tier-5-Encoding-Triage.md`.) |
 | **Total** |                                                          | **40**|                                                       |
 
-Status mix in the index (post Wave Z, 2026-05-11): `established` × 6, `speculative` × 31, `highly-speculative` × 3, `invalid` × 0, `standard-extension` × 0. (BE-26 moved established → speculative under Wave S per Phys iter-7 IMPORTANT — WKB formula canonical, biological-relevance bridge framing speculative. BE-16 and BE-37 lifted invalid → speculative under Wave Z-E and Wave Z-F respectively, via canonical reformulations to Landauer's principle and Shapiro gravitational time delay.) (No spec equations are classified as `standard-extension`; that arm of the type union is currently unused.)
+The status mix of the index after each wave, and the moves between tiers, are `CHANGELOG.md`; the live split is `NOTES.md`.
 
 **Final invalid count after Wave Z arc: 0.** The catalog is closed at 40 / 40 AST encodings with no entries marked `invalid`. The two surviving Wave P invalid entries (BE-16, BE-37) were reformulated to canonical literature forms (Landauer's principle, Shapiro delay) during Wave Z (commits `29932bf` and `05900f3` respectively, both 2026-05-11). See `Tier-5-Encoding-Triage.md` for the full Wave Z closure record.
 
@@ -392,9 +392,9 @@ status downgrade to `speculative` for honesty.
     distinction, so the "self-refuting" verdict is appropriate for the
     equation *as written*.
 
-### Tier R1 — Fix-if-cheap (originally 7; resolved 2026-05-01)
+### Tier R1 — Fix-if-cheap
 
-> **Status: Resolved 2026-05-01 (branch `fix/r1-batch-spec-edits`).** Single
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. Single
 > batch addressed all 7 originally-R1 entries: 3 received clean spec-edit
 > fixes and moved to R5; **4 were re-tiered R1 → R2** after the fix loop
 > revealed the audit's `spec-edit` classification was optimistic for those
@@ -453,10 +453,9 @@ status downgrade to `speculative` for honesty.
 **Aggregate**: 3 fixed (R1→R5), 4 preserved (R1→R2). Suite grew 126 → 172
 passing tests across 7 atomic commits on branch `fix/r1-batch-spec-edits`.
 
-### Tier R2 — Reformulate (9; all gap-specified 2026-05-04)
+### Tier R2 — Reformulate
 
-> **Status: All 9 R2 entries gap-specified 2026-05-04 (branch
-> `chore/r2-batch-reformulation-specs`).** Per-bridge structured
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. Per-bridge structured
 > gap-records added to `src/bridges/index.ts` notes, `Part-{I,II}.md`
 > "R2 reformulation gap" blocks, and `tests/bridges/be-XX-r2-spec.test.ts`
 > regressions. No bridge was promoted to R5 or invalidated to R3 — all
@@ -492,9 +491,9 @@ passing tests across 7 atomic commits on branch `fix/r1-batch-spec-edits`.
 - All other 8 R2 entries have at least one literature-cited reformulation
   path that is physically defensible; preserved as R2.
 
-### Tier R4 — Narrative-only concerns, needs Known Issue extraction (originally 16; 0 remaining)
+### Tier R4 — Narrative-only concerns, needs Known Issue extraction
 
-> **Status: All 16 R4 entries resolved.** When this triage was first written
+> Status and dates for this document are in `NOTES.md` and `CHANGELOG.md`. When this triage was first written
 > (2026-05-04), 16 bridges carried prose-only concerns in `notes` with empty
 > `known_issues: []` arrays. By the time Task 13 of v0.2.0 (2026-05-12,
 > commit `f808c66`) ran a fresh audit, only **2 of the 16** still needed work:
