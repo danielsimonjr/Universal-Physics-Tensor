@@ -14,7 +14,9 @@ import { describe, expect, it } from 'vitest';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
-const SKIP_DIRS = new Set(['.git', 'node_modules', 'dist', 'coverage']);
+const SKIP_DIRS = new Set(['node_modules', 'dist', 'coverage']);
+/** A dot-directory holds other checkouts (`.claude/worktrees/`) or tool state, never this tree's source. */
+const skipEntry = (entry: string): boolean => SKIP_DIRS.has(entry) || entry.startsWith('.');
 const CODE_EXT = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs']);
 const EXEMPT = new Set([
   'src/atlas/physjs-entries.generated.ts',
@@ -37,8 +39,7 @@ export function filenameOffender(name: string): boolean {
 
 function walk(dir: string, out: string[]): void {
   for (const entry of readdirSync(dir)) {
-    // Dot-directories hold other checkouts (`.claude/worktrees/`) and tool state, never source.
-    if (SKIP_DIRS.has(entry) || entry.startsWith('.')) continue;
+    if (skipEntry(entry)) continue;
     const abs = join(dir, entry);
     const rel = relative(root, abs);
     if (statSync(abs).isDirectory()) {
@@ -58,7 +59,7 @@ function codeFiles(): string[] {
   const found: string[] = [];
   const visit = (dir: string): void => {
     for (const entry of readdirSync(dir)) {
-      if (SKIP_DIRS.has(entry)) continue;
+      if (skipEntry(entry)) continue;
       const abs = join(dir, entry);
       if (statSync(abs).isDirectory()) visit(abs);
       else {
@@ -175,7 +176,7 @@ describe('source guard', () => {
     const hits: string[] = [];
     const visit = (dir: string): void => {
       for (const entry of readdirSync(dir)) {
-        if (SKIP_DIRS.has(entry)) continue;
+        if (skipEntry(entry)) continue;
         const abs = join(dir, entry);
         if (statSync(abs).isDirectory()) visit(abs);
         else if (entry.endsWith('.ts')) {
