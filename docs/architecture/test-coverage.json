@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 363,
-    "totalTestFiles": 572,
+    "totalTestFiles": 573,
     "testedCount": 351,
     "directlyTestedCount": 314,
     "untestedCount": 12,
@@ -6268,7 +6268,8 @@
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/no-holdout-wording.test.ts",
-      "tests/composition/probe/parse-expr-json.test.ts"
+      "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/probe/problem-file-refusals.test.ts"
     ],
     "src/composition/probe/report.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -10609,7 +10610,8 @@
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/no-holdout-wording.test.ts",
-      "tests/composition/probe/parse-expr-json.test.ts"
+      "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/probe/problem-file-refusals.test.ts"
     ],
     "src/composition/probe/report.ts": [
       "tests/composition/probe/coverage-backfill.test.ts",
@@ -18817,6 +18819,9 @@
       "src/composition/probe/problem.ts",
       "src/dimensional/ast-builders.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/probe/problem-file-refusals.test.ts": [
+      "src/composition/probe/problem.ts"
     ],
     "tests/composition/probe/serialize.test.ts": [
       "src/composition/probe/serialize.ts",

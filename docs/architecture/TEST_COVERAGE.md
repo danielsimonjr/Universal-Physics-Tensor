@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 363 |
-| Total Test Files | 572 |
+| Total Test Files | 573 |
 | Source files imported directly by a test | 314 |
 | Source files reached directly or through a barrel or side-effect import | 351 |
 | Source files no test reaches either way | 12 |
@@ -292,7 +292,7 @@ The following 12 source files are reached by no test file, directly or through a
 | `probe/limits.ts` | `coverage-backfill.test.ts`, `modules.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
 | `probe/metadata.ts` | `modules.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
 | `probe/pipeline.ts` | `corpus-prefactor.test.ts`, `coverage-backfill.test.ts`, `dimensionless-input.test.ts`, `family-b.test.ts`, `no-holdout-wording.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
-| `probe/problem.ts` | `probe-help-problem-format.test.ts`, `corpus-prefactor.test.ts`, `coverage-backfill.test.ts`, `dimensionless-input.test.ts`, `family-b.test.ts`, `generator-budget.test.ts`, `modules.test.ts`, `no-holdout-wording.test.ts`, `parse-expr-json.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
+| `probe/problem.ts` | `probe-help-problem-format.test.ts`, `corpus-prefactor.test.ts`, `coverage-backfill.test.ts`, `dimensionless-input.test.ts`, `family-b.test.ts`, `generator-budget.test.ts`, `modules.test.ts`, `no-holdout-wording.test.ts`, `parse-expr-json.test.ts`, `problem-file-refusals.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
 | `probe/report.ts` | `coverage-backfill.test.ts`, `family-b.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
 | `probe/residual.ts` | `coverage-backfill.test.ts`, `modules.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
 | `probe/run-manifest.ts` | `modules.test.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `probe.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts` |
@@ -748,6 +748,7 @@ The following 12 source files are reached by no test file, directly or through a
 | `probe/modules.test.ts` | 24 files |
 | `probe/no-holdout-wording.test.ts` | 2 files |
 | `probe/parse-expr-json.test.ts` | 3 files |
+| `probe/problem-file-refusals.test.ts` | 1 files |
 | `probe/serialize.test.ts` | 2 files |
 | `probe/study-inputs.test.ts` | 1 files |
 | `probe/study-refusals.test.ts` | 1 files |
