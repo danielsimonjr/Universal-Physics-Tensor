@@ -30,8 +30,9 @@ function runFence(source: string): { status: number; stdout: string; stderr: str
 
 describe('src/dimensional/README.md', () => {
   it('describes the live catalog and the transcendental node', () => {
-    expect(readme).toContain('77 entries, ids 11–87');
-    expect(readme).not.toContain('44 entries');
+    // The README carries no catalog count (the census does); it names the record and the projection.
+    expect(readme).toContain('data/bridge-catalog.json');
+    expect(readme).not.toMatch(/\b\d+ entries, ids \d+/);
     expect(readme).toContain("fn: 'sin'");
     expect(readme).toContain('import type { ExprNode }');
     expect(fences).toHaveLength(3);

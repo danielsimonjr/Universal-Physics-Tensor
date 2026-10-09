@@ -59,9 +59,9 @@ const r = validate({
 
 ## How it consumes the bridge index
 
-The catalog in `src/bridges/index.ts` has 77 entries, ids 11–87. Each
-carries `formula_latex`. `dimensional_signature` is populated for every
-entry.
+The catalog is the record `data/bridge-catalog.json`, projected by `src/bridges/index.ts`
+(the live counts are `tests/fixtures/catalog-census.json`). Every entry carries
+`formula_latex`, and `dimensional_signature` is populated for every entry.
 
 `inferDimensionForBridge(id, expr)` runs the analyzer on a supplied AST
 and, if `id` is registered in `EXPECTED_DIMENSION_BY_BRIDGE`, also
