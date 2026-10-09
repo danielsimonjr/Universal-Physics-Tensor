@@ -255,7 +255,7 @@ Bridge equations connect different physical regimes:
 
 Parts I–II of the formal specification write up the cross-domain bridges; a standard bridge is a catalog record and has no specification heading. The **authoritative current catalog** is the versioned, schema-checked JSON file [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json); its id range and counts are the generated Bridge catalog row of the Development Status table below. Part III covers algorithmic implementation.
 
-### Composing Bridges (v0.8.0)
+### Composing Bridges
 
 Bridges are edges in a typed quantity graph, and compatible edges
 **compose** — with an exact dimensional check at the junction, validity
@@ -291,11 +291,11 @@ adjudicates the catalog — <!-- readme-status:membership -->152 bridges · 5 no
 with rejections recorded in a reviewable negative catalog
 (`src/bridges/rejected.ts`).
 
-Since v0.12, composition is also **symbolic** (`composeSymbolic`): bridges may
+Composition is also **symbolic** (`composeSymbolic`): bridges may
 carry an optional `symbolic` `ExprNode` form, and composing two of them
 substitutes one AST into the other's junction, dimensionally validated and
 numerically evaluable — not just a chained numeric closure. The composed form
-can be folded by MathTS `simplify` (optional peer), so CT-1 reduces to
+can be folded by MathTS `simplify`, so CT-1 reduces to
 `ℏc³ln2/(8πGM)` with `k_B` cancelled. See `upt symbolic --simplify`.
 
 ## Documentation
@@ -306,8 +306,8 @@ see the **[specification index](https://github.com/danielsimonjr/universal-physi
 reader's map and the **[spec revision history](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/CHANGELOG.md)**
 for how the documents evolved.
 
-- **[Part I: Foundation & Mathematical Framework](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-I.md)** - Tensor structure, Π = L + B + E decomposition, Bridge Equations 11-20
-- **[Part II: Extended Bridge Equation Catalog](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-II.md)** - Bridge Equations 21-54 across condensed matter, quantum biology, emergent spacetime
+- **[Part I: Foundation & Mathematical Framework](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-I.md)** - Theoretical foundation: the rank-6 catalog `Π`, framing commitment, consistency invariants, and the cross-domain bridges in categories A–E
+- **[Part II: Extended Bridge Equation Catalog](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-II.md)** - The remaining cross-domain bridge write-ups, plus the tensor-integration mapping
 - **[Part III: Computational Implementation](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-III.md)** - Algorithms, information-theoretic bounds, ML integration
 - **[Part IV: Validation & Implications](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-IV.md)** - Experimental pathways, philosophical implications, applications
 - **[Part V: Advanced Mathematics & Protocols](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-V.md)** - Category theory extensions, validation protocols, algorithmic analysis
@@ -322,8 +322,10 @@ for how the documents evolved.
 
 ### Architecture
 
-Grounded in a real parse of the code. Every authored document ends with a `## Verification` block,
-and `repo_map.py check` fails when a claim in one stops matching the source.
+Hand-written. Each document ends with a `## Verification` block that says what was re-measured
+for it and what was not. No checker runs over these documents in CI (the `repo_map.py` tool that
+once did is private and is not in this repository), so a claim in them is current only as far as
+its Verification block says.
 
 - **[Overview](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/OVERVIEW.md)** - What this is, what it does, how it is laid out
 - **[Architecture](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/ARCHITECTURE.md)** - Why it is built this way; principles and key decisions
