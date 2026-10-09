@@ -265,7 +265,7 @@ upt recover
 Report where a family's models are valid, violated, or unknown.
 
 ```
-upt regime <family> [--at group=value ...] [--json]
+upt regime <family> [--at group=value ...] [--assume premise ...] [--deny premise ...] [--json]
 ```
 
 | Flag | Value | Default | Description |
