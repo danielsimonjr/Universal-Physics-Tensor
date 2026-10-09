@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 9.0.0
+**Version**: 10.0.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -3957,6 +3957,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./bridge-analysis.js` | `proposeLinkCandidates` | Import |
+| `../bridges/catalog-load.js` | `catalogEntries` | Import |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./probe/frontier.js` | `scanFrontier` | Import |
@@ -4836,10 +4837,11 @@ The codebase is organized into the following modules:
 - Constants:
 
   ```text
-  C_SI, G_SI, H_SI, HBAR_SI, HBAR_CODATA_DISPLAY, K_B_SI, E_SI, ALPHA, EPS0_SI, MU0_SI, SIGMA_SB_SI,
-  M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG, VON_KLITZING_SI, JOSEPHSON_CONSTANT_SI,
-  LORENZ_NUMBER_SI, EULER_GAMMA, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI,
-  GM_SUN_SI, M_SUN_IAU_SI, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
+  C_SI, R_INF_SI, G_SI, H_SI, HBAR_SI, HBAR_CODATA_DISPLAY, K_B_SI, E_SI, ALPHA, EPS0_SI, MU0_SI,
+  SIGMA_SB_SI, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_SUN_KG, VON_KLITZING_SI,
+  JOSEPHSON_CONSTANT_SI, LORENZ_NUMBER_SI, EULER_GAMMA, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3,
+  THOMSON_CROSS_SECTION_SI, GM_SUN_SI, M_SUN_IAU_SI, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI,
+  B_WIEN_SI, M_U_SI
   ```
 
 
@@ -5148,7 +5150,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, EULER_GAMMA, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI` | Import |
+| `../core/constants.js` | `B_WIEN_SI, C_SI, E_SI, EPS0_SI, EULER_GAMMA, FARADAY_SI, G_SI, GM_SUN_SI, H_SI, HBAR_CODATA_DISPLAY, HBAR_SI, K_B_SI, LANE_EMDEN_OMEGA3, M_E_SI, M_PROTON_SI, M_SUN_IAU_SI, M_SUN_SI, M_U_SI, MU0_SI, N_A_SI, SIGMA_SB_SI, THOMSON_CROSS_SECTION_SI, R_INF_SI` | Import |
 
 **Exports:**
 - Interfaces: `ConstantRow`
@@ -6989,8 +6991,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 81254 |
-| Total Exports | 2562 |
+| Total Lines of Code | 81271 |
+| Total Exports | 2563 |
 | Total Re-exports | 1311 |
 | Total Classes | 82 |
 | Total Interfaces | 462 |
@@ -7003,4 +7005,4 @@ graph TD
 
 ---
 
-*Version*: 9.0.0
+*Version*: 10.0.0

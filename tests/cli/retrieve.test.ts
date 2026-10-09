@@ -21,9 +21,11 @@ describe('upt retrieve', () => {
     expect(t).toMatch(/no expression/);
     expect(t).not.toMatch(/the process is not there/);
     expect(t).not.toMatch(/proposed \(cosine/);
-    const accepted = rankByStructure({ text: 'period of a pendulum' }, canonicalRetrievalCorpus());
-    expect(t).toContain(`    ${accepted[0]}`);
-    expect(accepted).toEqual([...accepted].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)));
+    // A text claim has no expression, so the atlas search accepts nothing (the owner's ruling
+    // of 2026-10-09); the structural ranking of the corpus is not an acceptance of it.
+    expect(t).toMatch(/nothing is accepted/);
+    expect(t).toContain('    none — the claim has no expression to rank by structure');
+    expect(rankByStructure({ text: 'period of a pendulum' }, canonicalRetrievalCorpus()).length).toBeGreaterThan(0);
   });
 
   it('--json reports the same accepted order and that embeddings were not requested', async () => {
@@ -32,10 +34,10 @@ describe('upt retrieve', () => {
     const env = JSON.parse(text(c));
     expect(env.command).toBe('retrieve');
     expect(env.options).toEqual({ embed: false, ollamaUrl: null });
-    const accepted = rankByStructure({ text: 'mass' }, canonicalRetrievalCorpus());
+
     expect(env.result.embeddings).toBe('not-requested');
     expect(env.result.proposals).toBeNull();
-    expect(env.result.accepted).toEqual(accepted);
+    expect(env.result.accepted).toEqual([]);
     expect(env.result.note).toMatch(/no expression/);
   });
 
@@ -57,7 +59,7 @@ describe('upt retrieve', () => {
     expect(env.result.fallback).toBe('process-not-there');
     expect(env.result.note).toMatch(/the process is not there/);
     expect(env.result.proposals).toBeNull();
-    expect(env.result.accepted).toEqual(rankByStructure({ text: 'mass' }, canonicalRetrievalCorpus()));
+    expect(env.result.accepted).toEqual([]);
   });
 
   it('a missing claim is a usage error', async () => {

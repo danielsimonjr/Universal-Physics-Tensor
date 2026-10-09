@@ -40,7 +40,7 @@ describe('canonical entries spell a registered constant by its primary name', ()
     expect(offenders).toEqual([]);
   });
 
-  it('the five constants once typed under an unregistered name are no longer graph sources; Rydberg\'s R stays an input', () => {
+  it('the constants once typed under an unregistered name are no longer graph sources, Rydberg\'s R∞ included', () => {
     // A governing name with a constant's dimension that the graph still exposes as a
     // source is a constant typed under an unregistered name (speed-of-light, electron-mass,
     // vacuum-permittivity, reduced-planck-constant).
@@ -48,9 +48,9 @@ describe('canonical entries spell a registered constant by its primary name', ()
     const exposed = CANONICAL_GRAPH.flatMap((e) =>
       e.sources.filter((s) => unregistered.includes(s.name)).map((s) => `${e.id}: ${s.name}`),
     );
-    // CE-rydberg-formula keeps its R as an input: R_M depends on the nuclear mass, so it is
-    // a parameter of the hydrogen-like atom, not a universal constant.
-    expect(exposed).toEqual(['CE-rydberg-formula: rydberg-constant']);
+    // CE-rydberg-formula bakes R∞ (the owner's decision of 2026-10-09); the reduced-mass
+    // R_M is not applied, and the entry says so in its assumptions.
+    expect(exposed).toEqual([]);
     for (const name of ['c', 'h', 'k_B', 'm_e', 'epsilon_0', 'hbar']) expect(CANONICAL_CONSTANTS[name]).toBeDefined();
   });
 });
@@ -78,9 +78,9 @@ describe('the audited entries evaluate from their non-constant inputs alone (§4
     expect(rel(value('CE-boltzmann-entropy', { 'microstate-count': Math.E }), K_B_SI)).toBeLessThan(1e-12);
   });
 
-  it('CE-rydberg-formula evaluates from R and the two levels (Balmer α: 3/4·R − R/9)', () => {
-    const R = 10973731.568160;
-    expect(rel(value('CE-rydberg-formula', { 'rydberg-constant': R, 'lower-level-n': 2, 'upper-level-n': 3 }), R * (1 / 4 - 1 / 9))).toBeLessThan(1e-12);
+  it('CE-rydberg-formula evaluates from the two levels alone, with the baked R∞ (Balmer α: R∞(1/4 − 1/9))', () => {
+    const R = 10973731.56816;
+    expect(rel(value('CE-rydberg-formula', { 'lower-level-n': 2, 'upper-level-n': 3 }), R * (1 / 4 - 1 / 9))).toBeLessThan(1e-12);
   });
 
   it('CE-larmor-power at q = e, a = 1 is e²/(6π ε₀ c³)', () => {

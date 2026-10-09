@@ -258,7 +258,6 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
   l1(
     { name: 'inverse-transition-wavelength', dim: INVERSE_LENGTH },
     [
-      { name: 'rydberg-constant', dim: INVERSE_LENGTH },
       { name: 'lower-level-n', dim: DIMENSIONLESS },
       { name: 'upper-level-n', dim: DIMENSIONLESS },
     ],
@@ -269,16 +268,18 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
       domain: 'quantum',
       formula_latex: '\\tfrac{1}{\\lambda} = R\\left(\\tfrac{1}{n_1^2} - \\tfrac{1}{n_2^2}\\right)',
       epistemicStatus: 'fully-quantitative', // exact closed form
-      // R·(1/n1² − 1/n2²); both level numbers are dimensionless integer counts.
+      // R∞·(1/n1² − 1/n2²); both level numbers are dimensionless integer counts. R∞ is the
+      // registered constant (infinite nuclear mass); the reduced-mass R_M is not applied
+      // (the owner's decision of 2026-10-09: a constant is never an input).
       scalarAst: op('*', [
-        sym('rydberg-constant', INVERSE_LENGTH),
+        sym('R_inf', INVERSE_LENGTH),
         op('-', [
           pow(sym('lower-level-n', DIMENSIONLESS), '-2'),
           pow(sym('upper-level-n', DIMENSIONLESS), '-2'),
         ]),
       ]),
       regime: { scale: 'quantum' },
-      assumptions: ['hydrogen-like atom', 'bound-state transition'],
+      assumptions: ['hydrogen-like atom', 'bound-state transition', 'infinite nuclear mass (R∞; no reduced-mass correction)'],
       references: ['Rydberg 1890 / Balmer 1885'],
       partnerBridges: [],
     },

@@ -7620,6 +7620,21 @@
       "graphNode": false
     },
     {
+      "id": "rydberg-constant",
+      "symbol": "rydberg-constant",
+      "dimension": {
+        "L": -1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": false
+    },
+    {
       "id": "specific-heat",
       "symbol": "specific-heat",
       "dimension": {

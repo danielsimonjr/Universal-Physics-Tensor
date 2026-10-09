@@ -1,7 +1,7 @@
 {
   "$schema": "./bridge-catalog.schema.json",
   "schemaVersion": 3,
-  "packageVersion": "9.0.0",
+  "packageVersion": "10.0.0",
   "entries": [
     {
       "id": 11,
@@ -915,7 +915,7 @@
       ],
       "status": "speculative",
       "context": "Discrete to continuous spacetime transition",
-      "formula_latex": "R(p) = \\frac{4}{\\sqrt{6}} \\ell_P^{-2} \\left[1 + N_0(p) - 9 N_1(p) + 16 N_2(p) - 8 N_3(p)\\right] \\quad (d=4)",
+      "formula_latex": "R(p) = \\frac{4}{\\sqrt{6}} \\ell_P^{-2} \\left[1 - N_0(p) + 9 N_1(p) - 16 N_2(p) + 8 N_3(p)\\right] \\quad (d=4)",
       "source_part": "II",
       "source_section": "Part-II Category I",
       "known_issues": [
@@ -934,7 +934,7 @@
       ],
       "dependencies": [],
       "dimensional_signature": "[L^-2]",
-      "notes": "Encoded 2026-05-07 (Wave W): Tier-5 AST encoding for Benincasa-Dowker d=4 discrete Ricci scalar landed (the catalog record (data/bridge-catalog.json)). dimensional_signature null → '[L^-2]'. AST encodes the dimensionless prefactor (4/√6) and the dimensionless bracket [1 + N_0 - 9N_1 + 16N_2 - 8N_3] as a single dimensionless symbol stub multiplied by ℓ_P^(-2); numerical evaluator computes the bracket with full coefficient fidelity. Bracket-checks verify coefficient extraction at all four unit-vector tuples ((1,0,0,0), (0,1,0,0), (0,0,1,0), (0,0,0,1)), linearity in each N_k, ℓ_P^(-2) scaling, and the algebraic-zero point at (-1,0,0,0). The continuum-limit-mean check on Minkowski sprinkling expectation values is intentionally omitted — sensitive to BD's specific sign conventions, not a clean cross-check at the encoding level. | status_text: Speculative. Benincasa-Dowker (arXiv:1001.2725) established discrete-to-continuum limits for causal set action and Ricci scalar. | Reformulated 2026-05-05 (Wave I.B C3, per Mathematician M-I + Physicist I9 paper review): replaced the originally-stated R = (2/√π)(N/V^{2/4} - k_1 - k_2(ρ²ℓ_P⁴)^{1/4}) form (which contained both a V^{2/4}→V^{1/2} typo and a dimensional mismatch in the (ρ²ℓ_P⁴)^{1/4} term against Ricci-scalar dimensions [L^-2]) with the canonical Benincasa-Dowker d=4 inclusion-exclusion form: R(p) = (4/√6) ℓ_P^(-2) [1 + N_0(p) - 9 N_1(p) + 16 N_2(p) - 8 N_3(p)], where N_k(p) counts causal-set inclusive intervals of cardinality k+2 below point p. The earlier R2 gap-spec block (which proposed a /⟨n(p)⟩-divided form) used the wrong functional form; per the prompt's authoritative reading of Benincasa-Dowker 2010, the bracket is additive (not divided by sprinkling density). Status remains speculative because the d≠4 generalization is non-trivial and the bridge-equation framing (causal sets as UPT microstructure) is original to this catalog. The R1->R2 dimensional known_issue is replaced with a phenomenological-ansatz known_issue tagged for the framing, not the math. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown naming applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): [quantum, cosmological]. Rationale (MEDIUM: causal sets are discrete quantum-gravity; continuum limit is the classical/cosmological spacetime).",
+      "notes": "Encoded 2026-05-07 (Wave W): Tier-5 AST encoding for Benincasa-Dowker d=4 discrete Ricci scalar landed (the catalog record (data/bridge-catalog.json)). dimensional_signature null → '[L^-2]'. AST encodes the dimensionless prefactor (4/√6) and the dimensionless bracket [1 + N_0 - 9N_1 + 16N_2 - 8N_3] as a single dimensionless symbol stub multiplied by ℓ_P^(-2); numerical evaluator computes the bracket with full coefficient fidelity. Bracket-checks verify coefficient extraction at all four unit-vector tuples ((1,0,0,0), (0,1,0,0), (0,0,1,0), (0,0,0,1)), linearity in each N_k, ℓ_P^(-2) scaling, and the algebraic-zero point at (-1,0,0,0). The continuum-limit-mean check on Minkowski sprinkling expectation values is intentionally omitted — sensitive to BD's specific sign conventions, not a clean cross-check at the encoding level. | status_text: Speculative. Benincasa-Dowker (arXiv:1001.2725) established discrete-to-continuum limits for causal set action and Ricci scalar. | Reformulated 2026-05-05 (Wave I.B C3, per Mathematician M-I + Physicist I9 paper review): replaced the originally-stated R = (2/√π)(N/V^{2/4} - k_1 - k_2(ρ²ℓ_P⁴)^{1/4}) form (which contained both a V^{2/4}→V^{1/2} typo and a dimensional mismatch in the (ρ²ℓ_P⁴)^{1/4} term against Ricci-scalar dimensions [L^-2]) with the canonical Benincasa-Dowker d=4 inclusion-exclusion form: R(p) = (4/√6) ℓ_P^(-2) [1 + N_0(p) - 9 N_1(p) + 16 N_2(p) - 8 N_3(p)], where N_k(p) counts causal-set inclusive intervals of cardinality k+2 below point p. The earlier R2 gap-spec block (which proposed a /⟨n(p)⟩-divided form) used the wrong functional form; per the prompt's authoritative reading of Benincasa-Dowker 2010, the bracket is additive (not divided by sprinkling density). Status remains speculative because the d≠4 generalization is non-trivial and the bridge-equation framing (causal sets as UPT microstructure) is original to this catalog. The R1->R2 dimensional known_issue is replaced with a phenomenological-ansatz known_issue tagged for the framing, not the math. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown naming applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): [quantum, cosmological]. Rationale (MEDIUM: causal sets are discrete quantum-gravity; continuum limit is the classical/cosmological spacetime). | Corrected 2026-10-09 (Tom's second round, owner-delegated): the bracket was encoded as 1 + N_0 − 9N_1 + 16N_2 − 8N_3, every N_k with the wrong sign; the sources (Benincasa–Dowker 2010 PRL 104:181301 eq. 14, N − N_1 + 9N_2 − 16N_3 + 8N_4 with their indices shifted by one; Surya 2019 Living Rev. Relativ. 22:5 eq. 33, R(e) = (4/√6)[1 − N_0 + 9N_1 − 16N_2 + 8N_3]) give −N_0 + 9N_1 − 16N_2 + 8N_3. The algebraic zero is (1,0,0,0), one link. ℓ_P here is the catalog's Planck length; BD's prefactor convention is the rationalized √(8πGħ) and an ħ, both absorbed into the 'order one' factor the sources state.",
       "dimension": {
         "L": -2,
         "M": 0,
@@ -1231,7 +1231,7 @@
           {
             "group": "r_s · r^-1",
             "op": "<=",
-            "bound": 0.000004246264992173933,
+            "bound": 4.246264992173933e-06,
             "alias": "r_s/r <= r_s(M_sun)/R_sun (solar limb; no conjunction ray passes inside it)"
           }
         ],
@@ -1566,7 +1566,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "contested": true
     },
     {
       "id": 45,
@@ -1645,7 +1646,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "contested": true
     },
     {
       "id": 47,
@@ -1811,7 +1813,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "contested": true
     },
     {
       "id": 51,
@@ -1848,7 +1851,7 @@
           {
             "group": "r_s · r^-1",
             "op": "<=",
-            "bound": 0.000004246264992173933,
+            "bound": 4.246264992173933e-06,
             "alias": "r_s/r <= r_s(M_sun)/R_sun (the solar-limb baseline the confrontation uses)"
           }
         ],
@@ -1910,7 +1913,7 @@
           {
             "group": "r_s · r^-1",
             "op": "<=",
-            "bound": 6.419934159745687e-8,
+            "bound": 6.419934159745687e-08,
             "alias": "r_s/r <= r_s(M)/(a(1-e)) at Mercury perihelion"
           },
           {
@@ -5923,7 +5926,7 @@
       "reference": {
         "inputs": {
           "relaxation-rate": 0.001,
-          "superposition-extent": 0.000001,
+          "superposition-extent": 1e-06,
           "thermal-de-broglie-wavelength": 2e-11
         },
         "value": 2500000
@@ -5949,7 +5952,7 @@
           "mass": 9.1093837015e-31,
           "temperature": 300
         },
-        "value": 4.303475439595208e-9
+        "value": 4.303475439595208e-09
       }
     },
     {
@@ -6009,7 +6012,7 @@
           "far-radius": 149600000000,
           "near-radius": 695700000
         },
-        "value": 0.000052923373587891635
+        "value": 5.2923373587891635e-05
       }
     },
     {
@@ -6034,7 +6037,7 @@
         "inputs": {
           "mass": 1.989e+30
         },
-        "value": 6.168429716410344e-8
+        "value": 6.168429716410344e-08
       }
     },
     {
@@ -6055,7 +6058,7 @@
         "inputs": {
           "schwarzschild-radius": 2953.25
         },
-        "value": 6.170260569962136e-8
+        "value": 6.170260569962136e-08
       }
     },
     {
@@ -6085,7 +6088,7 @@
           "mass": 1.989e+30,
           "impact-parameter": 695700000
         },
-        "value": 0.000008492529984347865
+        "value": 8.492529984347865e-06
       }
     },
     {
@@ -6351,7 +6354,7 @@
       "citation": "Kawasaki & Gunton 1976 PRA 13:2294; Hohenberg & Halperin 1977 RMP 49:435",
       "reference": {
         "inputs": {
-          "model-a-mobility": 1e-9,
+          "model-a-mobility": 1e-09,
           "time": 100
         },
         "value": 0.00031622776601683794
@@ -6469,13 +6472,13 @@
       "citation": "Sachdev & Ye 1993 PRL 70:3339; Hartnoll 2015 Nature Phys. 11:54",
       "reference": {
         "inputs": {
-          "residual-resistivity": 1e-8,
+          "residual-resistivity": 1e-08,
           "effective-mass": 9.1093837015e-31,
           "carrier-density": 1e+28,
           "temperature": 300,
           "syk-coefficient": 0.5
         },
-        "value": 7.968937807915649e-8
+        "value": 7.968937807915649e-08
       }
     },
     {
@@ -6495,8 +6498,8 @@
       "citation": "Förster 1948 Ann. Phys. 437:55; Lakowicz 2006 Princ. Fluoresc. Spectrosc. Ch.13",
       "reference": {
         "inputs": {
-          "donor-acceptor-distance": 6e-9,
-          "foerster-radius": 5e-9
+          "donor-acceptor-distance": 6e-09,
+          "foerster-radius": 5e-09
         },
         "value": 0.250879080297362
       }
@@ -6601,8 +6604,8 @@
       "id": "be-31",
       "catalogId": 31,
       "kind": "bridge",
-      "label": "Benincasa-Dowker R(p) = (4/√6)ℓ_P⁻²·[1+N_0−9N_1+16N_2−8N_3]",
-      "expression": "(4/sqrt(6))*(1+causal-set-count-0-9*causal-set-count-1+16*causal-set-count-2-8*causal-set-count-3)/planck-length^2",
+      "label": "Benincasa-Dowker R(p) = (4/√6)ℓ_P⁻²·[1−N_0+9N_1−16N_2+8N_3]",
+      "expression": "(4/sqrt(6))*(1-causal-set-count-0+9*causal-set-count-1-16*causal-set-count-2+8*causal-set-count-3)/planck-length^2",
       "target": "ricci-scalar",
       "sources": [
         "causal-set-count-0",
@@ -6623,7 +6626,7 @@
           "causal-set-count-3": 5,
           "planck-length": 1.616255e-35
         },
-        "value": -5.626095667649292e+70
+        "value": 6.876339149349133e+70
       }
     },
     {
@@ -6645,12 +6648,12 @@
       "citation": "Hertz 1976 PRB 14:1165; Millis 1993 PRB 48:7183; Sachdev 2011 QPT 2nd ed. Ch.11",
       "reference": {
         "inputs": {
-          "reference-correlation-length": 1e-9,
+          "reference-correlation-length": 1e-09,
           "temperature": 100,
           "reference-temperature": 200,
           "dynamic-exponent-z": 2
         },
-        "value": 1.4142135623730951e-9
+        "value": 1.4142135623730951e-09
       }
     },
     {
@@ -6676,14 +6679,14 @@
       "reference": {
         "inputs": {
           "quench-timescale": 0.001,
-          "microscopic-relaxation-time": 0.000001,
+          "microscopic-relaxation-time": 1e-06,
           "spatial-dimension": 3,
           "static-exponent-nu": 0.5,
           "dynamic-exponent-z": 2,
           "defect-rest-mass": 1e-27,
           "reheating-temperature": 1000000000000
         },
-        "value": 0.000008373205934595397
+        "value": 8.373205934595397e-06
       }
     },
     {
@@ -6704,7 +6707,7 @@
         "inputs": {
           "gravitational-wave-speed": 299792458.3
         },
-        "value": 1.000692325358395e-9
+        "value": 1.000692325358395e-09
       }
     },
     {
@@ -6783,9 +6786,9 @@
         "inputs": {
           "reference-mass": 1e-27,
           "swampland-coefficient": 0.5,
-          "scalar-field-value": 3e-9,
-          "scalar-field-reference": 2e-9,
-          "planck-mass": 2.176434e-8
+          "scalar-field-value": 3e-09,
+          "scalar-field-reference": 2e-09,
+          "planck-mass": 2.176434e-08
         },
         "value": 9.772885192000917e-28
       }
@@ -6997,7 +7000,7 @@
         "inputs": {
           "chern-number": 2
         },
-        "value": 0.00007748091729863649
+        "value": 7.748091729863649e-05
       }
     },
     {
@@ -7020,7 +7023,7 @@
       "citation": "Josephson 1962 Phys. Lett. 1:251",
       "reference": {
         "inputs": {
-          "voltage": 0.000001
+          "voltage": 1e-06
         },
         "value": 483597848.4169836
       }
@@ -7047,7 +7050,7 @@
         "inputs": {
           "filling-fraction": 2
         },
-        "value": 0.00007748091729863649
+        "value": 7.748091729863649e-05
       }
     },
     {
@@ -7111,7 +7114,7 @@
           "reflectance": 0.5,
           "incidence-angle": 0.3
         },
-        "value": 0.000006215004010938307
+        "value": 6.215004010938307e-06
       }
     },
     {
@@ -7138,7 +7141,7 @@
       "citation": "Alfvén 1942 Nature 150:405. SI form B/√(μ0 ρ); ρ is the total mass density.",
       "reference": {
         "inputs": {
-          "magnetic-flux-density": 1e-8,
+          "magnetic-flux-density": 1e-08,
           "plasma-mass-density": 1.67e-21
         },
         "value": 218291.50359208556
@@ -7204,7 +7207,7 @@
       "reference": {
         "inputs": {
           "sound-speed": 10000,
-          "magnetic-flux-density": 1e-8,
+          "magnetic-flux-density": 1e-08,
           "plasma-mass-density": 1.67e-21
         },
         "value": 218520.4350638482
@@ -7361,7 +7364,7 @@
       "citation": "PhysJS.MagneticPressure.pressure_eq. U = (L/2) I². C = 1 is the battery work per volume, not this pressure.",
       "reference": {
         "inputs": {
-          "magnetic-flux-density": 1e-8
+          "magnetic-flux-density": 1e-08
         },
         "value": 3.9788735751312084e-11
       }
@@ -7395,7 +7398,7 @@
           "effective-mass": 9.1093837015e-31,
           "carrier-density": 1e+28
         },
-        "value": 5.314093261582035e-8
+        "value": 5.314093261582035e-08
       }
     },
     {
@@ -7433,7 +7436,7 @@
           "temperature": 300,
           "magnetic-pressure": 398000
         },
-        "value": 0.0000010406902010050252
+        "value": 1.0406902010050252e-06
       }
     },
     {
@@ -7510,7 +7513,7 @@
       "reference": {
         "inputs": {
           "youngs-modulus": 200000000000,
-          "area-moment": 1e-8,
+          "area-moment": 1e-08,
           "column-length": 2
         },
         "value": 4934.802200544679
@@ -7548,8 +7551,8 @@
       "reference": {
         "inputs": {
           "pull-in-stiffness": 10,
-          "pull-in-gap": 0.000002,
-          "pull-in-area": 1e-8
+          "pull-in-gap": 2e-06,
+          "pull-in-area": 1e-08
         },
         "value": 16.361900223777916
       }
@@ -7592,7 +7595,7 @@
           "mott-permittivity": 3e-11,
           "mott-mobility": 0.0001,
           "mott-voltage": 5,
-          "mott-thickness": 1e-7
+          "mott-thickness": 1e-07
         },
         "value": 84375000.00000001
       }
@@ -7700,7 +7703,7 @@
       "reference": {
         "inputs": {
           "thomson-temperature": 300,
-          "seebeck-slope": 0.000001
+          "seebeck-slope": 1e-06
         },
         "value": 0.0003
       }
@@ -7817,7 +7820,7 @@
           "capacitor-temperature": 300,
           "capacitance": 1e-12
         },
-        "value": 4.1419470000000004e-9
+        "value": 4.1419470000000004e-09
       }
     },
     {
@@ -8062,7 +8065,7 @@
           "pauli-fermi-energy": 1.12e-18,
           "pauli-magneton": 9.274e-24
         },
-        "value": 0.000012260288621294371
+        "value": 1.2260288621294371e-05
       }
     },
     {
@@ -8110,7 +8113,7 @@
       "citation": "PhysJS.UpperCritical.critical_field. Charge e instead of 2e is a different field. Not the spectrum of the covariant Laplacian.",
       "reference": {
         "inputs": {
-          "upper-critical-length": 1e-8
+          "upper-critical-length": 1e-08
         },
         "value": 3.291059784754533
       }
@@ -8583,9 +8586,9 @@
         "inputs": {
           "gradb-mass": 1.67262192369e-27,
           "gradb-perp-speed": 100000,
-          "gradb-gradient": 1e-7,
+          "gradb-gradient": 1e-07,
           "gradb-charge": 1.602176634e-19,
-          "gradb-field": 0.00005
+          "gradb-field": 5e-05
         },
         "value": 2087.9369829706307
       }
@@ -8685,7 +8688,7 @@
       "reference": {
         "inputs": {
           "debye-sphere-density": 10000000000000000,
-          "debye-sphere-length": 0.00007
+          "debye-sphere-length": 7e-05
         },
         "value": 129307.95362175585
       }
@@ -8714,10 +8717,10 @@
       "citation": "PhysJS.MultiDebye.debye_two. Dropping a responding species leaves a different length.",
       "reference": {
         "inputs": {
-          "multi-debye-1": 0.00007,
-          "multi-debye-2": 0.00003
+          "multi-debye-1": 7e-05,
+          "multi-debye-2": 3e-05
         },
-        "value": 0.000027574350900541734
+        "value": 2.7574350900541734e-05
       }
     },
     {
@@ -8757,7 +8760,7 @@
           "lorentz-temperature": 1000000,
           "lorentz-mass": 9.1093837015e-31
         },
-        "value": 0.0000011391849743171435
+        "value": 1.1391849743171435e-06
       }
     },
     {
@@ -8852,7 +8855,7 @@
       "citation": "PhysJS.ParkerSpiral.spiral_ratio. Dropping the sign is a different spiral.",
       "reference": {
         "inputs": {
-          "spiral-omega": 0.0000029,
+          "spiral-omega": 2.9e-06,
           "spiral-radius": 149600000000,
           "spiral-colatitude": 1.2,
           "spiral-radial-speed": 400000
@@ -8888,7 +8891,7 @@
       "citation": "PhysJS.ChapmanFerraro.standoff_eq. A doubled dipole is a hypothesis. Specular 2 ρ v² replaces the numerator 2 by 1.",
       "reference": {
         "inputs": {
-          "standoff-field": 0.000031,
+          "standoff-field": 3.1e-05,
           "standoff-density": 1.67e-20,
           "standoff-speed": 400000
         },
@@ -9088,11 +9091,11 @@
         "inputs": {
           "comb-finger-count": 50,
           "comb-dielectric": 8.8541878128e-12,
-          "comb-overlap": 0.00002,
+          "comb-overlap": 2e-05,
           "comb-bias": 10,
-          "comb-airgap": 0.000002
+          "comb-airgap": 2e-06
         },
-        "value": 4.4270939064000013e-7
+        "value": 4.4270939064000013e-07
       }
     },
     {
@@ -9595,7 +9598,7 @@
       "citation": "PhysJS.JosephsonInductance.inductance_eq. cos φ = 1 at φ = 0. Not be-59.",
       "reference": {
         "inputs": {
-          "josephsonl-ic": 0.000001
+          "josephsonl-ic": 1e-06
         },
         "value": 3.2910597847545334e-10
       }
@@ -9624,8 +9627,8 @@
       "citation": "PhysJS.LowerCritical.lower_critical. Not be-96.",
       "reference": {
         "inputs": {
-          "lowercrit-pen": 1e-7,
-          "lowercrit-xi": 1e-8
+          "lowercrit-pen": 1e-07,
+          "lowercrit-xi": 1e-08
         },
         "value": 0.037889726002639915
       }
@@ -10165,7 +10168,7 @@
         "inputs": {
           "schmidtmu": 0.00089,
           "schmidtrho": 997,
-          "schmidtdiff": 2.3e-9
+          "schmidtdiff": 2.3e-09
         },
         "value": 388.1208843923073
       }
@@ -10200,7 +10203,7 @@
         "inputs": {
           "sherwoodkm": 0.01,
           "sherwoodlen": 0.2,
-          "sherwooddiff": 0.00002
+          "sherwooddiff": 2e-05
         },
         "value": 100
       }
@@ -10414,7 +10417,7 @@
       "citation": "PhysJS.StefanBoltzmann.stefan_boltzmann_eq. Not equal to the Stefan constant symbol when that symbol omits this quotient.",
       "reference": {
         "inputs": {},
-        "value": 5.6703744191844294e-8
+        "value": 5.6703744191844294e-08
       }
     },
     {
@@ -10509,7 +10512,7 @@
           "sahawarmth": 10000,
           "sahaion": 1.0550558526199999e-17
         },
-        "value": 0.000001567515321125971
+        "value": 1.567515321125971e-06
       }
     },
     {
@@ -10597,7 +10600,7 @@
       "citation": "Casimir 1948 Proc. Kon. Ned. Akad. Wet. 51:793",
       "reference": {
         "inputs": {
-          "plate-separation": 0.000001
+          "plate-separation": 1e-06
         },
         "value": -0.0013001257732443657
       }
@@ -14010,7 +14013,7 @@
         "kind": "consistency",
         "predicted": 1,
         "approaches": 1,
-        "fractionalGap": 1e-9,
+        "fractionalGap": 1e-09,
         "fractionalGapIs": "agreement-bound",
         "units": "V(junction A)/V(junction B) ratio; Josephson-volt universality to ~1e-9",
         "provenance": {
@@ -14050,7 +14053,7 @@
         "kind": "consistency",
         "predicted": 1,
         "approaches": 1,
-        "fractionalGap": 0.00001,
+        "fractionalGap": 1e-05,
         "fractionalGapIs": "agreement-bound",
         "units": "R_xy(plateau)/(3·R_K) ratio; the ⅓ fraction (topological order) to ~1e-5",
         "provenance": {
@@ -14088,8 +14091,8 @@
       "rigor": "loose",
       "outcome": {
         "kind": "consistency",
-        "predicted": 2.443004509073667e-8,
-        "approaches": 2.443004509073667e-8,
+        "predicted": 2.443004509073667e-08,
+        "approaches": 2.443004509073667e-08,
         "fractionalGap": 0.1,
         "fractionalGapIs": "agreement-bound",
         "units": "Lorenz number L (W·Ω·K⁻²); degenerate-limit consistency, material spread ~10% (caveat)",
@@ -14545,7 +14548,7 @@
         "kind": "value",
         "predicted": 1,
         "observed": 1.000021,
-        "sigma": 0.000023,
+        "sigma": 2.3e-05,
         "residualInSigma": 0.9130434782629895,
         "withinObserved": true,
         "units": "PPN γ (dimensionless)",
@@ -14582,7 +14585,7 @@
       "outcome": {
         "kind": "upper-bound",
         "predicted": 1e-16,
-        "bound": 2.96e-8,
+        "bound": 2.96e-08,
         "satisfied": true,
         "predictedIs": "point",
         "units": "s⁻¹ (collapse rate)",
@@ -14822,13 +14825,13 @@
   ],
   "spine": {
     "37": {
-      "r_s · r^-1": 0.000004246264992173933
+      "r_s · r^-1": 4.246264992173933e-06
     },
     "51": {
-      "r_s · r^-1": 0.000004246264992173933
+      "r_s · r^-1": 4.246264992173933e-06
     },
     "52": {
-      "r_s · r^-1": 6.419934159745687e-8,
+      "r_s · r^-1": 6.419934159745687e-08,
       "v · c^-1": 0.00019672380662442537
     }
   }

@@ -1854,8 +1854,6 @@ digraph PhysicsMap {
     q_rydberg_energy [shape=ellipse,label="rydberg-energy"];
     j_CE_rydberg_energy -> q_rydberg_energy;
     j_CE_rydberg_formula [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Rydberg formula"];
-    q_rydberg_constant [shape=ellipse,label="rydberg-constant"];
-    q_rydberg_constant -> j_CE_rydberg_formula;
     q_lower_level_n [shape=ellipse,label="lower-level-n"];
     q_lower_level_n -> j_CE_rydberg_formula;
     q_upper_level_n [shape=ellipse,label="upper-level-n"];

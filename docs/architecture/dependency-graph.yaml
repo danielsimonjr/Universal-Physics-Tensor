@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
-  version: 9.0.0
+  version: 10.0.0
   totalFiles: 363
   totalModules: 13
-  totalExports: 2562
+  totalExports: 2563
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9384,6 +9384,9 @@ modules:
         - file: ./bridge-analysis.js
           imports:
             - proposeLinkCandidates
+        - file: ../bridges/catalog-load.js
+          imports:
+            - catalogEntries
         - file: ./catalog-graph.js
           imports:
             - CATALOG_GRAPH
@@ -11817,6 +11820,7 @@ modules:
             - checkedDataFile
       exports:
         - C_SI
+        - R_INF_SI
         - G_SI
         - H_SI
         - HBAR_SI
@@ -11850,6 +11854,7 @@ modules:
         - M_U_SI
       constants:
         - C_SI
+        - R_INF_SI
         - G_SI
         - H_SI
         - HBAR_SI
@@ -12523,6 +12528,7 @@ modules:
             - N_A_SI
             - SIGMA_SB_SI
             - THOMSON_CROSS_SECTION_SI
+            - R_INF_SI
       exports:
         - CONSTANT_ROWS
         - constantRow
@@ -17709,14 +17715,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 363
   totalModules: 13
-  totalLinesOfCode: 81254
-  totalExports: 2562
+  totalLinesOfCode: 81271
+  totalExports: 2563
   totalClasses: 82
   totalInterfaces: 462
   totalFunctions: 776
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 392
+  totalConstants: 393
   totalReExports: 1311
   totalTypeOnlyImports: 510
   runtimeCircularDeps: 0

@@ -478,8 +478,8 @@
         "M": 1,
         "T": -2
       },
-      "prefixable": false,
-      "comment": "lbf/in^2."
+      "prefixable": true,
+      "comment": "lbf/in^2. Prefixable: kpsi and Mpsi are engineering spellings (a kilopound and a megapound per square inch)."
     },
     {
       "symbols": [
@@ -1043,6 +1043,18 @@
       },
       "prefixable": false,
       "comment": "US therm (the EC therm is 1.05506e8 J). Spelled out so the choice is visible."
+    },
+    {
+      "symbols": [
+        "c"
+      ],
+      "scale": "c",
+      "dimension": {
+        "L": 1,
+        "T": -1
+      },
+      "prefixable": false,
+      "comment": "The speed of light as a unit, for the particle-physics spellings eV/c (momentum) and GeV/c2 (mass). A bare c in a formula is the registered constant."
     }
   ],
   "refused": [
@@ -1076,7 +1088,7 @@
     }
   ],
   "prefixLetterUnits": {
-    "comment": "Letters that are both an SI prefix and a unit of their own (tesla, gauss, poise, hour, day, molar, atomic mass). Such a token reads as the prefix reading and not as the unit times the rest: Gyr is a gigayear, TW a terawatt, hPa a hectopascal. m is left out on purpose: mK in a denominator is millikelvin or metre·kelvin, and a target dimension chooses.",
+    "comment": "Letters that are both an SI prefix and a unit of their own (tesla, gauss, poise, hour, day, molar, atomic mass). Such a token reads as the prefix reading and not as the unit times the rest: Gyr is a gigayear, TW a terawatt, hPa a hectopascal. m is left out on purpose: mK in a denominator is millikelvin or metre·kelvin, and a target dimension chooses; c (the speed of light as a unit) reads as centi in cm, cd stays the candela.",
     "letters": [
       "T",
       "G",
@@ -1084,7 +1096,8 @@
       "h",
       "d",
       "M",
-      "u"
+      "u",
+      "c"
     ]
   },
   "affine": {

@@ -542,6 +542,10 @@
           },
           "statement": {
             "type": "string"
+          },
+          "contested": {
+            "const": true,
+            "description": "The row's adjudication is contested (recorded in the negative catalog's commentary); it stays out of the null-result list until a membership rejection or a confrontation adjudicates it."
           }
         }
       }

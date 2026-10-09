@@ -124,14 +124,14 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the Benincasa–Dowker d = 4 discrete Ricci scalar.
 
-<img src="https://i.upmath.me/svg/R%28p%29%20%3D%20%5Cfrac%7B4%7D%7B%5Csqrt%7B6%7D%7D%20%5Cell_P%5E%7B-2%7D%20%5Cleft%5B1%20%2B%20N_0%28p%29%20-%209%20N_1%28p%29%20%2B%2016%20N_2%28p%29%20-%208%20N_3%28p%29%5Cright%5D%20%5Cquad%20%28d%3D4%29" alt="R(p) = \frac{4}{\sqrt{6}} \ell_P^{-2} \left[1 + N_0(p) - 9 N_1(p) + 16 N_2(p) - 8 N_3(p)\right] \quad (d=4)" />
+<img src="https://i.upmath.me/svg/R%28p%29%20%3D%20%5Cfrac%7B4%7D%7B%5Csqrt%7B6%7D%7D%20%5Cell_P%5E%7B-2%7D%20%5Cleft%5B1%20-%20N_0%28p%29%20%2B%209%20N_1%28p%29%20-%2016%20N_2%28p%29%20%2B%208%20N_3%28p%29%5Cright%5D%20%5Cquad%20%28d%3D4%29" alt="R(p) = \frac{4}{\sqrt{6}} \ell_P^{-2} \left[1 - N_0(p) + 9 N_1(p) - 16 N_2(p) + 8 N_3(p)\right] \quad (d=4)" />
 
 - **Status**: Speculative. Benincasa-Dowker (arXiv:1001.2725) established discrete-to-continuum limits for causal set action and Ricci scalar. **Reformulated 2026-05-05:** replaced the originally-stated `R = (2/√π)(N/V^{2/4} - k_1 - k_2(ρ²ℓ_P⁴)^{1/4})` form — which contained both a `V^{2/4}→V^{1/2}` typo and a dimensional mismatch in the `(ρ²ℓ_P⁴)^{1/4}` term against Ricci-scalar dimensions `[L^{-2}]` — with the canonical Benincasa-Dowker d=4 inclusion-exclusion formula. The published Benincasa-Dowker (2010 *Phys. Rev. Lett.* 104:181301) form is additive (no sprinkling-density division). Status remains *speculative* because (a) the d≠4 generalization requires re-deriving coefficients and (b) using BD's discrete Ricci scalar as a *bridge equation* between causal-set discreteness and continuum spacetime — i.e., committing to causal-set dynamics as UPT's microstructure — is original to this catalog and is not in BD itself.
 - **Context**: Discrete to continuous spacetime transition
 
 - **Mathematical Formulation** (Benincasa-Dowker 2010, d=4):
 
-<img src="https://i.upmath.me/svg/R(p)%20%3D%20%5Cfrac%7B4%7D%7B%5Csqrt%7B6%7D%7D%20%5Cell_P%5E%7B-2%7D%20%5Cleft%5B1%20%2B%20N_0(p)%20-%209%20N_1(p)%20%2B%2016%20N_2(p)%20-%208%20N_3(p)%5Cright%5D" alt="R(p) = \frac{4}{\sqrt{6}} \ell_P^{-2} \left[1 + N_0(p) - 9 N_1(p) + 16 N_2(p) - 8 N_3(p)\right]" />
+<img src="https://i.upmath.me/svg/R(p)%20%3D%20%5Cfrac%7B4%7D%7B%5Csqrt%7B6%7D%7D%20%5Cell_P%5E%7B-2%7D%20%5Cleft%5B1%20-%20N_0(p)%20%2B%209%20N_1(p)%20-%2016%20N_2(p)%20%2B%208%20N_3(p)%5Cright%5D" alt="R(p) = \frac{4}{\sqrt{6}} \ell_P^{-2} \left[1 - N_0(p) + 9 N_1(p) - 16 N_2(p) + 8 N_3(p)\right]" />
 
 where:
 

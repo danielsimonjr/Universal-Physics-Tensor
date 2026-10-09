@@ -8,6 +8,7 @@
  * @internal
  */
 import { proposeLinkCandidates } from './bridge-analysis.js';
+import { catalogEntries } from '../bridges/catalog-load.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import type { BridgeEdge } from './edge.js';
 import { scanFrontier } from './probe/frontier.js';
@@ -26,13 +27,16 @@ export const CANDIDATE_NOT_A_BRIDGE_REASON =
   'a coincidence-heavy REVIEW SURFACE, NOT discovered bridges';
 
 /**
- * Bridge ids the negative-catalog comment already names as contested.
+ * Bridge ids whose catalog row is marked `contested` in `data/bridge-catalog.json`.
  * A contested row stays out of the null-result list until an adjudication
- * exists. A membership rejection is that adjudication.
+ * exists. A membership rejection is that adjudication. Derived from the data,
+ * never typed here (the owner's decision of 2026-10-09).
  *
  * @internal
  */
-export const CONTESTED_BRIDGE_IDS: readonly string[] = [`be-${44}`, `be-${46}`, `be-${50}`];
+export const CONTESTED_BRIDGE_IDS: readonly string[] = catalogEntries()
+  .filter((entry) => entry.contested === true)
+  .map((entry) => `be-${entry.id}`);
 
 /** Why an entry cannot be confronted yet: no comparison exists, or its data is absent. @internal */
 export type ConfrontationMarkStatus = 'unconfrontable' | 'data-pending';

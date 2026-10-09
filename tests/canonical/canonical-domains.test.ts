@@ -43,7 +43,7 @@ const CASES: readonly Case[] = [
   },
   {
     id: 'CE-rydberg-formula',
-    good: { 'rydberg-constant': 10973731.568, 'lower-level-n': 2, 'upper-level-n': 3 },
+    good: { 'lower-level-n': 2, 'upper-level-n': 3 },
     bad: [['n1>n2', { 'lower-level-n': 3, 'upper-level-n': 2 }], ['fractional', { 'lower-level-n': 1.5 }], ['n=0', { 'lower-level-n': 0 }]],
   },
   { id: 'CE-stefan-boltzmann', good: { temperature: 5800 }, bad: [['T<0', { temperature: -5800 }]] },

@@ -38,8 +38,7 @@ import {
   MU0_SI,
   N_A_SI,
   SIGMA_SB_SI,
-  THOMSON_CROSS_SECTION_SI,
-} from '../core/constants.js';
+  THOMSON_CROSS_SECTION_SI, R_INF_SI } from '../core/constants.js';
 
 /** One registered constant as written: everything but the dimension, which `symbolic-constants.ts` derives from `unit`. @internal */
 export interface ConstantRow {
@@ -104,6 +103,8 @@ export const CONSTANT_ROWS: readonly ConstantRow[] = [
     meaning: 'Planck constant', source: `exact SI, 2019 redefinition (${OWNER} H_SI)` }),
   row({ name: 'c', spellings: ['speed-of-light', 'speed_of_light'], value: C_SI, unit: 'm/s', canonical: true, mathts: 'speedOfLight', exact: true,
     meaning: 'speed of light in vacuum', source: `exact SI (${OWNER} C_SI)` }),
+  row({ name: 'R_inf', spellings: ['Rinf', 'R_infinity', 'rydberg'], quantity: 'rydberg-constant', value: R_INF_SI, unit: '1/m', canonical: true, mathts: 'rydberg',
+    meaning: 'Rydberg constant R∞, infinite nuclear mass (the reduced-mass correction R_M = R∞/(1 + m_e/M) is not applied)', source: `CODATA 2018 (${OWNER} R_INF_SI)` }),
   row({ name: 'G', value: G_SI, unit: 'm^3/(kg*s^2)', canonical: true, mathts: 'gravitationConstant',
     meaning: 'Newtonian gravitational constant', source: `CODATA 2018 (${OWNER} G_SI)` }),
   row({ name: 'k_B', spellings: ['kB', 'boltzmann'], quantity: 'boltzmann-constant', value: K_B_SI, unit: 'J/K', canonical: true, mathts: 'boltzmann', exact: true,

@@ -201,7 +201,7 @@ function tryOneFactor(token: string): FactorReading | null {
     base = caret[1]!;
     exp = Number(caret[2]);
   } else {
-    const uni = /^(.*?)([¹²³])$/.exec(token);
+    const uni = /^(.*?)(⁻?[¹²³])$/.exec(token);
     const superExp = uni === null ? undefined : SUPERSCRIPT[uni[2]!];
     if (uni !== null && superExp !== undefined && uni[1]!.length > 0) {
       base = uni[1]!;
@@ -413,7 +413,7 @@ function unitReadings(text: string): UnitReading[] {
   return [...unique.values()];
 }
 
-const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3 };
+const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
 
 /**
  * Spellings that convert correctly and still mean something else to a reader:
