@@ -89,7 +89,6 @@ function bridgeOf(
     bound: b,
     regime: AB_PENDULUM_LINEAR.regime,
     counterexamples: [],
-    evidence: new Set(),
     witnesses: [],
     citations: [],
     reviewStatus: 'proposed',

@@ -338,9 +338,10 @@ describe("ab-wave-dalembert ↔ PhysJS.WaveDalembert.solution_eq_profiles", () =
 describe('formally-proved is derived, and reachable only from a reviewed reference', () => {
   it('ab-pendulum-linear derives formally-proved from its reference and stores nothing', () => {
     expect(deriveEvidence(AB_PENDULUM_LINEAR, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
-    // The record's stored set never carries it: `derived-tag-literals.test.ts`
-    // forbids spelling it anywhere a record could set it.
-    expect(AB_PENDULUM_LINEAR.evidence.has('formally-proved')).toBe(false);
+    // The record stores no evidence set at all: `derived-tag-literals.test.ts`
+    // forbids spelling the tag anywhere a record could set it, and the type
+    // has no field to set.
+    expect(Object.hasOwn(AB_PENDULUM_LINEAR, 'evidence')).toBe(false);
   });
 
   it('the sanity-lemma keys are exactly the atlas bridges with a formalRef, and each has a lemma in THIS file', () => {

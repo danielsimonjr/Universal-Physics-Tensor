@@ -112,7 +112,6 @@ export const BRIDGE_KG_SCHRODINGER: AtlasBridge = {
       witness: 'WS5b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WS5',
@@ -153,7 +152,6 @@ export const BRIDGE_KG_OSCILLATOR: AtlasBridge = {
     [],
   ),
   counterexamples: [],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WS6',
@@ -220,7 +218,6 @@ export const BRIDGE_STIFF_STRING: AtlasBridge = {
       witness: 'WS7b',
     },
   ],
-  evidence: new Set(['proposed', 'numerically-supported']),
   witnesses: [
     {
       id: 'WS7',

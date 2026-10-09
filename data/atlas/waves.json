@@ -375,8 +375,7 @@
       },
       "counterexamples": [],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -417,8 +416,8 @@
       },
       "counterexamples": [],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "formally-proved",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -520,8 +519,8 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -573,7 +572,8 @@
         "limitCharacter": "regular",
         "uniformity": [
           "phase velocity of one Fourier mode, for ω₀/(ck) ≤ 0.1"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "waves",
@@ -603,8 +603,9 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "formally-proved",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -670,7 +671,8 @@
         "limitCharacter": "regular",
         "uniformity": [
           "kinetic frequency of one mode, for x = ck/ω₀ ≤ 0.1"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "waves",
@@ -712,8 +714,9 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "formally-proved",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -784,8 +787,8 @@
       },
       "counterexamples": [],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "formally-proved",
+        "numerically-supported"
       ],
       "witnesses": [
         {
@@ -844,7 +847,8 @@
         "limitCharacter": "regular",
         "uniformity": [
           "phase velocity of one Fourier mode, for β = EIk²/F ≤ 0.01"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "waves",
@@ -875,8 +879,9 @@
         }
       ],
       "evidence": [
-        "numerically-supported",
-        "proposed"
+        "contradicted",
+        "formally-proved",
+        "numerically-supported"
       ],
       "witnesses": [
         {

@@ -137,7 +137,7 @@ describe('symbolically-checked is DERIVED from the artifact', () => {
     expect(deriveEvidence(BRIDGE_SPRING_LC, NO_PASSING_WITNESSES).has('symbolically-checked')).toBe(
       false,
     );
-    expect(BRIDGE_SPRING_LC.evidence.has('symbolically-checked')).toBe(false);
+    expect(Object.hasOwn(BRIDGE_SPRING_LC, 'evidence')).toBe(false);
   });
 
   it('ab-damped-rlc earns it the same way', () => {

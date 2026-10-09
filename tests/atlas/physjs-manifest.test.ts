@@ -179,7 +179,8 @@ describe('vendored PhysJS manifest', () => {
     );
     for (const bridge of reviewed) {
       expect(deriveEvidence(bridge, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
-      expect(bridge.evidence.has('formally-proved')).toBe(false);
+      // The record has no evidence field to store the tag on.
+      expect(Object.hasOwn(bridge, 'evidence')).toBe(false);
     }
   });
 

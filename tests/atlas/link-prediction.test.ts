@@ -88,7 +88,6 @@ describe('the predictor itself', () => {
     sideConditions: [],
     regime: { family: 'toy', inequalities: [], groupDefinitions: {} },
     counterexamples: [],
-    evidence: new Set(),
     witnesses: [],
     citations: [],
     reviewStatus: 'proposed',
