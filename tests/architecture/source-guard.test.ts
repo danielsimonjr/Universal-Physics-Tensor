@@ -37,7 +37,8 @@ export function filenameOffender(name: string): boolean {
 
 function walk(dir: string, out: string[]): void {
   for (const entry of readdirSync(dir)) {
-    if (SKIP_DIRS.has(entry)) continue;
+    // Dot-directories hold other checkouts (`.claude/worktrees/`) and tool state, never source.
+    if (SKIP_DIRS.has(entry) || entry.startsWith('.')) continue;
     const abs = join(dir, entry);
     const rel = relative(root, abs);
     if (statSync(abs).isDirectory()) {
