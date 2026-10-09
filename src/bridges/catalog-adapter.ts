@@ -1,8 +1,12 @@
 /**
- * Catalog adapter: ingests the 44-entry `BRIDGE_EQUATIONS` array into
- * the v0.7-p2 sparse semantic catalog as `BridgeCell` values.
+ * Catalog adapter: ingests `BRIDGE_EQUATIONS` into the v0.7-p2 sparse
+ * semantic catalog as `BridgeCell` values.
  *
- * Phase 3 of v0.7 Proposal 2 (Sparse Semantic Catalog).
+ * A cell needs a `PhysicalScale` on at least one end, and the catalog's
+ * `bridges` tuple names a scale on only part of the rows (the rest name a
+ * field such as `chemistry` or `plasma`). The adapter submits the rows it
+ * can place and lists every other row in `unsubmitted`, with the reason in
+ * `skipped`; it never guesses a scale. Phase 3 of v0.7 Proposal 2.
  *
  * Two entry points:
  *
@@ -31,6 +35,7 @@
 
 import type {
   BridgeEquationEntry,
+  BridgeEquationStatus,
 } from './index.js';
 import type { BridgeCell, CellConfidence } from '../core/cell.js';
 import type { UniversalTensor } from '../core/tensor.js';
@@ -80,6 +85,8 @@ export interface CatalogIngestionReport {
   readonly info: ReadonlyArray<FluxDiagnostic>;
   /** Bridge IDs the adapter filtered out before submission. */
   readonly unsubmitted: ReadonlyArray<number>;
+  /** Why each unsubmitted id was not placed: the tuple labels that name no `PhysicalScale`. */
+  readonly skipped: ReadonlyArray<{ readonly bridgeId: number; readonly reason: string }>;
   /** Cells that PASSED Rule 1 and would be submitted (or were). */
   readonly submitted: ReadonlyArray<BridgeCell>;
 }
@@ -116,17 +123,14 @@ export class CatalogIngestionError extends Error {
  *
  * @internal
  */
-function statusToCellConfidence(status: string): CellConfidence {
+function statusToCellConfidence(status: BridgeEquationStatus): CellConfidence {
   switch (status) {
     case 'established': return 'established';
     case 'speculative': return 'speculative';
     case 'highly-speculative': return 'highly-speculative';
     case 'invalid':
-      // 'invalid' catalog entries should not become cells; the
-      // adapter callers filter on isActiveStatus first. If we ever
-      // reach here, downgrade to 'highly-speculative' (safest).
-      return 'highly-speculative';
-    default:
+      // An invalid row is not a claim; the catalog carries none (the status
+      // distribution test pins 0). A cell built from one is the weakest grade.
       return 'highly-speculative';
   }
 }
@@ -302,14 +306,20 @@ export function scanCatalog(
   const warnings: FluxDiagnostic[] = [];
   const info: FluxDiagnostic[] = [];
   const unsubmitted: number[] = [];
+  const skipped: { bridgeId: number; reason: string }[] = [];
   const submitted: BridgeCell[] = [];
 
   for (const entry of entries) {
     const diagnostic = checkDimensionalConsistency(entry);
     const cell = entryToBridgeCell(entry);
     const submittable = cell !== null;
-    if (!submittable) unsubmitted.push(entry.id);
-    else submitted.push(cell);
+    if (!submittable) {
+      unsubmitted.push(entry.id);
+      skipped.push({
+        bridgeId: entry.id,
+        reason: `bridges tuple [${entry.bridges.join(', ')}] names no PhysicalScale (quantum, mesoscopic, classical, cosmological) on either end`,
+      });
+    } else submitted.push(cell);
 
     if (diagnostic) {
       switch (diagnostic.severity) {
@@ -333,6 +343,7 @@ export function scanCatalog(
     warnings,
     info,
     unsubmitted,
+    skipped,
     submitted,
   };
 }

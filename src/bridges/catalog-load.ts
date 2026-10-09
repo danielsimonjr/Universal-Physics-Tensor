@@ -8,24 +8,131 @@
 import { checkedDataFile } from '../core/data-file.js';
 import type {
   CatalogConfrontation,
+  CatalogConfrontationRecord,
   CatalogEntry,
   CatalogEvaluator,
   CatalogEvaluatorParameter,
   CatalogFile,
+  CatalogFileRecord,
+  CatalogRejection,
   CatalogRelation,
 } from './catalog-types.js';
+import type { ConfrontationOutcome } from './observations/types.js';
 
 /**
  * `data/bridge-catalog.json`, checked against `data/bridge-catalog.schema.json`
  * (every record's `type`, the relation, evaluator, parameter and confrontation
- * shapes) and against what a schema cannot state: `count` is the number of entries.
+ * shapes). What a schema cannot state is checked by {@link loadCatalog}.
  */
-function loadFile(): CatalogFile {
-  const file = checkedDataFile('bridge-catalog.json') as CatalogFile & { readonly count: number };
-  if (file.count !== file.entries.length) {
-    throw new Error(`data/bridge-catalog.json: count is ${file.count} but the file has ${file.entries.length} entries`);
+function loadFile(): CatalogFileRecord {
+  return checkedDataFile('bridge-catalog.json') as CatalogFileRecord;
+}
+
+/** Records in ascending id order; a duplicate or a disordered id is refused. */
+function checkOrder(file: CatalogFileRecord): void {
+  for (let i = 1; i < file.entries.length; i += 1) {
+    const previous = file.entries[i - 1]!.id;
+    const current = file.entries[i]!.id;
+    if (current <= previous) {
+      throw new Error(`data/bridge-catalog.json: entry ${current} follows entry ${previous}; records are in ascending id order`);
+    }
   }
-  return file;
+  const seen = new Set<number>();
+  for (const row of file.confrontations) {
+    if (seen.has(row.catalogId)) throw new Error(`data/bridge-catalog.json: catalog id ${row.catalogId} has two confrontations`);
+    seen.add(row.catalogId);
+  }
+  const rejected = new Set<number>();
+  const ids = new Set(file.entries.map((entry) => entry.id));
+  for (const row of file.rejections) {
+    if (!ids.has(row.catalogId)) throw new Error(`data/bridge-catalog.json: rejection ${row.catalogId} names no catalog row`);
+    if (rejected.has(row.catalogId)) throw new Error(`data/bridge-catalog.json: catalog id ${row.catalogId} is rejected twice`);
+    rejected.add(row.catalogId);
+  }
+}
+
+const number = (o: Readonly<Record<string, unknown>>, key: string, where: string): number => {
+  const v = o[key];
+  if (typeof v !== 'number' || !Number.isFinite(v)) throw new Error(`${where}: outcome.${key} must be a finite number`);
+  return v;
+};
+const boolean = (o: Readonly<Record<string, unknown>>, key: string, where: string): boolean => {
+  const v = o[key];
+  if (typeof v !== 'boolean') throw new Error(`${where}: outcome.${key} must be a boolean`);
+  return v;
+};
+
+/**
+ * The outcome of one confrontation, checked arm by arm on its `kind`. The
+ * schema states the shared fields (`kind`, `units`, `provenance`, the data
+ * handling); the fields each arm must carry are checked here, so the loaded
+ * record is a {@link ConfrontationOutcome} by inspection, not by assertion.
+ */
+function readOutcome(row: CatalogConfrontationRecord): ConfrontationOutcome {
+  const where = `data/bridge-catalog.json: confrontation ${row.catalogId}`;
+  const o = row.outcome;
+  if (o['kind'] !== row.kind) throw new Error(`${where}: outcome.kind ${String(o['kind'])} is not the record kind ${row.kind}`);
+  switch (row.kind) {
+    case 'value':
+      number(o, 'predicted', where);
+      number(o, 'observed', where);
+      number(o, 'sigma', where);
+      number(o, 'residualInSigma', where);
+      boolean(o, 'withinObserved', where);
+      break;
+    case 'upper-bound':
+      number(o, 'predicted', where);
+      number(o, 'bound', where);
+      boolean(o, 'satisfied', where);
+      break;
+    case 'consistency':
+      number(o, 'predicted', where);
+      number(o, 'approaches', where);
+      number(o, 'fractionalGap', where);
+      if (o['fractionalGapIs'] !== 'agreement-bound' && o['fractionalGapIs'] !== 'observed-difference') {
+        throw new Error(`${where}: outcome.fractionalGapIs must name what fractionalGap holds`);
+      }
+      break;
+    case 'table':
+      if (!Array.isArray(o['rows'])) throw new Error(`${where}: outcome.rows must be an array`);
+      break;
+  }
+  return o as unknown as ConfrontationOutcome;
+}
+
+function narrowConfrontations(file: CatalogFileRecord): readonly CatalogConfrontation[] {
+  return file.confrontations.map((row) => ({ ...row, outcome: readOutcome(row) }));
+}
+
+/**
+ * A relation's confidence is its catalog row's `status`. The row is the one
+ * owner, so the file may not store a confidence beside a catalog id; a
+ * relation with no row stores its own. A row that is `invalid` has no
+ * relation to evaluate.
+ */
+function deriveConfidence(file: CatalogFileRecord): CatalogFile {
+  const entries = new Map(file.entries.map((entry) => [entry.id, entry]));
+  const confrontations = narrowConfrontations(file);
+  const relations = file.relations.map((relation): CatalogRelation => {
+    if (relation.catalogId === null) {
+      if (relation.confidence === undefined) {
+        throw new Error(`data/bridge-catalog.json: relation ${relation.id} has no catalog row and no confidence`);
+      }
+      return { ...relation, confidence: relation.confidence };
+    }
+    if (relation.confidence !== undefined) {
+      throw new Error(`data/bridge-catalog.json: relation ${relation.id} stores a confidence; the row's status is the owner`);
+    }
+    const entry = entries.get(relation.catalogId);
+    if (entry === undefined) {
+      throw new Error(`data/bridge-catalog.json: relation ${relation.id} names an unknown catalog id ${relation.catalogId}`);
+    }
+    if (entry.status === 'invalid') {
+      throw new Error(`data/bridge-catalog.json: relation ${relation.id} has a closed form but its row is invalid`);
+    }
+    return { ...relation, confidence: entry.status };
+  });
+  return { ...file, relations, confrontations };
 }
 
 /**
@@ -70,7 +177,19 @@ function deriveDomains(file: CatalogFile): CatalogFile {
   return { ...file, relations };
 }
 
-const CATALOG = deriveDomains(loadFile());
+/**
+ * The loaded catalog from a file record: the records are in id order, each
+ * outcome is checked on its kind, each relation takes its row's status as its
+ * confidence, then the sign clauses its evaluator parameters state. The
+ * production catalog is this function on `data/bridge-catalog.json`.
+ * @internal
+ */
+export function loadCatalog(file: CatalogFileRecord): CatalogFile {
+  checkOrder(file);
+  return deriveDomains(deriveConfidence(file));
+}
+
+const CATALOG = loadCatalog(loadFile());
 
 /** The loaded catalog. */
 export function bridgeCatalog(): CatalogFile {
@@ -92,9 +211,14 @@ export function catalogEvaluators(): readonly CatalogEvaluator[] {
   return CATALOG.evaluators;
 }
 
-/** Confrontations, in file order. */
+/** Confrontations, in file order; one per catalog id. */
 export function catalogConfrontations(): readonly CatalogConfrontation[] {
   return CATALOG.confrontations;
+}
+
+/** The negative catalog, in file order. */
+export function catalogRejections(): readonly CatalogRejection[] {
+  return CATALOG.rejections;
 }
 
 const ENTRY_BY_ID = new Map(CATALOG.entries.map((entry) => [entry.id, entry]));

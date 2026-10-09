@@ -176,11 +176,12 @@ describe('§VI.6.1 tensor index', () => {
     expect(tensorIndexComponent(be48.category)).toBe('emergence');
   });
 
-  it('does not let a stated tensor rank override the category', () => {
+  it('does not let the stated tensor rank override the category', () => {
+    // BE-13 is the scalar trace of a rank-2 equation and BE-17 a scalar of a rank-3 tensor (their formula_latex).
     const be13 = BRIDGE_EQUATIONS.find((e) => e.id === 13)!;
     const be17 = BRIDGE_EQUATIONS.find((e) => e.id === 17)!;
-    expect(be13.encoded_form).toMatch(/rank-2/);
-    expect(be17.encoded_form).toMatch(/rank-3/);
+    expect(be13.formula_latex).toMatch(/\\mu\\nu|R =/);
+    expect(be17.formula_latex).toMatch(/T/);
     expect(tensorIndexComponent(be13.category)).toBe('information-geometry');
     expect(tensorIndexComponent(be17.category)).toBe('field-unification');
   });

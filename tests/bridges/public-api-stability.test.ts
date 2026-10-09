@@ -17,7 +17,6 @@ describe('Public API stability (per v0.2.0-Design.md §14.3)', () => {
     expect(sample).toHaveProperty('source_part');
     expect(sample).toHaveProperty('source_section');
     expect(sample).toHaveProperty('dimensional_signature');
-    expect(sample).toHaveProperty('tractability_class');
     expect(sample).toHaveProperty('notes');
     expect(sample).toHaveProperty('known_issues');
     expect(sample).toHaveProperty('references');
@@ -27,12 +26,6 @@ describe('Public API stability (per v0.2.0-Design.md §14.3)', () => {
   it('every bridge has a non-null dimensional_signature', () => {
     for (const b of BRIDGE_EQUATIONS) {
       expect(b.dimensional_signature).not.toBeNull();
-    }
-  });
-
-  it('every bridge has populated tractability_class', () => {
-    for (const b of BRIDGE_EQUATIONS) {
-      expect(b.tractability_class).not.toBe('undefined');
     }
   });
 

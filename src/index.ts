@@ -154,11 +154,11 @@ export {
   DIFFERENTIABLE_RELATIONS,
 } from './diff/bridge-specs.js';
 
-// Machine-readable bridge equation index — the 40+ catalogued equations.
-// `BridgeEquationEntry` is intentionally a different shape from the runtime
-// `BridgeEquation` interface above; the entry captures spec-level metadata
-// (status, known issues, references, dependencies), while `BridgeEquation`
-// describes a runtime bridge between two tensor regimes.
+// The catalog rows of `data/bridge-catalog.json`, in id order.
+// `BridgeEquationEntry` is a different shape from the runtime `BridgeEquation`
+// interface above: the entry is the catalog's record of an equation (status,
+// known issues, references, dependencies), while `BridgeEquation` describes a
+// runtime bridge between two tensor regimes.
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
 /** Request a caller-table confrontation. The catalog status does not change. */
 export {
@@ -210,6 +210,8 @@ export {
   NonFiniteInputError,
   UnknownInputError,
 } from './composition/index.js';
+/** A caller input that names a registered constant (`G`, `k_B`, `m_p`, …) is refused on every evaluation path. */
+export { ConstantInputError } from './bridges/index.js';
 /** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
 export type { Evaluation } from './composition/index.js';
 
@@ -741,34 +743,12 @@ export type {
   SourceRefs,
 } from './bridges/observations/types.js';
 
-// BE-37 × Cassini — GR Shapiro-delay PPN-γ confrontation.
-
-// BE-51 × VLBI — GR light-deflection PPN-γ confrontation (third classic GR test).
-
 // BE-53 — one-loop coefficient, and a confrontation only when the caller supplies both inputs.
 export { oneLoopCoefficientStatement } from './bridges/coefficient-statement.js';
 export type { OneLoopCoefficientStatement, OneLoopCoefficientSign } from './bridges/coefficient-statement.js';
 
-// BE-21 × QGP — KSS viscosity-bound confrontation (the "most perfect fluid").
-
-// BE-35 × 3D Ising — conformal-bootstrap critical-exponent confrontation.
-
-// BE-11 × matter-wave interferometry — collisional-decoherence confrontation.
-
-// BE-55 × quantum-Hall universality — topological quantization confrontation.
-
-// BE-56 × Casimir force — quantum-vacuum-force confrontation.
-
-// BE-58 × Johnson Noise Thermometry — fluctuation-dissipation confrontation.
-
-// Condensed-matter cluster (2026-07-05) — four established confrontations.
-
-// Astrophysics cluster (2026-07-05) — three established confrontations.
-
-// BE-48 × LISA-Pathfinder — GRW collapse-rate vs CSL upper bound.
-
-// Unified confrontation registry (be-23/36/37/48/52) — single lookup surface
-// for `upt confront`.
+// The confrontation registry: every committed confrontation of
+// `data/bridge-catalog.json`, the single lookup surface for `upt confront`.
 export {
   CONFRONTATIONS,
   listConfrontations,

@@ -21,6 +21,7 @@ import {
   C_SI,
   E_SI,
   EPS0_SI,
+  EULER_GAMMA,
   FARADAY_SI,
   G_SI,
   GM_SUN_SI,
@@ -159,6 +160,8 @@ export const CONSTANT_ROWS: readonly ConstantRow[] = [
     meaning: 'Thomson cross section', source: `CODATA 2018 (${OWNER} THOMSON_CROSS_SECTION_SI)` }),
   row({ name: 'lane_emden_omega_3', quantity: 'lane-emden-omega-3', value: LANE_EMDEN_OMEGA3, unit: '1',
     meaning: 'Lane–Emden n = 3 dimensionless radius', source: `${OWNER} LANE_EMDEN_OMEGA3` }),
+  row({ name: 'euler_gamma', value: EULER_GAMMA, unit: '1',
+    meaning: 'Euler–Mascheroni constant γ', source: `${OWNER} EULER_GAMMA` }),
   // GRW mass amplification: λ = λ₀ · (m / m₀), with λ₀ a rate and m₀ a mass.
   // The two numbers are the catalog expression's, so the rate is unchanged.
   row({ name: 'grw_lambda0', value: 1e-16, unit: 'Hz',

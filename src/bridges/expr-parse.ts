@@ -10,8 +10,7 @@
  * @module bridges/expr-parse
  */
 
-import type { Dimension } from '../dimensional/types.js';
-import { DIMENSIONLESS } from '../dimensional/types.js';
+import { DIMENSIONLESS, type Dimension } from '../dimensional/types.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/ast-types.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
@@ -19,6 +18,7 @@ import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
 import { allQuantityRecords } from '../dimensional/quantity-registry.js';
 import { parseFormula } from '../numerical/formula-mathts.js';
 import { parseFormulaPNode, type FormulaPNode } from '../numerical/formula-dimension.js';
+import { ConstantInputError } from './evaluation-errors.js';
 
 const TRANSCENDENTAL = new Set<TranscendentalFn>([
   'exp', 'ln', 'log2', 'log10', 'sin', 'cos', 'tan', 'sinh', 'cosh', 'tanh',
@@ -52,12 +52,36 @@ export function formulaNames(): ReadonlySet<string> {
   return names;
 }
 
-/** Numeric scope: constants, formula overlays, and π. Caller inputs overwrite. */
-export function formulaScope(inputs: Readonly<Record<string, number>> = {}): Record<string, number> {
+const RESERVED = new Set<string>(['pi', ...Object.keys(CONSTANTS), ...FORMULA_NAMED.map((named) => named.name)]);
+
+/** π, the registered constants and the formula overlays: names a caller may not bind. */
+export function reservedFormulaNames(): ReadonlySet<string> {
+  return RESERVED;
+}
+
+const underscored = (name: string): string => name.replace(/-/g, '_');
+
+/**
+ * Numeric scope: constants, formula overlays, and π, then the caller's inputs.
+ * An input whose name is reserved is refused with {@link ConstantInputError}
+ * unless `declared` names it: a relation's own source may carry a constant's
+ * name as a default the caller overrides (be-63's Lane-Emden ω₃).
+ * {@link evaluateFormula} first drops a reserved key its expression does not
+ * read; this builder refuses every undeclared one.
+ */
+export function formulaScope(
+  inputs: Readonly<Record<string, number>> = {},
+  declared: readonly string[] = [],
+): Record<string, number> {
   const scope: Record<string, number> = { pi: Math.PI };
   for (const [name, constant] of Object.entries(CONSTANTS)) scope[name] = constant.value;
   for (const named of FORMULA_NAMED) scope[named.name] = named.value;
-  for (const [key, value] of Object.entries(inputs)) scope[key.replace(/-/g, '_')] = value;
+  const allowed = new Set(declared.map(underscored));
+  for (const [key, value] of Object.entries(inputs)) {
+    const name = underscored(key);
+    if (RESERVED.has(name) && !allowed.has(name)) throw new ConstantInputError(key);
+    scope[name] = value;
+  }
   return scope;
 }
 
@@ -70,19 +94,86 @@ export function formulaVariables(expression: string): readonly string[] {
   return parseFormula(rewriteCatalogHyphens(expression, formulaNames())).variables;
 }
 
-/** Evaluate a catalog expression with MathTS. Inputs are quantity names. */
+const VARIABLES = new Map<string, ReadonlySet<string>>();
+
+const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
+
+/** The names an expression mentions (π included, which MathTS does not list as a variable), cached per expression text. */
+function readNames(expression: string): ReadonlySet<string> {
+  let names = VARIABLES.get(expression);
+  if (names === undefined) {
+    names = new Set(rewriteCatalogHyphens(expression, formulaNames()).match(IDENTIFIER) ?? []);
+    VARIABLES.set(expression, names);
+  }
+  return names;
+}
+
+/**
+ * `inputs` without the reserved keys that `reads` does not name. A reserved
+ * key the formula reads and `declared` does not name is refused: the caller's
+ * number would replace the constant. One the formula does not read is not an
+ * input of this formula; it is dropped, as any other extra key is on the
+ * graph path (a composed edge forwards every input to each component).
+ */
+export function withoutUnreadConstants(
+  inputs: Readonly<Record<string, number>>,
+  reads: ReadonlySet<string>,
+  declared: readonly string[],
+): Record<string, number> {
+  const allowed = new Set(declared.map(underscored));
+  const kept: Record<string, number> = {};
+  for (const [key, value] of Object.entries(inputs)) {
+    const name = underscored(key);
+    if (RESERVED.has(name) && !allowed.has(name)) {
+      if (reads.has(name)) throw new ConstantInputError(key);
+      continue;
+    }
+    kept[key] = value;
+  }
+  return kept;
+}
+
+/**
+ * Evaluate a catalog expression with MathTS. Inputs are quantity names.
+ * `declared` are the names the caller may bind although they are reserved
+ * (the relation's sources); a reserved key the expression reads and
+ * `declared` does not name is a {@link ConstantInputError}, and one it does
+ * not read is dropped ({@link withoutUnreadConstants}).
+ */
 export function evaluateFormula(
   expression: string,
   inputs: Readonly<Record<string, number>>,
+  declared: readonly string[] = [],
 ): number {
+  // One grammar: the expression must also build a dimensional tree, so a function the tree
+  // does not know (`max`) or a call of the wrong arity is refused here too.
+  if (!GRAMMAR_CHECKED.has(expression)) {
+    parseCatalogExpression(expression);
+    GRAMMAR_CHECKED.add(expression);
+  }
   const rewritten = rewriteCatalogHyphens(expression, formulaNames());
-  return parseFormula(rewritten).evaluate(formulaScope(inputs));
+  const scope = formulaScope(withoutUnreadConstants(inputs, readNames(expression), declared), declared);
+  return parseFormula(rewritten).evaluate(scope);
+}
+
+const GRAMMAR_CHECKED = new Set<string>();
+
+/** A literal exponent: a number, or a ratio of two numbers (`1/3`), folded to one literal. */
+function literalExponent(node: FormulaPNode): ExprNode | undefined {
+  if (node.kind === 'num') return numberSymbol(String(node.value));
+  if (node.kind === 'op' && node.op === '/' && node.args.length === 2) {
+    const [p, q] = node.args;
+    if (p!.kind === 'num' && q!.kind === 'num' && q!.value !== 0) return numberSymbol(String(p!.value / q!.value));
+  }
+  return undefined;
 }
 
 /**
  * The sign-preserving `ExprNode` of a normalized MathTS parse node. Unary minus
- * is `-1 ×`, `sqrt` is `^0.5`, and a transcendental keeps its name; a quantity
- * name written with underscores is restored to its hyphenated id.
+ * is `-1 ×`, `sqrt` is `^0.5`, a literal ratio exponent (`^(1/3)`) is one
+ * literal, and a transcendental keeps its name; a quantity name written with
+ * underscores is restored to its hyphenated id. A call takes exactly one
+ * argument: a second one is refused, never dropped.
  */
 function exprOf(node: FormulaPNode): ExprNode {
   switch (node.kind) {
@@ -95,8 +186,9 @@ function exprOf(node: FormulaPNode): ExprNode {
     case 'op':
       return { kind: 'op', op: node.op, args: node.args.map(exprOf) };
     case 'pow':
-      return { kind: 'op', op: '^', args: [exprOf(node.base), exprOf(node.exp)] };
+      return { kind: 'op', op: '^', args: [exprOf(node.base), literalExponent(node.exp) ?? exprOf(node.exp)] };
     case 'call': {
+      if (node.args.length !== 1) throw new Error(`expression calls '${node.fn}' with ${node.args.length} arguments; one is expected`);
       const arg = exprOf(node.args[0]!);
       if (node.fn === 'sqrt') return { kind: 'op', op: '^', args: [arg, numberSymbol('0.5')] };
       if (node.fn === 'abs') return { kind: 'abs', arg };

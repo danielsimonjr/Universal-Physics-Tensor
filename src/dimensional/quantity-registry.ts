@@ -29,20 +29,31 @@ export interface QuantityRecord {
   readonly graphNode: boolean;
 }
 
-interface QuantityFile {
+/** The shape of `data/quantities.json`. @internal */
+export interface QuantityFile {
   readonly quantities: readonly QuantityRecord[];
 }
 
 /** `_` written as `-`: the one fold every spelling comparison uses. */
 export const foldName = (s: string): string => s.replace(/_/g, '-');
 
+const isAffineTemperature = (dimension: Dimension): boolean =>
+  dimension.Theta === 1 && dimension.L === 0 && dimension.M === 0 && dimension.T === 0 && dimension.I === 0 && dimension.N === 0 && dimension.J === 0;
+
 /**
- * The rows of `data/quantities.json`. A constant that is also a quantity
- * (`k_B` is `boltzmann-constant`) gives that row its spellings as aliases:
- * the constant registry owns them and the file does not repeat them.
+ * The rows of a quantity file. A constant that is also a quantity (`k_B` is
+ * `boltzmann-constant`) gives that row its spellings as aliases: the
+ * constant registry owns them and the file does not repeat them. A `kind` is
+ * the role of an affine temperature, so a row whose dimension is not Θ¹ may
+ * not carry one: there it decides nothing and misleads a reader.
+ * @internal
  */
-function loadQuantities(): readonly QuantityRecord[] {
-  const parsed = checkedDataFile('quantities.json') as QuantityFile;
+export function readQuantityFile(parsed: QuantityFile): readonly QuantityRecord[] {
+  for (const row of parsed.quantities) {
+    if (row.kind !== undefined && !isAffineTemperature(row.dimension)) {
+      throw new Error(`data/quantities.json: ${row.id}: kind ${row.kind} on a quantity that is not an affine temperature`);
+    }
+  }
   const ids = new Set(parsed.quantities.map((row) => row.id));
   const derived = new Map<string, string[]>();
   for (const constant of CONSTANT_REGISTRY) {
@@ -59,7 +70,7 @@ function loadQuantities(): readonly QuantityRecord[] {
   });
 }
 
-const QUANTITIES = loadQuantities();
+const QUANTITIES = readQuantityFile(checkedDataFile('quantities.json') as QuantityFile);
 
 /**
  * Folded spelling → row, over every id and alias. Two rows that one folded

@@ -48,7 +48,7 @@ describe('single owner', () => {
     expect(prefactorOwnerHits(root)).toEqual([]);
   });
 
-  it('builds a catalog id only through registerBridge', () => {
+  it('assigns BRIDGE_EQUATIONS only from the catalog file', () => {
     expect(bridgeRegistryHits(root)).toEqual([]);
   });
 

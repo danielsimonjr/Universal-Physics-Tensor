@@ -11,10 +11,9 @@
  */
 
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
-import { primaryRelation } from './catalog-load.js';
-import { catalogEvaluators } from './catalog-load.js';
-import type { CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
-import { evaluateFormula, formulaVariables, parseCatalogExpression } from './expr-parse.js';
+import { catalogEvaluators, primaryRelation } from './catalog-load.js';
+import type { CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
+import { evaluateFormula, formulaVariables, parseCatalogExpression, reservedFormulaNames } from './expr-parse.js';
 import type { ExprNode } from '../dimensional/ast-types.js';
 import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
 import { DomainViolationError } from './evaluation-errors.js';
@@ -44,6 +43,7 @@ export interface EvaluatorParameter {
   /** An angular frequency in rad/s. A cycle unit (Hz, rpm) given to it is multiplied by 2π. */
   readonly angular?: true;
   readonly alternates?: readonly ParameterAlternate[];
+  /** Derived: the parameter binds no relation source, so only an extra output reads it. */
   readonly optional?: true;
 }
 
@@ -67,7 +67,7 @@ export interface EvaluatorSpec {
   run(inputs: Readonly<Record<string, number>>, want?: EvaluationWant): Record<string, number>;
 }
 
-function toParameter(row: CatalogEvaluatorParameter): EvaluatorParameter {
+function toParameter(row: CatalogEvaluatorParameter, optional: boolean): EvaluatorParameter {
   return {
     key: row.key,
     quantity: row.quantity,
@@ -79,14 +79,14 @@ function toParameter(row: CatalogEvaluatorParameter): EvaluatorParameter {
     ...(row.sign !== undefined ? { sign: row.sign } : {}),
     ...(row.angular === true ? { angular: true as const } : {}),
     ...(row.alternates !== undefined ? { alternates: row.alternates } : {}),
-    ...(row.optional === true ? { optional: true as const } : {}),
+    ...(optional ? { optional: true as const } : {}),
   };
 }
 
 const NAMED_DEFAULT = new Map(FORMULA_NAMED.map((named) => [named.name, named.value]));
 
 /** The relation source a parameter is the input for, or undefined when it owns none. */
-function sourceOfParameter(relation: CatalogRelation, parameter: EvaluatorParameter): string | undefined {
+function sourceOfParameter(relation: CatalogRelation, parameter: Pick<EvaluatorParameter, 'key' | 'quantity'>): string | undefined {
   for (const source of relation.sources) {
     if (source === parameter.key || (relation.aliases[source] ?? []).includes(parameter.key)) return source;
   }
@@ -190,6 +190,22 @@ function bindRelationInputs(
   return bound;
 }
 
+/**
+ * The spec of one catalog evaluator row. A parameter that binds no relation
+ * source is read only by an extra output and is optional: the output is left
+ * out when it is not given. An output expression reads the scope by
+ * parameter key, so a key that names a registered constant (be-66's
+ * reflectance `R`) may bind the relation's source but may not be read by an
+ * output: building the spec refuses it.
+ * @internal
+ */
+export function buildEvaluatorSpec(row: CatalogEvaluator): EvaluatorSpec {
+  const relation = primaryRelation(row.catalogId);
+  if (relation === undefined) throw new Error(missingEvaluatorMessage(row.catalogId));
+  const parameters = row.parameters.map((p) => toParameter(p, sourceOfParameter(relation, p) === undefined));
+  return buildSpec(row.catalogId, row.name, parameters, row.outputs ?? []);
+}
+
 function buildSpec(
   catalogId: number,
   name: string,
@@ -199,6 +215,18 @@ function buildSpec(
   const relation = primaryRelation(catalogId);
   if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
   const contract = evaluatorContract(catalogId, relation, parameters);
+  const keys = parameters.map((parameter) => parameter.key);
+  const reserved = reservedFormulaNames();
+  for (const output of outputs) {
+    const shadowed = formulaVariables(output.expression).find((name) => reserved.has(name) && keys.includes(name));
+    if (shadowed !== undefined) {
+      throw new Error(`be-${catalogId}: output '${output.name}' reads '${shadowed}', which names a registered constant`);
+    }
+  }
+  // An output reads the parameter keys and `value`; a key that shadows a constant is refused above.
+  const outputScope = [...keys, 'value'];
+  // An output is computed when every parameter key it reads was given.
+  const reads = outputs.map((output) => formulaVariables(output.expression).filter((name) => keys.includes(name)));
   return {
     bridgeId: catalogId,
     name,
@@ -221,10 +249,10 @@ function buildSpec(
       const value = evaluateCatalogRelation(relation, bound);
       const result: Record<string, number> = { value };
       if (want === 'value') return result;
-      for (const output of outputs) {
-        if ((output.requires ?? []).some((key) => given[key] === undefined)) continue;
-        result[output.name] = evaluateFormula(output.expression, { ...given, value });
-      }
+      outputs.forEach((output, i) => {
+        if (reads[i]!.some((key) => given[key] === undefined)) return;
+        result[output.name] = evaluateFormula(output.expression, { ...given, value }, outputScope);
+      });
       return result;
     },
   };
@@ -232,15 +260,12 @@ function buildSpec(
 
 /** Bridge id → evaluator. @internal */
 export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
-  catalogEvaluators().map((row) => {
-    const parameters = row.parameters.map(toParameter);
-    return [row.catalogId, buildSpec(row.catalogId, row.name, parameters, row.outputs ?? [])] as const;
-  }),
+  catalogEvaluators().map((row) => [row.catalogId, buildEvaluatorSpec(row)] as const),
 );
 
 /** What to say when an id is not in {@link BRIDGE_EVALUATORS}. @internal */
 export function missingEvaluatorMessage(bridgeId: number): string {
-  return `evaluateBridge: catalog id ${bridgeId} has no evaluator`;
+  return `catalog id ${bridgeId} has no evaluator`;
 }
 
 /**

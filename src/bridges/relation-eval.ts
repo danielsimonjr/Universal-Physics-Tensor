@@ -45,8 +45,8 @@ function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { cha
       let pos: number;
       let neg: number;
       try {
-        pos = evaluateFormula(rel.expression, { ...base, [name]: magnitude });
-        neg = evaluateFormula(rel.expression, { ...base, [name]: -magnitude });
+        pos = evaluateFormula(rel.expression, { ...base, [name]: magnitude }, rel.sources);
+        neg = evaluateFormula(rel.expression, { ...base, [name]: -magnitude }, rel.sources);
       } catch {
         continue;
       }
@@ -72,10 +72,14 @@ function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { cha
   return found;
 }
 
-/** Whether `inputs` satisfy the relation's validity condition. */
+/**
+ * Whether `inputs` satisfy the relation's validity condition. An unbound or
+ * unparsable condition is false; an input that names a constant the relation
+ * does not declare as a source throws `ConstantInputError`.
+ */
 export function relationHolds(rel: CatalogRelation, inputs: Readonly<Record<string, number>>): boolean {
   try {
-    return holds(rel.holds, inputs, formulaScope(), [...formulaNames()]);
+    return holds(rel.holds, inputs, formulaScope(), [...formulaNames()], rel.sources);
   } catch (error) {
     if (error instanceof HoldsError) return false;
     throw error;
@@ -105,43 +109,5 @@ export function evaluateCatalogRelation(
           right: named(rel, pair.mobility),
         },
   );
-  return evaluateFormula(rel.expression, adjusted);
-}
-
-/**
- * Recover the one missing finite input that makes the relation equal `target`.
- * A bracket that does not change sign has no root and throws.
- */
-export function solveCatalogRelation(
-  rel: CatalogRelation,
-  known: Readonly<Record<string, number>>,
-  unknown: string,
-  target = 0,
-): number {
-  const f = (value: number): number => evaluateCatalogRelation(rel, { ...known, [unknown]: value }) - target;
-  let lo = 1e-6;
-  let hi = 1;
-  let flo = f(lo);
-  let fhi = f(hi);
-  for (let i = 0; i < 60 && flo * fhi > 0; i += 1) {
-    lo /= 2;
-    hi *= 2;
-    flo = f(lo);
-    fhi = f(hi);
-  }
-  if (!(flo * fhi <= 0)) {
-    throw new Error(`solveCatalogRelation: ${rel.id} has no root for ${unknown}`);
-  }
-  for (let i = 0; i < 80; i += 1) {
-    const mid = (lo + hi) / 2;
-    const fmid = f(mid);
-    if (flo * fmid <= 0) {
-      hi = mid;
-      fhi = fmid;
-    } else {
-      lo = mid;
-      flo = fmid;
-    }
-  }
-  return (lo + hi) / 2;
+  return evaluateFormula(rel.expression, adjusted, rel.sources);
 }

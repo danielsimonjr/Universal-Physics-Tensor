@@ -1,9 +1,12 @@
 /**
- * Bridge catalog projection. Rows, regimes, and the spine are loaded from
+ * Bridge catalog projection. The rows are loaded from
  * `data/bridge-catalog.json`. This module does not declare an equation.
  *
  * @module bridges
  */
+
+import type { BridgeEquationEntry } from './types.js';
+import { catalogEntries } from './catalog-load.js';
 
 export type {
   BridgeEquationEntry,
@@ -12,10 +15,16 @@ export type {
   BridgeIssueSeverity,
   KnownIssue,
 } from './types.js';
-/** An active status is every status except `invalid`. */
-export { isActiveStatus } from './types.js';
 
-/** Physical constants the catalog expressions name. */
+/**
+ * Derived constants of the catalog's closed forms, re-exported for callers
+ * who want the number by name. A catalog expression reads `m_p` and
+ * `sigma_T` through the constant registry (`dimensional/constant-rows.ts`),
+ * which carries `M_PROTON_SI`, `THOMSON_CROSS_SECTION_SI` and
+ * `LANE_EMDEN_OMEGA3`; the von Klitzing, Josephson, Lorenz and BCS-gap
+ * values are not read by any expression and are the catalog's documented
+ * reference numbers.
+ */
 export {
   BCS_GAP_RATIO,
   JOSEPHSON_CONSTANT_SI,
@@ -27,22 +36,8 @@ export {
 } from '../core/constants.js';
 /** Thrown when two carrier roles have opposite signs. */
 export { CarrierSignError } from './carrier-sign.js';
+/** Thrown when a caller input names a registered constant. */
+export { ConstantInputError } from './evaluation-errors.js';
 
-import type { BridgeEquationEntry } from './types.js';
-import type { Regime } from '../relations/types.js';
-import { bridgeCatalog, catalogEntries, catalogEntry } from './catalog-load.js';
-
-/** Catalog rows in file order. @public */
+/** Catalog rows in id order. @public */
 export const BRIDGE_EQUATIONS: readonly BridgeEquationEntry[] = catalogEntries();
-
-/** The regime recorded on a catalog row, when the row has one. */
-export function catalogRegime(id: number): Regime | undefined {
-  return catalogEntry(id)?.regime;
-}
-
-/**
- * Dimensionless groups at the points the gravitational confrontations used.
- * Keys are catalog ids. Values are group formula → number.
- */
-export const SPINE_CONFRONTATION_POINTS: Readonly<Record<string, Readonly<Record<string, number>>>> =
-  bridgeCatalog().spine;

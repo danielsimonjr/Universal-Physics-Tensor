@@ -1,35 +1,29 @@
 /**
- * Every catalog reference is the value the engine returns at those inputs.
+ * Every catalog reference is the value the engine returns at its inputs, and
+ * the reference point can tell a wrong exponent from the right one.
  *
- * The 126 numeric master goldens were copied onto the relation as `reference`.
- * Under vitest, 114 of those are bitwise identical and 12 differ by one unit
- * in the last place (relative error below 1e-15). That is the measured
- * difference, not a widened physics tolerance. A thermal row (147–170) has no
- * master before-value; two of them, be-164 and be-165, sit in the same
- * one-ulp set. be-142's snapshot golden was null, so its reference is not a
- * master before-value.
+ * A reference at all-ones inputs cannot: 1^k is 1 for every k, so a formula
+ * with a wrong exponent on any input returns the same number. A reference
+ * whose value is 0 cannot either, since the comparison rescales a zero. Before
+ * 9.0.1, 63 references used all-ones inputs and 10 had value 0. Now every
+ * input of every reference is off 0 and ±1, every value is finite and
+ * nonzero, and the control below mutates one literal exponent of each
+ * expression and shows the stored reference moves.
+ *
+ * `be-21` and `be-165` have no sources: their references are the constants
+ * themselves, and the exponent rule has no input to apply to.
  */
 import { describe, expect, it } from 'vitest';
 import { catalogRelations } from '../../src/bridges/catalog-load.js';
+import { evaluateFormula } from '../../src/bridges/expr-parse.js';
 import { catalogEdge } from '../../src/composition/catalog-graph.js';
 import { evaluateEdge } from '../../src/composition/edge.js';
 
-/** Ids whose vitest value is not bitwise identical to the stored reference. */
-const ONE_ULP = [
-  'be-14',
-  'be-43',
-  'be-56',
-  'be-69',
-  'be-74',
-  'be-94',
-  'be-109',
-  'be-115',
-  'be-116',
-  'be-117',
-  'be-120',
-  'be-164',
-  'be-165',
-] as const;
+/** Ids whose vitest value is not bitwise identical to the stored reference (measured; none at 9.0.1). */
+const OFF_BY_ONE_ULP: readonly string[] = [];
+
+/** The first literal numeric exponent of an expression, as a regular-expression match. */
+const EXPONENT = /\^(\d+(?:\.\d+)?)/;
 
 describe('catalog reference goldens', () => {
   const relations = catalogRelations().filter((relation) => relation.reference !== undefined);
@@ -39,31 +33,70 @@ describe('catalog reference goldens', () => {
     expect(relations.length).toBe(158);
   });
 
-  it('evaluateEdge matches each stored reference, or misses by one unit in the last place', () => {
+  it('a relation with no sources is a constant; its reference has no inputs', () => {
+    const constants = relations.filter((relation) => relation.sources.length === 0).map((relation) => relation.id);
+    expect(constants).toEqual(['be-21', 'be-165']);
+    for (const id of constants) expect(relations.find((r) => r.id === id)!.reference!.inputs).toEqual({});
+  });
+
+  it('every reference input is off 0 and ±1, so a wrong exponent on any input moves the value', () => {
+    const trivial = relations
+      .filter((relation) => relation.sources.length > 0)
+      .flatMap((relation) =>
+        Object.entries(relation.reference!.inputs)
+          .filter(([, value]) => value === 0 || Math.abs(value) === 1)
+          .map(([name, value]) => `${relation.id}: ${name} = ${value}`),
+      );
+    expect(trivial).toEqual([]);
+  });
+
+  it('every reference binds exactly the relation sources', () => {
+    for (const relation of relations) {
+      expect(Object.keys(relation.reference!.inputs).sort(), relation.id).toEqual([...relation.sources].sort());
+    }
+  });
+
+  it('every reference value is finite and nonzero', () => {
+    const zero = relations.filter((relation) => !Number.isFinite(relation.reference!.value) || relation.reference!.value === 0);
+    expect(zero.map((relation) => relation.id)).toEqual([]);
+  });
+
+  it('evaluateEdge reproduces each stored reference, bitwise unless measured off by one ulp', () => {
     const off: string[] = [];
     for (const relation of relations) {
       const reference = relation.reference!;
       const value = evaluateEdge(catalogEdge(relation.id), { ...reference.inputs });
       if (value === reference.value) continue;
-      const scale = reference.value === 0 ? 1 : Math.abs(reference.value);
-      const rel = Math.abs(value - reference.value) / scale;
+      const rel = Math.abs(value - reference.value) / Math.abs(reference.value);
       expect(rel, relation.id).toBeLessThan(1e-15);
       off.push(relation.id);
     }
-    const byId = (id: string) => Number(id.slice(3));
-    expect(off.sort((a, b) => byId(a) - byId(b))).toEqual([...ONE_ULP]);
+    expect(off).toEqual([...OFF_BY_ONE_ULP]);
   });
 
-  it('be-12 at mass 1 and temperature 300 is the stored thermal wavelength', () => {
-    const relation = relations.find((row) => row.id === 'be-12')!;
-    expect(relation.reference!.value).toBe(4.107369998431901e-24);
-    expect(evaluateEdge(catalogEdge('be-12'), { ...relation.reference!.inputs })).toBe(4.107369998431901e-24);
+  it('control: a wrong literal exponent is caught at the reference point', () => {
+    // Positive control for the rule above: with one exponent raised by one, the
+    // expression no longer reproduces the stored reference. On all-ones inputs
+    // this control fails, which is what the rule exists to prevent.
+    const blind: string[] = [];
+    let controlled = 0;
+    for (const relation of relations) {
+      const match = EXPONENT.exec(relation.expression);
+      if (match === null) continue;
+      controlled += 1;
+      const mutated = relation.expression.replace(EXPONENT, `^${Number(match[1]) + 1}`);
+      const value = evaluateFormula(mutated, { ...relation.reference!.inputs }, relation.sources);
+      const scale = Math.abs(relation.reference!.value);
+      if (!(Math.abs(value - relation.reference!.value) > 1e-9 * scale)) blind.push(relation.id);
+    }
+    expect(controlled).toBeGreaterThanOrEqual(80);
+    expect(blind).toEqual([]);
   });
 
   it('a changed input does not match the stored reference', () => {
     const relation = relations.find((row) => row.id === 'be-12')!;
     const reference = relation.reference!;
-    const shifted = { ...reference.inputs, temperature: reference.inputs.temperature + 1 };
+    const shifted = { ...reference.inputs, temperature: reference.inputs.temperature! + 1 };
     const value = evaluateEdge(catalogEdge('be-12'), shifted);
     expect(value).not.toBe(reference.value);
     const rel = Math.abs(value - reference.value) / Math.abs(reference.value);

@@ -8,7 +8,8 @@
  * not yet graph-encoded — the `bridges: [a, b]` tuple is the proxy.
  *
  * Adjudication precedence (design r2-4): the negative catalog
- * (`rejected.ts`) overlays the tuple proxy — an id listed there is
+ * (the `rejections` ledger of `data/bridge-catalog.json`, projected by
+ * `rejected.ts`) overlays the tuple proxy — an id listed there is
  * `'not-a-bridge'` regardless of its tuple (the repo's
  * `['unknown','unknown']` convention historically marked NOT-A-BRIDGE
  * entries, so the tuple alone cannot distinguish "rejected" from
@@ -19,7 +20,7 @@
  */
 
 import type { BridgeEquationEntry } from './index.js';
-import { REJECTED_BRIDGE_IDS } from './rejected.js';
+import { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, type RejectedBridgeAdjudication } from './rejected.js';
 
 /** Adjudication verdict for a catalog entry. @public */
 export type BridgeVerdict = 'bridge' | 'not-a-bridge' | 'unadjudicated';
@@ -64,8 +65,6 @@ export function adjudicateCatalog(
   return { bridges, notABridges, unadjudicated };
 }
 
-// Re-exports: the negative catalog travels with the criterion it
-// overlays (v0.8.0 punch-list — replaced the membership-surface.ts
-// barrel indirection).
-export { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS } from './rejected.js';
-export type { RejectedBridgeAdjudication } from './rejected.js';
+// Re-exports: the negative catalog travels with the criterion it overlays.
+export { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS };
+export type { RejectedBridgeAdjudication };
