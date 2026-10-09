@@ -92,8 +92,9 @@ bun run test       # vitest full suite (~15 s on a fast box; 3–5 min cold-star
 ```
 
 - TypeScript 5.9+/6.x, ESM (`"type": "module"` — relative imports need
-  the `.js` extension), Node ≥ 18 (shipped runtime), Bun (install +
-  `bun run` scripts), vitest. Lockfile is `bun.lock` only.
+  the `.js` extension), Node ≥ 18 (shipped runtime; the test suite needs
+  Node ≥ 22.6, `tests/node-floor.test.ts`), Bun (install + `bun run`
+  scripts), vitest. Lockfile is `bun.lock` only.
 - The default branch is `master`. CI runs type-check + full suite on
   every push/PR.
 - Conventions live in `CLAUDE.md`; the spec index is
