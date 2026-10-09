@@ -219,7 +219,7 @@ export function developmentTable(facts: StatusFacts): string {
 
 export function membershipSentence(facts: StatusFacts): string {
   const bridgeWord = facts.bridges === 1 ? 'bridge' : 'bridges';
-  return `${facts.bridges} ${bridgeWord} · ${facts.notABridge} not-a-bridge · ${facts.unadjudicated} unadjudicated`;
+  return `${facts.bridges} ${bridgeWord} · ${facts.notABridge} not-a-bridge · ${facts.unadjudicated} unadjudicated (by the catalog's \`bridges\` label tuple, not the endpoint-regime criterion)`;
 }
 
 export function phase4Sentence(facts: StatusFacts): string {

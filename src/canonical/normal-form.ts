@@ -153,6 +153,9 @@ export function normalForm(node: ExprNode): string {
           // dimensionless exponent is never dropped (symmetric for direct
           // symbols and op sub-expressions alike).
           const base = normalForm(node.args[0]);
+          // A dimensionless constant to any power is still a dimensionless constant (π², √(2π)),
+          // dropped as the constant is; the exponent is structural only on a dimensionful base.
+          if (base === UNIT) return UNIT;
           return `^(${base},${rawForm(node.args[1])})`;
         }
         case '+':

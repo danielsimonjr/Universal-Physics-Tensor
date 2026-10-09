@@ -56,8 +56,9 @@ export interface GL4State {
 
 /**
  * Per-step snapshot recorded by the integrator. `v` (the contravariant
- * 4-velocity v^μ = g^{μν} p_ν) is optional — emitted when the caller asks
- * for it, since it requires an extra metric-inverse contraction.
+ * 4-velocity v^μ = g^{μν} p_ν) is declared optional and is never emitted:
+ * no option asks for it, and nothing in `src/` reads it. It stays so a caller's
+ * own snapshot type can carry one.
  *
  * @public
  */

@@ -116,6 +116,12 @@ describe('nits', () => {
     expect((await run(['eval', '1/0'])).code).toBe(1);
     expect((await run(['eval', 'foo(2)'])).code).toBe(2);
   });
+  it('eval: a cycle-counting unit prints its note, and is not silently multiplied by 2π', async () => {
+    const r = await run(['eval', 'omega*r', 'omega=60rpm', 'r=1m']);
+    expect(r.code, r.err).toBe(0);
+    expect(r.out).toMatch(/^1\b/m);
+    expect(r.err).toMatch(/rpm counts revolutions.*2π/);
+  });
   it('derive: the undeclared-symbol message separates its two sentences', async () => {
     const r = await run(['derive', 'period:time', 'length:length', '--formula', 'sqrt(lenght/g)']);
     expect(r.code).toBe(2);

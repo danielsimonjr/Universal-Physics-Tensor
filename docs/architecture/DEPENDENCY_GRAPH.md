@@ -1415,6 +1415,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `./observations/types.js` | `residualInSigma` | Import |
 | `../core/data-file.js` | `checkedDataFile` | Import |
 | `./catalog-types.js` | `CatalogConfrontation, CatalogConfrontationRecord, CatalogEntry, CatalogEvaluator, CatalogEvaluatorParameter, CatalogFile, CatalogFileRecord, CatalogRejection, CatalogRelation` | Import (type-only) |
 | `./observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
@@ -4102,11 +4103,10 @@ The codebase is organized into the following modules:
 
 ### `src/composition/mathts-scalar-symbols.ts` - Scalar leaves of an `ExprNode`, read from a MathTS AST.
 
-**Node.js Built-in Dependencies:**
-| Module | Import |
-|--------|--------|
-| `module` | `createRequire` |
-| `url` | `fileURLToPath` |
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `parse` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -5866,6 +5866,7 @@ The codebase is organized into the following modules:
 | `./dimensional/errors.js` | `UPTError` | Re-export |
 | `./dimensional/natural-units.js` | `UnitMode` | Re-export |
 | `./dimensional/ast-types.js` | `Variance, Role, TensorIndex, UpperIndex, CovariantIndex, TensorSymbolNode, TensorProductNode, MetricTensorNode, KroneckerDeltaNode, TensorPartialDerivativeNode, RiemannTensorNode, WeylTensorNode, KillingVectorNode, ConservedChargeNode, StressEnergyTensorNode, CosmologicalConstantNode` | Re-export |
+| `./dimensional/curvature-composite.js` | `CurvatureCompositeNode, CurvatureKind` | Re-export |
 | `./core/flux-rules.js` | `FluxRuleKind` | Re-export |
 | `./core/axes-registry.js` | `ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes` | Re-export |
 | `./core/regime-registry.js` | `AxisConvenience` | Re-export |
@@ -5975,12 +5976,13 @@ The codebase is organized into the following modules:
   UnitMode, Variance, Role, TensorIndex, UpperIndex, CovariantIndex, TensorSymbolNode,
   TensorProductNode, MetricTensorNode, KroneckerDeltaNode, TensorPartialDerivativeNode,
   RiemannTensorNode, WeylTensorNode, KillingVectorNode, ConservedChargeNode, StressEnergyTensorNode,
-  CosmologicalConstantNode, FluxRuleKind, ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes,
-  AxisConvenience, ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput, EinsumContraction,
-  EinsumFreeAxis, KillingFn, KillingMetricFn, ChristoffelAtFn, RelationContract, Conventions,
-  ScaleAxis, ForceAxis, InformationAxis, SymmetryAxis, TopologyAxis, StatisticsAxis,
-  EnumerationOptions, UncertaintyOptions, AnalyzeUserEquationOptions, ShortBinding, ConstantDef,
-  ProposedBridge, DiscoveryOptions, RepresentativeValue, SourcedPrefactor, SourcedGroupPrefactor
+  CosmologicalConstantNode, CurvatureCompositeNode, CurvatureKind, FluxRuleKind, ScaleAxes, ForceAxes,
+  SymmetryAxes, InformationAxes, AxisConvenience, ShapiroInput, PerihelionInput, HawkingInput,
+  DecoherenceInput, EinsumContraction, EinsumFreeAxis, KillingFn, KillingMetricFn, ChristoffelAtFn,
+  RelationContract, Conventions, ScaleAxis, ForceAxis, InformationAxis, SymmetryAxis, TopologyAxis,
+  StatisticsAxis, EnumerationOptions, UncertaintyOptions, AnalyzeUserEquationOptions, ShortBinding,
+  ConstantDef, ProposedBridge, DiscoveryOptions, RepresentativeValue, SourcedPrefactor,
+  SourcedGroupPrefactor
   ```
 
 
@@ -6987,9 +6989,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 81126 |
-| Total Exports | 2560 |
-| Total Re-exports | 1309 |
+| Total Lines of Code | 81254 |
+| Total Exports | 2562 |
+| Total Re-exports | 1311 |
 | Total Classes | 82 |
 | Total Interfaces | 462 |
 | Total Functions | 776 |

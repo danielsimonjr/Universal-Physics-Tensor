@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 363,
-    "totalTestFiles": 575,
+    "totalTestFiles": 577,
     "testedCount": 351,
     "directlyTestedCount": 314,
     "untestedCount": 12,
@@ -880,7 +880,8 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
-      "tests/composition/buckingham-filter.test.ts"
+      "tests/composition/buckingham-filter.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/atlas/diffusion/bridges-closure.ts": [
       "tests/atlas/barrel-completeness.test.ts",
@@ -1327,6 +1328,7 @@
       "tests/composition/graph-viz-filters.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/atlas/waves/bridges-closure.ts": [
@@ -1505,6 +1507,7 @@
       "tests/composition/retrodiction.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
@@ -1570,7 +1573,8 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
-      "tests/numerical/covariant-eikonal-step-sweep.test.ts"
+      "tests/numerical/covariant-eikonal-step-sweep.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/bridges/catalog-types.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -1730,6 +1734,7 @@
       "tests/dimensional/bridge-derivation-audit.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
@@ -1793,7 +1798,8 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/one-grammar.test.ts",
-      "tests/dimensional/unit-closure.test.ts"
+      "tests/dimensional/unit-closure.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/bridges/holds.ts": [
       "tests/bridges/constant-inputs.test.ts",
@@ -1848,6 +1854,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
@@ -1902,6 +1909,7 @@
       "tests/composition/evaluate-relation.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
@@ -2067,6 +2075,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
@@ -2183,6 +2192,7 @@
       "tests/composition/evaluate-relation.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/canonical/registry.ts": [
@@ -6911,6 +6921,7 @@
       "tests/numerical/spacetime-metrics.test.ts",
       "tests/numerical/weyl-kerr-schild.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
@@ -6948,7 +6959,9 @@
     ],
     "src/core/json-schema.ts": [
       "tests/core/data-file.test.ts",
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/core/labeled-tensor.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -7284,7 +7297,8 @@
       "tests/dimensional/integral-bounds-validation.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
       "tests/dimensional/validator.test.ts",
-      "tests/numerical/one-function-table.test.ts"
+      "tests/numerical/one-function-table.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/ast-types.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -7412,6 +7426,7 @@
       "tests/numerical/one-function-table.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/dimensional/bridge-check.ts": [
@@ -7504,7 +7519,28 @@
       "tests/dimensional/validator.test.ts"
     ],
     "src/dimensional/curvature-composite.ts": [
-      "tests/dimensional/curvature-composite-factory.test.ts"
+      "tests/api/api-reference-symbols.test.ts",
+      "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/hand-built-evaluator.test.ts",
+      "tests/api/public-surface.test.ts",
+      "tests/bridges/one-evaluate-path.test.ts",
+      "tests/bridges/public-api-stability.test.ts",
+      "tests/cases/kepler-rv.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/explain-temperature-binding.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-search.test.ts",
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/composition/evaluate-relation.test.ts",
+      "tests/diff/bridge-gradient.test.ts",
+      "tests/dimensional/curvature-composite-factory.test.ts",
+      "tests/fixtures/confrontation-golden.test.ts",
+      "tests/tensor.test.ts"
     ],
     "src/dimensional/curvature-invariants.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -7597,7 +7633,8 @@
       "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-spec-grouping.test.ts",
-      "tests/dimensional/dimension-spec.test.ts"
+      "tests/dimensional/dimension-spec.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/einstein-equation.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -8191,6 +8228,7 @@
       "tests/numerical/parse-physics.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/dimensional/unit-convention.ts": [
@@ -8232,6 +8270,7 @@
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/binding-value.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/dimensional/validator-registry.ts": [
@@ -8340,6 +8379,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/dimensional/weyl-validators.ts": [
@@ -9107,7 +9147,8 @@
     ],
     "src/numerical/quadrature.ts": [
       "tests/numerical/finiteness-guards.test.ts",
-      "tests/numerical/integral-quadrature.test.ts"
+      "tests/numerical/integral-quadrature.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/numerical/spacetime-metrics.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -9396,6 +9437,7 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/relations/category.test.ts",
       "tests/relations/regime-holds.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts"
     ]
   },
@@ -9511,7 +9553,8 @@
       "tests/atlas/witness-results.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/proved-counterexample.test.ts",
-      "tests/composition/buckingham-filter.test.ts"
+      "tests/composition/buckingham-filter.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/atlas/diffusion/bridges-closure.ts": [
       "tests/atlas/closure.test.ts",
@@ -9770,7 +9813,8 @@
       "tests/cli/atlas-command.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/composition/compose-relation.test.ts",
-      "tests/composition/graph-viz-filters.test.ts"
+      "tests/composition/graph-viz-filters.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/atlas/waves/bridges-closure.ts": [
       "tests/atlas/closure.test.ts",
@@ -9875,7 +9919,8 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
-      "tests/numerical/covariant-eikonal-step-sweep.test.ts"
+      "tests/numerical/covariant-eikonal-step-sweep.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/bridges/catalog-types.ts": [
       "tests/bridges/catalog-confidence.test.ts",
@@ -9934,7 +9979,8 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/one-grammar.test.ts",
-      "tests/dimensional/unit-closure.test.ts"
+      "tests/dimensional/unit-closure.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/bridges/holds.ts": [
       "tests/bridges/constant-inputs.test.ts",
@@ -9970,6 +10016,7 @@
       "tests/cli/atlas-command.test.ts",
       "tests/composition/frontier-account.test.ts",
       "tests/composition/proposed-bridges.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
@@ -9983,6 +10030,7 @@
       "tests/atlas/derive-evidence.test.ts",
       "tests/bridges/bridge-definitions.test.ts",
       "tests/bridges/membership.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/notices.ts": [
@@ -10076,7 +10124,8 @@
     "src/canonical/normal-form.ts": [
       "tests/canonical/normal-form.test.ts",
       "tests/canonical/restates-bridge.test.ts",
-      "tests/canonical/structural-classifier.test.ts"
+      "tests/canonical/structural-classifier.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/canonical/registry.ts": [
       "tests/atlas/association.test.ts",
@@ -10914,7 +10963,9 @@
     ],
     "src/core/json-schema.ts": [
       "tests/core/data-file.test.ts",
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/review/round2-bridges-atlas.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/core/labeled-tensor.ts": [
       "tests/core/labeled-tensor-axis-order.test.ts",
@@ -11040,7 +11091,8 @@
       "tests/dimensional/integral-bounds-validation.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
       "tests/dimensional/validator.test.ts",
-      "tests/numerical/one-function-table.test.ts"
+      "tests/numerical/one-function-table.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/ast-types.ts": [
       "tests/atlas/applicability.test.ts",
@@ -11058,7 +11110,8 @@
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
-      "tests/numerical/one-function-table.test.ts"
+      "tests/numerical/one-function-table.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/bridge-check.ts": [],
     "src/dimensional/buckingham.ts": [
@@ -11107,7 +11160,8 @@
       "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/derive-grammar.test.ts",
       "tests/dimensional/dimension-spec-grouping.test.ts",
-      "tests/dimensional/dimension-spec.test.ts"
+      "tests/dimensional/dimension-spec.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/einstein-equation.ts": [
       "tests/canonical/relativity.test.ts",
@@ -11402,7 +11456,8 @@
       "tests/numerical/one-function-table.test.ts",
       "tests/numerical/parse-physics.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
-      "tests/numerical/tensor-partial-derivative-lowering.test.ts"
+      "tests/numerical/tensor-partial-derivative-lowering.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/unit-convention.ts": [
       "tests/composition/retrodiction.test.ts"
@@ -11423,7 +11478,8 @@
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/units.test.ts",
-      "tests/numerical/binding-value.test.ts"
+      "tests/numerical/binding-value.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/validator-registry.ts": [
       "tests/dimensional/validator-registry.test.ts"
@@ -11510,7 +11566,8 @@
       "tests/numerical/lowering-utils.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
-      "tests/numerical/riemann-tensor-lowering.test.ts"
+      "tests/numerical/riemann-tensor-lowering.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/weyl-validators.ts": [
       "tests/dimensional/weyl-validators.test.ts"
@@ -11750,7 +11807,8 @@
     ],
     "src/numerical/quadrature.ts": [
       "tests/numerical/finiteness-guards.test.ts",
-      "tests/numerical/integral-quadrature.test.ts"
+      "tests/numerical/integral-quadrature.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/numerical/spacetime-metrics.ts": [
       "tests/numerical/spacetime-metrics.test.ts"
@@ -11897,6 +11955,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -12009,6 +12068,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -12121,6 +12181,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -12233,6 +12294,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -12347,6 +12409,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -13468,6 +13531,7 @@
       "src/bridges/sensitivity.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -13618,6 +13682,7 @@
       "src/bridges/sensitivity.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
       "src/composition/enumerate.ts",
@@ -13993,6 +14058,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -14254,6 +14320,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
@@ -14560,6 +14627,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -15692,6 +15760,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -15969,6 +16038,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -16348,6 +16418,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -16525,6 +16596,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -17197,6 +17269,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -17469,6 +17542,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -17916,6 +17990,7 @@
       "src/bridges/coefficient-statement.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/enumerate.ts",
@@ -18713,6 +18788,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -19398,6 +19474,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -20123,6 +20200,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",
@@ -20733,6 +20811,31 @@
     "tests/relations/regime-vocabularies.test.ts": [
       "src/relations/regime-vocabularies.ts"
     ],
+    "tests/review/round2-bridges-atlas.test.ts": [
+      "src/core/json-schema.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/types.ts",
+      "src/relations/types.ts",
+      "src/bridges/membership.ts",
+      "src/bridges/index.ts",
+      "src/bridges/types.ts",
+      "src/core/constants.ts",
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/bridges/catalog-load.ts",
+      "src/bridges/expr-parse.ts",
+      "src/canonical/normal-form.ts"
+    ],
+    "tests/review/round2-numerical-dimensional.test.ts": [
+      "src/numerical/quadrature.ts",
+      "src/dimensional/dimension-spec.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/ast-builders.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
+      "src/core/json-schema.ts"
+    ],
     "tests/tensor.test.ts": [
       "src/index.ts",
       "src/atlas/public.ts",
@@ -20800,6 +20903,7 @@
       "src/dimensional/errors.ts",
       "src/dimensional/natural-units.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/curvature-composite.ts",
       "src/numerical/tensor-engine.ts",
       "src/relations/types.ts",
       "src/composition/axes.ts",

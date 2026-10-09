@@ -62,7 +62,7 @@
     "atlas:study": "npm run build && node scripts/run-atlas-study.mjs",
     "typecheck": "tsc --noEmit && npm run typecheck:tests",
     "typecheck:tests": "tsc -p tsconfig.tests.json",
-    "validate": "npm run build && npm run typecheck:tests && vitest run && npm run audit:plans && npm run package:check",
+    "validate": "npm run build && npm run smoke && npm run typecheck:tests && vitest run && npm run audit:plans && npm run package:check",
     "package:check": "node scripts/package-smoke.mjs"
   },
   "files": [

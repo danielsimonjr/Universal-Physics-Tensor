@@ -331,6 +331,10 @@ function resolveChildForPartialDerivative(
  */
 /** A decimal literal: an optional sign, digits with an optional fraction, an optional exponent. */
 const DECIMAL_LITERAL = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
+/** The scalar operators an `op` node may carry; anything else is a violation, not a sum. */
+const SCALAR_OPS: ReadonlySet<string> = new Set(['^', '*', '/', '+', '-']);
+/** The `TranscendentalFn` union, as a runtime set for a node built from JSON. */
+const TRANSCENDENTAL_FNS: ReadonlySet<string> = new Set(['exp', 'ln', 'log2', 'log10', 'sin', 'cos', 'tan', 'sinh', 'cosh', 'tanh']);
 
 /**
  * A literal exponent: a symbol whose name is a decimal literal and whose
@@ -347,6 +351,15 @@ function infer(node: ExprNode, ctx: InferContext): Dimension | null {
       return node.dim;
 
     case 'op': {
+      if (!SCALAR_OPS.has(node.op)) {
+        ctx.violations.push({
+          location: ctx.path,
+          expected: DIMENSIONLESS,
+          actual: DIMENSIONLESS,
+          note: `unknown operator '${String(node.op)}'; the operators are ^ * / + -`,
+        });
+        return null;
+      }
       if (node.op === '^') {
         // a^n — base is an arbitrary expression. A numeric-literal exponent
         // works on any base (power(baseDim, n)). A non-literal (input-dependent)
@@ -376,7 +389,18 @@ function infer(node: ExprNode, ctx: InferContext): Dimension | null {
         // symbol: `''`, `' '` and `'0x2'` are not literals, and a `2` that
         // carries a dimension is a dimensioned exponent, which no base takes.
         if (expNode !== undefined && expNode.kind === 'symbol' && isLiteralExponent(expNode)) {
-          return power(baseDim, Number(expNode.name));
+          const n = Number(expNode.name);
+          // `1e400` reads as Infinity and `1e-400` as 0: neither is the exponent written.
+          if (!Number.isFinite(n) || (n === 0 && !/^[+-]?0*\.?0*(?:[eE][+-]?\d+)?$/.test(expNode.name))) {
+            ctx.violations.push({
+              location: ctx.path,
+              expected: DIMENSIONLESS,
+              actual: DIMENSIONLESS,
+              note: `exponent '${expNode.name}' is not representable as a finite number`,
+            });
+            return null;
+          }
+          return power(baseDim, n);
         }
 
         // Non-literal (input-dependent) exponent. SOUND only when the base is
@@ -623,6 +647,15 @@ function infer(node: ExprNode, ctx: InferContext): Dimension | null {
     }
 
     case 'transcendental': {
+      if (!TRANSCENDENTAL_FNS.has(node.fn)) {
+        ctx.violations.push({
+          location: ctx.path,
+          expected: DIMENSIONLESS,
+          actual: DIMENSIONLESS,
+          note: `unknown transcendental function '${String(node.fn)}'; the functions are ${[...TRANSCENDENTAL_FNS].join(', ')}`,
+        });
+        return null;
+      }
       // exp/ln/logₙ/sin/cos/tan/sinh/cosh/tanh of a DIMENSIONLESS argument is
       // DIMENSIONLESS (the function's Taylor series only sums across like
       // dimensions when its argument is dimensionless). A dimensionful argument
@@ -800,7 +833,8 @@ function okFromViolations(violations: ReadonlyArray<Violation>): boolean {
  */
 function isDimensionlessZeroLiteral(node: ExprNode | undefined): boolean {
   if (node === undefined || node.kind !== 'symbol' || node.name.trim() === '') return false;
-  if (Number(node.name) !== 0) return false;
+  // A decimal literal zero only: `0x0`, `0b0` and a blank are not the written identity.
+  if (!DECIMAL_LITERAL.test(node.name) || Number(node.name) !== 0) return false;
   const d = node.dim;
   return d.L === 0 && d.M === 0 && d.T === 0 && d.I === 0 && d.Theta === 0 && d.N === 0 && d.J === 0;
 }

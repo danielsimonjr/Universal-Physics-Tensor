@@ -27,13 +27,29 @@ interface GaussLegendreNode {
 
 const legendre16 = rootsLegendre(16);
 
+/** P₁₆'(x) by the three-term recurrence, for the weight formula. */
+function legendre16Derivative(x: number): number {
+  let p0 = 1;
+  let p1 = x;
+  for (let k = 2; k <= 16; k++) {
+    const p2 = ((2 * k - 1) * x * p1 - (k - 1) * p0) / k;
+    p0 = p1;
+    p1 = p2;
+  }
+  return (16 * (x * p1 - p0)) / (x * x - 1);
+}
+
 /**
- * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2), from
- * MathTS `rootsLegendre(16)`.
+ * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2). The
+ * nodes are MathTS `rootsLegendre(16)`'s. The weights are the closed form
+ * `2 / ((1 − x²) P₁₆'(x)²)` on those nodes: MathTS's tabulated weights carried a
+ * relative error of 8e-14 (Σ = 1.9999999999999956), 400 times the double
+ * precision the degree-31 exactness claim rests on (Tom's second round).
  */
-export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = legendre16.nodes.map(
-  (node, i) => ({ node, weight: legendre16.weights[i]! }),
-);
+export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = legendre16.nodes.map((node) => {
+  const dp = legendre16Derivative(node);
+  return { node, weight: 2 / ((1 - node * node) * dp * dp) };
+});
 
 /**
  * Evaluate the definite integral ∫ₐᵇ f(x) dx by 16-point Gauss–Legendre

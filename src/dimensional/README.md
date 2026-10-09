@@ -164,7 +164,7 @@ than producing a violation.
 - When the exponent is concrete in the system being encoded (e.g.,
   `(τ_Q/τ_0)^(-dν/(1+zν))` for canonical 3D Heisenberg with `d=ν=z=1`),
   encode the exponent as the literal value (`-0.5` in this case). See
-  `src/bridges/equations/be-34-kibble-zurek.ts` for the working pattern.
+  the be-34 (Kibble–Zurek) record in `data/bridge-catalog.json` and its AST in `src/bridges/rhs-registry.ts` for the working pattern.
 - When the exponent is genuinely scheme-dependent (e.g., BE-21's
   `r^{2Δ-d}` where Δ depends on the operator), encode the entire
   `^` factor as a single dimensionless-stub symbol (named like

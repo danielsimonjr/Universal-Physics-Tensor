@@ -50,7 +50,7 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--stored',
     valueStyle: 'none',
-    description: `Read witness results from ${WITNESS_RESULTS_URL}. That file is not in the published package; the command then names --run.`,
+    description: `Read witness results from ${WITNESS_RESULTS_URL}. When the file is absent (a checkout or install without data/), the command names --run.`,
   },
   JSON_FLAG,
 ];

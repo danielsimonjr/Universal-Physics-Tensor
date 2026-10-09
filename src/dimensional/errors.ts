@@ -10,8 +10,8 @@ import { Dimension } from './types.js';
 
 /** Base class for all UPT-source errors. */
 export class UPTError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor(message: string, options?: { readonly cause?: unknown }) {
+    super(message, options);
     this.name = 'UPTError';
     // Restore prototype chain (needed for instanceof after ES5 transpilation).
     Object.setPrototypeOf(this, UPTError.prototype);

@@ -793,6 +793,8 @@ export type {
   StressEnergyTensorNode,
   CosmologicalConstantNode,
 } from './dimensional/ast-types.js';
+/** The generic shape the curvature node types instantiate, and its kind union (referenced by the exported node types). */
+export type { CurvatureCompositeNode, CurvatureKind } from './dimensional/curvature-composite.js';
 /** The kind of a flux rule. */
 export type { FluxRuleKind } from './core/flux-rules.js';
 /** The per-axis value tables of the core axis registry. */

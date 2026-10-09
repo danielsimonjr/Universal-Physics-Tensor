@@ -4,7 +4,7 @@
     "version": "9.0.0",
     "totalFiles": 363,
     "totalModules": 13,
-    "totalExports": 2560
+    "totalExports": 2562
   },
   "entryPoints": [
     {
@@ -4937,6 +4937,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "./observations/types.js",
+            "imports": [
+              "residualInSigma"
+            ]
+          },
           {
             "file": "../core/data-file.js",
             "imports": [
@@ -14682,21 +14688,15 @@
       },
       "src/composition/mathts-scalar-symbols.ts": {
         "description": "Scalar leaves of an `ExprNode`, read from a MathTS AST.",
-        "externalDependencies": [],
-        "nodeDependencies": [
+        "externalDependencies": [
           {
-            "module": "module",
+            "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "createRequire"
-            ]
-          },
-          {
-            "module": "url",
-            "imports": [
-              "fileURLToPath"
+              "parse"
             ]
           }
         ],
+        "nodeDependencies": [],
         "internalDependencies": [
           {
             "file": "./mathts-quiet.js",
@@ -21534,6 +21534,14 @@
             "reExport": true
           },
           {
+            "file": "./dimensional/curvature-composite.js",
+            "imports": [
+              "CurvatureCompositeNode",
+              "CurvatureKind"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./core/flux-rules.js",
             "imports": [
               "FluxRuleKind"
@@ -22104,6 +22112,8 @@
           "ConservedChargeNode",
           "StressEnergyTensorNode",
           "CosmologicalConstantNode",
+          "CurvatureCompositeNode",
+          "CurvatureKind",
           "FluxRuleKind",
           "ScaleAxes",
           "ForceAxes",
@@ -22579,6 +22589,8 @@
           "ConservedChargeNode",
           "StressEnergyTensorNode",
           "CosmologicalConstantNode",
+          "CurvatureCompositeNode",
+          "CurvatureKind",
           "FluxRuleKind",
           "ScaleAxes",
           "ForceAxes",
@@ -25474,15 +25486,15 @@
   "statistics": {
     "totalTypeScriptFiles": 363,
     "totalModules": 13,
-    "totalLinesOfCode": 81126,
-    "totalExports": 2560,
+    "totalLinesOfCode": 81254,
+    "totalExports": 2562,
     "totalClasses": 82,
     "totalInterfaces": 462,
     "totalFunctions": 776,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 392,
-    "totalReExports": 1309,
+    "totalReExports": 1311,
     "totalTypeOnlyImports": 510,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

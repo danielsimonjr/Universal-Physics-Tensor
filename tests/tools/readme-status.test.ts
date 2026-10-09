@@ -42,8 +42,11 @@ describe('readme-status stamps', () => {
     expect(facts.bridges).toBe(adjudication.bridges.length);
     expect(facts.unadjudicated).toBe(adjudication.unadjudicated.length);
     expect(membershipSentence(facts)).toBe(
-      `${adjudication.bridges.length} bridges · ${adjudication.notABridges.length} not-a-bridge · ${adjudication.unadjudicated.length} unadjudicated`,
+      `${adjudication.bridges.length} bridges · ${adjudication.notABridges.length} not-a-bridge · ${adjudication.unadjudicated.length} unadjudicated` +
+        " (by the catalog's `bridges` label tuple, not the endpoint-regime criterion)",
     );
+    // Tom's second round: the sentence names the criterion the count comes from (law 4): the
+    // label-tuple proxy, where the endpoint-regime criterion on the 158 relations gives 52 and 106.
     expect(membershipSentence(facts)).not.toContain('contested');
     expect(stamped.readme).toContain(`**${CATALOG_GRAPH.length} bridge edges**`);
     expect(stamped.readme).toContain(membershipSentence(facts));

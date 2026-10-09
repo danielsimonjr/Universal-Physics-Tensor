@@ -142,7 +142,17 @@ function resolveAtom(raw: string): Dimension | null {
 }
 
 function baseAtom(id: string): Dimension | null {
-  const baseKey = BASES[id.toUpperCase()] ?? BASES[id];
+  // A single base letter is read in its own case: `m` is the metre's symbol, not mass,
+  // and `t`, `i`, `n`, `j` are not bases either (Tom's second round; it read `m^3` as M³).
+  // `Theta`/`THETA`/`Θ` are the one multi-letter base and stay case-insensitive.
+  if (id.length === 1 && /[a-z]/.test(id)) {
+    const upper = id.toUpperCase();
+    if (BASES[upper] !== undefined) {
+      throw new DimensionSpecError(`'${id}' is not a base letter: the bases are L M T I Θ N J in that case (mass is M, length is L); a unit symbol is not a dimension`);
+    }
+    return null;
+  }
+  const baseKey = id.length > 1 ? BASES[id.toUpperCase()] ?? BASES[id] : BASES[id];
   if (!baseKey) return null;
   const out = dim();
   out[baseKey] = 1;
