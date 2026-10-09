@@ -18,7 +18,7 @@
 // Domain names register when this barrel loads. The command reads the list.
 import './relations/domain-regimes.js';
 
-// Public-API symbols (already on the root surface).
+/** Public-API symbols (already on the root surface), plus `equals` as `dimensionsEqual`. */
 export {
   explainQuantity,
   CATALOG_GRAPH,
@@ -118,8 +118,10 @@ export { describeDerivedClaim } from './composition/consequence.js';
 export { filterEdges, formatFilterLegend } from './composition/graph-viz.js';
 export { deriveEdgeEvidence } from './cli/map-evidence.js';
 
-// Experimental Product B (expression / residual search). Not the identification
-// funnel (`rankDiscoveries`). CLI `upt probe` only.
+/**
+ * Experimental Product B (expression / residual search). Not the identification
+ * funnel (`rankDiscoveries`). CLI `upt probe` only.
+ */
 export {
   DEFAULT_SEARCH_BUDGET,
   scanFrontier,
@@ -262,6 +264,7 @@ export { propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite } from
 export type { PropagatedOutput, UncertaintyContribution } from './numerical/evaluator-uncertainty.js';
 /** A stated constant checked against the registry; a disagreement is its own error. */
 export { constantAgreement, ConstantDisagreementError } from './dimensional/symbolic-constants.js';
+/** Thrown when a formula string does not parse or names an unbound symbol. */
 export { FormulaError } from './numerical/formula-contract.js';
 /** The quantity names a target is bound under, the near names of a miss, and the synonym fold. */
 export { aliasesForTarget, nearQuantityNames, shareSynonyms } from './composition/aliases.js';
