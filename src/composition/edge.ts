@@ -222,6 +222,21 @@ function groupBound(edge: BridgeEdge, inputs: Record<string, number>): boolean {
 }
 
 /**
+ * The unset-coefficient gate: an edge whose coefficient is unset and whose
+ * group is not a finite input throws {@link CoefficientUnsetError}. This is
+ * the one rule; `evaluateEdge` applies it to the edge it is given, and a
+ * composed edge's evaluator applies it to each operand before calling it, so
+ * a monomial times an absent 1 never reaches a caller as a number.
+ *
+ * @internal
+ */
+export function assertCoefficientSet(edge: BridgeEdge, inputs: Record<string, number>): void {
+  if (edge.coefficientUnset === true && !groupBound(edge, inputs)) {
+    throw new CoefficientUnsetError(edge.id, edge.label);
+  }
+}
+
+/**
  * Composition refused: the composed sources would contain a duplicate
  * quantity NAME across operands without a recorded disposition (v0.11
  * namespacing gate, Option D — pure name-collision rule per the Adam
@@ -348,8 +363,6 @@ export function evaluateEdge(
       `${edge.id}: inputs violate validity domain (${edge.domain.description})`,
     );
   }
-  if (edge.coefficientUnset === true && !groupBound(edge, bound)) {
-    throw new CoefficientUnsetError(edge.id, edge.label);
-  }
+  assertCoefficientSet(edge, bound);
   return edge.evaluate(bound);
 }

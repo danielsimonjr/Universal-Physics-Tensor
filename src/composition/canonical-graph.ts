@@ -78,6 +78,7 @@ import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
 import { evalExpr } from './expr-eval.js';
+import { monomialExponents } from './formula-shape.js';
 import { HoldsError, holds } from '../bridges/holds.js';
 import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
 
@@ -245,45 +246,6 @@ function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undef
   if (c === undefined || !Number.isFinite(c) || c === 0) return undefined;
   if (Math.abs(c - 1) < 1e-12) return undefined;
   return c;
-}
-
-/**
- * Exponents of every symbol in a product, quotient, or integer power.
- * Undefined for a sum or any node that is not that monomial.
- */
-function monomialExponents(node: ExprNode | undefined): Map<string, number> | undefined {
-  if (node === undefined) return undefined;
-  if (node.kind === 'symbol') return new Map([[node.name, 1]]);
-  if (node.kind !== 'op') return undefined;
-  if (node.op === '*') {
-    const acc = new Map<string, number>();
-    for (const arg of node.args) {
-      const part = monomialExponents(arg);
-      if (part === undefined) return undefined;
-      for (const [name, exp] of part) acc.set(name, (acc.get(name) ?? 0) + exp);
-    }
-    return acc;
-  }
-  if (node.op === '/') {
-    if (node.args.length !== 2) return undefined;
-    const numerator = monomialExponents(node.args[0]);
-    const denominator = monomialExponents(node.args[1]);
-    if (numerator === undefined || denominator === undefined) return undefined;
-    for (const [name, exp] of denominator) numerator.set(name, (numerator.get(name) ?? 0) - exp);
-    return numerator;
-  }
-  if (node.op === '^') {
-    const base = node.args[0];
-    const expNode = node.args[1];
-    if (base === undefined || expNode === undefined || expNode.kind !== 'symbol') return undefined;
-    const exp = Number(expNode.name);
-    if (!Number.isFinite(exp)) return undefined;
-    const inner = monomialExponents(base);
-    if (inner === undefined) return undefined;
-    for (const [name, innerExp] of inner) inner.set(name, innerExp * exp);
-    return inner;
-  }
-  return undefined;
 }
 
 /**
