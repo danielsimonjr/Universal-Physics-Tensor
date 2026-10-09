@@ -12,6 +12,9 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 
+/** Where `--embed` looks for Ollama when `--ollama-url` is not given. */
+const OLLAMA_DEFAULT_URL = 'http://127.0.0.1:11434';
+
 const FLAGS: FlagSpec[] = [
   JSON_FLAG,
   {
@@ -23,7 +26,7 @@ const FLAGS: FlagSpec[] = [
     name: '--ollama-url',
     valueStyle: 'attached',
     description: 'Ollama base URL. Used only with --embed.',
-    defaultValue: 'http://127.0.0.1:11434',
+    defaultValue: OLLAMA_DEFAULT_URL,
   },
 ];
 
@@ -38,14 +41,14 @@ const HELP = `upt retrieve <claim> [--embed] [--ollama-url=URL]
         the server answered an error status, the reply is not a vector or its
         length is not the length stored in the frozen file, or the call does
         not finish. A fallback exits 0.
-        --ollama-url is used only with --embed (default http://127.0.0.1:11434).
+        --ollama-url is used only with --embed (default ${OLLAMA_DEFAULT_URL}).
         A claim is text. It has no expression, so the structural score is
         zero and the atlas order is by id. The command does not invent one.
         e.g.  upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed`;
 
 const EPISTEMICS =
-  'An embedding order is a proposal, not evidence. Acceptance is rankByStructure. Cosine similarity does not enter that score.';
+  'An embedding order is a proposal, not evidence. Acceptance is the atlas search. Cosine similarity does not enter that score.';
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, out, api } = ctx;
@@ -54,13 +57,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new UsageError('upt retrieve: give a claim, e.g. `upt retrieve period of a pendulum`');
   }
   const embed = args.flags.has('embed');
+  const ollamaUrl = args.flags.get('ollama-url')?.[0] ?? OLLAMA_DEFAULT_URL;
   const corpus = api.canonicalRetrievalCorpus();
   const result = await api.retrieveHybrid({
     query: { text: claim },
     corpus,
     embeddings: embed,
     embedder: embed
-      ? api.ollamaEmbedder({ baseUrl: args.flags.get('ollama-url')?.[0] ?? 'http://127.0.0.1:11434' })
+      ? api.ollamaEmbedder({ baseUrl: ollamaUrl })
       : undefined,
   });
   if (args.flags.has('json')) {
@@ -68,7 +72,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       {
         command: 'retrieve',
         epistemics: EPISTEMICS,
-        options: { embed, ollamaUrl: embed ? (args.flags.get('ollama-url')?.[0] ?? 'http://127.0.0.1:11434') : null },
+        options: { embed, ollamaUrl: embed ? ollamaUrl : null },
         result,
       },
       ctx.write,
@@ -77,6 +81,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   out(`upt retrieve — ${result.embeddings === 'used' ? 'embedding proposal and atlas search' : 'atlas search'}`);
   out(result.note);
+  if (result.fallback !== null) out(`  fallback reason: ${result.fallback} (Ollama at ${ollamaUrl})`);
   if (result.proposals !== null) {
     out('  proposed (cosine, not accepted):');
     for (const id of result.proposals) out(`    ${id}`);

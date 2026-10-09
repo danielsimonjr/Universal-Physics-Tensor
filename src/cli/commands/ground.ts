@@ -17,6 +17,7 @@ import { resolveGraph, groundTruthAnchor, groundTruthLine, type SourceName } fro
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
+import { DISCOVER_MAX_ORDERS_DEFAULT } from '../library-defaults.js';
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both. Use the same value as the discover run.'),
@@ -31,7 +32,7 @@ const FLAGS: FlagSpec[] = [
     name: '--max-orders',
     valueStyle: 'attached',
     description: 'Magnitude-clash threshold. A larger value keeps more pairs promising.',
-    defaultValue: '3',
+    defaultValue: DISCOVER_MAX_ORDERS_DEFAULT,
   },
   JSON_FLAG,
 ];

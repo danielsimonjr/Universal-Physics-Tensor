@@ -173,6 +173,20 @@ function loadedModules(command: string): { loaded: Set<string>; directReads: Rea
 }
 
 /**
+ * SHA-256 of one module's source. The module was found when the import graph was walked, so a
+ * failed read is not "absent": the value keeps which kind of failure it was (`unreadable (EACCES)`,
+ * `unreadable (EISDIR)`, ...), not one word for all of them.
+ */
+export function sourceHash(file: string): string {
+  try {
+    return createHash('sha256').update(readFileSync(file)).digest('hex');
+  } catch (e) {
+    const code = e instanceof Error && 'code' in e && typeof e.code === 'string' ? e.code : 'error';
+    return `unreadable (${code})`;
+  }
+}
+
+/**
  * SHA-256 of the source of every module `command` loads, keyed by module name, read from disk now
  * (not from the parse cache), or null when the command has no module of its own.
  */
@@ -180,15 +194,7 @@ export function moduleSources(command: string): Record<string, string> | null {
   const mods = loadedModules(command);
   if (!mods) return null;
   const out: Record<string, string> = {};
-  for (const file of [...mods.loaded].sort()) {
-    let hash: string;
-    try {
-      hash = createHash('sha256').update(readFileSync(file)).digest('hex');
-    } catch {
-      hash = 'unreadable';
-    }
-    out[tableName(file)] = hash;
-  }
+  for (const file of [...mods.loaded].sort()) out[tableName(file)] = sourceHash(file);
   return out;
 }
 

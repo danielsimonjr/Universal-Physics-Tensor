@@ -12,6 +12,12 @@ import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { publishedUrl } from '../published-url.js';
+import {
+  PROBE_BUDGET_MS_DEFAULT,
+  PROBE_CORRECTION_TERMS_MAX,
+  PROBE_HOLDOUT_TOL_DEFAULT,
+  PROBE_STUDY_ALPHA_DEFAULT,
+} from '../library-defaults.js';
 
 const PROBE_SUBCOMMANDS = [
   { name: 'scan', summary: 'List typed frontier gaps. The default listing is the searchable ones.' },
@@ -31,8 +37,8 @@ const FLAGS: FlagSpec[] = [
   sourceFlag('catalog', 'Which graph a subverb reads: catalog, canonical, or both.'),
   JSON_FLAG,
   { name: '--problem', valueStyle: 'attached', description: 'Problem JSON file for run, candidates, falsify, rank, and reproduce.' },
-  { name: '--budget-ms', valueStyle: 'attached', description: 'Wall-clock cap in milliseconds.', defaultValue: '5000' },
-  { name: '--holdout-tol', valueStyle: 'attached', description: 'Relative holdout RMSE cap.', defaultValue: '0.15' },
+  { name: '--budget-ms', valueStyle: 'attached', description: 'Wall-clock cap in milliseconds.', defaultValue: PROBE_BUDGET_MS_DEFAULT },
+  { name: '--holdout-tol', valueStyle: 'attached', description: 'Relative holdout RMSE cap.', defaultValue: PROBE_HOLDOUT_TOL_DEFAULT },
   { name: '--worker', valueStyle: 'attached', description: 'Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file.' },
   { name: '--bounds', valueStyle: 'attached', description: 'Bounds for design, as the design subverb reads them.' },
   { name: '--h1', valueStyle: 'attached', description: 'First hypothesis for design.' },
@@ -41,7 +47,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--all', valueStyle: 'none', description: 'scan: include Product A wrappers, which are not searchable here.' },
   { name: '--data', valueStyle: 'attached', description: 'Study file (JSON, or CSV when the name ends in .csv) for study.' },
   { name: '--replication', valueStyle: 'attached', description: 'study: replication rows from a separate JSON or CSV file.' },
-  { name: '--alpha', valueStyle: 'attached', description: 'study: χ² test level.', defaultValue: 'the file\'s alpha, else 0.001' },
+  { name: '--alpha', valueStyle: 'attached', description: 'study: χ² test level.', defaultValue: `the file's alpha, else ${PROBE_STUDY_ALPHA_DEFAULT}` },
 ];
 
 /**
@@ -89,11 +95,11 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                              or CSV) with its own provenance
         --searchable-only    scan: only Product-B-searchable gaps (default)
         --all                scan: include Product A wrappers (not searchable)
-        --budget-ms=N        wall-clock cap (default 5000)
-        --holdout-tol=X      relative holdout RMSE cap (default 0.15)
+        --budget-ms=N        wall-clock cap (default ${PROBE_BUDGET_MS_DEFAULT})
+        --holdout-tol=X      relative holdout RMSE cap (default ${PROBE_HOLDOUT_TOL_DEFAULT})
         --worker=PATH        optional NDJSON worker (spawned as node PATH)
         --source=catalog|canonical|both   the graph a subverb reads (default catalog)
-        --alpha=X            study: χ² test level (default: the file's, else 0.001)
+        --alpha=X            study: χ² test level (default: the file's, else ${PROBE_STUDY_ALPHA_DEFAULT})
         --json               machine envelope
 
         PROBLEM FILE (--problem=FILE, JSON)
@@ -150,10 +156,10 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                      models over the governing names in SI units, e.g.
                      "2*pi*sqrt(length/gravity)"; must have the target's dimension.
                      fitPrefactor (default false) fits one scale on exploratory rows.
-        criterion    optional {"alpha"} (default 0.001)
+        criterion    optional {"alpha"} (default ${PROBE_STUDY_ALPHA_DEFAULT})
         design       optional {"variables": {input: {"min", "max", "steps"?}}}
         correction   optional {"input": <dimensionless input u>, "powers": [2, 4]},
-                     or a list of them, one per input (at most 6 powers in all):
+                     or a list of them, one per input (at most ${PROBE_CORRECTION_TERMS_MAX} powers in all):
                      also search m(x)·(1 + c₁u² + c₂u⁴ + …) for each monomial m,
                      fit on exploratory rows only. Terms are admitted in the
                      declared order, family by family, while each passes an
@@ -203,7 +209,7 @@ function budgetFromFlags(api: CommandCtx['api'], flags: Map<string, string[]>) {
   if (raw === undefined) return undefined;
   const n = Number(raw);
   if (!Number.isFinite(n) || n <= 0) {
-    throw new UsageError('upt probe: --budget-ms must be a positive number');
+    throw new CliError('upt probe: --budget-ms must be a positive number');
   }
   return { ...api.DEFAULT_SEARCH_BUDGET, maxWallClockMs: n };
 }
@@ -213,7 +219,7 @@ function holdoutTolFromFlags(flags: Map<string, string[]>): number | undefined {
   if (raw === undefined) return undefined;
   const n = Number(raw);
   if (!Number.isFinite(n) || n <= 0) {
-    throw new UsageError('upt probe: --holdout-tol must be a positive number');
+    throw new CliError('upt probe: --holdout-tol must be a positive number');
   }
   return n;
 }
@@ -224,24 +230,40 @@ function problemPath(flags: Map<string, string[]>): string {
   return p;
 }
 
+/** The `code` and `path` Node puts on a failed file-system call; empty for any other error. */
+function errnoOf(e: unknown): { code?: string; path?: string } {
+  if (!(e instanceof Error)) return {};
+  const code: unknown = 'code' in e ? e.code : undefined;
+  const path: unknown = 'path' in e ? e.path : undefined;
+  return {
+    ...(typeof code === 'string' ? { code } : {}),
+    ...(typeof path === 'string' ? { path } : {}),
+  };
+}
+
 /** Map probe file/parse failures to CLI errors (no stack traces). */
-function mapProbeError(e: unknown, context?: string): never {
+function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string): never {
   if (e instanceof UsageError || e instanceof CliError) throw e;
-  const err = e as NodeJS.ErrnoException;
-  if (err?.code === 'ENOENT') {
-    throw new CliError(`upt probe: file not found: ${err.path ?? context ?? 'unknown'}`);
+  const errno = errnoOf(e);
+  if (errno.code === 'ENOENT') {
+    throw new CliError(`upt probe: file not found: ${errno.path ?? context ?? 'unknown'}`);
   }
   if (e instanceof SyntaxError) {
     throw new CliError(
       `upt probe: invalid JSON${context ? ` in ${context}` : ''}: ${e.message}`,
     );
   }
-  // The problem loader reads fields it expects (`target.name`, `gap.kind`); a JSON file of
-  // another shape fails there with a TypeError (a field is missing) or a RangeError (a
-  // field holds a value it does not take). Either is a file that is not a problem file.
+  // The loader checks every field it reads and names the one that is wrong.
+  if (e instanceof api.ProblemFileError) {
+    throw new CliError(
+      `upt probe: ${context ?? 'the file'} is not a problem file: ${e.message}. \`upt help probe\` shows the format.`,
+    );
+  }
+  // A TypeError or a RangeError past those checks is a field of a shape the loader does not
+  // check. It is reported as that, with the engine's words marked as the engine's.
   if (e instanceof TypeError || e instanceof RangeError) {
     throw new CliError(
-      `upt probe: ${context ?? 'the file'} is not a problem file (${e.message}). \`upt help probe\` shows the format.`,
+      `upt probe: ${context ?? 'the file'} has a field of a shape the probe does not read (internal: ${e.message}). \`upt help probe\` shows the format.`,
     );
   }
   if (e instanceof Error) {
@@ -250,16 +272,16 @@ function mapProbeError(e: unknown, context?: string): never {
   throw e;
 }
 
-function readJsonFile(path: string): unknown {
+function readJsonFile(api: CommandCtx['api'], path: string): unknown {
   try {
     return JSON.parse(readFileSync(path, 'utf8'));
   } catch (e) {
-    mapProbeError(e, path);
+    mapProbeError(api, e, path);
   }
 }
 
 /** Reject Node flag injection via `--worker=--import=…` etc. */
-function validateWorkerPath(worker: string): string {
+function validateWorkerPath(api: CommandCtx['api'], worker: string): string {
   if (worker.startsWith('-')) {
     throw new UsageError('upt probe: --worker must be a script path, not a Node flag');
   }
@@ -271,7 +293,7 @@ function validateWorkerPath(worker: string): string {
       throw new UsageError(`upt probe: --worker is not a file: ${worker}`);
     }
   } catch (e) {
-    mapProbeError(e, worker);
+    mapProbeError(api, e, worker);
   }
   return worker;
 }
@@ -370,10 +392,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       suggestion = api.suggestDiscriminatingPoint(
         api.parseExprJson(h1p),
         api.parseExprJson(h2p),
-        api.parseDesignBounds(readJsonFile(bp), bp),
+        api.parseDesignBounds(readJsonFile(api, bp), bp),
       );
     } catch (e) {
-      mapProbeError(e);
+      mapProbeError(api, e);
     }
     if (args.flags.has('json')) {
       emitJson({ command: 'probe', epistemics: EPISTEMICS, result: suggestion }, ctx.write);
@@ -397,16 +419,16 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     problem = api.loadSearchProblemFromJson(pp);
   } catch (e) {
-    mapProbeError(e, pp);
+    mapProbeError(api, e, pp);
   }
   const workerRaw = args.flags.get('worker')?.[0];
   // `--worker=` with nothing after it is not "no worker": it is refused, as `--replication=` is.
   if (workerRaw === '') throw new UsageError('upt probe: --worker needs a PATH (a .js, .mjs, or .cjs file)');
-  const worker = workerRaw === undefined ? undefined : validateWorkerPath(workerRaw);
+  const worker = workerRaw === undefined ? undefined : validateWorkerPath(api, workerRaw);
   const result = await api.runProbeSearch(problem, {
     budget: budgetFromFlags(api, args.flags),
     holdoutTol: holdoutTolFromFlags(args.flags),
-    backendArgv: worker ? [process.execPath, worker] : undefined,
+    backendArgv: worker ? api.nodeWorkerArgv(worker) : undefined,
   });
 
   if (sub === 'run' || sub === 'reproduce' || sub === 'rank' || sub === 'candidates' || sub === 'falsify') {
@@ -465,7 +487,7 @@ function alphaFromFlags(flags: Map<string, string[]>): number | undefined {
   if (raw === undefined) return undefined;
   const n = Number(raw);
   if (!Number.isFinite(n) || n <= 0 || n >= 1) {
-    throw new UsageError('upt probe: --alpha must be a number in (0, 1)');
+    throw new CliError('upt probe: --alpha must be a number in (0, 1)');
   }
   return n;
 }
@@ -482,13 +504,13 @@ async function runStudy(ctx: CommandCtx, source: ReturnType<typeof resolveGraph>
   try {
     study = api.loadStudyFile(path, replication);
   } catch (e) {
-    mapProbeError(e, e instanceof SyntaxError ? undefined : path);
+    mapProbeError(api, e, e instanceof SyntaxError ? undefined : path);
   }
   let result;
   try {
     result = await api.runProbeStudy(study, { budget, alpha });
   } catch (e) {
-    mapProbeError(e, path);
+    mapProbeError(api, e, path);
   }
   if (args.flags.has('json')) {
     emitJson(

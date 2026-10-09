@@ -21,7 +21,7 @@ import type * as cliApi from '../cli-api.js';
 import { parseArgs } from './args.js';
 import { resolveCommand } from './command.js';
 import { storedResultsFile } from './commands/_atlas-map.js';
-import { CliError } from './errors.js';
+import { CliError, UsageError } from './errors.js';
 import { emitJson } from './output.js';
 import { moduleSources, staticReach, type Attribution } from './record-reach.js';
 import { constantTables, tableFingerprint, type ConstantTable } from './record-tables.js';
@@ -126,8 +126,11 @@ function parseInvocation(argv: string[]): RecordEntry['parsed'] {
   try {
     const { flags, positionals } = parseArgs(command.name, rest, command.flags);
     return { command: command.name, flags: Object.fromEntries(flags), positionals };
-  } catch {
-    return null;
+  } catch (e) {
+    // An argument list the command refuses has no parsed form, and the entry records `null`.
+    // Any other failure of the parser is a defect and is not recorded as a refused invocation.
+    if (e instanceof UsageError) return null;
+    throw e;
   }
 }
 
@@ -141,6 +144,8 @@ function hashFile(path: string): string | null {
   try {
     return sha256(readFileSync(path));
   } catch {
+    // `null` is the record's one word for "no bytes to hash then" (`RecordInput.sha256`): the file
+    // is absent or cannot be read, and replay compares that word, not the reason.
     return null;
   }
 }
@@ -148,11 +153,13 @@ function hashFile(path: string): string | null {
 /** The observations file a problem file names, or null (also when the problem cannot be read). */
 function observationsOf(problem: string, api: typeof cliApi): string | null {
   try {
-    const raw = JSON.parse(readFileSync(problem, 'utf8')) as { observationsPath?: unknown } | null;
-    return raw !== null && typeof raw.observationsPath === 'string'
+    const raw: unknown = JSON.parse(readFileSync(problem, 'utf8'));
+    return typeof raw === 'object' && raw !== null && 'observationsPath' in raw && typeof raw.observationsPath === 'string'
       ? api.resolveObservationsPath({ observationsPath: raw.observationsPath }, problem)
       : null;
   } catch {
+    // A problem file that is absent or is not JSON names no observations file here; the run
+    // itself reports that file, and `readInputs` hashes the problem file apart from this.
     return null;
   }
 }
@@ -244,11 +251,14 @@ async function runCaptured(
   }
 }
 
+/** What a failed call said: an `Error`'s message, else the thrown value as text. */
+const messageOf = (e: unknown): string => (e instanceof Error ? e.message : String(e));
+
 function assertAppendable(file: string): void {
   try {
     closeSync(openSync(file, 'a'));
   } catch (e) {
-    throw new CliError(`upt: cannot append to record '${file}': ${(e as Error).message}`);
+    throw new CliError(`upt: cannot append to record '${file}': ${messageOf(e)}`);
   }
 }
 
@@ -289,13 +299,17 @@ export async function recordInvocation(
     inputs,
   };
   appendFileSync(file, JSON.stringify({ ...entry, entrySha256: entryFingerprint(entry) }) + '\n');
-  if (run.error !== undefined) throw run.error;
-  return run.exitCode as number;
+  // `exitCode` is null exactly when the dispatcher threw, and then `error` holds what it threw.
+  if (run.exitCode === null) throw run.error ?? new Error(run.threw ?? 'the invocation ended without an exit code');
+  return run.exitCode;
 }
 
 type Line = { line: number; entry: RecordEntry } | { line: number; error: string };
 
 function isEntry(v: unknown): v is RecordEntry {
+  // `v` is any parsed JSON line. The cast only lets the property reads below type-check:
+  // each one is guarded by the `typeof`/`Array.isArray` test on the same expression, and
+  // `typeof e === 'object' && e !== null` comes first, so a non-object is never read.
   const e = v as RecordEntry;
   return (
     typeof e === 'object' &&
@@ -318,7 +332,7 @@ function readRecord(file: string): Line[] {
   try {
     text = readFileSync(file, 'utf8');
   } catch (e) {
-    throw new CliError(`upt: cannot read record '${file}': ${(e as Error).message}`);
+    throw new CliError(`upt: cannot read record '${file}': ${messageOf(e)}`);
   }
   const lines: Line[] = [];
   text.split('\n').forEach((raw, i) => {
@@ -326,12 +340,14 @@ function readRecord(file: string): Line[] {
     let v: unknown;
     try {
       v = JSON.parse(raw);
-    } catch {
+    } catch (e) {
+      // `JSON.parse` throws a SyntaxError for text that is not JSON; any other failure is a defect.
+      if (!(e instanceof SyntaxError)) throw e;
       lines.push({ line: i + 1, error: `line ${i + 1} is not valid JSON` });
       return;
     }
     if (isEntry(v)) lines.push({ line: i + 1, entry: v });
-    else if ((v as { schema?: unknown } | null)?.schema === SUPERSEDED_SCHEMA) {
+    else if (typeof v === 'object' && v !== null && 'schema' in v && v.schema === SUPERSEDED_SCHEMA) {
       lines.push({
         line: i + 1,
         error: `line ${i + 1} is a ${SUPERSEDED_SCHEMA} entry, written before its arguments, the entry and each constant table were hashed; record it again`,
@@ -421,8 +437,10 @@ function integrityFindings(entry: RecordEntry): string[] {
   if (typeof tables !== 'object' || tables === null) findings.push('entry has no constantTables');
   else {
     for (const [name, t] of Object.entries(tables)) {
-      const values = (t as Partial<ConstantTable> | null)?.values;
-      if (typeof values !== 'object' || values === null || tableFingerprint(values) !== t.sha256) {
+      // A record is read from disk, so a table may be `null` or lack `values` whatever its type says.
+      const table: Partial<ConstantTable> | null = t;
+      const values = table?.values;
+      if (typeof values !== 'object' || values === null || tableFingerprint(values) !== table?.sha256) {
         findings.push(`recorded table ${name} does not match its recorded sha256`);
       }
     }

@@ -26,6 +26,7 @@ export {
   M_SUN_KG,
   composeSymbolic,
   format,
+  equals as dimensionsEqual,
   buildVizModel,
   renderDotToSvg,
   equationLanding,
@@ -129,7 +130,9 @@ export {
   loadSearchProblemFromJson,
   resolveObservationsPath,
   parseExprJson,
+  ProblemFileError,
   runProbeSearch,
+  nodeWorkerArgv,
   formatProbeReport,
   loadStudyFromJson,
   loadStudyFile,
@@ -258,6 +261,7 @@ export { propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite } from
 export type { PropagatedOutput, UncertaintyContribution } from './numerical/evaluator-uncertainty.js';
 /** A stated constant checked against the registry; a disagreement is its own error. */
 export { constantAgreement, ConstantDisagreementError } from './dimensional/symbolic-constants.js';
+export { FormulaError } from './numerical/formula-contract.js';
 /** The quantity names a target is bound under, the near names of a miss, and the synonym fold. */
 export { aliasesForTarget, nearQuantityNames, shareSynonyms } from './composition/aliases.js';
 /** Synonym agreement and expansion of a binding set. */
