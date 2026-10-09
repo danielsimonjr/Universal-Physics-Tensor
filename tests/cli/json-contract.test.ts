@@ -275,7 +275,7 @@ describe('derive text-mode error paths — conversion-fidelity rule (partial std
     expect(stdout).toContain('● period  from {length, gravity}');
     expect(stdout).toContain('dimensionally determined up to a constant');
     expect(stdout).toContain('formula dimensional check: ✗');
-    expect(errLines.join('')).toContain('formula parse error');
+    expect(errLines.join('')).toContain('--formula: parse error');
   });
 
   it('undeclared variable: exit 2, determination line on stdout, evaluate error on stderr', async () => {
@@ -289,6 +289,6 @@ describe('derive text-mode error paths — conversion-fidelity rule (partial std
     const stdout = outLines.join('');
     expect(stdout).toContain('● period  from {length, gravity}');
     expect(stdout).toContain('dimensionally determined up to a constant');
-    expect(errLines.join('')).toContain('formula uses an undeclared variable');
+    expect(errLines.join('')).toContain("undeclared symbol 'len'");
   });
 });

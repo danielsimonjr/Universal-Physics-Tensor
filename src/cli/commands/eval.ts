@@ -130,7 +130,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     cf = parser.parse(expr);
   } catch (e) {
-    throw new FormulaUsageError('parse error: ' + (e as Error).message, kind);
+    // The parser's message carries its own `parse error:` label.
+    throw new FormulaUsageError((e as Error).message, kind);
   }
 
   const mode: UnitMode = args.flags.has('geometrized') ? 'geometrized' : args.flags.has('natural') ? 'natural' : 'si';
@@ -162,6 +163,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   if (mode === 'si') for (const note of api.constantNotes(cf.variables)) notes.push(`note: ${note}`);
   for (const note of notes) err(note);
 
+  // The parser throws one class here for an unknown function (a malformed
+  // formula) and for a non-finite result (a bad value), so the two cannot be
+  // told apart by class and both exit 2. A typed error in the parser is the
+  // numerical package's follow-up.
   let value: number;
   try {
     value = cf.evaluate(scope);

@@ -112,7 +112,10 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   let full: ReturnType<typeof api.buckinghamPi> | undefined;
   let formulaCheck: ReturnType<Awaited<ReturnType<typeof api.getFormulaDimensionChecker>>['check']> | undefined;
+  // The recovered prefactor, and whether the formula has the monomial's input-dependence.
+  // `mean` is kept only when it does: a prefactor of a formula that does not match is not a number.
   let mean: number | undefined;
+  let matchesMonomial: boolean | undefined;
   let canonicalComparisons: ReturnType<typeof api.compareWithCanonical> | undefined;
   let catalogEdges: ReturnType<typeof api.matchingCatalogEdges> | undefined;
   // The formula's checks: dimension, monomial, canonical comparison. Any failure exits 3.
@@ -126,7 +129,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           determination: det,
           ...(full !== undefined ? { buckingham: full } : {}),
           ...(formulaCheck !== undefined ? { formulaCheck } : {}),
-          ...(mean !== undefined ? { prefactor: mean } : {}),
+          ...(matchesMonomial === undefined ? {} : { matchesMonomial, prefactor: matchesMonomial ? mean! : null }),
           ...(canonicalComparisons !== undefined ? { canonicalComparisons } : {}),
           ...(catalogEdges !== undefined ? { catalogEdges } : {}),
         },
@@ -158,6 +161,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (!r.ok) {
       failed = true;
       textOut(`  formula dimensional check: ✗ ${hyphenSubtractionNote(r, formula)}`);
+      // An undeclared symbol is a malformed invocation on either branch: the caller
+      // declares it as an argument. A registered constant is declared as itself (c:c).
+      if (r.undeclaredSymbol !== undefined) {
+        const sym = r.undeclaredSymbol;
+        const asConstant = api.CONSTANTS[sym] === undefined ? '' : ` ${sym}:${sym} for the registered constant, or`;
+        throw new UsageError(`upt derive: undeclared symbol '${sym}' in --formula. Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
+      }
     } else {
       const matches = dimsEqualTol(r.dim!, target.dim);
       if (!matches) failed = true;
@@ -171,7 +181,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     try {
       cf = parser.parse(formulaSymbols);
     } catch (e) {
-      throw new FormulaUsageError('  formula parse error: ' + (e as Error).message, await api.getFormulaParserKind());
+      // The parser's message carries its own `parse error:` label.
+      throw new FormulaUsageError('  --formula: ' + (e as Error).message, await api.getFormulaParserKind());
     }
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This
@@ -230,15 +241,20 @@ async function run(ctx: CommandCtx): Promise<number> {
       try {
         ratios.push(cf.evaluate(scope) / cand);
       } catch (e) {
-        throw new UsageError('  formula uses an undeclared variable: ' + (e as Error).message);
+        // Every symbol is declared (checked above). The scope is this command's own generic
+        // positive inputs, so a failure here is the formula itself (a literal division by zero,
+        // an unknown function), not a value the caller gave: a malformed formula, exit 2.
+        throw new UsageError('upt derive: the formula could not be evaluated at generic inputs: ' + (e as Error).message);
       }
     }
-    mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-    const cv = Math.sqrt(ratios.reduce((a, b) => a + (b - mean!) ** 2, 0) / ratios.length) / Math.abs(mean);
-    if (!(cv < 1e-9)) failed = true;
+    const ratioMean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+    const cv = Math.sqrt(ratios.reduce((a, b) => a + (b - ratioMean) ** 2, 0) / ratios.length) / Math.abs(ratioMean);
+    matchesMonomial = cv < 1e-9;
+    if (matchesMonomial) mean = ratioMean;
+    else failed = true;
     textOut(
-      cv < 1e-9
-        ? `  formula MATCHES the dimensional form — recovered prefactor ≈ ${mean.toExponential(4)}`
+      matchesMonomial
+        ? `  formula MATCHES the dimensional form — recovered prefactor ≈ ${mean!.toExponential(4)}`
         : `  formula does NOT match the dimensional monomial (different input-dependence — a decoy or different physics).`
     );
     printComparisons();
