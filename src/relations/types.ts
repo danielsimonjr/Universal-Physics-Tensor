@@ -70,8 +70,19 @@ export const ALL_EVIDENCE_TAGS = [
  * - `'back-translation'` — a reviewer who had not seen the source translated
  *   the formal statement back to prose and it matched.
  * - `'sanity-lemmas'` — the statement was instantiated on known cases in
- *   `tests/atlas/formal-sanity.test.ts`.
+ *   `tests/atlas/formal-sanity.test.ts`. A PhysJS reference carries it only
+ *   when its key is in `PHYSJS_SANITY_LEMMA_KEYS` and its manifest row is
+ *   also reviewed (below).
+ * - `'reviewed-manifest'` — the manifest row (key, theorem, kind, covers
+ *   line, proof status, axioms, nested statements) was read against the
+ *   bridge it keys and pinned by its hash in `src/atlas/physjs-reviewed.ts`;
+ *   `physjsFormalRef` recomputes the hash and emits this value only on a
+ *   match. The statement was not instantiated on a known case.
  * - `'unreviewed'` — recorded, not checked. **Earns no tag, by construction.**
+ *   A PhysJS key whose row is not in the reviewed table, or that is ahead of
+ *   the catalog, derives this value.
+ *
+ * No value here is hand-set on a record: `physjsFormalRef` derives it.
  *
  * @internal
  */
@@ -79,6 +90,7 @@ export type FormalFidelity =
   | 'two-formalizers'
   | 'back-translation'
   | 'sanity-lemmas'
+  | 'reviewed-manifest'
   | 'unreviewed';
 
 /**

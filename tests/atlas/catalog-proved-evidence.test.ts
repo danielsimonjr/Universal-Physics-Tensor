@@ -56,7 +56,7 @@ describe('catalog and edge evidence for a manifest-checked formalRef', () => {
       const ref = catalogFormalRef(id);
       expect(ref?.kind, `be-${id}`).toBe('bridge');
       expect(ref?.system, `be-${id}`).toBe('lean4-physjs');
-      expect(ref?.fidelity, `be-${id}`).toBe('sanity-lemmas');
+      expect(ref?.fidelity, `be-${id}`).toBe('reviewed-manifest');
       expect(deriveEvidence({ formalRef: ref }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
       expect(catalogTags(id), `be-${id} catalog`).toEqual(['formally-proved']);
       expect(edgeTags(id), `be-${id} edge`).toEqual(['formally-proved']);

@@ -8,53 +8,32 @@
  * `tests/atlas/physjs-manifest.test.ts` fails when the file and that table disagree
  * on the commit, a theorem, a key, or the coverage phrase.
  *
- * The commit is `PHYSJS_COMMIT`, copied from the manifest. The sentence that
- * the pin is PhysJS `main` `03e8bb77c952f720bdd2730af2afc6a7f2d36243` is the
- * record from before the table was generated.
- * PhysJS #63 stores each Lean file at `lean/<File>.lean`. The sentence that
- * the pin is `92f87257a1e3086a48cdc19fe4361cc1c5909d49` is the record from
- * before PhysJS #65. The sentence that the pin is
- * `ee753df77bd5b29b7207443181606b6004bfcf6a` is the record from
- * before PhysJS #64. The sentence that the pin is
- * `4ea35872513f8d4d12a01bfac225156bdddb87a9` and that the path is
- * `lean/PhysJS/<File>.lean` is the record from before that flatten. The
- * sentence that the pin is `3af15b49be09442350510e7c7f56f4aab92ea3bc` and
- * that the path is `PhysJS/<File>.lean` is the record from before PhysJS #61.
- * Theorem names of the earlier entries are unchanged. PhysJS #62 adds be-74,
- * be-75, and be-76. PhysJS #64 adds be-77 through be-87. PhysJS #65 adds
- * be-88 through be-102.
- * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
- * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
- * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
- * `corollary` on `be-13` and has no key. Each statement's `kind`, nested ones
- * included, is the manifest's own field (schema `physjs-bridge-manifest/v2`),
- * which PhysJS reads from the kind line of the Lean file that declares the
- * theorem; this module keeps no
- * override and does not parse the covers line for it. The sentence that a
- * counted covers line begins with `reduction`, `limit`, or `derivation-step`,
- * and that a catalog entry's `formalKind` overrides that word, is the record
- * from before that schema. A field of a manifest entry outside the
- * base fields is a nested statement: a second theorem on the same entry,
- * named by the field, with no key. It is recorded and compared, and it is not
- * a `formalRef`. The generator reads it by its shape, so a new nested name
- * needs no edit here. The sentence that the nested names are a fixed list in
- * this module and in the generator is the record from before that change.
- * PhysJS #66 adds be-103 through be-125. The sentence that the pin is
- * `03e8bb77c952f720bdd2730af2afc6a7f2d36243` and that the table stops at
- * be-102 is the record from before that pin. PhysJS #67 adds be-126 through
- * be-133. The sentence that the pin is
- * `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f` and that the table stops at
- * be-125 is the record from before that pin. PhysJS #68 adds be-134 through
- * be-146. The sentence that the pin is
- * `8515c621d1c6e6d31c2eea4467181eb85d58234b` and that the table stops at
- * be-133 is the record from before that pin.
+ * The commit is `PHYSJS_COMMIT`, copied from the manifest. Which PhysJS pull
+ * request added which keys, and what the pin was before, is history and lives
+ * in `NOTES.md` and `CHANGELOG.md`, not here.
+ *
+ * Each statement's `kind`, nested ones included, is the manifest's own field
+ * (schema `physjs-bridge-manifest/v2`), which PhysJS reads from the kind line
+ * of the Lean file that declares the theorem; this module keeps no override
+ * and does not parse the covers line for it. A field of a manifest entry
+ * outside the base fields is a nested statement: a second theorem on the same
+ * entry, named by the field, with no key. It is recorded and compared, and it
+ * is not a `formalRef`. The generator reads it by its shape, so a new nested
+ * name needs no edit here.
+ *
+ * A reference's `fidelity` is DERIVED here, never typed on a record:
+ * `physjsFidelity` reads the reviewed-row table (`physjs-reviewed.ts`) and the
+ * sanity-lemma key list, and a key ahead of the catalog, or whose row is not
+ * in that table, is `'unreviewed'`.
  *
  * @module atlas/physjs-ref
  */
 
-import type { FormalRef, FormalRefKind } from './types.js';
+import { createHash } from 'node:crypto';
+import type { FormalFidelity, FormalRef, FormalRefKind } from './types.js';
 import { FORMAL_REF_KINDS } from '../relations/types.js';
 import { catalogEntries, catalogIdNumber } from '../bridges/catalog-load.js';
+import { PHYSJS_REVIEWED_ROWS, PHYSJS_SANITY_LEMMA_KEYS } from './physjs-reviewed.js';
 import {
   PHYSJS_COMMIT,
   PHYSJS_MATHLIB,
@@ -75,6 +54,14 @@ export { PHYSJS_COMMIT } from './physjs-entries.generated.js';
  * `bound.delta` does not certify the regime, the horizon, or the side conditions.
  */
 const PHYSJS_COVERAGE = 'covers its statement only';
+
+/**
+ * The axioms a complete Lean 4 proof over Mathlib may rest on. `#print axioms`
+ * of a proof with a `sorry` adds `sorryAx`, and Lean still exits 0 (TOOLS.md),
+ * so every statement's list is held to this set; PhysJS reports the list and
+ * this repository does not re-measure it. @internal
+ */
+export const PHYSJS_ALLOWED_AXIOMS: ReadonlySet<string> = new Set(['propext', 'Classical.choice', 'Quot.sound']);
 
 /** One statement the manifest records: an entry's own, or a nested one. */
 interface PhysjsStatement {
@@ -265,9 +252,102 @@ export function physjsKeysAheadOfCatalog(): readonly string[] {
   return PHYSJS_ENTRIES.filter((entry) => physjsAheadOfCatalog(entry.key)).map((entry) => entry.key);
 }
 
+/** The fields of one manifest row that a review reads, nested statements included. @internal */
+export interface PhysjsReviewedRow {
+  readonly key: string;
+  readonly theorem: string;
+  readonly kind: string;
+  readonly covers: string;
+  readonly leanProof: string;
+  readonly axioms: readonly string[];
+  readonly nested: readonly {
+    readonly name: string;
+    readonly theorem: string;
+    readonly kind: string;
+    readonly covers: string;
+    readonly leanProof: string;
+    readonly axioms: readonly string[];
+  }[];
+}
+
 /**
- * The reviewed reference for a manifest key. Throws when the key is not an
- * entry, so a typo cannot ship a bridge with no reference.
+ * The row of a manifest entry as PhysJS writes it, in the shape
+ * {@link physjsRowHash} reads. @internal
+ */
+export function physjsManifestRow(entry: PhysjsManifestEntry): PhysjsReviewedRow {
+  return {
+    key: entry.key,
+    theorem: entry.theorem,
+    kind: entry.kind,
+    covers: entry.covers,
+    leanProof: entry.leanProof,
+    axioms: entry.axioms,
+    nested: physjsNestedStatements(entry).nested.map((statement) => ({
+      name: statement.name,
+      theorem: statement.theorem,
+      kind: statement.kind,
+      covers: statement.covers,
+      leanProof: statement.leanProof,
+      axioms: statement.axioms,
+    })),
+  };
+}
+
+/**
+ * SHA-256 of one row: `[key, theorem, kind, covers, leanProof, axioms,
+ * nested[]]`, each nested statement as `[name, theorem, kind, covers,
+ * leanProof, axioms]`. A swapped theorem or key, a changed kind, a reworded
+ * covers line, a proof status, an axiom, or a nested statement changes it.
+ * This is what `physjs-reviewed.ts` pins per key.
+ *
+ * @internal
+ */
+export function physjsRowHash(row: PhysjsReviewedRow): string {
+  const columns = [
+    row.key,
+    row.theorem,
+    row.kind,
+    row.covers,
+    row.leanProof,
+    [...row.axioms],
+    row.nested.map((n) => [n.name, n.theorem, n.kind, n.covers, n.leanProof, [...n.axioms]]),
+  ];
+  return createHash('sha256').update(JSON.stringify(columns)).digest('hex');
+}
+
+/**
+ * The fidelity a manifest key earns, derived from what checks it:
+ *
+ * - `'unreviewed'` when the key is ahead of the catalog
+ *   ({@link physjsAheadOfCatalog}): no bridge exists to read the row against;
+ * - `'unreviewed'` when the compiled row's hash is not the one
+ *   `PHYSJS_REVIEWED_ROWS` records for the key, or the key has no entry there;
+ * - `'sanity-lemmas'` when the row is reviewed AND the key is in
+ *   `PHYSJS_SANITY_LEMMA_KEYS`, whose statements
+ *   `tests/atlas/formal-sanity.test.ts` instantiates on known cases;
+ * - `'reviewed-manifest'` when the row is reviewed and no sanity lemma exists.
+ *
+ * A key the manifest does not name throws, like {@link physjsFormalRef}.
+ *
+ * @internal
+ */
+export function physjsFidelity(
+  key: string,
+  /** Defaults to the generated table. A test passes a mutated copy. */
+  compiledEntries: readonly PhysjsEntry[] = PHYSJS_ENTRIES,
+): FormalFidelity {
+  const entry = compiledEntries.find((candidate) => candidate.key === key);
+  if (entry === undefined) throw new Error(`PhysJS manifest has no entry for '${key}'`);
+  if (physjsAheadOfCatalog(key)) return 'unreviewed';
+  if (PHYSJS_REVIEWED_ROWS[key] !== physjsRowHash(entry)) return 'unreviewed';
+  return PHYSJS_SANITY_LEMMA_KEYS.includes(key) ? 'sanity-lemmas' : 'reviewed-manifest';
+}
+
+/**
+ * The reference for a manifest key, with its derived fidelity. Throws when
+ * the key is not an entry, so a typo cannot ship a bridge with no reference.
+ * A key ahead of the catalog, or whose row is not reviewed, is returned
+ * `'unreviewed'` and derives no proof tag.
  *
  * @internal
  */
@@ -279,11 +359,16 @@ export function physjsFormalRef(key: string): FormalRef {
     statement: entry.theorem,
     version: physjsVersion(),
     axioms: entry.axioms,
-    fidelity: 'sanity-lemmas',
+    fidelity: physjsFidelity(key),
     kind: entry.kind,
     url: physjsStatementUrl(entry.theorem),
     covers: `${entry.covers} — ${entry.coverage}`,
   };
+}
+
+/** The axioms of a statement that are outside {@link PHYSJS_ALLOWED_AXIOMS}. */
+function disallowedAxioms(axioms: readonly string[]): readonly string[] {
+  return axioms.filter((axiom) => !PHYSJS_ALLOWED_AXIOMS.has(axiom));
 }
 
 function sameAxioms(recorded: readonly string[], manifest: readonly string[]): boolean {
@@ -327,10 +412,14 @@ function isFormalRefKind(kind: unknown): kind is FormalRefKind {
  * is a problem: the gate does not skip that system. A nested object is kept
  * and compared; naming it as the `formalRef` is a problem. The top-level
  * theorem stays the reference. The reference's kind is the entry's
- * `kind`; a kind outside the formal-reference kinds is a problem. A `be-`
+ * `kind`; a kind outside the formal-reference kinds is a problem. An axiom
+ * outside {@link PHYSJS_ALLOWED_AXIOMS} on any statement is a problem. A `be-`
  * key in the unbroken run above the catalog's highest id is ahead of the
  * catalog and is not a problem (`physjsAheadOfCatalog`); any other key with
- * no bridge is.
+ * no bridge is. Every structural check (fields, kinds, coverage, proof
+ * status, axioms, Lean file, compiled copy) runs for every entry, ahead keys
+ * included; only the checks against a bridge's reference are skipped for a
+ * key that has no bridge yet.
  *
  * @internal
  */
@@ -358,7 +447,12 @@ export function physjsManifestProblems(input: {
     problems.push(`manifest physlib is '${manifest.physlib}', expected '${PHYSJS_PHYS_LIB}'`);
   }
 
-  const compiledByKey = new Map((input.compiledEntries ?? PHYSJS_ENTRIES).map((entry) => [entry.key, entry]));
+  const compiledEntries = input.compiledEntries ?? PHYSJS_ENTRIES;
+  const compiledByKey = new Map(compiledEntries.map((entry) => [entry.key, entry]));
+  /** Theorem → Lean file over the compiled table under test, nested statements included. */
+  const fileByTheorem = new Map(
+    compiledEntries.flatMap((entry) => [entry, ...entry.nested].map((statement) => [statement.theorem, statement.file] as const)),
+  );
   const byId = new Map(input.bridges.map((bridge) => [bridge.id, bridge]));
   const seen = new Set<string>();
   const manifestKeys = manifest.entries.map((entry) => entry.key);
@@ -381,6 +475,11 @@ export function physjsManifestProblems(input: {
     if (!isFormalRefKind(entry.kind)) {
       problems.push(`manifest key '${entry.key}' kind '${String(entry.kind)}' is not one of ${FORMAL_REF_KINDS.join(', ')}`);
     }
+    if (disallowedAxioms(entry.axioms).length > 0) {
+      problems.push(
+        `manifest key '${entry.key}' axioms [${entry.axioms.join(', ')}] are not a subset of [${[...PHYSJS_ALLOWED_AXIOMS].join(', ')}]`,
+      );
+    }
     for (const statement of nested) {
       if (!isFormalRefKind(statement.kind)) {
         problems.push(
@@ -395,6 +494,32 @@ export function physjsManifestProblems(input: {
       if (statement.leanProof !== 'complete') {
         problems.push(`${statement.name} leanProof for '${entry.key}' is '${statement.leanProof}', expected 'complete'`);
       }
+      if (disallowedAxioms(statement.axioms).length > 0) {
+        problems.push(
+          `${statement.name} axioms for '${entry.key}' [${statement.axioms.join(', ')}] are not a subset of [${[...PHYSJS_ALLOWED_AXIOMS].join(', ')}]`,
+        );
+      }
+      if (!fileByTheorem.has(statement.theorem)) {
+        problems.push(`manifest theorem '${statement.theorem}' (${entry.key}.${statement.name}) has no Lean file in formal/physjs/theorem-files.json`);
+      }
+    }
+    const file = fileByTheorem.get(entry.theorem);
+    if (file === undefined) {
+      problems.push(`manifest theorem '${entry.theorem}' has no Lean file in formal/physjs/theorem-files.json`);
+    }
+    const compiled = compiledByKey.get(entry.key);
+    if (compiled === undefined) {
+      problems.push(`manifest key '${entry.key}' is not in the compiled entry table`);
+    } else if (
+      compiled.theorem !== entry.theorem ||
+      compiled.kind !== entry.kind ||
+      compiled.covers !== entry.covers ||
+      compiled.coverage !== entry.coverage ||
+      compiled.leanProof !== entry.leanProof ||
+      !sameAxioms(compiled.axioms, entry.axioms) ||
+      !sameNested(compiled.nested, nested)
+    ) {
+      problems.push(`compiled entry for '${entry.key}' disagrees with the vendored manifest`);
     }
     const bridge = byId.get(entry.key);
     if (bridge === undefined) {
@@ -438,23 +563,8 @@ export function physjsManifestProblems(input: {
     if (ref.kind !== entry.kind) {
       problems.push(`bridge '${entry.key}' kind is '${ref.kind}', expected '${entry.kind}'`);
     }
-    const file = FILE_BY_THEOREM.get(entry.theorem);
-    if (file === undefined) {
-      problems.push(`manifest theorem '${entry.theorem}' has no Lean file in formal/physjs/theorem-files.json`);
-    } else if (ref.url !== physjsFileUrl(file)) {
+    if (file !== undefined && ref.url !== physjsFileUrl(file)) {
       problems.push(`bridge '${entry.key}' url is '${ref.url}', expected '${physjsFileUrl(file)}'`);
-    }
-    const compiled = compiledByKey.get(entry.key);
-    if (compiled === undefined) {
-      problems.push(`manifest key '${entry.key}' is not in the compiled entry table`);
-    } else if (
-      compiled.theorem !== entry.theorem ||
-      compiled.kind !== entry.kind ||
-      compiled.covers !== entry.covers ||
-      compiled.coverage !== entry.coverage ||
-      !sameNested(compiled.nested, nested)
-    ) {
-      problems.push(`compiled entry for '${entry.key}' disagrees with the vendored manifest`);
     }
   }
 

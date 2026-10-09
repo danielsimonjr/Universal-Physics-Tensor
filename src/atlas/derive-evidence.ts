@@ -173,12 +173,17 @@ export interface EvidenceInput {
   readonly conventions?: Conventions;
   readonly counterexamples?: readonly CounterexampleLike[];
   /**
-   * The record's formal reference, read for its fidelity and its kind.
-   * Structural so a caller can pass an `AtlasBridge` directly. A missing kind
-   * cannot be supplied by this function: only `'bridge'` derives
-   * `formally-proved`.
+   * The record's formal reference, read for its fidelity, its kind, and its
+   * axioms. Structural so a caller can pass an `AtlasBridge` directly. A
+   * missing kind cannot be supplied by this function: only `'bridge'` derives
+   * `formally-proved`. An axiom list naming `sorryAx` is a proof with a hole
+   * (Lean exits 0 on `sorry`; TOOLS.md) and derives no proof label.
    */
-  readonly formalRef?: { readonly fidelity: FormalFidelity; readonly kind: FormalRefKind };
+  readonly formalRef?: {
+    readonly fidelity: FormalFidelity;
+    readonly kind: FormalRefKind;
+    readonly axioms?: readonly string[];
+  };
 }
 
 /**
@@ -198,6 +203,9 @@ export interface EvidenceInput {
  * exactly the decision that must never be implicit.
  */
 export const NO_PASSING_WITNESSES: ReadonlySet<string> = new Set<string>();
+
+/** The axiom Lean 4 records for a proof that contains `sorry`. */
+const SORRY_AXIOM = 'sorryAx';
 
 /** The fields `Conventions` may declare. Kept in one place so the check is total. */
 const CONVENTION_FIELDS = [
@@ -246,8 +254,13 @@ export function deriveEvidence(
   // records a reference without earning a tag — a proof of the wrong statement
   // proves nothing. A property and a cross-check earn their own labels and do
   // not count as a proved bridge. A reduction, a limit, and a derivation-step
-  // earn neither.
-  if (record.formalRef !== undefined && record.formalRef.fidelity !== 'unreviewed') {
+  // earn neither. A proof resting on `sorryAx` is a hole, not a proof, and
+  // earns none of the three whatever its fidelity says.
+  if (
+    record.formalRef !== undefined &&
+    record.formalRef.fidelity !== 'unreviewed' &&
+    !(record.formalRef.axioms ?? []).includes(SORRY_AXIOM)
+  ) {
     if (record.formalRef.kind === 'bridge') tags.add('formally-proved');
     else if (record.formalRef.kind === 'property') tags.add('formally-proved-property');
     else if (record.formalRef.kind === 'cross-check') tags.add('formally-proved-cross-check');

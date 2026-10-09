@@ -7,7 +7,6 @@
  * checker that ignored those fields would stay green.
  */
 
-import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,12 +18,17 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { catalogEntries } from '../../src/bridges/catalog-load.js';
 import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
+import { PHYSJS_ENTRIES } from '../../src/atlas/physjs-entries.generated.js';
+import { PHYSJS_REVIEWED_ROWS } from '../../src/atlas/physjs-reviewed.js';
 import {
   PHYSJS_COMMIT,
   physjsAheadOfCatalog,
+  physjsFidelity,
   physjsFormalRef,
   physjsManifestProblems,
+  physjsManifestRow,
   physjsNestedStatements,
+  physjsRowHash,
   type PhysjsManifestFile,
 } from '../../src/atlas/physjs-ref.js';
 
@@ -37,19 +41,18 @@ const carriers = [
 ];
 
 /**
- * The reviewed manifest, pinned as one hash of its `[key, theorem, kind, covers]`
- * rows in file order. A swapped theorem or key, a changed kind, a reworded
- * covers line, or an added or dropped entry changes it. The failure message prints the current
- * hash: update the pin only after reading the manifest diff. The sentence
- * that this file held every row as a literal is the record from before this
- * pin.
+ * The reviewed manifest is pinned PER KEY in `src/atlas/physjs-reviewed.ts`:
+ * `physjsRowHash` of `[key, theorem, kind, covers, leanProof, axioms, nested]`.
+ * A swapped theorem or key, a changed kind, a reworded covers line, a changed
+ * axiom list or proof status, or a changed nested statement changes a row's
+ * hash, and `physjsFidelity` then derives `'unreviewed'` for that key. The
+ * failure message prints the line to paste: update the table only after
+ * reading the manifest diff. The sentence that this file pinned one SHA-256
+ * over every row, and that it held every row as a literal before that, is
+ * the record from before the per-key table.
  */
-const REVIEWED_ROWS_SHA256 = '2bc29b3bb63f125364186f66d3f430292b2cdb88e78447dc4187287a66731e92';
-
-const rowsOf = (entries: readonly { key: string; theorem: string; kind: string; covers: string }[]): string[][] =>
-  entries.map((entry) => [entry.key, entry.theorem, entry.kind, entry.covers]);
-const sha256 = (rows: readonly (readonly string[])[]): string =>
-  createHash('sha256').update(JSON.stringify(rows)).digest('hex');
+const reviewedLine = (entry: PhysjsManifestFile['entries'][number]): string =>
+  `  '${entry.key}': '${physjsRowHash(physjsManifestRow(entry))}',`;
 
 /** Rows whose covers text carries a reviewed caveat: what the theorem is NOT. Each is a sentinel the hash alone would not name. */
 const SENTINELS: readonly (readonly [string, string, string, RegExp])[] = [
@@ -95,13 +98,39 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('the reviewed rows are the pinned hash; a swapped theorem is not', () => {
-    const rows = rowsOf(manifest.entries);
-    const current = sha256(rows);
-    expect(current, `manifest rows changed; after reading the diff, set REVIEWED_ROWS_SHA256 = '${current}'`).toBe(REVIEWED_ROWS_SHA256);
-    const swapped = rows.map((row, index) => (index === 0 ? [row[0]!, rows[1]![1]!, row[2]!] : row));
-    expect(sha256(swapped)).not.toBe(REVIEWED_ROWS_SHA256);
-    expect(sha256(rows.slice(0, -1))).not.toBe(REVIEWED_ROWS_SHA256);
+  it('every row that resolves to a bridge is in the reviewed table with its current hash, and no reviewed key is ahead of the catalog', () => {
+    const resolving = manifest.entries.filter((entry) => !physjsAheadOfCatalog(entry.key));
+    const stale = resolving.filter((entry) => PHYSJS_REVIEWED_ROWS[entry.key] !== physjsRowHash(physjsManifestRow(entry)));
+    expect(
+      stale.map((entry) => entry.key),
+      `manifest rows changed or are new; after reading the diff, set these lines in src/atlas/physjs-reviewed.ts:\n${stale.map(reviewedLine).join('\n')}`,
+    ).toEqual([]);
+    const keys = new Set(manifest.entries.map((entry) => entry.key));
+    const orphans = Object.keys(PHYSJS_REVIEWED_ROWS).filter((key) => !keys.has(key) || physjsAheadOfCatalog(key));
+    expect(orphans, 'reviewed keys with no bridge to review against; delete them from src/atlas/physjs-reviewed.ts').toEqual([]);
+    expect(Object.keys(PHYSJS_REVIEWED_ROWS)).toHaveLength(resolving.length);
+    expect(resolving.length).toBeGreaterThan(0);
+  });
+
+  it('CONTROL: a row with only its theorem swapped, or one changed axiom, nested statement or proof status, is not the reviewed hash', () => {
+    const [first, second] = manifest.entries;
+    const row = physjsManifestRow(first!);
+    const pinned = PHYSJS_REVIEWED_ROWS[first!.key];
+    expect(physjsRowHash(row)).toBe(pinned);
+    // The control swaps ONLY the theorem and keeps every column, so a
+    // hasher blind to the theorem column would stay green here and fail.
+    expect(physjsRowHash({ ...row, theorem: second!.theorem })).not.toBe(pinned);
+    expect(physjsRowHash({ ...row, axioms: [...row.axioms, 'sorryAx'] })).not.toBe(pinned);
+    expect(physjsRowHash({ ...row, leanProof: 'sorry' })).not.toBe(pinned);
+    expect(physjsRowHash({ ...row, kind: 'property' })).not.toBe(pinned);
+    expect(physjsRowHash({ ...row, covers: `${row.covers}.` })).not.toBe(pinned);
+    const host = nestedRows[0]!;
+    const hostRow = physjsManifestRow(host.entry);
+    expect(hostRow.nested.length).toBeGreaterThan(0);
+    expect(physjsRowHash({ ...hostRow, nested: [] })).not.toBe(PHYSJS_REVIEWED_ROWS[host.entry.key]);
+    expect(physjsRowHash({ ...hostRow, nested: hostRow.nested.map((n, i) => (i === 0 ? { ...n, theorem: 'PhysJS.Other.theorem' } : n)) })).not.toBe(
+      PHYSJS_REVIEWED_ROWS[host.entry.key],
+    );
   });
 
   it('each reviewed sentinel row names its theorem and keeps its caveat', () => {
@@ -194,7 +223,16 @@ describe('vendored PhysJS manifest', () => {
     const withKey = (id: number) => ({ ...manifest, entries: [...manifest.entries, { ...template, key: `be-${id}`, bridgeId: `be-${id}` }] });
     const keysOf = (m: PhysjsManifestFile) => m.entries.map((entry) => entry.key);
     expect(physjsAheadOfCatalog(`be-${next}`, keysOf(withKey(next)))).toBe(true);
-    expect(physjsManifestProblems({ manifest: withKey(next), bridges: carriers }).join('\n')).not.toMatch(new RegExp(`'be-${next}'`));
+    // The structural checks still run for the ahead key: with no compiled
+    // copy it is a problem; with one, nothing about it is.
+    expect(physjsManifestProblems({ manifest: withKey(next), bridges: carriers }).join('\n')).toMatch(
+      new RegExp(`manifest key 'be-${next}' is not in the compiled entry table`),
+    );
+    const compiledTemplate = PHYSJS_ENTRIES.find((entry) => entry.key === 'be-16')!;
+    const compiledWithNext = [...PHYSJS_ENTRIES, { ...compiledTemplate, key: `be-${next}`, bridgeId: `be-${next}` }];
+    expect(physjsManifestProblems({ manifest: withKey(next), bridges: carriers, compiledEntries: compiledWithNext }).join('\n')).not.toMatch(
+      new RegExp(`'be-${next}'`),
+    );
     expect(physjsAheadOfCatalog(`be-${gap}`, keysOf(withKey(gap)))).toBe(false);
     expect(physjsManifestProblems({ manifest: withKey(gap), bridges: carriers }).join('\n')).toMatch(new RegExp(`'be-${gap}' does not resolve to a bridge`));
     const typo = next * 10;
@@ -440,5 +478,90 @@ describe('vendored PhysJS manifest', () => {
     }
     const be36 = BRIDGE_EQUATIONS.find((entry) => entry.id === 36);
     expect(be36?.name).toBe('MOND - Dark Matter Interpolation Function (TeVeS relativistic MOND)');
+  });
+});
+
+describe('fidelity is derived from what checks the key, never hand-set', () => {
+  it('a key the sanity file instantiates is sanity-lemmas; a reviewed catalog row is reviewed-manifest; a key ahead of the catalog is unreviewed', () => {
+    expect(physjsFormalRef('ab-pendulum-linear').fidelity).toBe('sanity-lemmas');
+    expect(physjsFormalRef('be-16').fidelity).toBe('reviewed-manifest');
+    const ahead = manifest.entries.map((entry) => entry.key).filter((key) => physjsAheadOfCatalog(key));
+    expect(ahead.length).toBeGreaterThan(0);
+    for (const key of ahead) expect(physjsFormalRef(key).fidelity, key).toBe('unreviewed');
+    for (const key of ahead) {
+      expect(deriveEvidence({ formalRef: physjsFormalRef(key) }, NO_PASSING_WITNESSES).has('formally-proved'), key).toBe(false);
+    }
+  });
+
+  it('the structural checks run for a key ahead of the catalog: a wrong compiled theorem, and a theorem with no Lean file', () => {
+    const ahead = manifest.entries.find((entry) => physjsAheadOfCatalog(entry.key))!;
+    const compiled = [...PHYSJS_ENTRIES].map((entry) =>
+      entry.key === ahead.key ? { ...entry, theorem: 'PhysJS.Wrong.theorem', axioms: ['sorryAx'], covers: 'nonsense' } : entry,
+    );
+    expect(physjsManifestProblems({ manifest, bridges: carriers, compiledEntries: compiled }).join('\n')).toMatch(
+      new RegExp(`compiled entry for '${ahead.key}' disagrees with the vendored manifest`),
+    );
+    const noFile = {
+      ...manifest,
+      entries: manifest.entries.map((entry) => (entry.key === ahead.key ? { ...entry, theorem: 'PhysJS.NoSuchFile.theorem' } : entry)),
+    };
+    expect(physjsManifestProblems({ manifest: noFile, bridges: carriers }).join('\n')).toMatch(
+      /manifest theorem 'PhysJS.NoSuchFile.theorem' has no Lean file/,
+    );
+  });
+
+  it('an axiom outside propext, Classical.choice and Quot.sound is a problem on every statement, nested ones included', () => {
+    const withSorry = (key: string, field?: string) => ({
+      ...manifest,
+      entries: manifest.entries.map((entry) => {
+        if (entry.key !== key) return entry;
+        if (field === undefined) return { ...entry, axioms: [...entry.axioms, 'sorryAx'] };
+        const nested = entry[field] as { axioms: readonly string[] };
+        return { ...entry, [field]: { ...nested, axioms: [...nested.axioms, 'sorryAx'] } };
+      }),
+    });
+    expect(physjsManifestProblems({ manifest: withSorry('be-16'), bridges: carriers }).join('\n')).toMatch(
+      /'be-16' axioms \[propext, Classical.choice, Quot.sound, sorryAx\] are not a subset of/,
+    );
+    const ahead = manifest.entries.find((entry) => physjsAheadOfCatalog(entry.key))!.key;
+    expect(physjsManifestProblems({ manifest: withSorry(ahead), bridges: carriers }).join('\n')).toMatch(new RegExp(`'${ahead}' axioms .* are not a subset of`));
+    const host = nestedRows[0]!;
+    expect(physjsManifestProblems({ manifest: withSorry(host.entry.key, host.statement.name), bridges: carriers }).join('\n')).toMatch(
+      new RegExp(`${host.statement.name} axioms for '${host.entry.key}' .* are not a subset of`),
+    );
+    // The same list on a compiled copy and on the manifest agrees by construction; the allow-list is the guard.
+    const compiled = [...PHYSJS_ENTRIES].map((entry) => (entry.key === 'be-16' ? { ...entry, axioms: [...entry.axioms, 'sorryAx'] } : entry));
+    expect(physjsManifestProblems({ manifest: withSorry('be-16'), bridges: carriers, compiledEntries: compiled }).join('\n')).toMatch(/sorryAx/);
+  });
+
+  it('a reviewed row whose manifest text changed derives unreviewed, and the gate names it', () => {
+    // The compiled copy is what `physjsFormalRef` hashes; mutate the covers
+    // line of a reviewed catalog key and the fidelity drops.
+    const reworded = {
+      ...manifest,
+      entries: manifest.entries.map((entry) => (entry.key === 'be-16' ? { ...entry, covers: `${entry.covers} (reworded)` } : entry)),
+    };
+    const compiled = [...PHYSJS_ENTRIES].map((entry) => (entry.key === 'be-16' ? { ...entry, covers: `${entry.covers} (reworded)` } : entry));
+    expect(physjsFidelity('be-16')).toBe('reviewed-manifest');
+    expect(physjsFidelity('be-16', compiled)).toBe('unreviewed');
+    expect(physjsFidelity('ab-pendulum-linear')).toBe('sanity-lemmas');
+    expect(physjsFidelity('ab-pendulum-linear', compiled.map((entry) => (entry.key === 'ab-pendulum-linear' ? { ...entry, kind: 'property' as const } : entry)))).toBe(
+      'unreviewed',
+    );
+    const stale = carriers.map((bridge) =>
+      bridge.id === 'be-16' ? { ...bridge, formalRef: { ...bridge.formalRef!, fidelity: physjsFidelity('be-16', compiled) } } : bridge,
+    );
+    expect(physjsManifestProblems({ manifest: reworded, bridges: stale, compiledEntries: compiled }).join('\n')).toMatch(
+      /bridge 'be-16' formalRef is unreviewed/,
+    );
+  });
+
+  it('deriveEvidence does not light a proof tag for a reference whose axioms include sorryAx', () => {
+    const reviewed = physjsFormalRef('be-16');
+    expect(deriveEvidence({ formalRef: reviewed }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
+    const holed = { ...reviewed, axioms: [...reviewed.axioms, 'sorryAx'] };
+    expect([...deriveEvidence({ formalRef: holed }, NO_PASSING_WITNESSES)]).toEqual(['proposed']);
+    const property = { ...holed, kind: 'property' as const };
+    expect([...deriveEvidence({ formalRef: property }, NO_PASSING_WITNESSES)]).toEqual(['proposed']);
   });
 });
