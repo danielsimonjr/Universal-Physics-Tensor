@@ -37,6 +37,19 @@ export type TopologyAxis = 'trivial' | 'chern' | 'winding' | 'z2' | 'berry';
 /** Quantum statistics (the 7th axis — orthogonal to the other six). @internal */
 export type StatisticsAxis = 'bosonic' | 'fermionic' | 'anyonic' | 'parastatistic';
 
+/** The scale values, the one list the registry row and every typed consumer read. @internal */
+export const SCALE_AXIS_VALUES: readonly ScaleAxis[] = ['quantum', 'mesoscopic', 'classical', 'cosmological'];
+/** The force values. @internal */
+export const FORCE_AXIS_VALUES: readonly ForceAxis[] = ['gravitational', 'electromagnetic', 'weak', 'strong', 'emergent'];
+/** The information-measure values. @internal */
+export const INFORMATION_AXIS_VALUES: readonly InformationAxis[] = ['von-neumann', 'shannon', 'kolmogorov', 'discord'];
+/** The symmetry values. @internal */
+export const SYMMETRY_AXIS_VALUES: readonly SymmetryAxis[] = ['poincare', 'gauge', 'conformal', 'susy', 'emergent'];
+/** The topology values. @internal */
+export const TOPOLOGY_AXIS_VALUES: readonly TopologyAxis[] = ['trivial', 'chern', 'winding', 'z2', 'berry'];
+/** The statistics values. @internal */
+export const STATISTICS_AXIS_VALUES: readonly StatisticsAxis[] = ['bosonic', 'fermionic', 'anyonic', 'parastatistic'];
+
 /** A classification-axis specification. @internal */
 export interface AxisSpec {
   /** The axis key, matching the `RegimeAttributes` field name. */
@@ -62,37 +75,37 @@ export interface AxisSpec {
 export const AXES: readonly AxisSpec[] = [
   {
     name: 'scale',
-    values: ['quantum', 'mesoscopic', 'classical', 'cosmological'],
+    values: SCALE_AXIS_VALUES,
     gated: true,
     description: 'Length/energy-scale regime (quantum → cosmological).',
   },
   {
     name: 'force',
-    values: ['gravitational', 'electromagnetic', 'weak', 'strong', 'emergent'],
+    values: FORCE_AXIS_VALUES,
     gated: true,
     description: 'Fundamental (or emergent effective) interaction.',
   },
   {
     name: 'information',
-    values: ['von-neumann', 'shannon', 'kolmogorov', 'discord'],
+    values: INFORMATION_AXIS_VALUES,
     gated: false,
     description: 'Information measure — authored, not gated (see discovery precision calibration).',
   },
   {
     name: 'symmetry',
-    values: ['poincare', 'gauge', 'conformal', 'susy', 'emergent'],
+    values: SYMMETRY_AXIS_VALUES,
     gated: false,
     description: 'Symmetry class — first-class attribute; ungated until coverage + audit earn it.',
   },
   {
     name: 'topology',
-    values: ['trivial', 'chern', 'winding', 'z2', 'berry'],
+    values: TOPOLOGY_AXIS_VALUES,
     gated: false,
     description: 'Topological invariant type — populates the rank-6 Topology axis; ungated until audit.',
   },
   {
     name: 'statistics',
-    values: ['bosonic', 'fermionic', 'anyonic', 'parastatistic'],
+    values: STATISTICS_AXIS_VALUES,
     gated: false,
     description: 'Quantum statistics (the 7th axis). NOTE: spin-statistics ties it to symmetry — the audit must confirm it discriminates independently before gating.',
   },

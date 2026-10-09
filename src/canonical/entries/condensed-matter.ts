@@ -136,7 +136,7 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
   // ── Fermi gas + collective frequencies (√-laws: dimensional-only,
   // engine-derived fractional monomials) ────────────────────────────────────
   l1({ name: 'fermi-energy', dim: ENERGY }, [
-    { name: 'reduced-planck-constant', dim: REDUCED_PLANCK },
+    { name: 'hbar', dim: REDUCED_PLANCK },
     { name: 'mass', dim: MASS },
     { name: 'carrier-density', dim: CARRIER_DENSITY },
   ], {
@@ -152,7 +152,7 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
     partnerBridges: [],
   }),
   l1({ name: 'fermi-velocity', dim: VELOCITY }, [
-    { name: 'reduced-planck-constant', dim: REDUCED_PLANCK },
+    { name: 'hbar', dim: REDUCED_PLANCK },
     { name: 'mass', dim: MASS },
     { name: 'carrier-density', dim: CARRIER_DENSITY },
   ], {
@@ -170,7 +170,7 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
   l1({ name: 'plasma-frequency', dim: FREQUENCY }, [
     { name: 'carrier-density', dim: CARRIER_DENSITY },
     { name: 'charge', dim: CHARGE },
-    { name: 'vacuum-permittivity', dim: VACUUM_PERMITTIVITY },
+    { name: 'epsilon_0', dim: VACUUM_PERMITTIVITY },
     { name: 'mass', dim: MASS },
   ], {
     id: 'CE-plasma-frequency',
@@ -181,7 +181,7 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
     scalarAst: pow(
       op('/', [
         op('*', [sym('carrier-density', CARRIER_DENSITY), pow(sym('charge', CHARGE), '2')]),
-        op('*', [sym('vacuum-permittivity', VACUUM_PERMITTIVITY), sym('mass', MASS)]),
+        op('*', [sym('epsilon_0', VACUUM_PERMITTIVITY), sym('mass', MASS)]),
       ]),
       '0.5',
     ),

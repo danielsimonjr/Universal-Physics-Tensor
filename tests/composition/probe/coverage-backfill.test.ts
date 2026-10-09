@@ -405,11 +405,9 @@ describe('falsify / limits / residual / fit extra branches', () => {
     const r = runFalsification({
       expr,
       skipDimensional: true,
-      observationalBoundIds: ['bound-1'],
     });
-    expect(r.records.some((b) => b.battery === 'observational-bounds' && b.outcome === 'inconclusive')).toBe(
-      true,
-    );
+    // The batteries that ran, and no battery that is inconclusive by construction.
+    expect(r.records.map((b) => b.battery)).toEqual(['finiteness', 'limits']);
     const empty = datasetFromRows([], 'y', 'falsification-only');
     const lim = checkDeclaredLimit(expr, empty, 1, { id: 'l', regime: { a: 'b' } }, true);
     expect(lim.detail).toMatch(/no observations/);

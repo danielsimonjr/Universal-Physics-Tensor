@@ -1216,7 +1216,7 @@ function admitCorrection(
 }
 
 /** Infix rendering of a scalar ExprNode for reports. */
-export function exprToInfix(e: ExprNode): string {
+function exprToInfix(e: ExprNode): string {
   if (e.kind === 'symbol') return e.name;
   if (e.kind === 'op') {
     const parts = e.args.map((a) => (a.kind === 'op' && a.op !== '^' ? `(${exprToInfix(a)})` : exprToInfix(a)));

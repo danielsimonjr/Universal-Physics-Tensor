@@ -85,6 +85,14 @@ export interface RegimeCheck {
   readonly violated: readonly RegimeInequality[];
   /** NOT checked: the π-group value was absent or non-finite. */
   readonly unchecked: readonly RegimeInequality[];
+  /**
+   * How many inequalities a finite value reached. `ok: true` with
+   * `checked: 0` is a VACUOUS pass: the regime states no inequality (the
+   * plasma, piezoelectricity and Tolman registrations), so nothing was
+   * checked and nothing held. That is a different fact from a pass over a
+   * non-empty list, and a coverage count must not add it (AGENTS law 4).
+   */
+  readonly checked: number;
 }
 
 function satisfies(value: number, ineq: RegimeInequality): boolean {
@@ -105,9 +113,11 @@ function satisfies(value: number, ineq: RegimeInequality): boolean {
  *
  * A group with no supplied value, or a non-finite one, is UNCHECKED — not
  * violated and not satisfied. See {@link RegimeCheck} for why the distinction
- * is load-bearing. A regime with no inequalities returns `true`: there was
- * nothing to check and nothing went unchecked, so the claim "every inequality
- * was checked and satisfied" is vacuously true rather than unknown.
+ * is load-bearing. A regime with no inequalities returns `true` with
+ * `checked: 0`: there was nothing to check and nothing went unchecked, so the
+ * claim "every inequality was checked and satisfied" is vacuously true rather
+ * than unknown, and `checked` says that nothing was checked. A caller that
+ * counts coverage reads `checked`, never `ok` alone.
  *
  * A violation outranks an absence: once one inequality is CHECKED and fails,
  * the regime does not hold, whatever the unmeasured coordinates would say.
@@ -120,16 +130,18 @@ export function regimeHolds(
 ): RegimeCheck {
   const violated: RegimeInequality[] = [];
   const unchecked: RegimeInequality[] = [];
+  let checked = 0;
   for (const ineq of regime.inequalities) {
     const value = groupValues[ineq.group];
     if (typeof value !== 'number' || !Number.isFinite(value)) {
       unchecked.push(ineq);
-    } else if (!satisfies(value, ineq)) {
-      violated.push(ineq);
+      continue;
     }
+    checked += 1;
+    if (!satisfies(value, ineq)) violated.push(ineq);
   }
   const ok = violated.length > 0 ? false : unchecked.length > 0 ? 'unknown' : true;
-  return { ok, violated, unchecked };
+  return { ok, violated, unchecked, checked };
 }
 
 // ── Sprint 2: regime algebra and admission ──────────────────────────────────

@@ -3,7 +3,8 @@
  * (Direction 2).
  *
  * `proposeLinkCandidates` surfaces cross-cluster quantity pairs that share a
- * dimension (132 → 36 → ~3) and hands the raw coincidences to a human. This
+ * dimension and hands the raw coincidences to a human (the counts at a given
+ * catalog are measured by the tests and recorded in NOTES.md). This
  * module closes the loop: it HYPOTHESIZES each candidate identification
  * `a ≡ b` and tests it with the machinery that already exists —
  *
@@ -38,8 +39,8 @@ import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS, effectiveAttributes } from './compose.js';
 import { GATE_AXES } from './axes.js';
 import type { RegimeAttributes } from './quantity.js';
-import { forwardClosure } from './identifiability.js';
-import { retrodict, forwardEvaluate } from './retrodiction.js';
+import { classifyIdentifiability, forwardClosure } from './identifiability.js';
+import { retrodict, retrodictNode, forwardEvaluate } from './retrodiction.js';
 import { proposeLinkCandidates } from './bridge-analysis.js';
 import type { LinkCandidate } from './bridge-analysis.js';
 import { M_SUN_KG } from '../core/constants.js';
@@ -112,13 +113,16 @@ export interface VettedCandidate {
    */
   readonly unlocksFromAnchor: readonly string[];
   /**
-   * Retrodiction over the graph WITH the hypothesized identification stays
-   * all-consistent (introduces no numerical contradiction in the
-   * anchor-reachable subgraph). The strong filter.
+   * Retrodiction over the graph WITH the hypothesized identification creates
+   * no numerical contradiction in the anchor-reachable subgraph. The strong
+   * filter. A node whose routes already disagree in the base graph is the
+   * graph's finding (`retrodict` reports it) and does not make a candidate
+   * inconsistent; only a disagreement the hypothesis CREATES does.
    */
   readonly numericallyConsistent: boolean;
-  /** Nodes that became inconsistent under the identification (the
-   *  falsification, when `numericallyConsistent` is false). Sorted. */
+  /** Nodes that became inconsistent under the identification and were not
+   *  inconsistent in the base graph (the falsification, when
+   *  `numericallyConsistent` is false). Sorted. */
   readonly inconsistentNodes: readonly string[];
   /**
    * Orders of magnitude between the representative values of a and b
@@ -385,6 +389,66 @@ export function buildDiscoveryContext(
 }
 
 /**
+ * The quantities whose value can depend on one of `seeds`: the seeds, every
+ * `to` of an identification from the set, and every target of an edge with a
+ * source in the set, to a fixed point. An over-approximation (an edge that
+ * does not fire still lists its target), which is the safe side: a target
+ * left out would keep its base retrodiction unexamined.
+ */
+function dependents(
+  edges: readonly BridgeEdge[],
+  seeds: readonly string[],
+  idents: readonly QuantityIdentification[],
+): Set<string> {
+  const set = new Set<string>(seeds);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const id of idents) {
+      if (set.has(id.from) && !set.has(id.to)) {
+        set.add(id.to);
+        changed = true;
+      }
+    }
+    for (const e of edges) {
+      if (set.has(e.target.name)) continue;
+      if (e.sources.some((s) => set.has(s.name))) {
+        set.add(e.target.name);
+        changed = true;
+      }
+    }
+  }
+  return set;
+}
+
+/**
+ * The nodes the hypothesis `a ≡ b` makes inconsistent that the base graph did
+ * not already have: inconsistent(hypothesis) minus inconsistent(base). Only a
+ * node downstream of `a` or `b` can change, so only those nodes are
+ * classified and retrodicted, with the same over-determined rule and the
+ * same tolerance `retrodict` applies to the whole graph. Sorted.
+ */
+function newInconsistencies(
+  edges: readonly BridgeEdge[],
+  groundTruth: Readonly<Record<string, number>>,
+  anchor: readonly string[],
+  candidate: LinkCandidate,
+  withHyp: readonly QuantityIdentification[],
+  baseInconsistentNodes: readonly string[],
+): string[] {
+  const base = new Set(baseInconsistentNodes);
+  const nodes: string[] = [];
+  for (const target of [...dependents(edges, [candidate.a, candidate.b], withHyp)].sort()) {
+    if (base.has(target)) continue;
+    const classified = classifyIdentifiability(edges, anchor, target, { identifications: withHyp });
+    if (classified.verdict !== 'over-determined') continue;
+    const result = retrodictNode(edges, groundTruth, target, { identifications: withHyp });
+    if (result.outcome === 'inconsistent') nodes.push(target);
+  }
+  return nodes;
+}
+
+/**
  * Vet one link candidate by hypothesizing the identification a≡b and
  * measuring its structural and numerical consequences. See module docs.
  *
@@ -422,7 +486,6 @@ export function vetInContext(
     comps,
     closureBase,
     attributesByName,
-    baseNumericallyConsistent,
     baseInconsistentNodes,
   } = ctx;
 
@@ -534,28 +597,31 @@ export function vetInContext(
     comps.has(candidate.b) &&
     comps.get(candidate.a) !== comps.get(candidate.b);
 
+  // Neither endpoint in the anchor closure means the identification cannot
+  // fire: `forwardClosure` copies a value across `a ≡ b` only from a
+  // determinable side. The hypothesis closure is then the base closure, and no
+  // value in the graph moves, so neither closure nor retrodiction is recomputed
+  // (9.0.0 audit §4 C9: 4004 of 4196 catalog candidates are this case).
+  const touchesClosure = closureBase.has(candidate.a) || closureBase.has(candidate.b);
+
   // Closure unlock: forward closure from the anchor, with vs without. The base
   // closure is candidate-invariant (ctx); only the hypothesis closure is fresh.
-  const closureHyp = forwardClosure(edges, anchor, withHyp);
+  const closureHyp = touchesClosure ? forwardClosure(edges, anchor, withHyp) : closureBase;
   const unlocksFromAnchor = [...closureHyp]
     .filter((q) => !closureBase.has(q))
     .sort();
 
-  // Numeric: retrodiction must stay all-consistent under the hypothesis.
-  // Neither endpoint in the anchor closure means the identification cannot
-  // fire, so the report is the base one. A copy, because a caller may sort it.
-  const touchesClosure = closureBase.has(candidate.a) || closureBase.has(candidate.b);
-  const report = touchesClosure
-    ? retrodict(edges, groundTruth, { identifications: withHyp })
-    : undefined;
-  const numericallyConsistent = report === undefined ? baseNumericallyConsistent : report.allConsistent;
-  const inconsistentNodes =
-    report === undefined
-      ? [...baseInconsistentNodes]
-      : report.results
-          .filter((r) => r.outcome === 'inconsistent')
-          .map((r) => r.target)
-          .sort();
+  // Numeric: the hypothesis must not CREATE a disagreement. A node whose
+  // routes already disagree in the base graph is the graph's finding
+  // (`retrodict` reports it), not this candidate's, so the attribution is
+  // inconsistent(hypothesis) minus inconsistent(base) (9.0.0 audit §4 C4).
+  // Only a target downstream of `a` or `b` can change under the hypothesis;
+  // every other target's retrodiction is the base one, so only those targets
+  // are retrodicted (§4 C9).
+  const inconsistentNodes = touchesClosure
+    ? newInconsistencies(edges, groundTruth, anchor, candidate, withHyp, baseInconsistentNodes)
+    : [];
+  const numericallyConsistent = inconsistentNodes.length === 0;
 
   // Verdict precedence: a magnitude clash is the most decisive, most
   // interpretable falsification, checked before the graph contradiction;

@@ -20,7 +20,7 @@ import { BRIDGE_RHS_BY_ID, parseBridgeId } from '../../src/bridges/rhs-registry.
 import { classifyLinkage } from '../../src/canonical/linkage.js';
 import { normalForm } from '../../src/canonical/normal-form.js';
 import { CANONICAL_EQUATIONS, canonicalById } from '../../src/canonical/registry.js';
-import { classifyStructure } from '../../src/canonical/structural.js';
+import { bridgeShapes, classifyStructure } from '../../src/canonical/structural.js';
 import { matchChain } from '../../src/composition/chain-match.js';
 import { sym } from '../../src/dimensional/ast-builders.js';
 import { ENERGY } from '../../src/dimensional/types.js';
@@ -223,5 +223,22 @@ describe('structural classifier', () => {
     const chain = matchChain(rhs!, ['be-16']);
     expect(chain.kind).toBe('restatement');
     expect(relation.restates).toBe(true);
+  });
+});
+
+describe('the bridge shapes are computed once (9.0.0 audit §4 Low)', () => {
+  // A chain classification re-validated and re-hashed every BRIDGE_RHS_BY_ID entry per call
+  // (2.6 ms a call); `scanLinkages` kept its own copy of the same precomputation. One memoized
+  // table serves both.
+  it('bridgeShapes is memoized and covers every bridge RHS with its validated dimension and hash', () => {
+    const shapes = bridgeShapes();
+    expect(bridgeShapes()).toBe(shapes);
+    expect([...shapes.keys()].sort((a, b) => a - b)).toEqual([...BRIDGE_RHS_BY_ID.keys()].sort((a, b) => a - b));
+    for (const [id, rhs] of BRIDGE_RHS_BY_ID) {
+      const shape = shapes.get(id)!;
+      const v = validate(rhs);
+      expect(shape.dim, String(id)).toEqual(v.ok ? v.inferredDimension : null);
+      expect(shape.normal, String(id)).toBe(normalForm(rhs));
+    }
   });
 });

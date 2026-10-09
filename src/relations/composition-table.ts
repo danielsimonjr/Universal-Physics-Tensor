@@ -15,16 +15,16 @@
  * The ninth cell, `approximation ∘ exact-equivalence = approximation`, is the
  * reviewed widening of `docs/planning/ADR-transported-norm-composition.md`. The
  * table stays a pure function of relation types: the cell says what a route
- * WOULD assert, and `boundPath` (`./path-bound.ts`) decides whether a given route
- * carries a bound, which it does only when the exact bridge declares a norm
- * transport from the norm the approximation states.
+ * WOULD assert, and `boundPath` (`src/atlas/path-bound.ts`) decides whether a
+ * given route carries a bound, which it does only when the exact bridge declares
+ * a norm transport from the norm the approximation states.
  *
  * Two cells the implementation plan asserts are NOT defined here, on the
  * authority of the design note (§0 and §2.2 item 5):
  *
  * - `exact-equivalence ∘ approximation`. An exact equivalence contributes
  *   `IDENTITY_BOUND` only *in the norm a given bridge states* (see
- *   `./error-algebra.ts`); with the exact edge first, that norm would have to be
+ *   `src/atlas/error-algebra.ts`); with the exact edge first, that norm would have to be
  *   pulled back through the map, which the ADR leaves undefined (its §3).
  * - `structural-analogy ∘ structural-analogy`. Analogy is not transitive: the
  *   shared structure can dilute to nothing across a chain.

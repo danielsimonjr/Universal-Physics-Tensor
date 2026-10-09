@@ -55,9 +55,9 @@ describe('closed-form evaluation', () => {
         'work-done-by-system': 40,
       }),
     ).toMatchObject({ kind: 'value', value: 60 });
+    // k_B is a baked constant of the entry, not an input (9.0.0 audit §4 C10).
     const factor = evaluateRelation('CE-boltzmann-factor', {
       'state-energy': K_B_SI,
-      'boltzmann-constant': K_B_SI,
       temperature: 1,
     });
     expect(factor.kind).toBe('value');

@@ -222,6 +222,21 @@ function groupBound(edge: BridgeEdge, inputs: Record<string, number>): boolean {
 }
 
 /**
+ * The unset-coefficient gate: an edge whose coefficient is unset and whose
+ * group is not a finite input throws {@link CoefficientUnsetError}. This is
+ * the one rule; `evaluateEdge` applies it to the edge it is given, and a
+ * composed edge's evaluator applies it to each operand before calling it, so
+ * a monomial times an absent 1 never reaches a caller as a number.
+ *
+ * @internal
+ */
+export function assertCoefficientSet(edge: BridgeEdge, inputs: Record<string, number>): void {
+  if (edge.coefficientUnset === true && !groupBound(edge, inputs)) {
+    throw new CoefficientUnsetError(edge.id, edge.label);
+  }
+}
+
+/**
  * Composition refused: the composed sources would contain a duplicate
  * quantity NAME across operands without a recorded disposition (v0.11
  * namespacing gate, Option D — pure name-collision rule per the Adam
@@ -248,15 +263,16 @@ export class CompositionAliasError extends Error {
  * the composite is known to be false. The message names both edge ids AND both
  * relation types, so the refused pair is identifiable without the table.
  *
- * Thrown ONLY when both operands carry a `relation`. An edge with no relation
- * overlay composes exactly as it did before Atlas Phase 1.
+ * Thrown when both operands carry a `relation` and the table is silent, or
+ * when both carry a `regime` of different families (this layer does not state
+ * where a cross-family chain applies). An edge with no relation overlay and no
+ * regime composes exactly as it did before Atlas Phase 1.
  *
- * `@internal`, not `@public`, for the same reason the rest of the Atlas overlay
- * is: nothing atlas-related joins the published surface before ROADMAP Phase 6.
- * It is reachable from the `src/composition/index.ts` barrel, which is what
- * internal consumers and tests use. Promote it in Phase 6 together with the
- * overlay fields, and update `tests/api/public-surface.test.ts`'s snapshot in
- * the same commit — that snapshot caught this addition, which is it working.
+ * `@internal`, not `@public`: nothing atlas-related joins the published
+ * surface before ROADMAP Phase 6. It is reachable from the
+ * `src/composition/index.ts` barrel, which is what internal consumers and
+ * tests use. Promoting it is a public-surface change and goes through
+ * `tests/api/public-surface.test.ts` like any other.
  *
  * @internal
  */
@@ -348,8 +364,6 @@ export function evaluateEdge(
       `${edge.id}: inputs violate validity domain (${edge.domain.description})`,
     );
   }
-  if (edge.coefficientUnset === true && !groupBound(edge, bound)) {
-    throw new CoefficientUnsetError(edge.id, edge.label);
-  }
+  assertCoefficientSet(edge, bound);
   return edge.evaluate(bound);
 }

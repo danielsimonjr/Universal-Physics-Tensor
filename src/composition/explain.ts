@@ -309,6 +309,8 @@ function buildSummary(
   encodedMatchesMonomial: boolean,
   unsetSentence: string | undefined,
   even: ReadonlySet<string>,
+  /** The identification that determines the target when no edge does. */
+  viaIdentification: QuantityIdentification | undefined,
 ): string {
   const known = knownNames.length
     ? `{${knownNames.join(', ')}}`
@@ -334,12 +336,22 @@ function buildSummary(
         s += ` Knowing one of {${id.blockingFrontier.join(', ')}} would unblock it.`;
       }
       break;
-    case 'exactly-determined':
-      s = `'${target}' is determined from ${known} via ${derivations[0]?.edge} (${derivations[0]?.label}).`;
+    case 'exactly-determined': {
+      // No edge derives a target the identification alone determines; the
+      // sentence then names the identification, not an undefined edge
+      // (9.0.0 audit §4 C11).
+      const first = derivations[0];
+      s =
+        first !== undefined
+          ? `'${target}' is determined from ${known} via ${first.edge} (${first.label}).`
+          : viaIdentification !== undefined
+            ? `'${target}' is determined from ${known} by the identification ${viaIdentification.from} ≡ ${viaIdentification.to} (${viaIdentification.rationale}).`
+            : `'${target}' is determined from ${known}.`;
       if (recoveredValue !== undefined) {
         s += ` Recovered value: ${formatQuantity(recoveredValue)}.`;
       }
       break;
+    }
     case 'over-determined':
     default: {
       // Independence is counted by BRIDGE, not by edge: be-42 and be-42-via-rs
@@ -608,6 +620,13 @@ export function explainQuantity(
           ? 'sourced'
           : undefined;
 
+  // A target with no derivation that is still determinable is reached by an
+  // identification whose `from` the known set determines.
+  const viaIdentification =
+    identifiability.verdict === 'exactly-determined' && derivations.length === 0
+      ? identifications.find((ident) => ident.to === target && determinable.has(ident.from))
+      : undefined;
+
   const summary = buildSummary(
     target,
     identifiability,
@@ -620,6 +639,7 @@ export function explainQuantity(
     encodedAgrees,
     unsetSentence,
     magnitudeNames(firedEdges),
+    viaIdentification,
   );
   const refusalSentence =
     refusals === undefined || recoveredValue !== undefined

@@ -12,8 +12,12 @@
 import { describe, it, expect } from 'vitest';
 import {
   classifyLinkage,
+  numericalRecovery,
   scanLinkages,
 } from '../../src/canonical/linkage.js';
+import { sym } from '../../src/dimensional/ast-builders.js';
+import { LENGTH, MASS } from '../../src/dimensional/types.js';
+import type { ExprNode } from '../../src/dimensional/validator.js';
 import {
   canonicalById,
   CANONICAL_EQUATIONS,
@@ -103,5 +107,31 @@ describe('bridge↔canonical linkage', () => {
       }
     }
     expect(scanLinkages()).toEqual(bruteForce);
+  });
+});
+
+describe('numericalRecovery samples each variable on its own base (9.0.0 audit §4 C3)', () => {
+  const op = (o: '+' | '*' | '/', args: ExprNode[]): ExprNode => ({ kind: 'op', op: o, args });
+  const dimensionless = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+  const x = sym('x', LENGTH);
+  const y = sym('y', LENGTH);
+
+  it('x + 2y against x + y is NOT a constant ratio: the recovery must report a real spread', () => {
+    // With every variable scaled by one common factor s, (x + 2y)/(x + y) is the same number at
+    // every sample, so the old recovery reported maxRelErr ≈ 1e-16 and `tested: true` for two
+    // different functions. Per-variable bases change the ratio between samples.
+    const r = numericalRecovery(op('+', [x, op('*', [sym('2', dimensionless), y])]), op('+', [x, y]));
+    expect(r.tested).toBe(true);
+    expect(r.maxRelErr).toBeGreaterThan(1e-3);
+  });
+
+  it('control: 2·x·y against x·y IS a constant ratio, and so is one that names M for mass', () => {
+    const r = numericalRecovery(op('*', [sym('2', dimensionless), op('*', [x, y])]), op('*', [x, y]));
+    expect(r.tested).toBe(true);
+    expect(r.maxRelErr).toBeLessThan(1e-12);
+    // `M` and `mass` are one quantity and share a sample, so the ratio is exactly constant.
+    const same = numericalRecovery(op('/', [sym('mass', MASS), x]), op('/', [sym('M', MASS), x]));
+    expect(same.tested).toBe(true);
+    expect(same.maxRelErr).toBeLessThan(1e-12);
   });
 });

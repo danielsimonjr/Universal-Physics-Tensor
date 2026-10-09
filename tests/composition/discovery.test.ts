@@ -97,21 +97,48 @@ describe('vetLinkCandidate — controlled verdicts', () => {
     expect(r.score).toBeLessThan(0);
   });
 
-  it('an identification outside the anchor closure keeps a base inconsistency', () => {
-    // t is already over-determined from x. p and q are not reachable from x,
-    // so identifying them cannot clear or create that inconsistency.
-    const edges = [
+  describe('a base-graph inconsistency is the graph\'s fact, not every candidate\'s (9.0.0 audit §4 C4)', () => {
+    // t is already over-determined from x and its two routes disagree (2x vs 3x)
+    // before any hypothesis. That is a finding about the base graph, which
+    // `retrodict` reports. A candidate is `contradictory` only for an
+    // inconsistency the HYPOTHESIS creates: inconsistent(hyp) minus
+    // inconsistent(base).
+    const base = [
       edge('e1', ['x'], 't', (i) => i['x'] * 2),
       edge('e2', ['x'], 't', (i) => i['x'] * 3),
-      edge('e3', ['p'], 'r', (i) => i['p']),
     ];
-    const r = vetLinkCandidate(edges, cand('p', 'q'), {
-      groundTruth: { x: 1 },
-      ...noBase,
+
+    it('outside the anchor closure the identification cannot fire, so it is inert, not contradictory', () => {
+      const edges = [...base, edge('e3', ['p'], 'r', (i) => i['p'])];
+      expect(retrodict(edges, { x: 1 }, noBase).allConsistent).toBe(false); // the base fact
+      const r = vetLinkCandidate(edges, cand('p', 'q'), { groundTruth: { x: 1 }, ...noBase });
+      expect(r.numericallyConsistent).toBe(true);
+      expect(r.inconsistentNodes).toEqual([]);
+      expect(r.verdict).toBe('inert');
     });
-    expect(r.numericallyConsistent).toBe(false);
-    expect(r.inconsistentNodes).toContain('t');
-    expect(r.verdict).toBe('contradictory');
+
+    it('inside the closure, a hypothesis that adds no disagreement is not contradictory either', () => {
+      // x → a; b → y. a≡b only unlocks y; t's disagreement is untouched.
+      const edges = [...base, edge('e3', ['x'], 'a', (i) => i['x'] * 2), edge('e4', ['b'], 'y', (i) => i['b'] * 3)];
+      const r = vetLinkCandidate(edges, cand('a', 'b'), { groundTruth: { x: 1 }, ...noBase });
+      expect(r.numericallyConsistent).toBe(true);
+      expect(r.inconsistentNodes).toEqual([]);
+      expect(r.verdict).toBe('promising');
+    });
+
+    it('inside the closure, a hypothesis that creates a NEW disagreement is contradictory, and names only that node', () => {
+      // x → a → u (u = 20x); b → u (u = 5b). a≡b gives b = 2x, u = 10x ≠ 20x: new.
+      const edges = [
+        ...base,
+        edge('e3', ['x'], 'a', (i) => i['x'] * 2),
+        edge('e4', ['a'], 'u', (i) => i['a'] * 10),
+        edge('e5', ['b'], 'u', (i) => i['b'] * 5),
+      ];
+      const r = vetLinkCandidate(edges, cand('a', 'b'), { groundTruth: { x: 1 }, ...noBase });
+      expect(r.numericallyConsistent).toBe(false);
+      expect(r.inconsistentNodes).toEqual(['u']);
+      expect(r.verdict).toBe('contradictory');
+    });
   });
 
   it('INERT: consistent but a and b are already in one component', () => {

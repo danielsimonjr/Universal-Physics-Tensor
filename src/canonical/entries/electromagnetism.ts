@@ -377,7 +377,7 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'charge', dim: CHARGE },
     { name: 'acceleration', dim: ACCELERATION },
     { name: 'epsilon_0', dim: PERMITTIVITY },
-    { name: 'speed-of-light', dim: VELOCITY },
+    { name: 'c', dim: VELOCITY },
   ], {
     id: 'CE-larmor-power',
     prefactor: {
@@ -391,7 +391,7 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     epistemicStatus: 'scalar-up-to-constant',
     scalarAst: op('/', [
       op('*', [pow(sym('charge', CHARGE), '2'), pow(sym('acceleration', ACCELERATION), '2')]),
-      op('*', [sym('epsilon_0', PERMITTIVITY), pow(sym('speed-of-light', VELOCITY), '3')]),
+      op('*', [sym('epsilon_0', PERMITTIVITY), pow(sym('c', VELOCITY), '3')]),
     ]),
     regime: { scale: 'classical', force: 'electromagnetic' },
     assumptions: ['non-relativistic point charge'],

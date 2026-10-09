@@ -15,6 +15,7 @@
 
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { quietlySync } from './mathts-quiet.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 
@@ -127,23 +128,13 @@ function joinParts(parts: readonly string[], op: string): string | null {
 
 let cachedParse: MathtsFunctionsModule['parse'] | undefined;
 
-function quietlySync<T>(fn: () => T): T {
-  const origWarn = console.warn;
-  const origError = console.error;
-  const origWrite = process.stderr.write.bind(process.stderr);
-  console.warn = () => {};
-  console.error = () => {};
-  (process.stderr as { write: unknown }).write = () => true;
-  try {
-    return fn();
-  } finally {
-    console.warn = origWarn;
-    console.error = origError;
-    (process.stderr as { write: unknown }).write = origWrite;
-  }
-}
-
-/** Load `parse` at the call. This walk does not add its own static import. */
+/**
+ * Load `parse` at the call. This walk does not add its own static import.
+ * The load AND the first parse run inside the one console-silencing window
+ * this module opens (`mathts-quiet.ts` states the invariant): the peer's
+ * WASM-fallback chatter fires lazily on first use, so the smoke parse is that
+ * first use, and every later parse runs with the console untouched.
+ */
 function mathTsParse(): MathtsFunctionsModule['parse'] {
   if (cachedParse !== undefined) return cachedParse;
   let url: string;
@@ -154,14 +145,17 @@ function mathTsParse(): MathtsFunctionsModule['parse'] {
       `scalar symbols require @danielsimonjr/mathts-functions (${err instanceof Error ? err.message : String(err)})`,
     );
   }
-  const loaded = quietlySync(() => {
+  const parse = quietlySync(() => {
     const require = createRequire(import.meta.url);
-    return require(fileURLToPath(url)) as MathtsFunctionsModule;
+    const loaded = require(fileURLToPath(url)) as MathtsFunctionsModule;
+    if (typeof loaded.parse !== 'function') {
+      throw new Error('@danielsimonjr/mathts-functions: no parse() export');
+    }
+    const bound = loaded.parse.bind(loaded);
+    bound('g0');
+    return bound;
   });
-  if (typeof loaded.parse !== 'function') {
-    throw new Error('@danielsimonjr/mathts-functions: no parse() export');
-  }
-  cachedParse = loaded.parse.bind(loaded);
+  cachedParse = parse;
   return cachedParse;
 }
 
@@ -179,7 +173,7 @@ export function scalarSymbolsFromMathTs(expr: ExprNode): ScalarSymbol[] {
   const meta = new Map<string, LeafMeta>();
   const rendered = renderSymbolQuery(expr, gensymOf, meta);
   if (rendered === null) return [];
-  const node = quietlySync(() => mathTsParse()(rendered));
+  const node = mathTsParse()(rendered);
   const seen = new Set<string>();
   const leaves: ScalarSymbol[] = [];
   for (const symbol of node.filter((candidate) => candidate.isSymbolNode === true)) {

@@ -2615,7 +2615,7 @@
               "args": [
                 {
                   "kind": "symbol",
-                  "name": "speed-of-light",
+                  "name": "c",
                   "dim": {
                     "L": 1,
                     "M": 0,
@@ -4728,7 +4728,7 @@
               "args": [
                 {
                   "kind": "symbol",
-                  "name": "vacuum-permittivity",
+                  "name": "epsilon_0",
                   "dim": {
                     "L": -3,
                     "M": -1,
@@ -4785,7 +4785,7 @@
       "args": [
         {
           "kind": "symbol",
-          "name": "boltzmann-constant",
+          "name": "k_B",
           "dim": {
             "L": 2,
             "M": 1,
@@ -4825,7 +4825,7 @@
           "args": [
             {
               "kind": "symbol",
-              "name": "boltzmann-constant",
+              "name": "k_B",
               "dim": {
                 "L": 2,
                 "M": 1,
@@ -5180,7 +5180,7 @@
           "args": [
             {
               "kind": "symbol",
-              "name": "planck-constant",
+              "name": "h",
               "dim": {
                 "L": 2,
                 "M": 1,
@@ -5323,7 +5323,7 @@
                 "args": [
                   {
                     "kind": "symbol",
-                    "name": "boltzmann-constant",
+                    "name": "k_B",
                     "dim": {
                       "L": 2,
                       "M": 1,
@@ -5421,7 +5421,7 @@
                   "args": [
                     {
                       "kind": "symbol",
-                      "name": "speed-of-light",
+                      "name": "c",
                       "dim": {
                         "L": 1,
                         "M": 0,
@@ -5480,7 +5480,7 @@
           "args": [
             {
               "kind": "symbol",
-              "name": "planck-constant",
+              "name": "h",
               "dim": {
                 "L": 2,
                 "M": 1,
@@ -5497,7 +5497,7 @@
               "args": [
                 {
                   "kind": "symbol",
-                  "name": "electron-mass",
+                  "name": "m_e",
                   "dim": {
                     "L": 0,
                     "M": 1,
@@ -5510,7 +5510,7 @@
                 },
                 {
                   "kind": "symbol",
-                  "name": "speed-of-light",
+                  "name": "c",
                   "dim": {
                     "L": 1,
                     "M": 0,
@@ -5824,7 +5824,7 @@
       "args": [
         {
           "kind": "symbol",
-          "name": "boltzmann-constant",
+          "name": "k_B",
           "dim": {
             "L": 2,
             "M": 1,
@@ -5920,21 +5920,8 @@
                   },
                   {
                     "kind": "op",
-                    "op": "^",
+                    "op": "*",
                     "args": [
-                      {
-                        "kind": "symbol",
-                        "name": "standard-deviation",
-                        "dim": {
-                          "L": 1,
-                          "M": 0,
-                          "T": 0,
-                          "I": 0,
-                          "Theta": 0,
-                          "N": 0,
-                          "J": 0
-                        }
-                      },
                       {
                         "kind": "symbol",
                         "name": "2",
@@ -5947,6 +5934,38 @@
                           "N": 0,
                           "J": 0
                         }
+                      },
+                      {
+                        "kind": "op",
+                        "op": "^",
+                        "args": [
+                          {
+                            "kind": "symbol",
+                            "name": "standard-deviation",
+                            "dim": {
+                              "L": 1,
+                              "M": 0,
+                              "T": 0,
+                              "I": 0,
+                              "Theta": 0,
+                              "N": 0,
+                              "J": 0
+                            }
+                          },
+                          {
+                            "kind": "symbol",
+                            "name": "2",
+                            "dim": {
+                              "L": 0,
+                              "M": 0,
+                              "T": 0,
+                              "I": 0,
+                              "Theta": 0,
+                              "N": 0,
+                              "J": 0
+                            }
+                          }
+                        ]
                       }
                     ]
                   }

@@ -302,6 +302,27 @@ describe('limits / falsify / structure / design / metadata', () => {
     expect(r.records.some((b) => b.battery === 'finiteness' && b.outcome === 'fail')).toBe(true);
     expect(DEFAULT_BATTERIES).toContain('dimensional');
   });
+  it('lists only batteries that can fail: no battery is inconclusive by construction (9.0.0 audit §4 Low)', () => {
+    // `retrodiction` and `observational-bounds` always returned `inconclusive`, so
+    // two of five listed batteries could never fail a candidate and "survived"
+    // overstated what was checked.
+    expect(DEFAULT_BATTERIES).toEqual(['dimensional', 'finiteness', 'limits']);
+    const expr = sym('x', DIMENSIONLESS);
+    const r = runFalsification({ expr, dataset: datasetFromRows([{ x: 1, y: 1 }], 'y', 'falsification-only', 'z'), prefactor: 1 });
+    expect(r.records.map((b) => b.battery)).toEqual([...DEFAULT_BATTERIES]);
+    expect(r.records.every((b) => b.outcome !== 'inconclusive')).toBe(true);
+  });
+  it('robustness is derived from the batteries a candidate ran, not asserted from its status', () => {
+    const good = blankRecord({ id: 'h-g', status: 'expert-review-required' });
+    const pass = (battery: 'dimensional' | 'finiteness' | 'limits') => ({ battery, outcome: 'pass' as const, detail: '' });
+    const all = { records: [pass('dimensional'), pass('finiteness'), pass('limits')], survived: true, counterexamples: [] };
+    const twoOfThree = { ...all, records: [pass('dimensional'), pass('finiteness'), { battery: 'limits' as const, outcome: 'inconclusive' as const, detail: '' }] };
+    expect(scoreCandidate(good, 0.9, 1, all).robustness).toBe(1);
+    expect(scoreCandidate(good, 0.9, 1, twoOfThree).robustness).toBeCloseTo(2 / 3, 12);
+    // Without its batteries, a survivor awaiting review is not scored as fully robust.
+    expect(scoreCandidate(good, 0.9, 1).robustness).toBeLessThan(1);
+    expect(scoreCandidate({ ...good, status: 'falsification-survivor' }, 0.9, 1).robustness).toBeLessThan(1);
+  });
   it('recovers a synthetic changepoint, scale exponent, and conservation', () => {
     const y = [0, 0, 0, 0, 5, 5, 5, 5];
     const cp = detectMeanChangepoint({ x: y.map((_, i) => i), y });

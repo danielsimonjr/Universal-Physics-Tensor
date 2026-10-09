@@ -55,7 +55,7 @@ describe('a canonical equation is one record', () => {
 
   it('the prefactor tables are projections of the entries', () => {
     const withPrefactor = CANONICAL_EQUATIONS.filter((e) => e.prefactor !== undefined);
-    expect(withPrefactor.length).toBe(27);
+    expect(withPrefactor.length).toBe(28);
     for (const e of withPrefactor) expect(canonicalPrefactor(e.id)).toBe(e.prefactor!.value);
     for (const e of CANONICAL_EQUATIONS.filter((x) => x.prefactor === undefined)) expect(canonicalPrefactor(e.id), e.id).toBeUndefined();
     const grouped = CANONICAL_EQUATIONS.filter((e) => e.groupPrefactor !== undefined);

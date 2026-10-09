@@ -32,22 +32,30 @@
 
 import { equals, format } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
+import { validate } from '../dimensional/validator.js';
+import type { ExprNode } from '../dimensional/validator.js';
 import type { BridgeEdge, EdgeConfidence } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
+import { regimeAttributesOf } from './quantity.js';
+import { AXES } from './axes.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
 import {
+  assertCoefficientSet,
   CompositionAliasError,
   CompositionDimensionError,
   CompositionJunctionError,
   UndefinedCompositionError,
 } from './edge.js';
 import { DomainViolationError } from '../bridges/evaluation-errors.js';
+import { substitute } from './expr-subst.js';
+import { monomialExponents } from './formula-shape.js';
 // Atlas Phase 1 overlay. The composition table is a leaf module (pure, no
 // registry reads, no import from `src/composition/`), so this does not close a
 // cycle — same rule as the type-only atlas import in `./edge.ts`.
 import { composeRelation, NO_COMPOSITE_CLAIM } from '../relations/composition-table.js';
 import { checkConventions } from '../relations/conventions.js';
-import type { Conventions, RelationContract, RelationType } from '../relations/types.js';
+import { intersectRegimes } from '../relations/regime.js';
+import type { Conventions, Regime, RelationContract, RelationType } from '../relations/types.js';
 
 /**
  * The `RelationContract` a composed edge carries, given the composite TYPE the
@@ -181,20 +189,19 @@ export function effectiveAttributes(
     if (folded) contributors.push(folded);
   }
 
-  // One-value-agrees, zero-or-conflicting-values-abstain, per axis. Written
-  // out per axis (rather than generically over `keyof RegimeAttributes`) so
-  // each axis's value type stays concrete — no cross-axis union widening.
-  const scales = new Set(contributors.map((c) => c.scale).filter((v) => v !== undefined));
-  const forces = new Set(contributors.map((c) => c.force).filter((v) => v !== undefined));
-  const infos = new Set(
-    contributors.map((c) => c.information).filter((v) => v !== undefined),
-  );
-
-  const result: { scale?: RegimeAttributes['scale']; force?: RegimeAttributes['force']; information?: RegimeAttributes['information'] } = {};
-  if (scales.size === 1) result.scale = [...scales][0];
-  if (forces.size === 1) result.force = [...forces][0];
-  if (infos.size === 1) result.information = [...infos][0];
-  return result;
+  // One-value-agrees, zero-or-conflicting-values-abstain, per REGISTRY axis.
+  // The fold reads `AXES`, so an axis the registry carries is folded here: a
+  // hand list once named scale, force and information only, and the
+  // discrimination audit then measured symmetry, topology and statistics as
+  // `checked: 0` whatever the data said (9.0.0 audit §4 C2).
+  const folded: Record<string, string> = {};
+  for (const { name } of AXES) {
+    const values = new Set(
+      contributors.map((c) => (c as Readonly<Record<string, string | undefined>>)[name]).filter((v) => v !== undefined),
+    );
+    if (values.size === 1) folded[name] = [...values][0]!;
+  }
+  return regimeAttributesOf(folded, `effectiveAttributes(${name})`);
 }
 
 /**
@@ -225,19 +232,14 @@ export interface AliasDisposition {
 export const SOURCE_ALIAS_DISPOSITIONS: Readonly<
   Record<string, readonly AliasDisposition[]>
 > = {
-  // ST-2 (stress test, pre-registered v0.10.0 plan §T2): the photon
-  // grazes AT r_s of the SAME mass that bends it — one M is both the
-  // lensing mass and the r_s source. Deliberate, physical sharing.
-  'law-schwarzschild-radius>>be-51': [
-    {
-      name: 'mass',
-      treatAs: 'shared',
-      rationale:
-        'One gravitating mass M is simultaneously the lens (BE-51) and ' +
-        'the source of the Schwarzschild radius the photon grazes — ' +
-        'the sharing IS the stress-test physics (ST-2).',
-    },
-  ],
+  // Empty. The one entry this table held, `law-schwarzschild-radius>>be-51`
+  // ("ST-2": one M is both the lens and the r_s source), keyed a composition
+  // no call can reach: the law's target `schwarzschild-radius` matches none
+  // of be-51's sources (`mass`, `impact-parameter`) by name or registered
+  // identification, so `composeEdges` throws `CompositionJunctionError`
+  // before the alias gate runs. The judgment was never applied. Retracted in
+  // the 9.0.0 audit (§4 C8); `tests/composition/compose.test.ts` now requires
+  // every key here to reach the gate.
 };
 
 const CONFIDENCE_RANK: Record<EdgeConfidence, number> = {
@@ -275,17 +277,22 @@ function findJunction(
   first: BridgeEdge,
   second: BridgeEdge,
   identifications: readonly QuantityIdentification[],
-): { junction: BridgeEdge['sources'][number]; viaIdentification: QuantityIdentification | null } {
-  for (const src of second.sources) {
+): {
+  junction: BridgeEdge['sources'][number];
+  /** Position in `second.sources`: the slot the pipe fills. One slot, even when the same object sits twice. */
+  index: number;
+  viaIdentification: QuantityIdentification | null;
+} {
+  for (const [index, src] of second.sources.entries()) {
     if (src.name === first.target.name) {
-      return { junction: src, viaIdentification: null };
+      return { junction: src, index, viaIdentification: null };
     }
   }
   for (const ident of identifications) {
     if (ident.from !== first.target.name) continue;
-    for (const src of second.sources) {
+    for (const [index, src] of second.sources.entries()) {
       if (src.name === ident.to) {
-        return { junction: src, viaIdentification: ident };
+        return { junction: src, index, viaIdentification: ident };
       }
     }
   }
@@ -330,7 +337,7 @@ export function composeEdges(
     ...QUANTITY_IDENTIFICATIONS,
     ...(opts.identifications ?? []),
   ];
-  const { junction, viaIdentification } = findJunction(
+  const { junction, index: junctionIndex, viaIdentification } = findJunction(
     first,
     second,
     identifications,
@@ -348,7 +355,10 @@ export function composeEdges(
       ? 1
       : conventionFactor(first.target.name, junction.name);
 
-  const remainingSources = second.sources.filter((s) => s !== junction);
+  // The pipe fills ONE slot of `second.sources`, the one `findJunction`
+  // returned. Removal by object identity would also drop a second slot that
+  // holds the same `Quantity` object, which a `shared` disposition produces.
+  const remainingSources = second.sources.filter((_, i) => i !== junctionIndex);
 
   // v0.11 Option D (namespacing gate): pure name-collision rule across
   // operands. Intra-operand duplicates (e.g. ['mass','mass'] inherited
@@ -439,9 +449,8 @@ export function composeEdges(
   // ── Atlas Phase 1 (S1.2b): the relation overlay, and NOTHING else. ────────
   // Entered only when BOTH operands carry a `relation`. An operand with no
   // relation skips this block, and the composed edge then has no `relation`
-  // key. Nine edges in `CATALOG_GRAPH` do carry one: `be-11-master` and
-  // `be-11-zurek` (`coarse-graining`), and `be-21`, `be-37`, `be-48`,
-  // `be-51`, `be-52`, `be-55`, and `be-59` (`derivation`). Those nine stay.
+  // key. The catalog edges that carry one are the catalog's `relation` rows
+  // (`tests/composition/relation-refusal.test.ts` lists them); they stay.
   // When both operands carry a relation, a silent table cell throws
   // `UndefinedCompositionError`. The approximation cell throws the same
   // error, because an edge relation carries no norm transport and this
@@ -514,6 +523,10 @@ export function composeEdges(
             `(${composedDomain.description})`,
         );
       }
+      // Each operand's unset-coefficient gate is the one `evaluateEdge`
+      // applies to a primitive edge; an operand's monomial times an absent 1
+      // must not reach the caller as a number through the pipe.
+      assertCoefficientSet(first, inputs);
       const intermediate = first.evaluate(inputs);
       const pipedInputs = buildSecondInputs(inputs, intermediate);
       if (!second.domain.predicate(pipedInputs)) {
@@ -522,6 +535,7 @@ export function composeEdges(
             `(${composedDomain.description})`,
         );
       }
+      assertCoefficientSet(second, pipedInputs);
       return second.evaluate(pipedInputs);
     },
     citation: `${first.citation} | ${second.citation}`,
@@ -532,5 +546,127 @@ export function composeEdges(
       ? { aliasDispositionsUsed: dispositionsUsed }
       : {}),
     ...relationOverlay,
+    ...carriedClaims(first, second, junction, junctionScale, finalRemaining, renameMap),
   };
+}
+
+/**
+ * The claims a composed edge carries from its operands (9.0.0 audit §4 C5).
+ * A composed edge that dropped them answered differently from its operands:
+ * the regime gate abstained on every chain longer than two, an unset
+ * coefficient became a number, an even input lost its magnitude reading,
+ * a count became a Buckingham governor, and an alias key stopped working.
+ *
+ * - `regime`: the one an operand states; two of one family intersect
+ *   (`intersectRegimes`, which also refuses conflicting group definitions);
+ *   two of different families refuse with `UndefinedCompositionError`, since
+ *   this layer does not state where a cross-family chain applies.
+ * - `coefficientUnset`: either operand's. `evaluateEdge` then refuses the
+ *   composite; a bound group lifts a primitive entry only, because the group
+ *   row is keyed by the entry id, so a composite with an unset operand is
+ *   refused by `evaluateEdge` whatever is bound (its own `evaluate` applies
+ *   each operand's gate and does lift the operand whose group is bound).
+ * - `evenInputs`, `aliases`: the first operand's, plus the second's for its
+ *   remaining sources under their composed names. The piped junction is not
+ *   an input and is dropped. An alias key that two quantities would share is
+ *   carried for neither.
+ * - `formulaFactors`: the second operand's for its remaining sources, exact.
+ *   The first operand's counts enter through the pipe with their exponent
+ *   times the junction's exponent in the second's monomial, so they are
+ *   carried only when `second.symbolic` is a monomial that states it.
+ * - `symbolic`: the second's form with the junction leaf replaced by the
+ *   first's, when both exist, the junction carries no convention factor, no
+ *   source was renamed, the leaf occurs, and the result validates to the
+ *   target dimension. Otherwise absent, as on a numeric-only edge.
+ */
+function carriedClaims(
+  first: BridgeEdge,
+  second: BridgeEdge,
+  junction: Quantity,
+  junctionScale: number,
+  finalRemaining: readonly Quantity[],
+  renameMap: Readonly<Record<string, string>>,
+): Pick<BridgeEdge, 'regime' | 'coefficientUnset' | 'evenInputs' | 'formulaFactors' | 'aliases' | 'symbolic'> {
+  const out: {
+    regime?: Regime;
+    coefficientUnset?: boolean;
+    evenInputs?: readonly string[];
+    formulaFactors?: Readonly<Record<string, number>>;
+    aliases?: Readonly<Record<string, readonly string[]>>;
+    symbolic?: ExprNode;
+  } = {};
+
+  if (first.regime !== undefined && second.regime !== undefined) {
+    if (first.regime.family !== second.regime.family) {
+      throw new UndefinedCompositionError(
+        `Cannot compose ${first.id} -> ${second.id}: the regimes are of different ` +
+          `families ('${first.regime.family}', '${second.regime.family}'), and this ` +
+          `layer does not state where a cross-family chain applies.`,
+      );
+    }
+    out.regime = intersectRegimes(first.regime, second.regime);
+  } else if (first.regime !== undefined || second.regime !== undefined) {
+    out.regime = first.regime ?? second.regime;
+  }
+
+  if (first.coefficientUnset === true || second.coefficientUnset === true) out.coefficientUnset = true;
+
+  // Operand-internal name → the name the composite exposes it under.
+  const composedName = new Map(Object.entries(renameMap).map(([renamed, original]) => [original, renamed]));
+  const exposed = (name: string): string => composedName.get(name) ?? name;
+  const remainingNames = new Set(finalRemaining.map((s) => s.name));
+  const secondRemaining = (name: string): boolean => name !== junction.name && remainingNames.has(exposed(name));
+
+  const even = [
+    ...(first.evenInputs ?? []),
+    ...(second.evenInputs ?? []).filter(secondRemaining).map(exposed),
+  ];
+  if (even.length > 0) out.evenInputs = even;
+
+  const factors: Record<string, number> = {};
+  const junctionExponent = monomialExponents(second.symbolic)?.get(junction.name);
+  if (first.formulaFactors !== undefined && junctionExponent !== undefined) {
+    for (const [name, exp] of Object.entries(first.formulaFactors)) factors[name] = exp * junctionExponent;
+  }
+  for (const [name, exp] of Object.entries(second.formulaFactors ?? {})) {
+    if (secondRemaining(name)) factors[exposed(name)] = exp;
+  }
+  if (Object.keys(factors).length > 0) out.formulaFactors = factors;
+
+  const aliasOwner = new Map<string, string>();
+  const shared = new Set<string>();
+  const aliases: Record<string, string[]> = {};
+  const addAliases = (quantity: string, keys: readonly string[]): void => {
+    for (const key of keys) {
+      const owner = aliasOwner.get(key);
+      if (owner !== undefined && owner !== quantity) shared.add(key);
+      aliasOwner.set(key, quantity);
+      (aliases[quantity] ??= []).push(key);
+    }
+  };
+  for (const [quantity, keys] of Object.entries(first.aliases ?? {})) addAliases(quantity, keys);
+  for (const [quantity, keys] of Object.entries(second.aliases ?? {})) {
+    if (secondRemaining(quantity)) addAliases(exposed(quantity), keys);
+  }
+  const kept = Object.fromEntries(
+    Object.entries(aliases)
+      .map(([quantity, keys]) => [quantity, keys.filter((k) => !shared.has(k))] as const)
+      .filter(([, keys]) => keys.length > 0),
+  );
+  if (Object.keys(kept).length > 0) out.aliases = kept;
+
+  if (
+    first.symbolic !== undefined &&
+    second.symbolic !== undefined &&
+    junctionScale === 1 &&
+    Object.keys(renameMap).length === 0
+  ) {
+    const { expr, count } = substitute(second.symbolic, junction.name, first.symbolic);
+    const v = count > 0 ? validate(expr) : undefined;
+    if (v !== undefined && v.ok && v.inferredDimension !== null && equals(v.inferredDimension, second.target.dim)) {
+      out.symbolic = expr;
+    }
+  }
+
+  return out;
 }

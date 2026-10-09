@@ -38,7 +38,7 @@ const CASES: readonly Case[] = [
   },
   {
     id: 'CE-photoelectric',
-    good: { 'planck-constant': 6.62607015e-34, 'photon-frequency': 1.5e15, 'work-function': 4.3 * EV },
+    good: { 'photon-frequency': 1.5e15, 'work-function': 4.3 * EV },
     bad: [['below threshold', { 'photon-frequency': 5e14 }]],
   },
   {
@@ -56,7 +56,7 @@ const CASES: readonly Case[] = [
   },
   {
     id: 'CE-compton-shift',
-    good: { 'planck-constant': 6.62607015e-34, 'electron-mass': 9.1093837015e-31, 'speed-of-light': C, 'scattering-angle': Math.PI / 2 },
+    good: { 'scattering-angle': Math.PI / 2 },
     bad: [['degrees', { 'scattering-angle': 90 }]],
   },
   { id: 'CE-de-broglie', good: { p: 1e-24 }, bad: [['p<0', { p: -1e-24 }]] },
@@ -69,7 +69,7 @@ const CASES: readonly Case[] = [
   { id: 'CE-hubble-distance', good: { 'hubble-rate': 2.2685e-18 }, bad: [['H<0', { 'hubble-rate': -2.2685e-18 }]] },
   { id: 'CE-bekenstein-hawking', good: { A: 1e6 }, bad: [['A<0', { A: -1e6 }]] },
   { id: 'CE-newton-gravitation', good: { mass: 1, 'secondary-mass': 1, r: 1 }, bad: [['r<0', { r: -1 }], ['r=0', { r: 0 }]] },
-  { id: 'CE-lorentz-factor', good: { velocity: 0.6 * C, 'speed-of-light': C }, bad: [['v=c', { velocity: C }], ['v>c', { velocity: 1.1 * C }]] },
+  { id: 'CE-lorentz-factor', good: { velocity: 0.6 * C }, bad: [['v=c', { velocity: C }], ['v>c', { velocity: 1.1 * C }]] },
   { id: 'CE-kepler-third', good: { 'semi-major-axis': 1.496e11, mass: 1.989e30 }, bad: [['a<0', { 'semi-major-axis': -1.496e11 }]] },
   {
     id: 'CE-carnot-efficiency',
@@ -77,20 +77,20 @@ const CASES: readonly Case[] = [
     bad: [['Tc>Th', { 'cold-reservoir-temperature': 600, 'hot-reservoir-temperature': 300 }], ['Tc<0', { 'cold-reservoir-temperature': -300 }], ['Th<0', { 'hot-reservoir-temperature': -600 }]],
   },
   { id: 'CE-clausius-entropy', good: { heat: 100, temperature: 300 }, bad: [['T<0', { temperature: -300 }]] },
-  { id: 'CE-equipartition', good: { 'boltzmann-constant': 1.380649e-23, temperature: 300 }, bad: [['T<0', { temperature: -300 }]] },
-  { id: 'CE-boltzmann-entropy', good: { 'boltzmann-constant': 1.380649e-23, 'microstate-count': 10 }, bad: [['W<1', { 'microstate-count': 0.5 }], ['W=0', { 'microstate-count': 0 }]] },
+  { id: 'CE-equipartition', good: { temperature: 300 }, bad: [['T<0', { temperature: -300 }]] },
+  { id: 'CE-boltzmann-entropy', good: { 'microstate-count': 10 }, bad: [['W<1', { 'microstate-count': 0.5 }], ['W=0', { 'microstate-count': 0 }]] },
   { id: 'CE-ideal-gas', good: { temperature: 300, V: 1, N: 1e23 }, bad: [['T<0', { temperature: -300 }], ['V<0', { V: -1 }]] },
   { id: 'CE-heat-capacity', good: { mass: 1, 'specific-heat': 4180, 'temperature-change': 10 }, bad: [['m<0', { mass: -1 }]] },
   { id: 'CE-latent-heat', good: { mass: 1, 'specific-latent-heat': 2.26e6 }, bad: [['m<0', { mass: -1 }]] },
   { id: 'CE-jarzynski', good: { temperature: 300 }, bad: [['T<0', { temperature: -300 }]] },
   {
     id: 'CE-stokes-einstein',
-    good: { 'boltzmann-constant': 1.380649e-23, temperature: 300, 'dynamic-viscosity': 1e-3, 'particle-radius': 1e-9 },
+    good: { temperature: 300, 'dynamic-viscosity': 1e-3, 'particle-radius': 1e-9 },
     bad: [['r<0', { 'particle-radius': -1e-9 }]],
   },
   {
     id: 'CE-mb-most-probable-speed',
-    good: { 'boltzmann-constant': 1.380649e-23, temperature: 300, 'molecular-mass': 4.65e-26 },
+    good: { temperature: 300, 'molecular-mass': 4.65e-26 },
     bad: [['T<0', { temperature: -300 }]],
   },
 ];

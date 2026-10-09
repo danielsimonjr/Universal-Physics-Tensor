@@ -11,7 +11,13 @@ import { UniversalTensor } from '../core/tensor.js';
 import { CANONICAL_EQUATIONS } from './registry.js';
 
 /** A `TensorConfig` whose axes cover every regime the canonical registry uses,
- *  so `seedCanonicalLaws` never trips axis-membership validation. */
+ *  so `seedCanonicalLaws` never trips axis-membership validation. The scale,
+ *  force and symmetry lists are the tensor's own unions (`PhysicalScale`,
+ *  `Force`, `Symmetry`), written here because the canonical layer may not
+ *  import the composition layer's axis registry (`layer:check`);
+ *  `tests/composition/axes.test.ts` compares them to that registry so the two
+ *  cannot drift apart. The information measures are the tensor's camelCase
+ *  vocabulary (`InformationMeasure`). */
 export const CANONICAL_TENSOR_CONFIG: TensorConfig = {
   rank: 6,
   scales: ['quantum', 'mesoscopic', 'classical', 'cosmological'],

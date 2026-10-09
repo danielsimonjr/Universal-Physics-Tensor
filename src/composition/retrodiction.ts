@@ -29,10 +29,9 @@
  * @module composition/retrodiction
  */
 
-import { CarrierSignError } from '../bridges/carrier-sign.js';
 import type { BridgeEdge } from './edge.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
-import { evaluateEdge } from './edge.js';
+import { CoefficientUnsetError, evaluateEdge } from './edge.js';
 import { DomainViolationError } from '../bridges/evaluation-errors.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
@@ -163,8 +162,13 @@ export function forwardEvaluate(
       let v: number;
       try {
         v = evaluateEdge(e, inputs);
-      } catch {
-        continue; // domain violation or evaluator error: edge does not fire
+      } catch (err) {
+        // A domain miss or an unset coefficient is "the edge does not fire".
+        // Anything else (a sign rejection, an alias conflict, a TypeError in an
+        // evaluator) is a different fact and is not hidden as a non-derivation
+        // (9.0.0 audit §4 C6).
+        if (!(err instanceof DomainViolationError || err instanceof CoefficientUnsetError)) throw err;
+        continue;
       }
       if (Number.isFinite(v)) {
         values.set(e.target.name, v);
@@ -205,11 +209,15 @@ export function retrodictNode(
     try {
       v = evaluateEdge(e, inputs);
     } catch (err) {
-      // A sign rejection is the answer for this target. Swallowing it would
-      // report the quantity as unrecoverable. A domain miss still skips.
-      if (err instanceof CarrierSignError) throw err;
-      if (err instanceof DomainViolationError) refusals.push({ edge: e.id, reason: err.message });
-      continue;
+      // A domain miss or an unset coefficient is a recorded refusal of this
+      // edge. A sign rejection is the answer for this target, and any other
+      // error (an alias conflict, a TypeError in an evaluator) is a different
+      // fact: both propagate instead of reading as "unrecoverable" (§4 C6).
+      if (err instanceof DomainViolationError || err instanceof CoefficientUnsetError) {
+        refusals.push({ edge: e.id, reason: err.message });
+        continue;
+      }
+      throw err;
     }
     if (Number.isFinite(v)) predictions.push({ edge: e.id, value: v });
   }

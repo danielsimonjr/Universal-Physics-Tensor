@@ -176,4 +176,14 @@ describe('explainQuantity — real 41-edge graph', () => {
     expect(x.identifiability.verdict).toBe('given');
     expect(x.summary).toMatch(/supplied input/);
   });
+
+  it('a target determined only through a quantity identification names that identification, never "undefined" (9.0.0 audit §4 C11)', () => {
+    // temperature is determined from {hawking-temperature} by the registered
+    // identification hawking-temperature ≡ temperature alone: no edge derives it.
+    const x = explainQuantity(CATALOG_GRAPH, 'temperature', ['hawking-temperature']);
+    expect(x.identifiability.verdict).toBe('exactly-determined');
+    expect(x.derivations).toEqual([]);
+    expect(x.summary).not.toMatch(/undefined/);
+    expect(x.summary).toMatch(/identification hawking-temperature ≡ temperature/);
+  });
 });

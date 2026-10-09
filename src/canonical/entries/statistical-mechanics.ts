@@ -34,7 +34,7 @@ const MEAN_SQUARE_SPEED = dim(2, 0, -2, 0, 0); // m²/s² [L² T⁻²]
 
 export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
   l1({ name: 'thermal-energy', dim: ENERGY }, [
-    { name: 'boltzmann-constant', dim: BOLTZMANN_CONSTANT },
+    { name: 'k_B', dim: BOLTZMANN_CONSTANT },
     { name: 'temperature', dim: TEMPERATURE },
   ], {
     id: 'CE-equipartition',
@@ -49,7 +49,7 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     formula_latex: '\\langle E \\rangle = \\tfrac{3}{2} k_B T',
     epistemicStatus: 'scalar-up-to-constant',
     scalarAst: op('*', [
-      sym('boltzmann-constant', BOLTZMANN_CONSTANT),
+      sym('k_B', BOLTZMANN_CONSTANT),
       sym('temperature', TEMPERATURE),
     ]),
     regime: { scale: 'classical' },
@@ -58,7 +58,7 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     partnerBridges: [],
   }),
   l1({ name: 'diffusion-coefficient', dim: DIFFUSION_COEFFICIENT }, [
-    { name: 'boltzmann-constant', dim: BOLTZMANN_CONSTANT },
+    { name: 'k_B', dim: BOLTZMANN_CONSTANT },
     { name: 'temperature', dim: TEMPERATURE },
     { name: 'dynamic-viscosity', dim: DYNAMIC_VISCOSITY },
     { name: 'particle-radius', dim: PARTICLE_RADIUS },
@@ -76,7 +76,7 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     epistemicStatus: 'scalar-up-to-constant',
     scalarAst: op('/', [
       op('*', [
-        sym('boltzmann-constant', BOLTZMANN_CONSTANT),
+        sym('k_B', BOLTZMANN_CONSTANT),
         sym('temperature', TEMPERATURE),
       ]),
       op('*', [
@@ -118,7 +118,7 @@ export const STATISTICAL_MECHANICS: readonly CanonicalEquation[] = [
     partnerBridges: [],
   }),
   l1({ name: 'most-probable-speed', dim: VELOCITY }, [
-    { name: 'boltzmann-constant', dim: BOLTZMANN_CONSTANT },
+    { name: 'k_B', dim: BOLTZMANN_CONSTANT },
     { name: 'temperature', dim: TEMPERATURE },
     { name: 'molecular-mass', dim: MASS },
   ], {

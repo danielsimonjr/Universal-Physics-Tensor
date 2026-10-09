@@ -11,12 +11,14 @@ import { REJECTED_BRIDGE_ADJUDICATIONS } from '../../src/bridges/rejected.js';
 import { listConfrontations } from '../../src/bridges/confrontations.js';
 import {
   CANDIDATE_NOT_A_BRIDGE_REASON,
+  CONTESTED_BRIDGE_IDS,
   accountFromGraph,
   catalogFrontierAccount,
   formatFrontierAccount,
   marksFromEntries,
   type FrontierAccount,
 } from '../../src/composition/frontier-account.js';
+import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 
 function qty(name: string, dim: Quantity['dim']): Quantity {
   return { name, symbol: name, dim, attributes: {} };
@@ -145,5 +147,22 @@ describe('frontier account', () => {
     expect(Array.isArray(account.frontier)).toBe(true);
     const json = { nullResults: account.nullResults, frontier: account.frontier };
     expect(Array.isArray(json)).toBe(false);
+  });
+});
+
+describe('CONTESTED_BRIDGE_IDS is checked against the catalog it describes (9.0.0 audit §4 Low)', () => {
+  // The contested set has no field in data/bridge-catalog.json to derive from (it is not the
+  // highly-speculative set: that is {42, 46, 50}), so the literal stays, and this guard binds each
+  // id to the facts that make "contested" true: a live catalog row, no rejection record, and no
+  // confrontation. A row that gains either must leave the list.
+  it('each contested id is a catalog row with neither a rejection nor a confrontation', () => {
+    const catalogIds = new Set(BRIDGE_EQUATIONS.map((e) => `be-${e.id}`));
+    const rejected = new Set(REJECTED_BRIDGE_ADJUDICATIONS.map((r) => `be-${r.beId}`));
+    const confronted = new Set(listConfrontations().map((c) => `be-${c.bridgeId}`));
+    for (const id of CONTESTED_BRIDGE_IDS) {
+      expect(catalogIds.has(id), id).toBe(true);
+      expect(rejected.has(id), id).toBe(false);
+      expect(confronted.has(id), id).toBe(false);
+    }
   });
 });

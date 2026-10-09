@@ -57,7 +57,7 @@ import { CATALOG_GRAPH } from './catalog-graph.js';
  *  exponent. `k_B·T·ln2 / h` ⇒ {k_B:+1, T:+1, ln2:+1, h:-1}. */
 type Mono = Map<string, { dim: Dimension; exp: number }>;
 
-/** Thrown when an AST is not a product / quotient / integer-power of symbols. */
+/** Thrown when an AST is not a product / quotient / integer-power of symbols. @internal */
 export class NotAMonomialError extends Error {
   constructor(message: string) {
     super(message);
@@ -85,6 +85,8 @@ function mergeInto(into: Mono, from: Mono, scale: number): void {
  * Decompose a flat-monomial `ExprNode` into a leaf→exponent map. Throws
  * `NotAMonomialError` on sums, differences, or non-symbol bases — this is the
  * AST-level monomial gate.
+ *
+ * @internal
  */
 export function toMonomial(ast: ExprNode): Mono {
   const out: Mono = new Map();
@@ -124,7 +126,8 @@ export function toMonomial(ast: ExprNode): Mono {
 }
 
 /** Rebuild a flat-monomial `ExprNode` from a leaf→exponent map (numerator =
- *  positive exponents, denominator = negative). Zero exponents drop out. */
+ *  positive exponents, denominator = negative). Zero exponents drop out.
+ *  @internal */
 export function fromMonomial(m: Mono): ExprNode {
   const factor = (name: string, dim: Dimension, e: number): ExprNode =>
     e === 1
@@ -293,7 +296,8 @@ function hasNonConstantStub(m: Mono, inputs: ReadonlySet<string>): boolean {
 /** ALL admissible sources for `name` — every canonical equation AND every bridge
  *  edge whose target is `name` and whose form is a clean monomial. A target with
  *  several sources (e.g. BE-42 Hawking's two parametrisations) is DE-AMBIGUATED by
- *  enumeration, not skipped; coinciding derivations collapse later under dedup. */
+ *  enumeration, not skipped; coinciding derivations collapse later under dedup.
+ *  @internal */
 export function resolveSources(name: string): EquationSource[] {
   const out: EquationSource[] = [];
 
@@ -475,6 +479,8 @@ function disambiguateIds(
  * collapse (e.g. Landauer's dropped `ln2` vs an operator stub hash differently),
  * so this only merges genuine structural twins that a wider candidate scope can
  * produce (Design §9 #2). Deterministic: input order is preserved.
+ *
+ * @internal
  */
 export function dedupByNormalForm(
   proposals: readonly ProposedBridge[],
@@ -524,6 +530,7 @@ interface PromotionRequest {
   readonly evidence: PromotionEvidence;
 }
 
+/** Thrown when a proposal is promoted without the evidence the promotion requires. @internal */
 export class MissingEvidenceError extends Error {
   constructor(message: string) {
     super(message);
@@ -592,7 +599,7 @@ function equationMeta(id: string): { domain: string; references: readonly string
   return { domain: 'unknown', references: [] };
 }
 
-/** Render a `ProposedBridge` into the catalog field-shape, filled honestly. */
+/** Render a `ProposedBridge` into the catalog field-shape, filled honestly. @internal */
 export function toProposedEntry(p: ProposedBridge): ProposedBridgeEntry {
   const [id1, id2] = p.derivedFrom.sourceEquationIds;
   const M1 = equationMeta(id1);
