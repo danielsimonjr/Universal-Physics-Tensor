@@ -296,6 +296,8 @@ export { evaluatorOutput, resolveEvaluable } from './composition/evaluate-relati
 export { unusedInputKeys } from './bridges/evaluators.js';
 /** Two spellings of one quantity were given different numbers. The formula is not run. */
 export { SynonymDisagreementError } from './dimensional/formula-names.js';
+/** `upt retrieve`: the canonical corpus, the optional Ollama embedder, and the atlas-accepted hybrid search. */
+export { canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid } from './atlas/benchmark/hybrid-retrieval.js';
 
 /**
  * Builtin dimension checker for `upt eval`.

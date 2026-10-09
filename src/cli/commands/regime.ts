@@ -21,11 +21,6 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
-import {
-  assertSynonymAgreement,
-  resolveQuantityName,
-  SynonymDisagreementError,
-} from '../../dimensional/formula-names.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
@@ -124,9 +119,9 @@ export function parseAt(
     }
   }
   try {
-    assertSynonymAgreement(point);
+    api.assertSynonymAgreement(point);
   } catch (e) {
-    if (e instanceof SynonymDisagreementError) throw new CliError(`upt ${command}: ${e.message}`);
+    if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt ${command}: ${e.message}`);
     throw e;
   }
   return point;
@@ -145,6 +140,7 @@ const normalizeGroup = (name: string): string => name.replace(/\s+/g, '').replac
  * @internal
  */
 export function resolveAtPoint(
+  api: CommandCtx['api'],
   point: Readonly<Record<string, number>>,
   regimes: readonly { groupDefinitions: Readonly<Record<string, { exponents: Readonly<Record<string, number>> }>>; inequalities: readonly { group: string }[] }[],
 ): { values: Record<string, number>; unknown: string[] } {
@@ -162,7 +158,7 @@ export function resolveAtPoint(
   const values: Record<string, number> = {};
   const unknown: string[] = [];
   for (const [key, value] of Object.entries(point)) {
-    const resolved = resolveQuantityName(key, named) ?? key;
+    const resolved = api.resolveQuantityName(key, named) ?? key;
     const group = byNormal.get(normalizeGroup(resolved)) ?? byNormal.get(normalizeGroup(key));
     const stored = group ?? resolved;
     values[stored] = value;
@@ -252,7 +248,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   // check, so that case is labelled rather than left to read as a pass.
   const records = registration.records;
 
-  const { values: resolved, unknown } = resolveAtPoint(point, records.map((r) => r.regime));
+  const { values: resolved, unknown } = resolveAtPoint(api, point, records.map((r) => r.regime));
   const unmatched = [
     ...assume.map((d) => ({ flag: '--assume', d })),
     ...deny.map((d) => ({ flag: '--deny', d })),

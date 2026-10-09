@@ -1047,7 +1047,7 @@ function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteCl
     const regimeCollisions = api.collidingRegimeGroups(bridges.map((b) => b.regime));
     const blockedGroups = new Set(regimeCollisions.map((c) => c.group));
     const regimes: RegimeReport[] = bridges.map((b) => {
-      const { values } = resolveAtPoint(at, [b.regime]);
+      const { values } = resolveAtPoint(api, at, [b.regime]);
       for (const name of blockedGroups) delete values[name];
       const check = api.regimeHolds(b.regime, values);
       return {
