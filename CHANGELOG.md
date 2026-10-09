@@ -8,7 +8,13 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
-The 9.0.0 audit (`docs/audit/2026-10-09-codebase-audit-9.0.0.md`, 196 findings over eight sections) and its fixes, one change per section. Every item below says what changed and why; a claim the audit found false is struck through and retracted here. This change does not bump the version, tag, or publish; the public-surface removals under Breaking need the owner's major bump.
+Nothing yet.
+
+## [10.0.0] - 2026-10-09
+
+Dependency health at this release: `bun audit --audit-level=high` finds no vulnerabilities (142 packages). `bun outdated` lists only development dependencies: `@types/node` is pinned to the CI Node major (22.20.5; 26.6.4 is latest), and `@vitest/coverage-v8` 5.0.3, `@viz-js/viz` 3.31.0 and `fast-check` 4.10.2 are available.
+
+The 9.0.0 audit (`docs/audit/2026-10-09-codebase-audit-9.0.0.md`, 196 findings over eight sections) and its fixes, one change per section. Every item below says what changed and why; a claim the audit found false is struck through and retracted here. This release is the major bump the public-surface removals under Breaking need, made under the owner's delegation of 2026-10-09 (the sentence that this change does not bump, tag or publish was true of the audit-fix PR, #502, and is superseded by this release).
 
 ### Breaking
 
