@@ -13,6 +13,7 @@ import {
   runConfrontation,
 } from '../../src/bridges/confrontations.js';
 import { DATA_CONFRONTED_IDS } from '../../src/bridges/confrontation-coverage.js';
+import { CENSUS } from '../helpers/census.js';
 
 /** Computed test precision from an outcome (smaller = tighter). */
 function precisionOf(o: ReturnType<typeof runConfrontation>): number {
@@ -35,11 +36,11 @@ describe('confrontation rigor hierarchy', () => {
     );
   });
 
-  it('the honest distribution is 7 stringent / 3 moderate / 9 loose (NOT 19 equal)', () => {
+  it('the honest distribution is stringent / moderate / loose (NOT all equal)', () => {
     const tiers = [...CONFRONTATION_RIGOR.values()];
-    expect(tiers.filter((t) => t === 'stringent').length).toBe(7);
-    expect(tiers.filter((t) => t === 'moderate').length).toBe(3);
-    expect(tiers.filter((t) => t === 'loose').length).toBe(9);
+    expect(tiers.filter((t) => t === 'stringent').length).toBe(CENSUS.confrontations.rigorStringent);
+    expect(tiers.filter((t) => t === 'moderate').length).toBe(CENSUS.confrontations.rigorModerate);
+    expect(tiers.filter((t) => t === 'loose').length).toBe(CENSUS.confrontations.rigorLoose);
   });
 
   it('the metrology triangle is the precision core (BE-55/58/59 all stringent)', () => {

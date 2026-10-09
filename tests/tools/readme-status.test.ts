@@ -17,6 +17,7 @@ import {
   stampText,
   statusFacts,
 } from '../../scripts/readme-status.js';
+import { CENSUS } from '../helpers/census.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -55,8 +56,8 @@ describe('readme-status stamps', () => {
     expect(phase4Sentence(facts)).toContain(`Catalog property \`formalRef\`s are ${facts.property}`);
     // 95 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that
     // state their equations were labelled derivation-step.
-    expect(facts.kindBridge).toBe(119);
-    expect(facts.property).toBe(3);
+    expect(facts.kindBridge).toBe(CENSUS.formalRefs.catalogBridgeKind);
+    expect(facts.property).toBe(CENSUS.formalRefs.catalogProperty);
     expect(stamped.roadmap).toContain(phase4Sentence(facts));
   });
 

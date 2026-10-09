@@ -31,6 +31,7 @@ import {
 } from '../../src/atlas/oscillators/bridges-exact.js';
 import { LIMIT_CONTRACTS } from '../../src/atlas/oscillators/bridges-limits.js';
 import { CONTRACT_CHAIN_WAVE } from '../../src/atlas/oscillators/bridges-coarse.js';
+import { CENSUS } from '../helpers/census.js';
 
 /** The ten rows the Lead chose from the data-confronted set. */
 const AUDITED = [11, 21, 35, 37, 48, 51, 52, 55, 58, 59] as const;
@@ -60,13 +61,13 @@ const rowOf = (id: number) => {
 };
 
 describe('S1.5 — the ten audited catalog rows', () => {
-  it('registers 63 catalog rows and 54 graph edges', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+  it('registers every catalog row and every graph edge', () => {
+    expect(BRIDGE_EQUATIONS).toHaveLength(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
     // 127 is the record from before every catalog relation, including be-147..170, was a graph edge.
-    expect(CATALOG_GRAPH).toHaveLength(158);
+    expect(CATALOG_GRAPH).toHaveLength(CENSUS.graph.edges);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 77 and 68 are the record from before be-88..102.

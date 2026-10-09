@@ -1,0 +1,112 @@
+{
+  "catalog": {
+    "entries": 160,
+    "distinctIds": 160,
+    "idMin": 11,
+    "idMax": 170,
+    "categories": 15,
+    "crossDomain": 40,
+    "standard": 120
+  },
+  "membership": {
+    "bridges": 152,
+    "notABridges": 5,
+    "unadjudicated": 3
+  },
+  "relations": {
+    "total": 158,
+    "kindBridge": 52,
+    "kindLaw": 106,
+    "bridgeOnStandardRow": 27,
+    "lawOnCrossDomainRow": 16,
+    "kindDisagreesWithRegimeAttributes": 17
+  },
+  "graph": {
+    "edges": 158
+  },
+  "evaluators": {
+    "count": 120,
+    "rangeLabel": "BE-16/42/51/52/55..170"
+  },
+  "confrontations": {
+    "records": 19,
+    "dataConfronted": 19,
+    "withoutDataConfrontation": 141,
+    "rigorStringent": 7,
+    "rigorModerate": 3,
+    "rigorLoose": 9
+  },
+  "scaleCells": {
+    "submitted": 51,
+    "unsubmitted": 109
+  },
+  "linkage": {
+    "components": 133,
+    "isolated": 129,
+    "compositions": 22,
+    "anchoredClusterSize": 22,
+    "anchoredClusterEstablished": 11
+  },
+  "linkCandidates": {
+    "total": 4169,
+    "touchingCore": 4135,
+    "touchingCoreSameKind": 822
+  },
+  "discovery": {
+    "catalog": {
+      "total": 4169,
+      "promising": 32,
+      "inert": 2360,
+      "magnitudeClash": 20,
+      "contradictory": 0,
+      "axisClash": 1757,
+      "shadowedByMagnitudeClash": 10
+    },
+    "canonical": {
+      "axisClash": 1,
+      "promisingNovelConsequence": 5
+    },
+    "proposedBridges": 5
+  },
+  "evidence": {
+    "formallyProved": 118,
+    "rejectedRows": 5
+  },
+  "formalRefs": {
+    "emitted": 151,
+    "catalogBridgeKind": 119,
+    "catalogCounted": 16,
+    "catalogCrossCheck": 3,
+    "catalogProperty": 3
+  },
+  "derivationAudit": {
+    "derived": 37,
+    "coefficientUnset": 0,
+    "decoy": 22,
+    "notAMonomial": 25,
+    "open": 74,
+    "closable": 64,
+    "freedomOne": 55,
+    "maxFiniteFreedom": 6,
+    "unspannable": 1
+  },
+  "canonical": {
+    "withPrefactor": 28,
+    "withHolds": 40,
+    "withUnsetFactorNote": 3,
+    "comparisonTargetRows": 4,
+    "bridgesWithoutPartner": 152,
+    "audit": {
+      "derived": 79,
+      "coefficientUnset": 6,
+      "decoy": 7,
+      "open": 17
+    }
+  },
+  "mapBothFormallyProved": {
+    "total": 267,
+    "kept": 118,
+    "droppedNotMatching": 39,
+    "droppedMissingMetadata": 110
+  }
+}

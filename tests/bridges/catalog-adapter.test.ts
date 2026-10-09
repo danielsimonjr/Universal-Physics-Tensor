@@ -21,6 +21,7 @@ import {
 } from '../../src/bridges/catalog-adapter.js';
 import { UniversalTensor } from '../../src/core/tensor.js';
 import type { TensorConfig } from '../../src/core/types.js';
+import { CENSUS } from '../helpers/census.js';
 
 const baseConfig: TensorConfig = {
   rank: 3,
@@ -78,7 +79,7 @@ describe('catalogToCells', () => {
     // BE-164 through BE-169 name a PhysicalScale, so they are submittable.
     // 45 is the record from before those six. BE-170 does not.
     const cells = catalogToCells(BRIDGE_EQUATIONS);
-    expect(cells).toHaveLength(51);
+    expect(cells).toHaveLength(CENSUS.scaleCells.submitted);
   });
 
   it('assigns id as "BE-{number}" matching the catalog id field', () => {
@@ -115,14 +116,14 @@ describe('scanCatalog', () => {
     expect(report.entries).toHaveLength(BRIDGE_EQUATIONS.length);
     // Updated 2026-05-24 (parallel-agent dispatch): 42 → 44 after adding
     // BE-53 (Yang-Mills β) AND BE-54 (Randall-Sundrum).
-    expect(report.entries).toHaveLength(160);
+    expect(report.entries).toHaveLength(CENSUS.catalog.entries);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
   });
 
-  it('lists the 109 rows whose bridges tuple names no PhysicalScale, each with that reason', () => {
+  it('lists the rows whose bridges tuple names no PhysicalScale, each with that reason', () => {
     // Updated 2026-05-23 (BRIDGE-PHYSICS-AUDIT §3 naming pass per
     // docs/architecture/archive/v0.7-physics-judgment-proposals.md §3).
     // Unsubmitted = entries with NEITHER axis mappable to strict
@@ -147,7 +148,7 @@ describe('scanCatalog', () => {
     // 84 is the record from before be-134..146. BE-137, BE-138, BE-140, BE-141,
     // BE-142, BE-143, and BE-146 name neither quantum nor classical.
     // BE-147 through BE-163 and BE-170 name no PhysicalScale. 91 is the record from before those eighteen.
-    expect(report.unsubmitted).toHaveLength(109);
+    expect(report.unsubmitted).toHaveLength(CENSUS.scaleCells.unsubmitted);
     // 53 is the record from before be-103..125. Those twenty-three tuples are fluid → plasma.
     expect(report.skipped.map((s) => s.bridgeId)).toEqual(report.unsubmitted);
     for (const { bridgeId, reason } of report.skipped) {
@@ -158,7 +159,7 @@ describe('scanCatalog', () => {
     }
   });
 
-  it('submits the 51 rows with a PhysicalScale on at least one end', () => {
+  it('submits the rows with a PhysicalScale on at least one end', () => {
     // Updated 2026-05-24 (parallel-agent dispatch): 20 → 22 after adding
     // BE-53 (Yang-Mills, ['quantum','classical']) AND BE-54 (Randall-Sundrum,
     // ['quantum','cosmological']) — both pairs PhysicalScale-mappable.
@@ -169,7 +170,7 @@ describe('scanCatalog', () => {
     // 39 is the record from before those six.
     const report = scanCatalog(BRIDGE_EQUATIONS);
     // BE-164 through BE-169 name a PhysicalScale. 45 is the record from before those six.
-    expect(report.submitted).toHaveLength(51);
+    expect(report.submitted).toHaveLength(CENSUS.scaleCells.submitted);
   });
 
   it('does NOT throw on a malformed entry', () => {
@@ -251,7 +252,7 @@ describe('ingestCatalog', () => {
     // 39 is the record from before those six.
     const cells = tensor.populatedCells().filter((c) => c.kind === 'bridge');
     // BE-164 through BE-169 name a PhysicalScale. 45 is the record from before those six.
-    expect(cells).toHaveLength(51);
+    expect(cells).toHaveLength(CENSUS.scaleCells.submitted);
   });
 
   it('throws CatalogIngestionError on any Rule 1 error AND leaves tensor untouched', () => {

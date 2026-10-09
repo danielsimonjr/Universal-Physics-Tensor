@@ -21,6 +21,7 @@ import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CENSUS } from '../helpers/census.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const MANIFEST = JSON.parse(readFileSync(resolve(ROOT, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
@@ -56,10 +57,10 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
   it('the catalog references exist (otherwise the next assertions pass vacuously)', () => {
     // The counts are the proof-status record at this pin (3 property, 3
     // cross-check, 16 counted, 119 bridge); the ids come from the manifest.
-    expect(PROPERTIES.length).toBe(3);
-    expect(CROSS_CHECKS.length).toBe(3);
-    expect(COUNTED.length).toBe(16);
-    expect(CATALOG_EQUATION.length).toBe(119);
+    expect(PROPERTIES.length).toBe(CENSUS.formalRefs.catalogProperty);
+    expect(CROSS_CHECKS.length).toBe(CENSUS.formalRefs.catalogCrossCheck);
+    expect(COUNTED.length).toBe(CENSUS.formalRefs.catalogCounted);
+    expect(CATALOG_EQUATION.length).toBe(CENSUS.formalRefs.catalogBridgeKind);
     expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED, ...CATALOG_EQUATION].every((id) => row(id).formalRef !== undefined)).toBe(true);
   });
 
@@ -140,7 +141,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     ];
     // 127 is the record from before be-147..170 each added a catalog formalRef.
     // 57 is the record from before be-77..87 each added a catalog formalRef.
-    expect(refs.length).toBe(151);
+    expect(refs.length).toBe(CENSUS.formalRefs.emitted);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.

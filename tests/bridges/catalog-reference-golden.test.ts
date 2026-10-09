@@ -24,6 +24,7 @@ import { catalogRelations } from '../../src/bridges/catalog-load.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
 import { catalogEdge } from '../../src/composition/catalog-graph.js';
 import { evaluateEdge } from '../../src/composition/edge.js';
+import { CENSUS } from '../helpers/census.js';
 
 /** The spacing of doubles at `x`: the smallest step to the next representable value. */
 function ulp(x: number): number {
@@ -40,7 +41,7 @@ describe('catalog reference goldens', () => {
 
   it('there is a reference on every relation', () => {
     expect(relations.length).toBe(catalogRelations().length);
-    expect(relations.length).toBe(158);
+    expect(relations.length).toBe(CENSUS.relations.total);
   });
 
   it('a relation with no sources is a constant; its reference has no inputs', () => {

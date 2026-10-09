@@ -11,6 +11,7 @@ import {
   ADJUDICATIONS,
   annotateAdjudications,
 } from '../../src/composition/adjudication.js';
+import { CENSUS } from '../helpers/census.js';
 
 const count = (cands: readonly { verdict: string }[], v: string) =>
   cands.filter((c) => c.verdict === v).length;
@@ -86,7 +87,14 @@ describe('discovery calibration benchmark', () => {
   // 4196 → 4169, inert 2377 → 2360, axis-clash 1767 → 1757. promising and magnitude-clash stay.
   const EXPECTED = {
     // 2518 / 25 / 1307 / 1166 is the record from before be-147..170.
-    catalog: { total: 4169, promising: 32, inert: 2360, clash: 20, contradictory: 0, axisClash: 1757 },
+    catalog: {
+      total: CENSUS.discovery.catalog.total,
+      promising: CENSUS.discovery.catalog.promising,
+      inert: CENSUS.discovery.catalog.inert,
+      clash: CENSUS.discovery.catalog.magnitudeClash,
+      contradictory: CENSUS.discovery.catalog.contradictory,
+      axisClash: CENSUS.discovery.catalog.axisClash,
+    },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -99,7 +107,7 @@ describe('discovery calibration benchmark', () => {
     expect(count(cands, 'axis-clash')).toBe(EXPECTED.catalog.axisClash);
   });
 
-  it('the 1176 would-clash pairs decompose as 1166 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
+  it('the would-clash pairs decompose as axis-clash verdicts plus those shadowed by magnitude-clash', () => {
     const cands = rankDiscoveries(CATALOG_GRAPH);
     // `axisClashes` stays populated regardless of which falsifier wins, so
     // the shadowed pairs are exactly the magnitude-clash candidates whose
@@ -109,11 +117,13 @@ describe('discovery calibration benchmark', () => {
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
     // 1176 is the record from before be-147..170; 1777 the record from before be-33 and be-88 dropped two sources.
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1767);
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(
+      CENSUS.discovery.catalog.axisClash + CENSUS.discovery.catalog.shadowedByMagnitudeClash,
+    );
     // 994 is the record from before be-134..146.
     // 796 is the record from before be-126..133.
     // 455 is the record from before be-103..125.
-    expect(shadowed.length).toBe(10);
+    expect(shadowed.length).toBe(CENSUS.discovery.catalog.shadowedByMagnitudeClash);
   });
 
   // ── D1 axis gate: machine-readable flipped-pair pin (Eve r3 #6) ────────
@@ -162,7 +172,7 @@ describe('discovery calibration benchmark', () => {
   // rationale, same update protocol as the catalog counts above.
   it('canonical-only axis-clash count is pinned for the current audit', () => {
     const cands = rankDiscoveries(CANONICAL_GRAPH);
-    expect(count(cands, 'axis-clash')).toBe(1);
+    expect(count(cands, 'axis-clash')).toBe(CENSUS.discovery.canonical.axisClash);
   });
 
   it('adjudicated decoys never surface as unannotated promising', () => {

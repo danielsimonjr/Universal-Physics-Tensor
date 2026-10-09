@@ -14,6 +14,7 @@ import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { multiply, power, equals } from '../../src/dimensional/algebra.js';
 import { validate } from '../../src/dimensional/validator.js';
 import type { Dimension } from '../../src/dimensional/types.js';
+import { CENSUS } from '../helpers/census.js';
 
 const CATALOG_IDS = new Set(BRIDGE_EQUATIONS.map((b) => String(b.id)));
 
@@ -134,7 +135,7 @@ describe('OPEN-bridge coverage (F2 — gaps are logged, not silent)', () => {
     // 107 is the record from before those eight rows.
     // 136 catalog ids − 8 partnered. None of BE-134..146 has a canonical partner.
     // 128 is the record from before be-147..170. None of those twenty-four has a canonical partner.
-    expect(gap.length).toBe(152);
+    expect(gap.length).toBe(CENSUS.canonical.bridgesWithoutPartner);
     // every gap id is a real catalog id (and none is partnered)
     const partnered = partneredBridgeIds();
     for (const id of gap) {

@@ -8,6 +8,7 @@ import { parseUnit } from '../../src/dimensional/units.js';
 import { quantityRecord } from '../../src/dimensional/quantity-registry.js';
 import { M_SUN_SI } from '../../src/core/constants.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
+import { CENSUS } from '../helpers/census.js';
 
 describe('BRIDGE_EVALUATORS', () => {
   it('covers every catalog evaluator, and not a metadata-only id', () => {
@@ -19,7 +20,7 @@ describe('BRIDGE_EVALUATORS', () => {
     expect(ids).toContain(170);
     expect(ids).not.toContain(11);
     expect(ids).not.toContain(29);
-    expect(ids).toHaveLength(120);
+    expect(ids).toHaveLength(CENSUS.evaluators.count);
   });
 
   it('evaluateBridge(63, {mu_e:2}) → Chandrasekhar mass ≈ 1.44 M_⊙', () => {

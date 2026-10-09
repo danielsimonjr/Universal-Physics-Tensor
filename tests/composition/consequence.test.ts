@@ -4,6 +4,7 @@ import { rankDiscoveries } from '../../src/composition/discovery.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
+import { CENSUS } from '../helpers/census.js';
 
 describe('annotateConsequences', () => {
   it('attaches a consequence to every candidate; promising get a signal, non-promising get inconclusive/none', () => {
@@ -27,13 +28,15 @@ describe('annotateConsequences', () => {
     expect(novel).toBe(1);
   });
 
-  it('LIVE PIN: canonical promising yields 0 entailed, 5 novel-consequence', () => {
+  it('LIVE PIN: canonical promising yields 0 entailed, and the census novel-consequence count', () => {
     const annotated = annotateConsequences(rankDiscoveries(CANONICAL_GRAPH));
     const promising = annotated.filter((c) => c.verdict === 'promising');
     expect(promising.filter((c) => c.consequence?.signal === 'entailed').length).toBe(0);
     // Landauer photon, hν=mc², Wien/Hubble, Compton-full against Hubble distance,
     // and the classical electron radius against that distance once 1/(4π) is in the value.
-    expect(promising.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(5);
+    expect(promising.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(
+      CENSUS.discovery.canonical.promisingNovelConsequence,
+    );
   });
 
   it('annotation is order-preserving and non-mutating (same verdicts/scores as input)', () => {

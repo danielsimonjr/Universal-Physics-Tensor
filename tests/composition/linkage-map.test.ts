@@ -6,13 +6,14 @@
 import { describe, it, expect } from 'vitest';
 import { linkageMap } from '../../src/composition/bridge-analysis.js';
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
+import { CENSUS } from '../helpers/census.js';
 
 const GRAPH = CATALOG_GRAPH;
 
 const m = linkageMap(GRAPH);
 
 describe('linkageMap — component structure', () => {
-  it('partitions the 127-edge graph into 102 components (98 isolated)', () => {
+  it('partitions the catalog graph into components, most of them isolated edges', () => {
     // 43 components and 39 isolated edges are the record from before be-88..102.
     // Each of those fifteen edges uses quantities that meet no other edge.
     // 58 components and 54 isolated edges are the record from before be-103..125.
@@ -22,24 +23,24 @@ describe('linkageMap — component structure', () => {
     // 89 components and 85 isolated edges are the record from before be-134..146.
     // Each of those thirteen edges uses quantities that meet no other edge.
     // 102 components and 98 isolated edges are the record from before be-147..170.
-    expect(m.componentCount).toBe(133);
-    expect(m.isolated.length).toBe(129);
+    expect(m.componentCount).toBe(CENSUS.linkage.components);
+    expect(m.isolated.length).toBe(CENSUS.linkage.isolated);
     expect(m.clusters.reduce((n, c) => n + c.size, 0)).toBe(GRAPH.length);
   });
 
-  it('reports the 22 directed compositions over the graph', () => {
-    expect(m.compositions).toBe(22);
+  it('reports the directed compositions over the graph', () => {
+    expect(m.compositions).toBe(CENSUS.linkage.compositions);
   });
 
-  it('has one dominant ANCHORED cluster of 22, hubbed on mass + temperature', () => {
+  it('has one dominant ANCHORED cluster, hubbed on mass + temperature', () => {
     const big = m.clusters[0];
-    expect(big.size).toBe(22);
+    expect(big.size).toBe(CENSUS.linkage.anchoredClusterSize);
     expect(big.anchored).toBe(true);
     expect(big.hubs).toEqual(expect.arrayContaining(['mass', 'temperature', 'schwarzschild-radius']));
     // it links established GR to speculative thermal/quantum bridges
     expect(big.edges).toEqual(expect.arrayContaining(['be-42', 'be-51', 'be-52', 'be-16', 'be-12', 'be-63']));
     // 6 is the record from before be-67 and be-69 joined this cluster with be-74..76.
-    expect(big.statusMix.established).toBe(11);
+    expect(big.statusMix.established).toBe(CENSUS.linkage.anchoredClusterEstablished);
   });
 
   it('has the cosmological-constant cluster (be-13/be-20/be-31)', () => {

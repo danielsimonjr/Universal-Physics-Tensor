@@ -118,6 +118,8 @@ jobs:
           echo "docs/architecture/ matches a fresh generation."
       - name: Fail when README and ROADMAP status spans are stale
         run: bun scripts/readme-status.ts --check
+      - name: Fail when the catalog census is stale
+        run: bun scripts/catalog-census.ts --check
       - name: Fail when the CLI reference is stale
         run: bun scripts/cli-reference.ts --check
       - name: Fail when the PhysJS table is stale

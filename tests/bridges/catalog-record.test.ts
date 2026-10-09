@@ -28,6 +28,7 @@ import { BRIDGE_EVALUATORS } from '../../src/bridges/evaluators.js';
 import { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS } from '../../src/bridges/rejected.js';
 import { predictedAt } from '../../src/bridges/sensitivity.js';
 import { reservedFormulaNames } from '../../src/bridges/expr-parse.js';
+import { CENSUS } from '../helpers/census.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..', '..');
@@ -67,7 +68,7 @@ describe('the catalog file carries only fields something reads', () => {
   it('the file has no count field; the array length is the count', () => {
     expect('count' in raw).toBe(false);
     expect(schema.required).not.toContain('count');
-    expect(catalogEntries()).toHaveLength(160);
+    expect(catalogEntries()).toHaveLength(CENSUS.catalog.entries);
   });
 });
 
