@@ -311,7 +311,7 @@ holds is still named, as a change to its module.
 
 ```bash
 node bin/upt.mjs --record=session.jsonl evaluate be-58 T_K=300 R_ohm=1000
-node bin/upt.mjs --record=session.jsonl eval "ln(x)" x=-1          # exit 2, recorded
+node bin/upt.mjs --record=session.jsonl eval "ln(x)" x=-1          # exit 1 (a non-finite value), recorded
 node bin/upt.mjs --show-record=session.jsonl                       # readable transcript
 ```
 
@@ -353,7 +353,7 @@ node bin/upt.mjs --replay=session.jsonl
 # [line 1] $ upt evaluate be-58 T_K=300 R_ohm=1000
 #     reproduced — exit 0, stdout and stderr identical
 # [line 2] $ upt eval 'ln(x)' x=-1
-#     reproduced — exit 2, stdout and stderr identical
+#     reproduced — exit 1, stdout and stderr identical
 # summary: 2 reproduced, 0 differ, 0 not replayable; environment changed for 0 of 2; 0 integrity findings
 ```
 
@@ -395,7 +395,7 @@ node bin/upt.mjs map --equation "hawking_temperature = hbar*c^3/(4*pi*G*mass*k_B
 node bin/upt.mjs map --source=canonical --equation "period = mass"
 #   → ⚠ dimensional MISMATCH: RHS is [mass] but the target is [time]
 node bin/upt.mjs map --source=canonical --equation "period = uu / gravity"
-#   → ⚠ 'uu' is unknown — by its inferred dimension, did you mean: speed?
+#   → exit 3: 'uu' has no catalog dimension (NOT ESTABLISHED); by its inferred dimension, did you mean: v, speed, velocity, sound-speed, flow-velocity?
 node bin/upt.mjs map --source=both --equation "photon_energy = h * nu" --format=svg --out=mine.svg
 
 # Compose symbolic bridge forms, then simplify the composed AST:
@@ -553,7 +553,7 @@ rather than as not matching.
 | `0` | Success. |
 | `1` | Bad `--source`/`--format` value, empty `--out=`, an invalid or unregistered `confront --bridge` value, an unknown `regime` family, an unknown `path` model id, an `explain` name that is not a quantity of the graph (NOT COVERED), a non-numeric `upt eval` or `upt evaluate` binding value (`x=nope`, `mu_e=nope`, an empty value after `=`, an empty `--anchor` value, an `upt eval` formula whose value is not a finite real (`ln(-1)`, `1/0`), a non-finite value), a Kerr `--geodesic` with a non-positive mass or with `|a|` above GM/c², a non-numeric or negative `--max-orders`, a `probe` `--budget-ms`, `--holdout-tol` or `--alpha` outside its range, a `--problem` file that is not a problem file, a `discover` `--anchor` on a name no graph holds or with a unit of another dimension, the optional SVG renderer is missing, or the built package could not be loaded. **A `path` that carries no composite claim is NOT an error — it exits 0.** |
 | `2` | Usage error: missing required argument, unparseable expression syntax, a binding with no `=`, unknown command, an **unknown/mistyped flag** (e.g. `--sourc=canonical`), a malformed or dimensionally non-homogeneous `--equation`, or combining `--json` with `map --format=mermaid\|dot\|svg`. |
-| `3` | **The command ran and its check came out negative** (since 0.47.0): `derive --formula` whose dimension differs from the target, that does not match the dimensional monomial, or that differs from the canonical equation by a factor or in form; `map --equation` with a dimension mismatch (every name resolved) or a canonical difference; `path` with a violated regime or horizon at the `--at` point; `regime` when any record is VIOLATED; an applied case whose regime check fails; `--replay` with an entry whose output differs from the record. An UNKNOWN result, where a coordinate was not supplied or a name did not resolve, is not a failure and exits `0`. A `regime` survey that is VACUOUS or UNKNOWN, with no violated record, exits `0`. |
+| `3` | **The command ran and its check came out negative** (since 0.47.0): `derive --formula` whose dimension differs from the target, that does not match the dimensional monomial, or that differs from the canonical equation by a factor or in form; `map --equation` with a dimension mismatch, a name no graph resolves (the dimension is NOT ESTABLISHED), or a canonical difference; `path` with a violated regime or horizon at the `--at` point; `regime` when any record is VIOLATED; an applied case whose regime check fails; `--replay` with an entry whose output differs from the record. An UNKNOWN result, where a coordinate was not supplied or a name did not resolve, is not a failure and exits `0`. A `regime` survey that is VACUOUS or UNKNOWN, with no violated record, exits `0`. |
 
 ---
 

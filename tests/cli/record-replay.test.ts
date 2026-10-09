@@ -58,8 +58,8 @@ beforeAll(async () => {
 });
 
 describe('upt --record', () => {
-  it('PRECONDITION (not a test of recording): the three invocations exit 0, 2, 1 without it', () => {
-    expect(plain.map((p) => p.code)).toEqual([0, 2, 1]);
+  it('PRECONDITION (not a test of recording): the three invocations exit 0, 1, 1 without it', () => {
+    expect(plain.map((p) => p.code)).toEqual([0, 1, 1]);
   });
 
   it('recording changes nothing the caller sees: same exit code, stdout and stderr', () => {
@@ -69,7 +69,7 @@ describe('upt --record', () => {
   it('keeps every invocation in order, failures included, with their streams', () => {
     const entries = readEntries(session);
     expect(entries.map((e) => e.argv)).toEqual([THERMAL, FAILED_LN, INVALID_INPUT]);
-    expect(entries.map((e) => e.result.exitCode)).toEqual([0, 2, 1]);
+    expect(entries.map((e) => e.result.exitCode)).toEqual([0, 1, 1]);
     entries.forEach((e, i) => {
       expect(e.schema).toBe('upt-record/2');
       expect(e.result.stdout).toBe(plain[i].stdout);
@@ -150,7 +150,7 @@ describe('upt --show-record', () => {
     const r = await run([`--show-record=${session}`]);
     expect(r.code).toBe(0);
     expect(r.stdout).toContain('$ upt evaluate be-58 T_K=300 R_ohm=1000   (exit 0;');
-    expect(r.stdout).toContain(`$ upt eval 'ln(x)' x=-1   (exit 2;`);
+    expect(r.stdout).toContain(`$ upt eval 'ln(x)' x=-1   (exit 1;`);
     expect(r.stdout).toContain('$ upt evaluate be-58 T_K=abc R_ohm=1000   (exit 1;');
     expect(r.stdout).toContain("    ! upt evaluate: be-58: 'abc' is not a number with an optional unit");
     expect(r.stdout).toMatch(new RegExp(`environment: upt ${pkgVersion.replace(/\./g, '\\.')}, node `));
@@ -162,7 +162,7 @@ describe('upt --show-record', () => {
     const r = await run([`--show-record=${session}`, '--json']);
     const env = JSON.parse(r.stdout);
     expect(env.command).toBe('show-record');
-    expect(env.result.map((e: { result: { exitCode: number } }) => e.result.exitCode)).toEqual([0, 2, 1]);
+    expect(env.result.map((e: { result: { exitCode: number } }) => e.result.exitCode)).toEqual([0, 1, 1]);
   });
 
   it('a missing record exits 1', async () => {
@@ -190,7 +190,7 @@ describe('upt --replay', () => {
   it('an untouched record reproduces every entry, the failures included, and exits 0', async () => {
     const r = await run([`--replay=${session}`]);
     expect(r.code).toBe(0);
-    expect(r.stdout).toContain(`$ upt eval 'ln(x)' x=-1\n    reproduced — exit 2, stdout and stderr identical`);
+    expect(r.stdout).toContain(`$ upt eval 'ln(x)' x=-1\n    reproduced — exit 1, stdout and stderr identical`);
     expect(r.stdout.match(/^ {4}reproduced — /gm)).toHaveLength(3);
     expect(r.stdout).toContain(
       'summary: 3 reproduced, 0 differ, 0 not replayable; environment changed for 0 of 3; 0 integrity findings',
@@ -246,7 +246,7 @@ describe('upt --replay', () => {
     });
     const { code, env } = await replayJson(file);
     expect(code).toBe(3);
-    expect(env.result.entries[1].differences).toEqual([{ stream: 'exit', recorded: 'exit 0', replayed: 'exit 2' }]);
+    expect(env.result.entries[1].differences).toEqual([{ stream: 'exit', recorded: 'exit 0', replayed: 'exit 1' }]);
   });
 
   it('a changed constant is NAMED, beside a reproduced output — not folded into either', async () => {
