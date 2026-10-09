@@ -27,15 +27,19 @@ export interface EngineTensor {
 }
 
 /** One contracted index: the two (operand, axis) coordinates that the
- *  Einstein summation pairs and sums over.
- *  @internal */
+ *  Einstein summation pairs and sums over. Named by the public
+ *  {@link EinsumSpec}, so it is public too.
+ *  @public */
 export interface EinsumContraction {
   readonly pair: readonly [readonly [number, number], readonly [number, number]];
 }
 
-/** One surviving (free) index in the einsum output, in output-axis order.
- *  v0.6.1: dropped export — was @internal-tagged with no external consumer. */
-interface EinsumFreeAxis {
+/** One surviving (free) index in the einsum output, in output-axis order:
+ *  the operand and the axis of that operand it comes from. Exported because
+ *  the public {@link EinsumSpec} names it (the surface is closed under type
+ *  references).
+ *  @public */
+export interface EinsumFreeAxis {
   readonly operand: number;
   readonly axis: number;
 }

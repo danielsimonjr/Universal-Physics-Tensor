@@ -94,7 +94,6 @@ export interface UnitTableData {
   readonly sha256: string;
 }
 
-const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
 /** π, which the registry does not spell (a formula scope adds `pi` itself), as the irrational factor. */
 const PI = 'pi';
 const PI_SCALE = irrationalScale(Math.PI);
@@ -107,9 +106,15 @@ function constantScale(name: string): ExactScale | undefined {
 }
 
 function dimension(d: DimensionFile): Dimension {
-  const out: Record<string, number> = {};
-  for (const base of BASES) out[base] = d[base] ?? 0;
-  return out as unknown as Dimension;
+  return {
+    L: d.L ?? 0,
+    M: d.M ?? 0,
+    T: d.T ?? 0,
+    I: d.I ?? 0,
+    Theta: d.Theta ?? 0,
+    N: d.N ?? 0,
+    J: d.J ?? 0,
+  };
 }
 
 /**

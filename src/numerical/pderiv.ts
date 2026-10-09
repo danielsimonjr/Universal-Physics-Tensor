@@ -131,7 +131,9 @@ export function pderivNumericalFn(
     const d = new Array(len);
     const inv2h = 1 / (2 * h);
     for (let i = 0; i < len; i++) {
-      d[i] = (fp[i] - fm[i]) * inv2h;
+      // A component that is the same number at every stencil point does not
+      // move: its derivative is exactly 0, not the stencil's roundoff over h.
+      d[i] = fp[i] === fm[i] ? 0 : (fp[i] - fm[i]) * inv2h;
     }
     return d.length === 1 ? d[0] : d;
   }
@@ -154,7 +156,12 @@ export function pderivNumericalFn(
   const len = fp1.length;
   const d = new Array(len);
   for (let i = 0; i < len; i++) {
-    d[i] = (-fp2[i] + 8 * fp1[i] - 8 * fm1[i] + fm2[i]) * inv12h;
+    // A component that is the same number at every stencil point does not
+    // move: its derivative is exactly 0. The stencil cancels a large constant
+    // (g_tt = −c²) only up to the roundoff of 8·f, and that roundoff over h
+    // is a fake derivative of order 10⁴.
+    const still = fp1[i] === fm1[i] && fp1[i] === fp2[i] && fp1[i] === fm2[i];
+    d[i] = still ? 0 : (-fp2[i] + 8 * fp1[i] - 8 * fm1[i] + fm2[i]) * inv12h;
   }
   return d.length === 1 ? d[0] : d;
 }

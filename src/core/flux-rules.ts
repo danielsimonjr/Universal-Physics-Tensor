@@ -283,7 +283,7 @@ function checkEmergenceCoordinate(cell: EmergenceCell): FluxRuleResult {
 }
 
 // ---------------------------------------------------------------------------
-// Rule 3 — Causality (WARNING tier in v0.7)
+// Rule 3 — Causality (ERROR tier)
 // ---------------------------------------------------------------------------
 
 /**

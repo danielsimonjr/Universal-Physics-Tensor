@@ -3,9 +3,14 @@
  * so CLI users can declare a quantity's dimensions without TypeScript.
  *
  * Accepts (in priority order):
- *   1. a named dimension — `length`, `time`, `mass`, `velocity`,
- *      `acceleration`, `force`, `energy`, `power`, `action`, `frequency`,
- *      `temperature`, `entropy`, `charge`, `area`, `dimensionless`;
+ *   1. a named dimension — the `types.ts` constants (`length`, `time`,
+ *      `mass`, `velocity`, `acceleration`, `force`, `energy`, `power`,
+ *      `action`, `frequency`, `temperature`, `entropy`, `charge`, `area`,
+ *      `dimensionless`, `density`) and the dimensions of the SI units
+ *      `m^3`, `Pa`, `Pa*s`, `ohm`, `T`, `H/m`, `A`, `mol`, `cd` under the
+ *      names `volume`, `pressure`, `viscosity`, `resistance`,
+ *      `magnetic-field`, `permeability`, `current`, `amount` (or
+ *      `amount-of-substance`), `luminous-intensity`;
  *   2. a fundamental constant by name — `hbar`/`ℏ`, `c`, `G`, `k_B`/`kB`,
  *      `e` (its SI dimension);
  *   3. a product/quotient of named dimensions or constants — `power/area`,
@@ -22,10 +27,11 @@
  * ({@link parseFormulaPNode}). The dimension notation differs from a formula
  * only in spelling, and {@link formulaSyntax} rewrites those spellings
  * before the parse: a `.` between factors is `*`, a space between factors is
- * `*`, a glued exponent (`L2`, `T-2`) takes its `^`, a fractional exponent
- * (`T^1/2`) is parenthesized, and a hyphen inside a name (`magnetic-field`)
- * is `_`. There is no subtraction in a dimension, so `-` after a name is
- * always an exponent's sign.
+ * `*`, a glued exponent (`L2`, `T-2`) takes its `^` unless the letters and
+ * the digit together spell a registered atom (`mu0`, `eps0`), a fractional
+ * exponent (`T^1/2`) is parenthesized, and a hyphen inside a name
+ * (`magnetic-field`) is `_`. There is no subtraction in a dimension, so `-`
+ * after a name is always an exponent's sign.
  *
  * @module dimensional/dimension-spec
  */
@@ -38,6 +44,7 @@ import {
   TIME,
   FREQUENCY,
   MASS,
+  MASS_DENSITY,
   VELOCITY,
   ACCELERATION,
   FORCE,
@@ -51,6 +58,7 @@ import {
 import { divide, multiply, power } from './algebra.js';
 import { dim } from './ast-builders.js';
 import { CONSTANT_REGISTRY } from './symbolic-constants.js';
+import { unitDimension } from './units.js';
 import { parseFormulaPNode, type FormulaPNode } from '../numerical/formula-dimension.js';
 
 /** A bad dimension spec. */
@@ -61,17 +69,20 @@ export class DimensionSpecError extends Error {
   }
 }
 
-/** `dim(L, M, T, I, Θ)`, the one builder, from `ast-builders`. */
-const d = dim;
-
-/** Named dimensions — matched case-insensitively. */
+/**
+ * Named dimensions — matched case-insensitively. Each is a `types.ts`
+ * constant or the dimension of an SI unit read by the one unit reader; no
+ * exponent tuple is typed here.
+ */
 const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
   dimensionless: DIMENSIONLESS,
   length: LENGTH,
   area: AREA,
+  volume: unitDimension('m^3'),
   time: TIME,
   frequency: FREQUENCY,
   mass: MASS,
+  density: MASS_DENSITY,
   velocity: VELOCITY,
   acceleration: ACCELERATION,
   force: FORCE,
@@ -81,13 +92,16 @@ const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
   temperature: TEMPERATURE,
   entropy: ENTROPY,
   charge: CHARGE,
-  pressure: d(-1, 1, -2),
-  density: d(-3, 1),
-  volume: d(3),
-  viscosity: d(-1, 1, -1),
-  resistance: d(2, 1, -3, -2, 0),
-  magnetic_field: d(0, 1, -2, -1, 0),
-  permeability: d(1, 1, -2, -2, 0),
+  current: unitDimension('A'),
+  electric_current: unitDimension('A'),
+  amount: unitDimension('mol'),
+  amount_of_substance: unitDimension('mol'),
+  luminous_intensity: unitDimension('cd'),
+  pressure: unitDimension('Pa'),
+  viscosity: unitDimension('Pa*s'),
+  resistance: unitDimension('ohm'),
+  magnetic_field: unitDimension('T'),
+  permeability: unitDimension('H/m'),
 };
 
 /**
@@ -130,7 +144,7 @@ function resolveAtom(raw: string): Dimension | null {
 function baseAtom(id: string): Dimension | null {
   const baseKey = BASES[id.toUpperCase()] ?? BASES[id];
   if (!baseKey) return null;
-  const out = d();
+  const out = dim();
   out[baseKey] = 1;
   return out;
 }
@@ -148,8 +162,12 @@ function formulaSyntax(spec: string): string {
       // Spaces around an operator carry nothing; between two factors they multiply.
       .replace(/\s*([*/^().])\s*/g, '$1')
       .replace(/\s+/g, '*')
-      // A glued exponent: `L2`, `T-2`, `T-2.5` (a name's own digits follow `_`, as in `mu_0`).
-      .replace(/(?<=[A-Za-zΘ])([+-]?\d)/g, '^$1')
+      // A glued exponent: `L2`, `T-2`, `T-2.5`. The letters and the digit
+      // together may spell a registered atom (`mu0`, `eps0`, `mu_0`); that
+      // token is a name, not a base with an exponent.
+      .replace(/([A-Za-zΘ_]+)([+-]?\d)/g, (token, word: string, digit: string) =>
+        resolveAtom(token) !== null ? token : `${word}^${digit}`,
+      )
       // A fractional exponent: `T^1/2` is `T^(1/2)`.
       .replace(/\^([+-]?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)/g, '^($1/$2)')
       // A dot between factors is a product; a dot before a digit is a decimal point.
@@ -193,7 +211,7 @@ function dimensionOf(node: FormulaPNode, spec: string): Dimension {
     }
     case 'num':
       // A literal 1 is the dimensionless numerator: `1/time`.
-      if (node.value === 1) return d();
+      if (node.value === 1) return dim();
       throw new DimensionSpecError(`a number is not a dimension term ('${node.value}' in '${spec}')`);
     case 'pow': {
       const exponent = exponentOf(node.exp, spec);

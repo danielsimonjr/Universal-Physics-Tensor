@@ -36,10 +36,14 @@ import type {
 // `Axes.scale.<quantum|mesoscopic|classical|cosmological>`, etc.
 // ---------------------------------------------------------------------------
 
-type ScaleAxes = { readonly [K in PhysicalScale]: UniversalIndex<'scale'> };
-type ForceAxes = { readonly [K in Force]: UniversalIndex<'force'> };
-type SymmetryAxes = { readonly [K in Symmetry]: UniversalIndex<'symmetry'> };
-type InformationAxes = {
+/** The scale namespace of {@link AxesRegistry}: one index per `PhysicalScale`. @public */
+export type ScaleAxes = { readonly [K in PhysicalScale]: UniversalIndex<'scale'> };
+/** The force namespace of {@link AxesRegistry}: one index per `Force`. @public */
+export type ForceAxes = { readonly [K in Force]: UniversalIndex<'force'> };
+/** The symmetry namespace of {@link AxesRegistry}: one index per `Symmetry`. @public */
+export type SymmetryAxes = { readonly [K in Symmetry]: UniversalIndex<'symmetry'> };
+/** The information namespace of {@link AxesRegistry}: one index per `InformationMeasure`. @public */
+export type InformationAxes = {
   readonly [K in InformationMeasure]: UniversalIndex<'information'>;
 };
 

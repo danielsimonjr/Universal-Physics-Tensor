@@ -20,7 +20,7 @@ import { equals, format, multiply } from '../dimensional/algebra.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/validator.js';
 import { validate } from '../dimensional/validator.js';
 import { sym } from '../dimensional/ast-builders.js';
-import { EULER_NUMBER_ERROR, EulerNumberError, FormulaError } from './formula-contract.js';
+import { EULER_NUMBER_ERROR, EulerNumberError, FormulaError, SCALAR_FUNCTIONS, unknownFunctionMessage } from './formula-contract.js';
 
 /** A formula cannot be dimensionally analyzed (undeclared symbol, variable
  *  exponent, transcendental of a dimensional argument, unsupported node).
@@ -62,7 +62,7 @@ class ElementaryChargeMixError extends FormulaDimensionError {
   }
 }
 
-/** Dimensionless math constants both parsers recognize. Bare `e` is not here:
+/** Dimensionless math constants the parser recognizes. Bare `e` is not here:
  *  ISO 80000 names that symbol the elementary charge. Euler's number is `exp(x)`. */
 const MATH_CONSTANTS = new Set(['pi', 'tau', 'phi', 'Infinity', 'NaN']);
 
@@ -80,29 +80,10 @@ export function formulaSymbolDimension(name: string): Dimension | undefined {
   return undefined;
 }
 
-/** Parser function names → the dimensional grammar's `transcendental` node fn
- *  (dimensionless → dimensionless). `log` is natural log (mathjs convention). */
-const TRANSCENDENTAL_FN: Readonly<Record<string, TranscendentalFn>> = {
-  exp: 'exp', ln: 'ln', log: 'ln', log10: 'log10', log2: 'log2',
-  sin: 'sin', cos: 'cos', tan: 'tan', sinh: 'sinh', cosh: 'cosh', tanh: 'tanh',
-};
-
-/** Transcendentals WITHOUT a grammar node — kept as dimensionless stubs (still
- *  dimensionless→dimensionless, just not a faithful node). */
-const TRANSCENDENTAL_STUB = new Set(['asin', 'acos', 'atan', 'sec', 'csc', 'cot']);
-
 const op = (o: '+' | '-' | '*' | '/' | '^', args: ExprNode[]): ExprNode => ({ kind: 'op', op: o, args });
 const powExpr = (base: ExprNode, exp: number): ExprNode => op('^', [base, sym(String(exp), DIMENSIONLESS)]);
 const transcendental = (fn: TranscendentalFn, arg: ExprNode): ExprNode => ({ kind: 'transcendental', fn, arg });
 const absNode = (arg: ExprNode): ExprNode => ({ kind: 'abs', arg });
-
-/** Dispatch a parsed function name to its `ExprNode`. Shared by both transpilers. */
-function transpileFunction(fn: string, argExpr: ExprNode): ExprNode | null {
-  if (fn === 'abs') return absNode(argExpr);
-  if (fn in TRANSCENDENTAL_FN) return transcendental(TRANSCENDENTAL_FN[fn], argExpr);
-  if (TRANSCENDENTAL_STUB.has(fn)) return transcendentalStub(fn, argExpr);
-  return null;
-}
 
 /** Resolve a symbol to a dimensioned `ExprNode` (declared dim, or a
  *  dimensionless math constant, else an error). */
@@ -137,9 +118,8 @@ function dimensionIsCharge(dim: Dimension): boolean {
  * What to say when a bare `e` was the elementary charge inside a sum that is
  * not homogeneous. Declaring or binding `e` keeps a different quantity.
  * Euler's number is `exp(x)`.
- * @internal
  */
-export const ELEMENTARY_CHARGE_MIX_MESSAGE =
+const ELEMENTARY_CHARGE_MIX_MESSAGE =
   'e is the elementary charge and is not dimensionless here. Declare it or bind a value (e=<number>) if you mean a different quantity, or write Euler\'s number as exp(x). The catalog writes the eccentricity factor as one_minus_e_sq.';
 
 /** Inferred dimension of an `ExprNode`, or throw if not homogeneous. */
@@ -165,12 +145,47 @@ function transcendentalStub(fn: string, argExprNode: ExprNode): ExprNode {
   return sym(`${fn}(...)`, DIMENSIONLESS);
 }
 
+/**
+ * A call, dispatched by the one function table's dimension rule. The arity is
+ * the table's: a call with another number of arguments is a dimension error,
+ * not a crash on a missing argument or a silently dropped extra one.
+ */
+function callToExpr(fn: string, args: readonly PNode[], dims: Readonly<Record<string, Dimension>>): ExprNode {
+  const spec = SCALAR_FUNCTIONS[fn];
+  if (spec === undefined) throw new FormulaDimensionError(unknownFunctionMessage(fn));
+  if (args.length !== spec.arity) {
+    throw new FormulaDimensionError(
+      `${fn}() expects ${spec.arity} argument${spec.arity === 1 ? '' : 's'}, got ${args.length}`,
+    );
+  }
+  const rule = spec.dimension;
+  switch (rule.kind) {
+    case 'root':
+      return powExpr(normToExpr(args[0]!, dims), rule.power);
+    case 'power':
+      return powOf(normToExpr(args[0]!, dims), args[1]!, dims);
+    case 'same':
+      return absNode(normToExpr(args[0]!, dims));
+    case 'transcendental': {
+      const arg = normToExpr(args[0]!, dims);
+      return rule.node === undefined ? transcendentalStub(fn, arg) : transcendental(rule.node, arg);
+    }
+    case 'ratio': {
+      const [y, x] = [dimensionOf(normToExpr(args[0]!, dims)), dimensionOf(normToExpr(args[1]!, dims))];
+      if (!equals(y, x)) {
+        throw new FormulaDimensionError(`${fn}() arguments must have the same dimension, got ${format(y)} and ${format(x)}`);
+      }
+      return sym(`${fn}(...)`, DIMENSIONLESS);
+    }
+  }
+}
+
 // --- one transpiler over a normalized parse node (Phase 2) ----------------
 //
-// The two front-ends (MathTS AST, built-in `FormulaAstNode`) are each adapted to
-// a tiny normalized `PNode`; the dimensional transpilation (`normToExpr`) and the
-// constant-exponent folding (`pnodeConstant`) then live in ONE place. `ExprNode`
-// is the single semantic IR; the parse-trees are transient.
+// The MathTS AST, the one front-end, is adapted to a tiny normalized `PNode`;
+// the dimensional transpilation (`normToExpr`) and the constant-exponent
+// folding (`pnodeConstant`) live in ONE place. `ExprNode` is the single
+// semantic IR; the parse-tree is transient.
 
 /** Structural shape of a MathTS AST node (the bits the adapter reads). */
 interface MathNode {
@@ -226,6 +241,23 @@ function pnodeConstant(node: PNode): number {
   if (!Number.isFinite(v)) throw new FormulaDimensionError('exponent must be a finite numeric constant');
   return v;
 }
+
+/**
+ * The number a numeric-constant exponent folds to (`2`, `-1`, `1/2`,
+ * `(2+1)/3`), or undefined when the node names a symbol or a call. The
+ * binding reader uses the same folding for its exponents, so the two
+ * readers agree on what an exponent may be.
+ * @internal
+ */
+export function constantExponent(node: PNode): number | undefined {
+  try {
+    return pnodeConstant(node);
+  } catch (error) {
+    if (error instanceof FormulaDimensionError) return undefined;
+    throw error;
+  }
+}
+
 function evalConstPNode(node: PNode): number {
   switch (node.kind) {
     case 'num':
@@ -278,15 +310,8 @@ function normToExpr(node: PNode, dims: Readonly<Record<string, Dimension>>): Exp
       return op(node.op, node.args.map((a) => normToExpr(a, dims)));
     case 'pow':
       return powOf(normToExpr(node.base, dims), node.exp, dims);
-    case 'call': {
-      const fn = node.fn;
-      if (fn === 'sqrt') return powExpr(normToExpr(node.args[0], dims), 0.5);
-      if (fn === 'cbrt') return powExpr(normToExpr(node.args[0], dims), 1 / 3);
-      if (fn === 'pow') return powOf(normToExpr(node.args[0], dims), node.args[1], dims);
-      const fnNode = transpileFunction(fn, normToExpr(node.args[0], dims));
-      if (fnNode) return fnNode;
-      throw new FormulaDimensionError(`unsupported function '${fn}'`);
-    }
+    case 'call':
+      return callToExpr(node.fn, node.args, dims);
   }
 }
 
@@ -363,6 +388,9 @@ function createFormulaDimensionChecker(
 
 function parsedMathNode(expr: string): MathNode {
   try {
+    // MathTS's Node type is not imported; `MathNode` is the structural subset
+    // this adapter reads (`type`, `value`, `name`, `op`, `args`, `content`,
+    // `fn`), every field of which exists on a MathTS node of that `type`.
     return parseMathTs(expr) as unknown as MathNode;
   } catch (e) {
     throw new FormulaError(`parse error: ${e instanceof Error ? e.message : String(e)}`);

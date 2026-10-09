@@ -247,7 +247,12 @@ export function _resetRegistryForTesting(): void {
 // Phase 3 — per-axis convenience APIs (typed narrowing)
 // ---------------------------------------------------------------------------
 
-type AxisConvenience<Axis extends AxisName> = (
+/**
+ * The shape of the per-axis `define*` helpers: a {@link RegimeSpec} with the
+ * axis already fixed, returning the registered value.
+ * @public
+ */
+export type AxisConvenience<Axis extends AxisName> = (
   spec: Omit<RegimeSpec<Axis>, 'axis'>,
 ) => RegimeValueBase;
 

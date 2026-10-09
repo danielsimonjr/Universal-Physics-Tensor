@@ -102,11 +102,19 @@ export class AxisMismatchError extends UPTError {
  */
 export class IdentityConflictError extends UPTError {
   public readonly indexId: UniversalIndexId;
-  constructor(indexId: UniversalIndexId) {
+  /**
+   * `where` says which shape was met: the id twice on ONE operand (a
+   * self-contraction, which `contract` does not perform), or the id as a
+   * free axis on BOTH operands beside a contraction (three occurrences).
+   */
+  constructor(indexId: UniversalIndexId, where: 'one-operand' | 'both-operands' = 'both-operands') {
     super(
-      `LabeledTensor.contract: UniversalIndexId '${indexId}' appears as a ` +
-      `free axis on both operands. Same physical axis on both sides is ` +
-      `ambiguous — rename or contract one side first.`,
+      where === 'one-operand'
+        ? `LabeledTensor.contract: UniversalIndexId '${indexId}' appears twice on one operand. ` +
+          `A self-contraction is not a contract(); rename one axis or trace it first.`
+        : `LabeledTensor.contract: UniversalIndexId '${indexId}' appears as a ` +
+          `free axis on both operands. Same physical axis on both sides is ` +
+          `ambiguous — rename or contract one side first.`,
     );
     this.name = 'IdentityConflictError';
     this.indexId = indexId;
@@ -438,9 +446,9 @@ export class LabeledTensor<
       } else if (occurrences.length === 2) {
         const [a, b] = occurrences;
         if (a.operand === b.operand) {
-          // Same id appears twice in one operand: that's a tensor-self-
-          // contraction situation; flag as free conflict.
-          throw new IdentityConflictError(id);
+          // The same id twice in one operand is a self-contraction, which
+          // contract() does not perform.
+          throw new IdentityConflictError(id, 'one-operand');
         }
         if (a.axisName !== b.axisName) {
           throw new AxisMismatchError(id, a.axisName, b.axisName);
@@ -540,10 +548,12 @@ export class LabeledTensor<
       if (p === -1) throw new AxisMergeError(`'${k}' is not a label key.`);
       positions.push(p);
     }
+    // Distinct keys have distinct positions (the duplicate check above), so a
+    // contiguous run is exactly `hi − lo === n − 1`.
     const sorted = [...positions].sort((a, b) => a - b);
     const lo = sorted[0];
     const hi = sorted[sorted.length - 1];
-    if (new Set(sorted).size !== sorted.length || hi - lo !== sorted.length - 1) {
+    if (hi - lo !== sorted.length - 1) {
       throw new AxisMergeError(
         `keys ${JSON.stringify(keys)} are not a contiguous run of engine axes ` +
         `(positions ${JSON.stringify(positions)}); transpose them adjacent first.`,

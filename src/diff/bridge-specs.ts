@@ -10,6 +10,19 @@ import { catalogEdgeKey, catalogRelations } from '../bridges/catalog-load.js';
 import type { CatalogRelation } from '../bridges/catalog-types.js';
 import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 
+/**
+ * The catalog id a differentiable relation is labelled by. A relation with no
+ * catalog id is not a catalog bridge and gets no `be-<n>` label; it throws
+ * rather than defaulting to `be-0`.
+ * @internal
+ */
+export function requireCatalogId(relation: CatalogRelation): number {
+  if (relation.catalogId === null) {
+    throw new Error(`bridge-specs: relation '${relation.id}' has no catalog id and cannot be labelled be-<n>`);
+  }
+  return relation.catalogId;
+}
+
 function relationWithSource(source: string): CatalogRelation {
   const found = catalogRelations().find((row) => row.sources.includes(source));
   if (found === undefined) throw new Error(`bridge-specs: no relation has source '${source}'`);
@@ -30,13 +43,15 @@ function evaluateAliased(relation: CatalogRelation, input: object): number {
   return evaluateCatalogRelation(relation, bound);
 }
 
-interface ShapiroInput {
+/** Inputs of {@link SHAPIRO_DELAY_DIFF}: the mass and the two radii. @public */
+export interface ShapiroInput {
   readonly M_kg: number;
   readonly R_far_m: number;
   readonly R_near_m: number;
 }
 
-interface PerihelionInput {
+/** Inputs of {@link PERIHELION_ADVANCE_DIFF}: mass, semi-major axis, eccentricity, optional period. @public */
+export interface PerihelionInput {
   readonly M_kg: number;
   readonly a_m: number;
   /** Orbital eccentricity, 0 ≤ e < 1. A bare `e` is the elementary charge, so it is not this key. */
@@ -44,11 +59,13 @@ interface PerihelionInput {
   readonly T_yr?: number;
 }
 
-interface HawkingInput {
+/** Inputs of {@link HAWKING_TEMPERATURE_DIFF}: the mass. @public */
+export interface HawkingInput {
   readonly M_kg: number;
 }
 
-interface DecoherenceInput {
+/** Inputs of {@link DECOHERENCE_RATE_DIFF}: the rate and the two couplings. @public */
+export interface DecoherenceInput {
   readonly gamma0_per_s: number;
   readonly lambda: number;
   readonly lambda0: number;
@@ -64,7 +81,7 @@ const decoherence = relationWithSource('system-environment-coupling');
 
 /** Shapiro delay. Differentiable in mass and the two radii. @public */
 export const SHAPIRO_DELAY_DIFF: BridgeDiffSpec<ShapiroInput> = {
-  bridgeId: catalogEdgeKey(shapiro.catalogId ?? 0),
+  bridgeId: catalogEdgeKey(requireCatalogId(shapiro)),
   name: 'Shapiro time delay',
   paramNames: ['M_kg', 'R_far_m', 'R_near_m'],
   defaults: {},
@@ -73,7 +90,7 @@ export const SHAPIRO_DELAY_DIFF: BridgeDiffSpec<ShapiroInput> = {
 
 /** Perihelion advance in radians per orbit. @public */
 export const PERIHELION_ADVANCE_DIFF: BridgeDiffSpec<PerihelionInput> = {
-  bridgeId: catalogEdgeKey(perihelion.catalogId ?? 0),
+  bridgeId: catalogEdgeKey(requireCatalogId(perihelion)),
   name: 'Perihelion advance (radian per orbit)',
   paramNames: ['M_kg', 'a_m', 'eccentricity'],
   defaults: {},
@@ -82,7 +99,7 @@ export const PERIHELION_ADVANCE_DIFF: BridgeDiffSpec<PerihelionInput> = {
 
 /** Hawking temperature. Differentiable in mass. @public */
 export const HAWKING_TEMPERATURE_DIFF: BridgeDiffSpec<HawkingInput> = {
-  bridgeId: catalogEdgeKey(hawking.catalogId ?? 0),
+  bridgeId: catalogEdgeKey(requireCatalogId(hawking)),
   name: 'Hawking temperature',
   paramNames: ['M_kg'],
   defaults: {},
@@ -91,7 +108,7 @@ export const HAWKING_TEMPERATURE_DIFF: BridgeDiffSpec<HawkingInput> = {
 
 /** Decoherence rate. Differentiable in the rate and the two couplings. @public */
 export const DECOHERENCE_RATE_DIFF: BridgeDiffSpec<DecoherenceInput> = {
-  bridgeId: catalogEdgeKey(decoherence.catalogId ?? 0),
+  bridgeId: catalogEdgeKey(requireCatalogId(decoherence)),
   name: 'Decoherence rate',
   paramNames: ['gamma0_per_s', 'lambda', 'lambda0'],
   defaults: {},

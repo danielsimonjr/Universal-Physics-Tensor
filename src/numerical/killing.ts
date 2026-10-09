@@ -68,8 +68,10 @@ export interface KillingEquationOptions {
 }
 
 type Vec4 = [number, number, number, number];
-type KillingFn = () => (x: Vec4) => Vec4;
-type MetricFn = (x: ReadonlyArray<number>) => number[][];
+/** A Killing-field factory: returns the field ξ^μ(x) as a function of the 4-position. @public */
+export type KillingFn = () => (x: Vec4) => Vec4;
+/** A covariant metric closure for the Killing checks: `g(x)[μ][ν] = g_{μν}(x)`, nested. @public */
+export type KillingMetricFn = (x: ReadonlyArray<number>) => number[][];
 
 /**
  * Layout-agnostic Christoffel accessor.
@@ -84,7 +86,8 @@ type MetricFn = (x: ReadonlyArray<number>) => number[][];
  */
 export type ChristoffelAccess = (lambda: number, mu: number, nu: number) => number;
 
-type ChristoffelAtFn = (x: Vec4) => ChristoffelAccess;
+/** A Christoffel producer: the {@link ChristoffelAccess} at a 4-position. @public */
+export type ChristoffelAtFn = (x: Vec4) => ChristoffelAccess;
 
 /**
  * Compute `||∇_μ ξ_ν + ∇_ν ξ_μ||_∞` at point `x`, returning the maximum
@@ -138,7 +141,7 @@ type ChristoffelAtFn = (x: Vec4) => ChristoffelAccess;
  */
 export function verifyKillingEquation(
   killingFn: KillingFn,
-  metricFn: MetricFn,
+  metricFn: KillingMetricFn,
   christoffelAt: ChristoffelAtFn,
   x: Vec4,
   opts: KillingEquationOptions = {},
@@ -313,7 +316,7 @@ export interface KillingEquationCheck {
  */
 export function checkKillingEquation(
   killingFn: KillingFn,
-  metricFn: MetricFn,
+  metricFn: KillingMetricFn,
   christoffelAt: ChristoffelAtFn,
   x: Vec4,
   opts: KillingEquationOptions = {},

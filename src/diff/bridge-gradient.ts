@@ -1,50 +1,32 @@
 /**
- * Bridge-parameter differentiation — v0.9 Proposal 8 core layer.
+ * Bridge-parameter differentiation by central finite differences.
  *
- * Wraps catalog bridge evaluators (typed scalar functions with
- * named-field struct inputs like `evaluateShapiroDelay(input:
- * ShapiroInputs): number`) into the shape expected by
- * `TensorEngine.reverseGrad`: `(paramTensor: EngineTensor) →
- * outputScalar`. Returns gradients with respect to a chosen subset
- * of the bridge's input parameters.
+ * A {@link BridgeDiffSpec} wraps one catalog closed form (a plain-JS scalar
+ * function over a named-field struct) and names which fields vary.
+ * {@link bridgeGradientNumerical} perturbs those fields and returns the
+ * gradient keyed by field name.
  *
- * Per P8 Decision #1, this lives in `src/diff/` (NOT in
- * `src/bridges/`), keeping bridge evaluators untouched. The AD
- * dependency `mathts-autograd` is a required dependency. Installing it
- * does not make AD of the plain-JS bridges work: the tape still cannot
- * trace `Math.*` (see the AD limitation below).
+ * There is no engine-AD path over a spec. `evaluate` returns a `number`, and
+ * a number carries no autograd tape, so reverse- or forward-mode AD of a spec
+ * is unreachable by construction; the function that once offered it
+ * (`bridgeGradient`) threw for every shipped spec and was removed. The exact
+ * AD path is {@link bridgeGradientAST} in `bridge-ast-gradient.ts`, which
+ * lowers the bridge's symbolic RHS through `@danielsimonjr/mathts-autograd`.
  *
- * IMPORTANT — AD limitation (verified empirically): `bridgeGradient`
- * does NOT actually differentiate the catalog evaluators. Because P8
- * Decision #1 keeps those evaluators as plain-JS scalar functions
- * (`Math.*` / raw arithmetic on numbers), neither reverse-mode (tape)
- * nor forward-mode (dual) AD can trace them — the tape/dual instrument
- * only sees ops routed through engine-traced tensors. With
- * `MathTSEngine` the autograd `TapedTensor` does not survive
- * `engine.toNested`. `bridgeGradient` therefore only works for
- * functions written in engine ops — not the plain-JS bridges.
- *
- * The SUPPORTED way to differentiate a plain-JS bridge evaluator is
- * {@link bridgeGradientNumerical} (central finite differences, no engine).
+ * This module lives in `src/diff/` (P8 Decision #1), not in `src/bridges/`,
+ * so the catalog closed forms stay untouched.
  *
  * @module diff/bridge-gradient
  */
 
-import type { EngineTensor, TensorEngine } from '../numerical/tensor-engine.js';
-import { hasAutogradSupport } from '../numerical/tensor-engine.js';
-import { EngineCapabilityError } from '../numerical/errors.js';
-
 /**
- * Specification of a differentiable bridge: which parameters can
- * vary, in what order they get packed into a 1-D parameter
- * tensor, how to unpack the tensor back into the bridge's input
- * struct, and the bridge evaluator itself.
+ * Specification of a differentiable bridge: which parameters can vary, in
+ * what order the gradient reports them, the fixed inputs, and the bridge's
+ * scalar evaluator.
  *
- * `paramNames` is the canonical pack/unpack order. For
- * `evaluateShapiroDelay(input: { r: number; b: number; M: number })`
- * with `paramNames: ['r', 'b', 'M']`, the gradient returned by
- * `bridgeGradient` has shape `[3]` with entries
- * `[dS/dr, dS/db, dS/dM]` in that order.
+ * `paramNames` is the report order. For a Shapiro-delay spec with
+ * `paramNames: ['M_kg', 'R_far_m', 'R_near_m']`, the gradient returned by
+ * `bridgeGradientNumerical` has keys in that insertion order.
  *
  * @public
  */
@@ -54,113 +36,17 @@ export interface BridgeDiffSpec<Input> {
   /** Display name (e.g., 'Shapiro time delay'). */
   readonly name: string;
   /**
-   * Pack/unpack order: which Input keys correspond to which axis
-   * of the parameter tensor. All names must be present in the
+   * Which Input keys vary, in report order. All names must be present in the
    * frozen `Input` struct as `number`-valued keys.
    */
   readonly paramNames: ReadonlyArray<keyof Input & string>;
   /**
-   * Fill in the non-differentiable input fields (those NOT in
-   * `paramNames`). Returns the full struct merged from `defaults`
-   * + the unpacked differentiable params. Typed as
-   * `Partial<Input>` for ergonomics — runtime check in
-   * `bridgeGradient` would catch missing required defaults if
-   * the bridge evaluator needs them.
+   * The non-differentiable input fields (those NOT in `paramNames`). The
+   * evaluator receives `defaults` merged with the varying params.
    */
   readonly defaults: Partial<Input>;
   /** The bridge's scalar evaluator. */
   readonly evaluate: (input: Input) => number;
-}
-
-/**
- * Result of `bridgeGradient`. `value` is the bridge's scalar
- * output at the supplied parameter point; `gradient` is the
- * 1-D `EngineTensor` of partial derivatives in `paramNames`
- * order.
- *
- * @public
- */
-export interface BridgeGradientResult {
-  readonly value: number;
-  readonly gradient: EngineTensor;
-}
-
-/**
- * Compute the gradient of a bridge evaluator with respect to its
- * differentiable parameters via reverse-mode AD. The supplied
- * `params` map must contain every key in `spec.paramNames`.
- *
- * Throws `EngineCapabilityError` if the engine doesn't support
- * autograd (the standard graceful-degradation path from v0.4.0;
- * see `MathTSEngine.reverseGrad`).
- *
- * @public
- */
-export async function bridgeGradient<Input>(
-  spec: BridgeDiffSpec<Input>,
-  engine: TensorEngine,
-  params: Record<string, number>,
-): Promise<BridgeGradientResult> {
-  if (!hasAutogradSupport(engine)) {
-    throw new EngineCapabilityError(engine.name, 'reverseGrad');
-  }
-
-  // Pack params into a 1-D tensor in spec.paramNames order.
-  const packed: number[] = spec.paramNames.map((k) => {
-    const v = params[k];
-    if (typeof v !== 'number') {
-      throw new TypeError(
-        `bridgeGradient: ${spec.bridgeId}: missing or non-numeric param '${k}' ` +
-        `(got ${typeof v}). All paramNames must be numbers in the params object.`,
-      );
-    }
-    return v;
-  });
-  const paramTensor = engine.fromNested(packed, [packed.length]);
-
-  // Build the (paramTensor) → scalar function the engine's
-  // reverseGrad expects. The function unpacks the tensor back
-  // into the bridge's Input struct, calls evaluate, and returns
-  // a rank-0 tensor.
-  const fn = (x: EngineTensor): EngineTensor => {
-    const unpacked = engine.toNested(x) as number[];
-    const input = { ...spec.defaults } as unknown as Input;
-    spec.paramNames.forEach((k, i) => {
-      (input as Record<string, unknown>)[k] = unpacked[i];
-    });
-    const scalar = spec.evaluate(input);
-    return engine.fromNested(scalar, []);
-  };
-
-  const { value, gradient } = await engine.reverseGrad!(fn, paramTensor);
-  const valueNumber = engine.toNested(value) as number;
-  return { value: valueNumber, gradient };
-}
-
-/**
- * Convenience: unpack a 1-D gradient tensor into a named-field
- * record matching the spec's `paramNames` order.
- *
- * @public
- */
-export function gradientToNamed<Input>(
-  spec: BridgeDiffSpec<Input>,
-  gradient: EngineTensor,
-  engine: TensorEngine,
-): Record<string, number> {
-  const arr = engine.toNested(gradient) as number[];
-  if (arr.length !== spec.paramNames.length) {
-    throw new RangeError(
-      `gradientToNamed: ${spec.bridgeId}: gradient length ${arr.length} does not ` +
-      `match paramNames length ${spec.paramNames.length} — a mismatch would ` +
-      `silently leave some params undefined or drop gradient entries.`,
-    );
-  }
-  const out: Record<string, number> = {};
-  spec.paramNames.forEach((k, i) => {
-    out[k] = arr[i];
-  });
-  return out;
 }
 
 /**
@@ -185,13 +71,8 @@ const CENTRAL_DIFF_REL_STEP = Math.cbrt(Number.EPSILON); // ≈ 6.06e-6
 
 /**
  * Gradient of a bridge evaluator by **central finite differences** — the
- * supported way to differentiate the catalog's plain-JS evaluators.
- *
- * Reverse-/forward-mode AD ({@link bridgeGradient}) cannot trace these
- * evaluators: per P8 Decision #1 they are plain-JS scalar functions
- * (`Math.*` / raw arithmetic on numbers), so a tape/dual engine observes no
- * traced ops. `bridgeGradientNumerical` perturbs the inputs instead, so it
- * needs no engine and is synchronous.
+ * way to differentiate the catalog's plain-JS closed forms without
+ * rewriting them. Needs no engine and is synchronous.
  *
  * For each differentiable param with value `x` it uses a relative step
  * `h = max(|x|, 1)·cbrt(eps)` and the ACTUAL representable denominator
@@ -215,9 +96,8 @@ export function bridgeGradientNumerical<Input>(
     );
   }
 
-  // Same contract as bridgeGradient: every paramName must be a FINITE number.
-  // (`typeof NaN === 'number'`, so a bare typeof check let NaN/∞ flow into a
-  // silently non-finite gradient.)
+  // Every paramName must be a FINITE number. (`typeof NaN === 'number'`, so a
+  // bare typeof check let NaN/∞ flow into a silently non-finite gradient.)
   for (const k of spec.paramNames) {
     if (!Number.isFinite(params[k])) {
       throw new TypeError(
@@ -228,7 +108,10 @@ export function bridgeGradientNumerical<Input>(
   }
 
   // Build the full Input struct (defaults + differentiable params), with an
-  // optional single-param override for the perturbed evaluations.
+  // optional single-param override for the perturbed evaluations. The
+  // `Input` generic has no runtime schema: `spec.paramNames` is declared as
+  // keys of `Input`, and `defaults` is a `Partial<Input>`, so the merged
+  // record is an `Input` by the spec's own contract; the cast states that.
   const buildInput = (override?: { key: string; val: number }): Input => {
     const input = { ...spec.defaults } as Record<string, unknown>;
     for (const k of spec.paramNames) input[k] = params[k];

@@ -176,7 +176,7 @@ describe('GL4 integrator: gated long-run tests (GL4_LONG=1)', () => {
   // NOT EXERCISED IN COMMIT: this test is gated `it.skip` in default mode;
   // the integrator wire-up was sanity-checked by the unchanged non-gated
   // tests above (which still drive the same code path through
-  // integrateGeodesicGL4 + solveGL4Stage). The GL4_LONG=1 path will be
+  // integrateGeodesicGL4 + gl4Step). The GL4_LONG=1 path will be
   // exercised at release-prep time, not per-commit.
   (isLong ? it : it.skip)(
     'Mercury N-orbit Picard convergence succeeds on >99.9% of steps',

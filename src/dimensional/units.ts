@@ -21,15 +21,21 @@
  * wins on a bare token, so `ms` stays a millisecond, `mm` a millimetre,
  * `mK` a millikelvin, and `Ts` a terasecond. Inside a larger expression the
  * prefixed reading competes with a heterogeneous product (`mK` is millikelvin
- * or metre·kelvin; `ms` is millisecond or metre·second). A homogeneous power
- * does not compete (`mm` is a millimetre, not metre·metre). `parseUnit` names
+ * or metre·kelvin; `ms` is millisecond or metre·second). A split that puts
+ * a prefix letter's own unit twice in a row is never a reading, because a
+ * power is written `m2` or `m^2`: `mm` is a millimetre, not metre·metre,
+ * and `mmin` is metre·minute or millimetre·inch, not metre·metre·inch.
+ * A unit that is not a prefix letter still juxtaposes with itself (`NN` is
+ * N·N). `parseUnit` names
  * every remaining reading and refuses. `convertValue` keeps the one reading
  * whose dimension is the declared unit. A token that is not one factor is a
  * product when exactly one split exists: `m2K` is `m^2·K`, `Vs` is `V·s`,
  * and `cm^2/Vs` is `cm^2/(V·s)`. Zero splits are an unknown unit. Two or more
  * splits name each reading and are refused (`mAs` is milliampere·second or
  * metre·ampere·second). An unknown token that ends in a digit stays unknown
- * when it is not that product.
+ * when it is not that product. A numerator that is the single token `1` is
+ * the dimensionless unit, so `1/s` is a reciprocal second and `1/m^3` a
+ * number density; `1` is not a symbol anywhere else.
  * The table is data: `data/units.json`, loaded and validated by
  * `unit-data.ts`. Every row, prefix, refused spelling, prefix letter, affine
  * scale and spelling note is a row there, with the reason as its `comment`;
@@ -230,17 +236,19 @@ function attachedUnit(symbol: string): string | null {
 }
 
 /**
- * A product of the same unprefixed unit the prefix attaches to (`mm` = m·m,
- * `mm2` = m·m²). Powers are written `m2` / `m^2`, so this reading does not
- * compete with the prefix.
+ * `X·X` where `XX` is X's own prefix spelling (`m·m` beside `mm`, `d·d`
+ * beside `dd`): not a split, because a power is written `X2` or `X^2`. A
+ * run of a unit that is not also a prefix letter (`N·N`) stays a product.
  */
-function homogeneousPower(single: FactorReading, product: readonly FactorReading[]): boolean {
-  const unit = attachedUnit(single.base);
-  if (unit === null) return false;
-  return product.every((factor) => factor.base === unit && attachedUnit(factor.base) === null);
+function prefixRun(last: FactorReading, next: FactorReading): boolean {
+  return last.base === next.base && attachedUnit(last.base + next.base) === last.base;
 }
 
-/** Every way to split `token` into one or more factors. A one-factor token is included. */
+/**
+ * Every way to split `token` into one or more factors. A one-factor token is
+ * included. A split that puts a prefix letter's own unit twice in a row
+ * (`m·m`, `m·m²`, `m·m·in`) is not a way, inside any split.
+ */
 function segmentations(token: string): FactorReading[][] {
   const ways: FactorReading[][][] = Array.from({ length: token.length + 1 }, () => []);
   ways[0]!.push([]);
@@ -249,7 +257,10 @@ function segmentations(token: string): FactorReading[][] {
     for (let j = i + 1; j <= token.length; j++) {
       const factor = tryOneFactor(token.slice(i, j));
       if (factor === null) continue;
-      for (const prev of ways[i]!) ways[j]!.push([...prev, factor]);
+      for (const prev of ways[i]!) {
+        if (prev.length > 0 && prefixRun(prev[prev.length - 1]!, factor)) continue;
+        ways[j]!.push([...prev, factor]);
+      }
     }
   }
   const unique = new Map<string, FactorReading[]>();
@@ -260,7 +271,8 @@ function segmentations(token: string): FactorReading[][] {
 /**
  * Ways to read one token. A bare expression keeps a one-factor reading and
  * does not also split it. Inside a compound, a prefixed factor also competes
- * with each heterogeneous product. A homogeneous power does not.
+ * with each heterogeneous product; `segmentations` has already dropped the
+ * homogeneous runs.
  */
 function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denominator'): FactorReading[][] {
   const refused = REFUSED_UNITS.get(token);
@@ -274,10 +286,9 @@ function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denomin
   const products = segmentations(token)
     .filter((way) => way.length > 1)
     .filter(() => !prefixWins);
-  const extra = single === null ? products : products.filter((way) => !homogeneousPower(single, way));
   const ways: FactorReading[][] = [];
   if (single !== null) ways.push([single]);
-  for (const way of extra) ways.push(way);
+  for (const way of products) ways.push(way);
   const unique = new Map<string, FactorReading[]>();
   for (const way of ways) unique.set(formatReading(way), way);
   const list = [...unique.values()];
@@ -315,7 +326,8 @@ function formatExpression(
   num: readonly (readonly FactorReading[])[],
   den: readonly (readonly FactorReading[])[],
 ): string {
-  const numerator = formatSide(num);
+  // An empty numerator over a denominator is the dimensionless 1: `1/s`.
+  const numerator = num.length === 0 ? '1' : formatSide(num);
   if (den.length === 0) return numerator;
   const denominator = formatSide(den);
   return denominator.includes('·') ? `${numerator}/(${denominator})` : `${numerator}/${denominator}`;
@@ -375,7 +387,9 @@ function unitReadings(text: string): UnitReading[] {
   // A chain is one denominator: `km/s/Mpc` is km/(s·Mpc), the way the Hubble constant is written.
   const sides = solidusSides(t);
   const compete = /[*·/\s]/.test(t);
-  const numerator = sideTokens(sides.numerator);
+  const numeratorTokens = sideTokens(sides.numerator);
+  // A numerator that is the single token `1` is the dimensionless unit: `1/s`, `1/m^3`.
+  const numerator = numeratorTokens.length === 1 && numeratorTokens[0] === '1' ? [] : numeratorTokens;
   const denominator = sides.denominator === '' ? [] : sideTokens(sides.denominator);
   // `/s` is a dimensionless numerator over seconds. A bare `/` is not a unit.
   if (numerator.length === 0 && denominator.length === 0) throw new UnknownUnitError(t);

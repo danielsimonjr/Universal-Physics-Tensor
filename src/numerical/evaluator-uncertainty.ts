@@ -16,6 +16,18 @@ import { eigvals } from '@danielsimonjr/mathts-matrix';
 /** A curvature term above this fraction of the linear term marks the linearization unreliable. */
 const NONLINEAR_FRACTION = 0.1;
 
+/**
+ * Thrown inside the finite-difference callback when the evaluator returns no
+ * finite number at a stepped point. It is the one outcome the propagation
+ * reports as "undefined next to this input"; it is not a programming error.
+ */
+class EvaluatorUndefinedError extends Error {
+  constructor(output: string, input: string) {
+    super(`evaluator output '${output}' is not a finite number when '${input}' is stepped`);
+    this.name = 'EvaluatorUndefinedError';
+  }
+}
+
 /** One input's share of an output's uncertainty. */
 export interface UncertaintyContribution {
   readonly sensitivity: number | null;
@@ -77,14 +89,19 @@ export function propagateEvaluatorUncertainty(
         probed = propagateScalarUncertainty(
           (vals) => {
             const out = f({ ...inputs, ...vals })[name];
-            if (typeof out !== 'number' || !Number.isFinite(out)) throw new Error('non-numeric');
+            if (typeof out !== 'number' || !Number.isFinite(out)) throw new EvaluatorUndefinedError(name, k);
             return out;
           },
           { [k]: x },
           { [k]: u },
           u > 0 ? { relativeStep, curvatureOffsets: { [k]: u } } : { relativeStep },
         );
-      } catch {
+      } catch (error) {
+        // Only "the evaluator has no finite value at the stepped point" is the
+        // reported outcome below. A RangeError is the evaluator's own domain
+        // refusal at that point and is the same outcome. Anything else is a
+        // programming error and propagates.
+        if (!(error instanceof EvaluatorUndefinedError) && !(error instanceof RangeError)) throw error;
         probed = undefined;
       }
       const ck = probed?.partials[k];

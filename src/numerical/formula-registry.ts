@@ -14,14 +14,24 @@ import type { Dimension } from '../dimensional/types.js';
 import type { FormulaDimensionChecker, ParsedPhysics } from './formula-dimension.js';
 import { builtinFormulaDimensionChecker } from './formula-dimension.js';
 
-type FormulaParserKind = 'mathts' | 'builtin';
+/**
+ * The one formula parser kind. The `builtin` recursive-descent parser was
+ * removed with Path B, so the type has no second member; the CLI records
+ * this value in an experiment record's environment.
+ */
+type FormulaParserKind = 'mathts';
 
-/** Resolve the active formula parser. It is the MathTS parser. @internal */
+/**
+ * Resolve the active formula parser. It is the MathTS parser. The function
+ * stays async because the CLI awaits it on a code path that once loaded an
+ * optional peer; the value is constant.
+ * @internal
+ */
 export async function getFormulaParser(): Promise<FormulaParser> {
   return mathtsFormulaParser;
 }
 
-/** Which parser is active. Always `mathts`. @internal */
+/** Which parser is active: `mathts`, the one value of {@link FormulaParserKind}. @internal */
 export async function getFormulaParserKind(): Promise<FormulaParserKind> {
   return 'mathts';
 }

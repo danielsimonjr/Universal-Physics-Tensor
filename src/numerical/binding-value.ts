@@ -2,12 +2,17 @@
  * A binding value: a bare number, a number with a unit, or an expression of
  * registered constants and unit literals (`pi/2`, `0.6*c`, `2*1km`).
  *
- * The MathTS parser produces the node this module evaluates, so a unit
- * literal keeps its dimension. A bare `e` is the elementary charge.
- * Euler's number is `exp(x)`. A bare number, or an expression whose result is
- * dimensionless and contains no unit literal, is already in the caller's
- * unit. Anything else is an SI quantity: the caller converts it into the
- * declared unit when the dimensions agree.
+ * The MathTS parser produces the node this module reads. The number is the
+ * MathTS formula parser's, evaluated over the registered constants and the
+ * spliced unit literals; this module walks the same parse tree for the
+ * dimension and the cycle count only, so a unit literal keeps its dimension
+ * and there is one arithmetic. The scalar functions are the one table in
+ * `formula-contract.ts`, read for arity and dimension rule here and for the
+ * numeric body there. A bare `e` is the elementary charge. Euler's number is
+ * `exp(x)`. A bare number, or an expression whose result is dimensionless
+ * and contains no unit literal, is already in the caller's unit. Anything
+ * else is an SI quantity: the caller converts it into the declared unit when
+ * the dimensions agree.
  *
  * A unit literal is recognized only where it is glued to a number (`1km`,
  * `1h`, `1G`). A bare name is a constant (`h`, `G`, `c`), never that unit.
@@ -39,11 +44,13 @@ import {
   unitConventionNotes,
   UnitError,
   UnitRefusedError,
+  UnknownUnitError,
   type AffineTemperature,
   type TemperatureReading,
 } from '../dimensional/units.js';
-import { callBuiltinFunction, EulerNumberError, FormulaError } from './formula-contract.js';
-import { parseFormulaPNode, UnsupportedSyntaxError, type FormulaPNode } from './formula-dimension.js';
+import { arityMessage, EulerNumberError, FormulaError, SCALAR_FUNCTIONS, unknownFunctionMessage } from './formula-contract.js';
+import { constantExponent, parseFormulaPNode, UnsupportedSyntaxError, type FormulaPNode } from './formula-dimension.js';
+import { mathtsFormulaParser } from './formula-mathts.js';
 
 /** A value on a temperature slot has a dimension that is neither a temperature nor an energy, or a temperature was read onto a dimensionless slot. @internal */
 export class TemperatureBindingError extends UnitError {
@@ -165,7 +172,14 @@ interface Qty {
   readonly cycles: number;
 }
 
-const GLUED_NUMBER = /(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/g;
+/** The dimension and cycle count of a sub-expression; its number is MathTS's. */
+interface DimCycles {
+  readonly dim: Dimension;
+  readonly cycles: number;
+}
+
+/** A number glued to a unit; `spliceUnits` builds its own global copy. */
+const GLUED_NUMBER = /(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/;
 function finite(raw: string, value: number): number {
   if (!Number.isFinite(value)) throw new BindingNumberError(`'${raw}' is not a finite number`);
   return value;
@@ -182,11 +196,6 @@ function scopeFor(mode: UnitMode): Map<string, Qty> {
     for (const [name, value] of Object.entries(naturalConstantOverrides(mode))) m.set(name, { value, dim: DIMENSIONLESS, cycles: 0 });
   }
   return m;
-}
-
-/** A unit the parser recognized and refused, rather than a prefix that is not a unit. */
-function unitRefusal(e: unknown): UnitError | null {
-  return e instanceof UnitRefusedError || e instanceof AmbiguousUnitError ? e : null;
 }
 
 /** The text has an operator, so it is an expression rather than a lone word. */
@@ -208,9 +217,10 @@ function longestUnit(rest: string): string | null {
       if (next !== undefined && /[A-Za-z0-9_µμ°ÅΩ]/.test(next)) continue;
       best = prefix;
     } catch (e) {
-      const refused = unitRefusal(e);
-      if (refused !== null) throw refused;
-      // A longer prefix may still be a unit (`m` then `m/s`, `M` then `Msun`).
+      // An unknown unit at this length: a longer prefix may still be one
+      // (`m` then `m/s`, `M` then `Msun`). A refused or ambiguous unit, and
+      // anything that is not a unit error, propagates.
+      if (!(e instanceof UnknownUnitError)) throw e;
     }
   }
   return best;
@@ -257,123 +267,127 @@ function spliceUnits(src: string): Splice {
   return { expr: out, slots, notes };
 }
 
-function evalAst(node: FormulaPNode, scope: ReadonlyMap<string, Qty>, slots: ReadonlyMap<string, Qty>): Qty {
+/**
+ * An exponent is a dimensionless numeric constant (`2`, `-1`, `1/2`); its
+ * value raises the base's dimension. The number of the whole expression is
+ * MathTS's, so this is the one place a value is folded here, and it is the
+ * same folding the formula dimension checker uses.
+ */
+function exponentValue(node: FormulaPNode, scope: ReadonlyMap<string, Qty>, slots: ReadonlyMap<string, Qty>): number {
+  const exp = dimensionWalk(node, scope, slots);
+  const value = constantExponent(node);
+  if (!equals(exp.dim, DIMENSIONLESS) || value === undefined) {
+    throw new UnitError('an exponent must be a dimensionless number');
+  }
+  return value;
+}
+
+/**
+ * The dimension and cycle count of a parse tree, by the dimensional rules of
+ * each node and the one function table. No number is computed here except an
+ * exponent's; unknown names, unlike sums and dimensioned transcendental
+ * arguments are refused.
+ */
+function dimensionWalk(node: FormulaPNode, scope: ReadonlyMap<string, Qty>, slots: ReadonlyMap<string, Qty>): DimCycles {
   switch (node.kind) {
     case 'num':
-      return { value: node.value, dim: DIMENSIONLESS, cycles: 0 };
+      return { dim: DIMENSIONLESS, cycles: 0 };
     case 'sym': {
       if (node.name === 'euler') throw new EulerNumberError();
-      const slot = slots.get(node.name);
-      if (slot !== undefined) return slot;
-      const known = scope.get(node.name);
-      if (known !== undefined) return known;
-      throw new UnknownNameError(node.name);
+      const known = slots.get(node.name) ?? scope.get(node.name);
+      if (known === undefined) throw new UnknownNameError(node.name);
+      return { dim: known.dim, cycles: known.cycles };
     }
-    case 'neg': {
-      const a = evalAst(node.arg, scope, slots);
-      return { value: -a.value, dim: a.dim, cycles: a.cycles };
-    }
+    case 'neg':
+      return dimensionWalk(node.arg, scope, slots);
     case 'op':
-      return evalOp(node.op, node.args.map((a) => evalAst(a, scope, slots)));
+      return dimensionOfOp(node.op, node.args.map((a) => dimensionWalk(a, scope, slots)));
     case 'pow': {
-      const base = evalAst(node.base, scope, slots);
-      const exp = evalAst(node.exp, scope, slots);
-      if (!equals(exp.dim, DIMENSIONLESS)) throw new UnitError('an exponent must be dimensionless');
-      return { value: Math.pow(base.value, exp.value), dim: power(base.dim, exp.value), cycles: base.cycles * exp.value };
+      const base = dimensionWalk(node.base, scope, slots);
+      const n = exponentValue(node.exp, scope, slots);
+      return { dim: power(base.dim, n), cycles: base.cycles * n };
     }
     case 'call':
-      if (node.fn === 'euler') throw new EulerNumberError();
-      return evalCall(node.fn, node.args.map((a) => evalAst(a, scope, slots)));
+      return dimensionOfCall(node.fn, node.args, scope, slots);
   }
 }
 
-function evalOp(op: '+' | '-' | '*' | '/', args: readonly Qty[]): Qty {
-  if (args.length === 0) throw new UnitError(`cannot ${op}`);
+function dimensionOfOp(op: '+' | '-' | '*' | '/', args: readonly DimCycles[]): DimCycles {
+  const first = args[0];
+  if (first === undefined) throw new UnitError(`cannot ${op}`);
   if (op === '+' || op === '-') {
-    const first = args[0]!;
-    if (args.length === 1) {
-      return op === '-' ? { value: -first.value, dim: first.dim, cycles: first.cycles } : first;
-    }
-    let value = first.value;
     let cycles = first.cycles;
     for (const next of args.slice(1)) {
       if (!equals(first.dim, next.dim)) {
         throw new UnitError(`cannot ${op === '+' ? 'add' : 'subtract'} ${format(first.dim)} and ${format(next.dim)}`);
       }
-      value = op === '+' ? value + next.value : value - next.value;
       // A sum of a cycle rate and a plain rate has no single cycle count.
       if (next.cycles !== cycles) cycles = Number.NaN;
     }
-    return { value, dim: first.dim, cycles };
+    return { dim: first.dim, cycles };
   }
-  if (op === '*') {
-    let value = 1;
-    let dim = DIMENSIONLESS;
-    let cycles = 0;
-    for (const a of args) {
-      value *= a.value;
-      dim = multiply(dim, a.dim);
-      cycles += a.cycles;
-    }
-    return { value, dim, cycles };
+  let dim = op === '*' ? DIMENSIONLESS : first.dim;
+  let cycles = op === '*' ? 0 : first.cycles;
+  for (const a of op === '*' ? args : args.slice(1)) {
+    dim = op === '*' ? multiply(dim, a.dim) : divide(dim, a.dim);
+    cycles = op === '*' ? cycles + a.cycles : cycles - a.cycles;
   }
-  let value = args[0]!.value;
-  let dim = args[0]!.dim;
-  let cycles = args[0]!.cycles;
-  for (const next of args.slice(1)) {
-    value /= next.value;
-    dim = divide(dim, next.dim);
-    cycles -= next.cycles;
-  }
-  return { value, dim, cycles };
+  return { dim, cycles };
 }
 
-function evalCall(fn: string, args: readonly Qty[]): Qty {
-  if (fn === 'sqrt' || fn === 'cbrt') {
-    if (args.length !== 1) throw new UnitError(`${fn} expected 1 argument`);
-    const n = fn === 'sqrt' ? 0.5 : 1 / 3;
-    const value = fn === 'sqrt' ? Math.sqrt(args[0]!.value) : Math.cbrt(args[0]!.value);
-    return { value, dim: power(args[0]!.dim, n), cycles: args[0]!.cycles * n };
+/** A call, by the one table's arity and dimension rule. */
+function dimensionOfCall(
+  fn: string,
+  args: readonly FormulaPNode[],
+  scope: ReadonlyMap<string, Qty>,
+  slots: ReadonlyMap<string, Qty>,
+): DimCycles {
+  if (fn === 'euler') throw new EulerNumberError();
+  const spec = SCALAR_FUNCTIONS[fn];
+  if (spec === undefined) throw new UnitError(unknownFunctionMessage(fn));
+  if (args.length !== spec.arity) throw new UnitError(arityMessage(fn, spec.arity));
+  const rule = spec.dimension;
+  const first = dimensionWalk(args[0]!, scope, slots);
+  switch (rule.kind) {
+    case 'root':
+      return { dim: power(first.dim, rule.power), cycles: first.cycles * rule.power };
+    case 'same':
+      return first;
+    case 'transcendental':
+      if (!equals(first.dim, DIMENSIONLESS)) throw new UnitError(`${fn} expects a dimensionless argument`);
+      return { dim: DIMENSIONLESS, cycles: 0 };
+    case 'power': {
+      const n = exponentValue(args[1]!, scope, slots);
+      return { dim: power(first.dim, n), cycles: first.cycles * n };
+    }
+    case 'ratio': {
+      const second = dimensionWalk(args[1]!, scope, slots);
+      if (!equals(first.dim, second.dim)) throw new UnitError(`${fn} arguments must have the same dimension`);
+      return { dim: DIMENSIONLESS, cycles: 0 };
+    }
   }
-  if (fn === 'abs') {
-    if (args.length !== 1) throw new UnitError('abs expected 1 argument');
-    return { value: Math.abs(args[0]!.value), dim: args[0]!.dim, cycles: args[0]!.cycles };
-  }
-  if (fn === 'pow') {
-    if (args.length !== 2) throw new UnitError('pow expects 2 arguments');
-    if (!equals(args[1]!.dim, DIMENSIONLESS)) throw new UnitError('an exponent must be dimensionless');
-    return {
-      value: Math.pow(args[0]!.value, args[1]!.value),
-      dim: power(args[0]!.dim, args[1]!.value),
-      cycles: args[0]!.cycles * args[1]!.value,
-    };
-  }
-  if (fn === 'atan2') {
-    if (args.length !== 2) throw new UnitError('atan2 expects 2 arguments');
-    if (!equals(args[0]!.dim, args[1]!.dim)) throw new UnitError('atan2 arguments must have the same dimension');
-    return { value: Math.atan2(args[0]!.value, args[1]!.value), dim: DIMENSIONLESS, cycles: 0 };
-  }
-  for (const a of args) {
-    if (!equals(a.dim, DIMENSIONLESS)) throw new UnitError(`${fn} expects a dimensionless argument`);
-  }
+}
+
+/**
+ * The number of a spliced expression: the MathTS formula parser over the
+ * registered constants and the unit slots. The dimension walk has already
+ * refused unknown names, so a failure here is a non-finite result.
+ */
+function numberOf(raw: string, expr: string, scope: ReadonlyMap<string, Qty>, slots: ReadonlyMap<string, Qty>): number {
+  const values: Record<string, number> = {};
+  for (const [name, qty] of scope) values[name] = qty.value;
+  for (const [name, qty] of slots) values[name] = qty.value;
   try {
-    return { value: callBuiltinFunction(fn, args.map((a) => a.value)), dim: DIMENSIONLESS, cycles: 0 };
+    return mathtsFormulaParser.parse(expr).evaluate(values);
   } catch (e) {
-    if (e instanceof FormulaError) throw new UnitError(e.message);
+    if (e instanceof FormulaError) throw new BindingNumberError(`'${raw}' is not a finite number`);
     throw e;
   }
 }
 
 /** The literal path: a number with an optional unit, read exactly by the one unit reader. */
 function literalBinding(raw: string, reading: TemperatureReading): BindingValue | null {
-  let literal;
-  try {
-    literal = readQuantityLiteral(raw, reading);
-  } catch (e) {
-    const refused = unitRefusal(e);
-    if (refused !== null) throw refused;
-    throw e;
-  }
+  const literal = readQuantityLiteral(raw, reading);
   if (literal === null) return null;
   return {
     value: finite(raw, literal.value),
@@ -409,6 +423,9 @@ function declaredUnitReading(
     };
   } catch (error) {
     if (error instanceof AmbiguousUnitError) throw error;
+    // A unit the reader could not match to the target is the "not this
+    // reading" outcome; anything that is not a unit error propagates.
+    if (!(error instanceof UnitError)) throw error;
     return undefined;
   }
 }
@@ -453,8 +470,10 @@ export function readNamedBinding(
     if (sibling.name === name) continue;
     try {
       pending.push({ name: sibling.name, read: readBinding(sibling.raw, { mode, reading }) });
-    } catch {
-      // A sibling that does not parse is that sibling's own error.
+    } catch (error) {
+      // A sibling that does not read as a value is that sibling's own error,
+      // reported where it is read. A programming error propagates.
+      if (!(error instanceof UnitError)) throw error;
     }
   }
   const declaredDim = declared !== undefined && declared !== '' ? parseUnit(declared).dim : undefined;
@@ -526,19 +545,20 @@ export function readBinding(
     }
     throw e;
   }
-  let qty: Qty;
+  const scope = scopeFor(mode);
+  let shape: DimCycles;
   try {
-    qty = evalAst(ast, scopeFor(mode), spliced.slots);
+    shape = dimensionWalk(ast, scope, spliced.slots);
   } catch (e) {
     if (e instanceof UnknownNameError && spliced.slots.size === 0 && !hasOperator(trimmed)) throw notANumber();
     throw e;
   }
   return {
-    value: finite(trimmed, qty.value),
-    dimensioned: spliced.slots.size > 0 || !equals(qty.dim, DIMENSIONLESS),
-    dimension: qty.dim,
+    value: finite(trimmed, numberOf(trimmed, spliced.expr, scope, spliced.slots)),
+    dimensioned: spliced.slots.size > 0 || !equals(shape.dim, DIMENSIONLESS),
+    dimension: shape.dim,
     notes: spliced.notes,
-    cycles: qty.cycles,
+    cycles: shape.cycles,
   };
 }
 

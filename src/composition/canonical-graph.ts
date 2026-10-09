@@ -79,8 +79,8 @@ import { evalExpr } from './expr-eval.js';
 import { HoldsError, holds } from '../bridges/holds.js';
 import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
 
-/** A universal constant a canonical `governing` list may name: SI value + dim. */
-interface ConstantDef {
+/** A universal constant a canonical `governing` list may name: SI value + dim. Named by the public `CANONICAL_CONSTANTS`. @public */
+export interface ConstantDef {
   readonly value: number;
   readonly dim: Dimension;
 }

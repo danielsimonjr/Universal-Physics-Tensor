@@ -131,20 +131,12 @@ import './core/regime-rule-install.js';
 import './core/regimes-builtins.js';
 
 // v0.9 Proposal 8 — Bridge Parameter Differentiation (P8 Decision #1: lives
-// in src/diff/, doesn't touch src/bridges/). `bridgeGradient` is the AD path
-// (engine.reverseGrad), but it CANNOT trace the plain-JS catalog evaluators —
-// use `bridgeGradientNumerical` (central finite differences, engine-free) to
-// differentiate them. See the module doc for the full AD-limitation note.
-export type {
-  BridgeDiffSpec,
-  BridgeGradientResult,
-  BridgeNumericalGradientResult,
-} from './diff/bridge-gradient.js';
-export {
-  bridgeGradient,
-  bridgeGradientNumerical,
-  gradientToNamed,
-} from './diff/bridge-gradient.js';
+// in src/diff/, doesn't touch src/bridges/). `bridgeGradientNumerical` is
+// central finite differences over a spec, engine-free. Engine AD of a spec
+// is unreachable by construction (`evaluate` returns a number, which carries
+// no tape); the exact AD path is `bridgeGradientAST` over the symbolic RHS.
+export type { BridgeDiffSpec, BridgeNumericalGradientResult } from './diff/bridge-gradient.js';
+export { bridgeGradientNumerical } from './diff/bridge-gradient.js';
 // Exact bridge gradients via reverse-mode AD over the symbolic RHS AST
 // (traced lowering through mathts-autograd; faithful encodings only).
 export type { ASTGradientResult } from './diff/bridge-ast-gradient.js';
@@ -796,3 +788,54 @@ export type { Elasticity } from './bridges/sensitivity.js';
 // The PUBLIC atlas surface as a namespace (Atlas API review, Tier 1). The full
 // @internal surface stays on the universal-physics-tensor/atlas subpath.
 export * as atlas from './atlas/public.js';
+
+// ---------------------------------------------------------------------------
+// Closure under type references (tests/api/root-public-closure.test.ts).
+// Every type a root export names is itself importable from the root or from
+// a package.json subpath; the names below were reachable only through the
+// public declarations that mention them.
+// ---------------------------------------------------------------------------
+export type { UPTError } from './dimensional/errors.js';
+export type { UnitMode } from './dimensional/natural-units.js';
+export type {
+  Variance,
+  Role,
+  TensorIndex,
+  UpperIndex,
+  CovariantIndex,
+  TensorSymbolNode,
+  TensorProductNode,
+  MetricTensorNode,
+  KroneckerDeltaNode,
+  TensorPartialDerivativeNode,
+  RiemannTensorNode,
+  WeylTensorNode,
+  KillingVectorNode,
+  ConservedChargeNode,
+  StressEnergyTensorNode,
+  CosmologicalConstantNode,
+} from './dimensional/ast-types.js';
+export type { FluxRuleKind } from './core/flux-rules.js';
+export type { ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes } from './core/axes-registry.js';
+export type { AxisConvenience } from './core/regime-registry.js';
+export type { ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput } from './diff/bridge-specs.js';
+export type { EinsumContraction, EinsumFreeAxis } from './numerical/tensor-engine.js';
+export type { KillingFn, KillingMetricFn, ChristoffelAtFn } from './numerical/killing.js';
+export type { BridgeTractabilityClass } from './bridges/types.js';
+export type { RelationContract, Conventions } from './relations/types.js';
+export type {
+  ScaleAxis,
+  ForceAxis,
+  InformationAxis,
+  SymmetryAxis,
+  TopologyAxis,
+  StatisticsAxis,
+} from './composition/axes.js';
+export type { EnumerationOptions } from './composition/enumerate.js';
+export type { UncertaintyOptions } from './composition/uncertainty.js';
+export type { AnalyzeUserEquationOptions, ShortBinding } from './composition/user-equation.js';
+export type { ConstantDef } from './composition/canonical-graph.js';
+export type { ProposedBridge } from './composition/proposed-bridges.js';
+export type { DiscoveryOptions } from './composition/discovery.js';
+export type { RepresentativeValue } from './composition/representative-values.js';
+export type { SourcedPrefactor, SourcedGroupPrefactor } from './canonical/canonical-equation.js';

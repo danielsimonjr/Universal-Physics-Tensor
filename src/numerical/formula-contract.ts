@@ -1,13 +1,20 @@
 /**
- * Scalar-formula contract shared by the MathTS parser.
+ * Scalar-formula contract: the parser types, the refusal of `euler`, and THE
+ * ONE TABLE of documented scalar functions.
  *
- * Path B, the recursive-descent parser that used to live in `formula.ts`, is
- * gone. These types and the documented function table stay: the MathTS
- * adapter still returns a `number`, still refuses `euler`, and still supplies
- * `ln` when MathTS does not define it.
+ * `SCALAR_FUNCTIONS` carries, for each documented function, its arity, its
+ * numeric body, and its dimension rule (how the arguments' dimensions map to
+ * the result's). Three readers consume it and none keeps a table of its
+ * own: the MathTS formula parser supplies the bodies MathTS does not define
+ * (`ln`) and names the documented list in its diagnostics; the lowering pass
+ * evaluates a `transcendental`, `abs` or `^` node through it; the dimension
+ * checker and the binding reader apply the dimension rule. Path B, the
+ * recursive-descent parser that used to live in `formula.ts`, is gone.
  *
  * @module numerical/formula-contract
  */
+
+import type { TranscendentalFn } from '../dimensional/ast-types.js';
 
 /** A parse or evaluation failure (bad syntax, unknown symbol, arity). */
 export class FormulaError extends Error {
@@ -48,41 +55,75 @@ export class EulerNumberError extends FormulaError {
   }
 }
 
-type Fn = (args: number[]) => number;
-const arity1 = (f: (x: number) => number): Fn => (a) => {
-  if (a.length !== 1) throw new FormulaError('expected 1 argument');
-  return f(a[0]!);
-};
-const FUNCTIONS: Readonly<Record<string, Fn>> = {
-  sqrt: arity1(Math.sqrt),
-  cbrt: arity1(Math.cbrt),
-  exp: arity1(Math.exp),
-  ln: arity1(Math.log),
-  log: arity1(Math.log), // natural log (physics convention)
-  log10: arity1(Math.log10),
-  log2: arity1(Math.log2),
-  abs: arity1(Math.abs),
-  sin: arity1(Math.sin),
-  cos: arity1(Math.cos),
-  tan: arity1(Math.tan),
-  asin: arity1(Math.asin),
-  acos: arity1(Math.acos),
-  atan: arity1(Math.atan),
-  sinh: arity1(Math.sinh),
-  cosh: arity1(Math.cosh),
-  tanh: arity1(Math.tanh),
-  pow: (a) => {
-    if (a.length !== 2) throw new FormulaError('pow expects 2 arguments');
-    return Math.pow(a[0]!, a[1]!);
-  },
-  atan2: (a) => {
-    if (a.length !== 2) throw new FormulaError('atan2 expects 2 arguments');
-    return Math.atan2(a[0]!, a[1]!);
-  },
+/**
+ * How a documented function maps its arguments' dimensions to its result's.
+ *
+ * - `transcendental`: the argument must be dimensionless and so is the result.
+ *   `node` is the dimensional grammar's `transcendental` node when the grammar
+ *   has one for this function; without it the checker keeps a dimensionless stub.
+ * - `same`: the result has the argument's dimension (`abs`).
+ * - `root`: the result is the argument's dimension to `power` (`sqrt`, `cbrt`).
+ * - `power`: `pow(base, exp)`; the exponent is a dimensionless constant and
+ *   the result is the base's dimension to that constant.
+ * - `ratio`: `atan2(y, x)`; both arguments share a dimension and the result is
+ *   dimensionless.
+ * @internal
+ */
+export type ScalarFunctionDimension =
+  | { readonly kind: 'transcendental'; readonly node?: TranscendentalFn }
+  | { readonly kind: 'same' }
+  | { readonly kind: 'root'; readonly power: number }
+  | { readonly kind: 'power' }
+  | { readonly kind: 'ratio' };
+
+/** One documented scalar function: arity, numeric body, dimension rule. @internal */
+export interface ScalarFunction {
+  readonly arity: number;
+  readonly dimension: ScalarFunctionDimension;
+  /** The numeric body. Arity is checked by {@link callBuiltinFunction}, not here. */
+  readonly apply: (args: readonly number[]) => number;
+}
+
+const transcendental = (node: TranscendentalFn | undefined, f: (x: number) => number): ScalarFunction => ({
+  arity: 1,
+  dimension: node === undefined ? { kind: 'transcendental' } : { kind: 'transcendental', node },
+  apply: (a) => f(a[0]!),
+});
+
+/**
+ * The documented scalar functions, in the order help lists them. `log` is the
+ * natural logarithm (physics convention) and lowers to the grammar's `ln` node.
+ * @internal
+ */
+export const SCALAR_FUNCTIONS: Readonly<Record<string, ScalarFunction>> = {
+  sqrt: { arity: 1, dimension: { kind: 'root', power: 0.5 }, apply: (a) => Math.sqrt(a[0]!) },
+  cbrt: { arity: 1, dimension: { kind: 'root', power: 1 / 3 }, apply: (a) => Math.cbrt(a[0]!) },
+  exp: transcendental('exp', Math.exp),
+  ln: transcendental('ln', Math.log),
+  log: transcendental('ln', Math.log),
+  log10: transcendental('log10', Math.log10),
+  log2: transcendental('log2', Math.log2),
+  abs: { arity: 1, dimension: { kind: 'same' }, apply: (a) => Math.abs(a[0]!) },
+  sin: transcendental('sin', Math.sin),
+  cos: transcendental('cos', Math.cos),
+  tan: transcendental('tan', Math.tan),
+  asin: transcendental(undefined, Math.asin),
+  acos: transcendental(undefined, Math.acos),
+  atan: transcendental(undefined, Math.atan),
+  sinh: transcendental('sinh', Math.sinh),
+  cosh: transcendental('cosh', Math.cosh),
+  tanh: transcendental('tanh', Math.tanh),
+  pow: { arity: 2, dimension: { kind: 'power' }, apply: (a) => Math.pow(a[0]!, a[1]!) },
+  atan2: { arity: 2, dimension: { kind: 'ratio' }, apply: (a) => Math.atan2(a[0]!, a[1]!) },
 };
 
 /** Names of the built-in functions this parser documents. @internal */
-export const BUILTIN_FUNCTION_NAMES: readonly string[] = Object.keys(FUNCTIONS);
+export const BUILTIN_FUNCTION_NAMES: readonly string[] = Object.keys(SCALAR_FUNCTIONS);
+
+/** `${name} expects ${arity} argument(s)`, the one arity sentence. @internal */
+export function arityMessage(name: string, arity: number): string {
+  return `${name} expects ${arity} argument${arity === 1 ? '' : 's'}`;
+}
 
 /**
  * Function names from other conventions, each with the documented function that computes the same
@@ -128,12 +169,13 @@ export function unknownFunctionMessage(name: string): string {
 }
 
 /**
- * Call a documented function by name, with this parser's arity checks. Supplies
+ * Call a documented function by name, with the table's arity check. Supplies
  * a function MathTS does not define (`ln`).
  * @internal
  */
-export function callBuiltinFunction(name: string, args: number[]): number {
-  const fn = FUNCTIONS[name];
+export function callBuiltinFunction(name: string, args: readonly number[]): number {
+  const fn = SCALAR_FUNCTIONS[name];
   if (fn === undefined) throw new FormulaError(unknownFunctionMessage(name));
-  return fn(args);
+  if (args.length !== fn.arity) throw new FormulaError(arityMessage(name, fn.arity));
+  return fn.apply(args);
 }

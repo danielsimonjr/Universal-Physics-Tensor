@@ -346,3 +346,45 @@ describe('canonicalLabelOrder', () => {
     expect(canonicalLabelOrder(a)).toEqual(canonicalLabelOrder(b));
   });
 });
+
+// ---------------------------------------------------------------------------
+// 9.0.0 audit §2 N17: the same id twice on ONE operand used to throw the
+// "appears as a free axis on both operands" message, which describes the
+// other case.
+// ---------------------------------------------------------------------------
+
+describe('LabeledTensor.contract — the same id twice on one operand (N17)', () => {
+  it('names the one-operand case, not the both-operands case', () => {
+    const a = new LabeledTensor(
+      engine.fromNested([[1, 2], [3, 4]], [2, 2]),
+      engine,
+      { i: Axes.scale.quantum, j: Axes.scale.quantum },
+    );
+    const b = new LabeledTensor(engine.fromNested([5, 6], [2]), engine, { k: Axes.force.electromagnetic });
+    let error: unknown;
+    try {
+      a.contract(b);
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeInstanceOf(IdentityConflictError);
+    expect((error as Error).message).toMatch(/twice on one operand/);
+    expect((error as Error).message).not.toMatch(/both operands/);
+  });
+
+  it('the both-operands case keeps its own message (control)', () => {
+    const a = new LabeledTensor(engine.fromNested([1, 2], [2]), engine, { i: Axes.scale.quantum });
+    const b = new LabeledTensor(engine.fromNested([3, 4], [2]), engine, { j: Axes.scale.quantum });
+    // One shared id across the two operands is a contraction; two shared ids
+    // with different axis names are the mismatch; the same id on both sides
+    // with the SAME name is the outer-product path. The both-operands text is
+    // reached by three occurrences: twice on one side, once on the other.
+    const aa = new LabeledTensor(
+      engine.fromNested([[1, 2], [3, 4]], [2, 2]),
+      engine,
+      { i: Axes.scale.quantum, j: Axes.scale.quantum },
+    );
+    expect(() => aa.contract(b)).toThrow(IdentityConflictError);
+    expect(() => a.contract(b)).not.toThrow();
+  });
+});

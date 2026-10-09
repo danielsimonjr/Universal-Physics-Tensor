@@ -12,6 +12,7 @@
  */
 
 import type { Dimension } from './types.js';
+import type { ExprNode } from './ast-types.js';
 import type {
   Role,
   TensorSymbolNode,
@@ -58,7 +59,7 @@ interface CovariantDerivativeValidationResult {
  */
 export function validateCovariantDerivative(
   node: CovariantDerivativeNode,
-  validateChild: (child: unknown) => PartialDerivativeChildResult,
+  validateChild: (child: ExprNode) => PartialDerivativeChildResult,
 ): CovariantDerivativeValidationResult {
   if (node.wrtIndex.variance !== 'lower') {
     throw new PartialDerivativeIndexVarianceError(node.wrtIndex.label);
