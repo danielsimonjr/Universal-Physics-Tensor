@@ -21,7 +21,6 @@ import { equals } from '../dimensional/algebra.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { BridgeEdge } from '../composition/edge.js';
 import { enumerateCompositionsWithRefusals } from '../composition/enumerate.js';
-import type { CompositionResult } from '../relations/composition-table.js';
 import { buckinghamFilter } from '../composition/buckingham-filter.js';
 import { matchChain } from '../composition/chain-match.js';
 import { compareChainEdgeIds, type ChainCandidate } from '../composition/chain-candidate.js';
@@ -107,24 +106,6 @@ export function governingOf(expr: ExprNode, targetName: string): { name: string;
   }
   vars.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
   return vars;
-}
-
-/**
- * The category claim recorded for two quantity edges.
- *
- * A quantity edge stores a quantity name, not a category object id.
- * This step does not invent that id, so the recorded result is unset
- * even when both edges store a relation. The pair is not dropped.
- *
- * @internal
- */
-export function categoryCompositionForChain(
-  first: BridgeEdge,
-  second: BridgeEdge,
-): CompositionResult | undefined {
-  const relationsAreStored = first.relation !== undefined && second.relation !== undefined;
-  if (!relationsAreStored) return undefined;
-  return undefined;
 }
 
 function theoremsFor(edgeIds: readonly string[]): string[] {
@@ -237,7 +218,11 @@ export function runChainPipeline(edges: readonly BridgeEdge[]): readonly ChainPi
       classification,
       theorem: filtered.theorem,
       mismatch: undefined,
-      categoryComposition: categoryCompositionForChain(target.first, target.second),
+      // A quantity edge stores a quantity name, not a category object id, so
+      // no step can state a category claim for the pair. Unset, and the pair
+      // is not dropped. The sentence that a function computed this value is
+      // the record from before it was found to return nothing else.
+      categoryComposition: undefined,
     };
     if (classification.kind === 'confirmation' || classification.kind === 'restatement') {
       records.push(record);

@@ -13,7 +13,6 @@ import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { enumerateCompositions } from '../../src/composition/enumerate.js';
 import {
-  categoryCompositionForChain,
   runChainPipeline,
   type ChainStubRecord,
 } from '../../src/atlas/chain-pipeline.js';
@@ -64,11 +63,7 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
     );
   });
 
-  it('records an unset category claim and one provisional stub', () => {
-    const seeded = enumerateCompositions(CATALOG_GRAPH, { seedIds: new Set(bridgeSeedKeys()) });
-    for (const target of seeded.proofTargets) {
-      expect(categoryCompositionForChain(target.first, target.second)).toBeUndefined();
-    }
+  it('records one provisional stub', () => {
     const stubs = result.filter((row): row is ChainStubRecord => row.kind === 'stub');
     expect(stubs.map((row) => row.edgeIds)).toEqual([['be-74', 'be-76']]);
   });

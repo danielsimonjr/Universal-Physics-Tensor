@@ -62,6 +62,19 @@ describe('checkApplicability — side conditions over the AST', () => {
     }
   });
 
+  it('does NOT clear a divisor whose name is only a SUBSTRING of a word in the prose', () => {
+    // `a` is not guarded by "the amplitude is positive": the matcher must read
+    // whole tokens, or every one-letter divisor is cleared by any sentence that
+    // contains its letter beside a marker.
+    const xOverA: ExprNode = { kind: 'op', op: '/', args: [sym('x', LENGTH), sym('a', LENGTH)] };
+    const findings = checkApplicability({ ast: xOverA, sideConditions: ['the amplitude is positive'] });
+    expect(kinds(findings)).toContain('division-unguarded');
+    const named = checkApplicability({ ast: xOverA, sideConditions: ['a is positive'] });
+    expect(kinds(named)).not.toContain('division-unguarded');
+    const symbolic = checkApplicability({ ast: xOverA, sideConditions: ['x/a with a > 0'] });
+    expect(kinds(symbolic)).not.toContain('division-unguarded');
+  });
+
   it('does NOT clear a divisor the prose never mentions — the asymmetry that matters', () => {
     // A guard on a DIFFERENT symbol must not clear `b`. This is the false-clearance
     // case design note §1.3 says the shallow matcher cannot produce; pinning it here

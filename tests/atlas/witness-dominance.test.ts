@@ -21,6 +21,25 @@ function spec(bound: (x: number) => number, err = (res: number) => 1 / res): Dom
 }
 
 describe('runDominanceWitness', () => {
+  it('a bound that moves between resolutions adds its own difference to the uncertainty', () => {
+    // measured settles at 1 − x² (err 0.1 coarse, 0.01 fine: u_m = 0.09); the
+    // bound sits 0.12 above the fine value at the fine resolution but 0.3 above
+    // at the coarse one, so u = 0.09 + 0.18 = 0.27 > 0.12: unresolved, not checked.
+    const moving: DominanceWitnessSpec = {
+      ...spec(() => 1.2),
+      evaluate: (res) => {
+        const xs = [0, 0.5, 1];
+        const measured = xs.map((x) => 1 - x * x + 1 / res);
+        const bound = xs.map((x) => 1 - x * x + (res === 10 ? 0.4 : 0.13));
+        return { measured, bound };
+      },
+    };
+    const r = runDominanceWitness(moving);
+    expect(r.status).toBe('unresolved');
+    expect(r.reason).toBe('no-convergence');
+    expect(r.uncertainty).toBeCloseTo(0.09 + 0.27, 12);
+  });
+
   it('checked when the bound clears the measurement by more than the pointwise uncertainty', () => {
     const r = runDominanceWitness(spec(() => 1.2));
     expect(r.status).toBe('checked');
@@ -48,6 +67,17 @@ describe('runDominanceWitness', () => {
     expect(runDominanceWitness(bad).status).toBe('unresolved');
     const nan: DominanceWitnessSpec = { ...spec(() => Number.NaN) };
     expect(runDominanceWitness(nan).status).toBe('unresolved');
+    // A non-finite or mis-sized bound at the COARSE resolution is the same breakage.
+    const coarseBoundNaN: DominanceWitnessSpec = {
+      ...spec(() => 1.2),
+      evaluate: (res) => (res === 10 ? { measured: [0, 0, 0], bound: [Number.NaN, 1, 1] } : { measured: [0, 0, 0], bound: [1, 1, 1] }),
+    };
+    expect(runDominanceWitness(coarseBoundNaN)).toMatchObject({ status: 'unresolved', reason: 'parse-error' });
+    const coarseBoundShort: DominanceWitnessSpec = {
+      ...spec(() => 1.2),
+      evaluate: (res) => (res === 10 ? { measured: [0, 0, 0], bound: [1] } : { measured: [0, 0, 0], bound: [1, 1, 1] }),
+    };
+    expect(runDominanceWitness(coarseBoundShort)).toMatchObject({ status: 'unresolved', reason: 'parse-error' });
     const throws: DominanceWitnessSpec = {
       ...spec(() => 2),
       evaluate: () => {

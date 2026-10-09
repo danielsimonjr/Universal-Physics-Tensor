@@ -173,12 +173,24 @@ function literalValue(node: ExprNode): number | null {
   return Number.isFinite(v) ? v : null;
 }
 
-/** Is `name` guarded as non-vanishing by any of the stated side conditions? */
+/** The word-like tokens of a side condition: runs of letters, digits and underscores, lower-cased. */
+function wordTokens(text: string): Set<string> {
+  return new Set(text.toLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? []);
+}
+
+/**
+ * Is `name` guarded as non-vanishing by any of the stated side conditions?
+ *
+ * The name must appear as a WHOLE token of the condition: `a` is not guarded
+ * by "the amplitude is positive", although that sentence contains the letter
+ * `a` beside a marker. A substring match cleared every one-letter divisor on
+ * most prose; that was the audit's A14.
+ */
 function isGuarded(name: string, sideConditions: readonly string[]): boolean {
   const needle = name.toLowerCase();
   return sideConditions.some((raw) => {
+    if (!wordTokens(raw).has(needle)) return false;
     const s = raw.toLowerCase();
-    if (!s.includes(needle)) return false;
     return NONVANISHING_MARKERS.some((m) => s.includes(m));
   });
 }

@@ -70,8 +70,8 @@ export function summarizeEvidence(
  * non-empty, which a machine check produces) while nobody has recorded a
  * `relation` for it at all.
  *
- * - `schema` — the denominator: the 55 catalog rows plus the canonical
- *   registry. The atlas families are NOT in it; they are reported separately,
+ * - `schema` — the denominator: the catalog rows plus the canonical
+ *   registry (the counts are the caller's; this module stores none). The atlas families are NOT in it; they are reported separately,
  *   because a nine-model pilot would otherwise dilute a catalog-wide fraction.
  * - `audited` — a HUMAN set `relation` or `conventions` on the record.
  * - `verified` — a derived evidence tag set is non-empty. Passed IN, never

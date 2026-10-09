@@ -155,12 +155,19 @@ describe('the Lean file of a theorem is where it is declared, read from data', (
       'end PhysJS.Einstein',
       'namespace PhysJS.SpringLc',
       'protected theorem time_rescale_equationOfMotion : True := trivial',
+      'open Real Nat in theorem opened : True := trivial',
+      '@[simp] @[nolint docBlame] lemma twoAttrs : True := trivial',
+      'open Real in',
+      'theorem openedOnPreviousLine : True := trivial',
       'end PhysJS.SpringLc',
     ].join('\n');
     expect(declaredTheorems(source)).toEqual([
       'PhysJS.Einstein.friedmann_corollary',
       'PhysJS.Einstein.helper',
       'PhysJS.SpringLc.time_rescale_equationOfMotion',
+      'PhysJS.SpringLc.opened',
+      'PhysJS.SpringLc.twoAttrs',
+      'PhysJS.SpringLc.openedOnPreviousLine',
     ]);
   });
 
