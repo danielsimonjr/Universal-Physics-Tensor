@@ -13,8 +13,7 @@
  * @module composition/mathts-scalar-symbols
  */
 
-import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
+import { parse as mathtsParse } from '@danielsimonjr/mathts-functions';
 import { quietlySync } from './mathts-quiet.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -129,29 +128,19 @@ function joinParts(parts: readonly string[], op: string): string | null {
 let cachedParse: MathtsFunctionsModule['parse'] | undefined;
 
 /**
- * Load `parse` at the call. This walk does not add its own static import.
- * The load AND the first parse run inside the one console-silencing window
- * this module opens (`mathts-quiet.ts` states the invariant): the peer's
- * WASM-fallback chatter fires lazily on first use, so the smoke parse is that
- * first use, and every later parse runs with the console untouched.
+ * `parse`, bound once. The package is a required dependency and `quadrature.ts`
+ * already imports it statically, so this module imports it the same way (a
+ * `createRequire` of the ESM package once stood here, which needs Node 22.12 or
+ * 20.19 while `engines` says 18; Tom's second round). The first parse runs
+ * inside the one console-silencing window this module opens (`mathts-quiet.ts`
+ * states the invariant): the peer's WASM-fallback chatter fires lazily on first
+ * use, so the smoke parse is that first use, and every later parse runs with the
+ * console untouched.
  */
 function mathTsParse(): MathtsFunctionsModule['parse'] {
   if (cachedParse !== undefined) return cachedParse;
-  let url: string;
-  try {
-    url = import.meta.resolve('@danielsimonjr/mathts-functions');
-  } catch (err) {
-    throw new Error(
-      `scalar symbols require @danielsimonjr/mathts-functions (${err instanceof Error ? err.message : String(err)})`,
-    );
-  }
   const parse = quietlySync(() => {
-    const require = createRequire(import.meta.url);
-    const loaded = require(fileURLToPath(url)) as MathtsFunctionsModule;
-    if (typeof loaded.parse !== 'function') {
-      throw new Error('@danielsimonjr/mathts-functions: no parse() export');
-    }
-    const bound = loaded.parse.bind(loaded);
+    const bound = (mathtsParse as MathtsFunctionsModule['parse']).bind(undefined);
     bound('g0');
     return bound;
   });

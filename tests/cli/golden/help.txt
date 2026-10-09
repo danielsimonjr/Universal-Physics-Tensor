@@ -44,7 +44,7 @@ Flags:
   --evidence
         With no bridge id, list every bridge's derived evidence and the witness results it observes.
   --stored
-        Read witness results from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. That file is not in the published package; the command then names --run.
+        Read witness results from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. When the file is absent (a checkout or install without data/), the command names --run.
   --json
         Write a JSON envelope to stdout instead of the text report.
 
@@ -459,7 +459,7 @@ Flags:
         preserved, and counts the bridges that record nothing about it;
         --relation/--evidence filter it as they filter a family.
         --stored derives evidence from the committed witness results
-        (https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json; not in the published package),
+        (https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json; it ships in data/),
         labelled with the last commit that touched it; --run runs the shown
         bridges' in-process registered witnesses now (exit 3 if any is
         refuted). Either resolves a tag once its witnesses have results; a
@@ -505,7 +505,7 @@ Flags:
   --observable=VALUE (or --observable VALUE)
         Map bridges whose recorded text names this observable.
   --stored
-        Derive evidence from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. That file is not in the published package; the command then names --run.
+        Derive evidence from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. When the file is absent (a checkout or install without data/), the command names --run.
   --run
         Run the shown bridges' in-process witnesses now. Exit 3 if one is refuted.
   --equation=VALUE (or --equation VALUE)

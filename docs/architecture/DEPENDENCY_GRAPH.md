@@ -1415,6 +1415,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `./observations/types.js` | `residualInSigma` | Import |
 | `../core/data-file.js` | `checkedDataFile` | Import |
 | `./catalog-types.js` | `CatalogConfrontation, CatalogConfrontationRecord, CatalogEntry, CatalogEvaluator, CatalogEvaluatorParameter, CatalogFile, CatalogFileRecord, CatalogRejection, CatalogRelation` | Import (type-only) |
 | `./observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
@@ -3238,7 +3239,7 @@ The codebase is organized into the following modules:
 | `./numerical/evaluator-uncertainty.js` | `propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite` | Re-export |
 | `./numerical/evaluator-uncertainty.js` | `PropagatedOutput, UncertaintyContribution` | Re-export |
 | `./dimensional/symbolic-constants.js` | `constantAgreement, ConstantDisagreementError` | Re-export |
-| `./numerical/formula-contract.js` | `FormulaError` | Re-export |
+| `./numerical/formula-contract.js` | `FormulaError, FormulaValueError` | Re-export |
 | `./composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Re-export |
 | `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues` | Re-export |
 | `./composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Re-export |
@@ -3307,13 +3308,13 @@ The codebase is organized into the following modules:
   readBinding, bindingInUnit, readNamedBinding, BindingNumberError, TemperatureBindingError,
   propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite, PropagatedOutput,
   UncertaintyContribution, constantAgreement, ConstantDisagreementError, FormulaError,
-  aliasesForTarget, nearQuantityNames, shareSynonyms, assertSynonymAgreement, expandSynonymValues,
-  CANONICAL_GROUP_PREFACTORS, formatQuantity, formatExact, CarrierSignError, naturalConstantOverrides,
-  UnitMode, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluatorOutput,
-  resolveEvaluable, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
-  ollamaEmbedder, retrieveHybrid, builtinFormulaDimensionChecker, missingEvaluatorMessage,
-  relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
-  EquationAnalysis
+  FormulaValueError, aliasesForTarget, nearQuantityNames, shareSynonyms, assertSynonymAgreement,
+  expandSynonymValues, CANONICAL_GROUP_PREFACTORS, formatQuantity, formatExact, CarrierSignError,
+  naturalConstantOverrides, UnitMode, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName,
+  evaluatorOutput, resolveEvaluable, unusedInputKeys, SynonymDisagreementError,
+  canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid, builtinFormulaDimensionChecker,
+  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
+  EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -4102,11 +4103,10 @@ The codebase is organized into the following modules:
 
 ### `src/composition/mathts-scalar-symbols.ts` - Scalar leaves of an `ExprNode`, read from a MathTS AST.
 
-**Node.js Built-in Dependencies:**
-| Module | Import |
-|--------|--------|
-| `module` | `createRequire` |
-| `url` | `fileURLToPath` |
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `parse` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -5866,6 +5866,7 @@ The codebase is organized into the following modules:
 | `./dimensional/errors.js` | `UPTError` | Re-export |
 | `./dimensional/natural-units.js` | `UnitMode` | Re-export |
 | `./dimensional/ast-types.js` | `Variance, Role, TensorIndex, UpperIndex, CovariantIndex, TensorSymbolNode, TensorProductNode, MetricTensorNode, KroneckerDeltaNode, TensorPartialDerivativeNode, RiemannTensorNode, WeylTensorNode, KillingVectorNode, ConservedChargeNode, StressEnergyTensorNode, CosmologicalConstantNode` | Re-export |
+| `./dimensional/curvature-composite.js` | `CurvatureCompositeNode, CurvatureKind` | Re-export |
 | `./core/flux-rules.js` | `FluxRuleKind` | Re-export |
 | `./core/axes-registry.js` | `ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes` | Re-export |
 | `./core/regime-registry.js` | `AxisConvenience` | Re-export |
@@ -5975,12 +5976,13 @@ The codebase is organized into the following modules:
   UnitMode, Variance, Role, TensorIndex, UpperIndex, CovariantIndex, TensorSymbolNode,
   TensorProductNode, MetricTensorNode, KroneckerDeltaNode, TensorPartialDerivativeNode,
   RiemannTensorNode, WeylTensorNode, KillingVectorNode, ConservedChargeNode, StressEnergyTensorNode,
-  CosmologicalConstantNode, FluxRuleKind, ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes,
-  AxisConvenience, ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput, EinsumContraction,
-  EinsumFreeAxis, KillingFn, KillingMetricFn, ChristoffelAtFn, RelationContract, Conventions,
-  ScaleAxis, ForceAxis, InformationAxis, SymmetryAxis, TopologyAxis, StatisticsAxis,
-  EnumerationOptions, UncertaintyOptions, AnalyzeUserEquationOptions, ShortBinding, ConstantDef,
-  ProposedBridge, DiscoveryOptions, RepresentativeValue, SourcedPrefactor, SourcedGroupPrefactor
+  CosmologicalConstantNode, CurvatureCompositeNode, CurvatureKind, FluxRuleKind, ScaleAxes, ForceAxes,
+  SymmetryAxes, InformationAxes, AxisConvenience, ShapiroInput, PerihelionInput, HawkingInput,
+  DecoherenceInput, EinsumContraction, EinsumFreeAxis, KillingFn, KillingMetricFn, ChristoffelAtFn,
+  RelationContract, Conventions, ScaleAxis, ForceAxis, InformationAxis, SymmetryAxis, TopologyAxis,
+  StatisticsAxis, EnumerationOptions, UncertaintyOptions, AnalyzeUserEquationOptions, ShortBinding,
+  ConstantDef, ProposedBridge, DiscoveryOptions, RepresentativeValue, SourcedPrefactor,
+  SourcedGroupPrefactor
   ```
 
 
@@ -6204,7 +6206,7 @@ The codebase is organized into the following modules:
 | `../dimensional/ast-types.js` | `TranscendentalFn` | Import (type-only) |
 
 **Exports:**
-- Classes: `FormulaError`, `EulerNumberError`
+- Classes: `FormulaError`, `FormulaValueError`, `EulerNumberError`
 - Interfaces: `CompiledFormula`, `FormulaParser`, `ScalarFunction`
 - Functions: `arityMessage`, `unknownFunctionMessage`, `callBuiltinFunction`
 - Constants: `EULER_NUMBER_ERROR`, `SCALAR_FUNCTIONS`, `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`
@@ -6247,7 +6249,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./formula-contract.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
-| `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage` | Import |
+| `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError` | Import |
 
 **Exports:**
 - Functions: `parseFormula`
@@ -6987,10 +6989,10 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 81116 |
-| Total Exports | 2558 |
-| Total Re-exports | 1308 |
-| Total Classes | 81 |
+| Total Lines of Code | 81254 |
+| Total Exports | 2562 |
+| Total Re-exports | 1311 |
+| Total Classes | 82 |
 | Total Interfaces | 462 |
 | Total Functions | 776 |
 | Total Type Guards | 6 |

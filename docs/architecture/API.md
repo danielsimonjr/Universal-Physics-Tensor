@@ -82,40 +82,28 @@ import { BRIDGE_EQUATIONS } from 'universal-physics-tensor';
 const active = BRIDGE_EQUATIONS.filter(e => e.status !== 'invalid');
 ```
 
-### `evaluateGravitationalLensing(inputs)` — function
+### Evaluating a catalog relation — `evaluateRelation(id, inputs)`
 
-Evaluates the gravitational lensing deflection angle (bridge equation BE-51, Schwarzschild weak-field approximation).
+The light-bending deflection (BE-51) and the perihelion advance (BE-52) are catalog relations and evaluate through the one evaluator, by id. The per-bridge functions `evaluateGravitationalLensing` and `evaluatePerihelionPrecession`, and their input and result types, were removed in 6.0.0.
 
 **Kind**: function
 **Stability**: `@public`
 
 ```typescript
-import { evaluateGravitationalLensing } from 'universal-physics-tensor';
+import { evaluateRelation } from 'universal-physics-tensor';
 
-const result = evaluateGravitationalLensing({
+const deflection = evaluateRelation('be-51', {
   M_kg: 1.989e30,  // kg — solar mass
   b_m: 6.96e8,     // m — impact parameter (solar radius for grazing ray)
 });
-// result.alpha_rad: deflection in radians (result.alpha_arcsec in arc-seconds)
-```
+// deflection.kind === 'value'; deflection.value is the deflection angle in radians (8.49e-6)
 
-### `evaluatePerihelionPrecession(inputs)` — function
-
-Evaluates the general-relativistic perihelion precession per orbit (bridge equation BE-52).
-
-**Kind**: function
-**Stability**: `@public`
-
-```typescript
-import { evaluatePerihelionPrecession } from 'universal-physics-tensor';
-
-const result = evaluatePerihelionPrecession({
-  M_kg: 1.989e30,  // kg — central mass
-  a_m: 5.79e10,    // m — orbital semi-major axis
-  eccentricity: 0.205, // orbital eccentricity (a bare e is the elementary charge)
-  T_yr: 0.2408,    // orbital period in years (per-century conversion)
+const advance = evaluateRelation('be-52', {
+  M_kg: 1.989e30,       // kg — central mass
+  a_m: 5.79e10,         // m — orbital semi-major axis
+  eccentricity: 0.205,  // orbital eccentricity (a bare e is the elementary charge)
 });
-// result.dphi_rad_per_orbit: radians per orbit
+// advance.value is Δφ per orbit in radians (5.02e-7)
 ```
 
 ---
@@ -931,10 +919,6 @@ The following are type-only symbols erased at runtime. They appear in `src/index
 | `BridgeIssueSeverity` | `bridges/index` | Known-issue severity |
 | `BridgeIssueFixable` | `bridges/index` | Known-issue fixability |
 | `KnownIssue` | `bridges/index` | Single known-issue entry |
-| `GravitationalLensingInputs` | `bridges/index` | Input type for `evaluateGravitationalLensing` |
-| `GravitationalLensingResult` | `bridges/index` | Result type for `evaluateGravitationalLensing` |
-| `PerihelionPrecessionInputs` | `bridges/index` | Input type for `evaluatePerihelionPrecession` |
-| `PerihelionPrecessionResult` | `bridges/index` | Result type for `evaluatePerihelionPrecession` |
 | `GeodesicIntegratorInputs` | `numerical/geodesic-integrator` | Input bundle for `integrateGeodesic` |
 | `GeodesicIntegratorResult` | `numerical/geodesic-integrator` | Return type of `integrateGeodesic` |
 | `CovariantDerivativeNode` | `dimensional/validator` | AST node for ∇_μ |

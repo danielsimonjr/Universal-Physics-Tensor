@@ -350,11 +350,11 @@ export interface DiscoveryContext {
   /** `forwardClosure(edges, anchor, baseIdents)` — base determinable set. */
   readonly closureBase: ReadonlySet<string>;
   /**
-   * Retrodiction of the anchor with no hypothesized identification.
-   * An identification of two quantities outside {@link closureBase} cannot
-   * fire, so that candidate's numeric report is this one.
+   * The targets the retrodiction of the anchor finds inconsistent with no
+   * hypothesized identification (empty when the base is consistent). An
+   * identification of two quantities outside {@link closureBase} cannot fire,
+   * so that candidate's numeric report is this one.
    */
-  readonly baseNumericallyConsistent: boolean;
   readonly baseInconsistentNodes: readonly string[];
 }
 
@@ -387,7 +387,6 @@ export function buildDiscoveryContext(
     ),
     comps: quantityComponents(edges, baseIdents),
     closureBase: forwardClosure(edges, anchor, baseIdents),
-    baseNumericallyConsistent: baseReport.allConsistent,
     baseInconsistentNodes: baseReport.results
       .filter((r) => r.outcome === 'inconsistent')
       .map((r) => r.target)

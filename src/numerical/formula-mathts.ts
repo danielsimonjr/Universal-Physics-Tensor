@@ -20,7 +20,7 @@
 
 import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import type { CompiledFormula, FormulaParser } from './formula-contract.js';
-import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage } from './formula-contract.js';
+import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError } from './formula-contract.js';
 
 /** Bare `e` is the SI magnitude, not the coulomb Unit. */
 const PHYSICS_SCALAR = { physics: true, charge: 'scalar' } as const;
@@ -160,7 +160,7 @@ function createMathtsFormulaParser(
           if (typeof result !== 'number' || !Number.isFinite(result)) {
             // typeof Infinity and NaN is "number", which reads as a type error.
             // A Complex is an object; "got object" hides that sqrt(-1) left the reals.
-            throw new FormulaError(`formula did not evaluate to a finite number (got ${describeNonFinite(result)})`);
+            throw new FormulaValueError(`formula did not evaluate to a finite number (got ${describeNonFinite(result)})`);
           }
           return result;
         },

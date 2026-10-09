@@ -86,7 +86,7 @@ function objectTables(): Record<string, Record<string, TableValue>> {
     units[`${sym}.dimension`] = dimensionText(dim);
     units[`${sym}.prefixable`] = prefixable;
     // A cycle-counting row multiplies an angular input by 2π, so it changes a result like a scale does.
-    units[`${sym}.cycles`] = cycles;
+    units[`${sym}.cycles`] = cycles; // the cycle-count flag (Hz, rpm); the reader keeps the count and prints a note, it does not multiply by 2π
   }
   for (const [p, f] of prefixes) units[`prefix.${p}`] = f;
   units['degC.offsetK'] = celsiusOffsetK;

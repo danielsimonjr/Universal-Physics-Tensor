@@ -123,6 +123,14 @@ if ! git diff --quiet -- docs/architecture/; then
   exit 1
 fi
 
+echo "pre-push gate: README and ROADMAP status spans"
+if ! bun scripts/readme-status.ts --check; then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: a README or ROADMAP status span is stale."
+  echo "Run bun scripts/readme-status.ts (after docs:deps) and commit the files."
+  exit 1
+fi
+
 echo "pre-push gate: PhysJS table freshness"
 if ! bun scripts/generate-physjs-table.ts --check; then
   echo ""

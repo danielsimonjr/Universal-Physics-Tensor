@@ -3,9 +3,18 @@
   "title": "UPT Atlas Record",
   "description": "Versioned JSON artifact for a Phase 0 atlas family (`src/atlas`): the models, the bridges between them, and the claimed bridges that were rejected. DOCUMENTATION ONLY — this tree carries no JSON-Schema validator and adds no dependency to get one; the schema exists so an external validator can check an emitted record and so the field set has one written source. `schemaVersion` is independent of `packageVersion`. Experimental — does not imply public API stability. TypeScript sources (`src/atlas/types.ts`) remain authoritative for in-memory types, and Phase 0 pilot types are replaced rather than migrated (Atlas-Phase-0-Design.md §4).",
   "type": "object",
-  "required": ["schemaVersion", "packageVersion", "family", "models", "bridges", "rejections"],
+  "required": [
+    "schemaVersion",
+    "packageVersion",
+    "family",
+    "models",
+    "bridges",
+    "rejections"
+  ],
   "properties": {
-    "$schema": { "type": "string" },
+    "$schema": {
+      "type": "string"
+    },
     "schemaVersion": {
       "const": "0",
       "description": "Record major version. Parsers reject unknown incompatible majors. Additive optional fields do not require a bump."
@@ -23,21 +32,26 @@
     "models": {
       "type": "array",
       "description": "The models that are bridge endpoints. Ids must be unique within the record.",
-      "items": { "$ref": "#/definitions/atlasModel" }
+      "items": {
+        "$ref": "#/definitions/atlasModel"
+      }
     },
     "bridges": {
       "type": "array",
       "description": "Asserted relations between models, each with premises and a conclusion.",
-      "items": { "$ref": "#/definitions/atlasBridge" }
+      "items": {
+        "$ref": "#/definitions/atlasBridge"
+      }
     },
     "rejections": {
       "type": "array",
       "description": "Claimed bridges that do NOT hold, retained with the counterexample that defeats each one. A rejection is evidence, not an omission.",
-      "items": { "$ref": "#/definitions/atlasRejection" }
+      "items": {
+        "$ref": "#/definitions/atlasRejection"
+      }
     }
   },
   "additionalProperties": false,
-
   "definitions": {
     "relationType": {
       "description": "The eight Phase 0 relation kinds (Atlas-Phase-0-Design.md §2).",
@@ -52,12 +66,14 @@
         "deformation-quantization"
       ]
     },
-
     "limitCharacter": {
       "description": "Whether the limit taken by the relation is regular or singular.",
-      "enum": ["regular", "singular", "unknown"]
+      "enum": [
+        "regular",
+        "singular",
+        "unknown"
+      ]
     },
-
     "evidenceTag": {
       "description": "One derived evidence tag (`ALL_EVIDENCE_TAGS` in `src/relations/types.ts`, in declaration order). `formally-proved` is reachable only through a reviewed formal reference of kind `bridge`; `symbolically-checked` and `numerically-supported` only through a witness the committed results record as checked.",
       "enum": [
@@ -75,11 +91,18 @@
         "unresolved"
       ]
     },
-
     "approximationBound": {
       "type": "object",
       "description": "Quantitative error bound. `horizon` (prose) states where the approximation stops being usable; the machine predicate that decides it lives in the TypeScript source and is not serialisable, so only the prose form appears here.",
-      "required": ["K", "delta", "norm", "domain", "horizon", "limitCharacter", "uniformity"],
+      "required": [
+        "K",
+        "delta",
+        "norm",
+        "domain",
+        "horizon",
+        "limitCharacter",
+        "uniformity"
+      ],
       "properties": {
         "K": {
           "type": "number",
@@ -109,49 +132,88 @@
           "minLength": 1,
           "description": "Optional prose range of the parameter the bound was taken over."
         },
-        "limitCharacter": { "$ref": "#/definitions/limitCharacter" },
+        "limitCharacter": {
+          "$ref": "#/definitions/limitCharacter"
+        },
         "uniformity": {
           "description": "What the error is uniform in. null or an empty array means not yet analysed; boundPath then returns no numeric bound.",
-          "type": ["array", "null"],
-          "items": { "type": "string", "minLength": 1 }
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "deltaAtBasis": {
           "description": "What the machine form `deltaAt` (TypeScript only, not serialisable) rests on: `closed-form` returns the exact error; `numerically-supported` returns a value a witness checked. Present on every approximation bound.",
-          "enum": ["closed-form", "numerically-supported"]
+          "enum": [
+            "closed-form",
+            "numerically-supported"
+          ]
         }
       },
       "additionalProperties": false
     },
-
     "witness": {
       "type": "object",
-      "description": "Evidence that a bridge holds: an analytic argument, a numeric experiment, or both.",
-      "required": ["kind", "description"],
+      "description": "A named check that supports a record, and the test file that runs it (the TS `Witness` type). The emitted record carries no prose description: the id, the kind, the test path and the stated tolerance are the witness.",
+      "required": [
+        "id",
+        "kind",
+        "test"
+      ],
       "properties": {
-        "kind": { "enum": ["analytic", "numeric", "symbolic"] },
-        "description": { "type": "string", "minLength": 1 }
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "symbolic",
+            "numeric",
+            "formal"
+          ]
+        },
+        "test": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tolerance": {
+          "type": "string",
+          "minLength": 1
+        }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
-
     "counterexample": {
       "type": "object",
       "description": "A concrete instance that defeats a claimed relation.",
-      "required": ["description"],
+      "required": [
+        "description"
+      ],
       "properties": {
-        "description": { "type": "string", "minLength": 1 },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
         "params": {
           "type": "object",
           "description": "Parameter assignment at which the claim fails.",
-          "additionalProperties": { "type": "number" }
+          "additionalProperties": {
+            "type": "number"
+          }
         }
       },
       "additionalProperties": true
     },
-
     "atlasModel": {
       "type": "object",
-      "required": ["id", "dynamics"],
+      "required": [
+        "id",
+        "dynamics"
+      ],
       "properties": {
         "id": {
           "type": "string",
@@ -166,72 +228,117 @@
         "canonicalRefs": {
           "type": "array",
           "description": "Ids into `CANONICAL_EQUATIONS`. A ref that does not resolve is a test failure, not a warning (§3).",
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       },
       "additionalProperties": true
     },
-
     "atlasBridge": {
       "type": "object",
       "description": "An asserted relation. The if/then below encodes the Phase 0 rule that an approximation without an error bound is an assertion rather than a relation: when `relation` is `approximation`, `bound` is required and `bound.horizon` with it.",
-      "required": ["id", "relation", "premises", "conclusion"],
+      "required": [
+        "id",
+        "relation",
+        "premises",
+        "conclusion"
+      ],
       "properties": {
         "id": {
           "type": "string",
           "pattern": "^ab-",
           "description": "Stable bridge identifier (`ab-*`)."
         },
-        "relation": { "$ref": "#/definitions/relationType" },
+        "relation": {
+          "$ref": "#/definitions/relationType"
+        },
         "premises": {
           "type": "array",
           "minItems": 1,
           "description": "Model ids the relation reasons FROM.",
-          "items": { "type": "string", "pattern": "^model-" }
+          "items": {
+            "type": "string",
+            "pattern": "^model-"
+          }
         },
         "conclusion": {
           "type": "string",
           "pattern": "^model-",
           "description": "Model id the relation reasons TO."
         },
-        "limitCharacter": { "$ref": "#/definitions/limitCharacter" },
-        "bound": { "$ref": "#/definitions/approximationBound" },
+        "limitCharacter": {
+          "$ref": "#/definitions/limitCharacter"
+        },
+        "bound": {
+          "$ref": "#/definitions/approximationBound"
+        },
         "witnesses": {
           "type": "array",
-          "items": { "$ref": "#/definitions/witness" }
+          "items": {
+            "$ref": "#/definitions/witness"
+          }
         },
         "evidence": {
           "type": "array",
           "description": "The evidence tags the claim DERIVES (`deriveEvidence`, against `data/atlas/witness-results.json`), sorted. Never stored on a record; `toAtlasJson` computes it at write time.",
-          "items": { "$ref": "#/definitions/evidenceTag" }
+          "items": {
+            "$ref": "#/definitions/evidenceTag"
+          }
         },
         "normTransports": {
           "type": "array",
           "description": "Optional, on an exact-equivalence bridge only: per-direction declarations of how the map carries an error norm (docs/planning/ADR-transported-norm-composition.md). A bound crosses the map only in a norm and direction declared here, with its own witness.",
           "items": {
             "type": "object",
-            "required": ["id", "fromModel", "toModel", "from", "to", "K", "timeMap", "witness", "basis"],
+            "required": [
+              "id",
+              "fromModel",
+              "toModel",
+              "from",
+              "to",
+              "K",
+              "timeMap",
+              "witness",
+              "basis"
+            ],
             "additionalProperties": true
           }
         }
       },
       "additionalProperties": true,
-
       "if": {
-        "properties": { "relation": { "const": "approximation" } },
-        "required": ["relation"]
+        "properties": {
+          "relation": {
+            "const": "approximation"
+          }
+        },
+        "required": [
+          "relation"
+        ]
       },
       "then": {
-        "required": ["bound"],
+        "required": [
+          "bound"
+        ],
         "properties": {
-          "bound": { "required": ["horizon"] }
+          "bound": {
+            "required": [
+              "horizon"
+            ]
+          }
         }
       }
     },
-
     "atlasRejection": {
       "type": "object",
-      "required": ["id", "claimedRelation", "premises", "counterexample"],
+      "required": [
+        "id",
+        "claimedRelation",
+        "premises",
+        "counterexample"
+      ],
       "properties": {
         "id": {
           "type": "string",
@@ -245,13 +352,21 @@
         "premises": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string", "pattern": "^model-" }
+          "items": {
+            "type": "string",
+            "pattern": "^model-"
+          }
         },
         "conclusion": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Model id the claim reached, or null when the claim has no surviving conclusion."
         },
-        "counterexample": { "$ref": "#/definitions/counterexample" }
+        "counterexample": {
+          "$ref": "#/definitions/counterexample"
+        }
       },
       "additionalProperties": true
     }

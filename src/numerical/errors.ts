@@ -12,8 +12,8 @@ import { UPTError } from '../dimensional/errors.js';
  * @public
  */
 export class NumericalBackendError extends UPTError {
-  constructor(message: string) {
-    super(message);
+  constructor(message: string, options?: { readonly cause?: unknown }) {
+    super(message, options);
     this.name = 'NumericalBackendError';
     Object.setPrototypeOf(this, NumericalBackendError.prototype);
   }
@@ -29,10 +29,12 @@ export class EngineCapabilityError extends NumericalBackendError {
   constructor(
     public readonly engineName: string,
     public readonly missingMethod: string,
+    options?: { readonly cause?: unknown },
   ) {
     super(
       `Engine "${engineName}" does not implement "${missingMethod}". ` +
-      `Call \`hasAutogradSupport(engine)\` to detect support before invoking.`,
+        `Call \`hasAutogradSupport(engine)\` to detect support before invoking.`,
+      options,
     );
     this.name = 'EngineCapabilityError';
     Object.setPrototypeOf(this, EngineCapabilityError.prototype);

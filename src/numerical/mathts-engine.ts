@@ -166,7 +166,7 @@ export class MathTSEngine implements TensorEngine {
     try {
       // Narrow the dynamic import to the local call-site shape.
       autograd = await import('@danielsimonjr/mathts-autograd') as unknown as MathTSAutograd;
-    } catch { throw new EngineCapabilityError('MathTSEngine', 'forwardGrad'); }
+    } catch (cause) { throw new EngineCapabilityError('MathTSEngine', 'forwardGrad', { cause }); }
 
     // S1 fix: pass fn UNCHANGED. autograd.forwardGrad wraps x as a DualTensor;
     // MathTSEngine's arithmetic methods (mul/add/sub/scale) MUST dispatch
@@ -204,7 +204,7 @@ export class MathTSEngine implements TensorEngine {
     try {
       // Narrow the dynamic import to the local call-site shape.
       autograd = await import('@danielsimonjr/mathts-autograd') as unknown as MathTSAutograd;
-    } catch { throw new EngineCapabilityError('MathTSEngine', 'reverseGrad'); }
+    } catch (cause) { throw new EngineCapabilityError('MathTSEngine', 'reverseGrad', { cause }); }
 
     // S1 fix: pass fn UNCHANGED (see forwardGrad note above). autograd.reverseGrad
     // wraps x as a TapedTensor; MathTSEngine's mul/add/sub/scale dispatch

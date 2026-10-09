@@ -91,10 +91,6 @@
     "unspannable": 1
   },
   "canonical": {
-    "withPrefactor": 28,
-    "withHolds": 40,
-    "withUnsetFactorNote": 3,
-    "comparisonTargetRows": 4,
     "bridgesWithoutPartner": 152,
     "audit": {
       "derived": 79,

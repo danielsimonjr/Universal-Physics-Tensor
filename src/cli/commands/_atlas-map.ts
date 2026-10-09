@@ -107,7 +107,7 @@ export interface WitnessResultRow {
 
 /** Where stored witness results came from and whether the artifact changed since its last commit. */
 export interface StoredProvenance {
-  /** GitHub blob URL of the artifact. The file itself is not in the published package. */
+  /** GitHub blob URL of the artifact. The file ships in `data/`; a checkout or install without it has no stored results. */
   url: string;
   schemaVersion: string;
   /** What the artifact itself records about when it was produced. */
@@ -181,8 +181,8 @@ export function loadStoredResults(command = 'upt map', file = storedResultsFile(
       );
     }
     throw new CliError(
-      `${command}: --stored reads ${publishedUrl(STORED_RESULTS_PATH)}. That artifact is not in the published package, and it is not ` +
-        'present here. --run executes the in-process registered witnesses instead',
+      `${command}: --stored reads ${publishedUrl(STORED_RESULTS_PATH)}, which is not present here (a checkout or install ` +
+        'without data/). --run executes the in-process registered witnesses instead',
     );
   }
   let parsed: unknown;

@@ -74,8 +74,9 @@ describe('atlas-record.v0.json — definitions', () => {
     expect(def('approximationBound')['additionalProperties']).toBe(false);
   });
 
-  it('witness requires kind and description; counterexample requires description', () => {
-    expect(def('witness')['required']).toEqual(['kind', 'description']);
+  it('witness requires id, kind and test (the emitted shape); counterexample requires description', () => {
+    expect(def('witness')['required']).toEqual(['id', 'kind', 'test']);
+    expect(def('witness')['properties']['kind']['enum']).toEqual(['symbolic', 'numeric', 'formal']);
     expect(def('counterexample')['required']).toEqual(['description']);
   });
 

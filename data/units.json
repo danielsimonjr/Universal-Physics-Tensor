@@ -1144,6 +1144,22 @@
     {
       "spelling": "u",
       "note": "bare u is the atomic mass unit ({m_u} kg); um is still a micrometre"
+    },
+    {
+      "spelling": "rpm",
+      "note": "rpm counts revolutions: 1 rpm = 1/60 per second, a cycle count, not an angular rate; an angular frequency in rad/s is 2π times that"
+    },
+    {
+      "spelling": "Hz",
+      "note": "Hz counts cycles: 1 Hz = 1 per second; an angular frequency in rad/s is 2π times that, and a 1/s result is printed as s^-1, not Hz"
+    },
+    {
+      "spelling": "therm",
+      "note": "therm is the US therm (105480400 J); the EC therm is 1.05506e8 J, and 100000 BTU (IT) is 0.024% more than 1 US therm"
+    },
+    {
+      "spelling": "BTU",
+      "note": "BTU is the International Steam Table (IT) BTU, 1055.05585262 J, not the thermochemical BTU (1054.35 J)"
     }
   ]
 }

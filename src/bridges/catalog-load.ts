@@ -5,6 +5,7 @@
  * @module bridges/catalog-load
  */
 
+import { residualInSigma } from './observations/types.js';
 import { checkedDataFile } from '../core/data-file.js';
 import type {
   CatalogConfrontation,
@@ -68,31 +69,74 @@ const boolean = (o: Readonly<Record<string, unknown>>, key: string, where: strin
  * handling); the fields each arm must carry are checked here, so the loaded
  * record is a {@link ConfrontationOutcome} by inspection, not by assertion.
  */
+/** A stored number is written to a few significant digits; it agrees when it rounds to the computed one within 1e-3 relative (or absolute near zero). */
+function agreesToStoredPrecision(stored: number, computed: number): boolean {
+  return Math.abs(stored - computed) <= 1e-3 * Math.max(1, Math.abs(computed));
+}
+
+/** True when `holds` contains `clause` as a whole clause, not as the tail of a longer name. */
+function holdsStatesClause(holds: string, clause: string): boolean {
+  let from = 0;
+  for (;;) {
+    const at = holds.indexOf(clause, from);
+    if (at < 0) return false;
+    const before = at === 0 ? ' ' : holds[at - 1]!;
+    if (!/[A-Za-z0-9_-]/.test(before)) return true;
+    from = at + 1;
+  }
+}
+
 function readOutcome(row: CatalogConfrontationRecord): ConfrontationOutcome {
   const where = `data/bridge-catalog.json: confrontation ${row.catalogId}`;
   const o = row.outcome;
   if (o['kind'] !== row.kind) throw new Error(`${where}: outcome.kind ${String(o['kind'])} is not the record kind ${row.kind}`);
   switch (row.kind) {
-    case 'value':
-      number(o, 'predicted', where);
-      number(o, 'observed', where);
-      number(o, 'sigma', where);
-      number(o, 'residualInSigma', where);
-      boolean(o, 'withinObserved', where);
+    case 'value': {
+      // The verdict is derived from the numbers, never read as stored (AGENTS law 1): a stored
+      // residual or verdict that disagrees with |predicted − observed|/σ is refused.
+      const predicted = number(o, 'predicted', where);
+      const observed = number(o, 'observed', where);
+      const sigma = number(o, 'sigma', where);
+      const stored = number(o, 'residualInSigma', where);
+      const computed = residualInSigma(predicted, observed, sigma);
+      if (!agreesToStoredPrecision(stored, computed)) {
+        throw new Error(`${where}: outcome.residualInSigma ${stored} is not |predicted − observed|/sigma = ${computed}`);
+      }
+      if (boolean(o, 'withinObserved', where) !== computed <= 1) {
+        throw new Error(`${where}: outcome.withinObserved must be residualInSigma <= 1 (${computed})`);
+      }
       break;
-    case 'upper-bound':
-      number(o, 'predicted', where);
-      number(o, 'bound', where);
-      boolean(o, 'satisfied', where);
+    }
+    case 'upper-bound': {
+      const predicted = number(o, 'predicted', where);
+      const bound = number(o, 'bound', where);
+      // `predictedIs` picks the comparison (`observations/types.ts`): a point is satisfied at or
+      // below the observed limit; an encoded bound (|x| ≤ predicted) when the limit lies inside it.
+      const encodedBound = o['predictedIs'] === 'encoded-bound';
+      const expected = encodedBound ? bound <= predicted : predicted <= bound;
+      if (boolean(o, 'satisfied', where) !== expected) {
+        throw new Error(
+          `${where}: outcome.satisfied must be ${encodedBound ? 'bound <= predicted' : 'predicted <= bound'} (${predicted} vs ${bound})`,
+        );
+      }
       break;
-    case 'consistency':
-      number(o, 'predicted', where);
-      number(o, 'approaches', where);
-      number(o, 'fractionalGap', where);
+    }
+    case 'consistency': {
+      const predicted = number(o, 'predicted', where);
+      const approaches = number(o, 'approaches', where);
+      const gap = number(o, 'fractionalGap', where);
       if (o['fractionalGapIs'] !== 'agreement-bound' && o['fractionalGapIs'] !== 'observed-difference') {
         throw new Error(`${where}: outcome.fractionalGapIs must name what fractionalGap holds`);
       }
+      // An agreement bound is the record's stated tolerance; an observed difference is derived.
+      if (o['fractionalGapIs'] === 'observed-difference' && predicted !== 0) {
+        const computed = (approaches - predicted) / predicted;
+        if (!agreesToStoredPrecision(gap, computed)) {
+          throw new Error(`${where}: outcome.fractionalGap ${gap} is not (approaches − predicted)/predicted = ${computed}`);
+        }
+      }
       break;
+    }
     case 'table':
       if (!Array.isArray(o['rows'])) throw new Error(`${where}: outcome.rows must be an array`);
       break;
@@ -164,7 +208,8 @@ function deriveDomains(file: CatalogFile): CatalogFile {
         (relation.sources.includes(parameter.quantity) ? parameter.quantity : undefined);
       if (source === undefined) continue;
       const clause = signClause(parameter, source);
-      if (clause !== undefined && !relation.holds.includes(clause)) clauses.push(clause);
+      // A whole-clause match: `radius > 0` is not already stated by `near-radius > 0`.
+      if (clause !== undefined && !holdsStatesClause(relation.holds, clause)) clauses.push(clause);
     }
     if (clauses.length === 0) return relation;
     const stated = relation.holds.trim() === 'true' ? '' : `${relation.holds} and `;

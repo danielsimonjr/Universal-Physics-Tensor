@@ -265,7 +265,7 @@ export type { PropagatedOutput, UncertaintyContribution } from './numerical/eval
 /** A stated constant checked against the registry; a disagreement is its own error. */
 export { constantAgreement, ConstantDisagreementError } from './dimensional/symbolic-constants.js';
 /** Thrown when a formula string does not parse or names an unbound symbol. */
-export { FormulaError } from './numerical/formula-contract.js';
+export { FormulaError, FormulaValueError } from './numerical/formula-contract.js';
 /** The quantity names a target is bound under, the near names of a miss, and the synonym fold. */
 export { aliasesForTarget, nearQuantityNames, shareSynonyms } from './composition/aliases.js';
 /** Synonym agreement and expansion of a binding set. */

@@ -3,7 +3,7 @@ metadata:
   version: 9.0.0
   totalFiles: 363
   totalModules: 13
-  totalExports: 2558
+  totalExports: 2562
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3465,6 +3465,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ./observations/types.js
+          imports:
+            - residualInSigma
         - file: ../core/data-file.js
           imports:
             - checkedDataFile
@@ -7461,6 +7464,7 @@ modules:
         - file: ./numerical/formula-contract.js
           imports:
             - FormulaError
+            - FormulaValueError
           reExport: true
         - file: ./composition/aliases.js
           imports:
@@ -7723,6 +7727,7 @@ modules:
         - constantAgreement
         - ConstantDisagreementError
         - FormulaError
+        - FormulaValueError
         - aliasesForTarget
         - nearQuantityNames
         - shareSynonyms
@@ -7994,6 +7999,7 @@ modules:
         - constantAgreement
         - ConstantDisagreementError
         - FormulaError
+        - FormulaValueError
         - aliasesForTarget
         - nearQuantityNames
         - shareSynonyms
@@ -9908,14 +9914,11 @@ modules:
         - quietly
     src/composition/mathts-scalar-symbols.ts:
       description: Scalar leaves of an `ExprNode`, read from a MathTS AST.
-      externalDependencies: []
-      nodeDependencies:
-        - module: module
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
           imports:
-            - createRequire
-        - module: url
-          imports:
-            - fileURLToPath
+            - parse
+      nodeDependencies: []
       internalDependencies:
         - file: ./mathts-quiet.js
           imports:
@@ -14677,6 +14680,11 @@ modules:
             - StressEnergyTensorNode
             - CosmologicalConstantNode
           reExport: true
+        - file: ./dimensional/curvature-composite.js
+          imports:
+            - CurvatureCompositeNode
+            - CurvatureKind
+          reExport: true
         - file: ./core/flux-rules.js
           imports:
             - FluxRuleKind
@@ -15199,6 +15207,8 @@ modules:
         - ConservedChargeNode
         - StressEnergyTensorNode
         - CosmologicalConstantNode
+        - CurvatureCompositeNode
+        - CurvatureKind
         - FluxRuleKind
         - ScaleAxes
         - ForceAxes
@@ -15673,6 +15683,8 @@ modules:
         - ConservedChargeNode
         - StressEnergyTensorNode
         - CosmologicalConstantNode
+        - CurvatureCompositeNode
+        - CurvatureKind
         - FluxRuleKind
         - ScaleAxes
         - ForceAxes
@@ -16159,9 +16171,11 @@ modules:
         - unknownFunctionMessage
         - callBuiltinFunction
         - FormulaError
+        - FormulaValueError
         - EulerNumberError
       classes:
         - FormulaError
+        - FormulaValueError
         - EulerNumberError
       interfaces:
         - CompiledFormula
@@ -16256,6 +16270,7 @@ modules:
             - EulerNumberError
             - FormulaError
             - unknownFunctionMessage
+            - FormulaValueError
       exports:
         - mathtsFormulaParser
         - parseFormula
@@ -17694,15 +17709,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 363
   totalModules: 13
-  totalLinesOfCode: 81116
-  totalExports: 2558
-  totalClasses: 81
+  totalLinesOfCode: 81254
+  totalExports: 2562
+  totalClasses: 82
   totalInterfaces: 462
   totalFunctions: 776
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 392
-  totalReExports: 1308
+  totalReExports: 1311
   totalTypeOnlyImports: 510
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

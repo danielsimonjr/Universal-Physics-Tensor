@@ -1,6 +1,6 @@
 /**
  * Catalog-wide invariant: every entry whose `dimensional_signature` is
- * non-null and whose AST is encoded in `src/bridges/equations/` must
+ * non-null and whose AST is encoded in `src/bridges/rhs-registry.ts` must
  * round-trip through the dimensional analyzer back to the registered
  * string.
  *

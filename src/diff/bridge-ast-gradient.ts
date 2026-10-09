@@ -41,8 +41,9 @@ export interface ASTGradientResult {
   readonly gradient: number;
 }
 
-// --- Structural views of the optional autograd/tensor peers (not full imports;
-// the peers are absent during tsc, so we narrow the dynamic-import result). ---
+// --- Structural views of the autograd/tensor packages (required dependencies; the
+// dynamic import keeps the AD path off the module's load, and its result is narrowed
+// to the call-site shape). ---
 
 type TapeHandle = unknown;
 
@@ -341,7 +342,7 @@ export function bridgeGradientASTById(
   if (rhs === undefined) {
     throw new TypeError(
       `bridgeGradientASTById: BE-${id} has no encoded RHS AST in the registry ` +
-        `(BE-51/52 are closed-form; only ids ${[...BRIDGE_RHS_BY_ID.keys()].length} bridges are encoded).`
+        `(BE-51/52 are closed-form; ${BRIDGE_RHS_BY_ID.size} bridges have an encoded AST).`
     );
   }
   return bridgeGradientAST(rhs, varName, bindings);

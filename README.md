@@ -286,8 +286,8 @@ horizon — is the framework's first **derived** (rather than encoded)
 literature-anchored result, pre-registered before implementation and
 pinned to relErr ≤ 10⁻¹² (see [Part IX](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-IX-Composition.md)
 and `docs/planning/v0.8.0-Design.md`). A computable **membership
-criterion** (a bridge's endpoint quantities must differ in regime) now
-adjudicates the catalog — <!-- readme-status:membership -->152 bridges · 5 not-a-bridge · 3 unadjudicated<!-- /readme-status:membership --> —
+criterion** (the catalog's `bridges` label tuple: two different regime labels; a
+rejected id is not a bridge) adjudicates the catalog — <!-- readme-status:membership -->152 bridges · 5 not-a-bridge · 3 unadjudicated (by the catalog's `bridges` label tuple, not the endpoint-regime criterion)<!-- /readme-status:membership --> —
 with rejections recorded in a reviewable negative catalog
 (`src/bridges/rejected.ts`).
 

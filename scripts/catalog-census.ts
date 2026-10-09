@@ -41,7 +41,6 @@ import {
 import { rankDiscoveries } from '../src/composition/discovery.js';
 import { annotateConsequences } from '../src/composition/consequence.js';
 import { PROPOSED_BRIDGES } from '../src/composition/proposed-bridges.js';
-import { NAME_TABLE } from '../src/composition/aliases.js';
 import {
   CANONICAL_EQUATIONS,
   bridgesWithoutCanonicalPartner,
@@ -142,10 +141,6 @@ export interface CatalogCensus {
     readonly unspannable: number;
   };
   readonly canonical: {
-    readonly withPrefactor: number;
-    readonly withHolds: number;
-    readonly withUnsetFactorNote: number;
-    readonly comparisonTargetRows: number;
     readonly bridgesWithoutPartner: number;
     readonly audit: {
       readonly derived: number;
@@ -325,10 +320,9 @@ export function deriveCensus(): CatalogCensus {
     },
     derivationAudit,
     canonical: {
-      withPrefactor: count(CANONICAL_EQUATIONS, (e) => e.prefactor !== undefined),
-      withHolds: count(CANONICAL_EQUATIONS, (e) => e.holds !== undefined),
-      withUnsetFactorNote: count(CANONICAL_EQUATIONS, (e) => e.unsetFactorNote !== undefined),
-      comparisonTargetRows: Object.keys(NAME_TABLE.canonicalTargets).length,
+      // The prefactor, holds, unset-factor-note and comparison-target counts are canonical
+      // entry facts that no bridge ingest moves; they stay typed in
+      // tests/canonical/one-record.test.ts, where a change is a reviewed edit (Tom's review).
       bridgesWithoutPartner: bridgesWithoutCanonicalPartner().length,
       audit: {
         derived: canonicalAudit.derived,

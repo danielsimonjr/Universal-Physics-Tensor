@@ -329,9 +329,10 @@ export async function evaluateCovariantEikonalNumerical(
   let p_r: number;
   try {
     p_r = reconstructNullPr(gInv0, p_t, p_phi);
-  } catch {
+  } catch (cause) {
     throw new RangeError(
       `evaluateCovariantEikonalNumerical: null condition has no real p_r at R_far=${R_far_m} (impact parameter b=${b_m} too large for this geometry)`,
+      { cause },
     );
   }
 

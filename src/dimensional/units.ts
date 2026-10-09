@@ -384,6 +384,10 @@ function unitReadings(text: string): UnitReading[] {
   ) {
     throw new UnitRefusedError('an affine temperature cannot be part of a compound unit; give K');
   }
+  // An operator with nothing on one side (`m/`, `m//s`, `m*`, `*m`, `m/*s`) is not a unit
+  // text; it was read as if the empty factor were 1 (Tom's second round). A leading `/`
+  // (`/s`) stays the dimensionless numerator.
+  if (/[*·/]\s*$|^\s*[*·]|[*·/]\s*[*·/]/.test(t)) throw new UnknownUnitError(t);
   // A chain is one denominator: `km/s/Mpc` is km/(s·Mpc), the way the Hubble constant is written.
   const sides = solidusSides(t);
   const compete = /[*·/\s]/.test(t);

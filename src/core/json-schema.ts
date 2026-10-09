@@ -9,7 +9,7 @@
  * Subset: `type` (a name or an array of names), `required`, `properties`,
  * `additionalProperties` (boolean or schema), `propertyNames`, `items`,
  * `minItems`, `maxItems`, `uniqueItems`, `minLength`, `pattern`, `minimum`,
- * `enum`, `const`, and `$ref` to `#/$defs/<name>`. `$schema`, `$id`, `$defs`,
+ * `enum`, `const`, `if`/`then`/`else`, and `$ref` to `#/$defs/<name>` or `#/definitions/<name>`. `$schema`, `$id`, `$defs`,
  * `title` and `description` are annotations.
  *
  * @module core/json-schema
@@ -18,7 +18,7 @@
 /** A JSON Schema document or subschema, as parsed from JSON. @internal */
 export type JsonSchema = { readonly [keyword: string]: unknown };
 
-const ANNOTATIONS = new Set(['$schema', '$id', '$defs', 'title', 'description']);
+const ANNOTATIONS = new Set(['$schema', '$id', '$defs', 'definitions', 'title', 'description']);
 const KEYWORDS = new Set([
   'type',
   'required',
@@ -35,6 +35,9 @@ const KEYWORDS = new Set([
   'enum',
   'const',
   '$ref',
+  'if',
+  'then',
+  'else',
 ]);
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -63,9 +66,11 @@ function typeMatches(type: string, value: unknown): boolean {
 }
 
 function resolveRef(root: JsonSchema, ref: string): JsonSchema {
-  const m = /^#\/\$defs\/([^/]+)$/.exec(ref);
-  const defs = root['$defs'];
-  const target = m === null || !isObject(defs) ? undefined : defs[m[1]!];
+  // `#/$defs/<name>` (2019-09 and later) or `#/definitions/<name>` (draft-07): both are a
+  // local definition table and nothing else is resolved.
+  const m = /^#\/(\$defs|definitions)\/([^/]+)$/.exec(ref);
+  const defs = m === null ? undefined : root[m[1]!];
+  const target = m === null || !isObject(defs) ? undefined : defs[m[2]!];
   if (!isObject(target)) throw new Error(`json-schema: unresolved $ref '${ref}'`);
   return target;
 }
@@ -77,6 +82,14 @@ function check(root: JsonSchema, schema: JsonSchema, value: unknown, path: strin
     }
   }
   if (typeof schema['$ref'] === 'string') check(root, resolveRef(root, schema['$ref']), value, path, problems);
+  // `if`/`then`/`else`: the branch whose condition the value meets is checked; the condition's
+  // own problems are not reported.
+  if (isObject(schema['if'])) {
+    const condition: string[] = [];
+    check(root, schema['if'], value, path, condition);
+    const branch = condition.length === 0 ? schema['then'] : schema['else'];
+    if (isObject(branch)) check(root, branch, value, path, problems);
+  }
   if (schema['type'] !== undefined) {
     const types = Array.isArray(schema['type']) ? (schema['type'] as unknown[]) : [schema['type']];
     if (types.length === 0 || types.some((type) => typeof type !== 'string')) {
@@ -118,19 +131,26 @@ function check(root: JsonSchema, schema: JsonSchema, value: unknown, path: strin
     if (isObject(schema['items'])) {
       const items = schema['items'];
       value.forEach((item, i) => check(root, items, item, `${path}[${i}]`, problems));
+    } else if (Array.isArray(schema['items'])) {
+      // A tuple: each position has its own schema; a position past the tuple is unchecked.
+      (schema['items'] as unknown[]).forEach((itemSchema, i) => {
+        if (!isObject(itemSchema)) throw new Error(`json-schema: items[${i}] at ${path} is not a schema`);
+        if (i < value.length) check(root, itemSchema, value[i], `${path}[${i}]`, problems);
+      });
     }
   }
   if (isObject(value)) {
     const properties = isObject(schema['properties']) ? schema['properties'] : {};
     if (Array.isArray(schema['required'])) {
       for (const key of schema['required'] as readonly string[]) {
-        if (!(key in value)) problems.push(`${path}: missing '${key}'`);
+        if (!Object.hasOwn(value, key)) problems.push(`${path}: missing '${key}'`);
       }
     }
     for (const [key, child] of Object.entries(value)) {
       const where = `${path}.${key}`;
       if (isObject(schema['propertyNames'])) check(root, schema['propertyNames'], key, `${where} (name)`, problems);
-      const declared = properties[key];
+      // Own properties only: a `__proto__` key must not resolve to Object.prototype.
+      const declared = Object.hasOwn(properties, key) ? properties[key] : undefined;
       if (isObject(declared)) {
         check(root, declared, child, where, problems);
       } else if (schema['additionalProperties'] === false) {

@@ -161,14 +161,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   if (mode === 'si') for (const note of api.constantNotes(cf.variables)) notes.push(`note: ${note}`);
   for (const note of notes) err(note);
 
-  // The parser throws one class here for an unknown function (a malformed
-  // formula) and for a non-finite result (a bad value), so the two cannot be
-  // told apart by class and both exit 2. A typed error in the parser is the
-  // numerical package's follow-up.
+  // A non-finite result (`ln(-1)`, `1/0`) is a bad value at the point: exit 1, by class.
+  // An unknown function or symbol is a malformed formula: exit 2.
   let value: number;
   try {
     value = cf.evaluate(scope);
   } catch (e) {
+    if (e instanceof api.FormulaValueError) throw new CliError(`upt eval: ${e.message}`);
     throw new FormulaUsageError((e as Error).message, kind);
   }
 

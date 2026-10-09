@@ -122,7 +122,9 @@ export function referencedTypeNames(declaration: string, name: string): string[]
   const code = declaration
     .replace(/'[^']*'|"[^"]*"|`[^`]*`/g, '')
     .replace(/\b[A-Za-z_$][\w$]*(?=\s*\??:)/g, '')
-    .replace(/(?<![=!<>])=(?!>)\s*[A-Za-z_$][\w$]*/g, '=');
+    // A parameter default (`tol = DEFAULT`) is followed by `,` or `)`; the head of a type
+    // alias (`= Secret<…>`, `= Secret;`) is not, and stays a reference.
+    .replace(/(?<![=!<>])=(?!>)\s*[A-Za-z_$][\w$]*(?=\s*[,)])/g, '=');
   const own = typeParametersOf(declaration, name);
   const found = code.match(/\b[A-Z][A-Za-z0-9_$]*\b/g) ?? [];
   return [...new Set(found)].filter((n) => n !== name && !own.has(n) && !BUILTIN.has(n));
@@ -176,6 +178,15 @@ describe('the root closure scan — proven before it is trusted', () => {
     expect(referencedTypeNames(declarationText(fn, 'ricci')!, 'ricci')).toEqual(['RiemannTensorNode', 'Out']);
     const mapped = "export type Axes = { readonly [K in Scale]: Index<'scale'> };";
     expect(referencedTypeNames(declarationText(mapped, 'Axes')!, 'Axes')).toEqual(['Scale', 'Index']);
+  });
+
+  it('POSITIVE CONTROL: the head of a type alias is a reference (an alias to a generic, too)', () => {
+    // Tom's second round: the default-stripping regex also deleted the first identifier after
+    // the `=` of `export type X = Secret<…>`, so an alias whose head was private passed.
+    const head = 'export type A = SecretNode;';
+    expect(referencedTypeNames(declarationText(head, 'A')!, 'A')).toEqual(['SecretNode']);
+    const generic = "export type A = SecretNode<'k', { readonly x: number }>;";
+    expect(referencedTypeNames(declarationText(generic, 'A')!, 'A')).toEqual(['SecretNode']);
   });
 
   it('subpath entry modules contribute their exported names (the atlas facade is one)', () => {
