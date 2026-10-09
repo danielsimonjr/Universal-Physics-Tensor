@@ -35,8 +35,9 @@ const HELP = `upt retrieve <claim> [--embed] [--ollama-url=URL]
         the atlas search, and cosine similarity does not enter its score.
         If Ollama cannot be used, the same atlas search is printed and the
         reason is named: the process is not there, the model is not there,
-        the reply is not a vector or its length is not the length stored in
-        the frozen file, or the call does not finish. A fallback exits 0.
+        the server answered an error status, the reply is not a vector or its
+        length is not the length stored in the frozen file, or the call does
+        not finish. A fallback exits 0.
         --ollama-url is used only with --embed (default http://127.0.0.1:11434).
         A claim is text. It has no expression, so the structural score is
         zero and the atlas order is by id. The command does not invent one.

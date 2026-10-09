@@ -801,7 +801,6 @@ export type { AxisConvenience } from './core/regime-registry.js';
 export type { ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput } from './diff/bridge-specs.js';
 export type { EinsumContraction, EinsumFreeAxis } from './numerical/tensor-engine.js';
 export type { KillingFn, KillingMetricFn, ChristoffelAtFn } from './numerical/killing.js';
-export type { BridgeTractabilityClass } from './bridges/types.js';
 export type { RelationContract, Conventions } from './relations/types.js';
 export type {
   ScaleAxis,

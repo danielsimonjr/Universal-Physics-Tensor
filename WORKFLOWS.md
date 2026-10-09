@@ -117,9 +117,9 @@ not published.
 5. Commit and open the release PR. The review rule recorded in `ACTIVE.md` applies: Tom deep-reviews it before it merges, and an agent does not merge its own PR. After the merge, wait until CI on the merge commit is green.
 6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
    workflow checks out the tag, fetches `origin/master` (the layer-order gate reads that ref,
-   and a tag checkout does not have it), installs, builds, typechecks, runs the test suite, and
-   fails the job when the tag version (the leading `v` removed) is not `package.json`'s version.
-   It then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish).
+   and a tag checkout does not have it), installs, refuses a tag whose version (the leading `v` removed) is not
+   `package.json`'s, and then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish),
+   whose `prepublishOnly` runs the build, the typecheck and the suite once.
 7. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
    Plain `npm view` serves a stale cache right after a publish.
 
