@@ -25,7 +25,8 @@ describe('proposeLinkCandidates — generator', () => {
     // 1525 is the record from before be-126..133. Those eight edges are isolated too.
     // 1964 is the record from before be-134..146. Those thirteen edges are isolated too.
     // 2518 is the record from before be-147..170.
-    expect(cands.length).toBe(4196);
+    // 4196 is the record from before be-33 and be-88 dropped the sources their formulas never read.
+    expect(cands.length).toBe(4169);
   });
 
   it('the funnel narrows: most touch the core, fewer are same-kind', () => {
@@ -41,8 +42,10 @@ describe('proposeLinkCandidates — generator', () => {
     // n3 (1), and scatter (1) among the new established edges. A shared token
     // is not an identification.
     // 2484 and 665 are the record from before be-147..170.
-    expect(core).toBe(4162);
-    expect(ck).toBe(839);
+    // 4162 is the record from before be-33 and be-88 dropped two sources.
+    expect(core).toBe(4135);
+    // 839 is the record from before those two sources were dropped (same-kind 839 → 822).
+    expect(ck).toBe(822);
     expect(ck).toBeLessThan(core); // the filters genuinely narrow
   });
 

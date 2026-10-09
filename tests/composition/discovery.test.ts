@@ -248,7 +248,8 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
     // 1525 is the record from before be-126..133.
     // 1964 is the record from before be-134..146.
     // 2518 is the record from before be-147..170.
-    expect(ranked.length).toBe(4196);
+    // 4196 is the record from before be-33 and be-88 dropped the sources their formulas never read.
+    expect(ranked.length).toBe(4169);
     const verdicts = new Set(ranked.map((r) => r.verdict));
     for (const v of verdicts) {
       expect(['promising', 'inert', 'contradictory', 'magnitude-clash', 'axis-clash']).toContain(v);
