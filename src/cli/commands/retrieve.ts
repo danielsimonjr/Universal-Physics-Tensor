@@ -42,8 +42,9 @@ const HELP = `upt retrieve <claim> [--embed] [--ollama-url=URL]
         length is not the length stored in the frozen file, or the call does
         not finish. A fallback exits 0.
         --ollama-url is used only with --embed (default ${OLLAMA_DEFAULT_URL}).
-        A claim is text. It has no expression, so the structural score is
-        zero and the atlas order is by id. The command does not invent one.
+        A claim is text. It has no expression, so the atlas search accepts
+        nothing: it ranks by structure, and a text claim has none to rank.
+        The command does not invent one. --embed still proposes an order.
         e.g.  upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed`;
 
@@ -87,6 +88,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     for (const id of result.proposals) out(`    ${id}`);
   }
   out('  accepted (atlas search):');
+  if (result.accepted.length === 0) out('    none — the claim has no expression to rank by structure');
   for (const id of result.accepted) out(`    ${id}`);
   return 0;
 }

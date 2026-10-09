@@ -862,8 +862,9 @@ Flags:
         length is not the length stored in the frozen file, or the call does
         not finish. A fallback exits 0.
         --ollama-url is used only with --embed (default http://127.0.0.1:11434).
-        A claim is text. It has no expression, so the structural score is
-        zero and the atlas order is by id. The command does not invent one.
+        A claim is text. It has no expression, so the atlas search accepts
+        nothing: it ranks by structure, and a text claim has none to rank.
+        The command does not invent one. --embed still proposes an order.
         e.g.  upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed
 Flags:

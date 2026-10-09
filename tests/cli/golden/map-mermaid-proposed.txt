@@ -1877,8 +1877,6 @@ flowchart LR
     q_rydberg_energy(["rydberg-energy"]):::qty
     j_CE_rydberg_energy --> q_rydberg_energy
     j_CE_rydberg_formula["Rydberg formula"]:::law
-    q_rydberg_constant(["rydberg-constant"]):::qty
-    q_rydberg_constant --> j_CE_rydberg_formula
     q_lower_level_n(["lower-level-n"]):::qty
     q_lower_level_n --> j_CE_rydberg_formula
     q_upper_level_n(["upper-level-n"]):::qty

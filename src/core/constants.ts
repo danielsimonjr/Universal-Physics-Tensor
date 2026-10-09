@@ -28,6 +28,8 @@ import { checkedDataFile } from './data-file.js';
 
 /** Speed of light in vacuum (m/s). Exact SI definition since 1983. */
 export const C_SI = 299792458;
+/** Rydberg constant R∞ (infinite nuclear mass), CODATA 2018: 10 973 731.568 160(21) m⁻¹. */
+export const R_INF_SI = 10973731.56816;
 
 /** Newtonian gravitational constant (m³ kg⁻¹ s⁻²). CODATA 2018. */
 export const G_SI = 6.67430e-11;

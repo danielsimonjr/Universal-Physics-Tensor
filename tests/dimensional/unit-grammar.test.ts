@@ -210,8 +210,9 @@ describe('unit juxtaposition grammar', () => {
         const right = oneFactor(symbol);
         if (prefixed === null || left === null || right === null) continue;
         expectFactor(token, prefixed);
-        // A prefix letter that is also a unit (T, G, P, h, d, M, u) reads as the prefix: `W/Gyr` is not W/(G·yr).
-        if (['T', 'G', 'P', 'h', 'd', 'M', 'u'].includes(prefix)) {
+        // A prefix letter that is also a unit (T, G, P, h, d, M, u, and c since the speed of light
+        // became a unit) reads as the prefix: `W/Gyr` is not W/(G·yr), `W/cm` is not W/(c·m).
+        if (['T', 'G', 'P', 'h', 'd', 'M', 'u', 'c'].includes(prefix)) {
           close(parseUnit(`W/${token}`).scale, parseUnit('W').scale / prefixed.scale);
           continue;
         }

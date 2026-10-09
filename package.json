@@ -109,7 +109,7 @@
     "@danielsimonjr/mathts-workerpool": "^0.2.6"
   },
   "devDependencies": {
-    "@types/node": "^26.0.0",
+    "@types/node": "^22.0.0",
     "@vitest/coverage-v8": "^4.1.7",
     "@viz-js/viz": "^3.28.0",
     "fast-check": "^4.8.0",

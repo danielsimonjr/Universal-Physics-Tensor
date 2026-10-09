@@ -221,7 +221,12 @@ export interface HybridRetrieval {
 
 function noteFor(base: string, query: RetrievalQuery): string {
   if (query.expr !== undefined) return base;
-  return `${base} The claim has no expression, so the structural score is zero and the atlas order is by id.`;
+  return `${base} The claim has no expression, so nothing is accepted: the atlas search ranks by structure, and a text claim has none to rank.`;
+}
+
+/** The atlas acceptance: by structure when the query has an expression; nothing for a text claim. */
+function acceptedFor(query: RetrievalQuery, corpus: readonly CorpusRecord[]): readonly string[] {
+  return query.expr === undefined ? [] : rankByStructure(query, corpus);
 }
 
 function fallbackResult(query: RetrievalQuery, accepted: readonly string[], reason: EmbeddingFallbackReason): HybridRetrieval {
@@ -245,7 +250,7 @@ export async function retrieveHybrid(args: {
   readonly embeddings?: boolean;
   readonly embedder?: Embedder;
 }): Promise<HybridRetrieval> {
-  const accepted = rankByStructure(args.query, args.corpus);
+  const accepted = acceptedFor(args.query, args.corpus);
   if (args.embeddings !== true) {
     return {
       embeddings: 'not-requested',

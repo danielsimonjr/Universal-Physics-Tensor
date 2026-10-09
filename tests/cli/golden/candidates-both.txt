@@ -4,7 +4,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  6702 total  →  6687 touch the anchored core  →  1293 also same-kind
+  funnel:  6695 total  →  6680 touch the anchored core  →  1293 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     accretor-mass ≟ jeans-mass                               [mass]

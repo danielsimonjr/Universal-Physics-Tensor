@@ -88,9 +88,9 @@ Spivak (2019):
 Phase B's compose operator shipped: `composeEdges(first, second)` in
 `src/composition/compose.ts` chains two typed `BridgeEdge`s through a
 shared quantity, with a dimensional check at the junction. Whether
-phases C–D are met is the open owner decision in `ACTIVE.md`. The
-rest of this section is the Phase A contract as it was written, before
-that operator existed. Per Adam-F2, the precondition
+phases C–D are met is recorded in `NOTES.md` (the owner's ruling of
+2026-10-09). The rest of this section is the Phase A contract as it was
+written, before that operator existed. Per Adam-F2, the precondition
 is a shared `Observable` contract on bridge outputs that does NOT
 yet exist at HEAD. The existing evaluators
 (`evaluatePerihelionPrecession`, `evaluateGravitationalLensing`,

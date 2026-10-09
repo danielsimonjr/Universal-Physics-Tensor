@@ -30,6 +30,8 @@ export interface CatalogEntry extends BridgeEquationEntry {
   readonly dimension?: Dimension;
   /** The confrontation is a caller-supplied table, not a stored outcome. */
   readonly callerTable?: true;
+  /** The adjudication is contested; the row stays out of the null-result list until adjudicated. */
+  readonly contested?: true;
   /** A named statement this row's expression supports. */
   readonly statement?: string;
   /**

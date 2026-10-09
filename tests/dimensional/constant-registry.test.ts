@@ -91,6 +91,7 @@ describe('the constant registry is the one owner of spellings, units and provena
     const linked = CONSTANT_REGISTRY.filter((row) => row.quantity !== undefined);
     expect(linked.map((row) => [row.name, row.quantity])).toEqual([
       ['h', 'planck-constant'],
+      ['R_inf', 'rydberg-constant'],
       ['k_B', 'boltzmann-constant'],
       ['lane_emden_omega_3', 'lane-emden-omega-3'],
     ]);

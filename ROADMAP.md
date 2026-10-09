@@ -522,5 +522,5 @@ Subagent-driven execution plan for all seven phases:
 Related programs already recorded elsewhere and not restated here: the Product B
 expression/residual search (`Scientific-Bridge-Discovery-v1.md`, phases 0A–12, Product B
 shipped experimentally in v0.44.2, 2026-08-25), the v0.7 proposal set (`docs/planning/UPT v0.70 -
-Proposals.md`, P1–P3/P5/P8 shipped, P4 and P7 pending peers, P6: Phase B's compose operator shipped as `composeEdges`, and whether phases C–D are met is the open owner decision in `ACTIVE.md`), and the
+Proposals.md`, P1–P3/P5/P8 shipped, P4 and P7 pending peers, P6: Phase B's compose operator shipped as `composeEdges`; whether phases C–D are met is recorded in `NOTES.md`, the owner's ruling of 2026-10-09), and the
 parking lot in `Future-Production-Hardening.md`.

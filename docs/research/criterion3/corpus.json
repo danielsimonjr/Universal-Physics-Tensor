@@ -5566,14 +5566,14 @@
   },
   {
     "id": "CE-rydberg-formula",
-    "text": "Rydberg formula\nquantum\nhydrogen-like atom\nbound-state transition",
+    "text": "Rydberg formula\nquantum\nhydrogen-like atom\nbound-state transition\ninfinite nuclear mass (R∞; no reduced-mass correction)",
     "expr": {
       "kind": "op",
       "op": "*",
       "args": [
         {
           "kind": "symbol",
-          "name": "rydberg-constant",
+          "name": "R_inf",
           "dim": {
             "L": -1,
             "M": 0,

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 363,
-    "totalTestFiles": 577,
+    "totalTestFiles": 578,
     "testedCount": 351,
     "directlyTestedCount": 314,
     "untestedCount": 12,
@@ -723,7 +723,8 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/retrieve.test.ts",
-      "tests/cli/suggest-token-length.test.ts"
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/atlas/benchmark/leakage.ts": [
       "tests/atlas/barrel-completeness.test.ts",
@@ -1574,7 +1575,8 @@
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts",
-      "tests/review/round2-bridges-atlas.test.ts"
+      "tests/review/round2-bridges-atlas.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/bridges/catalog-types.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -2251,6 +2253,7 @@
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round3-owner-decisions.test.ts",
       "tests/tensor.test.ts",
       "tests/tools/criterion3-export.test.ts",
       "tests/tools/criterion3-residual-corpus.test.ts"
@@ -5155,6 +5158,7 @@
       "tests/dimensional/bridge-derivation-audit.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round3-owner-decisions.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/composition/canonical-json.ts": [
@@ -5730,6 +5734,7 @@
       "tests/dimensional/bridge-derivation-audit.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/review/round3-owner-decisions.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/composition/explain.ts": [
@@ -5874,7 +5879,8 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
-      "tests/composition/frontier-account.test.ts"
+      "tests/composition/frontier-account.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/composition/graph-viz-svg.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -8014,7 +8020,8 @@
       "tests/composition/symbolic-constants-extra.test.ts",
       "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/constants-surface.test.ts",
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/dimensional/tensor-trace.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -8272,6 +8279,7 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts",
+      "tests/review/round3-owner-decisions.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/dimensional/validator-registry.ts": [
@@ -9461,7 +9469,8 @@
     ],
     "src/atlas/benchmark/hybrid-retrieval.ts": [
       "tests/atlas/hybrid-retrieval.test.ts",
-      "tests/cli/retrieve.test.ts"
+      "tests/cli/retrieve.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/atlas/benchmark/leakage.ts": [
       "tests/atlas/benchmark.test.ts",
@@ -9921,7 +9930,8 @@
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts",
-      "tests/review/round2-bridges-atlas.test.ts"
+      "tests/review/round2-bridges-atlas.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/bridges/catalog-types.ts": [
       "tests/bridges/catalog-confidence.test.ts",
@@ -10165,6 +10175,7 @@
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
+      "tests/review/round3-owner-decisions.test.ts",
       "tests/tools/criterion3-export.test.ts",
       "tests/tools/criterion3-residual-corpus.test.ts"
     ],
@@ -10510,7 +10521,8 @@
       "tests/composition/graph-viz-filters.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/proposed-bridges.test.ts",
-      "tests/composition/scalar-prefactor-consistency.test.ts"
+      "tests/composition/scalar-prefactor-consistency.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/composition/canonical-json.ts": [
       "tests/composition/canonical-json.test.ts"
@@ -10633,7 +10645,8 @@
       "tests/cli/evaluate-bridge-42-hint.test.ts",
       "tests/composition/closed-form-evaluation.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
-      "tests/composition/scalar-prefactor-consistency.test.ts"
+      "tests/composition/scalar-prefactor-consistency.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/composition/explain.ts": [
       "tests/canonical/canonical-domains.test.ts",
@@ -10671,7 +10684,8 @@
     ],
     "src/composition/formula-shape.ts": [],
     "src/composition/frontier-account.ts": [
-      "tests/composition/frontier-account.test.ts"
+      "tests/composition/frontier-account.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/composition/graph-viz-svg.ts": [
       "tests/composition/graph-viz-svg.test.ts"
@@ -11284,7 +11298,8 @@
       "tests/composition/symbolic-constants-extra.test.ts",
       "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/constants-surface.test.ts",
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/dimensional/tensor-trace.ts": [
       "tests/dimensional/tensor-trace.test.ts"
@@ -11481,7 +11496,8 @@
       "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/numerical/binding-value.test.ts",
-      "tests/review/round2-numerical-dimensional.test.ts"
+      "tests/review/round2-numerical-dimensional.test.ts",
+      "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/dimensional/validator-registry.ts": [
       "tests/dimensional/validator-registry.test.ts"
@@ -20838,6 +20854,16 @@
       "src/dimensional/types.ts",
       "src/dimensional/units.ts",
       "src/core/json-schema.ts"
+    ],
+    "tests/review/round3-owner-decisions.test.ts": [
+      "src/composition/evaluate-relation.ts",
+      "src/canonical/registry.ts",
+      "src/composition/canonical-graph.ts",
+      "src/dimensional/symbolic-constants.ts",
+      "src/composition/frontier-account.ts",
+      "src/bridges/catalog-load.ts",
+      "src/dimensional/units.ts",
+      "src/atlas/benchmark/hybrid-retrieval.ts"
     ],
     "tests/tensor.test.ts": [
       "src/index.ts",
