@@ -15,7 +15,7 @@ import { listCommandNames, resolveCommand } from '../../src/cli/command.js';
 import { GLOBAL_FLAGS, renderFlagCatalog, undocumentedFlags } from '../../src/cli/flag-help.js';
 import { runCli } from '../../src/cli/main.js';
 import '../../src/cli/commands/index.js';
-import { renderCliReference, stampReadme } from '../../scripts/cli-reference.js';
+import { renderCliReference, stampCliReadme, stampReadme } from '../../scripts/cli-reference.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -69,11 +69,23 @@ describe('flag spec is what help and the reference print', () => {
     expect(undocumentedFlags(help.out, GLOBAL_FLAGS)).toEqual([]);
   });
 
-  it('docs/CLI.md and the README spans match the registry', () => {
+  it('docs/CLI.md, the README spans and the cli/README.md spans match the registry', () => {
     const cli = readFileSync(join(root, 'docs/CLI.md'), 'utf8');
     expect(cli).toBe(renderCliReference());
     const readme = readFileSync(join(root, 'README.md'), 'utf8');
     expect(readme).toBe(stampReadme(readme));
+    const cliReadme = readFileSync(join(root, 'cli/README.md'), 'utf8');
+    expect(cliReadme).toBe(stampCliReadme(cliReadme));
+  });
+
+  it('CONTROL: a flag dropped from a command leaves the cli/README.md flag table', () => {
+    const cliReadme = readFileSync(join(root, 'cli/README.md'), 'utf8');
+    const stamped = stampCliReadme(cliReadme);
+    expect(stamped).toMatch(/^\| `--sigma` \| `evaluate` \|/m);
+    const without = listCommandNames()
+      .map((name) => resolveCommand(name)!)
+      .map((c) => (c.name === 'evaluate' ? { ...c, flags: c.flags.filter((f) => f.name !== '--sigma') } : c));
+    expect(stampCliReadme(cliReadme, without)).not.toMatch(/^\| `--sigma` \|/m);
   });
 
   it('CONTROL: dropping a command from the rendered page is visible', () => {

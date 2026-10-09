@@ -24,8 +24,11 @@ function capture() {
 }
 
 describe('regime registrations', () => {
-  it('the command source names no family', () => {
-    expect(regimeSource).not.toMatch(/\b(oscillators|diffusion|waves|plasma|piezoelectricity|tolman)\b/);
+  it('the command source names no family, outside its one example invocation', () => {
+    // The example (`upt regime oscillators --at theta0=0.2`) is a real invocation and may name a
+    // family; the code that lists and checks families reads the registry, never a name.
+    const withoutExample = regimeSource.replace(/^\s*example: .*$/m, '');
+    expect(withoutExample).not.toMatch(/\b(oscillators|diffusion|waves|plasma|piezoelectricity|tolman)\b/);
   });
 
   it.each(['plasma', 'piezoelectricity', 'tolman'])(

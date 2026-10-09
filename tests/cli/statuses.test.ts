@@ -157,7 +157,9 @@ describe('audit I13: one glossary, reached by upt help statuses', () => {
 
   it("audit's DECOY definition is the glossary's", async () => {
     const env = JSON.parse((await run(['audit', '--json'])).stdout);
-    expect(env.result.definitions.decoy).toBe(STATUS_GLOSSARY.find((s) => s.key === 'decoy')!.meaning);
+    // The envelope carries the definitions once, at the top level; the result does not repeat them.
+    expect(env.definitions.decoy).toBe(STATUS_GLOSSARY.find((s) => s.key === 'decoy')!.meaning);
+    expect(env.result.definitions).toBeUndefined();
   });
 
   it('a record that states no inequality does not begin its line with valid', async () => {

@@ -147,7 +147,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     coarsening-length ≟ debye-sphere-length                  [length]
     coarsening-length ≟ multi-debye-length                   [length]
     coarsening-length ≟ pipe-length                          [length]
-    coarsening-length ≟ quantum-correlation-length           [length]
+    coarsening-length ≟ quantum-correlation-length           [length]  [adjudicated: decoy — Non-equilibrium vs equilibrium length; unanimous. A coarsening length is a non-equilibrium domain size formed by quenching through a critical point; the quantum correlation length ξ is an equilibrium static property at it. Different processes — not the same length.]
     coarsening-length ≟ reference-correlation-length         [length]
     coarsening-length ≟ upper-critical-length                [length]
     column-length ≟ debye-sphere-length                      [length]
@@ -228,7 +228,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     debye-temperature ≟ wiedemann-temperature                [temperature]
     debye-theta ≟ einstein-theta                             [theta]
     decoherence-rate ≟ hubble-rate                           [rate]
-    decoherence-rate ≟ mutation-rate                         [rate]
+    decoherence-rate ≟ mutation-rate                         [rate]  [adjudicated: decoy — Same units, no shared meaning; unanimous. A decoherence rate (loss of quantum phase to the environment) vs. a mutation rate (frequency of a permanent, classical change to a DNA sequence). Same units, no shared physical meaning — decoherence may precede a mutation, but they are not one quantity.]
     defect-rest-mass ≟ accretor-mass                         [mass]
     defect-rest-mass ≟ bohm-ion-mass                         [mass]
     defect-rest-mass ≟ child-carrier-mass                    [mass]
@@ -259,7 +259,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     effective-mass ≟ probe-ion-mass                          [mass]
     effective-mass ≟ reference-mass                          [mass]
     effective-mass ≟ swampland-tower-mass                    [mass]
-    effective-mass ≟ tunneling-mass                          [mass]
+    effective-mass ≟ tunneling-mass                          [mass]  [adjudicated: decoy — Different particles/Hamiltonians; unanimous. A proton's inertia in a specific biomolecular potential vs. an emergent electronic quasiparticle's effective mass in a strongly-correlated metal. Different particles, different Hamiltonians, unrelated scales.]
     effective-mass ≟ upper-hybrid-mass                       [mass]
     effective-temperature ≟ bennett-temperature              [temperature]
     effective-temperature ≟ bkt-temperature                  [temperature]
@@ -672,7 +672,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     relaxation-rate ≟ mutation-rate                          [rate]
     residual-resistivity ≟ lorentz-resistivity               [resistivity]
     resistivity ≟ lorentz-resistivity                        [resistivity]
-    schwarzschild-radius ≟ foerster-radius                   [radius]
+    schwarzschild-radius ≟ foerster-radius                   [radius]  [adjudicated: decoy — a Förster radius is not a Schwarzschild radius]
     schwarzschild-radius ≟ parker-radius                     [radius]
     schwarzschild-radius ≟ pipe-radius                       [radius]
     schwarzschild-radius ≟ spiral-radius                     [radius]
@@ -847,8 +847,8 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     wiedemann-temperature ≟ jeans-temperature                [temperature]
     wormhole-cross-section-area ≟ pull-in-area               [area]
 
-  Most are still coincidences (decoherence-rate ≟ hubble-rate) or pairs the catalog
-  deliberately keeps distinct (effective-mass ≠ mass). The genuinely motivated few —
-  e.g. coarsening-length ≟ quantum-correlation-length (links the isolated Model-A
-  coarsening bridge to the Kibble-Zurek criticality cluster) — are written up in
-  https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Linkage-Candidate-Proposals.md
+  adjudicated: 4 of 839 carry a recorded verdict; the rest are unadjudicated.
+  A shared dimension is a coincidence until a physicist records otherwise. The ledger's sources:
+    https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
+    https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md
+    https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md

@@ -189,12 +189,12 @@ upt explain hawking-temperature mass=1Msun
 Show how equations link, or where your own equation lands on that graph. Aliases: `linkage`.
 
 ```
-upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
+upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
 ```
 
 | Flag | Value | Default | Description |
 |---|---|---|---|
-| `--source=VALUE` | `=` value | both | Which graph to draw: catalog, canonical, both, or poster. poster is the Atlas Phase 3 statement index and is valid only here. This command defaults to both. |
+| `--source=VALUE` | `=` value | both | Which graph to draw: catalog, canonical, or both. This command defaults to both. |
 | `--format=VALUE` | `=` value | text | Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer. |
 | `--out=VALUE` | `=` value |  | Write the report to PATH instead of stdout. |
 | `--max-orders=VALUE` | `=` value | 3 | Magnitude-clash threshold for the --proposed overlay. |
@@ -276,7 +276,7 @@ upt regime <family> [--at group=value ...] [--json]
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 
 ```
-upt regime <name>
+upt regime oscillators --at theta0=0.2
 ```
 
 ### `search`
@@ -401,7 +401,7 @@ upt ground <quantityA> <quantityB> [--source=catalog|canonical|both]
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 
 ```
-upt ground temperature mass
+upt ground landauer-erasure-energy gap-energy
 ```
 
 ### `predict`
@@ -581,5 +581,5 @@ This command takes no flags.
 
 
 ```
-upt chain
+upt help chain
 ```

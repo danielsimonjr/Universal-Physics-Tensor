@@ -175,7 +175,13 @@ export function loadStoredResults(command = 'upt map'): WitnessResults {
         'present here. --run executes the in-process registered witnesses instead',
     );
   }
-  const artifact = JSON.parse(raw) as { schemaVersion?: string; results?: WitnessResultRow[] };
+  let artifact: { schemaVersion?: string; results?: WitnessResultRow[] };
+  try {
+    artifact = JSON.parse(raw) as { schemaVersion?: string; results?: WitnessResultRow[] };
+  } catch (e) {
+    // A corrupt artifact is refused as such, not thrown through as a SyntaxError with a stack.
+    throw new CliError(`${command}: ${publishedUrl(STORED_RESULTS_PATH)} is not valid JSON (${(e as Error).message})`);
+  }
   if (artifact.schemaVersion !== '0' || !Array.isArray(artifact.results)) {
     throw new CliError(`${command}: ${publishedUrl(STORED_RESULTS_PATH)} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`);
   }

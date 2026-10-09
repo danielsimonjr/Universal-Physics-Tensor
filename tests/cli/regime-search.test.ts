@@ -55,7 +55,8 @@ describe('upt search indexes domain regimes', () => {
 
   it('a miss names the regime registry', async () => {
     const cap = capture();
-    expect(await runCli(['search', 'zzqqxx'], cap.io)).toBe(1);
+    // No match is a result (exit 0); the scope line names every registry searched.
+    expect(await runCli(['search', 'zzqqxx'], cap.io)).toBe(0);
     expect(cap.lines.join('')).toMatch(/applied cases, \d+ regimes; this registry only/);
   });
 });

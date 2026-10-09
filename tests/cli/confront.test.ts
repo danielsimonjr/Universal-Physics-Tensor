@@ -278,7 +278,8 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   it('be-53 with no table and no procedure refuses and names both', async () => {
     const cap = capture();
     const code = await runCli(['confront', 'be-53'], cap.io);
-    expect(code).toBe(1);
+    // The refusal is the result the command computed: exit 0, as a path with no composite claim.
+    expect(code).toBe(0);
     const text = cap.lines.join('');
     expect(text).toMatch(/refused/);
     expect(text).toMatch(/table/);
@@ -291,7 +292,7 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   it('be-53 --json is the same refusal and has no residual field', async () => {
     const cap = capture();
     const code = await runCli(['confront', '--bridge=be-53', '--json'], cap.io);
-    expect(code).toBe(1);
+    expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
     expect(parsed.command).toBe('confront');
     expect(parsed.result.status).toBe('refused');

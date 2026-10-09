@@ -404,23 +404,23 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
   adjudicated: 3 of the 59 promising carry recorded verdicts (2 decoy, 1 entailed) — folded; --show-adjudicated to list
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):
-    bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart  (anchor-derived)
-    classical-electron-radius ≟ bohr-radius              ~4.3 orders apart  (anchor-derived)
-    classical-electron-radius ≟ compton-wavelength-full  ~57.4 orders apart  (anchor-derived)
-    erasure-energy ≟ rydberg-energy                      ~12.6 orders apart  (anchor-derived)
-    free-energy-difference ≟ rydberg-energy              ~12.4 orders apart  (anchor-derived)
-    mass ≟ planck-mass                                   ~38.0 orders apart  (anchor-derived)
-    peak-wavelength ≟ bohr-radius                        ~14.9 orders apart  (anchor-derived)
-    peak-wavelength ≟ classical-electron-radius          ~19.2 orders apart  (anchor-derived)
-    planck-length ≟ bohr-radius                          ~24.5 orders apart
-    planck-length ≟ classical-electron-radius            ~20.2 orders apart  (anchor-derived)
-    planck-length ≟ compton-wavelength                   ~23.2 orders apart
-    planck-length ≟ compton-wavelength-full              ~37.2 orders apart  (anchor-derived)
-    planck-length ≟ peak-wavelength                      ~39.5 orders apart  (anchor-derived)
-    radius ≟ bohr-radius                                 ~13.7 orders apart  (anchor-derived)
-    radius ≟ classical-electron-radius                   ~18.0 orders apart  (anchor-derived)
-    radius ≟ planck-length                               ~38.3 orders apart  (anchor-derived)
-    rest-energy ≟ rydberg-energy                         ~64.9 orders apart  (anchor-derived)
+    bohr-radius ≟ compton-wavelength-full                61.6778192921353 orders apart  (anchor-derived)
+    classical-electron-radius ≟ bohr-radius              4.2736880434328 orders apart  (anchor-derived)
+    classical-electron-radius ≟ compton-wavelength-full  57.4041312487025 orders apart  (anchor-derived)
+    erasure-energy ≟ rydberg-energy                      12.5673477005004 orders apart  (anchor-derived)
+    free-energy-difference ≟ rydberg-energy              12.4081731615455 orders apart  (anchor-derived)
+    mass ≟ planck-mass                                   37.9609758920983 orders apart  (anchor-derived)
+    peak-wavelength ≟ bohr-radius                        14.9482697487237 orders apart  (anchor-derived)
+    peak-wavelength ≟ classical-electron-radius          19.2219577921565 orders apart  (anchor-derived)
+    planck-length ≟ bohr-radius                          24.5151784790769 orders apart
+    planck-length ≟ classical-electron-radius            20.2414904356441 orders apart  (anchor-derived)
+    planck-length ≟ compton-wavelength                   23.176449440092 orders apart
+    planck-length ≟ compton-wavelength-full              37.1626408130584 orders apart  (anchor-derived)
+    planck-length ≟ peak-wavelength                      39.4634482278006 orders apart  (anchor-derived)
+    radius ≟ bohr-radius                                 13.7468092610749 orders apart  (anchor-derived)
+    radius ≟ classical-electron-radius                   18.0204973045077 orders apart  (anchor-derived)
+    radius ≟ planck-length                               38.2619877401518 orders apart  (anchor-derived)
+    rest-energy ≟ rydberg-energy                         64.9138451240449 orders apart  (anchor-derived)
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     distance ≟ hubble-distance                           [[length]]

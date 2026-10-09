@@ -10,7 +10,6 @@ import { runCli } from '../../src/cli/main.js';
 import { publishedUrl } from '../../src/cli/published-url.js';
 
 const ORPHAN = 'docs/research/Orphan-Connector-Analysis.md';
-const LINKAGE = 'docs/research/Linkage-Candidate-Proposals.md';
 const AXES = 'docs/research/rank7-axis-measurement.md';
 const PROBE = 'tests/fixtures/probe-study';
 const WITNESS = 'data/atlas/witness-results.json';
@@ -58,10 +57,11 @@ describe('commands cite GitHub, not a repository path', () => {
     assertCited(cap.text(), ORPHAN);
   });
 
-  it('upt candidates cites the linkage proposals', async () => {
+  it('upt candidates cites the adjudication ledger\'s sources', async () => {
     const cap = capture();
     expect(await runCli(['candidates'], cap.io)).toBe(0);
-    assertCited(cap.text(), LINKAGE);
+    assertCited(cap.text(), ORPHAN);
+    assertCited(cap.text(), 'docs/research/proposed-equations-adjudication.md');
   });
 
   it('upt axes cites the rank-7 measurement', async () => {

@@ -123,6 +123,91 @@ const SI_BASE: readonly (readonly [keyof Dimension, string])[] = [
   ['J', 'cd'],
 ];
 
+const DIM_KEYS: readonly (keyof Dimension)[] = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'];
+const dimEqual = (a: Dimension, b: Dimension): boolean => DIM_KEYS.every((k) => (a[k] ?? 0) === (b[k] ?? 0));
+const dimPow = (a: Dimension, n: number): Dimension =>
+  Object.fromEntries(DIM_KEYS.map((k) => [k, (a[k] ?? 0) * n])) as unknown as Dimension;
+const dimMul = (a: Dimension, b: Dimension): Dimension =>
+  Object.fromEntries(DIM_KEYS.map((k) => [k, (a[k] ?? 0) + (b[k] ?? 0)])) as unknown as Dimension;
+const isDimensionless = (d: Dimension): boolean => DIM_KEYS.every((k) => (d[k] ?? 0) === 0);
+
+/** One coherent SI unit of the table: a scale of exactly 1 and a dimension. */
+export interface CoherentUnit {
+  readonly name: string;
+  readonly dim: Dimension;
+}
+
+/**
+ * The coherent named SI units of a unit table (`unitRows()`): scale exactly 1,
+ * not dimensionless, the first spelling the table gives for each dimension
+ * (`ohm` before `Ω`). The seven base units are added so a label can mix them.
+ */
+export function coherentUnits(
+  rows: ReadonlyMap<string, { readonly scale: { readonly num: bigint; readonly den: bigint; readonly irrational: number }; readonly dim: Dimension }>,
+): CoherentUnit[] {
+  const out: CoherentUnit[] = [];
+  const seen: Dimension[] = [];
+  const add = (name: string, dim: Dimension): void => {
+    if (isDimensionless(dim) || seen.some((d) => dimEqual(d, dim))) return;
+    seen.push(dim);
+    out.push({ name, dim });
+  };
+  for (const [name, row] of rows) {
+    if (row.scale.num === 1n && row.scale.den === 1n && row.scale.irrational === 1) add(name, row.dim);
+  }
+  for (const [k, u] of SI_BASE) {
+    add(u, Object.fromEntries(DIM_KEYS.map((key) => [key, key === k ? 1 : 0])) as unknown as Dimension);
+  }
+  return out;
+}
+
+/**
+ * A dimension as a product of at most two coherent units (`V^2/Hz`, `J/K`,
+ * `kg*m^2/s`), the fewest factors with the smallest exponents, a named unit
+ * before a base unit (`V^2/Hz` over `V^2*s`), else the SI base form.
+ * Presentation only: the dimension is the fact, the label is a reading of it.
+ */
+export function derivedUnitOf(dim: Dimension, units: readonly CoherentUnit[]): string {
+  if (isDimensionless(dim)) return '1';
+  const base = new Set(SI_BASE.map(([, u]) => u));
+  type Term = { readonly unit: CoherentUnit; readonly exp: number };
+  const label = (terms: readonly Term[]): string => {
+    const factor = (t: Term, e: number): string => (e === 1 ? t.unit.name : `${t.unit.name}^${e}`);
+    const num = terms.filter((t) => t.exp > 0).map((t) => factor(t, t.exp));
+    const den = terms.filter((t) => t.exp < 0).map((t) => factor(t, -t.exp));
+    if (num.length === 0) return terms.map((t) => factor(t, t.exp)).join('*');
+    if (den.length === 0) return num.join('*');
+    return `${num.join('*')}/${den.length === 1 ? den[0] : `(${den.join('*')})`}`;
+  };
+  // Score: factor count, then the sum of |exponents|, then base units used (fewer is better).
+  const score = (terms: readonly Term[]): number =>
+    terms.length * 1000 + terms.reduce((s, t) => s + Math.abs(t.exp), 0) * 10 + terms.filter((t) => base.has(t.unit.name)).length;
+  const EXPS = [1, -1, 2, -2, 3, -3, 4, -4];
+  let best: Term[] | null = null;
+  const consider = (terms: Term[]): void => {
+    if (best === null || score(terms) < score(best)) best = terms;
+  };
+  for (const u of units) {
+    for (const e of EXPS) {
+      if (dimEqual(dimPow(u.dim, e), dim)) consider([{ unit: u, exp: e }]);
+    }
+  }
+  if (best === null) {
+    for (let i = 0; i < units.length; i++) {
+      for (let j = i + 1; j < units.length; j++) {
+        for (const e1 of EXPS) {
+          for (const e2 of EXPS) {
+            if (dimEqual(dimMul(dimPow(units[i]!.dim, e1), dimPow(units[j]!.dim, e2)), dim)) {
+              consider([{ unit: units[i]!, exp: e1 }, { unit: units[j]!, exp: e2 }]);
+            }
+          }
+        }
+      }
+    }
+  }
+  return best === null ? siUnitOf(dim) : label(best);
+}
+
 /**
  * A dimension as SI base units, numerator before one `/` (`m^3/(kg*s^2)`), a bare denominator as
  * negative powers (`s^-1`), and `1` when dimensionless: the forms `parseUnit` reads back.

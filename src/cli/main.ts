@@ -16,7 +16,7 @@
 
 import * as api from '../cli-api.js';
 import { UsageError, CliError } from './errors.js';
-import { parseArgs } from './args.js';
+import { optionTokens, parseArgs } from './args.js';
 import { packageVersion } from './version.js';
 import { glossaryText } from './statuses.js';
 import { listCommandNames, resolveCommand, type Command, type CommandCtx } from './command.js';
@@ -145,7 +145,8 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
 
     if (cmd === 'help' || cmd === '--help' || cmd === '-h') {
       if (rest.length > 1) throw new UsageError('upt help takes at most one command name');
-      const target = rest[0];
+      // `upt help -h` and `upt help --help` ask for the command list, as `upt help` does.
+      const target = rest[0] === '--help' || rest[0] === '-h' ? undefined : rest[0];
       if (target === 'statuses') {
         out(glossaryText());
         return 0;
@@ -177,7 +178,10 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       return 2;
     }
 
-    if (rest.includes('--help')) {
+    // `-h` is `--help` on every command, as the global help says. A token after a
+    // bare `--` is a positional, so it is not read as the help request.
+    const options = optionTokens(rest);
+    if (options.includes('--help') || options.includes('-h')) {
       out(command.help);
       return 0;
     }

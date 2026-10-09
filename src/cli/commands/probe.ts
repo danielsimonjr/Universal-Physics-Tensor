@@ -236,6 +236,14 @@ function mapProbeError(e: unknown, context?: string): never {
       `upt probe: invalid JSON${context ? ` in ${context}` : ''}: ${e.message}`,
     );
   }
+  // The problem loader reads fields it expects (`target.name`, `gap.kind`); a JSON file of
+  // another shape fails there with a TypeError (a field is missing) or a RangeError (a
+  // field holds a value it does not take). Either is a file that is not a problem file.
+  if (e instanceof TypeError || e instanceof RangeError) {
+    throw new CliError(
+      `upt probe: ${context ?? 'the file'} is not a problem file (${e.message}). \`upt help probe\` shows the format.`,
+    );
+  }
   if (e instanceof Error) {
     throw new CliError(`upt probe: ${e.message}`);
   }
@@ -392,7 +400,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     mapProbeError(e, pp);
   }
   const workerRaw = args.flags.get('worker')?.[0];
-  const worker = workerRaw ? validateWorkerPath(workerRaw) : undefined;
+  // `--worker=` with nothing after it is not "no worker": it is refused, as `--replication=` is.
+  if (workerRaw === '') throw new UsageError('upt probe: --worker needs a PATH (a .js, .mjs, or .cjs file)');
+  const worker = workerRaw === undefined ? undefined : validateWorkerPath(workerRaw);
   const result = await api.runProbeSearch(problem, {
     budget: budgetFromFlags(api, args.flags),
     holdoutTol: holdoutTolFromFlags(args.flags),

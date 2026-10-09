@@ -90,10 +90,11 @@ describe('I5 — search by law, model, symbol, alias or description; never by eq
     expect(section(r.text, 'catalog bridges')).toBe('');
   });
 
-  it('no match exits 1 and states the scope searched: an empty result is not an absence from physics', async () => {
+  it('no match is a result (exit 0) and states the scope searched: an empty result is not an absence from physics', async () => {
     const r = await run(['search', 'zzqqxx']);
-    expect(r.code).toBe(1);
-    expect(r.text).toMatch(/no entry matches every word of 'zzqqxx' — searched \d+ catalog bridges, \d+ canonical equations, \d+ atlas models, \d+ atlas bridges, \d+ quantities, \d+ applied cases, \d+ regimes; this registry only/);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/no entry matches every word of 'zzqqxx'/);
+    expect(r.text).toMatch(/searched \d+ catalog bridges, \d+ canonical equations, \d+ atlas models, \d+ atlas bridges, \d+ quantities, \d+ applied cases, \d+ regimes; this registry only/);
   });
 
   it('--json lists every match with its kind, the fields its words matched in, and its command', async () => {
@@ -645,7 +646,6 @@ describe('I16 — a focused map states its denominator', () => {
     expect(a.text).toMatch(/'temprature' is not a quantity of the .* graph; did you mean: temperature/);
     expect((await run(['map', '--depth=2'])).text).toMatch(/--depth needs --around/);
     expect((await run(['map', '--around=temperature', '--depth=0'])).text).toMatch(/--depth=0 must be an integer from 1 to 10/);
-    expect((await run(['map', '--source=poster', '--around=temperature'])).text).toMatch(/the poster index has statements, not quantities/);
   });
 });
 

@@ -46,7 +46,7 @@ export const command: Command = {
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Name the internal chain orchestrator and exit 2. It does not run it.',
-  example: 'upt chain',
+  example: 'upt help chain',
   group: 'utilities',
   run,
 };

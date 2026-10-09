@@ -22,3 +22,4 @@ export class FormulaUsageError extends UsageError {
     this.name = 'FormulaUsageError';
   }
 }
+

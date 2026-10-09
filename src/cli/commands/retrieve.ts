@@ -11,11 +11,6 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
-import {
-  canonicalRetrievalCorpus,
-  ollamaEmbedder,
-  retrieveHybrid,
-} from '../../atlas/benchmark/hybrid-retrieval.js';
 
 const FLAGS: FlagSpec[] = [
   JSON_FLAG,
@@ -52,19 +47,19 @@ const EPISTEMICS =
   'An embedding order is a proposal, not evidence. Acceptance is rankByStructure. Cosine similarity does not enter that score.';
 
 async function run(ctx: CommandCtx): Promise<number> {
-  const { args, out } = ctx;
+  const { args, out, api } = ctx;
   const claim = args.positionals.join(' ').trim();
   if (claim.length === 0) {
     throw new UsageError('upt retrieve: give a claim, e.g. `upt retrieve period of a pendulum`');
   }
   const embed = args.flags.has('embed');
-  const corpus = canonicalRetrievalCorpus();
-  const result = await retrieveHybrid({
+  const corpus = api.canonicalRetrievalCorpus();
+  const result = await api.retrieveHybrid({
     query: { text: claim },
     corpus,
     embeddings: embed,
     embedder: embed
-      ? ollamaEmbedder({ baseUrl: args.flags.get('ollama-url')?.[0] ?? 'http://127.0.0.1:11434' })
+      ? api.ollamaEmbedder({ baseUrl: args.flags.get('ollama-url')?.[0] ?? 'http://127.0.0.1:11434' })
       : undefined,
   });
   if (args.flags.has('json')) {

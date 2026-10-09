@@ -49,7 +49,8 @@ describe('search names the formula and a prefix', () => {
     const cap = capture();
     const code = await runCli(['search', 'landau diamagnetism'], cap.io);
     const out = text(cap);
-    expect(code, out).toBe(1);
+    // No match is a result (exit 0), not an error.
+    expect(code, out).toBe(0);
     expect(out).toMatch(/no entry matches/);
   });
 });

@@ -257,13 +257,13 @@ describe('json-contract — discover --json', () => {
   });
 });
 
-describe('derive text-mode error paths — conversion-fidelity rule (partial stdout preserved)', () => {
+describe('derive text-mode error paths — an error leaves stdout empty', () => {
   // The old bin printed the header + determination + dimensional-check lines
-  // to stdout BEFORE the formula parse/evaluate errors hit stderr with exit 2.
-  // The port must keep that partial stdout (output emitted before the old
-  // process.exit(2) site stays emitted before the throw).
+  // to stdout before a formula error exited 2. Since the 9.0.0 audit (K3) an
+  // error exits 1 or 2 with empty stdout on every command; derive buffers its
+  // report and prints it only on a result (exit 0 or 3).
 
-  it('malformed formula: exit 2, partial report on stdout, parse error on stderr', async () => {
+  it('malformed formula: exit 2, empty stdout, parse error on stderr', async () => {
     const { io, outLines, errLines } = makeIo();
     const status = await runCli(
       ['derive', 'period:time', 'length:length', 'gravity:acceleration', '--formula', '2*pi*sqrt((('],
@@ -271,14 +271,11 @@ describe('derive text-mode error paths — conversion-fidelity rule (partial std
     );
 
     expect(status).toBe(2);
-    const stdout = outLines.join('');
-    expect(stdout).toContain('● period  from {length, gravity}');
-    expect(stdout).toContain('dimensionally determined up to a constant');
-    expect(stdout).toContain('formula dimensional check: ✗');
-    expect(errLines.join('')).toContain('formula parse error');
+    expect(outLines.join('')).toBe('');
+    expect(errLines.join('')).toContain('--formula: parse error');
   });
 
-  it('undeclared variable: exit 2, determination line on stdout, evaluate error on stderr', async () => {
+  it('undeclared variable: exit 2, empty stdout, the symbol named on stderr', async () => {
     const { io, outLines, errLines } = makeIo();
     const status = await runCli(
       ['derive', 'period:time', 'length:length', 'gravity:acceleration', '--formula', '2*pi*sqrt(len/gravity)'],
@@ -286,9 +283,7 @@ describe('derive text-mode error paths — conversion-fidelity rule (partial std
     );
 
     expect(status).toBe(2);
-    const stdout = outLines.join('');
-    expect(stdout).toContain('● period  from {length, gravity}');
-    expect(stdout).toContain('dimensionally determined up to a constant');
-    expect(errLines.join('')).toContain('formula uses an undeclared variable');
+    expect(outLines.join('')).toBe('');
+    expect(errLines.join('')).toContain("undeclared symbol 'len'");
   });
 });

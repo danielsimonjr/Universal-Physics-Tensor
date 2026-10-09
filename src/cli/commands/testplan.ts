@@ -140,7 +140,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const target = args.positionals[0];
   if (!target) throw new UsageError('upt testplan needs a be-NN id or a case id. See `upt help testplan`.');
-  const caseHit = api.APPLIED_CASES.get(target);
+  const caseHit = api.APPLIED_CASES.get(target.toLowerCase());
   let plan: Plan;
   if (caseHit !== undefined) plan = fromCase(api, caseHit);
   else {

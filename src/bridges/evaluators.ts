@@ -11,7 +11,7 @@
  */
 
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
-import { catalogEvaluators, primaryRelation } from './catalog-load.js';
+import { catalogEntries, catalogEntry, catalogEvaluators, primaryRelation } from './catalog-load.js';
 import type { CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
 import { evaluateFormula, formulaVariables, parseCatalogExpression, reservedFormulaNames } from './expr-parse.js';
 import type { ExprNode } from '../dimensional/ast-types.js';
@@ -263,9 +263,18 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
   catalogEvaluators().map((row) => [row.catalogId, buildEvaluatorSpec(row)] as const),
 );
 
-/** What to say when an id is not in {@link BRIDGE_EVALUATORS}. @internal */
+/**
+ * What to say when an id is not in {@link BRIDGE_EVALUATORS}: an id outside
+ * the catalog and a catalog row with no evaluator are two different facts.
+ * @internal
+ */
 export function missingEvaluatorMessage(bridgeId: number): string {
-  return `catalog id ${bridgeId} has no evaluator`;
+  const entry = catalogEntry(bridgeId);
+  if (entry === undefined) {
+    const ids = catalogEntries().map((e) => e.id);
+    return `be-${bridgeId} is not a catalog id (the catalog holds be-${Math.min(...ids)} to be-${Math.max(...ids)})`;
+  }
+  return `be-${bridgeId} (${entry.name}) has no evaluator; \`upt atlas be-${bridgeId}\` prints its record, and \`upt evaluate\` with no id lists the evaluable ids`;
 }
 
 /**

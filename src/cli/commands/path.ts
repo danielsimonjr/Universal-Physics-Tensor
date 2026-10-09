@@ -876,7 +876,7 @@ function runSweep(
   for (const r of rows) {
     const a = r.adequacy === undefined ? '' : `${r.adequacy.padEnd(13)} `;
     const w = s.translation === null ? '' : `${(r.pointWitness?.status ?? '—').padEnd(14)} `;
-    out(`  ${String(Number(r.value.toPrecision(6))).padEnd(12)} ${String(r.regime).padEnd(10)} ${String(r.horizon).padEnd(14)} ${a}${w}${r.error === null ? `— ${r.reason ?? ''}` : r.error}`);
+    out(`  ${ctx.api.formatQuantity(r.value).padEnd(12)} ${String(r.regime).padEnd(10)} ${String(r.horizon).padEnd(14)} ${a}${w}${r.error === null ? `— ${r.reason ?? ''}` : ctx.api.formatQuantity(r.error)}`);
   }
   out(
     `  in regime: ${tally('regime', 'holds')} · outside: ${tally('regime', 'violated')} · unknown: ${tally('regime', 'unknown')} · ` +
@@ -1001,10 +1001,10 @@ function runCompare(ctx: CommandCtx, from: string, point: Readonly<Record<string
   out(`  ${sweep.name.padEnd(12)} ${heads.map((h) => h.padEnd(w)).join(' ')} covered by`);
   for (const r of rows) {
     const cells = r.paths.map((p) =>
-      `${p.regime}/${p.horizon} ${p.error === null ? '—' : Number(p.error.toPrecision(6))}`.padEnd(w),
+      `${p.regime}/${p.horizon} ${p.error === null ? '—' : ctx.api.formatQuantity(p.error)}`.padEnd(w),
     );
     const cov = r.coverage === 'covered' ? r.claimedBy.join(' + ') : r.coverage === 'neither' ? `NEITHER — ${neitherNote}` : 'UNSETTLED — a coordinate or t was not supplied';
-    out(`  ${String(Number(r.value.toPrecision(6))).padEnd(12)} ${cells.join(' ')} ${cov}`);
+    out(`  ${ctx.api.formatQuantity(r.value).padEnd(12)} ${cells.join(' ')} ${cov}`);
   }
   out(
     `  covered: ${tally.covered} (${sides.map((sd) => `${sd.to}: ${tally.claimedBy[sd.to]}`).join(', ')}; by all: ${tally.claimedByAll}) · ` +
@@ -1047,7 +1047,7 @@ function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteCl
     const regimeCollisions = api.collidingRegimeGroups(bridges.map((b) => b.regime));
     const blockedGroups = new Set(regimeCollisions.map((c) => c.group));
     const regimes: RegimeReport[] = bridges.map((b) => {
-      const { values } = resolveAtPoint(at, [b.regime]);
+      const { values } = resolveAtPoint(api, at, [b.regime]);
       for (const name of blockedGroups) delete values[name];
       const check = api.regimeHolds(b.regime, values);
       return {

@@ -121,8 +121,10 @@ describe('a multi-word search is a noun phrase in one field', () => {
   });
 
   it('does not invent a magnetic Reynolds number', async () => {
+    // No match is the result the search computed: exit 0, the scope named.
     const r = await search('magnetic reynolds');
-    expect(r.code, r.text).toBe(1);
+    expect(r.code, r.text).toBe(0);
+    expect(r.text).toMatch(/no entry matches/);
     expect(r.text).not.toMatch(/be-86/);
   });
 });

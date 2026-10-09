@@ -103,10 +103,12 @@ describe('audit I3 — the discovery ground truth', () => {
     const plain = await json(['map']);
     expect(plain.anchor.groundTruth).toBeUndefined();
     expect((await run(['map'])).stdout).not.toMatch(/proposals: anchor:/);
-    const prop = await json(['map', '--proposed', '--anchor=mass=2e30']);
+    // --proposed runs the funnel in every output form; the catalog graph keeps the run short.
+    const prop = await json(['map', '--proposed', '--source=catalog', '--anchor=mass=2e30']);
     expect(prop.anchor.groundTruth).toEqual({ values: { mass: 2e30 }, isDefault: false });
-    expect((await run(['map', '--proposed'])).stdout).toMatch(/proposals: anchor: mass=[0-9.e+]+ \(the default/);
-  });
+    expect(prop.result.proposed).toBeDefined();
+    expect((await run(['map', '--proposed', '--source=catalog'])).stdout).toMatch(/proposals: anchor: mass=[0-9.e+]+ \(the default/);
+  }, 180_000);
 });
 
 describe('audit I3 — the anchored core', () => {

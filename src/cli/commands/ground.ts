@@ -60,11 +60,19 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const pairs = (c: { a: string; b: string }) => (c.a === a && c.b === b) || (c.a === b && c.b === a);
-  const cand = api.rankDiscoveries(graph, opts).find(pairs);
+  // A graph's funnel runs only when both names are quantities of that graph: a
+  // name no graph carries is answered without running three funnels.
+  const quantities = (edges: readonly { target: { name: string }; sources: readonly { name: string }[] }[]): Set<string> =>
+    new Set(edges.flatMap((e) => [e.target.name, ...e.sources.map((q) => q.name)]));
+  const bothNamed = (edges: Parameters<typeof quantities>[0]): boolean => {
+    const names = quantities(edges);
+    return names.has(a) && names.has(b);
+  };
+  const cand = bothNamed(graph) ? api.rankDiscoveries(graph, opts).find(pairs) : undefined;
   if (!cand) {
     const elsewhere = ALL_SOURCES.filter((s) => s !== source).filter((s) => {
       const other = resolveGraph(api, new Map([['source', [s]]]));
-      return api.rankDiscoveries(other.graph, opts).some(pairs);
+      return bothNamed(other.graph) && api.rankDiscoveries(other.graph, opts).some(pairs);
     });
     const anchorFlags = (args.flags.get('anchor') ?? []).map((v) => ` --anchor=${v}`).join('');
     const ordersFlag = args.flags.has('max-orders') ? ` --max-orders=${args.flags.get('max-orders')!.at(-1)}` : '';
@@ -110,7 +118,7 @@ export const command: Command = {
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Show which falsifiers ran on one discovery candidate, and which abstained.',
-  example: 'upt ground temperature mass',
+  example: 'upt ground landauer-erasure-energy gap-energy',
   group: 'discovery',
   run,
 };

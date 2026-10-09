@@ -70,7 +70,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   if (restates.length) {
     out('  RESTATES-CANONICAL (the bridge IS the canonical law — F4: NOT a discovery):');
     for (const r of restates) {
-      const rec = r.recovery && r.recovery.tested ? ` (recovery exact, err ${r.recovery.maxRelErr.toExponential(0)})` : '';
+      const rec = r.recovery && r.recovery.tested ? ` (recovery exact, err ${api.formatQuantity(r.recovery.maxRelErr)})` : '';
       out(
         `    ${r.canonicalId.padEnd(26)} ≡ bridge ${r.bridgeId}${rec}` +
           conventionAdvisory(api, r.canonicalId, r.bridgeId)
