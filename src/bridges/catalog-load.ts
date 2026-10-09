@@ -12,6 +12,7 @@ import type {
   CatalogEvaluator,
   CatalogEvaluatorParameter,
   CatalogFile,
+  CatalogFileRecord,
   CatalogRelation,
 } from './catalog-types.js';
 
@@ -20,12 +21,42 @@ import type {
  * (every record's `type`, the relation, evaluator, parameter and confrontation
  * shapes) and against what a schema cannot state: `count` is the number of entries.
  */
-function loadFile(): CatalogFile {
-  const file = checkedDataFile('bridge-catalog.json') as CatalogFile & { readonly count: number };
+function loadFile(): CatalogFileRecord {
+  const file = checkedDataFile('bridge-catalog.json') as CatalogFileRecord & { readonly count: number };
   if (file.count !== file.entries.length) {
     throw new Error(`data/bridge-catalog.json: count is ${file.count} but the file has ${file.entries.length} entries`);
   }
   return file;
+}
+
+/**
+ * A relation's confidence is its catalog row's `status`. The row is the one
+ * owner, so the file may not store a confidence beside a catalog id; a
+ * relation with no row stores its own. A row that is `invalid` has no
+ * relation to evaluate.
+ */
+function deriveConfidence(file: CatalogFileRecord): CatalogFile {
+  const entries = new Map(file.entries.map((entry) => [entry.id, entry]));
+  const relations = file.relations.map((relation): CatalogRelation => {
+    if (relation.catalogId === null) {
+      if (relation.confidence === undefined) {
+        throw new Error(`data/bridge-catalog.json: relation ${relation.id} has no catalog row and no confidence`);
+      }
+      return { ...relation, confidence: relation.confidence };
+    }
+    if (relation.confidence !== undefined) {
+      throw new Error(`data/bridge-catalog.json: relation ${relation.id} stores a confidence; the row's status is the owner`);
+    }
+    const entry = entries.get(relation.catalogId);
+    if (entry === undefined) {
+      throw new Error(`data/bridge-catalog.json: relation ${relation.id} names an unknown catalog id ${relation.catalogId}`);
+    }
+    if (entry.status === 'invalid') {
+      throw new Error(`data/bridge-catalog.json: relation ${relation.id} has a closed form but its row is invalid`);
+    }
+    return { ...relation, confidence: entry.status };
+  });
+  return { ...file, relations };
 }
 
 /**
@@ -70,7 +101,17 @@ function deriveDomains(file: CatalogFile): CatalogFile {
   return { ...file, relations };
 }
 
-const CATALOG = deriveDomains(loadFile());
+/**
+ * The loaded catalog from a file record: each relation takes its row's status
+ * as its confidence, then the sign clauses its evaluator parameters state.
+ * The production catalog is this function on `data/bridge-catalog.json`.
+ * @internal
+ */
+export function loadCatalog(file: CatalogFileRecord): CatalogFile {
+  return deriveDomains(deriveConfidence(file));
+}
+
+const CATALOG = loadCatalog(loadFile());
 
 /** The loaded catalog. */
 export function bridgeCatalog(): CatalogFile {

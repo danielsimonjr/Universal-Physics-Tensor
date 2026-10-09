@@ -359,7 +359,6 @@
           "aliases",
           "holds",
           "domain",
-          "confidence",
           "citation"
         ],
         "additionalProperties": false,
@@ -419,7 +418,8 @@
               "established",
               "speculative",
               "highly-speculative"
-            ]
+            ],
+            "description": "Stored only on a relation with no catalog row (catalogId null). A relation with a row takes its row's status when the catalog loads; src/bridges/catalog-load.ts refuses a stored copy beside a catalog id."
           },
           "citation": {
             "type": "string"

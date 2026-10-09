@@ -132,7 +132,16 @@ export interface CatalogConfrontation {
   readonly prediction?: { readonly inputs: Readonly<Record<string, number>> };
 }
 
-/** The on-disk catalog: schema 3, entries, relations, evaluators, and confrontations. */
+/**
+ * A relation as the file stores it. `confidence` is stored only on a relation
+ * that has no catalog row; a relation with a row takes its row's `status`
+ * when the catalog loads, so the two cannot drift.
+ */
+export type CatalogRelationRecord = Omit<CatalogRelation, 'confidence'> & {
+  readonly confidence?: CatalogRelation['confidence'];
+};
+
+/** The loaded catalog: schema 3, entries, relations, evaluators, and confrontations. */
 export interface CatalogFile {
   readonly schemaVersion: 3;
   readonly packageVersion: string;
@@ -144,6 +153,11 @@ export interface CatalogFile {
   readonly adjudications: readonly CatalogAdjudication[];
   readonly spine: Readonly<Record<string, Readonly<Record<string, number>>>>;
 }
+
+/** The catalog as `data/bridge-catalog.json` stores it, before the loader derives the per-relation fields. */
+export type CatalogFileRecord = Omit<CatalogFile, 'relations'> & {
+  readonly relations: readonly CatalogRelationRecord[];
+};
 
 /**
  * A recorded human verdict on an identification hypothesis `a ≟ b`.
