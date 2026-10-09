@@ -1,5 +1,6 @@
 /**
- * Mercury 10-orbit conserved-charge (Killing Q) drift test (v0.6.0 Phase 1 Task 1.7).
+ * Mercury conserved-charge (Killing Q) drift test (v0.6.0 Phase 1 Task 1.7): 2 orbits per
+ * commit, 10 orbits under GL4_LONG=1 (the nightly long-tests job).
  *
  * Tests that the GL4 symplectic integrator conserves energy E = −Q_t and
  * angular momentum L = Q_φ (Killing-vector conserved charges) along a
@@ -9,7 +10,8 @@
  *   - Mercury orbit in Schwarzschild spacetime (equatorial, θ = π/2).
  *   - Initial conditions at perihelion (dr/dτ = 0): canonical (x, p) from
  *     Newtonian vis-viva + exact g^μν p_μ p_ν = −c² normalization.
- *   - Integrate 10 Keplerian orbital periods, sample Q_t and Q_φ at each step.
+ *   - Integrate N Keplerian orbital periods (N from tests/helpers/gl4-long.ts), sample Q_t and
+ *     Q_φ at each step.
  *   - Assert max|ΔE/E| < tolerance and max|ΔL/L| < tolerance.
  *
  * F-3 reconciliation (plan-template corrections):
@@ -23,6 +25,7 @@
  * @module tests/numerical/conserved-charge-mercury
  */
 import { describe, it, expect } from 'vitest';
+import { gl4LongScope } from '../helpers/gl4-long.js';
 import {
   schwarzschildKillingT,
   schwarzschildKillingPhi,
@@ -91,14 +94,17 @@ describe('Conserved-charge Mercury 10-orbit drift (Phase 1 Task 1.7)', () => {
     expect(Q_t0).toBeLessThan(0);
     expect(Q_phi0).toBeGreaterThan(0);
 
-    // --- Integration window: 2 orbits (CI-practical) ---
+    // --- Integration window: 2 orbits per commit, 10 orbits nightly ---
     const T_orbit = 2 * Math.PI * Math.sqrt((a_m * a_m * a_m) / (G * M_SUN));
-    // E-4 measure-then-lock pattern: Windows Picard cost on
-    // MathTSEngine is ~28 ms/step, so 50k steps timed out at
-    // 10 min. Reduced to 2 orbits / 2000 steps total (~1k/orbit) for CI;
-    // full 10-orbit test available via env override.
-    const orbits  = parseInt(process.env.GL4_LONG_ORBITS ?? '2', 10);
-    const steps   = parseInt(process.env.GL4_LONG_STEPS  ?? '2000', 10);
+    // E-4 measure-then-lock pattern: Windows Picard cost on MathTSEngine is ~28 ms/step, so 50k
+    // steps timed out at 10 min. The per-commit scope is 2 orbits / 2000 steps (~1k/orbit); the
+    // full 10-orbit scope at the same density runs when GL4_LONG=1, which the nightly long-tests
+    // job sets. Before tests/helpers/gl4-long.ts the 10-orbit run was "available via env
+    // override" and nothing set the override, so it never ran.
+    const { orbits, steps } = gl4LongScope({
+      short: { orbits: 2, steps: 2000 },
+      long: { orbits: 10, steps: 10_000 },
+    });
     const tauMax  = orbits * T_orbit;
 
     const snapshots = integrateGeodesicGL4(
@@ -137,7 +143,7 @@ describe('Conserved-charge Mercury 10-orbit drift (Phase 1 Task 1.7)', () => {
     // Diagnostic: surface measured drift on any failure.
     // eslint-disable-next-line no-console
     console.log(
-      `[Q-drift Mercury 10-orbit] max|ΔE/E|=${maxDeltaE_over_E.toExponential(3)}`
+      `[Q-drift Mercury ${orbits}-orbit, ${steps} steps] max|ΔE/E|=${maxDeltaE_over_E.toExponential(3)}`
       + ` max|ΔL/L|=${maxDeltaL_over_L.toExponential(3)}`,
     );
 

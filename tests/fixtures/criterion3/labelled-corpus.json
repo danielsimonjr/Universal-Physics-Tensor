@@ -1,0 +1,5421 @@
+[
+  {
+    "id": "CE-pendulum-period",
+    "text": "Pendulum period\nmechanics\nsmall-angle\npoint mass\nrigid massless rod"
+  },
+  {
+    "id": "CE-kepler-third",
+    "text": "Kepler's third law\ngravitation\ntwo-body\nM ≫ m"
+  },
+  {
+    "id": "CE-schwarzschild-radius",
+    "text": "Schwarzschild radius\ngeneral-relativity\nstatic\nspherically symmetric\nvacuum"
+  },
+  {
+    "id": "CE-string-wave-speed",
+    "text": "Wave speed on a string\nmechanics\nideal flexible string\nsmall amplitude"
+  },
+  {
+    "id": "CE-planck-length",
+    "text": "Planck length\nquantum"
+  },
+  {
+    "id": "CE-planck-mass",
+    "text": "Planck mass\nquantum"
+  },
+  {
+    "id": "CE-planck-time",
+    "text": "Planck time\nquantum"
+  },
+  {
+    "id": "CE-compton-wavelength",
+    "text": "Compton wavelength\nquantum"
+  },
+  {
+    "id": "CE-thermal-de-broglie",
+    "text": "Thermal de Broglie wavelength\nstatistical\nnon-relativistic\nideal gas"
+  },
+  {
+    "id": "CE-einstein-field-eq",
+    "text": "Einstein field equation\ngeneral-relativity\nclassical GR\npseudo-Riemannian spacetime"
+  },
+  {
+    "id": "CE-friedmann",
+    "text": "Friedmann equation (flat, matter-dominated)\ncosmology\nflat (k=0)\nmatter-dominated\nΛ=0\nFLRW",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "8pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "rho",
+              "dim": {
+                "L": -3,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "3",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-hawking-temperature",
+    "text": "Hawking temperature\ngeneral-relativity\nSchwarzschild\nsemiclassical",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "hbar",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "c",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "3",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "8pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "M",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "k_B",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": -1,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-light-deflection",
+    "text": "Light deflection (Eddington weak-field)\ngeneral-relativity\nweak field\ngrazing ray",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "4",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "M",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "c",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "name": "impact_parameter",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-perihelion-precession",
+    "text": "Perihelion precession (Einstein)\ngeneral-relativity\nweak field\nnearly-circular orbit",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "6pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "M",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "c",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "name": "a",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "one_minus_e_sq",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-bekenstein-hawking",
+    "text": "Bekenstein–Hawking entropy\ngeneral-relativity\nstationary horizon\nsemiclassical",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "k_B",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": -1,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "c",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "3",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "name": "A",
+              "dim": {
+                "L": 2,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "4",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "hbar",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-newton-gravitation",
+    "text": "Newton's law of gravitation\ngravitation\npoint masses\nnon-relativistic",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "m_1",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "m_2",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "r",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-newton-second-law",
+    "text": "Newton's second law\nmechanics\ninertial frame\nconstant mass",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "acceleration",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-mass-energy",
+    "text": "Mass–energy equivalence\nmechanics\nrest energy of a massive body",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-momentum",
+    "text": "Momentum (non-relativistic)\nmechanics\nnon-relativistic (v ≪ c)",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "velocity",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-kinetic-energy",
+    "text": "Kinetic energy\nmechanics\nnon-relativistic",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "speed",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-rotational-kinetic-energy",
+    "text": "Rotational kinetic energy\nmechanics\nrigid body",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "moment-of-inertia",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "angular-velocity",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-gravitational-potential-energy",
+    "text": "Gravitational potential energy\nmechanics\ntwo point masses\nzero reference at infinity",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "mass",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "secondary-mass",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "r",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-work",
+    "text": "Work (constant force)\nmechanics\nconstant force along displacement",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "force",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "distance",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-spring-potential-energy",
+    "text": "Elastic potential energy\nmechanics\nHookean (linear) spring",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "spring-constant",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "displacement",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-power",
+    "text": "Mechanical power\nmechanics\nforce along velocity",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "force",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "velocity",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-centripetal-force",
+    "text": "Centripetal force\nmechanics\nuniform circular motion",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "mass",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "speed",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "radius",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-hooke-law",
+    "text": "Hooke's law\nmechanics\nlinear elastic regime",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "spring-constant",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "displacement",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-torque",
+    "text": "Torque (perpendicular force)\nmechanics\nforce perpendicular to lever arm",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "radius",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "force",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-angular-momentum",
+    "text": "Angular momentum (point particle)\nmechanics\nmomentum perpendicular to radius",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "radius",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "p",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-moment-of-inertia",
+    "text": "Moment of inertia (point mass)\nmechanics\npoint mass at radius r",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "radius",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-impulse",
+    "text": "Impulse (constant force)\nmechanics\nconstant force over interval t",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "force",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "time",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-simple-harmonic-frequency",
+    "text": "Simple-harmonic angular frequency\nmechanics\nideal mass–spring oscillator"
+  },
+  {
+    "id": "CE-ohm-law",
+    "text": "Ohm's law\nelectromagnetism\nohmic conductor",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "current",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "resistance",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -3,
+            "I": -2,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-electrical-power",
+    "text": "Electrical power\nelectromagnetism",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "current",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "voltage",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -3,
+            "I": -1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-resistance-material",
+    "text": "Resistance of a uniform conductor\nelectromagnetism\nuniform cross-section\nhomogeneous material",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "resistivity",
+              "dim": {
+                "L": 3,
+                "M": 1,
+                "T": -3,
+                "I": -2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "length",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "area",
+          "dim": {
+            "L": 2,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-capacitance-parallel-plate",
+    "text": "Parallel-plate capacitance\nelectromagnetism\nvacuum gap\nideal plates (no fringing)",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "epsilon_0",
+              "dim": {
+                "L": -3,
+                "M": -1,
+                "T": 4,
+                "I": 2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "area",
+              "dim": {
+                "L": 2,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "distance",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-capacitor-energy",
+    "text": "Capacitor stored energy\nelectromagnetism",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "capacitance",
+          "dim": {
+            "L": -2,
+            "M": -1,
+            "T": 4,
+            "I": 2,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "voltage",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -3,
+                "I": -1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-inductor-energy",
+    "text": "Inductor stored energy\nelectromagnetism",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "inductance",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": -2,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "current",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-magnetic-field-wire",
+    "text": "Magnetic field of a long straight wire\nelectromagnetism\ninfinite straight wire\nmagnetostatic",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "mu_0",
+              "dim": {
+                "L": 1,
+                "M": 1,
+                "T": -2,
+                "I": -2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "current",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "distance",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-cyclotron-frequency",
+    "text": "Cyclotron frequency\nelectromagnetism\nnon-relativistic charged particle",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "charge",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "magnetic-field",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": -2,
+                "I": -1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-larmor-radius",
+    "text": "Larmor (gyro) radius\nelectromagnetism\nvelocity perpendicular to B\nnon-relativistic",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "mass",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "speed",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "charge",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "magnetic-field",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": -2,
+                "I": -1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-point-charge-field",
+    "text": "Point-charge electric field (Coulomb field)\nelectromagnetism\npoint charge\nvacuum\nelectrostatic",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "charge",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 1,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "epsilon_0",
+              "dim": {
+                "L": -3,
+                "M": -1,
+                "T": 4,
+                "I": 2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "r",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-lc-resonance",
+    "text": "LC resonant angular frequency\nelectromagnetism\nideal lossless LC circuit"
+  },
+  {
+    "id": "CE-coulomb",
+    "text": "Coulomb's law\nelectromagnetism\npoint charges\nvacuum\nelectrostatic",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "q_1",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "q_2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "4pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "epsilon_0",
+              "dim": {
+                "L": -3,
+                "M": -1,
+                "T": 4,
+                "I": 2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "r",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-lorentz-force",
+    "text": "Lorentz force (magnitude)\nelectromagnetism\nv ⟂ B (magnitude only)",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "q",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 1,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "v",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "B",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": -2,
+            "I": -1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-rc-time-constant",
+    "text": "RC time constant\nelectromagnetism\nseries RC circuit",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "resistance",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -3,
+            "I": -2,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "capacitance",
+          "dim": {
+            "L": -2,
+            "M": -1,
+            "T": 4,
+            "I": 2,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-poynting-flux",
+    "text": "Poynting vector (magnitude)\nelectromagnetism\nplane EM wave\nvacuum",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "electric-field",
+              "dim": {
+                "L": 1,
+                "M": 1,
+                "T": -3,
+                "I": -1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "magnetic-flux-density",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": -2,
+                "I": -1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "mu_0",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -2,
+            "I": -2,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-solenoid-field",
+    "text": "Solenoid magnetic field\nelectromagnetism\nideal infinite solenoid",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "mu_0",
+              "dim": {
+                "L": 1,
+                "M": 1,
+                "T": -2,
+                "I": -2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "turn-density",
+              "dim": {
+                "L": -1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "current",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-larmor-power",
+    "text": "Larmor radiated power\nelectromagnetism\nnon-relativistic point charge",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "charge",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 1,
+                    "I": 1,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "acceleration",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -2,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "epsilon_0",
+              "dim": {
+                "L": -3,
+                "M": -1,
+                "T": 4,
+                "I": 2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "speed-of-light",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "3",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-field-energy-density",
+    "text": "Electric-field energy density\nelectromagnetism\nlinear vacuum\nelectrostatic",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "epsilon_0",
+          "dim": {
+            "L": -3,
+            "M": -1,
+            "T": 4,
+            "I": 2,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "electric-field",
+              "dim": {
+                "L": 1,
+                "M": 1,
+                "T": -3,
+                "I": -1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-hydrostatic-pressure",
+    "text": "Hydrostatic pressure\nmechanics\nincompressible fluid\nuniform gravity",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "density",
+          "dim": {
+            "L": -3,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "g",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "height",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-pressure-definition",
+    "text": "Pressure (force per area)\nmechanics\nforce normal to surface",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "force",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "area",
+          "dim": {
+            "L": 2,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-density-definition",
+    "text": "Mass density\nmechanics\nuniform body",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "volume",
+          "dim": {
+            "L": 3,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-buoyant-force",
+    "text": "Buoyant force (Archimedes')\nmechanics\nfully submerged\nstatic fluid",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "density",
+          "dim": {
+            "L": -3,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "volume",
+          "dim": {
+            "L": 3,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "g",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-stokes-drag",
+    "text": "Stokes' drag\nmechanics\nlow Reynolds number\nrigid sphere",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "viscosity",
+          "dim": {
+            "L": -1,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "radius",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "speed",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-wave-speed",
+    "text": "Wave relation (v = fλ)\nmechanics\nsingle propagating mode",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "frequency",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "wavelength",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-sound-speed",
+    "text": "Speed of sound in a fluid\nmechanics\nadiabatic\nideal fluid (γ dimensionless)"
+  },
+  {
+    "id": "CE-volume-flow-rate",
+    "text": "Volume flow rate (continuity)\nmechanics\nincompressible flow\nsteady state",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "cross-sectional-area",
+          "dim": {
+            "L": 2,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "flow-velocity",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-shear-stress",
+    "text": "Shear stress (Newtonian fluid)\nmechanics\nNewtonian fluid\nlaminar flow",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "dynamic-viscosity",
+          "dim": {
+            "L": -1,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "velocity-gradient",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-laplace-pressure",
+    "text": "Laplace pressure (surface tension)\nmechanics\nspherical interface",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "surface-tension",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "droplet-radius",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-dynamic-pressure",
+    "text": "Dynamic pressure\nmechanics\nincompressible flow",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "density",
+          "dim": {
+            "L": -3,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "flow-velocity",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-oscillator-energy",
+    "text": "Harmonic oscillator energy\nmechanics\nsimple harmonic motion\nlinear spring",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "spring-constant",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "amplitude",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-heat-capacity",
+    "text": "Sensible heat (heat capacity)\nthermodynamics\nno phase change\nconstant specific heat",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "specific-heat",
+          "dim": {
+            "L": 2,
+            "M": 0,
+            "T": -2,
+            "I": 0,
+            "Theta": -1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "temperature-change",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 1,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-half-life",
+    "text": "Radioactive half-life\nquantum\nfirst-order (exponential) decay",
+    "expr": {
+      "kind": "op",
+      "op": "^",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "decay-constant",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "-1",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-hubble-distance",
+    "text": "Hubble distance\ncosmology\npresent-epoch Hubble parameter",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "c",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "hubble-rate",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-landauer",
+    "text": "Landauer erasure bound\ninformation\nisothermal\nquasi-static erasure",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "k_B",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": -1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "T",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "ln2",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-jarzynski",
+    "text": "Jarzynski free-energy equality\nstatistical\nisothermal\narbitrary work protocol between two equilibria",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "-1",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "k_B",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": -1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "T",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "ln_avg_exp_minus_betaW",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-stefan-boltzmann",
+    "text": "Stefan–Boltzmann law\nthermodynamics\nblackbody\nthermal equilibrium",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "sigma_sb",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": -3,
+            "I": 0,
+            "Theta": -4,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "T",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 1,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "4",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-ideal-gas",
+    "text": "Ideal gas law\nthermodynamics\nideal gas\nthermal equilibrium",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "N",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "k_B",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": -1,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "T",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 1,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "V",
+          "dim": {
+            "L": 3,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-wien",
+    "text": "Wien's displacement law\nthermodynamics\nblackbody\nthermal equilibrium",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "b",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "T",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 1,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-latent-heat",
+    "text": "Latent heat of phase transition\nthermodynamics\nisothermal phase transition",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "specific-latent-heat",
+          "dim": {
+            "L": 2,
+            "M": 0,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-clausius-entropy",
+    "text": "Clausius entropy change\nthermodynamics\nreversible process\nconstant temperature",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "heat",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "temperature",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 1,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-thermal-diffusivity",
+    "text": "Thermal diffusivity\nthermodynamics\nhomogeneous isotropic medium",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "thermal-conductivity",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -3,
+            "I": 0,
+            "Theta": -1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "density",
+              "dim": {
+                "L": -3,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "specific-heat-capacity",
+              "dim": {
+                "L": 2,
+                "M": 0,
+                "T": -2,
+                "I": 0,
+                "Theta": -1,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-rydberg-energy",
+    "text": "Rydberg energy\nquantum\nhydrogen-like\nnon-relativistic",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "m_e",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "e",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 1,
+                    "I": 1,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "4",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "epsilon_0",
+                  "dim": {
+                    "L": -3,
+                    "M": -1,
+                    "T": 4,
+                    "I": 2,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "hbar",
+                  "dim": {
+                    "L": 2,
+                    "M": 1,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-classical-electron-radius",
+    "text": "Classical electron radius\nquantum\nclassical point-charge self-energy scale",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "e",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "epsilon_0",
+              "dim": {
+                "L": -3,
+                "M": -1,
+                "T": 4,
+                "I": 2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "m_e",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "c",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-bohr-magneton",
+    "text": "Bohr magneton\nquantum\nelectron magnetic-moment scale",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "e",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "hbar",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "m_e",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-planck-einstein",
+    "text": "Planck–Einstein relation\nquantum",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "h",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "nu",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-de-broglie",
+    "text": "de Broglie wavelength\nquantum",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "h",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "p",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-bohr-radius",
+    "text": "Bohr radius\nquantum\nhydrogen-like\nnon-relativistic",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "4pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "epsilon_0",
+              "dim": {
+                "L": -3,
+                "M": -1,
+                "T": 4,
+                "I": 2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "hbar",
+                  "dim": {
+                    "L": 2,
+                    "M": 1,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "m_e",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "e",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 1,
+                    "I": 1,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-thomson-cross-section",
+    "text": "Thomson scattering cross-section\nquantum\nnon-relativistic Thomson limit\nfree electron",
+    "expr": {
+      "kind": "op",
+      "op": "^",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "classical-electron-radius",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "2",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-uncertainty-principle",
+    "text": "Heisenberg uncertainty principle\nquantum\na LOWER BOUND, not an equality; the scalarAst is its saturating case\nsaturated only by minimum-uncertainty (Gaussian) states",
+    "expr": {
+      "kind": "symbol",
+      "name": "hbar",
+      "dim": {
+        "L": 2,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      }
+    }
+  },
+  {
+    "id": "CE-carrier-mobility",
+    "text": "Carrier mobility\ncondensed-matter\nDrude free-electron model",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "charge",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "relaxation-time",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-electrical-conductivity",
+    "text": "Electrical conductivity (Drude)\ncondensed-matter\nDrude free-electron model",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "carrier-density",
+          "dim": {
+            "L": -3,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "charge",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 1,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "carrier-mobility",
+          "dim": {
+            "L": 0,
+            "M": -1,
+            "T": 2,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-drude-resistivity",
+    "text": "Drude resistivity\ncondensed-matter\nDrude free-electron model",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "mass",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "carrier-density",
+              "dim": {
+                "L": -3,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "charge",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 1,
+                    "I": 1,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "name": "relaxation-time",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-hall-coefficient",
+    "text": "Hall coefficient\ncondensed-matter\nsingle-carrier Drude model\nlow magnetic field",
+    "expr": {
+      "kind": "op",
+      "op": "^",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "carrier-density",
+              "dim": {
+                "L": -3,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "charge",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "-1",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-drift-velocity",
+    "text": "Carrier drift velocity\ncondensed-matter\nDrude free-electron model\nlinear-response (low-field) regime",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "carrier-mobility",
+          "dim": {
+            "L": 0,
+            "M": -1,
+            "T": 2,
+            "I": 1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "electric-field",
+          "dim": {
+            "L": 1,
+            "M": 1,
+            "T": -3,
+            "I": -1,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-fermi-energy",
+    "text": "Fermi energy\ncondensed-matter\ndegenerate free-electron gas\nT ≈ 0"
+  },
+  {
+    "id": "CE-fermi-velocity",
+    "text": "Fermi velocity\ncondensed-matter\ndegenerate free-electron gas\nT ≈ 0"
+  },
+  {
+    "id": "CE-plasma-frequency",
+    "text": "Plasma frequency\ncondensed-matter\nfree-electron gas\nlong-wavelength (q→0) limit"
+  },
+  {
+    "id": "CE-debye-frequency",
+    "text": "Debye frequency\ncondensed-matter\nDebye model of lattice vibrations\nlinear dispersion"
+  },
+  {
+    "id": "CE-equipartition",
+    "text": "Equipartition (mean kinetic energy)\nstatistical\nideal gas\nthermal equilibrium\n3 translational DOF",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "boltzmann-constant",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": -1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "temperature",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 1,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-stokes-einstein",
+    "text": "Stokes-Einstein diffusion\nstatistical\nspherical particle\nlow Reynolds number",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "boltzmann-constant",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": -1,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "temperature",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 1,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "dynamic-viscosity",
+              "dim": {
+                "L": -1,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "particle-radius",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-kinetic-pressure",
+    "text": "Kinetic pressure of an ideal gas\nstatistical\nideal gas\nisotropic velocity distribution",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "number-density",
+              "dim": {
+                "L": -3,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "molecular-mass",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "mean-square-speed",
+          "dim": {
+            "L": 2,
+            "M": 0,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-mb-most-probable-speed",
+    "text": "Maxwell-Boltzmann most-probable speed\nstatistical\nMaxwell-Boltzmann distribution"
+  },
+  {
+    "id": "CE-bernoulli",
+    "text": "Bernoulli equation\nmechanics\nincompressible\ninviscid\nsteady flow along a streamline",
+    "expr": {
+      "kind": "op",
+      "op": "+",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "density",
+              "dim": {
+                "L": -3,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "flow-velocity",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "density",
+              "dim": {
+                "L": -3,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "gravitational-acceleration",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -2,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "height",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "static-pressure",
+          "dim": {
+            "L": -1,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-radioactive-decay",
+    "text": "Radioactive decay law\nquantum\nfirst-order decay\nlarge-N statistical limit",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "initial-nuclei",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "transcendental",
+          "fn": "exp",
+          "arg": {
+            "kind": "op",
+            "op": "*",
+            "args": [
+              {
+                "kind": "symbol",
+                "name": "-1",
+                "dim": {
+                  "L": 0,
+                  "M": 0,
+                  "T": 0,
+                  "I": 0,
+                  "Theta": 0,
+                  "N": 0,
+                  "J": 0
+                }
+              },
+              {
+                "kind": "op",
+                "op": "*",
+                "args": [
+                  {
+                    "kind": "symbol",
+                    "name": "decay-constant",
+                    "dim": {
+                      "L": 0,
+                      "M": 0,
+                      "T": -1,
+                      "I": 0,
+                      "Theta": 0,
+                      "N": 0,
+                      "J": 0
+                    }
+                  },
+                  {
+                    "kind": "symbol",
+                    "name": "elapsed-time",
+                    "dim": {
+                      "L": 0,
+                      "M": 0,
+                      "T": 1,
+                      "I": 0,
+                      "Theta": 0,
+                      "N": 0,
+                      "J": 0
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-photoelectric",
+    "text": "Photoelectric equation\nquantum\nsingle-photon absorption\nabove threshold (hf > W)",
+    "expr": {
+      "kind": "op",
+      "op": "-",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "planck-constant",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "photon-frequency",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "work-function",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-carnot-efficiency",
+    "text": "Carnot efficiency\nthermodynamics\nreversible cycle\ntwo heat reservoirs",
+    "expr": {
+      "kind": "op",
+      "op": "-",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "1",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "/",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "cold-reservoir-temperature",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 1,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "hot-reservoir-temperature",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 1,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-boltzmann-factor",
+    "text": "Boltzmann factor\nstatistical\ncanonical ensemble\nthermal equilibrium",
+    "expr": {
+      "kind": "transcendental",
+      "fn": "exp",
+      "arg": {
+        "kind": "op",
+        "op": "*",
+        "args": [
+          {
+            "kind": "symbol",
+            "name": "-1",
+            "dim": {
+              "L": 0,
+              "M": 0,
+              "T": 0,
+              "I": 0,
+              "Theta": 0,
+              "N": 0,
+              "J": 0
+            }
+          },
+          {
+            "kind": "op",
+            "op": "/",
+            "args": [
+              {
+                "kind": "symbol",
+                "name": "state-energy",
+                "dim": {
+                  "L": 2,
+                  "M": 1,
+                  "T": -2,
+                  "I": 0,
+                  "Theta": 0,
+                  "N": 0,
+                  "J": 0
+                }
+              },
+              {
+                "kind": "op",
+                "op": "*",
+                "args": [
+                  {
+                    "kind": "symbol",
+                    "name": "boltzmann-constant",
+                    "dim": {
+                      "L": 2,
+                      "M": 1,
+                      "T": -2,
+                      "I": 0,
+                      "Theta": -1,
+                      "N": 0,
+                      "J": 0
+                    }
+                  },
+                  {
+                    "kind": "symbol",
+                    "name": "temperature",
+                    "dim": {
+                      "L": 0,
+                      "M": 0,
+                      "T": 0,
+                      "I": 0,
+                      "Theta": 1,
+                      "N": 0,
+                      "J": 0
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "CE-lorentz-factor",
+    "text": "Lorentz factor\nmechanics\nspecial relativity\ninertial frames",
+    "expr": {
+      "kind": "op",
+      "op": "^",
+      "args": [
+        {
+          "kind": "op",
+          "op": "-",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "1",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "/",
+              "args": [
+                {
+                  "kind": "op",
+                  "op": "^",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "velocity",
+                      "dim": {
+                        "L": 1,
+                        "M": 0,
+                        "T": -1,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "2",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "op",
+                  "op": "^",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "speed-of-light",
+                      "dim": {
+                        "L": 1,
+                        "M": 0,
+                        "T": -1,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "2",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "-0.5",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-compton-shift",
+    "text": "Compton shift\nquantum\nelastic photon-electron scattering\nfree electron at rest",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "op",
+          "op": "/",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "planck-constant",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "electron-mass",
+                  "dim": {
+                    "L": 0,
+                    "M": 1,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "speed-of-light",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "-",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "1",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "transcendental",
+              "fn": "cos",
+              "arg": {
+                "kind": "symbol",
+                "name": "scattering-angle",
+                "dim": {
+                  "L": 0,
+                  "M": 0,
+                  "T": 0,
+                  "I": 0,
+                  "Theta": 0,
+                  "N": 0,
+                  "J": 0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-rydberg-formula",
+    "text": "Rydberg formula\nquantum\nhydrogen-like atom\nbound-state transition",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "rydberg-constant",
+          "dim": {
+            "L": -1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "-",
+          "args": [
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "lower-level-n",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "-2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "upper-level-n",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "-2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-snell-law",
+    "text": "Snell's law\nelectromagnetism\ngeometric optics\nplanar interface between isotropic media",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "incident-index",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "transcendental",
+              "fn": "sin",
+              "arg": {
+                "kind": "symbol",
+                "name": "angle-of-incidence",
+                "dim": {
+                  "L": 0,
+                  "M": 0,
+                  "T": 0,
+                  "I": 0,
+                  "Theta": 0,
+                  "N": 0,
+                  "J": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "transcendental",
+          "fn": "sin",
+          "arg": {
+            "kind": "symbol",
+            "name": "angle-of-refraction",
+            "dim": {
+              "L": 0,
+              "M": 0,
+              "T": 0,
+              "I": 0,
+              "Theta": 0,
+              "N": 0,
+              "J": 0
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-malus-law",
+    "text": "Malus's law\nelectromagnetism\nideal linear polarizer\ncoherent linearly-polarized incident light",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "incident-intensity",
+          "dim": {
+            "L": 0,
+            "M": 1,
+            "T": -3,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "transcendental",
+              "fn": "cos",
+              "arg": {
+                "kind": "symbol",
+                "name": "polarization-angle",
+                "dim": {
+                  "L": 0,
+                  "M": 0,
+                  "T": 0,
+                  "I": 0,
+                  "Theta": 0,
+                  "N": 0,
+                  "J": 0
+                }
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-first-law-thermodynamics",
+    "text": "First law of thermodynamics\nthermodynamics\nclosed system\nsign convention: Q into the system, W done by the system",
+    "expr": {
+      "kind": "op",
+      "op": "-",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "heat-added",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "work-done-by-system",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-boltzmann-entropy",
+    "text": "Boltzmann entropy\nstatistical\nmicrocanonical ensemble\nequiprobable microstates",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "boltzmann-constant",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -2,
+            "I": 0,
+            "Theta": -1,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "transcendental",
+          "fn": "ln",
+          "arg": {
+            "kind": "symbol",
+            "name": "microstate-count",
+            "dim": {
+              "L": 0,
+              "M": 0,
+              "T": 0,
+              "I": 0,
+              "Theta": 0,
+              "N": 0,
+              "J": 0
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-normal-distribution",
+    "text": "Normal (Gaussian) distribution\nstatistical\nsigma > 0\nvariate taken length-dimensioned as the representative case",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "transcendental",
+          "fn": "exp",
+          "arg": {
+            "kind": "op",
+            "op": "*",
+            "args": [
+              {
+                "kind": "symbol",
+                "name": "-1",
+                "dim": {
+                  "L": 0,
+                  "M": 0,
+                  "T": 0,
+                  "I": 0,
+                  "Theta": 0,
+                  "N": 0,
+                  "J": 0
+                }
+              },
+              {
+                "kind": "op",
+                "op": "/",
+                "args": [
+                  {
+                    "kind": "op",
+                    "op": "^",
+                    "args": [
+                      {
+                        "kind": "symbol",
+                        "name": "deviation-from-mean",
+                        "dim": {
+                          "L": 1,
+                          "M": 0,
+                          "T": 0,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      },
+                      {
+                        "kind": "symbol",
+                        "name": "2",
+                        "dim": {
+                          "L": 0,
+                          "M": 0,
+                          "T": 0,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "op",
+                    "op": "^",
+                    "args": [
+                      {
+                        "kind": "symbol",
+                        "name": "standard-deviation",
+                        "dim": {
+                          "L": 1,
+                          "M": 0,
+                          "T": 0,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      },
+                      {
+                        "kind": "symbol",
+                        "name": "2",
+                        "dim": {
+                          "L": 0,
+                          "M": 0,
+                          "T": 0,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "standard-deviation",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  }
+]
