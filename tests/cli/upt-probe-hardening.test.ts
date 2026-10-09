@@ -30,14 +30,14 @@ function run(args: string[]): { status: number; stderr: string } {
 }
 
 describe('upt probe — flag validation', () => {
-  it('rejects non-finite --holdout-tol', () => {
+  it('rejects non-finite --holdout-tol as a bad value (exit 1)', () => {
     const { status, stderr } = run([
       'probe',
       'run',
       `--problem=${pendulum}`,
       '--holdout-tol=abc',
     ]);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
     expect(stderr).toContain('--holdout-tol');
   });
 

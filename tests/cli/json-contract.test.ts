@@ -156,11 +156,11 @@ describe('json-contract — map --json', () => {
     expect(writes.join('')).toBe('');
   });
 
-  it('--proposed --max-orders=abc: exit 2 with the pinned --max-orders message (proves shared wiring)', async () => {
+  it('--proposed --max-orders=abc: exit 1 (a bad value) with the pinned --max-orders message (proves shared wiring)', async () => {
     const { io, errLines } = makeIo();
     const status = await runCli(['map', '--proposed', '--max-orders=abc', '--format=dot'], io);
 
-    expect(status).toBe(2);
+    expect(status).toBe(1);
     expect(errLines.join('')).toContain(
       'upt: --max-orders must be a non-negative finite number, got "abc".'
     );
@@ -184,11 +184,11 @@ describe('json-contract — discover --json', () => {
     expect(Array.isArray(envelope.result)).toBe(true);
   });
 
-  it('bad --max-orders=abc: exit 2 with the pinned message', async () => {
+  it('bad --max-orders=abc: exit 1 (a bad value) with the pinned message', async () => {
     const { io, errLines } = makeIo();
     const status = await runCli(['discover', '--max-orders=abc'], io);
 
-    expect(status).toBe(2);
+    expect(status).toBe(1);
     expect(errLines.join('')).toContain(
       'upt: --max-orders must be a non-negative finite number, got "abc".'
     );

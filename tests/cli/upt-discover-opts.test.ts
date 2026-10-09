@@ -1,6 +1,6 @@
 /**
  * `upt discover` option validation (Round-2 robustness): `--max-orders` and
- * `--anchor` must reject malformed values with exit 2 rather than silently
+ * `--anchor` must reject malformed values (exit 2 for a token with no `=`, exit 1 for a bad value) rather than silently
  * ignoring them (or, for an empty `--max-orders=`, silently coercing to 0).
  */
 import '../helpers/dist.js';
@@ -29,15 +29,15 @@ function run(args: string[]): { status: number; stderr: string } {
 
 describe('upt discover — option validation', () => {
   it('rejects a non-numeric --max-orders', () => {
-    expect(run(['discover', '--max-orders=abc']).status).toBe(2);
+    expect(run(['discover', '--max-orders=abc']).status).toBe(1);
   });
 
   it('rejects an empty --max-orders (would silently coerce to 0)', () => {
-    expect(run(['discover', '--max-orders=']).status).toBe(2);
+    expect(run(['discover', '--max-orders=']).status).toBe(1);
   });
 
   it('rejects a negative --max-orders', () => {
-    expect(run(['discover', '--max-orders=-1']).status).toBe(2);
+    expect(run(['discover', '--max-orders=-1']).status).toBe(1);
   });
 
   it('rejects a malformed --anchor (no value)', () => {

@@ -57,7 +57,7 @@ describe('runCli from src — coverage path', () => {
     expect(JSON.parse(text(ax)).result.length).toBeGreaterThan(0);
   });
 
-  it('probe holdout-tol validation', async () => {
+  it('probe holdout-tol validation (a bad value, exit 1)', async () => {
     const c = captureMerged();
     expect(
       await runCli(
@@ -69,7 +69,7 @@ describe('runCli from src — coverage path', () => {
         ],
         c.io,
       ),
-    ).toBe(2);
+    ).toBe(1);
     expect(text(c)).toMatch(/--holdout-tol/);
   });
 
