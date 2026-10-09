@@ -6,8 +6,7 @@
  * @module bridges/caller-table
  */
 
-import type { ConfrontationOutcome } from './observations/types.js';
-import { residualInSigma } from './observations/types.js';
+import { residualInSigma, type ConfrontationOutcome } from './observations/types.js';
 
 /** One row of a caller-supplied measured table. @public */
 export interface MeasuredCouplingRow {

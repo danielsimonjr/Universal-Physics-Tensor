@@ -13,13 +13,6 @@ export type BridgeEquationStatus =
   | 'highly-speculative'
   | 'invalid';
 
-/** An active status is every status except `invalid`. */
-export function isActiveStatus(
-  s: BridgeEquationStatus,
-): s is Exclude<BridgeEquationStatus, 'invalid'> {
-  return s !== 'invalid';
-}
-
 /** How badly a catalogued defect undermines a bridge equation. @public */
 export type BridgeIssueSeverity =
   | 'self-refuting'
@@ -37,18 +30,10 @@ export type BridgeIssueFixable =
   | 'unfixable-must-mark-invalid'
   | 'unknown';
 
-/** Tractability of a catalog row. */
-export type BridgeTractabilityClass =
-  | 'closed-form'
-  | 'numerical-tractable'
-  | 'numerical-asymptotic'
-  | 'formally-divergent'
-  | 'undefined';
-
 /** One recorded defect. @public */
 export interface KnownIssue {
   severity: BridgeIssueSeverity;
-  /** Verbatim issue text from the spec (may be paraphrased; cf. source). */
+  /** The defect, in the catalog's words. */
   description: string;
   fixable: BridgeIssueFixable;
 }
@@ -73,8 +58,6 @@ export interface BridgeEquationEntry {
   references: string[];
   dependencies: number[];
   dimensional_signature: string | null;
-  encoded_form?: string;
-  tractability_class: BridgeTractabilityClass;
   notes: string;
   relation?: RelationContract;
   regime?: Regime;

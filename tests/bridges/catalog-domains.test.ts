@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { evaluateBridge } from '../../src/bridges/evaluators.js';
-import { catalogEvaluators, primaryRelation } from '../../src/bridges/catalog-load.js';
 
 const MP = 1.67262192369e-27;
 
@@ -102,23 +101,5 @@ describe('catalog validity domains', () => {
       }
     });
   }
-
-  it('derives the sign clause from the parameter flag, not from a per-bridge hand edit', () => {
-    let flagged = 0;
-    for (const ev of catalogEvaluators()) {
-      const relation = primaryRelation(ev.catalogId);
-      if (relation === undefined) continue;
-      for (const p of ev.parameters) {
-        if (p.sign === undefined && p.temperature === undefined) continue;
-        const source = relation.sources.find((s) => s === p.quantity || (relation.aliases[s] ?? []).includes(p.key));
-        if (source === undefined) continue;
-        flagged += 1;
-        const want = p.sign === 'any' ? null : p.sign === 'positive' ? '>' : '>=';
-        if (want === null) continue;
-        const clause = relation.holds.includes(`${source} ${want}`) || relation.holds.includes(`${source} >`);
-        expect(clause, `${relation.id} ${p.key} -> ${source}: ${relation.holds}`).toBe(true);
-      }
-    }
-    expect(flagged).toBeGreaterThan(100);
-  });
+  // The derived clauses are checked against the raw file and at their boundary in derived-domains.test.ts.
 });

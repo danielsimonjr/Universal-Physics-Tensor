@@ -10,6 +10,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
+import type { ExprNode } from '../../src/dimensional/ast-types.js';
 import { catalogEntries, catalogRelations } from '../../src/bridges/catalog-load.js';
 import { evaluateFormula, formulaNames, formulaScope, parseCatalogExpression } from '../../src/bridges/expr-parse.js';
 import { holds, HoldsError } from '../../src/bridges/holds.js';
@@ -95,6 +96,21 @@ describe('holds() decides exactly as the old interpreter did', () => {
     // the reason this layer exists, recorded as a control
     expect(parseMathTs('1e-18 > 0').evaluate({})).toBe(false);
   });
+  it('one grammar: a function the tree does not know, or a call of the wrong arity, is refused by the number too', () => {
+    // `max` evaluates in MathTS but builds no dimensional tree; `ln(x, 2)` evaluated on x alone before.
+    expect(() => parseCatalogExpression('max(mass)')).toThrow(/unknown function 'max'/);
+    expect(() => evaluateFormula('max(mass)', { mass: 1 })).toThrow(/unknown function 'max'/);
+    expect(() => parseCatalogExpression('ln(mass, 2)')).toThrow(/calls 'ln' with 2 arguments; one is expected/);
+    expect(() => evaluateFormula('ln(mass, 2)', { mass: 1 })).toThrow(/calls 'ln' with 2 arguments/);
+    expect(evaluateFormula('ln(mass)', { mass: Math.E })).toBeCloseTo(1, 12);
+  });
+
+  it('a literal ratio exponent is one literal in the tree, so a cube root keeps its dimension', () => {
+    const tree = parseCatalogExpression('(3*pi^2*fermi-sea-density)^(1/3)');
+    expect(tree.kind === 'op' && tree.op === '^' && tree.args[1]!.kind === 'symbol' && tree.args[1]!.name).toBe(String(1 / 3));
+    expect(evaluateFormula('mass^(1/3)', { mass: 27 })).toBeCloseTo(3, 12);
+  });
+
   it('an unbound name is a HoldsError, which relationHolds reads as false (as before)', () => {
     expect(() => holds('y > 0', { x: 1 }, {}, ['x'])).toThrow(HoldsError);
     expect(() => holdsOracle.holds('y > 0', { x: 1 }, {}, ['x'])).toThrow();
@@ -108,8 +124,20 @@ describe('parseCatalogExpression builds the same ExprNode the old parser did', (
     ...catalogRelations().map((r) => [r.id, r.expression] as const),
     ...catalogEntries().filter((e) => e.scalarExpression !== undefined).map((e) => [`entry ${e.id}`, e.scalarExpression!] as const),
   ];
+  /** The one stated deviation: a literal ratio exponent (`^(1/3)`) is one literal now; the oracle kept the division. */
+  const foldRatioExponents = (node: ExprNode): ExprNode => {
+    if (node.kind === 'op' && node.op === '^' && node.args[1]?.kind === 'op' && node.args[1].op === '/') {
+      const [p, q] = node.args[1].args;
+      if (p?.kind === 'symbol' && q?.kind === 'symbol' && /^\d/.test(p.name) && /^\d/.test(q.name)) {
+        return { kind: 'op', op: '^', args: [foldRatioExponents(node.args[0]!), { kind: 'symbol', name: String(Number(p.name) / Number(q.name)), dim: q.dim }] };
+      }
+    }
+    if (node.kind === 'op') return { ...node, args: node.args.map(foldRatioExponents) };
+    if (node.kind === 'abs' || node.kind === 'transcendental') return { ...node, arg: foldRatioExponents(node.arg) };
+    return node;
+  };
   it.each(expressions)('%s', (_id, expression) => {
-    expect(parseCatalogExpression(expression)).toEqual(parseOracle.parseCatalogExpression(expression));
+    expect(parseCatalogExpression(expression)).toEqual(foldRatioExponents(parseOracle.parseCatalogExpression(expression)));
   });
   it('the dimensional tree and the number agree on -x^2 (they did not)', () => {
     const node = parseCatalogExpression('-x^2');

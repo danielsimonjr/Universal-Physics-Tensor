@@ -123,7 +123,7 @@ describe('scanCatalog', () => {
     // 77 is the record from before be-88..102.
   });
 
-  it('counts unsubmitted entries as 21 (post-v0.8.0 adjudication)', () => {
+  it('lists the 109 rows whose bridges tuple names no PhysicalScale, each with that reason', () => {
     // Updated 2026-05-23 (BRIDGE-PHYSICS-AUDIT §3 naming pass per
     // docs/architecture/archive/v0.7-physics-judgment-proposals.md §3).
     // Unsubmitted = entries with NEITHER axis mappable to strict
@@ -150,9 +150,16 @@ describe('scanCatalog', () => {
     // BE-147 through BE-163 and BE-170 name no PhysicalScale. 91 is the record from before those eighteen.
     expect(report.unsubmitted).toHaveLength(109);
     // 53 is the record from before be-103..125. Those twenty-three tuples are fluid → plasma.
+    expect(report.skipped.map((s) => s.bridgeId)).toEqual(report.unsubmitted);
+    for (const { bridgeId, reason } of report.skipped) {
+      const entry = BRIDGE_EQUATIONS.find((e) => e.id === bridgeId)!;
+      expect(reason, `BE-${bridgeId}`).toBe(
+        `bridges tuple [${entry.bridges.join(', ')}] names no PhysicalScale (quantum, mesoscopic, classical, cosmological) on either end`,
+      );
+    }
   });
 
-  it('counts submittable entries as 23 (44 - 21 with at least one PhysicalScale axis)', () => {
+  it('submits the 51 rows with a PhysicalScale on at least one end', () => {
     // Updated 2026-05-24 (parallel-agent dispatch): 20 → 22 after adding
     // BE-53 (Yang-Mills, ['quantum','classical']) AND BE-54 (Randall-Sundrum,
     // ['quantum','cosmological']) — both pairs PhysicalScale-mappable.
@@ -177,7 +184,6 @@ describe('scanCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     expect(() => scanCatalog([malformed])).not.toThrow();
@@ -194,7 +200,6 @@ describe('scanCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     const report = scanCatalog([malformed]);
@@ -216,7 +221,6 @@ describe('scanCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     const report = scanCatalog([uncovered]);
@@ -264,7 +268,6 @@ describe('ingestCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     // Include both: should throw, and tensor must be untouched.
@@ -287,7 +290,6 @@ describe('ingestCatalog', () => {
       known_issues: [],
       references: [],
       depends_on: [],
-      tractability_class: null,
       notes: '',
     } as unknown as BridgeEquationEntry; // deliberately malformed/minimal — sanctioned idiom
     try {
@@ -326,7 +328,7 @@ describe('ingestionReportToFluxReport', () => {
 // ---------------------------------------------------------------------------
 
 describe('Acceptance gate (proposals doc §3.5)', () => {
-  it('the live 43-entry catalog produces ZERO Rule 1 errors at HEAD', () => {
+  it('the live catalog produces ZERO Rule 1 errors at HEAD', () => {
     // This is the Eve-R1 lesson re-confirmed at the test level: at
     // HEAD, no catalog entry has structural dimensional_signature:
     // null (verified Phase 0 Task 0.3). Rule 1 should report zero
@@ -336,7 +338,7 @@ describe('Acceptance gate (proposals doc §3.5)', () => {
     expect(report.errors).toHaveLength(0);
   });
 
-  it('the 21 submittable bridges all clear Rule 2 + Rule 3 in fluxDiagnostics', () => {
+  it('the submitted rows all clear Rule 2 + Rule 3 in fluxDiagnostics', () => {
     const tensor = new UniversalTensor(baseConfig);
     ingestCatalog(tensor, BRIDGE_EQUATIONS);
     const flux = tensor.fluxDiagnostics();

@@ -11,32 +11,13 @@ import type { BridgeEdge } from './edge.js';
 import { withBoundAliases } from './edge.js';
 import { quantityByName } from './quantities.js';
 
-function regimeFor(relation: ReturnType<typeof catalogRelations>[number]) {
-  const fromEntry = relation.catalogId === null ? undefined : catalogEntry(relation.catalogId)?.regime;
-  if (fromEntry !== undefined && relation.regime !== undefined && JSON.stringify(fromEntry) !== JSON.stringify(relation.regime)) {
-    throw new Error(`catalog ${relation.catalogId} regime disagrees with relation ${relation.id}`);
-  }
-  return fromEntry ?? relation.regime;
-}
-
-function inherited<T>(
-  relation: ReturnType<typeof catalogRelations>[number],
-  field: 'relation' | 'conventions' | 'counterexamples',
-): T | undefined {
-  const fromRelation = relation[field] as T | undefined;
-  const entry = relation.catalogId === null ? undefined : catalogEntry(relation.catalogId);
-  const fromEntry = entry?.[field] as T | undefined;
-  if (fromRelation !== undefined && fromEntry !== undefined && JSON.stringify(fromRelation) !== JSON.stringify(fromEntry)) {
-    throw new Error(`catalog ${relation.catalogId} ${field} disagrees with relation ${relation.id}`);
-  }
-  return fromRelation ?? fromEntry;
-}
-
+/** The catalog row owns the relation contract, the regime, the conventions and the counterexamples; the edge reads them from it. */
 function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): BridgeEdge {
-  const regime = regimeFor(relation);
-  const contract = inherited<NonNullable<BridgeEdge['relation']>>(relation, 'relation');
-  const conventions = inherited<NonNullable<BridgeEdge['conventions']>>(relation, 'conventions');
-  const counterexamples = inherited<NonNullable<BridgeEdge['counterexamples']>>(relation, 'counterexamples');
+  const row = relation.catalogId === null ? undefined : catalogEntry(relation.catalogId);
+  const regime = row?.regime;
+  const contract = row?.relation;
+  const conventions = row?.conventions;
+  const counterexamples = row?.counterexamples;
   const edge: BridgeEdge = {
     id: relation.id,
     beId: relation.catalogId,

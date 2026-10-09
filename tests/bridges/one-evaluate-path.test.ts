@@ -104,19 +104,14 @@ describe('the input contract runs before the domain, on every entry', () => {
     expect(() => spec.run({ ...DAMPING, 'damping-inertia': 1 })).toThrow(DuplicateInputError);
   });
 
-  it('an input only an extra output reads is required for the outputs, not for the value', () => {
-    // be-139: N_c and N_D feed only Ec_minus_EF_J. The CLI wants every output and must name them;
-    // the relation's value (the graph edge) does not read them.
+  it('an input only an extra output reads is optional: the output is left out without it', () => {
+    // be-139: N_c and N_D feed only Ec_minus_EF_J. Without them the run returns the value alone;
+    // the relation's value (the graph edge) does not read them. One rule for every evaluator
+    // (output-only-inputs.test.ts); be-52's period was the only declared case before.
     const spec = BRIDGE_EVALUATORS.get(139)!;
     const core = { T_K: 300, mh_kg: 2, me_kg: 1 };
-    let caught: unknown;
-    try {
-      spec.run(core);
-    } catch (e) {
-      caught = e;
-    }
-    expect(caught).toBeInstanceOf(MissingInputError);
-    expect((caught as MissingInputError).missing).toEqual(['Nc_per_m3', 'ND_per_m3']);
+    expect(Object.keys(spec.run(core))).toEqual(['value']);
+    expect(Object.keys(spec.run({ ...core, Nc_per_m3: 1e25, ND_per_m3: 1e22 }))).toEqual(['value', 'Ec_minus_EF_J']);
     const valueOnly = spec.run(core, 'value');
     expect(Object.keys(valueOnly)).toEqual(['value']);
     expect(valueOnly.value).toBe(spec.run({ ...core, Nc_per_m3: 1e25, ND_per_m3: 1e22 }).value);

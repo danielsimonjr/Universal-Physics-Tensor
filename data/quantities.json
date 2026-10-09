@@ -644,7 +644,6 @@
         "information": "von-neumann",
         "force": "gravitational"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -1061,7 +1060,6 @@
         "scale": "classical",
         "force": "emergent"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -1905,7 +1903,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -2337,7 +2334,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -2741,7 +2737,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -2760,7 +2755,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -5342,7 +5336,6 @@
         "scale": "classical",
         "force": "emergent"
       },
-      "kind": "interval",
       "graphNode": true
     },
     {
@@ -6015,7 +6008,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -6034,7 +6026,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -6341,7 +6332,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -6412,7 +6402,6 @@
         "scale": "classical",
         "force": "emergent"
       },
-      "kind": "interval",
       "graphNode": true
     },
     {
@@ -6910,7 +6899,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -7095,7 +7083,6 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -7486,7 +7473,6 @@
       "attributes": {
         "scale": "quantum"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -7561,7 +7547,6 @@
         "information": "von-neumann",
         "force": "gravitational"
       },
-      "kind": "absolute",
       "graphNode": true
     },
     {
@@ -9004,8 +8989,7 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true,
-      "kind": "absolute"
+      "graphNode": true
     },
     {
       "id": "planckfreq",
@@ -9114,8 +9098,7 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true,
-      "kind": "absolute"
+      "graphNode": true
     },
     {
       "id": "sackurcount",
@@ -9750,6 +9733,42 @@
       },
       "attributes": {},
       "graphNode": true
+    },
+    {
+      "id": "orbital-period",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": false
+    },
+    {
+      "id": "drude-factor",
+      "symbol": "C",
+      "dimension": {
+        "L": 3,
+        "M": 1,
+        "T": -2,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": false
     }
   ]
 }

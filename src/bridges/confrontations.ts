@@ -38,7 +38,7 @@ export function rigorDistribution(): Record<RigorTier, number> {
   return counts;
 }
 
-/** Catalog id → confrontation. @public */
+/** Catalog id → confrontation. One per id: the loader refuses a second. @public */
 export const CONFRONTATIONS: ReadonlyMap<number, ConfrontationEntry> = new Map(
   ROWS.map((row) => [
     row.catalogId,
@@ -46,7 +46,7 @@ export const CONFRONTATIONS: ReadonlyMap<number, ConfrontationEntry> = new Map(
       bridgeId: row.catalogId,
       title: row.title,
       kind: row.kind,
-      run: () => row.outcome as unknown as ConfrontationOutcome,
+      run: () => row.outcome,
     },
   ]),
 );

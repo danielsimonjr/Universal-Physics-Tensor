@@ -115,8 +115,8 @@ export const JOSEPHSON_CONSTANT_SI = (2 * E_SI) / H_SI;
 /** Lorenz number L = (π²/3) (k_B/e)² (W Ω K⁻²). */
 export const LORENZ_NUMBER_SI = (Math.PI ** 2 / 3) * (K_B_SI / E_SI) ** 2;
 
-/** Euler-Mascheroni constant γ. */
-const EULER_GAMMA = 0.5772156649015329;
+/** Euler–Mascheroni constant γ. The BCS gap is π k_B T_c / e^γ; the formula name is `euler_gamma`. */
+export const EULER_GAMMA = 0.5772156649015329;
 
 /** Weak-coupling BCS gap ratio 2Δ(0)/(k_B T_c) = 2π e^{−γ}. */
 export const BCS_GAP_RATIO = (2 * Math.PI) / Math.exp(EULER_GAMMA);

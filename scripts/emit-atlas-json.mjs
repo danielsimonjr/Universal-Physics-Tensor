@@ -2,7 +2,7 @@
  * Emit every atlas family as a versioned JSON artifact (Phase 0 S0.6; all
  * families since Phase 4 S4.4).
  *
- * Same discipline as `emit-catalog-json.mjs`: the committed artifact is the
+ * Same discipline as `check-catalog-json.mjs`: the committed artifact is the
  * reviewable surface, and `tests/atlas/atlas-json.test.ts` pins it against the
  * live family, so an atlas edit fails CI until `npm run atlas:json` is re-run.
  *

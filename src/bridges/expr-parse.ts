@@ -10,8 +10,7 @@
  * @module bridges/expr-parse
  */
 
-import type { Dimension } from '../dimensional/types.js';
-import { DIMENSIONLESS } from '../dimensional/types.js';
+import { DIMENSIONLESS, type Dimension } from '../dimensional/types.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/ast-types.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
@@ -146,15 +145,35 @@ export function evaluateFormula(
   inputs: Readonly<Record<string, number>>,
   declared: readonly string[] = [],
 ): number {
+  // One grammar: the expression must also build a dimensional tree, so a function the tree
+  // does not know (`max`) or a call of the wrong arity is refused here too.
+  if (!GRAMMAR_CHECKED.has(expression)) {
+    parseCatalogExpression(expression);
+    GRAMMAR_CHECKED.add(expression);
+  }
   const rewritten = rewriteCatalogHyphens(expression, formulaNames());
   const scope = formulaScope(withoutUnreadConstants(inputs, readNames(expression), declared), declared);
   return parseFormula(rewritten).evaluate(scope);
 }
 
+const GRAMMAR_CHECKED = new Set<string>();
+
+/** A literal exponent: a number, or a ratio of two numbers (`1/3`), folded to one literal. */
+function literalExponent(node: FormulaPNode): ExprNode | undefined {
+  if (node.kind === 'num') return numberSymbol(String(node.value));
+  if (node.kind === 'op' && node.op === '/' && node.args.length === 2) {
+    const [p, q] = node.args;
+    if (p!.kind === 'num' && q!.kind === 'num' && q!.value !== 0) return numberSymbol(String(p!.value / q!.value));
+  }
+  return undefined;
+}
+
 /**
  * The sign-preserving `ExprNode` of a normalized MathTS parse node. Unary minus
- * is `-1 ×`, `sqrt` is `^0.5`, and a transcendental keeps its name; a quantity
- * name written with underscores is restored to its hyphenated id.
+ * is `-1 ×`, `sqrt` is `^0.5`, a literal ratio exponent (`^(1/3)`) is one
+ * literal, and a transcendental keeps its name; a quantity name written with
+ * underscores is restored to its hyphenated id. A call takes exactly one
+ * argument: a second one is refused, never dropped.
  */
 function exprOf(node: FormulaPNode): ExprNode {
   switch (node.kind) {
@@ -167,8 +186,9 @@ function exprOf(node: FormulaPNode): ExprNode {
     case 'op':
       return { kind: 'op', op: node.op, args: node.args.map(exprOf) };
     case 'pow':
-      return { kind: 'op', op: '^', args: [exprOf(node.base), exprOf(node.exp)] };
+      return { kind: 'op', op: '^', args: [exprOf(node.base), literalExponent(node.exp) ?? exprOf(node.exp)] };
     case 'call': {
+      if (node.args.length !== 1) throw new Error(`expression calls '${node.fn}' with ${node.args.length} arguments; one is expected`);
       const arg = exprOf(node.args[0]!);
       if (node.fn === 'sqrt') return { kind: 'op', op: '^', args: [arg, numberSymbol('0.5')] };
       if (node.fn === 'abs') return { kind: 'abs', arg };
