@@ -788,3 +788,54 @@ export type { Elasticity } from './bridges/sensitivity.js';
 // The PUBLIC atlas surface as a namespace (Atlas API review, Tier 1). The full
 // @internal surface stays on the universal-physics-tensor/atlas subpath.
 export * as atlas from './atlas/public.js';
+
+// ---------------------------------------------------------------------------
+// Closure under type references (tests/api/root-public-closure.test.ts).
+// Every type a root export names is itself importable from the root or from
+// a package.json subpath; the names below were reachable only through the
+// public declarations that mention them.
+// ---------------------------------------------------------------------------
+export type { UPTError } from './dimensional/errors.js';
+export type { UnitMode } from './dimensional/natural-units.js';
+export type {
+  Variance,
+  Role,
+  TensorIndex,
+  UpperIndex,
+  CovariantIndex,
+  TensorSymbolNode,
+  TensorProductNode,
+  MetricTensorNode,
+  KroneckerDeltaNode,
+  TensorPartialDerivativeNode,
+  RiemannTensorNode,
+  WeylTensorNode,
+  KillingVectorNode,
+  ConservedChargeNode,
+  StressEnergyTensorNode,
+  CosmologicalConstantNode,
+} from './dimensional/ast-types.js';
+export type { FluxRuleKind } from './core/flux-rules.js';
+export type { ScaleAxes, ForceAxes, SymmetryAxes, InformationAxes } from './core/axes-registry.js';
+export type { AxisConvenience } from './core/regime-registry.js';
+export type { ShapiroInput, PerihelionInput, HawkingInput, DecoherenceInput } from './diff/bridge-specs.js';
+export type { EinsumContraction, EinsumFreeAxis } from './numerical/tensor-engine.js';
+export type { KillingFn, KillingMetricFn, ChristoffelAtFn } from './numerical/killing.js';
+export type { BridgeTractabilityClass } from './bridges/types.js';
+export type { RelationContract, Conventions } from './relations/types.js';
+export type {
+  ScaleAxis,
+  ForceAxis,
+  InformationAxis,
+  SymmetryAxis,
+  TopologyAxis,
+  StatisticsAxis,
+} from './composition/axes.js';
+export type { EnumerationOptions } from './composition/enumerate.js';
+export type { UncertaintyOptions } from './composition/uncertainty.js';
+export type { AnalyzeUserEquationOptions, ShortBinding } from './composition/user-equation.js';
+export type { ConstantDef } from './composition/canonical-graph.js';
+export type { ProposedBridge } from './composition/proposed-bridges.js';
+export type { DiscoveryOptions } from './composition/discovery.js';
+export type { RepresentativeValue } from './composition/representative-values.js';
+export type { SourcedPrefactor, SourcedGroupPrefactor } from './canonical/canonical-equation.js';

@@ -43,13 +43,15 @@ function evaluateAliased(relation: CatalogRelation, input: object): number {
   return evaluateCatalogRelation(relation, bound);
 }
 
-interface ShapiroInput {
+/** Inputs of {@link SHAPIRO_DELAY_DIFF}: the mass and the two radii. @public */
+export interface ShapiroInput {
   readonly M_kg: number;
   readonly R_far_m: number;
   readonly R_near_m: number;
 }
 
-interface PerihelionInput {
+/** Inputs of {@link PERIHELION_ADVANCE_DIFF}: mass, semi-major axis, eccentricity, optional period. @public */
+export interface PerihelionInput {
   readonly M_kg: number;
   readonly a_m: number;
   /** Orbital eccentricity, 0 ≤ e < 1. A bare `e` is the elementary charge, so it is not this key. */
@@ -57,11 +59,13 @@ interface PerihelionInput {
   readonly T_yr?: number;
 }
 
-interface HawkingInput {
+/** Inputs of {@link HAWKING_TEMPERATURE_DIFF}: the mass. @public */
+export interface HawkingInput {
   readonly M_kg: number;
 }
 
-interface DecoherenceInput {
+/** Inputs of {@link DECOHERENCE_RATE_DIFF}: the rate and the two couplings. @public */
+export interface DecoherenceInput {
   readonly gamma0_per_s: number;
   readonly lambda: number;
   readonly lambda0: number;
