@@ -42,12 +42,16 @@ const HISTORY = [
   join('docs', 'superpowers') + sep,
 ];
 
-/** Scratch directories that are not product documentation. */
-const NOT_PRODUCT = ['node_modules', '.git', 'dist', '.remember', '.superpowers', 'coverage'];
+/**
+ * Scratch directories that are not product documentation. Every dot-directory is skipped as well:
+ * `.claude/worktrees/` holds other checkouts of this repository, whose CHANGELOG this walker once
+ * read as product prose (2026-10-09), and `.git`, `.remember`, `.superpowers` are the same kind.
+ */
+const NOT_PRODUCT = ['node_modules', 'dist', 'coverage'];
 
 function markdownFiles(dir: string, acc: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
-    if (NOT_PRODUCT.includes(name)) continue;
+    if (NOT_PRODUCT.includes(name) || name.startsWith('.')) continue;
     const full = join(dir, name);
     if (statSync(full).isDirectory()) markdownFiles(full, acc);
     else if (name.endsWith('.md')) acc.push(full);
