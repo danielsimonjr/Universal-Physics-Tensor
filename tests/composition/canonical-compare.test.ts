@@ -14,7 +14,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { compareWithCanonical } from '../../src/composition/canonical-compare.js';
+import { compareUserEquation, compareWithCanonical } from '../../src/composition/canonical-compare.js';
 import { C_SI, G_SI, HBAR_SI, K_B_SI } from '../../src/core/constants.js';
 
 const hawking = (v: Record<string, number>) => (HBAR_SI * C_SI ** 3) / (8 * Math.PI * G_SI * v['mass']! * K_B_SI);
@@ -102,5 +102,30 @@ describe('compareWithCanonical — scope and determinism', () => {
     const a = compareWithCanonical('hawking-temperature', ['mass'], (v) => 3 * hawking(v));
     const b = compareWithCanonical('hawking-temperature', ['mass'], (v) => 3 * hawking(v));
     expect(a).toEqual(b);
+  });
+});
+
+describe('compareUserEquation: an equation that does not parse is a not-compared row, not an empty list (9.0.0 audit §4 C7)', () => {
+  it('kinetic-energy = mass + speed (a dimensional parse failure) reports why nothing was compared', async () => {
+    // An empty list reads as "no canonical equation has this target and these variables".
+    // That is a different fact from "the equation could not be read", and the two must not merge.
+    const rows = await compareUserEquation('kinetic-energy = mass + speed', new Map([
+      ['kinetic-energy', { L: 2, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 }],
+      ['mass', { L: 0, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }],
+      ['speed', { L: 1, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 }],
+    ]));
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.kind).toBe('not-compared');
+    expect(rows[0]!.id).toBe('kinetic-energy');
+    expect(rows[0]!.detail).toMatch(/mass|speed|dimension/i);
+  });
+
+  it('control: the true law parses and agrees', async () => {
+    const rows = await compareUserEquation('kinetic-energy = 0.5 * mass * speed^2', new Map([
+      ['kinetic-energy', { L: 2, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 }],
+      ['mass', { L: 0, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }],
+      ['speed', { L: 1, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 }],
+    ]));
+    expect(rows.find((r) => r.id === 'CE-kinetic-energy')?.kind).toBe('agrees');
   });
 });

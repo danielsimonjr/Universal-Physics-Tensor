@@ -118,13 +118,22 @@ export function describeDerivedClaim(
   canonical: readonly ClaimEquation[] = CANONICAL_EQUATIONS,
 ): DerivedClaim {
   const { identification, sourceEquationIds, solvedFor } = proposal.derivedFrom;
+  // `deriveProposedBridges` resolves the first source id for the smaller
+  // endpoint name and the second for the larger, so each id's target is known
+  // even when the source is a catalog bridge the canonical registry does not
+  // hold (then `canonical.find` is undefined; the sentence once printed
+  // "equals ? (undefined)" there, 9.0.0 audit §7 T1).
+  const [t0, t1] = [identification.a, identification.b].sort();
+  const endpointOf = (id: string): string => (id === sourceEquationIds[0] ? t0 : t1);
   const sources = sourceEquationIds
     .map((id) => canonical.find((e) => e.id === id))
     .filter((e): e is ClaimEquation => e !== undefined);
   const home = sources.find((e) => e.dimensional.governing.some((g) => g.name === solvedFor)) ?? sources[0];
-  const other = sources.find((e) => e !== home);
-  const homeTarget = home?.dimensional.target.name ?? '?';
-  const otherTarget = other?.dimensional.target.name ?? '?';
+  const homeId = home?.id ?? sourceEquationIds[0];
+  const otherId = sourceEquationIds.find((id) => id !== homeId) ?? sourceEquationIds[1];
+  const other = sources.find((e) => e.id === otherId);
+  const homeTarget = home?.dimensional.target.name ?? endpointOf(homeId);
+  const otherTarget = other?.dimensional.target.name ?? endpointOf(otherId);
 
   const derivedNF = normalForm(proposal.scalarAst);
   const sameTarget = canonical.filter((e) => e.scalarAst && e.dimensional.target.name === proposal.target.name);
@@ -137,10 +146,10 @@ export function describeDerivedClaim(
     tested: false,
     symbol: {
       name: solvedFor,
-      fromEquation: home?.id ?? sourceEquationIds[0],
+      fromEquation: homeId,
       meaning:
-        `${solvedFor} is the ${solvedFor} of ${home?.id} (${home?.name}): the ${solvedFor} for which ` +
-        `${homeTarget} equals ${otherTarget} (${other?.id}) — an equal-${identification.dim} scale; ` +
+        `${solvedFor} is the ${solvedFor} of ${homeId}${home !== undefined ? ` (${home.name})` : ''}: the ${solvedFor} for which ` +
+        `${homeTarget} equals ${otherTarget} (${otherId}) — an equal-${identification.dim} scale; ` +
         `the ${otherTarget} side is not given a ${solvedFor}`,
     },
     assumptions: sources.map((e) => ({ equation: e.id, assumptions: [...e.assumptions] })),

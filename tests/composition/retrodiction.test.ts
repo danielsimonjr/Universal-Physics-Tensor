@@ -224,3 +224,48 @@ describe('retrodiction — pre-registered {mass: M_sun} anchor', () => {
     expect(ht?.outcome).toBe('consistent');
   });
 });
+
+describe('an evaluator error keeps its kind (9.0.0 audit §4 C6)', () => {
+  // `forwardEvaluate` once swallowed every error as "the edge did not fire",
+  // so a programming error (a TypeError in an evaluator) read as a quiet
+  // non-derivation, and an unset coefficient read the same as a domain miss.
+  const q = (name: string): Quantity => ({ name, symbol: name, dim: DIMENSIONLESS, attributes: {} });
+  const mk = (id: string, sources: string[], target: string, evaluate: (i: Record<string, number>) => number, over: Partial<BridgeEdge> = {}): BridgeEdge => ({
+    id,
+    beId: null,
+    kind: 'bridge',
+    label: id,
+    sources: sources.map(q),
+    target: q(target),
+    confidence: 'speculative',
+    domain: { description: 'any', predicate: () => true },
+    evaluate,
+    citation: 'synthetic',
+    ...over,
+  });
+
+  it('forwardEvaluate rethrows a TypeError from an evaluator instead of reporting the edge as not fired', () => {
+    const edges = [mk('broken', ['x'], 'y', () => { throw new TypeError('evaluator bug'); })];
+    expect(() => forwardEvaluate(edges, { x: 1 }, [])).toThrow(TypeError);
+  });
+
+  it('forwardEvaluate skips a domain miss and an unset coefficient: the edge does not fire, nothing else is said', () => {
+    const edges = [
+      mk('outside', ['x'], 'y', (i) => i['x'] * 2, { domain: { description: 'x < 0', predicate: (i) => i['x'] < 0 } }),
+      mk('unset', ['x'], 'z', (i) => i['x'] * 3, { coefficientUnset: true }),
+    ];
+    const values = forwardEvaluate(edges, { x: 1 }, []);
+    expect(values.has('y')).toBe(false);
+    expect(values.has('z')).toBe(false);
+  });
+
+  it('retrodictNode rethrows a TypeError and records a domain miss or an unset coefficient as a refusal', () => {
+    const broken = [mk('a', ['x'], 't', (i) => i['x']), mk('b', ['x'], 't', () => { throw new TypeError('evaluator bug'); })];
+    expect(() => retrodictNode(broken, { x: 1 }, 't', { identifications: [] })).toThrow(TypeError);
+    const unset = [mk('a', ['x'], 't', (i) => i['x']), mk('b', ['x'], 't', (i) => i['x'], { coefficientUnset: true })];
+    const r = retrodictNode(unset, { x: 1 }, 't', { identifications: [] });
+    expect(r.predictions.map((p) => p.edge)).toEqual(['a']);
+    expect(r.refusals).toBeDefined();
+    expect(r.refusals!.map((f) => f.edge)).toEqual(['b']);
+  });
+});
