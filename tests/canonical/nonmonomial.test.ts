@@ -170,6 +170,15 @@ describe('CE-normal-distribution: one numeric point of the whole density', () =>
     expect(density).toBeCloseTo(0.24197072451914337, 12);
   });
 
+  it('a σ ≠ 1 point: at (x−μ, σ) = (0.9, 0.7) the density is e^{-0.81/0.98}/(0.7√(2π)), so the 1/σ and the σ² are both pinned', () => {
+    const at = { 'standard-deviation': 0.7, 'deviation-from-mean': 0.9 };
+    expect(evalExpr(entry.scalarAst!, at)).toBeCloseTo(Math.exp(-0.81 / 0.98) / 0.7, 12);
+    const density = canonicalPrefactor(entry.id)! * evalExpr(entry.scalarAst!, at);
+    expect(density).toBeCloseTo(Math.exp(-0.81 / 0.98) / (0.7 * Math.sqrt(2 * Math.PI)), 12);
+    // Both points above have σ = 1, where 1/σ and 1/σ² are indistinguishable from 1.
+    expect(density).not.toBeCloseTo(Math.exp(-0.81 / 0.98) / Math.sqrt(2 * Math.PI), 6);
+  });
+
   it('control: the density at (2, 1) is e^{-2}/√(2π), so a σ instead of a 2σ² would be caught there too', () => {
     const at2 = canonicalPrefactor(entry.id)! * evalExpr(entry.scalarAst!, { ...point, 'deviation-from-mean': 2 });
     expect(at2).toBeCloseTo(Math.exp(-2) / Math.sqrt(2 * Math.PI), 12);

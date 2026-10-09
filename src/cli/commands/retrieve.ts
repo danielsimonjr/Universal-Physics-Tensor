@@ -32,7 +32,7 @@ const FLAGS: FlagSpec[] = [
 
 const HELP = `upt retrieve <claim> [--embed] [--ollama-url=URL]
         Propose canonical relations for a claim. The default is the atlas
-        search (rankByStructure) and does not call out of process. The output
+        search (typed structural ranking) and does not call out of process. The output
         says so. --embed asks a local Ollama model, qwen3-embedding:4b, for
         an order. That order is a proposal, not evidence. Acceptance stays
         the atlas search, and cosine similarity does not enter its score.

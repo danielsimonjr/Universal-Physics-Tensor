@@ -212,11 +212,16 @@ function uncertaintyOf(
 /** The one number formatter, as every command reads it: through `ctx.api`. */
 type Fmt = CommandCtx['api']['formatExact'];
 
-function printUncertainty(fmt: Fmt, out: CommandCtx['out'], u: Uncertainty): void {
-  const g = (x: number | null): string => (x === null ? 'unavailable' : fmt(x));
+/**
+ * The value is echoed exactly; σ, the relative %, a sensitivity, a contribution and the
+ * curvature ratio are statistics (the sensitivity is a central difference whose trailing
+ * digits are noise), so they print at three significant digits.
+ */
+function printUncertainty(api: CommandCtx['api'], out: CommandCtx['out'], u: Uncertainty): void {
+  const g = (x: number | null): string => (x === null ? 'unavailable' : api.formatQuantity(x, 3));
   out('  uncertainty (first-order, GUM law; a sensitivity is not an uncertainty, the contribution is c·u):');
   for (const [name, p] of Object.entries(u.propagated)) {
-    out(`    ${name} = ${g(p.value)} ± ${g(p.u)} (1σ${p.relative === null ? '' : `; relative ${g(p.relative * 100)}%`})`);
+    out(`    ${name} = ${api.formatExact(p.value)} ± ${g(p.u)} (1σ${p.relative === null ? '' : `; relative ${g(p.relative * 100)}%`})`);
     for (const [k, c] of Object.entries(p.contributions)) {
       out(
         `      from ${k}: c = ${g(c.sensitivity)}, c·u = ${g(c.contribution)}` +
@@ -333,7 +338,7 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
       : `  NOT QUALIFIED: ${failed.join(', ')} violated — the outputs above are outside the stated regime and are not a ` +
           'qualified prediction at these inputs.',
   );
-  if (u !== null) printUncertainty(api.formatExact, out, u);
+  if (u !== null) printUncertainty(api, out, u);
   out('  not included in the model:');
   for (const s of c.notIncluded) out(`    - ${s}`);
   out('  compare with a measurement:');
@@ -465,7 +470,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  note: ${key} is required and does not enter the value; the closed form does not use it, so changing it changes nothing`);
   }
   for (const notice of notices) out(`  ${notice}`);
-  if (u !== null) printUncertainty(api.formatExact, out, u);
+  if (u !== null) printUncertainty(api, out, u);
   return 0;
 }
 

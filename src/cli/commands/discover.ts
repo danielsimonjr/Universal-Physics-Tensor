@@ -422,7 +422,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`\n  MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):`);
     for (const r of clash) {
       const basis = r.magnitudeUsedAnchor ? '  (anchor-derived)' : '';
-      out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ${api.formatQuantity(r.ordersApart!)} orders apart${basis}`);
+      // A magnitude estimate is a statistic: three digits, marked approximate.
+      out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ~${api.formatQuantity(r.ordersApart!, 3)} orders apart${basis}`);
     }
   }
   const subsumed = inert.filter((r) => r.subsuming);

@@ -24,7 +24,6 @@
  * @module composition/bridge-analysis
  */
 
-import { ALPHA } from '../core/constants.js';
 import { constantRecord } from '../dimensional/symbolic-constants.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -180,29 +179,14 @@ const isCleanPrefactor = (p: number): boolean =>
  * A canonical closure more than ten times away from 1 is not a recovered
  * prefactor. Stefan–Boltzmann (≈0.1645) and Wien (≈1.265) stay inside that
  * window and keep the empirical/tuned mark. A G-closure of an atomic law
- * (10^21–10^25) and the ℏ, c, e stand-in for the field energy density
- * (≈10.9) do not. After the sourced ½ is applied, the same stand-in sits
- * near 5.45, inside the window, and times α is 1/(8π). That is μ0 rewritten
- * through α. A larger subset that still contains {ℏ, c, e} is the same
- * rewrite, so it is still not derived. A catalog id is not a canonical id,
- * so be-74 stays where the catalog audit put it.
- * A recognized constant (2π, ln 2, 4π, 1/(6π), …) stays even when it sits
- * outside the window. `ALPHA` is the fine-structure constant declared above.
+ * (10^21–10^25) does not. A recognized constant (2π, ln 2, 4π, 1/(6π), …)
+ * stays even when it sits outside the window. The search includes ε₀, so the
+ * field energy density derives on {ε₀} with its sourced ½; the {ℏ, c, e}
+ * stand-in it once closed on, μ0 rewritten through α, no longer arises, and
+ * the guard that rejected it is gone (it changed no row of either graph).
  */
-function recoveredCanonicalPrefactor(
-  id: string,
-  prefactor: number,
-  subset: readonly string[],
-): boolean {
+function recoveredCanonicalPrefactor(id: string, prefactor: number): boolean {
   if (!id.startsWith('CE-') || isCleanPrefactor(prefactor)) return true;
-  if (
-    subset.includes('ℏ') &&
-    subset.includes('c') &&
-    subset.includes('e') &&
-    isCleanPrefactor(Math.abs(prefactor) * ALPHA)
-  ) {
-    return false;
-  }
   const mag = Math.abs(prefactor);
   if (!(mag > 0) || !Number.isFinite(mag)) return false;
   return Math.abs(Math.log10(mag)) <= 1;
@@ -267,7 +251,7 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
     const cv =
       Math.sqrt(ratios.reduce((a, b) => a + (b - mean) ** 2, 0) / ratios.length) /
       Math.abs(mean);
-    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean, S.map((x) => x.name))) {
+    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean)) {
       return {
         status: 'derived',
         subset: S.map((x) => x.name),

@@ -270,6 +270,20 @@ describe('composeEdges carries the operands\' claims (9.0.0 audit §4 C5)', () =
     );
   });
 
+  it('refuses two same-family regimes that define one group name differently, as an UndefinedCompositionError', () => {
+    // `intersectRegimes` throws a bare Error there; the composite has no regime this layer
+    // can state, so composeEdges reports it as the one refusal class its callers catch.
+    const withGroup = (exps: Record<string, number>): Regime => ({
+      ...regime('f', 'g'),
+      groupDefinitions: { g: { name: 'g', formula: 'g', exponents: exps } as unknown as Regime['groupDefinitions'][string] },
+    });
+    expect(() => composeEdges({ ...first, regime: withGroup({ x: 1 }) }, { ...second, regime: withGroup({ x: 2 }) })).toThrow(
+      UndefinedCompositionError,
+    );
+    // Control: the same definition on both sides composes.
+    expect(composeEdges({ ...first, regime: withGroup({ x: 1 }) }, { ...second, regime: withGroup({ x: 1 }) }).regime?.family).toBe('f');
+  });
+
   it('an unset coefficient on either operand is unset on the composite, and evaluateEdge refuses instead of returning a number', () => {
     const composed = composeEdges({ ...first, coefficientUnset: true }, second);
     expect(composed.coefficientUnset).toBe(true);

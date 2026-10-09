@@ -123,7 +123,7 @@ Flags:
         separately from its stated agreement bound.
         be-53 is not in that registry. `upt confront be-53` refuses: a
         confrontation needs a caller-supplied measured-coupling table and a
-        running procedure (requestYangMillsConfrontation). The refusal names
+        running procedure, neither of which the library ships. The refusal names
         each missing input, prints no residual, and does not change the
         catalog status. It is not a pass and not a fail. The one-loop
         coefficient's sign is oneLoopCoefficientStatement, not this command.
@@ -852,7 +852,7 @@ Flags:
 
   upt retrieve <claim> [--embed] [--ollama-url=URL]
         Propose canonical relations for a claim. The default is the atlas
-        search (rankByStructure) and does not call out of process. The output
+        search (typed structural ranking) and does not call out of process. The output
         says so. --embed asks a local Ollama model, qwen3-embedding:4b, for
         an order. That order is a proposal, not evidence. Acceptance stays
         the atlas search, and cosine similarity does not enter its score.

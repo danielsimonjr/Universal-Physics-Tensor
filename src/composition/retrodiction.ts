@@ -33,6 +33,8 @@ import type { BridgeEdge } from './edge.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { CoefficientUnsetError, evaluateEdge } from './edge.js';
 import { DomainViolationError } from '../bridges/evaluation-errors.js';
+import { CarrierSignError } from '../bridges/carrier-sign.js';
+import { FormulaError } from '../numerical/formula-contract.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
@@ -83,7 +85,13 @@ export interface RetrodictionOptions {
 /** One refused edge in a retrodiction, with the kind of refusal. @public */
 export interface RetrodictionRefusal {
   readonly edge: string;
-  readonly kind: 'domain' | 'coefficient-unset';
+  /**
+   * `domain`: the validity domain rejected the point. `coefficient-unset`: the edge has no
+   * sourced prefactor, whatever the values. `carrier-sign`: the carrier charge and the
+   * mobility had opposite signs. `formula`: the relation's formula did not evaluate at the
+   * point (a 0/0, say). Four facts, kept apart (AGENTS law 4).
+   */
+  readonly kind: 'domain' | 'coefficient-unset' | 'carrier-sign' | 'formula';
   readonly reason: string;
 }
 
@@ -97,13 +105,9 @@ export interface RetrodictionResult {
   readonly relativeSpread: number;
   readonly tolerance: number;
   /**
-   * Derivations that refused the inputs as outside their validity domain.
-   * A refusal is not an unset coefficient and not a missing input.
-   */
-  /**
-   * Edges that refused the supplied values. `kind` keeps the two refusals apart (AGENTS law 4):
-   * `domain` is a bad value (the edge's validity domain rejected the point); `coefficient-unset`
-   * is the edge's own state (no sourced prefactor), whatever the values.
+   * Edges that refused the supplied values. `kind` keeps the refusals apart (AGENTS law 4):
+   * `domain`, `carrier-sign` and `formula` are the point (the edge does not fire there);
+   * `coefficient-unset` is the edge's own state (no sourced prefactor), whatever the values.
    */
   readonly refusals?: readonly RetrodictionRefusal[];
   /** `outcome !== 'inconsistent'` — the falsification gate. */
@@ -124,6 +128,20 @@ export interface RetrodictionReport {
   readonly inconsistent: number;
   /** The headline gate: no inconsistent node was found. */
   readonly allConsistent: boolean;
+}
+
+/** The refusal an evaluator error is, or `undefined` when it is not a refusal at all. */
+function refusalKind(err: unknown): RetrodictionRefusal['kind'] | undefined {
+  if (err instanceof DomainViolationError) return 'domain';
+  if (err instanceof CoefficientUnsetError) return 'coefficient-unset';
+  if (err instanceof CarrierSignError) return 'carrier-sign';
+  if (err instanceof FormulaError) return 'formula';
+  return undefined;
+}
+
+/** True when the error says the edge does not fire here (or at all, for an unset coefficient). */
+function refusesThePoint(err: unknown): boolean {
+  return refusalKind(err) !== undefined;
 }
 
 /**
@@ -175,11 +193,11 @@ export function forwardEvaluate(
       try {
         v = evaluateEdge(e, inputs);
       } catch (err) {
-        // A domain miss or an unset coefficient is "the edge does not fire".
-        // Anything else (a sign rejection, an alias conflict, a TypeError in an
-        // evaluator) is a different fact and is not hidden as a non-derivation
-        // (9.0.0 audit §4 C6).
-        if (!(err instanceof DomainViolationError || err instanceof CoefficientUnsetError)) throw err;
+        // The edge refusing this point (a domain miss, opposite carrier signs, a formula
+        // that has no finite value there) or an unset coefficient is "the edge does not
+        // fire". Anything else (an alias conflict, a TypeError in an evaluator) is a
+        // different fact and is not hidden as a non-derivation (9.0.0 audit §4 C6).
+        if (!refusesThePoint(err)) throw err;
         continue;
       }
       if (Number.isFinite(v)) {
@@ -221,19 +239,14 @@ export function retrodictNode(
     try {
       v = evaluateEdge(e, inputs);
     } catch (err) {
-      // A domain miss or an unset coefficient is a recorded refusal of this
-      // edge. A sign rejection is the answer for this target, and any other
-      // error (an alias conflict, a TypeError in an evaluator) is a different
-      // fact: both propagate instead of reading as "unrecoverable" (§4 C6).
-      if (err instanceof DomainViolationError || err instanceof CoefficientUnsetError) {
-        refusals.push({
-          edge: e.id,
-          kind: err instanceof DomainViolationError ? 'domain' : 'coefficient-unset',
-          reason: err.message,
-        });
-        continue;
-      }
-      throw err;
+      // A refusal of the point or an unset coefficient is a recorded refusal of
+      // this edge, under its own kind. Any other error (an alias conflict, a
+      // TypeError in an evaluator) is a different fact and propagates instead of
+      // reading as "unrecoverable" (§4 C6).
+      const kind = refusalKind(err);
+      if (kind === undefined) throw err;
+      refusals.push({ edge: e.id, kind, reason: (err as Error).message });
+      continue;
     }
     if (Number.isFinite(v)) predictions.push({ edge: e.id, value: v });
   }

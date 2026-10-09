@@ -48,7 +48,7 @@ const HELP = `upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|
         separately from its stated agreement bound.
         be-53 is not in that registry. \`upt confront be-53\` refuses: a
         confrontation needs a caller-supplied measured-coupling table and a
-        running procedure (requestYangMillsConfrontation). The refusal names
+        running procedure, neither of which the library ships. The refusal names
         each missing input, prints no residual, and does not change the
         catalog status. It is not a pass and not a fail. The one-loop
         coefficient's sign is oneLoopCoefficientStatement, not this command.`;
@@ -152,8 +152,7 @@ function statisticDistribution(outcomes: readonly Outcome[]) {
 /** The one number formatter, as every command reads it: through `ctx.api`. */
 type Fmt = CommandCtx['api']['formatQuantity'];
 
-/** A fraction as a percentage, through the one number formatter. */
-/** A percentage is a statistic: three significant digits (`-43.7%`, `±150%`), never fifteen. */
+/** A fraction as a percentage: a statistic, three significant digits (`-43.7%`, `±150%`), never fifteen. */
 function percent(fmt: Fmt, x: number): string {
   return `${fmt(x * 100, 3)}%`;
 }

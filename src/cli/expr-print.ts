@@ -141,9 +141,15 @@ export interface CoherentUnit {
  * The coherent named SI units of a unit table (`unitRows()`): scale exactly 1,
  * not dimensionless, the first spelling the table gives for each dimension
  * (`ohm` before `Ω`). The seven base units are added so a label can mix them.
+ * A cycle-counting unit (`Hz`, `rpm`; the table's `cycles` flag) is never a
+ * label: a 1/s output may be an angular frequency, and `Hz` would say it
+ * counts cycles. Such an output reads `1/s`, which is its dimension.
  */
 export function coherentUnits(
-  rows: ReadonlyMap<string, { readonly scale: { readonly num: bigint; readonly den: bigint; readonly irrational: number }; readonly dim: Dimension }>,
+  rows: ReadonlyMap<
+    string,
+    { readonly scale: { readonly num: bigint; readonly den: bigint; readonly irrational: number }; readonly dim: Dimension; readonly cycles?: true }
+  >,
 ): CoherentUnit[] {
   const out: CoherentUnit[] = [];
   const seen: Dimension[] = [];
@@ -153,6 +159,7 @@ export function coherentUnits(
     out.push({ name, dim });
   };
   for (const [name, row] of rows) {
+    if (row.cycles === true) continue;
     if (row.scale.num === 1n && row.scale.den === 1n && row.scale.irrational === 1) add(name, row.dim);
   }
   for (const [k, u] of SI_BASE) {
@@ -163,7 +170,7 @@ export function coherentUnits(
 
 /**
  * A dimension's label: the one coherent named unit whose dimension it is (`Pa`, `J`, `V`,
- * `ohm`, `Hz`, `T`), else the SI base form (`m/s`, `kg^2*m^4/(s^5*A^2)`). A product of two
+ * `ohm`, `T`), else the SI base form (`m/s`, `kg^2*m^4/(s^5*A^2)`). A product of two
  * named units is never chosen: a search over pairs once labelled a velocity `W/N` and a
  * voltage-noise density `J*ohm`, readings that are dimensionally right and physically
  * unreadable. Presentation only: the dimension is the fact, the label is a reading of it.

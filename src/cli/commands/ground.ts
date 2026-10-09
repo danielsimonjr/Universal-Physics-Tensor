@@ -69,21 +69,44 @@ async function run(ctx: CommandCtx): Promise<number> {
     const names = quantities(edges);
     return names.has(a) && names.has(b);
   };
+  // A name no graph holds is a bad argument (exit 1). A pair every graph holds and no
+  // funnel pairs is a computed absence: exit 0 with its envelope, the rule `search` with no
+  // match and `confront` with a refusal follow (Tom's review of #502).
+  const graphs = ALL_SOURCES.map((s) => (s === source ? graph : resolveGraph(api, new Map([['source', [s]]])).graph));
+  const held = new Set(graphs.flatMap((g) => [...quantities(g)]));
+  for (const name of [a, b]) {
+    if (!held.has(name)) throw new CliError(`upt ground: '${name}' is not a quantity of any graph (${ALL_SOURCES.join(', ')})`);
+  }
   const cand = bothNamed(graph) ? api.rankDiscoveries(graph, opts).find(pairs) : undefined;
   if (!cand) {
     const elsewhere = ALL_SOURCES.filter((s) => s !== source).filter((s) => {
-      const other = resolveGraph(api, new Map([['source', [s]]]));
-      return bothNamed(other.graph) && api.rankDiscoveries(other.graph, opts).some(pairs);
+      const other = graphs[ALL_SOURCES.indexOf(s)]!;
+      return bothNamed(other) && api.rankDiscoveries(other, opts).some(pairs);
     });
     const anchorFlags = (args.flags.get('anchor') ?? []).map((v) => ` --anchor=${v}`).join('');
     const ordersFlag = args.flags.has('max-orders') ? ` --max-orders=${args.flags.get('max-orders')!.at(-1)}` : '';
-    throw new CliError(
+    const sentence =
       elsewhere.length > 0
-        ? `upt ground: '${a}' ≟ '${b}' is not a candidate in the ${source} graph, but it is in ` +
-            `${elsewhere.join(' and ')}: upt ground --source=${elsewhere[0]}${anchorFlags}${ordersFlag} ${a} ${b}`
-        : `upt ground: no discovery candidate pairs '${a}' with '${b}' in any of ${ALL_SOURCES.join(', ')} — ` +
-            'they may not share a dimension, or are already connected (not a cross-cluster coincidence).',
-    );
+        ? `'${a}' ≟ '${b}' is not a candidate in the ${source} graph, but it is in ` +
+          `${elsewhere.join(' and ')}: upt ground --source=${elsewhere[0]}${anchorFlags}${ordersFlag} ${a} ${b}`
+        : `no discovery candidate pairs '${a}' with '${b}' in any of ${ALL_SOURCES.join(', ')} — ` +
+          'they may not share a dimension, or are already connected (not a cross-cluster coincidence).';
+    if (args.flags.has('json')) {
+      emitJson(
+        {
+          command: 'ground',
+          source,
+          anchor: { groundTruth: groundTruthAnchor(api, opts) },
+          options: { ...opts },
+          result: { a, b, candidate: null, searched: [...ALL_SOURCES], elsewhere, note: sentence },
+        },
+        ctx.write,
+      );
+      return 0;
+    }
+    out(`\n● ${a} ≟ ${b}  [no candidate]  [source: ${label}]`);
+    out(`  ${sentence}`);
+    return 0;
   }
 
   const g = api.describeGrounding(cand);
@@ -93,7 +116,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         command: 'ground',
         source,
         anchor: { groundTruth: groundTruthAnchor(api, opts) },
-        options: opts as Record<string, unknown>,
+        options: { ...opts },
         result: { a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g },
       },
       ctx.write,

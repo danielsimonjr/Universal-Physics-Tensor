@@ -498,7 +498,7 @@ async function runAtlasView(
     try {
       writeFileSync(path, src);
     } catch (e) {
-      throw new CliError((e as Error).message);
+      throw new CliError(`upt map: ${(e as Error).message}`);
     }
     err(`upt: wrote ${fmt} to ${path}`);
   } else {
@@ -533,7 +533,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     writeFileSync(path, captured);
   } catch (e) {
-    throw new CliError((e as Error).message);
+    throw new CliError(`upt map: ${(e as Error).message}`);
   }
   ctx.err(`upt: wrote ${ctx.args.flags.has('json') ? 'json' : 'text'} to ${path}`);
   return code;
@@ -726,7 +726,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
       try {
         writeFileSync(path, src);
       } catch (e) {
-        throw new CliError((e as Error).message);
+        throw new CliError(`upt map: ${(e as Error).message}`);
       }
       err(`upt: wrote ${fmt} (${model.junctions.length} junctions, ${model.clusters.length} clusters) to ${path}`);
     } else {
@@ -769,7 +769,11 @@ async function runReport(ctx: CommandCtx): Promise<number> {
     // The overlay the visual forms draw, listed here: an unadjudicated identity consequence is a
     // proposal, never a catalog edge. Each names its target and the quantities it would relate.
     out(`  proposed relations (${proposed.length}, unadjudicated identity consequences; not catalog edges):`);
-    for (const p of proposed) out(`     ${p.id}: ${p.target} ← {${p.sources.join(', ')}}`);
+    for (const p of proposed) {
+      // No free input: every governing quantity of the derived relation is a registered constant.
+      const sources = p.sources.length === 0 ? '{} (no sources: every input is a registered constant)' : `{${p.sources.join(', ')}}`;
+      out(`     ${p.id}: ${p.target} ← ${sources}`);
+    }
     if (proposed.length === 0) out('     (none at this anchor and --max-orders)');
   }
   out('');

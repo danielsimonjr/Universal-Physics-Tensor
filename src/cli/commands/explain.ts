@@ -313,12 +313,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
     throw e;
   }
-  // Every route refused by a validity domain and no value recovered: the inputs are a bad
-  // value, exit 1, the code `upt evaluate` gives the same domain failure. A refusal beside
-  // a recovered value from another route stays in the report, and an unset coefficient is
-  // not a bad value: it is the edge's own state, reported as "no recovered number" (exit 0).
+  // Every route refused the point (a validity domain, opposite carrier signs, a formula with
+  // no finite value there) and no value recovered: the inputs are a bad value, exit 1, the
+  // code `upt evaluate` gives the same failure. A refusal beside a recovered value from
+  // another route stays in the report, and an unset coefficient is not a bad value: it is
+  // the edge's own state, reported as "no recovered number" (exit 0).
   const refusals = x.refusals ?? [];
-  if (x.recoveredValue === undefined && refusals.length > 0 && refusals.every((r) => r.kind === 'domain')) {
+  if (x.recoveredValue === undefined && refusals.length > 0 && refusals.every((r) => r.kind !== 'coefficient-unset')) {
     throw new CliError(`upt explain: ${refusals.map((r) => r.reason).join('; ')}`);
   }
   const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;

@@ -317,12 +317,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   // The box is what --at states, and nothing else.
   const samples: Record<string, number[]> = {};
   for (const [group, value] of Object.entries(resolved)) samples[group] = [value];
-  // Coverage is asked of the records that actually CONSTRAIN something. An
-  // unconstrained model regime holds at every point, so including the models
-  // would make coverage vacuously total and the report would answer nothing.
+  // `uncoveredRegions` counts a record as covering a point only when it checked an
+  // inequality there, so an unconstrained model regime covers nothing and every record
+  // can be passed. The constraining count is the report's, not a filter.
   const constraining = records.filter((r) => r.regime.inequalities.length > 0);
   const uncovered =
-    stated.length === 0 ? null : api.uncoveredRegions(registration.name, constraining, samples);
+    stated.length === 0 ? null : api.uncoveredRegions(registration.name, records, samples);
 
   if (wantJson) {
     emitJson(

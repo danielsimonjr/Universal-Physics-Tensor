@@ -604,7 +604,13 @@ function carriedClaims(
           `layer does not state where a cross-family chain applies.`,
       );
     }
-    out.regime = intersectRegimes(first.regime, second.regime);
+    try {
+      out.regime = intersectRegimes(first.regime, second.regime);
+    } catch (e) {
+      // Conflicting definitions of one group name: the composite has no regime this
+      // layer can state, the same refusal as a cross-family chain.
+      throw new UndefinedCompositionError(`Cannot compose ${first.id} -> ${second.id}: ${(e as Error).message}`);
+    }
   } else if (first.regime !== undefined || second.regime !== undefined) {
     out.regime = first.regime ?? second.regime;
   }

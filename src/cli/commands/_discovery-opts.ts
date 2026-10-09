@@ -39,9 +39,11 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
       const eq = pair.indexOf('=');
       const k = eq >= 0 ? pair.slice(0, eq) : pair;
       const v = eq >= 0 ? pair.slice(eq + 1) : '';
-      if (eq < 0 || !k || v === '') {
+      if (eq < 0 || !k) {
         throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${pair}".`);
       }
+      // An empty value is a bad value (exit 1), as `x=` is on every other binding.
+      if (v === '') throw new CliError(`upt: --anchor '${k}' has no value ('${pair}'); give k=v with a finite numeric value`);
       pairs.push({ name: k, raw: v, pair });
     }
   }

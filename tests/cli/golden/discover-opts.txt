@@ -236,26 +236,26 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [observation: measure thermal-wavelength and planck-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):
-    attempt-frequency ≟ hubble-rate                      30.6575773191778 orders apart
-    barrier-height ≟ planck-mass-energy                  28.7871060930366 orders apart
-    barrier-width ≟ planck-length                        24.7915586435614 orders apart
-    donor-acceptor-distance ≟ planck-length              26.4905286478974 orders apart
-    foerster-radius ≟ planck-length                      26.4905286478974 orders apart
-    grw-localization-rate ≟ attempt-frequency            29 orders apart
-    landauer-erasure-energy ≟ planck-mass-energy         29.8298580734575 orders apart
-    landauer-erasure-energy ≟ vacuum-expectation-value   13.1330982239266 orders apart
-    mass ≟ planck-mass                                   37.9609758920983 orders apart  (anchor-derived)
-    mass ≟ tunneling-mass                                57.075138842162 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ barrier-width                 13.4704290965903 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ donor-acceptor-distance       11.7714590922543 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ foerster-radius               11.7714590922543 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ planck-length                 38.2619877401518 orders apart  (anchor-derived)
-    thermal-wavelength ≟ barrier-width                   23.6922802480037 orders apart  (anchor-derived)
-    thermal-wavelength ≟ donor-acceptor-distance         25.3912502523397 orders apart  (anchor-derived)
-    thermal-wavelength ≟ foerster-radius                 25.3912502523397 orders apart  (anchor-derived)
-    tunneling-mass ≟ planck-mass                         19.1141629500637 orders apart
-    vacuum-expectation-value ≟ barrier-height            12.0903462435057 orders apart
-    vacuum-expectation-value ≟ planck-mass-energy        16.6967598495309 orders apart
+    attempt-frequency ≟ hubble-rate                      ~30.7 orders apart
+    barrier-height ≟ planck-mass-energy                  ~28.8 orders apart
+    barrier-width ≟ planck-length                        ~24.8 orders apart
+    donor-acceptor-distance ≟ planck-length              ~26.5 orders apart
+    foerster-radius ≟ planck-length                      ~26.5 orders apart
+    grw-localization-rate ≟ attempt-frequency            ~29 orders apart
+    landauer-erasure-energy ≟ planck-mass-energy         ~29.8 orders apart
+    landauer-erasure-energy ≟ vacuum-expectation-value   ~13.1 orders apart
+    mass ≟ planck-mass                                   ~38 orders apart  (anchor-derived)
+    mass ≟ tunneling-mass                                ~57.1 orders apart  (anchor-derived)
+    schwarzschild-radius ≟ barrier-width                 ~13.5 orders apart  (anchor-derived)
+    schwarzschild-radius ≟ donor-acceptor-distance       ~11.8 orders apart  (anchor-derived)
+    schwarzschild-radius ≟ foerster-radius               ~11.8 orders apart  (anchor-derived)
+    schwarzschild-radius ≟ planck-length                 ~38.3 orders apart  (anchor-derived)
+    thermal-wavelength ≟ barrier-width                   ~23.7 orders apart  (anchor-derived)
+    thermal-wavelength ≟ donor-acceptor-distance         ~25.4 orders apart  (anchor-derived)
+    thermal-wavelength ≟ foerster-radius                 ~25.4 orders apart  (anchor-derived)
+    tunneling-mass ≟ planck-mass                         ~19.1 orders apart
+    vacuum-expectation-value ≟ barrier-height            ~12.1 orders apart
+    vacuum-expectation-value ≟ planck-mass-energy        ~16.7 orders apart
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     attempt-frequency ≟ frequency                        [[frequency]]

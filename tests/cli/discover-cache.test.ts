@@ -4,7 +4,8 @@
  * command that is not a funnel. Then one real check that a cached `ground` equals a direct one.
  */
 import '../helpers/dist.js';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -12,6 +13,7 @@ import {
   createFunnelCache,
   funnelFingerprint,
   isFunnelCommand,
+  peerVersions,
   runCliCaptured,
   runFunnel,
   type CliRun,
@@ -58,6 +60,33 @@ describe('createFunnelCache', () => {
     await createFunnelCache({ run: r.run, fingerprint: 'c'.repeat(64), dir })(['discover']);
     await createFunnelCache({ run: r.run, fingerprint: 'd'.repeat(64), dir })(['discover']);
     expect(r.calls).toEqual(['discover', 'discover']);
+  });
+
+  it('a half-written store file (another fork mid-write, or a crashed run) is a miss, not a SyntaxError', async () => {
+    // Tom's review of #502: the store is shared between forks and was written with a
+    // truncate-then-write, so a reader could parse a partial file. The write is now
+    // temp-then-rename, and a record that does not parse is treated as absent.
+    const fingerprint = 'e'.repeat(64);
+    const argv = ['discover', '--json'];
+    const store = join(dir, fingerprint.slice(0, 32));
+    mkdirSync(store, { recursive: true });
+    const file = join(store, `${createHash('sha256').update(JSON.stringify(argv)).digest('hex').slice(0, 32)}.json`);
+    writeFileSync(file, '{"argv":"[\\"discover\\",\\"--js');
+    const r = counting();
+    const result = await createFunnelCache({ run: r.run, fingerprint, dir })(argv);
+    expect(result.stdout).toBe('ran discover --json\n');
+    expect(r.calls).toEqual(['discover --json']);
+    // The whole record is there now: a fresh instance reads it without running.
+    const other = counting();
+    expect(await createFunnelCache({ run: other.run, fingerprint, dir })(argv)).toEqual(result);
+    expect(other.calls).toEqual([]);
+  });
+
+  it('the fingerprint reads the peers by version: a bump with an unchanged dist is a different store', () => {
+    const installed = peerVersions();
+    expect(Object.keys(installed)).toContain('mathts-core');
+    expect(funnelFingerprint()).toBe(funnelFingerprint(installed));
+    expect(funnelFingerprint({ ...installed, 'mathts-core': '0.0.0-other' })).not.toBe(funnelFingerprint(installed));
   });
 
   it('refuses a command that is not a funnel, and the runner is not called', () => {

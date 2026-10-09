@@ -129,8 +129,8 @@ export interface QuantityExplanation {
   /** Whether the KNOWN set dimensionally fixes the target (Buckingham-π);
    *  absent when the target has no resolvable dimension. */
   readonly dimensional?: DimensionalDeterminationResult;
-  /** Derivations that refused the given values as outside their validity domain. */
-  readonly refusals?: readonly { readonly edge: string; readonly kind: 'domain' | 'coefficient-unset'; readonly reason: string }[];
+  /** Derivations that refused the given values, each under its own kind (`RetrodictionRefusal`). */
+  readonly refusals?: RetrodictionResult['refusals'];
   /** Upstream gaps for an under-determined target (from the classifier). */
   readonly blockingFrontier: readonly string[];
   /** Plain-language synthesis of the above. */
@@ -654,9 +654,10 @@ export function explainQuantity(
     magnitudeNames(firedEdges),
     viaIdentification,
   );
-  // A domain refusal is a bad value and is named with the edge's own reason. An unset
+  // A refusal of the point (a validity domain, opposite carrier signs, a formula with no
+  // finite value there) is a bad value and is named with the edge's own reason. An unset
   // coefficient is not: `unsetSentence` already says it in words (AGENTS law 4).
-  const domainRefusals = (refusals ?? []).filter((r) => r.kind === 'domain');
+  const domainRefusals = (refusals ?? []).filter((r) => r.kind !== 'coefficient-unset');
   const refusalSentence =
     domainRefusals.length === 0 || recoveredValue !== undefined
       ? ''

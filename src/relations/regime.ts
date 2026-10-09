@@ -369,9 +369,11 @@ export interface RegimeBearing {
  * library invented, so "uncovered" would measure the guess rather than the
  * atlas. The caller states where it wants to know about.
  *
- * COVERED means some regime returned `true`. An `'unknown'` is NOT coverage,
- * by the same rule that makes {@link regimeHolds} tri-state: a regime whose
- * groups the sample axes never mention has not been shown to apply anywhere.
+ * COVERED means some regime returned `true` with at least one inequality
+ * checked. An `'unknown'` is NOT coverage, by the same rule that makes
+ * {@link regimeHolds} tri-state: a regime whose groups the sample axes never
+ * mention has not been shown to apply anywhere. Neither is a vacuous pass: a
+ * regime that states no inequality has checked nothing at the point.
  *
  * Records of another family are skipped, so a mixed list is safe to pass.
  *
@@ -385,7 +387,13 @@ export function uncoveredRegions(
   const inFamily = models.filter((m) => m.regime.family === family);
   const uncovered: RegionSample[] = [];
   for (const point of gridPoints(samples)) {
-    const covered = inFamily.some((m) => regimeHolds(m.regime, point).ok === true);
+    // `checked > 0`: a regime with no inequality passes vacuously and has shown
+    // nothing about this point, so it covers nothing (the rule in `regimeHolds`'s
+    // doc comment: coverage reads `checked`, never `ok` alone).
+    const covered = inFamily.some((m) => {
+      const check = regimeHolds(m.regime, point);
+      return check.ok === true && check.checked > 0;
+    });
     // An uncovered cell is covered by nothing, by definition; the sample
     // carries the point and no list that could only ever be empty.
     if (!covered) uncovered.push({ point });

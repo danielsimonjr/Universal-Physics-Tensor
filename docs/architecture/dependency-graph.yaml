@@ -8175,9 +8175,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - ALPHA
         - file: ../dimensional/symbolic-constants.js
           imports:
             - constantRecord
@@ -11606,6 +11603,12 @@ modules:
         - file: ../bridges/evaluation-errors.js
           imports:
             - DomainViolationError
+        - file: ../bridges/carrier-sign.js
+          imports:
+            - CarrierSignError
+        - file: ../numerical/formula-contract.js
+          imports:
+            - FormulaError
         - file: ./compose.js
           imports:
             - QuantityIdentification
@@ -17691,7 +17694,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 363
   totalModules: 13
-  totalLinesOfCode: 81050
+  totalLinesOfCode: 81116
   totalExports: 2558
   totalClasses: 81
   totalInterfaces: 462

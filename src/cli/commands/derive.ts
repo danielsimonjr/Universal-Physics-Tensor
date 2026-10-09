@@ -30,7 +30,7 @@ function hyphenSubtractionNote(check: { readonly error?: string; readonly undecl
   const error = check.error ?? '';
   if (check.undeclaredSymbol === undefined) return error;
   if (!/[A-Za-z0-9_]-[A-Za-z0-9_]/.test(formula)) return error;
-  return `${error} A hyphen between names is subtraction. A name from a dimension argument is one symbol.`;
+  return `${error}. A hyphen between names is subtraction. A name from a dimension argument is one symbol.`;
 }
 
 const FLAGS: FlagSpec[] = [
@@ -169,7 +169,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         // The checker's own sentence first (with the hyphen note when one remains in the
         // formula), then how to declare the symbol. The report above is not printed: an error
         // leaves stdout empty.
-        throw new UsageError(`upt derive: ${hyphenSubtractionNote(r, formula)} Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
+        throw new UsageError(`upt derive: ${hyphenSubtractionNote(r, formula)}. Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
       }
     } else {
       const matches = dimsEqualTol(r.dim!, target.dim);
@@ -185,7 +185,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       cf = parser.parse(formulaSymbols);
     } catch (e) {
       // The parser's message carries its own `parse error:` label.
-      throw new FormulaUsageError('  --formula: ' + (e as Error).message, await api.getFormulaParserKind());
+      throw new FormulaUsageError('upt derive: --formula: ' + (e as Error).message, await api.getFormulaParserKind());
     }
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This

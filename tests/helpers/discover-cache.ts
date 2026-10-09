@@ -14,7 +14,7 @@
  */
 import './dist.js';
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -50,13 +50,51 @@ function hashTree(hash: ReturnType<typeof createHash>, dir: string, pattern: Reg
   }
 }
 
-/** The fingerprint of everything a funnel run depends on. */
-export function funnelFingerprint(): string {
+/** The installed version of each MathTS peer, by package name, from its `package.json`. */
+export function peerVersions(): Readonly<Record<string, string>> {
+  const scope = resolve(root, 'node_modules/@danielsimonjr');
+  const out: Record<string, string> = {};
+  if (!existsSync(scope)) return out;
+  for (const name of readdirSync(scope).sort()) {
+    const file = join(scope, name, 'package.json');
+    if (!existsSync(file)) continue;
+    out[name] = (JSON.parse(readFileSync(file, 'utf8')) as { version: string }).version;
+  }
+  return out;
+}
+
+/**
+ * The fingerprint of everything a funnel run depends on: the build, the data files, and the
+ * peers by version. A peer bump with an unchanged `dist/` is a different fingerprint, so a
+ * cached answer from the old peer is never served.
+ */
+export function funnelFingerprint(peers: Readonly<Record<string, string>> = peerVersions()): string {
   const hash = createHash('sha256');
   hashTree(hash, resolve(root, 'dist'), /\.js$/);
   hashTree(hash, resolve(root, 'data'), /\.json$/);
   hash.update(`peers:${peerPresent}`);
+  hash.update(`versions:${JSON.stringify(peers)}`);
   return hash.digest('hex');
+}
+
+/** The stored run at `file`, or `undefined` when there is none or it is not a complete record. */
+function readStored(file: string, key: string): CliRun | undefined {
+  if (!existsSync(file)) return undefined;
+  let stored: CliRun & { readonly argv: string };
+  try {
+    stored = JSON.parse(readFileSync(file, 'utf8')) as CliRun & { readonly argv: string };
+  } catch {
+    // Another fork's write is not visible yet, or the file is from a crashed run: a miss.
+    return undefined;
+  }
+  return stored.argv === key ? { code: stored.code, stdout: stored.stdout, stderr: stored.stderr } : undefined;
+}
+
+/** Write the record atomically: a reader sees the old file, nothing, or the whole new file. */
+function writeStored(file: string, record: unknown): void {
+  const tmp = `${file}.${process.pid}.${Math.random().toString(16).slice(2)}.tmp`;
+  writeFileSync(tmp, JSON.stringify(record));
+  renameSync(tmp, file);
 }
 
 /** Run `argv` through `runCli` and capture both streams. */
@@ -97,13 +135,11 @@ export function createFunnelCache(options: {
     if (hit !== undefined) return hit;
     const file = join(store, `${createHash('sha256').update(key).digest('hex').slice(0, 32)}.json`);
     const pending = (async (): Promise<CliRun> => {
-      if (existsSync(file)) {
-        const stored = JSON.parse(readFileSync(file, 'utf8')) as CliRun & { readonly argv: string };
-        if (stored.argv === key) return { code: stored.code, stdout: stored.stdout, stderr: stored.stderr };
-      }
+      const stored = readStored(file, key);
+      if (stored !== undefined) return stored;
       const result = await options.run(argv);
       mkdirSync(store, { recursive: true });
-      writeFileSync(file, JSON.stringify({ argv: key, ...result }));
+      writeStored(file, { argv: key, ...result });
       return result;
     })();
     memory.set(key, pending);

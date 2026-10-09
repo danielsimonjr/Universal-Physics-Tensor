@@ -40,7 +40,7 @@ describe('canonical entries spell a registered constant by its primary name', ()
     expect(offenders).toEqual([]);
   });
 
-  it('every constant leaf of a scalar AST is a key of CANONICAL_CONSTANTS, so the graph bakes it', () => {
+  it('the five constants once typed under an unregistered name are no longer graph sources; Rydberg\'s R stays an input', () => {
     // A governing name with a constant's dimension that the graph still exposes as a
     // source is a constant typed under an unregistered name (speed-of-light, electron-mass,
     // vacuum-permittivity, reduced-planck-constant).

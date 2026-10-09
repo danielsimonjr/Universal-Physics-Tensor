@@ -22,9 +22,11 @@ describe('upt ground', () => {
     expect(r.text).toMatch(/mechanism-tested/);
   }, FUNNEL_MS);
 
-  it('a non-candidate pair is exit 1, and says it is in none of the three graphs', async () => {
+  it('a non-candidate pair of held names is a computed absence: exit 0, and says it is in none of the three graphs', async () => {
+    // Tom's review of #502: a name no graph holds is exit 1; a pair every graph holds that
+    // no funnel pairs is an answer, under the rule `search` with no match follows.
     const r = await runText(['ground', 'mass', 'mass']);
-    expect(r.code).toBe(1);
+    expect(r.code).toBe(0);
     expect(r.text).toMatch(/in any of catalog, canonical, both/);
   }, FUNNEL_MS);
 
@@ -42,9 +44,9 @@ describe('upt ground', () => {
       expect(r.text).toMatch(/compton-wavelength ≟ hubble-distance/);
     }, FUNNEL_MS);
 
-    it('a pair from another scope names the scope that has it', async () => {
+    it('a pair from another scope names the scope that has it (exit 0: an answer, not an error)', async () => {
       const r = await runText(['ground', 'compton-wavelength', 'hubble-distance']);
-      expect(r.code).toBe(1);
+      expect(r.code).toBe(0);
       expect(r.text).toMatch(/not a candidate in the catalog graph/);
       expect(r.text).toMatch(/upt ground --source=canonical compton-wavelength hubble-distance/);
     }, FUNNEL_MS);

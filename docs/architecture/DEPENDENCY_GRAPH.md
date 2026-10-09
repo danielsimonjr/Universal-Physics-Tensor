@@ -3398,7 +3398,6 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `ALPHA` | Import |
 | `../dimensional/symbolic-constants.js` | `constantRecord` | Import |
 | `../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
@@ -4730,6 +4729,8 @@ The codebase is organized into the following modules:
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `./edge.js` | `CoefficientUnsetError, evaluateEdge` | Import |
 | `../bridges/evaluation-errors.js` | `DomainViolationError` | Import |
+| `../bridges/carrier-sign.js` | `CarrierSignError` | Import |
+| `../numerical/formula-contract.js` | `FormulaError` | Import |
 | `./compose.js` | `QuantityIdentification` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
 | `../dimensional/unit-convention.js` | `conventionFactor` | Import |
@@ -6986,7 +6987,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 81050 |
+| Total Lines of Code | 81116 |
 | Total Exports | 2558 |
 | Total Re-exports | 1308 |
 | Total Classes | 81 |
