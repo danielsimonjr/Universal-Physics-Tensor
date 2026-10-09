@@ -4,24 +4,16 @@
  * injected through a test-only patched api; the unpatched run is the paired check that the same
  * assertion fails on the true registry.
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
+import { runText } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { runCli } from '../../dist/cli/main.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { ALL_EVIDENCE_TAGS } from '../../src/atlas/types.js';
 import { deriveEvidence } from '../../src/atlas/derive-evidence.js';
 import { WITNESS_REGISTRY } from '../../src/atlas/witness-specs.js';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-async function run(args: string[]): Promise<{ code: number; text: string }> {
-  const c = capture();
-  const code = await runCli(args, c.io);
-  return { code, text: c.lines.join('') };
-}
 async function runPatched(name: string, args: string[], patch: Record<string, unknown>): Promise<{ code: number; text: string }> {
   const [{ resolveCommand }, { parseArgs }, api] = await Promise.all([
     import('../../dist/cli/command.js'),
@@ -30,7 +22,7 @@ async function runPatched(name: string, args: string[], patch: Record<string, un
     import('../../dist/cli/commands/index.js'),
   ]);
   const command = resolveCommand(name)!;
-  const c = capture();
+  const c = captureMerged();
   const code = await command.run({ args: parseArgs(command.name, args, command.flags), api: { ...api, ...patch }, ...c.io } as any);
   return { code, text: c.lines.join('') };
 }
@@ -39,7 +31,7 @@ const BRIDGES = ATLAS_FAMILIES.flatMap((f) => f.bridges.map((b) => ({ family: f.
 
 describe('audit I16: the atlas-wide evidence view', () => {
   it('lists every bridge of every family once, with the denominators derived from the families', async () => {
-    const r = await run(['atlas', '--evidence', '--json']);
+    const r = await runText(['atlas', '--evidence', '--json']);
     expect(r.code).toBe(0);
     const v = JSON.parse(r.text).result;
     expect(v.view).toBe('atlas-evidence');
@@ -55,7 +47,7 @@ describe('audit I16: the atlas-wide evidence view', () => {
   });
 
   it('--stored: each bridge derives what deriveEvidence gives under the committed results (a second derivation)', async () => {
-    const v = JSON.parse((await run(['atlas', '--stored', '--json'])).text).result;
+    const v = JSON.parse((await runText(['atlas', '--stored', '--json'])).text).result;
     const stored = JSON.parse(readFileSync('data/atlas/witness-results.json', 'utf8')) as {
       results: { recordId: string; witnessId: string; status: string }[];
     };
@@ -77,9 +69,9 @@ describe('audit I16: the atlas-wide evidence view', () => {
   });
 
   it("--stored agrees with each family view's filed bridges (a second code path)", async () => {
-    const v = JSON.parse((await run(['atlas', '--stored', '--json'])).text).result;
+    const v = JSON.parse((await runText(['atlas', '--stored', '--json'])).text).result;
     for (const f of ATLAS_FAMILIES) {
-      const fv = JSON.parse((await run(['map', `--family=${f.family}`, '--stored', '--json'])).text).result;
+      const fv = JSON.parse((await runText(['map', `--family=${f.family}`, '--stored', '--json'])).text).result;
       for (const b of fv.bridges.filter((x: { role: string }) => x.role === 'filed')) {
         expect(v.bridges.find((x: { id: string }) => x.id === b.id).evidence, b.id).toEqual(b.evidence);
       }
@@ -87,32 +79,32 @@ describe('audit I16: the atlas-wide evidence view', () => {
   });
 
   it('with no results source, every witness is unobserved and the text says so', async () => {
-    const r = await run(['atlas', '--evidence']);
+    const r = await runText(['atlas', '--evidence']);
     expect(r.code).toBe(0);
     expect(r.text).toContain('witness results: none observed');
     expect(r.text).toMatch(/by tag \(bridges; a bridge carries several tags, so the counts do not sum to 20\)/);
-    const v = JSON.parse((await run(['atlas', '--evidence', '--json'])).text).result;
+    const v = JSON.parse((await runText(['atlas', '--evidence', '--json'])).text).result;
     expect(v.witnessResults).toBeUndefined();
     expect(v.bridges.every((b: any) => b.evidence.results === undefined)).toBe(true);
   });
 
   it('--run runs every registered witness, the transport witnesses included', async () => {
-    const v = JSON.parse((await run(['atlas', '--run', '--json'])).text).result;
+    const v = JSON.parse((await runText(['atlas', '--run', '--json'])).text).result;
     expect(v.witnessResults.provenance.registered).toBe(WITNESS_REGISTRY.length);
     expect(v.witnessResults.witnesses.refuted).toBe(0);
     expect(v.normTransports).toEqual([{ id: 'nt-spring-lc-relative-period', bridge: 'ab-spring-lc', witness: 'W1τ', status: 'checked' }]);
   });
 
   it('refuses a bridge id with --evidence or --stored, and both results sources at once', async () => {
-    expect((await run(['atlas', 'ab-spring-lc', '--evidence'])).code).toBe(1);
-    expect((await run(['atlas', 'ab-spring-lc', '--stored'])).code).toBe(1);
-    const both = await run(['atlas', '--stored', '--run']);
+    expect((await runText(['atlas', 'ab-spring-lc', '--evidence'])).code).toBe(1);
+    expect((await runText(['atlas', 'ab-spring-lc', '--stored'])).code).toBe(1);
+    const both = await runText(['atlas', '--stored', '--run']);
     expect(both.code).toBe(1);
     expect(both.text).toContain('pick one witness-results source');
   });
 
   it('the plain listing points to the evidence view', async () => {
-    expect((await run(['atlas'])).text).toContain('`upt atlas --evidence`');
+    expect((await runText(['atlas'])).text).toContain('`upt atlas --evidence`');
   });
 });
 

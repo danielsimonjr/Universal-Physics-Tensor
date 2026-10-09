@@ -2,21 +2,11 @@
  * be-42 evaluates. The sentence that named BridgeEquations.hawkingTemperature
  * is the record from before this evaluator.
  */
+import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { evaluateBridge } from '../../src/bridges/evaluators.js';
 import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return {
-    lines,
-    err,
-    io: { out: sink, err: (s?: string) => err.push((s ?? '') + '\n'), write: (s: string) => lines.push(s) },
-  };
-}
 
 function messageOf(fn: () => unknown): string {
   try {

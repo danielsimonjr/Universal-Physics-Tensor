@@ -2,6 +2,7 @@
  * CLI pins for the 0.47.1 applied-physicist persona findings that are not
  * covered by the canonical-compare or probe suites (L2, Q1).
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 

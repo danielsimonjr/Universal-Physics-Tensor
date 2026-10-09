@@ -3,6 +3,8 @@
  * `--anchor` must reject malformed values with exit 2 rather than silently
  * ignoring them (or, for an empty `--max-orders=`, silently coercing to 0).
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -22,13 +24,8 @@ function run(args: string[]): { status: number; stderr: string } {
   }
 }
 
-// In-process harness (mirrors tests/cli/confront.test.ts's capture()) for
+// In-process harness (mirrors tests/cli/confront.test.ts's captureMerged()) for
 // the consequence-propagation surfacing added in Phase 4 Unit A task 2.
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
 
 describe('upt discover — option validation', () => {
   it('rejects a non-numeric --max-orders', () => {
@@ -62,14 +59,14 @@ describe('upt discover — option validation', () => {
 
 describe('upt discover — consequence signal surfacing', () => {
   it('discover shows a consequence signal on promising candidates', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['discover'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/consequence|novel-consequence|entailed/i);
   });
 
   it('discover --json carries the consequence field additively', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['discover', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -85,7 +82,7 @@ describe('upt discover — consequence signal surfacing', () => {
 // test, so it is a prior, not a falsification. The verdict enum is unchanged.
 describe('upt discover — axis-clash is labelled a regime-label prior, not a falsification', () => {
   it('the header and the funnel say what each verdict tested', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['discover'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');

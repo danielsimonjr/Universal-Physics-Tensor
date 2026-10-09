@@ -6,6 +6,7 @@
  * exited 0, said there was no derivation path, and suggested the wire law
  * (`current`, `distance`, `magnetic-field`, `mu_0`).
  */
+import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { E_SI } from '../../src/core/constants.js';
@@ -14,20 +15,6 @@ const M_PROTON_SI = 1.67262192369e-27;
 const CHARGE = 'charge=1.602176634e-19';
 const MASS = 'mass=1.67262192369e-27';
 const EXPECTED = (E_SI * 12e-9) / M_PROTON_SI;
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
 
 async function explain(binding: string) {
   const cap = capture();

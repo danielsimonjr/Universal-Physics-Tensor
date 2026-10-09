@@ -11,7 +11,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { compareWithCanonical } from '../../src/composition/canonical-compare.js';
-import { MASS, VELOCITY, ENERGY, TEMPERATURE, DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { MASS, VELOCITY, TEMPERATURE } from '../../src/dimensional/types.js';
 
 const ke = (u: string) => (v: Readonly<Record<string, number>>) => v['mass']! * v[u]! ** 2;
 const find = (rs: ReturnType<typeof compareWithCanonical>, id: string) => rs.find((r) => r.id === id);
@@ -53,7 +53,6 @@ describe('N1: sources pair with canonical variables by a unique dimension', () =
   it('the TARGET is not paired by dimension: `energy` does not reach CE-kinetic-energy', () => {
     const rs = compareWithCanonical('energy', [{ name: 'mass', dim: MASS }, { name: 'velocity', dim: VELOCITY }], ke('velocity'));
     expect(find(rs, 'CE-kinetic-energy')).toBeUndefined();
-    expect(ENERGY).toBeDefined();
   });
 
   it('two same-dimension variables with other names are NOT guessed: CE-carnot-efficiency is not compared', () => {
@@ -65,7 +64,6 @@ describe('N1: sources pair with canonical variables by a unique dimension', () =
     const r = find(rs, 'CE-carnot-efficiency');
     expect(r?.kind).toBe('not-compared');
     expect(r?.detail).toMatch(/more than one way/);
-    expect(DIMENSIONLESS).toBeDefined();
   });
 
   it('the Carnot law with the registry\'s own names still agrees', () => {

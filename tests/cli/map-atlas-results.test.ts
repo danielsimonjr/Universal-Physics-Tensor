@@ -11,32 +11,16 @@
  *
  * @module tests/cli/map-atlas-results
  */
+import '../helpers/dist.js';
+import { json, run } from '../helpers/cli-run.js';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect } from 'vitest';
-import { runCli } from '../../dist/cli/main.js';
 import * as api from '../../dist/cli-api.js';
 import { enumerateRoutes } from '../../dist/atlas/path-bound.js';
 import { buildFamilyView, type WitnessResults } from '../../dist/cli/commands/_atlas-map.js';
 import type { AtlasBridge } from '../../dist/cli-api.js';
 
 const { ATLAS_FAMILIES, deriveEvidence } = api;
-
-async function run(args: string[]): Promise<{ code: number; stdout: string; stderr: string }> {
-  const out: string[] = [];
-  const err: string[] = [];
-  const code = await runCli(args, {
-    out: (s?: string) => out.push((s ?? '') + '\n'),
-    err: (s?: string) => err.push((s ?? '') + '\n'),
-    write: (s: string) => out.push(s),
-  });
-  return { code, stdout: out.join(''), stderr: err.join('') };
-}
-
-async function json(args: string[]): Promise<any> {
-  const r = await run([...args, '--json']);
-  expect(r.code).toBe(0);
-  return JSON.parse(r.stdout);
-}
 
 const BRIDGES = ATLAS_FAMILIES.flatMap((f) => f.bridges);
 const MODELS = ATLAS_FAMILIES.flatMap((f) => f.models);

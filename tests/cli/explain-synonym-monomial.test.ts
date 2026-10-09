@@ -6,6 +6,7 @@
  * monomial was not unique. The derivation line already used only the edge
  * source.
  */
+import { captureMerged } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
@@ -15,21 +16,9 @@ import { shareSynonyms } from '../../src/composition/aliases.js';
 const Q = -1.602176634e-19;
 const M = 9.1093837015e-31;
 
-function capture() {
-  const lines: string[] = [];
-  return {
-    lines,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => lines.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-
 describe('a magnetic synonym is one Buckingham variable', () => {
   it('does not call the cyclotron monomial non-unique when only one B was given', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       [
         'explain',
@@ -51,7 +40,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
   });
 
   it('keeps the Larmor monomial unique, and still evaluates a flux-density spelling', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       [
         'explain',
@@ -70,7 +59,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
     expect(text).not.toMatch(/do not fix a unique monomial/);
     expect(text).not.toMatch(/magnetic-flux-density/);
 
-    const flux = capture();
+    const flux = captureMerged();
     const fluxCode = await runCli(
       [
         'explain',
@@ -88,7 +77,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
     expect(fluxText).toMatch(/charge·magnetic-field·mass\^-1/);
     expect(fluxText).not.toMatch(/do not fix a unique monomial/);
 
-    const doubled = capture();
+    const doubled = captureMerged();
     const doubledCode = await runCli(
       [
         'explain',
@@ -107,7 +96,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
   });
 
   it('recovers one frequency when both spellings carry the same number', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       [
         'explain',
@@ -138,7 +127,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
       /magnetic-flux-density and magnetic-field are one quantity and disagree/,
     );
 
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       [
         'explain',

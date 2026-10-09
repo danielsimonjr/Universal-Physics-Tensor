@@ -7,6 +7,7 @@
  * the same shape at ×1.090e+1 with ℏ, c, e. Stefan–Boltzmann and Wien stay
  * empirical/tuned. Planck–Einstein and de Broglie stay ×2π.
  */
+import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 
@@ -17,20 +18,6 @@ const SPURIOUS = [
   'CE-bohr-radius',
   'CE-field-energy-density',
 ] as const;
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
 
 async function audit(args: string[]) {
   const cap = capture();

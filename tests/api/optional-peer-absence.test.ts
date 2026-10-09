@@ -3,6 +3,7 @@
  * public barrel. The MathTS packages are required dependencies, so the
  * barrel does reach them.
  */
+import '../helpers/dist.js';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 

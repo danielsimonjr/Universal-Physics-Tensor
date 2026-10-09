@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { parseArgs } from '../../dist/cli/args.js';
 import { UsageError } from '../../dist/cli/errors.js';

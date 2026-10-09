@@ -6,6 +6,7 @@
  * `speculative`. `composeEdges(edge42, edge16)` stays `highly-speculative`
  * and is not `formally-proved`.
  */
+import { capture } from '../helpers/cli.js';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
@@ -18,20 +19,6 @@ import { composeEdges } from '../../src/composition/compose.js';
 
 const DESIGN_URL =
   'https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/planning/Bridge-Discovery-Pipeline-Design.md';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
 
 describe('chain pointer and Landauer confidence', () => {
   it('upt chain exits 2, names the GitHub design, and does not run the pipeline', async () => {

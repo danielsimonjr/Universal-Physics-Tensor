@@ -7,29 +7,14 @@
  * `upt search debye` is one word and still returns that family. The Reynolds
  * number is be-155; the Reynolds analogy is be-86, and a phrase does not cross them.
  */
+import { allText, capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-
-const text = (c: ReturnType<typeof capture>) => c.lines.join('') + c.err.join('');
 
 async function search(query: string): Promise<{ code: number; text: string }> {
   const cap = capture();
   const code = await runCli(['search', query], cap.io);
-  return { code, text: text(cap) };
+  return { code, text: allText(cap) };
 }
 
 describe('a multi-word search is a noun phrase in one field', () => {
@@ -80,7 +65,7 @@ describe('a multi-word search is a noun phrase in one field', () => {
   it('explain debye-length is NOT COVERED and does not list the phonon family', async () => {
     const cap = capture();
     const code = await runCli(['explain', 'debye-length'], cap.io);
-    const out = text(cap);
+    const out = allText(cap);
     expect(code, out).toBe(1);
     expect(out).toMatch(/NOT COVERED/);
     expect(out).not.toMatch(/CE-debye-frequency/);
@@ -114,7 +99,7 @@ describe('a multi-word search is a noun phrase in one field', () => {
   it('explain reynolds-number does not suggest the analogy', async () => {
     const cap = capture();
     const code = await runCli(['explain', 'reynolds-number'], cap.io);
-    const out = text(cap);
+    const out = allText(cap);
     expect(code, out).toBe(1);
     expect(out).toMatch(/NOT COVERED/);
     expect(out).not.toMatch(/be-86/);

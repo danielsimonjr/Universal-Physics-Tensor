@@ -1,3 +1,4 @@
+import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { equals } from '../../src/dimensional/algebra.js';
 import { parseDimensionSpec } from '../../src/dimensional/dimension-spec.js';

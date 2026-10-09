@@ -1,23 +1,24 @@
 /**
  * `upt map --format=…` — the physics-map visualization CLI surface.
  *
- * Executes the built CLI, so it is guarded on `dist/` existing (CI typechecks
- * with `tsc --noEmit` and may not have emitted dist — same skip pattern as the
- * public-surface post-build check). The rendering logic itself is covered by
- * `tests/composition/graph-viz.test.ts`; these tests pin the CLI wiring.
+ * Executes the built CLI. `tests/helpers/dist.js` (imported first) throws when `dist/` is
+ * missing or older than `src/`; this file once skipped its whole describe block when `dist/`
+ * was absent and reported "skipped" on an unbuilt tree while every sibling failed. The
+ * rendering logic itself is covered by `tests/composition/graph-viz.test.ts`; these tests pin
+ * the CLI wiring.
  *
  * @module tests/cli/upt-map-format
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, rmSync } from 'node:fs';
+import { readFileSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join } from 'node:path';
 import { tmpdir } from 'node:os';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(here, '../../bin/upt.mjs');
-const distIndex = resolve(here, '../../dist/index.js');
 const run = (args: string[]): string =>
   execFileSync('node', [cli, ...args], { encoding: 'utf8', stdio: 'pipe' });
 
@@ -28,7 +29,7 @@ try {
   peerAvailable = false;
 }
 
-describe.skipIf(!existsSync(distIndex))('upt map --format', () => {
+describe('upt map --format', () => {
   it('default (no --format) still prints the text linkage map', () => {
     const out = run(['map']);
     expect(out).toContain('Linkage map');

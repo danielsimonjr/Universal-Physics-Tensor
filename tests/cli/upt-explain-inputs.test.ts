@@ -10,6 +10,7 @@
  *
  * @module tests/cli/upt-explain-inputs
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';

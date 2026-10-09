@@ -16,12 +16,7 @@ import { makeObservable } from '../../src/composition/compose-symbolic.js';
 import { scalarSymbolsFromMathTs } from '../../src/composition/mathts-scalar-symbols.js';
 import { CHARGE, DIMENSIONLESS } from '../../src/dimensional/types.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
-
-const sym = (name: string, dim: typeof DIMENSIONLESS = DIMENSIONLESS): ExprNode => ({
-  kind: 'symbol',
-  name,
-  dim: { ...dim },
-});
+import { sym } from '../../src/dimensional/ast-builders.js';
 
 function names(expr: ExprNode): string[] {
   return scalarSymbolsFromMathTs(expr)
@@ -38,8 +33,8 @@ describe('scalar leaves are the MathTS symbol filter', () => {
         kind: 'op',
         op: '+',
         args: [
-          sym('x'),
-          { kind: 'transcendental', fn: 'sin', arg: sym('y') },
+          sym('x', DIMENSIONLESS),
+          { kind: 'transcendental', fn: 'sin', arg: sym('y', DIMENSIONLESS) },
         ],
       },
     };
@@ -59,7 +54,7 @@ describe('scalar leaves are the MathTS symbol filter', () => {
   });
 
   it('does not add a leaf named e for exp(1)', () => {
-    const expr: ExprNode = { kind: 'transcendental', fn: 'exp', arg: sym('1') };
+    const expr: ExprNode = { kind: 'transcendental', fn: 'exp', arg: sym('1', DIMENSIONLESS) };
     expect(names(expr)).not.toContain('e');
     expect(governingOf(expr, 'target').map((leaf) => leaf.name)).not.toContain('e');
     expect([...makeObservable('out', 'Y', { ...DIMENSIONLESS }, expr).leaves]).not.toContain('e');

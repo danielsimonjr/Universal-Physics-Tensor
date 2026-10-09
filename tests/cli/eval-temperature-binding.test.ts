@@ -3,24 +3,11 @@
  * joule magnitude. `upt eval "k_B*T/e" T=22eV` used to exit 0 and print
  * `22 * k_B`. A length on the same name is not a temperature and exits 1.
  */
+import { capture, text } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { E_SI, K_B_SI } from '../../src/core/constants.js';
 
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 const errText = (c: ReturnType<typeof capture>) => c.err.join('');
 
 describe('upt eval temperature bindings', () => {

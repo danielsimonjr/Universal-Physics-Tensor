@@ -4,18 +4,14 @@
  * json-contract.test.ts (not a src/ import — the command needs the built
  * cli-api barrel wired in).
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-
 describe('upt confront', () => {
   it('lists all confrontations by default (exit 0)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -25,26 +21,26 @@ describe('upt confront', () => {
   });
 
   it('--bridge=be-37 runs one, exit 0', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-37'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/PPN|γ|gamma/i);
   });
 
   it('--bridge with an unregistered id is a bad value → exit 1', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-99'], cap.io);
     expect(code).toBe(1);
   });
 
   it('--bridge with an unparseable value is a bad value → exit 1', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=garbage'], cap.io);
     expect(code).toBe(1);
   });
 
   it('--json emits an envelope with a result array', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -54,7 +50,7 @@ describe('upt confront', () => {
   });
 
   it('--bridge=be-52 --sensitivity prints a descending elasticity ranking', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-52', '--sensitivity'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -64,14 +60,14 @@ describe('upt confront', () => {
   });
 
   it('--bridge=be-48 --sensitivity reports n/a for the non-value kind', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-48', '--sensitivity'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/sensitivity: n\/a for upper-bound-kind/);
   });
 
   it('--json --sensitivity adds a sensitivity field to value-kind entries only', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--json', '--sensitivity'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -84,7 +80,7 @@ describe('upt confront', () => {
   });
 
   it('--bridge=be-36 surfaces the one-sided caveat in the summary line', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-36'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -100,14 +96,14 @@ describe('upt confront', () => {
   });
 
   it('a point-prediction upper-bound record states its rule (be-48)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['confront', '--bridge=be-48'], cap.io);
     const text = cap.lines.join('');
     expect(text).toMatch(/predicted 1e-16 .* · observed upper limit 2\.96e-8 · rule: predicted ≤ limit · not excluded ✓/);
   });
 
   it('--json names what the predicted field is for each upper-bound record', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['confront', '--json'], cap.io);
     const rows = JSON.parse(cap.lines.join('')).result as { bridgeId: number; predictedIs?: string }[];
     expect(rows.find((r) => r.bridgeId === 36)!.predictedIs).toBe('encoded-bound');
@@ -115,7 +111,7 @@ describe('upt confront', () => {
   });
 
   it('--json carries the be-36 caveat as a field', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -126,7 +122,7 @@ describe('upt confront', () => {
 
   // Audit §14 item 14: "gap 150.0%" for be-65 was the agreement bound; the difference is −43.7%.
   it('a consistency record prints its actual difference and its agreement bound as separate fields', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['confront'], cap.io);
     const text = cap.lines.join('');
     expect(text).not.toMatch(/· gap \d/);
@@ -146,7 +142,7 @@ describe('upt confront', () => {
   });
 
   it('--json carries the comparison beside fractionalGap and says what fractionalGap is', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['confront', '--json'], cap.io);
     const rows = JSON.parse(cap.lines.join('')).result as {
       bridgeId: number;
@@ -177,7 +173,7 @@ describe('upt confront', () => {
   });
 
   it('default confront (no --sensitivity) output is unaffected', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).not.toMatch(/sensitivity/i);
@@ -190,7 +186,7 @@ describe('upt confront', () => {
 // residual, 0.67σ, is correct because it tests only γ; the label was not.
 describe('upt confront be-51 shows the measurement, and labels the deflection as derived', () => {
   it('prints γ ± σ as the measurement and the deflection as (1+γ)/2 × predicted', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-51'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -201,7 +197,7 @@ describe('upt confront be-51 shows the measurement, and labels the deflection as
   });
 
   it('--json carries the measurement', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['confront', '--bridge=be-51', '--json'], cap.io);
     const s = JSON.stringify(JSON.parse(cap.lines.join('')));
     expect(s).toContain('"measured":{"quantity":"PPN γ","value":0.99992,"sigma":0.00012,"source":"VLBI","derivation":"(1+γ)/2 × predicted"}');
@@ -213,7 +209,7 @@ describe('upt confront be-51 shows the measurement, and labels the deflection as
 // a bare `be-58` still selects the full list.
 describe('upt confront <be-NN> — the id explain prints', () => {
   it('a positional be-58 prints that confrontation and not the rest of the catalog', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', 'be-58'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -224,7 +220,7 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   });
 
   it('positional be-58 --json is a one-element result', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', 'be-58', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -232,8 +228,8 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   });
 
   it('positional be-58 prints the same record as --bridge=be-58', async () => {
-    const positional = capture();
-    const flagged = capture();
+    const positional = captureMerged();
+    const flagged = captureMerged();
     expect(await runCli(['confront', 'be-58'], positional.io)).toBe(0);
     expect(await runCli(['confront', '--bridge=be-58'], flagged.io)).toBe(0);
     expect(positional.lines.join('')).toBe(flagged.lines.join(''));
@@ -242,15 +238,15 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   // Agreeing spellings. Before the fix this already exited 0: the positional was
   // ignored and --bridge was obeyed. It guards a fix that rejects every pair.
   it('be-58 together with --bridge=58 is that one record, not an error', async () => {
-    const both = capture();
-    const flagged = capture();
+    const both = captureMerged();
+    const flagged = captureMerged();
     expect(await runCli(['confront', 'be-58', '--bridge=58'], both.io)).toBe(0);
     expect(await runCli(['confront', '--bridge=be-58'], flagged.io)).toBe(0);
     expect(both.lines.join('')).toBe(flagged.lines.join(''));
   });
 
   it('a positional and --bridge that name different bridges is an error, not both records', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', 'be-58', '--bridge=be-56'], cap.io);
     expect(code).toBe(2);
     const text = cap.lines.join('');
@@ -260,7 +256,7 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   });
 
   it('a positional that is not a bridge id is an error, not the full list', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', 'nope'], cap.io);
     expect(code).toBe(1);
     const text = cap.lines.join('');
@@ -269,14 +265,14 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   });
 
   it('two positionals are a usage error', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', 'be-58', 'be-56'], cap.io);
     expect(code).toBe(2);
     expect(cap.lines.join('')).toMatch(/unexpected/);
   });
 
   it('be-53 with no table and no procedure refuses and names both', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', 'be-53'], cap.io);
     // The refusal is the result the command computed: exit 0, as a path with no composite claim.
     expect(code).toBe(0);
@@ -290,7 +286,7 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   });
 
   it('be-53 --json is the same refusal and has no residual field', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=be-53', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -303,7 +299,7 @@ describe('upt confront <be-NN> — the id explain prints', () => {
   });
 
   it('the full confrontation list still does not include be-53', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['confront'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).not.toMatch(/be-53/);

@@ -98,8 +98,9 @@ bun run test       # vitest full suite; `pretest` runs tsc first
 ```
 
 - TypeScript 7 (native compiler; no compiler API), ESM (`"type": "module"` — relative imports need
-  the `.js` extension), Node ≥ 18 (shipped runtime), Bun (install +
-  `bun run` scripts), vitest. Lockfile is `bun.lock` only.
+  the `.js` extension), Node ≥ 18 (shipped runtime; the test suite needs
+  Node ≥ 22.6, `tests/node-floor.test.ts`), Bun (install + `bun run`
+  scripts), vitest. Lockfile is `bun.lock` only.
 - The default branch is `master`. CI runs type-check + full suite on
   every push/PR.
 - The rules are `AGENTS.md` and the procedure is `WORKFLOWS.md`

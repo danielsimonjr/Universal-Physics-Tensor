@@ -6,6 +6,7 @@
  * file instead pins the JSON *shape* (spec field names from the task-6
  * brief) plus the "errors never emit JSON" invariant.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 

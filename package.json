@@ -29,11 +29,6 @@
       "default": "./dist/atlas/index.js"
     }
   },
-  "directories": {
-    "doc": "docs",
-    "example": "examples",
-    "test": "tests"
-  },
   "scripts": {
     "prepare": "git config core.hooksPath .githooks || exit 0",
     "build": "tsc",
@@ -50,7 +45,7 @@
     "test:watch": "vitest",
     "prepublishOnly": "npm run validate",
     "bench": "vitest bench",
-    "bench:ci": "vitest bench --reporter=verbose",
+    "bench:ci": "vitest bench --run --outputJson bench/results.json",
     "docs:deps": "bun tools/create-dependency-graph/create-dependency-graph.ts --root=. --include-tests",
     "physjs:table": "bun scripts/generate-physjs-table.ts",
     "docs:cli": "bun scripts/cli-reference.ts",
@@ -65,8 +60,9 @@
     "atlas:json": "npm run build && node scripts/emit-atlas-json.mjs",
     "atlas:witness-results": "npm run build && node scripts/emit-witness-results.mjs",
     "atlas:study": "npm run build && node scripts/run-atlas-study.mjs",
-    "typecheck": "tsc --noEmit && tsc -p tsconfig.tests.json",
-    "validate": "npm run build && npm run typecheck && npm test && npm run audit:plans && npm run package:check",
+    "typecheck": "tsc --noEmit && npm run typecheck:tests",
+    "typecheck:tests": "tsc -p tsconfig.tests.json",
+    "validate": "npm run build && npm run typecheck:tests && vitest run && npm run audit:plans && npm run package:check",
     "package:check": "node scripts/package-smoke.mjs"
   },
   "files": [
@@ -95,12 +91,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielsimonjr/universal-physics-tensor.git"
+    "url": "git+https://github.com/danielsimonjr/Universal-Physics-Tensor.git"
   },
   "bugs": {
-    "url": "https://github.com/danielsimonjr/universal-physics-tensor/issues"
+    "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/issues"
   },
-  "homepage": "https://github.com/danielsimonjr/universal-physics-tensor#readme",
+  "homepage": "https://github.com/danielsimonjr/Universal-Physics-Tensor#readme",
   "dependencies": {
     "@danielsimonjr/mathts-autograd": "^0.3.16",
     "@danielsimonjr/mathts-core": "^0.16.0",

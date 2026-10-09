@@ -14,11 +14,11 @@ import { describe, expect, it } from 'vitest';
 import { evalExpr } from '../../src/composition/expr-eval.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { sym } from '../../src/dimensional/ast-builders.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const evalSource = readFileSync(resolve(root, 'src/composition/expr-eval.ts'), 'utf8');
 
-const sym = (name: string): ExprNode => ({ kind: 'symbol', name, dim: DIMENSIONLESS });
 const op = (operator: '+' | '-' | '*' | '/' | '^', args: ExprNode[]): ExprNode => ({
   kind: 'op',
   op: operator,
@@ -49,12 +49,12 @@ describe('MathTS scalar builder', () => {
   });
 
   it('matches the deleted arithmetic on one fixture, and a mutated tree differs', () => {
-    const quotient = op('/', [sym('a'), sym('b')]);
+    const quotient = op('/', [sym('a', DIMENSIONLESS), sym('b', DIMENSIONLESS)]);
     expect(evalExpr(quotient, { a: 12, b: 3 })).toBe(4);
-    const product = op('*', [sym('a'), sym('b')]);
+    const product = op('*', [sym('a', DIMENSIONLESS), sym('b', DIMENSIONLESS)]);
     expect(evalExpr(product, { a: 12, b: 3 })).toBe(36);
     expect(evalExpr(product, { a: 12, b: 3 })).not.toBe(evalExpr(quotient, { a: 12, b: 3 }));
-    expect(evalExpr(sym('6pi'))).toBe(6 * Math.PI);
-    expect(evalExpr({ kind: 'transcendental', fn: 'ln', arg: sym('x') }, { x: Math.E })).toBe(1);
+    expect(evalExpr(sym('6pi', DIMENSIONLESS))).toBe(6 * Math.PI);
+    expect(evalExpr({ kind: 'transcendental', fn: 'ln', arg: sym('x', DIMENSIONLESS) }, { x: Math.E })).toBe(1);
   });
 });

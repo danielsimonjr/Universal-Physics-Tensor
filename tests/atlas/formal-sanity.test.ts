@@ -94,8 +94,8 @@ describe('ab-pendulum-linear ↔ PhysJS.Pendulum.linearizedEquationOfMotion_iff'
 
   it('the formal statement is about the DYNAMICS dictionary, not the period bound — and the record’s bound is not claimed', () => {
     // Physlib's period results (`smallAnglePeriod_le_periodFormula`,
-    // `strictMonoOn_periodFormula`) concern `periodFormula`, which Physlib's own
-    // TODO has not yet identified with the period of the motion. They are
+    // `strictMonoOn_periodFormula`) concern `periodFormula`, which an open note in
+    // Physlib has not yet identified with the period of the motion. They are
     // consistent with the record's bound — checked here — but they are NOT the
     // referenced statement, and the reference does not certify `delta`.
     expect(pendulumPeriodErrorAt({ theta0: 0 })).toBeCloseTo(0, 15);

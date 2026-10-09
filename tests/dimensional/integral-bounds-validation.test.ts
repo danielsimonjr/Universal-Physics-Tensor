@@ -10,8 +10,7 @@ import { validate } from '../../src/dimensional/validator.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import { DIMENSIONLESS, LENGTH, TIME } from '../../src/dimensional/types.js';
-
-const sym = (name: string, dim = DIMENSIONLESS): ExprNode => ({ kind: 'symbol', name, dim });
+import { sym } from '../../src/dimensional/ast-builders.js';
 
 describe('definite integral — bound dimensions', () => {
   it('∫ over LENGTH with LENGTH bounds and a dimensionless integrand → [length]', () => {

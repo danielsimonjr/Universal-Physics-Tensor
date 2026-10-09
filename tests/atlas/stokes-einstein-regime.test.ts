@@ -6,6 +6,7 @@
  * with it D = k_B T/(6πηa), holds only in creeping flow; the Oseen correction is first order in
  * Re. The thresholds 0.1 and 0.01 are CHOSEN machine forms of "≪ 1", and the side conditions say so.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import {
   BRIDGE_LANGEVIN_DIFFUSION,

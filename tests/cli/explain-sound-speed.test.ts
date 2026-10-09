@@ -4,25 +4,11 @@
  * A bound adiabatic index is √γ in front of √(P/ρ). Unbound, the factor
  * is unset and no number is recovered. Issue #390.
  */
+import { allText, capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import { compareWithCanonical } from '../../src/composition/canonical-compare.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('') + c.err.join('');
 
 function recovered(body: string): number | undefined {
   const m = /Recovered value: ([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/.exec(body);
@@ -38,7 +24,7 @@ describe('sound-speed explain uses CE-sound-speed', () => {
     expect(
       await runCli(['explain', 'sound-speed', 'pressure=1e5', 'density=1.2', '--source=canonical'], cap.io),
     ).toBe(0);
-    const body = text(cap);
+    const body = allText(cap);
     expect(body).toMatch(/CE-sound-speed/);
     expect(body).not.toMatch(/Recovered value:/);
     expect(body).toMatch(/factor is unset/);
@@ -53,7 +39,7 @@ describe('sound-speed explain uses CE-sound-speed', () => {
         cap.io,
       ),
     ).toBe(0);
-    const body = text(cap);
+    const body = allText(cap);
     expect(body).toMatch(/CE-sound-speed/);
     expect(recovered(body)).toBeCloseTo(WITH_GAMMA, 6);
     expect(recovered(body)).not.toBeCloseTo(BARE, 6);
@@ -69,7 +55,7 @@ describe('sound-speed explain uses CE-sound-speed', () => {
         cap.io,
       ),
     ).toBe(0);
-    const body = text(cap);
+    const body = allText(cap);
     expect(recovered(body)).toBeCloseTo(BARE, 6);
     expect(body).not.toContain('sets the dimensionless constant to 1');
   });
@@ -79,7 +65,7 @@ describe('sound-speed explain uses CE-sound-speed', () => {
     expect(
       await runCli(['explain', 'speed', 'pressure=1e5', 'density=1.2', '--source=canonical'], cap.io),
     ).toBe(0);
-    const body = text(cap);
+    const body = allText(cap);
     expect(body).not.toMatch(/CE-sound-speed/);
     expect(recovered(body)).toBeUndefined();
   });
@@ -89,7 +75,7 @@ describe('sound-speed explain uses CE-sound-speed', () => {
     expect(
       await runCli(['explain', 'speed', 'tension=4', 'linear-density=1', '--source=canonical'], cap.io),
     ).toBe(0);
-    const body = text(cap);
+    const body = allText(cap);
     expect(body).toMatch(/CE-string-wave-speed/);
     expect(recovered(body)).toBeCloseTo(2, 8);
     const sound = CANONICAL_EQUATIONS.find((e) => e.id === 'CE-sound-speed');

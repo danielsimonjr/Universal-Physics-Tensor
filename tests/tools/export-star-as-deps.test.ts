@@ -8,11 +8,11 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { tempDir } from '../helpers/tmp.js';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const generator = join(repoRoot, 'tools/create-dependency-graph/create-dependency-graph.ts');
@@ -25,7 +25,7 @@ function unusedFiles(root: string): string[] {
 
 /** A tracked fixture tree. The generator reads the git index, not the disk. */
 function fixture(indexSource: string): string {
-  const root = mkdtempSync(join(tmpdir(), 'upt-export-star-as-'));
+  const root = tempDir('upt-export-star-as-');
   mkdirSync(join(root, 'src'), { recursive: true });
   writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'fixture', version: '0.0.0' }));
   writeFileSync(join(root, 'src/index.ts'), indexSource);

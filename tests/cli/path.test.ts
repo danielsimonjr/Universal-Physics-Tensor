@@ -11,14 +11,10 @@
  * ab-spring-lc through that bridge's declared norm transport, and the tests
  * below pin both what it now claims and what it still refuses.
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
-
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
 
 /** Relative kinetic-frequency error at x = ck/ω₀. Independent of the bridge record. */
 function kgKineticError(x: number): number {
@@ -27,7 +23,7 @@ function kgKineticError(x: number): number {
 
 describe('upt path', () => {
   it('pendulum → spring composes to an approximation with its stated bound', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       ['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1', 't=10'],
       cap.io,
@@ -47,7 +43,7 @@ describe('upt path', () => {
   });
 
   it('the same path at t=1000 reports the pendulum horizon VIOLATED', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       ['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1', 't=1000'],
       cap.io,
@@ -64,7 +60,7 @@ describe('upt path', () => {
   // 2K(sin 0.4)/π − 1 = 0.0415 (AGM), 2.6 times the quoted 0.0159. A bound quoted outside the
   // regime it is claimed in is the claim applied where it was never made.
   it('outside the bound regime (θ0 = 0.8) the regime is reported VIOLATED, and the bound does not apply', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       ['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.8', 'T0=1', 't=1'],
       cap.io,
@@ -77,7 +73,7 @@ describe('upt path', () => {
   });
 
   it('a path whose regimes state no inequality says VACUOUS, not "all hold"', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-spring', 'model-lc', '--at', 't=1'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -87,7 +83,7 @@ describe('upt path', () => {
 
   it('--json carries each regime verdict and allRegimesHold', async () => {
     const run = async (theta0: string) => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(
         ['path', 'model-pendulum', 'model-spring', '--at', `theta0=${theta0}`, 'T0=1', 't=1', '--json'],
         cap.io,
@@ -111,7 +107,7 @@ describe('upt path', () => {
   });
 
   it('with no --at the regime is UNKNOWN, never a pass', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-pendulum', 'model-spring', '--json'], cap.io);
     expect(code).toBe(0);
     const result = JSON.parse(cap.lines.join('')).result;
@@ -122,7 +118,7 @@ describe('upt path', () => {
   // pendulum at any θ0). Where deltaAt is PROVEN (closed-form, the exact error), the bound at the
   // --at point is printed beside it; at θ0 = 0.2 the exact period error is 0.0025057 (AGM).
   it('prints the proven bound at the --at point beside the domain supremum', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1', 't=10'], cap.io);
     const text = cap.lines.join('');
     expect(text).toMatch(/bound at this point: K = 1 · delta = 0\.00250574\d* \(closed-form: the exact error; the composed bound above is the supremum over the bridge's domain\)/);
@@ -137,7 +133,7 @@ describe('upt path', () => {
 
   it('no point bound outside the regime, and none from a numerically supported deltaAt', async () => {
     const out = async (args: string[]) => {
-      const cap = capture();
+      const cap = captureMerged();
       await runCli(args, cap.io);
       return cap.lines.join('');
     };
@@ -151,7 +147,7 @@ describe('upt path', () => {
   });
 
   it("a no-composite-claim pair prints the phrase, carries no bound, and EXITS 0", async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-rlc', 'model-first-order'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -164,7 +160,7 @@ describe('upt path', () => {
   // transport. This was the audit F05 refusal; the refusal tests moved to the routes
   // that still refuse (below).
   it('pendulum → lc composes through ab-spring-lc\'s declared norm transport, and says why', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.2', 'T0=1', 't=10'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -189,7 +185,7 @@ describe('upt path', () => {
   });
 
   it('control: at θ0 = 0.4 the point bound moves with θ0, so the check above is not reading a constant', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.4', 'T0=1', 't=1'], cap.io);
     const point = /bound at this point: K = 1 · delta = ([0-9.e-]+)/.exec(cap.lines.join(''));
     const seriesAt02 = 0.2 ** 2 / 16 + (11 * 0.2 ** 4) / 3072;
@@ -228,7 +224,7 @@ describe('upt path', () => {
   });
 
   it('a trajectory tolerance on pendulum → lc stays UNDETERMINED: the map declares no carriage of position', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(
       ['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.2', 'T0=1', 't=10', '--tolerance=position:0.1'],
       cap.io,
@@ -237,7 +233,7 @@ describe('upt path', () => {
   });
 
   it('a route whose exact step declares no transport refuses as norm-not-stated, naming the declaration (audit F05)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-telegraph', 'model-heat'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -255,7 +251,7 @@ describe('upt path', () => {
   });
 
   it('an exact map BEFORE a bound is named too: the bound must be pulled back through it', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     await runCli(['path', 'model-rlc', 'model-first-order'], cap.io);
     const text = cap.lines.join('');
     expect(text).toMatch(/a composition-table cell for exact-equivalence then approximation/);
@@ -266,7 +262,7 @@ describe('upt path', () => {
   });
 
   it('--json for a no-claim has NO bound key and names the reason', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-rlc', 'model-first-order', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -278,7 +274,7 @@ describe('upt path', () => {
   });
 
   it('--json envelope matches confront’s shape for a bounded path', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(
       ['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1', 't=10', '--json'],
       cap.io,
@@ -296,7 +292,7 @@ describe('upt path', () => {
   });
 
   it('an unevaluated horizon is reported as unevaluated, not as holding', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-pendulum', 'model-spring', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -306,7 +302,7 @@ describe('upt path', () => {
   });
 
   it('an exact-equivalence path is traversable in both directions', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-lc', 'model-spring', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -324,7 +320,7 @@ describe('upt path', () => {
   });
 
   it('an unknown model id → exit 1', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-nope', 'model-spring'], cap.io);
     expect(code).toBe(1);
     expect(cap.lines.join('')).toMatch(/unknown model 'model-nope'/);
@@ -332,28 +328,28 @@ describe('upt path', () => {
   });
 
   it('a wrong number of endpoints is a missing argument → exit 2', async () => {
-    const one = capture();
+    const one = captureMerged();
     expect(await runCli(['path', 'model-spring'], one.io)).toBe(2);
     expect(one.lines.join('')).toMatch(/exactly two model ids/);
-    const none = capture();
+    const none = captureMerged();
     expect(await runCli(['path'], none.io)).toBe(2);
-    const three = capture();
+    const three = captureMerged();
     expect(await runCli(['path', 'a', 'b', 'c'], three.io)).toBe(2);
     expect(three.lines.join('')).toMatch(/exactly two model ids/);
   });
 
   it('a non-finite --at value → exit 1', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['path', 'model-pendulum', 'model-spring', '--at', 't=oops'], cap.io)).toBe(1);
   });
 
   it('an unknown flag is rejected by the parser → exit 2', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['path', 'model-pendulum', 'model-spring', '--bogus'], cap.io)).toBe(2);
   });
 
   it('identical endpoints compose nothing, and say so (exit 0)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-spring', 'model-spring'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/the path is empty and composes nothing/);
@@ -371,7 +367,7 @@ describe('upt path', () => {
   });
 
   it('a disconnected pair reports no chain rather than a bound (exit 0)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['path', 'model-spring', 'model-cubic-spring'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/no chain of bridges connects these models/);
@@ -381,7 +377,7 @@ describe('upt path', () => {
   // `path` refused it because the endpoints sit in different families.
   describe('cross-family routes (audit F01)', () => {
     it('follows the listed KG → free-Schrödinger bridge and checks its regime and horizon', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(
         ['path', 'model-klein-gordon', 'model-schrodinger-free', '--at', 'c=1', 'omega0=1', 'k=0.05', 't=1'],
         cap.io,
@@ -410,7 +406,7 @@ describe('upt path', () => {
     });
 
     it('at k = 1 the violated inequality is named and the check fails (exit 3)', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(
         ['path', 'model-klein-gordon', 'model-schrodinger-free', '--at', 'c=1', 'omega0=1', 'k=1'],
         cap.io,
@@ -420,7 +416,7 @@ describe('upt path', () => {
     });
 
     it('--json records the family of each step and each endpoint', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['path', 'model-klein-gordon', 'model-schrodinger-free', '--json'], cap.io);
       expect(code).toBe(0);
       const r = JSON.parse(cap.lines.join('')).result;
@@ -451,7 +447,7 @@ describe('upt path', () => {
     });
 
     it('a cross-family chain still refuses a composite the table does not define', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['path', 'model-klein-gordon', 'model-fick', '--json'], cap.io);
       expect(code).toBe(0);
       const r = JSON.parse(cap.lines.join('')).result;
@@ -477,7 +473,7 @@ describe('upt path', () => {
     });
 
     it('an unbounded restriction followed by another step is a refusal, not a crash', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['path', 'model-klein-gordon', 'model-lc', '--json'], cap.io);
       expect(code).toBe(0);
       const r = JSON.parse(cap.lines.join('')).result;
@@ -505,7 +501,7 @@ describe('upt path', () => {
     });
 
     it('Langevin → Fick is the coarse-graining only; the hyperedge is named and is not a step', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['path', 'model-langevin', 'model-fick', '--json'], cap.io);
       expect(code).toBe(0);
       const r = JSON.parse(cap.lines.join('')).result;
@@ -529,7 +525,7 @@ describe('upt path', () => {
     });
 
     it('Stokes drag → Fick names the hyperedge and has no chain', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['path', 'model-stokes-drag', 'model-fick', '--json'], cap.io);
       expect(code).toBe(0);
       const r = JSON.parse(cap.lines.join('')).result;
@@ -547,7 +543,7 @@ describe('upt path', () => {
     });
 
     it('an approximation is never traversed backwards across families', async () => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['path', 'model-schrodinger-free', 'model-klein-gordon'], cap.io);
       expect(code).toBe(0);
       expect(cap.lines.join('')).toMatch(/no chain of bridges connects these models/);
@@ -555,7 +551,7 @@ describe('upt path', () => {
   });
 
   it('`upt help path` prints the command help', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['help', 'path'], cap.io)).toBe(0);
     const text = cap.lines.join('');
     expect(text).toMatch(/upt path <from> <to>/);
@@ -578,7 +574,7 @@ describe('upt path', () => {
       { args: ['model-stokes-drag', 'model-fick'], exit: 0, kind: 'missing-chain' },
     ];
     for (const c of cases) {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['path', ...c.args, '--json'], cap.io);
       const env = JSON.parse(cap.lines.join(''));
       expect(code, c.args.join(' ')).toBe(c.exit);

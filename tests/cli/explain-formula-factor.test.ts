@@ -3,25 +3,11 @@
  * AST's dimensionless count is not in that monomial, so ideal-gas explain
  * returned `k_B T/V` and perihelion dropped `1-e²`. Issue #387.
  */
+import { capture, text } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { C_SI, G_SI, HBAR_SI, K_B_SI } from '../../src/core/constants.js';
-
-function capture() {
-  const lines: string[] = [];
-  const err: string[] = [];
-  return {
-    lines,
-    err,
-    io: {
-      out: (s?: string) => lines.push((s ?? '') + '\n'),
-      err: (s?: string) => err.push((s ?? '') + '\n'),
-      write: (s: string) => lines.push(s),
-    },
-  };
-}
-const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 
 function recovered(body: string): number | undefined {
   const m = /Recovered value: ([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/.exec(body);

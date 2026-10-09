@@ -284,8 +284,15 @@ function getAllTestFiles(dir: string, files: string[] = []): string[] {
 interface TestCoverageAnalysis {
   sourceFiles: string[];
   testFiles: ParsedFile[];
-  coverageMap: Map<string, string[]>; // source file -> test files that import it
+  /** source file -> test files that reach it DIRECTLY or through a barrel / side-effect import (traced). */
+  coverageMap: Map<string, string[]>;
+  /** source file -> test files that import it DIRECTLY (a `dist/` import resolves to its `src/` file). */
+  directMap: Map<string, string[]>;
+  /** Reached directly or traced. */
   testedFiles: string[];
+  /** Imported directly by at least one test. Always a subset of `testedFiles`. */
+  directlyTestedFiles: string[];
+  /** Reached neither way. */
   untestedFiles: string[];
   testToSourceMap: Map<string, string[]>; // test file -> source files it imports
 }
@@ -366,24 +373,30 @@ function traceReExports(importedPath: string, reExportMap: ReExportMap): Set<str
 
 /**
  * Analyze test coverage by mapping source files to test files.
- * Traces imports through barrel files (index.ts) to find all source files
- * that are indirectly tested through re-exports.
+ *
+ * Two coverages are kept apart. DIRECT: a test imports the file itself (an import of
+ * `dist/<p>.js` resolves to `src/<p>.ts`, see `resolvePath`). TRACED: direct, plus every file
+ * reached through a barrel re-export (`export … from`) or a bare side-effect import. A barrel
+ * import credits every module behind the barrel, so the traced count alone over-states what
+ * the suite exercises; the report states both.
  */
 function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[]): TestCoverageAnalysis {
   const sourceFilePaths = new Set(sourceFiles.map(f => f.path));
   const coverageMap = new Map<string, string[]>();
+  const directMap = new Map<string, string[]>();
   const testToSourceMap = new Map<string, string[]>();
 
   // Build re-export map to trace imports through barrel files
   const reExportMap = buildReExportMap(sourceFiles);
   const sourceByPath = new Map(sourceFiles.map(f => [f.path, f]));
 
-  // Initialize coverage map with empty arrays
+  // Initialize coverage maps with empty arrays
   for (const source of sourceFiles) {
     coverageMap.set(source.path, []);
+    directMap.set(source.path, []);
   }
 
-  // Helper to add test coverage for a source file
+  // Helper to add (traced) test coverage for a source file
   const addCoverage = (sourcePath: string, testPath: string, importedSources: string[]) => {
     if (!importedSources.includes(sourcePath)) {
       importedSources.push(sourcePath);
@@ -392,6 +405,16 @@ function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[])
     if (!tests.includes(testPath)) {
       tests.push(testPath);
       coverageMap.set(sourcePath, tests);
+    }
+  };
+
+  // A direct import is also traced coverage.
+  const addDirect = (sourcePath: string, testPath: string, importedSources: string[]) => {
+    addCoverage(sourcePath, testPath, importedSources);
+    const tests = directMap.get(sourcePath) || [];
+    if (!tests.includes(testPath)) {
+      tests.push(testPath);
+      directMap.set(sourcePath, tests);
     }
   };
 
@@ -429,7 +452,7 @@ function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[])
       // Check if it's a source file (in src/)
       if (sourceFilePaths.has(resolvedPath)) {
         // Add the directly imported file
-        addCoverage(resolvedPath, testFile.path, importedSources);
+        addDirect(resolvedPath, testFile.path, importedSources);
 
         // Trace through barrel re-exports to find underlying source files
         const reExportedSources = traceReExports(resolvedPath, reExportMap);
@@ -447,7 +470,7 @@ function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[])
       const withoutTs = resolvedPath.replace(/\.ts$/, '');
       const withTs = withoutTs + '.ts';
       if (sourceFilePaths.has(withTs)) {
-        addCoverage(withTs, testFile.path, importedSources);
+        addDirect(withTs, testFile.path, importedSources);
 
         // Trace through barrel re-exports
         const reExportedSources = traceReExports(withTs, reExportMap);
@@ -467,6 +490,7 @@ function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[])
 
   // Determine tested and untested files
   const testedFiles: string[] = [];
+  const directlyTestedFiles: string[] = [];
   const untestedFiles: string[] = [];
 
   for (const [sourcePath, tests] of coverageMap) {
@@ -475,13 +499,18 @@ function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[])
     } else {
       untestedFiles.push(sourcePath);
     }
+    if ((directMap.get(sourcePath) ?? []).length > 0) {
+      directlyTestedFiles.push(sourcePath);
+    }
   }
 
   return {
     sourceFiles: sourceFiles.map(f => f.path),
     testFiles,
     coverageMap,
+    directMap,
     testedFiles,
+    directlyTestedFiles,
     untestedFiles,
     testToSourceMap,
   };
@@ -1727,32 +1756,42 @@ function generateTestCoverageMarkdown(coverage: TestCoverageAnalysis): string {
   lines.push('');
   lines.push('');
 
-  // Summary statistics
+  // Summary statistics. Two coverages, never one headline: a test that imports a barrel is
+  // credited for every module behind it (TRACED), which over-states what the suite exercises;
+  // DIRECT counts only files a test imports itself. An import of `dist/<p>.js` is a direct
+  // import of `src/<p>.ts`.
   const totalSource = coverage.sourceFiles.length;
-  const totalTested = coverage.testedFiles.length;
+  const totalTraced = coverage.testedFiles.length;
+  const totalDirect = coverage.directlyTestedFiles.length;
   const totalUntested = coverage.untestedFiles.length;
-  const coveragePercent = totalSource > 0 ? ((totalTested / totalSource) * 100).toFixed(1) : '0';
+  const percent = (n: number) => (totalSource > 0 ? ((n / totalSource) * 100).toFixed(1) : '0');
 
   lines.push('## Summary');
+  lines.push('');
+  lines.push('Direct: a test file imports the source file itself (`dist/<p>.js` counts as `src/<p>.ts`).');
+  lines.push('Traced: direct, or reached through a barrel re-export or a bare side-effect import.');
+  lines.push('Traced credit through a barrel says the module was LOADED, not that any assertion touched it.');
   lines.push('');
   lines.push('| Metric | Count |');
   lines.push('|--------|-------|');
   lines.push(`| Total Source Files | ${totalSource} |`);
   lines.push(`| Total Test Files | ${coverage.testFiles.length} |`);
-  lines.push(`| Source Files with Tests | ${totalTested} |`);
-  lines.push(`| Source Files without Tests | ${totalUntested} |`);
-  lines.push(`| Coverage | ${coveragePercent}% |`);
+  lines.push(`| Source files imported directly by a test | ${totalDirect} |`);
+  lines.push(`| Source files reached directly or through a barrel or side-effect import | ${totalTraced} |`);
+  lines.push(`| Source files no test reaches either way | ${totalUntested} |`);
+  lines.push(`| Direct coverage | ${percent(totalDirect)}% |`);
+  lines.push(`| Traced coverage | ${percent(totalTraced)}% |`);
   lines.push('');
   lines.push('---');
   lines.push('');
 
-  // Untested files (the main deliverable)
-  lines.push('## Source Files Without Test Coverage');
+  // Files no test reaches (the main deliverable)
+  lines.push('## Source Files No Test Reaches');
   lines.push('');
   if (coverage.untestedFiles.length === 0) {
-    lines.push('**All source files have test coverage!** 🎉');
+    lines.push('Every source file is reached by at least one test, directly or traced.');
   } else {
-    lines.push(`The following ${coverage.untestedFiles.length} source files are not directly imported by any test file:`);
+    lines.push(`The following ${coverage.untestedFiles.length} source files are reached by no test file, directly or through a barrel or side-effect import:`);
     lines.push('');
 
     // Group by module
@@ -1768,8 +1807,7 @@ function generateTestCoverageMarkdown(coverage: TestCoverageAnalysis): string {
       lines.push(`### ${module}/`);
       lines.push('');
       for (const file of files.sort()) {
-        const fileName = basename(file, '.ts');
-        lines.push(`- \`${file}\` → Expected test: \`tests/unit/${module}/${fileName}.test.ts\``);
+        lines.push(`- \`${file}\``);
       }
       lines.push('');
     }
@@ -1777,18 +1815,19 @@ function generateTestCoverageMarkdown(coverage: TestCoverageAnalysis): string {
   lines.push('---');
   lines.push('');
 
-  // Files with tests
+  // Files with tests: direct importers, then the tests that reach the file only by tracing.
   lines.push('## Source Files With Test Coverage');
   lines.push('');
-  lines.push('| Source File | Test Files |');
-  lines.push('|-------------|------------|');
+  lines.push('| Source File | Direct | Traced only |');
+  lines.push('|-------------|--------|-------------|');
 
   const sortedTested = [...coverage.testedFiles].sort();
   for (const sourcePath of sortedTested) {
-    const tests = coverage.coverageMap.get(sourcePath) || [];
+    const direct = coverage.directMap.get(sourcePath) || [];
+    const tracedOnly = (coverage.coverageMap.get(sourcePath) || []).filter(t => !direct.includes(t));
     const shortSource = sourcePath.split('/').slice(-2).join('/');
-    const shortTests = tests.map(t => `\`${basename(t)}\``).join(', ');
-    lines.push(`| \`${shortSource}\` | ${shortTests} |`);
+    const cell = (tests: string[]) => (tests.length === 0 ? '—' : tests.map(t => `\`${basename(t)}\``).join(', '));
+    lines.push(`| \`${shortSource}\` | ${cell(direct)} | ${cell(tracedOnly)} |`);
   }
   lines.push('');
   lines.push('---');
@@ -1819,24 +1858,35 @@ function generateTestCoverageJson(coverage: TestCoverageAnalysis): object {
     coverageMapObj[source] = tests;
   }
 
+  const directMapObj: Record<string, string[]> = {};
+  for (const [source, tests] of coverage.directMap) {
+    directMapObj[source] = tests;
+  }
+
   const testToSourceObj: Record<string, string[]> = {};
   for (const [test, sources] of coverage.testToSourceMap) {
     testToSourceObj[test] = sources;
   }
 
+  const percent = (n: number) =>
+    coverage.sourceFiles.length > 0 ? ((n / coverage.sourceFiles.length) * 100).toFixed(1) : '0';
+
   return {
     metadata: {
       totalSourceFiles: coverage.sourceFiles.length,
       totalTestFiles: coverage.testFiles.length,
+      // `testedCount` / `coveragePercent` are the TRACED figures (direct, barrel, side-effect).
       testedCount: coverage.testedFiles.length,
+      directlyTestedCount: coverage.directlyTestedFiles.length,
       untestedCount: coverage.untestedFiles.length,
-      coveragePercent: coverage.sourceFiles.length > 0
-        ? ((coverage.testedFiles.length / coverage.sourceFiles.length) * 100).toFixed(1)
-        : '0',
+      coveragePercent: percent(coverage.testedFiles.length),
+      directCoveragePercent: percent(coverage.directlyTestedFiles.length),
     },
     untestedFiles: coverage.untestedFiles.sort(),
     testedFiles: coverage.testedFiles.sort(),
+    directlyTestedFiles: coverage.directlyTestedFiles.sort(),
     coverageMap: coverageMapObj,
+    directMap: directMapObj,
     testToSourceMap: testToSourceObj,
   };
 }
@@ -2124,8 +2174,9 @@ async function main(): Promise<void> {
 
     console.log('\n=== Test Coverage Analysis ===');
     console.log(`  - ${testCoverage.testFiles.length} test files analyzed`);
-    console.log(`  - ${testCoverage.testedFiles.length}/${testCoverage.sourceFiles.length} source files have tests (${coveragePercent}%)`);
-    console.log(`  - ${testCoverage.untestedFiles.length} source files without tests`);
+    console.log(`  - ${testCoverage.testedFiles.length}/${testCoverage.sourceFiles.length} source files reached by a test, directly or traced (${coveragePercent}%)`);
+    console.log(`  - ${testCoverage.directlyTestedFiles.length}/${testCoverage.sourceFiles.length} imported directly by a test`);
+    console.log(`  - ${testCoverage.untestedFiles.length} source files no test reaches`);
 
     if (testCoverage.untestedFiles.length > 0) {
       console.log('\nSource files without test coverage:');

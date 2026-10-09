@@ -8,12 +8,12 @@
  * check.
  */
 
-import { mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { scanFileImports } from '../../tools/layer-order/check.js';
+import { tempDir } from '../helpers/tmp.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const numerical = join(root, 'src/numerical');
@@ -52,7 +52,7 @@ describe('numerical does not import composition', () => {
   });
 
   it('POSITIVE CONTROL: an import of composition is reported', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'numerical-import-'));
+    const dir = tempDir('numerical-import-');
     const source = "import { evalExpr } from '../composition/expr-eval.js';\nexport const unused = evalExpr;\n";
     writeFileSync(join(dir, 'leak.ts'), source);
     const hits = numericalCompositionImports([{ path: 'src/numerical/leak.ts', source }]);

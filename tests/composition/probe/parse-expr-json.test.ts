@@ -2,15 +2,15 @@
  * parseExprJson structural validation coverage.
  */
 import { describe, it, expect } from 'vitest';
-import { mkdtempSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseExprJson } from '../../../src/composition/probe/problem.js';
 import { sym } from '../../../src/dimensional/ast-builders.js';
 import { DIMENSIONLESS } from '../../../src/dimensional/types.js';
+import { tempDir } from '../../helpers/tmp.js';
 
 describe('parseExprJson', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'upt-parse-expr-'));
+  const dir = tempDir('upt-parse-expr-');
 
   it('validates symbol nodes', () => {
     const path = join(dir, 'good.json');

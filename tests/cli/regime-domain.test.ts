@@ -3,6 +3,8 @@
  * domains whose inequality lists are empty. The command source does not name
  * a family.
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,12 +19,6 @@ const regimeSource = readFileSync(
 const VACUOUS =
   'no machine condition evaluated (VACUOUS — states no inequality; nothing was checked)';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-
 describe('regime registrations', () => {
   it('the command source names no family, outside its one example invocation', () => {
     // The example (`upt regime oscillators --at theta0=0.2`) is a real invocation and may name a
@@ -34,7 +30,7 @@ describe('regime registrations', () => {
   it.each(['plasma', 'piezoelectricity', 'tolman'])(
     '%s is a vacuous registration and exits 0',
     async (name) => {
-      const cap = capture();
+      const cap = captureMerged();
       const code = await runCli(['regime', name], cap.io);
       const text = cap.lines.join('');
       expect(code).toBe(0);
@@ -45,7 +41,7 @@ describe('regime registrations', () => {
   );
 
   it('an unregistered name exits 1 and the known names come from the registry', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'no-such-regime'], cap.io);
     const text = cap.lines.join('');
     expect(code).toBe(1);

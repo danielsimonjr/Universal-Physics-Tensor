@@ -6,18 +6,14 @@
  * never supplied must read as unknown/unchecked, and a regime with no
  * inequality at all must not read as a plain pass.
  */
+import '../helpers/dist.js';
+import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-function capture() {
-  const lines: string[] = [];
-  const sink = (s?: string) => lines.push((s ?? '') + '\n');
-  return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
-}
-
 describe('upt regime', () => {
   it('lists the family at a stated point (exit 0)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.2'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -26,7 +22,7 @@ describe('upt regime', () => {
   });
 
   it('reports a CHECKED violation by naming the inequality', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.9'], cap.io);
     expect(code).toBe(3);
     const text = cap.lines.join('');
@@ -35,7 +31,7 @@ describe('upt regime', () => {
   });
 
   it("an unsupplied coordinate is 'unknown', never valid and never violated", async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.2'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -47,14 +43,14 @@ describe('upt regime', () => {
   });
 
   it('marks a regime with no inequality as VACUOUS rather than a pass', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.2'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/model-spring: no machine condition evaluated \(VACUOUS/);
   });
 
   it('refuses to synthesize a box when no --at point is given', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
@@ -63,41 +59,41 @@ describe('upt regime', () => {
   });
 
   it('a missing family is a missing argument → exit 2', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['regime'], cap.io)).toBe(2);
     expect(cap.lines.join('')).toMatch(/a name is required/);
   });
 
   it('an extra positional is a usage error → exit 2', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['regime', 'oscillators', 'waves'], cap.io)).toBe(2);
     expect(cap.lines.join('')).toMatch(/unexpected argument/);
   });
 
   it('an unknown family → exit 1', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'nope'], cap.io);
     expect(code).toBe(1);
     expect(cap.lines.join('')).toMatch(/unknown family 'nope'/);
   });
 
   it('a non-finite --at value → exit 1', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['regime', 'oscillators', '--at', 'theta0=abc'], cap.io)).toBe(1);
   });
 
   it('an --at token with no = is a malformed invocation → exit 2 (a bad value is 1)', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['regime', 'oscillators', '--at', 'theta0'], cap.io)).toBe(2);
   });
 
   it('an unknown flag is rejected by the parser → exit 2', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['regime', 'oscillators', '--bogus'], cap.io)).toBe(2);
   });
 
   it('--json emits the confront-shaped envelope with the tri-state preserved', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.9', '--json'], cap.io);
     expect(code).toBe(3);
     const parsed = JSON.parse(cap.lines.join(''));
@@ -114,14 +110,14 @@ describe('upt regime', () => {
   });
 
   it('--json with no point reports uncovered as null, not an empty list', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     const code = await runCli(['regime', 'oscillators', '--json'], cap.io);
     expect(code).toBe(0);
     expect(JSON.parse(cap.lines.join('')).result.uncovered).toBe(null);
   });
 
   it('`upt help regime` prints the command help', async () => {
-    const cap = capture();
+    const cap = captureMerged();
     expect(await runCli(['help', 'regime'], cap.io)).toBe(0);
     expect(cap.lines.join('')).toMatch(/upt regime <family>/);
   });

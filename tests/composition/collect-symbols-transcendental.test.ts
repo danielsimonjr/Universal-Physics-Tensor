@@ -14,9 +14,10 @@
 import { describe, it, expect } from 'vitest';
 import { makeObservable } from '../../src/composition/compose-symbolic.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
+import { sym } from '../../src/dimensional/ast-builders.js';
+import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 
 const DIMLESS = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 } as const;
-const sym = (name: string): ExprNode => ({ kind: 'symbol', name, dim: { ...DIMLESS } });
 
 describe('collectSymbols recurses transcendental/abs/dirac-delta (Batch-3)', () => {
   it('includes leaves inside transcendental and abs arms', () => {
@@ -24,8 +25,8 @@ describe('collectSymbols recurses transcendental/abs/dirac-delta (Batch-3)', () 
       kind: 'op',
       op: '*',
       args: [
-        { kind: 'transcendental', fn: 'ln', arg: sym('ratio') },
-        { kind: 'abs', arg: sym('phase') },
+        { kind: 'transcendental', fn: 'ln', arg: sym('ratio', DIMENSIONLESS) },
+        { kind: 'abs', arg: sym('phase', DIMENSIONLESS) },
       ],
     };
     const obs = makeObservable('test', 'X', { ...DIMLESS }, expr);
@@ -34,7 +35,7 @@ describe('collectSymbols recurses transcendental/abs/dirac-delta (Batch-3)', () 
   });
 
   it('includes the leaf inside a dirac-delta arm', () => {
-    const expr: ExprNode = { kind: 'dirac-delta', arg: sym('q') };
+    const expr: ExprNode = { kind: 'dirac-delta', arg: sym('q', DIMENSIONLESS) };
     const obs = makeObservable('test', 'X', { ...DIMLESS }, expr);
     expect(obs.leaves).toContain('q');
   });

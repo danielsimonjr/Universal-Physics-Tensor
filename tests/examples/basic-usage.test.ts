@@ -5,11 +5,11 @@
  * The example runs under Node's type stripper against the package exports.
  */
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, mkdtempSync, mkdirSync, readFileSync, symlinkSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { copyFileSync, mkdirSync, readFileSync, symlinkSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { tempDir } from '../helpers/tmp.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -23,7 +23,7 @@ describe('examples/basic-usage.ts', () => {
   });
 
   it('runs against the package exports', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'upt-basic-usage-'));
+    const dir = tempDir('upt-basic-usage-');
     mkdirSync(join(dir, 'node_modules'));
     symlinkSync(root, join(dir, 'node_modules', 'universal-physics-tensor'));
     copyFileSync(resolve(root, 'examples/basic-usage.ts'), join(dir, 'basic-usage.ts'));

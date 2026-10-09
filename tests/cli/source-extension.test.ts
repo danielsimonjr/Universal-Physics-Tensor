@@ -4,6 +4,7 @@
  * (dist/cli/main.js) — NOT the old bin/upt.mjs, which never had `--source`
  * on `priority`/`audit`/`connectors`/`predict`, nor `--json` on any of them.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 

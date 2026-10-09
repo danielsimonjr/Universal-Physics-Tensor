@@ -7,9 +7,15 @@
  * the shim, the dispatcher, and every ported command agree on: unknown-flag
  * exit code (2) and message shape, `--version`/`-v`/`version` output shape,
  * per-command `help` text, and the no-args demo's flag-rejection behavior.
+ *
+ * This file and `closed-stdout.test.ts` (EPIPE) are the only spawned paths. The golden corpus
+ * runs in-process (`inprocess-golden.test.ts`); the ONE spawned golden case at the end of this
+ * file is the smoke that the shim delivers the same bytes and exit code as `runCli`.
  */
+import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
@@ -127,5 +133,23 @@ describe('upt — no-args demo takes no flags', () => {
     const parsed = JSON.parse(stdout) as { command: string; result: { value: number } };
     expect(parsed.command).toBe('eval');
     expect(parsed.result.value).toBe(2);
+  });
+});
+
+describe('upt — the shim reproduces one golden case end to end', () => {
+  // The corpus runs in-process (inprocess-golden.test.ts). This one spawned case is the smoke
+  // that bin/upt.mjs -> dist/cli/main.js delivers the same stdout bytes and exit code through a
+  // real process; a second spawned run of all 36 cases proved nothing more (190 s of the suite).
+  it("'upt priority' through bin/upt.mjs matches tests/cli/golden/priority.txt and exits 0", () => {
+    const golden = readFileSync(resolve(here, 'golden/priority.txt'), 'utf8').replace(/\r\n/g, '\n');
+    const { status, stdout } = run(['priority']);
+    expect(status).toBe(0);
+    expect(stdout.replace(/\r\n/g, '\n')).toBe(golden);
+  });
+
+  it("control: a case the shim must refuse exits 2 with the command named", () => {
+    const { status, stderr } = run(['nosuchcommand']);
+    expect(status).toBe(2);
+    expect(stderr).toContain("Unknown command 'nosuchcommand'");
   });
 });

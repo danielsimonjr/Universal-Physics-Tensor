@@ -10,8 +10,8 @@ import { describe, it, expect } from 'vitest';
 import { normalForm, structurallyEqual } from '../../src/canonical/normal-form.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 import { ENTROPY, TEMPERATURE, DIMENSIONLESS, VELOCITY, LENGTH, MASS, TIME } from '../../src/dimensional/types.js';
+import { sym } from '../../src/dimensional/ast-builders.js';
 
-const sym = (name: string, dim = DIMENSIONLESS): ExprNode => ({ kind: 'symbol', name, dim });
 const op = (o: '*' | '/' | '^' | '+', args: ExprNode[]): ExprNode => ({ kind: 'op', op: o, args });
 
 describe('normalForm — structural hash up to dimensionless factors', () => {
