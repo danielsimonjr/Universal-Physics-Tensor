@@ -3,7 +3,7 @@ metadata:
   version: 9.0.0
   totalFiles: 362
   totalModules: 13
-  totalExports: 2538
+  totalExports: 2540
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7423,6 +7423,7 @@ modules:
         - file: ./composition/explain.js
           imports:
             - formatQuantity
+            - formatExact
           reExport: true
         - file: ./bridges/carrier-sign.js
           imports:
@@ -7439,10 +7440,6 @@ modules:
         - file: ./dimensional/hyphen-names.js
           imports:
             - rewriteCatalogHyphens
-          reExport: true
-        - file: ./composition/bridge-analysis.js
-          imports:
-            - vacuumConstantThroughAlpha
           reExport: true
         - file: ./composition/adjudication.js
           imports:
@@ -7672,10 +7669,10 @@ modules:
         - expandSynonymValues
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
+        - formatExact
         - CarrierSignError
         - naturalConstantOverrides
         - rewriteCatalogHyphens
-        - vacuumConstantThroughAlpha
         - candidateIdIfSlug
         - resolveQuantityName
         - evaluatorOutput
@@ -7939,11 +7936,11 @@ modules:
         - expandSynonymValues
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
+        - formatExact
         - CarrierSignError
         - naturalConstantOverrides
         - UnitMode
         - rewriteCatalogHyphens
-        - vacuumConstantThroughAlpha
         - candidateIdIfSlug
         - resolveQuantityName
         - evaluatorOutput
@@ -8155,7 +8152,6 @@ modules:
             - DATA_CONFRONTED_IDS
       exports:
         - dimensionalFreedom
-        - vacuumConstantThroughAlpha
         - attemptDerivation
         - bridgePriority
         - linkageMap
@@ -8165,7 +8161,6 @@ modules:
         - LinkCandidate
       functions:
         - dimensionalFreedom
-        - vacuumConstantThroughAlpha
         - attemptDerivation
         - bridgePriority
         - linkageMap
@@ -9177,6 +9172,7 @@ modules:
             - formulaShape
       exports:
         - formatQuantity
+        - formatExact
         - explainQuantity
       interfaces:
         - DerivationExplanation
@@ -9184,6 +9180,7 @@ modules:
         - QuantityExplanation
       functions:
         - formatQuantity
+        - formatExact
         - explainQuantity
     src/composition/expr-eval.ts:
       description: Scalar `ExprNode` value evaluator (v0.12 symbolic composition).
@@ -9566,6 +9563,7 @@ modules:
             - RetrodictionOutcome
             - RetrodictionPrediction
             - RetrodictionResult
+            - RetrodictionRefusal
             - RetrodictionReport
             - RetrodictionOptions
           reExport: true
@@ -9725,6 +9723,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - DerivationExplanation
@@ -9792,6 +9791,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - retrodict
@@ -11539,6 +11539,7 @@ modules:
       interfaces:
         - RetrodictionPrediction
         - RetrodictionOptions
+        - RetrodictionRefusal
         - RetrodictionResult
         - RetrodictionReport
       functions:
@@ -12888,7 +12889,10 @@ modules:
       description: Kebab catalog names are one token. A parser that treats `-` as subtraction
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ./symbolic-constants.js
+          imports:
+            - constantRecord
       exports:
         - rewriteCatalogHyphens
       functions:
@@ -14242,6 +14246,9 @@ modules:
           imports:
             - adjudicateBridgeEntry
             - adjudicateCatalog
+          reExport: true
+        - file: ./bridges/rejected.js
+          imports:
             - REJECTED_BRIDGE_ADJUDICATIONS
             - REJECTED_BRIDGE_IDS
           reExport: true
@@ -14249,6 +14256,9 @@ modules:
           imports:
             - BridgeVerdict
             - CatalogAdjudicationReport
+          reExport: true
+        - file: ./bridges/rejected.js
+          imports:
             - RejectedBridgeAdjudication
           reExport: true
         - file: ./composition/index.js
@@ -14285,6 +14295,7 @@ modules:
             - RetrodictionOutcome
             - RetrodictionPrediction
             - RetrodictionResult
+            - RetrodictionRefusal
             - RetrodictionReport
             - RetrodictionOptions
           reExport: true
@@ -15020,6 +15031,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - DerivationExplanation
@@ -15430,6 +15442,7 @@ modules:
         - RetrodictionOutcome
         - RetrodictionPrediction
         - RetrodictionResult
+        - RetrodictionRefusal
         - RetrodictionReport
         - RetrodictionOptions
         - explainQuantity
@@ -17587,15 +17600,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 362
   totalModules: 13
-  totalLinesOfCode: 80764
-  totalExports: 2538
+  totalLinesOfCode: 80771
+  totalExports: 2540
   totalClasses: 80
-  totalInterfaces: 461
+  totalInterfaces: 462
   totalFunctions: 774
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 383
-  totalReExports: 1300
+  totalReExports: 1302
   totalTypeOnlyImports: 510
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

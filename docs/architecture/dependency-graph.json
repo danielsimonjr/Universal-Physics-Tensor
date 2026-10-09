@@ -4,7 +4,7 @@
     "version": "9.0.0",
     "totalFiles": 362,
     "totalModules": 13,
-    "totalExports": 2538
+    "totalExports": 2540
   },
   "entryPoints": [
     {
@@ -11079,7 +11079,8 @@
           {
             "file": "./composition/explain.js",
             "imports": [
-              "formatQuantity"
+              "formatQuantity",
+              "formatExact"
             ],
             "reExport": true
           },
@@ -11108,13 +11109,6 @@
             "file": "./dimensional/hyphen-names.js",
             "imports": [
               "rewriteCatalogHyphens"
-            ],
-            "reExport": true
-          },
-          {
-            "file": "./composition/bridge-analysis.js",
-            "imports": [
-              "vacuumConstantThroughAlpha"
             ],
             "reExport": true
           },
@@ -11389,10 +11383,10 @@
           "expandSynonymValues",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
+          "formatExact",
           "CarrierSignError",
           "naturalConstantOverrides",
           "rewriteCatalogHyphens",
-          "vacuumConstantThroughAlpha",
           "candidateIdIfSlug",
           "resolveQuantityName",
           "evaluatorOutput",
@@ -11657,11 +11651,11 @@
           "expandSynonymValues",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
+          "formatExact",
           "CarrierSignError",
           "naturalConstantOverrides",
           "UnitMode",
           "rewriteCatalogHyphens",
-          "vacuumConstantThroughAlpha",
           "candidateIdIfSlug",
           "resolveQuantityName",
           "evaluatorOutput",
@@ -11987,7 +11981,6 @@
         ],
         "exports": [
           "dimensionalFreedom",
-          "vacuumConstantThroughAlpha",
           "attemptDerivation",
           "bridgePriority",
           "linkageMap",
@@ -11999,7 +11992,6 @@
         ],
         "functions": [
           "dimensionalFreedom",
-          "vacuumConstantThroughAlpha",
           "attemptDerivation",
           "bridgePriority",
           "linkageMap",
@@ -13646,6 +13638,7 @@
         ],
         "exports": [
           "formatQuantity",
+          "formatExact",
           "explainQuantity"
         ],
         "interfaces": [
@@ -13655,6 +13648,7 @@
         ],
         "functions": [
           "formatQuantity",
+          "formatExact",
           "explainQuantity"
         ]
       },
@@ -14252,6 +14246,7 @@
               "RetrodictionOutcome",
               "RetrodictionPrediction",
               "RetrodictionResult",
+              "RetrodictionRefusal",
               "RetrodictionReport",
               "RetrodictionOptions"
             ],
@@ -14465,6 +14460,7 @@
           "RetrodictionOutcome",
           "RetrodictionPrediction",
           "RetrodictionResult",
+          "RetrodictionRefusal",
           "RetrodictionReport",
           "RetrodictionOptions",
           "DerivationExplanation",
@@ -14533,6 +14529,7 @@
           "RetrodictionOutcome",
           "RetrodictionPrediction",
           "RetrodictionResult",
+          "RetrodictionRefusal",
           "RetrodictionReport",
           "RetrodictionOptions",
           "retrodict",
@@ -17008,6 +17005,7 @@
         "interfaces": [
           "RetrodictionPrediction",
           "RetrodictionOptions",
+          "RetrodictionRefusal",
           "RetrodictionResult",
           "RetrodictionReport"
         ],
@@ -18945,7 +18943,14 @@
         "description": "Kebab catalog names are one token. A parser that treats `-` as subtraction",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./symbolic-constants.js",
+            "imports": [
+              "constantRecord"
+            ]
+          }
+        ],
         "exports": [
           "rewriteCatalogHyphens"
         ],
@@ -20878,7 +20883,13 @@
             "file": "./bridges/membership.js",
             "imports": [
               "adjudicateBridgeEntry",
-              "adjudicateCatalog",
+              "adjudicateCatalog"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/rejected.js",
+            "imports": [
               "REJECTED_BRIDGE_ADJUDICATIONS",
               "REJECTED_BRIDGE_IDS"
             ],
@@ -20888,7 +20899,13 @@
             "file": "./bridges/membership.js",
             "imports": [
               "BridgeVerdict",
-              "CatalogAdjudicationReport",
+              "CatalogAdjudicationReport"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/rejected.js",
+            "imports": [
               "RejectedBridgeAdjudication"
             ],
             "reExport": true
@@ -20943,6 +20960,7 @@
               "RetrodictionOutcome",
               "RetrodictionPrediction",
               "RetrodictionResult",
+              "RetrodictionRefusal",
               "RetrodictionReport",
               "RetrodictionOptions"
             ],
@@ -21879,6 +21897,7 @@
           "RetrodictionOutcome",
           "RetrodictionPrediction",
           "RetrodictionResult",
+          "RetrodictionRefusal",
           "RetrodictionReport",
           "RetrodictionOptions",
           "DerivationExplanation",
@@ -22290,6 +22309,7 @@
           "RetrodictionOutcome",
           "RetrodictionPrediction",
           "RetrodictionResult",
+          "RetrodictionRefusal",
           "RetrodictionReport",
           "RetrodictionOptions",
           "explainQuantity",
@@ -25315,15 +25335,15 @@
   "statistics": {
     "totalTypeScriptFiles": 362,
     "totalModules": 13,
-    "totalLinesOfCode": 80764,
-    "totalExports": 2538,
+    "totalLinesOfCode": 80771,
+    "totalExports": 2540,
     "totalClasses": 80,
-    "totalInterfaces": 461,
+    "totalInterfaces": 462,
     "totalFunctions": 774,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 383,
-    "totalReExports": 1300,
+    "totalReExports": 1302,
     "totalTypeOnlyImports": 510,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
