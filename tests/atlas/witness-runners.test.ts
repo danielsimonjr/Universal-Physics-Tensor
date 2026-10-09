@@ -24,6 +24,11 @@ const LENGTH = dim(1);
 const x = sym('x', LENGTH);
 const spec = { id: 'W-test', lhs: x, rhs: x };
 
+// Gate on the SIMPLIFIER peer, not the parser registry: they are different
+// packages, and gating on the wrong one would skip or run for the wrong reason.
+const simplifierPresent = await isSimplifierAvailable();
+const peerRequired = process.env.UPT_REQUIRE_PEERS === '1';
+
 /** A simplifier that always returns the literal `value`, ignoring its input. */
 const constantSimplifier = (value: string): SymbolicSimplifier =>
   async () => ({ expr: sym(value, DIMENSIONLESS), simplified: true });
@@ -106,14 +111,9 @@ describe('runSymbolicWitness', () => {
     }
   });
 
-  it('runs against the REAL peer under the skip-when-absent pattern', async () => {
-    // Gate on the SIMPLIFIER peer, not the parser registry: they are different
-    // packages, and gating on the wrong one would skip or run for the wrong reason.
-    if (!(await isSimplifierAvailable()) && process.env.UPT_REQUIRE_PEERS !== '1') {
-      // Peer absent and not required: the injected-null test above already covers
-      // this path. Skipping here rather than asserting a peer-dependent outcome.
-      return;
-    }
+  // Peer absent and not required: the injected-null test above already covers
+  // that path, and this one is reported as skipped, not passed.
+  it.skipIf(!simplifierPresent && !peerRequired)('runs against the REAL peer under the skip-when-absent pattern', async () => {
     // x − x must vanish. This is the one test that uses the real `simplifyExpr`,
     // and it still does not touch the registry: it calls the default directly.
     const r = await runSymbolicWitness({ id: 'W-real', lhs: x, rhs: x }, simplifyExpr);

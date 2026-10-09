@@ -44,13 +44,11 @@ describe('data/atlas/witness-results.json — committed artifact', () => {
     );
   });
 
-  it('FRESHNESS: deep-equals a fresh run (re-run `bun run atlas:witness-results`)', async () => {
-    if (!peerPresent && !peerRequired) {
-      // Without the CAS peer a fresh run records every symbolic witness as
-      // peer-absent, so it CANNOT equal an artifact emitted with the peer. The
-      // emitter refuses to write in that state for the same reason.
-      return;
-    }
+  // Without the CAS peer a fresh run records every symbolic witness as
+  // peer-absent, so it CANNOT equal an artifact emitted with the peer. The
+  // emitter refuses to write in that state for the same reason. Skipped, and
+  // reported as skipped, rather than returned as a pass.
+  it.skipIf(!peerPresent && !peerRequired)('FRESHNESS: deep-equals a fresh run (re-run `bun run atlas:witness-results`)', async () => {
     // Round-trip through JSON so the comparison sees what the file can hold
     // (a ratio of Infinity serializes as null).
     const live = JSON.parse(JSON.stringify(await runWitnessRegistry())) as WitnessResultsArtifact;
@@ -71,8 +69,7 @@ describe('W1s / W2s — the spring ↔ circuit dictionary, checked by the CAS', 
     expect(artifactPassingWitnessIds(committed, 'ab-damped-rlc')).toEqual(new Set(['W2s']));
   });
 
-  it('NEGATIVE CONTROL: a WRONG dictionary (k ↔ C instead of 1/C) does not check', async () => {
-    if (!peerPresent && !peerRequired) return;
+  it.skipIf(!peerPresent && !peerRequired)('NEGATIVE CONTROL: a WRONG dictionary (k ↔ C instead of 1/C) does not check', async () => {
     const w1s = WITNESS_REGISTRY.find((w) => w.spec.id === 'W1s');
     if (w1s === undefined || w1s.kind !== 'symbolic') throw new Error('W1s missing');
     const L = sym('L', INDUCTANCE);
