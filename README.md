@@ -47,7 +47,7 @@ npm install universal-physics-tensor
 npx upt help
 ```
 
-The npm package ships `dist/`, `bin/`, this README and the licence. The documentation and the
+The npm package ships `dist/`, `bin/`, `data/`, this README and the licence. The documentation and the
 examples live in the GitHub repository. From a clone, Bun is the package manager (`package.json`
 pins `bun@1.4.2`). Node does not install it: `corepack prepare bun@1.4.2 --activate` fails with
 `Unsupported package manager specification`. Install that Bun from <https://bun.sh/install>, then
@@ -85,10 +85,11 @@ npx upt search pendulum
   ✓ agrees with CE-pendulum-period (Pendulum period), prefactor included: yours/canonical = 1 at 3 fixed points
 ```
 
-`upt explain hawking-temperature mass=1Msun` recovers `6.1684e-8` by the two routes of BE-42.
-`upt evaluate be-63 mu_e=2` prints `M_Ch_solar = 1.4558683960704613` for an ideal degenerate gas
-with `M_sun = 1.989e30` kg. `upt search pendulum` names the commands that open the pendulum
-records. Every flag of every command is in [`docs/CLI.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/CLI.md).
+`upt explain hawking-temperature mass=1Msun` prints `Recovered value: 6.16842971641034e-8`, reached
+by the two routes of BE-42 (`be-42` and `be-42-via-rs`). `upt evaluate be-63 mu_e=2` prints
+`mass [kg] = 2.895722239784147e+30`, the Chandrasekhar mass of an ideal degenerate gas, about
+1.456 solar masses at M_sun = 1.989e30 kg. `upt search pendulum` names `CE-pendulum-period`,
+`model-pendulum`, and `ab-pendulum-linear`, each with the command that opens its record. Every flag of every command is in [`docs/CLI.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/CLI.md).
 
 ## Commands
 
