@@ -67,11 +67,11 @@ describe('runSymbolicWitness', () => {
   });
 
   it('a budget that elapses is UNRESOLVED/timeout', async () => {
-    const slow: SymbolicSimplifier = () =>
-      new Promise((resolve) => {
-        setTimeout(() => resolve({ expr: sym('0', DIMENSIONLESS), simplified: true }), 200);
-      });
-    const r = await runSymbolicWitness({ ...spec, budgetMs: 10 }, slow);
+    // A simplifier that never settles: the budget is then the only thing that can end the
+    // wait, so the outcome does not depend on two timers racing (a 200 ms reply against a
+    // 10 ms budget was the previous shape; it could not lose, but the proof was a margin).
+    const never: SymbolicSimplifier = () => new Promise(() => {});
+    const r = await runSymbolicWitness({ ...spec, budgetMs: 10 }, never);
     expect(r.status).toBe('unresolved');
     expect(r.reason).toBe('timeout');
     // The doc comment's claim, pinned: the budget bounds the WAIT, not the CAS.

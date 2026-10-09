@@ -15,13 +15,12 @@ import { leakageKey } from '../../src/atlas/benchmark/leakage.js';
 import { validate } from '../../src/dimensional/validator.js';
 import type { ExprNode } from '../../src/dimensional/ast-types.js';
 import type { Dimension } from '../../src/dimensional/types.js';
+import { sym, dim } from '../../src/dimensional/ast-builders.js';
 
-const d = (L: number, M: number, T: number): Dimension => ({ L, M, T, I: 0, Theta: 0, N: 0, J: 0 });
-const sym = (name: string, dim: Dimension): ExprNode => ({ kind: 'symbol', name, dim }) as ExprNode;
 const op = (o: '-' | '*' | '/', ...args: ExprNode[]): ExprNode => ({ kind: 'op', op: o, args }) as ExprNode;
 
 // A claim in the benchmark's form: physics notation, as a residual F − m·a.
-const claim = op('-', sym('F', d(1, 1, -2)), op('*', sym('m', d(0, 1, 0)), sym('a', d(1, 0, -2))));
+const claim = op('-', sym('F', dim(1, 1, -2)), op('*', sym('m', dim(0, 1, 0)), sym('a', dim(1, 0, -2))));
 const newton = canonicalById('CE-newton-second-law')!;
 
 describe('canonical residual form', () => {
@@ -35,7 +34,7 @@ describe('canonical residual form', () => {
   });
 
   it('CONTROL: a claim of a different relation (F − m·v) still does not match', () => {
-    const wrong = op('-', sym('F', d(1, 1, -2)), op('*', sym('m', d(0, 1, 0)), sym('v', d(1, 0, -1))));
+    const wrong = op('-', sym('F', dim(1, 1, -2)), op('*', sym('m', dim(0, 1, 0)), sym('v', dim(1, 0, -1))));
     expect(leakageKey(wrong)).not.toBe(leakageKey(canonicalResidual(newton)!));
   });
 

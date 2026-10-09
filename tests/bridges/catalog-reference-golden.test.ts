@@ -1,35 +1,27 @@
 /**
  * Every catalog reference is the value the engine returns at those inputs.
  *
- * The 126 numeric master goldens were copied onto the relation as `reference`.
- * Under vitest, 114 of those are bitwise identical and 12 differ by one unit
- * in the last place (relative error below 1e-15). That is the measured
- * difference, not a widened physics tolerance. A thermal row (147–170) has no
- * master before-value; two of them, be-164 and be-165, sit in the same
- * one-ulp set. be-142's snapshot golden was null, so its reference is not a
- * master before-value.
+ * The 126 numeric master goldens were copied onto the relation as `reference`. Which rows land
+ * bitwise and which land a unit or two in the last place away depends on the host's
+ * floating-point library: the set was once measured on one platform and typed in as a list of
+ * thirteen ids said to be "one unit in the last place" off, and on Linux x86-64 three of them
+ * (be-74, be-120, be-164) are TWO units off. So the rule is the assertion, not a list: every row
+ * is within two ulp of its reference, and a failure names the rows and both values. Two ulp is
+ * the measured maximum across the two hosts, not a widened physics tolerance (it is below the
+ * relative 1e-15 the old test also required). be-142's snapshot golden was null, so its
+ * reference is not a master before-value.
  */
 import { describe, expect, it } from 'vitest';
 import { catalogRelations } from '../../src/bridges/catalog-load.js';
 import { catalogEdge } from '../../src/composition/catalog-graph.js';
 import { evaluateEdge } from '../../src/composition/edge.js';
 
-/** Ids whose vitest value is not bitwise identical to the stored reference. */
-const ONE_ULP = [
-  'be-14',
-  'be-43',
-  'be-56',
-  'be-69',
-  'be-74',
-  'be-94',
-  'be-109',
-  'be-115',
-  'be-116',
-  'be-117',
-  'be-120',
-  'be-164',
-  'be-165',
-] as const;
+/** The spacing of doubles at `x`: the smallest step to the next representable value. */
+function ulp(x: number): number {
+  if (x === 0) return Number.MIN_VALUE;
+  const exponent = Math.floor(Math.log2(Math.abs(x)));
+  return 2 ** (exponent - 52);
+}
 
 describe('catalog reference goldens', () => {
   const relations = catalogRelations().filter((relation) => relation.reference !== undefined);
@@ -39,19 +31,28 @@ describe('catalog reference goldens', () => {
     expect(relations.length).toBe(158);
   });
 
-  it('evaluateEdge matches each stored reference, or misses by one unit in the last place', () => {
-    const off: string[] = [];
+  const MAX_ULP = 2;
+
+  it('evaluateEdge matches each stored reference to within two units in the last place', () => {
+    const beyond: string[] = [];
     for (const relation of relations) {
       const reference = relation.reference!;
       const value = evaluateEdge(catalogEdge(relation.id), { ...reference.inputs });
-      if (value === reference.value) continue;
-      const scale = reference.value === 0 ? 1 : Math.abs(reference.value);
-      const rel = Math.abs(value - reference.value) / scale;
-      expect(rel, relation.id).toBeLessThan(1e-15);
-      off.push(relation.id);
+      if (Math.abs(value - reference.value) > MAX_ULP * ulp(reference.value)) {
+        beyond.push(`${relation.id}: ${value} vs ${reference.value}`);
+      }
     }
-    const byId = (id: string) => Number(id.slice(3));
-    expect(off.sort((a, b) => byId(a) - byId(b))).toEqual([...ONE_ULP]);
+    expect(beyond).toEqual([]);
+  });
+
+  it('control: the ulp rule separates two steps from three, and is the spacing of doubles', () => {
+    const x = 4.107369998431901e-24;
+    const two = x + 2 * ulp(x);
+    expect(two).not.toBe(x);
+    expect(Math.abs(two - x)).toBeLessThanOrEqual(MAX_ULP * ulp(x));
+    expect(Math.abs(two + ulp(x) - x)).toBeGreaterThan(MAX_ULP * ulp(x));
+    expect(ulp(1)).toBe(Number.EPSILON);
+    expect(x + ulp(x) / 2).toBe(x); // half a step rounds back: ulp is the spacing, not less
   });
 
   it('be-12 at mass 1 and temperature 300 is the stored thermal wavelength', () => {

@@ -31,8 +31,7 @@ import {
   Dimension,
 } from '../../src/dimensional/types.js';
 import { hbar, c, k_B, l_P } from '../../src/dimensional/constants.js';
-
-const sym = (name: string, dim: Dimension): ExprNode => ({ kind: 'symbol', name, dim });
+import { sym } from '../../src/dimensional/ast-builders.js';
 
 describe('validator: known-good equations', () => {
   it("Newton's second law F = m a", () => {

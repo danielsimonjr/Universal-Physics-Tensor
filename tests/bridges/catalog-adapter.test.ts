@@ -95,14 +95,13 @@ describe('catalogToCells', () => {
         (e.bridges[0] === 'quantum' && e.bridges[1] === 'classical') ||
         (e.bridges[0] === 'classical' && e.bridges[1] === 'quantum'),
     );
-    if (quantumClassical) {
-      const cell = catalogToCells([quantumClassical])[0];
-      expect(cell.source.scale).toBeDefined();
-      expect(cell.target.scale).toBeDefined();
-    } else {
-      // If no such entry exists, skip; the test passes vacuously.
-      expect(true).toBe(true);
-    }
+    // The catalog holds such entries (be-11 is one); a catalog without one must fail here, not
+    // pass through an empty branch.
+    expect(quantumClassical).toBeDefined();
+    const cell = catalogToCells([quantumClassical!])[0];
+    expect(cell.source.scale).toBeDefined();
+    expect(cell.target.scale).toBeDefined();
+    expect(cell.source.scale).not.toBe(cell.target.scale);
   });
 });
 

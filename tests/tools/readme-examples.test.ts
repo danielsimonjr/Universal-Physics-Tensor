@@ -6,10 +6,10 @@
  * state, and the test reads those back.
  */
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, symlinkSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, readFileSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { tempDir } from '../helpers/tmp.js';
 
 const root = resolve(import.meta.dirname, '../..');
 const readme = readFileSync(resolve(root, 'README.md'), 'utf8');
@@ -21,7 +21,7 @@ const fence = (needle: string): string => {
 };
 
 function runFence(source: string): { status: number; stdout: string; stderr: string } {
-  const dir = mkdtempSync(join(tmpdir(), 'upt-readme-'));
+  const dir = tempDir('upt-readme-');
   mkdirSync(join(dir, 'node_modules'));
   symlinkSync(root, join(dir, 'node_modules', 'universal-physics-tensor'));
   writeFileSync(join(dir, 'snippet.ts'), source);

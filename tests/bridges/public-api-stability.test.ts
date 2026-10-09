@@ -67,7 +67,7 @@ describe('Public API stability — v0.3.5 numerical surface', () => {
     const numerical = await import('../../src/numerical/index.js');
     const names = Object.keys(numerical).sort();
     expect(names).toContain('evaluateCovariantEikonalNumerical');
-    expect(names).not.toContain(['evaluateBE', '37CovariantEikonalNumerical'].join(''));
+    expect(names).not.toContain('evaluateBE37CovariantEikonalNumerical');
     expect(names).toMatchSnapshot();
   });
 

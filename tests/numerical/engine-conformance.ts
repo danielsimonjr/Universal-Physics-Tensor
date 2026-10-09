@@ -1,11 +1,13 @@
 /**
- * Parameterized TensorEngine conformance suite. Both MathTSEngine
- * and MathTSEngine must pass this identical suite — it is the contract that
- * makes the two-repo parallel development safe (v0.3.5-Design.md §9).
+ * Parameterized TensorEngine conformance suite. Every engine must pass this identical suite;
+ * when two engines existed (the reference engine and MathTSEngine) it was the contract that made
+ * the two-repo parallel development safe (v0.3.5-Design.md §9), and MathTSEngine is the one
+ * engine now (`engine-conformance.mathts.test.ts` runs it at tier 'full'). The AD conformance
+ * suite is `ad-conformance.ts`, run by `ad-conformance.test.ts`.
  *
  * Not a *.test.ts file: it exports a function that an engine's own
  * *.test.ts wraps. `tier` lets an engine opt into a subset while it is
- * still being built (Task 4 runs 'core'; Task 5 + Task 11 run 'full').
+ * still being built.
  */
 import { describe, it, expect } from 'vitest';
 import type { TensorEngine } from '../../src/numerical/tensor-engine.js';

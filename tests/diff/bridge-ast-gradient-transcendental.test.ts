@@ -14,10 +14,11 @@ import { bridgeGradientAST } from '../../src/diff/bridge-ast-gradient.js';
 import type { ExprNode, TranscendentalFn } from '../../src/dimensional/validator.js';
 import { hasAutogradSupport } from '../../src/numerical/tensor-engine.js';
 import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
+import { sym } from '../../src/dimensional/ast-builders.js';
+import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 
 const peerPresent = hasAutogradSupport(new MathTSEngine());
 
-const sym = (name: string): ExprNode => ({ kind: 'symbol', name, dim: {} }) as ExprNode;
 const fn = (f: TranscendentalFn, arg: ExprNode): ExprNode =>
   ({ kind: 'transcendental', fn: f, arg }) as ExprNode;
 
@@ -44,14 +45,14 @@ const CASES: UnaryCase[] = [
 describe('bridgeGradientAST — transcendental nodes', () => {
   for (const c of CASES) {
     it.runIf(peerPresent)(`${c.fn}(x): exact d/dx`, async () => {
-      const { gradient } = await bridgeGradientAST(fn(c.fn, sym('x')), 'x', { x: c.x });
+      const { gradient } = await bridgeGradientAST(fn(c.fn, sym('x', DIMENSIONLESS)), 'x', { x: c.x });
       expect(gradient).toBeCloseTo(c.deriv(c.x), 10);
     });
   }
 
   it.runIf(peerPresent)('chain rule: d/dx ln(a/x) = -1/x (variable inside the argument)', async () => {
     // ln(a/x); ∂/∂x = -1/x. This is the BE-37 shape (ln of a ratio).
-    const expr = fn('ln', { kind: 'op', op: '/', args: [sym('a'), sym('x')] } as ExprNode);
+    const expr = fn('ln', { kind: 'op', op: '/', args: [sym('a', DIMENSIONLESS), sym('x', DIMENSIONLESS)] } as ExprNode);
     const { value, gradient } = await bridgeGradientAST(expr, 'x', { a: 10, x: 2 });
     expect(value).toBeCloseTo(Math.log(10 / 2), 12);
     expect(gradient).toBeCloseTo(-1 / 2, 10);
@@ -62,7 +63,7 @@ describe('bridgeGradientAST — transcendental nodes', () => {
     const negXsq: ExprNode = {
       kind: 'op',
       op: '*',
-      args: [sym('neg1'), { kind: 'op', op: '^', args: [sym('x'), sym('2')] } as ExprNode],
+      args: [sym('neg1', DIMENSIONLESS), { kind: 'op', op: '^', args: [sym('x', DIMENSIONLESS), sym('2', DIMENSIONLESS)] } as ExprNode],
     } as ExprNode;
     const { value, gradient } = await bridgeGradientAST(fn('exp', negXsq), 'x', { x: 0.9, neg1: -1, 2: 2 });
     const x = 0.9;

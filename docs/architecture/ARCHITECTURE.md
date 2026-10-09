@@ -107,7 +107,7 @@ Capabilities that are not implemented are not claimed. The bridge catalog marks 
 
 ### 3. Interface + Conformance Suite
 
-The `TensorEngine` interface decouples the evaluation surface from any particular linear-algebra library. Both engines (`Float64ReferenceEngine` and `MathTSEngine`) satisfy a single parameterized conformance suite (`tests/numerical/engine-conformance.test.ts`) that runs the same test cases against either engine. Adding a new engine means implementing the interface and passing the suite — no changes to the evaluator.
+The `TensorEngine` interface decouples the evaluation surface from any particular linear-algebra library. Both engines (`Float64ReferenceEngine` and `MathTSEngine`) satisfy a single parameterized conformance suite (`tests/numerical/engine-conformance.mathts.test.ts`) that runs the same test cases against either engine. Adding a new engine means implementing the interface and passing the suite — no changes to the evaluator.
 
 ### 4. Dependency-Shape Signal
 
@@ -284,7 +284,7 @@ The engine architecture follows a strict three-part structure:
 - `Float64ReferenceEngine`: Pure TypeScript, Float64Array-backed. Zero runtime dependencies. Available from the main package entry point. Its AD implementation uses dual numbers for forward mode and a tape-record approach for reverse mode, both implemented inline in `float64-engine.ts`.
 - `MathTSEngine`: Wraps `@danielsimonjr/mathts-tensor`. Available only via the `universal-physics-tensor/numerical/mathts-engine` exports subpath (a conditional import that keeps the optional dependency tree-shakeable). Its AD delegates to `@danielsimonjr/mathts-autograd`.
 
-**3. Conformance suite**: A parameterized test suite (`tests/numerical/engine-conformance.test.ts`) defines the behavioral contract shared by both engines. The suite is run against each engine independently. Any engine that passes the suite is a valid drop-in for `evaluateNumerical()`.
+**3. Conformance suite**: A parameterized test suite (`tests/numerical/engine-conformance.mathts.test.ts`) defines the behavioral contract shared by both engines. The suite is run against each engine independently. Any engine that passes the suite is a valid drop-in for `evaluateNumerical()`.
 
 ---
 

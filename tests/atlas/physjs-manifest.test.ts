@@ -90,7 +90,10 @@ describe('vendored PhysJS manifest', () => {
   it('records the manifest commit, and every coverage phrase says the reference covers its statement only', () => {
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(PHYSJS_COMMIT).toBe(manifest.commit);
-    expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
+    // The toolchain is PhysJS's at the pinned commit; CI's docs-fresh job compares the vendored
+    // manifest to PhysJS at that commit (`vendor-physjs.ts --check`), which is where the value is
+    // bound. A literal here was a second copy of that fact, outside the reviewed-rows hash.
+    expect(manifest.toolchain).toMatch(/^leanprover\/lean4:v\d+\.\d+\.\d+$/);
     expect(manifest.entries.length).toBeGreaterThanOrEqual(SENTINELS.length);
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
