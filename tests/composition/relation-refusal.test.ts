@@ -176,11 +176,14 @@ describe('composition-table refusals', () => {
     expect(recorded).toEqual(CATALOG_RELATIONS);
   });
 
-  it('the composeEdges comment no longer says the catalog carries no relation', () => {
+  it('the composeEdges comment neither denies the catalog relations nor counts them', () => {
+    // The list and its count are this file's `CATALOG_RELATIONS`, derived from the graph above;
+    // a count in the comment ("nine edges") went stale when be-58's relation was copied onto the
+    // edge (9.0.0 audit §4 stale comments), so the comment now points here instead of counting.
     const source = readFileSync(resolve(HERE, '../../src/composition/compose.ts'), 'utf8');
     expect(source).not.toContain('Every edge in `CATALOG_GRAPH` carries none');
-    expect(source).toContain('be-11-master');
-    expect(source).toContain('be-59');
+    expect(source).not.toMatch(/Nine edges|Those nine|Ten edges|Those ten/);
+    expect(source).toContain('relation-refusal.test.ts');
   });
 
   it('the root barrel does not gain the refusal list', () => {

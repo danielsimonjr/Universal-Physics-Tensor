@@ -450,7 +450,7 @@ export function composeEdges(
   // Entered only when BOTH operands carry a `relation`. An operand with no
   // relation skips this block, and the composed edge then has no `relation`
   // key. The catalog edges that carry one are the catalog's `relation` rows
-  // (`tests/composition/compose-relation.test.ts` lists them); they stay.
+  // (`tests/composition/relation-refusal.test.ts` lists them); they stay.
   // When both operands carry a relation, a silent table cell throws
   // `UndefinedCompositionError`. The approximation cell throws the same
   // error, because an edge relation carries no norm transport and this
