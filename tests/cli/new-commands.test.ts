@@ -37,7 +37,7 @@ describe('upt evaluate', () => {
   it('no args lists the evaluable bridges', async () => {
     const c = captureMerged();
     expect(await runCli(['evaluate'], c.io)).toBe(0);
-    expect(text(c)).toMatch(/be-55 {2}Integer quantum Hall \/ TKNN\n {6}C \[dimensionless\] TKNN \(Chern\) number C — /);
+    expect(text(c)).toMatch(/be-55 {2}Integer quantum Hall \/ TKNN\n {6}C \[dimensionless\] chern-number C — /);
   });
   it('a non-bridge target is a usage error → exit 2', async () => {
     const c = captureMerged();
@@ -73,7 +73,7 @@ describe('upt confront --rigor / --frontier', () => {
     const c = captureMerged();
     expect(await runCli(['confront', '--frontier'], c.io)).toBe(0);
     const t = text(c);
-    expect(t).toMatch(/margin 0\.09σ to the 1σ acceptance threshold/);
+    expect(t).toMatch(/margin 0\.087σ to the 1σ acceptance threshold/);
     expect(t).toMatch(/a software criterion, not a scientific exclusion level/);
     expect(t).not.toMatch(/to exclusion/);
     // be-37 (0.91σ, margin 0.09) must precede be-52 (0.26σ, margin 0.74)

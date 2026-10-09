@@ -6,6 +6,7 @@
  * lines. The CLI is exercised in-process against the built `dist/`, so a src
  * change needs `bun run build` before this file reports on it.
  */
+import '../helpers/dist.js';
 import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';

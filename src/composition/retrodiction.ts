@@ -81,6 +81,13 @@ export interface RetrodictionOptions {
 }
 
 /** The result of retrodicting one node. @public */
+/** One refused edge in a retrodiction, with the kind of refusal. @internal */
+export interface RetrodictionRefusal {
+  readonly edge: string;
+  readonly kind: 'domain' | 'coefficient-unset';
+  readonly reason: string;
+}
+
 export interface RetrodictionResult {
   readonly target: string;
   readonly outcome: RetrodictionOutcome;
@@ -93,7 +100,12 @@ export interface RetrodictionResult {
    * Derivations that refused the inputs as outside their validity domain.
    * A refusal is not an unset coefficient and not a missing input.
    */
-  readonly refusals?: readonly { readonly edge: string; readonly reason: string }[];
+  /**
+   * Edges that refused the supplied values. `kind` keeps the two refusals apart (AGENTS law 4):
+   * `domain` is a bad value (the edge's validity domain rejected the point); `coefficient-unset`
+   * is the edge's own state (no sourced prefactor), whatever the values.
+   */
+  readonly refusals?: readonly RetrodictionRefusal[];
   /** `outcome !== 'inconsistent'` — the falsification gate. */
   readonly pass: boolean;
   /** Supplied external value, when scored. */
@@ -200,7 +212,7 @@ export function retrodictNode(
   const values = forwardEvaluate(edgesMinusIntoTarget, groundTruth, idents);
 
   const predictions: RetrodictionPrediction[] = [];
-  const refusals: { edge: string; reason: string }[] = [];
+  const refusals: RetrodictionRefusal[] = [];
   for (const e of edges) {
     if (e.target.name !== target) continue;
     if (!e.sources.every((s) => values.has(s.name))) continue;
@@ -214,7 +226,11 @@ export function retrodictNode(
       // error (an alias conflict, a TypeError in an evaluator) is a different
       // fact: both propagate instead of reading as "unrecoverable" (§4 C6).
       if (err instanceof DomainViolationError || err instanceof CoefficientUnsetError) {
-        refusals.push({ edge: e.id, reason: err.message });
+        refusals.push({
+          edge: e.id,
+          kind: err instanceof DomainViolationError ? 'domain' : 'coefficient-unset',
+          reason: err.message,
+        });
         continue;
       }
       throw err;

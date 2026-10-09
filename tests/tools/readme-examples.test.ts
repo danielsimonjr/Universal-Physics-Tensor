@@ -13,6 +13,7 @@
  * sentence. A command with no stated output, or two statements for one
  * command, fails the test, so a line added to the fence must say what it prints.
  */
+import '../helpers/dist.js';
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';

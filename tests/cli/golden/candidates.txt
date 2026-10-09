@@ -1,10 +1,10 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (160-bridge)]
-  anchored core: the clusters holding at least one of the 126 established-confidence edge(s) of the 158 in this graph
+  anchored core: the clusters holding at least one of the 125 established-confidence edge(s) of the 158 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  4196 total  →  4162 touch the anchored core  →  839 also same-kind
+  funnel:  4169 total  →  4135 touch the anchored core  →  822 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     accretor-mass ≟ jeans-mass                               [mass]
@@ -113,7 +113,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     carrier-density ≟ upper-hybrid-density                   [density]
     child-carrier-mass ≟ accretor-mass                       [mass]
     child-carrier-mass ≟ bohm-ion-mass                       [mass]
-    child-carrier-mass ≟ fermi-sea-mass                      [mass]
     child-carrier-mass ≟ gradb-mass                          [mass]
     child-carrier-mass ≟ jeans-mass                          [mass]
     child-carrier-mass ≟ lorentz-mass                        [mass]
@@ -232,7 +231,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     defect-rest-mass ≟ accretor-mass                         [mass]
     defect-rest-mass ≟ bohm-ion-mass                         [mass]
     defect-rest-mass ≟ child-carrier-mass                    [mass]
-    defect-rest-mass ≟ fermi-sea-mass                        [mass]
     defect-rest-mass ≟ gradb-mass                            [mass]
     defect-rest-mass ≟ jeans-mass                            [mass]
     defect-rest-mass ≟ lorentz-mass                          [mass]
@@ -249,7 +247,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     effective-mass ≟ accretor-mass                           [mass]
     effective-mass ≟ bohm-ion-mass                           [mass]
     effective-mass ≟ child-carrier-mass                      [mass]
-    effective-mass ≟ fermi-sea-mass                          [mass]
     effective-mass ≟ gradb-mass                              [mass]
     effective-mass ≟ jeans-mass                              [mass]
     effective-mass ≟ lorentz-mass                            [mass]
@@ -342,15 +339,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     fermi-sea-density ≟ pauli-density                        [density]
     fermi-sea-density ≟ sommerfeld-density                   [density]
     fermi-sea-density ≟ upper-hybrid-density                 [density]
-    fermi-sea-mass ≟ accretor-mass                           [mass]
-    fermi-sea-mass ≟ bohm-ion-mass                           [mass]
-    fermi-sea-mass ≟ gradb-mass                              [mass]
-    fermi-sea-mass ≟ jeans-mass                              [mass]
-    fermi-sea-mass ≟ lorentz-mass                            [mass]
-    fermi-sea-mass ≟ parker-mass                             [mass]
-    fermi-sea-mass ≟ probe-electron-mass                     [mass]
-    fermi-sea-mass ≟ probe-ion-mass                          [mass]
-    fermi-sea-mass ≟ upper-hybrid-mass                       [mass]
     fermioffset-warmth ≟ gortercas-warmth                    [warmth]
     fin-conductivity ≟ thermal-conductivity                  [conductivity]
     foerster-radius ≟ parker-radius                          [radius]
@@ -438,7 +426,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     mass ≟ accretor-mass                                     [mass]
     mass ≟ bohm-ion-mass                                     [mass]
     mass ≟ child-carrier-mass                                [mass]
-    mass ≟ fermi-sea-mass                                    [mass]
     mass ≟ gradb-mass                                        [mass]
     mass ≟ jeans-mass                                        [mass]
     mass ≟ lorentz-mass                                      [mass]
@@ -544,7 +531,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     planck-mass ≟ accretor-mass                              [mass]
     planck-mass ≟ bohm-ion-mass                              [mass]
     planck-mass ≟ child-carrier-mass                         [mass]
-    planck-mass ≟ fermi-sea-mass                             [mass]
     planck-mass ≟ gradb-mass                                 [mass]
     planck-mass ≟ jeans-mass                                 [mass]
     planck-mass ≟ lorentz-mass                               [mass]
@@ -614,7 +600,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     reference-mass ≟ accretor-mass                           [mass]
     reference-mass ≟ bohm-ion-mass                           [mass]
     reference-mass ≟ child-carrier-mass                      [mass]
-    reference-mass ≟ fermi-sea-mass                          [mass]
     reference-mass ≟ gradb-mass                              [mass]
     reference-mass ≟ jeans-mass                              [mass]
     reference-mass ≟ lorentz-mass                            [mass]
@@ -738,7 +723,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     swampland-tower-mass ≟ accretor-mass                     [mass]
     swampland-tower-mass ≟ bohm-ion-mass                     [mass]
     swampland-tower-mass ≟ child-carrier-mass                [mass]
-    swampland-tower-mass ≟ fermi-sea-mass                    [mass]
     swampland-tower-mass ≟ gradb-mass                        [mass]
     swampland-tower-mass ≟ jeans-mass                        [mass]
     swampland-tower-mass ≟ lorentz-mass                      [mass]
@@ -793,7 +777,6 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     tunneling-mass ≟ bohm-ion-mass                           [mass]
     tunneling-mass ≟ child-carrier-mass                      [mass]
     tunneling-mass ≟ defect-rest-mass                        [mass]
-    tunneling-mass ≟ fermi-sea-mass                          [mass]
     tunneling-mass ≟ gradb-mass                              [mass]
     tunneling-mass ≟ jeans-mass                              [mass]
     tunneling-mass ≟ lorentz-mass                            [mass]
@@ -847,7 +830,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     wiedemann-temperature ≟ jeans-temperature                [temperature]
     wormhole-cross-section-area ≟ pull-in-area               [area]
 
-  adjudicated: 4 of 839 carry a recorded verdict; the rest are unadjudicated.
+  adjudicated: 4 of 822 carry a recorded verdict; the rest are unadjudicated.
   A shared dimension is a coincidence until a physicist records otherwise. The ledger's sources:
     https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
     https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md

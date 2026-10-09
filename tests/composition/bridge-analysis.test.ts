@@ -47,3 +47,21 @@ describe('attemptDerivation samples both signs where a domain needs it', () => {
     expect(r.status).toBe('no-samples');
   });
 });
+
+describe('a flat regime is not a derivation', () => {
+  it('an edge whose positive samples overflow is not fitted at a negated point where it is saturated', () => {
+    // I = I_s (exp(V/T·1e4) − 1): at the positive sample points the exponential overflows; at V < 0 the
+    // function is −I_s whatever V and T are. Before 2026-10-09 the sampler fell back to the negated
+    // point and reported a monomial I_s^1 V^0 T^0 with prefactor −1 as `derived` (be-82 in the catalog).
+    const saturating = edge({
+      id: 'saturating',
+      sources: [q('saturation'), q('voltage'), q('temperature')],
+      target: q('current'),
+      domain: { description: 'any', predicate: () => true },
+      evaluate: (i) => i['saturation']! * (Math.exp((1e4 * i['voltage']!) / i['temperature']!) - 1),
+    });
+    const r = attemptDerivation(saturating);
+    expect(r.status).not.toBe('derived');
+  });
+});
+

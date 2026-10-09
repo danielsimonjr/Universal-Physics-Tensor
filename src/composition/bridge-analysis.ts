@@ -45,7 +45,11 @@ interface NamedConstant {
 }
 
 /** ℏ, c, G, k_B, e — the constants the audit/triage may invoke, from the registry. */
-const FUNDAMENTAL_CONSTANTS: readonly NamedConstant[] = ['ℏ', 'c', 'G', 'k_B', 'e'].map((name) => {
+// The constants a canonical or catalog relation bakes: a closure is searched over every subset.
+// `epsilon_0` and `m_e` joined on 2026-10-09, when the canonical entries that spelled them as
+// governing inputs (`vacuum-permittivity`, `electron-mass`) started baking them like every other
+// constant; without them CE-plasma-frequency read as a reconstruction mismatch.
+const FUNDAMENTAL_CONSTANTS: readonly NamedConstant[] = ['ℏ', 'c', 'G', 'k_B', 'e', 'epsilon_0', 'm_e'].map((name) => {
   const record = constantRecord(name)!;
   return { name, dim: record.dim, si: record.value };
 });
@@ -126,9 +130,16 @@ export function dimensionalFreedom(e: BridgeEdge): number {
 function makeInputs(e: BridgeEdge): Array<Record<string, number>> {
   if (e.sources.length === 0) return [{}];
   const sets: Array<Record<string, number>> = [];
-  const admitted = (inp: Record<string, number>): boolean => {
+  const inDomain = (inp: Record<string, number>): boolean => {
     try {
-      return e.domain.predicate(inp) && Number.isFinite(e.evaluate(inp));
+      return e.domain.predicate(inp);
+    } catch {
+      return false;
+    }
+  };
+  const finite = (inp: Record<string, number>): boolean => {
+    try {
+      return Number.isFinite(e.evaluate(inp));
     } catch {
       return false;
     }
@@ -138,12 +149,19 @@ function makeInputs(e: BridgeEdge): Array<Record<string, number>> {
     e.sources.forEach((s, i) => {
       magnitudes[s.name] = Math.pow(1.6 + i, 1 + 0.27 * j);
     });
-    const patterns: Array<Record<string, number>> = [
-      magnitudes,
-      ...e.sources.map((s) => ({ ...magnitudes, [s.name]: -magnitudes[s.name]! })),
-    ];
-    const first = patterns.find(admitted);
-    if (first !== undefined) sets.push(first);
+    // A negated source is tried only when the DOMAIN refuses the positive point (a carrier
+    // charge that must be negative). A positive point the domain admits but the evaluator
+    // cannot finish (an exponential that overflows, be-82) is a degenerate sample and not a
+    // reason to look for a sign at which the function happens to be flat: a monomial fitted
+    // on a saturated regime is not a derivation.
+    if (inDomain(magnitudes)) {
+      if (finite(magnitudes)) sets.push(magnitudes);
+      continue;
+    }
+    const negated = e.sources
+      .map((s) => ({ ...magnitudes, [s.name]: -magnitudes[s.name]! }))
+      .find((inp) => inDomain(inp) && finite(inp));
+    if (negated !== undefined) sets.push(negated);
   }
   return sets;
 }

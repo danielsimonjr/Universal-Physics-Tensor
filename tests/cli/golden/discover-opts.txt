@@ -5,7 +5,7 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  4196 candidates  →  32 promising  ·  2377 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1767 axis-clash
+  funnel:  4169 candidates  →  32 promising  ·  2360 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1757 axis-clash
   readiness of the 32 promising: 0 mechanism-tested · 0 data-tested · 31 without magnitude evidence · 29 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
@@ -268,7 +268,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     mass ≟ accretor-mass                                 [[mass]]
     mass ≟ bohm-ion-mass                                 [[mass]]
     mass ≟ child-carrier-mass                            [[mass]]
-    mass ≟ fermi-sea-mass                                [[mass]]
     mass ≟ gradb-mass                                    [[mass]]
     mass ≟ jeans-mass                                    [[mass]]
     mass ≟ lorentz-mass                                  [[mass]]
@@ -661,7 +660,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     defect-rest-mass ≟ damping-inertia                   scale: cosmological ≠ classical
     defect-rest-mass ≟ dos2d-bandmass                    scale: cosmological ≠ classical
     defect-rest-mass ≟ dos3d-bandmass                    scale: cosmological ≠ classical
-    defect-rest-mass ≟ fermi-sea-mass                    scale: cosmological ≠ classical
     defect-rest-mass ≟ fermioffset-elecmass              scale: cosmological ≠ classical
     defect-rest-mass ≟ fermioffset-holemass              scale: cosmological ≠ classical
     defect-rest-mass ≟ gradb-mass                        scale: cosmological ≠ classical
@@ -729,7 +727,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     effective-mass ≟ damping-inertia                     scale: quantum ≠ classical
     effective-mass ≟ dos2d-bandmass                      scale: quantum ≠ classical
     effective-mass ≟ dos3d-bandmass                      scale: quantum ≠ classical
-    effective-mass ≟ fermi-sea-mass                      scale: quantum ≠ classical
     effective-mass ≟ fermioffset-elecmass                scale: quantum ≠ classical
     effective-mass ≟ fermioffset-holemass                scale: quantum ≠ classical
     effective-mass ≟ gradb-mass                          scale: quantum ≠ classical
@@ -844,8 +841,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     far-radius ≟ slab-width                              force: gravitational ≠ electromagnetic
     far-radius ≟ spiral-radius                           force: gravitational ≠ electromagnetic
     far-radius ≟ upper-critical-length                   force: gravitational ≠ electromagnetic
-    fermi-sea-mass ≟ accretor-mass                       force: electromagnetic ≠ gravitational
-    fermi-sea-mass ≟ jeans-mass                          force: electromagnetic ≠ gravitational
     fermioffset-elecmass ≟ accretor-mass                 force: electromagnetic ≠ gravitational
     fermioffset-elecmass ≟ jeans-mass                    force: electromagnetic ≠ gravitational
     fermioffset-holemass ≟ accretor-mass                 force: electromagnetic ≠ gravitational
@@ -1356,7 +1351,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     planck-mass ≟ damping-inertia                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ dos2d-bandmass                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ dos3d-bandmass                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
-    planck-mass ≟ fermi-sea-mass                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ fermioffset-elecmass                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ fermioffset-holemass                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ gradb-mass                             force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -1537,7 +1531,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reference-mass ≟ damping-inertia                     scale: quantum ≠ classical
     reference-mass ≟ dos2d-bandmass                      scale: quantum ≠ classical
     reference-mass ≟ dos3d-bandmass                      scale: quantum ≠ classical
-    reference-mass ≟ fermi-sea-mass                      scale: quantum ≠ classical
     reference-mass ≟ fermioffset-elecmass                scale: quantum ≠ classical
     reference-mass ≟ fermioffset-holemass                scale: quantum ≠ classical
     reference-mass ≟ gradb-mass                          scale: quantum ≠ classical
@@ -1672,7 +1665,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     scalar-field-reference ≟ damping-inertia             scale: quantum ≠ classical
     scalar-field-reference ≟ dos2d-bandmass              scale: quantum ≠ classical
     scalar-field-reference ≟ dos3d-bandmass              scale: quantum ≠ classical
-    scalar-field-reference ≟ fermi-sea-mass              scale: quantum ≠ classical
     scalar-field-reference ≟ fermioffset-elecmass        scale: quantum ≠ classical
     scalar-field-reference ≟ fermioffset-holemass        scale: quantum ≠ classical
     scalar-field-reference ≟ gradb-mass                  scale: quantum ≠ classical
@@ -1691,7 +1683,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     scalar-field-value ≟ damping-inertia                 scale: quantum ≠ classical
     scalar-field-value ≟ dos2d-bandmass                  scale: quantum ≠ classical
     scalar-field-value ≟ dos3d-bandmass                  scale: quantum ≠ classical
-    scalar-field-value ≟ fermi-sea-mass                  scale: quantum ≠ classical
     scalar-field-value ≟ fermioffset-elecmass            scale: quantum ≠ classical
     scalar-field-value ≟ fermioffset-holemass            scale: quantum ≠ classical
     scalar-field-value ≟ gradb-mass                      scale: quantum ≠ classical
@@ -1844,7 +1835,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     swampland-tower-mass ≟ damping-inertia               scale: quantum ≠ classical
     swampland-tower-mass ≟ dos2d-bandmass                scale: quantum ≠ classical
     swampland-tower-mass ≟ dos3d-bandmass                scale: quantum ≠ classical
-    swampland-tower-mass ≟ fermi-sea-mass                scale: quantum ≠ classical
     swampland-tower-mass ≟ fermioffset-elecmass          scale: quantum ≠ classical
     swampland-tower-mass ≟ fermioffset-holemass          scale: quantum ≠ classical
     swampland-tower-mass ≟ gradb-mass                    scale: quantum ≠ classical
@@ -2006,7 +1996,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     tunneling-mass ≟ defect-rest-mass                    scale: quantum ≠ cosmological
     tunneling-mass ≟ dos2d-bandmass                      scale: quantum ≠ classical
     tunneling-mass ≟ dos3d-bandmass                      scale: quantum ≠ classical
-    tunneling-mass ≟ fermi-sea-mass                      scale: quantum ≠ classical
     tunneling-mass ≟ fermioffset-elecmass                scale: quantum ≠ classical
     tunneling-mass ≟ fermioffset-holemass                scale: quantum ≠ classical
     tunneling-mass ≟ gradb-mass                          scale: quantum ≠ classical

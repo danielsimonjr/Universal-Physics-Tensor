@@ -105,10 +105,10 @@
     "bridgeId": 52,
     "kind": "value",
     "numbers": {
-      "predicted": 42.98056186229095,
+      "predicted": 42.980561862290955,
       "observed": 43.11,
       "sigma": 0.45,
-      "residualInSigma": 0.2876403060201148,
+      "residualInSigma": 0.287640306020099,
       "provenance": {
         "year": 1947
       }

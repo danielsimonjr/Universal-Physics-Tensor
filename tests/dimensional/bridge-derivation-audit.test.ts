@@ -155,7 +155,10 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // be-96, be-97, and be-101 match their evaluators. be-92 and be-94 do not.
     // 25 is the record from before be-103..125. be-103 and be-118 match
     // their evaluators. be-109, be-117, be-120, and be-121 do not.
-    expect(derived.length).toBe(36);
+    // 36 is the record from before 2026-10-09, when ε₀ and m_e joined the closure constants: be-109
+    // (Bennett pinch) then closes on {c, k_B, ε₀} with prefactor √(16π), the formula's own; and
+    // be-82 (Shockley) is no longer fitted at a saturated negative point (no-samples again).
+    expect(derived.length).toBe(37);
     // 31 is the record from before the catalog graph held every relation.
     // 27 is the record from before be-134..146. be-135, be-136, be-140, and
     // be-141 match their evaluators. be-137 does not.

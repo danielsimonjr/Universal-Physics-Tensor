@@ -2,7 +2,7 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (36) — recognized monomial, prefactor recovered:
+  DERIVED (37) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.506628274631
     be-16                  +[k_B]  ×0.693147180559945
     be-42-via-rs           +[ℏ,c,k_B]  ×0.0795774715459477
@@ -16,7 +16,7 @@ Deriving the bridge equations by dimensions
     be-70                  +[k_B]  ×1
     be-71                  +[]  ×1
     be-73                  +[]  ×1
-    be-74                  +[ℏ,c,e]  ×5.45248915894307  (vacuum constant; μ0 rewritten through α)
+    be-74                  +[c,epsilon_0]  ×0.5
     be-80                  +[]  ×1.125  (empirical/tuned constant)
     be-83                  +[]  ×1
     be-84                  +[]  ×4.53236014182719  (empirical/tuned constant)
@@ -28,6 +28,7 @@ Deriving the bridge equations by dimensions
     be-97                  +[e]  ×1.5707963267949  (empirical/tuned constant)
     be-101                 +[k_B]  ×1.5707963267949  (empirical/tuned constant)
     be-103                 +[k_B]  ×1
+    be-109                 +[c,k_B,epsilon_0]  ×7.08981540362206  (empirical/tuned constant)
     be-118                 +[G]  ×0.5
     be-135                 +[ℏ]  ×0.143289792062689  (empirical/tuned constant)
     be-136                 +[ℏ]  ×0.318309886183791  (empirical/tuned constant)
@@ -44,8 +45,8 @@ Deriving the bridge equations by dimensions
     
     (not a recovered prefactor, not a failed reconstruction, and not a free dimensionless group)
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 23) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-109, be-117, be-120, be-121, be-137, be-147, be-148, be-149, be-164, be-168, be-169, be-64
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 22) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-117, be-120, be-121, be-137, be-147, be-148, be-149, be-164, be-168, be-169, be-64
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
   NOT A MONOMIAL (25) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
@@ -102,6 +103,7 @@ Deriving the bridge equations by dimensions
     cplx=2  be-22
     cplx=2  be-25
     cplx=2  be-26
+    cplx=2  be-33
     cplx=2  be-63
     cplx=2  be-66
     cplx=2  be-72
@@ -118,7 +120,6 @@ Deriving the bridge equations by dimensions
     cplx=2  be-145
     cplx=2  be-167
     cplx=3  be-53
-    cplx=3  be-33
     cplx=3  be-45
     cplx=3  be-46
     cplx=3  be-131

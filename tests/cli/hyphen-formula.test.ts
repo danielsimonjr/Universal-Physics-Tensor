@@ -24,7 +24,7 @@ describe('a declared hyphenated name is one symbol in upt derive --formula', () 
     );
     const out = allText(cap);
     expect(code, out).toBe(0);
-    expect(out).toMatch(/4\.7854e\+0/);
+    expect(out).toMatch(/4\.78539/);
     expect(out).not.toMatch(/undeclared symbol/);
   });
 

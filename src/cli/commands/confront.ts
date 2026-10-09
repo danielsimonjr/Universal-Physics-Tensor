@@ -153,8 +153,9 @@ function statisticDistribution(outcomes: readonly Outcome[]) {
 type Fmt = CommandCtx['api']['formatQuantity'];
 
 /** A fraction as a percentage, through the one number formatter. */
+/** A percentage is a statistic: three significant digits (`-43.7%`, `±150%`), never fifteen. */
 function percent(fmt: Fmt, x: number): string {
-  return `${fmt(x * 100)}%`;
+  return `${fmt(x * 100, 3)}%`;
 }
 
 function signedPercent(fmt: Fmt, x: number): string {
@@ -340,13 +341,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  be-${bridgeId} [${rigor}]: ${title}`);
     switch (outcome.kind) {
       case 'value': {
-        const margin = wantFrontier ? ` · margin ${api.formatQuantity(1 - outcome.residualInSigma)}σ to the 1σ acceptance threshold` : '';
+        const margin = wantFrontier ? ` · margin ${api.formatQuantity(1 - outcome.residualInSigma, 3)}σ to the 1σ acceptance threshold` : '';
         // A derived "observed" value is labelled derived, and the quantity that
         // was actually measured is shown beside it (persona finding L6).
         const m = outcome.measured;
         const observedLabel = m ? `derived ${m.derivation} =` : 'observed';
         out(
-          `    predicted ${api.formatQuantity(outcome.predicted)} · ${observedLabel} ${api.formatQuantity(outcome.observed)} ± ${api.formatQuantity(outcome.sigma)} ${outcome.units} · residual ${api.formatQuantity(outcome.residualInSigma)}σ · ${outcome.withinObserved ? 'within 1σ ✓' : 'outside 1σ'}${margin}`
+          `    predicted ${api.formatQuantity(outcome.predicted)} · ${observedLabel} ${api.formatQuantity(outcome.observed)} ± ${api.formatQuantity(outcome.sigma)} ${outcome.units} · residual ${api.formatQuantity(outcome.residualInSigma, 3)}σ · ${outcome.withinObserved ? 'within 1σ ✓' : 'outside 1σ'}${margin}`
         );
         if (m) {
           out(`    measured: ${m.quantity} = ${m.value} ± ${m.sigma} (${m.source}); the value above is derived from it, not observed`);
@@ -397,7 +398,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         out(`    ${outcome.rows.length} rows (${outcome.units}):`);
         for (const row of outcome.rows) {
           out(
-            `      ${row.label}: predicted ${api.formatQuantity(row.predicted)} · observed ${api.formatQuantity(row.observed)} ± ${api.formatQuantity(row.sigma)} · ${api.formatQuantity(row.residualInSigma)}σ`
+            `      ${row.label}: predicted ${api.formatQuantity(row.predicted)} · observed ${api.formatQuantity(row.observed)} ± ${api.formatQuantity(row.sigma)} · ${api.formatQuantity(row.residualInSigma, 3)}σ`
           );
         }
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);

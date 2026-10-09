@@ -36,13 +36,24 @@ import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { canonicalById } from '../canonical/registry.js';
 
 /**
- * Text form of a recovered quantity: 15 significant digits, the precision an
- * evaluator input is already passed at. JSON keeps the number; this is only
- * the printed form. An integer stays an integer (`1`, not `1.0000e+0`).
+ * Text form of a recovered quantity: `digits` significant digits (15 by default, the precision an
+ * evaluator input is already passed at; a statistic such as a residual in σ asks for 3). JSON keeps
+ * the number; this is only the printed form. An integer stays an integer (`1`, not `1.0000e+0`).
+ * Every command prints a number through this function or through {@link formatExact}.
  * @internal
  */
-export function formatQuantity(value: number): string {
-  return String(Number(value.toPrecision(15)));
+export function formatQuantity(value: number, digits = 15): string {
+  return String(Number(value.toPrecision(digits)));
+}
+
+/**
+ * Text form of a computed value that a reader may need to reproduce bit for bit: the shortest
+ * decimal that round-trips to the same double (`upt evaluate`'s outputs). A recovered or compared
+ * quantity prints through {@link formatQuantity} instead.
+ * @internal
+ */
+export function formatExact(value: number): string {
+  return String(value);
 }
 import type { DimensionalDeterminationResult } from '../dimensional/buckingham.js';
 import { dimensionallyDetermines } from '../dimensional/buckingham.js';
@@ -119,7 +130,7 @@ export interface QuantityExplanation {
    *  absent when the target has no resolvable dimension. */
   readonly dimensional?: DimensionalDeterminationResult;
   /** Derivations that refused the given values as outside their validity domain. */
-  readonly refusals?: readonly { readonly edge: string; readonly reason: string }[];
+  readonly refusals?: readonly { readonly edge: string; readonly kind: 'domain' | 'coefficient-unset'; readonly reason: string }[];
   /** Upstream gaps for an under-determined target (from the classifier). */
   readonly blockingFrontier: readonly string[];
   /** Plain-language synthesis of the above. */
@@ -394,12 +405,14 @@ function buildSummary(
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional?.determined && dimensional.monomial) {
     s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial, even)}.`;
-    if (unsetSentence !== undefined) s += ` ${unsetSentence}`;
   } else if (dimensional?.outsideGoverningSpan && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional && !dimensional.determined && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix a unique monomial.`;
   }
+  // The unset factor is a fact about the edge, whatever the inputs span: it is said whether or
+  // not a ∝ line could be printed (a baked constant removes the ∝ line, not the unset factor).
+  if (unsetSentence !== undefined) s += ` ${unsetSentence}`;
   return s;
 }
 
@@ -641,10 +654,13 @@ export function explainQuantity(
     magnitudeNames(firedEdges),
     viaIdentification,
   );
+  // A domain refusal is a bad value and is named with the edge's own reason. An unset
+  // coefficient is not: `unsetSentence` already says it in words (AGENTS law 4).
+  const domainRefusals = (refusals ?? []).filter((r) => r.kind === 'domain');
   const refusalSentence =
-    refusals === undefined || recoveredValue !== undefined
+    domainRefusals.length === 0 || recoveredValue !== undefined
       ? ''
-      : ` No recovered value: ${refusals.map((r) => r.reason).join('; ')}.`;
+      : ` No recovered value: ${domainRefusals.map((r) => r.reason).join('; ')}.`;
 
   return {
     target,

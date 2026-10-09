@@ -127,16 +127,16 @@ describe('upt confront', () => {
     const text = cap.lines.join('');
     expect(text).not.toMatch(/· gap \d/);
     expect(text).toMatch(
-      /approaches 1 M_⊙;.* · actual difference -43\.7% = \(observed − predicted\) \/ predicted · agreement bound ±150\.0% \(the record's stated tolerance, not a measured difference\) · \|difference\| ≤ bound: compatible ✓/,
+      /approaches 1 M_⊙;.* · actual difference -43\.7% = \(observed − predicted\) \/ predicted · agreement bound ±150% \(the record's stated tolerance, not a measured difference\) · \|difference\| ≤ bound: compatible ✓/,
     );
-    expect(text).toMatch(/approaches 1\.35 M_⊙;.* · actual difference -7\.3% .* agreement bound ±12\.0%/);
-    expect(text).toMatch(/approaches 3\.5 2Δ.* · actual difference -0\.8% .* agreement bound ±5\.0%/);
-    expect(text).toMatch(/Lorenz number .* · actual difference 0\.0% .* agreement bound ±10\.0%/);
-    expect(text).toMatch(/peak L\/L_Edd .* · actual difference 0\.0% .* agreement bound ±50\.0%/);
-    expect(text).toMatch(/force ratio;.* · actual difference 0\.0% .* agreement bound ±1\.0%/);
+    expect(text).toMatch(/approaches 1\.35 M_⊙;.* · actual difference -7\.27% .* agreement bound ±12%/);
+    expect(text).toMatch(/approaches 3\.5 2Δ.* · actual difference -0\.787% .* agreement bound ±5%/);
+    expect(text).toMatch(/Lorenz number .* · actual difference 0% .* agreement bound ±10%/);
+    expect(text).toMatch(/peak L\/L_Edd .* · actual difference 0% .* agreement bound ±50%/);
+    expect(text).toMatch(/force ratio;.* · actual difference 0% .* agreement bound ±1%/);
     expect(text).toMatch(/graphene.* agreement bound ±8\.6e-9%/);
     expect(text).toMatch(/KSS lower bound .* · actual difference \+25\.7% .* · rule: observed ≥ predicted lower limit · compatible ✓/);
-    expect(text).toMatch(/9-gas agreement within 15% experimental error · actual difference 0\.0% .* agreement bound ±15\.0% .* compatible ✓/);
+    expect(text).toMatch(/9-gas agreement within 15% experimental error · actual difference 0% .* agreement bound ±15% .* compatible ✓/);
     // Audit I14 limit closed: every consistency record now makes a compatibility decision.
     expect(text).not.toMatch(/no compatibility decision/);
   });
@@ -193,7 +193,7 @@ describe('upt confront be-51 shows the measurement, and labels the deflection as
     expect(text).toMatch(/measured: PPN γ = 0\.99992 ± 0\.00012 \(VLBI\); the value above is derived from it, not observed/);
     expect(text).toMatch(/derived \(1\+γ\)\/2 × predicted = 1\.75112\d* ± 0\.000105\d* arcsec/);
     expect(text).not.toMatch(/observed 1\.75/);
-    expect(text).toMatch(/residual 0\.67σ/);
+    expect(text).toMatch(/residual 0\.667σ/);
   });
 
   it('--json carries the measurement', async () => {

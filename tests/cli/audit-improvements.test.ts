@@ -232,7 +232,7 @@ describe('I6 — every evaluator declares its inputs; units convert only when th
   it('a value with a unit gives the same result as the bare SI number', async () => {
     expect(await out(['evaluate', 'be-56', 'd_m=1um'])).toEqual(await out(['evaluate', 'be-56', 'd_m=1e-6']));
     const r = await runText(['evaluate', 'be-56', 'd_m=1um']);
-    expect(r.text).toMatch(/\n {4}d_m \[m\] plate separation d \(geometry: separation\) — the gap between the facing plate surfaces, > 0\n {6}converted: 1um → 0\.000001 m\n/);
+    expect(r.text).toMatch(/\n {4}d_m \[m\] plate-separation d \(geometry: separation\) — the gap between the facing plate surfaces, > 0\n {6}converted: 1um → 0\.000001 m\n/);
   });
 
   it('an absolute temperature in degC adds 273.15 K; its σ in degC does not', async () => {
@@ -270,7 +270,7 @@ describe('I6 — every evaluator declares its inputs; units convert only when th
 
   it('the listing declares every input with its unit and meaning', async () => {
     const r = await runText(['evaluate']);
-    expect(r.text).toMatch(/\n {2}be-58 {2}Johnson-Nyquist noise\n {6}T_K \[K\] temperature T \(an absolute temperature; degC adds 273\.15; degF is \(degF − 32\)×5\/9 \+ 273\.15\) — /);
+    expect(r.text).toMatch(/\n {2}be-58 {2}Johnson-Nyquist noise\n {6}T_K \[K\] johnson-temperature T \(an absolute temperature; degC adds 273\.15; degF is \(degF − 32\)×5\/9 \+ 273\.15\) — /);
     const env = await json(['evaluate']);
     expect(env.result.find((s: any) => s.bridgeId === 51).parameters[1]).toMatchObject({ key: 'b_m', unit: 'm', geometry: 'impact-parameter' });
   });

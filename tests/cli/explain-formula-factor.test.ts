@@ -43,7 +43,9 @@ describe('canonical formula counts', () => {
     const body = text(cap);
     const expected = (N_A * K_B_SI * 300) / 0.0224;
     expect(recovered(body)).toBeCloseTo(expected, 4);
-    expect(body).toMatch(/∝ [^\n]*\bN\b/);
+    // k_B is baked (2026-10-09), so {temperature, V, N} alone do not fix the dimension and no ∝ line
+    // prints; the count N is a leaf of the derivation and the value is N k_B T / V.
+    expect(body).toMatch(/\[from leaves: N, V, temperature\]/);
     expect(recovered(body)).not.toBeCloseTo((K_B_SI * 300) / 0.0224, 6);
   });
 

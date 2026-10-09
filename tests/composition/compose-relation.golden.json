@@ -177,7 +177,7 @@
     "pair": "be-11-zurek>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-11-zurek -> be-33: target quantity 'decoherence-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-11-zurek -> be-33: target quantity 'decoherence-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-11-zurek>>be-34",
@@ -411,7 +411,7 @@
     "pair": "be-11-zurek>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-11-zurek -> be-88: target quantity 'decoherence-rate' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-11-zurek -> be-88: target quantity 'decoherence-rate' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-11-zurek>>be-89",
@@ -976,6 +976,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -1153,7 +1154,7 @@
     "pair": "be-12>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-12 -> be-33: target quantity 'thermal-de-broglie-wavelength' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-12 -> be-33: target quantity 'thermal-de-broglie-wavelength' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-12>>be-34",
@@ -1387,7 +1388,7 @@
     "pair": "be-12>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-12 -> be-88: target quantity 'thermal-de-broglie-wavelength' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-12 -> be-88: target quantity 'thermal-de-broglie-wavelength' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-12>>be-89",
@@ -2101,7 +2102,7 @@
     "pair": "be-16>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-16 -> be-33: target quantity 'landauer-erasure-energy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-16 -> be-33: target quantity 'landauer-erasure-energy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-16>>be-34",
@@ -2335,7 +2336,7 @@
     "pair": "be-16>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-16 -> be-88: target quantity 'landauer-erasure-energy' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-16 -> be-88: target quantity 'landauer-erasure-energy' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-16>>be-89",
@@ -3049,7 +3050,7 @@
     "pair": "be-37>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-37 -> be-33: target quantity 'shapiro-delay' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-37 -> be-33: target quantity 'shapiro-delay' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-37>>be-34",
@@ -3283,7 +3284,7 @@
     "pair": "be-37>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-37 -> be-88: target quantity 'shapiro-delay' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-37 -> be-88: target quantity 'shapiro-delay' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-37>>be-89",
@@ -3848,6 +3849,7 @@
     "identificationUsed": "hawking-temperature->temperature",
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -3858,6 +3860,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -3998,6 +4001,7 @@
     "identificationUsed": "hawking-temperature->temperature",
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -4008,6 +4012,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -4049,6 +4054,7 @@
     "identificationUsed": "hawking-temperature->temperature",
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -4059,6 +4065,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -4082,12 +4089,11 @@
     "id": "be-42>>be-33",
     "beId": null,
     "kind": "bridge",
-    "label": "Hawking temperature T_H = ℏc³/(8πGMk_B) ∘ Hertz-Millis correlation length ξ(T) = ξ_0 (T/T_0)^(−1/z)",
+    "label": "Hawking temperature T_H = ℏc³/(8πGMk_B) ∘ Quantum-critical thermal scaling ξ(T) = ξ_0 (T/T_0)^(−1/z)",
     "sources": [
       "mass:M:{\"L\":0,\"M\":1,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
       "reference-correlation-length:ξ_0:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
       "reference-temperature:T_0:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":1,\"N\":0,\"J\":0}",
-      "static-exponent-nu:ν:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
       "dynamic-exponent-z:z:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
     ],
     "target": "quantum-correlation-length:ξ_quantum",
@@ -4097,6 +4103,7 @@
     "identificationUsed": "hawking-temperature->temperature",
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -4107,6 +4114,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -4287,6 +4295,7 @@
     "identificationUsed": "hawking-temperature->temperature",
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -4297,6 +4306,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -4372,7 +4382,7 @@
     "pair": "be-42>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-42 -> be-88: target quantity 'hawking-temperature' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-42 -> be-88: target quantity 'hawking-temperature' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-42>>be-89",
@@ -4942,6 +4952,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -4974,6 +4985,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -5124,6 +5136,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -5175,6 +5188,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -5198,12 +5212,11 @@
     "id": "be-42-via-rs>>be-33",
     "beId": null,
     "kind": "bridge",
-    "label": "Hawking temperature T_H = ℏc/(4π k_B r_s) ∘ Hertz-Millis correlation length ξ(T) = ξ_0 (T/T_0)^(−1/z)",
+    "label": "Hawking temperature T_H = ℏc/(4π k_B r_s) ∘ Quantum-critical thermal scaling ξ(T) = ξ_0 (T/T_0)^(−1/z)",
     "sources": [
       "schwarzschild-radius:r_s:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
       "reference-correlation-length:ξ_0:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
       "reference-temperature:T_0:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":1,\"N\":0,\"J\":0}",
-      "static-exponent-nu:ν:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
       "dynamic-exponent-z:z:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
     ],
     "target": "quantum-correlation-length:ξ_quantum",
@@ -5223,6 +5236,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -5403,6 +5417,7 @@
     "identificationUsed": "hawking-temperature->temperature",
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -5413,6 +5428,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -5488,7 +5504,7 @@
     "pair": "be-42-via-rs>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-42-via-rs -> be-88: target quantity 'hawking-temperature' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-42-via-rs -> be-88: target quantity 'hawking-temperature' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-42-via-rs>>be-89",
@@ -6202,7 +6218,7 @@
     "pair": "be-51>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-51 -> be-33: target quantity 'deflection-angle' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-51 -> be-33: target quantity 'deflection-angle' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-51>>be-34",
@@ -6436,7 +6452,7 @@
     "pair": "be-51>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-51 -> be-88: target quantity 'deflection-angle' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-51 -> be-88: target quantity 'deflection-angle' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-51>>be-89",
@@ -7150,7 +7166,7 @@
     "pair": "be-52>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-52 -> be-33: target quantity 'perihelion-advance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-52 -> be-33: target quantity 'perihelion-advance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-52>>be-34",
@@ -7384,7 +7400,7 @@
     "pair": "be-52>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-52 -> be-88: target quantity 'perihelion-advance' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-52 -> be-88: target quantity 'perihelion-advance' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-52>>be-89",
@@ -7976,6 +7992,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -8123,7 +8140,7 @@
     "pair": "law-schwarzschild-radius>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose law-schwarzschild-radius -> be-33: target quantity 'schwarzschild-radius' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose law-schwarzschild-radius -> be-33: target quantity 'schwarzschild-radius' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "law-schwarzschild-radius>>be-34",
@@ -8357,7 +8374,7 @@
     "pair": "law-schwarzschild-radius>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose law-schwarzschild-radius -> be-88: target quantity 'schwarzschild-radius' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose law-schwarzschild-radius -> be-88: target quantity 'schwarzschild-radius' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "law-schwarzschild-radius>>be-89",
@@ -9071,7 +9088,7 @@
     "pair": "be-14>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-14 -> be-33: target quantity 'boundary-entanglement-entropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-14 -> be-33: target quantity 'boundary-entanglement-entropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-14>>be-34",
@@ -9305,7 +9322,7 @@
     "pair": "be-14>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-14 -> be-88: target quantity 'boundary-entanglement-entropy' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-14 -> be-88: target quantity 'boundary-entanglement-entropy' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-14>>be-89",
@@ -10019,7 +10036,7 @@
     "pair": "be-19>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-19 -> be-33: target quantity 'hubble-rate-squared' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-19 -> be-33: target quantity 'hubble-rate-squared' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-19>>be-34",
@@ -10253,7 +10270,7 @@
     "pair": "be-19>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-19 -> be-88: target quantity 'hubble-rate-squared' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-19 -> be-88: target quantity 'hubble-rate-squared' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-19>>be-89",
@@ -10967,7 +10984,7 @@
     "pair": "be-21>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-21 -> be-33: target quantity 'viscosity-entropy-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-21 -> be-33: target quantity 'viscosity-entropy-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-21>>be-34",
@@ -11201,7 +11218,7 @@
     "pair": "be-21>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-21 -> be-88: target quantity 'viscosity-entropy-ratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-21 -> be-88: target quantity 'viscosity-entropy-ratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-21>>be-89",
@@ -11915,7 +11932,7 @@
     "pair": "be-48>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-48 -> be-33: target quantity 'grw-localization-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-48 -> be-33: target quantity 'grw-localization-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-48>>be-34",
@@ -12149,7 +12166,7 @@
     "pair": "be-48>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-48 -> be-88: target quantity 'grw-localization-rate' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-48 -> be-88: target quantity 'grw-localization-rate' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-48>>be-89",
@@ -12863,7 +12880,7 @@
     "pair": "be-53>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-53 -> be-33: target quantity 'yang-mills-beta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-53 -> be-33: target quantity 'yang-mills-beta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-53>>be-34",
@@ -13097,7 +13114,7 @@
     "pair": "be-53>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-53 -> be-88: target quantity 'yang-mills-beta' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-53 -> be-88: target quantity 'yang-mills-beta' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-53>>be-89",
@@ -13811,7 +13828,7 @@
     "pair": "be-54>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-54 -> be-33: target quantity 'hubble-rate-squared' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-54 -> be-33: target quantity 'hubble-rate-squared' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-54>>be-34",
@@ -14045,7 +14062,7 @@
     "pair": "be-54>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-54 -> be-88: target quantity 'hubble-rate-squared' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-54 -> be-88: target quantity 'hubble-rate-squared' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-54>>be-89",
@@ -14759,7 +14776,7 @@
     "pair": "be-11-master>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-11-master -> be-33: target quantity 'decoherence-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-11-master -> be-33: target quantity 'decoherence-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-11-master>>be-34",
@@ -14993,7 +15010,7 @@
     "pair": "be-11-master>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-11-master -> be-88: target quantity 'decoherence-rate' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-11-master -> be-88: target quantity 'decoherence-rate' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-11-master>>be-89",
@@ -15707,7 +15724,7 @@
     "pair": "be-13>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-13 -> be-33: target quantity 'ricci-scalar' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-13 -> be-33: target quantity 'ricci-scalar' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-13>>be-34",
@@ -15941,7 +15958,7 @@
     "pair": "be-13>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-13 -> be-88: target quantity 'ricci-scalar' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-13 -> be-88: target quantity 'ricci-scalar' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-13>>be-89",
@@ -16655,7 +16672,7 @@
     "pair": "be-15>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-15 -> be-33: target quantity 'coarsening-length' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-15 -> be-33: target quantity 'coarsening-length' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-15>>be-34",
@@ -16889,7 +16906,7 @@
     "pair": "be-15>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-15 -> be-88: target quantity 'coarsening-length' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-15 -> be-88: target quantity 'coarsening-length' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-15>>be-89",
@@ -17603,7 +17620,7 @@
     "pair": "be-17>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-17 -> be-33: target quantity 'spin-density-squared' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-17 -> be-33: target quantity 'spin-density-squared' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-17>>be-34",
@@ -17837,7 +17854,7 @@
     "pair": "be-17>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-17 -> be-88: target quantity 'spin-density-squared' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-17 -> be-88: target quantity 'spin-density-squared' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-17>>be-89",
@@ -18551,7 +18568,7 @@
     "pair": "be-18>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-18 -> be-33: target quantity 'dark-fermion-mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-18 -> be-33: target quantity 'dark-fermion-mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-18>>be-34",
@@ -18785,7 +18802,7 @@
     "pair": "be-18>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-18 -> be-88: target quantity 'dark-fermion-mass' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-18 -> be-88: target quantity 'dark-fermion-mass' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-18>>be-89",
@@ -19499,7 +19516,7 @@
     "pair": "be-20>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-20 -> be-33: target quantity 'lambda-mass-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-20 -> be-33: target quantity 'lambda-mass-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-20>>be-34",
@@ -19733,7 +19750,7 @@
     "pair": "be-20>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-20 -> be-88: target quantity 'lambda-mass-density' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-20 -> be-88: target quantity 'lambda-mass-density' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-20>>be-89",
@@ -20447,7 +20464,7 @@
     "pair": "be-22>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-22 -> be-33: target quantity 'subsystem-entanglement-entropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-22 -> be-33: target quantity 'subsystem-entanglement-entropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-22>>be-34",
@@ -20681,7 +20698,7 @@
     "pair": "be-22>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-22 -> be-88: target quantity 'subsystem-entanglement-entropy' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-22 -> be-88: target quantity 'subsystem-entanglement-entropy' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-22>>be-89",
@@ -21395,7 +21412,7 @@
     "pair": "be-23>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-23 -> be-33: target quantity 'resistivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-23 -> be-33: target quantity 'resistivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-23>>be-34",
@@ -21629,7 +21646,7 @@
     "pair": "be-23>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-23 -> be-88: target quantity 'resistivity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-23 -> be-88: target quantity 'resistivity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-23>>be-89",
@@ -22343,7 +22360,7 @@
     "pair": "be-24>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-24 -> be-33: target quantity 'fret-efficiency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-24 -> be-33: target quantity 'fret-efficiency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-24>>be-34",
@@ -22577,7 +22594,7 @@
     "pair": "be-24>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-24 -> be-88: target quantity 'fret-efficiency' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-24 -> be-88: target quantity 'fret-efficiency' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-24>>be-89",
@@ -23291,7 +23308,7 @@
     "pair": "be-25>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-25 -> be-33: target quantity 'intrinsic-information' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-25 -> be-33: target quantity 'intrinsic-information' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-25>>be-34",
@@ -23525,7 +23542,7 @@
     "pair": "be-25>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-25 -> be-88: target quantity 'intrinsic-information' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-25 -> be-88: target quantity 'intrinsic-information' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-25>>be-89",
@@ -24239,7 +24256,7 @@
     "pair": "be-26>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-26 -> be-33: target quantity 'mutation-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-26 -> be-33: target quantity 'mutation-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-26>>be-34",
@@ -24473,7 +24490,7 @@
     "pair": "be-26>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-26 -> be-88: target quantity 'mutation-rate' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-26 -> be-88: target quantity 'mutation-rate' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-26>>be-89",
@@ -25187,7 +25204,7 @@
     "pair": "be-27>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-27 -> be-33: target quantity 'effective-temperature' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-27 -> be-33: target quantity 'effective-temperature' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-27>>be-34",
@@ -25421,7 +25438,7 @@
     "pair": "be-27>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-27 -> be-88: target quantity 'effective-temperature' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-27 -> be-88: target quantity 'effective-temperature' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-27>>be-89",
@@ -26135,7 +26152,7 @@
     "pair": "be-30>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-30 -> be-33: target quantity 'entanglement-entropy-variation' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-30 -> be-33: target quantity 'entanglement-entropy-variation' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-30>>be-34",
@@ -26369,7 +26386,7 @@
     "pair": "be-30>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-30 -> be-88: target quantity 'entanglement-entropy-variation' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-30 -> be-88: target quantity 'entanglement-entropy-variation' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-30>>be-89",
@@ -27083,7 +27100,7 @@
     "pair": "be-31>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-31 -> be-33: target quantity 'ricci-scalar' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-31 -> be-33: target quantity 'ricci-scalar' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-31>>be-34",
@@ -27317,7 +27334,7 @@
     "pair": "be-31>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-31 -> be-88: target quantity 'ricci-scalar' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-31 -> be-88: target quantity 'ricci-scalar' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-31>>be-89",
@@ -28031,7 +28048,7 @@
     "pair": "be-33>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-33 -> be-33: target quantity 'quantum-correlation-length' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-33 -> be-33: target quantity 'quantum-correlation-length' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-33>>be-34",
@@ -28265,7 +28282,7 @@
     "pair": "be-33>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-33 -> be-88: target quantity 'quantum-correlation-length' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-33 -> be-88: target quantity 'quantum-correlation-length' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-33>>be-89",
@@ -28979,7 +28996,7 @@
     "pair": "be-34>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-34 -> be-33: target quantity 'defect-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-34 -> be-33: target quantity 'defect-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-34>>be-34",
@@ -29213,7 +29230,7 @@
     "pair": "be-34>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-34 -> be-88: target quantity 'defect-density' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-34 -> be-88: target quantity 'defect-density' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-34>>be-89",
@@ -29927,7 +29944,7 @@
     "pair": "be-36>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-36 -> be-33: target quantity 'gw-photon-speed-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-36 -> be-33: target quantity 'gw-photon-speed-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-36>>be-34",
@@ -30161,7 +30178,7 @@
     "pair": "be-36>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-36 -> be-88: target quantity 'gw-photon-speed-ratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-36 -> be-88: target quantity 'gw-photon-speed-ratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-36>>be-89",
@@ -30875,7 +30892,7 @@
     "pair": "be-38>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-38 -> be-33: target quantity 'mond-force' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-38 -> be-33: target quantity 'mond-force' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-38>>be-34",
@@ -31109,7 +31126,7 @@
     "pair": "be-38>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-38 -> be-88: target quantity 'mond-force' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-38 -> be-88: target quantity 'mond-force' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-38>>be-89",
@@ -31823,7 +31840,7 @@
     "pair": "be-39>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-39 -> be-33: target quantity 'newton-coupling-beta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-39 -> be-33: target quantity 'newton-coupling-beta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-39>>be-34",
@@ -32057,7 +32074,7 @@
     "pair": "be-39>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-39 -> be-88: target quantity 'newton-coupling-beta' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-39 -> be-88: target quantity 'newton-coupling-beta' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-39>>be-89",
@@ -32771,7 +32788,7 @@
     "pair": "be-41>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-41 -> be-33: target quantity 'swampland-tower-mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-41 -> be-33: target quantity 'swampland-tower-mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-41>>be-34",
@@ -33005,7 +33022,7 @@
     "pair": "be-41>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-41 -> be-88: target quantity 'swampland-tower-mass' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-41 -> be-88: target quantity 'swampland-tower-mass' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-41>>be-89",
@@ -33719,7 +33736,7 @@
     "pair": "be-43>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-43 -> be-33: target quantity 'wormhole-entanglement-entropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-43 -> be-33: target quantity 'wormhole-entanglement-entropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-43>>be-34",
@@ -33953,7 +33970,7 @@
     "pair": "be-43>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-43 -> be-88: target quantity 'wormhole-entanglement-entropy' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-43 -> be-88: target quantity 'wormhole-entanglement-entropy' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-43>>be-89",
@@ -34667,7 +34684,7 @@
     "pair": "be-45>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-45 -> be-33: target quantity 'max-efolds' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-45 -> be-33: target quantity 'max-efolds' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-45>>be-34",
@@ -34901,7 +34918,7 @@
     "pair": "be-45>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-45 -> be-88: target quantity 'max-efolds' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-45 -> be-88: target quantity 'max-efolds' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-45>>be-89",
@@ -35615,7 +35632,7 @@
     "pair": "be-46>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-46 -> be-33: target quantity 'anthropic-probability' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-46 -> be-33: target quantity 'anthropic-probability' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-46>>be-34",
@@ -35849,7 +35866,7 @@
     "pair": "be-46>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-46 -> be-88: target quantity 'anthropic-probability' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-46 -> be-88: target quantity 'anthropic-probability' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-46>>be-89",
@@ -36563,7 +36580,7 @@
     "pair": "be-47>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-47 -> be-33: target quantity 'nucleon-yield-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-47 -> be-33: target quantity 'nucleon-yield-rate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-47>>be-34",
@@ -36797,7 +36814,7 @@
     "pair": "be-47>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-47 -> be-88: target quantity 'nucleon-yield-rate' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-47 -> be-88: target quantity 'nucleon-yield-rate' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-47>>be-89",
@@ -37511,7 +37528,7 @@
     "pair": "be-49>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-49 -> be-33: target quantity 'fragment-mutual-information' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-49 -> be-33: target quantity 'fragment-mutual-information' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-49>>be-34",
@@ -37745,7 +37762,7 @@
     "pair": "be-49>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-49 -> be-88: target quantity 'fragment-mutual-information' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-49 -> be-88: target quantity 'fragment-mutual-information' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-49>>be-89",
@@ -38459,7 +38476,7 @@
     "pair": "be-50>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-50 -> be-33: target quantity 'time-symmetric-field-amplitude' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-50 -> be-33: target quantity 'time-symmetric-field-amplitude' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-50>>be-34",
@@ -38693,7 +38710,7 @@
     "pair": "be-50>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-50 -> be-88: target quantity 'time-symmetric-field-amplitude' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-50 -> be-88: target quantity 'time-symmetric-field-amplitude' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-50>>be-89",
@@ -39407,7 +39424,7 @@
     "pair": "be-40>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-40 -> be-33: target quantity 'composite-higgs-potential' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-40 -> be-33: target quantity 'composite-higgs-potential' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-40>>be-34",
@@ -39641,7 +39658,7 @@
     "pair": "be-40>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-40 -> be-88: target quantity 'composite-higgs-potential' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-40 -> be-88: target quantity 'composite-higgs-potential' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-40>>be-89",
@@ -40355,7 +40372,7 @@
     "pair": "be-55>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-55 -> be-33: target quantity 'hall-conductance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-55 -> be-33: target quantity 'hall-conductance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-55>>be-34",
@@ -40589,7 +40606,7 @@
     "pair": "be-55>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-55 -> be-88: target quantity 'hall-conductance' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-55 -> be-88: target quantity 'hall-conductance' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-55>>be-89",
@@ -41303,7 +41320,7 @@
     "pair": "be-59>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-59 -> be-33: target quantity 'frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-59 -> be-33: target quantity 'frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-59>>be-34",
@@ -41537,7 +41554,7 @@
     "pair": "be-59>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-59 -> be-88: target quantity 'frequency' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-59 -> be-88: target quantity 'frequency' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-59>>be-89",
@@ -42251,7 +42268,7 @@
     "pair": "be-60>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-60 -> be-33: target quantity 'hall-conductance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-60 -> be-33: target quantity 'hall-conductance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-60>>be-34",
@@ -42485,7 +42502,7 @@
     "pair": "be-60>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-60 -> be-88: target quantity 'hall-conductance' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-60 -> be-88: target quantity 'hall-conductance' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-60>>be-89",
@@ -43046,6 +43063,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43055,6 +43073,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -43080,12 +43099,13 @@
       "near-radius:R_near:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
     ],
     "target": "shapiro-delay:Δt",
-    "confidence": "established",
+    "confidence": "speculative",
     "domainDescription": "(μ_e > 0 and ω₃⁰ finite) AND, on the piped mass, (M > 0 and 0 < R_near ≤ R_far (weak-field ray geometry))",
     "citation": "Chandrasekhar 1931 ApJ 74:81 | Shapiro 1964 PRL 13:789",
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43094,7 +43114,9 @@
       "id",
       "kind",
       "label",
+      "regime",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -43118,6 +43140,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43127,6 +43150,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -43157,6 +43181,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43165,7 +43190,9 @@
       "id",
       "kind",
       "label",
+      "regime",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:false",
@@ -43191,6 +43218,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43199,7 +43227,9 @@
       "id",
       "kind",
       "label",
+      "regime",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:false",
@@ -43223,6 +43253,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43232,6 +43263,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -43273,6 +43305,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43282,6 +43315,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -43387,7 +43421,7 @@
     "pair": "be-63>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-63 -> be-33: target quantity 'mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-63 -> be-33: target quantity 'mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-34",
@@ -43421,6 +43455,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -43430,6 +43465,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -43649,7 +43685,7 @@
     "pair": "be-63>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-63 -> be-88: target quantity 'mass' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-63 -> be-88: target quantity 'mass' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-89",
@@ -44363,7 +44399,7 @@
     "pair": "be-66>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-66 -> be-33: target quantity 'radiation-pressure' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-66 -> be-33: target quantity 'radiation-pressure' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-66>>be-34",
@@ -44597,7 +44633,7 @@
     "pair": "be-66>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-66 -> be-88: target quantity 'radiation-pressure' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-66 -> be-88: target quantity 'radiation-pressure' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-66>>be-89",
@@ -45311,7 +45347,7 @@
     "pair": "be-67>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-67 -> be-33: target quantity 'alfven-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-67 -> be-33: target quantity 'alfven-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-67>>be-34",
@@ -45545,7 +45581,7 @@
     "pair": "be-67>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-67 -> be-88: target quantity 'alfven-speed' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-67 -> be-88: target quantity 'alfven-speed' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-67>>be-89",
@@ -46259,7 +46295,7 @@
     "pair": "be-68>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-68 -> be-33: target quantity 'tolman-invariant' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-68 -> be-33: target quantity 'tolman-invariant' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-68>>be-34",
@@ -46493,7 +46529,7 @@
     "pair": "be-68>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-68 -> be-88: target quantity 'tolman-invariant' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-68 -> be-88: target quantity 'tolman-invariant' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-68>>be-89",
@@ -47207,7 +47243,7 @@
     "pair": "be-69>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-69 -> be-33: target quantity 'fast-magnetosonic-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-69 -> be-33: target quantity 'fast-magnetosonic-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-69>>be-34",
@@ -47441,7 +47477,7 @@
     "pair": "be-69>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-69 -> be-88: target quantity 'fast-magnetosonic-speed' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-69 -> be-88: target quantity 'fast-magnetosonic-speed' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-69>>be-89",
@@ -48155,7 +48191,7 @@
     "pair": "be-70>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-70 -> be-33: target quantity 'diffusivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-70 -> be-33: target quantity 'diffusivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-70>>be-34",
@@ -48389,7 +48425,7 @@
     "pair": "be-70>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-70 -> be-88: target quantity 'diffusivity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-70 -> be-88: target quantity 'diffusivity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-70>>be-89",
@@ -49103,7 +49139,7 @@
     "pair": "be-71>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-71 -> be-33: target quantity 'clapeyron-slope' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-71 -> be-33: target quantity 'clapeyron-slope' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-71>>be-34",
@@ -49337,7 +49373,7 @@
     "pair": "be-71>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-71 -> be-88: target quantity 'clapeyron-slope' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-71 -> be-88: target quantity 'clapeyron-slope' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-71>>be-89",
@@ -50051,7 +50087,7 @@
     "pair": "be-72>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-72 -> be-33: target quantity 'gravitational-frequency-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-72 -> be-33: target quantity 'gravitational-frequency-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-72>>be-34",
@@ -50285,7 +50321,7 @@
     "pair": "be-72>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-72 -> be-88: target quantity 'gravitational-frequency-ratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-72 -> be-88: target quantity 'gravitational-frequency-ratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-72>>be-89",
@@ -50999,7 +51035,7 @@
     "pair": "be-73>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-73 -> be-33: target quantity 'peltier-coefficient' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-73 -> be-33: target quantity 'peltier-coefficient' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-73>>be-34",
@@ -51233,7 +51269,7 @@
     "pair": "be-73>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-73 -> be-88: target quantity 'peltier-coefficient' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-73 -> be-88: target quantity 'peltier-coefficient' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-73>>be-89",
@@ -51947,7 +51983,7 @@
     "pair": "be-74>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-74 -> be-33: target quantity 'magnetic-pressure' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-74 -> be-33: target quantity 'magnetic-pressure' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-74>>be-34",
@@ -52124,6 +52160,7 @@
     "identificationUsed": null,
     "aliasDispositionsUsed": [],
     "extraKeys": [
+      "aliases",
       "beId",
       "citation",
       "confidence",
@@ -52133,6 +52170,7 @@
       "kind",
       "label",
       "sources",
+      "symbolic",
       "target"
     ],
     "predicateAtOnes": "ok:true",
@@ -52208,7 +52246,7 @@
     "pair": "be-74>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-74 -> be-88: target quantity 'magnetic-pressure' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-74 -> be-88: target quantity 'magnetic-pressure' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-74>>be-89",
@@ -52922,7 +52960,7 @@
     "pair": "be-75>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-75 -> be-33: target quantity 'london-penetration-depth' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-75 -> be-33: target quantity 'london-penetration-depth' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-75>>be-34",
@@ -53156,7 +53194,7 @@
     "pair": "be-75>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-75 -> be-88: target quantity 'london-penetration-depth' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-75 -> be-88: target quantity 'london-penetration-depth' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-75>>be-89",
@@ -53870,7 +53908,7 @@
     "pair": "be-76>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-76 -> be-33: target quantity 'plasma-beta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-76 -> be-33: target quantity 'plasma-beta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-76>>be-34",
@@ -54104,7 +54142,7 @@
     "pair": "be-76>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-76 -> be-88: target quantity 'plasma-beta' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-76 -> be-88: target quantity 'plasma-beta' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-76>>be-89",
@@ -54818,7 +54856,7 @@
     "pair": "be-77>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-77 -> be-33: target quantity 'poiseuille-flow' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-77 -> be-33: target quantity 'poiseuille-flow' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-77>>be-34",
@@ -55052,7 +55090,7 @@
     "pair": "be-77>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-77 -> be-88: target quantity 'poiseuille-flow' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-77 -> be-88: target quantity 'poiseuille-flow' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-77>>be-89",
@@ -55766,7 +55804,7 @@
     "pair": "be-78>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-78 -> be-33: target quantity 'buckling-load' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-78 -> be-33: target quantity 'buckling-load' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-78>>be-34",
@@ -56000,7 +56038,7 @@
     "pair": "be-78>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-78 -> be-88: target quantity 'buckling-load' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-78 -> be-88: target quantity 'buckling-load' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-78>>be-89",
@@ -56714,7 +56752,7 @@
     "pair": "be-79>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-79 -> be-33: target quantity 'pull-in-voltage' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-79 -> be-33: target quantity 'pull-in-voltage' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-79>>be-34",
@@ -56948,7 +56986,7 @@
     "pair": "be-79>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-79 -> be-88: target quantity 'pull-in-voltage' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-79 -> be-88: target quantity 'pull-in-voltage' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-79>>be-89",
@@ -57662,7 +57700,7 @@
     "pair": "be-80>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-80 -> be-33: target quantity 'mott-gurney-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-80 -> be-33: target quantity 'mott-gurney-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-80>>be-34",
@@ -57896,7 +57934,7 @@
     "pair": "be-80>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-80 -> be-88: target quantity 'mott-gurney-current' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-80 -> be-88: target quantity 'mott-gurney-current' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-80>>be-89",
@@ -58610,7 +58648,7 @@
     "pair": "be-81>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-81 -> be-33: target quantity 'child-langmuir-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-81 -> be-33: target quantity 'child-langmuir-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-81>>be-34",
@@ -58844,7 +58882,7 @@
     "pair": "be-81>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-81 -> be-88: target quantity 'child-langmuir-current' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-81 -> be-88: target quantity 'child-langmuir-current' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-81>>be-89",
@@ -59558,7 +59596,7 @@
     "pair": "be-82>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-82 -> be-33: target quantity 'shockley-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-82 -> be-33: target quantity 'shockley-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-82>>be-34",
@@ -59792,7 +59830,7 @@
     "pair": "be-82>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-82 -> be-88: target quantity 'shockley-current' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-82 -> be-88: target quantity 'shockley-current' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-82>>be-89",
@@ -60506,7 +60544,7 @@
     "pair": "be-83>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-83 -> be-33: target quantity 'thomson-coefficient' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-83 -> be-33: target quantity 'thomson-coefficient' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-83>>be-34",
@@ -60740,7 +60778,7 @@
     "pair": "be-83>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-83 -> be-88: target quantity 'thomson-coefficient' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-83 -> be-88: target quantity 'thomson-coefficient' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-83>>be-89",
@@ -61454,7 +61492,7 @@
     "pair": "be-84>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-84 -> be-33: target quantity 'sheet-resistance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-84 -> be-33: target quantity 'sheet-resistance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-84>>be-34",
@@ -61688,7 +61726,7 @@
     "pair": "be-84>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-84 -> be-88: target quantity 'sheet-resistance' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-84 -> be-88: target quantity 'sheet-resistance' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-84>>be-89",
@@ -62402,7 +62440,7 @@
     "pair": "be-85>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-85 -> be-33: target quantity 'shot-noise' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-85 -> be-33: target quantity 'shot-noise' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-85>>be-34",
@@ -62636,7 +62674,7 @@
     "pair": "be-85>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-85 -> be-88: target quantity 'shot-noise' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-85 -> be-88: target quantity 'shot-noise' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-85>>be-89",
@@ -63350,7 +63388,7 @@
     "pair": "be-86>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-86 -> be-33: target quantity 'stanton-number' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-86 -> be-33: target quantity 'stanton-number' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-86>>be-34",
@@ -63584,7 +63622,7 @@
     "pair": "be-86>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-86 -> be-88: target quantity 'stanton-number' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-86 -> be-88: target quantity 'stanton-number' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-86>>be-89",
@@ -64298,7 +64336,7 @@
     "pair": "be-87>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-87 -> be-33: target quantity 'capacitor-voltage-variance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-87 -> be-33: target quantity 'capacitor-voltage-variance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-87>>be-34",
@@ -64532,7 +64570,7 @@
     "pair": "be-87>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-87 -> be-88: target quantity 'capacitor-voltage-variance' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-87 -> be-88: target quantity 'capacitor-voltage-variance' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-87>>be-89",
@@ -65246,7 +65284,7 @@
     "pair": "be-88>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-88 -> be-33: target quantity 'fermi-wavevector' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-88 -> be-33: target quantity 'fermi-wavevector' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-88>>be-34",
@@ -65480,7 +65518,7 @@
     "pair": "be-88>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-88 -> be-88: target quantity 'fermi-wavevector' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-88 -> be-88: target quantity 'fermi-wavevector' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-88>>be-89",
@@ -66194,7 +66232,7 @@
     "pair": "be-89>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-89 -> be-33: target quantity 'debye-cutoff-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-89 -> be-33: target quantity 'debye-cutoff-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-89>>be-34",
@@ -66428,7 +66466,7 @@
     "pair": "be-89>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-89 -> be-88: target quantity 'debye-cutoff-frequency' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-89 -> be-88: target quantity 'debye-cutoff-frequency' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-89>>be-89",
@@ -67142,7 +67180,7 @@
     "pair": "be-90>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-90 -> be-33: target quantity 'debye-heat-capacity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-90 -> be-33: target quantity 'debye-heat-capacity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-90>>be-34",
@@ -67376,7 +67414,7 @@
     "pair": "be-90>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-90 -> be-88: target quantity 'debye-heat-capacity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-90 -> be-88: target quantity 'debye-heat-capacity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-90>>be-89",
@@ -68090,7 +68128,7 @@
     "pair": "be-91>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-91 -> be-33: target quantity 'einstein-heat-capacity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-91 -> be-33: target quantity 'einstein-heat-capacity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-91>>be-34",
@@ -68324,7 +68362,7 @@
     "pair": "be-91>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-91 -> be-88: target quantity 'einstein-heat-capacity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-91 -> be-88: target quantity 'einstein-heat-capacity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-91>>be-89",
@@ -69038,7 +69076,7 @@
     "pair": "be-92>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-92 -> be-33: target quantity 'sommerfeld-heat-capacity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-92 -> be-33: target quantity 'sommerfeld-heat-capacity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-92>>be-34",
@@ -69272,7 +69310,7 @@
     "pair": "be-92>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-92 -> be-88: target quantity 'sommerfeld-heat-capacity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-92 -> be-88: target quantity 'sommerfeld-heat-capacity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-92>>be-89",
@@ -69986,7 +70024,7 @@
     "pair": "be-93>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-93 -> be-33: target quantity 'curie-weiss-susceptibility' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-93 -> be-33: target quantity 'curie-weiss-susceptibility' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-93>>be-34",
@@ -70220,7 +70258,7 @@
     "pair": "be-93>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-93 -> be-88: target quantity 'curie-weiss-susceptibility' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-93 -> be-88: target quantity 'curie-weiss-susceptibility' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-93>>be-89",
@@ -70934,7 +70972,7 @@
     "pair": "be-94>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-94 -> be-33: target quantity 'pauli-susceptibility' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-94 -> be-33: target quantity 'pauli-susceptibility' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-94>>be-34",
@@ -71168,7 +71206,7 @@
     "pair": "be-94>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-94 -> be-88: target quantity 'pauli-susceptibility' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-94 -> be-88: target quantity 'pauli-susceptibility' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-94>>be-89",
@@ -71882,7 +71920,7 @@
     "pair": "be-95>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-95 -> be-33: target quantity 'gl-trial-factor' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-95 -> be-33: target quantity 'gl-trial-factor' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-95>>be-34",
@@ -72116,7 +72154,7 @@
     "pair": "be-95>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-95 -> be-88: target quantity 'gl-trial-factor' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-95 -> be-88: target quantity 'gl-trial-factor' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-95>>be-89",
@@ -72830,7 +72868,7 @@
     "pair": "be-96>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-96 -> be-33: target quantity 'upper-critical-field' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-96 -> be-33: target quantity 'upper-critical-field' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-96>>be-34",
@@ -73064,7 +73102,7 @@
     "pair": "be-96>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-96 -> be-88: target quantity 'upper-critical-field' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-96 -> be-88: target quantity 'upper-critical-field' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-96>>be-89",
@@ -73778,7 +73816,7 @@
     "pair": "be-97>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-97 -> be-33: target quantity 'ambegaokar-product' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-97 -> be-33: target quantity 'ambegaokar-product' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-97>>be-34",
@@ -74012,7 +74050,7 @@
     "pair": "be-97>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-97 -> be-88: target quantity 'ambegaokar-product' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-97 -> be-88: target quantity 'ambegaokar-product' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-97>>be-89",
@@ -74726,7 +74764,7 @@
     "pair": "be-98>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-98 -> be-33: target quantity 'bcs-heat-jump' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-98 -> be-33: target quantity 'bcs-heat-jump' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-98>>be-34",
@@ -74960,7 +74998,7 @@
     "pair": "be-98>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-98 -> be-88: target quantity 'bcs-heat-jump' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-98 -> be-88: target quantity 'bcs-heat-jump' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-98>>be-89",
@@ -75674,7 +75712,7 @@
     "pair": "be-99>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-99 -> be-33: target quantity 'mass-action-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-99 -> be-33: target quantity 'mass-action-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-99>>be-34",
@@ -75908,7 +75946,7 @@
     "pair": "be-99>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-99 -> be-88: target quantity 'mass-action-density' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-99 -> be-88: target quantity 'mass-action-density' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-99>>be-89",
@@ -76622,7 +76660,7 @@
     "pair": "be-100>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-100 -> be-33: target quantity 'lst-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-100 -> be-33: target quantity 'lst-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-100>>be-34",
@@ -76856,7 +76894,7 @@
     "pair": "be-100>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-100 -> be-88: target quantity 'lst-ratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-100 -> be-88: target quantity 'lst-ratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-100>>be-89",
@@ -77570,7 +77608,7 @@
     "pair": "be-101>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-101 -> be-33: target quantity 'bkt-temperature' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-101 -> be-33: target quantity 'bkt-temperature' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-101>>be-34",
@@ -77804,7 +77842,7 @@
     "pair": "be-101>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-101 -> be-88: target quantity 'bkt-temperature' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-101 -> be-88: target quantity 'bkt-temperature' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-101>>be-89",
@@ -78518,7 +78556,7 @@
     "pair": "be-102>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-102 -> be-33: target quantity 'landauer-channel-conductance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-102 -> be-33: target quantity 'landauer-channel-conductance' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-102>>be-34",
@@ -78752,7 +78790,7 @@
     "pair": "be-102>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-102 -> be-88: target quantity 'landauer-channel-conductance' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-102 -> be-88: target quantity 'landauer-channel-conductance' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-102>>be-89",
@@ -79466,7 +79504,7 @@
     "pair": "be-103>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-103 -> be-33: target quantity 'bohm-ion-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-103 -> be-33: target quantity 'bohm-ion-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-103>>be-34",
@@ -79700,7 +79738,7 @@
     "pair": "be-103>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-103 -> be-88: target quantity 'bohm-ion-speed' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-103 -> be-88: target quantity 'bohm-ion-speed' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-103>>be-89",
@@ -80414,7 +80452,7 @@
     "pair": "be-104>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-104 -> be-33: target quantity 'ion-acoustic-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-104 -> be-33: target quantity 'ion-acoustic-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-104>>be-34",
@@ -80648,7 +80686,7 @@
     "pair": "be-104>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-104 -> be-88: target quantity 'ion-acoustic-frequency' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-104 -> be-88: target quantity 'ion-acoustic-frequency' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-104>>be-89",
@@ -81362,7 +81400,7 @@
     "pair": "be-105>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-105 -> be-33: target quantity 'upper-hybrid-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-105 -> be-33: target quantity 'upper-hybrid-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-105>>be-34",
@@ -81596,7 +81634,7 @@
     "pair": "be-105>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-105 -> be-88: target quantity 'upper-hybrid-frequency' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-105 -> be-88: target quantity 'upper-hybrid-frequency' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-105>>be-89",
@@ -82310,7 +82348,7 @@
     "pair": "be-106>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-106 -> be-33: target quantity 'cutoff-r-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-106 -> be-33: target quantity 'cutoff-r-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-106>>be-34",
@@ -82544,7 +82582,7 @@
     "pair": "be-106>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-106 -> be-88: target quantity 'cutoff-r-frequency' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-106 -> be-88: target quantity 'cutoff-r-frequency' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-106>>be-89",
@@ -83258,7 +83296,7 @@
     "pair": "be-107>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-107 -> be-33: target quantity 'lower-hybrid-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-107 -> be-33: target quantity 'lower-hybrid-frequency' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-107>>be-34",
@@ -83492,7 +83530,7 @@
     "pair": "be-107>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-107 -> be-88: target quantity 'lower-hybrid-frequency' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-107 -> be-88: target quantity 'lower-hybrid-frequency' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-107>>be-89",
@@ -84206,7 +84244,7 @@
     "pair": "be-108>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-108 -> be-33: target quantity 'oblique-fast-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-108 -> be-33: target quantity 'oblique-fast-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-108>>be-34",
@@ -84440,7 +84478,7 @@
     "pair": "be-108>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-108 -> be-88: target quantity 'oblique-fast-speed' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-108 -> be-88: target quantity 'oblique-fast-speed' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-108>>be-89",
@@ -85154,7 +85192,7 @@
     "pair": "be-109>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-109 -> be-33: target quantity 'bennett-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-109 -> be-33: target quantity 'bennett-current' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-109>>be-34",
@@ -85388,7 +85426,7 @@
     "pair": "be-109>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-109 -> be-88: target quantity 'bennett-current' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-109 -> be-88: target quantity 'bennett-current' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-109>>be-89",
@@ -86102,7 +86140,7 @@
     "pair": "be-110>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-110 -> be-33: target quantity 'loss-cone-pitch' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-110 -> be-33: target quantity 'loss-cone-pitch' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-110>>be-34",
@@ -86336,7 +86374,7 @@
     "pair": "be-110>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-110 -> be-88: target quantity 'loss-cone-pitch' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-110 -> be-88: target quantity 'loss-cone-pitch' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-110>>be-89",
@@ -87050,7 +87088,7 @@
     "pair": "be-111>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-111 -> be-33: target quantity 'gradb-drift' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-111 -> be-33: target quantity 'gradb-drift' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-111>>be-34",
@@ -87284,7 +87322,7 @@
     "pair": "be-111>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-111 -> be-88: target quantity 'gradb-drift' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-111 -> be-88: target quantity 'gradb-drift' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-111>>be-89",
@@ -87998,7 +88036,7 @@
     "pair": "be-112>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-112 -> be-33: target quantity 'exb-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-112 -> be-33: target quantity 'exb-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-112>>be-34",
@@ -88232,7 +88270,7 @@
     "pair": "be-112>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-112 -> be-88: target quantity 'exb-speed' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-112 -> be-88: target quantity 'exb-speed' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-112>>be-89",
@@ -88946,7 +88984,7 @@
     "pair": "be-113>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-113 -> be-33: target quantity 'landau-gamma' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-113 -> be-33: target quantity 'landau-gamma' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-113>>be-34",
@@ -89180,7 +89218,7 @@
     "pair": "be-113>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-113 -> be-88: target quantity 'landau-gamma' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-113 -> be-88: target quantity 'landau-gamma' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-113>>be-89",
@@ -89894,7 +89932,7 @@
     "pair": "be-114>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-114 -> be-33: target quantity 'debye-sphere-argument' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-114 -> be-33: target quantity 'debye-sphere-argument' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-114>>be-34",
@@ -90128,7 +90166,7 @@
     "pair": "be-114>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-114 -> be-88: target quantity 'debye-sphere-argument' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-114 -> be-88: target quantity 'debye-sphere-argument' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-114>>be-89",
@@ -90842,7 +90880,7 @@
     "pair": "be-115>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-115 -> be-33: target quantity 'multi-debye-length' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-115 -> be-33: target quantity 'multi-debye-length' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-115>>be-34",
@@ -91076,7 +91114,7 @@
     "pair": "be-115>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-115 -> be-88: target quantity 'multi-debye-length' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-115 -> be-88: target quantity 'multi-debye-length' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-115>>be-89",
@@ -91790,7 +91828,7 @@
     "pair": "be-116>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-116 -> be-33: target quantity 'lorentz-resistivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-116 -> be-33: target quantity 'lorentz-resistivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-116>>be-34",
@@ -92024,7 +92062,7 @@
     "pair": "be-116>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-116 -> be-88: target quantity 'lorentz-resistivity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-116 -> be-88: target quantity 'lorentz-resistivity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-116>>be-89",
@@ -92738,7 +92776,7 @@
     "pair": "be-117>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-117 -> be-33: target quantity 'slab-time' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-117 -> be-33: target quantity 'slab-time' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-117>>be-34",
@@ -92972,7 +93010,7 @@
     "pair": "be-117>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-117 -> be-88: target quantity 'slab-time' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-117 -> be-88: target quantity 'slab-time' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-117>>be-89",
@@ -93686,7 +93724,7 @@
     "pair": "be-118>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-118 -> be-33: target quantity 'parker-radius' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-118 -> be-33: target quantity 'parker-radius' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-118>>be-34",
@@ -93920,7 +93958,7 @@
     "pair": "be-118>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-118 -> be-88: target quantity 'parker-radius' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-118 -> be-88: target quantity 'parker-radius' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-118>>be-89",
@@ -94634,7 +94672,7 @@
     "pair": "be-119>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-119 -> be-33: target quantity 'spiral-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-119 -> be-33: target quantity 'spiral-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-119>>be-34",
@@ -94868,7 +94906,7 @@
     "pair": "be-119>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-119 -> be-88: target quantity 'spiral-ratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-119 -> be-88: target quantity 'spiral-ratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-119>>be-89",
@@ -95582,7 +95620,7 @@
     "pair": "be-120>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-120 -> be-33: target quantity 'standoff-sixth' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-120 -> be-33: target quantity 'standoff-sixth' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-120>>be-34",
@@ -95816,7 +95854,7 @@
     "pair": "be-120>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-120 -> be-88: target quantity 'standoff-sixth' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-120 -> be-88: target quantity 'standoff-sixth' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-120>>be-89",
@@ -96530,7 +96568,7 @@
     "pair": "be-121>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-121 -> be-33: target quantity 'lawson-product' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-121 -> be-33: target quantity 'lawson-product' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-121>>be-34",
@@ -96764,7 +96802,7 @@
     "pair": "be-121>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-121 -> be-88: target quantity 'lawson-product' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-121 -> be-88: target quantity 'lawson-product' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-121>>be-89",
@@ -97478,7 +97516,7 @@
     "pair": "be-122>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-122 -> be-33: target quantity 'probe-potential-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-122 -> be-33: target quantity 'probe-potential-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-122>>be-34",
@@ -97712,7 +97750,7 @@
     "pair": "be-122>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-122 -> be-88: target quantity 'probe-potential-ratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-122 -> be-88: target quantity 'probe-potential-ratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-122>>be-89",
@@ -98426,7 +98464,7 @@
     "pair": "be-123>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-123 -> be-33: target quantity 'cross-field-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-123 -> be-33: target quantity 'cross-field-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-123>>be-34",
@@ -98660,7 +98698,7 @@
     "pair": "be-123>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-123 -> be-88: target quantity 'cross-field-ratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-123 -> be-88: target quantity 'cross-field-ratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-123>>be-89",
@@ -99374,7 +99412,7 @@
     "pair": "be-124>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-124 -> be-33: target quantity 'firehose-margin' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-124 -> be-33: target quantity 'firehose-margin' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-124>>be-34",
@@ -99608,7 +99646,7 @@
     "pair": "be-124>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-124 -> be-88: target quantity 'firehose-margin' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-124 -> be-88: target quantity 'firehose-margin' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-124>>be-89",
@@ -100322,7 +100360,7 @@
     "pair": "be-125>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-125 -> be-33: target quantity 'mirror-margin' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-125 -> be-33: target quantity 'mirror-margin' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-125>>be-34",
@@ -100556,7 +100594,7 @@
     "pair": "be-125>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-125 -> be-88: target quantity 'mirror-margin' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-125 -> be-88: target quantity 'mirror-margin' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-125>>be-89",
@@ -101270,7 +101308,7 @@
     "pair": "be-126>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-126 -> be-33: target quantity 'comb-lateral' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-126 -> be-33: target quantity 'comb-lateral' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-126>>be-34",
@@ -101504,7 +101542,7 @@
     "pair": "be-126>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-126 -> be-88: target quantity 'comb-lateral' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-126 -> be-88: target quantity 'comb-lateral' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-126>>be-89",
@@ -102218,7 +102256,7 @@
     "pair": "be-127>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-127 -> be-33: target quantity 'swing-decade' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-127 -> be-33: target quantity 'swing-decade' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-127>>be-34",
@@ -102452,7 +102490,7 @@
     "pair": "be-127>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-127 -> be-88: target quantity 'swing-decade' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-127 -> be-88: target quantity 'swing-decade' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-127>>be-89",
@@ -103166,7 +103204,7 @@
     "pair": "be-128>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-128 -> be-33: target quantity 'boost-gain' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-128 -> be-33: target quantity 'boost-gain' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-128>>be-34",
@@ -103400,7 +103438,7 @@
     "pair": "be-128>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-128 -> be-88: target quantity 'boost-gain' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-128 -> be-88: target quantity 'boost-gain' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-128>>be-89",
@@ -104114,7 +104152,7 @@
     "pair": "be-129>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-129 -> be-33: target quantity 'fin-adiabatic' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-129 -> be-33: target quantity 'fin-adiabatic' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-129>>be-34",
@@ -104348,7 +104386,7 @@
     "pair": "be-129>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-129 -> be-88: target quantity 'fin-adiabatic' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-129 -> be-88: target quantity 'fin-adiabatic' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-129>>be-89",
@@ -105062,7 +105100,7 @@
     "pair": "be-130>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-130 -> be-33: target quantity 'teg-optimum' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-130 -> be-33: target quantity 'teg-optimum' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-130>>be-34",
@@ -105296,7 +105334,7 @@
     "pair": "be-130>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-130 -> be-88: target quantity 'teg-optimum' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-130 -> be-88: target quantity 'teg-optimum' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-130>>be-89",
@@ -106010,7 +106048,7 @@
     "pair": "be-131>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-131 -> be-33: target quantity 'joukowsky-jump' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-131 -> be-33: target quantity 'joukowsky-jump' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-131>>be-34",
@@ -106244,7 +106282,7 @@
     "pair": "be-131>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-131 -> be-88: target quantity 'joukowsky-jump' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-131 -> be-88: target quantity 'joukowsky-jump' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-131>>be-89",
@@ -106958,7 +106996,7 @@
     "pair": "be-132>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-132 -> be-33: target quantity 'coax-specific' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-132 -> be-33: target quantity 'coax-specific' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-132>>be-34",
@@ -107192,7 +107230,7 @@
     "pair": "be-132>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-132 -> be-88: target quantity 'coax-specific' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-132 -> be-88: target quantity 'coax-specific' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-132>>be-89",
@@ -107906,7 +107944,7 @@
     "pair": "be-133>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-133 -> be-33: target quantity 'damping-zeta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-133 -> be-33: target quantity 'damping-zeta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-133>>be-34",
@@ -108140,7 +108178,7 @@
     "pair": "be-133>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-133 -> be-88: target quantity 'damping-zeta' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-133 -> be-88: target quantity 'damping-zeta' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-133>>be-89",
@@ -108854,7 +108892,7 @@
     "pair": "be-134>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-134 -> be-33: target quantity 'blochlaw-deficit' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-134 -> be-33: target quantity 'blochlaw-deficit' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-134>>be-34",
@@ -109088,7 +109126,7 @@
     "pair": "be-134>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-134 -> be-88: target quantity 'blochlaw-deficit' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-134 -> be-88: target quantity 'blochlaw-deficit' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-134>>be-89",
@@ -109802,7 +109840,7 @@
     "pair": "be-135>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-135 -> be-33: target quantity 'dos3d-states' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-135 -> be-33: target quantity 'dos3d-states' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-135>>be-34",
@@ -110036,7 +110074,7 @@
     "pair": "be-135>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-135 -> be-88: target quantity 'dos3d-states' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-135 -> be-88: target quantity 'dos3d-states' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-135>>be-89",
@@ -110750,7 +110788,7 @@
     "pair": "be-136>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-136 -> be-33: target quantity 'dos2d-states' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-136 -> be-33: target quantity 'dos2d-states' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-136>>be-34",
@@ -110984,7 +111022,7 @@
     "pair": "be-136>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-136 -> be-88: target quantity 'dos2d-states' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-136 -> be-88: target quantity 'dos2d-states' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-136>>be-89",
@@ -111698,7 +111736,7 @@
     "pair": "be-137>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-137 -> be-33: target quantity 'tfscreen-k2' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-137 -> be-33: target quantity 'tfscreen-k2' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-137>>be-34",
@@ -111932,7 +111970,7 @@
     "pair": "be-137>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-137 -> be-88: target quantity 'tfscreen-k2' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-137 -> be-88: target quantity 'tfscreen-k2' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-137>>be-89",
@@ -112646,7 +112684,7 @@
     "pair": "be-138>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-138 -> be-33: target quantity 'builtin-vbi' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-138 -> be-33: target quantity 'builtin-vbi' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-138>>be-34",
@@ -112880,7 +112918,7 @@
     "pair": "be-138>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-138 -> be-88: target quantity 'builtin-vbi' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-138 -> be-88: target quantity 'builtin-vbi' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-138>>be-89",
@@ -113594,7 +113632,7 @@
     "pair": "be-139>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-139 -> be-33: target quantity 'fermioffset-muoff' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-139 -> be-33: target quantity 'fermioffset-muoff' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-139>>be-34",
@@ -113828,7 +113866,7 @@
     "pair": "be-139>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-139 -> be-88: target quantity 'fermioffset-muoff' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-139 -> be-88: target quantity 'fermioffset-muoff' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-139>>be-89",
@@ -114542,7 +114580,7 @@
     "pair": "be-140>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-140 -> be-33: target quantity 'onsagerk-orbit' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-140 -> be-33: target quantity 'onsagerk-orbit' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-140>>be-34",
@@ -114776,7 +114814,7 @@
     "pair": "be-140>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-140 -> be-88: target quantity 'onsagerk-orbit' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-140 -> be-88: target quantity 'onsagerk-orbit' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-140>>be-89",
@@ -115490,7 +115528,7 @@
     "pair": "be-141>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-141 -> be-33: target quantity 'josephsonl-henry' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-141 -> be-33: target quantity 'josephsonl-henry' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-141>>be-34",
@@ -115724,7 +115762,7 @@
     "pair": "be-141>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-141 -> be-88: target quantity 'josephsonl-henry' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-141 -> be-88: target quantity 'josephsonl-henry' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-141>>be-89",
@@ -116438,7 +116476,7 @@
     "pair": "be-142>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-142 -> be-33: target quantity 'lowercrit-bc1' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-142 -> be-33: target quantity 'lowercrit-bc1' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-142>>be-34",
@@ -116672,7 +116710,7 @@
     "pair": "be-142>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-142 -> be-88: target quantity 'lowercrit-bc1' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-142 -> be-88: target quantity 'lowercrit-bc1' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-142>>be-89",
@@ -117386,7 +117424,7 @@
     "pair": "be-143>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-143 -> be-33: target quantity 'acdrude-conduct' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-143 -> be-33: target quantity 'acdrude-conduct' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-143>>be-34",
@@ -117620,7 +117658,7 @@
     "pair": "be-143>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-143 -> be-88: target quantity 'acdrude-conduct' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-143 -> be-88: target quantity 'acdrude-conduct' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-143>>be-89",
@@ -118334,7 +118372,7 @@
     "pair": "be-144>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-144 -> be-33: target quantity 'matthsum-scatter' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-144 -> be-33: target quantity 'matthsum-scatter' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-144>>be-34",
@@ -118568,7 +118606,7 @@
     "pair": "be-144>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-144 -> be-88: target quantity 'matthsum-scatter' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-144 -> be-88: target quantity 'matthsum-scatter' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-144>>be-89",
@@ -119282,7 +119320,7 @@
     "pair": "be-145>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-145 -> be-33: target quantity 'stonerchi-enhanced' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-145 -> be-33: target quantity 'stonerchi-enhanced' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-145>>be-34",
@@ -119516,7 +119554,7 @@
     "pair": "be-145>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-145 -> be-88: target quantity 'stonerchi-enhanced' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-145 -> be-88: target quantity 'stonerchi-enhanced' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-145>>be-89",
@@ -120230,7 +120268,7 @@
     "pair": "be-146>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-146 -> be-33: target quantity 'gortercas-ns' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-146 -> be-33: target quantity 'gortercas-ns' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-146>>be-34",
@@ -120464,7 +120502,7 @@
     "pair": "be-146>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-146 -> be-88: target quantity 'gortercas-ns' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-146 -> be-88: target quantity 'gortercas-ns' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-146>>be-89",
@@ -121178,7 +121216,7 @@
     "pair": "be-147>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-147 -> be-33: target quantity 'arrhrate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-147 -> be-33: target quantity 'arrhrate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-147>>be-34",
@@ -121412,7 +121450,7 @@
     "pair": "be-147>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-147 -> be-88: target quantity 'arrhrate' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-147 -> be-88: target quantity 'arrhrate' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-147>>be-89",
@@ -122126,7 +122164,7 @@
     "pair": "be-148>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-148 -> be-33: target quantity 'eyringrate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-148 -> be-33: target quantity 'eyringrate' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-148>>be-34",
@@ -122360,7 +122398,7 @@
     "pair": "be-148>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-148 -> be-88: target quantity 'eyringrate' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-148 -> be-88: target quantity 'eyringrate' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-148>>be-89",
@@ -123074,7 +123112,7 @@
     "pair": "be-149>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-149 -> be-33: target quantity 'vanthoffslope' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-149 -> be-33: target quantity 'vanthoffslope' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-149>>be-34",
@@ -123308,7 +123346,7 @@
     "pair": "be-149>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-149 -> be-88: target quantity 'vanthoffslope' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-149 -> be-88: target quantity 'vanthoffslope' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-149>>be-89",
@@ -124022,7 +124060,7 @@
     "pair": "be-150>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-150 -> be-33: target quantity 'gibbsisodg' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-150 -> be-33: target quantity 'gibbsisodg' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-150>>be-34",
@@ -124256,7 +124294,7 @@
     "pair": "be-150>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-150 -> be-88: target quantity 'gibbsisodg' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-150 -> be-88: target quantity 'gibbsisodg' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-150>>be-89",
@@ -124970,7 +125008,7 @@
     "pair": "be-151>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-151 -> be-33: target quantity 'nernstge' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-151 -> be-33: target quantity 'nernstge' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-151>>be-34",
@@ -125204,7 +125242,7 @@
     "pair": "be-151>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-151 -> be-88: target quantity 'nernstge' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-151 -> be-88: target quantity 'nernstge' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-151>>be-89",
@@ -125918,7 +125956,7 @@
     "pair": "be-152>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-152 -> be-33: target quantity 'clapintln' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-152 -> be-33: target quantity 'clapintln' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-152>>be-34",
@@ -126152,7 +126190,7 @@
     "pair": "be-152>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-152 -> be-88: target quantity 'clapintln' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-152 -> be-88: target quantity 'clapintln' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-152>>be-89",
@@ -126866,7 +126904,7 @@
     "pair": "be-153>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-153 -> be-33: target quantity 'raoultvapor' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-153 -> be-33: target quantity 'raoultvapor' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-153>>be-34",
@@ -127100,7 +127138,7 @@
     "pair": "be-153>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-153 -> be-88: target quantity 'raoultvapor' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-153 -> be-88: target quantity 'raoultvapor' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-153>>be-89",
@@ -127814,7 +127852,7 @@
     "pair": "be-154>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-154 -> be-33: target quantity 'prandtlratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-154 -> be-33: target quantity 'prandtlratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-154>>be-34",
@@ -128048,7 +128086,7 @@
     "pair": "be-154>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-154 -> be-88: target quantity 'prandtlratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-154 -> be-88: target quantity 'prandtlratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-154>>be-89",
@@ -128762,7 +128800,7 @@
     "pair": "be-155>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-155 -> be-33: target quantity 'reynumratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-155 -> be-33: target quantity 'reynumratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-155>>be-34",
@@ -128996,7 +129034,7 @@
     "pair": "be-155>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-155 -> be-88: target quantity 'reynumratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-155 -> be-88: target quantity 'reynumratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-155>>be-89",
@@ -129710,7 +129748,7 @@
     "pair": "be-156>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-156 -> be-33: target quantity 'biotratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-156 -> be-33: target quantity 'biotratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-156>>be-34",
@@ -129944,7 +129982,7 @@
     "pair": "be-156>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-156 -> be-88: target quantity 'biotratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-156 -> be-88: target quantity 'biotratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-156>>be-89",
@@ -130658,7 +130696,7 @@
     "pair": "be-157>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-157 -> be-33: target quantity 'nusseltratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-157 -> be-33: target quantity 'nusseltratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-157>>be-34",
@@ -130892,7 +130930,7 @@
     "pair": "be-157>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-157 -> be-88: target quantity 'nusseltratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-157 -> be-88: target quantity 'nusseltratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-157>>be-89",
@@ -131606,7 +131644,7 @@
     "pair": "be-158>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-158 -> be-33: target quantity 'schmidtratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-158 -> be-33: target quantity 'schmidtratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-158>>be-34",
@@ -131840,7 +131878,7 @@
     "pair": "be-158>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-158 -> be-88: target quantity 'schmidtratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-158 -> be-88: target quantity 'schmidtratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-158>>be-89",
@@ -132554,7 +132592,7 @@
     "pair": "be-159>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-159 -> be-33: target quantity 'sherwoodratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-159 -> be-33: target quantity 'sherwoodratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-159>>be-34",
@@ -132788,7 +132826,7 @@
     "pair": "be-159>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-159 -> be-88: target quantity 'sherwoodratio' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-159 -> be-88: target quantity 'sherwoodratio' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-159>>be-89",
@@ -133502,7 +133540,7 @@
     "pair": "be-160>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-160 -> be-33: target quantity 'fourierslabflux' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-160 -> be-33: target quantity 'fourierslabflux' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-160>>be-34",
@@ -133736,7 +133774,7 @@
     "pair": "be-160>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-160 -> be-88: target quantity 'fourierslabflux' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-160 -> be-88: target quantity 'fourierslabflux' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-160>>be-89",
@@ -134450,7 +134488,7 @@
     "pair": "be-161>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-161 -> be-33: target quantity 'newtontheta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-161 -> be-33: target quantity 'newtontheta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-161>>be-34",
@@ -134684,7 +134722,7 @@
     "pair": "be-161>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-161 -> be-88: target quantity 'newtontheta' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-161 -> be-88: target quantity 'newtontheta' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-161>>be-89",
@@ -135398,7 +135436,7 @@
     "pair": "be-162>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-162 -> be-33: target quantity 'ottoeta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-162 -> be-33: target quantity 'ottoeta' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-162>>be-34",
@@ -135632,7 +135670,7 @@
     "pair": "be-162>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-162 -> be-88: target quantity 'ottoeta' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-162 -> be-88: target quantity 'ottoeta' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-162>>be-89",
@@ -136346,7 +136384,7 @@
     "pair": "be-163>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-163 -> be-33: target quantity 'jtcmu' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-163 -> be-33: target quantity 'jtcmu' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-163>>be-34",
@@ -136580,7 +136618,7 @@
     "pair": "be-163>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-163 -> be-88: target quantity 'jtcmu' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-163 -> be-88: target quantity 'jtcmu' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-163>>be-89",
@@ -137294,7 +137332,7 @@
     "pair": "be-164>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-164 -> be-33: target quantity 'plancku' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-164 -> be-33: target quantity 'plancku' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-164>>be-34",
@@ -137528,7 +137566,7 @@
     "pair": "be-164>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-164 -> be-88: target quantity 'plancku' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-164 -> be-88: target quantity 'plancku' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-164>>be-89",
@@ -138242,7 +138280,7 @@
     "pair": "be-165>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-165 -> be-33: target quantity 'stefansigma' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-165 -> be-33: target quantity 'stefansigma' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-165>>be-34",
@@ -138476,7 +138514,7 @@
     "pair": "be-165>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-165 -> be-88: target quantity 'stefansigma' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-165 -> be-88: target quantity 'stefansigma' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-165>>be-89",
@@ -139190,7 +139228,7 @@
     "pair": "be-166>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-166 -> be-33: target quantity 'wienb' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-166 -> be-33: target quantity 'wienb' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-166>>be-34",
@@ -139424,7 +139462,7 @@
     "pair": "be-166>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-166 -> be-88: target quantity 'wienb' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-166 -> be-88: target quantity 'wienb' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-166>>be-89",
@@ -140138,7 +140176,7 @@
     "pair": "be-167>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-167 -> be-33: target quantity 'sackurentropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-167 -> be-33: target quantity 'sackurentropy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-167>>be-34",
@@ -140372,7 +140410,7 @@
     "pair": "be-167>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-167 -> be-88: target quantity 'sackurentropy' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-167 -> be-88: target quantity 'sackurentropy' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-167>>be-89",
@@ -141086,7 +141124,7 @@
     "pair": "be-168>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-168 -> be-33: target quantity 'sahaconst' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-168 -> be-33: target quantity 'sahaconst' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-168>>be-34",
@@ -141320,7 +141358,7 @@
     "pair": "be-168>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-168 -> be-88: target quantity 'sahaconst' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-168 -> be-88: target quantity 'sahaconst' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-168>>be-89",
@@ -142034,7 +142072,7 @@
     "pair": "be-169>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-169 -> be-33: target quantity 'richardsj' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-169 -> be-33: target quantity 'richardsj' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-169>>be-34",
@@ -142268,7 +142306,7 @@
     "pair": "be-169>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-169 -> be-88: target quantity 'richardsj' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-169 -> be-88: target quantity 'richardsj' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-169>>be-89",
@@ -142982,7 +143020,7 @@
     "pair": "be-170>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-170 -> be-33: target quantity 'onsagerl21' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-170 -> be-33: target quantity 'onsagerl21' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-170>>be-34",
@@ -143216,7 +143254,7 @@
     "pair": "be-170>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-170 -> be-88: target quantity 'onsagerl21' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-170 -> be-88: target quantity 'onsagerl21' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-170>>be-89",
@@ -143930,7 +143968,7 @@
     "pair": "be-56>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-56 -> be-33: target quantity 'casimir-pressure' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-56 -> be-33: target quantity 'casimir-pressure' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-56>>be-34",
@@ -144164,7 +144202,7 @@
     "pair": "be-56>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-56 -> be-88: target quantity 'casimir-pressure' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-56 -> be-88: target quantity 'casimir-pressure' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-56>>be-89",
@@ -144878,7 +144916,7 @@
     "pair": "be-57>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-33: target quantity 'unruh-temperature' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-57 -> be-33: target quantity 'unruh-temperature' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-57>>be-34",
@@ -145112,7 +145150,7 @@
     "pair": "be-57>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-88: target quantity 'unruh-temperature' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-57 -> be-88: target quantity 'unruh-temperature' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-57>>be-89",
@@ -145826,7 +145864,7 @@
     "pair": "be-58>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-58 -> be-33: target quantity 'voltage-noise-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-58 -> be-33: target quantity 'voltage-noise-density' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-58>>be-34",
@@ -146060,7 +146098,7 @@
     "pair": "be-58>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-58 -> be-88: target quantity 'voltage-noise-density' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-58 -> be-88: target quantity 'voltage-noise-density' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-58>>be-89",
@@ -146774,7 +146812,7 @@
     "pair": "be-61>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-61 -> be-33: target quantity 'thermal-conductivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-61 -> be-33: target quantity 'thermal-conductivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-61>>be-34",
@@ -147008,7 +147046,7 @@
     "pair": "be-61>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-61 -> be-88: target quantity 'thermal-conductivity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-61 -> be-88: target quantity 'thermal-conductivity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-61>>be-89",
@@ -147722,7 +147760,7 @@
     "pair": "be-62>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-62 -> be-33: target quantity 'gap-energy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-62 -> be-33: target quantity 'gap-energy' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-62>>be-34",
@@ -147956,7 +147994,7 @@
     "pair": "be-62>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-62 -> be-88: target quantity 'gap-energy' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-62 -> be-88: target quantity 'gap-energy' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-62>>be-89",
@@ -148670,7 +148708,7 @@
     "pair": "be-64>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-64 -> be-33: target quantity 'eddington-luminosity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-64 -> be-33: target quantity 'eddington-luminosity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-64>>be-34",
@@ -148904,7 +148942,7 @@
     "pair": "be-64>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-64 -> be-88: target quantity 'eddington-luminosity' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-64 -> be-88: target quantity 'eddington-luminosity' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-64>>be-89",
@@ -149618,7 +149656,7 @@
     "pair": "be-65>>be-33",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-65 -> be-33: target quantity 'jeans-mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+    "message": "Cannot compose be-65 -> be-33: target quantity 'jeans-mass' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
   },
   {
     "pair": "be-65>>be-34",
@@ -149852,7 +149890,7 @@
     "pair": "be-65>>be-88",
     "outcome": "error",
     "error": "CompositionJunctionError",
-    "message": "Cannot compose be-65 -> be-88: target quantity 'jeans-mass' matches none of ['fermi-sea-density', 'fermi-sea-mass'] by name or registered identification"
+    "message": "Cannot compose be-65 -> be-88: target quantity 'jeans-mass' matches none of ['fermi-sea-density'] by name or registered identification"
   },
   {
     "pair": "be-65>>be-89",

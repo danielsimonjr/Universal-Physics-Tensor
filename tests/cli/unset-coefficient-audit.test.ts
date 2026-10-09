@@ -37,7 +37,7 @@ describe('an unset dimensional coefficient is not a recovered prefactor', () => 
       expect(unset, id).toContain(id);
     }
     expect(derived).toContain('CE-plasma-frequency');
-    expect(derived).toMatch(/CE-plasma-frequency\s+\+\[\]\s+×1\.000e\+0/);
+    expect(derived).toMatch(/CE-plasma-frequency\s+\+\[epsilon_0\]\s+×1\b/);
     expect(derived).toContain('CE-simple-harmonic-frequency');
     expect(derived).toContain('CE-electrical-conductivity');
     expect(unset).not.toContain('CE-plasma-frequency');

@@ -198,7 +198,7 @@ function uncertaintyOf(
 }
 
 /** The one number formatter, as every command reads it: through `ctx.api`. */
-type Fmt = CommandCtx['api']['formatQuantity'];
+type Fmt = CommandCtx['api']['formatExact'];
 
 function printUncertainty(fmt: Fmt, out: CommandCtx['out'], u: Uncertainty): void {
   const g = (x: number | null): string => (x === null ? 'unavailable' : fmt(x));
@@ -293,23 +293,23 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   out('  scalar simplification evaluated:');
   for (const e of c.governing.scalar) out(`    ${e}`);
   out(`  kept and dropped: ${c.governing.distinction}`);
-  printInputs(api.formatQuantity, out, c.parameters, inputs, resolved);
+  printInputs(api.formatExact, out, c.parameters, inputs, resolved);
   out('  conditions (boundary, initial, equilibrium):');
   for (const s of c.conditions) out(`    - ${s}`);
   out('  outputs:');
-  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(api.formatQuantity, result.outputs[o.key] ?? null, o.unit)} — ${o.meaning}`);
+  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(api.formatExact, result.outputs[o.key] ?? null, o.unit)} — ${o.meaning}`);
   const obs = c.outputs.find((o) => o.key === c.observable)!;
-  out(`  observable: ${obs.key} = ${withUnit(api.formatQuantity, result.outputs[obs.key] ?? null, obs.unit)}`);
+  out(`  observable: ${obs.key} = ${withUnit(api.formatExact, result.outputs[obs.key] ?? null, obs.unit)}`);
   out('  regime checks (at the given inputs):');
   if (regimeLine !== '') out(`  regime coordinates: ${regimeLine}`);
   for (const k of result.checks) {
-    out(`    ${k.holds ? 'holds   ' : 'VIOLATED'}  ${k.id}: ${k.quantity} = ${api.formatQuantity(k.value)} ${k.op} ${k.bound} — ${k.premise} (${k.threshold})`);
+    out(`    ${k.holds ? 'holds   ' : 'VIOLATED'}  ${k.id}: ${k.quantity} = ${api.formatExact(k.value)} ${k.op} ${k.bound} — ${k.premise} (${k.threshold})`);
   }
   if (c.comparison !== undefined) {
     const d = result.outputs[c.comparison.deviationKey] ?? null;
     out(
       `  comparison (reported beside the checks, not one of them): ${c.comparison.valueKey} / ${c.comparison.referenceKey} − 1 = ` +
-        `${d === null ? 'undefined here' : api.formatQuantity(d)} — against ${c.comparison.reference}; ${c.comparison.method}`,
+        `${d === null ? 'undefined here' : api.formatExact(d)} — against ${c.comparison.reference}; ${c.comparison.method}`,
     );
   }
   if (result.unchecked.length > 0) {
@@ -322,7 +322,7 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
       : `  NOT QUALIFIED: ${failed.join(', ')} violated — the outputs above are outside the stated regime and are not a ` +
           'qualified prediction at these inputs.',
   );
-  if (u !== null) printUncertainty(api.formatQuantity, out, u);
+  if (u !== null) printUncertainty(api.formatExact, out, u);
   out('  not included in the model:');
   for (const s of c.notIncluded) out(`    - ${s}`);
   out('  compare with a measurement:');
@@ -439,7 +439,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
   out(`\n● be-${id}  ${spec.name}`);
-  printInputs(api.formatQuantity, out, spec.parameters, inputs, resolved);
+  printInputs(api.formatExact, out, spec.parameters, inputs, resolved);
   for (const [k, v] of Object.entries(result)) {
     const extra = spec.outputs.find((o) => o.name === k);
     const label =
@@ -450,13 +450,13 @@ async function run(ctx: CommandCtx): Promise<number> {
         : extra === undefined
           ? k
           : `${k} [${extra.unit}] (${extra.meaning})`;
-    out(`  ${label} = ${typeof v === 'number' ? api.formatQuantity(v) : JSON.stringify(v)}`);
+    out(`  ${label} = ${typeof v === 'number' ? api.formatExact(v) : JSON.stringify(v)}`);
   }
   for (const key of unused) {
     out(`  note: ${key} is required and does not enter the value; the closed form does not use it, so changing it changes nothing`);
   }
   for (const notice of notices) out(`  ${notice}`);
-  if (u !== null) printUncertainty(api.formatQuantity, out, u);
+  if (u !== null) printUncertainty(api.formatExact, out, u);
   return 0;
 }
 

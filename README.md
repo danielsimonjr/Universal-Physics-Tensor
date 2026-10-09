@@ -81,7 +81,7 @@ npx upt search pendulum
 ```text
   dimensionally determined up to a constant:  period ∝ length^0.5·gravity^-0.5
   formula dimension: [time]  ✓ homogeneous, matches target
-  formula MATCHES the dimensional form — recovered prefactor ≈ 6.2832e+0
+  formula MATCHES the dimensional form — recovered prefactor ≈ 6.28318530717959
   ✓ agrees with CE-pendulum-period (Pendulum period), prefactor included: yours/canonical = 1 at 3 fixed points
 ```
 

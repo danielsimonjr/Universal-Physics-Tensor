@@ -95,14 +95,14 @@ const OWNER = 'core/constants.ts';
 /** Every registered constant as written. Order is the order the tables print. @internal */
 export const CONSTANT_ROWS: readonly ConstantRow[] = [
   // ── universal constants a canonical equation may bake ──────────────────
-  row({ name: 'hbar', spellings: ['ℏ'], value: HBAR_SI, unit: 'J*s', canonical: true, mathts: 'reducedPlanckConstant', exact: true,
+  row({ name: 'hbar', spellings: ['ℏ', 'reduced-planck-constant'], value: HBAR_SI, unit: 'J*s', canonical: true, mathts: 'reducedPlanckConstant', exact: true,
     meaning: 'reduced Planck constant h/(2π)', source: `exact H_SI/(2π) (${OWNER} HBAR_SI)`,
     note:
       `hbar is HBAR_SI = H_SI/(2π), the exact reduced Planck constant. The CODATA display ${HBAR_CODATA_DISPLAY} ` +
       `is that quotient truncated (relative difference ${(Math.abs(HBAR_CODATA_DISPLAY - HBAR_SI) / HBAR_SI).toExponential(3)}).` }),
   row({ name: 'h', quantity: 'planck-constant', value: H_SI, unit: 'J*s', canonical: true, mathts: 'planckConstant', exact: true,
     meaning: 'Planck constant', source: `exact SI, 2019 redefinition (${OWNER} H_SI)` }),
-  row({ name: 'c', value: C_SI, unit: 'm/s', canonical: true, mathts: 'speedOfLight', exact: true,
+  row({ name: 'c', spellings: ['speed-of-light', 'speed_of_light'], value: C_SI, unit: 'm/s', canonical: true, mathts: 'speedOfLight', exact: true,
     meaning: 'speed of light in vacuum', source: `exact SI (${OWNER} C_SI)` }),
   row({ name: 'G', value: G_SI, unit: 'm^3/(kg*s^2)', canonical: true, mathts: 'gravitationConstant',
     meaning: 'Newtonian gravitational constant', source: `CODATA 2018 (${OWNER} G_SI)` }),
@@ -121,7 +121,7 @@ export const CONSTANT_ROWS: readonly ConstantRow[] = [
   // dimensionless governing name e.
   row({ name: 'e', spellings: ['e_charge'], value: E_SI, unit: 'C', canonical: true, mathts: 'elementaryCharge', exact: true,
     meaning: 'elementary charge', source: `exact SI, 2019 redefinition (${OWNER} E_SI)` }),
-  row({ name: 'epsilon_0', spellings: ['epsilon0', 'eps0'], value: EPS0_SI, unit: 'F/m', canonical: true,
+  row({ name: 'epsilon_0', spellings: ['epsilon0', 'eps0', 'vacuum-permittivity'], value: EPS0_SI, unit: 'F/m', canonical: true,
     meaning: 'vacuum permittivity', source: `CODATA 2018 (${OWNER} EPS0_SI)` }),
   row({ name: 'sigma_sb', spellings: ['stefan-boltzmann-constant'], value: SIGMA_SB_SI, unit: 'W/(m^2*K^4)', canonical: true, mathts: 'stefanBoltzmann',
     meaning: 'Stefan–Boltzmann constant', source: `CODATA 2018 (${OWNER} SIGMA_SB_SI)` }),
@@ -134,7 +134,7 @@ export const CONSTANT_ROWS: readonly ConstantRow[] = [
     meaning: 'IAU solar mass (GM)☉/G, the mass that reproduces GM_sun with G_SI', source: `GM_SUN_SI/G_SI (${OWNER} M_SUN_IAU_SI)` }),
   row({ name: 'm_u', value: M_U_SI, unit: 'kg', canonical: true, mathts: 'atomicMass',
     meaning: 'unified atomic mass unit (atomic mass constant)', source: `CODATA 2018 (${OWNER} M_U_SI)` }),
-  row({ name: 'm_e', spellings: ['electron_mass'], value: M_E_SI, unit: 'kg', canonical: true, mathts: 'electronMass',
+  row({ name: 'm_e', spellings: ['electron_mass', 'electron-mass'], value: M_E_SI, unit: 'kg', canonical: true, mathts: 'electronMass',
     meaning: 'electron mass', source: `CODATA 2018 (${OWNER} M_E_SI)` }),
   // ── overlay names for `upt eval` and the dimensional assignment only ────
   row({ name: 'mu_0', spellings: ['mu0'], value: MU0_SI, unit: 'H/m', mathts: 'magneticConstant',
