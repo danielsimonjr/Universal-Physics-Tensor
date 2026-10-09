@@ -233,7 +233,8 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`catalog id ${bridgeId} refused. Missing: ${missing}.`);
       out(`This is not a pass and not a fail. The catalog status of catalog id ${bridgeId} is unchanged.`);
     }
-    return 1;
+    // The refusal is the result the command computed: exit 0, as a path with no composite claim.
+    return 0;
   }
 
   let entries =

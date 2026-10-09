@@ -101,14 +101,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   const governing = specs.slice(1);
   const det = api.dimensionallyDetermines(target, governing);
 
-  // Text lines follow the OLD bin's exact interleaving (bin/upt.mjs lines
-  // 340-385): the header/determination block — and the dimensional-check
-  // line — hit stdout BEFORE the formula parse/evaluate error sites, so a
-  // failing formula still leaves the partial report on stdout (the
-  // error-conversion fidelity rule: output emitted before the old
-  // `process.exit(2)` stays emitted before the throw). In --json mode text
-  // is suppressed and errors emit no JSON, so nothing precedes a throw.
-  const textOut = isJson ? () => {} : out;
+  // Text is buffered and written only when the command reaches a result, so an
+  // error (exit 1 or 2) leaves stdout empty, as every command's does; a result,
+  // exit 0 or 3, prints the whole report. In --json mode text is suppressed.
+  const lines: string[] = [];
+  const textOut = isJson ? () => {} : (line: string) => void lines.push(line);
+  const flush = (): void => {
+    for (const line of lines) out(line);
+  };
 
   let full: ReturnType<typeof api.buckinghamPi> | undefined;
   let formulaCheck: ReturnType<Awaited<ReturnType<typeof api.getFormulaDimensionChecker>>['check']> | undefined;
@@ -221,6 +221,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       textOut('  formula given, but with no unique monomial there is no single prefactor to recover.');
       printComparisons();
       if (isJson) emitEnvelope();
+      else flush();
       return classifyDetermination({
         asked: true,
         agrees: canonicalComparisons.some((c) => c.kind === 'agrees'),
@@ -261,6 +262,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   if (isJson) emitEnvelope();
+  else flush();
   return classifyDetermination({
     asked: true,
     agrees: (canonicalComparisons ?? []).some((c) => c.kind === 'agrees'),
