@@ -70,10 +70,14 @@ describe('Q3: which monomial entries the constant binding reaches', () => {
       e.dimensional.governing.some((g) => CONSTANTS[g.name] !== undefined && equals(CONSTANTS[g.name]!.dim, g.dim)),
   );
 
-  it('seven entries hold a governing constant in a monomial-only record', () => {
+  it('the monomial-only records that hold a governing constant are exactly these', () => {
+    // CE-fermi-energy, CE-fermi-velocity and CE-mb-most-probable-speed joined the set when
+    // their constants were respelled hbar and k_B (9.0.0 audit §4 C10): a constant spelled
+    // under an unregistered name was a free variable, not a governing constant.
     expect(monomialWithConstant.map((e) => e.id).sort()).toEqual([
-      'CE-compton-wavelength', 'CE-kepler-third', 'CE-planck-length',
-      'CE-planck-mass', 'CE-planck-time', 'CE-schwarzschild-radius', 'CE-thermal-de-broglie',
+      'CE-compton-wavelength', 'CE-fermi-energy', 'CE-fermi-velocity', 'CE-kepler-third',
+      'CE-mb-most-probable-speed', 'CE-planck-length', 'CE-planck-mass', 'CE-planck-time',
+      'CE-schwarzschild-radius', 'CE-thermal-de-broglie',
     ]);
   });
 

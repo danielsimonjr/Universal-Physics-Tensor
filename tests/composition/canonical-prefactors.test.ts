@@ -46,6 +46,7 @@ const EXPECTED: Record<string, number> = {
   'CE-kinetic-pressure': 1 / 3,
   'CE-half-life': Math.log(2),
   'CE-thomson-cross-section': (8 * Math.PI) / 3,
+  'CE-normal-distribution': 1 / Math.sqrt(2 * Math.PI),
 };
 
 /** A dimensionless number used as a FACTOR (not as an exponent) anywhere in the AST. */
