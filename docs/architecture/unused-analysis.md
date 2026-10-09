@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 75
+- **Potentially unused exports**: 67
 
 ## Potentially Unused Files
 
@@ -132,43 +132,17 @@ These exports are not imported by any other file in the codebase:
 - `sha256` (constant)
 - `argvFingerprint` (constant)
 
-### `src/composition/bridge-analysis.ts`
+### `src/cli/statuses.ts`
 
-- `anchoringDistance` (function)
+- `statusMeaning` (function)
 
-### `src/composition/frontier-account.ts`
+### `src/composition/axes.ts`
 
-- `CONTESTED_BRIDGE_IDS` (constant)
-
-### `src/composition/probe/study.ts`
-
-- `exprToInfix` (function)
-
-### `src/composition/quantities.ts`
-
-- `temperatureQ` (constant)
-- `massQ` (constant)
-
-### `src/core/constants.ts`
-
-- `GM_SUN_SOURCE` (constant)
-
-### `src/dimensional/constants.ts`
-
-- `G` (constant)
-- `e` (constant)
-
-### `src/dimensional/unit-convention.ts`
-
-- `QUANTITY_CONVENTION_UNIT` (constant)
-
-### `src/numerical/formula-dimension.ts`
-
-- `ELEMENTARY_CHARGE_MIX_MESSAGE` (constant)
+- `INFORMATION_AXIS_VALUES` (constant)
+- `TOPOLOGY_AXIS_VALUES` (constant)
+- `STATISTICS_AXIS_VALUES` (constant)
 
 ### `src/numerical/spacetime-metrics.ts`
 
-- `metricParams` (function)
 - `METRIC_SIGNATURE` (constant)
-- `METRIC_SIGNATURE_NOTE` (constant)
 

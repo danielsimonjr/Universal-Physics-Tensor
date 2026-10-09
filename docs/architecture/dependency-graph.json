@@ -4,7 +4,7 @@
     "version": "9.0.0",
     "totalFiles": 362,
     "totalModules": 13,
-    "totalExports": 2483
+    "totalExports": 2538
   },
   "entryPoints": [
     {
@@ -4808,14 +4808,8 @@
           {
             "file": "./observations/types.js",
             "imports": [
+              "residualInSigma",
               "ConfrontationOutcome"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "./observations/types.js",
-            "imports": [
-              "residualInSigma"
             ]
           }
         ],
@@ -4855,14 +4849,15 @@
         ]
       },
       "src/bridges/catalog-adapter.ts": {
-        "description": "Catalog adapter: ingests the 44-entry `BRIDGE_EQUATIONS` array into",
+        "description": "Catalog adapter: ingests `BRIDGE_EQUATIONS` into the v0.7-p2 sparse",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
             "file": "./index.js",
             "imports": [
-              "BridgeEquationEntry"
+              "BridgeEquationEntry",
+              "BridgeEquationStatus"
             ],
             "typeOnly": true
           },
@@ -4952,21 +4947,33 @@
             "file": "./catalog-types.js",
             "imports": [
               "CatalogConfrontation",
+              "CatalogConfrontationRecord",
               "CatalogEntry",
               "CatalogEvaluator",
               "CatalogEvaluatorParameter",
               "CatalogFile",
+              "CatalogFileRecord",
+              "CatalogRejection",
               "CatalogRelation"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./observations/types.js",
+            "imports": [
+              "ConfrontationOutcome"
             ],
             "typeOnly": true
           }
         ],
         "exports": [
+          "loadCatalog",
           "bridgeCatalog",
           "catalogEntries",
           "catalogRelations",
           "catalogEvaluators",
           "catalogConfrontations",
+          "catalogRejections",
           "catalogEntry",
           "relationsForCatalog",
           "primaryRelation",
@@ -4975,11 +4982,13 @@
           "catalogEdgeKey"
         ],
         "functions": [
+          "loadCatalog",
           "bridgeCatalog",
           "catalogEntries",
           "catalogRelations",
           "catalogEvaluators",
           "catalogConfrontations",
+          "catalogRejections",
           "catalogEntry",
           "relationsForCatalog",
           "primaryRelation",
@@ -5001,12 +5010,9 @@
             "typeOnly": true
           },
           {
-            "file": "../relations/types.js",
+            "file": "./observations/types.js",
             "imports": [
-              "Conventions",
-              "Counterexample",
-              "Regime",
-              "RelationContract"
+              "ConfrontationOutcome"
             ],
             "typeOnly": true
           },
@@ -5027,7 +5033,9 @@
           "CatalogEvaluatorParameter",
           "CatalogEvaluatorOutput",
           "CatalogEvaluator",
+          "CatalogPrediction",
           "CatalogConfrontation",
+          "CatalogRejection",
           "CatalogFile",
           "CatalogAdjudication"
         ]
@@ -5133,6 +5141,7 @@
           "UnknownInputError",
           "InputTypeError",
           "NonFiniteInputError",
+          "ConstantInputError",
           "DuplicateInputError",
           "DomainViolationError"
         ],
@@ -5141,6 +5150,7 @@
           "UnknownInputError",
           "InputTypeError",
           "NonFiniteInputError",
+          "ConstantInputError",
           "DuplicateInputError",
           "DomainViolationError"
         ],
@@ -5217,18 +5227,16 @@
           {
             "file": "./catalog-load.js",
             "imports": [
+              "catalogEntries",
+              "catalogEntry",
+              "catalogEvaluators",
               "primaryRelation"
-            ]
-          },
-          {
-            "file": "./catalog-load.js",
-            "imports": [
-              "catalogEvaluators"
             ]
           },
           {
             "file": "./catalog-types.js",
             "imports": [
+              "CatalogEvaluator",
               "CatalogEvaluatorOutput",
               "CatalogEvaluatorParameter",
               "CatalogRelation"
@@ -5240,7 +5248,8 @@
             "imports": [
               "evaluateFormula",
               "formulaVariables",
-              "parseCatalogExpression"
+              "parseCatalogExpression",
+              "reservedFormulaNames"
             ]
           },
           {
@@ -5277,6 +5286,7 @@
         "exports": [
           "BRIDGE_EVALUATORS",
           "unusedInputKeys",
+          "buildEvaluatorSpec",
           "missingEvaluatorMessage",
           "evaluateBridge"
         ],
@@ -5287,6 +5297,7 @@
         ],
         "functions": [
           "unusedInputKeys",
+          "buildEvaluatorSpec",
           "missingEvaluatorMessage",
           "evaluateBridge"
         ],
@@ -5302,14 +5313,8 @@
           {
             "file": "../dimensional/types.js",
             "imports": [
+              "DIMENSIONLESS",
               "Dimension"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "DIMENSIONLESS"
             ]
           },
           {
@@ -5356,19 +5361,29 @@
               "parseFormulaPNode",
               "FormulaPNode"
             ]
+          },
+          {
+            "file": "./evaluation-errors.js",
+            "imports": [
+              "ConstantInputError"
+            ]
           }
         ],
         "exports": [
           "formulaNames",
+          "reservedFormulaNames",
           "formulaScope",
           "formulaVariables",
+          "withoutUnreadConstants",
           "evaluateFormula",
           "parseCatalogExpression"
         ],
         "functions": [
           "formulaNames",
+          "reservedFormulaNames",
           "formulaScope",
           "formulaVariables",
+          "withoutUnreadConstants",
           "evaluateFormula",
           "parseCatalogExpression"
         ]
@@ -5390,6 +5405,12 @@
             "imports": [
               "rewriteCatalogHyphens"
             ]
+          },
+          {
+            "file": "./evaluation-errors.js",
+            "imports": [
+              "ConstantInputError"
+            ]
           }
         ],
         "exports": [
@@ -5404,7 +5425,7 @@
         ]
       },
       "src/bridges/index.ts": {
-        "description": "Bridge catalog projection. Rows, regimes, and the spine are loaded from",
+        "description": "Bridge catalog projection. The rows are loaded from",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -5416,18 +5437,9 @@
             "typeOnly": true
           },
           {
-            "file": "../relations/types.js",
-            "imports": [
-              "Regime"
-            ],
-            "typeOnly": true
-          },
-          {
             "file": "./catalog-load.js",
             "imports": [
-              "bridgeCatalog",
-              "catalogEntries",
-              "catalogEntry"
+              "catalogEntries"
             ]
           },
           {
@@ -5438,13 +5450,6 @@
               "BridgeIssueFixable",
               "BridgeIssueSeverity",
               "KnownIssue"
-            ],
-            "reExport": true
-          },
-          {
-            "file": "./types.js",
-            "imports": [
-              "isActiveStatus"
             ],
             "reExport": true
           },
@@ -5467,10 +5472,16 @@
               "CarrierSignError"
             ],
             "reExport": true
+          },
+          {
+            "file": "./evaluation-errors.js",
+            "imports": [
+              "ConstantInputError"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
-          "isActiveStatus",
           "BCS_GAP_RATIO",
           "JOSEPHSON_CONSTANT_SI",
           "LANE_EMDEN_OMEGA3",
@@ -5479,9 +5490,8 @@
           "THOMSON_CROSS_SECTION_SI",
           "VON_KLITZING_SI",
           "CarrierSignError",
+          "ConstantInputError",
           "BRIDGE_EQUATIONS",
-          "SPINE_CONFRONTATION_POINTS",
-          "catalogRegime",
           "BridgeEquationEntry",
           "BridgeEquationStatus",
           "BridgeIssueFixable",
@@ -5494,7 +5504,6 @@
           "BridgeIssueFixable",
           "BridgeIssueSeverity",
           "KnownIssue",
-          "isActiveStatus",
           "BCS_GAP_RATIO",
           "JOSEPHSON_CONSTANT_SI",
           "LANE_EMDEN_OMEGA3",
@@ -5502,14 +5511,11 @@
           "M_PROTON_SI",
           "THOMSON_CROSS_SECTION_SI",
           "VON_KLITZING_SI",
-          "CarrierSignError"
-        ],
-        "functions": [
-          "catalogRegime"
+          "CarrierSignError",
+          "ConstantInputError"
         ],
         "constants": [
-          "BRIDGE_EQUATIONS",
-          "SPINE_CONFRONTATION_POINTS"
+          "BRIDGE_EQUATIONS"
         ]
       },
       "src/bridges/input-contract.ts": {
@@ -5557,36 +5563,17 @@
           {
             "file": "./rejected.js",
             "imports": [
-              "REJECTED_BRIDGE_IDS"
-            ]
-          },
-          {
-            "file": "./rejected.js",
-            "imports": [
               "REJECTED_BRIDGE_ADJUDICATIONS",
-              "REJECTED_BRIDGE_IDS"
-            ],
-            "reExport": true
-          },
-          {
-            "file": "./rejected.js",
-            "imports": [
+              "REJECTED_BRIDGE_IDS",
               "RejectedBridgeAdjudication"
-            ],
-            "reExport": true
+            ]
           }
         ],
         "exports": [
           "REJECTED_BRIDGE_ADJUDICATIONS",
           "REJECTED_BRIDGE_IDS",
           "adjudicateBridgeEntry",
-          "adjudicateCatalog",
-          "RejectedBridgeAdjudication"
-        ],
-        "reExported": [
-          "REJECTED_BRIDGE_ADJUDICATIONS",
-          "REJECTED_BRIDGE_IDS",
-          "RejectedBridgeAdjudication"
+          "adjudicateCatalog"
         ],
         "interfaces": [
           "CatalogAdjudicationReport"
@@ -5644,41 +5631,18 @@
           "combineInQuadrature"
         ]
       },
-      "src/bridges/registry.ts": {
-        "description": "One registration for a catalog bridge.",
+      "src/bridges/rejected.ts": {
+        "description": "Negative catalog — NOT-A-BRIDGE adjudications, projected from the",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../dimensional/validator.js",
+            "file": "./catalog-load.js",
             "imports": [
-              "ExprNode"
-            ],
-            "typeOnly": true
+              "catalogRejections"
+            ]
           }
         ],
-        "exports": [
-          "bridgeRegistry",
-          "createBridgeRegistry",
-          "registerBridge"
-        ],
-        "interfaces": [
-          "BridgeRegistration",
-          "BridgeRegistry"
-        ],
-        "functions": [
-          "createBridgeRegistry",
-          "registerBridge"
-        ],
-        "constants": [
-          "bridgeRegistry"
-        ]
-      },
-      "src/bridges/rejected.ts": {
-        "description": "Negative catalog (v0.8.0 P-4) — NOT-A-BRIDGE adjudications as",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
         "exports": [
           "REJECTED_BRIDGE_ADJUDICATIONS",
           "REJECTED_BRIDGE_IDS"
@@ -5735,13 +5699,11 @@
         "exports": [
           "CarrierSignError",
           "relationHolds",
-          "evaluateCatalogRelation",
-          "solveCatalogRelation"
+          "evaluateCatalogRelation"
         ],
         "functions": [
           "relationHolds",
-          "evaluateCatalogRelation",
-          "solveCatalogRelation"
+          "evaluateCatalogRelation"
         ]
       },
       "src/bridges/rhs-registry.ts": {
@@ -5791,25 +5753,28 @@
             ]
           },
           {
-            "file": "./expr-parse.js",
+            "file": "./catalog-types.js",
             "imports": [
-              "evaluateFormula"
-            ]
+              "CatalogPrediction"
+            ],
+            "typeOnly": true
           },
           {
-            "file": "./catalog-load.js",
+            "file": "./evaluators.js",
             "imports": [
-              "primaryRelation"
+              "BRIDGE_EVALUATORS"
             ]
           }
         ],
         "exports": [
+          "predictedAt",
           "decidingMeasurement"
         ],
         "interfaces": [
           "Elasticity"
         ],
         "functions": [
+          "predictedAt",
           "decidingMeasurement"
         ]
       },
@@ -5847,15 +5812,10 @@
             "typeOnly": true
           }
         ],
-        "exports": [
-          "isActiveStatus"
-        ],
+        "exports": [],
         "interfaces": [
           "KnownIssue",
           "BridgeEquationEntry"
-        ],
-        "functions": [
-          "isActiveStatus"
         ]
       }
     },
@@ -6539,12 +6499,6 @@
             "typeOnly": true
           },
           {
-            "file": "../dimensional/validator.js",
-            "imports": [
-              "validate"
-            ]
-          },
-          {
             "file": "../composition/expr-eval.js",
             "imports": [
               "evalExpr"
@@ -6554,12 +6508,6 @@
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
-            ]
-          },
-          {
-            "file": "../bridges/rhs-registry.js",
-            "imports": [
-              "BRIDGE_RHS_BY_ID"
             ]
           },
           {
@@ -6586,11 +6534,20 @@
           {
             "file": "./structural.js",
             "imports": [
+              "bridgeShapes",
               "classifyStructure"
             ]
+          },
+          {
+            "file": "./structural.js",
+            "imports": [
+              "BridgeShape"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
+          "numericalRecovery",
           "classifyLinkage",
           "scanLinkages"
         ],
@@ -6599,6 +6556,7 @@
           "LinkageResult"
         ],
         "functions": [
+          "numericalRecovery",
           "classifyLinkage",
           "scanLinkages"
         ]
@@ -6873,6 +6831,7 @@
           }
         ],
         "exports": [
+          "bridgeShapes",
           "classifyStructure"
         ],
         "interfaces": [
@@ -6880,9 +6839,11 @@
           "StructuralRelation",
           "ChainConfirmation",
           "ChainRestatement",
-          "ChainProvisional"
+          "ChainProvisional",
+          "BridgeShape"
         ],
         "functions": [
+          "bridgeShapes",
           "classifyStructure",
           "classifyStructure",
           "classifyStructure"
@@ -7339,6 +7300,8 @@
           }
         ],
         "exports": [
+          "END_OF_OPTIONS",
+          "optionTokens",
           "parseArgs"
         ],
         "interfaces": [
@@ -7346,7 +7309,34 @@
           "ParsedArgs"
         ],
         "functions": [
+          "optionTokens",
           "parseArgs"
+        ],
+        "constants": [
+          "END_OF_OPTIONS"
+        ]
+      },
+      "src/cli/bindings.ts": {
+        "description": "The one reader of `name=value` tokens for every command that takes them",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./errors.js",
+            "imports": [
+              "CliError",
+              "UsageError"
+            ]
+          }
+        ],
+        "exports": [
+          "splitAssignments"
+        ],
+        "interfaces": [
+          "Assignment"
+        ],
+        "functions": [
+          "splitAssignments"
         ]
       },
       "src/cli/closed-form-range.ts": {
@@ -7770,12 +7760,6 @@
             "imports": [
               "emitJson"
             ]
-          },
-          {
-            "file": "../statuses.js",
-            "imports": [
-              "statusMeaning"
-            ]
           }
         ],
         "exports": [
@@ -7877,7 +7861,7 @@
           {
             "file": "../published-url.js",
             "imports": [
-              "publishedUrl"
+              "adjudicationSourceUrls"
             ]
           }
         ],
@@ -8013,6 +7997,13 @@
             "imports": [
               "publishedUrl"
             ]
+          },
+          {
+            "file": "../../cli-api.js",
+            "imports": [
+              "RigorTier"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -8348,6 +8339,12 @@
             ]
           },
           {
+            "file": "../bindings.js",
+            "imports": [
+              "splitAssignments"
+            ]
+          },
+          {
             "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
@@ -8398,7 +8395,15 @@
           {
             "file": "../expr-print.js",
             "imports": [
+              "coherentUnits",
+              "derivedUnitOf",
               "siUnitOf"
+            ]
+          },
+          {
+            "file": "../bindings.js",
+            "imports": [
+              "splitAssignments"
             ]
           },
           {
@@ -8475,6 +8480,12 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../bindings.js",
+            "imports": [
+              "splitAssignments"
             ]
           },
           {
@@ -8879,13 +8890,6 @@
             "typeOnly": true
           },
           {
-            "file": "../graphs.js",
-            "imports": [
-              "SourceName"
-            ],
-            "typeOnly": true
-          },
-          {
             "file": "../conventions.js",
             "imports": [
               "canonicalCheckFailed",
@@ -8955,6 +8959,12 @@
             "imports": [
               "CliError",
               "UsageError"
+            ]
+          },
+          {
+            "file": "../bindings.js",
+            "imports": [
+              "splitAssignments"
             ]
           },
           {
@@ -9301,17 +9311,15 @@
             ]
           },
           {
-            "file": "../../dimensional/formula-names.js",
-            "imports": [
-              "assertSynonymAgreement",
-              "resolveQuantityName",
-              "SynonymDisagreementError"
-            ]
-          },
-          {
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../bindings.js",
+            "imports": [
+              "splitAssignments"
             ]
           }
         ],
@@ -9367,14 +9375,6 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
-            ]
-          },
-          {
-            "file": "../../atlas/benchmark/hybrid-retrieval.js",
-            "imports": [
-              "canonicalRetrievalCorpus",
-              "ollamaEmbedder",
-              "retrieveHybrid"
             ]
           }
         ],
@@ -9697,11 +9697,18 @@
           "printEval",
           "latexName",
           "printLatex",
+          "coherentUnits",
+          "derivedUnitOf",
           "siUnitOf"
+        ],
+        "interfaces": [
+          "CoherentUnit"
         ],
         "functions": [
           "latexName",
           "printLatex",
+          "coherentUnits",
+          "derivedUnitOf",
           "siUnitOf"
         ],
         "constants": [
@@ -9818,6 +9825,7 @@
           {
             "file": "./args.js",
             "imports": [
+              "optionTokens",
               "parseArgs"
             ]
           },
@@ -9948,62 +9956,6 @@
         "functions": [
           "sanitize",
           "emitJson"
-        ]
-      },
-      "src/cli/poster-source.ts": {
-        "description": "The POSTER source for the physics map — turn the Atlas Phase 3 poster index",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../atlas/association.js",
-            "imports": [
-              "Association"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../atlas/derivation.js",
-            "imports": [
-              "Derivation",
-              "DerivationId"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../atlas/statement.js",
-            "imports": [
-              "Statement",
-              "StatementId"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../composition/graph-viz.js",
-            "imports": [
-              "VizJunction"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "POSTER_GRAPH",
-          "validatePoster",
-          "posterJunctions",
-          "describePosterSource"
-        ],
-        "interfaces": [
-          "PosterGraph",
-          "DanglingPremise",
-          "PosterValidation"
-        ],
-        "functions": [
-          "validatePoster",
-          "posterJunctions",
-          "describePosterSource"
-        ],
-        "constants": [
-          "POSTER_GRAPH"
         ]
       },
       "src/cli/published-url.ts": {
@@ -10659,7 +10611,8 @@
             "file": "./dimensional/units.js",
             "imports": [
               "convertValue",
-              "UnitError"
+              "UnitError",
+              "unitRows"
             ],
             "reExport": true
           },
@@ -10740,24 +10693,6 @@
             "file": "./cli/map-evidence.js",
             "imports": [
               "deriveEdgeEvidence"
-            ],
-            "reExport": true
-          },
-          {
-            "file": "./cli/poster-source.js",
-            "imports": [
-              "POSTER_GRAPH",
-              "posterJunctions",
-              "validatePoster",
-              "describePosterSource"
-            ],
-            "reExport": true
-          },
-          {
-            "file": "./cli/poster-source.js",
-            "imports": [
-              "PosterGraph",
-              "PosterValidation"
             ],
             "reExport": true
           },
@@ -11220,6 +11155,15 @@
             "reExport": true
           },
           {
+            "file": "./atlas/benchmark/hybrid-retrieval.js",
+            "imports": [
+              "canonicalRetrievalCorpus",
+              "ollamaEmbedder",
+              "retrieveHybrid"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./numerical/formula-dimension.js",
             "imports": [
               "builtinFormulaDimensionChecker"
@@ -11337,6 +11281,7 @@
           "runAppliedCase",
           "convertValue",
           "UnitError",
+          "unitRows",
           "auditAxisDiscrimination",
           "AXES",
           "simplifyObservable",
@@ -11349,10 +11294,6 @@
           "filterEdges",
           "formatFilterLegend",
           "deriveEdgeEvidence",
-          "POSTER_GRAPH",
-          "posterJunctions",
-          "validatePoster",
-          "describePosterSource",
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
@@ -11458,6 +11399,9 @@
           "resolveEvaluable",
           "unusedInputKeys",
           "SynonymDisagreementError",
+          "canonicalRetrievalCorpus",
+          "ollamaEmbedder",
+          "retrieveHybrid",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "relationNotices",
@@ -11472,8 +11416,6 @@
           "CaseResult",
           "AxisDiscrimination",
           "AxisSpec",
-          "PosterGraph",
-          "PosterValidation",
           "AnnotatedCandidate",
           "CatalogAdjudication",
           "ConsequenceAnnotatedCandidate",
@@ -11577,6 +11519,7 @@
           "CaseResult",
           "convertValue",
           "UnitError",
+          "unitRows",
           "auditAxisDiscrimination",
           "AxisDiscrimination",
           "AXES",
@@ -11591,12 +11534,6 @@
           "filterEdges",
           "formatFilterLegend",
           "deriveEdgeEvidence",
-          "POSTER_GRAPH",
-          "posterJunctions",
-          "validatePoster",
-          "describePosterSource",
-          "PosterGraph",
-          "PosterValidation",
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
@@ -11731,6 +11668,9 @@
           "resolveEvaluable",
           "unusedInputKeys",
           "SynonymDisagreementError",
+          "canonicalRetrievalCorpus",
+          "ollamaEmbedder",
+          "retrieveHybrid",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "relationNotices",
@@ -11878,6 +11818,12 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
+          "SCALE_AXIS_VALUES",
+          "FORCE_AXIS_VALUES",
+          "INFORMATION_AXIS_VALUES",
+          "SYMMETRY_AXIS_VALUES",
+          "TOPOLOGY_AXIS_VALUES",
+          "STATISTICS_AXIS_VALUES",
           "AXES",
           "GATE_AXES"
         ],
@@ -11885,6 +11831,12 @@
           "AxisSpec"
         ],
         "constants": [
+          "SCALE_AXIS_VALUES",
+          "FORCE_AXIS_VALUES",
+          "INFORMATION_AXIS_VALUES",
+          "SYMMETRY_AXIS_VALUES",
+          "TOPOLOGY_AXIS_VALUES",
+          "STATISTICS_AXIS_VALUES",
           "AXES",
           "GATE_AXES"
         ]
@@ -12037,7 +11989,6 @@
           "dimensionalFreedom",
           "vacuumConstantThroughAlpha",
           "attemptDerivation",
-          "anchoringDistance",
           "bridgePriority",
           "linkageMap",
           "proposeLinkCandidates",
@@ -12050,7 +12001,6 @@
           "dimensionalFreedom",
           "vacuumConstantThroughAlpha",
           "attemptDerivation",
-          "anchoringDistance",
           "bridgePriority",
           "linkageMap",
           "proposeLinkCandidates",
@@ -12090,6 +12040,13 @@
               "Quantity"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./axes.js",
+            "imports": [
+              "FORCE_AXIS_VALUES",
+              "SCALE_AXIS_VALUES"
+            ]
           }
         ],
         "exports": [
@@ -12306,6 +12263,18 @@
             "typeOnly": true
           },
           {
+            "file": "./quantity.js",
+            "imports": [
+              "regimeAttributesOf"
+            ]
+          },
+          {
+            "file": "./axes.js",
+            "imports": [
+              "AXES"
+            ]
+          },
+          {
             "file": "../canonical/canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -12382,6 +12351,12 @@
             ]
           },
           {
+            "file": "./formula-shape.js",
+            "imports": [
+              "monomialExponents"
+            ]
+          },
+          {
             "file": "../bridges/holds.js",
             "imports": [
               "HoldsError",
@@ -12400,6 +12375,9 @@
           "CANONICAL_CONSTANTS",
           "CANONICAL_GRAPH",
           "canonicalToEdges"
+        ],
+        "interfaces": [
+          "ConstantDef"
         ],
         "functions": [
           "canonicalToEdges"
@@ -12858,6 +12836,19 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "validate"
+            ]
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge",
@@ -12874,6 +12865,18 @@
             "typeOnly": true
           },
           {
+            "file": "./quantity.js",
+            "imports": [
+              "regimeAttributesOf"
+            ]
+          },
+          {
+            "file": "./axes.js",
+            "imports": [
+              "AXES"
+            ]
+          },
+          {
             "file": "../dimensional/unit-convention.js",
             "imports": [
               "conventionFactor"
@@ -12882,6 +12885,7 @@
           {
             "file": "./edge.js",
             "imports": [
+              "assertCoefficientSet",
               "CompositionAliasError",
               "CompositionDimensionError",
               "CompositionJunctionError",
@@ -12892,6 +12896,18 @@
             "file": "../bridges/evaluation-errors.js",
             "imports": [
               "DomainViolationError"
+            ]
+          },
+          {
+            "file": "./expr-subst.js",
+            "imports": [
+              "substitute"
+            ]
+          },
+          {
+            "file": "./formula-shape.js",
+            "imports": [
+              "monomialExponents"
             ]
           },
           {
@@ -12908,9 +12924,16 @@
             ]
           },
           {
+            "file": "../relations/regime.js",
+            "imports": [
+              "intersectRegimes"
+            ]
+          },
+          {
             "file": "../relations/types.js",
             "imports": [
               "Conventions",
+              "Regime",
               "RelationContract",
               "RelationType"
             ],
@@ -13206,6 +13229,7 @@
           {
             "file": "./identifiability.js",
             "imports": [
+              "classifyIdentifiability",
               "forwardClosure"
             ]
           },
@@ -13213,6 +13237,7 @@
             "file": "./retrodiction.js",
             "imports": [
               "retrodict",
+              "retrodictNode",
               "forwardEvaluate"
             ]
           },
@@ -13340,6 +13365,7 @@
           }
         ],
         "exports": [
+          "assertCoefficientSet",
           "withBoundAliases",
           "evaluateEdge",
           "CompositionJunctionError",
@@ -13360,6 +13386,7 @@
           "BridgeEdge"
         ],
         "functions": [
+          "assertCoefficientSet",
           "withBoundAliases",
           "evaluateEdge"
         ]
@@ -13750,6 +13777,12 @@
             "imports": [
               "renderScalarLeaf"
             ]
+          },
+          {
+            "file": "./mathts-quiet.js",
+            "imports": [
+              "quietly"
+            ]
           }
         ],
         "exports": [
@@ -13825,9 +13858,11 @@
           }
         ],
         "exports": [
+          "monomialExponents",
           "formulaShape"
         ],
         "functions": [
+          "monomialExponents",
           "formulaShape"
         ]
       },
@@ -14539,6 +14574,20 @@
           "SynonymDisagreementError"
         ]
       },
+      "src/composition/mathts-quiet.ts": {
+        "description": "Load the MathTS peer without its console chatter reaching stderr.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "quietlySync",
+          "quietly"
+        ],
+        "functions": [
+          "quietlySync",
+          "quietly"
+        ]
+      },
       "src/composition/mathts-scalar-symbols.ts": {
         "description": "Scalar leaves of an `ExprNode`, read from a MathTS AST.",
         "externalDependencies": [],
@@ -14557,6 +14606,12 @@
           }
         ],
         "internalDependencies": [
+          {
+            "file": "./mathts-quiet.js",
+            "imports": [
+              "quietlySync"
+            ]
+          },
           {
             "file": "../dimensional/validator.js",
             "imports": [
@@ -16289,6 +16344,13 @@
               "ScoreVector"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./falsify.js",
+            "imports": [
+              "FalsifyResult"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -16519,7 +16581,6 @@
           "chiSquareCdf",
           "fSurvival",
           "effectiveSigma",
-          "exprToInfix",
           "runProbeStudy",
           "formatProbeStudy",
           "StudyRefusal"
@@ -16556,7 +16617,6 @@
           "chiSquareCdf",
           "fSurvival",
           "effectiveSigma",
-          "exprToInfix",
           "runProbeStudy",
           "formatProbeStudy"
         ]
@@ -16800,25 +16860,24 @@
           {
             "file": "./quantity.js",
             "imports": [
-              "Quantity",
-              "RegimeAttributes"
+              "Quantity"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./quantity.js",
+            "imports": [
+              "regimeAttributesOf"
+            ]
           }
         ],
         "exports": [
-          "temperatureQ",
-          "massQ",
           "allQuantities",
           "quantityByName"
         ],
         "functions": [
           "allQuantities",
           "quantityByName"
-        ],
-        "constants": [
-          "temperatureQ",
-          "massQ"
         ]
       },
       "src/composition/quantity.ts": {
@@ -16844,9 +16903,16 @@
               "StatisticsAxis"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./axes.js",
+            "imports": [
+              "AXES"
+            ]
           }
         ],
         "exports": [
+          "regimeAttributesOf",
           "regimesDiffer"
         ],
         "interfaces": [
@@ -16854,6 +16920,7 @@
           "Quantity"
         ],
         "functions": [
+          "regimeAttributesOf",
           "regimesDiffer"
         ]
       },
@@ -16882,12 +16949,6 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../bridges/carrier-sign.js",
-            "imports": [
-              "CarrierSignError"
-            ]
-          },
-          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge"
@@ -16903,6 +16964,7 @@
           {
             "file": "./edge.js",
             "imports": [
+              "CoefficientUnsetError",
               "evaluateEdge"
             ]
           },
@@ -17220,7 +17282,7 @@
         ]
       },
       "src/core/constants.ts": {
-        "description": "Canonical CODATA 2018 + SI-defined physical constants for UPT (v0.5.1).",
+        "description": "Canonical CODATA 2018 + SI-defined physical constants for UPT.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -17252,12 +17314,12 @@
           "VON_KLITZING_SI",
           "JOSEPHSON_CONSTANT_SI",
           "LORENZ_NUMBER_SI",
+          "EULER_GAMMA",
           "BCS_GAP_RATIO",
           "LANE_EMDEN_OMEGA3",
           "THOMSON_CROSS_SECTION_SI",
           "GM_SUN_SI",
           "M_SUN_IAU_SI",
-          "GM_SUN_SOURCE",
           "M_E_SI",
           "M_PROTON_SI",
           "N_A_SI",
@@ -17286,12 +17348,12 @@
           "VON_KLITZING_SI",
           "JOSEPHSON_CONSTANT_SI",
           "LORENZ_NUMBER_SI",
+          "EULER_GAMMA",
           "BCS_GAP_RATIO",
           "LANE_EMDEN_OMEGA3",
           "THOMSON_CROSS_SECTION_SI",
           "GM_SUN_SI",
           "M_SUN_IAU_SI",
-          "GM_SUN_SOURCE",
           "M_E_SI",
           "M_PROTON_SI",
           "N_A_SI",
@@ -17755,44 +17817,18 @@
         ]
       },
       "src/diff/bridge-gradient.ts": {
-        "description": "Bridge-parameter differentiation — v0.9 Proposal 8 core layer.",
+        "description": "Bridge-parameter differentiation by central finite differences.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../numerical/tensor-engine.js",
-            "imports": [
-              "EngineTensor",
-              "TensorEngine"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../numerical/tensor-engine.js",
-            "imports": [
-              "hasAutogradSupport"
-            ]
-          },
-          {
-            "file": "../numerical/errors.js",
-            "imports": [
-              "EngineCapabilityError"
-            ]
-          }
-        ],
+        "internalDependencies": [],
         "exports": [
-          "bridgeGradient",
-          "gradientToNamed",
           "bridgeGradientNumerical"
         ],
         "interfaces": [
           "BridgeDiffSpec",
-          "BridgeGradientResult",
           "BridgeNumericalGradientResult"
         ],
         "functions": [
-          "bridgeGradient",
-          "gradientToNamed",
           "bridgeGradientNumerical"
         ]
       },
@@ -17834,7 +17870,17 @@
           "PERIHELION_ADVANCE_DIFF",
           "HAWKING_TEMPERATURE_DIFF",
           "DECOHERENCE_RATE_DIFF",
-          "DIFFERENTIABLE_RELATIONS"
+          "DIFFERENTIABLE_RELATIONS",
+          "requireCatalogId"
+        ],
+        "interfaces": [
+          "ShapiroInput",
+          "PerihelionInput",
+          "HawkingInput",
+          "DecoherenceInput"
+        ],
+        "functions": [
+          "requireCatalogId"
         ],
         "constants": [
           "SHAPIRO_DELAY_DIFF",
@@ -18075,6 +18121,13 @@
           {
             "file": "./ast-types.js",
             "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./ast-types.js",
+            "imports": [
               "Role",
               "TensorSymbolNode",
               "MetricTensorNode",
@@ -18213,6 +18266,7 @@
               "C_SI",
               "E_SI",
               "EPS0_SI",
+              "EULER_GAMMA",
               "FARADAY_SI",
               "G_SI",
               "GM_SUN_SI",
@@ -18248,7 +18302,7 @@
         ]
       },
       "src/dimensional/constants.ts": {
-        "description": "SI dimensional signatures of fundamental physical constants, projected",
+        "description": "SI dimensional signatures of a few fundamental constants, projected from",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -18269,17 +18323,13 @@
         "exports": [
           "hbar",
           "c",
-          "G",
           "k_B",
-          "e",
           "l_P"
         ],
         "constants": [
           "hbar",
           "c",
-          "G",
           "k_B",
-          "e",
           "l_P"
         ]
       },
@@ -18487,6 +18537,7 @@
               "TIME",
               "FREQUENCY",
               "MASS",
+              "MASS_DENSITY",
               "VELOCITY",
               "ACCELERATION",
               "FORCE",
@@ -18516,6 +18567,12 @@
             "file": "./symbolic-constants.js",
             "imports": [
               "CONSTANT_REGISTRY"
+            ]
+          },
+          {
+            "file": "./units.js",
+            "imports": [
+              "unitDimension"
             ]
           },
           {
@@ -18996,6 +19053,13 @@
           {
             "file": "./ast-types.js",
             "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./ast-types.js",
+            "imports": [
               "Variance",
               "Role",
               "TensorIndex",
@@ -19198,15 +19262,18 @@
         ],
         "exports": [
           "foldName",
+          "readQuantityFile",
           "quantitySpellingIndex",
           "allQuantityRecords",
           "quantityRecord",
           "synonymGroupsFromRegistry"
         ],
         "interfaces": [
-          "QuantityRecord"
+          "QuantityRecord",
+          "QuantityFile"
         ],
         "functions": [
+          "readQuantityFile",
           "quantitySpellingIndex",
           "allQuantityRecords",
           "quantityRecord",
@@ -19567,7 +19634,6 @@
           }
         ],
         "exports": [
-          "QUANTITY_CONVENTION_UNIT",
           "quantityConventionUnit",
           "conventionScaleToSI",
           "conventionFactor"
@@ -19576,9 +19642,6 @@
           "quantityConventionUnit",
           "conventionScaleToSI",
           "conventionFactor"
-        ],
-        "constants": [
-          "QUANTITY_CONVENTION_UNIT"
         ]
       },
       "src/dimensional/unit-data.ts": {
@@ -19992,8 +20055,7 @@
         ],
         "interfaces": [
           "Violation",
-          "ValidationResult",
-          "DimensionValidationReport"
+          "ValidationResult"
         ],
         "functions": [
           "validate",
@@ -20263,7 +20325,6 @@
             "file": "./diff/bridge-gradient.js",
             "imports": [
               "BridgeDiffSpec",
-              "BridgeGradientResult",
               "BridgeNumericalGradientResult"
             ],
             "reExport": true
@@ -20271,9 +20332,7 @@
           {
             "file": "./diff/bridge-gradient.js",
             "imports": [
-              "bridgeGradient",
-              "bridgeGradientNumerical",
-              "gradientToNamed"
+              "bridgeGradientNumerical"
             ],
             "reExport": true
           },
@@ -20372,6 +20431,13 @@
               "MissingInputError",
               "NonFiniteInputError",
               "UnknownInputError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/index.js",
+            "imports": [
+              "ConstantInputError"
             ],
             "reExport": true
           },
@@ -21283,6 +21349,171 @@
               "Elasticity"
             ],
             "reExport": true
+          },
+          {
+            "file": "./dimensional/errors.js",
+            "imports": [
+              "UPTError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/natural-units.js",
+            "imports": [
+              "UnitMode"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/ast-types.js",
+            "imports": [
+              "Variance",
+              "Role",
+              "TensorIndex",
+              "UpperIndex",
+              "CovariantIndex",
+              "TensorSymbolNode",
+              "TensorProductNode",
+              "MetricTensorNode",
+              "KroneckerDeltaNode",
+              "TensorPartialDerivativeNode",
+              "RiemannTensorNode",
+              "WeylTensorNode",
+              "KillingVectorNode",
+              "ConservedChargeNode",
+              "StressEnergyTensorNode",
+              "CosmologicalConstantNode"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./core/flux-rules.js",
+            "imports": [
+              "FluxRuleKind"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./core/axes-registry.js",
+            "imports": [
+              "ScaleAxes",
+              "ForceAxes",
+              "SymmetryAxes",
+              "InformationAxes"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./core/regime-registry.js",
+            "imports": [
+              "AxisConvenience"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./diff/bridge-specs.js",
+            "imports": [
+              "ShapiroInput",
+              "PerihelionInput",
+              "HawkingInput",
+              "DecoherenceInput"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./numerical/tensor-engine.js",
+            "imports": [
+              "EinsumContraction",
+              "EinsumFreeAxis"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./numerical/killing.js",
+            "imports": [
+              "KillingFn",
+              "KillingMetricFn",
+              "ChristoffelAtFn"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./relations/types.js",
+            "imports": [
+              "RelationContract",
+              "Conventions"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/axes.js",
+            "imports": [
+              "ScaleAxis",
+              "ForceAxis",
+              "InformationAxis",
+              "SymmetryAxis",
+              "TopologyAxis",
+              "StatisticsAxis"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/enumerate.js",
+            "imports": [
+              "EnumerationOptions"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/uncertainty.js",
+            "imports": [
+              "UncertaintyOptions"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/user-equation.js",
+            "imports": [
+              "AnalyzeUserEquationOptions",
+              "ShortBinding"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/canonical-graph.js",
+            "imports": [
+              "ConstantDef"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/proposed-bridges.js",
+            "imports": [
+              "ProposedBridge"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/discovery.js",
+            "imports": [
+              "DiscoveryOptions"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/representative-values.js",
+            "imports": [
+              "RepresentativeValue"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./canonical/canonical-equation.js",
+            "imports": [
+              "SourcedPrefactor",
+              "SourcedGroupPrefactor"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -21334,9 +21565,7 @@
           "attachRegimesToCell",
           "getCellRegimes",
           "RegimeCollisionError",
-          "bridgeGradient",
           "bridgeGradientNumerical",
-          "gradientToNamed",
           "bridgeGradientAST",
           "bridgeGradientASTById",
           "astDifferentiableBridgeIds",
@@ -21362,6 +21591,7 @@
           "MissingInputError",
           "NonFiniteInputError",
           "UnknownInputError",
+          "ConstantInputError",
           "inputContract",
           "christoffel",
           "ricci",
@@ -21548,7 +21778,6 @@
           "RegimeValueBase",
           "RegimeSpec",
           "BridgeDiffSpec",
-          "BridgeGradientResult",
           "BridgeNumericalGradientResult",
           "ASTGradientResult",
           "MeasuredCouplingRow",
@@ -21708,7 +21937,58 @@
           "OneLoopCoefficientSign",
           "ConfrontationEntry",
           "RigorTier",
-          "Elasticity"
+          "Elasticity",
+          "UPTError",
+          "UnitMode",
+          "Variance",
+          "Role",
+          "TensorIndex",
+          "UpperIndex",
+          "CovariantIndex",
+          "TensorSymbolNode",
+          "TensorProductNode",
+          "MetricTensorNode",
+          "KroneckerDeltaNode",
+          "TensorPartialDerivativeNode",
+          "RiemannTensorNode",
+          "WeylTensorNode",
+          "KillingVectorNode",
+          "ConservedChargeNode",
+          "StressEnergyTensorNode",
+          "CosmologicalConstantNode",
+          "FluxRuleKind",
+          "ScaleAxes",
+          "ForceAxes",
+          "SymmetryAxes",
+          "InformationAxes",
+          "AxisConvenience",
+          "ShapiroInput",
+          "PerihelionInput",
+          "HawkingInput",
+          "DecoherenceInput",
+          "EinsumContraction",
+          "EinsumFreeAxis",
+          "KillingFn",
+          "KillingMetricFn",
+          "ChristoffelAtFn",
+          "RelationContract",
+          "Conventions",
+          "ScaleAxis",
+          "ForceAxis",
+          "InformationAxis",
+          "SymmetryAxis",
+          "TopologyAxis",
+          "StatisticsAxis",
+          "EnumerationOptions",
+          "UncertaintyOptions",
+          "AnalyzeUserEquationOptions",
+          "ShortBinding",
+          "ConstantDef",
+          "ProposedBridge",
+          "DiscoveryOptions",
+          "RepresentativeValue",
+          "SourcedPrefactor",
+          "SourcedGroupPrefactor"
         ],
         "reExported": [
           "* as atlas from ./atlas/public.js",
@@ -21788,11 +22068,8 @@
           "getCellRegimes",
           "RegimeCollisionError",
           "BridgeDiffSpec",
-          "BridgeGradientResult",
           "BridgeNumericalGradientResult",
-          "bridgeGradient",
           "bridgeGradientNumerical",
-          "gradientToNamed",
           "ASTGradientResult",
           "bridgeGradientAST",
           "bridgeGradientASTById",
@@ -21831,6 +22108,7 @@
           "MissingInputError",
           "NonFiniteInputError",
           "UnknownInputError",
+          "ConstantInputError",
           "Evaluation",
           "EvaluatorSpec",
           "EvaluatorParameter",
@@ -22133,7 +22411,58 @@
           "ConfrontationEntry",
           "RigorTier",
           "decidingMeasurement",
-          "Elasticity"
+          "Elasticity",
+          "UPTError",
+          "UnitMode",
+          "Variance",
+          "Role",
+          "TensorIndex",
+          "UpperIndex",
+          "CovariantIndex",
+          "TensorSymbolNode",
+          "TensorProductNode",
+          "MetricTensorNode",
+          "KroneckerDeltaNode",
+          "TensorPartialDerivativeNode",
+          "RiemannTensorNode",
+          "WeylTensorNode",
+          "KillingVectorNode",
+          "ConservedChargeNode",
+          "StressEnergyTensorNode",
+          "CosmologicalConstantNode",
+          "FluxRuleKind",
+          "ScaleAxes",
+          "ForceAxes",
+          "SymmetryAxes",
+          "InformationAxes",
+          "AxisConvenience",
+          "ShapiroInput",
+          "PerihelionInput",
+          "HawkingInput",
+          "DecoherenceInput",
+          "EinsumContraction",
+          "EinsumFreeAxis",
+          "KillingFn",
+          "KillingMetricFn",
+          "ChristoffelAtFn",
+          "RelationContract",
+          "Conventions",
+          "ScaleAxis",
+          "ForceAxis",
+          "InformationAxis",
+          "SymmetryAxis",
+          "TopologyAxis",
+          "StatisticsAxis",
+          "EnumerationOptions",
+          "UncertaintyOptions",
+          "AnalyzeUserEquationOptions",
+          "ShortBinding",
+          "ConstantDef",
+          "ProposedBridge",
+          "DiscoveryOptions",
+          "RepresentativeValue",
+          "SourcedPrefactor",
+          "SourcedGroupPrefactor"
         ]
       }
     },
@@ -22251,6 +22580,7 @@
               "unitConventionNotes",
               "UnitError",
               "UnitRefusedError",
+              "UnknownUnitError",
               "AffineTemperature",
               "TemperatureReading"
             ]
@@ -22258,17 +22588,26 @@
           {
             "file": "./formula-contract.js",
             "imports": [
-              "callBuiltinFunction",
+              "arityMessage",
               "EulerNumberError",
-              "FormulaError"
+              "FormulaError",
+              "SCALAR_FUNCTIONS",
+              "unknownFunctionMessage"
             ]
           },
           {
             "file": "./formula-dimension.js",
             "imports": [
+              "constantExponent",
               "parseFormulaPNode",
               "UnsupportedSyntaxError",
               "FormulaPNode"
+            ]
+          },
+          {
+            "file": "./formula-mathts.js",
+            "imports": [
+              "mathtsFormulaParser"
             ]
           }
         ],
@@ -22506,6 +22845,8 @@
           "christoffelAt",
           "dGammaAt",
           "buildRiemann",
+          "riemannUpperAt",
+          "lowerFirstIndex",
           "riemannLowerAt",
           "covariantDerivRiemannLowerAt",
           "contractRiemannJS",
@@ -22517,6 +22858,8 @@
           "christoffelAt",
           "dGammaAt",
           "buildRiemann",
+          "riemannUpperAt",
+          "lowerFirstIndex",
           "riemannLowerAt",
           "covariantDerivRiemannLowerAt",
           "contractRiemannJS",
@@ -22791,15 +23134,25 @@
         ]
       },
       "src/numerical/formula-contract.ts": {
-        "description": "Scalar-formula contract shared by the MathTS parser.",
+        "description": "Scalar-formula contract: the parser types, the refusal of `euler`, and THE",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/ast-types.js",
+            "imports": [
+              "TranscendentalFn"
+            ],
+            "typeOnly": true
+          }
+        ],
         "exports": [
           "EULER_NUMBER_ERROR",
+          "SCALAR_FUNCTIONS",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST",
+          "arityMessage",
           "unknownFunctionMessage",
           "callBuiltinFunction",
           "FormulaError",
@@ -22811,14 +23164,17 @@
         ],
         "interfaces": [
           "CompiledFormula",
-          "FormulaParser"
+          "FormulaParser",
+          "ScalarFunction"
         ],
         "functions": [
+          "arityMessage",
           "unknownFunctionMessage",
           "callBuiltinFunction"
         ],
         "constants": [
           "EULER_NUMBER_ERROR",
+          "SCALAR_FUNCTIONS",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST"
@@ -22884,13 +23240,15 @@
             "imports": [
               "EULER_NUMBER_ERROR",
               "EulerNumberError",
-              "FormulaError"
+              "FormulaError",
+              "SCALAR_FUNCTIONS",
+              "unknownFunctionMessage"
             ]
           }
         ],
         "exports": [
-          "ELEMENTARY_CHARGE_MIX_MESSAGE",
           "formulaSymbolDimension",
+          "constantExponent",
           "parseFormulaPNode",
           "builtinFormulaDimensionChecker",
           "FormulaDimensionError",
@@ -22906,11 +23264,9 @@
         ],
         "functions": [
           "formulaSymbolDimension",
+          "constantExponent",
           "parseFormulaPNode",
           "builtinFormulaDimensionChecker"
-        ],
-        "constants": [
-          "ELEMENTARY_CHARGE_MIX_MESSAGE"
         ]
       },
       "src/numerical/formula-mathts.ts": {
@@ -23114,7 +23470,7 @@
           "GL4_A",
           "GL4_B",
           "GL4_C",
-          "solveGL4Stage",
+          "gl4Step",
           "integrateGeodesicGL4"
         ],
         "reExported": [
@@ -23125,10 +23481,11 @@
         "interfaces": [
           "GL4State",
           "GL4Snapshot",
-          "GL4Options"
+          "GL4Options",
+          "GL4StepResult"
         ],
         "functions": [
-          "solveGL4Stage",
+          "gl4Step",
           "integrateGeodesicGL4"
         ]
       },
@@ -23610,10 +23967,15 @@
           {
             "file": "../dimensional/validator.js",
             "imports": [
-              "ExprNode",
-              "TranscendentalFn"
+              "ExprNode"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./formula-contract.js",
+            "imports": [
+              "callBuiltinFunction"
+            ]
           },
           {
             "file": "../dimensional/validator.js",
@@ -24071,7 +24433,8 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "solveODESystem"
+              "det",
+              "inv"
             ]
           }
         ],
@@ -24102,16 +24465,53 @@
             "imports": [
               "readParameter"
             ]
+          },
+          {
+            "file": "./connection-lowering-helpers.js",
+            "imports": [
+              "computeChristoffelTensor"
+            ]
+          },
+          {
+            "file": "./curvature-lowering-helpers.js",
+            "imports": [
+              "christoffelAt",
+              "lowerFirstIndex",
+              "riemannUpperAt"
+            ]
+          },
+          {
+            "file": "./geodesic-integrator.js",
+            "imports": [
+              "integrateGeodesic"
+            ]
+          },
+          {
+            "file": "./kretschmann.js",
+            "imports": [
+              "computeKretschmann"
+            ]
+          },
+          {
+            "file": "./mathts-engine.js",
+            "imports": [
+              "MathTSEngine"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "NestedArray"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
           "METRIC_SIGNATURE",
-          "METRIC_SIGNATURE_NOTE",
           "schwarzschildKretschmann",
           "flrwRicciScalar",
           "friedmannSides",
           "kerrKretschmann",
-          "metricParams",
           "curvatureReport",
           "schwarzschildCircularOrbit",
           "kerrIscoRadius",
@@ -24138,7 +24538,6 @@
           "flrwRicciScalar",
           "friedmannSides",
           "kerrKretschmann",
-          "metricParams",
           "curvatureReport",
           "schwarzschildCircularOrbit",
           "kerrIscoRadius",
@@ -24152,8 +24551,7 @@
           "kerrEquatorialCircular"
         ],
         "constants": [
-          "METRIC_SIGNATURE",
-          "METRIC_SIGNATURE_NOTE"
+          "METRIC_SIGNATURE"
         ]
       },
       "src/numerical/strides.ts": {
@@ -24203,6 +24601,7 @@
         "interfaces": [
           "EngineTensor",
           "EinsumContraction",
+          "EinsumFreeAxis",
           "EinsumSpec",
           "ForwardGradResult",
           "ReverseGradResult",
@@ -24584,7 +24983,6 @@
           "src/bridges/membership.ts",
           "src/bridges/notices.ts",
           "src/bridges/observations/types.ts",
-          "src/bridges/registry.ts",
           "src/bridges/rejected.ts",
           "src/bridges/relation-eval.ts",
           "src/bridges/rhs-registry.ts",
@@ -24635,6 +25033,7 @@
         "name": "Cli",
         "files": [
           "src/cli/args.ts",
+          "src/cli/bindings.ts",
           "src/cli/closed-form-range.ts",
           "src/cli/command.ts",
           "src/cli/commands/_atlas-map.ts",
@@ -24680,7 +25079,6 @@
           "src/cli/main.ts",
           "src/cli/map-evidence.ts",
           "src/cli/output.ts",
-          "src/cli/poster-source.ts",
           "src/cli/published-url.ts",
           "src/cli/record-reach.ts",
           "src/cli/record-tables.ts",
@@ -24740,6 +25138,7 @@
           "src/composition/grounding.ts",
           "src/composition/identifiability.ts",
           "src/composition/index.ts",
+          "src/composition/mathts-quiet.ts",
           "src/composition/mathts-scalar-symbols.ts",
           "src/composition/not-composable-seeds.ts",
           "src/composition/probe/backend-protocol.ts",
@@ -24916,19 +25315,19 @@
   "statistics": {
     "totalTypeScriptFiles": 362,
     "totalModules": 13,
-    "totalLinesOfCode": 80279,
-    "totalExports": 2483,
-    "totalClasses": 79,
-    "totalInterfaces": 454,
-    "totalFunctions": 764,
-    "totalTypeGuards": 7,
+    "totalLinesOfCode": 80764,
+    "totalExports": 2538,
+    "totalClasses": 80,
+    "totalInterfaces": 461,
+    "totalFunctions": 774,
+    "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 385,
-    "totalReExports": 1256,
+    "totalConstants": 383,
+    "totalReExports": 1300,
     "totalTypeOnlyImports": 510,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 77
+    "unusedExportsCount": 67
   }
 }
