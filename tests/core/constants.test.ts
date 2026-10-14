@@ -2,7 +2,7 @@
  * v0.5.1 Task 0 — Constants canonicalization tests.
  *
  * Asserts each flat constant exported from `src/core/constants.ts` matches
- * its CODATA 2018 / SI-defined value. Defined-exact SI values use `toBe`
+ * its CODATA 2022 / SI-defined value. Defined-exact SI values use `toBe`
  * (bit-exact); measured constants use `toBeCloseTo` at appropriate precision.
  *
  * @module tests/core/constants
@@ -40,8 +40,8 @@ describe('Flat CODATA / SI constants — src/core/constants.ts', () => {
     expect(E_SI).toBe(1.602176634e-19);
   });
 
-  // ── Measured constants (CODATA 2018 best values) ─────────────────────────
-  it('G_SI matches CODATA 2018 gravitational constant', () => {
+  // ── Measured constants (CODATA 2022 best values) ─────────────────────────
+  it('G_SI matches CODATA 2022 gravitational constant', () => {
     expect(G_SI).toBeCloseTo(6.67430e-11, 16);
   });
 
@@ -49,19 +49,19 @@ describe('Flat CODATA / SI constants — src/core/constants.ts', () => {
     expect(HBAR_SI).toBe(H_SI / (2 * Math.PI));
   });
 
-  it('ALPHA matches CODATA 2018 fine-structure constant', () => {
-    expect(ALPHA).toBeCloseTo(7.2973525693e-3, 12);
+  it('ALPHA matches CODATA 2022 fine-structure constant', () => {
+    expect(ALPHA).toBeCloseTo(7.2973525643e-3, 12);
   });
 
-  it('M_P_SI matches Planck mass (CODATA 2018)', () => {
+  it('M_P_SI matches Planck mass (CODATA 2022)', () => {
     expect(M_P_SI).toBeCloseTo(2.176434e-8, 14);
   });
 
-  it('L_P_SI matches Planck length (CODATA 2018)', () => {
+  it('L_P_SI matches Planck length (CODATA 2022)', () => {
     expect(L_P_SI).toBeCloseTo(1.616255e-35, 40);
   });
 
-  it('T_P_SI matches Planck time (CODATA 2018)', () => {
+  it('T_P_SI matches Planck time (CODATA 2022)', () => {
     expect(T_P_SI).toBeCloseTo(5.391247e-44, 49);
   });
 

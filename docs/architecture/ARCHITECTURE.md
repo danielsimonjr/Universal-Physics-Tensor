@@ -214,7 +214,7 @@ The core module contains:
 
 - the `UniversalTensor` class (the original high-level facade, predating the dimensional and numerical layers);
 - the `PhysicalConstants` lookup (SI values of G, c, ℏ, k_B, etc.);
-- `constants.ts` — the flat CODATA 2018 / SI-defined constants (`C_SI`, `G_SI`, `HBAR_SI`, …), the single source of truth for physical constants across the numerical, dimensional, and bridge layers.
+- `constants.ts` — the flat CODATA 2022 (MathTS) / SI-defined constants (`C_SI`, `G_SI`, `HBAR_SI`, …), the single source of truth for physical constants across the numerical, dimensional, and bridge layers.
 
 The `UniversalTensor`/`PhysicalConstants` parts are the oldest in the codebase and predate the AST-first design; they remain on the public surface for backward compatibility. The intelligent-index / regime layer lives here (`labeled-tensor.ts`, `axes-registry.ts`, `universal-index.ts`, `cell.ts`, `flux-rules.ts`, `regime-registry.ts` and the regime builtins) — see `docs/architecture/intelligent-index-tutorial.md`. The `compose()` factory lives with `UniversalTensor` in `tensor.ts`, which keeps `cell.ts` and `tensor.ts` free of a runtime cycle. Runtime and type-only circular dependencies are both **0**: the recursive `ExprNode` union lives in the leaf module `dimensional/ast-types.ts`.
 

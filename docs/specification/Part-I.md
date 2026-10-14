@@ -532,7 +532,7 @@ This table does not replace the per-bridge `where:` clauses. Those remain author
 | n | BE-47 | **species number density** `n_p`, `n_n` for protons / neutrons in BBN | Kolb-Turner §5.2 |
 | k | BE-22 | **Boltzmann constant `k_B`** in thermal factors (always written `k_B`, never bare `k`) | standard |
 | k | BE-19, BE-21 | **mode/momentum index** in Fourier / RG / soft-modes contexts | standard |
-| α_fs | BE-17 (invalidated), various | **fine-structure constant** `α_fs ≈ 1/137.036` (dimensionless) — distinct from per-bridge α coefficients listed above | CODATA 2018 |
+| α_fs | BE-17 (invalidated), various | **fine-structure constant** `α_fs ≈ 1/137.036` (dimensionless) — distinct from per-bridge α coefficients listed above | CODATA 2022 (MathTS) |
 | e | BE-61 | elementary charge. Euler's number in these sections is written `\exp`, including the BE-62 factor the catalog stores as `e^{γ}` | catalog formulas; the parser reads a bare `e` as this charge |
 
 **Notes:**

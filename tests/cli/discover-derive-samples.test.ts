@@ -10,6 +10,7 @@
 import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { B_WIEN_SI } from '../../src/core/constants.js';
 
 async function derive(): Promise<string> {
   const lines: string[] = [];
@@ -27,10 +28,10 @@ describe('discover --derive sample values', () => {
 
   it('the Hubble proposal is evaluated at H0 = 2.2e-18 s⁻¹, citing its source', async () => {
     const t = await derive();
-    // T = b·H/c with Wien's b = 2.897771955e-3 m·K: 2.2e-18 · b / c = 2.13e-29 K.
-    const expected = (2.897771955e-3 * 2.2e-18) / 299792458;
+    // T = b·H/c with Wien's b (CODATA 2022 via MathTS, 2.8977719551851727e-3) m·K: 2.2e-18 · b / c = 2.13e-29 K.
+    const expected = (B_WIEN_SI * 2.2e-18) / 299792458;
     expect(expected).toBeCloseTo(2.1265e-29, 32);
-    expect(t).toMatch(/≈ 2\.12650389657234e-29 \(hubble-rate=2\.2e-18 \[H0 ≈ 67 km\/s\/Mpc \(Planck 2018\)\]\)/);
+    expect(t).toMatch(/≈ 2\.12650389670823e-29 \(hubble-rate=2\.2e-18 \[H0 ≈ 67 km\/s\/Mpc \(Planck 2018\)\]\)/);
   });
 
   it('the Landauer–photon proposal is evaluated at room temperature: ν = k_B ln2 · 300 K / h = 4.33e12 Hz', async () => {

@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { E_SI, MU0_SI } from '../../src/core/constants.js';
 
-const M_PROTON_SI = 1.67262192369e-27;
+const M_PROTON_SI = 1.67262192595e-27; // CODATA 2022
 const N_A_SI = 6.02214076e23;
 
 const errText = (c: ReturnType<typeof capture>) => c.err.join('');

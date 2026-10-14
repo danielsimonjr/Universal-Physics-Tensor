@@ -194,7 +194,7 @@ landed; the older "not yet" wording for those is withdrawn.
 - BIPM, *The International System of Units (SI)*, 9th edition, 2019.
 - NIST Special Publication 811 (2008).
 - Bridgman, *Dimensional Analysis*, Yale University Press, 1922.
-- CODATA 2018 / NIST CODATA values: <https://physics.nist.gov/cuu/Constants/>
+- CODATA 2022 / NIST CODATA values: <https://physics.nist.gov/cuu/Constants/>
 - Sakurai, *Modern Quantum Mechanics*, 2nd ed. (Schrödinger formulation).
 - Goldstein, *Classical Mechanics*, 3rd ed. (Newton II derivation).
 - Bekenstein, *PRD* 7 (1973); Hawking, *CMP* 43 (1975) — black-hole entropy

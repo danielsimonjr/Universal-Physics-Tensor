@@ -36,7 +36,7 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       assumptions carried: CE-mass-energy: rest energy of a massive body
       canonical match: none — 0 registry equation(s) target mass, 0 with governing {yukawa-coupling, vacuum-expectation-value}; scope: this registry only, not physics at large
   IC-classical-electron-radius--hubble-distance--hubble-rate
-      hubble-rate = \frac{4pi \cdot c^{3} \cdot epsilon_0 \cdot m_e}{e^{2}}      [frequency]  ≈ 1.06387085351714e+23
+      hubble-rate = \frac{4pi \cdot c^{3} \cdot epsilon_0 \cdot m_e}{e^{2}}      [frequency]  ≈ 1.06387085568624e+23
       from: hubble-distance ≟ classical-electron-radius  (CE-classical-electron-radius = CE-hubble-distance); solved for hubble-rate
       status: conditional identity — holds only if hubble-distance ≡ classical-electron-radius (unadjudicated); untested
       meaning: hubble-rate is the hubble-rate of CE-hubble-distance (Hubble distance): the hubble-rate for which hubble-distance equals classical-electron-radius (CE-classical-electron-radius) — an equal-[length] scale; the classical-electron-radius side is not given a hubble-rate
@@ -50,7 +50,7 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       assumptions carried: CE-compton-wavelength-full: none stated; CE-hubble-distance: present-epoch Hubble parameter
       canonical match: none — 0 registry equation(s) target hubble-rate, 0 with governing {mass}; scope: this registry only, not physics at large
   IC-hubble-distance--peak-wavelength--temperature
-      temperature = \frac{b \cdot hubble-rate}{c}      [temperature]  ≈ 2.12650389657234e-29 (hubble-rate=2.2e-18 [H0 ≈ 67 km/s/Mpc (Planck 2018)])
+      temperature = \frac{b \cdot hubble-rate}{c}      [temperature]  ≈ 2.12650389670823e-29 (hubble-rate=2.2e-18 [H0 ≈ 67 km/s/Mpc (Planck 2018)])
       from: hubble-distance ≟ peak-wavelength  (CE-hubble-distance = CE-wien); solved for temperature
       status: conditional identity — holds only if hubble-distance ≡ peak-wavelength (unadjudicated); untested
       meaning: temperature is the temperature of CE-wien (Wien's displacement law): the temperature for which peak-wavelength equals hubble-distance (CE-hubble-distance) — an equal-[length] scale; the hubble-distance side is not given a temperature

@@ -6,7 +6,8 @@
  * equation in the frequency domain and by its lossy-dielectric limit.
  */
 import { describe, expect, it } from 'vitest';
-import { EPS_0_SI, MU_0_SI, SKIN_DEPTH_CASE as C, maxwellDepthFactor } from '../../src/cases/skin-depth.js';
+import { EPS0_SI, MU0_SI } from '../../src/core/constants.js';
+import { SKIN_DEPTH_CASE as C, maxwellDepthFactor } from '../../src/cases/skin-depth.js';
 
 const base = { rho_ohm_m: 1.68e-8, f_Hz: 1e6, mu_r: 1, eps_r: 1, l_mfp_m: 39e-9, v_carrier_m_per_s: 1.57e6, thickness_m: 1e-3 };
 const run = (i: Partial<typeof base> = {}) => C.run({ ...base, ...i });
@@ -103,25 +104,26 @@ function maxwellLogAmplitude(k2re: number, k2im: number, dx: number, N: number):
 describe('case-skin-depth — δ and R_s', () => {
   it('copper (ρ = 1.68e-8 Ω·m) at 1 MHz: δ = √(2ρ/(ωμ0)) ≈ 65.2 µm by hand; at 60 Hz ≈ 8.4 mm', () => {
     const hand = Math.sqrt((2 * 1.68e-8) / (2 * Math.PI * 1e6 * 4 * Math.PI * 1e-7));
-    // μ0 = 4π×10⁻⁷ is the pre-2019 exact value; CODATA 2018 differs by 5.4e-10.
+    // μ0 = 4π×10⁻⁷ is the pre-2019 exact value; CODATA 2022 differs by -1.3e-10.
     expect(Math.abs(out().delta_m / hand - 1)).toBeLessThan(1e-9);
     expect(out().delta_m).toBeCloseTo(65.23e-6, 8);
     expect(out({ f_Hz: 60 }).delta_m).toBeCloseTo(8.42e-3, 5);
   });
 
-  it('μ0 is CODATA 2018 and ε0 = 1/(μ0c²) reproduces CODATA 2018 ε0 = 8.8541878128e-12 F/m', () => {
-    expect(MU_0_SI / (4 * Math.PI * 1e-7) - 1).toBeCloseTo(5.4e-10, 10);
-    expect(Math.abs(EPS_0_SI / 8.8541878128e-12 - 1)).toBeLessThan(1e-10);
+  it('μ0 and ε0 are the core CODATA 2022 values: ε0 = 8.8541878188e-12 F/m and μ0 = 1/(ε0c²) = 1.25663706127e-6 N/A²', () => {
+    expect(MU0_SI / (4 * Math.PI * 1e-7) - 1).toBeCloseTo(-1.3e-10, 11);
+    expect(Math.abs(EPS0_SI / 8.8541878188e-12 - 1)).toBeLessThan(1e-12);
+    expect(Math.abs(MU0_SI / 1.25663706127e-6 - 1)).toBeLessThan(1e-11);
   });
 
   it('R_s = ρ/δ = √(ωμρ/2), and δ scales as 1/√(f μ_r)', () => {
-    expect(out().R_s_ohm).toBeCloseTo(Math.sqrt((2 * Math.PI * 1e6 * MU_0_SI * 1.68e-8) / 2), 15);
+    expect(out().R_s_ohm).toBeCloseTo(Math.sqrt((2 * Math.PI * 1e6 * MU0_SI * 1.68e-8) / 2), 15);
     expect(out({ f_Hz: 4e6 }).delta_m / out().delta_m).toBeCloseTo(0.5, 14);
     expect(out({ mu_r: 100 }).delta_m / out().delta_m).toBeCloseTo(0.1, 14);
   });
 
   it('control: the check would catch a dropped factor 2 (δ = √(ρ/(ωμ)) is off by √2)', () => {
-    const wrong = Math.sqrt(1.68e-8 / (2 * Math.PI * 1e6 * MU_0_SI));
+    const wrong = Math.sqrt(1.68e-8 / (2 * Math.PI * 1e6 * MU0_SI));
     expect(Math.abs(out().delta_m / wrong - 1)).toBeGreaterThan(0.4);
   });
 });
@@ -130,7 +132,7 @@ describe('case-skin-depth — the parent, solved numerically', () => {
   it('Crank–Nicolson on the driven diffusion equation: amplitude and phase both fall by one unit per δ (to 2e-4)', () => {
     const rho = 1.68e-8;
     const omega = 2 * Math.PI * 1e6;
-    const { dx, amp, phase } = diffusionResponse(rho / MU_0_SI, omega, 30);
+    const { dx, amp, phase } = diffusionResponse(rho / MU0_SI, omega, 30);
     const lnA = amp.map((x) => Math.log(x));
     // Nodes 40..200: x from √(D/ω) to 5√(D/ω), about 0.7δ to 3.5δ, far from the H(L) = 0 wall.
     const fromAmplitude = -1 / slope(lnA, dx, 40, 200);
@@ -144,8 +146,8 @@ describe('case-skin-depth — the parent, solved numerically', () => {
       const o = out(i);
       const p = { ...base, ...i };
       const omega = 2 * Math.PI * p.f_Hz;
-      const k2re = omega * omega * MU_0_SI * p.mu_r * p.eps_r * EPS_0_SI;
-      const k2im = (omega * MU_0_SI * p.mu_r) / p.rho_ohm_m;
+      const k2re = omega * omega * MU0_SI * p.mu_r * p.eps_r * EPS0_SI;
+      const k2im = (omega * MU0_SI * p.mu_r) / p.rho_ohm_m;
       const scale = 1 / Math.sqrt(Math.hypot(k2re, k2im));
       const dx = scale / 60;
       const N = 1500;
@@ -166,7 +168,7 @@ describe('case-skin-depth — the parent, solved numerically', () => {
     expect(maxwellDepthFactor(1e-6) - 1).toBeCloseTo(5e-7, 12);
     // Dielectric limit: attenuation (σ/2)√(μ/ε), so the depth is (2/σ)√(ε/μ) = δ√(2r).
     const o = out({ rho_ohm_m: 1e4, f_Hz: 1e10, eps_r: 4 });
-    const dielectric = 2 * 1e4 * Math.sqrt((4 * EPS_0_SI) / MU_0_SI);
+    const dielectric = 2 * 1e4 * Math.sqrt((4 * EPS0_SI) / MU0_SI);
     expect(Math.abs(o.delta_maxwell_m / dielectric - 1)).toBeLessThan(1e-4);
   });
 });
@@ -180,7 +182,7 @@ describe('case-skin-depth — regime checks', () => {
     expect(failed({ v_carrier_m_per_s: (omega * 39e-9) / 0.1 / 1.001 })).toEqual(['dc-conductivity']);
     expect(failed({ thickness_m: 5 * d * 0.999 })).toEqual(['thick']);
     expect(failed({ thickness_m: 5 * d * 1.001 })).toEqual([]);
-    expect(failed({ rho_ohm_m: 0.01 / (omega * EPS_0_SI) * 1.001, l_mfp_m: 1e-12, thickness_m: 1e3 })).toEqual(['good-conductor']);
+    expect(failed({ rho_ohm_m: 0.01 / (omega * EPS0_SI) * 1.001, l_mfp_m: 1e-12, thickness_m: 1e3 })).toEqual(['good-conductor']);
   });
 
   it('cold copper at 10 GHz fails both the local and the DC-conductivity premise (ωτ ≈ 1.6)', () => {

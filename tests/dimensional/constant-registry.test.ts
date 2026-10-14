@@ -35,11 +35,10 @@ const siDimension = (u: MathTsUnit): Dimension => {
 };
 
 /**
- * The largest relative move between CODATA 2018 and CODATA 2022 among the
- * measured constants above is the Thomson cross section, about 4e-9. A
- * registry value outside this bound is not the 2018 value it claims to be.
+ * MathTS states ε₀ and μ₀ as two CODATA 2022 decimals, each to 11 digits, so
+ * 1/(μ₀c²) and the stated ε₀ agree only to their printed digits, about 1e-12.
  */
-const VINTAGE_DRIFT = 1e-8;
+const PRINTED_DIGITS = 1e-11;
 
 describe('the constant registry is the one owner of spellings, units and provenance', () => {
   it('every row has a unique name and unique spellings', () => {
@@ -130,22 +129,36 @@ describe('MathTS states the same constants (the independent second method)', () 
     expect(equals(siDimension(unit), row.dim), `dimension of ${name}`).toBe(true);
     const theirs = siValue(unit);
     const relative = Math.abs(row.value - theirs) / Math.abs(theirs);
-    if (row.exact) expect(relative).toBeLessThan(1e-15);
-    else expect(relative, `${name}: ${row.value} vs ${theirs}`).toBeLessThan(VINTAGE_DRIFT);
+    // Exact constants agree to rounding; measured ones are MathTS's own number (G7).
+    // mu_0 is derived here as 1/(eps_0 c^2), so it meets MathTS's stated mu_0 at the printed digits.
+    const bound = row.source.includes('1/(EPS0_SI') ? PRINTED_DIGITS : 1e-15;
+    expect(relative, `${name}: ${row.value} vs ${theirs}`).toBeLessThan(bound);
   });
 
   it('epsilon_0 is 1/(mu_0 c^2) against MathTS too', () => {
     const mu0 = siValue(unitOf('magneticConstant'));
     const theirs = 1 / (mu0 * C_SI * C_SI);
     const ours = constantRecord('epsilon_0')!.value;
-    expect(Math.abs(ours - theirs) / theirs).toBeLessThan(VINTAGE_DRIFT);
+    expect(Math.abs(ours - theirs) / theirs).toBeLessThan(PRINTED_DIGITS);
   });
 
-  it('the drift bound is not vacuous: a 2022 value is a different number', () => {
-    // electron mass moved by about 1.4e-9 between the two vintages
+  it('a measured constant is MathTS\'s number (CODATA 2022), not a local copy', () => {
     const ours = constantRecord('m_e')!.value;
     const theirs = siValue(unitOf('electronMass'));
-    expect(ours).not.toBe(theirs);
-    expect(Math.abs(ours - theirs) / theirs).toBeGreaterThan(1e-10);
+    expect(ours).toBe(theirs);
+  });
+
+});
+
+describe('a measured constant row names its vintage (G7: CODATA 2022 from MathTS)', () => {
+  it('no row cites CODATA 2018', () => {
+    const stale = CONSTANT_REGISTRY.filter((row) => row.source.includes('CODATA 2018')).map((row) => row.name);
+    expect(stale).toEqual([]);
+  });
+
+  it('the rows that read a measured constant cite CODATA 2022 and MathTS', () => {
+    const g = constantRecord('G')!;
+    expect(g.source).toContain('CODATA 2022');
+    expect(g.source).toContain('MathTS');
   });
 });

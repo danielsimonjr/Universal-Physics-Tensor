@@ -16,16 +16,10 @@
  *
  * @module cases/skin-depth
  */
-import { C_SI } from '../core/constants.js';
+import { EPS0_SI, MU0_SI } from '../core/constants.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-skin-depth';
-
-/** Vacuum permeability μ0, CODATA 2018 (N/A²). @internal */
-export const MU_0_SI = 1.25663706212e-6;
-
-/** Vacuum permittivity ε0 = 1/(μ0 c²) (F/m). @internal */
-export const EPS_0_SI = 1 / (MU_0_SI * C_SI * C_SI);
 
 /** ωε/σ ceiling: the displacement current then moves the penetration depth by ≈ ωε/(2σ) ≤ 0.5%. @internal */
 export const MAX_DISPLACEMENT_RATIO = 0.01;
@@ -150,9 +144,9 @@ export const SKIN_DEPTH_CASE: AppliedCase = {
     requirePositive(ID, i, ['rho_ohm_m', 'f_Hz', 'mu_r', 'eps_r', 'l_mfp_m', 'v_carrier_m_per_s', 'thickness_m']);
     const { rho_ohm_m: rho, f_Hz: f, mu_r: muR, eps_r: epsR, l_mfp_m: l, v_carrier_m_per_s: v, thickness_m: d } = i as Record<string, number>;
     const omega = 2 * Math.PI * f;
-    const mu = muR * MU_0_SI;
+    const mu = muR * MU0_SI;
     const delta = Math.sqrt((2 * rho) / (omega * mu));
-    const r = omega * epsR * EPS_0_SI * rho;
+    const r = omega * epsR * EPS0_SI * rho;
     const deltaMaxwell = delta * maxwellDepthFactor(r);
     const omegaTau = (omega * l) / v;
     return {

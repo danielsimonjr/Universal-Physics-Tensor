@@ -439,8 +439,8 @@ where:
 
 - `L_Edd` is the luminosity, in watts
 - `M` is the mass, in kilograms
-- `m_p` is the proton mass. The evaluator stores `1.67262192369×10⁻²⁷ kg`
-- `σ_T` is the Thomson cross-section. The evaluator stores `6.6524587321×10⁻²⁹ m²`
+- `m_p` is the proton mass. The evaluator reads MathTS's CODATA 2022 value, `1.67262192595×10⁻²⁷ kg`
+- `σ_T` is the Thomson cross-section. The evaluator reads MathTS's CODATA 2022 value, `6.6524587051×10⁻²⁹ m²`
 - `G` and `c` are Newton's constant and the speed of light
 - `r` is the radius at which the two forces are compared. It cancels
 - the second display is the force balance the lemma proves equivalent to the luminosity. Both forces are premises

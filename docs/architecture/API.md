@@ -110,7 +110,7 @@ const advance = evaluateRelation('be-52', {
 
 ## Constants
 
-Canonical flat CODATA 2018 / SI-defined physical constants — the single source of truth across the numerical, dimensional, and bridge layers (PC-1). Defined in `src/core/constants.ts`; each is a bare `number` in SI units.
+Canonical flat CODATA 2022 (MathTS) / SI-defined physical constants — the single source of truth across the numerical, dimensional, and bridge layers (PC-1). Defined in `src/core/constants.ts`; each is a bare `number` in SI units.
 
 **Kind**: constants (`number`)
 **Stability**: `@public`

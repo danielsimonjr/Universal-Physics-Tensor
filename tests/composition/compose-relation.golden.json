@@ -43077,7 +43077,7 @@
       "target"
     ],
     "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:2.969630479870544e-38"
+    "evaluateAtOnes": "ok:2.969630484019524e-38"
   },
   {
     "pair": "be-63>>be-16",
@@ -43154,7 +43154,7 @@
       "target"
     ],
     "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:2.1377913732536106e-8"
+    "evaluateAtOnes": "ok:2.137791379227184e-8"
   },
   {
     "pair": "be-63>>be-42-via-rs",
@@ -43267,7 +43267,7 @@
       "target"
     ],
     "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:8523.90100185839"
+    "evaluateAtOnes": "ok:8523.900978040281"
   },
   {
     "pair": "be-63>>be-14",
@@ -43319,7 +43319,7 @@
       "target"
     ],
     "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:3.4365891331940695e+41"
+    "evaluateAtOnes": "ok:3.4365891235912997e+41"
   },
   {
     "pair": "be-63>>be-53",
@@ -43469,7 +43469,7 @@
       "target"
     ],
     "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:2395642680458439.5"
+    "evaluateAtOnes": "ok:2395642677111399"
   },
   {
     "pair": "be-63>>be-39",
@@ -52174,7 +52174,7 @@
       "target"
     ],
     "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:3.4699494063579835e-29"
+    "evaluateAtOnes": "ok:3.4699494040065873e-29"
   },
   {
     "pair": "be-74>>be-77",

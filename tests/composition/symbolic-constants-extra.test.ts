@@ -13,7 +13,7 @@ describe('extension constants ε₀ and σ_sb', () => {
   it('epsilon_0 — vacuum permittivity [I² T⁴ M⁻¹ L⁻³]', () => {
     const e = CONSTANTS['epsilon_0'];
     expect(e).toBeDefined();
-    expect(e.value).toBeCloseTo(8.8541878128e-12, 22);
+    expect(e.value).toBeCloseTo(8.8541878188e-12, 22);
     expect(e.dim).toEqual({ L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 });
   });
 
