@@ -3,7 +3,7 @@ metadata:
   version: 10.0.0
   totalFiles: 363
   totalModules: 13
-  totalExports: 2563
+  totalExports: 2566
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5749,7 +5749,6 @@ modules:
           imports:
             - coherentUnits
             - derivedUnitOf
-            - siUnitOf
         - file: ../bindings.js
           imports:
             - splitAssignments
@@ -6413,7 +6412,6 @@ modules:
             - printEval
             - printLatex
             - latexName
-            - siUnitOf
       exports:
         - command
       constants:
@@ -6538,6 +6536,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ../dimensional/algebra.js
+          imports:
+            - siUnitOf
       exports:
         - EVAL_STUBS
         - printDisplay
@@ -6546,7 +6547,6 @@ modules:
         - printLatex
         - coherentUnits
         - derivedUnitOf
-        - siUnitOf
       interfaces:
         - CoherentUnit
       functions:
@@ -6554,7 +6554,6 @@ modules:
         - printLatex
         - coherentUnits
         - derivedUnitOf
-        - siUnitOf
       constants:
         - EVAL_STUBS
         - printDisplay
@@ -7512,8 +7511,12 @@ modules:
           reExport: true
         - file: ./composition/evaluate-relation.js
           imports:
-            - evaluatorOutput
+            - evaluateResolved
             - resolveEvaluable
+          reExport: true
+        - file: ./dimensional/algebra.js
+          imports:
+            - siUnitOf
           reExport: true
         - file: ./bridges/evaluators.js
           imports:
@@ -7741,8 +7744,9 @@ modules:
         - rewriteCatalogHyphens
         - candidateIdIfSlug
         - resolveQuantityName
-        - evaluatorOutput
+        - evaluateResolved
         - resolveEvaluable
+        - siUnitOf
         - unusedInputKeys
         - SynonymDisagreementError
         - canonicalRetrievalCorpus
@@ -8014,8 +8018,9 @@ modules:
         - rewriteCatalogHyphens
         - candidateIdIfSlug
         - resolveQuantityName
-        - evaluatorOutput
+        - evaluateResolved
         - resolveEvaluable
+        - siUnitOf
         - unusedInputKeys
         - SynonymDisagreementError
         - canonicalRetrievalCorpus
@@ -9139,6 +9144,9 @@ modules:
         - file: ../dimensional/bridge-check.js
           imports:
             - EXPECTED_DIMENSION_BY_BRIDGE
+        - file: ../dimensional/algebra.js
+          imports:
+            - siUnitOf
         - file: ../dimensional/types.js
           imports:
             - Dimension
@@ -9151,6 +9159,7 @@ modules:
           imports:
             - checkInputs
             - inputContract
+            - EvaluationWant
             - InputContract
         - file: ../bridges/catalog-load.js
           imports:
@@ -9175,16 +9184,17 @@ modules:
             - evaluateEdge
             - BridgeEdge
       exports:
-        - evaluatorOutput
         - evaluableContract
         - resolveEvaluable
+        - evaluateResolved
         - evaluateRelation
       interfaces:
+        - ExtraOutput
         - Evaluable
       functions:
-        - evaluatorOutput
         - evaluableContract
         - resolveEvaluable
+        - evaluateResolved
         - evaluateRelation
     src/composition/explain.ts:
       description: "\"Explain this quantity\" — the unified entry point over the three"
@@ -9658,6 +9668,7 @@ modules:
         - file: ./evaluate-relation.js
           imports:
             - Evaluation
+            - ExtraOutput
           reExport: true
         - file: ./evaluate-relation.js
           imports:
@@ -9803,6 +9814,7 @@ modules:
         - ExplainOptions
         - QuantityExplanation
         - Evaluation
+        - ExtraOutput
         - Observable
         - ComposeSymbolicOptions
         - VizStatus
@@ -9874,6 +9886,7 @@ modules:
         - QuantityExplanation
         - explainQuantity
         - Evaluation
+        - ExtraOutput
         - evaluateRelation
         - Observable
         - ComposeSymbolicOptions
@@ -12287,6 +12300,7 @@ modules:
         - add
         - subtract
         - format
+        - siUnitOf
       reExported:
         - DimensionMismatchError
       functions:
@@ -12297,6 +12311,7 @@ modules:
         - add
         - subtract
         - format
+        - siUnitOf
       constants:
         - EXPONENT_TOL
     src/dimensional/ast-builders.ts:
@@ -14049,6 +14064,7 @@ modules:
         - file: ./composition/index.js
           imports:
             - Evaluation
+            - ExtraOutput
           reExport: true
         - file: ./bridges/evaluators.js
           imports:
@@ -15049,6 +15065,7 @@ modules:
         - BridgeIssueFixable
         - KnownIssue
         - Evaluation
+        - ExtraOutput
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
@@ -15368,6 +15385,7 @@ modules:
         - UnknownInputError
         - ConstantInputError
         - Evaluation
+        - ExtraOutput
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
@@ -17715,15 +17733,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 363
   totalModules: 13
-  totalLinesOfCode: 81271
-  totalExports: 2563
+  totalLinesOfCode: 81322
+  totalExports: 2566
   totalClasses: 82
-  totalInterfaces: 462
+  totalInterfaces: 463
   totalFunctions: 776
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 393
-  totalReExports: 1311
+  totalReExports: 1314
   totalTypeOnlyImports: 510
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

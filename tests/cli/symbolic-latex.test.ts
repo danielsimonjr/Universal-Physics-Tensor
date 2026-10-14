@@ -10,7 +10,8 @@
 import '../helpers/dist.js';
 import { run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
-import { printDisplay, printEval, printLatex, siUnitOf } from '../../src/cli/expr-print.js';
+import { printDisplay, printEval, printLatex } from '../../src/cli/expr-print.js';
+import { siUnitOf } from '../../src/dimensional/algebra.js';
 import { evalExpr } from '../../src/composition/expr-eval.js';
 import { parseFormula } from '../../src/numerical/formula-mathts.js';
 import { CONSTANT_REGISTRY, CONSTANTS, CONSTANT_PROVENANCE } from '../../src/dimensional/symbolic-constants.js';

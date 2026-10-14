@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 363,
-    "totalTestFiles": 578,
+    "totalTestFiles": 579,
     "testedCount": 351,
     "directlyTestedCount": 314,
     "untestedCount": 12,
@@ -1569,6 +1569,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/composition/one-copy.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/diff/bridge-gradient.test.ts",
@@ -1789,6 +1790,7 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
@@ -1801,6 +1803,7 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/one-grammar.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/review/round2-bridges-atlas.test.ts"
     ],
@@ -2456,6 +2459,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/audit.ts": [
@@ -2539,6 +2543,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/axes.ts": [
@@ -2622,6 +2627,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/candidates.ts": [
@@ -2705,6 +2711,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/canonical.ts": [
@@ -2788,6 +2795,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/chain.ts": [
@@ -2871,6 +2879,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/confront.ts": [
@@ -2954,6 +2963,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/connectors.ts": [
@@ -3037,6 +3047,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/coverage.ts": [
@@ -3120,6 +3131,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/derive.ts": [
@@ -3203,6 +3215,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/discover.ts": [
@@ -3286,6 +3299,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/eval.ts": [
@@ -3369,6 +3383,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/evaluate.ts": [
@@ -3453,6 +3468,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/explain.ts": [
@@ -3536,6 +3552,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/frontier.ts": [
@@ -3619,6 +3636,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/ground.ts": [
@@ -3702,6 +3720,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/index.ts": [
@@ -3785,6 +3804,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/map.ts": [
@@ -3868,6 +3888,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/metric.ts": [
@@ -3951,6 +3972,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/path.ts": [
@@ -4034,6 +4056,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/predict.ts": [
@@ -4117,6 +4140,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/priority.ts": [
@@ -4200,6 +4224,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/probe.ts": [
@@ -4284,6 +4309,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/recover.ts": [
@@ -4367,6 +4393,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/regime.ts": [
@@ -4450,6 +4477,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/retrieve.ts": [
@@ -4533,6 +4561,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/search.ts": [
@@ -4616,6 +4645,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/symbolic.ts": [
@@ -4699,6 +4729,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/testplan.ts": [
@@ -4782,6 +4813,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/conventions.ts": [],
@@ -4800,8 +4832,7 @@
       "tests/cli/eval-registered-constants.test.ts"
     ],
     "src/cli/expr-print.ts": [
-      "tests/cli/symbolic-latex.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/cli/symbolic-latex.test.ts"
     ],
     "src/cli/flag-help.ts": [
       "tests/cli/cli-reference.test.ts"
@@ -4890,6 +4921,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/map-evidence.ts": [
@@ -5722,6 +5754,7 @@
       "tests/composition/discovery.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/identifiability.test.ts",
       "tests/composition/link-candidates.test.ts",
@@ -7246,6 +7279,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/diff/bridge-gradient.test.ts",
@@ -7701,6 +7735,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/diff/bridge-gradient.test.ts",
@@ -8268,6 +8303,7 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/core/constants-owner.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
@@ -9924,6 +9960,7 @@
       "tests/cli/cli-boundary.test.ts",
       "tests/cli/evaluate-uncertainty-name.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/composition/one-copy.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/diff/bridge-gradient.test.ts",
@@ -9982,6 +10019,7 @@
       "tests/cli/evaluate-bridge-42-hint.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluate-relation.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/units.test.ts"
@@ -9991,6 +10029,7 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/one-grammar.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/review/round2-bridges-atlas.test.ts"
     ],
@@ -10312,8 +10351,7 @@
       "tests/cli/eval-registered-constants.test.ts"
     ],
     "src/cli/expr-print.ts": [
-      "tests/cli/symbolic-latex.test.ts",
-      "tests/composition/evaluate-boundary.test.ts"
+      "tests/cli/symbolic-latex.test.ts"
     ],
     "src/cli/flag-help.ts": [
       "tests/cli/cli-reference.test.ts"
@@ -10402,6 +10440,7 @@
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/map-evidence.ts": [
@@ -10645,6 +10684,7 @@
       "tests/cli/evaluate-bridge-42-hint.test.ts",
       "tests/composition/closed-form-evaluation.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/review/round3-owner-decisions.test.ts"
     ],
@@ -11052,6 +11092,7 @@
       "tests/canonical/thermo-nuclear-cosmo.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/dimensional/algebra-properties.test.ts",
@@ -11488,6 +11529,7 @@
       "tests/cases/applied-cases.test.ts",
       "tests/cli/cli-boundary.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/composition/evaluation-result.test.ts",
       "tests/core/constants-owner.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
@@ -14286,6 +14328,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -14319,7 +14362,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -14593,6 +14635,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -14626,7 +14669,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -15726,6 +15768,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -15759,7 +15802,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -16004,6 +16046,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -16037,7 +16080,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -16384,6 +16426,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -16417,7 +16460,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -16562,6 +16604,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -16595,7 +16638,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -17235,6 +17277,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -17268,7 +17311,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -17508,6 +17550,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -17541,7 +17584,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -17956,6 +17998,7 @@
       "src/dimensional/natural-units.ts",
       "src/dimensional/hyphen-names.ts",
       "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/numerical/formula-dimension.ts",
       "src/bridges/notices.ts",
@@ -17989,7 +18032,6 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
       "src/dimensional/einstein-equation.ts",
@@ -18096,12 +18138,12 @@
     ],
     "tests/cli/symbolic-latex.test.ts": [
       "src/cli/expr-print.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/composition/expr-eval.ts",
       "src/numerical/formula-mathts.ts",
       "src/dimensional/symbolic-constants.ts",
       "src/dimensional/units.ts",
-      "src/dimensional/algebra.ts",
-      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
     ],
@@ -18706,7 +18748,6 @@
       "src/bridges/evaluation-errors.ts",
       "src/composition/evaluate-relation.ts",
       "src/bridges/evaluators.ts",
-      "src/cli/expr-print.ts",
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
       "src/cli/commands/priority.ts",
@@ -18851,6 +18892,45 @@
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts",
       "src/bridges/catalog-load.ts"
+    ],
+    "tests/composition/evaluation-result.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/bridges/evaluators.ts",
+      "src/bridges/catalog-load.ts",
+      "src/bridges/expr-parse.ts",
+      "src/composition/evaluate-relation.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
+      "src/dimensional/units.ts"
     ],
     "tests/composition/explain.test.ts": [
       "src/composition/explain.ts",

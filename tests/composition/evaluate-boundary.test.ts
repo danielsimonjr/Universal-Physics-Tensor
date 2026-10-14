@@ -1,9 +1,8 @@
 import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { DomainViolationError } from '../../src/bridges/evaluation-errors.js';
-import { evaluateRelation, evaluatorOutput } from '../../src/composition/evaluate-relation.js';
+import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
 import { BRIDGE_EVALUATORS, unusedInputKeys } from '../../src/bridges/evaluators.js';
-import { siUnitOf } from '../../src/cli/expr-print.js';
 import { runCli } from '../../dist/cli/main.js';
 
 const DAMPING_INPUTS = { c_kg_per_s: 2, k_N_per_m: 1, m_kg: 1 };
@@ -67,11 +66,10 @@ describe('a declared alternate works in the library, and T_yr only adds the per-
 });
 
 describe('the output carries its name and unit (issue 460)', () => {
-  it('evaluatorOutput names the target and its SI unit', () => {
-    const o = evaluatorOutput(BRIDGE_EVALUATORS.get(120)!);
-    expect(o.name).toBe('standoff-sixth');
-    expect(siUnitOf(o.dimension!)).toBe('1');
-    expect(siUnitOf(evaluatorOutput(BRIDGE_EVALUATORS.get(67)!).dimension!)).toBe('m/s');
+  it('evaluateRelation names the target and its SI unit', () => {
+    const o = evaluateRelation('be-120', { B_E_T: 3.1e-5, rho_kg_per_m3: 8.36e-21, v_m_per_s: 4e5 });
+    expect(o).toMatchObject({ kind: 'value', name: 'standoff-sixth', unit: '1' });
+    expect(evaluateRelation('be-67', { B_T: 1e-8, rho_kg_per_m3: 1.67e-21 })).toMatchObject({ name: 'alfven-speed', unit: 'm/s' });
   });
   it('the text line names it', async () => {
     const cap = capture();

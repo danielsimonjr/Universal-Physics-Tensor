@@ -122,7 +122,7 @@ describe('Public API stability — 6.0.0 surface', () => {
     }
     expect('evaluateRelation' in root).toBe(true);
     expect('CoefficientUnsetError' in root).toBe(true);
-    expect(indexSrc).toContain('export type { Evaluation }');
+    expect(indexSrc).toContain('export type { Evaluation, ExtraOutput }');
     expect('VON_KLITZING_SI' in root).toBe(true);
     expect('CarrierSignError' in root).toBe(true);
     for (const name of ABSENT) expect(name in root, name).toBe(false);
