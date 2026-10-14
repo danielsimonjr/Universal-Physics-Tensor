@@ -14394,20 +14394,26 @@ modules:
             - CompositionDimensionError
             - CompositionJunctionError
             - DomainViolationError
-            - validityDomain
             - M_SUN_KG
           reExport: true
         - file: ./composition/index.js
           imports:
             - BridgeEdge
             - ComposeOptions
-            - DomainInput
-            - DomainViolation
             - EdgeConfidence
             - Quantity
             - QuantityIdentification
             - RegimeAttributes
             - ValidityDomain
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - validityDomain
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - DomainInput
+            - DomainViolation
           reExport: true
         - file: ./bridges/membership.js
           imports:
@@ -14997,8 +15003,8 @@ modules:
         - CompositionDimensionError
         - CompositionJunctionError
         - DomainViolationError
-        - validityDomain
         - M_SUN_KG
+        - validityDomain
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -15188,13 +15194,13 @@ modules:
         - CovariantEikonalResult
         - BridgeEdge
         - ComposeOptions
-        - DomainInput
-        - DomainViolation
         - EdgeConfidence
         - Quantity
         - QuantityIdentification
         - RegimeAttributes
         - ValidityDomain
+        - DomainInput
+        - DomainViolation
         - BridgeVerdict
         - CatalogAdjudicationReport
         - RejectedBridgeAdjudication
@@ -15589,17 +15595,17 @@ modules:
         - CompositionDimensionError
         - CompositionJunctionError
         - DomainViolationError
-        - validityDomain
         - M_SUN_KG
         - BridgeEdge
         - ComposeOptions
-        - DomainInput
-        - DomainViolation
         - EdgeConfidence
         - Quantity
         - QuantityIdentification
         - RegimeAttributes
         - ValidityDomain
+        - validityDomain
+        - DomainInput
+        - DomainViolation
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -17792,7 +17798,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 364
   totalModules: 13
-  totalLinesOfCode: 81603
+  totalLinesOfCode: 81605
   totalExports: 2577
   totalClasses: 82
   totalInterfaces: 467

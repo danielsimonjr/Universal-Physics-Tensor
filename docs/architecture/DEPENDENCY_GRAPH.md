@@ -5827,8 +5827,10 @@ The codebase is organized into the following modules:
 | `./numerical/kretschmann.js` | `computeKretschmann` | Re-export |
 | `./numerical/index.js` | `evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport, evaluateCovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion` | Re-export |
 | `./numerical/index.js` | `NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options, PerihelionResult, FindPerihelionOptions, CovariantEikonalInputs, CovariantEikonalResult` | Re-export |
-| `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, validityDomain, M_SUN_KG` | Re-export |
-| `./composition/index.js` | `BridgeEdge, ComposeOptions, DomainInput, DomainViolation, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
+| `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, M_SUN_KG` | Re-export |
+| `./composition/index.js` | `BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
+| `./composition/index.js` | `validityDomain` | Re-export |
+| `./composition/index.js` | `DomainInput, DomainViolation` | Re-export |
 | `./bridges/membership.js` | `adjudicateBridgeEntry, adjudicateCatalog` | Re-export |
 | `./bridges/rejected.js` | `REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS` | Re-export |
 | `./bridges/membership.js` | `BridgeVerdict, CatalogAdjudicationReport` | Re-export |
@@ -5963,10 +5965,10 @@ The codebase is organized into the following modules:
   PerihelionResult, FindPerihelionOptions, CovariantEikonalInputs, CovariantEikonalResult,
   composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer,
   QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError,
-  validityDomain, M_SUN_KG, BridgeEdge, ComposeOptions, DomainInput, DomainViolation, EdgeConfidence,
-  Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain, adjudicateBridgeEntry,
-  adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, BridgeVerdict,
-  CatalogAdjudicationReport, RejectedBridgeAdjudication, enumerateCompositions,
+  M_SUN_KG, BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification,
+  RegimeAttributes, ValidityDomain, validityDomain, DomainInput, DomainViolation,
+  adjudicateBridgeEntry, adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS,
+  BridgeVerdict, CatalogAdjudicationReport, RejectedBridgeAdjudication, enumerateCompositions,
   REGISTERED_COMPOSITION_IDS, propagateUncertainty, CompositionCandidate, EnumerationReport,
   UncertaintyResult, classifyIdentifiability, classifyAll, forwardClosure, IdentifiabilityVerdict,
   IdentifiabilityResult, IdentifiabilityOptions, retrodict, retrodictNode, RetrodictionOutcome,
@@ -7012,7 +7014,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 364 |
 | Total Modules | 13 |
-| Total Lines of Code | 81603 |
+| Total Lines of Code | 81605 |
 | Total Exports | 2577 |
 | Total Re-exports | 1320 |
 | Total Classes | 82 |
