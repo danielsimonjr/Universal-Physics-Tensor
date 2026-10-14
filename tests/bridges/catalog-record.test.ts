@@ -105,7 +105,7 @@ describe('every path a record cites exists', () => {
   it('in entries, relations and confrontations', () => {
     const texts: string[] = [];
     for (const e of raw.entries) texts.push(e.notes, e.context, ...e.known_issues.map((i) => i.description));
-    for (const r of raw.relations) texts.push(r.label, r.domain, r.citation, r.notice?.text ?? '');
+    for (const r of raw.relations) texts.push(r.label, r.citation, r.notice?.text ?? '');
     for (const c of raw.confrontations) texts.push(JSON.stringify(c));
     const missing = [...new Set(texts.flatMap(cited))].filter((p) => !existsSync(resolve(root, p)));
     expect(missing).toEqual([]);

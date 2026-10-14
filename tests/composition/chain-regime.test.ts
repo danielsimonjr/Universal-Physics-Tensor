@@ -22,6 +22,7 @@ import { ACCELERATION, DIMENSIONLESS, ENERGY, LENGTH, MASS, TEMPERATURE, TIME } 
 import type { Dimension } from '../../src/dimensional/types.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 import type { Regime } from '../../src/relations/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 function q(name: string, dim: Dimension, attributes: RegimeAttributes = {}): Quantity {
   return { name, symbol: name, dim, attributes };
@@ -42,7 +43,7 @@ function edge(
     sources,
     target,
     confidence: 'established',
-    domain: { description: 'any', predicate: () => true },
+    domain: validityDomain('true'),
     citation: 'fixture',
     evaluate: (inputs) => {
       const first = sources[0];

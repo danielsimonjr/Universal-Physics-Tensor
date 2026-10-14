@@ -491,6 +491,10 @@ export type {
   RegimeAttributes,
   ValidityDomain,
 } from './composition/index.js';
+/** A validity domain built from one condition text: the predicate, the description and the refusal all read it. */
+export { validityDomain } from './composition/index.js';
+/** A failed validity condition and the inputs it read, as `DomainViolationError.violations` lists them. */
+export type { DomainInput, DomainViolation } from './composition/index.js';
 
 // v0.8.0 — Bridge-membership criterion + negative catalog (G-2 / P-4)
 export { adjudicateBridgeEntry, adjudicateCatalog } from './bridges/membership.js';

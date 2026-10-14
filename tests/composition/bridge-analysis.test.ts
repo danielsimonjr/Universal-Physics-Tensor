@@ -8,7 +8,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { attemptDerivation } from '../../src/composition/bridge-analysis.js';
-import type { BridgeEdge } from '../../src/composition/edge.js';
+import { validityDomain, type BridgeEdge } from '../../src/composition/edge.js';
 import type { Quantity } from '../../src/composition/quantity.js';
 import { LENGTH } from '../../src/dimensional/types.js';
 
@@ -21,7 +21,7 @@ const edge = (over: Partial<BridgeEdge>): BridgeEdge => ({
   sources: [q('x')],
   target: q('y'),
   confidence: 'established',
-  domain: { description: 'x < 0', predicate: (i) => i['x']! < 0 },
+  domain: validityDomain('x < 0'),
   evaluate: (i) => -2 * i['x']!,
   citation: 'synthetic',
   ...over,
@@ -37,13 +37,13 @@ describe('attemptDerivation samples both signs where a domain needs it', () => {
   });
 
   it('control: a domain that admits x > 0 still derives from the positive samples', () => {
-    const r = attemptDerivation(edge({ domain: { description: 'x > 0', predicate: (i) => i['x']! > 0 }, evaluate: (i) => 2 * i['x']! }));
+    const r = attemptDerivation(edge({ domain: validityDomain('x > 0'), evaluate: (i) => 2 * i['x']! }));
     expect(r.status).toBe('derived');
     expect(r.prefactor).toBeCloseTo(2, 12);
   });
 
   it('control: a domain no sign satisfies is still no-samples', () => {
-    const r = attemptDerivation(edge({ domain: { description: 'never', predicate: () => false } }));
+    const r = attemptDerivation(edge({ domain: validityDomain('x < 0 and x > 0') }));
     expect(r.status).toBe('no-samples');
   });
 });
@@ -57,7 +57,7 @@ describe('a flat regime is not a derivation', () => {
       id: 'saturating',
       sources: [q('saturation'), q('voltage'), q('temperature')],
       target: q('current'),
-      domain: { description: 'any', predicate: () => true },
+      domain: validityDomain('true'),
       evaluate: (i) => i['saturation']! * (Math.exp((1e4 * i['voltage']!) / i['temperature']!) - 1),
     });
     const r = attemptDerivation(saturating);

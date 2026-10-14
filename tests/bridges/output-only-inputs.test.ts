@@ -48,6 +48,6 @@ describe('an input only an extra output reads', () => {
   });
 
   it('a positive-signed optional input is still checked when given', () => {
-    expect(() => BRIDGE_EVALUATORS.get(52)!.run({ ...at('be-52'), T_yr: -1 })).toThrow(/T_yr must be > 0/);
+    expect(() => BRIDGE_EVALUATORS.get(52)!.run({ ...at('be-52'), T_yr: -1 })).toThrow(/T_yr = -1 violates T_yr > 0/);
   });
 });

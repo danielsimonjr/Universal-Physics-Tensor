@@ -32,6 +32,7 @@ import type {
   RelationType,
 } from '../../src/atlas/types.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const q = (name: string): Quantity => ({
   name,
@@ -49,7 +50,7 @@ const plainEdge: BridgeEdge = {
   sources: [q('alpha')],
   target: q('beta'),
   confidence: 'established',
-  domain: { description: 'always', predicate: () => true },
+  domain: validityDomain('true'),
   evaluate: (inputs) => inputs.alpha ?? 0,
   citation: 'test fixture',
 };

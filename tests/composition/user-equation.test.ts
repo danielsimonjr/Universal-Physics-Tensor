@@ -27,13 +27,14 @@ import type { VizJunction } from '../../src/composition/graph-viz.js';
 import type { BridgeEdge } from '../../src/composition/edge.js';
 import type { Quantity } from '../../src/composition/quantity.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const q = (name: string): Quantity => ({ name, symbol: name, dim: DIMENSIONLESS, attributes: {} });
 const edge = (id: string, src: string[], tgt: string): BridgeEdge => ({
   id, beId: null, kind: 'bridge', label: id,
   sources: src.map(q), target: q(tgt),
   confidence: 'speculative',
-  domain: { description: 'any', predicate: () => true },
+  domain: validityDomain('true'),
   evaluate: () => 0, citation: 'synthetic',
 });
 

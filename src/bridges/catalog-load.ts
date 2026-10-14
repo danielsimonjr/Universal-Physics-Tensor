@@ -213,11 +213,7 @@ function deriveDomains(file: CatalogFile): CatalogFile {
     }
     if (clauses.length === 0) return relation;
     const stated = relation.holds.trim() === 'true' ? '' : `${relation.holds} and `;
-    return {
-      ...relation,
-      holds: `${stated}${clauses.join(' and ')}`,
-      domain: relation.domain === '' ? clauses.join(', ') : `${relation.domain}; ${clauses.join(', ')}`,
-    };
+    return { ...relation, holds: `${stated}${clauses.join(' and ')}` };
   });
   return { ...file, relations };
 }

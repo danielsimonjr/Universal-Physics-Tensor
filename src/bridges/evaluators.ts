@@ -15,8 +15,8 @@ import { catalogEntries, catalogEntry, catalogEvaluators, primaryRelation } from
 import type { CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
 import { evaluateFormula, formulaVariables, parseCatalogExpression, reservedFormulaNames } from './expr-parse.js';
 import type { ExprNode } from '../dimensional/ast-types.js';
-import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
-import { DomainViolationError } from './evaluation-errors.js';
+import { evaluateCatalogRelation, relationDomain } from './relation-eval.js';
+import { DomainViolationError, type DomainViolation } from './evaluation-errors.js';
 import { checkInputs, inputContract, type EvaluationWant, type InputContract, type InputSlot } from './input-contract.js';
 
 /** How a length input is read: radius, diameter, separation, impact parameter, or semi-major axis. @public */
@@ -191,6 +191,22 @@ function bindRelationInputs(
 }
 
 /**
+ * An optional positive parameter no source owns (so the relation's condition
+ * cannot read it) states its own condition: `key > 0` when it is given.
+ */
+function unsignedOptional(parameter: EvaluatorParameter, value: number | undefined): DomainViolation[] {
+  if (parameter.optional !== true || parameter.sign !== 'positive' || value === undefined || value > 0) return [];
+  return [
+    {
+      condition: `${parameter.key} > 0`,
+      key: parameter.key,
+      value,
+      inputs: [{ key: parameter.key, quantity: parameter.quantity, value }],
+    },
+  ];
+}
+
+/**
  * The spec of one catalog evaluator row. A parameter that binds no relation
  * source is read only by an extra output and is optional: the output is left
  * out when it is not given. An output expression reads the scope by
@@ -227,6 +243,12 @@ function buildSpec(
   const outputScope = [...keys, 'value'];
   // An output is computed when every parameter key it reads was given.
   const reads = outputs.map((output) => formulaVariables(output.expression).filter((name) => keys.includes(name)));
+  const keyOfSource = new Map(
+    parameters.flatMap((parameter) => {
+      const source = sourceOfParameter(relation, parameter);
+      return source === undefined ? [] : [[source, parameter.key] as const];
+    }),
+  );
   return {
     bridgeId: catalogId,
     name,
@@ -237,15 +259,11 @@ function buildSpec(
     run(inputs, want = 'all') {
       const given = checkInputs(contract, inputs, want);
       const bound = bindRelationInputs(relation, parameters, given);
-      if (!relationHolds(relation, bound)) {
-        throw new DomainViolationError(`${relation.id}: inputs violate validity domain (${relation.domain})`);
-      }
-      for (const parameter of parameters) {
-        const value = given[parameter.key];
-        if (parameter.optional === true && parameter.sign === 'positive' && value !== undefined && !(value > 0)) {
-          throw new DomainViolationError(`${relation.id}: ${parameter.key} must be > 0`);
-        }
-      }
+      const violated = [
+        ...relationDomain(relation).violations(bound, (source) => keyOfSource.get(source) ?? source),
+        ...parameters.flatMap((parameter) => unsignedOptional(parameter, given[parameter.key])),
+      ];
+      if (violated.length > 0) throw new DomainViolationError(relation.id, violated);
       const value = evaluateCatalogRelation(relation, bound);
       const result: Record<string, number> = { value };
       outputs.forEach((output, i) => {

@@ -23,6 +23,7 @@ export {
   CompositionJunctionError,
   UndefinedCompositionError,
   evaluateEdge,
+  validityDomain,
 } from './edge.js';
 /** The errors one evaluation throws: the input checks, then the validity domain. */
 export {
@@ -33,6 +34,8 @@ export {
   NonFiniteInputError,
   UnknownInputError,
 } from '../bridges/evaluation-errors.js';
+/** A failed validity condition and the inputs it read, as `DomainViolationError.violations` lists them. */
+export type { DomainInput, DomainViolation } from '../bridges/evaluation-errors.js';
 
 export type { ComposeOptions, QuantityIdentification } from './compose.js';
 export {

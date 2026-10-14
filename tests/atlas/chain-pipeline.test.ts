@@ -33,6 +33,7 @@ import {
 import type { Dimension } from '../../src/dimensional/types.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 import { scanFileImports } from '../../tools/layer-order/check.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const sourcePath = resolve(root, 'src/atlas/chain-pipeline.ts');
@@ -55,7 +56,7 @@ function edge(
     sources,
     target,
     confidence: 'established',
-    domain: { description: 'any', predicate: () => true },
+    domain: validityDomain('true'),
     citation: 'fixture',
     evaluate: (inputs) => {
       const first = sources[0];
