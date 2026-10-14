@@ -9,7 +9,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { coherentUnits, derivedUnitOf, siUnitOf } from '../expr-print.js';
+import { coherentUnits, derivedUnitOf } from '../expr-print.js';
 import { splitAssignments } from '../bindings.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
@@ -406,10 +406,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   const spec = found.evaluator;
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 
-  // The one evaluation: `run` checks the inputs (missing, unknown, type) before the domain.
-  let result: Record<string, number>;
+  // The one evaluation, the library's result builder: `run` checks the inputs (missing, unknown,
+  // type) before the domain, and the result carries the output's name, unit, meaning and extras.
+  let evaluation: ReturnType<typeof api.evaluateResolved>;
   try {
-    result = spec.run(inputs);
+    evaluation = api.evaluateResolved(found, inputs, 'all');
   } catch (e) {
     throw evaluationFailure(api, e, `be-${spec.bridgeId}`);
   }
@@ -418,15 +419,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   const relation = api.primaryRelation(id);
   const notices = relation === undefined ? [] : api.relationNotices(relation);
 
-  const outputDescriptor = api.evaluatorOutput(spec);
-  // The label is a derived SI unit read from the unit table (`V^2/Hz`); the JSON keeps the
-  // base form `parseUnit` reads back, and the dimension itself, beside it.
-  const outputLabel = {
-    name: outputDescriptor.name,
-    ...(outputDescriptor.dimension === undefined
-      ? {}
-      : { unit: siUnitOf(outputDescriptor.dimension), label: derivedUnitOf(outputDescriptor.dimension, coherentUnits(api.unitRows())) }),
-  };
+  // The text label is a derived SI unit read from the unit table (`V^2/Hz`); the JSON is the
+  // library result itself, whose `unit` is the base form `parseUnit` reads back.
+  const label = evaluation.kind === 'unset' ? undefined : derivedUnitOf(evaluation.dimension, coherentUnits(api.unitRows()));
   const unused = api.unusedInputKeys(spec);
   if (args.flags.has('json')) {
     emitJson(
@@ -437,12 +432,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           inputs,
           parameters: spec.parameters,
           conversions: conversionsOf(resolved),
-          output: {
-            ...result,
-            name: outputLabel.name,
-            ...(outputLabel.unit === undefined ? {} : { unit: outputLabel.unit, dimension: outputDescriptor.dimension }),
-          },
-          ...(spec.outputs.length === 0 ? {} : { extraOutputs: spec.outputs.map(({ name, unit, meaning }) => ({ name, unit, meaning })) }),
+          output: evaluation,
           ...(unused.length === 0 ? {} : { unusedInputs: unused }),
           ...(notices.length === 0 ? {} : { notices }),
           ...(u === null ? {} : { uncertainty: u.block }),
@@ -454,17 +444,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   out(`\n● be-${id}  ${spec.name}`);
   printInputs(api.formatExact, out, spec.parameters, inputs, resolved);
-  for (const [k, v] of Object.entries(result)) {
-    const extra = spec.outputs.find((o) => o.name === k);
-    const label =
-      k === 'value'
-        ? outputLabel.label === undefined
-          ? outputLabel.name
-          : `${outputLabel.name} [${outputLabel.label}]`
-        : extra === undefined
-          ? k
-          : `${k} [${extra.unit}] (${extra.meaning})`;
-    out(`  ${label} = ${typeof v === 'number' ? api.formatExact(v) : JSON.stringify(v)}`);
+  if (evaluation.kind === 'unset') {
+    out(`  value is unset: ${evaluation.formula} is not finite at these inputs (a dropped factor or a singularity)`);
+  } else {
+    out(`  ${evaluation.name} [${label}] = ${api.formatExact(evaluation.value)} — ${evaluation.meaning}`);
+    for (const extra of evaluation.extras) out(`  ${extra.name} [${extra.unit}] = ${api.formatExact(extra.value)} — ${extra.meaning}`);
   }
   for (const key of unused) {
     out(`  note: ${key} is required and does not enter the value; the closed form does not use it, so changing it changes nothing`);

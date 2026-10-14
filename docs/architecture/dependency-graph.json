@@ -4,7 +4,7 @@
     "version": "10.0.0",
     "totalFiles": 363,
     "totalModules": 13,
-    "totalExports": 2563
+    "totalExports": 2566
   },
   "entryPoints": [
     {
@@ -8415,8 +8415,7 @@
             "file": "../expr-print.js",
             "imports": [
               "coherentUnits",
-              "derivedUnitOf",
-              "siUnitOf"
+              "derivedUnitOf"
             ]
           },
           {
@@ -9531,8 +9530,7 @@
               "printDisplay",
               "printEval",
               "printLatex",
-              "latexName",
-              "siUnitOf"
+              "latexName"
             ]
           }
         ],
@@ -9729,6 +9727,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "siUnitOf"
+            ]
           }
         ],
         "exports": [
@@ -9738,8 +9742,7 @@
           "latexName",
           "printLatex",
           "coherentUnits",
-          "derivedUnitOf",
-          "siUnitOf"
+          "derivedUnitOf"
         ],
         "interfaces": [
           "CoherentUnit"
@@ -9748,8 +9751,7 @@
           "latexName",
           "printLatex",
           "coherentUnits",
-          "derivedUnitOf",
-          "siUnitOf"
+          "derivedUnitOf"
         ],
         "constants": [
           "EVAL_STUBS",
@@ -11224,8 +11226,15 @@
           {
             "file": "./composition/evaluate-relation.js",
             "imports": [
-              "evaluatorOutput",
+              "evaluateResolved",
               "resolveEvaluable"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/algebra.js",
+            "imports": [
+              "siUnitOf"
             ],
             "reExport": true
           },
@@ -11489,8 +11498,9 @@
           "rewriteCatalogHyphens",
           "candidateIdIfSlug",
           "resolveQuantityName",
-          "evaluatorOutput",
+          "evaluateResolved",
           "resolveEvaluable",
+          "siUnitOf",
           "unusedInputKeys",
           "SynonymDisagreementError",
           "canonicalRetrievalCorpus",
@@ -11763,8 +11773,9 @@
           "rewriteCatalogHyphens",
           "candidateIdIfSlug",
           "resolveQuantityName",
-          "evaluatorOutput",
+          "evaluateResolved",
           "resolveEvaluable",
+          "siUnitOf",
           "unusedInputKeys",
           "SynonymDisagreementError",
           "canonicalRetrievalCorpus",
@@ -13562,6 +13573,12 @@
             ]
           },
           {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "siUnitOf"
+            ]
+          },
+          {
             "file": "../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -13580,6 +13597,7 @@
             "imports": [
               "checkInputs",
               "inputContract",
+              "EvaluationWant",
               "InputContract"
             ]
           },
@@ -13625,18 +13643,19 @@
           }
         ],
         "exports": [
-          "evaluatorOutput",
           "evaluableContract",
           "resolveEvaluable",
+          "evaluateResolved",
           "evaluateRelation"
         ],
         "interfaces": [
+          "ExtraOutput",
           "Evaluable"
         ],
         "functions": [
-          "evaluatorOutput",
           "evaluableContract",
           "resolveEvaluable",
+          "evaluateResolved",
           "evaluateRelation"
         ]
       },
@@ -14386,7 +14405,8 @@
           {
             "file": "./evaluate-relation.js",
             "imports": [
-              "Evaluation"
+              "Evaluation",
+              "ExtraOutput"
             ],
             "reExport": true
           },
@@ -14574,6 +14594,7 @@
           "ExplainOptions",
           "QuantityExplanation",
           "Evaluation",
+          "ExtraOutput",
           "Observable",
           "ComposeSymbolicOptions",
           "VizStatus",
@@ -14646,6 +14667,7 @@
           "QuantityExplanation",
           "explainQuantity",
           "Evaluation",
+          "ExtraOutput",
           "evaluateRelation",
           "Observable",
           "ComposeSymbolicOptions",
@@ -18062,7 +18084,8 @@
           "equals",
           "add",
           "subtract",
-          "format"
+          "format",
+          "siUnitOf"
         ],
         "reExported": [
           "DimensionMismatchError"
@@ -18074,7 +18097,8 @@
           "equals",
           "add",
           "subtract",
-          "format"
+          "format",
+          "siUnitOf"
         ],
         "constants": [
           "EXPONENT_TOL"
@@ -20587,7 +20611,8 @@
           {
             "file": "./composition/index.js",
             "imports": [
-              "Evaluation"
+              "Evaluation",
+              "ExtraOutput"
             ],
             "reExport": true
           },
@@ -21957,6 +21982,7 @@
           "BridgeIssueFixable",
           "KnownIssue",
           "Evaluation",
+          "ExtraOutput",
           "EvaluatorSpec",
           "EvaluatorParameter",
           "ParameterAlternate",
@@ -22277,6 +22303,7 @@
           "UnknownInputError",
           "ConstantInputError",
           "Evaluation",
+          "ExtraOutput",
           "EvaluatorSpec",
           "EvaluatorParameter",
           "ParameterAlternate",
@@ -25495,15 +25522,15 @@
   "statistics": {
     "totalTypeScriptFiles": 363,
     "totalModules": 13,
-    "totalLinesOfCode": 81271,
-    "totalExports": 2563,
+    "totalLinesOfCode": 81323,
+    "totalExports": 2566,
     "totalClasses": 82,
-    "totalInterfaces": 462,
+    "totalInterfaces": 463,
     "totalFunctions": 776,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 393,
-    "totalReExports": 1311,
+    "totalReExports": 1314,
     "totalTypeOnlyImports": 510,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

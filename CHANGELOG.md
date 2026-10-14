@@ -8,7 +8,16 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
-Nothing yet.
+### Breaking
+
+- **`upt evaluate --json` serializes the library's `Evaluation`; extra outputs move into `output.extras`.** `result.output` is now exactly what `evaluateRelation` returns for the same inputs (built by one function, `evaluateResolved` in `src/composition/evaluate-relation.ts`): `kind`, `value`, `dimension`, `name`, `unit`, `meaning` and `extras`. `output.value`, `output.name`, `output.unit` and `output.dimension` read as before. An extra output was a key of `output` (`output.precession_arcsec_per_century`) with its unit and meaning in a separate `result.extraOutputs` list; it is now one entry `{ name, value, unit, meaning }` of `output.extras`, and `result.extraOutputs` is gone. A closed form that is not finite at finite inputs printed `= NaN`; it is now `output: { kind: 'unset', formula }` in JSON and `value is unset: …` in text, as the library already returned. Migration: read `result.output.extras.find((e) => e.name === '<name>').value` instead of `result.output['<name>']`, and the unit and meaning from the same entry.
+- **The `upt evaluate` text result line ends in ` — <meaning>`, and an extra output prints in the same form.** 9.0.0 printed `perihelion-advance = 5.02e-7` (no unit for a dimensionless result) and `precession_arcsec_per_century [arcsec/century] (Δφ per orbit …) = 43.0`; both are now `<name> [<label>] = <value> — <meaning>`, the label being 10.0.0's derived SI unit (`[1]` for dimensionless). A script that split the text on ` = ` should read `--json`.
+- **The catalog evaluator output field `requires` is removed.** An extra output is computed when every input its expression reads is given; that list is read from the expression, so a record no longer states it a second time (be-52 was the one record with it). The catalog schema refuses the field. `CatalogEvaluatorOutput.requires` is gone from the type.
+
+### Added
+
+- **`evaluateRelation` returns what the evaluator knows.** A value result also carries `name` (the quantity the relation computes), `unit` (its SI unit written from the dimension, in the form `parseUnit` reads back), `meaning` (the relation as its record states it, with its sign convention: be-119 is `Parker spiral B_φ/B_r = −Ω r sinθ / v_r`) and `extras`, every extra output whose inputs were given, each `{ name, value, unit, meaning }` (type `ExtraOutput`, exported). be-52 with `T_yr` now returns `precession_arcsec_per_century` ≈ 43.0 arcsec/century from the library, where 9.0.0 printed it in the CLI only. An input only an extra output reads is still not required by `evaluateRelation`. Readers of `.kind`, `.value` and `.dimension` are unaffected. `EvaluatorSpec.run(inputs, 'value')` returns the extra outputs whose inputs are given, beside `value`.
+- **`upt evaluate` prints the result, it does not compute one.** The text line is `<name> [<label>] = <value> — <meaning>` (the label is the derived SI unit 10.0.0 reads from the unit table; the JSON is the library result, whose `unit` is the base form), one line per extra output in the same form, from the same `Evaluation` object; the CLI's own label code (`evaluatorOutput`, the per-key label branch) is deleted. `siUnitOf` moves from `src/cli/expr-print.ts` to `src/dimensional/algebra.ts` so the library builder can write the unit; `derivedUnitOf` stays in the CLI and reads it.
 
 ## [10.0.0] - 2026-10-09
 

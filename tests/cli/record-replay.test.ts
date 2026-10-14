@@ -218,6 +218,8 @@ describe('upt --replay', () => {
     });
     const line = plain[0].stdout.split('\n').findIndex((l) => l.includes('1.6567788e-17')) + 1;
     expect(line).toBeGreaterThan(0);
+    const resultLine = plain[0].stdout.split('\n')[line - 1]!;
+    expect(resultLine).toMatch(/^  voltage-noise-density \[kg\^2\*m\^4\/\(s\^5\*A\^2\)\] = 1\.6567788e-17 — /);
     const { code, env } = await replayJson(file);
     expect(code).toBe(3);
     const [first] = env.result.entries;
@@ -226,8 +228,8 @@ describe('upt --replay', () => {
     expect(first.differences[0]).toMatchObject({
       stream: 'stdout',
       firstDifferingLine: line,
-      recorded: '  voltage-noise-density [kg^2*m^4/(s^5*A^2)] = 1.6567789e-17',
-      replayed: '  voltage-noise-density [kg^2*m^4/(s^5*A^2)] = 1.6567788e-17',
+      recorded: resultLine.replace('1.6567788e-17', '1.6567789e-17'),
+      replayed: resultLine,
     });
     expect(first.integrity).toEqual([
       'recorded stdout does not match its recorded stdoutSha256',

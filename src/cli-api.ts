@@ -287,7 +287,9 @@ export { candidateIdIfSlug } from './composition/adjudication.js';
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */
 export { resolveQuantityName } from './index.js';
 /** The edge and the closed-form evaluator for an id. An evaluator with no edge is not unknown. */
-export { evaluatorOutput, resolveEvaluable } from './composition/evaluate-relation.js';
+export { evaluateResolved, resolveEvaluable } from './composition/evaluate-relation.js';
+/** The SI unit of a dimension, in the form `parseUnit` reads back. The CLI's derived label reads it. */
+export { siUnitOf } from './dimensional/algebra.js';
 /** The required inputs of an evaluator that no relation source reads. They do not change the value. */
 export { unusedInputKeys } from './bridges/evaluators.js';
 /** Two spellings of one quantity were given different numbers. The formula is not run. */

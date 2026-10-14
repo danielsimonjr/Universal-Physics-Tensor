@@ -37,7 +37,7 @@ describe('evaluateRelation', () => {
       'einstein-temperature': T,
       'carrier-charge': q,
     });
-    expect(byAlias).toEqual({ kind: 'value', value: expected, dimension: edge70.target.dim });
+    expect(byAlias).toMatchObject({ kind: 'value', value: expected, dimension: edge70.target.dim });
     expect(valueOf(byName)).toBe(expected);
     expect(evaluateEdge(edge70, { mu_m2_per_Vs: mu, T_K: T, q_C: q })).toBe(expected);
     expect(() => evaluateRelation('be-70', { mu_m2_per_Vs: mu, T_K: T, q_C: -q })).toThrow(CarrierSignError);
