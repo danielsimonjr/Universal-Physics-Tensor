@@ -168,7 +168,7 @@ describe('case-lumped-cooling — regime checks', () => {
     expect(failed({ h_W_per_m2_K: h * 1.001, emissivity: 0 })).toEqual(['lumped']);
   });
 
-  it('σ_SB from the exact constants is CODATA 2018 5.670374419e-8; h_rad by hand at the hotter end', () => {
+  it('σ_SB from the exact constants is CODATA 2022 5.670374419e-8; h_rad by hand at the hotter end', () => {
     expect(Math.abs(SIGMA_SB_SI / 5.670374419e-8 - 1)).toBeLessThan(1e-9);
     const hr = 0.05 * SIGMA_SB_SI * (373.15 + 293.15) * (373.15 ** 2 + 293.15 ** 2);
     expect(out().h_rad_max_W_per_m2_K).toBeCloseTo(hr, 12);

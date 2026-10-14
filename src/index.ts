@@ -7,7 +7,7 @@
  */
 
 export { UniversalTensor } from './core/tensor.js';
-// v0.5.1 — canonical flat CODATA 2018 / SI-defined constants (PC-1).
+// v0.5.1 — canonical flat CODATA 2022 / SI-defined constants (PC-1).
 // Single source of truth across numerical, dimensional, and bridge layers.
 // See src/core/constants.ts and docs/planning/v0.5.1-Implementation-Plan.md.
 export {

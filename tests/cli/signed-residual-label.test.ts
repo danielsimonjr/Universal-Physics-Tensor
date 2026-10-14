@@ -64,7 +64,7 @@ describe('signed comparison residuals', () => {
     ]);
     expect(poor.code).toBe(3);
     const line = outputLine(poor.stdout, 'maxwell_deviation');
-    expect(Number(line.match(/maxwell_deviation = ([^ ]+)/)?.[1])).toBeCloseTo(-0.0487572085250777, 12);
+    expect(Number(line.match(/maxwell_deviation = ([^ ]+)/)?.[1])).toBeCloseTo(-0.04875720855719001, 12);
     expectSignedLabel(line);
     expectSignedLabel(meaning(SKIN_DEPTH_CASE.outputs, 'maxwell_deviation'));
   });

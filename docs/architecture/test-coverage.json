@@ -6925,6 +6925,7 @@
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/binding-expressions.test.ts",
       "tests/cli/chain-atlas-pointer.test.ts",
+      "tests/cli/discover-derive-samples.test.ts",
       "tests/cli/eval-si-prefix-constants.test.ts",
       "tests/cli/eval-temperature-binding.test.ts",
       "tests/cli/evaluate-bridge-16-hint.test.ts",
@@ -11023,6 +11024,7 @@
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/skin-depth.test.ts",
       "tests/cli/binding-expressions.test.ts",
+      "tests/cli/discover-derive-samples.test.ts",
       "tests/cli/eval-si-prefix-constants.test.ts",
       "tests/cli/eval-temperature-binding.test.ts",
       "tests/cli/evaluate-bridge-16-hint.test.ts",
@@ -15243,7 +15245,8 @@
       "src/cli/commands/search.ts",
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
-      "src/cli/commands/testplan.ts"
+      "src/cli/commands/testplan.ts",
+      "src/core/constants.ts"
     ],
     "tests/cli/eval-functions.test.ts": [
       "src/numerical/formula-contract.ts"

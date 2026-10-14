@@ -710,7 +710,7 @@ A lookup object of SI physical constants: G (gravitational), c (speed of light),
 
 ### Flat `*_SI` constants (`src/core/constants.ts`)
 
-The canonical CODATA 2018 / SI-defined physical constants, as bare `number` values in SI units:
+The canonical CODATA 2022 (MathTS) / SI-defined physical constants, as bare `number` values in SI units:
 
 - `C_SI`, `G_SI`, `H_SI`, `HBAR_SI`, `K_B_SI`, `E_SI`, `ALPHA` (dimensionless), `M_P_SI`, `L_P_SI`, `T_P_SI`, `H0_SI`
 - the anchors `M_SUN_SI` (solar mass), `GM_SUN_SI` (IAU 2015 nominal solar gravitational parameter, not `G_SI * M_SUN_SI`), `M_E_SI` (electron mass), and `B_WIEN_SI` (Wien displacement constant)

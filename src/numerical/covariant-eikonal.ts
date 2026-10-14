@@ -35,7 +35,7 @@ import { integrateGeodesicGL4 } from './gl4-integrator.js';
 import { C_SI, G_SI } from '../core/constants.js';
 import { reconstructNullPr } from './null-ic.js';
 
-// ─── Physical constants (canonical CODATA 2018 + exact-SI definitions) ────
+// ─── Physical constants (canonical CODATA 2022 + exact-SI definitions) ────
 // Imported from src/core/constants.ts (v0.5.1 PC-1 canonicalization).
 const c_SI = C_SI;
 const c2_SI = c_SI * c_SI;

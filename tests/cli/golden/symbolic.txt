@@ -11,7 +11,7 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
         hbar  reduced Planck constant h/(2π)          1.0545718176461565e-34 J*s           exact H_SI/(2π) (core/constants.ts HBAR_SI)
         c     speed of light in vacuum                299792458              m/s           exact SI (core/constants.ts C_SI)
         8pi   8π                                      25.132741228718345     1             mathematical constant (8·Math.PI)
-        G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
+        G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2022, MathTS (core/constants.ts G_SI)
         mass  input quantity mass (symbol M), [mass]  1.989e+30              kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
         ln2   natural logarithm of 2                  0.6931471805599453     1             mathematical constant (Math.LN2)
       dimension: [energy]   (validated on the composed AST)
@@ -27,7 +27,7 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
         c     speed of light in vacuum                299792458              m/s           exact SI (core/constants.ts C_SI)
         4pi   4π                                      12.566370614359172     1             mathematical constant (4·Math.PI)
         k_B   Boltzmann constant                      1.380649e-23           J/K           exact SI, 2019 redefinition (core/constants.ts K_B_SI)
-        G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
+        G     Newtonian gravitational constant        6.6743e-11             m^3/(kg*s^2)  CODATA 2022, MathTS (core/constants.ts G_SI)
         mass  input quantity mass (symbol M), [mass]  1.989e+30              kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
       dimension: [temperature]   (validated on the composed AST)
       value @ mass = M_sun:  6.16842971641034e-8
