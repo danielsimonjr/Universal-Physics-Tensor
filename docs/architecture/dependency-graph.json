@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "10.0.0",
-    "totalFiles": 363,
+    "totalFiles": 364,
     "totalModules": 13,
-    "totalExports": 2566
+    "totalExports": 2577
   },
   "entryPoints": [
     {
@@ -5160,6 +5160,10 @@
           "DuplicateInputError",
           "DomainViolationError"
         ],
+        "interfaces": [
+          "DomainInput",
+          "DomainViolation"
+        ],
         "functions": [
           "isInputContractError"
         ]
@@ -5269,13 +5273,14 @@
             "file": "./relation-eval.js",
             "imports": [
               "evaluateCatalogRelation",
-              "relationHolds"
+              "relationDomain"
             ]
           },
           {
             "file": "./evaluation-errors.js",
             "imports": [
-              "DomainViolationError"
+              "DomainViolationError",
+              "DomainViolation"
             ]
           },
           {
@@ -5420,13 +5425,22 @@
           }
         ],
         "exports": [
+          "holdsConditions",
+          "conditionReads",
+          "holdsScope",
           "holds",
           "HoldsError"
         ],
         "classes": [
           "HoldsError"
         ],
+        "interfaces": [
+          "HoldsCondition"
+        ],
         "functions": [
+          "holdsConditions",
+          "conditionReads",
+          "holdsScope",
           "holds"
         ]
       },
@@ -5695,20 +5709,20 @@
             ]
           },
           {
-            "file": "./holds.js",
+            "file": "./validity.js",
             "imports": [
-              "holds",
-              "HoldsError"
+              "conditionDomain",
+              "ConditionDomain"
             ]
           }
         ],
         "exports": [
           "CarrierSignError",
-          "relationHolds",
+          "relationDomain",
           "evaluateCatalogRelation"
         ],
         "functions": [
-          "relationHolds",
+          "relationDomain",
           "evaluateCatalogRelation"
         ]
       },
@@ -5822,6 +5836,39 @@
         "interfaces": [
           "KnownIssue",
           "BridgeEquationEntry"
+        ]
+      },
+      "src/bridges/validity.ts": {
+        "description": "A validity domain read from one condition text, the record's `holds`.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./evaluation-errors.js",
+            "imports": [
+              "DomainViolation"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./holds.js",
+            "imports": [
+              "conditionReads",
+              "holdsConditions",
+              "holdsScope",
+              "HoldsError",
+              "HoldsCondition"
+            ]
+          }
+        ],
+        "exports": [
+          "conditionDomain"
+        ],
+        "interfaces": [
+          "ConditionDomain"
+        ],
+        "functions": [
+          "conditionDomain"
         ]
       }
     },
@@ -12351,10 +12398,10 @@
           {
             "file": "./edge.js",
             "imports": [
+              "validityDomain",
               "BridgeEdge",
               "ValidityDomain"
-            ],
-            "typeOnly": true
+            ]
           },
           {
             "file": "./quantity.js",
@@ -12456,20 +12503,6 @@
             "file": "./formula-shape.js",
             "imports": [
               "monomialExponents"
-            ]
-          },
-          {
-            "file": "../bridges/holds.js",
-            "imports": [
-              "HoldsError",
-              "holds"
-            ]
-          },
-          {
-            "file": "../bridges/expr-parse.js",
-            "imports": [
-              "formulaNames",
-              "formulaScope"
             ]
           }
         ],
@@ -12578,7 +12611,7 @@
             "file": "../bridges/relation-eval.js",
             "imports": [
               "evaluateCatalogRelation",
-              "relationHolds"
+              "relationDomain"
             ]
           },
           {
@@ -12954,7 +12987,8 @@
             "file": "./edge.js",
             "imports": [
               "BridgeEdge",
-              "EdgeConfidence"
+              "EdgeConfidence",
+              "ValidityDomain"
             ],
             "typeOnly": true
           },
@@ -13464,11 +13498,26 @@
           {
             "file": "../bridges/evaluation-errors.js",
             "imports": [
-              "DomainViolationError"
+              "DomainViolationError",
+              "DomainViolation"
+            ]
+          },
+          {
+            "file": "../bridges/expr-parse.js",
+            "imports": [
+              "formulaNames",
+              "formulaScope"
+            ]
+          },
+          {
+            "file": "../bridges/validity.js",
+            "imports": [
+              "conditionDomain"
             ]
           }
         ],
         "exports": [
+          "validityDomain",
           "assertCoefficientSet",
           "withBoundAliases",
           "evaluateEdge",
@@ -13490,6 +13539,7 @@
           "BridgeEdge"
         ],
         "functions": [
+          "validityDomain",
           "assertCoefficientSet",
           "withBoundAliases",
           "evaluateEdge"
@@ -14246,7 +14296,8 @@
               "CompositionDimensionError",
               "CompositionJunctionError",
               "UndefinedCompositionError",
-              "evaluateEdge"
+              "evaluateEdge",
+              "validityDomain"
             ],
             "reExport": true
           },
@@ -14259,6 +14310,14 @@
               "MissingInputError",
               "NonFiniteInputError",
               "UnknownInputError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "../bridges/evaluation-errors.js",
+            "imports": [
+              "DomainInput",
+              "DomainViolation"
             ],
             "reExport": true
           },
@@ -14527,6 +14586,7 @@
           "CompositionJunctionError",
           "UndefinedCompositionError",
           "evaluateEdge",
+          "validityDomain",
           "DomainViolationError",
           "DuplicateInputError",
           "InputTypeError",
@@ -14575,6 +14635,8 @@
           "BridgeEdge",
           "EdgeConfidence",
           "ValidityDomain",
+          "DomainInput",
+          "DomainViolation",
           "ComposeOptions",
           "QuantityIdentification",
           "AliasDisposition",
@@ -14622,12 +14684,15 @@
           "CompositionJunctionError",
           "UndefinedCompositionError",
           "evaluateEdge",
+          "validityDomain",
           "DomainViolationError",
           "DuplicateInputError",
           "InputTypeError",
           "MissingInputError",
           "NonFiniteInputError",
           "UnknownInputError",
+          "DomainInput",
+          "DomainViolation",
           "ComposeOptions",
           "QuantityIdentification",
           "composeEdges",
@@ -21025,6 +21090,7 @@
               "CompositionDimensionError",
               "CompositionJunctionError",
               "DomainViolationError",
+              "validityDomain",
               "M_SUN_KG"
             ],
             "reExport": true
@@ -21034,6 +21100,8 @@
             "imports": [
               "BridgeEdge",
               "ComposeOptions",
+              "DomainInput",
+              "DomainViolation",
               "EdgeConfidence",
               "Quantity",
               "QuantityIdentification",
@@ -21862,6 +21930,7 @@
           "CompositionDimensionError",
           "CompositionJunctionError",
           "DomainViolationError",
+          "validityDomain",
           "M_SUN_KG",
           "adjudicateBridgeEntry",
           "adjudicateCatalog",
@@ -22052,6 +22121,8 @@
           "CovariantEikonalResult",
           "BridgeEdge",
           "ComposeOptions",
+          "DomainInput",
+          "DomainViolation",
           "EdgeConfidence",
           "Quantity",
           "QuantityIdentification",
@@ -22452,9 +22523,12 @@
           "CompositionDimensionError",
           "CompositionJunctionError",
           "DomainViolationError",
+          "validityDomain",
           "M_SUN_KG",
           "BridgeEdge",
           "ComposeOptions",
+          "DomainInput",
+          "DomainViolation",
           "EdgeConfidence",
           "Quantity",
           "QuantityIdentification",
@@ -25194,7 +25268,8 @@
           "src/bridges/rhs-registry.ts",
           "src/bridges/sensitivity.ts",
           "src/bridges/tensor-index.ts",
-          "src/bridges/types.ts"
+          "src/bridges/types.ts",
+          "src/bridges/validity.ts"
         ]
       },
       {
@@ -25520,17 +25595,17 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 363,
+    "totalTypeScriptFiles": 364,
     "totalModules": 13,
-    "totalLinesOfCode": 81323,
-    "totalExports": 2566,
+    "totalLinesOfCode": 81603,
+    "totalExports": 2577,
     "totalClasses": 82,
-    "totalInterfaces": 463,
-    "totalFunctions": 776,
+    "totalInterfaces": 467,
+    "totalFunctions": 781,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 393,
-    "totalReExports": 1314,
+    "totalReExports": 1320,
     "totalTypeOnlyImports": 510,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

@@ -39,7 +39,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 74 files
-- **bridges**: 24 files
+- **bridges**: 25 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 56 files
@@ -1488,6 +1488,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `MissingInputError`, `UnknownInputError`, `InputTypeError`, `NonFiniteInputError`, `ConstantInputError`, `DuplicateInputError`, `DomainViolationError`
+- Interfaces: `DomainInput`, `DomainViolation`
 - Functions: `isInputContractError`
 
 ---
@@ -1519,8 +1520,8 @@ The codebase is organized into the following modules:
 | `./catalog-types.js` | `CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation` | Import (type-only) |
 | `./expr-parse.js` | `evaluateFormula, formulaVariables, parseCatalogExpression, reservedFormulaNames` | Import |
 | `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
-| `./relation-eval.js` | `evaluateCatalogRelation, relationHolds` | Import |
-| `./evaluation-errors.js` | `DomainViolationError` | Import |
+| `./relation-eval.js` | `evaluateCatalogRelation, relationDomain` | Import |
+| `./evaluation-errors.js` | `DomainViolationError, DomainViolation` | Import |
 | `./input-contract.js` | `checkInputs, inputContract, EvaluationWant, InputContract, InputSlot` | Import |
 
 **Exports:**
@@ -1565,7 +1566,8 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `HoldsError`
-- Functions: `holds`
+- Interfaces: `HoldsCondition`
+- Functions: `holdsConditions`, `conditionReads`, `holdsScope`, `holds`
 
 ---
 
@@ -1664,10 +1666,10 @@ The codebase is organized into the following modules:
 | `./carrier-sign.js` | `applyCarrierSignPolicy, CarrierSignError` | Import |
 | `./catalog-types.js` | `CatalogRelation` | Import (type-only) |
 | `./expr-parse.js` | `evaluateFormula, formulaNames, formulaScope` | Import |
-| `./holds.js` | `holds, HoldsError` | Import |
+| `./validity.js` | `conditionDomain, ConditionDomain` | Import |
 
 **Exports:**
-- Functions: `relationHolds`, `evaluateCatalogRelation`
+- Functions: `relationDomain`, `evaluateCatalogRelation`
 
 ---
 
@@ -1714,6 +1716,20 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
+
+---
+
+### `src/bridges/validity.ts` - A validity domain read from one condition text, the record's `holds`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./evaluation-errors.js` | `DomainViolation` | Import (type-only) |
+| `./holds.js` | `conditionReads, holdsConditions, holdsScope, HoldsError, HoldsCondition` | Import |
+
+**Exports:**
+- Interfaces: `ConditionDomain`
+- Functions: `conditionDomain`
 
 ---
 
@@ -3485,7 +3501,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./edge.js` | `BridgeEdge, ValidityDomain` | Import (type-only) |
+| `./edge.js` | `validityDomain, BridgeEdge, ValidityDomain` | Import |
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `./quantity.js` | `regimeAttributesOf` | Import |
 | `./axes.js` | `AXES` | Import |
@@ -3501,8 +3517,6 @@ The codebase is organized into the following modules:
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./formula-shape.js` | `monomialExponents` | Import |
-| `../bridges/holds.js` | `HoldsError, holds` | Import |
-| `../bridges/expr-parse.js` | `formulaNames, formulaScope` | Import |
 
 **Exports:**
 - Interfaces: `ConstantDef`
@@ -3550,7 +3564,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../bridges/catalog-load.js` | `catalogEntry, catalogRelations` | Import |
 | `../bridges/expr-parse.js` | `parseCatalogExpression` | Import |
-| `../bridges/relation-eval.js` | `evaluateCatalogRelation, relationHolds` | Import |
+| `../bridges/relation-eval.js` | `evaluateCatalogRelation, relationDomain` | Import |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./edge.js` | `withBoundAliases` | Import |
 | `./quantities.js` | `quantityByName` | Import |
@@ -3667,7 +3681,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/validator.js` | `validate` | Import |
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `./edge.js` | `BridgeEdge, EdgeConfidence` | Import (type-only) |
+| `./edge.js` | `BridgeEdge, EdgeConfidence, ValidityDomain` | Import (type-only) |
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `./quantity.js` | `regimeAttributesOf` | Import |
 | `./axes.js` | `AXES` | Import |
@@ -3806,12 +3820,14 @@ The codebase is organized into the following modules:
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
-| `../bridges/evaluation-errors.js` | `DomainViolationError` | Import |
+| `../bridges/evaluation-errors.js` | `DomainViolationError, DomainViolation` | Import |
+| `../bridges/expr-parse.js` | `formulaNames, formulaScope` | Import |
+| `../bridges/validity.js` | `conditionDomain` | Import |
 
 **Exports:**
 - Classes: `CompositionJunctionError`, `CompositionDimensionError`, `CoefficientUnsetError`, `CompositionAliasError`, `UndefinedCompositionError`
 - Interfaces: `ValidityDomain`, `BridgeEdge`
-- Functions: `assertCoefficientSet`, `withBoundAliases`, `evaluateEdge`
+- Functions: `validityDomain`, `assertCoefficientSet`, `withBoundAliases`, `evaluateEdge`
 
 ---
 
@@ -4037,8 +4053,9 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Re-export |
 | `./quantity.js` | `regimesDiffer` | Re-export |
 | `./edge.js` | `BridgeEdge, EdgeConfidence, ValidityDomain` | Re-export |
-| `./edge.js` | `CoefficientUnsetError, CompositionAliasError, CompositionDimensionError, CompositionJunctionError, UndefinedCompositionError, evaluateEdge` | Re-export |
+| `./edge.js` | `CoefficientUnsetError, CompositionAliasError, CompositionDimensionError, CompositionJunctionError, UndefinedCompositionError, evaluateEdge, validityDomain` | Re-export |
 | `../bridges/evaluation-errors.js` | `DomainViolationError, DuplicateInputError, InputTypeError, MissingInputError, NonFiniteInputError, UnknownInputError` | Re-export |
+| `../bridges/evaluation-errors.js` | `DomainInput, DomainViolation` | Re-export |
 | `./compose.js` | `ComposeOptions, QuantityIdentification` | Re-export |
 | `./compose.js` | `composeEdges, minConfidence, QUANTITY_IDENTIFICATIONS, SOURCE_ALIAS_DISPOSITIONS` | Re-export |
 | `./compose.js` | `AliasDisposition` | Re-export |
@@ -4077,20 +4094,21 @@ The codebase is organized into the following modules:
   ```text
   Quantity, RegimeAttributes, regimesDiffer, BridgeEdge, EdgeConfidence, ValidityDomain,
   CoefficientUnsetError, CompositionAliasError, CompositionDimensionError, CompositionJunctionError,
-  UndefinedCompositionError, evaluateEdge, DomainViolationError, DuplicateInputError, InputTypeError,
-  MissingInputError, NonFiniteInputError, UnknownInputError, ComposeOptions, QuantityIdentification,
-  composeEdges, minConfidence, QUANTITY_IDENTIFICATIONS, SOURCE_ALIAS_DISPOSITIONS, AliasDisposition,
-  consistencyRatio, M_SUN_KG, catalogEdge, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges,
-  CANONICAL_CONSTANTS, CompositionCandidate, EnumerationReport, enumerateCompositions,
-  REGISTERED_COMPOSITION_IDS, UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict,
-  IdentifiabilityResult, IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure,
-  RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionRefusal,
-  RetrodictionReport, RetrodictionOptions, retrodict, retrodictNode, DerivationExplanation,
-  ExplainOptions, QuantityExplanation, explainQuantity, Evaluation, ExtraOutput, evaluateRelation,
-  Observable, ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError,
-  VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel,
-  edgeToJunction, renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency,
-  UserEquation, EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, suggestQuantities,
+  UndefinedCompositionError, evaluateEdge, validityDomain, DomainViolationError, DuplicateInputError,
+  InputTypeError, MissingInputError, NonFiniteInputError, UnknownInputError, DomainInput,
+  DomainViolation, ComposeOptions, QuantityIdentification, composeEdges, minConfidence,
+  QUANTITY_IDENTIFICATIONS, SOURCE_ALIAS_DISPOSITIONS, AliasDisposition, consistencyRatio, M_SUN_KG,
+  catalogEdge, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS,
+  CompositionCandidate, EnumerationReport, enumerateCompositions, REGISTERED_COMPOSITION_IDS,
+  UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict, IdentifiabilityResult,
+  IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure, RetrodictionOutcome,
+  RetrodictionPrediction, RetrodictionResult, RetrodictionRefusal, RetrodictionReport,
+  RetrodictionOptions, retrodict, retrodictNode, DerivationExplanation, ExplainOptions,
+  QuantityExplanation, explainQuantity, Evaluation, ExtraOutput, evaluateRelation, Observable,
+  ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, VizStatus,
+  VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel, edgeToJunction,
+  renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation,
+  EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, suggestQuantities,
   suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
   SynonymDisagreementError
   ```
@@ -5809,8 +5827,8 @@ The codebase is organized into the following modules:
 | `./numerical/kretschmann.js` | `computeKretschmann` | Re-export |
 | `./numerical/index.js` | `evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport, evaluateCovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion` | Re-export |
 | `./numerical/index.js` | `NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options, PerihelionResult, FindPerihelionOptions, CovariantEikonalInputs, CovariantEikonalResult` | Re-export |
-| `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, M_SUN_KG` | Re-export |
-| `./composition/index.js` | `BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
+| `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, validityDomain, M_SUN_KG` | Re-export |
+| `./composition/index.js` | `BridgeEdge, ComposeOptions, DomainInput, DomainViolation, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
 | `./bridges/membership.js` | `adjudicateBridgeEntry, adjudicateCatalog` | Re-export |
 | `./bridges/rejected.js` | `REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS` | Re-export |
 | `./bridges/membership.js` | `BridgeVerdict, CatalogAdjudicationReport` | Re-export |
@@ -5945,34 +5963,34 @@ The codebase is organized into the following modules:
   PerihelionResult, FindPerihelionOptions, CovariantEikonalInputs, CovariantEikonalResult,
   composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer,
   QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError,
-  M_SUN_KG, BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification,
-  RegimeAttributes, ValidityDomain, adjudicateBridgeEntry, adjudicateCatalog,
-  REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, BridgeVerdict, CatalogAdjudicationReport,
-  RejectedBridgeAdjudication, enumerateCompositions, REGISTERED_COMPOSITION_IDS, propagateUncertainty,
-  CompositionCandidate, EnumerationReport, UncertaintyResult, classifyIdentifiability, classifyAll,
-  forwardClosure, IdentifiabilityVerdict, IdentifiabilityResult, IdentifiabilityOptions, retrodict,
-  retrodictNode, RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionRefusal,
-  RetrodictionReport, RetrodictionOptions, explainQuantity, DerivationExplanation, ExplainOptions,
-  QuantityExplanation, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, Observable,
-  ComposeSymbolicOptions, buildVizModel, edgeToJunction, VizStatus, VizJunction, VizCluster,
-  VizOptions, VizModel, VizFilterStats, renderDotToSvg, SvgRendererUnavailableError,
-  parseUserEquation, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation,
-  UserEquationError, resolveQuantityName, UserEquation, EquationLanding, EquationAnalysis,
-  EquationHint, parsePhysics, FormulaDimensionError, ParsedPhysics, inferUnknownDimension,
-  substituteSymbolDim, dimensionAdjacency, DimensionAdjacency, buckinghamPi, dimensionallyDetermines,
-  RationalizationError, DimensionalVariable, PiGroup, BuckinghamVerdict, BuckinghamResult,
-  DimensionalDeterminationResult, CompositionAliasError, SOURCE_ALIAS_DISPOSITIONS, AliasDisposition,
-  DispositionRequired, evaluateKGDispersionResidual, verifyKleinGordonPlaneWave,
-  KGDispersionResidualInput, KGPlaneWaveVerifyInput, KGPlaneWaveVerifyResult, CATALOG_GRAPH,
-  CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS, CANONICAL_EQUATIONS, CANONICAL_BY_ID,
-  canonicalById, canonicalByDomain, partneredBridgeIds, bridgesWithoutCanonicalPartner,
-  canonicalToLaw, seedCanonicalLaws, CANONICAL_TENSOR_CONFIG, CanonicalEquation, CanonicalDomain,
-  EpistemicStatus, CanonicalForms, FieldEquationNode, normalForm, structurallyEqual, classifyLinkage,
-  scanLinkages, LinkageResult, RecoveryOutcome, candidateId, ADJUDICATIONS, adjudicationFor,
-  annotateAdjudications, AnnotatedCandidate, AdjudicationVerdict, CatalogAdjudication,
-  annotateConsequences, classifyProposal, ConsequenceAnnotatedCandidate, ConsequenceSignal,
-  ConsequenceEvidence, describeGrounding, CandidateGrounding, rankDiscoveries, VettedCandidate,
-  residualInSigma, combineInQuadrature, consistencyComparison, ConsistencyComparison,
+  validityDomain, M_SUN_KG, BridgeEdge, ComposeOptions, DomainInput, DomainViolation, EdgeConfidence,
+  Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain, adjudicateBridgeEntry,
+  adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, BridgeVerdict,
+  CatalogAdjudicationReport, RejectedBridgeAdjudication, enumerateCompositions,
+  REGISTERED_COMPOSITION_IDS, propagateUncertainty, CompositionCandidate, EnumerationReport,
+  UncertaintyResult, classifyIdentifiability, classifyAll, forwardClosure, IdentifiabilityVerdict,
+  IdentifiabilityResult, IdentifiabilityOptions, retrodict, retrodictNode, RetrodictionOutcome,
+  RetrodictionPrediction, RetrodictionResult, RetrodictionRefusal, RetrodictionReport,
+  RetrodictionOptions, explainQuantity, DerivationExplanation, ExplainOptions, QuantityExplanation,
+  composeSymbolic, SymbolicCompositionError, SymbolicEvalError, Observable, ComposeSymbolicOptions,
+  buildVizModel, edgeToJunction, VizStatus, VizJunction, VizCluster, VizOptions, VizModel,
+  VizFilterStats, renderDotToSvg, SvgRendererUnavailableError, parseUserEquation, suggestQuantities,
+  suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
+  UserEquation, EquationLanding, EquationAnalysis, EquationHint, parsePhysics, FormulaDimensionError,
+  ParsedPhysics, inferUnknownDimension, substituteSymbolDim, dimensionAdjacency, DimensionAdjacency,
+  buckinghamPi, dimensionallyDetermines, RationalizationError, DimensionalVariable, PiGroup,
+  BuckinghamVerdict, BuckinghamResult, DimensionalDeterminationResult, CompositionAliasError,
+  SOURCE_ALIAS_DISPOSITIONS, AliasDisposition, DispositionRequired, evaluateKGDispersionResidual,
+  verifyKleinGordonPlaneWave, KGDispersionResidualInput, KGPlaneWaveVerifyInput,
+  KGPlaneWaveVerifyResult, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS,
+  CANONICAL_EQUATIONS, CANONICAL_BY_ID, canonicalById, canonicalByDomain, partneredBridgeIds,
+  bridgesWithoutCanonicalPartner, canonicalToLaw, seedCanonicalLaws, CANONICAL_TENSOR_CONFIG,
+  CanonicalEquation, CanonicalDomain, EpistemicStatus, CanonicalForms, FieldEquationNode, normalForm,
+  structurallyEqual, classifyLinkage, scanLinkages, LinkageResult, RecoveryOutcome, candidateId,
+  ADJUDICATIONS, adjudicationFor, annotateAdjudications, AnnotatedCandidate, AdjudicationVerdict,
+  CatalogAdjudication, annotateConsequences, classifyProposal, ConsequenceAnnotatedCandidate,
+  ConsequenceSignal, ConsequenceEvidence, describeGrounding, CandidateGrounding, rankDiscoveries,
+  VettedCandidate, residualInSigma, combineInQuadrature, consistencyComparison, ConsistencyComparison,
   ObservationProvenance, SigmaComponent, ObservationKind, ConfrontationOutcome,
   ConfrontationDataHandling, ConfrontationPreprocessing, ConfrontationIndependence, SourceRef,
   SourceRefs, oneLoopCoefficientStatement, OneLoopCoefficientStatement, OneLoopCoefficientSign,
@@ -6865,7 +6883,7 @@ graph TD
         N8[catalog-adapter]
         N9[catalog-load]
         N10[catalog-types]
-        N11[...19 more]
+        N11[...20 more]
     end
 
     subgraph Canonical
@@ -6992,14 +7010,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 363 |
+| Total TypeScript Files | 364 |
 | Total Modules | 13 |
-| Total Lines of Code | 81323 |
-| Total Exports | 2566 |
-| Total Re-exports | 1314 |
+| Total Lines of Code | 81603 |
+| Total Exports | 2577 |
+| Total Re-exports | 1320 |
 | Total Classes | 82 |
-| Total Interfaces | 463 |
-| Total Functions | 776 |
+| Total Interfaces | 467 |
+| Total Functions | 781 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 510 |

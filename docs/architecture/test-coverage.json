@@ -1,14 +1,15 @@
 {
   "metadata": {
-    "totalSourceFiles": 363,
-    "totalTestFiles": 579,
+    "totalSourceFiles": 364,
+    "totalTestFiles": 580,
     "testedCount": 351,
     "directlyTestedCount": 314,
-    "untestedCount": 12,
-    "coveragePercent": "96.7",
-    "directCoveragePercent": "86.5"
+    "untestedCount": 13,
+    "coveragePercent": "96.4",
+    "directCoveragePercent": "86.3"
   },
   "untestedFiles": [
+    "src/bridges/validity.ts",
     "src/cases/quadrature.ts",
     "src/cli/bindings.ts",
     "src/cli/commands/_atlas-route.ts",
@@ -1550,6 +1551,7 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/one-grammar.test.ts",
@@ -1588,6 +1590,7 @@
       "tests/bridges/catalog-confidence.test.ts",
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cases/kepler-rv.test.ts",
@@ -1687,6 +1690,7 @@
       "tests/bridges/derived-domains.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -1770,6 +1774,7 @@
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/evaluator-extra-outputs.test.ts",
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -1802,6 +1807,7 @@
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/unit-closure.test.ts",
@@ -1809,6 +1815,7 @@
     ],
     "src/bridges/holds.ts": [
       "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-grammar.test.ts"
     ],
     "src/bridges/index.ts": [
@@ -2086,6 +2093,7 @@
       "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
+    "src/bridges/validity.ts": [],
     "src/canonical/canonical-equation.ts": [
       "tests/api/api-reference-symbols.test.ts",
       "tests/api/atlas-public-closure.test.ts",
@@ -2381,6 +2389,7 @@
     "src/cli/commands/atlas.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -2465,6 +2474,7 @@
     "src/cli/commands/audit.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -2549,6 +2559,7 @@
     "src/cli/commands/axes.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -2633,6 +2644,7 @@
     "src/cli/commands/candidates.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -2717,6 +2729,7 @@
     "src/cli/commands/canonical.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -2801,6 +2814,7 @@
     "src/cli/commands/chain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -2885,6 +2899,7 @@
     "src/cli/commands/confront.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -2969,6 +2984,7 @@
     "src/cli/commands/connectors.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3053,6 +3069,7 @@
     "src/cli/commands/coverage.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3137,6 +3154,7 @@
     "src/cli/commands/derive.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3221,6 +3239,7 @@
     "src/cli/commands/discover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3305,6 +3324,7 @@
     "src/cli/commands/eval.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3389,6 +3409,7 @@
     "src/cli/commands/evaluate.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3474,6 +3495,7 @@
     "src/cli/commands/explain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3558,6 +3580,7 @@
     "src/cli/commands/frontier.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3642,6 +3665,7 @@
     "src/cli/commands/ground.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3726,6 +3750,7 @@
     "src/cli/commands/index.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3810,6 +3835,7 @@
     "src/cli/commands/map.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3894,6 +3920,7 @@
     "src/cli/commands/metric.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -3978,6 +4005,7 @@
     "src/cli/commands/path.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4062,6 +4090,7 @@
     "src/cli/commands/predict.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4146,6 +4175,7 @@
     "src/cli/commands/priority.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4230,6 +4260,7 @@
     "src/cli/commands/probe.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4315,6 +4346,7 @@
     "src/cli/commands/recover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4399,6 +4431,7 @@
     "src/cli/commands/regime.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4483,6 +4516,7 @@
     "src/cli/commands/retrieve.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4567,6 +4601,7 @@
     "src/cli/commands/search.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4651,6 +4686,7 @@
     "src/cli/commands/symbolic.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4735,6 +4771,7 @@
     "src/cli/commands/testplan.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -4844,6 +4881,7 @@
     "src/cli/main.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -5242,7 +5280,9 @@
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
+      "tests/bridges/one-grammar.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cases/kepler-rv.test.ts",
@@ -5395,6 +5435,7 @@
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cases/kepler-rv.test.ts",
@@ -5616,6 +5657,7 @@
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/carrier-sign.test.ts",
@@ -8132,6 +8174,7 @@
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/atomic.test.ts",
@@ -9950,6 +9993,7 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/one-grammar.test.ts",
@@ -9974,6 +10018,7 @@
       "tests/bridges/catalog-confidence.test.ts",
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/review/round2-bridges-atlas.test.ts"
     ],
     "src/bridges/coefficient-statement.ts": [],
@@ -9990,6 +10035,7 @@
     "src/bridges/evaluation-errors.ts": [
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/bridges/output-only-inputs.test.ts",
       "tests/canonical/canonical-domains.test.ts",
@@ -10010,6 +10056,7 @@
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/derived-domains.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/evaluator-extra-outputs.test.ts",
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -10028,6 +10075,7 @@
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/unit-closure.test.ts",
@@ -10035,6 +10083,7 @@
     ],
     "src/bridges/holds.ts": [
       "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-grammar.test.ts"
     ],
     "src/bridges/index.ts": [
@@ -10126,6 +10175,7 @@
       "tests/bridges/tensor-index.test.ts"
     ],
     "src/bridges/types.ts": [],
+    "src/bridges/validity.ts": [],
     "src/canonical/canonical-equation.ts": [
       "tests/canonical/carrier-sign.test.ts",
       "tests/composition/canonical-graph-information-axis.test.ts",
@@ -10363,6 +10413,7 @@
     "src/cli/main.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
@@ -10579,7 +10630,9 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
+      "tests/bridges/one-grammar.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/probe.test.ts",
       "tests/cli/source-anchor.test.ts",
@@ -10624,6 +10677,7 @@
     "src/composition/compose.ts": [
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/cli/chain-atlas-pointer.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/junction-dimension.test.ts",
@@ -10655,18 +10709,29 @@
     ],
     "src/composition/edge.ts": [
       "tests/atlas/chain-pipeline-refusal.test.ts",
+      "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/canonical/carrier-sign.test.ts",
+      "tests/composition/axis-gate.test.ts",
       "tests/composition/bridge-analysis.test.ts",
+      "tests/composition/bridge-prediction.test.ts",
+      "tests/composition/chain-regime.test.ts",
+      "tests/composition/compose-properties.test.ts",
+      "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery.test.ts",
+      "tests/composition/explain.test.ts",
       "tests/composition/frontier-account.test.ts",
       "tests/composition/graph-viz.test.ts",
+      "tests/composition/identifiability.test.ts",
       "tests/composition/junction-dimension.test.ts",
       "tests/composition/relation-refusal.test.ts",
+      "tests/composition/retrodiction.test.ts",
       "tests/composition/user-equation.test.ts"
     ],
     "src/composition/enumerate.ts": [
@@ -11390,6 +11455,7 @@
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/regime.test.ts",
+      "tests/bridges/domain-violations.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/canonical/atomic.test.ts",
       "tests/canonical/carrier-sign.test.ts",
@@ -13452,6 +13518,48 @@
       "src/dimensional/errors.ts",
       "src/bridges/rhs-registry.ts"
     ],
+    "tests/bridges/domain-violations.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/bridges/evaluators.ts",
+      "src/bridges/catalog-load.ts",
+      "src/bridges/expr-parse.ts",
+      "src/bridges/holds.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/compose.ts",
+      "src/composition/edge.ts",
+      "src/dimensional/types.ts",
+      "src/bridges/catalog-types.ts"
+    ],
     "tests/bridges/evaluator-extra-outputs.test.ts": [
       "src/bridges/evaluators.ts",
       "src/composition/evaluate-relation.ts"
@@ -13638,6 +13746,7 @@
       "src/bridges/catalog-load.ts",
       "src/bridges/expr-parse.ts",
       "src/bridges/holds.ts",
+      "src/composition/catalog-graph.ts",
       "src/bridges/relation-eval.ts",
       "src/bridges/evaluators.ts",
       "src/canonical/registry.ts"
@@ -18579,9 +18688,9 @@
       "src/dimensional/types.ts"
     ],
     "tests/composition/compose-properties.test.ts": [
+      "src/composition/edge.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
-      "src/composition/edge.ts",
       "src/bridges/evaluation-errors.ts",
       "src/composition/compose.ts",
       "src/composition/consistency.ts",
