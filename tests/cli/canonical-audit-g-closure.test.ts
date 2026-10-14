@@ -41,8 +41,8 @@ describe('canonical audit G-closures', () => {
     expect(derived).toMatch(/CE-bohr-radius\s+\+\[ℏ,e,epsilon_0,m_e\]\s+×12\.5663706143592$/m);
     expect(derived).toMatch(/CE-field-energy-density\s+\+\[epsilon_0\]\s+×0\.5$/m);
     for (const id of SPURIOUS) expect(derived, id).not.toMatch(new RegExp(`${id}\\s+\\+\\[[^\\]]*\\bG\\b`));
-    expect(text.stdout).toMatch(/CE-stefan-boltzmann\s+\+\[ℏ,c,k_B\]\s+×0\.164493406679472\s+\(empirical\/tuned constant\)/);
-    expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.26546641497325\s+\(empirical\/tuned constant\)/);
+    expect(text.stdout).toMatch(/CE-stefan-boltzmann\s+\+\[ℏ,c,k_B\]\s+×0\.164493406684823\s+\(empirical\/tuned constant\)/);
+    expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.26546641505411\s+\(empirical\/tuned constant\)/);
     expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.28318530717959$/m);
     expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.28318530717959$/m);
     // Hawking, light deflection, perihelion and Bekenstein–Hawking: the only closure the search

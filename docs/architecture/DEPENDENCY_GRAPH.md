@@ -4829,7 +4829,12 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/core/constants.ts` - Canonical CODATA 2018 + SI-defined physical constants for UPT.
+### `src/core/constants.ts` - Canonical CODATA 2022 + SI-defined physical constants for UPT.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `* as mathtsConstants` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -6994,7 +6999,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 81323 |
+| Total Lines of Code | 81339 |
 | Total Exports | 2566 |
 | Total Re-exports | 1314 |
 | Total Classes | 82 |

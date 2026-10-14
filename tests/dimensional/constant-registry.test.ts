@@ -141,11 +141,10 @@ describe('MathTS states the same constants (the independent second method)', () 
     expect(Math.abs(ours - theirs) / theirs).toBeLessThan(VINTAGE_DRIFT);
   });
 
-  it('the drift bound is not vacuous: a 2022 value is a different number', () => {
-    // electron mass moved by about 1.4e-9 between the two vintages
+  it('a measured constant is MathTS\'s number (CODATA 2022), not a local copy', () => {
     const ours = constantRecord('m_e')!.value;
     const theirs = siValue(unitOf('electronMass'));
-    expect(ours).not.toBe(theirs);
-    expect(Math.abs(ours - theirs) / theirs).toBeGreaterThan(1e-10);
+    expect(ours).toBe(theirs);
   });
+
 });

@@ -7077,7 +7077,7 @@
           "lane-emden-omega-3": 2,
           "mean-molecular-weight-per-electron": 2
         },
-        "value": 2.869551926217048e+30
+        "value": 2.8695519181987356e+30
       }
     },
     {
@@ -7144,7 +7144,7 @@
           "magnetic-flux-density": 1e-08,
           "plasma-mass-density": 1.67e-21
         },
-        "value": 218291.50359208556
+        "value": 218291.50366604768
       }
     },
     {
@@ -7210,7 +7210,7 @@
           "magnetic-flux-density": 1e-08,
           "plasma-mass-density": 1.67e-21
         },
-        "value": 218520.4350638482
+        "value": 218520.43513773286
       }
     },
     {
@@ -7366,7 +7366,7 @@
         "inputs": {
           "magnetic-flux-density": 1e-08
         },
-        "value": 3.9788735751312084e-11
+        "value": 3.978873577827474e-11
       }
     },
     {
@@ -7398,7 +7398,7 @@
           "effective-mass": 9.1093837015e-31,
           "carrier-density": 1e+28
         },
-        "value": 5.314093261582035e-08
+        "value": 5.3140932633825706e-8
       }
     },
     {
@@ -7554,7 +7554,7 @@
           "pull-in-gap": 2e-06,
           "pull-in-area": 1e-08
         },
-        "value": 16.361900223777916
+        "value": 16.36190021823413
       }
     },
     {
@@ -7635,7 +7635,7 @@
           "child-voltage": 100,
           "child-gap": 0.001
         },
-        "value": 2333.951938468463
+        "value": 2333.9519400500553
       }
     },
     {
@@ -8030,7 +8030,7 @@
           "curie-temperature": 300,
           "weiss-temperature": 100
         },
-        "value": 0.009132875856972988
+        "value": 0.009132875850784136
       }
     },
     {
@@ -8065,7 +8065,7 @@
           "pauli-fermi-energy": 1.12e-18,
           "pauli-magneton": 9.274e-24
         },
-        "value": 1.2260288621294371e-05
+        "value": 0.000012260288612986245
       }
     },
     {
@@ -8385,7 +8385,7 @@
           "upper-hybrid-field": 0.1,
           "upper-hybrid-mass": 9.1093837015e-31
         },
-        "value": 18470810934.26198
+        "value": 18470810933.67817
       }
     },
     {
@@ -8515,7 +8515,7 @@
           "bennett-line-density": 1000000000000000000,
           "bennett-temperature": 1000000
         },
-        "value": 23500.204248034508
+        "value": 23500.204255996912
       }
     },
     {
@@ -8760,7 +8760,7 @@
           "lorentz-temperature": 1000000,
           "lorentz-mass": 9.1093837015e-31
         },
-        "value": 1.1391849743171435e-06
+        "value": 0.0000011391849727732165
       }
     },
     {
@@ -8790,7 +8790,7 @@
           "slab-conductivity": 60000000,
           "slab-width": 0.01
         },
-        "value": 0.0007639437272570034
+        "value": 0.0007639437267393204
       }
     },
     {
@@ -8895,7 +8895,7 @@
           "standoff-density": 1.67e-20,
           "standoff-speed": 400000
         },
-        "value": 572409.8062426782
+        "value": 572409.8066305692
       }
     },
     {
@@ -9475,7 +9475,7 @@
           "tfscreen-n3": 8.47e+28,
           "tfscreen-chemical": 1.12e-18
         },
-        "value": 328873366745079350000
+        "value": 328873366522219800000
       }
     },
     {
@@ -10737,7 +10737,7 @@
         "inputs": {
           "accretor-mass": 1.989e+30
         },
-        "value": 1.2574382573536063e+31
+        "value": 1.257438264156123e+31
       }
     },
     {
@@ -10775,7 +10775,7 @@
           "jeans-density": 1e-18,
           "mean-molecular-weight": 2.3
         },
-        "value": 1.9476307989132442e+32
+        "value": 1.9476307948315846e+32
       }
     }
   ],

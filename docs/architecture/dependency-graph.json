@@ -17437,8 +17437,15 @@
         ]
       },
       "src/core/constants.ts": {
-        "description": "Canonical CODATA 2018 + SI-defined physical constants for UPT.",
-        "externalDependencies": [],
+        "description": "Canonical CODATA 2022 + SI-defined physical constants for UPT.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "* as mathtsConstants"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -25522,7 +25529,7 @@
   "statistics": {
     "totalTypeScriptFiles": 363,
     "totalModules": 13,
-    "totalLinesOfCode": 81323,
+    "totalLinesOfCode": 81339,
     "totalExports": 2566,
     "totalClasses": 82,
     "totalInterfaces": 463,

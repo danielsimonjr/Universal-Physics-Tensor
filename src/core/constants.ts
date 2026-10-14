@@ -1,5 +1,5 @@
 /**
- * Canonical CODATA 2018 + SI-defined physical constants for UPT.
+ * Canonical CODATA 2022 + SI-defined physical constants for UPT.
  *
  * The one owner of every fundamental physical constant used across the
  * numerical, dimensional, and bridge layers; `tests/core/constants-owner.test.ts`
@@ -9,7 +9,7 @@
  *   • Exact-SI definitions (`C_SI`, `H_SI`, `K_B_SI`, `E_SI`) where the
  *     2019 SI redefinition fixed their values exactly.
  *   • `HBAR_SI` is the exact quotient `H_SI / (2π)`, not the truncated CODATA display.
- *   • CODATA 2018 best estimates for measured constants (`G_SI`, `ALPHA`, Planck units).
+ *   • CODATA 2022 best estimates for measured constants (`G_SI`, `ALPHA`, Planck units).
  *   • Planck 2018 best estimate for `H0_SI`, in SI through the unit table's parsec.
  *
  * This file is the one owner of every value. `PhysicalConstants` in
@@ -24,15 +24,31 @@
  * @public
  */
 
+import * as mathtsConstants from '@danielsimonjr/mathts-functions';
 import { checkedDataFile } from './data-file.js';
+
+/**
+ * A measured constant's SI value, read from MathTS (CODATA 2022). MathTS is the
+ * one source of measured constants; UPT keeps no copy of their decimals. A
+ * constant MathTS lacks is a MathTS issue, not a local value.
+ */
+function codata(name: string): number {
+  const value: unknown = (mathtsConstants as Record<string, unknown>)[name];
+  if (typeof value === 'number') return value;
+  if (typeof value === 'object' && value !== null && typeof (value as { toNumeric?: unknown }).toNumeric === 'function') {
+    const n = (value as { toNumeric: () => unknown }).toNumeric();
+    if (typeof n === 'number' && Number.isFinite(n)) return n;
+  }
+  throw new Error(`MathTS has no numeric constant ${name}`);
+}
 
 /** Speed of light in vacuum (m/s). Exact SI definition since 1983. */
 export const C_SI = 299792458;
-/** Rydberg constant R∞ (infinite nuclear mass), CODATA 2018: 10 973 731.568 160(21) m⁻¹. */
-export const R_INF_SI = 10973731.56816;
+/** Rydberg constant R∞ (infinite nuclear mass), CODATA 2022 (m⁻¹), read from MathTS. */
+export const R_INF_SI = codata('rydberg');
 
-/** Newtonian gravitational constant (m³ kg⁻¹ s⁻²). CODATA 2018. */
-export const G_SI = 6.67430e-11;
+/** Newtonian gravitational constant (m³ kg⁻¹ s⁻²). CODATA 2022. */
+export const G_SI = codata('gravitationConstant');
 
 /** Planck constant (J·s). Exact SI definition since 2019. */
 export const H_SI = 6.62607015e-34;
@@ -41,11 +57,11 @@ export const H_SI = 6.62607015e-34;
  * Reduced Planck constant h/(2π) (J·s). Exact, from the 2019 SI definition of
  * h. The CODATA display `1.054571817e-34` is that quotient truncated; it is
  * smaller by a relative `6.127e-10`. Planck units below stay the published
- * CODATA 2018 values, which were computed from the truncated display.
+ * CODATA 2022 values, which were computed from the truncated display.
  */
 export const HBAR_SI = H_SI / (2 * Math.PI);
 
-/** The CODATA 2018 display value of ħ: {@link HBAR_SI} truncated. Kept so the difference is computed, not typed. @internal */
+/** The CODATA 2022 display value of ħ: {@link HBAR_SI} truncated. Kept so the difference is computed, not typed. @internal */
 export const HBAR_CODATA_DISPLAY = 1.054571817e-34;
 
 /** Boltzmann constant (J/K). Exact SI definition since 2019. */
@@ -54,26 +70,26 @@ export const K_B_SI = 1.380649e-23;
 /** Elementary charge (C). Exact SI definition since 2019. */
 export const E_SI = 1.602176634e-19;
 
-/** Fine-structure constant α (dimensionless). CODATA 2018. */
-export const ALPHA = 7.2973525693e-3;
+/** Fine-structure constant α (dimensionless). CODATA 2022. */
+export const ALPHA = codata('fineStructure');
 
-/** Vacuum permittivity ε₀ (F/m). CODATA 2018. @internal */
-export const EPS0_SI = 8.8541878128e-12;
+/** Vacuum permittivity ε₀ (F/m). CODATA 2022. @internal */
+export const EPS0_SI = codata('electricConstant');
 
 /** Vacuum permeability μ₀ = 1/(ε₀ c²) (H/m), from ε₀ and the exact c. @internal */
 export const MU0_SI = 1 / (EPS0_SI * C_SI * C_SI);
 
-/** Stefan–Boltzmann constant σ (W m⁻² K⁻⁴). CODATA 2018. @internal */
-export const SIGMA_SB_SI = 5.670374419e-8;
+/** Stefan–Boltzmann constant σ (W m⁻² K⁻⁴). CODATA 2022. @internal */
+export const SIGMA_SB_SI = codata('stefanBoltzmann');
 
-/** Planck mass √(ℏc/G) (kg). CODATA 2018. */
-export const M_P_SI = 2.176434e-8;
+/** Planck mass √(ℏc/G) (kg). CODATA 2022. */
+export const M_P_SI = codata('planckMass');
 
-/** Planck length √(ℏG/c³) (m). CODATA 2018. */
-export const L_P_SI = 1.616255e-35;
+/** Planck length √(ℏG/c³) (m). CODATA 2022. */
+export const L_P_SI = codata('planckLength');
 
-/** Planck time √(ℏG/c⁵) (s). CODATA 2018. */
-export const T_P_SI = 5.391247e-44;
+/** Planck time √(ℏG/c⁵) (s). CODATA 2022. */
+export const T_P_SI = codata('planckTime');
 
 /** The `scale` of the `symbol` row in `data/units.json`, which must be a plain decimal (metres for a length). */
 function unitTableDecimal(symbol: string): number {
@@ -125,7 +141,7 @@ export const BCS_GAP_RATIO = (2 * Math.PI) / Math.exp(EULER_GAMMA);
 export const LANE_EMDEN_OMEGA3 = 2.01824;
 
 /** Thomson cross section (m²). */
-export const THOMSON_CROSS_SECTION_SI = 6.6524587321e-29;
+export const THOMSON_CROSS_SECTION_SI = codata('thomsonCrossSection');
 
 /**
  * Nominal solar gravitational parameter (GM)☉ (m³ s⁻²), IAU 2015 Resolution B3.
@@ -148,19 +164,19 @@ export const GM_SUN_SI = 1.3271244e20;
 export const M_SUN_IAU_SI = GM_SUN_SI / G_SI;
 
 /**
- * Electron mass (kg), CODATA 2018. Added for the v0.11 namespacing
+ * Electron mass (kg), CODATA 2022. Added for the v0.11 namespacing
  * gate's criterion-3 pin (λ_T of an electron at the Hawking
  * temperature — see the Adam vet A-5).
  * @public
  */
-export const M_E_SI = 9.1093837015e-31;
+export const M_E_SI = codata('electronMass');
 
 /**
- * Proton mass (kg). CODATA 2018. Shared by the Eddington evaluator and
+ * Proton mass (kg). CODATA 2022. Shared by the Eddington evaluator and
  * `upt eval` (`m_p`, `m_proton`). Not the Planck mass `M_P_SI`.
  * @internal
  */
-export const M_PROTON_SI = 1.67262192369e-27;
+export const M_PROTON_SI = codata('protonMass');
 
 /**
  * Avogadro constant (mol⁻¹). Exact in the 2019 SI.
@@ -175,16 +191,16 @@ export const N_A_SI = 6.02214076e23;
 export const FARADAY_SI = N_A_SI * E_SI;
 
 /**
- * Wien displacement-law constant b = λ_max·T (m·K). CODATA 2018.
+ * Wien displacement-law constant b = λ_max·T (m·K). CODATA 2022.
  *
  * @public
  */
-export const B_WIEN_SI = 2.897771955e-3;
+export const B_WIEN_SI = codata('wienDisplacement');
 
 /**
- * Unified atomic mass unit (kg). CODATA 2018 atomic mass constant.
+ * Unified atomic mass unit (kg). CODATA 2022 atomic mass constant.
  * One value for the Chandrasekhar evaluator and the symbolic constant `m_u`.
  * Kept off the package barrel: callers use `m_u` in the symbolic registry.
  * @internal
  */
-export const M_U_SI = 1.66053906660e-27;
+export const M_U_SI = codata('atomicMass');

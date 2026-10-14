@@ -99,9 +99,9 @@
   "homepage": "https://github.com/danielsimonjr/Universal-Physics-Tensor#readme",
   "dependencies": {
     "@danielsimonjr/mathts-autograd": "^0.3.16",
-    "@danielsimonjr/mathts-core": "^0.16.0",
+    "@danielsimonjr/mathts-core": "^0.18.0",
     "@danielsimonjr/mathts-expression": "^0.10.0",
-    "@danielsimonjr/mathts-functions": "^0.68.0",
+    "@danielsimonjr/mathts-functions": "^0.68.2",
     "@danielsimonjr/mathts-matrix": "^0.7.6",
     "@danielsimonjr/mathts-parallel": "^0.6.8",
     "@danielsimonjr/mathts-tensor": "^0.2.22",

@@ -216,7 +216,8 @@ describe('MathTS states the same unit scales (the independent second method)', (
     // MathTS states both as 133.322 Pa. hp = 550 ft·lbf/s = 745.69987158227022 W and
     // psi = lbf/in² = 6894.757293168361 Pa exactly; MathTS stores 745.6998715386 and
     // 6894.75729276459, rounded at about 6e-11.
-    expect(disagree.sort()).toEqual(['bit', 'hp', 'mmHg', 'psi', 'torr']);
+    // mathts-core 0.18.0 states torr, mmHg, hp and psi exactly, so only bit's convention differs.
+    expect(disagree.sort()).toEqual(['bit']);
   });
 });
 

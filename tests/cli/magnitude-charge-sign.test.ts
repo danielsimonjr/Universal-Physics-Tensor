@@ -74,7 +74,7 @@ describe('magnitudes stay positive when the carrier charge is negative', () => {
     ).toBe(0);
     const body = cap.lines.join('');
     expect(body).not.toMatch(/Recovered value: -/);
-    expect(body).toMatch(/Recovered value: 56414\.6023118063/);
+    expect(body).toMatch(/Recovered value: 56414\.602254295/);
     for (const line of body.match(/plasma-frequency ∝ [^\n]+/g) ?? []) {
       expect(line, line).toContain('|charge|');
       expect(line.replaceAll('|charge|', ''), line).not.toMatch(/charge/);
@@ -100,7 +100,7 @@ describe('magnitudes stay positive when the carrier charge is negative', () => {
       ),
     ).toBe(0);
     const larmorText = larmor.lines.join('');
-    expect(larmorText).toMatch(/Recovered value: 0\.00000568563010356572/);
+    expect(larmorText).toMatch(/Recovered value: 0\.00000568563011130519/);
     for (const line of larmorText.match(/larmor-radius ∝ [^\n]+/g) ?? []) {
       expect(line, line).toContain('|charge|^-1');
       expect(line.replaceAll('|charge|', ''), line).not.toMatch(/charge/);
@@ -129,7 +129,7 @@ describe('magnitudes stay positive when the carrier charge is negative', () => {
       ),
     ).toBe(0);
     const text = cap.lines.join('');
-    expect(text).toMatch(/Recovered value: 3\.54869118854327e-7/);
+    expect(text).toMatch(/Recovered value: 3\.54869119337387e-7/);
     for (const line of text.match(/electrical-resistivity ∝ [^\n]+/g) ?? []) {
       expect(line, line).toContain('charge^-2');
       expect(line, line).not.toContain('|charge|');

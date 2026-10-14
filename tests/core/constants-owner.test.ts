@@ -5,6 +5,8 @@
  *
  * The scan strips comments and matches the decimal spellings the owner uses,
  * so a value quoted in prose is not a hit and a value typed into code is.
+ * Measured constants (CODATA 2022) are MathTS's: no file under `src/`, the
+ * owner included, spells one; the owner reads them from MathTS.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -30,27 +32,14 @@ function stripComments(source: string): string {
   return source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
 }
 
-/** The literal spellings a second copy would use. `1` and `2π` are not constants. */
+/** The literal spellings a second copy of an owned value would use. `1` and `2π` are not constants. */
 const LITERALS = [
   '299792458',
   '6.62607015e-34',
   '1.380649e-23',
   '1.602176634e-19',
-  '6.6743e-11',
-  '6.67430e-11',
-  '8.8541878128e-12',
-  '5.670374419e-8',
-  '9.1093837015e-31',
-  '1.67262192369e-27',
   '6.02214076e23',
-  '2.897771955e-3',
-  '1.66053906660e-27',
-  '7.2973525693e-3',
   '2.184e-18',
-  '1.616255e-35',
-  '2.176434e-8',
-  '5.391247e-44',
-  '6.6524587321e-29',
   '1.3271244e20',
   '2.01824',
   '0.5772156649015329',
@@ -64,6 +53,34 @@ const LITERALS = [
  * to say that decimal is not in the theorem. The test below proves each
  * site still spells its literal, so an allowance cannot outlive its reason.
  */
+/**
+ * Measured-constant spellings, CODATA 2018 and 2022. MathTS owns these; a hit
+ * anywhere under `src/`, the owner included, is a local copy.
+ */
+const MEASURED = [
+  '6.6743e-11',
+  '6.67430e-11',
+  '7.2973525693e-3',
+  '7.2973525643e-3',
+  '8.8541878128e-12',
+  '8.8541878188e-12',
+  '5.670374419e-8',
+  '9.1093837015e-31',
+  '9.1093837139e-31',
+  '1.67262192369e-27',
+  '1.67262192595e-27',
+  '2.897771955e-3',
+  '1.66053906660e-27',
+  '1.66053906892e-27',
+  '6.6524587321e-29',
+  '6.6524587051e-29',
+  '10973731.56816',
+  '10973731.568157',
+  '1.616255e-35',
+  '2.176434e-8',
+  '5.391247e-44',
+];
+
 const SECOND_SITES: ReadonlyArray<{ literal: string; file: string; reason: string }> = [
   { literal: '1.67e-27', file: 'dimensional/constant-rows.ts', reason: "GRW's own reference mass m₀, the catalog expression's number, not CODATA m_p" },
   { literal: '2.01824', file: 'atlas/physjs-entries.generated.ts', reason: 'the vendored PhysJS covers text says this decimal is not in the theorem' },
@@ -73,7 +90,16 @@ describe('core/constants.ts is the one owner of physical-constant values', () =>
   it('the owner states each value the scan looks for (the scan is not vacuous)', () => {
     const owner = stripComments(readFileSync(OWNER_FILE, 'utf8'));
     const stated = LITERALS.filter((literal) => owner.includes(literal));
-    expect(stated.length).toBeGreaterThanOrEqual(16);
+    expect(stated.length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('no measured-constant decimal appears under src/, the owner included (MathTS owns them)', () => {
+    const hits: string[] = [];
+    for (const file of tsFiles(ROOT)) {
+      const code = stripComments(readFileSync(file, 'utf8'));
+      for (const literal of MEASURED) if (code.includes(literal)) hits.push(`${relative(ROOT, file).replace(/\\/g, '/')}: ${literal}`);
+    }
+    expect(hits).toEqual([]);
   });
 
   it('no CODATA literal appears in code outside the owner', () => {
