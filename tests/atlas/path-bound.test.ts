@@ -41,6 +41,7 @@ import { RELATIVE_PERIOD_NORM } from '../../src/atlas/oscillators/norms.js';
 import { propagateUncertainty } from '../../src/composition/uncertainty.js';
 import type { BridgeEdge } from '../../src/composition/edge.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 /**
  * A bound with the mandatory fields filled, for algebra-only assertions.
@@ -285,7 +286,7 @@ describe('propagateUncertainty — the optional bound is strictly additive', () 
     sources: [{ name: 'x', symbol: 'x', dim: DIMENSIONLESS, attributes: {} }],
     target: { name: 'y', symbol: 'y', dim: DIMENSIONLESS, attributes: {} },
     confidence: 'established',
-    domain: { description: 'any', predicate: () => true },
+    domain: validityDomain('true'),
     evaluate: (i) => a * i['x']!,
     citation: 'synthetic',
   };

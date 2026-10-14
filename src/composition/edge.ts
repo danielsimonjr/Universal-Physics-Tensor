@@ -21,7 +21,9 @@ import type {
   Regime,
   RelationContract,
 } from '../relations/types.js';
-import { DomainViolationError } from '../bridges/evaluation-errors.js';
+import { DomainViolationError, type DomainViolation } from '../bridges/evaluation-errors.js';
+import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
+import { conditionDomain } from '../bridges/validity.js';
 
 /**
  * First-class validity domain (v0.8.0 G-8). The predicate receives the
@@ -31,10 +33,33 @@ import { DomainViolationError } from '../bridges/evaluation-errors.js';
  * @public
  */
 export interface ValidityDomain {
-  /** Human-readable statement, e.g. 'M > 0 and b ≫ r_s (weak field)'. */
+  /** The conditions written out, read from the same text the predicate runs (a catalog relation's `holds`). */
   readonly description: string;
-  /** Machine-checkable form of the same statement. */
+  /** Whether every condition holds. */
   readonly predicate: (inputs: Record<string, number>) => boolean;
+  /**
+   * The conditions `inputs` violate, each written with the caller's keys and
+   * naming the inputs it reads; empty exactly when `predicate` holds.
+   * `keyOf` maps a name the domain reads to the key the caller gave; a name it
+   * does not map is its own key.
+   */
+  readonly violations: (
+    inputs: Record<string, number>,
+    keyOf?: (name: string) => string,
+  ) => readonly DomainViolation[];
+}
+
+/**
+ * The validity domain a condition states, in the catalog's condition grammar
+ * (`v > 0 and abs(x) < 1`; `true` for none). The predicate, the description
+ * and the violations are all read from that one text. `names` lists the
+ * hyphenated quantity names the condition reads beyond the registered ones;
+ * registered constants are bound.
+ *
+ * @public
+ */
+export function validityDomain(condition: string, names: readonly string[] = []): ValidityDomain {
+  return conditionDomain(condition, () => [...formulaNames(), ...names], formulaScope);
 }
 
 /**
@@ -313,6 +338,12 @@ function bindAliasInputs(
   return out ?? inputs;
 }
 
+/** The key the caller gave `name` under: the name itself, else the first alias present. */
+function givenKey(edge: BridgeEdge, inputs: Readonly<Record<string, number>>, name: string): string {
+  if (Object.hasOwn(inputs, name)) return name;
+  return (edge.aliases?.[name] ?? []).find((alias) => Object.hasOwn(inputs, alias)) ?? name;
+}
+
 /**
  * The domain predicate and `evaluate` read source names. This copy reads
  * aliases first, so a CLI key reaches the same formula.
@@ -325,6 +356,8 @@ export function withBoundAliases<E extends BridgeEdge>(edge: E): E {
     domain: {
       description: edge.domain.description,
       predicate: (inputs) => edge.domain.predicate(bindAliasInputs(edge, inputs)),
+      violations: (inputs, keyOf = (name) => name) =>
+        edge.domain.violations(bindAliasInputs(edge, inputs), (name) => keyOf(givenKey(edge, inputs, name))),
     },
     evaluate: (inputs) => edge.evaluate(bindAliasInputs(edge, inputs)),
   };
@@ -344,9 +377,7 @@ export function evaluateEdge(
 ): number {
   const bound = bindAliasInputs(edge, inputs);
   if (!edge.domain.predicate(bound)) {
-    throw new DomainViolationError(
-      `${edge.id}: inputs violate validity domain (${edge.domain.description})`,
-    );
+    throw new DomainViolationError(edge.id, edge.domain.violations(bound, (name) => givenKey(edge, inputs, name)));
   }
   if (edge.coefficientUnset === true && !groupBound(edge, bound)) {
     throw new CoefficientUnsetError(edge.id, edge.label);

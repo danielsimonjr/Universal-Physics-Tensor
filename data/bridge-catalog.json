@@ -1294,6 +1294,9 @@
           }
         }
       },
+      "assumptions": [
+        "weak-field ray geometry"
+      ],
       "formalKey": "be-37",
       "dimension": {
         "L": 0,
@@ -1429,6 +1432,9 @@
       "dimensional_signature": "[L^8 M^4 T^-8]",
       "tractability_class": "closed-form",
       "notes": "Encoded 2026-05-07 (Wave V): Tier-5 AST encoding for the SILH composite-Higgs potential V(h) = -α f⁴ sin²(h/f) + β f⁴ [sin⁴(h/f) - sin²(h/f) cos²(h/f)] landed (src/bridges/equations/be-40-composite-higgs.ts). dimensional_signature null → '[L^8 M^4 T^-8]' (= [energy^4]; matches BE-18). The four trig combinations are encoded as dimensionless symbol stubs (the AST has no transcendental primitives); h/f dimensionlessness is verified via lemma BE40_HIGGS_DIMLESS_ARG. Numerical evaluator works in natural units (f, h dimensionless TeV-scale), the standard particle-physics convention. | Corrected on 2026-05-05 (Wave J Tier C5, per Phys iter-2 paper review): the first term coefficient was -α f² which made the term carry energy-dimension [E]² while the second term β f⁴[...] carries [E]⁴, giving a dimensionally inhomogeneous potential. Standard composite-Higgs effective potentials (Kaplan-Georgi 1984; Giudice-Grojean-Pomarol-Rattazzi 2007) are V(h) = α f⁴ sin² + β f⁴ sin⁴ with α, β dimensionless Wilson coefficients and the overall f⁴ scale set by the coset Goldstone-boson decay constant. Replaced f² with f⁴ for dimensional consistency. status_text: Established form (after correction). The pseudo-Goldstone Higgs construction is the canonical SO(5)/SO(4) composite-Higgs pattern; the catalog framing of treating it as a bridge between Standard-Model and BSM physics is original to UPT but the potential itself is mainstream. | 2026-05-23 BRIDGE-PHYSICS-AUDIT §5 considered: audit recommended demotion to 'speculative' (BSM research program). KEPT as 'established' — the SO(5)/SO(4) coset structure is canonical group theory (current test-pinned rationale). However, the Composite-Higgs scenario itself IS BSM research; consumers reading the 'established' status should read this as endorsing the canonical math, not endorsing Composite Higgs as a real BSM phenomenon. Analysis: docs/architecture/archive/v0.7-bridge-status-recalibration-analysis.md. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown classification applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): NOT-A-BRIDGE. HIGH NOT-A-BRIDGE: single-regime BSM field theory; SO(5)/SO(4) coset is internal. The bridges array remains [unknown, unknown] as the structural marker for not actually a regime-spanning bridge. Future v0.8+ restructuring may move this entry to a separate LAW_EQUATIONS registry.",
+      "assumptions": [
+        "natural units"
+      ],
       "formalKey": "be-40",
       "dimension": {
         "L": 8,
@@ -2525,6 +2531,9 @@
       "dimensional_signature": "[L^-1 M T^-2]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateRadiationPressure({I_W_per_m2, R, theta_rad}) → {P_Pa} in src/bridges/be66-radiation-pressure.ts. The overlay formalRef is PhysJS.RadiationPressure.pressure_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Buckingham on {P, I, c} leaves the constant unfixed; the theorem states the opaque-surface factor. No confrontation: the printed I = 10^6 W/m² stand-ins are arithmetic, not measurements.",
+      "assumptions": [
+        "transmission 0"
+      ],
       "formalKey": "be-66",
       "dimension": {
         "L": -1,
@@ -2560,6 +2569,9 @@
       "dimensional_signature": "[velocity]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateAlfvenSpeed({B_T, rho_kg_per_m3}) → {v_m_per_s} in src/bridges/be67-alfven-speed.ts. rho_kg_per_m3 is the total mass density. alfvenProtonOnlyDensity(n_per_m3) = n m_p is the named special case; passing a number density as rho_kg_per_m3 is not that case. The overlay formalRef is PhysJS.AlfvenSpeed.speed_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. The 69.95 km/s figure is the proton-only stand-in at B = 12 nT and n = 14 cm⁻³. It does not close a ~60 km/s sentence, and a helium fraction is not claimed to close it. No confrontation.",
+      "assumptions": [
+        "ρ is a mass density"
+      ],
       "formalKey": "be-67",
       "dimension": {
         "L": 1,
@@ -2799,6 +2811,9 @@
       "dimensional_signature": "[L^-1 M T^-2]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateMagneticPressure({B_T}) → {p_Pa} in src/bridges/be74-magnetic-pressure.ts. The factor 2 is in the evaluator. Units fix p ∝ B²/μ0 and do not fix the 2. The overlay formalRef is PhysJS.MagneticPressure.pressure_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation.",
+      "assumptions": [
+        "the factor 2 is the stored-energy half, not C = 1"
+      ],
       "formalKey": "be-74",
       "dimension": {
         "L": -1,
@@ -2833,6 +2848,9 @@
       "dimensional_signature": "[length]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateLondonPenetration({m_kg, n_per_m3}) → {lambda_m} in src/bridges/be75-london-penetration.ts. e is E_SI, not an input and not Euler's number. The overlay formalRef is PhysJS.LondonPenetration.depth_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the classical skin depth. No confrontation.",
+      "assumptions": [
+        "e is the elementary charge"
+      ],
       "formalKey": "be-75",
       "dimension": {
         "L": 1,
@@ -2869,6 +2887,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluatePlasmaBeta({n_per_m3, T_K, p_B_Pa}) → {beta} in src/bridges/be76-plasma-beta.ts. p_B_Pa is B²/(2 μ0). The overlay formalRef is PhysJS.PlasmaBeta.beta_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge composes with be-74 on magnetic-pressure. The edge confidence stays established. Not a plasma-β inequality. No confrontation.",
+      "assumptions": [
+        "p_B is B²/(2 μ0)"
+      ],
       "formalKey": "be-76",
       "dimension": {
         "L": 0,
@@ -2903,6 +2924,9 @@
       "dimensional_signature": "[L^3 T^-1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateHagenPoiseuille({R_m, deltaP_Pa, mu_Pa_s, L_m}) → {Q_m3_per_s} in src/bridges/be77-hagen-poiseuille.ts. The 8 is the integral of the no-slip parabola. The overlay formalRef is PhysJS.HagenPoiseuille.flow_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a square duct and not the Fanning factor 16. No confrontation.",
+      "assumptions": [
+        "circular pipe, not a square duct"
+      ],
       "formalKey": "be-77",
       "dimension": {
         "L": 3,
@@ -2937,6 +2961,9 @@
       "dimensional_signature": "[force]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateEulerBuckling({E_Pa, I_m4, L_m}) → {P_N} in src/bridges/be78-euler-buckling.ts. The overlay formalRef is PhysJS.EulerBuckling.critical_load, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the cantilever load. No confrontation.",
+      "assumptions": [
+        "pinned ends y(0) = y(L) = 0"
+      ],
       "formalKey": "be-78",
       "dimension": {
         "L": 1,
@@ -2971,6 +2998,9 @@
       "dimensional_signature": "[L^2 M T^-3 I^-1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluatePullIn({k_N_per_m, g0_m, A_m2}) → {V_pi_V} in src/bridges/be79-pull-in.ts. ε0 is EPS0_SI. The overlay formalRef is PhysJS.PullIn.pull_in_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a fringing field. No confrontation.",
+      "assumptions": [
+        "the fold is g = 2 g0/3, not g0/2"
+      ],
       "formalKey": "be-79",
       "dimension": {
         "L": 2,
@@ -3005,6 +3035,9 @@
       "dimensional_signature": "[L^-2 I]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateMottGurney({eps, mu_m2_per_Vs, V_volts, d_m}) → {J_A_per_m2} in src/bridges/be80-mott-gurney.ts. eps is the solid permittivity in F/m, not necessarily ε0. The overlay formalRef is PhysJS.MottGurney.current_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Child–Langmuir. No confrontation.",
+      "assumptions": [
+        "E(0) = 0"
+      ],
       "formalKey": "be-80",
       "dimension": {
         "L": -2,
@@ -3039,6 +3072,10 @@
       "dimensional_signature": "[L^-2 I]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateChildLangmuir({m_kg, V_volts, d_m}) → {J_A_per_m2} in src/bridges/be81-child-langmuir.ts. e is E_SI, not an input and not Euler's number. ε0 is EPS0_SI. The overlay formalRef is PhysJS.ChildLangmuir.current_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Mott–Gurney. No confrontation.",
+      "assumptions": [
+        "cathode field 0",
+        "Poisson not at x = 0"
+      ],
       "formalKey": "be-81",
       "dimension": {
         "L": -2,
@@ -3073,6 +3110,9 @@
       "dimensional_signature": "[I]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateShockleyDiode({I_s_A, V_volts, T_K}) → {I_A} in src/bridges/be82-shockley-diode.ts. e is E_SI. Euler's number is written exp. The overlay formalRef is PhysJS.ShockleyDiode.shockley_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Ideality is 1. No confrontation.",
+      "assumptions": [
+        "ideality 1"
+      ],
       "formalKey": "be-82",
       "dimension": {
         "L": 0,
@@ -3109,6 +3149,9 @@
       "dimensional_signature": "[L^2 M T^-3 I^-1 Theta^-1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateThomsonCoefficient({T_K, dS_dT_V_per_K2}) → {mu_V_per_K} in src/bridges/be83-thomson.ts. dS/dT is an input, not a sampled difference of S. The overlay formalRef is PhysJS.Thomson.thomson_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge does not compose with be-73: Π is not an input. The dependency is the Kelvin relation the theorem assumes. The edge confidence stays established. Not Π = S T. No confrontation.",
+      "assumptions": [
+        "Kelvin along temperature and the Thomson split are hypotheses"
+      ],
       "formalKey": "be-83",
       "dimension": {
         "L": 2,
@@ -3143,6 +3186,10 @@
       "dimensional_signature": "[L^2 M T^-3 I^-2]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateFourPointSheet({V_volts, I_A}) → {R_s_ohm} in src/bridges/be84-four-point.ts. The spacing s cancels. The overlay formalRef is PhysJS.FourPoint.sheet_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the conformal crossing be-35. No confrontation.",
+      "assumptions": [
+        "probes at 0, s, 2s, 3s",
+        "radial field (I R_s)/(2 π r)"
+      ],
       "formalKey": "be-84",
       "dimension": {
         "L": 2,
@@ -3177,6 +3224,10 @@
       "dimensional_signature": "[T I^2]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateShotNoise({I_A}) → {S_I_A2_per_Hz} in src/bridges/be85-shot-noise.ts. e is E_SI. The formula is linear in I. The overlay formalRef is PhysJS.ShotNoise.shot_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Johnson–Nyquist and not the two-sided spectrum e I. No confrontation.",
+      "assumptions": [
+        "Poisson Var(N) = mean(N)",
+        "one-sided Δf = 1/(2 T)"
+      ],
       "formalKey": "be-85",
       "dimension": {
         "L": 0,
@@ -3211,6 +3262,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateReynoldsAnalogy({C_f}) → {St} in src/bridges/be86-reynolds-analogy.ts. Pr and the wall slopes are not inputs. The overlay formalRef is PhysJS.ReynoldsAnalogy.reynolds_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a Nusselt correlation. No confrontation.",
+      "assumptions": [
+        "normalized wall gradients agree and Pr = 1"
+      ],
       "formalKey": "be-86",
       "dimension": {
         "L": 0,
@@ -3245,6 +3299,9 @@
       "dimensional_signature": "[L^4 M^2 T^-6 I^-2]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateCapacitorNoise({T_K, C_F}) → {v2_V2} in src/bridges/be87-capacitor-noise.ts. The two halves cancel. The overlay formalRef is PhysJS.CapacitorNoise.noise_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not (3/2) k_B T/C. No confrontation.",
+      "assumptions": [
+        "U = (C/2) V²"
+      ],
       "formalKey": "be-87",
       "dimension": {
         "L": 4,
@@ -3279,6 +3336,11 @@
       "dimensional_signature": "[L^-1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateFermiSea({n_per_m3, m_kg}) → {k_F_per_m, E_F_J, v_F_m_per_s} in src/bridges/be88-fermi-sea.ts. The edge value is k_F. The overlay formalRef is PhysJS.FermiSea.fermi_sea, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a lattice band. No confrontation.",
+      "assumptions": [
+        "two spins",
+        "T = 0",
+        "isotropic parabola"
+      ],
       "formalKey": "be-88",
       "dimension": {
         "L": -1,
@@ -3313,6 +3375,9 @@
       "dimensional_signature": "[frequency]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateDebyeCutoff({v_m_per_s, n_per_m3}) → {omega_D_rad_per_s} in src/bridges/be89-debye-cutoff.ts. The overlay formalRef is PhysJS.DebyeCutoff.debye_cutoff, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Equating the three-branch sum to n is a different cutoff. No confrontation.",
+      "assumptions": [
+        "three acoustic branches, one speed"
+      ],
       "formalKey": "be-89",
       "dimension": {
         "L": 0,
@@ -3347,6 +3412,9 @@
       "dimensional_signature": "[entropy]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateDebyeHeat({N, T_K, thetaD_K}) → {C_V_J_per_K} in src/bridges/be90-debye-heat.ts. The overlay formalRef is PhysJS.DebyeHeat.debye_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. π⁴/15 is assumed. No confrontation.",
+      "assumptions": [
+        "I = π⁴/15 is assumed"
+      ],
       "formalKey": "be-90",
       "dimension": {
         "L": 2,
@@ -3381,6 +3449,9 @@
       "dimensional_signature": "[entropy]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateEinsteinSolid({N, T_K, thetaE_K}) → {C_V_J_per_K} in src/bridges/be91-einstein-solid.ts. The overlay formalRef is PhysJS.EinsteinSolid.einstein_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. One oscillator is a different heat capacity. No confrontation.",
+      "assumptions": [
+        "three Einstein oscillators"
+      ],
       "formalKey": "be-91",
       "dimension": {
         "L": 2,
@@ -3415,6 +3486,10 @@
       "dimensional_signature": "[L^-1 M T^-2 Theta^-1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateSommerfeldHeat({n_per_m3, T_K, E_F_J}) → {c_V_J_per_K_m3} in src/bridges/be92-sommerfeld-heat.ts. The overlay formalRef is PhysJS.SommerfeldHeat.electronic_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not be-61. No confrontation.",
+      "assumptions": [
+        "δU is a hypothesis",
+        "√E density"
+      ],
       "formalKey": "be-92",
       "dimension": {
         "L": -1,
@@ -3449,6 +3524,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateCurieWeiss({n_per_m3, g, spin, muB_J_per_T, T_K, theta_K}) → {C_K, chi} in src/bridges/be93-curie-weiss.ts. The edge value is χ. The overlay formalRef is PhysJS.CurieWeiss.curie_weiss, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not an su(2) derivation. No confrontation.",
+      "assumptions": [
+        "second moment and mean field are hypotheses"
+      ],
       "formalKey": "be-93",
       "dimension": {
         "L": 0,
@@ -3483,6 +3561,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluatePauliParamagnetism({n_per_m3, E_F_J, muB_J_per_T}) → {chi_P} in src/bridges/be94-pauli-paramagnetism.ts. The overlay formalRef is PhysJS.PauliParamagnetism.pauli, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Landau diamagnetism. No confrontation.",
+      "assumptions": [
+        "Zeeman imbalance is a hypothesis"
+      ],
       "formalKey": "be-94",
       "dimension": {
         "L": 0,
@@ -3517,6 +3598,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateGinzburgLandau({kappa}) → {trial_factor} in src/bridges/be95-ginzburg-landau.ts. The overlay formalRef is PhysJS.GinzburgLandau.type_boundary, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not every minimizer. No confrontation.",
+      "assumptions": [
+        "the factor multiplies this trial, not every minimizer"
+      ],
       "formalKey": "be-95",
       "dimension": {
         "L": 0,
@@ -3551,6 +3635,10 @@
       "dimensional_signature": "[M T^-2 I^-1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateUpperCritical({xi_m}) → {B_c2_T} in src/bridges/be96-upper-critical.ts. e is E_SI. The overlay formalRef is PhysJS.UpperCritical.critical_field, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Charge e is a different field. No confrontation.",
+      "assumptions": [
+        "charge q = 2e",
+        "the Landau level is a hypothesis"
+      ],
       "formalKey": "be-96",
       "dimension": {
         "L": 0,
@@ -3585,6 +3673,9 @@
       "dimensional_signature": "[L^2 M T^-3 I^-1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateAmbegaokarBaratoff({Delta_J}) → {IcRn_V} in src/bridges/be97-ambegaokar-baratoff.ts. e is E_SI. The overlay formalRef is PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. T = 0 only. No confrontation.",
+      "assumptions": [
+        "T = 0 and identical gaps are hypotheses"
+      ],
       "formalKey": "be-97",
       "dimension": {
         "L": 2,
@@ -3619,6 +3710,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateBcsJump({zeta}) → {ratio} in src/bridges/be98-bcs-jump.ts. The overlay formalRef is PhysJS.BcsJump.heat_jump, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. ζ is not evaluated as a series. No confrontation.",
+      "assumptions": [
+        "ζ is the quartic coefficient"
+      ],
       "formalKey": "be-98",
       "dimension": {
         "L": 0,
@@ -3653,6 +3747,9 @@
       "dimensional_signature": "[L^-3]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateMassAction({N_c_per_m3, N_v_per_m3, E_g_J, T_K}) → {n_i_per_m3} in src/bridges/be99-mass-action.ts. The overlay formalRef is PhysJS.MassAction.mass_action, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Dropping the 2 is a different density. No confrontation.",
+      "assumptions": [
+        "Boltzmann tails are hypotheses"
+      ],
       "formalKey": "be-99",
       "dimension": {
         "L": -3,
@@ -3687,6 +3784,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateLyddaneSachsTeller({eps_static, eps_inf}) → {frequency_ratio_sq} in src/bridges/be100-lyddane-sachs-teller.ts. The overlay formalRef is PhysJS.LyddaneSachsTeller.lst, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. The unsquared ratio is a different statement. No confrontation.",
+      "assumptions": [
+        "no damping is a hypothesis"
+      ],
       "formalKey": "be-100",
       "dimension": {
         "L": 0,
@@ -3721,6 +3821,9 @@
       "dimensional_signature": "[temperature]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateBktJump({J_J}) → {T_K} in src/bridges/be101-bkt-jump.ts. The overlay formalRef is PhysJS.BktJump.bkt_jump, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the RG flow. No confrontation.",
+      "assumptions": [
+        "area entropy of core positions is the hypothesis"
+      ],
       "formalKey": "be-101",
       "dimension": {
         "L": 0,
@@ -3755,6 +3858,9 @@
       "dimensional_signature": "[L^-2 M^-1 T^3 I^2]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateLandauerConductance({sum_Tn}) → {G_S} in src/bridges/be102-landauer-conductance.ts. e is E_SI. The overlay formalRef is PhysJS.LandauerConductance.conductance_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not be-55 and not be-16. No confrontation.",
+      "assumptions": [
+        "spin = 2 and Δμ = e V are hypotheses"
+      ],
       "formalKey": "be-102",
       "dimension": {
         "L": -2,
@@ -3891,6 +3997,9 @@
       "dimensional_signature": "[frequency]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateColdPlasmaCutoff in src/bridges/plasma-space.ts. The overlay formalRef is PhysJS.ColdPlasmaCutoff.cutoff_R, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. The cold Stix index is a hypothesis of the proof, not a derived dielectric.",
+      "assumptions": [
+        "the Stix index is a hypothesis"
+      ],
       "formalKey": "be-106",
       "dimension": {
         "L": 0,
@@ -4129,6 +4238,9 @@
       "dimensional_signature": "[frequency]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateLandauDamping in src/bridges/plasma-space.ts. The overlay formalRef is PhysJS.LandauDamping.damping_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. The residue formula is a hypothesis, not a contour integral.",
+      "assumptions": [
+        "the residue is a hypothesis"
+      ],
       "formalKey": "be-113",
       "dimension": {
         "L": 0,
@@ -4231,6 +4343,9 @@
       "dimensional_signature": "[L^3 M T^-3 I^-2]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateLorentzResistivity in src/bridges/plasma-space.ts. The overlay formalRef is PhysJS.LorentzResistivity.resistivity_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. The catalog value is the kinetic closure. σ_tr and the conductivity moment are hypotheses. The reference closure η_ref = (32/(3π)) η is nested and is not this value.",
+      "assumptions": [
+        "the transport integrals are hypotheses"
+      ],
       "formalKey": "be-116",
       "dimension": {
         "L": 3,
@@ -4537,6 +4652,9 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateMirrorInstability in src/bridges/plasma-space.ts. The overlay formalRef is PhysJS.MirrorInstability.mirror_threshold, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. The threshold is a hypothesis. The kinetic integral is not evaluated.",
+      "assumptions": [
+        "the kinetic integral is a hypothesis"
+      ],
       "formalKey": "be-125",
       "dimension": {
         "L": 0,
@@ -6238,7 +6356,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(relaxation-rate) and\n      relaxation-rate >= 0 and\n      isFinite(superposition-extent) and\n      superposition-extent > 0 and\n      isFinite(thermal-de-broglie-wavelength) and\n      thermal-de-broglie-wavelength > 0",
-      "domain": "γ_relax ≥ 0, Δx > 0, λ_T > 0",
       "confidence": "established",
       "citation": "Caldeira & Leggett 1983 Physica A 121:587; Zurek 1991 Phys. Today 44(10):36",
       "relation": {
@@ -6267,7 +6384,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(mass) and\n      mass > 0 and\n      isFinite(temperature) and\n      temperature > 0",
-      "domain": "m > 0 and T > 0 (massive particle, finite temperature)",
       "confidence": "speculative",
       "citation": "Pathria 2011 Statistical Mechanics §7.1; de Broglie 1924",
       "reference": {
@@ -6294,7 +6410,6 @@
         ]
       },
       "holds": "isFinite(temperature) and temperature >= 0",
-      "domain": "T ≥ 0 and finite (thermodynamic temperature)",
       "confidence": "speculative",
       "citation": "Landauer 1961 IBM JRD 5:183",
       "reference": {
@@ -6328,7 +6443,6 @@
         ]
       },
       "holds": "isFinite(mass) and\n      mass > 0 and\n      isFinite(near-radius) and\n      near-radius > 0 and\n      isFinite(far-radius) and\n      far-radius >= near-radius",
-      "domain": "M > 0 and 0 < R_near ≤ R_far (weak-field ray geometry)",
       "confidence": "established",
       "citation": "Shapiro 1964 PRL 13:789",
       "relation": {
@@ -6392,7 +6506,6 @@
         ]
       },
       "holds": "isFinite(mass) and mass > 0",
-      "domain": "M > 0 and finite (positive black-hole mass)",
       "confidence": "highly-speculative",
       "citation": "Hawking 1975 CMP 43:199",
       "reference": {
@@ -6414,7 +6527,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(schwarzschild-radius) and schwarzschild-radius > 0",
-      "domain": "r_s > 0 and finite",
       "confidence": "highly-speculative",
       "citation": "Hawking 1975 CMP 43:199 (r_s parameterization)",
       "reference": {
@@ -6444,7 +6556,6 @@
         ]
       },
       "holds": "isFinite(mass) and\n      mass > 0 and\n      isFinite(impact-parameter) and\n      impact-parameter > 0 and\n      impact-parameter >= (10 * 2 * G * mass) / (c * c)",
-      "domain": "M > 0, b > 0, and weak field b ≥ 10·r_s",
       "confidence": "established",
       "citation": "Dyson, Eddington & Davidson 1920 Phil. Trans. R. Soc. A 220:291",
       "relation": {
@@ -6511,7 +6622,6 @@
         ]
       },
       "holds": "isFinite(mass) and\n      mass > 0 and\n      isFinite(semi-major-axis) and\n      semi-major-axis > 0 and\n      isFinite(eccentricity) and\n      eccentricity >= 0 and\n      eccentricity < 1 and\n      semi-major-axis * (1 - eccentricity) >= (10 * 2 * G * mass) / (c * c)",
-      "domain": "M > 0, a > 0, 0 ≤ e < 1 (bound elliptical orbit); weak field a(1−e) ≥ 10·r_s",
       "confidence": "established",
       "citation": "Einstein 1915 Preuss. Akad. Wiss. 831",
       "relation": {
@@ -6576,7 +6686,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(mass) and mass > 0",
-      "domain": "M > 0 and finite",
       "confidence": "established",
       "citation": "Schwarzschild 1916; Carroll 2004 Spacetime and Geometry §5.4",
       "reference": {
@@ -6598,7 +6707,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(minimal-surface-area) and\n      minimal-surface-area >= 0",
-      "domain": "A ≥ 0 and finite (minimal-surface area)",
       "confidence": "speculative",
       "citation": "Ryu & Takayanagi 2006 PRL 96:181602",
       "reference": {
@@ -6622,7 +6730,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(mass-density) and\n      mass-density >= 0 and\n      isFinite(critical-density) and\n      critical-density > 0 and\n      isFinite(rescaled-cosmological-constant)",
-      "domain": "ρ ≥ 0, ρ_crit > 0, Λ finite (all SI)",
       "confidence": "speculative",
       "citation": "Ashtekar, Pawlowski & Singh 2006 PRD 74:084003",
       "reference": {
@@ -6644,7 +6751,6 @@
       "sources": [],
       "aliases": {},
       "holds": "true",
-      "domain": "universal constant — no inputs (vacuously valid)",
       "confidence": "established",
       "citation": "Kovtun, Son & Starinets 2005 PRL 94:111601",
       "relation": {
@@ -6668,7 +6774,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(mass) and mass > 0",
-      "domain": "m > 0 and finite (object mass)",
       "confidence": "speculative",
       "citation": "Ghirardi, Rimini & Weber 1986 PRD 34:470",
       "relation": {
@@ -6696,7 +6801,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(gauge-coupling) and\n      isFinite(color-number) and\n      color-number > 0 and\n      isFinite(flavor-number) and\n      flavor-number >= 0",
-      "domain": "g finite, N_c > 0, N_f ≥ 0",
       "confidence": "established",
       "citation": "Gross & Wilczek 1973 PRL 30:1343; Politzer 1973 PRL 30:1346",
       "reference": {
@@ -6722,7 +6826,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(mass-density) and\n      mass-density >= 0 and\n      isFinite(brane-tension) and\n      brane-tension > 0 and\n      isFinite(rescaled-cosmological-constant)",
-      "domain": "ρ ≥ 0, σ > 0, Λ finite (all SI)",
       "confidence": "speculative",
       "citation": "Randall & Sundrum 1999 PRL 83:4690; Binétruy et al. 2000 PLB 477:285",
       "reference": {
@@ -6758,7 +6861,6 @@
         ]
       },
       "holds": "isFinite(relaxation-rate) and\n      relaxation-rate >= 0 and\n      isFinite(system-environment-coupling) and\n      isFinite(reference-coupling) and\n      reference-coupling > 0",
-      "domain": "γ_0 ≥ 0, λ finite, λ_0 > 0",
       "confidence": "established",
       "citation": "Caldeira & Leggett 1983 Physica A 121:587; Lindblad 1976 CMP 48:119",
       "relation": {
@@ -6787,7 +6889,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(cosmological-constant-curvature) and\n      isFinite(stress-energy-trace)",
-      "domain": "Λ and T finite (all SI)",
       "confidence": "speculative",
       "citation": "Jacobson 1995 PRL 75:1260; MTW Gravitation §17.4",
       "reference": {
@@ -6811,7 +6912,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(model-a-mobility) and\n      model-a-mobility > 0 and\n      isFinite(time) and\n      time > 0",
-      "domain": "Γ > 0 and t > 0 (all SI)",
       "confidence": "speculative",
       "citation": "Kawasaki & Gunton 1976 PRA 13:2294; Hohenberg & Halperin 1977 RMP 49:435",
       "reference": {
@@ -6835,7 +6935,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(einstein-coupling-prefactor-squared) and\n      isFinite(torsion-contraction-scalar) and\n      torsion-contraction-scalar >= 0",
-      "domain": "prefactor finite, torsion contraction ≥ 0 (sum of squares)",
       "confidence": "speculative",
       "citation": "Hehl et al. 1976 RMP 48:393; Cartan 1922 C. R. Acad. Sci. 174:593",
       "reference": {
@@ -6859,7 +6958,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(yukawa-coupling) and isFinite(vacuum-expectation-value)",
-      "domain": "g_dark and v_dark finite",
       "confidence": "speculative",
       "citation": "Peskin & Schroeder 1995 QFT §20.1",
       "reference": {
@@ -6882,7 +6980,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(cosmological-constant-curvature) and\n      cosmological-constant-curvature >= 0",
-      "domain": "Λ ≥ 0 and finite (m⁻²)",
       "confidence": "speculative",
       "citation": "Carroll 2001 Living Rev. Relativity 4:1; Planck 2020 A&A 641:A6",
       "reference": {
@@ -6906,7 +7003,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(area-law-coefficient) and\n      isFinite(boundary-length) and\n      boundary-length >= 0 and\n      isFinite(topological-entanglement-entropy)",
-      "domain": "α finite, L ≥ 0, γ finite",
       "confidence": "speculative",
       "citation": "Kitaev & Preskill 2006 PRL 96:110404; Levin & Wen 2006 PRL 96:110405",
       "reference": {
@@ -6934,7 +7030,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(residual-resistivity) and\n      residual-resistivity >= 0 and\n      isFinite(effective-mass) and\n      effective-mass > 0 and\n      isFinite(carrier-density) and\n      carrier-density > 0 and\n      isFinite(temperature) and\n      temperature >= 0 and\n      isFinite(syk-coefficient)",
-      "domain": "ρ_0 ≥ 0, m* > 0, n_e > 0, T ≥ 0, α_SYK finite",
       "confidence": "speculative",
       "citation": "Sachdev & Ye 1993 PRL 70:3339; Hartnoll 2015 Nature Phys. 11:54",
       "reference": {
@@ -6961,7 +7056,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(donor-acceptor-distance) and\n      donor-acceptor-distance > 0 and\n      isFinite(foerster-radius) and\n      foerster-radius > 0",
-      "domain": "R > 0 and R_0 > 0",
       "confidence": "speculative",
       "citation": "Förster 1948 Ann. Phys. 437:55; Lakowicz 2006 Princ. Fluoresc. Spectrosc. Ch.13",
       "reference": {
@@ -6985,7 +7079,6 @@
       ],
       "aliases": {},
       "holds": "not (not isFinite((conditional-probability)) or (conditional-probability) < 0 or (conditional-probability) > 1) and not (not isFinite((marginal-probability)) or (marginal-probability) < 0 or (marginal-probability) > 1) and not ((conditional-probability) > 0 and (marginal-probability) == 0)",
-      "domain": "p_cond, p_marg ∈ [0,1]; not (p_cond>0 and p_marg=0) (KL singularity)",
       "confidence": "speculative",
       "citation": "Tononi 2008 Biol. Bull. 215:216; Oizumi, Albantakis & Tononi 2014 PLoS Comput. Biol. 10:e1003588",
       "reference": {
@@ -7012,7 +7105,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(attempt-frequency) and\n      attempt-frequency >= 0 and\n      isFinite(tunneling-mass) and\n      tunneling-mass > 0 and\n      isFinite(barrier-height) and\n      barrier-height >= 0 and\n      isFinite(barrier-width) and\n      barrier-width > 0 and\n      isFinite(biological-rate-correction)",
-      "domain": "ν₀ ≥ 0, m > 0, V−E ≥ 0, barrier-width > 0, f finite",
       "confidence": "speculative",
       "citation": "Löwdin 1963 Adv. Quantum Chem. 2:213; Gamow 1928",
       "reference": {
@@ -7039,7 +7131,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(temperature) and\n      temperature > 0 and\n      isFinite(active-noise-energy)",
-      "domain": "T > 0 and Σ_active finite",
       "confidence": "speculative",
       "citation": "Cugliandolo & Kurchan 1993 J. Phys. A 26:L401",
       "reference": {
@@ -7062,7 +7153,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(modular-hamiltonian-variation)",
-      "domain": "δ⟨H_R⟩ finite (nats)",
       "confidence": "speculative",
       "citation": "Faulkner, Lewkowycz & Maldacena 2013 JHEP 11:074; Blanco et al. 2013 JHEP 08:060",
       "reference": {
@@ -7088,7 +7178,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(causal-set-count-0) and\n      isFinite(causal-set-count-1) and\n      isFinite(causal-set-count-2) and\n      isFinite(causal-set-count-3) and\n      isFinite(planck-length) and\n      planck-length > 0",
-      "domain": "N_0..N_3 finite, ℓ_P > 0",
       "confidence": "speculative",
       "citation": "Benincasa & Dowker 2010 PRL 104:181301",
       "reference": {
@@ -7118,7 +7207,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(reference-correlation-length) and\n      reference-correlation-length > 0 and\n      isFinite(temperature) and\n      temperature > 0 and\n      isFinite(reference-temperature) and\n      reference-temperature > 0 and\n      isFinite(static-exponent-nu) and\n      isFinite(dynamic-exponent-z) and\n      dynamic-exponent-z != 0",
-      "domain": "ξ_0 > 0, T > 0, T_0 > 0, ν finite, z ≠ 0",
       "confidence": "speculative",
       "citation": "Hertz 1976 PRB 14:1165; Millis 1993 PRB 48:7183; Sachdev 2011 QPT 2nd ed. Ch.11",
       "reference": {
@@ -7150,7 +7238,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(quench-timescale) and\n      quench-timescale > 0 and\n      isFinite(microscopic-relaxation-time) and\n      microscopic-relaxation-time > 0 and\n      isFinite(spatial-dimension) and\n      isFinite(static-exponent-nu) and\n      isFinite(dynamic-exponent-z) and\n      isFinite(defect-rest-mass) and\n      defect-rest-mass >= 0 and\n      isFinite(reheating-temperature) and\n      reheating-temperature > 0 and\n      1 + dynamic-exponent-z * static-exponent-nu != 0",
-      "domain": "τ_Q>0, τ_0>0, d/ν/z finite, m_defect≥0, T_reh>0, 1+zν≠0",
       "confidence": "established",
       "citation": "Kibble 1976 J. Phys. A 9:1387; Zurek 1985 Nature 317:505",
       "reference": {
@@ -7178,7 +7265,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(gravitational-wave-speed) and\n      gravitational-wave-speed > 0",
-      "domain": "c_GW > 0 and finite",
       "confidence": "speculative",
       "citation": "Abbott et al. 2017 ApJ Lett. 848:L13; Boran et al. 2018 PRD 97:041501",
       "reference": {
@@ -7202,7 +7288,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(newtonian-force) and\n      newtonian-force > 0 and\n      isFinite(mass) and\n      mass > 0 and\n      isFinite(mond-acceleration-scale) and\n      mond-acceleration-scale > 0",
-      "domain": "F_N > 0, m > 0, a_0 > 0",
       "confidence": "speculative",
       "citation": "Milgrom 1983 ApJ 270:365; Famaey & McGaugh 2012 Living Rev. Relativity 15:10",
       "reference": {
@@ -7230,7 +7315,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(newton-coupling-dimensionless) and\n      isFinite(cosmological-constant-dimensionless) and\n      isFinite(truncation-coefficient-a) and\n      isFinite(truncation-coefficient-b) and\n      isFinite(truncation-coefficient-c)",
-      "domain": "g, λ, A, B, C all finite",
       "confidence": "speculative",
       "citation": "Reuter 1998 PRD 57:971; Reuter & Weyer 2009 Gen. Rel. Grav. 41:983",
       "reference": {
@@ -7260,7 +7344,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(reference-mass) and\n      reference-mass >= 0 and\n      isFinite(swampland-coefficient) and\n      isFinite(scalar-field-value) and\n      isFinite(scalar-field-reference) and\n      isFinite(planck-mass) and\n      planck-mass > 0",
-      "domain": "m₀ ≥ 0, α/φ/φ₀ finite, M_P > 0",
       "confidence": "speculative",
       "citation": "Ooguri & Vafa 2007 Nucl. Phys. B 766:21; Vafa 2005 (hep-th/0509212)",
       "reference": {
@@ -7286,7 +7369,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(wormhole-cross-section-area) and\n      wormhole-cross-section-area >= 0",
-      "domain": "A_wh ≥ 0 and finite",
       "confidence": "speculative",
       "citation": "Maldacena & Susskind 2013 Fortschr. Phys. 61:781; Bekenstein 1973 PRD 7:2333",
       "reference": {
@@ -7311,7 +7393,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(planck-mass-energy) and\n      planck-mass-energy > 0 and\n      isFinite(inflation-hubble-energy) and\n      inflation-hubble-energy > 0 and\n      isFinite(tensor-to-scalar-ratio) and\n      tensor-to-scalar-ratio > 0 and\n      isFinite(tcc-correction-coefficient)",
-      "domain": "M_P > 0, H_inf > 0, r > 0, γ finite",
       "confidence": "speculative",
       "citation": "Bedroya & Vafa 2019 (arXiv:1909.11063)",
       "reference": {
@@ -7338,7 +7419,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(measure-normalization) and\n      isFinite(anthropic-model-parameter) and\n      isFinite(landscape-parameter) and\n      landscape-parameter > 0",
-      "domain": "A, α finite, Λ > 0",
       "confidence": "highly-speculative",
       "citation": "Vilenkin 1995 PRL 74:846; Weinberg 1987 PRL 59:2607",
       "reference": {
@@ -7369,7 +7449,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(hubble-rate) and\n      isFinite(nucleon-yield-density) and\n      isFinite(sm-reaction-rate-coefficient) and\n      isFinite(proton-density) and\n      isFinite(neutron-density) and\n      isFinite(dark-reaction-rate-coefficient) and\n      isFinite(dark-species-density) and\n      isFinite(transfer-efficiency)",
-      "domain": "all eight Boltzmann inputs finite",
       "confidence": "speculative",
       "citation": "Kolb & Turner 1990 §5.2; Pitrou et al. 2018 Phys. Rep. 754:1",
       "reference": {
@@ -7401,7 +7480,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(total-mutual-information) and\n      isFinite(darwinism-magnitude) and\n      isFinite(fragment-count) and\n      fragment-count > 0 and\n      isFinite(darwinism-decay-exponent)",
-      "domain": "I(S:E), α, β finite; k > 0",
       "confidence": "speculative",
       "citation": "Zurek 2009 Nat. Phys. 5:181; Blume-Kohout & Zurek 2006 PRA 73:062310",
       "reference": {
@@ -7427,7 +7505,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(retarded-field-amplitude) and isFinite(advanced-field-amplitude)",
-      "domain": "A_ret and A_adv finite",
       "confidence": "highly-speculative",
       "citation": "Wheeler & Feynman 1945 RMP 17:157; Cramer 1986 RMP 58:647",
       "reference": {
@@ -7453,7 +7530,6 @@
       ],
       "aliases": {},
       "holds": "isFinite(higgs-decay-constant) and\n      higgs-decay-constant > 0 and\n      isFinite(higgs-field) and\n      isFinite(composite-higgs-alpha) and\n      isFinite(composite-higgs-beta)",
-      "domain": "f > 0; h, α, β finite (natural units)",
       "confidence": "established",
       "citation": "Kaplan & Georgi 1984 PLB 136:183; Giudice, Grojean, Pomarol & Rattazzi 2007 JHEP 0706:045",
       "reference": {
@@ -7482,7 +7558,6 @@
         ]
       },
       "holds": "isInteger(chern-number) and chern-number != 0",
-      "domain": "C is a nonzero integer",
       "confidence": "established",
       "citation": "von Klitzing 1980 PRL 45:494; Thouless, Kohmoto, Nightingale & den Nijs 1982 PRL 49:405",
       "relation": {
@@ -7512,7 +7587,6 @@
         ]
       },
       "holds": "isFinite(voltage)",
-      "domain": "V finite",
       "confidence": "established",
       "citation": "Josephson 1962 Phys. Lett. 1:251",
       "relation": {
@@ -7542,7 +7616,6 @@
         ]
       },
       "holds": "isFinite(filling-fraction) and filling-fraction > 0",
-      "domain": "ν finite and > 0",
       "confidence": "established",
       "citation": "Tsui, Störmer & Gossard 1982 PRL 48:1559; Laughlin 1983 PRL 50:1395",
       "reference": {
@@ -7569,7 +7642,6 @@
         ]
       },
       "holds": "isFinite(mean-molecular-weight-per-electron) and\n      mean-molecular-weight-per-electron > 0 and\n      isFinite(lane-emden-omega-3)",
-      "domain": "μ_e > 0 and ω₃⁰ finite",
       "confidence": "established",
       "citation": "Chandrasekhar 1931 ApJ 74:81",
       "reference": {
@@ -7606,7 +7678,6 @@
         ]
       },
       "holds": "isFinite(poynting-flux) and\n      poynting-flux >= 0 and\n      isFinite(reflectance) and\n      reflectance >= 0 and\n      reflectance <= 1 and\n      isFinite(incidence-angle) and incidence-angle >= 0 and incidence-angle < pi / 2",
-      "domain": "I ≥ 0, R on [0, 1], θ finite; transmission 0; incidence-angle >= 0 and incidence-angle < pi / 2",
       "confidence": "established",
       "citation": "OpenStax University Physics Volume 2, https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog's assembly.",
       "reference": {
@@ -7638,7 +7709,6 @@
         ]
       },
       "holds": "isFinite(magnetic-flux-density) and\n      magnetic-flux-density >= 0 and\n      isFinite(plasma-mass-density) and\n      plasma-mass-density > 0",
-      "domain": "B ≥ 0 and ρ > 0, both finite; ρ is a mass density",
       "confidence": "established",
       "citation": "Alfvén 1942 Nature 150:405. SI form B/√(μ0 ρ); ρ is the total mass density.",
       "reference": {
@@ -7669,7 +7739,6 @@
         ]
       },
       "holds": "isFinite(proper-temperature) and\n      proper-temperature > 0 and\n      isFinite(metric-g00) and\n      metric-g00 < 0",
-      "domain": "T > 0 and g_00 < 0, both finite",
       "confidence": "established",
       "citation": "Tolman & Ehrenfest 1930 Phys. Rev. 36:1791 (T0 √g_44). Catalog form T √(−g_00).",
       "reference": {
@@ -7705,7 +7774,6 @@
         ]
       },
       "holds": "isFinite(sound-speed) and\n      sound-speed >= 0 and\n      isFinite(magnetic-flux-density) and\n      isFinite(plasma-mass-density) and\n      plasma-mass-density > 0",
-      "domain": "c_s ≥ 0, B finite, ρ > 0",
       "confidence": "established",
       "citation": "PhysJS.FastMagnetosonic.speed_eq. Perpendicular compressional phase speed. c_s = 0 is the Alfvén number of a different polarization.",
       "reference": {
@@ -7741,7 +7809,6 @@
         ]
       },
       "holds": "isFinite(electrical-mobility) and\n      isFinite(einstein-temperature) and\n      einstein-temperature != 0 and\n      isFinite(carrier-charge) and\n      carrier-charge != 0",
-      "domain": "μ finite, T ≠ 0, and q ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.EinsteinRelation.diffusion_eq. Drift cancels diffusion on a Boltzmann profile.",
       "reference": {
@@ -7777,7 +7844,6 @@
         ]
       },
       "holds": "isFinite(specific-latent-heat) and\n      isFinite(clapeyron-temperature) and\n      clapeyron-temperature != 0 and\n      isFinite(specific-volume-change) and\n      specific-volume-change != 0",
-      "domain": "L finite, T ≠ 0, Δv ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Clapeyron.slope_eq. L = T (s2−s1) is already substituted. The entropy slope is not a second edge.",
       "reference": {
@@ -7809,7 +7875,6 @@
         ]
       },
       "holds": "isFinite(redshift-metric-g00-1) and\n      redshift-metric-g00-1 < 0 and\n      isFinite(redshift-metric-g00-2) and\n      redshift-metric-g00-2 < 0",
-      "domain": "both static g_00 components are finite and negative",
       "confidence": "established",
       "citation": "PhysJS.GravitationalRedshift.frequency_ratio. Not PhysJS.TolmanEhrenfest.hydrostatic_constant. tolman_same_ratio is nested and is not this edge.",
       "reference": {
@@ -7840,7 +7905,6 @@
         ]
       },
       "holds": "isFinite(seebeck-coefficient) and isFinite(peltier-temperature) and peltier-temperature != 0",
-      "domain": "S finite and T ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.KelvinRelation.peltier_eq. L12 = L21 is ThermoelectricOnsager.onsager, a structure field, not an axiom and not an input.",
       "reference": {
@@ -7868,7 +7932,6 @@
         ]
       },
       "holds": "isFinite(magnetic-flux-density)",
-      "domain": "B finite; the factor 2 is the stored-energy half, not C = 1",
       "confidence": "established",
       "citation": "PhysJS.MagneticPressure.pressure_eq. U = (L/2) I². C = 1 is the battery work per volume, not this pressure.",
       "reference": {
@@ -7900,7 +7963,6 @@
         ]
       },
       "holds": "isFinite(effective-mass) and effective-mass > 0 and isFinite(carrier-density) and carrier-density > 0",
-      "domain": "m > 0 and n > 0; e is the elementary charge",
       "confidence": "established",
       "citation": "PhysJS.LondonPenetration.depth_eq. Units also admit μ0 e²/m. Not the classical skin depth.",
       "reference": {
@@ -7938,7 +8000,6 @@
         ]
       },
       "holds": "isFinite(carrier-density) and\n      isFinite(temperature) and\n      isFinite(magnetic-pressure) and\n      magnetic-pressure != 0",
-      "domain": "n and T finite, p_B ≠ 0; p_B is B²/(2 μ0)",
       "confidence": "established",
       "citation": "PhysJS.PlasmaBeta.beta_eq. p_B is PhysJS.MagneticPressure.pressure_eq. Using B²/μ0 is half of this beta. Not a plasma-β inequality.",
       "reference": {
@@ -7981,7 +8042,6 @@
         ]
       },
       "holds": "isFinite(pipe-radius) and\n      pipe-radius > 0 and\n      isFinite(pipe-pressure-drop) and\n      isFinite(dynamic-viscosity) and\n      dynamic-viscosity != 0 and\n      isFinite(pipe-length) and\n      pipe-length != 0",
-      "domain": "R > 0, ΔP finite, μ ≠ 0, L ≠ 0; circular pipe, not a square duct",
       "confidence": "established",
       "citation": "PhysJS.HagenPoiseuille.flow_eq. f_D Re = 64 follows from Darcy definitions. The Fanning factor is 16. Not a square duct.",
       "reference": {
@@ -8020,7 +8080,6 @@
         ]
       },
       "holds": "isFinite(youngs-modulus) and\n      youngs-modulus > 0 and\n      isFinite(area-moment) and\n      area-moment > 0 and\n      isFinite(column-length) and\n      column-length > 0",
-      "domain": "E > 0, I > 0, L > 0; pinned ends y(0) = y(L) = 0",
       "confidence": "established",
       "citation": "PhysJS.EulerBuckling.critical_load. The beam equation is a hypothesis. The clamped-free load is π² E I / (4 L²), not this load.",
       "reference": {
@@ -8059,7 +8118,6 @@
         ]
       },
       "holds": "isFinite(pull-in-stiffness) and\n      pull-in-stiffness > 0 and\n      isFinite(pull-in-gap) and\n      pull-in-gap > 0 and\n      isFinite(pull-in-area) and\n      pull-in-area > 0",
-      "domain": "k > 0, g0 > 0, A > 0; the fold is g = 2 g0/3, not g0/2",
       "confidence": "established",
       "citation": "PhysJS.PullIn.pull_in_eq. C = ε0 A/g and the linear spring are hypotheses. g = g0/2 is not the fold.",
       "reference": {
@@ -8102,7 +8160,6 @@
         ]
       },
       "holds": "isFinite(mott-permittivity) and\n      mott-permittivity > 0 and\n      isFinite(mott-mobility) and\n      mott-mobility > 0 and\n      isFinite(mott-voltage) and\n      isFinite(mott-thickness) and\n      mott-thickness > 0",
-      "domain": "ε > 0, μ > 0, V finite, d > 0; E(0) = 0",
       "confidence": "established",
       "citation": "PhysJS.MottGurney.current_eq. Drift, Poisson, and the injecting contact are hypotheses. Not Child–Langmuir.",
       "reference": {
@@ -8142,7 +8199,6 @@
         ]
       },
       "holds": "isFinite(child-carrier-mass) and\n      child-carrier-mass > 0 and\n      isFinite(child-voltage) and\n      child-voltage > 0 and\n      isFinite(child-gap) and\n      child-gap > 0",
-      "domain": "m > 0, V > 0, d > 0; cathode field 0; Poisson not at x = 0",
       "confidence": "established",
       "citation": "PhysJS.ChildLangmuir.current_eq. e is the elementary charge. Not a drift-only solid.",
       "reference": {
@@ -8181,7 +8237,6 @@
         ]
       },
       "holds": "isFinite(shockley-saturation) and\n      isFinite(shockley-voltage) and\n      isFinite(shockley-temperature) and\n      shockley-temperature != 0",
-      "domain": "I_s and V finite, T ≠ 0; ideality 1",
       "confidence": "established",
       "citation": "PhysJS.ShockleyDiode.shockley_eq. Quasi-equilibrium, detailed balance at V = 0, and low injection are hypotheses. Ideality 2 is not this current.",
       "reference": {
@@ -8215,7 +8270,6 @@
         ]
       },
       "holds": "isFinite(thomson-temperature) and isFinite(seebeck-slope)",
-      "domain": "T and dS/dT finite; Kelvin along temperature and the Thomson split are hypotheses",
       "confidence": "established",
       "citation": "PhysJS.Thomson.thomson_eq. Π(t) = S(t) t is PhysJS.KelvinRelation.peltier_eq read along temperature. Not a second copy of Π = S T.",
       "reference": {
@@ -8248,7 +8302,6 @@
         ]
       },
       "holds": "isFinite(four-point-voltage) and isFinite(four-point-current) and four-point-current != 0",
-      "domain": "V finite, I ≠ 0; probes at 0, s, 2s, 3s; radial field (I R_s)/(2 π r)",
       "confidence": "established",
       "citation": "PhysJS.FourPoint.sheet_eq. The Laplace field and linear superposition are hypotheses. A sink at 4s is 2π/ln 3. Not PhysJS.Crossing.antisymmetry.",
       "reference": {
@@ -8276,7 +8329,6 @@
         ]
       },
       "holds": "isFinite(shot-current)",
-      "domain": "I finite; Poisson Var(N) = mean(N); one-sided Δf = 1/(2 T)",
       "confidence": "established",
       "citation": "PhysJS.ShotNoise.shot_eq. e is the elementary charge. The two-sided bandwidth gives e I. Not Johnson–Nyquist.",
       "reference": {
@@ -8302,7 +8354,6 @@
         ]
       },
       "holds": "isFinite(skin-friction)",
-      "domain": "C_f finite; normalized wall gradients agree and Pr = 1",
       "confidence": "established",
       "citation": "PhysJS.ReynoldsAnalogy.reynolds_eq. St Pr = C_f/2 when the slopes match. Pr = 1 is the hypothesis that drops Pr. Not a Nusselt correlation.",
       "reference": {
@@ -8334,7 +8385,6 @@
         ]
       },
       "holds": "isFinite(capacitor-temperature) and isFinite(capacitance) and capacitance > 0",
-      "domain": "T finite, C > 0; U = (C/2) V²",
       "confidence": "established",
       "citation": "PhysJS.CapacitorNoise.noise_eq. (3/2) k_B T/C is not this variance. Dropping the energy half gives k_B T/(2 C).",
       "reference": {
@@ -8365,7 +8415,6 @@
         ]
       },
       "holds": "isFinite(fermi-sea-density) and fermi-sea-density > 0 and isFinite(fermi-sea-mass) and fermi-sea-mass > 0",
-      "domain": "n > 0, m* > 0; two spins, T = 0, isotropic parabola",
       "confidence": "established",
       "citation": "PhysJS.FermiSea.fermi_sea. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses.",
       "reference": {
@@ -8396,7 +8445,6 @@
         ]
       },
       "holds": "isFinite(debye-sound-speed) and debye-sound-speed > 0 and isFinite(debye-atom-density) and debye-atom-density > 0",
-      "domain": "v_s > 0, n > 0; three acoustic branches, one speed",
       "confidence": "established",
       "citation": "PhysJS.DebyeCutoff.debye_cutoff. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses.",
       "reference": {
@@ -8431,7 +8479,6 @@
         ]
       },
       "holds": "isFinite(debye-atom-count) and debye-atom-count > 0 and\n      isFinite(debye-temperature) and debye-temperature > 0 and\n      isFinite(debye-theta) and debye-theta > 0 and 10 * debye-temperature <= debye-theta",
-      "domain": "N > 0, T > 0, θ_D > 0; I = π⁴/15 is assumed; 10 * debye-temperature <= debye-theta",
       "confidence": "established",
       "citation": "PhysJS.DebyeHeat.debye_heat. I = π⁴/15 is a hypothesis, not an evaluation of the Bose integral. The energy prefactor 3 π⁴/5 is not the heat capacity.",
       "reference": {
@@ -8467,7 +8514,6 @@
         ]
       },
       "holds": "isFinite(einstein-atom-count) and einstein-atom-count > 0 and\n      isFinite(einstein-solid-temperature) and einstein-solid-temperature > 0 and\n      isFinite(einstein-theta) and einstein-theta > 0",
-      "domain": "N > 0, T > 0, θ_E > 0; three Einstein oscillators",
       "confidence": "established",
       "citation": "PhysJS.EinsteinSolid.einstein_heat. The high-temperature limit is 3 N k_B. One oscillator tends to N k_B. The zero-point is constant.",
       "reference": {
@@ -8503,7 +8549,6 @@
         ]
       },
       "holds": "isFinite(sommerfeld-density) and sommerfeld-density > 0 and\n      isFinite(sommerfeld-temperature) and sommerfeld-temperature > 0 and\n      isFinite(sommerfeld-fermi-energy) and sommerfeld-fermi-energy > 0 and 10 * k_B * sommerfeld-temperature <= sommerfeld-fermi-energy",
-      "domain": "n > 0, T > 0, E_F > 0; δU is a hypothesis; √E density; 10 * k_B * sommerfeld-temperature <= sommerfeld-fermi-energy",
       "confidence": "established",
       "citation": "PhysJS.SommerfeldHeat.electronic_heat. A flat density leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61.",
       "reference": {
@@ -8551,7 +8596,6 @@
         ]
       },
       "holds": "isFinite(curie-density) and curie-density > 0 and\n      isFinite(curie-g-factor) and\n      isFinite(curie-spin) and curie-spin >= 0 and\n      isFinite(curie-magneton) and curie-magneton > 0 and\n      isFinite(curie-temperature) and isFinite(weiss-temperature) and\n      curie-temperature != weiss-temperature and curie-temperature > weiss-temperature",
-      "domain": "n > 0, μ_B > 0, spin ≥ 0, T ≠ θ; second moment and mean field are hypotheses; curie-temperature > weiss-temperature",
       "confidence": "established",
       "citation": "PhysJS.CurieWeiss.curie_weiss. θ = 0 is C/T. Not an su(2) derivation. The second moment and the mean-field shift are hypotheses.",
       "reference": {
@@ -8590,7 +8634,6 @@
         ]
       },
       "holds": "isFinite(pauli-density) and pauli-density > 0 and\n      isFinite(pauli-fermi-energy) and pauli-fermi-energy > 0 and\n      isFinite(pauli-magneton) and pauli-magneton > 0",
-      "domain": "n > 0, E_F > 0, μ_B > 0; Zeeman imbalance is a hypothesis",
       "confidence": "established",
       "citation": "PhysJS.PauliParamagnetism.pauli. A flat density leaves the factor 1. Not Landau diamagnetism.",
       "reference": {
@@ -8618,7 +8661,6 @@
         ]
       },
       "holds": "isFinite(gl-kappa) and gl-kappa > 0",
-      "domain": "κ > 0; the factor multiplies this trial, not every minimizer",
       "confidence": "established",
       "citation": "PhysJS.GinzburgLandau.type_boundary. Negative when κ > 1/√2. The positive side is this trial, not every minimizer.",
       "reference": {
@@ -8644,7 +8686,6 @@
         ]
       },
       "holds": "isFinite(upper-critical-length) and upper-critical-length > 0",
-      "domain": "ξ > 0; charge q = 2e; the Landau level is a hypothesis",
       "confidence": "established",
       "citation": "PhysJS.UpperCritical.critical_field. Charge e instead of 2e is a different field. Not the spectrum of the covariant Laplacian.",
       "reference": {
@@ -8670,7 +8711,6 @@
         ]
       },
       "holds": "isFinite(ambegaokar-gap) and ambegaokar-gap > 0",
-      "domain": "Δ > 0; T = 0 and identical gaps are hypotheses",
       "confidence": "established",
       "citation": "PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff. A coefficient other than π/2 fails. Not the finite-temperature tanh factor.",
       "reference": {
@@ -8696,7 +8736,6 @@
         ]
       },
       "holds": "isFinite(bcs-quartic) and bcs-quartic != 0",
-      "domain": "ζ finite and nonzero; ζ is the quartic coefficient",
       "confidence": "established",
       "citation": "PhysJS.BcsJump.heat_jump. ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio.",
       "reference": {
@@ -8734,7 +8773,6 @@
         ]
       },
       "holds": "isFinite(conduction-dos) and conduction-dos > 0 and\n      isFinite(valence-dos) and valence-dos > 0 and\n      isFinite(mass-action-gap) and\n      isFinite(mass-action-temperature) and mass-action-temperature > 0",
-      "domain": "N_c > 0, N_v > 0, T > 0; Boltzmann tails are hypotheses",
       "confidence": "established",
       "citation": "PhysJS.MassAction.mass_action. Dropping the 2 in the exponent is a different density. Not a Fermi–Dirac integral.",
       "reference": {
@@ -8767,7 +8805,6 @@
         ]
       },
       "holds": "isFinite(lst-static) and isFinite(lst-infinity) and lst-infinity != 0 and lst-static >= lst-infinity",
-      "domain": "ε(∞) ≠ 0; no damping is a hypothesis; lst-static >= lst-infinity",
       "confidence": "established",
       "citation": "PhysJS.LyddaneSachsTeller.lst. The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis.",
       "reference": {
@@ -8794,7 +8831,6 @@
         ]
       },
       "holds": "isFinite(bkt-stiffness) and bkt-stiffness > 0",
-      "domain": "J > 0; area entropy of core positions is the hypothesis",
       "confidence": "established",
       "citation": "PhysJS.BktJump.bkt_jump. Circumference entropy unbinds at π J. Not the renormalization-group flow.",
       "reference": {
@@ -8820,7 +8856,6 @@
         ]
       },
       "holds": "isFinite(landauer-transmission)",
-      "domain": "Σ T_n finite; spin = 2 and Δμ = e V are hypotheses",
       "confidence": "established",
       "citation": "PhysJS.LandauerConductance.conductance_eq. One spin is e²/h. Not the Hall conductance and not Landauer erasure.",
       "reference": {
@@ -8850,7 +8885,6 @@
         ]
       },
       "holds": "isFinite(bohm-ion-mass) and bohm-ion-mass > 0",
-      "domain": "m_i > 0",
       "confidence": "established",
       "citation": "PhysJS.BohmSheath.cold_bohm_threshold. The sound-speed root is the non-negative one. γ_i = 5/3 is not the warm closure.",
       "reference": {
@@ -8885,7 +8919,6 @@
         ]
       },
       "holds": "isFinite(ion-acoustic-wavenumber) and ion-acoustic-wavenumber != 0",
-      "domain": "k ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.IonAcoustic.dispersion_eq. Warm ions and a kinetic dispersion are not this row.",
       "reference": {
@@ -8921,7 +8954,6 @@
         ]
       },
       "holds": "isFinite(upper-hybrid-mass) and upper-hybrid-mass > 0",
-      "domain": "m > 0",
       "confidence": "established",
       "citation": "PhysJS.UpperHybrid.upper_hybrid_eq. e is the elementary charge. Not a cyclotron monomial.",
       "reference": {
@@ -8953,7 +8985,6 @@
         ]
       },
       "holds": "isFinite(cutoff-cyclotron) and cutoff-cyclotron >= 0",
-      "domain": "ω_c ≥ 0; the Stix index is a hypothesis",
       "confidence": "established",
       "citation": "PhysJS.ColdPlasmaCutoff.cutoff_R. The cold Stix index n_R² = 1 − ω_p²/(ω(ω − ω_c)) is a hypothesis. The Stix dielectric is not re-derived.",
       "reference": {
@@ -8988,7 +9019,6 @@
         ]
       },
       "holds": "lower-hybrid-ion-plasma != 0 and lower-hybrid-ion-cyclotron != 0 and lower-hybrid-electron-cyclotron != 0",
-      "domain": "frequencies finite and nonzero",
       "confidence": "established",
       "citation": "PhysJS.LowerHybrid.lower_hybrid_eq. Dropping the leading 1 leaves ω² = ω_ci ω_ce.",
       "reference": {
@@ -9024,7 +9054,6 @@
         ]
       },
       "holds": "isFinite(oblique-sound) and isFinite(oblique-alfven)",
-      "domain": "c_s² and v_A² ≥ 0",
       "confidence": "established",
       "citation": "PhysJS.ObliqueMagnetosonic.phase_speed_eq. The be-69 quartic with k_∥ = k cos θ is a hypothesis.",
       "reference": {
@@ -9056,7 +9085,6 @@
         ]
       },
       "holds": "bennett-line-density >= 0 and bennett-temperature >= 0",
-      "domain": "N ≥ 0 and T ≥ 0",
       "confidence": "established",
       "citation": "PhysJS.BennettPinch.equal_temperature_current. N_e = N_i = N and T_e = T_i = T. The factor 8 is the single-population current.",
       "reference": {
@@ -9087,7 +9115,6 @@
         ]
       },
       "holds": "loss-cone-mirror != 0 and loss-cone-throat <= loss-cone-mirror",
-      "domain": "Bm ≠ 0; loss-cone-throat <= loss-cone-mirror",
       "confidence": "established",
       "citation": "PhysJS.LossCone.loss_cone_eq. Pitch-angle scattering is not this statement.",
       "reference": {
@@ -9130,7 +9157,6 @@
         ]
       },
       "holds": "gradb-charge != 0 and gradb-field != 0",
-      "domain": "q ≠ 0 and B ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.GradBDrift.drift_magnitude. q is the signed charge. High-β curvature is a different vector.",
       "reference": {
@@ -9168,7 +9194,6 @@
         ]
       },
       "holds": "exb-field != 0",
-      "domain": "B ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.ExBDrift.drift_eq. v_x = E_y/B and v_y = −E_x/B. Not a finite-Larmor-radius drift.",
       "reference": {
@@ -9204,7 +9229,6 @@
         ]
       },
       "holds": "landau-wavenumber != 0 and landau-thermal != 0",
-      "domain": "k ≠ 0 and v_t ≠ 0; the residue is a hypothesis",
       "confidence": "established",
       "citation": "PhysJS.LandauDamping.damping_eq. The residue formula γ = (π ω³/(2 n k²)) (∂f/∂v)|_{ω/k} is a hypothesis, not a contour integral.",
       "reference": {
@@ -9236,7 +9260,6 @@
         ]
       },
       "holds": "isFinite(debye-sphere-density) and isFinite(debye-sphere-length)",
-      "domain": "n and λ_D finite",
       "confidence": "established",
       "citation": "PhysJS.DebyeSphere.coulomb_argument. The angular integral and ln Λ are not evaluated.",
       "reference": {
@@ -9267,7 +9290,6 @@
         ]
       },
       "holds": "multi-debye-1 != 0 and multi-debye-2 != 0",
-      "domain": "both lengths nonzero",
       "confidence": "established",
       "citation": "PhysJS.MultiDebye.debye_two. Dropping a responding species leaves a different length.",
       "reference": {
@@ -9306,7 +9328,6 @@
         ]
       },
       "holds": "lorentz-temperature > 0 and lorentz-mass > 0",
-      "domain": "T > 0 and m > 0; the transport integrals are hypotheses",
       "confidence": "established",
       "citation": "PhysJS.LorentzResistivity.resistivity_eq. σ_tr = 4π b0² ln Λ and the conductivity moment are hypotheses. The typed reference closure is nested.",
       "reference": {
@@ -9339,7 +9360,6 @@
         ]
       },
       "holds": "isFinite(slab-conductivity) and isFinite(slab-width)",
-      "domain": "σ and L finite",
       "confidence": "established",
       "citation": "PhysJS.ResistiveSlab.decay_time. A denominator 4π is not π². Not the Reynolds analogy.",
       "reference": {
@@ -9370,7 +9390,6 @@
         ]
       },
       "holds": "parker-sound != 0",
-      "domain": "c_s ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.ParkerCritical.critical_radius. The critical point also has v² = c_s².",
       "reference": {
@@ -9409,7 +9428,6 @@
         ]
       },
       "holds": "spiral-radial-speed != 0",
-      "domain": "v_r ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.ParkerSpiral.spiral_ratio. Dropping the sign is a different spiral.",
       "reference": {
@@ -9446,7 +9464,6 @@
         ]
       },
       "holds": "standoff-density != 0 and standoff-speed != 0",
-      "domain": "ρ ≠ 0 and v ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.ChapmanFerraro.standoff_eq. A doubled dipole is a hypothesis. Specular 2 ρ v² replaces the numerator 2 by 1.",
       "reference": {
@@ -9482,7 +9499,6 @@
         ]
       },
       "holds": "lawson-reactivity != 0 and lawson-energy != 0",
-      "domain": "⟨σv⟩ ≠ 0 and E ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.LawsonBreakeven.breakeven_eq. The 12 is 4 × 3. The Maxwellian average is not computed.",
       "reference": {
@@ -9514,7 +9530,6 @@
         ]
       },
       "holds": "probe-electron-mass > 0 and probe-ion-mass > 0 and probe-ion-mass > probe-electron-mass",
-      "domain": "masses positive; probe-ion-mass > probe-electron-mass",
       "confidence": "established",
       "citation": "PhysJS.LangmuirProbe.floating_potential. The ion flux is the nested bohmFlux object. Not Child–Langmuir.",
       "reference": {
@@ -9541,7 +9556,6 @@
         ]
       },
       "holds": "isFinite(cross-field-alpha)",
-      "domain": "α finite",
       "confidence": "established",
       "citation": "PhysJS.CrossFieldDiffusion.diffusion_ratio. Einstein relation on μ and on μ/(1+α²) is be-70 and is not re-proved. Bohm 1/16 equals this ratio only when α² = 15.",
       "reference": {
@@ -9571,7 +9585,6 @@
         ]
       },
       "holds": "isFinite(firehose-beta-parallel) and isFinite(firehose-beta-perp)",
-      "domain": "betas finite",
       "confidence": "established",
       "citation": "PhysJS.Firehose.firehose_threshold. The CGL root is a hypothesis. With β = 2 μ0 p/B² the threshold is β_∥ − β_⊥ > 2.",
       "reference": {
@@ -9606,7 +9619,6 @@
         ]
       },
       "holds": "mirror-t-parallel != 0",
-      "domain": "T_∥ ≠ 0; the kinetic integral is a hypothesis",
       "confidence": "established",
       "citation": "PhysJS.MirrorInstability.mirror_threshold. The threshold β_⊥ (T_⊥/T_∥ − 1) > 1 is a hypothesis. The kinetic integral is not evaluated.",
       "reference": {
@@ -9650,7 +9662,6 @@
         ]
       },
       "holds": "isFinite(comb-airgap) and comb-airgap != 0",
-      "domain": "g ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.CombDrive.force_eq. Both sidewalls and the coenergy 1/2 cancel. One sidewall leaves the 1/2. Not be-79.",
       "reference": {
@@ -9688,7 +9699,6 @@
         ]
       },
       "holds": "isFinite(swing-kelvin) and\n      swing-kelvin != 0 and\n      isFinite(swing-oxide) and\n      swing-oxide != 0 and\n      swing-oxide + swing-depletion != 0",
-      "domain": "T ≠ 0, C_ox ≠ 0, and C_ox + C_d ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.SubthresholdSwing.swing_eq. e is the elementary charge. Dropping C_d is not the swing when C_d ≠ 0. Not be-82.",
       "reference": {
@@ -9716,7 +9726,6 @@
         ]
       },
       "holds": "isFinite(boost-duty) and boost-duty != 1 and boost-duty >= 0 and boost-duty < 1",
-      "domain": "D ≠ 1; boost-duty >= 0 and boost-duty < 1",
       "confidence": "established",
       "citation": "PhysJS.BoostConverter.boost_ratio. Volt-second balance. No real duty equals both this ratio and the buck ratio D.",
       "reference": {
@@ -9754,7 +9763,6 @@
         ]
       },
       "holds": "isFinite(fin-conductivity) and\n      fin-conductivity > 0 and\n      isFinite(fin-web) and\n      fin-web > 0 and\n      isFinite(fin-convection) and\n      fin-convection > 0 and\n      isFinite(fin-span) and\n      fin-span != 0",
-      "domain": "k > 0, t > 0, h > 0, and L ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.FinEfficiency.efficiency_eq. One face is not that m. tanh is not 1, so this is not an infinite fin.",
       "reference": {
@@ -9791,7 +9799,6 @@
         ]
       },
       "holds": "not (not isFinite(teg-source) or teg-source == 0) and not (not isFinite(teg-sink) or not isFinite(teg-figure)) and not ((1 + teg-figure * ((teg-source + teg-sink) / 2)) < 0) and sqrt((1 + teg-figure * ((teg-source + teg-sink) / 2))) + teg-sink / teg-source != 0 and teg-sink <= teg-source",
-      "domain": "T_h ≠ 0, 1 + Z T_m ≥ 0, and the denominator ≠ 0; teg-sink <= teg-source",
       "confidence": "established",
       "citation": "PhysJS.ThermoelectricGenerator.efficiency_eq. Matched load m = 1 is not stationary when Z T_m ≠ 0. The Carnot factor alone is not this efficiency.",
       "reference": {
@@ -9839,7 +9846,6 @@
         ]
       },
       "holds": "not (not (joukowsky-rho > 0 and joukowsky-bulk > 0 and joukowsky-wallmod > 0 and joukowsky-thk > 0)) and 1 + ((joukowsky-bulk / joukowsky-wallmod) * (joukowsky-bore / joukowsky-thk)) > 0",
-      "domain": "ρ > 0, K > 0, E > 0, e_wall > 0, and 1 + (K/E)(D/e_wall) > 0",
       "confidence": "established",
       "citation": "PhysJS.Joukowsky.joukowsky_eq. ρ (Δv)² is not ρ c Δv when c ≠ Δv. Dropping the wall term is the rigid-pipe speed.",
       "reference": {
@@ -9878,7 +9884,6 @@
         ]
       },
       "holds": "coax-inner > 0 and coax-outer > 0 and coax-inner != coax-outer and coax-liner != 0",
-      "domain": "a > 0, b > 0, a ≠ b, and ε ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.CoaxialCapacitance.capacitance_per_length. Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d.",
       "reference": {
@@ -9914,7 +9919,6 @@
         ]
       },
       "holds": "damping-inertia > 0 and damping-spring > 0",
-      "domain": "m > 0 and k > 0",
       "confidence": "established",
       "citation": "PhysJS.DampingRatio.damping_ratio. For c ≥ 0 the discriminant vanishes iff ζ = 1. Dropping the 2 is not this ratio.",
       "reference": {
@@ -9954,7 +9958,6 @@
         ]
       },
       "holds": "isFinite(blochlaw-dstiff) and blochlaw-dstiff > 0 and isFinite(blochlaw-warmth) and blochlaw-warmth >= 0",
-      "domain": "D > 0 and T ≥ 0",
       "confidence": "established",
       "citation": "PhysJS.BlochLaw.bloch_law. ζ(3/2) is not evaluated. g μ_B at g = 2 is not one Bohr magneton.",
       "reference": {
@@ -9987,7 +9990,6 @@
         ]
       },
       "holds": "isFinite(dos3d-bandmass) and dos3d-bandmass > 0 and isFinite(dos3d-abscissa) and dos3d-abscissa >= 0",
-      "domain": "m > 0 and E ≥ 0",
       "confidence": "established",
       "citation": "PhysJS.DensityOfStates3D.dos_3d. One spin replaces 1/(2 π²) by 1/(4 π²). Not be-88.",
       "reference": {
@@ -10014,7 +10016,6 @@
         ]
       },
       "holds": "isFinite(dos2d-bandmass) and dos2d-bandmass != 0",
-      "domain": "m ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.DensityOfStates2D.dos_2d. A valley factor other than 1 is not this density.",
       "reference": {
@@ -10044,7 +10045,6 @@
         ]
       },
       "holds": "isFinite(tfscreen-n3) and isFinite(tfscreen-chemical) and tfscreen-chemical > 0",
-      "domain": "E_F > 0",
       "confidence": "established",
       "citation": "PhysJS.ThomasFermi.thomas_fermi. A flat density leaves the factor 1. Not the Debye length.",
       "reference": {
@@ -10083,7 +10083,6 @@
         ]
       },
       "holds": "isFinite(builtin-warmth) and\n      isFinite(builtin-acceptor) and\n      builtin-acceptor > 0 and\n      isFinite(builtin-donor) and\n      builtin-donor > 0 and\n      isFinite(builtin-ni) and\n      builtin-ni > 0",
-      "domain": "N_A > 0, N_D > 0, and n_i > 0",
       "confidence": "established",
       "citation": "PhysJS.BuiltinVoltage.builtin_voltage. Not the ideal diode of be-82.",
       "reference": {
@@ -10120,7 +10119,6 @@
         ]
       },
       "holds": "isFinite(fermioffset-warmth) and\n      fermioffset-warmth != 0 and\n      isFinite(fermioffset-holemass) and\n      fermioffset-holemass > 0 and\n      isFinite(fermioffset-elecmass) and\n      fermioffset-elecmass > 0",
-      "domain": "T ≠ 0, m_h* > 0, and m_e* > 0",
       "confidence": "established",
       "citation": "PhysJS.SemiconductorFermi.fermi_level. The 3/4 is half of 3/2. The edge value is the intrinsic offset.",
       "reference": {
@@ -10148,7 +10146,6 @@
         ]
       },
       "holds": "isFinite(onsagerk-karea)",
-      "domain": "A is finite",
       "confidence": "established",
       "citation": "PhysJS.OnsagerFrequency.onsager_frequency. γ cancels. Δ(1/B) = 1/F.",
       "reference": {
@@ -10174,7 +10171,6 @@
         ]
       },
       "holds": "isFinite(josephsonl-ic) and josephsonl-ic != 0",
-      "domain": "I_c ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.JosephsonInductance.inductance_eq. cos φ = 1 at φ = 0. Not be-59.",
       "reference": {
@@ -10204,7 +10200,6 @@
         ]
       },
       "holds": "isFinite(lowercrit-xi) and\n      lowercrit-xi > 0 and\n      isFinite(lowercrit-pen) and\n      lowercrit-pen > lowercrit-xi",
-      "domain": "0 < ξ < λ",
       "confidence": "established",
       "citation": "PhysJS.LowerCritical.lower_critical. Not be-96.",
       "reference": {
@@ -10243,7 +10238,6 @@
         ]
       },
       "holds": "isFinite(acdrude-n3) and\n      isFinite(acdrude-bandmass) and\n      acdrude-bandmass != 0 and\n      isFinite(acdrude-scatter) and\n      acdrude-scatter > 0 and\n      isFinite(acdrude-radian)",
-      "domain": "τ > 0 and m ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.AcDrude.ac_drude. Dropping the DC 1 is not this conductivity. Not be-123.",
       "reference": {
@@ -10276,7 +10270,6 @@
         ]
       },
       "holds": "isFinite(matthsum-scatter1) and\n      matthsum-scatter1 != 0 and\n      isFinite(matthsum-scatter2) and\n      matthsum-scatter2 != 0 and\n      1 / matthsum-scatter1 + 1 / matthsum-scatter2 != 0",
-      "domain": "τ₁ ≠ 0, τ₂ ≠ 0, and 1/τ₁ + 1/τ₂ ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Matthiessen.matthiessen. The edge value is τ. ρ = ρ₁ + ρ₂ is the same rate sum.",
       "reference": {
@@ -10307,7 +10300,6 @@
         ]
       },
       "holds": "isFinite(stonerchi-pauli) and isFinite(stonerchi-ig) and abs(stonerchi-ig) < 1",
-      "domain": "|x| < 1",
       "confidence": "established",
       "citation": "PhysJS.Stoner.stoner. χ_P is be-94 and is not re-proved. The pole is the same formula.",
       "reference": {
@@ -10338,7 +10330,6 @@
         ]
       },
       "holds": "isFinite(gortercas-tc) and\n      gortercas-tc > 0 and\n      isFinite(gortercas-warmth) and\n      gortercas-warmth >= 0 and\n      gortercas-warmth < gortercas-tc",
-      "domain": "T_c > 0 and 0 ≤ T < T_c",
       "confidence": "established",
       "citation": "PhysJS.GorterCasimir.gorter_casimir. The exponent 4 is a hypothesis. λ(T) is on the result and is not this edge. Not be-75.",
       "reference": {
@@ -10373,7 +10364,6 @@
         ]
       },
       "holds": "isFinite(arrhwarmth) and arrhwarmth != 0",
-      "domain": "T ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Arrhenius.arrhenius_eq. The prefactor is temperature-independent. Not the Eyring identification of A.",
       "reference": {
@@ -10405,7 +10395,6 @@
         ]
       },
       "holds": "isFinite(eyringwarmth) and eyringwarmth != 0",
-      "domain": "T ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Eyring.eyring_eq. Transmission coefficient 1. The molar substitutions differ by exp(−1).",
       "reference": {
@@ -10436,7 +10425,6 @@
         ]
       },
       "holds": "isFinite(vanthoffwarmth) and vanthoffwarmth != 0",
-      "domain": "T ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.VanTHoff.vant_hoff. Not a plot and not a second proof of be-150.",
       "reference": {
@@ -10467,7 +10455,6 @@
         ]
       },
       "holds": "isFinite(gibbsisok) and gibbsisok > 0 and isFinite(gibbsisowarmth) and gibbsisowarmth != 0",
-      "domain": "K > 0 and T ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.GibbsIsotherm.gibbs_eq. Not an activity model.",
       "reference": {
@@ -10506,7 +10493,6 @@
         ]
       },
       "holds": "isFinite(nernstgn) and nernstgn != 0 and isFinite(nernstgq) and nernstgq > 0",
-      "domain": "n ≠ 0 and Q > 0",
       "confidence": "established",
       "citation": "PhysJS.NernstGibbs.nernst_eq. e is the elementary charge.",
       "reference": {
@@ -10543,7 +10529,6 @@
         ]
       },
       "holds": "isFinite(clapintwarm1) and clapintwarm1 > 0 and isFinite(clapintwarm2) and clapintwarm2 > 0",
-      "domain": "T1 > 0 and T2 > 0",
       "confidence": "established",
       "citation": "PhysJS.ClausiusClapeyron.integrated_eq. A separate liquid volume is not this row.",
       "reference": {
@@ -10575,7 +10560,6 @@
         ]
       },
       "holds": "isFinite(raoultsat) and raoultsat > 0 and raoultmole >= 0 and raoultmole <= 1",
-      "domain": "P* > 0; raoultmole >= 0 and raoultmole <= 1",
       "confidence": "established",
       "citation": "PhysJS.Raoult.raoult_eq. Not a second proof of the Gibbs isotherm.",
       "reference": {
@@ -10610,7 +10594,6 @@
         ]
       },
       "holds": "isFinite(prandtlk) and prandtlk != 0",
-      "domain": "k ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Prandtl.prandtl_eq. Not a heat-transfer correlation.",
       "reference": {
@@ -10650,7 +10633,6 @@
         ]
       },
       "holds": "isFinite(reynummu) and reynummu != 0",
-      "domain": "μ ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.ReynoldsNumber.reynolds_eq. Not a friction correlation.",
       "reference": {
@@ -10687,7 +10669,6 @@
         ]
       },
       "holds": "isFinite(biotk) and biotk != 0",
-      "domain": "k ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Biot.biot_eq. Not a lumped-capacitance criterion.",
       "reference": {
@@ -10723,7 +10704,6 @@
         ]
       },
       "holds": "isFinite(nusseltk) and nusseltk != 0",
-      "domain": "k ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Nusselt.nusselt_eq. Not a correlation for Nu.",
       "reference": {
@@ -10759,7 +10739,6 @@
         ]
       },
       "holds": "isFinite(schmidtrho) and schmidtrho != 0 and isFinite(schmidtdiff) and schmidtdiff != 0",
-      "domain": "ρ ≠ 0 and D ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Schmidt.schmidt_eq. Lewis number is not this row.",
       "reference": {
@@ -10795,7 +10774,6 @@
         ]
       },
       "holds": "isFinite(sherwooddiff) and sherwooddiff != 0",
-      "domain": "D ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.Sherwood.sherwood_eq. Not a correlation for Sh.",
       "reference": {
@@ -10835,7 +10813,6 @@
         ]
       },
       "holds": "isFinite(fourierslabk) and fourierslabk != 0 and isFinite(fourierslablen) and fourierslablen != 0",
-      "domain": "k ≠ 0 and L ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.FourierConduction.fourier_eq. The sign is part of the statement.",
       "reference": {
@@ -10888,7 +10865,6 @@
         ]
       },
       "holds": "isFinite(newtonrho) and isFinite(newtoncp) and isFinite(newtonvol) and newtonrho*newtoncp*newtonvol != 0 and isFinite(newtonfilm) and isFinite(newtonarea) and newtonfilm*newtonarea != 0",
-      "domain": "ρ c V ≠ 0 and h A ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.NewtonCooling.newton_eq. Radiation in T^4 is not this row.",
       "reference": {
@@ -10924,7 +10900,6 @@
         ]
       },
       "holds": "isFinite(ottoratio) and ottoratio > 0 and isFinite(ottogamma) and ottogamma > 1 and ottoratio > 1",
-      "domain": "r > 0 and γ > 1; ottoratio > 1",
       "confidence": "established",
       "citation": "PhysJS.Otto.otto_eq. The exponent γ−1 is not 1−γ.",
       "reference": {
@@ -10963,7 +10938,6 @@
         ]
       },
       "holds": "isFinite(jtcp) and jtcp != 0",
-      "domain": "c_p ≠ 0",
       "confidence": "established",
       "citation": "PhysJS.JouleThomson.joule_thomson_eq. The ideal-gas bracket vanishes.",
       "reference": {
@@ -10996,7 +10970,6 @@
         ]
       },
       "holds": "isFinite(planckfreq) and planckfreq > 0 and isFinite(planckwarmth) and planckwarmth > 0",
-      "domain": "ν > 0 and T > 0",
       "confidence": "established",
       "citation": "PhysJS.PlanckSpectrum.planck_eq. Two polarizations. One polarization is not this density.",
       "reference": {
@@ -11017,7 +10990,6 @@
       "sources": [],
       "aliases": {},
       "holds": "true",
-      "domain": "no variable input",
       "confidence": "established",
       "citation": "PhysJS.StefanBoltzmann.stefan_boltzmann_eq. Not equal to the Stefan constant symbol when that symbol omits this quotient.",
       "reference": {
@@ -11041,7 +11013,6 @@
         ]
       },
       "holds": "isFinite(wienroot) and wienroot > 4 and wienroot < 5 and abs((5 - wienroot) - 5 * exp(-wienroot)) < 0.00001",
-      "domain": "4 < x < 5; abs((5 - wienroot) - 5 * exp(-wienroot)) < 0.00001",
       "confidence": "established",
       "citation": "PhysJS.WienDisplacement.wien_eq. The decimal root is not evaluated.",
       "reference": {
@@ -11075,7 +11046,6 @@
         ]
       },
       "holds": "isFinite(sackurquantum) and sackurquantum > 0 and isFinite(sackurdensity) and sackurdensity > 0 and 10 * sackurdensity <= sackurquantum",
-      "domain": "n_Q > 0 and n > 0; 10 * sackurdensity <= sackurquantum",
       "confidence": "established",
       "citation": "PhysJS.SackurTetrode.sackur_tetrode. Stirling is ln N! = N ln N − N.",
       "reference": {
@@ -11111,7 +11081,6 @@
         ]
       },
       "holds": "isFinite(sahamass) and sahamass > 0 and isFinite(sahawarmth) and sahawarmth > 0",
-      "domain": "m > 0 and T > 0",
       "confidence": "established",
       "citation": "PhysJS.Saha.saha_eq. The electron weight 2 is not in this statement.",
       "reference": {
@@ -11147,7 +11116,6 @@
         ]
       },
       "holds": "isFinite(richardswarmth) and richardswarmth > 0",
-      "domain": "T > 0",
       "confidence": "established",
       "citation": "PhysJS.RichardsonDushman.richardson_eq. Reflection coefficient 1. e is the elementary charge.",
       "reference": {
@@ -11179,7 +11147,6 @@
         ]
       },
       "holds": "isFinite(onsagerb0) and onsagerb0 == 0 and isFinite(onsagerl12)",
-      "domain": "B = 0",
       "confidence": "established",
       "citation": "PhysJS.OnsagerReciprocity.onsager_eq. L12(B) = L21(−B) is not this row.",
       "reference": {
@@ -11206,7 +11173,6 @@
         ]
       },
       "holds": "isFinite(plate-separation) and plate-separation > 0",
-      "domain": "plate separation > 0",
       "confidence": "established",
       "citation": "Casimir 1948 Proc. Kon. Ned. Akad. Wet. 51:793",
       "reference": {
@@ -11232,7 +11198,6 @@
         ]
       },
       "holds": "isFinite(unruh-acceleration) and unruh-acceleration >= 0",
-      "domain": "proper acceleration ≥ 0",
       "confidence": "established",
       "citation": "Unruh 1976 Phys. Rev. D 14:870",
       "reference": {
@@ -11262,7 +11227,6 @@
         ]
       },
       "holds": "isFinite(johnson-temperature) and johnson-temperature >= 0 and isFinite(resistance) and resistance >= 0",
-      "domain": "temperature ≥ 0 and resistance ≥ 0",
       "confidence": "established",
       "citation": "Nyquist 1928 Phys. Rev. 32:110",
       "reference": {
@@ -11293,7 +11257,6 @@
         ]
       },
       "holds": "isFinite(electrical-conductivity) and electrical-conductivity >= 0 and isFinite(wiedemann-temperature) and wiedemann-temperature >= 0",
-      "domain": "conductivity ≥ 0 and temperature ≥ 0",
       "confidence": "established",
       "citation": "Franz and Wiedemann 1853",
       "reference": {
@@ -11320,7 +11283,6 @@
         ]
       },
       "holds": "isFinite(critical-temperature) and critical-temperature >= 0",
-      "domain": "critical temperature ≥ 0",
       "confidence": "established",
       "citation": "Bardeen, Cooper, and Schrieffer 1957 Phys. Rev. 108:1175",
       "reference": {
@@ -11346,7 +11308,6 @@
         ]
       },
       "holds": "isFinite(accretor-mass) and accretor-mass > 0",
-      "domain": "accretor mass > 0",
       "confidence": "established",
       "citation": "Eddington 1926 The Internal Constitution of the Stars",
       "reference": {
@@ -11380,7 +11341,6 @@
         ]
       },
       "holds": "isFinite(jeans-temperature) and jeans-temperature > 0 and isFinite(jeans-density) and jeans-density > 0 and isFinite(mean-molecular-weight) and mean-molecular-weight > 0",
-      "domain": "temperature, density, and mean molecular weight are positive",
       "confidence": "established",
       "citation": "Jeans 1902 Phil. Trans. R. Soc. A 199:1",
       "notice": {

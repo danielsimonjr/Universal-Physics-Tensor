@@ -358,7 +358,6 @@
           "sources",
           "aliases",
           "holds",
-          "domain",
           "confidence",
           "citation"
         ],
@@ -409,9 +408,6 @@
             }
           },
           "holds": {
-            "type": "string"
-          },
-          "domain": {
             "type": "string"
           },
           "confidence": {

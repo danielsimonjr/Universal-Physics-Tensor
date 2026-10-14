@@ -13,7 +13,8 @@ import { describe, expect, it } from 'vitest';
 import { catalogEntries, catalogRelations } from '../../src/bridges/catalog-load.js';
 import { evaluateFormula, formulaNames, formulaScope, parseCatalogExpression } from '../../src/bridges/expr-parse.js';
 import { holds, HoldsError } from '../../src/bridges/holds.js';
-import { relationHolds } from '../../src/bridges/relation-eval.js';
+import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
+import { relationDomain } from '../../src/bridges/relation-eval.js';
 import { BRIDGE_EVALUATORS, unusedInputKeys } from '../../src/bridges/evaluators.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import * as holdsOracle from '../fixtures/oracles/holds-oracle.js';
@@ -42,10 +43,8 @@ describe('every condition is written in the MathTS grammar', () => {
     const offenders = catalogRelations().filter((r) => OLD_GRAMMAR.test(r.holds)).map((r) => r.id);
     expect(offenders).toEqual([]);
   });
-  it('catalog domain text reads "and", not a code operator, on every relation', () => {
-    const relations = catalogRelations();
-    expect(relations.every((r) => typeof r.domain === 'string')).toBe(true);
-    const offenders = relations.filter((r) => OLD_GRAMMAR.test(r.domain)).map((r) => `${r.id}: ${r.domain}`);
+  it('a domain description is the holds text, so it reads "and" like the condition', () => {
+    const offenders = CATALOG_GRAPH.filter((e) => OLD_GRAMMAR.test(e.domain.description)).map((e) => e.id);
     expect(offenders).toEqual([]);
     expect(OLD_GRAMMAR.test('boost-duty >= 0 && boost-duty < 1')).toBe(true);
   });
@@ -95,11 +94,11 @@ describe('holds() decides exactly as the old interpreter did', () => {
     // the reason this layer exists, recorded as a control
     expect(parseMathTs('1e-18 > 0').evaluate({})).toBe(false);
   });
-  it('an unbound name is a HoldsError, which relationHolds reads as false (as before)', () => {
+  it('an unbound name is a HoldsError, which relationDomain reads as false (as before)', () => {
     expect(() => holds('y > 0', { x: 1 }, {}, ['x'])).toThrow(HoldsError);
     expect(() => holdsOracle.holds('y > 0', { x: 1 }, {}, ['x'])).toThrow();
     const relation = catalogRelations().find((r) => r.id === 'be-88')!;
-    expect(relationHolds(relation, {})).toBe(false);
+    expect(relationDomain(relation).predicate({})).toBe(false);
   });
 });
 

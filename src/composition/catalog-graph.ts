@@ -6,7 +6,7 @@
 
 import { catalogEntry, catalogRelations } from '../bridges/catalog-load.js';
 import { parseCatalogExpression } from '../bridges/expr-parse.js';
-import { evaluateCatalogRelation, relationHolds } from '../bridges/relation-eval.js';
+import { evaluateCatalogRelation, relationDomain } from '../bridges/relation-eval.js';
 import type { BridgeEdge } from './edge.js';
 import { withBoundAliases } from './edge.js';
 import { quantityByName } from './quantities.js';
@@ -46,10 +46,7 @@ function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): Bridg
     ...(Object.keys(relation.aliases).length > 0 ? { aliases: relation.aliases } : {}),
     target: quantityByName(relation.target),
     confidence: relation.confidence,
-    domain: {
-      description: relation.domain,
-      predicate: (inputs) => relationHolds(relation, inputs),
-    },
+    domain: relationDomain(relation),
     evaluate: (inputs) => evaluateCatalogRelation(relation, inputs),
     symbolic: parseCatalogExpression(relation.expression),
     citation: relation.citation,

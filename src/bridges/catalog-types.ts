@@ -60,7 +60,6 @@ export interface CatalogRelation {
   readonly sources: readonly string[];
   readonly aliases: Readonly<Record<string, readonly string[]>>;
   readonly holds: string;
-  readonly domain: string;
   readonly confidence: 'established' | 'speculative' | 'highly-speculative';
   readonly citation: string;
   readonly coefficientUnset?: boolean;

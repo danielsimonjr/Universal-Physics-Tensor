@@ -28,6 +28,7 @@ import {
   MASS,
   TEMPERATURE,
 } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const q = (
   name: string,
@@ -40,7 +41,7 @@ const edge = (over: Partial<BridgeEdge> & Pick<BridgeEdge, 'id' | 'sources' | 't
   kind: 'bridge',
   label: over.id,
   confidence: 'established',
-  domain: { description: 'any', predicate: () => true },
+  domain: validityDomain('true'),
   citation: 'synthetic',
   ...over,
 });
@@ -141,11 +142,7 @@ describe('composeEdges', () => {
       id: 'nats',
       sources: [q('subsystem-entanglement-entropy')],
       target: q('out'),
-      domain: {
-        description: 'junction is ln 2 nats',
-        predicate: (i) =>
-          Math.abs(i['subsystem-entanglement-entropy']! - Math.LN2) < 1e-12,
-      },
+      domain: validityDomain('abs(subsystem-entanglement-entropy - log(2)) < 1e-12'),
       evaluate: (i) => i['subsystem-entanglement-entropy']! * 2,
     });
     const composed = composeEdges(bits, nats, {
@@ -180,10 +177,7 @@ describe('composeEdges', () => {
       sources: [q('intermediate', LENGTH)],
       target: q('out'),
       evaluate: (i) => Math.sqrt(i['intermediate']),
-      domain: {
-        description: 'intermediate ≥ 0',
-        predicate: (i) => i['intermediate'] >= 0,
-      },
+      domain: validityDomain('intermediate >= 0'),
     });
     const composed = composeEdges(first, positiveOnly);
     expect(composed.evaluate({ x: 2 })).toBe(2); // sqrt(4)
@@ -230,7 +224,7 @@ describe('evaluateEdge / consistencyRatio (domain checking)', () => {
     sources: [q('v')],
     target: q('w'),
     evaluate: (i) => i['v'] * 4,
-    domain: { description: 'v > 0', predicate: (i) => i['v'] > 0 },
+    domain: validityDomain('v > 0'),
   });
 
   it('evaluateEdge throws DomainViolationError outside the domain', () => {

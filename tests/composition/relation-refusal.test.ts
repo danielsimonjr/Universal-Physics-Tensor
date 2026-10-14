@@ -22,6 +22,7 @@ import {
 } from '../../src/composition/enumerate.js';
 import type { BridgeEdge } from '../../src/composition/edge.js';
 import type { RelationContract } from '../../src/relations/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -46,7 +47,7 @@ function edge(
     sources: [quantity(source, sourceDim)],
     target: quantity(target, targetDim),
     confidence: 'established',
-    domain: { description: 'any', predicate: () => true },
+    domain: validityDomain('true'),
     citation: 'synthetic',
     evaluate: (inputs) => inputs[source]!,
     symbolic: form,

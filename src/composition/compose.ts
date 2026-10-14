@@ -32,7 +32,7 @@
 
 import { equals, format } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
-import type { BridgeEdge, EdgeConfidence } from './edge.js';
+import type { BridgeEdge, EdgeConfidence, ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
 import {
@@ -418,7 +418,13 @@ export function composeEdges(
     return si;
   };
 
-  const composedDomain = {
+  const id = `${first.id}>>${second.id}`;
+  // A name `second` reads under a renamed key reads it under that key here.
+  const secondKeyOf = (keyOf: (name: string) => string) => (name: string): string =>
+    keyOf(Object.entries(renameMap).find(([, original]) => original === name)?.[0] ?? name);
+  const pipedContext = `on ${second.id}, with ${junction.name} piped from ${first.id}`;
+
+  const composedDomain: ValidityDomain = {
     description:
       `(${first.domain.description}) AND, on the piped ` +
       `${junction.name}, (${second.domain.description})`,
@@ -432,9 +438,14 @@ export function composeEdges(
       const intermediate = first.evaluate(inputs);
       return second.domain.predicate(buildSecondInputs(inputs, intermediate));
     },
+    violations: (inputs, keyOf = (name) => name) => {
+      const before = first.domain.violations(inputs, keyOf);
+      if (before.length > 0) return before;
+      const piped = buildSecondInputs(inputs, first.evaluate(inputs));
+      return second.domain.violations(piped, secondKeyOf(keyOf));
+    },
   };
 
-  const id = `${first.id}>>${second.id}`;
 
   // ── Atlas Phase 1 (S1.2b): the relation overlay, and NOTHING else. ────────
   // Entered only when BOTH operands carry a `relation`. An operand with no
@@ -509,18 +520,12 @@ export function composeEdges(
     domain: composedDomain,
     evaluate: (inputs) => {
       if (!first.domain.predicate(inputs)) {
-        throw new DomainViolationError(
-          `${id}: inputs violate composed validity domain ` +
-            `(${composedDomain.description})`,
-        );
+        throw new DomainViolationError(id, first.domain.violations(inputs), `on ${first.id}`);
       }
       const intermediate = first.evaluate(inputs);
       const pipedInputs = buildSecondInputs(inputs, intermediate);
       if (!second.domain.predicate(pipedInputs)) {
-        throw new DomainViolationError(
-          `${id}: inputs violate composed validity domain ` +
-            `(${composedDomain.description})`,
-        );
+        throw new DomainViolationError(id, second.domain.violations(pipedInputs, secondKeyOf((name) => name)), pipedContext);
       }
       return second.evaluate(pipedInputs);
     },

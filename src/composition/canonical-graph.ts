@@ -63,7 +63,7 @@
  * @module composition/canonical-graph
  */
 
-import type { BridgeEdge, ValidityDomain } from './edge.js';
+import { validityDomain, type BridgeEdge, type ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
@@ -76,8 +76,6 @@ import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
 import { evalExpr } from './expr-eval.js';
-import { HoldsError, holds } from '../bridges/holds.js';
-import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
 
 /** A universal constant a canonical `governing` list may name: SI value + dim. */
 interface ConstantDef {
@@ -137,6 +135,7 @@ function attributesOf(eq: CanonicalEquation): RegimeAttributes {
 const PERMISSIVE_DOMAIN: ValidityDomain = {
   description: 'standard-physics regime (canonical L-layer)',
   predicate: () => true,
+  violations: () => [],
 };
 
 /**
@@ -146,17 +145,7 @@ const PERMISSIVE_DOMAIN: ValidityDomain = {
 function domainOf(eq: CanonicalEquation, sourceNames: readonly string[]): ValidityDomain {
   const text = eq.holds;
   if (text === undefined) return PERMISSIVE_DOMAIN;
-  return {
-    description: text,
-    predicate: (inputs) => {
-      try {
-        return holds(text, inputs, formulaScope(), [...formulaNames(), ...sourceNames]);
-      } catch (error) {
-        if (error instanceof HoldsError) return false;
-        throw error;
-      }
-    },
-  };
+  return validityDomain(text, sourceNames);
 }
 
 /** A registered or literal dimensionless number, or undefined when `name` is not one. */

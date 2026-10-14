@@ -29,6 +29,7 @@ import {
 import type { RelationContract } from '../../src/atlas/types.js';
 import { snapshotAllPairs, type PairSnapshot } from './compose-relation.snapshot.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const GOLDEN: readonly PairSnapshot[] = JSON.parse(
   readFileSync(fileURLToPath(new URL('./compose-relation.golden.json', import.meta.url)), 'utf8'),
@@ -50,7 +51,7 @@ const edge = (
   sources: [q(source)],
   target: q(target),
   confidence: 'established',
-  domain: { description: 'any', predicate: () => true },
+  domain: validityDomain('true'),
   evaluate: (inputs) => inputs[source] * 2,
   citation: 'synthetic',
   ...(relation ? { relation } : {}),

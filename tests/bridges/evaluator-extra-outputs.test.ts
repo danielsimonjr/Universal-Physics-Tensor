@@ -35,7 +35,7 @@ describe('a record may return a second number beside its value (issues 451, 479)
     const r = run(52, { ...base, T_yr: 0.2408 });
     expect(r.precession_arcsec_per_century).toBeGreaterThan(42.9);
     expect(r.precession_arcsec_per_century).toBeLessThan(43.1);
-    expect(() => run(52, { ...base, T_yr: -1 })).toThrow(/T_yr must be > 0/);
+    expect(() => run(52, { ...base, T_yr: -1 })).toThrow(/T_yr = -1 violates T_yr > 0/);
   });
   it('evaluateRelation still returns the primary value, not the extra', () => {
     const ev = evaluateRelation(88, { n_per_m3: 8.47e28, m_kg: 9.1093837015e-31 });

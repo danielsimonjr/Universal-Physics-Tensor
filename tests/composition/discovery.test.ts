@@ -24,6 +24,7 @@ import {
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
 import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const q = (name: string): Quantity => ({
   name,
@@ -45,7 +46,7 @@ const edge = (
   sources: sourceNames.map(q),
   target: q(targetName),
   confidence: 'speculative',
-  domain: { description: 'any', predicate: () => true },
+  domain: validityDomain('true'),
   evaluate,
   citation: 'synthetic',
 });

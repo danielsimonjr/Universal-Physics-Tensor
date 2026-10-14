@@ -16,8 +16,8 @@ import { catalogEvaluators } from './catalog-load.js';
 import type { CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
 import { evaluateFormula, formulaVariables, parseCatalogExpression } from './expr-parse.js';
 import type { ExprNode } from '../dimensional/ast-types.js';
-import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
-import { DomainViolationError } from './evaluation-errors.js';
+import { evaluateCatalogRelation, relationDomain } from './relation-eval.js';
+import { DomainViolationError, type DomainViolation } from './evaluation-errors.js';
 import { checkInputs, inputContract, type EvaluationWant, type InputContract, type InputSlot } from './input-contract.js';
 
 /** How a length input is read: radius, diameter, separation, impact parameter, or semi-major axis. @public */
@@ -190,6 +190,22 @@ function bindRelationInputs(
   return bound;
 }
 
+/**
+ * An optional positive parameter no source owns (so the relation's condition
+ * cannot read it) states its own condition: `key > 0` when it is given.
+ */
+function unsignedOptional(parameter: EvaluatorParameter, value: number | undefined): DomainViolation[] {
+  if (parameter.optional !== true || parameter.sign !== 'positive' || value === undefined || value > 0) return [];
+  return [
+    {
+      condition: `${parameter.key} > 0`,
+      key: parameter.key,
+      value,
+      inputs: [{ key: parameter.key, quantity: parameter.quantity, value }],
+    },
+  ];
+}
+
 function buildSpec(
   catalogId: number,
   name: string,
@@ -199,6 +215,12 @@ function buildSpec(
   const relation = primaryRelation(catalogId);
   if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
   const contract = evaluatorContract(catalogId, relation, parameters);
+  const keyOfSource = new Map(
+    parameters.flatMap((parameter) => {
+      const source = sourceOfParameter(relation, parameter);
+      return source === undefined ? [] : [[source, parameter.key] as const];
+    }),
+  );
   return {
     bridgeId: catalogId,
     name,
@@ -209,15 +231,11 @@ function buildSpec(
     run(inputs, want = 'all') {
       const given = checkInputs(contract, inputs, want);
       const bound = bindRelationInputs(relation, parameters, given);
-      if (!relationHolds(relation, bound)) {
-        throw new DomainViolationError(`${relation.id}: inputs violate validity domain (${relation.domain})`);
-      }
-      for (const parameter of parameters) {
-        const value = given[parameter.key];
-        if (parameter.optional === true && parameter.sign === 'positive' && value !== undefined && !(value > 0)) {
-          throw new DomainViolationError(`${relation.id}: ${parameter.key} must be > 0`);
-        }
-      }
+      const violated = [
+        ...relationDomain(relation).violations(bound, (source) => keyOfSource.get(source) ?? source),
+        ...parameters.flatMap((parameter) => unsignedOptional(parameter, given[parameter.key])),
+      ];
+      if (violated.length > 0) throw new DomainViolationError(relation.id, violated);
       const value = evaluateCatalogRelation(relation, bound);
       const result: Record<string, number> = { value };
       if (want === 'value') return result;
