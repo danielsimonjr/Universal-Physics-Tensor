@@ -479,12 +479,15 @@ export {
   CompositionDimensionError,
   CompositionJunctionError,
   DomainViolationError,
+  validityDomain,
   // Calibration edges (pre-registered CT-1/CT-1b/CT-2/CT-3 targets)
   M_SUN_KG,
 } from './composition/index.js';
 export type {
   BridgeEdge,
   ComposeOptions,
+  DomainInput,
+  DomainViolation,
   EdgeConfidence,
   Quantity,
   QuantityIdentification,

@@ -13,6 +13,7 @@ import type { BridgeEdge } from '../../src/composition/edge.js';
 import type { Quantity } from '../../src/composition/quantity.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 import { DIMENSIONLESS, LENGTH, TEMPERATURE } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const q = (name: string, dim: Dimension = DIMENSIONLESS): Quantity => ({
   name,
@@ -28,7 +29,7 @@ const edge = (
   kind: 'bridge',
   label: over.id,
   confidence: 'established',
-  domain: { description: 'any', predicate: () => true },
+  domain: validityDomain('true'),
   citation: 'synthetic',
   ...over,
 });

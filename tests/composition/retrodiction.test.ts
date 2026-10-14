@@ -20,6 +20,7 @@ import { CarrierSignError } from '../../src/bridges/carrier-sign.js';
 import { FormulaError } from '../../src/numerical/formula-contract.js';
 import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const q = (name: string): Quantity => ({
   name,
@@ -41,7 +42,7 @@ const edge = (
   sources: sourceNames.map(q),
   target: q(targetName),
   confidence: 'established',
-  domain: { description: 'any', predicate: () => true },
+  domain: validityDomain('true'),
   evaluate,
   citation: 'synthetic',
 });
@@ -240,7 +241,7 @@ describe('an evaluator error keeps its kind (9.0.0 audit §4 C6)', () => {
     sources: sources.map(q),
     target: q(target),
     confidence: 'speculative',
-    domain: { description: 'any', predicate: () => true },
+    domain: validityDomain('true'),
     evaluate,
     citation: 'synthetic',
     ...over,
@@ -253,7 +254,7 @@ describe('an evaluator error keeps its kind (9.0.0 audit §4 C6)', () => {
 
   it('forwardEvaluate skips a domain miss and an unset coefficient: the edge does not fire, nothing else is said', () => {
     const edges = [
-      mk('outside', ['x'], 'y', (i) => i['x'] * 2, { domain: { description: 'x < 0', predicate: (i) => i['x'] < 0 } }),
+      mk('outside', ['x'], 'y', (i) => i['x'] * 2, { domain: validityDomain('x < 0') }),
       mk('unset', ['x'], 'z', (i) => i['x'] * 3, { coefficientUnset: true }),
     ];
     const values = forwardEvaluate(edges, { x: 1 }, []);

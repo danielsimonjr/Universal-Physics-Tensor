@@ -128,28 +128,144 @@ function compile(node: MathNode, source: string): Compiled {
   }
 }
 
-const COMPILED = new Map<string, Compiled>();
+/**
+ * One conjunct of a validity condition: the text it is written in (the
+ * relation's own names), the names it reads, and its test.
+ * @internal
+ */
+export interface HoldsCondition {
+  /** The conjunct as the condition states it, in the relation's names (`swing-kelvin >= 0`). */
+  readonly text: string;
+  /** The names it reads, in order of first use, as the relation spells them. */
+  readonly names: readonly string[];
+  /** True when the conjunct holds; a name it cannot bind, or a non-boolean result, throws {@link HoldsError}. */
+  test(scope: Readonly<Record<string, number>>): boolean;
+}
 
-function compiled(rewritten: string, source: string): Compiled {
-  const hit = COMPILED.get(rewritten);
+
+/**
+ * The conjuncts of `node`: an `and` splits, `not (not X)` is X, `not (A or B)` is
+ * `not A` and `not B`, and `not (x == y)` is `x != y`. Each rewrite is exact, so
+ * the conjunction of the parts is the condition. Anything else is one conjunct.
+ */
+function conjuncts(node: MathNode): MathNode[] {
+  if (node.type === 'ParenthesisNode') return conjuncts(node.content!);
+  if (node.type === 'OperatorNode' && node.op === 'and') return (node.args ?? []).flatMap(conjuncts);
+  if (node.type === 'OperatorNode' && node.op === 'not') {
+    let inner = node.args![0]!;
+    while (inner.type === 'ParenthesisNode') inner = inner.content!;
+    if (inner.type === 'OperatorNode' && inner.op === 'not') return conjuncts(inner.args![0]!);
+    if (inner.type === 'OperatorNode' && inner.op === 'or') return (inner.args ?? []).flatMap((arg) => conjuncts(negation(arg)));
+    if (inner.type === 'OperatorNode' && inner.op === '==') return [withOperator(inner, '!=')];
+  }
+  return [node];
+}
+
+/** `not X` as a node, so the rewrite above can recurse into it. */
+function negation(node: MathNode): MathNode {
+  return parseMathTs(`not (${node.toString()})`) as unknown as MathNode;
+}
+
+/** `a op b` with the same operands. */
+function withOperator(node: MathNode, op: string): MathNode {
+  const [a, b] = node.args!;
+  return parseMathTs(`${a!.toString()} ${op} ${b!.toString()}`) as unknown as MathNode;
+}
+
+/** The symbol names a node reads, in order, without functions. */
+function symbolNames(node: MathNode): string[] {
+  const out: string[] = [];
+  const visit = (n: MathNode): void => {
+    if (n.type === 'SymbolNode' && n.name !== undefined) {
+      if (!out.includes(n.name)) out.push(n.name);
+      return;
+    }
+    if (n.type === 'ParenthesisNode') visit(n.content!);
+    for (const arg of n.args ?? []) visit(arg);
+  };
+  visit(node);
+  return out;
+}
+
+/** Replace each whole-word identifier of `text` through `rename`. */
+function renameIdentifiers(text: string, rename: (name: string) => string): string {
+  return text.replace(/[A-Za-z_][A-Za-z0-9_]*/g, (word) => rename(word));
+}
+
+const CONDITIONS = new Map<string, readonly HoldsCondition[]>();
+
+/**
+ * The conjuncts of the condition `source`, each testable alone. Their
+ * conjunction is the condition, so a caller that tests them all decides
+ * exactly what {@link holds} decides, and can say which part failed.
+ * Hyphenated names are rewritten with `names` before parsing and restored in
+ * each conjunct's `text` and `names`.
+ * @internal
+ */
+export function holdsConditions(source: string, names: readonly string[]): readonly HoldsCondition[] {
+  const rewritten = rewriteCatalogHyphens(source, names);
+  const hit = CONDITIONS.get(rewritten);
   if (hit !== undefined) return hit;
-  let node: MathNode;
+  let root: MathNode;
   try {
-    node = parseMathTs(rewritten) as unknown as MathNode;
+    root = parseMathTs(rewritten) as unknown as MathNode;
   } catch (error) {
     throw new HoldsError(`${error instanceof Error ? error.message : String(error)} in ${source}`);
   }
-  const fn = compile(node, source);
-  COMPILED.set(rewritten, fn);
-  return fn;
+  const spelled = new Map(names.map((name) => [name.replace(/-/g, '_'), name]));
+  const restore = (name: string): string => spelled.get(name) ?? name;
+  const parts = conjuncts(root).map((node): HoldsCondition => {
+    const text = renameIdentifiers(node.toString(), restore);
+    const fn = compile(node, text);
+    return {
+      text,
+      names: symbolNames(node).map(restore),
+      test: (scope) => {
+        const result = fn({ ...scope });
+        if (typeof result !== 'boolean') throw new HoldsError(`condition is not boolean: ${text}`);
+        return result;
+      },
+    };
+  });
+  CONDITIONS.set(rewritten, parts);
+  return parts;
 }
 
-const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
+/** The names (hyphens written as underscores) the conditions read. @internal */
+export function conditionReads(conditions: readonly HoldsCondition[]): ReadonlySet<string> {
+  return new Set(conditions.flatMap((condition) => condition.names.map((name) => name.replace(/-/g, '_'))));
+}
 
 /**
- * Whether `holds` is true for `values`.
- * Hyphenated quantity names are rewritten with `names` before parsing; an
- * unbound name, a non-boolean result, and a syntax error are a {@link HoldsError}.
+ * A scope for a condition: the constants, then `values` with hyphens written as
+ * underscores. A value whose name is a constant that `declared` does not name
+ * is a {@link ConstantInputError} when `reads` holds it, and is dropped otherwise.
+ * @internal
+ */
+export function holdsScope(
+  values: Readonly<Record<string, number>>,
+  constants: Readonly<Record<string, number>>,
+  reads: ReadonlySet<string>,
+  declared: readonly string[] = [],
+): Record<string, number> {
+  const scope: Record<string, number> = { ...constants };
+  const allowed = new Set(declared.map((name) => name.replace(/-/g, '_')));
+  for (const [key, value] of Object.entries(values)) {
+    const name = key.replace(/-/g, '_');
+    if (name in constants && !allowed.has(name)) {
+      if (reads.has(name)) throw new ConstantInputError(key);
+      continue;
+    }
+    scope[name] = value;
+  }
+  return scope;
+}
+
+/**
+ * Whether `holds` is true for `values`: every conjunct of
+ * {@link holdsConditions} holds. Hyphenated quantity names are rewritten with
+ * `names` before parsing; an unbound name, a non-boolean result, and a syntax
+ * error are a {@link HoldsError}.
  * A value whose name is one of `constants` and which the condition reads is
  * a {@link ConstantInputError}, a caller error and not a false condition,
  * unless `declared` names it; one the condition does not read is dropped, as
@@ -162,19 +278,7 @@ export function holds(
   names: readonly string[],
   declared: readonly string[] = [],
 ): boolean {
-  const rewritten = rewriteCatalogHyphens(source, names);
-  const reads = new Set(rewritten.match(IDENTIFIER) ?? []);
-  const scope: Scope = { ...constants };
-  const allowed = new Set(declared.map((name) => name.replace(/-/g, '_')));
-  for (const [key, value] of Object.entries(values)) {
-    const name = key.replace(/-/g, '_');
-    if (name in constants && !allowed.has(name)) {
-      if (reads.has(name)) throw new ConstantInputError(key);
-      continue;
-    }
-    scope[name] = value;
-  }
-  const result = compiled(rewritten, source)(scope);
-  if (typeof result !== 'boolean') throw new HoldsError(`condition is not boolean: ${source}`);
-  return result;
+  const conditions = holdsConditions(source, names);
+  const scope = holdsScope(values, constants, conditionReads(conditions), declared);
+  return conditions.every((condition) => condition.test(scope));
 }

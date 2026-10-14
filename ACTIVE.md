@@ -21,6 +21,14 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 ## Open tasks, easiest first
 
 - [x] Release 9.0.0 (PR D, `release/9.0.0`). Done: 9.0.0 is on npm (`npm view universal-physics-tensor version --prefer-online` printed 9.0.0 on 2026-10-09).
+- [x] One source for domain messages (the 8.0.0 dogfood grouping, domain-message group).
+  The personas found refusals that contradicted the check (be-127 "T ≠ 0" when T ≥ 0 was checked, be-147 likewise) and that never named the failing input. The cause: each relation carried its domain twice, as executable `holds` and as prose `domain`, and the refusal printed the prose.
+  Plan: delete the prose field; the predicate, the description and the refusal are all read from `holds`, split into exact conjuncts (`holdsConditions`); `DomainViolationError` carries `{ condition, key, value, inputs }` per failed conjunct, rendered with the caller's keys; non-check prose moves to entry `assumptions`.
+  Done: `tests/bridges/domain-violations.test.ts` probes every evaluator with reference inputs, moving each input to refused values, and for each refusal re-reads every listed condition over the given inputs, requires every false conjunct listed, every key a contract key and no internal source name in the message; plus the edge, alias and composition paths and the be-127/be-147 CLI repros.
+  Leftover, with reason: the condition objects are what a later range-per-kind change (G2) should generate; the sign clauses are still derived from parameter flags by `deriveDomains` until then. `upt evaluate --json` still reports a refusal as stderr text like every other CLI error; the structured form is the library error.
+
+
+- [ ] Release 9.0.0 (PR D, `release/9.0.0`).
   The changes since 8.0.0 (#459–#500) were notes spread over thirteen PR entries, several of which a later PR in the range contradicted. The ledger said the owner removed every reviewer gate, and named migration scripts that are not in the repository. The persona README listed six personas where seven reported. `tests/composition/discovery.test.ts` spent 158 s on Node 22 (227 s on CI) rebuilding the discovery context once per candidate.
   Plan: `package.json` 9.0.0, the catalog `packageVersion` with it, and the version test reading the newest CHANGELOG heading instead of a literal; one `## [9.0.0] - 2026-10-08` entry stating the final behaviour, with every break and its migration; this file and the persona README corrected; the discovery equivalence test replaced by the two facts it stood for (the context build is a function of its inputs, and vetting does not mutate it) plus a check of the closure skip it never exercised.
   Not done here, by rule: the merge, the `v9.0.0` tag and the npm publish wait for Tom's review and the owner. Awaiting owner confirmation: the #495 Bernoulli re-pin authorization.

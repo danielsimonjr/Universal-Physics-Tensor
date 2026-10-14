@@ -120,7 +120,42 @@ export function isInputContractError(
 }
 
 /**
+ * One input a violated condition reads: the key the caller gave it under, the
+ * name the relation reads it by, and its value. @public
+ */
+export interface DomainInput {
+  readonly key: string;
+  readonly quantity: string;
+  readonly value: number;
+}
+
+/**
+ * One violated condition of a validity domain. `condition` is the conjunct of
+ * the record's `holds` that failed, written with the caller's keys
+ * (`T_K >= 0`); `key` and `value` are the first input it reads, and `inputs`
+ * every input it reads. A condition that reads no input (a constant check) has
+ * `key` `''` and `value` `NaN`. A later range-per-kind change generates the
+ * same objects. @public
+ */
+export interface DomainViolation {
+  readonly condition: string;
+  readonly key: string;
+  readonly value: number;
+  readonly inputs: readonly DomainInput[];
+}
+
+/** `T_K = -1 violates T_K >= 0`; two inputs: `T_c_K = 5, T_h_K = 3 violate T_c_K <= T_h_K`. */
+function describeViolation(violation: DomainViolation): string {
+  if (violation.inputs.length === 0) return `${violation.condition} fails`;
+  const given = violation.inputs.map((input) => `${input.key} = ${input.value}`).join(', ');
+  return `${given} ${violation.inputs.length === 1 ? 'violates' : 'violate'} ${violation.condition}`;
+}
+
+/**
  * Evaluation refused: the inputs fall outside the relation's validity domain.
+ * The error lists only the conditions that failed, each with the input keys it
+ * reads and their values; the message is rendered from them, so it cannot name
+ * a condition the check did not run.
  *
  * Honest deviation from design D-3's "domain-incompatible at compose
  * time": domain predicates are opaque functions, so incompatibility is
@@ -131,8 +166,16 @@ export function isInputContractError(
  * @public
  */
 export class DomainViolationError extends Error {
-  constructor(message: string) {
-    super(message);
+  /** The id evaluated, every violated condition, and, for a composed edge, where in the composition it failed. */
+  constructor(
+    readonly id: string,
+    readonly violations: readonly DomainViolation[],
+    readonly context?: string,
+  ) {
+    super(
+      `${id}: outside the validity domain${context === undefined ? '' : ` (${context})`}: ` +
+        violations.map(describeViolation).join('; '),
+    );
     this.name = 'DomainViolationError';
   }
 }

@@ -9,7 +9,7 @@ import { quantityRecord } from '../dimensional/quantity-registry.js';
 import { applyCarrierSignPolicy, CarrierSignError } from './carrier-sign.js';
 import type { CatalogRelation } from './catalog-types.js';
 import { evaluateFormula, formulaNames, formulaScope } from './expr-parse.js';
-import { holds, HoldsError } from './holds.js';
+import { conditionDomain, type ConditionDomain } from './validity.js';
 
 /** Thrown when two carrier roles have opposite signs. */
 export { CarrierSignError };
@@ -72,18 +72,18 @@ function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { cha
   return found;
 }
 
+const domainCache = new Map<string, ConditionDomain>();
+
 /**
- * Whether `inputs` satisfy the relation's validity condition. An unbound or
- * unparsable condition is false; an input that names a constant the relation
- * does not declare as a source throws `ConstantInputError`.
+ * The relation's validity domain, read from its `holds`: the predicate, the
+ * description and the violated conditions all come from that one text.
  */
-export function relationHolds(rel: CatalogRelation, inputs: Readonly<Record<string, number>>): boolean {
-  try {
-    return holds(rel.holds, inputs, formulaScope(), [...formulaNames()], rel.sources);
-  } catch (error) {
-    if (error instanceof HoldsError) return false;
-    throw error;
-  }
+export function relationDomain(rel: CatalogRelation): ConditionDomain {
+  const hit = domainCache.get(rel.id);
+  if (hit !== undefined) return hit;
+  const domain = conditionDomain(rel.holds, formulaNames, formulaScope, rel.sources);
+  domainCache.set(rel.id, domain);
+  return domain;
 }
 
 /**
