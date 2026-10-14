@@ -3,7 +3,7 @@ metadata:
   version: 10.0.0
   totalFiles: 364
   totalModules: 13
-  totalExports: 2577
+  totalExports: 2575
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5020,7 +5020,8 @@ modules:
       internalDependencies:
         - file: ../core/constants.js
           imports:
-            - C_SI
+            - EPS0_SI
+            - MU0_SI
         - file: ./types.js
           imports:
             - check
@@ -5028,8 +5029,6 @@ modules:
             - signedRelativeDifference
             - AppliedCase
       exports:
-        - MU_0_SI
-        - EPS_0_SI
         - MAX_DISPLACEMENT_RATIO
         - MAX_MFP_RATIO
         - MAX_OMEGA_TAU
@@ -5039,8 +5038,6 @@ modules:
       functions:
         - maxwellDepthFactor
       constants:
-        - MU_0_SI
-        - EPS_0_SI
         - MAX_DISPLACEMENT_RATIO
         - MAX_MFP_RATIO
         - MAX_OMEGA_TAU
@@ -17801,14 +17798,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 364
   totalModules: 13
-  totalLinesOfCode: 81621
-  totalExports: 2577
+  totalLinesOfCode: 81615
+  totalExports: 2575
   totalClasses: 82
   totalInterfaces: 467
   totalFunctions: 781
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 393
+  totalConstants: 391
   totalReExports: 1320
   totalTypeOnlyImports: 510
   runtimeCircularDeps: 0

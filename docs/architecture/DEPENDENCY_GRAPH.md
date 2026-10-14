@@ -2161,12 +2161,12 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `C_SI` | Import |
+| `../core/constants.js` | `EPS0_SI, MU0_SI` | Import |
 | `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
 
 **Exports:**
 - Functions: `maxwellDepthFactor`
-- Constants: `MU_0_SI`, `EPS_0_SI`, `MAX_DISPLACEMENT_RATIO`, `MAX_MFP_RATIO`, `MAX_OMEGA_TAU`, `MIN_THICKNESS_RATIO`, `SKIN_DEPTH_CASE`
+- Constants: `MAX_DISPLACEMENT_RATIO`, `MAX_MFP_RATIO`, `MAX_OMEGA_TAU`, `MIN_THICKNESS_RATIO`, `SKIN_DEPTH_CASE`
 
 ---
 
@@ -7019,8 +7019,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 364 |
 | Total Modules | 13 |
-| Total Lines of Code | 81621 |
-| Total Exports | 2577 |
+| Total Lines of Code | 81615 |
+| Total Exports | 2575 |
 | Total Re-exports | 1320 |
 | Total Classes | 82 |
 | Total Interfaces | 467 |

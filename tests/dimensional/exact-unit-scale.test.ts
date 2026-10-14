@@ -212,11 +212,8 @@ describe('MathTS states the same unit scales (the independent second method)', (
   });
 
   it('disagrees only where the table is the definition and MathTS rounds or differs by convention', () => {
-    // bit: ln 2 nat here, 1 in MathTS. torr: 101325/760 Pa exactly; mmHg: 133.322387415 Pa (NIST SP 811);
-    // MathTS states both as 133.322 Pa. hp = 550 ft·lbf/s = 745.69987158227022 W and
-    // psi = lbf/in² = 6894.757293168361 Pa exactly; MathTS stores 745.6998715386 and
-    // 6894.75729276459, rounded at about 6e-11.
-    // mathts-core 0.18.0 states torr, mmHg, hp and psi exactly, so only bit's convention differs.
+    // bit: ln 2 nat here, 1 in MathTS, a convention difference. mathts-core 0.18.0 states torr (101325/760 Pa),
+    // mmHg (133.322387415 Pa, NIST SP 811), hp (550 ft·lbf/s) and psi (lbf/in²) exactly, so they agree.
     expect(disagree.sort()).toEqual(['bit']);
   });
 });

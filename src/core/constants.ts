@@ -56,12 +56,12 @@ export const H_SI = 6.62607015e-34;
 /**
  * Reduced Planck constant h/(2π) (J·s). Exact, from the 2019 SI definition of
  * h. The CODATA display `1.054571817e-34` is that quotient truncated; it is
- * smaller by a relative `6.127e-10`. Planck units below stay the published
- * CODATA 2022 values, which were computed from the truncated display.
+ * smaller by a relative `6.127e-10`. The Planck units below are
+ * MathTS's CODATA 2022 values, not recomputed here from {@link HBAR_SI}.
  */
 export const HBAR_SI = H_SI / (2 * Math.PI);
 
-/** The CODATA 2022 display value of ħ: {@link HBAR_SI} truncated. Kept so the difference is computed, not typed. @internal */
+/** The CODATA display value of ħ: {@link HBAR_SI} truncated. Kept so the difference is computed, not typed. @internal */
 export const HBAR_CODATA_DISPLAY = 1.054571817e-34;
 
 /** Boltzmann constant (J/K). Exact SI definition since 2019. */

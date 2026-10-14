@@ -79,6 +79,8 @@ const MEASURED = [
   '1.616255e-35',
   '2.176434e-8',
   '5.391247e-44',
+  '1.25663706212e-6',
+  '1.25663706127e-6',
 ];
 
 const SECOND_SITES: ReadonlyArray<{ literal: string; file: string; reason: string }> = [
