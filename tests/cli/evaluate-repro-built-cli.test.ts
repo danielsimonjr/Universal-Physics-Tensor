@@ -42,7 +42,7 @@ describe('upt evaluate names a missing input before any domain check (issue 454,
   it('a value outside the domain is still a domain failure, so the check above can fail', () => {
     const { status, stderr } = upt(['evaluate', 'be-133', 'c_kg_per_s=2', 'k_N_per_m=-1', 'm_kg=1']);
     expect(status).toBe(1);
-    expect(stderr).toMatch(/be-133: inputs violate validity domain/);
+    expect(stderr).toMatch(/be-133: outside the validity domain: k_N_per_m = -1 violates k_N_per_m > 0/);
   });
 
   it('every absent input is named at once', () => {

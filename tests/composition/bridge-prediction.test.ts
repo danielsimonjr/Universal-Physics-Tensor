@@ -16,6 +16,7 @@ import { CATALOG_GRAPH } from '../../src/composition/index.js';
 import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import type { PhysicalScale, Force } from '../../src/core/types.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const Q = (name: string, scale: PhysicalScale, force: Force): Quantity => ({
   name,
@@ -32,7 +33,7 @@ const E = (id: string, source: Quantity, target: Quantity): BridgeEdge => ({
   sources: [source],
   target,
   confidence: 'speculative',
-  domain: { description: 'any', predicate: () => true },
+  domain: validityDomain('true'),
   evaluate: () => 0,
   citation: 'synthetic',
 });

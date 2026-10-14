@@ -7,6 +7,7 @@
  * (a∘b)∘c and a∘(b∘c) agree numerically and in confidence/kind.
  */
 import { describe, it } from 'vitest';
+import { validityDomain } from '../../src/composition/edge.js';
 import fc from 'fast-check';
 import {
   composeEdges,
@@ -79,7 +80,7 @@ describe('composeEdges — associativity on compatible chains (property-based)',
     sources: [q(inName)],
     target: q(outName),
     confidence,
-    domain: { description: 'any finite', predicate: (i) => Number.isFinite(i[inName]) },
+    domain: validityDomain(`isFinite(${inName})`, [inName]),
     evaluate: (i) => scale * i[inName] + offset,
     citation: 'synthetic',
   });

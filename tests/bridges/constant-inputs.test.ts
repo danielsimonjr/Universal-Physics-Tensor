@@ -14,7 +14,7 @@ import { ConstantInputError } from '../../src/bridges/evaluation-errors.js';
 import { BRIDGE_EVALUATORS, buildEvaluatorSpec } from '../../src/bridges/evaluators.js';
 import { evaluateFormula, formulaNames, formulaScope, reservedFormulaNames } from '../../src/bridges/expr-parse.js';
 import { holds, HoldsError } from '../../src/bridges/holds.js';
-import { evaluateCatalogRelation, relationHolds } from '../../src/bridges/relation-eval.js';
+import { evaluateCatalogRelation, relationDomain } from '../../src/bridges/relation-eval.js';
 
 const relation = (id: string) => catalogRelations().find((row) => row.id === id)!;
 
@@ -31,9 +31,9 @@ describe('a constant-named input is refused', () => {
     // be-51's condition reads G and c (b >= 10 r_s); be-42's reads neither.
     const lensing = relation('be-51');
     const at = { mass: 1.989e30, 'impact-parameter': 6.957e8 };
-    expect(relationHolds(lensing, at)).toBe(true);
-    expect(() => relationHolds(lensing, { ...at, c: -1 })).toThrow(ConstantInputError);
-    expect(relationHolds(relation('be-42'), { mass: 1, c: -1 })).toBe(true);
+    expect(relationDomain(lensing).predicate(at)).toBe(true);
+    expect(() => relationDomain(lensing).predicate({ ...at, c: -1 })).toThrow(ConstantInputError);
+    expect(relationDomain(relation('be-42')).predicate({ mass: 1, c: -1 })).toBe(true);
   });
 
   it('a reserved key the formula does not read is an extra key, dropped as any other is on the graph path', () => {
@@ -41,7 +41,7 @@ describe('a constant-named input is refused', () => {
     const thermal = relation('be-12');
     const at = { mass: 9.1093837015e-31, temperature: 300 };
     expect(evaluateCatalogRelation(thermal, { ...at, 'lane-emden-omega-3': 2 })).toBe(evaluateCatalogRelation(thermal, at));
-    expect(relationHolds(thermal, { ...at, 'lane-emden-omega-3': 2 })).toBe(true);
+    expect(relationDomain(thermal).predicate({ ...at, 'lane-emden-omega-3': 2 })).toBe(true);
     expect(() => evaluateCatalogRelation(thermal, { ...at, h: 1 })).toThrow(ConstantInputError);
   });
 

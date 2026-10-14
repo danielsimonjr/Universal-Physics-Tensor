@@ -432,7 +432,7 @@ describe('evaluate: every failure of the evaluation itself is exit 1 under the o
   it('a validity-domain refusal carries the prefix', async () => {
     const r = await run(['evaluate', 'be-16', 'temperature_K=-5']);
     expect(r.code).toBe(1);
-    expect(r.err).toMatch(/^upt evaluate: be-16: inputs violate validity domain/);
+    expect(r.err).toMatch(/^upt evaluate: be-16: outside the validity domain: /);
   });
 });
 

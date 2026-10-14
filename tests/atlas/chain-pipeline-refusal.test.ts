@@ -19,6 +19,7 @@ import { sym } from '../../src/dimensional/ast-builders.js';
 import { DIMENSIONLESS, LENGTH, MASS } from '../../src/dimensional/types.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 import type { RelationContract } from '../../src/relations/types.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -52,7 +53,7 @@ function edge(
     sources: [quantity(source, sourceDim)],
     target: quantity(target, targetDim),
     confidence: 'established',
-    domain: { description: 'any', predicate: () => true },
+    domain: validityDomain('true'),
     citation: 'fixture',
     evaluate: (inputs) => inputs[source] ?? 0,
     symbolic,

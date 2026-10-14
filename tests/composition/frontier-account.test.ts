@@ -19,6 +19,7 @@ import {
   type FrontierAccount,
 } from '../../src/composition/frontier-account.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 function qty(name: string, dim: Quantity['dim']): Quantity {
   return { name, symbol: name, dim, attributes: {} };
@@ -33,7 +34,7 @@ function edge(id: string, source: Quantity, target: Quantity): BridgeEdge {
     sources: [source],
     target,
     confidence: 'established',
-    domain: { description: 'fixture', predicate: () => true },
+    domain: validityDomain('true'),
     evaluate: () => 0,
     citation: 'fixture',
   };

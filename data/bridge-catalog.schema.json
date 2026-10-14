@@ -565,7 +565,6 @@
           "sources",
           "aliases",
           "holds",
-          "domain",
           "citation"
         ],
         "additionalProperties": false,
@@ -617,9 +616,6 @@
           "holds": {
             "type": "string",
             "minLength": 1
-          },
-          "domain": {
-            "type": "string"
           },
           "confidence": {
             "enum": [

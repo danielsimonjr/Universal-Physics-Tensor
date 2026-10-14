@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 10.0.0
-  totalFiles: 363
+  totalFiles: 364
   totalModules: 13
-  totalExports: 2566
+  totalExports: 2577
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3628,6 +3628,9 @@ modules:
         - ConstantInputError
         - DuplicateInputError
         - DomainViolationError
+      interfaces:
+        - DomainInput
+        - DomainViolation
       functions:
         - isInputContractError
     src/bridges/evaluator-inputs.ts:
@@ -3699,10 +3702,11 @@ modules:
         - file: ./relation-eval.js
           imports:
             - evaluateCatalogRelation
-            - relationHolds
+            - relationDomain
         - file: ./evaluation-errors.js
           imports:
             - DomainViolationError
+            - DomainViolation
         - file: ./input-contract.js
           imports:
             - checkInputs
@@ -3794,11 +3798,19 @@ modules:
           imports:
             - ConstantInputError
       exports:
+        - holdsConditions
+        - conditionReads
+        - holdsScope
         - holds
         - HoldsError
       classes:
         - HoldsError
+      interfaces:
+        - HoldsCondition
       functions:
+        - holdsConditions
+        - conditionReads
+        - holdsScope
         - holds
     src/bridges/index.ts:
       description: Bridge catalog projection. The rows are loaded from
@@ -3988,16 +4000,16 @@ modules:
             - evaluateFormula
             - formulaNames
             - formulaScope
-        - file: ./holds.js
+        - file: ./validity.js
           imports:
-            - holds
-            - HoldsError
+            - conditionDomain
+            - ConditionDomain
       exports:
         - CarrierSignError
-        - relationHolds
+        - relationDomain
         - evaluateCatalogRelation
       functions:
-        - relationHolds
+        - relationDomain
         - evaluateCatalogRelation
     src/bridges/rhs-registry.ts:
       description: Right-hand side of each catalog id that has a relation, projected from
@@ -4074,6 +4086,28 @@ modules:
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
+    src/bridges/validity.ts:
+      description: A validity domain read from one condition text, the record's `holds`.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./evaluation-errors.js
+          imports:
+            - DomainViolation
+          typeOnly: true
+        - file: ./holds.js
+          imports:
+            - conditionReads
+            - holdsConditions
+            - holdsScope
+            - HoldsError
+            - HoldsCondition
+      exports:
+        - conditionDomain
+      interfaces:
+        - ConditionDomain
+      functions:
+        - conditionDomain
   canonical:
     src/canonical/canonical-equation.ts:
       description: Canonical (textbook) physics equations — the ground-truth L-layer of the
@@ -8388,9 +8422,9 @@ modules:
       internalDependencies:
         - file: ./edge.js
           imports:
+            - validityDomain
             - BridgeEdge
             - ValidityDomain
-          typeOnly: true
         - file: ./quantity.js
           imports:
             - Quantity
@@ -8448,14 +8482,6 @@ modules:
         - file: ./formula-shape.js
           imports:
             - monomialExponents
-        - file: ../bridges/holds.js
-          imports:
-            - HoldsError
-            - holds
-        - file: ../bridges/expr-parse.js
-          imports:
-            - formulaNames
-            - formulaScope
       exports:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
@@ -8528,7 +8554,7 @@ modules:
         - file: ../bridges/relation-eval.js
           imports:
             - evaluateCatalogRelation
-            - relationHolds
+            - relationDomain
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -8760,6 +8786,7 @@ modules:
           imports:
             - BridgeEdge
             - EdgeConfidence
+            - ValidityDomain
           typeOnly: true
         - file: ./quantity.js
           imports:
@@ -9072,7 +9099,16 @@ modules:
         - file: ../bridges/evaluation-errors.js
           imports:
             - DomainViolationError
+            - DomainViolation
+        - file: ../bridges/expr-parse.js
+          imports:
+            - formulaNames
+            - formulaScope
+        - file: ../bridges/validity.js
+          imports:
+            - conditionDomain
       exports:
+        - validityDomain
         - assertCoefficientSet
         - withBoundAliases
         - evaluateEdge
@@ -9091,6 +9127,7 @@ modules:
         - ValidityDomain
         - BridgeEdge
       functions:
+        - validityDomain
         - assertCoefficientSet
         - withBoundAliases
         - evaluateEdge
@@ -9566,6 +9603,7 @@ modules:
             - CompositionJunctionError
             - UndefinedCompositionError
             - evaluateEdge
+            - validityDomain
           reExport: true
         - file: ../bridges/evaluation-errors.js
           imports:
@@ -9575,6 +9613,11 @@ modules:
             - MissingInputError
             - NonFiniteInputError
             - UnknownInputError
+          reExport: true
+        - file: ../bridges/evaluation-errors.js
+          imports:
+            - DomainInput
+            - DomainViolation
           reExport: true
         - file: ./compose.js
           imports:
@@ -9747,6 +9790,7 @@ modules:
         - CompositionJunctionError
         - UndefinedCompositionError
         - evaluateEdge
+        - validityDomain
         - DomainViolationError
         - DuplicateInputError
         - InputTypeError
@@ -9795,6 +9839,8 @@ modules:
         - BridgeEdge
         - EdgeConfidence
         - ValidityDomain
+        - DomainInput
+        - DomainViolation
         - ComposeOptions
         - QuantityIdentification
         - AliasDisposition
@@ -9841,12 +9887,15 @@ modules:
         - CompositionJunctionError
         - UndefinedCompositionError
         - evaluateEdge
+        - validityDomain
         - DomainViolationError
         - DuplicateInputError
         - InputTypeError
         - MissingInputError
         - NonFiniteInputError
         - UnknownInputError
+        - DomainInput
+        - DomainViolation
         - ComposeOptions
         - QuantityIdentification
         - composeEdges
@@ -14360,6 +14409,15 @@ modules:
             - RegimeAttributes
             - ValidityDomain
           reExport: true
+        - file: ./composition/index.js
+          imports:
+            - validityDomain
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - DomainInput
+            - DomainViolation
+          reExport: true
         - file: ./bridges/membership.js
           imports:
             - adjudicateBridgeEntry
@@ -14949,6 +15007,7 @@ modules:
         - CompositionJunctionError
         - DomainViolationError
         - M_SUN_KG
+        - validityDomain
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -15143,6 +15202,8 @@ modules:
         - QuantityIdentification
         - RegimeAttributes
         - ValidityDomain
+        - DomainInput
+        - DomainViolation
         - BridgeVerdict
         - CatalogAdjudicationReport
         - RejectedBridgeAdjudication
@@ -15545,6 +15606,9 @@ modules:
         - QuantityIdentification
         - RegimeAttributes
         - ValidityDomain
+        - validityDomain
+        - DomainInput
+        - DomainViolation
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -17446,6 +17510,7 @@ dependencyGraph:
         - src/bridges/sensitivity.ts
         - src/bridges/tensor-index.ts
         - src/bridges/types.ts
+        - src/bridges/validity.ts
     - name: Canonical
       files:
         - src/canonical/canonical-equation.ts
@@ -17734,17 +17799,17 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 363
+  totalTypeScriptFiles: 364
   totalModules: 13
-  totalLinesOfCode: 81339
-  totalExports: 2566
+  totalLinesOfCode: 81621
+  totalExports: 2577
   totalClasses: 82
-  totalInterfaces: 463
-  totalFunctions: 776
+  totalInterfaces: 467
+  totalFunctions: 781
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 393
-  totalReExports: 1314
+  totalReExports: 1320
   totalTypeOnlyImports: 510
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

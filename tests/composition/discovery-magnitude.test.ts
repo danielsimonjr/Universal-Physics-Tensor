@@ -20,6 +20,7 @@ import {
   representativeValue,
   REPRESENTATIVE_VALUES,
 } from '../../src/composition/representative-values.js';
+import { validityDomain } from '../../src/composition/edge.js';
 
 const cand = (a: string, b: string): LinkCandidate => ({
   a,
@@ -95,7 +96,7 @@ describe('discover — order-of-magnitude falsifier', () => {
       ],
       target: graphQuantity('dark-fermion-mass', ENERGY),
       confidence: 'established',
-      domain: { description: 'any', predicate: () => true },
+      domain: validityDomain('true'),
       evaluate: (inputs) =>
         inputs['vacuum-expectation-value']! * inputs['yukawa-coupling']!,
       citation: 'synthetic',
