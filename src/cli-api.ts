@@ -288,6 +288,7 @@ export { candidateIdIfSlug } from './composition/adjudication.js';
 export { resolveQuantityName } from './index.js';
 /** The edge and the closed-form evaluator for an id. An evaluator with no edge is not unknown. */
 export { evaluateResolved, resolveEvaluable } from './composition/evaluate-relation.js';
+/** The SI unit of a dimension, in the form `parseUnit` reads back. The CLI's derived label reads it. */
 export { siUnitOf } from './dimensional/algebra.js';
 /** The required inputs of an evaluator that no relation source reads. They do not change the value. */
 export { unusedInputKeys } from './bridges/evaluators.js';
