@@ -9,6 +9,7 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
+import { siUnitOf } from '../dimensional/algebra.js';
 
 interface PrintStyle {
   readonly times: string;
@@ -180,15 +181,4 @@ export function derivedUnitOf(dim: Dimension, units: readonly CoherentUnit[]): s
   const base = new Set(SI_BASE.map(([, u]) => u));
   const named = units.find((u) => !base.has(u.name) && dimEqual(u.dim, dim));
   return named === undefined ? siUnitOf(dim) : named.name;
-}
-
-/** The SI base-unit form of a dimension (`m/s`, `kg*m^2/(s^3*A)`), `1` when dimensionless. */
-export function siUnitOf(dim: Dimension): string {
-  const factor = (u: string, e: number): string => (e === 1 ? u : `${u}^${e}`);
-  const num = SI_BASE.filter(([k]) => dim[k] > 0).map(([k, u]) => factor(u, dim[k]));
-  const den = SI_BASE.filter(([k]) => dim[k] < 0).map(([k, u]) => factor(u, -dim[k]));
-  if (num.length === 0 && den.length === 0) return '1';
-  if (num.length === 0) return SI_BASE.filter(([k]) => dim[k] < 0).map(([k, u]) => factor(u, dim[k])).join('*');
-  if (den.length === 0) return num.join('*');
-  return `${num.join('*')}/${den.length === 1 ? den[0] : `(${den.join('*')})`}`;
 }

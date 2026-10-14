@@ -2519,7 +2519,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../expr-print.js` | `coherentUnits, derivedUnitOf, siUnitOf` | Import |
+| `../expr-print.js` | `coherentUnits, derivedUnitOf` | Import |
 | `../bindings.js` | `splitAssignments` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
@@ -2823,7 +2823,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `../expr-print.js` | `EVAL_STUBS, printDisplay, printEval, printLatex, latexName, siUnitOf` | Import |
+| `../expr-print.js` | `EVAL_STUBS, printDisplay, printEval, printLatex, latexName` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2913,10 +2913,11 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/algebra.js` | `siUnitOf` | Import |
 
 **Exports:**
 - Interfaces: `CoherentUnit`
-- Functions: `latexName`, `printLatex`, `coherentUnits`, `derivedUnitOf`, `siUnitOf`
+- Functions: `latexName`, `printLatex`, `coherentUnits`, `derivedUnitOf`
 - Constants: `EVAL_STUBS`, `printDisplay`, `printEval`
 
 ---
@@ -3250,7 +3251,8 @@ The codebase is organized into the following modules:
 | `./dimensional/hyphen-names.js` | `rewriteCatalogHyphens` | Re-export |
 | `./composition/adjudication.js` | `candidateIdIfSlug` | Re-export |
 | `./index.js` | `resolveQuantityName` | Re-export |
-| `./composition/evaluate-relation.js` | `evaluatorOutput, resolveEvaluable` | Re-export |
+| `./composition/evaluate-relation.js` | `evaluateResolved, resolveEvaluable` | Re-export |
+| `./dimensional/algebra.js` | `siUnitOf` | Re-export |
 | `./bridges/evaluators.js` | `unusedInputKeys` | Re-export |
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid` | Re-export |
@@ -3311,7 +3313,7 @@ The codebase is organized into the following modules:
   FormulaValueError, aliasesForTarget, nearQuantityNames, shareSynonyms, assertSynonymAgreement,
   expandSynonymValues, CANONICAL_GROUP_PREFACTORS, formatQuantity, formatExact, CarrierSignError,
   naturalConstantOverrides, UnitMode, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName,
-  evaluatorOutput, resolveEvaluable, unusedInputKeys, SynonymDisagreementError,
+  evaluateResolved, resolveEvaluable, siUnitOf, unusedInputKeys, SynonymDisagreementError,
   canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid, builtinFormulaDimensionChecker,
   missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
   EvidenceTag, RelationType, EquationAnalysis
@@ -3838,9 +3840,10 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
+| `../dimensional/algebra.js` | `siUnitOf` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, EvaluatorSpec` | Import |
-| `../bridges/input-contract.js` | `checkInputs, inputContract, InputContract` | Import |
+| `../bridges/input-contract.js` | `checkInputs, inputContract, EvaluationWant, InputContract` | Import |
 | `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId, primaryRelation` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
@@ -3849,8 +3852,8 @@ The codebase is organized into the following modules:
 | `./edge.js` | `CoefficientUnsetError, evaluateEdge, BridgeEdge` | Import |
 
 **Exports:**
-- Interfaces: `Evaluable`
-- Functions: `evaluatorOutput`, `evaluableContract`, `resolveEvaluable`, `evaluateRelation`
+- Interfaces: `ExtraOutput`, `Evaluable`
+- Functions: `evaluableContract`, `resolveEvaluable`, `evaluateResolved`, `evaluateRelation`
 
 ---
 
@@ -4053,7 +4056,7 @@ The codebase is organized into the following modules:
 | `./retrodiction.js` | `retrodict, retrodictNode` | Re-export |
 | `./explain.js` | `DerivationExplanation, ExplainOptions, QuantityExplanation` | Re-export |
 | `./explain.js` | `explainQuantity` | Re-export |
-| `./evaluate-relation.js` | `Evaluation` | Re-export |
+| `./evaluate-relation.js` | `Evaluation, ExtraOutput` | Re-export |
 | `./evaluate-relation.js` | `evaluateRelation` | Re-export |
 | `./compose-symbolic.js` | `Observable, ComposeSymbolicOptions` | Re-export |
 | `./compose-symbolic.js` | `composeSymbolic, SymbolicCompositionError` | Re-export |
@@ -4083,11 +4086,11 @@ The codebase is organized into the following modules:
   IdentifiabilityResult, IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure,
   RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionRefusal,
   RetrodictionReport, RetrodictionOptions, retrodict, retrodictNode, DerivationExplanation,
-  ExplainOptions, QuantityExplanation, explainQuantity, Evaluation, evaluateRelation, Observable,
-  ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, VizStatus,
-  VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel, edgeToJunction,
-  renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation,
-  EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, suggestQuantities,
+  ExplainOptions, QuantityExplanation, explainQuantity, Evaluation, ExtraOutput, evaluateRelation,
+  Observable, ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError,
+  VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel,
+  edgeToJunction, renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency,
+  UserEquation, EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, suggestQuantities,
   suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
   SynonymDisagreementError
   ```
@@ -5041,7 +5044,7 @@ The codebase is organized into the following modules:
 | `./errors.js` | `DimensionMismatchError` | Re-export |
 
 **Exports:**
-- Functions: `multiply`, `divide`, `power`, `equals`, `add`, `subtract`, `format`
+- Functions: `multiply`, `divide`, `power`, `equals`, `add`, `subtract`, `format`, `siUnitOf`
 - Constants: `EXPONENT_TOL`
 - Re-exports: `DimensionMismatchError`
 
@@ -5762,7 +5765,7 @@ The codebase is organized into the following modules:
 | `./composition/index.js` | `evaluateRelation, CoefficientUnsetError` | Re-export |
 | `./composition/index.js` | `DuplicateInputError, InputTypeError, MissingInputError, NonFiniteInputError, UnknownInputError` | Re-export |
 | `./bridges/index.js` | `ConstantInputError` | Re-export |
-| `./composition/index.js` | `Evaluation` | Re-export |
+| `./composition/index.js` | `Evaluation, ExtraOutput` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./bridges/catalog-types.js` | `CatalogEvaluatorOutput` | Re-export |
 | `./bridges/input-contract.js` | `ContractAlternate, EvaluationWant, InputContract, InputSlot` | Re-export |
@@ -5911,7 +5914,7 @@ The codebase is organized into the following modules:
   JOSEPHSON_CONSTANT_SI, LORENZ_NUMBER_SI, BCS_GAP_RATIO, LANE_EMDEN_OMEGA3, THOMSON_CROSS_SECTION_SI,
   M_PROTON_SI, CarrierSignError, evaluateRelation, CoefficientUnsetError, DuplicateInputError,
   InputTypeError, MissingInputError, NonFiniteInputError, UnknownInputError, ConstantInputError,
-  Evaluation, EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole,
+  Evaluation, ExtraOutput, EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole,
   CatalogEvaluatorOutput, ContractAlternate, EvaluationWant, InputContract, InputSlot, inputContract,
   christoffel, CovariantDerivativeNode, ricci, RicciTensorNode, einstein, EinsteinTensorNode,
   bianchiResidual, BianchiResidualNode, verifyKillingEquation, checkKillingEquation,
@@ -6991,11 +6994,11 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 363 |
 | Total Modules | 13 |
-| Total Lines of Code | 81271 |
-| Total Exports | 2563 |
-| Total Re-exports | 1311 |
+| Total Lines of Code | 81323 |
+| Total Exports | 2566 |
+| Total Re-exports | 1314 |
 | Total Classes | 82 |
-| Total Interfaces | 462 |
+| Total Interfaces | 463 |
 | Total Functions | 776 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |

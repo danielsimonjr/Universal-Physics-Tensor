@@ -266,7 +266,6 @@ function buildSpec(
       if (violated.length > 0) throw new DomainViolationError(relation.id, violated);
       const value = evaluateCatalogRelation(relation, bound);
       const result: Record<string, number> = { value };
-      if (want === 'value') return result;
       outputs.forEach((output, i) => {
         if (reads[i]!.some((key) => given[key] === undefined)) return;
         result[output.name] = evaluateFormula(output.expression, { ...given, value }, outputScope);

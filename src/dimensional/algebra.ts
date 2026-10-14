@@ -133,3 +133,27 @@ export function format(d: Dimension): string {
   if (parts.length === 0) return '[1]';
   return `[${parts.join(' ')}]`;
 }
+
+const SI_BASE: readonly (readonly [keyof Dimension, string])[] = [
+  ['M', 'kg'],
+  ['L', 'm'],
+  ['T', 's'],
+  ['I', 'A'],
+  ['Theta', 'K'],
+  ['N', 'mol'],
+  ['J', 'cd'],
+];
+
+/**
+ * A dimension as SI base units, numerator before one `/` (`m^3/(kg*s^2)`), a bare denominator as
+ * negative powers (`s^-1`), and `1` when dimensionless: the forms `parseUnit` reads back.
+ */
+export function siUnitOf(dim: Dimension): string {
+  const factor = (u: string, e: number): string => (e === 1 ? u : `${u}^${e}`);
+  const num = SI_BASE.filter(([k]) => dim[k] > 0).map(([k, u]) => factor(u, dim[k]));
+  const den = SI_BASE.filter(([k]) => dim[k] < 0).map(([k, u]) => factor(u, -dim[k]));
+  if (num.length === 0 && den.length === 0) return '1';
+  if (num.length === 0) return SI_BASE.filter(([k]) => dim[k] < 0).map(([k, u]) => factor(u, dim[k])).join('*');
+  if (den.length === 0) return num.join('*');
+  return `${num.join('*')}/${den.length === 1 ? den[0] : `(${den.join('*')})`}`;
+}

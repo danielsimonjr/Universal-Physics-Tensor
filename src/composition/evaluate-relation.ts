@@ -12,9 +12,10 @@
  */
 
 import { EXPECTED_DIMENSION_BY_BRIDGE } from '../dimensional/bridge-check.js';
+import { siUnitOf } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import { BRIDGE_EVALUATORS, type EvaluatorSpec } from '../bridges/evaluators.js';
-import { checkInputs, inputContract, type InputContract } from '../bridges/input-contract.js';
+import { checkInputs, inputContract, type EvaluationWant, type InputContract } from '../bridges/input-contract.js';
 import { catalogEdgeKey, parseBridgeId, primaryRelation } from '../bridges/catalog-load.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
@@ -23,14 +24,40 @@ import { CATALOG_GRAPH } from './catalog-graph.js';
 import { CoefficientUnsetError, evaluateEdge, type BridgeEdge } from './edge.js';
 
 /**
+ * A further number an evaluator returns beside its value (be-52's
+ * `precession_arcsec_per_century`), with the unit and meaning its record states.
+ *
+ * @public
+ */
+export interface ExtraOutput {
+  readonly name: string;
+  readonly value: number;
+  readonly unit: string;
+  readonly meaning: string;
+}
+
+/**
  * A sourced number, or an unset coefficient.
  *
- * `dimension` is the edge target. `formula` is the edge label.
+ * A value carries what it is: `name` is the quantity the relation computes
+ * (its target), `unit` that quantity's SI unit written from `dimension` (the
+ * form `parseUnit` reads back), `meaning` the relation as its record states it
+ * (a sign convention included), and `extras` every further output whose inputs
+ * were given. `upt evaluate` prints and serializes this object; it computes no
+ * label of its own. `formula` is the edge label.
  *
  * @public
  */
 export type Evaluation =
-  | { readonly kind: 'value'; readonly value: number; readonly dimension: Dimension }
+  | {
+      readonly kind: 'value';
+      readonly value: number;
+      readonly dimension: Dimension;
+      readonly name: string;
+      readonly unit: string;
+      readonly meaning: string;
+      readonly extras: readonly ExtraOutput[];
+    }
   | { readonly kind: 'unset'; readonly formula: string };
 
 /**
@@ -41,20 +68,6 @@ export interface Evaluable {
   readonly id: string;
   readonly edge?: BridgeEdge;
   readonly evaluator?: EvaluatorSpec;
-}
-
-/**
- * The output of a closed-form evaluator: the quantity it computes and that
- * quantity's dimension. An evaluator with no catalog dimension (a closed form
- * with no AST) names no dimension.
- */
-export function evaluatorOutput(spec: EvaluatorSpec): { readonly name: string; readonly dimension?: Dimension } {
-  const relation = primaryRelation(spec.bridgeId);
-  const dimension = EXPECTED_DIMENSION_BY_BRIDGE.get(spec.bridgeId);
-  return {
-    name: relation?.target ?? 'value',
-    ...(dimension === undefined ? {} : { dimension }),
-  };
 }
 
 /**
@@ -133,24 +146,72 @@ export function resolveEvaluable(id: string | number): Evaluable {
 }
 
 /**
- * The closed form's primary output, through the evaluator's `run`. A record's
- * `value` is the catalog signature; any other number it returns is an extra
- * output, named by `spec.outputs`. A non-finite value at finite inputs is an
- * unset result (a dropped factor, a singularity).
+ * The closed form through the evaluator's `run`, the one evaluation. A record's
+ * `value` is the catalog signature; every other number `run` returns is an
+ * extra output, labelled from `spec.outputs`. A non-finite value at finite
+ * inputs is an unset result (a dropped factor, a singularity).
  */
 function closedFormEvaluation(
   spec: EvaluatorSpec,
   edge: BridgeEdge | undefined,
   bindings: Readonly<Record<string, number>>,
+  want: EvaluationWant,
 ): Evaluation {
-  const { value } = spec.run(bindings, 'value');
+  const numbers = spec.run(bindings, want);
+  const relation = primaryRelation(spec.bridgeId);
   const dimension = edge?.target.dim ?? EXPECTED_DIMENSION_BY_BRIDGE.get(spec.bridgeId);
   if (dimension === undefined) {
     throw new Error(`evaluateRelation: be-${spec.bridgeId} has no catalog dimension`);
   }
-  if (Number.isFinite(value)) return { kind: 'value', value, dimension };
+  const value = numbers.value!;
   // `run` refused a non-finite input, so a non-finite value here comes from the closed form.
-  return { kind: 'unset', formula: edge?.label ?? primaryRelation(spec.bridgeId)?.label ?? spec.name };
+  if (!Number.isFinite(value)) return { kind: 'unset', formula: edge?.label ?? relation?.label ?? spec.name };
+  return {
+    kind: 'value',
+    value,
+    dimension,
+    name: relation?.target ?? edge?.target.name ?? 'value',
+    unit: siUnitOf(dimension),
+    meaning: relation?.label ?? edge?.label ?? spec.name,
+    extras: spec.outputs
+      .filter((output) => numbers[output.name] !== undefined)
+      .map((output) => ({ name: output.name, value: numbers[output.name]!, unit: output.unit, meaning: output.meaning })),
+  };
+}
+
+/**
+ * The one result builder: evaluate a resolved id at `bindings`. A closed-form
+ * evaluator is its `run`; an edge with none is checked against its contract and
+ * evaluated. {@link evaluateRelation} calls it with `want` `'value'`;
+ * `upt evaluate` calls it with `'all'`, which also requires an input only an
+ * extra output reads. Both get the same {@link Evaluation}.
+ * @internal
+ */
+export function evaluateResolved(
+  found: Evaluable,
+  bindings: Readonly<Record<string, number>>,
+  want: EvaluationWant,
+): Evaluation {
+  if (found.evaluator !== undefined) return closedFormEvaluation(found.evaluator, found.edge, bindings, want);
+  const edge = found.edge!;
+  const checked = checkInputs(evaluableContract(found), bindings, want);
+  try {
+    const value = evaluateEdge(edge, { ...checked });
+    // `checkInputs` refused a non-finite input, so a non-finite value comes from the formula.
+    if (!Number.isFinite(value)) return { kind: 'unset', formula: edge.label };
+    return {
+      kind: 'value',
+      value,
+      dimension: edge.target.dim,
+      name: edge.target.name,
+      unit: siUnitOf(edge.target.dim),
+      meaning: edge.label,
+      extras: [],
+    };
+  } catch (error) {
+    if (error instanceof CoefficientUnsetError) return { kind: 'unset', formula: error.formula };
+    throw error;
+  }
 }
 
 /**
@@ -166,6 +227,9 @@ function closedFormEvaluation(
  * An unset coefficient returns `{ kind: 'unset', formula }` and no number.
  * A complete finite input whose closed form is not finite (a dropped factor,
  * a singularity) is the same unset result, not a missing input.
+ * A value carries its name, SI unit and meaning, and every extra output whose
+ * inputs were given (`extras`); an input only an extra output reads is not
+ * required.
  *
  * @public
  */
@@ -173,17 +237,5 @@ export function evaluateRelation(
   id: string | number,
   bindings: Readonly<Record<string, number>>,
 ): Evaluation {
-  const found = resolveEvaluable(id);
-  if (found.evaluator !== undefined) return closedFormEvaluation(found.evaluator, found.edge, bindings);
-  const edge = found.edge!;
-  const checked = checkInputs(evaluableContract(found), bindings);
-  try {
-    const value = evaluateEdge(edge, { ...checked });
-    // `checkInputs` refused a non-finite input, so a non-finite value comes from the formula.
-    if (!Number.isFinite(value)) return { kind: 'unset', formula: edge.label };
-    return { kind: 'value', value, dimension: edge.target.dim };
-  } catch (error) {
-    if (error instanceof CoefficientUnsetError) return { kind: 'unset', formula: error.formula };
-    throw error;
-  }
+  return evaluateResolved(resolveEvaluable(id), bindings, 'value');
 }
