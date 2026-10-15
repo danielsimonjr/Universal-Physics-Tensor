@@ -28,12 +28,15 @@ import {
   TEMPERATURE,
   AREA,
   FORCE,
+  PRESSURE,
+  GRAVITATIONAL_CONSTANT,
+  MASS_DENSITY,
 } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
 // ── EFE node builders (the canonical G_μν + Λg_μν = (8πG/c⁴)T_μν structure) ──
 const L_INV2 = dim(-2); // [L⁻²] — per-component dim of every EFE term
-const ENERGY_DENSITY = dim(-1, 1, -2); // T_μν componentDim [M L⁻¹ T⁻²]
+const ENERGY_DENSITY = PRESSURE; // T_μν componentDim [M L⁻¹ T⁻²]
 
 function buildRiemann(mu = 'mu', nu = 'nu'): RiemannTensorNode {
   const gLower = metric(
@@ -123,17 +126,17 @@ const EFE_NODE: EinsteinFieldEquationNode = {
 };
 
 // ── dimensional layer for the EFE (per-component [L⁻²] from 8πG·T/c⁴) ────────
-const GRAV = dim(3, -1, -2);
+const GRAV = GRAVITATIONAL_CONSTANT;
 const EFE_TARGET = { name: 'efe-curvature', dim: L_INV2 };
 const EFE_GOV = [
   { name: 'G', dim: GRAV },
-  { name: 'c', dim: dim(1, 0, -1) },
+  { name: 'c', dim: VELOCITY },
   { name: 'stress-energy-density', dim: ENERGY_DENSITY },
 ];
 
 // ── Friedmann (flat, matter-dominated): H² = 8πG ρ / 3 ───────────────────────
 const HSQUARED = dim(0, 0, -2); // [T⁻²]
-const DENSITY = dim(-3, 1); // [M L⁻³]
+const DENSITY = MASS_DENSITY; // [M L⁻³]
 const FRIEDMANN_TARGET = { name: 'hubble-rate-squared', dim: HSQUARED };
 const FRIEDMANN_GOV = [
   { name: 'G', dim: GRAV },
@@ -165,7 +168,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     FRIEDMANN_TARGET,
     [
       ...FRIEDMANN_GOV,
-      { name: 'c', dim: dim(1, 0, -1) },
+      { name: 'c', dim: VELOCITY },
       { name: 'curvature-k', dim: DIMENSIONLESS },
       { name: 'scale-factor', dim: LENGTH },
     ],

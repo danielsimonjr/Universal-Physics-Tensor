@@ -26,15 +26,17 @@ import {
   POWER,
   FREQUENCY,
   DIMENSIONLESS,
+  MOMENTUM,
+  ACTION,
+  SPRING_CONSTANT,
+  GRAVITATIONAL_CONSTANT,
 } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
-const MOMENTUM = dim(1, 1, -1); // [L M T⁻¹]
-const TORQUE = dim(2, 1, -2); // [L² M T⁻²]
-const ANGULAR_MOMENTUM = dim(2, 1, -1); // [L² M T⁻¹]
+const TORQUE = ENERGY; // [L² M T⁻²]
+const ANGULAR_MOMENTUM = ACTION; // [L² M T⁻¹]
 const MOMENT_OF_INERTIA = dim(2, 1, 0); // [L² M]
-const SPRING_CONSTANT = dim(0, 1, -2); // [M T⁻²]
-const G_DIM = dim(3, -1, -2); // Newton's constant [L³ M⁻¹ T⁻²]
+const G_DIM = GRAVITATIONAL_CONSTANT; // Newton's constant [L³ M⁻¹ T⁻²]
 
 export const MECHANICS: readonly CanonicalEquation[] = [
   // ── foundational ──────────────────────────────────────────────────────────
