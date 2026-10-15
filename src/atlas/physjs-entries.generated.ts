@@ -1871,7 +1871,7 @@ export const PHYSJS_ENTRIES = [
     kind: "bridge",
     theorem: "PhysJS.VanTHoff.vant_hoff",
     file: "VanTHoff.lean",
-    covers: "equilibrium_log is PhysJS.GibbsIsotherm.gibbs_eq, so ln K = −ΔG°/(R T). At ΔG° = ΔH° − T ΔS° with both constant, d ln K/dT = ΔH°/(R T²). Not a second proof of be-150 and not a van 't Hoff plot",
+    covers: "at every temperature the ideal chemical potentials μ_i = μ_i° + R T ln a_i at equilibrium Σ ν_i μ_i = 0 give ln K = −ΔG°/(R T) (equilibrium_log, which is PhysJS.GibbsIsotherm.gibbs_eq), and ΔG° = ΔH° − T ΔS° with both constant gives ln K = −ΔH°/(R T) + ΔS°/R, derived rather than assumed. Its derivative is d ln K/dT = ΔH°/(R T²). Not a second proof of be-150 and not a van 't Hoff plot",
     coverage: "covers its statement only",
     leanProof: "complete",
     axioms: ["propext", "Classical.choice", "Quot.sound"],
