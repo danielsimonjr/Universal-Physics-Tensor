@@ -16,6 +16,7 @@
  *
  * @module canonical/structural
  */
+import { compareCodepoint } from '../core/compare.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { validate } from '../dimensional/validator.js';
@@ -208,7 +209,7 @@ function classifyChain(expr: ExprNode, edgeIds: readonly string[], opts: Structu
   restatements.sort((a, b) => {
     const byBridge = bridgeRank(a.restatesBridge) - bridgeRank(b.restatesBridge);
     if (byBridge !== 0) return byBridge;
-    return a.canonicalId < b.canonicalId ? -1 : a.canonicalId > b.canonicalId ? 1 : 0;
+    return compareCodepoint(a.canonicalId, b.canonicalId);
   });
   const restatement = restatements[0];
   if (restatement !== undefined) {

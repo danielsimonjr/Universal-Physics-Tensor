@@ -14,6 +14,7 @@
  */
 
 import { pairwiseDot } from '@danielsimonjr/mathts-core';
+import { compareCodepoint } from '../../core/compare.js';
 import { CANONICAL_EQUATIONS } from '../../canonical/registry.js';
 import { rankByStructure, type CorpusRecord, type RetrievalQuery } from './baselines.js';
 
@@ -128,7 +129,7 @@ export function rankByCosine(
 ): string[] {
   return records
     .map((r) => ({ id: r.id, s: cosine(query, r.vector) }))
-    .sort((a, b) => (b.s !== a.s ? b.s - a.s : a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+    .sort((a, b) => (b.s !== a.s ? b.s - a.s : compareCodepoint(a.id, b.id)))
     .map((x) => x.id);
 }
 

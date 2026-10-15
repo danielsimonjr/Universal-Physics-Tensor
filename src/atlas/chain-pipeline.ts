@@ -14,6 +14,7 @@
  * @module atlas/chain-pipeline
  */
 
+import { byKey } from '../core/compare.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -104,7 +105,7 @@ export function governingOf(expr: ExprNode, targetName: string): { name: string;
     if (isNumericName(leaf.name) || isDimensionlessConstant(leaf.name)) continue;
     vars.push(leaf);
   }
-  vars.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+  vars.sort(byKey((v) => v.name));
   return vars;
 }
 

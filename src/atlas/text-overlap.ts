@@ -1,13 +1,16 @@
 /**
  * Word-token overlap: the text baseline's tokenizer, Jaccard similarity and the rank comparator.
  *
- * `link-prediction.ts` reads these. `benchmark/baselines.ts` carries byte-identical private
- * copies on purpose: that file is a pinned code blob of the closed criterion 3 study, hashed by
- * the study's freeze, and is not edited to import this module.
+ * `link-prediction.ts` reads these. `benchmark/baselines.ts` carries private copies of the same
+ * functions on purpose (its rank comparator spells the codepoint order inline, where this one
+ * calls `compareCodepoint`): that file is a pinned code blob of the closed criterion 3 study,
+ * hashed by the study's freeze, and is not edited to import this module.
  *
  * @module atlas/text-overlap
  * @internal
  */
+
+import { compareCodepoint } from '../core/compare.js';
 
 /** Lower-cased word tokens (letters and digits) of a text, as a set. @internal */
 export const tokens = (text: string): Set<string> =>
@@ -32,6 +35,6 @@ export function rankBy(candidates: readonly string[], score: (id: string) => rea
     const sx = score(x);
     const sy = score(y);
     for (let i = 0; i < sx.length; i++) if (sx[i] !== sy[i]) return sy[i]! - sx[i]!;
-    return x < y ? -1 : x > y ? 1 : 0;
+    return compareCodepoint(x, y);
   });
 }
