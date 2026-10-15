@@ -28,11 +28,10 @@ describe('expressionNames', () => {
 });
 
 describe('relationNotices reads the rewritten names', () => {
-  it.fails(
-    'KNOWN DEFECT, not fixed here: hbar spelled `reduced-planck-constant` does not reach its note, because ' +
-      '`rewriteCatalogHyphens` rewrites the declared quantity `planck-constant` inside it first (its lookbehind admits a ' +
-      'preceding `-`), leaving `reduced`, `planck_constant`. The bare regex the notices reader used read `reduced`, ' +
-      '`planck`, `constant`; neither finds `hbar`. This marker flips when hyphen-names.ts is fixed.',
+  it(
+    'hbar spelled `reduced-planck-constant` reaches its note: the leftmost-longest rewrite reads the constant ' +
+      'spelling before the declared quantity `planck-constant` inside it (it was `reduced`, `planck_constant`, ' +
+      'marked `it.fails` until hyphen-names.ts was fixed)',
     () => {
       const relation = { ...primaryRelation(56)!, expression: 'reduced-planck-constant*omega' };
       expect(relationNotices(relation).join('\n')).toMatch(/exact reduced Planck constant/);

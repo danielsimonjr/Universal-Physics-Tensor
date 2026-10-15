@@ -102,12 +102,10 @@ const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
  * The names a catalog expression mentions, each hyphenated quantity or
  * constant spelling rewritten to its one token first (`truncation-coefficient-b`
  * is `truncation_coefficient_b`, not `b`), π included (MathTS does not list it
- * as a variable). Cached per expression text. Known defect, not fixed here:
- * `reduced-planck-constant` is read as `reduced`, `planck_constant`, not
- * `hbar`, because the declared `planck-constant` is rewritten inside it first
- * (`tests/bridges/expression-names.test.ts` marks it with `it.fails`). The
- * one identifier walk: the notices reader and the condition interpreter read
- * it too.
+ * as a variable). Cached per expression text. `reduced-planck-constant` is
+ * `hbar`: the rewrite takes the longest spelling at each segment, so the
+ * declared `planck-constant` inside it does not win. The one identifier
+ * walk: the notices reader and the condition interpreter read it too.
  * @internal
  */
 export function expressionNames(expression: string): ReadonlySet<string> {
