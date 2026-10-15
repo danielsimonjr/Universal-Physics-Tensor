@@ -17,12 +17,14 @@
  * A literal a module keeps private (not exported, not in one of the object tables) is in no table.
  */
 
-import { createHash } from 'node:crypto';
+import { compareCodepoint } from '../core/compare.js';
+import { sha256Hex } from '../core/hash.js';
 import { readdirSync, statSync } from 'node:fs';
 import { extname, join, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { CANONICAL_CONSTANTS } from '../composition/canonical-graph.js';
 import { CONSTANTS as SYMBOLIC_CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { BASES } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import { unitTables } from '../dimensional/units.js';
 
@@ -38,19 +40,17 @@ export interface ConstantTable {
 /** The source shape used to build a constant table. */
 export type TableKind = 'module-exports' | 'object';
 
-const sha256 = (s: string): string => createHash('sha256').update(s).digest('hex');
-
 /** Source root (`dist/` when built, `src/` under a TypeScript loader) and its module extension. */
 export const SOURCE_ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const MODULE_EXT = extname(fileURLToPath(import.meta.url));
 
 /** Serialised with sorted keys so the fingerprint does not depend on declaration order. */
 export const tableFingerprint = (values: Record<string, TableValue>): string =>
-  sha256(JSON.stringify(Object.fromEntries(Object.keys(values).sort().map((k) => [k, values[k]]))));
+  sha256Hex(JSON.stringify(Object.fromEntries(Object.keys(values).sort().map((k) => [k, values[k]]))));
 
 /** Exponents in a fixed base order, independent of how `format()` names a dimension. */
 const dimensionText = (d: Dimension): string =>
-  (['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const)
+  BASES
     .filter((b) => d[b] !== 0)
     .map((b) => `${b}^${d[b]}`)
     .join(' ') || '1';
@@ -120,7 +120,7 @@ export function constantTables(): Promise<{ tables: Record<string, ConstantTable
       if (Object.keys(values).length > 0) found.push([tableName(file), values, 'module-exports']);
     }
     for (const [name, values] of Object.entries(objectTables())) found.push([name, values, 'object']);
-    found.sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+    found.sort(([a], [b]) => compareCodepoint(a, b));
     const tables: Record<string, ConstantTable> = {};
     const kinds: Record<string, TableKind> = {};
     for (const [name, values, kind] of found) {

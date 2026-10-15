@@ -21,8 +21,24 @@ import { DimensionMismatchError } from './errors.js';
  */
 export { DimensionMismatchError } from './errors.js';
 
-const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
+/** The seven SI bases, in the order every exponent list is written. @internal */
+export const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
 type Base = typeof BASES[number];
+
+/** Exact zero on every base; a base missing from a partial object reads as 0. @internal */
+export function isDimensionless(d: Dimension): boolean {
+  return BASES.every((base) => (d[base] ?? 0) === 0);
+}
+
+/**
+ * Exact equality on every base, no tolerance: the predicate for exponents that
+ * were never computed. {@link equals} is the tolerant one for exponents that
+ * were (a fractional power reached by different op chains).
+ * @internal
+ */
+export function exactlyEquals(a: Dimension, b: Dimension): boolean {
+  return BASES.every((base) => (a[base] ?? 0) === (b[base] ?? 0));
+}
 
 /** Product of two dimensions: exponents add per base. */
 export function multiply(a: Dimension, b: Dimension): Dimension {
@@ -134,7 +150,8 @@ export function format(d: Dimension): string {
   return `[${parts.join(' ')}]`;
 }
 
-const SI_BASE: readonly (readonly [keyof Dimension, string])[] = [
+/** Each base with its coherent SI unit, kilogram first (the order `siUnitOf` prints). @internal */
+export const SI_BASE: readonly (readonly [keyof Dimension, string])[] = [
   ['M', 'kg'],
   ['L', 'm'],
   ['T', 's'],
