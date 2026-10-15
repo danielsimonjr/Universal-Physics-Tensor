@@ -74,7 +74,7 @@ export {
 /** Ask for a caller-table confrontation. The catalog status does not change. */
 export { requestCallerTableConfrontation } from './bridges/caller-table.js';
 /** The catalog row, the id parser (and its non-throwing form), and the relation a numeric id evaluates. */
-export { catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation } from './bridges/catalog-load.js';
+export { catalogEdgeKey, catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation } from './bridges/catalog-load.js';
 /** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
@@ -286,7 +286,7 @@ export { naturalConstantOverrides } from './dimensional/natural-units.js';
 /** The constant-value mode a formula is evaluated in: SI, natural, or geometrized. */
 export type { UnitMode } from './dimensional/natural-units.js';
 /** Kebab catalog names rewritten to one symbol each before a formula is parsed. */
-export { rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
+export { escapeRegExp, rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
 /** The ledger id of an orphan-connector pair, when both names are slugs. */
 export { candidateIdIfSlug } from './composition/adjudication.js';
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */

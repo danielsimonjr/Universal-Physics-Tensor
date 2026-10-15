@@ -16,14 +16,15 @@
  * @module cases/kepler-rv
  */
 import { C_SI, G_SI } from '../core/constants.js';
+import { convertValue } from '../dimensional/units.js';
 import { catalogRelations } from '../bridges/catalog-load.js';
 import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { check, requirePositive, type AppliedCase } from './types.js';
 
 const ID = 'case-kepler-rv';
 
-/** The Julian year, the year BE-52 takes (s). @internal */
-export const JULIAN_YEAR_S = 365.25 * 86400;
+/** The Julian year, the year BE-52 takes (s): the unit table's `julian_year` row (`yr`). @internal */
+export const JULIAN_YEAR_S = convertValue('1 yr', 's').value;
 
 /** m_p/M_* ceiling: the test-mass K then exceeds the two-body K by (1 + q)^{2/3} − 1 ≤ 0.67%. @internal */
 export const MAX_MASS_RATIO = 0.01;
