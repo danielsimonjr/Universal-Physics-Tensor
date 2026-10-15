@@ -23,7 +23,7 @@
 import { ENERGY, LENGTH, MASS, TIME, VELOCITY } from '../../dimensional/types.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { DAMPING } from '../oscillators/dimensions.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { WAVENUMBER } from '../waves/models.js';
@@ -35,7 +35,7 @@ const TEST = 'tests/atlas/closure.test.ts';
 const WITNESS_RESULTS_TEST = 'tests/atlas/witness-results.test.ts';
 
 /** τ_p/t ceiling of the Langevin → Fick regime: WD4's fine resolution, t = 100 τ_p. @internal */
-export const LANGEVIN_MAX_TAU_RATIO = 0.01;
+const LANGEVIN_MAX_TAU_RATIO = 0.01;
 
 /** ε = τDq² ceiling of the telegraph → Fick domain. @internal */
 export const TELEGRAPH_FICK_MAX_EPS = 0.05;
@@ -44,7 +44,7 @@ export const TELEGRAPH_FICK_MAX_EPS = 0.05;
 export const TELEGRAPH_WAVE_MIN_EPS = 25;
 
 /** Fourier-number floor of the steady-state restriction. @internal */
-export const STEADY_MIN_FOURIER = 1;
+const STEADY_MIN_FOURIER = 1;
 
 const regime = (
   parameters: readonly { name: string; dim: import('../../dimensional/types.js').Dimension }[],
@@ -56,11 +56,7 @@ const regimeWithInputs = (
   parameters: readonly { name: string; dim: import('../../dimensional/types.js').Dimension }[],
   dimensionlessInputs: readonly string[],
   inequalities: AtlasBridge['regime']['inequalities'],
-): AtlasBridge['regime'] => ({
-  family: DIFFUSION_FAMILY_NAME,
-  inequalities,
-  groupDefinitions: deriveRegimeGroups(DIFFUSION_FAMILY_NAME, parameters, dimensionlessInputs),
-});
+): AtlasBridge['regime'] => makeRegime(DIFFUSION_FAMILY_NAME, parameters, dimensionlessInputs, inequalities);
 
 /** Reynolds-number ceiling of the Stokes–Einstein derivation: a chosen threshold for Re ≪ 1. @internal */
 const STOKES_MAX_RE = 0.1;

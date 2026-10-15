@@ -25,7 +25,7 @@ import {
   MASS,
   VELOCITY,
 } from '../../dimensional/types.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import type { AtlasModel } from '../model.js';
 import type { DimensionalVariable } from '../../dimensional/buckingham.js';
 import {
@@ -47,11 +47,7 @@ function model(
   return {
     ...spec,
     family: FAMILY,
-    regime: {
-      family: FAMILY,
-      inequalities: [],
-      groupDefinitions: deriveRegimeGroups(FAMILY, spec.parameters, spec.dimensionlessInputs),
-    },
+    regime: makeRegime(FAMILY, spec.parameters, spec.dimensionlessInputs, []),
   };
 }
 

@@ -95,7 +95,7 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     { key: 'V_rms_unloaded_V', symbol: 'V_rms,0', unit: 'V', meaning: 'open-circuit value √(4k_BTRB), with no instrument attached' },
     { key: 'V_rms_V', symbol: 'V_rms', unit: 'V', meaning: 'the RMS noise voltage the instrument reads (scalar model)' },
     { key: 'loading_ratio', symbol: 'V_rms/V_rms,0', unit: '', meaning: '√(R_in/(R + R_in)): what the input resistance removes' },
-    { key: 'V_rms_parent_V', symbol: 'V_rms,parent', unit: 'V', meaning: 'the parent spectrum integrated over the band (adaptive Simpson)' },
+    { key: 'V_rms_parent_V', symbol: 'V_rms,parent', unit: 'V', meaning: 'the parent spectrum integrated over the band (MathTS quad, adaptive Gauss–Kronrod)' },
     { key: 'parent_deviation', symbol: 'V_rms/V_rms,parent − 1', unit: '', meaning: signedRelativeDifference('scalar result', 'parent') },
     { key: 'V_rms_rel_sigma', symbol: 'σ(V_rms)/V_rms', unit: '', meaning: 'statistical scatter of an RMS averaged over t_avg: 1/(2√(B t_avg)) (Dicke radiometer relation)' },
     { key: 'V_rms_total_V', symbol: 'V_rms,total', unit: 'V', meaning: 'what the instrument reads with its amplifier noise added in quadrature; not defined without e_n2/i_n2' },
@@ -112,7 +112,7 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     valueKey: 'V_rms_V',
     referenceKey: 'V_rms_parent_V',
     deviationKey: 'parent_deviation',
-    method: 'adaptive Simpson quadrature, relative tolerance 1e-10',
+    method: 'MathTS quad, adaptive Gauss–Kronrod (G7–K15) quadrature, relative tolerance 1e-10',
   },
   notIncluded: [
     "the amplifier's noise when e_n2 and i_n2 are left out; when given, their 1/f corners and their correlation (taken white and uncorrelated)",

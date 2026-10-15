@@ -9,7 +9,8 @@
  * @module atlas/diffusion/numerics
  */
 
-import { lgamma, solveODESystem, trapz } from '@danielsimonjr/mathts-functions';
+import { lgamma, trapz } from '@danielsimonjr/mathts-functions';
+import { integrateRK4 } from '../../numerical/null-ray-integrator.js';
 
 /**
  * The Gaussian solution of `∂c/∂t = D ∂²c/∂x²` from a point source of unit
@@ -223,7 +224,7 @@ export interface LangevinFixture {
  *
  * The second moments are integrated from the LANGEVIN model's own moment
  * equations, `d⟨x²⟩/dt = 2⟨xv⟩`, `d⟨xv⟩/dt = ⟨v²⟩ − (γ/m)⟨xv⟩`, with
- * `⟨v²⟩ = k_B T/m` held at equipartition, by `solveODESystem` with `dt` on a fine fixed grid. The
+ * `⟨v²⟩ = k_B T/m` held at equipartition, by `integrateRK4` (MathTS `solveODESystem` with `dt`) on a fine fixed grid. The
  * diffusion coefficient `D = k_B T/γ` (Einstein) enters only the DENOMINATOR:
  * the ratio tends to 1 in the diffusive regime `t ≫ τ_p`.
  *
@@ -235,14 +236,8 @@ export function langevinMsdRatio(resolution: number, f: LangevinFixture): number
   const v2 = f.kT / f.m;
   const steps = Math.max(2000, Math.ceil(200 * resolution));
   const h = tEnd / steps;
-  const sol = solveODESystem(
-    (_t, y) => [2 * y[1]!, v2 - y[1]! / tauP],
-    [0, 0],
-    [0, steps * h],
-    { dt: h },
-  );
-  const end = sol.y[sol.y.length - 1];
-  const x2 = end?.[0] ?? Number.NaN;
+  const end = integrateRK4((_t, y) => [2 * y[1]!, v2 - y[1]! / tauP], [0, 0], 0, steps * h, steps);
+  const x2 = end[0] ?? Number.NaN;
   const D = f.kT / f.gamma;
   return x2 / (2 * D * tEnd);
 }

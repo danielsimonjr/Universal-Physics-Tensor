@@ -12,7 +12,7 @@
  */
 
 import { LENGTH, MASS, VELOCITY } from '../../dimensional/types.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import type { AtlasBridge, RelationContract } from '../types.js';
 import { relationContractOf } from './bridges-exact.js';
 import { SPRING_CONSTANT } from './dimensions.js';
@@ -91,20 +91,17 @@ export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
     'the discrete lattice spacing a as an independent scale',
   ],
   sideConditions: ['long-wavelength, qa ≪ 1'],
-  regime: {
-    family: FAMILY,
-    inequalities: [{ group: 'qa', op: '<', bound: 1, alias: 'qa ≪ 1' }],
-    groupDefinitions: deriveRegimeGroups(
-      FAMILY,
-      [
-        { name: 'm', dim: MASS },
-        { name: 'kappa', dim: SPRING_CONSTANT },
-        { name: 'a', dim: LENGTH },
-        { name: 'c', dim: VELOCITY },
-      ],
-      ['qa'],
-    ),
-  },
+  regime: makeRegime(
+    FAMILY,
+    [
+      { name: 'm', dim: MASS },
+      { name: 'kappa', dim: SPRING_CONSTANT },
+      { name: 'a', dim: LENGTH },
+      { name: 'c', dim: VELOCITY },
+    ],
+    ['qa'],
+    [{ group: 'qa', op: '<', bound: 1, alias: 'qa ≪ 1' }],
+  ),
   counterexamples: [
     {
       description:

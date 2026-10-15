@@ -23,7 +23,7 @@
 
 import { ellipticK } from '@danielsimonjr/mathts-functions';
 import { physjsFormalRef } from '../physjs-ref.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { MissingHorizonError } from '../types.js';
 import type { ApproximationBound, AtlasBridge, RelationContract, Regime } from '../types.js';
 import { relationContractOf } from './bridges-exact.js';
@@ -106,18 +106,15 @@ export function dampedOffsetBoundAt(params: Readonly<Record<string, number>>): n
 }
 
 /** Pendulum regime: `θ0 ≤ 0.5 rad`, stated on the dimensionless input. @internal */
-const PENDULUM_REGIME: Regime = {
-  family: FAMILY,
-  inequalities: [{ group: 'theta0', op: '<=', bound: 0.5, alias: 'θ0 ≤ 0.5 rad' }],
-  groupDefinitions: deriveRegimeGroups(
-    FAMILY,
-    [
-      { name: 'g', dim: ACCELERATION },
-      { name: 'ell', dim: LENGTH },
-    ],
-    ['theta0'],
-  ),
-};
+const PENDULUM_REGIME: Regime = makeRegime(
+  FAMILY,
+  [
+    { name: 'g', dim: ACCELERATION },
+    { name: 'ell', dim: LENGTH },
+  ],
+  ['theta0'],
+  [{ group: 'theta0', op: '<=', bound: 0.5, alias: 'θ0 ≤ 0.5 rad' }],
+);
 
 /**
  * Damped-spring regime: overdamped, `m k / b² < 1/4`.
@@ -128,19 +125,16 @@ const PENDULUM_REGIME: Regime = {
  *
  * @internal
  */
-const DAMPED_REGIME: Regime = {
-  family: FAMILY,
-  inequalities: [{ group: 'm · b^-2 · k', op: '<', bound: 0.25, alias: 'ζ > 1' }],
-  groupDefinitions: deriveRegimeGroups(
-    FAMILY,
-    [
-      { name: 'm', dim: MASS },
-      { name: 'b', dim: DAMPING },
-      { name: 'k', dim: SPRING_CONSTANT },
-    ],
-    [],
-  ),
-};
+const DAMPED_REGIME: Regime = makeRegime(
+  FAMILY,
+  [
+    { name: 'm', dim: MASS },
+    { name: 'b', dim: DAMPING },
+    { name: 'k', dim: SPRING_CONSTANT },
+  ],
+  [],
+  [{ group: 'm · b^-2 · k', op: '<', bound: 0.25, alias: 'ζ > 1' }],
+);
 
 /**
  * `ab-pendulum-linear` — small-angle pendulum → harmonic spring.
@@ -350,11 +344,11 @@ export const LIMIT_BRIDGES: readonly AtlasBridge[] = [AB_PENDULUM_LINEAR, AB_DAM
  *
  * @internal
  */
-export const CONTRACT_PENDULUM_LINEAR: RelationContract =
+const CONTRACT_PENDULUM_LINEAR: RelationContract =
   relationContractOf(AB_PENDULUM_LINEAR);
 
 /** @internal */
-export const CONTRACT_DAMPED_MASSLESS: RelationContract =
+const CONTRACT_DAMPED_MASSLESS: RelationContract =
   relationContractOf(AB_DAMPED_MASSLESS);
 
 /** The two limit contracts, in design-note order. @internal */

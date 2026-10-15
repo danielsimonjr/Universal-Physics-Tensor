@@ -125,7 +125,7 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
     valueKey: 'linewidth_windowed_Hz',
     referenceKey: 'linewidth_Hz',
     deviationKey: 'windowed_excess',
-    method: 'closed-form transform of the truncated ring-down, half-power point by bisection',
+    method: 'closed-form transform of the truncated ring-down, half-power point by MathTS findRoot (Brent) inside the first step past half power',
   },
   notIncluded: [
     'the detector noise floor; and the thermal drive of the resonator unless T_K and k_N_per_m are given (its equilibrium amplitude √(k_BT/k) is the fluctuation–dissipation partner of its damping; compare case-resistor-noise)',
