@@ -313,7 +313,9 @@ jobs:
     # evicts itself): `.lake/packages` (Mathlib's downloaded oleans and the Physlib build) keyed on
     # the toolchain and the lake manifest, so it is saved once per dependency set; and `.lake/build`
     # (this tree's oleans) keyed per commit and restored from the newest, so lake rebuilds only the
-    # files that changed.
+    # files that changed. Mathlib's own cache (`lake exe cache get`) is fetched only when the
+    # packages cache misses: on a hit the oleans are already in `.lake/packages`, and `cache get`
+    # re-downloaded all ~8900 archives anyway (about five minutes) before finding them decompressed.
     name: lake build and axiom audit
     if: always()
     needs: [paths-touched]
@@ -338,6 +340,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Restore the Lean dependencies (Mathlib oleans, Physlib build)
+        id: lake-packages
         if: steps.should.outputs.run == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -357,7 +360,7 @@ jobs:
           build: "true"
           test: "false"
           lint: "false"
-          use-mathlib-cache: "true"
+          use-mathlib-cache: ${{ steps.lake-packages.outputs.cache-hit == 'true' && 'false' || 'true' }}
           use-github-cache: "false"
           axiom-audit: "true"
           axiom-audit-root: "lean"
