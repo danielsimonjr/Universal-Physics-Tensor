@@ -41,17 +41,15 @@ import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
 import type { CompiledFormula } from '../numerical/formula-contract.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
+import { FIXED_POINT_EXPONENTS, constantRatio, fixedPoint } from '../canonical/fixed-points.js';
 
 /**
  * The comparison points: variable `i` (in sorted name order) takes the value
- * `(1.7 + i)^p` at point `p` of this list, the scheme `upt derive` uses to
- * recover a prefactor. Each variable has its own base, so the RATIOS between
- * variables change from point to point too. A common scale factor would leave
- * every ratio such as ℓ/g fixed, and `T ∝ ℓ/g` would then pass as the form of
- * `T ∝ √(ℓ/g)`.
- * @internal
+ * `(1.7 + i)^p` at each exponent of `FIXED_POINT_EXPONENTS`, the scheme
+ * `upt derive` uses to recover a prefactor (`canonical/fixed-points.ts` says
+ * why each variable has its own base).
  */
-const FIXED_POINT_EXPONENTS: readonly number[] = [1, 1.3, 1.6];
+const COMPARISON_SCHEME = { base: 1.7, step: 1 } as const;
 
 /** Relative tolerance for "the ratio is constant" and "the ratio is 1". @internal */
 const RATIO_TOLERANCE = 1e-9;
@@ -308,12 +306,7 @@ function alignmentDetail(
 function sameRatios(series: readonly (readonly number[])[]): boolean {
   const first = series[0];
   if (first === undefined) return false;
-  return series.every((s) =>
-    s.every((r, i) => {
-      const r0 = first[i]!;
-      return Number.isFinite(r) && Number.isFinite(r0) && r0 !== 0 && Math.abs(r / r0 - 1) <= RATIO_TOLERANCE;
-    }),
-  );
+  return first.every((_, i) => constantRatio(series.map((s) => s[i]!), RATIO_TOLERANCE).constant);
 }
 
 function classify(
@@ -323,7 +316,7 @@ function classify(
 ): CanonicalComparison {
   const base = { id: entry.id, name: entry.name };
   const r0 = ratios[0]!;
-  const constant = ratios.every((r) => Math.abs(r / r0 - 1) <= RATIO_TOLERANCE);
+  const constant = constantRatio(ratios, RATIO_TOLERANCE).constant;
   if (!constant) return { ...base, kind: 'form' };
   if (!recordsPrefactor) {
     return {
@@ -448,7 +441,7 @@ export function compareWithCanonical(
     const names = variables.map((g) => normalize(g.name)).sort();
 
     const points = FIXED_POINT_EXPONENTS.map((p) => {
-      const row: Record<string, number> = Object.fromEntries(names.map((n, i) => [n, Math.pow(1.7 + i, p)]));
+      const row = fixedPoint(names, p, COMPARISON_SCHEME);
       if (boundGroup !== undefined) row['__group'] = Math.pow(2.3, p);
       return row;
     });

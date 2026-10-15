@@ -26,6 +26,7 @@ import { CANONICAL_EQUATIONS, canonicalById } from './registry.js';
 import { canonicalQuantityName, normalForm } from './normal-form.js';
 import { bridgeShapes, classifyStructure } from './structural.js';
 import type { BridgeShape } from './structural.js';
+import { FIXED_POINT_EXPONENTS, constantRatio, fixedPoint } from './fixed-points.js';
 
 /** Best-effort numerical-recovery outcome. */
 export interface RecoveryOutcome {
@@ -85,14 +86,15 @@ function collectLeaves(
 
 /**
  * The sample points: variable `i` (in sorted canonical-name order) takes the
- * value `(1.3 + 0.7·i)^p` at exponent `p`. Each variable has its own base, so
- * the RATIOS between variables change from point to point too. One common
- * scale factor would leave every ratio such as y/x fixed, and two homogeneous
- * expressions of the same degree (`x + 2y` and `x + y`) would then pass as a
- * constant ratio at every point: a recovery that could not fail (9.0.0 audit
- * §4 C3). `canonical-compare.ts` uses the same scheme.
+ * value `(1.3 + 0.7·i)^p` at each exponent of `FIXED_POINT_EXPONENTS`. Each
+ * variable has its own base, so the RATIOS between variables change from
+ * point to point too. One common scale factor would leave every ratio such
+ * as y/x fixed, and two homogeneous expressions of the same degree
+ * (`x + 2y` and `x + y`) would then pass as a constant ratio at every point:
+ * a recovery that could not fail (9.0.0 audit §4 C3). `canonical-compare.ts`
+ * uses the same exponents on its own base.
  */
-const SAMPLE_EXPONENTS = [1, 1.3, 1.6];
+const RECOVERY_SCHEME = { base: 1.3, step: 0.7 } as const;
 
 /**
  * Best-effort check that two ASTs agree up to a constant ratio.
@@ -107,13 +109,11 @@ export function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOu
   // `M` and `mass` are one quantity. They share a sample, or the ratio is a
   // float artifact of two independent draws of the same mass.
   const canonicals = [...new Set(vars.values())].sort();
-  const index = new Map(canonicals.map((n, i) => [n, i]));
   const ratios: number[] = [];
-  for (const p of SAMPLE_EXPONENTS) {
+  for (const p of FIXED_POINT_EXPONENTS) {
+    const point = fixedPoint(canonicals, p, RECOVERY_SCHEME);
     const values: Record<string, number> = {};
-    for (const [raw, canonName] of vars) {
-      values[raw] = Math.pow(1.3 + 0.7 * index.get(canonName)!, p);
-    }
+    for (const [raw, canonName] of vars) values[raw] = point[canonName]!;
     // Hold unresolved dimensionless leaves fixed — recovery is "up to" them.
     for (const n of dimless) values[n] = 1;
     let cv: number;
@@ -131,9 +131,8 @@ export function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOu
     }
     ratios.push(cv / bv);
   }
-  const r0 = ratios[0];
-  const maxRelErr = Math.max(...ratios.map((r) => Math.abs((r - r0) / r0)));
-  return { tested: true, maxRelErr };
+  // The recovery records the spread; the reader decides. Every ratio is finite and nonzero here.
+  return { tested: true, maxRelErr: constantRatio(ratios, 0).maxRelErr };
 }
 
 /**

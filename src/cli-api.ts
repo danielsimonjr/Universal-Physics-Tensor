@@ -194,6 +194,21 @@ export {
   matchingCatalogEdges,
 } from './composition/canonical-compare.js';
 export type { CanonicalComparison, CatalogEdgeMatch } from './composition/canonical-compare.js';
+// One owner for "a constant times that one" (proposal 6): `upt derive` recovers its prefactor here.
+export {
+  FIXED_POINT_EXPONENTS,
+  constantRatio,
+  fixedPoint,
+  recoverMonomialPrefactor,
+} from './canonical/fixed-points.js';
+export type {
+  ConstantRatio,
+  ConstantRatioOptions,
+  FixedPointScheme,
+  PrefactorRecovery,
+  PrefactorRecoveryScheme,
+  RatioStatistic,
+} from './canonical/fixed-points.js';
 export { CONSTANTS, CONSTANT_PROVENANCE } from './dimensional/symbolic-constants.js';
 export type { CandidateGrounding, CandidateReadiness } from './composition/grounding.js';
 

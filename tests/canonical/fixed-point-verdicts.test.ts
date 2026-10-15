@@ -11,7 +11,13 @@
  * verdicts on the tree before the move; a changed verdict fails here.
  *
  * `cleanPrefactor` is deliberately NOT in the audit pin: proposal 3 changes
- * that field on purpose, and its moves are reported separately.
+ * that field on purpose, and its moves are reported separately. Two audit
+ * rows DID move under proposal 3, by its rule and not by the sample scheme:
+ * CE-einstein-field-eq (decoy → derived, 8π on {c, G}) and CE-rydberg-energy
+ * (decoy → derived, 1/(32π²) on {ℏ, e, ε₀, m_e}), closed forms the retired
+ * list of seventeen constants could not name. The snapshot records them as
+ * derived; the sample-scheme move (proposal 6) was checked against the
+ * snapshot taken before it and changed no row.
  */
 import { describe, expect, it } from 'vitest';
 import { attemptDerivation } from '../../src/composition/bridge-analysis.js';
