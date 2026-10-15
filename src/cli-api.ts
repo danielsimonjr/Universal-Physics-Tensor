@@ -124,6 +124,7 @@ export { deriveEdgeEvidence } from './cli/map-evidence.js';
  * physics), derivation cycles, and betweenness hub ranking on demand. Internal.
  */
 export { communitiesOf, derivationCycles, rankHubs } from './composition/graph-structure.js';
+/** The community report, one derivation cycle, and one hub rank, as `upt map` prints them. */
 export type { CommunityReport, DerivationCycle, HubRank } from './composition/graph-structure.js';
 
 /**
