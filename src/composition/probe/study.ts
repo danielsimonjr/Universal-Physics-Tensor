@@ -27,7 +27,7 @@
  * @internal
  */
 
-import { betainc, gammainc, lgamma } from '@danielsimonjr/mathts-functions';
+import { betainc, gammainc, gammaincp } from '@danielsimonjr/mathts-functions';
 import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
@@ -812,20 +812,12 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
 
 // --- χ² and F survival functions ------------------------------------------
 //
-// MathTS carries log Γ (`lgamma`), the regularized lower incomplete gamma
-// `gammainc` (the series for x < a + 1, else 1 − Q by continued fraction) and
-// the regularized incomplete beta `betainc`. It does NOT carry the upper
-// incomplete gamma directly: `gammaincp` is `1 − gammainc`, which rounds a
-// small upper tail to 0 (`gammaincp(5, 80)` is 0 where Q is 2.5e-28), and the
-// χ² p-value of a bad fit IS that tail. `gammaQ` therefore stays the direct
-// Lentz continued fraction, with its front factor from `lgamma`.
-
-/** `log Γ(z)`, MathTS `lgamma`, read back as the number it is for a number. */
-function logGamma(z: number): number {
-  const v: unknown = lgamma(z);
-  if (typeof v !== 'number') throw new TypeError('lgamma did not return a number for a number argument');
-  return v;
-}
+// MathTS carries the regularized lower incomplete gamma `gammainc` (the
+// series for x < a + 1, else 1 − Q by continued fraction), the upper one
+// `gammaincp` (from `@danielsimonjr/mathts-functions` 0.68.3 the modified
+// Lentz continued fraction for x ≥ a + 1, computed directly; before that it
+// was `1 − gammainc`, which rounded a far upper tail to 0, and the χ² p-value
+// of a bad fit IS that tail) and the regularized incomplete beta `betainc`.
 
 /** Regularized lower incomplete gamma P(a, x), MathTS `gammainc`. */
 function gammaP(a: number, x: number): number {
@@ -834,29 +826,12 @@ function gammaP(a: number, x: number): number {
   return v;
 }
 
-/** Regularized upper incomplete gamma Q(a, x), computed directly in the upper tail (modified Lentz). */
+/** Regularized upper incomplete gamma Q(a, x), MathTS `gammaincp` (direct in the upper tail). */
 function gammaQ(a: number, x: number): number {
   if (x <= 0) return 1;
-  if (x < a + 1) return Math.max(0, 1 - gammaP(a, x));
-  const front = Math.exp(-x + a * Math.log(x) - logGamma(a));
-  const tiny = 1e-300;
-  let b = x + 1 - a;
-  let c = 1 / tiny;
-  let d = 1 / b;
-  let h = d;
-  for (let i = 1; i < 1000; i++) {
-    const an = -i * (i - a);
-    b += 2;
-    d = an * d + b;
-    if (Math.abs(d) < tiny) d = tiny;
-    c = b + an / c;
-    if (Math.abs(c) < tiny) c = tiny;
-    d = 1 / d;
-    const del = d * c;
-    h *= del;
-    if (Math.abs(del - 1) < 1e-16) break;
-  }
-  return front * h;
+  const v: unknown = gammaincp(a, x);
+  if (typeof v !== 'number') throw new TypeError('gammaincp did not return a number for number arguments');
+  return v;
 }
 
 /** P(χ²_ν ≥ chi2): the probability of a χ² at least this large if the model and σ are right. @internal */

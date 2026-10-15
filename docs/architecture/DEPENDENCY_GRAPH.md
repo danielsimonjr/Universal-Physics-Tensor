@@ -4663,7 +4663,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `betainc, gammainc, lgamma` |
+| `@danielsimonjr/mathts-functions` | `betainc, gammainc, gammaincp` |
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -6698,7 +6698,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `hermiteInterp, median` |
+| `@danielsimonjr/mathts-functions` | `findRoot, hermiteInterp, median` |
 | `universal-physics-tensor` | `findPerihelion, integrateGeodesicGL4` |
 
 **Internal Dependencies:**
@@ -7103,7 +7103,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 365 |
 | Total Modules | 13 |
-| Total Lines of Code | 81681 |
+| Total Lines of Code | 81612 |
 | Total Exports | 2580 |
 | Total Re-exports | 1321 |
 | Total Classes | 82 |

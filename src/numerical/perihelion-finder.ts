@@ -20,17 +20,15 @@
  *      `(τ_{i+1}, dr/dτ_{i+1})`, with endpoint derivatives estimated
  *      from neighboring snapshots (4 values total: f and f' at both
  *      endpoints). Find an analytic root of the cubic on [τ_i, τ_{i+1}].
- *   5. If `|P(τ_root)| > tauTolerance`, refine with **bisection on the
- *      polynomial** (not re-integration — Adam+Eve I6/F11 — that would
- *      cost a full GL4 sweep per bisection step, which defeats the
- *      cached-snapshot approach). Precision floor: 1e-9 × T_orbit
- *      (Adam+Eve I1 — 1e-12 needs ~40 cubic bisections and is wasted
+ *   5. If `|P(τ_root)| > tauTolerance`, refine with **Brent's method on the
+ *      polynomial** (MathTS `findRoot`, not re-integration — Adam+Eve
+ *      I6/F11 — that would cost a full GL4 sweep per step, which defeats
+ *      the cached-snapshot approach). `tauTolerance` is a RESIDUAL tolerance
+ *      in the units of dr/dτ, so the search is run with `xtol: 0`
+ *      (`@danielsimonjr/mathts-functions` ≥ 0.68.3): the solver stops on
+ *      `|P| ≤ tauTolerance` alone, never on the bracket width in `s`.
+ *      Precision floor: 1e-9 × T_orbit (Adam+Eve I1 — 1e-12 is wasted
  *      effort given the integrator's per-step error is already > 1e-12).
- *      The bisection stays local: MathTS `findRoot` (Brent) stops on
- *      `|b − a| < tol` as well as on `|f| < tol`, in the units of its
- *      independent variable, and `tauTolerance` is a RESIDUAL tolerance in
- *      the units of dr/dτ; the width stop would end the search at a bracket
- *      of `tauTolerance` in `s`, where the residual can be far above it.
  *   6. Return `{ tau, x, phi }` where `x` is the cubic-Hermite-interpolated
  *      4-coordinate at the root and `phi = x[3]`.
  *
@@ -39,7 +37,7 @@
  *
  * @module numerical/perihelion-finder
  */
-import { hermiteInterp, median } from '@danielsimonjr/mathts-functions';
+import { findRoot, hermiteInterp, median } from '@danielsimonjr/mathts-functions';
 
 /**
  * Result of `findPerihelion`: the τ at the radial turning point, the
@@ -151,21 +149,19 @@ function hermiteInterpVector(
 }
 
 /**
- * Bisection on the cubic-Hermite polynomial for the scalar `dr/dτ` root.
- * Operates on `s ∈ [0,1]` — the normalised bracket coordinate. Returns
- * the converged `s` and the corresponding polynomial value.
+ * The root of the cubic-Hermite polynomial for the scalar `dr/dτ`, on the
+ * normalised bracket coordinate `s ∈ [0,1]`, by MathTS `findRoot` (Brent).
+ * Returns the converged `s` and the polynomial value there.
  *
- * Local, not MathTS `findRoot`: that solver's one `tol` also stops on the
- * bracket width in `s`, and this contract is a residual tolerance in the
- * units of dr/dτ (module docstring, step 5).
- *
- * Precision: the loop terminates when `|P(s_mid)| ≤ tauTolerance` (scaled
- * to whatever units `dr/dτ` is in — the caller passes `tauTolerance`
- * matched to the integrator scale). A hard iteration cap of 60 prevents
- * runaway on pathological inputs (60 bisections halve `s` to ≈1e-18 — well
- * below floating-point resolution).
+ * Precision: `tol` is a residual tolerance in the units of `dr/dτ` (the
+ * caller passes `tauTolerance`, matched to the integrator scale), so the
+ * solver runs with `xtol: 0` and stops on `|P(s)| ≤ tol` alone, never on
+ * the bracket width in `s`. `sInitial` (the linear estimate) is tried first
+ * and returned when it already meets `tol`. A hard iteration cap of 100
+ * bounds a tolerance the polynomial cannot meet in floating point; the
+ * solver then returns its best point.
  */
-function bisectCubic(
+function rootOnCubic(
   f0: number,
   f1: number,
   m0: number,
@@ -174,49 +170,12 @@ function bisectCubic(
   sInitial: number,
   tol: number,
 ): { s: number; residual: number } {
-  // Establish a bracket around sInitial. The sign-change is at the
-  // f(τ0)=f0 → f(τ1)=f1 endpoints (by construction f0 < 0, f1 > 0).
-  let sLo = 0;
-  let sHi = 1;
-  let fLo = f0;
-  let fHi = f1;
-  let s = sInitial;
-  let fs = hermiteEval(f0, f1, m0, m1, dt, s);
-
-  // If sInitial already satisfies tol, return it.
-  let absFs = fs < 0 ? -fs : fs;
-  if (absFs <= tol) return { s, residual: fs };
-
-  // Warm start: the sInitial evaluation above is otherwise discarded. Use its
-  // sign to tighten the GUARANTEED bracket before bisecting. This preserves the
-  // sign-bracket invariant (fLo < 0 < fHi) — so convergence is unaffected — and
-  // a good linear estimate yields a smaller starting interval (fewer iters).
-  if (sInitial > sLo && sInitial < sHi) {
-    if ((fs < 0) === (fLo < 0)) {
-      sLo = s;
-      fLo = fs;
-    } else {
-      sHi = s;
-      fHi = fs;
-    }
-  }
-
-  for (let iter = 0; iter < 60; iter++) {
-    // Bisect the (warm-started) bracket — robust regardless of the estimate.
-    s = 0.5 * (sLo + sHi);
-    fs = hermiteEval(f0, f1, m0, m1, dt, s);
-    absFs = fs < 0 ? -fs : fs;
-    if (absFs <= tol) return { s, residual: fs };
-    // Maintain sign-bracket: fLo < 0 < fHi.
-    if ((fs < 0) === (fLo < 0)) {
-      sLo = s;
-      fLo = fs;
-    } else {
-      sHi = s;
-      fHi = fs;
-    }
-  }
-  return { s, residual: fs };
+  const P = (s: number): number => hermiteEval(f0, f1, m0, m1, dt, s);
+  const atStart = P(sInitial);
+  if (Math.abs(atStart) <= tol) return { s: sInitial, residual: atStart };
+  // By construction f(0) = f0 ≤ 0 < f1 = f(1) (or f0 < 0 ≤ f1), the sign change `findRoot` requires.
+  const s = findRoot(P, 0, 1, { tol, xtol: 0, maxIter: 100 });
+  return { s, residual: P(s) };
 }
 
 /**
@@ -367,8 +326,8 @@ export function findPerihelion(options: FindPerihelionOptions): PerihelionResult
   // For a linear sign-change this is exact; for cubic it's a warm start.
   const sLinear = f0 / (f0 - f1);
 
-  // Step 5: bisect the cubic-Hermite polynomial until residual ≤ tolerance.
-  const { s: sRoot } = bisectCubic(f0, f1, m0, m1, dt, sLinear, tauTolerance);
+  // Step 5: solve the cubic-Hermite polynomial until residual ≤ tolerance.
+  const { s: sRoot } = rootOnCubic(f0, f1, m0, m1, dt, sLinear, tauTolerance);
 
   const tauRoot = tau0 + sRoot * dt;
 

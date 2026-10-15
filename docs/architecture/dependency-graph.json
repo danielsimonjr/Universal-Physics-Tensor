@@ -16767,7 +16767,7 @@
             "imports": [
               "betainc",
               "gammainc",
-              "lgamma"
+              "gammaincp"
             ]
           }
         ],
@@ -24793,6 +24793,7 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
+              "findRoot",
               "hermiteInterp",
               "median"
             ]
@@ -25769,7 +25770,7 @@
   "statistics": {
     "totalTypeScriptFiles": 365,
     "totalModules": 13,
-    "totalLinesOfCode": 81681,
+    "totalLinesOfCode": 81612,
     "totalExports": 2580,
     "totalClasses": 82,
     "totalInterfaces": 468,

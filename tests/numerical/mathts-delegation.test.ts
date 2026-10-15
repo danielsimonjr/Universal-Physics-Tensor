@@ -1,9 +1,10 @@
 /**
  * The 2026-10-15 MathTS-usage review: each numeric routine UPT used to keep
- * locally is the MathTS call now, and the two copies MathTS cannot carry are
- * still local, each with its reason beside it. The source scans fail while a
- * local copy is still the implementation; the value checks are the second
- * method, computed from a closed form rather than from the routine itself.
+ * locally is the MathTS call now, including the two that waited for
+ * @danielsimonjr/mathts-functions 0.68.3 (the direct upper incomplete gamma,
+ * and findRoot's residual-only stop). The source scans fail while a local
+ * copy is still the implementation; the value checks are the second method,
+ * computed from a closed form rather than from the routine itself.
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -39,16 +40,15 @@ describe('MathTS carries the special functions', () => {
     expect(theta0OfPeriodError(pendulumPeriodErrorAt({ theta0: 0.3 }))).toBeCloseTo(0.3, 12);
   });
 
-  it('the probe study reads lgamma, betainc and gammainc, and keeps the direct upper tail', () => {
+  it('the probe study reads betainc, gammainc and gammaincp, and the upper tail still resolves', () => {
     const study = source('../../src/composition/probe/study.ts');
-    expect(study).toMatch(/\blgamma\b/);
     expect(study).toMatch(/\bbetainc\b/);
     expect(study).toMatch(/\bgammainc\b/);
-    expect(study).not.toMatch(/function lnGamma|function betaCf|function gammaSeries|LANCZOS/);
-    // MathTS `gammaincp` is 1 − P and rounds the far tail to 0 (gammaincp(5, 80) = 0); the
-    // survival function stays a direct continued fraction, and must still resolve that tail.
-    expect(study).toMatch(/function gammaQ/);
-    expect(study).not.toMatch(/import \{[^}]*gammaincp/);
+    expect(study).toMatch(/import \{[^}]*gammaincp/);
+    expect(study).not.toMatch(/function lnGamma|function betaCf|function gammaSeries|LANCZOS|modified Lentz\)/);
+    // Before @danielsimonjr/mathts-functions 0.68.3, `gammaincp` was 1 − P and rounded the far
+    // tail to 0 (gammaincp(5, 80) = 0); the survival function is that call now, and this is the
+    // tail it must resolve (the dependency range is pinned in tests/tools/package-deps.test.ts).
     expect(chiSquareSurvival(160, 10)).toBeGreaterThan(0);
     expect(chiSquareSurvival(160, 10)).toBeCloseTo(Math.exp(-80) * (1 + 80 + 80 ** 2 / 2 + 80 ** 3 / 6 + 80 ** 4 / 24), 40);
     // Closed forms: χ²₂ is exponential and the F(1, 1) tail is the Cauchy t².
@@ -104,13 +104,15 @@ describe('MathTS carries the quadrature, the interpolation and the statistics', 
     expect(windowedLinewidthHz(Math.PI, 1e3)).toBeCloseTo(1, 12);
   });
 
-  it('the perihelion residual bisection stays local, with its reason', () => {
-    // MathTS `findRoot` stops on `|b − a| < tol` as well as `|f| < tol`, in the units of its
-    // independent variable; the perihelion contract is a residual tolerance in the units of
-    // dr/dτ, which that width stop would silently coarsen.
+  it('the perihelion residual root is findRoot with xtol: 0, the residual stop alone', () => {
+    // Before 0.68.3, `findRoot` stopped on `|b − a| < tol` as well as `|f| < tol`, in the units of
+    // its independent variable; the perihelion contract is a residual tolerance in the units of
+    // dr/dτ, which that width stop would have silently coarsened. `xtol: 0` is the residual stop.
     const finder = source('../../src/numerical/perihelion-finder.ts');
-    expect(finder).toMatch(/function bisectCubic/);
-    expect(finder).toMatch(/findRoot/);
+    expect(finder).not.toMatch(/function bisectCubic/);
+    expect(finder).toMatch(/findRoot\(P, 0, 1, \{ tol, xtol: 0/);
+    const quadrature = source('../../src/cases/quadrature.ts');
+    expect(quadrature).toMatch(/atol: 0/);
   });
 });
 
