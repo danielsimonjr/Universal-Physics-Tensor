@@ -225,6 +225,8 @@ export type {
 export { CONSTANTS, CONSTANT_PROVENANCE } from './dimensional/symbolic-constants.js';
 /** The one decimal-literal rule (`2`, `1e3`; not `0x2`, `''`, `Infinity`): a symbol name that is a number. */
 export { isDecimalLiteral } from './dimensional/ast-leaves.js';
+/** The one scalar-leaf walk of an `ExprNode`: `op` arguments always, other arms as the caller opts in. */
+export { forEachScalarLeaf } from './dimensional/ast-leaves.js';
 export type { CandidateGrounding, CandidateReadiness } from './composition/grounding.js';
 
 // Atlas Phase 2 CLI surface (`upt regime`, `upt path`). Regime admission and

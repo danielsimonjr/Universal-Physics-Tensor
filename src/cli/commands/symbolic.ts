@@ -48,12 +48,10 @@ function evalFormOf(
   const formula = printEval(n);
   if (formula === null) return null;
   const names: string[] = [];
-  const collect = (e: ExprNode): void => {
-    if (e.kind === 'symbol') {
-      if (!names.includes(e.name)) names.push(e.name);
-    } else if (e.kind === 'op') e.args.forEach(collect);
-  };
-  collect(n);
+  // The leaves under `op` arguments only: a node the scalar evaluator cannot take has no eval form.
+  api.forEachScalarLeaf(n, (leaf) => {
+    if (!names.includes(leaf.name)) names.push(leaf.name);
+  }, {});
   const bindings: string[] = [];
   for (const name of names) {
     if (name in EVAL_STUBS || api.isDecimalLiteral(name)) continue;
@@ -91,12 +89,9 @@ function symbolTable(
   point: Readonly<Record<string, number>>,
 ): SymbolRow[] | null {
   const names: string[] = [];
-  const collect = (e: ExprNode): void => {
-    if (e.kind === 'symbol') {
-      if (!names.includes(e.name) && !api.isDecimalLiteral(e.name)) names.push(e.name);
-    } else if (e.kind === 'op') e.args.forEach(collect);
-  };
-  collect(n);
+  api.forEachScalarLeaf(n, (leaf) => {
+    if (!names.includes(leaf.name) && !api.isDecimalLiteral(leaf.name)) names.push(leaf.name);
+  }, {});
   const rows: SymbolRow[] = [];
   for (const name of names) {
     const c = api.CONSTANTS[name];
