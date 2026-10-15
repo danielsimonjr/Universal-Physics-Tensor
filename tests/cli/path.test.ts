@@ -16,9 +16,15 @@ import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 
-/** Relative kinetic-frequency error at x = ck/ω₀. Independent of the bridge record. */
+/**
+ * Relative kinetic-frequency error at x = ck/ω₀. Independent of the bridge record, and of the
+ * library's own form `x²/(1 + √(1 + x²))²`: with d = √(1 + x²) − 1 = expm1(½ log1p(x²)), the
+ * error |d/(x²/2) − 1| is d/(d + 2), with no cancellation. The naive difference this helper
+ * once computed was off by 6e-12 relative at x = 0.1, which the library no longer is.
+ */
 function kgKineticError(x: number): number {
-  return Math.abs((Math.sqrt(1 + x * x) - 1) / ((x * x) / 2) - 1);
+  const d = Math.expm1(0.5 * Math.log1p(x * x));
+  return d / (d + 2);
 }
 
 describe('upt path', () => {
@@ -425,7 +431,9 @@ describe('upt path', () => {
       expect(r.modelFamilies).toEqual(['waves', 'diffusion']);
       expect(r.kind).toBe('bound');
       expect(r.relation).toBe('approximation');
-      expect(r.bound).toEqual({ K: 1, delta: kgKineticError(0.1) });
+      // Two routes to one number: equal to two ulps, not bit for bit.
+      expect(r.bound.K).toBe(1);
+      expect(Math.abs(r.bound.delta / kgKineticError(0.1) - 1)).toBeLessThan(5e-16);
       expect(r.norm).toBe(
         'relative error of the kinetic frequency ω − ω₀, normalized by the value of the reduced model',
       );
