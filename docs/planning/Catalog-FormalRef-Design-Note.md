@@ -8,8 +8,8 @@ code, no catalog name, no canonical entry, and no cell of the composition
 table. Approval, and what has landed, are recorded outside this file.
 
 The shape is the one already in use. `FormalRef` is `src/atlas/types.ts`.
-The manifest entry is `formal/physjs/manifest.json`, copied by
-`src/atlas/physjs-ref.ts`. The Phase 4 design snippet is the earlier
+The manifest entry is `formal/lean/manifest.json`, read by
+`src/atlas/physjs-ref.ts` through the generated table. The Phase 4 design snippet is the earlier
 shape: it has no `covers` field and no `lean4-physjs` system. This note
 follows the type and the manifest.
 

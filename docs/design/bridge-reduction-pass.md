@@ -282,18 +282,18 @@ that tag and does not delete the equation.
 
 `dependencies` is left as it is.
 
-## PhysJS
+## Lean proofs (`lean/`)
 
 Derivation theorems live in the flat Lean tree, in the file of the derived
-equation (`lean/<File>.lean`), which is the layout the vendored
-`formal/physjs/lean-files.json` already records. The theorem imports the
+equation (`lean/<File>.lean`), which is the layout
+`formal/lean/lean-files.json` already records. The theorem imports the
 basis modules and names the basis theorems. The equation theorem that the
 UPT `formalRef` already points at stays the top-level manifest `theorem`.
 The derivation is a nested object on that same manifest entry, the shape
 the formalRef note already uses for a second statement. It has no second
 `key` and no second `bridgeId`.
 
-Proposed nested object, still under schema `physjs-bridge-manifest/v1`
+Proposed nested object, under the manifest schema `upt-lean-manifest/v1`
 until Daniel bumps it:
 
 | Field | What it holds |
@@ -310,9 +310,9 @@ that fills `derivedFrom` reads `imports`, maps each theorem back to its
 `bridgeId`, and writes those keys. A nested derivation does not become a
 second `formalRef`.
 
-The pin is the existing procedure. Land the theorem in PhysJS. Vendor
-`manifest/bridges.json` to `formal/physjs/manifest.json` at that commit.
-Run `bun run physjs:table`. The new step is the generator for
+The procedure is the existing one (`WORKFLOWS.md`). Write the theorem in
+`lean/`, add it to `formal/lean/manifest.json`, run
+`bun scripts/lean-index.ts`, then `bun run physjs:table`. The new step is the generator for
 `derivedFrom` and `basis`, in that same commit, from the vendored
 manifest. `atlas:formal-gate` still compares the manifest to the bridges.
 An import that names a theorem the manifest does not contain fails the

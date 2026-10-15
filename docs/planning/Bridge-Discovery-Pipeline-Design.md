@@ -394,7 +394,7 @@ hypothesis. The text includes the import `PhysJS.Dimensional` when the
 filter named one of its theorems.
 
 The function does not call `physjsFormalRef`, does not write
-`PHYSJS_ENTRIES`, `catalog-formal-ref.ts`, `formal/physjs/manifest.json`,
+`PHYSJS_ENTRIES`, `catalog-formal-ref.ts`, `formal/lean/manifest.json`,
 or `BRIDGE_EQUATIONS`, and does not call `deriveEvidence`. The text is not
 a manifest entry: it has no `leanProof: complete`. The proof body is
 absent, so the text contains no `sorry` that a later copy could vendor as

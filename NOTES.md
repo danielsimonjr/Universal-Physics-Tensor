@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-10-14
+
+- **The Lean proofs are this repository's `lean/` (PR #509, the 11.0.0 change; not merged or tagged when this was written).** 235 files: PhysJS main `a737eab`'s 233 with their history, plus `DiffusionMode.lean` and `SteadyProfile.lean`. CI job `lake build and axiom audit` builds them when a Lean input, the manifest, the catalog or `ci.yml` changes. Catalog proof status: 119 full, 22 weak, 19 pending (160 records), read from `data/bridge-catalog.json`. The permalinks name `v<package.json version>`; at 10.0.0 that tag has no `lean/`, so they 404 until the 11.0.0 bump and tag. PhysJS is unchanged and not archived; archiving it is the owner's decision. The `PhysJS` lines under 2026-10-08 and earlier (the pin, `formal/physjs/`, `PHYSJS_COMMIT`) are the record from before the move.
+
 ## As of 2026-10-09
 
 - **Root exports after the audit.** `bridgeGradient`, `gradientToNamed` and `BridgeGradientResult` are no longer root exports (engine AD over a `BridgeDiffSpec` was unreachable: `evaluate` returns a number); 52 referenced types are (`tests/api/root-public-closure.test.ts` found 87 leaks on 9.0.0). The binding reader (`numerical/binding-value.ts`) takes its number from the MathTS formula parser and walks the parse tree for dimension and cycles only; the one scalar-function table is `SCALAR_FUNCTIONS` in `numerical/formula-contract.ts`. The sentences that `bridgeGradient` is the AD path and that the binding path is a hand interpreter are the record from before these changes.

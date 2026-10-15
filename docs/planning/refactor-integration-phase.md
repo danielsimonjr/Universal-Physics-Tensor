@@ -739,7 +739,7 @@ Scope. `emitProofTarget` builds a typed object with the fields it already
 puts in the JSON (`key`, `bridgeId`, `theorem`, `covers`, `coverage`,
 `leanProof`, `axioms`) and renders the comment block from that object.
 `leanProof` stays `absent`. The markers stay so existing golden text can be
-compared. The object is not written to `formal/physjs/manifest.json` and is
+compared. The object is not written to `formal/lean/manifest.json` and is
 not passed to `deriveEvidence`. `physjsManifestProblems` may be called on a
 copy the test builds. The production orchestrator still does not write.
 
