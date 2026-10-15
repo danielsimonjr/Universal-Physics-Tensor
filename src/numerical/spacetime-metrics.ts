@@ -28,7 +28,7 @@ import { splitAssignment } from '../core/assignment.js';
 import { relDiff, withinMixed } from '../core/compare.js';
 import { numberFrom, numberMatrixFrom } from '../core/mathts-read.js';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
-import { DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
+import { DIMENSIONLESS, GRAVITATIONAL_CONSTANT, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
 import { UnitError } from '../dimensional/units.js';
 import { readParameter } from './binding-value.js';
 import { computeChristoffelTensor } from './connection-lowering-helpers.js';
@@ -361,7 +361,7 @@ function requirePolarInterior(theta: number): void {
 const PARAM_DIM: Readonly<Record<string, Dimension>> = {
   M: MASS,
   c: VELOCITY,
-  G: { L: 3, M: -1, T: -2, I: 0, Theta: 0, N: 0, J: 0 },
+  G: GRAVITATIONAL_CONSTANT,
   r: LENGTH,
   a: LENGTH,
   t: TIME,

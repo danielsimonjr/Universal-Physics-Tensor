@@ -7,7 +7,6 @@
  * @module canonical/entries/dimensional-classics
  */
 import type { CanonicalEquation } from '../canonical-equation.js';
-import { dim } from '../../dimensional/ast-builders.js';
 import {
   LENGTH,
   TIME,
@@ -18,10 +17,12 @@ import {
   ACTION,
   ENTROPY,
   TEMPERATURE,
+  GRAVITATIONAL_CONSTANT,
+  LINEAR_DENSITY,
 } from '../../dimensional/types.js';
 
-const G = dim(3, -1, -2); // Newton's constant [L³ M⁻¹ T⁻²]
-const LIN_DENSITY = dim(-1, 1, 0); // mass per length [L⁻¹ M]
+const G = GRAVITATIONAL_CONSTANT; // Newton's constant [L³ M⁻¹ T⁻²]
+const LIN_DENSITY = LINEAR_DENSITY; // mass per length [L⁻¹ M]
 
 /** Shared shape for an L0 classic (no L1/L2, fully dimensionally determined). */
 const l0 = (
