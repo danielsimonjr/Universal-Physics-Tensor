@@ -35,7 +35,7 @@ const key = (d: Readonly<Record<(typeof BASES)[number], number>>): string => BAS
 /** Shape key → the names `types.ts` gives it (DIMENSIONLESS excluded: `dim()` of nothing is not a copy of a name). */
 function namedShapes(): Map<string, string[]> {
   const out = new Map<string, string[]>();
-  for (const [name, value] of Object.entries(types)) {
+  for (const [name, value] of Object.entries(types) as [string, unknown][]) {
     if (name === 'DIMENSIONLESS' || typeof value !== 'object' || value === null || Array.isArray(value)) continue;
     if (!BASES.every((b) => typeof (value as Record<string, unknown>)[b] === 'number')) continue;
     const k = key(value as Dimension);
