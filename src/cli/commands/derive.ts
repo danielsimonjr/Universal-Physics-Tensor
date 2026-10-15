@@ -205,7 +205,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           Object.fromEntries(
             governing.map((g) => [
               formulaSymbol(g.name),
-              isConstant(g) ? api.CONSTANTS[g.name]!.value : values[g.name.replace(/_/g, '-')]!,
+              isConstant(g) ? api.CONSTANTS[g.name]!.value : values[api.foldName(g.name)]!,
             ]),
           ),
         ),
@@ -277,6 +277,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'derive',
   aliases: ['dim'],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Derive the dimensional form of your own equation and, with --formula, the prefactor.',

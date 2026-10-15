@@ -15,10 +15,12 @@ describe('pderivNumericalFn — order parameter (PD-7)', () => {
   it('defaults to 4th-order as of v0.6.0 (Decision #7 FD-flip)', () => {
     const f = (x: ReadonlyArray<number>) => x[0] ** 3;
     const dfx = pderivNumericalFn(f, [1.0], 0);
-    // 4th-order at h≈1e-4: truncation is zero on a cubic; residual is pure round-off ~1e-12.
-    // f'(1) = 3 — within 1e-5 trivially; actual residual ~1e-12.
+    // 4th-order at h≈1e-4: truncation is zero on a cubic; the residual is round-off, ~1e-12.
+    // The bound is the discriminating 1e-11 of pderiv-order-default.test.ts: 2nd order at its
+    // h = 1e-6 lands near 8e-11, so a bound of 1e-5 (the one here until 2026-10-15) was met by
+    // either order and could not fail on the default this title names.
     expect(typeof dfx).toBe('number');
-    expect(Math.abs((dfx as number) - 3.0)).toBeLessThan(1e-5);
+    expect(Math.abs((dfx as number) - 3.0)).toBeLessThan(1e-11);
   });
 
   it('supports 4th-order opt-in (≤1e-9 on a smooth cubic)', () => {

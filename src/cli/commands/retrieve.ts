@@ -96,6 +96,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'retrieve',
   aliases: [],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Search the atlas for a claim. --embed asks a local Ollama model and does not accept that order.',

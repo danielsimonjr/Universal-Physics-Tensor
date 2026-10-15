@@ -156,14 +156,22 @@ describe('json-contract — map --json', () => {
     expect(writes.join('')).toBe('');
   });
 
-  it('--proposed --max-orders=abc: exit 1 (a bad value) with the pinned --max-orders message (proves shared wiring)', async () => {
+  it('--proposed --max-orders=-1: exit 1 (a bad value) with the pinned --max-orders message (proves shared wiring)', async () => {
     const { io, errLines } = makeIo();
-    const status = await runCli(['map', '--proposed', '--max-orders=abc', '--format=dot'], io);
+    const status = await runCli(['map', '--proposed', '--max-orders=-1', '--format=dot'], io);
 
     expect(status).toBe(1);
     expect(errLines.join('')).toContain(
-      'upt: --max-orders must be a non-negative finite number, got "abc".'
+      'upt: --max-orders must be a non-negative finite number, got "-1".'
     );
+  });
+
+  it('--proposed --max-orders=abc: exit 2 (not a number is a malformed invocation; 2026-10-15 numeric-flag grammar)', async () => {
+    const { io, errLines } = makeIo();
+    const status = await runCli(['map', '--proposed', '--max-orders=abc', '--format=dot'], io);
+
+    expect(status).toBe(2);
+    expect(errLines.join('')).toContain("upt: --max-orders 'abc' is not a number");
   });
 });
 
@@ -184,14 +192,17 @@ describe('json-contract — discover --json', () => {
     expect(Array.isArray(envelope.result)).toBe(true);
   });
 
-  it('bad --max-orders=abc: exit 1 (a bad value) with the pinned message', async () => {
+  it('bad --max-orders=-1: exit 1 (a bad value) with the pinned message; =abc is exit 2 (malformed)', async () => {
     const { io, errLines } = makeIo();
-    const status = await runCli(['discover', '--max-orders=abc'], io);
+    const status = await runCli(['discover', '--max-orders=-1'], io);
 
     expect(status).toBe(1);
     expect(errLines.join('')).toContain(
-      'upt: --max-orders must be a non-negative finite number, got "abc".'
+      'upt: --max-orders must be a non-negative finite number, got "-1".'
     );
+    const malformed = makeIo();
+    expect(await runCli(['discover', '--max-orders=abc'], malformed.io)).toBe(2);
+    expect(malformed.errLines.join('')).toContain("upt: --max-orders 'abc' is not a number");
   });
 
   it('--source=canonical: result candidates carry adjudication; adjudicationSummary reconciles', async () => {

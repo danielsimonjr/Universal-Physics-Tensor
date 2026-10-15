@@ -431,6 +431,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'regime',
   aliases: [],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Report where a family\'s models are valid, violated, or unknown.',

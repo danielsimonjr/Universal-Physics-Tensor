@@ -147,7 +147,7 @@ function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: Co
       `upt atlas: be-${entry.id} is a catalog equation and has no formalRef; proof status ${proofStatus} (\`upt atlas\` lists atlas bridges)`,
     );
   }
-  const id = `be-${entry.id}`;
+  const id = ctx.api.catalogEdgeKey(entry.id);
   if (wantJson) {
     emitJson(
       {
@@ -193,8 +193,8 @@ function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: Co
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const wantJson = args.flags.has('json');
-  const [id, extra] = args.positionals;
-  if (extra !== undefined) throw new CliError(`upt atlas: unexpected argument '${extra}' (one bridge at a time)`);
+  // One bridge at a time: the parser refused a second positional (`positionals: { max: 1 }`).
+  const [id] = args.positionals;
 
   const families = api.ATLAS_FAMILIES;
   const rows = families.flatMap((f) => f.bridges.map((b) => ({ family: f.family, bridge: b })));
@@ -585,6 +585,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'atlas',
   aliases: [],
+  positionals: { max: 1 },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Show one atlas bridge with its relation, regime, bound, witnesses, and formal reference.',

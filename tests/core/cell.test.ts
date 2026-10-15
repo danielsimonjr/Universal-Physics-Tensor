@@ -128,14 +128,15 @@ describe('Cell discriminated union', () => {
       // is not assignable.
       const wrong: LawCell = { ...sampleLaw, kind: 'bridge' };
       void wrong;
-      expect(true).toBe(true);
+      // The check is the @ts-expect-error above (`typecheck:tests`); no runtime stand-in (law 3).
     });
 
     it("rejects extra discriminator values not in the union", () => {
-      // @ts-expect-error — there is no 'spurious' kind.
-      const wrong: Cell = { kind: 'spurious', id: 'x', equation: '', confidence: 'established' } as Cell;
+      // @ts-expect-error — there is no 'spurious' kind, so the literal is not assignable to
+      // Cell (TS2322). Until 2026-10-15 the literal was cast `as Cell`, so the error the
+      // directive consumed was the conversion's (TS2352), not the assignment this title names.
+      const wrong: Cell = { kind: 'spurious', id: 'x', equation: '', confidence: 'established' };
       void wrong;
-      expect(true).toBe(true);
     });
   });
 

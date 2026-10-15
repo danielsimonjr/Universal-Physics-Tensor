@@ -110,24 +110,39 @@ describe('parseArgs', () => {
     expect(() => parseArgs('discover', ['--source=a', '--source=b'], SPECS)).toThrow(UsageError);
   });
 
+  it('a command that declares no positionals refuses one as a usage error naming the token and the command', () => {
+    expect(() => parseArgs('discover', ['junk'], SPECS)).toThrow(UsageError);
+    expect(() => parseArgs('discover', ['junk'], SPECS)).toThrow(
+      "upt discover: unexpected argument 'junk' (discover takes no positional arguments; see upt help discover)",
+    );
+    expect(() => parseArgs('atlas', ['one', 'two'], SPECS, { max: 1 })).toThrow(
+      "upt atlas: unexpected argument 'two' (atlas takes at most 1 positional argument; see upt help atlas)",
+    );
+    expect(() => parseArgs('ground', ['a', 'b', 'c'], SPECS, { max: 2 })).toThrow(/takes at most 2 positional arguments/);
+    expect(parseArgs('ground', ['a', 'b'], SPECS, { max: 2 }).positionals).toEqual(['a', 'b']);
+    // A token after a bare `--` is a positional and counts.
+    expect(() => parseArgs('discover', ['--', 'junk'], SPECS)).toThrow(/unexpected argument 'junk'/);
+  });
+
   it('passes positionals through untouched and in original order', () => {
     const result = parseArgs(
       'discover',
       ['length:distance', 'mass=5', 'bare', '--source=canonical', 'trailing'],
-      SPECS
+      SPECS,
+      { max: Infinity },
     );
     expect(result.positionals).toEqual(['length:distance', 'mass=5', 'bare', 'trailing']);
     expect(result.flags.get('source')).toEqual(['canonical']);
   });
 
   it('does not treat a positional containing "=" as a flag (no -- prefix required)', () => {
-    const result = parseArgs('discover', ['T=E'], SPECS);
+    const result = parseArgs('discover', ['T=E'], SPECS, { max: Infinity });
     expect(result.positionals).toEqual(['T=E']);
     expect(result.flags.size).toBe(0);
   });
 
   it('a bare "--" ends the options: every later token is a positional, flags included', () => {
-    const r = parseArgs('discover', ['a', '--', '--source=canonical', '--bogus', 'b'], SPECS);
+    const r = parseArgs('discover', ['a', '--', '--source=canonical', '--bogus', 'b'], SPECS, { max: Infinity });
     expect(r.positionals).toEqual(['a', '--source=canonical', '--bogus', 'b']);
     expect(r.flags.size).toBe(0);
   });

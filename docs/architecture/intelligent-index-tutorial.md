@@ -35,9 +35,12 @@ import {
   LabeledTensor,
   makeIndex,
 } from 'universal-physics-tensor';
-import { Float64ReferenceEngine } from 'universal-physics-tensor';
+import { MathTSEngine } from 'universal-physics-tensor/numerical/mathts-engine';
 
-const engine = new Float64ReferenceEngine();
+// The engine is the MathTS one, on its own subpath (`getActiveEngine()` returns the same
+// class). `Float64ReferenceEngine`, which this walkthrough imported until 2026-10-15, no
+// longer exists: see API.md, "Engine classes".
+const engine = new MathTSEngine();
 
 // 1. Build a labeled tensor — pick axes from the Axes registry.
 const a = new LabeledTensor(

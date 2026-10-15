@@ -215,6 +215,48 @@ try {
 }
 
 /**
+ * The members each file reads through a namespace import, by importer path and then by the
+ * import's source text: `src/cli/commands/map.ts` → `./_atlas-map.js` → {parseRoute, …}.
+ * Filled by `parseFile`, read by `detectUnused`.
+ */
+const namespaceMemberUses = new Map<string, Map<string, Set<string>>>();
+
+/**
+ * The module roots whose numeric exports `src/cli/record-tables.ts` fingerprints for an
+ * experiment record (`MODULE_EXPORT_ROOTS` there: `core/constants`, `bridges`, `cases`),
+ * read from that file so the two cannot drift. It lists every module under those roots with
+ * `await import()` and hashes each export whose value is a number, so `--record` depends on
+ * those constants although no static import names them (`tests/cli/record-hardening.test.ts`
+ * pins `cases/brownian-sphere`'s `G_STANDARD`). `detectUnused` therefore does not report a
+ * numeric `export const` under one of these roots. Empty when the file is absent (a fixture).
+ */
+function fingerprintedModuleRoots(): string[] {
+  const file = join(SRC_DIR, 'cli', 'record-tables.ts');
+  if (!existsSync(file)) return [];
+  const m = /const MODULE_EXPORT_ROOTS\s*=\s*\[([^\]]*)\]/.exec(readFileSync(file, 'utf-8'));
+  if (m === null) return [];
+  return [...m[1].matchAll(/'([^']+)'/g)].map((x) => `src/${x[1]}`);
+}
+
+/** Whether `filePath` (repo-relative) is a module `record-tables.ts` fingerprints: the root file itself, or under the root directory. */
+function isFingerprintedModule(filePath: string, roots: readonly string[]): boolean {
+  return roots.some((root) => filePath === `${root}.ts` || filePath.startsWith(`${root}/`));
+}
+
+/**
+ * Whether `export const NAME = …` in `filePath` initialises a number: a numeric literal or an
+ * arithmetic expression of literals, identifiers and `Math.*` (`9.80665`, `365.25 * 86400`,
+ * `2 * Math.PI`). A string, array, object, function or `new` initialiser is not.
+ */
+function isNumericConstant(filePath: string, name: string): boolean {
+  const content = readFileSync(join(ROOT_DIR, filePath), 'utf-8');
+  const m = new RegExp(`export\\s+const\\s+${name}(?:\\s*:\\s*number)?\\s*=\\s*([^;]*);`).exec(content);
+  if (m === null) return false;
+  const init = m[1].trim();
+  return /^[-+(]?\s*(?:\d|\.\d|Math\.)/.test(init) && !/['"`{}\[\]]|=>|\bnew\b/.test(init);
+}
+
+/**
  * Recursively get all TypeScript files in a directory
  */
 function getAllTsFiles(dir: string, files: string[] = []): string[] {
@@ -596,7 +638,22 @@ function parseFile(filePath: string, isTestFile: boolean = false): ParsedFile {
       }
     }
     if (defaultImport) imports.push(defaultImport);
-    if (namespaceImport) imports.push(`* as ${namespaceImport}`);
+    if (namespaceImport) {
+      imports.push(`* as ${namespaceImport}`);
+      // The members the importer reads through the alias (`atlasMap.parseRoute`, in a value or a
+      // type position). `detectUnused` counts those as the imported symbols; the alias itself is
+      // not a symbol of the module. Before this (2026-10-15) the alias was recorded as a symbol
+      // name, so every export a file used only through `import * as` was reported unused
+      // (fourteen in `src/cli/commands/_atlas-map.ts`).
+      if (source.startsWith('.')) {
+        const members = new Set<string>();
+        const memberRegex = new RegExp(`\\b${namespaceImport}\\.([A-Za-z_$][\\w$]*)`, 'g');
+        let member: RegExpExecArray | null;
+        while ((member = memberRegex.exec(content)) !== null) members.add(member[1]);
+        if (!namespaceMemberUses.has(relativePath)) namespaceMemberUses.set(relativePath, new Map());
+        namespaceMemberUses.get(relativePath)!.set(source, members);
+      }
+    }
 
     const typeOnly = isTypeOnlyImport || !hasRuntimeImport;
 
@@ -1106,8 +1163,10 @@ function detectUnused(
   files: ParsedFile[],
   testFiles: ParsedFile[] = [],
   exportsReachable: Set<string> = new Set(),
+  scriptFiles: ParsedFile[] = [],
 ): UnusedAnalysis {
   const filePaths = new Set(files.map(f => f.path));
+  const fingerprintedRoots = fingerprintedModuleRoots();
 
   // Build a set of all imported files
   const importedFiles = new Set<string>(exportsReachable);
@@ -1125,7 +1184,9 @@ function detectUnused(
   // encoding tests) are falsely reported as unused. The `--include-tests`
   // flag already triggered a separate test-coverage report; this extension
   // makes the flag actually feed `detectUnused` too.
-  const allConsumers: ParsedFile[] = [...files, ...testFiles];
+  // `scripts/` is a consumer root too (2026-10-15): `scripts/cli-reference.ts` imports
+  // `flagHeading` and `BUILTIN_VERBS` from `src/cli/flag-help.ts`, which were reported unused.
+  const allConsumers: ParsedFile[] = [...files, ...testFiles, ...scriptFiles];
 
   for (const file of allConsumers) {
     for (const dep of file.internalDependencies) {
@@ -1142,8 +1203,18 @@ function detectUnused(
           if (imp === '*') {
             // Wildcard import - mark all exports as used
             symbols.add('*');
+          } else if (imp.startsWith('* as ')) {
+            // A namespace import: the symbols used are the members read through the alias
+            // (recorded by parseFile). An alias with no member read (the namespace object is
+            // passed whole) is a wildcard, so nothing is reported on a guess.
+            const members = namespaceMemberUses.get(file.path)?.get(dep.file);
+            if (members !== undefined && members.size > 0) {
+              for (const member of members) symbols.add(member);
+            } else {
+              symbols.add('*');
+            }
           } else {
-            symbols.add(imp.replace(/^\* as /, ''));
+            symbols.add(imp);
           }
         }
       }
@@ -1206,9 +1277,11 @@ function detectUnused(
       }
     }
     for (const constant of file.exports.constants) {
-      if (!usedSymbols.has(constant)) {
-        unusedExports.push({ file: file.path, name: constant, type: 'constant' });
-      }
+      if (usedSymbols.has(constant)) continue;
+      // A numeric export under a root `record-tables.ts` fingerprints is read by `--record`
+      // through a dynamic import (see fingerprintedModuleRoots), so it is not unused.
+      if (isFingerprintedModule(file.path, fingerprintedRoots) && isNumericConstant(file.path, constant)) continue;
+      unusedExports.push({ file: file.path, name: constant, type: 'constant' });
     }
   }
 
@@ -1958,8 +2031,14 @@ async function main(): Promise<void> {
   const circularDeps = detectCircularDependencies(parsedFiles);
   console.log(`Found ${circularDeps.all.length} circular dependencies (${circularDeps.runtime.length} runtime, ${circularDeps.typeOnly.length} type-only)`);
 
+  // `scripts/` consumes source modules too (`scripts/cli-reference.ts` imports `flag-help.ts`),
+  // so its files feed the reachability scan: consumers only, never source files or tests.
+  const scriptFilePaths = getAllTsFiles(join(ROOT_DIR, 'scripts'));
+  const parsedScriptFiles = scriptFilePaths.map((f) => parseFile(f, true));
+  if (scriptFilePaths.length > 0) console.log(`Found ${scriptFilePaths.length} script files (consumers)`);
+
   // Detect unused files and exports
-  const unusedAnalysis = detectUnused(parsedFiles, parsedTestFiles, exportsReachable);
+  const unusedAnalysis = detectUnused(parsedFiles, parsedTestFiles, exportsReachable, parsedScriptFiles);
 
   // Generate statistics
   const stats = generateStatistics(parsedFiles, modules, circularDeps, unusedAnalysis);

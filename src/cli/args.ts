@@ -13,7 +13,8 @@ import { UsageError } from './errors.js';
 export interface FlagSpec {
   name: string; // e.g. '--source'
   valueStyle: 'attached' | 'next' | 'either' | 'none';
-  repeatable?: boolean; // only --anchor today
+  /** The flag may be given more than once; the values are kept in order. */
+  repeatable?: boolean;
   /** For 'either'/'next' styles: a missing value stores '' instead of throwing —
    * exists for old-CLI fidelity (--equation's empty-value diagnostic belongs to
    * the command, not the parser). */
@@ -41,7 +42,45 @@ export interface ParsedArgs {
   positionals: string[];
 }
 
-export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): ParsedArgs {
+/**
+ * How many positional arguments a command reads. A command declares it on its registration;
+ * absent means none, and every positional is then a stray token (cli/README.md §Hardening:
+ * nothing typed is silently dropped).
+ */
+export interface PositionalArity {
+  /** The most positionals the command reads; `Infinity` for a list. The token past it is refused. */
+  readonly max: number;
+}
+
+/** No positional is read. The parser's default when a command declares nothing. */
+export const NO_POSITIONALS: PositionalArity = { max: 0 };
+
+/**
+ * Refuse the positional past `max` as a usage error naming the token and the command:
+ * `upt audit: unexpected argument 'junk' (audit takes no positional arguments; see upt help audit)`.
+ * `command` may carry a subverb (`probe scan`), whose first word is the help target.
+ */
+export function refuseExtraPositionals(command: string, positionals: readonly string[], max: number): void {
+  if (positionals.length <= max) return;
+  const takes =
+    max === 0
+      ? `${command} takes no positional arguments`
+      : `${command} takes at most ${max} positional argument${max === 1 ? '' : 's'}`;
+  throw new UsageError(
+    `upt ${command}: unexpected argument '${positionals[max]}' (${takes}; see upt help ${command.split(' ')[0]})`,
+  );
+}
+
+/**
+ * Parse `argv` against the command's flag specs. `positionals` is the command's declared arity
+ * (`Command.positionals`); a token past it, or any token when none is declared, is a `UsageError`.
+ */
+export function parseArgs(
+  command: string,
+  argv: string[],
+  specs: FlagSpec[],
+  arity: PositionalArity = NO_POSITIONALS,
+): ParsedArgs {
   const bySpecName = new Map<string, FlagSpec>();
   for (const spec of specs) bySpecName.set(spec.name, spec);
 
@@ -116,5 +155,6 @@ export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): P
     }
   }
 
+  refuseExtraPositionals(command, positionals, arity.max);
   return { flags, positionals };
 }

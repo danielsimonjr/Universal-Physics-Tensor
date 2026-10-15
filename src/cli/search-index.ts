@@ -193,15 +193,16 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
     const ev = api.BRIDGE_EVALUATORS.get(b.id);
     const ref = ev === undefined ? api.catalogFormalRef(b.id) : undefined;
     const formulaRoute = ev === undefined && ref !== undefined;
+    const key = api.catalogEdgeKey(b.id);
     entries.push({
       kind: 'catalog-bridge',
-      id: `be-${b.id}`,
-      line: `be-${b.id} ${b.name} [${b.status}]`,
+      id: key,
+      line: `${key} ${b.name} [${b.status}]`,
       command: ev !== undefined
-        ? `upt evaluate be-${b.id} ${ev.inputKeys.map((k) => `${k}=…`).join(' ')}`
+        ? `upt evaluate ${key} ${ev.inputKeys.map((k) => `${k}=…`).join(' ')}`
         : formulaRoute
-          ? `upt atlas be-${b.id}`
-          : `upt explain be-${b.id}`,
+          ? `upt atlas ${key}`
+          : `upt explain ${key}`,
       commandLabel: ev !== undefined ? 'evaluate' : formulaRoute ? 'formula' : 'no evaluator; route',
       ...(ev !== undefined
         ? { note: `units: ${ev.parameters.map((p) => `${p.key} in ${p.unit || 'dimensionless'}`).join(', ')}; a value may carry its own unit` }
@@ -209,7 +210,7 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
           ? { note: ref!.covers }
           : {}),
       fields: [
-        { label: 'id', text: `be ${b.id}`, exact: [`be-${b.id}`] },
+        { label: 'id', text: `be ${b.id}`, exact: [key] },
         ...titleAndGloss('name', b.name),
         { label: 'description', text: affirmativeSentences(b.context ?? '') },
       ],

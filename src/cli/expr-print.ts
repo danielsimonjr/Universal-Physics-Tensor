@@ -10,6 +10,7 @@
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { siUnitOf } from '../dimensional/algebra.js';
+import { isDecimalLiteral } from './numeric-flag.js';
 
 interface PrintStyle {
   readonly times: string;
@@ -79,7 +80,8 @@ const LATEX_NAMES: Readonly<Record<string, string>> = {
 export function latexName(name: string): string {
   const known = LATEX_NAMES[name];
   if (known !== undefined) return known;
-  if (/^[A-Za-z]$/.test(name) || Number.isFinite(Number(name))) return name;
+  // A decimal literal prints as is; `Number()` also read '' and '0x10' as numbers.
+  if (/^[A-Za-z]$/.test(name) || isDecimalLiteral(name)) return name;
   return name.includes('-') ? `\\text{${name}}` : `\\mathrm{${name.replace(/_/g, '\\_')}}`;
 }
 

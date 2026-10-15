@@ -13,6 +13,7 @@
 import type { ParsedArgs } from '../args.js';
 import type { CommandCtx } from '../command.js';
 import { CliError, UsageError } from '../errors.js';
+import { realFlag } from '../numeric-flag.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
 import type { Dimension } from '../../dimensional/types.js';
 
@@ -22,11 +23,10 @@ export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['fl
   const moValues = flags.get('max-orders');
   if (moValues && moValues.length > 0) {
     const raw = moValues[moValues.length - 1];
-    const n = Number(raw);
-    // Reject rather than silently ignore: an empty value coerces to 0 (every
-    // pair would clash), a non-numeric one to NaN, and a negative threshold is
-    // meaningless. The flag is well formed and its value is bad: exit 1, as for any bad value.
-    if (raw === '' || !Number.isFinite(n) || n < 0) {
+    // The grammar first: an empty, hex or non-numeric token is a malformed invocation (exit 2,
+    // naming the flag and the token). A well-formed negative value is a bad value: exit 1.
+    const n = realFlag('', '--max-orders', raw);
+    if (n < 0) {
       throw new CliError(`upt: --max-orders must be a non-negative finite number, got "${raw}".`);
     }
     opts.maxOrdersOfMagnitude = n;

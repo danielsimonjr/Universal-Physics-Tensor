@@ -5,8 +5,9 @@
  * link and regime-transition gaps abstain and tell the user to use discover.
  */
 import { readFileSync, statSync } from 'node:fs';
-import type { FlagSpec } from '../args.js';
+import { refuseExtraPositionals, type FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { realFlag } from '../numeric-flag.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
@@ -204,11 +205,13 @@ function isSubverb(s: string | undefined): s is Subverb {
   return SUBVERBS.includes(s as Subverb);
 }
 
+// Each numeric flag: the grammar first (a malformed token is usage, exit 2), the range after
+// (a well-formed value outside it is a bad value, exit 1).
 function budgetFromFlags(api: CommandCtx['api'], flags: Map<string, string[]>) {
   const raw = flags.get('budget-ms')?.[0];
   if (raw === undefined) return undefined;
-  const n = Number(raw);
-  if (!Number.isFinite(n) || n <= 0) {
+  const n = realFlag('probe', '--budget-ms', raw);
+  if (!(n > 0)) {
     throw new CliError('upt probe: --budget-ms must be a positive number');
   }
   return { ...api.DEFAULT_SEARCH_BUDGET, maxWallClockMs: n };
@@ -217,8 +220,8 @@ function budgetFromFlags(api: CommandCtx['api'], flags: Map<string, string[]>) {
 function holdoutTolFromFlags(flags: Map<string, string[]>): number | undefined {
   const raw = flags.get('holdout-tol')?.[0];
   if (raw === undefined) return undefined;
-  const n = Number(raw);
-  if (!Number.isFinite(n) || n <= 0) {
+  const n = realFlag('probe', '--holdout-tol', raw);
+  if (!(n > 0)) {
     throw new CliError('upt probe: --holdout-tol must be a positive number');
   }
   return n;
@@ -301,11 +304,19 @@ function validateWorkerPath(api: CommandCtx['api'], worker: string): string {
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const sub = args.positionals[0];
-  if (!isSubverb(sub)) {
+  if (sub === undefined) {
     throw new UsageError(
       `upt probe needs a subverb (${SUBVERBS.join('|')}). See \`upt help probe\`.`,
     );
   }
+  // A token that is not a subverb is named as such, not reported as a missing one.
+  if (!isSubverb(sub)) {
+    throw new UsageError(
+      `upt probe: '${sub}' is not a subverb (${SUBVERBS.join('|')}). See \`upt help probe\`.`,
+    );
+  }
+  // `show` reads its gap id; every other subverb reads the subverb alone (§Hardening).
+  refuseExtraPositionals(`probe ${sub}`, args.positionals.slice(sub === 'show' ? 2 : 1), 0);
 
   const { graph, source } = resolveGraph(api, args.flags);
 
@@ -387,15 +398,27 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (!h1p || !h2p || !bp) {
       throw new UsageError('upt probe design needs --h1=FILE --h2=FILE --bounds=FILE');
     }
+    // Each file is parsed under its own name, so an invalid JSON message names the file.
+    const parseExpr = (path: string) => {
+      try {
+        return api.parseExprJson(path);
+      } catch (e) {
+        mapProbeError(api, e, path);
+      }
+    };
+    const h1 = parseExpr(h1p);
+    const h2 = parseExpr(h2p);
+    let bounds;
+    try {
+      bounds = api.parseDesignBounds(readJsonFile(api, bp), bp);
+    } catch (e) {
+      mapProbeError(api, e, bp);
+    }
     let suggestion;
     try {
-      suggestion = api.suggestDiscriminatingPoint(
-        api.parseExprJson(h1p),
-        api.parseExprJson(h2p),
-        api.parseDesignBounds(readJsonFile(api, bp), bp),
-      );
+      suggestion = api.suggestDiscriminatingPoint(h1, h2, bounds);
     } catch (e) {
-      mapProbeError(api, e);
+      mapProbeError(api, e, `${h1p}, ${h2p}, ${bp}`);
     }
     if (args.flags.has('json')) {
       emitJson({ command: 'probe', epistemics: EPISTEMICS, result: suggestion }, ctx.write);
@@ -485,8 +508,8 @@ async function run(ctx: CommandCtx): Promise<number> {
 function alphaFromFlags(flags: Map<string, string[]>): number | undefined {
   const raw = flags.get('alpha')?.[0];
   if (raw === undefined) return undefined;
-  const n = Number(raw);
-  if (!Number.isFinite(n) || n <= 0 || n >= 1) {
+  const n = realFlag('probe', '--alpha', raw);
+  if (!(n > 0 && n < 1)) {
     throw new CliError('upt probe: --alpha must be a number in (0, 1)');
   }
   return n;
@@ -551,6 +574,9 @@ function notFalsified(result: {
 export const command: Command = {
   name: 'probe',
   aliases: [],
+  // The subverb, and `show`'s gap id. The arity is the subverb's, so `run` refuses the first
+  // token past what the subverb reads, naming it under `upt probe <subverb>:`.
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Search expressions and residuals. This is not `upt discover`.',

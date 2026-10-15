@@ -5,9 +5,7 @@
  */
 import { solveODESystem } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
-import { heatFtcsCentre } from '../../src/atlas/diffusion/numerics.js';
 import { linearAccel, rk4Step, W2 } from '../../src/atlas/oscillators/pendulum-motion.js';
-import { acousticLeapfrogQuarter, stringLeapfrogMidpoint } from '../../src/atlas/waves/numerics.js';
 
 /** The hand loop `rk4Step` had before it called `solveODESystem`. */
 function handRk4(x: number, v: number, h: number, accel: (x: number) => number): [number, number] {
@@ -44,10 +42,6 @@ describe('linear oscillator at the W7p fine step', () => {
   });
 });
 
-describe('finite-difference wave and heat stay', () => {
-  it('still exports the leapfrog and heat steps', () => {
-    expect(typeof stringLeapfrogMidpoint).toBe('function');
-    expect(typeof acousticLeapfrogQuarter).toBe('function');
-    expect(typeof heatFtcsCentre).toBe('function');
-  });
-});
+// A "still exports the leapfrog and heat steps" block stood here, three `typeof` checks on named
+// imports; an import that resolves cannot fail them (law 3). Removed 2026-10-15. The three
+// steps are exercised by the atlas witnesses that call them.

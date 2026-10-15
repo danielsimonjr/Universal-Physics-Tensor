@@ -116,10 +116,12 @@ async function run(ctx: CommandCtx): Promise<number> {
         const a = report.parameters.a ?? 0;
         const r = report.parameters.r;
         const theta = report.parameters.theta ?? Math.PI / 2;
-        if (Mgeom === undefined || !(Mgeom > 0)) throw new CliError('Kerr geodesic needs a positive mass');
+        // Reachable: `curvatureReport` refuses M ≤ 0, but G=0 (or a c that overflows) makes
+        // M_geom = G M / c² zero with M > 0, and a supplied r passes its own check.
+        if (Mgeom === undefined || !(Mgeom > 0)) throw new CliError('upt metric: Kerr geodesic needs a positive mass');
         const rOverM = (r ?? 10 * Mgeom) / Mgeom;
         const aOverM = a / Mgeom;
-        if (!(Math.abs(aOverM) <= 1)) throw new CliError('Kerr geodesic wants |a| ≤ GM/c²');
+        if (!(Math.abs(aOverM) <= 1)) throw new CliError('upt metric: Kerr geodesic wants |a| ≤ GM/c²');
         const equatorial = Math.abs(theta - Math.PI / 2) < 1e-6;
         if (a === 0) {
           // At a = 0 the Kerr metric is Schwarzschild. The Boyer–Lindquist integrator refuses the
@@ -199,6 +201,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'metric',
   aliases: ['curvature'],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Print Christoffel symbols and curvature scalars for one exact metric.',

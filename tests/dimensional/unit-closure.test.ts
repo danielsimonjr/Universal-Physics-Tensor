@@ -136,13 +136,20 @@ describe('the unit table is closed over the units the dogfood rounds named', () 
     expect(() => readBinding('1uohm.cm')).not.toThrow();
     expect(() => readBinding('1nonsense.thing')).toThrow(/^(?!.*AccessorNode)/);
   });
-  it('1m_p does not leak the substitution placeholder', () => {
+  it('1m_p reads as one proton mass', () => {
+    // Until 2026-10-15 this test caught the throw and checked the message for the placeholder;
+    // `readBinding('1m_p')` had come to succeed, so `message` stayed '' and the check could
+    // not fail (law 3). The success is asserted; the placeholder check moved to a token that throws.
+    close(readBinding('1m_p').value, 1.6726e-27, 1e-4);
+  });
+  it('a refused unit text does not leak the substitution placeholder', () => {
     let message = '';
     try {
-      readBinding('1m_p');
+      readBinding('1nonsense_thing');
     } catch (e) {
       message = (e as Error).message;
     }
+    expect(message).not.toBe('');
     expect(message).not.toMatch(/__u/);
   });
 });

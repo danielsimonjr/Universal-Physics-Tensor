@@ -94,16 +94,22 @@ describe('probe run: a file that is not a problem file says what is wrong with i
   });
 });
 
-describe('probe: a bad value of a numeric flag is exit 1; exit 2 is only for a malformed invocation', () => {
+describe('probe: a bad value of a numeric flag is exit 1; exit 2 is for a malformed invocation, a token outside the grammar included', () => {
   it.each([
     ['--budget-ms=0', /--budget-ms must be a positive number/],
-    ['--budget-ms=abc', /--budget-ms must be a positive number/],
     ['--holdout-tol=-1', /--holdout-tol must be a positive number/],
   ])('probe run %s', async (flag, message) => {
     const path = file('flags.json', { target: GOOD_TARGET, governing: GOOD_GOVERNING });
     const r = await run(['probe', 'run', `--problem=${path}`, flag]);
     expect(r.code).toBe(1);
     expect(r.err).toMatch(message);
+  });
+
+  it('probe run --budget-ms=abc is not a number: a malformed invocation, exit 2 (2026-10-15 numeric-flag grammar)', async () => {
+    const path = file('flags.json', { target: GOOD_TARGET, governing: GOOD_GOVERNING });
+    const r = await run(['probe', 'run', `--problem=${path}`, '--budget-ms=abc']);
+    expect(r.code).toBe(2);
+    expect(r.err).toMatch(/--budget-ms 'abc' is not a number/);
   });
 
   it('probe study --alpha=2 is a bad value', async () => {
@@ -338,10 +344,13 @@ describe('map atlas views', () => {
 describe('discover: a bad value is exit 1, a unit is checked against the quantity, and an unknown name is refused', () => {
   const FAST = ['--source=canonical', '--max-orders=1'];
 
-  it('--max-orders that is not a number is a bad value, exit 1', async () => {
+  it('--max-orders that is not a number is a malformed invocation, exit 2; a negative one is the bad value, exit 1', async () => {
     const r = await run(['discover', '--max-orders=abc']);
-    expect(r.code).toBe(1);
-    expect(r.err).toMatch(/--max-orders must be a non-negative finite number, got "abc"/);
+    expect(r.code).toBe(2);
+    expect(r.err).toMatch(/--max-orders 'abc' is not a number/);
+    const negative = await run(['discover', '--max-orders=-1']);
+    expect(negative.code).toBe(1);
+    expect(negative.err).toMatch(/--max-orders must be a non-negative finite number, got "-1"/);
   });
 
   it('--anchor with a unit of another dimension is refused with both dimensions', async () => {

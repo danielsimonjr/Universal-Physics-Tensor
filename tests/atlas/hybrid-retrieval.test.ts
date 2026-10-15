@@ -42,7 +42,8 @@ describe('stub embedder', () => {
     expect(stubVector('claim')).toEqual([518, 1571]);
     expect(stubVector('near')).toEqual([422, 1059]);
     expect(stubVector('zz')).toEqual([244, 366]);
-    expect(stubVector('claim')).toEqual(stubVector('claim'));
+    // (A `stubVector('claim')` equal to itself stood here; a pure call compared with its own
+    // call cannot fail (law 3). The three pinned vectors above are the determinism check.)
     const [claim, near, zz] = await stubEmbedder(['claim', 'near', 'zz']);
     expect(claim).toEqual([518, 1571]);
     expect(near).toEqual([422, 1059]);

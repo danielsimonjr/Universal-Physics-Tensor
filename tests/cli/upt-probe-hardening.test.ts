@@ -30,15 +30,28 @@ function run(args: string[]): { status: number; stderr: string } {
 }
 
 describe('upt probe — flag validation', () => {
-  it('rejects non-finite --holdout-tol as a bad value (exit 1)', () => {
+  // A token outside the numeric grammar is a malformed invocation, exit 2 (one exit-code rule
+  // since 2026-10-15; this exited 1 before it). A well-formed value outside the range stays exit 1.
+  it('rejects a non-numeric --holdout-tol as a usage error (exit 2)', () => {
     const { status, stderr } = run([
       'probe',
       'run',
       `--problem=${pendulum}`,
       '--holdout-tol=abc',
     ]);
+    expect(status).toBe(2);
+    expect(stderr).toContain("--holdout-tol 'abc'");
+  });
+
+  it('rejects a non-positive --holdout-tol as a bad value (exit 1)', () => {
+    const { status, stderr } = run([
+      'probe',
+      'run',
+      `--problem=${pendulum}`,
+      '--holdout-tol=-1',
+    ]);
     expect(status).toBe(1);
-    expect(stderr).toContain('--holdout-tol');
+    expect(stderr).toContain('--holdout-tol must be a positive number');
   });
 
   it('rejects Node flag injection via --worker', () => {

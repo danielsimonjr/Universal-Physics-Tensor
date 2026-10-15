@@ -113,6 +113,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'search',
   aliases: [],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Find a bridge, equation, model, quantity, case, or regime by the words in its record.',
