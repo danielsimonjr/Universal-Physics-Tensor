@@ -75,6 +75,10 @@ Flags:
         GATE the discovery funnel. Each axis measures FIRES (candidate clashes)
         vs ABSTAINS over the funnel; an axis gates only when it fires. Reproduces
         the rank-7 measurement (topology/statistics/symmetry classify but don't gate).
+        Beside each axis: Fisher's exact test of its fires against the
+        independent magnitude falsifier's clashes (table, odds ratio, p, n),
+        and EARNED when p < 0.05 with a positive association. Firing is
+        activity, not evidence: a gated axis that is not earned is named.
 Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
