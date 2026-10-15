@@ -35,6 +35,7 @@ import { CoefficientUnsetError, evaluateEdge } from './edge.js';
 import { DomainViolationError } from '../bridges/evaluation-errors.js';
 import { CarrierSignError } from '../bridges/carrier-sign.js';
 import { FormulaError } from '../numerical/formula-contract.js';
+import { meanOf } from '../numerical/statistics.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
@@ -282,8 +283,7 @@ export function retrodictNode(
 
   const ref = opts.references?.[target];
   if (ref !== undefined && predictions.length >= 1) {
-    const mean =
-      predictions.reduce((a, p) => a + p.value, 0) / predictions.length;
+    const mean = meanOf(predictions.map((p) => p.value));
     const referenceRelError = Math.abs(mean - ref) / (Math.abs(ref) || 1);
     return {
       ...result,
