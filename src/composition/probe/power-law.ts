@@ -248,8 +248,11 @@ export function powerLawDetermination(problem: SearchProblem): PowerLawDetermina
       return abstain(`π-group ${groups[j]!.formula} does not vary over the usable rows, so its exponent is not identifiable`);
     }
   }
-  // Columns scaled to order one: `ols` tests singularity with an absolute 1e-15, so a column of
-  // log π of magnitude 1e-9 would read as collinear unscaled. Coefficients and errors are unscaled after.
+  // Columns scaled to order one. History: before @danielsimonjr/mathts-functions 0.68.4, `ols`
+  // tested singularity with an absolute 1e-15, so a column of log π of magnitude 1e-9 read as
+  // collinear unscaled. From 0.68.4 (installed) `ols` equilibrates the design itself, and an
+  // unscaled 1e-9 column fits without throwing. The scaling stays, because it also conditions
+  // `matrixRank` (logDesignRank, which scales the same way). Coefficients and errors are unscaled after.
   const { scaled, scales } = scaleColumns(X);
   let fit;
   try {
