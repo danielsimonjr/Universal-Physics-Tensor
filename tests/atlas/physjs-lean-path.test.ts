@@ -1,16 +1,17 @@
 /**
- * Every PhysJS URL this library emits names a Lean file that exists at the
- * pinned commit as `lean/<File>.lean`.
+ * Every Lean URL this library emits names a file of this repository's
+ * `lean/` at the release tag, as `lean/<File>.lean`.
  *
- * PhysJS #63 flattened the sources. `formal/physjs/lean-files.json` is the
- * tree listing at that commit. The path `lean/<File>.lean` is written here,
- * not taken from the permalink builder, so a builder that returns
- * `lean/PhysJS/<File>.lean` fails this file.
+ * `formal/lean/lean-files.json` is the listing of that tree, and
+ * `scripts/lean-index.ts --check` (docs-fresh) holds it to the working tree.
+ * The path `lean/<File>.lean` is written here, not taken from the permalink
+ * builder, so a builder that returns `lean/PhysJS/<File>.lean`, or a PhysJS
+ * URL, fails this file.
  *
- * The first run failed: `physjsFormalRef('ab-pendulum-linear').url` was
- * `https://github.com/danielsimonjr/PhysJS/blob/<commit>/PhysJS/Pendulum.lean`.
- * After #61 it was `lean/PhysJS/Pendulum.lean`. That prefix is the record
- * from before this flatten.
+ * The first run (PhysJS era) failed: `physjsFormalRef('ab-pendulum-linear').url`
+ * was `https://github.com/danielsimonjr/PhysJS/blob/<commit>/PhysJS/Pendulum.lean`.
+ * After PhysJS #61 it was `lean/PhysJS/Pendulum.lean`. In 11.0.0 the proofs
+ * moved here and every URL names this repository at `v<version>`.
  */
 
 import { readFileSync } from 'node:fs';
@@ -19,19 +20,19 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
-import { PHYSJS_COMMIT, physjsFormalRef, physjsLeanFile, physjsNestedStatements, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
-import { declaredTheorems, manifestTheorems, vendoredFiles } from '../../scripts/vendor-physjs.js';
+import { LEAN_SOURCE_TAG, physjsFormalRef, physjsLeanFile, physjsNestedStatements, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
+import { declaredTheorems, indexFiles, lakePins, manifestTheorems, pinProblems, treeLeanFiles } from '../../scripts/lean-index.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { CENSUS } from '../helpers/census.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const leanFiles = new Set(
-  JSON.parse(readFileSync(resolve(root, 'formal/physjs/lean-files.json'), 'utf-8')) as readonly string[],
+  JSON.parse(readFileSync(resolve(root, 'formal/lean/lean-files.json'), 'utf-8')) as readonly string[],
 );
 
 /** Hardcoded. A builder regression to `lean/PhysJS/` must not satisfy this. */
 const URL_RE = new RegExp(
-  `^https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/lean/([^/]+\\.lean)$`,
+  `^https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/${LEAN_SOURCE_TAG}/lean/([^/]+\\.lean)$`,
 );
 
 const STORED = [
@@ -58,7 +59,8 @@ function storedUrls(): string[] {
   const urls: string[] = [];
   for (const rel of STORED) {
     const text = readFileSync(resolve(root, rel), 'utf-8');
-    for (const match of text.matchAll(/https:\/\/github\.com\/danielsimonjr\/PhysJS\/blob\/[^\s"]+/g)) {
+    // A PhysJS permalink left in stored data is matched too, and fails `expectLeanFile`.
+    for (const match of text.matchAll(/https:\/\/github\.com\/danielsimonjr\/(?:PhysJS|Universal-Physics-Tensor)\/blob\/[^\s"]+/g)) {
       const url = match[0];
       if (url !== undefined) urls.push(url);
     }
@@ -72,7 +74,7 @@ function expectLeanFile(url: string): void {
   expect(leanFiles.has(`lean/${match?.[1]}`), url).toBe(true);
 }
 
-describe('PhysJS permalinks name the lean/ tree at the pin', () => {
+describe('Lean permalinks name this repository\'s lean/ tree at the release tag', () => {
   it('the fixture lists lean/<File>.lean and not a PhysJS directory', () => {
     expect(leanFiles.has('lean/Pendulum.lean')).toBe(true);
     expect(leanFiles.has('lean/PhysJS/Pendulum.lean')).toBe(false);
@@ -84,9 +86,10 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
     expect(leanFiles.has('lean/PlasmaBeta.lean')).toBe(true);
     expect([...leanFiles].every((path) => /^lean\/[^/]+\.lean$/.test(path))).toBe(true);
     // Every file a manifest theorem is declared in is in the listing. The
-    // listing's size is PhysJS's, not a number kept here; the hand-kept
+    // listing's size is the tree's, not a number kept here; the hand-kept
     // count that grew with each pin is the record from before this check.
-    const files = JSON.parse(readFileSync(resolve(root, 'formal/physjs/theorem-files.json'), 'utf-8')) as {
+    expect([...leanFiles]).toEqual(treeLeanFiles());
+    const files = JSON.parse(readFileSync(resolve(root, 'formal/lean/theorem-files.json'), 'utf-8')) as {
       readonly files: Readonly<Record<string, string>>;
     };
     for (const path of Object.values(files.files)) expect(leanFiles.has(path), path).toBe(true);
@@ -107,7 +110,7 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
     expect(spring.includes('/SpringLc.lean')).toBe(false);
   });
 
-  it('every stored PhysJS URL is that same file', () => {
+  it('every stored Lean URL is that same file', () => {
     const urls = storedUrls();
     expect(urls.length).toBeGreaterThan(0);
     for (const url of urls) expectLeanFile(url);
@@ -115,14 +118,13 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
 });
 
 describe('the Lean file of a theorem is where it is declared, read from data', () => {
-  const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
-  const vendored = JSON.parse(readFileSync(resolve(root, 'formal/physjs/theorem-files.json'), 'utf-8')) as {
-    commit: string;
+  const manifest = JSON.parse(readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf-8')) as PhysjsManifestFile;
+  const vendored = JSON.parse(readFileSync(resolve(root, 'formal/lean/theorem-files.json'), 'utf-8')) as {
     files: Record<string, string>;
   };
 
-  it('theorem-files.json is for the manifest commit and names a listed file for every manifest statement', () => {
-    expect(vendored.commit).toBe(manifest.commit);
+  it('theorem-files.json names a listed file for every manifest statement, and records no commit', () => {
+    expect(Object.keys(vendored)).toEqual(['files']);
     const theorems = [...new Set(manifestTheorems(manifest))].sort();
     expect(Object.keys(vendored.files).sort()).toEqual(theorems);
     for (const theorem of theorems) {
@@ -141,10 +143,10 @@ describe('the Lean file of a theorem is where it is declared, read from data', (
       ['vacuum', 'Einstein.lean'],
       ['corollary', 'VacuumFriedmann.lean'],
     ]);
-    expect(() => physjsLeanFile('PhysJS.NoSuch.theorem')).toThrow(/not a statement of the vendored manifest/);
+    expect(() => physjsLeanFile('PhysJS.NoSuch.theorem')).toThrow(/not a statement of the Lean manifest/);
   });
 
-  it('the vendor script reads namespaces, sections and comments the way Lean scopes them', () => {
+  it('the index script reads namespaces, sections and comments the way Lean scopes them', () => {
     const source = [
       'namespace PhysJS.Einstein',
       '/- theorem not_this : True -/',
@@ -172,25 +174,34 @@ describe('the Lean file of a theorem is where it is declared, read from data', (
     ]);
   });
 
-  it('the vendor script renders all three pinned files from PhysJS at one commit', () => {
+  it('the index script renders both index files from the tree, and nothing else', () => {
     const tree: Record<string, string> = {
-      'manifest/bridges.json': JSON.stringify({ schema: 'physjs-bridge-manifest/v2', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }] }),
       'lean/B.lean': 'namespace PhysJS.B\ntheorem u : True := trivial\nend PhysJS.B',
       'lean/A.lean': 'namespace PhysJS.A\ntheorem t : True := trivial\nend PhysJS.A',
-      'README.md': 'not Lean',
     };
-    const files = vendoredFiles('abc123', { show: (path) => tree[path]!, paths: () => Object.keys(tree) });
-    expect(JSON.parse(files['formal/physjs/manifest.json']!)).toEqual({ schema: 'physjs-bridge-manifest/v2', entries: [{ key: 'k', theorem: 'PhysJS.A.t' }], commit: 'abc123' });
-    expect(JSON.parse(files['formal/physjs/lean-files.json']!)).toEqual(['lean/A.lean', 'lean/B.lean']);
-    expect(JSON.parse(files['formal/physjs/theorem-files.json']!)).toEqual({ commit: 'abc123', files: { 'PhysJS.A.t': 'lean/A.lean' } });
+    const pins = { toolchain: 't', mathlib: 'm', physlib: 'p' };
+    const files = indexFiles({ ...pins, entries: [{ theorem: 'PhysJS.A.t' }] }, Object.keys(tree), (path) => tree[path]!);
+    expect(Object.keys(files).sort()).toEqual(['formal/lean/lean-files.json', 'formal/lean/theorem-files.json']);
+    expect(JSON.parse(files['formal/lean/lean-files.json']!)).toEqual(['lean/A.lean', 'lean/B.lean']);
+    expect(JSON.parse(files['formal/lean/theorem-files.json']!)).toEqual({ files: { 'PhysJS.A.t': 'lean/A.lean' } });
+    expect(() => indexFiles({ ...pins, entries: [{ theorem: 'PhysJS.C.none' }] }, Object.keys(tree), (path) => tree[path]!)).toThrow(
+      /PhysJS\.C\.none: declared in no file/,
+    );
   });
 
-  it('the committed manifest and lean-files.json have the shape the vendor script writes', () => {
-    // CI's docs-fresh job checks them byte for byte against a fetch of PhysJS at the pin.
-    const manifestText = readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8');
-    const manifest = JSON.parse(manifestText) as { commit: string };
-    expect(Object.keys(manifest).at(-1)).toBe('commit');
-    expect(manifestText).toBe(`${JSON.stringify(manifest, null, 2)}\n`);
+  it('the manifest records the toolchain, Mathlib and Physlib the lake project builds with', () => {
+    const read = (path: string): string => readFileSync(resolve(root, path), 'utf-8');
+    const lake = lakePins(read('lean-toolchain'), read('lake-manifest.json'));
+    expect(pinProblems(manifest, lake)).toEqual([]);
+    expect(pinProblems({ ...manifest, mathlib: 'v0.0.0' }, lake)).toEqual([
+      `formal/lean/manifest.json mathlib is 'v0.0.0', the lake project builds with '${lake.mathlib}'`,
+    ]);
+  });
+
+  it('the committed manifest and lean-files.json are in the shape the scripts write', () => {
+    const manifestText = readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf-8');
+    expect(manifestText).toBe(`${JSON.stringify(JSON.parse(manifestText), null, 2)}\n`);
+    expect('commit' in (JSON.parse(manifestText) as object)).toBe(false);
     expect([...leanFiles]).toEqual([...leanFiles].sort());
   });
 });

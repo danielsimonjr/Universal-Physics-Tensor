@@ -4,7 +4,7 @@
     "version": "10.0.0",
     "totalFiles": 364,
     "totalModules": 13,
-    "totalExports": 2575
+    "totalExports": 2578
   },
   "entryPoints": [
     {
@@ -551,8 +551,17 @@
             "typeOnly": true
           },
           {
+            "file": "../bridges/catalog-types.js",
+            "imports": [
+              "CatalogEntry",
+              "ProofStatus"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "../bridges/catalog-load.js",
             "imports": [
+              "catalogEntries",
               "catalogEntry"
             ]
           },
@@ -564,10 +573,14 @@
           }
         ],
         "exports": [
-          "catalogFormalRef"
+          "catalogFormalRef",
+          "deriveProofStatus",
+          "catalogProofProblems"
         ],
         "functions": [
-          "catalogFormalRef"
+          "catalogFormalRef",
+          "deriveProofStatus",
+          "catalogProofProblems"
         ]
       },
       "src/atlas/chain-pipeline.ts": {
@@ -3248,27 +3261,27 @@
         ]
       },
       "src/atlas/physjs-entries.generated.ts": {
-        "description": "Generated from `formal/physjs/manifest.json` and `formal/physjs/theorem-files.json`.",
+        "description": "Generated from `formal/lean/manifest.json`, `formal/lean/theorem-files.json`",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
-          "PHYSJS_COMMIT",
-          "PHYSJS_TOOLCHAIN",
-          "PHYSJS_MATHLIB",
-          "PHYSJS_PHYS_LIB",
+          "LEAN_SOURCE_TAG",
+          "LEAN_TOOLCHAIN",
+          "LEAN_MATHLIB",
+          "LEAN_PHYSLIB",
           "PHYSJS_ENTRIES"
         ],
         "constants": [
-          "PHYSJS_COMMIT",
-          "PHYSJS_TOOLCHAIN",
-          "PHYSJS_MATHLIB",
-          "PHYSJS_PHYS_LIB",
+          "LEAN_SOURCE_TAG",
+          "LEAN_TOOLCHAIN",
+          "LEAN_MATHLIB",
+          "LEAN_PHYSLIB",
           "PHYSJS_ENTRIES"
         ]
       },
       "src/atlas/physjs-ref.ts": {
-        "description": "Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.",
+        "description": "Reviewed `formalRef`s keyed by this repository's Lean manifest.",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -3311,23 +3324,23 @@
           {
             "file": "./physjs-entries.generated.js",
             "imports": [
-              "PHYSJS_COMMIT",
-              "PHYSJS_MATHLIB",
-              "PHYSJS_PHYS_LIB",
-              "PHYSJS_TOOLCHAIN",
+              "LEAN_MATHLIB",
+              "LEAN_PHYSLIB",
+              "LEAN_SOURCE_TAG",
+              "LEAN_TOOLCHAIN",
               "PHYSJS_ENTRIES"
             ]
           },
           {
             "file": "./physjs-entries.generated.js",
             "imports": [
-              "PHYSJS_COMMIT"
+              "LEAN_SOURCE_TAG"
             ],
             "reExport": true
           }
         ],
         "exports": [
-          "PHYSJS_COMMIT",
+          "LEAN_SOURCE_TAG",
           "physjsNestedStatements",
           "physjsTheorem",
           "physjsLeanFile",
@@ -3342,7 +3355,7 @@
           "physjsManifestProblems"
         ],
         "reExported": [
-          "PHYSJS_COMMIT"
+          "LEAN_SOURCE_TAG"
         ],
         "interfaces": [
           "PhysjsManifestEntry",
@@ -3365,7 +3378,7 @@
         ]
       },
       "src/atlas/physjs-reviewed.ts": {
-        "description": "The reviewed PhysJS manifest rows, pinned per key.",
+        "description": "The reviewed Lean manifest rows (`formal/lean/manifest.json`), pinned per key.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
@@ -5031,7 +5044,9 @@
             "typeOnly": true
           }
         ],
-        "exports": [],
+        "exports": [
+          "PROOF_STATUSES"
+        ],
         "interfaces": [
           "CatalogEntry",
           "CatalogReference",
@@ -5044,6 +5059,9 @@
           "CatalogRejection",
           "CatalogFile",
           "CatalogAdjudication"
+        ],
+        "constants": [
+          "PROOF_STATUSES"
         ]
       },
       "src/bridges/coefficient-statement.ts": {
@@ -25613,16 +25631,16 @@
   "statistics": {
     "totalTypeScriptFiles": 364,
     "totalModules": 13,
-    "totalLinesOfCode": 81615,
-    "totalExports": 2575,
+    "totalLinesOfCode": 81698,
+    "totalExports": 2578,
     "totalClasses": 82,
     "totalInterfaces": 467,
-    "totalFunctions": 781,
+    "totalFunctions": 783,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 391,
+    "totalConstants": 392,
     "totalReExports": 1320,
-    "totalTypeOnlyImports": 510,
+    "totalTypeOnlyImports": 511,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

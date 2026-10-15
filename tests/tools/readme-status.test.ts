@@ -11,7 +11,9 @@ import { describe, expect, it } from 'vitest';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { adjudicateCatalog } from '../../src/bridges/membership.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { catalogEntries } from '../../src/bridges/catalog-load.js';
 import {
+  leanBadge,
   membershipSentence,
   phase4Sentence,
   stampText,
@@ -55,6 +57,14 @@ describe('readme-status stamps', () => {
     expect(match).not.toBeNull();
     expect(stamped.readme).toContain(`TypeScript-${match![1]}.${match![2]}+`);
     expect(stamped.readme).not.toContain('TypeScript-6.0+');
+    // The Lean-proof badge counts every record once, by its own proofStatus, best first.
+    const byStatus = (status: string) => catalogEntries().filter((entry) => entry.proofStatus === status).length;
+    expect(facts.proofStatus).toEqual({ full: byStatus('full'), weak: byStatus('weak'), pending: byStatus('pending') });
+    expect(facts.proofStatus.full + facts.proofStatus.weak + facts.proofStatus.pending).toBe(BRIDGE_EQUATIONS.length);
+    expect(stamped.readme).toContain(leanBadge(facts.proofStatus));
+    expect(leanBadge({ full: 1, weak: 2, pending: 3 })).toContain(
+      'https://img.shields.io/badge/Lean--proved%20bridges-1%20full%20%C2%B7%202%20weak%20%C2%B7%203%20pending-blue',
+    );
     expect(phase4Sentence(facts)).toContain(`Catalog kind \`bridge\` is ${facts.kindBridge}`);
     expect(phase4Sentence(facts)).toContain(`Catalog property \`formalRef\`s are ${facts.property}`);
     // 95 is the record from before the PhysJS manifest carried kind: twenty-four catalog theorems that
@@ -67,7 +77,8 @@ describe('readme-status stamps', () => {
   it('CONTROL: a stale edge count, badge, and kind count are rewritten', () => {
     const staleReadme = stamped.readme
       .replace(`**${facts.graphEdges} bridge edges**`, '**41 bridge edges**')
-      .replace(`TypeScript-${facts.typescriptBadge.slice('TypeScript-'.length)}`, 'TypeScript-6.0+');
+      .replace(`TypeScript-${facts.typescriptBadge.slice('TypeScript-'.length)}`, 'TypeScript-6.0+')
+      .replace(leanBadge(facts.proofStatus), leanBadge({ full: 0, weak: 0, pending: 0 }));
     const staleRoadmap = stamped.roadmap.replace(
       `Catalog kind \`bridge\` is ${facts.kindBridge}`,
       'Catalog kind `bridge` is 13',
@@ -77,6 +88,8 @@ describe('readme-status stamps', () => {
     expect(restored.readme).not.toContain('**41 bridge edges**');
     expect(restored.readme).toContain(facts.typescriptBadge);
     expect(restored.readme).not.toContain('TypeScript-6.0+');
+    expect(restored.readme).toContain(leanBadge(facts.proofStatus));
+    expect(restored.readme).not.toContain(leanBadge({ full: 0, weak: 0, pending: 0 }));
     expect(restored.roadmap).toContain(`Catalog kind \`bridge\` is ${facts.kindBridge}`);
     expect(restored.roadmap).not.toContain('Catalog kind `bridge` is 13');
   });

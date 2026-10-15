@@ -78,8 +78,8 @@ known issue, reference and note lives there, and nowhere else.
 composition graph and the evaluators are projections of it. Read it,
 annotate it, PR it — an accepted change is a change to that file.
 `bun run catalog:json` checks the file (schema version, `packageVersion`
-against `package.json`, every `formalKey` against the vendored PhysJS
-manifest); it does not regenerate it. The size and status counts are in
+against `package.json`, every `formalKey` against the Lean manifest
+`formal/lean/manifest.json`); it does not regenerate it. The size and status counts are in
 `NOTES.md`.
 
 ### The negative catalog is reviewable too

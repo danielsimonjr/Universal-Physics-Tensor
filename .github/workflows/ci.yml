@@ -122,20 +122,14 @@ jobs:
         run: bun scripts/catalog-census.ts --check
       - name: Fail when the CLI reference is stale
         run: bun scripts/cli-reference.ts --check
-      - name: Fail when the PhysJS table is stale
+      - name: Fail when the generated Lean table is stale
         run: bun scripts/generate-physjs-table.ts --check
-      # The pinned PhysJS files (manifest, lean/ listing, theorem -> file table) are copies of
-      # PhysJS at the manifest's commit. Without a PhysJS checkout nothing compared them, so a hand
-      # edit or a half-done re-pin passed every job. A depth-1 fetch of that one commit is enough:
-      # the script reads only `git show` and `git ls-tree` at it. PhysJS is public; no token.
-      - name: Fetch PhysJS at the pinned commit
-        run: |
-          commit=$(node -p "require('./formal/physjs/manifest.json').commit")
-          git init -q "$RUNNER_TEMP/PhysJS"
-          git -C "$RUNNER_TEMP/PhysJS" fetch -q --depth=1 https://github.com/danielsimonjr/PhysJS.git "$commit"
-          echo "PHYSJS_CHECKOUT=$RUNNER_TEMP/PhysJS" >> "$GITHUB_ENV"
-      - name: Fail when the vendored PhysJS files are not PhysJS's at the pin
-        run: bun scripts/vendor-physjs.ts --physjs "$PHYSJS_CHECKOUT" --check
+      # The Lean index (lean/ listing, theorem -> file table) is read from this repository's lean/,
+      # and the manifest's toolchain, Mathlib and Physlib must be the lake project's. Before 11.0.0
+      # these were copies of PhysJS at a pinned commit and this job fetched PhysJS to compare them;
+      # the proofs are here now, so nothing is fetched.
+      - name: Fail when the Lean index is stale
+        run: bun scripts/lean-index.ts --check
 
   # Non-required on purpose. The local pre-push hook still runs the private
   # code_docs.py against .githooks/code-docs-baseline.txt. A GitHub-UI merge
@@ -186,35 +180,56 @@ jobs:
           fi
           bun tools/code-docs-ratchet/check.ts --base "$base"
 
-  # Does this PR touch the numerical core? The accuracy suite below is expensive, so it is
-  # schedule/dispatch-only -- but that meant a pull request could change floating-point code and
+  # Which expensive suites does this change need? Computed with git rather than a third-party
+  # paths-filter action: one less action to SHA-pin and audit for a two-line diff check.
+  #
+  # numerical: does this PR touch the numerical core? The accuracy suite below is expensive, so it
+  # is schedule/dispatch-only -- but that meant a pull request could change floating-point code and
   # merge with the one suite that would catch a regression never having run. v0.44.3 was exactly
   # that shape: a term-by-term FP reassociation in weyl-lowering, green on every PR check, and
   # only covered because the accuracy tests were run by hand. This repo has been bitten before --
   # the GL4 step-halving bug was invisible precisely because its accuracy test was skip-by-default.
+  # It stays a pull-request question: on a push it is false, as when this job did not run there.
   #
-  # Computed with git rather than a third-party paths-filter action: one less action to SHA-pin
-  # and audit for a two-line diff check.
-  numerical-touched:
-    if: github.event_name == 'pull_request'
+  # lean: does this change touch the Lean tree, its lake configuration, the Lean manifest and
+  # index, the catalog that names the theorems, or this workflow? On a pull request against its
+  # base, on a push to master against the commit it replaced (true when that commit is unknown).
+  paths-touched:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
-      changed: ${{ steps.check.outputs.changed }}
+      numerical: ${{ steps.check.outputs.numerical }}
+      lean: ${{ steps.check.outputs.lean }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       - id: check
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
         run: |
-          base="origin/${{ github.base_ref }}"
-          git fetch -q origin "${{ github.base_ref }}"
-          if git diff --name-only "$base"...HEAD | grep -qE '^src/numerical/'; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-            echo "src/numerical/ touched -- the accuracy suite will run."
+          lean_paths='^(lean/|lean\.lean$|lakefile\.toml$|lake-manifest\.json$|lean-toolchain$|formal/lean/|data/bridge-catalog\.json$|\.github/workflows/ci\.yml$)'
+          if [ "$EVENT" = "pull_request" ]; then
+            git fetch -q origin "$BASE_REF"
+            changed=$(git diff --name-only "origin/$BASE_REF"...HEAD)
+            numerical=false
+            if printf '%s\n' "$changed" | grep -qE '^src/numerical/'; then numerical=true; fi
           else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "src/numerical/ untouched -- accuracy suite stays on its nightly schedule."
+            numerical=false
+            if git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+              changed=$(git diff --name-only "$BEFORE" HEAD)
+            else
+              changed=lean/
+            fi
           fi
+          lean=false
+          if printf '%s\n' "$changed" | grep -qE "$lean_paths"; then lean=true; fi
+          echo "numerical=$numerical" >> "$GITHUB_OUTPUT"
+          echo "lean=$lean" >> "$GITHUB_OUTPUT"
+          echo "src/numerical/ touched on a pull request: $numerical (the accuracy suite runs when true)."
+          echo "Lean tree, lake config, Lean manifest, catalog or this workflow touched: $lean (lake build runs when true)."
 
   long-tests:
     # This job runs UNCONDITIONALLY so that it can safely be a REQUIRED status context.
@@ -228,7 +243,7 @@ jobs:
     # the job still runs, does nothing, and reports success in seconds -- cheap, and crucially
     # always present for branch protection to match against.
     if: always()
-    needs: [numerical-touched]
+    needs: [paths-touched]
     runs-on: ubuntu-latest
     steps:
       - id: should
@@ -236,7 +251,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "schedule" ] \
              || [ "${{ github.event_name }}" = "workflow_dispatch" ] \
-             || [ "${{ needs.numerical-touched.outputs.changed }}" = "true" ]; then
+             || [ "${{ needs.paths-touched.outputs.numerical }}" = "true" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
             echo "Accuracy suite WILL run for this event."
           else
@@ -281,3 +296,72 @@ jobs:
         env:
           UPT_REQUIRE_PEERS: '1'
           GL4_LONG: '1'
+
+  lean:
+    # The Lean proofs moved here from PhysJS (11.0.0). `lean/` is outside the npm package
+    # (package.json `files`); this job is the only thing that builds it. `lake build` uses the
+    # Mathlib cache, then the axiom audit imports the module `lean` (the aggregator `lean.lean`)
+    # and fails on `sorryAx`, `Lean.ofReduceBool`, or any axiom outside propext,
+    # Classical.choice and Quot.sound. Theorem names stay `PhysJS.*`: namespaces, not paths.
+    #
+    # Like long-tests, the job always runs and gates its steps, so it reports on every change and
+    # can be made a required context: the build runs on the nightly schedule, on a dispatch, and
+    # when paths-touched says the Lean tree, its configuration, the Lean manifest, the catalog or
+    # this workflow changed; otherwise it succeeds in seconds without building.
+    #
+    # Two caches replace lean-action's own (one whole `.lake` per commit, several GB each, which
+    # evicts itself): `.lake/packages` (Mathlib's downloaded oleans and the Physlib build) keyed on
+    # the toolchain and the lake manifest, so it is saved once per dependency set; and `.lake/build`
+    # (this tree's oleans) keyed per commit and restored from the newest, so lake rebuilds only the
+    # files that changed. Mathlib's own cache (`lake exe cache get`) is fetched only when the
+    # packages cache misses: on a hit the oleans are already in `.lake/packages`, and `cache get`
+    # re-downloaded all ~8900 archives anyway (about five minutes) before finding them decompressed.
+    name: lake build and axiom audit
+    if: always()
+    needs: [paths-touched]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - id: should
+        name: Decide whether the Lean build is needed
+        env:
+          EVENT: ${{ github.event_name }}
+          LEAN_TOUCHED: ${{ needs.paths-touched.outputs.lean }}
+        run: |
+          if [ "$EVENT" = "schedule" ] || [ "$EVENT" = "workflow_dispatch" ] || [ "$LEAN_TOUCHED" = "true" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "The Lean build WILL run for this event."
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing the Lean build reads changed and this is not a scheduled run -- build not needed."
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.should.outputs.run == 'true'
+        with:
+          persist-credentials: false
+      - name: Restore the Lean dependencies (Mathlib oleans, Physlib build)
+        id: lake-packages
+        if: steps.should.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .lake/packages
+          key: lake-packages-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}
+      - name: Restore this tree's Lean build
+        if: steps.should.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .lake/build
+          key: lake-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: lake-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-
+      - name: Build and axiom audit
+        if: steps.should.outputs.run == 'true'
+        uses: leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865 # v1
+        with:
+          build: "true"
+          test: "false"
+          lint: "false"
+          use-mathlib-cache: ${{ steps.lake-packages.outputs.cache-hit == 'true' && 'false' || 'true' }}
+          use-github-cache: "false"
+          axiom-audit: "true"
+          axiom-audit-root: "lean"
+          axiom-audit-allow: "propext,Classical.choice,Quot.sound"

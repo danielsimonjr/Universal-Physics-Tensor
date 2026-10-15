@@ -141,8 +141,11 @@ function catalogEquationNumber(api: CommandCtx['api'], raw: string): number | un
  */
 function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: CommandCtx): number {
   const ref = ctx.api.catalogFormalRef(entry.id);
+  const proofStatus = ctx.api.catalogEntry(entry.id)?.proofStatus;
   if (ref === undefined) {
-    throw new CliError(`upt atlas: be-${entry.id} is a catalog equation and has no formalRef (\`upt atlas\` lists atlas bridges)`);
+    throw new CliError(
+      `upt atlas: be-${entry.id} is a catalog equation and has no formalRef; proof status ${proofStatus} (\`upt atlas\` lists atlas bridges)`,
+    );
   }
   const id = `be-${entry.id}`;
   if (wantJson) {
@@ -158,6 +161,7 @@ function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: Co
           id,
           catalogId: entry.id,
           name: entry.name,
+          proofStatus,
           formalRef: ref,
         },
       },
@@ -172,6 +176,7 @@ function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: Co
   ctx.out(`  version ${ref.version}; axioms ${ref.axioms.join(', ') || 'none'}`);
   ctx.out(`  fidelity: ${ref.fidelity}`);
   ctx.out(`  kind: ${ref.kind}`);
+  ctx.out(`  proof status: ${proofStatus} (full, weak, pending, best first)`);
   ctx.out(`  url: ${ref.url}`);
   ctx.out(`  covers: ${ref.covers}`);
   ctx.out('This command prints the stored catalog formalRef. It does not derive formally-proved from it.');

@@ -34,7 +34,7 @@ import { scanFileImports } from '../../tools/layer-order/check.js';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const sourcePath = resolve(root, 'src/atlas/proof-target.ts');
 const manifest = JSON.parse(
-  readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf8'),
+  readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf8'),
 ) as PhysjsManifestFile;
 
 const THREE_AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;

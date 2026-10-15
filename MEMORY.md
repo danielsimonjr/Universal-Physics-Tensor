@@ -115,9 +115,11 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
 - What shipped and when: `CHANGELOG.md`. What is in flight, and the authorization gate:
   `ACTIVE.md`. `todo.md` is the historical ledger. The current version: `package.json`. What is on the registry: the
   registry itself (`WORKFLOWS.md`, Release step 7).
-- Out-of-tree Lean proofs belong to the **`PhysJS`** repo, outside this one. That Lean
+- The Lean proofs are this repository's **`lean/`** (with `lean.lean`, `lakefile.toml`,
+  `lean-toolchain` and `lake-manifest.json` at the root), outside the npm package. The Lean
   project requires Mathlib and the Physlib package (the library Daniel calls PhysLean;
-  repository `leanprover-community/physlib`). Both requires are firm. UPT records a reviewed
-  `formalRef` and does not run Lean.
+  repository `leanprover-community/physlib`). Both requires are firm. CI's `lean` job builds and
+  axiom-audits it; the TypeScript library records a reviewed `formalRef` and does not run Lean.
+  Theorem names stay `PhysJS.*`: Lean namespaces, not a dependency on the PhysJS repository.
 - Peer and fleet context lives on the peer's machine. Ask rather than assume; two honest
   observers disagreeing usually means *different objects*, not a broken instrument.

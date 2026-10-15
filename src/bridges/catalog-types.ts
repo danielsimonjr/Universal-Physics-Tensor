@@ -20,13 +20,39 @@ import type {
 export type CatalogFiling = 'standard' | 'cross-domain';
 
 /**
+ * How far `lean/` proves a catalog record, best first. `full`: the record's
+ * Lean theorem is kind `bridge` and its manifest row is reviewed, so it states
+ * the catalogued equation and the catalog path passes it to `deriveEvidence`.
+ * `weak`: the theorem proves part of the equation (a derivation-step, limit,
+ * reduction, property or cross-check) or its row is unreviewed. `pending`: the
+ * record has no Lean theorem. The order of this array is the rank.
+ *
+ * @internal
+ */
+export const PROOF_STATUSES = ['full', 'weak', 'pending'] as const;
+
+/** One of {@link PROOF_STATUSES}. @internal */
+export type ProofStatus = (typeof PROOF_STATUSES)[number];
+
+/**
  * One catalog row. The row owns the relation contract, the regime, the
  * conventions and the counterexamples; its relations carry no copy.
  */
 export interface CatalogEntry extends BridgeEquationEntry {
   readonly type: CatalogFiling;
-  /** The PhysJS manifest key. The reference and its kind are that entry's. */
+  /** The key of this record's entry in `formal/lean/manifest.json`. The reference and its kind are that entry's. */
   readonly formalKey?: string;
+  /**
+   * The Lean theorem that manifest entry names, present exactly when
+   * `formalKey` is. A projection of the manifest; `catalogFormalRef` refuses
+   * a record whose theorem is not the manifest's.
+   */
+  readonly theorem?: string;
+  /**
+   * The record's {@link ProofStatus}, a projection of `formalKey` and the
+   * manifest that `catalogProofProblems` checks against its derivation.
+   */
+  readonly proofStatus: ProofStatus;
   readonly dimension?: Dimension;
   /** The confrontation is a caller-supplied table, not a stored outcome. */
   readonly callerTable?: true;

@@ -31,7 +31,7 @@ import { telegraphSlowRateRatio, telegraphWaveFrequencyRatio } from '../../src/a
 import { BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_WAVE_DALEMBERT, KG_MAX_DISPERSION_RATIO } from '../../src/atlas/waves/bridges.js';
 import { BRIDGE_KG_OSCILLATOR, BRIDGE_KG_SCHRODINGER, BRIDGE_STIFF_STRING, KG_NR_MAX_X, STIFF_MAX_BETA } from '../../src/atlas/waves/bridges-closure.js';
 import { kgNonrelativisticError, kleinGordonPhaseError, stiffStringPhaseError } from '../../src/atlas/waves/numerics.js';
-import { PHYSJS_COMMIT, physjsFormalRef } from '../../src/atlas/physjs-ref.js';
+import { LEAN_SOURCE_TAG, physjsFormalRef } from '../../src/atlas/physjs-ref.js';
 import { PHYSJS_SANITY_LEMMA_KEYS } from '../../src/atlas/physjs-reviewed.js';
 import type { AtlasBridge } from '../../src/atlas/types.js';
 import { readFileSync } from 'node:fs';
@@ -51,7 +51,7 @@ describe('ab-pendulum-linear ↔ PhysJS.Pendulum.linearizedEquationOfMotion_iff'
     expect(ref!.system).toBe('lean4-physjs');
     expect(ref!.statement).toBe('PhysJS.Pendulum.linearizedEquationOfMotion_iff');
     expect(ref!.fidelity).toBe('sanity-lemmas');
-    expect(ref!.version).toContain(`physjs@${PHYSJS_COMMIT}`);
+    expect(ref!.version).toContain(`upt-lean@${LEAN_SOURCE_TAG}`);
     expect(ref!.covers).toContain('the transformation, not bound.delta');
     expect(ref!.covers).toContain('covers its statement only');
   });

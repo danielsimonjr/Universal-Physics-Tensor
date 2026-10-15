@@ -85,7 +85,7 @@ const MEASURED = [
 
 const SECOND_SITES: ReadonlyArray<{ literal: string; file: string; reason: string }> = [
   { literal: '1.67e-27', file: 'dimensional/constant-rows.ts', reason: "GRW's own reference mass m₀, the catalog expression's number, not CODATA m_p" },
-  { literal: '2.01824', file: 'atlas/physjs-entries.generated.ts', reason: 'the vendored PhysJS covers text says this decimal is not in the theorem' },
+  { literal: '2.01824', file: 'atlas/physjs-entries.generated.ts', reason: 'the Lean manifest covers text says this decimal is not in the theorem' },
 ];
 
 describe('core/constants.ts is the one owner of physical-constant values', () => {

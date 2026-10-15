@@ -76,7 +76,7 @@ describe('specification sections equal the cross-domain records', () => {
     readFileSync(resolve(repoRoot, 'data', 'bridge-catalog.json'), 'utf8'),
   ) as { entries: CatalogEntry[] };
   const manifest = JSON.parse(
-    readFileSync(resolve(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf8'),
+    readFileSync(resolve(repoRoot, 'formal', 'lean', 'manifest.json'), 'utf8'),
   ) as { entries: ManifestEntry[] };
   const theoremByKey = new Map(manifest.entries.map((entry) => [entry.key, entry.theorem]));
   const spec = `${readSpec('Part-I.md')}\n${readSpec('Part-II.md')}`;

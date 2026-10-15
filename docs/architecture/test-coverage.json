@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 364,
-    "totalTestFiles": 580,
+    "totalTestFiles": 582,
     "testedCount": 351,
     "directlyTestedCount": 314,
     "untestedCount": 13,
@@ -766,6 +766,7 @@
     ],
     "src/atlas/catalog-formal-ref.ts": [
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1150,6 +1151,7 @@
     ],
     "src/atlas/physjs-entries.generated.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
@@ -1163,6 +1165,7 @@
     ],
     "src/atlas/physjs-ref.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
@@ -1540,6 +1543,7 @@
     ],
     "src/bridges/catalog-load.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
@@ -1579,7 +1583,8 @@
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
-      "tests/review/round3-owner-decisions.test.ts"
+      "tests/review/round3-owner-decisions.test.ts",
+      "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/catalog-types.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -1587,6 +1592,7 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/catalog-confidence.test.ts",
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/derived-domains.test.ts",
@@ -2387,6 +2393,7 @@
     "src/cli/commands/_atlas-route.ts": [],
     "src/cli/commands/_discovery-opts.ts": [],
     "src/cli/commands/atlas.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -2472,6 +2479,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/audit.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -2557,6 +2565,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/axes.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -2642,6 +2651,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/candidates.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -2727,6 +2737,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/canonical.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -2812,6 +2823,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/chain.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -2897,6 +2909,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/confront.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -2982,6 +2995,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/connectors.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3067,6 +3081,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/coverage.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3152,6 +3167,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/derive.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3237,6 +3253,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/discover.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3322,6 +3339,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/eval.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3407,6 +3425,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/evaluate.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3493,6 +3512,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/explain.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3578,6 +3598,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/frontier.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3663,6 +3684,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/ground.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3748,6 +3770,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/index.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3833,6 +3856,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/map.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -3918,6 +3942,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/metric.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4003,6 +4028,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/path.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4088,6 +4114,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/predict.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4173,6 +4200,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/priority.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4258,6 +4286,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/probe.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4344,6 +4373,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/recover.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4429,6 +4459,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/regime.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4514,6 +4545,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/retrieve.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4599,6 +4631,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/search.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4684,6 +4717,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/symbolic.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4769,6 +4803,7 @@
       "tests/dimensional/derive-grammar.test.ts"
     ],
     "src/cli/commands/testplan.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -4879,6 +4914,7 @@
     ],
     "src/cli/library-defaults.ts": [],
     "src/cli/main.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -7011,6 +7047,7 @@
       "tests/tools/readme-status.test.ts"
     ],
     "src/core/data-file.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/core/data-file.test.ts"
     ],
@@ -7042,6 +7079,7 @@
       "tests/tensor.test.ts"
     ],
     "src/core/json-schema.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/core/data-file.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
@@ -9587,6 +9625,7 @@
     ],
     "src/atlas/catalog-formal-ref.ts": [
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -9824,6 +9863,7 @@
     ],
     "src/atlas/physjs-ref.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
@@ -9984,6 +10024,7 @@
     ],
     "src/bridges/catalog-load.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
@@ -10014,9 +10055,11 @@
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
-      "tests/review/round3-owner-decisions.test.ts"
+      "tests/review/round3-owner-decisions.test.ts",
+      "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/catalog-types.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/catalog-confidence.test.ts",
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/derived-domains.test.ts",
@@ -10413,6 +10456,7 @@
     ],
     "src/cli/library-defaults.ts": [],
     "src/cli/main.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -11077,6 +11121,7 @@
       "tests/numerical/weyl-schwarzschild.test.ts"
     ],
     "src/core/data-file.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/core/data-file.test.ts"
     ],
@@ -11087,6 +11132,7 @@
       "tests/core/regime-rule-install.test.ts"
     ],
     "src/core/json-schema.ts": [
+      "tests/atlas/catalog-proof-status.test.ts",
       "tests/core/data-file.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
@@ -12786,6 +12832,45 @@
       "src/bridges/evaluation-errors.ts",
       "src/bridges/membership.ts",
       "src/cli/map-evidence.ts"
+    ],
+    "tests/atlas/catalog-proof-status.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/atlas/catalog-formal-ref.ts",
+      "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
+      "src/bridges/catalog-load.ts",
+      "src/bridges/catalog-types.ts",
+      "src/core/data-file.ts",
+      "src/core/json-schema.ts"
     ],
     "tests/atlas/catalog-proved-evidence.test.ts": [
       "src/atlas/catalog-formal-ref.ts",
@@ -20470,6 +20555,7 @@
     "tests/fixtures/schwarzschild.test.ts": [
       "src/core/constants.ts"
     ],
+    "tests/formal/lean-theorems.test.ts": [],
     "tests/internal/no-network-in-tests.test.ts": [],
     "tests/internal/no-raw-nul.test.ts": [],
     "tests/internal/no-removed-paths.test.ts": [],
@@ -21223,7 +21309,8 @@
       "src/bridges/types.ts",
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
-      "src/bridges/evaluation-errors.ts"
+      "src/bridges/evaluation-errors.ts",
+      "src/bridges/catalog-load.ts"
     ],
     "tests/tools/test-coverage-columns.test.ts": [],
     "tests/tools/untracked-gate-inputs.test.ts": [],

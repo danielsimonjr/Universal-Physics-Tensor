@@ -1,7 +1,7 @@
 /**
  * Kind `bridge` is the only seed. The list is `bridgeSeedKeys`, read from each
  * manifest entry's own `kind`. A second list would drift, so this test keeps
- * none: it derives every expectation from the vendored manifest and the catalog.
+ * none: it derives every expectation from the Lean manifest and the catalog.
  *
  * Before the kind check, a stub that returned every key kept `CE-fixture`
  * when its kind was `derivation-step`. The control below failed on that stub.
@@ -23,7 +23,7 @@ import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 const KIND_PREFIX = new RegExp(`^(${FORMAL_REF_KINDS.join('|')}): `);
 
 const MANIFEST = JSON.parse(
-  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../formal/physjs/manifest.json'), 'utf8'),
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../formal/lean/manifest.json'), 'utf8'),
 ) as { readonly entries: readonly { readonly key: string; readonly kind: string; readonly covers: string }[] };
 
 const ATLAS_KEYS = ATLAS_FAMILIES.flatMap((family) => family.bridges)

@@ -21,7 +21,7 @@ The catalog is `data/bridge-catalog.json`. The specification writes up the cross
 - **[ROADMAP.md](../ROADMAP.md)** — atlas phases.
 - **[ACTIVE.md](../ACTIVE.md)** — the authorization ledger. The last promoted sprint heading is Sprint 6.
 - **[docs/design/](design/)** — designs written after the roadmap's DONE mark (Lean milestones, tiers, frontier, BE-53, bridge reduction).
-- **Reviewed `formalRef`s.** Each is `system: 'lean4-physjs'`, naming public [PhysJS](https://github.com/danielsimonjr/PhysJS). The pin is [`formal/physjs/manifest.json`](../formal/physjs/manifest.json). The count is [`NOTES.md`](../NOTES.md).
+- **Reviewed `formalRef`s.** Each is `system: 'lean4-physjs'`, naming a theorem in this repository's [`lean/`](../lean/), which CI builds and axiom-audits. The record of each statement is [`formal/lean/manifest.json`](../formal/lean/manifest.json). The count is [`NOTES.md`](../NOTES.md).
 
 ## Research (`research/`)
 

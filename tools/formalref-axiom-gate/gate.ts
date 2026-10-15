@@ -19,9 +19,11 @@
  * - the checkout is not at the commit and toolchain that each `formalRef.version` records;
  * - there is nothing to check (no probed theorem, no reference, or a `#print axioms` line that the
  *   gate cannot parse), so that the gate cannot pass by checking nothing;
- * - a `lean4-physjs` formalRef disagrees with `formal/physjs/manifest.json` (commit, theorem, key,
+ * - a `lean4-physjs` formalRef disagrees with `formal/lean/manifest.json` (version, theorem, key,
  *   axioms, or the coverage phrase), or a manifest entry does not resolve to a bridge. That system
- *   is not skipped. The manifest check does not run Lean.
+ *   is not skipped. The manifest check does not run Lean;
+ * - a catalog record's `theorem` or `proofStatus` is not the projection of that manifest
+ *   (`catalogProofProblems`).
  *
  * Lean exits 0 for a proof that uses `sorry` (it only warns), so the gate reads the printed axioms
  * and never the exit code.
@@ -252,14 +254,15 @@ async function main(args: readonly string[]): Promise<number> {
   const physlibDir = argValue(args, '--physlib');
   const { ATLAS_FAMILIES } = await import('../../src/atlas/families.js');
   const { BRIDGE_EQUATIONS } = await import('../../src/bridges/index.js');
-  const { catalogFormalRef } = await import('../../src/atlas/catalog-formal-ref.js');
+  const { catalogFormalRef, catalogProofProblems } = await import('../../src/atlas/catalog-formal-ref.js');
   const { physjsManifestProblems } = await import('../../src/atlas/physjs-ref.js');
-  const manifest = JSON.parse(readFileSync(join(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf-8'));
+  const manifest = JSON.parse(readFileSync(join(repoRoot, 'formal', 'lean', 'manifest.json'), 'utf-8'));
   const bridges = [
     ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
     ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
   ];
-  const physjsProblems = physjsManifestProblems({ manifest, bridges });
+  // A catalog record's theorem and proof status are projections of the same manifest.
+  const physjsProblems = [...physjsManifestProblems({ manifest, bridges }), ...catalogProofProblems()];
   for (const p of physjsProblems) console.error(`FAIL: ${p}`);
 
   const references = lean4PhyslibReferences(bridges);

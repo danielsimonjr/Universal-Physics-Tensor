@@ -7,7 +7,7 @@
  * id order, one confrontation per id, the rejection ledger, each outcome on
  * its kind, and each row relation's confidence derived from its row. The
  * cross-file checks below are what the loader cannot know: the package
- * version, the PhysJS manifest keys, and that every relation names a row.
+ * version, the Lean manifest keys (`formal/lean/manifest.json`), and that every relation names a row.
  *
  * Run via `npm run catalog:json`. `tests/bridges/catalog-json.test.ts`
  * imports {@link crossChecks}, so the rules live here once.
@@ -50,7 +50,7 @@ const isMain = process.argv[1] !== undefined && resolve(process.argv[1]) === fil
 if (isMain) {
   const catalog = JSON.parse(readFileSync(resolve(repoRoot, 'data', 'bridge-catalog.json'), 'utf8'));
   const pkg = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf8'));
-  const manifest = JSON.parse(readFileSync(resolve(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf8'));
+  const manifest = JSON.parse(readFileSync(resolve(repoRoot, 'formal', 'lean', 'manifest.json'), 'utf8'));
   const keys = new Set(manifest.entries.map((entry) => entry.key));
   const errors = crossChecks(catalog, pkg.version, keys);
   let loaded;

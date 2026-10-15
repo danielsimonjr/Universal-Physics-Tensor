@@ -19,9 +19,10 @@ owner's job.
   [`docs/planning/Catalog-FormalRef-Design-Note.md`](../planning/Catalog-FormalRef-Design-Note.md).
   A reduction, a limit, and a derivation-step light no evidence tag. A
   derivation theorem in this pass is a reduction in that sense.
-- UPT does not run Lean. The pin procedure is the `lean4-physjs` section
-  of `WORKFLOWS.md`. The manifest schema stays
-  `physjs-bridge-manifest/v1` unless Daniel bumps it.
+- The Lean proofs are this repository's `lean/`, built and axiom-audited
+  by CI; the library and this pass do not run Lean. The procedure is the
+  `lean4-physjs` section of `WORKFLOWS.md`. The manifest schema stays
+  `upt-lean-manifest/v1` unless Daniel bumps it.
 - Symbolic composition is `composeSymbolic` and `substitute`
   (`src/composition/compose-symbolic.ts`, `src/composition/expr-subst.ts`).
   Simplification is MathTS `simplify` behind `src/composition/expr-simplify.ts`,
@@ -267,8 +268,8 @@ not mean "fundamental." `basis: false` is not a third state; an id with a
 derivation theorem omits `basis` and carries `derivedFrom`.
 
 A hand-written `derivedFrom` or `basis` fails the gate the same way a
-hand-edited PhysJS table fails `bun scripts/generate-physjs-table.ts --check`.
-The generator reads the vendored manifest. The implementation, when it is
+hand-edited Lean table fails `bun scripts/generate-physjs-table.ts --check`.
+The generator reads `formal/lean/manifest.json`. The implementation, when it is
 authorized, lands the failing test before the generator is allowed to
 write the field.
 
@@ -282,18 +283,18 @@ that tag and does not delete the equation.
 
 `dependencies` is left as it is.
 
-## PhysJS
+## Lean proofs (`lean/`)
 
 Derivation theorems live in the flat Lean tree, in the file of the derived
-equation (`lean/<File>.lean`), which is the layout the vendored
-`formal/physjs/lean-files.json` already records. The theorem imports the
+equation (`lean/<File>.lean`), which is the layout
+`formal/lean/lean-files.json` already records. The theorem imports the
 basis modules and names the basis theorems. The equation theorem that the
 UPT `formalRef` already points at stays the top-level manifest `theorem`.
 The derivation is a nested object on that same manifest entry, the shape
 the formalRef note already uses for a second statement. It has no second
 `key` and no second `bridgeId`.
 
-Proposed nested object, still under schema `physjs-bridge-manifest/v1`
+Proposed nested object, under the manifest schema `upt-lean-manifest/v1`
 until Daniel bumps it:
 
 | Field | What it holds |
@@ -310,11 +311,11 @@ that fills `derivedFrom` reads `imports`, maps each theorem back to its
 `bridgeId`, and writes those keys. A nested derivation does not become a
 second `formalRef`.
 
-The pin is the existing procedure. Land the theorem in PhysJS. Vendor
-`manifest/bridges.json` to `formal/physjs/manifest.json` at that commit.
-Run `bun run physjs:table`. The new step is the generator for
-`derivedFrom` and `basis`, in that same commit, from the vendored
-manifest. `atlas:formal-gate` still compares the manifest to the bridges.
+The procedure is the existing one (`WORKFLOWS.md`). Write the theorem in
+`lean/`, add it to `formal/lean/manifest.json`, run
+`bun scripts/lean-index.ts`, then `bun run physjs:table`. The new step is the generator for
+`derivedFrom` and `basis`, in that same commit, from
+`formal/lean/manifest.json`. `atlas:formal-gate` still compares the manifest to the bridges.
 An import that names a theorem the manifest does not contain fails the
 gate. A `derivedFrom` key with no nested derivation fails the gate.
 
@@ -331,41 +332,40 @@ The round already has an order. This pass is one step in it.
    label is the future `type` field.
 2. **Root fixes.** Defects the session recorded are fixed on their own,
    before new equations are admitted.
-3. **PhysJS proofs, then the pin.** New equations are proved in PhysJS.
-   UPT vendors the manifest and registers the rows by the `lean4-physjs`
-   procedure in `WORKFLOWS.md`.
-4. **Reduction pass.** After that pin, before the release tag. The input
-   is the pinned catalog, the symbolic edges, and the vendored manifest.
+3. **Lean proofs.** New equations are proved in `lean/` and registered
+   by the `lean4-physjs` procedure in `WORKFLOWS.md`.
+4. **Reduction pass.** After those proofs merge, before the release tag.
+   The input is the catalog, the symbolic edges, and
+   `formal/lean/manifest.json` at that commit.
    The pass does not run on a proposal that is not yet a catalog row.
 5. **Release.** The release section of `WORKFLOWS.md` is unchanged, and
    it stays the owner's. The tag waits until the reduction report for
-   that pin is either merged or explicitly skipped. Skipping is a
+   that commit is either merged or explicitly skipped. Skipping is a
    sentence in the release note, written by the owner.
 
 ### Outputs
 
 The pass writes a report at `docs/research/bridge-reduction/<pin>.md`.
-The pin in the path is the PhysJS commit the vendored manifest names.
+`<pin>` in the path is the UPT commit whose `lean/` and manifest the pass read.
 The report is a dated research note. It holds the candidate basis, the
 candidate derivations with their premises, the near-misses, the unscanned
 ids, the mutation results, and the statement that the basis is not proved
 minimum. Counts live in that report and, when a run is accepted, in
 `NOTES.md`. They do not live in this design.
 
-Two pull requests follow an accepted report, and only then:
+One UPT pull request follows an accepted report, and only then: the
+derivation theorems in `lean/` and their manifest entries (no `sorry`),
+the regenerated index and table, the generated `derivedFrom` and `basis`
+fields, and the report. No hand-written derivation field. Before 11.0.0
+these were two pull requests, PhysJS and then UPT.
 
-- **PhysJS.** The derivation theorems and the manifest entries. No `sorry`.
-- **UPT.** The vendored manifest, the regenerated table, the generated
-  `derivedFrom` and `basis` fields, and the report. No hand-written
-  derivation field.
-
-This note does not open those pull requests.
+This note does not open that pull request.
 
 ## Worked example
 
 The formulas below are the `formula_latex` strings of those catalog ids,
-and the theorem names are the vendored manifest's. The pass, when it
-runs, recomputes candidates from the pin it is given. These paragraphs
+and the theorem names are `formal/lean/manifest.json`'s. The pass, when
+it runs, recomputes candidates from the commit it is given. These paragraphs
 are the check of the definition against those strings.
 
 ### BE-76 follows from BE-74 by a junction the tree already has

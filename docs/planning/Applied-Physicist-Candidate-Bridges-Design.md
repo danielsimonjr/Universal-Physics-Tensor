@@ -240,7 +240,7 @@ only checks that a matcher can be told `C = 2` after the answer is known is
 not either control. The Maxwell-stress derivation of those endpoints is the
 library gap named above.
 
-Draft object, not written to `formal/physjs/manifest.json`:
+Draft object, not written to `formal/lean/manifest.json`:
 
 ```json
 {
@@ -621,7 +621,7 @@ attributes match.
 
 ## What this note does not do
 
-It does not write `formal/physjs/manifest.json`. It does not call
+It does not write `formal/lean/manifest.json`. It does not call
 `deriveEvidence` to light `formally-proved`. It does not treat a `chain-`
 id as a catalog id. It does not treat a units monomial as a proof. The
 open notes below stay notes.
