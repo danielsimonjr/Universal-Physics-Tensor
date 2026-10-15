@@ -7,8 +7,9 @@
  * (`upt map | head -1`): nothing more can be delivered, so the run ends quietly.
  *
  * A defect (an error that is neither UsageError nor CliError, which `runCli`
- * rethrows) is reported as `upt: internal error: <message>` with exit 70
- * (EX_SOFTWARE), not as Node's stack and an unhandled rejection.
+ * rethrows) goes to `reportInternalError` (dist/cli/main.js): `upt: internal
+ * error: <message>` with exit 70 (EX_SOFTWARE), not Node's stack and an
+ * unhandled rejection.
  */
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -33,7 +34,7 @@ try {
   process.exitCode = await main.runCli(process.argv.slice(2));
 } catch (err) {
   // Last resort: a defect, since every usage error and value refusal was mapped to an exit
-  // code inside runCli. The message, not the stack, and EX_SOFTWARE (70).
-  process.stderr.write(`upt: internal error: ${err && err.message ? err.message : String(err)}\n`);
-  process.exitCode = 70;
+  // code inside runCli. reportInternalError prints the message, not the stack, and returns
+  // EX_SOFTWARE (70); it is unit-tested in tests/cli/internal-error-exit.test.ts.
+  process.exitCode = main.reportInternalError(err);
 }
