@@ -213,9 +213,16 @@ async function run(ctx: CommandCtx): Promise<number> {
     const relationSources = variables.map((g) => ({ name: g.name, dim: g.dim }));
     catalogEdges = api.matchingCatalogEdges(target.name, relationSources);
     const printComparisons = (): void => {
-      for (const line of api.describeKnownRelation(canonicalComparisons!, target.name, relationSources)) {
+      // describeKnownRelation's first lines are one per comparison, in order (then the catalog
+      // edges), so line i belongs to comparison i when i is below the comparison count.
+      api.describeKnownRelation(canonicalComparisons!, target.name, relationSources).forEach((line, i) => {
         textOut(`  ${line}`);
-      }
+        // A form mismatch names which exponent differs (the log-design fit), beneath its line.
+        const c = canonicalComparisons![i];
+        if (c?.kind === 'form' && c.exponentDifference !== undefined) {
+          textOut(`      ${api.describeExponentDifference(c.exponentDifference)}`);
+        }
+      });
       for (const line of conventionLines(canonicalComparisons!.map((c) => c.id))) textOut(`  ${line}`);
     };
     if (canonicalCheckFailed(canonicalComparisons)) failed = true;
