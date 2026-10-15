@@ -21,7 +21,7 @@ import type {
 } from './types.js';
 import { DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
 import { openBudget, budgetStopReason, type BudgetState } from './search-budget.js';
-import { generateNative, nativeDetermination, type RawCandidate } from './generator.js';
+import { generateNative, nativeDetermination, powerLawDetermination, powerLawWording, type RawCandidate } from './generator.js';
 import { fingerprintExpr, complexityOf, bodyExpression } from './fingerprint.js';
 import {
   compareToCorpus,
@@ -220,9 +220,14 @@ export async function runProbeSearch(
   if (unsearched.length > 0) {
     wording.push(
       `the monomial is taken from the dimensioned inputs; an unknown function of the ` +
-        `dimensionless input(s) {${unsearched.join(', ')}} is not searched`,
+        `dimensionless input(s) {${unsearched.join(', ')}} is not searched as such`,
     );
   }
+  // What the power-law fit over the π-groups found on the exploratory rows, or why it abstained
+  // (a negative result is a result); the generator ran the same fit to emit its candidate.
+  const powerLaw = hasAnyData(problem) ? powerLawDetermination(problem) : null;
+  const powerLawNote = powerLaw ? powerLawWording(powerLaw) : null;
+  if (powerLawNote !== null) wording.push(powerLawNote);
   for (const raw of generateNative(problem, state)) {
     raws.push(raw);
     const stop = budgetStopReason(state);
@@ -462,7 +467,7 @@ export async function runProbeSearch(
       det.determined
         ? 'enumerator produced no dimensionally valid candidates'
         : `the target is not a unique monomial of the inputs (${det.reason}); ` +
-            'the native enumerator searches unique monomials only',
+            'the native enumerator searches unique monomials and, with exploratory rows, a rational power law of the π-groups',
     );
   } else if (
     hasAnyData(problem) &&

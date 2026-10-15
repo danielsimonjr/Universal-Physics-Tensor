@@ -72,6 +72,9 @@ export { openManifest, closeManifest } from './run-manifest.js';
 export { canTransition, applyStatus, statusRank, ProbeCandidateStore } from './candidate-store.js';
 export { monomialToExpr, generateNative } from './generator.js';
 export type { RawCandidate } from './generator.js';
+/** The rational power law over the π-groups, and the log-design rank the frontier reads. */
+export { powerLawDetermination, powerLawWording, rationalizeExponent, piStructure, logDesign, logDesignRank } from './power-law.js';
+export type { PowerLawDetermination, PowerLawExponent, PowerLawFit, PiStructure, LogDesign } from './power-law.js';
 export {
   wrapRelationLinkGaps,
   wrapConnectorGaps,
