@@ -40,10 +40,26 @@ export interface StructuralPair {
   readonly bridgeId: string;
 }
 
+/**
+ * The algebraic-equivalence step a layer above may inject: on a normal-form
+ * miss with equal dimension, whether the two expressions are the same
+ * relation up to a dimensionless constant (`composition/algebraic-equivalence.ts`
+ * answers with MathTS `simplify`). This module stays below `composition/`, so
+ * it does not import the step; a caller that has it passes it.
+ *
+ * @internal
+ */
+export interface StructuralOptions {
+  readonly equivalent?: (left: ExprNode, right: ExprNode) => boolean;
+}
+
 /** Dimension, normal form, and the F4 guard. No numerical recovery. @internal */
 export interface StructuralRelation {
   readonly dimMatch: boolean;
+  /** The normal forms match, or the injected step found them equal up to a constant. */
   readonly structuralMatch: boolean;
+  /** True only when the match came from the injected step, not from the hash. */
+  readonly algebraic: boolean;
   /**
    * True only when the normal forms match and `restatesBridge` names
    * `bridgeId`. A structural match the registry did not pre-declare is
@@ -94,13 +110,19 @@ function isStructuralPair(value: ExprNode | StructuralPair): value is Structural
   return !('kind' in value) && 'bridgeId' in value;
 }
 
-function comparePair(pair: StructuralPair): StructuralRelation {
+function comparePair(pair: StructuralPair, opts: StructuralOptions = {}): StructuralRelation {
   const leftNormal = pair.leftNormal ?? normalForm(pair.left);
   const rightNormal = pair.rightNormal ?? normalForm(pair.right);
-  const structuralMatch = leftNormal === rightNormal;
+  const dimMatch = pair.rightDim != null && dimEqual(pair.rightDim, pair.leftDim);
+  const hashMatch = leftNormal === rightNormal;
+  // The hash is the cheap key; the step runs only on a miss, and only when the
+  // dimensions agree (a different dimension is a different relation).
+  const algebraic = !hashMatch && dimMatch && opts.equivalent !== undefined && opts.equivalent(pair.left, pair.right);
+  const structuralMatch = hashMatch || algebraic;
   return {
-    dimMatch: pair.rightDim != null && dimEqual(pair.rightDim, pair.leftDim),
+    dimMatch,
     structuralMatch,
+    algebraic,
     restates:
       structuralMatch &&
       pair.restatesBridge !== undefined &&
@@ -155,7 +177,7 @@ function provisionalChainId(edgeIds: readonly string[]): string {
   return `chain-${edgeIds.join('-')}`;
 }
 
-function classifyChain(expr: ExprNode, edgeIds: readonly string[]): ChainClassification {
+function classifyChain(expr: ExprNode, edgeIds: readonly string[], opts: StructuralOptions): ChainClassification {
   const ordered = [...edgeIds];
   const validated = validate(expr);
   const leftDim = validated.ok ? validated.inferredDimension : null;
@@ -167,15 +189,18 @@ function classifyChain(expr: ExprNode, edgeIds: readonly string[]): ChainClassif
   const restatements: { canonicalId: string; restatesBridge: string }[] = [];
   for (const ce of CANONICAL_EQUATIONS) {
     if (ce.scalarAst === undefined || ce.restatesBridge === undefined) continue;
-    const relation = comparePair({
-      left: expr,
-      leftDim,
-      leftNormal,
-      right: ce.scalarAst,
-      rightDim: ce.dimensional.target.dim,
-      restatesBridge: ce.restatesBridge,
-      bridgeId: ce.restatesBridge,
-    });
+    const relation = comparePair(
+      {
+        left: expr,
+        leftDim,
+        leftNormal,
+        right: ce.scalarAst,
+        rightDim: ce.dimensional.target.dim,
+        restatesBridge: ce.restatesBridge,
+        bridgeId: ce.restatesBridge,
+      },
+      opts,
+    );
     if (relation.restates && relation.dimMatch) {
       restatements.push({ canonicalId: ce.id, restatesBridge: ce.restatesBridge });
     }
@@ -197,16 +222,19 @@ function classifyChain(expr: ExprNode, edgeIds: readonly string[]): ChainClassif
 
   const confirmations: number[] = [];
   for (const [id, bridge] of bridgeShapes()) {
-    const relation = comparePair({
-      left: expr,
-      leftDim,
-      leftNormal,
-      right: bridge.rhs,
-      rightDim: bridge.dim,
-      rightNormal: bridge.normal,
-      restatesBridge: undefined,
-      bridgeId: String(id),
-    });
+    const relation = comparePair(
+      {
+        left: expr,
+        leftDim,
+        leftNormal,
+        right: bridge.rhs,
+        rightDim: bridge.dim,
+        rightNormal: bridge.normal,
+        restatesBridge: undefined,
+        bridgeId: String(id),
+      },
+      opts,
+    );
     if (relation.structuralMatch && relation.dimMatch) confirmations.push(id);
   }
   confirmations.sort((a, b) => a - b);
@@ -223,19 +251,26 @@ function classifyChain(expr: ExprNode, edgeIds: readonly string[]): ChainClassif
  *
  * A {@link StructuralPair} returns the dimension, normal-form, and F4
  * result `classifyLinkage` uses. An expression plus the chain's ordered
- * edge ids returns the chain classification. Both calls are this function.
+ * edge ids returns the chain classification. Both calls are this function,
+ * and both take the optional {@link StructuralOptions} whose `equivalent`
+ * runs on a normal-form miss with equal dimension; without it the hash is
+ * the whole decision.
  *
  * @internal
  */
-export function classifyStructure(pair: StructuralPair): StructuralRelation;
-export function classifyStructure(expr: ExprNode, edgeIds: readonly string[]): ChainClassification;
+export function classifyStructure(pair: StructuralPair, opts?: StructuralOptions): StructuralRelation;
+export function classifyStructure(expr: ExprNode, edgeIds: readonly string[], opts?: StructuralOptions): ChainClassification;
 export function classifyStructure(
   exprOrPair: ExprNode | StructuralPair,
-  edgeIds?: readonly string[],
+  edgeIdsOrOpts?: readonly string[] | StructuralOptions,
+  opts: StructuralOptions = {},
 ): StructuralRelation | ChainClassification {
-  if (isStructuralPair(exprOrPair)) return comparePair(exprOrPair);
-  if (edgeIds === undefined) {
+  if (isStructuralPair(exprOrPair)) {
+    const pairOpts = edgeIdsOrOpts !== undefined && !Array.isArray(edgeIdsOrOpts) ? (edgeIdsOrOpts as StructuralOptions) : {};
+    return comparePair(exprOrPair, pairOpts);
+  }
+  if (edgeIdsOrOpts === undefined || !Array.isArray(edgeIdsOrOpts)) {
     throw new TypeError('classifyStructure: a chain needs its ordered edge ids');
   }
-  return classifyChain(exprOrPair, edgeIds);
+  return classifyChain(exprOrPair, edgeIdsOrOpts as readonly string[], opts);
 }

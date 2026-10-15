@@ -53,6 +53,7 @@ import type { VettedCandidate } from './discovery.js';
 import { CANONICAL_GRAPH } from './canonical-graph.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { rationalExponentOf } from './formula-shape.js';
+import { equalUpToConstant } from './algebraic-equivalence.js';
 import { formatRational, fractionToNumber } from './rational-exponent.js';
 
 // ── monomial algebra over flat ExprNode forms ───────────────────────────────
@@ -543,7 +544,16 @@ export function dedupByNormalForm(
   const extras = new Map<string, string[]>();
 
   for (const p of proposals) {
-    const key = dedupKey(p);
+    let key = dedupKey(p);
+    // On a hash miss, the algebraic step: a kept proposal of the same dimension
+    // that is this one up to a constant owns the key (`a/(b/c)` for `a·c/b`).
+    if (!byKey.has(key)) {
+      const twin = order.find((k) => {
+        const candidate = byKey.get(k)!;
+        return candidate.dimensionalSignature === p.dimensionalSignature && equalUpToConstant(candidate.scalarAst, p.scalarAst).equal;
+      });
+      if (twin !== undefined) key = twin;
+    }
     const kept = byKey.get(key);
     if (kept === undefined) {
       byKey.set(key, p);

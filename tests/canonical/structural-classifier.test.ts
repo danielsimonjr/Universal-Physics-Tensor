@@ -199,7 +199,7 @@ describe('structural classifier', () => {
       bridgeId: '16',
     });
     const link = classifyLinkage('CE-landauer', 16);
-    expect(relation).toEqual({ dimMatch: true, structuralMatch: true, restates: true });
+    expect(relation).toEqual({ dimMatch: true, structuralMatch: true, algebraic: false, restates: true });
     expect(link.structuralMatch).toBe(relation.structuralMatch);
     expect(link.dimMatch).toBe(relation.dimMatch);
     expect(link.classification).toBe('restates-canonical');

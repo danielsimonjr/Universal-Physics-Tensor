@@ -12,9 +12,10 @@
  * THE INVARIANT: the replacement is process-global, so a concurrent caller in
  * the same process (a worker pool thread, a vitest worker sharing a process)
  * loses its console for the window. The window is therefore confined to the
- * peer's ONE-TIME load and first-use smoke in `expr-simplify.ts` and
- * `mathts-scalar-symbols.ts`: both cache the loaded module, so the sinks are
- * replaced once per process, and never around a per-call parse or simplify.
+ * peer's ONE-TIME load and first-use smoke in `expr-simplify.ts`,
+ * `mathts-scalar-symbols.ts` and `algebraic-equivalence.ts`: each caches the
+ * loaded function, so the sinks are replaced once per process, and never
+ * around a per-call parse or simplify.
  * Both helpers restore the sinks in `finally`, so a throw inside the window
  * cannot leave them replaced. `tests/composition/mathts-quiet.test.ts` scans
  * `src/` for any other reassignment and traps the sinks during a call.

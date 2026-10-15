@@ -118,17 +118,24 @@ function collectMathSymbols(n: MathNode, out: Set<string>): void {
 // ExprNode → gensym string (fully parenthesized) and back.
 // ---------------------------------------------------------------------------
 
-interface LeafMeta {
+/** The leaf a gensym stands for: its name and dimension. @internal */
+export interface LeafMeta {
   readonly name: string;
   readonly dim: Dimension;
 }
 
 const isLiteral = isDecimalLiteral;
 
-/** Render a scalar ExprNode to a mathjs-safe, fully-parenthesized string,
- *  gensym'ing each non-literal leaf by NAME (so repeats share an identifier
- *  and can cancel). Throws `Unsupported` on non-scalar arms. */
-function renderGensym(
+/**
+ * Render a scalar ExprNode to a mathjs-safe, fully-parenthesized string,
+ * gensym'ing each non-literal leaf by NAME (so repeats share an identifier
+ * and can cancel). Throws on a non-scalar arm and on a non-literal exponent;
+ * `algebraic-equivalence.ts` renders both sides of a quotient through one
+ * gensym table with it.
+ *
+ * @internal
+ */
+export function renderGensym(
   expr: ExprNode,
   gensymOf: Map<string, string>,
   meta: Map<string, LeafMeta>,
