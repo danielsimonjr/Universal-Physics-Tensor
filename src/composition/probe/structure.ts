@@ -11,11 +11,13 @@ import { sumSquaredDeviations } from '@danielsimonjr/mathts-core';
 import { linearRegression } from '@danielsimonjr/mathts-functions';
 import { meanOf } from '../../numerical/statistics.js';
 
+/** A series sampled at `x` with values `y`, scanned for a step in its mean. @internal */
 export interface ChangepointInput {
   readonly x: readonly number[];
   readonly y: readonly number[];
 }
 
+/** The best split of {@link detectMeanChangepoint}, or an abstention with its reason. @internal */
 export interface ChangepointResult {
   readonly index: number | null;
   readonly score: number;
@@ -52,6 +54,7 @@ export function detectMeanChangepoint(
   return { index: bestIdx, score: best, abstained: false };
 }
 
+/** Positive samples `(x, y)` whose log-log slope is the scale exponent. @internal */
 export interface ScaleSymmetryInput {
   readonly x: readonly number[];
   readonly y: readonly number[];
