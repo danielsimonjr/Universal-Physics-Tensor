@@ -33,9 +33,9 @@ import { equals, format } from '../dimensional/algebra.js';
 import type { BridgeEdge } from './edge.js';
 import { formulaShape } from './formula-shape.js';
 import { BRIDGE_EQUATIONS } from '../bridges/index.js';
-import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { enumerateCompositions } from './enumerate.js';
 import { DATA_CONFRONTED_IDS } from '../bridges/confrontation-coverage.js';
+import { clusterBySharedKeys, quantityCanonicalizer } from './quantity-clusters.js';
 
 /** A fundamental constant the derivation search may add (with SI value). */
 interface NamedConstant {
@@ -385,19 +385,10 @@ export function bridgePriority(
 // Catalog linkage map — how the equations connect via shared quantities.
 // ---------------------------------------------------------------------------
 
-/**
- * Quantity-name canonicalizer honoring `QUANTITY_IDENTIFICATIONS`: maps each
- * name to its identified representative (e.g. hawking-temperature →
- * temperature). The shared linkage substrate for `linkageMap` /
- * `proposeLinkCandidates`. NOTE: `anchoringDistance` deliberately does NOT
- * use this — it links on raw names (its distance-0/∞ contract is pinned).
- */
-function quantityCanonicalizer(): (n: string) => string {
-  const alias = new Map<string, string>(
-    QUANTITY_IDENTIFICATIONS.map((id) => [id.from, id.to]),
-  );
-  return (n: string): string => alias.get(n) ?? n;
-}
+// The quantity-name canonicalizer (`QUANTITY_IDENTIFICATIONS`) and the component partition are
+// `quantity-clusters.ts`, the one owner shared with the visual map and the discovery funnel.
+// NOTE: `anchoringDistance` deliberately does NOT canonicalize — it links on raw names (its
+// distance-0/∞ contract is pinned).
 
 /** An edge's distinct (canonical) quantity names — sources ∪ target. */
 function quantitiesOf(e: BridgeEdge, canon: (n: string) => string): string[] {
@@ -449,27 +440,13 @@ function clusterMap(edges: readonly BridgeEdge[]): ClusterMap {
   );
   const canon = quantityCanonicalizer();
 
-  // Union-find over edges sharing a (canonical) quantity.
-  const parent = edges.map((_, i) => i);
-  const find = (x: number): number => (parent[x] === x ? x : (parent[x] = find(parent[x])));
-  const union = (a: number, b: number): void => { parent[find(a)] = find(b); };
-  const qToEdges = new Map<string, number[]>();
-  edges.forEach((e, i) => {
-    for (const q of quantitiesOf(e, canon)) {
-      mapGetOrInsert(qToEdges, q, () => []).push(i);
-    }
-  });
-  for (const idxs of qToEdges.values()) {
-    for (let k = 1; k < idxs.length; k++) union(idxs[0], idxs[k]);
-  }
-
-  const groups = new Map<number, number[]>();
-  edges.forEach((_, i) => {
-    mapGetOrInsert(groups, find(i), () => []).push(i);
-  });
-
-  const clusters: LinkageCluster[] = [...groups.values()].map((idxs) => {
-    const es = idxs.map((i) => edges[i]);
+  // Edges sharing a (canonical) quantity are one cluster: the shared partition, already in
+  // the order this map always had (largest first, then by first edge id; input order inside).
+  const clusters: LinkageCluster[] = clusterBySharedKeys(
+    edges,
+    (e) => quantitiesOf(e, canon),
+    (e) => e.id,
+  ).map((es) => {
     const statusMix: Record<string, number> = {};
     const qcount: Record<string, number> = {};
     for (const e of es) {
@@ -485,7 +462,6 @@ function clusterMap(edges: readonly BridgeEdge[]): ClusterMap {
       hubs: Object.entries(qcount).filter(([, c]) => c >= 2).map(([q]) => q).sort(),
     };
   });
-  clusters.sort((a, b) => b.size - a.size || a.edges[0].localeCompare(b.edges[0]));
 
   return {
     clusters,

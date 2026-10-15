@@ -20,7 +20,7 @@
  */
 
 import type { BridgeEdge } from './edge.js';
-import { QUANTITY_IDENTIFICATIONS } from './compose.js';
+import { clusterBySharedKeys, quantityCanonicalizer } from './quantity-clusters.js';
 import type { EvidenceTag, RelationType } from '../relations/types.js';
 
 /**
@@ -319,48 +319,18 @@ export function formatFilterLegend(stats: VizFilterStats): string | null {
   );
 }
 
-/** Quantity-name canonicalizer from `QUANTITY_IDENTIFICATIONS` (matches `linkageMap`). */
-function makeCanon(): (name: string) => string {
-  const alias = new Map(QUANTITY_IDENTIFICATIONS.map((id) => [id.from, id.to]));
-  return (n) => alias.get(n) ?? n;
-}
-
 /** Distinct canonical quantity names of a junction (sources ∪ target). */
 function quantitiesOf(j: VizJunction): string[] {
   return [...new Set([...j.sources, j.target])];
 }
 
-/** Union-find component grouping of junctions sharing a (canonical) quantity. */
+/**
+ * Component grouping of junctions sharing a (canonical) quantity: the shared partition of
+ * `quantity-clusters.ts`, in the order the map always drew (largest first, then by first
+ * junction id; input order inside). The anchoring rule below is this module's own.
+ */
 function componentsOf(junctions: readonly VizJunction[]): VizCluster[] {
-  const parent = junctions.map((_, i) => i);
-  const find = (x: number): number =>
-    parent[x] === x ? x : (parent[x] = find(parent[x]));
-  const union = (a: number, b: number): void => {
-    parent[find(a)] = find(b);
-  };
-
-  const qToJunctions = new Map<string, number[]>();
-  junctions.forEach((j, i) => {
-    for (const qty of quantitiesOf(j)) {
-      const arr = qToJunctions.get(qty) ?? [];
-      arr.push(i);
-      qToJunctions.set(qty, arr);
-    }
-  });
-  for (const idxs of qToJunctions.values()) {
-    for (let k = 1; k < idxs.length; k++) union(idxs[0], idxs[k]);
-  }
-
-  const groups = new Map<number, number[]>();
-  junctions.forEach((_, i) => {
-    const r = find(i);
-    const arr = groups.get(r) ?? [];
-    arr.push(i);
-    groups.set(r, arr);
-  });
-
-  const clusters = [...groups.values()].map((idxs): VizCluster => {
-    const js = idxs.map((i) => junctions[i]);
+  return clusterBySharedKeys(junctions, quantitiesOf, (j) => j.id).map((js): VizCluster => {
     const quantities = [...new Set(js.flatMap(quantitiesOf))].sort();
     return {
       junctionIds: js.map((j) => j.id),
@@ -374,11 +344,6 @@ function componentsOf(junctions: readonly VizJunction[]): VizCluster[] {
       anchored: js.some((j) => j.status === 'law' || j.status === 'established'),
     };
   });
-  // Deterministic: largest first, then by first junction id.
-  clusters.sort(
-    (a, b) => b.size - a.size || a.junctionIds[0].localeCompare(b.junctionIds[0]),
-  );
-  return clusters;
 }
 
 /** A stable, collision-free id factory mapping arbitrary keys to safe ids. */
@@ -569,7 +534,7 @@ export function buildVizModel(
   edges: readonly BridgeEdge[],
   opts: VizOptions = {},
 ): VizModel {
-  const canon = makeCanon();
+  const canon = quantityCanonicalizer();
   const normalize = (j: VizJunction): VizJunction => ({
     ...j,
     sources: j.sources.map(canon),

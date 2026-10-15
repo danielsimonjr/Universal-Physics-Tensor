@@ -43,6 +43,7 @@ import { classifyIdentifiability, forwardClosure } from './identifiability.js';
 import { retrodict, retrodictNode, forwardEvaluate } from './retrodiction.js';
 import { proposeLinkCandidates } from './bridge-analysis.js';
 import type { LinkCandidate } from './bridge-analysis.js';
+import { clusterBySharedKeys } from './quantity-clusters.js';
 import { M_SUN_KG } from '../core/constants.js';
 import { REPRESENTATIVE_VALUES } from './representative-values.js';
 import type { RepresentativeValue } from './representative-values.js';
@@ -244,35 +245,45 @@ export interface DiscoveryOptions {
   readonly quantityAttributes?: ReadonlyMap<string, RegimeAttributes>;
 }
 
-/** Union-find over quantity names; merges each edge's endpoints and every
- *  identification's from↔to. Returns name → component-root. */
+/**
+ * The component partition of quantity names: names in one equation are one component, and so
+ * are the two sides of every identification. The shared partition of `quantity-clusters.ts`
+ * (a name is an item; its keys are the equations and identifications it appears in). Returns
+ * name → a representative of its component (its first name), read only for equality.
+ *
+ * RECORDED BEHAVIOUR, kept on purpose: an equation with no source (an all-constant right-hand
+ * side, `CE-bohr-radius`) registers no name at all, so its target is absent from the map and
+ * an identification touching it never counts as merging components. The union-find this
+ * replaced only registered a name when it took part in a union, and the census, the canonical
+ * funnel counts and the `map --proposed` golden pin that reading. Registering such a target
+ * makes `bohr-radius ≟ hubble-distance` promising; whether it should is a catalog decision,
+ * not this module's (`tests/composition/quantity-clusters.test.ts` pins the recorded reading
+ * by name).
+ */
 function quantityComponents(
   edges: readonly BridgeEdge[],
   idents: readonly QuantityIdentification[],
 ): Map<string, string> {
-  const parent = new Map<string, string>();
-  const find = (x: string): string => {
-    if (!parent.has(x)) parent.set(x, x);
-    let r = x;
-    while (parent.get(r) !== r) r = parent.get(r)!;
-    let cur = x;
-    while (parent.get(cur) !== r) {
-      const next = parent.get(cur)!;
-      parent.set(cur, r);
-      cur = next;
-    }
-    return r;
+  const keysByName = new Map<string, string[]>();
+  const tag = (name: string, key: string): void => {
+    const keys = keysByName.get(name);
+    if (keys === undefined) keysByName.set(name, [key]);
+    else keys.push(key);
   };
-  const union = (a: string, b: string) => {
-    parent.set(find(a), find(b));
-  };
-  for (const e of edges) {
-    const names = [...e.sources.map((s) => s.name), e.target.name];
-    for (let i = 1; i < names.length; i++) union(names[0], names[i]);
-  }
-  for (const id of idents) union(id.from, id.to);
+  edges.forEach((e, i) => {
+    if (e.sources.length === 0) return; // recorded behaviour: a source-less target is not registered
+    for (const s of e.sources) tag(s.name, `edge:${i}`);
+    tag(e.target.name, `edge:${i}`);
+  });
+  idents.forEach((id, i) => {
+    tag(id.from, `ident:${i}`);
+    tag(id.to, `ident:${i}`);
+  });
+  const names = [...keysByName.keys()];
   const roots = new Map<string, string>();
-  for (const name of parent.keys()) roots.set(name, find(name));
+  for (const cluster of clusterBySharedKeys(names, (name) => keysByName.get(name) ?? [], (name) => name)) {
+    for (const name of cluster) roots.set(name, cluster[0]);
+  }
   return roots;
 }
 
