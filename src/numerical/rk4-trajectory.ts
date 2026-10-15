@@ -31,7 +31,11 @@ export function rk4Trajectory(
   if (!Number.isInteger(steps) || steps <= 0) {
     throw new NumericalBackendError(`rk4Trajectory: step count must be a positive integer, got ${steps}`);
   }
-  const h = (t1 - t0) / steps;
+  // MathTS takes ceil(span/dt) steps of span/ceil(span/dt): when span/(span/steps)
+  // rounds a hair above `steps` it takes one extra, smaller step. `dt` is passed
+  // a few ulps above span/steps so that ceiling is exactly `steps`, and the step
+  // MathTS then uses is span/steps, the one asked for. The count is still checked.
+  const h = ((t1 - t0) / steps) * (1 + 4 * Number.EPSILON);
   const sol = solveODESystem(system, [...y0], [t0, t1], { dt: h });
   if (sol.y.length !== steps + 1) {
     throw new NumericalBackendError(`rk4Trajectory: expected ${steps + 1} states, got ${sol.y.length}`);

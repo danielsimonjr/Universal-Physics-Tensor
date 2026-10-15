@@ -34,6 +34,23 @@ describe('rk4Trajectory', () => {
     }
   });
 
+  it('takes exactly `steps` steps even where span/(span/steps) rounds a hair above the integer (MathTS ceils it)', () => {
+    // Find a (span, steps) pair on which the naive dt = span/steps would make MathTS take one extra step.
+    let found: { span: number; steps: number } | undefined;
+    for (let steps = 1; steps < 100_000 && found === undefined; steps++) {
+      const span = steps * 0.001;
+      if (Math.ceil(span / (span / steps)) !== steps) found = { span, steps };
+    }
+    expect(found).toBeDefined();
+    const { span, steps } = found!;
+    const traj = rk4Trajectory(harmonic, [1, 0], 0, span, steps);
+    expect(traj).toHaveLength(steps + 1);
+    // And the states are those of a step of exactly span/steps: the same as the step-by-step run.
+    let state = [1, 0];
+    for (let i = 0; i < steps; i++) state = integrateRK4(harmonic, state, 0, span / steps, 1);
+    expect(Math.abs(traj[steps]![0]! - state[0]!)).toBeLessThan(1e-13);
+  });
+
   it('refuses a non-positive or non-integer step count', () => {
     expect(() => rk4Trajectory(harmonic, [1, 0], 0, 1, 0)).toThrow(/step count/);
     expect(() => rk4Trajectory(harmonic, [1, 0], 0, 1, 2.5)).toThrow(/step count/);
