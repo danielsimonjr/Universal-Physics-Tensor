@@ -10,6 +10,7 @@ import { DIMENSIONLESS } from '../../dimensional/types.js';
 import { sym } from '../../dimensional/ast-builders.js';
 import { dimensionallyDetermines, type DimensionalDeterminationResult } from '../../dimensional/buckingham.js';
 import { validate } from '../../dimensional/validator.js';
+import { isDimensionless } from '../../dimensional/algebra.js';
 import type { DimensionalVariableRef, SearchBudget, SearchProblem } from './types.js';
 import { canEmitCandidate, type BudgetState } from './search-budget.js';
 import { powerLawDetermination, type PowerLawFit } from './power-law.js';
@@ -140,12 +141,11 @@ export function nativeDetermination(problem: SearchProblem): {
 } {
   const det = dimensionallyDetermines(problem.target, problem.governing);
   if (det.determined) return { det, unsearched: [] };
-  const isDimensionless = (g: DimensionalVariableRef) => Object.values(g.dim).every((e) => e === 0);
-  const dimless = problem.governing.filter(isDimensionless);
+  const dimless = problem.governing.filter((g) => isDimensionless(g.dim));
   if (dimless.length === 0) return { det, unsearched: [] };
   const reduced = dimensionallyDetermines(
     problem.target,
-    problem.governing.filter((g) => !isDimensionless(g)),
+    problem.governing.filter((g) => !isDimensionless(g.dim)),
   );
   return reduced.determined
     ? { det: reduced, unsearched: dimless.map((g) => g.name) }
