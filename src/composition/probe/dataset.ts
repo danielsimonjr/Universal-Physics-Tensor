@@ -16,6 +16,7 @@
  */
 
 import { readFileSync } from 'node:fs';
+import { readJsonFile } from '../../core/data-file.js';
 import type { DatasetRole, ObservationRow, ProbeDataset } from './types.js';
 import { SCHEMA_VERSION } from './types.js';
 
@@ -119,7 +120,7 @@ export function asDatasetSafe(raw: unknown, fallbackId: string, fallbackRole?: D
 
 /** Load a single ProbeDataset JSON object. @internal */
 export function loadDatasetFromJson(path: string, fallbackRole?: DatasetRole): ProbeDataset {
-  const raw = JSON.parse(readFileSync(path, 'utf8')) as unknown;
+  const raw = readJsonFile(path);
   return asDatasetSafe(raw, path, fallbackRole);
 }
 
@@ -130,7 +131,7 @@ export interface SplitFileDatasets {
 
 /** Load `{ exploratory, holdout }` JSON. @internal */
 export function loadSplitDatasetsFromJson(path: string): SplitFileDatasets {
-  const raw = JSON.parse(readFileSync(path, 'utf8')) as {
+  const raw = readJsonFile(path) as {
     exploratory?: unknown;
     holdout?: unknown;
     observations?: unknown;

@@ -30,6 +30,8 @@
 import { pairwiseDot, pairwiseSum } from '@danielsimonjr/mathts-core';
 import { betainc, gammainc, gammaincp, inv, propagateUncertainty } from '@danielsimonjr/mathts-functions';
 import { numberFrom } from '../../core/mathts-read.js';
+import { readJsonFile } from '../../core/data-file.js';
+import { isPlainObject } from '../../core/json-schema.js';
 import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
@@ -141,16 +143,12 @@ function refuse(where: string, why: string): never {
   throw new StudyRefusal(`study refused (${where}): ${why}`);
 }
 
-function isObject(v: unknown): v is Record<string, unknown> {
-  return !!v && typeof v === 'object' && !Array.isArray(v);
-}
-
 function nonEmptyString(v: unknown): v is string {
   return typeof v === 'string' && v.trim().length > 0;
 }
 
 function quantity(raw: unknown, where: string): StudyQuantity {
-  if (!isObject(raw) || !nonEmptyString(raw.name) || typeof raw.unit !== 'string') {
+  if (!isPlainObject(raw) || !nonEmptyString(raw.name) || typeof raw.unit !== 'string') {
     refuse(where, 'needs {"name", "unit"} ("unit": "" for a dimensionless quantity)');
   }
   let parsed;
@@ -190,7 +188,7 @@ function governingQuantity(raw: unknown, where: string): StudyQuantity {
 }
 
 function parseFamily(raw: unknown, governing: readonly StudyQuantity[], where: string): StudyCorrection {
-  if (!isObject(raw) || !nonEmptyString(raw.input) || !Array.isArray(raw.powers)) {
+  if (!isPlainObject(raw) || !nonEmptyString(raw.input) || !Array.isArray(raw.powers)) {
     refuse(where, 'needs {"input": <dimensionless governing input>, "powers": [p, ...]}');
   }
   for (const k of Object.keys(raw)) {
@@ -210,7 +208,7 @@ function parseFamily(raw: unknown, governing: readonly StudyQuantity[], where: s
   }
   if (new Set(powers).size !== powers.length) refuse(`${where}.powers`, 'must be distinct');
   if (raw.reference === undefined) return { input: q.name, powers };
-  if (!isObject(raw.reference)) refuse(`${where}.reference`, 'must be {"<power>": number}, keyed by a declared power');
+  if (!isPlainObject(raw.reference)) refuse(`${where}.reference`, 'must be {"<power>": number}, keyed by a declared power');
   const reference: Record<string, number> = {};
   for (const [k, v] of Object.entries(raw.reference)) {
     if (!powers.some((p) => String(p) === k)) refuse(`${where}.reference`, `'${k}' is not a declared power of this family`);
@@ -242,7 +240,7 @@ function parseCorrection(raw: unknown, governing: readonly StudyQuantity[]): Stu
 const provenanceKey = (s: string): string => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 
 function parseProvenance(raw: unknown): StudyProvenance {
-  if (!isObject(raw)) refuse('provenance', 'is required: {"synthetic": true|false, "source": "..."}');
+  if (!isPlainObject(raw)) refuse('provenance', 'is required: {"synthetic": true|false, "source": "..."}');
   if (typeof raw.synthetic !== 'boolean') {
     refuse('provenance.synthetic', 'must be declared true or false; it is never inferred');
   }
@@ -262,7 +260,7 @@ function parseBaselines(raw: unknown, target: StudyQuantity, governing: readonly
   const checker = builtinFormulaDimensionChecker();
   return raw.map((b, i) => {
     const where = `baselines[${i}]`;
-    if (!isObject(b) || !nonEmptyString(b.name) || !nonEmptyString(b.formula)) {
+    if (!isPlainObject(b) || !nonEmptyString(b.name) || !nonEmptyString(b.formula)) {
       refuse(where, 'needs {"name", "formula"}');
     }
     let vars: readonly string[];
@@ -290,14 +288,14 @@ function parseDesign(
   governing: readonly StudyQuantity[],
 ): ProbeStudy['design'] {
   if (raw === undefined) return undefined;
-  if (!isObject(raw) || !isObject(raw.variables)) refuse('design', 'needs {"variables": {name: {"min", "max"}}}');
+  if (!isPlainObject(raw) || !isPlainObject(raw.variables)) refuse('design', 'needs {"variables": {name: {"min", "max"}}}');
   const byName = new Map(governing.map((g) => [g.name, g]));
   const out: Record<string, { min: number; max: number; steps: number }> = {};
   for (const [name, spec] of Object.entries(raw.variables)) {
     const q = byName.get(name);
     const where = `design.variables.${name}`;
     if (!q) refuse(where, 'is not a declared governing input');
-    if (!isObject(spec)) refuse(where, 'needs {"min", "max"}');
+    if (!isPlainObject(spec)) refuse(where, 'needs {"min", "max"}');
     const min = toSi(spec.min, q, `${where}.min`, 'absolute');
     const max = toSi(spec.max, q, `${where}.max`, 'absolute');
     if (min > max) refuse(where, 'has min > max');
@@ -318,9 +316,9 @@ function parseObservations(
   if (!Array.isArray(raw) || raw.length === 0) refuse('observations', 'must be a non-empty array');
   const ids = new Set<string>();
   const rows = raw.map((row, i): StudyObservation => {
-    const id = isObject(row) && nonEmptyString(row.id) ? row.id : `row-${i + 1}`;
+    const id = isPlainObject(row) && nonEmptyString(row.id) ? row.id : `row-${i + 1}`;
     const where = `observation ${id}`;
-    if (!isObject(row)) refuse(where, 'is not an object');
+    if (!isPlainObject(row)) refuse(where, 'is not an object');
     for (const k of Object.keys(row)) {
       if (!ROW_KEYS.has(k)) refuse(where, `undeclared key '${k}'`);
     }
@@ -329,7 +327,7 @@ function parseObservations(
     if (row.role !== 'exploratory' && row.role !== 'holdout' && row.role !== 'replication') {
       refuse(where, `role must be exploratory, holdout or replication (got '${String(row.role)}')`);
     }
-    if (!isObject(row.values)) refuse(where, 'needs "values": {input: value}');
+    if (!isPlainObject(row.values)) refuse(where, 'needs "values": {input: value}');
     for (const k of Object.keys(row.values)) {
       if (!governing.some((g) => g.name === k)) refuse(`${where} values.${k}`, 'is not a declared governing input');
     }
@@ -345,7 +343,7 @@ function parseObservations(
       refuse(where, 'has no uncertainty: give "sigma" on the row or on the target');
     }
     const sigma = positiveSigma(sigmaRaw, target, `${where} sigma`);
-    if (row.inputSigma !== undefined && !isObject(row.inputSigma)) refuse(where, '"inputSigma" must be {input: σ}');
+    if (row.inputSigma !== undefined && !isPlainObject(row.inputSigma)) refuse(where, '"inputSigma" must be {input: σ}');
     const rowInputSigma = (row.inputSigma ?? {}) as Record<string, unknown>;
     for (const k of Object.keys(rowInputSigma)) {
       if (!governing.some((g) => g.name === k)) refuse(`${where} inputSigma.${k}`, 'is not a declared governing input');
@@ -406,7 +404,7 @@ function guardLeakage(rows: readonly StudyObservation[]): void {
 
 /** Parse and validate a study file. Throws {@link StudyRefusal}. @internal */
 export function parseStudy(raw: unknown, source = 'inline'): ProbeStudy {
-  if (!isObject(raw)) refuse(source, 'is not a JSON object');
+  if (!isPlainObject(raw)) refuse(source, 'is not a JSON object');
   for (const k of Object.keys(raw)) {
     if (!TOP_KEYS.has(k)) refuse(source, `undeclared top-level key '${k}'`);
   }
@@ -418,7 +416,7 @@ export function parseStudy(raw: unknown, source = 'inline'): ProbeStudy {
   const governing = raw.governing.map((g, i) => governingQuantity(g, `governing[${i}]`));
   const names = [target.name, ...governing.map((g) => g.name)];
   if (new Set(names).size !== names.length) refuse('governing', 'names must be distinct from each other and from the target');
-  const gapRaw = isObject(raw.gap) ? raw.gap : {};
+  const gapRaw = isPlainObject(raw.gap) ? raw.gap : {};
   const gap = {
     id: nonEmptyString(gapRaw.id) ? gapRaw.id : 'fg-study',
     kind: nonEmptyString(gapRaw.kind) ? gapRaw.kind : 'unexplained-observation',
@@ -427,7 +425,7 @@ export function parseStudy(raw: unknown, source = 'inline'): ProbeStudy {
   if (!isGapKind(gap.kind)) refuse('gap.kind', `unknown gap kind '${gap.kind}'`);
   let alpha = DEFAULT_ALPHA;
   if (raw.criterion !== undefined) {
-    if (!isObject(raw.criterion) || typeof raw.criterion.alpha !== 'number') {
+    if (!isPlainObject(raw.criterion) || typeof raw.criterion.alpha !== 'number') {
       refuse('criterion', 'needs {"alpha": number}');
     }
     alpha = raw.criterion.alpha;
@@ -454,17 +452,12 @@ export function parseStudy(raw: unknown, source = 'inline'): ProbeStudy {
 
 /** Load a study JSON file. @internal */
 export function loadStudyFromJson(path: string): ProbeStudy {
-  return parseStudy(JSON.parse(readFileSync(path, 'utf8')), path);
+  return parseStudy(readJsonFile(path), path);
 }
 
 function readStudyRaw(path: string): unknown {
-  const text = readFileSync(path, 'utf8');
-  if (/\.csv$/i.test(path)) return studyCsvToRaw(text, path);
-  try {
-    return JSON.parse(text);
-  } catch (e) {
-    throw e instanceof SyntaxError ? new SyntaxError(`${path}: ${e.message}`) : e;
-  }
+  if (/\.csv$/i.test(path)) return studyCsvToRaw(readFileSync(path, 'utf8'), path);
+  return readJsonFile(path);
 }
 
 /**
@@ -489,7 +482,7 @@ const sameDim = (a: StudyQuantity, b: StudyQuantity) => a.name === b.name && equ
  * @internal
  */
 export function attachReplication(study: ProbeStudy, raw: unknown, source: string): ProbeStudy {
-  if (!isObject(raw)) refuse(source, 'is not a JSON object');
+  if (!isPlainObject(raw)) refuse(source, 'is not a JSON object');
   for (const k of Object.keys(raw)) {
     if (!REPLICATION_KEYS.has(k)) {
       refuse(source, `'${k}' belongs in the study file; a replication file carries only ${[...REPLICATION_KEYS].join(', ')}`);
@@ -710,7 +703,7 @@ function setPath(obj: Record<string, unknown>, path: readonly string[], value: u
   let at = obj;
   for (const k of path.slice(0, -1)) {
     if (at[k] === undefined) at[k] = {};
-    if (!isObject(at[k])) refuse(where, `'${k}' is already set to a value`);
+    if (!isPlainObject(at[k])) refuse(where, `'${k}' is already set to a value`);
     at = at[k] as Record<string, unknown>;
   }
   const last = path[path.length - 1]!;
@@ -802,12 +795,12 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
   for (const k of Object.keys(governingSigma)) {
     if (!governing.some((g) => g.name === k)) refuse(`${source} governing.${k}.sigma`, `'${k}' is not a governing input column`);
   }
-  if (isObject(raw.target)) {
+  if (isPlainObject(raw.target)) {
     for (const k of Object.keys(raw.target)) {
       if (k !== 'sigma') refuse(`${source} target.${k}`, "the target's name and unit come from its column; only 'target.sigma' is declared");
     }
   }
-  raw.target = { name: targetCol.name, unit: targetCol.unit, ...(isObject(raw.target) ? raw.target : {}) };
+  raw.target = { name: targetCol.name, unit: targetCol.unit, ...(isPlainObject(raw.target) ? raw.target : {}) };
   raw.governing = governing.map((g) => ({
     name: g.name,
     unit: g.unit,

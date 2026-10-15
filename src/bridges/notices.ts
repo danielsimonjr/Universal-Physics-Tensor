@@ -15,8 +15,8 @@ export function relationNotices(relation: CatalogRelation): string[] {
   const notes: string[] = [];
   if (relation.notice !== undefined) notes.push(relation.notice.text);
   // The names are read after the kebab rewrite: a bare identifier regex read be-39's
-  // `truncation-coefficient-b` as the constant `b`. A `reduced-planck-constant` spelling still
-  // misses `hbar` (a known defect of the hyphen rewrite, marked in tests/bridges/expression-names.test.ts).
+  // `truncation-coefficient-b` as the constant `b`. A `reduced-planck-constant` spelling is
+  // `hbar` (tests/bridges/expression-names.test.ts).
   for (const note of constantNotes(expressionNames(relation.expression))) notes.push(`note: ${note}`);
   return notes;
 }

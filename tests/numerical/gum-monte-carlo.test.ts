@@ -30,7 +30,10 @@ const CURVATURE_DRAWS = 20000;
  * 0.81% at that size, so this seed's be-74 value is 1.7% (2.2 spreads) under the prediction: the
  * draw resolves the sign of the second-order term, not its size. Every measured ratio here,
  * and the 20000-draw run at σ_B = 0.3 B that was replaced (1.0083 against 1.0223), came out
- * under its expectation; whether `mvnSample`'s tails are light was not tested.
+ * under its expectation. That is sampling, not a biased sampler: `tests/numerical/mvn-sample-bias.test.ts`
+ * measures `mvnSample`'s covariance and kurtosis as unbiased, the be-74 ratio over 60 seeds as √1.125, and
+ * this seed's first 20000 standard normals as having sample std 0.9917; every check here draws with
+ * that one seed, so its readings are not independent and come out low together.
  * MathTS `mvnSample` also drew the exactly singular ρ = 1 covariance without error; the jitter
  * is kept so the draw does not depend on how its factorization treats a zero pivot.
  */

@@ -17,7 +17,7 @@
  * @module canonical/linkage
  */
 import type { ExprNode } from '../dimensional/validator.js';
-import type { Dimension } from '../dimensional/types.js';
+import { isDimensionless } from '../dimensional/algebra.js';
 import { evalExpr } from '../composition/expr-eval.js';
 import { forEachScalarLeaf, isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
@@ -52,15 +52,6 @@ export interface LinkageResult {
     | 'dimensional-only'
     | 'unrelated';
 }
-
-const isDimensionless = (d: Dimension): boolean =>
-  d.L === 0 &&
-  d.M === 0 &&
-  d.T === 0 &&
-  d.I === 0 &&
-  d.Theta === 0 &&
-  d.N === 0 &&
-  d.J === 0;
 
 /**
  * Collect leaves `evalExpr` can't resolve (not a registered constant, not a

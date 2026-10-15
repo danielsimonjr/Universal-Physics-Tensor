@@ -145,17 +145,8 @@ function statisticDistribution(outcomes: readonly Outcome[]) {
   return { sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'), tables: n('table') };
 }
 
-/** The one number formatter, as every command reads it: through `ctx.api`. */
-type Fmt = CommandCtx['api']['formatQuantity'];
-
-/** A fraction as a percentage: a statistic, three significant digits (`-43.7%`, `±150%`), never fifteen. */
-function percent(fmt: Fmt, x: number): string {
-  return `${fmt(x * 100, 3)}%`;
-}
-
-function signedPercent(fmt: Fmt, x: number): string {
-  return `${x > 0 ? '+' : ''}${percent(fmt, x)}`;
-}
+/** A fraction printed as a percentage is a statistic: three significant digits (`-43.7%`, `±150%`), never fifteen. */
+const STATISTIC = { significant: 3 } as const;
 
 /** Count by rigor tier, over the confrontations given. */
 function rigorDistributionOf(tiers: readonly RigorTier[]): Record<RigorTier, number> {
@@ -380,11 +371,11 @@ async function run(ctx: CommandCtx): Promise<number> {
             ? `rule: ${c.rule} · ${c.withinBound ? 'compatible ✓' : 'BELOW THE LIMIT'}`
             : c.agreementBound === null
               ? 'no agreement bound in this outcome, so no compatibility decision'
-              : `agreement bound ±${percent(api.formatQuantity, c.agreementBound)} (the record's stated tolerance, not a measured difference) · ` +
+              : `agreement bound ±${api.formatPercent(c.agreementBound, STATISTIC)} (the record's stated tolerance, not a measured difference) · ` +
                 `|difference| ≤ bound: ${c.withinBound ? 'compatible ✓' : 'OUTSIDE BOUND'}`;
         out(
           `    predicted ${outcome.predicted} approaches ${outcome.approaches} ${outcome.units} · ` +
-            `actual difference ${signedPercent(api.formatQuantity, c.relativeDifference)} = ${c.definition} · ${verdict}`,
+            `actual difference ${api.formatPercent(c.relativeDifference, { ...STATISTIC, signed: true })} = ${c.definition} · ${verdict}`,
         );
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);
         break;

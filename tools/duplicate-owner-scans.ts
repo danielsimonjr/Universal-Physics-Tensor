@@ -237,7 +237,7 @@ const BASE_KEYS = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
 type Exponents = Record<(typeof BASE_KEYS)[number], number>;
 
 /** The exponents an object literal `{ L: -3, M: 1, … }` or a `dim(L, M, T, …)` call states; bases not written are 0. */
-function dimensionLiterals(source: string): Exponents[] {
+export function dimensionLiterals(source: string): Exponents[] {
   const out: Exponents[] = [];
   const zero = (): Exponents => ({ L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 });
   for (const m of source.matchAll(/\{([^{}]*)\}/g)) {
@@ -280,18 +280,13 @@ export function massDensityAssignment(source: string): boolean {
 /**
  * Files that state the mass-density shape by exponents and have not yet been
  * moved to the `MASS_DENSITY` import. Found when the scan began matching by
- * exponents instead of by name; each is a `const DENSITY = dim(-3, 1, …)` in a
- * module another change owns. The list only shrinks:
+ * exponents instead of by name; the five found then (the diffusion family's
+ * dimensions and four canonical entry modules) now read `MASS_DENSITY`, so the
+ * list is empty. It only shrinks:
  * `tests/architecture/single-owner.test.ts` fails when a file here no longer
  * states the shape (remove it) or when a copy outside it appears (a hit).
  */
-export const MASS_DENSITY_PENDING: readonly string[] = [
-  'src/atlas/diffusion/dimensions.ts',
-  'src/canonical/entries/fluids-waves.ts',
-  'src/canonical/entries/nonmonomial.ts',
-  'src/canonical/entries/relativity.ts',
-  'src/canonical/entries/thermo-nuclear-cosmo.ts',
-];
+export const MASS_DENSITY_PENDING: readonly string[] = [];
 
 /** Every file under `src/` that states the mass-density shape by exponents, sorted. */
 export function massDensityStatements(root: string): string[] {

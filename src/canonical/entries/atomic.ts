@@ -26,12 +26,12 @@ import {
   CHARGE,
   FREQUENCY,
   DIMENSIONLESS,
+  PERMITTIVITY,
+  MOMENTUM,
 } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
-const PERMITTIVITY = dim(-3, -1, 4, 2); // ε₀ [L⁻³ M⁻¹ T⁴ I²]
 const MAGNETIC_MOMENT = dim(2, 0, 0, 1); // [L² I] (A·m²)
-const MOMENTUM = dim(1, 1, -1); // [L M T⁻¹]
 
 export const ATOMIC: readonly CanonicalEquation[] = [
   l1({ name: 'rydberg-energy', dim: ENERGY }, [

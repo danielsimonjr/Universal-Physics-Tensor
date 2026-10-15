@@ -27,7 +27,20 @@ export function formatExact(value: number): string {
   return String(value);
 }
 
-/** The fraction `x` as a percentage with `digits` decimals: `0.1234` → `12.3%`. @internal */
-export function formatPercent(x: number, digits = 1): string {
-  return `${(100 * x).toFixed(digits)}%`;
+/** How {@link formatPercent} prints a statistic: significant digits, and a `+` on a positive value when `signed`. @internal */
+export interface PercentDigits {
+  readonly significant: number;
+  readonly signed?: boolean;
+}
+
+/**
+ * The fraction `x` as a percentage. A number of `digits` fixes the decimals
+ * (`0.1234` → `12.3%`); `{ significant }` prints that many significant digits
+ * through {@link formatQuantity} (`-0.437` → `-43.7%`, `1.5` → `150%`), and
+ * `signed` adds `+` to a positive value (`+25.7%`; zero stays `0%`).
+ * @internal
+ */
+export function formatPercent(x: number, digits: number | PercentDigits = 1): string {
+  if (typeof digits === 'number') return `${(100 * x).toFixed(digits)}%`;
+  return `${digits.signed === true && x > 0 ? '+' : ''}${formatQuantity(x * 100, digits.significant)}%`;
 }

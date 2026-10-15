@@ -252,8 +252,10 @@ function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string): ne
     throw new CliError(`upt probe: file not found: ${errno.path ?? context ?? 'unknown'}`);
   }
   if (e instanceof SyntaxError) {
+    // The JSON readers prefix the file's path; a context that names it already drops the repeat.
+    const message = context !== undefined && e.message.startsWith(`${context}: `) ? e.message.slice(context.length + 2) : e.message;
     throw new CliError(
-      `upt probe: invalid JSON${context ? ` in ${context}` : ''}: ${e.message}`,
+      `upt probe: invalid JSON${context ? ` in ${context}` : ''}: ${message}`,
     );
   }
   // The loader checks every field it reads and names the one that is wrong.

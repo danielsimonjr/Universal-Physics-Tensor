@@ -47,5 +47,7 @@ describe('upt probe design names the file an invalid JSON message is about', () 
     const r = await run(['probe', 'design', `--h1=${files.h1}`, `--h2=${files.h2}`, `--bounds=${files.bounds}`]);
     expect(r.code).toBe(1);
     expect(r.stderr).toContain(`upt probe: invalid JSON in ${bad}:`);
+    // The reader's SyntaxError already starts with the path; the message names it once.
+    expect(r.stderr).not.toContain(`${bad}: ${bad}`);
   });
 });

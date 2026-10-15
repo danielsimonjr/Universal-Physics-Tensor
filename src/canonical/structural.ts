@@ -16,8 +16,10 @@
  *
  * @module canonical/structural
  */
+import { compareCodepoint } from '../core/compare.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
+import { exactlyEquals } from '../dimensional/algebra.js';
 import { validate } from '../dimensional/validator.js';
 import { BRIDGE_RHS_BY_ID } from '../bridges/rhs-registry.js';
 import { CANONICAL_EQUATIONS } from './registry.js';
@@ -97,15 +99,6 @@ export interface ChainProvisional {
 /** Decision (a) for one chain. @internal */
 export type ChainClassification = ChainConfirmation | ChainRestatement | ChainProvisional;
 
-const dimEqual = (a: Dimension, b: Dimension): boolean =>
-  a.L === b.L &&
-  a.M === b.M &&
-  a.T === b.T &&
-  a.I === b.I &&
-  a.Theta === b.Theta &&
-  a.N === b.N &&
-  a.J === b.J;
-
 function isStructuralPair(value: ExprNode | StructuralPair): value is StructuralPair {
   return !('kind' in value) && 'bridgeId' in value;
 }
@@ -113,7 +106,7 @@ function isStructuralPair(value: ExprNode | StructuralPair): value is Structural
 function comparePair(pair: StructuralPair, opts: StructuralOptions = {}): StructuralRelation {
   const leftNormal = pair.leftNormal ?? normalForm(pair.left);
   const rightNormal = pair.rightNormal ?? normalForm(pair.right);
-  const dimMatch = pair.rightDim != null && dimEqual(pair.rightDim, pair.leftDim);
+  const dimMatch = pair.rightDim != null && exactlyEquals(pair.rightDim, pair.leftDim);
   const hashMatch = leftNormal === rightNormal;
   // The hash is the cheap key; the step runs only on a miss, and only when the
   // dimensions agree (a different dimension is a different relation).
@@ -208,7 +201,7 @@ function classifyChain(expr: ExprNode, edgeIds: readonly string[], opts: Structu
   restatements.sort((a, b) => {
     const byBridge = bridgeRank(a.restatesBridge) - bridgeRank(b.restatesBridge);
     if (byBridge !== 0) return byBridge;
-    return a.canonicalId < b.canonicalId ? -1 : a.canonicalId > b.canonicalId ? 1 : 0;
+    return compareCodepoint(a.canonicalId, b.canonicalId);
   });
   const restatement = restatements[0];
   if (restatement !== undefined) {

@@ -4,7 +4,8 @@
  * @internal
  */
 
-import { readFileSync } from 'node:fs';
+import { readJsonFile } from '../../core/data-file.js';
+import { isPlainObject } from '../../core/json-schema.js';
 import { dirname, isAbsolute, resolve } from 'node:path';
 import { parseDimensionSpec } from '../../dimensional/dimension-spec.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
@@ -93,11 +94,9 @@ function kindOf(v: unknown): string {
   return typeof v === 'object' ? 'an object' : typeof v;
 }
 
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
-
 /** A `{"name", "dim"}` variable, read from `raw` and located by `where` in any refusal. */
 function varFromJson(raw: unknown, where: string): DimensionalVariableRef {
-  if (!isRecord(raw)) {
+  if (!isPlainObject(raw)) {
     throw new ProblemFileError(`${where} must be {"name": text, "dim": text} (found ${kindOf(raw)})`);
   }
   const { name, dim } = raw;
@@ -131,7 +130,7 @@ export interface ProblemFile {
 
 /** Load a SearchProblem from a JSON file (optionally with inline datasets). @internal */
 export function loadSearchProblemFromJson(path: string): SearchProblem {
-  const raw = JSON.parse(readFileSync(path, 'utf8')) as ProblemFile;
+  const raw = readJsonFile(path) as ProblemFile;
   return searchProblemFromFile(raw, path);
 }
 
@@ -151,7 +150,7 @@ export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): Sear
   // `ProblemFile` is what a well-formed file holds; a file read from disk is any JSON value, so
   // each field is checked here before it is read, and a refusal names the field.
   const file: unknown = raw;
-  if (!isRecord(file)) {
+  if (!isPlainObject(file)) {
     throw new ProblemFileError(`the top level must be a JSON object with "target" and "governing" (found ${kindOf(file)})`);
   }
   if (file.target === undefined) throw new ProblemFileError('it has no "target" ({"name": text, "dim": text})');
@@ -159,7 +158,7 @@ export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): Sear
   if (!Array.isArray(file.governing)) {
     throw new ProblemFileError(`"governing" must be a list of {"name": text, "dim": text} (found ${kindOf(file.governing)})`);
   }
-  if (file.gap !== undefined && !isRecord(file.gap)) {
+  if (file.gap !== undefined && !isPlainObject(file.gap)) {
     throw new ProblemFileError(`"gap" must be an object (found ${kindOf(file.gap)})`);
   }
   for (const field of ['id', 'kind', 'summary'] as const) {
@@ -226,7 +225,7 @@ function textList(raw: unknown, field: string): readonly string[] {
 
 /** A `{name: text}` object, located by its field name. */
 function textRecord(raw: unknown, field: string): Readonly<Record<string, string>> {
-  if (!isRecord(raw)) throw new ProblemFileError(`"${field}" must be {name: text} (found ${kindOf(raw)})`);
+  if (!isPlainObject(raw)) throw new ProblemFileError(`"${field}" must be {name: text} (found ${kindOf(raw)})`);
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(raw)) {
     if (typeof v !== 'string') throw new ProblemFileError(`${field}.${k} must be text (found ${kindOf(v)})`);
@@ -236,7 +235,7 @@ function textRecord(raw: unknown, field: string): Readonly<Record<string, string
 }
 
 function discrepancyFromJson(raw: unknown): DiscrepancyDefinition {
-  if (!isRecord(raw)) throw new ProblemFileError(`"discrepancy" must be {"kind": text, "observableIds": [text]} (found ${kindOf(raw)})`);
+  if (!isPlainObject(raw)) throw new ProblemFileError(`"discrepancy" must be {"kind": text, "observableIds": [text]} (found ${kindOf(raw)})`);
   if (typeof raw.kind !== 'string' || !DISCREPANCY_KINDS.has(raw.kind)) {
     throw new ProblemFileError(
       `discrepancy.kind '${String(raw.kind)}' is not a discrepancy kind (${[...DISCREPANCY_KINDS].join(', ')})`,
@@ -260,9 +259,9 @@ function limitsFromJson(raw: unknown): NonNullable<SearchProblem['limits']> {
   const shape = '{"id": text, "regime": {name: text}}';
   if (!Array.isArray(raw)) throw new ProblemFileError(`"limits" must be a list of ${shape} (found ${kindOf(raw)})`);
   return raw.map((l, i) => {
-    if (!isRecord(l)) throw new ProblemFileError(`limits[${i}] must be ${shape} (found ${kindOf(l)})`);
+    if (!isPlainObject(l)) throw new ProblemFileError(`limits[${i}] must be ${shape} (found ${kindOf(l)})`);
     if (typeof l.id !== 'string' || l.id === '') throw new ProblemFileError(`limits[${i}].id must be text`);
-    if (!isRecord(l.regime)) throw new ProblemFileError(`limits[${i}].regime must be {name: text} (found ${kindOf(l.regime)})`);
+    if (!isPlainObject(l.regime)) throw new ProblemFileError(`limits[${i}].regime must be {name: text} (found ${kindOf(l.regime)})`);
     const regime = textRecord(l.regime, `limits[${i}].regime`);
     if (l.description !== undefined && typeof l.description !== 'string') {
       throw new ProblemFileError(`limits[${i}].description must be text (found ${kindOf(l.description)})`);
@@ -294,7 +293,7 @@ function child(raw: Record<string, unknown>, field: string, path: string, what: 
  * Refusals are {@link ProblemFileError}, located by `path`.
  */
 function assertExprNode(raw: unknown, path: string): ExprNode {
-  if (!isRecord(raw) || !('kind' in raw)) {
+  if (!isPlainObject(raw) || !('kind' in raw)) {
     throw new ProblemFileError(`${path} is not an ExprNode JSON object (found ${kindOf(raw)})`);
   }
   const kind = raw.kind;
@@ -306,7 +305,7 @@ function assertExprNode(raw: unknown, path: string): ExprNode {
       if (typeof raw.name !== 'string' || raw.name.length === 0) {
         throw new ProblemFileError(`${path} symbol node missing name (needs "name": text)`);
       }
-      if (!isRecord(raw.dim)) throw new ProblemFileError(`${path} symbol node missing dim`);
+      if (!isPlainObject(raw.dim)) throw new ProblemFileError(`${path} symbol node missing dim`);
       for (const k of DIM_KEYS) {
         if (!(k in raw.dim)) throw new ProblemFileError(`${path} symbol node dim needs the exponents ${DIM_KEYS.join(', ')}`);
         if (typeof raw.dim[k] !== 'number' || !Number.isFinite(raw.dim[k])) {
@@ -360,9 +359,9 @@ function assertExprNode(raw: unknown, path: string): ExprNode {
  * checked recursively; a file that is not an expression raises {@link ProblemFileError}. @internal
  */
 export function parseExprJson(path: string): ExprNode {
-  const raw: unknown = JSON.parse(readFileSync(path, 'utf8'));
-  if (isRecord(raw) && 'kind' in raw) return assertExprNode(raw, path);
-  if (isRecord(raw) && 'expression' in raw && raw.expression) {
+  const raw: unknown = readJsonFile(path);
+  if (isPlainObject(raw) && 'kind' in raw) return assertExprNode(raw, path);
+  if (isPlainObject(raw) && 'expression' in raw && raw.expression) {
     return assertExprNode(raw.expression, path);
   }
   throw new ProblemFileError(`${path} is not an ExprNode JSON object`);

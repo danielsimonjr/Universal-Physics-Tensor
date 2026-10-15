@@ -22,19 +22,10 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
-import { equals } from '../dimensional/algebra.js';
+import { equals, isDimensionless } from '../dimensional/algebra.js';
 import { DIMENSION_RENAMES, quantityIdForSpelling } from '../dimensional/formula-names.js';
 import { isRegisteredConstant, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
-
-const isDimensionless = (d: Dimension): boolean =>
-  d.L === 0 &&
-  d.M === 0 &&
-  d.T === 0 &&
-  d.I === 0 &&
-  d.Theta === 0 &&
-  d.N === 0 &&
-  d.J === 0;
 
 /** Token for a node that carries no structural content (a dimensionless factor). */
 const UNIT = '1';

@@ -1,7 +1,7 @@
 /**
  * Kebab catalog names are one token. A parser that treats `-` as subtraction
- * splits them. Longest match first, so a longer declared name wins over a
- * shorter one that is its suffix.
+ * splits them. Leftmost longest match, so a longer declared name or constant
+ * spelling wins over a shorter one inside it.
  *
  * @module dimensional/hyphen-names
  */
@@ -13,29 +13,52 @@ export function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/** A hyphenated spelling a registered constant could have: letters and digits, no underscore. */
+const CONSTANT_SPELLING = /^[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)+$/;
+
 /**
  * Rewrite declared kebab-case names to underscores. Names without a hyphen
  * stay. A hyphen that is not a declared name stays subtraction.
+ *
+ * Each hyphenated word is scanned left to right, segment by segment; at each
+ * segment the longest run of segments that is a declared name (written with
+ * underscores) or a registered constant's hyphenated spelling (written as the
+ * constant's primary name: `speed-of-light` is `c`) is taken, a declared name
+ * before a constant spelling of the same length. So a declared name inside a
+ * longer constant spelling does not win: `reduced-planck-constant` is `hbar`,
+ * not `reduced - planck_constant`.
  */
 export function rewriteCatalogHyphens(
   text: string,
   catalogNames: ReadonlySet<string> | Iterable<string>,
 ): string {
-  const names = [...catalogNames]
-    .filter((n) => n.includes('-'))
-    .sort((a, b) => b.length - a.length || a.localeCompare(b));
-  let out = text;
-  for (const name of names) {
-    const underscored = name.replace(/-/g, '_');
-    const re = new RegExp(`(?<![A-Za-z0-9_])${escapeRegExp(name)}(?![A-Za-z0-9_])`, 'g');
-    out = out.replace(re, underscored);
+  const declared = new Set([...catalogNames].filter((n) => n.includes('-')));
+  return text.replace(/[A-Za-z0-9_]+(?:-[A-Za-z0-9_]+)+/g, (word) => rewriteWord(word, declared));
+}
+
+/** One hyphenated word, rewritten by the leftmost-longest segment scan. */
+function rewriteWord(word: string, declared: ReadonlySet<string>): string {
+  const segments = word.split('-');
+  const out: string[] = [];
+  let i = 0;
+  while (i < segments.length) {
+    let taken: { readonly end: number; readonly token: string } | undefined;
+    for (let end = segments.length; end > i + 1 && taken === undefined; end--) {
+      const candidate = segments.slice(i, end).join('-');
+      if (declared.has(candidate)) {
+        taken = { end, token: candidate.replace(/-/g, '_') };
+      } else if (CONSTANT_SPELLING.test(candidate)) {
+        const record = constantRecord(candidate);
+        if (record !== undefined) taken = { end, token: record.name };
+      }
+    }
+    if (taken === undefined) {
+      out.push(segments[i]!);
+      i += 1;
+    } else {
+      out.push(taken.token);
+      i = taken.end;
+    }
   }
-  // A hyphenated spelling of a registered constant (`speed-of-light`) is that constant, by its
-  // primary name (`c`), whether or not the caller declared it: the formula then reads the baked
-  // value, and the hyphens are not subtractions.
-  out = out.replace(/(?<![A-Za-z0-9_])[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)+(?![A-Za-z0-9_])/g, (word) => {
-    const record = constantRecord(word);
-    return record === undefined ? word : record.name;
-  });
-  return out;
+  return out.join('-');
 }

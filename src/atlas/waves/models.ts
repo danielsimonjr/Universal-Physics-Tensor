@@ -16,7 +16,7 @@
 import { dim } from '../../dimensional/ast-builders.js';
 import type { DimensionalVariable } from '../../dimensional/buckingham.js';
 import type { Dimension } from '../../dimensional/types.js';
-import { FORCE, FREQUENCY, VELOCITY } from '../../dimensional/types.js';
+import { FORCE, FREQUENCY, LINEAR_DENSITY, PRESSURE, VELOCITY } from '../../dimensional/types.js';
 import { DENSITY } from '../diffusion/dimensions.js';
 import type { AtlasModel } from '../model.js';
 import { makeRegime } from '../regime.js';
@@ -24,17 +24,14 @@ import { makeRegime } from '../regime.js';
 /** The family name every wave record carries. @internal */
 export const WAVES_FAMILY_NAME = 'waves';
 
-/** kg/m, `L^-1 M` — `src/canonical/entries/dimensional-classics.ts` (`LIN_DENSITY`). @internal */
-export const LINEAR_DENSITY: Dimension = dim(-1, 1);
+/** kg/m (`L^-1 M`) and Pa (`L^-1 M T^-2`): the named shapes of `dimensional/types.ts`. @internal */
+export { LINEAR_DENSITY, PRESSURE };
 
-/** Pa, `L^-1 M T^-2` — `src/canonical/entries/fluids-waves.ts` (`PRESSURE`). @internal */
-export const PRESSURE: Dimension = dim(-1, 1, -2);
+/** rad/m, `L^-1`: the named shape of `dimensional/types.ts`. @internal */
+export { WAVENUMBER } from '../../dimensional/types.js';
 
 /** Flexural rigidity E·I, N·m², `L^3 M T^-2`. @internal */
 export const FLEXURAL_RIGIDITY: Dimension = dim(3, 1, -2);
-
-/** rad/m, `L^-1`. @internal */
-export const WAVENUMBER: Dimension = dim(-1);
 
 interface ModelSpec {
   readonly id: string;

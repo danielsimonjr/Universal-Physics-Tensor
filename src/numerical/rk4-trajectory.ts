@@ -1,12 +1,11 @@
 /**
- * Fixed-step classical RK4 that keeps EVERY state of the run, for the callers
- * that read a quantity off the whole motion (a supremum over a window, a zero
- * crossing) rather than off the final state. `integrateRK4`
- * (`null-ray-integrator.ts`) is the same MathTS `solveODESystem` call with
- * `dt` set and returns the last state only; a caller that re-entered it once
- * per sample would not reproduce one continuous fixed-step run, which is why
- * this module exists beside it. The two agree on the final state bit for bit
- * (`tests/numerical/rk4-trajectory.test.ts`).
+ * Fixed-step classical RK4 that keeps EVERY state of the run: the one owner of
+ * the fixed-step count. `integrateRK4` (`null-ray-integrator.ts`) returns its
+ * last state and `integrateGeodesic` (`geodesic-integrator.ts`) samples its
+ * states; callers that read a quantity off the whole motion (a supremum over a
+ * window, a zero crossing) call it directly. A caller that re-entered a
+ * one-step integrator once per sample would not reproduce one continuous
+ * fixed-step run (`tests/numerical/rk4-trajectory.test.ts`).
  *
  * @module numerical/rk4-trajectory
  */

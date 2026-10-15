@@ -36,16 +36,17 @@ import {
   AREA,
   FREQUENCY,
   ENERGY,
+  PRESSURE,
+  MASS_DENSITY,
+  VOLUME,
+  VISCOSITY,
+  SPRING_CONSTANT,
 } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
-const PRESSURE = dim(-1, 1, -2); // pascal [M L⁻¹ T⁻²]
-const DENSITY = dim(-3, 1, 0); // [M L⁻³]
-const VOLUME = dim(3, 0, 0); // [L³]
-const VISCOSITY = dim(-1, 1, -1); // dynamic viscosity, Pa·s [M L⁻¹ T⁻¹]
+const DENSITY = MASS_DENSITY; // [M L⁻³]
 const VOLUME_FLOW_RATE = dim(3, 0, -1); // [L³ T⁻¹]
-const SURFACE_TENSION = dim(0, 1, -2); // N/m [M T⁻²]
-const SPRING_CONSTANT = dim(0, 1, -2); // N/m [M T⁻²]
+const SURFACE_TENSION = SPRING_CONSTANT; // N/m [M T⁻²]
 
 export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
   l1({ name: 'pressure', dim: PRESSURE }, [

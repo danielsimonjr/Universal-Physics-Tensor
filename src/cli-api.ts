@@ -309,6 +309,8 @@ export { assertSynonymAgreement, expandSynonymValues } from './dimensional/formu
 export { CANONICAL_GROUP_PREFACTORS } from './composition/canonical-prefactors.js';
 /** The one number formatter of explain text. */
 export { formatQuantity, formatExact } from './composition/explain.js';
+/** A fraction printed as a percentage (fixed decimals, or significant digits for a statistic). */
+export { formatPercent } from './core/format.js';
 /** A monomial odd in both carrier charge and mobility with opposite signs. */
 export { CarrierSignError } from './bridges/carrier-sign.js';
 /** The constant values a natural-unit mode overrides. */
