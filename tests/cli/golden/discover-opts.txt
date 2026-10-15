@@ -235,27 +235,27 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [to make it testable — premise: thermal-wavelength and planck-length are the same physical quantity, not only both [length] · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and planck-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
 
-  MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):
-    attempt-frequency ≟ hubble-rate                      ~30.7 orders apart
-    barrier-height ≟ planck-mass-energy                  ~28.8 orders apart
-    barrier-width ≟ planck-length                        ~24.8 orders apart
-    donor-acceptor-distance ≟ planck-length              ~26.5 orders apart
-    foerster-radius ≟ planck-length                      ~26.5 orders apart
-    grw-localization-rate ≟ attempt-frequency            ~29 orders apart
-    landauer-erasure-energy ≟ planck-mass-energy         ~29.8 orders apart
-    landauer-erasure-energy ≟ vacuum-expectation-value   ~13.1 orders apart
-    mass ≟ planck-mass                                   ~38 orders apart  (anchor-derived)
-    mass ≟ tunneling-mass                                ~57.1 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ barrier-width                 ~13.5 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ donor-acceptor-distance       ~11.8 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ foerster-radius               ~11.8 orders apart  (anchor-derived)
-    schwarzschild-radius ≟ planck-length                 ~38.3 orders apart  (anchor-derived)
-    thermal-wavelength ≟ barrier-width                   ~23.7 orders apart  (anchor-derived)
-    thermal-wavelength ≟ donor-acceptor-distance         ~25.4 orders apart  (anchor-derived)
-    thermal-wavelength ≟ foerster-radius                 ~25.4 orders apart  (anchor-derived)
-    tunneling-mass ≟ planck-mass                         ~19.1 orders apart
-    vacuum-expectation-value ≟ barrier-height            ~12.1 orders apart
-    vacuum-expectation-value ≟ planck-mass-energy        ~16.7 orders apart
+  MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):
+    attempt-frequency ≟ hubble-rate                      ~30.7 orders apart, p = 3.3e-104
+    barrier-height ≟ planck-mass-energy                  ~28.8 orders apart, p = 4.15e-92
+    barrier-width ≟ planck-length                        ~24.8 orders apart, p = 8.42e-69
+    donor-acceptor-distance ≟ planck-length              ~26.5 orders apart, p = 2.73e-78
+    foerster-radius ≟ planck-length                      ~26.5 orders apart, p = 2.73e-78
+    grw-localization-rate ≟ attempt-frequency            ~29 orders apart, p = 1.9e-93
+    landauer-erasure-energy ≟ planck-mass-energy         ~29.8 orders apart, p = 9.24e-99
+    landauer-erasure-energy ≟ vacuum-expectation-value   ~13.1 orders apart, p = 1.59e-20
+    mass ≟ planck-mass                                   ~38 orders apart, p = 1.03e-158  (anchor-derived)
+    mass ≟ tunneling-mass                                ~57.1 orders apart, p < 1e-300  (anchor-derived)
+    schwarzschild-radius ≟ barrier-width                 ~13.5 orders apart, p = 1.65e-21  (anchor-derived)
+    schwarzschild-radius ≟ donor-acceptor-distance       ~11.8 orders apart, p = 8.53e-17  (anchor-derived)
+    schwarzschild-radius ≟ foerster-radius               ~11.8 orders apart, p = 8.53e-17  (anchor-derived)
+    schwarzschild-radius ≟ planck-length                 ~38.3 orders apart, p = 3.31e-161  (anchor-derived)
+    thermal-wavelength ≟ barrier-width                   ~23.7 orders apart, p = 5.39e-63  (anchor-derived)
+    thermal-wavelength ≟ donor-acceptor-distance         ~25.4 orders apart, p = 4.44e-72  (anchor-derived)
+    thermal-wavelength ≟ foerster-radius                 ~25.4 orders apart, p = 4.44e-72  (anchor-derived)
+    tunneling-mass ≟ planck-mass                         ~19.1 orders apart, p = 1.26e-41
+    vacuum-expectation-value ≟ barrier-height            ~12.1 orders apart, p = 1.24e-17
+    vacuum-expectation-value ≟ planck-mass-energy        ~16.7 orders apart, p = 3.62e-32
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     attempt-frequency ≟ frequency                        [[frequency]]
