@@ -53,14 +53,16 @@ function isMetric(s: string | undefined): s is MetricId {
 
 /**
  * The metric library refuses a bad value (a non-positive mass, a point inside
- * the horizon, an unknown parameter, a start the integrator cannot take, a
- * parameter in the wrong unit) with `MetricMassError`, a `UnitError`, or a
- * plain `Error`. Each is a bad value, exit 1. Any other class (a TypeError, a
- * RangeError) is a defect and is not converted.
+ * the horizon, an unknown or repeated parameter, a start the integrator cannot
+ * take, a parameter in the wrong unit) with `MetricMassError`,
+ * `MetricValueError` or a `UnitError`. Each is a bad value, exit 1. Any other
+ * class (a plain `Error`, a TypeError, a RangeError) is a defect and is not
+ * converted.
  */
 function metricValueError(api: CommandCtx['api'], e: unknown): unknown {
-  if (e instanceof api.MetricMassError || e instanceof api.UnitError) return new CliError(`upt metric: ${e.message}`);
-  if (e instanceof Error && e.constructor === Error) return new CliError(`upt metric: ${e.message}`);
+  if (e instanceof api.MetricMassError || e instanceof api.MetricValueError || e instanceof api.UnitError) {
+    return new CliError(`upt metric: ${e.message}`);
+  }
   return e;
 }
 

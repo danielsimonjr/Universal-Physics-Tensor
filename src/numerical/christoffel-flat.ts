@@ -29,7 +29,8 @@
  */
 
 // Use canonical SI constants per v0.5.1 PC-1 (do NOT inline truncated literals):
-import { C_SI, G_SI } from '../core/constants.js';
+import { C_SI } from '../core/constants.js';
+import { schwarzschildRadius } from './schwarzschild.js';
 
 /**
  * Encodes a Christoffel index triple (λ, μ, ν) into a flat array offset.
@@ -66,7 +67,7 @@ export function christoffelFnFlat(
 ): (x: [number, number, number, number], out?: Float64Array) => Float64Array {
   return (x, out) => {
     const [_t, r, theta, _phi] = x;
-    const r_s = (2 * G_SI * M) / (C_SI * C_SI);
+    const r_s = schwarzschildRadius(M);
     const arr = out ?? new Float64Array(64); // 64 zeros by default when fresh
     const dr_factor = r - r_s;
     const sinTheta = Math.sin(theta);

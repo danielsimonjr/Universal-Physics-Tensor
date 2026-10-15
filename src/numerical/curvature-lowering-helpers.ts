@@ -946,9 +946,9 @@ export function lowerKretschmannScalar(
   }
 
   const rLower = riemannLowerAt(x, gFn, gInverseFn, N, engine);
+  // `flattenNestedArray` has checked the length is N·N, so the flat row-major form is the one
+  // `computeKretschmann` reads as a Float64Array; it never was a number[][] here.
   const gInvFlat = flattenNestedArray(requireValue(metricInvName, inputs), N * N);
-  const gInvArg =
-    gInvFlat.length === N * N ? Float64Array.from(gInvFlat) : (gInvFlat as unknown as number[][]);
-  const K = computeKretschmann(rLower, gInvArg);
+  const K = computeKretschmann(rLower, Float64Array.from(gInvFlat));
   return engine.fromNested(K, []);
 }

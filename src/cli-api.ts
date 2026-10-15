@@ -250,6 +250,7 @@ export {
   kerrGeodesic,
   kerrTurningPointOrbit,
   MetricMassError,
+  MetricValueError,
   schwarzschildCircularOrbit,
   type MetricId,
 } from './numerical/spacetime-metrics.js';

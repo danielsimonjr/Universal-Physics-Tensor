@@ -13,7 +13,7 @@ import { Tensor } from '@danielsimonjr/mathts-tensor';
 import type { EngineTensor, TensorEngine, EinsumSpec, ForwardGradResult, ReverseGradResult } from './tensor-engine.js';
 import type { NestedArray } from './types.js';
 import { NumericalBackendError } from './errors.js';
-import { EngineCapabilityError } from './tensor-engine.js';
+import { EngineCapabilityError, isTracedTensor, tracedMode } from './tensor-engine.js';
 
 /** EngineTensor handle wrapping a MathTS Tensor. */
 class MathTSEngineTensor implements EngineTensor {
@@ -81,43 +81,25 @@ export class MathTSEngine implements TensorEngine {
 
   // AD dispatch. `@danielsimonjr/mathts-autograd` wraps the traced input as a
   // DualTensor (forward mode, carries `tangent`) or a TapedTensor (reverse
-  // mode, carries `tape`) and calls these methods with it. The autograd
-  // package is loaded at the AD call, not at module load, so its classes
-  // cannot be named here; the structural casts below state the invariant
-  // the package keeps: a wrapped tensor implements add/sub/mul/scale over
-  // another wrapped tensor and returns a wrapped tensor.
+  // mode, carries `tape`) and calls these methods with it. The operations a
+  // wrapped tensor implements are declared on `TracedEngineTensor`; the guard
+  // `isTracedTensor` is the dispatch. Two operands trace together only when
+  // both are wrapped in the same mode; a mixed or half-wrapped pair falls
+  // through to the plain path, whose `unwrap` refuses it.
   add(a: EngineTensor, b: EngineTensor): EngineTensor {
-    if ('tangent' in a && 'tangent' in b) {
-      return (a as unknown as { add(o: unknown): EngineTensor }).add(b);
-    }
-    // AD dispatch: TapedTensor (reverse-mode)
-    if ('tape' in a && 'tape' in b) {
-      return (a as unknown as { add(o: unknown): EngineTensor }).add(b);
-    }
+    if (isTracedTensor(a) && isTracedTensor(b) && tracedMode(a) === tracedMode(b)) return a.add(b);
     return new MathTSEngineTensor(unwrap(a, 'add').add(unwrap(b, 'add')));
   }
   sub(a: EngineTensor, b: EngineTensor): EngineTensor {
-    if ('tangent' in a && 'tangent' in b) {
-      return (a as unknown as { sub(o: unknown): EngineTensor }).sub(b);
-    }
-    if ('tape' in a && 'tape' in b) {
-      return (a as unknown as { sub(o: unknown): EngineTensor }).sub(b);
-    }
+    if (isTracedTensor(a) && isTracedTensor(b) && tracedMode(a) === tracedMode(b)) return a.sub(b);
     return new MathTSEngineTensor(unwrap(a, 'sub').sub(unwrap(b, 'sub')));
   }
   mul(a: EngineTensor, b: EngineTensor): EngineTensor {
-    if ('tangent' in a && 'tangent' in b) {
-      return (a as unknown as { mul(o: unknown): EngineTensor }).mul(b);
-    }
-    if ('tape' in a && 'tape' in b) {
-      return (a as unknown as { mul(o: unknown): EngineTensor }).mul(b);
-    }
+    if (isTracedTensor(a) && isTracedTensor(b) && tracedMode(a) === tracedMode(b)) return a.mul(b);
     return new MathTSEngineTensor(unwrap(a, 'mul').mul(unwrap(b, 'mul')));
   }
   scale(t: EngineTensor, k: number): EngineTensor {
-    if ('tangent' in t || 'tape' in t) {
-      return (t as unknown as { scale(k: number): EngineTensor }).scale(k);
-    }
+    if (isTracedTensor(t)) return t.scale(k);
     return new MathTSEngineTensor(unwrap(t, 'scale').scale(k));
   }
 
