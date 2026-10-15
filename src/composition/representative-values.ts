@@ -35,6 +35,26 @@ export interface RepresentativeValue {
   readonly value: number;
   /** Provenance — how the estimate is obtained (a citation or a one-liner). */
   readonly source: string;
+  /**
+   * The value's stated uncertainty, as a standard deviation in decades of `log10|value|`.
+   * Absent means {@link DEFAULT_SIGMA_DECADES}, the table's "good to about one order"; a row
+   * states another only with a source for it. The graded magnitude gate
+   * (`discovery.ts`, `magnitudeP`) reads it; the verdict threshold does not.
+   */
+  readonly sigmaDecades?: number;
+}
+
+/**
+ * The σ in decades a representative value carries when its row states none: one decade, the
+ * precision this table has always claimed ("good to ~1 order"). Not a per-row measurement.
+ *
+ * @internal
+ */
+export const DEFAULT_SIGMA_DECADES = 1;
+
+/** The σ in decades of a representative value: its own `sigmaDecades`, else the default. @internal */
+export function sigmaDecadesOf(rv: RepresentativeValue): number {
+  return rv.sigmaDecades ?? DEFAULT_SIGMA_DECADES;
 }
 
 /**
