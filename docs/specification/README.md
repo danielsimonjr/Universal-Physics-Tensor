@@ -32,8 +32,9 @@ part carries status notes marking superseded or speculative content.
   [`docs/architecture/bridge-type-classification.md`](../architecture/bridge-type-classification.md).
   BE-1–10 are the implicit diagonal laws (Schrödinger,
   Newton, Maxwell, Einstein, Standard Model) and are not individually catalogued.
-  Status counts, the PhysJS pin, and the catalog size are in `NOTES.md`.
-  Reviewed `formalRef`s use `lean4-physjs` and name public PhysJS.
+  Status counts and the catalog size are in `NOTES.md`.
+  Reviewed `formalRef`s use `lean4-physjs` and name the theorems in this
+  repository's `lean/` (moved from PhysJS in 11.0.0).
   Kind `bridge` is the only kind that lights `formally-proved`. The catalog path
   passes that reference, except an unadjudicated row stays `proposed`.
 - **Revision provenance**: the 2026-05 adversarial-review iterations

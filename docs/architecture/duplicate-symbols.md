@@ -43,7 +43,7 @@ These were one value reached through a second `export`. They are `export { … }
 | `M_PROTON_SI` | `src/core/constants.ts` | `src/bridges/index.ts`. The sentence that the re-export was `src/bridges/be67-alfven-speed.ts` is the record from before the catalog engine |
 | `evaluateMetricInverse` | `src/numerical/metric-inverse.ts` | `src/numerical/index.ts` |
 | `dim` | `src/dimensional/ast-builders.ts` | `src/canonical/entries/_l1-build.ts` |
-| `PHYSJS_COMMIT` | `src/atlas/physjs-entries.generated.ts` | `src/atlas/physjs-ref.ts` |
+| `LEAN_SOURCE_TAG` (was `PHYSJS_COMMIT` before 11.0.0) | `src/atlas/physjs-entries.generated.ts` | `src/atlas/physjs-ref.ts` |
 
 `admitApproximation` stays `export function` in `src/atlas/regime.ts`.
 

@@ -6,7 +6,7 @@ A bridge equation is a record in `data/bridge-catalog.json`. Adding a record doe
 
 `type` is required and is `standard` or `cross-domain`. `cross-domain` means the equation joins quantities or constants from two distinct fields. `standard` means the equation stays inside one field. Dogfood rows keep the label the proposal printed. `type` does not light an evidence tag. The catalog field is authoritative. The human-readable ledger is [`bridge-type-classification.md`](bridge-type-classification.md).
 
-`derivedFrom` and `basis` are optional. They stay off the record until a derivation theorem is pinned. `basis: false` is not a state. `formalKey` names a vendored PhysJS manifest entry. `formalRef` is derived from that key. The schema is version 3.
+`derivedFrom` and `basis` are optional. They stay off the record until a derivation theorem is pinned. `basis: false` is not a state. `formalKey` names an entry of the Lean manifest `formal/lean/manifest.json`. `formalRef` is derived from that key. `theorem` and `proofStatus` are that entry's projections, and `catalogProofProblems` checks them. The schema is version 3.
 
 A closed form is a relation: an expression string, a target, sources, a `holds` domain, and an optional reference value. A confrontation is a record plus the generic residual. A numerical method is named by the method. A record may name that method. The method is not named by a bridge number.
 

@@ -869,8 +869,8 @@ where:
 
 **Open candidates, unproved.** These two statements have no bridge id and no `formalRef`.
 
-- **Landau diamagnetism.** `χ_L = −χ_P / 3` for free electrons in three dimensions. No Lean theorem in the pinned PhysJS manifest states it. It is not catalog record 94, the Pauli spin susceptibility, which is a standard record and has no heading here.
-- **BCS coherence length.** `ξ₀ = ℏ v_F / (π Δ)`. No Lean theorem in the pinned PhysJS manifest states it. It is not Bridge Equation 12 and not catalog record 75. Catalog record 96 takes a coherence length as an input and does not derive this length. Records 75 and 96 are standard and have no heading here.
+- **Landau diamagnetism.** `χ_L = −χ_P / 3` for free electrons in three dimensions. No Lean theorem in `formal/lean/manifest.json` states it. It is not catalog record 94, the Pauli spin susceptibility, which is a standard record and has no heading here.
+- **BCS coherence length.** `ξ₀ = ℏ v_F / (π Δ)`. No Lean theorem in `formal/lean/manifest.json` states it. It is not Bridge Equation 12 and not catalog record 75. Catalog record 96 takes a coherence length as an input and does not derive this length. Records 75 and 96 are standard and have no heading here.
 
 ## VI. Integration with Universal Physics Tensor
 

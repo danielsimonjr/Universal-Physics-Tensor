@@ -7,7 +7,7 @@ A bridge equation is a record in [`data/bridge-catalog.json`](../../data/bridge-
 The fields that decide what a row is:
 
 - `type` is required. It is `standard` or `cross-domain`. The catalog field is authoritative. The human-readable ledger is [`docs/architecture/bridge-type-classification.md`](../../docs/architecture/bridge-type-classification.md).
-- `formalKey` names a vendored PhysJS manifest entry. `formalRef` is derived from that key. It is not stored as its own object on the row.
+- `formalKey` names an entry of the Lean manifest `formal/lean/manifest.json`. `formalRef` is derived from that key. It is not stored as its own object on the row. `theorem` and `proofStatus` are that entry's projections, and `catalogProofProblems` checks them.
 - A relation is the closed form: an expression string, a target, sources, a `holds` domain, and a reference point. Several relations may share one catalog id. The on-disk list is the catalog `relations` array. A relation's `confidence` is its row's `status`, derived when the catalog loads; the file stores one only on a relation with no row.
 - The row owns its relation contract, regime, conventions and counterexamples; a relation carries no copy.
 - `rejections` is the negative catalog (rows adjudicated not-a-bridge); `rejected.ts` projects it.
