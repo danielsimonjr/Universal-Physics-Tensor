@@ -17,7 +17,7 @@
  * @internal
  */
 
-import { readFileSync } from 'node:fs';
+import { readJsonFile } from '../../core/data-file.js';
 import { join } from 'node:path';
 import { HELD_OUT_FAMILY } from './types.js';
 import type { BenchmarkItem } from './types.js';
@@ -78,7 +78,7 @@ export class BenchmarkAdmissionError extends Error {
 }
 
 function readItems(file: string): BenchmarkItem[] {
-  const parsed = JSON.parse(readFileSync(file, 'utf-8')) as unknown;
+  const parsed = readJsonFile(file);
   if (!Array.isArray(parsed)) throw new Error(`${file}: expected a JSON array of items`);
   return parsed as BenchmarkItem[];
 }
