@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "UPT Bridge Catalog Artifact",
-  "description": "The bridge catalog. data/bridge-catalog.json is the source; src/bridges/catalog-load.ts (and the dimension projection in src/dimensional/bridge-check.ts, through the same src/core/data-file.ts reader) validates it against this schema when it loads, with the keyword subset src/core/json-schema.ts reads, then derives each relation's confidence from its row and the sign clauses from the evaluator flags. type is required on every record. formalRef is derived from formalKey and is not stored. Every field declared here has a reader in src/; a field nothing reads is not declared.",
+  "description": "The bridge catalog. data/bridge-catalog.json is the source; src/bridges/catalog-load.ts (and the dimension projection in src/dimensional/bridge-check.ts, through the same src/core/data-file.ts reader) validates it against this schema when it loads, with the keyword subset src/core/json-schema.ts reads, then derives each relation's confidence from its row and the sign clauses from the evaluator flags. type is required on every record. formalRef is derived from formalKey and is not stored; theorem and proofStatus are its checked projections (catalogProofProblems). Every field declared here has a reader in src/; a field nothing reads is not declared.",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -271,7 +271,8 @@
           "references",
           "dependencies",
           "known_issues",
-          "notes"
+          "notes",
+          "proofStatus"
         ],
         "additionalProperties": false,
         "properties": {
@@ -312,6 +313,14 @@
               "highly-speculative",
               "invalid"
             ]
+          },
+          "proofStatus": {
+            "enum": [
+              "full",
+              "weak",
+              "pending"
+            ],
+            "description": "How far lean/ proves this record, best first: full (its Lean theorem is kind bridge and reviewed: it states the catalogued equation, and the catalog path passes it to deriveEvidence), weak (its theorem proves part of the equation: a derivation-step, limit, reduction, property or cross-check, or its row is unreviewed), pending (no Lean theorem; no formalKey). A projection of formalKey and formal/lean/manifest.json, checked by catalogProofProblems (src/atlas/catalog-formal-ref.ts) in tests/atlas/catalog-proof-status.test.ts and in the formalRef gate; it is never set by hand to anything else."
           },
           "formula_latex": {
             "type": [
@@ -421,7 +430,12 @@
           "formalKey": {
             "type": "string",
             "pattern": "^be-[a-z0-9-]+$",
-            "description": "The PhysJS manifest key. formalRef, its kind included, is read from that manifest entry. The catalog stores no kind of its own."
+            "description": "The key of this record's entry in formal/lean/manifest.json. formalRef, its kind included, is read from that manifest entry. The catalog stores no kind of its own."
+          },
+          "theorem": {
+            "type": "string",
+            "pattern": "^PhysJS(\\.[A-Za-z_][A-Za-z0-9_']*)+$",
+            "description": "The Lean theorem the manifest entry of formalKey names, declared in lean/ (formal/lean/theorem-files.json gives the file). Present exactly when formalKey is. catalogFormalRef refuses a record whose theorem is not the manifest's; tests/atlas/catalog-proof-status.test.ts checks every record."
           },
           "dimension": {
             "type": "object"
@@ -546,6 +560,34 @@
           "contested": {
             "const": true,
             "description": "The row's adjudication is contested (recorded in the negative catalog's commentary); it stays out of the null-result list until a membership rejection or a confrontation adjudicates it."
+          }
+        },
+        "if": {
+          "required": [
+            "formalKey"
+          ]
+        },
+        "then": {
+          "required": [
+            "theorem"
+          ],
+          "properties": {
+            "proofStatus": {
+              "enum": [
+                "full",
+                "weak"
+              ]
+            }
+          }
+        },
+        "else": {
+          "propertyNames": {
+            "pattern": "^(?!theorem$)"
+          },
+          "properties": {
+            "proofStatus": {
+              "const": "pending"
+            }
           }
         }
       }
