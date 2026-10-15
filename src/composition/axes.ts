@@ -41,14 +41,14 @@ export type StatisticsAxis = 'bosonic' | 'fermionic' | 'anyonic' | 'parastatisti
 export const SCALE_AXIS_VALUES: readonly ScaleAxis[] = ['quantum', 'mesoscopic', 'classical', 'cosmological'];
 /** The force values. @internal */
 export const FORCE_AXIS_VALUES: readonly ForceAxis[] = ['gravitational', 'electromagnetic', 'weak', 'strong', 'emergent'];
-/** The information-measure values. @internal */
-export const INFORMATION_AXIS_VALUES: readonly InformationAxis[] = ['von-neumann', 'shannon', 'kolmogorov', 'discord'];
+/** The information-measure values; read by its `AXES` row alone, so not exported. */
+const INFORMATION_AXIS_VALUES: readonly InformationAxis[] = ['von-neumann', 'shannon', 'kolmogorov', 'discord'];
 /** The symmetry values. @internal */
 export const SYMMETRY_AXIS_VALUES: readonly SymmetryAxis[] = ['poincare', 'gauge', 'conformal', 'susy', 'emergent'];
-/** The topology values. @internal */
-export const TOPOLOGY_AXIS_VALUES: readonly TopologyAxis[] = ['trivial', 'chern', 'winding', 'z2', 'berry'];
-/** The statistics values. @internal */
-export const STATISTICS_AXIS_VALUES: readonly StatisticsAxis[] = ['bosonic', 'fermionic', 'anyonic', 'parastatistic'];
+/** The topology values; read by its `AXES` row alone, so not exported. */
+const TOPOLOGY_AXIS_VALUES: readonly TopologyAxis[] = ['trivial', 'chern', 'winding', 'z2', 'berry'];
+/** The statistics values; read by its `AXES` row alone, so not exported. */
+const STATISTICS_AXIS_VALUES: readonly StatisticsAxis[] = ['bosonic', 'fermionic', 'anyonic', 'parastatistic'];
 
 /** A classification-axis specification. @internal */
 export interface AxisSpec {
