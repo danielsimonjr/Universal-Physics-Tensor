@@ -146,6 +146,18 @@ export const CONSTANTS: Readonly<Record<string, NamedConstantValue>> = Object.fr
   ]),
 );
 
+/**
+ * True when `name` is a key of {@link CONSTANTS} itself. `in` on that plain
+ * object is true for `constructor` and every other `Object.prototype` name,
+ * which once read a leaf spelled that way as a constant; this reads the own
+ * properties only, and is the one rule for "a registered constant".
+ *
+ * @internal
+ */
+export function isRegisteredConstant(name: string): boolean {
+  return Object.prototype.hasOwnProperty.call(CONSTANTS, name);
+}
+
 /** What a registered constant is, its SI unit, and where its value comes from (audit I10). @internal */
 export interface ConstantProvenance {
   readonly meaning: string;

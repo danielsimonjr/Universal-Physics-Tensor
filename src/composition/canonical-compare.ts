@@ -28,7 +28,8 @@ import type { Dimension } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
-import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { CONSTANTS, isRegisteredConstant, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { forEachScalarLeaf, isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import { evalExpr } from './expr-eval.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
@@ -169,7 +170,7 @@ function peelConstantAliases(
         continue;
       }
       // h and ħ are both action. A formula that writes one is not the other.
-      if (Object.prototype.hasOwnProperty.call(CONSTANTS, s.name)) {
+      if (isRegisteredConstant(s.name)) {
         forVariables.push(s);
         continue;
       }
@@ -205,15 +206,16 @@ function targetThroughRestatedBridge(entry: CanonicalEquation, wantTarget: strin
 
 /** The free (non-constant, non-literal) symbols of an AST, with their dimensions. */
 function freeSymbols(node: ExprNode, out: Map<string, Dimension>): Map<string, Dimension> {
-  if (node.kind === 'symbol') {
-    const literal = Number.isFinite(Number(node.name));
-    if (!literal && CONSTANTS[node.name] === undefined && piMultipleValue(node.name) === undefined) {
-      out.set(node.name, node.dim);
-    }
-    return out;
-  }
-  const args = (node as { args?: readonly ExprNode[] }).args ?? [];
-  for (const a of args) freeSymbols(a, out);
+  // The arms are `op` and `tensor-product`: the two node kinds that carry `args`.
+  forEachScalarLeaf(
+    node,
+    (leaf) => {
+      if (!isDecimalLiteral(leaf.name) && !isRegisteredConstant(leaf.name) && piMultipleValue(leaf.name) === undefined) {
+        out.set(leaf.name, leaf.dim);
+      }
+    },
+    { tensorProduct: true },
+  );
   return out;
 }
 

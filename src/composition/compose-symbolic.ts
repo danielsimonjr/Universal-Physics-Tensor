@@ -25,7 +25,8 @@ import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { substitute } from './expr-subst.js';
 import { evalExpr, SymbolicEvalError } from './expr-eval.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import { scalarSymbolsFromMathTs } from './mathts-scalar-symbols.js';
 
 /**
@@ -100,7 +101,7 @@ function findJunctionName(
 function freeLeaves(expr: ExprNode): string[] {
   return scalarSymbolsFromMathTs(expr)
     .map((leaf) => leaf.name)
-    .filter((n) => !(n in CONSTANTS) && !Number.isFinite(Number(n)))
+    .filter((n) => !isRegisteredConstant(n) && !isDecimalLiteral(n))
     .sort();
 }
 

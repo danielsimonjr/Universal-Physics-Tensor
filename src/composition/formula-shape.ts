@@ -11,14 +11,13 @@
  */
 
 import type { ExprNode } from '../dimensional/ast-types.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import { divide, equals, multiply, power } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 
 /** `monomial` is a product of powers. `dimensional-sum` adds dimensionful terms. */
 type FormulaShape = 'monomial' | 'dimensional-sum';
-
-const NUMERIC_NAME = /^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/;
 
 /**
  * Exponents of every symbol in a product, quotient, or literal integer power.
@@ -65,7 +64,7 @@ export function monomialExponents(node: ExprNode | undefined): Map<string, numbe
 
 /** A dimensionless symbol whose name is a number, the way a literal exponent is written. */
 function numericExponent(node: ExprNode): number | undefined {
-  if (node.kind !== 'symbol' || !NUMERIC_NAME.test(node.name)) return undefined;
+  if (node.kind !== 'symbol' || !isDecimalLiteral(node.name)) return undefined;
   if (!equals(node.dim, DIMENSIONLESS)) return undefined;
   const n = Number(node.name);
   return Number.isFinite(n) ? n : undefined;

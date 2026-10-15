@@ -15,6 +15,7 @@
 
 import { parse as mathtsParse } from '@danielsimonjr/mathts-functions';
 import { quietlySync } from './mathts-quiet.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 
@@ -40,7 +41,7 @@ interface MathtsFunctionsModule {
   parse(expr: string): MathNode;
 }
 
-const isLiteral = (name: string): boolean => Number.isFinite(Number(name));
+const isLiteral = isDecimalLiteral;
 
 /**
  * Render one symbol the way `expr-simplify.ts` does: a numeric literal stays

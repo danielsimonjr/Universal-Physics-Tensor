@@ -24,7 +24,8 @@ import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import { DIMENSION_RENAMES, quantityIdForSpelling } from '../dimensional/formula-names.js';
-import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { isRegisteredConstant, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 
 const isDimensionless = (d: Dimension): boolean =>
   d.L === 0 &&
@@ -74,8 +75,8 @@ export function canonicalQuantityName(name: string, dim: Dimension): string {
  */
 function isDroppableConstant(name: string): boolean {
   return (
-    name in CONSTANTS ||
-    Number.isFinite(Number(name)) ||
+    isRegisteredConstant(name) ||
+    isDecimalLiteral(name) ||
     NAMED_DIMENSIONLESS_CONSTANTS.has(name) ||
     piMultipleValue(name) !== undefined
   );

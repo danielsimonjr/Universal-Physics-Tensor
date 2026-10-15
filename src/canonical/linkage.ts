@@ -19,7 +19,8 @@
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { evalExpr } from '../composition/expr-eval.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { forEachScalarLeaf, isDecimalLiteral } from '../dimensional/ast-leaves.js';
+import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import type { CanonicalEquation } from './canonical-equation.js';
 import { CANONICAL_EQUATIONS, canonicalById } from './registry.js';
 import { canonicalQuantityName, normalForm } from './normal-form.js';
@@ -71,25 +72,15 @@ function collectLeaves(
   vars: Map<string, string>,
   dimless: Set<string>,
 ): void {
-  switch (node.kind) {
-    case 'symbol':
-      if (!(node.name in CONSTANTS) && Number.isNaN(Number(node.name))) {
-        if (isDimensionless(node.dim)) dimless.add(node.name);
-        else vars.set(node.name, canonicalQuantityName(node.name, node.dim));
-      }
-      return;
-    case 'op':
-      for (const a of node.args) collectLeaves(a, vars, dimless);
-      return;
-    case 'transcendental':
-      collectLeaves(node.arg, vars, dimless);
-      return;
-    case 'abs':
-      collectLeaves(node.arg, vars, dimless);
-      return;
-    default:
-      return;
-  }
+  forEachScalarLeaf(
+    node,
+    (leaf) => {
+      if (isRegisteredConstant(leaf.name) || isDecimalLiteral(leaf.name)) return;
+      if (isDimensionless(leaf.dim)) dimless.add(leaf.name);
+      else vars.set(leaf.name, canonicalQuantityName(leaf.name, leaf.dim));
+    },
+    { transcendental: true, abs: true },
+  );
 }
 
 /**

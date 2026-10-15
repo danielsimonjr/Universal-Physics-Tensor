@@ -33,7 +33,8 @@ import { equals } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { evalExpr } from './expr-eval.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { forEachScalarLeaf, isDecimalLiteral } from '../dimensional/ast-leaves.js';
+import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import type { Observable } from './compose-symbolic.js';
 import { makeObservable } from './compose-symbolic.js';
 import { renderScalarLeaf } from './mathts-scalar-symbols.js';
@@ -122,7 +123,7 @@ interface LeafMeta {
   readonly dim: Dimension;
 }
 
-const isLiteral = (name: string): boolean => Number.isFinite(Number(name));
+const isLiteral = isDecimalLiteral;
 
 /** Render a scalar ExprNode to a mathjs-safe, fully-parenthesized string,
  *  gensym'ing each non-literal leaf by NAME (so repeats share an identifier
@@ -212,15 +213,7 @@ function walkBack(node: MathNode, meta: Map<string, LeafMeta>): ExprNode {
 // ---------------------------------------------------------------------------
 
 function symbolNames(expr: ExprNode, out: string[] = []): string[] {
-  if (expr.kind === 'symbol') out.push(expr.name);
-  else if (expr.kind === 'op') for (const a of expr.args) symbolNames(a, out);
-  else if (expr.kind === 'integral') {
-    symbolNames(expr.over, out);
-    symbolNames(expr.integrand, out);
-  } else if (expr.kind === 'derivative') {
-    symbolNames(expr.of, out);
-    symbolNames(expr.wrt, out);
-  }
+  forEachScalarLeaf(expr, (leaf) => out.push(leaf.name), { integral: 'over+integrand', derivative: true });
   return out;
 }
 
@@ -239,7 +232,7 @@ function numericAgreement(
   candidate: ExprNode,
 ): 'agree' | 'disagree' | 'insufficient' {
   const leaves = [...new Set(nonNumericSymbols(original))].filter(
-    (n) => !(n in CONSTANTS),
+    (n) => !isRegisteredConstant(n),
   );
   let finiteProbes = 0;
   for (const mult of PROBE_MULTIPLIERS) {

@@ -12,7 +12,7 @@
 
 import { DIMENSIONLESS, type Dimension } from '../dimensional/types.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/ast-types.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
 import { allQuantityRecords } from '../dimensional/quantity-registry.js';
@@ -236,7 +236,7 @@ function foldKnownConstants(node: ExprNode): ExprNode {
       right.name === 'pi' &&
       left.kind === 'symbol' &&
       /^(?:2|4|8)$/.test(left.name) &&
-      `${left.name}pi` in CONSTANTS
+      isRegisteredConstant(`${left.name}pi`)
     ) {
       merged.push(symbol(`${left.name}pi`));
       i += 1;

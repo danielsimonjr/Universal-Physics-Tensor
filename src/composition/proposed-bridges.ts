@@ -44,7 +44,8 @@ import type { KnownIssue } from '../bridges/index.js';
 import { BRIDGE_EQUATIONS } from '../bridges/index.js';
 import { catalogIdNumber } from '../bridges/catalog-load.js';
 import { normalForm } from '../canonical/normal-form.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
+import { forEachScalarLeaf, isDecimalLiteral, mapScalarLeaves } from '../dimensional/ast-leaves.js';
 import { evalExpr } from './expr-eval.js';
 import { rankDiscoveries } from './discovery.js';
 import type { VettedCandidate } from './discovery.js';
@@ -188,8 +189,7 @@ export interface ProposedBridge {
   evaluate(values: Readonly<Record<string, number>>): number;
 }
 
-const isConstant = (name: string): boolean =>
-  Object.prototype.hasOwnProperty.call(CONSTANTS, name);
+const isConstant = isRegisteredConstant;
 
 /** The single non-constant leaf of a monomial, or null if 0 or >1. */
 function uniqueNonConstantLeaf(m: Mono): { name: string; dim: Dimension; exp: number } | null {
@@ -219,11 +219,13 @@ function latexFromMono(m: Mono): string {
 // bridge edge of the SAME physics collapse under `dedupByNormalForm`.
 
 function collectLeafDims(ast: ExprNode, into: Map<string, Dimension>): void {
-  if (ast.kind === 'symbol') {
-    if (!into.has(ast.name)) into.set(ast.name, ast.dim);
-  } else if (ast.kind === 'op') {
-    for (const a of ast.args) collectLeafDims(a, into);
-  }
+  forEachScalarLeaf(
+    ast,
+    (leaf) => {
+      if (!into.has(leaf.name)) into.set(leaf.name, leaf.dim);
+    },
+    {},
+  );
 }
 
 /** Map each non-constant `scalarAst` leaf to the governing quantity of equal
@@ -237,7 +239,7 @@ function leafCanonMap(
   const govFree = governing.filter((g) => !isConstant(g.name));
   const map = new Map<string, string>();
   for (const [leaf, dim] of leaves) {
-    if (isConstant(leaf) || Number.isFinite(Number(leaf))) continue;
+    if (isConstant(leaf) || isDecimalLiteral(leaf)) continue;
     if (govFree.some((g) => g.name === leaf)) continue; // already a graph name
     const matches = govFree.filter((g) => equals(g.dim, dim));
     if (matches.length === 1) map.set(leaf, matches[0].name);
@@ -247,14 +249,14 @@ function leafCanonMap(
 
 function renameLeaves(ast: ExprNode, map: ReadonlyMap<string, string>): ExprNode {
   if (map.size === 0) return ast;
-  if (ast.kind === 'symbol') {
-    const r = map.get(ast.name);
-    return r ? { ...ast, name: r } : ast;
-  }
-  if (ast.kind === 'op') {
-    return { ...ast, args: ast.args.map((a) => renameLeaves(a, map)) };
-  }
-  return ast;
+  return mapScalarLeaves(
+    ast,
+    (leaf) => {
+      const r = map.get(leaf.name);
+      return r ? { ...leaf, name: r } : leaf;
+    },
+    {},
+  );
 }
 
 // ── the generator ───────────────────────────────────────────────────────────
@@ -284,7 +286,7 @@ function hasNonConstantStub(m: Mono, inputs: ReadonlySet<string>): boolean {
     if (
       equals(dim, DIMENSIONLESS) &&
       !isConstant(name) &&
-      !Number.isFinite(Number(name)) &&
+      !isDecimalLiteral(name) &&
       !inputs.has(name)
     ) {
       return true;
