@@ -38,4 +38,25 @@ describe('formatExact and formatPercent', () => {
     expect(formatPercent(0.5, 0)).toBe('50%');
     expect(formatPercent(1 / 3)).toBe('33.3%');
   });
+
+  it('formatPercent with significant digits prints a statistic as upt confront always did (-43.7%, ±150%, 1e-7%)', () => {
+    expect(formatPercent(-0.437, { significant: 3 })).toBe('-43.7%');
+    expect(formatPercent(1.5, { significant: 3 })).toBe('150%');
+    expect(formatPercent(1e-9, { significant: 3 })).toBe('1e-7%');
+    expect(formatPercent(0.257, { significant: 3, signed: true })).toBe('+25.7%');
+    expect(formatPercent(-0.0727, { significant: 3, signed: true })).toBe('-7.27%');
+    expect(formatPercent(0, { significant: 3, signed: true })).toBe('0%');
+  });
+
+  it('formatPercent with significant digits is the retired confront spelling on every value tried', () => {
+    // The two private helpers `upt confront` used, verbatim (`fmt` was formatQuantity).
+    const percent = (x: number): string => `${formatQuantity(x * 100, 3)}%`;
+    const signedPercent = (x: number): string => `${x > 0 ? '+' : ''}${percent(x)}`;
+    const values = [0, -0, 1, -1, 0.1, 1.5, -0.437, 0.257, -0.00787, 8.6e-11, 1e-9, 0.00001, 123.456, -0.0727, 1 / 3, 2 / 3];
+    for (let i = 0; i < 200; i++) values.push(Math.sin(i * 12.9898) * 10 ** ((i % 9) - 6));
+    for (const x of values) {
+      expect(formatPercent(x, { significant: 3 })).toBe(percent(x));
+      expect(formatPercent(x, { significant: 3, signed: true })).toBe(signedPercent(x));
+    }
+  });
 });
