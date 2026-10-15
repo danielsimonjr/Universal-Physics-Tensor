@@ -193,15 +193,18 @@ export {
   describeKnownRelation,
   matchingCatalogEdges,
 } from './composition/canonical-compare.js';
+/** The comparison row, the catalog-edge match, and the exponent-difference diagnosis of a form mismatch. */
 export type { CanonicalComparison, CatalogEdgeMatch, ExponentDifference } from './composition/canonical-compare.js';
+/** One line for an exponent difference (`yours/canonical ∝ mass^-1 (R² = 1): …`), for `upt derive` to print. */
 export { describeExponentDifference } from './composition/canonical-compare.js';
-// One owner for "a constant times that one" (proposal 6): `upt derive` recovers its prefactor here.
+/** One owner for "a constant times that one" (proposal 6): `upt derive` recovers its prefactor here. */
 export {
   FIXED_POINT_EXPONENTS,
   constantRatio,
   fixedPoint,
   recoverMonomialPrefactor,
 } from './canonical/fixed-points.js';
+/** The fixed-point scheme, the ratio statistic and the recovery result types of `canonical/fixed-points.ts`. */
 export type {
   ConstantRatio,
   ConstantRatioOptions,

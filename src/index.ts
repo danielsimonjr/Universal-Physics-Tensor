@@ -525,11 +525,13 @@ export {
   classifyIdentifiability,
   classifyAll,
   forwardClosure,
+  identifiabilityByRank,
 } from './composition/index.js';
 export type {
   IdentifiabilityVerdict,
   IdentifiabilityResult,
   IdentifiabilityOptions,
+  RankIdentifiability,
 } from './composition/index.js';
 
 // Retrodiction harness (the framework's own falsification benchmark —

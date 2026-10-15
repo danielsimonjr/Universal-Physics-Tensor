@@ -21,16 +21,36 @@
  * resulting nonlinear system has a unique numeric solution (undecidable
  * in general for closed-form evaluators). "Independent derivation" means
  * a structurally distinct edge, NOT a provably-independent formula — two
- * edges encoding the same relation are counted as two (an honest
- * over-count). The classifier PROPOSES; humans filter (Part-VI §XXVII-B),
- * exactly as `enumerateCompositions` does.
+ * edges encoding the same relation are counted as two by the forward
+ * count (an honest over-count, kept as `surplusConstraints`). The
+ * classifier PROPOSES; humans filter (Part-VI §XXVII-B), exactly as
+ * `enumerateCompositions` does.
+ *
+ * TWO INSTRUMENTS, TWO FIELDS. The forward closure fires an edge only when
+ * every source is known, so it never reads a law in reverse. The MONOMIAL
+ * edges (a `symbolic` product of powers, or a canonical equation with a
+ * stated monomial) are also a linear system in log space: `y = C Π xᵢ^aᵢ`
+ * is the row `log y − Σ aᵢ log xᵢ = log C`. Stacked with a unit row per
+ * known quantity, the exact null space (MathTS `rationalNullspace`) says
+ * which quantities are DETERMINED (their column is zero in every basis
+ * vector) whichever way the laws are read, and `distinct rows − rank` is
+ * the number of independent consistency checks, where a restated monomial
+ * is one row, not two. {@link identifiabilityByRank} is that instrument;
+ * {@link classifyIdentifiability} reports both, `determinable` being their
+ * union, and names every law the rank read in reverse, because a validity
+ * domain is stated on the sources and a caller may refuse the inversion.
  *
  * @module composition/identifiability
  */
 
+import { Fraction } from '@danielsimonjr/mathts-core';
+import { rationalNullspace } from '@danielsimonjr/mathts-functions';
 import type { BridgeEdge } from './edge.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
+import { monomialExponentsExact } from './formula-shape.js';
+import { rationalize } from './rational-exponent.js';
+import { canonicalById } from '../canonical/registry.js';
 
 /** The four-way structural-identifiability verdict. @public */
 export type IdentifiabilityVerdict =
@@ -49,6 +69,35 @@ export interface IdentifiabilityOptions {
    * physical-edge graph.
    */
   readonly identifications?: readonly QuantityIdentification[];
+}
+
+/**
+ * What the log-space rank says about one known set, over the monomial edges
+ * of the graph. See the module docs: this is the second instrument beside
+ * the forward closure, and its numbers are not the closure's.
+ *
+ * @public
+ */
+export interface RankIdentifiability {
+  /** Every quantity whose column is zero in every null-space basis vector, sorted. */
+  readonly determined: readonly string[];
+  /** The quantities the rank determines that the forward closure does not, sorted. */
+  readonly determinedByRankOnly: readonly string[];
+  /**
+   * Independent consistency checks the system carries: distinct rows
+   * (a restated monomial is one row) minus the rank. Zero when every row
+   * is needed to determine what it determines.
+   */
+  readonly surplusChecks: number;
+  /**
+   * Ids of the monomial edges the rank read against their direction: a
+   * source of the edge is determined, and not by the forward closure over
+   * the monomial edges. A caller whose validity domain is stated on the
+   * sources may refuse these.
+   */
+  readonly usedInReverse: readonly string[];
+  /** Ids of the edges that contributed a row (a readable monomial, target not among its sources). */
+  readonly monomialEdges: readonly string[];
 }
 
 /** The result of classifying one target against one known set. @public */
@@ -79,8 +128,14 @@ export interface IdentifiabilityResult {
    * moves the target toward determined. Empty when determinable.
    */
   readonly blockingFrontier: readonly string[];
-  /** Every quantity determinable from the known set (the forward closure). */
+  /**
+   * Every quantity determinable from the known set: the forward closure
+   * united with what the log-space rank determines through the monomial
+   * edges (`rank.determined`), sorted.
+   */
   readonly determinable: readonly string[];
+  /** The rank instrument's own report for this known set. */
+  readonly rank: RankIdentifiability;
 }
 
 /**
@@ -117,6 +172,232 @@ export function forwardClosure(
     }
   }
   return determinable;
+}
+
+// ---------------------------------------------------------------------------
+// The log-space rank over the monomial edges.
+// ---------------------------------------------------------------------------
+
+/**
+ * The exact exponents of an edge's monomial over its SOURCE names, or
+ * undefined when it is not one. Internal: a `Fraction` is not a root type.
+ * @internal
+ */
+export type EdgeMonomialReader = (edge: BridgeEdge) => ReadonlyMap<string, Fraction> | undefined;
+
+/**
+ * The exact exponents of `edge`'s target over its source names, read from
+ * its `symbolic` form, or, for a canonical edge with no symbolic form, from
+ * the equation's stated monomial and `formulaFactors`. A leaf that is not a
+ * source (a constant, a literal, a held stub) is part of the prefactor and
+ * contributes no column. Undefined when the form is not a monomial, when an
+ * exponent is not a small rational, or when the target is among the sources.
+ *
+ * @internal
+ */
+export function edgeMonomial(edge: BridgeEdge): ReadonlyMap<string, Fraction> | undefined {
+  const sourceNames = new Set(edge.sources.map((s) => s.name));
+  if (sourceNames.has(edge.target.name)) return undefined;
+  const out = new Map<string, Fraction>();
+  if (edge.symbolic !== undefined) {
+    const exact = monomialExponentsExact(edge.symbolic);
+    if (exact === undefined) return undefined;
+    for (const [name, exp] of exact) if (sourceNames.has(name)) out.set(name, exp);
+    return out;
+  }
+  if (edge.beId !== null) return undefined;
+  const equation = canonicalById(edge.id);
+  const monomial = equation?.dimensional.monomial;
+  if (monomial === undefined || monomial === null) return undefined;
+  const stated: Record<string, number> = { ...monomial, ...(edge.formulaFactors ?? {}) };
+  for (const [name, exp] of Object.entries(stated)) {
+    if (!sourceNames.has(name)) continue;
+    const q = rationalize(exp);
+    if (q === undefined) return undefined;
+    out.set(name, q);
+  }
+  return out;
+}
+
+interface MonomialRow {
+  readonly id: string;
+  readonly target: string;
+  readonly sources: ReadonlyMap<string, Fraction>;
+}
+
+/** A row scaled so its first nonzero entry is 1, as a string, so two rows of one relation compare equal. */
+function rowKey(row: readonly Fraction[]): string {
+  const pivot = row.find((f) => !f.isZero());
+  if (pivot === undefined) return '0';
+  return row.map((f) => f.divide(pivot).toString()).join(',');
+}
+
+const ZERO = new Fraction(0);
+const ONE = new Fraction(1);
+
+/** Directed identifications: `from` in the set puts `to` in it. */
+function expandByIdentifications(set: Set<string>, identifications: readonly QuantityIdentification[]): void {
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const ident of identifications) {
+      if (set.has(ident.from) && !set.has(ident.to)) {
+        set.add(ident.to);
+        changed = true;
+      }
+    }
+  }
+}
+
+/** The cache of rank results per edge array, keyed by the known set and the identifications. */
+const rankCache = new WeakMap<readonly BridgeEdge[], Map<string, RankIdentifiability>>();
+
+function rankCacheKey(known: readonly string[], identifications: readonly QuantityIdentification[], custom: boolean): string {
+  return `${[...known].sort().join('\u0001')}|${identifications.map((i) => `${i.from}>${i.to}`).join('\u0001')}|${custom ? 'custom' : 'default'}`;
+}
+
+/**
+ * {@link identifiabilityByRank} with the monomial reader chosen by the
+ * caller (the default is {@link edgeMonomial}). A custom reader's result is
+ * cached beside the default's, never in its place.
+ *
+ * @internal
+ */
+export function identifiabilityByRankWith(
+  edges: readonly BridgeEdge[],
+  knownNames: readonly string[],
+  reader: EdgeMonomialReader,
+  opts: IdentifiabilityOptions = {},
+): RankIdentifiability {
+  return rankWithReader(edges, knownNames, reader, reader !== edgeMonomial, opts);
+}
+
+/**
+ * The log-space rank: which quantities the monomial edges determine from
+ * `knownNames`, whichever direction each law is read, how many independent
+ * consistency checks the system carries, and which laws were read in
+ * reverse. Identifications stay directed, as in {@link forwardClosure}: a
+ * name they reach joins the known rows, and the system is solved again
+ * until nothing new is determined. Non-monomial edges contribute nothing
+ * here; the forward closure is their instrument.
+ *
+ * @public
+ */
+export function identifiabilityByRank(
+  edges: readonly BridgeEdge[],
+  knownNames: readonly string[],
+  opts: IdentifiabilityOptions = {},
+): RankIdentifiability {
+  return rankWithReader(edges, knownNames, edgeMonomial, false, opts);
+}
+
+function rankWithReader(
+  edges: readonly BridgeEdge[],
+  knownNames: readonly string[],
+  reader: EdgeMonomialReader,
+  custom: boolean,
+  opts: IdentifiabilityOptions,
+): RankIdentifiability {
+  const identifications = opts.identifications ?? QUANTITY_IDENTIFICATIONS;
+  const key = rankCacheKey(knownNames, identifications, custom);
+  let perEdges = rankCache.get(edges);
+  if (perEdges === undefined) {
+    perEdges = new Map();
+    rankCache.set(edges, perEdges);
+  }
+  const hit = perEdges.get(key);
+  if (hit !== undefined) return hit;
+
+  const rows: MonomialRow[] = [];
+  for (const edge of edges) {
+    const sources = reader(edge);
+    if (sources !== undefined) rows.push({ id: edge.id, target: edge.target.name, sources });
+  }
+  const columns: string[] = [];
+  const columnOf = new Map<string, number>();
+  const column = (name: string): number => {
+    let i = columnOf.get(name);
+    if (i === undefined) {
+      i = columns.length;
+      columns.push(name);
+      columnOf.set(name, i);
+    }
+    return i;
+  };
+  for (const row of rows) {
+    column(row.target);
+    for (const name of row.sources.keys()) column(name);
+  }
+
+  // The asserted set: the known names, plus every name a directed
+  // identification reaches from a known or a determined one. Only these get
+  // a unit row; a name the rank determines is read from the null space and
+  // is never fed back in as a row (that would count it as a check).
+  const asserted = new Set<string>(knownNames);
+  expandByIdentifications(asserted, identifications);
+  const determined = new Set<string>();
+  let surplusChecks = 0;
+  for (;;) {
+    for (const name of asserted) column(name);
+    const matrix: Fraction[][] = [];
+    const seen = new Set<string>();
+    const pushRow = (row: Fraction[]): void => {
+      const k = rowKey(row);
+      if (k === '0' || seen.has(k)) return;
+      seen.add(k);
+      matrix.push(row);
+    };
+    for (const row of rows) {
+      const vector = columns.map(() => ZERO);
+      vector[column(row.target)] = ONE;
+      for (const [name, exp] of row.sources) {
+        const i = column(name);
+        vector[i] = vector[i]!.sub(exp);
+      }
+      pushRow(vector);
+    }
+    for (const name of asserted) {
+      const vector = columns.map(() => ZERO);
+      vector[column(name)] = ONE;
+      pushRow(vector);
+    }
+    const solved = rationalNullspace(matrix, { columns: columns.length });
+    surplusChecks = matrix.length - solved.rank;
+    determined.clear();
+    for (const name of asserted) determined.add(name);
+    columns.forEach((name, i) => {
+      if (solved.basis.every((vector) => vector[i]!.isZero())) determined.add(name);
+    });
+    // A directed identification from a determined name asserts its `to`,
+    // and only that: a determined name itself is never fed back as a row.
+    const before = asserted.size;
+    const reach = new Set(determined);
+    expandByIdentifications(reach, identifications);
+    for (const name of reach) if (!determined.has(name)) asserted.add(name);
+    if (asserted.size === before) break;
+  }
+
+  // A law is read in reverse when one of its sources is determined, and not
+  // by the forward closure over the monomial edges alone.
+  const monomialIds = new Set(rows.map((r) => r.id));
+  const forward = forwardClosure(
+    edges.filter((e) => monomialIds.has(e.id)),
+    knownNames,
+    identifications,
+  );
+  const usedInReverse = rows
+    .filter((row) => [...row.sources.keys()].some((name) => !forward.has(name) && determined.has(name)))
+    .map((row) => row.id);
+
+  const result: RankIdentifiability = {
+    determined: [...determined].sort(),
+    determinedByRankOnly: [...determined].filter((name) => !forward.has(name)).sort(),
+    surplusChecks,
+    usedInReverse,
+    monomialEdges: rows.map((r) => r.id),
+  };
+  perEdges.set(key, result);
+  return result;
 }
 
 /** The quantities from which `targetName` is forward-reachable (its
@@ -158,7 +439,24 @@ export function classifyIdentifiability(
   const identifications = opts.identifications ?? QUANTITY_IDENTIFICATIONS;
   const known = [...new Set(knownNames)];
 
-  const determinable = forwardClosure(edges, known, identifications);
+  const closure = forwardClosure(edges, known, identifications);
+  // The rank is computed once per result and only when something reads it:
+  // the verdict needs it only for a target the closure does not reach, and
+  // the funnel classifies thousands of targets whose verdict it does reach.
+  let rankMemo: RankIdentifiability | undefined;
+  const rankOf = (): RankIdentifiability => {
+    rankMemo ??= identifiabilityByRank(edges, known, { identifications });
+    return rankMemo;
+  };
+  // The union: the closure (every edge, forward) and the rank (the monomial
+  // edges, either way). `determinedByRankOnly` is reported against the whole
+  // closure here, so a name the closure reaches through an opaque edge is
+  // not counted as rank-only.
+  const determinableOf = (): Set<string> => new Set<string>([...closure, ...rankOf().determined]);
+  const rankReport = (): RankIdentifiability => {
+    const rank = rankOf();
+    return { ...rank, determinedByRankOnly: rank.determined.filter((name) => !closure.has(name)) };
+  };
 
   // Derivations must not depend on the target itself: close over the
   // graph with every edge INTO the target removed (excludes circular
@@ -180,11 +478,14 @@ export function classifyIdentifiability(
   let verdict: IdentifiabilityVerdict;
   if (isGiven) {
     verdict = 'given';
-  } else if (!determinable.has(targetName)) {
+  } else if (!closure.has(targetName) && !rankOf().determined.includes(targetName)) {
     verdict = 'under-determined';
   } else if (derivations.length >= 2) {
     verdict = 'over-determined';
   } else {
+    // One forward derivation, or determined by identity, or determined by
+    // the rank alone (then `derivations` is empty and `rank.usedInReverse`
+    // names the laws that were read backwards).
     verdict = 'exactly-determined';
   }
 
@@ -195,6 +496,7 @@ export function classifyIdentifiability(
   let blockingFrontier: string[] = [];
   if (verdict === 'under-determined') {
     const knownSet = new Set(known);
+    const determinable = determinableOf();
     blockingFrontier = [...backwardCone(edges, targetName)]
       .filter(
         (q) => q !== targetName && !determinable.has(q) && !knownSet.has(q),
@@ -209,7 +511,12 @@ export function classifyIdentifiability(
     derivations,
     surplusConstraints,
     blockingFrontier,
-    determinable: [...determinable].sort(),
+    get determinable(): readonly string[] {
+      return [...determinableOf()].sort();
+    },
+    get rank(): RankIdentifiability {
+      return rankReport();
+    },
   };
 }
 

@@ -74,11 +74,13 @@ export type {
   IdentifiabilityVerdict,
   IdentifiabilityResult,
   IdentifiabilityOptions,
+  RankIdentifiability,
 } from './identifiability.js';
 export {
   classifyIdentifiability,
   classifyAll,
   forwardClosure,
+  identifiabilityByRank,
 } from './identifiability.js';
 
 /** The retrodiction harness's result, prediction, refusal, report and option types. */
