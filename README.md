@@ -7,6 +7,7 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 <!-- readme-status:badge -->
 [![TypeScript](https://img.shields.io/badge/TypeScript-7.0+-blue)](https://www.typescriptlang.org/)
+[![Lean-proved bridges: 119 full · 22 weak · 19 pending](https://img.shields.io/badge/Lean--proved%20bridges-119%20full%20%C2%B7%2022%20weak%20%C2%B7%2019%20pending-blue)](https://github.com/danielsimonjr/universal-physics-tensor/tree/master/lean)
 <!-- /readme-status:badge -->
 
 ## Vision

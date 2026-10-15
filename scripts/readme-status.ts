@@ -1,6 +1,7 @@
 /**
  * Stamp the README development-status counts, the membership sentence, the
- * TypeScript badge, and the ROADMAP Phase 4 kind counts from the registries.
+ * TypeScript and Lean-proof badges, and the ROADMAP Phase 4 kind counts from
+ * the registries.
  *
  * `bun scripts/readme-status.ts` rewrites the marked spans.
  * `bun scripts/readme-status.ts --check` exits 1 when a marked span is stale.
@@ -12,6 +13,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { BRIDGE_EQUATIONS } from '../src/bridges/index.js';
+import { catalogEntries } from '../src/bridges/catalog-load.js';
+import { PROOF_STATUSES, type ProofStatus } from '../src/bridges/catalog-types.js';
 import { adjudicateCatalog } from '../src/bridges/membership.js';
 import { CONFRONTATIONS } from '../src/bridges/confrontations.js';
 import { CATALOG_GRAPH } from '../src/composition/catalog-graph.js';
@@ -50,6 +53,8 @@ export interface StatusFacts {
   readonly unusedFiles: number;
   readonly unusedExports: number;
   readonly typescriptBadge: string;
+  /** Catalog records per `proofStatus`, read from each record. */
+  readonly proofStatus: Readonly<Record<ProofStatus, number>>;
 }
 
 const STATUS_WORDS: Readonly<Record<string, string>> = {
@@ -68,6 +73,19 @@ function typescriptBadge(): string {
     throw new Error(`package.json devDependencies.typescript is not a version range: ${spec}`);
   }
   return `TypeScript-${match[1]}.${match[2]}+`;
+}
+
+/**
+ * The Lean-proof badge: catalog records per proof status, best first, as a
+ * shields.io static badge (`-` and `_` doubled, the rest URL-encoded).
+ */
+export function leanBadge(counts: Readonly<Record<ProofStatus, number>>): string {
+  const part = (text: string) => encodeURIComponent(text.replace(/-/g, '--').replace(/_/g, '__'));
+  const message = PROOF_STATUSES.map((status) => `${counts[status]} ${status}`).join(' · ');
+  return (
+    `[![Lean-proved bridges: ${message}](https://img.shields.io/badge/${part('Lean-proved bridges')}-${part(message)}-blue)]` +
+    '(https://github.com/danielsimonjr/universal-physics-tensor/tree/master/lean)'
+  );
 }
 
 function generatedCount(file: string, label: string): number {
@@ -133,6 +151,9 @@ export function statusFacts(): StatusFacts {
     unusedFiles: generatedCount('docs/architecture/unused-analysis.md', 'Potentially unused files'),
     unusedExports: generatedCount('docs/architecture/unused-analysis.md', 'Potentially unused exports'),
     typescriptBadge: typescriptBadge(),
+    proofStatus: Object.fromEntries(
+      PROOF_STATUSES.map((status) => [status, catalogEntries().filter((entry) => entry.proofStatus === status).length]),
+    ) as Record<ProofStatus, number>,
   };
 }
 
@@ -254,7 +275,7 @@ export function stampText(readme: string, roadmap: string, facts: StatusFacts = 
   nextReadme = replaceSpan(
     nextReadme,
     'badge',
-    `[![TypeScript](https://img.shields.io/badge/${facts.typescriptBadge}-blue)](https://www.typescriptlang.org/)`,
+    `[![TypeScript](https://img.shields.io/badge/${facts.typescriptBadge}-blue)](https://www.typescriptlang.org/)\n${leanBadge(facts.proofStatus)}`,
     false,
   );
   nextReadme = replaceSpan(nextReadme, 'membership', membershipSentence(facts), true);
