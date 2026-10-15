@@ -48,10 +48,3 @@ export const ATLAS_REJECTIONS: readonly AtlasRejection[] = [
     ],
   },
 ];
-
-/** Look up a rejection by id, throwing on an unknown one. @internal */
-export function getAtlasRejection(id: string): AtlasRejection {
-  const found = ATLAS_REJECTIONS.find((r) => r.id === id);
-  if (found === undefined) throw new Error(`unknown atlas rejection id: ${id}`);
-  return found;
-}

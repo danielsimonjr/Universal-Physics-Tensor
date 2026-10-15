@@ -45,7 +45,10 @@ const WITNESS_RESULTS_TEST = 'tests/atlas/witness-results.test.ts';
  *
  * Work and topic are cited rather than precise section numbers, because a section number
  * stated without checking the edition in hand is the same fabrication in a more confident
- * costume. `reviewStatus` stays 'proposed' until the independent physicist review lands.
+ * costume. `reviewStatus` is the record's declared review state and derives no evidence
+ * tag (`deriveEvidence` never reads it). It is 'proposed' here because no independent
+ * physicist review of these records exists; the atlas no longer gates on one (the ruling
+ * is recorded in `ACTIVE.md` and `NOTES.md`).
  */
 const CITATIONS: readonly string[] = [
   'Olson, Dynamical Analogies - the force-voltage (impedance) analogy between a mass-spring–damper and a series RLC circuit',

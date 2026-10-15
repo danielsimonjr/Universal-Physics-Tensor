@@ -187,7 +187,7 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
     valueKey: 'theta',
     referenceKey: 'theta_parent_mean',
     deviationKey: 'parent_deviation',
-    method: 'eigenfunction series, roots of 1 − ζ cot ζ = Bi_a by bisection, summed until e^{−ζ²Fo} < 1e-18',
+    method: 'eigenfunction series, roots of 1 − ζ cot ζ = Bi_a by MathTS findRoot (Brent) on each interval ((n−1)π, nπ), summed until e^{−ζ²Fo} < 1e-18',
   },
   notIncluded: [
     'radiation in T_K and in the series: the linear-loss check bounds it; T_radiating_K keeps it, in the lumped model only',

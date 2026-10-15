@@ -344,11 +344,11 @@ export const LIMIT_BRIDGES: readonly AtlasBridge[] = [AB_PENDULUM_LINEAR, AB_DAM
  *
  * @internal
  */
-export const CONTRACT_PENDULUM_LINEAR: RelationContract =
+const CONTRACT_PENDULUM_LINEAR: RelationContract =
   relationContractOf(AB_PENDULUM_LINEAR);
 
 /** @internal */
-export const CONTRACT_DAMPED_MASSLESS: RelationContract =
+const CONTRACT_DAMPED_MASSLESS: RelationContract =
   relationContractOf(AB_DAMPED_MASSLESS);
 
 /** The two limit contracts, in design-note order. @internal */

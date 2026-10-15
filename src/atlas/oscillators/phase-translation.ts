@@ -40,7 +40,7 @@ import { crossingTimes, linearAccel, pendulumAccel, phaseAt, theta0OfPeriodError
  * @returns NaN if the drift does not reach `tolerance` within 2^16 periods.
  * @internal
  */
-export function measurePhaseHorizon(theta0: number, tolerance: number, stepsPerPeriod: number): number {
+function measurePhaseHorizon(theta0: number, tolerance: number, stepsPerPeriod: number): number {
   for (let periods = 16; periods <= 2 ** 16; periods *= 2) {
     const t = measurePhaseHorizonWithin(theta0, tolerance, stepsPerPeriod, periods);
     if (!Number.isNaN(t)) return t;
@@ -49,7 +49,7 @@ export function measurePhaseHorizon(theta0: number, tolerance: number, stepsPerP
 }
 
 /** As `measurePhaseHorizon`, over exactly `periods` of T0; NaN if the drift does not reach `tolerance` in them. @internal */
-export function measurePhaseHorizonWithin(theta0: number, tolerance: number, stepsPerPeriod: number, periods: number): number {
+function measurePhaseHorizonWithin(theta0: number, tolerance: number, stepsPerPeriod: number, periods: number): number {
   const pend = crossingTimes(pendulumAccel, theta0, stepsPerPeriod, periods);
   const lin = crossingTimes(linearAccel, theta0, stepsPerPeriod, periods);
   let prevT = 0;

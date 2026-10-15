@@ -35,7 +35,7 @@ const TEST = 'tests/atlas/closure.test.ts';
 const WITNESS_RESULTS_TEST = 'tests/atlas/witness-results.test.ts';
 
 /** τ_p/t ceiling of the Langevin → Fick regime: WD4's fine resolution, t = 100 τ_p. @internal */
-export const LANGEVIN_MAX_TAU_RATIO = 0.01;
+const LANGEVIN_MAX_TAU_RATIO = 0.01;
 
 /** ε = τDq² ceiling of the telegraph → Fick domain. @internal */
 export const TELEGRAPH_FICK_MAX_EPS = 0.05;
@@ -44,7 +44,7 @@ export const TELEGRAPH_FICK_MAX_EPS = 0.05;
 export const TELEGRAPH_WAVE_MIN_EPS = 25;
 
 /** Fourier-number floor of the steady-state restriction. @internal */
-export const STEADY_MIN_FOURIER = 1;
+const STEADY_MIN_FOURIER = 1;
 
 const regime = (
   parameters: readonly { name: string; dim: import('../../dimensional/types.js').Dimension }[],

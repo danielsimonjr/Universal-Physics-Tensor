@@ -76,7 +76,7 @@ function positionHorizon(eps: number, tolerance: number, T0: number | undefined)
 }
 
 /** The point witness integrates at most this many periods of T0. */
-export const POSITION_POINT_MAX_PERIODS = 512;
+const POSITION_POINT_MAX_PERIODS = 512;
 /** Samples per T0 both resolutions report at. */
 const SAMPLES_PER_PERIOD = 200;
 
@@ -123,7 +123,7 @@ function dominanceSpec(id: string, eps: number, drift: number, waveform: number)
 }
 
 /** a₀ measured by projecting one RK4 pendulum period onto cos φ (trapezoid, exact for a periodic integrand). */
-export function measureFundamental(theta0: number, stepsPerPeriod: number): number {
+function measureFundamental(theta0: number, stepsPerPeriod: number): number {
   const T = 1 + pendulumPeriodErrorAt({ theta0 });
   const h = T / stepsPerPeriod;
   let x = theta0;
