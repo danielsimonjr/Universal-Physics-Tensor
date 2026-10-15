@@ -20,6 +20,12 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] The Lean proofs move from PhysJS into this repository (the 11.0.0 change, PR #509; the owner's night agenda of 2026-10-09 and rulings of 2026-10-14).
+  UPT vendored PhysJS's manifest at a pinned PhysJS commit and built no Lean, so nothing here compiled the proofs a `formalRef` cites, and thirteen of them were thin: they restated the catalog identity from hypotheses that already contained it.
+  Plan: merge PhysJS's Lean tree with its history into `lean/`; keep the manifest in `formal/lean/`, edited with the Lean files, and write the file index from the tree (`scripts/lean-index.ts`); CI builds and axiom-audits `lean/` when a Lean input, the manifest or the catalog changes; each catalog record names its theorem and a ranked proof status (full, weak, pending) with a drift test and a README badge; derive the thin statements from premises.
+  Done: PR #509's CI (`lake build and axiom audit`, `test`, `docs-fresh` with `scripts/lean-index.ts --check`); `tests/atlas/catalog-proof-status.test.ts`; `tests/formal/lean-theorems.test.ts`; be-148, be-149, be-151, be-154 to be-159, be-163, be-164, be-168 and be-170 derive their statements from premises (CHANGELOG `[Unreleased]`).
+  Not done here, by rule: the merge (Tom's review and the owner), the 11.0.0 bump and tag (WORKFLOWS.md, Release; until the bump the permalinks name `v10.0.0`, which has no `lean/`), any dogfood round, and archiving PhysJS wait for the owner.
+
 - [x] The evaluation result carries what the evaluator knows (the 8.0.0 dogfood grouping, evaluation-result group).
   `evaluateRelation` called the evaluator's `run` with `'value'` and returned the value and dimension alone, so be-52's 43″/century never reached the library (issue 479, API part), and the library result had no name, unit or meaning (issue 460). `upt evaluate` built its own labels on a second path (`evaluatorOutput`, a label branch per result key), and printed be-119's signed ratio with no sign convention. A record stated which inputs an extra output needs (`requires`) beside the expression that already reads them.
   Plan: one builder, `evaluateResolved`, returns `{ kind, value, dimension, name, unit, meaning, extras }`; `evaluateRelation` calls it with `'value'`, the CLI with `'all'`, and the CLI prints and serializes that object; `run` computes every extra output whose inputs are given, read from the expression; `requires` is deleted from the type, the schema and be-52.
