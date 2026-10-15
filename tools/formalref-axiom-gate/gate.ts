@@ -254,7 +254,7 @@ async function main(args: readonly string[]): Promise<number> {
   const { BRIDGE_EQUATIONS } = await import('../../src/bridges/index.js');
   const { catalogFormalRef } = await import('../../src/atlas/catalog-formal-ref.js');
   const { physjsManifestProblems } = await import('../../src/atlas/physjs-ref.js');
-  const manifest = JSON.parse(readFileSync(join(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf-8'));
+  const manifest = JSON.parse(readFileSync(join(repoRoot, 'formal', 'lean', 'manifest.json'), 'utf-8'));
   const bridges = [
     ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
     ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),

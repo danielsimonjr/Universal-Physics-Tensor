@@ -50,7 +50,7 @@ const isMain = process.argv[1] !== undefined && resolve(process.argv[1]) === fil
 if (isMain) {
   const catalog = JSON.parse(readFileSync(resolve(repoRoot, 'data', 'bridge-catalog.json'), 'utf8'));
   const pkg = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf8'));
-  const manifest = JSON.parse(readFileSync(resolve(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf8'));
+  const manifest = JSON.parse(readFileSync(resolve(repoRoot, 'formal', 'lean', 'manifest.json'), 'utf8'));
   const keys = new Set(manifest.entries.map((entry) => entry.key));
   const errors = crossChecks(catalog, pkg.version, keys);
   let loaded;

@@ -30,7 +30,7 @@ interface CatalogFile {
 describe('data/bridge-catalog.json', () => {
   const catalog = JSON.parse(readFileSync(resolve(repoRoot, 'data', 'bridge-catalog.json'), 'utf8')) as CatalogFile;
   const pkg = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf8')) as { version: string };
-  const manifest = JSON.parse(readFileSync(resolve(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf8')) as {
+  const manifest = JSON.parse(readFileSync(resolve(repoRoot, 'formal', 'lean', 'manifest.json'), 'utf8')) as {
     entries: Array<{ key: string }>;
   };
   const keys = new Set(manifest.entries.map((entry) => entry.key));
