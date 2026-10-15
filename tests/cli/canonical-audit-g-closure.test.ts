@@ -36,21 +36,25 @@ describe('canonical audit G-closures', () => {
     const text = await audit([]);
     expect(text.code).toBe(0);
     const derived = text.stdout.split('DIMENSIONAL-RECONSTRUCTION')[0] ?? '';
-    expect(derived).toMatch(/CE-classical-electron-radius\s+\+\[c,e,epsilon_0,m_e\]\s+×0\.0795774715459477$/m);
-    expect(derived).toMatch(/CE-bohr-magneton\s+\+\[ℏ,e,m_e\]\s+×0\.5$/m);
-    expect(derived).toMatch(/CE-bohr-radius\s+\+\[ℏ,e,epsilon_0,m_e\]\s+×12\.5663706143592$/m);
-    expect(derived).toMatch(/CE-field-energy-density\s+\+\[epsilon_0\]\s+×0\.5$/m);
+    expect(derived).toMatch(/CE-classical-electron-radius\s+\+\[c,e,epsilon_0,m_e\]\s+×0\.0795774715459477 \(= 1\/\(4π\)\)$/m);
+    expect(derived).toMatch(/CE-bohr-magneton\s+\+\[ℏ,e,m_e\]\s+×0\.5 \(= 1\/2\)$/m);
+    expect(derived).toMatch(/CE-bohr-radius\s+\+\[ℏ,e,epsilon_0,m_e\]\s+×12\.5663706143592 \(= 4π\)$/m);
+    expect(derived).toMatch(/CE-field-energy-density\s+\+\[epsilon_0\]\s+×0\.5 \(= 1\/2\)$/m);
+    // The two closed forms the retired list could not name (header): derived, no G.
+    expect(derived).toMatch(/CE-stefan-boltzmann\s+\+\[ℏ,c,k_B\]\s+×0\.164493406684823 \(= π²\/60\)$/m);
+    expect(derived).toMatch(/CE-rydberg-energy\s+\+\[ℏ,e,epsilon_0,m_e\]\s+×0\.00316628698882306 \(= 1\/\(32π²\)\)$/m);
+    // A closure that names G is never derived.
     for (const id of SPURIOUS) expect(derived, id).not.toMatch(new RegExp(`${id}\\s+\\+\\[[^\\]]*\\bG\\b`));
-    expect(text.stdout).toMatch(/CE-stefan-boltzmann\s+\+\[ℏ,c,k_B\]\s+×0\.164493406684823\s+\(empirical\/tuned constant\)/);
     expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.26546641505411\s+\(empirical\/tuned constant\)/);
-    expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.28318530717959$/m);
-    expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.28318530717959$/m);
+    expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.28318530717959 \(= 2π\)$/m);
+    expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.28318530717959 \(= 2π\)$/m);
     // Hawking, light deflection, perihelion and Bekenstein–Hawking: the only closure the search
-    // accepts does not reproduce the evaluator, so they stay DECOY; the Rydberg energy's
-    // 1/(32π²) is not a recognized factor and it stays there too.
+    // accepts does not reproduce the evaluator, so they stay DECOY. The Rydberg energy left the
+    // list when the rule named its 1/(32π²) (header).
     const decoy = text.stdout.split('OPEN (')[0]?.split('DIMENSIONAL-RECONSTRUCTION')[1] ?? '';
     expect(decoy).toMatch(/CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-bekenstein-hawking/);
-    expect(decoy).toContain('CE-rydberg-energy');
+    expect(decoy).not.toContain('CE-rydberg-energy');
+    expect(decoy).not.toContain('CE-stefan-boltzmann');
   });
 
   it('keeps the catalog empirical scale of be-48', async () => {

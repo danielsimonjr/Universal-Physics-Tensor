@@ -54,6 +54,9 @@ Flags:
         which are dimensional with no sourced prefactor (the evaluator's 1
         is that absence), which are decoys, which add dimensionful terms
         (not a monomial), which are dimensionally open.
+        A recovered prefactor of the form p/(π^a·ln2^b), a small rational p,
+        or the square root of one, is clean and prints its exact form after
+        the number, ×1.125 (= 9/8); any other prints (empirical/tuned constant).
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.
@@ -467,6 +470,14 @@ Flags:
         unresolved are counted apart.
         Every atlas view states how many of the atlas's models and bridges it
         shows, in text, --json and --format=mermaid|dot|svg.
+        --communities, --cycles and --rank-hubs each add one section to the
+        text report (and a key to --json); they do not apply to a diagram.
+        --communities lists the layout communities (Louvain, heuristic) of the
+        largest component: where a drawing may place quantities together, never
+        a physics claim. --cycles lists the derivation cycles (strongly
+        connected components of the directed source→target quantity graph),
+        where over-determination lives. --rank-hubs ranks quantities by
+        betweenness centrality (normalised; computed only when asked).
         e.g.  upt map --relation=derivation --source=both
               upt map --around=temperature --depth=2 --source=catalog
               upt map --route=model-pendulum,model-lc
@@ -520,6 +531,12 @@ Flags:
         Set ħ = c = 1 when a dimension difference is a power of those constants.
   --geometrized
         With the natural-unit rules, also set G = 1.
+  --communities
+        Also print the layout communities (Louvain, heuristic) of the largest component. A drawing aid, not physics.
+  --cycles
+        Also print the derivation cycles: strongly connected components of the directed source→target quantity graph.
+  --rank-hubs
+        Also rank quantities by betweenness centrality (normalised). Computed only when asked.
   --json
         Write a JSON envelope to stdout instead of the text report.
 
