@@ -23,9 +23,16 @@
  *
  * bounds the error at every t; the clamp at π keeps B non-decreasing in t and
  * is still a bound, since |cos a − cos b| ≤ 2. It is rigorous GIVEN the
- * Fourier series, which is quoted, not derived here. Witness W7xs checks the
- * series against RK4 over one period at each θ0 of a grid across the domain;
- * that is a check at those points, not a derivation.
+ * Fourier series, which is quoted, not derived here. The exact check
+ * (`fourierSeriesExactDeviation`, run by `tests/atlas/pendulum-exact.test.ts`;
+ * not a registered witness, because it has no resolution for a runner to
+ * refine) compares the series with the EXACT solution θ = 2 asin(k sn(K − ω0t, k²))
+ * (`exactPendulumAngle`) over a dense grid of amplitudes and phases at
+ * 1e-12 rad (1e-13 above θ0 = 0.002; the floor below that is the nome's, see
+ * `FOURIER_SERIES_EXACT_TOLERANCE`), and W7xs against RK4 over one period at
+ * six amplitudes at 1e-9;
+ * both are checks at grid points, not a derivation. The coefficients also
+ * have a second route, the FFT of one exact period (`fourierCoefficientsByFft`).
  *
  * B is an upper bound, not the error: past its horizon the BOUND exceeds the
  * tolerance, and the error may not. It is near-sharp where Δφ → π (the
@@ -37,11 +44,20 @@
  * @internal
  */
 
+import { rfft } from '@danielsimonjr/mathts-functions';
 import type { ObservableTranslation } from '../translation.js';
 import type { DominanceWitnessSpec } from '../witness-dominance.js';
 import type { NumericWitnessSpec } from '../witness-numeric.js';
 import { pendulumPeriodErrorAt } from './bridges-limits.js';
-import { linearAccel, pendulumAccel, pendulumNome, rk4Step, theta0OfPeriodError, TWO_PI } from './pendulum-motion.js';
+import {
+  exactPendulumAngle,
+  linearAccel,
+  pendulumAccel,
+  pendulumNome,
+  rk4Step,
+  theta0OfPeriodError,
+  TWO_PI,
+} from './pendulum-motion.js';
 
 /** W̄ = (16/3) q^{3/2}/(1 − q): the bound on the waveform distortion |F(φ) − θ0 cos φ|. @internal */
 export function waveformBound(theta0: number): number {
@@ -82,7 +98,9 @@ const SAMPLES_PER_PERIOD = 200;
 
 /**
  * |θ(t) − θ_lin(t)| from RK4 of both motions, and B(t) at the same samples,
- * over `periods` of T0; `stepsPerPeriod` must be a multiple of 200.
+ * over `periods` of T0; `stepsPerPeriod` must be a multiple of 200. The
+ * exact route is {@link exactDominanceSpec}; this one is what W7x registers,
+ * so the integrator stays part of what the witness exercises.
  */
 function dominanceSamples(theta0: number, periods: number, stepsPerPeriod: number, bound: (t: number) => number) {
   const stride = stepsPerPeriod / SAMPLES_PER_PERIOD;
@@ -108,6 +126,39 @@ function dominanceSamples(theta0: number, periods: number, stepsPerPeriod: numbe
 /** The window a dominance witness covers: up to antiphase (Δφ = π), past which B ≥ 2θ0 holds trivially, capped. */
 function dominanceWindow(eps: number): number {
   return Math.min(POSITION_POINT_MAX_PERIODS, (1 + eps) / (2 * eps));
+}
+
+/**
+ * The exact route to W7x's measured value: |θ_exact(t) − θ0 cos(2πt)| from the
+ * closed forms, at the same 200 samples per T0 as {@link dominanceSamples},
+ * against B(t) at θ0 recovered from `eps`. The resolution is ignored, so the
+ * runner's coarse-to-fine uncertainty u is exactly 0 here and its rule
+ * `bound − measured > u` is `bound > measured`: u is a property of the RK4
+ * route, not of the claim. The registered W7x keeps the RK4 route.
+ *
+ * @internal
+ */
+export function exactDominanceSpec(id: string, eps: number): DominanceWitnessSpec {
+  const theta0 = theta0OfPeriodError(eps);
+  const periods = dominanceWindow(eps);
+  const bound = positionBound(eps);
+  const samples = Math.floor(periods * SAMPLES_PER_PERIOD);
+  return {
+    id,
+    kind: 'dominance',
+    evaluate: () => {
+      const measured: number[] = [];
+      const b: number[] = [];
+      for (let i = 1; i <= samples; i++) {
+        const t = i / SAMPLES_PER_PERIOD;
+        measured.push(Math.abs(exactPendulumAngle(theta0, t) - theta0 * Math.cos(TWO_PI * t)));
+        b.push(bound(t));
+      }
+      return { measured, bound: b };
+    },
+    coarseResolution: 200,
+    fineResolution: 800,
+  };
 }
 
 function dominanceSpec(id: string, eps: number, drift: number, waveform: number): DominanceWitnessSpec {
@@ -141,6 +192,17 @@ export const FOURIER_SERIES_THETA0S: readonly number[] = [0.01, 0.1, 0.2, 0.3, 0
 const FOURIER_SERIES_TERMS = 20;
 const FOURIER_SERIES_TOLERANCE = 1e-9;
 
+/** aₙ = 8 q^{n+½}/((2n+1)(1 + q^{2n+1})) from the nome; `'minus'` is the (1 − q^{2n+1}) transcription error the controls use. */
+function coefficientFromNome(q: number, n: number, variant: 'plus' | 'minus'): number {
+  const odd = 2 * n + 1;
+  return (8 * q ** (n + 0.5)) / (odd * (variant === 'plus' ? 1 + q ** odd : 1 - q ** odd));
+}
+
+/** The pendulum's Fourier coefficient aₙ at amplitude θ0 (the closed form, from the nome). @internal */
+export function fourierCoefficient(theta0: number, n: number, variant: 'plus' | 'minus' = 'plus'): number {
+  return coefficientFromNome(pendulumNome(theta0), n, variant);
+}
+
 /**
  * F(φ) = Σ_{n<20} (−1)ⁿ aₙ cos((2n+1)φ). `'minus'` puts (1 − q^{2n+1}) in the
  * denominator of aₙ, a transcription error the control uses.
@@ -149,11 +211,75 @@ function fourierSeries(theta0: number, phi: number, variant: 'plus' | 'minus'): 
   const q = pendulumNome(theta0);
   let s = 0;
   for (let n = 0; n < FOURIER_SERIES_TERMS; n++) {
-    const odd = 2 * n + 1;
-    const a = (8 * q ** (n + 0.5)) / (odd * (variant === 'plus' ? 1 + q ** odd : 1 - q ** odd));
-    s += (n % 2 === 0 ? a : -a) * Math.cos(odd * phi);
+    const a = coefficientFromNome(q, n, variant);
+    s += (n % 2 === 0 ? a : -a) * Math.cos((2 * n + 1) * phi);
   }
   return s;
+}
+
+/** The grid the exact check runs on: amplitudes θ0 = 0.5 j/500, j = 1..500, and phases φ = 2π i/256. @internal */
+export const FOURIER_SERIES_EXACT_GRID = { amplitudes: 500, phases: 256 } as const;
+/**
+ * The exact check's tolerance over the whole grid, in rad. The measured deviation is
+ * 2.3e-13, all of it at the smallest amplitude θ0 = 0.001 and on the SERIES
+ * side: the nome's K′ = K(cos²(θ0/2)) is read from a complementary parameter
+ * that rounds at 1e-16 absolute, 4e-10 relative at m = 2.5e-7, so a₀ is low
+ * by 2.3e-10 of θ0 there. The exact solution agrees with an independent AGM
+ * sn to the bit at that point.
+ * @internal
+ */
+export const FOURIER_SERIES_EXACT_TOLERANCE = 1e-12;
+/** Above θ0 = 0.002 the same check holds at 1e-13 rad (measured 3.8e-14 at θ0 = 0.002, below 1.5e-14 from θ0 = 0.01). @internal */
+export const FOURIER_SERIES_EXACT_TIGHT = { theta0Min: 0.002, tolerance: 1e-13 } as const;
+
+/**
+ * The exact check, or its control: max over the grid of |θ_exact(t) − F(φ)|, t = φT/2π,
+ * with θ_exact the elliptic solution (`exactPendulumAngle`) and F the 20-term
+ * series, over the amplitudes at or above `theta0Min`. A closed form against
+ * a closed form, so no resolution and no convergence ratio: the number is the
+ * deviation itself, held to {@link FOURIER_SERIES_EXACT_TOLERANCE} over the
+ * whole grid and to {@link FOURIER_SERIES_EXACT_TIGHT} above its floor by the
+ * test.
+ *
+ * @internal
+ */
+export function fourierSeriesExactDeviation(
+  variant: 'plus' | 'minus' = 'plus',
+  grid: { readonly amplitudes: number; readonly phases: number } = FOURIER_SERIES_EXACT_GRID,
+  theta0Min = 0,
+): number {
+  let worst = 0;
+  for (let j = 1; j <= grid.amplitudes; j++) {
+    const theta0 = (0.5 * j) / grid.amplitudes;
+    if (theta0 < theta0Min) continue;
+    const T = 1 + pendulumPeriodErrorAt({ theta0 });
+    const q = pendulumNome(theta0);
+    const a = Array.from({ length: FOURIER_SERIES_TERMS }, (_, n) => coefficientFromNome(q, n, variant));
+    for (let i = 0; i < grid.phases; i++) {
+      const phi = (TWO_PI * i) / grid.phases;
+      let s = 0;
+      for (let n = 0; n < FOURIER_SERIES_TERMS; n++) s += (n % 2 === 0 ? a[n]! : -a[n]!) * Math.cos((2 * n + 1) * phi);
+      worst = Math.max(worst, Math.abs(exactPendulumAngle(theta0, (i * T) / grid.phases) - s));
+    }
+  }
+  return worst;
+}
+
+/**
+ * The first `count` coefficients aₙ from the FFT of one exact period sampled
+ * at `samples` points, MathTS `rfft`: aₙ = (−1)ⁿ 2 re[2n+1]/N. A second
+ * route to the series, independent of the nome. `samples` must exceed
+ * 2·count + 1.
+ *
+ * @internal
+ */
+export function fourierCoefficientsByFft(theta0: number, samples: number, count: number): number[] {
+  if (!Number.isInteger(samples) || samples <= 2 * count + 1) {
+    throw new RangeError(`fourierCoefficientsByFft: ${samples} samples cannot resolve ${count} odd harmonics`);
+  }
+  const T = 1 + pendulumPeriodErrorAt({ theta0 });
+  const { re } = rfft(Array.from({ length: samples }, (_, i) => exactPendulumAngle(theta0, (i * T) / samples)));
+  return Array.from({ length: count }, (_, n) => ((n % 2 === 0 ? 2 : -2) * re[2 * n + 1]!) / samples);
 }
 
 /** max over the grid, and over one period T = T0(1+ε) sampled at every RK4 step, of |θ_RK4(t) − F(2πt/T)|. */
@@ -232,7 +358,9 @@ export const PENDULUM_POSITION_TRANSLATION: ObservableTranslation = {
     'both motions are released from rest at the same θ0 at t = 0',
     'T0 = 2π √(ℓ/g) is the linear period, in the unit t is given in',
     'the classical Fourier series of the pendulum (all aₙ > 0, Σ (−1)ⁿ aₙ = θ0) — quoted, not derived here; ' +
-      `machine-checked against RK4 at θ0 ∈ {${FOURIER_SERIES_THETA0S.join(', ')}} (W7xs), not between those points`,
+      `machine-checked against the elliptic solution θ = 2 asin(k sn(K − ω0t, k²)) over ${FOURIER_SERIES_EXACT_GRID.amplitudes} amplitudes in (0, 0.5] ` +
+      `and ${FOURIER_SERIES_EXACT_GRID.phases} phases within ${FOURIER_SERIES_EXACT_TOLERANCE} rad, and within ${FOURIER_SERIES_EXACT_TIGHT.tolerance} rad ` +
+      `above θ0 = ${FOURIER_SERIES_EXACT_TIGHT.theta0Min} (tests/atlas/pendulum-exact.test.ts), and against RK4 at θ0 ∈ {${FOURIER_SERIES_THETA0S.join(', ')}} (W7xs)`,
   ],
   parameters: ['T0'],
   timeUnit: 'the unit of T0',
