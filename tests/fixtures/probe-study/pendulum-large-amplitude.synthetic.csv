@@ -8,7 +8,7 @@
 # provenance.calibration: none: synthetic rows have no instrument
 # baselines: [{"name":"small-angle law 2π√(L/g)","formula":"2*pi*sqrt(length/gravity)"}]
 # criterion: {"alpha":0.001}
-# correction: {"input":"amplitude","powers":[2,4]}
+# correction: {"input":"amplitude","powers":[2,4],"reference":{"2":0.0625,"4":0.0035807291666666665}}
 # target: period
 # target.sigma: 2 ms
 id,role,length[m],gravity[m/s^2],amplitude[rad],period[s]
