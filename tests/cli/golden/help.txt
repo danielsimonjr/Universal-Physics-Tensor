@@ -814,9 +814,9 @@ Flags:
   --bounds=VALUE
         Bounds for design, as the design subverb reads them.
   --h1=VALUE
-        First hypothesis for design.
+        First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused.
   --h2=VALUE
-        Second hypothesis for design.
+        Second hypothesis for design, an expression-tree JSON file in the form --h1 takes.
   --searchable-only
         scan: list only Product-B-searchable gaps. This is the default.
   --all

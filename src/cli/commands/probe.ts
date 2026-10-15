@@ -42,8 +42,9 @@ const FLAGS: FlagSpec[] = [
   { name: '--holdout-tol', valueStyle: 'attached', description: 'Relative holdout RMSE cap.', defaultValue: PROBE_HOLDOUT_TOL_DEFAULT },
   { name: '--worker', valueStyle: 'attached', description: 'Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file.' },
   { name: '--bounds', valueStyle: 'attached', description: 'Bounds for design, as the design subverb reads them.' },
-  { name: '--h1', valueStyle: 'attached', description: 'First hypothesis for design.' },
-  { name: '--h2', valueStyle: 'attached', description: 'Second hypothesis for design.' },
+  { name: '--h1', valueStyle: 'attached', description:
+      "First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused." },
+  { name: '--h2', valueStyle: 'attached', description: 'Second hypothesis for design, an expression-tree JSON file in the form --h1 takes.' },
   { name: '--searchable-only', valueStyle: 'none', description: 'scan: list only Product-B-searchable gaps. This is the default.' },
   { name: '--all', valueStyle: 'none', description: 'scan: include Product A wrappers, which are not searchable here.' },
   { name: '--data', valueStyle: 'attached', description: 'Study file (JSON, or CSV when the name ends in .csv) for study.' },

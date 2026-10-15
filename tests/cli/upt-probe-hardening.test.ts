@@ -12,6 +12,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { tempDir } from '../helpers/tmp.js';
 
+/** A symbol's dimension record: all seven exponents (the probe validates an expression tree strictly; `{}` is refused). */
+const DIMENSIONLESS_DIM = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(here, '../../bin/upt.mjs');
 const pendulum = resolve(here, '../fixtures/discovery/pendulum-scaling/public/problem.json');
@@ -99,7 +102,7 @@ describe('upt probe — file errors', () => {
     const h1 = join(dir, 'h1.json');
     writeFileSync(h1, JSON.stringify({ kind: 'symbol' }));
     const h2 = join(dir, 'h2.json');
-    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
+    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS_DIM }));
     const bounds = join(dir, 'bounds.json');
     writeFileSync(bounds, JSON.stringify({ variables: { x: { min: 0, max: 1 } } }));
     const { status, stderr } = run([
@@ -116,9 +119,9 @@ describe('upt probe — file errors', () => {
   it('rejects design bounds missing variables', () => {
     const dir = tempDir('upt-probe-bounds-');
     const h1 = join(dir, 'h1.json');
-    writeFileSync(h1, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
+    writeFileSync(h1, JSON.stringify({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS_DIM }));
     const h2 = join(dir, 'h2.json');
-    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
+    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS_DIM }));
     const bounds = join(dir, 'bounds.json');
     writeFileSync(bounds, JSON.stringify({ sigma: 1 }));
     const { status, stderr } = run([

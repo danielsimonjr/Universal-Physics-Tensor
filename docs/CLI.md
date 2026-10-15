@@ -470,8 +470,8 @@ upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
 | `--holdout-tol=VALUE` | `=` value | 0.15 | Relative holdout RMSE cap. |
 | `--worker=VALUE` | `=` value |  | Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file. |
 | `--bounds=VALUE` | `=` value |  | Bounds for design, as the design subverb reads them. |
-| `--h1=VALUE` | `=` value |  | First hypothesis for design. |
-| `--h2=VALUE` | `=` value |  | Second hypothesis for design. |
+| `--h1=VALUE` | `=` value |  | First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused. |
+| `--h2=VALUE` | `=` value |  | Second hypothesis for design, an expression-tree JSON file in the form --h1 takes. |
 | `--searchable-only` | no |  | scan: list only Product-B-searchable gaps. This is the default. |
 | `--all` | no |  | scan: include Product A wrappers, which are not searchable here. |
 | `--data=VALUE` | `=` value |  | Study file (JSON, or CSV when the name ends in .csv) for study. |

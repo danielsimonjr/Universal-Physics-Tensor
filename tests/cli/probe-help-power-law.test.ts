@@ -19,4 +19,13 @@ describe('upt probe help names the power-law fit', () => {
     expect(text).toMatch(/native enumerator also fits a rational power law of the π-groups[^.]*on the exploratory rows only/);
     expect(text).toMatch(/holdout rows are never fitted/);
   });
+
+  it('says an expression file names every one of a symbol\'s seven dimension exponents', async () => {
+    // The probe validates an expression tree strictly: `dim: {}` is refused before the design
+    // runs (three CLI tests once wrote it and failed on that refusal, not the error they named).
+    const cap = capture();
+    expect(await runCli(['help', 'probe'], cap.io)).toBe(0);
+    const text = cap.lines.join('').replace(/\s+/g, ' ');
+    expect(text).toMatch(/--h1=VALUE First hypothesis for design: an expression-tree JSON file\. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J/);
+  });
 });
