@@ -16,6 +16,7 @@ import { powerLawDetermination, type PowerLawFit } from './power-law.js';
 
 /** The power-law fit over the π-groups, re-exported beside the generator that emits it. */
 export { powerLawDetermination, powerLawWording, rationalizeExponent } from './power-law.js';
+/** The power-law fit's result types: the determination, one fitted exponent, and a recovered fit. */
 export type { PowerLawDetermination, PowerLawExponent, PowerLawFit } from './power-law.js';
 
 export interface RawCandidate {

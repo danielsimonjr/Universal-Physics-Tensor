@@ -1411,9 +1411,11 @@ function designAgainst(
   baselines: readonly FittedModel[],
 ): StudyDesignSuggestion {
   if (!candidate.predict) return { abstained: true, reason: 'no credible candidate to discriminate' };
-  const live = baselines
-    .filter((b) => b.predict && b.test.exploratory?.pass === true)
-    .sort((a, b) => (b.test.exploratory!.p ?? 0) - (a.test.exploratory!.p ?? 0));
+  const predict = candidate.predict;
+  // A live competitor has a predictor and passed on the exploratory rows; the guard types both.
+  const isLive = (b: FittedModel): b is FittedModel & { predict: Predictor; test: ModelTest & { exploratory: SetTest } } =>
+    b.predict !== null && b.test.exploratory?.pass === true;
+  const live = baselines.filter(isLive).sort((a, b) => (b.test.exploratory.p ?? 0) - (a.test.exploratory.p ?? 0));
   const best = live[0];
   if (!best) {
     return {
@@ -1442,7 +1444,7 @@ function designAgainst(
       study.governing.forEach((g, i) => (point[g.name] = grids[i]![idx[i]!]!));
       let disc: number;
       try {
-        disc = Math.abs(candidate.predict!(point) - best.predict!(point)) / sigma;
+        disc = Math.abs(predict(point) - best.predict(point)) / sigma;
       } catch {
         return;
       }
@@ -1460,9 +1462,8 @@ function designAgainst(
   visit(0);
   if (bestPoint === null) return { abstained: true, reason: 'neither model is finite anywhere in the design bounds' };
   const chosen: Record<string, number> = bestPoint;
-  const maxEx = Math.max(
-    ...sets.exploratory.map((r) => Math.abs(candidate.predict!(r.inputs) - best.predict!(r.inputs)) / r.sigma),
-  );
+  // A reduce, not a spread: a spread of a large row set overflows the call stack.
+  const maxEx = sets.exploratory.reduce((m, r) => Math.max(m, Math.abs(predict(r.inputs) - best.predict(r.inputs)) / r.sigma), 0);
   return {
     abstained: false,
     against: best.test.label,
