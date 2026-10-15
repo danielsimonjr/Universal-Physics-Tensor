@@ -109,7 +109,15 @@ export {
   estimateScaleExponent,
   probeConservation,
 } from './structure.js';
-export type { ChangepointInput, ChangepointResult, ScaleSymmetryInput } from './structure.js';
+export type {
+  ChangepointInput,
+  ChangepointResult,
+  ScaleSymmetryInput,
+  ScaleExponentResult,
+  ConservationResult,
+} from './structure.js';
+/** The direct two-sided Student t tail the probes consume instead of MathTS's `2·(1 − CDF)`. */
+export { studentTwoSidedP } from './t-tail.js';
 export { runBackendWorker } from './backend-protocol.js';
 export type { BackendRequest, BackendCandidate, BackendResponse } from './backend-protocol.js';
 export {
