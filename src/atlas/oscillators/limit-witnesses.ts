@@ -3,8 +3,8 @@
  * bridges that had none: W7 (`ab-pendulum-linear`), W8b (`ab-damped-massless`)
  * and W9 (`ab-chain-wave`).
  *
- * Each one INTEGRATES the premise model's own equation with MathTS
- * `solveODESystem` and `dt`, and reads the
+ * Each one INTEGRATES the premise model's own equation with `rk4Trajectory`
+ * (MathTS `solveODESystem` with `dt`, every state kept) and reads the
  * claimed quantity off the motion. None evaluates the closed form its record
  * states, so a test comparing the measurement with that closed form compares
  * two methods, not one method with itself.
@@ -13,7 +13,7 @@
  * @internal
  */
 
-import { solveODESystem } from '@danielsimonjr/mathts-functions';
+import { rk4Trajectory } from '../../numerical/rk4-trajectory.js';
 import { quarterPeriod } from './norm-transport-witness.js';
 
 /**
@@ -65,15 +65,10 @@ export function measureMasslessOffset(
   const h = m / stepsPerMass;
   const layerSteps = Math.ceil((5 * stepsPerMass) / b);
   const steps = Math.ceil(tEnd / h);
-  const sol = solveODESystem(
-    (_t, y) => [y[1]!, -(b * y[1]! + k * y[0]!) / m],
-    [x0, v0],
-    [0, steps * h],
-    { dt: h },
-  );
+  const states = rk4Trajectory((_t, y) => [y[1]!, -(b * y[1]! + k * y[0]!) / m], [x0, v0], 0, steps * h, steps);
   let sup = 0;
   for (let i = layerSteps; i <= steps; i++) {
-    const x = sol.y[i]?.[0];
+    const x = states[i]?.[0];
     if (x === undefined) return Number.NaN;
     sup = Math.max(sup, Math.abs(x - x0 * Math.exp((-k / b) * i * h)));
   }
@@ -111,26 +106,30 @@ export function measureChainDispersionError(
     return out;
   };
   const h = 1 / stepsPerUnitTime;
-  let state = [
+  const start = [
     ...Float64Array.from({ length: N }, (_, n) => Math.cos((2 * Math.PI * n) / N)),
     ...new Array<number>(N).fill(0),
   ];
   // Twice the lattice quarter period π/(4√(κ/m) sin(π/N)): the crossing is inside.
   const maxSteps = Math.ceil(((2 * Math.PI) / (4 * Math.sqrt(w) * Math.sin(Math.PI / N))) * stepsPerUnitTime);
+  // One continuous run; the system ignores t, so the states are those of a
+  // step-by-step loop, and the first crossing of u_0 is read off them.
+  const states = rk4Trajectory(
+    (_t, y) => {
+      const pos = Float64Array.from(y.slice(0, N));
+      const vel = y.slice(N);
+      const a = accel(pos);
+      return [...vel, ...a];
+    },
+    start,
+    0,
+    maxSteps * h,
+    maxSteps,
+  );
   for (let i = 0; i < maxSteps; i++) {
-    const sol = solveODESystem(
-      (_t, y) => {
-        const pos = Float64Array.from(y.slice(0, N));
-        const vel = y.slice(N);
-        const a = accel(pos);
-        return [...vel, ...a];
-      },
-      state,
-      [0, h],
-      { dt: h },
-    );
-    const next = sol.y[sol.y.length - 1];
-    if (next === undefined) return Number.NaN;
+    const state = states[i];
+    const next = states[i + 1];
+    if (state === undefined || next === undefined) return Number.NaN;
     const u0 = state[0]!;
     const nu0 = next[0]!;
     const v0 = state[N]!;
@@ -148,7 +147,6 @@ export function measureChainDispersionError(
       const q = (2 * Math.PI) / (N * a);
       return 1 - omega / (c * q);
     }
-    state = next.slice();
   }
   return Number.NaN;
 }

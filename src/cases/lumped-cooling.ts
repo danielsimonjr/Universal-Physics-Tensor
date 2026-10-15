@@ -19,8 +19,9 @@
  *
  * @module cases/lumped-cooling
  */
-import { findRoot, solveODESystem } from '@danielsimonjr/mathts-functions';
+import { findRoot } from '@danielsimonjr/mathts-functions';
 import { C_SI, H_SI, K_B_SI } from '../core/constants.js';
+import { integrateRK4 } from '../numerical/null-ray-integrator.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-lumped-cooling';
@@ -49,14 +50,14 @@ export interface LumpedRadiating {
 
 /**
  * T(t) of ρcV dT/dt = −A[h(T − T∞) + εσ_SB(T⁴ − T∞⁴)] for a sphere (V/A =
- * a/3), by classical RK4 (MathTS `solveODESystem` with `dt`, one call per
- * step) with each step 1/100 of the local relaxation time
+ * a/3), by classical RK4 (`integrateRK4`, MathTS `solveODESystem` with `dt`,
+ * one call per step) with each step 1/100 of the local relaxation time
  * ρca/(3(h + 4εσ_SB T³)). Stops early once |T − T∞| is below 1e-15 |T0 − T∞|.
  * @internal
  */
 export function lumpedRadiatingTemperature(p: LumpedRadiating): number {
   const k = 3 / (p.rho * p.c * p.a);
-  const f = (_t: number, y: number[]): number[] => {
+  const f = (_t: number, y: readonly number[]): number[] => {
     const T = y[0]!;
     return [-k * (p.h * (T - p.Tinf) + p.eps * SIGMA_SB_SI * (T ** 4 - p.Tinf ** 4))];
   };
@@ -66,8 +67,7 @@ export function lumpedRadiatingTemperature(p: LumpedRadiating): number {
   while (s < p.t && Math.abs(T - p.Tinf) > floor) {
     const rate = k * (p.h + 4 * p.eps * SIGMA_SB_SI * Math.max(T, p.Tinf) ** 3);
     const dt = Math.min(p.t - s, 0.01 / rate);
-    const sol = solveODESystem(f, [T], [s, s + dt], { dt });
-    T = sol.y[sol.y.length - 1]?.[0] ?? Number.NaN;
+    T = integrateRK4(f, [T], s, s + dt, 1)[0] ?? Number.NaN;
     s += dt;
   }
   return T;

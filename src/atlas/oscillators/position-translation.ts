@@ -41,9 +41,7 @@ import type { ObservableTranslation } from '../translation.js';
 import type { DominanceWitnessSpec } from '../witness-dominance.js';
 import type { NumericWitnessSpec } from '../witness-numeric.js';
 import { pendulumPeriodErrorAt } from './bridges-limits.js';
-import { linearAccel, pendulumAccel, pendulumNome, rk4Step, theta0OfPeriodError } from './pendulum-motion.js';
-
-const TWO_PI = 2 * Math.PI;
+import { linearAccel, pendulumAccel, pendulumNome, rk4Step, theta0OfPeriodError, TWO_PI } from './pendulum-motion.js';
 
 /** W̄ = (16/3) q^{3/2}/(1 − q): the bound on the waveform distortion |F(φ) − θ0 cos φ|. @internal */
 export function waveformBound(theta0: number): number {

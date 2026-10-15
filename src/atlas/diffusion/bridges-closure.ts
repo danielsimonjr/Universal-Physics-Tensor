@@ -23,7 +23,7 @@
 import { ENERGY, LENGTH, MASS, TIME, VELOCITY } from '../../dimensional/types.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { DAMPING } from '../oscillators/dimensions.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { WAVENUMBER } from '../waves/models.js';
@@ -56,11 +56,7 @@ const regimeWithInputs = (
   parameters: readonly { name: string; dim: import('../../dimensional/types.js').Dimension }[],
   dimensionlessInputs: readonly string[],
   inequalities: AtlasBridge['regime']['inequalities'],
-): AtlasBridge['regime'] => ({
-  family: DIFFUSION_FAMILY_NAME,
-  inequalities,
-  groupDefinitions: deriveRegimeGroups(DIFFUSION_FAMILY_NAME, parameters, dimensionlessInputs),
-});
+): AtlasBridge['regime'] => makeRegime(DIFFUSION_FAMILY_NAME, parameters, dimensionlessInputs, inequalities);
 
 /** Reynolds-number ceiling of the Stokes–Einstein derivation: a chosen threshold for Re ≪ 1. @internal */
 const STOKES_MAX_RE = 0.1;

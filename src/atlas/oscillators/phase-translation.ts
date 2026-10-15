@@ -30,9 +30,7 @@
 
 import type { ObservableTranslation } from '../translation.js';
 import { pendulumPeriodErrorAt } from './bridges-limits.js';
-import { crossingTimes, linearAccel, pendulumAccel, phaseAt, theta0OfPeriodError } from './pendulum-motion.js';
-
-const TWO_PI = 2 * Math.PI;
+import { crossingTimes, linearAccel, pendulumAccel, phaseAt, theta0OfPeriodError, TWO_PI } from './pendulum-motion.js';
 
 /**
  * The time, in units of T0, at which the MEASURED phase lead of the linear

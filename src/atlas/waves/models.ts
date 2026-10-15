@@ -19,7 +19,7 @@ import type { Dimension } from '../../dimensional/types.js';
 import { FORCE, FREQUENCY, VELOCITY } from '../../dimensional/types.js';
 import { DENSITY } from '../diffusion/dimensions.js';
 import type { AtlasModel } from '../model.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 
 /** The family name every wave record carries. @internal */
 export const WAVES_FAMILY_NAME = 'waves';
@@ -57,11 +57,7 @@ function model(spec: ModelSpec): AtlasModel {
     parameters: spec.parameters,
     dimensionlessInputs: dimensionless,
     canonicalRefs: spec.canonicalRefs,
-    regime: {
-      family: WAVES_FAMILY_NAME,
-      inequalities: [],
-      groupDefinitions: deriveRegimeGroups(WAVES_FAMILY_NAME, spec.parameters, dimensionless),
-    },
+    regime: makeRegime(WAVES_FAMILY_NAME, spec.parameters, dimensionless, []),
   };
 }
 

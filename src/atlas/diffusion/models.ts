@@ -18,7 +18,7 @@ import { dim } from '../../dimensional/ast-builders.js';
 import type { Dimension } from '../../dimensional/types.js';
 import { DAMPING } from '../oscillators/dimensions.js';
 import type { AtlasModel } from '../model.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY } from './dimensions.js';
 
 /** The family name every diffusion record carries. @internal */
@@ -44,11 +44,7 @@ function model(spec: ModelSpec): AtlasModel {
     parameters: spec.parameters,
     dimensionlessInputs: [],
     canonicalRefs: spec.canonicalRefs,
-    regime: {
-      family: DIFFUSION_FAMILY_NAME,
-      inequalities: [],
-      groupDefinitions: deriveRegimeGroups(DIFFUSION_FAMILY_NAME, spec.parameters, []),
-    },
+    regime: makeRegime(DIFFUSION_FAMILY_NAME, spec.parameters, [], []),
     ...(spec.symmetryGroup === undefined ? {} : { symmetryGroup: spec.symmetryGroup }),
   };
 }

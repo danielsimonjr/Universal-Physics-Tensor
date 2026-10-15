@@ -24,7 +24,7 @@
  */
 
 import { LENGTH, MASS, ACTION, TIME } from '../../dimensional/types.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import type { AtlasBridge } from '../types.js';
 import { DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY } from './dimensions.js';
 import { DIFFUSION_FAMILY_NAME } from './models.js';
@@ -57,9 +57,16 @@ export const BRIDGE_WALK_DIFFUSION: AtlasBridge = {
     'many steps: Δt/t ≪ 1',
     'symmetric, unbiased steps',
   ],
-  regime: {
-    family: DIFFUSION_FAMILY_NAME,
-    inequalities: [
+  regime: makeRegime(
+    DIFFUSION_FAMILY_NAME,
+    [
+      { name: 'dx', dim: LENGTH },
+      { name: 'dt', dim: TIME },
+      { name: 'D', dim: DIFFUSIVITY },
+      { name: 't', dim: TIME },
+    ],
+    [],
+    [
       {
         group: 'dt · t^-1',
         op: '<=',
@@ -67,17 +74,7 @@ export const BRIDGE_WALK_DIFFUSION: AtlasBridge = {
         alias: 'Δt/t ≪ 1 (machine form ≤ 0.01, the coarse resolution WD1 measures)',
       },
     ],
-    groupDefinitions: deriveRegimeGroups(
-      DIFFUSION_FAMILY_NAME,
-      [
-        { name: 'dx', dim: LENGTH },
-        { name: 'dt', dim: TIME },
-        { name: 'D', dim: DIFFUSIVITY },
-        { name: 't', dim: TIME },
-      ],
-      [],
-    ),
-  },
+  ),
   counterexamples: [
     {
       description:
@@ -131,22 +128,19 @@ export const BRIDGE_HEAT_DIFFUSION: AtlasBridge = {
     'homogeneous isotropic medium: κ, ρ, c_p constant',
     'no sources and no advection (the Péclet number is not applicable to either model)',
   ],
-  regime: {
-    family: DIFFUSION_FAMILY_NAME,
-    inequalities: [],
-    groupDefinitions: deriveRegimeGroups(
-      DIFFUSION_FAMILY_NAME,
-      [
-        { name: 'kappa', dim: THERMAL_CONDUCTIVITY },
-        { name: 'rho', dim: DENSITY },
-        { name: 'cp', dim: SPECIFIC_HEAT },
-        { name: 'D', dim: DIFFUSIVITY },
-        { name: 'ell', dim: LENGTH },
-        { name: 't', dim: TIME },
-      ],
-      [],
-    ),
-  },
+  regime: makeRegime(
+    DIFFUSION_FAMILY_NAME,
+    [
+      { name: 'kappa', dim: THERMAL_CONDUCTIVITY },
+      { name: 'rho', dim: DENSITY },
+      { name: 'cp', dim: SPECIFIC_HEAT },
+      { name: 'D', dim: DIFFUSIVITY },
+      { name: 'ell', dim: LENGTH },
+      { name: 't', dim: TIME },
+    ],
+    [],
+    [],
+  ),
   counterexamples: [],
   witnesses: [
     {
@@ -190,19 +184,16 @@ export const BRIDGE_SCHRODINGER_DIFFUSION: AtlasBridge = {
     'V = 0 (free particle)',
     'the continuation is formal: real Schrödinger time maps to imaginary diffusion time',
   ],
-  regime: {
-    family: DIFFUSION_FAMILY_NAME,
-    inequalities: [],
-    groupDefinitions: deriveRegimeGroups(
-      DIFFUSION_FAMILY_NAME,
-      [
-        { name: 'hbar', dim: ACTION },
-        { name: 'm', dim: MASS },
-        { name: 'D', dim: DIFFUSIVITY },
-      ],
-      [],
-    ),
-  },
+  regime: makeRegime(
+    DIFFUSION_FAMILY_NAME,
+    [
+      { name: 'hbar', dim: ACTION },
+      { name: 'm', dim: MASS },
+      { name: 'D', dim: DIFFUSIVITY },
+    ],
+    [],
+    [],
+  ),
   counterexamples: [
     {
       description:

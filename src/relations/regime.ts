@@ -415,3 +415,25 @@ function gridPoints(
   }
   return points;
 }
+
+/**
+ * Build a regime from its family, its dimensioned parameters, its dimensionless
+ * inputs and its inequalities: the one owner of the literal
+ * `{ family, inequalities, groupDefinitions: deriveRegimeGroups(…) }` every
+ * atlas model and bridge used to spell out. The groups are derived here, so an
+ * inequality names a `PiGroup.formula` of the same dimension matrix.
+ *
+ * @internal
+ */
+export function makeRegime(
+  family: string,
+  parameters: readonly DimensionalVariable[],
+  dimensionlessInputs: readonly string[],
+  inequalities: readonly RegimeInequality[],
+): Regime {
+  return {
+    family,
+    inequalities,
+    groupDefinitions: deriveRegimeGroups(family, parameters, dimensionlessInputs),
+  };
+}

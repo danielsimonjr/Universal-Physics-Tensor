@@ -21,7 +21,7 @@ import type { Dimension } from '../../dimensional/types.js';
 import { ACTION, FORCE, FREQUENCY, MASS, VELOCITY } from '../../dimensional/types.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { SPRING_CONSTANT } from '../oscillators/dimensions.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { FLEXURAL_RIGIDITY, LINEAR_DENSITY, WAVENUMBER, WAVES_FAMILY_NAME } from './models.js';
@@ -38,11 +38,7 @@ export const STIFF_MAX_BETA = 0.01;
 const regime = (
   parameters: readonly { name: string; dim: Dimension }[],
   inequalities: AtlasBridge['regime']['inequalities'],
-): AtlasBridge['regime'] => ({
-  family: WAVES_FAMILY_NAME,
-  inequalities,
-  groupDefinitions: deriveRegimeGroups(WAVES_FAMILY_NAME, parameters, []),
-});
+): AtlasBridge['regime'] => makeRegime(WAVES_FAMILY_NAME, parameters, [], inequalities);
 
 /**
  * Bridge: Klein–Gordon → free Schrödinger, the non-relativistic limit.

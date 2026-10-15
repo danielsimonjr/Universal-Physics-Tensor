@@ -22,7 +22,7 @@
  */
 
 import { physjsFormalRef } from '../physjs-ref.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { getAtlasModel } from './models.js';
 import type { AtlasBridge, Regime, RelationContract } from '../types.js';
 import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT } from './norm-transport.js';
@@ -63,11 +63,7 @@ function bridgeRegime(premiseId: string, conclusionId: string): Regime {
     ...getAtlasModel(premiseId).parameters,
     ...getAtlasModel(conclusionId).parameters,
   ];
-  return {
-    family: FAMILY,
-    inequalities: [],
-    groupDefinitions: deriveRegimeGroups(FAMILY, parameters, []),
-  };
+  return makeRegime(FAMILY, parameters, [], []);
 }
 
 /**
