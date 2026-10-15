@@ -40,6 +40,7 @@
  */
 
 import type { Dimension } from './types.js';
+import { BASES } from './algebra.js';
 import { validateComponentDimension } from './field-equation-helpers.js';
 
 // ---------------------------------------------------------------------------
@@ -174,8 +175,7 @@ export function validateGaugeField(node: GaugeFieldNode): void {
   }
 
   const dim = node.dim;
-  const axes: ReadonlyArray<keyof Dimension> = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'];
-  for (const ax of axes) {
+  for (const ax of BASES) {
     if (typeof dim[ax] !== 'number' || !Number.isFinite(dim[ax])) {
       throw new Error(
         `GaugeFieldNode: gauge-field dim.${ax} must be a finite number ` +

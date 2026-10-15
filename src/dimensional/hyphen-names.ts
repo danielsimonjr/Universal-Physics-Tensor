@@ -8,7 +8,8 @@
 
 import { constantRecord } from './symbolic-constants.js';
 
-function escapeRegExp(s: string): string {
+/** `s` with every regular-expression metacharacter escaped, so it matches itself. @internal */
+export function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 

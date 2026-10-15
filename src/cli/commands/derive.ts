@@ -3,8 +3,8 @@
  * (with `--formula`) verify it and recover the dimensionless prefactor.
  * Transposed verbatim from bin/upt.mjs's `derive()` (lines 313-385, the
  * post-crash-fix body — `format(r.dim)`/`format(target.dim)` on the
- * dimension-check line), plus `--json`. `fmtMono`/`BASES`/`dimsEqualTol`
- * move here with it.
+ * dimension-check line), plus `--json`. `fmtMono` moves here with it; the
+ * dimension equality is the library's `equals` (through `api.dimensionsEqual`).
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
@@ -67,10 +67,6 @@ const fmtMono = (m: Readonly<Record<string, number>>): string =>
     .filter(([, e]) => Math.abs(e) > 1e-9)
     .map(([n, e]) => (e === 1 ? n : `${n}^${e}`))
     .join('·') || '(dimensionless)';
-
-const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
-const dimsEqualTol = (a: Dimension, b: Dimension): boolean =>
-  BASES.every((k) => Math.abs((a[k] || 0) - (b[k] || 0)) < 1e-9);
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err } = ctx;
@@ -172,7 +168,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         throw new UsageError(`upt derive: ${hyphenSubtractionNote(r, formula)}. Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
       }
     } else {
-      const matches = dimsEqualTol(r.dim!, target.dim);
+      const matches = api.dimensionsEqual(r.dim!, target.dim);
       if (!matches) failed = true;
       textOut(
         `  formula dimension: ${api.format(r.dim!)}`
@@ -193,7 +189,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     // named after a registered constant is that constant, as in `upt map --equation`.
     const isConstant = (g: { name: string; dim: Dimension }): boolean => {
       const c = api.CONSTANTS[g.name];
-      return c !== undefined && dimsEqualTol(c.dim, g.dim);
+      return c !== undefined && api.dimensionsEqual(c.dim, g.dim);
     };
     const variables = governing.filter((g) => !isConstant(g));
     const compiled = cf;

@@ -28,6 +28,7 @@ import type {
   EmergenceCell,
 } from './cell.js';
 import { lawToCell, bridgeToCell, emergenceToCell } from './cell.js';
+import { Axes } from './axes-registry.js';
 import type { FluxRule, FluxReport, FluxDiagnostic } from './flux-rules.js';
 import { runRules, V07_CELL_RULES, FluxViolationError } from './flux-rules.js';
 
@@ -129,6 +130,20 @@ function cellToEmergence(cell: EmergenceCell): EmergentPhenomenon {
 }
 
 /**
+ * Refuse a configured axis value the registry does not name. `admitted` is the
+ * registry namespace for that axis (`Axes.scale`, …), whose keys are the values.
+ */
+function requireAxisValues(field: string, values: readonly unknown[], admitted: Readonly<Record<string, unknown>>): void {
+  if (!Array.isArray(values)) throw new TypeError(`TensorConfig.${field} must be an array`);
+  const known = Object.keys(admitted);
+  for (const value of values) {
+    if (typeof value !== 'string' || !known.includes(value)) {
+      throw new RangeError(`TensorConfig.${field}: '${String(value)}' is not an axis value; the registry names ${known.join(', ')}`);
+    }
+  }
+}
+
+/**
  * The rank-6 universal physics tensor Π = L + B + E: a sparse store of
  * physical-law / bridge / emergence cells indexed by regime coordinates.
  *
@@ -171,6 +186,14 @@ export class UniversalTensor {
     }
     if (!Array.isArray(config.forces) || config.forces.length === 0) {
       throw new TypeError('TensorConfig.forces must be a non-empty array');
+    }
+    // Each value is one the axis registry names: `scales: ['nope']` used to build a tensor over
+    // an axis value nothing else in the library knows.
+    requireAxisValues('scales', config.scales, Axes.scale);
+    requireAxisValues('forces', config.forces, Axes.force);
+    if (config.symmetries !== undefined) requireAxisValues('symmetries', config.symmetries, Axes.symmetry);
+    if (config.informationMeasures !== undefined) {
+      requireAxisValues('informationMeasures', config.informationMeasures, Axes.information);
     }
 
     // Apply defaults

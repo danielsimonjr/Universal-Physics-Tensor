@@ -56,7 +56,6 @@ export class LabeledTensorConstructionError extends UPTError {
     this.name = 'LabeledTensorConstructionError';
     this.labelCount = labelCount;
     this.tensorRank = tensorRank;
-    Object.setPrototypeOf(this, LabeledTensorConstructionError.prototype);
   }
 }
 
@@ -87,7 +86,6 @@ export class AxisMismatchError extends UPTError {
     this.indexId = indexId;
     this.leftAxis = leftAxis;
     this.rightAxis = rightAxis;
-    Object.setPrototypeOf(this, AxisMismatchError.prototype);
   }
 }
 
@@ -118,7 +116,6 @@ export class IdentityConflictError extends UPTError {
     );
     this.name = 'IdentityConflictError';
     this.indexId = indexId;
-    Object.setPrototypeOf(this, IdentityConflictError.prototype);
   }
 }
 
@@ -154,7 +151,6 @@ export class IndexNameMismatchError extends UPTError {
     this.name = 'IndexNameMismatchError';
     this.indexName = indexName;
     this.ids = ids;
-    Object.setPrototypeOf(this, IndexNameMismatchError.prototype);
   }
 }
 
@@ -178,7 +174,6 @@ export class RankPreservationError extends UPTError {
     this.name = 'RankPreservationError';
     this.fromRank = fromRank;
     this.toRank = toRank;
-    Object.setPrototypeOf(this, RankPreservationError.prototype);
   }
 }
 
@@ -203,7 +198,6 @@ export class AxisOrderError extends UPTError {
     this.name = 'AxisOrderError';
     this.axisOrder = axisOrder;
     this.labelKeys = labelKeys;
-    Object.setPrototypeOf(this, AxisOrderError.prototype);
   }
 }
 
@@ -218,7 +212,6 @@ export class AxisMergeError extends UPTError {
   constructor(message: string) {
     super(`LabeledTensor.mergeAxes: ${message}`);
     this.name = 'AxisMergeError';
-    Object.setPrototypeOf(this, AxisMergeError.prototype);
   }
 }
 
@@ -233,7 +226,6 @@ export class AxisSplitError extends UPTError {
   constructor(message: string) {
     super(`LabeledTensor.splitAxis: ${message}`);
     this.name = 'AxisSplitError';
-    Object.setPrototypeOf(this, AxisSplitError.prototype);
   }
 }
 

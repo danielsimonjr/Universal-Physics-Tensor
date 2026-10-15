@@ -17,7 +17,15 @@
  */
 import { describe, it, expect } from 'vitest';
 import { evaluateNumerical } from '../../src/numerical/index.js';
+import { scanForMetricPair } from '../../src/numerical/metric-inverse.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
+import type {
+  EinsteinFieldEquationNode,
+  EinsteinTensorNode,
+  KretschmannScalarNode,
+  RiemannTensorNode,
+  StressEnergyTensorNode,
+} from '../../src/dimensional/ast-types.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { metric } from '../../src/dimensional/metric.js';
 import { LENGTH, DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -131,5 +139,53 @@ describe('scanForMetricPair walks v0.5.0 curvature node kinds (PC-3)', () => {
     expect(
       result.warnings.some((w) => w.note.includes('InverseMetricInconsistencyWarning')),
     ).toBe(false);
+  });
+});
+
+/**
+ * The walk is an exhaustive switch over `ExprNode` now: a `kretschmann-scalar`
+ * and an `einstein-equation` hold a metric and were not walked (no `never`
+ * arm, so a new kind was silently a leaf). Checked on the scan directly: the
+ * pair must be found inside each.
+ */
+describe('scanForMetricPair walks every node kind that holds a metric', () => {
+  const riemann = buildRiemannNode() as RiemannTensorNode;
+
+  it('finds the pair inside a kretschmann-scalar node', () => {
+    const node: KretschmannScalarNode = { kind: 'kretschmann-scalar', riemann, metric: riemann.gLower };
+    const pair = scanForMetricPair(node);
+    expect(pair).not.toBeNull();
+    expect(pair!.gLower).toBe(riemann.gLower);
+    expect(pair!.gUpper).toBe(riemann.gInverse);
+  });
+
+  it('finds the pair inside an einstein-equation node', () => {
+    const lhs: EinsteinTensorNode = { kind: 'einstein-tensor', riemann, gLower: riemann.gLower, gInverse: riemann.gInverse };
+    const rhs: StressEnergyTensorNode = {
+      kind: 'stress-energy',
+      symbol: 'T',
+      indices: [
+        { label: 'mu', variance: 'lower' },
+        { label: 'nu', variance: 'lower' },
+      ],
+      symmetry: 'symmetric',
+      componentDim: DIMENSIONLESS,
+    };
+    const node: EinsteinFieldEquationNode = {
+      kind: 'einstein-equation',
+      lhs,
+      cosmological: null,
+      metric: riemann.gLower,
+      rhs,
+      coupling: 'einstein',
+    };
+    const pair = scanForMetricPair(node);
+    expect(pair).not.toBeNull();
+    expect(pair!.gUpper).toBe(riemann.gInverse);
+  });
+
+  it('the control: a riemann-tensor node is still found, and a bare symbol holds none', () => {
+    expect(scanForMetricPair(riemann)).not.toBeNull();
+    expect(scanForMetricPair({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS })).toBeNull();
   });
 });

@@ -20,14 +20,14 @@
  * @module cases/lumped-cooling
  */
 import { findRoot } from '@danielsimonjr/mathts-functions';
-import { C_SI, H_SI, K_B_SI } from '../core/constants.js';
+import { SIGMA_SB_SI } from '../core/constants.js';
 import { integrateRK4 } from '../numerical/null-ray-integrator.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-lumped-cooling';
 
-/** Stefan–Boltzmann constant 2π⁵k_B⁴/(15h³c²), from the exact SI constants (W m⁻² K⁻⁴). @internal */
-export const SIGMA_SB_SI = (2 * Math.PI ** 5 * K_B_SI ** 4) / (15 * H_SI ** 3 * C_SI ** 2);
+/** The Stefan–Boltzmann constant (W m⁻² K⁻⁴) is `core/constants`'s; re-exported so the record's module-export table keeps its row. @internal */
+export { SIGMA_SB_SI } from '../core/constants.js';
 
 /** Bi = h L_c/k ceiling, L_c = V/A (Incropera §5.2, eq. 5.10). @internal */
 export const MAX_BIOT = 0.1;

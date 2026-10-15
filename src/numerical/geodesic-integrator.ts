@@ -209,6 +209,17 @@ export function integrateGeodesic(
       `integrateGeodesic: steps must be a positive integer, got ${steps}`,
     );
   }
+  // A NaN or infinite end made every step NaN and the result the start state; an
+  // end equal to the start is a zero step, which is not an integration either.
+  if (!Number.isFinite(tauStart)) {
+    throw new NumericalBackendError(`integrateGeodesic: tauStart must be finite, got ${tauStart}`);
+  }
+  if (!Number.isFinite(tauEnd)) {
+    throw new NumericalBackendError(`integrateGeodesic: tauEnd must be finite, got ${tauEnd}`);
+  }
+  if (tauEnd === tauStart) {
+    throw new NumericalBackendError(`integrateGeodesic: tauEnd must differ from tauStart, both are ${tauStart}`);
+  }
 
   const h = (tauEnd - tauStart) / steps;
   const y0 = [x0[0], x0[1], x0[2], x0[3], v0[0], v0[1], v0[2], v0[3]];

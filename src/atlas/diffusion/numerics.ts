@@ -9,8 +9,10 @@
  * @module atlas/diffusion/numerics
  */
 
-import { lgamma, trapz } from '@danielsimonjr/mathts-functions';
+import { trapz } from '@danielsimonjr/mathts-functions';
 import { integrateRK4 } from '../../numerical/null-ray-integrator.js';
+// `logChoose` is `ln C(n, k)` through MathTS `lgamma`, the one owner of the log binomial coefficient.
+import { logChoose } from '../../numerical/statistics.js';
 
 /**
  * The Gaussian solution of `∂c/∂t = D ∂²c/∂x²` from a point source of unit
@@ -20,18 +22,6 @@ import { integrateRK4 } from '../../numerical/null-ray-integrator.js';
  */
 export function diffusionKernel(x: number, t: number, D: number): number {
   return Math.exp(-(x * x) / (4 * D * t)) / Math.sqrt(4 * Math.PI * D * t);
-}
-
-/** `log Γ(z)`, MathTS `lgamma`, read back as the number it is for a number. */
-function logGamma(z: number): number {
-  const v: unknown = lgamma(z);
-  if (typeof v !== 'number') throw new TypeError('lgamma did not return a number for a number argument');
-  return v;
-}
-
-/** `ln C(n, k) = ln Γ(n+1) − ln Γ(k+1) − ln Γ(n−k+1)`, through MathTS `lgamma`. */
-function logBinomialCoefficient(n: number, k: number): number {
-  return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
 }
 
 /**
@@ -52,7 +42,7 @@ export function randomWalkCentralDensity(steps: number, D: number, t: number): n
   const n = 2 * Math.ceil(steps / 2);
   const dt = t / n;
   const dx = Math.sqrt(2 * D * dt);
-  const logP = logBinomialCoefficient(n, n / 2) - n * Math.LN2;
+  const logP = logChoose(n, n / 2) - n * Math.LN2;
   return Math.exp(logP) / (2 * dx);
 }
 
@@ -68,7 +58,7 @@ export function randomWalkDensity(site: number, steps: number, D: number, t: num
   if (Math.abs(site) > n || (site + n) % 2 !== 0) return 0;
   const dx = Math.sqrt((2 * D * t) / n);
   const k = (n + site) / 2;
-  return Math.exp(logBinomialCoefficient(n, k) - n * Math.LN2) / (2 * dx);
+  return Math.exp(logChoose(n, k) - n * Math.LN2) / (2 * dx);
 }
 
 /** Parameters of the WD2 heat-conduction fixture. @internal */

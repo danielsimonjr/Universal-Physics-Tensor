@@ -14,7 +14,6 @@ export class UPTError extends Error {
     super(message, options);
     this.name = 'UPTError';
     // Restore prototype chain (needed for instanceof after ES5 transpilation).
-    Object.setPrototypeOf(this, UPTError.prototype);
   }
 }
 
@@ -31,7 +30,6 @@ export class DimensionMismatchError extends UPTError {
     this.name = 'DimensionMismatchError';
     this.expected = expected;
     this.actual = actual;
-    Object.setPrototypeOf(this, DimensionMismatchError.prototype);
   }
 }
 
@@ -57,7 +55,6 @@ export class DuplicateIndexLabelError extends UPTError {
     this.name = 'DuplicateIndexLabelError';
     this.tensorName = tensorName;
     this.label = label;
-    Object.setPrototypeOf(this, DuplicateIndexLabelError.prototype);
   }
 }
 
@@ -93,7 +90,6 @@ export class IndexLabelCollisionError extends UPTError {
     this.label = label;
     this.totalCount = totalCount;
     this.sources = sources;
-    Object.setPrototypeOf(this, IndexLabelCollisionError.prototype);
   }
 }
 
@@ -117,7 +113,6 @@ export class VarianceMismatchError extends UPTError {
     this.name = 'VarianceMismatchError';
     this.label = label;
     this.variance = variance;
-    Object.setPrototypeOf(this, VarianceMismatchError.prototype);
   }
 }
 
@@ -136,7 +131,6 @@ export class TensorInScalarOpError extends UPTError {
     );
     this.name = 'TensorInScalarOpError';
     this.op = op;
-    Object.setPrototypeOf(this, TensorInScalarOpError.prototype);
   }
 }
 
@@ -150,7 +144,6 @@ export class FreeIndexMismatchError extends UPTError {
   constructor(message: string) {
     super(message);
     this.name = 'FreeIndexMismatchError';
-    Object.setPrototypeOf(this, FreeIndexMismatchError.prototype);
   }
 }
 
@@ -165,7 +158,6 @@ export class TensorProductChildInferenceError extends UPTError {
   constructor(message: string) {
     super(message);
     this.name = 'TensorProductChildInferenceError';
-    Object.setPrototypeOf(this, TensorProductChildInferenceError.prototype);
   }
 }
 
@@ -186,7 +178,6 @@ export class InvalidMetricRankError extends UPTError {
     this.name = 'InvalidMetricRankError';
     this.tensorName = tensorName;
     this.actualRank = actualRank;
-    Object.setPrototypeOf(this, InvalidMetricRankError.prototype);
   }
 }
 
@@ -206,7 +197,6 @@ export class MetricSignatureError extends UPTError {
     this.name = 'MetricSignatureError';
     this.tensorName = tensorName;
     this.reason = reason;
-    Object.setPrototypeOf(this, MetricSignatureError.prototype);
   }
 }
 
@@ -223,7 +213,6 @@ export class InvalidKroneckerRankError extends UPTError {
     );
     this.name = 'InvalidKroneckerRankError';
     this.actualRank = actualRank;
-    Object.setPrototypeOf(this, InvalidKroneckerRankError.prototype);
   }
 }
 
@@ -242,7 +231,6 @@ export class KroneckerVarianceError extends UPTError {
     );
     this.name = 'KroneckerVarianceError';
     this.bothVariance = bothVariance;
-    Object.setPrototypeOf(this, KroneckerVarianceError.prototype);
   }
 }
 
@@ -262,7 +250,6 @@ export class PartialDerivativeIndexVarianceError extends UPTError {
     );
     this.name = 'PartialDerivativeIndexVarianceError';
     this.label = label;
-    Object.setPrototypeOf(this, PartialDerivativeIndexVarianceError.prototype);
   }
 }
 
@@ -277,7 +264,7 @@ export class PartialDerivativeIndexVarianceError extends UPTError {
  * a dimensional → numerical import cycle; re-exported from numerical/index.ts
  * for the public API surface per v0.4.0-Implementation-Plan Task 13.
  *
- * Uses `Object.setPrototypeOf` for correct `instanceof` after ES5 transpilation.
+ * A plain `class extends Error` under the ES2022 target: `instanceof` holds without a prototype reset.
  *
  * @public
  */
@@ -289,6 +276,5 @@ export class DuplicateCoordinateWarning extends Error {
       `Rename the operand's free index or pick a different wrt label.`,
     );
     this.name = 'DuplicateCoordinateWarning';
-    Object.setPrototypeOf(this, DuplicateCoordinateWarning.prototype);
   }
 }

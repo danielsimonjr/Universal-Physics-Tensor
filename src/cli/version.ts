@@ -8,13 +8,15 @@
  * npm layout (`dist/` ships as part of the published package).
  */
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { readJsonFile } from '../core/data-file.js';
 
 export function packageVersion(): string {
-  const pkgPath = new URL('../../package.json', import.meta.url);
-  const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as { version: string };
+  const pkgPath = fileURLToPath(new URL('../../package.json', import.meta.url));
+  const pkg = readJsonFile(pkgPath) as { version: string };
   return pkg.version;
 }
 
@@ -25,7 +27,7 @@ export function packageVersion(): string {
  * the record still names those versions so a replay can see a parser change.
  */
 export function peerVersions(): Record<string, string | null> {
-  const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as {
+  const pkg = readJsonFile(fileURLToPath(new URL('../../package.json', import.meta.url))) as {
     dependencies?: Record<string, string>;
     peerDependencies?: Record<string, string>;
   };
@@ -40,7 +42,7 @@ export function peerVersions(): Record<string, string | null> {
     for (const dir of require.resolve.paths(name) ?? []) {
       const manifest = join(dir, name, 'package.json');
       if (existsSync(manifest)) {
-        peers[name] = (JSON.parse(readFileSync(manifest, 'utf8')) as { version?: string }).version ?? null;
+        peers[name] = (readJsonFile(manifest) as { version?: string }).version ?? null;
         break;
       }
     }

@@ -13,7 +13,7 @@
  * @module composition/canonical-json
  */
 
-import { createHash } from 'node:crypto';
+import { sha256Hex as coreSha256Hex } from '../core/hash.js';
 import type { EnvironmentFingerprint } from './probe/types.js';
 
 /** Which caller’s bytes `canonicalJson` writes. */
@@ -90,7 +90,7 @@ export function canonicalJson(value: unknown, profile: JsonProfile = 'probe'): s
  * @internal
  */
 export function sha256Hex(text: string): string {
-  return createHash('sha256').update(text, 'utf8').digest('hex');
+  return coreSha256Hex(text);
 }
 
 /**

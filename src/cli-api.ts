@@ -280,9 +280,12 @@ export {
   kerrGeodesic,
   kerrTurningPointOrbit,
   MetricMassError,
+  MetricValueError,
   schwarzschildCircularOrbit,
   type MetricId,
 } from './numerical/spacetime-metrics.js';
+/** One split of a `name=value` token; a null is the command's own usage or value error. */
+export { splitAssignment } from './core/assignment.js';
 
 /**
  * Binding readers for `upt eval`, `upt evaluate`, `upt regime`, and `upt path`.
@@ -313,7 +316,7 @@ export { naturalConstantOverrides } from './dimensional/natural-units.js';
 /** The constant-value mode a formula is evaluated in: SI, natural, or geometrized. */
 export type { UnitMode } from './dimensional/natural-units.js';
 /** Kebab catalog names rewritten to one symbol each before a formula is parsed. */
-export { rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
+export { escapeRegExp, rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
 /** The ledger id of an orphan-connector pair, when both names are slugs. */
 export { candidateIdIfSlug } from './composition/adjudication.js';
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */

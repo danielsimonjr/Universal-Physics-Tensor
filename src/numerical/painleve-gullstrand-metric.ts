@@ -51,7 +51,7 @@
  * @module numerical/painleve-gullstrand-metric
  */
 
-import { C_SI, G_SI } from '../core/constants.js';
+import { schwarzschildRadius } from './schwarzschild.js';
 import type { MetricFnFlat } from './curvature-lowering-helpers.js';
 
 /**
@@ -62,7 +62,7 @@ import type { MetricFnFlat } from './curvature-lowering-helpers.js';
  * @internal
  */
 function schwarzschildRs(M_kg: number): number {
-  return (2 * G_SI * M_kg) / (C_SI * C_SI);
+  return schwarzschildRadius(M_kg);
 }
 
 /**

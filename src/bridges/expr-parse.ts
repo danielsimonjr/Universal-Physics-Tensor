@@ -98,8 +98,19 @@ const VARIABLES = new Map<string, ReadonlySet<string>>();
 
 const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
 
-/** The names an expression mentions (π included, which MathTS does not list as a variable), cached per expression text. */
-function readNames(expression: string): ReadonlySet<string> {
+/**
+ * The names a catalog expression mentions, each hyphenated quantity or
+ * constant spelling rewritten to its one token first (`truncation-coefficient-b`
+ * is `truncation_coefficient_b`, not `b`), π included (MathTS does not list it
+ * as a variable). Cached per expression text. Known defect, not fixed here:
+ * `reduced-planck-constant` is read as `reduced`, `planck_constant`, not
+ * `hbar`, because the declared `planck-constant` is rewritten inside it first
+ * (`tests/bridges/expression-names.test.ts` marks it with `it.fails`). The
+ * one identifier walk: the notices reader and the condition interpreter read
+ * it too.
+ * @internal
+ */
+export function expressionNames(expression: string): ReadonlySet<string> {
   let names = VARIABLES.get(expression);
   if (names === undefined) {
     names = new Set(rewriteCatalogHyphens(expression, formulaNames()).match(IDENTIFIER) ?? []);
@@ -152,7 +163,7 @@ export function evaluateFormula(
     GRAMMAR_CHECKED.add(expression);
   }
   const rewritten = rewriteCatalogHyphens(expression, formulaNames());
-  const scope = formulaScope(withoutUnreadConstants(inputs, readNames(expression), declared), declared);
+  const scope = formulaScope(withoutUnreadConstants(inputs, expressionNames(expression), declared), declared);
   return parseFormula(rewritten).evaluate(scope);
 }
 

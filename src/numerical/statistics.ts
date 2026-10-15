@@ -1,20 +1,20 @@
 /**
  * Scalar statistics read from MathTS, typed back as the numbers they are.
  *
- * The typed MathTS functions (`mean`, `std`) are dispatch objects whose
- * declared return is `unknown`; each reader here checks the number it gets
- * for a number array, so a caller never carries an `unknown` into arithmetic.
+ * The typed MathTS functions (`mean`, `std`, `lgamma`) are dispatch objects
+ * whose declared return is `unknown`; each reader here takes its number
+ * through `core/mathts-read`, so a caller never carries an `unknown` into
+ * arithmetic.
  *
  * @module numerical/statistics
  */
-import { mean, std } from '@danielsimonjr/mathts-functions';
+import { lgamma, mean, std } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../core/mathts-read.js';
 
 /** MathTS `mean` of a non-empty number array. @throws RangeError on an empty array. @internal */
 export function meanOf(values: readonly number[]): number {
   if (values.length === 0) throw new RangeError('meanOf: no values');
-  const v: unknown = mean([...values]);
-  if (typeof v !== 'number') throw new TypeError('mean did not return a number for a number array');
-  return v;
+  return numberFrom('mean', mean([...values]));
 }
 
 /**
@@ -23,9 +23,23 @@ export function meanOf(values: readonly number[]): number {
  */
 function populationStd(values: readonly number[]): number {
   if (values.length === 0) throw new RangeError('populationStd: no values');
-  const v: unknown = std([...values], 'uncorrected');
-  if (typeof v !== 'number') throw new TypeError('std did not return a number for a number array');
-  return v;
+  return numberFrom('std', std([...values], 'uncorrected'));
+}
+
+/** `log Γ(z)`, MathTS `lgamma`, read back as the number it is for a number. */
+function logGamma(z: number): number {
+  return numberFrom('lgamma', lgamma(z));
+}
+
+/**
+ * `ln C(n, k) = ln Γ(n+1) − ln Γ(k+1) − ln Γ(n−k+1)`, through MathTS `lgamma`.
+ * The one owner of the log binomial coefficient: the lattice random walk and
+ * the McNemar tail both read it (`TOOLS.md`, how `lgamma` compares to a sum
+ * of logs at large n).
+ * @internal
+ */
+export function logChoose(n: number, k: number): number {
+  return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
 }
 
 /** The mean of a set of ratios and their coefficient of variation (population σ over |mean|). @internal */

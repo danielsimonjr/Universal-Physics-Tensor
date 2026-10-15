@@ -99,7 +99,6 @@ class RaiseLowerInvalidLabelError extends UPTError {
   constructor(message: string) {
     super(message);
     this.name = 'RaiseLowerInvalidLabelError';
-    Object.setPrototypeOf(this, RaiseLowerInvalidLabelError.prototype);
   }
 }
 

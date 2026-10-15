@@ -37,13 +37,13 @@ export const DIMENSIONLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0
 
 // --- Mechanics ---
 //
-// Named-dimension constants are exported only when there is at least one
-// real consumer (a bridge encoding, a constant, or an active test). The
-// previously-exported VOLUME, MOMENTUM, ANGULAR_MOMENTUM, PRESSURE,
-// DENSITY, VOLTAGE, ELECTRIC_FIELD, MAGNETIC_FIELD were unreferenced and
-// were removed 2026-05-04 per simplifier F-01 (no flexibility/configura-
-// bility that wasn't requested). Re-add them precisely when a bridge
-// encoding or test references them.
+// Named-dimension constants: one owner for each shape. The atlas families and
+// the canonical entries each spelled PRESSURE, SPRING_CONSTANT, CAPACITANCE,
+// INDUCTANCE, RESISTANCE, THERMAL_CONDUCTIVITY, SPECIFIC_HEAT, VISCOSITY,
+// VOLUME, PERMITTIVITY, MOMENTUM and ELECTRIC_FIELD by exponents; those shapes
+// are named here. A shape named here is NOT a row of NAMED_DIMENSIONS unless
+// `format()` is meant to print its name: adding a row changes every printed
+// dimension of that shape.
 export const LENGTH:        Dimension = { L: 1, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 export const AREA:          Dimension = { L: 2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 export const TIME:          Dimension = { L: 0, M: 0, T: 1, I: 0, Theta: 0, N: 0, J: 0 };
@@ -57,13 +57,37 @@ export const FORCE:         Dimension = { L: 1, M: 1, T: -2, I: 0, Theta: 0, N: 
 export const ENERGY:        Dimension = { L: 2, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 }; // joule
 export const POWER:         Dimension = { L: 2, M: 1, T: -3, I: 0, Theta: 0, N: 0, J: 0 }; // watt
 export const ACTION:        Dimension = { L: 2, M: 1, T: -1, I: 0, Theta: 0, N: 0, J: 0 }; // J·s
+/** Volume, cubic metre. */
+export const VOLUME:        Dimension = { L: 3, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+/** Momentum, kilogram metre per second. */
+export const MOMENTUM:      Dimension = { L: 1, M: 1, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
+/** Pressure, pascal. */
+export const PRESSURE:      Dimension = { L: -1, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
+/** Spring constant, newton per metre. */
+export const SPRING_CONSTANT: Dimension = { L: 0, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
+/** Dynamic viscosity, pascal second. */
+export const VISCOSITY:     Dimension = { L: -1, M: 1, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
 
 // --- Thermodynamics ---
 export const TEMPERATURE:   Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 1, N: 0, J: 0 };
 export const ENTROPY:       Dimension = { L: 2, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 }; // J/K
+/** Thermal conductivity, watt per metre kelvin. */
+export const THERMAL_CONDUCTIVITY: Dimension = { L: 1, M: 1, T: -3, I: 0, Theta: -1, N: 0, J: 0 };
+/** Specific heat capacity, joule per kilogram kelvin. */
+export const SPECIFIC_HEAT: Dimension = { L: 2, M: 0, T: -2, I: 0, Theta: -1, N: 0, J: 0 };
 
 // --- Electromagnetism (SI) ---
 export const CHARGE:        Dimension = { L: 0, M: 0, T: 1, I: 1, Theta: 0, N: 0, J: 0 }; // coulomb = A·s
+/** Capacitance, farad. */
+export const CAPACITANCE:   Dimension = { L: -2, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };
+/** Inductance, henry. */
+export const INDUCTANCE:    Dimension = { L: 2, M: 1, T: -2, I: -2, Theta: 0, N: 0, J: 0 };
+/** Resistance, ohm. */
+export const RESISTANCE:    Dimension = { L: 2, M: 1, T: -3, I: -2, Theta: 0, N: 0, J: 0 };
+/** Permittivity, farad per metre. */
+export const PERMITTIVITY:  Dimension = { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };
+/** Electric field, volt per metre. */
+export const ELECTRIC_FIELD: Dimension = { L: 1, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 };
 
 // --- Curated lookup table for `format()` to recognize named SI dimensions. ---
 // Order matters only for tie-breaks; the first matching name wins.
