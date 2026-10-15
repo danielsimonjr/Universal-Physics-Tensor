@@ -954,7 +954,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/physjs-reviewed.ts` - The reviewed PhysJS manifest rows, pinned per key.
+### `src/atlas/physjs-reviewed.ts` - The reviewed Lean manifest rows (`formal/lean/manifest.json`), pinned per key.
 
 **Exports:**
 - Constants: `PHYSJS_SANITY_LEMMA_KEYS`, `PHYSJS_REVIEWED_ROWS`
@@ -7031,7 +7031,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 364 |
 | Total Modules | 13 |
-| Total Lines of Code | 81696 |
+| Total Lines of Code | 81698 |
 | Total Exports | 2578 |
 | Total Re-exports | 1320 |
 | Total Classes | 82 |

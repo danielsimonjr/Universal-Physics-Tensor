@@ -3378,7 +3378,7 @@
         ]
       },
       "src/atlas/physjs-reviewed.ts": {
-        "description": "The reviewed PhysJS manifest rows, pinned per key.",
+        "description": "The reviewed Lean manifest rows (`formal/lean/manifest.json`), pinned per key.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
@@ -25631,7 +25631,7 @@
   "statistics": {
     "totalTypeScriptFiles": 364,
     "totalModules": 13,
-    "totalLinesOfCode": 81696,
+    "totalLinesOfCode": 81698,
     "totalExports": 2578,
     "totalClasses": 82,
     "totalInterfaces": 467,
