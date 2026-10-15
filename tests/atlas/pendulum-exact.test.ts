@@ -66,12 +66,18 @@ describe('the exact check — the Fourier-series premise against the elliptic so
   });
 });
 
+/** MathTS `random` is a typed function and returns `unknown`: read the number back, never cast. */
+function num(v: unknown): number {
+  if (typeof v !== 'number') throw new TypeError('random did not return a number');
+  return v;
+}
+
 describe('the elliptic solution itself', () => {
   it('satisfies θ″ + ω0² sin θ = 0 through the cn·dn identities at seeded random points', () => {
     seedProbabilityRng('pendulum-exact');
     for (let i = 0; i < 64; i++) {
-      const theta0 = random(0.01, 0.5);
-      const t = random(0, 3);
+      const theta0 = num(random(0.01, 0.5));
+      const t = num(random(0, 3));
       const k = Math.sin(theta0 / 2);
       const m = k * k;
       const K = (Math.PI / 2) * (1 + pendulumPeriodErrorAt({ theta0 }));

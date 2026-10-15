@@ -41,7 +41,7 @@ describe('W8b — the damped spring’s offset from its massless reduction: expm
     const layerSteps = Math.ceil((5 * stepsPerMass) / b);
     const steps = Math.ceil(tEnd / h);
     const E = propagator([[0, 1], [-k / m, -b / m]], h);
-    let y = [x0, v0];
+    let y: number[] = [x0, v0];
     let sup = 0;
     for (let i = 1; i <= steps; i++) {
       y = apply(E, y);
