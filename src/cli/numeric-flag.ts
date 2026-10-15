@@ -4,29 +4,19 @@
  * `Number()` accepts hex (`0x10`), binary, octal, an exponent on an integer (`1e1`), and reads
  * `''` and whitespace as 0, so a flag read through it took a value the user did not type
  * (`upt map --max-routes=0x10` ran with 16). An integer flag is digits with an optional sign; a
- * real flag is a decimal with an optional fraction and exponent. A token outside the grammar is
+ * real flag is a decimal with an optional fraction and exponent, the AST's one literal rule
+ * (`DECIMAL_LITERAL`, `src/dimensional/ast-leaves.ts`). A token outside the grammar is
  * a malformed invocation (`UsageError`, exit 2) naming the flag and the token; a well-formed
  * value outside the flag's range is the command's own value refusal (exit 1), judged after.
  *
  * @module cli/numeric-flag
  * @internal
  */
+import { DECIMAL_LITERAL } from '../dimensional/ast-leaves.js';
 import { UsageError } from './errors.js';
 
 /** `3`, `-2`, `+7`, `010`: digits with an optional sign, nothing else. */
 const INTEGER = /^[+-]?\d+$/;
-
-/** `3`, `-2.5`, `.5`, `5.`, `1e-3`, `2E+4`: a decimal with an optional fraction and exponent. */
-const DECIMAL = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
-
-/**
- * Whether `s` is a decimal literal of the AST grammar (`2`, `0.5`, `1e-3`), and so a number and
- * not a symbol name. `''`, whitespace and `0x10` are not. (`src/dimensional/ast-leaves.ts` is
- * to export the same test; this copy goes when it lands.)
- */
-export function isDecimalLiteral(s: string): boolean {
-  return DECIMAL.test(s);
-}
 
 /** The help pointer, worded as the parser's unknown-flag message words it. */
 function hint(command: string): string {
@@ -52,7 +42,7 @@ export function integerFlag(command: string, label: string, raw: string): number
  * arguments are {@link integerFlag}'s. An exponent is a decimal form (`1e-3`); hex is not.
  */
 export function realFlag(command: string, label: string, raw: string): number {
-  if (!DECIMAL.test(raw)) {
+  if (!DECIMAL_LITERAL.test(raw)) {
     throw new UsageError(
       `upt${command === '' ? '' : ` ${command}`}: ${label} '${raw}' is not a number (a decimal such as 2, 0.5 or 1e-3; ${hint(command)})`,
     );

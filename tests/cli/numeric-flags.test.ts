@@ -12,7 +12,8 @@ import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { join } from 'node:path';
 import { runCli } from '../../dist/cli/main.js';
-import { integerFlag, isDecimalLiteral, realFlag } from '../../dist/cli/numeric-flag.js';
+import { integerFlag, realFlag } from '../../dist/cli/numeric-flag.js';
+import { isDecimalLiteral } from '../../dist/dimensional/ast-leaves.js';
 import { latexName } from '../../dist/cli/expr-print.js';
 import { UsageError } from '../../dist/cli/errors.js';
 

@@ -10,7 +10,7 @@
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { BASES, exactlyEquals, isDimensionless, SI_BASE, siUnitOf } from '../dimensional/algebra.js';
-import { isDecimalLiteral } from './numeric-flag.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 
 interface PrintStyle {
   readonly times: string;

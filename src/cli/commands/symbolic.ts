@@ -10,7 +10,6 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import { EVAL_STUBS, printDisplay, printEval, printLatex, latexName } from '../expr-print.js';
-import { isDecimalLiteral } from '../numeric-flag.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -43,7 +42,7 @@ function exprToString(n: ExprNode): string {
  */
 function evalFormOf(
   n: ExprNode,
-  constants: CommandCtx['api']['CONSTANTS'],
+  api: CommandCtx['api'],
   point: Readonly<Record<string, number>>,
 ): { formula: string; bindings: string[] } | null {
   const formula = printEval(n);
@@ -57,8 +56,8 @@ function evalFormOf(
   collect(n);
   const bindings: string[] = [];
   for (const name of names) {
-    if (name in EVAL_STUBS || isDecimalLiteral(name)) continue;
-    const value = constants[name]?.value ?? point[name];
+    if (name in EVAL_STUBS || api.isDecimalLiteral(name)) continue;
+    const value = api.CONSTANTS[name]?.value ?? point[name];
     if (value === undefined) return null;
     bindings.push(`${name}=${value}`);
   }
@@ -94,7 +93,7 @@ function symbolTable(
   const names: string[] = [];
   const collect = (e: ExprNode): void => {
     if (e.kind === 'symbol') {
-      if (!names.includes(e.name) && !isDecimalLiteral(e.name)) names.push(e.name);
+      if (!names.includes(e.name) && !api.isDecimalLiteral(e.name)) names.push(e.name);
     } else if (e.kind === 'op') e.args.forEach(collect);
   };
   collect(n);
@@ -187,7 +186,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           leaves: s.leaves,
           expr: exprToString(s.expr),
           latex: latexOf(s.name, s.leaves, s.expr),
-          evalForm: evalFormOf(s.expr, api.CONSTANTS, point),
+          evalForm: evalFormOf(s.expr, api, point),
           symbols: symbolTable(s.expr, api, inputs, point),
           dim: api.format(s.dim),
           value: sNum,
@@ -198,7 +197,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         const tag = s.expr === obs.expr ? '  (unchanged — minimal, or not reducible here)' : '';
         out(`      simplified: ${s.name}(${s.leaves.join(',')}) = ${exprToString(s.expr)}${tag}`);
         out(`      latex:      ${latexOf(s.name, s.leaves, s.expr) ?? 'none (a node the printer cannot take)'}`);
-        out(`      eval form:  ${showEvalForm(evalFormOf(s.expr, api.CONSTANTS, point))}`);
+        out(`      eval form:  ${showEvalForm(evalFormOf(s.expr, api, point))}`);
         showSymbolTable(symbolTable(s.expr, api, inputs, point), out);
         out(`      value @ mass = M_sun:  ${api.formatQuantity(sNum)}  (= composed, ${api.format(s.dim)})`);
       }
@@ -209,7 +208,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         leaves: obs.leaves,
         expr: exprToString(obs.expr),
         latex: latexOf(obs.name, obs.leaves, obs.expr),
-        evalForm: evalFormOf(obs.expr, api.CONSTANTS, point),
+        evalForm: evalFormOf(obs.expr, api, point),
         symbols: symbolTable(obs.expr, api, inputs, point),
         dim: api.format(obs.dim),
         value: num,
@@ -217,7 +216,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       });
     } else {
       out(`      latex:      ${latexOf(obs.name, obs.leaves, obs.expr) ?? 'none (a node the printer cannot take)'}`);
-      out(`      eval form:  ${showEvalForm(evalFormOf(obs.expr, api.CONSTANTS, point))}`);
+      out(`      eval form:  ${showEvalForm(evalFormOf(obs.expr, api, point))}`);
       showSymbolTable(symbolTable(obs.expr, api, inputs, point), out);
       out(`      dimension: ${api.format(obs.dim)}   (validated on the composed AST)`);
       out(`      value @ mass = M_sun:  ${api.formatQuantity(num)}`);
