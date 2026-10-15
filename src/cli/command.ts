@@ -13,8 +13,6 @@
 import type { ParsedArgs, FlagSpec, PositionalArity } from './args.js';
 import type * as cliApi from '../cli-api.js';
 
-export type { PositionalArity } from './args.js';
-
 export interface CommandCtx {
   args: ParsedArgs;
   api: typeof cliApi; // injected so tests can stub; main.ts passes the real barrel
