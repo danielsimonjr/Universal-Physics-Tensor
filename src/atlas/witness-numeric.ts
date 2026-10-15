@@ -134,21 +134,12 @@ function observedOrderOf(
   const y = points.map((p) => Math.log(p.error));
   const fit = linearRegression(x, y);
   if (!Number.isFinite(fit.slope) || !Number.isFinite(fit.intercept)) return undefined;
-  // MathTS derives the slope's standard error from the correlation, through
-  // (1/r² − 1), so a near-perfect fit whose r rounds a hair above 1 reports
-  // null (measured: r = 1 + 2.2e-16 on an exact power law with rounded
-  // errors, stdErr null where the residual form gives 5.8e-15). The residual
-  // form √(Σ(y − ŷ)²/((n − 2) Σ(x − x̄)²)) is the same statistic and is read
-  // only when MathTS's is not a finite number.
-  let stdErr: number = fit.stdErr;
-  if (!Number.isFinite(stdErr)) {
-    const n = points.length;
-    const xMean = x.reduce((s, v) => s + v, 0) / n;
-    const sse = y.reduce((s, v, i) => s + (v - (fit.intercept + fit.slope * x[i]!)) ** 2, 0);
-    const sxx = x.reduce((s, v) => s + (v - xMean) ** 2, 0);
-    stdErr = Math.sqrt(sse / (n - 2) / sxx);
-    if (!Number.isFinite(stdErr)) return undefined;
-  }
+  // From @danielsimonjr/mathts-functions 0.68.5 (MathTS #371) the slope's standard error is the
+  // residual form √(Σ(y − ŷ)²/((n − 2) Σ(x − x̄)²)); before it, `syy − slope·sxy` cancelled on a
+  // near-exact fit and went negative, so an exact power law with rounded errors reported NaN and
+  // this runner recomputed the residual form itself. A non-finite value is still not reported.
+  const stdErr: number = fit.stdErr;
+  if (!Number.isFinite(stdErr)) return undefined;
   return { slope: fit.slope, stdErr, n: points.length };
 }
 

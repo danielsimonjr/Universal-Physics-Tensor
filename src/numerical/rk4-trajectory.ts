@@ -30,11 +30,11 @@ export function rk4Trajectory(
   if (!Number.isInteger(steps) || steps <= 0) {
     throw new NumericalBackendError(`rk4Trajectory: step count must be a positive integer, got ${steps}`);
   }
-  // MathTS takes ceil(span/dt) steps of span/ceil(span/dt): when span/(span/steps)
-  // rounds a hair above `steps` it takes one extra, smaller step. `dt` is passed
-  // a few ulps above span/steps so that ceiling is exactly `steps`, and the step
-  // MathTS then uses is span/steps, the one asked for. The count is still checked.
-  const h = ((t1 - t0) / steps) * (1 + 4 * Number.EPSILON);
+  // From @danielsimonjr/mathts-functions 0.68.5 (MathTS #371) a `span/dt` that is a whole number
+  // up to rounding takes exactly that many steps of span/n and ends on t1; before it, `ceil`
+  // could add one smaller step, and this module nudged `dt` by 4ε to avoid it. The count is
+  // still checked, so a regression in MathTS is refused here, not integrated.
+  const h = (t1 - t0) / steps;
   const sol = solveODESystem(system, [...y0], [t0, t1], { dt: h });
   if (sol.y.length !== steps + 1) {
     throw new NumericalBackendError(`rk4Trajectory: expected ${steps + 1} states, got ${sol.y.length}`);
