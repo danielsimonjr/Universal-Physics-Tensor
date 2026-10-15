@@ -241,11 +241,12 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../relations/types.js` | `FormalRef` | Import (type-only) |
-| `../bridges/catalog-load.js` | `catalogEntry` | Import |
+| `../bridges/catalog-types.js` | `CatalogEntry, ProofStatus` | Import (type-only) |
+| `../bridges/catalog-load.js` | `catalogEntries, catalogEntry` | Import |
 | `./physjs-ref.js` | `physjsFormalRef` | Import |
 
 **Exports:**
-- Functions: `catalogFormalRef`
+- Functions: `catalogFormalRef`, `deriveProofStatus`, `catalogProofProblems`
 
 ---
 
@@ -1440,6 +1441,17 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `./observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
 | `./types.js` | `BridgeEquationEntry, BridgeEquationStatus` | Import (type-only) |
+
+**Exports:**
+- Interfaces:
+
+  ```text
+  CatalogEntry, CatalogReference, CatalogRelation, CatalogEvaluatorParameter, CatalogEvaluatorOutput,
+  CatalogEvaluator, CatalogPrediction, CatalogConfrontation, CatalogRejection, CatalogFile,
+  CatalogAdjudication
+  ```
+
+- Constants: `PROOF_STATUSES`
 
 ---
 
@@ -6845,7 +6857,7 @@ The codebase is organized into the following modules:
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
 | `bridge-record` | 4 files | 0 files |
-| `catalog-formal-ref` | 3 files | 3 files |
+| `catalog-formal-ref` | 4 files | 3 files |
 | `chain-pipeline` | 14 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
@@ -7019,15 +7031,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 364 |
 | Total Modules | 13 |
-| Total Lines of Code | 81615 |
-| Total Exports | 2575 |
+| Total Lines of Code | 81696 |
+| Total Exports | 2578 |
 | Total Re-exports | 1320 |
 | Total Classes | 82 |
 | Total Interfaces | 467 |
-| Total Functions | 781 |
+| Total Functions | 783 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 510 |
+| Type-only Imports | 511 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

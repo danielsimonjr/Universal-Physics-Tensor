@@ -4,7 +4,7 @@
     "version": "10.0.0",
     "totalFiles": 364,
     "totalModules": 13,
-    "totalExports": 2575
+    "totalExports": 2578
   },
   "entryPoints": [
     {
@@ -551,8 +551,17 @@
             "typeOnly": true
           },
           {
+            "file": "../bridges/catalog-types.js",
+            "imports": [
+              "CatalogEntry",
+              "ProofStatus"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "../bridges/catalog-load.js",
             "imports": [
+              "catalogEntries",
               "catalogEntry"
             ]
           },
@@ -564,10 +573,14 @@
           }
         ],
         "exports": [
-          "catalogFormalRef"
+          "catalogFormalRef",
+          "deriveProofStatus",
+          "catalogProofProblems"
         ],
         "functions": [
-          "catalogFormalRef"
+          "catalogFormalRef",
+          "deriveProofStatus",
+          "catalogProofProblems"
         ]
       },
       "src/atlas/chain-pipeline.ts": {
@@ -5031,7 +5044,9 @@
             "typeOnly": true
           }
         ],
-        "exports": [],
+        "exports": [
+          "PROOF_STATUSES"
+        ],
         "interfaces": [
           "CatalogEntry",
           "CatalogReference",
@@ -5044,6 +5059,9 @@
           "CatalogRejection",
           "CatalogFile",
           "CatalogAdjudication"
+        ],
+        "constants": [
+          "PROOF_STATUSES"
         ]
       },
       "src/bridges/coefficient-statement.ts": {
@@ -25613,16 +25631,16 @@
   "statistics": {
     "totalTypeScriptFiles": 364,
     "totalModules": 13,
-    "totalLinesOfCode": 81615,
-    "totalExports": 2575,
+    "totalLinesOfCode": 81696,
+    "totalExports": 2578,
     "totalClasses": 82,
     "totalInterfaces": 467,
-    "totalFunctions": 781,
+    "totalFunctions": 783,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 391,
+    "totalConstants": 392,
     "totalReExports": 1320,
-    "totalTypeOnlyImports": 510,
+    "totalTypeOnlyImports": 511,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
