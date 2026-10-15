@@ -23,6 +23,7 @@
  * @module composition/canonical-compare
  */
 
+import { matrixRank, ols } from '@danielsimonjr/mathts-functions';
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
@@ -42,6 +43,7 @@ import type { CompiledFormula } from '../numerical/formula-contract.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { FIXED_POINT_EXPONENTS, constantRatio, fixedPoint } from '../canonical/fixed-points.js';
+import { formatRational, rationalize } from './rational-exponent.js';
 
 /**
  * The comparison points: variable `i` (in sorted name order) takes the value
@@ -59,6 +61,25 @@ const STUB_GLOSS: Readonly<Record<string, string>> = {
   one_minus_e_sq: '1-e²',
 };
 
+/**
+ * Which exponent differs, when a formula differs in FORM from the canonical
+ * monomial (proposal 4): the fit of `log|yours/canonical|` on the logs of the
+ * variables over a full-rank design. `exponents` are the fitted powers,
+ * replaced by the small rational they stand for when one fits; `exact` is the
+ * rational spelled (`-1`, `1/2`, `0`) or the fitted decimal when none fits.
+ * `r2` is the fit's coefficient of determination: 1 means the ratio IS a
+ * monomial in these variables, below 1 it is not.
+ *
+ * @internal
+ */
+export interface ExponentDifference {
+  readonly exponents: Readonly<Record<string, number>>;
+  readonly exact: Readonly<Record<string, string>>;
+  readonly r2: number;
+  /** True when `r2` is 1 to within 1e-9: the difference is a monomial. */
+  readonly monomial: boolean;
+}
+
 /** How a user formula compares with one canonical equation. @internal */
 export interface CanonicalComparison {
   readonly id: string;
@@ -68,6 +89,8 @@ export interface CanonicalComparison {
   readonly ratio?: number;
   /** Why the prefactor is unchecked, or why no comparison was made. */
   readonly detail?: string;
+  /** For `form` only: which exponent differs, from a log-design fit. Absent when the fit could not run. */
+  readonly exponentDifference?: ExponentDifference;
   /** `[yours, canonical]` for each variable paired by dimension, not by name (persona finding N1). */
   readonly paired?: readonly (readonly [string, string])[];
   /**
@@ -300,6 +323,102 @@ function alignmentDetail(
     return `its formula depends on ${shown.join(', ')}, which your formula does not name`;
   }
   return 'its variables could not be aligned by name or by a unique dimension';
+}
+
+/** The relative tolerance within which a fitted exponent is a small rational, and R² is 1. */
+const EXPONENT_FIT_TOLERANCE = 1e-6;
+/** The denominator cap of a rationalised exponent difference. */
+const EXPONENT_MAX_DENOMINATOR = 24;
+
+/**
+ * Fit `log|ratio|` on the logs of the variables over a full-rank design: the
+ * base point of the comparison scheme, each variable doubled, each variable
+ * quadrupled, and all of them doubled together (2k + 2 rows for k variables,
+ * so a difference that is not a monomial has rows to fail on). The design's
+ * rank is checked before the fit. `undefined` when there is no variable, when
+ * the ratio is zero, negative or not finite at a point, or when the fit
+ * cannot run.
+ *
+ * @internal
+ */
+export function diagnoseExponentDifference(
+  names: readonly string[],
+  ratioAt: (point: Readonly<Record<string, number>>) => number,
+): ExponentDifference | undefined {
+  const k = names.length;
+  if (k === 0) return undefined;
+  const base = fixedPoint(names, 1, COMPARISON_SCHEME);
+  const scales: number[][] = [Array<number>(k).fill(1)];
+  for (const factor of [2, 4]) {
+    for (let i = 0; i < k; i++) {
+      const row = Array<number>(k).fill(1);
+      row[i] = factor;
+      scales.push(row);
+    }
+  }
+  scales.push(Array<number>(k).fill(2));
+  const logX: number[][] = [];
+  const y: number[] = [];
+  for (const row of scales) {
+    const point: Record<string, number> = {};
+    names.forEach((name, i) => {
+      point[name] = base[name]! * row[i]!;
+    });
+    let ratio: number;
+    try {
+      ratio = ratioAt(point);
+    } catch {
+      return undefined;
+    }
+    if (!Number.isFinite(ratio) || ratio <= 0) return undefined;
+    logX.push(row.map((s) => Math.log(s)));
+    y.push(Math.log(ratio));
+  }
+  if (matrixRank(logX) !== k) return undefined;
+  let fit: { coefficients: number[]; r2: number };
+  try {
+    fit = ols(logX, y);
+  } catch {
+    return undefined;
+  }
+  const exponents: Record<string, number> = {};
+  const exact: Record<string, string> = {};
+  names.forEach((name, i) => {
+    const c = fit.coefficients[i + 1]!;
+    if (Math.abs(c) < 1e-9) {
+      exponents[name] = 0;
+      exact[name] = '0';
+      return;
+    }
+    const q = rationalize(c, { maxDenominator: EXPONENT_MAX_DENOMINATOR, tolerance: EXPONENT_FIT_TOLERANCE });
+    exponents[name] = q === undefined ? c : Number(q.numerator) / Number(q.denominator);
+    exact[name] = q === undefined ? c.toPrecision(6) : formatRational(q);
+  });
+  const r2 = fit.r2;
+  return { exponents, exact, r2, monomial: Number.isFinite(r2) && r2 >= 1 - 1e-9 };
+}
+
+/**
+ * One line for an exponent difference: `yours/canonical ∝ mass^-1 (R² = 1):
+ * the difference is a monomial in these variables`. A rational exponent is
+ * braced (`speed^{1/2}`), a unit one is bare, a zero one is omitted.
+ *
+ * @internal
+ */
+export function describeExponentDifference(d: ExponentDifference): string {
+  const parts = Object.keys(d.exact)
+    .sort()
+    .filter((name) => d.exact[name] !== '0')
+    .map((name) => {
+      const e = d.exact[name]!;
+      if (e === '1') return name;
+      return e.includes('/') ? `${name}^{${e}}` : `${name}^${e}`;
+    });
+  const r2 = d.monomial ? '1' : Number.isFinite(d.r2) ? d.r2.toFixed(3) : 'undefined';
+  const verdict = d.monomial
+    ? 'the difference is a monomial in these variables'
+    : 'the difference is not a monomial in these variables (R² below 1)';
+  return `yours/canonical ∝ ${parts.join(' · ') || '1'} (R² = ${r2}): ${verdict}`;
 }
 
 /** True when every alignment produced the same ratio at each fixed point. */
@@ -573,8 +692,17 @@ export function compareWithCanonical(
         ? `the dimensionless group ${groupSpec.group} is bound, so the prefactor includes ${groupSpec.coefficient}·${groupSpec.group}^${groupSpec.exponent}`
         : undefined;
     const classified = classify(entry, ratios, recordsPrefactor);
+    // A form mismatch gets its diagnosis: which exponent differs, by a log-design fit.
+    const exponentDifference =
+      classified.kind === 'form'
+        ? diagnoseExponentDifference(names, (point) => {
+            const row = boundGroup === undefined ? point : { ...point, __group: 2.3 };
+            return userAt(row) / canonicalAt(row);
+          })
+        : undefined;
     results.push({
       ...classified,
+      ...(exponentDifference === undefined ? {} : { exponentDifference }),
       ...(extension !== undefined && classified.detail === undefined ? { detail: extension } : {}),
       ...(names.length === 0 ? { constantsOnly: true as const } : {}),
       ...paired, ...targetVia,

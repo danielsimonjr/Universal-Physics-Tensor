@@ -193,7 +193,8 @@ export {
   describeKnownRelation,
   matchingCatalogEdges,
 } from './composition/canonical-compare.js';
-export type { CanonicalComparison, CatalogEdgeMatch } from './composition/canonical-compare.js';
+export type { CanonicalComparison, CatalogEdgeMatch, ExponentDifference } from './composition/canonical-compare.js';
+export { describeExponentDifference } from './composition/canonical-compare.js';
 // One owner for "a constant times that one" (proposal 6): `upt derive` recovers its prefactor here.
 export {
   FIXED_POINT_EXPONENTS,
