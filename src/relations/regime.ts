@@ -13,6 +13,7 @@
  * @module relations/regime
  */
 
+import { compareCodepoint } from '../core/compare.js';
 import { buckinghamPi } from '../dimensional/buckingham.js';
 import type { DimensionalVariable, PiGroup } from '../dimensional/buckingham.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -226,7 +227,7 @@ export function collidingRegimeGroups(
 function exponentSignature(group: PiGroup): string {
   return Object.entries(group.exponents)
     .filter(([, exp]) => exp !== 0)
-    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .sort(([a], [b]) => compareCodepoint(a, b))
     .map(([name, exp]) => `${name}:${exp}`)
     .join(',');
 }
@@ -414,4 +415,26 @@ function gridPoints(
     points = next;
   }
   return points;
+}
+
+/**
+ * Build a regime from its family, its dimensioned parameters, its dimensionless
+ * inputs and its inequalities: the one owner of the literal
+ * `{ family, inequalities, groupDefinitions: deriveRegimeGroups(…) }` every
+ * atlas model and bridge used to spell out. The groups are derived here, so an
+ * inequality names a `PiGroup.formula` of the same dimension matrix.
+ *
+ * @internal
+ */
+export function makeRegime(
+  family: string,
+  parameters: readonly DimensionalVariable[],
+  dimensionlessInputs: readonly string[],
+  inequalities: readonly RegimeInequality[],
+): Regime {
+  return {
+    family,
+    inequalities,
+    groupDefinitions: deriveRegimeGroups(family, parameters, dimensionlessInputs),
+  };
 }

@@ -8,6 +8,7 @@
  * @module bridges/sensitivity
  */
 
+import { centralPartial } from '../numerical/finite-difference.js';
 import { catalogConfrontations } from './catalog-load.js';
 import type { CatalogPrediction } from './catalog-types.js';
 import { BRIDGE_EVALUATORS } from './evaluators.js';
@@ -24,11 +25,10 @@ function elasticityOf(
   key: string,
 ): number {
   const x = point[key]!;
+  // Relative step 1e-6, absolute 1e-12 at x = 0: this reader's rule; the derivative is the shared one.
   const h = Math.abs(x) * 1e-6 || 1e-12;
-  const up = { ...point, [key]: x + h };
-  const dn = { ...point, [key]: x - h };
   const P = predict(point);
-  const dP = (predict(up) - predict(dn)) / (2 * h);
+  const dP = centralPartial(predict, point, key, h);
   if (!(Number.isFinite(P) && P !== 0)) return 0;
   return (Math.abs(dP) * Math.abs(x)) / Math.abs(P);
 }

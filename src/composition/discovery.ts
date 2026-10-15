@@ -43,8 +43,10 @@ import { classifyIdentifiability, forwardClosure } from './identifiability.js';
 import { retrodict, retrodictNode, forwardEvaluate } from './retrodiction.js';
 import { proposeLinkCandidates } from './bridge-analysis.js';
 import type { LinkCandidate } from './bridge-analysis.js';
+import { clusterBySharedKeys } from './quantity-clusters.js';
+import { normalCDF } from '@danielsimonjr/mathts-functions';
 import { M_SUN_KG } from '../core/constants.js';
-import { REPRESENTATIVE_VALUES } from './representative-values.js';
+import { DEFAULT_SIGMA_DECADES, REPRESENTATIVE_VALUES, sigmaDecadesOf } from './representative-values.js';
 import type { RepresentativeValue } from './representative-values.js';
 import { conventionScaleToSI } from '../dimensional/unit-convention.js';
 import { allQuantities } from './quantities.js';
@@ -130,6 +132,19 @@ export interface VettedCandidate {
    * value (the gate abstained — see `magnitudeChecked`).
    */
   readonly ordersApart: number | null;
+  /**
+   * The calibrated STRENGTH of the magnitude falsifier against the two values' stated
+   * uncertainties: `2·Φ(−ordersApart / √(σ_a² + σ_b²))`, with σ in decades per representative
+   * value (`sigmaDecades`, default one decade: the table's "good to about one order"; an
+   * anchor-derived value takes the default), through MathTS `normalCDF` of the negative
+   * argument so a far tail is not rounded to 0 by `1 − cdf`. It is reported BESIDE the verdict
+   * and changes no verdict: the clash threshold stays `ordersApart > maxOrders`. A small p says
+   * the two magnitudes are hard to reconcile at their stated precision; 2.9 decades at σ = 1
+   * is p ≈ 0.040, no longer a clean pass, while 3.1 decades stays a clash. NOT a credibility
+   * score: it says nothing about whether the identification is true. `null` when the gate
+   * abstained. Optional on the type; the funnel always sets it.
+   */
+  readonly magnitudeP?: number | null;
   /** Both endpoints had a representative value, so the magnitude gate ran. */
   readonly magnitudeChecked: boolean;
   /** The magnitude gate read at least one endpoint value from the graph at
@@ -244,35 +259,45 @@ export interface DiscoveryOptions {
   readonly quantityAttributes?: ReadonlyMap<string, RegimeAttributes>;
 }
 
-/** Union-find over quantity names; merges each edge's endpoints and every
- *  identification's from↔to. Returns name → component-root. */
+/**
+ * The component partition of quantity names: names in one equation are one component, and so
+ * are the two sides of every identification. The shared partition of `quantity-clusters.ts`
+ * (a name is an item; its keys are the equations and identifications it appears in). Returns
+ * name → a representative of its component (its first name), read only for equality.
+ *
+ * RECORDED BEHAVIOUR, kept on purpose: an equation with no source (an all-constant right-hand
+ * side, `CE-bohr-radius`) registers no name at all, so its target is absent from the map and
+ * an identification touching it never counts as merging components. The union-find this
+ * replaced only registered a name when it took part in a union, and the census, the canonical
+ * funnel counts and the `map --proposed` golden pin that reading. Registering such a target
+ * makes `bohr-radius ≟ hubble-distance` promising; whether it should is a catalog decision,
+ * not this module's (`tests/composition/quantity-clusters.test.ts` pins the recorded reading
+ * by name).
+ */
 function quantityComponents(
   edges: readonly BridgeEdge[],
   idents: readonly QuantityIdentification[],
 ): Map<string, string> {
-  const parent = new Map<string, string>();
-  const find = (x: string): string => {
-    if (!parent.has(x)) parent.set(x, x);
-    let r = x;
-    while (parent.get(r) !== r) r = parent.get(r)!;
-    let cur = x;
-    while (parent.get(cur) !== r) {
-      const next = parent.get(cur)!;
-      parent.set(cur, r);
-      cur = next;
-    }
-    return r;
+  const keysByName = new Map<string, string[]>();
+  const tag = (name: string, key: string): void => {
+    const keys = keysByName.get(name);
+    if (keys === undefined) keysByName.set(name, [key]);
+    else keys.push(key);
   };
-  const union = (a: string, b: string) => {
-    parent.set(find(a), find(b));
-  };
-  for (const e of edges) {
-    const names = [...e.sources.map((s) => s.name), e.target.name];
-    for (let i = 1; i < names.length; i++) union(names[0], names[i]);
-  }
-  for (const id of idents) union(id.from, id.to);
+  edges.forEach((e, i) => {
+    if (e.sources.length === 0) return; // recorded behaviour: a source-less target is not registered
+    for (const s of e.sources) tag(s.name, `edge:${i}`);
+    tag(e.target.name, `edge:${i}`);
+  });
+  idents.forEach((id, i) => {
+    tag(id.from, `ident:${i}`);
+    tag(id.to, `ident:${i}`);
+  });
+  const names = [...keysByName.keys()];
   const roots = new Map<string, string>();
-  for (const name of parent.keys()) roots.set(name, find(name));
+  for (const cluster of clusterBySharedKeys(names, (name) => keysByName.get(name) ?? [], (name) => name)) {
+    for (const name of cluster) roots.set(name, cluster[0]);
+  }
   return roots;
 }
 
@@ -454,6 +479,95 @@ function newInconsistencies(
   return nodes;
 }
 
+/** One endpoint's magnitude for the gate: its value, where it came from, and its σ in decades. */
+interface GateMagnitude {
+  readonly value: number;
+  readonly fromAnchor: boolean;
+  readonly sigmaDecades: number;
+}
+
+/** What the magnitude gate found for one candidate. @internal */
+export interface MagnitudeGate {
+  /** The two magnitudes, when both were found (the gate ran). */
+  readonly a: GateMagnitude | undefined;
+  readonly b: GateMagnitude | undefined;
+  readonly checked: boolean;
+  readonly usedAnchor: boolean;
+  /** `|log10|a| − log10|b||`, or null when the gate abstained. */
+  readonly ordersApart: number | null;
+  /** The verdict: `ordersApart > maxOrders`. */
+  readonly clash: boolean;
+  /** The calibrated strength `2·Φ(−orders/√(σ_a² + σ_b²))`, or null when the gate abstained. */
+  readonly p: number | null;
+  /** The endpoints with no magnitude (why the gate abstained); empty when it ran. */
+  readonly missing: readonly string[];
+}
+
+/** MathTS `normalCDF`, read back as the number it is. */
+function phi(z: number): number {
+  const v: unknown = normalCDF(z);
+  if (typeof v !== 'number') throw new TypeError('normalCDF did not return a number for a number argument');
+  return v;
+}
+
+/**
+ * The two-sided tail of a gap of `orders` decades between two values whose log10 carry
+ * standard deviations `sigmaA` and `sigmaB` decades: `2·Φ(−orders/√(σ_a² + σ_b²))`, through the
+ * NEGATIVE argument (`1 − Φ` rounds a far tail to 0; the lower tail is accurate). A strength of
+ * the falsifier, not a credibility score.
+ *
+ * @internal
+ */
+export function magnitudeStrength(orders: number, sigmaA: number, sigmaB: number): number {
+  return 2 * phi(-orders / Math.sqrt(sigmaA * sigmaA + sigmaB * sigmaB));
+}
+
+/**
+ * The magnitude gate: an INDEPENDENT falsifier the single-anchor graph cannot make. It runs only
+ * when both endpoints have a representative value and abstains (never false-rejects) otherwise.
+ * A value comes from the sourced static table first, else — for graph-derived quantities the
+ * table omits by design (schwarzschild-radius, thermal-de-broglie-wavelength) — from the
+ * quantity's value AT THE REGISTERED ANCHOR, a definite magnitude for this run, with the default
+ * σ of one decade. The verdict is `ordersApart > ctx.maxOrders`; `p` is reported beside it.
+ *
+ * @internal
+ */
+export function magnitudeGate(candidate: LinkCandidate, ctx: DiscoveryContext): MagnitudeGate {
+  const magnitudeOf = (name: string): GateMagnitude | undefined => {
+    const rv = ctx.repVals[name];
+    // Both paths apply the same finite-and-nonzero gate: a 0/∞/NaN magnitude
+    // would make log10 blow up (log10(0) = -∞), spoofing or silently disabling
+    // the falsifier. Symmetric validation across the table and anchor sources.
+    if (rv !== undefined && Number.isFinite(rv.value) && rv.value !== 0) {
+      return { value: rv.value, fromAnchor: false, sigmaDecades: sigmaDecadesOf(rv) };
+    }
+    const av = ctx.anchorValues.get(name);
+    if (av !== undefined) {
+      const value = av * conventionScaleToSI(name);
+      if (Number.isFinite(value) && value !== 0) {
+        return { value, fromAnchor: true, sigmaDecades: DEFAULT_SIGMA_DECADES };
+      }
+    }
+    return undefined;
+  };
+  const a = magnitudeOf(candidate.a);
+  const b = magnitudeOf(candidate.b);
+  const checked = a !== undefined && b !== undefined;
+  const ordersApart = checked ? Math.abs(Math.log10(Math.abs(a.value)) - Math.log10(Math.abs(b.value))) : null;
+  return {
+    a,
+    b,
+    checked,
+    usedAnchor: checked && (a.fromAnchor || b.fromAnchor),
+    ordersApart,
+    clash: ordersApart !== null && ordersApart > ctx.maxOrders,
+    p: checked && ordersApart !== null ? magnitudeStrength(ordersApart, a.sigmaDecades, b.sigmaDecades) : null,
+    missing: [a === undefined ? candidate.a : null, b === undefined ? candidate.b : null].filter(
+      (e): e is string => e !== null,
+    ),
+  };
+}
+
 /**
  * Vet one link candidate by hypothesizing the identification a≡b and
  * measuring its structural and numerical consequences. See module docs.
@@ -485,9 +599,6 @@ export function vetInContext(
     baseIdents,
     groundTruth,
     anchor,
-    repVals,
-    maxOrders,
-    anchorValues,
     anchorValuesProbe,
     comps,
     closureBase,
@@ -495,38 +606,15 @@ export function vetInContext(
     baseInconsistentNodes,
   } = ctx;
 
-  // Magnitude gate: an INDEPENDENT falsifier the single-anchor graph can't make.
-  // Only fires when both endpoints have a representative value; abstains (and
-  // never false-rejects) otherwise. A value comes from the sourced static table
-  // first, else — for graph-derived quantities the table omits by design
-  // (schwarzschild-radius, thermal-de-broglie-wavelength) — from the quantity's
-  // value AT THE REGISTERED ANCHOR, which is a definite magnitude for this run.
-  const magnitudeOf = (
-    name: string,
-  ): { value: number; fromAnchor: boolean } | undefined => {
-    const rv = repVals[name];
-    // Both paths apply the same finite-and-nonzero gate: a 0/∞/NaN magnitude
-    // would make log10 blow up (log10(0) = -∞), spoofing or silently disabling
-    // the falsifier. Symmetric validation across the table and anchor sources.
-    if (rv !== undefined && Number.isFinite(rv.value) && rv.value !== 0)
-      return { value: rv.value, fromAnchor: false };
-    const av = anchorValues.get(name);
-    if (av !== undefined) {
-      const value = av * conventionScaleToSI(name);
-      if (Number.isFinite(value) && value !== 0)
-        return { value, fromAnchor: true };
-    }
-    return undefined;
-  };
-  const va = magnitudeOf(candidate.a);
-  const vb = magnitudeOf(candidate.b);
-  const magnitudeChecked = va !== undefined && vb !== undefined;
-  const magnitudeUsedAnchor =
-    magnitudeChecked && (va!.fromAnchor || vb!.fromAnchor);
-  const ordersApart = magnitudeChecked
-    ? Math.abs(Math.log10(Math.abs(va!.value)) - Math.log10(Math.abs(vb!.value)))
-    : null;
-  const magnitudeClash = ordersApart !== null && ordersApart > maxOrders;
+  // Magnitude gate: an INDEPENDENT falsifier the single-anchor graph can't make
+  // (`magnitudeGate`): the verdict is the hard threshold, `p` its calibrated strength.
+  const gate = magnitudeGate(candidate, ctx);
+  const va = gate.a;
+  const vb = gate.b;
+  const magnitudeChecked = gate.checked;
+  const magnitudeUsedAnchor = gate.usedAnchor;
+  const ordersApart = gate.ordersApart;
+  const magnitudeClash = gate.clash;
 
   // Anchor-invariance probe: re-read each anchor-derived magnitude at the
   // rescaled anchor. A table value is a constant and does not move.
@@ -672,12 +760,11 @@ export function vetInContext(
     numericallyConsistent,
     inconsistentNodes,
     ordersApart,
+    magnitudeP: gate.p,
     magnitudeChecked,
     magnitudeUsedAnchor,
     magnitudeAnchorInvariant,
-    magnitudeMissing: [va === undefined ? candidate.a : null, vb === undefined ? candidate.b : null].filter(
-      (e): e is string => e !== null,
-    ),
+    magnitudeMissing: gate.missing,
     axisUnstated,
     subsuming,
     verdict,

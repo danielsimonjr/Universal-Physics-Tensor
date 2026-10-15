@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "10.0.0",
-    "totalFiles": 365,
+    "totalFiles": 384,
     "totalModules": 13,
-    "totalExports": 2580
+    "totalExports": 2744
   },
   "entryPoints": [
     {
@@ -52,6 +52,15 @@
             "imports": [
               "checkConventions",
               "unknownConventionKeys"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf",
+              "isDecimalLiteral",
+              "literalValue",
+              "LeafWalkArms"
             ]
           }
         ],
@@ -160,6 +169,12 @@
         ],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../core/compare.js",
+            "imports": [
+              "compareCodepoint"
+            ]
+          },
           {
             "file": "../../canonical/registry.js",
             "imports": [
@@ -275,12 +290,6 @@
         "externalDependencies": [],
         "nodeDependencies": [
           {
-            "module": "fs",
-            "imports": [
-              "readFileSync"
-            ]
-          },
-          {
             "module": "path",
             "imports": [
               "join"
@@ -288,6 +297,12 @@
           }
         ],
         "internalDependencies": [
+          {
+            "file": "../../core/data-file.js",
+            "imports": [
+              "readJsonFile"
+            ]
+          },
           {
             "file": "./types.js",
             "imports": [
@@ -398,7 +413,14 @@
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          }
+        ],
         "exports": [
           "Z95",
           "wilsonInterval",
@@ -604,6 +626,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/compare.js",
+            "imports": [
+              "byKey"
+            ]
+          },
+          {
             "file": "../dimensional/validator.js",
             "imports": [
               "ExprNode"
@@ -632,7 +660,14 @@
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "isRegisteredConstant"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "isDecimalLiteral"
             ]
           },
           {
@@ -963,7 +998,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -1004,16 +1039,14 @@
           {
             "file": "./numerics.js",
             "imports": [
-              "telegraphSlowRateRatio",
+              "telegraphSlowRateExcess",
               "telegraphWaveFrequencyRatio"
             ]
           }
         ],
         "exports": [
-          "LANGEVIN_MAX_TAU_RATIO",
           "TELEGRAPH_FICK_MAX_EPS",
           "TELEGRAPH_WAVE_MIN_EPS",
-          "STEADY_MIN_FOURIER",
           "BRIDGE_LANGEVIN_DIFFUSION",
           "BRIDGE_STOKES_EINSTEIN",
           "BRIDGE_TELEGRAPH_DIFFUSION",
@@ -1022,10 +1055,8 @@
           "DIFFUSION_CLOSURE_BRIDGES"
         ],
         "constants": [
-          "LANGEVIN_MAX_TAU_RATIO",
           "TELEGRAPH_FICK_MAX_EPS",
           "TELEGRAPH_WAVE_MIN_EPS",
-          "STEADY_MIN_FOURIER",
           "BRIDGE_LANGEVIN_DIFFUSION",
           "BRIDGE_STOKES_EINSTEIN",
           "BRIDGE_TELEGRAPH_DIFFUSION",
@@ -1051,7 +1082,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -1093,35 +1124,46 @@
         ]
       },
       "src/atlas/diffusion/dimensions.ts": {
-        "description": "Dimension constants the diffusion family needs that the canonical entry",
+        "description": "Dimension constants the diffusion family needs: the named shapes of",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
-          {
-            "file": "../../dimensional/ast-builders.js",
-            "imports": [
-              "dim"
-            ]
-          },
           {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "MASS_DENSITY"
+            ]
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIFFUSIVITY",
+              "SPECIFIC_HEAT",
+              "THERMAL_CONDUCTIVITY"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
           "DIFFUSIVITY",
+          "SPECIFIC_HEAT",
           "THERMAL_CONDUCTIVITY",
-          "DENSITY",
-          "SPECIFIC_HEAT"
+          "DENSITY"
+        ],
+        "reExported": [
+          "DIFFUSIVITY",
+          "SPECIFIC_HEAT",
+          "THERMAL_CONDUCTIVITY"
         ],
         "constants": [
-          "DIFFUSIVITY",
-          "THERMAL_CONDUCTIVITY",
-          "DENSITY",
-          "SPECIFIC_HEAT"
+          "DENSITY"
         ]
       },
       "src/atlas/diffusion/index.ts": {
@@ -1182,21 +1224,9 @@
               "ENERGY",
               "LENGTH",
               "MASS",
-              "TIME"
+              "TIME",
+              "VISCOSITY"
             ]
-          },
-          {
-            "file": "../../dimensional/ast-builders.js",
-            "imports": [
-              "dim"
-            ]
-          },
-          {
-            "file": "../../dimensional/types.js",
-            "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
           },
           {
             "file": "../oscillators/dimensions.js",
@@ -1214,7 +1244,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -1228,8 +1258,8 @@
           }
         ],
         "exports": [
-          "DIFFUSION_FAMILY_NAME",
           "VISCOSITY",
+          "DIFFUSION_FAMILY_NAME",
           "DIFFUSION_MODELS",
           "getDiffusionModel"
         ],
@@ -1238,7 +1268,6 @@
         ],
         "constants": [
           "DIFFUSION_FAMILY_NAME",
-          "VISCOSITY",
           "DIFFUSION_MODELS"
         ]
       },
@@ -1248,14 +1277,25 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "lgamma",
-              "solveODESystem",
               "trapz"
             ]
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../numerical/null-ray-integrator.js",
+            "imports": [
+              "integrateRK4"
+            ]
+          },
+          {
+            "file": "../../numerical/statistics.js",
+            "imports": [
+              "logChoose"
+            ]
+          }
+        ],
         "exports": [
           "diffusionKernel",
           "randomWalkCentralDensity",
@@ -1266,6 +1306,7 @@
           "wickKernelSquaredNorm",
           "langevinMsdRatio",
           "telegraphSlowRateRatio",
+          "telegraphSlowRateExcess",
           "telegraphWaveFrequencyRatio",
           "heatSteadyDeviation"
         ],
@@ -1285,6 +1326,7 @@
           "wickKernelSquaredNorm",
           "langevinMsdRatio",
           "telegraphSlowRateRatio",
+          "telegraphSlowRateExcess",
           "telegraphWaveFrequencyRatio",
           "heatSteadyDeviation"
         ]
@@ -2457,7 +2499,16 @@
       },
       "src/atlas/link-prediction.ts": {
         "description": "Atlas Phase 6, S6.3 — link prediction over the typed model graph: ONE result,",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "bootstrapCI",
+              "inv",
+              "permutationTest"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -2473,17 +2524,57 @@
               "AtlasModel"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "AtlasBridge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./text-overlap.js",
+            "imports": [
+              "jaccard",
+              "rankBy",
+              "tokens"
+            ]
+          },
+          {
+            "file": "./benchmark/stats.js",
+            "imports": [
+              "mcnemar"
+            ]
+          },
+          {
+            "file": "../numerical/statistics.js",
+            "imports": [
+              "meanOf"
+            ]
           }
         ],
         "exports": [
-          "runLinkPrediction"
+          "PERMUTATION_KIND",
+          "POST_HOC_LABEL",
+          "runLinkPrediction",
+          "runKatzLinkPrediction"
         ],
         "interfaces": [
           "LinkPredictionTrial",
-          "LinkPredictionResult"
+          "BootstrapInterval",
+          "LinkPredictionIntervals",
+          "ReciprocalRankPermutation",
+          "LinkPredictionResult",
+          "KatzTrial",
+          "KatzLinkPredictionResult"
         ],
         "functions": [
-          "runLinkPrediction"
+          "runLinkPrediction",
+          "runKatzLinkPrediction"
+        ],
+        "constants": [
+          "PERMUTATION_KIND",
+          "POST_HOC_LABEL"
         ]
       },
       "src/atlas/model.ts": {
@@ -2527,7 +2618,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -2586,7 +2677,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -2641,6 +2732,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          },
+          {
             "file": "../physjs-ref.js",
             "imports": [
               "physjsFormalRef"
@@ -2649,7 +2746,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -2700,8 +2797,6 @@
           "AB_PENDULUM_LINEAR",
           "AB_DAMPED_MASSLESS",
           "LIMIT_BRIDGES",
-          "CONTRACT_PENDULUM_LINEAR",
-          "CONTRACT_DAMPED_MASSLESS",
           "LIMIT_CONTRACTS",
           "makeApproximation",
           "pendulumPeriodErrorAt",
@@ -2716,13 +2811,11 @@
           "AB_PENDULUM_LINEAR",
           "AB_DAMPED_MASSLESS",
           "LIMIT_BRIDGES",
-          "CONTRACT_PENDULUM_LINEAR",
-          "CONTRACT_DAMPED_MASSLESS",
           "LIMIT_CONTRACTS"
         ]
       },
       "src/atlas/oscillators/dimensions.ts": {
-        "description": "Dimension constants the oscillator pilot needs that the canonical entry",
+        "description": "Dimension constants the oscillator pilot needs.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -2738,6 +2831,16 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "CAPACITANCE",
+              "INDUCTANCE",
+              "RESISTANCE",
+              "SPRING_CONSTANT"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -2748,11 +2851,13 @@
           "DAMPING",
           "CUBIC_STIFFNESS"
         ],
-        "constants": [
+        "reExported": [
           "CAPACITANCE",
           "INDUCTANCE",
           "RESISTANCE",
-          "SPRING_CONSTANT",
+          "SPRING_CONSTANT"
+        ],
+        "constants": [
           "DAMPING",
           "CUBIC_STIFFNESS"
         ]
@@ -2810,16 +2915,15 @@
       },
       "src/atlas/oscillators/limit-witnesses.ts": {
         "description": "The measurements behind the in-process witnesses of the three oscillator",
-        "externalDependencies": [
-          {
-            "package": "@danielsimonjr/mathts-functions",
-            "imports": [
-              "solveODESystem"
-            ]
-          }
-        ],
+        "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../numerical/rk4-trajectory.js",
+            "imports": [
+              "rk4Trajectory"
+            ]
+          },
           {
             "file": "./norm-transport-witness.js",
             "imports": [
@@ -2863,7 +2967,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -2983,12 +3087,24 @@
             "imports": [
               "ellipticK",
               "findRoot",
-              "solveODESystem"
+              "jacobiSN"
             ]
           }
         ],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          },
+          {
+            "file": "../../numerical/null-ray-integrator.js",
+            "imports": [
+              "integrateRK4"
+            ]
+          },
           {
             "file": "./bridges-limits.js",
             "imports": [
@@ -2997,6 +3113,7 @@
           }
         ],
         "exports": [
+          "TWO_PI",
           "W2",
           "pendulumAccel",
           "linearAccel",
@@ -3004,16 +3121,19 @@
           "crossingTimes",
           "phaseAt",
           "theta0OfPeriodError",
-          "pendulumNome"
+          "pendulumNome",
+          "exactPendulumAngle"
         ],
         "functions": [
           "rk4Step",
           "crossingTimes",
           "phaseAt",
           "theta0OfPeriodError",
-          "pendulumNome"
+          "pendulumNome",
+          "exactPendulumAngle"
         ],
         "constants": [
+          "TWO_PI",
           "W2",
           "pendulumAccel",
           "linearAccel"
@@ -3082,19 +3202,14 @@
               "linearAccel",
               "pendulumAccel",
               "phaseAt",
-              "theta0OfPeriodError"
+              "theta0OfPeriodError",
+              "TWO_PI"
             ]
           }
         ],
         "exports": [
           "PHASE_POINT_MAX_PERIODS",
-          "PENDULUM_PHASE_TRANSLATION",
-          "measurePhaseHorizon",
-          "measurePhaseHorizonWithin"
-        ],
-        "functions": [
-          "measurePhaseHorizon",
-          "measurePhaseHorizonWithin"
+          "PENDULUM_PHASE_TRANSLATION"
         ],
         "constants": [
           "PHASE_POINT_MAX_PERIODS",
@@ -3103,7 +3218,14 @@
       },
       "src/atlas/oscillators/position-translation.ts": {
         "description": "`ab-pendulum-linear`'s declared translation from its bound's quantity, the",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "rfft"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -3136,32 +3258,44 @@
           {
             "file": "./pendulum-motion.js",
             "imports": [
+              "exactPendulumAngle",
               "linearAccel",
               "pendulumAccel",
               "pendulumNome",
               "rk4Step",
-              "theta0OfPeriodError"
+              "theta0OfPeriodError",
+              "TWO_PI"
             ]
           }
         ],
         "exports": [
-          "POSITION_POINT_MAX_PERIODS",
           "FOURIER_SERIES_THETA0S",
+          "FOURIER_SERIES_EXACT_GRID",
+          "FOURIER_SERIES_EXACT_TOLERANCE",
+          "FOURIER_SERIES_EXACT_TIGHT",
           "PENDULUM_POSITION_TRANSLATION",
           "waveformBound",
           "fundamentalCoefficient",
-          "measureFundamental",
+          "exactDominanceSpec",
+          "fourierCoefficient",
+          "fourierSeriesExactDeviation",
+          "fourierCoefficientsByFft",
           "fourierSeriesCheck"
         ],
         "functions": [
           "waveformBound",
           "fundamentalCoefficient",
-          "measureFundamental",
+          "exactDominanceSpec",
+          "fourierCoefficient",
+          "fourierSeriesExactDeviation",
+          "fourierCoefficientsByFft",
           "fourierSeriesCheck"
         ],
         "constants": [
-          "POSITION_POINT_MAX_PERIODS",
           "FOURIER_SERIES_THETA0S",
+          "FOURIER_SERIES_EXACT_GRID",
+          "FOURIER_SERIES_EXACT_TOLERANCE",
+          "FOURIER_SERIES_EXACT_TIGHT",
           "PENDULUM_POSITION_TRANSLATION"
         ]
       },
@@ -3179,11 +3313,7 @@
           }
         ],
         "exports": [
-          "ATLAS_REJECTIONS",
-          "getAtlasRejection"
-        ],
-        "functions": [
-          "getAtlasRejection"
+          "ATLAS_REJECTIONS"
         ],
         "constants": [
           "ATLAS_REJECTIONS"
@@ -3306,15 +3436,14 @@
       "src/atlas/physjs-ref.ts": {
         "description": "Reviewed `formalRef`s keyed by this repository's Lean manifest.",
         "externalDependencies": [],
-        "nodeDependencies": [
-          {
-            "module": "crypto",
-            "imports": [
-              "createHash"
-            ]
-          }
-        ],
+        "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/hash.js",
+            "imports": [
+              "sha256Hex"
+            ]
+          },
           {
             "file": "./types.js",
             "imports": [
@@ -3540,7 +3669,6 @@
         "exports": [
           "POSTER_MODEL_UNRECORDED",
           "UNIDENTIFIED",
-          "POSTER_5_IDENTIFICATION_NOTE",
           "POSTER_ENTRIES",
           "HIDDEN_NODES",
           "SUPPORTING_STATEMENTS",
@@ -3565,7 +3693,6 @@
         "constants": [
           "POSTER_MODEL_UNRECORDED",
           "UNIDENTIFIED",
-          "POSTER_5_IDENTIFICATION_NOTE",
           "POSTER_ENTRIES",
           "HIDDEN_NODES",
           "SUPPORTING_STATEMENTS",
@@ -3789,6 +3916,7 @@
               "collidingRegimeGroups",
               "deriveRegimeGroups",
               "intersectRegimes",
+              "makeRegime",
               "regimeOverlap",
               "uncoveredRegions"
             ],
@@ -3815,6 +3943,7 @@
           "collidingRegimeGroups",
           "deriveRegimeGroups",
           "intersectRegimes",
+          "makeRegime",
           "regimeOverlap",
           "uncoveredRegions",
           "regimeHolds",
@@ -3827,6 +3956,7 @@
           "collidingRegimeGroups",
           "deriveRegimeGroups",
           "intersectRegimes",
+          "makeRegime",
           "regimeOverlap",
           "uncoveredRegions",
           "RegimeBearing",
@@ -3961,6 +4091,31 @@
         "functions": [
           "contextUnion",
           "statementContextUnion"
+        ]
+      },
+      "src/atlas/text-overlap.ts": {
+        "description": "Word-token overlap: the text baseline's tokenizer, Jaccard similarity and the rank comparator.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/compare.js",
+            "imports": [
+              "compareCodepoint"
+            ]
+          }
+        ],
+        "exports": [
+          "tokens",
+          "jaccard",
+          "rankBy"
+        ],
+        "functions": [
+          "rankBy"
+        ],
+        "constants": [
+          "tokens",
+          "jaccard"
         ]
       },
       "src/atlas/translation-registry.ts": {
@@ -4165,7 +4320,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -4243,7 +4398,7 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
           },
           {
@@ -4363,6 +4518,8 @@
             "imports": [
               "FORCE",
               "FREQUENCY",
+              "LINEAR_DENSITY",
+              "PRESSURE",
               "VELOCITY"
             ]
           },
@@ -4382,24 +4539,31 @@
           {
             "file": "../regime.js",
             "imports": [
-              "deriveRegimeGroups"
+              "makeRegime"
             ]
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "WAVENUMBER"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
-          "WAVES_FAMILY_NAME",
           "LINEAR_DENSITY",
           "PRESSURE",
-          "FLEXURAL_RIGIDITY",
           "WAVENUMBER",
+          "WAVES_FAMILY_NAME",
+          "FLEXURAL_RIGIDITY",
           "WAVE_MODELS"
+        ],
+        "reExported": [
+          "WAVENUMBER"
         ],
         "constants": [
           "WAVES_FAMILY_NAME",
-          "LINEAR_DENSITY",
-          "PRESSURE",
           "FLEXURAL_RIGIDITY",
-          "WAVENUMBER",
           "WAVE_MODELS"
         ]
       },
@@ -4535,7 +4699,14 @@
       },
       "src/atlas/witness-numeric.ts": {
         "description": "Atlas Phase 4, S4.2 — the numeric witness runner.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "linearRegression"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -4551,6 +4722,7 @@
         ],
         "interfaces": [
           "Convergence",
+          "ObservedOrder",
           "NumericWitnessSpec",
           "NumericWitnessRunResult"
         ],
@@ -4780,7 +4952,15 @@
       },
       "src/atlas/witness-symbolic.ts": {
         "description": "Atlas Phase 4, S4.2 — the symbolic witness runner.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "random",
+              "seedProbabilityRng"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -4791,10 +4971,34 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../composition/expr-eval.js",
+            "imports": [
+              "evalExpr"
+            ]
+          },
+          {
             "file": "../composition/expr-simplify.js",
             "imports": [
               "isSimplifierAvailable",
               "simplifyExpr"
+            ]
+          },
+          {
+            "file": "../composition/mathts-scalar-symbols.js",
+            "imports": [
+              "scalarSymbolsFromMathTs"
             ]
           },
           {
@@ -4803,16 +5007,34 @@
               "WitnessRunResult"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "literalValue"
+            ]
           }
         ],
         "exports": [
+          "NUMERIC_PROBE_POINTS",
+          "NUMERIC_PROBE_TOLERANCE",
+          "probeSymbolicWitness",
+          "tallySymbolicResults",
           "runSymbolicWitness"
         ],
         "interfaces": [
-          "SymbolicWitnessSpec"
+          "SymbolicWitnessSpec",
+          "NumericProbe",
+          "SymbolicWitnessRunResult"
         ],
         "functions": [
+          "probeSymbolicWitness",
+          "tallySymbolicResults",
           "runSymbolicWitness"
+        ],
+        "constants": [
+          "NUMERIC_PROBE_POINTS",
+          "NUMERIC_PROBE_TOLERANCE"
         ]
       },
       "src/atlas/witnesses/quantum-support.ts": {
@@ -4977,6 +5199,12 @@
             "file": "./observations/types.js",
             "imports": [
               "residualInSigma"
+            ]
+          },
+          {
+            "file": "../core/compare.js",
+            "imports": [
+              "withinMixed"
             ]
           },
           {
@@ -5215,6 +5443,18 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/assignment.js",
+            "imports": [
+              "splitAssignment"
+            ]
+          },
+          {
+            "file": "../core/format.js",
+            "imports": [
+              "formatQuantity"
+            ]
+          },
+          {
             "file": "../dimensional/units.js",
             "imports": [
               "affineReadingNote",
@@ -5380,7 +5620,8 @@
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "isRegisteredConstant"
             ]
           },
           {
@@ -5426,6 +5667,7 @@
           "reservedFormulaNames",
           "formulaScope",
           "formulaVariables",
+          "expressionNames",
           "withoutUnreadConstants",
           "evaluateFormula",
           "parseCatalogExpression"
@@ -5435,6 +5677,7 @@
           "reservedFormulaNames",
           "formulaScope",
           "formulaVariables",
+          "expressionNames",
           "withoutUnreadConstants",
           "evaluateFormula",
           "parseCatalogExpression"
@@ -5462,6 +5705,12 @@
             "file": "./evaluation-errors.js",
             "imports": [
               "ConstantInputError"
+            ]
+          },
+          {
+            "file": "./expr-parse.js",
+            "imports": [
+              "expressionNames"
             ]
           }
         ],
@@ -5661,6 +5910,12 @@
               "CatalogRelation"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./expr-parse.js",
+            "imports": [
+              "expressionNames"
+            ]
           }
         ],
         "exports": [
@@ -5725,6 +5980,12 @@
             "file": "../dimensional/quantity-registry.js",
             "imports": [
               "quantityRecord"
+            ]
+          },
+          {
+            "file": "../core/compare.js",
+            "imports": [
+              "withinSymmetric"
             ]
           },
           {
@@ -5807,6 +6068,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../numerical/finite-difference.js",
+            "imports": [
+              "centralPartial"
+            ]
+          },
           {
             "file": "./catalog-load.js",
             "imports": [
@@ -6086,7 +6353,9 @@
               "ACTION",
               "CHARGE",
               "FREQUENCY",
-              "DIMENSIONLESS"
+              "DIMENSIONLESS",
+              "PERMITTIVITY",
+              "MOMENTUM"
             ]
           },
           {
@@ -6132,7 +6401,11 @@
               "ENERGY",
               "TIME",
               "FREQUENCY",
-              "CHARGE"
+              "CHARGE",
+              "ELECTRIC_FIELD",
+              "RESISTIVITY",
+              "ACTION",
+              "PERMITTIVITY"
             ]
           },
           {
@@ -6165,12 +6438,6 @@
             "typeOnly": true
           },
           {
-            "file": "../../dimensional/ast-builders.js",
-            "imports": [
-              "dim"
-            ]
-          },
-          {
             "file": "../../dimensional/types.js",
             "imports": [
               "LENGTH",
@@ -6181,7 +6448,9 @@
               "FORCE",
               "ACTION",
               "ENTROPY",
-              "TEMPERATURE"
+              "TEMPERATURE",
+              "GRAVITATIONAL_CONSTANT",
+              "LINEAR_DENSITY"
             ]
           }
         ],
@@ -6224,7 +6493,16 @@
               "FREQUENCY",
               "CHARGE",
               "FORCE",
-              "DIMENSIONLESS"
+              "DIMENSIONLESS",
+              "RESISTANCE",
+              "RESISTIVITY",
+              "CAPACITANCE",
+              "INDUCTANCE",
+              "ELECTRIC_FIELD",
+              "PERMITTIVITY",
+              "ENERGY_FLUX",
+              "WAVENUMBER",
+              "PRESSURE"
             ]
           },
           {
@@ -6272,7 +6550,12 @@
               "LENGTH",
               "AREA",
               "FREQUENCY",
-              "ENERGY"
+              "ENERGY",
+              "PRESSURE",
+              "MASS_DENSITY",
+              "VOLUME",
+              "VISCOSITY",
+              "SPRING_CONSTANT"
             ]
           },
           {
@@ -6322,7 +6605,11 @@
               "TIME",
               "POWER",
               "FREQUENCY",
-              "DIMENSIONLESS"
+              "DIMENSIONLESS",
+              "MOMENTUM",
+              "ACTION",
+              "SPRING_CONSTANT",
+              "GRAVITATIONAL_CONSTANT"
             ]
           },
           {
@@ -6364,13 +6651,25 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "DIMENSIONLESS",
-              "TIME"
+              "TIME",
+              "PRESSURE",
+              "MASS_DENSITY",
+              "VELOCITY",
+              "ACCELERATION",
+              "LENGTH",
+              "FREQUENCY",
+              "ENERGY",
+              "ACTION",
+              "TEMPERATURE",
+              "ENTROPY",
+              "MASS",
+              "WAVENUMBER",
+              "ENERGY_FLUX"
             ]
           },
           {
             "file": "./_l1-build.js",
             "imports": [
-              "dim",
               "op",
               "pow",
               "l1"
@@ -6461,7 +6760,10 @@
               "ENTROPY",
               "TEMPERATURE",
               "AREA",
-              "FORCE"
+              "FORCE",
+              "PRESSURE",
+              "GRAVITATIONAL_CONSTANT",
+              "MASS_DENSITY"
             ]
           },
           {
@@ -6553,7 +6855,14 @@
               "FREQUENCY",
               "TEMPERATURE",
               "ENTROPY",
-              "DIMENSIONLESS"
+              "DIMENSIONLESS",
+              "SPECIFIC_HEAT",
+              "ENERGY_FLUX",
+              "PRESSURE",
+              "VOLUME",
+              "THERMAL_CONDUCTIVITY",
+              "MASS_DENSITY",
+              "DIFFUSIVITY"
             ]
           },
           {
@@ -6573,6 +6882,40 @@
           "THERMO_NUCLEAR_COSMO"
         ]
       },
+      "src/canonical/fixed-points.ts": {
+        "description": "One owner for \"a constant times that one\".",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../numerical/statistics.js",
+            "imports": [
+              "ratioSpread"
+            ]
+          }
+        ],
+        "exports": [
+          "FIXED_POINT_EXPONENTS",
+          "fixedPoint",
+          "constantRatio",
+          "recoverMonomialPrefactor"
+        ],
+        "interfaces": [
+          "FixedPointScheme",
+          "ConstantRatioOptions",
+          "ConstantRatio",
+          "PrefactorRecoveryScheme",
+          "PrefactorRecovery"
+        ],
+        "functions": [
+          "fixedPoint",
+          "constantRatio",
+          "recoverMonomialPrefactor"
+        ],
+        "constants": [
+          "FIXED_POINT_EXPONENTS"
+        ]
+      },
       "src/canonical/linkage.ts": {
         "description": "Bridge↔canonical linkage (Sub-project B) — the \"validate against standard",
         "externalDependencies": [],
@@ -6586,11 +6929,10 @@
             "typeOnly": true
           },
           {
-            "file": "../dimensional/types.js",
+            "file": "../dimensional/algebra.js",
             "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
+              "isDimensionless"
+            ]
           },
           {
             "file": "../composition/expr-eval.js",
@@ -6599,9 +6941,16 @@
             ]
           },
           {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf",
+              "isDecimalLiteral"
+            ]
+          },
+          {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "isRegisteredConstant"
             ]
           },
           {
@@ -6638,6 +6987,14 @@
               "BridgeShape"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./fixed-points.js",
+            "imports": [
+              "FIXED_POINT_EXPONENTS",
+              "constantRatio",
+              "fixedPoint"
+            ]
           }
         ],
         "exports": [
@@ -6677,7 +7034,8 @@
           {
             "file": "../dimensional/algebra.js",
             "imports": [
-              "equals"
+              "equals",
+              "isDimensionless"
             ]
           },
           {
@@ -6690,8 +7048,14 @@
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS",
+              "isRegisteredConstant",
               "piMultipleValue"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "isDecimalLiteral"
             ]
           }
         ],
@@ -6886,6 +7250,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/compare.js",
+            "imports": [
+              "compareCodepoint"
+            ]
+          },
+          {
             "file": "../dimensional/validator.js",
             "imports": [
               "ExprNode"
@@ -6898,6 +7268,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "exactlyEquals"
+            ]
           },
           {
             "file": "../dimensional/validator.js",
@@ -6930,6 +7306,7 @@
         ],
         "interfaces": [
           "StructuralPair",
+          "StructuralOptions",
           "StructuralRelation",
           "ChainConfirmation",
           "ChainRestatement",
@@ -6954,6 +7331,12 @@
             "file": "../core/constants.js",
             "imports": [
               "K_B_SI"
+            ]
+          },
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "convertValue"
             ]
           },
           {
@@ -7159,6 +7542,12 @@
             ]
           },
           {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "convertValue"
+            ]
+          },
+          {
             "file": "../bridges/catalog-load.js",
             "imports": [
               "catalogRelations"
@@ -7202,8 +7591,7 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "findRoot",
-              "solveODESystem"
+              "findRoot"
             ]
           }
         ],
@@ -7212,9 +7600,13 @@
           {
             "file": "../core/constants.js",
             "imports": [
-              "C_SI",
-              "H_SI",
-              "K_B_SI"
+              "SIGMA_SB_SI"
+            ]
+          },
+          {
+            "file": "../numerical/null-ray-integrator.js",
+            "imports": [
+              "integrateRK4"
             ]
           },
           {
@@ -7225,6 +7617,13 @@
               "signedRelativeDifference",
               "AppliedCase"
             ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "SIGMA_SB_SI"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -7236,6 +7635,9 @@
           "sphereEigenvalues",
           "sphereSeries"
         ],
+        "reExported": [
+          "SIGMA_SB_SI"
+        ],
         "interfaces": [
           "LumpedRadiating"
         ],
@@ -7245,7 +7647,6 @@
           "sphereSeries"
         ],
         "constants": [
-          "SIGMA_SB_SI",
           "MAX_BIOT",
           "MAX_RADIATION_RATIO",
           "LUMPED_COOLING_CASE"
@@ -7414,19 +7815,24 @@
         ],
         "exports": [
           "END_OF_OPTIONS",
+          "NO_POSITIONALS",
           "optionTokens",
+          "refuseExtraPositionals",
           "parseArgs"
         ],
         "interfaces": [
           "FlagSpec",
-          "ParsedArgs"
+          "ParsedArgs",
+          "PositionalArity"
         ],
         "functions": [
           "optionTokens",
+          "refuseExtraPositionals",
           "parseArgs"
         ],
         "constants": [
-          "END_OF_OPTIONS"
+          "END_OF_OPTIONS",
+          "NO_POSITIONALS"
         ]
       },
       "src/cli/bindings.ts": {
@@ -7434,6 +7840,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/assignment.js",
+            "imports": [
+              "splitAssignment"
+            ]
+          },
           {
             "file": "./errors.js",
             "imports": [
@@ -7482,7 +7894,8 @@
             "file": "./args.js",
             "imports": [
               "ParsedArgs",
-              "FlagSpec"
+              "FlagSpec",
+              "PositionalArity"
             ],
             "typeOnly": true
           },
@@ -7529,18 +7942,6 @@
             "imports": [
               "readFileSync"
             ]
-          },
-          {
-            "module": "path",
-            "imports": [
-              "join"
-            ]
-          },
-          {
-            "module": "url",
-            "imports": [
-              "fileURLToPath"
-            ]
           }
         ],
         "internalDependencies": [
@@ -7561,6 +7962,14 @@
             "file": "../published-url.js",
             "imports": [
               "publishedUrl"
+            ]
+          },
+          {
+            "file": "../stored-results.js",
+            "imports": [
+              "repoRoot",
+              "STORED_RESULTS_PATH",
+              "storedResultsFile"
             ]
           },
           {
@@ -7600,12 +8009,8 @@
           }
         ],
         "exports": [
-          "ATLAS_SOURCE",
-          "LINK_SOURCE",
-          "STORED_RESULTS_PATH",
           "DEFAULT_MAX_ROUTES",
           "MAX_ROUTES_CEILING",
-          "storedResultsFile",
           "loadStoredResults",
           "runResults",
           "parseRoute",
@@ -7614,10 +8019,8 @@
           "buildObservableView",
           "buildAtlasEvidenceView",
           "atlasEvidenceText",
-          "formatAtlasFilterLegend",
           "bridgeIdsOf",
           "buildFamilyView",
-          "resultsLine",
           "routeText",
           "familyText",
           "routesText",
@@ -7646,7 +8049,6 @@
           "FamilyView"
         ],
         "functions": [
-          "storedResultsFile",
           "loadStoredResults",
           "runResults",
           "parseRoute",
@@ -7655,10 +8057,8 @@
           "buildObservableView",
           "buildAtlasEvidenceView",
           "atlasEvidenceText",
-          "formatAtlasFilterLegend",
           "bridgeIdsOf",
           "buildFamilyView",
-          "resultsLine",
           "routeText",
           "familyText",
           "routesText",
@@ -7668,9 +8068,6 @@
           "toDot"
         ],
         "constants": [
-          "ATLAS_SOURCE",
-          "LINK_SOURCE",
-          "STORED_RESULTS_PATH",
           "DEFAULT_MAX_ROUTES",
           "MAX_ROUTES_CEILING"
         ]
@@ -7749,6 +8146,12 @@
             "imports": [
               "CliError",
               "UsageError"
+            ]
+          },
+          {
+            "file": "../numeric-flag.js",
+            "imports": [
+              "realFlag"
             ]
           },
           {
@@ -8515,7 +8918,8 @@
           {
             "file": "../output.js",
             "imports": [
-              "emitJson"
+              "emitJson",
+              "emitJsonError"
             ]
           },
           {
@@ -8529,6 +8933,12 @@
             "file": "../bindings.js",
             "imports": [
               "splitAssignments"
+            ]
+          },
+          {
+            "file": "../numeric-flag.js",
+            "imports": [
+              "realFlag"
             ]
           },
           {
@@ -8989,6 +9399,12 @@
             ]
           },
           {
+            "file": "../numeric-flag.js",
+            "imports": [
+              "integerFlag"
+            ]
+          },
+          {
             "file": "../determination.js",
             "imports": [
               "classifyDetermination",
@@ -9012,8 +9428,11 @@
             "imports": [
               "BridgeEdge",
               "CanonicalComparison",
+              "CommunityReport",
+              "DerivationCycle",
               "EquationAnalysis",
               "EvidenceTag",
+              "HubRank",
               "RelationType",
               "VizJunction",
               "VizModel"
@@ -9161,6 +9580,12 @@
             ]
           },
           {
+            "file": "../numeric-flag.js",
+            "imports": [
+              "integerFlag"
+            ]
+          },
+          {
             "file": "./regime.js",
             "imports": [
               "parseAt",
@@ -9183,16 +9608,22 @@
         "exports": [
           "command",
           "parseSweep",
+          "translatedBound",
           "judgeTolerance",
           "parseTolerance",
           "judgeObservable",
-          "judgeAtPoint"
+          "judgeAtPoint",
+          "TranslationWithoutBoundError"
+        ],
+        "classes": [
+          "TranslationWithoutBoundError"
         ],
         "interfaces": [
           "ToleranceRequest"
         ],
         "functions": [
           "parseSweep",
+          "translatedBound",
           "judgeTolerance",
           "parseTolerance",
           "judgeObservable",
@@ -9314,9 +9745,9 @@
           {
             "file": "../args.js",
             "imports": [
+              "refuseExtraPositionals",
               "FlagSpec"
-            ],
-            "typeOnly": true
+            ]
           },
           {
             "file": "../command.js",
@@ -9324,6 +9755,12 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../numeric-flag.js",
+            "imports": [
+              "realFlag"
             ]
           },
           {
@@ -9838,7 +10275,17 @@
           {
             "file": "../dimensional/algebra.js",
             "imports": [
+              "BASES",
+              "exactlyEquals",
+              "isDimensionless",
+              "SI_BASE",
               "siUnitOf"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "isDecimalLiteral"
             ]
           }
         ],
@@ -10069,9 +10516,11 @@
           }
         ],
         "exports": [
+          "reportInternalError",
           "runCli"
         ],
         "functions": [
+          "reportInternalError",
           "runCli"
         ]
       },
@@ -10117,6 +10566,33 @@
           "withCatalogEvidence"
         ]
       },
+      "src/cli/numeric-flag.ts": {
+        "description": "The one reader of a numeric flag value for the UPT CLI.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "DECIMAL_LITERAL"
+            ]
+          },
+          {
+            "file": "./errors.js",
+            "imports": [
+              "UsageError"
+            ]
+          }
+        ],
+        "exports": [
+          "integerFlag",
+          "realFlag"
+        ],
+        "functions": [
+          "integerFlag",
+          "realFlag"
+        ]
+      },
       "src/cli/output.ts": {
         "description": "JSON output envelope for the UPT CLI.",
         "externalDependencies": [],
@@ -10129,6 +10605,13 @@
             ]
           },
           {
+            "file": "./errors.js",
+            "imports": [
+              "UsageError",
+              "CliError"
+            ]
+          },
+          {
             "file": "./graphs.js",
             "imports": [
               "AnchorScope"
@@ -10137,13 +10620,16 @@
           }
         ],
         "exports": [
+          "emitJsonError",
           "sanitize",
           "emitJson"
         ],
         "interfaces": [
+          "JsonErrorEnvelope",
           "JsonEnvelope"
         ],
         "functions": [
+          "emitJsonError",
           "sanitize",
           "emitJson"
         ]
@@ -10174,12 +10660,6 @@
         "externalDependencies": [],
         "nodeDependencies": [
           {
-            "module": "crypto",
-            "imports": [
-              "createHash"
-            ]
-          },
-          {
             "module": "fs",
             "imports": [
               "existsSync",
@@ -10197,6 +10677,12 @@
           }
         ],
         "internalDependencies": [
+          {
+            "file": "../core/hash.js",
+            "imports": [
+              "sha256Hex"
+            ]
+          },
           {
             "file": "./record-tables.js",
             "imports": [
@@ -10230,12 +10716,6 @@
         "externalDependencies": [],
         "nodeDependencies": [
           {
-            "module": "crypto",
-            "imports": [
-              "createHash"
-            ]
-          },
-          {
             "module": "fs",
             "imports": [
               "readdirSync",
@@ -10261,6 +10741,18 @@
         ],
         "internalDependencies": [
           {
+            "file": "../core/compare.js",
+            "imports": [
+              "compareCodepoint"
+            ]
+          },
+          {
+            "file": "../core/hash.js",
+            "imports": [
+              "sha256Hex"
+            ]
+          },
+          {
             "file": "../composition/canonical-graph.js",
             "imports": [
               "CANONICAL_CONSTANTS"
@@ -10270,6 +10762,12 @@
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "BASES"
             ]
           },
           {
@@ -10311,12 +10809,6 @@
         "externalDependencies": [],
         "nodeDependencies": [
           {
-            "module": "crypto",
-            "imports": [
-              "createHash"
-            ]
-          },
-          {
             "module": "fs",
             "imports": [
               "appendFileSync",
@@ -10344,6 +10836,18 @@
         ],
         "internalDependencies": [
           {
+            "file": "../core/data-file.js",
+            "imports": [
+              "readJsonFile"
+            ]
+          },
+          {
+            "file": "../core/hash.js",
+            "imports": [
+              "sha256Hex"
+            ]
+          },
+          {
             "file": "../cli-api.js",
             "imports": [
               "* as cliApi"
@@ -10363,7 +10867,7 @@
             ]
           },
           {
-            "file": "./commands/_atlas-map.js",
+            "file": "./stored-results.js",
             "imports": [
               "storedResultsFile"
             ]
@@ -10413,10 +10917,7 @@
           }
         ],
         "exports": [
-          "RECORD_SCHEMA",
           "sha256",
-          "argvFingerprint",
-          "entryFingerprint",
           "recordInvocation",
           "replayRecord",
           "showRecord"
@@ -10431,15 +10932,12 @@
           "ReplayEntryReport"
         ],
         "functions": [
-          "entryFingerprint",
           "recordInvocation",
           "replayRecord",
           "showRecord"
         ],
         "constants": [
-          "RECORD_SCHEMA",
-          "sha256",
-          "argvFingerprint"
+          "sha256"
         ]
       },
       "src/cli/search-index.ts": {
@@ -10489,7 +10987,6 @@
         "exports": [
           "STATUS_GLOSSARY",
           "definitionsFor",
-          "statusMeaning",
           "glossaryText"
         ],
         "interfaces": [
@@ -10497,11 +10994,41 @@
         ],
         "functions": [
           "definitionsFor",
-          "statusMeaning",
           "glossaryText"
         ],
         "constants": [
           "STATUS_GLOSSARY"
+        ]
+      },
+      "src/cli/stored-results.ts": {
+        "description": "Where the committed witness-results artifact is: the one owner of the path that",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "path",
+            "imports": [
+              "join"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "STORED_RESULTS_PATH",
+          "repoRoot",
+          "storedResultsFile"
+        ],
+        "functions": [
+          "repoRoot",
+          "storedResultsFile"
+        ],
+        "constants": [
+          "STORED_RESULTS_PATH"
         ]
       },
       "src/cli/top-level-help.ts": {
@@ -10544,8 +11071,7 @@
           {
             "module": "fs",
             "imports": [
-              "existsSync",
-              "readFileSync"
+              "existsSync"
             ]
           },
           {
@@ -10559,9 +11085,22 @@
             "imports": [
               "join"
             ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
           }
         ],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/data-file.js",
+            "imports": [
+              "readJsonFile"
+            ]
+          }
+        ],
         "exports": [
           "packageVersion",
           "peerVersions",
@@ -10649,13 +11188,6 @@
             "reExport": true
           },
           {
-            "file": "./numerical/statistics.js",
-            "imports": [
-              "ratioSpread"
-            ],
-            "reExport": true
-          },
-          {
             "file": "./composition/bridge-prediction.js",
             "imports": [
               "predictMissingBridges"
@@ -10717,6 +11249,20 @@
               "catalogIdNumber",
               "parseBridgeId",
               "primaryRelation"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/catalog-load.js",
+            "imports": [
+              "catalogEdgeKey"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/quantity-registry.js",
+            "imports": [
+              "foldName"
             ],
             "reExport": true
           },
@@ -10820,7 +11366,8 @@
           {
             "file": "./composition/axis-audit.js",
             "imports": [
-              "auditAxisDiscrimination"
+              "auditAxisDiscrimination",
+              "AUDIT_ALPHA"
             ],
             "reExport": true
           },
@@ -10894,6 +11441,24 @@
             "file": "./cli/map-evidence.js",
             "imports": [
               "deriveEdgeEvidence"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/graph-structure.js",
+            "imports": [
+              "communitiesOf",
+              "derivationCycles",
+              "rankHubs"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/graph-structure.js",
+            "imports": [
+              "CommunityReport",
+              "DerivationCycle",
+              "HubRank"
             ],
             "reExport": true
           },
@@ -11013,7 +11578,37 @@
             "file": "./composition/canonical-compare.js",
             "imports": [
               "CanonicalComparison",
-              "CatalogEdgeMatch"
+              "CatalogEdgeMatch",
+              "ExponentDifference"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/canonical-compare.js",
+            "imports": [
+              "describeExponentDifference"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./canonical/fixed-points.js",
+            "imports": [
+              "FIXED_POINT_EXPONENTS",
+              "constantRatio",
+              "fixedPoint",
+              "recoverMonomialPrefactor"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./canonical/fixed-points.js",
+            "imports": [
+              "ConstantRatio",
+              "ConstantRatioOptions",
+              "FixedPointScheme",
+              "PrefactorRecovery",
+              "PrefactorRecoveryScheme",
+              "RatioStatistic"
             ],
             "reExport": true
           },
@@ -11022,6 +11617,20 @@
             "imports": [
               "CONSTANTS",
               "CONSTANT_PROVENANCE"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/ast-leaves.js",
+            "imports": [
+              "isDecimalLiteral"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf"
             ],
             "reExport": true
           },
@@ -11215,8 +11824,16 @@
               "kerrGeodesic",
               "kerrTurningPointOrbit",
               "MetricMassError",
+              "MetricValueError",
               "schwarzschildCircularOrbit",
               "type MetricId"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./core/assignment.js",
+            "imports": [
+              "splitAssignment"
             ],
             "reExport": true
           },
@@ -11296,6 +11913,13 @@
             "reExport": true
           },
           {
+            "file": "./core/format.js",
+            "imports": [
+              "formatPercent"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/carrier-sign.js",
             "imports": [
               "CarrierSignError"
@@ -11319,6 +11943,7 @@
           {
             "file": "./dimensional/hyphen-names.js",
             "imports": [
+              "escapeRegExp",
               "rewriteCatalogHyphens"
             ],
             "reExport": true
@@ -11461,7 +12086,6 @@
           "getFormulaParserKind",
           "getFormulaDimensionChecker",
           "parseDimensionSpec",
-          "ratioSpread",
           "predictMissingBridges",
           "catalogFrontierAccount",
           "formatFrontierAccount",
@@ -11479,6 +12103,8 @@
           "catalogIdNumber",
           "parseBridgeId",
           "primaryRelation",
+          "catalogEdgeKey",
+          "foldName",
           "demonstrationEdges",
           "consistencyComparison",
           "decidingMeasurement",
@@ -11497,6 +12123,7 @@
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
+          "AUDIT_ALPHA",
           "AXES",
           "simplifyObservable",
           "isSimplifierAvailable",
@@ -11508,6 +12135,9 @@
           "filterEdges",
           "formatFilterLegend",
           "deriveEdgeEvidence",
+          "communitiesOf",
+          "derivationCycles",
+          "rankHubs",
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
@@ -11548,8 +12178,15 @@
           "describeComparisons",
           "describeKnownRelation",
           "matchingCatalogEdges",
+          "describeExponentDifference",
+          "FIXED_POINT_EXPONENTS",
+          "constantRatio",
+          "fixedPoint",
+          "recoverMonomialPrefactor",
           "CONSTANTS",
           "CONSTANT_PROVENANCE",
+          "isDecimalLiteral",
+          "forEachScalarLeaf",
           "OSCILLATOR_FAMILY",
           "ATLAS_FAMILIES",
           "deriveEvidence",
@@ -11587,8 +12224,10 @@
           "kerrGeodesic",
           "kerrTurningPointOrbit",
           "MetricMassError",
+          "MetricValueError",
           "schwarzschildCircularOrbit",
           "type MetricId",
+          "splitAssignment",
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
@@ -11608,8 +12247,10 @@
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
+          "formatPercent",
           "CarrierSignError",
           "naturalConstantOverrides",
+          "escapeRegExp",
           "rewriteCatalogHyphens",
           "candidateIdIfSlug",
           "resolveQuantityName",
@@ -11635,6 +12276,9 @@
           "CaseResult",
           "AxisDiscrimination",
           "AxisSpec",
+          "CommunityReport",
+          "DerivationCycle",
+          "HubRank",
           "AnnotatedCandidate",
           "CatalogAdjudication",
           "ConsequenceAnnotatedCandidate",
@@ -11643,6 +12287,13 @@
           "ConventionKey",
           "CanonicalComparison",
           "CatalogEdgeMatch",
+          "ExponentDifference",
+          "ConstantRatio",
+          "ConstantRatioOptions",
+          "FixedPointScheme",
+          "PrefactorRecovery",
+          "PrefactorRecoveryScheme",
+          "RatioStatistic",
           "CandidateGrounding",
           "CandidateReadiness",
           "ObservableCarriage",
@@ -11698,7 +12349,6 @@
           "getFormulaParserKind",
           "getFormulaDimensionChecker",
           "parseDimensionSpec",
-          "ratioSpread",
           "predictMissingBridges",
           "catalogFrontierAccount",
           "formatFrontierAccount",
@@ -11716,6 +12366,8 @@
           "catalogIdNumber",
           "parseBridgeId",
           "primaryRelation",
+          "catalogEdgeKey",
+          "foldName",
           "demonstrationEdges",
           "ConfrontationEntry",
           "RigorTier",
@@ -11742,6 +12394,7 @@
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
+          "AUDIT_ALPHA",
           "AxisDiscrimination",
           "AXES",
           "AxisSpec",
@@ -11755,6 +12408,12 @@
           "filterEdges",
           "formatFilterLegend",
           "deriveEdgeEvidence",
+          "communitiesOf",
+          "derivationCycles",
+          "rankHubs",
+          "CommunityReport",
+          "DerivationCycle",
+          "HubRank",
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
@@ -11803,8 +12462,22 @@
           "matchingCatalogEdges",
           "CanonicalComparison",
           "CatalogEdgeMatch",
+          "ExponentDifference",
+          "describeExponentDifference",
+          "FIXED_POINT_EXPONENTS",
+          "constantRatio",
+          "fixedPoint",
+          "recoverMonomialPrefactor",
+          "ConstantRatio",
+          "ConstantRatioOptions",
+          "FixedPointScheme",
+          "PrefactorRecovery",
+          "PrefactorRecoveryScheme",
+          "RatioStatistic",
           "CONSTANTS",
           "CONSTANT_PROVENANCE",
+          "isDecimalLiteral",
+          "forEachScalarLeaf",
           "CandidateGrounding",
           "CandidateReadiness",
           "OSCILLATOR_FAMILY",
@@ -11860,8 +12533,10 @@
           "kerrGeodesic",
           "kerrTurningPointOrbit",
           "MetricMassError",
+          "MetricValueError",
           "schwarzschildCircularOrbit",
           "type MetricId",
+          "splitAssignment",
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
@@ -11883,9 +12558,11 @@
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
+          "formatPercent",
           "CarrierSignError",
           "naturalConstantOverrides",
           "UnitMode",
+          "escapeRegExp",
           "rewriteCatalogHyphens",
           "candidateIdIfSlug",
           "resolveQuantityName",
@@ -11952,6 +12629,73 @@
         ],
         "constants": [
           "ADJUDICATIONS"
+        ]
+      },
+      "src/composition/algebraic-equivalence.ts": {
+        "description": "Equality of two scalar expressions up to a dimensionless constant, decided",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "parse",
+              "simplify"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "mapScalarLeaves"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS",
+              "isRegisteredConstant",
+              "piMultipleValue"
+            ]
+          },
+          {
+            "file": "./expr-simplify.js",
+            "imports": [
+              "renderGensym",
+              "LeafMeta"
+            ]
+          },
+          {
+            "file": "./mathts-quiet.js",
+            "imports": [
+              "quietlySync"
+            ]
+          }
+        ],
+        "exports": [
+          "equalUpToConstant"
+        ],
+        "functions": [
+          "equalUpToConstant"
         ]
       },
       "src/composition/aliases.ts": {
@@ -12046,10 +12790,7 @@
         "exports": [
           "SCALE_AXIS_VALUES",
           "FORCE_AXIS_VALUES",
-          "INFORMATION_AXIS_VALUES",
           "SYMMETRY_AXIS_VALUES",
-          "TOPOLOGY_AXIS_VALUES",
-          "STATISTICS_AXIS_VALUES",
           "AXES",
           "GATE_AXES"
         ],
@@ -12059,17 +12800,21 @@
         "constants": [
           "SCALE_AXIS_VALUES",
           "FORCE_AXIS_VALUES",
-          "INFORMATION_AXIS_VALUES",
           "SYMMETRY_AXIS_VALUES",
-          "TOPOLOGY_AXIS_VALUES",
-          "STATISTICS_AXIS_VALUES",
           "AXES",
           "GATE_AXES"
         ]
       },
       "src/composition/axis-audit.ts": {
         "description": "Axis-discrimination audit — the anti-inert-metadata gate for the extensible",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "fisherExact"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -12115,18 +12860,32 @@
           {
             "file": "./discovery.js",
             "imports": [
+              "buildDiscoveryContext",
+              "magnitudeGate",
               "REGISTRY_ATTRIBUTES_BY_NAME"
             ]
+          },
+          {
+            "file": "./discovery.js",
+            "imports": [
+              "DiscoveryOptions"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
+          "AUDIT_ALPHA",
           "auditAxisDiscrimination"
         ],
         "interfaces": [
+          "AxisEvidence",
           "AxisDiscrimination"
         ],
         "functions": [
           "auditAxisDiscrimination"
+        ],
+        "constants": [
+          "AUDIT_ALPHA"
         ]
       },
       "src/composition/bridge-analysis.ts": {
@@ -12135,15 +12894,23 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../numerical/statistics.js",
-            "imports": [
-              "ratioSpread"
-            ]
-          },
-          {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "constantRecord"
+            ]
+          },
+          {
+            "file": "../canonical/fixed-points.js",
+            "imports": [
+              "constantRatio",
+              "fixedPoint"
+            ]
+          },
+          {
+            "file": "./rational-exponent.js",
+            "imports": [
+              "formatRational",
+              "rationalize"
             ]
           },
           {
@@ -12193,12 +12960,6 @@
             ]
           },
           {
-            "file": "./compose.js",
-            "imports": [
-              "QUANTITY_IDENTIFICATIONS"
-            ]
-          },
-          {
             "file": "./enumerate.js",
             "imports": [
               "enumerateCompositions"
@@ -12209,10 +12970,18 @@
             "imports": [
               "DATA_CONFRONTED_IDS"
             ]
+          },
+          {
+            "file": "./quantity-clusters.js",
+            "imports": [
+              "clusterBySharedKeys",
+              "quantityCanonicalizer"
+            ]
           }
         ],
         "exports": [
           "dimensionalFreedom",
+          "cleanPrefactorForm",
           "attemptDerivation",
           "bridgePriority",
           "linkageMap",
@@ -12224,6 +12993,7 @@
         ],
         "functions": [
           "dimensionalFreedom",
+          "cleanPrefactorForm",
           "attemptDerivation",
           "bridgePriority",
           "linkageMap",
@@ -12331,7 +13101,15 @@
       },
       "src/composition/canonical-compare.ts": {
         "description": "Compare a user's formula with the canonical (textbook) equation it restates.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "matrixRank",
+              "ols"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -12371,7 +13149,15 @@
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
+              "isRegisteredConstant",
               "piMultipleValue"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf",
+              "isDecimalLiteral"
             ]
           },
           {
@@ -12442,9 +13228,26 @@
             "imports": [
               "DIMENSIONLESS"
             ]
+          },
+          {
+            "file": "../canonical/fixed-points.js",
+            "imports": [
+              "FIXED_POINT_EXPONENTS",
+              "constantRatio",
+              "fixedPoint"
+            ]
+          },
+          {
+            "file": "./rational-exponent.js",
+            "imports": [
+              "formatRational",
+              "rationalize"
+            ]
           }
         ],
         "exports": [
+          "diagnoseExponentDifference",
+          "describeExponentDifference",
           "compareWithCanonical",
           "compareUserEquation",
           "describeComparisons",
@@ -12453,10 +13256,13 @@
           "describeComparison"
         ],
         "interfaces": [
+          "ExponentDifference",
           "CanonicalComparison",
           "CatalogEdgeMatch"
         ],
         "functions": [
+          "diagnoseExponentDifference",
+          "describeExponentDifference",
           "compareWithCanonical",
           "compareUserEquation",
           "describeComparisons",
@@ -12522,7 +13328,14 @@
             "imports": [
               "CONSTANT_REGISTRY",
               "CONSTANTS",
+              "isRegisteredConstant",
               "piMultipleValue"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf"
             ]
           },
           {
@@ -12600,15 +13413,14 @@
       "src/composition/canonical-json.ts": {
         "description": "One canonical-JSON serializer with two named profiles.",
         "externalDependencies": [],
-        "nodeDependencies": [
-          {
-            "module": "crypto",
-            "imports": [
-              "createHash"
-            ]
-          }
-        ],
+        "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/hash.js",
+            "imports": [
+              "sha256Hex"
+            ]
+          },
           {
             "file": "./probe/types.js",
             "imports": [
@@ -12728,6 +13540,7 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
+          "chainClassIndex",
           "compareChainEdgeIds",
           "orderChainCandidates"
         ],
@@ -12735,6 +13548,7 @@
           "ChainCandidate"
         ],
         "functions": [
+          "chainClassIndex",
           "compareChainEdgeIds",
           "orderChainCandidates"
         ]
@@ -12756,6 +13570,12 @@
             "imports": [
               "classifyStructure",
               "ChainClassification"
+            ]
+          },
+          {
+            "file": "./algebraic-equivalence.js",
+            "imports": [
+              "equalUpToConstant"
             ]
           }
         ],
@@ -12860,6 +13680,7 @@
           {
             "file": "./chain-candidate.js",
             "imports": [
+              "chainClassIndex",
               "compareChainEdgeIds",
               "ChainCandidateKind"
             ]
@@ -12999,7 +13820,13 @@
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "isRegisteredConstant"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "isDecimalLiteral"
             ]
           },
           {
@@ -13180,6 +14007,13 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/compare.js",
+            "imports": [
+              "byKey",
+              "compareCodepoint"
+            ]
+          },
           {
             "file": "../canonical/registry.js",
             "imports": [
@@ -13400,7 +14234,14 @@
       },
       "src/composition/discovery.ts": {
         "description": "Discovery loop — vet link candidates through the verification primitives",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "normalCDF"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -13466,6 +14307,12 @@
             "typeOnly": true
           },
           {
+            "file": "./quantity-clusters.js",
+            "imports": [
+              "clusterBySharedKeys"
+            ]
+          },
+          {
             "file": "../core/constants.js",
             "imports": [
               "M_SUN_KG"
@@ -13474,7 +14321,9 @@
           {
             "file": "./representative-values.js",
             "imports": [
-              "REPRESENTATIVE_VALUES"
+              "DEFAULT_SIGMA_DECADES",
+              "REPRESENTATIVE_VALUES",
+              "sigmaDecadesOf"
             ]
           },
           {
@@ -13514,6 +14363,8 @@
           "ANCHOR_DEFAULT",
           "DEFAULT_MAX_ORDERS_OF_MAGNITUDE",
           "buildDiscoveryContext",
+          "magnitudeStrength",
+          "magnitudeGate",
           "vetLinkCandidate",
           "vetInContext",
           "rankDiscoveries"
@@ -13521,10 +14372,13 @@
         "interfaces": [
           "VettedCandidate",
           "DiscoveryOptions",
-          "DiscoveryContext"
+          "DiscoveryContext",
+          "MagnitudeGate"
         ],
         "functions": [
           "buildDiscoveryContext",
+          "magnitudeStrength",
+          "magnitudeGate",
           "vetLinkCandidate",
           "vetInContext",
           "rankDiscoveries"
@@ -13643,6 +14497,8 @@
             "file": "./edge.js",
             "imports": [
               "CompositionAliasError",
+              "CompositionDimensionError",
+              "CompositionJunctionError",
               "UndefinedCompositionError"
             ]
           },
@@ -13662,7 +14518,14 @@
           {
             "file": "./compose-symbolic.js",
             "imports": [
-              "composeSymbolic"
+              "composeSymbolic",
+              "SymbolicCompositionError"
+            ]
+          },
+          {
+            "file": "./expr-eval.js",
+            "imports": [
+              "SymbolicEvalError"
             ]
           }
         ],
@@ -13824,6 +14687,12 @@
             ]
           },
           {
+            "file": "../canonical/fixed-points.js",
+            "imports": [
+              "fixedPoint"
+            ]
+          },
+          {
             "file": "./retrodiction.js",
             "imports": [
               "RetrodictionResult"
@@ -13856,6 +14725,12 @@
             ]
           },
           {
+            "file": "../core/format.js",
+            "imports": [
+              "formatQuantity"
+            ]
+          },
+          {
             "file": "../dimensional/buckingham.js",
             "imports": [
               "DimensionalDeterminationResult"
@@ -13879,6 +14754,14 @@
             "imports": [
               "formulaShape"
             ]
+          },
+          {
+            "file": "../core/format.js",
+            "imports": [
+              "formatQuantity",
+              "formatExact"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -13886,14 +14769,16 @@
           "formatExact",
           "explainQuantity"
         ],
+        "reExported": [
+          "formatQuantity",
+          "formatExact"
+        ],
         "interfaces": [
           "DerivationExplanation",
           "ExplainOptions",
           "QuantityExplanation"
         ],
         "functions": [
-          "formatQuantity",
-          "formatExact",
           "explainQuantity"
         ]
       },
@@ -13923,6 +14808,12 @@
               "ExprNode"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf"
+            ]
           },
           {
             "file": "../dimensional/symbolic-constants.js",
@@ -13993,9 +14884,16 @@
             ]
           },
           {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf",
+              "isDecimalLiteral"
+            ]
+          },
+          {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "isRegisteredConstant"
             ]
           },
           {
@@ -14025,11 +14923,16 @@
           }
         ],
         "exports": [
+          "renderGensym",
           "isSimplifierAvailable",
           "simplifyExpr",
           "simplifyObservable"
         ],
+        "interfaces": [
+          "LeafMeta"
+        ],
         "functions": [
+          "renderGensym",
           "isSimplifierAvailable",
           "simplifyExpr",
           "simplifyObservable"
@@ -14063,7 +14966,14 @@
       },
       "src/composition/formula-shape.ts": {
         "description": "Whether an encoded formula is a product of powers, or a sum of dimensionful terms.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Fraction"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -14072,6 +14982,12 @@
               "ExprNode"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "isDecimalLiteral"
+            ]
           },
           {
             "file": "../dimensional/algebra.js",
@@ -14094,13 +15010,24 @@
             "imports": [
               "DIMENSIONLESS"
             ]
+          },
+          {
+            "file": "./rational-exponent.js",
+            "imports": [
+              "fractionToNumber",
+              "rationalize"
+            ]
           }
         ],
         "exports": [
+          "rationalExponentOf",
+          "monomialExponentsExact",
           "monomialExponents",
           "formulaShape"
         ],
         "functions": [
+          "rationalExponentOf",
+          "monomialExponentsExact",
           "monomialExponents",
           "formulaShape"
         ]
@@ -14193,9 +15120,69 @@
           "CONTESTED_BRIDGE_IDS"
         ]
       },
+      "src/composition/graph-structure.ts": {
+        "description": "Map structure from graph algorithms, over the QUANTITY graph of a composition graph.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "betweennessCentrality",
+              "connectedComponents",
+              "louvainCommunities",
+              "stronglyConnectedComponents"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./quantity-clusters.js",
+            "imports": [
+              "quantityCanonicalizer"
+            ]
+          }
+        ],
+        "exports": [
+          "COMMUNITY_METHOD",
+          "quantityGraph",
+          "communitiesOf",
+          "derivationCycles",
+          "rankHubs"
+        ],
+        "interfaces": [
+          "QuantityGraph",
+          "LayoutCommunity",
+          "CommunityReport",
+          "DerivationCycle",
+          "HubRank"
+        ],
+        "functions": [
+          "quantityGraph",
+          "communitiesOf",
+          "derivationCycles",
+          "rankHubs"
+        ],
+        "constants": [
+          "COMMUNITY_METHOD"
+        ]
+      },
       "src/composition/graph-viz-svg.ts": {
         "description": "SVG rendering for the physics map — render Graphviz DOT source to an SVG",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@viz-js/viz",
+            "imports": [
+              "Viz"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
@@ -14222,9 +15209,10 @@
             "typeOnly": true
           },
           {
-            "file": "./compose.js",
+            "file": "./quantity-clusters.js",
             "imports": [
-              "QUANTITY_IDENTIFICATIONS"
+              "clusterBySharedKeys",
+              "quantityCanonicalizer"
             ]
           },
           {
@@ -14295,7 +15283,20 @@
       },
       "src/composition/identifiability.ts": {
         "description": "Identifiability classifier (Consequence 1 of",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Fraction"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "rationalNullspace"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -14317,19 +15318,44 @@
             "imports": [
               "QUANTITY_IDENTIFICATIONS"
             ]
+          },
+          {
+            "file": "./formula-shape.js",
+            "imports": [
+              "monomialExponentsExact"
+            ]
+          },
+          {
+            "file": "./rational-exponent.js",
+            "imports": [
+              "rationalize"
+            ]
+          },
+          {
+            "file": "../canonical/registry.js",
+            "imports": [
+              "canonicalById"
+            ]
           }
         ],
         "exports": [
           "forwardClosure",
+          "edgeMonomial",
+          "identifiabilityByRankWith",
+          "identifiabilityByRank",
           "classifyIdentifiability",
           "classifyAll"
         ],
         "interfaces": [
           "IdentifiabilityOptions",
+          "RankIdentifiability",
           "IdentifiabilityResult"
         ],
         "functions": [
           "forwardClosure",
+          "edgeMonomial",
+          "identifiabilityByRankWith",
+          "identifiabilityByRank",
           "classifyIdentifiability",
           "classifyAll"
         ]
@@ -14487,7 +15513,8 @@
             "imports": [
               "IdentifiabilityVerdict",
               "IdentifiabilityResult",
-              "IdentifiabilityOptions"
+              "IdentifiabilityOptions",
+              "RankIdentifiability"
             ],
             "reExport": true
           },
@@ -14496,7 +15523,8 @@
             "imports": [
               "classifyIdentifiability",
               "classifyAll",
-              "forwardClosure"
+              "forwardClosure",
+              "identifiabilityByRank"
             ],
             "reExport": true
           },
@@ -14685,6 +15713,7 @@
           "classifyIdentifiability",
           "classifyAll",
           "forwardClosure",
+          "identifiabilityByRank",
           "retrodict",
           "retrodictNode",
           "explainQuantity",
@@ -14721,6 +15750,7 @@
           "IdentifiabilityVerdict",
           "IdentifiabilityResult",
           "IdentifiabilityOptions",
+          "RankIdentifiability",
           "RetrodictionOutcome",
           "RetrodictionPrediction",
           "RetrodictionResult",
@@ -14791,9 +15821,11 @@
           "IdentifiabilityVerdict",
           "IdentifiabilityResult",
           "IdentifiabilityOptions",
+          "RankIdentifiability",
           "classifyIdentifiability",
           "classifyAll",
           "forwardClosure",
+          "identifiabilityByRank",
           "RetrodictionOutcome",
           "RetrodictionPrediction",
           "RetrodictionResult",
@@ -14870,6 +15902,12 @@
             "file": "./mathts-quiet.js",
             "imports": [
               "quietlySync"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "isDecimalLiteral"
             ]
           },
           {
@@ -15038,6 +16076,13 @@
             "imports": [
               "canonicalPrefactor"
             ]
+          },
+          {
+            "file": "../../canonical/fixed-points.js",
+            "imports": [
+              "constantRatio",
+              "fixedPoint"
+            ]
           }
         ],
         "exports": [
@@ -15068,6 +16113,12 @@
         ],
         "internalDependencies": [
           {
+            "file": "../../core/data-file.js",
+            "imports": [
+              "readJsonFile"
+            ]
+          },
+          {
             "file": "./types.js",
             "imports": [
               "DatasetRole",
@@ -15084,17 +16135,23 @@
           }
         ],
         "exports": [
+          "readDatasetNumber",
           "datasetFromRows",
           "asDatasetSafe",
           "loadDatasetFromJson",
           "loadSplitDatasetsFromJson",
           "loadDatasetFromCsv",
-          "loadSplitCsv"
+          "loadSplitCsv",
+          "DatasetError"
+        ],
+        "classes": [
+          "DatasetError"
         ],
         "interfaces": [
           "SplitFileDatasets"
         ],
         "functions": [
+          "readDatasetNumber",
           "datasetFromRows",
           "asDatasetSafe",
           "loadDatasetFromJson",
@@ -15312,6 +16369,12 @@
               "norm2",
               "pairwiseDot"
             ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "ols"
+            ]
           }
         ],
         "nodeDependencies": [],
@@ -15405,6 +16468,14 @@
               "SearchProblem"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./power-law.js",
+            "imports": [
+              "logDesign",
+              "logDesignRank",
+              "piStructure"
+            ]
           }
         ],
         "exports": [
@@ -15445,7 +16516,8 @@
           {
             "file": "../../dimensional/ast-builders.js",
             "imports": [
-              "sym"
+              "sym",
+              "symbolPower"
             ]
           },
           {
@@ -15459,6 +16531,12 @@
             "file": "../../dimensional/validator.js",
             "imports": [
               "validate"
+            ]
+          },
+          {
+            "file": "../../dimensional/algebra.js",
+            "imports": [
+              "isDimensionless"
             ]
           },
           {
@@ -15476,11 +16554,50 @@
               "canEmitCandidate",
               "BudgetState"
             ]
+          },
+          {
+            "file": "./power-law.js",
+            "imports": [
+              "powerLawDetermination",
+              "PowerLawFit"
+            ]
+          },
+          {
+            "file": "./power-law.js",
+            "imports": [
+              "powerLawDetermination",
+              "powerLawWording",
+              "rationalizeExponent"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./power-law.js",
+            "imports": [
+              "PowerLawDetermination",
+              "PowerLawExponent",
+              "PowerLawFit"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
+          "powerLawDetermination",
+          "powerLawWording",
+          "rationalizeExponent",
           "monomialToExpr",
-          "nativeDetermination"
+          "nativeDetermination",
+          "PowerLawDetermination",
+          "PowerLawExponent",
+          "PowerLawFit"
+        ],
+        "reExported": [
+          "powerLawDetermination",
+          "powerLawWording",
+          "rationalizeExponent",
+          "PowerLawDetermination",
+          "PowerLawExponent",
+          "PowerLawFit"
         ],
         "interfaces": [
           "RawCandidate"
@@ -15628,6 +16745,29 @@
             "reExport": true
           },
           {
+            "file": "./power-law.js",
+            "imports": [
+              "powerLawDetermination",
+              "powerLawWording",
+              "rationalizeExponent",
+              "piStructure",
+              "logDesign",
+              "logDesignRank"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./power-law.js",
+            "imports": [
+              "PowerLawDetermination",
+              "PowerLawExponent",
+              "PowerLawFit",
+              "PiStructure",
+              "LogDesign"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./frontier.js",
             "imports": [
               "wrapRelationLinkGaps",
@@ -15708,6 +16848,13 @@
             "reExport": true
           },
           {
+            "file": "./limits.js",
+            "imports": [
+              "LimitOutcome"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./falsify.js",
             "imports": [
               "runFalsification",
@@ -15732,6 +16879,14 @@
               "loadSplitDatasetsFromJson",
               "loadDatasetFromCsv",
               "loadSplitCsv"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dataset.js",
+            "imports": [
+              "readDatasetNumber",
+              "DatasetError"
             ],
             "reExport": true
           },
@@ -15773,6 +16928,21 @@
               "ChangepointInput",
               "ChangepointResult",
               "ScaleSymmetryInput"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./structure.js",
+            "imports": [
+              "ScaleExponentResult",
+              "ConservationResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./t-tail.js",
+            "imports": [
+              "studentTwoSidedP"
             ],
             "reExport": true
           },
@@ -15884,6 +17054,13 @@
               "CorrectionStep"
             ],
             "reExport": true
+          },
+          {
+            "file": "./study.js",
+            "imports": [
+              "CorrectionCoefficient"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -15914,6 +17091,12 @@
           "ProbeCandidateStore",
           "monomialToExpr",
           "generateNative",
+          "powerLawDetermination",
+          "powerLawWording",
+          "rationalizeExponent",
+          "piStructure",
+          "logDesign",
+          "logDesignRank",
           "wrapRelationLinkGaps",
           "wrapConnectorGaps",
           "wrapRegimeGaps",
@@ -15937,11 +17120,14 @@
           "loadSplitDatasetsFromJson",
           "loadDatasetFromCsv",
           "loadSplitCsv",
+          "readDatasetNumber",
+          "DatasetError",
           "suggestDiscriminatingPoint",
           "parseDesignBounds",
           "detectMeanChangepoint",
           "estimateScaleExponent",
           "probeConservation",
+          "studentTwoSidedP",
           "runBackendWorker",
           "setRelationMetadata",
           "getRelationMetadata",
@@ -16008,11 +17194,17 @@
           "ScientificRelationRecord",
           "BudgetState",
           "RawCandidate",
+          "PowerLawDetermination",
+          "PowerLawExponent",
+          "PowerLawFit",
+          "PiStructure",
+          "LogDesign",
           "FitResult",
           "RankedCandidate",
           "CorpusMatch",
           "CorpusComparisonResult",
           "LimitCheckResult",
+          "LimitOutcome",
           "FalsifyInput",
           "FalsifyResult",
           "SplitFileDatasets",
@@ -16021,6 +17213,8 @@
           "ChangepointInput",
           "ChangepointResult",
           "ScaleSymmetryInput",
+          "ScaleExponentResult",
+          "ConservationResult",
           "BackendRequest",
           "BackendCandidate",
           "BackendResponse",
@@ -16042,7 +17236,8 @@
           "StudyDesignSuggestion",
           "StudyCorrection",
           "StudyCorrectionReport",
-          "CorrectionStep"
+          "CorrectionStep",
+          "CorrectionCoefficient"
         ],
         "reExported": [
           "SCHEMA_VERSION",
@@ -16111,6 +17306,17 @@
           "monomialToExpr",
           "generateNative",
           "RawCandidate",
+          "powerLawDetermination",
+          "powerLawWording",
+          "rationalizeExponent",
+          "piStructure",
+          "logDesign",
+          "logDesignRank",
+          "PowerLawDetermination",
+          "PowerLawExponent",
+          "PowerLawFit",
+          "PiStructure",
+          "LogDesign",
           "wrapRelationLinkGaps",
           "wrapConnectorGaps",
           "wrapRegimeGaps",
@@ -16131,6 +17337,7 @@
           "checkDeclaredLimit",
           "checkDeclaredLimits",
           "LimitCheckResult",
+          "LimitOutcome",
           "runFalsification",
           "DEFAULT_BATTERIES",
           "FalsifyInput",
@@ -16141,6 +17348,8 @@
           "loadSplitDatasetsFromJson",
           "loadDatasetFromCsv",
           "loadSplitCsv",
+          "readDatasetNumber",
+          "DatasetError",
           "SplitFileDatasets",
           "suggestDiscriminatingPoint",
           "parseDesignBounds",
@@ -16152,6 +17361,9 @@
           "ChangepointInput",
           "ChangepointResult",
           "ScaleSymmetryInput",
+          "ScaleExponentResult",
+          "ConservationResult",
+          "studentTwoSidedP",
           "runBackendWorker",
           "BackendRequest",
           "BackendCandidate",
@@ -16200,12 +17412,20 @@
           "StudyDesignSuggestion",
           "StudyCorrection",
           "StudyCorrectionReport",
-          "CorrectionStep"
+          "CorrectionStep",
+          "CorrectionCoefficient"
         ]
       },
       "src/composition/probe/limits.ts": {
         "description": "Declared-limit checks for probe candidates.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "norm2"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -16319,6 +17539,8 @@
             "imports": [
               "generateNative",
               "nativeDetermination",
+              "powerLawDetermination",
+              "powerLawWording",
               "RawCandidate"
             ]
           },
@@ -16405,16 +17627,71 @@
           "NO_HOLDOUT_WORDING"
         ]
       },
+      "src/composition/probe/power-law.ts": {
+        "description": "Power-law discovery over the Buckingham π-groups (proposal 8 of",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "matrixRank",
+              "ols"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../dimensional/buckingham.js",
+            "imports": [
+              "buckinghamPi",
+              "dimensionallyDetermines",
+              "PiGroup"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "DimensionalVariableRef",
+              "ObservationRow",
+              "SearchProblem"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "MAX_EXPONENT_DENOMINATOR",
+          "rationalCandidates",
+          "rationalizeExponent",
+          "piStructure",
+          "logDesign",
+          "logDesignRank",
+          "powerLawDetermination",
+          "powerLawWording"
+        ],
+        "interfaces": [
+          "PowerLawExponent",
+          "PowerLawFit",
+          "Rational",
+          "PiStructure",
+          "LogDesign"
+        ],
+        "functions": [
+          "rationalCandidates",
+          "rationalizeExponent",
+          "piStructure",
+          "logDesign",
+          "logDesignRank",
+          "powerLawDetermination",
+          "powerLawWording"
+        ],
+        "constants": [
+          "MAX_EXPONENT_DENOMINATOR"
+        ]
+      },
       "src/composition/probe/problem.ts": {
         "description": "Search-problem construction and JSON loading for Product B.",
         "externalDependencies": [],
         "nodeDependencies": [
-          {
-            "module": "fs",
-            "imports": [
-              "readFileSync"
-            ]
-          },
           {
             "module": "path",
             "imports": [
@@ -16425,6 +17702,18 @@
           }
         ],
         "internalDependencies": [
+          {
+            "file": "../../core/data-file.js",
+            "imports": [
+              "readJsonFile"
+            ]
+          },
+          {
+            "file": "../../core/json-schema.js",
+            "imports": [
+              "isPlainObject"
+            ]
+          },
           {
             "file": "../../dimensional/dimension-spec.js",
             "imports": [
@@ -16535,7 +17824,14 @@
       },
       "src/composition/probe/residual.ts": {
         "description": "Explicit residual / discrepancy evaluation. Does not replace",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "norm2"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -16719,18 +18015,22 @@
         ]
       },
       "src/composition/probe/structure.ts": {
-        "description": "Cheap structure probes: regime changepoint, scale symmetry, conserved dQ/dt.",
+        "description": "Cheap structure probes as TESTS: a regime changepoint, a scale symmetry, a",
         "externalDependencies": [
           {
             "package": "@danielsimonjr/mathts-core",
             "imports": [
+              "pairwiseSum",
               "sumSquaredDeviations"
             ]
           },
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "linearRegression"
+              "gradient",
+              "linearRegression",
+              "permutationTest",
+              "studentTTest"
             ]
           }
         ],
@@ -16740,6 +18040,12 @@
             "file": "../../numerical/statistics.js",
             "imports": [
               "meanOf"
+            ]
+          },
+          {
+            "file": "./t-tail.js",
+            "imports": [
+              "studentTwoSidedP"
             ]
           }
         ],
@@ -16751,7 +18057,9 @@
         "interfaces": [
           "ChangepointInput",
           "ChangepointResult",
-          "ScaleSymmetryInput"
+          "ScaleSymmetryInput",
+          "ScaleExponentResult",
+          "ConservationResult"
         ],
         "functions": [
           "detectMeanChangepoint",
@@ -16763,11 +18071,20 @@
         "description": "Falsification-oriented study over calibrated observations (audit §14 I19).",
         "externalDependencies": [
           {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "pairwiseDot",
+              "pairwiseSum"
+            ]
+          },
+          {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
               "betainc",
               "gammainc",
-              "gammaincp"
+              "gammaincp",
+              "inv",
+              "propagateUncertainty"
             ]
           }
         ],
@@ -16780,6 +18097,24 @@
           }
         ],
         "internalDependencies": [
+          {
+            "file": "../../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          },
+          {
+            "file": "../../core/data-file.js",
+            "imports": [
+              "readJsonFile"
+            ]
+          },
+          {
+            "file": "../../core/json-schema.js",
+            "imports": [
+              "isPlainObject"
+            ]
+          },
           {
             "file": "../../dimensional/types.js",
             "imports": [
@@ -16914,6 +18249,7 @@
           "ModelTest",
           "CorrectionStep",
           "CandidateTest",
+          "CorrectionCoefficient",
           "StudyCorrectionReport",
           "StudyDesignSuggestion",
           "ProbeStudyResult",
@@ -16936,6 +18272,25 @@
         "constants": [
           "DEFAULT_ALPHA",
           "MAX_CORRECTION_TERMS"
+        ]
+      },
+      "src/composition/probe/t-tail.ts": {
+        "description": "The two-sided tail of Student's t, computed directly.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "betainc"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "studentTwoSidedP"
+        ],
+        "functions": [
+          "studentTwoSidedP"
         ]
       },
       "src/composition/probe/types.ts": {
@@ -17007,7 +18362,14 @@
       },
       "src/composition/proposed-bridges.ts": {
         "description": "Identity-consequence surfacer — turns a `promising` discovery identification",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Fraction"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -17026,7 +18388,8 @@
           {
             "file": "../dimensional/ast-builders.js",
             "imports": [
-              "sym"
+              "sym",
+              "symbolPower"
             ]
           },
           {
@@ -17098,7 +18461,15 @@
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "isRegisteredConstant"
+            ]
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf",
+              "isDecimalLiteral",
+              "mapScalarLeaves"
             ]
           },
           {
@@ -17131,12 +18502,33 @@
             "imports": [
               "CATALOG_GRAPH"
             ]
+          },
+          {
+            "file": "./formula-shape.js",
+            "imports": [
+              "rationalExponentOf"
+            ]
+          },
+          {
+            "file": "./algebraic-equivalence.js",
+            "imports": [
+              "equalUpToConstant"
+            ]
+          },
+          {
+            "file": "./rational-exponent.js",
+            "imports": [
+              "formatRational",
+              "fractionToNumber"
+            ]
           }
         ],
         "exports": [
           "PROPOSED_BRIDGES",
           "toMonomial",
           "fromMonomial",
+          "latexFromMono",
+          "isolateLeaf",
           "resolveSources",
           "deriveProposedBridges",
           "dedupByNormalForm",
@@ -17150,11 +18542,14 @@
           "MissingEvidenceError"
         ],
         "interfaces": [
-          "ProposedBridge"
+          "ProposedBridge",
+          "MonoLeaf"
         ],
         "functions": [
           "toMonomial",
           "fromMonomial",
+          "latexFromMono",
+          "isolateLeaf",
           "resolveSources",
           "deriveProposedBridges",
           "dedupByNormalForm",
@@ -17197,6 +18592,36 @@
         "functions": [
           "allQuantities",
           "quantityByName"
+        ]
+      },
+      "src/composition/quantity-clusters.ts": {
+        "description": "The one component owner: items that share a (canonical) quantity are one cluster.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "connectedComponents"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./compose.js",
+            "imports": [
+              "QUANTITY_IDENTIFICATIONS"
+            ]
+          }
+        ],
+        "exports": [
+          "quantityCanonicalizer",
+          "groupInto",
+          "clusterBySharedKeys"
+        ],
+        "functions": [
+          "quantityCanonicalizer",
+          "groupInto",
+          "clusterBySharedKeys"
         ]
       },
       "src/composition/quantity.ts": {
@@ -17243,22 +18668,56 @@
           "regimesDiffer"
         ]
       },
+      "src/composition/rational-exponent.ts": {
+        "description": "Exact rationals from doubles, for exponents and prefactors.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Fraction"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "DEFAULT_MAX_DENOMINATOR",
+          "rationalize",
+          "fractionToNumber",
+          "formatRational"
+        ],
+        "interfaces": [
+          "RationalizeOptions"
+        ],
+        "functions": [
+          "rationalize",
+          "fractionToNumber",
+          "formatRational"
+        ],
+        "constants": [
+          "DEFAULT_MAX_DENOMINATOR"
+        ]
+      },
       "src/composition/representative-values.ts": {
         "description": "Order-of-magnitude representative values for the discovery falsifier.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
+          "DEFAULT_SIGMA_DECADES",
           "REPRESENTATIVE_VALUES",
+          "sigmaDecadesOf",
           "representativeValue"
         ],
         "interfaces": [
           "RepresentativeValue"
         ],
         "functions": [
+          "sigmaDecadesOf",
           "representativeValue"
         ],
         "constants": [
+          "DEFAULT_SIGMA_DECADES",
           "REPRESENTATIVE_VALUES"
         ]
       },
@@ -17303,6 +18762,12 @@
             "file": "../numerical/formula-contract.js",
             "imports": [
               "FormulaError"
+            ]
+          },
+          {
+            "file": "../numerical/statistics.js",
+            "imports": [
+              "meanOf"
             ]
           },
           {
@@ -17420,7 +18885,8 @@
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "isRegisteredConstant"
             ]
           },
           {
@@ -17530,6 +18996,21 @@
       }
     },
     "core": {
+      "src/core/assignment.ts": {
+        "description": "One split of a `name=value` token.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "splitAssignment"
+        ],
+        "interfaces": [
+          "SplitAssignment"
+        ],
+        "functions": [
+          "splitAssignment"
+        ]
+      },
       "src/core/axes-registry.ts": {
         "description": "`Axes` singleton registry — module-load-stable `UniversalIndex`",
         "externalDependencies": [
@@ -17611,6 +19092,30 @@
           "lawToCell",
           "bridgeToCell",
           "emergenceToCell"
+        ]
+      },
+      "src/core/compare.ts": {
+        "description": "Numeric and string comparisons the layers above share.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "relDiff",
+          "symmetricRelDiff",
+          "withinRel",
+          "withinMixed",
+          "withinSymmetric",
+          "compareCodepoint",
+          "byKey"
+        ],
+        "functions": [
+          "relDiff",
+          "symmetricRelDiff",
+          "withinRel",
+          "withinMixed",
+          "withinSymmetric",
+          "compareCodepoint",
+          "byKey"
         ]
       },
       "src/core/constants.ts": {
@@ -17737,6 +19242,7 @@
           }
         ],
         "exports": [
+          "readJsonFile",
           "schemaFileOf",
           "dataText",
           "dataSchema",
@@ -17744,6 +19250,7 @@
           "checkedDataFile"
         ],
         "functions": [
+          "readJsonFile",
           "schemaFileOf",
           "dataText",
           "dataSchema",
@@ -17801,15 +19308,55 @@
           "V07_CELL_RULES"
         ]
       },
+      "src/core/format.ts": {
+        "description": "The printed forms of a number.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "formatQuantity",
+          "formatExact",
+          "formatPercent"
+        ],
+        "interfaces": [
+          "PercentDigits"
+        ],
+        "functions": [
+          "formatQuantity",
+          "formatExact",
+          "formatPercent"
+        ]
+      },
+      "src/core/hash.ts": {
+        "description": "One SHA-256 digest.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "sha256Hex"
+        ],
+        "functions": [
+          "sha256Hex"
+        ]
+      },
       "src/core/json-schema.ts": {
         "description": "A JSON Schema reader for the keyword subset the repository's data schemas use.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
+          "isPlainObject",
           "schemaProblems"
         ],
         "functions": [
+          "isPlainObject",
           "schemaProblems"
         ]
       },
@@ -17868,6 +19415,22 @@
         ],
         "functions": [
           "canonicalLabelOrder"
+        ]
+      },
+      "src/core/mathts-read.ts": {
+        "description": "Readers for the typed MathTS results.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "numberFrom",
+          "bigintFrom",
+          "numberMatrixFrom"
+        ],
+        "functions": [
+          "numberFrom",
+          "bigintFrom",
+          "numberMatrixFrom"
         ]
       },
       "src/core/regime-registry.ts": {
@@ -18022,6 +19585,12 @@
             ]
           },
           {
+            "file": "./axes-registry.js",
+            "imports": [
+              "Axes"
+            ]
+          },
+          {
             "file": "./flux-rules.js",
             "imports": [
               "FluxRule",
@@ -18161,7 +19730,14 @@
         "description": "Bridge-parameter differentiation by central finite differences.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../numerical/finite-difference.js",
+            "imports": [
+              "centralPartial"
+            ]
+          }
+        ],
         "exports": [
           "bridgeGradientNumerical"
         ],
@@ -18261,7 +19837,11 @@
         ],
         "exports": [
           "DimensionMismatchError",
+          "BASES",
           "EXPONENT_TOL",
+          "SI_BASE",
+          "isDimensionless",
+          "exactlyEquals",
           "multiply",
           "divide",
           "power",
@@ -18275,6 +19855,8 @@
           "DimensionMismatchError"
         ],
         "functions": [
+          "isDimensionless",
+          "exactlyEquals",
           "multiply",
           "divide",
           "power",
@@ -18285,7 +19867,9 @@
           "siUnitOf"
         ],
         "constants": [
-          "EXPONENT_TOL"
+          "BASES",
+          "EXPONENT_TOL",
+          "SI_BASE"
         ]
       },
       "src/dimensional/ast-builders.ts": {
@@ -18310,11 +19894,46 @@
         ],
         "exports": [
           "sym",
-          "dim"
+          "dim",
+          "symbolPower"
         ],
         "functions": [
           "sym",
-          "dim"
+          "dim",
+          "symbolPower"
+        ]
+      },
+      "src/dimensional/ast-leaves.ts": {
+        "description": "One owner for the scalar-leaf walk of an `ExprNode` and the literal rule.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./ast-types.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "DECIMAL_LITERAL",
+          "isDecimalLiteral",
+          "literalValue",
+          "forEachScalarLeaf",
+          "mapScalarLeaves"
+        ],
+        "interfaces": [
+          "LeafWalkArms"
+        ],
+        "functions": [
+          "isDecimalLiteral",
+          "literalValue",
+          "forEachScalarLeaf",
+          "mapScalarLeaves"
+        ],
+        "constants": [
+          "DECIMAL_LITERAL"
         ]
       },
       "src/dimensional/ast-types.ts": {
@@ -18428,6 +20047,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./algebra.js",
+            "imports": [
+              "BASES"
+            ]
           }
         ],
         "exports": [
@@ -18832,6 +20457,7 @@
           {
             "file": "./algebra.js",
             "imports": [
+              "BASES",
               "divide",
               "power",
               "EXPONENT_TOL"
@@ -19063,7 +20689,14 @@
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/mathts-read.js",
+            "imports": [
+              "bigintFrom"
+            ]
+          }
+        ],
         "exports": [
           "UNIT_SCALE",
           "decimalScale",
@@ -19272,6 +20905,12 @@
             "typeOnly": true
           },
           {
+            "file": "./algebra.js",
+            "imports": [
+              "BASES"
+            ]
+          },
+          {
             "file": "./field-equation-helpers.js",
             "imports": [
               "validateComponentDimension"
@@ -19305,9 +20944,11 @@
           }
         ],
         "exports": [
+          "escapeRegExp",
           "rewriteCatalogHyphens"
         ],
         "functions": [
+          "escapeRegExp",
           "rewriteCatalogHyphens"
         ]
       },
@@ -19746,6 +21387,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/compare.js",
+            "imports": [
+              "withinRel"
+            ]
+          },
+          {
             "file": "./types.js",
             "imports": [
               "Dimension"
@@ -19775,6 +21422,7 @@
           "constantAgreement",
           "constantNotes",
           "constantScope",
+          "isRegisteredConstant",
           "piMultipleValue",
           "ConstantDisagreementError"
         ],
@@ -19791,6 +21439,7 @@
           "constantAgreement",
           "constantNotes",
           "constantScope",
+          "isRegisteredConstant",
           "piMultipleValue"
         ],
         "constants": [
@@ -19945,9 +21594,27 @@
           "ENERGY",
           "POWER",
           "ACTION",
+          "VOLUME",
+          "MOMENTUM",
+          "PRESSURE",
+          "SPRING_CONSTANT",
+          "VISCOSITY",
+          "LINEAR_DENSITY",
+          "WAVENUMBER",
+          "DIFFUSIVITY",
+          "ENERGY_FLUX",
+          "GRAVITATIONAL_CONSTANT",
           "TEMPERATURE",
           "ENTROPY",
+          "THERMAL_CONDUCTIVITY",
+          "SPECIFIC_HEAT",
           "CHARGE",
+          "CAPACITANCE",
+          "INDUCTANCE",
+          "RESISTANCE",
+          "PERMITTIVITY",
+          "ELECTRIC_FIELD",
+          "RESISTIVITY",
           "NAMED_DIMENSIONS"
         ],
         "interfaces": [
@@ -19967,9 +21634,27 @@
           "ENERGY",
           "POWER",
           "ACTION",
+          "VOLUME",
+          "MOMENTUM",
+          "PRESSURE",
+          "SPRING_CONSTANT",
+          "VISCOSITY",
+          "LINEAR_DENSITY",
+          "WAVENUMBER",
+          "DIFFUSIVITY",
+          "ENERGY_FLUX",
+          "GRAVITATIONAL_CONSTANT",
           "TEMPERATURE",
           "ENTROPY",
+          "THERMAL_CONDUCTIVITY",
+          "SPECIFIC_HEAT",
           "CHARGE",
+          "CAPACITANCE",
+          "INDUCTANCE",
+          "RESISTANCE",
+          "PERMITTIVITY",
+          "ELECTRIC_FIELD",
+          "RESISTIVITY",
           "NAMED_DIMENSIONS"
         ]
       },
@@ -20005,15 +21690,14 @@
       "src/dimensional/unit-data.ts": {
         "description": "The unit table, loaded from `data/units.json` and validated once.",
         "externalDependencies": [],
-        "nodeDependencies": [
-          {
-            "module": "crypto",
-            "imports": [
-              "createHash"
-            ]
-          }
-        ],
+        "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/hash.js",
+            "imports": [
+              "sha256Hex"
+            ]
+          },
           {
             "file": "../core/data-file.js",
             "imports": [
@@ -21302,7 +22986,8 @@
             "imports": [
               "classifyIdentifiability",
               "classifyAll",
-              "forwardClosure"
+              "forwardClosure",
+              "identifiabilityByRank"
             ],
             "reExport": true
           },
@@ -21311,7 +22996,8 @@
             "imports": [
               "IdentifiabilityVerdict",
               "IdentifiabilityResult",
-              "IdentifiabilityOptions"
+              "IdentifiabilityOptions",
+              "RankIdentifiability"
             ],
             "reExport": true
           },
@@ -22080,6 +23766,7 @@
           "classifyIdentifiability",
           "classifyAll",
           "forwardClosure",
+          "identifiabilityByRank",
           "retrodict",
           "retrodictNode",
           "explainQuantity",
@@ -22275,6 +23962,7 @@
           "IdentifiabilityVerdict",
           "IdentifiabilityResult",
           "IdentifiabilityOptions",
+          "RankIdentifiability",
           "RetrodictionOutcome",
           "RetrodictionPrediction",
           "RetrodictionResult",
@@ -22688,9 +24376,11 @@
           "classifyIdentifiability",
           "classifyAll",
           "forwardClosure",
+          "identifiabilityByRank",
           "IdentifiabilityVerdict",
           "IdentifiabilityResult",
           "IdentifiabilityOptions",
+          "RankIdentifiability",
           "retrodict",
           "retrodictNode",
           "RetrodictionOutcome",
@@ -23051,8 +24741,13 @@
           {
             "file": "../core/constants.js",
             "imports": [
-              "C_SI",
-              "G_SI"
+              "C_SI"
+            ]
+          },
+          {
+            "file": "./schwarzschild.js",
+            "imports": [
+              "schwarzschildRadius"
             ]
           }
         ],
@@ -23127,6 +24822,13 @@
         "description": "Covariant-eikonal method, used by catalog relation be-37.",
         "externalDependencies": [
           {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "findRoot",
+              "hermiteInterp"
+            ]
+          },
+          {
             "package": "universal-physics-tensor",
             "imports": [
               "evaluateCovariantEikonalNumerical",
@@ -23146,8 +24848,13 @@
           {
             "file": "../core/constants.js",
             "imports": [
-              "C_SI",
-              "G_SI"
+              "C_SI"
+            ]
+          },
+          {
+            "file": "./schwarzschild.js",
+            "imports": [
+              "schwarzschildRadius"
             ]
           },
           {
@@ -23542,6 +25249,18 @@
           "correlationIsPositiveSemidefinite"
         ]
       },
+      "src/numerical/finite-difference.ts": {
+        "description": "One central-difference rule.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "centralPartial"
+        ],
+        "functions": [
+          "centralPartial"
+        ]
+      },
       "src/numerical/formula-contract.ts": {
         "description": "Scalar-formula contract: the parser types, the refusal of `euler`, and THE",
         "externalDependencies": [],
@@ -23779,20 +25498,19 @@
       },
       "src/numerical/geodesic-integrator.ts": {
         "description": "Fixed-step RK4 integrator for the geodesic equation in an arbitrary",
-        "externalDependencies": [
-          {
-            "package": "@danielsimonjr/mathts-functions",
-            "imports": [
-              "solveODESystem"
-            ]
-          }
-        ],
+        "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
             "file": "./errors.js",
             "imports": [
               "NumericalBackendError"
+            ]
+          },
+          {
+            "file": "./rk4-trajectory.js",
+            "imports": [
+              "rk4Trajectory"
             ]
           }
         ],
@@ -24602,7 +26320,9 @@
           {
             "file": "./tensor-engine.js",
             "imports": [
-              "EngineCapabilityError"
+              "EngineCapabilityError",
+              "isTracedTensor",
+              "tracedMode"
             ]
           }
         ],
@@ -24689,20 +26409,19 @@
       },
       "src/numerical/null-ray-integrator.ts": {
         "description": "Fixed-step classical RK4 integrator for affine-parameterized null",
-        "externalDependencies": [
-          {
-            "package": "@danielsimonjr/mathts-functions",
-            "imports": [
-              "solveODESystem"
-            ]
-          }
-        ],
+        "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
             "file": "./errors.js",
             "imports": [
               "NumericalBackendError"
+            ]
+          },
+          {
+            "file": "./rk4-trajectory.js",
+            "imports": [
+              "rk4Trajectory"
             ]
           }
         ],
@@ -24719,10 +26438,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../core/constants.js",
+            "file": "./schwarzschild.js",
             "imports": [
-              "C_SI",
-              "G_SI"
+              "schwarzschildRadius"
             ]
           },
           {
@@ -24809,6 +26527,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          },
+          {
             "file": "../tests/fixtures/schwarzschild.js",
             "imports": []
           }
@@ -24836,7 +26560,14 @@
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          }
+        ],
         "exports": [
           "GAUSS_LEGENDRE_16",
           "integrateGaussLegendre"
@@ -24846,6 +26577,52 @@
         ],
         "constants": [
           "GAUSS_LEGENDRE_16"
+        ]
+      },
+      "src/numerical/rk4-trajectory.ts": {
+        "description": "Fixed-step classical RK4 that keeps EVERY state of the run: the one owner of",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "solveODESystem"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./errors.js",
+            "imports": [
+              "NumericalBackendError"
+            ]
+          }
+        ],
+        "exports": [
+          "rk4Trajectory"
+        ],
+        "functions": [
+          "rk4Trajectory"
+        ]
+      },
+      "src/numerical/schwarzschild.ts": {
+        "description": "The Schwarzschild radius, once.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "G_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "schwarzschildRadius"
+        ],
+        "functions": [
+          "schwarzschildRadius"
         ]
       },
       "src/numerical/spacetime-metrics.ts": {
@@ -24862,6 +26639,26 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/assignment.js",
+            "imports": [
+              "splitAssignment"
+            ]
+          },
+          {
+            "file": "../core/compare.js",
+            "imports": [
+              "relDiff",
+              "withinMixed"
+            ]
+          },
+          {
+            "file": "../core/mathts-read.js",
+            "imports": [
+              "numberFrom",
+              "numberMatrixFrom"
+            ]
+          },
+          {
             "file": "../core/constants.js",
             "imports": [
               "C_SI",
@@ -24873,6 +26670,7 @@
             "file": "../dimensional/types.js",
             "imports": [
               "DIMENSIONLESS",
+              "GRAVITATIONAL_CONSTANT",
               "LENGTH",
               "MASS",
               "MASS_DENSITY",
@@ -24926,6 +26724,12 @@
             ]
           },
           {
+            "file": "./schwarzschild.js",
+            "imports": [
+              "schwarzschildRadius"
+            ]
+          },
+          {
             "file": "./types.js",
             "imports": [
               "NestedArray"
@@ -24950,10 +26754,12 @@
           "kerrGeodesic",
           "schwarzschildGeodesic",
           "kerrEquatorialCircular",
-          "MetricMassError"
+          "MetricMassError",
+          "MetricValueError"
         ],
         "classes": [
-          "MetricMassError"
+          "MetricMassError",
+          "MetricValueError"
         ],
         "interfaces": [
           "Component",
@@ -24987,15 +26793,24 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
+              "lgamma",
               "mean",
               "std"
             ]
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          }
+        ],
         "exports": [
           "meanOf",
+          "logChoose",
           "ratioSpread"
         ],
         "interfaces": [
@@ -25003,6 +26818,7 @@
         ],
         "functions": [
           "meanOf",
+          "logChoose",
           "ratioSpread"
         ]
       },
@@ -25044,6 +26860,8 @@
         ],
         "exports": [
           "EngineCapabilityError",
+          "tracedMode",
+          "isTracedTensor",
           "hasAutogradSupport",
           "isEinsumSpec"
         ],
@@ -25052,6 +26870,7 @@
         ],
         "interfaces": [
           "EngineTensor",
+          "TracedEngineTensor",
           "EinsumContraction",
           "EinsumFreeAxis",
           "EinsumSpec",
@@ -25060,6 +26879,8 @@
           "TensorEngine"
         ],
         "functions": [
+          "tracedMode",
+          "isTracedTensor",
           "hasAutogradSupport",
           "isEinsumSpec"
         ]
@@ -25244,6 +27065,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/compare.js",
+            "imports": [
+              "compareCodepoint"
+            ]
+          },
+          {
             "file": "../dimensional/buckingham.js",
             "imports": [
               "buckinghamPi"
@@ -25278,7 +27105,8 @@
           "intersectRegimes",
           "collidingRegimeGroups",
           "regimeOverlap",
-          "uncoveredRegions"
+          "uncoveredRegions",
+          "makeRegime"
         ],
         "interfaces": [
           "RegimeCheck",
@@ -25291,7 +27119,8 @@
           "intersectRegimes",
           "collidingRegimeGroups",
           "regimeOverlap",
-          "uncoveredRegions"
+          "uncoveredRegions",
+          "makeRegime"
         ]
       },
       "src/relations/types.ts": {
@@ -25397,6 +27226,7 @@
           "src/atlas/regime.ts",
           "src/atlas/serialize.ts",
           "src/atlas/statement.ts",
+          "src/atlas/text-overlap.ts",
           "src/atlas/translation-registry.ts",
           "src/atlas/translation.ts",
           "src/atlas/types.ts",
@@ -25460,6 +27290,7 @@
           "src/canonical/entries/relativity.ts",
           "src/canonical/entries/statistical-mechanics.ts",
           "src/canonical/entries/thermo-nuclear-cosmo.ts",
+          "src/canonical/fixed-points.ts",
           "src/canonical/linkage.ts",
           "src/canonical/normal-form.ts",
           "src/canonical/registry.ts",
@@ -25532,6 +27363,7 @@
           "src/cli/library-defaults.ts",
           "src/cli/main.ts",
           "src/cli/map-evidence.ts",
+          "src/cli/numeric-flag.ts",
           "src/cli/output.ts",
           "src/cli/published-url.ts",
           "src/cli/record-reach.ts",
@@ -25539,6 +27371,7 @@
           "src/cli/record.ts",
           "src/cli/search-index.ts",
           "src/cli/statuses.ts",
+          "src/cli/stored-results.ts",
           "src/cli/top-level-help.ts",
           "src/cli/version.ts"
         ]
@@ -25553,6 +27386,7 @@
         "name": "Composition",
         "files": [
           "src/composition/adjudication.ts",
+          "src/composition/algebraic-equivalence.ts",
           "src/composition/aliases.ts",
           "src/composition/audit-coverage.ts",
           "src/composition/axes.ts",
@@ -25587,6 +27421,7 @@
           "src/composition/expr-subst.ts",
           "src/composition/formula-shape.ts",
           "src/composition/frontier-account.ts",
+          "src/composition/graph-structure.ts",
           "src/composition/graph-viz-svg.ts",
           "src/composition/graph-viz.ts",
           "src/composition/grounding.ts",
@@ -25610,6 +27445,7 @@
           "src/composition/probe/limits.ts",
           "src/composition/probe/metadata.ts",
           "src/composition/probe/pipeline.ts",
+          "src/composition/probe/power-law.ts",
           "src/composition/probe/problem.ts",
           "src/composition/probe/report.ts",
           "src/composition/probe/residual.ts",
@@ -25619,10 +27455,13 @@
           "src/composition/probe/serialize.ts",
           "src/composition/probe/structure.ts",
           "src/composition/probe/study.ts",
+          "src/composition/probe/t-tail.ts",
           "src/composition/probe/types.ts",
           "src/composition/proposed-bridges.ts",
           "src/composition/quantities.ts",
+          "src/composition/quantity-clusters.ts",
           "src/composition/quantity.ts",
+          "src/composition/rational-exponent.ts",
           "src/composition/representative-values.ts",
           "src/composition/retrodiction.ts",
           "src/composition/uncertainty.ts",
@@ -25632,13 +27471,18 @@
       {
         "name": "Core",
         "files": [
+          "src/core/assignment.ts",
           "src/core/axes-registry.ts",
           "src/core/cell.ts",
+          "src/core/compare.ts",
           "src/core/constants.ts",
           "src/core/data-file.ts",
           "src/core/flux-rules.ts",
+          "src/core/format.ts",
+          "src/core/hash.ts",
           "src/core/json-schema.ts",
           "src/core/labeled-tensor.ts",
+          "src/core/mathts-read.ts",
           "src/core/regime-registry.ts",
           "src/core/regime-rule-install.ts",
           "src/core/regimes-builtins.ts",
@@ -25660,6 +27504,7 @@
         "files": [
           "src/dimensional/algebra.ts",
           "src/dimensional/ast-builders.ts",
+          "src/dimensional/ast-leaves.ts",
           "src/dimensional/ast-types.ts",
           "src/dimensional/bridge-check.ts",
           "src/dimensional/buckingham.ts",
@@ -25721,6 +27566,7 @@
           "src/numerical/engine-registry.ts",
           "src/numerical/errors.ts",
           "src/numerical/evaluator-uncertainty.ts",
+          "src/numerical/finite-difference.ts",
           "src/numerical/formula-contract.ts",
           "src/numerical/formula-dimension.ts",
           "src/numerical/formula-mathts.ts",
@@ -25744,6 +27590,8 @@
           "src/numerical/pderiv.ts",
           "src/numerical/perihelion-finder.ts",
           "src/numerical/quadrature.ts",
+          "src/numerical/rk4-trajectory.ts",
+          "src/numerical/schwarzschild.ts",
           "src/numerical/spacetime-metrics.ts",
           "src/numerical/statistics.ts",
           "src/numerical/strides.ts",
@@ -25768,21 +27616,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 365,
+    "totalTypeScriptFiles": 384,
     "totalModules": 13,
-    "totalLinesOfCode": 81612,
-    "totalExports": 2580,
-    "totalClasses": 82,
-    "totalInterfaces": 468,
-    "totalFunctions": 784,
-    "totalTypeGuards": 6,
+    "totalLinesOfCode": 86010,
+    "totalExports": 2744,
+    "totalClasses": 85,
+    "totalInterfaces": 508,
+    "totalFunctions": 863,
+    "totalTypeGuards": 12,
     "totalEnums": 0,
-    "totalConstants": 392,
-    "totalReExports": 1321,
-    "totalTypeOnlyImports": 511,
+    "totalConstants": 405,
+    "totalReExports": 1387,
+    "totalTypeOnlyImports": 514,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 66
+    "unusedExportsCount": 9
   }
 }

@@ -12,6 +12,7 @@ export {
   collidingRegimeGroups,
   deriveRegimeGroups,
   intersectRegimes,
+  makeRegime,
   regimeOverlap,
   uncoveredRegions,
 } from '../relations/regime.js';

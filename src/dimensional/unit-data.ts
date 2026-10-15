@@ -20,7 +20,7 @@
  * @module dimensional/unit-data
  */
 
-import { createHash } from 'node:crypto';
+import { sha256Hex } from '../core/hash.js';
 import { dataSchema, dataText, parseDataFile } from '../core/data-file.js';
 import type { JsonSchema } from '../core/json-schema.js';
 import { constantRow } from './constant-rows.js';
@@ -198,7 +198,7 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
     iceKelvin: read(file.affine.iceKelvin, 'affine iceKelvin'),
     affine,
     spellingNotes,
-    sha256: createHash('sha256').update(text.replace(/\r\n/g, '\n')).digest('hex'),
+    sha256: sha256Hex(text.replace(/\r\n/g, '\n')),
   };
 }
 

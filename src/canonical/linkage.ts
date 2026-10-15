@@ -17,14 +17,16 @@
  * @module canonical/linkage
  */
 import type { ExprNode } from '../dimensional/validator.js';
-import type { Dimension } from '../dimensional/types.js';
+import { isDimensionless } from '../dimensional/algebra.js';
 import { evalExpr } from '../composition/expr-eval.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { forEachScalarLeaf, isDecimalLiteral } from '../dimensional/ast-leaves.js';
+import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import type { CanonicalEquation } from './canonical-equation.js';
 import { CANONICAL_EQUATIONS, canonicalById } from './registry.js';
 import { canonicalQuantityName, normalForm } from './normal-form.js';
 import { bridgeShapes, classifyStructure } from './structural.js';
 import type { BridgeShape } from './structural.js';
+import { FIXED_POINT_EXPONENTS, constantRatio, fixedPoint } from './fixed-points.js';
 
 /** Best-effort numerical-recovery outcome. */
 export interface RecoveryOutcome {
@@ -51,15 +53,6 @@ export interface LinkageResult {
     | 'unrelated';
 }
 
-const isDimensionless = (d: Dimension): boolean =>
-  d.L === 0 &&
-  d.M === 0 &&
-  d.T === 0 &&
-  d.I === 0 &&
-  d.Theta === 0 &&
-  d.N === 0 &&
-  d.J === 0;
-
 /**
  * Collect leaves `evalExpr` can't resolve (not a registered constant, not a
  * numeric literal), split into physical `vars` (non-dimensionless — varied
@@ -71,37 +64,28 @@ function collectLeaves(
   vars: Map<string, string>,
   dimless: Set<string>,
 ): void {
-  switch (node.kind) {
-    case 'symbol':
-      if (!(node.name in CONSTANTS) && Number.isNaN(Number(node.name))) {
-        if (isDimensionless(node.dim)) dimless.add(node.name);
-        else vars.set(node.name, canonicalQuantityName(node.name, node.dim));
-      }
-      return;
-    case 'op':
-      for (const a of node.args) collectLeaves(a, vars, dimless);
-      return;
-    case 'transcendental':
-      collectLeaves(node.arg, vars, dimless);
-      return;
-    case 'abs':
-      collectLeaves(node.arg, vars, dimless);
-      return;
-    default:
-      return;
-  }
+  forEachScalarLeaf(
+    node,
+    (leaf) => {
+      if (isRegisteredConstant(leaf.name) || isDecimalLiteral(leaf.name)) return;
+      if (isDimensionless(leaf.dim)) dimless.add(leaf.name);
+      else vars.set(leaf.name, canonicalQuantityName(leaf.name, leaf.dim));
+    },
+    { transcendental: true, abs: true },
+  );
 }
 
 /**
  * The sample points: variable `i` (in sorted canonical-name order) takes the
- * value `(1.3 + 0.7·i)^p` at exponent `p`. Each variable has its own base, so
- * the RATIOS between variables change from point to point too. One common
- * scale factor would leave every ratio such as y/x fixed, and two homogeneous
- * expressions of the same degree (`x + 2y` and `x + y`) would then pass as a
- * constant ratio at every point: a recovery that could not fail (9.0.0 audit
- * §4 C3). `canonical-compare.ts` uses the same scheme.
+ * value `(1.3 + 0.7·i)^p` at each exponent of `FIXED_POINT_EXPONENTS`. Each
+ * variable has its own base, so the RATIOS between variables change from
+ * point to point too. One common scale factor would leave every ratio such
+ * as y/x fixed, and two homogeneous expressions of the same degree
+ * (`x + 2y` and `x + y`) would then pass as a constant ratio at every point:
+ * a recovery that could not fail (9.0.0 audit §4 C3). `canonical-compare.ts`
+ * uses the same exponents on its own base.
  */
-const SAMPLE_EXPONENTS = [1, 1.3, 1.6];
+const RECOVERY_SCHEME = { base: 1.3, step: 0.7 } as const;
 
 /**
  * Best-effort check that two ASTs agree up to a constant ratio.
@@ -116,13 +100,11 @@ export function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOu
   // `M` and `mass` are one quantity. They share a sample, or the ratio is a
   // float artifact of two independent draws of the same mass.
   const canonicals = [...new Set(vars.values())].sort();
-  const index = new Map(canonicals.map((n, i) => [n, i]));
   const ratios: number[] = [];
-  for (const p of SAMPLE_EXPONENTS) {
+  for (const p of FIXED_POINT_EXPONENTS) {
+    const point = fixedPoint(canonicals, p, RECOVERY_SCHEME);
     const values: Record<string, number> = {};
-    for (const [raw, canonName] of vars) {
-      values[raw] = Math.pow(1.3 + 0.7 * index.get(canonName)!, p);
-    }
+    for (const [raw, canonName] of vars) values[raw] = point[canonName]!;
     // Hold unresolved dimensionless leaves fixed — recovery is "up to" them.
     for (const n of dimless) values[n] = 1;
     let cv: number;
@@ -140,9 +122,8 @@ export function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOu
     }
     ratios.push(cv / bv);
   }
-  const r0 = ratios[0];
-  const maxRelErr = Math.max(...ratios.map((r) => Math.abs((r - r0) / r0)));
-  return { tested: true, maxRelErr };
+  // The recovery records the spread; the reader decides. Every ratio is finite and nonzero here.
+  return { tested: true, maxRelErr: constantRatio(ratios, 0).maxRelErr };
 }
 
 /**

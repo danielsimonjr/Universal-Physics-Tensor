@@ -98,7 +98,7 @@ export const UNIDENTIFIED = 'UNIDENTIFIED';
  *
  * @internal
  */
-export const POSTER_5_IDENTIFICATION_NOTE =
+const POSTER_5_IDENTIFICATION_NOTE =
   "entry 5 is read as E = mc² because 8 → 12 already lands on universal gravitation at 12, " +
   "so the alternative reading of '5, 16 → 8' (the Newtonian limit) would duplicate entry 12; " +
   'no edge in this module depends on the reading — all fifteen reference entries by number';

@@ -3,42 +3,42 @@ Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
   DERIVED (37) — recognized monomial, prefactor recovered:
-    be-12                  +[ℏ,k_B]  ×2.506628274631
-    be-16                  +[k_B]  ×0.693147180559945
-    be-42-via-rs           +[ℏ,c,k_B]  ×0.0795774715459477
+    be-12                  +[ℏ,k_B]  ×2.506628274631 (= √(2π))
+    be-16                  +[k_B]  ×0.693147180559945 (= ln 2)
+    be-42-via-rs           +[ℏ,c,k_B]  ×0.0795774715459477 (= 1/(4π))
     law-schwarzschild-radius +[c,G]  ×2
-    be-21                  +[ℏ,k_B]  ×0.0795774715459477
+    be-21                  +[ℏ,k_B]  ×0.0795774715459477 (= 1/(4π))
     be-48                  +[ℏ,c]  ×7.02616402405127e-41  (empirical/tuned constant)
     be-15                  +[]  ×1
     be-17                  +[]  ×1
-    be-20                  +[c,G]  ×0.0397887357729738
-    be-59                  +[ℏ,e]  ×0.318309886183791  (empirical/tuned constant)
+    be-20                  +[c,G]  ×0.0397887357729738 (= 1/(8π))
+    be-59                  +[ℏ,e]  ×0.318309886183791 (= 1/π)
     be-70                  +[k_B]  ×1
     be-71                  +[]  ×1
     be-73                  +[]  ×1
-    be-74                  +[c,epsilon_0]  ×0.5
-    be-80                  +[]  ×1.125  (empirical/tuned constant)
+    be-74                  +[c,epsilon_0]  ×0.5 (= 1/2)
+    be-80                  +[]  ×1.125 (= 9/8)
     be-83                  +[]  ×1
-    be-84                  +[]  ×4.53236014182719  (empirical/tuned constant)
+    be-84                  +[]  ×4.53236014182719 (= π/ln 2)
     be-85                  +[e]  ×2
     be-87                  +[k_B]  ×1
     be-88                  +[]  ×3.09366772628014  (empirical/tuned constant)
     be-89                  +[]  ×3.89777708972075  (empirical/tuned constant)
-    be-96                  +[ℏ,e]  ×0.5
-    be-97                  +[e]  ×1.5707963267949  (empirical/tuned constant)
-    be-101                 +[k_B]  ×1.5707963267949  (empirical/tuned constant)
+    be-96                  +[ℏ,e]  ×0.5 (= 1/2)
+    be-97                  +[e]  ×1.5707963267949 (= π/2)
+    be-101                 +[k_B]  ×1.5707963267949 (= π/2)
     be-103                 +[k_B]  ×1
-    be-109                 +[c,k_B,epsilon_0]  ×7.08981540362206  (empirical/tuned constant)
-    be-118                 +[G]  ×0.5
+    be-109                 +[c,k_B,epsilon_0]  ×7.08981540362206 (= √(16π))
+    be-118                 +[G]  ×0.5 (= 1/2)
     be-135                 +[ℏ]  ×0.143289792062689  (empirical/tuned constant)
-    be-136                 +[ℏ]  ×0.318309886183791  (empirical/tuned constant)
-    be-140                 +[ℏ,e]  ×0.159154943091895
-    be-141                 +[ℏ,e]  ×0.5
-    be-165                 +[ℏ,c,k_B]  ×0.164493406684823  (empirical/tuned constant)
-    be-56                  +[ℏ,c]  ×-0.0411233516712057  (empirical/tuned constant)
-    be-57                  +[ℏ,c,k_B]  ×0.159154943091895
+    be-136                 +[ℏ]  ×0.318309886183791 (= 1/π)
+    be-140                 +[ℏ,e]  ×0.159154943091895 (= 1/(2π))
+    be-141                 +[ℏ,e]  ×0.5 (= 1/2)
+    be-165                 +[ℏ,c,k_B]  ×0.164493406684823 (= π²/60)
+    be-56                  +[ℏ,c]  ×-0.0411233516712057 (= -π²/240)
+    be-57                  +[ℏ,c,k_B]  ×0.159154943091895 (= 1/(2π))
     be-58                  +[k_B]  ×4
-    be-61                  +[k_B,e]  ×3.28986813369645  (empirical/tuned constant)
+    be-61                  +[k_B,e]  ×3.28986813369645 (= π²/3)
     be-62                  +[k_B]  ×1.76387698886205  (empirical/tuned constant)
 
   COEFFICIENT UNSET (0) — dimensional, and no sourced prefactor multiplies the monomial. The evaluator's 1 is that absence, not a recovered constant:

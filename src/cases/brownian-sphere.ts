@@ -19,13 +19,14 @@
  * @module cases/brownian-sphere
  */
 import { K_B_SI } from '../core/constants.js';
+import { convertValue } from '../dimensional/units.js';
 import { adaptiveQuadrature } from './quadrature.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-brownian-sphere';
 
-/** Standard gravity (CGPM 1901), for the sedimentation speed. @internal */
-export const G_STANDARD = 9.80665;
+/** Standard gravity (CGPM 1901), for the sedimentation speed: the unit table's `standard_gravity` row, read as newtons per kilogram-force. @internal */
+export const G_STANDARD = convertValue('1 kgf/kg', 'm/s^2').value;
 
 /** The thresholds `ab-stokes-einstein` states: Re ≤ 0.1 and τ_p/t ≤ 0.01. @internal */
 export const MAX_RE = 0.1;
@@ -64,7 +65,7 @@ export function ballisticDeficit(x: number): number {
  * C(t) = (k_BT/πγ) ∫₀^∞ e^{−ut} √(τ_f u)/((1 − τ_p u)² + τ_f u) du, τ_p = M/γ.
  * Then ⟨Δx²⟩ = 2∫₀ᵗ (t − s) C(s) ds, and with v = ut,
  * MSD/(2Dt) = (1/π) ∫₀^∞ √(βv) (v − 1 + e^{−v}) / (v² ((1 − αv)² + βv)) dv, α = τ_p/t, β = τ_f/t,
- * integrated here over ln v by adaptive Simpson, split at v = 1, 1/β and around
+ * integrated here over ln v by MathTS `quad` (adaptive Gauss–Kronrod), split at v = 1, 1/β and around
  * the near-resonance at v = 1/α (width √(β/α) in ln v; β/α ≤ 9 for any densities).
  *
  * Limits: → 1 − 2√(τ_f/(πt)) + (τ_f − τ_p)/t for t ≫ τ_p, τ_f (expanding Ĉ in √s),

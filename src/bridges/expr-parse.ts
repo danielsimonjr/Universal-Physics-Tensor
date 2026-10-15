@@ -12,7 +12,7 @@
 
 import { DIMENSIONLESS, type Dimension } from '../dimensional/types.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/ast-types.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
 import { allQuantityRecords } from '../dimensional/quantity-registry.js';
@@ -98,8 +98,17 @@ const VARIABLES = new Map<string, ReadonlySet<string>>();
 
 const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
 
-/** The names an expression mentions (π included, which MathTS does not list as a variable), cached per expression text. */
-function readNames(expression: string): ReadonlySet<string> {
+/**
+ * The names a catalog expression mentions, each hyphenated quantity or
+ * constant spelling rewritten to its one token first (`truncation-coefficient-b`
+ * is `truncation_coefficient_b`, not `b`), π included (MathTS does not list it
+ * as a variable). Cached per expression text. `reduced-planck-constant` is
+ * `hbar`: the rewrite takes the longest spelling at each segment, so the
+ * declared `planck-constant` inside it does not win. The one identifier
+ * walk: the notices reader and the condition interpreter read it too.
+ * @internal
+ */
+export function expressionNames(expression: string): ReadonlySet<string> {
   let names = VARIABLES.get(expression);
   if (names === undefined) {
     names = new Set(rewriteCatalogHyphens(expression, formulaNames()).match(IDENTIFIER) ?? []);
@@ -152,7 +161,7 @@ export function evaluateFormula(
     GRAMMAR_CHECKED.add(expression);
   }
   const rewritten = rewriteCatalogHyphens(expression, formulaNames());
-  const scope = formulaScope(withoutUnreadConstants(inputs, readNames(expression), declared), declared);
+  const scope = formulaScope(withoutUnreadConstants(inputs, expressionNames(expression), declared), declared);
   return parseFormula(rewritten).evaluate(scope);
 }
 
@@ -236,7 +245,7 @@ function foldKnownConstants(node: ExprNode): ExprNode {
       right.name === 'pi' &&
       left.kind === 'symbol' &&
       /^(?:2|4|8)$/.test(left.name) &&
-      `${left.name}pi` in CONSTANTS
+      isRegisteredConstant(`${left.name}pi`)
     ) {
       merged.push(symbol(`${left.name}pi`));
       i += 1;

@@ -152,7 +152,7 @@ describe('runCli — registered-command dispatch', () => {
     const status = await runCli(['stub', '--nope'], io);
 
     expect(status).toBe(2);
-    expect(errLines).toEqual(["unknown flag '--nope' for 'stub' (see upt help stub)\n"]);
+    expect(errLines).toEqual(["upt stub: unknown flag '--nope' for 'stub' (see upt help stub)\n"]);
   });
 
   it('maps a UsageError thrown by run() to exit 2 with its message on stderr', async () => {

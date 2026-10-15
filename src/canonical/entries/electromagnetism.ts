@@ -32,22 +32,25 @@ import {
   CHARGE,
   FORCE,
   DIMENSIONLESS,
+  RESISTANCE,
+  RESISTIVITY,
+  CAPACITANCE,
+  INDUCTANCE,
+  ELECTRIC_FIELD,
+  PERMITTIVITY,
+  ENERGY_FLUX,
+  WAVENUMBER,
+  PRESSURE,
 } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
 const CURRENT = dim(0, 0, 0, 1); // ampere [I]
 const VOLTAGE = dim(2, 1, -3, -1); // volt [L² M T⁻³ I⁻¹]
-const RESISTANCE = dim(2, 1, -3, -2); // ohm [L² M T⁻³ I⁻²]
-const RESISTIVITY = dim(3, 1, -3, -2); // ohm·m [L³ M T⁻³ I⁻²]
-const CAPACITANCE = dim(-2, -1, 4, 2); // farad [L⁻² M⁻¹ T⁴ I²]
-const INDUCTANCE = dim(2, 1, -2, -2); // henry [L² M T⁻² I⁻²]
 const MAGNETIC_FIELD = dim(0, 1, -2, -1); // tesla [M T⁻² I⁻¹]
-const ELECTRIC_FIELD = dim(1, 1, -3, -1); // V/m [L M T⁻³ I⁻¹]
-const PERMITTIVITY = dim(-3, -1, 4, 2); // ε₀ [L⁻³ M⁻¹ T⁴ I²]
 const PERMEABILITY = dim(1, 1, -2, -2); // μ₀ [L M T⁻² I⁻²]
-const POYNTING_FLUX = dim(0, 1, -3, 0); // W/m² [M T⁻³] (power per area)
-const TURN_DENSITY = dim(-1, 0, 0, 0); // turns/m [L⁻¹]
-const FIELD_ENERGY_DENSITY = dim(-1, 1, -2, 0); // J/m³ [L⁻¹ M T⁻²] (energy per volume)
+const POYNTING_FLUX = ENERGY_FLUX; // W/m² [M T⁻³] (power per area)
+const TURN_DENSITY = WAVENUMBER; // turns/m [L⁻¹]
+const FIELD_ENERGY_DENSITY = PRESSURE; // J/m³ [L⁻¹ M T⁻²] (energy per volume)
 
 export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
   l1({ name: 'voltage', dim: VOLTAGE }, [

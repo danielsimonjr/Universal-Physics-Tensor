@@ -473,9 +473,11 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--bounds` | `probe` | Bounds for design, as the design subverb reads them. |
 | `--bridge` | `confront` | Select one bridge id, the same selection as a positional be-XX. |
 | `--budget-ms` | `probe` | Wall-clock cap in milliseconds. |
+| `--communities` | `map` | Also print the layout communities (Louvain, heuristic) of the largest component. A drawing aid, not physics. |
 | `--compare` | `path` | Sweep a second route from the same source to this model id and mark NEITHER where no limit applies. |
 | `--corr` | `evaluate` | A pairwise correlation as a,b=rho, used with --sigma. |
 | `--csv` | `path` | Write sweep rows as CSV. |
+| `--cycles` | `map` | Also print the derivation cycles: strongly connected components of the directed source→target quantity graph. |
 | `--data` | `probe` | Study file (JSON, or CSV when the name ends in .csv) for study. |
 | `--debug` | `derive`, `eval` | Print the formula parser name and version on stderr. |
 | `--deny` | `regime` | Mark one prose premise contradicted. The others stay unspecified. |
@@ -491,8 +493,8 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--frontier` | `confront` | Rank the σ-tests by margin to this tool's 1σ acceptance line. That line is a software criterion. |
 | `--geodesic` | `metric` | Integrate a short Schwarzschild circular orbit, or a Kerr geodesic at the given θ. |
 | `--geometrized` | `eval`, `map` | eval: Set ħ = c = G = 1 when reading values. map: With the natural-unit rules, also set G = 1. |
-| `--h1` | `probe` | First hypothesis for design. |
-| `--h2` | `probe` | Second hypothesis for design. |
+| `--h1` | `probe` | First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused. |
+| `--h2` | `probe` | Second hypothesis for design, an expression-tree JSON file in the form --h1 takes. |
 | `--holdout-tol` | `probe` | Relative holdout RMSE cap. |
 | `--json` | `atlas`, `audit`, `axes`, `candidates`, `canonical`, `confront`, `connectors`, `coverage`, `derive`, `discover`, `eval`, `evaluate`, `explain`, `frontier`, `ground`, `map`, `metric`, `path`, `predict`, `priority`, `probe`, `recover`, `regime`, `retrieve`, `search`, `symbolic`, `testplan` | Write a JSON envelope to stdout instead of the text report. |
 | `--max-orders` | `discover`, `ground`, `map` | discover: Magnitude-clash threshold. A larger value keeps more pairs promising. ground: Magnitude-clash threshold. A larger value keeps more pairs promising. map: Magnitude-clash threshold for the --proposed overlay. |
@@ -503,6 +505,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--out` | `map` | Write the report to PATH instead of stdout. |
 | `--problem` | `probe` | Problem JSON file for run, candidates, falsify, rank, and reproduce. |
 | `--proposed` | `map` | Overlay unadjudicated identity-consequence relations. |
+| `--rank-hubs` | `map` | Also rank quantities by betweenness centrality (normalised). Computed only when asked. |
 | `--relation` | `map` | Keep atlas edges whose recorded relation is TYPE. |
 | `--replication` | `probe` | study: replication rows from a separate JSON or CSV file. |
 | `--require-falsifier` | `discover` | Hide promising rows that no independent falsifier ran on and survived. |
@@ -551,22 +554,52 @@ rather than as not matching.
 | Code | Meaning |
 |---|---|
 | `0` | Success. |
-| `1` | Bad `--source`/`--format` value, empty `--out=`, an invalid or unregistered `confront --bridge` value, an unknown `regime` family, an unknown `path` model id, an `explain` name that is not a quantity of the graph (NOT COVERED), a non-numeric `upt eval` or `upt evaluate` binding value (`x=nope`, `mu_e=nope`, an empty value after `=`, an empty `--anchor` value, an `upt eval` formula whose value is not a finite real (`ln(-1)`, `1/0`), a non-finite value), a Kerr `--geodesic` with a non-positive mass or with `|a|` above GM/c², a non-numeric or negative `--max-orders`, a `probe` `--budget-ms`, `--holdout-tol` or `--alpha` outside its range, a `--problem` file that is not a problem file, a `discover` `--anchor` on a name no graph holds or with a unit of another dimension, the optional SVG renderer is missing, or the built package could not be loaded. **A `path` that carries no composite claim is NOT an error — it exits 0.** |
-| `2` | Usage error: missing required argument, unparseable expression syntax, a binding with no `=`, unknown command, an **unknown/mistyped flag** (e.g. `--sourc=canonical`), a malformed or dimensionally non-homogeneous `--equation`, or combining `--json` with `map --format=mermaid\|dot\|svg`. |
+| `1` | Bad `--source`/`--format` value, empty `--out=`, an unregistered `confront --bridge` value (`be-999`), an unknown `regime` family, an unknown `path` model id, an `explain` name that is not a quantity of the graph (NOT COVERED), a non-numeric `upt eval` or `upt evaluate` binding value (`x=nope`, `mu_e=nope`, an empty value after `=`, an empty `--anchor` value, an `upt eval` formula whose value is not a finite real (`ln(-1)`, `1/0`), a non-finite value), a Kerr `--geodesic` with a non-positive mass or with `|a|` above GM/c², a negative `--max-orders`, a `probe` `--budget-ms`, `--holdout-tol` or `--alpha` outside its range, a `--max-routes` or `--depth` outside its range, a `--problem` file that is not a problem file, a `discover` `--anchor` on a name no graph holds or with a unit of another dimension, the optional SVG renderer is missing, or the built package could not be loaded. **A `path` that carries no composite claim is NOT an error — it exits 0.** |
+| `2` | Usage error: missing required argument, a **stray positional argument** the command does not read (`upt audit junk`), unparseable expression syntax, a binding with no `=`, unknown command, an **unknown/mistyped flag** (e.g. `--sourc=canonical`), a **numeric flag outside its grammar** (`--max-routes=0x10`, `--depth=1e1`, `--max-orders=abc`), a malformed bridge id (`be-abc`, on every command), a malformed or dimensionally non-homogeneous `--equation`, or combining `--json` with `map --format=mermaid\|dot\|svg`. |
 | `3` | **The command ran and its check came out negative** (since 0.47.0): `derive --formula` whose dimension differs from the target, that does not match the dimensional monomial, or that differs from the canonical equation by a factor or in form; `map --equation` with a dimension mismatch, a name no graph resolves (the dimension is NOT ESTABLISHED), or a canonical difference; `path` with a violated regime or horizon at the `--at` point; `regime` when any record is VIOLATED; an applied case whose regime check fails; `--replay` with an entry whose output differs from the record. An UNKNOWN result, where a coordinate was not supplied or a name did not resolve, is not a failure and exits `0`. A `regime` survey that is VACUOUS or UNKNOWN, with no violated record, exits `0`. |
+| `70` | Internal error: a defect reached the launcher (`upt: internal error: <message>`). Not a usage error and not a value the command refused; report it. |
 
 ---
 
 ## Hardening
 
-**Unknown flags are rejected, not silently ignored.** This is the one
-behavior change from earlier releases: a mistyped or unsupported flag (e.g.
-`upt discover --sourc=canonical`) used to be swallowed without effect; it now
-exits `2` with a diagnostic naming the bad flag and the command
-(`upt: unknown flag '--sourc' for 'discover' (see upt help discover)`). Every
-command's flag set is fixed and typed — a flag valid on one command but not
-another (e.g. `upt derive --source=catalog`) is rejected the same way, since
-`--source`/`--json`/etc. are per-command, not global.
+**Nothing typed is silently dropped.** Every token of an invocation is either
+read or refused:
+
+- **Unknown flags are rejected, not silently ignored.** A mistyped or
+  unsupported flag (e.g. `upt discover --sourc=canonical`) used to be swallowed
+  without effect; it exits `2` with a diagnostic naming the bad flag and the
+  command (`upt discover: unknown flag '--sourc' for 'discover' (see upt help discover)`).
+  Every command's flag set is fixed and typed — a flag valid on one command but
+  not another (e.g. `upt derive --source=catalog`) is rejected the same way,
+  since `--source`/`--json`/etc. are per-command, not global.
+- **Stray positional arguments are rejected.** A command declares how many
+  positional arguments it reads (`positionals` on its registration; none when
+  it declares nothing), and the parser refuses the first token past that with
+  exit `2`, naming the token and the command: `upt audit: unexpected argument
+  'junk' (audit takes no positional arguments; see upt help audit)`. `upt probe
+  <subverb>` refuses the same way under the subverb's name.
+- **Numeric flags are read by one strict grammar.** An integer flag is digits
+  with an optional sign (`3`, `-2`); a real flag is a decimal with an optional
+  fraction and exponent (`0.5`, `1e-3`). `0x10`, `1e1` on an integer flag, `''`
+  and whitespace are refused with exit `2`, naming the flag and the token
+  (`upt map: --max-routes '0x10' is not an integer (digits only, such as 3 or
+  -2; see upt help map)`). A well-formed value outside the flag's range is the
+  command's own value refusal, exit `1` (`--max-routes=0`, `--depth=11`).
+
+**The exit-code rule.** A malformed token — a flag the command does not take,
+a stray positional, a numeric token outside its grammar, a bridge id that is
+not `be-<n>` (`upt evaluate be-abc`, `upt confront --bridge=be-xyz`) — is a
+usage error, exit `2`, refused before the command runs. A well-formed value
+the command refuses — an unregistered id (`--bridge=be-999`), an input outside
+a relation's validity domain, a number outside a flag's range — is exit `1`.
+A check that ran and came out negative is exit `3`. A defect that reaches the
+launcher (an error of neither class) is reported as `upt: internal error:
+<message>` with exit `70`, never as a stack trace. Every refusal a command
+makes is prefixed `upt <command>:`. `upt evaluate --json` answers a refusal
+inside the JSON envelope, on stdout with nothing on stderr, so a JSON consumer
+reads one stream: `{"command":"evaluate","error":{"kind":"usage"|"value",
+"exitCode":2|1,"message":"…"}}`; the text mode prints the message on stderr.
 
 ## Troubleshooting
 

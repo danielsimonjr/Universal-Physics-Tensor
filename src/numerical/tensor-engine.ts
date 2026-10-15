@@ -26,6 +26,36 @@ export interface EngineTensor {
   readonly shape: ReadonlyArray<number>;
 }
 
+/**
+ * An `EngineTensor` that `@danielsimonjr/mathts-autograd` has wrapped for
+ * tracing: a `DualTensor` (forward mode, carries `tangent`) or a
+ * `TapedTensor` (reverse mode, carries `tape`). Both implement the traced
+ * arithmetic over another wrapped tensor, which is what the engine dispatches
+ * to inside an AD call. The autograd package is loaded at that call, so its
+ * classes are not named here; this is the shape the package keeps.
+ * @internal
+ */
+export interface TracedEngineTensor extends EngineTensor {
+  readonly tangent?: unknown;
+  readonly tape?: unknown;
+  add(other: EngineTensor): EngineTensor;
+  sub(other: EngineTensor): EngineTensor;
+  mul(other: EngineTensor): EngineTensor;
+  scale(k: number): EngineTensor;
+}
+
+/** The AD mode a wrapped tensor carries: `forward` (a `tangent`), `reverse` (a `tape`), or null for a plain tensor. @internal */
+export function tracedMode(t: EngineTensor): 'forward' | 'reverse' | null {
+  if ('tangent' in t) return 'forward';
+  if ('tape' in t) return 'reverse';
+  return null;
+}
+
+/** Whether `t` is an autograd-wrapped tensor (it carries a `tangent` or a `tape`). @internal */
+export function isTracedTensor(t: EngineTensor): t is TracedEngineTensor {
+  return tracedMode(t) !== null;
+}
+
 /** One contracted index: the two (operand, axis) coordinates that the
  *  Einstein summation pairs and sums over. Named by the public
  *  {@link EinsumSpec}, so it is public too.

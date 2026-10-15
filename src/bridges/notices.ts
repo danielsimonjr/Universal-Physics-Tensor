@@ -8,16 +8,15 @@
 
 import { constantNotes } from '../dimensional/symbolic-constants.js';
 import type { CatalogRelation } from './catalog-types.js';
-
-/** Identifiers in an expression, in order of first appearance. */
-function identifiers(expression: string): string[] {
-  return [...new Set(expression.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? [])];
-}
+import { expressionNames } from './expr-parse.js';
 
 /** The caveats to print beside `relation`'s value. @internal */
 export function relationNotices(relation: CatalogRelation): string[] {
   const notes: string[] = [];
   if (relation.notice !== undefined) notes.push(relation.notice.text);
-  for (const note of constantNotes(identifiers(relation.expression))) notes.push(`note: ${note}`);
+  // The names are read after the kebab rewrite: a bare identifier regex read be-39's
+  // `truncation-coefficient-b` as the constant `b`. A `reduced-planck-constant` spelling is
+  // `hbar` (tests/bridges/expression-names.test.ts).
+  for (const note of constantNotes(expressionNames(relation.expression))) notes.push(`note: ${note}`);
   return notes;
 }

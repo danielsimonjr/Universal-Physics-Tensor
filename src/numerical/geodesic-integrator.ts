@@ -14,16 +14,17 @@
  * The Christoffel symbol Γ^μ_{νρ} is supplied as a plain-JS closure that
  * maps a 4-coordinate array to a [4][4][4] tensor.  No TensorEngine
  * dependency — the integrator is self-contained. The fixed steps are
- * MathTS `solveODESystem` with `dt` set, which is that library's classical
- * RK4. Adaptive `solveODE` is not this step.
+ * `rk4Trajectory` (MathTS `solveODESystem` with `dt` set, that library's
+ * classical RK4), which takes exactly `steps` steps. Adaptive `solveODE` is
+ * not this step.
  *
  * Validated against the cycloid parametric form for radial Schwarzschild
  * infall to ±1e-6 (Task 14 test, η = 0.5).
  *
  * @module numerical/geodesic-integrator
  */
-import { solveODESystem } from '@danielsimonjr/mathts-functions';
 import { NumericalBackendError } from './errors.js';
+import { rk4Trajectory } from './rk4-trajectory.js';
 
 /**
  * Input bundle for `integrateGeodesic`.
@@ -209,15 +210,25 @@ export function integrateGeodesic(
       `integrateGeodesic: steps must be a positive integer, got ${steps}`,
     );
   }
+  // A NaN or infinite end made every step NaN and the result the start state; an
+  // end equal to the start is a zero step, which is not an integration either.
+  if (!Number.isFinite(tauStart)) {
+    throw new NumericalBackendError(`integrateGeodesic: tauStart must be finite, got ${tauStart}`);
+  }
+  if (!Number.isFinite(tauEnd)) {
+    throw new NumericalBackendError(`integrateGeodesic: tauEnd must be finite, got ${tauEnd}`);
+  }
+  if (tauEnd === tauStart) {
+    throw new NumericalBackendError(`integrateGeodesic: tauEnd must differ from tauStart, both are ${tauStart}`);
+  }
 
-  const h = (tauEnd - tauStart) / steps;
   const y0 = [x0[0], x0[1], x0[2], x0[3], v0[0], v0[1], v0[2], v0[3]];
 
   // One scratch buffer reused across all Christoffel evaluations (4 per step).
   // Each geodesicRHS consumes its Γ before the next call, so reuse is safe and
   // avoids ~4·steps Float64Array(64) allocations per integration.
   const scratch = new Float64Array(64);
-  const sol = solveODESystem(
+  const states = rk4Trajectory(
     (_tau, y) => {
       const x: Vec4 = [y[0], y[1], y[2], y[3]];
       const v: Vec4 = [y[4], y[5], y[6], y[7]];
@@ -225,20 +236,17 @@ export function integrateGeodesic(
       return [s.dx[0], s.dx[1], s.dx[2], s.dx[3], s.dv[0], s.dv[1], s.dv[2], s.dv[3]];
     },
     y0,
-    [tauStart, tauEnd],
-    { dt: h },
+    tauStart,
+    tauEnd,
+    steps,
   );
 
   const asVec4 = (row: readonly number[]): Vec4 => [row[0], row[1], row[2], row[3]];
   const sampleEvery = Math.max(1, Math.floor(steps / 100));
-  const trajectory: Vec4[] = [asVec4(sol.y[0] ?? y0)];
-  for (let i = 0; i < steps; i++) {
-    if ((i + 1) % sampleEvery === 0) {
-      const row = sol.y[i + 1] ?? sol.y[sol.y.length - 1] ?? y0;
-      trajectory.push(asVec4(row));
-    }
-  }
-  const last = sol.y[sol.y.length - 1] ?? y0;
+  // `rk4Trajectory` returns exactly steps + 1 states, so state i is the one after i steps.
+  const trajectory: Vec4[] = [asVec4(states[0] ?? y0)];
+  for (let i = sampleEvery; i <= steps; i += sampleEvery) trajectory.push(asVec4(states[i] ?? y0));
+  const last = states[steps] ?? y0;
 
   return {
     xFinal: asVec4(last),

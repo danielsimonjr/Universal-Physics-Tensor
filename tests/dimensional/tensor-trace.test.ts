@@ -274,8 +274,5 @@ describe('validateTensorTrace — meta-tests (error-keyword discipline)', () => 
     };
     expect(() => validateTensorTrace(idxNode)).toThrow(/index/);
   });
-
-  it('validator is a function (structural sanity)', () => {
-    expect(typeof validateTensorTrace).toBe('function');
-  });
+  // A "validator is a function" check stood here; it could not fail (law 3) and was removed 2026-10-15.
 });

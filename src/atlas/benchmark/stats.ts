@@ -15,6 +15,7 @@
  */
 
 import { lgamma, normalQuantile } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../../core/mathts-read.js';
 
 /** The two-sided 95% normal quantile, MathTS `normalQuantile(0.975)` (1.959963984540054). @internal */
 export const Z95: number = normalQuantile(0.975);
@@ -67,12 +68,15 @@ export interface McNemarResult {
 
 /** `log Γ(z)`, MathTS `lgamma`, read back as the number it is for a number. */
 function logGamma(z: number): number {
-  const v: unknown = lgamma(z);
-  if (typeof v !== 'number') throw new TypeError('lgamma did not return a number for a number argument');
-  return v;
+  return numberFrom('lgamma', lgamma(z));
 }
 
-/** `ln C(n, k) = ln Γ(n+1) − ln Γ(k+1) − ln Γ(n−k+1)`, through MathTS `lgamma`. */
+/**
+ * `ln C(n, k) = ln Γ(n+1) − ln Γ(k+1) − ln Γ(n−k+1)`, through MathTS `lgamma`:
+ * the same three terms as `logChoose` in `numerical/statistics`, the owner
+ * the lattice random walk reads. This copy stays because the delegation scan
+ * (`tests/numerical/mathts-delegation.test.ts`) pins this file's body text.
+ */
 function logChoose(n: number, k: number): number {
   return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
 }

@@ -174,3 +174,49 @@ describe('upt probe study — CSV, replication file', () => {
     expect(broken.out).toMatch(new RegExp(`invalid JSON: ${p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}: `));
   });
 });
+
+describe('upt probe study — the shipped controls declare the series reference', () => {
+  // The large-amplitude pendulum series T/T0 = 1 + θ0²/16 + 11θ0⁴/3072 + …: the generator declares
+  // it on the amplitude family, so the shipped files print the θ² coefficient's z against 1/16
+  // (proposal 9). The numbers are the ones the batch measured with the reference declared in memory.
+  const file = (f: string) => join(dir, f);
+  const runArgs = async (...argv: string[]) => {
+    const c = captureMerged();
+    const code = await runCli(['probe', 'study', ...argv], c.io);
+    return { code, out: text(c) };
+  };
+  type Term = { input: string; power: number; coefficient: number; stderr: number; reference?: number; z?: number };
+  const selectedTerms = (out: string): Term[] => {
+    const r = JSON.parse(out).result as { selected: string; candidates: { id: string; correction: { terms: Term[] } }[] };
+    return r.candidates.find((c) => c.id === r.selected)!.correction.terms;
+  };
+
+  it('the large-amplitude control prints c₁ = 0.06819 ± 0.00049, z = +11.7 against 1/16 (JSON and CSV twin)', async () => {
+    for (const f of ['pendulum-large-amplitude.synthetic.json', 'pendulum-large-amplitude.synthetic.csv']) {
+      const { code, out } = await runArgs(`--data=${file(f)}`);
+      expect(code).toBe(0);
+      expect(out).toContain('c₁ = 0.06819 ± 0.00049 (z = +11.7 against the declared 0.0625) (fit on exploratory rows)');
+      expect(out).toMatch(/verdict: survives-holdout\n/);
+    }
+    const raw = JSON.parse(readFileSync(file('pendulum-large-amplitude.synthetic.json'), 'utf8'));
+    expect(raw.correction.reference).toEqual({ '2': 1 / 16, '4': 11 / 3072 });
+    const t = selectedTerms((await runArgs(`--data=${file('pendulum-large-amplitude.synthetic.json')}`, '--json')).out)[0]!;
+    expect(t).toMatchObject({ input: 'amplitude', power: 2, reference: 1 / 16 });
+    expect(t.coefficient).toBeCloseTo(0.06818929, 8);
+    expect(t.stderr).toBeCloseTo(0.00048672, 8);
+    expect(t.z).toBeCloseTo((t.coefficient - 1 / 16) / t.stderr, 12);
+    expect(t.z!.toFixed(1)).toBe('11.7');
+  });
+
+  it('the physical-pendulum control prints c(amplitude²) = 0.06743 ± 0.0020, z = +2.4 against 1/16', async () => {
+    const f = file('pendulum-physical.synthetic.json');
+    const { code, out } = await runArgs(`--data=${f}`);
+    expect(code).toBe(0);
+    expect(out).toContain('c₁ = 0.06743 ± 0.0020 (z = +2.4 against the declared 0.0625), c₂ = 0.2139 ± 0.014 (fit on exploratory rows)');
+    const amp = selectedTerms((await runArgs(`--data=${f}`, '--json')).out).find((t) => t.input === 'amplitude' && t.power === 2)!;
+    expect(amp.reference).toBe(1 / 16);
+    expect(amp.coefficient).toBeCloseTo(0.06742573, 8);
+    expect(amp.stderr).toBeCloseTo(0.00203404, 8);
+    expect(amp.z!.toFixed(1)).toBe('2.4');
+  });
+});

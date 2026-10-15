@@ -7,19 +7,40 @@
 
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { DIMENSIONLESS } from '../../dimensional/types.js';
-import { sym } from '../../dimensional/ast-builders.js';
+import { sym, symbolPower } from '../../dimensional/ast-builders.js';
 import { dimensionallyDetermines, type DimensionalDeterminationResult } from '../../dimensional/buckingham.js';
 import { validate } from '../../dimensional/validator.js';
+import { isDimensionless } from '../../dimensional/algebra.js';
 import type { DimensionalVariableRef, SearchBudget, SearchProblem } from './types.js';
 import { canEmitCandidate, type BudgetState } from './search-budget.js';
+import { powerLawDetermination, type PowerLawFit } from './power-law.js';
+
+/** The power-law fit over the π-groups, re-exported beside the generator that emits it. */
+export { powerLawDetermination, powerLawWording, rationalizeExponent } from './power-law.js';
+/** The power-law fit's result types: the determination, one fitted exponent, and a recovered fit. */
+export type { PowerLawDetermination, PowerLawExponent, PowerLawFit } from './power-law.js';
 
 export interface RawCandidate {
   readonly expression: ExprNode;
   readonly monomial: Readonly<Record<string, number>> | null;
   readonly originNote: string;
+  /** Set on a candidate the power-law fit produced: its exponents, their errors and R². */
+  readonly powerLaw?: PowerLawFit;
 }
 
-/** Build `Π governing^exp` as an `ExprNode`. @internal */
+/**
+ * Build `Π governing^exp` as an `ExprNode`: ONE product, negative exponents kept, names in
+ * code-unit order (`sort()`).
+ *
+ * This is not merged with `fromMonomial` (composition/proposed-bridges.ts), which writes a
+ * numerator over a denominator with positive exponents and orders names by `localeCompare`.
+ * The two trees differ for the same monomial (`Z·a^-0.5` against `Z/a^0.5`, and `Z` before `a`
+ * here, after it there), and both are printed (`upt probe` candidates, `upt discover --derive`
+ * proposals) and hashed, so one builder would move printed text. They share `symbolPower`, the
+ * one factor that is the same in both (tests/composition/monomial-builders.test.ts).
+ *
+ * @internal
+ */
 export function monomialToExpr(
   monomial: Readonly<Record<string, number>>,
   vars: readonly DimensionalVariableRef[],
@@ -31,15 +52,7 @@ export function monomialToExpr(
     if (exp === 0) continue;
     const dim = byName.get(name);
     if (!dim) throw new RangeError(`monomialToExpr: unknown variable '${name}'`);
-    const base = sym(name, dim);
-    if (exp === 1) factors.push(base);
-    else {
-      factors.push({
-        kind: 'op',
-        op: '^',
-        args: [base, sym(String(exp), DIMENSIONLESS)],
-      });
-    }
+    factors.push(symbolPower(sym(name, dim), exp));
   }
   if (factors.length === 0) return sym('1', DIMENSIONLESS);
   if (factors.length === 1) return factors[0];
@@ -53,20 +66,17 @@ function* extraPrefactors(base: ExprNode): Iterable<ExprNode> {
 }
 
 /**
- * Yield dimensionally valid monomials for `problem`, honouring the budget.
- * Invalid typed constructions are skipped (never evaluated).
- *
- * @internal
+ * Yield `expr` and its registered prefactor variants that validate and fit the budget's
+ * depth and operator caps; `seen` keeps one copy of each construction across the paths.
  */
-export function* generateNative(
-  problem: SearchProblem,
+function* emitWithPrefactors(
+  expr: ExprNode,
+  monomial: Readonly<Record<string, number>>,
+  originNote: string,
+  powerLaw: PowerLawFit | undefined,
   state: BudgetState,
+  seen: Set<string>,
 ): Iterable<RawCandidate> {
-  const { det } = nativeDetermination(problem);
-  if (!det.determined || !det.monomial) return;
-
-  const expr = monomialToExpr(det.monomial, [problem.target, ...problem.governing]);
-  const seen = new Set<string>();
   for (const candidate of extraPrefactors(expr)) {
     if (!canEmitCandidate(state)) return;
     if (validate(candidate).ok !== true) continue;
@@ -79,11 +89,40 @@ export function* generateNative(
     if (seen.has(key)) continue;
     seen.add(key);
     state.candidates += 1;
-    yield {
-      expression: candidate,
-      monomial: det.monomial,
-      originNote: det.reason,
-    };
+    yield { expression: candidate, monomial, originNote, ...(powerLaw ? { powerLaw } : {}) };
+  }
+}
+
+/**
+ * Yield dimensionally valid monomials for `problem`, honouring the budget.
+ * Invalid typed constructions are skipped (never evaluated).
+ *
+ * Two paths. The unique monomial of {@link nativeDetermination}, when there
+ * is one. Then, when the governing set leaves π-groups (the full determination
+ * is not unique) and the problem has exploratory rows, the rational power law
+ * over those groups that {@link powerLawDetermination} fits on THOSE ROWS
+ * ONLY; the holdout rows are never read here. A fit whose exponents all
+ * rationalise to 0 is the base monomial again and is kept once.
+ *
+ * @internal
+ */
+export function* generateNative(
+  problem: SearchProblem,
+  state: BudgetState,
+): Iterable<RawCandidate> {
+  const vars = [problem.target, ...problem.governing];
+  const seen = new Set<string>();
+  const { det } = nativeDetermination(problem);
+  if (det.determined && det.monomial) {
+    yield* emitWithPrefactors(monomialToExpr(det.monomial, vars), det.monomial, det.reason, undefined, state, seen);
+  }
+
+  if ((problem.exploratory?.rows.length ?? 0) > 0) {
+    const pl = powerLawDetermination(problem);
+    if (pl.kind === 'fit') {
+      const note = `power-law: ${pl.exponents.map((e) => `${e.group}^(${e.rational!.numerator}/${e.rational!.denominator})`).join(' · ')}`;
+      yield* emitWithPrefactors(monomialToExpr(pl.monomial, vars), pl.monomial, note, pl, state, seen);
+    }
   }
 
   if (problem.baseline && problem.discrepancy) {
@@ -106,12 +145,11 @@ export function nativeDetermination(problem: SearchProblem): {
 } {
   const det = dimensionallyDetermines(problem.target, problem.governing);
   if (det.determined) return { det, unsearched: [] };
-  const isDimensionless = (g: DimensionalVariableRef) => Object.values(g.dim).every((e) => e === 0);
-  const dimless = problem.governing.filter(isDimensionless);
+  const dimless = problem.governing.filter((g) => isDimensionless(g.dim));
   if (dimless.length === 0) return { det, unsearched: [] };
   const reduced = dimensionallyDetermines(
     problem.target,
-    problem.governing.filter((g) => !isDimensionless(g)),
+    problem.governing.filter((g) => !isDimensionless(g.dim)),
   );
   return reduced.determined
     ? { det: reduced, unsearched: dimless.map((g) => g.name) }

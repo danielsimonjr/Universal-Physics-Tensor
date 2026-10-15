@@ -106,7 +106,10 @@ export interface IdentifiabilityAssessment {
     readonly status: 'identifiable' | 'partially-identifiable' | 'non-identifiable' | 'unknown';
     readonly rank?: number;
     readonly nParameters?: number;
+    /** The rank of the log-design over the exploratory rows: what the rows can identify, not how many there are. */
     readonly nIndependentObservations?: number;
+    /** The raw exploratory row count, under its own name. */
+    readonly nObservations?: number;
     readonly reasons: readonly string[];
   };
 }

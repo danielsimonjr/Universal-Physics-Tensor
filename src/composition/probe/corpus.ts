@@ -14,6 +14,7 @@ import { evalExpr } from '../expr-eval.js';
 import { equals } from '../../dimensional/algebra.js';
 import type { Dimension } from '../../dimensional/types.js';
 import { canonicalPrefactor } from '../canonical-prefactors.js';
+import { constantRatio, fixedPoint } from '../../canonical/fixed-points.js';
 
 export interface CorpusMatch {
   readonly id: string;
@@ -79,8 +80,9 @@ function dimensionedSymbols(node: ExprNode, out: Map<string, Dimension>): Map<st
  * The corpus prefactor k of a fully quantitative canonical entry against a
  * candidate body: `scalarAst / candidate`, which must be constant. Symbols align
  * by name, then by a dimension exactly one candidate symbol carries. Evaluated at
- * three points where variable i takes (1.7 + i)^p, p = 1, 1.3, 1.6. `null` when
- * the symbols do not align or the ratio is not constant.
+ * three points where variable i takes (1.7 + i)^p, p = 1, 1.3, 1.6 (`fixedPoint`, base 1.7,
+ * step 1), and the ratio is constant when its largest relative departure is at most 1e-9
+ * (`constantRatio`). `null` when the symbols do not align or the ratio is not constant.
  */
 function corpusPrefactor(ast: ExprNode, candidate: ExprNode): number | null {
   const astSyms = dimensionedSymbols(ast, new Map());
@@ -98,12 +100,12 @@ function corpusPrefactor(ast: ExprNode, candidate: ExprNode): number | null {
   }
   const names = [...candSyms.keys()].sort();
   const ratios = [1, 1.3, 1.6].map((p) => {
-    const vals = Object.fromEntries(names.map((n, i) => [n, Math.pow(1.7 + i, p)]));
+    const vals = fixedPoint(names, p, { base: 1.7, step: 1 });
     const astVals = Object.fromEntries([...toCand].map(([s, c]) => [s, vals[c]!]));
     return evalExpr(ast, astVals) / evalExpr(candidate, vals);
   });
-  const k = ratios[0]!;
-  return Number.isFinite(k) && ratios.every((r) => Math.abs(r / k - 1) <= 1e-9) ? k : null;
+  const decided = constantRatio(ratios, 1e-9);
+  return decided.constant ? decided.value : null;
 }
 
 /**
@@ -113,7 +115,9 @@ function corpusPrefactor(ast: ExprNode, candidate: ExprNode): number | null {
  * pendulum fitted on finite-amplitude data gives ĉ = 7.39, not 2π. Only a fully
  * quantitative canonical entry records a prefactor; for any other match the
  * note says the fitted value is not compared. `tolerance` is relative (the
- * holdout tolerance of the run).
+ * holdout tolerance of the run) and is what decides agreement; when the fit
+ * carries a standard error `stderr`, the note also states the difference in
+ * σ beside that verdict, and decides nothing by it.
  *
  * @internal
  */
@@ -122,8 +126,14 @@ export function corpusPrefactorNotes(
   candidate: ExprNode,
   fitted: number,
   tolerance: number,
+  stderr?: number | null,
 ): string[] {
   const c = fitted.toPrecision(4);
+  const inSigma = (k: number): string => {
+    if (stderr === undefined || stderr === null || !(stderr > 0)) return '';
+    const z = (fitted - k) / stderr;
+    return `; ${z >= 0 ? '+' : ''}${z.toFixed(1)}σ (σ_ĉ = ${Number(stderr.toPrecision(2))})`;
+  };
   return result.algebraicMatches.map((m) => {
     const entry = m.layer === 'canonical' ? CANONICAL_EQUATIONS.find((e) => e.id === m.id) : undefined;
     let k: number | null = null;
@@ -150,12 +160,13 @@ export function corpusPrefactorNotes(
     if (k === null) return `${m.id} records no prefactor, so the fitted ĉ=${c} is not compared with it`;
     const rel = fitted / k - 1;
     if (Math.abs(rel) <= tolerance) {
-      return `fitted ĉ=${c} agrees with ${m.id}'s prefactor ${k.toPrecision(4)} (within the holdout tolerance ${tolerance})`;
+      return `fitted ĉ=${c} agrees with ${m.id}'s prefactor ${k.toPrecision(4)} (within the holdout tolerance ${tolerance}${inSigma(k)})`;
     }
     const pct = `${rel > 0 ? '+' : ''}${Math.round(rel * 100)}%`;
+    const sigma = inSigma(k);
     return (
       `fitted ĉ=${c} contradicts ${m.id}'s prefactor ${k.toPrecision(4)} (${pct}): ` +
-      "the data may lie outside that relation's regime"
+      `the data may lie outside that relation's regime${sigma === '' ? '' : `; the difference is ${sigma.slice(2)}`}`
     );
   });
 }

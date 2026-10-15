@@ -233,27 +233,85 @@ export function classicalRk4Literal(source: string): boolean {
 
 const MASS_DENSITY_OWNER = 'src/dimensional/types.ts';
 
-/** A `const MASS_DENSITY` assignment. `export { MASS_DENSITY } from` is not one. */
+const BASE_KEYS = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
+type Exponents = Record<(typeof BASE_KEYS)[number], number>;
+
+/** The exponents an object literal `{ L: -3, M: 1, … }` or a `dim(L, M, T, …)` call states; bases not written are 0. */
+export function dimensionLiterals(source: string): Exponents[] {
+  const out: Exponents[] = [];
+  const zero = (): Exponents => ({ L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 });
+  for (const m of source.matchAll(/\{([^{}]*)\}/g)) {
+    const body = m[1]!;
+    const pairs = [...body.matchAll(/\b(L|M|T|I|Theta|N|J)\s*:\s*(-?\d+(?:\.\d+)?)/g)];
+    if (pairs.length === 0) continue;
+    // Only a literal whose every `key: value` pair is a base exponent is a dimension literal.
+    const members = body.split(',').map((x) => x.trim()).filter((x) => x.length > 0);
+    if (members.length !== pairs.length) continue;
+    const d = zero();
+    for (const [, key, value] of pairs) d[key as keyof Exponents] = Number(value);
+    out.push(d);
+  }
+  for (const m of source.matchAll(/\bdim\(\s*([-\d.,\s]*)\)/g)) {
+    const args = m[1]!.split(',').map((x) => x.trim()).filter((x) => x.length > 0).map(Number);
+    if (args.length === 0 || args.some((x) => !Number.isFinite(x))) continue;
+    const d = zero();
+    args.forEach((x, i) => {
+      const key = BASE_KEYS[i];
+      if (key !== undefined) d[key] = x;
+    });
+    out.push(d);
+  }
+  return out;
+}
+
+/** The mass-density shape: `dim(-3, 1)`, `{ L: -3, M: 1 }` with every other base 0. */
+const isMassDensity = (d: Exponents): boolean => BASE_KEYS.every((k) => d[k] === (k === 'L' ? -3 : k === 'M' ? 1 : 0));
+
+/**
+ * A mass-density dimension stated by exponents under any name: an object
+ * literal `{ L: -3, M: 1, … }` (keys in any order) or a `dim(-3, 1, …)` call.
+ * The shape, not the name `MASS_DENSITY`, is what a second owner copies.
+ * `export { MASS_DENSITY } from` is not one.
+ */
 export function massDensityAssignment(source: string): boolean {
-  return /(?:export\s+)?const\s+MASS_DENSITY\b/.test(source);
+  return dimensionLiterals(source).some(isMassDensity);
 }
 
 /**
- * One `const MASS_DENSITY`, and it is the dimensional export.
- * A second assignment, or a missing owner, is a hit.
+ * Files that state the mass-density shape by exponents and have not yet been
+ * moved to the `MASS_DENSITY` import. Found when the scan began matching by
+ * exponents instead of by name; the five found then (the diffusion family's
+ * dimensions and four canonical entry modules) now read `MASS_DENSITY`, so the
+ * list is empty. It only shrinks:
+ * `tests/architecture/single-owner.test.ts` fails when a file here no longer
+ * states the shape (remove it) or when a copy outside it appears (a hit).
  */
-export function massDensityHits(root: string): string[] {
+export const MASS_DENSITY_PENDING: readonly string[] = [];
+
+/** Every file under `src/` that states the mass-density shape by exponents, sorted. */
+export function massDensityStatements(root: string): string[] {
   const files: string[] = [];
   walkTs(join(root, 'src'), files);
-  const assignments: string[] = [];
+  const statements: string[] = [];
   for (const file of files) {
     if (massDensityAssignment(readFileSync(file, 'utf8'))) {
-      assignments.push(relative(root, file).replaceAll('\\', '/'));
+      statements.push(relative(root, file).replaceAll('\\', '/'));
     }
   }
-  if (assignments.length === 1 && assignments[0] === MASS_DENSITY_OWNER) return [];
-  if (assignments.length === 0) return ['no const MASS_DENSITY'];
-  return assignments.map((file) => `${file} assigns MASS_DENSITY`);
+  return statements.sort();
+}
+
+/**
+ * One statement of the mass-density shape, and it is the dimensional export
+ * `MASS_DENSITY`. A second statement by exponents under any name, outside
+ * {@link MASS_DENSITY_PENDING}, or a missing owner, is a hit.
+ */
+export function massDensityHits(root: string): string[] {
+  const statements = massDensityStatements(root);
+  if (!statements.includes(MASS_DENSITY_OWNER)) return ['no MASS_DENSITY in src/dimensional/types.ts'];
+  return statements
+    .filter((file) => file !== MASS_DENSITY_OWNER && !MASS_DENSITY_PENDING.includes(file))
+    .map((file) => `${file} states the mass-density shape (L⁻³ M) by exponents`);
 }
 
 /** Files under `src/` that still update a state with the classical RK4 weights. */

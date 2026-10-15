@@ -16,6 +16,8 @@ import {
   jsonOwnerHits,
   massDensityAssignment,
   massDensityHits,
+  massDensityStatements,
+  MASS_DENSITY_PENDING,
   nameTableOwnerHits,
   prefactorOwnerHits,
   renderDuplicateOwners,
@@ -73,11 +75,28 @@ describe('single owner', () => {
     expect(massDensityHits(root)).toEqual([]);
   });
 
+  it('the pending mass-density copies are exactly the ones still stated: the list only shrinks', () => {
+    const pending = massDensityStatements(root).filter((file) => file !== 'src/dimensional/types.ts');
+    expect(pending).toEqual([...MASS_DENSITY_PENDING].sort());
+  });
+
   it('a const MASS_DENSITY assignment is a hit, and a re-export is not', () => {
     // The marker matches `export const MASS_DENSITY` and `const MASS_DENSITY` on the parent tree.
     expect(massDensityAssignment('export const MASS_DENSITY: Dimension = { L: -3, M: 1 };\n')).toBe(true);
     expect(massDensityAssignment('const MASS_DENSITY: Dimension = { L: -3, M: 1 };\n')).toBe(true);
     expect(massDensityAssignment("export { MASS_DENSITY } from '../../dimensional/types.js';\n")).toBe(false);
+  });
+
+  it('a mass-density shape under any name is a hit: the scan matches by exponents, not by name', () => {
+    // The control: a deliberately planted copy, as an object literal (keys in any order) and as a `dim(L, M)` call.
+    expect(massDensityAssignment('const RHO: Dimension = { M: 1, L: -3, T: 0, I: 0, Theta: 0, N: 0, J: 0 };\n')).toBe(true);
+    expect(massDensityAssignment('export const DENSITY: Dimension = dim(-3, 1);\n')).toBe(true);
+    expect(massDensityAssignment('const DENSITY = dim(-3, 1, 0, 0, 0);\n')).toBe(true);
+    // Not a mass density: a number density, a mass density times a rate, a volume.
+    expect(massDensityAssignment('const N: Dimension = dim(-3, 0, 0, 0, 0);\n')).toBe(false);
+    expect(massDensityAssignment('const X: Dimension = { L: -3, M: 1, T: -1, I: 0, Theta: 0, N: 0, J: 0 };\n')).toBe(false);
+    expect(massDensityAssignment('const Y = dim(-3, 1, -1);\n')).toBe(false);
+    expect(massDensityAssignment('const VOLUME: Dimension = { L: 3, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };\n')).toBe(false);
   });
 
   it('a classical RK4 weight is a hit', () => {

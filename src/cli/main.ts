@@ -44,6 +44,21 @@ function stdoutRaw(s: string): void {
 
 const defaultIo: Io = { out: stdoutLine, err: stderrLine, write: stdoutRaw };
 
+/** EX_SOFTWARE (sysexits.h): the exit code of a defect, an error `runCli` did not map. */
+const EX_SOFTWARE = 70;
+
+/**
+ * The last-resort handler `bin/upt.mjs` calls when `runCli` rethrows: a defect, since every
+ * usage error and value refusal was mapped to an exit code inside `runCli`. Prints one line,
+ * `upt: internal error: <message>` (the message, not the stack), and returns 70 (EX_SOFTWARE).
+ * A thrown value that is not an Error, or an Error with no message, prints as its string.
+ */
+export function reportInternalError(error: unknown, io: Pick<Io, 'err'> = defaultIo): number {
+  const message = error instanceof Error && error.message !== '' ? error.message : String(error);
+  io.err(`upt: internal error: ${message}`);
+  return EX_SOFTWARE;
+}
+
 const unknownCommandMessage = (name: string): string => `Unknown command '${name}'. See \`upt help\`.`;
 
 const GLOBAL_FILE_OPTION = /^--(record|replay|show-record)(?:=(.*))?$/;
@@ -129,7 +144,7 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       if (!explainCmd) {
         throw new CliError("upt: the demo needs the 'explain' command, which is not registered yet");
       }
-      const explainArgs = parseArgs('explain', ['hawking-temperature', 'mass=1.989e30'], explainCmd.flags);
+      const explainArgs = parseArgs('explain', ['hawking-temperature', 'mass=1.989e30'], explainCmd.flags, explainCmd.positionals);
       const explainCtx: CommandCtx = { args: explainArgs, api, out, err, write };
       const explainStatus = await explainCmd.run(explainCtx);
       if (explainStatus !== 0) return explainStatus;
@@ -138,7 +153,7 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       if (!priorityCmd) {
         throw new CliError("upt: the demo needs the 'priority' command, which is not registered yet");
       }
-      const priorityArgs = parseArgs('priority', [], priorityCmd.flags);
+      const priorityArgs = parseArgs('priority', [], priorityCmd.flags, priorityCmd.positionals);
       const priorityCtx: CommandCtx = { args: priorityArgs, api, out, err, write };
       return await priorityCmd.run(priorityCtx);
     }
@@ -186,7 +201,9 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       return 0;
     }
 
-    const parsed = parseArgs(command.name, rest, command.flags);
+    // The parser refuses a positional past the command's declared arity (none when it
+    // declares none), so a token the command would not read never reaches `run`.
+    const parsed = parseArgs(command.name, rest, command.flags, command.positionals);
     const ctx: CommandCtx = { args: parsed, api, out, err, write };
     return await command.run(ctx);
   } catch (e) {

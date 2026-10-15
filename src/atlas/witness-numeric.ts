@@ -24,10 +24,21 @@
  * inside the tolerance while refinement is not converging is agreement by
  * accident, and the tolerance alone cannot tell the two apart.
  *
+ * ## An observed order is REPORTED beside the ratio, from three or more resolutions
+ *
+ * A spec may name further resolutions (`orderResolutions`). With three or
+ * more in all, MathTS `linearRegression` of log|error| on log(1/resolution)
+ * gives an OBSERVED order with the slope's standard error, carried as
+ * {@link ObservedOrder}. The same rule applies: nothing compares it with an
+ * expected order, and it changes no verdict. The extra resolutions are
+ * evaluated after the two-resolution verdict is fixed; one that throws, is
+ * non-finite, or lands exactly on the target drops the fit and nothing else.
+ *
  * @module atlas/witness-numeric
  * @internal
  */
 
+import { linearRegression } from '@danielsimonjr/mathts-functions';
 import type { WitnessRunResult } from './witness-result.js';
 
 /** The two-resolution error record a numeric witness carries. @internal */
@@ -44,6 +55,19 @@ export interface Convergence {
    * and the run is `'unresolved'` with reason `'no-error-to-reduce'`.
    */
   readonly ratio: number;
+}
+
+/**
+ * The observed order of convergence over `n` resolutions: `slope` is the
+ * fitted exponent p in |error| ∝ h^p with h = 1/resolution (the slope of
+ * log|error| against log(1/resolution)), `stdErr` the standard error of that
+ * slope from the fit (n − 2 degrees of freedom). Reported, never asserted.
+ * @internal
+ */
+export interface ObservedOrder {
+  readonly slope: number;
+  readonly stdErr: number;
+  readonly n: number;
 }
 
 /** What a numeric witness asserts, and how to evaluate it. @internal */
@@ -68,6 +92,12 @@ export interface NumericWitnessSpec {
    * report `'checked'` for any fine value.
    */
   readonly tolerance: number;
+  /**
+   * Further resolutions, beyond `coarseResolution` and `fineResolution`,
+   * evaluated only to fit the observed order. They enter no verdict, no
+   * convergence record and no detail sentence.
+   */
+  readonly orderResolutions?: readonly number[];
 }
 
 /** A result that also carries the two-resolution record, when one was produced. */
@@ -75,6 +105,42 @@ export interface NumericWitnessRunResult extends WitnessRunResult {
   readonly kind: 'numeric';
   /** Absent only when evaluation threw before any number existed. */
   readonly convergence?: Convergence;
+  /** Present only when `orderResolutions` gave three or more finite, non-zero errors to fit. */
+  readonly observedOrder?: ObservedOrder;
+}
+
+/**
+ * The observed order over the resolutions whose errors are all finite and
+ * positive, or `undefined` when fewer than three are, or an extra
+ * evaluation throws. The fit is log|error| against log(1/resolution).
+ */
+function observedOrderOf(
+  spec: NumericWitnessSpec,
+  errors: readonly { readonly resolution: number; readonly error: number }[],
+): ObservedOrder | undefined {
+  const points = [...errors];
+  try {
+    for (const resolution of spec.orderResolutions ?? []) {
+      points.push({ resolution, error: Math.abs(spec.evaluate(resolution) - spec.target) });
+    }
+  } catch {
+    return undefined;
+  }
+  if (points.length < 3) return undefined;
+  if (!points.every((p) => Number.isFinite(p.error) && p.error > 0 && Number.isFinite(p.resolution) && p.resolution > 0)) {
+    return undefined;
+  }
+  const x = points.map((p) => -Math.log(p.resolution));
+  const y = points.map((p) => Math.log(p.error));
+  const fit = linearRegression(x, y);
+  if (!Number.isFinite(fit.slope) || !Number.isFinite(fit.intercept)) return undefined;
+  // From @danielsimonjr/mathts-functions 0.68.5 (MathTS #371) the slope's standard error is the
+  // residual form √(Σ(y − ŷ)²/((n − 2) Σ(x − x̄)²)); before it, `syy − slope·sxy` cancelled on a
+  // near-exact fit and went negative, so an exact power law with rounded errors reported NaN and
+  // this runner recomputed the residual form itself. A non-finite value is still not reported.
+  const stdErr: number = fit.stdErr;
+  if (!Number.isFinite(stdErr)) return undefined;
+  return { slope: fit.slope, stdErr, n: points.length };
 }
 
 /**
@@ -140,6 +206,11 @@ export function runNumericWitness(spec: NumericWitnessSpec): NumericWitnessRunRe
   // zero is 0/0: no ratio exists, and that case is reported on its own below.
   const ratio = fine === 0 ? (coarse === 0 ? Number.NaN : Infinity) : coarse / fine;
   const convergence: Convergence = { coarse, fine, ratio };
+  const order = observedOrderOf(spec, [
+    { resolution: spec.coarseResolution, error: coarse },
+    { resolution: spec.fineResolution, error: fine },
+  ]);
+  const observed = order === undefined ? {} : { observedOrder: order };
 
   if (coarse === 0 && fine === 0) {
     return {
@@ -159,6 +230,7 @@ export function runNumericWitness(spec: NumericWitnessSpec): NumericWitnessRunRe
       ...base,
       status: 'refuted',
       convergence,
+      ...observed,
       detail:
         `The fine evaluation misses the target by ${fine}, outside the stated ` +
         `tolerance ${spec.tolerance}.`,
@@ -172,6 +244,7 @@ export function runNumericWitness(spec: NumericWitnessSpec): NumericWitnessRunRe
       status: 'unresolved',
       reason: 'no-convergence',
       convergence,
+      ...observed,
       detail:
         `Refinement did not reduce the error (ratio ${ratio}). The fine value is ` +
         'inside tolerance, but agreement that does not improve with refinement is ' +
@@ -184,6 +257,7 @@ export function runNumericWitness(spec: NumericWitnessSpec): NumericWitnessRunRe
     ...base,
     status: 'checked',
     convergence,
+    ...observed,
     detail:
       `Fine error ${fine} is within tolerance ${spec.tolerance}, and refinement ` +
       `reduced the error by a factor of ${ratio}.`,

@@ -23,24 +23,32 @@
  */
 import type { CanonicalEquation } from '../canonical-equation.js';
 import { sym } from '../../dimensional/ast-builders.js';
-import { DIMENSIONLESS, TIME } from '../../dimensional/types.js';
-import { dim, op, pow, l1 } from './_l1-build.js';
+import {
+  DIMENSIONLESS,
+  TIME,
+  PRESSURE,
+  MASS_DENSITY,
+  VELOCITY,
+  ACCELERATION,
+  LENGTH,
+  FREQUENCY,
+  ENERGY,
+  ACTION,
+  TEMPERATURE,
+  ENTROPY,
+  MASS,
+  WAVENUMBER,
+  ENERGY_FLUX,
+} from '../../dimensional/types.js';
+import { op, pow, l1 } from './_l1-build.js';
 
-const PRESSURE = dim(-1, 1, -2, 0, 0);
-const DENSITY = dim(-3, 1, 0, 0, 0);
-const VELOCITY = dim(1, 0, -1, 0, 0);
-const ACCELERATION = dim(1, 0, -2, 0, 0);
-const HEIGHT = dim(1, 0, 0, 0, 0);
-const DECAY_CONSTANT = dim(0, 0, -1, 0, 0);
-const ENERGY = dim(2, 1, -2, 0, 0);
-const PLANCK = dim(2, 1, -1, 0, 0);
-const FREQUENCY = dim(0, 0, -1, 0, 0);
-const TEMPERATURE = dim(0, 0, 0, 0, 1);
-const BOLTZMANN = dim(2, 1, -2, 0, -1);
-const MASS = dim(0, 1, 0, 0, 0);
-const LENGTH = dim(1, 0, 0, 0, 0);
-const INVERSE_LENGTH = dim(-1, 0, 0, 0, 0);
-const INTENSITY = dim(0, 1, -3, 0, 0);
+const DENSITY = MASS_DENSITY;
+const HEIGHT = LENGTH;
+const DECAY_CONSTANT = FREQUENCY;
+const PLANCK = ACTION;
+const BOLTZMANN = ENTROPY;
+const INVERSE_LENGTH = WAVENUMBER;
+const INTENSITY = ENERGY_FLUX;
 
 export const NONMONOMIAL: readonly CanonicalEquation[] = [
   l1(

@@ -31,9 +31,10 @@
  * @module composition/proposed-bridges
  */
 
+import { Fraction } from '@danielsimonjr/mathts-core';
 import type { ExprNode } from '../dimensional/validator.js';
 import { validate } from '../dimensional/validator.js';
-import { sym } from '../dimensional/ast-builders.js';
+import { sym, symbolPower } from '../dimensional/ast-builders.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { equals, format } from '../dimensional/algebra.js';
@@ -44,18 +45,31 @@ import type { KnownIssue } from '../bridges/index.js';
 import { BRIDGE_EQUATIONS } from '../bridges/index.js';
 import { catalogIdNumber } from '../bridges/catalog-load.js';
 import { normalForm } from '../canonical/normal-form.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
+import { forEachScalarLeaf, isDecimalLiteral, mapScalarLeaves } from '../dimensional/ast-leaves.js';
 import { evalExpr } from './expr-eval.js';
 import { rankDiscoveries } from './discovery.js';
 import type { VettedCandidate } from './discovery.js';
 import { CANONICAL_GRAPH } from './canonical-graph.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
+import { rationalExponentOf } from './formula-shape.js';
+import { equalUpToConstant } from './algebraic-equivalence.js';
+import { formatRational, fractionToNumber } from './rational-exponent.js';
 
 // ── monomial algebra over flat ExprNode forms ───────────────────────────────
 
-/** A flat monomial: leaf name → its dimension and (signed, possibly rational)
- *  exponent. `k_B·T·ln2 / h` ⇒ {k_B:+1, T:+1, ln2:+1, h:-1}. */
-type Mono = Map<string, { dim: Dimension; exp: number }>;
+/**
+ * A flat monomial: leaf name → its dimension and signed exact exponent.
+ * `k_B·T·ln2 / h` ⇒ {k_B:+1, T:+1, ln2:+1, h:-1}. The exponent is a core
+ * `Fraction`, so solving for a cubed leaf carries `1/3`, not
+ * `0.3333333333333333`, and a cancellation is an exact zero.
+ *
+ * @internal
+ */
+export type Mono = Map<string, { dim: Dimension; exp: Fraction }>;
+
+const ONE = new Fraction(1);
+const MINUS_ONE = new Fraction(-1);
 
 /** Thrown when an AST is not a product / quotient / integer-power of symbols. @internal */
 export class NotAMonomialError extends Error {
@@ -65,18 +79,18 @@ export class NotAMonomialError extends Error {
   }
 }
 
-function mergeInto(into: Mono, from: Mono, scale: number): void {
+function mergeInto(into: Mono, from: Mono, scale: Fraction): void {
   for (const [name, { dim, exp }] of from) {
     const cur = into.get(name);
     if (cur === undefined) {
-      into.set(name, { dim, exp: exp * scale });
+      into.set(name, { dim, exp: exp.multiply(scale) });
     } else {
       if (!equals(cur.dim, dim)) {
         throw new NotAMonomialError(
           `leaf '${name}' appears with inconsistent dimensions`,
         );
       }
-      cur.exp += exp * scale;
+      cur.exp = cur.exp.add(exp.multiply(scale));
     }
   }
 }
@@ -92,17 +106,17 @@ export function toMonomial(ast: ExprNode): Mono {
   const out: Mono = new Map();
   switch (ast.kind) {
     case 'symbol':
-      out.set(ast.name, { dim: ast.dim, exp: 1 });
+      out.set(ast.name, { dim: ast.dim, exp: ONE });
       return out;
     case 'op':
       switch (ast.op) {
         case '*':
-          for (const a of ast.args) mergeInto(out, toMonomial(a), 1);
+          for (const a of ast.args) mergeInto(out, toMonomial(a), ONE);
           return out;
         case '/': {
           const [num, ...dens] = ast.args;
-          mergeInto(out, toMonomial(num), 1);
-          for (const d of dens) mergeInto(out, toMonomial(d), -1);
+          mergeInto(out, toMonomial(num), ONE);
+          for (const d of dens) mergeInto(out, toMonomial(d), MINUS_ONE);
           return out;
         }
         case '^': {
@@ -110,8 +124,8 @@ export function toMonomial(ast: ExprNode): Mono {
           if (expNode.kind !== 'symbol') {
             throw new NotAMonomialError('non-literal exponent');
           }
-          const n = Number(expNode.name);
-          if (!Number.isFinite(n)) {
+          const n = rationalExponentOf(expNode.name);
+          if (n === undefined) {
             throw new NotAMonomialError(`non-numeric exponent '${expNode.name}'`);
           }
           mergeInto(out, toMonomial(base), n);
@@ -126,20 +140,26 @@ export function toMonomial(ast: ExprNode): Mono {
 }
 
 /** Rebuild a flat-monomial `ExprNode` from a leaf→exponent map (numerator =
- *  positive exponents, denominator = negative). Zero exponents drop out.
+ *  positive exponents, denominator = negative). Zero exponents drop out. The
+ *  exponent literal is the double built from the fraction (`1/3` is written
+ *  `0.3333333333333333`), so one rational is always one spelling.
+ *
+ *  This is not merged with `monomialToExpr` (composition/probe/generator.ts),
+ *  which writes one product with negative exponents in code-unit name order;
+ *  this one orders names by `localeCompare` and splits a quotient. The
+ *  proposals' printed formulas and the IC dedup key read this tree, so one
+ *  builder would move them. Both build each factor with `symbolPower`.
  *  @internal */
 export function fromMonomial(m: Mono): ExprNode {
-  const factor = (name: string, dim: Dimension, e: number): ExprNode =>
-    e === 1
-      ? sym(name, dim)
-      : { kind: 'op', op: '^', args: [sym(name, dim), sym(String(e), DIMENSIONLESS)] };
+  const factor = (name: string, dim: Dimension, e: Fraction): ExprNode =>
+    symbolPower(sym(name, dim), fractionToNumber(e));
 
   const num: ExprNode[] = [];
   const den: ExprNode[] = [];
   for (const [name, { dim, exp }] of [...m].sort((a, b) => a[0].localeCompare(b[0]))) {
-    if (exp === 0) continue;
-    if (exp > 0) num.push(factor(name, dim, exp));
-    else den.push(factor(name, dim, -exp));
+    if (exp.isZero()) continue;
+    if (exp.numerator > 0n) num.push(factor(name, dim, exp));
+    else den.push(factor(name, dim, exp.abs()));
   }
   const product = (xs: ExprNode[]): ExprNode =>
     xs.length === 1 ? xs[0] : { kind: 'op', op: '*', args: xs };
@@ -188,27 +208,53 @@ export interface ProposedBridge {
   evaluate(values: Readonly<Record<string, number>>): number;
 }
 
-const isConstant = (name: string): boolean =>
-  Object.prototype.hasOwnProperty.call(CONSTANTS, name);
+const isConstant = isRegisteredConstant;
+
+/** One leaf of a monomial with its exact exponent. @internal */
+export interface MonoLeaf {
+  readonly name: string;
+  readonly dim: Dimension;
+  readonly exp: Fraction;
+}
 
 /** The single non-constant leaf of a monomial, or null if 0 or >1. */
-function uniqueNonConstantLeaf(m: Mono): { name: string; dim: Dimension; exp: number } | null {
+function uniqueNonConstantLeaf(m: Mono): MonoLeaf | null {
   const free = [...m].filter(([name]) => !isConstant(name));
   if (free.length !== 1) return null;
   const [name, { dim, exp }] = free[0];
   return { name, dim, exp };
 }
 
-function latexFromMono(m: Mono): string {
+/** The LaTeX of a monomial, exponents rendered from their fractions (`y^{1/3}`). @internal */
+export function latexFromMono(m: Mono): string {
   const num: string[] = [];
   const den: string[] = [];
   for (const [name, { exp }] of [...m].sort((a, b) => a[0].localeCompare(b[0]))) {
-    if (exp === 0) continue;
-    const tok = Math.abs(exp) === 1 ? name : `${name}^{${Math.abs(exp)}}`;
-    (exp > 0 ? num : den).push(tok);
+    if (exp.isZero()) continue;
+    const magnitude = exp.abs();
+    const tok = magnitude.equals(ONE) ? name : `${name}^{${formatRational(magnitude)}}`;
+    (exp.numerator > 0n ? num : den).push(tok);
   }
   const n = num.join(' \\cdot ') || '1';
   return den.length ? `\\frac{${n}}{${den.join(' \\cdot ')}}` : n;
+}
+
+/**
+ * Isolate `solveFor` from `m1 = m2`: `solveFor^e = m1 / (m2 without solveFor)`,
+ * every exponent divided by `e`, exactly. `m2` must hold `solveFor`.
+ *
+ * @internal
+ */
+export function isolateLeaf(m1: Mono, m2: Mono, solveFor: MonoLeaf): Mono {
+  const result: Mono = new Map();
+  mergeInto(result, m1, ONE);
+  const m2NoSolve: Mono = new Map(m2);
+  m2NoSolve.delete(solveFor.name);
+  mergeInto(result, m2NoSolve, MINUS_ONE);
+  if (!solveFor.exp.equals(ONE)) {
+    for (const v of result.values()) v.exp = v.exp.divide(solveFor.exp);
+  }
+  return result;
 }
 
 // ── leaf-name canonicalization ──────────────────────────────────────────────
@@ -219,11 +265,13 @@ function latexFromMono(m: Mono): string {
 // bridge edge of the SAME physics collapse under `dedupByNormalForm`.
 
 function collectLeafDims(ast: ExprNode, into: Map<string, Dimension>): void {
-  if (ast.kind === 'symbol') {
-    if (!into.has(ast.name)) into.set(ast.name, ast.dim);
-  } else if (ast.kind === 'op') {
-    for (const a of ast.args) collectLeafDims(a, into);
-  }
+  forEachScalarLeaf(
+    ast,
+    (leaf) => {
+      if (!into.has(leaf.name)) into.set(leaf.name, leaf.dim);
+    },
+    {},
+  );
 }
 
 /** Map each non-constant `scalarAst` leaf to the governing quantity of equal
@@ -237,7 +285,7 @@ function leafCanonMap(
   const govFree = governing.filter((g) => !isConstant(g.name));
   const map = new Map<string, string>();
   for (const [leaf, dim] of leaves) {
-    if (isConstant(leaf) || Number.isFinite(Number(leaf))) continue;
+    if (isConstant(leaf) || isDecimalLiteral(leaf)) continue;
     if (govFree.some((g) => g.name === leaf)) continue; // already a graph name
     const matches = govFree.filter((g) => equals(g.dim, dim));
     if (matches.length === 1) map.set(leaf, matches[0].name);
@@ -247,14 +295,14 @@ function leafCanonMap(
 
 function renameLeaves(ast: ExprNode, map: ReadonlyMap<string, string>): ExprNode {
   if (map.size === 0) return ast;
-  if (ast.kind === 'symbol') {
-    const r = map.get(ast.name);
-    return r ? { ...ast, name: r } : ast;
-  }
-  if (ast.kind === 'op') {
-    return { ...ast, args: ast.args.map((a) => renameLeaves(a, map)) };
-  }
-  return ast;
+  return mapScalarLeaves(
+    ast,
+    (leaf) => {
+      const r = map.get(leaf.name);
+      return r ? { ...leaf, name: r } : leaf;
+    },
+    {},
+  );
 }
 
 // ── the generator ───────────────────────────────────────────────────────────
@@ -284,7 +332,7 @@ function hasNonConstantStub(m: Mono, inputs: ReadonlySet<string>): boolean {
     if (
       equals(dim, DIMENSIONLESS) &&
       !isConstant(name) &&
-      !Number.isFinite(Number(name)) &&
+      !isDecimalLiteral(name) &&
       !inputs.has(name)
     ) {
       return true;
@@ -415,14 +463,7 @@ function derivePair(
   if (m1.has(solveFor.name)) return null; // degenerate overlap (Design §5.2)
 
   // Isolate solveFor from `m1 = m2`:  solveFor^e = m1 / (m2 without solveFor).
-  const result: Mono = new Map();
-  mergeInto(result, m1, 1);
-  const m2NoSolve: Mono = new Map(m2);
-  m2NoSolve.delete(solveFor.name);
-  mergeInto(result, m2NoSolve, -1);
-  if (solveFor.exp !== 1) {
-    for (const v of result.values()) v.exp /= solveFor.exp;
-  }
+  const result = isolateLeaf(m1, m2, solveFor);
 
   const scalarAst = fromMonomial(result);
   const dim = validate(scalarAst).inferredDimension;
@@ -473,12 +514,29 @@ function disambiguateIds(
 }
 
 /**
+ * The hash a proposal dedupes under: `normalForm` of its monomial rebuilt
+ * from the exact exponents (so `0.3333333333333333` and
+ * `0.33333333333333337` are one `1/3`), or of the AST itself when it is not
+ * a monomial.
+ */
+function dedupKey(p: ProposedBridge): string {
+  let canonical: ExprNode = p.scalarAst;
+  try {
+    canonical = fromMonomial(toMonomial(p.scalarAst));
+  } catch (err) {
+    if (!(err instanceof NotAMonomialError)) throw err;
+  }
+  return `${normalForm(canonical)}::${p.dimensionalSignature}`;
+}
+
+/**
  * Collapse proposals that derive the SAME relation — equal `normalForm` (up to
- * dimensionless constants) AND equal target dimension — into the first, recording
- * the others' identifications in `alsoDerivableFrom`. Distinct stubs do NOT
- * collapse (e.g. Landauer's dropped `ln2` vs an operator stub hash differently),
- * so this only merges genuine structural twins that a wider candidate scope can
- * produce (Design §9 #2). Deterministic: input order is preserved.
+ * dimensionless constants) of the exact monomial AND equal target dimension —
+ * into the first, recording the others' identifications in
+ * `alsoDerivableFrom`. Distinct stubs do NOT collapse (e.g. Landauer's dropped
+ * `ln2` vs an operator stub hash differently), so this only merges genuine
+ * structural twins that a wider candidate scope can produce (Design §9 #2).
+ * Deterministic: input order is preserved.
  *
  * @internal
  */
@@ -490,7 +548,16 @@ export function dedupByNormalForm(
   const extras = new Map<string, string[]>();
 
   for (const p of proposals) {
-    const key = `${normalForm(p.scalarAst)}::${p.dimensionalSignature}`;
+    let key = dedupKey(p);
+    // On a hash miss, the algebraic step: a kept proposal of the same dimension
+    // that is this one up to a constant owns the key (`a/(b/c)` for `a·c/b`).
+    if (!byKey.has(key)) {
+      const twin = order.find((k) => {
+        const candidate = byKey.get(k)!;
+        return candidate.dimensionalSignature === p.dimensionalSignature && equalUpToConstant(candidate.scalarAst, p.scalarAst).equal;
+      });
+      if (twin !== undefined) key = twin;
+    }
     const kept = byKey.get(key);
     if (kept === undefined) {
       byKey.set(key, p);

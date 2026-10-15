@@ -9,6 +9,7 @@
  * @module cli/bindings
  * @internal
  */
+import { splitAssignment } from '../core/assignment.js';
 import { CliError, UsageError } from './errors.js';
 
 /** One `name=value` token, split. `raw` may be empty (`mass=`); the reader decides what that means. */
@@ -27,12 +28,12 @@ export function splitAssignments(command: string, tokens: readonly string[], sha
   const out: Assignment[] = [];
   const seen = new Set<string>();
   for (const token of tokens) {
-    const eq = token.indexOf('=');
-    if (eq <= 0) throw new UsageError(`upt ${command}: '${token}' must be ${shape}. See \`upt help ${command.split(' ')[0]}\`.`);
-    const name = token.slice(0, eq);
+    const split = splitAssignment(token);
+    if (split === null) throw new UsageError(`upt ${command}: '${token}' must be ${shape}. See \`upt help ${command.split(' ')[0]}\`.`);
+    const { name, raw } = split;
     if (seen.has(name)) throw new CliError(`upt ${command}: '${name}' is given twice ('${token}'); give one value per name`);
     seen.add(name);
-    out.push({ name, raw: token.slice(eq + 1), token });
+    out.push({ name, raw, token });
   }
   return out;
 }

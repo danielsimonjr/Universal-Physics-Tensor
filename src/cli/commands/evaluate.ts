@@ -8,9 +8,10 @@
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
-import { emitJson } from '../output.js';
+import { emitJson, emitJsonError } from '../output.js';
 import { coherentUnits, derivedUnitOf } from '../expr-print.js';
 import { splitAssignments } from '../bindings.js';
+import { realFlag } from '../numeric-flag.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter, PropagatedOutput } from '../../cli-api.js';
@@ -115,6 +116,28 @@ function describeParameter(p: EvaluatorParameter): string {
   );
 }
 
+/**
+ * The parameter a `--sigma` spelling names, through the same contract the inputs use
+ * (`resolveEvaluatorInputs`): the key itself, a declared alternate (`diameter_m` for `a_m`,
+ * whose σ is scaled by the alternate's `toKey`), or a synonym spelling of the key. `undefined`
+ * when the spelling names none of them.
+ */
+function sigmaSlot(
+  api: CommandCtx['api'],
+  parameters: readonly EvaluatorParameter[],
+  given: string,
+): { key: string; unit: string; factor: number } | undefined {
+  const direct = parameters.find((p) => p.key === given);
+  if (direct !== undefined) return { key: direct.key, unit: direct.unit, factor: 1 };
+  for (const p of parameters) {
+    const alt = (p.alternates ?? []).find((a) => a.key === given);
+    if (alt !== undefined) return { key: p.key, unit: p.unit, factor: alt.toKey };
+  }
+  const viaName = api.resolveQuantityName(given, new Set(parameters.map((p) => p.key)));
+  const synonym = viaName === null ? undefined : parameters.find((p) => p.key === viaName);
+  return synonym === undefined ? undefined : { key: synonym.key, unit: synonym.unit, factor: 1 };
+}
+
 function parseUncertainty(
   api: CommandCtx['api'],
   spec: { readonly parameters: readonly EvaluatorParameter[] },
@@ -127,17 +150,19 @@ function parseUncertainty(
   for (const a of sigmaArgs) {
     const m = /^([^=]+)=(.+)$/.exec(a);
     const given = m?.[1];
-    const key = given === undefined ? undefined : (api.resolveQuantityName(given, new Set(Object.keys(inputs))) ?? given);
+    // The same spellings the inputs take: the key, a declared alternate, or a synonym.
+    const slot = given === undefined ? undefined : sigmaSlot(api, spec.parameters, given);
+    const key = slot?.key;
     if (m !== null && (key === undefined || !(key in inputs))) {
       throw new CliError(`upt evaluate: --sigma '${given}' is not one of the inputs given (${Object.keys(inputs).join(', ')})`);
     }
     // A σ is a difference: a σ in degC takes no 273.15 offset. The value is read
     // by the same binding reader as the input, so an energy on a kelvin slot is k_B T.
+    // A σ given under an alternate is scaled by the alternate's factor (a diameter's σ is twice the radius's).
     let u = NaN;
-    if (m !== null && key !== undefined) {
-      const p = spec.parameters.find((x) => x.key === key)!;
+    if (m !== null && slot !== undefined) {
       try {
-        u = api.readNamedBinding(given!, m[2]!, { reading: 'difference', declaredUnit: p.unit }).value;
+        u = api.readNamedBinding(given!, m[2]!, { reading: 'difference', declaredUnit: slot.unit }).value * slot.factor;
       } catch (e) {
         if (!(e instanceof api.UnitError)) throw e;
         if (!(e instanceof api.BindingNumberError)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);
@@ -153,7 +178,8 @@ function parseUncertainty(
   const corr = new Map<string, number>();
   for (const a of corrArgs) {
     const m = /^([^,=]+),([^,=]+)=(.+)$/.exec(a);
-    const rho = m === null ? NaN : Number(m[3]);
+    // The grammar first (a malformed rho is usage, exit 2), the range after (a bad value, exit 1).
+    const rho = m === null ? NaN : realFlag('evaluate', '--corr rho', m[3]!);
     if (m === null || !Number.isFinite(rho) || Math.abs(rho) > 1) throw new CliError(`upt evaluate: --corr '${a}' is not a,b=<rho in [-1, 1]>`);
     const [x, y] = [m[1]!, m[2]!];
     if (x === y) throw new CliError(`upt evaluate: --corr '${a}' correlates an input with itself`);
@@ -348,7 +374,23 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   return code;
 }
 
+/**
+ * `--json` answers a refusal in the envelope too (`emitJsonError`), with the exit code the
+ * refusal stands for; the text mode reports it on stderr as every command does. A defect
+ * (neither error class) propagates either way.
+ */
 async function run(ctx: CommandCtx): Promise<number> {
+  try {
+    return await evaluate(ctx);
+  } catch (e) {
+    if (ctx.args.flags.has('json') && (e instanceof UsageError || e instanceof CliError)) {
+      return emitJsonError('evaluate', e, ctx.write);
+    }
+    throw e;
+  }
+}
+
+async function evaluate(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const [target, ...rest] = args.positionals;
 
@@ -404,7 +446,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new CliError(`upt evaluate: ${api.missingEvaluatorMessage(id)}`);
   }
   const spec = found.evaluator;
-  const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
+  const key = api.catalogEdgeKey(spec.bridgeId);
+  const { inputs, resolved } = resolveInputs(api, key, spec.parameters, rest);
 
   // The one evaluation, the library's result builder: `run` checks the inputs (missing, unknown,
   // type) before the domain, and the result carries the output's name, unit, meaning and extras.
@@ -412,7 +455,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     evaluation = api.evaluateResolved(found, inputs, 'all');
   } catch (e) {
-    throw evaluationFailure(api, e, `be-${spec.bridgeId}`);
+    throw evaluationFailure(api, e, key);
   }
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i), NOT_INCLUDED);
@@ -461,6 +504,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'evaluate',
   aliases: [],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Evaluate a closed-form bridge or an applied case, with units on every input.',

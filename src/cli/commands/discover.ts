@@ -419,11 +419,18 @@ async function run(ctx: CommandCtx): Promise<number> {
     out('  no candidate is `promising` from the anchor above.');
   }
   if (clash.length) {
-    out(`\n  MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):`);
+    out(
+      `\n  MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength ` +
+        `at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):`,
+    );
     for (const r of clash) {
       const basis = r.magnitudeUsedAnchor ? '  (anchor-derived)' : '';
+      // A p that underflows a double is not zero: it is below the smallest normal double.
+      const p = r.magnitudeP;
+      const strength =
+        p === undefined || p === null ? '' : p === 0 ? ', p < 1e-300' : `, p = ${api.formatQuantity(p, 3)}`;
       // A magnitude estimate is a statistic: three digits, marked approximate.
-      out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ~${api.formatQuantity(r.ordersApart!, 3)} orders apart${basis}`);
+      out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ~${api.formatQuantity(r.ordersApart!, 3)} orders apart${strength}${basis}`);
     }
   }
   const subsumed = inert.filter((r) => r.subsuming);

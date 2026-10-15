@@ -107,10 +107,11 @@ describe('normalForm — properties (idempotence / invariance / sensitivity)', (
   const powd = op('^', [sym('v', VELOCITY), sym('2', DIMENSIONLESS)]);
   const bases: ExprNode[] = [kT, ratio, powd, sym('x', LENGTH)];
 
-  it('reflexive + idempotent: normalForm is deterministic and self-equal', () => {
+  it('reflexive: every base is structurally equal to itself', () => {
+    // `expect(normalForm(b)).toBe(normalForm(b))` stood here as "deterministic"; a pure
+    // function compared with its own call cannot fail (law 3), so it was removed 2026-10-15.
     for (const b of bases) {
-      expect(normalForm(b)).toBe(normalForm(b)); // deterministic
-      expect(structurallyEqual(b, b)).toBe(true); // reflexive
+      expect(structurallyEqual(b, b)).toBe(true);
     }
   });
 

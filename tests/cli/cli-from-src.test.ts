@@ -65,7 +65,7 @@ describe('runCli from src — coverage path', () => {
           'probe',
           'run',
           `--problem=${fileURLToPath(new URL('../fixtures/discovery/pendulum-scaling/public/problem.json', import.meta.url))}`,
-          '--holdout-tol=not-a-number',
+          '--holdout-tol=-1', // well formed and out of range; a malformed token is exit 2
         ],
         c.io,
       ),

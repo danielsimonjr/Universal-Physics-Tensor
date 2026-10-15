@@ -20,17 +20,27 @@
  */
 import type { CanonicalEquation } from '../canonical-equation.js';
 import { sym } from '../../dimensional/ast-builders.js';
-import { MASS, VELOCITY, ENERGY, TIME, FREQUENCY, CHARGE } from '../../dimensional/types.js';
+import {
+  MASS,
+  VELOCITY,
+  ENERGY,
+  TIME,
+  FREQUENCY,
+  CHARGE,
+  ELECTRIC_FIELD,
+  RESISTIVITY,
+  ACTION,
+  PERMITTIVITY,
+} from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
-const ELECTRIC_FIELD = dim(1, 1, -3, -1); // V/m [L M T⁻³ I⁻¹]
 const CARRIER_DENSITY = dim(-3, 0, 0, 0); // [L⁻³] (number density)
 const CARRIER_MOBILITY = dim(0, -1, 2, 1); // [M⁻¹ T² I]
 const ELECTRICAL_CONDUCTIVITY = dim(-3, -1, 3, 2); // siemens/m [L⁻³ M⁻¹ T³ I²]
-const ELECTRICAL_RESISTIVITY = dim(3, 1, -3, -2); // ohm·m [L³ M T⁻³ I⁻²]
+const ELECTRICAL_RESISTIVITY = RESISTIVITY; // ohm·m [L³ M T⁻³ I⁻²]
 const HALL_COEFFICIENT = dim(3, 0, -1, -1); // [L³ T⁻¹ I⁻¹]
-const REDUCED_PLANCK = dim(2, 1, -1, 0); // J·s [L² M T⁻¹]
-const VACUUM_PERMITTIVITY = dim(-3, -1, 4, 2); // farad/m [L⁻³ M⁻¹ T⁴ I²]
+const REDUCED_PLANCK = ACTION; // J·s [L² M T⁻¹]
+const VACUUM_PERMITTIVITY = PERMITTIVITY; // farad/m [L⁻³ M⁻¹ T⁴ I²]
 
 export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
   // ── free-carrier transport (fully-quantitative clean monomials) ───────────

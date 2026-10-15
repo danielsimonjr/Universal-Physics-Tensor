@@ -93,9 +93,9 @@
   "canonical": {
     "bridgesWithoutPartner": 152,
     "audit": {
-      "derived": 79,
+      "derived": 81,
       "coefficientUnset": 6,
-      "decoy": 7,
+      "decoy": 5,
       "open": 17
     }
   },

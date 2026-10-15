@@ -71,7 +71,8 @@ describe('UniversalIndexId branding', () => {
     // @ts-expect-error — plain string is not assignable to the branded id.
     const wrong: UniversalIndexId = 'not-a-uuid';
     void wrong;
-    expect(true).toBe(true);
+    // The check is the @ts-expect-error above, which `typecheck:tests` fails when the
+    // assignment compiles; no runtime assertion stands in for it (law 3).
   });
 
   it('accepts the id returned from makeIndex without further casting', () => {

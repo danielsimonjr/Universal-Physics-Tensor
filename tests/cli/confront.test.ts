@@ -33,9 +33,16 @@ describe('upt confront', () => {
     expect(code).toBe(1);
   });
 
-  it('--bridge with an unparseable value is a bad value → exit 1', async () => {
+  it('--bridge with an unparseable value is a malformed invocation → exit 2 (as `upt evaluate be-abc`)', async () => {
     const cap = captureMerged();
     const code = await runCli(['confront', '--bridge=garbage'], cap.io);
+    expect(code).toBe(2);
+    expect(cap.lines.join('')).toMatch(/invalid --bridge='garbage'/);
+  });
+
+  it('--bridge with a well-formed id that has no record is a bad value → exit 1', async () => {
+    const cap = captureMerged();
+    const code = await runCli(['confront', '--bridge=be-999'], cap.io);
     expect(code).toBe(1);
   });
 
@@ -255,10 +262,10 @@ describe('upt confront <be-NN> — the id explain prints', () => {
     expect(text).not.toMatch(/Casimir/);
   });
 
-  it('a positional that is not a bridge id is an error, not the full list', async () => {
+  it('a positional that is not a bridge id is a usage error (exit 2), not the full list', async () => {
     const cap = captureMerged();
     const code = await runCli(['confront', 'nope'], cap.io);
-    expect(code).toBe(1);
+    expect(code).toBe(2);
     const text = cap.lines.join('');
     expect(text).toMatch(/not a bridge id/);
     expect(text).not.toMatch(/NOT 19 equal confirmations/);

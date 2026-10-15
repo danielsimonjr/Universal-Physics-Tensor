@@ -70,11 +70,12 @@ const SENSITIVITY_EPISTEMICS =
   ' sensitivity (elasticity) ranks which input the prediction depends on most STRONGLY; ' +
   'it is NOT which input dominates the uncertainty budget (that needs input sigma).';
 
+/** A malformed id is a malformed invocation (exit 2), as `upt evaluate be-abc` is; an unregistered one is refused later (exit 1). */
 function parseSelection(api: CommandCtx['api'], raw: string, via: 'flag' | 'positional'): number {
   try {
     return api.parseBridgeId(raw);
   } catch {
-    throw new CliError(
+    throw new UsageError(
       via === 'flag'
         ? `upt confront: invalid --bridge='${raw}' (expected be-<id>)`
         : `upt confront: '${raw}' is not a bridge id (expected be-<id>). A positional is not ignored.`,
@@ -84,12 +85,7 @@ function parseSelection(api: CommandCtx['api'], raw: string, via: 'flag' | 'posi
 
 /** The bridge a positional id and/or `--bridge` select, or undefined for the full list. */
 function selectedBridgeId(api: CommandCtx['api'], args: CommandCtx['args']): number | undefined {
-  if (args.positionals.length > 1) {
-    throw new UsageError(
-      `upt confront: unexpected extra arguments (${args.positionals.slice(1).join(', ')}). ` +
-        'Give one bridge id, e.g. `upt confront be-58`, or `--bridge=be-58`.',
-    );
-  }
+  // One bridge at a time: the parser refused a second positional (`positionals: { max: 1 }`).
   const flag = args.flags.get('bridge');
   const fromFlag = flag && flag.length > 0 ? parseSelection(api, flag[flag.length - 1]!, 'flag') : undefined;
   const fromPositional = args.positionals.length === 1 ? parseSelection(api, args.positionals[0]!, 'positional') : undefined;
@@ -149,17 +145,8 @@ function statisticDistribution(outcomes: readonly Outcome[]) {
   return { sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'), tables: n('table') };
 }
 
-/** The one number formatter, as every command reads it: through `ctx.api`. */
-type Fmt = CommandCtx['api']['formatQuantity'];
-
-/** A fraction as a percentage: a statistic, three significant digits (`-43.7%`, `±150%`), never fifteen. */
-function percent(fmt: Fmt, x: number): string {
-  return `${fmt(x * 100, 3)}%`;
-}
-
-function signedPercent(fmt: Fmt, x: number): string {
-  return `${x > 0 ? '+' : ''}${percent(fmt, x)}`;
-}
+/** A fraction printed as a percentage is a statistic: three significant digits (`-43.7%`, `±150%`), never fifteen. */
+const STATISTIC = { significant: 3 } as const;
 
 /** Count by rigor tier, over the confrontations given. */
 function rigorDistributionOf(tiers: readonly RigorTier[]): Record<RigorTier, number> {
@@ -384,11 +371,11 @@ async function run(ctx: CommandCtx): Promise<number> {
             ? `rule: ${c.rule} · ${c.withinBound ? 'compatible ✓' : 'BELOW THE LIMIT'}`
             : c.agreementBound === null
               ? 'no agreement bound in this outcome, so no compatibility decision'
-              : `agreement bound ±${percent(api.formatQuantity, c.agreementBound)} (the record's stated tolerance, not a measured difference) · ` +
+              : `agreement bound ±${api.formatPercent(c.agreementBound, STATISTIC)} (the record's stated tolerance, not a measured difference) · ` +
                 `|difference| ≤ bound: ${c.withinBound ? 'compatible ✓' : 'OUTSIDE BOUND'}`;
         out(
           `    predicted ${outcome.predicted} approaches ${outcome.approaches} ${outcome.units} · ` +
-            `actual difference ${signedPercent(api.formatQuantity, c.relativeDifference)} = ${c.definition} · ${verdict}`,
+            `actual difference ${api.formatPercent(c.relativeDifference, { ...STATISTIC, signed: true })} = ${c.definition} · ${verdict}`,
         );
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);
         break;
@@ -416,6 +403,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'confront',
   aliases: [],
+  positionals: { max: 1 },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Run the committed predicted-versus-observed confrontations.',

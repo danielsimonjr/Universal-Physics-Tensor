@@ -1,6 +1,7 @@
 /**
  * `upt discover` option validation (Round-2 robustness): `--max-orders` and
- * `--anchor` must reject malformed values (exit 2 for a token with no `=`, exit 1 for a bad value) rather than silently
+ * `--anchor` must reject malformed values (exit 2 for a token with no `=` or a numeric token outside the
+ * grammar, exit 1 for a well-formed bad value; cli/README.md §Hardening) rather than silently
  * ignoring them (or, for an empty `--max-orders=`, silently coercing to 0).
  */
 import '../helpers/dist.js';
@@ -28,12 +29,16 @@ function run(args: string[]): { status: number; stderr: string } {
 // the consequence-propagation surfacing added in Phase 4 Unit A task 2.
 
 describe('upt discover — option validation', () => {
-  it('rejects a non-numeric --max-orders', () => {
-    expect(run(['discover', '--max-orders=abc']).status).toBe(1);
+  // A token outside the numeric grammar is a malformed invocation, exit 2 (one exit-code rule
+  // since 2026-10-15; these two exited 1 before it).
+  it('rejects a non-numeric --max-orders as a usage error (exit 2), naming the flag and the token', () => {
+    const r = run(['discover', '--max-orders=abc']);
+    expect(r.status).toBe(2);
+    expect(r.stderr).toContain("--max-orders 'abc'");
   });
 
-  it('rejects an empty --max-orders (would silently coerce to 0)', () => {
-    expect(run(['discover', '--max-orders=']).status).toBe(1);
+  it('rejects an empty --max-orders (would silently coerce to 0) as a usage error (exit 2)', () => {
+    expect(run(['discover', '--max-orders=']).status).toBe(2);
   });
 
   it('rejects a negative --max-orders', () => {

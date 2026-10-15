@@ -295,11 +295,13 @@ describe('correction families in several dimensionless inputs', () => {
   it('parses a list of families and refuses an empty list, a repeated input and more than 6 powers in all', () => {
     const raw = load('pendulum-physical');
     const s = parseStudy(raw);
+    // The amplitude family declares the pendulum series 1/16, 11/3072 as its reference.
+    const series = { '2': 1 / 16, '4': 11 / 3072 };
     expect(s.correction).toEqual([
-      { input: 'amplitude', powers: [2, 4] },
+      { input: 'amplitude', powers: [2, 4], reference: series },
       { input: 'bob_ratio', powers: [2, 4] },
     ]);
-    expect(parseStudy(load('pendulum-large-amplitude')).correction).toEqual([{ input: 'amplitude', powers: [2, 4] }]);
+    expect(parseStudy(load('pendulum-large-amplitude')).correction).toEqual([{ input: 'amplitude', powers: [2, 4], reference: series }]);
     const bad = (correction: unknown) => refusal(() => parseStudy({ ...raw, correction }));
     expect(bad([])).toMatch(/\(correction\): must list at least one family/);
     expect(bad([{ input: 'amplitude', powers: [2] }, { input: 'amplitude', powers: [4] }])).toMatch(

@@ -9,7 +9,37 @@
  */
 
 import { definitionsFor } from './statuses.js';
+import { UsageError, type CliError } from './errors.js';
 import type { AnchorScope } from './graphs.js';
+
+/**
+ * The `--json` form of a refusal: no `result`; the error's kind (`usage` for a malformed
+ * invocation, `value` for a value the command refuses), the exit code the process returns,
+ * and the message the text mode prints on stderr.
+ */
+export interface JsonErrorEnvelope {
+  command: string;
+  error: { kind: 'usage' | 'value'; exitCode: 1 | 2; message: string };
+}
+
+/**
+ * Write a refusal as a JSON envelope on stdout and return the exit code it stands for: 2 for a
+ * `UsageError`, 1 for a `CliError`. A command that answers in JSON calls this instead of
+ * letting the dispatcher print the message on stderr, so a JSON consumer reads one stream.
+ */
+export function emitJsonError(
+  command: string,
+  e: UsageError | CliError,
+  write: (s: string) => void = (s) => process.stdout.write(s),
+): 1 | 2 {
+  const usage = e instanceof UsageError;
+  const envelope: JsonErrorEnvelope = {
+    command,
+    error: { kind: usage ? 'usage' : 'value', exitCode: usage ? 2 : 1, message: e.message },
+  };
+  write(JSON.stringify(envelope, null, 2) + '\n');
+  return envelope.error.exitCode;
+}
 
 /** The shape of every `--json` output: the command, what it read, and its result. */
 export interface JsonEnvelope {

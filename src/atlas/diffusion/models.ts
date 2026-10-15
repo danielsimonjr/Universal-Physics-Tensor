@@ -13,12 +13,10 @@
  */
 
 import type { DimensionalVariable } from '../../dimensional/buckingham.js';
-import { ACTION, ENERGY, LENGTH, MASS, TIME } from '../../dimensional/types.js';
-import { dim } from '../../dimensional/ast-builders.js';
-import type { Dimension } from '../../dimensional/types.js';
+import { ACTION, ENERGY, LENGTH, MASS, TIME, VISCOSITY } from '../../dimensional/types.js';
 import { DAMPING } from '../oscillators/dimensions.js';
 import type { AtlasModel } from '../model.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY } from './dimensions.js';
 
 /** The family name every diffusion record carries. @internal */
@@ -44,17 +42,13 @@ function model(spec: ModelSpec): AtlasModel {
     parameters: spec.parameters,
     dimensionlessInputs: [],
     canonicalRefs: spec.canonicalRefs,
-    regime: {
-      family: DIFFUSION_FAMILY_NAME,
-      inequalities: [],
-      groupDefinitions: deriveRegimeGroups(DIFFUSION_FAMILY_NAME, spec.parameters, []),
-    },
+    regime: makeRegime(DIFFUSION_FAMILY_NAME, spec.parameters, [], []),
     ...(spec.symmetryGroup === undefined ? {} : { symmetryGroup: spec.symmetryGroup }),
   };
 }
 
-/** Pa·s, `L^-1 M T^-1` — `src/canonical/entries/fluids-waves.ts:45` (`VISCOSITY`). @internal */
-export const VISCOSITY: Dimension = dim(-1, 1, -1);
+/** Pa·s, `L^-1 M T^-1`: the named shape of `dimensional/types.ts`. @internal */
+export { VISCOSITY };
 
 /** The diffusion models, in design-note order; the last four were added to close Sprint 4. @internal */
 export const DIFFUSION_MODELS: readonly AtlasModel[] = [

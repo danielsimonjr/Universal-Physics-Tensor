@@ -47,8 +47,11 @@ export function selectRoute(
   } catch (e) {
     // RangeError: an unknown endpoint. Reported as a CliError (exit 1) rather
     // than surfaced as a crash — and NOT as `null`, which would be
-    // indistinguishable from a genuinely disconnected pair.
-    throw new CliError(`upt ${command}: ${e instanceof Error ? e.message : String(e)}`);
+    // indistinguishable from a genuinely disconnected pair. Any other class is
+    // a defect and propagates as one; converting it would present a crash as
+    // the user's mistake.
+    if (!(e instanceof RangeError)) throw e;
+    throw new CliError(`upt ${command}: ${e.message}`);
   }
   return { bridges, fromFamily, toFamily };
 }

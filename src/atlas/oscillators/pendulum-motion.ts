@@ -10,25 +10,28 @@
  * @internal
  */
 
-import { ellipticK, findRoot, solveODESystem } from '@danielsimonjr/mathts-functions';
+import { ellipticK, findRoot, jacobiSN } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../../core/mathts-read.js';
+import { integrateRK4 } from '../../numerical/null-ray-integrator.js';
 import { pendulumPeriodErrorAt } from './bridges-limits.js';
 
+/** 2π: one period of the angle variable, the T0 = 1 time unit's ω0. @internal */
+export const TWO_PI = 2 * Math.PI;
 /** ω0² at T0 = 1. @internal */
-export const W2 = (2 * Math.PI) ** 2;
+export const W2 = TWO_PI ** 2;
 /** @internal */
 export const pendulumAccel = (x: number): number => -W2 * Math.sin(x);
 /** @internal */
 export const linearAccel = (x: number): number => -W2 * x;
 
 /**
- * One fixed step of x″ = accel(x). MathTS `solveODESystem` with `dt` is the
- * classical RK4 step.
+ * One fixed step of x″ = accel(x): `integrateRK4` (MathTS `solveODESystem`
+ * with `dt`, the classical RK4 step) over one step of length `h`.
  *
  * @internal
  */
 export function rk4Step(x: number, v: number, h: number, accel: (x: number) => number): [number, number] {
-  const sol = solveODESystem((_t, y) => [y[1]!, accel(y[0]!)], [x, v], [0, h], { dt: h });
-  const end = sol.y[sol.y.length - 1] ?? [x, v];
+  const end = integrateRK4((_t, y) => [y[1]!, accel(y[0]!)], [x, v], 0, h, 1);
   return [end[0]!, end[1]!];
 }
 
@@ -113,8 +116,27 @@ export function theta0OfPeriodError(eps: number): number {
 export function pendulumNome(theta0: number): number {
   const k = Math.sin(Math.abs(theta0) / 2);
   if (k === 0) return 0;
-  const K: unknown = ellipticK(k * k);
-  const Kp: unknown = ellipticK(Math.cos(theta0 / 2) ** 2);
-  if (typeof K !== 'number' || typeof Kp !== 'number') throw new TypeError('ellipticK did not return a number');
+  const K = numberFrom('ellipticK', ellipticK(k * k));
+  const Kp = numberFrom('ellipticK', ellipticK(Math.cos(theta0 / 2) ** 2));
   return Math.exp((-Math.PI * Kp) / K);
+}
+
+/**
+ * The exact pendulum released from rest at `theta0`, in units of T0 = 1
+ * (ω0 = 2π): θ(t) = 2 asin(k sn(K − ω0 t, m)), with k = sin(θ0/2), the
+ * parameter m = k², and K = K(m) the quarter period in the sn argument, read
+ * from `pendulumPeriodErrorAt` as (π/2)(1 + ε) so one `ellipticK` read
+ * serves both. At t = 0, sn K = 1 and θ = θ0; the period is T = 4K/ω0 =
+ * (1 + ε) T0. MathTS `jacobiSN` is a plain number function of (u, m). A
+ * closed form, independent of every integrator: `tests/atlas/pendulum-exact.test.ts`
+ * checks it against the cn·dn identities (θ″ = −2ω0² k sn u dn u, sin θ =
+ * 2k sn u dn u) and against RK4.
+ *
+ * @internal
+ */
+export function exactPendulumAngle(theta0: number, t: number): number {
+  const k = Math.sin(theta0 / 2);
+  if (k === 0) return 0;
+  const K = (Math.PI / 2) * (1 + pendulumPeriodErrorAt({ theta0 }));
+  return 2 * Math.asin(k * jacobiSN(K - TWO_PI * t, k * k));
 }

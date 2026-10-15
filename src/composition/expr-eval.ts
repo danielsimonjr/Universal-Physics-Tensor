@@ -23,6 +23,7 @@
 import { createScalarBuilder, ScalarBuildError } from '@danielsimonjr/mathts-expression';
 import { evaluateScalar, ScalarEvalError } from '@danielsimonjr/mathts-functions';
 import type { ExprNode } from '../dimensional/validator.js';
+import { forEachScalarLeaf } from '../dimensional/ast-leaves.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 
@@ -39,15 +40,7 @@ const builder = createScalarBuilder();
 
 /** Symbol names on the scalar arms. Other kinds are left for the builder to reject. */
 function symbolNames(node: ExprNode, out: Set<string>): void {
-  if (node.kind === 'symbol') {
-    out.add(node.name);
-    return;
-  }
-  if (node.kind === 'op') {
-    for (const arg of node.args) symbolNames(arg, out);
-    return;
-  }
-  if (node.kind === 'transcendental' || node.kind === 'abs') symbolNames(node.arg, out);
+  forEachScalarLeaf(node, (leaf) => out.add(leaf.name), { transcendental: true, abs: true });
 }
 
 /**

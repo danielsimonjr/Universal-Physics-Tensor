@@ -23,19 +23,19 @@
 import { ENERGY, LENGTH, MASS, TIME, VELOCITY } from '../../dimensional/types.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { DAMPING } from '../oscillators/dimensions.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { WAVENUMBER } from '../waves/models.js';
 import { DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY } from './dimensions.js';
 import { DIFFUSION_FAMILY_NAME, VISCOSITY } from './models.js';
-import { telegraphSlowRateRatio, telegraphWaveFrequencyRatio } from './numerics.js';
+import { telegraphSlowRateExcess, telegraphWaveFrequencyRatio } from './numerics.js';
 
 const TEST = 'tests/atlas/closure.test.ts';
 const WITNESS_RESULTS_TEST = 'tests/atlas/witness-results.test.ts';
 
 /** τ_p/t ceiling of the Langevin → Fick regime: WD4's fine resolution, t = 100 τ_p. @internal */
-export const LANGEVIN_MAX_TAU_RATIO = 0.01;
+const LANGEVIN_MAX_TAU_RATIO = 0.01;
 
 /** ε = τDq² ceiling of the telegraph → Fick domain. @internal */
 export const TELEGRAPH_FICK_MAX_EPS = 0.05;
@@ -44,7 +44,7 @@ export const TELEGRAPH_FICK_MAX_EPS = 0.05;
 export const TELEGRAPH_WAVE_MIN_EPS = 25;
 
 /** Fourier-number floor of the steady-state restriction. @internal */
-export const STEADY_MIN_FOURIER = 1;
+const STEADY_MIN_FOURIER = 1;
 
 const regime = (
   parameters: readonly { name: string; dim: import('../../dimensional/types.js').Dimension }[],
@@ -56,11 +56,7 @@ const regimeWithInputs = (
   parameters: readonly { name: string; dim: import('../../dimensional/types.js').Dimension }[],
   dimensionlessInputs: readonly string[],
   inequalities: AtlasBridge['regime']['inequalities'],
-): AtlasBridge['regime'] => ({
-  family: DIFFUSION_FAMILY_NAME,
-  inequalities,
-  groupDefinitions: deriveRegimeGroups(DIFFUSION_FAMILY_NAME, parameters, dimensionlessInputs),
-});
+): AtlasBridge['regime'] => makeRegime(DIFFUSION_FAMILY_NAME, parameters, dimensionlessInputs, inequalities);
 
 /** Reynolds-number ceiling of the Stokes–Einstein derivation: a chosen threshold for Re ≪ 1. @internal */
 const STOKES_MAX_RE = 0.1;
@@ -223,9 +219,9 @@ export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
   sideConditions: ['ε = τDq² ≤ 0.05', 'after the initial layer: t ≫ τ'],
   bound: makeApproximation({
     K: 1,
-    delta: telegraphSlowRateRatio(TELEGRAPH_FICK_MAX_EPS, 1, 1) - 1,
+    delta: telegraphSlowRateExcess(TELEGRAPH_FICK_MAX_EPS, 1, 1),
     deltaAt: (p) =>
-      telegraphSlowRateRatio(p['tau'] ?? Number.NaN, p['D'] ?? Number.NaN, p['q'] ?? Number.NaN) - 1,
+      telegraphSlowRateExcess(p['tau'] ?? Number.NaN, p['D'] ?? Number.NaN, p['q'] ?? Number.NaN),
     deltaAtBasis: 'closed-form',
     norm: 'relative error of the slow-mode decay rate of a Fourier mode, normalized by the value of the reduced model',
     domain: 'ε = τDq² ≤ 0.05',
@@ -235,7 +231,7 @@ export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
     horizonHolds: (t, p) => {
       const { tau, D, q } = p;
       if (tau === undefined || D === undefined || q === undefined) return false;
-      const delta = telegraphSlowRateRatio(tau, D, q) - 1;
+      const delta = telegraphSlowRateExcess(tau, D, q);
       if (!Number.isFinite(delta)) return false;
       if (t <= 5 * tau) return false;
       return delta === 0 || t < 0.1 / (delta * D * q * q);

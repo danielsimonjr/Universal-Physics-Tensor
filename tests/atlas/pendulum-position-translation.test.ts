@@ -188,7 +188,7 @@ describe('W7xs — the Fourier-series premise, checked against RK4 across the do
     expect(runTranslationCheck(w7xs!).status).toBe('checked');
     expect(TR.witnesses.map((w) => w.id)).toContain('W7xs');
     expect(FOURIER_SERIES_THETA0S).toEqual([0.01, 0.1, 0.2, 0.3, 0.4, 0.5]);
-    expect(TR.premises.join(' ')).toMatch(/Fourier series .* machine-checked against RK4 at θ0 ∈ \{0\.01, 0\.1, 0\.2, 0\.3, 0\.4, 0\.5\} \(W7xs\)/);
+    expect(TR.premises.join(' ')).toMatch(/Fourier series .* machine-checked .* against RK4 at θ0 ∈ \{0\.01, 0\.1, 0\.2, 0\.3, 0\.4, 0\.5\} \(W7xs\)/);
   });
 
   it('control: the same check with (1 − q^{2n+1}) for (1 + q^{2n+1}) in aₙ is refuted', () => {

@@ -9,7 +9,12 @@ import { describe, expect, it } from 'vitest';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runLinkPrediction } from '../../src/atlas/link-prediction.js';
+import {
+  PERMUTATION_KIND,
+  POST_HOC_LABEL,
+  runKatzLinkPrediction,
+  runLinkPrediction,
+} from '../../src/atlas/link-prediction.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { mcnemar, pairedDifferenceInterval, wilsonInterval } from '../../src/atlas/benchmark/stats.js';
 import type { AtlasFamily } from '../../src/atlas/family.js';
@@ -62,6 +67,42 @@ describe('the one result — recomputed and bound to the note', () => {
     // The note says NOT supported; that is only honest while the interval spans zero.
     expect(diff.lower).toBeLessThan(0);
     expect(note).toContain('**The hypothesis is NOT supported.**');
+  });
+});
+
+describe('the seeded intervals, the two tests and the post-hoc Katz run — bound to the note', () => {
+  const iv = (x: { lower: number; upper: number }): string => `[${x.lower.toFixed(3)}, ${x.upper.toFixed(3)}]`;
+
+  it('the bootstrap intervals, with their seed and resample count, match the note', () => {
+    const { intervals } = result;
+    expect(note).toContain(`seed ${intervals.seed}`);
+    expect(note).toContain(`${intervals.resamples} resamples`);
+    for (const x of [intervals.structuralRecall, intervals.textRecall, intervals.structuralMrr, intervals.textMrr]) {
+      expect(note).toContain(iv(x));
+    }
+  });
+
+  it('the permutation p is stated as unpaired, beside the paired McNemar p', () => {
+    expect(result.permutation.kind).toBe(PERMUTATION_KIND);
+    expect(note).toContain(`p = ${result.permutation.pValue.toFixed(3)}`);
+    expect(note).toContain(result.permutation.statistic.toFixed(3).replace('-', '−'));
+    expect(note).toContain('unpaired');
+    expect(note).toContain(`McNemar's exact p is ${result.mcnemarExactP.toFixed(3)}`);
+  });
+
+  it('the Katz run is labelled post hoc, matches the note, and sits below chance', () => {
+    const katz = runKatzLinkPrediction(ATLAS_FAMILIES);
+    expect(katz.postHoc).toBe(true);
+    expect(katz.label).toBe(POST_HOC_LABEL);
+    expect(note).toContain('post hoc');
+    expect(note).toContain(`${katz.katzHits}/20 = ${(katz.katzHits / 20).toFixed(2)}`);
+    expect(note).toContain(katz.katzMrr.toFixed(3));
+    expect(note).toContain(iv(katz.intervals.recall));
+    expect(note).toContain(iv(katz.intervals.mrr));
+    expect(note).toContain(`1/${Math.round(1 / katz.betaRange[0])}`);
+    expect(note).toContain(`1/${Math.round(1 / katz.betaRange[1])}`);
+    // The note calls it below chance; that is only honest while it is.
+    expect(katz.katzHits / 20).toBeLessThan(katz.chanceRecall);
   });
 });
 

@@ -24,8 +24,11 @@
  */
 
 import { det, inv } from '@danielsimonjr/mathts-functions';
+import { splitAssignment } from '../core/assignment.js';
+import { relDiff, withinMixed } from '../core/compare.js';
+import { numberFrom, numberMatrixFrom } from '../core/mathts-read.js';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
-import { DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
+import { DIMENSIONLESS, GRAVITATIONAL_CONSTANT, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
 import { UnitError } from '../dimensional/units.js';
 import { readParameter } from './binding-value.js';
 import { computeChristoffelTensor } from './connection-lowering-helpers.js';
@@ -33,6 +36,7 @@ import { christoffelAt, lowerFirstIndex, riemannUpperAt } from './curvature-lowe
 import { integrateGeodesic as integrateGeodesicRK4 } from './geodesic-integrator.js';
 import { computeKretschmann } from './kretschmann.js';
 import { MathTSEngine } from './mathts-engine.js';
+import { schwarzschildRadius } from './schwarzschild.js';
 import type { NestedArray } from './types.js';
 
 /** Coordinate order (t, r, θ, φ). */
@@ -97,19 +101,15 @@ const ENGINE = new MathTSEngine();
  * number[][] input.
  */
 function invert4(src: number[][]): number[][] {
-  const determinant: unknown = det(src);
-  if (typeof determinant !== 'number' || !Number.isFinite(determinant) || determinant === 0) {
-    throw new Error('metric is singular at this point');
+  const determinant = numberFrom('det', det(src));
+  if (!Number.isFinite(determinant) || determinant === 0) {
+    throw new MetricValueError('metric is singular at this point');
   }
-  const out: unknown = inv(src);
-  if (!Array.isArray(out) || out.length !== 4) throw new Error('metric inverse is not a 4×4 matrix');
-  return out.map((row: unknown) => {
-    if (!Array.isArray(row) || row.length !== 4) throw new Error('metric inverse is not a 4×4 matrix');
-    return row.map((v: unknown) => {
-      if (typeof v !== 'number') throw new Error('metric inverse is not a 4×4 matrix');
-      return v;
-    });
-  });
+  try {
+    return numberMatrixFrom('inv', inv(src), 4);
+  } catch (error) {
+    throw new Error('metric inverse is not a 4×4 matrix', { cause: error });
+  }
 }
 
 type MetricFn = (x: Pt) => number[][];
@@ -203,7 +203,7 @@ function nonzeroGamma(G: Gamma): Component[] {
 }
 
 function schwarzschildMetric(M: number, c: number, G: number): MetricFn {
-  const rs = (2 * G * M) / (c * c);
+  const rs = schwarzschildRadius(M, G, c);
   return (x) => {
     const r = x[1];
     const th = x[2];
@@ -322,6 +322,22 @@ export class MetricMassError extends Error {
   }
 }
 
+/**
+ * A value the metric library refuses: a point inside the horizon or on a
+ * pole, a Kerr point inside the ring, an unknown or repeated parameter, a
+ * token that is not `key=value`, an orbit or geodesic start the closed forms
+ * do not admit, a Newton iteration that does not converge at the given
+ * point. The CLI maps this class to exit 1; any other class is a defect and
+ * is not converted.
+ * @internal
+ */
+export class MetricValueError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'MetricValueError';
+  }
+}
+
 /** A mass that is not positive is not a source. */
 function requirePositiveMass(M: number): void {
   if (!(M > 0)) throw new MetricMassError(`${M <= 0 ? 'a non-positive' : 'a non-finite'} mass (M = ${M} kg) is not a source: the metric needs a positive mass`);
@@ -335,7 +351,7 @@ function requirePositiveMass(M: number): void {
  */
 function requirePolarInterior(theta: number): void {
   if (!(theta > 0 && theta < Math.PI && Math.sin(theta) > 1e-9)) {
-    throw new Error(
+    throw new MetricValueError(
       `θ must be strictly between 0 and π (got ${theta}): the poles are coordinate singularities of the spherical chart`,
     );
   }
@@ -345,7 +361,7 @@ function requirePolarInterior(theta: number): void {
 const PARAM_DIM: Readonly<Record<string, Dimension>> = {
   M: MASS,
   c: VELOCITY,
-  G: { L: 3, M: -1, T: -2, I: 0, Theta: 0, N: 0, J: 0 },
+  G: GRAVITATIONAL_CONSTANT,
   r: LENGTH,
   a: LENGTH,
   t: TIME,
@@ -366,14 +382,17 @@ function metricParams(
 ): { values: Record<string, number>; notes: string[] } {
   const values: Record<string, number> = { ...defaults };
   const notes: string[] = [];
+  const seen = new Set<string>();
   for (const pair of pairs) {
-    const eq = pair.indexOf('=');
-    if (eq <= 0) throw new Error(`'${pair}' must be key=value`);
-    const key = pair.slice(0, eq);
-    if (!(key in defaults)) throw new Error(`unknown parameter '${key}' (expected ${Object.keys(defaults).join(', ')})`);
+    const split = splitAssignment(pair);
+    if (split === null) throw new MetricValueError(`'${pair}' must be key=value`);
+    const key = split.name;
+    if (!(key in defaults)) throw new MetricValueError(`unknown parameter '${key}' (expected ${Object.keys(defaults).join(', ')})`);
+    if (seen.has(key)) throw new MetricValueError(`'${key}' is given twice ('${pair}'); give one value per parameter`);
+    seen.add(key);
     let read: ReturnType<typeof readParameter>;
     try {
-      read = readParameter(pair.slice(eq + 1), PARAM_DIM[key] ?? DIMENSIONLESS);
+      read = readParameter(split.raw, PARAM_DIM[key] ?? DIMENSIONLESS);
     } catch (e) {
       // The reader knows the text and the dimension it was given, not which parameter held them.
       if (e instanceof UnitError) throw new UnitError(`parameter ${key}: ${e.message}`);
@@ -412,9 +431,9 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     const { values: p, notes } = metricParams(pairs, { M: M_SUN_SI, c: C_SI, G: G_SI, r: Number.NaN, theta: Math.PI / 2, phi: 0, t: 0 });
     requirePositiveMass(p.M!);
     requirePolarInterior(p.theta!);
-    const rs = (2 * p.G! * p.M!) / (p.c! * p.c!);
+    const rs = schwarzschildRadius(p.M!, p.G!, p.c!);
     if (Number.isNaN(p.r)) p.r = 10 * rs;
-    if (!(p.r! > rs)) throw new Error(`r must be outside the horizon (r = ${p.r} m, r_s = ${rs} m)`);
+    if (!(p.r! > rs)) throw new MetricValueError(`r must be outside the horizon (r = ${p.r} m, r_s = ${rs} m)`);
     const g = schwarzschildMetric(p.M!, p.c!, p.G!);
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
     const t = tensorsOf(g, x);
@@ -494,8 +513,8 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
   requirePolarInterior(p.theta!);
   const Mgeom = (p.G! * p.M!) / (p.c! * p.c!);
   if (Number.isNaN(p.r)) p.r = 10 * Mgeom;
-  if (!(p.r! > 0)) throw new Error(`r must be positive and outside the singularity (got r = ${p.r} m)`);
-  if (Math.abs(p.a!) >= p.r!) throw new Error('Kerr finite difference wants |a| < r and r outside the ring');
+  if (!(p.r! > 0)) throw new MetricValueError(`r must be positive and outside the singularity (got r = ${p.r} m)`);
+  if (Math.abs(p.a!) >= p.r!) throw new MetricValueError('Kerr finite difference wants |a| < r and r outside the ring');
   const g = kerrMetric(Mgeom, p.a!);
   const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
   const t = tensorsOf(g, x);
@@ -518,8 +537,6 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
   ]));
 }
 
-const relDiff = (got: number, want: number): number => Math.abs(got - want) / Math.max(Math.abs(want), 1e-30);
-
 /**
  * The headline Ricci scalar is the closed form when the finite difference
  * does not match it. A vacuum metric's finite-difference residual is not
@@ -534,7 +551,7 @@ function stateCurvature(report: CurvatureReport): CurvatureReport {
     ricciScalar = 0;
     ricci = [];
     notes.push('Ricci is 0 for this vacuum metric. A finite-difference residual is not listed.');
-  } else if (exactR !== undefined && relDiff(report.ricciScalar, exactR) > 1e-2) {
+  } else if (exactR !== undefined && relDiff(report.ricciScalar, exactR, 1e-30) > 1e-2) {
     ricciScalar = exactR;
     ricci = [];
     notes.push(
@@ -543,7 +560,7 @@ function stateCurvature(report: CurvatureReport): CurvatureReport {
   }
   const H2 = report.closedForm.H2;
   const rhs = report.closedForm.friedmannRhs;
-  if (H2 !== undefined && rhs !== undefined && relDiff(H2, rhs) > 1e-6) {
+  if (H2 !== undefined && rhs !== undefined && relDiff(H2, rhs, 1e-30) > 1e-6) {
     notes.push(
       'H² and the Friedmann right-hand side differ, so this scale factor is not a solution of the Friedmann equation at the stated ρ, k and Λ. k is a curvature in 1/length²: k = 1 with c in m/s is a curvature radius of about a metre, not the dimensionless k = ±1 of geometrized cosmology.',
     );
@@ -601,7 +618,7 @@ export function schwarzschildCircularOrbit(opts?: {
   const Omega = Math.sqrt(M / r0 ** 3);
   const ut = 1 / Math.sqrt(1 - (3 * rs) / (2 * r0));
   const uphi = Omega * ut;
-  if (!(f > 0) || !Number.isFinite(ut)) throw new Error('circular orbit needs r > 1.5 r_s');
+  if (!(f > 0) || !Number.isFinite(ut)) throw new MetricValueError('circular orbit needs r > 1.5 r_s');
 
   // The closed-form Schwarzschild Christoffel symbols, polar terms included:
   // with u^θ = 0 and θ = π/2 the polar terms stay zero to roundoff.
@@ -620,7 +637,7 @@ export function schwarzschildCircularOrbit(opts?: {
  */
 export function kerrIscoRadius(aOverM: number): { readonly prograde: number; readonly retrograde: number } {
   const chi = aOverM;
-  if (!(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
+  if (!(Math.abs(chi) <= 1)) throw new MetricValueError('|a/M| must be at most 1');
   const z1 = 1 + Math.cbrt(1 - chi * chi) * (Math.cbrt(1 + chi) + Math.cbrt(1 - chi));
   const z2 = Math.sqrt(3 * chi * chi + z1 * z1);
   const inner = Math.sqrt((3 - z1) * (3 + z1 + 2 * z2));
@@ -634,7 +651,7 @@ export function kerrIscoRadius(aOverM: number): { readonly prograde: number; rea
  */
 export function kerrPhotonRadius(aOverM: number): { readonly prograde: number; readonly retrograde: number } {
   const chi = aOverM;
-  if (!(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
+  if (!(Math.abs(chi) <= 1)) throw new MetricValueError('|a/M| must be at most 1');
   return {
     prograde: 2 * (1 + Math.cos((2 / 3) * Math.acos(-chi))),
     retrograde: 2 * (1 + Math.cos((2 / 3) * Math.acos(chi))),
@@ -687,7 +704,7 @@ function equatorialCircular(M: number, a: number, r: number, prograde: boolean):
   const Omega = (sign * sqrtM) / (r ** 1.5 + sign * a * sqrtM);
   const g0 = kerrMetric(M, a)([0, r, Math.PI / 2, 0]);
   const norm = -(g0[0]![0]! + 2 * Omega * g0[0]![3]! + Omega * Omega * g0[3]![3]!);
-  if (!(norm > 0) || !Number.isFinite(Omega)) throw new Error('circular orbit is not timelike at this radius');
+  if (!(norm > 0) || !Number.isFinite(Omega)) throw new MetricValueError('circular orbit is not timelike at this radius');
   const ut = 1 / Math.sqrt(norm);
   const uphi = Omega * ut;
   return {
@@ -736,7 +753,7 @@ function solveSpherical(M: number, a: number, r: number, Q: number, mu2: number,
     const { j11, j12, j21, j22 } = sphericalJacobian(aHat, rHat, E, L);
     const det = j11 * j22 - j12 * j21;
     const scale = Math.max(1, Math.abs(j11), Math.abs(j12), Math.abs(j21), Math.abs(j22));
-    if (!Number.isFinite(det) || Math.abs(det) < 1e-18 * scale * scale) throw new Error('spherical-orbit Jacobian is singular');
+    if (!Number.isFinite(det) || Math.abs(det) < 1e-18 * scale * scale) throw new MetricValueError('spherical-orbit Jacobian is singular');
     const stepE = (j22 * f1 - j12 * f2) / det;
     const stepL = (-j21 * f1 + j11 * f2) / det;
     E -= stepE;
@@ -750,7 +767,7 @@ function solveSpherical(M: number, a: number, r: number, Q: number, mu2: number,
       Math.abs(f2) < 1e-6 * room;
     if (settled) return { E, L: L * M };
   }
-  throw new Error('spherical orbit did not converge');
+  throw new MetricValueError('spherical orbit did not converge');
 }
 
 /**
@@ -767,7 +784,7 @@ export function kerrSphericalTimelike(opts?: {
 }): SphericalConstants & { readonly R: number; readonly Rp: number } {
   const M = opts?.M ?? 1;
   const chi = opts?.aOverM ?? 0;
-  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('spherical orbit wants M > 0 and |a/M| ≤ 1');
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new MetricValueError('spherical orbit wants M > 0 and |a/M| ≤ 1');
   const a = chi * M;
   const r = (opts?.rOverM ?? 10) * M;
   const Q = opts?.Q ?? 0;
@@ -795,23 +812,23 @@ export function kerrSphericalPhoton(opts?: {
   const M = opts?.M ?? 1;
   const chi = opts?.aOverM ?? 0;
   const rHat = opts?.rOverM;
-  if (!(M > 0) || !(Math.abs(chi) > 0 && Math.abs(chi) <= 1)) throw new Error('spherical photon orbit wants M > 0 and 0 < |a/M| ≤ 1');
-  if (rHat === undefined) throw new Error('spherical photon orbit needs rOverM');
+  if (!(M > 0) || !(Math.abs(chi) > 0 && Math.abs(chi) <= 1)) throw new MetricValueError('spherical photon orbit wants M > 0 and 0 < |a/M| ≤ 1');
+  if (rHat === undefined) throw new MetricValueError('spherical photon orbit needs rOverM');
   const ends = kerrPhotonRadius(chi);
   const lo = Math.min(ends.prograde, ends.retrograde);
   const hi = Math.max(ends.prograde, ends.retrograde);
   if (!(rHat >= lo - 1e-9 && rHat <= hi + 1e-9)) {
-    throw new Error('spherical photon radius lies between the prograde and retrograde photon orbits');
+    throw new MetricValueError('spherical photon radius lies between the prograde and retrograde photon orbits');
   }
   const a = chi * M;
   const r = rHat * M;
-  if (!(Math.abs(r - M) > 1e-9 * M)) throw new Error('extremal prograde photon orbit sits on the horizon');
+  if (!(Math.abs(r - M) > 1e-9 * M)) throw new MetricValueError('extremal prograde photon orbit sits on the horizon');
   const Delta = r * r - 2 * M * r + a * a;
   const E = 1;
   const L = E * ((r * r + a * a) / a - (2 * r * Delta) / (a * (r - M)));
   const P = E * (r * r + a * a) - a * L;
   const Q = (P * P) / Delta - (L - a * E) ** 2;
-  if (Q < -1e-8 * M * M) throw new Error('no spherical photon orbit at this radius');
+  if (Q < -1e-8 * M * M) throw new MetricValueError('no spherical photon orbit at this radius');
   return { E, L, Q: Q < 0 ? 0 : Q };
 }
 
@@ -829,14 +846,14 @@ export function kerrTurningPointOrbit(opts: {
 }): SphericalConstants {
   const M = opts.M ?? 1;
   const chi = opts.aOverM ?? 0;
-  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('turning-point orbit wants M > 0 and |a/M| ≤ 1');
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new MetricValueError('turning-point orbit wants M > 0 and |a/M| ≤ 1');
   const a = chi * M;
   const r = (opts.rOverM ?? 10) * M;
   const theta = opts.theta;
   const s = Math.sin(theta);
   const c = Math.cos(theta);
   if (!(Math.abs(s) > 1e-3) || !(Math.abs(c) > 1e-4)) {
-    throw new Error('turning-point θ must sit off the equator and off the pole');
+    throw new MetricValueError('turning-point θ must sit off the equator and off the pole');
   }
   const seed = equatorialCircular(M, a, r, opts.prograde !== false);
   let Q = seed.L * seed.L * c * c;
@@ -847,11 +864,11 @@ export function kerrTurningPointOrbit(opts: {
     E = solved.E;
     L = solved.L;
     const next = c * c * (a * a * (1 - E * E) + (L * L) / (s * s));
-    if (!Number.isFinite(next) || next < 0) throw new Error('turning-point Carter constant left the physical range');
-    if (Math.abs(next - Q) <= 1e-9 * Math.max(1, Math.abs(next))) return { E, L, Q: next };
+    if (!Number.isFinite(next) || next < 0) throw new MetricValueError('turning-point Carter constant left the physical range');
+    if (withinMixed(Q, next, 1e-9)) return { E, L, Q: next };
     Q = next;
   }
-  throw new Error('turning-point Carter constant did not converge');
+  throw new MetricValueError('turning-point Carter constant did not converge');
 }
 
 function kerrMetricDerivatives(M: number, a: number, r: number, theta: number): { readonly dr: number[][]; readonly dth: number[][] } {
@@ -964,15 +981,15 @@ function carterState(
 ): number[] {
   const c = Math.cos(theta);
   const s = Math.sin(theta);
-  if (!(Math.abs(s) > 1e-6)) throw new Error('Boyer–Lindquist geodesic wants θ away from the poles');
+  if (!(Math.abs(s) > 1e-6)) throw new MetricValueError('Boyer–Lindquist geodesic wants θ away from the poles');
   const Sigma = r * r + a * a * c * c;
   const Delta = r * r - 2 * M * r + a * a;
-  if (!(Delta > 0)) throw new Error('geodesic start must be outside the horizon');
+  if (!(Delta > 0)) throw new MetricValueError('geodesic start must be outside the horizon');
   const R = radialPotential(M, a, r, E, L, Q, mu2);
   const Theta = Q - c * c * (a * a * (mu2 - E * E) + (L * L) / (s * s));
   const scale = Math.max(1, E * E, L * L, Math.abs(Q));
-  if (R < -1e-8 * scale && !allowOffShell) throw new Error('radial potential is negative at the start');
-  if (Theta < -1e-8 * scale && !allowOffShell) throw new Error('polar potential is negative at the start');
+  if (R < -1e-8 * scale && !allowOffShell) throw new MetricValueError('radial potential is negative at the start');
+  if (Theta < -1e-8 * scale && !allowOffShell) throw new MetricValueError('polar potential is negative at the start');
   const g = kerrMetric(M, a)([0, r, theta, 0]);
   const det = g[0]![0]! * g[3]![3]! - g[0]![3]! * g[0]![3]!;
   const ut = (g[3]![3]! * -E - g[0]![3]! * L) / det;
@@ -1069,7 +1086,7 @@ export function kerrGeodesic(opts: {
 }): KerrGeodesicSample {
   const M = opts.M ?? 1;
   const chi = opts.aOverM ?? 0;
-  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('Kerr geodesic wants M > 0 and |a/M| ≤ 1');
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new MetricValueError('Kerr geodesic wants M > 0 and |a/M| ≤ 1');
   const a = chi * M;
   const r = (opts.rOverM ?? 10) * M;
   const theta = opts.theta ?? Math.PI / 2;
@@ -1101,7 +1118,7 @@ export function schwarzschildGeodesic(opts: {
   readonly steps?: number;
 }): KerrGeodesicSample {
   const M = opts.M ?? 1;
-  if (!(M > 0)) throw new Error('Schwarzschild geodesic wants M > 0');
+  if (!(M > 0)) throw new MetricValueError('Schwarzschild geodesic wants M > 0');
   const r = (opts.rOverM ?? 10) * M;
   const theta = opts.theta ?? Math.PI / 2;
   const steps = opts.steps ?? 80;
@@ -1129,7 +1146,7 @@ export function kerrEquatorialCircular(opts?: {
   const M = opts?.M ?? 1;
   const chi = opts?.aOverM ?? 0;
   const rOverM = opts?.rOverM ?? 10;
-  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new MetricValueError('|a/M| must be at most 1');
   const eq = equatorialCircular(M, chi * M, rOverM * M, opts?.prograde !== false);
   return kerrGeodesic({
     M,

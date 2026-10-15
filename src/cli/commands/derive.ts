@@ -3,8 +3,8 @@
  * (with `--formula`) verify it and recover the dimensionless prefactor.
  * Transposed verbatim from bin/upt.mjs's `derive()` (lines 313-385, the
  * post-crash-fix body — `format(r.dim)`/`format(target.dim)` on the
- * dimension-check line), plus `--json`. `fmtMono`/`BASES`/`dimsEqualTol`
- * move here with it.
+ * dimension-check line), plus `--json`. `fmtMono` moves here with it; the
+ * dimension equality is the library's `equals` (through `api.dimensionsEqual`).
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
@@ -67,10 +67,6 @@ const fmtMono = (m: Readonly<Record<string, number>>): string =>
     .filter(([, e]) => Math.abs(e) > 1e-9)
     .map(([n, e]) => (e === 1 ? n : `${n}^${e}`))
     .join('·') || '(dimensionless)';
-
-const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
-const dimsEqualTol = (a: Dimension, b: Dimension): boolean =>
-  BASES.every((k) => Math.abs((a[k] || 0) - (b[k] || 0)) < 1e-9);
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err } = ctx;
@@ -172,7 +168,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         throw new UsageError(`upt derive: ${hyphenSubtractionNote(r, formula)}. Declare it as an argument:${asConstant} ${sym}:<dimension>.`);
       }
     } else {
-      const matches = dimsEqualTol(r.dim!, target.dim);
+      const matches = api.dimensionsEqual(r.dim!, target.dim);
       if (!matches) failed = true;
       textOut(
         `  formula dimension: ${api.format(r.dim!)}`
@@ -193,7 +189,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     // named after a registered constant is that constant, as in `upt map --equation`.
     const isConstant = (g: { name: string; dim: Dimension }): boolean => {
       const c = api.CONSTANTS[g.name];
-      return c !== undefined && dimsEqualTol(c.dim, g.dim);
+      return c !== undefined && api.dimensionsEqual(c.dim, g.dim);
     };
     const variables = governing.filter((g) => !isConstant(g));
     const compiled = cf;
@@ -205,7 +201,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           Object.fromEntries(
             governing.map((g) => [
               formulaSymbol(g.name),
-              isConstant(g) ? api.CONSTANTS[g.name]!.value : values[g.name.replace(/_/g, '-')]!,
+              isConstant(g) ? api.CONSTANTS[g.name]!.value : values[api.foldName(g.name)]!,
             ]),
           ),
         ),
@@ -213,9 +209,16 @@ async function run(ctx: CommandCtx): Promise<number> {
     const relationSources = variables.map((g) => ({ name: g.name, dim: g.dim }));
     catalogEdges = api.matchingCatalogEdges(target.name, relationSources);
     const printComparisons = (): void => {
-      for (const line of api.describeKnownRelation(canonicalComparisons!, target.name, relationSources)) {
+      // describeKnownRelation's first lines are one per comparison, in order (then the catalog
+      // edges), so line i belongs to comparison i when i is below the comparison count.
+      api.describeKnownRelation(canonicalComparisons!, target.name, relationSources).forEach((line, i) => {
         textOut(`  ${line}`);
-      }
+        // A form mismatch names which exponent differs (the log-design fit), beneath its line.
+        const c = canonicalComparisons![i];
+        if (c?.kind === 'form' && c.exponentDifference !== undefined) {
+          textOut(`      ${api.describeExponentDifference(c.exponentDifference)}`);
+        }
+      });
       for (const line of conventionLines(canonicalComparisons!.map((c) => c.id))) textOut(`  ${line}`);
     };
     if (canonicalCheckFailed(canonicalComparisons)) failed = true;
@@ -234,26 +237,27 @@ async function run(ctx: CommandCtx): Promise<number> {
       }).exit;
     }
 
-    const ratios: number[] = [];
-    for (let j = 0; j < 3; j++) {
-      const scope: Record<string, number> = {};
-      governing.forEach((g, i) => {
-        scope[formulaSymbol(g.name)] = Math.pow(1.7 + i, 1 + 0.3 * j);
-      });
-      let cand = 1;
-      for (const g of governing) cand *= Math.pow(scope[formulaSymbol(g.name)]!, det.monomial?.[g.name] || 0);
-      try {
-        ratios.push(cf.evaluate(scope) / cand);
-      } catch (e) {
-        // Every symbol is declared (checked above). The scope is this command's own generic
-        // positive inputs, so a failure here is the formula itself (a literal division by zero,
-        // an unknown function), not a value the caller gave: a malformed formula, exit 2.
-        throw new UsageError('upt derive: the formula could not be evaluated at generic inputs: ' + (e as Error).message);
-      }
-    }
-    const spread = api.ratioSpread(ratios);
-    matchesMonomial = spread.cv < 1e-9;
-    if (matchesMonomial) mean = spread.mean;
+    // Variable i takes (1.7 + i)^p at p = 1, 1.3, 1.6, and the ratio to the monomial is one
+    // constant when its coefficient of variation is under 1e-9: this command's own scheme,
+    // through the one fixed-point owner (canonical/fixed-points.ts).
+    const recovered = api.recoverMonomialPrefactor(
+      (point) => {
+        const scope = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), point[g.name]!]));
+        try {
+          return cf.evaluate(scope);
+        } catch (e) {
+          // Every symbol is declared (checked above). The scope is this command's own generic
+          // positive inputs, so a failure here is the formula itself (a literal division by zero,
+          // an unknown function), not a value the caller gave: a malformed formula, exit 2.
+          throw new UsageError('upt derive: the formula could not be evaluated at generic inputs: ' + (e as Error).message);
+        }
+      },
+      det.monomial ?? {},
+      governing.map((g) => g.name),
+      { base: 1.7, step: 1, exponents: [0, 1, 2].map((j) => 1 + 0.3 * j), tolerance: 1e-9, statistic: 'cv' },
+    );
+    matchesMonomial = recovered.matches;
+    if (matchesMonomial) mean = recovered.prefactor;
     else failed = true;
     textOut(
       matchesMonomial
@@ -277,6 +281,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'derive',
   aliases: ['dim'],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Derive the dimensional form of your own equation and, with --formula, the prefactor.',

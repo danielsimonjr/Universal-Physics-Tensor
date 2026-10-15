@@ -29,19 +29,22 @@ import {
   TEMPERATURE,
   ENTROPY,
   DIMENSIONLESS,
+  SPECIFIC_HEAT,
+  ENERGY_FLUX,
+  PRESSURE,
+  VOLUME,
+  THERMAL_CONDUCTIVITY,
+  MASS_DENSITY,
+  DIFFUSIVITY,
 } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
-const SPECIFIC_HEAT = dim(2, 0, -2, 0, -1); // [L² T⁻² Θ⁻¹] (J·kg⁻¹·K⁻¹)
-const SB_FLUX = dim(0, 1, -3); // radiative flux W/m² = [M T⁻³]
+const SB_FLUX = ENERGY_FLUX; // radiative flux W/m² = [M T⁻³]
 const SIGMA_SB = dim(0, 1, -3, 0, -4); // Stefan–Boltzmann σ [M T⁻³ Θ⁻⁴] (Θ is 5th arg)
-const PRESSURE = dim(-1, 1, -2); // [M L⁻¹ T⁻²]
-const VOLUME = dim(3); // [L³]
 const WIEN_B = dim(1, 0, 0, 0, 1); // Wien constant [L Θ]
 const SPECIFIC_LATENT_HEAT = dim(2, 0, -2, 0, 0); // [L² T⁻²] (J·kg⁻¹, no Θ dependence)
-const THERMAL_CONDUCTIVITY = dim(1, 1, -3, 0, -1); // [L M T⁻³ Θ⁻¹] (W·m⁻¹·K⁻¹)
-const DENSITY = dim(-3, 1, 0, 0, 0); // [M L⁻³] (kg/m³)
-const THERMAL_DIFFUSIVITY = dim(2, 0, -1, 0, 0); // [L² T⁻¹] (m²/s)
+const DENSITY = MASS_DENSITY; // [M L⁻³] (kg/m³)
+const THERMAL_DIFFUSIVITY = DIFFUSIVITY; // [L² T⁻¹] (m²/s)
 
 export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
   l1({ name: 'heat-energy', dim: ENERGY }, [
@@ -202,7 +205,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
   // Wien's displacement  λ_max = b / T  (blackbody peak wavelength)
   l1({ name: 'peak-wavelength', dim: LENGTH }, [
     { name: 'b', dim: WIEN_B },
-    { name: 'temperature', dim: dim(0, 0, 0, 0, 1) },
+    { name: 'temperature', dim: TEMPERATURE },
   ], {
     id: 'CE-wien',
     holds: 'temperature > 0',
@@ -210,7 +213,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     domain: 'thermodynamics',
     formula_latex: '\\lambda_{max} = b/T',
     epistemicStatus: 'fully-quantitative',
-    scalarAst: op('/', [sym('b', WIEN_B), sym('temperature', dim(0, 0, 0, 0, 1))]),
+    scalarAst: op('/', [sym('b', WIEN_B), sym('temperature', TEMPERATURE)]),
     regime: { scale: 'classical', force: 'electromagnetic' },
     assumptions: ['blackbody', 'thermal equilibrium'],
     references: ['Wien 1893'],

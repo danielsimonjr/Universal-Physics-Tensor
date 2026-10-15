@@ -1,7 +1,8 @@
 /**
- * The nine oscillator models of design note §3, and the module-local
- * dimension constants S0.1 redefines because the canonical entry files do
- * not export them.
+ * The nine oscillator models of design note §3, and the dimension constants
+ * the atlas families read. Those that `src/dimensional/types.ts` names are
+ * that module's objects (one owner); the canonical entry files read the same
+ * names (`tests/dimensional/named-shape-owner.test.ts` scans them).
  */
 import { describe, it, expect } from 'vitest';
 import { ATLAS_MODELS, getAtlasModel } from '../../src/atlas/oscillators/models.js';
@@ -13,62 +14,33 @@ import {
   RESISTANCE,
   SPRING_CONSTANT,
 } from '../../src/atlas/oscillators/dimensions.js';
+import * as diffusionDims from '../../src/atlas/diffusion/dimensions.js';
+import { VISCOSITY } from '../../src/atlas/diffusion/models.js';
+import { LINEAR_DENSITY, PRESSURE, WAVENUMBER } from '../../src/atlas/waves/models.js';
 import { dim } from '../../src/dimensional/ast-builders.js';
-import type { Dimension } from '../../src/dimensional/types.js';
+import * as types from '../../src/dimensional/types.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 
-/**
- * Read a MODULE-LOCAL `const NAME = dim(...)` out of a canonical entry file
- * and evaluate it.
- *
- * These constants are not exported, so a redefinition under `src/atlas/`
- * cannot be compared against them by importing. Comparing two locally-built
- * `dim(...)` calls would assert nothing — it would pass no matter what the
- * entry file says. Parsing the source is what makes a future divergence in
- * the entry file fail THIS test.
- */
-function dimFromEntryFile(entry: string, name: string): Dimension {
-  const path = fileURLToPath(new URL(`../../src/canonical/entries/${entry}`, import.meta.url));
-  const source = readFileSync(path, 'utf8');
-  const match = new RegExp(`^const ${name} = dim\\(([^)]*)\\);`, 'm').exec(source);
-  if (match === null) throw new Error(`no module-local \`const ${name} = dim(...)\` in ${entry}`);
-  const args = match[1].split(',').map((a) => {
-    const n = Number(a.trim());
-    if (!Number.isFinite(n)) throw new Error(`non-numeric dim() arg in ${entry}:${name}: "${a}"`);
-    return n;
-  });
-  return dim(...(args as [number, number, number, number, number]));
-}
-
-describe('oscillator dimension constants', () => {
-  it('matches the canonical entry files argument-for-argument', () => {
-    // electromagnetism.ts:40-43, quoted in design note §10 Q2.
-    expect(CAPACITANCE).toEqual(dimFromEntryFile('electromagnetism.ts', 'CAPACITANCE'));
-    expect(INDUCTANCE).toEqual(dimFromEntryFile('electromagnetism.ts', 'INDUCTANCE'));
-    // RESISTANCE is needed by model-rlc and is module-local for the same reason.
-    expect(RESISTANCE).toEqual(dimFromEntryFile('electromagnetism.ts', 'RESISTANCE'));
+describe('atlas dimension constants', () => {
+  it('are the named shapes of dimensional/types.ts, the same objects, not copies', () => {
+    expect(CAPACITANCE).toBe(types.CAPACITANCE);
+    expect(INDUCTANCE).toBe(types.INDUCTANCE);
+    expect(RESISTANCE).toBe(types.RESISTANCE);
+    expect(SPRING_CONSTANT).toBe(types.SPRING_CONSTANT);
+    expect(diffusionDims.DIFFUSIVITY).toBe(types.DIFFUSIVITY);
+    expect(diffusionDims.THERMAL_CONDUCTIVITY).toBe(types.THERMAL_CONDUCTIVITY);
+    expect(diffusionDims.SPECIFIC_HEAT).toBe(types.SPECIFIC_HEAT);
+    expect(diffusionDims.DENSITY).toBe(types.MASS_DENSITY);
+    expect(VISCOSITY).toBe(types.VISCOSITY);
+    expect(LINEAR_DENSITY).toBe(types.LINEAR_DENSITY);
+    expect(PRESSURE).toBe(types.PRESSURE);
+    expect(WAVENUMBER).toBe(types.WAVENUMBER);
   });
 
-  it('agrees with BOTH definitions of SPRING_CONSTANT', () => {
-    // mechanics.ts:35 AND fluids-waves.ts:48 — two sources of truth for one
-    // dimension, identical today. Reading both means a future divergence
-    // fails here instead of being silently picked.
-    const mechanics = dimFromEntryFile('mechanics.ts', 'SPRING_CONSTANT');
-    const fluidsWaves = dimFromEntryFile('fluids-waves.ts', 'SPRING_CONSTANT');
-    expect(mechanics).toEqual(fluidsWaves);
-    expect(SPRING_CONSTANT).toEqual(mechanics);
-    expect(SPRING_CONSTANT).toEqual(fluidsWaves);
-  });
-
-  it('detects a divergence between the two SPRING_CONSTANT definitions', () => {
-    // Proves the reader above can FAIL: a parser that always returns the same
-    // thing is indistinguishable from a passing check.
-    expect(dimFromEntryFile('mechanics.ts', 'SPRING_CONSTANT')).not.toEqual(
-      dimFromEntryFile('electromagnetism.ts', 'RESISTANCE'),
-    );
-    expect(() => dimFromEntryFile('mechanics.ts', 'NO_SUCH_CONSTANT')).toThrow();
+  it('CONTROL: an equal copy built by exponents is not the named object, so the identity check can fail', () => {
+    const copy = dim(-2, -1, 4, 2);
+    expect(copy).toEqual(CAPACITANCE);
+    expect(copy).not.toBe(CAPACITANCE);
   });
 
   it('derives DAMPING as M T^-1 and CUBIC_STIFFNESS as M L^-2 T^-2', () => {

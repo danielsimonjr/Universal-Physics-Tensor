@@ -134,15 +134,9 @@ describe('validateKleinGordonEquation — predicate failures', () => {
 // ---------------------------------------------------------------------------
 
 describe('Klein-Gordon as TensorEquationNode Phase 1 demonstrator', () => {
-  it('validator body is THIN (delegates to 3 helpers per the design pattern)', () => {
-    // This isn't really an assertion — it's a meta-test that
-    // documents the design pattern. validateKleinGordonEquation
-    // body length: ~30-40 LOC (vs the ~80 LOC of
-    // validateEinsteinFieldEquation before Phase 0 extraction).
-    // The savings come from the 3 reusable helpers; this test
-    // serves as a "see, the pattern works" anchor.
-    expect(typeof validateKleinGordonEquation).toBe('function');
-  });
+  // The "validator body is THIN" anchor that stood here asserted only that the import was a
+  // function, which no change to the validator could fail (law 3); removed 2026-10-15. The
+  // behaviour the helpers give it is the error-keyword vocabulary below.
 
   it('shares error-keyword vocabulary with EinsteinFieldEquationNode', () => {
     // Both should throw errors containing "dimension" / "symmetry" /

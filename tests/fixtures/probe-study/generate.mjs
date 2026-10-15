@@ -18,6 +18,11 @@ import { fileURLToPath } from 'node:url';
 const SIGMA_S = 0.002;
 const G = 9.81;
 const SCRIPT = 'tests/fixtures/probe-study/generate.mjs';
+/**
+ * The large-amplitude pendulum series T/T0 = 1 + θ0²/16 + 11θ0⁴/3072 + …, declared on every amplitude
+ * family whose rows follow the pendulum law, so the study reports each coefficient's z against it.
+ */
+const PENDULUM_SERIES = { 2: 1 / 16, 4: 11 / 3072 };
 
 function mulberry32(seed) {
   let a = seed >>> 0;
@@ -174,7 +179,7 @@ function largeAmplitudeStudy() {
     ],
     baselines: [{ name: 'small-angle law 2π√(L/g)', formula: '2*pi*sqrt(length/gravity)' }],
     criterion: { alpha: 0.001 },
-    correction: { input: 'amplitude', powers: [2, 4] },
+    correction: { input: 'amplitude', powers: [2, 4], reference: PENDULUM_SERIES },
     observations: [
       ...pendulumRows('e', 'exploratory', 5, WIDE_EXPLORATORY),
       ...pendulumRows('h', 'holdout', 7, WIDE_HOLDOUT),
@@ -350,7 +355,7 @@ function physicalPendulumStudy() {
     baselines: [{ name: 'small-angle law 2π√(L/g)', formula: '2*pi*sqrt(length/gravity)' }],
     criterion: { alpha: 0.001 },
     correction: [
-      { input: 'amplitude', powers: [2, 4] },
+      { input: 'amplitude', powers: [2, 4], reference: PENDULUM_SERIES },
       { input: 'bob_ratio', powers: [2, 4] },
     ],
     observations: [

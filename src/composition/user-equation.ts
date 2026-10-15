@@ -22,7 +22,7 @@
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
 import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
 import { aliasesForTarget, editDistance } from './aliases.js';
@@ -181,9 +181,7 @@ export async function parseUserEquation(
     // No parse tree, so no subtraction was read: the hyphen hint needs the parsed variables.
     throw new UserEquationError(`could not parse the right-hand side '${rhs}': ${(e as Error).message}`);
   }
-  const sources = variables.filter(
-    (v) => !Object.prototype.hasOwnProperty.call(CONSTANTS, v),
-  );
+  const sources = variables.filter((v) => !isRegisteredConstant(v));
   // An all-constant right-hand side (the Planck length) is an equation about a catalog quantity
   // only when its target is one; otherwise it names nothing to check (persona finding W5).
   const targetIsCatalog = names !== undefined && resolveQuantityName(target, names) !== null;

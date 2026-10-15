@@ -15,6 +15,7 @@
  * @internal
  */
 
+import { byKey, compareCodepoint } from '../core/compare.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { normalForm } from '../canonical/normal-form.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
@@ -92,11 +93,8 @@ export function scanCompositionRecovery(
     }
   }
 
-  pairs.sort((a, b) => (pairKey(a) < pairKey(b) ? -1 : pairKey(a) > pairKey(b) ? 1 : 0));
-  hits.sort((a, b) => {
-    const byPair = pairKey(a) < pairKey(b) ? -1 : pairKey(a) > pairKey(b) ? 1 : 0;
-    if (byPair !== 0) return byPair;
-    return a.canonicalId < b.canonicalId ? -1 : a.canonicalId > b.canonicalId ? 1 : 0;
-  });
+  const byPair = byKey(pairKey);
+  pairs.sort(byPair);
+  hits.sort((a, b) => byPair(a, b) || compareCodepoint(a.canonicalId, b.canonicalId));
   return { pairs, hits };
 }

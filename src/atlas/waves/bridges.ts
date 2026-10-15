@@ -19,7 +19,7 @@
 import { FORCE, FREQUENCY, VELOCITY } from '../../dimensional/types.js';
 import { DENSITY } from '../diffusion/dimensions.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
-import { deriveRegimeGroups } from '../regime.js';
+import { makeRegime } from '../regime.js';
 import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { LINEAR_DENSITY, PRESSURE, WAVENUMBER, WAVES_FAMILY_NAME } from './models.js';
@@ -46,19 +46,16 @@ export const BRIDGE_STRING_WAVE: AtlasBridge = {
     'the transverse geometry: the wave equation does not know u is a displacement',
   ],
   sideConditions: ['small slopes |y_x| ≪ 1', 'uniform tension and density', 'perfectly flexible'],
-  regime: {
-    family: WAVES_FAMILY_NAME,
-    inequalities: [],
-    groupDefinitions: deriveRegimeGroups(
-      WAVES_FAMILY_NAME,
-      [
-        { name: 'F', dim: FORCE },
-        { name: 'mu', dim: LINEAR_DENSITY },
-        { name: 'c', dim: VELOCITY },
-      ],
-      [],
-    ),
-  },
+  regime: makeRegime(
+    WAVES_FAMILY_NAME,
+    [
+      { name: 'F', dim: FORCE },
+      { name: 'mu', dim: LINEAR_DENSITY },
+      { name: 'c', dim: VELOCITY },
+    ],
+    [],
+    [],
+  ),
   counterexamples: [],
   witnesses: [
     {
@@ -87,11 +84,7 @@ export const BRIDGE_WAVE_DALEMBERT: AtlasBridge = {
     'boundary conditions: on a bounded domain f and g are fixed only up to reflections',
   ],
   sideConditions: ['infinite line, or boundaries handled by the method of images', 'u ∈ C²'],
-  regime: {
-    family: WAVES_FAMILY_NAME,
-    inequalities: [],
-    groupDefinitions: deriveRegimeGroups(WAVES_FAMILY_NAME, [{ name: 'c', dim: VELOCITY }], []),
-  },
+  regime: makeRegime(WAVES_FAMILY_NAME, [{ name: 'c', dim: VELOCITY }], [], []),
   counterexamples: [],
   witnesses: [
     {
@@ -134,9 +127,16 @@ export const BRIDGE_SOUND_SPEED: AtlasBridge = {
     'adiabatic compression (no heat exchange within a wavelength)',
     'fluid at rest, no ambient flow',
   ],
-  regime: {
-    family: WAVES_FAMILY_NAME,
-    inequalities: [
+  regime: makeRegime(
+    WAVES_FAMILY_NAME,
+    [
+      { name: 'rho0', dim: DENSITY },
+      { name: 'p0', dim: PRESSURE },
+      { name: 'p1', dim: PRESSURE },
+      { name: 'c', dim: VELOCITY },
+    ],
+    ['gamma'],
+    [
       {
         group: 'p0 · p1^-1',
         op: '>=',
@@ -144,17 +144,7 @@ export const BRIDGE_SOUND_SPEED: AtlasBridge = {
         alias: '|p′| ≪ p₀ (machine form p₀/p₁ ≥ 100)',
       },
     ],
-    groupDefinitions: deriveRegimeGroups(
-      WAVES_FAMILY_NAME,
-      [
-        { name: 'rho0', dim: DENSITY },
-        { name: 'p0', dim: PRESSURE },
-        { name: 'p1', dim: PRESSURE },
-        { name: 'c', dim: VELOCITY },
-      ],
-      ['gamma'],
-    ),
-  },
+  ),
   counterexamples: [
     {
       description:
@@ -232,9 +222,15 @@ export const BRIDGE_KLEIN_GORDON_WAVE: AtlasBridge = {
     // A phase-velocity error. The record says it is not uniform in time.
     uniformity: ['phase velocity of one Fourier mode, for ω₀/(ck) ≤ 0.1'],
   }),
-  regime: {
-    family: WAVES_FAMILY_NAME,
-    inequalities: [
+  regime: makeRegime(
+    WAVES_FAMILY_NAME,
+    [
+      { name: 'c', dim: VELOCITY },
+      { name: 'omega0', dim: FREQUENCY },
+      { name: 'k', dim: WAVENUMBER },
+    ],
+    [],
+    [
       {
         group: 'c · omega0^-1 · k',
         op: '>=',
@@ -242,16 +238,7 @@ export const BRIDGE_KLEIN_GORDON_WAVE: AtlasBridge = {
         alias: 'ω₀/(c k) ≤ 0.1',
       },
     ],
-    groupDefinitions: deriveRegimeGroups(
-      WAVES_FAMILY_NAME,
-      [
-        { name: 'c', dim: VELOCITY },
-        { name: 'omega0', dim: FREQUENCY },
-        { name: 'k', dim: WAVENUMBER },
-      ],
-      [],
-    ),
-  },
+  ),
   counterexamples: [
     {
       description:

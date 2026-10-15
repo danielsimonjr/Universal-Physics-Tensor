@@ -22,18 +22,10 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
-import { equals } from '../dimensional/algebra.js';
+import { equals, isDimensionless } from '../dimensional/algebra.js';
 import { DIMENSION_RENAMES, quantityIdForSpelling } from '../dimensional/formula-names.js';
-import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
-
-const isDimensionless = (d: Dimension): boolean =>
-  d.L === 0 &&
-  d.M === 0 &&
-  d.T === 0 &&
-  d.I === 0 &&
-  d.Theta === 0 &&
-  d.N === 0 &&
-  d.J === 0;
+import { isRegisteredConstant, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 
 /** Token for a node that carries no structural content (a dimensionless factor). */
 const UNIT = '1';
@@ -74,8 +66,8 @@ export function canonicalQuantityName(name: string, dim: Dimension): string {
  */
 function isDroppableConstant(name: string): boolean {
   return (
-    name in CONSTANTS ||
-    Number.isFinite(Number(name)) ||
+    isRegisteredConstant(name) ||
+    isDecimalLiteral(name) ||
     NAMED_DIMENSIONLESS_CONSTANTS.has(name) ||
     piMultipleValue(name) !== undefined
   );

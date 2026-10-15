@@ -20,11 +20,9 @@
 
 import type { Dimension } from './types.js';
 import { DIMENSIONLESS, LENGTH } from './types.js';
-import { divide, power, EXPONENT_TOL } from './algebra.js';
+import { BASES, divide, power, EXPONENT_TOL } from './algebra.js';
 import type { ExprNode } from './validator.js';
 import { validate } from './validator.js';
-
-const BASES: ReadonlyArray<keyof Dimension> = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'];
 
 /**
  * Rebuild `node`, replacing the dimension of every `symbol` named `name` with

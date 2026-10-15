@@ -135,14 +135,23 @@ describe('K3: a result carries the envelope and exits 0 or 3; an error (1, 2) wr
   it('the error table names every registered command', () => {
     expect(Object.keys(ERRORS).sort()).toEqual(listCommandNames());
   });
-  it.each(Object.entries(ERRORS))('%s: a failing invocation exits 1 or 2 with empty stdout, --json or not', async (_name, argv) => {
+  it.each(Object.entries(ERRORS))('%s: a failing invocation exits 1 or 2 with empty stdout; under --json, evaluate alone answers in the envelope', async (_name, argv) => {
     const text = await run(argv);
     expect([1, 2]).toContain(text.code);
     expect(text.out).toBe('');
     if (_name !== 'chain') {
       const json = await run([...argv, '--json']);
       expect([1, 2]).toContain(json.code);
-      expect(json.out).toBe('');
+      if (_name === 'evaluate') {
+        // Since 2026-10-15 `upt evaluate --json` writes the refusal as an error envelope on
+        // stdout (cli/README.md §Hardening) with the same exit code, and nothing on stderr.
+        const envelope = JSON.parse(json.out) as { command: string; error: { exitCode: number } };
+        expect(envelope.command).toBe('evaluate');
+        expect(envelope.error.exitCode).toBe(json.code);
+        expect(json.err).toBe('');
+      } else {
+        expect(json.out).toBe('');
+      }
     }
   });
   it('no command returns 1 or 2 after writing an envelope (static scan of every emitJson site)', () => {

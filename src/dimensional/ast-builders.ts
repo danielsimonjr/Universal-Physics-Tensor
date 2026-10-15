@@ -30,3 +30,14 @@ export function sym(name: string, dim: Dimension): ExprNode {
 export function dim(L = 0, M = 0, T = 0, I = 0, Theta = 0, N = 0, J = 0): Dimension {
   return { L, M, T, I, Theta, N, J };
 }
+
+/**
+ * `base ^ exponent`, with the exponent a dimensionless literal written `String(exponent)`;
+ * exponent 1 returns `base` itself. The factor both monomial builders share
+ * (`monomialToExpr` in composition/probe/generator.ts, `fromMonomial` in
+ * composition/proposed-bridges.ts), which arrange their factors differently.
+ */
+export function symbolPower(base: ExprNode, exponent: number): ExprNode {
+  if (exponent === 1) return base;
+  return { kind: 'op', op: '^', args: [base, sym(String(exponent), dim())] };
+}

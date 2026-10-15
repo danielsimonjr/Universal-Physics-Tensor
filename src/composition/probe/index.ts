@@ -72,6 +72,10 @@ export { openManifest, closeManifest } from './run-manifest.js';
 export { canTransition, applyStatus, statusRank, ProbeCandidateStore } from './candidate-store.js';
 export { monomialToExpr, generateNative } from './generator.js';
 export type { RawCandidate } from './generator.js';
+/** The rational power law over the π-groups, and the log-design rank the frontier reads. */
+export { powerLawDetermination, powerLawWording, rationalizeExponent, piStructure, logDesign, logDesignRank } from './power-law.js';
+/** The power-law types: the determination, one fitted exponent, a recovered fit, the π-structure and the log-design. */
+export type { PowerLawDetermination, PowerLawExponent, PowerLawFit, PiStructure, LogDesign } from './power-law.js';
 export {
   wrapRelationLinkGaps,
   wrapConnectorGaps,
@@ -89,6 +93,8 @@ export { compareToCorpus, corpusRelativeWording } from './corpus.js';
 export type { CorpusMatch, CorpusComparisonResult } from './corpus.js';
 export { checkDeclaredLimit, checkDeclaredLimits } from './limits.js';
 export type { LimitCheckResult } from './limits.js';
+/** What a declared-limit check found: held, failed, or undecided on too few evaluable rows. */
+export type { LimitOutcome } from './limits.js';
 export { runFalsification, DEFAULT_BATTERIES } from './falsify.js';
 export type { FalsifyInput, FalsifyResult } from './falsify.js';
 export {
@@ -99,6 +105,8 @@ export {
   loadDatasetFromCsv,
   loadSplitCsv,
 } from './dataset.js';
+/** The strict cell reader (a finite number or a decimal string, never a coercion) and the error a dataset raises by row and column. */
+export { readDatasetNumber, DatasetError } from './dataset.js';
 export type { SplitFileDatasets } from './dataset.js';
 export { suggestDiscriminatingPoint, parseDesignBounds } from './experiment-design.js';
 export type { DesignBounds, DesignSuggestion } from './experiment-design.js';
@@ -108,6 +116,10 @@ export {
   probeConservation,
 } from './structure.js';
 export type { ChangepointInput, ChangepointResult, ScaleSymmetryInput } from './structure.js';
+/** The scale-exponent result (slope, standard error, direct p) and the conservation verdict (slope against k·stdErr). */
+export type { ScaleExponentResult, ConservationResult } from './structure.js';
+/** The direct two-sided Student t tail the probes consume instead of MathTS's `2·(1 − CDF)`. */
+export { studentTwoSidedP } from './t-tail.js';
 export { runBackendWorker } from './backend-protocol.js';
 export type { BackendRequest, BackendCandidate, BackendResponse } from './backend-protocol.js';
 export {
@@ -154,3 +166,5 @@ export type {
   StudyCorrectionReport,
   CorrectionStep,
 } from './study.js';
+/** One fitted correction coefficient with its standard error and, when declared, the reference it is compared with. */
+export type { CorrectionCoefficient } from './study.js';

@@ -30,6 +30,7 @@
  * @module dimensional/symbolic-constants
  */
 
+import { withinRel } from '../core/compare.js';
 import type { Dimension } from './types.js';
 import { parseUnit } from './units.js';
 import { CONSTANT_ROWS, constantRow, type ConstantRow } from './constant-rows.js';
@@ -104,7 +105,7 @@ export class ConstantDisagreementError extends Error {
 export function constantAgreement(key: string, value: number): string | null {
   const record = BY_SPELLING.get(key);
   if (record === undefined) return null;
-  if (Math.abs(value - record.value) > CONSTANT_AGREEMENT * Math.abs(record.value)) {
+  if (!withinRel(value, record.value, CONSTANT_AGREEMENT, 0)) {
     throw new ConstantDisagreementError(key, record.name, record.value, value);
   }
   return record.name;
@@ -145,6 +146,18 @@ export const CONSTANTS: Readonly<Record<string, NamedConstantValue>> = Object.fr
     { value: record.value, dim: record.dim },
   ]),
 );
+
+/**
+ * True when `name` is a key of {@link CONSTANTS} itself. `in` on that plain
+ * object is true for `constructor` and every other `Object.prototype` name,
+ * which once read a leaf spelled that way as a constant; this reads the own
+ * properties only, and is the one rule for "a registered constant".
+ *
+ * @internal
+ */
+export function isRegisteredConstant(name: string): boolean {
+  return Object.prototype.hasOwnProperty.call(CONSTANTS, name);
+}
 
 /** What a registered constant is, its SI unit, and where its value comes from (audit I10). @internal */
 export interface ConstantProvenance {

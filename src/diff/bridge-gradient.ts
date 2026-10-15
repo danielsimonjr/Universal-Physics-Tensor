@@ -19,6 +19,8 @@
  * @module diff/bridge-gradient
  */
 
+import { centralPartial } from '../numerical/finite-difference.js';
+
 /**
  * Specification of a differentiable bridge: which parameters can vary, in
  * what order the gradient reports them, the fixed inputs, and the bridge's
@@ -47,6 +49,14 @@ export interface BridgeDiffSpec<Input> {
   readonly defaults: Partial<Input>;
   /** The bridge's scalar evaluator. */
   readonly evaluate: (input: Input) => number;
+  /**
+   * The smallest magnitude the relative step is taken against, per parameter:
+   * for `|x| < floor` the step is `floor·relStep`. A parameter that is zero at
+   * a point of interest (an eccentricity on a circular orbit) needs its scale
+   * stated here, because a relative step at zero is no step. A parameter not
+   * named here has no floor: the step is `|x|·relStep`, and `x = 0` is refused.
+   */
+  readonly stepFloors?: Readonly<Partial<Record<keyof Input & string, number>>>;
 }
 
 /**
@@ -74,12 +84,17 @@ const CENTRAL_DIFF_REL_STEP = Math.cbrt(Number.EPSILON); // ≈ 6.06e-6
  * way to differentiate the catalog's plain-JS closed forms without
  * rewriting them. Needs no engine and is synchronous.
  *
- * For each differentiable param with value `x` it uses a relative step
- * `h = max(|x|, 1)·cbrt(eps)` and the ACTUAL representable denominator
- * `dx = (x + h) − (x − h)` — so the perturbation survives floating-point
- * rounding even at astrophysical scales (e.g. `M ≈ 2e30 kg`). The supplied
- * `params` must contain every key in `spec.paramNames`; non-differentiable
- * fields come from `spec.defaults`.
+ * For each differentiable param with value `x` it uses the relative step
+ * `h = max(|x|, floor)·cbrt(eps)`, where `floor` is the spec's
+ * {@link BridgeDiffSpec.stepFloors} entry for that param (0 when the spec
+ * states none), and the ACTUAL representable denominator
+ * `dx = (x + h) − (x − h)` (`numerical/finite-difference`) — so the
+ * perturbation survives floating-point rounding at astrophysical scales
+ * (`M ≈ 2e30 kg`) and stays relative at atomic ones (a charge of 1.6e-19
+ * takes a step of 1e-24, not the 6e-6 an absolute floor of 1 gave). A param
+ * at exactly 0 with no stated floor is refused with a `RangeError`: there is
+ * no scale to step by. The supplied `params` must contain every key in
+ * `spec.paramNames`; non-differentiable fields come from `spec.defaults`.
  *
  * @public
  */
@@ -124,11 +139,15 @@ export function bridgeGradientNumerical<Input>(
   const gradient: Record<string, number> = {};
   for (const k of spec.paramNames) {
     const x = params[k];
-    const h = Math.max(Math.abs(x), 1) * relStep;
-    const dx = x + h - (x - h); // actual representable step (huge-x safe)
-    const fp = spec.evaluate(buildInput({ key: k, val: x + h }));
-    const fm = spec.evaluate(buildInput({ key: k, val: x - h }));
-    gradient[k] = (fp - fm) / dx;
+    const floor = spec.stepFloors?.[k] ?? 0;
+    const h = Math.max(Math.abs(x), floor) * relStep;
+    if (!(h > 0)) {
+      throw new RangeError(
+        `bridgeGradientNumerical: ${spec.bridgeId}: param '${k}' is ${x} and the spec states no stepFloors['${k}'], ` +
+        `so a relative central-difference step has no scale; state the parameter's scale in the spec's stepFloors.`,
+      );
+    }
+    gradient[k] = centralPartial((p) => spec.evaluate(buildInput({ key: k, val: p[k]! })), { [k]: x }, k, h);
   }
 
   return { value, gradient };

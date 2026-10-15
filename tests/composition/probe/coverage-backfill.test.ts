@@ -445,7 +445,7 @@ describe('falsify / limits / residual / fit extra branches', () => {
 describe('structure abstentions', () => {
   it('abstains on weak changepoints, nonpositive pairs, degenerate x, zero dt', () => {
     const y = [1, 1.01, 1.02, 1.01, 1, 1.02, 1.01, 1];
-    expect(detectMeanChangepoint({ x: y.map((_, i) => i), y }, 10).abstained).toBe(true);
+    expect(detectMeanChangepoint({ x: y.map((_, i) => i), y }).abstained).toBe(true);
     expect(estimateScaleExponent({ x: [-1, -2, -3], y: [1, 2, 3] }).abstained).toBe(true);
     expect(estimateScaleExponent({ x: [1, 1, 1], y: [1, 2, 3] }).abstained).toBe(true);
     expect(probeConservation([1, 2], [5, 5]).abstained).toBe(true);

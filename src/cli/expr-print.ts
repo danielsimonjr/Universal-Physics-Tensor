@@ -9,7 +9,8 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
-import { siUnitOf } from '../dimensional/algebra.js';
+import { BASES, exactlyEquals, isDimensionless, SI_BASE, siUnitOf } from '../dimensional/algebra.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 
 interface PrintStyle {
   readonly times: string;
@@ -79,7 +80,8 @@ const LATEX_NAMES: Readonly<Record<string, string>> = {
 export function latexName(name: string): string {
   const known = LATEX_NAMES[name];
   if (known !== undefined) return known;
-  if (/^[A-Za-z]$/.test(name) || Number.isFinite(Number(name))) return name;
+  // A decimal literal prints as is; `Number()` also read '' and '0x10' as numbers.
+  if (/^[A-Za-z]$/.test(name) || isDecimalLiteral(name)) return name;
   return name.includes('-') ? `\\text{${name}}` : `\\mathrm{${name.replace(/_/g, '\\_')}}`;
 }
 
@@ -114,23 +116,6 @@ export function printLatex(n: ExprNode): string | null {
   }
 }
 
-const SI_BASE: readonly (readonly [keyof Dimension, string])[] = [
-  ['M', 'kg'],
-  ['L', 'm'],
-  ['T', 's'],
-  ['I', 'A'],
-  ['Theta', 'K'],
-  ['N', 'mol'],
-  ['J', 'cd'],
-];
-
-const DIM_KEYS: readonly (keyof Dimension)[] = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'];
-const dimEqual = (a: Dimension, b: Dimension): boolean => DIM_KEYS.every((k) => (a[k] ?? 0) === (b[k] ?? 0));
-const dimPow = (a: Dimension, n: number): Dimension =>
-  Object.fromEntries(DIM_KEYS.map((k) => [k, (a[k] ?? 0) * n])) as unknown as Dimension;
-const dimMul = (a: Dimension, b: Dimension): Dimension =>
-  Object.fromEntries(DIM_KEYS.map((k) => [k, (a[k] ?? 0) + (b[k] ?? 0)])) as unknown as Dimension;
-const isDimensionless = (d: Dimension): boolean => DIM_KEYS.every((k) => (d[k] ?? 0) === 0);
 
 /** One coherent SI unit of the table: a scale of exactly 1 and a dimension. */
 export interface CoherentUnit {
@@ -155,7 +140,7 @@ export function coherentUnits(
   const out: CoherentUnit[] = [];
   const seen: Dimension[] = [];
   const add = (name: string, dim: Dimension): void => {
-    if (isDimensionless(dim) || seen.some((d) => dimEqual(d, dim))) return;
+    if (isDimensionless(dim) || seen.some((d) => exactlyEquals(d, dim))) return;
     seen.push(dim);
     out.push({ name, dim });
   };
@@ -164,7 +149,7 @@ export function coherentUnits(
     if (row.scale.num === 1n && row.scale.den === 1n && row.scale.irrational === 1) add(name, row.dim);
   }
   for (const [k, u] of SI_BASE) {
-    add(u, Object.fromEntries(DIM_KEYS.map((key) => [key, key === k ? 1 : 0])) as unknown as Dimension);
+    add(u, Object.fromEntries(BASES.map((key) => [key, key === k ? 1 : 0])) as unknown as Dimension);
   }
   return out;
 }
@@ -179,6 +164,6 @@ export function coherentUnits(
 export function derivedUnitOf(dim: Dimension, units: readonly CoherentUnit[]): string {
   if (isDimensionless(dim)) return '1';
   const base = new Set(SI_BASE.map(([, u]) => u));
-  const named = units.find((u) => !base.has(u.name) && dimEqual(u.dim, dim));
+  const named = units.find((u) => !base.has(u.name) && exactlyEquals(u.dim, dim));
   return named === undefined ? siUnitOf(dim) : named.name;
 }

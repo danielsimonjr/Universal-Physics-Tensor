@@ -5,8 +5,9 @@
  * link and regime-transition gaps abstain and tell the user to use discover.
  */
 import { readFileSync, statSync } from 'node:fs';
-import type { FlagSpec } from '../args.js';
+import { refuseExtraPositionals, type FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { realFlag } from '../numeric-flag.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
@@ -41,8 +42,9 @@ const FLAGS: FlagSpec[] = [
   { name: '--holdout-tol', valueStyle: 'attached', description: 'Relative holdout RMSE cap.', defaultValue: PROBE_HOLDOUT_TOL_DEFAULT },
   { name: '--worker', valueStyle: 'attached', description: 'Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file.' },
   { name: '--bounds', valueStyle: 'attached', description: 'Bounds for design, as the design subverb reads them.' },
-  { name: '--h1', valueStyle: 'attached', description: 'First hypothesis for design.' },
-  { name: '--h2', valueStyle: 'attached', description: 'Second hypothesis for design.' },
+  { name: '--h1', valueStyle: 'attached', description:
+      "First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused." },
+  { name: '--h2', valueStyle: 'attached', description: 'Second hypothesis for design, an expression-tree JSON file in the form --h1 takes.' },
   { name: '--searchable-only', valueStyle: 'none', description: 'scan: list only Product-B-searchable gaps. This is the default.' },
   { name: '--all', valueStyle: 'none', description: 'scan: include Product A wrappers, which are not searchable here.' },
   { name: '--data', valueStyle: 'attached', description: 'Study file (JSON, or CSV when the name ends in .csv) for study.' },
@@ -81,7 +83,13 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
         \`--problem=FILE\`. The id is not that file.
         scan                 typed frontier gaps (default: searchable only)
         show <gap-id>        one gap
-        run --problem=FILE   bounded native search (MHC / holdout / budget)
+        run --problem=FILE   bounded native search (MHC / holdout / budget).
+                             When the governing variables leave dimensionless
+                             groups, the native enumerator also fits a rational
+                             power law of the π-groups, base · Π πₖ^(p/q) with
+                             q ≤ 6 within 2σ, on the exploratory rows only (the
+                             holdout rows are never fitted); an exponent that is
+                             no such fraction is reported, not a candidate
         candidates           same as run; list stored statuses
         falsify              run + print falsification batteries
         rank                 run + Pareto front
@@ -204,11 +212,13 @@ function isSubverb(s: string | undefined): s is Subverb {
   return SUBVERBS.includes(s as Subverb);
 }
 
+// Each numeric flag: the grammar first (a malformed token is usage, exit 2), the range after
+// (a well-formed value outside it is a bad value, exit 1).
 function budgetFromFlags(api: CommandCtx['api'], flags: Map<string, string[]>) {
   const raw = flags.get('budget-ms')?.[0];
   if (raw === undefined) return undefined;
-  const n = Number(raw);
-  if (!Number.isFinite(n) || n <= 0) {
+  const n = realFlag('probe', '--budget-ms', raw);
+  if (!(n > 0)) {
     throw new CliError('upt probe: --budget-ms must be a positive number');
   }
   return { ...api.DEFAULT_SEARCH_BUDGET, maxWallClockMs: n };
@@ -217,8 +227,8 @@ function budgetFromFlags(api: CommandCtx['api'], flags: Map<string, string[]>) {
 function holdoutTolFromFlags(flags: Map<string, string[]>): number | undefined {
   const raw = flags.get('holdout-tol')?.[0];
   if (raw === undefined) return undefined;
-  const n = Number(raw);
-  if (!Number.isFinite(n) || n <= 0) {
+  const n = realFlag('probe', '--holdout-tol', raw);
+  if (!(n > 0)) {
     throw new CliError('upt probe: --holdout-tol must be a positive number');
   }
   return n;
@@ -241,22 +251,28 @@ function errnoOf(e: unknown): { code?: string; path?: string } {
   };
 }
 
-/** Map probe file/parse failures to CLI errors (no stack traces). */
-function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string): never {
+/**
+ * Map probe file/parse failures to CLI errors (no stack traces). `kind` names what the file was
+ * read as (`a problem file` for `run --problem`, `an expression file` for a `design` hypothesis,
+ * `a bounds file` for its bounds), so a refusal of the loader's own checks says the right thing.
+ */
+function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string, kind = 'a problem file'): never {
   if (e instanceof UsageError || e instanceof CliError) throw e;
   const errno = errnoOf(e);
   if (errno.code === 'ENOENT') {
     throw new CliError(`upt probe: file not found: ${errno.path ?? context ?? 'unknown'}`);
   }
   if (e instanceof SyntaxError) {
+    // The JSON readers prefix the file's path; a context that names it already drops the repeat.
+    const message = context !== undefined && e.message.startsWith(`${context}: `) ? e.message.slice(context.length + 2) : e.message;
     throw new CliError(
-      `upt probe: invalid JSON${context ? ` in ${context}` : ''}: ${e.message}`,
+      `upt probe: invalid JSON${context ? ` in ${context}` : ''}: ${message}`,
     );
   }
   // The loader checks every field it reads and names the one that is wrong.
   if (e instanceof api.ProblemFileError) {
     throw new CliError(
-      `upt probe: ${context ?? 'the file'} is not a problem file: ${e.message}. \`upt help probe\` shows the format.`,
+      `upt probe: ${context ?? 'the file'} is not ${kind}: ${e.message}. \`upt help probe\` shows the format.`,
     );
   }
   // A TypeError or a RangeError past those checks is a field of a shape the loader does not
@@ -301,11 +317,19 @@ function validateWorkerPath(api: CommandCtx['api'], worker: string): string {
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const sub = args.positionals[0];
-  if (!isSubverb(sub)) {
+  if (sub === undefined) {
     throw new UsageError(
       `upt probe needs a subverb (${SUBVERBS.join('|')}). See \`upt help probe\`.`,
     );
   }
+  // A token that is not a subverb is named as such, not reported as a missing one.
+  if (!isSubverb(sub)) {
+    throw new UsageError(
+      `upt probe: '${sub}' is not a subverb (${SUBVERBS.join('|')}). See \`upt help probe\`.`,
+    );
+  }
+  // `show` reads its gap id; every other subverb reads the subverb alone (§Hardening).
+  refuseExtraPositionals(`probe ${sub}`, args.positionals.slice(sub === 'show' ? 2 : 1), 0);
 
   const { graph, source } = resolveGraph(api, args.flags);
 
@@ -387,15 +411,27 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (!h1p || !h2p || !bp) {
       throw new UsageError('upt probe design needs --h1=FILE --h2=FILE --bounds=FILE');
     }
+    // Each file is parsed under its own name, so an invalid JSON message names the file.
+    const parseExpr = (path: string) => {
+      try {
+        return api.parseExprJson(path);
+      } catch (e) {
+        mapProbeError(api, e, path, 'an expression file');
+      }
+    };
+    const h1 = parseExpr(h1p);
+    const h2 = parseExpr(h2p);
+    let bounds;
+    try {
+      bounds = api.parseDesignBounds(readJsonFile(api, bp), bp);
+    } catch (e) {
+      mapProbeError(api, e, bp, 'a bounds file');
+    }
     let suggestion;
     try {
-      suggestion = api.suggestDiscriminatingPoint(
-        api.parseExprJson(h1p),
-        api.parseExprJson(h2p),
-        api.parseDesignBounds(readJsonFile(api, bp), bp),
-      );
+      suggestion = api.suggestDiscriminatingPoint(h1, h2, bounds);
     } catch (e) {
-      mapProbeError(api, e);
+      mapProbeError(api, e, `${h1p}, ${h2p}, ${bp}`);
     }
     if (args.flags.has('json')) {
       emitJson({ command: 'probe', epistemics: EPISTEMICS, result: suggestion }, ctx.write);
@@ -485,8 +521,8 @@ async function run(ctx: CommandCtx): Promise<number> {
 function alphaFromFlags(flags: Map<string, string[]>): number | undefined {
   const raw = flags.get('alpha')?.[0];
   if (raw === undefined) return undefined;
-  const n = Number(raw);
-  if (!Number.isFinite(n) || n <= 0 || n >= 1) {
+  const n = realFlag('probe', '--alpha', raw);
+  if (!(n > 0 && n < 1)) {
     throw new CliError('upt probe: --alpha must be a number in (0, 1)');
   }
   return n;
@@ -551,6 +587,9 @@ function notFalsified(result: {
 export const command: Command = {
   name: 'probe',
   aliases: [],
+  // The subverb, and `show`'s gap id. The arity is the subverb's, so `run` refuses the first
+  // token past what the subverb reads, naming it under `upt probe <subverb>:`.
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Search expressions and residuals. This is not `upt discover`.',

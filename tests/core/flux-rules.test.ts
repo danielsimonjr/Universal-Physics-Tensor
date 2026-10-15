@@ -312,7 +312,7 @@ describe('Type-shape exhaustiveness (compile-time)', () => {
     // @ts-expect-error — 'unknown-rule' is not assignable to FluxRuleKind.
     const wrong: FluxRule = { kind: 'unknown-rule', check: () => ({ ok: true }) };
     void wrong;
-    expect(true).toBe(true);
+    // The check is the @ts-expect-error above (`typecheck:tests`); no runtime stand-in (law 3).
   });
 
   it('FluxDiagnostic.severity union rejects unknown tiers', () => {

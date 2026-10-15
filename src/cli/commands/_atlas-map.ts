@@ -34,11 +34,10 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
 import { publishedUrl } from '../published-url.js';
+import { repoRoot, STORED_RESULTS_PATH, storedResultsFile } from '../stored-results.js';
 import type { AppliedTransport, AtlasBridge, AtlasModel } from '../../cli-api.js';
 import type { EvidenceTag, RelationType } from '../../atlas/types.js';
 import { showInequality } from './regime.js';
@@ -54,8 +53,8 @@ import {
 
 type Api = CommandCtx['api'];
 
-export const ATLAS_SOURCE = `atlas (the models and bridges of every family, ${publishedUrl('src/atlas/families.ts')})`;
-export const LINK_SOURCE = 'AtlasModel.canonicalRefs';
+const ATLAS_SOURCE = `atlas (the models and bridges of every family, ${publishedUrl('src/atlas/families.ts')})`;
+const LINK_SOURCE = 'AtlasModel.canonicalRefs';
 const NO_LINK =
   'no canonical equation recorded in its canonicalRefs (an absent link, not a finding that none exists; ' +
   'nothing is inferred from shared quantities or names)';
@@ -136,18 +135,7 @@ export interface WitnessOutcomes {
   notObserved: string[];
 }
 
-export const STORED_RESULTS_PATH = 'data/atlas/witness-results.json';
 const ARTIFACT_CARRIES = 'the artifact records no commit or date of its own';
-
-/** The repository root, when this module runs from a checkout (src/ or dist/). */
-function repoRoot(): string {
-  return fileURLToPath(new URL('../../../', import.meta.url));
-}
-
-/** The absolute path `--stored` reads, which an experiment record hashes as an input. */
-export function storedResultsFile(): string {
-  return join(repoRoot(), STORED_RESULTS_PATH);
-}
 
 function git(args: string[], cwd: string): string | null {
   try {
@@ -695,8 +683,8 @@ const OBSERVABLE_MATCH =
   'the transformation, and a bridge that records nothing about the observable is counted apart from one that records ' +
   'it as not preserved';
 
-function wordMatcher(term: string): (text: string) => boolean {
-  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function wordMatcher(api: Api, term: string): (text: string) => boolean {
+  const escaped = api.escapeRegExp(term);
   const re = new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}($|[^\\p{L}\\p{N}])`, 'iu');
   return (text) => re.test(text);
 }
@@ -710,7 +698,7 @@ export function buildObservableView(
 ): ObservableView {
   const term = observable.trim();
   if (term.length < 2) throw new CliError(`upt map: --observable='${observable}' must name an observable (two characters or more)`);
-  const hit = wordMatcher(term);
+  const hit = wordMatcher(api, term);
   const models = allModels(api);
   const rows = api.ATLAS_FAMILIES.flatMap((f) => f.bridges.map((b) => ({ family: f.family, b })));
   const matched = rows.map(({ family, b }) => ({
@@ -887,7 +875,7 @@ function judge(b: BridgeView, f: AtlasFilter): 'kept' | 'not-matching' | 'undeci
 }
 
 /** Format the bridge-filter counts shown in text and diagram legends. */
-export function formatAtlasFilterLegend(s: AtlasFilterStats | null): string | null {
+function formatAtlasFilterLegend(s: AtlasFilterStats | null): string | null {
   if (s === null) return null;
   const terms = [
     ...(s.relation !== undefined ? [`relation=${s.relation}`] : []),
@@ -1008,7 +996,7 @@ function outcomeLine(r: WitnessOutcomes): string {
 }
 
 /** Format witness-result provenance and counts for a rendered atlas view. */
-export function resultsLine(t: ResultsTally | undefined): string | null {
+function resultsLine(t: ResultsTally | undefined): string | null {
   if (t === undefined) return null;
   const w = t.witnesses;
   const counts =

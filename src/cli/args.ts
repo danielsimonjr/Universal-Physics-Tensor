@@ -13,7 +13,8 @@ import { UsageError } from './errors.js';
 export interface FlagSpec {
   name: string; // e.g. '--source'
   valueStyle: 'attached' | 'next' | 'either' | 'none';
-  repeatable?: boolean; // only --anchor today
+  /** The flag may be given more than once; the values are kept in order. */
+  repeatable?: boolean;
   /** For 'either'/'next' styles: a missing value stores '' instead of throwing —
    * exists for old-CLI fidelity (--equation's empty-value diagnostic belongs to
    * the command, not the parser). */
@@ -41,13 +42,53 @@ export interface ParsedArgs {
   positionals: string[];
 }
 
-export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): ParsedArgs {
+/**
+ * How many positional arguments a command reads. A command declares it on its registration;
+ * absent means none, and every positional is then a stray token (cli/README.md §Hardening:
+ * nothing typed is silently dropped).
+ */
+export interface PositionalArity {
+  /** The most positionals the command reads; `Infinity` for a list. The token past it is refused. */
+  readonly max: number;
+}
+
+/** No positional is read. The parser's default when a command declares nothing. */
+export const NO_POSITIONALS: PositionalArity = { max: 0 };
+
+/**
+ * Refuse the positional past `max` as a usage error naming the token and the command:
+ * `upt audit: unexpected argument 'junk' (audit takes no positional arguments; see upt help audit)`.
+ * `command` may carry a subverb (`probe scan`), whose first word is the help target.
+ */
+export function refuseExtraPositionals(command: string, positionals: readonly string[], max: number): void {
+  if (positionals.length <= max) return;
+  const takes =
+    max === 0
+      ? `${command} takes no positional arguments`
+      : `${command} takes at most ${max} positional argument${max === 1 ? '' : 's'}`;
+  throw new UsageError(
+    `upt ${command}: unexpected argument '${positionals[max]}' (${takes}; see upt help ${command.split(' ')[0]})`,
+  );
+}
+
+/**
+ * Parse `argv` against the command's flag specs. `positionals` is the command's declared arity
+ * (`Command.positionals`); a token past it, or any token when none is declared, is a `UsageError`.
+ */
+export function parseArgs(
+  command: string,
+  argv: string[],
+  specs: FlagSpec[],
+  arity: PositionalArity = NO_POSITIONALS,
+): ParsedArgs {
   const bySpecName = new Map<string, FlagSpec>();
   for (const spec of specs) bySpecName.set(spec.name, spec);
 
   const flags = new Map<string, string[]>();
   const positionals: string[] = [];
   const hint = `(see upt help ${command})`;
+  // Every flag refusal names the command first, as every other refusal does (`upt audit: ...`).
+  const refuse = (message: string): UsageError => new UsageError(`upt ${command}: ${message}`);
 
   for (let i = 0; i < argv.length; i++) {
     const token = argv[i];
@@ -68,26 +109,26 @@ export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): P
     if (!spec) {
       // The three file options belong to `upt`, not to a command, and are read only before the command.
       if (flagName === '--record' || flagName === '--replay' || flagName === '--show-record') {
-        throw new UsageError(
+        throw refuse(
           `unknown flag '${flagName}' for '${command}' ${hint}; ${flagName} is an option of upt itself and goes before the command: upt ${flagName}=FILE ${command} ...`,
         );
       }
-      throw new UsageError(`unknown flag '${flagName}' for '${command}' ${hint}`);
+      throw refuse(`unknown flag '${flagName}' for '${command}' ${hint}`);
     }
 
     let value: string;
     if (attachedValue !== undefined) {
       if (spec.valueStyle === 'next') {
-        throw new UsageError(
+        throw refuse(
           `flag '${spec.name}' does not accept an attached value; use '${spec.name} VALUE' for '${command}' ${hint}`
         );
       }
       if (spec.valueStyle === 'none') {
-        throw new UsageError(`flag '${spec.name}' takes no value for '${command}' ${hint}`);
+        throw refuse(`flag '${spec.name}' takes no value for '${command}' ${hint}`);
       }
       value = attachedValue;
     } else if (spec.valueStyle === 'attached') {
-      throw new UsageError(`flag '${spec.name}' requires '${spec.name}=VALUE' for '${command}' ${hint}`);
+      throw refuse(`flag '${spec.name}' requires '${spec.name}=VALUE' for '${command}' ${hint}`);
     } else if (spec.valueStyle === 'none') {
       value = '';
     } else {
@@ -95,7 +136,7 @@ export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): P
       const next = argv[i + 1];
       if (next === undefined || next.startsWith('--')) {
         if (!spec.optionalValue) {
-          throw new UsageError(`flag '${spec.name}' requires a value for '${command}' ${hint}`);
+          throw refuse(`flag '${spec.name}' requires a value for '${command}' ${hint}`);
         }
         value = '';
       } else {
@@ -108,7 +149,7 @@ export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): P
     const existing = flags.get(key);
     if (existing) {
       if (!spec.repeatable) {
-        throw new UsageError(`flag '${spec.name}' given more than once for '${command}' ${hint}`);
+        throw refuse(`flag '${spec.name}' given more than once for '${command}' ${hint}`);
       }
       existing.push(value);
     } else {
@@ -116,5 +157,6 @@ export function parseArgs(command: string, argv: string[], specs: FlagSpec[]): P
     }
   }
 
+  refuseExtraPositionals(command, positionals, arity.max);
   return { flags, positionals };
 }

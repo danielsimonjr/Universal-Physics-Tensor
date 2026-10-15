@@ -24,7 +24,7 @@ async function runPatched(name: string, args: string[], patch: Record<string, un
   ]);
   const command = resolveCommand(name)!;
   const c = captureMerged();
-  const code = await command.run({ args: parseArgs(command.name, args, command.flags), api: { ...api, ...patch }, ...c.io } as any);
+  const code = await command.run({ args: parseArgs(command.name, args, command.flags, command.positionals), api: { ...api, ...patch }, ...c.io } as any);
   return { code, text: c.lines.join('') };
 }
 async function json(args: string[]): Promise<any> {
@@ -577,7 +577,10 @@ describe('I18 — two limits swept side by side; where NEITHER applies there is 
     for (const row of env.result.rows) {
       const x = row.value;
       const [nr, wave] = row.paths;
-      if (nr.state === 'claimed') expect(nr.error).toBeCloseTo((x * x / 2 - (Math.sqrt(1 + x * x) - 1)) / (x * x / 2), 12);
+      // d = √(1 + x²) − 1 by expm1/log1p, and the error |d/(x²/2) − 1| = d/(d + 2): no cancellation.
+      // The naive (x²/2 − (√(1 + x²) − 1))/(x²/2) is off by ~2e-12 at x = 0.01, above this window.
+      const d = Math.expm1(0.5 * Math.log1p(x * x));
+      if (nr.state === 'claimed') expect(nr.error).toBeCloseTo(d / (d + 2), 12);
       if (wave.state === 'claimed') expect(wave.error).toBeCloseTo(Math.sqrt(1 + 1 / (x * x)) - 1, 12);
       expect(nr.state === 'claimed').toBe(x <= 0.1 + 1e-12);
       expect(wave.state === 'claimed').toBe(x >= 10 - 1e-9);

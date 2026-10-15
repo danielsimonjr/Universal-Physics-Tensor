@@ -11,9 +11,9 @@ const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf-8'));
 
 const MATHTS: Record<string, string> = {
   '@danielsimonjr/mathts-autograd': '^0.3.18',
-  '@danielsimonjr/mathts-core': '^0.18.0',
+  '@danielsimonjr/mathts-core': '^0.18.1',
   '@danielsimonjr/mathts-expression': '^0.10.2',
-  '@danielsimonjr/mathts-functions': '^0.68.3',
+  '@danielsimonjr/mathts-functions': '^0.68.5',
   '@danielsimonjr/mathts-matrix': '^0.7.8',
   '@danielsimonjr/mathts-parallel': '^0.6.8',
   '@danielsimonjr/mathts-tensor': '^0.2.24',

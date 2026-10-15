@@ -38,7 +38,6 @@ export class NonGeometrizableDimensionError extends UPTError {
   constructor(message: string) {
     super(message);
     this.name = 'NonGeometrizableDimensionError';
-    Object.setPrototypeOf(this, NonGeometrizableDimensionError.prototype);
   }
 }
 

@@ -35,6 +35,39 @@ export interface RepresentativeValue {
   readonly value: number;
   /** Provenance — how the estimate is obtained (a citation or a one-liner). */
   readonly source: string;
+  /**
+   * The value's stated uncertainty, as a standard deviation in decades of `log10|value|`.
+   * Absent means {@link DEFAULT_SIGMA_DECADES}, the table's "good to about one order"; a row
+   * states another only with a source for it. The graded magnitude gate
+   * (`discovery.ts`, `magnitudeP`) reads it; the verdict threshold does not.
+   */
+  readonly sigmaDecades?: number;
+}
+
+/**
+ * The σ in decades a representative value carries when its row states none: one decade, the
+ * precision this table has always claimed ("good to ~1 order"). Not a per-row measurement.
+ *
+ * @internal
+ */
+export const DEFAULT_SIGMA_DECADES = 1;
+
+/**
+ * The σ in decades of a representative value: its own `sigmaDecades`, else the default. A stated
+ * σ that is not a finite number > 0 is refused with a `RangeError` naming the row's source: σ = 0
+ * would make the falsifier's strength 0 (certain) and a negative or NaN σ would make it NaN.
+ *
+ * @internal
+ */
+export function sigmaDecadesOf(rv: RepresentativeValue): number {
+  const sigma = rv.sigmaDecades;
+  if (sigma === undefined) return DEFAULT_SIGMA_DECADES;
+  if (!(Number.isFinite(sigma) && sigma > 0)) {
+    throw new RangeError(
+      `representative value sigmaDecades ${String(sigma)} (source: ${rv.source}) must be a finite number > 0 decades`,
+    );
+  }
+  return sigma;
 }
 
 /**

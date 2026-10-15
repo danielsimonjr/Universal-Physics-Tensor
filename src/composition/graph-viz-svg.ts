@@ -11,6 +11,8 @@
  * @module composition/graph-viz-svg
  */
 
+import type { Viz } from '@viz-js/viz';
+
 /**
  * Thrown by {@link renderDotToSvg} when the optional `@viz-js/viz` peer is not
  * installed. The message names the install command and the no-install
@@ -28,11 +30,13 @@ export class SvgRendererUnavailableError extends Error {
   }
 }
 
-/** The shape we use from `@viz-js/viz` — its `instance()` resolves a renderer. */
+/**
+ * The part of `@viz-js/viz` this module uses: `instance()` resolves the renderer, whose
+ * `renderString` is the peer's own declared type. The peer's types are a devDependency, so the
+ * dynamic import is typed without a cast; at runtime the peer stays optional.
+ */
 interface VizModule {
-  instance(): Promise<{
-    renderString(src: string, options: { format: string }): string;
-  }>;
+  instance(): Promise<Viz>;
 }
 
 /**
@@ -45,7 +49,7 @@ interface VizModule {
 export async function renderDotToSvg(dot: string): Promise<string> {
   let viz: VizModule;
   try {
-    viz = (await import('@viz-js/viz')) as unknown as VizModule;
+    viz = await import('@viz-js/viz');
   } catch {
     throw new SvgRendererUnavailableError();
   }

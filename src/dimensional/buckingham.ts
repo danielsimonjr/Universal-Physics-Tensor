@@ -28,8 +28,7 @@
 import { Fraction } from '@danielsimonjr/mathts-core';
 import { rationalNullspace } from '@danielsimonjr/mathts-functions';
 import type { Dimension } from './types.js';
-
-const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
+import { BASES } from './algebra.js';
 
 /** A named physical quantity with a dimension — the enumerator's input.
  *  Structurally satisfied by a composition `Quantity`. @public */

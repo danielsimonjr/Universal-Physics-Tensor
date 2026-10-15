@@ -57,8 +57,6 @@ export {
   getFormulaDimensionChecker,
 } from './numerical/formula-registry.js';
 export { parseDimensionSpec } from './dimensional/dimension-spec.js';
-/** The mean and coefficient of variation of a set of ratios, what `upt derive` judges a monomial fit by. */
-export { ratioSpread } from './numerical/statistics.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
 export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';
@@ -75,6 +73,10 @@ export {
 export { requestCallerTableConfrontation } from './bridges/caller-table.js';
 /** The catalog row, the id parser (and its non-throwing form), and the relation a numeric id evaluates. */
 export { catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation } from './bridges/catalog-load.js';
+/** The graph key of a catalog number (`be-<n>`): the one place that spelling is written. */
+export { catalogEdgeKey } from './bridges/catalog-load.js';
+/** `_` written as `-`: the one fold every spelling comparison uses. */
+export { foldName } from './dimensional/quantity-registry.js';
 /** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
@@ -101,7 +103,8 @@ export { APPLIED_CASES, runAppliedCase } from './cases/index.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
 /** The unit reader's conversion, its refusal and the rows of the unit table. */
 export { convertValue, UnitError, unitRows } from './dimensional/units.js';
-export { auditAxisDiscrimination } from './composition/axis-audit.js';
+/** The axis-discrimination audit and the level (0.05) at which an axis's evidence is earned. */
+export { auditAxisDiscrimination, AUDIT_ALPHA } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';
 export { AXES } from './composition/axes.js';
 export type { AxisSpec } from './composition/axes.js';
@@ -119,6 +122,13 @@ export { describeDerivedClaim } from './composition/consequence.js';
 // derivation lives in cli/map-evidence.ts, which is what calls it.
 export { filterEdges, formatFilterLegend } from './composition/graph-viz.js';
 export { deriveEdgeEvidence } from './cli/map-evidence.js';
+/**
+ * `upt map --communities | --cycles | --rank-hubs`: layout communities (Louvain, heuristic; never
+ * physics), derivation cycles, and betweenness hub ranking on demand. Internal.
+ */
+export { communitiesOf, derivationCycles, rankHubs } from './composition/graph-structure.js';
+/** The community report, one derivation cycle, and one hub rank, as `upt map` prints them. */
+export type { CommunityReport, DerivationCycle, HubRank } from './composition/graph-structure.js';
 
 /**
  * Experimental Product B (expression / residual search). Not the identification
@@ -193,8 +203,31 @@ export {
   describeKnownRelation,
   matchingCatalogEdges,
 } from './composition/canonical-compare.js';
-export type { CanonicalComparison, CatalogEdgeMatch } from './composition/canonical-compare.js';
+/** The comparison row, the catalog-edge match, and the exponent-difference diagnosis of a form mismatch. */
+export type { CanonicalComparison, CatalogEdgeMatch, ExponentDifference } from './composition/canonical-compare.js';
+/** One line for an exponent difference (`yours/canonical ∝ mass^-1 (R² = 1): …`), for `upt derive` to print. */
+export { describeExponentDifference } from './composition/canonical-compare.js';
+/** One owner for "a constant times that one" (proposal 6): `upt derive` recovers its prefactor here. */
+export {
+  FIXED_POINT_EXPONENTS,
+  constantRatio,
+  fixedPoint,
+  recoverMonomialPrefactor,
+} from './canonical/fixed-points.js';
+/** The fixed-point scheme, the ratio statistic and the recovery result types of `canonical/fixed-points.ts`. */
+export type {
+  ConstantRatio,
+  ConstantRatioOptions,
+  FixedPointScheme,
+  PrefactorRecovery,
+  PrefactorRecoveryScheme,
+  RatioStatistic,
+} from './canonical/fixed-points.js';
 export { CONSTANTS, CONSTANT_PROVENANCE } from './dimensional/symbolic-constants.js';
+/** The one decimal-literal rule (`2`, `1e3`; not `0x2`, `''`, `Infinity`): a symbol name that is a number. */
+export { isDecimalLiteral } from './dimensional/ast-leaves.js';
+/** The one scalar-leaf walk of an `ExprNode`: `op` arguments always, other arms as the caller opts in. */
+export { forEachScalarLeaf } from './dimensional/ast-leaves.js';
 export type { CandidateGrounding, CandidateReadiness } from './composition/grounding.js';
 
 // Atlas Phase 2 CLI surface (`upt regime`, `upt path`). Regime admission and
@@ -250,9 +283,12 @@ export {
   kerrGeodesic,
   kerrTurningPointOrbit,
   MetricMassError,
+  MetricValueError,
   schwarzschildCircularOrbit,
   type MetricId,
 } from './numerical/spacetime-metrics.js';
+/** One split of a `name=value` token; a null is the command's own usage or value error. */
+export { splitAssignment } from './core/assignment.js';
 
 /**
  * Binding readers for `upt eval`, `upt evaluate`, `upt regime`, and `upt path`.
@@ -276,6 +312,8 @@ export { assertSynonymAgreement, expandSynonymValues } from './dimensional/formu
 export { CANONICAL_GROUP_PREFACTORS } from './composition/canonical-prefactors.js';
 /** The one number formatter of explain text. */
 export { formatQuantity, formatExact } from './composition/explain.js';
+/** A fraction printed as a percentage (fixed decimals, or significant digits for a statistic). */
+export { formatPercent } from './core/format.js';
 /** A monomial odd in both carrier charge and mobility with opposite signs. */
 export { CarrierSignError } from './bridges/carrier-sign.js';
 /** The constant values a natural-unit mode overrides. */
@@ -283,7 +321,7 @@ export { naturalConstantOverrides } from './dimensional/natural-units.js';
 /** The constant-value mode a formula is evaluated in: SI, natural, or geometrized. */
 export type { UnitMode } from './dimensional/natural-units.js';
 /** Kebab catalog names rewritten to one symbol each before a formula is parsed. */
-export { rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
+export { escapeRegExp, rewriteCatalogHyphens } from './dimensional/hyphen-names.js';
 /** The ledger id of an orphan-connector pair, when both names are slugs. */
 export { candidateIdIfSlug } from './composition/adjudication.js';
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */

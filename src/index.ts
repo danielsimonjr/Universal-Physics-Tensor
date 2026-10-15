@@ -102,9 +102,10 @@ export {
   AxisSplitError,
 } from './core/labeled-tensor.js';
 
-// v0.8 Proposal 5 — RegimeType extension system. Per P5 Decision #1,
-// ship the mechanism + the 18 v0.6-shipped values pre-registered;
-// closed taxonomy of new physics-regime built-ins deferred to v0.9.
+// v0.8 Proposal 5 — RegimeType extension system: the mechanism, with the 18
+// v0.6-shipped values pre-registered. No further built-in regime is added
+// (owner ruling of 2026-10-09, NOTES.md); a new regime is registered through
+// this mechanism by its caller.
 export type {
   RegimeProvenance,
   RegimeValueBase,
@@ -241,8 +242,11 @@ export type { RicciTensorNode } from './dimensional/validator.js';
 // v0.5.0 curvature layer — Einstein tensor helper (Task 8). `einstein(R, g,
 // gInverse)` wraps a RiemannTensorNode + metric pair and produces the
 // composite G_μν = R_μν − ½ R g_μν as an ExprNode (own validator +
-// lowering arms — no AST rewrite). Vacuum-Einstein scope; matter-coupled
-// `G_μν = κ T_μν` is deferred to v0.6.0+.
+// lowering arms — no AST rewrite). The matter-coupled field-equation node
+// `G_μν = κ T_μν` exists (`EinsteinFieldEquationNode`, validated in
+// dimensional/validator.ts); its numerical lowering is still deferred: the
+// lowering layer refuses a deferred node kind with `NumericalBackendError`
+// and names the evaluator to use instead (numerical/lowering.ts).
 export { einstein } from './dimensional/curvature.js';
 export type { EinsteinTensorNode } from './dimensional/validator.js';
 
@@ -521,15 +525,19 @@ export type {
 // Identifiability classifier (structural over/exactly/under-determined
 // over the composition graph — Consequence 1 of the bridge-inference
 // epistemics note)
+/** The forward closure, the per-target classifier, the sweep, and the log-space rank over the monomial edges. */
 export {
   classifyIdentifiability,
   classifyAll,
   forwardClosure,
+  identifiabilityByRank,
 } from './composition/index.js';
+/** The classifier's verdict, result and option types, and the rank instrument's report. */
 export type {
   IdentifiabilityVerdict,
   IdentifiabilityResult,
   IdentifiabilityOptions,
+  RankIdentifiability,
 } from './composition/index.js';
 
 // Retrodiction harness (the framework's own falsification benchmark —

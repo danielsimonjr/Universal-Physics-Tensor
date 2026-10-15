@@ -15,7 +15,6 @@ export class NumericalBackendError extends UPTError {
   constructor(message: string, options?: { readonly cause?: unknown }) {
     super(message, options);
     this.name = 'NumericalBackendError';
-    Object.setPrototypeOf(this, NumericalBackendError.prototype);
   }
 }
 
@@ -37,7 +36,6 @@ export class EngineCapabilityError extends NumericalBackendError {
       options,
     );
     this.name = 'EngineCapabilityError';
-    Object.setPrototypeOf(this, EngineCapabilityError.prototype);
   }
 }
 
@@ -58,6 +56,5 @@ export class GL4ConvergenceError extends NumericalBackendError {
   constructor(message: string) {
     super(message);
     this.name = 'GL4ConvergenceError';
-    Object.setPrototypeOf(this, GL4ConvergenceError.prototype);
   }
 }

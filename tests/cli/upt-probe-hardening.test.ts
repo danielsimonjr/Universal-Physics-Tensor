@@ -12,6 +12,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { tempDir } from '../helpers/tmp.js';
 
+/** A symbol's dimension record: all seven exponents (the probe validates an expression tree strictly; `{}` is refused). */
+const DIMENSIONLESS_DIM = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(here, '../../bin/upt.mjs');
 const pendulum = resolve(here, '../fixtures/discovery/pendulum-scaling/public/problem.json');
@@ -30,15 +33,28 @@ function run(args: string[]): { status: number; stderr: string } {
 }
 
 describe('upt probe — flag validation', () => {
-  it('rejects non-finite --holdout-tol as a bad value (exit 1)', () => {
+  // A token outside the numeric grammar is a malformed invocation, exit 2 (one exit-code rule
+  // since 2026-10-15; this exited 1 before it). A well-formed value outside the range stays exit 1.
+  it('rejects a non-numeric --holdout-tol as a usage error (exit 2)', () => {
     const { status, stderr } = run([
       'probe',
       'run',
       `--problem=${pendulum}`,
       '--holdout-tol=abc',
     ]);
+    expect(status).toBe(2);
+    expect(stderr).toContain("--holdout-tol 'abc'");
+  });
+
+  it('rejects a non-positive --holdout-tol as a bad value (exit 1)', () => {
+    const { status, stderr } = run([
+      'probe',
+      'run',
+      `--problem=${pendulum}`,
+      '--holdout-tol=-1',
+    ]);
     expect(status).toBe(1);
-    expect(stderr).toContain('--holdout-tol');
+    expect(stderr).toContain('--holdout-tol must be a positive number');
   });
 
   it('rejects Node flag injection via --worker', () => {
@@ -86,7 +102,7 @@ describe('upt probe — file errors', () => {
     const h1 = join(dir, 'h1.json');
     writeFileSync(h1, JSON.stringify({ kind: 'symbol' }));
     const h2 = join(dir, 'h2.json');
-    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
+    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS_DIM }));
     const bounds = join(dir, 'bounds.json');
     writeFileSync(bounds, JSON.stringify({ variables: { x: { min: 0, max: 1 } } }));
     const { status, stderr } = run([
@@ -103,9 +119,9 @@ describe('upt probe — file errors', () => {
   it('rejects design bounds missing variables', () => {
     const dir = tempDir('upt-probe-bounds-');
     const h1 = join(dir, 'h1.json');
-    writeFileSync(h1, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
+    writeFileSync(h1, JSON.stringify({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS_DIM }));
     const h2 = join(dir, 'h2.json');
-    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
+    writeFileSync(h2, JSON.stringify({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS_DIM }));
     const bounds = join(dir, 'bounds.json');
     writeFileSync(bounds, JSON.stringify({ sigma: 1 }));
     const { status, stderr } = run([

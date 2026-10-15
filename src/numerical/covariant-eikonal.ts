@@ -31,8 +31,10 @@
  * @public
  */
 
+import { findRoot, hermiteInterp } from '@danielsimonjr/mathts-functions';
 import { integrateGeodesicGL4 } from './gl4-integrator.js';
-import { C_SI, G_SI } from '../core/constants.js';
+import { C_SI } from '../core/constants.js';
+import { schwarzschildRadius } from './schwarzschild.js';
 import { reconstructNullPr } from './null-ic.js';
 
 // ─── Physical constants (canonical CODATA 2022 + exact-SI definitions) ────
@@ -121,7 +123,7 @@ export interface CovariantEikonalResult {
  * @internal
  */
 function schwarzschildRs(M_kg: number): number {
-  return (2 * G_SI * M_kg) / c2_SI;
+  return schwarzschildRadius(M_kg);
 }
 
 /**
@@ -376,17 +378,38 @@ export async function evaluateCovariantEikonalNumerical(
     domainMinRadius: r_s * 1.01,
   });
 
-  // Find the first snapshot with r ≤ R_near_m and linearly interpolate t.
+  // Find the first snapshot with r ≤ R_near_m and locate the crossing INSIDE
+  // that step with the cubic Hermite interpolant of r(τ) and t(τ), whose
+  // derivatives are the 4-velocity v^μ = g^{μν} p_ν the snapshot already
+  // carries, by MathTS `findRoot` (Brent, residual stop only). A straight line
+  // between the two snapshots is O(h²) in the crossing, and with an impact
+  // parameter r(τ) curves by c² b²/r³: at Earth–Mars with b = 5e10 m that line
+  // put the crossing about 300 m off, a 1e-6 s excess on a 4e-6 s delay (25 %),
+  // independent of the mass. The Hermite crossing is O(h⁴).
+  const velocity = (snap: { readonly x: readonly number[]; readonly p: readonly number[] }): number[] => {
+    const gInv = gInverseFn(snap.x);
+    const v = [0, 0, 0, 0];
+    for (let mu = 0; mu < 4; mu++) {
+      for (let nu = 0; nu < 4; nu++) v[mu]! += gInv[mu * 4 + nu]! * snap.p[nu]!;
+    }
+    return v;
+  };
   let t_geodesic: number | undefined;
   for (let i = 1; i < snapshots.length; i++) {
-    const rPrev = snapshots[i - 1].x[1];
-    const rCurr = snapshots[i].x[1];
+    const prev = snapshots[i - 1]!;
+    const curr = snapshots[i]!;
+    const rPrev = prev.x[1]!;
+    const rCurr = curr.x[1]!;
     if (rPrev > R_near_m && rCurr <= R_near_m) {
-      const tPrev = snapshots[i - 1].x[0];
-      const tCurr = snapshots[i].x[0];
-      // Linear interpolation: alpha = (R_near - rPrev) / (rCurr - rPrev), in [0, 1].
-      const alpha = (R_near_m - rPrev) / (rCurr - rPrev);
-      t_geodesic = tPrev + alpha * (tCurr - tPrev);
+      const dtau = curr.tau - prev.tau;
+      const vPrev = velocity(prev);
+      const vCurr = velocity(curr);
+      const rAt = (s: number): number => hermiteInterp([0, 1], [rPrev, rCurr], [dtau * vPrev[1]!, dtau * vCurr[1]!], s);
+      const sCross =
+        rCurr === R_near_m
+          ? 1
+          : findRoot((s) => rAt(s) - R_near_m, 0, 1, { tol: 1e-15 * R_near_m, xtol: 0, maxIter: 100 });
+      t_geodesic = hermiteInterp([0, 1], [prev.x[0]!, curr.x[0]!], [dtau * vPrev[0]!, dtau * vCurr[0]!], sCross);
       break;
     }
   }

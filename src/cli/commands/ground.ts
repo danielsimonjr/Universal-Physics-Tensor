@@ -139,6 +139,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'ground',
   aliases: [],
+  positionals: { max: 2 },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Show which falsifiers ran on one discovery candidate, and which abstained.',
