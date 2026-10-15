@@ -159,6 +159,7 @@ export type {
   SetTest,
   ModelTest,
   CandidateTest,
+  CorrectionCoefficient,
   StudyDesignSuggestion,
   StudyCorrection,
   StudyCorrectionReport,

@@ -413,7 +413,7 @@ describe('probe study — declared correction family', () => {
     expect(text).toMatch(/declared correction family: m\(x\)·\(1 \+ Σ c_k·amplitude\^p_k\).*extra-sum-of-squares F test at p < α = 0.001/);
     expect(text).toMatch(/amplitude\^2 admitted: F = .* on \(1, 12\)/);
     expect(text).toMatch(/amplitude\^4 not admitted/);
-    expect(text).toMatch(/c₁ = 0\.06\d+ \(fit on exploratory rows\)/);
+    expect(text).toMatch(/c₁ = 0\.06\d+ ± 0\.00\d+ \(fit on exploratory rows\)/);
     expect(text).toMatch(/correction family in 'amplitude' was declared by the file/);
   });
 });

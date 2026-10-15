@@ -5,6 +5,7 @@
  */
 
 import { norm2, pairwiseDot } from '@danielsimonjr/mathts-core';
+import { ols } from '@danielsimonjr/mathts-functions';
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { evalExpr } from '../expr-eval.js';
 import { DEFAULT_HOLDOUT_TOL, type ProbeDataset } from './types.js';
@@ -13,6 +14,12 @@ import { canonicalJson } from './serialize.js';
 
 export interface FitResult {
   readonly prefactor: number;
+  /**
+   * Standard error of the prefactor from the residual scatter of the exploratory rows
+   * (MathTS `ols`, one column, no intercept); null below two finite rows or when the
+   * form is zero on every row.
+   */
+  readonly prefactorStderr: number | null;
   readonly exploratoryRmse: number;
   readonly nExploratory: number;
   readonly holdoutRmse: number | null;
@@ -41,6 +48,28 @@ function observed(rows: ProbeDataset): number[] {
 function rmse(observedValues: readonly number[], predicted: readonly number[]): number {
   const residuals = observedValues.map((obs, i) => scalarDiscrepancy(obs, predicted[i]!, 'additive'));
   return norm2(residuals) / Math.sqrt(residuals.length);
+}
+
+/**
+ * The standard error of the least-squares prefactor: MathTS `ols` on the single
+ * column f with no intercept, the column scaled to order one first because
+ * `ols` tests singularity with an absolute 1e-15 (a column of 1e-9 is refused
+ * unscaled), then unscaled. The estimator is the one `pairwiseDot` ratio above
+ * gives, so the coefficient itself is not read back from here. Null below two
+ * finite rows (no residual degree of freedom) or when f is zero everywhere.
+ */
+function prefactorStderr(fs: readonly number[], ys: readonly number[]): number | null {
+  if (fs.length < 2) return null;
+  const scale = fs.reduce((m, v) => Math.max(m, Math.abs(v)), 0);
+  if (!(scale > 0)) return null;
+  let fit;
+  try {
+    fit = ols(fs.map((v) => [v / scale]), [...ys], { intercept: false });
+  } catch {
+    return null;
+  }
+  const se: unknown = fit.stderr[0];
+  return typeof se === 'number' && Number.isFinite(se) ? se / scale : null;
 }
 
 function predictorKey(row: Readonly<Record<string, number>>, observable: string): string {
@@ -82,14 +111,18 @@ export function fitPrefactor(
   // The least-squares prefactor over the rows where the form is finite: c = f·y / f·f
   // (core `pairwiseDot`, a pairwise sum).
   const finite = f.map((v, i) => [v, y[i]!] as const).filter(([v]) => Number.isFinite(v));
-  const den = pairwiseDot(finite.map(([v]) => v), finite.map(([v]) => v));
-  const prefactor = den > 0 ? pairwiseDot(finite.map(([v]) => v), finite.map(([, obs]) => obs)) / den : 1;
+  const fs = finite.map(([v]) => v);
+  const ys = finite.map(([, obs]) => obs);
+  const den = pairwiseDot(fs, fs);
+  const prefactor = den > 0 ? pairwiseDot(fs, ys) / den : 1;
+  const stderr = den > 0 ? prefactorStderr(fs, ys) : null;
   const pred = predictions(expr, exploratory, prefactor);
   const exploratoryRmse = rmse(y, pred);
 
   if (!holdout || holdout.rows.length === 0) {
     return {
       prefactor,
+      prefactorStderr: stderr,
       exploratoryRmse,
       nExploratory: y.length,
       holdoutRmse: null,
@@ -106,6 +139,7 @@ export function fitPrefactor(
   const holdoutSupported = holdoutRmse <= holdoutTol * scale;
   return {
     prefactor,
+    prefactorStderr: stderr,
     exploratoryRmse,
     nExploratory: y.length,
     holdoutRmse,

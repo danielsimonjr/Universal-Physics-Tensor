@@ -54,7 +54,7 @@ export function formatProbeReport(result: ProbeSearchResult): string {
     const mark = item.pareto ? '●' : '·';
     const fit = result.fits[rec.id];
     const fitBit = fit
-      ? ` ĉ=${fit.prefactor.toPrecision(4)} RMSE_ex=${fit.exploratoryRmse.toPrecision(3)}` +
+      ? ` ĉ=${fit.prefactor.toPrecision(4)}${fit.prefactorStderr !== null ? `±${fit.prefactorStderr.toPrecision(2)}` : ''} RMSE_ex=${fit.exploratoryRmse.toPrecision(3)}` +
         (fit.holdoutRmse != null ? ` RMSE_ho=${fit.holdoutRmse.toPrecision(3)}` : '')
       : '';
     lines.push(

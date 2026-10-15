@@ -409,6 +409,7 @@ export async function runProbeSearch(
         bodyExpression(rec.body),
         fit.prefactor,
         opts.holdoutTol ?? DEFAULT_HOLDOUT_TOL,
+        fit.prefactorStderr,
       );
       rec = applyStatus(rec, 'equivalent-known', corpusRelativeWording(corp), runId, at);
       store.replace(rec);

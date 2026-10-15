@@ -113,7 +113,9 @@ function corpusPrefactor(ast: ExprNode, candidate: ExprNode): number | null {
  * pendulum fitted on finite-amplitude data gives ĉ = 7.39, not 2π. Only a fully
  * quantitative canonical entry records a prefactor; for any other match the
  * note says the fitted value is not compared. `tolerance` is relative (the
- * holdout tolerance of the run).
+ * holdout tolerance of the run) and is what decides agreement; when the fit
+ * carries a standard error `stderr`, the note also states the difference in
+ * σ beside that verdict, and decides nothing by it.
  *
  * @internal
  */
@@ -122,8 +124,14 @@ export function corpusPrefactorNotes(
   candidate: ExprNode,
   fitted: number,
   tolerance: number,
+  stderr?: number | null,
 ): string[] {
   const c = fitted.toPrecision(4);
+  const inSigma = (k: number): string => {
+    if (stderr === undefined || stderr === null || !(stderr > 0)) return '';
+    const z = (fitted - k) / stderr;
+    return `; ${z >= 0 ? '+' : ''}${z.toFixed(1)}σ (σ_ĉ = ${Number(stderr.toPrecision(2))})`;
+  };
   return result.algebraicMatches.map((m) => {
     const entry = m.layer === 'canonical' ? CANONICAL_EQUATIONS.find((e) => e.id === m.id) : undefined;
     let k: number | null = null;
@@ -150,12 +158,13 @@ export function corpusPrefactorNotes(
     if (k === null) return `${m.id} records no prefactor, so the fitted ĉ=${c} is not compared with it`;
     const rel = fitted / k - 1;
     if (Math.abs(rel) <= tolerance) {
-      return `fitted ĉ=${c} agrees with ${m.id}'s prefactor ${k.toPrecision(4)} (within the holdout tolerance ${tolerance})`;
+      return `fitted ĉ=${c} agrees with ${m.id}'s prefactor ${k.toPrecision(4)} (within the holdout tolerance ${tolerance}${inSigma(k)})`;
     }
     const pct = `${rel > 0 ? '+' : ''}${Math.round(rel * 100)}%`;
+    const sigma = inSigma(k);
     return (
       `fitted ĉ=${c} contradicts ${m.id}'s prefactor ${k.toPrecision(4)} (${pct}): ` +
-      "the data may lie outside that relation's regime"
+      `the data may lie outside that relation's regime${sigma === '' ? '' : `; the difference is ${sigma.slice(2)}`}`
     );
   });
 }
