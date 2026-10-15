@@ -37,15 +37,15 @@ Linkage map — how the equations connect via shared quantities  [source: catalo
   derivation cycles (strongly connected components of source→target, where over-determination lives): none — the quantity graph is acyclic
 
   hubs by betweenness centrality (normalised; top 10 of 531 quantities; a cut quantity of the drawing, not a central law):
-     temperature                              0.0059  (degree 17)
-     mass                                     0.0041  (degree 17)
+     temperature                              0.00591  (degree 17)
+     mass                                     0.00409  (degree 17)
      dynamic-exponent-z                       0.0021  (degree 11)
-     magnetic-pressure                        0.0016  (degree 4)
-     thermal-wavelength                       0.0016  (degree 5)
-     magnetic-flux-density                    0.0013  (degree 5)
-     decoherence-rate                         0.0003  (degree 5)
-     relaxation-rate                          0.0003  (degree 5)
-     carrier-density                          0.0003  (degree 8)
-     effective-mass                           0.0001  (degree 6)
+     magnetic-pressure                        0.00157  (degree 4)
+     thermal-wavelength                       0.00157  (degree 5)
+     magnetic-flux-density                    0.00129  (degree 5)
+     decoherence-rate                         0.000328  (degree 5)
+     relaxation-rate                          0.000328  (degree 5)
+     carrier-density                          0.000292  (degree 8)
+     effective-mass                           0.000143  (degree 6)
 
   (a structural map — shared-quantity connectivity, NOT a credibility signal)
