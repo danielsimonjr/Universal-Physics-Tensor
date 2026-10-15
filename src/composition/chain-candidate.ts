@@ -35,7 +35,14 @@ export interface ChainCandidate {
   readonly id?: string;
 }
 
-function classIndex(kind: ChainCandidateKind): number {
+/**
+ * The rank of a class in the four-class order: confirmation 0, restatement
+ * 1, unique monomial 2, unfixed shape 3. `chain-result.ts` orders its
+ * records by this same function; there is no second copy.
+ *
+ * @internal
+ */
+export function chainClassIndex(kind: ChainCandidateKind): number {
   switch (kind) {
     case 'confirmation':
       return 0;
@@ -73,7 +80,7 @@ export function compareChainEdgeIds(left: readonly string[], right: readonly str
  */
 export function orderChainCandidates(candidates: readonly ChainCandidate[]): ChainCandidate[] {
   return [...candidates].sort((a, b) => {
-    const byClass = classIndex(a.kind) - classIndex(b.kind);
+    const byClass = chainClassIndex(a.kind) - chainClassIndex(b.kind);
     if (byClass !== 0) return byClass < 0 ? -1 : 1;
     return compareChainEdgeIds(a.edgeIds, b.edgeIds);
   });

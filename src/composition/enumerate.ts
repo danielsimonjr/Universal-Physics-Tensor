@@ -19,10 +19,16 @@
 
 import type { ExprNode } from '../dimensional/validator.js';
 import type { BridgeEdge } from './edge.js';
-import { CompositionAliasError, UndefinedCompositionError } from './edge.js';
+import {
+  CompositionAliasError,
+  CompositionDimensionError,
+  CompositionJunctionError,
+  UndefinedCompositionError,
+} from './edge.js';
 import { composeEdges } from './compose.js';
 import type { ComposeOptions } from './compose.js';
-import { composeSymbolic } from './compose-symbolic.js';
+import { composeSymbolic, SymbolicCompositionError } from './compose-symbolic.js';
+import { SymbolicEvalError } from './expr-eval.js';
 
 /** One successful pairwise composition found by the enumerator. @public */
 export interface CompositionCandidate {
@@ -207,6 +213,16 @@ export function enumerateCompositionsWithRefusals(
             composedId: `${first.id}>>${second.id}`,
             message: err.message,
           });
+        } else if (
+          !(err instanceof CompositionDimensionError) &&
+          !(err instanceof CompositionJunctionError) &&
+          !(err instanceof SymbolicEvalError)
+        ) {
+          // Only the composer's own refusals are a non-pair: a dimension or junction
+          // failure, or `substitute` declining a node kind while the composed edge's
+          // symbolic form is built. Anything else is the instrument breaking, and a
+          // broken instrument must not read as "no composition here".
+          throw err;
         }
         // A dimension or junction failure stays a silent non-pair.
         continue;
@@ -224,7 +240,11 @@ export function enumerateCompositionsWithRefusals(
           second,
           expr: composeSymbolic(first, second, opts).expr,
         });
-      } catch {
+      } catch (err) {
+        // A pair `composeSymbolic` declines (no symbolic form, no junction leaf, a
+        // non-homogeneous result, or a node kind `substitute` does not read) is
+        // not substitutable. Any other error is rethrown.
+        if (!(err instanceof SymbolicCompositionError) && !(err instanceof SymbolicEvalError)) throw err;
         notSubstitutable.push({ first, second });
       }
     }
