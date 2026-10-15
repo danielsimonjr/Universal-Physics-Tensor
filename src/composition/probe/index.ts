@@ -88,7 +88,7 @@ export type { RankedCandidate } from './scoring.js';
 export { compareToCorpus, corpusRelativeWording } from './corpus.js';
 export type { CorpusMatch, CorpusComparisonResult } from './corpus.js';
 export { checkDeclaredLimit, checkDeclaredLimits } from './limits.js';
-export type { LimitCheckResult } from './limits.js';
+export type { LimitCheckResult, LimitOutcome } from './limits.js';
 export { runFalsification, DEFAULT_BATTERIES } from './falsify.js';
 export type { FalsifyInput, FalsifyResult } from './falsify.js';
 export {
@@ -98,6 +98,8 @@ export {
   loadSplitDatasetsFromJson,
   loadDatasetFromCsv,
   loadSplitCsv,
+  readDatasetNumber,
+  DatasetError,
 } from './dataset.js';
 export type { SplitFileDatasets } from './dataset.js';
 export { suggestDiscriminatingPoint, parseDesignBounds } from './experiment-design.js';

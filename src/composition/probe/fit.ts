@@ -100,8 +100,9 @@ export function fitPrefactor(
   const yh = observed(holdout);
   const ph = predictions(expr, holdout, prefactor);
   const holdoutRmse = rmse(yh, ph);
-  const scale =
-    Math.max(...yh.map(Math.abs), ...ph.map(Math.abs), 1e-12);
+  // A reduce, not `Math.max(...rows)`: a spread of a large holdout overflows the call stack.
+  const maxAbs = (m: number, v: number) => (Number.isFinite(v) ? Math.max(m, Math.abs(v)) : m);
+  const scale = ph.reduce(maxAbs, yh.reduce(maxAbs, 1e-12));
   const holdoutSupported = holdoutRmse <= holdoutTol * scale;
   return {
     prefactor,

@@ -16,7 +16,34 @@ export interface DesignBounds {
   readonly sigma?: number;
 }
 
-/** Coerce unknown JSON into {@link DesignBounds}. @internal */
+/** What a JSON value is, in the words a file author would use. */
+function kindOf(v: unknown): string {
+  if (v === null) return 'null';
+  if (Array.isArray(v)) return 'a list';
+  if (typeof v === 'string') return 'text';
+  if (typeof v === 'number') return Number.isFinite(v) ? 'a number' : String(v);
+  if (typeof v === 'boolean') return 'true or false';
+  return typeof v === 'object' ? 'an object' : typeof v;
+}
+
+/** A finite number, or null: nothing is coerced (`null`, `""` and `"0"` once read as 0). */
+const finite = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+
+/** `{min, max}` as two finite numbers, located by `where` in any refusal. */
+function readRange(spec: Record<string, unknown>, where: string): { min: number; max: number } {
+  const min = finite(spec.min);
+  const max = finite(spec.max);
+  if (min === null || max === null) {
+    throw new Error(`${where} needs finite min/max numbers (found ${kindOf(spec.min)} and ${kindOf(spec.max)})`);
+  }
+  return { min, max };
+}
+
+/**
+ * Coerce unknown JSON into {@link DesignBounds}. Every bound is a finite
+ * number and `steps` a positive integer; a value of another kind is refused,
+ * naming the field and what was found. @internal
+ */
 export function parseDesignBounds(raw: unknown, source: string): DesignBounds {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
     throw new Error(`design bounds at ${source} is not an object`);
@@ -34,22 +61,18 @@ export function parseDesignBounds(raw: unknown, source: string): DesignBounds {
     if (!spec || typeof spec !== 'object' || Array.isArray(spec)) {
       throw new Error(`design bounds at ${source}: variables.${name} is not an object`);
     }
-    const { min, max, steps } = spec as { min?: unknown; max?: unknown; steps?: unknown };
-    const minN = typeof min === 'number' ? min : Number(min);
-    const maxN = typeof max === 'number' ? max : Number(max);
-    if (!Number.isFinite(minN) || !Number.isFinite(maxN)) {
-      throw new Error(`design bounds at ${source}: variables.${name} needs finite min/max`);
+    const where = `design bounds at ${source}: variables.${name}`;
+    const { min, max } = readRange(spec as Record<string, unknown>, where);
+    if (min > max) {
+      throw new Error(`${where} has min > max`);
     }
-    if (minN > maxN) {
-      throw new Error(`design bounds at ${source}: variables.${name} has min > max`);
-    }
-    const entry: { min: number; max: number; steps?: number } = { min: minN, max: maxN };
+    const entry: { min: number; max: number; steps?: number } = { min, max };
+    const { steps } = spec as { steps?: unknown };
     if (steps !== undefined) {
-      const stepsN = typeof steps === 'number' ? steps : Number(steps);
-      if (!Number.isFinite(stepsN) || stepsN <= 0) {
-        throw new Error(`design bounds at ${source}: variables.${name}.steps must be positive`);
+      if (typeof steps !== 'number' || !Number.isInteger(steps) || steps < 1) {
+        throw new Error(`${where}.steps must be a positive integer (found ${typeof steps === 'number' ? steps : kindOf(steps)})`);
       }
-      entry.steps = stepsN;
+      entry.steps = steps;
     }
     variables[name] = entry;
   }
@@ -67,23 +90,18 @@ export function parseDesignBounds(raw: unknown, source: string): DesignBounds {
         if (!r || typeof r !== 'object' || Array.isArray(r)) {
           throw new Error(`design bounds at ${source}: forbidden[${i}].${k} is not an object`);
         }
-        const { min, max } = r as { min?: unknown; max?: unknown };
-        const minN = typeof min === 'number' ? min : Number(min);
-        const maxN = typeof max === 'number' ? max : Number(max);
-        if (!Number.isFinite(minN) || !Number.isFinite(maxN)) {
-          throw new Error(`design bounds at ${source}: forbidden[${i}].${k} needs finite min/max`);
-        }
-        out[k] = { min: minN, max: maxN };
+        out[k] = readRange(r as Record<string, unknown>, `design bounds at ${source}: forbidden[${i}].${k}`);
       }
       return out;
     });
   }
   let sigma: number | undefined;
   if (obj.sigma !== undefined) {
-    sigma = typeof obj.sigma === 'number' ? obj.sigma : Number(obj.sigma);
-    if (!Number.isFinite(sigma) || sigma <= 0) {
-      throw new Error(`design bounds at ${source}: sigma must be a positive number`);
+    const s = finite(obj.sigma);
+    if (s === null || s <= 0) {
+      throw new Error(`design bounds at ${source}: sigma must be a positive number (found ${s === null ? kindOf(obj.sigma) : s})`);
     }
+    sigma = s;
   }
   return { variables, ...(forbidden ? { forbidden } : {}), ...(sigma !== undefined ? { sigma } : {}) };
 }

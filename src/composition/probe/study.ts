@@ -27,6 +27,7 @@
  * @internal
  */
 
+import { pairwiseDot, pairwiseSum } from '@danielsimonjr/mathts-core';
 import { betainc, gammainc, gammaincp } from '@danielsimonjr/mathts-functions';
 import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
@@ -559,22 +560,30 @@ function closeness(chi2: number, dof: number, alpha: number): ClosenessTest {
   return { chi2, dof, pLower, flagged: pLower < alpha / 2 };
 }
 
-/** Weighted straight line y = a + b·x with the effective variance σ_y² + b²σ_x², iterated from b = 1. */
+/**
+ * Weighted straight line y = a + b·x with the effective variance σ_y² + b²σ_x², iterated from b = 1.
+ * The weighted sums are core `pairwiseDot` and `pairwiseSum` (the stable sums), not a `reduce`.
+ */
 function affineFit(pts: readonly { x: number; sx: number; y: number; sy: number }[]): { a: number; b: number; chi2: number } | null {
   let b = 1;
   let a = 0;
+  const xs = pts.map((p) => p.x);
+  const ys = pts.map((p) => p.y);
+  const variance = (slope: number) => pts.map((p) => p.sy ** 2 + slope * slope * p.sx ** 2);
   for (let it = 0; it < 6; it++) {
-    const w = pts.map((p) => 1 / (p.sy ** 2 + b * b * p.sx ** 2));
-    const W = w.reduce((s, v) => s + v, 0);
-    const xm = pts.reduce((s, p, i) => s + w[i]! * p.x, 0) / W;
-    const ym = pts.reduce((s, p, i) => s + w[i]! * p.y, 0) / W;
-    const sxx = pts.reduce((s, p, i) => s + w[i]! * (p.x - xm) ** 2, 0);
-    const sxy = pts.reduce((s, p, i) => s + w[i]! * (p.x - xm) * (p.y - ym), 0);
+    const w = variance(b).map((v) => 1 / v);
+    const W = pairwiseSum(w);
+    const xm = pairwiseDot(w, xs) / W;
+    const ym = pairwiseDot(w, ys) / W;
+    const dx = xs.map((x) => x - xm);
+    const sxx = pairwiseDot(w, dx.map((d) => d * d));
+    const sxy = pairwiseDot(w, dx.map((d, i) => d * (ys[i]! - ym)));
     if (!(sxx > 0) || !Number.isFinite(sxy)) return null;
     b = sxy / sxx;
     a = ym - b * xm;
   }
-  const chi2 = pts.reduce((s, p) => s + (p.y - a - b * p.x) ** 2 / (p.sy ** 2 + b * b * p.sx ** 2), 0);
+  const v = variance(b);
+  const chi2 = pairwiseSum(pts.map((p, i) => (p.y - a - b * p.x) ** 2 / v[i]!));
   return Number.isFinite(chi2) ? { a, b, chi2 } : null;
 }
 
@@ -720,7 +729,9 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
     const where = `${source} line ${n}`;
     const m = /^\s*#\s*([A-Za-z_][\w.()-]*)\s*:\s?(.*)$/.exec(l);
     if (!m) refuse(where, "a declaration is '# key: value'");
-    const [, key, valueText] = m as unknown as [string, string, string];
+    // Both groups are unconditional in the pattern, so a match carries them.
+    const key = m[1]!;
+    const valueText = m[2]!;
     const value = declValue(valueText.trim());
     const path = key.split('.');
     if (key === 'target') {

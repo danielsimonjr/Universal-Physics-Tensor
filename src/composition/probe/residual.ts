@@ -5,6 +5,7 @@
  * @module composition/probe/residual
  */
 
+import { norm2 } from '@danielsimonjr/mathts-core';
 import type { DiscrepancyDefinition, DiscrepancyKind } from './types.js';
 
 export class ResidualError extends Error {
@@ -68,7 +69,12 @@ export function scalarDiscrepancy(
   }
 }
 
-/** RMSE of a discrepancy over paired samples. @internal */
+/**
+ * RMSE of a discrepancy over paired samples: core `norm2` of the discrepancies
+ * (the scaled, overflow-safe 2-norm) over √n. Empty or unequal-length samples
+ * are refused, as before; a non-finite sample still throws from
+ * {@link scalarDiscrepancy}. @internal
+ */
 export function rmse(
   observed: readonly number[],
   predicted: readonly number[],
@@ -78,10 +84,6 @@ export function rmse(
   if (observed.length !== predicted.length || observed.length === 0) {
     throw new ResidualError('rmse: nonempty equal-length samples required');
   }
-  let acc = 0;
-  for (let i = 0; i < observed.length; i++) {
-    const r = scalarDiscrepancy(observed[i], predicted[i], def.kind, scale);
-    acc += r * r;
-  }
-  return Math.sqrt(acc / observed.length);
+  const residuals = observed.map((o, i) => scalarDiscrepancy(o, predicted[i]!, def.kind, scale));
+  return norm2(residuals) / Math.sqrt(residuals.length);
 }

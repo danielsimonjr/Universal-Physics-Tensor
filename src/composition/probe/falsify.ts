@@ -105,6 +105,8 @@ function limitsBattery(checks: readonly LimitCheckResult[]): FalsificationRecord
       detail: fatal.map((c) => c.detail).join('; '),
     };
   }
+  // A non-fatal failure (domain not claimed) and an undecided limit (too few evaluable rows)
+  // both leave the battery inconclusive; neither is a pass.
   const failedNonFatal = checks.filter((c) => !c.passed && !c.fatal);
   if (failedNonFatal.length > 0) {
     return {
