@@ -15,6 +15,8 @@
  * @module dimensional/exact-scale
  * @internal
  */
+import { gcd } from '@danielsimonjr/mathts-functions';
+
 
 /** `num / den × irrational`, with `den > 0` and the fraction in lowest terms. @internal */
 export interface ExactScale {
@@ -24,11 +26,11 @@ export interface ExactScale {
   readonly irrational: number;
 }
 
-function gcd(a: bigint, b: bigint): bigint {
-  let x = a < 0n ? -a : a;
-  let y = b < 0n ? -b : b;
-  while (y !== 0n) [x, y] = [y, x % y];
-  return x;
+/** The bigint gcd, MathTS `gcd` on its `bigint, bigint` signature, read back as the bigint it is. */
+function bigGcd(a: bigint, b: bigint): bigint {
+  const g: unknown = gcd(a, b);
+  if (typeof g !== 'bigint') throw new TypeError('gcd did not return a bigint for bigint arguments');
+  return g < 0n ? -g : g;
 }
 
 function make(num: bigint, den: bigint, irrational: number): ExactScale {
@@ -37,7 +39,7 @@ function make(num: bigint, den: bigint, irrational: number): ExactScale {
     num = -num;
     den = -den;
   }
-  const g = gcd(num, den);
+  const g = bigGcd(num, den);
   return g > 1n ? { num: num / g, den: den / g, irrational } : { num, den, irrational };
 }
 
@@ -153,7 +155,7 @@ function terminatingPlaces(den: bigint): number | null {
 function rationalToNumber(num: bigint, den: bigint): number {
   if (num === 0n) return 0;
   const negative = num < 0n;
-  const g = gcd(num, den);
+  const g = bigGcd(num, den);
   const a = (negative ? -num : num) / g;
   den /= g;
   const places = terminatingPlaces(den);

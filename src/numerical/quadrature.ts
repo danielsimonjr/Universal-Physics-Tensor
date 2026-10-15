@@ -17,7 +17,7 @@
  *
  * @module numerical/quadrature
  */
-import { rootsLegendre } from '@danielsimonjr/mathts-functions';
+import { legendreP, rootsLegendre } from '@danielsimonjr/mathts-functions';
 
 /** A Gauss–Legendre abscissa/weight pair on the reference interval [−1, 1]. @internal */
 interface GaussLegendreNode {
@@ -27,16 +27,16 @@ interface GaussLegendreNode {
 
 const legendre16 = rootsLegendre(16);
 
-/** P₁₆'(x) by the three-term recurrence, for the weight formula. */
+/** `Pₙ(x)`, MathTS `legendreP`, read back as the number it is for a number. */
+function legendre(n: number, x: number): number {
+  const v: unknown = legendreP(n, x);
+  if (typeof v !== 'number') throw new TypeError('legendreP did not return a number for number arguments');
+  return v;
+}
+
+/** P₁₆'(x) = 16 (x P₁₆(x) − P₁₅(x)) / (x² − 1), the derivative identity on MathTS `legendreP`. */
 function legendre16Derivative(x: number): number {
-  let p0 = 1;
-  let p1 = x;
-  for (let k = 2; k <= 16; k++) {
-    const p2 = ((2 * k - 1) * x * p1 - (k - 1) * p0) / k;
-    p0 = p1;
-    p1 = p2;
-  }
-  return (16 * (x * p1 - p0)) / (x * x - 1);
+  return (16 * (x * legendre(16, x) - legendre(15, x))) / (x * x - 1);
 }
 
 /**

@@ -27,6 +27,7 @@
  * @internal
  */
 
+import { betainc, gammainc, gammaincp } from '@danielsimonjr/mathts-functions';
 import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
@@ -809,60 +810,28 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
   return raw;
 }
 
-// --- χ² survival function -------------------------------------------------
+// --- χ² and F survival functions ------------------------------------------
+//
+// MathTS carries the regularized lower incomplete gamma `gammainc` (the
+// series for x < a + 1, else 1 − Q by continued fraction), the upper one
+// `gammaincp` (from `@danielsimonjr/mathts-functions` 0.68.3 the modified
+// Lentz continued fraction for x ≥ a + 1, computed directly; before that it
+// was `1 − gammainc`, which rounded a far upper tail to 0, and the χ² p-value
+// of a bad fit IS that tail) and the regularized incomplete beta `betainc`.
 
-const LANCZOS = [
-  0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059,
-  12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7,
-];
-
-function lnGamma(z: number): number {
-  if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lnGamma(1 - z);
-  const zz = z - 1;
-  let x = LANCZOS[0]!;
-  for (let i = 1; i < LANCZOS.length; i++) x += LANCZOS[i]! / (zz + i);
-  const t = zz + 7.5;
-  return 0.5 * Math.log(2 * Math.PI) + (zz + 0.5) * Math.log(t) - t + Math.log(x);
+/** Regularized lower incomplete gamma P(a, x), MathTS `gammainc`. */
+function gammaP(a: number, x: number): number {
+  const v: unknown = gammainc(a, x);
+  if (typeof v !== 'number') throw new TypeError('gammainc did not return a number for number arguments');
+  return v;
 }
 
-/** The series for the regularized lower incomplete gamma P(a, x); converges fast for x < a + 1. */
-function gammaSeries(a: number, x: number): number {
-  const front = Math.exp(-x + a * Math.log(x) - lnGamma(a));
-  let ap = a;
-  let del = 1 / a;
-  let sum = del;
-  for (let n = 0; n < 1000; n++) {
-    ap += 1;
-    del *= x / ap;
-    sum += del;
-    if (Math.abs(del) < Math.abs(sum) * 1e-16) break;
-  }
-  return sum * front;
-}
-
-/** Regularized upper incomplete gamma Q(a, x). */
+/** Regularized upper incomplete gamma Q(a, x), MathTS `gammaincp` (direct in the upper tail). */
 function gammaQ(a: number, x: number): number {
   if (x <= 0) return 1;
-  if (x < a + 1) return Math.max(0, 1 - gammaSeries(a, x));
-  const front = Math.exp(-x + a * Math.log(x) - lnGamma(a));
-  const tiny = 1e-300;
-  let b = x + 1 - a;
-  let c = 1 / tiny;
-  let d = 1 / b;
-  let h = d;
-  for (let i = 1; i < 1000; i++) {
-    const an = -i * (i - a);
-    b += 2;
-    d = an * d + b;
-    if (Math.abs(d) < tiny) d = tiny;
-    c = b + an / c;
-    if (Math.abs(c) < tiny) c = tiny;
-    d = 1 / d;
-    const del = d * c;
-    h *= del;
-    if (Math.abs(del - 1) < 1e-16) break;
-  }
-  return front * h;
+  const v: unknown = gammaincp(a, x);
+  if (typeof v !== 'number') throw new TypeError('gammaincp did not return a number for number arguments');
+  return v;
 }
 
 /** P(χ²_ν ≥ chi2): the probability of a χ² at least this large if the model and σ are right. @internal */
@@ -873,53 +842,24 @@ export function chiSquareSurvival(chi2: number, dof: number): number {
 }
 
 /**
- * P(χ²_ν ≤ chi2), computed directly in the lower tail, where 1 − Q would
- * round a small probability away. @internal
+ * P(χ²_ν ≤ chi2), computed directly in the lower tail (MathTS `gammainc` is
+ * the series there), where 1 − Q would round a small probability away. @internal
  */
 export function chiSquareCdf(chi2: number, dof: number): number {
   if (!(dof > 0)) throw new RangeError('chiSquareCdf: dof must be positive');
   if (!(chi2 > 0)) return 0;
   const a = dof / 2;
   const x = chi2 / 2;
-  return x < a + 1 ? Math.min(1, gammaSeries(a, x)) : 1 - gammaQ(a, x);
+  return x < a + 1 ? Math.min(1, gammaP(a, x)) : 1 - gammaQ(a, x);
 }
 
-/** Continued fraction for the incomplete beta function (modified Lentz). */
-function betaCf(a: number, b: number, x: number): number {
-  const tiny = 1e-300;
-  let c = 1;
-  let d = 1 - ((a + b) * x) / (a + 1);
-  if (Math.abs(d) < tiny) d = tiny;
-  d = 1 / d;
-  let h = d;
-  for (let m = 1; m < 1000; m++) {
-    const m2 = 2 * m;
-    let aa = (m * (b - m) * x) / ((a + m2 - 1) * (a + m2));
-    d = 1 + aa * d;
-    if (Math.abs(d) < tiny) d = tiny;
-    c = 1 + aa / c;
-    if (Math.abs(c) < tiny) c = tiny;
-    d = 1 / d;
-    h *= d * c;
-    aa = (-(a + m) * (a + b + m) * x) / ((a + m2) * (a + m2 + 1));
-    d = 1 + aa * d;
-    if (Math.abs(d) < tiny) d = tiny;
-    c = 1 + aa / c;
-    if (Math.abs(c) < tiny) c = tiny;
-    d = 1 / d;
-    const del = d * c;
-    h *= del;
-    if (Math.abs(del - 1) < 1e-16) break;
-  }
-  return h;
-}
-
-/** Regularized incomplete beta I_x(a, b). */
+/** Regularized incomplete beta I_x(a, b), MathTS `betainc`. */
 function betaI(a: number, b: number, x: number): number {
   if (x <= 0) return 0;
   if (x >= 1) return 1;
-  const front = Math.exp(lnGamma(a + b) - lnGamma(a) - lnGamma(b) + a * Math.log(x) + b * Math.log(1 - x));
-  return x < (a + 1) / (a + b + 2) ? (front * betaCf(a, b, x)) / a : 1 - (front * betaCf(b, a, 1 - x)) / b;
+  const v: unknown = betainc(a, b, x);
+  if (typeof v !== 'number') throw new TypeError('betainc did not return a number for number arguments');
+  return v;
 }
 
 /** P(F_{d1,d2} ≥ f): the probability of an F ratio at least this large if the extra terms explain nothing. @internal */

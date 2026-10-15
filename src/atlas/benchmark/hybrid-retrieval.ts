@@ -13,6 +13,7 @@
  * @internal
  */
 
+import { pairwiseDot } from '@danielsimonjr/mathts-core';
 import { CANONICAL_EQUATIONS } from '../../canonical/registry.js';
 import { rankByStructure, type CorpusRecord, type RetrievalQuery } from './baselines.js';
 
@@ -97,23 +98,23 @@ export function stubVector(text: string): readonly number[] {
 /** The stub embedder. It does not open a socket. @internal */
 export const stubEmbedder: Embedder = async (texts) => texts.map((text) => stubVector(text));
 
-/** Cosine similarity. Unequal lengths are not a similarity. @internal */
+/**
+ * Cosine similarity, from MathTS core's `pairwiseDot` (pairwise summation over
+ * any `ArrayLike<number>`, the frozen `Float32Array` vectors included; the
+ * typed `dot` of the functions package takes a plain array or a `Float64Array`
+ * only, and routes the latter to an async path). The norms are the same dot
+ * product, so a vector against itself is exactly 1 (`√(x·x) = x`).
+ * Unequal lengths are not a similarity.
+ * @internal
+ */
 export function cosine(a: ArrayLike<number>, b: ArrayLike<number>): number {
   if (a.length !== b.length) {
     throw new EmbeddingUnavailable('reply-not-a-vector');
   }
-  let dot = 0;
-  let na = 0;
-  let nb = 0;
-  for (let i = 0; i < a.length; i++) {
-    const x = a[i]!;
-    const y = b[i]!;
-    dot += x * y;
-    na += x * x;
-    nb += y * y;
-  }
+  const na = pairwiseDot(a, a);
+  const nb = pairwiseDot(b, b);
   if (na === 0 || nb === 0) return 0;
-  return dot / Math.sqrt(na * nb);
+  return pairwiseDot(a, b) / Math.sqrt(na * nb);
 }
 
 /**

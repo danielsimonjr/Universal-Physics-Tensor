@@ -24,6 +24,7 @@
  * @module composition/bridge-analysis
  */
 
+import { ratioSpread } from '../numerical/statistics.js';
 import { constantRecord } from '../dimensional/symbolic-constants.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -247,10 +248,7 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
       for (const [name, exp] of Object.entries(factors)) cand *= Math.pow(i[name]!, exp);
       return e.evaluate(i) / cand;
     });
-    const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-    const cv =
-      Math.sqrt(ratios.reduce((a, b) => a + (b - mean) ** 2, 0) / ratios.length) /
-      Math.abs(mean);
+    const { mean, cv } = ratioSpread(ratios);
     if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean)) {
       return {
         status: 'derived',

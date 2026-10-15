@@ -7,11 +7,17 @@
  * @internal
  */
 
+import { sumSquaredDeviations } from '@danielsimonjr/mathts-core';
+import { linearRegression } from '@danielsimonjr/mathts-functions';
+import { meanOf } from '../../numerical/statistics.js';
+
+/** A series sampled at `x` with values `y`, scanned for a step in its mean. @internal */
 export interface ChangepointInput {
   readonly x: readonly number[];
   readonly y: readonly number[];
 }
 
+/** The best split of {@link detectMeanChangepoint}, or an abstention with its reason. @internal */
 export interface ChangepointResult {
   readonly index: number | null;
   readonly score: number;
@@ -36,11 +42,7 @@ export function detectMeanChangepoint(
   let bestIdx = 1;
   let best = 0;
   for (let i = 2; i < y.length - 2; i++) {
-    const left = y.slice(0, i);
-    const right = y.slice(i);
-    const μL = left.reduce((a, b) => a + b, 0) / left.length;
-    const μR = right.reduce((a, b) => a + b, 0) / right.length;
-    const score = Math.abs(μL - μR);
+    const score = Math.abs(meanOf(y.slice(0, i)) - meanOf(y.slice(i)));
     if (score > best) {
       best = score;
       bestIdx = i;
@@ -52,13 +54,17 @@ export function detectMeanChangepoint(
   return { index: bestIdx, score: best, abstained: false };
 }
 
+/** Positive samples `(x, y)` whose log-log slope is the scale exponent. @internal */
 export interface ScaleSymmetryInput {
   readonly x: readonly number[];
   readonly y: readonly number[];
 }
 
 /**
- * Ordinary-least-squares log-log slope. Abstains if x or y are non-positive.
+ * Ordinary-least-squares log-log slope, MathTS `linearRegression` on the
+ * logs. Abstains if x or y are non-positive, or when the log-x spread
+ * (core `sumSquaredDeviations`, times n: the normal-equation denominator)
+ * is degenerate.
  *
  * @internal
  */
@@ -73,24 +79,12 @@ export function estimateScaleExponent(input: ScaleSymmetryInput): {
   if (pairs.length < 3) {
     return { exponent: null, abstained: true, reason: 'need ≥3 positive (x,y) pairs' };
   }
-  const n = pairs.length;
-  let sX = 0;
-  let sY = 0;
-  let sXX = 0;
-  let sXY = 0;
-  for (const [x, y] of pairs) {
-    const lx = Math.log(x);
-    const ly = Math.log(y);
-    sX += lx;
-    sY += ly;
-    sXX += lx * lx;
-    sXY += lx * ly;
-  }
-  const denom = n * sXX - sX * sX;
-  if (Math.abs(denom) < 1e-18) {
+  const lx = pairs.map(([x]) => Math.log(x));
+  const ly = pairs.map(([, y]) => Math.log(y));
+  if (pairs.length * sumSquaredDeviations(lx) < 1e-18) {
     return { exponent: null, abstained: true, reason: 'degenerate log-x variance' };
   }
-  return { exponent: (n * sXY - sX * sY) / denom, abstained: false };
+  return { exponent: linearRegression(lx, ly).slope, abstained: false };
 }
 
 /**

@@ -21,6 +21,7 @@
  * @module atlas/oscillators/bridges-limits
  */
 
+import { ellipticK } from '@danielsimonjr/mathts-functions';
 import { physjsFormalRef } from '../physjs-ref.js';
 import { deriveRegimeGroups } from '../regime.js';
 import { MissingHorizonError } from '../types.js';
@@ -55,19 +56,11 @@ export function makeApproximation(bound: ApproximationBound): ApproximationBound
   return bound;
 }
 
-/** Arithmetic–geometric mean, the standard evaluation route for `K`. @internal */
-export function agm(a0: number, b0: number): number {
-  let a = a0;
-  let b = b0;
-  for (let i = 0; i < 60 && a !== b; i++) {
-    [a, b] = [(a + b) / 2, Math.sqrt(a * b)];
-  }
-  return a;
-}
-
 /**
  * The EXACT relative period error of the pendulum at amplitude `theta0`:
- * `(2/π) K(sin(θ0/2)) − 1 = 1/AGM(1, cos(θ0/2)) − 1`.
+ * `(2/π) K(sin(θ0/2)) − 1`, with `K` MathTS `ellipticK`, which takes the
+ * PARAMETER `m = k² = sin²(θ0/2)` and evaluates it by the AGM
+ * (`K = π / (2·AGM(1, √(1−m)))`, so this is `1/AGM(1, cos(θ0/2)) − 1`).
  *
  * This is the machine form of `ab-pendulum-linear`'s `delta`. It is SHARP —
  * the bound equals the error it bounds — and it is strictly increasing in
@@ -86,7 +79,10 @@ export function agm(a0: number, b0: number): number {
 export function pendulumPeriodErrorAt(params: Readonly<Record<string, number>>): number {
   const { theta0 } = params;
   if (!Number.isFinite(theta0) || Math.abs(theta0) >= Math.PI) return Infinity;
-  return 1 / agm(1, Math.cos(theta0 / 2)) - 1;
+  const m = Math.sin(theta0 / 2) ** 2;
+  const k: unknown = ellipticK(m);
+  if (typeof k !== 'number') throw new TypeError('ellipticK did not return a number for a number parameter');
+  return (2 / Math.PI) * k - 1;
 }
 
 /**
@@ -175,8 +171,8 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
   bound: makeApproximation({
     K: 1,
     // Sup over `θ0 ≤ 0.5`: the error is strictly increasing in |θ0|, so the
-    // edge value IS the supremum. 0.0158525311014... (AGM), independently
-    // reproduced by quadrature of the complete elliptic integral.
+    // edge value IS the supremum. 0.0158525311014... (MathTS ellipticK, by the
+    // AGM), independently reproduced by quadrature of the complete elliptic integral.
     delta: pendulumPeriodErrorAt({ theta0: 0.5 }),
     deltaAt: pendulumPeriodErrorAt,
     deltaAtBasis: 'closed-form',

@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 10.0.0
-  totalFiles: 364
+  totalFiles: 365
   totalModules: 13
-  totalExports: 2578
+  totalExports: 2580
 entryPoints:
   - file: src/index.ts
     type: main
@@ -101,7 +101,10 @@ modules:
         - recallAtK
     src/atlas/benchmark/hybrid-retrieval.ts:
       description: Optional embedding retrieval. An embedder proposes an order. `rankByStructure`
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - pairwiseDot
       nodeDependencies: []
       internalDependencies:
         - file: ../../canonical/registry.js
@@ -259,7 +262,11 @@ modules:
         - ABLATION_CONFIGS
     src/atlas/benchmark/stats.ts:
       description: Atlas Phase 5, S5.4 — the benchmark's statistics and power report.
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - lgamma
+            - normalQuantile
       nodeDependencies: []
       internalDependencies: []
       exports:
@@ -822,7 +829,9 @@ modules:
       externalDependencies:
         - package: "@danielsimonjr/mathts-functions"
           imports:
+            - lgamma
             - solveODESystem
+            - trapz
       nodeDependencies: []
       internalDependencies: []
       exports:
@@ -1880,7 +1889,10 @@ modules:
         - CONTRACT_DAMPED_RLC
     src/atlas/oscillators/bridges-limits.ts:
       description: The two Phase 0 APPROXIMATION bridges — design note §3, bridges 3 and 4.
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - ellipticK
       nodeDependencies: []
       internalDependencies:
         - file: ../physjs-ref.js
@@ -1922,12 +1934,10 @@ modules:
         - CONTRACT_DAMPED_MASSLESS
         - LIMIT_CONTRACTS
         - makeApproximation
-        - agm
         - pendulumPeriodErrorAt
         - dampedOffsetBoundAt
       functions:
         - makeApproximation
-        - agm
         - pendulumPeriodErrorAt
         - dampedOffsetBoundAt
       constants:
@@ -2108,12 +2118,13 @@ modules:
       externalDependencies:
         - package: "@danielsimonjr/mathts-functions"
           imports:
+            - ellipticK
+            - findRoot
             - solveODESystem
       nodeDependencies: []
       internalDependencies:
         - file: ./bridges-limits.js
           imports:
-            - agm
             - pendulumPeriodErrorAt
       exports:
         - W2
@@ -4788,7 +4799,7 @@ modules:
             - K_B_SI
         - file: ./quadrature.js
           imports:
-            - adaptiveSimpson
+            - adaptiveQuadrature
         - file: ./types.js
           imports:
             - check
@@ -4826,7 +4837,10 @@ modules:
         - BROWNIAN_SPHERE_CASE
     src/cases/damped-resonator.ts:
       description: "Applied case: the free ring-down of a damped resonator, read out over a"
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - findRoot
       nodeDependencies: []
       internalDependencies:
         - file: ../core/constants.js
@@ -4950,7 +4964,11 @@ modules:
         - KEPLER_RV_CASE
     src/cases/lumped-cooling.ts:
       description: "Applied case: a solid sphere cooling (or warming) in a fluid — its"
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - findRoot
+            - solveODESystem
       nodeDependencies: []
       internalDependencies:
         - file: ../core/constants.js
@@ -4984,14 +5002,17 @@ modules:
         - MAX_RADIATION_RATIO
         - LUMPED_COOLING_CASE
     src/cases/quadrature.ts:
-      description: Adaptive Simpson quadrature for the parent-model comparisons of the applied
-      externalDependencies: []
+      description: "Adaptive quadrature for the parent-model comparisons of the applied cases:"
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - quad
       nodeDependencies: []
       internalDependencies: []
       exports:
-        - adaptiveSimpson
+        - adaptiveQuadrature
       functions:
-        - adaptiveSimpson
+        - adaptiveQuadrature
     src/cases/resistor-noise.ts:
       description: "Applied case: the thermal (Johnson–Nyquist) noise voltage of a resistor as an"
       externalDependencies: []
@@ -5009,7 +5030,7 @@ modules:
             - evaluateCatalogRelation
         - file: ./quadrature.js
           imports:
-            - adaptiveSimpson
+            - adaptiveQuadrature
         - file: ./types.js
           imports:
             - check
@@ -7117,6 +7138,10 @@ modules:
           imports:
             - parseDimensionSpec
           reExport: true
+        - file: ./numerical/statistics.js
+          imports:
+            - ratioSpread
+          reExport: true
         - file: ./composition/bridge-prediction.js
           imports:
             - predictMissingBridges
@@ -7637,6 +7662,7 @@ modules:
         - getFormulaParserKind
         - getFormulaDimensionChecker
         - parseDimensionSpec
+        - ratioSpread
         - predictMissingBridges
         - catalogFrontierAccount
         - formatFrontierAccount
@@ -7872,6 +7898,7 @@ modules:
         - getFormulaParserKind
         - getFormulaDimensionChecker
         - parseDimensionSpec
+        - ratioSpread
         - predictMissingBridges
         - catalogFrontierAccount
         - formatFrontierAccount
@@ -8230,6 +8257,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../numerical/statistics.js
+          imports:
+            - ratioSpread
         - file: ../dimensional/symbolic-constants.js
           imports:
             - constantRecord
@@ -10276,7 +10306,11 @@ modules:
         - fingerprintExpr
     src/composition/probe/fit.ts:
       description: Prefactor fit + holdout evaluation. Generation never sees holdout rows.
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - norm2
+            - pairwiseDot
       nodeDependencies: []
       internalDependencies:
         - file: ../../dimensional/ast-types.js
@@ -11319,9 +11353,18 @@ modules:
         - hashCanonical
     src/composition/probe/structure.ts:
       description: "Cheap structure probes: regime changepoint, scale symmetry, conserved dQ/dt."
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - sumSquaredDeviations
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - linearRegression
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../../numerical/statistics.js
+          imports:
+            - meanOf
       exports:
         - detectMeanChangepoint
         - estimateScaleExponent
@@ -11336,7 +11379,12 @@ modules:
         - probeConservation
     src/composition/probe/study.ts:
       description: Falsification-oriented study over calibrated observations (audit §14 I19).
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - betainc
+            - gammainc
+            - gammaincp
       nodeDependencies:
         - module: fs
           imports:
@@ -12895,7 +12943,10 @@ modules:
         - DuplicateCoordinateWarning
     src/dimensional/exact-scale.ts:
       description: Exact unit scales.
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - gcd
       nodeDependencies: []
       internalDependencies: []
       exports:
@@ -17066,6 +17117,11 @@ modules:
     src/numerical/perihelion-finder.ts:
       description: Bisection perihelion finder via cubic-Hermite interpolation on cached
       externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - findRoot
+            - hermiteInterp
+            - median
         - package: universal-physics-tensor
           imports:
             - findPerihelion
@@ -17086,6 +17142,7 @@ modules:
       externalDependencies:
         - package: "@danielsimonjr/mathts-functions"
           imports:
+            - legendreP
             - rootsLegendre
       nodeDependencies: []
       internalDependencies: []
@@ -17188,6 +17245,23 @@ modules:
         - kerrEquatorialCircular
       constants:
         - METRIC_SIGNATURE
+    src/numerical/statistics.ts:
+      description: Scalar statistics read from MathTS, typed back as the numbers they are.
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - mean
+            - std
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - meanOf
+        - ratioSpread
+      interfaces:
+        - RatioSpread
+      functions:
+        - meanOf
+        - ratioSpread
     src/numerical/strides.ts:
       description: Shared stride and flat-index utilities for row-major tensor storage.
       externalDependencies: []
@@ -17794,6 +17868,7 @@ dependencyGraph:
         - src/numerical/perihelion-finder.ts
         - src/numerical/quadrature.ts
         - src/numerical/spacetime-metrics.ts
+        - src/numerical/statistics.ts
         - src/numerical/strides.ts
         - src/numerical/tensor-engine.ts
         - src/numerical/types.ts
@@ -17809,17 +17884,17 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 364
+  totalTypeScriptFiles: 365
   totalModules: 13
-  totalLinesOfCode: 81698
-  totalExports: 2578
+  totalLinesOfCode: 81612
+  totalExports: 2580
   totalClasses: 82
-  totalInterfaces: 467
-  totalFunctions: 783
+  totalInterfaces: 468
+  totalFunctions: 784
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 392
-  totalReExports: 1320
+  totalReExports: 1321
   totalTypeOnlyImports: 511
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

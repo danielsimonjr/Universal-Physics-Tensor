@@ -105,52 +105,30 @@ export class RationalizationError extends Error {
 }
 
 // ---------------------------------------------------------------------------
-// Exact rational arithmetic (number-backed; dimension exponents are small
-// rationals, so reduced fractions never overflow in practice).
+// Exact rational arithmetic: MathTS core `Fraction` (bigint-backed, reduced by
+// its constructor). Dimension exponents are small rationals.
 // ---------------------------------------------------------------------------
-
-interface Frac {
-  readonly n: number;
-  readonly d: number;
-}
-
-function gcd(a: number, b: number): number {
-  a = Math.abs(a);
-  b = Math.abs(b);
-  while (b) {
-    [a, b] = [b, a % b];
-  }
-  return a || 1;
-}
-
-function frac(n: number, d: number): Frac {
-  if (d === 0) throw new RationalizationError('zero denominator');
-  if (d < 0) {
-    n = -n;
-    d = -d;
-  }
-  const g = gcd(n, d);
-  return { n: n / g, d: d / g };
-}
 
 const MAX_DEN = 720;
 
-/** Convert a (possibly rational) exponent to an exact fraction by scanning
- *  small denominators; throws if none matches within tolerance. */
-function toFrac(x: number): Frac {
-  if (Number.isInteger(x)) return { n: x, d: 1 };
+/**
+ * Convert a (possibly rational) exponent to an exact {@link Fraction} by
+ * scanning small denominators; throws if none matches within tolerance. The
+ * scan, not `Fraction.fromNumber`'s continued fraction, is what refuses an
+ * irrational exponent instead of approximating it.
+ */
+function toFrac(x: number): Fraction {
+  if (Number.isInteger(x)) return new Fraction(x, 1);
   for (let d = 2; d <= MAX_DEN; d++) {
     const n = x * d;
     if (Math.abs(n - Math.round(n)) < 1e-9 * Math.max(1, Math.abs(n))) {
-      return frac(Math.round(n), d);
+      return new Fraction(Math.round(n), d);
     }
   }
   throw new RationalizationError(
     `dimension exponent ${x} is not a rational with denominator ≤ ${MAX_DEN}`,
   );
 }
-
-const fZero = (a: Frac): boolean => a.n === 0;
 
 /**
  * Exact null space of the dimension matrix. Exponents pass through as
@@ -159,9 +137,8 @@ const fZero = (a: Frac): boolean => a.n === 0;
  * A matrix with no rows is `0×n`: `{ columns: n }` is the standard basis.
  * MathTS integerizes each vector (content 1, first nonzero entry positive).
  */
-function nullSpace(matrix: Frac[][], cols: number): { basis: number[][]; rank: number } {
-  const entries = matrix.map((row) => row.map((f) => new Fraction(f.n, f.d)));
-  const solved = rationalNullspace(entries, { columns: cols });
+function nullSpace(matrix: Fraction[][], cols: number): { basis: number[][]; rank: number } {
+  const solved = rationalNullspace(matrix, { columns: cols });
   const basis = solved.basis.map((vec) =>
     vec.map((entry) => {
       if (entry.denominator !== 1n) {
@@ -176,14 +153,14 @@ function nullSpace(matrix: Frac[][], cols: number): { basis: number[][]; rank: n
 }
 
 function buildMatrix(variables: readonly DimensionalVariable[]): {
-  matrix: Frac[][];
+  matrix: Fraction[][];
   spannedBases: string[];
 } {
   const spannedBases: string[] = [];
-  const matrix: Frac[][] = [];
+  const matrix: Fraction[][] = [];
   for (const base of BASES) {
     const row = variables.map((v) => toFrac(v.dim[base]));
-    if (row.some((f) => !fZero(f))) {
+    if (row.some((f) => !f.isZero())) {
       spannedBases.push(base);
       matrix.push(row);
     }

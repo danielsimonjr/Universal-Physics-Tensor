@@ -77,7 +77,11 @@ describe('signed comparison residuals', () => {
     ]);
     expect(copper.code).toBe(0);
     const line = outputLine(copper.stdout, 'parent_deviation');
-    expect(Number(line.match(/parent_deviation = ([^ ]+)/)?.[1])).toBeCloseTo(-0.000052203242016934936, 12);
+    // 10 places, not 12: the residual is θ/θ̄ − 1 with both near 1, so its absolute precision is
+    // the ratio's, and θ̄ sums eigenvalues located to the bracket's floating-point resolution.
+    // Two equally valid root solvers (bisection, then MathTS findRoot) agree on each eigenvalue to
+    // 2e-15 and move this residual by 6e-13 (2026-10-15); the sign and the label are the claim.
+    expect(Number(line.match(/parent_deviation = ([^ ]+)/)?.[1])).toBeCloseTo(-0.000052203242016934936, 10);
     expectSignedLabel(line);
     expectSignedLabel(meaning(LUMPED_COOLING_CASE.outputs, 'parent_deviation'));
   });

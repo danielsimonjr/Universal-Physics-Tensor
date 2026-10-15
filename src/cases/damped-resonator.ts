@@ -14,6 +14,7 @@
  *
  * @module cases/damped-resonator
  */
+import { findRoot } from '@danielsimonjr/mathts-functions';
 import { K_B_SI } from '../core/constants.js';
 import { check, requirePositive, type AppliedCase } from './types.js';
 
@@ -55,12 +56,10 @@ export function windowedLinewidthHz(alpha: number, T: number): number {
     lo = hi;
     hi += h;
   }
-  for (let k = 0; k < 80; k++) {
-    const mid = (lo + hi) / 2;
-    if (power(mid) > half) lo = mid;
-    else hi = mid;
-  }
-  return (lo + hi) / 2 / Math.PI;
+  // The crossing inside the first step past half power, by MathTS `findRoot` (Brent) on the
+  // order-one residual power/half − 1, to the bracket's floating-point resolution.
+  const crossing = findRoot((dw) => power(dw) / half - 1, lo, hi, { tol: 4 * Number.EPSILON * hi, maxIter: 200 });
+  return crossing / Math.PI;
 }
 
 export const DAMPED_RESONATOR_CASE: AppliedCase = {
