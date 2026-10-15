@@ -55,6 +55,11 @@ export function groupInto<K, V>(items: readonly V[], keyOf: (item: V) => K): Map
  * input position when no `idOf` is given). An item with no key is a cluster of its own; an
  * empty input is no cluster.
  *
+ * Cost: `connectedComponents` takes a dense n×n adjacency matrix, so memory is O(n²) in the
+ * number of items (8·n² bytes as numbers: about 4 MB at n = 700, the order of the quantity
+ * names one discovery context clusters, once per context; 800 MB at n = 10 000). A caller with
+ * thousands of items should expect that, or cluster with a union-find over the key lists.
+ *
  * @internal
  */
 export function clusterBySharedKeys<T>(
