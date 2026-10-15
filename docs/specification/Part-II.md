@@ -672,7 +672,7 @@ These equations link thermal radiation to quantum electromagnetism, an entropy t
 
 **Bridge Equation 164: Planck spectrum**
 
-> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.PlanckSpectrum.planck_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/PlanckSpectrum.lean) states that the Bose factor `1/(exp(x) − 1) = Σ_{n≥1} exp(−n x)` is proved, and that the mode density `8 π ν²/c³` for two polarizations is a hypothesis. Their product is `u (exp(hν/k_B T) − 1) c³ = 8 π h ν³`. The frequency integral is a different record. One polarization is not this density. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Catalog evidence and edge evidence include `formally-proved`.
+> **Proof status as of 2026-10-15.** Kind is `bridge`. [`PhysJS.PlanckSpectrum.planck_eq`](../../lean/PlanckSpectrum.lean) derives the mean energy `h ν/(exp(x) − 1)` of the levels `n h ν` with Boltzmann weights `exp(−n x)`, `x = h ν/(k_B T)`, and proves the Bose factor `1/(exp(x) − 1) = Σ_{n≥1} exp(−n x)`. The mode density `8 π ν²/c³` for two polarizations is a hypothesis. Their product is `u (exp(hν/k_B T) − 1) c³ = 8 π h ν³`. The frequency integral is a different record. One polarization is not this density. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Catalog evidence and edge evidence include `formally-proved`.
 
 > **Evaluator:** catalog record 164 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
@@ -786,7 +786,7 @@ where:
 
 **Bridge Equation 168: Saha ionization constant**
 
-> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Saha.saha_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Saha.lean) states that the thermal factor is `PhysJS.ThermalDeBroglie.wavelength_eq`, so `K = (2 π m k_B T/h²)^{3/2} exp(−I/(k_B T))`. The electron statistical weight `2` and the internal partition functions are not in this statement. The thermal wavelength is not re-proved. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Catalog evidence and edge evidence include `formally-proved`.
+> **Proof status as of 2026-10-15.** Kind is `bridge`. [`PhysJS.Saha.saha_eq`](../../lean/Saha.lean) derives `n₊ n_e/n_A = (g₊ g_e/g_A) λ_e^{−3} exp(−I/(k_B T))` from the equilibrium `μ_A = μ₊ + μ_e` of classical ideal gases with `μ_i = E_i + k_B T ln(n_i λ_i³/g_i)`, the atom and the ion sharing one wavelength. The thermal factor is `PhysJS.ThermalDeBroglie.wavelength_eq`, so with `g₊ g_e = g_A` it is `K = (2 π m k_B T/h²)^{3/2} exp(−I/(k_B T))`. The electron statistical weight `2` and the internal partition functions are the weights `g_i`, which the catalog formula sets to one. The thermal wavelength is not re-proved. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Catalog evidence and edge evidence include `formally-proved`.
 
 > **Evaluator:** catalog record 168 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
@@ -804,7 +804,7 @@ where:
 
 **Dimensions**: The catalog signature is `[L^-3]`.
 
-**Domain**: `m > 0` and `T > 0`. The electron weight `2` is not in this statement.
+**Domain**: `m > 0` and `T > 0`. The catalog formula has unit weights; the electron weight `2` is not in it.
 
 **References**:
 
@@ -842,7 +842,7 @@ where:
 
 **Bridge Equation 170: Onsager reciprocity**
 
-> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.OnsagerReciprocity.onsager_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/OnsagerReciprocity.lean) states that the mixed partials of `Φ = ½ L11 X1² + L12 X1 X2 + ½ L22 X2²` are both `L12`, so `L12 = L21`. The thermoelectric instance applies `PhysJS.KelvinRelation.peltier_eq` and does not re-prove `Π = S T`. An antisymmetric cross term produces no entropy. The magnetic case `L12(B) = L21(−B)` is not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Catalog evidence and edge evidence include `formally-proved`.
+> **Proof status as of 2026-10-15.** Kind is `bridge`. [`PhysJS.OnsagerReciprocity.onsager_eq`](../../lean/OnsagerReciprocity.lean) derives `L12 = L21` from detailed balance `π_i W_ij = π_j W_ji` of the jump rates, with each kinetic coefficient the initial slope `Σ π_i A_b(i) W_ij A_a(j)` of an equilibrium cross-correlation. A three-state cycle without detailed balance has unequal coefficients. The mixed partials of `Φ = ½ L11 X1² + L12 X1 X2 + ½ L22 X2²` are both `L12`, the macroscopic form. The thermoelectric instance applies `PhysJS.KelvinRelation.peltier_eq` and does not re-prove `Π = S T`. An antisymmetric cross term produces no entropy. The magnetic case `L12(B) = L21(−B)` is not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Catalog evidence and edge evidence include `formally-proved`.
 
 > **Evaluator:** catalog record 170 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 

@@ -8,27 +8,40 @@ import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.Analysis.Calculus.Deriv.Pow
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 /-!
-`be-170`. Bridge. Onsager reciprocity from a dissipation potential.
+`be-170`. Bridge. Onsager reciprocity from microscopic reversibility.
 
-The catalog equation is `L12 = L21`. `onsager_eq` is the equality of mixed
-partials of the quadratic potential
+The catalog equation is `L12 = L21`. The system jumps between finitely
+many states `i` with rates `W i j`, and its equilibrium distribution `π`
+has detailed balance, `π_i W_ij = π_j W_ji`: every jump is as frequent as
+its reverse, which is microscopic reversibility at zero field. Onsager's
+regression takes the kinetic coefficient of the observables `A_a`, `A_b` to
+be the initial slope of their equilibrium cross-correlation,
+
+```
+L_ab = d/dt ⟨A_a(t) A_b(0)⟩ at t = 0 = ∑_{i,j} π_i A_b(i) W_ij A_a(j)
+```
+
+`onsager_eq` proves `L_ab = L_ba` from detailed balance, so `L12 = L21`.
+`not_without_balance` is a three-state cycle without detailed balance whose
+coefficients differ, so the hypothesis is needed. `potential_symmetric` is
+the macroscopic reading, the equal mixed partials of the quadratic
+dissipation potential
 
 ```
 Φ = ½ L11 X1² + L12 X1 X2 + ½ L22 X2²
 ```
 
-The flux `J_i = ∂Φ/∂X_i` has cross coefficients that are both `L12`.
 `entropy_blind` shows an antisymmetric piece `A` drops out of `J · X` and
-still separates the two flux coefficients when `A ≠ 0`. The zero-field
-hypothesis is this potential: the magnetic case `L12(B) = L21(−B)` is not
-this row. `thermoelectric_instance` applies `PhysJS.KelvinRelation.peltier_eq`,
-the Kelvin relation of `be-73`, whose structure field is this equality.
-It is not a second proof of `Π = S T`.
+still separates the two flux coefficients when `A ≠ 0`. The magnetic case
+`L12(B) = L21(−B)` is not this row. `thermoelectric_instance` applies
+`PhysJS.KelvinRelation.peltier_eq`, the Kelvin relation of `be-73`, whose
+structure field is this equality. It is not a second proof of `Π = S T`.
 -/
 
 namespace PhysJS.OnsagerReciprocity
@@ -65,8 +78,32 @@ lemma deriv_force2 (L11 L12 L22 X1 X2 : ℝ) :
   refine hsum.congr_deriv ?_
   ring
 
-/-- Mixed partials of `Φ` are both `L12`, so `L12 = L21`. -/
-theorem onsager_eq (L11 L12 L22 X1 X2 : ℝ) :
+/-- Kinetic coefficient: the initial slope of `⟨A_a(t) A_b(0)⟩` for jump rates `W`. -/
+noncomputable def kinetic {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : ι → ι → ℝ) (A_a A_b : ι → ℝ) : ℝ :=
+  ∑ i, ∑ j, π i * A_b i * W i j * A_a j
+
+/-- Detailed balance makes the kinetic coefficients symmetric, `L_ab = L_ba`. -/
+theorem onsager_eq {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : ι → ι → ℝ)
+    (hdb : ∀ i j, π i * W i j = π j * W j i) (A_a A_b : ι → ℝ) :
+    kinetic π W A_a A_b = kinetic π W A_b A_a := by
+  unfold kinetic
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl (fun j _ => Finset.sum_congr rfl (fun i _ => ?_))
+  have h := hdb i j
+  calc π i * A_b i * W i j * A_a j = (π i * W i j) * A_b i * A_a j := by ring
+    _ = (π j * W j i) * A_b i * A_a j := by rw [h]
+    _ = π j * A_a j * W j i * A_b i := by ring
+
+/-- A three-state cycle without detailed balance has `L_ab ≠ L_ba`. -/
+theorem not_without_balance :
+    kinetic (fun _ : Fin 3 => (1 : ℝ)) (fun i j => if j = i + 1 then 1 else 0)
+        (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) ≠
+      kinetic (fun _ : Fin 3 => (1 : ℝ)) (fun i j => if j = i + 1 then 1 else 0)
+        (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) := by
+  simp [kinetic, Fin.sum_univ_three]
+
+/-- Mixed partials of `Φ` are both `L12`, the macroscopic form of `L12 = L21`. -/
+theorem potential_symmetric (L11 L12 L22 X1 X2 : ℝ) :
     deriv (fun y => deriv (fun x => dissipation L11 L12 L22 x y) X1) X2 = L12 ∧
       deriv (fun x => deriv (fun y => dissipation L11 L12 L22 x y) X2) X1 = L12 := by
   have hinner1 : ∀ y, deriv (fun x => dissipation L11 L12 L22 x y) X1 =

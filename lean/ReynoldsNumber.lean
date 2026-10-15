@@ -3,18 +3,22 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
-import Mathlib.Basic.Real.Basic
+import lean.DiffusionMode
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Ring
 
 /-!
-`be-155`. Bridge. The Reynolds number as a flux ratio.
+`be-155`. Bridge. The Reynolds number as viscous time over advection time.
 
-The catalog product is `Re μ = ρ v L`. `reynolds_eq` identifies that
-product with the ratio of inertial momentum flux to viscous momentum flux,
+The catalog product is `Re μ = ρ v L`. `reynolds_eq` takes a mode of
+wavenumber `1 / L`, `exp(−r t) sin((x − v t) / L)`, carried at speed `v`
+through a fluid of kinematic viscosity `ν`, so it solves
+`∂u/∂t + v ∂u/∂x = ν ∂²u/∂x²`. `PhysJS.DiffusionMode.mode_solves_iff`
+forces the viscous decay rate `r = ν / L²`. `Re` is the viscous decay time
+`1 / r` over the advection time `L / v`:
 
 ```
-Re = (ρ v²) / (μ v / L) = v L / ν,    ν = μ / ρ
+Re = (1 / r) / (L / v) = v L / ν = ρ v L / μ,    ν = μ / ρ
 ```
 
 It is not a friction correlation, and it is not the pipe factor of `be-77`.
@@ -22,24 +26,32 @@ It is not a friction correlation, and it is not the pipe factor of `be-77`.
 
 namespace PhysJS.ReynoldsNumber
 
-/-- Inertial flux over viscous flux is `ρ v L / μ` and `v L / ν`. -/
-theorem reynolds_eq (Re ρ v L μ ν inertial viscous : ℝ)
-    (hμ : μ ≠ 0) (hv : v ≠ 0) (hL : L ≠ 0) (hρ : ρ ≠ 0) (hν : ν ≠ 0)
+open PhysJS.DiffusionMode
+
+/-- Viscous decay time over advection time is `v L / ν` and `ρ v L / μ`.
+
+`hu` says the advected mode of wavenumber `1 / L` and rate `r` solves
+`∂u/∂t + v ∂u/∂x = ν ∂²u/∂x²`. -/
+theorem reynolds_eq (Re ρ v L μ ν r τvisc τadv : ℝ)
+    (hμ : μ ≠ 0) (hv : v ≠ 0) (hL : L ≠ 0) (hρ : ρ ≠ 0)
     (hkin : ν = μ / ρ)
-    (hinertial : inertial = ρ * v ^ 2)
-    (hviscous : viscous = μ * v / L)
-    (hvisc0 : viscous ≠ 0)
-    (hRe : Re = inertial / viscous) :
-    Re = v * L / ν ∧ Re * μ = ρ * v * L := by
-  have hflux : inertial / viscous = ρ * v * L / μ := by
-    rw [hinertial, hviscous]
-    field_simp [hμ, hv, hL, hρ, hvisc0]
-  have hkinform : ρ * v * L / μ = v * L / ν := by
+    (hu : Solves r (1 / L) v ν)
+    (hvisc : τvisc = 1 / r)
+    (hadv : τadv = L / v)
+    (hRe : Re = τvisc / τadv) :
+    r = ν / L ^ 2 ∧ Re = v * L / ν ∧ Re * μ = ρ * v * L := by
+  have hr := (mode_solves_iff r (1 / L) v ν (one_div_ne_zero hL)).1 hu
+  have hν : ν ≠ 0 := by
     rw [hkin]
-    field_simp [hμ, hρ, hν]
-  refine ⟨?_, ?_⟩
-  · rw [hRe, hflux, hkinform]
-  · rw [hRe, hflux]
-    field_simp [hμ]
+    exact div_ne_zero hμ hρ
+  have hrate : r = ν / L ^ 2 := by
+    rw [hr]
+    field_simp
+  have hform : Re = v * L / ν := by
+    rw [hRe, hvisc, hadv, hrate]
+    field_simp
+  refine ⟨hrate, hform, ?_⟩
+  rw [hform, hkin]
+  field_simp
 
 end PhysJS.ReynoldsNumber

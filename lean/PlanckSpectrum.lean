@@ -7,6 +7,7 @@ import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import Mathlib.Topology.Algebra.InfiniteSum.Ring
@@ -21,10 +22,18 @@ u (exp(h ν / (k_B T)) − 1) c³ = 8 π h ν³
 ```
 
 `bose_factor` proves the geometric series for the mean occupation of one
-oscillator, `1 / (e^x − 1) = ∑_{n≥1} e^{−n x}`. `planck_eq` multiplies that
-occupation by the mode density `8 π ν² / c³` and by the quantum `h ν`. The
-factor `8 π`, two polarizations in a volume, is a hypothesis. The integral
-over frequency is `be-165`, not this row.
+oscillator, `1 / (e^x − 1) = ∑_{n≥1} e^{−n x}`. `mean_energy` derives the
+mean energy of an oscillator whose levels are `n h ν`, with Boltzmann
+weights `e^{−n x}`, `x = h ν / (k_B T)`:
+
+```
+⟨E⟩ = (∑ n h ν e^{−n x}) / (∑ e^{−n x}) = h ν / (e^x − 1)
+```
+
+`planck_eq` multiplies that mean energy by the mode density `8 π ν² / c³`.
+The quantized levels are the premise. The mode density, two polarizations
+in a volume, is a hypothesis. The integral over frequency is `be-165`, not
+this row.
 -/
 
 namespace PhysJS.PlanckSpectrum
@@ -64,25 +73,71 @@ theorem bose_factor (x : ℝ) (hx : 0 < x) :
   simp only [r, exp_neg]
   field_simp [hden]
 
-/-- Spectral energy density of one mode, times the proved Bose factor.
+/-- Boltzmann mean energy of the levels `n ε`, for `x > 0`, is `ε / (e^x − 1)`. -/
+theorem mean_energy (ε x : ℝ) (hx : 0 < x) :
+    (∑' n : ℕ, (n : ℝ) * ε * exp (-(n * x))) / (∑' n : ℕ, exp (-(n * x))) =
+      ε / (exp x - 1) := by
+  let r : ℝ := exp (-x)
+  have hrpos : 0 ≤ r := (exp_pos _).le
+  have hr : ‖r‖ < 1 := by
+    rw [Real.norm_of_nonneg hrpos, exp_lt_one_iff]
+    linarith
+  have hterm : ∀ n : ℕ, exp (-(n * x)) = r ^ n := by
+    intro n
+    rw [show r = exp (-x) by rfl, ← exp_nat_mul]
+    ring_nf
+  have hZ : ∑' n : ℕ, exp (-(n * x)) = (1 - r)⁻¹ := by
+    rw [show (fun n : ℕ => exp (-(n * x))) = fun n => r ^ n from funext hterm]
+    exact tsum_geometric_of_norm_lt_one hr
+  have hN : ∑' n : ℕ, (n : ℝ) * ε * exp (-(n * x)) = ε * (r / (1 - r) ^ (2 : ℕ)) := by
+    have hfun : (fun n : ℕ => (n : ℝ) * ε * exp (-(n * x))) = fun n : ℕ => ε * ((n : ℝ) * r ^ n) := by
+      funext n
+      rw [hterm n]
+      ring
+    rw [hfun, tsum_mul_left, tsum_coe_mul_geometric_of_norm_lt_one hr]
+  have hgt : 1 < exp x := (one_lt_exp_iff).2 hx
+  have hden : exp x - 1 ≠ 0 := by linarith
+  have hr1 : r < 1 := by
+    have hnorm := hr
+    rwa [Real.norm_of_nonneg hrpos] at hnorm
+  have h1r : 1 - r ≠ 0 := by linarith
+  have hrx : r * exp x = 1 := by
+    simp only [r]
+    rw [← exp_add]
+    simp
+  have hq : r / (1 - r) = 1 / (exp x - 1) := by
+    rw [div_eq_div_iff h1r hden]
+    linear_combination hrx
+  have hsimp : ε * (r / (1 - r) ^ (2 : ℕ)) * (1 - r) = ε * (r / (1 - r)) := by
+    field_simp
+  rw [hN, hZ, div_inv_eq_mul, hsimp, hq]
+  ring
 
-`hmode` is `8 π ν² / c³`. `hu` multiplies by `h ν` and by `bose_factor`. -/
-theorem planck_eq (u mode h ν c kB T : ℝ)
-    (hc : c ≠ 0) (hkB : kB ≠ 0) (hh : h ≠ 0) (hT : 0 < T)
+/-- Spectral energy density from the Boltzmann mean energy of quantized modes.
+
+`hmode` is `8 π ν² / c³`. `hE` is the mean of the levels `n h ν` with
+weights `exp(−n h ν / (k_B T))`. -/
+theorem planck_eq (u mode E h ν c kB T : ℝ)
+    (hc : c ≠ 0) (hh : h ≠ 0)
     (hx : 0 < h * ν / (kB * T))
     (hmode : mode = 8 * π * ν ^ 2 / c ^ 3)
-    (hu : u = mode * h * ν * (1 / (exp (h * ν / (kB * T)) - 1))) :
-    u * (exp (h * ν / (kB * T)) - 1) * c ^ 3 = 8 * π * h * ν ^ 3 ∧
+    (hE : E = (∑' n : ℕ, (n : ℝ) * (h * ν) * exp (-(n * (h * ν / (kB * T))))) /
+      (∑' n : ℕ, exp (-(n * (h * ν / (kB * T))))))
+    (hu : u = mode * E) :
+    E = h * ν / (exp (h * ν / (kB * T)) - 1) ∧
+      u * (exp (h * ν / (kB * T)) - 1) * c ^ 3 = 8 * π * h * ν ^ 3 ∧
       (1 : ℝ) / (exp (h * ν / (kB * T)) - 1) =
         ∑' n : ℕ, exp (-((n + 1 : ℕ) : ℝ) * (h * ν / (kB * T))) := by
-  refine ⟨?_, bose_factor _ hx⟩
+  have hE' : E = h * ν / (exp (h * ν / (kB * T)) - 1) := by
+    rw [hE, mean_energy _ _ hx]
+  refine ⟨hE', ?_, bose_factor _ hx⟩
   have hden : exp (h * ν / (kB * T)) - 1 ≠ 0 := by
     have hgt : 1 < exp (h * ν / (kB * T)) := (one_lt_exp_iff).2 hx
     linarith
-  rw [hu, hmode]
   have hden' : exp (ν * h / (kB * T)) - 1 ≠ 0 := by
     rw [mul_comm ν h]
     exact hden
-  field_simp [hc, hden']
+  rw [hu, hmode, hE']
+  field_simp [hc, hden, hden']
 
 end PhysJS.PlanckSpectrum

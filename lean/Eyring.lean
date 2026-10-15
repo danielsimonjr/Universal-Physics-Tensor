@@ -6,6 +6,7 @@ Released under MIT license as described in the file LICENSE.
 import lean.Arrhenius
 import Mathlib.Analysis.Calculus.Deriv.Inv
 import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.Calculus.Deriv.Slope
 import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 import Mathlib.Tactic.FieldSimp
@@ -13,7 +14,7 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 /-!
-`be-148`. Bridge. Eyring rate, and its Arrhenius slope.
+`be-148`. Bridge. Eyring rate from transition-state theory, and its Arrhenius slope.
 
 The catalog equation is
 
@@ -21,10 +22,17 @@ The catalog equation is
 k = (k_B T / h) exp(−ΔG‡ / (k_B T))
 ```
 
-`eyring_eq` is that formula. For a molar barrier, `R = N_A k_B` identifies
-it with the molecular exponential through `PhysJS.Arrhenius.molar_exponent`,
-the step `PhysJS.Arrhenius.arrhenius_eq` uses. The effective Arrhenius
-energy is the logarithmic derivative
+`eyring_eq` derives it. The activated complex is in quasi-equilibrium with
+the reactants, with the molecular Gibbs isotherm `ΔG‡ = −k_B T ln K‡`. It
+crosses the barrier along a reaction coordinate that is a vibration of
+frequency `ν`, so the rate is `ν q(ν) K‡` with the oscillator partition
+function `q(ν) = 1 / (1 − exp(−h ν / (k_B T)))`. `classical_limit` proves
+`ν q(ν) → k_B T / h` as `ν → 0`: the loose reaction coordinate fixes the
+universal frequency `k_B T / h`, and the limit of the rate is the Eyring
+formula. For a molar barrier, `R = N_A k_B` identifies it with the molecular
+exponential through `PhysJS.Arrhenius.molar_exponent`, the step
+`PhysJS.Arrhenius.arrhenius_eq` uses. The effective Arrhenius energy is the
+logarithmic derivative
 
 ```
 Ea = R T² d(ln k)/dT = ΔH‡ + R T
@@ -40,16 +48,44 @@ namespace PhysJS.Eyring
 
 open PhysJS.Arrhenius
 
-/-- Eyring rate. `h` in the module is the Planck constant `hpl`. -/
-theorem eyring_eq (k hpl dG kB T : ℝ) (hh : hpl ≠ 0) (hkB : kB ≠ 0) (hT : 0 < T)
-    (hk : k = (kB * T / hpl) * Real.exp (-dG / (kB * T))) :
-    k * hpl * Real.exp (dG / (kB * T)) = kB * T := by
-  have hkT : kB * T ≠ 0 := mul_ne_zero hkB hT.ne'
-  rw [hk]
-  field_simp [hh, hkT]
-  rw [← Real.exp_add]
-  ring_nf
-  exact Real.exp_zero
+/-- `ν / (1 − exp(−a ν)) → 1 / a` as `ν → 0`, for `a > 0`. -/
+theorem classical_limit (a : ℝ) (ha : 0 < a) :
+    Filter.Tendsto (fun ν : ℝ => ν * (1 / (1 - Real.exp (-(a * ν)))))
+      (nhdsWithin 0 {0}ᶜ) (nhds a⁻¹) := by
+  have hlin : HasDerivAt (fun ν : ℝ => -(a * ν)) (-a) 0 :=
+    (((hasDerivAt_id' 0).const_mul a).neg).congr_deriv (by ring)
+  have hf : HasDerivAt (fun ν : ℝ => 1 - Real.exp (-(a * ν))) a 0 :=
+    (((Real.hasDerivAt_exp _).comp 0 hlin).const_sub 1).congr_deriv (by simp)
+  have hslope := (hasDerivAt_iff_tendsto_slope.mp hf).inv₀ ha.ne'
+  refine hslope.congr (fun ν => ?_)
+  rw [slope_def_field, inv_div]
+  simp [div_eq_mul_inv]
+
+/-- Transition-state rate in the classical limit of the reaction coordinate.
+
+`hG` is the molecular Gibbs isotherm `ΔG‡ = −k_B T ln K‡` of the activated
+complex. `hk` is the rate `ν q(ν) K‡` with the vibrational partition
+function `q(ν) = 1 / (1 − exp(−h ν / (k_B T)))`. `h` in the module is the
+Planck constant `hpl`. -/
+theorem eyring_eq (k : ℝ → ℝ) (K hpl dG kB T : ℝ) (hh : 0 < hpl) (hkB : 0 < kB) (hT : 0 < T)
+    (hK : 0 < K) (hG : dG = -(kB * T) * Real.log K)
+    (hk : ∀ ν, k ν = ν * (1 / (1 - Real.exp (-(hpl * ν / (kB * T))))) * K) :
+    K = Real.exp (-dG / (kB * T)) ∧
+      Filter.Tendsto k (nhdsWithin 0 {0}ᶜ)
+        (nhds ((kB * T / hpl) * Real.exp (-dG / (kB * T)))) := by
+  have hkT : 0 < kB * T := mul_pos hkB hT
+  have hKexp : K = Real.exp (-dG / (kB * T)) := by
+    rw [hG, show -(-(kB * T) * Real.log K) / (kB * T) = Real.log K by field_simp,
+      Real.exp_log hK]
+  refine ⟨hKexp, ?_⟩
+  have ha : 0 < hpl / (kB * T) := div_pos hh hkT
+  have hfun : k = fun ν => ν * (1 / (1 - Real.exp (-(hpl / (kB * T) * ν)))) * K := by
+    funext ν
+    rw [hk ν, show hpl * ν / (kB * T) = hpl / (kB * T) * ν by ring]
+  have hlim := (classical_limit _ ha).mul_const K
+  rw [inv_div] at hlim
+  rw [hfun, ← hKexp]
+  exact hlim
 
 /-- Molar and molecular barriers agree when `R = N_A k_B` and `ΔG_molar = N_A ΔG`.
 
