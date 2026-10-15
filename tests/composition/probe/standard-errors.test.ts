@@ -129,8 +129,11 @@ describe('the study: coefficient covariance from the weighted normal equations',
     expect(t.stderr).toBeLessThan(0.01);
     expect(t.reference).toBe(1 / 16);
     expect(t.z).toBeCloseTo((t.coefficient - 1 / 16) / t.stderr!, 12);
-    // The fitted values and the verdict are what they were without the reference.
-    const plain = selectedOf(await run(raw));
+    // The fitted values and the verdict are what they were without the reference (the shipped
+    // fixture declares it, so it is removed here).
+    const { reference: _shipped, ...bare } = raw.correction as Record<string, unknown>;
+    expect(_shipped).toEqual(reference);
+    const plain = selectedOf(await run({ ...raw, correction: bare }));
     expect(plain.correction!.terms[0]!.coefficient).toBe(t.coefficient);
     expect(plain.correction!.terms[0]!.z).toBeUndefined();
     expect(r.verdict).toBe('survives-holdout');

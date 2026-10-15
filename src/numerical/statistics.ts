@@ -45,7 +45,7 @@ export function logChoose(n: number, k: number): number {
 /** The mean of a set of ratios and their coefficient of variation (population σ over |mean|). @internal */
 export interface RatioSpread {
   readonly mean: number;
-  /** `σ/|mean|`; `NaN` when the mean is 0 or any ratio is not finite. */
+  /** `σ/|mean|`; `Infinity` when the mean is 0 and the ratios are not all 0, `NaN` when they are all 0 or any ratio is not finite. */
   readonly cv: number;
 }
 

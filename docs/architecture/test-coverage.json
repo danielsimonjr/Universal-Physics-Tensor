@@ -1,15 +1,14 @@
 {
   "metadata": {
     "totalSourceFiles": 384,
-    "totalTestFiles": 662,
-    "testedCount": 372,
-    "directlyTestedCount": 338,
-    "untestedCount": 12,
-    "coveragePercent": "96.9",
-    "directCoveragePercent": "88.0"
+    "totalTestFiles": 665,
+    "testedCount": 375,
+    "directlyTestedCount": 341,
+    "untestedCount": 9,
+    "coveragePercent": "97.7",
+    "directCoveragePercent": "88.8"
   },
   "untestedFiles": [
-    "src/atlas/text-overlap.ts",
     "src/bridges/validity.ts",
     "src/cli/bindings.ts",
     "src/cli/commands/_discovery-opts.ts",
@@ -18,9 +17,7 @@
     "src/cli/library-defaults.ts",
     "src/cli/top-level-help.ts",
     "src/dimensional/constant-rows.ts",
-    "src/numerical/input-validation.ts",
-    "src/numerical/schwarzschild.ts",
-    "src/numerical/statistics.ts"
+    "src/numerical/input-validation.ts"
   ],
   "testedFiles": [
     "src/atlas/applicability.ts",
@@ -82,6 +79,7 @@
     "src/atlas/regime.ts",
     "src/atlas/serialize.ts",
     "src/atlas/statement.ts",
+    "src/atlas/text-overlap.ts",
     "src/atlas/translation-registry.ts",
     "src/atlas/translation.ts",
     "src/atlas/types.ts",
@@ -382,7 +380,9 @@
     "src/numerical/perihelion-finder.ts",
     "src/numerical/quadrature.ts",
     "src/numerical/rk4-trajectory.ts",
+    "src/numerical/schwarzschild.ts",
     "src/numerical/spacetime-metrics.ts",
+    "src/numerical/statistics.ts",
     "src/numerical/strides.ts",
     "src/numerical/tensor-engine.ts",
     "src/numerical/types.ts",
@@ -455,6 +455,7 @@
     "src/atlas/regime.ts",
     "src/atlas/serialize.ts",
     "src/atlas/statement.ts",
+    "src/atlas/text-overlap.ts",
     "src/atlas/translation-registry.ts",
     "src/atlas/types.ts",
     "src/atlas/waves/bridges-closure.ts",
@@ -722,7 +723,9 @@
     "src/numerical/perihelion-finder.ts",
     "src/numerical/quadrature.ts",
     "src/numerical/rk4-trajectory.ts",
+    "src/numerical/schwarzschild.ts",
     "src/numerical/spacetime-metrics.ts",
+    "src/numerical/statistics.ts",
     "src/numerical/strides.ts",
     "src/numerical/tensor-engine.ts",
     "src/numerical/types.ts",
@@ -1373,7 +1376,9 @@
       "tests/atlas/poster.test.ts",
       "tests/atlas/statement-derivation.test.ts"
     ],
-    "src/atlas/text-overlap.ts": [],
+    "src/atlas/text-overlap.ts": [
+      "tests/atlas/text-overlap.test.ts"
+    ],
     "src/atlas/translation-registry.ts": [
       "tests/atlas/pendulum-exact.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
@@ -10728,7 +10733,9 @@
       "tests/atlas/exact-propagators.test.ts",
       "tests/numerical/rk4-trajectory.test.ts"
     ],
-    "src/numerical/schwarzschild.ts": [],
+    "src/numerical/schwarzschild.ts": [
+      "tests/numerical/schwarzschild.test.ts"
+    ],
     "src/numerical/spacetime-metrics.ts": [
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
@@ -10745,7 +10752,9 @@
       "tests/numerical/metric-value-error.test.ts",
       "tests/numerical/spacetime-metrics.test.ts"
     ],
-    "src/numerical/statistics.ts": [],
+    "src/numerical/statistics.ts": [
+      "tests/numerical/statistics.test.ts"
+    ],
     "src/numerical/strides.ts": [
       "tests/numerical/strides.test.ts"
     ],
@@ -11421,7 +11430,9 @@
       "tests/atlas/poster.test.ts",
       "tests/atlas/statement-derivation.test.ts"
     ],
-    "src/atlas/text-overlap.ts": [],
+    "src/atlas/text-overlap.ts": [
+      "tests/atlas/text-overlap.test.ts"
+    ],
     "src/atlas/translation-registry.ts": [
       "tests/atlas/pendulum-exact.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
@@ -13785,12 +13796,16 @@
       "tests/atlas/exact-propagators.test.ts",
       "tests/numerical/rk4-trajectory.test.ts"
     ],
-    "src/numerical/schwarzschild.ts": [],
+    "src/numerical/schwarzschild.ts": [
+      "tests/numerical/schwarzschild.test.ts"
+    ],
     "src/numerical/spacetime-metrics.ts": [
       "tests/numerical/metric-value-error.test.ts",
       "tests/numerical/spacetime-metrics.test.ts"
     ],
-    "src/numerical/statistics.ts": [],
+    "src/numerical/statistics.ts": [
+      "tests/numerical/statistics.test.ts"
+    ],
     "src/numerical/strides.ts": [
       "tests/numerical/strides.test.ts"
     ],
@@ -15309,6 +15324,9 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts"
+    ],
+    "tests/atlas/text-overlap.test.ts": [
+      "src/atlas/text-overlap.ts"
     ],
     "tests/atlas/transported-norm-demo.test.ts": [
       "src/atlas/composition-table.ts",
@@ -24411,9 +24429,15 @@
       "src/numerical/geodesic-integrator.ts",
       "src/core/constants.ts"
     ],
+    "tests/numerical/schwarzschild.test.ts": [
+      "src/numerical/schwarzschild.ts"
+    ],
     "tests/numerical/spacetime-metrics.test.ts": [
       "src/core/constants.ts",
       "src/numerical/spacetime-metrics.ts"
+    ],
+    "tests/numerical/statistics.test.ts": [
+      "src/numerical/statistics.ts"
     ],
     "tests/numerical/strides.test.ts": [
       "src/numerical/strides.ts"

@@ -15,22 +15,18 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 384 |
-| Total Test Files | 662 |
-| Source files imported directly by a test | 338 |
-| Source files reached directly or through a barrel or side-effect import | 372 |
-| Source files no test reaches either way | 12 |
-| Direct coverage | 88.0% |
-| Traced coverage | 96.9% |
+| Total Test Files | 665 |
+| Source files imported directly by a test | 341 |
+| Source files reached directly or through a barrel or side-effect import | 375 |
+| Source files no test reaches either way | 9 |
+| Direct coverage | 88.8% |
+| Traced coverage | 97.7% |
 
 ---
 
 ## Source Files No Test Reaches
 
-The following 12 source files are reached by no test file, directly or through a barrel or side-effect import:
-
-### atlas/
-
-- `src/atlas/text-overlap.ts`
+The following 9 source files are reached by no test file, directly or through a barrel or side-effect import:
 
 ### bridges/
 
@@ -52,8 +48,6 @@ The following 12 source files are reached by no test file, directly or through a
 ### numerical/
 
 - `src/numerical/input-validation.ts`
-- `src/numerical/schwarzschild.ts`
-- `src/numerical/statistics.ts`
 
 ---
 
@@ -120,6 +114,7 @@ The following 12 source files are reached by no test file, directly or through a
 | `atlas/regime.ts` | `bound-machine-form.test.ts`, `closure.test.ts`, `diffusion.test.ts`, `gr-spine-regime.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `relations-shim.test.ts`, `stokes-einstein-regime.test.ts`, `waves.test.ts`, `witness-claims.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `atlas/serialize.ts` | `atlas-json.test.ts`, `make-regime.test.ts`, `model.test.ts`, `serialize.test.ts`, `spring-lc-norm-transport.test.ts` | `barrel-completeness.test.ts` |
 | `atlas/statement.ts` | `poster.test.ts`, `statement-derivation.test.ts` | `barrel-completeness.test.ts` |
+| `atlas/text-overlap.ts` | `text-overlap.test.ts` | — |
 | `atlas/translation-registry.ts` | `pendulum-exact.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `spring-lc-phase-carriage.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
 | `atlas/translation.ts` | — | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
 | `atlas/types.ts` | `applicability.test.ts`, `bound-machine-form.test.ts`, `composition-table.test.ts`, `conventions.test.ts`, `coverage.test.ts`, `error-algebra.test.ts`, `evidence-rule.test.ts`, `families.test.ts`, `formal-sanity.test.ts`, `gr-spine-regime.test.ts`, `link-prediction-intervals.test.ts`, `link-prediction.test.ts`, `oscillators-limits.test.ts`, `overlay-types.test.ts`, `path-bound.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `statement-derivation.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `witness-results.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `compose-relation.test.ts`, `graph-viz-filters.test.ts`, `round2-bridges-atlas.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `audited-catalog.test.ts`, `barrel-completeness.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
@@ -420,7 +415,9 @@ The following 12 source files are reached by no test file, directly or through a
 | `numerical/perihelion-finder.ts` | `perihelion-finder-roundtrip.test.ts`, `perihelion-finder.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `covariant-eikonal-real.test.ts`, `covariant-eikonal-step-sweep.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `one-function-table.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/quadrature.ts` | `finiteness-guards.test.ts`, `integral-quadrature.test.ts`, `mathts-delegation.test.ts`, `round2-numerical-dimensional.test.ts` | — |
 | `numerical/rk4-trajectory.ts` | `exact-propagators.test.ts`, `rk4-trajectory.test.ts` | — |
+| `numerical/schwarzschild.ts` | `schwarzschild.test.ts` | — |
 | `numerical/spacetime-metrics.ts` | `metric-value-error.test.ts`, `spacetime-metrics.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
+| `numerical/statistics.ts` | `statistics.test.ts` | — |
 | `numerical/strides.ts` | `strides.test.ts` | — |
 | `numerical/tensor-engine.ts` | `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-reencode-batch.test.ts`, `bridge-ast-reencode.test.ts`, `integral-ad.test.ts`, `dimensionful-power-ad.test.ts`, `einsum-precompute.test.ts`, `engine-capability.test.ts`, `mathts-autograd.test.ts`, `mathts-engine-typing.test.ts`, `tensor-engine-types.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `covariant-eikonal-real.test.ts`, `covariant-eikonal-step-sweep.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `one-function-table.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/types.ts` | `connection-lowering-helpers.test.ts`, `correctness.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-utils.test.ts`, `metric-inverse.test.ts`, `tensor-engine-types.test.ts`, `tensor-partial-derivative-lowering.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `covariant-derivative-lowering.test.ts`, `covariant-eikonal-real.test.ts`, `covariant-eikonal-step-sweep.test.ts`, `engine-default.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `one-function-table.test.ts`, `pderiv.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
@@ -531,6 +528,7 @@ The following 12 source files are reached by no test file, directly or through a
 | `atlas/spring-lc-phase-carriage.test.ts` | 6 files |
 | `atlas/statement-derivation.test.ts` | 4 files |
 | `atlas/stokes-einstein-regime.test.ts` | 33 files |
+| `atlas/text-overlap.test.ts` | 1 files |
 | `atlas/transported-norm-demo.test.ts` | 9 files |
 | `atlas/waves.test.ts` | 6 files |
 | `atlas/witness-claims.test.ts` | 6 files |
@@ -1057,7 +1055,9 @@ The following 12 source files are reached by no test file, directly or through a
 | `numerical/riemann-tensor-lowering.test.ts` | 16 files |
 | `numerical/rk4-trajectory.test.ts` | 3 files |
 | `numerical/schwarzschild-radial-geodesic.test.ts` | 2 files |
+| `numerical/schwarzschild.test.ts` | 1 files |
 | `numerical/spacetime-metrics.test.ts` | 2 files |
+| `numerical/statistics.test.ts` | 1 files |
 | `numerical/strides.test.ts` | 1 files |
 | `numerical/tensor-engine-types.test.ts` | 3 files |
 | `numerical/tensor-partial-derivative-lowering.test.ts` | 7 files |

@@ -44,7 +44,11 @@
     "powers": [
       2,
       4
-    ]
+    ],
+    "reference": {
+      "2": 0.0625,
+      "4": 0.0035807291666666665
+    }
   },
   "observations": [
     {"id":"e1","role":"exploratory","values":{"length":0.4,"gravity":9.81,"amplitude":0.05},"observed":"1.26938 s"},
