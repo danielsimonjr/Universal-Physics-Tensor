@@ -5413,13 +5413,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "k = (k_B T/h) exp(−ΔG‡/(k_B T)). The molar form calls Arrhenius at R = N_A k_B. The logarithmic derivative is Ea = ΔH‡ + R T, and that Ea is not the constant in k = A exp(−Ea/(R T)) at A = (k_B T/h) exp(ΔS‡/R): those substitutions differ by exp(−1). The transmission coefficient is 1. Eyring. Transition state",
+      "context": "In quasi-equilibrium with the activated complex, ΔG‡ = −k_B T ln K‡ and the rate is ν q(ν) K‡ with the reaction-coordinate partition function q(ν) = 1/(1 − exp(−hν/(k_B T))). As ν → 0, ν q(ν) → k_B T/h, so k = (k_B T/h) exp(−ΔG‡/(k_B T)). The molar form calls Arrhenius at R = N_A k_B. The logarithmic derivative is Ea = ΔH‡ + R T, and that Ea is not the constant in k = A exp(−Ea/(R T)) at A = (k_B T/h) exp(ΔS‡/R): those substitutions differ by exp(−1). The transmission coefficient is 1. Eyring. Transition state",
       "formula_latex": "k = (k_B T/h) \\exp(-\\Delta G^\\ddagger/(k_B T))",
       "source_part": "III",
       "source_section": "Thermal catalog (be-148) — established textbook relation, PhysJS.Eyring.eyring_eq",
       "known_issues": [],
       "references": [
-        "The molar form calls PhysJS.Arrhenius.arrhenius_eq. It is not a second proof of be-147."
+        "The molar form calls PhysJS.Arrhenius.molar_exponent, the R = N_A k_B step of PhysJS.Arrhenius.arrhenius_eq. It is not a second proof of be-147. The classical limit ν q(ν) → k_B T/h is classical_limit."
       ],
       "dependencies": [],
       "dimensional_signature": "[frequency]",
@@ -5448,13 +5448,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "equilibrium_log is the Gibbs isotherm, so ln K = −ΔG°/(R T). At ΔG° = ΔH° − T ΔS° with both constant, d ln K/dT = ΔH°/(R T²). Not a second proof of be-150 and not a van 't Hoff plot. van 't Hoff",
+      "context": "At every temperature, ideal chemical potentials μ_i = μ_i° + R T ln a_i at equilibrium Σ ν_i μ_i = 0 give the Gibbs isotherm ln K = −ΔG°/(R T), and ΔG° = ΔH° − T ΔS° with both constant gives ln K = −ΔH°/(R T) + ΔS°/R, so d ln K/dT = ΔH°/(R T²). Not a second proof of be-150 and not a van 't Hoff plot. van 't Hoff",
       "formula_latex": "\\frac{d \\ln K}{dT} = \\frac{\\Delta H^\\circ}{R T^2}",
       "source_part": "III",
       "source_section": "Thermal catalog (be-149) — established textbook relation, PhysJS.VanTHoff.vant_hoff",
       "known_issues": [],
       "references": [
-        "equilibrium_log is PhysJS.GibbsIsotherm.gibbs_eq. ΔH° and ΔS° are constant."
+        "equilibrium_log is PhysJS.GibbsIsotherm.gibbs_eq at each temperature. ΔH° and ΔS° are constant. The integrated ln K is derived, not a hypothesis."
       ],
       "dependencies": [],
       "dimensional_signature": "[Theta^-1]",
@@ -5518,13 +5518,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "The cell standard state is the Gibbs isotherm, and ΔG = −n F E with F = N_A e gives E = E° − (R T/(n F)) ln Q. e is the elementary charge. The same voltage is E° − (k_B T/(n e)) ln Q. Not a second proof of be-150. Nernst",
+      "context": "Ideal activities μ_i = μ_i° + R T ln a_i sum to ΔG = ΔG° + R T ln Q, and ΔG = −n F E, ΔG° = −n F E° with F = N_A e give E = E° − (R T/(n F)) ln Q. The cell standard state is the Gibbs isotherm. e is the elementary charge. The same voltage is E° − (k_B T/(n e)) ln Q. Not a second proof of be-150. Nernst",
       "formula_latex": "E = E^\\circ - (R T/(n F)) \\ln Q,\\quad F = N_A e",
       "source_part": "III",
       "source_section": "Thermal catalog (be-151) — established textbook relation, PhysJS.NernstGibbs.nernst_eq",
       "known_issues": [],
       "references": [
-        "The standard state is PhysJS.GibbsIsotherm.gibbs_eq. ΔG = −n F E is on the same result."
+        "ΔG = ΔG° + R T ln Q is derived from the ideal activities (reaction_gibbs). The standard state is PhysJS.GibbsIsotherm.gibbs_eq. ΔG = −n F E is on the same result."
       ],
       "dependencies": [],
       "dimensional_signature": "[L^2 M T^-3 I^-1]",
@@ -5623,13 +5623,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "The ratio identity Pr = ν/α with ν = μ/ρ and α = k/(ρ c_p) is the product Pr k = μ c_p. Not a heat-transfer correlation and not the Reynolds analogy of be-86. Prandtl",
+      "context": "One Fourier mode decays at ν q² under momentum diffusion and at α q² under heat conduction, so the rate ratio is Pr = ν/α with ν = μ/ρ and α = k/(ρ c_p), and Pr k = μ c_p. Not a heat-transfer correlation and not the Reynolds analogy of be-86. Prandtl",
       "formula_latex": "\\mathrm{Pr} = \\mu c_p / k",
       "source_part": "III",
       "source_section": "Thermal catalog (be-154) — established textbook relation, PhysJS.Prandtl.prandtl_eq",
       "known_issues": [],
       "references": [
-        "The kinematic viscosity and the thermal diffusivity are the hypotheses of PhysJS.Prandtl.prandtl_eq."
+        "The decay rates are PhysJS.DiffusionMode.mode_solves_iff. ν = μ/ρ and α = k/(ρ c_p) are definitions in PhysJS.Prandtl.prandtl_eq."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
@@ -5658,13 +5658,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "Inertial flux over viscous flux is Re = (ρ v²)/(μ v/L) = v L/ν with ν = μ/ρ, so Re μ = ρ v L. Not a friction correlation and not the pipe factor of be-77. Reynolds number",
+      "context": "A mode of wavenumber 1/L carried at speed v under ∂u/∂t + v ∂u/∂x = ν ∂²u/∂x² decays at the viscous rate ν/L². The viscous time over the advection time L/v is Re = v L/ν with ν = μ/ρ, so Re μ = ρ v L. Not a friction correlation and not the pipe factor of be-77. Reynolds number",
       "formula_latex": "\\mathrm{Re} = \\rho v L / \\mu",
       "source_part": "III",
       "source_section": "Thermal catalog (be-155) — established textbook relation, PhysJS.ReynoldsNumber.reynolds_eq",
       "known_issues": [],
       "references": [
-        "The flux ratio is the hypothesis of PhysJS.ReynoldsNumber.reynolds_eq."
+        "The viscous decay rate is PhysJS.DiffusionMode.mode_solves_iff. The time ratio is PhysJS.ReynoldsNumber.reynolds_eq."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
@@ -5693,13 +5693,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "With L_c = V/A, Bi = (L_c/k)/(1/h) = h V/(k A), so Bi k = h L_c. Not a lumped-capacitance criterion. Biot",
+      "context": "A plane wall in steady conduction with a convective face −k T'(L) = h (T(L) − T∞) has internal over external temperature drop h L/k. With L_c = V/A that is Bi = h V/(k A), so Bi k = h L_c. Not a lumped-capacitance criterion. Biot",
       "formula_latex": "\\mathrm{Bi} = h L_c / k",
       "source_part": "III",
       "source_section": "Thermal catalog (be-156) — established textbook relation, PhysJS.Biot.biot_eq",
       "known_issues": [],
       "references": [
-        "L_c = V/A is the hypothesis of PhysJS.Biot.biot_eq. The volume form is the same number."
+        "The linear steady profile is PhysJS.SteadyProfile.linear_profile. L_c = V/A names the wall thickness in PhysJS.Biot.biot_eq. The volume form is the same number."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
@@ -5728,13 +5728,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "h = k (∂T/∂n)/ΔT makes Nu = h L/k equal to L (∂T/∂n)/ΔT, so Nu k = h L. Not a correlation for Nu. Nusselt",
+      "context": "h (T_w − T∞) = −k T'(0) at the wall makes Nu = h L/k the dimensionless wall gradient L (−T'(0))/(T_w − T∞), so Nu k = h L, and a layer in pure steady conduction has Nu = 1. Not a correlation for Nu. Nusselt",
       "formula_latex": "\\mathrm{Nu} = h L / k",
       "source_part": "III",
       "source_section": "Thermal catalog (be-157) — established textbook relation, PhysJS.Nusselt.nusselt_eq",
       "known_issues": [],
       "references": [
-        "The wall gradient is the hypothesis of PhysJS.Nusselt.nusselt_eq."
+        "The wall condition defines h in PhysJS.Nusselt.nusselt_eq. Nu = 1 for pure conduction uses PhysJS.SteadyProfile.slab_slope."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
@@ -5763,13 +5763,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "Sc = ν/D with ν = μ/ρ is Sc ρ D = μ, and Le = α/D = Sc/Pr once Pr = ν/α. Not a mass-transfer correlation. Schmidt. Lewis",
+      "context": "One Fourier mode decays at ν q², α q² and D q² under momentum, heat and mass diffusion, so Sc = ν/D with ν = μ/ρ is Sc ρ D = μ, and Le = α/D = Sc/Pr. Not a mass-transfer correlation. Schmidt. Lewis",
       "formula_latex": "\\mathrm{Sc} = \\mu/(\\rho D)",
       "source_part": "III",
       "source_section": "Thermal catalog (be-158) — established textbook relation, PhysJS.Schmidt.schmidt_eq",
       "known_issues": [],
       "references": [
-        "Le = Sc/Pr is the second conjunct of PhysJS.Schmidt.schmidt_eq and is not a second edge."
+        "Le = Sc/Pr is the second conjunct of PhysJS.Schmidt.schmidt_eq and is not a second edge. The decay rates are PhysJS.DiffusionMode.mode_solves_iff."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
@@ -5798,13 +5798,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "k_m = D (∂c/∂n)/Δc makes Sh = k_m L/D equal to L (∂c/∂n)/Δc, so Sh D = k_m L. Not a correlation for Sh. Sherwood",
+      "context": "k_m (c_w − c∞) = −D c'(0) at the wall makes Sh = k_m L/D the dimensionless wall gradient L (−c'(0))/(c_w − c∞), so Sh D = k_m L, and a layer in pure steady diffusion has Sh = 1. Not a correlation for Sh. Sherwood",
       "formula_latex": "\\mathrm{Sh} = k_m L / D",
       "source_part": "III",
       "source_section": "Thermal catalog (be-159) — established textbook relation, PhysJS.Sherwood.sherwood_eq",
       "known_issues": [],
       "references": [
-        "The wall gradient of concentration is the hypothesis of PhysJS.Sherwood.sherwood_eq."
+        "The wall condition defines k_m in PhysJS.Sherwood.sherwood_eq. Sh = 1 for pure diffusion uses PhysJS.SteadyProfile.slab_slope."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
@@ -5938,13 +5938,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "The enthalpy differential dh = c_p dT + (v − T (∂v/∂T)_p) dP is a hypothesis. It gives μ_JT c_p = T (∂v/∂T)_p − v, and the ideal-gas bracket v = R T/P vanishes. Not a measured inversion curve. Joule–Thomson",
+      "context": "From the second-virial Gibbs energy g = φ(T) + R T ln P + B(T) P, the enthalpy slope (∂h/∂P)_T = v − T (∂v/∂T)_P = B − T B' is derived, so μ_JT c_p = T (∂v/∂T)_p − v = T B' − B, an ideal gas (B = 0) has μ_JT = 0, and B = b − a/(R T) gives μ_JT c_p = 2a/(R T) − b. Not a measured inversion curve. Joule–Thomson",
       "formula_latex": "\\mu_{JT} c_p = T (\\partial v/\\partial T)_p - v",
       "source_part": "III",
       "source_section": "Thermal catalog (be-163) — established textbook relation, PhysJS.JouleThomson.joule_thomson_eq",
       "known_issues": [],
       "references": [
-        "The enthalpy differential is a hypothesis of PhysJS.JouleThomson.joule_thomson_eq."
+        "The enthalpy slope is derived from the second-virial Gibbs energy in PhysJS.JouleThomson.joule_thomson_eq. The van der Waals form is virial_inversion."
       ],
       "dependencies": [],
       "dimensional_signature": "[L M^-1 T^2 Theta]",
@@ -5973,13 +5973,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "The Bose factor 1/(exp(x) − 1) = Σ_{n≥1} exp(−n x) is proved. The mode density 8 π ν²/c³, two polarizations, is a hypothesis. Their product is u (exp(hν/kT) − 1) c³ = 8 π h ν³. The frequency integral is be-165. Planck",
+      "context": "The Boltzmann mean energy of the levels n h ν is h ν/(exp(x) − 1) with x = h ν/(k_B T), and the Bose factor 1/(exp(x) − 1) = Σ_{n≥1} exp(−n x) is proved. The mode density 8 π ν²/c³, two polarizations, is a hypothesis. Their product is u (exp(hν/kT) − 1) c³ = 8 π h ν³. The frequency integral is be-165. Planck",
       "formula_latex": "u (\\exp(h\\nu/k_B T) - 1) c^3 = 8 \\pi h \\nu^3",
       "source_part": "III",
       "source_section": "Thermal catalog (be-164) — established textbook relation, PhysJS.PlanckSpectrum.planck_eq",
       "known_issues": [],
       "references": [
-        "The mode density, two polarizations, is a hypothesis of PhysJS.PlanckSpectrum.planck_eq."
+        "The mode density, two polarizations, is a hypothesis of PhysJS.PlanckSpectrum.planck_eq. The mean energy per mode is derived (mean_energy)."
       ],
       "dependencies": [],
       "dimensional_signature": "[L^-1 M T^-1]",
@@ -6113,17 +6113,17 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "The thermal factor is the thermal de Broglie wavelength, so K = (2 π m k_B T/h²)^{3/2} exp(−I/(k_B T)). The electron weight 2 and the internal partition functions are not in this statement. Not a second proof of be-12. Saha",
+      "context": "The ionization equilibrium μ_A = μ₊ + μ_e of classical ideal gases with μ_i = E_i + k_B T ln(n_i λ_i³/g_i) gives n₊ n_e/n_A = (g₊ g_e/g_A) λ_e^{−3} exp(−I/(k_B T)). The thermal factor is the thermal de Broglie wavelength, and at g₊ g_e = g_A that is K = (2 π m k_B T/h²)^{3/2} exp(−I/(k_B T)). The electron weight 2 and the internal partition functions enter only as the weights g_i and are not in the catalogued K. Not a second proof of be-12. Saha",
       "formula_latex": "K = (2\\pi m k_B T/h^2)^{3/2} \\exp(-I/(k_B T))",
       "source_part": "III",
       "source_section": "Thermal catalog (be-168) — established textbook relation, PhysJS.Saha.saha_eq",
       "known_issues": [],
       "references": [
-        "The thermal factor is PhysJS.ThermalDeBroglie.wavelength_eq, be-12."
+        "The mass action is derived from ideal-gas chemical potentials with statistical weights in PhysJS.Saha.saha_eq. The thermal factor is PhysJS.ThermalDeBroglie.wavelength_eq, be-12. The catalogued K is the case g₊ g_e = g_A."
       ],
       "dependencies": [],
       "dimensional_signature": "[L^-3]",
-      "notes": "Closed-form evaluator evaluateSaha from the catalog record. The overlay formalRef is PhysJS.Saha.saha_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. Type cross-domain. Derived from be-12. The electron spin weight 2 and the internal partition functions are not in this statement. Multiplying by 2 is a different number. Not a second proof of be-12. Scope: The electron statistical weight 2 is not in this statement.",
+      "notes": "Closed-form evaluator evaluateSaha from the catalog record. The overlay formalRef is PhysJS.Saha.saha_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. Type cross-domain. Derived from be-12. The electron spin weight 2 and the internal partition functions are not in the catalogued K: the theorem carries them as the weights g_i, and K is its case g₊ g_e = g_A. Multiplying K by 2 is a different number. Not a second proof of be-12. Scope: The electron statistical weight 2 is not in this statement.",
       "dimension": {
         "L": -3,
         "M": 0,
@@ -6183,13 +6183,13 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "The mixed partials of Φ = ½ L11 X1² + L12 X1 X2 + ½ L22 X2² are both L12, so L12 = L21. thermoelectric_instance applies the Kelvin–Peltier relation, be-73, and does not re-prove Π = S T. An antisymmetric cross term produces no entropy. The magnetic case L12(B) = L21(−B) is not this row. Onsager",
+      "context": "Detailed balance π_i W_ij = π_j W_ji of the jump rates makes the kinetic coefficients, the initial slopes of the equilibrium cross-correlations, symmetric, so L12 = L21. A three-state cycle without detailed balance breaks the symmetry. The mixed partials of Φ = ½ L11 X1² + L12 X1 X2 + ½ L22 X2² are both L12. thermoelectric_instance applies the Kelvin–Peltier relation, be-73, and does not re-prove Π = S T. An antisymmetric cross term produces no entropy. The magnetic case L12(B) = L21(−B) is not this row. Onsager",
       "formula_latex": "L_{12} = L_{21}",
       "source_part": "III",
       "source_section": "Thermal catalog (be-170) — established textbook relation, PhysJS.OnsagerReciprocity.onsager_eq",
       "known_issues": [],
       "references": [
-        "thermoelectric_instance applies PhysJS.KelvinRelation.peltier_eq, be-73."
+        "thermoelectric_instance applies PhysJS.KelvinRelation.peltier_eq, be-73. The symmetry is derived from detailed balance, and not_without_balance is the failing control."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
