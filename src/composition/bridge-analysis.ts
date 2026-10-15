@@ -24,8 +24,9 @@
  * @module composition/bridge-analysis
  */
 
-import { ratioSpread } from '../numerical/statistics.js';
 import { constantRecord } from '../dimensional/symbolic-constants.js';
+import { constantRatio, fixedPoint } from '../canonical/fixed-points.js';
+import { formatRational, rationalize } from './rational-exponent.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -145,10 +146,12 @@ function makeInputs(e: BridgeEdge): Array<Record<string, number>> {
     }
   };
   for (let j = 0; j < 3; j++) {
-    const magnitudes: Record<string, number> = {};
-    e.sources.forEach((s, i) => {
-      magnitudes[s.name] = Math.pow(1.6 + i, 1 + 0.27 * j);
-    });
+    // Source i takes (1.6 + i)^(1 + 0.27 j): this audit's own scheme, stated here.
+    const magnitudes = fixedPoint(
+      e.sources.map((s) => s.name),
+      1 + 0.27 * j,
+      { base: 1.6, step: 1 },
+    );
     // A negated source is tried only when the DOMAIN refuses the positive point (a carrier
     // charge that must be negative). A positive point the domain admits but the evaluator
     // cannot finish (an exponential that overflows, be-82) is a degenerate sample and not a
@@ -166,22 +169,86 @@ function makeInputs(e: BridgeEdge): Array<Record<string, number>> {
   return sets;
 }
 
-/** Recognizable dimensionless prefactors (small rationals, 1/nπ, √, π). */
-const CLEAN_PREFACTORS: readonly number[] = [
-  1, 2, 3, 4, 0.5, 0.25, Math.log(2),
-  1 / (2 * Math.PI), 1 / (4 * Math.PI), 1 / (8 * Math.PI),
-  Math.sqrt(2 * Math.PI), Math.sqrt(Math.PI),
-  Math.PI, 2 * Math.PI, 4 * Math.PI, 6 * Math.PI, 1 / (6 * Math.PI),
-];
-const isCleanPrefactor = (p: number): boolean =>
-  CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);
+/** The denominator cap of a clean rational: the Buckingham enumerator's. */
+const CLEAN_MAX_DENOMINATOR = 720;
+/** The relative tolerance of a clean hit: the one the derivation fit uses. */
+const CLEAN_TOLERANCE = 1e-9;
+/** The (a, b) pairs of π^a · ln2^b, the simplest first. */
+const CLEAN_EXPONENT_PAIRS: readonly (readonly [number, number])[] = (() => {
+  const pairs: [number, number][] = [];
+  for (let a = -2; a <= 2; a++) for (let b = -1; b <= 1; b++) pairs.push([a, b]);
+  pairs.sort((x, y) => Math.abs(x[0]) + Math.abs(x[1]) - (Math.abs(y[0]) + Math.abs(y[1])) || Math.abs(x[0]) - Math.abs(y[0]));
+  return pairs;
+})();
+
+/** `π`, `π²`, `ln 2`, `(ln 2)²`, as a product string. */
+function symbolicFactor(a: number, b: number): string {
+  const parts: string[] = [];
+  if (a === 1) parts.push('π');
+  else if (a === 2) parts.push('π²');
+  if (b === 1) parts.push('ln 2');
+  else if (b === 2) parts.push('(ln 2)²');
+  return parts.join(' ');
+}
+
+/** `r = p / (π^a · ln2^b)`, with `p = n/d`, as the exact form string. */
+function renderCleanForm(n: bigint, d: bigint, a: number, b: number, root: boolean): string {
+  // Negative exponents put the symbol in the numerator.
+  const numSym = symbolicFactor(a < 0 ? -a : 0, b < 0 ? -b : 0);
+  const denSym = symbolicFactor(a > 0 ? a : 0, b > 0 ? b : 0);
+  const numParts = [...(n === 1n && numSym !== '' ? [] : [n.toString()]), ...(numSym === '' ? [] : [numSym])];
+  const denParts = [...(d === 1n ? [] : [d.toString()]), ...(denSym === '' ? [] : [denSym])];
+  const numerator = numParts.join('');
+  if (denParts.length === 0) return root ? (numerator === 'π' ? '√π' : /^[0-9]+$/.test(numerator) && numParts.length === 1 ? `√${numerator}` : `√(${numerator})`) : numerator;
+  const denominator = denParts.length === 1 ? denParts[0]! : `(${denParts.join('')})`;
+  const form = `${numerator}/${denominator}`;
+  return root ? `√(${form})` : form;
+}
+
+/**
+ * The exact form of a clean dimensionless prefactor, or `undefined` when
+ * the number is not one. A prefactor `r` is clean when `r = p / (π^a · ln2^b)`
+ * for `a ∈ −2..2`, `b ∈ −1..1` and a rational `p` with denominator at most
+ * 720, and numerator at most 720, that reproduces it to the relative 1e-9 the
+ * derivation fit uses; or
+ * when `r²` is, which names `√π`, `√(2π)` and their kin. The simplest
+ * `(a, b)` that fits is the one reported, so `2` is `2` and not `2π/π`.
+ * The rule replaces a list of seventeen constants matched at 1e-3; `9/8`
+ * (be-80) and `π/ln 2` (be-84) were not on it, and `π²/60`, the
+ * Stefan–Boltzmann closed form, is a hit under this rule.
+ *
+ * @internal
+ */
+export function cleanPrefactorForm(p: number): string | undefined {
+  if (!Number.isFinite(p) || p === 0) return undefined;
+  const sign = p < 0 ? '-' : '';
+  const r = Math.abs(p);
+  for (const root of [false, true]) {
+    const value = root ? r * r : r;
+    for (const [a, b] of CLEAN_EXPONENT_PAIRS) {
+      const scaled = value * Math.pow(Math.PI, a) * Math.pow(Math.LN2, b);
+      const q = rationalize(scaled, { maxDenominator: CLEAN_MAX_DENOMINATOR, tolerance: CLEAN_TOLERANCE });
+      // The cap bounds the numerator too. With it free, every integer-valued double
+      // (a G-closure of 3.6e21) is a rational over 1, and 21791/563 reproduced the
+      // BCS ratio 1.7639 to 1e-9 by chance: a small rational has a small numerator.
+      if (q !== undefined && (q.numerator < 0n ? -q.numerator : q.numerator) <= BigInt(CLEAN_MAX_DENOMINATOR)) {
+        return sign + renderCleanForm(q.numerator, q.denominator, a, b, root);
+      }
+    }
+  }
+  return undefined;
+}
+
+const isCleanPrefactor = (p: number): boolean => cleanPrefactorForm(p) !== undefined;
 
 /**
  * A canonical closure more than ten times away from 1 is not a recovered
- * prefactor. Stefan–Boltzmann (≈0.1645) and Wien (≈1.265) stay inside that
- * window and keep the empirical/tuned mark. A G-closure of an atomic law
- * (10^21–10^25) does not. A recognized constant (2π, ln 2, 4π, 1/(6π), …)
- * stays even when it sits outside the window. The search includes ε₀, so the
+ * prefactor. Wien (≈1.265, 2π over the root of a transcendental equation)
+ * stays inside that window and keeps the empirical/tuned mark;
+ * Stefan–Boltzmann's π²/60 is a clean form under `cleanPrefactorForm`. A
+ * G-closure of an atomic law (10^21–10^25) does not pass. A recognized
+ * constant (2π, ln 2, 4π, 1/(6π), …) stays even when it sits outside the
+ * window. The search includes ε₀, so the
  * field energy density derives on {ε₀} with its sourced ½; the {ℏ, c, e}
  * stand-in it once closed on, μ0 rewritten through α, no longer arises, and
  * the guard that rejected it is gone (it changed no row of either graph).
@@ -212,6 +279,8 @@ interface DerivationResult {
   readonly prefactor?: number;
   /** True when derived AND the prefactor is a recognizable constant. */
   readonly cleanPrefactor?: boolean;
+  /** The exact form of a clean prefactor (`9/8`, `π/ln 2`); absent when it is not clean. */
+  readonly prefactorForm?: string;
 }
 
 /**
@@ -248,14 +317,17 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
       for (const [name, exp] of Object.entries(factors)) cand *= Math.pow(i[name]!, exp);
       return e.evaluate(i) / cand;
     });
-    const { mean, cv } = ratioSpread(ratios);
-    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean)) {
+    // The coefficient of variation under 1e-9: this audit's own statistic and tolerance.
+    const decided = constantRatio(ratios, 1e-9, { statistic: 'cv' });
+    if (decided.constant && recoveredCanonicalPrefactor(e.id, decided.value)) {
+      const form = cleanPrefactorForm(decided.value);
       return {
         status: 'derived',
         subset: S.map((x) => x.name),
         monomial: r.monomial,
-        prefactor: mean,
-        cleanPrefactor: isCleanPrefactor(mean),
+        prefactor: decided.value,
+        cleanPrefactor: form !== undefined,
+        ...(form === undefined ? {} : { prefactorForm: form }),
       };
     }
   }

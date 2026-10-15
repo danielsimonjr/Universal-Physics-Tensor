@@ -12,7 +12,7 @@
 import type { ChainClassification } from '../canonical/structural.js';
 import type { CompositionResult } from '../relations/composition-table.js';
 import type { BuckinghamFilterRecord } from './buckingham-filter.js';
-import { compareChainEdgeIds, type ChainCandidateKind } from './chain-candidate.js';
+import { chainClassIndex, compareChainEdgeIds, type ChainCandidateKind } from './chain-candidate.js';
 import type { ChainRegimeMismatch } from './chain-regime.js';
 
 /**
@@ -51,19 +51,6 @@ export function chainOrderKey(record: ChainRecord): ChainCandidateKind {
   return record.theorem === 'PhysJS.Dimensional.monomial_form' ? 'unique-monomial' : 'unfixed-shape';
 }
 
-function classIndex(kind: ChainCandidateKind): number {
-  switch (kind) {
-    case 'confirmation':
-      return 0;
-    case 'restatement':
-      return 1;
-    case 'unique-monomial':
-      return 2;
-    case 'unfixed-shape':
-      return 3;
-  }
-}
-
 /**
  * Total order of chain records by {@link chainOrderKey}, then by edge ids.
  *
@@ -74,7 +61,7 @@ function classIndex(kind: ChainCandidateKind): number {
  */
 export function orderChainRecords(records: readonly ChainRecord[]): ChainRecord[] {
   return [...records].sort((a, b) => {
-    const byClass = classIndex(chainOrderKey(a)) - classIndex(chainOrderKey(b));
+    const byClass = chainClassIndex(chainOrderKey(a)) - chainClassIndex(chainOrderKey(b));
     if (byClass !== 0) return byClass < 0 ? -1 : 1;
     return compareChainEdgeIds(a.edgeIds, b.edgeIds);
   });

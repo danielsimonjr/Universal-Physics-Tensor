@@ -70,7 +70,8 @@ import { AXES } from './axes.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { applyCarrierSignPolicy } from '../bridges/carrier-sign.js';
-import { CONSTANT_REGISTRY, CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { CONSTANT_REGISTRY, CONSTANTS, isRegisteredConstant, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { forEachScalarLeaf } from '../dimensional/ast-leaves.js';
 import type { Dimension } from '../dimensional/types.js';
 import type { InformationMeasure } from '../core/types.js';
 import { CHARGE, DIMENSIONLESS, MASS } from '../dimensional/types.js';
@@ -211,7 +212,7 @@ function hasUnresolvedStub(node: ExprNode, governing: ReadonlySet<string>): bool
   if (node.kind === 'symbol') {
     if (dimensionlessLeaf(node.name) !== undefined) return false;
     if (governing.has(node.name)) return false;
-    if (node.name in CONSTANTS) return false;
+    if (isRegisteredConstant(node.name)) return false;
     return true;
   }
   if (node.kind === 'op') return node.args.some((a) => hasUnresolvedStub(a, governing));
@@ -248,18 +249,14 @@ function formulaFactorExponents(eq: CanonicalEquation): Record<string, number> {
   if (powers === undefined) return {};
   const governing = new Set(eq.dimensional.governing.map((g) => g.name));
   const dims = new Map<string, Dimension>();
-  const collectDims = (node: ExprNode): void => {
-    if (node.kind === 'symbol') dims.set(node.name, node.dim);
-    else if (node.kind === 'op') for (const arg of node.args) collectDims(arg);
-  };
-  collectDims(eq.scalarAst);
+  forEachScalarLeaf(eq.scalarAst, (leaf) => dims.set(leaf.name, leaf.dim), {});
   const factors: Record<string, number> = {};
   for (const [name, exp] of powers) {
     if (exp === 0) continue;
     const dim = dims.get(name);
     if (dim === undefined || !equals(dim, DIMENSIONLESS)) continue;
     if (dimensionlessLeaf(name) !== undefined) continue;
-    if (governing.has(name) || name in CONSTANTS) continue;
+    if (governing.has(name) || isRegisteredConstant(name)) continue;
     factors[name] = exp;
   }
   return factors;
@@ -325,12 +322,7 @@ function inputParity(node: ExprNode, name: string): InputParity {
 function evenInputNames(node: ExprNode | undefined): ReadonlySet<string> {
   if (node === undefined) return new Set();
   const names = new Set<string>();
-  const walk = (n: ExprNode): void => {
-    if (n.kind === 'symbol') names.add(n.name);
-    else if (n.kind === 'op') for (const arg of n.args) walk(arg);
-    else if (n.kind === 'abs' || n.kind === 'transcendental' || n.kind === 'dirac-delta') walk(n.arg);
-  };
-  walk(node);
+  forEachScalarLeaf(node, (leaf) => names.add(leaf.name), { abs: true, transcendental: true, diracDelta: true });
   const even = new Set<string>();
   for (const name of names) {
     if (inputParity(node, name) === 'even') even.add(name);

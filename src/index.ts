@@ -525,15 +525,19 @@ export type {
 // Identifiability classifier (structural over/exactly/under-determined
 // over the composition graph — Consequence 1 of the bridge-inference
 // epistemics note)
+/** The forward closure, the per-target classifier, the sweep, and the log-space rank over the monomial edges. */
 export {
   classifyIdentifiability,
   classifyAll,
   forwardClosure,
+  identifiabilityByRank,
 } from './composition/index.js';
+/** The classifier's verdict, result and option types, and the rank instrument's report. */
 export type {
   IdentifiabilityVerdict,
   IdentifiabilityResult,
   IdentifiabilityOptions,
+  RankIdentifiability,
 } from './composition/index.js';
 
 // Retrodiction harness (the framework's own falsification benchmark —

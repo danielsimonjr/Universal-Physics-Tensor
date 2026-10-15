@@ -29,6 +29,7 @@ import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import type { IdentifiabilityResult } from './identifiability.js';
 import { classifyIdentifiability, forwardClosure } from './identifiability.js';
+import { fixedPoint } from '../canonical/fixed-points.js';
 import type { RetrodictionResult } from './retrodiction.js';
 import { retrodictNode } from './retrodiction.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -153,10 +154,8 @@ function encodedMatchesMonomial(
   identifications: readonly QuantityIdentification[],
 ): boolean {
   if (knownNames.length === 0) return true;
-  const base: Record<string, number> = {};
-  knownNames.forEach((name, i) => {
-    base[name] = 1.7 + 0.3 * i;
-  });
+  // Known i takes 1.7 + 0.3 i: this check's own scheme, stated here; each is then scaled by 4.
+  const base = fixedPoint(knownNames, 1, { base: 1.7, step: 0.3 });
   const read = (values: Record<string, number>): number | undefined => {
     const retro = retrodictNode(edges, values, target, { identifications });
     const hit = retro.predictions.find((prediction) => Number.isFinite(prediction.value) && prediction.value !== 0);
