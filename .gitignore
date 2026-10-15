@@ -71,3 +71,6 @@ tools/**/dist
 .tracker-watch.json
 
 *.orig
+
+# Lake build output for lean/ (CI-built, never committed)
+.lake/

@@ -281,3 +281,28 @@ jobs:
         env:
           UPT_REQUIRE_PEERS: '1'
           GL4_LONG: '1'
+
+  lean:
+    # The Lean proofs moved here from PhysJS (11.0.0). `lean/` is outside the npm package
+    # (package.json `files`); this job is the only thing that builds it. `lake build` uses the
+    # Mathlib cache, then the axiom audit imports the module `lean` (the aggregator `lean.lean`)
+    # and fails on `sorryAx`, `Lean.ofReduceBool`, or any axiom outside propext,
+    # Classical.choice and Quot.sound. Theorem names stay `PhysJS.*`: namespaces, not paths.
+    # Not yet a required context.
+    name: lake build and axiom audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and axiom audit
+        uses: leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865 # v1
+        with:
+          build: "true"
+          test: "false"
+          lint: "false"
+          use-mathlib-cache: "true"
+          axiom-audit: "true"
+          axiom-audit-root: "lean"
+          axiom-audit-allow: "propext,Classical.choice,Quot.sound"
