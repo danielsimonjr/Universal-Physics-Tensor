@@ -15,10 +15,11 @@
  * @module tests/peers-required
  */
 import { describe, it, expect } from 'vitest';
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { peerPresent, requirePeers, simplifierPresent, vizPresent } from './helpers/peers.js';
+import { tempDir } from './helpers/tmp.js';
 
 const PEERS: readonly (readonly [string, boolean, string])[] = [
   ['MathTS autograd', peerPresent, 'the AST-AD test arc would silently skip'],
@@ -56,18 +57,34 @@ function testFiles(dir: string): string[] {
   );
 }
 
+/** The test files under `dir` that return instead of skipping, `exclude`d paths left out. */
+function offenders(dir: string, exclude: ReadonlySet<string>): string[] {
+  return testFiles(dir).filter((file) => !exclude.has(file) && returnsInsteadOfSkipping(readFileSync(file, 'utf8')));
+}
+
 describe('a peer-gated control skips; it never returns as a pass', () => {
-  const here = dirname(fileURLToPath(import.meta.url));
+  const self = fileURLToPath(import.meta.url);
+  const here = dirname(self);
 
   it('POSITIVE CONTROL: the scan finds the three return-instead-of-skip forms', () => {
     expect(returnsInsteadOfSkipping("it('x', async () => {\n  if (!peerPresent && !peerRequired) return;\n})")).toBe(true);
     expect(returnsInsteadOfSkipping("if (!peerPresent && !peerRequired) {\n  // reason\n  return;\n}")).toBe(true);
     expect(returnsInsteadOfSkipping("if (!(await isSimplifierAvailable()) && process.env.UPT_REQUIRE_PEERS !== '1') {\n  // a\n  // b\n  return;\n}")).toBe(true);
+    expect(returnsInsteadOfSkipping("if (!(await isSimplifierAvailable())) return;")).toBe(true);
     expect(returnsInsteadOfSkipping("it.skipIf(!peerPresent && !peerRequired)('x', () => {})")).toBe(false);
   });
 
-  it('no test under tests/atlas returns instead of skipping', () => {
-    const offenders = testFiles(resolve(here, 'atlas')).filter((file) => returnsInsteadOfSkipping(readFileSync(file, 'utf8')));
-    expect(offenders.map((file) => file.slice(here.length + 1))).toEqual([]);
+  it('POSITIVE CONTROL: the directory scan finds a planted offender and passes a clean file', () => {
+    const dir = tempDir('upt-peers-scan-');
+    writeFileSync(join(dir, 'planted.test.ts'), "it('x', async () => {\n  if (!(await isSimplifierAvailable())) return;\n});\n");
+    writeFileSync(join(dir, 'clean.test.ts'), "it.skipIf(!simplifierPresent)('x', () => {});\n");
+    expect(offenders(dir, new Set())).toEqual([join(dir, 'planted.test.ts')]);
+  });
+
+  it('no test under tests/ returns instead of skipping', () => {
+    // Widened from tests/atlas on 2026-10-15, when tests/composition/mathts-quiet.test.ts held the
+    // form. This file carries the three forms as string literals for its control, so it alone is
+    // left out by path.
+    expect(offenders(here, new Set([self])).map((file) => file.slice(here.length + 1))).toEqual([]);
   });
 });

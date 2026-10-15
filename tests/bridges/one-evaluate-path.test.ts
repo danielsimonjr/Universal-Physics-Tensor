@@ -157,13 +157,29 @@ describe('an input contract binds each spelling to one slot', () => {
   });
 
   it('every catalog and canonical edge builds its contract (an absent input, never a spelling clash)', () => {
-    for (const edge of [...CATALOG_GRAPH, ...CANONICAL_GRAPH]) {
+    const edges = [...CATALOG_GRAPH, ...CANONICAL_GRAPH];
+    let checked = 0;
+    let refused = 0;
+    let evaluated = 0;
+    for (const edge of edges) {
+      checked++;
       try {
         evaluateRelation(edge.id, {});
+        evaluated++;
       } catch (e) {
+        refused++;
         expect((e as Error).message).not.toMatch(/input contract spells/);
       }
     }
+    // The loop asserted only inside the catch until 2026-10-15; an evaluator that stopped
+    // throwing would have passed it vacuously. Every edge is checked: an edge that reads an
+    // input refuses the empty set (`missing input`), and an all-constant relation (a Planck
+    // unit) evaluates it. Both counts are stated so neither path is silent.
+    expect(checked).toBe(edges.length);
+    expect(edges.length).toBeGreaterThan(100);
+    expect(refused + evaluated).toBe(checked);
+    expect(refused).toBeGreaterThan(evaluated);
+    expect(evaluated).toBeGreaterThan(0);
   });
 });
 

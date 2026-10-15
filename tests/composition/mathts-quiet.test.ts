@@ -20,6 +20,7 @@ import { scalarSymbolsFromMathTs } from '../../src/composition/mathts-scalar-sym
 import { isSimplifierAvailable, simplifyExpr } from '../../src/composition/expr-simplify.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
+import { simplifierPresent } from '../helpers/peers.js';
 
 const src = resolve(dirname(fileURLToPath(import.meta.url)), '../../src');
 const OWNER = 'composition/mathts-quiet.ts';
@@ -91,10 +92,11 @@ describe('the MathTS console silencer', () => {
     expect(process.stderr.write).toBe(before.write);
   });
 
-  it('a parse and a simplify after the peer is loaded do not touch the sinks (the window is the load only)', async () => {
+  // Skipped, never returned as a pass, when the simplifier peer is absent (tests/peers-required.test.ts).
+  it.skipIf(!simplifierPresent)('a parse and a simplify after the peer is loaded do not touch the sinks (the window is the load only)', async () => {
     // Load first, outside the trap: the one-time window is allowed there.
     scalarSymbolsFromMathTs(product);
-    if (!(await isSimplifierAvailable())) return;
+    expect(await isSimplifierAvailable()).toBe(true);
     await simplifyExpr(product);
     const hits = await assignmentsDuring(async () => {
       scalarSymbolsFromMathTs(product);
