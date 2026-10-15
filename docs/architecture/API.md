@@ -33,7 +33,7 @@
 | `@public` | Stable surface — symbols whose behavioral contract has settled across at least one minor release | Breaking changes require a major-version bump |
 | `@internal` | Implementation detail — not re-exported from `src/index.ts` | May change at any time |
 
-> **Coverage note**: the intelligent-index layer (`LabeledTensor`, `Cell`/regime registry, `bridgeGradient`, catalog adapter, BE-53/54 evaluators) is on the snapshot-tested public surface but is documented in its own tutorials (`intelligent-index-tutorial.md`, `bridge-gradient-tutorial.md`) rather than enumerated per-symbol here. The composition layer is summarized in [§10](#composition--membership--confrontation-layer) and [§11](#phase-cd-analysis-namespacing-gate-and-related-exports). These are likewise on the surface but deferred to the snapshot test + `CHANGELOG.md`: the `composeSymbolic`/Observable symbolic-composition layer, the public geometrized-units adapters `toGeometrized`/`fromGeometrized`/`geometrizedFactor`/`NonGeometrizableDimensionError`, the `BridgeEquations` evaluator facade, and the `LabeledTensor` `axisOrder`/`axisOf` + `mergeAxes`/`splitAxis` extension with its `AxisOrderError`/`AxisMergeError`/`AxisSplitError`. The adjudication ledger, consequence propagation, the unified confrontation registry and the epistemic-grounding ledger are itemized in [§13](#discovery-adjudication-ledger-and-consequence-propagation), [§14](#real-data-confrontation-subsystem), and [§15](#epistemic-grounding-ledger). `tests/api/public-surface.test.ts` remains the authoritative enumeration.
+> **Coverage note**: the intelligent-index layer (`LabeledTensor`, `Cell`/regime registry, the bridge parameter gradients `bridgeGradientNumerical`/`bridgeGradientAST`, catalog adapter, the closed-form evaluation `evaluateRelation`) is on the snapshot-tested public surface but is documented in its own tutorials (`intelligent-index-tutorial.md`, `bridge-gradient-tutorial.md`) rather than enumerated per-symbol here. The composition layer is summarized in [§10](#composition--membership--confrontation-layer) and [§11](#phase-cd-analysis-namespacing-gate-and-related-exports). These are likewise on the surface but deferred to the snapshot test + `CHANGELOG.md`: the `composeSymbolic`/Observable symbolic-composition layer, the public geometrized-units adapters `toGeometrized`/`fromGeometrized`/`geometrizedFactor`/`NonGeometrizableDimensionError`, and the `LabeledTensor` `axisOrder`/`axisOf` + `mergeAxes`/`splitAxis` extension with its `AxisOrderError`/`AxisMergeError`/`AxisSplitError`. (The bridgeGradient root export and the BridgeEquations evaluator facade this note once listed were removed on 2026-10-09 and in 6.0.0; `tests/api/api-reference-symbols.test.ts` now reads this note.) The adjudication ledger, consequence propagation, the unified confrontation registry and the epistemic-grounding ledger are itemized in [§13](#discovery-adjudication-ledger-and-consequence-propagation), [§14](#real-data-confrontation-subsystem), and [§15](#epistemic-grounding-ledger). `tests/api/public-surface.test.ts` remains the authoritative enumeration.
 
 All symbols in this document are `@public` unless annotated otherwise.
 
@@ -68,17 +68,13 @@ A `BRIDGE_EQUATIONS` entry does not carry `formalRef`. The reference for a catal
 
 Passing the reference to `deriveEvidence` (the atlas subpath) lights `formally-proved` only when `kind` is `bridge`. A property lights `formally-proved-property`. A cross-check lights `formally-proved-cross-check`. Those two labels are shown and are not a proved bridge. A reduction, a limit, and a derivation-step light none of the three. The catalog evidence path passes a kind-`bridge` reference, so an adjudicated row's catalog evidence includes `formally-proved`. An unadjudicated row stays `proposed`.
 
-### `isActiveStatus(s)` — function
+### Filtering invalid entries
 
-Type predicate that returns `true` for any status that is not `'invalid'`. Use to exclude deprecated catalog entries from active-research filters.
-
-**Kind**: function
-**Stability**: `@internal` to the main package entry — **not** re-exported from `src/index.ts`. `isActiveStatus` is defined in `src/bridges/index.ts`; `package.json` `exports` has no bridges subpath, so a consumer cannot import it at all. To filter out invalid entries from the main-package surface, compare `status` directly.
+No status predicate is exported: the `isActiveStatus(s)` function this section once documented (a type predicate for any status that is not `'invalid'`, defined in `src/bridges/index.ts`) no longer exists anywhere in the package, and `package.json` `exports` has no bridges subpath. To exclude invalid entries, compare `status` directly.
 
 ```typescript
 import { BRIDGE_EQUATIONS } from 'universal-physics-tensor';
 
-// isActiveStatus is not on the main public surface — compare status directly:
 const active = BRIDGE_EQUATIONS.filter(e => e.status !== 'invalid');
 ```
 
@@ -374,9 +370,9 @@ A warning class for a covariant derivative whose `wrt` coordinate label collides
 **Kind**: warning class
 **Stability**: `@public`
 
-### `evaluateBE37CovariantEikonalNumerical(inputs)` — function
+### `evaluateCovariantEikonalNumerical(inputs)` — function
 
-Numerical evaluation of the covariant eikonal phase for bridge equation BE-37 (Shapiro delay).
+Numerical evaluation of the covariant eikonal phase for bridge equation BE-37 (Shapiro delay). (This section named the export `evaluateBE37CovariantEikonalNumerical` until 2026-10-15; the root export is `evaluateCovariantEikonalNumerical`, `src/index.ts`.)
 
 **Kind**: async function
 **Stability**: `@public`
