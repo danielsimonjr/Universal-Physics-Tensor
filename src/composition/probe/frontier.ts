@@ -10,6 +10,7 @@ import { QUANTITY_IDENTIFICATIONS } from '../compose.js';
 import { candidateId, candidateIdIfSlug } from '../adjudication.js';
 import type { BridgeEdge } from '../edge.js';
 import type { FrontierGap, ProbeDataset, SearchProblem } from './types.js';
+import { logDesign, logDesignRank, piStructure } from './power-law.js';
 
 const ALIAS_PAIRS = new Set(
   QUANTITY_IDENTIFICATIONS.map((id) => candidateId(id.from, id.to)),
@@ -167,32 +168,52 @@ export function problemFromResidualGap(
       `problemFromResidualGap: ${gap.kind} is not a Product B search target; use upt discover`,
     );
   }
+  // Identifiability is the rank of the log-design [1, log π₁, …, log πₖ] over the exploratory
+  // rows (MathTS `matrixRank`), against the k + 1 parameters of a rational power law: a
+  // prefactor and one exponent per π-group of the governing set. The row count is kept under
+  // its own name; it is not a count of independent observations (six rows with c/d = (a/b)²
+  // on every one of them carry two).
   const nObs = exploratory?.rows.length ?? 0;
-  const nPar = 1;
-  const identifiable = nObs >= nPar && nObs > 0;
+  const { groups } = piStructure(target, governing);
+  const k = groups.length;
+  const nPar = 1 + k;
+  const design = nObs > 0 ? logDesign(groups, exploratory!.rows) : { rows: [], used: 0, skipped: 0 };
+  const rank = logDesignRank(design);
+  const status: NonNullable<FrontierGap['identifiability']['parametric']>['status'] =
+    nObs === 0 ? 'unknown' : rank >= nPar ? 'identifiable' : 'partially-identifiable';
+  const parameters = k === 0 ? 'a prefactor' : `a prefactor and ${k} exponent(s)`;
+  const reasons =
+    status === 'unknown'
+      ? ['no observations: identifiability not assessed']
+      : status === 'identifiable'
+        ? [`rank ${rank} of the log-design over ${design.used} usable row(s) of ${nObs}: ${parameters} identifiable`]
+        : [
+            `rank ${rank} of the log-design over ${design.used} usable row(s) of ${nObs} (${design.skipped} with a non-positive π-group), ` +
+              `against ${nPar} parameters (${parameters}): the exponents are not all identifiable; the monomial prefactor is fit on the linear scale`,
+          ];
   const enriched: FrontierGap = {
     ...gap,
     identifiability: {
       kind: 'parametric',
       parametric: {
-        status: identifiable ? 'identifiable' : nObs === 0 ? 'unknown' : 'non-identifiable',
-        rank: identifiable ? nPar : 0,
+        status,
+        rank,
         nParameters: nPar,
-        nIndependentObservations: nObs,
-        reasons: identifiable
-          ? [`${nObs} observations vs ${nPar} free prefactor`]
-          : ['insufficient observations for a unique prefactor'],
+        nIndependentObservations: rank,
+        nObservations: nObs,
+        reasons,
       },
     },
     searchability: {
-      searchable: identifiable || nObs === 0,
-      reasons: identifiable
-        ? ['parametric rank sufficient for a monomial prefactor']
-        : nObs === 0
+      searchable: true,
+      reasons:
+        status === 'unknown'
           ? ['no data — structural generation only; status will be insufficient-evidence']
-          : ['non-identifiable — do not search'],
+          : status === 'identifiable'
+            ? ['parametric rank sufficient for a monomial prefactor and the π-group exponents']
+            : ['the monomial prefactor is identifiable; the power-law fit abstains by itself on a rank-deficient design'],
     },
-    status: identifiable || nObs === 0 ? 'searchable' : 'underdetermined',
+    status: 'searchable',
   };
   return {
     gap: enriched,

@@ -27,7 +27,8 @@
  * @internal
  */
 
-import { betainc, gammainc, gammaincp } from '@danielsimonjr/mathts-functions';
+import { pairwiseDot, pairwiseSum } from '@danielsimonjr/mathts-core';
+import { betainc, gammainc, gammaincp, inv, propagateUncertainty } from '@danielsimonjr/mathts-functions';
 import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
@@ -83,6 +84,12 @@ export interface StudyObservation {
 export interface StudyCorrection {
   readonly input: string;
   readonly powers: readonly number[];
+  /**
+   * A reference value the file declares for a power's coefficient (keyed by the power's text,
+   * e.g. `{"2": 0.0625}` for the pendulum series θ²/16): the fitted coefficient's z against it
+   * is reported, and decides nothing.
+   */
+  readonly reference?: Readonly<Record<string, number>>;
 }
 
 /** A declared comparison model formula and whether its scale is fit on exploratory rows. @internal */
@@ -186,7 +193,7 @@ function parseFamily(raw: unknown, governing: readonly StudyQuantity[], where: s
     refuse(where, 'needs {"input": <dimensionless governing input>, "powers": [p, ...]}');
   }
   for (const k of Object.keys(raw)) {
-    if (k !== 'input' && k !== 'powers') refuse(where, `undeclared key '${k}'`);
+    if (k !== 'input' && k !== 'powers' && k !== 'reference') refuse(where, `undeclared key '${k}'`);
   }
   const q = governing.find((g) => g.name === raw.input);
   if (!q) refuse(`${where}.input`, `'${raw.input}' is not a declared governing input`);
@@ -201,7 +208,15 @@ function parseFamily(raw: unknown, governing: readonly StudyQuantity[], where: s
     refuse(`${where}.powers`, 'must be positive finite numbers');
   }
   if (new Set(powers).size !== powers.length) refuse(`${where}.powers`, 'must be distinct');
-  return { input: q.name, powers };
+  if (raw.reference === undefined) return { input: q.name, powers };
+  if (!isObject(raw.reference)) refuse(`${where}.reference`, 'must be {"<power>": number}, keyed by a declared power');
+  const reference: Record<string, number> = {};
+  for (const [k, v] of Object.entries(raw.reference)) {
+    if (!powers.some((p) => String(p) === k)) refuse(`${where}.reference`, `'${k}' is not a declared power of this family`);
+    if (typeof v !== 'number' || !Number.isFinite(v)) refuse(`${where}.reference`, `'${k}' must be a finite number`);
+    reference[k] = v;
+  }
+  return { input: q.name, powers, reference };
 }
 
 /** One family `{input, powers}`, or a list of them, each in a different dimensionless input. */
@@ -559,22 +574,30 @@ function closeness(chi2: number, dof: number, alpha: number): ClosenessTest {
   return { chi2, dof, pLower, flagged: pLower < alpha / 2 };
 }
 
-/** Weighted straight line y = a + b·x with the effective variance σ_y² + b²σ_x², iterated from b = 1. */
+/**
+ * Weighted straight line y = a + b·x with the effective variance σ_y² + b²σ_x², iterated from b = 1.
+ * The weighted sums are core `pairwiseDot` and `pairwiseSum` (the stable sums), not a `reduce`.
+ */
 function affineFit(pts: readonly { x: number; sx: number; y: number; sy: number }[]): { a: number; b: number; chi2: number } | null {
   let b = 1;
   let a = 0;
+  const xs = pts.map((p) => p.x);
+  const ys = pts.map((p) => p.y);
+  const variance = (slope: number) => pts.map((p) => p.sy ** 2 + slope * slope * p.sx ** 2);
   for (let it = 0; it < 6; it++) {
-    const w = pts.map((p) => 1 / (p.sy ** 2 + b * b * p.sx ** 2));
-    const W = w.reduce((s, v) => s + v, 0);
-    const xm = pts.reduce((s, p, i) => s + w[i]! * p.x, 0) / W;
-    const ym = pts.reduce((s, p, i) => s + w[i]! * p.y, 0) / W;
-    const sxx = pts.reduce((s, p, i) => s + w[i]! * (p.x - xm) ** 2, 0);
-    const sxy = pts.reduce((s, p, i) => s + w[i]! * (p.x - xm) * (p.y - ym), 0);
+    const w = variance(b).map((v) => 1 / v);
+    const W = pairwiseSum(w);
+    const xm = pairwiseDot(w, xs) / W;
+    const ym = pairwiseDot(w, ys) / W;
+    const dx = xs.map((x) => x - xm);
+    const sxx = pairwiseDot(w, dx.map((d) => d * d));
+    const sxy = pairwiseDot(w, dx.map((d, i) => d * (ys[i]! - ym)));
     if (!(sxx > 0) || !Number.isFinite(sxy)) return null;
     b = sxy / sxx;
     a = ym - b * xm;
   }
-  const chi2 = pts.reduce((s, p) => s + (p.y - a - b * p.x) ** 2 / (p.sy ** 2 + b * b * p.sx ** 2), 0);
+  const v = variance(b);
+  const chi2 = pairwiseSum(pts.map((p, i) => (p.y - a - b * p.x) ** 2 / v[i]!));
   return Number.isFinite(chi2) ? { a, b, chi2 } : null;
 }
 
@@ -720,7 +743,9 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
     const where = `${source} line ${n}`;
     const m = /^\s*#\s*([A-Za-z_][\w.()-]*)\s*:\s?(.*)$/.exec(l);
     if (!m) refuse(where, "a declaration is '# key: value'");
-    const [, key, valueText] = m as unknown as [string, string, string];
+    // Both groups are unconditional in the pattern, so a match carries them.
+    const key = m[1]!;
+    const valueText = m[2]!;
     const value = declValue(valueText.trim());
     const path = key.split('.');
     if (key === 'target') {
@@ -894,6 +919,8 @@ export interface ModelTest {
   readonly fittedParameters: number;
   /** SI coherent; 1 for a fixed baseline, the level for the null model. */
   readonly prefactor: number | null;
+  /** Standard error of the prefactor from (ΦᵀWΦ)⁻¹ with the declared σ; null when unfit or fixed. */
+  readonly prefactorStderr: number | null;
   readonly exploratory: SetTest | null;
   readonly holdout: SetTest | null;
   readonly replication: SetTest | null;
@@ -904,21 +931,52 @@ type Predictor = (inputs: Readonly<Record<string, number>>) => number;
 
 /**
  * The effective σ of one row under a model f: σ_eff² = σ_y² + Σ_i (∂f/∂x_i · σ_xi)²
- * over the inputs with a σ, each derivative by a central difference at the
- * recorded inputs. First order in σ_x: exact for f linear in x_i.
+ * over the inputs with a σ, the GUM first-order propagation of MathTS
+ * `propagateUncertainty` (the one uncertainty path of the library, as in
+ * `composition/uncertainty.ts`), each partial a central difference with the
+ * relative step 1e-6·|x_i| at the recorded inputs. An input that is exactly
+ * zero has no relative step, so it is passed to MathTS shifted by
+ * c = 1e3·σ_xi and read back as z − c inside the model: the derivative is
+ * unchanged and the step is 1e-6·c = 1e-3·σ_xi, the floor the hand-coded
+ * difference used before. First order in σ_x: exact for f linear in x_i.
  *
  * @internal
  */
 export function effectiveSigma(r: StudyObservation, predict: Predictor): number {
-  let v = r.sigma * r.sigma;
-  for (const [name, sx] of Object.entries(r.inputSigma)) {
-    const x = r.inputs[name]!;
-    const h = Math.max(Math.abs(x) * 1e-6, sx * 1e-3);
-    const d = (predict({ ...r.inputs, [name]: x + h }) - predict({ ...r.inputs, [name]: x - h })) / (2 * h);
-    if (!Number.isFinite(d)) throw new RangeError(`the model's slope in ${name} is not finite on row ${r.id}`);
-    v += (d * sx) ** 2;
+  const names = Object.keys(r.inputSigma);
+  if (names.length === 0) return r.sigma;
+  const values: Record<string, number> = {};
+  const shift: Record<string, number> = {};
+  for (const name of names) {
+    const x = r.inputs[name] ?? NaN;
+    shift[name] = x === 0 ? 1e3 * r.inputSigma[name]! : 0;
+    values[name] = x + shift[name];
   }
-  return Math.sqrt(v);
+  const unshifted = (v: Record<string, number>): Record<string, number> => {
+    const inputs: Record<string, number> = { ...r.inputs };
+    for (const name of names) inputs[name] = v[name]! - shift[name]!;
+    return inputs;
+  };
+  const notFinite = (name: string) => new RangeError(`the model's slope in ${name} is not finite on row ${r.id}`);
+  // MathTS varies one input at a time; the input being varied when the model is not finite is
+  // the one to name, read from the stencil point itself rather than from MathTS's message.
+  let culprit: string | null = null;
+  const model = (v: Record<string, number>): number => {
+    const y = predict(unshifted(v));
+    if (!Number.isFinite(y) && culprit === null) culprit = names.find((name) => v[name] !== values[name]) ?? names[0]!;
+    return y;
+  };
+  let u;
+  try {
+    u = propagateUncertainty(model, values, r.inputSigma, { relativeStep: 1e-6 });
+  } catch (e) {
+    if (culprit !== null) throw notFinite(culprit);
+    throw e;
+  }
+  for (const name of names) {
+    if (!Number.isFinite(u.partials[name])) throw notFinite(name);
+  }
+  return Math.hypot(r.sigma, u.sigma);
 }
 
 const hasInputSigma = (rows: readonly StudyObservation[]) => rows.some((r) => Object.keys(r.inputSigma).length > 0);
@@ -944,8 +1002,46 @@ function testRows(rows: readonly StudyObservation[], predict: Predictor, fitted:
 const combine = (basis: readonly Predictor[], coef: readonly number[]): Predictor =>
   (x) => basis.reduce((s, b, j) => s + coef[j]! * b(x), 0);
 
-/** Solve the weighted normal equations for y ≈ Σ a_j·φ_j; null when they are singular. */
-function solveWeighted(phi: readonly number[][], y: readonly number[], sigma: readonly number[]): number[] | null {
+/** A weighted least-squares solution: the coefficients and their covariance (ΦᵀWΦ)⁻¹, or null when the inverse failed. */
+interface WeightedSolution {
+  readonly coef: number[];
+  readonly covariance: number[][] | null;
+}
+
+/**
+ * The inverse of the equilibrated normal matrix B (k×k, unit diagonal), MathTS `inv`,
+ * unscaled back to the covariance of the coefficients: Σ = S⁻¹ B⁻¹ S⁻¹. Null when
+ * MathTS refuses the inverse or returns something other than a k×k number matrix.
+ */
+function covarianceOf(B: readonly (readonly number[])[], s: readonly number[]): number[][] | null {
+  let raw: unknown;
+  try {
+    raw = inv(B.map((row) => [...row]));
+  } catch {
+    return null;
+  }
+  const k = s.length;
+  if (!Array.isArray(raw) || raw.length !== k) return null;
+  const out: number[][] = [];
+  for (let a = 0; a < k; a++) {
+    const row: unknown = raw[a];
+    if (!Array.isArray(row) || row.length !== k) return null;
+    const unscaled: number[] = [];
+    for (let b = 0; b < k; b++) {
+      const v: unknown = row[b];
+      if (typeof v !== 'number' || !Number.isFinite(v)) return null;
+      unscaled.push(v / (s[a]! * s[b]!));
+    }
+    out.push(unscaled);
+  }
+  return out;
+}
+
+/**
+ * Solve the weighted normal equations for y ≈ Σ a_j·φ_j; null when they are singular.
+ * The covariance of the solution is the inverse of the same (equilibrated) matrix.
+ */
+function solveWeighted(phi: readonly number[][], y: readonly number[], sigma: readonly number[]): WeightedSolution | null {
   const k = phi[0]?.length ?? 0;
   const A = Array.from({ length: k }, () => new Array<number>(k + 1).fill(0));
   phi.forEach((f, i) => {
@@ -955,7 +1051,10 @@ function solveWeighted(phi: readonly number[][], y: readonly number[], sigma: re
       A[a]![k]! += w * f[a]! * y[i]!;
     }
   });
-  if (k === 1) return A[0]![0]! > 0 ? [A[0]![1]! / A[0]![0]!] : null;
+  if (k === 1) {
+    const a00 = A[0]![0]!;
+    return a00 > 0 ? { coef: [A[0]![1]! / a00], covariance: [[1 / a00]] } : null;
+  }
   // Equilibrate so the pivot test is scale-free, then eliminate with partial pivoting.
   const s = A.map((row, a) => Math.sqrt(row[a]!));
   if (!s.every((v) => v > 0)) return null;
@@ -963,6 +1062,7 @@ function solveWeighted(phi: readonly number[][], y: readonly number[], sigma: re
     for (let b = 0; b < k; b++) A[a]![b]! /= s[a]! * s[b]!;
     A[a]![k]! /= s[a]!;
   }
+  const covariance = covarianceOf(A.map((row) => row.slice(0, k)), s);
   for (let c = 0; c < k; c++) {
     let p = c;
     for (let r = c + 1; r < k; r++) if (Math.abs(A[r]![c]!) > Math.abs(A[p]![c]!)) p = r;
@@ -974,7 +1074,7 @@ function solveWeighted(phi: readonly number[][], y: readonly number[], sigma: re
       for (let q = c; q <= k; q++) A[r]![q]! -= m * A[c]![q]!;
     }
   }
-  return A.map((row, a) => row[k]! / row[a]! / s[a]!);
+  return { coef: A.map((row, a) => row[k]! / row[a]! / s[a]!), covariance };
 }
 
 const EV_ROUNDS = 50;
@@ -982,9 +1082,10 @@ const EV_ROUNDS = 50;
 /**
  * Weighted least squares y ≈ Σ a_j·φ_j(x), from the exploratory rows only.
  * With input σ the weights are 1/σ_eff² of the current fit, iterated to a
- * fixed point (the effective-variance method).
+ * fixed point (the effective-variance method); the covariance is that of the
+ * last solve, with the fixed-point weights.
  */
-function fitLinear(rows: readonly StudyObservation[], basis: readonly Predictor[]): number[] | null {
+function fitLinear(rows: readonly StudyObservation[], basis: readonly Predictor[]): WeightedSolution | null {
   const phi = rows.map((r) =>
     basis.map((b) => {
       const f = b(r.inputs);
@@ -993,17 +1094,18 @@ function fitLinear(rows: readonly StudyObservation[], basis: readonly Predictor[
     }),
   );
   const y = rows.map((r) => r.observed);
-  let coef = solveWeighted(phi, y, rows.map((r) => r.sigma));
-  if (!hasInputSigma(rows)) return coef;
-  for (let round = 0; coef !== null && round < EV_ROUNDS; round++) {
+  let sol = solveWeighted(phi, y, rows.map((r) => r.sigma));
+  if (!hasInputSigma(rows)) return sol;
+  for (let round = 0; sol !== null && round < EV_ROUNDS; round++) {
+    const coef = sol.coef;
     const predict = combine(basis, coef);
     const next = solveWeighted(phi, y, rows.map((r) => effectiveSigma(r, predict)));
     if (next === null) return null;
-    const settled = next.every((a, j) => Math.abs(a - coef![j]!) <= 1e-13 * Math.max(Math.abs(a), 1e-300));
-    coef = next;
+    const settled = next.coef.every((a, j) => Math.abs(a - coef[j]!) <= 1e-13 * Math.max(Math.abs(a), 1e-300));
+    sol = next;
     if (settled) break;
   }
-  return coef;
+  return sol;
 }
 
 interface Split {
@@ -1025,6 +1127,8 @@ interface FittedModel {
   readonly predict: Predictor | null;
   /** Fitted coefficients of the basis terms, SI; null when unfit. */
   readonly coef: readonly number[] | null;
+  /** Covariance of `coef`, (ΦᵀWΦ)⁻¹; null when unfit, fixed, or the inverse failed. */
+  readonly covariance: readonly (readonly number[])[] | null;
 }
 
 /** A model as a sum of basis terms; `fit: false` means one fixed term with coefficient 1. */
@@ -1044,19 +1148,22 @@ function scoreModel(spec: ModelSpec, sets: Split, alpha: number, withheld: boole
   const { id, kind, label } = spec;
   const k = spec.fit ? spec.basis.length : 0;
   const failed = (error: string): FittedModel => ({
-    test: { id, kind, label, fittedParameters: k, prefactor: null, exploratory: null, holdout: null, replication: null, error },
+    test: { id, kind, label, fittedParameters: k, prefactor: null, prefactorStderr: null, exploratory: null, holdout: null, replication: null, error },
     predict: null,
     coef: null,
+    covariance: null,
   });
   try {
-    const coef = spec.fit ? fitLinear(sets.exploratory, spec.basis) : [1];
-    if (coef === null) {
+    const sol = spec.fit ? fitLinear(sets.exploratory, spec.basis) : { coef: [1], covariance: null };
+    if (sol === null) {
       return failed(k === 1
         ? 'model is zero on every exploratory row; no scale can be fit'
         : 'the model\'s terms are degenerate on the exploratory rows; they cannot be fit');
     }
+    const { coef, covariance } = sol;
     const predict = combine(spec.basis, coef);
     const on = (rows: readonly StudyObservation[]) => (withheld && rows.length > 0 ? testRows(rows, predict, 0, alpha) : null);
+    const v00 = covariance?.[0]?.[0];
     return {
       test: {
         id,
@@ -1064,12 +1171,14 @@ function scoreModel(spec: ModelSpec, sets: Split, alpha: number, withheld: boole
         label,
         fittedParameters: k,
         prefactor: coef[0]!,
+        prefactorStderr: v00 !== undefined && v00 >= 0 ? Math.sqrt(v00) : null,
         exploratory: sets.exploratory.length > 0 ? testRows(sets.exploratory, predict, k, alpha) : null,
         holdout: on(sets.holdout),
         replication: on(sets.replication),
       },
       predict,
       coef,
+      covariance,
     };
   } catch (e) {
     return failed((e as Error).message);
@@ -1091,10 +1200,11 @@ export interface CorrectionStep {
 const SUBSCRIPT = '₀₁₂₃₄₅₆₇₈₉';
 const sub = (n: number) => [...String(n)].map((d) => SUBSCRIPT[Number(d)]).join('');
 
-/** One admitted term u^p of a correction family. */
+/** One admitted term u^p of a correction family, with the reference value its family declared for it, if any. */
 interface CorrectionTerm {
   readonly input: string;
   readonly power: number;
+  readonly reference?: number;
 }
 
 function correctionBasis(shape: Predictor, terms: readonly CorrectionTerm[]): Predictor[] {
@@ -1117,8 +1227,8 @@ function admitCorrection(
 ): { terms: CorrectionTerm[]; steps: CorrectionStep[] } {
   const chi2With = (terms: readonly CorrectionTerm[]): number | null => {
     const basis = correctionBasis(shape, terms);
-    const coef = fitLinear(rows, basis);
-    return coef === null ? null : testRows(rows, combine(basis, coef), terms.length + 1, alpha).chi2;
+    const sol = fitLinear(rows, basis);
+    return sol === null ? null : testRows(rows, combine(basis, sol.coef), terms.length + 1, alpha).chi2;
   };
   const steps: CorrectionStep[] = [];
   const admitted: CorrectionTerm[] = [];
@@ -1126,23 +1236,25 @@ function admitCorrection(
   families: for (const family of families) {
     for (const power of family.powers) {
       if (prev === null) break families;
-      const term = { input: family.input, power };
+      const reference = family.reference?.[String(power)];
+      const term: CorrectionTerm = { input: family.input, power, ...(reference !== undefined ? { reference } : {}) };
       const trial = [...admitted, term];
       const dof = rows.length - (trial.length + 1);
       if (dof < 1) {
-        steps.push({ ...term, F: null, dof, p: null, admitted: false, reason: 'ν < 1: too few exploratory rows to test another term' });
+        steps.push({ input: term.input, power: term.power, F: null, dof, p: null, admitted: false, reason: 'ν < 1: too few exploratory rows to test another term' });
         break families;
       }
       const cur = chi2With(trial);
       if (cur === null) {
-        steps.push({ ...term, F: null, dof, p: null, admitted: false, reason: 'degenerate with the terms before it on the exploratory rows' });
+        steps.push({ input: term.input, power: term.power, F: null, dof, p: null, admitted: false, reason: 'degenerate with the terms before it on the exploratory rows' });
         break;
       }
       const F = cur > 0 ? Math.max(0, prev - cur) / (cur / dof) : Infinity;
       const p = fSurvival(F, 1, dof);
       const ok = p < alpha;
       steps.push({
-        ...term,
+        input: term.input,
+        power: term.power,
         F,
         dof,
         p,
@@ -1186,8 +1298,21 @@ export interface CandidateTest extends ModelTest {
   /** Set on a candidate from the declared correction families: m(x)·(1 + Σ c_k·u_k^p_k). */
   readonly correction?: {
     readonly base: string;
-    readonly terms: readonly { readonly input: string; readonly power: number; readonly coefficient: number }[];
+    readonly terms: readonly CorrectionCoefficient[];
   };
+}
+
+/** One fitted correction coefficient c_k = a_k/a_0, with its standard error and, when the file declared one, the reference it is compared with. @internal */
+export interface CorrectionCoefficient {
+  readonly input: string;
+  readonly power: number;
+  readonly coefficient: number;
+  /** Delta-method standard error of a_k/a_0 from the fit's covariance; null when the inverse failed. */
+  readonly stderr: number | null;
+  /** The declared reference value, when the family states one for this power. */
+  readonly reference?: number;
+  /** (coefficient − reference)/stderr; present when both are. Reported, never a verdict. */
+  readonly z?: number;
 }
 
 /** How the declared correction families were searched. @internal */
@@ -1286,9 +1411,11 @@ function designAgainst(
   baselines: readonly FittedModel[],
 ): StudyDesignSuggestion {
   if (!candidate.predict) return { abstained: true, reason: 'no credible candidate to discriminate' };
-  const live = baselines
-    .filter((b) => b.predict && b.test.exploratory?.pass === true)
-    .sort((a, b) => (b.test.exploratory!.p ?? 0) - (a.test.exploratory!.p ?? 0));
+  const predict = candidate.predict;
+  // A live competitor has a predictor and passed on the exploratory rows; the guard types both.
+  const isLive = (b: FittedModel): b is FittedModel & { predict: Predictor; test: ModelTest & { exploratory: SetTest } } =>
+    b.predict !== null && b.test.exploratory?.pass === true;
+  const live = baselines.filter(isLive).sort((a, b) => (b.test.exploratory.p ?? 0) - (a.test.exploratory.p ?? 0));
   const best = live[0];
   if (!best) {
     return {
@@ -1317,7 +1444,7 @@ function designAgainst(
       study.governing.forEach((g, i) => (point[g.name] = grids[i]![idx[i]!]!));
       let disc: number;
       try {
-        disc = Math.abs(candidate.predict!(point) - best.predict!(point)) / sigma;
+        disc = Math.abs(predict(point) - best.predict(point)) / sigma;
       } catch {
         return;
       }
@@ -1335,9 +1462,8 @@ function designAgainst(
   visit(0);
   if (bestPoint === null) return { abstained: true, reason: 'neither model is finite anywhere in the design bounds' };
   const chosen: Record<string, number> = bestPoint;
-  const maxEx = Math.max(
-    ...sets.exploratory.map((r) => Math.abs(candidate.predict!(r.inputs) - best.predict!(r.inputs)) / r.sigma),
-  );
+  // A reduce, not a spread: a spread of a large row set overflows the call stack.
+  const maxEx = sets.exploratory.reduce((m, r) => Math.max(m, Math.abs(predict(r.inputs) - best.predict(r.inputs)) / r.sigma), 0);
   return {
     abstained: false,
     against: best.test.label,
@@ -1421,18 +1547,39 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
   const correctionOf = (
     s: (typeof specs)[number],
     coef: readonly number[] | null,
-  ): Pick<CandidateTest, 'correction'> =>
-    'correction' in s && s.correction && coef
-      ? {
-          correction: {
-            base: s.correction.base,
-            terms: s.correction.terms.map((t, j) => ({ input: t.input, power: t.power, coefficient: coef[j + 1]! / coef[0]! })),
-          },
-        }
-      : {};
+    covariance: readonly (readonly number[])[] | null,
+  ): Pick<CandidateTest, 'correction'> => {
+    if (!('correction' in s) || !s.correction || !coef) return {};
+    const a0 = coef[0]!;
+    return {
+      correction: {
+        base: s.correction.base,
+        terms: s.correction.terms.map((t, j): CorrectionCoefficient => {
+          const a = coef[j + 1]!;
+          const coefficient = a / a0;
+          // Delta method on c = a/a₀: Var(c) = Var(a)/a₀² + a²Var(a₀)/a₀⁴ − 2a·Cov(a, a₀)/a₀³.
+          const cov = covariance;
+          const variance = cov
+            ? cov[j + 1]![j + 1]! / a0 ** 2 + (a * a * cov[0]![0]!) / a0 ** 4 - (2 * a * cov[j + 1]![0]!) / a0 ** 3
+            : null;
+          const stderr = variance !== null && Number.isFinite(variance) ? Math.sqrt(Math.max(0, variance)) : null;
+          const reference = t.reference;
+          const z = reference !== undefined && stderr !== null && stderr > 0 ? (coefficient - reference) / stderr : undefined;
+          return {
+            input: t.input,
+            power: t.power,
+            coefficient,
+            stderr,
+            ...(reference !== undefined ? { reference } : {}),
+            ...(z !== undefined ? { z } : {}),
+          };
+        }),
+      },
+    };
+  };
   const scored = specs.map((s) => {
     const m = scoreModel(s.spec, sets, alpha, false);
-    return { model: m, spec: s.spec, complexity: s.complexity, extra: correctionOf(s, m.coef), ...credibility(m.test, nullModel, alpha) };
+    return { model: m, spec: s.spec, complexity: s.complexity, extra: correctionOf(s, m.coef, m.covariance), ...credibility(m.test, nullModel, alpha) };
   });
   const credibleOnes = scored
     .filter((s) => s.credible)
@@ -1648,11 +1795,19 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
   }
   L.push(`  null model (constant ${r.target.name}) — ${setLine('exploratory', r.nullModel.exploratory)}`);
   L.push('');
+  const pm = (stderr: number | null) => (stderr === null ? '' : ` ± ${stderr.toPrecision(2)}`);
   for (const c of r.candidates) {
-    const pre = c.prefactor === null ? '' : `, ĉ = ${c.prefactor.toPrecision(5)} (SI)`;
+    const pre = c.prefactor === null ? '' : `, ĉ = ${c.prefactor.toPrecision(5)}${pm(c.prefactorStderr)} (SI)`;
     L.push(`  candidate ${c.id}: ${c.label}${pre}`);
     if (c.correction) {
-      L.push(`    ${c.correction.terms.map((t, j) => `c${sub(j + 1)} = ${t.coefficient.toPrecision(4)}`).join(', ')} (fit on exploratory rows)`);
+      const term = (t: CorrectionCoefficient, j: number): string => {
+        const against =
+          t.z !== undefined && t.reference !== undefined
+            ? ` (z = ${t.z >= 0 ? '+' : ''}${t.z.toFixed(1)} against the declared ${Number(t.reference.toPrecision(4))})`
+            : '';
+        return `c${sub(j + 1)} = ${t.coefficient.toPrecision(4)}${pm(t.stderr)}${against}`;
+      };
+      L.push(`    ${c.correction.terms.map(term).join(', ')} (fit on exploratory rows)`);
     }
     L.push(`    ${setLine('exploratory', c.exploratory)}`);
     L.push(`    ${c.credible ? 'credible' : 'not credible'}: ${c.credibility}`);
@@ -1666,7 +1821,7 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
     L.push('');
     L.push('  baselines (declared by the file; same rows, same criterion):');
     for (const b of r.baselines) {
-      const how = b.fittedParameters === 0 ? 'fixed, no fitted parameter' : `prefactor fit on exploratory rows = ${b.prefactor?.toPrecision(5)}`;
+      const how = b.fittedParameters === 0 ? 'fixed, no fitted parameter' : `prefactor fit on exploratory rows = ${b.prefactor?.toPrecision(5)}${pm(b.prefactorStderr)}`;
       L.push(`    ${b.label}  [${how}]`);
       if (b.error) {
         L.push(`      not evaluable: ${b.error}`);

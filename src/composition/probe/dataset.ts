@@ -5,12 +5,58 @@
  * that tree is Product A's confrontation ledger and must stay cycle-free
  * from probe.
  *
+ * A cell is a finite number or a non-empty string in the strict decimal
+ * grammar (`1`, `-0.5`, `.5`, `2.`, `1e-3`). Nothing is coerced: an empty
+ * cell, `null`, `true`, `false`, a list and `"0x10"` are refused by column
+ * and row, with {@link DatasetError}. `Number(v)` once read all of those as
+ * 0, 1 or 16, which also defeated the missing-observation guard of the
+ * declared-limit check (a missing observation scored as 0).
+ *
  * @internal
  */
 
 import { readFileSync } from 'node:fs';
 import type { DatasetRole, ObservationRow, ProbeDataset } from './types.js';
 import { SCHEMA_VERSION } from './types.js';
+
+/** A dataset file or object that is not a dataset: the message names the row and the column. @internal */
+export class DatasetError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'DatasetError';
+  }
+}
+
+/** The strict decimal grammar a string cell must match: sign, digits with an optional fraction, an optional exponent. */
+const DECIMAL = /^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/;
+
+/** What a JSON value is, in the words a file author would use. */
+function kindOf(v: unknown): string {
+  if (v === null) return 'null';
+  if (Array.isArray(v)) return 'a list';
+  if (typeof v === 'boolean') return String(v);
+  if (typeof v === 'string') return `'${v}'`;
+  return typeof v === 'object' ? 'an object' : typeof v;
+}
+
+/**
+ * A cell as a number: a finite number, or a non-empty string in the strict
+ * decimal grammar. Anything else is refused at `where` (the dataset, row and
+ * column). @internal
+ */
+export function readDatasetNumber(v: unknown, where: string): number {
+  if (typeof v === 'number') {
+    if (!Number.isFinite(v)) throw new DatasetError(`${where}: ${v} is not a finite number`);
+    return v;
+  }
+  if (typeof v === 'string') {
+    if (v.trim() === '') throw new DatasetError(`${where}: an empty cell is not a number`);
+    const n = DECIMAL.test(v.trim()) ? Number(v.trim()) : NaN;
+    if (!Number.isFinite(n)) throw new DatasetError(`${where}: ${kindOf(v)} is not a finite decimal number`);
+    return n;
+  }
+  throw new DatasetError(`${where}: ${kindOf(v)} is not a number`);
+}
 
 /** Build an in-memory dataset. @internal */
 export function datasetFromRows(
@@ -26,7 +72,7 @@ export function datasetFromRows(
 /** Coerce unknown JSON into a ProbeDataset. @internal */
 export function asDatasetSafe(raw: unknown, fallbackId: string, fallbackRole?: DatasetRole): ProbeDataset {
   if (!raw || typeof raw !== 'object') {
-    throw new Error(`dataset JSON is not an object (${fallbackId})`);
+    throw new DatasetError(`dataset JSON is not an object (${fallbackId})`);
   }
   const obj = raw as {
     id?: unknown;
@@ -37,10 +83,10 @@ export function asDatasetSafe(raw: unknown, fallbackId: string, fallbackRole?: D
     schemaVersion?: unknown;
   };
   if (!Array.isArray(obj.rows)) {
-    throw new Error(`dataset at ${fallbackId} is missing rows[]`);
+    throw new DatasetError(`dataset at ${fallbackId} is missing rows[]`);
   }
   if (typeof obj.observable !== 'string' || obj.observable.length === 0) {
-    throw new Error(`dataset at ${fallbackId} is missing observable`);
+    throw new DatasetError(`dataset at ${fallbackId} is missing observable`);
   }
   const role = (typeof obj.role === 'string' ? obj.role : fallbackRole) as DatasetRole | undefined;
   if (
@@ -49,19 +95,15 @@ export function asDatasetSafe(raw: unknown, fallbackId: string, fallbackRole?: D
     role !== 'external-replication' &&
     role !== 'falsification-only'
   ) {
-    throw new Error(`dataset at ${fallbackId} has invalid role '${String(obj.role)}'`);
+    throw new DatasetError(`dataset at ${fallbackId} has invalid role '${String(obj.role)}'`);
   }
   const rows: ObservationRow[] = obj.rows.map((row, i) => {
     if (!row || typeof row !== 'object' || Array.isArray(row)) {
-      throw new Error(`dataset ${fallbackId} row ${i} is not an object`);
+      throw new DatasetError(`dataset ${fallbackId} row ${i} is not an object`);
     }
     const out: Record<string, number> = {};
     for (const [k, v] of Object.entries(row as Record<string, unknown>)) {
-      const n = typeof v === 'number' ? v : Number(v);
-      if (!Number.isFinite(n)) {
-        throw new Error(`dataset ${fallbackId} row ${i} column ${k}: not a finite number`);
-      }
-      out[k] = n;
+      out[k] = readDatasetNumber(v, `dataset ${fallbackId} row ${i} column ${k}`);
     }
     return out;
   });
@@ -112,7 +154,38 @@ export function loadSplitDatasetsFromJson(path: string): SplitFileDatasets {
       ),
     };
   }
-  throw new Error(`JSON at ${path} needs exploratory/holdout or observations`);
+  throw new DatasetError(`JSON at ${path} needs exploratory/holdout or observations`);
+}
+
+/** The header and the data lines of a CSV file; the file needs both. */
+function csvLines(path: string): { headers: string[]; lines: string[] } {
+  const text = readFileSync(path, 'utf8').trim();
+  const lines = text.split(/\r?\n/).filter((l) => l.length > 0);
+  if (lines.length < 2) {
+    throw new DatasetError(`CSV dataset at ${path} needs a header and at least one row`);
+  }
+  const headers = lines[0]!.split(',').map((h) => h.trim());
+  return { headers, lines };
+}
+
+/**
+ * One CSV data line as a row of numbers. A line with fewer cells than the
+ * header is refused by the first column it lacks; `skip` names the header
+ * column (if any) that is not a number column. `line` is the 1-based line
+ * number of the file, so a message points at the file.
+ */
+function csvRow(cells: readonly string[], headers: readonly string[], line: number, path: string, skip: number): Record<string, number> {
+  if (cells.length < headers.length) {
+    throw new DatasetError(
+      `CSV ${path} row ${line} has ${cells.length} cell(s); the header has ${headers.length} (column ${headers[cells.length]} is missing)`,
+    );
+  }
+  const row: Record<string, number> = {};
+  for (let c = 0; c < headers.length; c++) {
+    if (c === skip) continue;
+    row[headers[c]!] = readDatasetNumber(cells[c], `CSV ${path} row ${line} column ${headers[c]}`);
+  }
+  return row;
 }
 
 /**
@@ -128,29 +201,15 @@ export function loadDatasetFromCsv(
   role: DatasetRole,
   id = path,
 ): ProbeDataset {
-  const text = readFileSync(path, 'utf8').trim();
-  const lines = text.split(/\r?\n/).filter((l) => l.length > 0);
-  if (lines.length < 2) {
-    throw new Error(`CSV dataset at ${path} needs a header and at least one row`);
-  }
-  const headers = lines[0]!.split(',').map((h) => h.trim());
+  const { headers, lines } = csvLines(path);
+  const splitIdx = headers.indexOf('split');
   const rows: ObservationRow[] = [];
   for (let i = 1; i < lines.length; i++) {
     const cells = lines[i]!.split(',').map((c) => c.trim());
-    const row: Record<string, number> = {};
-    for (let c = 0; c < headers.length; c++) {
-      const h = headers[c]!;
-      if (h === 'split') continue;
-      const n = Number(cells[c] ?? '');
-      if (!Number.isFinite(n)) {
-        throw new Error(`CSV ${path} row ${i + 1} column ${h}: not a finite number`);
-      }
-      row[h] = n;
-    }
-    rows.push(row);
+    rows.push(csvRow(cells, headers, i + 1, path, splitIdx));
   }
   if (!(observable in (rows[0] ?? {}))) {
-    throw new Error(`CSV ${path} is missing observable column '${observable}'`);
+    throw new DatasetError(`CSV ${path} is missing observable column '${observable}'`);
   }
   return datasetFromRows(rows, observable, role, id);
 }
@@ -160,33 +219,20 @@ export function loadSplitCsv(
   path: string,
   observable: string,
 ): { exploratory: ProbeDataset; holdout: ProbeDataset } {
-  const text = readFileSync(path, 'utf8').trim();
-  const lines = text.split(/\r?\n/).filter((l) => l.length > 0);
-  if (lines.length < 2) {
-    throw new Error(`CSV dataset at ${path} needs a header and at least one row`);
-  }
-  const headers = lines[0]!.split(',').map((h) => h.trim());
+  const { headers, lines } = csvLines(path);
   const splitIdx = headers.indexOf('split');
   if (splitIdx < 0) {
-    throw new Error(`CSV ${path} has no split column`);
+    throw new DatasetError(`CSV ${path} has no split column`);
   }
   const exploratoryRows: ObservationRow[] = [];
   const holdoutRows: ObservationRow[] = [];
   for (let i = 1; i < lines.length; i++) {
     const cells = lines[i]!.split(',').map((c) => c.trim());
-    const row: Record<string, number> = {};
-    for (let c = 0; c < headers.length; c++) {
-      if (c === splitIdx) continue;
-      const n = Number(cells[c] ?? '');
-      if (!Number.isFinite(n)) {
-        throw new Error(`CSV ${path} row ${i + 1} column ${headers[c]}: not a finite number`);
-      }
-      row[headers[c]!] = n;
-    }
+    const row = csvRow(cells, headers, i + 1, path, splitIdx);
     const split = cells[splitIdx];
     if (split === 'holdout' || split === 'blind') holdoutRows.push(row);
     else if (split === 'exploratory') exploratoryRows.push(row);
-    else throw new Error(`CSV ${path} row ${i + 1} has invalid split '${split}'`);
+    else throw new DatasetError(`CSV ${path} row ${i + 1} has invalid split '${split}'`);
   }
   return {
     exploratory: datasetFromRows(exploratoryRows, observable, 'exploratory-fit', `${path}#exploratory`),

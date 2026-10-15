@@ -66,9 +66,9 @@ export function makeResidualGap(
 }
 
 /**
- * A JSON file that is not a search-problem file: a field it must carry is missing or holds a
- * value of another kind. The message names the field; it never reports what a JavaScript engine
- * said on reading it. @internal
+ * A JSON file that is not a search-problem file, or not an expression file: a field it must carry
+ * is missing or holds a value of another kind. The message names the field; it never reports what
+ * a JavaScript engine said on reading it. @internal
  */
 export class ProblemFileError extends Error {
   constructor(message: string) {
@@ -76,6 +76,12 @@ export class ProblemFileError extends Error {
     this.name = 'ProblemFileError';
   }
 }
+
+/** The `DiscrepancyKind` union as a runtime set, for a file's `discrepancy.kind`. */
+const DISCREPANCY_KINDS: ReadonlySet<string> = new Set([
+  'additive', 'relative', 'log-ratio', 'standardized', 'likelihood',
+  'vector', 'tensor', 'distributional', 'operator', 'custom',
+]);
 
 /** What a JSON value is, in the words a file author would use. */
 function kindOf(v: unknown): string {
@@ -178,6 +184,9 @@ export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): Sear
   const governing = raw.governing.map((g, i) => varFromJson(g, `governing[${i}]`));
   let exploratory: ProbeDataset | undefined;
   let holdout: ProbeDataset | undefined;
+  if (file.observationsPath !== undefined && typeof file.observationsPath !== 'string') {
+    throw new ProblemFileError(`"observationsPath" must be text (found ${kindOf(file.observationsPath)})`);
+  }
   const observationsPath = resolveObservationsPath(raw, source);
   if (observationsPath !== null) {
     const split = loadSplitDatasetsFromJson(observationsPath);
@@ -191,59 +200,170 @@ export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): Sear
     holdout = asDatasetSafe(raw.holdout, `${source}#holdout`, 'validation-holdout');
   }
   const problem = problemFromResidualGap(gap, target, governing, exploratory, holdout);
+  // The secondary fields. Each was once passed through unread, so `limits: 5` or
+  // `assumptions: "x"` reached `runProbeSearch` and threw a raw TypeError there.
   return {
     ...problem,
-    baseline: raw.baseline,
-    discrepancy: raw.discrepancy ?? problem.discrepancy,
-    assumptions: raw.assumptions ?? gap.assumptions,
-    limits: raw.limits,
-    claimedRegimes: raw.claimedRegimes,
-    observationalBoundIds: raw.observationalBoundIds,
+    baseline: file.baseline === undefined ? undefined : assertExprNode(file.baseline, '"baseline"'),
+    discrepancy: file.discrepancy === undefined ? problem.discrepancy : discrepancyFromJson(file.discrepancy),
+    assumptions: file.assumptions === undefined ? gap.assumptions : textList(file.assumptions, 'assumptions'),
+    limits: file.limits === undefined ? undefined : limitsFromJson(file.limits),
+    claimedRegimes: file.claimedRegimes === undefined ? undefined : textRecord(file.claimedRegimes, 'claimedRegimes'),
+    observationalBoundIds:
+      file.observationalBoundIds === undefined ? undefined : textList(file.observationalBoundIds, 'observationalBoundIds'),
   };
 }
 
-function assertMinimalExprNode(raw: unknown, path: string): ExprNode {
-  if (!raw || typeof raw !== 'object' || !('kind' in raw)) {
-    throw new Error(`${path} is not an ExprNode JSON object`);
-  }
-  const node = raw as { kind: unknown };
-  if (node.kind === 'symbol') {
-    const sym = raw as { name?: unknown; dim?: unknown };
-    if (typeof sym.name !== 'string' || sym.name.length === 0) {
-      throw new Error(`${path} symbol node missing name`);
-    }
-    if (!sym.dim || typeof sym.dim !== 'object') {
-      throw new Error(`${path} symbol node missing dim`);
-    }
-    return raw as ExprNode;
-  }
-  if (node.kind === 'op') {
-    const op = raw as { op?: unknown; args?: unknown };
-    if (typeof op.op !== 'string' || !Array.isArray(op.args)) {
-      throw new Error(`${path} op node missing op/args`);
-    }
-    for (let i = 0; i < op.args.length; i++) {
-      assertMinimalExprNode(op.args[i], `${path}#args[${i}]`);
-    }
-    return raw as ExprNode;
-  }
-  if (typeof node.kind !== 'string' || node.kind.length === 0) {
-    throw new Error(`${path} has invalid kind`);
-  }
-  return raw as ExprNode;
+/** A list of text, located by its field name. */
+function textList(raw: unknown, field: string): readonly string[] {
+  const label = field.includes('.') ? field : `"${field}"`;
+  if (!Array.isArray(raw)) throw new ProblemFileError(`${label} must be a list of text (found ${kindOf(raw)})`);
+  return raw.map((v, i) => {
+    if (typeof v !== 'string') throw new ProblemFileError(`${field}[${i}] must be text (found ${kindOf(v)})`);
+    return v;
+  });
 }
 
-/** Load an ExprNode from a JSON file (`{expression}` wrapper or bare node). @internal */
-export function parseExprJson(path: string): ExprNode {
-  const raw = JSON.parse(readFileSync(path, 'utf8')) as { expression?: ExprNode } | ExprNode;
-  if (raw && typeof raw === 'object' && 'kind' in raw) return assertMinimalExprNode(raw, path);
-  if (
-    raw &&
-    typeof raw === 'object' &&
-    'expression' in raw &&
-    (raw as { expression?: ExprNode }).expression
-  ) {
-    return assertMinimalExprNode((raw as { expression: unknown }).expression, path);
+/** A `{name: text}` object, located by its field name. */
+function textRecord(raw: unknown, field: string): Readonly<Record<string, string>> {
+  if (!isRecord(raw)) throw new ProblemFileError(`"${field}" must be {name: text} (found ${kindOf(raw)})`);
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(raw)) {
+    if (typeof v !== 'string') throw new ProblemFileError(`${field}.${k} must be text (found ${kindOf(v)})`);
+    out[k] = v;
   }
-  throw new Error(`${path} is not an ExprNode JSON object`);
+  return out;
+}
+
+function discrepancyFromJson(raw: unknown): DiscrepancyDefinition {
+  if (!isRecord(raw)) throw new ProblemFileError(`"discrepancy" must be {"kind": text, "observableIds": [text]} (found ${kindOf(raw)})`);
+  if (typeof raw.kind !== 'string' || !DISCREPANCY_KINDS.has(raw.kind)) {
+    throw new ProblemFileError(
+      `discrepancy.kind '${String(raw.kind)}' is not a discrepancy kind (${[...DISCREPANCY_KINDS].join(', ')})`,
+    );
+  }
+  const observableIds = textList(raw.observableIds, 'discrepancy.observableIds');
+  for (const key of ['covarianceRef', 'implementationRef'] as const) {
+    if (raw[key] !== undefined && typeof raw[key] !== 'string') {
+      throw new ProblemFileError(`discrepancy.${key} must be text (found ${kindOf(raw[key])})`);
+    }
+  }
+  return {
+    kind: raw.kind as DiscrepancyDefinition['kind'],
+    observableIds,
+    ...(typeof raw.covarianceRef === 'string' ? { covarianceRef: raw.covarianceRef } : {}),
+    ...(typeof raw.implementationRef === 'string' ? { implementationRef: raw.implementationRef } : {}),
+  };
+}
+
+function limitsFromJson(raw: unknown): NonNullable<SearchProblem['limits']> {
+  const shape = '{"id": text, "regime": {name: text}}';
+  if (!Array.isArray(raw)) throw new ProblemFileError(`"limits" must be a list of ${shape} (found ${kindOf(raw)})`);
+  return raw.map((l, i) => {
+    if (!isRecord(l)) throw new ProblemFileError(`limits[${i}] must be ${shape} (found ${kindOf(l)})`);
+    if (typeof l.id !== 'string' || l.id === '') throw new ProblemFileError(`limits[${i}].id must be text`);
+    if (!isRecord(l.regime)) throw new ProblemFileError(`limits[${i}].regime must be {name: text} (found ${kindOf(l.regime)})`);
+    const regime = textRecord(l.regime, `limits[${i}].regime`);
+    if (l.description !== undefined && typeof l.description !== 'string') {
+      throw new ProblemFileError(`limits[${i}].description must be text (found ${kindOf(l.description)})`);
+    }
+    return { id: l.id, regime, ...(typeof l.description === 'string' ? { description: l.description } : {}) };
+  });
+}
+
+/** The scalar operators an `op` node may carry. */
+const SCALAR_OPS: ReadonlySet<string> = new Set(['+', '-', '*', '/', '^']);
+/** The `TranscendentalFn` union as a runtime set. */
+const TRANSCENDENTAL_FNS: ReadonlySet<string> = new Set(['exp', 'ln', 'log2', 'log10', 'sin', 'cos', 'tan', 'sinh', 'cosh', 'tanh']);
+/** A decimal literal, as the validator reads a numeric-literal symbol. */
+const DECIMAL_LITERAL = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
+const DIM_KEYS = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
+const SCALAR_KINDS = 'symbol, op, integral, derivative, dirac-delta, variational-derivative, transcendental, abs';
+
+/** `raw[field]` as a child node, or a refusal that names the field. */
+function child(raw: Record<string, unknown>, field: string, path: string, what: string): ExprNode {
+  if (raw[field] === undefined) throw new ProblemFileError(`${path} ${what} node needs ${field === 'args' ? '' : 'an '}"${field}" node`);
+  return assertExprNode(raw[field], `${path}#${field}`);
+}
+
+/**
+ * Check that a JSON value has the shape of a scalar `ExprNode`, recursively:
+ * a kind per node, the children each kind owns, a finite literal where a
+ * symbol's name is a decimal literal, and the seven dimension exponents on a
+ * symbol. A tensor kind is refused here: the probe evaluates scalars.
+ * Refusals are {@link ProblemFileError}, located by `path`.
+ */
+function assertExprNode(raw: unknown, path: string): ExprNode {
+  if (!isRecord(raw) || !('kind' in raw)) {
+    throw new ProblemFileError(`${path} is not an ExprNode JSON object (found ${kindOf(raw)})`);
+  }
+  const kind = raw.kind;
+  if (typeof kind !== 'string' || kind.length === 0) {
+    throw new ProblemFileError(`${path} has invalid kind (found ${kindOf(kind)})`);
+  }
+  switch (kind) {
+    case 'symbol': {
+      if (typeof raw.name !== 'string' || raw.name.length === 0) {
+        throw new ProblemFileError(`${path} symbol node missing name (needs "name": text)`);
+      }
+      if (!isRecord(raw.dim)) throw new ProblemFileError(`${path} symbol node missing dim`);
+      for (const k of DIM_KEYS) {
+        if (!(k in raw.dim)) throw new ProblemFileError(`${path} symbol node dim needs the exponents ${DIM_KEYS.join(', ')}`);
+        if (typeof raw.dim[k] !== 'number' || !Number.isFinite(raw.dim[k])) {
+          throw new ProblemFileError(`${path} symbol node dim.${k} must be a finite number (found ${kindOf(raw.dim[k])})`);
+        }
+      }
+      if (DECIMAL_LITERAL.test(raw.name) && !Number.isFinite(Number(raw.name))) {
+        throw new ProblemFileError(`${path} literal '${raw.name}' is not a finite number`);
+      }
+      return raw as unknown as ExprNode;
+    }
+    case 'op': {
+      if (typeof raw.op !== 'string' || !Array.isArray(raw.args)) {
+        throw new ProblemFileError(`${path} op node needs "op" and an "args" list (op node missing op/args)`);
+      }
+      if (!SCALAR_OPS.has(raw.op)) throw new ProblemFileError(`${path} op node has op '${raw.op}', not one of + - * / ^`);
+      raw.args.forEach((a, i) => assertExprNode(a, `${path}#args[${i}]`));
+      return raw as unknown as ExprNode;
+    }
+    case 'integral': {
+      child(raw, 'over', path, 'integral');
+      child(raw, 'integrand', path, 'integral');
+      for (const bound of ['lower', 'upper']) if (raw[bound] !== undefined) assertExprNode(raw[bound], `${path}#${bound}`);
+      return raw as unknown as ExprNode;
+    }
+    case 'derivative':
+      child(raw, 'of', path, 'derivative');
+      child(raw, 'wrt', path, 'derivative');
+      return raw as unknown as ExprNode;
+    case 'dirac-delta':
+    case 'abs':
+      child(raw, 'arg', path, kind);
+      return raw as unknown as ExprNode;
+    case 'variational-derivative':
+      for (const f of ['functional', 'field', 'over']) child(raw, f, path, kind);
+      return raw as unknown as ExprNode;
+    case 'transcendental': {
+      if (typeof raw.fn !== 'string' || !TRANSCENDENTAL_FNS.has(raw.fn)) {
+        throw new ProblemFileError(`${path} transcendental node has fn '${String(raw.fn)}', not one of ${[...TRANSCENDENTAL_FNS].join(', ')}`);
+      }
+      child(raw, 'arg', path, kind);
+      return raw as unknown as ExprNode;
+    }
+    default:
+      throw new ProblemFileError(`${path} has kind '${kind}', which is not a scalar expression node (${SCALAR_KINDS})`);
+  }
+}
+
+/**
+ * Load an ExprNode from a JSON file (`{expression}` wrapper or bare node). The node shape is
+ * checked recursively; a file that is not an expression raises {@link ProblemFileError}. @internal
+ */
+export function parseExprJson(path: string): ExprNode {
+  const raw: unknown = JSON.parse(readFileSync(path, 'utf8'));
+  if (isRecord(raw) && 'kind' in raw) return assertExprNode(raw, path);
+  if (isRecord(raw) && 'expression' in raw && raw.expression) {
+    return assertExprNode(raw.expression, path);
+  }
+  throw new ProblemFileError(`${path} is not an ExprNode JSON object`);
 }

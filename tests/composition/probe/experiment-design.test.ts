@@ -36,7 +36,7 @@ describe('parseDesignBounds', () => {
     expect(() => parseDesignBounds({ variables: { x: { min: 1, max: NaN } } }, 'x')).toThrow(/finite min\/max/);
     expect(() => parseDesignBounds({ variables: { x: { min: 2, max: 1 } } }, 'x')).toThrow(/min > max/);
     expect(() => parseDesignBounds({ variables: { x: { min: 0, max: 1, steps: 0 } } }, 'x')).toThrow(
-      /steps must be positive/,
+      /steps must be a positive integer/,
     );
   });
 

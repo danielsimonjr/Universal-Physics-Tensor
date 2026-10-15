@@ -330,7 +330,9 @@ describe('limits / falsify / structure / design / metadata', () => {
   });
   it('recovers a synthetic changepoint, scale exponent, and conservation', () => {
     const y = [0, 0, 0, 0, 5, 5, 5, 5];
-    const cp = detectMeanChangepoint({ x: y.map((_, i) => i), y });
+    // Eight points: the permutation null of the maximum over splits cannot fall below 2/70, so
+    // the perfect step is flagged at α = 0.05, not at the default 0.01.
+    const cp = detectMeanChangepoint({ x: y.map((_, i) => i), y, alpha: 0.05 });
     expect(cp.abstained).toBe(false);
     expect(cp.index).toBe(4);
     expect(detectMeanChangepoint({ x: [1], y: [1] }).abstained).toBe(true);
