@@ -1,0 +1,35 @@
+name = "PhysJS"
+version = "0.1.0"
+defaultTargets = ["PhysJS"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+
+# Both requires are direct. Physlib (the library Daniel calls PhysLean) already
+# depends on Mathlib; this package requires Mathlib itself so a Mathlib lemma
+# is not reached only by accident through Physlib.
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.34.1"
+
+[[require]]
+name = "Physlib"
+git = "https://github.com/leanprover-community/physlib"
+rev = "af484f78ee0701290595f8bf892b157b10d64940"
+
+[[lean_lib]]
+name = "PhysJS"
+# `lean/Clapeyron.lean` is the module `lean.Clapeyron`. The aggregator
+# `lean.lean` is the module `lean` and imports the others. `srcDir` stays
+# the package root: `srcDir = "lean"` would look for `lean/lean/Clapeyron.lean`.
+# `lean.*` builds `lean.lean` and every file in `lean/`. `PhysJS.+` would
+# build `lean/PhysJS/`, which this tree does not have. Declarations stay in
+# `namespace PhysJS...`, so theorem names do not change. The axiom audit
+# imports the module `lean` and checks declarations defined in `lean` and
+# `lean.*`.
+srcDir = "."
+roots = ["lean"]
+globs = ["lean.*"]
