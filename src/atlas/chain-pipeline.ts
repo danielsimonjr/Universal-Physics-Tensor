@@ -19,7 +19,8 @@ import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
+import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import type { BridgeEdge } from '../composition/edge.js';
 import { enumerateCompositionsWithRefusals } from '../composition/enumerate.js';
 import { buckinghamFilter } from '../composition/buckingham-filter.js';
@@ -80,14 +81,10 @@ export type ChainPipelineResult =
   | ChainRegimeMismatch
   | ChainCompositionRefusal;
 
-function isNumericName(name: string): boolean {
-  return /^\d+(\.\d+)?$/.test(name);
-}
-
+/** A registered constant whose dimension is none, or a `pi` multiple (`2pi`). Own keys only. */
 function isDimensionlessConstant(name: string): boolean {
   if (/^\d*pi$/.test(name)) return true;
-  const registered = CONSTANTS[name];
-  return registered !== undefined && equals(registered.dim, DIMENSIONLESS);
+  return isRegisteredConstant(name) && equals(CONSTANTS[name]!.dim, DIMENSIONLESS);
 }
 
 /**
@@ -102,7 +99,7 @@ export function governingOf(expr: ExprNode, targetName: string): { name: string;
   const vars: { name: string; dim: Dimension }[] = [];
   for (const leaf of scalarSymbolsFromMathTs(expr)) {
     if (leaf.name === targetName) continue;
-    if (isNumericName(leaf.name) || isDimensionlessConstant(leaf.name)) continue;
+    if (isDecimalLiteral(leaf.name) || isDimensionlessConstant(leaf.name)) continue;
     vars.push(leaf);
   }
   vars.sort(byKey((v) => v.name));

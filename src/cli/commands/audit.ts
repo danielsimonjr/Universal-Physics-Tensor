@@ -21,6 +21,9 @@ const HELP = `upt audit [--source=catalog|canonical|both]
         which are dimensional with no sourced prefactor (the evaluator's 1
         is that absence), which are decoys, which add dimensionful terms
         (not a monomial), which are dimensionally open.
+        A recovered prefactor of the form p/(π^a·ln2^b), a small rational p,
+        or the square root of one, is clean and prints its exact form after
+        the number, ×1.125 (= 9/8); any other prints (empirical/tuned constant).
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.
@@ -61,6 +64,7 @@ async function run(ctx: CommandCtx): Promise<number> {
             subset: d.subset,
             prefactor: d.prefactor,
             cleanPrefactor: d.cleanPrefactor,
+            ...(d.prefactorForm === undefined ? {} : { prefactorForm: d.prefactorForm }),
             complexity: c,
           })),
           coefficientUnset: coefficientUnset.map(({ e, c }) => ({ id: e.id, complexity: c })),
@@ -79,8 +83,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`  DERIVED (${derived.length}) — recognized monomial, prefactor recovered:`);
   if (derived.length === 0) out('    none');
   for (const { e, d } of derived) {
+    const shown = api.formatQuantity(d.prefactor!);
+    // A clean prefactor prints its exact form, unless the form is the number's own text (×1, ×2).
+    const form = d.prefactorForm === undefined || d.prefactorForm === shown ? '' : ` (= ${d.prefactorForm})`;
     const tag = d.cleanPrefactor ? '' : '  (empirical/tuned constant)';
-    out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${api.formatQuantity(d.prefactor!)}${tag}`);
+    out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${shown}${form}${tag}`);
   }
   out(
     `\n  COEFFICIENT UNSET (${coefficientUnset.length}) — dimensional, and no sourced prefactor multiplies the monomial. ` +

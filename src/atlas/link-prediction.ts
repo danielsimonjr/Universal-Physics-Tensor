@@ -141,6 +141,8 @@ export interface KatzTrial {
   /** The Katz index K[premise][conclusion] = ((I − βA)⁻¹ − I)[premise][conclusion]; 0 when no path. */
   readonly katzScore: number;
   readonly candidates: number;
+  /** This trial's attenuation β = 1/(2·max degree) of its own held-out graph. */
+  readonly beta: number;
   readonly postHoc: true;
 }
 
@@ -149,8 +151,12 @@ export interface KatzLinkPredictionResult {
   readonly postHoc: true;
   readonly label: typeof POST_HOC_LABEL;
   readonly k: number;
-  /** The attenuation β = 1/(2·max degree), below the spectral bound 1/λ_max since λ_max ≤ max degree. */
-  readonly beta: number;
+  /**
+   * `[min, max]` of the trials' attenuations. Each held-out graph has its own maximum degree, so
+   * β = 1/(2·max degree) is per trial (`KatzTrial.beta`), each below its graph's spectral bound
+   * 1/λ_max since λ_max ≤ max degree. The result once reported one β, the last trial's.
+   */
+  readonly betaRange: readonly [number, number];
   readonly trials: readonly KatzTrial[];
   readonly stillConnected: number;
   readonly katzHits: number;
@@ -372,10 +378,8 @@ export function runKatzLinkPrediction(families: readonly AtlasFamily[], k = 10):
   const { models, queries, stillConnected } = holdOuts(families);
   const ids = [...models.keys()];
   const index = new Map(ids.map((id, i) => [id, i]));
-  let beta = Number.NaN;
   const trials: KatzTrial[] = queries.map((q) => {
     const katz = katzIndex(q.adj, ids);
-    beta = katz.beta;
     const p = index.get(q.premise)!;
     const score = (id: string): number => katz.K[p][index.get(id)!];
     const ranked = rankBy(q.candidates, (id) => [score(id)]);
@@ -386,16 +390,18 @@ export function runKatzLinkPrediction(families: readonly AtlasFamily[], k = 10):
       katzRank: rankOf(ranked, q.conclusion),
       katzScore: q.candidates.includes(q.conclusion) ? score(q.conclusion) : 0,
       candidates: q.candidates.length,
+      beta: katz.beta,
       postHoc: true,
     };
   });
+  const betas = trials.map((t) => t.beta);
   const hit: number[] = trials.map((t) => (t.katzRank <= k ? 1 : 0));
   const rr = trials.map((t) => 1 / t.katzRank);
   return {
     postHoc: true,
     label: POST_HOC_LABEL,
     k,
-    beta,
+    betaRange: betas.length === 0 ? [Number.NaN, Number.NaN] : [Math.min(...betas), Math.max(...betas)],
     trials,
     stillConnected,
     katzHits: hit.reduce((acc, x) => acc + x, 0),

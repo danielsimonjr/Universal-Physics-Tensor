@@ -44,6 +44,21 @@ function stdoutRaw(s: string): void {
 
 const defaultIo: Io = { out: stdoutLine, err: stderrLine, write: stdoutRaw };
 
+/** EX_SOFTWARE (sysexits.h): the exit code of a defect, an error `runCli` did not map. */
+const EX_SOFTWARE = 70;
+
+/**
+ * The last-resort handler `bin/upt.mjs` calls when `runCli` rethrows: a defect, since every
+ * usage error and value refusal was mapped to an exit code inside `runCli`. Prints one line,
+ * `upt: internal error: <message>` (the message, not the stack), and returns 70 (EX_SOFTWARE).
+ * A thrown value that is not an Error, or an Error with no message, prints as its string.
+ */
+export function reportInternalError(error: unknown, io: Pick<Io, 'err'> = defaultIo): number {
+  const message = error instanceof Error && error.message !== '' ? error.message : String(error);
+  io.err(`upt: internal error: ${message}`);
+  return EX_SOFTWARE;
+}
+
 const unknownCommandMessage = (name: string): string => `Unknown command '${name}'. See \`upt help\`.`;
 
 const GLOBAL_FILE_OPTION = /^--(record|replay|show-record)(?:=(.*))?$/;
@@ -190,13 +205,6 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
     // declares none), so a token the command would not read never reaches `run`.
     const parsed = parseArgs(command.name, rest, command.flags, command.positionals);
     const ctx: CommandCtx = { args: parsed, api, out, err, write };
-    // Test hook for the last-resort handler in bin/upt.mjs: a planted defect, thrown from
-    // inside the dispatch like a real one, so the test proves that neither catch below
-    // converts it and that the shim reports it as an internal error (exit 70). The variable
-    // names the command it fires on; it is unset in normal use, and nothing else reads it.
-    if (process.env.UPT_CLI_PLANT_INTERNAL_ERROR === command.name) {
-      throw new TypeError(`planted internal error for 'upt ${command.name}' (UPT_CLI_PLANT_INTERNAL_ERROR)`);
-    }
     return await command.run(ctx);
   } catch (e) {
     if (e instanceof UsageError) {

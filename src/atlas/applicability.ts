@@ -35,6 +35,7 @@ import { validate } from '../dimensional/validator.js';
 import type { AtlasModel } from './model.js';
 import type { Conventions } from './types.js';
 import { checkConventions, unknownConventionKeys } from './conventions.js';
+import { forEachScalarLeaf, isDecimalLiteral, literalValue as leafLiteral, type LeafWalkArms } from '../dimensional/ast-leaves.js';
 
 /** Whether a finding is a contradiction in the data or a silence in it. @internal */
 export type ApplicabilitySeverity = 'blocking' | 'question';
@@ -120,13 +121,22 @@ const NONVANISHING_MARKERS: readonly string[] = [
   'positive',
 ];
 
-/** Free symbol names appearing anywhere in a subtree. */
+/**
+ * The arms this checker descends into: every scalar child {@link childNodes} lists, and no
+ * tensor-product argument (a tensor node has no children here).
+ */
+const SCALAR_ARMS: LeafWalkArms = {
+  transcendental: true,
+  abs: true,
+  diracDelta: true,
+  integral: 'all',
+  derivative: true,
+  variationalDerivative: true,
+};
+
+/** Symbol names (literals included, as a divisor's names always were) appearing anywhere in a subtree. */
 function symbolNames(node: ExprNode, into: Set<string> = new Set()): Set<string> {
-  if (node.kind === 'symbol') {
-    into.add(node.name);
-    return into;
-  }
-  for (const child of childNodes(node)) symbolNames(child, into);
+  forEachScalarLeaf(node, (leaf) => into.add(leaf.name), SCALAR_ARMS);
   return into;
 }
 
@@ -162,15 +172,14 @@ function childNodes(node: ExprNode): readonly ExprNode[] {
 /**
  * The numeric value of a leaf that IS a literal, or `null`.
  *
- * Literals are `symbol` leaves whose `name` parses as a number — the same
- * convention `validator.ts` uses to recognise a literal exponent, so the two
- * cannot disagree about what a literal is.
+ * Literals are `symbol` leaves whose `name` is a decimal literal under the one
+ * rule (`isDecimalLiteral`, `dimensional/ast-leaves.ts`, the validator's), and
+ * whose value is finite.
  */
 function literalValue(node: ExprNode): number | null {
-  if (node.kind !== 'symbol') return null;
-  if (node.name.trim() === '') return null;
-  const v = Number(node.name);
-  return Number.isFinite(v) ? v : null;
+  if (node.kind !== 'symbol' || !isDecimalLiteral(node.name)) return null;
+  const v = leafLiteral(node);
+  return v !== undefined && Number.isFinite(v) ? v : null;
 }
 
 /** The word-like tokens of a side condition: runs of letters, digits and underscores, lower-cased. */

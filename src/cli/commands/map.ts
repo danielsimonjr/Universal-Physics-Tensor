@@ -436,8 +436,8 @@ async function structureSections(
   };
 }
 
-/** The text of the structure sections, in flag order; empty when none was asked for. */
-function structureLines(s: StructureSections): string[] {
+/** The text of the structure sections, in flag order; empty when none was asked for. A number goes through `formatQuantity`. */
+function structureLines(s: StructureSections, formatQuantity: (value: number, digits?: number) => string): string[] {
   const lines: string[] = [];
   if (s.communities !== undefined) {
     const c = s.communities;
@@ -457,7 +457,7 @@ function structureLines(s: StructureSections): string[] {
     lines.push(
       `  hubs by betweenness centrality (normalised; top ${shown} of ${s.hubs.length} quantities; a cut quantity of the drawing, not a central law):`,
     );
-    for (const h of s.hubs.slice(0, shown)) lines.push(`     ${h.quantity.padEnd(40)} ${h.betweenness.toFixed(4)}  (degree ${h.degree})`);
+    for (const h of s.hubs.slice(0, shown)) lines.push(`     ${h.quantity.padEnd(40)} ${formatQuantity(h.betweenness, 3)}  (degree ${h.degree})`);
     lines.push('');
   }
   // Sections are separated by one blank line; the closing line of the report brings its own.
@@ -869,7 +869,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   }
   out(`  ○ isolated (${m.isolated.length}) — share no quantity with any other edge:`);
   out(`     ${m.isolated.length === 0 ? 'none' : m.isolated.join(', ')}`);
-  const structureText = structureLines(structure);
+  const structureText = structureLines(structure, api.formatQuantity);
   if (structureText.length > 0) {
     out('');
     for (const line of structureText) out(line);

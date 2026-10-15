@@ -52,9 +52,22 @@ export interface RepresentativeValue {
  */
 export const DEFAULT_SIGMA_DECADES = 1;
 
-/** The σ in decades of a representative value: its own `sigmaDecades`, else the default. @internal */
+/**
+ * The σ in decades of a representative value: its own `sigmaDecades`, else the default. A stated
+ * σ that is not a finite number > 0 is refused with a `RangeError` naming the row's source: σ = 0
+ * would make the falsifier's strength 0 (certain) and a negative or NaN σ would make it NaN.
+ *
+ * @internal
+ */
 export function sigmaDecadesOf(rv: RepresentativeValue): number {
-  return rv.sigmaDecades ?? DEFAULT_SIGMA_DECADES;
+  const sigma = rv.sigmaDecades;
+  if (sigma === undefined) return DEFAULT_SIGMA_DECADES;
+  if (!(Number.isFinite(sigma) && sigma > 0)) {
+    throw new RangeError(
+      `representative value sigmaDecades ${String(sigma)} (source: ${rv.source}) must be a finite number > 0 decades`,
+    );
+  }
+  return sigma;
 }
 
 /**

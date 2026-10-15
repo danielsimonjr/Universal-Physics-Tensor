@@ -95,3 +95,27 @@ describe('magnitudeP — the calibrated strength of the magnitude falsifier', ()
     expect(r.magnitudeP!).toBeLessThan(1e-10);
   });
 });
+
+describe('sigmaDecadesOf refuses a stated σ that is not a finite number > 0', () => {
+  // A σ of 0 makes the strength 2Φ(−∞) = 0 (a certain falsifier from a typo), and a negative or
+  // NaN σ makes it NaN. Absent is the default; stated, it must be a finite positive number.
+  it.each([0, -1, Number.NaN, Number.POSITIVE_INFINITY])('σ = %s is refused, naming the row', (sigma) => {
+    expect(() => sigmaDecadesOf({ value: 1, source: 'planted row', sigmaDecades: sigma })).toThrow(
+      /sigmaDecades .*planted row.* finite number > 0/,
+    );
+  });
+
+  it('a planted row reaches the gate as a refusal, not as p = 0 or NaN', () => {
+    expect(() =>
+      vetLinkCandidate([], cand('alpha', 'zero'), opts({
+        alpha: { value: 1e-21, source: 'test' },
+        zero: { value: 1e-18, source: 'planted row', sigmaDecades: 0 },
+      })),
+    ).toThrow(RangeError);
+  });
+
+  it('a stated σ that is finite and positive is read as stated', () => {
+    expect(sigmaDecadesOf({ value: 1, source: 'test', sigmaDecades: 0.25 })).toBe(0.25);
+    expect(sigmaDecadesOf({ value: 1, source: 'test' })).toBe(DEFAULT_SIGMA_DECADES);
+  });
+});

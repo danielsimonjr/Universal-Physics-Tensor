@@ -12,6 +12,9 @@ import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { tempDir } from '../helpers/tmp.js';
 
+/** A symbol's dimension record: all seven exponents (the probe validates an expression tree strictly; `{}` is refused). */
+const DIMENSIONLESS_DIM = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+
 async function run(args: string[]): Promise<{ code: number; stderr: string }> {
   const err: string[] = [];
   const sink = () => {};
@@ -37,7 +40,7 @@ describe('upt probe design names the file an invalid JSON message is about', () 
   it.each(['h1', 'h2', 'bounds'])('--%s', async (which) => {
     const dir = tempDir('upt-probe-design-json-');
     const good = join(dir, 'good.json');
-    writeFileSync(good, JSON.stringify({ kind: 'symbol', name: 'x', dim: {} }));
+    writeFileSync(good, JSON.stringify({ kind: 'symbol', name: 'x', dim: DIMENSIONLESS_DIM }));
     const bounds = join(dir, 'bounds.json');
     writeFileSync(bounds, JSON.stringify({ variables: { x: { min: 0, max: 1 } } }));
     const bad = join(dir, `${which}-bad.json`);

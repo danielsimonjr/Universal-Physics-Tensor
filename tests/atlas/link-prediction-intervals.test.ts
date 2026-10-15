@@ -106,10 +106,22 @@ describe('the Katz-index predictor is separate and labelled post hoc', () => {
     expect(result).not.toHaveProperty('katz');
   });
 
-  it('beta is below the spectral bound 1/λ_max, through 1/(2·max degree)', () => {
-    expect(katz.beta).toBeGreaterThan(0);
-    expect(katz.beta).toBeLessThan(1);
-    expect(katz.beta).toBeCloseTo(1 / 12, 12); // the atlas graph's maximum degree is 6
+  it('beta is per trial, below the spectral bound 1/λ_max through 1/(2·max degree), and the result states its range', () => {
+    // Each held-out graph has its own maximum degree, so β is a property of the trial. The result
+    // once reported one β, the last trial's; it now reports the range over the trials.
+    const betas = katz.trials.map((t) => t.beta);
+    for (const b of betas) {
+      expect(b).toBeGreaterThan(0);
+      expect(b).toBeLessThan(1);
+      // 1/(2·d) for an integer max degree d.
+      expect(Number.isInteger(1 / (2 * b))).toBe(true);
+    }
+    expect(katz.betaRange).toEqual([Math.min(...betas), Math.max(...betas)]);
+    expect(katz).not.toHaveProperty('beta');
+    // Measured: max degree 6 on fifteen held-out graphs and 5 on five, so β runs over [1/12, 1/10].
+    expect(katz.betaRange[0]).toBeCloseTo(1 / 12, 12);
+    expect(katz.betaRange[1]).toBeCloseTo(1 / 10, 12);
+    expect(betas.filter((b) => Math.abs(b - 1 / 10) < 1e-12)).toHaveLength(5);
   });
 
   it('NEGATIVE RESULT, pinned once: on the atlas the Katz index recalls 8/20 = 0.40, below chance, MRR 0.086', () => {

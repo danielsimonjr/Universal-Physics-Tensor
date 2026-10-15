@@ -34,7 +34,7 @@
 import { Fraction } from '@danielsimonjr/mathts-core';
 import type { ExprNode } from '../dimensional/validator.js';
 import { validate } from '../dimensional/validator.js';
-import { sym } from '../dimensional/ast-builders.js';
+import { sym, symbolPower } from '../dimensional/ast-builders.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { equals, format } from '../dimensional/algebra.js';
@@ -143,12 +143,16 @@ export function toMonomial(ast: ExprNode): Mono {
  *  positive exponents, denominator = negative). Zero exponents drop out. The
  *  exponent literal is the double built from the fraction (`1/3` is written
  *  `0.3333333333333333`), so one rational is always one spelling.
+ *
+ *  This is not merged with `monomialToExpr` (composition/probe/generator.ts),
+ *  which writes one product with negative exponents in code-unit name order;
+ *  this one orders names by `localeCompare` and splits a quotient. The
+ *  proposals' printed formulas and the IC dedup key read this tree, so one
+ *  builder would move them. Both build each factor with `symbolPower`.
  *  @internal */
 export function fromMonomial(m: Mono): ExprNode {
   const factor = (name: string, dim: Dimension, e: Fraction): ExprNode =>
-    e.equals(ONE)
-      ? sym(name, dim)
-      : { kind: 'op', op: '^', args: [sym(name, dim), sym(String(fractionToNumber(e)), DIMENSIONLESS)] };
+    symbolPower(sym(name, dim), fractionToNumber(e));
 
   const num: ExprNode[] = [];
   const den: ExprNode[] = [];

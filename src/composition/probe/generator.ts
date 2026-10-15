@@ -7,7 +7,7 @@
 
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { DIMENSIONLESS } from '../../dimensional/types.js';
-import { sym } from '../../dimensional/ast-builders.js';
+import { sym, symbolPower } from '../../dimensional/ast-builders.js';
 import { dimensionallyDetermines, type DimensionalDeterminationResult } from '../../dimensional/buckingham.js';
 import { validate } from '../../dimensional/validator.js';
 import { isDimensionless } from '../../dimensional/algebra.js';
@@ -28,7 +28,19 @@ export interface RawCandidate {
   readonly powerLaw?: PowerLawFit;
 }
 
-/** Build `Π governing^exp` as an `ExprNode`. @internal */
+/**
+ * Build `Π governing^exp` as an `ExprNode`: ONE product, negative exponents kept, names in
+ * code-unit order (`sort()`).
+ *
+ * This is not merged with `fromMonomial` (composition/proposed-bridges.ts), which writes a
+ * numerator over a denominator with positive exponents and orders names by `localeCompare`.
+ * The two trees differ for the same monomial (`Z·a^-0.5` against `Z/a^0.5`, and `Z` before `a`
+ * here, after it there), and both are printed (`upt probe` candidates, `upt discover --derive`
+ * proposals) and hashed, so one builder would move printed text. They share `symbolPower`, the
+ * one factor that is the same in both (tests/composition/monomial-builders.test.ts).
+ *
+ * @internal
+ */
 export function monomialToExpr(
   monomial: Readonly<Record<string, number>>,
   vars: readonly DimensionalVariableRef[],
@@ -40,15 +52,7 @@ export function monomialToExpr(
     if (exp === 0) continue;
     const dim = byName.get(name);
     if (!dim) throw new RangeError(`monomialToExpr: unknown variable '${name}'`);
-    const base = sym(name, dim);
-    if (exp === 1) factors.push(base);
-    else {
-      factors.push({
-        kind: 'op',
-        op: '^',
-        args: [base, sym(String(exp), DIMENSIONLESS)],
-      });
-    }
+    factors.push(symbolPower(sym(name, dim), exp));
   }
   if (factors.length === 0) return sym('1', DIMENSIONLESS);
   if (factors.length === 1) return factors[0];

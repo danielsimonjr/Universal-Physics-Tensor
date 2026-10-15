@@ -493,8 +493,8 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--frontier` | `confront` | Rank the σ-tests by margin to this tool's 1σ acceptance line. That line is a software criterion. |
 | `--geodesic` | `metric` | Integrate a short Schwarzschild circular orbit, or a Kerr geodesic at the given θ. |
 | `--geometrized` | `eval`, `map` | eval: Set ħ = c = G = 1 when reading values. map: With the natural-unit rules, also set G = 1. |
-| `--h1` | `probe` | First hypothesis for design. |
-| `--h2` | `probe` | Second hypothesis for design. |
+| `--h1` | `probe` | First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused. |
+| `--h2` | `probe` | Second hypothesis for design, an expression-tree JSON file in the form --h1 takes. |
 | `--holdout-tol` | `probe` | Relative holdout RMSE cap. |
 | `--json` | `atlas`, `audit`, `axes`, `candidates`, `canonical`, `confront`, `connectors`, `coverage`, `derive`, `discover`, `eval`, `evaluate`, `explain`, `frontier`, `ground`, `map`, `metric`, `path`, `predict`, `priority`, `probe`, `recover`, `regime`, `retrieve`, `search`, `symbolic`, `testplan` | Write a JSON envelope to stdout instead of the text report. |
 | `--max-orders` | `discover`, `ground`, `map` | discover: Magnitude-clash threshold. A larger value keeps more pairs promising. ground: Magnitude-clash threshold. A larger value keeps more pairs promising. map: Magnitude-clash threshold for the --proposed overlay. |
@@ -569,7 +569,7 @@ read or refused:
 - **Unknown flags are rejected, not silently ignored.** A mistyped or
   unsupported flag (e.g. `upt discover --sourc=canonical`) used to be swallowed
   without effect; it exits `2` with a diagnostic naming the bad flag and the
-  command (`unknown flag '--sourc' for 'discover' (see upt help discover)`).
+  command (`upt discover: unknown flag '--sourc' for 'discover' (see upt help discover)`).
   Every command's flag set is fixed and typed — a flag valid on one command but
   not another (e.g. `upt derive --source=catalog`) is rejected the same way,
   since `--source`/`--json`/etc. are per-command, not global.

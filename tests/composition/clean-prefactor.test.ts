@@ -13,7 +13,9 @@
  * transcendental equation) is not a hit.
  */
 import { describe, expect, it } from 'vitest';
+import { Fraction } from '@danielsimonjr/mathts-core';
 import { attemptDerivation, cleanPrefactorForm } from '../../src/composition/bridge-analysis.js';
+import { fractionToNumber, rationalize } from '../../src/composition/rational-exponent.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { CENSUS } from '../helpers/census.js';
@@ -66,6 +68,91 @@ describe('cleanPrefactorForm — the rule', () => {
     expect(cleanPrefactorForm(1 / 721)).toBeUndefined();
     expect(cleanPrefactorForm(1.125 * (1 + 1e-7))).toBeUndefined();
     expect(cleanPrefactorForm(1.125 * (1 + 1e-10))).toBe('9/8');
+  });
+});
+
+/** The seeded 64-bit LCG of the measurement: s ← s·6364136223846793005 + 1442695040888963407 mod 2^64. */
+function lcg(seed: bigint): () => number {
+  let s = seed;
+  const mask = (1n << 64n) - 1n;
+  return () => {
+    s = (s * 6364136223846793005n + 1442695040888963407n) & mask;
+    return Number(s >> 11n) / 2 ** 53;
+  };
+}
+
+/** Hits of the rule among `n` log-uniform draws on [lo, hi], in the draw order the seed fixes. */
+function chanceHits(rnd: () => number, lo: number, hi: number, n: number): number {
+  let hits = 0;
+  for (let i = 0; i < n; i++) {
+    const x = Math.exp(Math.log(lo) + rnd() * (Math.log(hi) - Math.log(lo)));
+    if (cleanPrefactorForm(x) !== undefined) hits++;
+  }
+  return hits;
+}
+
+describe('cleanPrefactorForm — the measured chance-hit rate', () => {
+  // A rule this wide names some numbers by chance. Measured with seed 20261015, 20000
+  // log-uniform draws per range, the second range continuing the first one's stream: 53 hits on
+  // [0.1, 10] (0.27%) and 19 on [1e-3, 1e3] (0.10%) at the current caps (a ∈ −2..2, b ∈ −1..1,
+  // numerator and denominator ≤ 720, 1e-9, and the square branch). The draws are deterministic,
+  // so these are exact pins: a widened search (a larger cap, a looser tolerance, another
+  // symbol) moves them, and that move has to be reviewed here.
+  it('pins 53 of 20000 on [0.1, 10] and 19 of 20000 on [1e-3, 1e3]', () => {
+    const rnd = lcg(20261015n);
+    expect(chanceHits(rnd, 0.1, 10, 20000)).toBe(53);
+    expect(chanceHits(rnd, 1e-3, 1e3, 20000)).toBe(19);
+  });
+
+  it('named transcendental constants are not hits; √2 is, by the r² branch', () => {
+    expect(cleanPrefactorForm(1.26546641505411)).toBeUndefined(); // Wien, 2π/x
+    expect(cleanPrefactorForm(1.76387698886205)).toBeUndefined(); // BCS, π/e^γ
+    expect(cleanPrefactorForm(Math.E)).toBeUndefined();
+    expect(cleanPrefactorForm(0.5772156649015329)).toBeUndefined(); // Euler's γ
+    expect(cleanPrefactorForm(1.2020569031595942)).toBeUndefined(); // ζ(3)
+    expect(cleanPrefactorForm((1 + Math.sqrt(5)) / 2)).toBeUndefined(); // the golden ratio
+    expect(cleanPrefactorForm(Math.SQRT2)).toBe('√2');
+  });
+
+  it('an integer before ln 2 is spaced, as ln 2 is everywhere else in a form', () => {
+    expect(cleanPrefactorForm(2 * Math.LN2)).toBe('2 ln 2');
+    expect(cleanPrefactorForm((713 * Math.LN2) / (654 * Math.PI))).toBe('713 ln 2/(654π)');
+    expect(cleanPrefactorForm(2 * Math.PI * Math.LN2)).toBe('2π ln 2');
+  });
+});
+
+describe('rationalize — the double-only miss is the Fraction miss (second method)', () => {
+  // rationalize decides a miss on n/d in doubles before building a Fraction (the rule asks it
+  // 43,200 times per miss). The reference below builds every Fraction, as the scan did before.
+  function reference(x: number, maxDenominator: number, tolerance: number): Fraction | undefined {
+    if (!Number.isFinite(x)) return undefined;
+    if (Number.isInteger(x)) return new Fraction(x, 1);
+    const within = (f: Fraction) => Math.abs(fractionToNumber(f) - x) <= tolerance * Math.abs(x);
+    const guess = Fraction.fromNumber(x, BigInt(maxDenominator));
+    if (guess.denominator <= BigInt(maxDenominator) && within(guess)) return guess;
+    for (let d = 1; d <= maxDenominator; d++) {
+      const candidate = new Fraction(Math.round(x * d), d);
+      if (within(candidate)) return candidate;
+    }
+    return undefined;
+  }
+
+  it('agrees on 3000 seeded draws, hits and misses, across tolerances and magnitudes', () => {
+    const rnd = lcg(7n);
+    let hits = 0;
+    for (let i = 0; i < 3000; i++) {
+      const d = 1 + Math.floor(rnd() * 720);
+      const n = Math.floor(rnd() * 5000) - 2500;
+      // Half the draws are exact rationals (hits), half are perturbed (mostly misses).
+      const x = (n / d) * (i % 2 === 0 ? 1 : 1 + (rnd() - 0.5) * 1e-6) * 10 ** Math.floor(rnd() * 8 - 4);
+      const tolerance = i % 3 === 0 ? 1e-12 : 1e-9;
+      const got = rationalize(x, { maxDenominator: 720, tolerance });
+      const want = reference(x, 720, tolerance);
+      expect(got?.toString(), String(x)).toBe(want?.toString());
+      if (want !== undefined) hits++;
+    }
+    expect(hits).toBeGreaterThan(500);
+    expect(hits).toBeLessThan(2500);
   });
 });
 

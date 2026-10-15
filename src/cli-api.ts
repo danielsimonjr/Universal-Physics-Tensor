@@ -57,8 +57,6 @@ export {
   getFormulaDimensionChecker,
 } from './numerical/formula-registry.js';
 export { parseDimensionSpec } from './dimensional/dimension-spec.js';
-/** The mean and coefficient of variation of a set of ratios, what `upt derive` judges a monomial fit by. */
-export { ratioSpread } from './numerical/statistics.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
 export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';
@@ -105,7 +103,8 @@ export { APPLIED_CASES, runAppliedCase } from './cases/index.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
 /** The unit reader's conversion, its refusal and the rows of the unit table. */
 export { convertValue, UnitError, unitRows } from './dimensional/units.js';
-export { auditAxisDiscrimination } from './composition/axis-audit.js';
+/** The axis-discrimination audit and the level (0.05) at which an axis's evidence is earned. */
+export { auditAxisDiscrimination, AUDIT_ALPHA } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';
 export { AXES } from './composition/axes.js';
 export type { AxisSpec } from './composition/axes.js';
@@ -225,6 +224,10 @@ export type {
   RatioStatistic,
 } from './canonical/fixed-points.js';
 export { CONSTANTS, CONSTANT_PROVENANCE } from './dimensional/symbolic-constants.js';
+/** The one decimal-literal rule (`2`, `1e3`; not `0x2`, `''`, `Infinity`): a symbol name that is a number. */
+export { isDecimalLiteral } from './dimensional/ast-leaves.js';
+/** The one scalar-leaf walk of an `ExprNode`: `op` arguments always, other arms as the caller opts in. */
+export { forEachScalarLeaf } from './dimensional/ast-leaves.js';
 export type { CandidateGrounding, CandidateReadiness } from './composition/grounding.js';
 
 // Atlas Phase 2 CLI surface (`upt regime`, `upt path`). Regime admission and

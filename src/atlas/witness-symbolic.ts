@@ -56,6 +56,7 @@ import { evalExpr } from '../composition/expr-eval.js';
 import { isSimplifierAvailable, simplifyExpr } from '../composition/expr-simplify.js';
 import { scalarSymbolsFromMathTs } from '../composition/mathts-scalar-symbols.js';
 import type { WitnessRunResult } from './witness-result.js';
+import { literalValue as leafLiteral } from '../dimensional/ast-leaves.js';
 
 /**
  * The simplification capability this runner needs, as a function rather than
@@ -206,12 +207,10 @@ export function tallySymbolicResults(results: readonly SymbolicWitnessRunResult[
   return { cas, numeric };
 }
 
-/** The numeric value of a literal leaf, or `null`. Same rule as `validator.ts`. */
+/** The finite value of a decimal-literal leaf (the one rule, `dimensional/ast-leaves.ts`), or `null`. */
 function literalValue(node: ExprNode): number | null {
-  if (node.kind !== 'symbol') return null;
-  if (node.name.trim() === '') return null;
-  const v = Number(node.name);
-  return Number.isFinite(v) ? v : null;
+  const v = leafLiteral(node);
+  return v !== undefined && Number.isFinite(v) ? v : null;
 }
 
 /** A sentinel the timeout race resolves with; never confusable with a result. */
