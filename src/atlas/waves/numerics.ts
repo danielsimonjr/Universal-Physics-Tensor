@@ -181,7 +181,9 @@ export function soundSpeeds(p0: number, rho0: number, gamma: number): {
  */
 export function kleinGordonPhaseError(omega0: number, c: number, k: number): number {
   const ratio = omega0 / (c * k);
-  return Math.sqrt(1 + ratio * ratio) - 1;
+  // `√(1 + r²) − 1` as `expm1(½ log1p(r²))`: the naive difference cancels to 0 below
+  // r ≈ 1e-8 and falls below the true error (not a bound) around r ≈ 1e-7.
+  return Math.expm1(0.5 * Math.log1p(ratio * ratio));
 }
 
 /**
@@ -213,7 +215,11 @@ export function kleinGordonPhaseVelocity(
  */
 export function kgNonrelativisticError(x: number): number {
   if (x === 0) return 0;
-  return Math.abs((Math.sqrt(1 + x * x) - 1) / ((x * x) / 2) - 1);
+  // Algebraically `x² / (1 + √(1 + x²))²`: with `s = 1 + √(1 + x²)`, `√(1 + x²) − 1 = x²/s`,
+  // so the quantity is `|(2/s) − 1| = (s − 2)/s = x²/s²`. The naive difference of the two
+  // ratios returned 8.9e-5 at x = 1e-6, where the error is 2.5e-13.
+  const s = 1 + Math.sqrt(1 + x * x);
+  return (x * x) / (s * s);
 }
 
 /**
@@ -258,7 +264,8 @@ export function kgUniformModeValue(
  * @internal
  */
 export function stiffStringPhaseError(F: number, EI: number, k: number): number {
-  return Math.sqrt(1 + (EI * k * k) / F) - 1;
+  // `√(1 + β) − 1` as `expm1(½ log1p(β))`, which keeps its precision as β → 0.
+  return Math.expm1(0.5 * Math.log1p((EI * k * k) / F));
 }
 
 /**

@@ -260,7 +260,28 @@ export function telegraphSlowRateRatio(tau: number, D: number, q: number): numbe
   if (eps === 0) return 1;
   const disc = 1 - 4 * eps;
   if (disc < 0) return Number.NaN;
-  return (1 - Math.sqrt(disc)) / (2 * eps);
+  // `(1 − √(1 − 4ε))/(2ε)` is algebraically `2/(1 + √(1 − 4ε))`, which does not cancel as
+  // ε → 0 (the naive form was 26× the true `ratio − 1` at ε = 1e-9).
+  return 2 / (1 + Math.sqrt(disc));
+}
+
+/**
+ * The slow-mode decay-rate EXCESS over diffusion, `telegraphSlowRateRatio − 1`,
+ * as the cancellation-free `4ε / (1 + √(1 − 4ε))²` with `ε = τ D q²`: the
+ * relative error `ab-telegraph-diffusion` states its bound in. Subtracting 1
+ * from the ratio loses the leading digits as ε → 0 (at ε = 1e-9 the naive
+ * difference was 8e-8 relative off), so the bridge reads this function.
+ * NaN for ε > 1/4, as the ratio is.
+ *
+ * @internal
+ */
+export function telegraphSlowRateExcess(tau: number, D: number, q: number): number {
+  const eps = tau * D * q * q;
+  if (eps === 0) return 0;
+  const disc = 1 - 4 * eps;
+  if (disc < 0) return Number.NaN;
+  const s = 1 + Math.sqrt(disc);
+  return (4 * eps) / (s * s);
 }
 
 /**

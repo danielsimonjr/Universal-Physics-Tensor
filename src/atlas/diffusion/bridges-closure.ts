@@ -29,7 +29,7 @@ import type { AtlasBridge } from '../types.js';
 import { WAVENUMBER } from '../waves/models.js';
 import { DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY } from './dimensions.js';
 import { DIFFUSION_FAMILY_NAME, VISCOSITY } from './models.js';
-import { telegraphSlowRateRatio, telegraphWaveFrequencyRatio } from './numerics.js';
+import { telegraphSlowRateExcess, telegraphWaveFrequencyRatio } from './numerics.js';
 
 const TEST = 'tests/atlas/closure.test.ts';
 const WITNESS_RESULTS_TEST = 'tests/atlas/witness-results.test.ts';
@@ -223,9 +223,9 @@ export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
   sideConditions: ['ε = τDq² ≤ 0.05', 'after the initial layer: t ≫ τ'],
   bound: makeApproximation({
     K: 1,
-    delta: telegraphSlowRateRatio(TELEGRAPH_FICK_MAX_EPS, 1, 1) - 1,
+    delta: telegraphSlowRateExcess(TELEGRAPH_FICK_MAX_EPS, 1, 1),
     deltaAt: (p) =>
-      telegraphSlowRateRatio(p['tau'] ?? Number.NaN, p['D'] ?? Number.NaN, p['q'] ?? Number.NaN) - 1,
+      telegraphSlowRateExcess(p['tau'] ?? Number.NaN, p['D'] ?? Number.NaN, p['q'] ?? Number.NaN),
     deltaAtBasis: 'closed-form',
     norm: 'relative error of the slow-mode decay rate of a Fourier mode, normalized by the value of the reduced model',
     domain: 'ε = τDq² ≤ 0.05',
@@ -235,7 +235,7 @@ export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
     horizonHolds: (t, p) => {
       const { tau, D, q } = p;
       if (tau === undefined || D === undefined || q === undefined) return false;
-      const delta = telegraphSlowRateRatio(tau, D, q) - 1;
+      const delta = telegraphSlowRateExcess(tau, D, q);
       if (!Number.isFinite(delta)) return false;
       if (t <= 5 * tau) return false;
       return delta === 0 || t < 0.1 / (delta * D * q * q);
