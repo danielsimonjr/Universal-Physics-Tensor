@@ -127,8 +127,12 @@ describe('MathTS carries the rational arithmetic and the stable sums', () => {
   it('the prefactor fit, the ratio spread and the changepoint read the stable primitives', () => {
     expect(source('../../src/composition/probe/fit.ts')).toMatch(/pairwiseDot|norm2/);
     expect(source('../../src/numerical/statistics.ts')).toMatch(/\bstd\b/);
-    expect(source('../../src/composition/bridge-analysis.ts')).toMatch(/ratioSpread/);
-    expect(source('../../src/cli/commands/derive.ts')).toMatch(/api\.ratioSpread/);
+    // The ratio spread has one owner since proposal 6: canonical/fixed-points.ts reads it, and
+    // the audit (bridge-analysis) and `upt derive` reach it through that module's constantRatio /
+    // recoverMonomialPrefactor (derive through the barrel).
+    expect(source('../../src/canonical/fixed-points.ts')).toMatch(/\bratioSpread\(/);
+    expect(source('../../src/composition/bridge-analysis.ts')).toMatch(/from '\.\.\/canonical\/fixed-points\.js'/);
+    expect(source('../../src/cli/commands/derive.ts')).toMatch(/api\.(ratioSpread|recoverMonomialPrefactor)\b/);
     expect(source('../../src/composition/probe/structure.ts')).toMatch(/\bmean\b/);
     expect(source('../../src/cases/lumped-cooling.ts')).toMatch(/solveODESystem/);
   });
