@@ -28,7 +28,7 @@
  */
 
 import { pairwiseDot, pairwiseSum } from '@danielsimonjr/mathts-core';
-import { betainc, gammainc, gammaincp } from '@danielsimonjr/mathts-functions';
+import { betainc, gammainc, gammaincp, propagateUncertainty } from '@danielsimonjr/mathts-functions';
 import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
@@ -915,21 +915,52 @@ type Predictor = (inputs: Readonly<Record<string, number>>) => number;
 
 /**
  * The effective σ of one row under a model f: σ_eff² = σ_y² + Σ_i (∂f/∂x_i · σ_xi)²
- * over the inputs with a σ, each derivative by a central difference at the
- * recorded inputs. First order in σ_x: exact for f linear in x_i.
+ * over the inputs with a σ, the GUM first-order propagation of MathTS
+ * `propagateUncertainty` (the one uncertainty path of the library, as in
+ * `composition/uncertainty.ts`), each partial a central difference with the
+ * relative step 1e-6·|x_i| at the recorded inputs. An input that is exactly
+ * zero has no relative step, so it is passed to MathTS shifted by
+ * c = 1e3·σ_xi and read back as z − c inside the model: the derivative is
+ * unchanged and the step is 1e-6·c = 1e-3·σ_xi, the floor the hand-coded
+ * difference used before. First order in σ_x: exact for f linear in x_i.
  *
  * @internal
  */
 export function effectiveSigma(r: StudyObservation, predict: Predictor): number {
-  let v = r.sigma * r.sigma;
-  for (const [name, sx] of Object.entries(r.inputSigma)) {
-    const x = r.inputs[name]!;
-    const h = Math.max(Math.abs(x) * 1e-6, sx * 1e-3);
-    const d = (predict({ ...r.inputs, [name]: x + h }) - predict({ ...r.inputs, [name]: x - h })) / (2 * h);
-    if (!Number.isFinite(d)) throw new RangeError(`the model's slope in ${name} is not finite on row ${r.id}`);
-    v += (d * sx) ** 2;
+  const names = Object.keys(r.inputSigma);
+  if (names.length === 0) return r.sigma;
+  const values: Record<string, number> = {};
+  const shift: Record<string, number> = {};
+  for (const name of names) {
+    const x = r.inputs[name] ?? NaN;
+    shift[name] = x === 0 ? 1e3 * r.inputSigma[name]! : 0;
+    values[name] = x + shift[name];
   }
-  return Math.sqrt(v);
+  const unshifted = (v: Record<string, number>): Record<string, number> => {
+    const inputs: Record<string, number> = { ...r.inputs };
+    for (const name of names) inputs[name] = v[name]! - shift[name]!;
+    return inputs;
+  };
+  const notFinite = (name: string) => new RangeError(`the model's slope in ${name} is not finite on row ${r.id}`);
+  // MathTS varies one input at a time; the input being varied when the model is not finite is
+  // the one to name, read from the stencil point itself rather than from MathTS's message.
+  let culprit: string | null = null;
+  const model = (v: Record<string, number>): number => {
+    const y = predict(unshifted(v));
+    if (!Number.isFinite(y) && culprit === null) culprit = names.find((name) => v[name] !== values[name]) ?? names[0]!;
+    return y;
+  };
+  let u;
+  try {
+    u = propagateUncertainty(model, values, r.inputSigma, { relativeStep: 1e-6 });
+  } catch (e) {
+    if (culprit !== null) throw notFinite(culprit);
+    throw e;
+  }
+  for (const name of names) {
+    if (!Number.isFinite(u.partials[name])) throw notFinite(name);
+  }
+  return Math.hypot(r.sigma, u.sigma);
 }
 
 const hasInputSigma = (rows: readonly StudyObservation[]) => rows.some((r) => Object.keys(r.inputSigma).length > 0);
