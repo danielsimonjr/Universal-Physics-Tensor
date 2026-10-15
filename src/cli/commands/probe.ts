@@ -82,7 +82,13 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
         \`--problem=FILE\`. The id is not that file.
         scan                 typed frontier gaps (default: searchable only)
         show <gap-id>        one gap
-        run --problem=FILE   bounded native search (MHC / holdout / budget)
+        run --problem=FILE   bounded native search (MHC / holdout / budget).
+                             When the governing variables leave dimensionless
+                             groups, the native enumerator also fits a rational
+                             power law of the π-groups, base · Π πₖ^(p/q) with
+                             q ≤ 6 within 2σ, on the exploratory rows only (the
+                             holdout rows are never fitted); an exponent that is
+                             no such fraction is reported, not a candidate
         candidates           same as run; list stored statuses
         falsify              run + print falsification batteries
         rank                 run + Pareto front
