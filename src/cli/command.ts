@@ -10,8 +10,10 @@
  * from a barrel later tasks import) without `runCli`'s body ever changing.
  */
 
-import type { ParsedArgs, FlagSpec } from './args.js';
+import type { ParsedArgs, FlagSpec, PositionalArity } from './args.js';
 import type * as cliApi from '../cli-api.js';
+
+export type { PositionalArity } from './args.js';
 
 export interface CommandCtx {
   args: ParsedArgs;
@@ -41,6 +43,13 @@ export interface Command {
   group?: CommandGroup;
   /** Subverbs, when the command has them. `probe` is the one that does. */
   subcommands?: readonly CommandSub[];
+  /**
+   * The positional arguments the command reads. Absent: none, and a stray token is a usage
+   * error (exit 2) naming the token and the command, checked once by the parser the dispatcher
+   * runs (`parseArgs`), so `run` never sees a token it would drop. A command that reads
+   * positionals declares how many (`{ max: Infinity }` for a list).
+   */
+  positionals?: PositionalArity;
   run(ctx: CommandCtx): Promise<number>; // 0 on success; throws UsageError/CliError otherwise
 }
 

@@ -551,22 +551,52 @@ rather than as not matching.
 | Code | Meaning |
 |---|---|
 | `0` | Success. |
-| `1` | Bad `--source`/`--format` value, empty `--out=`, an invalid or unregistered `confront --bridge` value, an unknown `regime` family, an unknown `path` model id, an `explain` name that is not a quantity of the graph (NOT COVERED), a non-numeric `upt eval` or `upt evaluate` binding value (`x=nope`, `mu_e=nope`, an empty value after `=`, an empty `--anchor` value, an `upt eval` formula whose value is not a finite real (`ln(-1)`, `1/0`), a non-finite value), a Kerr `--geodesic` with a non-positive mass or with `|a|` above GM/c², a non-numeric or negative `--max-orders`, a `probe` `--budget-ms`, `--holdout-tol` or `--alpha` outside its range, a `--problem` file that is not a problem file, a `discover` `--anchor` on a name no graph holds or with a unit of another dimension, the optional SVG renderer is missing, or the built package could not be loaded. **A `path` that carries no composite claim is NOT an error — it exits 0.** |
-| `2` | Usage error: missing required argument, unparseable expression syntax, a binding with no `=`, unknown command, an **unknown/mistyped flag** (e.g. `--sourc=canonical`), a malformed or dimensionally non-homogeneous `--equation`, or combining `--json` with `map --format=mermaid\|dot\|svg`. |
+| `1` | Bad `--source`/`--format` value, empty `--out=`, an unregistered `confront --bridge` value (`be-999`), an unknown `regime` family, an unknown `path` model id, an `explain` name that is not a quantity of the graph (NOT COVERED), a non-numeric `upt eval` or `upt evaluate` binding value (`x=nope`, `mu_e=nope`, an empty value after `=`, an empty `--anchor` value, an `upt eval` formula whose value is not a finite real (`ln(-1)`, `1/0`), a non-finite value), a Kerr `--geodesic` with a non-positive mass or with `|a|` above GM/c², a negative `--max-orders`, a `probe` `--budget-ms`, `--holdout-tol` or `--alpha` outside its range, a `--max-routes` or `--depth` outside its range, a `--problem` file that is not a problem file, a `discover` `--anchor` on a name no graph holds or with a unit of another dimension, the optional SVG renderer is missing, or the built package could not be loaded. **A `path` that carries no composite claim is NOT an error — it exits 0.** |
+| `2` | Usage error: missing required argument, a **stray positional argument** the command does not read (`upt audit junk`), unparseable expression syntax, a binding with no `=`, unknown command, an **unknown/mistyped flag** (e.g. `--sourc=canonical`), a **numeric flag outside its grammar** (`--max-routes=0x10`, `--depth=1e1`, `--max-orders=abc`), a malformed bridge id (`be-abc`, on every command), a malformed or dimensionally non-homogeneous `--equation`, or combining `--json` with `map --format=mermaid\|dot\|svg`. |
 | `3` | **The command ran and its check came out negative** (since 0.47.0): `derive --formula` whose dimension differs from the target, that does not match the dimensional monomial, or that differs from the canonical equation by a factor or in form; `map --equation` with a dimension mismatch, a name no graph resolves (the dimension is NOT ESTABLISHED), or a canonical difference; `path` with a violated regime or horizon at the `--at` point; `regime` when any record is VIOLATED; an applied case whose regime check fails; `--replay` with an entry whose output differs from the record. An UNKNOWN result, where a coordinate was not supplied or a name did not resolve, is not a failure and exits `0`. A `regime` survey that is VACUOUS or UNKNOWN, with no violated record, exits `0`. |
+| `70` | Internal error: a defect reached the launcher (`upt: internal error: <message>`). Not a usage error and not a value the command refused; report it. |
 
 ---
 
 ## Hardening
 
-**Unknown flags are rejected, not silently ignored.** This is the one
-behavior change from earlier releases: a mistyped or unsupported flag (e.g.
-`upt discover --sourc=canonical`) used to be swallowed without effect; it now
-exits `2` with a diagnostic naming the bad flag and the command
-(`upt: unknown flag '--sourc' for 'discover' (see upt help discover)`). Every
-command's flag set is fixed and typed — a flag valid on one command but not
-another (e.g. `upt derive --source=catalog`) is rejected the same way, since
-`--source`/`--json`/etc. are per-command, not global.
+**Nothing typed is silently dropped.** Every token of an invocation is either
+read or refused:
+
+- **Unknown flags are rejected, not silently ignored.** A mistyped or
+  unsupported flag (e.g. `upt discover --sourc=canonical`) used to be swallowed
+  without effect; it exits `2` with a diagnostic naming the bad flag and the
+  command (`unknown flag '--sourc' for 'discover' (see upt help discover)`).
+  Every command's flag set is fixed and typed — a flag valid on one command but
+  not another (e.g. `upt derive --source=catalog`) is rejected the same way,
+  since `--source`/`--json`/etc. are per-command, not global.
+- **Stray positional arguments are rejected.** A command declares how many
+  positional arguments it reads (`positionals` on its registration; none when
+  it declares nothing), and the parser refuses the first token past that with
+  exit `2`, naming the token and the command: `upt audit: unexpected argument
+  'junk' (audit takes no positional arguments; see upt help audit)`. `upt probe
+  <subverb>` refuses the same way under the subverb's name.
+- **Numeric flags are read by one strict grammar.** An integer flag is digits
+  with an optional sign (`3`, `-2`); a real flag is a decimal with an optional
+  fraction and exponent (`0.5`, `1e-3`). `0x10`, `1e1` on an integer flag, `''`
+  and whitespace are refused with exit `2`, naming the flag and the token
+  (`upt map: --max-routes '0x10' is not an integer (digits only, such as 3 or
+  -2; see upt help map)`). A well-formed value outside the flag's range is the
+  command's own value refusal, exit `1` (`--max-routes=0`, `--depth=11`).
+
+**The exit-code rule.** A malformed token — a flag the command does not take,
+a stray positional, a numeric token outside its grammar, a bridge id that is
+not `be-<n>` (`upt evaluate be-abc`, `upt confront --bridge=be-xyz`) — is a
+usage error, exit `2`, refused before the command runs. A well-formed value
+the command refuses — an unregistered id (`--bridge=be-999`), an input outside
+a relation's validity domain, a number outside a flag's range — is exit `1`.
+A check that ran and came out negative is exit `3`. A defect that reaches the
+launcher (an error of neither class) is reported as `upt: internal error:
+<message>` with exit `70`, never as a stack trace. Every refusal a command
+makes is prefixed `upt <command>:`. `upt evaluate --json` answers a refusal
+inside the JSON envelope, on stdout with nothing on stderr, so a JSON consumer
+reads one stream: `{"command":"evaluate","error":{"kind":"usage"|"value",
+"exitCode":2|1,"message":"…"}}`; the text mode prints the message on stderr.
 
 ## Troubleshooting
 

@@ -29,6 +29,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
+import { integerFlag } from '../numeric-flag.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
 import { explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, type RouteClaim } from './_atlas-route.js';
 
@@ -196,7 +197,8 @@ export function parseSweep(
   };
   const lo = endpoint(loS);
   const hi = endpoint(hiS);
-  const n = Number(nS);
+  // The grammar first (`0x5` is usage, exit 2); the 2..MAX_SAMPLES range after (exit 1).
+  const n = integerFlag('path', '--sweep sample count', nS);
   const spacing = sp === 'log' ? 'log' : 'linear';
   if (!Number.isFinite(lo) || !Number.isFinite(hi) || !(lo < hi)) {
     throw new CliError(`upt path: --sweep '${spec}' needs finite lo < hi`);
@@ -218,6 +220,28 @@ type Witness = import('../../cli-api.js').Witness;
 type Bridges = readonly AtlasBridge[];
 type Translation = import('../../cli-api.js').ObservableTranslation;
 type Carriage = import('../../cli-api.js').ObservableCarriage;
+
+/**
+ * A translation declared on a bridge that states no bound. A translation restates the bound's
+ * error in another observable, so it presupposes the bound; a bridge without one declaring a
+ * translation is a defect of the atlas record, not a user error, and this is not a `CliError`.
+ */
+export class TranslationWithoutBoundError extends Error {
+  constructor(bridgeId: string, observable: string) {
+    super(
+      `upt path: '${bridgeId}' declares a translation to ${observable} but states no bound; ` +
+        'a translation presupposes the bound it translates (a defect of the record, not a usage error)',
+    );
+    this.name = 'TranslationWithoutBoundError';
+  }
+}
+
+/** The first bridge's bound, which the translation `tr` presupposes. @internal */
+export function translatedBound(bridges: Bridges, tr: Translation): NonNullable<AtlasBridge['bound']> {
+  const first = bridges[0]!;
+  if (first.bound === undefined) throw new TranslationWithoutBoundError(first.id, tr.observable);
+  return first.bound;
+}
 
 function modelFamilyOf(api: CommandCtx['api'], id: string | null): string | undefined {
   if (id === null) return undefined;
@@ -592,7 +616,7 @@ export function judgeAtPoint(
 function thresholdOrigin(request: ToleranceRequest, tr: Translation, bridges: Bridges): string {
   return (
     `t* is derived from the requested tolerance ${request.value} ${tr.unit} through the translation; ` +
-    `${bridges[0]!.id}'s own horizon (${bridges[0]!.bound!.horizon}) is the record's fixed threshold, judged separately`
+    `${bridges[0]!.id}'s own horizon (${translatedBound(bridges, tr).horizon}) is the record's fixed threshold, judged separately`
   );
 }
 
@@ -630,7 +654,7 @@ function observableReport(
           domainHorizon: j.domainHorizon,
           horizonConvention: tr.boundary,
           thresholdOrigin: thresholdOrigin(request, tr, bridges),
-          bridgeHorizon: { horizon: bridges[0]!.bound!.horizon, holds: j.bridgeHorizonHolds },
+          bridgeHorizon: { horizon: translatedBound(bridges, tr).horizon, holds: j.bridgeHorizonHolds },
           evidence,
           pointWitness: j.pointWitness,
         }),
@@ -1401,6 +1425,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'path',
   aliases: [],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Show the bridge chain between two models and whether a bound is claimed there.',

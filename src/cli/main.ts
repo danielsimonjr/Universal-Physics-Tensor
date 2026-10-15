@@ -129,7 +129,7 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       if (!explainCmd) {
         throw new CliError("upt: the demo needs the 'explain' command, which is not registered yet");
       }
-      const explainArgs = parseArgs('explain', ['hawking-temperature', 'mass=1.989e30'], explainCmd.flags);
+      const explainArgs = parseArgs('explain', ['hawking-temperature', 'mass=1.989e30'], explainCmd.flags, explainCmd.positionals);
       const explainCtx: CommandCtx = { args: explainArgs, api, out, err, write };
       const explainStatus = await explainCmd.run(explainCtx);
       if (explainStatus !== 0) return explainStatus;
@@ -138,7 +138,7 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       if (!priorityCmd) {
         throw new CliError("upt: the demo needs the 'priority' command, which is not registered yet");
       }
-      const priorityArgs = parseArgs('priority', [], priorityCmd.flags);
+      const priorityArgs = parseArgs('priority', [], priorityCmd.flags, priorityCmd.positionals);
       const priorityCtx: CommandCtx = { args: priorityArgs, api, out, err, write };
       return await priorityCmd.run(priorityCtx);
     }
@@ -186,8 +186,17 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       return 0;
     }
 
-    const parsed = parseArgs(command.name, rest, command.flags);
+    // The parser refuses a positional past the command's declared arity (none when it
+    // declares none), so a token the command would not read never reaches `run`.
+    const parsed = parseArgs(command.name, rest, command.flags, command.positionals);
     const ctx: CommandCtx = { args: parsed, api, out, err, write };
+    // Test hook for the last-resort handler in bin/upt.mjs: a planted defect, thrown from
+    // inside the dispatch like a real one, so the test proves that neither catch below
+    // converts it and that the shim reports it as an internal error (exit 70). The variable
+    // names the command it fires on; it is unset in normal use, and nothing else reads it.
+    if (process.env.UPT_CLI_PLANT_INTERNAL_ERROR === command.name) {
+      throw new TypeError(`planted internal error for 'upt ${command.name}' (UPT_CLI_PLANT_INTERNAL_ERROR)`);
+    }
     return await command.run(ctx);
   } catch (e) {
     if (e instanceof UsageError) {

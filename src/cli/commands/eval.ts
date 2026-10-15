@@ -189,6 +189,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'eval',
   aliases: ['calc'],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Evaluate a scalar formula. A bare e is the elementary charge; Euler\'s number is exp(x).',

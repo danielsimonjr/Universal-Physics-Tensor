@@ -5,6 +5,10 @@
  * returned code onto process.exitCode (NOT process.exit — a hard exit can
  * truncate piped stdout). The one exception is a reader that closed the pipe
  * (`upt map | head -1`): nothing more can be delivered, so the run ends quietly.
+ *
+ * A defect (an error that is neither UsageError nor CliError, which `runCli`
+ * rethrows) is reported as `upt: internal error: <message>` with exit 70
+ * (EX_SOFTWARE), not as Node's stack and an unhandled rejection.
  */
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -25,4 +29,11 @@ try {
   console.error(String(err && err.message ? err.message : err));
   process.exit(1);
 }
-process.exitCode = await main.runCli(process.argv.slice(2));
+try {
+  process.exitCode = await main.runCli(process.argv.slice(2));
+} catch (err) {
+  // Last resort: a defect, since every usage error and value refusal was mapped to an exit
+  // code inside runCli. The message, not the stack, and EX_SOFTWARE (70).
+  process.stderr.write(`upt: internal error: ${err && err.message ? err.message : String(err)}\n`);
+  process.exitCode = 70;
+}

@@ -20,7 +20,7 @@ import { basename, join } from 'node:path';
 import type * as cliApi from '../cli-api.js';
 import { parseArgs } from './args.js';
 import { resolveCommand } from './command.js';
-import { storedResultsFile } from './commands/_atlas-map.js';
+import { storedResultsFile } from './stored-results.js';
 import { CliError, UsageError } from './errors.js';
 import { emitJson } from './output.js';
 import { moduleSources, staticReach, type Attribution } from './record-reach.js';
@@ -38,7 +38,7 @@ export type Io = {
 /** A CLI dispatcher invoked with argv and an isolated output sink. */
 export type Dispatch = (argv: string[], io: Io) => Promise<number>;
 
-export const RECORD_SCHEMA = 'upt-record/2';
+const RECORD_SCHEMA = 'upt-record/2';
 const SUPERSEDED_SCHEMA = 'upt-record/1';
 
 /** The toolchain, parser, peers and constants captured beside a CLI invocation. */
@@ -63,7 +63,7 @@ export interface RecordResult {
 
 /** One JSON-lines record entry for a CLI invocation and its replay inputs. */
 export interface RecordEntry {
-  schema: typeof RECORD_SCHEMA;
+  schema: 'upt-record/2';
   recordedAt: string;
   argv: string[];
   argvSha256: string;
@@ -91,10 +91,10 @@ export interface RecordInput {
 
 export const sha256 = (s: string | Buffer): string => createHash('sha256').update(s).digest('hex');
 
-export const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv, 'record'));
+const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv, 'record'));
 
 /** Hash a record entry after excluding its stored fingerprint field. */
-export function entryFingerprint(entry: Partial<RecordEntry>): string {
+function entryFingerprint(entry: Partial<RecordEntry>): string {
   const { entrySha256: _, ...rest } = entry;
   return sha256(canonicalJson(rest, 'record'));
 }
@@ -124,7 +124,7 @@ function parseInvocation(argv: string[]): RecordEntry['parsed'] {
   const command = cmd === undefined ? undefined : resolveCommand(cmd);
   if (!command) return null;
   try {
-    const { flags, positionals } = parseArgs(command.name, rest, command.flags);
+    const { flags, positionals } = parseArgs(command.name, rest, command.flags, command.positionals);
     return { command: command.name, flags: Object.fromEntries(flags), positionals };
   } catch (e) {
     // An argument list the command refuses has no parsed form, and the entry records `null`.

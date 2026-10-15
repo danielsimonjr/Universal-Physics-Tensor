@@ -70,11 +70,12 @@ const SENSITIVITY_EPISTEMICS =
   ' sensitivity (elasticity) ranks which input the prediction depends on most STRONGLY; ' +
   'it is NOT which input dominates the uncertainty budget (that needs input sigma).';
 
+/** A malformed id is a malformed invocation (exit 2), as `upt evaluate be-abc` is; an unregistered one is refused later (exit 1). */
 function parseSelection(api: CommandCtx['api'], raw: string, via: 'flag' | 'positional'): number {
   try {
     return api.parseBridgeId(raw);
   } catch {
-    throw new CliError(
+    throw new UsageError(
       via === 'flag'
         ? `upt confront: invalid --bridge='${raw}' (expected be-<id>)`
         : `upt confront: '${raw}' is not a bridge id (expected be-<id>). A positional is not ignored.`,
@@ -84,12 +85,7 @@ function parseSelection(api: CommandCtx['api'], raw: string, via: 'flag' | 'posi
 
 /** The bridge a positional id and/or `--bridge` select, or undefined for the full list. */
 function selectedBridgeId(api: CommandCtx['api'], args: CommandCtx['args']): number | undefined {
-  if (args.positionals.length > 1) {
-    throw new UsageError(
-      `upt confront: unexpected extra arguments (${args.positionals.slice(1).join(', ')}). ` +
-        'Give one bridge id, e.g. `upt confront be-58`, or `--bridge=be-58`.',
-    );
-  }
+  // One bridge at a time: the parser refused a second positional (`positionals: { max: 1 }`).
   const flag = args.flags.get('bridge');
   const fromFlag = flag && flag.length > 0 ? parseSelection(api, flag[flag.length - 1]!, 'flag') : undefined;
   const fromPositional = args.positionals.length === 1 ? parseSelection(api, args.positionals[0]!, 'positional') : undefined;
@@ -416,6 +412,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'confront',
   aliases: [],
+  positionals: { max: 1 },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Run the committed predicted-versus-observed confrontations.',

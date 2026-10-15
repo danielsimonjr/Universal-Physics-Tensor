@@ -98,15 +98,16 @@ function fromConfrontation(api: CommandCtx['api'], id: number): Plan {
   if (entry === undefined) throw new CliError(`upt testplan: no confrontation be-${id}`);
   const outcome = entry.run();
   const { confirm, falsify } = linesOf(outcome);
+  const key = api.catalogEdgeKey(id);
   return {
-    id: `be-${id}`,
+    id: key,
     title: entry.title,
     observable: `${outcome.kind} comparison`,
     confirm,
     falsify,
     notIncluded: [],
     measurement: [],
-    links: [`be-${id}`],
+    links: [key],
     preprocessing: outcome.preprocessing.state === 'recorded' ? outcome.preprocessing.statement : 'preprocessing: not-recorded',
     independence: outcome.independence.state === 'not-recorded' ? 'independence: not-recorded' : outcome.independence.statement,
   };
@@ -163,6 +164,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'testplan',
   aliases: [],
+  positionals: { max: 1 },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Print the measurement plan stored on a confrontation or an applied case.',

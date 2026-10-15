@@ -126,10 +126,16 @@ describe('upt map --route --all-routes', () => {
   });
 
   it('refuses a bad limit, and the route-only flags elsewhere', async () => {
-    for (const bad of ['0', '1001', '2.5', 'x']) {
+    // Out of range is a bad value (exit 1); outside the integer grammar is a malformed invocation (exit 2).
+    for (const bad of ['0', '1001']) {
       const r = await run(['map', '--route=model-pendulum,model-lc', '--all-routes', `--max-routes=${bad}`]);
       expect(r.code).toBe(1);
       expect(r.stderr).toMatch(/--max-routes=.* must be an integer from 1 to 1000/);
+    }
+    for (const bad of ['2.5', 'x']) {
+      const r = await run(['map', '--route=model-pendulum,model-lc', '--all-routes', `--max-routes=${bad}`]);
+      expect(r.code).toBe(2);
+      expect(r.stderr).toMatch(/--max-routes '.*' is not an integer/);
     }
     expect((await run(['map', '--route=model-pendulum,model-lc', '--max-routes=3'])).stderr).toMatch(/--max-routes needs --all-routes/);
     expect((await run(['map', '--family=waves', '--all-routes'])).stderr).toMatch(/--all-routes needs --route/);

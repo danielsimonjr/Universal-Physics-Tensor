@@ -140,7 +140,7 @@ function restatementPartner(
   api: CommandCtx['api'],
   target: string,
 ): { name: string; canonicalId: string; bridgeId: number } | null {
-  const norm = (s: string): string => s.replaceAll('_', '-').toLowerCase();
+  const norm = (s: string): string => api.foldName(s).toLowerCase();
   const want = norm(target);
   for (const eq of api.CANONICAL_EQUATIONS) {
     if (eq.restatesBridge === undefined) continue;
@@ -373,6 +373,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 export const command: Command = {
   name: 'explain',
   aliases: [],
+  positionals: { max: Infinity },
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Show how the graph determines a quantity, or say that it does not cover that name.',

@@ -23,7 +23,7 @@ async function runPatched(name: string, args: string[], patch: Record<string, un
   ]);
   const command = resolveCommand(name)!;
   const c = captureMerged();
-  const code = await command.run({ args: parseArgs(command.name, args, command.flags), api: { ...api, ...patch }, ...c.io } as any);
+  const code = await command.run({ args: parseArgs(command.name, args, command.flags, command.positionals), api: { ...api, ...patch }, ...c.io } as any);
   return { code, text: c.lines.join('') };
 }
 

@@ -10,6 +10,7 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import { EVAL_STUBS, printDisplay, printEval, printLatex, latexName } from '../expr-print.js';
+import { isDecimalLiteral } from '../numeric-flag.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -56,7 +57,7 @@ function evalFormOf(
   collect(n);
   const bindings: string[] = [];
   for (const name of names) {
-    if (name in EVAL_STUBS || Number.isFinite(Number(name))) continue;
+    if (name in EVAL_STUBS || isDecimalLiteral(name)) continue;
     const value = constants[name]?.value ?? point[name];
     if (value === undefined) return null;
     bindings.push(`${name}=${value}`);
@@ -93,7 +94,7 @@ function symbolTable(
   const names: string[] = [];
   const collect = (e: ExprNode): void => {
     if (e.kind === 'symbol') {
-      if (!names.includes(e.name) && !Number.isFinite(Number(e.name))) names.push(e.name);
+      if (!names.includes(e.name) && !isDecimalLiteral(e.name)) names.push(e.name);
     } else if (e.kind === 'op') e.args.forEach(collect);
   };
   collect(n);
@@ -169,7 +170,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const grade =
       graded.length === 0
         ? null
-        : { confidence: api.composeEdges(first, second).confidence, gradedBy: graded.map((edge) => `be-${edge.beId}`) };
+        : { confidence: api.composeEdges(first, second).confidence, gradedBy: graded.map((edge) => api.catalogEdgeKey(edge.beId!)) };
 
     if (!isJson) {
       out(`  ● ${label}`);

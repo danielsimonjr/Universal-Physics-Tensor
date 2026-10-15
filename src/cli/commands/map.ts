@@ -20,6 +20,7 @@ import { resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine,
 import { emitJson } from '../output.js';
 import { publishedUrl } from '../published-url.js';
 import { UsageError, CliError, EXIT_CHECK_FAILED } from '../errors.js';
+import { integerFlag } from '../numeric-flag.js';
 import { classifyDetermination, type Determination } from '../determination.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import * as atlasMap from './_atlas-map.js';
@@ -426,8 +427,9 @@ async function runAtlasView(
   if (allRoutes && route === undefined) throw new CliError('upt map: --all-routes needs --route=FROM,TO');
   const maxRaw = lastValue(args.flags, 'max-routes');
   if (maxRaw !== undefined && !allRoutes) throw new CliError('upt map: --max-routes needs --all-routes');
-  const maxRoutes = maxRaw === undefined ? atlasMap.DEFAULT_MAX_ROUTES : Number(maxRaw);
-  if (!Number.isInteger(maxRoutes) || maxRoutes < 1 || maxRoutes > atlasMap.MAX_ROUTES_CEILING) {
+  // The grammar first (`0x10` is usage, exit 2); the 1..ceiling range after (exit 1).
+  const maxRoutes = maxRaw === undefined ? atlasMap.DEFAULT_MAX_ROUTES : integerFlag('map', '--max-routes', maxRaw);
+  if (maxRoutes < 1 || maxRoutes > atlasMap.MAX_ROUTES_CEILING) {
     throw new CliError(`upt map: --max-routes=${maxRaw} must be an integer from 1 to ${atlasMap.MAX_ROUTES_CEILING}`);
   }
   if (args.flags.has('stored') && args.flags.has('run')) {
@@ -564,8 +566,9 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   let focus: { around: string; depth: number; kept: number; of: number } | null = null;
   let fullGraph = wholeGraph;
   if (around !== undefined) {
-    const depth = depthRaw === undefined ? DEFAULT_DEPTH : Number(depthRaw);
-    if (!Number.isInteger(depth) || depth < 1 || depth > MAX_DEPTH) throw new CliError(`upt map: --depth=${depthRaw} must be an integer from 1 to ${MAX_DEPTH}`);
+    // The grammar first (`1e1` is usage, exit 2); the 1..MAX_DEPTH range after (exit 1).
+    const depth = depthRaw === undefined ? DEFAULT_DEPTH : integerFlag('map', '--depth', depthRaw);
+    if (depth < 1 || depth > MAX_DEPTH) throw new CliError(`upt map: --depth=${depthRaw} must be an integer from 1 to ${MAX_DEPTH}`);
     const known = new Set(wholeGraph.flatMap((e) => [...e.sources.map((q) => q.name), e.target.name]));
     const name = api.resolveQuantityName(around, known);
     if (name === null) {
