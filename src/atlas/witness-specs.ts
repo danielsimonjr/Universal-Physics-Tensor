@@ -293,6 +293,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 160,
       fineResolution: 640,
       tolerance: 1e-9,
+      orderResolutions: [2560, 10240],
     },
   },
   {
@@ -307,6 +308,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 100,
       fineResolution: 1000,
       tolerance: 1e-4,
+      orderResolutions: [10000, 100000],
     },
   },
   {
@@ -326,6 +328,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 80,
       fineResolution: 160,
       tolerance: 5e-4,
+      orderResolutions: [320, 640],
     },
   },
   {
@@ -353,6 +356,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 4,
       tolerance: 1e-3,
+      orderResolutions: [16, 64],
     },
   },
   {
@@ -369,6 +373,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 40,
       fineResolution: 80,
       tolerance: 2e-4,
+      orderResolutions: [160, 320],
     },
   },
   {
@@ -382,6 +387,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 4,
       fineResolution: 8,
       tolerance: 2e-3,
+      orderResolutions: [16, 32],
     },
   },
   {
@@ -398,6 +404,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 64,
       fineResolution: 128,
       tolerance: 2e-4,
+      orderResolutions: [256, 512],
     },
   },
   {
@@ -412,6 +419,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: 2e-3,
+      orderResolutions: [4, 8],
     },
     claim: {
       name: 'bound',
@@ -430,6 +438,8 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 10,
       fineResolution: 100,
       tolerance: 0.02,
+      // 1000 τ_p only: 161 ms; 10000 τ_p measured 1.4 s.
+      orderResolutions: [1000],
     },
   },
   {
@@ -454,6 +464,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 2,
       fineResolution: 4,
       tolerance: 0.03,
+      orderResolutions: [8, 16],
     },
     claim: {
       name: 'bound',
@@ -472,6 +483,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: 3e-3,
+      orderResolutions: [4, 8],
     },
     claim: {
       name: 'bound',
@@ -493,6 +505,8 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 2,
       fineResolution: 4,
       tolerance: 0.025,
+      // The approach to the steady state is exponential in t, not a power law; the fit reports what it sees.
+      orderResolutions: [8, 16],
     },
   },
   {
@@ -506,6 +520,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: 1e-3,
+      orderResolutions: [4, 8],
     },
     // The spec reads only x = ck/ω₀; c = ω₀ = 1 is one point with that x.
     claim: { name: 'bound', at: (resolution) => ({ c: 1, omega0: 1, k: WS5_FIXTURE.x0 / resolution }) },
@@ -522,6 +537,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 50,
       fineResolution: 100,
       tolerance: 3e-4,
+      orderResolutions: [200, 400],
     },
   },
   {
@@ -536,6 +552,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: 0.15,
+      orderResolutions: [4, 8],
     },
     claim: {
       name: 'bound',
@@ -561,6 +578,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: 0.002507,
+      orderResolutions: [4, 8],
     },
     claim: { name: 'bound', at: (resolution) => ({ theta0: W7_FIXTURE.theta0 / resolution }) },
   },
@@ -577,6 +595,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: dampedOffsetBoundAt({ m: W8B_FIXTURE.m / 2, b: W8B_FIXTURE.b, k: W8B_FIXTURE.k, x0: W8B_FIXTURE.x0, v0: W8B_FIXTURE.v0 }),
+      orderResolutions: [4, 8],
     },
     claim: {
       name: 'bound-holds-at',
