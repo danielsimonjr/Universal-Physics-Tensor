@@ -16,6 +16,7 @@
  * @internal
  */
 import { gcd } from '@danielsimonjr/mathts-functions';
+import { bigintFrom } from '../core/mathts-read.js';
 
 
 /** `num / den × irrational`, with `den > 0` and the fraction in lowest terms. @internal */
@@ -28,8 +29,7 @@ export interface ExactScale {
 
 /** The bigint gcd, MathTS `gcd` on its `bigint, bigint` signature, read back as the bigint it is. */
 function bigGcd(a: bigint, b: bigint): bigint {
-  const g: unknown = gcd(a, b);
-  if (typeof g !== 'bigint') throw new TypeError('gcd did not return a bigint for bigint arguments');
+  const g = bigintFrom('gcd', gcd(a, b));
   return g < 0n ? -g : g;
 }
 

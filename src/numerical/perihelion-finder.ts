@@ -38,6 +38,7 @@
  * @module numerical/perihelion-finder
  */
 import { findRoot, hermiteInterp, median } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../core/mathts-read.js';
 
 /**
  * Result of `findPerihelion`: the τ at the radial turning point, the
@@ -99,9 +100,7 @@ function radialVelocity(
 /** Median of the snapshot steps, MathTS `median` (0 for no steps, as before). */
 function medianStep(values: readonly number[]): number {
   if (values.length === 0) return 0;
-  const v: unknown = median([...values]);
-  if (typeof v !== 'number') throw new TypeError('median did not return a number for a number array');
-  return v;
+  return numberFrom('median', median([...values]));
 }
 
 /**

@@ -683,8 +683,8 @@ const OBSERVABLE_MATCH =
   'the transformation, and a bridge that records nothing about the observable is counted apart from one that records ' +
   'it as not preserved';
 
-function wordMatcher(term: string): (text: string) => boolean {
-  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function wordMatcher(api: Api, term: string): (text: string) => boolean {
+  const escaped = api.escapeRegExp(term);
   const re = new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}($|[^\\p{L}\\p{N}])`, 'iu');
   return (text) => re.test(text);
 }
@@ -698,7 +698,7 @@ export function buildObservableView(
 ): ObservableView {
   const term = observable.trim();
   if (term.length < 2) throw new CliError(`upt map: --observable='${observable}' must name an observable (two characters or more)`);
-  const hit = wordMatcher(term);
+  const hit = wordMatcher(api, term);
   const models = allModels(api);
   const rows = api.ATLAS_FAMILIES.flatMap((f) => f.bridges.map((b) => ({ family: f.family, b })));
   const matched = rows.map(({ family, b }) => ({

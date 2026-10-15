@@ -18,6 +18,7 @@
  * @module numerical/quadrature
  */
 import { legendreP, rootsLegendre } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../core/mathts-read.js';
 
 /** A Gauss–Legendre abscissa/weight pair on the reference interval [−1, 1]. @internal */
 interface GaussLegendreNode {
@@ -29,9 +30,7 @@ const legendre16 = rootsLegendre(16);
 
 /** `Pₙ(x)`, MathTS `legendreP`, read back as the number it is for a number. */
 function legendre(n: number, x: number): number {
-  const v: unknown = legendreP(n, x);
-  if (typeof v !== 'number') throw new TypeError('legendreP did not return a number for number arguments');
-  return v;
+  return numberFrom('legendreP', legendreP(n, x));
 }
 
 /** P₁₆'(x) = 16 (x P₁₆(x) − P₁₅(x)) / (x² − 1), the derivative identity on MathTS `legendreP`. */

@@ -22,6 +22,7 @@
  */
 
 import { ellipticK } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../../core/mathts-read.js';
 import { physjsFormalRef } from '../physjs-ref.js';
 import { makeRegime } from '../regime.js';
 import { MissingHorizonError } from '../types.js';
@@ -80,8 +81,7 @@ export function pendulumPeriodErrorAt(params: Readonly<Record<string, number>>):
   const { theta0 } = params;
   if (!Number.isFinite(theta0) || Math.abs(theta0) >= Math.PI) return Infinity;
   const m = Math.sin(theta0 / 2) ** 2;
-  const k: unknown = ellipticK(m);
-  if (typeof k !== 'number') throw new TypeError('ellipticK did not return a number for a number parameter');
+  const k = numberFrom('ellipticK', ellipticK(m));
   return (2 / Math.PI) * k - 1;
 }
 

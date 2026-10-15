@@ -19,7 +19,7 @@
  * change to a literal a module keeps private, which no constant table holds, is still named.
  */
 
-import { createHash } from 'node:crypto';
+import { sha256Hex } from '../core/hash.js';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve, sep } from 'node:path';
 import { MODULE_EXT, SOURCE_ROOT, tableName, type TableKind } from './record-tables.js';
@@ -179,7 +179,7 @@ function loadedModules(command: string): { loaded: Set<string>; directReads: Rea
  */
 export function sourceHash(file: string): string {
   try {
-    return createHash('sha256').update(readFileSync(file)).digest('hex');
+    return sha256Hex(readFileSync(file));
   } catch (e) {
     const code = e instanceof Error && 'code' in e && typeof e.code === 'string' ? e.code : 'error';
     return `unreadable (${code})`;

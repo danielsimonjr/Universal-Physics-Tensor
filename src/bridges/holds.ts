@@ -17,6 +17,7 @@
 import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
 import { ConstantInputError } from './evaluation-errors.js';
+import { expressionNames } from './expr-parse.js';
 
 /** A condition could not be evaluated: it names an unbound symbol, or its text does not parse. @internal */
 export class HoldsError extends Error {
@@ -187,9 +188,15 @@ function symbolNames(node: MathNode): string[] {
   return out;
 }
 
-/** Replace each whole-word identifier of `text` through `rename`. */
+/**
+ * Replace each identifier `text` mentions through `rename`, whole-word, in one
+ * pass (a renamed word is never renamed again). The identifiers are the ones
+ * `expressionNames` reads (the text is a printed conjunct, already written
+ * with underscores, so the rewrite it applies is the identity on it).
+ */
 function renameIdentifiers(text: string, rename: (name: string) => string): string {
-  return text.replace(/[A-Za-z_][A-Za-z0-9_]*/g, (word) => rename(word));
+  const names = expressionNames(text);
+  return text.replace(/[A-Za-z_][A-Za-z0-9_]*/g, (word) => (names.has(word) ? rename(word) : word));
 }
 
 const CONDITIONS = new Map<string, readonly HoldsCondition[]>();

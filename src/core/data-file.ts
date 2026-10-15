@@ -17,6 +17,22 @@ import { schemaProblems, type JsonSchema } from './json-schema.js';
 
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '../../data');
 
+/**
+ * The JSON value in the file at `path`. A file that is not JSON throws a
+ * `SyntaxError` whose message starts with `path`, so a bad file is found by
+ * its name; a file that cannot be read throws the file-system error as is.
+ * @internal
+ */
+export function readJsonFile(path: string): unknown {
+  const text = readFileSync(path, 'utf8');
+  try {
+    return JSON.parse(text) as unknown;
+  } catch (error) {
+    if (error instanceof SyntaxError) throw new SyntaxError(`${path}: ${error.message}`, { cause: error });
+    throw error;
+  }
+}
+
 /** The schema file of `file`: `units.json` → `units.schema.json`. @internal */
 export function schemaFileOf(file: string): string {
   return file.replace(/\.json$/, '.schema.json');

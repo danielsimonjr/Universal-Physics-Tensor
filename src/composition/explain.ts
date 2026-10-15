@@ -36,26 +36,13 @@ import type { Dimension } from '../dimensional/types.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { canonicalById } from '../canonical/registry.js';
 
+import { formatQuantity } from '../core/format.js';
 /**
- * Text form of a recovered quantity: `digits` significant digits (15 by default, the precision an
- * evaluator input is already passed at; a statistic such as a residual in σ asks for 3). JSON keeps
- * the number; this is only the printed form. An integer stays an integer (`1`, not `1.0000e+0`).
- * Every command prints a number through this function or through {@link formatExact}.
+ * The printed forms of a number, owned by `core/format` and re-exported here so the commands'
+ * imports stay as they were: every command prints a number through `formatQuantity` or `formatExact`.
  * @internal
  */
-export function formatQuantity(value: number, digits = 15): string {
-  return String(Number(value.toPrecision(digits)));
-}
-
-/**
- * Text form of a computed value that a reader may need to reproduce bit for bit: the shortest
- * decimal that round-trips to the same double (`upt evaluate`'s outputs). A recovered or compared
- * quantity prints through {@link formatQuantity} instead.
- * @internal
- */
-export function formatExact(value: number): string {
-  return String(value);
-}
+export { formatQuantity, formatExact } from '../core/format.js';
 import type { DimensionalDeterminationResult } from '../dimensional/buckingham.js';
 import { dimensionallyDetermines } from '../dimensional/buckingham.js';
 import { collapseSynonymGovernors } from './aliases.js';

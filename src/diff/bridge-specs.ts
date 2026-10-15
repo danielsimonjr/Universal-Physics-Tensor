@@ -95,6 +95,9 @@ export const PERIHELION_ADVANCE_DIFF: BridgeDiffSpec<PerihelionInput> = {
   paramNames: ['M_kg', 'a_m', 'eccentricity'],
   defaults: {},
   evaluate: (input) => evaluateAliased(perihelion, input),
+  // The eccentricity is a dimensionless number in [0, 1): its scale is 1, so a circular orbit
+  // (eccentricity 0) still takes the step 1·∛ε, the step every orbit took before the floor was stated.
+  stepFloors: { eccentricity: 1 },
 };
 
 /** Hawking temperature. Differentiable in mass. @public */

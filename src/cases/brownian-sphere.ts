@@ -19,13 +19,14 @@
  * @module cases/brownian-sphere
  */
 import { K_B_SI } from '../core/constants.js';
+import { convertValue } from '../dimensional/units.js';
 import { adaptiveQuadrature } from './quadrature.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-brownian-sphere';
 
-/** Standard gravity (CGPM 1901), for the sedimentation speed. @internal */
-export const G_STANDARD = 9.80665;
+/** Standard gravity (CGPM 1901), for the sedimentation speed: the unit table's `standard_gravity` row, read as newtons per kilogram-force. @internal */
+export const G_STANDARD = convertValue('1 kgf/kg', 'm/s^2').value;
 
 /** The thresholds `ab-stokes-einstein` states: Re ≤ 0.1 and τ_p/t ≤ 0.01. @internal */
 export const MAX_RE = 0.1;

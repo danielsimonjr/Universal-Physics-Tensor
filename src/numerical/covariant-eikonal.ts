@@ -33,7 +33,8 @@
 
 import { findRoot, hermiteInterp } from '@danielsimonjr/mathts-functions';
 import { integrateGeodesicGL4 } from './gl4-integrator.js';
-import { C_SI, G_SI } from '../core/constants.js';
+import { C_SI } from '../core/constants.js';
+import { schwarzschildRadius } from './schwarzschild.js';
 import { reconstructNullPr } from './null-ic.js';
 
 // ─── Physical constants (canonical CODATA 2022 + exact-SI definitions) ────
@@ -122,7 +123,7 @@ export interface CovariantEikonalResult {
  * @internal
  */
 function schwarzschildRs(M_kg: number): number {
-  return (2 * G_SI * M_kg) / c2_SI;
+  return schwarzschildRadius(M_kg);
 }
 
 /**
