@@ -70,12 +70,14 @@ export {
 export type { UncertaintyResult } from './uncertainty.js';
 export { propagateUncertainty } from './uncertainty.js';
 
+/** The classifier's verdict, result and option types, and the rank instrument's report. */
 export type {
   IdentifiabilityVerdict,
   IdentifiabilityResult,
   IdentifiabilityOptions,
   RankIdentifiability,
 } from './identifiability.js';
+/** The forward closure, the per-target classifier, the sweep, and the log-space rank over the monomial edges. */
 export {
   classifyIdentifiability,
   classifyAll,
