@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 364,
-    "totalTestFiles": 580,
+    "totalTestFiles": 581,
     "testedCount": 351,
     "directlyTestedCount": 314,
     "untestedCount": 13,
@@ -20470,6 +20470,7 @@
     "tests/fixtures/schwarzschild.test.ts": [
       "src/core/constants.ts"
     ],
+    "tests/formal/lean-theorems.test.ts": [],
     "tests/internal/no-network-in-tests.test.ts": [],
     "tests/internal/no-raw-nul.test.ts": [],
     "tests/internal/no-removed-paths.test.ts": [],

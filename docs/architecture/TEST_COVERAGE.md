@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 364 |
-| Total Test Files | 580 |
+| Total Test Files | 581 |
 | Source files imported directly by a test | 314 |
 | Source files reached directly or through a barrel or side-effect import | 351 |
 | Source files no test reaches either way | 13 |
@@ -876,6 +876,7 @@ The following 13 source files are reached by no test file, directly or through a
 | `fixtures/perfect-fluid.test.ts` | 1 files |
 | `fixtures/schwarzschild-riemann.test.ts` | 3 files |
 | `fixtures/schwarzschild.test.ts` | 1 files |
+| `formal/lean-theorems.test.ts` | 0 files |
 | `internal/no-network-in-tests.test.ts` | 0 files |
 | `internal/no-raw-nul.test.ts` | 0 files |
 | `internal/no-removed-paths.test.ts` | 0 files |
