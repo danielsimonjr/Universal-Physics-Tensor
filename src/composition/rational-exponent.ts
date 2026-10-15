@@ -51,6 +51,10 @@ export function rationalize(x: number, options: RationalizeOptions = {}): Fracti
   if (guess.denominator <= BigInt(maxDenominator) && within(guess, x, tolerance)) return guess;
   for (let d = 1; d <= maxDenominator; d++) {
     const n = Math.round(x * d);
+    // A safe-integer n/d is the same correctly rounded quotient as the reduced
+    // fraction's, so a miss is decided on doubles and no Fraction is built for it
+    // (the clean-prefactor rule asks this 43,200 times for one miss).
+    if (Number.isSafeInteger(n) && !(Math.abs(n / d - x) <= tolerance * Math.abs(x))) continue;
     const candidate = new Fraction(n, d);
     if (within(candidate, x, tolerance)) return candidate;
   }

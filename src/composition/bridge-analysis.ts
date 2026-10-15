@@ -198,9 +198,12 @@ function renderCleanForm(n: bigint, d: bigint, a: number, b: number, root: boole
   const denSym = symbolicFactor(a > 0 ? a : 0, b > 0 ? b : 0);
   const numParts = [...(n === 1n && numSym !== '' ? [] : [n.toString()]), ...(numSym === '' ? [] : [numSym])];
   const denParts = [...(d === 1n ? [] : [d.toString()]), ...(denSym === '' ? [] : [denSym])];
-  const numerator = numParts.join('');
+  // `2π` stays joined; a number before `ln 2` is spaced (`2 ln 2`), as `π ln 2` is.
+  const join = (parts: readonly string[]): string =>
+    parts.reduce((acc, part) => (acc === '' ? part : part.startsWith('ln') || part.startsWith('(ln') ? `${acc} ${part}` : acc + part), '');
+  const numerator = join(numParts);
   if (denParts.length === 0) return root ? (numerator === 'π' ? '√π' : /^[0-9]+$/.test(numerator) && numParts.length === 1 ? `√${numerator}` : `√(${numerator})`) : numerator;
-  const denominator = denParts.length === 1 ? denParts[0]! : `(${denParts.join('')})`;
+  const denominator = denParts.length === 1 ? denParts[0]! : `(${join(denParts)})`;
   const form = `${numerator}/${denominator}`;
   return root ? `√(${form})` : form;
 }
