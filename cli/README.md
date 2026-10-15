@@ -569,7 +569,7 @@ read or refused:
 - **Unknown flags are rejected, not silently ignored.** A mistyped or
   unsupported flag (e.g. `upt discover --sourc=canonical`) used to be swallowed
   without effect; it exits `2` with a diagnostic naming the bad flag and the
-  command (`unknown flag '--sourc' for 'discover' (see upt help discover)`).
+  command (`upt discover: unknown flag '--sourc' for 'discover' (see upt help discover)`).
   Every command's flag set is fixed and typed — a flag valid on one command but
   not another (e.g. `upt derive --source=catalog`) is rejected the same way,
   since `--source`/`--json`/etc. are per-command, not global.

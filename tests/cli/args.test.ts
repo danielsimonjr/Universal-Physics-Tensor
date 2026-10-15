@@ -21,8 +21,32 @@ describe('parseArgs', () => {
     } catch (err) {
       expect(err).toBeInstanceOf(UsageError);
       expect((err as Error).message).toBe(
-        "unknown flag '--sourc' for 'discover' (see upt help discover)"
+        "upt discover: unknown flag '--sourc' for 'discover' (see upt help discover)"
       );
+    }
+  });
+
+  it('every flag refusal carries the `upt <command>: ` prefix every other refusal has', () => {
+    // The unknown-flag message and the five flag-value refusals were the parser's refusals
+    // without it (`upt audit: unexpected argument ...` had it).
+    const cases: string[][] = [
+      ['--sourc=canonical'],
+      ['--rec' + 'ord=x.json'],
+      ['--formula=X'],
+      ['--proposed=1'],
+      ['--source'],
+      ['--formula'],
+      ['--source=a', '--source=b'],
+    ];
+    for (const argv of cases) {
+      let message = '';
+      try {
+        parseArgs('discover', argv, SPECS);
+      } catch (err) {
+        expect(err, argv.join(' ')).toBeInstanceOf(UsageError);
+        message = (err as Error).message;
+      }
+      expect(message, argv.join(' ')).toMatch(/^upt discover: /);
     }
   });
 
@@ -49,7 +73,7 @@ describe('parseArgs', () => {
     } catch (err) {
       expect(err).toBeInstanceOf(UsageError);
       expect((err as Error).message).toBe(
-        "flag '--formula' does not accept an attached value; use '--formula VALUE' for 'discover' (see upt help discover)"
+        "upt discover: flag '--formula' does not accept an attached value; use '--formula VALUE' for 'discover' (see upt help discover)"
       );
     }
   });

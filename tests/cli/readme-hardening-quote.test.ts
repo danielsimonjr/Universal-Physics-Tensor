@@ -4,7 +4,9 @@
  * Found by the 2026-10-15 survey: the README quoted `upt: unknown flag '--sourc' for
  * 'discover' (see upt help discover)` while the parser prints it without the `upt: ` prefix.
  * Each quoted message is read from the README and compared with the command's own stderr, so
- * the two cannot drift apart again.
+ * the two cannot drift apart again. The parser's flag refusals now carry the `upt <command>: `
+ * prefix every other refusal has (`upt discover: unknown flag '--sourc' ...`), and the README
+ * quotes that.
  */
 import '../helpers/dist.js';
 import { readFileSync } from 'node:fs';

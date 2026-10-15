@@ -87,6 +87,8 @@ export function parseArgs(
   const flags = new Map<string, string[]>();
   const positionals: string[] = [];
   const hint = `(see upt help ${command})`;
+  // Every flag refusal names the command first, as every other refusal does (`upt audit: ...`).
+  const refuse = (message: string): UsageError => new UsageError(`upt ${command}: ${message}`);
 
   for (let i = 0; i < argv.length; i++) {
     const token = argv[i];
@@ -107,26 +109,26 @@ export function parseArgs(
     if (!spec) {
       // The three file options belong to `upt`, not to a command, and are read only before the command.
       if (flagName === '--record' || flagName === '--replay' || flagName === '--show-record') {
-        throw new UsageError(
+        throw refuse(
           `unknown flag '${flagName}' for '${command}' ${hint}; ${flagName} is an option of upt itself and goes before the command: upt ${flagName}=FILE ${command} ...`,
         );
       }
-      throw new UsageError(`unknown flag '${flagName}' for '${command}' ${hint}`);
+      throw refuse(`unknown flag '${flagName}' for '${command}' ${hint}`);
     }
 
     let value: string;
     if (attachedValue !== undefined) {
       if (spec.valueStyle === 'next') {
-        throw new UsageError(
+        throw refuse(
           `flag '${spec.name}' does not accept an attached value; use '${spec.name} VALUE' for '${command}' ${hint}`
         );
       }
       if (spec.valueStyle === 'none') {
-        throw new UsageError(`flag '${spec.name}' takes no value for '${command}' ${hint}`);
+        throw refuse(`flag '${spec.name}' takes no value for '${command}' ${hint}`);
       }
       value = attachedValue;
     } else if (spec.valueStyle === 'attached') {
-      throw new UsageError(`flag '${spec.name}' requires '${spec.name}=VALUE' for '${command}' ${hint}`);
+      throw refuse(`flag '${spec.name}' requires '${spec.name}=VALUE' for '${command}' ${hint}`);
     } else if (spec.valueStyle === 'none') {
       value = '';
     } else {
@@ -134,7 +136,7 @@ export function parseArgs(
       const next = argv[i + 1];
       if (next === undefined || next.startsWith('--')) {
         if (!spec.optionalValue) {
-          throw new UsageError(`flag '${spec.name}' requires a value for '${command}' ${hint}`);
+          throw refuse(`flag '${spec.name}' requires a value for '${command}' ${hint}`);
         }
         value = '';
       } else {
@@ -147,7 +149,7 @@ export function parseArgs(
     const existing = flags.get(key);
     if (existing) {
       if (!spec.repeatable) {
-        throw new UsageError(`flag '${spec.name}' given more than once for '${command}' ${hint}`);
+        throw refuse(`flag '${spec.name}' given more than once for '${command}' ${hint}`);
       }
       existing.push(value);
     } else {
