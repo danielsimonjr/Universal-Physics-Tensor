@@ -249,7 +249,204 @@ function expandByIdentifications(set: Set<string>, identifications: readonly Qua
   }
 }
 
-/** The cache of rank results per edge array, keyed by the known set and the identifications. */
+/** One connected component of the monomial graph: its rows and its column names. */
+interface MonomialComponent {
+  readonly index: number;
+  readonly rows: readonly MonomialRow[];
+  readonly names: readonly string[];
+}
+
+/** The solve of one component under one asserted set. */
+interface ComponentSolve {
+  /** The asserted names inside the component, sorted. */
+  readonly inside: readonly string[];
+  readonly determined: ReadonlySet<string>;
+  /** Distinct rows minus rank, for this component. */
+  readonly surplus: number;
+}
+
+/** The rows, the components and the memo of component solves, per edge array and reader. */
+interface RankIndex {
+  readonly rows: readonly MonomialRow[];
+  readonly components: readonly MonomialComponent[];
+  readonly componentOf: ReadonlyMap<string, number>;
+  readonly solves: Map<number, ComponentSolve[]>;
+}
+
+const rankIndexCache = new WeakMap<readonly BridgeEdge[], Map<string, RankIndex>>();
+
+/**
+ * The monomial rows of `edges` under `reader`, grouped into the connected
+ * components of the graph whose vertices are quantity names and whose links
+ * are the rows (a row joins its target to each of its sources). The
+ * log-space matrix is block-diagonal over these components, so each is
+ * solved on its own, once per asserted set, and the answers are exact.
+ * Built once per edge array and reader.
+ */
+function rankIndex(edges: readonly BridgeEdge[], reader: EdgeMonomialReader, readerKey: string): RankIndex {
+  let perEdges = rankIndexCache.get(edges);
+  if (perEdges === undefined) {
+    perEdges = new Map();
+    rankIndexCache.set(edges, perEdges);
+  }
+  const hit = perEdges.get(readerKey);
+  if (hit !== undefined) return hit;
+
+  const rows: MonomialRow[] = [];
+  for (const edge of edges) {
+    const sources = reader(edge);
+    if (sources !== undefined) rows.push({ id: edge.id, target: edge.target.name, sources });
+  }
+  const parent = new Map<string, string>();
+  const find = (name: string): string => {
+    let root = name;
+    while (parent.get(root) !== root) root = parent.get(root)!;
+    let cur = name;
+    while (cur !== root) {
+      const next = parent.get(cur)!;
+      parent.set(cur, root);
+      cur = next;
+    }
+    return root;
+  };
+  for (const row of rows) {
+    if (!parent.has(row.target)) parent.set(row.target, row.target);
+    for (const name of row.sources.keys()) {
+      if (!parent.has(name)) parent.set(name, name);
+      const a = find(row.target);
+      const b = find(name);
+      if (a !== b) parent.set(a, b);
+    }
+  }
+  const groups = new Map<string, { rows: MonomialRow[]; names: Set<string> }>();
+  for (const row of rows) {
+    const root = find(row.target);
+    let group = groups.get(root);
+    if (group === undefined) {
+      group = { rows: [], names: new Set() };
+      groups.set(root, group);
+    }
+    group.rows.push(row);
+    group.names.add(row.target);
+    for (const name of row.sources.keys()) group.names.add(name);
+  }
+  const components: MonomialComponent[] = [...groups.values()].map((group, index) => ({
+    index,
+    rows: group.rows,
+    names: [...group.names],
+  }));
+  const componentOf = new Map<string, number>();
+  for (const component of components) for (const name of component.names) componentOf.set(name, component.index);
+  const index: RankIndex = { rows, components, componentOf, solves: new Map() };
+  perEdges.set(readerKey, index);
+  return index;
+}
+
+/**
+ * Solve one component with the asserted names inside it as unit rows.
+ * Memoised per asserted set; a solve whose asserted set extends a cached
+ * one by names that solve already determined is that solve with one more
+ * dependent row per extra name (an already-determined quantity asserted
+ * again is a consistency check, and determines nothing new).
+ */
+function solveComponent(index: RankIndex, component: MonomialComponent, asserted: ReadonlySet<string>): ComponentSolve {
+  const inside = component.names.filter((name) => asserted.has(name)).sort();
+  let cached = index.solves.get(component.index);
+  if (cached === undefined) {
+    cached = [];
+    index.solves.set(component.index, cached);
+  }
+  const insideSet = new Set(inside);
+  for (const solve of cached) {
+    if (solve.inside.length === inside.length && solve.inside.every((name) => insideSet.has(name))) return solve;
+  }
+  for (const solve of cached) {
+    if (!solve.inside.every((name) => insideSet.has(name))) continue;
+    const extra = inside.filter((name) => !solve.inside.includes(name));
+    if (extra.every((name) => solve.determined.has(name))) {
+      const widened: ComponentSolve = { inside, determined: solve.determined, surplus: solve.surplus + extra.length };
+      cached.push(widened);
+      return widened;
+    }
+  }
+
+  const column = new Map(component.names.map((name, i) => [name, i] as const));
+  const matrix: Fraction[][] = [];
+  const seen = new Set<string>();
+  const pushRow = (row: Fraction[]): void => {
+    const k = rowKey(row);
+    if (k === '0' || seen.has(k)) return;
+    seen.add(k);
+    matrix.push(row);
+  };
+  for (const row of component.rows) {
+    const vector = component.names.map(() => ZERO);
+    vector[column.get(row.target)!] = ONE;
+    for (const [name, exp] of row.sources) {
+      const i = column.get(name)!;
+      vector[i] = vector[i]!.sub(exp);
+    }
+    pushRow(vector);
+  }
+  for (const name of inside) {
+    const vector = component.names.map(() => ZERO);
+    vector[column.get(name)!] = ONE;
+    pushRow(vector);
+  }
+  const solved = rationalNullspace(matrix, { columns: component.names.length });
+  const determined = new Set<string>(inside);
+  component.names.forEach((name, i) => {
+    if (solved.basis.every((vector) => vector[i]!.isZero())) determined.add(name);
+  });
+  const result: ComponentSolve = { inside, determined, surplus: matrix.length - solved.rank };
+  cached.push(result);
+  return result;
+}
+
+interface RankSolution {
+  readonly determined: Set<string>;
+  readonly surplus: number;
+}
+
+/**
+ * The asserted set is the known names plus every name a directed
+ * identification reaches from a known or a determined one; only these get a
+ * unit row, and a name the rank determines is never fed back in as a row
+ * (that would count it as a check). Each pass solves the components the
+ * asserted set touches (every component when `every`, so the surplus counts
+ * the whole system), lets the identifications assert what the determined
+ * names reach, and repeats until nothing new is asserted.
+ */
+function solveRank(
+  index: RankIndex,
+  knownNames: readonly string[],
+  identifications: readonly QuantityIdentification[],
+  every: boolean,
+): RankSolution {
+  const asserted = new Set<string>(knownNames);
+  expandByIdentifications(asserted, identifications);
+  const determined = new Set<string>();
+  let surplus = 0;
+  for (;;) {
+    determined.clear();
+    for (const name of asserted) determined.add(name);
+    surplus = 0;
+    for (const component of index.components) {
+      if (!every && !component.names.some((name) => asserted.has(name))) continue;
+      const solve = solveComponent(index, component, asserted);
+      for (const name of solve.determined) determined.add(name);
+      surplus += solve.surplus;
+    }
+    const before = asserted.size;
+    const reach = new Set(determined);
+    expandByIdentifications(reach, identifications);
+    for (const name of reach) if (!determined.has(name)) asserted.add(name);
+    if (asserted.size === before) break;
+  }
+  return { determined, surplus };
+}
+
+/** The cache of full rank reports per edge array, keyed by the known set and the identifications. */
 const rankCache = new WeakMap<readonly BridgeEdge[], Map<string, RankIdentifiability>>();
 
 function rankCacheKey(known: readonly string[], identifications: readonly QuantityIdentification[], custom: boolean): string {
@@ -258,8 +455,8 @@ function rankCacheKey(known: readonly string[], identifications: readonly Quanti
 
 /**
  * {@link identifiabilityByRank} with the monomial reader chosen by the
- * caller (the default is {@link edgeMonomial}). A custom reader's result is
- * cached beside the default's, never in its place.
+ * caller (the default is {@link edgeMonomial}). A custom reader's index and
+ * results are cached beside the default's, never in its place.
  *
  * @internal
  */
@@ -308,96 +505,48 @@ function rankWithReader(
   const hit = perEdges.get(key);
   if (hit !== undefined) return hit;
 
-  const rows: MonomialRow[] = [];
-  for (const edge of edges) {
-    const sources = reader(edge);
-    if (sources !== undefined) rows.push({ id: edge.id, target: edge.target.name, sources });
-  }
-  const columns: string[] = [];
-  const columnOf = new Map<string, number>();
-  const column = (name: string): number => {
-    let i = columnOf.get(name);
-    if (i === undefined) {
-      i = columns.length;
-      columns.push(name);
-      columnOf.set(name, i);
-    }
-    return i;
-  };
-  for (const row of rows) {
-    column(row.target);
-    for (const name of row.sources.keys()) column(name);
-  }
-
-  // The asserted set: the known names, plus every name a directed
-  // identification reaches from a known or a determined one. Only these get
-  // a unit row; a name the rank determines is read from the null space and
-  // is never fed back in as a row (that would count it as a check).
-  const asserted = new Set<string>(knownNames);
-  expandByIdentifications(asserted, identifications);
-  const determined = new Set<string>();
-  let surplusChecks = 0;
-  for (;;) {
-    for (const name of asserted) column(name);
-    const matrix: Fraction[][] = [];
-    const seen = new Set<string>();
-    const pushRow = (row: Fraction[]): void => {
-      const k = rowKey(row);
-      if (k === '0' || seen.has(k)) return;
-      seen.add(k);
-      matrix.push(row);
-    };
-    for (const row of rows) {
-      const vector = columns.map(() => ZERO);
-      vector[column(row.target)] = ONE;
-      for (const [name, exp] of row.sources) {
-        const i = column(name);
-        vector[i] = vector[i]!.sub(exp);
-      }
-      pushRow(vector);
-    }
-    for (const name of asserted) {
-      const vector = columns.map(() => ZERO);
-      vector[column(name)] = ONE;
-      pushRow(vector);
-    }
-    const solved = rationalNullspace(matrix, { columns: columns.length });
-    surplusChecks = matrix.length - solved.rank;
-    determined.clear();
-    for (const name of asserted) determined.add(name);
-    columns.forEach((name, i) => {
-      if (solved.basis.every((vector) => vector[i]!.isZero())) determined.add(name);
-    });
-    // A directed identification from a determined name asserts its `to`,
-    // and only that: a determined name itself is never fed back as a row.
-    const before = asserted.size;
-    const reach = new Set(determined);
-    expandByIdentifications(reach, identifications);
-    for (const name of reach) if (!determined.has(name)) asserted.add(name);
-    if (asserted.size === before) break;
-  }
+  const index = rankIndex(edges, reader, custom ? 'custom' : 'default');
+  const { determined, surplus } = solveRank(index, knownNames, identifications, true);
 
   // A law is read in reverse when one of its sources is determined, and not
   // by the forward closure over the monomial edges alone.
-  const monomialIds = new Set(rows.map((r) => r.id));
+  const monomialIds = new Set(index.rows.map((r) => r.id));
   const forward = forwardClosure(
     edges.filter((e) => monomialIds.has(e.id)),
     knownNames,
     identifications,
   );
-  const usedInReverse = rows
+  const usedInReverse = index.rows
     .filter((row) => [...row.sources.keys()].some((name) => !forward.has(name) && determined.has(name)))
     .map((row) => row.id);
 
   const result: RankIdentifiability = {
     determined: [...determined].sort(),
     determinedByRankOnly: [...determined].filter((name) => !forward.has(name)).sort(),
-    surplusChecks,
+    surplusChecks: surplus,
     usedInReverse,
-    monomialEdges: rows.map((r) => r.id),
+    monomialEdges: index.rows.map((r) => r.id),
   };
   perEdges.set(key, result);
   return result;
+}
+
+/**
+ * Whether the rank determines `target` from `knownNames`. Only the
+ * components the asserted set touches are solved, and each solve is
+ * memoised, so the funnel's thousands of calls per anchor cost one solve
+ * per touched component, plus one per hypothesis that actually asserts a
+ * new name.
+ */
+function rankDetermines(
+  edges: readonly BridgeEdge[],
+  knownNames: readonly string[],
+  target: string,
+  identifications: readonly QuantityIdentification[],
+): boolean {
+  const index = rankIndex(edges, edgeMonomial, 'default');
+  if (!index.componentOf.has(target)) return false;
+  return solveRank(index, knownNames, identifications, false).determined.has(target);
 }
 
 /** The quantities from which `targetName` is forward-reachable (its
@@ -478,7 +627,7 @@ export function classifyIdentifiability(
   let verdict: IdentifiabilityVerdict;
   if (isGiven) {
     verdict = 'given';
-  } else if (!closure.has(targetName) && !rankOf().determined.includes(targetName)) {
+  } else if (!closure.has(targetName) && !rankDetermines(edges, known, targetName, identifications)) {
     verdict = 'under-determined';
   } else if (derivations.length >= 2) {
     verdict = 'over-determined';
