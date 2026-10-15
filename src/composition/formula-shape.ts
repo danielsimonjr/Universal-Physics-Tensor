@@ -10,56 +10,93 @@
  * @module composition/formula-shape
  */
 
+import { Fraction } from '@danielsimonjr/mathts-core';
 import type { ExprNode } from '../dimensional/ast-types.js';
 import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import { divide, equals, multiply, power } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
+import { fractionToNumber, rationalize } from './rational-exponent.js';
 
 /** `monomial` is a product of powers. `dimensional-sum` adds dimensionful terms. */
 type FormulaShape = 'monomial' | 'dimensional-sum';
 
 /**
- * Exponents of every symbol in a product, quotient, or literal integer power.
- * Undefined for a sum or any node that is not that monomial. The one reader
- * of a monomial's exponents: the canonical graph reads a count's exponent
- * from it, and a composed edge reads the junction's exponent from it.
+ * The rational a literal exponent stands for: a bounded-denominator scan at
+ * the fit's tolerance reads `0.3333333333333333` as `1/3`; a decimal that
+ * is no such rational (`0.3333`) is kept as the exact decimal it spells.
  *
  * @internal
  */
-export function monomialExponents(node: ExprNode | undefined): Map<string, number> | undefined {
+export function rationalExponentOf(name: string): Fraction | undefined {
+  if (!isDecimalLiteral(name)) return undefined;
+  const value = Number(name);
+  if (!Number.isFinite(value)) return undefined;
+  const scanned = rationalize(value);
+  if (scanned !== undefined) return scanned;
+  try {
+    return Fraction.parse(name);
+  } catch {
+    return Fraction.fromNumber(value);
+  }
+}
+
+/**
+ * Exact exponents of every symbol in a product, quotient, or literal power,
+ * as core `Fraction`s. Undefined for a sum or any node that is not that
+ * monomial. A cancellation is an exact zero: `(x^(1/3))^3 / x` carries `x`
+ * at `0`, not at `2.2e-16`.
+ *
+ * @internal
+ */
+export function monomialExponentsExact(node: ExprNode | undefined): Map<string, Fraction> | undefined {
   if (node === undefined) return undefined;
-  if (node.kind === 'symbol') return new Map([[node.name, 1]]);
+  if (node.kind === 'symbol') return new Map([[node.name, new Fraction(1)]]);
   if (node.kind !== 'op') return undefined;
   if (node.op === '*') {
-    const acc = new Map<string, number>();
+    const acc = new Map<string, Fraction>();
     for (const arg of node.args) {
-      const part = monomialExponents(arg);
+      const part = monomialExponentsExact(arg);
       if (part === undefined) return undefined;
-      for (const [name, exp] of part) acc.set(name, (acc.get(name) ?? 0) + exp);
+      for (const [name, exp] of part) acc.set(name, (acc.get(name) ?? new Fraction(0)).add(exp));
     }
     return acc;
   }
   if (node.op === '/') {
     if (node.args.length !== 2) return undefined;
-    const numerator = monomialExponents(node.args[0]);
-    const denominator = monomialExponents(node.args[1]);
+    const numerator = monomialExponentsExact(node.args[0]);
+    const denominator = monomialExponentsExact(node.args[1]);
     if (numerator === undefined || denominator === undefined) return undefined;
-    for (const [name, exp] of denominator) numerator.set(name, (numerator.get(name) ?? 0) - exp);
+    for (const [name, exp] of denominator) numerator.set(name, (numerator.get(name) ?? new Fraction(0)).sub(exp));
     return numerator;
   }
   if (node.op === '^') {
     const base = node.args[0];
     const expNode = node.args[1];
     if (base === undefined || expNode === undefined || expNode.kind !== 'symbol') return undefined;
-    const exp = Number(expNode.name);
-    if (!Number.isFinite(exp)) return undefined;
-    const inner = monomialExponents(base);
+    const exp = rationalExponentOf(expNode.name);
+    if (exp === undefined) return undefined;
+    const inner = monomialExponentsExact(base);
     if (inner === undefined) return undefined;
-    for (const [name, innerExp] of inner) inner.set(name, innerExp * exp);
+    for (const [name, innerExp] of inner) inner.set(name, innerExp.multiply(exp));
     return inner;
   }
   return undefined;
+}
+
+/**
+ * Exponents of every symbol in a product, quotient, or literal power, as
+ * numbers: the projection of {@link monomialExponentsExact}. Undefined for a
+ * sum or any node that is not that monomial. The canonical graph reads a
+ * count's exponent from it, and a composed edge reads the junction's
+ * exponent from it.
+ *
+ * @internal
+ */
+export function monomialExponents(node: ExprNode | undefined): Map<string, number> | undefined {
+  const exact = monomialExponentsExact(node);
+  if (exact === undefined) return undefined;
+  return new Map([...exact].map(([name, exp]) => [name, fractionToNumber(exp)]));
 }
 
 /** A dimensionless symbol whose name is a number, the way a literal exponent is written. */
