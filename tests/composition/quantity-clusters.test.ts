@@ -3,8 +3,9 @@
  * and the discovery funnel once each ran their own union-find over items sharing a canonical
  * quantity. This file pins the component ids and their order BEFORE the move
  * (`tests/fixtures/quantity-clusters-pin.json`, captured from the union-find implementations
- * at `0c3c67b` by a script kept in the deep-dive session log) and tests the shared helper on a
- * hand-built set, so the migration can be proved to change nothing.
+ * at `0c3c67b` by a twenty-line script over the built `dist/` of that commit, recorded in the
+ * batch report of the change that added this file) and tests the shared helper on a hand-built
+ * set, so the migration can be proved to change nothing.
  *
  * @module tests/composition/quantity-clusters
  */
