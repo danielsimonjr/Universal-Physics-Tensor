@@ -28,6 +28,7 @@
  */
 
 import { betainc, gammainc, gammaincp } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../../core/mathts-read.js';
 import { readFileSync } from 'node:fs';
 import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
@@ -821,17 +822,13 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
 
 /** Regularized lower incomplete gamma P(a, x), MathTS `gammainc`. */
 function gammaP(a: number, x: number): number {
-  const v: unknown = gammainc(a, x);
-  if (typeof v !== 'number') throw new TypeError('gammainc did not return a number for number arguments');
-  return v;
+  return numberFrom('gammainc', gammainc(a, x));
 }
 
 /** Regularized upper incomplete gamma Q(a, x), MathTS `gammaincp` (direct in the upper tail). */
 function gammaQ(a: number, x: number): number {
   if (x <= 0) return 1;
-  const v: unknown = gammaincp(a, x);
-  if (typeof v !== 'number') throw new TypeError('gammaincp did not return a number for number arguments');
-  return v;
+  return numberFrom('gammaincp', gammaincp(a, x));
 }
 
 /** P(χ²_ν ≥ chi2): the probability of a χ² at least this large if the model and σ are right. @internal */
@@ -857,9 +854,7 @@ export function chiSquareCdf(chi2: number, dof: number): number {
 function betaI(a: number, b: number, x: number): number {
   if (x <= 0) return 0;
   if (x >= 1) return 1;
-  const v: unknown = betainc(a, b, x);
-  if (typeof v !== 'number') throw new TypeError('betainc did not return a number for number arguments');
-  return v;
+  return numberFrom('betainc', betainc(a, b, x));
 }
 
 /** P(F_{d1,d2} ≥ f): the probability of an F ratio at least this large if the extra terms explain nothing. @internal */

@@ -42,19 +42,8 @@ import { canonicalById } from '../canonical/registry.js';
  * Every command prints a number through this function or through {@link formatExact}.
  * @internal
  */
-export function formatQuantity(value: number, digits = 15): string {
-  return String(Number(value.toPrecision(digits)));
-}
-
-/**
- * Text form of a computed value that a reader may need to reproduce bit for bit: the shortest
- * decimal that round-trips to the same double (`upt evaluate`'s outputs). A recovered or compared
- * quantity prints through {@link formatQuantity} instead.
- * @internal
- */
-export function formatExact(value: number): string {
-  return String(value);
-}
+import { formatQuantity } from '../core/format.js';
+export { formatQuantity, formatExact } from '../core/format.js';
 import type { DimensionalDeterminationResult } from '../dimensional/buckingham.js';
 import { dimensionallyDetermines } from '../dimensional/buckingham.js';
 import { collapseSynonymGovernors } from './aliases.js';

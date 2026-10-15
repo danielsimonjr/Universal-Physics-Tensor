@@ -34,7 +34,7 @@
  * @module atlas/physjs-ref
  */
 
-import { createHash } from 'node:crypto';
+import { sha256Hex } from '../core/hash.js';
 import type { FormalFidelity, FormalRef, FormalRefKind } from './types.js';
 import { FORMAL_REF_KINDS } from '../relations/types.js';
 import { catalogEntries, catalogIdNumber } from '../bridges/catalog-load.js';
@@ -316,7 +316,7 @@ export function physjsRowHash(row: PhysjsReviewedRow): string {
     [...row.axioms],
     row.nested.map((n) => [n.name, n.theorem, n.kind, n.covers, n.leanProof, [...n.axioms]]),
   ];
-  return createHash('sha256').update(JSON.stringify(columns)).digest('hex');
+  return sha256Hex(JSON.stringify(columns));
 }
 
 /**

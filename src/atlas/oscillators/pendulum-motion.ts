@@ -11,6 +11,7 @@
  */
 
 import { ellipticK, findRoot, solveODESystem } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../../core/mathts-read.js';
 import { pendulumPeriodErrorAt } from './bridges-limits.js';
 
 /** ω0² at T0 = 1. @internal */
@@ -113,8 +114,7 @@ export function theta0OfPeriodError(eps: number): number {
 export function pendulumNome(theta0: number): number {
   const k = Math.sin(Math.abs(theta0) / 2);
   if (k === 0) return 0;
-  const K: unknown = ellipticK(k * k);
-  const Kp: unknown = ellipticK(Math.cos(theta0 / 2) ** 2);
-  if (typeof K !== 'number' || typeof Kp !== 'number') throw new TypeError('ellipticK did not return a number');
+  const K = numberFrom('ellipticK', ellipticK(k * k));
+  const Kp = numberFrom('ellipticK', ellipticK(Math.cos(theta0 / 2) ** 2));
   return Math.exp((-Math.PI * Kp) / K);
 }

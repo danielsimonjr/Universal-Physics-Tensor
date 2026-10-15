@@ -253,6 +253,8 @@ export {
   schwarzschildCircularOrbit,
   type MetricId,
 } from './numerical/spacetime-metrics.js';
+/** One split of a `name=value` token; a null is the command's own usage or value error. */
+export { splitAssignment } from './core/assignment.js';
 
 /**
  * Binding readers for `upt eval`, `upt evaluate`, `upt regime`, and `upt path`.

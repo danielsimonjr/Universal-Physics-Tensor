@@ -6,6 +6,7 @@
  */
 
 import { residualInSigma } from './observations/types.js';
+import { withinMixed } from '../core/compare.js';
 import { checkedDataFile } from '../core/data-file.js';
 import type {
   CatalogConfrontation,
@@ -71,7 +72,7 @@ const boolean = (o: Readonly<Record<string, unknown>>, key: string, where: strin
  */
 /** A stored number is written to a few significant digits; it agrees when it rounds to the computed one within 1e-3 relative (or absolute near zero). */
 function agreesToStoredPrecision(stored: number, computed: number): boolean {
-  return Math.abs(stored - computed) <= 1e-3 * Math.max(1, Math.abs(computed));
+  return withinMixed(stored, computed, 1e-3);
 }
 
 /** True when `holds` contains `clause` as a whole clause, not as the tail of a longer name. */
@@ -86,7 +87,13 @@ function holdsStatesClause(holds: string, clause: string): boolean {
   }
 }
 
-function readOutcome(row: CatalogConfrontationRecord): ConfrontationOutcome {
+/**
+ * Checks `row.outcome` arm by arm on the record's `kind` and narrows the row to
+ * a loaded {@link CatalogConfrontation}: an assertion guard, so the loaded
+ * record is a `ConfrontationOutcome` by inspection, not by a cast. A field
+ * that is missing or of the wrong type throws naming the record.
+ */
+function readOutcome(row: CatalogConfrontationRecord): asserts row is CatalogConfrontationRecord & CatalogConfrontation {
   const where = `data/bridge-catalog.json: confrontation ${row.catalogId}`;
   const o = row.outcome;
   if (o['kind'] !== row.kind) throw new Error(`${where}: outcome.kind ${String(o['kind'])} is not the record kind ${row.kind}`);
@@ -141,11 +148,13 @@ function readOutcome(row: CatalogConfrontationRecord): ConfrontationOutcome {
       if (!Array.isArray(o['rows'])) throw new Error(`${where}: outcome.rows must be an array`);
       break;
   }
-  return o as unknown as ConfrontationOutcome;
 }
 
 function narrowConfrontations(file: CatalogFileRecord): readonly CatalogConfrontation[] {
-  return file.confrontations.map((row) => ({ ...row, outcome: readOutcome(row) }));
+  return file.confrontations.map((row) => {
+    readOutcome(row);
+    return row;
+  });
 }
 
 /**

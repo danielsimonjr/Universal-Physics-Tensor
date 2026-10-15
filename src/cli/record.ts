@@ -13,7 +13,8 @@
  * neither imports the barrel nor re-enters the global-option parser.
  */
 
-import { createHash } from 'node:crypto';
+import { readJsonFile } from '../core/data-file.js';
+import { sha256Hex } from '../core/hash.js';
 import { appendFileSync, closeSync, existsSync, mkdtempSync, openSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
@@ -89,7 +90,7 @@ export interface RecordInput {
   sha256: string | null;
 }
 
-export const sha256 = (s: string | Buffer): string => createHash('sha256').update(s).digest('hex');
+export const sha256 = (s: string | Buffer): string => sha256Hex(s);
 
 export const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv, 'record'));
 
@@ -153,7 +154,7 @@ function hashFile(path: string): string | null {
 /** The observations file a problem file names, or null (also when the problem cannot be read). */
 function observationsOf(problem: string, api: typeof cliApi): string | null {
   try {
-    const raw: unknown = JSON.parse(readFileSync(problem, 'utf8'));
+    const raw: unknown = readJsonFile(problem);
     return typeof raw === 'object' && raw !== null && 'observationsPath' in raw && typeof raw.observationsPath === 'string'
       ? api.resolveObservationsPath({ observationsPath: raw.observationsPath }, problem)
       : null;

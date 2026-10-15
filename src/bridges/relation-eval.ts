@@ -6,6 +6,7 @@
  */
 
 import { quantityRecord } from '../dimensional/quantity-registry.js';
+import { withinSymmetric } from '../core/compare.js';
 import { applyCarrierSignPolicy, CarrierSignError } from './carrier-sign.js';
 import type { CatalogRelation } from './catalog-types.js';
 import { evaluateFormula, formulaNames, formulaScope } from './expr-parse.js';
@@ -51,9 +52,9 @@ function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { cha
         continue;
       }
       if (!Number.isFinite(pos) || !Number.isFinite(neg)) continue;
-      const scale = Math.max(Math.abs(pos), Math.abs(neg), 1);
-      const isEven = Math.abs(pos - neg) <= 1e-8 * scale;
-      const isOdd = Math.abs(pos + neg) <= 1e-8 * scale;
+      // The scale is max(|pos|, |neg|, 1): relative far from one, absolute near zero.
+      const isEven = withinSymmetric(pos, neg, 1e-8, 1);
+      const isOdd = withinSymmetric(pos, -neg, 1e-8, 1);
       if (isEven && !isOdd) even.push(name);
       if (isOdd && !isEven) {
         const role = signRole(name);

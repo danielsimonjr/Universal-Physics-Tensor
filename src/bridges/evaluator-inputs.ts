@@ -10,6 +10,8 @@
  *
  * @module bridges/evaluator-inputs
  */
+import { splitAssignment } from '../core/assignment.js';
+import { formatQuantity } from '../core/format.js';
 import { affineReadingNote, unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
 import {
   resolveQuantityName,
@@ -32,8 +34,8 @@ export interface ResolvedInput {
   readonly note?: string;
 }
 
-/** 15 significant digits: the value itself is passed unrounded. */
-const show = (v: number): number => Number(v.toPrecision(15));
+/** 15 significant digits in the note; the value itself is passed unrounded. */
+const show = formatQuantity;
 
 /** Disclosures that a unit symbol does not carry by itself. */
 function unitAside(given: string): string {
@@ -42,9 +44,9 @@ function unitAside(given: string): string {
 }
 
 const splitArg = (a: string): [string, string] => {
-  const eq = a.indexOf('=');
-  if (eq <= 0) throw new UnitError(`'${a}' must be key=value (e.g. d_m=1um)`);
-  return [a.slice(0, eq), a.slice(eq + 1)];
+  const split = splitAssignment(a);
+  if (split === null) throw new UnitError(`'${a}' must be key=value (e.g. d_m=1um)`);
+  return [split.name, split.raw];
 };
 
 function convert(

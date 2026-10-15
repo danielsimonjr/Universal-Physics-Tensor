@@ -30,6 +30,7 @@
  * @module dimensional/symbolic-constants
  */
 
+import { withinRel } from '../core/compare.js';
 import type { Dimension } from './types.js';
 import { parseUnit } from './units.js';
 import { CONSTANT_ROWS, constantRow, type ConstantRow } from './constant-rows.js';
@@ -104,7 +105,7 @@ export class ConstantDisagreementError extends Error {
 export function constantAgreement(key: string, value: number): string | null {
   const record = BY_SPELLING.get(key);
   if (record === undefined) return null;
-  if (Math.abs(value - record.value) > CONSTANT_AGREEMENT * Math.abs(record.value)) {
+  if (!withinRel(value, record.value, CONSTANT_AGREEMENT, 0)) {
     throw new ConstantDisagreementError(key, record.name, record.value, value);
   }
   return record.name;
