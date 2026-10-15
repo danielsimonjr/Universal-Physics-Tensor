@@ -251,8 +251,12 @@ function errnoOf(e: unknown): { code?: string; path?: string } {
   };
 }
 
-/** Map probe file/parse failures to CLI errors (no stack traces). */
-function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string): never {
+/**
+ * Map probe file/parse failures to CLI errors (no stack traces). `kind` names what the file was
+ * read as (`a problem file` for `run --problem`, `an expression file` for a `design` hypothesis,
+ * `a bounds file` for its bounds), so a refusal of the loader's own checks says the right thing.
+ */
+function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string, kind = 'a problem file'): never {
   if (e instanceof UsageError || e instanceof CliError) throw e;
   const errno = errnoOf(e);
   if (errno.code === 'ENOENT') {
@@ -268,7 +272,7 @@ function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string): ne
   // The loader checks every field it reads and names the one that is wrong.
   if (e instanceof api.ProblemFileError) {
     throw new CliError(
-      `upt probe: ${context ?? 'the file'} is not a problem file: ${e.message}. \`upt help probe\` shows the format.`,
+      `upt probe: ${context ?? 'the file'} is not ${kind}: ${e.message}. \`upt help probe\` shows the format.`,
     );
   }
   // A TypeError or a RangeError past those checks is a field of a shape the loader does not
@@ -412,7 +416,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       try {
         return api.parseExprJson(path);
       } catch (e) {
-        mapProbeError(api, e, path);
+        mapProbeError(api, e, path, 'an expression file');
       }
     };
     const h1 = parseExpr(h1p);
@@ -421,7 +425,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     try {
       bounds = api.parseDesignBounds(readJsonFile(api, bp), bp);
     } catch (e) {
-      mapProbeError(api, e, bp);
+      mapProbeError(api, e, bp, 'a bounds file');
     }
     let suggestion;
     try {
