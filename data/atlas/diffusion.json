@@ -847,7 +847,7 @@
       ],
       "bound": {
         "K": 1,
-        "delta": 0.055728090000841446,
+        "delta": 0.055728090000841224,
         "norm": "relative error of the slow-mode decay rate of a Fourier mode, normalized by the value of the reduced model",
         "domain": "ε = τDq² ≤ 0.05",
         "horizon": "τ ≪ t ≪ 1/(δ D q²): after the initial layer and before the decay-rate error accumulates; machine form 5τ < t < 0.1/(δ D q²)",

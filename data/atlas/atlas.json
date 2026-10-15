@@ -1895,7 +1895,7 @@
           ],
           "bound": {
             "K": 1,
-            "delta": 0.055728090000841446,
+            "delta": 0.055728090000841224,
             "norm": "relative error of the slow-mode decay rate of a Fourier mode, normalized by the value of the reduced model",
             "domain": "ε = τDq² ≤ 0.05",
             "horizon": "τ ≪ t ≪ 1/(δ D q²): after the initial layer and before the decay-rate error accumulates; machine form 5τ < t < 0.1/(δ D q²)",
@@ -2696,7 +2696,7 @@
           ],
           "bound": {
             "K": 1,
-            "delta": 0.00498756211208895,
+            "delta": 0.004987562112089028,
             "norm": "relative phase-velocity error of a Fourier mode, normalized by the value of the reduced model",
             "domain": "ω₀/(c k) ≤ 0.1",
             "horizon": "t ≪ π/(2 c k δ): the phase drift reaches π/2; machine form t < π/(2 c k δ(ω₀, c, k))",
@@ -2795,7 +2795,7 @@
           ],
           "bound": {
             "K": 1,
-            "delta": 0.0024875775822101875,
+            "delta": 0.0024875775821945954,
             "norm": "relative error of the kinetic frequency ω − ω₀, normalized by the value of the reduced model",
             "domain": "x = ck/ω₀ ≤ 0.1",
             "horizon": "t ≪ π/(δ ω₀ x²): the kinetic-phase drift reaches π/2; machine form t < π/(δ ω₀ x²)",
@@ -2971,7 +2971,7 @@
           ],
           "bound": {
             "K": 1,
-            "delta": 0.00498756211208895,
+            "delta": 0.004987562112089027,
             "norm": "relative phase-velocity error of a Fourier mode, normalized by the value of the reduced model",
             "domain": "β = EIk²/F ≤ 0.01",
             "horizon": "t ≪ π/(2 c k δ): the phase drift reaches π/2; machine form t < π/(2 √(F/μ) k δ)",

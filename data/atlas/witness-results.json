@@ -142,11 +142,11 @@
       "witnessId": "WD6",
       "kind": "numeric",
       "status": "checked",
-      "detail": "Fine error 0.02633403898972464 is within tolerance 0.03, and refinement reduced the error by a factor of 2.116199874337019.",
+      "detail": "Fine error 0.026334038989723974 is within tolerance 0.03, and refinement reduced the error by a factor of 2.1161998743370645.",
       "convergence": {
-        "coarse": 0.055728090000841446,
-        "fine": 0.02633403898972464,
-        "ratio": 2.116199874337019
+        "coarse": 0.055728090000841224,
+        "fine": 0.026334038989723974,
+        "ratio": 2.1161998743370645
       }
     },
     {
@@ -178,11 +178,11 @@
       "witnessId": "WS5",
       "kind": "numeric",
       "status": "checked",
-      "detail": "Fine error 0.0006242199685362326 is within tolerance 0.001, and refinement reduced the error by a factor of 3.985097734126391.",
+      "detail": "Fine error 0.0006242199685708921 is within tolerance 0.001, and refinement reduced the error by a factor of 3.985097733880142.",
       "convergence": {
-        "coarse": 0.0024875775822101875,
-        "fine": 0.0006242199685362326,
-        "ratio": 3.985097734126391
+        "coarse": 0.0024875775821945954,
+        "fine": 0.0006242199685708921,
+        "ratio": 3.985097733880142
       }
     },
     {
