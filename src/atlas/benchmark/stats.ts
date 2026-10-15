@@ -14,8 +14,10 @@
  * @internal
  */
 
-/** The two-sided 95% normal quantile. @internal */
-export const Z95 = 1.959963984540054;
+import { lgamma, normalQuantile } from '@danielsimonjr/mathts-functions';
+
+/** The two-sided 95% normal quantile, MathTS `normalQuantile(0.975)` (1.959963984540054). @internal */
+export const Z95: number = normalQuantile(0.975);
 
 /** A closed interval. @internal */
 export interface Interval {
@@ -63,11 +65,16 @@ export interface McNemarResult {
   readonly exactP: number;
 }
 
-/** `ln C(n, k)`, summed; exact enough for the n here. */
+/** `log Γ(z)`, MathTS `lgamma`, read back as the number it is for a number. */
+function logGamma(z: number): number {
+  const v: unknown = lgamma(z);
+  if (typeof v !== 'number') throw new TypeError('lgamma did not return a number for a number argument');
+  return v;
+}
+
+/** `ln C(n, k) = ln Γ(n+1) − ln Γ(k+1) − ln Γ(n−k+1)`, through MathTS `lgamma`. */
 function logChoose(n: number, k: number): number {
-  let s = 0;
-  for (let i = 1; i <= k; i++) s += Math.log(n - k + i) - Math.log(i);
-  return s;
+  return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
 }
 
 /**

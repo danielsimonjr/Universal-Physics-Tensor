@@ -10,8 +10,8 @@
  * @internal
  */
 
-import { solveODESystem } from '@danielsimonjr/mathts-functions';
-import { agm, pendulumPeriodErrorAt } from './bridges-limits.js';
+import { ellipticK, findRoot, solveODESystem } from '@danielsimonjr/mathts-functions';
+import { pendulumPeriodErrorAt } from './bridges-limits.js';
 
 /** ω0² at T0 = 1. @internal */
 export const W2 = (2 * Math.PI) ** 2;
@@ -34,28 +34,21 @@ export function rk4Step(x: number, v: number, h: number, accel: (x: number) => n
 
 /**
  * The root in (0, h] of x(τ), the position one partial RK4 step of length τ
- * from (x, v), by the secant method from the bracket (0, x) and (h, nx).
+ * from (x, v), by MathTS `findRoot` (Brent) on the bracket (0, x), (h, nx).
  *
  * The crossing is then located to the integrator's own truncation error,
  * rather than to the O(h³) error of a straight line between the two steps.
  * That truncation error is nearly the same for the pendulum and the linear
  * oscillator at small θ0, so it cancels in their phase difference; the
- * interpolation error does not.
+ * interpolation error does not. `findRoot` evaluates both ends, and a step
+ * of length 0 is the start itself (`solveODESystem` cannot take `dt = 0`).
+ * Its `tol` stops on the residual (an angle) and on the bracket width (a
+ * time in T0), both at 1e-12, below the integrator's error either way.
  */
 function refineCrossing(x: number, v: number, nx: number, h: number, accel: (x: number) => number): number {
-  let a = 0;
-  let fa = x;
-  let b = h;
-  let fb = nx;
-  for (let k = 0; k < 50 && fb !== 0 && fb !== fa; k++) {
-    const c = b - (fb * (b - a)) / (fb - fa);
-    if (!(c >= -h && c <= 2 * h) || c === b) break;
-    a = b;
-    fa = fb;
-    b = c;
-    fb = rk4Step(x, v, c, accel)[0];
-  }
-  return b;
+  if (nx === 0) return h;
+  const position = (tau: number): number => (tau === 0 ? x : tau === h ? nx : rk4Step(x, v, tau, accel)[0]);
+  return findRoot(position, 0, h, { tol: 1e-12, maxIter: 200 });
 }
 
 /** Zero-crossing times of a release from rest at `theta0`, over `periods` of T0 = 1. @internal */
@@ -88,8 +81,14 @@ export function phaseAt(crossings: readonly number[], t: number): number {
 }
 
 /**
- * θ0 in [0, π) whose exact relative period error is `eps`, by bisection on the
- * strictly increasing `pendulumPeriodErrorAt`.
+ * θ0 in [0, π) whose exact relative period error is `eps`, by MathTS
+ * `findRoot` (Brent) on the strictly increasing `pendulumPeriodErrorAt`.
+ *
+ * The residual is solved as `err/eps − 1`, of order 1, so `findRoot`'s one
+ * `tol` (it stops on the residual AND on the bracket width) cannot stop on a
+ * residual that is small only because `eps` is. The upper end is just below
+ * π, where the error is finite; at π it is `Infinity`, which Brent's
+ * interpolation cannot take.
  *
  * @returns NaN for a negative or non-finite `eps`.
  * @internal
@@ -97,24 +96,25 @@ export function phaseAt(crossings: readonly number[], t: number): number {
 export function theta0OfPeriodError(eps: number): number {
   if (!Number.isFinite(eps) || eps < 0) return Number.NaN;
   if (eps === 0) return 0;
-  let lo = 0;
-  let hi = Math.PI;
-  for (let i = 0; i < 200 && hi - lo > 0; i++) {
-    const mid = (lo + hi) / 2;
-    if (mid === lo || mid === hi) break;
-    if (pendulumPeriodErrorAt({ theta0: mid }) < eps) lo = mid;
-    else hi = mid;
-  }
-  return (lo + hi) / 2;
+  const hi = Math.PI * (1 - Number.EPSILON);
+  if (pendulumPeriodErrorAt({ theta0: hi }) <= eps) return hi;
+  return findRoot((theta0) => pendulumPeriodErrorAt({ theta0 }) / eps - 1, 0, hi, {
+    tol: 4 * Number.EPSILON,
+    maxIter: 200,
+  });
 }
 
 /**
- * The nome q = exp(−π K′/K) of the modulus k = sin(θ0/2), with
- * K′/K = AGM(1, cos(θ0/2)) / AGM(1, sin(θ0/2)).
+ * The nome q = exp(−π K′/K) of the modulus k = sin(θ0/2): K = K(m) and
+ * K′ = K(1 − m) at the parameter m = k², both MathTS `ellipticK` (whose
+ * route is the AGM, so K′/K = AGM(1, cos(θ0/2)) / AGM(1, sin(θ0/2))).
  * @internal
  */
 export function pendulumNome(theta0: number): number {
   const k = Math.sin(Math.abs(theta0) / 2);
   if (k === 0) return 0;
-  return Math.exp((-Math.PI * agm(1, Math.cos(theta0 / 2))) / agm(1, k));
+  const K: unknown = ellipticK(k * k);
+  const Kp: unknown = ellipticK(Math.cos(theta0 / 2) ** 2);
+  if (typeof K !== 'number' || typeof Kp !== 'number') throw new TypeError('ellipticK did not return a number');
+  return Math.exp((-Math.PI * Kp) / K);
 }

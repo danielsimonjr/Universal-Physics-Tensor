@@ -57,6 +57,7 @@ export {
   getFormulaDimensionChecker,
 } from './numerical/formula-registry.js';
 export { parseDimensionSpec } from './dimensional/dimension-spec.js';
+export { ratioSpread } from './numerical/statistics.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
 export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';

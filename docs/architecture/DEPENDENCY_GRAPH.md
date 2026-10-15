@@ -49,7 +49,7 @@ The codebase is organized into the following modules:
 - **diff**: 3 files
 - **dimensional**: 41 files
 - **entry**: 1 file
-- **numerical**: 39 files
+- **numerical**: 40 files
 - **relations**: 8 files
 
 ---
@@ -110,6 +110,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/atlas/benchmark/hybrid-retrieval.ts` - Optional embedding retrieval. An embedder proposes an order. `rankByStructure`
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `pairwiseDot` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -182,6 +187,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/atlas/benchmark/stats.ts` - Atlas Phase 5, S5.4 — the benchmark's statistics and power report.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `lgamma, normalQuantile` |
 
 **Exports:**
 - Interfaces: `Interval`, `PairedTable`, `McNemarResult`, `PowerReport`
@@ -448,7 +458,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `solveODESystem` |
+| `@danielsimonjr/mathts-functions` | `lgamma, solveODESystem, trapz` |
 
 **Exports:**
 - Interfaces: `HeatFixture`, `WickFixture`, `LangevinFixture`, `SteadyStateFixture`
@@ -700,6 +710,11 @@ The codebase is organized into the following modules:
 
 ### `src/atlas/oscillators/bridges-limits.ts` - The two Phase 0 APPROXIMATION bridges — design note §3, bridges 3 and 4.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `ellipticK` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -713,7 +728,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/types.js` | `ACCELERATION, LENGTH, MASS` | Import |
 
 **Exports:**
-- Functions: `makeApproximation`, `agm`, `pendulumPeriodErrorAt`, `dampedOffsetBoundAt`
+- Functions: `makeApproximation`, `pendulumPeriodErrorAt`, `dampedOffsetBoundAt`
 - Constants: `AB_PENDULUM_LINEAR`, `AB_DAMPED_MASSLESS`, `LIMIT_BRIDGES`, `CONTRACT_PENDULUM_LINEAR`, `CONTRACT_DAMPED_MASSLESS`, `LIMIT_CONTRACTS`
 
 ---
@@ -822,12 +837,12 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `solveODESystem` |
+| `@danielsimonjr/mathts-functions` | `ellipticK, findRoot, solveODESystem` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./bridges-limits.js` | `agm, pendulumPeriodErrorAt` | Import |
+| `./bridges-limits.js` | `pendulumPeriodErrorAt` | Import |
 
 **Exports:**
 - Functions: `rk4Step`, `crossingTimes`, `phaseAt`, `theta0OfPeriodError`, `pendulumNome`
@@ -2064,7 +2079,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `K_B_SI` | Import |
-| `./quadrature.js` | `adaptiveSimpson` | Import |
+| `./quadrature.js` | `adaptiveQuadrature` | Import |
 | `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
 
 **Exports:**
@@ -2080,6 +2095,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/cases/damped-resonator.ts` - Applied case: the free ring-down of a damped resonator, read out over a
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `findRoot` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -2132,6 +2152,11 @@ The codebase is organized into the following modules:
 
 ### `src/cases/lumped-cooling.ts` - Applied case: a solid sphere cooling (or warming) in a fluid — its
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `findRoot, solveODESystem` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -2145,10 +2170,15 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/cases/quadrature.ts` - Adaptive Simpson quadrature for the parent-model comparisons of the applied
+### `src/cases/quadrature.ts` - Adaptive quadrature for the parent-model comparisons of the applied cases:
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `quad` |
 
 **Exports:**
-- Functions: `adaptiveSimpson`
+- Functions: `adaptiveQuadrature`
 
 ---
 
@@ -2160,7 +2190,7 @@ The codebase is organized into the following modules:
 | `../core/constants.js` | `H_SI, K_B_SI` | Import |
 | `../bridges/catalog-load.js` | `catalogRelations` | Import |
 | `../bridges/relation-eval.js` | `evaluateCatalogRelation` | Import |
-| `./quadrature.js` | `adaptiveSimpson` | Import |
+| `./quadrature.js` | `adaptiveQuadrature` | Import |
 | `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
 
 **Exports:**
@@ -3197,6 +3227,7 @@ The codebase is organized into the following modules:
 | `./composition/bridge-analysis.js` | `bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors` | Re-export |
 | `./numerical/formula-registry.js` | `getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker` | Re-export |
 | `./dimensional/dimension-spec.js` | `parseDimensionSpec` | Re-export |
+| `./numerical/statistics.js` | `ratioSpread` | Re-export |
 | `./composition/bridge-prediction.js` | `predictMissingBridges` | Re-export |
 | `./composition/frontier-account.js` | `catalogFrontierAccount, formatFrontierAccount` | Re-export |
 | `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
@@ -3301,7 +3332,7 @@ The codebase is organized into the following modules:
   buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, suggestQuantities,
   buckinghamPi, dimensionallyDetermines, composeEdges, formatConnectedSummary, bridgePriority,
   attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors,
-  getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec,
+  getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec, ratioSpread,
   predictMissingBridges, catalogFrontierAccount, formatFrontierAccount, rankDiscoveries,
   ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage, CONFRONTATIONS, listConfrontations,
   runConfrontation, confrontationRigor, rigorDistribution, requestCallerTableConfrontation,
@@ -3429,6 +3460,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../numerical/statistics.js` | `ratioSpread` | Import |
 | `../dimensional/symbolic-constants.js` | `constantRecord` | Import |
 | `../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
@@ -4301,6 +4333,11 @@ The codebase is organized into the following modules:
 
 ### `src/composition/probe/fit.ts` - Prefactor fit + holdout evaluation. Generation never sees holdout rows.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `norm2, pairwiseDot` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -4604,6 +4641,17 @@ The codebase is organized into the following modules:
 
 ### `src/composition/probe/structure.ts` - Cheap structure probes: regime changepoint, scale symmetry, conserved dQ/dt.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `sumSquaredDeviations` |
+| `@danielsimonjr/mathts-functions` | `linearRegression` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../numerical/statistics.js` | `meanOf` | Import |
+
 **Exports:**
 - Interfaces: `ChangepointInput`, `ChangepointResult`, `ScaleSymmetryInput`
 - Functions: `detectMeanChangepoint`, `estimateScaleExponent`, `probeConservation`
@@ -4611,6 +4659,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/composition/probe/study.ts` - Falsification-oriented study over calibrated observations (audit §14 I19).
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `betainc, gammainc, lgamma` |
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -5336,6 +5389,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/dimensional/exact-scale.ts` - Exact unit scales.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `gcd` |
 
 **Exports:**
 - Interfaces: `ExactScale`
@@ -6640,6 +6698,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
+| `@danielsimonjr/mathts-functions` | `hermiteInterp, median` |
 | `universal-physics-tensor` | `findPerihelion, integrateGeodesicGL4` |
 
 **Internal Dependencies:**
@@ -6658,7 +6717,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `rootsLegendre` |
+| `@danielsimonjr/mathts-functions` | `legendreP, rootsLegendre` |
 
 **Exports:**
 - Functions: `integrateGaussLegendre`
@@ -6700,6 +6759,19 @@ The codebase is organized into the following modules:
   ```
 
 - Constants: `METRIC_SIGNATURE`
+
+---
+
+### `src/numerical/statistics.ts` - Scalar statistics read from MathTS, typed back as the numbers they are.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `mean, std` |
+
+**Exports:**
+- Interfaces: `RatioSpread`
+- Functions: `meanOf`, `ratioSpread`
 
 ---
 
@@ -6979,7 +7051,7 @@ graph TD
         N55[christoffel-flat]
         N56[connection-lowering-helpers]
         N57[covariant-eikonal]
-        N58[...34 more]
+        N58[...35 more]
     end
 
     subgraph Relations
@@ -7029,14 +7101,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 364 |
+| Total TypeScript Files | 365 |
 | Total Modules | 13 |
-| Total Lines of Code | 81698 |
-| Total Exports | 2578 |
-| Total Re-exports | 1320 |
+| Total Lines of Code | 81677 |
+| Total Exports | 2580 |
+| Total Re-exports | 1321 |
 | Total Classes | 82 |
-| Total Interfaces | 467 |
-| Total Functions | 783 |
+| Total Interfaces | 468 |
+| Total Functions | 784 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 511 |

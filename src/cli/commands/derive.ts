@@ -251,10 +251,9 @@ async function run(ctx: CommandCtx): Promise<number> {
         throw new UsageError('upt derive: the formula could not be evaluated at generic inputs: ' + (e as Error).message);
       }
     }
-    const ratioMean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-    const cv = Math.sqrt(ratios.reduce((a, b) => a + (b - ratioMean) ** 2, 0) / ratios.length) / Math.abs(ratioMean);
-    matchesMonomial = cv < 1e-9;
-    if (matchesMonomial) mean = ratioMean;
+    const spread = api.ratioSpread(ratios);
+    matchesMonomial = spread.cv < 1e-9;
+    if (matchesMonomial) mean = spread.mean;
     else failed = true;
     textOut(
       matchesMonomial

@@ -16,7 +16,7 @@
 import { H_SI, K_B_SI } from '../core/constants.js';
 import { catalogRelations } from '../bridges/catalog-load.js';
 import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
-import { adaptiveSimpson } from './quadrature.js';
+import { adaptiveQuadrature } from './quadrature.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-resistor-noise';
@@ -169,7 +169,7 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     const S = spectral(T, rEff);
     const S0 = spectral(T, R);
     const vRms = Math.sqrt(S * B);
-    const vParent = Math.sqrt(adaptiveSimpson((f) => parentDensity(f, T, rEff, C), fLo, fHi));
+    const vParent = Math.sqrt(adaptiveQuadrature((f) => parentDensity(f, T, rEff, C), fLo, fHi));
     const x = (H_SI * fHi) / (K_B_SI * T);
     const wrc = 2 * Math.PI * fHi * rEff * C;
     const checks = [

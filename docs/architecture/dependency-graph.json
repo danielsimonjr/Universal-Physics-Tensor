@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "10.0.0",
-    "totalFiles": 364,
+    "totalFiles": 365,
     "totalModules": 13,
-    "totalExports": 2578
+    "totalExports": 2580
   },
   "entryPoints": [
     {
@@ -150,7 +150,14 @@
       },
       "src/atlas/benchmark/hybrid-retrieval.ts": {
         "description": "Optional embedding retrieval. An embedder proposes an order. `rankByStructure`",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "pairwiseDot"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -381,7 +388,15 @@
       },
       "src/atlas/benchmark/stats.ts": {
         "description": "Atlas Phase 5, S5.4 — the benchmark's statistics and power report.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "lgamma",
+              "normalQuantile"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
@@ -1233,7 +1248,9 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "solveODESystem"
+              "lgamma",
+              "solveODESystem",
+              "trapz"
             ]
           }
         ],
@@ -2613,7 +2630,14 @@
       },
       "src/atlas/oscillators/bridges-limits.ts": {
         "description": "The two Phase 0 APPROXIMATION bridges — design note §3, bridges 3 and 4.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "ellipticK"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -2680,13 +2704,11 @@
           "CONTRACT_DAMPED_MASSLESS",
           "LIMIT_CONTRACTS",
           "makeApproximation",
-          "agm",
           "pendulumPeriodErrorAt",
           "dampedOffsetBoundAt"
         ],
         "functions": [
           "makeApproximation",
-          "agm",
           "pendulumPeriodErrorAt",
           "dampedOffsetBoundAt"
         ],
@@ -2959,6 +2981,8 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
+              "ellipticK",
+              "findRoot",
               "solveODESystem"
             ]
           }
@@ -2968,7 +2992,6 @@
           {
             "file": "./bridges-limits.js",
             "imports": [
-              "agm",
               "pendulumPeriodErrorAt"
             ]
           }
@@ -6936,7 +6959,7 @@
           {
             "file": "./quadrature.js",
             "imports": [
-              "adaptiveSimpson"
+              "adaptiveQuadrature"
             ]
           },
           {
@@ -6984,7 +7007,14 @@
       },
       "src/cases/damped-resonator.ts": {
         "description": "Applied case: the free ring-down of a damped resonator, read out over a",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "findRoot"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -7168,7 +7198,15 @@
       },
       "src/cases/lumped-cooling.ts": {
         "description": "Applied case: a solid sphere cooling (or warming) in a fluid — its",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "findRoot",
+              "solveODESystem"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -7214,15 +7252,22 @@
         ]
       },
       "src/cases/quadrature.ts": {
-        "description": "Adaptive Simpson quadrature for the parent-model comparisons of the applied",
-        "externalDependencies": [],
+        "description": "Adaptive quadrature for the parent-model comparisons of the applied cases:",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "quad"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
-          "adaptiveSimpson"
+          "adaptiveQuadrature"
         ],
         "functions": [
-          "adaptiveSimpson"
+          "adaptiveQuadrature"
         ]
       },
       "src/cases/resistor-noise.ts": {
@@ -7252,7 +7297,7 @@
           {
             "file": "./quadrature.js",
             "imports": [
-              "adaptiveSimpson"
+              "adaptiveQuadrature"
             ]
           },
           {
@@ -10604,6 +10649,13 @@
             "reExport": true
           },
           {
+            "file": "./numerical/statistics.js",
+            "imports": [
+              "ratioSpread"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./composition/bridge-prediction.js",
             "imports": [
               "predictMissingBridges"
@@ -11409,6 +11461,7 @@
           "getFormulaParserKind",
           "getFormulaDimensionChecker",
           "parseDimensionSpec",
+          "ratioSpread",
           "predictMissingBridges",
           "catalogFrontierAccount",
           "formatFrontierAccount",
@@ -11645,6 +11698,7 @@
           "getFormulaParserKind",
           "getFormulaDimensionChecker",
           "parseDimensionSpec",
+          "ratioSpread",
           "predictMissingBridges",
           "catalogFrontierAccount",
           "formatFrontierAccount",
@@ -12080,6 +12134,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../numerical/statistics.js",
+            "imports": [
+              "ratioSpread"
+            ]
+          },
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
@@ -15245,7 +15305,15 @@
       },
       "src/composition/probe/fit.ts": {
         "description": "Prefactor fit + holdout evaluation. Generation never sees holdout rows.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "norm2",
+              "pairwiseDot"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -16652,9 +16720,29 @@
       },
       "src/composition/probe/structure.ts": {
         "description": "Cheap structure probes: regime changepoint, scale symmetry, conserved dQ/dt.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "sumSquaredDeviations"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "linearRegression"
+            ]
+          }
+        ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../numerical/statistics.js",
+            "imports": [
+              "meanOf"
+            ]
+          }
+        ],
         "exports": [
           "detectMeanChangepoint",
           "estimateScaleExponent",
@@ -16673,7 +16761,16 @@
       },
       "src/composition/probe/study.ts": {
         "description": "Falsification-oriented study over calibrated observations (audit §14 I19).",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "betainc",
+              "gammainc",
+              "lgamma"
+            ]
+          }
+        ],
         "nodeDependencies": [
           {
             "module": "fs",
@@ -18957,7 +19054,14 @@
       },
       "src/dimensional/exact-scale.ts": {
         "description": "Exact unit scales.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "gcd"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
@@ -24687,6 +24791,13 @@
         "description": "Bisection perihelion finder via cubic-Hermite interpolation on cached",
         "externalDependencies": [
           {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "hermiteInterp",
+              "median"
+            ]
+          },
+          {
             "package": "universal-physics-tensor",
             "imports": [
               "findPerihelion",
@@ -24718,6 +24829,7 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
+              "legendreP",
               "rootsLegendre"
             ]
           }
@@ -24866,6 +24978,31 @@
         ],
         "constants": [
           "METRIC_SIGNATURE"
+        ]
+      },
+      "src/numerical/statistics.ts": {
+        "description": "Scalar statistics read from MathTS, typed back as the numbers they are.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "mean",
+              "std"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "meanOf",
+          "ratioSpread"
+        ],
+        "interfaces": [
+          "RatioSpread"
+        ],
+        "functions": [
+          "meanOf",
+          "ratioSpread"
         ]
       },
       "src/numerical/strides.ts": {
@@ -25607,6 +25744,7 @@
           "src/numerical/perihelion-finder.ts",
           "src/numerical/quadrature.ts",
           "src/numerical/spacetime-metrics.ts",
+          "src/numerical/statistics.ts",
           "src/numerical/strides.ts",
           "src/numerical/tensor-engine.ts",
           "src/numerical/types.ts",
@@ -25629,17 +25767,17 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 364,
+    "totalTypeScriptFiles": 365,
     "totalModules": 13,
-    "totalLinesOfCode": 81698,
-    "totalExports": 2578,
+    "totalLinesOfCode": 81677,
+    "totalExports": 2580,
     "totalClasses": 82,
-    "totalInterfaces": 467,
-    "totalFunctions": 783,
+    "totalInterfaces": 468,
+    "totalFunctions": 784,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 392,
-    "totalReExports": 1320,
+    "totalReExports": 1321,
     "totalTypeOnlyImports": 511,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

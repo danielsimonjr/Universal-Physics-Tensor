@@ -19,6 +19,7 @@
  *
  * @module cases/lumped-cooling
  */
+import { findRoot, solveODESystem } from '@danielsimonjr/mathts-functions';
 import { C_SI, H_SI, K_B_SI } from '../core/constants.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
@@ -48,24 +49,25 @@ export interface LumpedRadiating {
 
 /**
  * T(t) of ρcV dT/dt = −A[h(T − T∞) + εσ_SB(T⁴ − T∞⁴)] for a sphere (V/A =
- * a/3), by RK4 with each step 1/100 of the local relaxation time
+ * a/3), by classical RK4 (MathTS `solveODESystem` with `dt`, one call per
+ * step) with each step 1/100 of the local relaxation time
  * ρca/(3(h + 4εσ_SB T³)). Stops early once |T − T∞| is below 1e-15 |T0 − T∞|.
  * @internal
  */
 export function lumpedRadiatingTemperature(p: LumpedRadiating): number {
   const k = 3 / (p.rho * p.c * p.a);
-  const f = (T: number) => -k * (p.h * (T - p.Tinf) + p.eps * SIGMA_SB_SI * (T ** 4 - p.Tinf ** 4));
+  const f = (_t: number, y: number[]): number[] => {
+    const T = y[0]!;
+    return [-k * (p.h * (T - p.Tinf) + p.eps * SIGMA_SB_SI * (T ** 4 - p.Tinf ** 4))];
+  };
   const floor = 1e-15 * Math.abs(p.T0 - p.Tinf);
   let T = p.T0;
   let s = 0;
   while (s < p.t && Math.abs(T - p.Tinf) > floor) {
     const rate = k * (p.h + 4 * p.eps * SIGMA_SB_SI * Math.max(T, p.Tinf) ** 3);
     const dt = Math.min(p.t - s, 0.01 / rate);
-    const k1 = f(T);
-    const k2 = f(T + (dt / 2) * k1);
-    const k3 = f(T + (dt / 2) * k2);
-    const k4 = f(T + dt * k3);
-    T += (dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
+    const sol = solveODESystem(f, [T], [s, s + dt], { dt });
+    T = sol.y[sol.y.length - 1]?.[0] ?? Number.NaN;
     s += dt;
   }
   return T;
@@ -74,21 +76,20 @@ export function lumpedRadiatingTemperature(p: LumpedRadiating): number {
 /**
  * The first n roots of 1 − ζ cot ζ = Bi (Bi = h a/k, radius-based): the n-th
  * lies in ((n−1)π, nπ), where the left side runs from −∞ (0 for n = 1) to +∞.
+ * Each is MathTS `findRoot` (Brent) on that interval, pulled in from the
+ * poles by a few ulps of kπ, since the solver evaluates both ends: at 0 the
+ * function is 0/0, and at an exact multiple of π `Math.tan` has no sign to
+ * trust. The tolerance is the bracket's own floating-point resolution.
  * @internal
  */
 export function sphereEigenvalues(biRadius: number, n: number): number[] {
   const f = (z: number) => 1 - z / Math.tan(z) - biRadius;
   const roots: number[] = [];
   for (let k = 1; k <= n; k++) {
-    let lo = (k - 1) * Math.PI;
-    let hi = k * Math.PI;
-    for (let it = 0; it < 200 && hi - lo > 4 * Number.EPSILON * hi; it++) {
-      const mid = (lo + hi) / 2;
-      if (mid === lo || mid === hi) break;
-      if (f(mid) < 0) lo = mid;
-      else hi = mid;
-    }
-    roots.push((lo + hi) / 2);
+    const hi = k * Math.PI;
+    const inset = 8 * Number.EPSILON * hi;
+    const lo = k === 1 ? Number.MIN_VALUE : (k - 1) * Math.PI + inset;
+    roots.push(findRoot(f, lo, hi - inset, { tol: 4 * Number.EPSILON * hi, maxIter: 200 }));
   }
   return roots;
 }

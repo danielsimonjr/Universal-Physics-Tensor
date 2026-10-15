@@ -26,6 +26,11 @@
  *      cached-snapshot approach). Precision floor: 1e-9 × T_orbit
  *      (Adam+Eve I1 — 1e-12 needs ~40 cubic bisections and is wasted
  *      effort given the integrator's per-step error is already > 1e-12).
+ *      The bisection stays local: MathTS `findRoot` (Brent) stops on
+ *      `|b − a| < tol` as well as on `|f| < tol`, in the units of its
+ *      independent variable, and `tauTolerance` is a RESIDUAL tolerance in
+ *      the units of dr/dτ; the width stop would end the search at a bracket
+ *      of `tauTolerance` in `s`, where the residual can be far above it.
  *   6. Return `{ tau, x, phi }` where `x` is the cubic-Hermite-interpolated
  *      4-coordinate at the root and `phi = x[3]`.
  *
@@ -34,6 +39,7 @@
  *
  * @module numerical/perihelion-finder
  */
+import { hermiteInterp, median } from '@danielsimonjr/mathts-functions';
 
 /**
  * Result of `findPerihelion`: the τ at the radial turning point, the
@@ -92,29 +98,22 @@ function radialVelocity(
   return v;
 }
 
-/** Median of a numeric array (does not mutate input). */
-function median(values: readonly number[]): number {
-  const sorted = [...values].sort((a, b) => a - b);
-  const n = sorted.length;
-  if (n === 0) return 0;
-  if (n % 2 === 1) return sorted[(n - 1) / 2];
-  return 0.5 * (sorted[n / 2 - 1] + sorted[n / 2]);
+/** Median of the snapshot steps, MathTS `median` (0 for no steps, as before). */
+function medianStep(values: readonly number[]): number {
+  if (values.length === 0) return 0;
+  const v: unknown = median([...values]);
+  if (typeof v !== 'number') throw new TypeError('median did not return a number for a number array');
+  return v;
 }
 
 /**
- * Hermite basis on the unit interval, evaluated at `s ∈ [0,1]`.
- *
- * Cubic Hermite interpolant of a scalar `f(τ)` over `[τ0, τ1]` with
+ * The cubic Hermite interpolant of a scalar `f(τ)` over `[τ0, τ1]` with
  * endpoint values `f0, f1` and endpoint derivatives `m0, m1` (in `f` per
- * `τ`):
+ * `τ`), at `s = (τ − τ0)/(τ1 − τ0)`: MathTS `hermiteInterp` on the two
+ * nodes `0` and `1` of the unit interval, where the derivatives are
+ * `(τ1 − τ0) m`. With two nodes that interpolant IS the cubic
  *
- *     P(τ) = h00(s) f0 + h10(s) (τ1−τ0) m0 + h01(s) f1 + h11(s) (τ1−τ0) m1
- *
- * where `s = (τ − τ0)/(τ1 − τ0)` and
- *     h00 =  2s³ − 3s² + 1
- *     h10 =      s³ − 2s² + s
- *     h01 = −2s³ + 3s²
- *     h11 =      s³ −  s²
+ *     P = h00(s) f0 + h10(s) (τ1−τ0) m0 + h01(s) f1 + h11(s) (τ1−τ0) m1
  *
  * (Numerical Recipes §3.4; Hairer/Lubich/Wanner §III.5.)
  */
@@ -126,13 +125,7 @@ function hermiteEval(
   dt: number,
   s: number,
 ): number {
-  const s2 = s * s;
-  const s3 = s2 * s;
-  const h00 =  2 * s3 - 3 * s2 + 1;
-  const h10 =      s3 - 2 * s2 + s;
-  const h01 = -2 * s3 + 3 * s2;
-  const h11 =      s3 -     s2;
-  return h00 * f0 + h10 * dt * m0 + h01 * f1 + h11 * dt * m1;
+  return hermiteInterp([0, 1], [f0, f1], [dt * m0, dt * m1], s);
 }
 
 /**
@@ -161,6 +154,10 @@ function hermiteInterpVector(
  * Bisection on the cubic-Hermite polynomial for the scalar `dr/dτ` root.
  * Operates on `s ∈ [0,1]` — the normalised bracket coordinate. Returns
  * the converged `s` and the corresponding polynomial value.
+ *
+ * Local, not MathTS `findRoot`: that solver's one `tol` also stops on the
+ * bracket width in `s`, and this contract is a residual tolerance in the
+ * units of dr/dτ (module docstring, step 5).
  *
  * Precision: the loop terminates when `|P(s_mid)| ≤ tauTolerance` (scaled
  * to whatever units `dr/dτ` is in — the caller passes `tauTolerance`
@@ -347,7 +344,7 @@ export function findPerihelion(options: FindPerihelionOptions): PerihelionResult
   for (let i = 0; i < snapshots.length - 1; i++) {
     deltas.push(snapshots[i + 1].tau - snapshots[i].tau);
   }
-  const hSnap = median(deltas);
+  const hSnap = medianStep(deltas);
   if (dt < hSnap) {
     process.emitWarning(
       `findPerihelion: bracket width Δτ=${dt} < h_snap=${hSnap} `

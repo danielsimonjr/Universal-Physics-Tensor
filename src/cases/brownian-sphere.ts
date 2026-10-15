@@ -19,7 +19,7 @@
  * @module cases/brownian-sphere
  */
 import { K_B_SI } from '../core/constants.js';
-import { adaptiveSimpson } from './quadrature.js';
+import { adaptiveQuadrature } from './quadrature.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-brownian-sphere';
@@ -85,7 +85,7 @@ export function hydrodynamicMsdRatio(alpha: number, beta: number): number {
   // The integrand falls as v^{3/2} below and v^{−3/2} above the breakpoints: e^{−75} at ±50 in ln v.
   const edges = [points[0]! - 50, ...points, points[points.length - 1]! + 50];
   let sum = 0;
-  for (let k = 1; k < edges.length; k++) if (edges[k]! > edges[k - 1]!) sum += adaptiveSimpson(f, edges[k - 1]!, edges[k]!, 1e-12);
+  for (let k = 1; k < edges.length; k++) if (edges[k]! > edges[k - 1]!) sum += adaptiveQuadrature(f, edges[k - 1]!, edges[k]!, 1e-12);
   return sum / Math.PI;
 }
 

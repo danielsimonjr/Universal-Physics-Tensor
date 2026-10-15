@@ -32,11 +32,11 @@
       "witnessId": "WD1",
       "kind": "numeric",
       "status": "checked",
-      "detail": "Fine error 0.00007051487111636723 is within tolerance 0.0001, and refinement reduced the error by a factor of 9.988594363526142.",
+      "detail": "Fine error 0.00007051487150111502 is within tolerance 0.0001, and refinement reduced the error by a factor of 9.988594309025729.",
       "convergence": {
         "coarse": 0.000704344444177718,
-        "fine": 0.00007051487111636723,
-        "ratio": 9.988594363526142
+        "fine": 0.00007051487150111502,
+        "ratio": 9.988594309025729
       }
     },
     {

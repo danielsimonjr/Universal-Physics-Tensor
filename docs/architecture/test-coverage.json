@@ -1,16 +1,15 @@
 {
   "metadata": {
-    "totalSourceFiles": 364,
-    "totalTestFiles": 582,
-    "testedCount": 351,
-    "directlyTestedCount": 314,
-    "untestedCount": 13,
-    "coveragePercent": "96.4",
+    "totalSourceFiles": 365,
+    "totalTestFiles": 583,
+    "testedCount": 353,
+    "directlyTestedCount": 315,
+    "untestedCount": 12,
+    "coveragePercent": "96.7",
     "directCoveragePercent": "86.3"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
-    "src/cases/quadrature.ts",
     "src/cli/bindings.ts",
     "src/cli/commands/_atlas-route.ts",
     "src/cli/commands/_discovery-opts.ts",
@@ -146,6 +145,7 @@
     "src/cases/index.ts",
     "src/cases/kepler-rv.ts",
     "src/cases/lumped-cooling.ts",
+    "src/cases/quadrature.ts",
     "src/cases/resistor-noise.ts",
     "src/cases/skin-depth.ts",
     "src/cases/types.ts",
@@ -363,6 +363,7 @@
     "src/numerical/perihelion-finder.ts",
     "src/numerical/quadrature.ts",
     "src/numerical/spacetime-metrics.ts",
+    "src/numerical/statistics.ts",
     "src/numerical/strides.ts",
     "src/numerical/tensor-engine.ts",
     "src/numerical/types.ts",
@@ -493,6 +494,7 @@
     "src/cases/index.ts",
     "src/cases/kepler-rv.ts",
     "src/cases/lumped-cooling.ts",
+    "src/cases/quadrature.ts",
     "src/cases/resistor-noise.ts",
     "src/cases/skin-depth.ts",
     "src/cli-api.ts",
@@ -725,6 +727,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/retrieve.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/numerical/mathts-delegation.test.ts",
       "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/atlas/benchmark/leakage.ts": [
@@ -747,6 +750,7 @@
       "tests/atlas/benchmark-model-set.test.ts",
       "tests/atlas/benchmark-stats.test.ts",
       "tests/atlas/link-prediction.test.ts",
+      "tests/numerical/mathts-delegation.test.ts",
       "tests/tools/criterion3-run.test.ts"
     ],
     "src/atlas/benchmark/study.ts": [
@@ -916,7 +920,8 @@
       "tests/atlas/diffusion.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/linear-oscillator-step.test.ts",
-      "tests/atlas/negative-controls.test.ts"
+      "tests/atlas/negative-controls.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/atlas/error-algebra.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -1067,7 +1072,8 @@
       "tests/atlas/pendulum-position-translation.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/spring-lc-norm-transport.test.ts",
-      "tests/atlas/transported-norm-demo.test.ts"
+      "tests/atlas/transported-norm-demo.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/atlas/oscillators/dimensions.ts": [
       "tests/atlas/barrel-completeness.test.ts",
@@ -1120,7 +1126,8 @@
     ],
     "src/atlas/oscillators/pendulum-motion.ts": [
       "tests/atlas/linear-oscillator-step.test.ts",
-      "tests/atlas/pendulum-position-translation.test.ts"
+      "tests/atlas/pendulum-position-translation.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/atlas/oscillators/phase-carriage.ts": [
       "tests/atlas/spring-lc-phase-carriage.test.ts"
@@ -2312,7 +2319,8 @@
       "tests/cli/signed-residual-label.test.ts"
     ],
     "src/cases/damped-resonator.ts": [
-      "tests/cases/damped-resonator.test.ts"
+      "tests/cases/damped-resonator.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
@@ -2337,9 +2345,12 @@
     ],
     "src/cases/lumped-cooling.ts": [
       "tests/cases/lumped-cooling.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
+      "tests/cli/signed-residual-label.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
-    "src/cases/quadrature.ts": [],
+    "src/cases/quadrature.ts": [
+      "tests/numerical/mathts-delegation.test.ts"
+    ],
     "src/cases/resistor-noise.ts": [
       "tests/cases/resistor-noise.test.ts",
       "tests/cli/signed-residual-label.test.ts"
@@ -6568,7 +6579,8 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
-      "tests/composition/probe/modules.test.ts"
+      "tests/composition/probe/modules.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/composition/probe/study.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -6585,7 +6597,8 @@
       "tests/composition/probe/study-inputs.test.ts",
       "tests/composition/probe/study-refusals.test.ts",
       "tests/composition/probe/study-replication.test.ts",
-      "tests/composition/probe/study.test.ts"
+      "tests/composition/probe/study.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/composition/probe/types.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -9276,6 +9289,7 @@
     "src/numerical/quadrature.ts": [
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
+      "tests/numerical/mathts-delegation.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/numerical/spacetime-metrics.ts": [
@@ -9289,6 +9303,17 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/numerical/spacetime-metrics.test.ts"
+    ],
+    "src/numerical/statistics.ts": [
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/explain-temperature-binding.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-search.test.ts",
+      "tests/cli/suggest-token-length.test.ts"
     ],
     "src/numerical/strides.ts": [
       "tests/numerical/strides.test.ts"
@@ -9589,6 +9614,7 @@
     "src/atlas/benchmark/hybrid-retrieval.ts": [
       "tests/atlas/hybrid-retrieval.test.ts",
       "tests/cli/retrieve.test.ts",
+      "tests/numerical/mathts-delegation.test.ts",
       "tests/review/round3-owner-decisions.test.ts"
     ],
     "src/atlas/benchmark/leakage.ts": [
@@ -9608,6 +9634,7 @@
       "tests/atlas/benchmark-model-set.test.ts",
       "tests/atlas/benchmark-stats.test.ts",
       "tests/atlas/link-prediction.test.ts",
+      "tests/numerical/mathts-delegation.test.ts",
       "tests/tools/criterion3-run.test.ts"
     ],
     "src/atlas/benchmark/study.ts": [
@@ -9712,7 +9739,8 @@
       "tests/atlas/diffusion.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/linear-oscillator-step.test.ts",
-      "tests/atlas/negative-controls.test.ts"
+      "tests/atlas/negative-controls.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/atlas/error-algebra.ts": [
       "tests/atlas/error-algebra.test.ts",
@@ -9796,7 +9824,8 @@
       "tests/atlas/pendulum-position-translation.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/spring-lc-norm-transport.test.ts",
-      "tests/atlas/transported-norm-demo.test.ts"
+      "tests/atlas/transported-norm-demo.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/atlas/oscillators/dimensions.ts": [
       "tests/atlas/models.test.ts",
@@ -9837,7 +9866,8 @@
     ],
     "src/atlas/oscillators/pendulum-motion.ts": [
       "tests/atlas/linear-oscillator-step.test.ts",
-      "tests/atlas/pendulum-position-translation.test.ts"
+      "tests/atlas/pendulum-position-translation.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/atlas/oscillators/phase-carriage.ts": [
       "tests/atlas/spring-lc-phase-carriage.test.ts"
@@ -10329,7 +10359,8 @@
       "tests/cli/signed-residual-label.test.ts"
     ],
     "src/cases/damped-resonator.ts": [
-      "tests/cases/damped-resonator.test.ts"
+      "tests/cases/damped-resonator.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
@@ -10345,9 +10376,12 @@
     ],
     "src/cases/lumped-cooling.ts": [
       "tests/cases/lumped-cooling.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
+      "tests/cli/signed-residual-label.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
-    "src/cases/quadrature.ts": [],
+    "src/cases/quadrature.ts": [
+      "tests/numerical/mathts-delegation.test.ts"
+    ],
     "src/cases/resistor-noise.ts": [
       "tests/cases/resistor-noise.test.ts",
       "tests/cli/signed-residual-label.test.ts"
@@ -10998,13 +11032,15 @@
     ],
     "src/composition/probe/structure.ts": [
       "tests/composition/probe/coverage-backfill.test.ts",
-      "tests/composition/probe/modules.test.ts"
+      "tests/composition/probe/modules.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/composition/probe/study.ts": [
       "tests/composition/probe/study-inputs.test.ts",
       "tests/composition/probe/study-refusals.test.ts",
       "tests/composition/probe/study-replication.test.ts",
-      "tests/composition/probe/study.test.ts"
+      "tests/composition/probe/study.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/composition/probe/types.ts": [
       "tests/composition/probe/generator-budget.test.ts",
@@ -11984,11 +12020,13 @@
     "src/numerical/quadrature.ts": [
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
+      "tests/numerical/mathts-delegation.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/numerical/spacetime-metrics.ts": [
       "tests/numerical/spacetime-metrics.test.ts"
     ],
+    "src/numerical/statistics.ts": [],
     "src/numerical/strides.ts": [
       "tests/numerical/strides.test.ts"
     ],
@@ -14468,6 +14506,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -14771,6 +14810,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -15905,6 +15945,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -16183,6 +16224,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -16563,6 +16605,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -16741,6 +16784,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -17414,6 +17458,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -17687,6 +17732,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -18135,6 +18181,7 @@
       "src/composition/bridge-analysis.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/numerical/statistics.ts",
       "src/composition/bridge-prediction.ts",
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
@@ -20918,6 +20965,19 @@
       "src/numerical/tensor-engine.ts",
       "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
+    ],
+    "tests/numerical/mathts-delegation.test.ts": [
+      "src/atlas/oscillators/bridges-limits.ts",
+      "src/atlas/oscillators/pendulum-motion.ts",
+      "src/atlas/diffusion/numerics.ts",
+      "src/atlas/benchmark/stats.ts",
+      "src/atlas/benchmark/hybrid-retrieval.ts",
+      "src/composition/probe/study.ts",
+      "src/composition/probe/structure.ts",
+      "src/cases/lumped-cooling.ts",
+      "src/cases/damped-resonator.ts",
+      "src/cases/quadrature.ts",
+      "src/numerical/quadrature.ts"
     ],
     "tests/numerical/mathts-engine-typing.test.ts": [
       "src/numerical/mathts-engine.ts",

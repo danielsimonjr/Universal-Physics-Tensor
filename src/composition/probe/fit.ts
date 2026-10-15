@@ -4,6 +4,7 @@
  * @module composition/probe/fit
  */
 
+import { norm2, pairwiseDot } from '@danielsimonjr/mathts-core';
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { evalExpr } from '../expr-eval.js';
 import { DEFAULT_HOLDOUT_TOL, type ProbeDataset } from './types.js';
@@ -34,6 +35,12 @@ function observed(rows: ProbeDataset): number[] {
     }
     return y;
   });
+}
+
+/** Root-mean-square additive discrepancy: core `norm2` of the residuals (the scaled, overflow-safe 2-norm) over √n. */
+function rmse(observedValues: readonly number[], predicted: readonly number[]): number {
+  const residuals = observedValues.map((obs, i) => scalarDiscrepancy(obs, predicted[i]!, 'additive'));
+  return norm2(residuals) / Math.sqrt(residuals.length);
 }
 
 function predictorKey(row: Readonly<Record<string, number>>, observable: string): string {
@@ -72,23 +79,15 @@ export function fitPrefactor(
   }
   const y = observed(exploratory);
   const f = predictions(expr, exploratory, 1);
-  let num = 0;
-  let den = 0;
-  for (let i = 0; i < y.length; i++) {
-    if (!Number.isFinite(f[i])) continue;
-    num += f[i] * y[i];
-    den += f[i] * f[i];
-  }
-  const prefactor = den > 0 ? num / den : 1;
+  // The least-squares prefactor over the rows where the form is finite: c = f·y / f·f
+  // (core `pairwiseDot`, a pairwise sum).
+  const finite = f.map((v, i) => [v, y[i]!] as const).filter(([v]) => Number.isFinite(v));
+  const den = pairwiseDot(finite.map(([v]) => v), finite.map(([v]) => v));
+  const prefactor = den > 0 ? pairwiseDot(finite.map(([v]) => v), finite.map(([, obs]) => obs)) / den : 1;
   const pred = predictions(expr, exploratory, prefactor);
-  let acc = 0;
-  for (let i = 0; i < y.length; i++) {
-    const r = scalarDiscrepancy(y[i], pred[i], 'additive');
-    acc += r * r;
-  }
-  const exploratoryRmse = Math.sqrt(acc / y.length);
+  const exploratoryRmse = rmse(y, pred);
 
-    if (!holdout || holdout.rows.length === 0) {
+  if (!holdout || holdout.rows.length === 0) {
     return {
       prefactor,
       exploratoryRmse,
@@ -100,12 +99,7 @@ export function fitPrefactor(
   }
   const yh = observed(holdout);
   const ph = predictions(expr, holdout, prefactor);
-  let hacc = 0;
-  for (let i = 0; i < yh.length; i++) {
-    const r = scalarDiscrepancy(yh[i], ph[i], 'additive');
-    hacc += r * r;
-  }
-  const holdoutRmse = Math.sqrt(hacc / yh.length);
+  const holdoutRmse = rmse(yh, ph);
   const scale =
     Math.max(...yh.map(Math.abs), ...ph.map(Math.abs), 1e-12);
   const holdoutSupported = holdoutRmse <= holdoutTol * scale;
