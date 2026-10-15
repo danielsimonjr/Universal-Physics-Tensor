@@ -83,5 +83,5 @@ The gate prints `formalRef axiom gate: PASS` and exits 0, or prints each problem
 Add each new `lean4-physlib` formalRef theorem to `AxiomProbe.lean`. When the pin changes, update
 the `version` of every such formalRef; the gate fails for a checkout at another commit. Run the
 gate with `--write-captured`. The option writes new files into `captured/`. Review the new output
-before you commit it. A `lean4-physjs` reference is checked against `formal/physjs/manifest.json`
+before you commit it. A `lean4-physjs` reference is checked against `formal/lean/manifest.json`
 and is not added here.

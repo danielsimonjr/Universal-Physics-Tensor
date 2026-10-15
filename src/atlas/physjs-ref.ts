@@ -17,8 +17,9 @@
  * pins before the move, are history in `NOTES.md` and `CHANGELOG.md`.
  *
  * Each statement's `kind`, nested ones included, is the manifest's own field
- * (schema `physjs-bridge-manifest/v2`), which PhysJS reads from the kind line
- * of the Lean file that declares the theorem; this module keeps no override
+ * (schema `upt-lean-manifest/v1`), the kind line of the Lean file that
+ * declares the theorem (`scripts/lean-index.ts --check` compares the two);
+ * this module keeps no override
  * and does not parse the covers line for it. A field of a manifest entry
  * outside the base fields is a nested statement: a second theorem on the same
  * entry, named by the field, with no key. It is recorded and compared, and it
@@ -62,8 +63,9 @@ const PHYSJS_COVERAGE = 'covers its statement only';
 /**
  * The axioms a complete Lean 4 proof over Mathlib may rest on. `#print axioms`
  * of a proof with a `sorry` adds `sorryAx`, and Lean still exits 0 (TOOLS.md),
- * so every statement's list is held to this set; PhysJS reports the list and
- * this repository does not re-measure it.
+ * so every statement's list is held to this set. The manifest records the
+ * list; CI's `lean` job audits the axioms of every declaration in `lean/`
+ * against the same set, and this module does not re-measure them.
  */
 const PHYSJS_ALLOWED_AXIOMS: ReadonlySet<string> = new Set(['propext', 'Classical.choice', 'Quot.sound']);
 
@@ -107,7 +109,7 @@ interface PhysjsEntry extends PhysjsCompiledStatement {
 }
 
 /**
- * One manifest entry as PhysJS writes it: the base fields, and each nested
+ * One manifest entry as `formal/lean/manifest.json` writes it: the base fields, and each nested
  * statement under a field of its own (`planeWave`, `corollary`).
  * @internal
  */
@@ -212,11 +214,11 @@ function physjsStatementUrl(theorem: string): string {
 const CATALOG_MAX_ID = Math.max(...catalogEntries().map((entry) => entry.id));
 
 /**
- * True when `key` is ahead of the catalog: PhysJS proved the statement for a
+ * True when `key` is ahead of the catalog: `lean/` proves the statement for a
  * catalog id the catalog has not reached yet. That is an id above the
  * catalog's highest, with every id between them also a key of `keys` (the
  * manifest's), so the ahead keys are one unbroken run that starts right after
- * the catalog. Such an entry is vendored and compared, and it is not a seed
+ * the catalog. Such an entry is compiled and compared, and it is not a seed
  * and not a problem until the catalog entry exists. A missing id inside the
  * catalog's range is not ahead, nor is an id past a gap in the run (a typo
  * such as an extra digit), nor an atlas key.
@@ -273,7 +275,7 @@ export interface PhysjsReviewedRow {
 }
 
 /**
- * The row of a manifest entry as PhysJS writes it, in the shape
+ * The row of a manifest entry as the manifest writes it, in the shape
  * {@link physjsRowHash} reads. @internal
  */
 export function physjsManifestRow(entry: PhysjsManifestEntry): PhysjsReviewedRow {
@@ -339,7 +341,7 @@ export function physjsFidelity(
   compiledEntries: readonly PhysjsEntry[] = PHYSJS_ENTRIES,
 ): FormalFidelity {
   const entry = compiledEntries.find((candidate) => candidate.key === key);
-  if (entry === undefined) throw new Error(`PhysJS manifest has no entry for '${key}'`);
+  if (entry === undefined) throw new Error(`the Lean manifest has no entry for '${key}'`);
   if (physjsAheadOfCatalog(key)) return 'unreviewed';
   if (PHYSJS_REVIEWED_ROWS[key] !== physjsRowHash(entry)) return 'unreviewed';
   return PHYSJS_SANITY_LEMMA_KEYS.includes(key) ? 'sanity-lemmas' : 'reviewed-manifest';
@@ -355,7 +357,7 @@ export function physjsFidelity(
  */
 export function physjsFormalRef(key: string): FormalRef {
   const entry = entryByKey.get(key);
-  if (entry === undefined) throw new Error(`PhysJS manifest has no entry for '${key}'`);
+  if (entry === undefined) throw new Error(`the Lean manifest has no entry for '${key}'`);
   return {
     system: 'lean4-physjs',
     statement: entry.theorem,
@@ -405,7 +407,7 @@ function isFormalRefKind(kind: unknown): kind is FormalRefKind {
 }
 
 /**
- * Problems in the vendored manifest against the bridges that claim to be keyed
+ * Problems in the Lean manifest against the bridges that claim to be keyed
  * by it. Empty means every entry resolves to a `lean4-physjs` reference whose
  * theorem, axioms, version and coverage phrase are the entry's own.
  *
@@ -518,7 +520,7 @@ export function physjsManifestProblems(input: {
       !sameAxioms(compiled.axioms, entry.axioms) ||
       !sameNested(compiled.nested, nested)
     ) {
-      problems.push(`compiled entry for '${entry.key}' disagrees with the vendored manifest`);
+      problems.push(`compiled entry for '${entry.key}' disagrees with the Lean manifest`);
     }
     const bridge = byId.get(entry.key);
     if (bridge === undefined) {

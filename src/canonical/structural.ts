@@ -11,7 +11,7 @@
  * A chain that matches a canonical equation the registry pre-declared with
  * `restatesBridge` is a restatement. Any other chain receives a provisional
  * id, `chain-` followed by the ordered edge ids. That id is not a catalog
- * id. It enters `BRIDGE_EQUATIONS` only after a vendored PhysJS proof, which
+ * id. It enters `BRIDGE_EQUATIONS` only after a Lean proof in `lean/`, which
  * this function does not record.
  *
  * @module canonical/structural

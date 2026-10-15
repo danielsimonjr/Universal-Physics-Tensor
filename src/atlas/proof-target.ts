@@ -4,7 +4,7 @@
  * The text names the theorem chain in the order the caller recorded,
  * checked against the compiled manifest copy. It is a target. The proof
  * body is absent. Nothing here is written into the catalog, the
- * formal-reference overlay, or the vendored manifest.
+ * formal-reference overlay, or the Lean manifest.
  *
  * A draft is a new target, so its `kind` is `derivation-step`, one of
  * `FORMAL_REF_KINDS`, stated as its own field and its own `-- kind:` line.

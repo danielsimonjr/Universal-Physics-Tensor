@@ -1,5 +1,5 @@
 /**
- * The vendored PhysJS manifest is the pin for every `lean4-physjs` formalRef.
+ * The Lean manifest (`formal/lean/manifest.json`) is the record for every `lean4-physjs` formalRef.
  *
  * A wrong commit, theorem, key, or coverage phrase fails here. So does a
  * manifest entry that does not resolve to a bridge, and a `lean4-physjs`
@@ -287,7 +287,7 @@ describe('the Lean manifest', () => {
       }),
     };
     expect(physjsManifestProblems({ manifest: stripped, bridges: carriers }).join('\n')).toMatch(
-      /compiled entry for 'ab-kg-schrodinger' disagrees with the vendored manifest/,
+      /compiled entry for 'ab-kg-schrodinger' disagrees with the Lean manifest/,
     );
 
     const promoted = carriers.map((bridge) =>
@@ -384,7 +384,7 @@ describe('the Lean manifest', () => {
       }),
     };
     expect(physjsManifestProblems({ manifest: stripped, bridges: carriers }).join('\n')).toMatch(
-      /compiled entry for 'be-53' disagrees with the vendored manifest/,
+      /compiled entry for 'be-53' disagrees with the Lean manifest/,
     );
 
     const promoted = carriers.map((bridge) =>
@@ -506,7 +506,7 @@ describe('fidelity is derived from what checks the key, never hand-set', () => {
       entry.key === ahead.key ? { ...entry, theorem: 'PhysJS.Wrong.theorem', axioms: ['sorryAx'], covers: 'nonsense' } : entry,
     );
     expect(physjsManifestProblems({ manifest, bridges: carriers, compiledEntries: compiled }).join('\n')).toMatch(
-      new RegExp(`compiled entry for '${ahead.key}' disagrees with the vendored manifest`),
+      new RegExp(`compiled entry for '${ahead.key}' disagrees with the Lean manifest`),
     );
     const noFile = {
       ...manifest,

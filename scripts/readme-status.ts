@@ -191,7 +191,7 @@ export function formalCell(facts: StatusFacts): string {
     `**${facts.kindBridge}** state the catalogued equation, kind \`bridge\`; ` +
     'the catalog path passes that reference, so catalog evidence and edge evidence include `formally-proved`, except an unadjudicated row, which stays `proposed`. ' +
     `**${facts.crossCheck}** carry a cross-check and **${facts.property}** carry a property. ` +
-    'Each kind is the PhysJS manifest entry\'s own field. Nested statements are not second references. The pin and the split are ' +
+    'Each kind is the Lean manifest entry\'s own field (`formal/lean/manifest.json`; the theorems are this repository\'s `lean/`). Nested statements are not second references. The split is in ' +
     '[`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md)'
   );
 }

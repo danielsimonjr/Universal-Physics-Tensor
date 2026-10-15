@@ -40,7 +40,7 @@ describe('generated PhysJS table', () => {
       index === 0 ? { ...entry, theorem: 'PhysJS.HandEdited.theorem' } : entry,
     );
     const problems = physjsManifestProblems({ manifest, bridges: carriers, compiledEntries: edited }).join('\n');
-    expect(problems).toMatch(/compiled entry for 'ab-kg-schrodinger' disagrees with the vendored manifest/);
+    expect(problems).toMatch(/compiled entry for 'ab-kg-schrodinger' disagrees with the Lean manifest/);
     expect(physjsManifestProblems({ manifest, bridges: carriers })).toEqual([]);
   });
 

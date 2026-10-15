@@ -7,7 +7,7 @@
  * id order, one confrontation per id, the rejection ledger, each outcome on
  * its kind, and each row relation's confidence derived from its row. The
  * cross-file checks below are what the loader cannot know: the package
- * version, the PhysJS manifest keys, and that every relation names a row.
+ * version, the Lean manifest keys (`formal/lean/manifest.json`), and that every relation names a row.
  *
  * Run via `npm run catalog:json`. `tests/bridges/catalog-json.test.ts`
  * imports {@link crossChecks}, so the rules live here once.

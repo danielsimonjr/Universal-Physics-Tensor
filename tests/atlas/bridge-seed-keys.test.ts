@@ -1,7 +1,7 @@
 /**
  * Kind `bridge` is the only seed. The list is `bridgeSeedKeys`, read from each
  * manifest entry's own `kind`. A second list would drift, so this test keeps
- * none: it derives every expectation from the vendored manifest and the catalog.
+ * none: it derives every expectation from the Lean manifest and the catalog.
  *
  * Before the kind check, a stub that returned every key kept `CE-fixture`
  * when its kind was `derivation-step`. The control below failed on that stub.

@@ -70,7 +70,7 @@ The catalog is checked against the **canonical L-layer** (`src/canonical/`). The
 
 ## Atlas
 
-Beside the catalog sits an atlas of typed relations between models (`src/atlas/`). A relation carries its type, side conditions, regime, and an error bound with a horizon. `formally-proved` is derived from a reviewed `formalRef` and is never hand-set. The references use `system: 'lean4-physjs'` and name public PhysJS (`https://github.com/danielsimonjr/PhysJS`). The pin is `formal/physjs/manifest.json`. The count, split between atlas bridges and catalog equations, is `NOTES.md`.
+Beside the catalog sits an atlas of typed relations between models (`src/atlas/`). A relation carries its type, side conditions, regime, and an error bound with a horizon. `formally-proved` is derived from a reviewed `formalRef` and is never hand-set. The references use `system: 'lean4-physjs'` and name theorems in this repository's `lean/`, which CI builds and axiom-audits; `formal/lean/manifest.json` records each statement, and every catalog record carries its theorem and proof status (`full`, `weak`, `pending`). The count, split between atlas bridges and catalog equations, is `NOTES.md`.
 
 ## History and plans
 

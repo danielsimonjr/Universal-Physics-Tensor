@@ -1,5 +1,5 @@
 /**
- * The reviewed PhysJS manifest rows, pinned per key.
+ * The reviewed Lean manifest rows (`formal/lean/manifest.json`), pinned per key.
  *
  * Each value is `physjsRowHash` of the row as the manifest writes it:
  * `[key, theorem, kind, covers, leanProof, axioms, nested statements]`. A key
