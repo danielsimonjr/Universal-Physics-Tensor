@@ -57,8 +57,6 @@ export {
   getFormulaDimensionChecker,
 } from './numerical/formula-registry.js';
 export { parseDimensionSpec } from './dimensional/dimension-spec.js';
-/** The mean and coefficient of variation of a set of ratios, what `upt derive` judges a monomial fit by. */
-export { ratioSpread } from './numerical/statistics.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
 export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';

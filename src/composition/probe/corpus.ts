@@ -14,6 +14,7 @@ import { evalExpr } from '../expr-eval.js';
 import { equals } from '../../dimensional/algebra.js';
 import type { Dimension } from '../../dimensional/types.js';
 import { canonicalPrefactor } from '../canonical-prefactors.js';
+import { constantRatio, fixedPoint } from '../../canonical/fixed-points.js';
 
 export interface CorpusMatch {
   readonly id: string;
@@ -79,8 +80,9 @@ function dimensionedSymbols(node: ExprNode, out: Map<string, Dimension>): Map<st
  * The corpus prefactor k of a fully quantitative canonical entry against a
  * candidate body: `scalarAst / candidate`, which must be constant. Symbols align
  * by name, then by a dimension exactly one candidate symbol carries. Evaluated at
- * three points where variable i takes (1.7 + i)^p, p = 1, 1.3, 1.6. `null` when
- * the symbols do not align or the ratio is not constant.
+ * three points where variable i takes (1.7 + i)^p, p = 1, 1.3, 1.6 (`fixedPoint`, base 1.7,
+ * step 1), and the ratio is constant when its largest relative departure is at most 1e-9
+ * (`constantRatio`). `null` when the symbols do not align or the ratio is not constant.
  */
 function corpusPrefactor(ast: ExprNode, candidate: ExprNode): number | null {
   const astSyms = dimensionedSymbols(ast, new Map());
@@ -98,12 +100,12 @@ function corpusPrefactor(ast: ExprNode, candidate: ExprNode): number | null {
   }
   const names = [...candSyms.keys()].sort();
   const ratios = [1, 1.3, 1.6].map((p) => {
-    const vals = Object.fromEntries(names.map((n, i) => [n, Math.pow(1.7 + i, p)]));
+    const vals = fixedPoint(names, p, { base: 1.7, step: 1 });
     const astVals = Object.fromEntries([...toCand].map(([s, c]) => [s, vals[c]!]));
     return evalExpr(ast, astVals) / evalExpr(candidate, vals);
   });
-  const k = ratios[0]!;
-  return Number.isFinite(k) && ratios.every((r) => Math.abs(r / k - 1) <= 1e-9) ? k : null;
+  const decided = constantRatio(ratios, 1e-9);
+  return decided.constant ? decided.value : null;
 }
 
 /**

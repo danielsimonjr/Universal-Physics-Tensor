@@ -237,26 +237,27 @@ async function run(ctx: CommandCtx): Promise<number> {
       }).exit;
     }
 
-    const ratios: number[] = [];
-    for (let j = 0; j < 3; j++) {
-      const scope: Record<string, number> = {};
-      governing.forEach((g, i) => {
-        scope[formulaSymbol(g.name)] = Math.pow(1.7 + i, 1 + 0.3 * j);
-      });
-      let cand = 1;
-      for (const g of governing) cand *= Math.pow(scope[formulaSymbol(g.name)]!, det.monomial?.[g.name] || 0);
-      try {
-        ratios.push(cf.evaluate(scope) / cand);
-      } catch (e) {
-        // Every symbol is declared (checked above). The scope is this command's own generic
-        // positive inputs, so a failure here is the formula itself (a literal division by zero,
-        // an unknown function), not a value the caller gave: a malformed formula, exit 2.
-        throw new UsageError('upt derive: the formula could not be evaluated at generic inputs: ' + (e as Error).message);
-      }
-    }
-    const spread = api.ratioSpread(ratios);
-    matchesMonomial = spread.cv < 1e-9;
-    if (matchesMonomial) mean = spread.mean;
+    // Variable i takes (1.7 + i)^p at p = 1, 1.3, 1.6, and the ratio to the monomial is one
+    // constant when its coefficient of variation is under 1e-9: this command's own scheme,
+    // through the one fixed-point owner (canonical/fixed-points.ts).
+    const recovered = api.recoverMonomialPrefactor(
+      (point) => {
+        const scope = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), point[g.name]!]));
+        try {
+          return cf.evaluate(scope);
+        } catch (e) {
+          // Every symbol is declared (checked above). The scope is this command's own generic
+          // positive inputs, so a failure here is the formula itself (a literal division by zero,
+          // an unknown function), not a value the caller gave: a malformed formula, exit 2.
+          throw new UsageError('upt derive: the formula could not be evaluated at generic inputs: ' + (e as Error).message);
+        }
+      },
+      det.monomial ?? {},
+      governing.map((g) => g.name),
+      { base: 1.7, step: 1, exponents: [0, 1, 2].map((j) => 1 + 0.3 * j), tolerance: 1e-9, statistic: 'cv' },
+    );
+    matchesMonomial = recovered.matches;
+    if (matchesMonomial) mean = recovered.prefactor;
     else failed = true;
     textOut(
       matchesMonomial
