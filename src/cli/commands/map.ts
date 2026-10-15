@@ -26,8 +26,11 @@ import * as atlasMap from './_atlas-map.js';
 import type {
   BridgeEdge,
   CanonicalComparison,
+  CommunityReport,
+  DerivationCycle,
   EquationAnalysis,
   EvidenceTag,
+  HubRank,
   RelationType,
   VizJunction,
   VizModel,
@@ -68,8 +71,17 @@ const FLAGS: FlagSpec[] = [
   { name: '--bind-short', valueStyle: 'none', description: 'Bind a one-letter catalog name in --equation. Without it, those names are reported and not bound.' },
   { name: '--natural', valueStyle: 'none', description: 'Set ħ = c = 1 when a dimension difference is a power of those constants.' },
   { name: '--geometrized', valueStyle: 'none', description: 'With the natural-unit rules, also set G = 1.' },
+  { name: '--communities', valueStyle: 'none', description: 'Also print the layout communities (Louvain, heuristic) of the largest component. A drawing aid, not physics.' },
+  { name: '--cycles', valueStyle: 'none', description: 'Also print the derivation cycles: strongly connected components of the directed source→target quantity graph.' },
+  { name: '--rank-hubs', valueStyle: 'none', description: 'Also rank quantities by betweenness centrality (normalised). Computed only when asked.' },
   JSON_FLAG,
 ];
+
+/** How many hubs `--rank-hubs` prints in text; `--json` carries every quantity. */
+const HUBS_SHOWN = 10;
+
+/** Flags that add a structure section to the text and --json forms, and mean nothing on a diagram. */
+const STRUCTURE_FLAGS = ['communities', 'cycles', 'rank-hubs'] as const;
 
 const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
@@ -155,6 +167,14 @@ const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|d
         unresolved are counted apart.
         Every atlas view states how many of the atlas's models and bridges it
         shows, in text, --json and --format=mermaid|dot|svg.
+        --communities, --cycles and --rank-hubs each add one section to the
+        text report (and a key to --json); they do not apply to a diagram.
+        --communities lists the layout communities (Louvain, heuristic) of the
+        largest component: where a drawing may place quantities together, never
+        a physics claim. --cycles lists the derivation cycles (strongly
+        connected components of the directed source→target quantity graph),
+        where over-determination lives. --rank-hubs ranks quantities by
+        betweenness centrality (normalised; computed only when asked).
         e.g.  upt map --relation=derivation --source=both
               upt map --around=temperature --depth=2 --source=catalog
               upt map --route=model-pendulum,model-lc
@@ -395,8 +415,57 @@ function printEquationReport(
   }
 }
 
+/** The opt-in structure sections, each present only when its flag was given. */
+interface StructureSections {
+  readonly communities?: CommunityReport;
+  readonly cycles?: readonly DerivationCycle[];
+  readonly hubs?: readonly HubRank[];
+}
+
+/** Compute only the sections asked for; `rankHubs` is the betweenness pass the default path never runs. */
+async function structureSections(
+  api: CommandCtx['api'],
+  graph: readonly BridgeEdge[],
+  flags: ParsedArgs['flags'],
+): Promise<StructureSections> {
+  return {
+    ...(flags.has('communities') ? { communities: api.communitiesOf(graph) } : {}),
+    ...(flags.has('cycles') ? { cycles: api.derivationCycles(graph) } : {}),
+    ...(flags.has('rank-hubs') ? { hubs: await api.rankHubs(graph) } : {}),
+  };
+}
+
+/** The text of the structure sections, in flag order; empty when none was asked for. */
+function structureLines(s: StructureSections): string[] {
+  const lines: string[] = [];
+  if (s.communities !== undefined) {
+    const c = s.communities;
+    lines.push(`  ${c.method} of the largest component (${c.componentSize} quantities) — a drawing aid, not physics:`);
+    if (c.communities.length === 0) lines.push('     none (the graph has no component)');
+    c.communities.forEach((com, i) => lines.push(`     ${i + 1}. (${com.size}) ${com.quantities.join(', ')}`));
+    lines.push('');
+  }
+  if (s.cycles !== undefined) {
+    const head = s.cycles.length === 0 ? 'none — the quantity graph is acyclic' : String(s.cycles.length);
+    lines.push(`  derivation cycles (strongly connected components of source→target, where over-determination lives): ${head}`);
+    for (const cyc of s.cycles) lines.push(`     {${cyc.quantities.join(', ')}} closed by ${cyc.edges.join(', ')}`);
+    lines.push('');
+  }
+  if (s.hubs !== undefined) {
+    const shown = Math.min(HUBS_SHOWN, s.hubs.length);
+    lines.push(
+      `  hubs by betweenness centrality (normalised; top ${shown} of ${s.hubs.length} quantities; a cut quantity of the drawing, not a central law):`,
+    );
+    for (const h of s.hubs.slice(0, shown)) lines.push(`     ${h.quantity.padEnd(40)} ${h.betweenness.toFixed(4)}  (degree ${h.degree})`);
+    lines.push('');
+  }
+  // Sections are separated by one blank line; the closing line of the report brings its own.
+  while (lines.length > 0 && lines[lines.length - 1] === '') lines.pop();
+  return lines;
+}
+
 /** Flags that shape the equation graph, and so mean nothing on an atlas view. */
-const GRAPH_ONLY_FLAGS = ['source', 'around', 'depth', 'equation', 'equation-only', 'proposed', 'max-orders', 'anchor'] as const;
+const GRAPH_ONLY_FLAGS = ['source', 'around', 'depth', 'equation', 'equation-only', 'proposed', 'max-orders', 'anchor', ...STRUCTURE_FLAGS] as const;
 
 /** Flags that only an atlas view reads. */
 const ATLAS_ONLY_FLAGS = ['all-routes', 'max-routes', 'stored', 'run'] as const;
@@ -611,6 +680,15 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   if (isJson && fmt !== 'text') {
     throw new UsageError('upt: pick one output form: --json or --format');
   }
+  const structureAsked = STRUCTURE_FLAGS.filter((f) => args.flags.has(f));
+  if (structureAsked.length > 0 && fmt !== 'text') {
+    const named = structureAsked.map((f) => `--${f}`).join(', ');
+    throw new UsageError(
+      `upt map: ${named} print${structureAsked.length === 1 ? 's' : ''} text or --json; ${structureAsked.length === 1 ? 'it does' : 'they do'} not apply to --format=${fmt}`,
+    );
+  }
+  // Computed only when asked, over the same filtered edge list the linkage map reads.
+  const structure = await structureSections(api, graph, args.flags);
 
   // --equation injects a user-supplied "TARGET = EXPR" as a 'user' junction.
   let user: EquationAnalysis | null = null;
@@ -692,6 +770,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
           ...(edgeLegend !== null ? { filter: edgeStats } : {}),
           ...(focus !== null ? { focus } : {}),
           ...(user ? { landing, userEquation } : {}),
+          ...structure,
         },
       },
       write
@@ -787,6 +866,11 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   }
   out(`  ○ isolated (${m.isolated.length}) — share no quantity with any other edge:`);
   out(`     ${m.isolated.length === 0 ? 'none' : m.isolated.join(', ')}`);
+  const structureText = structureLines(structure);
+  if (structureText.length > 0) {
+    out('');
+    for (const line of structureText) out(line);
+  }
   out('\n  (a structural map — shared-quantity connectivity, NOT a credibility signal)');
   return exitCode;
 }

@@ -119,6 +119,12 @@ export { describeDerivedClaim } from './composition/consequence.js';
 // derivation lives in cli/map-evidence.ts, which is what calls it.
 export { filterEdges, formatFilterLegend } from './composition/graph-viz.js';
 export { deriveEdgeEvidence } from './cli/map-evidence.js';
+/**
+ * `upt map --communities | --cycles | --rank-hubs`: layout communities (Louvain, heuristic; never
+ * physics), derivation cycles, and betweenness hub ranking on demand. Internal.
+ */
+export { communitiesOf, derivationCycles, rankHubs } from './composition/graph-structure.js';
+export type { CommunityReport, DerivationCycle, HubRank } from './composition/graph-structure.js';
 
 /**
  * Experimental Product B (expression / residual search). Not the identification

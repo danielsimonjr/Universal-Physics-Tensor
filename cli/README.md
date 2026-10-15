@@ -473,9 +473,11 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--bounds` | `probe` | Bounds for design, as the design subverb reads them. |
 | `--bridge` | `confront` | Select one bridge id, the same selection as a positional be-XX. |
 | `--budget-ms` | `probe` | Wall-clock cap in milliseconds. |
+| `--communities` | `map` | Also print the layout communities (Louvain, heuristic) of the largest component. A drawing aid, not physics. |
 | `--compare` | `path` | Sweep a second route from the same source to this model id and mark NEITHER where no limit applies. |
 | `--corr` | `evaluate` | A pairwise correlation as a,b=rho, used with --sigma. |
 | `--csv` | `path` | Write sweep rows as CSV. |
+| `--cycles` | `map` | Also print the derivation cycles: strongly connected components of the directed source→target quantity graph. |
 | `--data` | `probe` | Study file (JSON, or CSV when the name ends in .csv) for study. |
 | `--debug` | `derive`, `eval` | Print the formula parser name and version on stderr. |
 | `--deny` | `regime` | Mark one prose premise contradicted. The others stay unspecified. |
@@ -503,6 +505,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--out` | `map` | Write the report to PATH instead of stdout. |
 | `--problem` | `probe` | Problem JSON file for run, candidates, falsify, rank, and reproduce. |
 | `--proposed` | `map` | Overlay unadjudicated identity-consequence relations. |
+| `--rank-hubs` | `map` | Also rank quantities by betweenness centrality (normalised). Computed only when asked. |
 | `--relation` | `map` | Keep atlas edges whose recorded relation is TYPE. |
 | `--replication` | `probe` | study: replication rows from a separate JSON or CSV file. |
 | `--require-falsifier` | `discover` | Hide promising rows that no independent falsifier ran on and survived. |
