@@ -21,7 +21,7 @@ import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 import { PHYSJS_ENTRIES } from '../../src/atlas/physjs-entries.generated.js';
 import { PHYSJS_REVIEWED_ROWS } from '../../src/atlas/physjs-reviewed.js';
 import {
-  PHYSJS_COMMIT,
+  LEAN_SOURCE_TAG,
   physjsAheadOfCatalog,
   physjsFidelity,
   physjsFormalRef,
@@ -33,7 +33,8 @@ import {
 } from '../../src/atlas/physjs-ref.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
+const manifest = JSON.parse(readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf-8')) as PhysjsManifestFile;
+const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf-8')) as { version: string };
 const atlasBridges = ATLAS_FAMILIES.flatMap((family) => family.bridges);
 const carriers = [
   ...atlasBridges,
@@ -89,13 +90,15 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 
 const COVERAGE = 'covers its statement only';
 
-describe('vendored PhysJS manifest', () => {
-  it('records the manifest commit, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
-    expect(PHYSJS_COMMIT).toBe(manifest.commit);
-    // The toolchain is PhysJS's at the pinned commit; CI's docs-fresh job compares the vendored
-    // manifest to PhysJS at that commit (`vendor-physjs.ts --check`), which is where the value is
-    // bound. A literal here was a second copy of that fact, outside the reviewed-rows hash.
+describe('the Lean manifest', () => {
+  it('records no pin to another repository, links at the release tag, and every coverage phrase says the reference covers its statement only', () => {
+    // 11.0.0: the proofs are this repository's lean/. The PhysJS commit the manifest used to
+    // carry is gone; the permalinks name the release tag of the package version instead.
+    expect('commit' in manifest).toBe(false);
+    expect(LEAN_SOURCE_TAG).toBe(`v${pkg.version}`);
+    // The toolchain is the lake project's: `scripts/lean-index.ts --check` (docs-fresh) compares it
+    // with lean-toolchain and lake-manifest.json, which is where the value is bound. A literal here
+    // would be a second copy of that fact, outside the reviewed-rows hash.
     expect(manifest.toolchain).toMatch(/^leanprover\/lean4:v\d+\.\d+\.\d+$/);
     expect(manifest.entries.length).toBeGreaterThanOrEqual(SENTINELS.length);
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
@@ -161,7 +164,7 @@ describe('vendored PhysJS manifest', () => {
       expect(bridge!.formalRef?.statement).toBe(entry.theorem);
       expect(bridge!.formalRef?.covers).toContain(entry.covers);
       expect(bridge!.formalRef?.covers).toContain(COVERAGE);
-      expect(bridge!.formalRef?.version).toContain(`physjs@${manifest.commit}`);
+      expect(bridge!.formalRef?.version).toContain(`upt-lean@${LEAN_SOURCE_TAG}`);
       expect(bridge!.formalRef?.fidelity).not.toBe('unreviewed');
       expect(FORMAL_REF_KINDS, entry.key).toContain(entry.kind);
       expect(bridge!.formalRef?.kind, entry.key).toBe(entry.kind);
@@ -187,9 +190,9 @@ describe('vendored PhysJS manifest', () => {
     }
   });
 
-  it('fails on a wrong commit, theorem, key, or coverage phrase', () => {
-    const wrongCommit = { ...manifest, commit: '0000000' };
-    expect(physjsManifestProblems({ manifest: wrongCommit, bridges: carriers }).join('\n')).toMatch(/commit is '0000000'/);
+  it('fails on a wrong toolchain, theorem, key, or coverage phrase', () => {
+    const wrongToolchain = { ...manifest, toolchain: 'leanprover/lean4:v0.0.0' };
+    expect(physjsManifestProblems({ manifest: wrongToolchain, bridges: carriers }).join('\n')).toMatch(/toolchain is 'leanprover\/lean4:v0\.0\.0'/);
 
     const wrongTheorem = {
       ...manifest,

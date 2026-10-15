@@ -1,5 +1,4 @@
 {
-  "commit": "a239a7085722f71f8d84b57407ccb1acdeda7b5b",
   "files": {
     "PhysJS.AbbeResolution.resolution_eq": "lean/AbbeResolution.lean",
     "PhysJS.AcDrude.ac_drude": "lean/AcDrude.lean",

@@ -1,42 +1,48 @@
 /**
- * Vendor the PhysJS files UPT pins, from a PhysJS checkout at the pinned commit,
- * or check that the committed copies are exactly that.
+ * Index the Lean proofs in this repository's `lean/`, or check that the
+ * committed index is the tree's.
  *
- * Three files under `formal/physjs/`, all read from PhysJS at one commit:
+ * The proofs moved here from PhysJS (11.0.0). Nothing is vendored and
+ * nothing is pinned to another repository: the index is read from the
+ * working tree. Two files under `formal/lean/` are written:
  *
- * - `manifest.json`: PhysJS `manifest/bridges.json`, with the commit appended
- *   as `commit` (the pin; `toolchain`, `mathlib` and `physlib` come with it);
- * - `lean-files.json`: every `.lean` file under `lean/` at the commit, sorted;
+ * - `lean-files.json`: every `.lean` file under `lean/`, sorted;
  * - `theorem-files.json`: the Lean file each manifest theorem is declared in.
+ *
+ * `formal/lean/manifest.json` is this repository's own record of what each
+ * statement covers. It is edited by hand, with the Lean file it describes.
+ * Its `toolchain`, `mathlib` and `physlib` fields must be the ones the lake
+ * project builds with (`lean-toolchain`, and the `inputRev` / `rev` of those
+ * packages in `lake-manifest.json`); `--check` fails when they are not.
  *
  * A namespace is not a file: `PhysJS.Einstein.friedmann_corollary` is in
  * `lean/VacuumFriedmann.lean`, and `PhysJS.SpringLc` is a namespace inside
  * `lean/OscillatorDictionary.lean`. So the file is read from the sources,
- * not from the theorem's name: every listed file is read at the commit, its
- * `namespace`, `section` and `end` lines are tracked, and each `theorem` or
- * `lemma` is recorded under its full name. A manifest theorem declared in no
- * file, or in two, is an error. `bun run physjs:table` then copies the result
- * into the generated table. CI's docs-fresh job runs `--check` against a
- * shallow fetch of PhysJS at the pinned commit.
+ * not from the theorem's name: every listed file is read, its `namespace`,
+ * `section` and `end` lines are tracked, and each `theorem` or `lemma` is
+ * recorded under its full name. A manifest theorem declared in no file, or
+ * in two, is an error. `bun run physjs:table` then copies the result into the
+ * generated table. CI's docs-fresh job runs `--check`; the `lean` job builds
+ * every file with `lake build`.
  *
- *   bun scripts/vendor-physjs.ts --physjs ../PhysJS --commit <sha>   # pin <sha>: write all three
- *   bun scripts/vendor-physjs.ts --physjs ../PhysJS                  # rewrite them at the current pin
- *   bun scripts/vendor-physjs.ts --physjs ../PhysJS --check          # exit 1 when one is not PhysJS's at the pin
+ *   bun scripts/lean-index.ts           # write both index files
+ *   bun scripts/lean-index.ts --check   # exit 1 when one is stale, or the manifest's toolchain is not the build's
  */
-import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const manifestPath = resolve(root, 'formal/physjs/manifest.json');
 
 interface Statement {
   readonly theorem: string;
 }
 
+/** `formal/lean/manifest.json`, the fields this script reads. */
 interface Manifest {
-  readonly commit: string;
+  readonly toolchain: string;
+  readonly mathlib: string;
+  readonly physlib: string;
   readonly entries: readonly (Statement & Readonly<Record<string, unknown>>)[];
 }
 
@@ -120,12 +126,12 @@ export function declaredTheorems(source: string): string[] {
   return out;
 }
 
-/** `{ commit, files }` for `manifest`, reading each listed file through `read`. */
+/** `{ files }` for `manifest`, reading each listed file through `read`. */
 export function theoremFiles(
   manifest: Manifest,
   leanFiles: readonly string[],
   read: (path: string) => string,
-): { readonly commit: string; readonly files: Readonly<Record<string, string>> } {
+): { readonly files: Readonly<Record<string, string>> } {
   const where = new Map<string, string[]>();
   for (const path of leanFiles) {
     for (const theorem of declaredTheorems(read(path))) where.set(theorem, [...(where.get(theorem) ?? []), path]);
@@ -138,59 +144,72 @@ export function theoremFiles(
     else files[theorem] = paths[0]!;
   }
   if (problems.length > 0) throw new Error(`manifest theorems without one declaring file:\n${problems.join('\n')}`);
-  return { commit: manifest.commit, files };
-}
-
-/** A PhysJS checkout read at one commit. */
-export interface PhysjsAtCommit {
-  /** The text of `path` at the commit. */
-  show(path: string): string;
-  /** Every file path at the commit. */
-  paths(): readonly string[];
+  return { files };
 }
 
 const json = (value: unknown): string => `${JSON.stringify(value, null, 2)}\n`;
 
-/** The three vendored files, path under the repository → text, rendered from PhysJS at `commit`. */
-export function vendoredFiles(commit: string, physjs: PhysjsAtCommit): Readonly<Record<string, string>> {
-  const manifest = { ...(JSON.parse(physjs.show('manifest/bridges.json')) as Omit<Manifest, 'commit'>), commit } as Manifest;
-  const leanFiles = physjs
-    .paths()
-    .filter((path) => path.startsWith('lean/') && path.endsWith('.lean'))
-    .sort();
+/** The lake project's own pins: the toolchain, and the Mathlib and Physlib revisions it builds with. */
+export interface LakePins {
+  readonly toolchain: string;
+  readonly mathlib: string;
+  readonly physlib: string;
+}
+
+/** Read `lean-toolchain` and `lake-manifest.json` text into {@link LakePins}. */
+export function lakePins(leanToolchain: string, lakeManifest: string): LakePins {
+  const packages = (JSON.parse(lakeManifest) as { packages: readonly { name: string; rev: string; inputRev?: string }[] }).packages;
+  const find = (name: string) => {
+    const pkg = packages.find((p) => p.name === name);
+    if (pkg === undefined) throw new Error(`lake-manifest.json has no package '${name}'`);
+    return pkg;
+  };
   return {
-    'formal/physjs/manifest.json': json(manifest),
-    'formal/physjs/lean-files.json': json(leanFiles),
-    'formal/physjs/theorem-files.json': json(theoremFiles(manifest, leanFiles, (path) => physjs.show(path))),
+    toolchain: leanToolchain.trim(),
+    mathlib: find('mathlib').inputRev ?? find('mathlib').rev,
+    physlib: find('Physlib').rev,
   };
 }
 
-function main(argv: readonly string[]): number {
-  const option = (name: string): string | undefined => {
-    const at = argv.indexOf(name);
-    return at >= 0 ? argv[at + 1] : undefined;
+/** Each manifest pin that is not the lake project's. Empty when they agree. */
+export function pinProblems(manifest: LakePins, lake: LakePins): string[] {
+  return (['toolchain', 'mathlib', 'physlib'] as const)
+    .filter((field) => manifest[field] !== lake[field])
+    .map((field) => `formal/lean/manifest.json ${field} is '${manifest[field]}', the lake project builds with '${lake[field]}'`);
+}
+
+/** The two index files, path under the repository → text, for `manifest` over `leanFiles` read through `read`. */
+export function indexFiles(
+  manifest: Manifest,
+  leanFiles: readonly string[],
+  read: (path: string) => string,
+): Readonly<Record<string, string>> {
+  const sorted = [...leanFiles].sort();
+  return {
+    'formal/lean/lean-files.json': json(sorted),
+    'formal/lean/theorem-files.json': json(theoremFiles(manifest, sorted, read)),
   };
-  const checkout = option('--physjs');
-  if (checkout === undefined) {
-    process.stderr.write('usage: bun scripts/vendor-physjs.ts --physjs <PhysJS checkout> [--commit <sha>] [--check]\n');
-    return 2;
-  }
-  const commit = option('--commit') ?? (JSON.parse(readFileSync(manifestPath, 'utf8')) as Manifest).commit;
-  const git = (args: readonly string[]): string =>
-    execFileSync('git', ['-C', checkout, ...args], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-  const files = vendoredFiles(commit, {
-    show: (path) => git(['show', `${commit}:${path}`]),
-    paths: () => git(['ls-tree', '-r', '--name-only', commit]).split('\n').filter((path) => path !== ''),
-  });
+}
+
+/** `lean/<File>.lean` for every Lean file in this tree's `lean/`. */
+export function treeLeanFiles(repo: string = root): string[] {
+  return readdirSync(resolve(repo, 'lean'))
+    .filter((name) => name.endsWith('.lean'))
+    .map((name) => `lean/${name}`)
+    .sort();
+}
+
+function main(argv: readonly string[]): number {
+  const read = (path: string): string => readFileSync(resolve(root, path), 'utf8');
+  const manifest = JSON.parse(read('formal/lean/manifest.json')) as Manifest;
+  const files = indexFiles(manifest, treeLeanFiles(), read);
   if (argv.includes('--check')) {
+    const problems = pinProblems(manifest, lakePins(read('lean-toolchain'), read('lake-manifest.json')));
     const stale = Object.entries(files)
-      .filter(([path, text]) => readFileSync(resolve(root, path), 'utf8') !== text)
-      .map(([path]) => path);
-    if (stale.length > 0) {
-      process.stderr.write(`not PhysJS's at ${commit}: ${stale.join(', ')}. Run bun scripts/vendor-physjs.ts --physjs <checkout>.\n`);
-      return 1;
-    }
-    return 0;
+      .filter(([path, text]) => read(path) !== text)
+      .map(([path]) => `${path} is not the index of lean/. Run bun scripts/lean-index.ts.`);
+    for (const line of [...problems, ...stale]) process.stderr.write(`${line}\n`);
+    return problems.length + stale.length > 0 ? 1 : 0;
   }
   for (const [path, text] of Object.entries(files)) writeFileSync(resolve(root, path), text);
   return 0;

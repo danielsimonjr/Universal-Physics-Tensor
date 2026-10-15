@@ -9,10 +9,10 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { declaredTheorems } from '../../scripts/vendor-physjs.js';
+import { declaredTheorems } from '../../scripts/lean-index.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const theoremFiles = (JSON.parse(readFileSync(resolve(root, 'formal/physjs/theorem-files.json'), 'utf-8')) as { files: Record<string, string> }).files;
+const theoremFiles = (JSON.parse(readFileSync(resolve(root, 'formal/lean/theorem-files.json'), 'utf-8')) as { files: Record<string, string> }).files;
 
 describe('lean/ holds every theorem a record names', () => {
   it('maps at least one theorem (the scan is not vacuous)', () => {

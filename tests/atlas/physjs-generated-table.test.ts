@@ -1,6 +1,6 @@
 /**
  * The PhysJS table `physjsFormalRef` reads is generated from
- * `formal/physjs/manifest.json`.
+ * `formal/lean/manifest.json`.
  *
  * A fresh run matches the committed file. A theorem edited in that file,
  * and a key deleted from it, fail the formal gate. The manifest is not edited
@@ -20,7 +20,7 @@ import { PHYSJS_ENTRIES } from '../../src/atlas/physjs-entries.generated.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const generatedPath = resolve(root, 'src/atlas/physjs-entries.generated.ts');
-const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf8')) as PhysjsManifestFile;
+const manifest = JSON.parse(readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf8')) as PhysjsManifestFile;
 const carriers = [
   ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),

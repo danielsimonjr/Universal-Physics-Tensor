@@ -915,14 +915,14 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/physjs-entries.generated.ts` - Generated from `formal/physjs/manifest.json` and `formal/physjs/theorem-files.json`.
+### `src/atlas/physjs-entries.generated.ts` - Generated from `formal/lean/manifest.json`, `formal/lean/theorem-files.json`
 
 **Exports:**
-- Constants: `PHYSJS_COMMIT`, `PHYSJS_TOOLCHAIN`, `PHYSJS_MATHLIB`, `PHYSJS_PHYS_LIB`, `PHYSJS_ENTRIES`
+- Constants: `LEAN_SOURCE_TAG`, `LEAN_TOOLCHAIN`, `LEAN_MATHLIB`, `LEAN_PHYSLIB`, `PHYSJS_ENTRIES`
 
 ---
 
-### `src/atlas/physjs-ref.ts` - Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
+### `src/atlas/physjs-ref.ts` - Reviewed `formalRef`s keyed by this repository's Lean manifest.
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -936,8 +936,8 @@ The codebase is organized into the following modules:
 | `../relations/types.js` | `FORMAL_REF_KINDS` | Import |
 | `../bridges/catalog-load.js` | `catalogEntries, catalogIdNumber` | Import |
 | `./physjs-reviewed.js` | `PHYSJS_REVIEWED_ROWS, PHYSJS_SANITY_LEMMA_KEYS` | Import |
-| `./physjs-entries.generated.js` | `PHYSJS_COMMIT, PHYSJS_MATHLIB, PHYSJS_PHYS_LIB, PHYSJS_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
-| `./physjs-entries.generated.js` | `PHYSJS_COMMIT` | Re-export |
+| `./physjs-entries.generated.js` | `LEAN_MATHLIB, LEAN_PHYSLIB, LEAN_SOURCE_TAG, LEAN_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
+| `./physjs-entries.generated.js` | `LEAN_SOURCE_TAG` | Re-export |
 
 **Exports:**
 - Interfaces: `PhysjsManifestEntry`, `PhysjsManifestFile`, `PhysjsReviewedRow`
@@ -949,7 +949,7 @@ The codebase is organized into the following modules:
   physjsFormalRef, physjsManifestProblems
   ```
 
-- Re-exports: `PHYSJS_COMMIT`
+- Re-exports: `LEAN_SOURCE_TAG`
 
 ---
 

@@ -241,7 +241,7 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
   // certifies the TRANSFORMATION (mass mℓ², spring constant mgℓ, ω0² = g/ℓ),
   // not `bound.delta`. Physlib's period results concern `periodFormula`, which
   // its own TODO has not yet tied to the motion. The sanity lemmas instantiate
-  // that imported statement. Keyed by `formal/physjs/manifest.json`.
+  // that imported statement. Keyed by `formal/lean/manifest.json`.
   formalRef: physjsFormalRef('ab-pendulum-linear'),
 };
 

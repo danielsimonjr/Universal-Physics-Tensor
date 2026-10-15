@@ -19,7 +19,7 @@
  * - the checkout is not at the commit and toolchain that each `formalRef.version` records;
  * - there is nothing to check (no probed theorem, no reference, or a `#print axioms` line that the
  *   gate cannot parse), so that the gate cannot pass by checking nothing;
- * - a `lean4-physjs` formalRef disagrees with `formal/physjs/manifest.json` (commit, theorem, key,
+ * - a `lean4-physjs` formalRef disagrees with `formal/lean/manifest.json` (version, theorem, key,
  *   axioms, or the coverage phrase), or a manifest entry does not resolve to a bridge. That system
  *   is not skipped. The manifest check does not run Lean.
  *

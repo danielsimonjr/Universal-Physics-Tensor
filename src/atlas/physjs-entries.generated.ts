@@ -1,24 +1,25 @@
 /**
- * Generated from `formal/physjs/manifest.json` and `formal/physjs/theorem-files.json`.
+ * Generated from `formal/lean/manifest.json`, `formal/lean/theorem-files.json`
+ * and the `version` of `package.json`.
  * Do not edit by hand.
  * `bun run physjs:table` rewrites this file. A stale copy fails the docs gate,
  * and a hand-edited theorem fails `atlas:formal-gate`.
  */
 
-/** PhysJS commit recorded by the vendored manifest. */
-export const PHYSJS_COMMIT = "a239a7085722f71f8d84b57407ccb1acdeda7b5b";
+/** The release tag whose `lean/` tree the permalinks name: `v` and the package version. */
+export const LEAN_SOURCE_TAG = "v10.0.0";
 
-/** Lean toolchain recorded by the vendored manifest. */
-export const PHYSJS_TOOLCHAIN = "leanprover/lean4:v4.34.1";
+/** Lean toolchain the lake project builds with, as the manifest records it. */
+export const LEAN_TOOLCHAIN = "leanprover/lean4:v4.34.1";
 
-/** Mathlib version recorded by the vendored manifest. */
-export const PHYSJS_MATHLIB = "v4.34.1";
+/** Mathlib version the lake project builds with, as the manifest records it. */
+export const LEAN_MATHLIB = "v4.34.1";
 
-/** PhysLib commit recorded by the vendored manifest. */
-export const PHYSJS_PHYS_LIB = "af484f78ee0701290595f8bf892b157b10d64940";
+/** Physlib commit the lake project builds with, as the manifest records it. */
+export const LEAN_PHYSLIB = "af484f78ee0701290595f8bf892b157b10d64940";
 
 /**
- * Compiled entry table copied from the vendored manifest entries. Each
+ * Compiled entry table copied from the manifest entries. Each
  * statement, nested ones included, carries its manifest kind and the Lean file
  * that declares it; each nested statement is named by its manifest field.
  */
@@ -1846,7 +1847,7 @@ export const PHYSJS_ENTRIES = [
     kind: "bridge",
     theorem: "PhysJS.Arrhenius.arrhenius_eq",
     file: "Arrhenius.lean",
-    covers: "k = A exp(−Ea/(R T)) with R = N_A k_B is the molecular factor exp(−ε/(k_B T)) at ε = Ea/N_A. The prefactor A is temperature-independent here. Not the Eyring identification of A",
+    covers: "a positive differentiable k(T) whose activation energy R T² d(ln k)/dT is one constant Ea on T > 0 is k = A exp(−Ea/(R T)) for one constant A > 0. At R = N_A k_B and ε = Ea/N_A it is A times the share above ε of a Boltzmann weight exp(−E/(k_B T)) on E > 0, and that share is exp(−ε/(k_B T)). The same file proves the converse, ln k = ln A − (Ea/R)(1/T), ln(k₂/k₁) = −(Ea/R)(1/T₂ − 1/T₁), k > 0, and strict increase in T when Ea > 0. A is not derived. Not the Eyring identification of A",
     coverage: "covers its statement only",
     leanProof: "complete",
     axioms: ["propext", "Classical.choice", "Quot.sound"],
@@ -1858,7 +1859,7 @@ export const PHYSJS_ENTRIES = [
     kind: "bridge",
     theorem: "PhysJS.Eyring.eyring_eq",
     file: "Eyring.lean",
-    covers: "k = (k_B T/h) exp(−ΔG‡/(k_B T)). The molar form calls PhysJS.Arrhenius.arrhenius_eq at R = N_A k_B. The logarithmic derivative is Ea = ΔH‡ + R T. That Ea is not the constant in k = A exp(−Ea/(R T)) at A = (k_B T/h) exp(ΔS‡/R); those substitutions differ by exp(−1). The transmission coefficient is 1",
+    covers: "k = (k_B T/h) exp(−ΔG‡/(k_B T)). The molar form calls PhysJS.Arrhenius.molar_exponent, the R = N_A k_B step of PhysJS.Arrhenius.arrhenius_eq. The logarithmic derivative is Ea = ΔH‡ + R T. That Ea is not the constant in k = A exp(−Ea/(R T)) at A = (k_B T/h) exp(ΔS‡/R); those substitutions differ by exp(−1). The transmission coefficient is 1",
     coverage: "covers its statement only",
     leanProof: "complete",
     axioms: ["propext", "Classical.choice", "Quot.sound"],

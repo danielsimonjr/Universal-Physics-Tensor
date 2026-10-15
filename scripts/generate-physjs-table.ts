@@ -1,8 +1,9 @@
 /**
- * Write the TypeScript table `physjsFormalRef` reads from the vendored
- * PhysJS manifest and the theorem → file table vendored beside it
- * (`scripts/vendor-physjs.ts`). The manifest is the pin. This
- * script writes that table and nothing else. A manifest field outside the base
+ * Write the TypeScript table `physjsFormalRef` reads from this repository's
+ * Lean manifest (`formal/lean/manifest.json`) and the theorem → file index
+ * beside it (`scripts/lean-index.ts`). The Lean sources are this repository's
+ * `lean/`; their permalinks are at the release tag `v<package.json version>`.
+ * This script writes that table and nothing else. A manifest field outside the base
  * set is a nested statement when it has exactly the statement fields, and an
  * error otherwise; no list of nested names is kept here.
  *
@@ -16,8 +17,9 @@ import { fileURLToPath } from 'node:url';
 import { FORMAL_REF_KINDS } from '../src/relations/types.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const manifestPath = resolve(root, 'formal/physjs/manifest.json');
-const theoremFilesPath = resolve(root, 'formal/physjs/theorem-files.json');
+const manifestPath = resolve(root, 'formal/lean/manifest.json');
+const theoremFilesPath = resolve(root, 'formal/lean/theorem-files.json');
+const packagePath = resolve(root, 'package.json');
 const outPath = resolve(root, 'src/atlas/physjs-entries.generated.ts');
 
 /** The fields every manifest entry may carry. Any other field is a nested statement, or an error. */
@@ -47,16 +49,14 @@ interface Entry extends Statement {
 
 interface Manifest {
   readonly schema: string;
-  readonly commit: string;
   readonly toolchain: string;
   readonly mathlib: string;
   readonly physlib: string;
   readonly entries: readonly Entry[];
 }
 
-/** `formal/physjs/theorem-files.json`: theorem → the Lean file that declares it, at `commit`. */
+/** `formal/lean/theorem-files.json`: theorem → the Lean file under `lean/` that declares it. */
 interface TheoremFiles {
-  readonly commit: string;
   readonly files: Readonly<Record<string, string>>;
 }
 
@@ -84,7 +84,7 @@ function nestedStatements(entry: Entry): { readonly name: string; readonly state
 
 function fileOf(files: TheoremFiles, theorem: string): string {
   const path = files.files[theorem];
-  if (path === undefined) throw new Error(`formal/physjs/theorem-files.json has no file for '${theorem}'`);
+  if (path === undefined) throw new Error(`formal/lean/theorem-files.json has no file for '${theorem}'`);
   if (!/^lean\/[^/]+\.lean$/.test(path)) throw new Error(`'${theorem}' file '${path}' is not lean/<File>.lean`);
   return path.slice('lean/'.length);
 }
@@ -120,35 +120,33 @@ function emitEntry(entry: Entry, files: TheoremFiles): string {
   return lines.join('\n');
 }
 
-export function renderPhysjsTable(manifest: Manifest, files: TheoremFiles): string {
-  if (manifest.schema !== 'physjs-bridge-manifest/v2') {
-    throw new Error(`manifest schema is '${manifest.schema}', expected 'physjs-bridge-manifest/v2'`);
-  }
-  if (files.commit !== manifest.commit) {
-    throw new Error(`formal/physjs/theorem-files.json is for '${files.commit}', the manifest is '${manifest.commit}'`);
+export function renderPhysjsTable(manifest: Manifest, files: TheoremFiles, packageVersion: string): string {
+  if (manifest.schema !== 'upt-lean-manifest/v1') {
+    throw new Error(`manifest schema is '${manifest.schema}', expected 'upt-lean-manifest/v1'`);
   }
   const body = manifest.entries.map((entry) => emitEntry(entry, files)).join('\n');
   return `/**
- * Generated from \`formal/physjs/manifest.json\` and \`formal/physjs/theorem-files.json\`.
+ * Generated from \`formal/lean/manifest.json\`, \`formal/lean/theorem-files.json\`
+ * and the \`version\` of \`package.json\`.
  * Do not edit by hand.
  * \`bun run physjs:table\` rewrites this file. A stale copy fails the docs gate,
  * and a hand-edited theorem fails \`atlas:formal-gate\`.
  */
 
-/** PhysJS commit recorded by the vendored manifest. */
-export const PHYSJS_COMMIT = ${quote(manifest.commit)};
+/** The release tag whose \`lean/\` tree the permalinks name: \`v\` and the package version. */
+export const LEAN_SOURCE_TAG = ${quote(`v${packageVersion}`)};
 
-/** Lean toolchain recorded by the vendored manifest. */
-export const PHYSJS_TOOLCHAIN = ${quote(manifest.toolchain)};
+/** Lean toolchain the lake project builds with, as the manifest records it. */
+export const LEAN_TOOLCHAIN = ${quote(manifest.toolchain)};
 
-/** Mathlib version recorded by the vendored manifest. */
-export const PHYSJS_MATHLIB = ${quote(manifest.mathlib)};
+/** Mathlib version the lake project builds with, as the manifest records it. */
+export const LEAN_MATHLIB = ${quote(manifest.mathlib)};
 
-/** PhysLib commit recorded by the vendored manifest. */
-export const PHYSJS_PHYS_LIB = ${quote(manifest.physlib)};
+/** Physlib commit the lake project builds with, as the manifest records it. */
+export const LEAN_PHYSLIB = ${quote(manifest.physlib)};
 
 /**
- * Compiled entry table copied from the vendored manifest entries. Each
+ * Compiled entry table copied from the manifest entries. Each
  * statement, nested ones included, carries its manifest kind and the Lean file
  * that declares it; each nested statement is named by its manifest field.
  */
@@ -161,7 +159,8 @@ ${body}
 function main(): void {
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as Manifest;
   const files = JSON.parse(readFileSync(theoremFilesPath, 'utf8')) as TheoremFiles;
-  const rendered = renderPhysjsTable(manifest, files);
+  const { version } = JSON.parse(readFileSync(packagePath, 'utf8')) as { version: string };
+  const rendered = renderPhysjsTable(manifest, files, version);
   const stdout = process.argv.includes('--stdout');
   const check = process.argv.includes('--check');
   if (stdout) {

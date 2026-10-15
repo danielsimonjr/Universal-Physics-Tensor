@@ -598,7 +598,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
-        "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -606,7 +606,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/OscillatorDictionary.lean",
+        "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/OscillatorDictionary.lean",
         "covers": "the oscillator dictionary — covers its statement only"
       },
       "normTransports": [
@@ -725,7 +725,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.DampedRlc.time_rescale_equationOfMotion",
-        "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -733,7 +733,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/OscillatorDictionary.lean",
+        "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/OscillatorDictionary.lean",
         "covers": "the oscillator dictionary — covers its statement only"
       }
     },
@@ -831,7 +831,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
-        "version": "physjs@a239a7085722f71f8d84b57407ccb1acdeda7b5b leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -839,7 +839,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/a239a7085722f71f8d84b57407ccb1acdeda7b5b/lean/Pendulum.lean",
+        "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/Pendulum.lean",
         "covers": "the transformation, not bound.delta — covers its statement only"
       }
     },

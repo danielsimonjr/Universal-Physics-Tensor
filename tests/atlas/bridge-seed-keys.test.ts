@@ -23,7 +23,7 @@ import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 const KIND_PREFIX = new RegExp(`^(${FORMAL_REF_KINDS.join('|')}): `);
 
 const MANIFEST = JSON.parse(
-  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../formal/physjs/manifest.json'), 'utf8'),
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../formal/lean/manifest.json'), 'utf8'),
 ) as { readonly entries: readonly { readonly key: string; readonly kind: string; readonly covers: string }[] };
 
 const ATLAS_KEYS = ATLAS_FAMILIES.flatMap((family) => family.bridges)

@@ -14,7 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
-import { PHYSJS_COMMIT, physjsFileUrl, physjsFormalRef, physjsLeanFile, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
+import { LEAN_SOURCE_TAG, physjsFileUrl, physjsFormalRef, physjsLeanFile, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { catalogEntries } from '../../src/bridges/catalog-load.js';
 import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
@@ -24,7 +24,7 @@ import { fileURLToPath } from 'node:url';
 import { CENSUS } from '../helpers/census.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const MANIFEST = JSON.parse(readFileSync(resolve(ROOT, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
+const MANIFEST = JSON.parse(readFileSync(resolve(ROOT, 'formal/lean/manifest.json'), 'utf-8')) as PhysjsManifestFile;
 const KIND_OF = new Map(MANIFEST.entries.map((entry) => [entry.key, entry.kind]));
 /** A covers line that opens with a kind word, which the v2 manifest does not write. */
 const KIND_PREFIX = new RegExp(`^(${FORMAL_REF_KINDS.join('|')}): `);
@@ -147,7 +147,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.
     for (const ref of refs) {
       expect(ref.url).toBe(physjsFileUrl(physjsLeanFile(ref.statement)));
-      expect(ref.url).toContain(`/blob/${PHYSJS_COMMIT}/lean/`);
+      expect(ref.url).toContain(`/blob/${LEAN_SOURCE_TAG}/lean/`);
       expect(ref.url).not.toContain('/lean/PhysJS/');
     }
     const spring = refs.find((ref) => ref.statement === 'PhysJS.SpringLc.time_rescale_equationOfMotion');

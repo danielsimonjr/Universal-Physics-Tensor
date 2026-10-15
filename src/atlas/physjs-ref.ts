@@ -1,16 +1,20 @@
 /**
- * Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
+ * Reviewed `formalRef`s keyed by this repository's Lean manifest.
  *
- * The manifest file is `formal/physjs/manifest.json` (PhysJS `manifest/bridges.json`
- * at the commit that file records). `src/` cannot import a file outside its root,
- * so `physjs-entries.generated.ts` is the table this module reads.
- * `bun run physjs:table` writes that file from the manifest and writes nothing else.
- * `tests/atlas/physjs-manifest.test.ts` fails when the file and that table disagree
- * on the commit, a theorem, a key, or the coverage phrase.
+ * The Lean proofs are this repository's `lean/` (they moved from PhysJS in
+ * 11.0.0, with their history; the `PhysJS.*` theorem names are Lean
+ * namespaces, not a dependency). The manifest file is `formal/lean/manifest.json`.
+ * `src/` cannot import a file outside its root, so `physjs-entries.generated.ts`
+ * is the table this module reads. `bun run physjs:table` writes that file from
+ * the manifest and writes nothing else. `tests/atlas/physjs-manifest.test.ts`
+ * fails when the file and that table disagree on the toolchain, a theorem, a
+ * key, or the coverage phrase. CI's `lean` job builds every file under `lean/`
+ * and audits its axioms; this module does not run Lean.
  *
- * The commit is `PHYSJS_COMMIT`, copied from the manifest. Which PhysJS pull
- * request added which keys, and what the pin was before, is history and lives
- * in `NOTES.md` and `CHANGELOG.md`, not here.
+ * Permalinks name `lean/<File>.lean` at the release tag `LEAN_SOURCE_TAG`
+ * (`v` and the package version), so a published version links to the proofs
+ * it shipped with. Which PhysJS pull request added which keys, and the PhysJS
+ * pins before the move, are history in `NOTES.md` and `CHANGELOG.md`.
  *
  * Each statement's `kind`, nested ones included, is the manifest's own field
  * (schema `physjs-bridge-manifest/v2`), which PhysJS reads from the kind line
@@ -35,19 +39,19 @@ import { FORMAL_REF_KINDS } from '../relations/types.js';
 import { catalogEntries, catalogIdNumber } from '../bridges/catalog-load.js';
 import { PHYSJS_REVIEWED_ROWS, PHYSJS_SANITY_LEMMA_KEYS } from './physjs-reviewed.js';
 import {
-  PHYSJS_COMMIT,
-  PHYSJS_MATHLIB,
-  PHYSJS_PHYS_LIB,
-  PHYSJS_TOOLCHAIN,
+  LEAN_MATHLIB,
+  LEAN_PHYSLIB,
+  LEAN_SOURCE_TAG,
+  LEAN_TOOLCHAIN,
   PHYSJS_ENTRIES as GENERATED_PHYSJS_ENTRIES,
 } from './physjs-entries.generated.js';
 
 /**
- * PhysJS commit the vendored manifest records.
+ * The release tag whose `lean/` tree the permalinks name.
  *
  * @internal
  */
-export { PHYSJS_COMMIT } from './physjs-entries.generated.js';
+export { LEAN_SOURCE_TAG } from './physjs-entries.generated.js';
 
 /**
  * Every reviewed PhysJS reference covers its statement only. A lemma about
@@ -82,7 +86,7 @@ const STATEMENT_FIELDS = ['axioms', 'coverage', 'covers', 'kind', 'leanProof', '
 
 /** A compiled statement: the manifest's fields and the Lean file that declares its theorem. */
 interface PhysjsCompiledStatement extends PhysjsStatement {
-  /** `<File>.lean` under `lean/` at the pin, from `formal/physjs/theorem-files.json`. */
+  /** `<File>.lean` under `lean/`, from `formal/lean/theorem-files.json`. */
   readonly file: string;
 }
 
@@ -136,10 +140,9 @@ export function physjsNestedStatements(entry: PhysjsManifestEntry): {
   return { nested, problems };
 }
 
-/** The vendored manifest, as this module compares it. @internal */
+/** The Lean manifest, as this module compares it. @internal */
 export interface PhysjsManifestFile {
   readonly schema: string;
-  readonly commit: string;
   readonly toolchain: string;
   readonly mathlib: string;
   readonly physlib: string;
@@ -167,15 +170,15 @@ export function physjsTheorem(key: string): string | undefined {
   return entryByKey.get(key)?.theorem;
 }
 
-/** `formalRef.version` for the pinned manifest. */
+/** `formalRef.version`: the release tag of `lean/` and the toolchain it builds with. */
 function physjsVersion(): string {
-  return `physjs@${PHYSJS_COMMIT} ${PHYSJS_TOOLCHAIN} mathlib:${PHYSJS_MATHLIB} physlib@${PHYSJS_PHYS_LIB}`;
+  return `upt-lean@${LEAN_SOURCE_TAG} ${LEAN_TOOLCHAIN} mathlib:${LEAN_MATHLIB} physlib@${LEAN_PHYSLIB}`;
 }
 
 /**
- * Lean file name that contains `theorem` at the pinned commit.
+ * Lean file name under `lean/` that declares `theorem`.
  *
- * Read from the compiled table, which copies `formal/physjs/theorem-files.json`:
+ * Read from the compiled table, which copies `formal/lean/theorem-files.json`:
  * the file is where the theorem is declared, not its namespace
  * (`PhysJS.Einstein.friedmann_corollary` is in `VacuumFriedmann.lean`;
  * `PhysJS.SpringLc` is a namespace inside `OscillatorDictionary.lean`).
@@ -185,23 +188,22 @@ function physjsVersion(): string {
  */
 export function physjsLeanFile(theorem: string): string {
   const file = FILE_BY_THEOREM.get(theorem);
-  if (file === undefined) throw new Error(`PhysJS theorem '${theorem}' is not a statement of the vendored manifest`);
+  if (file === undefined) throw new Error(`PhysJS theorem '${theorem}' is not a statement of the Lean manifest`);
   return file;
 }
 
 /**
- * Permalink to one Lean file at the pinned commit.
+ * Permalink to one Lean file of this repository at the release tag.
  *
- * PhysJS #63 stores sources at `lean/<File>.lean`. This is the only builder
- * of those URLs.
+ * Sources are `lean/<File>.lean`. This is the only builder of those URLs.
  *
  * @internal
  */
 export function physjsFileUrl(file: string): string {
-  return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/lean/${file}`;
+  return `https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/${LEAN_SOURCE_TAG}/lean/${file}`;
 }
 
-/** Permalink to the Lean file that contains `theorem` at the pinned commit. */
+/** Permalink to the Lean file that declares `theorem`, at the release tag. */
 function physjsStatementUrl(theorem: string): string {
   return physjsFileUrl(physjsLeanFile(theorem));
 }
@@ -405,9 +407,9 @@ function isFormalRefKind(kind: unknown): kind is FormalRefKind {
 /**
  * Problems in the vendored manifest against the bridges that claim to be keyed
  * by it. Empty means every entry resolves to a `lean4-physjs` reference whose
- * theorem, axioms, commit and coverage phrase are the entry's own.
+ * theorem, axioms, version and coverage phrase are the entry's own.
  *
- * A wrong commit, theorem, key or coverage phrase is a problem. A manifest
+ * A wrong toolchain, version, theorem, key or coverage phrase is a problem. A manifest
  * entry with no bridge is a problem. A `lean4-physjs` reference with no entry
  * is a problem: the gate does not skip that system. A nested object is kept
  * and compared; naming it as the `formalRef` is a problem. The top-level
@@ -431,20 +433,17 @@ export function physjsManifestProblems(input: {
 }): string[] {
   const problems: string[] = [];
   const manifest = input.manifest;
-  if (manifest.schema !== 'physjs-bridge-manifest/v2') {
-    problems.push(`manifest schema is '${manifest.schema}', expected 'physjs-bridge-manifest/v2'`);
+  if (manifest.schema !== 'upt-lean-manifest/v1') {
+    problems.push(`manifest schema is '${manifest.schema}', expected 'upt-lean-manifest/v1'`);
   }
-  if (manifest.commit !== PHYSJS_COMMIT) {
-    problems.push(`manifest commit is '${manifest.commit}', expected '${PHYSJS_COMMIT}'`);
+  if (manifest.toolchain !== LEAN_TOOLCHAIN) {
+    problems.push(`manifest toolchain is '${manifest.toolchain}', expected '${LEAN_TOOLCHAIN}'`);
   }
-  if (manifest.toolchain !== PHYSJS_TOOLCHAIN) {
-    problems.push(`manifest toolchain is '${manifest.toolchain}', expected '${PHYSJS_TOOLCHAIN}'`);
+  if (manifest.mathlib !== LEAN_MATHLIB) {
+    problems.push(`manifest mathlib is '${manifest.mathlib}', expected '${LEAN_MATHLIB}'`);
   }
-  if (manifest.mathlib !== PHYSJS_MATHLIB) {
-    problems.push(`manifest mathlib is '${manifest.mathlib}', expected '${PHYSJS_MATHLIB}'`);
-  }
-  if (manifest.physlib !== PHYSJS_PHYS_LIB) {
-    problems.push(`manifest physlib is '${manifest.physlib}', expected '${PHYSJS_PHYS_LIB}'`);
+  if (manifest.physlib !== LEAN_PHYSLIB) {
+    problems.push(`manifest physlib is '${manifest.physlib}', expected '${LEAN_PHYSLIB}'`);
   }
 
   const compiledEntries = input.compiledEntries ?? PHYSJS_ENTRIES;
@@ -500,12 +499,12 @@ export function physjsManifestProblems(input: {
         );
       }
       if (!fileByTheorem.has(statement.theorem)) {
-        problems.push(`manifest theorem '${statement.theorem}' (${entry.key}.${statement.name}) has no Lean file in formal/physjs/theorem-files.json`);
+        problems.push(`manifest theorem '${statement.theorem}' (${entry.key}.${statement.name}) has no Lean file in formal/lean/theorem-files.json`);
       }
     }
     const file = fileByTheorem.get(entry.theorem);
     if (file === undefined) {
-      problems.push(`manifest theorem '${entry.theorem}' has no Lean file in formal/physjs/theorem-files.json`);
+      problems.push(`manifest theorem '${entry.theorem}' has no Lean file in formal/lean/theorem-files.json`);
     }
     const compiled = compiledByKey.get(entry.key);
     if (compiled === undefined) {
@@ -554,8 +553,8 @@ export function physjsManifestProblems(input: {
     if (!ref.covers.includes(entry.covers)) {
       problems.push(`bridge '${entry.key}' covers line does not record '${entry.covers}'`);
     }
-    if (ref.version !== physjsVersion() || !ref.version.includes(`physjs@${manifest.commit}`)) {
-      problems.push(`bridge '${entry.key}' version '${ref.version}' does not record commit '${manifest.commit}'`);
+    if (ref.version !== physjsVersion()) {
+      problems.push(`bridge '${entry.key}' version '${ref.version}' is not '${physjsVersion()}'`);
     }
     if (ref.fidelity === 'unreviewed') {
       problems.push(`bridge '${entry.key}' formalRef is unreviewed`);

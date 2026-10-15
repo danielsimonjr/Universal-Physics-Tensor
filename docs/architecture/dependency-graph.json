@@ -3248,27 +3248,27 @@
         ]
       },
       "src/atlas/physjs-entries.generated.ts": {
-        "description": "Generated from `formal/physjs/manifest.json` and `formal/physjs/theorem-files.json`.",
+        "description": "Generated from `formal/lean/manifest.json`, `formal/lean/theorem-files.json`",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
-          "PHYSJS_COMMIT",
-          "PHYSJS_TOOLCHAIN",
-          "PHYSJS_MATHLIB",
-          "PHYSJS_PHYS_LIB",
+          "LEAN_SOURCE_TAG",
+          "LEAN_TOOLCHAIN",
+          "LEAN_MATHLIB",
+          "LEAN_PHYSLIB",
           "PHYSJS_ENTRIES"
         ],
         "constants": [
-          "PHYSJS_COMMIT",
-          "PHYSJS_TOOLCHAIN",
-          "PHYSJS_MATHLIB",
-          "PHYSJS_PHYS_LIB",
+          "LEAN_SOURCE_TAG",
+          "LEAN_TOOLCHAIN",
+          "LEAN_MATHLIB",
+          "LEAN_PHYSLIB",
           "PHYSJS_ENTRIES"
         ]
       },
       "src/atlas/physjs-ref.ts": {
-        "description": "Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.",
+        "description": "Reviewed `formalRef`s keyed by this repository's Lean manifest.",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -3311,23 +3311,23 @@
           {
             "file": "./physjs-entries.generated.js",
             "imports": [
-              "PHYSJS_COMMIT",
-              "PHYSJS_MATHLIB",
-              "PHYSJS_PHYS_LIB",
-              "PHYSJS_TOOLCHAIN",
+              "LEAN_MATHLIB",
+              "LEAN_PHYSLIB",
+              "LEAN_SOURCE_TAG",
+              "LEAN_TOOLCHAIN",
               "PHYSJS_ENTRIES"
             ]
           },
           {
             "file": "./physjs-entries.generated.js",
             "imports": [
-              "PHYSJS_COMMIT"
+              "LEAN_SOURCE_TAG"
             ],
             "reExport": true
           }
         ],
         "exports": [
-          "PHYSJS_COMMIT",
+          "LEAN_SOURCE_TAG",
           "physjsNestedStatements",
           "physjsTheorem",
           "physjsLeanFile",
@@ -3342,7 +3342,7 @@
           "physjsManifestProblems"
         ],
         "reExported": [
-          "PHYSJS_COMMIT"
+          "LEAN_SOURCE_TAG"
         ],
         "interfaces": [
           "PhysjsManifestEntry",

@@ -32,7 +32,7 @@ const ONE_LOCAL = [
   'M_PROTON_SI',
   'evaluateMetricInverse',
   'dim',
-  'PHYSJS_COMMIT',
+  'LEAN_SOURCE_TAG',
   'MASS_DENSITY',
   // The second file was the citation-quote lexer reading a comment in
   // src/bridges/index.ts as an export. That comment now lives in
