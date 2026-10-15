@@ -14,8 +14,10 @@
  * does not carry, a throw inside the simplifier, is NOT SHOWN EQUAL: a
  * negative answer here is an absence of proof, never a proof of difference.
  *
- * MathTS `symbolicEqual` is not used: the installed version passes an empty
- * rule list and compares every pair false.
+ * MathTS `symbolicEqual` is not used. Before `@danielsimonjr/mathts-functions`
+ * 0.68.4 it passed an empty rule list and compared every pair false; from
+ * 0.68.4 it simplifies with the default rules, and it is the same simplifier
+ * this step calls, so it would be the same method, not a second one.
  *
  * The first use runs inside the one console-silencing window
  * `mathts-quiet.ts` describes, as `mathts-scalar-symbols.ts` does for its

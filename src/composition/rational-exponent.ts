@@ -8,9 +8,9 @@
  * and refuses otherwise, so an irrational is never approximated into a
  * rational and a rounding error never becomes a denominator of 10¹⁶.
  *
- * `Fraction.fromNumber(x, cap)` is asked first; the installed version can
- * return a denominator above its cap, so the cap and the tolerance are checked
- * here. When that answer is refused, a bounded-denominator scan (the one
+ * `Fraction.fromNumber(x, cap)` is asked first. Before `@danielsimonjr/mathts-core`
+ * 0.18.1 it could return a denominator above its cap; the cap and the tolerance
+ * are still checked here, which costs nothing and catches a regression. When that answer is refused, a bounded-denominator scan (the one
  * `dimensional/buckingham.ts` uses for dimension exponents) is the second
  * method, so a rational the continued fraction stepped past is still found.
  *
