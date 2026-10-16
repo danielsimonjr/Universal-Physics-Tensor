@@ -11206,7 +11206,13 @@
             "file": "./composition/discovery.js",
             "imports": [
               "rankDiscoveries",
-              "ANCHOR_DEFAULT",
+              "ANCHOR_DEFAULT"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/discovery.js",
+            "imports": [
               "hasMagnitudeEvidence",
               "isPromisingTier"
             ],
@@ -27641,7 +27647,7 @@
   "statistics": {
     "totalTypeScriptFiles": 384,
     "totalModules": 13,
-    "totalLinesOfCode": 86126,
+    "totalLinesOfCode": 86128,
     "totalExports": 2748,
     "totalClasses": 85,
     "totalInterfaces": 508,

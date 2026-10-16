@@ -3351,7 +3351,8 @@ The codebase is organized into the following modules:
 | `./dimensional/dimension-spec.js` | `parseDimensionSpec` | Re-export |
 | `./composition/bridge-prediction.js` | `predictMissingBridges` | Re-export |
 | `./composition/frontier-account.js` | `catalogFrontierAccount, formatFrontierAccount` | Re-export |
-| `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT, hasMagnitudeEvidence, isPromisingTier` | Re-export |
+| `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
+| `./composition/discovery.js` | `hasMagnitudeEvidence, isPromisingTier` | Re-export |
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
 | `./composition/audit-coverage.js` | `auditCoverage` | Re-export |
 | `./bridges/confrontations.js` | `CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution` | Re-export |
@@ -7576,7 +7577,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 384 |
 | Total Modules | 13 |
-| Total Lines of Code | 86126 |
+| Total Lines of Code | 86128 |
 | Total Exports | 2748 |
 | Total Re-exports | 1389 |
 | Total Classes | 85 |
