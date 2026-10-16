@@ -41,6 +41,7 @@ import { conventionFactor, conventionScaleToSI } from '../dimensional/unit-conve
 import { CONSTANT_REGISTRY } from '../dimensional/symbolic-constants.js';
 import { centralPartial } from '../numerical/finite-difference.js';
 import { byKey, compareCodepoint } from '../core/compare.js';
+import { formatQuantity } from '../core/format.js';
 
 /**
  * Relative difference above which two edges deriving one quantity disagree. Two encodings of one
@@ -306,7 +307,7 @@ export function deriveOwnEquationMagnitudes(
           edges: [f.edge],
           sigmaDecades: sigma,
           detail:
-            `${f.edge} gives ${name} from ${f.inputs.join(', ')} at σ = ${sigma.toPrecision(3)} decades, ` +
+            `${f.edge} gives ${name} from ${f.inputs.join(', ')} at σ = ${formatQuantity(sigma, 3)} decades, ` +
             `above the ${maxSigmaDecades}-decade precision the gate requires`,
         });
         continue;
@@ -325,7 +326,7 @@ function disagreement(name: string, sorted: readonly Firing[]): DerivedMagnitude
     reason: 'disagreeing-edges',
     edges: sorted.map((f) => f.edge),
     detail:
-      `${sorted.map((f) => `${f.edge} gives ${f.value.toPrecision(4)}`).join(', ')}: ` +
+      `${sorted.map((f) => `${f.edge} gives ${formatQuantity(f.value, 4)}`).join(', ')}: ` +
       `they differ by more than a relative ${DERIVED_AGREEMENT}, so no edge is taken`,
   };
 }

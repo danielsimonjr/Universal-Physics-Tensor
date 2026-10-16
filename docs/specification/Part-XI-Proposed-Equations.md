@@ -35,19 +35,18 @@ the widest source scope, `upt discover --source=both --derive` (catalog ∪ cano
 
 ## 2. Catalog of proposed equations
 
-Snapshot of **5 proposed equations** for `--source=both` (**3** for
-`--source=canonical`; regenerate with the command in §4 — the count is a
-measurement, not a fixed cardinality). The set **grew from 2 → 5 (1 → 3 canonical)**
-when the Adam+Eve canonical-L-layer expansion (29 → 66 laws) added new
-`fully-quantitative` monomial laws — chiefly `CE-mass-energy` (E = mc²) and
-`CE-hubble-distance` (D_H = c/H) — that pair *cross-cluster* with existing ones.
-This is exactly the growth condition this section predicted: it requires new clean
-closed-form (monomial) relations, **physics content, not tuning**. The set remains
-invariant under the discovery knobs — `--max-orders` and `--anchor` reshape the
-candidate funnel but add no proposal (every extra promising candidate pairs a
-clean-monomial source with a non-monomial one).
+The table below lists the proposals this part records and adjudicated (PE-1 to PE-5).
+The live list is a measurement, regenerated with the command in §4, and can differ from
+this table; its members and counts are recorded in `NOTES.md`, not here. The set grows
+only when new `fully-quantitative` monomial laws pair *cross-cluster* with existing ones
+(as `CE-mass-energy`, E = mc², and `CE-hubble-distance`, D_H = c/H, did when the
+canonical L-layer was expanded): that requires new clean closed-form (monomial)
+relations, **physics content, not tuning**. It shrinks when a falsifier removes an
+identification (PE-5). The discovery knobs are not neutral: `--anchor` reshapes the
+candidate funnel, and a looser `--max-orders` readmits an identification the magnitude
+gate falsified (PE-5 returns once the threshold exceeds its orders apart).
 
-PE-1/PE-3/PE-5 are `--source=canonical` (standard-physics only); PE-2/PE-4 need the
+PE-1/PE-3 (and PE-5, while it was derived) are `--source=canonical` (standard-physics only); PE-2/PE-4 need the
 speculative bridge BE-18 and so appear only under `--source=both`.
 
 | ID | Derived relation | [dim] | From identification | Sources |
@@ -159,8 +158,9 @@ speculative bridge BE-18 and so appear only under `--source=both`.
 
 The funnel no longer derives PE-5: once the Hubble distance has a representative
 magnitude (c/H0), the magnitude gate falsifies `peak-wavelength ≡ hubble-distance` at
-the default anchor, so the identification is a magnitude clash and not a promising
-candidate (the measured orders are in `NOTES.md`).
+the default anchor and the default `--max-orders`, so the identification is a magnitude
+clash and not a promising candidate (the measured orders are in `NOTES.md`; a threshold
+looser than those orders readmits it).
 
 - ~~**Derived relation:** `T = b · H / c`  →  `temperature = \frac{b \cdot hubble-rate}{c}`~~
 - ~~**Dimensional signature:** `[temperature]`~~

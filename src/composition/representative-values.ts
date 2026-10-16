@@ -124,7 +124,7 @@ export const REPRESENTATIVE_VALUES: Readonly<
   },
   'planck-length': { value: 1.616e-35, source: 'ℓ_P = √(ℏG/c³)' },
   // The Hubble distance is a definite cosmological scale, not a generic length: c over the
-  // hubble-rate row above, so the two rows cannot disagree.
+  // hubble-rate row above (a test pins the two rows together, so one cannot move alone).
   'hubble-distance': {
     value: 1.363e26,
     source:
