@@ -148,7 +148,10 @@ export interface VettedCandidate {
   /** Both endpoints had a representative value, so the magnitude gate ran. */
   readonly magnitudeChecked: boolean;
   /** The magnitude gate read at least one endpoint value from the graph at
-   *  the anchor (no static table entry) rather than the sourced table. */
+   *  the anchor (no static table entry) rather than the sourced table. A value
+   *  the graph computes from registered constants alone, with no anchor input
+   *  (the target of a source-less equation), is a constant and is not
+   *  anchor-derived. */
   readonly magnitudeUsedAnchor: boolean;
   /**
    * The magnitude comparison used an anchor-derived value, and the ratio of the
@@ -159,8 +162,11 @@ export interface VettedCandidate {
    * the temperature to the Hawking temperature of the anchor mass M, and then
    * the thermal wavelength is exactly 4π ℓ_P for EVERY M. Its anchor-derived
    * magnitude is not a representative magnitude of the quantity at all.
-   * A quantity whose value really is a constant belongs in the
-   * representative-value table, where it is not anchor-derived.
+   * A quantity whose value really is a constant is not anchor-derived: the
+   * sourced table states it, or the graph computes it from registered constants
+   * with no anchor input (`DiscoveryContext.constantValues`), and the probe does
+   * not withhold a comparison of two such values, which can fail by the clash
+   * threshold.
    * A clash stays a clash (the graph itself fixes the two apart); only a pass is
    * withheld, in `describeGrounding`. Optional on the type so hand-built
    * candidates need not state it; the funnel always sets it.
@@ -195,11 +201,18 @@ export interface VettedCandidate {
    *                       compares catalog labels and runs no computation, so
    *                       it is never counted or described as a falsification.
    * - `promising`       — consistent AND connects disconnected physics AND
-   *                       unlocks ≥1 quantity. Worth physicist review.
+   *                       unlocks ≥1 quantity, AND the magnitude falsifier ran
+   *                       and could have failed ({@link hasMagnitudeEvidence}).
+   *                       Worth physicist review.
+   * - `promising-unchecked` — the same structure, but the magnitude falsifier
+   *                       never tested it: it abstained (an endpoint has no
+   *                       representative magnitude) or its pass is anchor-invariant
+   *                       and so could not fail. A separate count, never added to
+   *                       `promising` (AGENTS law 4).
    * - `inert`           — consistent but structurally/numerically idle (a
    *                       dimensional coincidence with no consequence).
    */
-  readonly verdict: 'promising' | 'inert' | 'contradictory' | 'magnitude-clash' | 'axis-clash';
+  readonly verdict: 'promising' | 'promising-unchecked' | 'inert' | 'contradictory' | 'magnitude-clash' | 'axis-clash';
   /** Composite ranking score (higher = more worth review). */
   readonly score: number;
   /**
@@ -226,6 +239,31 @@ export interface VettedCandidate {
   /** At least one endpoint name is a quantity a canonical equation uses
    *  (weak name-based prior; informational). */
   readonly touchesCanonical: boolean;
+}
+
+/**
+ * Whether the magnitude falsifier ran on a candidate AND could have failed: both endpoints had a
+ * representative magnitude (`magnitudeChecked`) and the comparison is not anchor-invariant. An
+ * anchor-invariant pass is fixed by the graph at every anchor, so it cannot fail and is not a
+ * check (AGENTS law 2). The one owner of this predicate: the verdict split between `promising`
+ * and `promising-unchecked`, the CLI readiness count and the grounding ledger all read it.
+ * @internal
+ */
+export function hasMagnitudeEvidence(
+  c: Pick<VettedCandidate, 'magnitudeChecked' | 'magnitudeAnchorInvariant'>,
+): boolean {
+  return c.magnitudeChecked && c.magnitudeAnchorInvariant !== true;
+}
+
+/**
+ * Whether a verdict is one of the two promising tiers, `promising` (with magnitude evidence) or
+ * `promising-unchecked` (without): the structural set the consequence and proposal layers
+ * process, so splitting the tiers loses no proposal. A selector, never a count: the two tiers are
+ * reported apart and never added (AGENTS law 4).
+ * @internal
+ */
+export function isPromisingTier(verdict: VettedCandidate['verdict']): boolean {
+  return verdict === 'promising' || verdict === 'promising-unchecked';
 }
 
 /** Options for the discovery loop. @internal */
@@ -265,14 +303,12 @@ export interface DiscoveryOptions {
  * (a name is an item; its keys are the equations and identifications it appears in). Returns
  * name → a representative of its component (its first name), read only for equality.
  *
- * RECORDED BEHAVIOUR, kept on purpose: an equation with no source (an all-constant right-hand
- * side, `CE-bohr-radius`) registers no name at all, so its target is absent from the map and
- * an identification touching it never counts as merging components. The union-find this
- * replaced only registered a name when it took part in a union, and the census, the canonical
- * funnel counts and the `map --proposed` golden pin that reading. Registering such a target
- * makes `bohr-radius ≟ hubble-distance` promising; whether it should is a catalog decision,
- * not this module's (`tests/composition/quantity-clusters.test.ts` pins the recorded reading
- * by name).
+ * An equation with no source (an all-constant right-hand side, `CE-bohr-radius`) registers its
+ * target under its own key, so the target is a component member of its own and an identification
+ * touching it can merge components (the owner's decision of 2026-10-16, option 1). Before it, the
+ * union-find this replaced registered a name only when it took part in a union, so the target of
+ * every source-less equation (eight on the canonical graph) was absent from the map and no
+ * identification touching it merged anything.
  */
 function quantityComponents(
   edges: readonly BridgeEdge[],
@@ -285,7 +321,6 @@ function quantityComponents(
     else keys.push(key);
   };
   edges.forEach((e, i) => {
-    if (e.sources.length === 0) return; // recorded behaviour: a source-less target is not registered
     for (const s of e.sources) tag(s.name, `edge:${i}`);
     tag(e.target.name, `edge:${i}`);
   });
@@ -368,6 +403,13 @@ export interface DiscoveryContext {
   readonly attributesByName: ReadonlyMap<string, RegimeAttributes>;
   /** `forwardEvaluate(edges, groundTruth, baseIdents)` — anchor magnitudes. */
   readonly anchorValues: ReadonlyMap<string, number>;
+  /**
+   * `forwardEvaluate(edges, {}, baseIdents)` — the values the graph fixes with NO anchor input:
+   * the targets of source-less equations (an all-constant right-hand side such as the Rydberg
+   * energy or the Planck length) and whatever they alone determine. Such a value is a constant,
+   * not an anchor-derived magnitude, so the magnitude gate reads it as `fromAnchor: false`.
+   */
+  readonly constantValues: ReadonlyMap<string, number>;
   /** The same evaluation with every anchor input times {@link ANCHOR_PROBE_FACTOR}. */
   readonly anchorValuesProbe: ReadonlyMap<string, number>;
   /** `quantityComponents(edges, baseIdents)` — base component roots. */
@@ -403,6 +445,7 @@ export function buildDiscoveryContext(
     // Candidate-invariant: the anchor's forward evaluation, the base component
     // partition, and the base forward closure all depend only on (edges, opts).
     anchorValues: forwardEvaluate(edges, groundTruth, baseIdents),
+    constantValues: forwardEvaluate(edges, {}, baseIdents),
     anchorValuesProbe: forwardEvaluate(
       edges,
       Object.fromEntries(
@@ -525,10 +568,12 @@ export function magnitudeStrength(orders: number, sigmaA: number, sigmaB: number
 /**
  * The magnitude gate: an INDEPENDENT falsifier the single-anchor graph cannot make. It runs only
  * when both endpoints have a representative value and abstains (never false-rejects) otherwise.
- * A value comes from the sourced static table first, else — for graph-derived quantities the
- * table omits by design (schwarzschild-radius, thermal-de-broglie-wavelength) — from the
- * quantity's value AT THE REGISTERED ANCHOR, a definite magnitude for this run, with the default
- * σ of one decade. The verdict is `ordersApart > ctx.maxOrders`; `p` is reported beside it.
+ * A value comes from the sourced static table first; else from the value the graph fixes with NO
+ * anchor input (a constant computed from registered constants alone, `ctx.constantValues`: not
+ * anchor-derived); else — for graph-derived quantities the table omits by design
+ * (schwarzschild-radius, thermal-de-broglie-wavelength) — from the quantity's value AT THE
+ * REGISTERED ANCHOR, a definite magnitude for this run. The last two take the default σ of one
+ * decade. The verdict is `ordersApart > ctx.maxOrders`; `p` is reported beside it.
  *
  * @internal
  */
@@ -541,11 +586,15 @@ export function magnitudeGate(candidate: LinkCandidate, ctx: DiscoveryContext): 
     if (rv !== undefined && Number.isFinite(rv.value) && rv.value !== 0) {
       return { value: rv.value, fromAnchor: false, sigmaDecades: sigmaDecadesOf(rv) };
     }
-    const av = ctx.anchorValues.get(name);
+    // A value the graph fixes with no anchor input is a constant: comparing it can fail by the
+    // clash threshold at every anchor, so it is not anchor-derived and the invariance probe does
+    // not withhold it. Only a value that needs the anchor is `fromAnchor`.
+    const cv = ctx.constantValues.get(name);
+    const av = cv ?? ctx.anchorValues.get(name);
     if (av !== undefined) {
       const value = av * conventionScaleToSI(name);
       if (Number.isFinite(value) && value !== 0) {
-        return { value, fromAnchor: true, sigmaDecades: DEFAULT_SIGMA_DECADES };
+        return { value, fromAnchor: cv === undefined, sigmaDecades: DEFAULT_SIGMA_DECADES };
       }
     }
     return undefined;
@@ -726,7 +775,7 @@ export function vetInContext(
   else if (!numericallyConsistent) verdict = 'contradictory';
   else if (axisClash) verdict = 'axis-clash';
   else if (mergesComponents && unlocksFromAnchor.length > 0 && !subsuming)
-    verdict = 'promising';
+    verdict = hasMagnitudeEvidence({ magnitudeChecked, magnitudeAnchorInvariant }) ? 'promising' : 'promising-unchecked';
   else verdict = 'inert';
 
   // Score: all falsifications sink to the bottom; a subsuming (tautological)
@@ -778,7 +827,8 @@ export function vetInContext(
 
 /**
  * Run the full discovery funnel: propose cross-cluster candidates, vet each
- * against the inference suite, and rank — `promising` first, then by score.
+ * against the inference suite, and rank — `promising` first, then `promising-unchecked`, then
+ * the rest, and by score within a verdict.
  * The output is the physicist's worklist (vetted, provenance-traced), not a
  * list of discoveries.
  *
@@ -790,10 +840,11 @@ export function rankDiscoveries(
 ): VettedCandidate[] {
   const VERDICT_RANK: Record<VettedCandidate['verdict'], number> = {
     promising: 0,
-    inert: 1,
-    'magnitude-clash': 2,
-    contradictory: 3,
-    'axis-clash': 4,
+    'promising-unchecked': 1,
+    inert: 2,
+    'magnitude-clash': 3,
+    contradictory: 4,
+    'axis-clash': 5,
   };
   const ctx = buildDiscoveryContext(edges, opts);
   const candidates = proposeLinkCandidates(edges);

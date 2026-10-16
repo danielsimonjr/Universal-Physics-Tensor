@@ -17,6 +17,7 @@
  * @module composition/grounding
  */
 import type { VettedCandidate } from './discovery.js';
+import { hasMagnitudeEvidence } from './discovery.js';
 import type { ConsequenceSignal } from './consequence.js';
 
 /** The epistemic-grounding ledger for one discovery candidate. @public */
@@ -81,9 +82,13 @@ export function describeGrounding(
   if (c.numericallyConsistent) passed.push('numerical-consistency');
 
   // Magnitude gate: ran only when both endpoints had a representative value.
-  // An anchor-invariant ratio is fixed by the graph at every anchor, so its
-  // agreement is an identity, not a survived test (persona finding L3).
-  if (c.magnitudeChecked && c.magnitudeAnchorInvariant === true) {
+  // A clash is the gate FIRING: its failure is the magnitude-clash verdict, not a
+  // grounding line (as for numerical consistency above), so it is neither passed
+  // nor a gap. An anchor-invariant ratio is fixed by the graph at every anchor, so
+  // its agreement is an identity, not a survived test (persona finding L3).
+  if (c.verdict === 'magnitude-clash') {
+    // the verdict states it
+  } else if (c.magnitudeChecked && c.magnitudeAnchorInvariant === true) {
     gaps.push(
       'magnitude (anchor-invariant: the graph fixes this ratio at every anchor, so the match is an identity, not evidence)',
     );
@@ -163,8 +168,11 @@ export interface CandidateReadiness {
 export function describeReadiness(c: VettedCandidate, consequence?: ConsequenceSignal): CandidateReadiness {
   const survived: IndependentFalsifier[] = [];
   const abstained: IndependentFalsifier[] = [];
-  if (c.magnitudeChecked && c.magnitudeAnchorInvariant !== true) survived.push('magnitude');
-  else abstained.push('magnitude');
+  // A magnitude clash is the falsifier firing: it neither survived nor abstained.
+  if (c.verdict !== 'magnitude-clash') {
+    if (hasMagnitudeEvidence(c)) survived.push('magnitude');
+    else abstained.push('magnitude');
+  }
   if (c.axisChecked && c.axisClashes.length === 0) survived.push('axis');
   else if (!c.axisChecked) abstained.push('axis');
   if (consequence === 'entailed') survived.push('consequence');

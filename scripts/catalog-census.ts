@@ -112,13 +112,18 @@ export interface CatalogCensus {
     readonly catalog: {
       readonly total: number;
       readonly promising: number;
+      readonly promisingUnchecked: number;
       readonly inert: number;
       readonly magnitudeClash: number;
       readonly contradictory: number;
       readonly axisClash: number;
       readonly shadowedByMagnitudeClash: number;
     };
-    readonly canonical: { readonly axisClash: number; readonly promisingNovelConsequence: number };
+    readonly canonical: {
+      readonly axisClash: number;
+      readonly promisingNovelConsequence: number;
+      readonly promisingUncheckedNovelConsequence: number;
+    };
     readonly proposedBridges: number;
   };
   readonly evidence: { readonly formallyProved: number; readonly rejectedRows: number };
@@ -223,7 +228,9 @@ export function deriveCensus(): CatalogCensus {
   const ranked = rankDiscoveries(CATALOG_GRAPH);
   const verdict = (v: string): number => count(ranked, (c) => c.verdict === v);
   const rankedCanonical = rankDiscoveries(CANONICAL_GRAPH);
-  const canonicalPromising = annotateConsequences(rankedCanonical).filter((c) => c.verdict === 'promising');
+  const canonicalAnnotated = annotateConsequences(rankedCanonical);
+  const novelIn = (v: 'promising' | 'promising-unchecked'): number =>
+    count(canonicalAnnotated, (c) => c.verdict === v && c.consequence?.signal === 'novel-consequence');
 
   const rejectedIds = new Set(REJECTED_BRIDGE_ADJUDICATIONS.map((a) => a.beId));
   const evidence = summarizeEvidence(
@@ -295,6 +302,7 @@ export function deriveCensus(): CatalogCensus {
       catalog: {
         total: ranked.length,
         promising: verdict('promising'),
+        promisingUnchecked: verdict('promising-unchecked'),
         inert: verdict('inert'),
         magnitudeClash: verdict('magnitude-clash'),
         contradictory: verdict('contradictory'),
@@ -303,7 +311,9 @@ export function deriveCensus(): CatalogCensus {
       },
       canonical: {
         axisClash: count(rankedCanonical, (c) => c.verdict === 'axis-clash'),
-        promisingNovelConsequence: count(canonicalPromising, (c) => c.consequence?.signal === 'novel-consequence'),
+        // The two promising tiers apart, never one sum (AGENTS law 4).
+        promisingNovelConsequence: novelIn('promising'),
+        promisingUncheckedNovelConsequence: novelIn('promising-unchecked'),
       },
       proposedBridges: PROPOSED_BRIDGES.length,
     },

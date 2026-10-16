@@ -99,7 +99,7 @@ describe('audit I13: every status a command emits is defined in its envelope', (
 
   it('the invocations reach the statuses they are chosen for (so the check above is not vacuous)', () => {
     expect([...reached].sort()).toEqual(
-      expect.arrayContaining(['adequate', 'checked', 'decoy', 'inadequate', 'neither', 'promising', 'undetermined', 'unknown', 'vacuous', 'valid', 'violated']),
+      expect.arrayContaining(['adequate', 'checked', 'decoy', 'inadequate', 'neither', 'promising', 'promising-unchecked', 'undetermined', 'unknown', 'vacuous', 'valid', 'violated']),
     );
   });
 

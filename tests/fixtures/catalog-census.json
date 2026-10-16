@@ -55,7 +55,8 @@
   "discovery": {
     "catalog": {
       "total": 4169,
-      "promising": 32,
+      "promising": 1,
+      "promisingUnchecked": 31,
       "inert": 2360,
       "magnitudeClash": 20,
       "contradictory": 0,
@@ -64,9 +65,10 @@
     },
     "canonical": {
       "axisClash": 1,
-      "promisingNovelConsequence": 5
+      "promisingNovelConsequence": 0,
+      "promisingUncheckedNovelConsequence": 6
     },
-    "proposedBridges": 5
+    "proposedBridges": 6
   },
   "evidence": {
     "formallyProved": 118,

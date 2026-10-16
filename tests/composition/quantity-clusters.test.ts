@@ -80,12 +80,11 @@ describe('component ids and order are unchanged by the move to one owner (pinned
     expect(ranked.filter((c) => c.mergesComponents).length).toBe(PIN.discovery.mergesComponents);
   });
 
-  it('RECORDED BEHAVIOUR: the target of a source-less equation is not a component member, so identifying it merges nothing', () => {
-    // The union-find this replaced registered a name only when it took part in a union. An
-    // all-constant right-hand side (`CE-bohr-radius`) has no source, so its target was never
-    // registered and `mergesComponents` is false for every identification touching it. The
-    // census, the canonical funnel counts and the `map --proposed` golden pin that reading;
-    // flipping it is a catalog decision (it makes `bohr-radius ≟ hubble-distance` promising).
+  it('the target of a source-less equation is a component member of its own, so identifying it merges components', () => {
+    // The owner's decision of 2026-10-16 (option 1): an all-constant right-hand side
+    // (`CE-bohr-radius`) registers its target under its own key. Before it, the union-find
+    // registered a name only when it took part in a union, so `mergesComponents` was false for
+    // every identification touching such a target (eight canonical equations).
     const q = (name: string): Quantity => ({ name, symbol: name, dim: ENERGY, attributes: {} });
     const edge = (id: string, sources: string[], target: string): BridgeEdge => ({
       id,
@@ -102,7 +101,30 @@ describe('component ids and order are unchanged by the move to one owner (pinned
     const cand = (a: string, b: string): LinkCandidate => ({ a, b, dim: '[energy]', touchesCore: false, sameKind: false, sharedToken: null });
     const graph = [edge('constant-only', [], 'k'), edge('e1', ['a'], 'b'), edge('e2', ['c'], 'd')];
     expect(vetLinkCandidate(graph, cand('b', 'd'), { representativeValues: {} }).mergesComponents).toBe(true);
-    expect(vetLinkCandidate(graph, cand('k', 'b'), { representativeValues: {} }).mergesComponents).toBe(false);
+    expect(vetLinkCandidate(graph, cand('k', 'b'), { representativeValues: {} }).mergesComponents).toBe(true);
+    // Two source-less targets are two components; a source-less target that another equation
+    // also uses is in that equation's component.
+    const twoConstants = [...graph, edge('constant-only-2', [], 'm'), edge('uses-k', ['k'], 'f')];
+    expect(vetLinkCandidate(twoConstants, cand('k', 'm'), { representativeValues: {} }).mergesComponents).toBe(true);
+    expect(vetLinkCandidate(twoConstants, cand('k', 'f'), { representativeValues: {} }).mergesComponents).toBe(false);
+  });
+
+  it('every source-less canonical target is a component member (eight equations on the canonical graph)', () => {
+    const sourceless = CANONICAL_GRAPH.filter((e) => e.sources.length === 0).map((e) => e.id).sort();
+    expect(sourceless).toEqual([
+      'CE-bohr-magneton',
+      'CE-bohr-radius',
+      'CE-classical-electron-radius',
+      'CE-planck-length',
+      'CE-planck-mass',
+      'CE-planck-time',
+      'CE-rydberg-energy',
+      'CE-uncertainty-principle',
+    ]);
+    const ranked = rankDiscoveries(CANONICAL_GRAPH);
+    const touching = ranked.filter((c) => c.a === 'bohr-radius' || c.b === 'bohr-radius');
+    expect(touching.length).toBeGreaterThan(0);
+    expect(touching.every((c) => c.mergesComponents)).toBe(true);
   });
 });
 

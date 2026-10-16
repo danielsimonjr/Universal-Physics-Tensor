@@ -662,7 +662,7 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
   it('--json readiness agrees with the gate fields, and magnitudeMissing agrees with the sourced table', async () => {
     const { REPRESENTATIVE_VALUES } = await import('../../dist/cli-api.js');
     const env = await json(['discover', '--source=catalog']);
-    const promising = env.result.filter((c: any) => c.verdict === 'promising');
+    const promising = env.result.filter((c: any) => c.verdict === 'promising' || c.verdict === 'promising-unchecked');
     expect(promising.length).toBeGreaterThan(0);
     let survivedAny = 0;
     for (const c of promising) {
@@ -681,17 +681,28 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
   // Two catalog discovers plus one canonical. 60s is the record from before the graph held every relation.
   it('--require-falsifier hides a row that only connectivity supports, and says how many', async () => {
     const all = await json(['discover', '--source=catalog']);
-    const p = all.result.filter((c: any) => c.verdict === 'promising');
-    const kept = p.filter((c: any) => c.readiness.falsifiers.survived.length > 0);
     const { text } = await runText(['discover', '--source=catalog', '--require-falsifier']);
-    const section = text.slice(text.indexOf('  PROMISING ('));
-    const listed = (section.slice(0, section.indexOf('\n\n')).match(/^ {4}\S+ ≟ \S+/gm) ?? []).length;
-    expect(text).toMatch(new RegExp(`--require-falsifier: ${p.length - kept.length} of the ${p.length} promising hidden — no independent falsifier ran and survived \\(connectivity alone is not evidence\\)`));
-    expect(listed).toBeLessThanOrEqual(kept.length);
-    expect(listed).toBeGreaterThan(0);
+    // Each tier is hidden and counted apart (AGENTS law 4).
+    const counts: string[] = [];
+    let listedAny = 0;
+    for (const [verdict, label, heading] of [
+      ['promising', 'promising', '  PROMISING ('],
+      ['promising-unchecked', 'promising, magnitude unchecked', '  PROMISING, MAGNITUDE UNCHECKED ('],
+    ] as const) {
+      const p = all.result.filter((c: any) => c.verdict === verdict);
+      const kept = p.filter((c: any) => c.readiness.falsifiers.survived.length > 0);
+      counts.push(`${p.length - kept.length} of the ${p.length} ${label}`);
+      const at = text.indexOf(heading);
+      const section = at < 0 ? '' : text.slice(at);
+      const listed = (section.slice(0, section.indexOf('\n\n')).match(/^ {4}\S+ ≟ \S+/gm) ?? []).length;
+      expect(listed).toBeLessThanOrEqual(kept.length);
+      listedAny += listed;
+    }
+    expect(text).toContain(`--require-falsifier: ${counts.join(' and ')} hidden — no independent falsifier ran and survived (connectivity alone is not evidence)`);
+    expect(listedAny).toBeGreaterThan(0);
     const canonical = await runText(['discover', '--source=canonical', '--require-falsifier']);
-    const n = /→ {2}(\d+) promising/.exec(canonical.text)![1];
-    expect(canonical.text).toContain(`--require-falsifier: ${n} of the ${n} promising hidden`);
+    const n = /· {2}(\d+) promising, magnitude unchecked/.exec(canonical.text)![1];
+    expect(canonical.text).toContain(`--require-falsifier: 0 of the 0 promising and ${n} of the ${n} promising, magnitude unchecked hidden`);
   }, 300_000);
 });
 
@@ -723,7 +734,7 @@ describe('I12 — a derived relation carries its premise, meaning and status whe
   it('control: a proposal whose normal form is a registry entry is labelled a known law', async () => {
     const api = await import('../../dist/cli-api.js');
     const [p] = api.deriveProposedBridges(
-      api.rankDiscoveries(api.CANONICAL_GRAPH).filter((c: any) => c.verdict === 'promising'),
+      api.rankDiscoveries(api.CANONICAL_GRAPH).filter((c: any) => api.isPromisingTier(c.verdict)),
     );
     const planted = { id: 'CE-planted', name: 'planted', assumptions: [], dimensional: { target: p.target, governing: p.governing }, scalarAst: p.scalarAst };
     const known = api.describeDerivedClaim(p, [...api.CANONICAL_EQUATIONS, planted]);

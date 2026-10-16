@@ -4,7 +4,7 @@
     "version": "11.0.0",
     "totalFiles": 384,
     "totalModules": 13,
-    "totalExports": 2744
+    "totalExports": 2748
   },
   "entryPoints": [
     {
@@ -11211,6 +11211,14 @@
             "reExport": true
           },
           {
+            "file": "./composition/discovery.js",
+            "imports": [
+              "hasMagnitudeEvidence",
+              "isPromisingTier"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/index.js",
             "imports": [
               "BRIDGE_EQUATIONS"
@@ -12091,6 +12099,8 @@
           "formatFrontierAccount",
           "rankDiscoveries",
           "ANCHOR_DEFAULT",
+          "hasMagnitudeEvidence",
+          "isPromisingTier",
           "BRIDGE_EQUATIONS",
           "auditCoverage",
           "CONFRONTATIONS",
@@ -12354,6 +12364,8 @@
           "formatFrontierAccount",
           "rankDiscoveries",
           "ANCHOR_DEFAULT",
+          "hasMagnitudeEvidence",
+          "isPromisingTier",
           "BRIDGE_EQUATIONS",
           "auditCoverage",
           "CONFRONTATIONS",
@@ -14072,6 +14084,12 @@
             "typeOnly": true
           },
           {
+            "file": "./discovery.js",
+            "imports": [
+              "isPromisingTier"
+            ]
+          },
+          {
             "file": "./proposed-bridges.js",
             "imports": [
               "ProposedBridge"
@@ -14362,6 +14380,8 @@
           "REGISTRY_ATTRIBUTES_BY_NAME",
           "ANCHOR_DEFAULT",
           "DEFAULT_MAX_ORDERS_OF_MAGNITUDE",
+          "hasMagnitudeEvidence",
+          "isPromisingTier",
           "buildDiscoveryContext",
           "magnitudeStrength",
           "magnitudeGate",
@@ -14376,6 +14396,8 @@
           "MagnitudeGate"
         ],
         "functions": [
+          "hasMagnitudeEvidence",
+          "isPromisingTier",
           "buildDiscoveryContext",
           "magnitudeStrength",
           "magnitudeGate",
@@ -15259,6 +15281,12 @@
               "VettedCandidate"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./discovery.js",
+            "imports": [
+              "hasMagnitudeEvidence"
+            ]
           },
           {
             "file": "./consequence.js",
@@ -18361,7 +18389,7 @@
         ]
       },
       "src/composition/proposed-bridges.ts": {
-        "description": "Identity-consequence surfacer — turns a `promising` discovery identification",
+        "description": "Identity-consequence surfacer — turns a promising (either tier) discovery identification",
         "externalDependencies": [
           {
             "package": "@danielsimonjr/mathts-core",
@@ -18481,7 +18509,8 @@
           {
             "file": "./discovery.js",
             "imports": [
-              "rankDiscoveries"
+              "rankDiscoveries",
+              "isPromisingTier"
             ]
           },
           {
@@ -27618,15 +27647,15 @@
   "statistics": {
     "totalTypeScriptFiles": 384,
     "totalModules": 13,
-    "totalLinesOfCode": 86010,
-    "totalExports": 2744,
+    "totalLinesOfCode": 86155,
+    "totalExports": 2748,
     "totalClasses": 85,
     "totalInterfaces": 508,
-    "totalFunctions": 863,
-    "totalTypeGuards": 12,
+    "totalFunctions": 865,
+    "totalTypeGuards": 13,
     "totalEnums": 0,
     "totalConstants": 405,
-    "totalReExports": 1387,
+    "totalReExports": 1389,
     "totalTypeOnlyImports": 514,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

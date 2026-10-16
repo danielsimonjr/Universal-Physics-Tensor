@@ -46,7 +46,8 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--derive',
     valueStyle: 'none',
-    description: 'For each promising identification, print the one algebraic relation it implies. That relation is not a bridge.',
+    description:
+      'For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge.',
   },
   {
     name: '--show-adjudicated',
@@ -56,7 +57,7 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--require-falsifier',
     valueStyle: 'none',
-    description: 'Hide promising rows that no independent falsifier ran on and survived.',
+    description: 'Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier.',
   },
   JSON_FLAG,
 ];
@@ -67,13 +68,20 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         VET the link candidates through the inference suite: hypothesise
         each identification a≡b and test whether it merges disconnected
         physics, unlocks quantities, and stays numerically consistent.
-        Ranks promising / inert / contradictory.
+        Ranks promising / promising, magnitude unchecked / inert / contradictory.
+        A row that merges, unlocks and survives every falsifier that ran is
+        'promising' only when the magnitude falsifier ran on it and could have
+        failed (both endpoints have a representative magnitude, and the ratio
+        is not fixed by the graph at every anchor); otherwise it is 'promising,
+        magnitude unchecked' (promising-unchecked in --json). The two tiers are
+        counted and listed apart and never added.
         --source=canonical runs the funnel on the standard-physics L-layer
         ALONE (bridges excluded) — new candidates from established physics,
         and a self-consistency check (expect 0 contradictory).
-        --derive emits, for each 'promising' identification, the ONE algebraic
-        relation it implies (monomial elimination) as an UNADJUDICATED, math-only
-        proposal — NOT a bridge (Part-VI §XXVII-B). Pairs with --source=canonical.
+        --derive emits, for each promising identification of either tier, the ONE
+        algebraic relation it implies (monomial elimination) as an UNADJUDICATED,
+        math-only proposal — NOT a bridge (Part-VI §XXVII-B), and says when the
+        identification had no magnitude evidence. Pairs with --source=canonical.
         --max-orders=N tunes the magnitude-clash threshold (default ${DISCOVER_MAX_ORDERS_DEFAULT}); looser N
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
@@ -82,22 +90,23 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         kelvin: an energy is k_B T, and any other dimension is an error.
         Candidates a physicist has already adjudicated
         (${ADJUDICATION_URLS})
-        fold out of the PROMISING list by default (decoy/entailed verdicts only —
+        fold out of the two PROMISING lists by default (decoy/entailed verdicts only —
         review memory, not a re-litigation prompt); --show-adjudicated lists them
         again with their recorded verdict.
-        Each PROMISING row states its readiness dimension by dimension —
+        Each row of either PROMISING list states its readiness dimension by dimension —
         structure, kind, which independent falsifiers (magnitude, axis,
         consequence) ran and survived or abstained — and what would make it
         testable: the identity premise, the missing magnitudes and regimes,
         and the observation that would test it. An abstention is a missing
-        test, never a pass. --require-falsifier hides promising rows that no
-        independent falsifier ran on and survived, counts them, and lists the
-        encoded bridges that already carry a falsifier (a confrontation, a
-        counterexample, or a regime inequality).`;
+        test, never a pass. --require-falsifier hides promising rows (either
+        tier) that no independent falsifier ran on and survived, counts them per
+        tier, and lists the encoded bridges that already carry a falsifier (a
+        confrontation, a counterexample, or a regime inequality).`;
 
 const EPISTEMICS =
   '⚠ a REVIEW SURFACE: `promising` means "worth a physicist\'s minute", not "true".\n' +
-  '  Each candidate hypothesises an identification a≡b and tests its consequences.';
+  '  Each candidate hypothesises an identification a≡b and tests its consequences.\n' +
+  '  `promising-unchecked` is the same structure with no magnitude evidence; the two are never added.';
 
 const DERIVE_EPISTEMICS =
   '⚠ Each is the ALGEBRAIC CONSEQUENCE of an unadjudicated identification — NOT a new\n' +
@@ -157,6 +166,9 @@ function deriveReport(
       `      from: ${p.derivedFrom.identification.a} ≟ ${p.derivedFrom.identification.b}` +
         `  (${p.derivedFrom.sourceEquationIds[0]} = ${p.derivedFrom.sourceEquationIds[1]}); solved for ${p.derivedFrom.solvedFor}`
     );
+    if (!p.derivedFrom.identification.magnitudeEvidence) {
+      out('      magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)');
+    }
     if (p.alsoDerivableFrom && p.alsoDerivableFrom.length) {
       out(`      also derivable from: ${p.alsoDerivableFrom.join('; ')}`);
     }
@@ -204,7 +216,7 @@ function summarizeAdjudications(
 /** The reconciling line printed under PROMISING when some of it carries a
  *  recorded verdict — so the folded/shorter list never looks inconsistent
  *  against the funnel line's raw promising count. */
-function adjudicationSummaryLine(promising: readonly AnnotatedCandidate[], promisingCount: number): string {
+function adjudicationSummaryLine(promising: readonly AnnotatedCandidate[], promisingCount: number, tierLabel: string): string {
   const adjudicated = promising.filter((r) => r.adjudication);
   const counts = { genuine: 0, decoy: 0, entailed: 0, deferred: 0 };
   let folded = 0;
@@ -220,11 +232,12 @@ function adjudicationSummaryLine(promising: readonly AnnotatedCandidate[], promi
   const verb = total === 1 ? 'carries' : 'carry';
   const noun = total === 1 ? 'a recorded verdict' : 'recorded verdicts';
   const foldNote = folded === total ? '— folded' : folded === 0 ? '— shown below' : `— ${folded} folded`;
-  return `  adjudicated: ${total} of the ${promisingCount} promising ${verb} ${noun} (${parts.join(', ')}) ${foldNote}; --show-adjudicated to list`;
+  return `  adjudicated: ${total} of the ${promisingCount} ${tierLabel} ${verb} ${noun} (${parts.join(', ')}) ${foldNote}; --show-adjudicated to list`;
 }
 
+/** How far one promising tier is from evidence. */
 interface Readiness {
-  promising: number;
+  count: number;
   mechanismTested: number;
   dataTested: number;
   withoutMagnitudeEvidence: number;
@@ -253,15 +266,30 @@ function encodedFalsifiers(api: CommandCtx['api']): readonly string[] {
   return lines;
 }
 
-/** How far the `promising` set is from evidence, counted from candidate fields. */
-function readinessOf(api: CommandCtx['api'], candidates: readonly FullyAnnotatedCandidate[]): Readiness {
-  const p = candidates.filter((c) => c.verdict === 'promising');
+/** The two promising tiers, in print order, with the label each is printed under. */
+const TIERS = [
+  { verdict: 'promising', label: 'promising', heading: 'PROMISING (merges disconnected physics, unlocks quantities, stays consistent, and the magnitude falsifier ran and survived):' },
+  {
+    verdict: 'promising-unchecked',
+    label: 'promising, magnitude unchecked',
+    heading:
+      'PROMISING, MAGNITUDE UNCHECKED (the same structure; the magnitude falsifier abstained or its pass is fixed by the graph at every anchor, so it never tested the row):',
+  },
+] as const satisfies readonly { verdict: VettedCandidate['verdict']; label: string; heading: string }[];
+
+/** How far one promising tier is from evidence, counted from candidate fields. */
+function readinessOf(
+  api: CommandCtx['api'],
+  candidates: readonly FullyAnnotatedCandidate[],
+  verdict: VettedCandidate['verdict'],
+): Readiness {
+  const p = candidates.filter((c) => c.verdict === verdict);
   const g = p.map((c) => api.describeGrounding(c, c.consequence?.signal));
   return {
-    promising: p.length,
+    count: p.length,
     mechanismTested: g.filter((x) => x.mechanismTested).length,
     dataTested: g.filter((x) => x.dataTested).length,
-    withoutMagnitudeEvidence: p.filter((c) => !c.magnitudeChecked || c.magnitudeAnchorInvariant === true).length,
+    withoutMagnitudeEvidence: p.filter((c) => !api.hasMagnitudeEvidence(c)).length,
     axisUnresolved: p.filter((c) => !c.axisChecked).length,
     entailedConsequence: p.filter((c) => c.consequence?.signal === 'entailed').length,
   };
@@ -294,7 +322,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         ? mapped.filter(
             (c) =>
               !('readiness' in c) ||
-              c.verdict !== 'promising' ||
+              !api.isPromisingTier(c.verdict) ||
               c.readiness.falsifiers.survived.length > 0,
           )
         : mapped;
@@ -309,7 +337,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       ...(isDerive
         ? {}
         : {
-            readiness: readinessOf(api, withConsequence),
+            readiness: {
+              promising: readinessOf(api, withConsequence, 'promising'),
+              promisingUnchecked: readinessOf(api, withConsequence, 'promising-unchecked'),
+            },
             adjudicationSummary: summarizeAdjudications(withConsequence),
           }),
     };
@@ -332,19 +363,19 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const by = (v: string) => withConsequence.filter((r) => r.verdict === v);
-  // Q1: within PROMISING, spend the physicist's first minute on consequence-
-  // bearing / magnitude-backed rows before inconclusive + no-magnitude coincidences.
+  // Q1: within each PROMISING tier, spend the physicist's first minute on consequence-bearing
+  // rows before inconclusive coincidences. The magnitude evidence is the tier itself.
   const consRank = (s: ConsequenceSignal | undefined): number =>
     s === 'entailed' ? 0 : s === 'novel-consequence' ? 1 : 2;
-  const promising = [...by('promising')].sort((a, b) => {
-    const ca = consRank(a.consequence?.signal);
-    const cb = consRank(b.consequence?.signal);
-    if (ca !== cb) return ca - cb;
-    const magA = a.magnitudeChecked && a.magnitudeAnchorInvariant !== true ? 0 : 1;
-    const magB = b.magnitudeChecked && b.magnitudeAnchorInvariant !== true ? 0 : 1;
-    if (magA !== magB) return magA - magB;
-    return b.score - a.score || a.a.localeCompare(b.a) || a.b.localeCompare(b.b);
-  });
+  const tierRows = (verdict: VettedCandidate['verdict']) =>
+    [...by(verdict)].sort((a, b) => {
+      const ca = consRank(a.consequence?.signal);
+      const cb = consRank(b.consequence?.signal);
+      if (ca !== cb) return ca - cb;
+      return b.score - a.score || a.a.localeCompare(b.a) || a.b.localeCompare(b.b);
+    });
+  const tiers = TIERS.map((t) => ({ ...t, rows: tierRows(t.verdict), readiness: readinessOf(api, withConsequence, t.verdict) }));
+  const [promising, unchecked] = tiers;
   const inert = by('inert');
   const contra = by('contradictory');
   const clash = by('magnitude-clash');
@@ -353,70 +384,85 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`  ${groundTruthLine(anchor)}`);
   out('⚠ a REVIEW SURFACE: `promising` means "worth a physicist\'s minute", not "true".');
   out('  Each candidate hypothesises an identification a≡b and tests its consequences.\n');
+  // The two tiers are two counts, never one sum (AGENTS law 4).
   out(
-    `  funnel:  ${withConsequence.length} candidates  →  ${promising.length} promising  ` +
+    `  funnel:  ${withConsequence.length} candidates  →  ${promising!.rows.length} promising  ` +
+      `·  ${unchecked!.rows.length} promising, magnitude unchecked  ` +
       `·  ${inert.length} inert  ·  ${clash.length} magnitude-clash  ` +
       `·  ${contra.length} contradictory (numerically falsified)  ·  ${axisClash.length} axis-clash`
   );
-  const rd = readinessOf(api, withConsequence);
-  out(
-    `  readiness of the ${rd.promising} promising: ${rd.mechanismTested} mechanism-tested · ` +
-      `${rd.dataTested} data-tested · ${rd.withoutMagnitudeEvidence} without magnitude evidence · ` +
-      `${rd.axisUnresolved} with axis unresolved · ${rd.entailedConsequence} with an entailed consequence`,
-  );
+  for (const t of tiers) {
+    const rd = t.readiness;
+    out(
+      `  readiness of the ${rd.count} ${t.label}: ${rd.mechanismTested} mechanism-tested · ` +
+        `${rd.dataTested} data-tested · ${rd.withoutMagnitudeEvidence} without magnitude evidence · ` +
+        `${rd.axisUnresolved} with axis unresolved · ${rd.entailedConsequence} with an entailed consequence`,
+    );
+  }
   out('  promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.\n');
   const requireFalsifier = args.flags.has('require-falsifier');
   const untested = (r: FullyAnnotatedCandidate) =>
     api.describeReadiness(r, r.consequence?.signal).falsifiers.survived.length === 0;
   if (requireFalsifier) {
     out(
-      `  --require-falsifier: ${promising.filter(untested).length} of the ${promising.length} promising hidden — ` +
-        'no independent falsifier ran and survived (connectivity alone is not evidence)\n',
+      `  --require-falsifier: ` +
+        tiers.map((t) => `${t.rows.filter(untested).length} of the ${t.rows.length} ${t.label}`).join(' and ') +
+        ' hidden — no independent falsifier ran and survived (connectivity alone is not evidence)\n',
     );
     const encoded = encodedFalsifiers(api);
     out(`  encoded falsifiers already on the records (${encoded.length}; these are not discovery rows):`);
     for (const line of encoded) out(`    ${line}`);
     out('');
   }
-  if (promising.length) {
-    out('  PROMISING (merges disconnected physics, unlocks quantities, stays consistent):');
-    for (const r of promising) {
+  const printRow = (r: FullyAnnotatedCandidate): void => {
+    out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} [${r.dim}]  score ${r.score}`);
+    out(`        unlocks: ${r.unlocksFromAnchor.join(', ') || '—'}`);
+    if (r.consequence) {
+      out(`        [consequence: ${r.consequence.signal}]`);
+    }
+    const g = api.describeGrounding(r, r.consequence?.signal);
+    out(
+      `        [grounding — passed: ${g.passed.join(', ') || '—'}` +
+        ` · gaps: ${g.gaps.join(', ') || '—'} · ceiling: no mechanism/data test]`,
+    );
+    const rd = api.describeReadiness(r, r.consequence?.signal);
+    const f = rd.falsifiers;
+    out(
+      `        [readiness — structure: ${rd.structure.mergesComponents ? 'merges components' : 'no merge'}, ` +
+        `unlocks ${rd.structure.unlocks} · kind: ${rd.kind} · independent falsifiers survived: ` +
+        `${f.survived.join(', ') || 'none'}${f.abstained.length ? ` (abstained: ${f.abstained.join(', ')})` : ''}` +
+        ' · mechanism: none · data: none]',
+    );
+    const needs = [
+      ...(rd.needs.magnitudeFor.length ? [`needs a representative magnitude for: ${rd.needs.magnitudeFor.join(', ')}`] : []),
+      ...rd.needs.regimeFor.map((u) => `needs a stated ${u.axis} regime for: ${u.endpoints.join(', ')}`),
+      ...(rd.needs.derivableConsequence ? ['needs a consequence that re-derives a known law'] : []),
+    ];
+    out(`        [to make it testable — premise: ${rd.needs.premise}${needs.map((n) => ` · ${n}`).join('')}]`);
+    out(`        [observation: ${rd.observation}]`);
+    if (r.adjudication) {
+      out(`        [adjudicated: ${r.adjudication.verdict} — ${r.adjudication.grounds}]`);
+    }
+  };
+  for (const t of tiers) {
+    if (t !== promising) out('');
+    if (t.rows.length === 0) {
+      out(
+        t === promising
+          ? '  no candidate is `promising` (with magnitude evidence) from the anchor above.'
+          : '  no candidate is `promising, magnitude unchecked` from the anchor above.',
+      );
+      continue;
+    }
+    out(`  ${t.heading}`);
+    for (const r of t.rows) {
       if (r.adjudication && foldsOut(r.adjudication.verdict) && !showAdjudicated) continue;
       if (requireFalsifier && untested(r)) continue;
-      out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} [${r.dim}]  score ${r.score}`);
-      out(`        unlocks: ${r.unlocksFromAnchor.join(', ') || '—'}`);
-      if (r.consequence) {
-        out(`        [consequence: ${r.consequence.signal}]`);
-      }
-      const g = api.describeGrounding(r, r.consequence?.signal);
-      out(
-        `        [grounding — passed: ${g.passed.join(', ') || '—'}` +
-          ` · gaps: ${g.gaps.join(', ') || '—'} · ceiling: no mechanism/data test]`,
-      );
-      const rd = api.describeReadiness(r, r.consequence?.signal);
-      const f = rd.falsifiers;
-      out(
-        `        [readiness — structure: ${rd.structure.mergesComponents ? 'merges components' : 'no merge'}, ` +
-          `unlocks ${rd.structure.unlocks} · kind: ${rd.kind} · independent falsifiers survived: ` +
-          `${f.survived.join(', ') || 'none'}${f.abstained.length ? ` (abstained: ${f.abstained.join(', ')})` : ''}` +
-          ' · mechanism: none · data: none]',
-      );
-      const needs = [
-        ...(rd.needs.magnitudeFor.length ? [`needs a representative magnitude for: ${rd.needs.magnitudeFor.join(', ')}`] : []),
-        ...rd.needs.regimeFor.map((u) => `needs a stated ${u.axis} regime for: ${u.endpoints.join(', ')}`),
-        ...(rd.needs.derivableConsequence ? ['needs a consequence that re-derives a known law'] : []),
-      ];
-      out(`        [to make it testable — premise: ${rd.needs.premise}${needs.map((n) => ` · ${n}`).join('')}]`);
-      out(`        [observation: ${rd.observation}]`);
-      if (r.adjudication) {
-        out(`        [adjudicated: ${r.adjudication.verdict} — ${r.adjudication.grounds}]`);
-      }
+      printRow(r);
     }
-    if (promising.some((r) => r.adjudication)) {
-      out(adjudicationSummaryLine(promising, promising.length));
+    if (t.rows.some((r) => r.adjudication)) {
+      out(adjudicationSummaryLine(t.rows, t.rows.length, t.label));
     }
-  } else {
-    out('  no candidate is `promising` from the anchor above.');
   }
   if (clash.length) {
     out(
@@ -452,7 +498,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} ${r.axisClashes.join('; ')}`);
     }
   }
-  out('\n  (magnitude gate abstains where a representative value is unknown; weak priors on dimension.)');
+  out(
+    '\n  (magnitude gate abstains where a representative value is unknown, and such a row is at most ' +
+      "'promising, magnitude unchecked'; weak priors on dimension.)",
+  );
   out(`  (inspect one candidate: upt ground --source=${source} <a> <b>, with the same --anchor/--max-orders)`);
   return 0;
 }
@@ -462,7 +511,7 @@ export const command: Command = {
   aliases: ['discovery'],
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
-  summary: 'Vet quantity identifications and rank them promising, inert, or contradictory.',
+  summary: 'Vet quantity identifications and rank them promising (two tiers: magnitude checked or unchecked), inert, or contradictory.',
   example: 'upt discover --source=canonical',
   group: 'discovery',
   run,

@@ -90,6 +90,7 @@ describe('discovery calibration benchmark', () => {
     catalog: {
       total: CENSUS.discovery.catalog.total,
       promising: CENSUS.discovery.catalog.promising,
+      promisingUnchecked: CENSUS.discovery.catalog.promisingUnchecked,
       inert: CENSUS.discovery.catalog.inert,
       clash: CENSUS.discovery.catalog.magnitudeClash,
       contradictory: CENSUS.discovery.catalog.contradictory,
@@ -101,6 +102,7 @@ describe('discovery calibration benchmark', () => {
     const cands = rankDiscoveries(CATALOG_GRAPH);
     expect(cands.length).toBe(EXPECTED.catalog.total);
     expect(count(cands, 'promising')).toBe(EXPECTED.catalog.promising);
+    expect(count(cands, 'promising-unchecked')).toBe(EXPECTED.catalog.promisingUnchecked);
     expect(count(cands, 'inert')).toBe(EXPECTED.catalog.inert);
     expect(count(cands, 'magnitude-clash')).toBe(EXPECTED.catalog.clash);
     expect(count(cands, 'contradictory')).toBe(EXPECTED.catalog.contradictory);
@@ -152,8 +154,11 @@ describe('discovery calibration benchmark', () => {
     // (Task 0 §4, `mass`'s now-stripped generic tag) that the audit's
     // generic-strip REVERSES via abstention — they must stay promising, not
     // join the flip list above (Task 2 Step 5, confirmed on both sources).
-    expect(byId.get('mass~scalar-field-reference')!.verdict).toBe('promising');
-    expect(byId.get('mass~scalar-field-value')!.verdict).toBe('promising');
+    // Both are structurally promising with no magnitude evidence (the scalar field has no
+    // representative value), so they are the unchecked tier since the owner's decision of
+    // 2026-10-16; `'promising'` is the record from before that split.
+    expect(byId.get('mass~scalar-field-reference')!.verdict).toBe('promising-unchecked');
+    expect(byId.get('mass~scalar-field-value')!.verdict).toBe('promising-unchecked');
   });
 
   // ── Canonical-only invariant (D6, Adam #5 + Eve #5) ─────────────────────
@@ -186,7 +191,7 @@ describe('discovery calibration benchmark', () => {
     const annotated = annotateAdjudications(rankDiscoveries(both));
     const escaped = annotated.filter(
       (c) =>
-        c.verdict === 'promising' &&
+        (c.verdict === 'promising' || c.verdict === 'promising-unchecked') &&
         c.adjudication === undefined &&
         ADJUDICATIONS.some((a) => a.id === `${[c.a, c.b].sort().join('~')}`),
     );

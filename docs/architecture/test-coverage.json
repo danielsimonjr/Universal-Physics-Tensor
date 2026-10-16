@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 384,
-    "totalTestFiles": 665,
+    "totalTestFiles": 666,
     "testedCount": 375,
     "directlyTestedCount": 341,
     "untestedCount": 9,
@@ -17783,6 +17783,7 @@
       "src/composition/explain.ts",
       "src/core/format.ts"
     ],
+    "tests/cli/discover-tiers.test.ts": [],
     "tests/cli/eval-functions.test.ts": [
       "src/numerical/formula-contract.ts"
     ],

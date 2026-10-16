@@ -51,16 +51,20 @@ describe('F02 — the PROMISING count carries its evidential readiness', () => {
     await runCli(['discover', '--source=canonical', '--json'], c.io);
     const env = JSON.parse(c.lines.join(''));
     type Row = { verdict: string; magnitudeChecked: boolean; magnitudeAnchorInvariant?: boolean; axisChecked: boolean; consequence?: { signal: string }; grounding: { mechanismTested: boolean; dataTested: boolean } };
-    const p = (env.result as Row[]).filter((r) => r.verdict === 'promising');
-    expect(env.readiness).toEqual({
-      promising: p.length,
-      mechanismTested: p.filter((r) => r.grounding.mechanismTested).length,
-      dataTested: p.filter((r) => r.grounding.dataTested).length,
-      withoutMagnitudeEvidence: p.filter((r) => !r.magnitudeChecked || r.magnitudeAnchorInvariant === true).length,
-      axisUnresolved: p.filter((r) => !r.axisChecked).length,
-      entailedConsequence: p.filter((r) => r.consequence?.signal === 'entailed').length,
-    });
-    expect(env.readiness.withoutMagnitudeEvidence).toBeGreaterThan(0);
+    // One readiness per promising tier, never one summed count (AGENTS law 4).
+    const readinessOf = (verdict: string) => {
+      const p = (env.result as Row[]).filter((r) => r.verdict === verdict);
+      return {
+        count: p.length,
+        mechanismTested: p.filter((r) => r.grounding.mechanismTested).length,
+        dataTested: p.filter((r) => r.grounding.dataTested).length,
+        withoutMagnitudeEvidence: p.filter((r) => !r.magnitudeChecked || r.magnitudeAnchorInvariant === true).length,
+        axisUnresolved: p.filter((r) => !r.axisChecked).length,
+        entailedConsequence: p.filter((r) => r.consequence?.signal === 'entailed').length,
+      };
+    };
+    expect(env.readiness).toEqual({ promising: readinessOf('promising'), promisingUnchecked: readinessOf('promising-unchecked') });
+    expect(env.readiness.promisingUnchecked.withoutMagnitudeEvidence).toBeGreaterThan(0);
   });
 });
 

@@ -13,30 +13,50 @@ describe('annotateConsequences', () => {
     expect(annotated.length).toBe(ranked.length); // 1:1, order preserved
     // every promising candidate carries a signal from the allowed set
     for (const c of annotated) {
-      if (c.verdict === 'promising') {
+      if (c.verdict === 'promising' || c.verdict === 'promising-unchecked') {
         expect(['entailed', 'novel-consequence', 'inconclusive']).toContain(c.consequence?.signal);
       }
     }
   });
 
-  it('LIVE PIN (Task-0 measured): catalog promising yields 0 entailed, 1 novel-consequence', () => {
+  it('LIVE PIN (Task-0 measured): catalog promising yields 0 entailed, and its 1 novel-consequence is in the unchecked tier', () => {
     const annotated = annotateConsequences(rankDiscoveries(CATALOG_GRAPH));
-    const promising = annotated.filter((c) => c.verdict === 'promising');
-    const entailed = promising.filter((c) => c.consequence?.signal === 'entailed').length;
-    const novel = promising.filter((c) => c.consequence?.signal === 'novel-consequence').length;
-    expect(entailed).toBe(0);
-    expect(novel).toBe(1);
+    const signals = (v: 'promising' | 'promising-unchecked', s: string) =>
+      annotated.filter((c) => c.verdict === v && c.consequence?.signal === s).length;
+    expect(signals('promising', 'entailed')).toBe(0);
+    expect(signals('promising-unchecked', 'entailed')).toBe(0);
+    // dark-fermion-mass ≟ landauer-erasure-energy: the dark-fermion mass has no representative
+    // magnitude. One novel consequence in both tiers is the record from before the split.
+    expect(signals('promising', 'novel-consequence')).toBe(0);
+    expect(signals('promising-unchecked', 'novel-consequence')).toBe(1);
   });
 
   it('LIVE PIN: canonical promising yields 0 entailed, and the census novel-consequence count', () => {
     const annotated = annotateConsequences(rankDiscoveries(CANONICAL_GRAPH));
-    const promising = annotated.filter((c) => c.verdict === 'promising');
+    const promising = annotated.filter((c) => c.verdict === 'promising' || c.verdict === 'promising-unchecked');
     expect(promising.filter((c) => c.consequence?.signal === 'entailed').length).toBe(0);
-    // Landauer photon, hν=mc², Wien/Hubble, Compton-full against Hubble distance,
-    // and the classical electron radius against that distance once 1/(4π) is in the value.
-    expect(promising.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(
-      CENSUS.discovery.canonical.promisingNovelConsequence,
+    // Landauer photon, hν=mc², Wien/Hubble, Compton-full against Hubble distance, the classical
+    // electron radius against that distance once 1/(4π) is in the value, and the Bohr radius
+    // against it once a source-less target is a component member: every one of them is in the
+    // unchecked tier (the census counts each tier).
+    const novel = (v: string) => annotated.filter((c) => c.verdict === v && c.consequence?.signal === 'novel-consequence').length;
+    expect(novel('promising')).toBe(CENSUS.discovery.canonical.promisingNovelConsequence);
+    expect(novel('promising-unchecked')).toBe(CENSUS.discovery.canonical.promisingUncheckedNovelConsequence);
+  });
+
+  it('both promising tiers are classified, and the census counts their novel consequences apart (never one sum)', () => {
+    const annotated = annotateConsequences(rankDiscoveries(CANONICAL_GRAPH));
+    const tier = (v: 'promising' | 'promising-unchecked') => annotated.filter((c) => c.verdict === v);
+    const unchecked = tier('promising-unchecked');
+    expect(unchecked.length).toBeGreaterThan(0);
+    for (const c of unchecked) expect(['entailed', 'novel-consequence', 'inconclusive']).toContain(c.consequence?.signal);
+    expect(unchecked.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(
+      CENSUS.discovery.canonical.promisingUncheckedNovelConsequence,
     );
+    // Every other verdict stays unannotated.
+    for (const c of annotated) {
+      if (c.verdict !== 'promising' && c.verdict !== 'promising-unchecked') expect(c.consequence).toBeUndefined();
+    }
   });
 
   it('annotation is order-preserving and non-mutating (same verdicts/scores as input)', () => {
@@ -90,7 +110,7 @@ describe('describeDerivedClaim names both sides of the identification (9.0.0 aud
     governing: [],
     scalarAst: landauer.scalarAst!,
     derivedFrom: {
-      identification: { a: 'dark-fermion-mass', b: 'erasure-energy', dim: '[energy]' },
+      identification: { a: 'dark-fermion-mass', b: 'erasure-energy', dim: '[energy]', magnitudeEvidence: false },
       sourceEquationIds: ['BE-18', 'CE-landauer'] as const,
       solvedFor: 'temperature',
     },
@@ -111,7 +131,7 @@ describe('describeDerivedClaim names both sides of the identification (9.0.0 aud
       target: { name: 'mass', dim: massEnergy.dimensional.governing.find((g) => g.name === 'mass')!.dim },
       scalarAst: massEnergy.scalarAst!,
       derivedFrom: {
-        identification: { a: 'photon-energy', b: 'rest-energy', dim: '[energy]' },
+        identification: { a: 'photon-energy', b: 'rest-energy', dim: '[energy]', magnitudeEvidence: false },
         sourceEquationIds: ['CE-planck-einstein', 'CE-mass-energy'] as const,
         solvedFor: 'mass',
       },

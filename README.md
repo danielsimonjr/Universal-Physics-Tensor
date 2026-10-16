@@ -128,7 +128,7 @@ by the two routes of BE-42 (`be-42` and `be-42-via-rs`). `upt evaluate be-63 mu_
 | `axes` (`axis-audit`) | Report which tensor classification axes gate the discovery funnel. |
 | `candidates` (`propose`) | Propose same-dimension links between clusters for physicist review. |
 | `connectors` (`orphans`) | Find same-dimension identifications that would pull an isolated bridge into the core. |
-| `discover` (`discovery`) | Vet quantity identifications and rank them promising, inert, or contradictory. |
+| `discover` (`discovery`) | Vet quantity identifications and rank them promising (two tiers: magnitude checked or unchecked), inert, or contradictory. |
 | `frontier` | Print null results and missing connections as two lists, neither of them a score. |
 | `ground` | Show which falsifiers ran on one discovery candidate, and which abstained. |
 | `predict` (`predictions`) | Rank empty regime cells as undiscovered-connection hypotheses. |

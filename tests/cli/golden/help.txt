@@ -199,13 +199,20 @@ Flags:
         VET the link candidates through the inference suite: hypothesise
         each identification a≡b and test whether it merges disconnected
         physics, unlocks quantities, and stays numerically consistent.
-        Ranks promising / inert / contradictory.
+        Ranks promising / promising, magnitude unchecked / inert / contradictory.
+        A row that merges, unlocks and survives every falsifier that ran is
+        'promising' only when the magnitude falsifier ran on it and could have
+        failed (both endpoints have a representative magnitude, and the ratio
+        is not fixed by the graph at every anchor); otherwise it is 'promising,
+        magnitude unchecked' (promising-unchecked in --json). The two tiers are
+        counted and listed apart and never added.
         --source=canonical runs the funnel on the standard-physics L-layer
         ALONE (bridges excluded) — new candidates from established physics,
         and a self-consistency check (expect 0 contradictory).
-        --derive emits, for each 'promising' identification, the ONE algebraic
-        relation it implies (monomial elimination) as an UNADJUDICATED, math-only
-        proposal — NOT a bridge (Part-VI §XXVII-B). Pairs with --source=canonical.
+        --derive emits, for each promising identification of either tier, the ONE
+        algebraic relation it implies (monomial elimination) as an UNADJUDICATED,
+        math-only proposal — NOT a bridge (Part-VI §XXVII-B), and says when the
+        identification had no magnitude evidence. Pairs with --source=canonical.
         --max-orders=N tunes the magnitude-clash threshold (default 3); looser N
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
@@ -216,18 +223,18 @@ Flags:
         (https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
         https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md
         https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md)
-        fold out of the PROMISING list by default (decoy/entailed verdicts only —
+        fold out of the two PROMISING lists by default (decoy/entailed verdicts only —
         review memory, not a re-litigation prompt); --show-adjudicated lists them
         again with their recorded verdict.
-        Each PROMISING row states its readiness dimension by dimension —
+        Each row of either PROMISING list states its readiness dimension by dimension —
         structure, kind, which independent falsifiers (magnitude, axis,
         consequence) ran and survived or abstained — and what would make it
         testable: the identity premise, the missing magnitudes and regimes,
         and the observation that would test it. An abstention is a missing
-        test, never a pass. --require-falsifier hides promising rows that no
-        independent falsifier ran on and survived, counts them, and lists the
-        encoded bridges that already carry a falsifier (a confrontation, a
-        counterexample, or a regime inequality).
+        test, never a pass. --require-falsifier hides promising rows (either
+        tier) that no independent falsifier ran on and survived, counts them per
+        tier, and lists the encoded bridges that already carry a falsifier (a
+        confrontation, a counterexample, or a regime inequality).
 Flags:
   --source=VALUE
         Which graph to read: catalog, canonical, or both. canonical excludes bridges. Default: catalog.
@@ -236,11 +243,11 @@ Flags:
   --anchor=VALUE (repeatable)
         Override a numeric anchor as k=v or k=v,k2=v2. Default: mass=M_sun.
   --derive
-        For each promising identification, print the one algebraic relation it implies. That relation is not a bridge.
+        For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge.
   --show-adjudicated
         List candidates a physicist has already adjudicated, with the recorded verdict.
   --require-falsifier
-        Hide promising rows that no independent falsifier ran on and survived.
+        Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier.
   --json
         Write a JSON envelope to stdout instead of the text report.
 
