@@ -8,7 +8,7 @@
  * @module tests/composition/grounding
  */
 import { describe, it, expect } from 'vitest';
-import { describeGrounding } from '../../src/composition/grounding.js';
+import { describeGrounding, describeReadiness } from '../../src/composition/grounding.js';
 import type { CandidateGrounding } from '../../src/composition/grounding.js';
 import type { VettedCandidate } from '../../src/composition/discovery.js';
 
@@ -29,6 +29,21 @@ function candidate(over: Partial<VettedCandidate> = {}): VettedCandidate {
 }
 
 describe('describeGrounding — epistemic-grounding ledger', () => {
+  it('a magnitude clash is never a passed magnitude, and the falsifier did not survive (it fired)', () => {
+    // The gate ran and FAILED: 4.27 orders against the 3-order threshold. Its failure is the
+    // verdict; neither the grounding ledger nor the readiness may call it a survived test.
+    const clash = candidate({ ordersApart: 4.27, verdict: 'magnitude-clash', score: -1, unlocksFromAnchor: [] });
+    const g = describeGrounding(clash);
+    expect(g.passed.some((p) => p.startsWith('magnitude'))).toBe(false);
+    const f = describeReadiness(clash).falsifiers;
+    expect(f.survived).not.toContain('magnitude');
+    expect(f.abstained).not.toContain('magnitude');
+    // Control: the same comparison under the threshold is a pass and a survived falsifier.
+    const pass = candidate({ ordersApart: 2.9 });
+    expect(describeGrounding(pass).passed).toContain('magnitude (2.9 orders)');
+    expect(describeReadiness(pass).falsifiers.survived).toContain('magnitude');
+  });
+
   it('an anchor-invariant magnitude match is a GAP, never a pass (persona finding L3)', () => {
     const g = describeGrounding(
       candidate({ ordersApart: 1.1, magnitudeUsedAnchor: true, magnitudeAnchorInvariant: true }),
