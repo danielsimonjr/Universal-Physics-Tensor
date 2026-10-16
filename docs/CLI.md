@@ -352,7 +352,7 @@ upt connectors
 
 ### `discover`
 
-Vet quantity identifications and rank them promising, inert, or contradictory. Aliases: `discovery`.
+Vet quantity identifications and rank them promising (two tiers: magnitude checked or unchecked), inert, or contradictory. Aliases: `discovery`.
 
 ```
 upt discover [--source=catalog|canonical|both]
@@ -363,9 +363,9 @@ upt discover [--source=catalog|canonical|both]
 | `--source=VALUE` | `=` value | catalog | Which graph to read: catalog, canonical, or both. canonical excludes bridges. |
 | `--max-orders=VALUE` | `=` value | 3 | Magnitude-clash threshold. A larger value keeps more pairs promising. |
 | `--anchor=VALUE (repeatable)` | `=` value, repeatable | mass=M_sun | Override a numeric anchor as k=v or k=v,k2=v2. |
-| `--derive` | no |  | For each promising identification, print the one algebraic relation it implies. That relation is not a bridge. |
+| `--derive` | no |  | For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge. |
 | `--show-adjudicated` | no |  | List candidates a physicist has already adjudicated, with the recorded verdict. |
-| `--require-falsifier` | no |  | Hide promising rows that no independent falsifier ran on and survived. |
+| `--require-falsifier` | no |  | Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier. |
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 
 ```

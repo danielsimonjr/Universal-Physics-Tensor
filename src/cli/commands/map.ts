@@ -253,11 +253,14 @@ function parseFilter<T extends string>(
 // Convert the derived identity-consequence proposals into viz junctions
 // (gray-dashed, status 'proposed'). The library never imports proposed-bridges;
 // the CLI does the conversion, keeping the epistemic firewall intact.
+// Each junction keeps whether the identification it came from had magnitude evidence (it was
+// `promising`, not `promising-unchecked`), so the list below and `--json` can say so.
+type ProposedJunction = VizJunction & { readonly magnitudeEvidence: boolean };
 function proposedJunctions(
   api: CommandCtx['api'],
   graph: readonly BridgeEdge[],
   flags: ParsedArgs['flags']
-): VizJunction[] {
+): ProposedJunction[] {
   const opts = parseDiscoveryOpts(api, flags);
   const ranked = api.rankDiscoveries(graph, opts);
   return api.deriveProposedBridges(ranked).map((p) => ({
@@ -266,6 +269,7 @@ function proposedJunctions(
     status: 'proposed' as const,
     sources: (p.governing || []).map((g) => g.name),
     target: p.target.name,
+    magnitudeEvidence: p.derivedFrom.identification.magnitudeEvidence,
   }));
 }
 
@@ -736,8 +740,10 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   // Ranked from the UNFILTERED graph: the proposal set is a property of the
   // whole catalog, and the model then judges each overlay junction under the
   // same filter as every other junction. Computed once for every output form.
-  const proposed: VizJunction[] | null = args.flags.has('proposed') ? proposedJunctions(api, wholeGraph, args.flags) : null;
-  const overlay = (extra: VizJunction[]): VizJunction[] => [...(proposed ?? []), ...extra];
+  const proposed: ProposedJunction[] | null = args.flags.has('proposed') ? proposedJunctions(api, wholeGraph, args.flags) : null;
+  // The drawing reads a plain junction; the magnitude-evidence flag is the list's and `--json`'s.
+  const drawn: VizJunction[] = (proposed ?? []).map((p) => ({ id: p.id, label: p.label, status: p.status, sources: p.sources, target: p.target }));
+  const overlay = (extra: VizJunction[]): VizJunction[] => [...drawn, ...extra];
 
   if (isJson) {
     const linkage = api.linkageMap(graph);
@@ -769,7 +775,9 @@ async function runReport(ctx: CommandCtx): Promise<number> {
         anchor,
         result: {
           ...(equation != null && (equationOnly || !args.flags.has('verbose')) ? {} : { linkage }),
-          ...(proposed === null ? {} : { proposed: proposed.map((p) => ({ id: p.id, target: p.target, sources: p.sources })) }),
+          ...(proposed === null
+            ? {}
+            : { proposed: proposed.map((p) => ({ id: p.id, target: p.target, sources: p.sources, magnitudeEvidence: p.magnitudeEvidence })) }),
           ...(edgeLegend !== null ? { filter: edgeStats } : {}),
           ...(focus !== null ? { focus } : {}),
           ...(user ? { landing, userEquation } : {}),
@@ -854,7 +862,8 @@ async function runReport(ctx: CommandCtx): Promise<number> {
     for (const p of proposed) {
       // No free input: every governing quantity of the derived relation is a registered constant.
       const sources = p.sources.length === 0 ? '{} (no sources: every input is a registered constant)' : `{${p.sources.join(', ')}}`;
-      out(`     ${p.id}: ${p.target} ← ${sources}`);
+      const evidence = p.magnitudeEvidence ? '' : '  (from an identification with no magnitude evidence)';
+      out(`     ${p.id}: ${p.target} ← ${sources}${evidence}`);
     }
     if (proposed.length === 0) out('     (none at this anchor and --max-orders)');
   }

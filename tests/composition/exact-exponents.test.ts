@@ -84,7 +84,7 @@ describe('dedupByNormalForm — two proposals that differ by rounding are one', 
     const scalarAst = pow(sym('y', { ...DIMENSIONLESS, L: 3 }), literal);
     return {
       id,
-      derivedFrom: { identification: { a: `a-${id}`, b: `b-${id}`, dim: '[length]' }, sourceEquationIds: ['E1', 'E2'], solvedFor: 'x' },
+      derivedFrom: { identification: { a: `a-${id}`, b: `b-${id}`, dim: '[length]', magnitudeEvidence: false }, sourceEquationIds: ['E1', 'E2'], solvedFor: 'x' },
       target: { name: 'x', dim: L },
       governing: [{ name: 'y', dim: { ...DIMENSIONLESS, L: 3 } }],
       formulaLatex: `x = y^{1/3}`,

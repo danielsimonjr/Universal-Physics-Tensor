@@ -4,11 +4,21 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  429 candidates  →  75 promising  ·  335 inert  ·  18 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
-  readiness of the 75 promising: 0 mechanism-tested · 0 data-tested · 75 without magnitude evidence · 75 with axis unresolved · 0 with an entailed consequence
+  funnel:  429 candidates  →  0 promising  ·  135 promising, magnitude unchecked  ·  275 inert  ·  18 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  readiness of the 0 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 0 with axis unresolved · 0 with an entailed consequence
+  readiness of the 135 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 135 without magnitude evidence · 135 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
-  PROMISING (merges disconnected physics, unlocks quantities, stays consistent):
+  no candidate is `promising` (with magnitude evidence) from the anchor above.
+
+  PROMISING, MAGNITUDE UNCHECKED (the same structure; the magnitude falsifier abstained or its pass is fixed by the graph at every anchor, so it never tested the row):
+    hubble-distance ≟ bohr-radius                        [[length]]  score 6
+        unlocks: hubble-distance
+        [consequence: novel-consequence]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: hubble-distance and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, bohr-radius · needs a stated force regime for: hubble-distance, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure hubble-distance and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     hubble-distance ≟ classical-electron-radius          [[length]]  score 6
         unlocks: hubble-distance
         [consequence: novel-consequence]
@@ -23,6 +33,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: hubble-distance and compton-wavelength-full are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, compton-wavelength-full · needs a stated force regime for: hubble-distance, compton-wavelength-full · needs a consequence that re-derives a known law]
         [observation: measure hubble-distance and compton-wavelength-full in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-mass ≟ molecular-mass                         [[mass]]  score 8
+        unlocks: molecular-mass, most-probable-speed
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-mass and molecular-mass are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: molecular-mass · needs a stated scale regime for: molecular-mass · needs a stated force regime for: molecular-mass · needs a consequence that re-derives a known law]
+        [observation: measure planck-mass and molecular-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ state-energy                        [[energy]]  score 8
+        unlocks: boltzmann-factor, state-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and state-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: state-energy · needs a stated scale regime for: rydberg-energy, state-energy · needs a stated force regime for: rydberg-energy, state-energy · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and state-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     A ≟ thomson-cross-section                            [[area]]  score 7
         unlocks: A, bh-entropy
         [consequence: inconclusive]
@@ -30,6 +54,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: A and thomson-cross-section are the same physical quantity, not only both [area] · needs a representative magnitude for: A · needs a stated scale regime for: A, thomson-cross-section · needs a stated force regime for: A, thomson-cross-section · needs a consequence that re-derives a known law]
         [observation: measure A and thomson-cross-section in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    angular-momentum ≟ position-momentum-uncertainty-product [[action]]  score 7
+        unlocks: angular-momentum
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: angular-momentum and position-momentum-uncertainty-product are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: angular-momentum · needs a stated scale regime for: angular-momentum, position-momentum-uncertainty-product · needs a stated force regime for: angular-momentum, position-momentum-uncertainty-product · needs a consequence that re-derives a known law]
+        [observation: measure angular-momentum and position-momentum-uncertainty-product in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ particle-radius                        [[length]]  score 7
+        unlocks: particle-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and particle-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: particle-radius · needs a stated scale regime for: bohr-radius, particle-radius · needs a stated force regime for: bohr-radius, particle-radius · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and particle-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     classical-electron-radius ≟ particle-radius          [[length]]  score 7
         unlocks: particle-radius
         [consequence: inconclusive]
@@ -51,6 +89,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: cross-sectional-area and thomson-cross-section are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: cross-sectional-area · needs a stated scale regime for: cross-sectional-area, thomson-cross-section · needs a stated force regime for: cross-sectional-area, thomson-cross-section · needs a consequence that re-derives a known law]
         [observation: measure cross-sectional-area and thomson-cross-section in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    droplet-radius ≟ bohr-radius                         [[length]]  score 7
+        unlocks: droplet-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: droplet-radius and bohr-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: droplet-radius, bohr-radius · needs a stated force regime for: droplet-radius, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure droplet-radius and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     droplet-radius ≟ classical-electron-radius           [[length]]  score 7
         unlocks: droplet-radius
         [consequence: inconclusive]
@@ -93,6 +138,34 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: free-energy-difference and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: free-energy-difference, photon-energy · needs a stated force regime for: free-energy-difference, photon-energy · needs a consequence that re-derives a known law]
         [observation: measure free-energy-difference and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    gravitational-potential-energy ≟ rydberg-energy      [[energy]]  score 7
+        unlocks: gravitational-potential-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: gravitational-potential-energy and rydberg-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: gravitational-potential-energy · needs a stated scale regime for: gravitational-potential-energy, rydberg-energy · needs a stated force regime for: gravitational-potential-energy, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure gravitational-potential-energy and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    heat ≟ rydberg-energy                                [[energy]]  score 7
+        unlocks: entropy-change, heat
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: heat and rydberg-energy are the same physical quantity, not only both [energy] · needs a representative magnitude for: heat · needs a stated scale regime for: heat, rydberg-energy · needs a stated force regime for: heat, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure heat and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    heat-energy ≟ rydberg-energy                         [[energy]]  score 7
+        unlocks: heat-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: heat-energy and rydberg-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: heat-energy · needs a stated scale regime for: heat-energy, rydberg-energy · needs a stated force regime for: heat-energy, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure heat-energy and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    impact_parameter ≟ bohr-radius                       [[length]]  score 7
+        unlocks: impact_parameter, light-deflection
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: impact_parameter and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: impact_parameter · needs a stated scale regime for: impact_parameter, bohr-radius · needs a stated force regime for: impact_parameter, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure impact_parameter and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     impact_parameter ≟ classical-electron-radius         [[length]]  score 7
         unlocks: impact_parameter, light-deflection
         [consequence: inconclusive]
@@ -100,6 +173,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: impact_parameter and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: impact_parameter · needs a stated scale regime for: impact_parameter, classical-electron-radius · needs a stated force regime for: impact_parameter, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure impact_parameter and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    kinetic-energy ≟ rydberg-energy                      [[energy]]  score 7
+        unlocks: kinetic-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: kinetic-energy and rydberg-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: kinetic-energy · needs a stated scale regime for: kinetic-energy, rydberg-energy · needs a stated force regime for: kinetic-energy, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure kinetic-energy and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    larmor-radius ≟ bohr-radius                          [[length]]  score 7
+        unlocks: larmor-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: larmor-radius and bohr-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: larmor-radius · needs a stated scale regime for: larmor-radius, bohr-radius · needs a stated force regime for: larmor-radius, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure larmor-radius and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     larmor-radius ≟ classical-electron-radius            [[length]]  score 7
         unlocks: larmor-radius
         [consequence: inconclusive]
@@ -107,6 +194,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: larmor-radius and classical-electron-radius are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: larmor-radius · needs a stated scale regime for: larmor-radius, classical-electron-radius · needs a stated force regime for: larmor-radius, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure larmor-radius and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    oscillator-energy ≟ rydberg-energy                   [[energy]]  score 7
+        unlocks: oscillator-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: oscillator-energy and rydberg-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: oscillator-energy · needs a stated scale regime for: oscillator-energy, rydberg-energy · needs a stated force regime for: oscillator-energy, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure oscillator-energy and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     peak-wavelength ≟ compton-wavelength-shift           [[length]]  score 7
         unlocks: compton-wavelength-shift
         [consequence: inconclusive]
@@ -121,6 +215,41 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: photon-energy and thermal-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: photon-energy, thermal-energy · needs a stated force regime for: photon-energy, thermal-energy · needs a consequence that re-derives a known law]
         [observation: measure photon-energy and thermal-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ impact_parameter                     [[length]]  score 7
+        unlocks: impact_parameter, light-deflection
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and impact_parameter are the same physical quantity, not only both [length] · needs a representative magnitude for: impact_parameter · needs a stated scale regime for: impact_parameter · needs a stated force regime for: impact_parameter · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and impact_parameter in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-mass ≟ secondary-mass                         [[mass]]  score 7
+        unlocks: secondary-mass
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-mass and secondary-mass are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: secondary-mass · needs a stated scale regime for: secondary-mass · needs a stated force regime for: secondary-mass · needs a consequence that re-derives a known law]
+        [observation: measure planck-mass and secondary-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-time ≟ elapsed-time                           [[time]]  score 7
+        unlocks: elapsed-time
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-time and elapsed-time are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: elapsed-time · needs a stated scale regime for: planck-time, elapsed-time · needs a stated force regime for: planck-time, elapsed-time · needs a consequence that re-derives a known law]
+        [observation: measure planck-time and elapsed-time in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-time ≟ rc-time-constant                       [[time]]  score 7
+        unlocks: rc-time-constant
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-time and rc-time-constant are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: rc-time-constant · needs a stated scale regime for: planck-time, rc-time-constant · needs a stated force regime for: planck-time, rc-time-constant · needs a consequence that re-derives a known law]
+        [observation: measure planck-time and rc-time-constant in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-time ≟ relaxation-time                        [[time]]  score 7
+        unlocks: relaxation-time
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-time and relaxation-time are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: relaxation-time · needs a stated scale regime for: planck-time, relaxation-time · needs a stated force regime for: planck-time, relaxation-time · needs a consequence that re-derives a known law]
+        [observation: measure planck-time and relaxation-time in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     rest-energy ≟ internal-energy-change                 [[energy]]  score 7
         unlocks: internal-energy-change
         [consequence: inconclusive]
@@ -135,6 +264,48 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: rest-energy and photoelectron-max-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photoelectron-max-energy · needs a stated scale regime for: rest-energy, photoelectron-max-energy · needs a stated force regime for: rest-energy, photoelectron-max-energy · needs a consequence that re-derives a known law]
         [observation: measure rest-energy and photoelectron-max-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rotational-kinetic-energy ≟ rydberg-energy           [[energy]]  score 7
+        unlocks: rotational-kinetic-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rotational-kinetic-energy and rydberg-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: rotational-kinetic-energy · needs a stated scale regime for: rotational-kinetic-energy, rydberg-energy · needs a stated force regime for: rotational-kinetic-energy, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure rotational-kinetic-energy and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ fermi-energy                        [[energy]]  score 7
+        unlocks: fermi-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and fermi-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: fermi-energy · needs a stated scale regime for: rydberg-energy, fermi-energy · needs a stated force regime for: rydberg-energy, fermi-energy · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and fermi-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ internal-energy-change              [[energy]]  score 7
+        unlocks: internal-energy-change
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and internal-energy-change are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: internal-energy-change · needs a stated scale regime for: rydberg-energy, internal-energy-change · needs a stated force regime for: rydberg-energy, internal-energy-change · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and internal-energy-change in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ photoelectron-max-energy            [[energy]]  score 7
+        unlocks: photoelectron-max-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and photoelectron-max-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photoelectron-max-energy · needs a stated scale regime for: rydberg-energy, photoelectron-max-energy · needs a stated force regime for: rydberg-energy, photoelectron-max-energy · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and photoelectron-max-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ photon-energy                       [[energy]]  score 7
+        unlocks: photon-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: rydberg-energy, photon-energy · needs a stated force regime for: rydberg-energy, photon-energy · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    semi-major-axis ≟ bohr-radius                        [[length]]  score 7
+        unlocks: period, semi-major-axis
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: semi-major-axis and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: semi-major-axis · needs a stated scale regime for: bohr-radius · needs a stated force regime for: bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure semi-major-axis and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     semi-major-axis ≟ classical-electron-radius          [[length]]  score 7
         unlocks: period, semi-major-axis
         [consequence: inconclusive]
@@ -142,6 +313,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: semi-major-axis and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: semi-major-axis · needs a stated scale regime for: classical-electron-radius · needs a stated force regime for: classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure semi-major-axis and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    spring-potential-energy ≟ rydberg-energy             [[energy]]  score 7
+        unlocks: spring-potential-energy
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: spring-potential-energy and rydberg-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: spring-potential-energy · needs a stated scale regime for: spring-potential-energy, rydberg-energy · needs a stated force regime for: spring-potential-energy, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure spring-potential-energy and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-energy ≟ internal-energy-change              [[energy]]  score 7
         unlocks: internal-energy-change
         [consequence: inconclusive]
@@ -163,6 +341,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and compton-wavelength-shift are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: thermal-wavelength, compton-wavelength-shift · needs a stated scale regime for: compton-wavelength-shift · needs a stated force regime for: thermal-wavelength, compton-wavelength-shift · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    a ≟ bohr-radius                                      [[length]]  score 6
+        unlocks: a
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: a and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: a · needs a stated scale regime for: a, bohr-radius · needs a stated force regime for: a, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure a and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     a ≟ classical-electron-radius                        [[length]]  score 6
         unlocks: a
         [consequence: inconclusive]
@@ -170,6 +355,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: a and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: a · needs a stated scale regime for: a, classical-electron-radius · needs a stated force regime for: a, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure a and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    amplitude ≟ bohr-radius                              [[length]]  score 6
+        unlocks: amplitude
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: amplitude and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: amplitude · needs a stated scale regime for: amplitude, bohr-radius · needs a stated force regime for: amplitude, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure amplitude and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     amplitude ≟ classical-electron-radius                [[length]]  score 6
         unlocks: amplitude
         [consequence: inconclusive]
@@ -184,6 +376,27 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: area and thomson-cross-section are the same physical quantity, not only both [area] · needs a representative magnitude for: area · needs a stated scale regime for: area, thomson-cross-section · needs a stated force regime for: area, thomson-cross-section · needs a consequence that re-derives a known law]
         [observation: measure area and thomson-cross-section in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ compton-wavelength-shift               [[length]]  score 6
+        unlocks: compton-wavelength-shift
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and compton-wavelength-shift are the same physical quantity, not only both [length] · needs a representative magnitude for: compton-wavelength-shift · needs a stated scale regime for: bohr-radius, compton-wavelength-shift · needs a stated force regime for: bohr-radius, compton-wavelength-shift · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ deviation-from-mean                    [[length]]  score 6
+        unlocks: deviation-from-mean
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: bohr-radius, deviation-from-mean · needs a stated force regime for: bohr-radius, deviation-from-mean · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    bohr-radius ≟ standard-deviation                     [[length]]  score 6
+        unlocks: standard-deviation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: bohr-radius and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: bohr-radius, standard-deviation · needs a stated force regime for: bohr-radius, standard-deviation · needs a consequence that re-derives a known law]
+        [observation: measure bohr-radius and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     classical-electron-radius ≟ compton-wavelength-shift [[length]]  score 6
         unlocks: compton-wavelength-shift
         [consequence: inconclusive]
@@ -254,6 +467,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength-full and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: compton-wavelength-full, standard-deviation · needs a stated force regime for: compton-wavelength-full, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength-full and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    displacement ≟ bohr-radius                           [[length]]  score 6
+        unlocks: displacement
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: displacement and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: displacement · needs a stated scale regime for: displacement, bohr-radius · needs a stated force regime for: displacement, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure displacement and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     displacement ≟ classical-electron-radius             [[length]]  score 6
         unlocks: displacement
         [consequence: inconclusive]
@@ -261,6 +481,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: displacement and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: displacement · needs a stated scale regime for: displacement, classical-electron-radius · needs a stated force regime for: displacement, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure displacement and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    distance ≟ bohr-radius                               [[length]]  score 6
+        unlocks: distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: distance and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: distance · needs a stated scale regime for: distance, bohr-radius · needs a stated force regime for: distance, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure distance and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     distance ≟ classical-electron-radius                 [[length]]  score 6
         unlocks: distance
         [consequence: inconclusive]
@@ -324,6 +551,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: free-energy-difference and work-function are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-function · needs a stated scale regime for: free-energy-difference, work-function · needs a stated force regime for: free-energy-difference, work-function · needs a consequence that re-derives a known law]
         [observation: measure free-energy-difference and work-function in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    height ≟ bohr-radius                                 [[length]]  score 6
+        unlocks: height
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: height and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: height · needs a stated scale regime for: height, bohr-radius · needs a stated force regime for: height, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure height and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     height ≟ classical-electron-radius                   [[length]]  score 6
         unlocks: height
         [consequence: inconclusive]
@@ -331,6 +565,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: height and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: height · needs a stated scale regime for: height, classical-electron-radius · needs a stated force regime for: height, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure height and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    latent-heat ≟ rydberg-energy                         [[energy]]  score 6
+        unlocks: latent-heat
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: latent-heat and rydberg-energy are the same physical quantity, not only both [energy] · needs a representative magnitude for: latent-heat · needs a stated scale regime for: latent-heat, rydberg-energy · needs a stated force regime for: latent-heat, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure latent-heat and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    length ≟ bohr-radius                                 [[length]]  score 6
+        unlocks: length
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: length and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: length · needs a stated scale regime for: length, bohr-radius · needs a stated force regime for: length, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure length and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     length ≟ classical-electron-radius                   [[length]]  score 6
         unlocks: length
         [consequence: inconclusive]
@@ -352,6 +600,132 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: peak-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: peak-wavelength, standard-deviation · needs a stated force regime for: peak-wavelength, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure peak-wavelength and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    period ≟ planck-time                                 [[time]]  score 6
+        unlocks: period
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: period and planck-time are the same physical quantity, not only both [time] · needs a representative magnitude for: period · needs a stated scale regime for: period, planck-time · needs a stated force regime for: period, planck-time · needs a consequence that re-derives a known law]
+        [observation: measure period and planck-time in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ a                                    [[length]]  score 6
+        unlocks: a
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and a are the same physical quantity, not only both [length] · needs a representative magnitude for: a · needs a stated scale regime for: a · needs a stated force regime for: a · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and a in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ amplitude                            [[length]]  score 6
+        unlocks: amplitude
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and amplitude are the same physical quantity, not only both [length] · needs a representative magnitude for: amplitude · needs a stated scale regime for: amplitude · needs a stated force regime for: amplitude · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and amplitude in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ compton-wavelength-shift             [[length]]  score 6
+        unlocks: compton-wavelength-shift
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and compton-wavelength-shift are the same physical quantity, not only both [length] · needs a representative magnitude for: compton-wavelength-shift · needs a stated scale regime for: compton-wavelength-shift · needs a stated force regime for: compton-wavelength-shift · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and compton-wavelength-shift in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ deviation-from-mean                  [[length]]  score 6
+        unlocks: deviation-from-mean
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: deviation-from-mean · needs a stated force regime for: deviation-from-mean · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ displacement                         [[length]]  score 6
+        unlocks: displacement
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and displacement are the same physical quantity, not only both [length] · needs a representative magnitude for: displacement · needs a stated scale regime for: displacement · needs a stated force regime for: displacement · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and displacement in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ distance                             [[length]]  score 6
+        unlocks: distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and distance are the same physical quantity, not only both [length] · needs a representative magnitude for: distance · needs a stated scale regime for: distance · needs a stated force regime for: distance · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ droplet-radius                       [[length]]  score 6
+        unlocks: droplet-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: droplet-radius · needs a stated force regime for: droplet-radius · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and droplet-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ height                               [[length]]  score 6
+        unlocks: height
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and height are the same physical quantity, not only both [length] · needs a representative magnitude for: height · needs a stated scale regime for: height · needs a stated force regime for: height · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and height in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ hubble-distance                      [[length]]  score 6
+        unlocks: hubble-distance
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: hubble-distance · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ larmor-radius                        [[length]]  score 6
+        unlocks: larmor-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and larmor-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: larmor-radius · needs a stated scale regime for: larmor-radius · needs a stated force regime for: larmor-radius · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and larmor-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ particle-radius                      [[length]]  score 6
+        unlocks: particle-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and particle-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: particle-radius · needs a stated scale regime for: particle-radius · needs a stated force regime for: particle-radius · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and particle-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ r                                    [[length]]  score 6
+        unlocks: r
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and r are the same physical quantity, not only both [length] · needs a representative magnitude for: r · needs a stated scale regime for: r · needs a stated force regime for: r · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and r in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ scale-factor                         [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: scale-factor · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ standard-deviation                   [[length]]  score 6
+        unlocks: standard-deviation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: standard-deviation · needs a stated force regime for: standard-deviation · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-length ≟ wavelength                           [[length]]  score 6
+        unlocks: wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-length and wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: wavelength · needs a stated scale regime for: wavelength · needs a stated force regime for: wavelength · needs a consequence that re-derives a known law]
+        [observation: measure planck-length and wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    planck-time ≟ half-life                              [[time]]  score 6
+        unlocks: half-life
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: planck-time and half-life are the same physical quantity, not only both [time] · needs a representative magnitude for: half-life · needs a stated scale regime for: planck-time, half-life · needs a stated force regime for: planck-time, half-life · needs a consequence that re-derives a known law]
+        [observation: measure planck-time and half-life in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    r ≟ bohr-radius                                      [[length]]  score 6
+        unlocks: r
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: r and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: r · needs a stated scale regime for: r, bohr-radius · needs a stated force regime for: r, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure r and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     r ≟ classical-electron-radius                        [[length]]  score 6
         unlocks: r
         [consequence: inconclusive]
@@ -429,6 +803,34 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: rest-energy and work-function are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-function · needs a stated scale regime for: rest-energy, work-function · needs a stated force regime for: rest-energy, work-function · needs a consequence that re-derives a known law]
         [observation: measure rest-energy and work-function in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ heat-added                          [[energy]]  score 6
+        unlocks: heat-added
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and heat-added are the same physical quantity, not only both [energy] · needs a representative magnitude for: heat-added · needs a stated scale regime for: rydberg-energy, heat-added · needs a stated force regime for: rydberg-energy, heat-added · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and heat-added in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ work-done-by-system                 [[energy]]  score 6
+        unlocks: work-done-by-system
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and work-done-by-system are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-done-by-system · needs a stated scale regime for: rydberg-energy, work-done-by-system · needs a stated force regime for: rydberg-energy, work-done-by-system · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and work-done-by-system in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    rydberg-energy ≟ work-function                       [[energy]]  score 6
+        unlocks: work-function
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: rydberg-energy and work-function are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-function · needs a stated scale regime for: rydberg-energy, work-function · needs a stated force regime for: rydberg-energy, work-function · needs a consequence that re-derives a known law]
+        [observation: measure rydberg-energy and work-function in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    scale-factor ≟ bohr-radius                           [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: scale-factor and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor, bohr-radius · needs a stated force regime for: scale-factor, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure scale-factor and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     scale-factor ≟ classical-electron-radius             [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
@@ -506,6 +908,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, standard-deviation · needs a stated scale regime for: standard-deviation · needs a stated force regime for: thermal-wavelength, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    torque ≟ rydberg-energy                              [[energy]]  score 6
+        unlocks: torque
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: torque and rydberg-energy are the same physical quantity, not only both [energy] · needs a representative magnitude for: torque · needs a stated scale regime for: torque, rydberg-energy · needs a stated force regime for: torque, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure torque and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    wavelength ≟ bohr-radius                             [[length]]  score 6
+        unlocks: wavelength
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: wavelength and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: wavelength · needs a stated scale regime for: wavelength, bohr-radius · needs a stated force regime for: wavelength, bohr-radius · needs a consequence that re-derives a known law]
+        [observation: measure wavelength and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     wavelength ≟ classical-electron-radius               [[length]]  score 6
         unlocks: wavelength
         [consequence: inconclusive]
@@ -513,7 +929,14 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: wavelength and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: wavelength · needs a stated scale regime for: wavelength, classical-electron-radius · needs a stated force regime for: wavelength, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure wavelength and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-  adjudicated: 3 of the 75 promising carry recorded verdicts (2 decoy, 1 entailed) — folded; --show-adjudicated to list
+    work ≟ rydberg-energy                                [[energy]]  score 6
+        unlocks: work
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: work and rydberg-energy are the same physical quantity, not only both [energy] · needs a representative magnitude for: work · needs a stated scale regime for: work, rydberg-energy · needs a stated force regime for: work, rydberg-energy · needs a consequence that re-derives a known law]
+        [observation: measure work and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+  adjudicated: 3 of the 135 promising, magnitude unchecked carry recorded verdicts (2 decoy, 1 entailed) — folded; --show-adjudicated to list
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):
     bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart, p < 1e-300  (anchor-derived)
@@ -559,5 +982,5 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
   AXIS-CLASH (stated scale/force labels differ: a regime-label prior, not a physical test):
     semi-major-axis ≟ planck-length                      scale: classical ≠ quantum
 
-  (magnitude gate abstains where a representative value is unknown; weak priors on dimension.)
+  (magnitude gate abstains where a representative value is unknown, and such a row is at most 'promising, magnitude unchecked'; weak priors on dimension.)
   (inspect one candidate: upt ground --source=canonical <a> <b>, with the same --anchor/--max-orders)

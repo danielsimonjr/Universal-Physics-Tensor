@@ -56,14 +56,18 @@ describe('deriveProposedBridges — canonical-only pilot', () => {
   it('emits the Landauer photon first, plus the new fully-quantitative IDs', () => {
     // The canonical L-layer expansion (Adam+Eve audit) added more
     // fully-quantitative + determinate laws, so the identity-consequence funnel
-    // now surfaces five coincidences (all UNADJUDICATED), including
+    // now surfaces six coincidences (all UNADJUDICATED; five before the source-less targets joined), including
     // CE-compton-wavelength-full against the Hubble distance and, once the
     // classical electron radius carries 1/(4π), that radius against the same
     // distance: the Landauer photon, hν=mc² (photon-energy↔rest-energy via mass),
     // and c/H≟b/T (hubble-distance↔peak-wavelength). Order is registry-stable
     // (Landauer first).
     expect(proposals).toHaveLength(CENSUS.discovery.proposedBridges);
+    // IC-bohr-radius--hubble-distance--hubble-rate joined when the target of a source-less
+    // equation (CE-bohr-radius) became a component member (the owner's decision of 2026-10-16);
+    // the five others are the record from before it.
     expect(proposals.map((p) => p.id).sort()).toEqual([
+      'IC-bohr-radius--hubble-distance--hubble-rate',
       'IC-classical-electron-radius--hubble-distance--hubble-rate',
       'IC-compton-wavelength-full--hubble-distance--hubble-rate',
       'IC-erasure-energy--photon-energy--nu',
@@ -109,6 +113,37 @@ describe('deriveProposedBridges — canonical-only pilot', () => {
       promising('gravitational-force', 'lorentz-force', '[force]'),
     ]);
     expect(none).toEqual([]);
+  });
+});
+
+describe('both promising tiers derive, and each proposal says whether its identification had magnitude evidence', () => {
+  const withVerdict = (verdict: VettedCandidate['verdict']): VettedCandidate =>
+    ({ a: 'erasure-energy', b: 'photon-energy', dim: '[energy]', verdict } as unknown as VettedCandidate);
+
+  it('a promising row carries magnitudeEvidence true, a promising-unchecked row the same relation with false', () => {
+    const [checked] = deriveProposedBridges([withVerdict('promising')]);
+    const [unchecked] = deriveProposedBridges([withVerdict('promising-unchecked')]);
+    expect(checked?.id).toBe('IC-erasure-energy--photon-energy--nu');
+    expect(unchecked?.id).toBe(checked?.id);
+    expect(checked?.derivedFrom.identification.magnitudeEvidence).toBe(true);
+    expect(unchecked?.derivedFrom.identification.magnitudeEvidence).toBe(false);
+  });
+
+  it('control: an inert, clashing or contradictory row derives nothing', () => {
+    for (const v of ['inert', 'magnitude-clash', 'contradictory', 'axis-clash'] as const) {
+      expect(deriveProposedBridges([withVerdict(v)]), v).toEqual([]);
+    }
+  });
+
+  it('on the funnel, the flag is the source row\'s own magnitude evidence', () => {
+    const ranked = rankDiscoveries(CANONICAL_GRAPH);
+    const proposals = deriveProposedBridges(ranked);
+    expect(proposals.length).toBeGreaterThan(0);
+    for (const p of proposals) {
+      const { a, b, magnitudeEvidence } = p.derivedFrom.identification;
+      const row = ranked.find((c) => c.a === a && c.b === b)!;
+      expect(magnitudeEvidence, p.id).toBe(row.verdict === 'promising');
+    }
   });
 });
 
@@ -163,7 +198,7 @@ describe('dedupByNormalForm — cross-proposal dedup (Design §9 #2)', () => {
       id: 'IC-aaa--bbb--nu',
       derivedFrom: {
         ...base.derivedFrom,
-        identification: { a: 'aaa', b: 'bbb', dim: base.derivedFrom.identification.dim },
+        identification: { a: 'aaa', b: 'bbb', dim: base.derivedFrom.identification.dim, magnitudeEvidence: false },
       },
     };
     const deduped = dedupByNormalForm([base, twin]);
@@ -255,7 +290,7 @@ describe('bridge-source adapter + leaf canonicalization', () => {
 
 describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', () => {
   it('materializes the pilot as an unadjudicated, honest entry', () => {
-    expect(PROPOSED_BRIDGES).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + 4 expansion IDs
+    expect(PROPOSED_BRIDGES).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + 5 expansion IDs (4 before the Bohr radius joined)
     const e = PROPOSED_BRIDGES.find(
       (b) => b.id === 'IC-erasure-energy--photon-energy--nu',
     )!;

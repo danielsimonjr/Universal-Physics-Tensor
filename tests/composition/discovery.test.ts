@@ -14,6 +14,7 @@ import {
   rankDiscoveries,
   buildDiscoveryContext,
   vetInContext,
+  hasMagnitudeEvidence,
 } from '../../src/composition/discovery.js';
 import { forwardClosure } from '../../src/composition/identifiability.js';
 import { retrodict } from '../../src/composition/retrodiction.js';
@@ -64,22 +65,67 @@ const cand = (a: string, b: string): LinkCandidate => ({
 const noBase = { identifications: [] as const };
 
 describe('vetLinkCandidate — controlled verdicts', () => {
-  it('PROMISING: merges two components and unlocks new quantities', () => {
-    // chain 1: x → a ; chain 2: b → y. Identifying a≡b bridges them.
-    const edges = [
-      edge('e1', ['x'], 'a', (i) => i['x'] * 2),
-      edge('e2', ['b'], 'y', (i) => i['b'] * 3),
-    ];
-    const r = vetLinkCandidate(edges, cand('a', 'b'), {
+  // chain 1: x → a ; chain 2: b → y. Identifying a≡b bridges them.
+  const bridging = [
+    edge('e1', ['x'], 'a', (i) => i['x'] * 2),
+    edge('e2', ['b'], 'y', (i) => i['b'] * 3),
+  ];
+  const sourced = {
+    a: { value: 4, source: 'synthetic' },
+    b: { value: 5, source: 'synthetic' },
+  };
+
+  it('PROMISING: merges two components, unlocks new quantities, and the magnitude gate ran on sourced values', () => {
+    const r = vetLinkCandidate(bridging, cand('a', 'b'), {
       groundTruth: { x: 2 },
+      representativeValues: sourced,
       ...noBase,
     });
     expect(r.mergesComponents).toBe(true);
     expect(r.unlocksFromAnchor).toEqual(['b', 'y']);
     expect(r.numericallyConsistent).toBe(true);
+    expect(r.magnitudeChecked).toBe(true);
+    expect(r.magnitudeAnchorInvariant).toBe(false);
+    expect(hasMagnitudeEvidence(r)).toBe(true);
     expect(r.verdict).toBe('promising');
     expect(r.score).toBeGreaterThan(0);
   });
+
+  it('PROMISING-UNCHECKED: the same structure with no magnitude for one endpoint is its own verdict, with the same score', () => {
+    const checked = vetLinkCandidate(bridging, cand('a', 'b'), {
+      groundTruth: { x: 2 },
+      representativeValues: sourced,
+      ...noBase,
+    });
+    const r = vetLinkCandidate(bridging, cand('a', 'b'), {
+      groundTruth: { x: 2 },
+      representativeValues: {},
+      ...noBase,
+    });
+    expect(r.mergesComponents).toBe(true);
+    expect(r.unlocksFromAnchor).toEqual(['b', 'y']);
+    expect(r.magnitudeChecked).toBe(false);
+    expect(r.magnitudeMissing).toEqual(['b']);
+    expect(hasMagnitudeEvidence(r)).toBe(false);
+    expect(r.verdict).toBe('promising-unchecked');
+    expect(r.score).toBe(checked.score);
+  });
+});
+
+describe('hasMagnitudeEvidence — the one predicate for "the magnitude falsifier ran and could fail"', () => {
+  const row = (magnitudeChecked: boolean, magnitudeAnchorInvariant?: boolean) => ({ magnitudeChecked, magnitudeAnchorInvariant });
+  it('a checked comparison that moves with the anchor, or does not read it, is evidence', () => {
+    expect(hasMagnitudeEvidence(row(true, false))).toBe(true);
+    expect(hasMagnitudeEvidence(row(true))).toBe(true);
+  });
+  it('an abstention is not evidence, and an anchor-invariant pass cannot fail, so it is not evidence either (AGENTS law 2)', () => {
+    expect(hasMagnitudeEvidence(row(false))).toBe(false);
+    expect(hasMagnitudeEvidence(row(false, false))).toBe(false);
+    expect(hasMagnitudeEvidence(row(true, true))).toBe(false);
+  });
+});
+
+describe('vetLinkCandidate — controlled verdicts (falsifiers and idle rows)', () => {
 
   it('CONTRADICTORY: the identification makes a node disagree with itself', () => {
     // x → a → t (t = 20x). A second route b → t (t = 5b) only fires once
@@ -125,7 +171,8 @@ describe('vetLinkCandidate — controlled verdicts', () => {
       const r = vetLinkCandidate(edges, cand('a', 'b'), { groundTruth: { x: 1 }, ...noBase });
       expect(r.numericallyConsistent).toBe(true);
       expect(r.inconsistentNodes).toEqual([]);
-      expect(r.verdict).toBe('promising');
+      // Structurally promising; neither a nor b has a sourced magnitude, so it is the unchecked tier.
+      expect(r.verdict).toBe('promising-unchecked');
     });
 
     it('inside the closure, a hypothesis that creates a NEW disagreement is contradictory, and names only that node', () => {
@@ -281,17 +328,18 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
     expect(ranked.length).toBe(CENSUS.discovery.catalog.total);
     const verdicts = new Set(ranked.map((r) => r.verdict));
     for (const v of verdicts) {
-      expect(['promising', 'inert', 'contradictory', 'magnitude-clash', 'axis-clash']).toContain(v);
+      expect(['promising', 'promising-unchecked', 'inert', 'contradictory', 'magnitude-clash', 'axis-clash']).toContain(v);
     }
   });
 
   it('is ranked promising-first, then by score (non-increasing within a verdict)', () => {
     const RANK = {
       promising: 0,
-      inert: 1,
-      'magnitude-clash': 2,
-      contradictory: 3,
-      'axis-clash': 4,
+      'promising-unchecked': 1,
+      inert: 2,
+      'magnitude-clash': 3,
+      contradictory: 4,
+      'axis-clash': 5,
     } as const;
     for (let i = 1; i < ranked.length; i++) {
       const prev = ranked[i - 1];
@@ -340,6 +388,17 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
     // log10(1.616255 / 1.616) = 6.9e-5 decades is that rounding, not a physics difference.
     expect(tp?.ordersApart).toBeCloseTo(Math.log10(4 * Math.PI), 3);
     expect(tp?.magnitudeAnchorInvariant).toBe(true);
+    // The pass cannot fail, so the row is structurally promising with no magnitude evidence.
+    expect(tp?.magnitudeChecked).toBe(true);
+    expect(tp?.verdict).toBe('promising-unchecked');
+  });
+
+  it('every promising row has magnitude evidence and every promising-unchecked row has none', () => {
+    const tiers = ranked.filter((r) => r.verdict === 'promising' || r.verdict === 'promising-unchecked');
+    expect(tiers.length).toBeGreaterThan(0);
+    for (const r of tiers) expect(r.verdict === 'promising', `${r.a} ≟ ${r.b}`).toBe(hasMagnitudeEvidence(r));
+    expect(ranked.some((r) => r.verdict === 'promising')).toBe(true);
+    expect(ranked.some((r) => r.verdict === 'promising-unchecked')).toBe(true);
   });
 
   it('control: an anchor-derived ratio that MOVES with the anchor is not flagged', () => {
@@ -353,6 +412,7 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
     const rm = find('mass', 'reference-mass');
     expect(rm?.subsuming).toBe(true);
     expect(rm?.verdict).not.toBe('promising');
+    expect(rm?.verdict).not.toBe('promising-unchecked');
   });
 
   it('curated BE-24/BE-26 scales falsify the tunnelling/FRET length clashes', () => {
@@ -364,9 +424,9 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
     }
   });
 
-  it('no candidate is BOTH promising and subsuming', () => {
+  it('no candidate is BOTH promising (either tier) and subsuming', () => {
     for (const r of ranked) {
-      if (r.verdict === 'promising') expect(r.subsuming).toBe(false);
+      if (r.verdict === 'promising' || r.verdict === 'promising-unchecked') expect(r.subsuming).toBe(false);
     }
   });
 });

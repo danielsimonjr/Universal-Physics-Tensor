@@ -59,7 +59,7 @@ export {
 export { parseDimensionSpec } from './dimensional/dimension-spec.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
-export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';
+export { rankDiscoveries, ANCHOR_DEFAULT, hasMagnitudeEvidence, isPromisingTier } from './composition/discovery.js';
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
 export { auditCoverage } from './composition/audit-coverage.js';
 export {

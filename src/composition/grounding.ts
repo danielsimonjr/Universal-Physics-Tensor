@@ -17,6 +17,7 @@
  * @module composition/grounding
  */
 import type { VettedCandidate } from './discovery.js';
+import { hasMagnitudeEvidence } from './discovery.js';
 import type { ConsequenceSignal } from './consequence.js';
 
 /** The epistemic-grounding ledger for one discovery candidate. @public */
@@ -163,7 +164,7 @@ export interface CandidateReadiness {
 export function describeReadiness(c: VettedCandidate, consequence?: ConsequenceSignal): CandidateReadiness {
   const survived: IndependentFalsifier[] = [];
   const abstained: IndependentFalsifier[] = [];
-  if (c.magnitudeChecked && c.magnitudeAnchorInvariant !== true) survived.push('magnitude');
+  if (hasMagnitudeEvidence(c)) survived.push('magnitude');
   else abstained.push('magnitude');
   if (c.axisChecked && c.axisClashes.length === 0) survived.push('axis');
   else if (!c.axisChecked) abstained.push('axis');

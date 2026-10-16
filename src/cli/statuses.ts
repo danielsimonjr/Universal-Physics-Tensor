@@ -216,8 +216,19 @@ export const STATUS_GLOSSARY: readonly StatusDefinition[] = [
     key: 'promising',
     words: ['PROMISING', 'promising'],
     meaning:
-      'an identification a ≡ b that is numerically consistent, connects disconnected physics and unlocks at least ' +
-      'one quantity: worth a physicist\'s review, not evidence that it holds',
+      'an identification a ≡ b that is numerically consistent, connects disconnected physics, unlocks at least ' +
+      'one quantity, and survived a magnitude comparison that could have failed: worth a physicist\'s review, not ' +
+      'evidence that it holds',
+    commands: ['discover'],
+  },
+  {
+    key: 'promising-unchecked',
+    // `UNCHECKED` alone is `unknown` in the other commands; in `discover` it is this tier's heading word.
+    words: ['promising-unchecked', 'PROMISING, MAGNITUDE UNCHECKED', 'UNCHECKED'],
+    meaning:
+      'the same structure as promising (consistent, connects disconnected physics, unlocks at least one quantity), ' +
+      'but the magnitude falsifier never tested it: an endpoint has no representative magnitude, or the graph fixes ' +
+      'the ratio at every anchor so the comparison could not fail. Counted apart from promising and never added to it',
     commands: ['discover'],
   },
   {

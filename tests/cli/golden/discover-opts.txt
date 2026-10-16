@@ -5,18 +5,12 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  4169 candidates  →  32 promising  ·  2360 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1757 axis-clash
-  readiness of the 32 promising: 0 mechanism-tested · 0 data-tested · 31 without magnitude evidence · 29 with axis unresolved · 0 with an entailed consequence
+  funnel:  4169 candidates  →  1 promising  ·  31 promising, magnitude unchecked  ·  2360 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1757 axis-clash
+  readiness of the 1 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 1 with axis unresolved · 0 with an entailed consequence
+  readiness of the 31 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 31 without magnitude evidence · 28 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
-  PROMISING (merges disconnected physics, unlocks quantities, stays consistent):
-    landauer-erasure-energy ≟ dark-fermion-mass          [[energy]]  score 6
-        unlocks: dark-fermion-mass
-        [consequence: novel-consequence]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: landauer-erasure-energy and dark-fermion-mass are the same physical quantity, not only both [energy] · needs a representative magnitude for: dark-fermion-mass · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
-        [observation: measure landauer-erasure-energy and dark-fermion-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+  PROMISING (merges disconnected physics, unlocks quantities, stays consistent, and the magnitude falsifier ran and survived):
     landauer-erasure-energy ≟ barrier-height             [[energy]]  score 6
         unlocks: barrier-height
         [consequence: inconclusive]
@@ -24,6 +18,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: magnitude (abstained: axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: landauer-erasure-energy and barrier-height are the same physical quantity, not only both [energy] · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy, barrier-height · needs a consequence that re-derives a known law]
         [observation: measure landauer-erasure-energy and barrier-height in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+
+  PROMISING, MAGNITUDE UNCHECKED (the same structure; the magnitude falsifier abstained or its pass is fixed by the graph at every anchor, so it never tested the row):
+    landauer-erasure-energy ≟ dark-fermion-mass          [[energy]]  score 6
+        unlocks: dark-fermion-mass
+        [consequence: novel-consequence]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and dark-fermion-mass are the same physical quantity, not only both [energy] · needs a representative magnitude for: dark-fermion-mass · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and dark-fermion-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     landauer-erasure-energy ≟ ambegaokar-gap             [[energy]]  score 7
         unlocks: ambegaokar-gap, ambegaokar-product
         [consequence: inconclusive]
@@ -2049,5 +2052,5 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     youngs-modulus ≟ raoultsat                           force: emergent ≠ electromagnetic
     youngs-modulus ≟ raoultvapor                         force: emergent ≠ electromagnetic
 
-  (magnitude gate abstains where a representative value is unknown; weak priors on dimension.)
+  (magnitude gate abstains where a representative value is unknown, and such a row is at most 'promising, magnitude unchecked'; weak priors on dimension.)
   (inspect one candidate: upt ground --source=catalog <a> <b>, with the same --anchor/--max-orders)

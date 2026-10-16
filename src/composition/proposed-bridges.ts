@@ -1,5 +1,5 @@
 /**
- * Identity-consequence surfacer — turns a `promising` discovery identification
+ * Identity-consequence surfacer — turns a promising (either tier) discovery identification
  * into the ONE algebraic relation it implies, as an UNADJUDICATED proposal.
  *
  * When the discovery funnel flags `a ≟ b` (two canonical quantities of equal
@@ -48,7 +48,7 @@ import { normalForm } from '../canonical/normal-form.js';
 import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import { forEachScalarLeaf, isDecimalLiteral, mapScalarLeaves } from '../dimensional/ast-leaves.js';
 import { evalExpr } from './expr-eval.js';
-import { rankDiscoveries } from './discovery.js';
+import { rankDiscoveries, isPromisingTier } from './discovery.js';
 import type { VettedCandidate } from './discovery.js';
 import { CANONICAL_GRAPH } from './canonical-graph.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
@@ -183,7 +183,18 @@ export interface ProposedBridge {
   /** `IC-<sorted-a>--<sorted-b>--<solvedFor>`. */
   readonly id: string;
   readonly derivedFrom: {
-    readonly identification: { readonly a: string; readonly b: string; readonly dim: string };
+    readonly identification: {
+      readonly a: string;
+      readonly b: string;
+      readonly dim: string;
+      /**
+       * The source row's magnitude evidence: true when it was `promising` (the magnitude
+       * falsifier ran and could have failed), false when it was `promising-unchecked` (the gate
+       * abstained, or its pass was anchor-invariant). A proposal from an unchecked
+       * identification is printed as such.
+       */
+      readonly magnitudeEvidence: boolean;
+    };
     readonly sourceEquationIds: readonly [string, string];
     readonly solvedFor: string;
   };
@@ -401,7 +412,9 @@ export function resolveSources(name: string): EquationSource[] {
 }
 
 /**
- * Derive the implied relation for each `promising` identification in `candidates`.
+ * Derive the implied relation for each identification in `candidates` in either promising tier
+ * (`promising` or `promising-unchecked`, {@link isPromisingTier}); each proposal records which in
+ * `derivedFrom.identification.magnitudeEvidence`.
  * Returns ONE proposal per admissible candidate (Adam M2), structurally
  * de-duplicated (`dedupByNormalForm`).
  *
@@ -427,7 +440,7 @@ export function deriveProposedBridges(
 ): readonly ProposedBridge[] {
   const out: ProposedBridge[] = [];
   for (const cand of candidates) {
-    if (cand.verdict !== 'promising') continue;
+    if (!isPromisingTier(cand.verdict)) continue;
     const [t0, t1] = [cand.a, cand.b].sort();
     // Enumerate every admissible source pair (de-ambiguation by enumeration).
     for (const E1 of resolveSources(t0)) {
@@ -483,7 +496,7 @@ function derivePair(
   return {
     id: `IC-${t0}--${t1}--${solveFor.name}`,
     derivedFrom: {
-      identification: { a: cand.a, b: cand.b, dim: cand.dim },
+      identification: { a: cand.a, b: cand.b, dim: cand.dim, magnitudeEvidence: cand.verdict === 'promising' },
       sourceEquationIds: [E1.id, E2.id],
       solvedFor: solveFor.name,
     },

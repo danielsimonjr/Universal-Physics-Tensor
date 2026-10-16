@@ -12,6 +12,7 @@
  * @module composition/consequence
  */
 import type { VettedCandidate } from './discovery.js';
+import { isPromisingTier } from './discovery.js';
 import type { ProposedBridge } from './proposed-bridges.js';
 import { deriveProposedBridges } from './proposed-bridges.js';
 import { normalForm } from '../canonical/normal-form.js';
@@ -164,8 +165,9 @@ export function describeDerivedClaim(
 
 /**
  * Annotate ranked candidates with their consequence signal. Order-preserving,
- * 1:1 with the input; only `promising` candidates are classified (they are the
- * only ones `deriveProposedBridges` processes). A promising candidate with no
+ * 1:1 with the input; only candidates in a promising tier (`promising` or
+ * `promising-unchecked`) are classified (they are the only ones
+ * `deriveProposedBridges` processes). A promising candidate with no
  * derived proposal is `inconclusive`. Generic over the input candidate type so
  * it composes with other post-pass annotators (e.g. `annotateAdjudications`)
  * without forgetting fields the caller already attached.
@@ -179,7 +181,7 @@ export function annotateConsequences<T extends VettedCandidate>(
     readonly evidence: readonly ConsequenceEvidence[];
   };
 })[] {
-  const promising = candidates.filter((c) => c.verdict === 'promising');
+  const promising = candidates.filter((c) => isPromisingTier(c.verdict));
   const proposals = deriveProposedBridges(promising);
 
   // Group proposals + their classification by the sorted candidate-pair key.
@@ -198,7 +200,7 @@ export function annotateConsequences<T extends VettedCandidate>(
   }
 
   return candidates.map((c) => {
-    if (c.verdict !== 'promising') return c;
+    if (!isPromisingTier(c.verdict)) return c;
     const key = [c.a, c.b].sort().join('~');
     const hit = byPair.get(key);
     const signal: ConsequenceSignal = hit ? hit.signal : 'inconclusive';

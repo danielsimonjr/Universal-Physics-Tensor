@@ -110,7 +110,7 @@ Every command the registry holds, grouped as the registry groups them. The table
 | `axes` (`axis-audit`) | Report which tensor classification axes gate the discovery funnel. |
 | `candidates` (`propose`) | Propose same-dimension links between clusters for physicist review. |
 | `connectors` (`orphans`) | Find same-dimension identifications that would pull an isolated bridge into the core. |
-| `discover` (`discovery`) | Vet quantity identifications and rank them promising, inert, or contradictory. |
+| `discover` (`discovery`) | Vet quantity identifications and rank them promising (two tiers: magnitude checked or unchecked), inert, or contradictory. |
 | `frontier` | Print null results and missing connections as two lists, neither of them a score. |
 | `ground` | Show which falsifiers ran on one discovery candidate, and which abstained. |
 | `predict` (`predictions`) | Rank empty regime cells as undiscovered-connection hypotheses. |
@@ -254,8 +254,11 @@ date}` when the ledger has one — including folded (`decoy`/`entailed`)
 candidates, since `--json` never folds, only the text report does. The
 envelope also gains a top-level `adjudicationSummary: {total, genuine, decoy,
 entailed, deferred}`, tallied over every candidate in `result` regardless of
-funnel bucket. Every `promising` candidate also carries an optional
-`consequence: {signal, evidence}` field — `signal` is
+funnel bucket. The envelope's `readiness` is one object per promising tier,
+`{promising, promisingUnchecked}`, each `{count, mechanismTested, dataTested,
+withoutMagnitudeEvidence, axisUnresolved, entailedConsequence}`; the two counts are
+never added. Every candidate in either tier (`promising` or `promising-unchecked`)
+also carries an optional `consequence: {signal, evidence}` field — `signal` is
 `entailed | novel-consequence | inconclusive`, `evidence` is the array of
 `{target, governing, derivedNormalForm, canonicalMatch, sourceEquationIds}`
 records backing the signal (empty for `inconclusive`). Annotation-only: it
@@ -434,11 +437,17 @@ node bin/upt.mjs confront --bridge=be-37 --sensitivity
 
 The discovery-style commands print **review surfaces, not discoveries**. A
 `promising` verdict means "worth a physicist's minute", not "true"; a shared
-dimension is a weak prior. The commands say so in their own headers — take them
+dimension is a weak prior. `discover` reports two promising tiers apart and
+never adds them: `promising` rows survived a magnitude comparison that could have
+failed, and `promising, magnitude unchecked` rows (`promising-unchecked` in
+`--json`) have the same structure with no magnitude evidence (the gate abstained,
+or the graph fixes the ratio at every anchor). Each tier has its own funnel count,
+readiness line and section, and a `--derive` or `map --proposed` proposal from an
+unchecked identification says so. The commands say so in their own headers — take them
 at their word. The triage/`priority` ranking is about **decidability**, which is
 orthogonal to whether a bridge is correct.
 
-**`discover`'s adjudication fold-out.** Some PROMISING candidates have already
+**`discover`'s adjudication fold-out.** Some candidates of either PROMISING list have already
 been put to a physicist (recorded in `src/composition/adjudication.ts`, sourced
 from `docs/research/*-adjudication.md`). This is **review memory, not a
 re-litigation prompt**: it never touches the catalog or the funnel itself
@@ -447,8 +456,9 @@ Only the `decoy` (dimensional coincidence, no mechanism) and `entailed`
 (real physics, but already carried by the L-layer — not a new link) verdicts
 fold a candidate out of the default PROMISING listing; `deferred` and
 `genuine` verdicts stay listed, each with an `[adjudicated: …]` trailer giving
-the verdict and its grounds. When any of the PROMISING set carries a verdict,
+the verdict and its grounds. When any row of a PROMISING list carries a verdict,
 an `adjudicated: N of the M promising carry recorded verdicts (…) — …` line
+(`… of the M promising, magnitude unchecked …` for the second list)
 is printed underneath so the shorter list never looks inconsistent against the
 funnel count above it. Pass `--show-adjudicated` to re-list the folded
 candidates.
@@ -482,7 +492,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--debug` | `derive`, `eval` | Print the formula parser name and version on stderr. |
 | `--deny` | `regime` | Mark one prose premise contradicted. The others stay unspecified. |
 | `--depth` | `map` | Hop count for --around. |
-| `--derive` | `discover` | For each promising identification, print the one algebraic relation it implies. That relation is not a bridge. |
+| `--derive` | `discover` | For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge. |
 | `--embed` | `retrieve` | Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0. |
 | `--equation` | `map` | Inject TARGET = EXPR as a user node and report where it lands. |
 | `--equation-only` | `map` | Print only the equation verdict. Errors when --equation is missing. |
@@ -508,7 +518,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--rank-hubs` | `map` | Also rank quantities by betweenness centrality (normalised). Computed only when asked. |
 | `--relation` | `map` | Keep atlas edges whose recorded relation is TYPE. |
 | `--replication` | `probe` | study: replication rows from a separate JSON or CSV file. |
-| `--require-falsifier` | `discover` | Hide promising rows that no independent falsifier ran on and survived. |
+| `--require-falsifier` | `discover` | Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier. |
 | `--rigor` | `confront` | Show one rigor tier: stringent, moderate, or loose. |
 | `--route` | `map` | Map the atlas route FROM,TO instead of the equation graph. |
 | `--run` | `atlas`, `map` | atlas: Execute the in-process registered witnesses. Exit 3 if one is refuted. map: Run the shown bridges' in-process witnesses now. Exit 3 if one is refuted. |

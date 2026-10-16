@@ -101,7 +101,7 @@ describe('a chain that recovers a known law in another spelling is one confirmat
 describe('dedupByNormalForm takes the step on a hash miss', () => {
   const proposal = (id: string, scalarAst: ExprNode): ProposedBridge => ({
     id,
-    derivedFrom: { identification: { a: `a-${id}`, b: `b-${id}`, dim: '[length]' }, sourceEquationIds: ['E1', 'E2'], solvedFor: 'x' },
+    derivedFrom: { identification: { a: `a-${id}`, b: `b-${id}`, dim: '[length]', magnitudeEvidence: false }, sourceEquationIds: ['E1', 'E2'], solvedFor: 'x' },
     target: { name: 'x', dim: validate(scalarAst).inferredDimension! },
     governing: [],
     formulaLatex: id,

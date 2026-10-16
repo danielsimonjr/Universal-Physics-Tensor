@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 384 |
-| Total Test Files | 665 |
+| Total Test Files | 666 |
 | Source files imported directly by a test | 341 |
 | Source files reached directly or through a barrel or side-effect import | 375 |
 | Source files no test reaches either way | 9 |
@@ -646,6 +646,7 @@ The following 9 source files are reached by no test file, directly or through a 
 | `cli/discover-cache.test.ts` | 0 files |
 | `cli/discover-derive-samples.test.ts` | 31 files |
 | `cli/discover-magnitude-p.test.ts` | 2 files |
+| `cli/discover-tiers.test.ts` | 0 files |
 | `cli/eval-functions.test.ts` | 1 files |
 | `cli/eval-registered-constants.test.ts` | 32 files |
 | `cli/eval-si-prefix-constants.test.ts` | 31 files |
