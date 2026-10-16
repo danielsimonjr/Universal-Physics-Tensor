@@ -16064,6 +16064,12 @@
               "byKey",
               "compareCodepoint"
             ]
+          },
+          {
+            "file": "../core/format.js",
+            "imports": [
+              "formatQuantity"
+            ]
           }
         ],
         "exports": [
@@ -27755,7 +27761,7 @@
   "statistics": {
     "totalTypeScriptFiles": 385,
     "totalModules": 13,
-    "totalLinesOfCode": 86566,
+    "totalLinesOfCode": 86567,
     "totalExports": 2752,
     "totalClasses": 85,
     "totalInterfaces": 512,
