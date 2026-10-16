@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0",
-  "packageVersion": "10.0.0",
+  "packageVersion": "11.0.0",
   "families": [
     {
       "$schema": "../schemas/atlas-record.v0.json",
@@ -601,7 +601,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -609,7 +609,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/OscillatorDictionary.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/OscillatorDictionary.lean",
             "covers": "the oscillator dictionary — covers its statement only"
           },
           "normTransports": [
@@ -728,7 +728,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.DampedRlc.time_rescale_equationOfMotion",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -736,7 +736,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/OscillatorDictionary.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/OscillatorDictionary.lean",
             "covers": "the oscillator dictionary — covers its statement only"
           }
         },
@@ -834,7 +834,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -842,7 +842,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/Pendulum.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/Pendulum.lean",
             "covers": "the transformation, not bound.delta — covers its statement only"
           }
         },
@@ -1960,7 +1960,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -1968,7 +1968,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/TelegraphDiffusion.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/TelegraphDiffusion.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2056,7 +2056,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.TelegraphWave.covers_bound_delta",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2064,7 +2064,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/TelegraphWave.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/TelegraphWave.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2567,7 +2567,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.WaveDalembert.solution_eq_profiles",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2575,7 +2575,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/WaveDalembert.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/WaveDalembert.lean",
             "covers": "the missing direction of d'Alembert's formula — covers its statement only"
           }
         },
@@ -2760,7 +2760,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KleinGordonWave.covers_bound_delta",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2768,7 +2768,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/KleinGordonWave.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/KleinGordonWave.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2871,7 +2871,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KgSchrodinger.covers_bound_delta",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2879,7 +2879,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/KgSchrodinger.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/KgSchrodinger.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2937,7 +2937,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KgOscillator.uniform_solves_equationOfMotion",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2945,7 +2945,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/KgOscillator.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/KgOscillator.lean",
             "covers": "the restriction, in Physlib's own terms — covers its statement only"
           }
         },
@@ -3036,7 +3036,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.StiffString.covers_bound_delta",
-            "version": "upt-lean@v10.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "upt-lean@v11.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -3044,7 +3044,7 @@
             ],
             "fidelity": "sanity-lemmas",
             "kind": "bridge",
-            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v10.0.0/lean/StiffString.lean",
+            "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v11.0.0/lean/StiffString.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         }
