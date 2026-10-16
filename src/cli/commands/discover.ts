@@ -82,6 +82,10 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         algebraic relation it implies (monomial elimination) as an UNADJUDICATED,
         math-only proposal — NOT a bridge (Part-VI §XXVII-B), and says when the
         identification had no magnitude evidence. Pairs with --source=canonical.
+        A magnitude comes from the sourced table, else a constant the graph
+        fixes, else the quantity's own equation evaluated from the table and
+        the constants (used only at a propagated σ of at most one decade),
+        else the anchor; the MAGNITUDE-CLASH list marks the last two.
         --max-orders=N tunes the magnitude-clash threshold (default ${DISCOVER_MAX_ORDERS_DEFAULT}); looser N
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
@@ -470,7 +474,13 @@ async function run(ctx: CommandCtx): Promise<number> {
         `at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):`,
     );
     for (const r of clash) {
-      const basis = r.magnitudeUsedAnchor ? '  (anchor-derived)' : '';
+      // Where each magnitude came from when it was not the sourced table: the quantity's own
+      // equation (not anchor-derived), or the anchor.
+      const bases = [
+        ...((r.magnitudeDerived ?? []).length > 0 ? [`${r.magnitudeDerived!.join(', ')} from its own equation`] : []),
+        ...(r.magnitudeUsedAnchor ? ['anchor-derived'] : []),
+      ];
+      const basis = bases.length > 0 ? `  (${bases.join('; ')})` : '';
       // A p that underflows a double is not zero: it is below the smallest normal double.
       const p = r.magnitudeP;
       const strength =

@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (125)"]
+  subgraph cl_0["anchored cluster (119)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -130,25 +130,6 @@ flowchart LR
     q_mond_acceleration_scale --> j_be_38
     q_mond_force(["mond-force"]):::qty
     j_be_38 --> q_mond_force
-    j_be_47["BE-47"]:::speculative
-    q_hubble_rate(["hubble-rate"]):::qty
-    q_hubble_rate --> j_be_47
-    q_nucleon_yield_density(["nucleon-yield-density"]):::qty
-    q_nucleon_yield_density --> j_be_47
-    q_sm_reaction_rate_coefficient(["sm-reaction-rate-coefficient"]):::qty
-    q_sm_reaction_rate_coefficient --> j_be_47
-    q_proton_density(["proton-density"]):::qty
-    q_proton_density --> j_be_47
-    q_neutron_density(["neutron-density"]):::qty
-    q_neutron_density --> j_be_47
-    q_dark_reaction_rate_coefficient(["dark-reaction-rate-coefficient"]):::qty
-    q_dark_reaction_rate_coefficient --> j_be_47
-    q_dark_species_density(["dark-species-density"]):::qty
-    q_dark_species_density --> j_be_47
-    q_transfer_efficiency(["transfer-efficiency"]):::qty
-    q_transfer_efficiency --> j_be_47
-    q_nucleon_yield_rate(["nucleon-yield-rate"]):::qty
-    j_be_47 --> q_nucleon_yield_rate
     j_be_59["BE-59"]:::established
     q_voltage(["voltage"]):::qty
     q_voltage --> j_be_59
@@ -548,10 +529,6 @@ flowchart LR
     q_temperature_change --> j_CE_heat_capacity
     q_heat_energy(["heat-energy"]):::qty
     j_CE_heat_capacity --> q_heat_energy
-    j_CE_hubble_distance["Hubble distance"]:::law
-    q_hubble_rate --> j_CE_hubble_distance
-    q_hubble_distance(["hubble-distance"]):::qty
-    j_CE_hubble_distance --> q_hubble_distance
     j_CE_landauer["Landauer erasure bound"]:::law
     q_temperature --> j_CE_landauer
     q_erasure_energy(["erasure-energy"]):::qty
@@ -714,16 +691,6 @@ flowchart LR
     q_yukawa_coupling --> j_IC_dark_fermion_mass__rest_energy__mass
     q_vacuum_expectation_value --> j_IC_dark_fermion_mass__rest_energy__mass
     j_IC_dark_fermion_mass__rest_energy__mass --> q_mass
-    j_IC_bohr_radius__hubble_distance__hubble_rate["IC-bohr-radius--hubble-distance--hubble-rate"]:::proposed
-    j_IC_bohr_radius__hubble_distance__hubble_rate --> q_hubble_rate
-    j_IC_classical_electron_radius__hubble_distance__hubble_rate["IC-classical-electron-radius--hubble-distance--hubble-rate"]:::proposed
-    j_IC_classical_electron_radius__hubble_distance__hubble_rate --> q_hubble_rate
-    j_IC_compton_wavelength_full__hubble_distance__hubble_rate["IC-compton-wavelength-full--hubble-distance--hubble-rate"]:::proposed
-    q_mass --> j_IC_compton_wavelength_full__hubble_distance__hubble_rate
-    j_IC_compton_wavelength_full__hubble_distance__hubble_rate --> q_hubble_rate
-    j_IC_hubble_distance__peak_wavelength__temperature["IC-hubble-distance--peak-wavelength--temperature"]:::proposed
-    q_hubble_rate --> j_IC_hubble_distance__peak_wavelength__temperature
-    j_IC_hubble_distance__peak_wavelength__temperature --> q_temperature
     j_IC_parker_radius__peak_wavelength__temperature["IC-parker-radius--peak-wavelength--temperature"]:::proposed
     q_parker_mass --> j_IC_parker_radius__peak_wavelength__temperature
     q_2(["2"]):::qty
@@ -808,6 +775,32 @@ flowchart LR
   end
   subgraph cl_4["anchored cluster (2)"]
     direction LR
+    j_be_47["BE-47"]:::speculative
+    q_hubble_rate(["hubble-rate"]):::qty
+    q_hubble_rate --> j_be_47
+    q_nucleon_yield_density(["nucleon-yield-density"]):::qty
+    q_nucleon_yield_density --> j_be_47
+    q_sm_reaction_rate_coefficient(["sm-reaction-rate-coefficient"]):::qty
+    q_sm_reaction_rate_coefficient --> j_be_47
+    q_proton_density(["proton-density"]):::qty
+    q_proton_density --> j_be_47
+    q_neutron_density(["neutron-density"]):::qty
+    q_neutron_density --> j_be_47
+    q_dark_reaction_rate_coefficient(["dark-reaction-rate-coefficient"]):::qty
+    q_dark_reaction_rate_coefficient --> j_be_47
+    q_dark_species_density(["dark-species-density"]):::qty
+    q_dark_species_density --> j_be_47
+    q_transfer_efficiency(["transfer-efficiency"]):::qty
+    q_transfer_efficiency --> j_be_47
+    q_nucleon_yield_rate(["nucleon-yield-rate"]):::qty
+    j_be_47 --> q_nucleon_yield_rate
+    j_CE_hubble_distance["Hubble distance"]:::law
+    q_hubble_rate --> j_CE_hubble_distance
+    q_hubble_distance(["hubble-distance"]):::qty
+    j_CE_hubble_distance --> q_hubble_distance
+  end
+  subgraph cl_5["anchored cluster (2)"]
+    direction LR
     j_be_55["BE-55"]:::established
     q_chern_number(["chern-number"]):::qty
     q_chern_number --> j_be_55
@@ -818,7 +811,7 @@ flowchart LR
     q_filling_fraction --> j_be_60
     j_be_60 --> q_hall_conductance
   end
-  subgraph cl_5["anchored cluster (2)"]
+  subgraph cl_6["anchored cluster (2)"]
     direction LR
     j_CE_classical_electron_radius["Classical electron radius"]:::law
     q_classical_electron_radius(["classical-electron-radius"]):::qty
@@ -828,7 +821,7 @@ flowchart LR
     q_thomson_cross_section(["thomson-cross-section"]):::qty
     j_CE_thomson_cross_section --> q_thomson_cross_section
   end
-  subgraph cl_6["anchored cluster (2)"]
+  subgraph cl_7["anchored cluster (2)"]
     direction LR
     j_CE_half_life["Radioactive half-life"]:::law
     q_decay_constant(["decay-constant"]):::qty

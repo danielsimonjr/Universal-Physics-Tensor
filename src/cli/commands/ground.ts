@@ -117,7 +117,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         source,
         anchor: { groundTruth: groundTruthAnchor(api, opts) },
         options: { ...opts },
-        result: { a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g },
+        result: { a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g, magnitudeDerived: cand.magnitudeDerived ?? [] },
       },
       ctx.write,
     );
@@ -129,6 +129,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(EPISTEMICS + '\n');
   out(`  passed:  ${g.passed.join(', ') || '—'}`);
   out(`  gaps:    ${g.gaps.join(', ') || '—'}`);
+  // A magnitude-clash row's grounding states no magnitude line, so where a magnitude came from its
+  // own equation is said here, for every verdict.
+  if ((cand.magnitudeDerived ?? []).length > 0) {
+    out(`  magnitude: ${cand.magnitudeDerived!.join(', ')} from its own equation (the sourced table and the constants, not the anchor)`);
+  }
   out(
     `  ceiling: mechanism-tested ${g.mechanismTested} · data-tested ${g.dataTested} ` +
       '(permanent for a dimensional candidate — see `upt confront`)',

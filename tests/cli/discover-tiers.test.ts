@@ -105,10 +105,13 @@ describe('upt discover: two sections, each listing only its own tier', () => {
     expect(section(text, 'PROMISING (')).toEqual([]);
     expect(text).toContain('no candidate is `promising` (with magnitude evidence) from the anchor above.');
     const unchecked = section(text, 'PROMISING, MAGNITUDE UNCHECKED (');
-    expect(unchecked).toContain('hubble-distance ≟ bohr-radius');
+    // hubble-distance ≟ bohr-radius was the example until the Hubble distance had a magnitude
+    // (option 2 of the owner's decision of 2026-10-16): it is a magnitude clash now.
+    expect(unchecked).not.toContain('hubble-distance ≟ bohr-radius');
+    expect(unchecked).toContain('planck-mass ≟ molecular-mass');
     // The same per-row detail as the PROMISING section.
-    const row = text.slice(text.indexOf('    hubble-distance ≟ bohr-radius'));
-    expect(row).toMatch(/^ {4}hubble-distance ≟ bohr-radius .*\n {8}unlocks: /);
+    const row = text.slice(text.indexOf('    planck-mass ≟ molecular-mass'));
+    expect(row).toMatch(/^ {4}planck-mass ≟ molecular-mass .*\n {8}unlocks: /);
     expect(row).toMatch(/\[readiness — structure: merges components/);
   }, 300_000);
 
@@ -128,11 +131,13 @@ describe('upt discover: two sections, each listing only its own tier', () => {
 describe('upt discover --derive: a proposal says when its identification had no magnitude evidence', () => {
   it('text and JSON', async () => {
     const { text } = await runText(['discover', '--source=canonical', '--derive']);
-    const block = text.slice(text.indexOf('  IC-bohr-radius--hubble-distance--hubble-rate'));
-    expect(block).toMatch(/from: hubble-distance ≟ bohr-radius .*\n {6}magnitude: no evidence — the identification is promising, magnitude unchecked/);
+    // The Hubble proposals are no longer derived (option 2, 2026-10-16); the Landauer photon is the example.
+    expect(text).not.toContain('IC-bohr-radius--hubble-distance--hubble-rate');
+    const block = text.slice(text.indexOf('  IC-erasure-energy--photon-energy--nu'));
+    expect(block).toMatch(/from: erasure-energy ≟ photon-energy .*\n {6}magnitude: no evidence — the identification is promising, magnitude unchecked/);
     const env = await json(['discover', '--source=canonical', '--derive']);
     const p = (env.result as { id: string; derivedFrom: { identification: { magnitudeEvidence: boolean } } }[]).find(
-      (x) => x.id === 'IC-bohr-radius--hubble-distance--hubble-rate',
+      (x) => x.id === 'IC-erasure-energy--photon-energy--nu',
     );
     expect(p?.derivedFrom.identification.magnitudeEvidence).toBe(false);
   }, 300_000);
@@ -142,11 +147,11 @@ describe('upt map --proposed: the proposal list says when an identification had 
   it('text and JSON', async () => {
     const { text } = await runText(['map', '--source=canonical', '--proposed']);
     expect(text).toMatch(
-      /^ {5}IC-bohr-radius--hubble-distance--hubble-rate: hubble-rate ← .*\(from an identification with no magnitude evidence\)$/m,
+      /^ {5}IC-erasure-energy--photon-energy--nu: nu ← .*\(from an identification with no magnitude evidence\)$/m,
     );
     const env = await json(['map', '--source=canonical', '--proposed']);
     const p = (env.result.proposed as { id: string; magnitudeEvidence: boolean }[]).find(
-      (x) => x.id === 'IC-bohr-radius--hubble-distance--hubble-rate',
+      (x) => x.id === 'IC-erasure-energy--photon-energy--nu',
     );
     expect(p?.magnitudeEvidence).toBe(false);
   }, 300_000);

@@ -52,6 +52,8 @@ import { conventionScaleToSI } from '../dimensional/unit-convention.js';
 import { allQuantities } from './quantities.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { format } from '../dimensional/algebra.js';
+import { deriveOwnEquationMagnitudes } from './own-equation-magnitude.js';
+import type { DerivedMagnitudes } from './own-equation-magnitude.js';
 
 // ── registry-only attribute lookup (D1 axis gate; Option-A resolution) ─────
 // Built from the centralized `Quantity` nodes ONLY (never canonical
@@ -136,7 +138,8 @@ export interface VettedCandidate {
    * The calibrated STRENGTH of the magnitude falsifier against the two values' stated
    * uncertainties: `2·Φ(−ordersApart / √(σ_a² + σ_b²))`, with σ in decades per representative
    * value (`sigmaDecades`, default one decade: the table's "good to about one order"; an
-   * anchor-derived value takes the default), through MathTS `normalCDF` of the negative
+   * anchor-derived value takes the default; a value from the quantity's own equation, its
+   * propagated σ), through MathTS `normalCDF` of the negative
    * argument so a far tail is not rounded to 0 by `1 − cdf`. It is reported BESIDE the verdict
    * and changes no verdict: the clash threshold stays `ordersApart > maxOrders`. A small p says
    * the two magnitudes are hard to reconcile at their stated precision; 2.9 decades at σ = 1
@@ -173,9 +176,19 @@ export interface VettedCandidate {
    */
   readonly magnitudeAnchorInvariant?: boolean;
   /**
-   * The endpoints with no representative magnitude (neither in the sourced
-   * table nor valued at the anchor) — why the magnitude gate abstained. Empty
-   * when it ran. Optional on the type; the funnel always sets it.
+   * The endpoints whose magnitude the gate took from the quantity's own equation
+   * (`own-equation-magnitude.ts`): no table value and no no-anchor constant, but
+   * an edge into it whose every source the table or the constants value, at a
+   * propagated σ within one decade. Such a value is not anchor-derived. Empty
+   * when neither endpoint's magnitude came from there. Optional on the type; the
+   * funnel always sets it.
+   */
+  readonly magnitudeDerived?: readonly string[];
+  /**
+   * The endpoints with no representative magnitude (not in the sourced table,
+   * not a no-anchor constant, not derived from their own equation, not valued
+   * at the anchor) — why the magnitude gate abstained. Empty when it ran.
+   * Optional on the type; the funnel always sets it.
    */
   readonly magnitudeMissing?: readonly string[];
   /**
@@ -410,6 +423,12 @@ export interface DiscoveryContext {
    * not an anchor-derived magnitude, so the magnitude gate reads it as `fromAnchor: false`.
    */
   readonly constantValues: ReadonlyMap<string, number>;
+  /**
+   * The magnitudes the graph derives from the sourced table and the constants alone, never from
+   * the anchor (`deriveOwnEquationMagnitudes`), with every refusal and its reason: a σ above one
+   * decade, two disagreeing edges, or a σ that could not be measured.
+   */
+  readonly derivedMagnitudes: DerivedMagnitudes;
   /** The same evaluation with every anchor input times {@link ANCHOR_PROBE_FACTOR}. */
   readonly anchorValuesProbe: ReadonlyMap<string, number>;
   /** `quantityComponents(edges, baseIdents)` — base component roots. */
@@ -435,17 +454,24 @@ export function buildDiscoveryContext(
   const groundTruth = opts.groundTruth ?? ANCHOR_DEFAULT;
   const anchor = Object.keys(groundTruth);
   const baseReport = retrodict(edges, groundTruth, { identifications: baseIdents });
+  const repVals = opts.representativeValues ?? REPRESENTATIVE_VALUES;
+  const constantValues = forwardEvaluate(edges, {}, baseIdents);
   return {
     baseIdents,
     groundTruth,
     anchor,
-    repVals: opts.representativeValues ?? REPRESENTATIVE_VALUES,
+    repVals,
     maxOrders: opts.maxOrdersOfMagnitude ?? DEFAULT_MAX_ORDERS_OF_MAGNITUDE,
     attributesByName: opts.quantityAttributes ?? REGISTRY_ATTRIBUTES_BY_NAME,
     // Candidate-invariant: the anchor's forward evaluation, the base component
     // partition, and the base forward closure all depend only on (edges, opts).
     anchorValues: forwardEvaluate(edges, groundTruth, baseIdents),
-    constantValues: forwardEvaluate(edges, {}, baseIdents),
+    constantValues,
+    derivedMagnitudes: deriveOwnEquationMagnitudes(edges, {
+      representativeValues: repVals,
+      constantValues,
+      identifications: baseIdents,
+    }),
     anchorValuesProbe: forwardEvaluate(
       edges,
       Object.fromEntries(
@@ -526,6 +552,8 @@ function newInconsistencies(
 interface GateMagnitude {
   readonly value: number;
   readonly fromAnchor: boolean;
+  /** Derived from the quantity's own equation (`ctx.derivedMagnitudes`). */
+  readonly fromOwnEquation: boolean;
   readonly sigmaDecades: number;
 }
 
@@ -544,6 +572,8 @@ export interface MagnitudeGate {
   readonly p: number | null;
   /** The endpoints with no magnitude (why the gate abstained); empty when it ran. */
   readonly missing: readonly string[];
+  /** The endpoints whose magnitude came from their own equation, in candidate order. */
+  readonly derived: readonly string[];
 }
 
 /** MathTS `normalCDF`, read back as the number it is. */
@@ -570,10 +600,12 @@ export function magnitudeStrength(orders: number, sigmaA: number, sigmaB: number
  * when both endpoints have a representative value and abstains (never false-rejects) otherwise.
  * A value comes from the sourced static table first; else from the value the graph fixes with NO
  * anchor input (a constant computed from registered constants alone, `ctx.constantValues`: not
+ * anchor-derived); else from the quantity's own equation evaluated from the table and the
+ * constants (`ctx.derivedMagnitudes`, at its propagated σ, never above one decade: not
  * anchor-derived); else — for graph-derived quantities the table omits by design
  * (schwarzschild-radius, thermal-de-broglie-wavelength) — from the quantity's value AT THE
- * REGISTERED ANCHOR, a definite magnitude for this run. The last two take the default σ of one
- * decade. The verdict is `ordersApart > ctx.maxOrders`; `p` is reported beside it.
+ * REGISTERED ANCHOR, a definite magnitude for this run. The constant and the anchor value take the
+ * default σ of one decade. The verdict is `ordersApart > ctx.maxOrders`; `p` is reported beside it.
  *
  * @internal
  */
@@ -584,17 +616,29 @@ export function magnitudeGate(candidate: LinkCandidate, ctx: DiscoveryContext): 
     // would make log10 blow up (log10(0) = -∞), spoofing or silently disabling
     // the falsifier. Symmetric validation across the table and anchor sources.
     if (rv !== undefined && Number.isFinite(rv.value) && rv.value !== 0) {
-      return { value: rv.value, fromAnchor: false, sigmaDecades: sigmaDecadesOf(rv) };
+      return { value: rv.value, fromAnchor: false, fromOwnEquation: false, sigmaDecades: sigmaDecadesOf(rv) };
     }
     // A value the graph fixes with no anchor input is a constant: comparing it can fail by the
     // clash threshold at every anchor, so it is not anchor-derived and the invariance probe does
     // not withhold it. Only a value that needs the anchor is `fromAnchor`.
     const cv = ctx.constantValues.get(name);
-    const av = cv ?? ctx.anchorValues.get(name);
+    if (cv !== undefined) {
+      const value = cv * conventionScaleToSI(name);
+      if (Number.isFinite(value) && value !== 0) {
+        return { value, fromAnchor: false, fromOwnEquation: false, sigmaDecades: DEFAULT_SIGMA_DECADES };
+      }
+    }
+    // The quantity's own equation, from the table and the constants alone (already in SI, and
+    // already refused when its σ is above one decade): not anchor-derived either.
+    const dv = ctx.derivedMagnitudes.values.get(name);
+    if (dv !== undefined) {
+      return { value: dv.value, fromAnchor: false, fromOwnEquation: true, sigmaDecades: dv.sigmaDecades };
+    }
+    const av = ctx.anchorValues.get(name);
     if (av !== undefined) {
       const value = av * conventionScaleToSI(name);
       if (Number.isFinite(value) && value !== 0) {
-        return { value, fromAnchor: cv === undefined, sigmaDecades: DEFAULT_SIGMA_DECADES };
+        return { value, fromAnchor: true, fromOwnEquation: false, sigmaDecades: DEFAULT_SIGMA_DECADES };
       }
     }
     return undefined;
@@ -612,6 +656,9 @@ export function magnitudeGate(candidate: LinkCandidate, ctx: DiscoveryContext): 
     clash: ordersApart !== null && ordersApart > ctx.maxOrders,
     p: checked && ordersApart !== null ? magnitudeStrength(ordersApart, a.sigmaDecades, b.sigmaDecades) : null,
     missing: [a === undefined ? candidate.a : null, b === undefined ? candidate.b : null].filter(
+      (e): e is string => e !== null,
+    ),
+    derived: [a?.fromOwnEquation === true ? candidate.a : null, b?.fromOwnEquation === true ? candidate.b : null].filter(
       (e): e is string => e !== null,
     ),
   };
@@ -813,6 +860,7 @@ export function vetInContext(
     magnitudeChecked,
     magnitudeUsedAnchor,
     magnitudeAnchorInvariant,
+    magnitudeDerived: gate.derived,
     magnitudeMissing: gate.missing,
     axisUnstated,
     subsuming,

@@ -123,6 +123,13 @@ export const REPRESENTATIVE_VALUES: Readonly<
     source: 'BE-26 DNA H-bond proton-tunneling distance ~1 Å (Löwdin 1963)',
   },
   'planck-length': { value: 1.616e-35, source: 'ℓ_P = √(ℏG/c³)' },
+  // The Hubble distance is a definite cosmological scale, not a generic length: c over the
+  // hubble-rate row above (a test pins the two rows together, so one cannot move alone).
+  'hubble-distance': {
+    value: 1.363e26,
+    source:
+      'D_H = c/H0 = 2.998e8 m/s / 2.2e-18 s^-1 ≈ 1.363e26 m, with H0 ≈ 67 km/s/Mpc (Planck 2018), the hubble-rate row',
+  },
   // Canonical-graph atomic length scales — sourced so the gate compares real
   // magnitudes instead of falling back to the {mass: M_sun} anchor, which makes
   // a 1/mass quantity like the Compton wavelength absurdly small (~10⁻⁷³ m) and
