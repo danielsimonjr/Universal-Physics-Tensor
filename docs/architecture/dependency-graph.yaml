@@ -10786,6 +10786,10 @@ modules:
         - file: ../numerical/finite-difference.js
           imports:
             - centralPartial
+        - file: ../core/compare.js
+          imports:
+            - byKey
+            - compareCodepoint
       exports:
         - DERIVED_AGREEMENT
         - deriveOwnEquationMagnitudes
@@ -19207,7 +19211,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 86565
+  totalLinesOfCode: 86566
   totalExports: 2752
   totalClasses: 85
   totalInterfaces: 512

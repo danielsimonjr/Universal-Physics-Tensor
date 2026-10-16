@@ -40,6 +40,7 @@ import type { RepresentativeValue } from './representative-values.js';
 import { conventionFactor, conventionScaleToSI } from '../dimensional/unit-convention.js';
 import { CONSTANT_REGISTRY } from '../dimensional/symbolic-constants.js';
 import { centralPartial } from '../numerical/finite-difference.js';
+import { byKey, compareCodepoint } from '../core/compare.js';
 
 /**
  * Relative difference above which two edges deriving one quantity disagree. Two encodings of one
@@ -160,7 +161,7 @@ function logResponse(edge: BridgeEdge, inputs: Readonly<Record<string, number>>,
 /** σ of an edge's value from its inputs' σ, through the log-elasticities; undefined when one is not finite. */
 function propagatedSigma(edge: BridgeEdge, inputs: Readonly<Record<string, number>>, known: ReadonlyMap<string, Known>): number | undefined {
   let sum = 0;
-  for (const key of Object.keys(inputs).sort()) {
+  for (const key of Object.keys(inputs).sort(compareCodepoint)) {
     const sigma = known.get(key)?.sigmaDecades ?? 0;
     if (sigma === 0) continue;
     const x = inputs[key]!;
@@ -206,14 +207,14 @@ function firings(
       continue;
     }
     if (!(Number.isFinite(value) && value !== 0)) continue;
-    push(e.target.name, { edge: e.id, value, sigmaDecades: propagatedSigma(e, inputs, known), inputs: Object.keys(inputs).sort() });
+    push(e.target.name, { edge: e.id, value, sigmaDecades: propagatedSigma(e, inputs, known), inputs: Object.keys(inputs).sort(compareCodepoint) });
   }
   return out;
 }
 
 /** The firings sorted by edge id; and whether any two differ by more than {@link DERIVED_AGREEMENT}. */
 function agreement(list: readonly Firing[]): { sorted: Firing[]; agree: boolean } {
-  const sorted = [...list].sort((x, y) => (x.edge < y.edge ? -1 : x.edge > y.edge ? 1 : 0));
+  const sorted = [...list].sort(byKey((f) => f.edge));
   const agree = sorted.every(
     (f) => Math.abs(f.value - sorted[0]!.value) <= DERIVED_AGREEMENT * Math.max(Math.abs(f.value), Math.abs(sorted[0]!.value)),
   );
@@ -244,7 +245,7 @@ export function deriveOwnEquationMagnitudes(
     for (;;) {
       const round = firings(edges, seeds.identifications, known, skip);
       if (round.size === 0) break;
-      for (const target of [...round.keys()].sort()) {
+      for (const target of [...round.keys()].sort(compareCodepoint)) {
         const { sorted, agree } = agreement(round.get(target)!);
         const edgeIds = sorted.map((f) => f.edge);
         if (!agree) {
@@ -312,7 +313,7 @@ export function deriveOwnEquationMagnitudes(
       }
       usable.set(name, { value: f.value * conventionScaleToSI(name), sigmaDecades: sigma, edge: f.edge, inputs: f.inputs });
     }
-    refusals.sort((x, y) => (x.name < y.name ? -1 : x.name > y.name ? 1 : 0));
+    refusals.sort(byKey((r) => r.name));
     return { values: usable, refusals };
   }
 }

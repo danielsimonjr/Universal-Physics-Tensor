@@ -26,12 +26,17 @@ describe('discover --derive sample values', () => {
     expect(t).not.toMatch(/\bnu=300\b/);
   });
 
-  it('the Hubble proposal is evaluated at H0 = 2.2e-18 s⁻¹, citing its source', async () => {
+  // The Hubble–Wien proposal (T = b·H/c, evaluated at H0 = 2.2e-18 s⁻¹ from the table and printed as
+  // ≈ 2.12650389670823e-29 K with the row's source) was the one live proposal evaluated at a sourced
+  // table sample. Once the Hubble distance has a magnitude (option 2 of the owner's decision of
+  // 2026-10-16) the gate falsifies its identification and it is not derived, so no live proposal
+  // exercises the table-sample path (negative result about this test's reach; NOTES.md).
+  it('the Hubble–Wien proposal is no longer derived, so it is not evaluated at all', async () => {
     const t = await derive();
-    // T = b·H/c with Wien's b (CODATA 2022 via MathTS, 2.8977719551851727e-3) m·K: 2.2e-18 · b / c = 2.13e-29 K.
-    const expected = (B_WIEN_SI * 2.2e-18) / 299792458;
-    expect(expected).toBeCloseTo(2.1265e-29, 32);
-    expect(t).toMatch(/≈ 2\.12650389670823e-29 \(hubble-rate=2\.2e-18 \[H0 ≈ 67 km\/s\/Mpc \(Planck 2018\)\]\)/);
+    expect(t).not.toContain('IC-hubble-distance--peak-wavelength--temperature');
+    expect(t).not.toMatch(/hubble-rate=/);
+    // The value it printed, kept as the record of the formula: 2.2e-18 · b / c.
+    expect((B_WIEN_SI * 2.2e-18) / 299792458).toBeCloseTo(2.1265e-29, 32);
   });
 
   it('the Landauer–photon proposal is evaluated at room temperature: ν = k_B ln2 · 300 K / h = 4.33e12 Hz', async () => {

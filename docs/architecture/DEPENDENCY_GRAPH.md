@@ -4447,6 +4447,7 @@ The codebase is organized into the following modules:
 | `../dimensional/unit-convention.js` | `conventionFactor, conventionScaleToSI` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
 | `../numerical/finite-difference.js` | `centralPartial` | Import |
+| `../core/compare.js` | `byKey, compareCodepoint` | Import |
 
 **Exports:**
 - Interfaces: `DerivedMagnitude`, `DerivedMagnitudeRefusal`, `DerivedMagnitudes`, `OwnEquationSeeds`
@@ -7601,7 +7602,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 86565 |
+| Total Lines of Code | 86566 |
 | Total Exports | 2752 |
 | Total Re-exports | 1389 |
 | Total Classes | 85 |
