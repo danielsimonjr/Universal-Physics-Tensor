@@ -964,7 +964,7 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):
     bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart, p < 1e-300  (anchor-derived)
-    classical-electron-radius ≟ bohr-radius              ~4.27 orders apart, p = 0.00251  (anchor-derived)
+    classical-electron-radius ≟ bohr-radius              ~4.27 orders apart, p = 0.00251
     classical-electron-radius ≟ compton-wavelength-full  ~57.4 orders apart, p < 1e-300  (anchor-derived)
     erasure-energy ≟ rydberg-energy                      ~12.6 orders apart, p = 6.31e-19  (anchor-derived)
     free-energy-difference ≟ rydberg-energy              ~12.4 orders apart, p = 1.73e-18  (anchor-derived)
@@ -972,7 +972,7 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
     peak-wavelength ≟ bohr-radius                        ~14.9 orders apart, p = 4.1e-26  (anchor-derived)
     peak-wavelength ≟ classical-electron-radius          ~19.2 orders apart, p = 4.47e-42  (anchor-derived)
     planck-length ≟ bohr-radius                          ~24.5 orders apart, p = 2.57e-67
-    planck-length ≟ classical-electron-radius            ~20.2 orders apart, p = 1.82e-46  (anchor-derived)
+    planck-length ≟ classical-electron-radius            ~20.2 orders apart, p = 1.82e-46
     planck-length ≟ compton-wavelength                   ~23.2 orders apart, p = 2.32e-60
     planck-length ≟ compton-wavelength-full              ~37.2 orders apart, p = 3.43e-152  (anchor-derived)
     planck-length ≟ peak-wavelength                      ~39.5 orders apart, p = 2.33e-171  (anchor-derived)

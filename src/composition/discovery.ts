@@ -148,7 +148,10 @@ export interface VettedCandidate {
   /** Both endpoints had a representative value, so the magnitude gate ran. */
   readonly magnitudeChecked: boolean;
   /** The magnitude gate read at least one endpoint value from the graph at
-   *  the anchor (no static table entry) rather than the sourced table. */
+   *  the anchor (no static table entry) rather than the sourced table. A value
+   *  the graph computes from registered constants alone, with no anchor input
+   *  (the target of a source-less equation), is a constant and is not
+   *  anchor-derived. */
   readonly magnitudeUsedAnchor: boolean;
   /**
    * The magnitude comparison used an anchor-derived value, and the ratio of the
@@ -159,8 +162,11 @@ export interface VettedCandidate {
    * the temperature to the Hawking temperature of the anchor mass M, and then
    * the thermal wavelength is exactly 4π ℓ_P for EVERY M. Its anchor-derived
    * magnitude is not a representative magnitude of the quantity at all.
-   * A quantity whose value really is a constant belongs in the
-   * representative-value table, where it is not anchor-derived.
+   * A quantity whose value really is a constant is not anchor-derived: the
+   * sourced table states it, or the graph computes it from registered constants
+   * with no anchor input (`DiscoveryContext.constantValues`), and the probe does
+   * not withhold a comparison of two such values, which can fail by the clash
+   * threshold.
    * A clash stays a clash (the graph itself fixes the two apart); only a pass is
    * withheld, in `describeGrounding`. Optional on the type so hand-built
    * candidates need not state it; the funnel always sets it.
@@ -397,6 +403,13 @@ export interface DiscoveryContext {
   readonly attributesByName: ReadonlyMap<string, RegimeAttributes>;
   /** `forwardEvaluate(edges, groundTruth, baseIdents)` — anchor magnitudes. */
   readonly anchorValues: ReadonlyMap<string, number>;
+  /**
+   * `forwardEvaluate(edges, {}, baseIdents)` — the values the graph fixes with NO anchor input:
+   * the targets of source-less equations (an all-constant right-hand side such as the Rydberg
+   * energy or the Planck length) and whatever they alone determine. Such a value is a constant,
+   * not an anchor-derived magnitude, so the magnitude gate reads it as `fromAnchor: false`.
+   */
+  readonly constantValues: ReadonlyMap<string, number>;
   /** The same evaluation with every anchor input times {@link ANCHOR_PROBE_FACTOR}. */
   readonly anchorValuesProbe: ReadonlyMap<string, number>;
   /** `quantityComponents(edges, baseIdents)` — base component roots. */
@@ -432,6 +445,7 @@ export function buildDiscoveryContext(
     // Candidate-invariant: the anchor's forward evaluation, the base component
     // partition, and the base forward closure all depend only on (edges, opts).
     anchorValues: forwardEvaluate(edges, groundTruth, baseIdents),
+    constantValues: forwardEvaluate(edges, {}, baseIdents),
     anchorValuesProbe: forwardEvaluate(
       edges,
       Object.fromEntries(
@@ -554,10 +568,12 @@ export function magnitudeStrength(orders: number, sigmaA: number, sigmaB: number
 /**
  * The magnitude gate: an INDEPENDENT falsifier the single-anchor graph cannot make. It runs only
  * when both endpoints have a representative value and abstains (never false-rejects) otherwise.
- * A value comes from the sourced static table first, else — for graph-derived quantities the
- * table omits by design (schwarzschild-radius, thermal-de-broglie-wavelength) — from the
- * quantity's value AT THE REGISTERED ANCHOR, a definite magnitude for this run, with the default
- * σ of one decade. The verdict is `ordersApart > ctx.maxOrders`; `p` is reported beside it.
+ * A value comes from the sourced static table first; else from the value the graph fixes with NO
+ * anchor input (a constant computed from registered constants alone, `ctx.constantValues`: not
+ * anchor-derived); else — for graph-derived quantities the table omits by design
+ * (schwarzschild-radius, thermal-de-broglie-wavelength) — from the quantity's value AT THE
+ * REGISTERED ANCHOR, a definite magnitude for this run. The last two take the default σ of one
+ * decade. The verdict is `ordersApart > ctx.maxOrders`; `p` is reported beside it.
  *
  * @internal
  */
@@ -570,11 +586,15 @@ export function magnitudeGate(candidate: LinkCandidate, ctx: DiscoveryContext): 
     if (rv !== undefined && Number.isFinite(rv.value) && rv.value !== 0) {
       return { value: rv.value, fromAnchor: false, sigmaDecades: sigmaDecadesOf(rv) };
     }
-    const av = ctx.anchorValues.get(name);
+    // A value the graph fixes with no anchor input is a constant: comparing it can fail by the
+    // clash threshold at every anchor, so it is not anchor-derived and the invariance probe does
+    // not withhold it. Only a value that needs the anchor is `fromAnchor`.
+    const cv = ctx.constantValues.get(name);
+    const av = cv ?? ctx.anchorValues.get(name);
     if (av !== undefined) {
       const value = av * conventionScaleToSI(name);
       if (Number.isFinite(value) && value !== 0) {
-        return { value, fromAnchor: true, sigmaDecades: DEFAULT_SIGMA_DECADES };
+        return { value, fromAnchor: cv === undefined, sigmaDecades: DEFAULT_SIGMA_DECADES };
       }
     }
     return undefined;

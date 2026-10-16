@@ -22,7 +22,7 @@ import {
   proposeLinkCandidates,
   type LinkCandidate,
 } from '../../src/composition/bridge-analysis.js';
-import { CATALOG_GRAPH } from '../../src/composition/index.js';
+import { CATALOG_GRAPH, CANONICAL_GRAPH } from '../../src/composition/index.js';
 import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 import { CENSUS } from '../helpers/census.js';
@@ -505,4 +505,49 @@ describe('rankDiscoveries — one shared context', () => {
       ]);
     }
   });
+});
+
+describe('a value computed from registered constants alone is not anchor-derived', () => {
+  // A source-less equation fixes its target from registered constants with no anchor input
+  // (rydberg-energy, planck-length, classical-electron-radius). Labelling that value
+  // anchor-derived made the invariance probe find it constant and withhold a comparison that
+  // could fail by the clash threshold. The probe exists for a ratio the GRAPH fixes between
+  // anchor-driven values, and that case must stay withheld.
+  const constant = edge('constant-only', [], 'k', () => 5);
+  const tableValues = { t: { value: 7, source: 'synthetic' } };
+
+  it('a constant against a table value is checked, not anchor-derived, and not anchor-invariant', () => {
+    const edges = [constant, edge('e1', ['x'], 't', (i) => i['x'] * 2)];
+    const r = vetLinkCandidate(edges, cand('k', 't'), { groundTruth: { x: 2 }, representativeValues: tableValues, ...noBase });
+    expect(r.magnitudeChecked).toBe(true);
+    expect(r.magnitudeUsedAnchor).toBe(false);
+    expect(r.magnitudeAnchorInvariant).toBe(false);
+    expect(hasMagnitudeEvidence(r)).toBe(true);
+    expect(r.ordersApart).toBeCloseTo(Math.log10(7 / 5), 12);
+  });
+
+  it('control: an anchor-driven value whose ratio to the constant the graph fixes stays anchor-invariant', () => {
+    // x → u = 1/x; (x, u) → w = 3·x·u = 3 at every anchor: anchor-derived, and fixed by the graph.
+    const edges = [
+      constant,
+      edge('e1', ['x'], 'u', (i) => 1 / i['x']),
+      edge('e2', ['x', 'u'], 'w', (i) => 3 * i['x'] * i['u']),
+    ];
+    const r = vetLinkCandidate(edges, cand('w', 'k'), { groundTruth: { x: 2 }, representativeValues: {}, ...noBase });
+    expect(r.magnitudeChecked).toBe(true);
+    expect(r.magnitudeUsedAnchor).toBe(true);
+    expect(r.magnitudeAnchorInvariant).toBe(true);
+    expect(hasMagnitudeEvidence(r)).toBe(false);
+  });
+
+  it('catalog + canonical: barrier-height ≟ rydberg-energy (a table value against a constant) is promising', () => {
+    const both = rankDiscoveries([...CATALOG_GRAPH, ...CANONICAL_GRAPH]);
+    const r = both.find(
+      (c) => (c.a === 'barrier-height' && c.b === 'rydberg-energy') || (c.a === 'rydberg-energy' && c.b === 'barrier-height'),
+    );
+    expect(r?.magnitudeChecked).toBe(true);
+    expect(r?.magnitudeUsedAnchor).toBe(false);
+    expect(r?.magnitudeAnchorInvariant).toBe(false);
+    expect(r?.verdict).toBe('promising');
+  }, 180_000);
 });
