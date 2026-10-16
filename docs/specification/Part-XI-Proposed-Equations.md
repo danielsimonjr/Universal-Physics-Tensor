@@ -56,7 +56,7 @@ speculative bridge BE-18 and so appear only under `--source=both`.
 | PE-2 | `T = v · g / (k_B · ln2)` | [temperature] | `dark-fermion-mass ≡ erasure-energy` | BE-18, CE-landauer |
 | PE-3 | `m = h · ν / c²` | [mass] | `photon-energy ≡ rest-energy` | CE-planck-einstein, CE-mass-energy |
 | PE-4 | `m = v · g / c²` | [mass] | `dark-fermion-mass ≡ rest-energy` | BE-18, CE-mass-energy |
-| PE-5 | `T = b · H / c` | [temperature] | `peak-wavelength ≡ hubble-distance` | CE-hubble-distance, CE-wien |
+| ~~PE-5~~ | ~~`T = b · H / c`~~ | ~~[temperature]~~ | ~~`peak-wavelength ≡ hubble-distance`~~ | ~~CE-hubble-distance, CE-wien~~ (no longer derived; see PE-5 below) |
 
 > **Adjudicated 2026-06-21 — 0 promoted.** Independent Adam (gemini-2.5-pro) + Eve
 > (o3) review (Part-VI §XXVII-B): PE-1/PE-2/PE-5 are **dimensional coincidences**
@@ -155,24 +155,21 @@ speculative bridge BE-18 and so appear only under `--source=both`.
 - **Known issue:** `phenomenological-ansatz` — the `dark-fermion-mass` source is a
   `speculative` bridge; no mechanism asserted. Pending §XXVII-B review.
 
-### PE-5 — Hubble–Wien length coincidence (peak-wavelength ≡ hubble-distance)
+### ~~PE-5 — Hubble–Wien length coincidence (peak-wavelength ≡ hubble-distance)~~
 
-- **Derived relation:** `T = b · H / c`  →  `temperature = \frac{b \cdot hubble-rate}{c}`
-- **Dimensional signature:** `[temperature]`
-- **Solved for:** `temperature`. Free input: `hubble-rate` (H).
-- **Derivation:** Wien's displacement `λ_max = b / T` (`CE-wien`) and the Hubble
-  distance `D_H = c / H` (`CE-hubble-distance`) are identified through
-  `peak-wavelength ≡ hubble-distance` (both `[length]`); eliminating the shared
-  length gives `T = b H / c`.
-- **Bridged regimes:** thermodynamics ↔ cosmology.
-- **Numeric illustration (NOT a prediction):** at the present Hubble rate
-  `H₀ ≈ 2.2 × 10⁻¹⁸ s⁻¹`, `T ≈ 2 × 10⁻²⁹ K` — a physically meaningless value,
-  flagging this as a pure dimensional coincidence (the honest expected outcome).
-- **References (honest):** machine-derived; source equations `CE-hubble-distance`
-  (Hubble 1929) and `CE-wien` (Wien 1893). No independent literature.
-- **Known issue:** `phenomenological-ansatz` — equating a blackbody peak wavelength
-  with a cosmological horizon scale has no mechanism; the clearest "coincidence, not
-  physics" case in the set. Pending §XXVII-B review.
+The funnel no longer derives PE-5: once the Hubble distance has a representative
+magnitude (c/H0), the magnitude gate falsifies `peak-wavelength ≡ hubble-distance` at
+the default anchor, so the identification is a magnitude clash and not a promising
+candidate (the measured orders are in `NOTES.md`).
+
+- ~~**Derived relation:** `T = b · H / c`  →  `temperature = \frac{b \cdot hubble-rate}{c}`~~
+- ~~**Dimensional signature:** `[temperature]`~~
+- ~~**Solved for:** `temperature`. Free input: `hubble-rate` (H).~~
+- ~~**Derivation:** Wien's displacement `λ_max = b / T` (`CE-wien`) and the Hubble distance `D_H = c / H` (`CE-hubble-distance`) are identified through `peak-wavelength ≡ hubble-distance` (both `[length]`); eliminating the shared length gives `T = b H / c`.~~
+- ~~**Bridged regimes:** thermodynamics ↔ cosmology.~~
+- ~~**Numeric illustration (NOT a prediction):** at the present Hubble rate `H₀ ≈ 2.2 × 10⁻¹⁸ s⁻¹`, `T ≈ 2 × 10⁻²⁹ K` — a physically meaningless value, flagging this as a pure dimensional coincidence (the honest expected outcome).~~
+- ~~**References (honest):** machine-derived; source equations `CE-hubble-distance` (Hubble 1929) and `CE-wien` (Wien 1893). No independent literature.~~
+- ~~**Known issue:** `phenomenological-ansatz` — equating a blackbody peak wavelength with a cosmological horizon scale has no mechanism; the clearest "coincidence, not physics" case in the set. Pending §XXVII-B review.~~
 
 ## 3. Epistemic firewall (why these are not in Part II)
 

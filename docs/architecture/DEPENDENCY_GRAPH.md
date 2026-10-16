@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 58 files
 - **root**: 1 file
-- **composition**: 81 files
+- **composition**: 82 files
 - **core**: 18 files
 - **diff**: 3 files
 - **dimensional**: 42 files
@@ -4031,6 +4031,8 @@ The codebase is organized into the following modules:
 | `./quantities.js` | `allQuantities` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../dimensional/algebra.js` | `format` | Import |
+| `./own-equation-magnitude.js` | `deriveOwnEquationMagnitudes` | Import |
+| `./own-equation-magnitude.js` | `DerivedMagnitudes` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `VettedCandidate`, `DiscoveryOptions`, `DiscoveryContext`, `MagnitudeGate`
@@ -4428,6 +4430,28 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `NotComposableSeed`
 - Constants: `NOT_COMPOSABLE_SEEDS`
+
+---
+
+### `src/composition/own-equation-magnitude.ts` - A magnitude for a quantity from its own equation, for the discovery magnitude gate.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `./edge.js` | `evaluateEdge` | Import |
+| `./compose.js` | `QuantityIdentification` | Import (type-only) |
+| `./retrodiction.js` | `evaluationInputs, refusesThePoint` | Import |
+| `./representative-values.js` | `DEFAULT_SIGMA_DECADES, sigmaDecadesOf` | Import |
+| `./representative-values.js` | `RepresentativeValue` | Import (type-only) |
+| `../dimensional/unit-convention.js` | `conventionFactor, conventionScaleToSI` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
+| `../numerical/finite-difference.js` | `centralPartial` | Import |
+
+**Exports:**
+- Interfaces: `DerivedMagnitude`, `DerivedMagnitudeRefusal`, `DerivedMagnitudes`, `OwnEquationSeeds`
+- Functions: `deriveOwnEquationMagnitudes`
+- Constants: `DERIVED_AGREEMENT`
 
 ---
 
@@ -5177,7 +5201,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `RetrodictionPrediction`, `RetrodictionOptions`, `RetrodictionRefusal`, `RetrodictionResult`, `RetrodictionReport`
-- Functions: `forwardEvaluate`, `retrodictNode`, `retrodict`
+- Functions: `evaluationInputs`, `refusesThePoint`, `forwardEvaluate`, `retrodictNode`, `retrodict`
 
 ---
 
@@ -7488,7 +7512,7 @@ graph TD
         N33[aliases]
         N34[audit-coverage]
         N35[axes]
-        N36[...76 more]
+        N36[...77 more]
     end
 
     subgraph Core
@@ -7575,17 +7599,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 384 |
+| Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 86155 |
-| Total Exports | 2748 |
+| Total Lines of Code | 86565 |
+| Total Exports | 2752 |
 | Total Re-exports | 1389 |
 | Total Classes | 85 |
-| Total Interfaces | 508 |
-| Total Functions | 865 |
+| Total Interfaces | 512 |
+| Total Functions | 868 |
 | Total Type Guards | 13 |
 | Total Enums | 0 |
-| Type-only Imports | 514 |
+| Type-only Imports | 518 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

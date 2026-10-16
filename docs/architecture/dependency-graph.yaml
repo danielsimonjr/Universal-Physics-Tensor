@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 11.0.0
-  totalFiles: 384
+  totalFiles: 385
   totalModules: 13
-  totalExports: 2748
+  totalExports: 2752
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9651,6 +9651,13 @@ modules:
         - file: ../dimensional/algebra.js
           imports:
             - format
+        - file: ./own-equation-magnitude.js
+          imports:
+            - deriveOwnEquationMagnitudes
+        - file: ./own-equation-magnitude.js
+          imports:
+            - DerivedMagnitudes
+          typeOnly: true
       exports:
         - REGISTRY_ATTRIBUTES_BY_NAME
         - ANCHOR_DEFAULT
@@ -10741,6 +10748,56 @@ modules:
         - NotComposableSeed
       constants:
         - NOT_COMPOSABLE_SEEDS
+    src/composition/own-equation-magnitude.ts:
+      description: A magnitude for a quantity from its own equation, for the discovery magnitude gate.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./edge.js
+          imports:
+            - BridgeEdge
+          typeOnly: true
+        - file: ./edge.js
+          imports:
+            - evaluateEdge
+        - file: ./compose.js
+          imports:
+            - QuantityIdentification
+          typeOnly: true
+        - file: ./retrodiction.js
+          imports:
+            - evaluationInputs
+            - refusesThePoint
+        - file: ./representative-values.js
+          imports:
+            - DEFAULT_SIGMA_DECADES
+            - sigmaDecadesOf
+        - file: ./representative-values.js
+          imports:
+            - RepresentativeValue
+          typeOnly: true
+        - file: ../dimensional/unit-convention.js
+          imports:
+            - conventionFactor
+            - conventionScaleToSI
+        - file: ../dimensional/symbolic-constants.js
+          imports:
+            - CONSTANT_REGISTRY
+        - file: ../numerical/finite-difference.js
+          imports:
+            - centralPartial
+      exports:
+        - DERIVED_AGREEMENT
+        - deriveOwnEquationMagnitudes
+      interfaces:
+        - DerivedMagnitude
+        - DerivedMagnitudeRefusal
+        - DerivedMagnitudes
+        - OwnEquationSeeds
+      functions:
+        - deriveOwnEquationMagnitudes
+      constants:
+        - DERIVED_AGREEMENT
     src/composition/probe/backend-protocol.ts:
       description: Optional NDJSON worker protocol for expression-search backends.
       externalDependencies: []
@@ -12728,6 +12785,8 @@ modules:
           imports:
             - classifyAll
       exports:
+        - evaluationInputs
+        - refusesThePoint
         - forwardEvaluate
         - retrodictNode
         - retrodict
@@ -12738,6 +12797,8 @@ modules:
         - RetrodictionResult
         - RetrodictionReport
       functions:
+        - evaluationInputs
+        - refusesThePoint
         - forwardEvaluate
         - retrodictNode
         - retrodict
@@ -18979,6 +19040,7 @@ dependencyGraph:
         - src/composition/mathts-quiet.ts
         - src/composition/mathts-scalar-symbols.ts
         - src/composition/not-composable-seeds.ts
+        - src/composition/own-equation-magnitude.ts
         - src/composition/probe/backend-protocol.ts
         - src/composition/probe/candidate-store.ts
         - src/composition/probe/corpus.ts
@@ -19143,18 +19205,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 384
+  totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 86155
-  totalExports: 2748
+  totalLinesOfCode: 86565
+  totalExports: 2752
   totalClasses: 85
-  totalInterfaces: 508
-  totalFunctions: 865
+  totalInterfaces: 512
+  totalFunctions: 868
   totalTypeGuards: 13
   totalEnums: 0
-  totalConstants: 405
+  totalConstants: 406
   totalReExports: 1389
-  totalTypeOnlyImports: 514
+  totalTypeOnlyImports: 518
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

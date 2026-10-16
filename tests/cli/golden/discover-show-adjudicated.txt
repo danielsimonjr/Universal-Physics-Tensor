@@ -4,9 +4,9 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  429 candidates  →  0 promising  ·  135 promising, magnitude unchecked  ·  275 inert  ·  18 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  funnel:  429 candidates  →  0 promising  ·  128 promising, magnitude unchecked  ·  275 inert  ·  25 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
   readiness of the 0 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 0 with axis unresolved · 0 with an entailed consequence
-  readiness of the 135 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 135 without magnitude evidence · 135 with axis unresolved · 0 with an entailed consequence
+  readiness of the 128 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 128 without magnitude evidence · 128 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   no candidate is `promising` (with magnitude evidence) from the anchor above.
@@ -28,35 +28,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [to make it testable — premise: rest-energy and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: rest-energy, photon-energy · needs a stated force regime for: rest-energy, photon-energy · needs a consequence that re-derives a known law]
         [observation: measure rest-energy and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
         [adjudicated: entailed — Real physics, already entailed by the L-layer via CE-planck-einstein (E=hν) and CE-mass-energy (E=mc²); not a new link. Both Adam and Eve agree it is not a new discovery.]
-    hubble-distance ≟ bohr-radius                        [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: novel-consequence]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: hubble-distance and bohr-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, bohr-radius · needs a stated force regime for: hubble-distance, bohr-radius · needs a consequence that re-derives a known law]
-        [observation: measure hubble-distance and bohr-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    hubble-distance ≟ classical-electron-radius          [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: novel-consequence]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: hubble-distance and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, classical-electron-radius · needs a stated force regime for: hubble-distance, classical-electron-radius · needs a consequence that re-derives a known law]
-        [observation: measure hubble-distance and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    hubble-distance ≟ compton-wavelength-full            [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: novel-consequence]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: hubble-distance and compton-wavelength-full are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, compton-wavelength-full · needs a stated force regime for: hubble-distance, compton-wavelength-full · needs a consequence that re-derives a known law]
-        [observation: measure hubble-distance and compton-wavelength-full in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    hubble-distance ≟ peak-wavelength                    [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: novel-consequence]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: hubble-distance and peak-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, peak-wavelength · needs a stated force regime for: hubble-distance, peak-wavelength · needs a consequence that re-derives a known law]
-        [observation: measure hubble-distance and peak-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-        [adjudicated: decoy — Dimensional coincidence; no mechanism. A blackbody peak wavelength equated with the cosmological horizon — disparate domains, no mechanism; numerically off by ~10²⁹ for the CMB. The clearest "coincidence, not physics" case.]
     planck-mass ≟ molecular-mass                         [[mass]]  score 8
         unlocks: molecular-mass, most-probable-speed
         [consequence: inconclusive]
@@ -456,13 +427,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: compton-wavelength, droplet-radius · needs a stated force regime for: compton-wavelength, droplet-radius · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and droplet-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    compton-wavelength ≟ hubble-distance                 [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: inconclusive]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: compton-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: compton-wavelength, hubble-distance · needs a stated force regime for: compton-wavelength, hubble-distance · needs a consequence that re-derives a known law]
-        [observation: measure compton-wavelength and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength ≟ scale-factor                    [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
@@ -687,13 +651,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: planck-length and height are the same physical quantity, not only both [length] · needs a representative magnitude for: height · needs a stated scale regime for: height · needs a stated force regime for: height · needs a consequence that re-derives a known law]
         [observation: measure planck-length and height in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    planck-length ≟ hubble-distance                      [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: inconclusive]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: planck-length and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: hubble-distance · needs a consequence that re-derives a known law]
-        [observation: measure planck-length and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     planck-length ≟ larmor-radius                        [[length]]  score 6
         unlocks: larmor-radius
         [consequence: inconclusive]
@@ -785,13 +742,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: radius and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: radius, deviation-from-mean · needs a stated force regime for: radius, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure radius and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    radius ≟ hubble-distance                             [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: inconclusive]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: radius and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: radius, hubble-distance · needs a stated force regime for: radius, hubble-distance · needs a consequence that re-derives a known law]
-        [observation: measure radius and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     radius ≟ scale-factor                                [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
@@ -916,7 +866,7 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ scale-factor                    [[length]]  score 6
         unlocks: scale-factor
@@ -960,14 +910,19 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: work and rydberg-energy are the same physical quantity, not only both [energy] · needs a representative magnitude for: work · needs a stated scale regime for: work, rydberg-energy · needs a stated force regime for: work, rydberg-energy · needs a consequence that re-derives a known law]
         [observation: measure work and rydberg-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-  adjudicated: 3 of the 135 promising, magnitude unchecked carry recorded verdicts (2 decoy, 1 entailed) — folded; --show-adjudicated to list
+  adjudicated: 2 of the 128 promising, magnitude unchecked carry recorded verdicts (1 decoy, 1 entailed) — folded; --show-adjudicated to list
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier; p is the falsifier's strength at the values' stated σ, 2Φ(−orders/√(σa²+σb²)), not a credibility score):
     bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart, p < 1e-300  (anchor-derived)
     classical-electron-radius ≟ bohr-radius              ~4.27 orders apart, p = 0.00251
     classical-electron-radius ≟ compton-wavelength-full  ~57.4 orders apart, p < 1e-300  (anchor-derived)
+    compton-wavelength ≟ hubble-distance                 ~37.7 orders apart, p = 5.68e-157
     erasure-energy ≟ rydberg-energy                      ~12.6 orders apart, p = 6.31e-19  (anchor-derived)
     free-energy-difference ≟ rydberg-energy              ~12.4 orders apart, p = 1.73e-18  (anchor-derived)
+    hubble-distance ≟ bohr-radius                        ~36.4 orders apart, p = 3.54e-146
+    hubble-distance ≟ classical-electron-radius          ~40.7 orders apart, p = 5.34e-182
+    hubble-distance ≟ compton-wavelength-full            ~98.1 orders apart, p < 1e-300  (anchor-derived)
+    hubble-distance ≟ peak-wavelength                    ~21.5 orders apart, p = 5.07e-52  (anchor-derived)
     mass ≟ planck-mass                                   ~38 orders apart, p = 1.03e-158  (anchor-derived)
     peak-wavelength ≟ bohr-radius                        ~14.9 orders apart, p = 4.1e-26  (anchor-derived)
     peak-wavelength ≟ classical-electron-radius          ~19.2 orders apart, p = 4.47e-42  (anchor-derived)
@@ -975,9 +930,11 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
     planck-length ≟ classical-electron-radius            ~20.2 orders apart, p = 1.82e-46
     planck-length ≟ compton-wavelength                   ~23.2 orders apart, p = 2.32e-60
     planck-length ≟ compton-wavelength-full              ~37.2 orders apart, p = 3.43e-152  (anchor-derived)
+    planck-length ≟ hubble-distance                      ~60.9 orders apart, p < 1e-300
     planck-length ≟ peak-wavelength                      ~39.5 orders apart, p = 2.33e-171  (anchor-derived)
     radius ≟ bohr-radius                                 ~13.7 orders apart, p = 2.47e-22  (anchor-derived)
     radius ≟ classical-electron-radius                   ~18 orders apart, p = 3.44e-37  (anchor-derived)
+    radius ≟ hubble-distance                             ~22.7 orders apart, p = 8.42e-58  (anchor-derived)
     radius ≟ planck-length                               ~38.3 orders apart, p = 3.31e-161  (anchor-derived)
     rest-energy ≟ rydberg-energy                         ~64.9 orders apart, p < 1e-300  (anchor-derived)
     rydberg-energy ≟ thermal-energy                      ~12.2 orders apart, p = 5.18e-18  (anchor-derived)

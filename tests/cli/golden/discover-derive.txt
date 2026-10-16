@@ -39,38 +39,6 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals dark-fermion-mass (BE-18) — an equal-[energy] scale; the dark-fermion-mass side is not given a mass
       assumptions carried: CE-mass-energy: rest energy of a massive body
       canonical match: none — 0 registry equation(s) target mass, 0 with governing {yukawa-coupling, vacuum-expectation-value}; scope: this registry only, not physics at large
-  IC-bohr-radius--hubble-distance--hubble-rate
-      hubble-rate = \frac{c \cdot e^{2} \cdot m_e}{4pi \cdot epsilon_0 \cdot hbar^{2}}      [frequency]  ≈ 5665256402323410000
-      from: hubble-distance ≟ bohr-radius  (CE-bohr-radius = CE-hubble-distance); solved for hubble-rate
-      magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
-      status: conditional identity — holds only if hubble-distance ≡ bohr-radius (unadjudicated); untested
-      meaning: hubble-rate is the hubble-rate of CE-hubble-distance (Hubble distance): the hubble-rate for which hubble-distance equals bohr-radius (CE-bohr-radius) — an equal-[length] scale; the bohr-radius side is not given a hubble-rate
-      assumptions carried: CE-bohr-radius: hydrogen-like, non-relativistic; CE-hubble-distance: present-epoch Hubble parameter
-      canonical match: none — 0 registry equation(s) target hubble-rate, 0 with governing {}; scope: this registry only, not physics at large
-  IC-classical-electron-radius--hubble-distance--hubble-rate
-      hubble-rate = \frac{4pi \cdot c^{3} \cdot epsilon_0 \cdot m_e}{e^{2}}      [frequency]  ≈ 1.06387085568624e+23
-      from: hubble-distance ≟ classical-electron-radius  (CE-classical-electron-radius = CE-hubble-distance); solved for hubble-rate
-      magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
-      status: conditional identity — holds only if hubble-distance ≡ classical-electron-radius (unadjudicated); untested
-      meaning: hubble-rate is the hubble-rate of CE-hubble-distance (Hubble distance): the hubble-rate for which hubble-distance equals classical-electron-radius (CE-classical-electron-radius) — an equal-[length] scale; the classical-electron-radius side is not given a hubble-rate
-      assumptions carried: CE-classical-electron-radius: classical point-charge self-energy scale; CE-hubble-distance: present-epoch Hubble parameter
-      canonical match: none — 0 registry equation(s) target hubble-rate, 0 with governing {}; scope: this registry only, not physics at large
-  IC-compton-wavelength-full--hubble-distance--hubble-rate
-      hubble-rate = \frac{c^{2} \cdot mass}{h}      [frequency]  (no sourced sample value for mass; not evaluated)
-      from: hubble-distance ≟ compton-wavelength-full  (CE-compton-wavelength-full = CE-hubble-distance); solved for hubble-rate
-      magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
-      status: conditional identity — holds only if hubble-distance ≡ compton-wavelength-full (unadjudicated); untested
-      meaning: hubble-rate is the hubble-rate of CE-hubble-distance (Hubble distance): the hubble-rate for which hubble-distance equals compton-wavelength-full (CE-compton-wavelength-full) — an equal-[length] scale; the compton-wavelength-full side is not given a hubble-rate
-      assumptions carried: CE-compton-wavelength-full: none stated; CE-hubble-distance: present-epoch Hubble parameter
-      canonical match: none — 0 registry equation(s) target hubble-rate, 0 with governing {mass}; scope: this registry only, not physics at large
-  IC-hubble-distance--peak-wavelength--temperature
-      temperature = \frac{b \cdot hubble-rate}{c}      [temperature]  ≈ 2.12650389670823e-29 (hubble-rate=2.2e-18 [H0 ≈ 67 km/s/Mpc (Planck 2018)])
-      from: hubble-distance ≟ peak-wavelength  (CE-hubble-distance = CE-wien); solved for temperature
-      magnitude: no evidence — the identification is promising, magnitude unchecked (the magnitude falsifier never tested it)
-      status: conditional identity — holds only if hubble-distance ≡ peak-wavelength (unadjudicated); untested
-      meaning: temperature is the temperature of CE-wien (Wien's displacement law): the temperature for which peak-wavelength equals hubble-distance (CE-hubble-distance) — an equal-[length] scale; the hubble-distance side is not given a temperature
-      assumptions carried: CE-hubble-distance: present-epoch Hubble parameter; CE-wien: blackbody, thermal equilibrium
-      canonical match: none — 0 registry equation(s) target temperature, 0 with governing {hubble-rate}; scope: this registry only, not physics at large
   IC-parker-radius--peak-wavelength--temperature
       temperature = \frac{2 \cdot b \cdot parker-sound^{2}}{G \cdot parker-mass}      [temperature]  (no sourced sample value for parker-mass, 2, parker-sound; not evaluated)
       from: parker-radius ≟ peak-wavelength  (BE-118 = CE-wien); solved for temperature

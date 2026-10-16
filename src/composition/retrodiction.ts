@@ -45,8 +45,11 @@ import { classifyAll } from './identifiability.js';
  * Source values, plus a dimensionless group the edge multiplies when the
  * ground truth names it. The group is not a source: Buckingham cannot see
  * it, and a missing group is the unset coefficient, not a missing input.
+ * Exported for the own-equation magnitudes (`own-equation-magnitude.ts`),
+ * which evaluate an edge the same way.
+ * @internal
  */
-function evaluationInputs(edge: BridgeEdge, values: ReadonlyMap<string, number>): Record<string, number> {
+export function evaluationInputs(edge: BridgeEdge, values: ReadonlyMap<string, number>): Record<string, number> {
   const inputs: Record<string, number> = {};
   for (const s of edge.sources) inputs[s.name] = values.get(s.name)!;
   const group = CANONICAL_GROUP_PREFACTORS.find((g) => g.id === edge.id);
@@ -140,8 +143,12 @@ function refusalKind(err: unknown): RetrodictionRefusal['kind'] | undefined {
   return undefined;
 }
 
-/** True when the error says the edge does not fire here (or at all, for an unset coefficient). */
-function refusesThePoint(err: unknown): boolean {
+/**
+ * True when the error says the edge does not fire here (or at all, for an unset coefficient).
+ * Exported so the own-equation magnitudes read an edge's refusal by this one rule.
+ * @internal
+ */
+export function refusesThePoint(err: unknown): boolean {
   return refusalKind(err) !== undefined;
 }
 

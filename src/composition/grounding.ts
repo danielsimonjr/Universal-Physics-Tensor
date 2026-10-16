@@ -95,6 +95,8 @@ export function describeGrounding(
   } else if (c.magnitudeChecked) {
     const parts: string[] = [];
     if (c.ordersApart != null) parts.push(`${c.ordersApart.toFixed(1)} orders`);
+    // A magnitude from the quantity's own equation is not anchor-derived: say which, and where from.
+    if ((c.magnitudeDerived ?? []).length > 0) parts.push(`${c.magnitudeDerived!.join(', ')} from its own equation`);
     if (c.magnitudeUsedAnchor) parts.push('anchor-derived');
     passed.push(parts.length ? `magnitude (${parts.join(', ')})` : 'magnitude');
   } else {

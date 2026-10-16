@@ -213,6 +213,10 @@ Flags:
         algebraic relation it implies (monomial elimination) as an UNADJUDICATED,
         math-only proposal — NOT a bridge (Part-VI §XXVII-B), and says when the
         identification had no magnitude evidence. Pairs with --source=canonical.
+        A magnitude comes from the sourced table, else a constant the graph
+        fixes, else the quantity's own equation evaluated from the table and
+        the constants (used only at a propagated σ of at most one decade),
+        else the anchor; the MAGNITUDE-CLASH list marks the last two.
         --max-orders=N tunes the magnitude-clash threshold (default 3); looser N
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)

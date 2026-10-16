@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "totalSourceFiles": 384,
-    "totalTestFiles": 666,
-    "testedCount": 375,
-    "directlyTestedCount": 341,
+    "totalSourceFiles": 385,
+    "totalTestFiles": 668,
+    "testedCount": 376,
+    "directlyTestedCount": 342,
     "untestedCount": 9,
     "coveragePercent": "97.7",
     "directCoveragePercent": "88.8"
@@ -246,6 +246,7 @@
     "src/composition/mathts-quiet.ts",
     "src/composition/mathts-scalar-symbols.ts",
     "src/composition/not-composable-seeds.ts",
+    "src/composition/own-equation-magnitude.ts",
     "src/composition/probe/backend-protocol.ts",
     "src/composition/probe/candidate-store.ts",
     "src/composition/probe/corpus.ts",
@@ -592,6 +593,7 @@
     "src/composition/mathts-quiet.ts",
     "src/composition/mathts-scalar-symbols.ts",
     "src/composition/not-composable-seeds.ts",
+    "src/composition/own-equation-magnitude.ts",
     "src/composition/probe/backend-protocol.ts",
     "src/composition/probe/candidate-store.ts",
     "src/composition/probe/corpus.ts",
@@ -5877,6 +5879,7 @@
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery-magnitude-p.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/link-candidates.test.ts",
@@ -5977,6 +5980,7 @@
       "tests/composition/consequence.test.ts",
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery-calibration.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/evaluate-relation.test.ts",
@@ -6094,6 +6098,7 @@
       "tests/composition/consequence.test.ts",
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery-calibration.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/evaluate-relation.test.ts",
@@ -6463,6 +6468,7 @@
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery-magnitude-p.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/grounding.test.ts",
@@ -6516,6 +6522,7 @@
       "tests/composition/compose.test.ts",
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/evaluate-relation.test.ts",
@@ -6982,6 +6989,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/grounding.test.ts",
       "tests/diff/bridge-gradient.test.ts",
@@ -7105,6 +7113,9 @@
     ],
     "src/composition/not-composable-seeds.ts": [
       "tests/composition/one-copy.test.ts"
+    ],
+    "src/composition/own-equation-magnitude.ts": [
+      "tests/composition/discovery-own-equation.test.ts"
     ],
     "src/composition/probe/backend-protocol.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -7663,6 +7674,7 @@
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/algebraic-equivalence.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/exact-exponents.test.ts",
       "tests/composition/monomial-builders.test.ts",
@@ -7719,6 +7731,7 @@
       "tests/composition/compose.test.ts",
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/evaluate-relation.test.ts",
@@ -7769,6 +7782,7 @@
       "tests/composition/axis-audit-evidence.test.ts",
       "tests/composition/discovery-magnitude-p.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -8106,6 +8120,7 @@
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
       "tests/composition/dimensionful-constant.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/evaluate-relation.test.ts",
@@ -9614,6 +9629,7 @@
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/evaluate-relation.test.ts",
@@ -12229,6 +12245,7 @@
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery-magnitude-p.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/link-candidates.test.ts",
@@ -12272,6 +12289,7 @@
       "tests/composition/compose.test.ts",
       "tests/composition/consequence.test.ts",
       "tests/composition/discovery-calibration.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/graph-structure.test.ts",
       "tests/composition/graph-viz-filters.test.ts",
       "tests/composition/identifiability-rank.test.ts",
@@ -12312,6 +12330,7 @@
       "tests/composition/compose-relation.test.ts",
       "tests/composition/consequence.test.ts",
       "tests/composition/discovery-calibration.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/graph-structure.test.ts",
       "tests/composition/graph-viz-filters.test.ts",
       "tests/composition/graph-viz-svg.test.ts",
@@ -12381,6 +12400,7 @@
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery-magnitude-p.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/grounding.test.ts",
       "tests/composition/proposed-bridges.test.ts",
@@ -12404,6 +12424,7 @@
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/explain.test.ts",
@@ -12502,6 +12523,7 @@
       "tests/composition/user-equation.test.ts"
     ],
     "src/composition/grounding.ts": [
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/grounding.test.ts"
     ],
     "src/composition/identifiability.ts": [
@@ -12549,6 +12571,9 @@
     ],
     "src/composition/not-composable-seeds.ts": [
       "tests/composition/one-copy.test.ts"
+    ],
+    "src/composition/own-equation-magnitude.ts": [
+      "tests/composition/discovery-own-equation.test.ts"
     ],
     "src/composition/probe/backend-protocol.ts": [
       "tests/composition/probe/backend.test.ts",
@@ -12715,6 +12740,7 @@
     ],
     "src/composition/proposed-bridges.ts": [
       "tests/composition/algebraic-equivalence.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/exact-exponents.test.ts",
       "tests/composition/monomial-builders.test.ts",
       "tests/composition/proposed-bridges.test.ts"
@@ -12734,6 +12760,7 @@
       "tests/composition/bridge-analysis.test.ts",
       "tests/composition/chain-regime.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/frontier-account.test.ts",
       "tests/composition/graph-structure.test.ts",
       "tests/composition/graph-viz.test.ts",
@@ -12747,7 +12774,8 @@
     "src/composition/representative-values.ts": [
       "tests/composition/axis-audit-evidence.test.ts",
       "tests/composition/discovery-magnitude-p.test.ts",
-      "tests/composition/discovery-magnitude.test.ts"
+      "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts"
     ],
     "src/composition/retrodiction.ts": [
       "tests/composition/discovery.test.ts",
@@ -12809,6 +12837,7 @@
       "tests/composition/canonical-compare.test.ts",
       "tests/composition/canonical-graph.test.ts",
       "tests/composition/closed-form-evaluation.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/core/constants-owner.test.ts",
@@ -13316,6 +13345,7 @@
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
+      "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/exact-exponents.test.ts",
@@ -17783,6 +17813,7 @@
       "src/composition/explain.ts",
       "src/core/format.ts"
     ],
+    "tests/cli/discover-own-equation.test.ts": [],
     "tests/cli/discover-tiers.test.ts": [],
     "tests/cli/eval-functions.test.ts": [
       "src/numerical/formula-contract.ts"
@@ -21994,6 +22025,20 @@
       "src/composition/quantity.ts",
       "src/dimensional/types.ts",
       "src/composition/representative-values.ts"
+    ],
+    "tests/composition/discovery-own-equation.test.ts": [
+      "src/composition/discovery.ts",
+      "src/composition/bridge-analysis.ts",
+      "src/composition/edge.ts",
+      "src/composition/quantity.ts",
+      "src/composition/canonical-graph.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/proposed-bridges.ts",
+      "src/composition/grounding.ts",
+      "src/composition/own-equation-magnitude.ts",
+      "src/composition/representative-values.ts",
+      "src/core/constants.ts",
+      "src/dimensional/types.ts"
     ],
     "tests/composition/discovery.test.ts": [
       "src/composition/discovery.ts",

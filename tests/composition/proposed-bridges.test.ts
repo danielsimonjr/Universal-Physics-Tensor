@@ -56,22 +56,17 @@ describe('deriveProposedBridges — canonical-only pilot', () => {
   it('emits the Landauer photon first, plus the new fully-quantitative IDs', () => {
     // The canonical L-layer expansion (Adam+Eve audit) added more
     // fully-quantitative + determinate laws, so the identity-consequence funnel
-    // now surfaces six coincidences (all UNADJUDICATED; five before the source-less targets joined), including
-    // CE-compton-wavelength-full against the Hubble distance and, once the
-    // classical electron radius carries 1/(4π), that radius against the same
-    // distance: the Landauer photon, hν=mc² (photon-energy↔rest-energy via mass),
-    // and c/H≟b/T (hubble-distance↔peak-wavelength). Order is registry-stable
-    // (Landauer first).
+    // surfaced six coincidences, all UNADJUDICATED: the Landauer photon, hν=mc²
+    // (photon-energy↔rest-energy via mass), and four against the Hubble distance
+    // (the Bohr radius, the classical electron radius, the full Compton wavelength,
+    // and c/H≟b/T against the peak wavelength). Once the Hubble distance has a
+    // magnitude (option 2 of the owner's decision of 2026-10-16: the sourced table
+    // row, c/H0), the magnitude gate falsifies all four identifications, so two
+    // remain. The six, and the five before the Bohr radius joined, are the record
+    // from before it. Order is registry-stable (Landauer first).
     expect(proposals).toHaveLength(CENSUS.discovery.proposedBridges);
-    // IC-bohr-radius--hubble-distance--hubble-rate joined when the target of a source-less
-    // equation (CE-bohr-radius) became a component member (the owner's decision of 2026-10-16);
-    // the five others are the record from before it.
     expect(proposals.map((p) => p.id).sort()).toEqual([
-      'IC-bohr-radius--hubble-distance--hubble-rate',
-      'IC-classical-electron-radius--hubble-distance--hubble-rate',
-      'IC-compton-wavelength-full--hubble-distance--hubble-rate',
       'IC-erasure-energy--photon-energy--nu',
-      'IC-hubble-distance--peak-wavelength--temperature',
       'IC-photon-energy--rest-energy--mass',
     ]);
     const p = proposals[0];
@@ -290,7 +285,7 @@ describe('bridge-source adapter + leaf canonicalization', () => {
 
 describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', () => {
   it('materializes the pilot as an unadjudicated, honest entry', () => {
-    expect(PROPOSED_BRIDGES).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + 5 expansion IDs (4 before the Bohr radius joined)
+    expect(PROPOSED_BRIDGES).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + hν=mc² (6 before the Hubble distance had a magnitude)
     const e = PROPOSED_BRIDGES.find(
       (b) => b.id === 'IC-erasure-energy--photon-energy--nu',
     )!;
