@@ -20,6 +20,9 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Upgrade UPT to the published MathTS unit-delegation release (owner request, 2026-10-18).
+  Align core 0.19.0, functions 0.69.1 and their related MathTS packages, refresh `bun.lock`, and validate the installed registry artifacts against the existing unit, numerical and CLI contracts. Keep the local unit parser/table, physical constants, numerical tolerances and goldens unchanged. Open a focused PR for review; do not merge or publish.
+
 - [x] The Lean proofs move from PhysJS into this repository (the 11.0.0 change, PR #509; the owner's night agenda of 2026-10-09 and rulings of 2026-10-14).
   UPT vendored PhysJS's manifest at a pinned PhysJS commit and built no Lean, so nothing here compiled the proofs a `formalRef` cites, and thirteen of them were thin: they restated the catalog identity from hypotheses that already contained it.
   Plan: merge PhysJS's Lean tree with its history into `lean/`; keep the manifest in `formal/lean/`, edited with the Lean files, and write the file index from the tree (`scripts/lean-index.ts`); CI builds and axiom-audits `lean/` when a Lean input, the manifest or the catalog changes; each catalog record names its theorem and a ranked proof status (full, weak, pending) with a drift test and a README badge; derive the thin statements from premises.

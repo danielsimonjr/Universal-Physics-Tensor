@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Dependencies
+
+- Raise the MathTS minimum versions to the unit-delegation release: core 0.19.0, functions 0.69.1, expression 0.10.3, matrix 0.7.9, parallel 0.6.11, tensor 0.2.25 and autograd 0.3.19. The previous core and functions ranges excluded the new minor releases. Refresh `bun.lock` with Bun 1.4.2 so the packages share the new core and parallel versions, removing the older nested copies. This dependency update preserves UPT's local unit parser/table, physical constants, numerical tolerances and goldens.
+
 ### Breaking
 
 - **The discovery verdict gains `promising-unchecked`, `upt discover --json` reports readiness per tier, and a proposal records its identification's magnitude evidence.** `VettedCandidate['verdict']` (root export) is `'promising' | 'promising-unchecked' | 'inert' | 'contradictory' | 'magnitude-clash' | 'axis-clash'`, ranked in that order. A row that merges components, unlocks a quantity, is not subsuming and survives every falsifier that ran is `promising` only when the magnitude falsifier ran and could have failed (`hasMagnitudeEvidence`: `magnitudeChecked && magnitudeAnchorInvariant !== true`); otherwise it is `promising-unchecked`. A caller that selected `verdict === 'promising'` now gets the magnitude-evidenced tier only; `isPromisingTier` selects both. The `discover --json` field `readiness` is `{ promising, promisingUnchecked }`, each `{ count, mechanismTested, dataTested, withoutMagnitudeEvidence, axisUnresolved, entailedConsequence }` (it was one object whose first field was `promising`). `ProposedBridge.derivedFrom.identification` gains a required `magnitudeEvidence: boolean`, and `upt map --proposed --json` gives each proposal that field. Score is unchanged.
