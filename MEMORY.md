@@ -31,12 +31,13 @@ read it.
   functions, matrix, tensor, autograd, parallel, wasm, workerpool). The library does not
   start without them.
   `@viz-js/viz` (SVG map rendering) stays an optional peer and must degrade when absent.
-- The lockfile is **`bun.lock` only** (no `package-lock.json`). Dependabot uses
-  **`package-ecosystem: npm`**. Do NOT switch it to `bun`: Dependabot's bun parser reads an older
-  `bun.lock` format than this repo writes (the two lockfile versions are in `NOTES.md`), so it would
-  stop proposing updates at all. The consequence of the npm ecosystem is that **Dependabot never
-  writes `bun.lock`**, so every Dependabot PR fails CI at `bun install --frozen-lockfile` until the
-  lockfile is regenerated.
+- The lockfile is **`bun.lock` only** (no `package-lock.json`). **No Dependabot version-update
+  ecosystem runs on the repository root.** `bun` and `npm` both fail on a Bun-managed root and each
+  error recommends the other, so `.github/dependabot.yml` lists `github-actions` only. Do NOT add an
+  `npm` entry: its job aborts at file fetching and proposes nothing. Re-add `package-ecosystem: bun`
+  only after Dependabot's bun parser reads the `bun.lock` format this repo writes (the two lockfile
+  versions are in `NOTES.md`). Security alerts still come from the dependency graph. A dependency bump
+  is a human action: `bun outdated`, `bun update <pkg>`, then commit the regenerated `bun.lock`.
 
 ## Source map
 
