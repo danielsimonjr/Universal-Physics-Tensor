@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Remove the dead root npm Dependabot entry (the fleet-wide Dependabot carry, 2026-10-18).
+  The npm updater job for the repository root fails at file fetching, because the repository is managed by Bun, and has proposed nothing since 2026-09-23. Remove the entry, keep github-actions, say why in dependabot.yml, and record the ignore rule that went with it in the open row below.
+  Done: the entry is removed from .github/dependabot.yml with the reason in a comment; MEMORY.md no longer says that Dependabot uses the npm ecosystem; NOTES.md records the failing runs.
+
 - [x] Upgrade UPT to the published MathTS unit-delegation release (owner request, 2026-10-18).
   Align core 0.19.0, functions 0.69.1 and their related MathTS packages, refresh `bun.lock`, and validate the installed registry artifacts against the existing unit, numerical and CLI contracts. Keep the local unit parser/table, physical constants, numerical tolerances and goldens unchanged. Open a focused PR for review; do not merge or publish.
 
@@ -596,6 +600,11 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 - [ ] Promote the Tier 2 set that the Sprint 6.7 API review deferred. Tier 1 is already the public atlas namespace. Do not promote a symbol whose value is the dropped benchmark claim, and do not promote the harness. The review is docs/planning/Atlas-API-Review.md. Whether a further public-surface change stays an ADR is undecided there; escalate that call to the owner before editing the barrel. Publishing the package is the owner's job.
 - [ ] Record catalog judgments without inventing a verdict, and without treating them as gates: bridges 44, 46, and 50; the novel-candidate verdicts; the quantity-identification review; the bridge 23 check against Hartnoll 2015; the bridge 29 membership reconsider; the bridge 22 and 31 rename review. The bridge 42 membership reversal has already landed.
 - [ ] Research, and not a small task: ensemble averages and interpolation-function stubs still have no closed form for automatic differentiation. There is no clean lever. Do not invent one.
+- [ ] Dependabot ignore rules to restore when remediation returns. The root Dependabot entry was removed on 2026-10-18, because no updater ecosystem works on a Bun-managed root (the reason is in dependabot.yml). The ignore rule below went with it. It is not obsolete: it is inert only while nothing proposes updates, and it must come back with the entry. Blocked on the vendor: add the entry again when Dependabot's bun parser reads lockfileVersion 2.
+  The rule ignores semver-major updates of vitest. Why: vitest 5 is an API migration for this repository, not a version bump. The bench function stopped being a top-level export and became a test-context fixture, so all 31 bench call sites across the 14 files in bench/ must move inside a test and await run. Pull request 177 was closed for this reason on 2026-09-21. Remove the rule once the benches are migrated.
+
+      - dependency-name: vitest
+        update-types: [version-update:semver-major]
 
 Tiers 8, 10, and 11 are in the tree: the expression-gap listing, cross-family path milestones 1 through 4, and hybrid retrieval. ~~Their npm releases are not.~~ Retracted: they are in the published releases; the 8.0.0 tarball carries `expressionSearchGaps` and `upt retrieve`.
 

@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-10-18
+
+- **The root `npm` Dependabot entry is removed (branch `fix/drop-dead-dependabot-npm-entry`; not merged when this was written).** The `npm_and_yarn in /.` job last succeeded on 2026-09-23 and failed on 2026-09-28, 2026-09-29, 2026-10-05 and 2026-10-13. Each failure was at file fetching, with the message that the project has a `bun.lock` file and no `package-lock.json`, `yarn.lock` or `pnpm-lock.yaml` (read from the Actions logs of run 38364545058). The `github_actions in /.` job succeeded on the same dates. The line under 2026-10-09 that says `dependabot.yml` stays on the npm ecosystem is the record from before this change. `MEMORY.md` states the current rule, and the ignore rule that went with the entry is the last open row of `ACTIVE.md`.
+
 ## As of 2026-10-16
 
 - **Option 2 of the source-less decision, "Both" (branch `discovery-magnitude-own-equation`, from `a336533`; not merged when this was written).** The owner chose "Both" on 2026-10-16: (a) a sourced `hubble-distance` row in the representative-value table, `1.363e26` m (c/H0 at the `hubble-rate` row, default σ); (b) the own-equation magnitudes (`src/composition/own-equation-magnitude.ts`) with a precision guard (σ ≤ one decade) and a disagreement guard (relative 1e-9). What changed and why is the CHANGELOG `[Unreleased]` entry.
