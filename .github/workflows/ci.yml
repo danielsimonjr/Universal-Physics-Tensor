@@ -355,7 +355,7 @@ jobs:
           restore-keys: lake-build-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-
       - name: Build and axiom audit
         if: steps.should.outputs.run == 'true'
-        uses: leanprover/lean-action@f061402b660e0c34644504b324e830f2991d4865 # v1
+        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6 # v1
         with:
           build: "true"
           test: "false"
