@@ -325,7 +325,8 @@ for how the documents evolved.
 
 Hand-written. Each document ends with a `## Verification` block. The block lists the counts that
 `repo-tools check . --docs=docs/architecture` compares with the code. The pre-push hook runs that
-check when `repo-tools` is installed. CI does not run it. The generated files in the same
+check when `repo-tools` is installed. The non-required `architecture-docs claims` CI job runs it on every pull request
+and every push to `master`. The generated files in the same
 directory come from `bun run docs:deps`, and the `docs-fresh` CI job checks them.
 
 - **[Overview](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/OVERVIEW.md)** - What this is, what it does, how it is laid out

@@ -24,6 +24,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.
 
+- [x] Run `repo-tools check` in CI as a non-required job, so a merge that skips the pre-push hook is still checked.
+  The pre-push hook was the only gate for the claim tables of the architecture documents.
+  Done: the job `architecture-docs claims (non-required)` runs on a pull request and on a push to master, on Node 22, with the tool version pinned in one place. Branch protection is unchanged. `tests/tools/ci-workflows.test.ts` pins the shape of the job.
+
 - [ ] Clear the 55 MUST doc-comment issues that `repo-tools docs check src` reports on master, then make the pre-push code-docs ratchet use that command.
   The ratchet counts issues with a private checker, and it prints one skip line and passes when that checker is missing. The fix adds doc comments under `src/`, so it changes the shipped declaration files. Release timing is the maintainer's call.
 
