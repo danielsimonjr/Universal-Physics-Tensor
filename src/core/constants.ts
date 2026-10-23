@@ -174,7 +174,7 @@ export const M_E_SI = codata('electronMass');
 /**
  * Proton mass (kg). CODATA 2022. Shared by the Eddington evaluator and
  * `upt eval` (`m_p`, `m_proton`). Not the Planck mass `M_P_SI`.
- * @internal
+ * @public
  */
 export const M_PROTON_SI = codata('protonMass');
 
