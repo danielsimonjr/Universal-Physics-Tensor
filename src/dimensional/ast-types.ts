@@ -22,9 +22,12 @@ import type { CurvatureCompositeNode } from './curvature-composite.js';
 
 // ── index types ─────────────────────────────────────────────────────────────
 
+/** The position of a tensor index: upper (contravariant) or lower (covariant). */
 export type Variance = 'upper' | 'lower';
+/** The semantic class of a tensor symbol: coordinate, field or constant. */
 export type Role = 'coordinate' | 'field' | 'constant';
 
+/** One index of a tensor: its label and whether it is upper or lower. */
 export interface TensorIndex {
   readonly label: string;
   readonly variance: Variance;
@@ -63,6 +66,7 @@ export type TranscendentalFn =
 
 // ── tensor nodes ────────────────────────────────────────────────────────────
 
+/** A named tensor, with its indices, dimension and optional role. */
 export interface TensorSymbolNode {
   readonly kind: 'tensor-symbol';
   readonly name: string;
@@ -75,6 +79,7 @@ export interface TensorSymbolNode {
   readonly numericalForm?: 'symbolic' | 'numerical-fn' | 'grid';
 }
 
+/** An Einstein-summation product of tensor and scalar operands. */
 export interface TensorProductNode {
   readonly kind: 'tensor-product';
   readonly args: ReadonlyArray<ExprNode>;
@@ -82,6 +87,7 @@ export interface TensorProductNode {
 
 // ── metric nodes ────────────────────────────────────────────────────────────
 
+/** A metric tensor, with its name, indices, signature and dimension. */
 export interface MetricTensorNode {
   readonly kind: 'metric-tensor';
   readonly name: string;
@@ -92,12 +98,14 @@ export interface MetricTensorNode {
   readonly derivativeStrategy?: 'computed' | 'zero' | 'supplied';
 }
 
+/** The Kronecker delta, with its tensor indices and dimension. */
 export interface KroneckerDeltaNode {
   readonly kind: 'kronecker-delta';
   readonly indices: ReadonlyArray<TensorIndex>;
   readonly dim: Dimension;
 }
 
+/** The partial derivative of an expression, taken on a covariant index. */
 export interface TensorPartialDerivativeNode {
   readonly kind: 'tensor-partial-derivative';
   readonly of: ExprNode;
@@ -121,6 +129,7 @@ export interface CovariantDerivativeNode {
   readonly gInverse: MetricTensorNode;
 }
 
+/** The Riemann curvature tensor, with one upper and three lower indices. */
 export type RiemannTensorNode = CurvatureCompositeNode<'riemann-tensor', {
   readonly upperIndex: UpperIndex;
   readonly lowerIndices: readonly [CovariantIndex, CovariantIndex, CovariantIndex];
@@ -163,6 +172,7 @@ export type BianchiResidualNode = CurvatureCompositeNode<'bianchi-residual', {
   readonly riemann: RiemannTensorNode;
 }>;
 
+/** The Weyl curvature tensor, the trace-free part of the Riemann tensor. */
 export type WeylTensorNode = CurvatureCompositeNode<'weyl-tensor', {
   /** Metric g_{μν} (both-lower). Present for numerical lowering consumers. */
   readonly metric: MetricTensorNode;
@@ -188,12 +198,14 @@ export type KretschmannScalarNode = CurvatureCompositeNode<'kretschmann-scalar',
 
 // ── Killing / stress-energy / field-equation nodes ──────────────────────────
 
+/** A Killing vector field, with its vector and the metric it preserves. */
 export interface KillingVectorNode {
   readonly kind: 'killing-vector';
   readonly vector: TensorSymbolNode;
   readonly metric: MetricTensorNode;
 }
 
+/** A conserved charge: a Killing vector contracted with a momentum. */
 export interface ConservedChargeNode {
   readonly kind: 'conserved-charge';
   /** The Killing vector ξ^μ (rank-1, upper variance). */
@@ -203,6 +215,7 @@ export interface ConservedChargeNode {
   readonly momentum: TensorSymbolNode;
 }
 
+/** The symmetric stress-energy tensor T, with its indices and component dimension. */
 export interface StressEnergyTensorNode {
   readonly kind: 'stress-energy';
   readonly symbol: 'T';
@@ -211,6 +224,7 @@ export interface StressEnergyTensorNode {
   readonly componentDim: Dimension;
 }
 
+/** The cosmological constant Λ, with its dimension and optional numeric value. */
 export interface CosmologicalConstantNode {
   readonly kind: 'cosmological-constant';
   readonly symbol: 'Λ';
@@ -234,6 +248,7 @@ export interface EinsteinFieldEquationNode {
 
 // ── the ExprNode union ──────────────────────────────────────────────────────
 
+/** Any node of a dimensional expression: scalar, calculus, tensor, curvature or field-equation. */
 export type ExprNode =
   | { kind: 'symbol'; name: string; dim: Dimension }
   | { kind: 'op'; op: '+' | '-' | '*' | '/' | '^'; args: ExprNode[] }

@@ -16,11 +16,13 @@ import type { Dimension } from '../../dimensional/types.js';
 import { canonicalPrefactor } from '../canonical-prefactors.js';
 import { constantRatio, fixedPoint } from '../../canonical/fixed-points.js';
 
+/** One corpus entry that matches an expression, with the layer that holds it. */
 export interface CorpusMatch {
   readonly id: string;
   readonly layer: 'canonical' | 'bridge';
 }
 
+/** The result of comparing one expression with the in-repo corpus. */
 export interface CorpusComparisonResult {
   readonly corpusId: string;
   readonly corpusVersion: string;

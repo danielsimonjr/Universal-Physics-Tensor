@@ -20,6 +20,7 @@ import { captureEnvironment, hashCanonical } from '../canonical-json.js';
  */
 export { captureEnvironment } from '../canonical-json.js';
 
+/** The inputs from which openManifest builds one discovery run manifest. */
 export interface ManifestDraft {
   readonly runId: string;
   readonly repositoryCommit: string;

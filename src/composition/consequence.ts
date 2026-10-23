@@ -19,10 +19,16 @@ import { normalForm } from '../canonical/normal-form.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 
-/** @public */
+/**
+ * The consequence signal of a promising candidate: entailed, novel-consequence or inconclusive.
+ * @public
+ */
 export type ConsequenceSignal = 'entailed' | 'novel-consequence' | 'inconclusive';
 
-/** @public */
+/**
+ * The evidence behind one consequence signal: the derived claim and any canonical match.
+ * @public
+ */
 export interface ConsequenceEvidence {
   readonly target: string;
   readonly governing: readonly string[];
@@ -32,7 +38,10 @@ export interface ConsequenceEvidence {
   readonly sourceEquationIds: readonly [string, string];
 }
 
-/** @public */
+/**
+ * A vetted candidate, plus its optional consequence signal and evidence.
+ * @public
+ */
 export type ConsequenceAnnotatedCandidate = VettedCandidate & {
   readonly consequence?: {
     readonly signal: ConsequenceSignal;

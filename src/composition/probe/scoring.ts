@@ -67,6 +67,7 @@ function dominates(a: ScoreVector, b: ScoreVector): boolean {
   return better;
 }
 
+/** One probe candidate with its scores and whether it is on the Pareto front. */
 export interface RankedCandidate {
   readonly record: ProbeCandidateRecord;
   readonly scores: ScoreVector;

@@ -27,6 +27,7 @@ interface DeterminationInput {
   readonly unresolved: readonly string[];
 }
 
+/** The exit code, report and gap of one derive or map determination. */
 export interface Determination {
   readonly exit: 0 | typeof EXIT_CHECK_FAILED;
   readonly report: 'established' | 'nothing-checked' | 'check-failed' | 'not-established';

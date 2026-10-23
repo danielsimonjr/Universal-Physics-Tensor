@@ -26,6 +26,7 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 - [ ] Clear the 55 MUST doc-comment issues that `repo-tools docs check src` reports on master, then make the pre-push code-docs ratchet use that command.
   The ratchet counts issues with a private checker, and it prints one skip line and passes when that checker is missing. The fix adds doc comments under `src/`, so it changes the shipped declaration files. Release timing is the maintainer's call.
+  The 55 issues are cleared: the doc-check command reports 0 MUST issues for src. The pre-push code-docs ratchet still uses the private checker. Switching it to the doc-check command is the part that stays open.
 
 - [ ] Find why `repo-tools map` marks every file under `src/` as an entry root in this repository.
   Until the cause is fixed, no Verification table may hold `entryRoots`, `reachableFiles` or `testOnlyFiles`, and `orphanedFiles` is not a safe claim.

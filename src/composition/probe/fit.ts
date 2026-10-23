@@ -12,6 +12,7 @@ import { DEFAULT_HOLDOUT_TOL, type ProbeDataset } from './types.js';
 import { scalarDiscrepancy } from './residual.js';
 import { canonicalJson } from './serialize.js';
 
+/** The prefactor fit of one candidate, with its exploratory and holdout errors. */
 export interface FitResult {
   readonly prefactor: number;
   /**

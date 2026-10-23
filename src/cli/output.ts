@@ -72,6 +72,10 @@ export interface JsonEnvelope {
   compositionRecovery?: unknown;
 }
 
+/**
+ * Make a value JSON-safe. NaN and infinite numbers become strings.
+ * A function is omitted from an object and becomes null in an array.
+ */
 export function sanitize(v: unknown): unknown {
   if (typeof v === 'number') {
     if (Number.isNaN(v)) return 'NaN';
@@ -117,6 +121,10 @@ export function sanitize(v: unknown): unknown {
   return v;
 }
 
+/**
+ * Write the `--json` envelope of one command to `write`.
+ * The status definitions of the command are added when it has any.
+ */
 export function emitJson(env: JsonEnvelope, write: (s: string) => void = (s) => process.stdout.write(s)): void {
   const definitions = definitionsFor(env.command);
   const { result, ...head } = env;

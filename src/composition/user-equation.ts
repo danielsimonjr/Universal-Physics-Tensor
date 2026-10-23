@@ -149,6 +149,7 @@ function withFormulaNames(catalog: ReadonlyMap<string, Dimension>): Map<string, 
   return out;
 }
 
+/** Parse a `TARGET = EXPR` equation into its target and source quantities. A malformed equation throws. */
 export async function parseUserEquation(
   equation: string,
   catalogNames?: ReadonlySet<string> | Iterable<string>,

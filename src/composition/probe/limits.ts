@@ -17,6 +17,7 @@ import { evalExpr } from '../expr-eval.js';
 /** What a limit check found: the limit held, failed, or could not be decided on these rows. @internal */
 export type LimitOutcome = 'held' | 'failed' | 'undecided';
 
+/** The outcome of one declared-limit check, and whether it is fatal. */
 export interface LimitCheckResult {
   readonly id: string;
   /** `outcome === 'held'`. */

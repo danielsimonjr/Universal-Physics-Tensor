@@ -81,6 +81,7 @@ export const BUILTIN_VERBS: readonly {
   },
 ];
 
+/** The usage heading of one flag, showing how its value is written. */
 export function flagHeading(flag: FlagSpec): string {
   const repeat = flag.repeatable ? ' (repeatable)' : '';
   switch (flag.valueStyle) {

@@ -13,6 +13,7 @@
 import type { ParsedArgs, FlagSpec, PositionalArity } from './args.js';
 import type * as cliApi from '../cli-api.js';
 
+/** The arguments, API and output functions that a command's `run` receives. */
 export interface CommandCtx {
   args: ParsedArgs;
   api: typeof cliApi; // injected so tests can stub; main.ts passes the real barrel
@@ -24,11 +25,13 @@ export interface CommandCtx {
 /** README / docs/CLI.md grouping. The generator is the only reader. */
 export type CommandGroup = 'evaluate' | 'explore' | 'discovery' | 'data' | 'utilities';
 
+/** A subverb of a command, such as `probe scan`, with its one-line summary. */
 export interface CommandSub {
   readonly name: string;
   readonly summary: string;
 }
 
+/** One verb of the `upt` CLI: its name, flags, help text and `run` handler. */
 export interface Command {
   name: string;
   aliases: string[];
