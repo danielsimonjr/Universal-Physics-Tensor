@@ -74,6 +74,7 @@ const GLOBAL_FILE_OPTION = /^--(record|replay|show-record)(?:=(.*))?$/;
  */
 const NO_JSON_VERBS = new Set(['help', '--help', '-h', 'version', '--version', '-v']);
 
+/** Run one `upt` invocation and return its exit code. */
 export async function runCli(argv: string[], io: Io = defaultIo): Promise<number> {
   const files: Partial<Record<'record' | 'replay' | 'show-record', string>> = {};
   let json = false;

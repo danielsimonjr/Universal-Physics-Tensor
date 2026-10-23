@@ -19,6 +19,7 @@ import type {
   ProbeDataset,
 } from './types.js';
 
+/** The candidate, data and declared limits that one falsification battery tests. */
 export interface FalsifyInput {
   readonly expr: ExprNode;
   readonly dataset?: ProbeDataset;
@@ -28,6 +29,7 @@ export interface FalsifyInput {
   readonly skipDimensional?: boolean;
 }
 
+/** The records, survival flag and counterexamples of one falsification battery. */
 export interface FalsifyResult {
   readonly records: readonly FalsificationRecord[];
   readonly survived: boolean;

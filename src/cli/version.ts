@@ -14,6 +14,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readJsonFile } from '../core/data-file.js';
 
+/** Read the package version from `package.json` at run time. */
 export function packageVersion(): string {
   const pkgPath = fileURLToPath(new URL('../../package.json', import.meta.url));
   const pkg = readJsonFile(pkgPath) as { version: string };

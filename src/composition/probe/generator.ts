@@ -20,6 +20,7 @@ export { powerLawDetermination, powerLawWording, rationalizeExponent } from './p
 /** The power-law fit's result types: the determination, one fitted exponent, and a recovered fit. */
 export type { PowerLawDetermination, PowerLawExponent, PowerLawFit } from './power-law.js';
 
+/** A candidate that a generator emits, before scoring and falsification. */
 export interface RawCandidate {
   readonly expression: ExprNode;
   readonly monomial: Readonly<Record<string, number>> | null;

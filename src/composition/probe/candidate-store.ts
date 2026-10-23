@@ -102,6 +102,7 @@ export function statusRank(s: ProbeCandidateStatus): number {
   return i >= 0 ? i : -1;
 }
 
+/** The in-memory store of probe candidate records and their rejections. */
 export class ProbeCandidateStore {
   private readonly byId = new Map<string, ProbeCandidateRecord>();
   private readonly rejections: ProbeRejectionRecord[] = [];

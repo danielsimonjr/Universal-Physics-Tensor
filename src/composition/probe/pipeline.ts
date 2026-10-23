@@ -48,6 +48,7 @@ export function nodeWorkerArgv(script: string): readonly string[] {
   return [process.execPath, script];
 }
 
+/** The optional settings of one probe search: budget, run id, backend and corpus version. */
 export interface ProbeSearchOptions {
   readonly budget?: SearchBudget;
   readonly runId?: string;
@@ -58,6 +59,7 @@ export interface ProbeSearchOptions {
   readonly now?: string;
 }
 
+/** The outcome of one probe search: its manifest, candidates, rankings and stop reason. */
 export interface ProbeSearchResult {
   readonly manifest: DiscoveryRunManifest;
   readonly candidates: readonly ProbeCandidateRecord[];

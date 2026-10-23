@@ -10,6 +10,7 @@
 import { spawn } from 'node:child_process';
 import type { ExprNode } from '../../dimensional/ast-types.js';
 
+/** One request line that the search sends to an expression-search backend worker. */
 export interface BackendRequest {
   readonly problemId: string;
   readonly budgetMs: number;
@@ -17,12 +18,14 @@ export interface BackendRequest {
   readonly target: string;
 }
 
+/** One candidate expression that an expression-search backend worker returns. */
 export interface BackendCandidate {
   readonly expression: ExprNode;
   readonly prefactor?: number;
   readonly note?: string;
 }
 
+/** The parsed reply of a backend worker: its candidates, or an error. */
 export interface BackendResponse {
   readonly ok: boolean;
   readonly candidates: readonly BackendCandidate[];

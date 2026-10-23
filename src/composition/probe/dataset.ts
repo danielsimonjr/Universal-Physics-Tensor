@@ -124,6 +124,7 @@ export function loadDatasetFromJson(path: string, fallbackRole?: DatasetRole): P
   return asDatasetSafe(raw, path, fallbackRole);
 }
 
+/** The exploratory and holdout datasets that one split JSON file holds. */
 export interface SplitFileDatasets {
   readonly exploratory?: ProbeDataset;
   readonly holdout?: ProbeDataset;

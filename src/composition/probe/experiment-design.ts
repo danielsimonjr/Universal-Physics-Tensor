@@ -10,6 +10,7 @@
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { evalExpr } from '../expr-eval.js';
 
+/** The variable ranges, forbidden regions and sigma that bound an experiment design. */
 export interface DesignBounds {
   readonly variables: Readonly<Record<string, { min: number; max: number; steps?: number }>>;
   readonly forbidden?: readonly Readonly<Record<string, { min: number; max: number }>>[];
@@ -106,6 +107,7 @@ export function parseDesignBounds(raw: unknown, source: string): DesignBounds {
   return { variables, ...(forbidden ? { forbidden } : {}), ...(sigma !== undefined ? { sigma } : {}) };
 }
 
+/** One suggested experiment point, and how well it separates two hypotheses. */
 export interface DesignSuggestion {
   readonly point: Readonly<Record<string, number>>;
   readonly discrimination: number;

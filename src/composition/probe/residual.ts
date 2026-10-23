@@ -8,6 +8,7 @@
 import { norm2 } from '@danielsimonjr/mathts-core';
 import type { DiscrepancyDefinition, DiscrepancyKind } from './types.js';
 
+/** The error that residual evaluation throws, for example on a non-finite value. */
 export class ResidualError extends Error {
   constructor(message: string) {
     super(message);

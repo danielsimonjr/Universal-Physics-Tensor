@@ -10,6 +10,7 @@
 
 import { UsageError } from './errors.js';
 
+/** One flag that a command accepts, with its value style and help text. */
 export interface FlagSpec {
   name: string; // e.g. '--source'
   valueStyle: 'attached' | 'next' | 'either' | 'none';
@@ -37,6 +38,7 @@ export function optionTokens(argv: readonly string[]): readonly string[] {
   return end === -1 ? argv : argv.slice(0, end);
 }
 
+/** The options and positional arguments that the parser read from one argument list. */
 export interface ParsedArgs {
   flags: Map<string, string[]>; // name (no dashes) -> raw values ('' for none-style)
   positionals: string[];

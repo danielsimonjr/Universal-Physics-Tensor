@@ -17,6 +17,7 @@ import { realFlag } from '../numeric-flag.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
 import type { Dimension } from '../../dimensional/types.js';
 
+/** Read the `--max-orders` and `--anchor` flags into discovery options. A bad value throws. */
 export function parseDiscoveryOpts(api: CommandCtx['api'], flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
 

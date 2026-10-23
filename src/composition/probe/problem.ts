@@ -109,6 +109,7 @@ function varFromJson(raw: unknown, where: string): DimensionalVariableRef {
   return { name, dim: parseDimensionSpec(dim) };
 }
 
+/** The JSON shape of a probe problem file, as read before validation. */
 export interface ProblemFile {
   readonly gap?: {
     readonly id?: string;

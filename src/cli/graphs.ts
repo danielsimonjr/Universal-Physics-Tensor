@@ -10,8 +10,10 @@ import type { ParsedArgs } from './args.js';
 import type { CommandCtx } from './command.js';
 import { CliError } from './errors.js';
 
+/** The graph that a command reads, as chosen by its `--source` flag. */
 export type SourceName = 'catalog' | 'canonical' | 'both';
 
+/** Resolve the `--source` flag to graph edges, a banner label and the source name. */
 export function resolveGraph(
   api: CommandCtx['api'],
   flags: ParsedArgs['flags']

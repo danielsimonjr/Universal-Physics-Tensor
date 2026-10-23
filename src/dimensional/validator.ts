@@ -109,6 +109,7 @@ export type {
   KretschmannScalarNode,
 } from './ast-types.js';
 
+/** One dimensional violation that validation found in an expression. */
 export interface Violation {
   /** Tree path, e.g. "args[1].args[0]". Empty string for the root. */
   location: string;
@@ -120,6 +121,7 @@ export interface Violation {
   severity?: 'error' | 'warning';
 }
 
+/** The result of validating one expression: its verdict, dimension, free indices and violations. */
 export interface ValidationResult {
   ok: boolean;
   inferredDimension: Dimension | null;
