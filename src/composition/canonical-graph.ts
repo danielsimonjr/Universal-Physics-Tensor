@@ -513,7 +513,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
  * Project canonical equations into composition-graph edges (defaults to the
  * full registry). See the module docstring for the modelling decisions.
  *
- * @internal
+ * @public
  */
 export function canonicalToEdges(
   equations: readonly CanonicalEquation[] = CANONICAL_EQUATIONS,
@@ -525,6 +525,6 @@ export function canonicalToEdges(
  * The standard-physics composition graph: every canonical equation as an
  * `established` `law` edge. The bridge-free counterpart to `CATALOG_GRAPH`.
  *
- * @internal
+ * @public
  */
 export const CANONICAL_GRAPH: readonly BridgeEdge[] = canonicalToEdges();

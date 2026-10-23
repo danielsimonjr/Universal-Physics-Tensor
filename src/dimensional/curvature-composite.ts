@@ -62,7 +62,7 @@ export type CurvatureKind =
  * `componentDim` is the SI dimension of each component in the F8/I3 convention
  * (metric is dimensionless, coordinates carry [L]).
  *
- * @public
+ * @internal
  */
 interface CurvatureKindSpec {
   readonly freeIndicesShape: 'rank-4-1upper-3lower' | 'rank-2-lower-lower' | 'rank-3-lower' | 'scalar';
