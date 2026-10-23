@@ -608,6 +608,14 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 Tiers 8, 10, and 11 are in the tree: the expression-gap listing, cross-family path milestones 1 through 4, and hybrid retrieval. ~~Their npm releases are not.~~ Retracted: they are in the published releases; the 8.0.0 tarball carries `expressionSearchGaps` and `upt retrieve`.
 
+- [x] Make the tests that fail only on a Windows checkout pass there, so that the pre-push gate (the full suite) can run on a Windows machine.
+  `path.relative`, `path.join` and `path.resolve` return backslashes on Windows. Six test files compared those paths with forward-slash literals, and one passed a bare `C:\…` path to `node --import`. Read each path through `tests/helpers/posix-path.ts`, and give the preload as a `file:` URL.
+  Done: the full suite passes on Windows under Node 22 (668 files; 8060 tests passed, 4 skipped). Each changed guard still fails when a violation is planted.
+- [ ] Decide how the two goldens that encode the Node 22 Math.pow result are kept. `tests/bridges/catalog-reference-golden.test.ts` (one row) and `tests/composition/compose-relation.test.ts` (five composed pairs that contain be-42) fail on Node 24 and pass on Node 22. V8 13.6 (Node 24) gives the exact Math.pow(299792458, 3), `2.694400241737399e25`. V8 12.4 (Node 22) gives one ulp more, `2.6944002417373993e25`. Math.pow(1e14, 3) is `1e42` on Node 24 and `9.999999999999999e41` on Node 22. CI runs Node 22, so CI passes. The options are to re-capture the goldens, to widen the two-ulp rule, or to pin the suite to Node 22. A change to a stored reference is the owner's call.
+- [x] Clear the high advisory that fails `bun audit --audit-level=high` in the quality job (the nightly run, 2026-10-23).
+  `vite` 8.3.0, reached through `vitest > @vitest/mocker`, bundles `launch-editor` versions that the advisories GHSA-587h-7wmj-h5pm (high), GHSA-698v-4r3x-3vcv and GHSA-r825-w8mm-5pxw cover, and has its own advisories GHSA-9jrq-w75r-8gcw, GHSA-rq7h-c2jc-7f22 and GHSA-vfpm-58rq-9qcg. `@vitest/mocker` 4.1.11 has GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp. All are in the test runner, which the package does not ship. Raise `vitest` and `@vitest/coverage-v8` to ^4.1.12 and update `vite` in `bun.lock`.
+  Done: `vitest` and `@vitest/coverage-v8` are ^4.1.12 and `vite` is 8.3.5; `bun audit` reports no vulnerabilities and `bun audit --audit-level=high` exits 0.
+
 ## Owner decisions
 
 These are not authorized engineering until the owner rules. Publishing to npm is the owner's job.

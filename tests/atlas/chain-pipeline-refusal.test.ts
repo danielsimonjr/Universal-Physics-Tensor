@@ -9,6 +9,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { toPosix } from '../helpers/posix-path.js';
 import { runChainPipeline, type ChainCompositionRefusal } from '../../src/atlas/chain-pipeline.js';
 import { bridgeSeedKeys } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_RHS_BY_ID } from '../../src/bridges/rhs-registry.js';
@@ -27,7 +28,7 @@ function walk(dir: string, acc: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
     if (statSync(full).isDirectory()) walk(full, acc);
-    else if (name.endsWith('.ts')) acc.push(full);
+    else if (name.endsWith('.ts')) acc.push(toPosix(full));
   }
   return acc;
 }

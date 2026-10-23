@@ -9,9 +9,10 @@
  * allowed to be written out.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { relativePosix } from '../helpers/posix-path.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -47,7 +48,7 @@ function walk(dir: string, out: string[]): void {
   for (const entry of readdirSync(dir)) {
     if (skipEntry(entry)) continue;
     const abs = join(dir, entry);
-    const rel = relative(root, abs);
+    const rel = relativePosix(root, abs);
     if (statSync(abs).isDirectory()) {
       if (filenameOffender(entry)) out.push(rel);
       walk(abs, out);
@@ -69,7 +70,7 @@ function codeFiles(): string[] {
       const abs = join(dir, entry);
       if (statSync(abs).isDirectory()) visit(abs);
       else {
-        const rel = relative(root, abs);
+        const rel = relativePosix(root, abs);
         const dot = entry.lastIndexOf('.');
         const ext = dot >= 0 ? entry.slice(dot) : '';
         if (CODE_EXT.has(ext) && !isExempt(rel)) found.push(rel);
@@ -188,7 +189,7 @@ describe('source guard', () => {
         const abs = join(dir, entry);
         if (statSync(abs).isDirectory()) visit(abs);
         else if (entry.endsWith('.ts')) {
-          const rel = relative(root, abs);
+          const rel = relativePosix(root, abs);
           if (isExempt(rel)) continue;
           const found = wholeBeLiterals(readFileSync(abs, 'utf8'));
           if (found.length > 0) hits.push(`${rel}: ${found.join(', ')}`);

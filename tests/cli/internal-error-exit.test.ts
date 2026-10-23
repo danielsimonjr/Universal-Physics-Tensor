@@ -15,12 +15,13 @@ import { describe, expect, it } from 'vitest';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { reportInternalError } from '../../dist/cli/main.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(here, '../../bin/upt.mjs');
-const plant = resolve(here, '../fixtures/cli/plant-internal-error.mjs');
+// `--import` takes a module specifier: a bare Windows path (`C:\...`) reads as a URL with scheme `c:`.
+const plant = pathToFileURL(resolve(here, '../fixtures/cli/plant-internal-error.mjs')).href;
 
 function run(args: string[], preload: boolean): { status: number; stdout: string; stderr: string } {
   const node = preload ? ['--import', plant, cli, ...args] : [cli, ...args];

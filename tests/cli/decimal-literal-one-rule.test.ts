@@ -15,6 +15,7 @@ import { join } from 'node:path';
 import { realFlag } from '../../dist/cli/numeric-flag.js';
 import * as cliApi from '../../dist/cli-api.js';
 import { isDecimalLiteral } from '../../dist/dimensional/ast-leaves.js';
+import { toPosix } from '../helpers/posix-path.js';
 
 const SRC_CLI = join(import.meta.dirname, '../../src/cli');
 const REGEX_TEXT = String.raw`(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/`;
@@ -23,7 +24,7 @@ function cliSources(): { name: string; text: string }[] {
   const out: { name: string; text: string }[] = [];
   for (const dir of [SRC_CLI, join(SRC_CLI, 'commands')]) {
     for (const name of readdirSync(dir).filter((n) => n.endsWith('.ts'))) {
-      out.push({ name: join(dir === SRC_CLI ? '' : 'commands', name), text: readFileSync(join(dir, name), 'utf8') });
+      out.push({ name: toPosix(join(dir === SRC_CLI ? '' : 'commands', name)), text: readFileSync(join(dir, name), 'utf8') });
     }
   }
   return out;

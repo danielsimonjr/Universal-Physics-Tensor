@@ -4,8 +4,9 @@
  * parser, and holds no physics or numerics of its own.
  */
 import { readFileSync, readdirSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { relativePosix } from '../helpers/posix-path.js';
 import {
   correlationIsPositiveSemidefinite,
   propagateEvaluatorUncertainty,
@@ -49,7 +50,7 @@ describe('commands reach the library only through ctx.api', () => {
     const hits: string[] = [];
     for (const file of tsFiles(join(SRC, 'cli/commands'))) {
       const text = readFileSync(file, 'utf8');
-      for (const hit of libraryValueImports(text)) hits.push(`${relative(SRC, file)}: ${hit}`);
+      for (const hit of libraryValueImports(text)) hits.push(`${relativePosix(SRC, file)}: ${hit}`);
     }
     expect(hits).toEqual([]);
   });
@@ -59,7 +60,7 @@ describe('one bridge-id parser', () => {
   it('no regex re-parses a bridge id outside catalog-load.ts', () => {
     const hits: string[] = [];
     for (const file of tsFiles(SRC)) {
-      const rel = relative(SRC, file);
+      const rel = relativePosix(SRC, file);
       if (rel === 'bridges/catalog-load.ts') continue;
       if (/\(\?:be-\)\?\(\\d\+\)|\^be-\(\\d\+\)|startsWith\('BE-'\)/.test(code(rel))) hits.push(rel);
     }
@@ -81,7 +82,7 @@ describe('errors are classified by class, not by message text', () => {
   it('no CLI module tests an error message with a regex', () => {
     const hits: string[] = [];
     for (const file of tsFiles(join(SRC, 'cli'))) {
-      const rel = relative(SRC, file);
+      const rel = relativePosix(SRC, file);
       if (/\.test\(e\.message\)|\.test\(error\.message\)|e\.message\.includes\(/.test(code(rel))) hits.push(rel);
     }
     expect(hits).toEqual([]);
