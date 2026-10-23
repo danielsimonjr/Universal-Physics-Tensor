@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Dependencies
 
+- Raise `vitest` and `@vitest/coverage-v8` to ^4.1.12 and update `vite` to 8.3.5 in `bun.lock`. The nightly CI run on `master` failed in the `quality` job because `bun audit --audit-level=high` reported GHSA-587h-7wmj-h5pm, a high advisory in the `launch-editor` code that `vite` 8.3.0 bundles. The same `vite` version carries five more advisories (one low, four moderate), and `@vitest/mocker` 4.1.11 carries two moderate ones. `vite` is reached only through `vitest > @vitest/mocker`, so the packages that users install do not change. `bun audit` now reports no vulnerabilities.
+
 - Raise the MathTS minimum versions to the unit-delegation release: core 0.19.0, functions 0.69.1, expression 0.10.3, matrix 0.7.9, parallel 0.6.11, tensor 0.2.25 and autograd 0.3.19. The previous core and functions ranges excluded the new minor releases. Refresh `bun.lock` with Bun 1.4.2 so the packages share the new core and parallel versions, removing the older nested copies. This dependency update preserves UPT's local unit parser/table, physical constants, numerical tolerances and goldens.
 
 ### Breaking
