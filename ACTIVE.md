@@ -608,6 +608,11 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 Tiers 8, 10, and 11 are in the tree: the expression-gap listing, cross-family path milestones 1 through 4, and hybrid retrieval. ~~Their npm releases are not.~~ Retracted: they are in the published releases; the 8.0.0 tarball carries `expressionSearchGaps` and `upt retrieve`.
 
+- [x] Make the tests that fail only on a Windows checkout pass there, so that the pre-push gate (the full suite) can run on a Windows machine.
+  `path.relative`, `path.join` and `path.resolve` return backslashes on Windows. Six test files compared those paths with forward-slash literals, and one passed a bare `C:\…` path to `node --import`. Read each path through `tests/helpers/posix-path.ts`, and give the preload as a `file:` URL.
+  Done: the full suite passes on Windows under Node 22 (668 files; 8060 tests passed, 4 skipped). Each changed guard still fails when a violation is planted.
+- [ ] Decide how the two goldens that encode the Node 22 Math.pow result are kept. `tests/bridges/catalog-reference-golden.test.ts` (one row) and `tests/composition/compose-relation.test.ts` (five composed pairs that contain be-42) fail on Node 24 and pass on Node 22. V8 13.6 (Node 24) gives the exact Math.pow(299792458, 3), `2.694400241737399e25`. V8 12.4 (Node 22) gives one ulp more, `2.6944002417373993e25`. Math.pow(1e14, 3) is `1e42` on Node 24 and `9.999999999999999e41` on Node 22. CI runs Node 22, so CI passes. The options are to re-capture the goldens, to widen the two-ulp rule, or to pin the suite to Node 22. A change to a stored reference is the owner's call.
+
 ## Owner decisions
 
 These are not authorized engineering until the owner rules. Publishing to npm is the owner's job.

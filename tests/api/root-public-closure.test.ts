@@ -25,6 +25,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { namedReExports, wildcardReExports } from './_public-surface-parse.js';
 import { declarationText } from './atlas-public-closure.test.js';
+import { toPosix } from '../helpers/posix-path.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const SRC = resolve(here, '../../src');
@@ -199,7 +200,7 @@ describe('the root closure scan — proven before it is trusted', () => {
     // Synthetic modules on disk are not needed: the real barrel is the control.
     const decl = findDeclaration(INDEX, readFileSync(INDEX, 'utf-8'), 'EinsumSpec');
     expect(decl).toBeDefined();
-    expect(decl!.file.endsWith('numerical/tensor-engine.ts')).toBe(true);
+    expect(toPosix(decl!.file).endsWith('numerical/tensor-engine.ts')).toBe(true);
     expect(decl!.text).toContain('free');
   });
 });

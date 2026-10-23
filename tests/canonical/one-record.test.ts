@@ -7,8 +7,9 @@
  * the fact.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { relativePosix } from '../helpers/posix-path.js';
 import { canonicalById, CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import {
   CANONICAL_GROUP_PREFACTORS,
@@ -44,7 +45,7 @@ describe('a canonical equation is one record', () => {
   it('no id-keyed canonical fact lives outside src/canonical/entries', () => {
     const hits: string[] = [];
     for (const file of tsFiles(ROOT)) {
-      const rel = relative(ROOT, file);
+      const rel = relativePosix(ROOT, file);
       if (MAY_NAME_CANONICAL_IDS(rel)) continue;
       const code = stripComments(readFileSync(file, 'utf8'));
       const literals = code.match(/'CE-[a-z][a-z0-9-]*'/g) ?? [];
