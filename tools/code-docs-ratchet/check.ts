@@ -9,8 +9,8 @@
  * was there. Debt already present on the base ref does not fail.
  *
  * It is not `code_docs.py`. It does not read the baseline, and it does not
- * count object-literal methods. `repo_map.py` is a different gate and is
- * not invoked here.
+ * count object-literal methods. `repo-tools check` is a different gate and
+ * is not invoked here.
  *
  * @module tools/code-docs-ratchet
  */

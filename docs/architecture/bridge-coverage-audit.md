@@ -4,7 +4,7 @@
 
 <!-- repo-map:no-verification -->
 
-> **No `## Verification` block, deliberately.** This document is an audit snapshot (2026-05-16 / 2026-06-11 / 2026-06-19). Its counts are of bridge-catalog entries, which repo_map does not model; the basis is a reading of the catalog, not a graph metric.
+> **No `## Verification` block, deliberately.** This document is an audit snapshot (2026-05-16 / 2026-06-11 / 2026-06-19). Its counts are of bridge-catalog entries, which `repo-tools map` does not model; the basis is a reading of the catalog, not a graph metric.
 > The drift gate treats a missing Verification section as a failure, so the opt-out is
 > stated here explicitly rather than left to be inferred from its absence.
 

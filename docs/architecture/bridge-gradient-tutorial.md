@@ -16,17 +16,17 @@ temperature ∝ 1/M, Shapiro delay ∝ log(R_far/R_near), …). Two paths
 compute the gradient of such a relation with respect to its inputs:
 
 - `bridgeGradientNumerical(spec, params, opts?)` — central finite
-  differences over a registered `BridgeDiffSpec`. No engine. This is
-  the path for the catalog's plain-JS closed forms, which return a
-  `number` and so carry no autograd tape.
+  differences over a registered `BridgeDiffSpec`. No engine. The
+  catalog's plain-JS closed forms return a `number` and so carry no
+  autograd tape, so they use this function.
 - `bridgeGradientAST(rhs, varName, bindings)` and
   `bridgeGradientASTById(bridgeId, varName, bindings)` — exact
   reverse-mode AD over a bridge's symbolic RHS AST, lowered through
   `@danielsimonjr/mathts-autograd` (a required dependency).
 
-There is no engine-AD function over a spec: a spec's `evaluate` returns
+No engine-AD function exists over a spec. A spec's `evaluate` returns
 a number, and no tape survives that, so such a function could only
-throw. The one that once existed did, and was removed.
+throw.
 
 ## Five-minute walkthrough
 

@@ -1,83 +1,69 @@
 # Universal Physics Tensor — File Inventory
 
-Every file this repository tracks, by zone and by disposition.
+Every source file that this repository tracks, by zone.
 
-> **Derived from `file-inventory.json`.** A person writes this file from that artifact.
-> Refresh with `repo_map.py map`, then update the Verification block below.
+> **Derived from `file-inventory.json`.** A person writes this file from that report.
+> `repo-tools map` writes the report. Regenerate it, then update the tables and the
+> Verification block below.
 
 ## Scope: what is counted
 
-`repo_map` asks git for the file list, so the census is exactly **what the repository tracks**.
-Build output, `node_modules/` and ignored scratch files are absent because git does not track
-them, not because a directory name was guessed. This matters: an earlier version walked the
-filesystem and counted a gitignored scratch file under `.remember/tmp/` as source, and reported
-it as dead code.
+The census is the set of source files that git tracks. Build output, `node_modules/` and
+ignored scratch files are absent because git does not track them. The tool does not guess
+from a directory name.
 
-The scope of this document is the **whole repository**. The `src`-only figure from this repository's own generator is 471 files (`bun run docs:deps` on `b1db6b66`). The zone and disposition tables below are the last `repo_map.py` census. That tool is not in this repository and was not re-run, so those tables still say `src` 403 and a whole-repo total of 1025. A `git ls-files '*.ts' '*.tsx'` of this checkout is 1193 files (471 under `src/`, 688 under `tests/`). That is a different census from both the old table and the generator's 662 test files. Do not treat the zone table as current. The corrected `src/` census and the parallel-implementation reading are `INTEGRATION_MAP.md`.
+The scope of this document is the **whole repository**: 1150 source files. The library
+alone is smaller. `src/` holds 385 TypeScript files, and `bun run docs:deps` counts the same
+385. The zone `src` below counts 387 files: the 385 files under `src/`, the launcher
+`bin/upt.mjs` and the smoke entry `test-example.js`.
 
 ## By zone
 
 | Zone | Files | What lives here |
 |---|---|---|
-| `tests` | 580 | The vitest suite |
-| `src` | 403 | The library, the CLI, and the physics catalog |
-| `benchmarks` | 15 | `bench/*.bench.ts` plus their fixture, run by `npm run bench` |
-| `tools` | 24 | Repository tooling under `tools/` and `scripts/` |
-| `examples` | 1 | The smoke entry |
-| `docs` | 1 | A TypeScript file under `docs/` |
-| `config` | 1 | A `*.config.*` file |
-| **Total** | **1025** | |
+| `tests` | 713 | The vitest suite under `tests/` |
+| `src` | 387 | The library, the CLI and the physics catalog code, plus `bin/upt.mjs` and `test-example.js` |
+| `tools` | 32 | Repository tooling: 18 files under `tools/` and 14 files under `scripts/` |
+| `benchmarks` | 15 | `bench/*.bench.ts` and their fixture, run by `npm run bench` |
+| `examples` | 1 | `examples/basic-usage.ts` |
+| `docs` | 1 | One script under `docs/persona-sessions/` |
+| `config` | 1 | `vitest.config.ts` |
+| **Total** | **1150** | |
 
-**Tests outnumber source files: 580 against 403.** The ratio fits a repository whose claims are
-physical: a wrong number is a wrong prediction, not a cosmetic defect.
+**Tests outnumber source files: 713 against 387.** The ratio fits a repository whose claims
+are physical: a wrong number is a wrong prediction, not a cosmetic defect.
 
-## By disposition
+## The two orphans, and why neither is dead code
 
-| Disposition | Files | Meaning |
+**Read this table before you delete anything.** An orphan is a file that no import reaches.
+A file that no import reaches can still run.
+
+| File | Why no import reaches it | Verdict |
 |---|---|---|
-| `test` | 580 | In the test zone |
-| `reachable` | 383 | Reached from an entry root |
-| `bench` | 15 | A benchmark; nothing imports it, `npm run bench` runs it |
-| `test-only` | 10 | Reached only from a test |
-| `orphan` | 5 | Reached from nothing the tool can follow |
-| `tool` | 24 | Meta-tooling, excluded from reachability |
-| `build-entry` | 5 | A declared entry root |
-| `config` | 1 | Configuration |
-| `example` | 2 | An example |
+| `bin/upt.mjs` | The published `bin` launcher. It loads `dist/cli/main.js` through a path built at run time, so no import resolver can follow it. The tool reads the launcher to recover `src/cli/main.ts` as a root. It does not treat the launcher itself as a root. | **Live.** It is the shipped CLI entry. |
+| `test-example.js` | The `npm run smoke` entry. The `npm` script runs it by name, and `npm run validate` runs `smoke`. | **Live.** |
 
-## The five orphans, and why none is dead code
-
-**Read this table before deleting anything.** An orphan is a file the static graph cannot reach,
-which is not the same as a file nothing runs.
-
-| File | Why it is unreachable | Verdict |
-|---|---|---|
-| `bin/upt.mjs` | The published `bin` launcher. It loads `dist/cli/main.js` through a path built at runtime, so no resolver can follow it. The tool reads it to recover `src/cli/main.ts` as a root, but does not mark the launcher itself as one. | **Live.** It is the shipped CLI entry. |
-| `src/numerical/mathts-autograd.ambient.d.ts` | An ambient declaration. `tsc` loads it through `include`; nothing imports it. | **Live.** Deleting it breaks the build. |
-| `src/numerical/mathts-functions.ambient.d.ts` | Same. | **Live.** |
-| `src/numerical/mathts-tensor.ambient.d.ts` | Same. | **Live.** |
-| `test-example.js` | The `npm run smoke` entry, invoked by script name. | **Live.** |
-
-**Zero of the five are dead code.** Two reading errors would make the count much worse, and the
-tool avoids both:
+**Zero of the two are dead code.** Two reading errors would make the count much worse, and
+the tool avoids both:
 
 - If the launcher's entry cannot be resolved, the whole `src/cli/` subtree looks orphaned. The
   tool recovers `src/cli/main.ts` as a root from `bin/upt.mjs` (see the `bin/upt.mjs` row above).
-- If only `benchmarks/` is matched, every benchmark under `bench/` falls into `src` and looks
-  orphaned. The tool also matches `bench/`, so those files get the `bench` disposition.
+- If only a folder named `benchmarks/` is matched, every file under `bench/` looks like source
+  and looks orphaned. The tool also matches `bench/`, so those files get the `bench` disposition.
+
+`unused-analysis.md` lists the unused files and exports of `src/`.
 
 ## Verification
 
-Generated by `repo_map.py map`.
-Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_map.py check <repo> --docs docs/architecture`
+Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <repo> --docs=docs/architecture`
 
 | Claim | Value | Source |
 |---|---|---|
-| `src` TypeScript files | 471 | `dependency-graph.json` `statistics.totalTypeScriptFiles` |
+| totalSourceFiles | 1150 | `dependency-graph.json` `statistics.totalSourceFiles` |
 
-`totalSourceFiles`, `orphanedFiles`, `reachableFiles`, `testOnlyFiles`, and `entryRoots` are not fields of the current `dependency-graph.json`. The previous table cited 1025, 5, 388, 10, and 5 from `repo_map.py`. That tool was not re-run. The zone table above is that old census.
+The claim counts every tracked source file, tests and tools included. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.
 
-**Claims the gate cannot hold.** The per-zone and per-disposition tables come from
-`file-inventory.json`'s `byArea` and `byDisposition` blocks, which the gate does not read. The
-verdict column comes from a reading of each file and of how it is invoked, not from a metric.
-`tsc` include semantics and an npm script name are outside any dependency graph.
+**Claims the gate cannot hold.** The per-zone table comes from the `byArea` block of
+`file-inventory.json`, which the gate does not read. The verdict column comes from a reading
+of each file and of how it is invoked, not from a metric. `tsc` include semantics and an
+`npm` script name are outside any dependency graph.

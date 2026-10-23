@@ -37,23 +37,40 @@ describe('pre-push hook: a gate command that fails must fail the hook', () => {
   });
 });
 
-describe('pre-push hook: the private checkers are found by an overridable path and skip aloud', () => {
+describe('pre-push hook: the checkers are found by an overridable path and skip aloud', () => {
   it('locates the skills checkout through UPT_SKILLS_DIR, defaulting to $HOME/Github/skills', () => {
     expect(hook).toMatch(/UPT_SKILLS_DIR/);
     const hardCoded = lines.filter((l) => /\$HOME\/Github\/skills\/(code-docs|architecture-docs)/.test(l));
     expect(hardCoded, hardCoded.join('\n')).toEqual([]);
   });
 
-  it('runs the checkers with python3 (a bare `python` is python 2 or absent on many hosts)', () => {
+  it('locates repo-tools through UPT_REPO_TOOLS, defaulting to the name on PATH', () => {
+    expect(hook).toMatch(/REPO_TOOLS="\$\{UPT_REPO_TOOLS:-repo-tools\}"/);
+    // A path to the executable, on a line that runs something (the skip message names the npm scope).
+    const hardCoded = lines.filter((l) => !/^\s*(#|echo\b)/.test(l) && /[/\\]repo-tools\b/.test(l));
+    expect(hardCoded, hardCoded.join('\n')).toEqual([]);
+  });
+
+  it('runs the code-docs checker with python3 (a bare `python` is python 2 or absent on many hosts)', () => {
     const bare = lines.filter((l) => /\bpython\s+"?\$/.test(l));
     expect(bare, bare.join('\n')).toEqual([]);
     expect(hook).toMatch(/python3 "\$CODE_DOCS"/);
-    expect(hook).toMatch(/python3 "\$REPO_MAP"/);
+  });
+
+  it('runs the architecture-docs claims through repo-tools check, not a private script', () => {
+    expect(hook).toMatch(/"\$REPO_TOOLS" check \. --docs=docs\/architecture/);
+    expect(hook).not.toMatch(/repo_map\.py|\$REPO_MAP\b/);
+  });
+
+  it('fails the hook when repo-tools check fails (the status is not swallowed)', () => {
+    const swallowed = lines.filter((l) => /"\$REPO_TOOLS" check\b.*\|\|\s*(true|:)/.test(l));
+    expect(swallowed, swallowed.join('\n')).toEqual([]);
+    expect(hook).toMatch(/PRE-PUSH GATE FAILED: architecture-docs claims do not match the source/);
   });
 
   it('names the path it looked for when it skips', () => {
     expect(hook).toMatch(/code-docs SKIPPED \(not found: \$CODE_DOCS/);
-    expect(hook).toMatch(/architecture-docs claims SKIPPED \(not found: \$REPO_MAP/);
+    expect(hook).toMatch(/architecture-docs claims SKIPPED \(not found: \$REPO_TOOLS/);
   });
 });
 

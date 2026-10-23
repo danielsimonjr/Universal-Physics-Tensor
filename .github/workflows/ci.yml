@@ -145,10 +145,10 @@ jobs:
   # requests never saw one. A first push, or a force push, has no usable
   # `before` and is not the shape of this repository's history.
   #
-  # repo_map.py stays out of CI. It lives in a private repository, which is
-  # the recorded decision (the pre-push hook says the same). This job does
-  # not change branch protection. The check name says non-required so a
-  # reader does not mistake it for one of the required contexts.
+  # The architecture-docs claims check (`repo-tools check`) runs in the
+  # pre-push hook and not in CI. This job does not change branch protection.
+  # The check name says non-required so a reader does not mistake it for one
+  # of the required contexts.
   code-docs-ratchet:
     name: code-docs ratchet (non-required)
     if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')

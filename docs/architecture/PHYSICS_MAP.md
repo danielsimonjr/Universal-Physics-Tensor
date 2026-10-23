@@ -2,11 +2,11 @@
 
 <!-- repo-map:no-verification -->
 
-> **No `## Verification` block, deliberately.** This document is a map of the physics catalog -- bridges, quantities and their relations. Every count in it is of catalog entries, established by reading the catalog; repo_map measures files, exports and imports and cannot hold any of them.
+> **No `## Verification` block, deliberately.** This document is a map of the physics catalog -- bridges, quantities and their relations. Every count in it is of catalog entries, established by reading the catalog; `repo-tools map` measures files, exports and imports and cannot hold any of them.
 > The drift gate treats a missing Verification section as a failure, so the opt-out is
 > stated here explicitly rather than left to be inferred from its absence.
 
-Current catalog and edge counts, and the places the same concept is implemented twice, are `INTEGRATION_MAP.md`. A count in this essay that still says 46 edges or 58 bridges is older than the 92-row, 83-edge tree.
+Current catalog and edge counts, and the places the same concept is implemented twice, are `INTEGRATION_MAP.md`. The counts in this essay come from `upt map`. The Regenerating section lists the commands.
 
 UPT's bridge/law catalog is a **graph**. Round nodes are *quantities*
 (`mass`, `temperature`, `photon-energy`, …). Box nodes are *equations* —
@@ -28,18 +28,18 @@ or Graphviz-DOT **source text**, or as rendered SVG.
 ## The standard-physics (canonical) layer
 
 The textbook L-layer alone — every node a `law` (blue). Even established
-physics is only loosely connected. The layer has an 84-law core hubbed on
+physics is only loosely connected. The layer has an 81-law core hubbed on
 `mass`, `temperature`, `length`, `force`, and other widely-shared quantities.
 The layer also has three small two-law clusters (`radioactive-decay ↔ half-life`
 on the decay constant, `thomson-cross-section ↔ classical-electron-radius`,
-and the flat Friedmann equation with its curvature form). It also has 19 isolated laws, listed in the
+and the flat Friedmann equation with its curvature form). It also has 22 isolated laws, listed in the
 map's `isolated` group below, that share no quantity with any other law in
 this layer.
 
 ```mermaid
 flowchart LR
 %% UPT physics map — canonical (standard-physics L-layer, bridges excluded)
-  subgraph cl_0["anchored cluster (84)"]
+  subgraph cl_0["anchored cluster (81)"]
     direction LR
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
@@ -278,8 +278,6 @@ flowchart LR
     j_CE_larmor_power["Larmor radiated power"]:::law
     q_charge --> j_CE_larmor_power
     q_acceleration --> j_CE_larmor_power
-    q_speed_of_light(["speed-of-light"]):::qty
-    q_speed_of_light --> j_CE_larmor_power
     q_larmor_power(["larmor-power"]):::qty
     j_CE_larmor_power --> q_larmor_power
     j_CE_field_energy_density["Electric-field energy density"]:::law
@@ -441,14 +439,11 @@ flowchart LR
     q_drift_velocity(["drift-velocity"]):::qty
     j_CE_drift_velocity --> q_drift_velocity
     j_CE_fermi_energy["Fermi energy"]:::law
-    q_reduced_planck_constant(["reduced-planck-constant"]):::qty
-    q_reduced_planck_constant --> j_CE_fermi_energy
     q_mass --> j_CE_fermi_energy
     q_carrier_density --> j_CE_fermi_energy
     q_fermi_energy(["fermi-energy"]):::qty
     j_CE_fermi_energy --> q_fermi_energy
     j_CE_fermi_velocity["Fermi velocity"]:::law
-    q_reduced_planck_constant --> j_CE_fermi_velocity
     q_mass --> j_CE_fermi_velocity
     q_carrier_density --> j_CE_fermi_velocity
     q_fermi_velocity(["fermi-velocity"]):::qty
@@ -456,8 +451,6 @@ flowchart LR
     j_CE_plasma_frequency["Plasma frequency"]:::law
     q_carrier_density --> j_CE_plasma_frequency
     q_charge --> j_CE_plasma_frequency
-    q_vacuum_permittivity(["vacuum-permittivity"]):::qty
-    q_vacuum_permittivity --> j_CE_plasma_frequency
     q_mass --> j_CE_plasma_frequency
     q_plasma_frequency(["plasma-frequency"]):::qty
     j_CE_plasma_frequency --> q_plasma_frequency
@@ -468,13 +461,10 @@ flowchart LR
     q_debye_frequency(["debye-frequency"]):::qty
     j_CE_debye_frequency --> q_debye_frequency
     j_CE_equipartition["Equipartition (mean kinetic energy)"]:::law
-    q_boltzmann_constant(["boltzmann-constant"]):::qty
-    q_boltzmann_constant --> j_CE_equipartition
     q_temperature --> j_CE_equipartition
     q_thermal_energy(["thermal-energy"]):::qty
     j_CE_equipartition --> q_thermal_energy
     j_CE_stokes_einstein["Stokes-Einstein diffusion"]:::law
-    q_boltzmann_constant --> j_CE_stokes_einstein
     q_temperature --> j_CE_stokes_einstein
     q_dynamic_viscosity --> j_CE_stokes_einstein
     q_particle_radius(["particle-radius"]):::qty
@@ -490,7 +480,6 @@ flowchart LR
     q_kinetic_pressure(["kinetic-pressure"]):::qty
     j_CE_kinetic_pressure --> q_kinetic_pressure
     j_CE_mb_most_probable_speed["Maxwell-Boltzmann most-probable speed"]:::law
-    q_boltzmann_constant --> j_CE_mb_most_probable_speed
     q_temperature --> j_CE_mb_most_probable_speed
     q_molecular_mass --> j_CE_mb_most_probable_speed
     q_most_probable_speed(["most-probable-speed"]):::qty
@@ -505,42 +494,16 @@ flowchart LR
     q_static_pressure --> j_CE_bernoulli
     q_bernoulli_total_pressure(["bernoulli-total-pressure"]):::qty
     j_CE_bernoulli --> q_bernoulli_total_pressure
-    j_CE_photoelectric["Photoelectric equation"]:::law
-    q_planck_constant(["planck-constant"]):::qty
-    q_planck_constant --> j_CE_photoelectric
-    q_photon_frequency(["photon-frequency"]):::qty
-    q_photon_frequency --> j_CE_photoelectric
-    q_work_function(["work-function"]):::qty
-    q_work_function --> j_CE_photoelectric
-    q_photoelectron_max_energy(["photoelectron-max-energy"]):::qty
-    j_CE_photoelectric --> q_photoelectron_max_energy
     j_CE_boltzmann_factor["Boltzmann factor"]:::law
     q_state_energy(["state-energy"]):::qty
     q_state_energy --> j_CE_boltzmann_factor
-    q_boltzmann_constant --> j_CE_boltzmann_factor
     q_temperature --> j_CE_boltzmann_factor
     q_boltzmann_factor(["boltzmann-factor"]):::qty
     j_CE_boltzmann_factor --> q_boltzmann_factor
     j_CE_lorentz_factor["Lorentz factor"]:::law
     q_velocity --> j_CE_lorentz_factor
-    q_speed_of_light --> j_CE_lorentz_factor
     q_lorentz_factor(["lorentz-factor"]):::qty
     j_CE_lorentz_factor --> q_lorentz_factor
-    j_CE_compton_shift["Compton shift"]:::law
-    q_planck_constant --> j_CE_compton_shift
-    q_electron_mass(["electron-mass"]):::qty
-    q_electron_mass --> j_CE_compton_shift
-    q_speed_of_light --> j_CE_compton_shift
-    q_scattering_angle(["scattering-angle"]):::qty
-    q_scattering_angle --> j_CE_compton_shift
-    q_compton_wavelength_shift(["compton-wavelength-shift"]):::qty
-    j_CE_compton_shift --> q_compton_wavelength_shift
-    j_CE_boltzmann_entropy["Boltzmann entropy"]:::law
-    q_boltzmann_constant --> j_CE_boltzmann_entropy
-    q_microstate_count(["microstate-count"]):::qty
-    q_microstate_count --> j_CE_boltzmann_entropy
-    q_boltzmann_entropy(["boltzmann-entropy"]):::qty
-    j_CE_boltzmann_entropy --> q_boltzmann_entropy
   end
   subgraph cl_1["anchored cluster (2)"]
     direction LR
@@ -583,7 +546,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (19)"]
+  subgraph cl_iso["isolated (22)"]
     direction LR
     j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
     q_A(["A"]):::qty
@@ -596,6 +559,11 @@ flowchart LR
     j_CE_bohr_radius["Bohr radius"]:::law
     q_bohr_radius(["bohr-radius"]):::qty
     j_CE_bohr_radius --> q_bohr_radius
+    j_CE_boltzmann_entropy["Boltzmann entropy"]:::law
+    q_microstate_count(["microstate-count"]):::qty
+    q_microstate_count --> j_CE_boltzmann_entropy
+    q_boltzmann_entropy(["boltzmann-entropy"]):::qty
+    j_CE_boltzmann_entropy --> q_boltzmann_entropy
     j_CE_carnot_efficiency["Carnot efficiency"]:::law
     q_cold_reservoir_temperature(["cold-reservoir-temperature"]):::qty
     q_cold_reservoir_temperature --> j_CE_carnot_efficiency
@@ -603,6 +571,11 @@ flowchart LR
     q_hot_reservoir_temperature --> j_CE_carnot_efficiency
     q_carnot_efficiency(["carnot-efficiency"]):::qty
     j_CE_carnot_efficiency --> q_carnot_efficiency
+    j_CE_compton_shift["Compton shift"]:::law
+    q_scattering_angle(["scattering-angle"]):::qty
+    q_scattering_angle --> j_CE_compton_shift
+    q_compton_wavelength_shift(["compton-wavelength-shift"]):::qty
+    j_CE_compton_shift --> q_compton_wavelength_shift
     j_CE_einstein_field_eq["Einstein field equation"]:::law
     q_stress_energy_density(["stress-energy-density"]):::qty
     q_stress_energy_density --> j_CE_einstein_field_eq
@@ -650,6 +623,13 @@ flowchart LR
     q_deviation_from_mean --> j_CE_normal_distribution
     q_normal_probability_density(["normal-probability-density"]):::qty
     j_CE_normal_distribution --> q_normal_probability_density
+    j_CE_photoelectric["Photoelectric equation"]:::law
+    q_photon_frequency(["photon-frequency"]):::qty
+    q_photon_frequency --> j_CE_photoelectric
+    q_work_function(["work-function"]):::qty
+    q_work_function --> j_CE_photoelectric
+    q_photoelectron_max_energy(["photoelectron-max-energy"]):::qty
+    j_CE_photoelectric --> q_photoelectron_max_energy
     j_CE_planck_einstein["Planck–Einstein relation"]:::law
     q_nu(["nu"]):::qty
     q_nu --> j_CE_planck_einstein
@@ -668,8 +648,6 @@ flowchart LR
     q_rydberg_energy(["rydberg-energy"]):::qty
     j_CE_rydberg_energy --> q_rydberg_energy
     j_CE_rydberg_formula["Rydberg formula"]:::law
-    q_rydberg_constant(["rydberg-constant"]):::qty
-    q_rydberg_constant --> j_CE_rydberg_formula
     q_lower_level_n(["lower-level-n"]):::qty
     q_lower_level_n --> j_CE_rydberg_formula
     q_upper_level_n(["upper-level-n"]):::qty
@@ -695,9 +673,9 @@ flowchart LR
 
 ## The bridge catalog and the full map
 
-Two larger, more disjointed graphs exist. One is the 55-bridge catalog
-(`--source=catalog`, 46 edges → 26 components). The other is the combined
-laws-plus-bridges graph (`--source=both`, 155 edges → 42 components, over
+Two larger, more disjointed graphs exist. One is the 160-bridge catalog
+(`--source=catalog`, 158 edges → 133 components). The other is the combined
+laws-plus-bridges graph (`--source=both`, 267 edges → 146 components, over
 the 109-law canonical L-layer). Rendered SVG shows them better than the
 inline view. Both the DOT sources and the rendered SVGs are committed
 under [`maps/`](./maps/):
@@ -750,11 +728,12 @@ swap of two adjacent letters counts as one edit (`lenght` → `length`).
 ```bash
 node bin/upt.mjs map --source=canonical --equation "period = 2*pi*sqrt(length/gravity)"
 #   ✓ dimensionally consistent: [time]
-#   ● your equation joins the ANCHORED cluster of 84 via {gravity, length, period}
+#   ✓ agrees with CE-pendulum-period (Pendulum period), prefactor included: yours/canonical = 1 at 3 fixed points
+#   ● your equation joins the ANCHORED cluster of 82 via {gravity, length, period}
 node bin/upt.mjs map --source=canonical --equation "period = mass"
 #   ⚠ dimensional MISMATCH: RHS is [mass] but the target is [time]
 node bin/upt.mjs map --source=canonical --equation "period = uu / gravity"
-#   · UNKNOWN: RHS is [L^-1 T^2] but the target is [time]; the mismatch involves the unresolved placeholder 'uu' (taken as dimensionless), so it is not a failed check
+#   · NOT ESTABLISHED: 'uu' has no catalog dimension, so the right-hand side dimension was not established and is not reported.
 #   ⚠ 'uu' is unknown — by its inferred dimension, did you mean: v, speed, velocity, sound-speed, flow-velocity?
 ```
 

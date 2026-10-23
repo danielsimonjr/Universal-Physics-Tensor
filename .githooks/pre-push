@@ -213,28 +213,30 @@ else
 fi
 
 # Architecture-docs CLAIMS: the `## Verification` tables in docs/architecture/
-# checked against a fresh parse by repo_map.py. Its scope is those claim tables,
-# and only those: it does not check prose, and `docs:deps` / the `docs-fresh` CI
-# job check only the generated dependency artifacts. The two gates cover
-# different files; neither is "the docs gate".
+# checked against a fresh parse by `repo-tools check`. Its scope is those claim
+# tables, and only those: it does not check prose, and `docs:deps` / the
+# `docs-fresh` CI job check only the generated dependency artifacts. The two
+# gates cover different files; neither is "the docs gate".
 #
-# This runs HERE and not in CI because repo_map.py lives in a private repository
-# that CI cannot read without a credential. That is a recorded decision, not an
-# oversight.
-REPO_MAP="$SKILLS_DIR/architecture-docs/scripts/repo_map.py"
-if [ -f "$REPO_MAP" ]; then
-  echo "pre-push gate: architecture-docs claims (repo_map check)"
-  if ! rm_out=$(python3 "$REPO_MAP" check . --docs docs/architecture 2>&1); then
+# repo-tools is the public npm package @danielsimonjr/repo-tools (Node 20+).
+# Its location is a machine fact, not a repository fact: UPT_REPO_TOOLS names
+# the executable, and `repo-tools` on PATH is only the default. The gate is
+# SKIPPED, with a printed line, when the executable is missing. CI does not
+# run this check.
+REPO_TOOLS="${UPT_REPO_TOOLS:-repo-tools}"
+if command -v "$REPO_TOOLS" >/dev/null 2>&1; then
+  echo "pre-push gate: architecture-docs claims (repo-tools check)"
+  if ! rt_out=$("$REPO_TOOLS" check . --docs=docs/architecture 2>&1); then
     echo ""
     echo "PRE-PUSH GATE FAILED: architecture-docs claims do not match the source."
     printf '%s
-' "$rm_out" | tail -40
-    echo "Re-measure with repo_map.py map and correct the Verification tables and the"
+' "$rt_out" | tail -40
+    echo "Re-measure with repo-tools map and correct the Verification tables and the"
     echo "text that restates them. Never edit a generated report to make this pass."
     exit 1
   fi
 else
-  echo "pre-push gate: architecture-docs claims SKIPPED (not found: $REPO_MAP; set UPT_SKILLS_DIR to the skills checkout)"
+  echo "pre-push gate: architecture-docs claims SKIPPED (not found: $REPO_TOOLS; install @danielsimonjr/repo-tools or set UPT_REPO_TOOLS)"
 fi
 
 echo "pre-push gate: OK"

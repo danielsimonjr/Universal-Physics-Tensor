@@ -254,13 +254,13 @@ Bridge equations connect different physical regimes:
 - Universal Emergence Equation
 - Complexity-Entropy Production Relation
 
-Parts I–II of the formal specification write up the cross-domain bridges; a standard bridge is a catalog record and has no specification heading. The **authoritative current catalog** is the versioned, schema-checked JSON file [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json); its id range and counts are the generated Bridge catalog row of the Development Status table below. Part III covers algorithmic implementation.
+Parts I–II of the formal specification write up the cross-domain bridges; a standard bridge is a catalog record and has no specification heading. The **authoritative current catalog** is the versioned, schema-checked JSON file [`data/bridge-catalog.json`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/data/bridge-catalog.json). Its id range and counts are in the generated Bridge catalog row of the Development Status table below. Part III covers algorithmic implementation.
 
 ### Composing Bridges
 
-Bridges are edges in a typed quantity graph, and compatible edges
-**compose** — with an exact dimensional check at the junction, validity
-domains carried through, and confidence demoted to the weakest link:
+Bridges are edges in a typed quantity graph. Compatible edges
+**compose**. The junction gets an exact dimensional check, validity
+domains carry through, and confidence drops to the weakest link:
 
 ```typescript
 import { CATALOG_GRAPH, composeEdges, M_SUN_KG } from 'universal-physics-tensor';
@@ -273,7 +273,7 @@ erasureCost.evaluate({ mass: M_SUN_KG }); // ≈ 5.9e-31 J — E_min(M) = ℏc³
 erasureCost.confidence;                   // 'highly-speculative' (min of the operands)
 ```
 
-`GM_SUN_SI` is the IAU 2015 nominal solar gravitational parameter, `1.3271244e20` m³/s². It is not `G_SI * M_SUN_SI`. `parseUnit`, `convertValue`, and `UnitError` read a number with a unit:
+`GM_SUN_SI` is the IAU 2015 nominal solar gravitational parameter, `1.3271244e20` m³/s², and is not `G_SI * M_SUN_SI`. `parseUnit`, `convertValue`, and `UnitError` read a number with a unit:
 
 ```typescript
 import { GM_SUN_SI, convertValue } from 'universal-physics-tensor';
@@ -284,27 +284,26 @@ convertValue('25degC', 'K'); // { value: 298.15, given: 'degC', affine: 'celsius
 
 That derived relation — the minimum erasure cost at a black-hole
 horizon — is the framework's first **derived** (rather than encoded)
-literature-anchored result, pre-registered before implementation and
+literature-anchored result. The result was pre-registered before implementation and
 pinned to relErr ≤ 10⁻¹² (see [Part IX](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-IX-Composition.md)
 and `docs/planning/v0.8.0-Design.md`). A computable **membership
-criterion** (the catalog's `bridges` label tuple: two different regime labels; a
-rejected id is not a bridge) adjudicates the catalog — <!-- readme-status:membership -->152 bridges · 5 not-a-bridge · 3 unadjudicated (by the catalog's `bridges` label tuple, not the endpoint-regime criterion)<!-- /readme-status:membership --> —
-with rejections recorded in a reviewable negative catalog
-(`src/bridges/rejected.ts`).
+criterion** adjudicates the catalog. The criterion is the catalog's `bridges` label tuple: two different regime labels, and a
+rejected id is not a bridge. The adjudicated catalog has <!-- readme-status:membership -->152 bridges · 5 not-a-bridge · 3 unadjudicated (by the catalog's `bridges` label tuple, not the endpoint-regime criterion)<!-- /readme-status:membership -->.
+A reviewable negative catalog (`src/bridges/rejected.ts`) records the rejections.
 
-Composition is also **symbolic** (`composeSymbolic`): bridges may
-carry an optional `symbolic` `ExprNode` form, and composing two of them
-substitutes one AST into the other's junction, dimensionally validated and
-numerically evaluable — not just a chained numeric closure. The composed form
+Composition is also **symbolic** (`composeSymbolic`). A bridge may
+carry an optional `symbolic` `ExprNode` form. Composing two of them
+substitutes one AST into the other's junction. The result is dimensionally validated and
+numerically evaluable, not just a chained numeric closure. The composed form
 can be folded by MathTS `simplify`, so CT-1 reduces to
 `ℏc³ln2/(8πGM)` with `k_B` cancelled. See `upt symbolic --simplify`.
 
 ## Documentation
 
 ### Formal Specification
-Complete theoretical foundation of the Universal Physics Tensor Framework —
-see the **[specification index](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/README.md)** for the full
-reader's map and the **[spec revision history](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/CHANGELOG.md)**
+Complete theoretical foundation of the Universal Physics Tensor Framework.
+See the **[specification index](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/README.md)** for the full
+reader's map. See the **[spec revision history](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/CHANGELOG.md)**
 for how the documents evolved.
 
 - **[Part I: Foundation & Mathematical Framework](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-I.md)** - Theoretical foundation: the rank-6 catalog `Π`, framing commitment, consistency invariants, and the cross-domain bridges in categories A–E
@@ -313,7 +312,8 @@ for how the documents evolved.
 - **[Part IV: Validation & Implications](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-IV.md)** - Experimental pathways, philosophical implications, applications
 - **[Part V: Advanced Mathematics & Protocols](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-V.md)** - Category theory extensions, validation protocols, algorithmic analysis
 - **[Part VI: Deployment & Governance](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-VI.md)** - Implementation strategies, applications, governance frameworks
-- **Supplements** - [Part VII: Tensor Algebra](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-VII-Tensor-Algebra.md) · [Part VIII: Metric Layer](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-VIII-Metric-Layer.md) · [Part IX: Composition](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-IX-Composition.md) · [Part X: Curvature & Field Equations](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-X-Curvature-and-Field-Equations.md) · [Part XI: Proposed Equations](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-XI-Proposed-Equations.md) (non-normative; machine-derived identity consequences, unadjudicated)
+- **Supplements** - [Part VII: Tensor Algebra](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-VII-Tensor-Algebra.md) · [Part VIII: Metric Layer](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-VIII-Metric-Layer.md) · [Part IX: Composition](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-IX-Composition.md)
+- **More supplements** - [Part X: Curvature & Field Equations](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-X-Curvature-and-Field-Equations.md) · [Part XI: Proposed Equations](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/specification/Part-XI-Proposed-Equations.md) (non-normative; machine-derived identity consequences, unadjudicated)
 
 ### Planning & Development
 - **[ROADMAP.md](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/ROADMAP.md)** - Strategic direction: from bridge catalog to a verified, regime-aware physics atlas (phased, with exit criteria)
@@ -323,10 +323,10 @@ for how the documents evolved.
 
 ### Architecture
 
-Hand-written. Each document ends with a `## Verification` block that says what was re-measured
-for it and what was not. No checker runs over these documents in CI (the `repo_map.py` tool that
-once did is private and is not in this repository), so a claim in them is current only as far as
-its Verification block says.
+Hand-written. Each document ends with a `## Verification` block. The block lists the counts that
+`repo-tools check . --docs=docs/architecture` compares with the code. The pre-push hook runs that
+check when `repo-tools` is installed. CI does not run it. The generated files in the same
+directory come from `bun run docs:deps`, and the `docs-fresh` CI job checks them.
 
 - **[Overview](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/OVERVIEW.md)** - What this is, what it does, how it is laid out
 - **[Architecture](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/ARCHITECTURE.md)** - Why it is built this way; principles and key decisions
@@ -357,16 +357,17 @@ npm run bench:ci     # verbose run for CI log capture
 ```
 
 Baseline results are recorded in [`docs/architecture/benchmarks.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/benchmarks.md).
-These are **correctness-first baselines, not optimization targets**. Comparative
+The baselines are **correctness-first, not optimization targets**. Comparative
 analysis has since landed: v0.6.0's BR-2 `christoffelFn` flat-array refactor
 delivered a measured **5-6× RK4 geodesic-integrator speedup** (see [CHANGELOG](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/CHANGELOG.md)).
 
 ## Development Status
 
 The current version is recorded in `package.json` and on npm; release chronology
-lives in the [CHANGELOG](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/CHANGELOG.md). This README deliberately carries **no
-version number and no release-by-release counts** — both drift, and nothing gates
-this file. It said `v0.44.1` while the package was at `0.44.3`.
+lives in the [CHANGELOG](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/CHANGELOG.md). This README carries **no
+version number and no release-by-release counts**, because both drift. The marked
+status spans hold generated text. `bun scripts/readme-status.ts --check` verifies
+them in CI and in the pre-push hook.
 
 The current machine-checked state is:
 
@@ -382,8 +383,8 @@ The current machine-checked state is:
 | Formal references | **10** atlas bridges derive `formally-proved` from a reviewed `lean4-physjs` reference. **16** catalog equations carry a counted reference and do not light that tag. **119** state the catalogued equation, kind `bridge`; the catalog path passes that reference, so catalog evidence and edge evidence include `formally-proved`, except an unadjudicated row, which stays `proposed`. **3** carry a cross-check and **3** carry a property. Each kind is the Lean manifest entry's own field (`formal/lean/manifest.json`; the theorems are this repository's `lean/`). Nested statements are not second references. The split is in [`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md) |
 <!-- /readme-status:table -->
 
-The project is **engineering-complete for its stated goal**: it is a computational
-laboratory and falsification/review instrument, not a claim that physics itself is
+The project is **engineering-complete for its stated goal**. The project is a computational
+laboratory and falsification/review instrument. The project does not claim that physics itself is
 complete or unified. New physics claims remain reviewable hypotheses and require
 external evidence/domain review before promotion.
 
@@ -399,10 +400,10 @@ external evidence/domain review before promotion.
 
 ## Contributing
 
-See **[CONTRIBUTING.md](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/CONTRIBUTING.md)** — it lists bounded,
+See **[CONTRIBUTING.md](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/CONTRIBUTING.md)**. The file lists bounded,
 no-code-required physics-review tasks (catalog adjudications, encoding
 checks against the literature, quantity-identification reviews) plus
-the dev quick-start, and explains the JSON catalog review surface.
+the dev quick-start. The file also explains the JSON catalog review surface.
 
 Contributions are welcome, especially from:
 - **Physicists** - Validate equations, suggest corrections, add physics insights
@@ -426,7 +427,7 @@ The same systems thinking applies to physics:
 - Emergence = higher-order system behaviors (correlations)
 - Validation = experimental data matching (consistency checks)
 
-This is an **engineer's approach to theoretical physics** — systematic, organized, and open to collaboration with domain experts.
+The project is an **engineer's approach to theoretical physics** — systematic, organized, and open to collaboration with domain experts.
 
 ## License
 
