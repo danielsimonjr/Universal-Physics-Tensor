@@ -1,10 +1,15 @@
 # Bridge type classification
 
+<!-- repo-map:no-verification -->
+
+> **No `## Verification` block, deliberately.** This document is a ledger of catalog filings. It states no count that `repo-tools map` measures. `tests/bridges/catalog-filing-ledger.test.ts` compares every row with the catalog `type` field.
+> The drift gate treats a missing Verification section as a failure, so the opt-out is stated here instead of being inferred from the absence.
+
 The `type` field on each record in `data/bridge-catalog.json` is authoritative. This file is the human-readable ledger: one line for why each id was filed `standard` or `cross-domain`. When the two disagree, the catalog field is the filing and this ledger is wrong.
 
 `cross-domain` means the equation joins quantities or constants from two distinct fields. `standard` means the equation stays inside one field. `type` does not light an evidence tag. The specification writes up the cross-domain records. A standard record has no specification heading.
 
-The rule recorded with this ledger: for ids 11–133, cross-domain when the equation joins quantities or constants from two distinct fields (thermodynamics, electromagnetism, quantum theory, gravitation, information), and standard when the equation stays inside one field. Ids 134–146 stayed inside condensed matter and were filed standard. Ids 147–170 follow the round-9 table. Inside 11–133, id 26 (DNA tunneling) and id 118 (Parker critical radius) are cross-domain, the same pattern as Jeans (65).
+The rule recorded with this ledger applies to ids 11–133. An equation is cross-domain when it joins quantities or constants from two distinct fields (thermodynamics, electromagnetism, quantum theory, gravitation, information). An equation is standard when it stays inside one field. Ids 134–146 stay inside condensed matter. All 13 are standard. Ids 147–170 follow the same rule. Inside 11–133, id 26 (DNA tunneling) and id 118 (Parker critical radius) are cross-domain, the same pattern as Jeans (65).
 
 | id | type | reason |
 |---|---|---|
@@ -50,8 +55,8 @@ The rule recorded with this ledger: for ids 11–133, cross-domain when the equa
 | 50 | standard | The half-advanced field stays inside one absorber-theory proposal. |
 | 51 | standard | Light deflection stays inside weak-field general relativity. |
 | 52 | standard | Perihelion advance stays inside general relativity. |
-| 54 | standard | The quadratic density correction stays inside brane cosmology. |
 | 53 | standard | The one-loop coefficient stays inside Yang–Mills theory. |
+| 54 | standard | The quadratic density correction stays inside brane cosmology. |
 | 55 | standard | Integer Hall conductance is the conductance quantum of the quantum Hall effect. |
 | 56 | cross-domain | Casimir pressure joins ℏ to a macroscopic force. |
 | 57 | cross-domain | Unruh temperature joins proper acceleration to ℏ, c, and k_B. |
@@ -131,40 +136,40 @@ The rule recorded with this ledger: for ids 11–133, cross-domain when the equa
 | 131 | standard | The pressure rise stays inside unsteady pipe flow. |
 | 132 | standard | Capacitance per length stays inside electrostatics of a coaxial line. |
 | 133 | standard | The damping ratio stays inside a second-order mechanical oscillator. |
-| 134 | standard | r8 report prints no filing token. The magnon deficit stays inside ferromagnetism, so the row is standard. |
-| 135 | standard | r8 report prints no filing token. The three-dimensional density of states stays inside band counting, so the row is standard. |
-| 136 | standard | r8 report prints no filing token. The two-dimensional density of states stays inside band counting, so the row is standard. |
-| 137 | standard | r8 report prints no filing token. Thomas–Fermi screening of a Fermi gas stays inside condensed matter, so the row is standard. |
-| 138 | standard | r8 report prints no filing token. Built-in voltage stays inside a p–n junction, so the row is standard. |
-| 139 | standard | r8 report prints no filing token. The Fermi offset stays inside semiconductor statistics, so the row is standard. |
-| 140 | standard | r8 report prints no filing token. The oscillation frequency stays inside Fermi-surface orbits, so the row is standard. |
-| 141 | standard | r8 report prints no filing token. The inductance stays inside the Josephson equations, so the row is standard. |
-| 142 | standard | r8 report prints no filing token. The lower critical field stays inside London theory, so the row is standard. |
-| 143 | standard | r8 report prints no filing token. The Lorentzian stays inside the Drude model, so the row is standard. |
-| 144 | standard | r8 report prints no filing token. Adding scattering rates stays inside transport, so the row is standard. |
-| 145 | standard | r8 report prints no filing token. The Stoner factor stays inside itinerant magnetism, so the row is standard. |
-| 146 | standard | r8 report prints no filing token. The two-fluid fraction stays inside superconductivity, so the row is standard. |
-| 147 | standard | r9 table labels the row standard. The Arrhenius rate stays inside chemical kinetics. |
-| 148 | standard | r9 table labels the row standard. The Eyring rate stays inside chemical kinetics. |
-| 149 | standard | r9 table labels the row standard. The van 't Hoff slope stays inside chemical equilibrium. |
-| 150 | standard | r9 table labels the row standard. The isotherm stays inside chemical equilibrium. |
-| 151 | standard | r9 table labels the row standard. The Nernst voltage stays inside electrochemistry. |
-| 152 | standard | r9 table labels the row standard. The integrated Clausius–Clapeyron relation stays inside phase equilibrium. |
-| 153 | standard | r9 table labels the row standard. Raoult's law stays inside phase equilibrium. |
-| 154 | standard | r9 table labels the row standard. The Prandtl number stays inside convective transport. |
-| 155 | standard | r9 table labels the row standard. The Reynolds number stays inside fluid mechanics. |
-| 156 | standard | r9 table labels the row standard. The Biot number stays inside heat transfer. |
-| 157 | standard | r9 table labels the row standard. The Nusselt number stays inside convection. |
-| 158 | standard | r9 table labels the row standard. The Schmidt number stays inside mass transfer. |
-| 159 | standard | r9 table labels the row standard. The Sherwood number stays inside mass transfer. |
-| 160 | standard | r9 table labels the row standard. Fourier's law stays inside heat conduction. |
-| 161 | standard | r9 table labels the row standard. Newton cooling stays inside convection. |
-| 162 | standard | r9 table labels the row standard. Otto efficiency stays inside a thermodynamic cycle. |
-| 163 | standard | r9 table labels the row standard. The Joule–Thomson coefficient stays inside real-gas thermodynamics. |
-| 164 | cross-domain | r9 table labels the row cross-domain. The spectrum joins thermal radiation to quantum electromagnetism. |
-| 165 | cross-domain | r9 table labels the row cross-domain. The constant joins the Planck integral to c and ℏ. |
-| 166 | cross-domain | r9 table labels the row cross-domain. The displacement constant joins a thermal wavelength to h and c. |
-| 167 | cross-domain | r9 table labels the row cross-domain. The entropy joins thermodynamics to the quantum concentration. |
-| 168 | cross-domain | r9 table labels the row cross-domain. The ionization constant joins a chemical balance to the thermal wavelength. |
-| 169 | cross-domain | r9 table labels the row cross-domain. The current joins thermionic emission to a quantum phase-space factor. |
-| 170 | cross-domain | r9 table labels the row cross-domain. Reciprocity joins a thermodynamic potential to the transport matrix. |
+| 134 | standard | The magnon deficit stays inside ferromagnetism, so the row is standard. |
+| 135 | standard | The three-dimensional density of states stays inside band counting, so the row is standard. |
+| 136 | standard | The two-dimensional density of states stays inside band counting, so the row is standard. |
+| 137 | standard | Thomas–Fermi screening of a Fermi gas stays inside condensed matter, so the row is standard. |
+| 138 | standard | Built-in voltage stays inside a p–n junction, so the row is standard. |
+| 139 | standard | The Fermi offset stays inside semiconductor statistics, so the row is standard. |
+| 140 | standard | The oscillation frequency stays inside Fermi-surface orbits, so the row is standard. |
+| 141 | standard | The inductance stays inside the Josephson equations, so the row is standard. |
+| 142 | standard | The lower critical field stays inside London theory, so the row is standard. |
+| 143 | standard | The Lorentzian stays inside the Drude model, so the row is standard. |
+| 144 | standard | Adding scattering rates stays inside transport, so the row is standard. |
+| 145 | standard | The Stoner factor stays inside itinerant magnetism, so the row is standard. |
+| 146 | standard | The two-fluid fraction stays inside superconductivity, so the row is standard. |
+| 147 | standard | The Arrhenius rate stays inside chemical kinetics. |
+| 148 | standard | The Eyring rate stays inside chemical kinetics. |
+| 149 | standard | The van 't Hoff slope stays inside chemical equilibrium. |
+| 150 | standard | The isotherm stays inside chemical equilibrium. |
+| 151 | standard | The Nernst voltage stays inside electrochemistry. |
+| 152 | standard | The integrated Clausius–Clapeyron relation stays inside phase equilibrium. |
+| 153 | standard | Raoult's law stays inside phase equilibrium. |
+| 154 | standard | The Prandtl number stays inside convective transport. |
+| 155 | standard | The Reynolds number stays inside fluid mechanics. |
+| 156 | standard | The Biot number stays inside heat transfer. |
+| 157 | standard | The Nusselt number stays inside convection. |
+| 158 | standard | The Schmidt number stays inside mass transfer. |
+| 159 | standard | The Sherwood number stays inside mass transfer. |
+| 160 | standard | Fourier's law stays inside heat conduction. |
+| 161 | standard | Newton cooling stays inside convection. |
+| 162 | standard | Otto efficiency stays inside a thermodynamic cycle. |
+| 163 | standard | The Joule–Thomson coefficient stays inside real-gas thermodynamics. |
+| 164 | cross-domain | The spectrum joins thermal radiation to quantum electromagnetism. |
+| 165 | cross-domain | The constant joins the Planck integral to c and ℏ. |
+| 166 | cross-domain | The displacement constant joins a thermal wavelength to h and c. |
+| 167 | cross-domain | The entropy joins thermodynamics to the quantum concentration. |
+| 168 | cross-domain | The ionization constant joins a chemical balance to the thermal wavelength. |
+| 169 | cross-domain | The current joins thermionic emission to a quantum phase-space factor. |
+| 170 | cross-domain | Reciprocity joins a thermodynamic potential to the transport matrix. |
