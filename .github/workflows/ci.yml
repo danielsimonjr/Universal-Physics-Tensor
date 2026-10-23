@@ -145,8 +145,8 @@ jobs:
   # requests never saw one. A first push, or a force push, has no usable
   # `before` and is not the shape of this repository's history.
   #
-  # The architecture-docs claims check (`repo-tools check`) runs in the
-  # pre-push hook and not in CI. This job does not change branch protection.
+  # The architecture-docs claims check (`repo-tools check`) has its own job
+  # below. This job does not change branch protection.
   # The check name says non-required so a reader does not mistake it for one
   # of the required contexts.
   code-docs-ratchet:
@@ -179,6 +179,31 @@ jobs:
             base="${{ github.event.before }}"
           fi
           bun tools/code-docs-ratchet/check.ts --base "$base"
+
+  # Non-required on purpose, like the code-docs ratchet above. The pre-push
+  # hook runs the same command, but a GitHub-UI merge runs no hook, and a push
+  # from a clone that lacks `repo-tools` skips the step with a notice. This job
+  # reads the committed architecture documents against the committed source and
+  # writes nothing. It needs no Bun and no `bun install`: the command runs on
+  # a bare checkout. The version is pinned in one place, so a new release of
+  # `repo-tools` cannot turn this check red on its own. Raise the pin in a
+  # pull request that also re-measures the documents. This job does not change
+  # branch protection.
+  architecture-docs-claims:
+    name: architecture-docs claims (non-required)
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    env:
+      REPO_TOOLS_VERSION: '2.3.0'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Install the pinned repo-tools
+        run: npm install --global @danielsimonjr/repo-tools@${REPO_TOOLS_VERSION}
+      - name: Fail when an architecture document claim no longer matches the source
+        run: repo-tools check . --docs=docs/architecture
 
   # Which expensive suites does this change need? Computed with git rather than a third-party
   # paths-filter action: one less action to SHA-pin and audit for a two-line diff check.

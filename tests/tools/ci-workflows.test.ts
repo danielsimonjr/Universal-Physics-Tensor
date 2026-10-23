@@ -124,6 +124,41 @@ describe('ci.yml code-docs ratchet', () => {
   });
 });
 
+describe('ci.yml architecture-docs claims job', () => {
+  const text = readFileSync(resolve(root, '.github/workflows/ci.yml'), 'utf8');
+  const jobText = (): string => text.slice(text.indexOf('  architecture-docs-claims:'), text.indexOf('  paths-touched:'));
+
+  it('runs `repo-tools check` on the architecture documents', () => {
+    const job = ci.jobs['architecture-docs-claims'];
+    expect(job, 'the job exists').toBeDefined();
+    const check = job!.steps.find((s) => /^repo-tools check /.test(s.run ?? ''));
+    expect(check?.run?.trim()).toBe('repo-tools check . --docs=docs/architecture');
+  });
+
+  it('is not a required check: its name says so, it is a job of its own, and nothing waits on it', () => {
+    expect(jobText()).toMatch(/name: architecture-docs claims \(non-required\)/);
+    expect(jobText()).not.toMatch(/continue-on-error/);
+    for (const [name, job] of Object.entries(ci.jobs)) {
+      expect(JSON.stringify(job), `${name} must not need the job`).not.toMatch(/"needs":.*architecture-docs-claims/);
+    }
+  });
+
+  it('runs on a pull request and on a push to master, like the code-docs ratchet', () => {
+    const job = ci.jobs['architecture-docs-claims']!;
+    expect(job.if).toMatch(/pull_request/);
+    expect(job.if).toMatch(/push/);
+    expect(job.if).toMatch(/refs\/heads\/master/);
+  });
+
+  it('pins repo-tools to one exact version and runs on Node 22', () => {
+    const version = /REPO_TOOLS_VERSION:\s*'?(\d+\.\d+\.\d+)'?/.exec(jobText());
+    expect(version, 'an exact x.y.z version in the job env').not.toBeNull();
+    const install = ci.jobs['architecture-docs-claims']!.steps.find((s) => /repo-tools@/.test(s.run ?? ''));
+    expect(install?.run).toMatch(/npm install --global @danielsimonjr\/repo-tools@\$\{?REPO_TOOLS_VERSION\}?\s*$/);
+    expect(jobText()).toMatch(/node-version: 22/);
+  });
+});
+
 describe('no workflow runs the suite through `bun run test` twice', () => {
   it('each job runs at most one suite', () => {
     for (const [name, job] of Object.entries({ ...ci.jobs, ...publish.jobs })) {
