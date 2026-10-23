@@ -28,9 +28,9 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
   The pre-push hook was the only gate for the claim tables of the architecture documents.
   Done: the job `architecture-docs claims (non-required)` runs on a pull request and on a push to master, on Node 22, with the tool version pinned in one place. Branch protection is unchanged. `tests/tools/ci-workflows.test.ts` pins the shape of the job.
 
-- [ ] Clear the 55 MUST doc-comment issues that `repo-tools docs check src` reports on master, then make the pre-push code-docs ratchet use that command.
+- [x] Clear the 55 MUST doc-comment issues that `repo-tools docs check src` reports on master, then make the pre-push code-docs ratchet use that command.
   The ratchet counts issues with a private checker, and it prints one skip line and passes when that checker is missing. The fix adds doc comments under `src/`, so it changes the shipped declaration files. Release timing is the maintainer's call.
-  The 55 issues are cleared: the doc-check command reports 0 MUST issues for src. The pre-push code-docs ratchet still uses the private checker. Switching it to the doc-check command is the part that stays open.
+  Done: the doc-check command reports 0 MUST issues for src, and the pre-push hook runs it through `UPT_REPO_TOOLS`. The hook fails on any MUST issue and on a run with no `PASS --` line. It keeps no baseline, and `.githooks/code-docs-baseline.txt` is removed. A missing `repo-tools` executable still prints one `SKIPPED` line for each gate, and the push continues. `tests/tools/pre-push-gate.test.ts` runs the gate block against a stub executable.
 
 - [ ] Find why `repo-tools map` marks every file under `src/` as an entry root in this repository.
   Until the cause is fixed, no Verification table may hold `entryRoots`, `reachableFiles` or `testOnlyFiles`, and `orphanedFiles` is not a safe claim.

@@ -1,16 +1,16 @@
 /**
  * Pull-request code-docs ratchet.
  *
- * The local pre-push hook runs the private `code_docs.py` against
- * `.githooks/code-docs-baseline.txt`. A merge made in the GitHub UI never
- * runs that hook. This command is the `--paths` stand-in CI can run: a
- * changed file under `src/` may not introduce an export whose immediately
- * preceding JSDoc has no summary line, and it may not drop a summary that
- * was there. Debt already present on the base ref does not fail.
+ * The local pre-push hook runs `repo-tools docs check src`, which fails on
+ * any MUST issue. A merge made in the GitHub UI never runs that hook. This
+ * command is the `--paths` stand-in CI can run: a changed file under `src/`
+ * may not introduce an export whose immediately preceding JSDoc has no
+ * summary line, and it may not drop a summary that was there. Debt already
+ * present on the base ref does not fail.
  *
- * It is not `code_docs.py`. It does not read the baseline, and it does not
- * count object-literal methods. `repo-tools check` is a different gate and
- * is not invoked here.
+ * It is not `repo-tools docs check`. It reads the changed files only, and
+ * it does not count object-literal methods. `repo-tools check` is a
+ * different gate and is not invoked here.
  *
  * @module tools/code-docs-ratchet
  */
