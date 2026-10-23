@@ -25,10 +25,13 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.
 
 - [ ] Clear the 55 MUST doc-comment issues that `repo-tools docs check src` reports on master, then make the pre-push code-docs ratchet use that command.
-  The ratchet counts issues with a private checker, and it prints one skip line and passes when that checker is missing. The fix adds doc comments under `src/`, so it changes the shipped declaration files. Release timing is Mothership's call.
+  The ratchet counts issues with a private checker, and it prints one skip line and passes when that checker is missing. The fix adds doc comments under `src/`, so it changes the shipped declaration files. Release timing is the maintainer's call.
 
 - [ ] Find why `repo-tools map` marks every file under `src/` as an entry root in this repository.
   Until the cause is fixed, no Verification table may hold `entryRoots`, `reachableFiles` or `testOnlyFiles`, and `orphanedFiles` is not a safe claim.
+
+- [ ] Reconcile the visibility tags in `src/` with the package root, and keep one definition of each function.
+  Three symbols are exported from the root barrel and carry an @internal tag at their definition: M_PROTON_SI in `src/core/constants.ts`, and CANONICAL_GRAPH and canonicalToEdges in `src/composition/canonical-graph.ts`. The interface CurvatureKindSpec in `src/dimensional/curvature-composite.ts` carries a @public tag and is not exported. The function sha256Hex has two definitions, in `src/core/hash.ts` and `src/composition/canonical-json.ts`. Each fix edits `src/`, so it changes the shipped output. Release timing is the maintainer's call.
 
 - [x] Remove the dead root npm Dependabot entry (the fleet-wide Dependabot carry, 2026-10-18).
   The npm updater job for the repository root fails at file fetching, because the repository is managed by Bun, and has proposed nothing since 2026-09-23. Remove the entry, keep github-actions, say why in dependabot.yml, and record the ignore rule that went with it in the open row below.
