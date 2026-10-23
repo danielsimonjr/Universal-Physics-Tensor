@@ -131,13 +131,12 @@ jobs:
       - name: Fail when the Lean index is stale
         run: bun scripts/lean-index.ts --check
 
-  # Non-required on purpose. The local pre-push hook still runs the private
-  # code_docs.py against .githooks/code-docs-baseline.txt. A GitHub-UI merge
-  # never runs that hook, so this job runs the in-repo --paths stand-in: a
-  # changed src file may not add an export whose immediately preceding JSDoc
-  # has no summary, and may not drop a summary the base ref had. Pre-existing
-  # debt does not fail the job. The job does not read the baseline and does
-  # not raise it.
+  # Non-required on purpose. The local pre-push hook runs `repo-tools docs
+  # check src`, which fails on any MUST issue. A GitHub-UI merge never runs
+  # that hook, so this job runs the in-repo --paths stand-in: a changed src
+  # file may not add an export whose immediately preceding JSDoc has no
+  # summary, and may not drop a summary the base ref had. Pre-existing debt
+  # does not fail the job. No CI job runs `repo-tools docs check src`.
   #
   # It runs on a pull request against its base branch, and on a push to master
   # against the commit the push replaced (`github.event.before`): the recorded

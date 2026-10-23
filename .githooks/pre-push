@@ -99,7 +99,7 @@ echo "pre-push gate: architecture docs freshness"
 # printed OK while CI's docs-fresh job failed on the same commit. A failing
 # generator is a failing gate, and its output is the diagnosis, so it is not
 # sent to /dev/null either. (A tool that is NOT INSTALLED is a different
-# outcome, handled by the two skip branches further down.)
+# outcome, handled by the skip branch further down.)
 if ! bun install --frozen-lockfile >/dev/null; then
   echo ""
   echo "PRE-PUSH GATE FAILED: bun install --frozen-lockfile."
@@ -140,78 +140,23 @@ if ! bun scripts/generate-physjs-table.ts --check; then
 fi
 
 # ---------------------------------------------------------------------------
-# code-docs, as a RATCHET rather than a wall.
+# code-docs and the architecture-docs claims, both through `repo-tools`.
 #
-# MEASURED 2026-09-21 before wiring it, because Mothership suggested "typecheck
-# plus the two doc gates" and I said I would measure rather than ship two thirds
-# of her suggestion and call it done:
-#   runtime            2s  (speed was never the objection)
-#   MUST issues        171 across 305 files
+# code-docs: every exported function, class, interface, type alias and method
+# under src/ needs a doc comment. The tool does not check exported constants.
+# `repo-tools docs check src` exits 0 on PASS and non-zero on a MUST issue or
+# when it cannot measure the root, so its exit status is a verdict. The hook also
+# requires the PASS line: a run that exits 0 and prints no verdict measured
+# nothing, and must not read as a pass. The count of MUST issues is zero, so
+# there is no backlog to ratchet against and no baseline file: any MUST issue
+# fails the push. On a PASS the tool counts SHOULD issues; they are not gated.
 #
-# So BLOCKING on it is not a gate, it is a wall: every push refused until 171
-# pre-existing findings are cleared, or `--no-verify` typed every single time.
-# A gate bypassed on every push is WORSE than no gate, because it teaches the
-# bypass and the next real failure rides through the same habit.
+# The command needs @danielsimonjr/repo-tools 2.2.2 or later. Before 2.2.0 there
+# is no `docs` command. 2.2.0 and 2.2.1 report the implementation signature of an
+# overloaded function as undocumented, and src/ has such functions. An older
+# install exits non-zero, so the hook fails and prints the tool's own output; it
+# never skips an installed tool.
 #
-# The ratchet blocks NEW debt without demanding the backlog: fail only if the
-# count rises above the committed baseline. The baseline is a file in the repo,
-# so lowering it is a visible, reviewed act — and a number sitting in version
-# control is pressure the backlog would not otherwise carry.
-#
-# Both private checkers live in the `skills` checkout. Its location is a machine
-# fact, not a repository fact: UPT_SKILLS_DIR names it, and $HOME/Github/skills
-# is only the default. The interpreter is python3 by name; a bare `python` is
-# Python 2, or nothing, on many hosts, and a checker that cannot start must not
-# read as "no findings".
-SKILLS_DIR="${UPT_SKILLS_DIR:-$HOME/Github/skills}"
-CODE_DOCS="$SKILLS_DIR/code-docs/scripts/code_docs.py"
-BASELINE_FILE="$(dirname "$0")/code-docs-baseline.txt"
-
-if [ -f "$CODE_DOCS" ] && [ -f "$BASELINE_FILE" ]; then
-  echo "pre-push gate: code-docs ratchet"
-  baseline=$(cat "$BASELINE_FILE")
-  # `check` exits 1 whenever MUST issues exist, and this hook runs under `set -e`,
-  # so the exit status cannot be the verdict. The PASS/FAIL line is, below: a run
-  # that prints neither (a crash, a changed tool) fails the hook there.
-  cd_out=$(python3 "$CODE_DOCS" check src 2>&1) || true
-  # Read the count ONLY from a line the tool writes on purpose. This used to be
-  # `grep ... || echo 0`, so a crash, or a change in the tool's output, read as
-  # "0 MUST issues" and the ratchet passed - and even reported an improvement.
-  if current=$(printf '%s
-' "$cd_out" | grep -oE "^FAIL -- [0-9]+ MUST" | grep -oE "[0-9]+"); then
-    :
-  elif printf '%s
-' "$cd_out" | grep -qE "^PASS -- "; then
-    current=0
-  else
-    echo ""
-    echo "PRE-PUSH GATE FAILED: code-docs gave neither a PASS nor a FAIL line."
-    echo "The tool crashed or its output changed; its output was:"
-    printf '%s
-' "$cd_out" | tail -20
-    exit 1
-  fi
-
-  if [ "$current" -gt "$baseline" ]; then
-    echo ""
-    echo "PRE-PUSH GATE FAILED: code-docs went UP ($baseline -> $current)."
-    echo "You added an undocumented exported symbol. Document it, or if this is"
-    echo "deliberate, raise the baseline in .githooks/code-docs-baseline.txt so"
-    echo "the increase is a reviewed line in the diff rather than a silent drift."
-    exit 1
-  fi
-
-  if [ "$current" -lt "$baseline" ]; then
-    echo "  code-docs IMPROVED: $baseline -> $current. Lower the baseline:"
-    echo "    echo $current > .githooks/code-docs-baseline.txt"
-  fi
-else
-  # Skip rather than block: code_docs.py lives outside this repo, and a gate that
-  # fails because a SKILL is missing would train people to bypass it for reasons
-  # that have nothing to do with this codebase.
-  echo "pre-push gate: code-docs SKIPPED (not found: $CODE_DOCS or $BASELINE_FILE; set UPT_SKILLS_DIR to the skills checkout)"
-fi
-
 # Architecture-docs CLAIMS: the `## Verification` tables in docs/architecture/
 # checked against a fresh parse by `repo-tools check`. Its scope is those claim
 # tables, and only those: it does not check prose, and `docs:deps` / the
@@ -220,22 +165,40 @@ fi
 #
 # repo-tools is the public npm package @danielsimonjr/repo-tools (Node 20+).
 # Its location is a machine fact, not a repository fact: UPT_REPO_TOOLS names
-# the executable, and `repo-tools` on PATH is only the default. The gate is
-# SKIPPED, with a printed line, when the executable is missing. CI does not
-# run this check.
+# the executable, and `repo-tools` on PATH is only the default. Both gates are
+# SKIPPED, each with a printed line, only when the executable is missing. CI
+# runs the claims check in its own job; its code-docs job is the in-repo
+# stand-in for changed paths, and CI does not run `repo-tools docs check src`.
 REPO_TOOLS="${UPT_REPO_TOOLS:-repo-tools}"
 if command -v "$REPO_TOOLS" >/dev/null 2>&1; then
+  echo "pre-push gate: code-docs (repo-tools docs check src)"
+  if ! cd_out=$("$REPO_TOOLS" docs check src 2>&1); then
+    echo ""
+    echo "PRE-PUSH GATE FAILED: code-docs found MUST issues, or the checker did not run."
+    printf '%s\n' "$cd_out"
+    echo "Document each exported symbol the list names. The command needs"
+    echo "@danielsimonjr/repo-tools 2.2.2 or later."
+    exit 1
+  fi
+  if ! printf '%s\n' "$cd_out" | grep -E "^PASS -- "; then
+    echo ""
+    echo "PRE-PUSH GATE FAILED: code-docs exited 0 but printed no PASS line."
+    echo "The checker's output changed or it did not check; its output was:"
+    printf '%s\n' "$cd_out" | tail -20
+    exit 1
+  fi
+
   echo "pre-push gate: architecture-docs claims (repo-tools check)"
   if ! rt_out=$("$REPO_TOOLS" check . --docs=docs/architecture 2>&1); then
     echo ""
     echo "PRE-PUSH GATE FAILED: architecture-docs claims do not match the source."
-    printf '%s
-' "$rt_out" | tail -40
+    printf '%s\n' "$rt_out" | tail -40
     echo "Re-measure with repo-tools map and correct the Verification tables and the"
     echo "text that restates them. Never edit a generated report to make this pass."
     exit 1
   fi
 else
+  echo "pre-push gate: code-docs SKIPPED (not found: $REPO_TOOLS; install @danielsimonjr/repo-tools or set UPT_REPO_TOOLS)"
   echo "pre-push gate: architecture-docs claims SKIPPED (not found: $REPO_TOOLS; install @danielsimonjr/repo-tools or set UPT_REPO_TOOLS)"
 fi
 

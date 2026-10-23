@@ -261,7 +261,6 @@ const PRE_V071_ACCEPTED_DRIFT = new Set<string>([
   'evaluatePerihelionPrecessionLabeled',
   // dimensional/curvature-composite.ts
   'CurvatureKind',
-  'CurvatureKindSpec',
   'CURVATURE_KIND_REGISTRY',
   'CurvatureCompositeNode',
   // dimensional/curvature.ts
