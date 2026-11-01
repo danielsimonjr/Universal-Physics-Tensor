@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Changed
 
+- **Architecture claim tables name 3828 exports.** `repo-tools check` measured `totalExports` 3828 after the catalog engine and H0 exact-scale import; API.md, OVERVIEW.md, and duplicate-symbols.md had 3826.
+
 - **CI also runs on a push to `cursor/mathts-*`.** Stacked MathTS PRs cannot form a `pull_request` merge commit once each parent refreshes architecture file-count claims. The same jobs now run against the branch HEAD on push, including the code-docs and architecture-docs jobs. `tests/tools/ci-workflows.test.ts` pins the branch list (red first on `[master]` only).
 
 ### Added

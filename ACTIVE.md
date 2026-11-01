@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Fix #569 architecture-docs `totalExports` 3826 vs measured 3828.
+  `repo-tools check` on this HEAD fails in API.md, OVERVIEW.md, and duplicate-symbols.md. Re-measure and set the three claim tables to 3828.
+  Done: the three tables say 3828. `repo-tools check . --docs=docs/architecture` prints `check passed`.
+
 - [x] Attach GitHub Actions on stacked MathTS PRs that cannot form a merge commit.
   `pull_request` CI needs a mergeable merge. #562/#568/#569 are CONFLICTING with their parents (architecture file-count claims). Add a `cursor/mathts-*` push trigger and run the docs jobs on those pushes so the branch HEAD is checked.
   Done: `ci.yml` push.branches includes `cursor/mathts-*`; code-docs and architecture-docs jobs run on those refs. The pin failed on A2 while `push.branches` was `[master]` only. The six per-case files stay gone; `isForbiddenCaseModule` still refuses them.

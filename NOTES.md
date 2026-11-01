@@ -11,6 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-01
 
+- **#569 architecture-docs.** Push CI failed `architecture-docs claims` because API.md, OVERVIEW.md, and duplicate-symbols.md claimed `totalExports` 3826. `repo-tools check` (2.3.0) measured 3828 on this tree. The three tables now say 3828; the command prints `check passed: every claim matches the graph (17 claims in 8 documents; 15 documents opted out)`.
 - **Stacked MathTS CI attach (Part B).** #569 vs #568 is CONFLICTING (`DIRTY`) on architecture graphs, ACTIVE, CHANGELOG, and a wrapper-test import order. `pull_request` CI never attached to this HEAD. `ci.yml` now pushes on `cursor/mathts-*` so the branch HEAD is checked. `src/cases/` still holds only `catalog-checks.ts`, `catalog.ts`, `engine.ts`, `index.ts`, `methods.ts`, `quadrature.ts`, `types.ts`. `isForbiddenCaseModule` refuses the six deleted names and any new `case-*.ts`. B7 leftover: `tests/cases/applied-cases-catalog.test.ts` still has the in-memory projection test the plan deletes after B7; it is not a competing runtime source.
 
 ## As of 2026-10-18
