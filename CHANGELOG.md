@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Added
 
-- **Part A step A2 — exact-scale arithmetic delegates to MathTS.** `src/dimensional/exact-scale.ts` calls `@danielsimonjr/mathts-core` for decimal and ratio scales, products, quotients, integer powers, addition, and rounding (`exactScaleToNumber`). Unlike irrational factors throw on addition (`pi` + `ln2`); a fractional power throws. `tests/dimensional/exact-scale-delegation.test.ts` pins the source assertion and the two throws. Unit conversion tests stay unchanged.
+- **Part A step A2 — exact-scale arithmetic delegates to MathTS.** `src/dimensional/exact-scale.ts` calls `@danielsimonjr/mathts-core` for decimal and ratio scales, products, quotients, integer powers, addition, and rounding (`exactScaleToNumber`). Unlike irrational factors throw on addition (`pi` + `ln2`); a fractional power throws. `tests/dimensional/exact-scale-delegation.test.ts` pins the source assertion, the two throws, a rational `addScales` that stays exact, and that `units.ts` / `unit-data.ts` are not imported. Unit conversion tests stay unchanged.
 
 - **`docs/plans/MATHTS_UNITS_AND_CASES_PLAN.md` and the Part A gap oracle.** The plan from PR #560 records how unit delegation and the applied-case catalog will land. `tests/dimensional/mathts-unit-gaps.test.ts` pins MathTS–UPT agreements and the gap rows the wrapper keeps until MathTS releases A6–A10 or UPT policy (bit, ton, cycles). No production change in this step.
 
