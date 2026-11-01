@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Documented
+
+- **Session 14, the gravitational-wave search sentence.** The line in `docs/persona-sessions/2026-10-06-relativity-astro-bridges-session-14.md` that put `gravitational wave` on the exit-1 search list is struck. Re-measured 2026-11-01 on published `universal-physics-tensor@8.0.0` (with `@danielsimonjr/mathts-functions@0.68.0`, because a fresh install that resolves 0.68.5 does not start): `upt search "gravitational wave"` exits 0 and names `gravitational-wave-speed`. The same re-measurement is the addendum in that file. It files #525, #526, #527, #528, and #529. No `src/` change. The proposal counts in that file stay 6 standard and 5 cross-domain.
+
 ### Dependencies
 
 - Raise `vitest` and `@vitest/coverage-v8` to ^4.1.12 and update `vite` to 8.3.5 in `bun.lock`. The nightly CI run on `master` failed in the `quality` job because `bun audit --audit-level=high` reported GHSA-587h-7wmj-h5pm, a high advisory in the `launch-editor` code that `vite` 8.3.0 bundles. The same `vite` version carries five more advisories (one low, four moderate), and `@vitest/mocker` 4.1.11 carries two moderate ones. `vite` is reached only through `vitest > @vitest/mocker`, so the packages that users install do not change. `bun audit` now reports no vulnerabilities.

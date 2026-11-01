@@ -19,7 +19,7 @@ Scratch directory outside the repo: `npm init -y && npm i universal-physics-tens
 
 Catalog bridges that already cover it: be-42 Hawking temperature, be-51 lensing, be-52 perihelion, be-57 Unruh, be-63 Chandrasekhar mass, be-64 Eddington luminosity, be-65 Jeans mass, be-68 Tolman–Ehrenfest, be-72 gravitational redshift, be-20 (cosmological-constant density) and be-37 (Shapiro delay, speculative). The last two have no evaluator (`evaluateBridge: catalog id 20 has no evaluator`). The canonical registry has `CE-schwarzschild-radius`, `CE-kepler-third`, `CE-newton-gravitation`, `CE-friedmann`, `CE-friedmann-curvature`, `CE-hubble-distance`, `CE-hawking-temperature`, `CE-bekenstein-hawking`, `CE-perihelion-precession`, `CE-lorentz-factor`, `CE-mass-energy`, `CE-einstein-field-eq`.
 
-`upt search` exits 1, no entry, for: `gravitational wave`, `chirp mass`, `quadrupole`, `inspiral`, `isco`, `photon sphere`, `tidal`, `roche`, `hill sphere`, `luminosity distance`, `angular diameter`, `age of the universe`, `recombination`, `cmb`, `radiation era`, `matter era`, `tov`, `neutron star`, `bondi`, `lense-thirring`, `frame dragging`, `geodetic`, `de sitter`, `virial`, `free-fall`, `rotation curve`, `tully-fisher`, `escape velocity`, `vis-viva`, `synchrotron`, `pulsar`, `magnetar`, `gamma-ray burst`, `hubble tension`.
+`upt search` exits 1, no entry, for: ~~`gravitational wave`,~~ `chirp mass`, `quadrupole`, `inspiral`, `isco`, `photon sphere`, `tidal`, `roche`, `hill sphere`, `luminosity distance`, `angular diameter`, `age of the universe`, `recombination`, `cmb`, `radiation era`, `matter era`, `tov`, `neutron star`, `bondi`, `lense-thirring`, `frame dragging`, `geodetic`, `de sitter`, `virial`, `free-fall`, `rotation curve`, `tully-fisher`, `escape velocity`, `vis-viva`, `synchrotron`, `pulsar`, `magnetar`, `gamma-ray burst`, `hubble tension`. ~~`gravitational wave` is in that exit-1 list.~~ Retracted 2026-11-01: `upt search "gravitational wave"` on this same `@8.0.0` install exits 0 and names the quantity `gravitational-wave-speed` (symbol `c_GW`). The other names in the list were not re-run. The addendum is §7.
 
 ### Hand-checked values (all pass)
 
@@ -140,3 +140,35 @@ All are **unproven**. No measurement was opened for any of them.
 ## 6. Scope statement
 
 No src changes. Awaiting owner review before any fix/PhysJS agents. No release, tag, publish, merge, per-equation module, catalog edit, or specification write-up was made. Bare `e` is the elementary charge and Euler's number is `exp(x)` throughout.
+
+## 7. Addendum, re-measured 2026-11-01
+
+The §2 search list is corrected above. The commands in this section were run again on published `universal-physics-tensor@8.0.0`, not on a clone. `npm view universal-physics-tensor version` that day printed `11.0.0`. The `@8.0.0` tarball's own `package.json` is still `8.0.0`.
+
+A fresh `npm i universal-physics-tensor@8.0.0` resolves `@danielsimonjr/mathts-functions@0.68.5` (the range is `^0.68.0`) and `upt version` exits 1: `Could not load the built package` and `rationalNullspace: entry [0, 0] must be a finite number or a Fraction`. The stack is `rationalNullspace` ← `nullSpace` in `dist/dimensional/buckingham.js`. That is [#525](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/525). Pinning `@danielsimonjr/mathts-functions@0.68.0` restores the CLI. An install of this tarball on 2026-10-06 printed that same functions version from `upt eval --debug exp(1)`. With the pin, `upt version` prints `8.0.0` and `upt eval --debug exp(1)` prints `2.718281828459045`. Every command below used that pin. `npm audit` on the install reported 0 vulnerabilities.
+
+| command | exit | printed | issue |
+|---|---|---|---|
+| `upt version` after a fresh install (functions 0.68.5) | 1 | `rationalNullspace: entry [0, 0] must be a finite number or a Fraction` | [#525](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/525) |
+| `upt evaluate be-37 M_kg=1.989e30 R_near_m=6.957e8 R_far_m=1.495978707e11` | 1 | `evaluateBridge: catalog id 37 has no evaluator` | [#528](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/528) |
+| `evaluateRelation('be-37', …)` with `b_m` omitted, `b_m = R_sun`, and with both radii doubled and `b_m = 0.5 AU` | — | each value `0.00005292323333341079` | [#528](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/528) |
+| `evaluateCovariantEikonalNumerical` radial, default steps, Earth orbit to the solar radius | — | `0.00005295119376569346`; closed form `0.000052923233333410795`; relative `0.0005283205602068595` | [#526](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/526) |
+| the same call, `b_m = R_sun`, 2048 steps | throw | `final r=74801353639.79611` inside `tauMax=748.4990817858582` | [#526](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/526) |
+| the same grazing call, 65536 steps | — | `0.0016632360294579485` against the impact-parameter log `0.000059753386880550906` (relative 26.835) | [#526](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/526) |
+| `upt evaluate be-51 M_kg=1.989e30 b_m=14760` | 1 | `weak field b ≥ 10·r_s`; no number | [#529](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/529) |
+| `upt evaluate be-52 M_kg=1.989e30 a_m=14760 e=0 T_yr=0.001` | 0 | value `1.8863134721822323` and a warning, `a(1−e)/r_s = 4.996400704208549` | [#529](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/529) |
+| `upt metric flrw k=0 t=1 rho=1e-26 Lambda=0` | 0 | `ricci` `[]`, `ricciScalar` `1.4835361701627054e-17`, `n = 2/3` | [#527](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/527) |
+| `upt metric flrw k=0 t=1 n=0.5 rho=1e-26 Lambda=0` | 0 | note `Ricci is 0 for this vacuum metric`; `friedmannRhs` `5.5914484927611614e-36`; the mismatch note says `k = 1` while the parameter `k` is 0 | [#527](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/527) |
+| `upt search "gravitational wave"` | 0 | quantity `gravitational-wave-speed` | the retraction in §2 |
+
+`upt help evaluate` still says that when the impact parameter, or the periapsis `a(1−e)`, is not above 10 Schwarzschild radii, the number is printed, a warning names the cut, and the exit stays 0. be-52 does that. be-51 does not. For this mass, `r_s = 2954.126555055405` m, so `b = 14760` m is `5 r_s`.
+
+The radial closed form `(2 G M / c³) ln(R_far / R_near)` is the library value of be-37. The one-way grazing log `(2 G M / c³) ln((AU + √(AU² − R²)) / R)` is `0.000059753386880550906`. The round-trip form `(4 G M / c³) ln(4 AU² / R²)` is `0.00023901376063282652`. `R = 6.957e8` m and `AU = 1.495978707e11` m. The published type declaration for `evaluateCovariantEikonalNumerical` states a radial residual ≤ 1e-6 at 2048 steps and an example comment of about `2e-4` s. The radial call above is `5.30e-5` s.
+
+The §2 sentence that be-20 and be-37 have no evaluator quotes the CLI for id 20. The CLI says the same for id 37. `evaluateRelation('be-37')` still returns the number in the table. That split is #528.
+
+#477, #478, #479, and #480 stay the issues from §3. They were not opened again. The per-century silence of `T_yr` on be-52 remains #479.
+
+No new proposal rows. The count in §5 stays **6 standard** (RA-1 through RA-6) and **5 cross-domain** (RA-7 through RA-11).
+
+No src changes. Awaiting owner review.
