@@ -20,6 +20,18 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Merge master (`8d22f36f`, #563) into PR #566 and keep both sides of the ledger.
+  #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Joule–Thomson/Planck/Saha/Onsager rows.
+  Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.
+
+- [x] Close the remaining Saha Lean goals CI rejected on PR #566.
+  `unequal_heavy_wavelength` left `8 = 2^3`; `saha_high_T_exp` had `𝓝 (exp 0)` instead of `𝓝 1`; `saha_high_T_prefactor` had `𝓝 (c * 1)` instead of `𝓝 c`.
+  Done: `norm_num` after the wavelength cancellation; `simpa [exp_zero]` on the exponential limit; `simpa` on the constant-times-one neighbourhood.
+
+- [x] Review and fix UPT PR #566 (be-163, be-164, be-168, be-170).
+  The PR implements the thermo-stat half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems; stated limits (Rayleigh–Jeans, Wien, JT inversion) are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: virial `B` is `DifferentiableAt` at `T`; Rayleigh–Jeans and Wien are `u` limits; `μ` is derived from `Z₁`; inversion, `a = 0`, Saha `T → 0/∞`, and reverse-cycle Onsager are theorems.
+
 - [x] Merge master (`8d22f36f`, #563) into PR #565 and keep both sides of the ledger.
   #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Eyring/van 't Hoff/Nernst rows.
   Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.

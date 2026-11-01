@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- **be-163/164/168/170 stated limits are theorems, not comments.** The virial `B = b − a/(R T)` is differentiable at the working `T`, not on all of `ℝ`. Rayleigh–Jeans is `u → (8 π ν²/c³) k_B T` and Wien is `u / ((8 π h ν³/c³) exp(−x)) → 1`. The Saha chemical potential is derived from `Z₁ = g V λ⁻³ exp(−E/(k_B T))`. The ion-to-atom wavelength factor is `1/8` after `8 = 2³`; the high-`T` Boltzmann factor is `exp 0 = 1`, not a leftover `𝓝 (exp 0)`; `K / T^{3/2}` tends to the prefactor after cancelling `c * 1`. Maxwell's relation comes from mixed partials; `W = 0` and the reversed cycle are Onsager limits.
+
 - **be-148/149/151 thin-proof ends are derived, not assumed.** Nernst keeps one work law `ΔG = −n F E` and defines `E° = −ΔG°/(n F)` as its `Q = 1` case, instead of assuming both work identities. The rearrangement is `eq_div_of_mul_eq`; after clearing the denominator the leftover is `-(ΔG° + R T ln Q) = −ΔG° − R T ln Q`, which `ring` closes. van 't Hoff's `ΔC_p` counterexample is the Kirchhoff enthalpy `ΔH(T) = ΔH₀ + ΔC_p(T−T₀)`, cancelled by `div_left_inj'` so the constant-`ΔH₀` integrated form cannot hold when `ΔC_p ≠ 0`. The decade/`n` Nernst identities, the exact slopes `1` and `−1/T²`, and Eyring's `exp(−1)` gap stay theorems.
 
 - **Biot and Nusselt limits that the thin-proof plan asked for are theorems.** For `h > 0`, `k > 0`, `L > 0` and `T(L) > T∞`, the steady wall is hotter inside. The unit check is the profile `T(x) = 2 − x`, not three arithmetic identities; `biot_unit_profile` unfolds that profile before `norm_num`, so the Robin conjunct is `1 = 2 − 1` rather than `1 = unitWall 1`. `Nu = 1` does not give `Bi = 1`: the two lengths and conductivities are different materials.
