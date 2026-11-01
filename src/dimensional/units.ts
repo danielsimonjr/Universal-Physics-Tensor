@@ -44,6 +44,7 @@
  *
  * @module dimensional/units
  */
+import { Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
 import {
@@ -58,6 +59,11 @@ import {
   UNIT_SCALE,
   type ExactScale,
 } from './exact-scale.js';
+import {
+  mathtsParsedDimension,
+  unitExactScaleViaMathts,
+  unitParserViaMathts,
+} from './mathts-unit-delegation.js';
 import { UNIT_DATA, type AffineRow as UnitDataAffineRow } from './unit-data.js';
 
 /** An affine temperature scale: a lone `degC` or `degF`. @public */
@@ -183,6 +189,8 @@ function trySymbol(sym: string): SymbolReading | null {
   }
   return null;
 }
+
+const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
 
 interface FactorReading {
   readonly base: string;
@@ -362,8 +370,17 @@ function reading(exact: ExactScale, dim: Dimension, label: string, cycles: numbe
   };
 }
 
+let lastReadingSource: { readonly text: string; readonly kind: 'mathts' | 'local' } | null = null;
+
+function applyMathtsExactScale(text: string, local: UnitReading): UnitReading {
+  if (!unitExactScaleViaMathts(text, local.scale, local.exact, local.dim)) return local;
+  const core = Unit.exactScale(text.trim());
+  if (core === null) return local;
+  return { ...local, scale: exactScaleToNumber(core) };
+}
+
 /**
- * Every dimensionally distinct reading of one unit expression.
+ * Every dimensionally distinct reading of one unit expression (local grammar).
  *
  * The unit grammar is not the formula grammar, and the difference is
  * deliberate: a unit symbol is not an identifier (a prefix, a glued product
@@ -373,7 +390,7 @@ function reading(exact: ExactScale, dim: Dimension, label: string, cycles: numbe
  * formula grammar would read `(W/m)·K`.
  * @internal
  */
-function unitReadings(text: string): UnitReading[] {
+function localUnitReadings(text: string): UnitReading[] {
   const t = text.trim();
   if (t === '' || t === '1') return [reading(UNIT_SCALE, DIMENSIONLESS, '1', 0)];
   const affine = affineRow(t);
@@ -413,7 +430,28 @@ function unitReadings(text: string): UnitReading[] {
   return [...unique.values()];
 }
 
-const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
+function unitReadings(text: string): UnitReading[] {
+  const t = text.trim();
+  lastReadingSource = { text: t, kind: 'local' };
+  const readings = localUnitReadings(text);
+  if (readings.length === 1) {
+    const local = readings[0]!;
+    if (unitParserViaMathts(t, local.scale, local.exact, local.dim)) {
+      lastReadingSource = { text: t, kind: 'mathts' };
+      const core = Unit.exactScale(t);
+      const scale = core === null ? local.scale : exactScaleToNumber(core);
+      return [
+        {
+          ...local,
+          dim: mathtsParsedDimension(t, local.dim),
+          scale,
+        },
+      ];
+    }
+    return [applyMathtsExactScale(t, local)];
+  }
+  return readings;
+}
 
 /**
  * Spellings that convert correctly and still mean something else to a reader:
@@ -432,6 +470,13 @@ export function readUnit(text: string): UnitReading {
   const readings = unitReadings(t);
   if (readings.length !== 1) throw new AmbiguousUnitError(t, readings.map((r) => r.label));
   return readings[0]!;
+}
+
+/** Which reader parsed `text` last: local grammar or MathTS `Unit.parse`. @internal */
+export function unitReadingsSource(text: string): 'mathts' | 'local' {
+  readUnit(text);
+  const t = text.trim();
+  return lastReadingSource !== null && lastReadingSource.text === t ? lastReadingSource.kind : 'local';
 }
 
 /** Parse a unit expression; the empty string is dimensionless. @public */

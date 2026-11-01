@@ -51,6 +51,13 @@ describe('data/units.json is the unit table', () => {
     expect([...UNIT_DATA.prefixLetterUnits]).toEqual(file.prefixLetterUnits.letters);
   });
 
+  it('every admitted row scale double is pinned', () => {
+    const doubles = Object.fromEntries(
+      [...UNIT_DATA.units.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([symbol, row]) => [symbol, scaleToNumber(row.scale)]),
+    );
+    expect(doubles).toMatchSnapshot();
+  });
+
   it('reads the exact scales the rows state', () => {
     const exact = (symbol: string) => UNIT_DATA.units.get(symbol)!.scale;
     // psi = 0.45359237 × 9.80665 / 0.0254², every digit kept.

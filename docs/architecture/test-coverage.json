@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "totalSourceFiles": 385,
-    "totalTestFiles": 670,
-    "testedCount": 376,
-    "directlyTestedCount": 342,
+    "totalSourceFiles": 386,
+    "totalTestFiles": 673,
+    "testedCount": 377,
+    "directlyTestedCount": 343,
     "untestedCount": 9,
     "coveragePercent": "97.7",
-    "directCoveragePercent": "88.8"
+    "directCoveragePercent": "88.9"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
@@ -329,6 +329,7 @@
     "src/dimensional/hyphen-names.ts",
     "src/dimensional/killing-validators.ts",
     "src/dimensional/klein-gordon-equation.ts",
+    "src/dimensional/mathts-unit-delegation.ts",
     "src/dimensional/metric-validators.ts",
     "src/dimensional/metric.ts",
     "src/dimensional/natural-units.ts",
@@ -674,6 +675,7 @@
     "src/dimensional/hyphen-names.ts",
     "src/dimensional/killing-validators.ts",
     "src/dimensional/klein-gordon-equation.ts",
+    "src/dimensional/mathts-unit-delegation.ts",
     "src/dimensional/metric-validators.ts",
     "src/dimensional/metric.ts",
     "src/dimensional/quantity-registry.ts",
@@ -8033,7 +8035,8 @@
       "tests/tensor.test.ts"
     ],
     "src/core/compare.ts": [
-      "tests/core/compare.test.ts"
+      "tests/core/compare.test.ts",
+      "tests/dimensional/mathts-unit-gaps.test.ts"
     ],
     "src/core/constants.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -9186,7 +9189,8 @@
     "src/dimensional/exact-scale.ts": [
       "tests/dimensional/exact-scale-delegation.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/field-equation-helpers.ts": [
       "tests/dimensional/field-equation-helpers.test.ts"
@@ -9352,6 +9356,9 @@
       "tests/dimensional/klein-gordon-equation.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
+    ],
+    "src/dimensional/mathts-unit-delegation.ts": [
+      "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/metric-validators.ts": [
       "tests/dimensional/curvature-invariants.test.ts",
@@ -9782,6 +9789,8 @@
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
+      "tests/dimensional/unit-parse-delegation.test.ts",
+      "tests/dimensional/units-exact-scale-delegation.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/binding-value.test.ts",
@@ -12811,7 +12820,8 @@
       "tests/core/regime-rule-install.test.ts"
     ],
     "src/core/compare.ts": [
-      "tests/core/compare.test.ts"
+      "tests/core/compare.test.ts",
+      "tests/dimensional/mathts-unit-gaps.test.ts"
     ],
     "src/core/constants.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -13159,7 +13169,8 @@
     "src/dimensional/exact-scale.ts": [
       "tests/dimensional/exact-scale-delegation.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/field-equation-helpers.ts": [
       "tests/dimensional/field-equation-helpers.test.ts"
@@ -13189,6 +13200,9 @@
     "src/dimensional/klein-gordon-equation.ts": [
       "tests/dimensional/friedmann-equation.test.ts",
       "tests/dimensional/klein-gordon-equation.test.ts"
+    ],
+    "src/dimensional/mathts-unit-delegation.ts": [
+      "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/metric-validators.ts": [
       "tests/dimensional/curvature-invariants.test.ts",
@@ -13475,6 +13489,8 @@
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
+      "tests/dimensional/unit-parse-delegation.test.ts",
+      "tests/dimensional/units-exact-scale-delegation.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts",
@@ -23532,6 +23548,7 @@
       "src/dimensional/metric-validators.ts"
     ],
     "tests/dimensional/mathts-unit-gaps.test.ts": [
+      "src/core/compare.ts",
       "src/dimensional/units.ts"
     ],
     "tests/dimensional/metric-ast-serialization.test.ts": [
@@ -23748,6 +23765,7 @@
       "src/bridges/evaluators.ts",
       "src/bridges/expr-parse.ts"
     ],
+    "tests/dimensional/unit-data-delegation.test.ts": [],
     "tests/dimensional/unit-data.test.ts": [
       "src/cli/record-tables.ts",
       "src/core/constants.ts",
@@ -23762,6 +23780,14 @@
       "src/dimensional/errors.ts",
       "src/dimensional/units.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/dimensional/unit-parse-delegation.test.ts": [
+      "src/dimensional/units.ts"
+    ],
+    "tests/dimensional/units-exact-scale-delegation.test.ts": [
+      "src/dimensional/exact-scale.ts",
+      "src/dimensional/mathts-unit-delegation.ts",
+      "src/dimensional/units.ts"
     ],
     "tests/dimensional/units.test.ts": [
       "src/dimensional/units.ts",

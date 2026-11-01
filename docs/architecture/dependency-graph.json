@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "11.0.0",
-    "totalFiles": 385,
+    "totalFiles": 386,
     "totalModules": 13,
-    "totalExports": 2752
+    "totalExports": 2764
   },
   "entryPoints": [
     {
@@ -20857,6 +20857,8 @@
         ],
         "exports": [
           "UNIT_SCALE",
+          "coreExactScaleFromUpt",
+          "uptExactScaleFromCore",
           "decimalScale",
           "scaleOf",
           "ratioScale",
@@ -20873,6 +20875,8 @@
           "ExactScale"
         ],
         "functions": [
+          "coreExactScaleFromUpt",
+          "uptExactScaleFromCore",
           "decimalScale",
           "scaleOf",
           "ratioScale",
@@ -21193,6 +21197,83 @@
         ],
         "functions": [
           "validateKleinGordonEquation"
+        ]
+      },
+      "src/dimensional/mathts-unit-delegation.ts": {
+        "description": "MathTS unit delegation predicates (Part A steps A4–A5).",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Unit",
+              "exactScaleToNumber",
+              "getUnitRow",
+              "readScaleExpression",
+              "toSiDimensionVector",
+              "ExactScale"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/compare.js",
+            "imports": [
+              "symmetricRelDiff"
+            ]
+          },
+          {
+            "file": "./algebra.js",
+            "imports": [
+              "equals",
+              "multiply",
+              "power"
+            ]
+          },
+          {
+            "file": "./exact-scale.js",
+            "imports": [
+              "coreExactScaleFromUpt",
+              "solidusSides",
+              "uptExactScaleFromCore",
+              "ExactScale"
+            ]
+          },
+          {
+            "file": "./unit-data.js",
+            "imports": [
+              "UNIT_DATA"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "everySymbolInBothTables",
+          "mathtsExactScaleAgreed",
+          "unitExactScaleViaMathts",
+          "mathtsExactScaleReading",
+          "unitParserViaMathts",
+          "mathtsParsedDimension",
+          "readFileScaleExpression",
+          "_powerDim",
+          "_multiplyDim"
+        ],
+        "functions": [
+          "everySymbolInBothTables",
+          "mathtsExactScaleAgreed",
+          "unitExactScaleViaMathts",
+          "mathtsExactScaleReading",
+          "unitParserViaMathts",
+          "mathtsParsedDimension",
+          "readFileScaleExpression",
+          "_powerDim",
+          "_multiplyDim"
         ]
       },
       "src/dimensional/metric-validators.ts": {
@@ -21847,7 +21928,14 @@
       },
       "src/dimensional/unit-data.ts": {
         "description": "The unit table, loaded from `data/units.json` and validated once.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "readScaleExpression"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -21887,10 +21975,11 @@
           {
             "file": "./exact-scale.js",
             "imports": [
+              "coreExactScaleFromUpt",
               "decimalScale",
               "irrationalScale",
-              "readScaleExpression",
               "scaleOf",
+              "uptExactScaleFromCore",
               "ExactScale"
             ]
           }
@@ -21913,7 +22002,15 @@
       },
       "src/dimensional/units.ts": {
         "description": "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Unit",
+              "exactScaleToNumber"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -21948,6 +22045,14 @@
             ]
           },
           {
+            "file": "./mathts-unit-delegation.js",
+            "imports": [
+              "mathtsParsedDimension",
+              "unitExactScaleViaMathts",
+              "unitParserViaMathts"
+            ]
+          },
+          {
             "file": "./unit-data.js",
             "imports": [
               "UNIT_DATA",
@@ -21959,6 +22064,7 @@
           "affineReadingNote",
           "unitConventionNotes",
           "readUnit",
+          "unitReadingsSource",
           "parseUnit",
           "readQuantityLiteral",
           "convertValue",
@@ -21986,6 +22092,7 @@
           "affineReadingNote",
           "unitConventionNotes",
           "readUnit",
+          "unitReadingsSource",
           "parseUnit",
           "readQuantityLiteral",
           "convertValue",
@@ -27687,6 +27794,7 @@
           "src/dimensional/hyphen-names.ts",
           "src/dimensional/killing-validators.ts",
           "src/dimensional/klein-gordon-equation.ts",
+          "src/dimensional/mathts-unit-delegation.ts",
           "src/dimensional/metric-validators.ts",
           "src/dimensional/metric.ts",
           "src/dimensional/natural-units.ts",
@@ -27775,21 +27883,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 385,
+    "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 86623,
-    "totalExports": 2752,
+    "totalLinesOfCode": 86891,
+    "totalExports": 2764,
     "totalClasses": 85,
     "totalInterfaces": 512,
-    "totalFunctions": 868,
+    "totalFunctions": 880,
     "totalTypeGuards": 13,
     "totalEnums": 0,
     "totalConstants": 406,
     "totalReExports": 1389,
-    "totalTypeOnlyImports": 518,
+    "totalTypeOnlyImports": 519,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 9
+    "unusedExportsCount": 14
   }
 }

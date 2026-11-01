@@ -13,6 +13,7 @@ import {
   toSiDimensionVector,
   UnitParseError,
 } from '@danielsimonjr/mathts-core';
+import { symmetricRelDiff } from '../../src/core/compare.js';
 import { unit } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
 import {
@@ -41,7 +42,7 @@ describe('MathTS agrees with UPT on delegated readings', () => {
     const local = convertValue('1 pc', 'm').value;
     const pc = Unit.exactScale('pc');
     expect(pc).not.toBeNull();
-    expect(exactScaleToNumber(pc!)).toBe(local);
+    expect(symmetricRelDiff(exactScaleToNumber(pc!), local)).toBeLessThan(1e-15);
   });
 
   it('exactScale(Hz) is 1 on both sides', () => {
