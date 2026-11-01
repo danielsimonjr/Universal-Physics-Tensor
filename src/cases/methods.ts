@@ -10,7 +10,7 @@ import { catalogRelations } from '../bridges/catalog-load.js';
 import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { integrateRK4 } from '../numerical/null-ray-integrator.js';
 import { adaptiveQuadrature } from './quadrature.js';
-import { appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase } from './catalog.js';
+import { appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase, catalogSemanticProblems } from './catalog.js';
 import { runAppliedCaseEngine, usesCatalogEngine } from './engine.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase, type CaseResult, type LumpedRadiating } from './types.js';
 
@@ -204,6 +204,18 @@ export function windowedLinewidthHz(alpha: number, T: number): number {
   const crossing = findRoot((dw) => power(dw) / half - 1, lo, hi, { tol: 4 * Number.EPSILON * hi, maxIter: 200 });
   return crossing / Math.PI;
 }
+
+/** Catalog engine: FWHM of the truncated ring-down spectrum (null when overdamped). @internal */
+export function windowedLinewidthCatalogHz(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number | null {
+  if (inputs.Q! <= 0.5) return null;
+  const alpha = outputs.alpha_per_s;
+  if (alpha === null || !Number.isFinite(alpha)) return null;
+  return windowedLinewidthHz(alpha, inputs.t_obs_s!);
+}
+
 /** @internal */
 export function runCaseDampedResonator(i: Readonly<Record<string, number>>): CaseResult {
     requirePositive(DAMPED_RESONATOR_ID, i, ['f0_Hz', 'Q', 't_obs_s']);
@@ -743,6 +755,7 @@ export const APPLIED_CASE_RUNNERS: ReadonlyMap<string, AppliedCase> = new Map(
 export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'maxwellDepthFactor',
   'skinDeltaMaxwellM',
+  'windowedLinewidthCatalogHz',
   'windowedLinewidthHz',
   'lumpedRadiatingTemperature',
   'sphereEigenvalues',
@@ -760,10 +773,10 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'runCaseBrownianSphere',
 ]);
 
-/** Method registry for the catalog engine. @internal */
 export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   maxwellDepthFactor,
   skinDeltaMaxwellM,
+  windowedLinewidthCatalogHz,
   windowedLinewidthHz,
   lumpedRadiatingTemperature,
   sphereEigenvalues,
@@ -787,3 +800,7 @@ export const DAMPED_RESONATOR_CASE = APPLIED_CASE_RUNNERS.get('case-damped-reson
 export const RESISTOR_NOISE_CASE = APPLIED_CASE_RUNNERS.get('case-resistor-noise')!;
 export const LUMPED_COOLING_CASE = APPLIED_CASE_RUNNERS.get('case-lumped-cooling')!;
 export const BROWNIAN_SPHERE_CASE = APPLIED_CASE_RUNNERS.get('case-brownian-sphere')!;
+
+for (const msg of catalogSemanticProblems(appliedCaseCatalog(), CASE_METHOD_NAMES)) {
+  throw new Error(msg);
+}

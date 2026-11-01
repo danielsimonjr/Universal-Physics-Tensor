@@ -4,6 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { APPLIED_CASES, runAppliedCase } from '../../src/cases/index.js';
 import {
+  runCaseDampedResonator,
   runCaseKeplerRv,
   runCaseSkinDepth,
 } from '../../src/cases/methods.js';
@@ -78,5 +79,23 @@ describe('applied-case engine — kepler RV', () => {
     expect(catalogSemanticProblems(file, CASE_METHOD_NAMES)).toContainEqual(
       expect.stringMatching(/unknown relation 'be-99999'/),
     );
+  });
+});
+
+describe('applied-case engine — damped resonator', () => {
+  it('matches the legacy runner on the catalog valid example', () => {
+    legacyMatch('case-damped-resonator', runCaseDampedResonator);
+  });
+
+  it('control: mutating the envelope decay moves envelope_m', () => {
+    const inputs = resolveEvaluatorInputs(
+      APPLIED_CASES.get('case-damped-resonator')!.parameters,
+      APPLIED_CASES.get('case-damped-resonator')!.examples.valid.args,
+    ).inputs;
+    const baseline = runAppliedCase('case-damped-resonator', inputs).outputs.envelope_m!;
+    const mutatedExpr = 'abs(x0_m)*exp(-2*alpha_per_s*t_s)/sqrt(1-1/(4*Q*Q))';
+    const scope = runAppliedCase('case-damped-resonator', inputs).outputs;
+    const wrong = evaluateFormula(mutatedExpr, { ...inputs, ...scope } as Record<string, number>);
+    expect(Math.abs(wrong / baseline - 1)).toBeGreaterThan(0.05);
   });
 });

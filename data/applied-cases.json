@@ -756,67 +756,78 @@
           "key": "alpha_per_s",
           "symbol": "α",
           "unit": "s^-1",
-          "meaning": "amplitude decay rate ω0/(2Q) = b/(2m)"
+          "meaning": "amplitude decay rate ω0/(2Q) = b/(2m)",
+          "expr": "pi*f0_Hz/Q"
         },
         {
           "key": "tau_s",
           "symbol": "τ",
           "unit": "s",
-          "meaning": "amplitude ring-down time 1/α = Q/(πf0)"
+          "meaning": "amplitude ring-down time 1/α = Q/(πf0)",
+          "expr": "1/alpha_per_s"
         },
         {
           "key": "linewidth_Hz",
           "symbol": "Δf",
           "unit": "Hz",
-          "meaning": "f0/Q: FWHM of the velocity (absorbed-power) response, exact at any Q; the displacement response approaches it for Q ≫ 1"
+          "meaning": "f0/Q: FWHM of the velocity (absorbed-power) response, exact at any Q; the displacement response approaches it for Q ≫ 1",
+          "expr": "f0_Hz/Q"
         },
         {
           "key": "f_d_Hz",
           "symbol": "f_d",
           "unit": "Hz",
-          "meaning": "damped oscillation frequency f0 √(1 − 1/(4Q²))"
+          "meaning": "damped oscillation frequency f0 √(1 − 1/(4Q²))",
+          "expr": "f0_Hz*sqrt(1-1/(4*Q*Q))"
         },
         {
           "key": "x_m",
           "symbol": "x(t)",
           "unit": "m",
-          "meaning": "displacement at t, released from rest at x0"
+          "meaning": "displacement at t, released from rest at x0",
+          "expr": "x0_m*exp(-alpha_per_s*t_s)*(cos(2*pi*f_d_Hz*t_s)+alpha_per_s/(2*pi*f_d_Hz)*sin(2*pi*f_d_Hz*t_s))"
         },
         {
           "key": "envelope_m",
           "symbol": "A(t)",
           "unit": "m",
-          "meaning": "ring-down envelope at t: the amplitude a peak-detecting read-out sees"
+          "meaning": "ring-down envelope at t: the amplitude a peak-detecting read-out sees",
+          "expr": "abs(x0_m)*exp(-alpha_per_s*t_s)/sqrt(1-1/(4*Q*Q))"
         },
         {
           "key": "resolution_Hz",
           "symbol": "1/t_obs",
           "unit": "Hz",
-          "meaning": "frequency resolution of the record"
+          "meaning": "frequency resolution of the record",
+          "expr": "1/t_obs_s"
         },
         {
           "key": "linewidth_windowed_Hz",
           "symbol": "Δf_T",
           "unit": "Hz",
-          "meaning": "FWHM of the power spectrum of the truncated ring-down (rectangular window, near resonance)"
+          "meaning": "FWHM of the power spectrum of the truncated ring-down (rectangular window, near resonance)",
+          "method": "windowedLinewidthCatalogHz"
         },
         {
           "key": "windowed_excess",
           "symbol": "Δf_T/Δf − 1",
           "unit": "",
-          "meaning": "how much the finite record broadens the measured line"
+          "meaning": "how much the finite record broadens the measured line",
+          "expr": "linewidth_windowed_Hz/linewidth_Hz - 1"
         },
         {
           "key": "x_th_rms_m",
           "symbol": "√⟨x²⟩_th",
           "unit": "m",
-          "meaning": "thermal RMS displacement √(k_BT/k) of the mode (equipartition); not defined without T_K and k_N_per_m"
+          "meaning": "thermal RMS displacement √(k_BT/k) of the mode (equipartition); not defined without T_K and k_N_per_m",
+          "expr": "sqrt(k_B*T_K/k_N_per_m)"
         },
         {
           "key": "envelope_rms_m",
           "symbol": "√⟨A²⟩",
           "unit": "m",
-          "meaning": "RMS envelope with the thermal motion added: √(A² + 2k_BT/k), the Rice second moment; not defined without T_K and k_N_per_m"
+          "meaning": "RMS envelope with the thermal motion added: √(A² + 2k_BT/k), the Rice second moment; not defined without T_K and k_N_per_m",
+          "expr": "sqrt(envelope_m^2 + 2*x_th_rms_m^2)"
         }
       ],
       "conditions": [
