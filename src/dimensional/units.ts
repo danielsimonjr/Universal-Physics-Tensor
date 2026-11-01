@@ -64,6 +64,7 @@ import {
   unitExactScaleViaMathts,
   unitParserViaMathts,
 } from './mathts-unit-delegation.js';
+import { applyBitScaleOverride, tryMathtsA5Reading, uptRefusalReason } from './mathts-unit-wrapper.js';
 import { UNIT_DATA, type AffineRow as UnitDataAffineRow } from './unit-data.js';
 
 /** An affine temperature scale: a lone `degC` or `degF`. @public */
@@ -433,6 +434,18 @@ function localUnitReadings(text: string): UnitReading[] {
 function unitReadings(text: string): UnitReading[] {
   const t = text.trim();
   lastReadingSource = { text: t, kind: 'local' };
+  const refusal = uptRefusalReason(t);
+  if (refusal !== null) throw new UnitRefusedError(refusal);
+
+  const a5 = tryMathtsA5Reading(t);
+  if (a5 !== null) {
+    lastReadingSource = { text: t, kind: 'mathts' };
+    const affine = affineRow(t);
+    return [
+      reading(a5.exact, a5.dim, t, a5.cycles, affine?.id),
+    ];
+  }
+
   const readings = localUnitReadings(text);
   if (readings.length === 1) {
     const local = readings[0]!;
@@ -440,15 +453,19 @@ function unitReadings(text: string): UnitReading[] {
       lastReadingSource = { text: t, kind: 'mathts' };
       const core = Unit.exactScale(t);
       const scale = core === null ? local.scale : exactScaleToNumber(core);
+      const overridden = applyBitScaleOverride(t, local.exact, scale);
       return [
         {
           ...local,
           dim: mathtsParsedDimension(t, local.dim),
-          scale,
+          exact: overridden.exact,
+          scale: overridden.scale,
         },
       ];
     }
-    return [applyMathtsExactScale(t, local)];
+    const scaled = applyMathtsExactScale(t, local);
+    const overridden = applyBitScaleOverride(t, scaled.exact, scaled.scale);
+    return [{ ...scaled, exact: overridden.exact, scale: overridden.scale }];
   }
   return readings;
 }

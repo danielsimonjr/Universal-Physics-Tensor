@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Part A step A8 — wrapper refusal denylist.** `src/dimensional/mathts-unit-wrapper.ts` keeps `dB`, `dBm`, `dBW`, `Np`, `Mach`, `mach`, and `ton` on `UnitRefusedError` with the messages in `data/units.json`, including `ton` when MathTS parses the short ton. `src/dimensional/units.ts` consults `uptRefusalReason` before MathTS. `tests/dimensional/unit-wrapper-refusal.test.ts` pins the denylist and the source hook.
+
 - **Part A step A3 — unit file scale expressions read through MathTS.** `src/dimensional/unit-data.ts` calls `@danielsimonjr/mathts-core` `readScaleExpression` with UPT's resolver for `data/units.json` shared scales and registered constant spellings. `tests/dimensional/unit-data-delegation.test.ts` pins the source import; `tests/dimensional/unit-data.test.ts` snapshots every row's scale double.
 
 - **Part A step A4 — agreed unit scales from `Unit.exactScale`.** `src/dimensional/units.ts` and `mathts-unit-delegation.ts` take the MathTS exact scale when every symbol is admitted in UPT and MathTS and the numeric scale matches; `bit` stays on the local ln 2 row. `tests/dimensional/units-exact-scale-delegation.test.ts` pins the source call and the member/non-member predicate.
