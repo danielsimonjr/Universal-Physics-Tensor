@@ -13013,14 +13013,15 @@ modules:
     src/core/constants.ts:
       description: Canonical CODATA 2022 + SI-defined physical constants for UPT.
       externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - Unit
+            - exactScaleToNumber
         - package: "@danielsimonjr/mathts-functions"
           imports:
             - "* as mathtsConstants"
       nodeDependencies: []
-      internalDependencies:
-        - file: ./data-file.js
-          imports:
-            - checkedDataFile
+      internalDependencies: []
       exports:
         - C_SI
         - R_INF_SI

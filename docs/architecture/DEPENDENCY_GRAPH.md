@@ -5310,12 +5310,8 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber` |
 | `@danielsimonjr/mathts-functions` | `* as mathtsConstants` |
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./data-file.js` | `checkedDataFile` | Import |
 
 **Exports:**
 - Constants:
