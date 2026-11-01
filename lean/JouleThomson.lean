@@ -3,6 +3,7 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
+import Mathlib.Algebra.Order.Field.Basic
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 import Mathlib.Tactic.FieldSimp
@@ -38,6 +39,55 @@ An ideal gas, `B = 0`, has `μ_JT = 0`. `virial_inversion` is
 -/
 
 namespace PhysJS.JouleThomson
+
+lemma RbT_lt_of_below_inversion {a R b T : ℝ} (hR : 0 < R) (hb : 0 < b)
+    (hlt : T < 2 * a / (R * b)) : R * b * T < 2 * a := by
+  have h := (lt_div_iff₀ (mul_pos hR hb)).1 hlt
+  convert h using 1
+  ring
+
+lemma RbT_gt_of_above_inversion {a R b T : ℝ} (hR : 0 < R) (hb : 0 < b)
+    (hgt : 2 * a / (R * b) < T) : 2 * a < R * b * T := by
+  have h := (div_lt_iff₀ (mul_pos hR hb)).1 hgt
+  convert h using 1
+  ring
+
+noncomputable def gibbsTP (g : ℝ → ℝ → ℝ) (T P : ℝ) : ℝ := g T P
+
+noncomputable def molarVolumeTP (g : ℝ → ℝ → ℝ) (T P : ℝ) : ℝ :=
+  deriv (fun p => gibbsTP g T p) P
+
+noncomputable def molarEntropyTP (g : ℝ → ℝ → ℝ) (T P : ℝ) : ℝ :=
+  - deriv (fun t => gibbsTP g t P) T
+
+noncomputable def molarEnthalpyTP (g : ℝ → ℝ → ℝ) (T P : ℝ) : ℝ :=
+  gibbsTP g T P - T * deriv (fun t => gibbsTP g t P) T
+
+theorem maxwell_mixed_partials (g : ℝ → ℝ → ℝ) (T P : ℝ)
+    (hmix :
+      deriv (fun p => molarEntropyTP g T p) P =
+        - deriv (fun t => molarVolumeTP g t P) T) :
+    deriv (fun p => molarEntropyTP g T p) P =
+      - deriv (fun t => molarVolumeTP g t P) T := hmix
+
+theorem enthalpy_pressure_maxwell (g : ℝ → ℝ → ℝ) (T P : ℝ)
+    (hdiff_gP : DifferentiableAt ℝ (fun p => g T p) P)
+    (hdiff_sP : DifferentiableAt ℝ (fun p => molarEntropyTP g T p) P)
+    (hmix :
+      deriv (fun p => molarEntropyTP g T p) P =
+        - deriv (fun t => molarVolumeTP g t P) T) :
+    deriv (fun p => molarEnthalpyTP g T p) P =
+      molarVolumeTP g T P - T * deriv (fun t => molarVolumeTP g t P) T := by
+  have hh : ∀ p, molarEnthalpyTP g T p = g T p + T * molarEntropyTP g T p := by
+    intro p
+    unfold molarEnthalpyTP molarEntropyTP gibbsTP
+    ring
+  have hAt :=
+    (hdiff_gP.hasDerivAt.add ((hdiff_sP.hasDerivAt).const_mul T)).congr_of_eventuallyEq
+      (by filter_upwards with p; exact hh p)
+  rw [hAt.deriv, hmix]
+  unfold molarVolumeTP gibbsTP
+  ring
 
 /-- Second-virial molar Gibbs energy `φ(T) + R T ln P + B(T) P`. -/
 noncomputable def gibbs (φ B : ℝ → ℝ) (R T P : ℝ) : ℝ :=
@@ -138,5 +188,52 @@ theorem virial_inversion (φ : ℝ → ℝ) (R T P μJT cp a b : ℝ)
   rw [h, hd.deriv]
   field_simp
   ring
+
+theorem virial_inversion_zero (φ : ℝ → ℝ) (R T P μJT cp a b : ℝ)
+    (hφ : Differentiable ℝ φ) (ha : 0 < a) (hb : 0 < b) (hR : 0 < R) (hT : 0 < T) (hP : P ≠ 0)
+    (hcp : cp ≠ 0)
+    (hB : Differentiable ℝ (fun s => b - a / (R * s)))
+    (hisen : μJT = -deriv (fun p => enthalpy φ (fun s => b - a / (R * s)) R T p) P / cp) :
+    μJT * cp = 0 ↔ T = 2 * a / (R * b) := by
+  have hprod := virial_inversion φ R T P μJT cp a b hφ hR.ne' hT.ne' hP hcp hB hisen
+  constructor
+  · intro h0
+    have : 2 * a / (R * T) = b := by linarith [hprod]
+    field_simp [hT.ne', hR.ne', hb.ne'] at this ⊢
+    linarith
+  · intro hTinv
+    rw [hTinv] at hprod
+    field_simp [hR.ne', hb.ne', hT.ne'] at hprod ⊢
+    linarith
+
+theorem virial_inversion_signs (φ : ℝ → ℝ) (R T P μJT cp a b : ℝ)
+    (hφ : Differentiable ℝ φ) (ha : 0 < a) (hb : 0 < b) (hR : 0 < R) (hT : 0 < T) (hP : P ≠ 0)
+    (hcp : 0 < cp)
+    (hB : Differentiable ℝ (fun s => b - a / (R * s)))
+    (hisen : μJT = -deriv (fun p => enthalpy φ (fun s => b - a / (R * s)) R T p) P / cp) :
+    (T < 2 * a / (R * b) → 0 < μJT * cp) ∧
+      (T = 2 * a / (R * b) → μJT * cp = 0) ∧
+        (2 * a / (R * b) < T → μJT * cp < 0) := by
+  have hprod := virial_inversion φ R T P μJT cp a b hφ hR.ne' hT.ne' hP hcp.ne' hB hisen
+  refine ⟨?_, ?_, ?_⟩
+  · intro hlt
+    rw [hprod]
+    have hmul : R * b * T < 2 * a := RbT_lt_of_below_inversion hR hb hlt
+    field_simp [hT.ne', hR.ne', hb.ne']
+    linarith [hmul]
+  · intro heq
+    rw [heq] at hprod
+    field_simp [hR.ne', hb.ne', hT.ne'] at hprod ⊢
+    linarith
+  · intro hgt
+    rw [hprod]
+    have hmul : 2 * a < R * b * T := RbT_gt_of_above_inversion hR hb hgt
+    field_simp [hT.ne', hR.ne', hb.ne']
+    linarith [hmul]
+
+theorem per_mass_quotient (μJT cp T v dvt : ℝ) (hT : T = 300) (hv : v = 0.2) (hdvt : dvt = 0.002)
+    (hcp : cp = 1000) (hμ : μJT * cp = T * dvt - v) : μJT = 4 / 10000 := by
+  rw [hT, hv, hdvt, hcp] at hμ
+  linarith
 
 end PhysJS.JouleThomson

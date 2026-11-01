@@ -3,6 +3,8 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
+import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.Analysis.Calculus.LHopital
 import Mathlib.Analysis.Real.Pi.Bounds
 import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.Analysis.SpecialFunctions.Exp
@@ -10,7 +12,8 @@ import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import Mathlib.Topology.Algebra.InfiniteSum.Ring
+import lean.JohnsonNyquist
+import Mathlib.Topology.Order.LeftRightNhds
 
 /-!
 `be-164`. Bridge. The Planck spectrum.
@@ -39,7 +42,8 @@ this row.
 namespace PhysJS.PlanckSpectrum
 
 open Real
-open scoped Real
+open scoped Real Topology
+open Set Filter
 
 /-- Bose factor as a geometric series, for `x > 0`. -/
 theorem bose_factor (x : ℝ) (hx : 0 < x) :
@@ -139,5 +143,80 @@ theorem planck_eq (u mode E h ν c kB T : ℝ)
     exact hden
   rw [hu, hmode, hE']
   field_simp [hc, hden, hden']
+
+theorem mode_density (L ν c : ℝ) (hc : c ≠ 0) :
+    L ^ 3 * 8 * π * ν ^ 2 / c ^ 3 =
+      (L / (2 * π)) ^ 3 * 4 * π * (2 * π * ν / c) ^ 2 * (2 * π / c) * 2 := by
+  field_simp [hc, sq, mul_assoc, mul_left_comm, mul_comm]
+  ring
+
+theorem rayleigh_jeans_limit (ε : ℝ) :
+    Filter.Tendsto (fun x => ε / (exp x - 1) * x) (nhdsWithin 0 (Ioo 0 1)) (nhds ε) := by
+  have hsub : nhdsWithin 0 (Ioo 0 1) ≤ (nhdsWithin 0 {x : ℝ | x ≠ 0}) := by
+    refine nhdsWithin_mono 0 ?_
+    intro x hx
+    exact hx.1.ne'
+  have hy : Filter.Tendsto (fun x : ℝ => x / (exp x - 1)) (nhdsWithin 0 (Ioo 0 1)) (nhds 1) :=
+    PhysJS.JohnsonNyquist.tendsto_div_exp_sub_one.mono_left hsub
+  have h2 : Tendsto (fun x => ε / (exp x - 1) * x) (nhdsWithin 0 (Ioo 0 1)) (nhds (ε * 1)) :=
+    (hy.const_mul ε).congr fun x => by field_simp [sub_eq_add_neg]
+  simpa [one_mul] using h2
+
+theorem wien_limit (ν : ℝ) (hν : ν ≠ 0) :
+    Filter.Tendsto (fun x => exp x / (ν * (exp x - 1))) Filter.atTop (nhds (1 / ν)) := by
+  have ht : Tendsto (fun x : ℝ => exp x / (exp x - 1)) atTop (nhds 1) := by
+    have htail : Tendsto (fun x : ℝ => (exp x - 1)⁻¹) atTop (nhds 0) := by
+      have htop : Tendsto (fun x => exp x - 1) atTop atTop :=
+        tendsto_atTop_add_const_right atTop (-1) tendsto_exp_atTop
+      exact tendsto_inv_atTop_zero.comp htop
+    have ht1 : Tendsto (fun x => 1 + (exp x - 1)⁻¹) atTop (nhds 1) := by
+      simpa [add_comm] using htail.add_const 1
+    refine ht1.congr' ?_
+    filter_upwards [eventually_gt_atTop 0] with x hx
+    have hden : exp x - 1 ≠ 0 := by linarith [one_lt_exp_iff.2 hx]
+    field_simp [hden]
+    ring
+  convert ht.div_const ν using 1
+  ext x
+  field_simp [hν]
+
+theorem zero_point_fails (h ν kB T : ℝ) (hh : h ≠ 0) (hkB : 0 < kB) (hT : 0 < T)
+    (hx : 0 < h * ν / (kB * T)) :
+    h * ν / (exp (h * ν / (kB * T)) - 1) + h * ν / 2 ≠
+      h * ν / (exp (h * ν / (kB * T)) - 1) := by
+  intro hEq
+  have hpos : 0 < h * ν := by
+    have hkT : 0 < kB * T := mul_pos hkB hT
+    have hnum : 0 < h * ν := by
+      by_contra hnot
+      push_neg at hnot
+      have : h * ν / (kB * T) ≤ 0 := div_nonpos_of_nonpos_of_nonneg hnot hkT.le
+      linarith [hx]
+    exact hnum
+  linarith
+
+theorem one_polarization_fails (u h ν c kB T : ℝ) (hh : h ≠ 0) (hc : c ≠ 0) (hkB : 0 < kB) (hT : 0 < T)
+    (hx : 0 < h * ν / (kB * T))
+    (hmode : u = (4 * π * ν ^ 2 / c ^ 3) * (h * ν / (exp (h * ν / (kB * T)) - 1))) :
+    u * (exp (h * ν / (kB * T)) - 1) * c ^ 3 ≠ 8 * π * h * ν ^ 3 := by
+  intro hEq
+  have hden : exp (h * ν / (kB * T)) - 1 ≠ 0 := by
+    have hgt : 1 < exp (h * ν / (kB * T)) := (one_lt_exp_iff).2 hx
+    linarith
+  have hνnz : ν ≠ 0 := by
+    intro hν0
+    rw [hν0, mul_zero, zero_div] at hx
+    exact not_lt.mpr le_rfl hx
+  have hEq' : (4 : ℝ) * π * h * ν ^ 3 = (8 : ℝ) * π * h * ν ^ 3 := by
+    calc
+      (4 : ℝ) * π * h * ν ^ 3 =
+          u * (exp (h * ν / (kB * T)) - 1) * c ^ 3 := by
+        rw [hmode]
+        field_simp [hc, hden]
+      _ = (8 : ℝ) * π * h * ν ^ 3 := hEq
+  have : (4 : ℝ) = 8 := by
+    apply mul_left_cancel₀ (mul_ne_zero (mul_ne_zero Real.pi_ne_zero hh) (pow_ne_zero 3 hνnz))
+    linarith [hEq']
+  norm_num at this
 
 end PhysJS.PlanckSpectrum

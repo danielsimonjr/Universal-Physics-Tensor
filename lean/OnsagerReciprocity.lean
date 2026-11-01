@@ -78,9 +78,42 @@ lemma deriv_force2 (L11 L12 L22 X1 X2 : ℝ) :
   refine hsum.congr_deriv ?_
   ring
 
-/-- Kinetic coefficient: the initial slope of `⟨A_a(t) A_b(0)⟩` for jump rates `W`. -/
+/-- Kinetic coefficient: equilibrium regression sum. -/
 noncomputable def kinetic {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : ι → ι → ℝ) (A_a A_b : ι → ℝ) : ℝ :=
   ∑ i, ∑ j, π i * A_b i * W i j * A_a j
+
+noncomputable def obsGenerator {ι : Type*} [Fintype ι] (W : ι → ι → ℝ) (f : ι → ℝ) (i : ι) : ℝ :=
+  ∑ j, W i j * (f j - f i)
+
+def rowSumZero {ι : Type*} [Fintype ι] (W : ι → ι → ℝ) : Prop :=
+  ∀ i, ∑ j, W i j = 0
+
+theorem obsGenerator_eq_sum {ι : Type*} [Fintype ι] (W : ι → ι → ℝ) (f : ι → ℝ) (i : ι)
+    (hrow : ∑ j, W i j = 0) :
+    obsGenerator W f i = ∑ j, W i j * f j := by
+  unfold obsGenerator
+  calc
+    ∑ j, W i j * (f j - f i) = ∑ j, (W i j * f j - W i j * f i) := by
+      refine Finset.sum_congr rfl fun j _ => ?_
+      ring
+    _ = ∑ j, W i j * f j - ∑ j, W i j * f i := by
+      rw [Finset.sum_sub_distrib]
+    _ = ∑ j, W i j * f j - (∑ j, W i j) * f i := by
+      rw [Finset.sum_mul]
+    _ = ∑ j, W i j * f j := by rw [hrow, zero_mul, sub_zero]
+
+theorem regression_eq_kinetic {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : ι → ι → ℝ) (A_a A_b : ι → ℝ)
+    (hrow : rowSumZero W) :
+    ∑ i, π i * A_b i * obsGenerator W A_a i = kinetic π W A_a A_b := by
+  unfold kinetic
+  refine Finset.sum_congr rfl fun i _ => ?_
+  calc
+    π i * A_b i * obsGenerator W A_a i = π i * A_b i * ∑ j, W i j * A_a j := by
+      rw [obsGenerator_eq_sum W A_a i (hrow i)]
+    _ = ∑ j, π i * A_b i * W i j * A_a j := by
+      rw [Finset.mul_sum]
+      refine Finset.sum_congr rfl fun j _ => ?_
+      ring
 
 /-- Detailed balance makes the kinetic coefficients symmetric, `L_ab = L_ba`. -/
 theorem onsager_eq {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : ι → ι → ℝ)
@@ -94,13 +127,59 @@ theorem onsager_eq {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : ι → ι �
     _ = (π j * W j i) * A_b i * A_a j := by rw [h]
     _ = π j * A_a j * W j i * A_b i := by ring
 
-/-- A three-state cycle without detailed balance has `L_ab ≠ L_ba`. -/
+/-- Without detailed balance on a proper generator, `L_ab ≠ L_ba`. -/
+noncomputable def cycleGenerator (i j : Fin 3) : ℝ :=
+  if j = i then (-1 : ℝ) else if j = i + 1 then 1 else 0
+
 theorem not_without_balance :
-    kinetic (fun _ : Fin 3 => (1 : ℝ)) (fun i j => if j = i + 1 then 1 else 0)
-        (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) ≠
-      kinetic (fun _ : Fin 3 => (1 : ℝ)) (fun i j => if j = i + 1 then 1 else 0)
-        (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) := by
-  simp [kinetic, Fin.sum_univ_three]
+    kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+        (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) = 0 ∧
+      kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+          (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) = 1 / 3 ∧
+      kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+          (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) ≠
+        kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+          (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) := by
+  have h0 : kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+      (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) = 0 := by
+    norm_num [kinetic, cycleGenerator, Fin.sum_univ_three]
+  have h1 : kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+      (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) = 1 / 3 := by
+    norm_num [kinetic, cycleGenerator, Fin.sum_univ_three]
+  exact ⟨h0, h1, by linarith [h0, h1]⟩
+
+noncomputable def dissipationTwo (L11 L12 L21 L22 X1 X2 : ℝ) : ℝ :=
+  (1 / 2) * L11 * X1 ^ 2 + (1 / 2) * L12 * X1 * X2 + (1 / 2) * L21 * X1 * X2 +
+    (1 / 2) * L22 * X2 ^ 2
+
+noncomputable def flux1 (L11 L12 A X1 X2 : ℝ) : ℝ := L11 * X1 + L12 * X2 + A * X2
+
+noncomputable def flux2 (L21 L22 A X1 X2 : ℝ) : ℝ := L21 * X1 + L22 * X2 - A * X1
+
+theorem entropy_blind (L11 L12 L21 L22 A X1 X2 : ℝ) (hA : A ≠ 0) :
+    flux1 L11 L12 A X1 X2 * X1 + flux2 L21 L22 A X1 X2 * X2 =
+      L11 * X1 ^ 2 + L12 * X1 * X2 + L21 * X1 * X2 + L22 * X2 ^ 2 ∧
+      (X2 ≠ 0 → flux1 L11 L12 A X1 X2 ≠ L11 * X1 + L12 * X2) ∧
+      (X1 ≠ 0 → flux2 L21 L22 A X1 X2 ≠ L21 * X1 + L22 * X2) := by
+  refine ⟨?_, ?_, ?_⟩
+  · unfold flux1 flux2
+    ring
+  · intro hx2 hEq
+    have : A * X2 = 0 := by unfold flux1 at hEq; linarith
+    exact hA ((mul_eq_zero.mp this).resolve_right hx2)
+  · intro hx1 hEq
+    have : A * X1 = 0 := by unfold flux2 at hEq; linarith
+    exact hA ((mul_eq_zero.mp this).resolve_right hx1)
+
+noncomputable def swapGenerator (i j : Fin 2) : ℝ :=
+  if j = i then (-1 : ℝ) else 1
+
+theorem fin_two_witness :
+    kinetic (fun _ : Fin 2 => (1 / 2 : ℝ)) swapGenerator
+        (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) = 1 / 2 ∧
+      kinetic (fun _ : Fin 2 => (1 / 2 : ℝ)) swapGenerator
+          (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) = 1 / 2 := by
+  norm_num [kinetic, swapGenerator, Fin.sum_univ_two]
 
 /-- Mixed partials of `Φ` are both `L12`, the macroscopic form of `L12 = L21`. -/
 theorem potential_symmetric (L11 L12 L22 X1 X2 : ℝ) :
@@ -144,13 +223,29 @@ theorem potential_symmetric (L11 L12 L22 X1 X2 : ℝ) :
       exact (hlin.add hconst).congr_deriv (by ring)
     exact hderiv.deriv
 
-/-- An antisymmetric cross term does not produce entropy, and it does split the fluxes. -/
-theorem entropy_blind (A X1 X2 : ℝ) (hA : A ≠ 0) :
-    (A * X2) * X1 + (-A * X1) * X2 = 0 ∧ A ≠ -A := by
-  refine ⟨by ring, ?_⟩
-  intro hEq
-  have : (2 : ℝ) * A = 0 := by linarith
-  exact hA (by linarith)
+theorem potential_two_cross (L11 L12 L21 L22 X1 X2 : ℝ) :
+    deriv (fun y => deriv (fun x => dissipationTwo L11 L12 L21 L22 x y) X1) X2 =
+        (L12 + L21) / 2 ∧
+      ((L12 + L21) / 2 = L12 ↔ L12 = L21) := by
+  have hfun : ∀ x y, dissipationTwo L11 L12 L21 L22 x y =
+      dissipation L11 ((L12 + L21) / 2) L22 x y := by
+    intro x y
+    unfold dissipationTwo dissipation
+    ring
+  have h1 := (potential_symmetric L11 ((L12 + L21) / 2) L22 X1 X2).1
+  have hderiv : deriv (fun y => deriv (fun x => dissipationTwo L11 L12 L21 L22 x y) X1) X2 =
+      (L12 + L21) / 2 := by
+    have hEq : (fun y => deriv (fun x => dissipationTwo L11 L12 L21 L22 x y) X1) =
+        fun y => deriv (fun x => dissipation L11 ((L12 + L21) / 2) L22 x y) X1 := by
+      funext y
+      congr 1
+      ext x
+      rw [hfun x y]
+    rw [hEq, h1]
+  refine And.intro hderiv ?_
+  constructor
+  · intro h; linarith
+  · intro h; rw [h]; ring
 
 /-- The thermoelectric pair of `be-73` uses this equality as `R.onsager`.
 

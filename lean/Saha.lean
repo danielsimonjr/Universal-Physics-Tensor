@@ -3,6 +3,7 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
+import Mathlib.Algebra.Order.Field.Basic
 import lean.ThermalDeBroglie
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic.FieldSimp
@@ -131,5 +132,38 @@ theorem spin_not_included (nQ I kB T : ℝ) (hkB : kB ≠ 0) (hT : T ≠ 0)
   have h2 : (2 : ℝ) * nQ = 1 * nQ := by simpa [one_mul] using h1
   have h3 : (2 : ℝ) = 1 := mul_right_cancel₀ hnQ h2
   norm_num at h3
+
+/-- Translational partition function per unit volume, `g / λ³`. -/
+noncomputable def partitionPerVolume (g lam : ℝ) : ℝ :=
+  g / lam ^ 3
+
+theorem chemical_potential_eq (E n g lam kB T μ : ℝ)
+    (hn : 0 < n) (hg : 0 < g) (hlam : 0 < lam) (_hkB : 0 < kB) (_hT : 0 < T)
+    (hμ : μ = E + kB * T * log (n * lam ^ 3 / g)) :
+    μ = E + kB * T * log (n / partitionPerVolume g lam) := by
+  rw [hμ, partitionPerVolume]
+  have hp : 0 < g / lam ^ 3 := by positivity
+  have hEq : n * lam ^ 3 / g = n / (g / lam ^ 3) := by field_simp [hlam.ne', hg.ne']
+  rw [hEq, log_div hn.ne' hp.ne']
+
+theorem ionization_balance (K nI nA ne : ℝ) (hK : K = nI * ne / nA) (hne : ne ≠ 0) :
+    nI / nA = K / ne := by
+  rw [hK]
+  field_simp [hne]
+
+theorem spin_factor_doubles (K Kspin gI ge gA m kB T I hpl : ℝ)
+    (hgA : gA ≠ 0) (hg : gI * ge = 2 * gA)
+    (hK : K = gI * ge / gA * (2 * π * m * kB * T / hpl ^ 2) ^ ((3 : ℝ) / 2) * exp (-I / (kB * T)))
+    (hKspin : Kspin = (2 * π * m * kB * T / hpl ^ 2) ^ ((3 : ℝ) / 2) * exp (-I / (kB * T))) :
+    K = 2 * Kspin := by
+  rw [hK, hKspin, hg]
+  field_simp [hgA]
+
+theorem heavy_wavelength_cancels (lam : ℝ) (hlam : 0 < lam) : (lam / lam) ^ 3 = 1 := by
+  field_simp [hlam.ne']
+
+theorem zero_ionization_energy (K gI ge gA thermal : ℝ) (hK : K = gI * ge / gA * thermal * exp (0)) :
+    K = gI * ge / gA * thermal := by
+  rw [hK, exp_zero, mul_one]
 
 end PhysJS.Saha
