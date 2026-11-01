@@ -39,7 +39,7 @@ namespace PhysJS.NernstGibbs
 theorem standard_potential_of_work (E0 dG0 n F : ℝ) (hnF : n * F ≠ 0)
     (hwork0 : dG0 = -n * F * E0) :
     E0 = -dG0 / (n * F) := by
-  field_simp [hnF]
+  apply eq_div_of_mul_eq hnF
   linarith [hwork0]
 
 theorem standard_potential (E E0 R T n F Q dG dG0 : ℝ)
@@ -52,7 +52,7 @@ theorem standard_potential (E E0 R T n F Q dG dG0 : ℝ)
   have hnF : n * F ≠ 0 := mul_ne_zero hn hF
   have hG : dG = dG0 := by rw [hadd, hlogQ, mul_zero, add_zero]
   have : E = -dG / (n * F) := by
-    field_simp [hnF]
+    apply eq_div_of_mul_eq hnF
     linarith [hwork]
   rw [this, hG, hE0]
 
@@ -85,11 +85,10 @@ theorem nernst_from_reaction_gibbs {ι : Type*} (s : Finset ι) (ν μ μ0 a : �
   have hadd := reaction_gibbs s ν μ μ0 a R T Q dG dG0 hμ hlogQ hdG hdG0
   have hnF : n * F ≠ 0 := mul_ne_zero hn hF
   have hE : E = -dG / (n * F) := by
-    field_simp [hnF]
+    apply eq_div_of_mul_eq hnF
     linarith [hwork]
   rw [hE, hadd, hE0]
   field_simp [hnF]
-  ring
 
 /-- Nernst equation from ideal activities, and the same potential with `R / F = k_B / e`.
 
@@ -172,8 +171,8 @@ theorem equilibrium_voltage_chain {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι
     E = 0 := by
   have hnF : n * F ≠ 0 := mul_ne_zero hn hF
   have hstd : dG0 = -n * F * E0 := by
-    field_simp [hnF] at hE0 ⊢
-    linarith
+    rw [hE0]
+    field_simp [hnF]
   have hE := nernst_from_reaction_gibbs s ν μ μ0 a E E0 R T n F Q dG dG0 hn hF hμ hlogQ hdG hdG0
     hwork hE0
   have hE0K := standard_from_gibbs s ν μ μ0 a R T K dG0 n F E0 hT hR hK hn hF hact hμ hlogK hdG0

@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import lean.GibbsIsotherm
+import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Analysis.Calculus.Deriv.Add
 import Mathlib.Analysis.Calculus.Deriv.Inv
 import Mathlib.Analysis.Calculus.Deriv.Mul
@@ -141,10 +142,8 @@ theorem delta_cp_slope_ne_constant_reference (dH0 dCp R T0 T : ℝ)
   unfold kirchhoffEnthalpy
   intro h
   have hden : R * T ^ 2 ≠ 0 := mul_ne_zero hR (pow_ne_zero 2 hT)
-  have heq : dH0 + dCp * (T - T0) = dH0 := by
-    field_simp [hden] at h
-    linarith
-  have hprod : dCp * (T - T0) = 0 := by linarith
+  have heq : dH0 + dCp * (T - T0) = dH0 := (div_left_inj' hden).mp h
+  have hprod : dCp * (T - T0) = 0 := by linarith [heq]
   rcases mul_eq_zero.mp hprod with h0 | h1
   · exact hCp h0
   · exact hTT0 (sub_eq_zero.mp h1)
@@ -158,7 +157,7 @@ theorem delta_cp_counterexample (K : ℝ → ℝ) (dH0 dS R T0 T dCp : ℝ)
   have hconst := slope_of_log K dH0 dS R T hR hT hlog
   intro hvar
   exact delta_cp_slope_ne_constant_reference dH0 dCp R T0 T hR hT hCp hTT0
-    (HasDerivAt.unique hvar hconst)
+    (hvar.unique hconst)
 
 theorem slope_unit_enthalpy (R : ℝ) (hR : R ≠ 0) :
     R / (R * (1 : ℝ) ^ 2) = 1 := by
