@@ -23874,8 +23874,8 @@
       "src/dimensional/units.ts"
     ],
     "tests/dimensional/unit-wrapper-cycles.test.ts": [
-      "src/bridges/evaluator-inputs.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/evaluator-inputs.ts",
       "src/dimensional/units.ts"
     ],
     "tests/dimensional/unit-wrapper-refusal.test.ts": [

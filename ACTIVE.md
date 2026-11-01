@@ -32,6 +32,63 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
   #568/#569 hardcode `H0_SI` as `67.4 * 3.240779289444365e-20`. Derive it from MathTS `Unit.exactScale('km/s/Mpc')`. Confirm Part B deleted the per-case files and the loader/directory gate refuses new ones. Attach CI on #562 and #569.
   Done: `H0_SI` is `67.4 * exactScaleNumber('km/s/Mpc')`. The six per-case files are gone. `isForbiddenCaseModule` refuses those names and any new `case-*.ts`; the directory test applies it. CI attach is a push of this commit.
 
+- [x] Attach GitHub Actions on stacked MathTS PRs that cannot form a merge commit.
+  `pull_request` CI needs a mergeable merge. #562/#568/#569 are CONFLICTING with their parents (architecture file-count claims). Add a `cursor/mathts-*` push trigger and run the docs jobs on those pushes so the branch HEAD is checked.
+  Done: `ci.yml` push.branches includes `cursor/mathts-*`; code-docs and architecture-docs jobs run on those refs. The pin failed on A2 while `push.branches` was `[master]` only.
+
+- [x] Review and fix the stacked MathTS units/cases PRs (#560–#569) against the plan.
+  #568 hardcodes `H0_SI` as `67.4 * 3.240779289444365e-20` instead of the exact-scale path `convertValue` delegates to. Derive it from MathTS `Unit.exactScale('km/s/Mpc')` (core cannot import `units.ts`). Confirm Part B deleted the per-case files and the directory/loader gate refuses new ones. Attach CI on #562 and #569.
+  Done: `H0_SI` is `67.4 * exactScaleNumber('km/s/Mpc')` via MathTS `Unit.exactScale` + `exactScaleToNumber` (the pair `tryMathtsA5Reading` uses). `convertValue` from `core/` is a layer-order violation. The owner test failed on the hardcoded factor, then passed; a mutation that restored the factor failed again. Part B confirmation and CI attaches continue on #562/#569.
+
+  Done: `ci.yml` push.branches includes `cursor/mathts-*`; code-docs and architecture-docs jobs run on those refs. `tests/tools/ci-workflows.test.ts` failed on `[master]` only, then passed.
+
+- [x] Attach CI on stacked MathTS A2 PR #562 after architecture-claim refresh.
+  Empty re-run commits did not start Actions. A real test commit (A2 rational addScales positive control and file-boundary pin) starts the workflow.
+
+- [x] Merge master (`8d22f36f`, #563) into PR #566 and keep both sides of the ledger.
+  #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Joule–Thomson/Planck/Saha/Onsager rows.
+  Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.
+
+- [x] Close the remaining Saha Lean goals CI rejected on PR #566.
+  `unequal_heavy_wavelength` left `8 = 2^3`; `saha_high_T_exp` had `𝓝 (exp 0)` instead of `𝓝 1`; `saha_high_T_prefactor` had `𝓝 (c * 1)` instead of `𝓝 c`.
+  Done: `norm_num` after the wavelength cancellation; `simpa [exp_zero]` on the exponential limit; `simpa` on the constant-times-one neighbourhood.
+
+- [x] Review and fix UPT PR #566 (be-163, be-164, be-168, be-170).
+  The PR implements the thermo-stat half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems; stated limits (Rayleigh–Jeans, Wien, JT inversion) are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: virial `B` is `DifferentiableAt` at `T`; Rayleigh–Jeans and Wien are `u` limits; `μ` is derived from `Z₁`; inversion, `a = 0`, Saha `T → 0/∞`, and reverse-cycle Onsager are theorems.
+
+- [x] Merge master (`8d22f36f`, #563) into PR #565 and keep both sides of the ledger.
+  #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Eyring/van 't Hoff/Nernst rows.
+  Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.
+
+- [x] Close the Lean goals CI rejected on the Nernst work-law and Kirchhoff counterexample (PR #565).
+  `field_simp` followed by `linarith` or `ring` left no goals, or left a non-linear remainder, on the new one-work-law and Kirchhoff proofs.
+  Done: the work-law rearrangement uses `eq_div_of_mul_eq`; the Kirchhoff inequality uses `div_left_inj'`; uniqueness of the two slopes uses `HasDerivAt.unique`. After `field_simp` the Nernst identity is `-(ΔG° + R T ln Q) = −ΔG° − R T ln Q`, which `ring` closes.
+
+- [x] Review and fix UPT PR #565 (be-148, be-149, be-151).
+  The PR implements the kinetics half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems; stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: one Nernst work law with `E° = −ΔG°/(n F)`; Kirchhoff `ΔH(T) = ΔH₀ + ΔC_p(T−T₀)` is the van 't Hoff counterexample; decade/`n` identities and the `exp(−1)` gap are theorems.
+
+- [x] Merge master (`8d22f36f`, #563) into PR #564 and keep both sides of the ledger.
+  #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Biot/Nusselt/Sherwood rows.
+  Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.
+
+- [x] Close the Lean goal CI rejected on `biot_unit_profile` (PR #564).
+  After `rw [hderiv.deriv]`, the Robin conjunct is `1 = unitWall 1`. `norm_num` does not unfold `unitWall`.
+  Done: unfold `unitWall` before `norm_num` so the unit wall `T(x) = 2 − x` closes.
+
+- [x] Review and fix UPT PR #564 (be-156, be-157, be-159).
+  The PR implements the heat/mass half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: the internal-drop sign is a theorem from the Fourier/Robin route; the unit wall is the profile `T(x) = 2 − x`; `Nu = 1` does not give `Bi = 1`.
+
+- [x] Close the Lean goal CI rejected on `le_one_of_pr_eq_sc`, and name `lewis_ratio` in the be-158 catalog citation (PR #563).
+  `rw [hLe, hEq, div_self hPr]` rewrote `Pr` to `Sc` and then looked for `Pr / Pr`. The catalog citation still said "Lewis number is not this row" after the nested property landed.
+  Done: `div_self` uses `Sc ≠ 0` transported from `Pr ≠ 0`; the citation and notes name `PhysJS.Schmidt.lewis_ratio` as the corollary, not a second target.
+
+- [x] Review and fix UPT PR #563 (be-154, be-155, be-158).
+  The PR implements the transport half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems (especially be-158 Lewis); stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: `schmidt_eq` covers only `Sc ρ D = μ`; `Le = Sc / Pr` is the nested `lewis_ratio` property; the shared corollary is used at a general advection speed; the missing Prandtl/Reynolds/Schmidt limits are theorems.
+
 - [x] Bring the architecture documents to the architecture-docs convention: `repo-tools check . --docs=docs/architecture` exits 0 on `master` (the fleet docs carry, 2026-10-23).
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.
@@ -659,3 +716,7 @@ These are not authorized engineering until the owner rules. Publishing to npm is
 - [ ] Owner only, and not completable from a session: a Zenodo DOI for the composition research note needs the owner's Zenodo account; the session has no credential for it (2026-10-09). Do not send it out for physicist review. That send was a human-reviewer gate and is removed.
 
 Not a task: the Einstein-Cartan Newtonian limit and the Higgs-to-vacuum-energy residue. The repository has no derivation for either. Implementing either would fabricate physics. They are not gates.
+
+- [x] Restore #561 mergeability with master after the be-* landings.
+  `CHANGELOG.md` `[Unreleased]` on this branch replaced `### Documented` with the A1 Added bullet, so it conflicts with master's `### Fixed` be-163/148/Biot/be-158 entries. Take master's Unreleased text and put the A1 bullet in `### Added`.
+  Done: Unreleased now carries master's Fixed entries and the A1 Added bullet. This file matches master plus this row at the end, so the 3-way merge with `origin/master` is clean.
