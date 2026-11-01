@@ -197,7 +197,7 @@ Each pull request leaves `runAppliedCase(id, inputs)` returning the same outputs
 
 2. **B2 — `case-skin-depth` data moves.** The declarative fields go into `data/applied-cases.json`. `skin-depth.ts` keeps `maxwellDepthFactor` and the `run` function, and exports the assembled `SKIN_DEPTH_CASE` from the catalog record plus that function. A test asserts the assembled object's parameters, checks, and examples equal the projection B1 built, then B1's projection for this id is deleted so the JSON is the only copy. Behavior tests stay on `runAppliedCase` and on `maxwellDepthFactor`. Red first: the equality assertion fails while the JSON record is absent.
 
-3. **B3 — `case-kepler-rv` data moves.** Same shape as B2. `JULIAN_YEAR_S` stays a `convertValue` call. The be-52 link is a field on the JSON record. `tests/cases/unit-table-constants.test.ts` still imports the year from this module until B9.
+3. **B3 — `case-kepler-rv` data moves.** Same shape as B2. `JULIAN_YEAR_S` stays a `convertValue` call. The be-52 link is a field on the JSON record. `tests/cases/unit-table-constants.test.ts` still imports the year from this module until B10.
 
 4. **B4 — `case-damped-resonator` data moves.** `windowedLinewidthHz` and the threshold constants' values stay. The constants' values are the check bounds in the JSON. The test that imports `MAX_*` reads them from the assembled case in this same pull request.
 
