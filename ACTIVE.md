@@ -20,6 +20,14 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Close the Lean goal CI rejected on `le_one_of_pr_eq_sc`, and name `lewis_ratio` in the be-158 catalog citation (PR #563).
+  `rw [hLe, hEq, div_self hPr]` rewrote `Pr` to `Sc` and then looked for `Pr / Pr`. The catalog citation still said "Lewis number is not this row" after the nested property landed.
+  Done: `div_self` uses `Sc ≠ 0` transported from `Pr ≠ 0`; the citation and notes name `PhysJS.Schmidt.lewis_ratio` as the corollary, not a second target.
+
+- [x] Review and fix UPT PR #563 (be-154, be-155, be-158).
+  The PR implements the transport half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems (especially be-158 Lewis); stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: `schmidt_eq` covers only `Sc ρ D = μ`; `Le = Sc / Pr` is the nested `lewis_ratio` property; the shared corollary is used at a general advection speed; the missing Prandtl/Reynolds/Schmidt limits are theorems.
+
 - [x] Bring the architecture documents to the architecture-docs convention: `repo-tools check . --docs=docs/architecture` exits 0 on `master` (the fleet docs carry, 2026-10-23).
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.
