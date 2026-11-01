@@ -115,6 +115,11 @@ theorem regression_eq_kinetic {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : �
       refine Finset.sum_congr rfl fun j _ => ?_
       ring
 
+/-- Zero rates give every kinetic coefficient `0`. -/
+theorem zero_rates {ι : Type*} [Fintype ι] (π A_a A_b : ι → ℝ) :
+    kinetic π (fun _ _ => (0 : ℝ)) A_a A_b = 0 := by
+  simp [kinetic]
+
 /-- Detailed balance makes the kinetic coefficients symmetric, `L_ab = L_ba`. -/
 theorem onsager_eq {ι : Type*} [Fintype ι] (π : ι → ℝ) (W : ι → ι → ℝ)
     (hdb : ∀ i j, π i * W i j = π j * W j i) (A_a A_b : ι → ℝ) :
@@ -147,6 +152,34 @@ theorem not_without_balance :
       (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) = 1 / 3 := by
     norm_num [kinetic, cycleGenerator, Fin.sum_univ_three]
   exact ⟨h0, h1, by linarith [h0, h1]⟩
+
+/-- Reverse cycle: `W_ij = 1` for `j = i + 2`, diagonal `−1`. -/
+noncomputable def reverseCycleGenerator (i j : Fin 3) : ℝ :=
+  if j = i then (-1 : ℝ) else if j = i + 2 then 1 else 0
+
+/-- Reversing the three-state cycle negates `L_ab − L_ba`. -/
+theorem reverse_cycle_negates :
+    kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) reverseCycleGenerator
+        (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) -
+      kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) reverseCycleGenerator
+        (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) =
+      -(kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+          (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) -
+        kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+          (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0)) := by
+  have hfwd0 : kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+      (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) = 0 := by
+    norm_num [kinetic, cycleGenerator, Fin.sum_univ_three]
+  have hfwd1 : kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) cycleGenerator
+      (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) = 1 / 3 := by
+    norm_num [kinetic, cycleGenerator, Fin.sum_univ_three]
+  have hrev0 : kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) reverseCycleGenerator
+      (fun i => if i = 0 then 1 else 0) (fun i => if i = 1 then 1 else 0) = 1 / 3 := by
+    norm_num [kinetic, reverseCycleGenerator, Fin.sum_univ_three]
+  have hrev1 : kinetic (fun _ : Fin 3 => (1 / 3 : ℝ)) reverseCycleGenerator
+      (fun i => if i = 1 then 1 else 0) (fun i => if i = 0 then 1 else 0) = 0 := by
+    norm_num [kinetic, reverseCycleGenerator, Fin.sum_univ_three]
+  linarith [hfwd0, hfwd1, hrev0, hrev1]
 
 noncomputable def dissipationTwo (L11 L12 L21 L22 X1 X2 : ℝ) : ℝ :=
   (1 / 2) * L11 * X1 ^ 2 + (1 / 2) * L12 * X1 * X2 + (1 / 2) * L21 * X1 * X2 +

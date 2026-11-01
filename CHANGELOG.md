@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **be-163/164/168/170 stated limits are theorems, not comments.** The virial `B = b − a/(R T)` is differentiable at the working `T`, not on all of `ℝ`. Rayleigh–Jeans is `u → (8 π ν²/c³) k_B T` and Wien is `u / ((8 π h ν³/c³) exp(−x)) → 1`. The Saha chemical potential is derived from `Z₁ = g V λ⁻³ exp(−E/(k_B T))`. Maxwell's relation comes from mixed partials; `W = 0` and the reversed cycle are Onsager limits.
+
 ### Documented
 
 - **Session 14, the gravitational-wave search sentence.** The line in `docs/persona-sessions/2026-10-06-relativity-astro-bridges-session-14.md` that put `gravitational wave` on the exit-1 search list is struck. Re-measured 2026-11-01 on published `universal-physics-tensor@8.0.0` (with `@danielsimonjr/mathts-functions@0.68.0`, because a fresh install that resolves 0.68.5 does not start): `upt search "gravitational wave"` exits 0 and names `gravitational-wave-speed`. The same re-measurement is the addendum in that file. It files #525, #526, #527, #528, and #529. No `src/` change. The proposal counts in that file stay 6 standard and 5 cross-domain.

@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Review and fix UPT PR #566 (be-163, be-164, be-168, be-170).
+  The PR implements the thermo-stat half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems; stated limits (Rayleigh–Jeans, Wien, JT inversion) are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: virial `B` is `DifferentiableAt` at `T`; Rayleigh–Jeans and Wien are `u` limits; `μ` is derived from `Z₁`; inversion, `a = 0`, Saha `T → 0/∞`, and reverse-cycle Onsager are theorems.
+
 - [x] Bring the architecture documents to the architecture-docs convention: `repo-tools check . --docs=docs/architecture` exits 0 on `master` (the fleet docs carry, 2026-10-23).
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.

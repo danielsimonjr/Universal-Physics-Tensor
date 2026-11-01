@@ -13,6 +13,7 @@ import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import lean.JohnsonNyquist
+import Mathlib.Topology.Algebra.InfiniteSum.Ring
 import Mathlib.Topology.Order.LeftRightNhds
 
 /-!
@@ -35,8 +36,10 @@ weights `e^{−n x}`, `x = h ν / (k_B T)`:
 
 `planck_eq` multiplies that mean energy by the mode density `8 π ν² / c³`.
 The quantized levels are the premise. The mode density, two polarizations
-in a volume, is a hypothesis. The integral over frequency is `be-165`, not
-this row.
+in a volume, is a hypothesis. `rayleigh_jeans_limit` is
+`u → (8 π ν² / c³) k_B T` as `x → 0⁺`. `wien_limit` is
+`u / ((8 π h ν³ / c³) exp(−x)) → 1` as `x → ∞`. The integral over
+frequency is `be-165`, not this row.
 -/
 
 namespace PhysJS.PlanckSpectrum
@@ -150,35 +153,44 @@ theorem mode_density (L ν c : ℝ) (hc : c ≠ 0) :
   field_simp [hc, sq, mul_assoc, mul_left_comm, mul_comm]
   ring
 
-theorem rayleigh_jeans_limit (ε : ℝ) :
-    Filter.Tendsto (fun x => ε / (exp x - 1) * x) (nhdsWithin 0 (Ioo 0 1)) (nhds ε) := by
-  have hsub : nhdsWithin 0 (Ioo 0 1) ≤ (nhdsWithin 0 {x : ℝ | x ≠ 0}) := by
+/-- `(e^x − 1)/x → 1` as `x → 0⁺`, so the mean energy is `k_B T` in that limit. -/
+theorem rayleigh_jeans_occupation :
+    Tendsto (fun x : ℝ => x / (exp x - 1)) (nhdsWithin 0 (Ioo 0 1)) (nhds 1) := by
+  have hsub : nhdsWithin 0 (Ioo 0 1) ≤ nhdsWithin 0 {x : ℝ | x ≠ 0} := by
     refine nhdsWithin_mono 0 ?_
     intro x hx
     exact hx.1.ne'
-  have hy : Filter.Tendsto (fun x : ℝ => x / (exp x - 1)) (nhdsWithin 0 (Ioo 0 1)) (nhds 1) :=
-    PhysJS.JohnsonNyquist.tendsto_div_exp_sub_one.mono_left hsub
-  have h2 : Tendsto (fun x => ε / (exp x - 1) * x) (nhdsWithin 0 (Ioo 0 1)) (nhds (ε * 1)) :=
-    (hy.const_mul ε).congr fun x => by field_simp [sub_eq_add_neg]
-  simpa [one_mul] using h2
+  exact PhysJS.JohnsonNyquist.tendsto_div_exp_sub_one.mono_left hsub
 
-theorem wien_limit (ν : ℝ) (hν : ν ≠ 0) :
-    Filter.Tendsto (fun x => exp x / (ν * (exp x - 1))) Filter.atTop (nhds (1 / ν)) := by
-  have ht : Tendsto (fun x : ℝ => exp x / (exp x - 1)) atTop (nhds 1) := by
-    have htail : Tendsto (fun x : ℝ => (exp x - 1)⁻¹) atTop (nhds 0) := by
-      have htop : Tendsto (fun x => exp x - 1) atTop atTop :=
-        tendsto_atTop_add_const_right atTop (-1) tendsto_exp_atTop
-      exact tendsto_inv_atTop_zero.comp htop
-    have ht1 : Tendsto (fun x => 1 + (exp x - 1)⁻¹) atTop (nhds 1) := by
-      simpa [add_comm] using htail.add_const 1
-    refine ht1.congr' ?_
-    filter_upwards [eventually_gt_atTop 0] with x hx
-    have hden : exp x - 1 ≠ 0 := by linarith [one_lt_exp_iff.2 hx]
-    field_simp [hden]
-    ring
-  convert ht.div_const ν using 1
-  ext x
-  field_simp [hν]
+/-- Rayleigh–Jeans: `u → (8 π ν² / c³) k_B T` as `x = h ν / (k_B T) → 0⁺`. -/
+theorem rayleigh_jeans_limit (mode kB T : ℝ) :
+    Tendsto (fun x : ℝ => mode * (kB * T) * (x / (exp x - 1)))
+      (nhdsWithin 0 (Ioo 0 1)) (nhds (mode * kB * T)) := by
+  simpa [mul_one] using rayleigh_jeans_occupation.const_mul (mode * kB * T)
+
+/-- `e^x / (e^x − 1) → 1` as `x → ∞`. -/
+theorem wien_occupation_limit :
+    Tendsto (fun x : ℝ => exp x / (exp x - 1)) atTop (nhds 1) := by
+  have htail : Tendsto (fun x : ℝ => (exp x - 1)⁻¹) atTop (nhds 0) := by
+    have htop : Tendsto (fun x => exp x - 1) atTop atTop :=
+      tendsto_atTop_add_const_right atTop (-1) tendsto_exp_atTop
+    exact tendsto_inv_atTop_zero.comp htop
+  have ht1 : Tendsto (fun x => 1 + (exp x - 1)⁻¹) atTop (nhds 1) := by
+    simpa [add_comm] using htail.add_const 1
+  refine ht1.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with x hx
+  have hden : exp x - 1 ≠ 0 := by linarith [one_lt_exp_iff.2 hx]
+  field_simp [hden]
+  ring
+
+/-- Wien: `u / ((8 π h ν³ / c³) exp(−x)) → 1` as `x → ∞`. -/
+theorem wien_limit :
+    Tendsto (fun x : ℝ => (1 / (exp x - 1)) / exp (-x)) atTop (nhds 1) := by
+  refine wien_occupation_limit.congr' ?_
+  filter_upwards [eventually_gt_atTop 0] with x hx
+  have hden : exp x - 1 ≠ 0 := by linarith [one_lt_exp_iff.2 hx]
+  field_simp [hden, exp_ne_zero]
+  ring
 
 theorem zero_point_fails (h ν kB T : ℝ) (hh : h ≠ 0) (hkB : 0 < kB) (hT : 0 < T)
     (hx : 0 < h * ν / (kB * T)) :
