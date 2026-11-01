@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Merge master (`8d22f36f`, #563) into PR #564 and keep both sides of the ledger.
+  #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Biot/Nusselt/Sherwood rows.
+  Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.
+
 - [x] Close the Lean goal CI rejected on `biot_unit_profile` (PR #564).
   After `rw [hderiv.deriv]`, the Robin conjunct is `1 = unitWall 1`. `norm_num` does not unfold `unitWall`.
   Done: unfold `unitWall` before `norm_num` so the unit wall `T(x) = 2 − x` closes.
@@ -27,6 +31,14 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 - [x] Review and fix UPT PR #564 (be-156, be-157, be-159).
   The PR implements the heat/mass half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
   Done: the internal-drop sign is a theorem from the Fourier/Robin route; the unit wall is the profile `T(x) = 2 − x`; `Nu = 1` does not give `Bi = 1`.
+
+- [x] Close the Lean goal CI rejected on `le_one_of_pr_eq_sc`, and name `lewis_ratio` in the be-158 catalog citation (PR #563).
+  `rw [hLe, hEq, div_self hPr]` rewrote `Pr` to `Sc` and then looked for `Pr / Pr`. The catalog citation still said "Lewis number is not this row" after the nested property landed.
+  Done: `div_self` uses `Sc ≠ 0` transported from `Pr ≠ 0`; the citation and notes name `PhysJS.Schmidt.lewis_ratio` as the corollary, not a second target.
+
+- [x] Review and fix UPT PR #563 (be-154, be-155, be-158).
+  The PR implements the transport half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems (especially be-158 Lewis); stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: `schmidt_eq` covers only `Sc ρ D = μ`; `Le = Sc / Pr` is the nested `lewis_ratio` property; the shared corollary is used at a general advection speed; the missing Prandtl/Reynolds/Schmidt limits are theorems.
 
 - [x] Bring the architecture documents to the architecture-docs convention: `repo-tools check . --docs=docs/architecture` exits 0 on `master` (the fleet docs carry, 2026-10-23).
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
