@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 14
+- **Potentially unused exports**: 22
 
 ## Potentially Unused Files
 
@@ -22,6 +22,20 @@ These exports are not imported by any other file in the codebase:
 ### `src/bridges/expr-parse.ts`
 
 - `withoutUnreadConstants` (function)
+
+### `src/cases/catalog.ts`
+
+- `appliedCaseIds` (function)
+
+### `src/cases/methods.ts`
+
+- `skinDeltaMaxwellM` (function)
+- `windowedLinewidthCatalogHz` (function)
+- `runCaseResistorNoise` (function)
+- `runCaseLumpedCooling` (function)
+- `brownianSphereRegimeAt` (function)
+- `runCaseBrownianSphere` (function)
+- `CASE_METHODS` (constant)
 
 ### `src/cli/record.ts`
 

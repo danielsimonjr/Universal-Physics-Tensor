@@ -5,11 +5,11 @@
  * both print.
  */
 import { describe, expect, it } from 'vitest';
-import { BROWNIAN_SPHERE_CASE } from '../../src/cases/brownian-sphere.js';
-import { KEPLER_RV_CASE } from '../../src/cases/kepler-rv.js';
-import { LUMPED_COOLING_CASE } from '../../src/cases/lumped-cooling.js';
-import { RESISTOR_NOISE_CASE } from '../../src/cases/resistor-noise.js';
-import { SKIN_DEPTH_CASE } from '../../src/cases/skin-depth.js';
+import { BROWNIAN_SPHERE_CASE } from '../../src/cases/methods.js';
+import { KEPLER_RV_CASE } from '../../src/cases/methods.js';
+import { LUMPED_COOLING_CASE } from '../../src/cases/methods.js';
+import { RESISTOR_NOISE_CASE } from '../../src/cases/methods.js';
+import { SKIN_DEPTH_CASE } from '../../src/cases/methods.js';
 import { runCli } from '../../src/cli/main.js';
 
 function capture() {

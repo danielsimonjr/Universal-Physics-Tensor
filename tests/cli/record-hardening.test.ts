@@ -153,7 +153,7 @@ describe('named constant tables', () => {
     expect(checked).toBeGreaterThanOrEqual(10);
     // The Johnson-noise confrontation module's K_B_CODATA_2014 row is the record from before
     // that module was deleted. Case constants are the module-export tables the walk still finds.
-    expect(tables['cases/brownian-sphere'].values.G_STANDARD).toBe(9.80665);
+    expect(tables['cases/methods'].values.G_STANDARD).toBe(9.80665);
   });
 
   it('replay names the table and the key that changed', async () => {

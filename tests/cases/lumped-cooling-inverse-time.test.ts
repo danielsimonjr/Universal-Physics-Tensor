@@ -8,7 +8,7 @@
  */
 import { findRoot, quad } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
-import { lumpedRadiatingTemperature, SIGMA_SB_SI, type LumpedRadiating } from '../../src/cases/lumped-cooling.js';
+import { lumpedRadiatingTemperature, SIGMA_SB_SI, type LumpedRadiating } from '../../src/cases/methods.js';
 
 /** The oxidized steel ball of the linear-loss failure example: 711.22 K after 60 s. */
 const STEEL: LumpedRadiating = { a: 5e-3, rho: 7854, c: 434, h: 10, eps: 0.8, T0: 1000, Tinf: 300, t: 60 };

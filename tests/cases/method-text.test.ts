@@ -6,9 +6,9 @@
  * "adaptive Simpson" were the record from before that routing.
  */
 import { describe, expect, it } from 'vitest';
-import { DAMPED_RESONATOR_CASE } from '../../src/cases/damped-resonator.js';
-import { LUMPED_COOLING_CASE } from '../../src/cases/lumped-cooling.js';
-import { RESISTOR_NOISE_CASE } from '../../src/cases/resistor-noise.js';
+import { DAMPED_RESONATOR_CASE } from '../../src/cases/methods.js';
+import { LUMPED_COOLING_CASE } from '../../src/cases/methods.js';
+import { RESISTOR_NOISE_CASE } from '../../src/cases/methods.js';
 
 describe('the comparison method names the method the code runs', () => {
   it('case-damped-resonator: the half-power point is a Brent root (findRoot), not a bisection', () => {

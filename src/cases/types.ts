@@ -90,6 +90,19 @@ export interface CaseResult {
   readonly unchecked: readonly string[];
 }
 
+/** Parameters of the lumped equation with the radiative loss kept, in SI units. @internal */
+export interface LumpedRadiating {
+  readonly a: number;
+  readonly rho: number;
+  readonly c: number;
+  /** ≥ 0; 0 is pure radiation. */
+  readonly h: number;
+  readonly eps: number;
+  readonly T0: number;
+  readonly Tinf: number;
+  readonly t: number;
+}
+
 /** An applied case. @internal */
 export interface AppliedCase {
   readonly id: string;

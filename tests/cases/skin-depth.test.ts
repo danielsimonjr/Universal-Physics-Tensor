@@ -7,7 +7,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { EPS0_SI, MU0_SI } from '../../src/core/constants.js';
-import { SKIN_DEPTH_CASE as C, maxwellDepthFactor } from '../../src/cases/skin-depth.js';
+import { SKIN_DEPTH_CASE as C, maxwellDepthFactor } from '../../src/cases/methods.js';
 
 const base = { rho_ohm_m: 1.68e-8, f_Hz: 1e6, mu_r: 1, eps_r: 1, l_mfp_m: 39e-9, v_carrier_m_per_s: 1.57e6, thickness_m: 1e-3 };
 const run = (i: Partial<typeof base> = {}) => C.run({ ...base, ...i });

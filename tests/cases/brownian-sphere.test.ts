@@ -13,7 +13,7 @@ import {
   brennerPerpendicular,
   faxenParallel,
   hydrodynamicMsdRatio,
-} from '../../src/cases/brownian-sphere.js';
+} from '../../src/cases/methods.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { canonicalById } from '../../src/canonical/registry.js';
 import { evalExpr } from '../../src/composition/expr-eval.js';

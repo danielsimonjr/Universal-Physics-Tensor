@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 11.0.0
-  totalFiles: 387
+  totalFiles: 385
   totalModules: 13
-  totalExports: 2771
+  totalExports: 2797
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5037,107 +5037,120 @@ modules:
         - classifyStructure
         - classifyStructure
   cases:
-    src/cases/brownian-sphere.ts:
-      description: "Applied case: a Brownian sphere tracked in a fluid — the diffusion"
+    src/cases/catalog-checks.ts:
+      description: Check records (expr + bound) for the applied-case catalog. Declarative prose lives
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../core/constants.js
+        - file: ./catalog.js
           imports:
-            - K_B_SI
+            - AppliedCaseCheckRecord
+          typeOnly: true
+      exports:
+        - CHECKS_BY_CASE_ID
+      constants:
+        - CHECKS_BY_CASE_ID
+    src/cases/catalog.ts:
+      description: "The applied-case catalog: `data/applied-cases.json`, validated at load."
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/data-file.js
+          imports:
+            - checkedDataFile
+            - dataSchema
+            - parseDataFile
+        - file: ../bridges/catalog-load.js
+          imports:
+            - catalogRelations
+        - file: ../core/json-schema.js
+          imports:
+            - JsonSchema
+          typeOnly: true
+        - file: ../bridges/evaluators.js
+          imports:
+            - EvaluatorParameter
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - AppliedCase
+            - CaseComparison
+            - CaseExample
+          typeOnly: true
+      exports:
+        - FORBIDDEN_PER_CASE_MODULES
+        - isForbiddenCaseModule
+        - readAppliedCaseFile
+        - catalogSemanticProblems
+        - appliedCaseCatalog
+        - appliedCaseRecord
+        - projectAppliedCaseRecord
+        - assembleAppliedCase
+        - appliedCaseIds
+      interfaces:
+        - AppliedCaseCheckRecord
+        - AppliedCaseOutputRecord
+        - AppliedCaseRecord
+        - AppliedCaseFile
+      functions:
+        - isForbiddenCaseModule
+        - readAppliedCaseFile
+        - catalogSemanticProblems
+        - appliedCaseCatalog
+        - appliedCaseRecord
+        - projectAppliedCaseRecord
+        - assembleAppliedCase
+        - appliedCaseIds
+      constants:
+        - FORBIDDEN_PER_CASE_MODULES
+    src/cases/engine.ts:
+      description: Evaluate applied-case outputs and checks from catalog `expr`, `relation`, and
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../bridges/catalog-load.js
+          imports:
+            - catalogRelations
+        - file: ../bridges/relation-eval.js
+          imports:
+            - evaluateCatalogRelation
+        - file: ../bridges/expr-parse.js
+          imports:
+            - evaluateFormula
         - file: ../dimensional/units.js
           imports:
             - convertValue
-        - file: ./quadrature.js
+        - file: ./catalog.js
           imports:
-            - adaptiveQuadrature
+            - AppliedCaseCheckRecord
+            - AppliedCaseOutputRecord
+            - AppliedCaseRecord
+          typeOnly: true
         - file: ./types.js
           imports:
             - check
             - requirePositive
-            - signedRelativeDifference
-            - AppliedCase
+            - CaseCheck
+            - CaseResult
       exports:
-        - G_STANDARD
-        - MAX_RE
-        - MAX_TAU_P_RATIO
-        - MAX_MEMORY_CORRECTION
-        - MAX_DRIFT_RATIO
-        - MAX_WALL_CORRECTION
-        - MAX_FAXEN_LAST_TERM
-        - MAX_WALL_EXCURSION
-        - BROWNIAN_SPHERE_CASE
-        - ballisticDeficit
-        - hydrodynamicMsdRatio
-        - faxenParallel
-        - brennerPerpendicular
+        - registerCaseMethods
+        - usesCatalogEngine
+        - runAppliedCaseEngine
       functions:
-        - ballisticDeficit
-        - hydrodynamicMsdRatio
-        - faxenParallel
-        - brennerPerpendicular
-      constants:
-        - G_STANDARD
-        - MAX_RE
-        - MAX_TAU_P_RATIO
-        - MAX_MEMORY_CORRECTION
-        - MAX_DRIFT_RATIO
-        - MAX_WALL_CORRECTION
-        - MAX_FAXEN_LAST_TERM
-        - MAX_WALL_EXCURSION
-        - BROWNIAN_SPHERE_CASE
-    src/cases/damped-resonator.ts:
-      description: "Applied case: the free ring-down of a damped resonator, read out over a"
-      externalDependencies:
-        - package: "@danielsimonjr/mathts-functions"
-          imports:
-            - findRoot
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - K_B_SI
-        - file: ./types.js
-          imports:
-            - check
-            - requirePositive
-            - AppliedCase
-      exports:
-        - MIN_Q_LORENTZIAN
-        - MAX_RESOLUTION_RATIO
-        - MAX_THERMAL_RATIO
-        - DAMPED_RESONATOR_CASE
-        - windowedLinewidthHz
-      functions:
-        - windowedLinewidthHz
-      constants:
-        - MIN_Q_LORENTZIAN
-        - MAX_RESOLUTION_RATIO
-        - MAX_THERMAL_RATIO
-        - DAMPED_RESONATOR_CASE
+        - registerCaseMethods
+        - usesCatalogEngine
+        - runAppliedCaseEngine
     src/cases/index.ts:
       description: The applied-case registry behind `upt evaluate case-<id>`.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ./brownian-sphere.js
+        - file: ./catalog.js
           imports:
-            - BROWNIAN_SPHERE_CASE
-        - file: ./damped-resonator.js
+            - appliedCaseCatalog
+        - file: ./methods.js
           imports:
-            - DAMPED_RESONATOR_CASE
-        - file: ./kepler-rv.js
-          imports:
-            - KEPLER_RV_CASE
-        - file: ./lumped-cooling.js
-          imports:
-            - LUMPED_COOLING_CASE
-        - file: ./resistor-noise.js
-          imports:
-            - RESISTOR_NOISE_CASE
-        - file: ./skin-depth.js
-          imports:
-            - SKIN_DEPTH_CASE
+            - APPLIED_CASE_RUNNERS
         - file: ./types.js
           imports:
             - AppliedCase
@@ -5179,15 +5192,23 @@ modules:
       constants:
         - APPLIED_CASES
         - CASE_CONTRACTS
-    src/cases/kepler-rv.ts:
-      description: "Applied case: the radial-velocity semi-amplitude of a star orbited by a"
-      externalDependencies: []
+    src/cases/methods.ts:
+      description: Numeric methods and case runners for applied cases (Part B catalog).
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - findRoot
       nodeDependencies: []
       internalDependencies:
         - file: ../core/constants.js
           imports:
             - C_SI
+            - EPS0_SI
             - G_SI
+            - H_SI
+            - K_B_SI
+            - MU0_SI
+            - SIGMA_SB_SI
         - file: ../dimensional/units.js
           imports:
             - convertValue
@@ -5197,69 +5218,151 @@ modules:
         - file: ../bridges/relation-eval.js
           imports:
             - evaluateCatalogRelation
-        - file: ./types.js
-          imports:
-            - check
-            - requirePositive
-            - AppliedCase
-      exports:
-        - JULIAN_YEAR_S
-        - MAX_MASS_RATIO
-        - MAX_RADIUS_RATIO
-        - MAX_WEAK_FIELD
-        - MAX_APSIDAL_MISFIT
-        - KEPLER_RV_CASE
-      constants:
-        - JULIAN_YEAR_S
-        - MAX_MASS_RATIO
-        - MAX_RADIUS_RATIO
-        - MAX_WEAK_FIELD
-        - MAX_APSIDAL_MISFIT
-        - KEPLER_RV_CASE
-    src/cases/lumped-cooling.ts:
-      description: "Applied case: a solid sphere cooling (or warming) in a fluid — its"
-      externalDependencies:
-        - package: "@danielsimonjr/mathts-functions"
-          imports:
-            - findRoot
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - SIGMA_SB_SI
         - file: ../numerical/null-ray-integrator.js
           imports:
             - integrateRK4
+        - file: ./quadrature.js
+          imports:
+            - adaptiveQuadrature
+        - file: ./catalog.js
+          imports:
+            - appliedCaseCatalog
+            - appliedCaseRecord
+            - assembleAppliedCase
+            - catalogSemanticProblems
+        - file: ./engine.js
+          imports:
+            - runAppliedCaseEngine
+            - usesCatalogEngine
+            - registerCaseMethods
         - file: ./types.js
           imports:
             - check
             - requirePositive
             - signedRelativeDifference
             - AppliedCase
+            - CaseResult
+            - LumpedRadiating
+        - file: ./types.js
+          imports:
+            - LumpedRadiating
+          reExport: true
         - file: ../core/constants.js
           imports:
             - SIGMA_SB_SI
           reExport: true
       exports:
         - SIGMA_SB_SI
+        - MAX_DISPLACEMENT_RATIO
+        - MAX_MFP_RATIO
+        - MAX_OMEGA_TAU
+        - MIN_THICKNESS_RATIO
+        - JULIAN_YEAR_S
+        - MAX_MASS_RATIO
+        - MAX_RADIUS_RATIO
+        - MAX_WEAK_FIELD
+        - MAX_APSIDAL_MISFIT
+        - MIN_Q_LORENTZIAN
+        - MAX_RESOLUTION_RATIO
+        - MAX_THERMAL_RATIO
+        - CLASSICAL_MAX_X
+        - FLAT_BAND_MAX_WRC
+        - AMPLIFIER_MAX_REL_SIGMA
         - MAX_BIOT
         - MAX_RADIATION_RATIO
+        - G_STANDARD
+        - MAX_RE
+        - MAX_TAU_P_RATIO
+        - MAX_MEMORY_CORRECTION
+        - MAX_DRIFT_RATIO
+        - MAX_WALL_CORRECTION
+        - MAX_FAXEN_LAST_TERM
+        - MAX_WALL_EXCURSION
+        - APPLIED_CASE_RUNNERS
+        - CASE_METHOD_NAMES
+        - CASE_METHODS
+        - SKIN_DEPTH_CASE
+        - KEPLER_RV_CASE
+        - DAMPED_RESONATOR_CASE
+        - RESISTOR_NOISE_CASE
         - LUMPED_COOLING_CASE
+        - BROWNIAN_SPHERE_CASE
+        - maxwellDepthFactor
+        - skinDeltaMaxwellM
+        - runCaseSkinDepth
+        - runCaseKeplerRv
+        - windowedLinewidthHz
+        - windowedLinewidthCatalogHz
+        - runCaseDampedResonator
+        - runCaseResistorNoise
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
-      reExported:
-        - SIGMA_SB_SI
-      interfaces:
+        - runCaseLumpedCooling
+        - ballisticDeficit
+        - hydrodynamicMsdRatio
+        - faxenParallel
+        - brennerPerpendicular
+        - brownianSphereRegimeAt
+        - runCaseBrownianSphere
         - LumpedRadiating
+      reExported:
+        - LumpedRadiating
+        - SIGMA_SB_SI
       functions:
+        - maxwellDepthFactor
+        - skinDeltaMaxwellM
+        - runCaseSkinDepth
+        - runCaseKeplerRv
+        - windowedLinewidthHz
+        - windowedLinewidthCatalogHz
+        - runCaseDampedResonator
+        - runCaseResistorNoise
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
+        - runCaseLumpedCooling
+        - ballisticDeficit
+        - hydrodynamicMsdRatio
+        - faxenParallel
+        - brennerPerpendicular
+        - brownianSphereRegimeAt
+        - runCaseBrownianSphere
       constants:
+        - MAX_DISPLACEMENT_RATIO
+        - MAX_MFP_RATIO
+        - MAX_OMEGA_TAU
+        - MIN_THICKNESS_RATIO
+        - JULIAN_YEAR_S
+        - MAX_MASS_RATIO
+        - MAX_RADIUS_RATIO
+        - MAX_WEAK_FIELD
+        - MAX_APSIDAL_MISFIT
+        - MIN_Q_LORENTZIAN
+        - MAX_RESOLUTION_RATIO
+        - MAX_THERMAL_RATIO
+        - CLASSICAL_MAX_X
+        - FLAT_BAND_MAX_WRC
+        - AMPLIFIER_MAX_REL_SIGMA
         - MAX_BIOT
         - MAX_RADIATION_RATIO
+        - G_STANDARD
+        - MAX_RE
+        - MAX_TAU_P_RATIO
+        - MAX_MEMORY_CORRECTION
+        - MAX_DRIFT_RATIO
+        - MAX_WALL_CORRECTION
+        - MAX_FAXEN_LAST_TERM
+        - MAX_WALL_EXCURSION
+        - APPLIED_CASE_RUNNERS
+        - CASE_METHOD_NAMES
+        - CASE_METHODS
+        - SKIN_DEPTH_CASE
+        - KEPLER_RV_CASE
+        - DAMPED_RESONATOR_CASE
+        - RESISTOR_NOISE_CASE
         - LUMPED_COOLING_CASE
+        - BROWNIAN_SPHERE_CASE
     src/cases/quadrature.ts:
       description: "Adaptive quadrature for the parent-model comparisons of the applied cases:"
       externalDependencies:
@@ -5272,70 +5375,6 @@ modules:
         - adaptiveQuadrature
       functions:
         - adaptiveQuadrature
-    src/cases/resistor-noise.ts:
-      description: "Applied case: the thermal (Johnson–Nyquist) noise voltage of a resistor as an"
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - H_SI
-            - K_B_SI
-        - file: ../bridges/catalog-load.js
-          imports:
-            - catalogRelations
-        - file: ../bridges/relation-eval.js
-          imports:
-            - evaluateCatalogRelation
-        - file: ./quadrature.js
-          imports:
-            - adaptiveQuadrature
-        - file: ./types.js
-          imports:
-            - check
-            - requirePositive
-            - signedRelativeDifference
-            - AppliedCase
-      exports:
-        - CLASSICAL_MAX_X
-        - FLAT_BAND_MAX_WRC
-        - AMPLIFIER_MAX_REL_SIGMA
-        - RESISTOR_NOISE_CASE
-      constants:
-        - CLASSICAL_MAX_X
-        - FLAT_BAND_MAX_WRC
-        - AMPLIFIER_MAX_REL_SIGMA
-        - RESISTOR_NOISE_CASE
-    src/cases/skin-depth.ts:
-      description: "Applied case: the skin depth of a planar conductor driven at one frequency —"
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../core/constants.js
-          imports:
-            - EPS0_SI
-            - MU0_SI
-        - file: ./types.js
-          imports:
-            - check
-            - requirePositive
-            - signedRelativeDifference
-            - AppliedCase
-      exports:
-        - MAX_DISPLACEMENT_RATIO
-        - MAX_MFP_RATIO
-        - MAX_OMEGA_TAU
-        - MIN_THICKNESS_RATIO
-        - SKIN_DEPTH_CASE
-        - maxwellDepthFactor
-      functions:
-        - maxwellDepthFactor
-      constants:
-        - MAX_DISPLACEMENT_RATIO
-        - MAX_MFP_RATIO
-        - MAX_OMEGA_TAU
-        - MIN_THICKNESS_RATIO
-        - SKIN_DEPTH_CASE
     src/cases/types.ts:
       description: "An applied case: one complete measurement problem, qualified end to end."
       externalDependencies: []
@@ -5355,6 +5394,7 @@ modules:
         - CaseComparison
         - CaseExample
         - CaseResult
+        - LumpedRadiating
         - AppliedCase
       functions:
         - signedRelativeDifference
@@ -19064,14 +19104,12 @@ dependencyGraph:
         - src/canonical/structural.ts
     - name: Cases
       files:
-        - src/cases/brownian-sphere.ts
-        - src/cases/damped-resonator.ts
+        - src/cases/catalog-checks.ts
+        - src/cases/catalog.ts
+        - src/cases/engine.ts
         - src/cases/index.ts
-        - src/cases/kepler-rv.ts
-        - src/cases/lumped-cooling.ts
+        - src/cases/methods.ts
         - src/cases/quadrature.ts
-        - src/cases/resistor-noise.ts
-        - src/cases/skin-depth.ts
         - src/cases/types.ts
     - name: Cli
       files:
@@ -19350,19 +19388,19 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 387
+  totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 87064
-  totalExports: 2771
+  totalLinesOfCode: 87086
+  totalExports: 2797
   totalClasses: 85
-  totalInterfaces: 513
-  totalFunctions: 886
-  totalTypeGuards: 14
+  totalInterfaces: 517
+  totalFunctions: 906
+  totalTypeGuards: 15
   totalEnums: 0
-  totalConstants: 407
-  totalReExports: 1389
-  totalTypeOnlyImports: 520
+  totalConstants: 412
+  totalReExports: 1390
+  totalTypeOnlyImports: 525
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 14
+  unusedExportsCount: 22

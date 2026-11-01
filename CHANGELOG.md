@@ -10,9 +10,21 @@ from v0.1.0 onward.
 
 ### Changed
 
+- **Architecture claim tables name 3828 exports.** `repo-tools check` measured `totalExports` 3828 after the catalog engine and H0 exact-scale import; API.md, OVERVIEW.md, and duplicate-symbols.md had 3826.
+
 - **CI also runs on a push to `cursor/mathts-*`.** Stacked MathTS PRs cannot form a `pull_request` merge commit once each parent refreshes architecture file-count claims (`totalSourceFiles` 1151 vs 1152). The same jobs now run against the branch HEAD on push, including the code-docs and architecture-docs jobs. `tests/tools/ci-workflows.test.ts` pins the branch list (red first on `[master]` only).
 
 ### Added
+
+- **Part B step B12 — catalog loader rejects unwired outputs and a per-case file coming back.** `catalogSemanticProblems` with `CASE_METHOD_NAMES` requires every output to declare exactly one of `expr`, `relation`, or a known `method`; relation ids must exist in the bridge catalog. Legacy method-only cases name their `runCase*` runner on each output; load fails on typos. `isForbiddenCaseModule` names the six deleted per-case files and any new `case-*.ts`; `tests/cases/cases-directory.test.ts` applies it to `src/cases/`. `tests/cases/applied-cases-output-wiring.test.ts` pins the wiring rule.
+
+- **Part B step B11 — damped resonator ring-down expressions.** `case-damped-resonator` closed-form outputs run through the catalog engine; `windowedLinewidthCatalogHz` stays the method for the truncated-spectrum linewidth.
+
+- **Part B step B10 — Kepler RV catalog expressions and be-52 relation.** `case-kepler-rv` outputs and checks run through the catalog engine; apsidal advance calls `be-52` via a `relation` output. `readAppliedCaseFile` semantic validation rejects unknown relation ids when `CASE_METHOD_NAMES` is supplied.
+
+- **Part B step B9 — catalog engine for skin depth.** `src/cases/engine.ts` evaluates `case-skin-depth` from `expr` and `method` fields in `data/applied-cases.json`; `skinDeltaMaxwellM` stays the method for the parent penetration depth. `tests/cases/applied-case-engine.test.ts` pins parity with the legacy runner and a mutated exponent control.
+
+- **Part B step B8 — one methods module, six case files removed.** `src/cases/methods.ts` holds every applied-case runner and numeric helper; `src/cases/` keeps only `index.ts`, `types.ts`, `catalog.ts`, `catalog-checks.ts`, `quadrature.ts`, and `methods.ts`. `tests/cases/cases-directory.test.ts` lists that set; `tests/numerical/mathts-delegation.test.ts` scans `methods.ts` for `quad`, `findRoot`, and `solveODESystem`.
 
 - **Part A step A11a — wrapper keeps `bit` at ln 2.** `applyBitScaleOverride` in `mathts-unit-wrapper.ts` replaces MathTS axis-8 scale 1 with the `data/units.json` row on every delegated reading. `tests/dimensional/unit-wrapper-bit.test.ts` fails if `parseUnit('bit').scale` becomes 1.
 

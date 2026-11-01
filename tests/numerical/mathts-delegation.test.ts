@@ -15,8 +15,8 @@ import { Z95, mcnemar } from '../../src/atlas/benchmark/stats.js';
 import { cosine } from '../../src/atlas/benchmark/hybrid-retrieval.js';
 import { chiSquareCdf, chiSquareSurvival, fSurvival } from '../../src/composition/probe/study.js';
 import { estimateScaleExponent } from '../../src/composition/probe/structure.js';
-import { sphereEigenvalues } from '../../src/cases/lumped-cooling.js';
-import { windowedLinewidthHz } from '../../src/cases/damped-resonator.js';
+import { sphereEigenvalues } from '../../src/cases/methods.js';
+import { windowedLinewidthHz } from '../../src/cases/methods.js';
 import { adaptiveQuadrature } from '../../src/cases/quadrature.js';
 import { GAUSS_LEGENDRE_16 } from '../../src/numerical/quadrature.js';
 
@@ -95,8 +95,8 @@ describe('MathTS carries the quadrature, the interpolation and the statistics', 
     expect(quadrature).toMatch(/\bquad\b/);
     expect(quadrature).not.toMatch(/function adaptiveSimpson/);
     expect(adaptiveQuadrature((x) => Math.exp(-x * x), -8, 8)).toBeCloseTo(Math.sqrt(Math.PI), 12);
-    expect(source('../../src/cases/lumped-cooling.ts')).toMatch(/findRoot/);
-    expect(source('../../src/cases/damped-resonator.ts')).toMatch(/findRoot/);
+    expect(source('../../src/cases/methods.ts')).toMatch(/findRoot/);
+    expect(source('../../src/cases/methods.ts')).toMatch(/findRoot/);
     expect(source('../../src/atlas/oscillators/pendulum-motion.ts')).toMatch(/findRoot/);
     // 1 − ζ cot ζ = Bi at Bi = 1 has the roots ζ = (n + ½)π exactly.
     sphereEigenvalues(1, 4).forEach((z, n) => expect(z).toBeCloseTo((n + 0.5) * Math.PI, 13));
@@ -134,6 +134,6 @@ describe('MathTS carries the rational arithmetic and the stable sums', () => {
     expect(source('../../src/composition/bridge-analysis.ts')).toMatch(/from '\.\.\/canonical\/fixed-points\.js'/);
     expect(source('../../src/cli/commands/derive.ts')).toMatch(/api\.(ratioSpread|recoverMonomialPrefactor)\b/);
     expect(source('../../src/composition/probe/structure.ts')).toMatch(/\bmean\b/);
-    expect(source('../../src/cases/lumped-cooling.ts')).toMatch(/solveODESystem/);
+    expect(source('../../src/cases/methods.ts')).toMatch(/solveODESystem/);
   });
 });

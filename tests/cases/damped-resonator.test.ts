@@ -5,7 +5,7 @@
  * transform of the sampled, truncated ring-down for the windowed linewidth.
  */
 import { describe, expect, it } from 'vitest';
-import { DAMPED_RESONATOR_CASE as C, windowedLinewidthHz } from '../../src/cases/damped-resonator.js';
+import { DAMPED_RESONATOR_CASE as C, windowedLinewidthHz } from '../../src/cases/methods.js';
 
 const base = { f0_Hz: 1000, Q: 1000, x0_m: 1e-6, t_s: 0.1, t_obs_s: 20 };
 const run = (i: Partial<typeof base> = {}) => C.run({ ...base, ...i });
