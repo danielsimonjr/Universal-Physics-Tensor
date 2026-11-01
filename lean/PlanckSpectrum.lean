@@ -164,7 +164,7 @@ theorem rayleigh_jeans_occupation :
 
 /-- Rayleigh–Jeans: `u → (8 π ν² / c³) k_B T` as `x = h ν / (k_B T) → 0⁺`. -/
 theorem rayleigh_jeans_limit (mode kB T : ℝ) :
-    Tendsto (fun x : ℝ => mode * (kB * T) * (x / (exp x - 1)))
+    Tendsto (fun x : ℝ => mode * kB * T * (x / (exp x - 1)))
       (nhdsWithin 0 (Ioo 0 1)) (nhds (mode * kB * T)) := by
   simpa [mul_one] using rayleigh_jeans_occupation.const_mul (mode * kB * T)
 
@@ -189,8 +189,8 @@ theorem wien_limit :
   refine wien_occupation_limit.congr' ?_
   filter_upwards [eventually_gt_atTop 0] with x hx
   have hden : exp x - 1 ≠ 0 := by linarith [one_lt_exp_iff.2 hx]
-  field_simp [hden, exp_ne_zero]
-  ring
+  field_simp [hden]
+  rw [← exp_add, add_neg_cancel, exp_zero]
 
 theorem zero_point_fails (h ν kB T : ℝ) (hh : h ≠ 0) (hkB : 0 < kB) (hT : 0 < T)
     (hx : 0 < h * ν / (kB * T)) :

@@ -158,13 +158,12 @@ theorem chemical_potential_eq (E n N V g lam kB T μ : ℝ)
     unfold singleParticlePartition
     rw [hnV]
     field_simp [hlam.ne', hg.ne', hN.ne', hV.ne']
-    ring
   have hpre : 0 < g / (n * lam ^ 3) := by positivity
   have hnl : 0 < n * lam ^ 3 / g := by positivity
   rw [hμ, hratio, log_mul hpre.ne' (exp_pos _).ne', log_exp]
   have hlog : log (g / (n * lam ^ 3)) = -log (n * lam ^ 3 / g) := by
     have : g / (n * lam ^ 3) = (n * lam ^ 3 / g)⁻¹ := by field_simp [hg.ne']
-    rw [this, log_inv hnl.ne']
+    rw [this, log_inv]
   rw [hlog]
   field_simp [hkT]
   ring
@@ -192,7 +191,6 @@ theorem unequal_heavy_wavelength (lamA lamI : ℝ) (hA : 0 < lamA)
   rw [hI]
   have h2 : (2 : ℝ) ≠ 0 := by norm_num
   field_simp [hA.ne', h2]
-  ring
 
 theorem zero_ionization_energy (K gI ge gA thermal : ℝ) (hK : K = gI * ge / gA * thermal * exp (0)) :
     K = gI * ge / gA * thermal := by
@@ -208,12 +206,13 @@ theorem saha_vanishes_at_zero (I kB pref : ℝ) (hI : 0 < I) (hkB : 0 < kB) :
     (tendsto_const_mul_atTop_of_pos hc).mpr hinv
   have hneg : Tendsto (fun T : ℝ => -((I / kB) * T⁻¹)) (nhdsWithin 0 (Ioi 0)) atBot :=
     tendsto_neg_atTop_atBot.comp hmul
-  have hform : (fun T : ℝ => -I / (kB * T)) = fun T => -((I / kB) * T⁻¹) := by
-    funext T
-    field_simp
-    ring
   have hexp : Tendsto (fun T : ℝ => exp (-I / (kB * T))) (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
-    rw [hform]
+    have hfun : (fun T : ℝ => exp (-I / (kB * T))) =
+        exp ∘ fun T : ℝ => -((I / kB) * T⁻¹) := by
+      funext T
+      congr 1
+      field_simp
+    rw [hfun]
     exact Real.tendsto_exp_atBot.comp hneg
   simpa using hexp.const_mul pref
 
@@ -225,7 +224,6 @@ theorem saha_thermal_scale (m kB hpl T : ℝ)
   have ha : 0 < 2 * π * m * kB / hpl ^ 2 := by positivity
   have hrewrite : 2 * π * m * kB * T / hpl ^ 2 = (2 * π * m * kB / hpl ^ 2) * T := by
     field_simp
-    ring
   rw [hrewrite, Real.mul_rpow ha.le hT.le]
   field_simp [hT.ne']
 
@@ -237,14 +235,15 @@ theorem saha_high_T_exp (I kB : ℝ) (hkB : kB ≠ 0) :
     have : (fun T : ℝ => -I / (kB * T)) = fun T => (-I / kB) * T⁻¹ := by
       funext T
       field_simp [hkB]
-      ring
     rw [this]
     simpa using hinv.const_mul (-I / kB)
-  simpa [Real.exp_zero] using (continuous_exp.tendsto 0).comp harg
+  have hcomp : (fun T : ℝ => exp (-I / (kB * T))) = exp ∘ fun T => -I / (kB * T) := rfl
+  rw [hcomp]
+  exact (continuous_exp.tendsto 0).comp harg
 
 /-- As `T → ∞`, `K / T^{3/2}` tends to `(g₊ g_e / g_A) (2 π m k_B / h²)^{3/2}`. -/
 theorem saha_high_T_prefactor (gI ge gA m kB hpl I : ℝ)
-    (hgA : 0 < gA) (hm : 0 < m) (hkB : 0 < kB) (hh : 0 < hpl) :
+    (_hgA : 0 < gA) (hm : 0 < m) (hkB : 0 < kB) (hh : 0 < hpl) :
     Tendsto (fun T : ℝ =>
         gI * ge / gA * (2 * π * m * kB * T / hpl ^ 2) ^ ((3 : ℝ) / 2) *
           exp (-I / (kB * T)) / T ^ ((3 : ℝ) / 2))
@@ -265,9 +264,8 @@ theorem saha_high_T_prefactor (gI ge gA m kB hpl I : ℝ)
           ((2 * π * m * kB * T / hpl ^ 2) ^ ((3 : ℝ) / 2) / T ^ ((3 : ℝ) / 2)) *
             exp (-I / (kB * T)) := by
         field_simp [hT0]
-        ring
       _ = gI * ge / gA * (2 * π * m * kB / hpl ^ 2) ^ ((3 : ℝ) / 2) *
             exp (-I / (kB * T)) := by rw [hsc]
-  exact (tendsto_const_nhds.mul hexp).congr' hscale
+  exact (tendsto_const_nhds.mul hexp).congr' (hscale.mono fun _ h => h.symm)
 
 end PhysJS.Saha

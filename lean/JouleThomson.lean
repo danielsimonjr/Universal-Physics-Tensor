@@ -202,7 +202,6 @@ lemma virial_B_hasDerivAt (a b R T : ℝ) (hR : R ≠ 0) (hT : T ≠ 0) :
   refine (this.congr_deriv (by ring)).congr_of_eventuallyEq ?_
   filter_upwards with s
   field_simp [hR]
-  ring
 
 /-- With `B(T) = b − a / (R T)`, `μ_JT c_p = 2 a / (R T) − b`.
 
