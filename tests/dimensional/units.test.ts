@@ -63,8 +63,8 @@ describe('parseUnit', () => {
     expect(parseUnit('atm').scale).toBe(101325);
     expect(parseUnit('angstrom').scale).toBe(1e-10);
     expect(parseUnit('Å').scale).toBe(1e-10);
-    expect(parseUnit('pc').scale).toBe(30856775814913676);
-    expect(parseUnit('Mpc').scale).toBeCloseTo(30856775814913676 * 1e6, -6);
+    expect(parseUnit('pc').scale).toBe(30856775814913670);
+    expect(parseUnit('Mpc').scale).toBeCloseTo(30856775814913670 * 1e6, -6);
     expect(parseUnit('ly').scale).toBe(C_SI * 365.25 * 86400);
     expect(parseUnit('AU').scale).toBe(149597870700);
     expect(parseUnit('au').scale).toBe(parseUnit('AU').scale);

@@ -26,7 +26,6 @@
 
 import * as mathtsConstants from '@danielsimonjr/mathts-functions';
 import { checkedDataFile } from './data-file.js';
-import { decimalScale, scaleToNumber } from '../dimensional/exact-scale.js';
 
 /**
  * A measured constant's SI value, read from MathTS (CODATA 2022). MathTS is the
@@ -96,10 +95,9 @@ export const T_P_SI = codata('planckTime');
 function unitTableDecimal(symbol: string): number {
   const file = checkedDataFile('units.json') as { readonly units: readonly { readonly symbols: readonly string[]; readonly scale: string }[] };
   const scale = file.units.find((row) => row.symbols.includes(symbol))?.scale;
-  if (scale === undefined) throw new Error(`data/units.json: no '${symbol}' row`);
-  const exact = decimalScale(scale);
-  if (exact === null) throw new Error(`data/units.json: the '${symbol}' row must state a decimal scale (got ${scale})`);
-  return scaleToNumber(exact);
+  const value = scale === undefined ? Number.NaN : Number(scale);
+  if (!Number.isFinite(value)) throw new Error(`data/units.json: the '${symbol}' row must state a decimal scale (got ${scale ?? 'no row'})`);
+  return value;
 }
 
 /**
