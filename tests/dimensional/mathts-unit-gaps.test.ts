@@ -10,7 +10,6 @@
 import {
   Unit,
   exactScaleToNumber,
-  getUnitRow,
   toSiDimensionVector,
   UnitParseError,
 } from '@danielsimonjr/mathts-core';
@@ -33,18 +32,22 @@ describe('MathTS agrees with UPT on delegated readings', () => {
   ] as const)('%s %s → %s matches UPT convertValue', (n, notation, target, si) => {
     const raw = `${n} ${notation}`;
     expect(convertValue(raw, target).value).toBe(si);
-    const u = unit(Number(n), notation);
+    const u = unit(Number(n), notation) as { to(target: string): { toNumeric(): unknown } };
     const mt = Number(u.to(target).toNumeric());
     expect(mt).toBe(si);
   });
 
   it('parsec double matches the local table', () => {
     const local = convertValue('1 pc', 'm').value;
-    expect(exactScaleToNumber(Unit.exactScale('pc'))).toBe(local);
+    const pc = Unit.exactScale('pc');
+    expect(pc).not.toBeNull();
+    expect(exactScaleToNumber(pc!)).toBe(local);
   });
 
   it('exactScale(Hz) is 1 on both sides', () => {
-    expect(exactScaleToNumber(Unit.exactScale('Hz'))).toBe(1);
+    const hz = Unit.exactScale('Hz');
+    expect(hz).not.toBeNull();
+    expect(exactScaleToNumber(hz!)).toBe(1);
     expect(convertValue('1 Hz', 's^-1').value).toBe(1);
   });
 });
@@ -54,10 +57,11 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
     {
       id: 'bit axis-8 scale 1',
       check: () => {
-        expect(exactScaleToNumber(Unit.exactScale('bit'))).toBe(1);
-        const row = getUnitRow('bit');
-        expect(row).toBeDefined();
-        expect(() => toSiDimensionVector(row!.dimension)).toThrow();
+        const bitEs = Unit.exactScale('bit');
+        expect(bitEs).not.toBeNull();
+        expect(exactScaleToNumber(bitEs!)).toBe(1);
+        const u = unit(1, 'bit') as { dimensions: number[] };
+        expect(() => toSiDimensionVector(u.dimensions)).toThrow();
         expect(parseUnit('bit').scale).not.toBe(1);
       },
     },
@@ -106,7 +110,7 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
     {
       id: 'Hz.to(rad/s) applies 2π',
       check: () => {
-        const mt = Number(unit(1, 'Hz').to('rad/s').toNumeric());
+        const mt = Number((unit(1, 'Hz') as { to(target: string): { toNumeric(): unknown } }).to('rad/s').toNumeric());
         expect(mt).toBeCloseTo(2 * Math.PI, 12);
         expect(convertValue('1 Hz', 'rad/s').value).toBe(1);
         expect(convertValue('1 Hz', 'rad/s').cycles).toBe(1);
