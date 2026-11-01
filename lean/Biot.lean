@@ -5,6 +5,7 @@ Released under MIT license as described in the file LICENSE.
 
 import lean.FourierConduction
 import lean.SteadyProfile
+import Mathlib.Analysis.Calculus.Deriv.Add
 import Mathlib.Order.Filter.AtTopBot.Ring
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
@@ -100,6 +101,29 @@ theorem biot_sign (Bi hcoeff k L : ℝ) (hh : 0 < hcoeff) (hk : 0 < k) (hL : 0 <
   rw [hBi]
   positivity
 
+/-- For `h > 0`, `k > 0`, `L > 0` and `T(L) > T∞`, the steady wall is hotter inside. -/
+theorem biot_hotter_inside (T : ℝ → ℝ) (hcoeff k L q Tinf : ℝ)
+    (hk : 0 < k) (hh : 0 < hcoeff) (hL : 0 < L) (hext : Tinf < T L)
+    (hflux : ∀ x, HasDerivAt T (-q / k) x)
+    (hrobin : -k * deriv T L = hcoeff * (T L - Tinf)) :
+    T L < T 0 := by
+  have hf := fourier_eq T q k L hk.ne' hflux
+  have hfluxL : -k * deriv T L = q := by
+    rw [(hflux L).deriv]
+    field_simp [hk.ne']
+  have hq_face : q = hcoeff * (T L - Tinf) := by linarith [hrobin, hfluxL]
+  have hq : 0 < q := by
+    rw [hq_face]
+    exact mul_pos hh (sub_pos.mpr hext)
+  have hdrop : T 0 - T L = q * L / k := by
+    have h1 : k * (T 0 - T L) = q * L := by linarith [hf]
+    field_simp [hk.ne']
+    linarith
+  have hpos : 0 < T 0 - T L := by
+    rw [hdrop]
+    exact div_pos (mul_pos hq hL) hk
+  exact sub_pos.mp hpos
+
 /-- With a positive external drop, `Bi < 1` iff the internal drop is smaller. -/
 theorem biot_lt_one_iff (Bi Tint Text : ℝ) (hText : 0 < Text) (hBi : Bi = Tint / Text) :
     Bi < 1 ↔ Tint < Text := by
@@ -119,12 +143,24 @@ theorem biot_k_tendsto_zero (hcoeff L : ℝ) :
   have hk : Tendsto (fun k : ℝ => k⁻¹) atTop (𝓝 0) := hinv.comp hid
   simpa [div_eq_mul_inv] using Filter.Tendsto.const_mul (hcoeff * L) hk
 
-/-- Exact profile: `T(x) = 2 − x`, `k = h = L = 1`, `T∞ = 0`, `T(L) = 1`, slope `−1`. -/
+/-- Exact profile `T(x) = 2 − x`: `k = h = L = 1`, `T∞ = 0`, `T(L) = 1`, slope `−1`. -/
+noncomputable def unitWall (x : ℝ) : ℝ := 2 - x
+
 theorem biot_unit_profile :
-    (-(1 : ℝ) * (-1) = 1 * ((2 - 1) - 0)) ∧
-      (1 * 1 / 1 = 1) ∧
-      (2 - 1 = 1 - 0) := by
-  norm_num
+    HasDerivAt unitWall (-1) 1 ∧
+      (-(1 : ℝ) * deriv unitWall 1 = 1 * (unitWall 1 - 0)) ∧
+      ((1 : ℝ) * 1 / 1 = 1) ∧
+      unitWall 0 - unitWall 1 = unitWall 1 - 0 := by
+  have hderiv : HasDerivAt unitWall (-1) 1 := by
+    unfold unitWall
+    have h := (hasDerivAt_const (1 : ℝ) (2 : ℝ)).sub (hasDerivAt_id' (1 : ℝ))
+    convert h using 1
+    ring
+  refine ⟨hderiv, ?_, by norm_num, ?_⟩
+  · rw [hderiv.deriv]
+    norm_num
+  · unfold unitWall
+    norm_num
 
 /-- Catalog inputs `h = 25`, `L = 0.02`, `k = 16` give `Bi = 1/32`. -/
 theorem biot_catalog :

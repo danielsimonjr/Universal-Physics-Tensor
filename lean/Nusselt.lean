@@ -106,4 +106,19 @@ theorem nusselt_catalog :
     (40 : ℝ) * (2 / 10) / (26 / 1000) = 4000 / 13 := by
   norm_num
 
+/-- A conducting fluid layer with `Nu = 1` does not force the solid Biot number to `1`.
+The two lengths and conductivities are different materials. -/
+theorem nusselt_one_not_biot_one (Nu Bi hsolid ksolid Lsolid : ℝ)
+    (hNu : Nu = 1) (hk : ksolid ≠ 0)
+    (hBi : Bi = hsolid * Lsolid / ksolid)
+    (hne : hsolid * Lsolid ≠ ksolid) :
+    Nu = 1 ∧ Bi ≠ 1 := by
+  refine ⟨hNu, ?_⟩
+  intro hBi1
+  have : hsolid * Lsolid = ksolid := by
+    rw [hBi] at hBi1
+    field_simp [hk] at hBi1
+    linarith
+  exact hne this
+
 end PhysJS.Nusselt

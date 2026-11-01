@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Review and fix UPT PR #564 (be-156, be-157, be-159).
+  The PR implements the heat/mass half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: the internal-drop sign is a theorem from the Fourier/Robin route; the unit wall is the profile `T(x) = 2 − x`; `Nu = 1` does not give `Bi = 1`.
+
 - [x] Bring the architecture documents to the architecture-docs convention: `repo-tools check . --docs=docs/architecture` exits 0 on `master` (the fleet docs carry, 2026-10-23).
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.

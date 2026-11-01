@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Biot and Nusselt limits that the thin-proof plan asked for are theorems.** For `h > 0`, `k > 0`, `L > 0` and `T(L) > T∞`, the steady wall is hotter inside. The unit check is the profile `T(x) = 2 − x`, not three arithmetic identities. `Nu = 1` does not give `Bi = 1`: the two lengths and conductivities are different materials.
+
 ### Documented
 
 - **Session 14, the gravitational-wave search sentence.** The line in `docs/persona-sessions/2026-10-06-relativity-astro-bridges-session-14.md` that put `gravitational wave` on the exit-1 search list is struck. Re-measured 2026-11-01 on published `universal-physics-tensor@8.0.0` (with `@danielsimonjr/mathts-functions@0.68.0`, because a fresh install that resolves 0.68.5 does not start): `upt search "gravitational wave"` exits 0 and names `gravitational-wave-speed`. The same re-measurement is the addendum in that file. It files #525, #526, #527, #528, and #529. No `src/` change. The proposal counts in that file stay 6 standard and 5 cross-domain.
