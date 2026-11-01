@@ -22,7 +22,7 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 - [x] Close the Lean goals CI rejected on the Nernst work-law and Kirchhoff counterexample (PR #565).
   `field_simp` followed by `linarith` or `ring` left no goals, or left a non-linear remainder, on the new one-work-law and Kirchhoff proofs.
-  Done: the work-law rearrangement uses `eq_div_of_mul_eq`; the Kirchhoff inequality uses `div_left_inj'`; uniqueness of the two slopes uses `HasDerivAt.unique`.
+  Done: the work-law rearrangement uses `eq_div_of_mul_eq`; the Kirchhoff inequality uses `div_left_inj'`; uniqueness of the two slopes uses `HasDerivAt.unique`. After `field_simp` the Nernst identity is `-(ΔG° + R T ln Q) = −ΔG° − R T ln Q`, which `ring` closes.
 
 - [x] Review and fix UPT PR #565 (be-148, be-149, be-151).
   The PR implements the kinetics half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems; stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.

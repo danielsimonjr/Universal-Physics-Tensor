@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
-- **be-148/149/151 thin-proof ends are derived, not assumed.** Nernst keeps one work law `ΔG = −n F E` and defines `E° = −ΔG°/(n F)` as its `Q = 1` case, instead of assuming both work identities. The rearrangement is `eq_div_of_mul_eq`, not a leftover `field_simp; linarith` on a closed goal. van 't Hoff's `ΔC_p` counterexample is the Kirchhoff enthalpy `ΔH(T) = ΔH₀ + ΔC_p(T−T₀)`, cancelled by `div_left_inj'` so the constant-`ΔH₀` integrated form cannot hold when `ΔC_p ≠ 0`. The decade/`n` Nernst identities, the exact slopes `1` and `−1/T²`, and Eyring's `exp(−1)` gap stay theorems.
+- **be-148/149/151 thin-proof ends are derived, not assumed.** Nernst keeps one work law `ΔG = −n F E` and defines `E° = −ΔG°/(n F)` as its `Q = 1` case, instead of assuming both work identities. The rearrangement is `eq_div_of_mul_eq`; after clearing the denominator the leftover is `-(ΔG° + R T ln Q) = −ΔG° − R T ln Q`, which `ring` closes. van 't Hoff's `ΔC_p` counterexample is the Kirchhoff enthalpy `ΔH(T) = ΔH₀ + ΔC_p(T−T₀)`, cancelled by `div_left_inj'` so the constant-`ΔH₀` integrated form cannot hold when `ΔC_p ≠ 0`. The decade/`n` Nernst identities, the exact slopes `1` and `−1/T²`, and Eyring's `exp(−1)` gap stay theorems.
 
 ### Documented
 

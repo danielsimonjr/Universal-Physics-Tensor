@@ -89,6 +89,7 @@ theorem nernst_from_reaction_gibbs {ι : Type*} (s : Finset ι) (ν μ μ0 a : �
     linarith [hwork]
   rw [hE, hadd, hE0]
   field_simp [hnF]
+  ring
 
 /-- Nernst equation from ideal activities, and the same potential with `R / F = k_B / e`.
 
