@@ -7,7 +7,7 @@
  * @module dimensional/mathts-unit-wrapper
  * @internal
  */
-import { Unit } from '@danielsimonjr/mathts-core';
+import { Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
 import { mathtsExactScaleReading, mathtsParsedDimension } from './mathts-unit-delegation.js';
 import { UNIT_DATA } from './unit-data.js';
@@ -91,6 +91,7 @@ export function uptRefusalReason(text: string): string | null {
   return REFUSED.get(token) ?? null;
 }
 
+/** Whether `text` is on the Part A step A5 delegated spelling list. */
 export function isA5DelegatedText(text: string): boolean {
   return A5_DELEGATED.has(text.trim());
 }
@@ -114,6 +115,7 @@ export function applyBitScaleOverride(text: string, exact: ExactScale, scale: nu
   return { exact: row.scale, scale: localScale };
 }
 
+/** Scale, dimension, and cycles for one A5 in-set text read through MathTS. */
 export interface MathtsDelegatedReading {
   readonly exact: ExactScale;
   readonly scale: number;
@@ -139,8 +141,11 @@ export function tryMathtsA5Reading(text: string): MathtsDelegatedReading | null 
   } catch {
     return null;
   }
-  const exact = mathtsExactScaleReading(t);
+  const core = Unit.exactScale(t);
+  if (core === null) return null;
+  const scale = exactScaleToNumber(core);
   const dim = mathtsParsedDimension(t, affineDimHint ?? DIMENSIONLESS);
-  const overridden = applyBitScaleOverride(t, exact, scaleToNumber(exact));
+  const exact = UNITS.get(t)?.scale ?? mathtsExactScaleReading(t);
+  const overridden = applyBitScaleOverride(t, exact, scale);
   return { exact: overridden.exact, scale: overridden.scale, dim, cycles: 0 };
 }

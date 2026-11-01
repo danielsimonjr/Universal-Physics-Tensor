@@ -51,10 +51,13 @@ These exports are not imported by any other file in the codebase:
 ### `src/dimensional/mathts-unit-delegation.ts`
 
 - `everySymbolInBothTables` (function)
-- `mathtsExactScaleReading` (function)
 - `readFileScaleExpression` (function)
 - `_powerDim` (function)
 - `_multiplyDim` (function)
+
+### `src/dimensional/mathts-unit-wrapper.ts`
+
+- `isA5DelegatedText` (function)
 
 ### `src/numerical/spacetime-metrics.ts`
 
