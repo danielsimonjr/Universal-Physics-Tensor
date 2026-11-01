@@ -98,4 +98,15 @@ theorem mode_solves_iff (r k U D : ℝ) (hk : k ≠ 0) : Solves r k U D ↔ r = 
     rw [h0, mul_zero] at h
     linarith
 
+/-- Two modes at the same wavenumber and advection speed have decay-rate ratio equal to
+the diffusivity ratio; it does not depend on `k` or `U`. -/
+theorem decay_rate_ratio (r1 r2 k U D1 D2 : ℝ)
+    (hk : k ≠ 0) (hD2 : D2 ≠ 0)
+    (h1 : Solves r1 k U D1) (h2 : Solves r2 k U D2) :
+    r1 / r2 = D1 / D2 := by
+  have hr1 := (mode_solves_iff r1 k U D1 hk).1 h1
+  have hr2 := (mode_solves_iff r2 k U D2 hk).1 h2
+  rw [hr1, hr2]
+  field_simp
+
 end PhysJS.DiffusionMode
