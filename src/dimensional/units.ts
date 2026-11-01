@@ -44,7 +44,7 @@
  *
  * @module dimensional/units
  */
-import { Unit } from '@danielsimonjr/mathts-core';
+import { Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
 import {
@@ -60,7 +60,6 @@ import {
   type ExactScale,
 } from './exact-scale.js';
 import {
-  mathtsExactScaleReading,
   mathtsParsedDimension,
   unitExactScaleViaMathts,
   unitParserViaMathts,
@@ -377,8 +376,7 @@ function applyMathtsExactScale(text: string, local: UnitReading): UnitReading {
   if (!unitExactScaleViaMathts(text, local.scale, local.exact, local.dim)) return local;
   const core = Unit.exactScale(text.trim());
   if (core === null) return local;
-  const exact = mathtsExactScaleReading(text);
-  return { ...local, exact, scale: scaleToNumber(exact) };
+  return { ...local, scale: exactScaleToNumber(core) };
 }
 
 /**
@@ -440,13 +438,13 @@ function unitReadings(text: string): UnitReading[] {
     const local = readings[0]!;
     if (unitParserViaMathts(t, local.scale, local.exact, local.dim)) {
       lastReadingSource = { text: t, kind: 'mathts' };
-      const exact = mathtsExactScaleReading(t);
+      const core = Unit.exactScale(t);
+      const scale = core === null ? local.scale : exactScaleToNumber(core);
       return [
         {
           ...local,
           dim: mathtsParsedDimension(t, local.dim),
-          exact,
-          scale: scaleToNumber(exact),
+          scale,
         },
       ];
     }
