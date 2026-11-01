@@ -20,6 +20,18 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Merge master (`8d22f36f`, #563) into PR #565 and keep both sides of the ledger.
+  #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Eyring/van 't Hoff/Nernst rows.
+  Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.
+
+- [x] Close the Lean goals CI rejected on the Nernst work-law and Kirchhoff counterexample (PR #565).
+  `field_simp` followed by `linarith` or `ring` left no goals, or left a non-linear remainder, on the new one-work-law and Kirchhoff proofs.
+  Done: the work-law rearrangement uses `eq_div_of_mul_eq`; the Kirchhoff inequality uses `div_left_inj'`; uniqueness of the two slopes uses `HasDerivAt.unique`. After `field_simp` the Nernst identity is `-(ΔG° + R T ln Q) = −ΔG° − R T ln Q`, which `ring` closes.
+
+- [x] Review and fix UPT PR #565 (be-148, be-149, be-151).
+  The PR implements the kinetics half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; catalog citations match the theorems; stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
+  Done: one Nernst work law with `E° = −ΔG°/(n F)`; Kirchhoff `ΔH(T) = ΔH₀ + ΔC_p(T−T₀)` is the van 't Hoff counterexample; decade/`n` identities and the `exp(−1)` gap are theorems.
+
 - [x] Merge master (`8d22f36f`, #563) into PR #564 and keep both sides of the ledger.
   #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Biot/Nusselt/Sherwood rows.
   Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.

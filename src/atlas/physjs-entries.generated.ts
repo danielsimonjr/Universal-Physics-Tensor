@@ -1895,7 +1895,7 @@ export const PHYSJS_ENTRIES = [
     kind: "bridge",
     theorem: "PhysJS.NernstGibbs.nernst_eq",
     file: "NernstGibbs.lean",
-    covers: "the ideal activities μ_i = μ_i° + R T ln a_i sum to ΔG = ΔG° + R T ln Q (reaction_gibbs), and ΔG = −n F E, ΔG° = −n F E° with F = N_A e give E = E° − (R T/(n F)) ln Q. The cell standard state is PhysJS.GibbsIsotherm.gibbs_eq. Not a second proof of be-150",
+    covers: "the ideal activities μ_i = μ_i° + R T ln a_i sum to ΔG = ΔG° + R T ln Q (reaction_gibbs). One work law ΔG = −n F E, with E° = −ΔG°/(n F) the Q = 1 case of that same law, and F = N_A e, give E = E° − (R T/(n F)) ln Q. The cell standard state is PhysJS.GibbsIsotherm.gibbs_eq. Not a second proof of be-150",
     coverage: "covers its statement only",
     leanProof: "complete",
     axioms: ["propext", "Classical.choice", "Quot.sound"],
