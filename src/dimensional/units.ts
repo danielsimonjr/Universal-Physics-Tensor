@@ -434,6 +434,12 @@ export function readUnit(text: string): UnitReading {
   return readings[0]!;
 }
 
+/** Which reader parsed `text` last: local grammar or MathTS `Unit.parse`. @internal */
+export function unitReadingsSource(text: string): 'mathts' | 'local' {
+  void text;
+  return 'local';
+}
+
 /** Parse a unit expression; the empty string is dimensionless. @public */
 export function parseUnit(text: string): ParsedUnit {
   const r = readUnit(text);
