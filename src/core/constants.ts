@@ -110,8 +110,8 @@ function unitTableDecimal(symbol: string): number {
  * written; the rate uses the same compound scale as the unit reader (not the
  * separate float of `67.4e3/(1e6×pc)` alone).
  */
-/** Planck 2018: 67.4 km/s/Mpc through the delegated unit scale to Hz. */
 const KM_S_MPC_TO_HZ = 3.240779289444365e-20;
+/** Planck 2018 Hubble rate in SI (s⁻¹), matching delegated `convertValue('67.4km/s/Mpc', 'Hz')`. */
 export const H0_SI = 67.4 * KM_S_MPC_TO_HZ;
 
 /**
