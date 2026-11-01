@@ -90,73 +90,85 @@
           "key": "B_Hz",
           "symbol": "B",
           "unit": "Hz",
-          "meaning": "noise-equivalent bandwidth f_hi − f_lo"
+          "meaning": "noise-equivalent bandwidth f_hi − f_lo",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "R_eff_ohm",
           "symbol": "R_eff",
           "unit": "ohm",
-          "meaning": "R in parallel with R_in: the resistance the instrument sees"
+          "meaning": "R in parallel with R_in: the resistance the instrument sees",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "S_V_V2_per_Hz",
           "symbol": "S_V",
           "unit": "V^2/Hz",
-          "meaning": "flat one-sided spectral density 4k_BT R_eff"
+          "meaning": "flat one-sided spectral density 4k_BT R_eff",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "V_rms_unloaded_V",
           "symbol": "V_rms,0",
           "unit": "V",
-          "meaning": "open-circuit value √(4k_BTRB), with no instrument attached"
+          "meaning": "open-circuit value √(4k_BTRB), with no instrument attached",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "V_rms_V",
           "symbol": "V_rms",
           "unit": "V",
-          "meaning": "the RMS noise voltage the instrument reads (scalar model)"
+          "meaning": "the RMS noise voltage the instrument reads (scalar model)",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "loading_ratio",
           "symbol": "V_rms/V_rms,0",
           "unit": "",
-          "meaning": "√(R_in/(R + R_in)): what the input resistance removes"
+          "meaning": "√(R_in/(R + R_in)): what the input resistance removes",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "V_rms_parent_V",
           "symbol": "V_rms,parent",
           "unit": "V",
-          "meaning": "the parent spectrum integrated over the band (MathTS quad, adaptive Gauss–Kronrod)"
+          "meaning": "the parent spectrum integrated over the band (MathTS quad, adaptive Gauss–Kronrod)",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "parent_deviation",
           "symbol": "V_rms/V_rms,parent − 1",
           "unit": "",
-          "meaning": "signed relative difference of the scalar result relative to the parent"
+          "meaning": "signed relative difference of the scalar result relative to the parent",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "V_rms_rel_sigma",
           "symbol": "σ(V_rms)/V_rms",
           "unit": "",
-          "meaning": "statistical scatter of an RMS averaged over t_avg: 1/(2√(B t_avg)) (Dicke radiometer relation)"
+          "meaning": "statistical scatter of an RMS averaged over t_avg: 1/(2√(B t_avg)) (Dicke radiometer relation)",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "V_rms_total_V",
           "symbol": "V_rms,total",
           "unit": "V",
-          "meaning": "what the instrument reads with its amplifier noise added in quadrature; not defined without e_n2/i_n2"
+          "meaning": "what the instrument reads with its amplifier noise added in quadrature; not defined without e_n2/i_n2",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "resistor_fraction",
           "symbol": "φ",
           "unit": "",
-          "meaning": "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); not defined without e_n2/i_n2"
+          "meaning": "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); not defined without e_n2/i_n2",
+          "method": "runCaseResistorNoise"
         },
         {
           "key": "T_n_K",
           "symbol": "T_n",
           "unit": "K",
-          "meaning": "the amplifier's noise temperature for the source R_eff, (e_n² + i_n²R_eff²)/(4k_B R_eff); not defined without e_n2/i_n2"
+          "meaning": "the amplifier's noise temperature for the source R_eff, (e_n² + i_n²R_eff²)/(4k_B R_eff); not defined without e_n2/i_n2",
+          "method": "runCaseResistorNoise"
         }
       ],
       "conditions": [
@@ -378,115 +390,134 @@
           "key": "gamma_kg_per_s",
           "symbol": "γ",
           "unit": "kg/s",
-          "meaning": "Stokes drag coefficient 6πηa"
+          "meaning": "Stokes drag coefficient 6πηa",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "D_m2_per_s",
           "symbol": "D",
           "unit": "m^2/s",
-          "meaning": "diffusion coefficient k_BT/(6πηa)"
+          "meaning": "diffusion coefficient k_BT/(6πηa)",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "MSD_m2",
           "symbol": "⟨|Δr|²⟩",
           "unit": "m^2",
-          "meaning": "mean-square displacement 2dDt over the tracked axes"
+          "meaning": "mean-square displacement 2dDt over the tracked axes",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "rms_displacement_m",
           "symbol": "√⟨|Δr|²⟩",
           "unit": "m",
-          "meaning": "root-mean-square displacement over the tracked axes"
+          "meaning": "root-mean-square displacement over the tracked axes",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "m_kg",
           "symbol": "m",
           "unit": "kg",
-          "meaning": "particle mass (4/3)πa³ρ_p"
+          "meaning": "particle mass (4/3)πa³ρ_p",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "tau_p_s",
           "symbol": "τ_p",
           "unit": "s",
-          "meaning": "momentum relaxation time (m + m_f/2)/γ, with the displaced-fluid added mass m_f/2"
+          "meaning": "momentum relaxation time (m + m_f/2)/γ, with the displaced-fluid added mass m_f/2",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "tau_f_s",
           "symbol": "τ_f",
           "unit": "s",
-          "meaning": "vorticity diffusion time ρ_f a²/η over one radius (hydrodynamic memory)"
+          "meaning": "vorticity diffusion time ρ_f a²/η over one radius (hydrodynamic memory)",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "v_sed_m_per_s",
           "symbol": "v_s",
           "unit": "m/s",
-          "meaning": "Stokes sedimentation speed (2/9)(ρ_p − ρ_f) g a²/η; negative means the sphere rises"
+          "meaning": "Stokes sedimentation speed (2/9)(ρ_p − ρ_f) g a²/η; negative means the sphere rises",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "Re",
           "symbol": "Re",
           "unit": "",
-          "meaning": "ρ_f a max(√(k_BT/m), |v_s|)/η — radius-based; a diameter-based Re is twice this"
+          "meaning": "ρ_f a max(√(k_BT/m), |v_s|)/η — radius-based; a diameter-based Re is twice this",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "MSD_langevin_m2",
           "symbol": "⟨|Δr|²⟩_L",
           "unit": "m^2",
-          "meaning": "the Langevin parent: 2dD[t − τ(1 − e^{−t/τ})], τ = m/γ (bare mass)"
+          "meaning": "the Langevin parent: 2dD[t − τ(1 − e^{−t/τ})], τ = m/γ (bare mass)",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "langevin_deviation",
           "symbol": "MSD/MSD_L − 1",
           "unit": "",
-          "meaning": "signed relative difference of the diffusive MSD relative to the Langevin one"
+          "meaning": "signed relative difference of the diffusive MSD relative to the Langevin one",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "MSD_hydro_m2",
           "symbol": "⟨|Δr|²⟩_H",
           "unit": "m^2",
-          "meaning": "the Langevin–Basset parent: added mass and hydrodynamic memory, unbounded incompressible fluid (branch-cut integral of its Laplace-domain VACF)"
+          "meaning": "the Langevin–Basset parent: added mass and hydrodynamic memory, unbounded incompressible fluid (branch-cut integral of its Laplace-domain VACF)",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "hydro_correction_m2",
           "symbol": "⟨|Δr|²⟩_H − ⟨|Δr|²⟩",
           "unit": "m^2",
-          "meaning": "what inertia and memory change in the MSD at t; ≈ −4dD√(τ_f t/π) at t ≫ τ_f"
+          "meaning": "what inertia and memory change in the MSD at t; ≈ −4dD√(τ_f t/π) at t ≫ τ_f",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "hydro_deviation",
           "symbol": "MSD/MSD_H − 1",
           "unit": "",
-          "meaning": "signed relative difference of the diffusive MSD relative to the Langevin–Basset one"
+          "meaning": "signed relative difference of the diffusive MSD relative to the Langevin–Basset one",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "memory_correction",
           "symbol": "MSD_H/MSD_OU − 1",
           "unit": "",
-          "meaning": "the memory force's own share: MSD_H against the Ornstein–Uhlenbeck MSD with the same τ_p (added mass, no memory)"
+          "meaning": "the memory force's own share: MSD_H against the Ornstein–Uhlenbeck MSD with the same τ_p (added mass, no memory)",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "D_parallel_m2_per_s",
           "symbol": "D_∥",
           "unit": "m^2/s",
-          "meaning": "D beside the wall, parallel to it: D·(Faxén series in a/h); not defined without h_m"
+          "meaning": "D beside the wall, parallel to it: D·(Faxén series in a/h); not defined without h_m",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "D_perp_m2_per_s",
           "symbol": "D_⊥",
           "unit": "m^2/s",
-          "meaning": "D normal to the wall: D/λ, λ from Brenner's exact series; not defined without h_m"
+          "meaning": "D normal to the wall: D/λ, λ from Brenner's exact series; not defined without h_m",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "MSD_wall_m2",
           "symbol": "⟨|Δr|²⟩_w",
           "unit": "m^2",
-          "meaning": "2t(d_∥ D_∥ + d_⊥ D_⊥): the tracked horizontal axes parallel to the wall, a third one normal to it; not defined without h_m"
+          "meaning": "2t(d_∥ D_∥ + d_⊥ D_⊥): the tracked horizontal axes parallel to the wall, a third one normal to it; not defined without h_m",
+          "method": "runCaseBrownianSphere"
         },
         {
           "key": "wall_deviation",
           "symbol": "MSD/MSD_w − 1",
           "unit": "",
-          "meaning": "signed relative difference of the unbounded-fluid MSD relative to the wall-corrected one; not defined without h_m"
+          "meaning": "signed relative difference of the unbounded-fluid MSD relative to the wall-corrected one; not defined without h_m",
+          "method": "runCaseBrownianSphere"
         }
       ],
       "comparison": {
@@ -1358,91 +1389,106 @@
           "key": "tau_s",
           "symbol": "τ",
           "unit": "s",
-          "meaning": "lumped time constant ρcV/(hA) = ρca/(3h)"
+          "meaning": "lumped time constant ρcV/(hA) = ρca/(3h)",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "Bi",
           "symbol": "Bi",
           "unit": "",
-          "meaning": "Biot number h L_c/k with L_c = V/A = a/3 (the lumped criterion's form)"
+          "meaning": "Biot number h L_c/k with L_c = V/A = a/3 (the lumped criterion's form)",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "Bi_radius",
           "symbol": "Bi_a",
           "unit": "",
-          "meaning": "h a/k: the radius-based Biot number of the series solution (3 Bi)"
+          "meaning": "h a/k: the radius-based Biot number of the series solution (3 Bi)",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "alpha_m2_per_s",
           "symbol": "α",
           "unit": "m^2/s",
-          "meaning": "thermal diffusivity k/(ρc)"
+          "meaning": "thermal diffusivity k/(ρc)",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "Fo",
           "symbol": "Fo",
           "unit": "",
-          "meaning": "Fourier number αt/a²"
+          "meaning": "Fourier number αt/a²",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "theta",
           "symbol": "θ/θ0",
           "unit": "",
-          "meaning": "lumped excess-temperature ratio e^{−t/τ}"
+          "meaning": "lumped excess-temperature ratio e^{−t/τ}",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "T_K",
           "symbol": "T(t)",
           "unit": "K",
-          "meaning": "the lumped temperature at t: what a thermometer in or on the sphere reads"
+          "meaning": "the lumped temperature at t: what a thermometer in or on the sphere reads",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "Q_J",
           "symbol": "Q",
           "unit": "J",
-          "meaning": "heat released to the fluid by t, ρcV(T0 − T(t)) (negative when the sphere warms)"
+          "meaning": "heat released to the fluid by t, ρcV(T0 − T(t)) (negative when the sphere warms)",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "theta_parent_mean",
           "symbol": "θ̄/θ0",
           "unit": "",
-          "meaning": "volume-mean excess-temperature ratio of the series solution (convection only)"
+          "meaning": "volume-mean excess-temperature ratio of the series solution (convection only)",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "parent_deviation",
           "symbol": "θ/θ̄ − 1",
           "unit": "",
-          "meaning": "signed relative difference of the lumped ratio relative to the parent's volume mean"
+          "meaning": "signed relative difference of the lumped ratio relative to the parent's volume mean",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "T_centre_K",
           "symbol": "T(0, t)",
           "unit": "K",
-          "meaning": "temperature at the centre from the series solution"
+          "meaning": "temperature at the centre from the series solution",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "T_surface_K",
           "symbol": "T(a, t)",
           "unit": "K",
-          "meaning": "temperature at the surface from the series solution"
+          "meaning": "temperature at the surface from the series solution",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "h_rad_max_W_per_m2_K",
           "symbol": "h_rad",
           "unit": "W/(m^2*K)",
-          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run"
+          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "Bi_radiating",
           "symbol": "Bi_r",
           "unit": "",
-          "meaning": "(h + h_rad)(a/3)/k: the Biot number with the largest radiative conductance added"
+          "meaning": "(h + h_rad)(a/3)/k: the Biot number with the largest radiative conductance added",
+          "method": "runCaseLumpedCooling"
         },
         {
           "key": "T_radiating_K",
           "symbol": "T_r(t)",
           "unit": "K",
-          "meaning": "the lumped temperature with the T⁴ loss kept (RK4). The linear-loss check does not apply to it; its premise is Bi_radiating ≤ 0.1, and it is not defined otherwise"
+          "meaning": "the lumped temperature with the T⁴ loss kept (RK4). The linear-loss check does not apply to it; its premise is Bi_radiating ≤ 0.1, and it is not defined otherwise",
+          "method": "runCaseLumpedCooling"
         }
       ],
       "conditions": [

@@ -10,6 +10,10 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Part B step B12 — catalog loader rejects unwired outputs.** `catalogSemanticProblems` with `CASE_METHOD_NAMES` requires every output to declare exactly one of `expr`, `relation`, or a known `method`; relation ids must exist in the bridge catalog. Legacy method-only cases name their `runCase*` runner on each output; load fails on typos. `tests/cases/applied-cases-output-wiring.test.ts` pins the rule.
+
+- **Part B step B11 — damped resonator ring-down expressions.** `case-damped-resonator` closed-form outputs run through the catalog engine; `windowedLinewidthCatalogHz` stays the method for the truncated-spectrum linewidth.
+
 - **Part B step B10 — Kepler RV catalog expressions and be-52 relation.** `case-kepler-rv` outputs and checks run through the catalog engine; apsidal advance calls `be-52` via a `relation` output. `readAppliedCaseFile` semantic validation rejects unknown relation ids when `CASE_METHOD_NAMES` is supplied.
 
 - **Part B step B9 — catalog engine for skin depth.** `src/cases/engine.ts` evaluates `case-skin-depth` from `expr` and `method` fields in `data/applied-cases.json`; `skinDeltaMaxwellM` stays the method for the parent penetration depth. `tests/cases/applied-case-engine.test.ts` pins parity with the legacy runner and a mutated exponent control.
