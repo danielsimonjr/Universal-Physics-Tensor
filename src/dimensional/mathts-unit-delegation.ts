@@ -161,6 +161,7 @@ export function unitParserViaMathts(
   return true;
 }
 
+/** Map MathTS unit dimensions to the UPT seven-base record. */
 export function mathtsParsedDimension(text: string, localDim: Dimension): Dimension {
   const u = Unit.parse(text.trim());
   return dimensionFromMathtsVector(u.dimensions, localDim);
@@ -176,12 +177,18 @@ export function readFileScaleExpression(text: string, resolve: (name: string) =>
   );
 }
 
-/** @internal Test-only: local dimension power helper for delegation checks. */
+/**
+ * Raise a dimension to an integer power (test-only).
+ * @internal
+ */
 export function _powerDim(dim: Dimension, exp: number): Dimension {
   return power(dim, exp);
 }
 
-/** @internal Test-only: local dimension multiply helper for delegation checks. */
+/**
+ * Multiply two dimensions (test-only).
+ * @internal
+ */
 export function _multiplyDim(a: Dimension, b: Dimension): Dimension {
   return multiply(a, b);
 }

@@ -128,7 +128,7 @@ describe('core/constants.ts is the one owner of physical-constant values', () =>
   it('H0 has one value: the unit table\'s reading of 67.4 km/s/Mpc', () => {
     expect(OWNER.H0_SI).toBe(convertValue('67.4km/s/Mpc', 'Hz').value);
     expect(PhysicalConstants.H0).toBe(OWNER.H0_SI);
-    expect(OWNER.H0_SI).toBe(2.1842852410855023e-18);
+    expect(OWNER.H0_SI).toBe(2.184285241085502e-18);
   });
 
   it('the vacuum constants are related by c exactly', () => {

@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "totalSourceFiles": 386,
-    "totalTestFiles": 673,
-    "testedCount": 377,
-    "directlyTestedCount": 343,
+    "totalSourceFiles": 387,
+    "totalTestFiles": 677,
+    "testedCount": 378,
+    "directlyTestedCount": 344,
     "untestedCount": 9,
     "coveragePercent": "97.7",
     "directCoveragePercent": "88.9"
@@ -330,6 +330,7 @@
     "src/dimensional/killing-validators.ts",
     "src/dimensional/klein-gordon-equation.ts",
     "src/dimensional/mathts-unit-delegation.ts",
+    "src/dimensional/mathts-unit-wrapper.ts",
     "src/dimensional/metric-validators.ts",
     "src/dimensional/metric.ts",
     "src/dimensional/natural-units.ts",
@@ -676,6 +677,7 @@
     "src/dimensional/killing-validators.ts",
     "src/dimensional/klein-gordon-equation.ts",
     "src/dimensional/mathts-unit-delegation.ts",
+    "src/dimensional/mathts-unit-wrapper.ts",
     "src/dimensional/metric-validators.ts",
     "src/dimensional/metric.ts",
     "src/dimensional/quantity-registry.ts",
@@ -1951,6 +1953,7 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts"
     ],
     "src/bridges/evaluators.ts": [
@@ -1991,6 +1994,7 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/gum-monte-carlo.test.ts",
@@ -9360,6 +9364,11 @@
     "src/dimensional/mathts-unit-delegation.ts": [
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
+    "src/dimensional/mathts-unit-wrapper.ts": [
+      "tests/dimensional/unit-wrapper-a12-partial.test.ts",
+      "tests/dimensional/unit-wrapper-bit.test.ts",
+      "tests/dimensional/unit-wrapper-refusal.test.ts"
+    ],
     "src/dimensional/metric-validators.ts": [
       "tests/dimensional/curvature-invariants.test.ts",
       "tests/dimensional/derivative-strategy-field.test.ts",
@@ -9751,7 +9760,8 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/unit-wrapper-refusal.test.ts"
     ],
     "src/dimensional/units.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -9790,6 +9800,10 @@
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/unit-parse-delegation.test.ts",
+      "tests/dimensional/unit-wrapper-a12-partial.test.ts",
+      "tests/dimensional/unit-wrapper-bit.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
+      "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -11655,6 +11669,7 @@
       "tests/cases/lumped-cooling.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts"
     ],
     "src/bridges/evaluators.ts": [
@@ -11675,6 +11690,7 @@
       "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/numerical/gum-monte-carlo.test.ts"
     ],
@@ -13204,6 +13220,11 @@
     "src/dimensional/mathts-unit-delegation.ts": [
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
+    "src/dimensional/mathts-unit-wrapper.ts": [
+      "tests/dimensional/unit-wrapper-a12-partial.test.ts",
+      "tests/dimensional/unit-wrapper-bit.test.ts",
+      "tests/dimensional/unit-wrapper-refusal.test.ts"
+    ],
     "src/dimensional/metric-validators.ts": [
       "tests/dimensional/curvature-invariants.test.ts",
       "tests/dimensional/derivative-strategy-field.test.ts",
@@ -13472,7 +13493,8 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
-      "tests/dimensional/unit-data.test.ts"
+      "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/unit-wrapper-refusal.test.ts"
     ],
     "src/dimensional/units.ts": [
       "tests/bridges/evaluators.test.ts",
@@ -13490,6 +13512,10 @@
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/unit-parse-delegation.test.ts",
+      "tests/dimensional/unit-wrapper-a12-partial.test.ts",
+      "tests/dimensional/unit-wrapper-bit.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
+      "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/numerical/binding-value.test.ts",
@@ -23782,6 +23808,24 @@
       "src/dimensional/types.ts"
     ],
     "tests/dimensional/unit-parse-delegation.test.ts": [
+      "src/dimensional/units.ts"
+    ],
+    "tests/dimensional/unit-wrapper-a12-partial.test.ts": [
+      "src/dimensional/mathts-unit-wrapper.ts",
+      "src/dimensional/units.ts"
+    ],
+    "tests/dimensional/unit-wrapper-bit.test.ts": [
+      "src/dimensional/mathts-unit-wrapper.ts",
+      "src/dimensional/units.ts"
+    ],
+    "tests/dimensional/unit-wrapper-cycles.test.ts": [
+      "src/bridges/evaluators.ts",
+      "src/bridges/evaluator-inputs.ts",
+      "src/dimensional/units.ts"
+    ],
+    "tests/dimensional/unit-wrapper-refusal.test.ts": [
+      "src/dimensional/unit-data.ts",
+      "src/dimensional/mathts-unit-wrapper.ts",
       "src/dimensional/units.ts"
     ],
     "tests/dimensional/units-exact-scale-delegation.test.ts": [

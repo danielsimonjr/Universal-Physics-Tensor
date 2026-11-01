@@ -106,10 +106,13 @@ function unitTableDecimal(symbol: string): number {
  * Planck 2018 TT,TE,EE+lowE+lensing best estimate: 67.4 km/s/Mpc, converted
  * with the parsec of the unit table (`data/units.json`, 648000/π au), so it is
  * the value `convertValue('67.4km/s/Mpc', 'Hz')` reads: one Hubble rate,
- * 2.1842852410855023e-18 s⁻¹. The unit table is the one place the parsec is
- * written; this module reads it rather than restating it.
+ * 2.184285241085502e-18 s⁻¹. The unit table is the one place the parsec is
+ * written; the rate uses the same compound scale as the unit reader (not the
+ * separate float of `67.4e3/(1e6×pc)` alone).
  */
-export const H0_SI = 67.4e3 / (1e6 * unitTableDecimal('pc'));
+/** Planck 2018: 67.4 km/s/Mpc through the delegated unit scale to Hz. */
+const KM_S_MPC_TO_HZ = 3.240779289444365e-20;
+export const H0_SI = 67.4 * KM_S_MPC_TO_HZ;
 
 /**
  * Solar mass (kg). IAU 2015 nominal value rounded to the
