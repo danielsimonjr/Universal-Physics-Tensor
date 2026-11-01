@@ -210,6 +210,7 @@
     "PhysJS.Saha.saha_eq": "lean/Saha.lean",
     "PhysJS.SauerbreyMass.sauerbrey_eq": "lean/SauerbreyMass.lean",
     "PhysJS.SchawlowTownes.linewidth_eq": "lean/SchawlowTownes.lean",
+    "PhysJS.Schmidt.lewis_ratio": "lean/Schmidt.lean",
     "PhysJS.Schmidt.schmidt_eq": "lean/Schmidt.lean",
     "PhysJS.SchottkyMott.schottky_mott_eq": "lean/SchottkyMott.lean",
     "PhysJS.SchwarzschildCircularOrbits.isco_eq": "lean/SchwarzschildCircularOrbits.lean",
