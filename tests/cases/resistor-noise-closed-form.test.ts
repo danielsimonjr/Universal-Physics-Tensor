@@ -13,7 +13,7 @@
  */
 import { polylog } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
-import { RESISTOR_NOISE_CASE as C } from '../../src/cases/resistor-noise.js';
+import { RESISTOR_NOISE_CASE as C } from '../../src/cases/methods.js';
 import { H_SI, K_B_SI } from '../../src/core/constants.js';
 
 const out = (i: Record<string, number>) => C.run(i).outputs as Record<string, number>;

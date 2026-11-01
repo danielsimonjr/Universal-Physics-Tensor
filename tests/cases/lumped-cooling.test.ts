@@ -13,7 +13,7 @@ import {
   sphereEigenvalues,
   sphereSeries,
   type LumpedRadiating,
-} from '../../src/cases/lumped-cooling.js';
+} from '../../src/cases/methods.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 
 const base = {

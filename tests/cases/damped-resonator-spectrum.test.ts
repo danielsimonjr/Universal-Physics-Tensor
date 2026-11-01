@@ -11,7 +11,7 @@
  */
 import { findRoot, goertzel } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
-import { windowedLinewidthHz } from '../../src/cases/damped-resonator.js';
+import { windowedLinewidthHz } from '../../src/cases/methods.js';
 
 /** FWHM in Hz of the Goertzel power of the sampled ring-down, half-power points by Brent on each side of f_d. */
 function sampledLinewidthHz(f0: number, Q: number, T: number, fs: number, sign = -1): number {

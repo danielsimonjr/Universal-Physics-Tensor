@@ -5,7 +5,7 @@
  * and a Monte Carlo of the RMS scatter.
  */
 import { describe, expect, it } from 'vitest';
-import { RESISTOR_NOISE_CASE as C } from '../../src/cases/resistor-noise.js';
+import { RESISTOR_NOISE_CASE as C } from '../../src/cases/methods.js';
 
 const K_B = 1.380649e-23;
 const H = 6.62607015e-34;

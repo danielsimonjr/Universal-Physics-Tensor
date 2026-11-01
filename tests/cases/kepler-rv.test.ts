@@ -6,7 +6,7 @@
  * consistency against the published timing solution of the double pulsar.
  */
 import { describe, expect, it } from 'vitest';
-import { KEPLER_RV_CASE as C } from '../../src/cases/kepler-rv.js';
+import { KEPLER_RV_CASE as C } from '../../src/cases/methods.js';
 import { C_SI, GM_SUN_SI, G_SI } from '../../src/core/constants.js';
 import { runAppliedCase } from '../../src/cases/index.js';
 import { UnknownInputError } from '../../src/index.js';
