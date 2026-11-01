@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **CI also runs on a push to `cursor/mathts-*`.** Stacked MathTS PRs cannot form a `pull_request` merge commit once each parent refreshes architecture file-count claims (`totalSourceFiles` 1151 vs 1152). The same jobs now run against the branch HEAD on push, including the code-docs and architecture-docs jobs. `tests/tools/ci-workflows.test.ts` pins the branch list (red first on `[master]` only).
+
 ### Added
 
 - **Part A step A2 — exact-scale arithmetic delegates to MathTS.** `src/dimensional/exact-scale.ts` calls `@danielsimonjr/mathts-core` for decimal and ratio scales, products, quotients, integer powers, addition, and rounding (`exactScaleToNumber`). Unlike irrational factors throw on addition (`pi` + `ln2`); a fractional power throws. `tests/dimensional/exact-scale-delegation.test.ts` pins the source assertion, the two throws, a rational `addScales` that stays exact, and that `units.ts` / `unit-data.ts` are not imported. Unit conversion tests stay unchanged.
