@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Removed
+
+- **The temporary `cursor/mathts-*` push trigger in `ci.yml`.** The stacked MathTS units/cases PRs (#560–#569) are merged, so CI runs again only on pushes to `master`, pull requests, and the schedule. The code-docs and architecture-docs push conditions are back to `master` only, and the matching pin in `tests/tools/ci-workflows.test.ts` is removed.
+
 ### Changed
 
 - **Architecture claim tables name 3828 exports.** `repo-tools check` measured `totalExports` 3828 after the catalog engine and H0 exact-scale import; API.md, OVERVIEW.md, and duplicate-symbols.md had 3826.
