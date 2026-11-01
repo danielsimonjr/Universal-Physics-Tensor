@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Added
 
-- **Part B step B12 — catalog loader rejects unwired outputs.** `catalogSemanticProblems` with `CASE_METHOD_NAMES` requires every output to declare exactly one of `expr`, `relation`, or a known `method`; relation ids must exist in the bridge catalog. Legacy method-only cases name their `runCase*` runner on each output; load fails on typos. `tests/cases/applied-cases-output-wiring.test.ts` pins the rule.
+- **Part B step B12 — catalog loader rejects unwired outputs and a per-case file coming back.** `catalogSemanticProblems` with `CASE_METHOD_NAMES` requires every output to declare exactly one of `expr`, `relation`, or a known `method`; relation ids must exist in the bridge catalog. Legacy method-only cases name their `runCase*` runner on each output; load fails on typos. `isForbiddenCaseModule` names the six deleted per-case files and any new `case-*.ts`; `tests/cases/cases-directory.test.ts` applies it to `src/cases/`. `tests/cases/applied-cases-output-wiring.test.ts` pins the wiring rule.
 
 - **Part B step B11 — damped resonator ring-down expressions.** `case-damped-resonator` closed-form outputs run through the catalog engine; `windowedLinewidthCatalogHz` stays the method for the truncated-spectrum linewidth.
 
@@ -53,7 +53,7 @@ from v0.1.0 onward.
 
 ### Changed
 
-- **`H0_SI` matches `convertValue('67.4km/s/Mpc', 'Hz')` after delegated compound scales.** The Planck 2018 rate uses the same km/s/Mpc→Hz scale as the unit reader (`2.184285241085502e-18` s⁻¹).
+- **`H0_SI` is 67.4 km/s/Mpc through MathTS `Unit.exactScale`, the same path `convertValue` delegates to.** `src/core/constants.ts` calls `Unit.exactScale('km/s/Mpc')` and `exactScaleToNumber` (the pair `tryMathtsA5Reading` uses). It cannot call `convertValue` (`core/` is tier 0). The previous `67.4 * 3.240779289444365e-20` restated that double. The rate is still `2.184285241085502e-18` s⁻¹. `tests/core/constants-owner.test.ts` fails if the owner spells the factor or omits the `Unit.exactScale` call.
 
 - **The visibility tags of four `src/` symbols match the package root.** `M_PROTON_SI`, `CANONICAL_GRAPH` and `canonicalToEdges` are root exports that carried an `@internal` tag; they are now `@public`. `CurvatureKindSpec` carried a `@public` tag and is not exported; it is now `@internal`. Four comment lines change and nothing else: the emitted declaration files (385 before and after) differ in those four lines only, and the `tests/api` closure tests pass. `sha256Hex` is unchanged: `src/composition/canonical-json.ts` holds a one-line wrapper that calls `src/core/hash.ts`, so the name appears twice and the logic once.
 

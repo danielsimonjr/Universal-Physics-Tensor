@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Review and fix the stacked MathTS units/cases PRs (#560–#569) against the plan.
+  #568/#569 hardcode `H0_SI` as `67.4 * 3.240779289444365e-20`. Derive it from MathTS `Unit.exactScale('km/s/Mpc')`. Confirm Part B deleted the per-case files and the loader/directory gate refuses new ones. Attach CI on #562 and #569.
+  Done: `H0_SI` is `67.4 * exactScaleNumber('km/s/Mpc')`. The six per-case files are gone. `isForbiddenCaseModule` refuses those names and any new `case-*.ts`; the directory test applies it. CI attach is a push of this commit.
+
 - [x] Bring the architecture documents to the architecture-docs convention: `repo-tools check . --docs=docs/architecture` exits 0 on `master` (the fleet docs carry, 2026-10-23).
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.

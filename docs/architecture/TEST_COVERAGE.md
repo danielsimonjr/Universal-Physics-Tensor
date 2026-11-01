@@ -179,7 +179,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `canonical/seed-l-layer.ts` | `seed-l-layer.test.ts`, `axes.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `canonical/structural.ts` | `structural-classifier.test.ts`, `algebraic-equivalence.test.ts` | — |
 | `cases/catalog-checks.ts` | `applied-cases-catalog.test.ts` | — |
-| `cases/catalog.ts` | `applied-case-engine.test.ts`, `applied-cases-catalog.test.ts`, `applied-cases-output-wiring.test.ts` | — |
+| `cases/catalog.ts` | `applied-case-engine.test.ts`, `applied-cases-catalog.test.ts`, `applied-cases-output-wiring.test.ts`, `cases-directory.test.ts` | — |
 | `cases/index.ts` | `evaluators.test.ts`, `one-evaluate-path.test.ts`, `applied-case-engine.test.ts`, `applied-cases-catalog.test.ts`, `applied-cases.test.ts`, `kepler-rv.test.ts`, `applied-cases.test.ts`, `expression-gaps.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
 | `cases/methods.ts` | `applied-case-engine.test.ts`, `applied-cases-output-wiring.test.ts`, `brownian-sphere.test.ts`, `damped-resonator-spectrum.test.ts`, `damped-resonator.test.ts`, `kepler-rv.test.ts`, `lumped-cooling-inverse-time.test.ts`, `lumped-cooling.test.ts`, `method-text.test.ts`, `resistor-noise-closed-form.test.ts`, `resistor-noise.test.ts`, `skin-depth.test.ts`, `unit-table-constants.test.ts`, `signed-residual-label.test.ts`, `mathts-delegation.test.ts` | — |
 | `cases/quadrature.ts` | `mathts-delegation.test.ts` | — |
@@ -612,7 +612,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `cases/applied-cases-output-wiring.test.ts` | 4 files |
 | `cases/applied-cases.test.ts` | 11 files |
 | `cases/brownian-sphere.test.ts` | 6 files |
-| `cases/cases-directory.test.ts` | 0 files |
+| `cases/cases-directory.test.ts` | 1 files |
 | `cases/damped-resonator-spectrum.test.ts` | 3 files |
 | `cases/damped-resonator.test.ts` | 3 files |
 | `cases/kepler-rv.test.ts` | 115 files |

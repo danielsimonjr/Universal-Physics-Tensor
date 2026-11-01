@@ -2172,7 +2172,8 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `AppliedCaseCheckRecord`, `AppliedCaseOutputRecord`, `AppliedCaseRecord`, `AppliedCaseFile`
-- Functions: `readAppliedCaseFile`, `catalogSemanticProblems`, `appliedCaseCatalog`, `appliedCaseRecord`, `projectAppliedCaseRecord`, `assembleAppliedCase`, `appliedCaseIds`
+- Functions: `isForbiddenCaseModule`, `readAppliedCaseFile`, `catalogSemanticProblems`, `appliedCaseCatalog`, `appliedCaseRecord`, `projectAppliedCaseRecord`, `assembleAppliedCase`, `appliedCaseIds`
+- Constants: `FORBIDDEN_PER_CASE_MODULES`
 
 ---
 
@@ -5292,12 +5293,8 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber` |
 | `@danielsimonjr/mathts-functions` | `* as mathtsConstants` |
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./data-file.js` | `checkedDataFile` | Import |
 
 **Exports:**
 - Constants:
@@ -7648,13 +7645,13 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 87055 |
-| Total Exports | 2795 |
+| Total Lines of Code | 87075 |
+| Total Exports | 2797 |
 | Total Re-exports | 1390 |
 | Total Classes | 85 |
 | Total Interfaces | 517 |
-| Total Functions | 905 |
-| Total Type Guards | 14 |
+| Total Functions | 906 |
+| Total Type Guards | 15 |
 | Total Enums | 0 |
 | Type-only Imports | 525 |
 | Runtime Circular Deps | 0 |

@@ -2574,7 +2574,8 @@
     "src/cases/catalog.ts": [
       "tests/cases/applied-case-engine.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
-      "tests/cases/applied-cases-output-wiring.test.ts"
+      "tests/cases/applied-cases-output-wiring.test.ts",
+      "tests/cases/cases-directory.test.ts"
     ],
     "src/cases/engine.ts": [],
     "src/cases/index.ts": [
@@ -11948,7 +11949,8 @@
     "src/cases/catalog.ts": [
       "tests/cases/applied-case-engine.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
-      "tests/cases/applied-cases-output-wiring.test.ts"
+      "tests/cases/applied-cases-output-wiring.test.ts",
+      "tests/cases/cases-directory.test.ts"
     ],
     "src/cases/engine.ts": [],
     "src/cases/index.ts": [
@@ -16287,7 +16289,9 @@
       "src/canonical/registry.ts",
       "src/composition/expr-eval.ts"
     ],
-    "tests/cases/cases-directory.test.ts": [],
+    "tests/cases/cases-directory.test.ts": [
+      "src/cases/catalog.ts"
+    ],
     "tests/cases/damped-resonator-spectrum.test.ts": [
       "src/cases/methods.ts",
       "src/cases/types.ts",

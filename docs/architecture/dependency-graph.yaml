@@ -3,7 +3,7 @@ metadata:
   version: 11.0.0
   totalFiles: 385
   totalModules: 13
-  totalExports: 2795
+  totalExports: 2797
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5078,6 +5078,8 @@ modules:
             - CaseExample
           typeOnly: true
       exports:
+        - FORBIDDEN_PER_CASE_MODULES
+        - isForbiddenCaseModule
         - readAppliedCaseFile
         - catalogSemanticProblems
         - appliedCaseCatalog
@@ -5091,6 +5093,7 @@ modules:
         - AppliedCaseRecord
         - AppliedCaseFile
       functions:
+        - isForbiddenCaseModule
         - readAppliedCaseFile
         - catalogSemanticProblems
         - appliedCaseCatalog
@@ -5098,6 +5101,8 @@ modules:
         - projectAppliedCaseRecord
         - assembleAppliedCase
         - appliedCaseIds
+      constants:
+        - FORBIDDEN_PER_CASE_MODULES
     src/cases/engine.ts:
       description: Evaluate applied-case outputs and checks from catalog `expr`, `relation`, and
       externalDependencies: []
@@ -13048,14 +13053,15 @@ modules:
     src/core/constants.ts:
       description: Canonical CODATA 2022 + SI-defined physical constants for UPT.
       externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - Unit
+            - exactScaleToNumber
         - package: "@danielsimonjr/mathts-functions"
           imports:
             - "* as mathtsConstants"
       nodeDependencies: []
-      internalDependencies:
-        - file: ./data-file.js
-          imports:
-            - checkedDataFile
+      internalDependencies: []
       exports:
         - C_SI
         - R_INF_SI
@@ -19384,14 +19390,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 87055
-  totalExports: 2795
+  totalLinesOfCode: 87075
+  totalExports: 2797
   totalClasses: 85
   totalInterfaces: 517
-  totalFunctions: 905
-  totalTypeGuards: 14
+  totalFunctions: 906
+  totalTypeGuards: 15
   totalEnums: 0
-  totalConstants: 411
+  totalConstants: 412
   totalReExports: 1390
   totalTypeOnlyImports: 525
   runtimeCircularDeps: 0

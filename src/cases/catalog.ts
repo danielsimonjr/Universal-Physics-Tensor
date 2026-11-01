@@ -58,6 +58,26 @@ export interface AppliedCaseFile {
 const OPS = new Set<AppliedCaseCheckRecord['op']>(['<=', '>=', '>']);
 
 /**
+ * Per-case module names B8 deleted. The published package has no `src/`, so
+ * this list is the loader's record; {@link isForbiddenCaseModule} and the
+ * directory test fail if one of these, or a new `case-*.ts`, comes back.
+ */
+export const FORBIDDEN_PER_CASE_MODULES = [
+  'skin-depth.ts',
+  'kepler-rv.ts',
+  'damped-resonator.ts',
+  'resistor-noise.ts',
+  'lumped-cooling.ts',
+  'brownian-sphere.ts',
+] as const;
+
+/** True for a deleted per-case file or a new `case-*.ts` under `src/cases/`. */
+export function isForbiddenCaseModule(name: string): boolean {
+  return (FORBIDDEN_PER_CASE_MODULES as readonly string[]).includes(name)
+    || /^case-.+\.ts$/.test(name);
+}
+
+/**
  * Parse and validate catalog text. Schema problems and semantic problems throw
  * with every message listed.
  * @internal

@@ -131,6 +131,15 @@ describe('core/constants.ts is the one owner of physical-constant values', () =>
     expect(OWNER.H0_SI).toBe(2.184285241085502e-18);
   });
 
+  it('H0_SI derives from MathTS Unit.exactScale of km/s/Mpc, not a magic factor', () => {
+    const src = stripComments(readFileSync(OWNER_FILE, 'utf8'));
+    expect(src).toMatch(/Unit\.exactScale\(/);
+    expect(src).toMatch(/\bexactScaleToNumber\b/);
+    expect(src).toMatch(/['"]km\/s\/Mpc['"]/);
+    expect(src).not.toMatch(/3\.240779289444365e-20/);
+    expect(src).not.toMatch(/\bKM_S_MPC_TO_HZ\b/);
+  });
+
   it('the vacuum constants are related by c exactly', () => {
     expect(OWNER.MU0_SI * OWNER.EPS0_SI * OWNER.C_SI * OWNER.C_SI).toBeCloseTo(1, 15);
   });
