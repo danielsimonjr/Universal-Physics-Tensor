@@ -145,3 +145,112 @@ All are **unproven**. No measurement was opened for any of them.
 ## 6. Scope statement
 
 No src changes. Awaiting owner review before any fix/PhysJS agents. No release, tag, publish, merge, per-equation module, catalog edit, or specification write-up was made. Bare `e` is the elementary charge and Euler's number is `exp(x)` throughout.
+
+## 7. Further pass, 1 November 2026
+
+A second exercise of the same published tarball, after this file had already landed. Scratch directory `/tmp/upt-dogfood-800`. Node v22.23.4. `npm view universal-physics-tensor@8.0.0 version gitHead --prefer-online` printed `8.0.0` and `888099c0111d88214b0ca92aa9c7ea45292a9d48`. Annotated tag `v8.0.0` is object `0956655b13c08cd6e870dba88c4fd1447c139ed4` and its target is that commit. Publish run `37527828453` succeeded. `gh release view v8.0.0` returns release not found.
+
+`npm ls universal-physics-tensor` printed `universal-physics-tensor@8.0.0`. Reading `node_modules/universal-physics-tensor/package.json` printed `8.0.0`. `require('universal-physics-tensor/package.json')` throws `ERR_PACKAGE_PATH_NOT_EXPORTED`. That subpath gap is [#556](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/556).
+
+A fresh `npm i universal-physics-tensor@8.0.0` at 8:10 AM America/Chicago resolved `@danielsimonjr/mathts-functions@0.68.5` with `@danielsimonjr/mathts-core@0.16.0`. `upt version` exited 1:
+
+```
+Could not load the built package. Run `npm run build` first.
+rationalNullspace: entry [0, 0] must be a finite number or a Fraction
+```
+
+The stack is `entryToFraction` in mathts-functions 0.68.5, called from `nullSpace` in `dist/dimensional/buckingham.js` while canonical dimensional fields load. The same core `Fraction` is accepted by mathts-functions 0.68.0. This failure is already [#525](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/525) (also #530 and #541). [#548](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/548) is the same report and should be closed as a duplicate. The commands below ran with `@danielsimonjr/mathts-functions` overridden to `0.68.0`. `upt version` then printed `8.0.0`. `upt eval --debug exp(1)` printed `2.718281828459045`.
+
+`BRIDGE_EQUATIONS.length` is 160: 124 established, 33 speculative, 3 highly-speculative; 120 standard and 40 cross-domain. Ids 11–170. `CANONICAL_EQUATIONS.length` is 109. Search footer: 160 catalog bridges, 109 canonical equations, 24 atlas models, 20 atlas bridges, 703 quantities, 6 applied cases, 3 regimes.
+
+### Commands that matched an independent calculation
+
+`k_B = 1.380649e-23`, `e = 1.602176634e-19`, `ε0 = 8.8541878128e-12`.
+
+| command | exit | printed |
+|---|---|---|
+| `upt eval e` | 0 | `1.602176634e-19` |
+| `upt eval E` | 2 | `E` is energy |
+| `upt eval '1-e^2'` | 2 | `e` is the elementary charge. Euler's number is `exp(x)` |
+| `upt evaluate be-126` `n=50`, `ε0`, `h=20um`, `V=-10`, `g=2um` | 0 | `4.4270939064e-7` |
+| `upt evaluate be-127 T_K=300 Cd_F=0 Cox_F=1` | 0 | `0.05952642933233172` |
+| `upt evaluate be-128 D=0.4` | 0 | `1.6666666666666667` |
+| `upt evaluate be-129` `h=20W/m2K`, `k=200W/mK`, `t=1mm`, `L=5cm` | 0 | `0.8610571715805476` |
+| `upt evaluate be-131` water, `K=2.2GPa`, `E=2GPa`, `D=50mm`, wall `2mm`, `Δv=1` | 0 | `277836.25115549687` |
+| `upt evaluate be-132` `ε=1e-9`, `b/a=exp(1)` | 0 | `6.283185307179586e-9` |
+| `upt evaluate be-133 c=20 k=100 m=1` | 0 | `1` |
+| `upt evaluate be-78 E=200GPa I=1cm^4 L=2m` | 0 | `4934.802200544679` |
+| `upt evaluate be-82 I_s=1pA V=0.7 T=77degF` | 0 | `298.15` K, `0.6799065147504729` |
+| `upt evaluate be-70` both signs negative | 0 | `0.0036192799701009757` |
+| `evaluateRelation` Carnot at 300 K and 800 K, reservoir names | — | `0.625` |
+| `evaluateRelation` first law, heat 100, work 40 | — | `60` |
+| `evaluateRelation` kinetic energy, mass 2, speed 3 | — | `9` |
+| copper skin-depth case, `1.68e-8` Ω·m, 1 MHz | 0 | `delta_m = 0.0000652341146231142` |
+
+The fin number is `tanh(mL)/(mL)` with `m = √(2h/(kt))`. Dropping the face count 2 would print `0.9242343145200195`. The Joukowsky number is `ρ c Δv` with `c = 277.8362511554969` m/s. The swing is `ln(10) k_B T / e`. The coax check is `2 π ε`. `77 °F` is `298.15` K. `200W/mK` converts. Opposite carrier signs on be-70 exit 1. Unset sound speed stays `{ kind: 'unset' }`. Plasma frequency at negative charge prints `|charge|` and `56414.6023118063`. Unequal magnetic spellings exit 1. Sensible heat at `temperature-change=10degC` recovers `41800`. Casimir pressure at `100 nm` is `-13.001257732443651` Pa.
+
+`upt audit --source=catalog` prints DERIVED 36, COEFFICIENT UNSET 0, DECOY 23, NOT A MONOMIAL 25, OPEN 74 (sum 158). `upt audit --source=canonical` prints DERIVED 72, COEFFICIENT UNSET 6, NOT A MONOMIAL 0, OPEN 19. `upt map --source=catalog --evidence=formally-proved` keeps 94 of 158 edges. The cluster of 11 is be-12, be-16, be-37, be-27, be-33, be-63, be-67, be-69, be-74, be-75, be-76.
+
+`upt evaluate be-128 D=2` prints `-1`, inside the stated domain `D ≠ 1`.
+
+### Bugs from this pass
+
+| issue | status in this pass | what 8.0.0 did |
+|---|---|---|
+| [#550](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/550) | new | `theta_difference_K=10degC` on be-161 becomes `283.15` K. `10` and `10K` stay `10`. `newtontheta0` is `kind: "interval"`. The role lookup uses the key `theta_difference_K`, which is not that record. |
+| [#551](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/551) | new | Every bridge print is `value = <number>`. be-63 prints `2.895722239784147e30`. The help example says about `1.456` solar masses. The catalog notes still say fin `m` and the Joukowsky speed are on the result. `buildSpec` returns `{ value }` only. |
+| [#552](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/552) | filed this pass | be-154 prints `prandtlmu mu_Pa_s — prandtlmu`. be-147 prints `arrhbarrier`. Section 2 above had left this gloss unfiled. |
+| [#553](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/553) | new | be-132 with inner `5 mm` and outer `1 mm` exits 0 and prints `-3.456641746947256e-11`. The domain text requires `a ≠ b`, and the labels say inner and outer. |
+| [#556](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/556) | new | `require('universal-physics-tensor/package.json')` throws `ERR_PACKAGE_PATH_NOT_EXPORTED`. `upt version` and `npm ls` still print `8.0.0`. |
+
+These four repeats of issues already on the tracker were opened again and should be closed as duplicates. This pass could not close them: `gh issue close` returned `Resource not accessible by integration`.
+
+| opened again | already tracked | same behavior on 8.0.0 |
+|---|---|---|
+| [#548](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/548) | [#525](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/525) | fresh install, mathts-functions 0.68.5, `rationalNullspace` |
+| [#549](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/549) | [#445](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/445) | `50kJ/mol` and `1L` rejected; bare `50000` gives Arrhenius `17393.17968736233` |
+| [#554](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/554) | [#455](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/455) | `extra: 1` ignored; `velocity` on kinetic energy says `missing a finite input` and does not name `speed`. The CLI rejects `extra` on be-133 |
+| [#555](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/555) | [#458](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/458) | `1in`, `1inch`, and `1mil` exit 1. `1psi` is `6894.75729276459` Pa |
+
+### Proposals added in this pass
+
+EP-1 through EP-11 above stay as written. These eleven are additional. Each `upt derive` exits 3, the formula dimension matches, and the command says no canonical equation has that target and those variables. Counts for this pass: 7 standard, 4 cross-domain. The file then holds 13 standard and 9 cross-domain proposals.
+
+| id | type | name | formula | domains linked | catalog id |
+|---|---|---|---|---|---|
+| EP-12 | standard | Logarithmic decrement | `δ = 2 π ζ / √(1−ζ²)` | dynamics, sensors | none. be-133 is `ζ` |
+| EP-13 | standard | Square-law MOSFET | `I_D = (1/2) μ C_ox (W/L) (V_GS−V_t)²` | semiconductor devices | none. be-127 is the subthreshold swing |
+| EP-14 | standard | Circular squeeze-film damping | `B = (3 π / 2) μ R⁴ / d³` | MEMS, viscous flow | none. be-77 is pipe flux |
+| EP-15 | standard | Ideal buck ratio | `V_out / V_in = D` | power electronics | none. be-128 is `1/(1−D)` |
+| EP-16 | standard | Friis transmission | `P_r/P_t = G_t G_r (λ/(4 π R))²` | antennas | none |
+| EP-17 | standard | Base-excitation transmissibility | `T_R = √((1+(2 ζ r)²)/((1−r²)²+(2 ζ r)²))` | vibration isolation | none. be-133 is `ζ` |
+| EP-18 | standard | Harmonic mass sensitivity | `Δf/f = −Δm/(2 m)` | resonant sensors | none. EP-6 is the quartz Sauerbrey law |
+| EP-19 | cross-domain | Constrained thermal stress | `σ = E α ΔT` | elasticity, thermal expansion | none. `CE-hooke-law` is `F = −k x` |
+| EP-20 | cross-domain | Ideal photodiode responsivity | `ℜ = η e λ / (h c)` | optics, charge | none. `CE-photoelectric` is `hν − φ` |
+| EP-21 | cross-domain | Metal foil gauge factor | `GF = 1 + 2 ν` | elasticity, resistance | none. EP-4 takes `GF` as an input |
+| EP-22 | cross-domain | Peltier cooler COP | `COP = (T_c/ΔT) (√(1+ZT_m) − T_h/T_c) / (√(1+ZT_m)+1)` | heat, electrical transport | none. EP-10 is `ΔT_max`. be-130 is the generator |
+
+**EP-12.** `upt derive delta:dimensionless zeta:dimensionless --formula "2*pi*zeta/sqrt(1-zeta^2)"` exits 3. Groups `delta` and `zeta`. The `2 π` and the square root are the underdamped cycle of `e^{−ζ ω t}`. No ring-down pair was measured.
+
+**EP-13.** `upt derive Id:I mu:M^-1.T^2.I Cox:I^2.T^4.M^-1.L^-4 WoverL:dimensionless Vov:energy/charge --formula "0.5*mu*Cox*WoverL*Vov^2"` exits 3. Groups `WoverL` and `Id · mu^-1 · Cox^-1 · Vov^-2`. The `1/2` is the channel integral. `upt search "square law"` exits 1. `upt search mosfet` names be-127. Here `e` is not in the formula. No MOSFET curve was measured.
+
+**EP-14.** `upt derive B:M/T visc:L^-1.M.T^-1 R:length gap:length --formula "1.5*pi*visc*R^4/gap^3"` exits 3. Groups `B · visc^-1 · R^-1` and `B · visc^-1 · gap^-1`. Incompressible lubrication, ambient pressure vented at the rim. `upt search "squeeze film"` exits 1. No squeeze-film measurement.
+
+**EP-15.** `upt derive ratio:dimensionless D:dimensionless --formula "D"` exits 3. Groups `ratio` and `D`. Volt-second balance on a continuous-conduction buck. `upt search "buck converter"` exits 1. `upt search buckling` names be-78. No converter measurement.
+
+**EP-16.** `upt derive Pratio:dimensionless Gt:dimensionless Gr:dimensionless lam:length R:length --formula "Gt*Gr*(lam/(4*pi*R))^2"` exits 3. Groups `Pratio`, `Gt`, `Gr`, and `lam · R^-1`. The `(4 π)²` is the sphere and the effective area. `upt search friis` exits 1. No link budget.
+
+**EP-17.** `upt derive TR:dimensionless zeta:dimensionless r:dimensionless --formula "sqrt((1+(2*zeta*r)^2)/((1-r^2)^2+(2*zeta*r)^2))"` exits 3. Groups `TR`, `zeta`, and `r`. Steady base motion of `m ẍ + c (ẋ−ẏ) + k (x−y) = 0`. `upt search transmissibility` exits 1. No sweep.
+
+**EP-18.** `upt derive sens:dimensionless dm:dimensionless --formula "-dm/2"` exits 3. Groups `sens` and `dm`. This is `dω/ω = −dm/(2m)` for a harmonic mode with `Δm ≪ m`. EP-6 is the thickness-shear quartz law, with `f₀²` and the crystal impedance. No frequency shift was measured.
+
+**EP-19.** `upt derive sigma:pressure Emod:pressure alpha:Theta^-1 dT:temperature --formula "Emod*alpha*dT"` exits 3. Groups `sigma · Emod^-1` and `alpha · dT`. Fixed length, uniaxial Hooke, free thermal strain `α ΔT`. The row joins a modulus to an expansion coefficient. `upt search "thermal stress"` exits 1. No constrained-bar stress.
+
+**EP-20.** `upt derive Resp:charge/energy eta:dimensionless ee:e lam:length h:action c:velocity --formula "eta*ee*lam/(h*c)"` exits 3. Groups `eta` and `Resp · ee^-1 · lam^-1 · h · c`. `e` in that formula is the elementary charge. One electron per photon of energy `h c / λ`, times `η`. The row joins an optical wavelength to that charge. `upt search responsivity` exits 1. No responsivity.
+
+**EP-21.** `upt derive GF:dimensionless nu:dimensionless --formula "1+2*nu"` exits 3. Groups `GF` and `nu`. `R = ρ L / A`, axial strain, and two lateral strains `−ν ε`, with resistivity held fixed. The row joins a resistance change to Poisson's ratio. EP-4 then places that `GF` in a bridge. `upt search "gauge factor"` exits 1. No gauge-factor measurement.
+
+**EP-22.** `upt derive COP:dimensionless Th:temperature Tc:temperature ZTm:dimensionless --formula "((Tc/(Th-Tc))*((1+ZTm)^0.5-Th/Tc))/((1+ZTm)^0.5+1)"` exits 3. Groups `COP`, `Th · Tc^-1`, and `ZTm`. Cold-junction heat `S T_c I − I² R/2 − K ΔT`, and `d(COP)/dI = 0`. EP-10 is the zero-load `ΔT_max` from the same `Z`. `upt search "figure of merit"` names be-130. No cooler map.
+
+No src changes. Awaiting owner review before any fix/PhysJS agents.
+
