@@ -138,3 +138,81 @@ All are **unproven**. No measurement was opened for any of them.
 ## 6. Scope statement
 
 No src changes. Awaiting owner review before any fix/PhysJS agents. No release, tag, publish, merge, per-equation module, catalog edit, or specification write-up was made. Bare `e` is the elementary charge and Euler's number is `exp(x)` throughout.
+
+## 7. Second pass, 2026-11-01
+
+Same published package, a later install. This section does not replace sections 1–6. Candidates already in the table above are not proposed again. Nothing here changes `src/`.
+
+### Version
+
+`npm view universal-physics-tensor@8.0.0 version gitHead` prints `8.0.0` and `888099c0111d88214b0ca92aa9c7ea45292a9d48`. Annotated tag `v8.0.0` is object `0956655b13c08cd6e870dba88c4fd1447c139ed4` and its target is that commit. The message is `v8.0.0: data-driven bridge catalog and engine`. Publish workflow run `37527828453` succeeded. `gh release view v8.0.0` returns release not found.
+
+On Node v22.23.4 a fresh `npm i universal-physics-tensor@8.0.0` resolves `@danielsimonjr/mathts-functions@0.68.5` (the range is `^0.68.0`, and `@danielsimonjr/mathts-core` is `0.16.0`). Importing the package throws `rationalNullspace: entry [0, 0] must be a finite number or a Fraction` from `dist/dimensional/buckingham.js`. `upt version` does not run. That failure is [#525](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/525). [#530](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/530) is the same repro and should be closed as a duplicate.
+
+The commands below pin `@danielsimonjr/mathts-functions@0.68.0`. `import { BRIDGE_EQUATIONS }` has length 160. `upt version` prints `8.0.0`. `upt eval --show-parser` prints `mathts`. `upt eval --debug exp(1)` names `@danielsimonjr/mathts-functions 0.68.0` and prints `2.718281828459045`. `upt eval e` prints `1.602176634e-19`. `upt eval euler` exits 2 and names `exp(x)`.
+
+### Overlap the first table missed
+
+PS-9 says the Larmor power has no catalog row. `upt search "larmor power"` exits 0 on `CE-larmor-power`. `upt explain larmor-power` with `charge=-e`, `acceleration=1`, `vacuum-permittivity`, and `speed-of-light` recovers `5.70832676502951e-54` and the monomial `charge^2·acceleration^2·vacuum-permittivity^-1·speed-of-light^-3`. That is the canonical law. PS-9 is not proposed again.
+
+### Bugs this pass filed
+
+Each repro is published `@8.0.0` with functions pinned at 0.68.0, except the load failure, which is the unpinned install.
+
+| issue | what @8.0.0 did | already filed |
+|---|---|---|
+| [#533](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/533) | `upt search saha` lists quantities `sahamass`, `sahawarmth`, `sahaion`, `sahaconst`, and says `saha is a prefix of sahamass`. `upt explain sahamass --source=catalog` has no derivation path. `upt evaluate` prints `m_kg [kg] sahamass m_kg — sahamass`. The same slug pattern is on the round-9 rows (`arrhprefac`, `newtonvol`, `vanthoffenthalpy`, `clapintlatent`, and the rest of that block). | no |
+| [#535](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/535) | Notes on ids 147–170 say `kind bridge` and `formally-proved`. `upt atlas be-147` through `upt atlas be-170 --json` each print `formalRef.kind` `derivation-step`. `upt map --source=catalog --evidence=formally-proved` keeps 94 of 158 and does not list 147–170. The Saha note names `PhysJS.Saha.saha_eq` as kind `bridge`. | no |
+| [#536](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/536) | `upt search "coulomb logarithm"` exits 1. `upt evaluate` with no id describes be-116's `ln_Lambda` as `Coulomb logarithm`. `upt search logarithm` hits be-127 and be-142, not be-116. `upt search spitzer` hits be-116 on the description. | the miss is in section 2; it was not an issue |
+| [#531](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/531) | `upt evaluate be-110 B0_T=2 Bm_T=1` exits 0 and prints `value = 2`. The target symbol is `sin²θ_lc`. `Bm = 0` throws. | duplicate of [#463](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/463). Close 531. |
+| [#532](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/532) | `upt evaluate be-120 B_E_T=3.12e-5 rho_kg_per_m3=8.36310961845e-21 v_m_per_s=4e5` prints `value = 1157821.3337150936`. The sixth root is `10.247240393394772`. JSON output has no symbol. | duplicate of [#460](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/460). Close 532. |
+| [#534](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/534) | `Ea_J_per_mol=50kJ/mol` on be-147 exits 1 (`input is [1]`). Bare `50000` at `T_K=300` and `A_Hz=1e13` prints `19696.844058205552`. `dH_J_per_mol=40kJ/mol` on be-149 and be-152 exits 1. `V_m3=0.001m3` on be-161 exits 1. | duplicate of [#445](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/445). Close 534. |
+
+This pass could not close 530, 531, 532, or 534. The token can open an issue and cannot close one.
+
+### Further candidates
+
+Every row is unproven. A recovered prefactor is the derive command's report of the formula that was typed. No measurement was opened. `upt derive` on each row says no canonical equation has that target and those variables.
+
+| id | type | formula | domains | why units are not enough | catalog overlap |
+|---|---|---|---|---|---|
+| PS-12 | standard | `ω² = ω_p² + 3 k² v_t²`, `v_t² = k_B T/m` | plasma waves | exit 3. Groups `w/wp` and `w/(k v_t)`. The `3` is not recovered. | `upt search bohm-gross` exits 0 on be-113, description only. be-113 says Bohm–Gross is nested and does not replace `ω`. |
+| PS-13 | standard | `p_⊥/(ρ B)` and `p_∥ B²/ρ³` constant | kinetic MHD | each typed target exits 0 with prefactor `1.0000e+0`. Units do not choose those powers against any other pair. | `upt search cgl` exits 0 on be-124, description only. be-124 says the CGL closure is not derived. |
+| PS-14 | standard | `E_D = n e³ lnΛ / (4 π ε0² k_B T)` | runaway electrons | exit 3. Three groups, including `lnΛ`. The `4π` is not recovered. Here `e` is the elementary charge. | `upt search dreicer` exits 1. be-116 takes `ln Λ` and is not this field. |
+| PS-15 | standard | `γ = (√3/2) (m_e/(2 m_i))^{1/3} ω_pe` | two-stream / Buneman | exit 3. Groups `γ/ω_pe` and `m_e/m_i`. The `1/3` and `√3/2` are not recovered. | `upt search buneman` and `upt search two-stream` exit 1. |
+| PS-16 | standard | `Δv = ± ΔB / √(μ0 ρ)` | MHD waves | exit 0. Monomial `Δv ∝ ΔB·ρ^-0.5·μ0^-0.5`, prefactor `1`. The sign is not in that monomial. | `upt search walen` exits 1. be-67 is the phase speed of one polarization, not the jump. |
+| PS-17 | standard | `q = 2π a B_t / (R B_p)`, kink when `q < 1` | MHD stability | exit 3. Groups `q`, `a/R`, and `B_t/B_p`. The `2π` and the threshold `1` are not recovered. | `upt search kruskal` exits 1. |
+| PS-18 | cross-domain | `P = u/3` | photon gas, hydrodynamics | exit 0. `P ∝ u`, prefactor `3.3333e-1` because `1/3` was typed. | `upt search "radiation pressure"` hits be-64 and be-66. be-66 is `(I/c)(1+R) cos²θ` and is not this pressure. |
+| PS-19 | cross-domain | `ω_c = (3/2) γ² (e B/m) sinψ` | relativity, cyclotron radiation | exit 3. Groups `γ` and `ω/ω_ce`. The `3/2` and the power `2` are not recovered. | `upt search synchrotron` exits 1. The cyclotron monomial is separate. |
+| PS-20 | cross-domain | `Ṁ = π exp(3/2) G² M² ρ_∞ / c_s³` | gravitation, accretion | exit 3. Two groups. `π exp(3/2) = 14.079641459047734` was typed, not recovered. | `upt search bondi` exits 1. PS-5 is the capture radius. be-118 is `G M/(2 c_s²)`, the sonic radius, not the rate. |
+| PS-21 | cross-domain | `q = 3 r/(r−1)` | shocks, cosmic rays | exit 3. Two pure numbers. The `3` is not recovered. A strong shock `r = 4` gives `q = 4`. | `upt search "shock acceleration"` exits 1. PS-3 is the density ratio, not the spectrum. |
+| PS-22 | cross-domain | `H = k_B (T_e + T_i)/(m_i g)` | ionosphere, gravitation | exit 3. Groups `T_e/T_i` and `H m_i g /(k_B T_e)`. The sum is not a monomial. | `upt search "scale height"` exits 1. be-65 is a mass. be-118 is a wind radius. |
+| PS-23 | cross-domain | `P = (4/3) σ_T c β² γ² u_rad` | scattering, radiation | exit 3. Groups `β`, `γ`, and `P/(σ_T c u)`. The `4/3` is not recovered. | `upt search "inverse compton"` exits 1. `upt search compton` hits the Compton wavelengths and the shift. `CE-thomson-cross-section` is the area, audit tag `×8.378e+0`. |
+
+**PS-12 Bohm–Gross (standard).** Cold-fluid electrons plus the one-dimensional adiabatic moment give `ω² = ω_p² (1 + 3 k² λ_D²)` with `v_t² = k_B T/m` and `λ_D² = v_t²/ω_p²`. The `3` is that moment. A convention `v_t² = 2 k_B T/m` rewrites it.
+
+**PS-13 Chew–Goldberger–Low (standard).** The double-adiabatic invariants are `p_⊥/(ρ B)` and `p_∥ B² / ρ³`. be-124 uses a CGL wave root as a hypothesis and does not derive the closure. Firehose and mirror thresholds are that root, not these two constants.
+
+**PS-14 Dreicer field (standard).** `E_D = n e³ lnΛ / (4 π ε0² k_B T)` is the field at which the collisional drag on a thermal electron, with `v_T² = k_B T/m`, no longer confines a runaway. The Coulomb logarithm is held constant. be-116 is the resistivity that uses the same logarithm. It is not this field.
+
+**PS-15 Buneman rate (standard).** Cold electrons drifting through cold ions, `m_e ≪ m_i`, grow at `γ = (√3/2) (m_e/(2 m_i))^{1/3} ω_pe` on the fastest mode. The mass-ratio power is the cubic root of the dispersion, not a dimensional requirement.
+
+**PS-16 Walén jump (standard).** An incompressible Alfvénic fluctuation satisfies `Δv = ± ΔB / √(μ0 ρ)`. The sign is the propagation direction along `B`. be-67 is `B/√(μ0 ρ)` for the background phase speed of one transverse polarization.
+
+**PS-17 Kruskal–Shafranov (standard).** A large-aspect-ratio circular plasma has safety factor `q = 2π a B_t / (R B_p)`. The external kink is unstable for `q_a < 1`. The `2π` is the poloidal trip around the torus. A non-circular cross-section is a different definition.
+
+**PS-18 Photon-gas pressure (cross-domain).** An isotropic photon gas has `P = u/3`. With `u = 4 σ T⁴ / c` this is `P = 4 σ T⁴ / (3 c)`. be-66 is the pressure of a directed beam on an opaque surface. The Eddington luminosity be-64 uses radiation force and is not this equation of state.
+
+**PS-19 Synchrotron critical frequency (cross-domain).** `ω_c = (3/2) γ² ω_ce sinψ` with `ω_ce = |e| B / m`. The `γ²` is relativistic beaming. The rest-frame cyclotron frequency does not contain it.
+
+**PS-20 Isothermal Bondi rate (cross-domain).** Steady spherical accretion with `v→0` and `ρ→ρ_∞` at infinity passes through `v = c_s` at `r_c = G M / (2 c_s²)`, which is be-118, and the density there is `ρ_∞ exp(3/2)`. The rate is `Ṁ = 4π r_c² ρ_c c_s = π exp(3/2) G² M² ρ_∞ / c_s³`. PS-5 is the Bondi–Hoyle capture radius, a different length.
+
+**PS-21 Diffusive shock acceleration (cross-domain).** A test-particle power law at a shock of compression `r` has momentum index `q = 3r/(r−1)`. The `3` is the dimension of momentum space. PS-3 is the hydrodynamic `r` for a strong gas shock. It does not state `q`.
+
+**PS-22 Ambipolar scale height (cross-domain).** A quasineutral ionosphere with `T_e` and `T_i` has `H = k_B (T_e + T_i)/(m_i g)`. Units do not choose the sum of the two temperatures. be-65 counts a cloud mass. This row is a length.
+
+**PS-23 Inverse Compton power (cross-domain).** In the Thomson limit, `P = (4/3) σ_T c β² γ² u_rad`. The `4/3` is the isotropic average of the scattered power. `CE-thomson-cross-section` supplies `σ_T` and is not this cooling rate.
+
+Addendum count: 6 standard (PS-12–PS-17) and 6 cross-domain (PS-18–PS-23). Section 4 is unchanged: 5 standard and 6 cross-domain. PS-9 stays in that table. The overlap note above records that it is already `CE-larmor-power`, so it is not a new bridge.
+
+No src changes. Awaiting owner review.
