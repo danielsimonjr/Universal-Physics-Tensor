@@ -6,6 +6,7 @@
  */
 import type { AppliedCaseCheckRecord } from './catalog.js';
 
+/** Check records keyed by applied-case id. */
 export const CHECKS_BY_CASE_ID: Readonly<Record<string, readonly AppliedCaseCheckRecord[]>> = {
   'case-skin-depth': [
     {

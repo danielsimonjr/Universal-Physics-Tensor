@@ -14,6 +14,7 @@ import { appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase, catalogSema
 import { runAppliedCaseEngine, usesCatalogEngine } from './engine.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase, type CaseResult, type LumpedRadiating } from './types.js';
 
+/** Lumped body with radiative cooling parameters (re-export). */
 export type { LumpedRadiating } from './types.js';
 
 // --- skin-depth.ts ---
@@ -52,7 +53,10 @@ export function skinDeltaMaxwellM(
   }
   return delta * maxwellDepthFactor(r);
 }
-/** @internal */
+/**
+ * Evaluate the skin-depth applied case at the given SI inputs.
+ * @internal
+ */
 export function runCaseSkinDepth(i: Readonly<Record<string, number>>): CaseResult {
     requirePositive(SKIN_DEPTH_ID, i, ['rho_ohm_m', 'f_Hz', 'mu_r', 'eps_r', 'l_mfp_m', 'v_carrier_m_per_s', 'thickness_m']);
     const { rho_ohm_m: rho, f_Hz: f, mu_r: muR, eps_r: epsR, l_mfp_m: l, v_carrier_m_per_s: v, thickness_m: d } = i as Record<string, number>;
@@ -110,7 +114,10 @@ export const MAX_WEAK_FIELD = 1e-4;
 
 /** e·Δω accumulated over the record (rad) ceiling for a fixed ellipse. @internal */
 export const MAX_APSIDAL_MISFIT = 0.01;
-/** @internal */
+/**
+ * Evaluate the Kepler radial-velocity applied case at the given SI inputs.
+ * @internal
+ */
 export function runCaseKeplerRv(i: Readonly<Record<string, number>>): CaseResult {
     requirePositive(KEPLER_RV_ID, i, ['M_star_kg', 'm_p_kg', 'P_s', 'sin_i', 'R_star_m', 'T_obs_s']);
     const { M_star_kg: M, m_p_kg: m, P_s: P, eccentricity: e, sin_i: sinI, R_star_m: R, T_obs_s: tObs } = i as Record<string, number>;
@@ -216,7 +223,10 @@ export function windowedLinewidthCatalogHz(
   return windowedLinewidthHz(alpha, inputs.t_obs_s!);
 }
 
-/** @internal */
+/**
+ * Evaluate the damped-resonator applied case at the given SI inputs.
+ * @internal
+ */
 export function runCaseDampedResonator(i: Readonly<Record<string, number>>): CaseResult {
     requirePositive(DAMPED_RESONATOR_ID, i, ['f0_Hz', 'Q', 't_obs_s']);
     const { f0_Hz: f0, Q, x0_m: x0, t_s: t, t_obs_s: tObs } = i as Record<string, number>;
@@ -301,7 +311,10 @@ function parentDensity(f: number, T: number, rEff: number, c: number): number {
   const w = 2 * Math.PI * f * rEff * c;
   return (4 * K_B_SI * T * rEff * planck) / (1 + w * w);
 }
-/** @internal */
+/**
+ * Evaluate the resistor thermal-noise applied case at the given SI inputs.
+ * @internal
+ */
 export function runCaseResistorNoise(i: Readonly<Record<string, number>>): CaseResult {
     requirePositive(RESISTOR_NOISE_ID, i, ['T_K', 'R_ohm', 'R_in_ohm', 'f_hi_Hz', 't_avg_s']);
     const { T_K: T, R_ohm: R, R_in_ohm: Rin, C_in_F: C, f_lo_Hz: fLo, f_hi_Hz: fHi, t_avg_s: tAvg } = i as Record<string, number>;
@@ -456,7 +469,10 @@ export function sphereSeries(biRadius: number, fo: number): { mean: number; cent
   }
   return { mean, centre, surface };
 }
-/** @internal */
+/**
+ * Evaluate the lumped thermal cooling applied case at the given SI inputs.
+ * @internal
+ */
 export function runCaseLumpedCooling(i: Readonly<Record<string, number>>): CaseResult {
     requirePositive(LUMPED_COOLING_ID, i, ['a_m', 'rho_kg_per_m3', 'c_J_per_kg_K', 'k_W_per_m_K', 'h_W_per_m2_K', 'T0_K', 'T_inf_K']);
     const {
@@ -518,6 +534,7 @@ export const G_STANDARD = convertValue('1 kgf/kg', 'm/s^2').value;
 
 /** The thresholds `ab-stokes-einstein` states: Re ≤ 0.1 and τ_p/t ≤ 0.01. @internal */
 export const MAX_RE = 0.1;
+/** τ_p/t ceiling beside the Stokes–Einstein regime. @internal */
 export const MAX_TAU_P_RATIO = 0.01;
 
 /** Ceiling on the memory term's own share of the MSD, |MSD_H/MSD_OU − 1|. @internal */
@@ -625,6 +642,7 @@ export function brennerPerpendicular(hOverA: number): number {
   }
   return (4 / 3) * s * sum;
 }
+/** Regime tag string for the brownian-sphere case at the current inputs and outputs. */
 export function brownianSphereRegimeAt(
   inputs: Readonly<Record<string, number>>,
   outputs: Readonly<Record<string, number | null>>,
@@ -637,7 +655,10 @@ export function brownianSphereRegimeAt(
   return `upt regime diffusion --at Re=${re} m=${m} gamma=${gamma} t=${t}`;
 }
 
-/** @internal */
+/**
+ * Evaluate the brownian-sphere applied case at the given SI inputs.
+ * @internal
+ */
 export function runCaseBrownianSphere(i: Readonly<Record<string, number>>): CaseResult {
     requirePositive(BROWNIAN_SPHERE_ID, i, ['T_K', 'eta_Pa_s', 'a_m', 'rho_p_kg_per_m3', 'rho_f_kg_per_m3', 't_s']);
     const { T_K: T, eta_Pa_s: eta, a_m: a, rho_p_kg_per_m3: rhoP, rho_f_kg_per_m3: rhoF, t_s: t, d } = i as Record<string, number>;
@@ -773,6 +794,7 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'runCaseBrownianSphere',
 ]);
 
+/** Named numeric methods invoked from catalog output `method` fields. */
 export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   maxwellDepthFactor,
   skinDeltaMaxwellM,
@@ -794,11 +816,17 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   runCaseBrownianSphere,
 };
 
+/** Assembled skin-depth applied case (catalog + runner). */
 export const SKIN_DEPTH_CASE = APPLIED_CASE_RUNNERS.get('case-skin-depth')!;
+/** Assembled Kepler RV applied case (catalog + runner). */
 export const KEPLER_RV_CASE = APPLIED_CASE_RUNNERS.get('case-kepler-rv')!;
+/** Assembled damped-resonator applied case (catalog + runner). */
 export const DAMPED_RESONATOR_CASE = APPLIED_CASE_RUNNERS.get('case-damped-resonator')!;
+/** Assembled resistor-noise applied case (catalog + runner). */
 export const RESISTOR_NOISE_CASE = APPLIED_CASE_RUNNERS.get('case-resistor-noise')!;
+/** Assembled lumped-cooling applied case (catalog + runner). */
 export const LUMPED_COOLING_CASE = APPLIED_CASE_RUNNERS.get('case-lumped-cooling')!;
+/** Assembled brownian-sphere applied case (catalog + runner). */
 export const BROWNIAN_SPHERE_CASE = APPLIED_CASE_RUNNERS.get('case-brownian-sphere')!;
 
 for (const msg of catalogSemanticProblems(appliedCaseCatalog(), CASE_METHOD_NAMES)) {

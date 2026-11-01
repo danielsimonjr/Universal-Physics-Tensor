@@ -12,6 +12,7 @@ import type { AppliedCaseCheckRecord, AppliedCaseOutputRecord, AppliedCaseRecord
 import { CASE_METHODS } from './methods.js';
 import { check, requirePositive, type CaseCheck, type CaseResult } from './types.js';
 
+/** Resolve a catalog output field through a named numeric method. */
 export type CaseOutputMethod = (
   inputs: Readonly<Record<string, number>>,
   outputs: Readonly<Record<string, number | null>>,

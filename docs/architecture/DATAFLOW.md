@@ -1028,7 +1028,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
+| runtimeCircularDeps | 1 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 
 The claim covers the whole repository, tests and tools included. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.
 

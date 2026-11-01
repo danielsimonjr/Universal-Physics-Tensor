@@ -41,7 +41,7 @@ The codebase is organized into the following modules:
 - **atlas**: 75 files
 - **bridges**: 25 files
 - **canonical**: 20 files
-- **cases**: 9 files
+- **cases**: 7 files
 - **cli**: 58 files
 - **root**: 1 file
 - **composition**: 82 files
@@ -2147,44 +2147,50 @@ The codebase is organized into the following modules:
 
 ## Cases Dependencies
 
-### `src/cases/brownian-sphere.ts` - Applied case: a Brownian sphere tracked in a fluid — the diffusion
+### `src/cases/catalog-checks.ts` - Check records (expr + bound) for the applied-case catalog. Declarative prose lives
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `K_B_SI` | Import |
-| `../dimensional/units.js` | `convertValue` | Import |
-| `./quadrature.js` | `adaptiveQuadrature` | Import |
-| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
+| `./catalog.js` | `AppliedCaseCheckRecord` | Import (type-only) |
 
 **Exports:**
-- Functions: `ballisticDeficit`, `hydrodynamicMsdRatio`, `faxenParallel`, `brennerPerpendicular`
-- Constants:
-
-  ```text
-  G_STANDARD, MAX_RE, MAX_TAU_P_RATIO, MAX_MEMORY_CORRECTION, MAX_DRIFT_RATIO, MAX_WALL_CORRECTION,
-  MAX_FAXEN_LAST_TERM, MAX_WALL_EXCURSION, BROWNIAN_SPHERE_CASE
-  ```
-
+- Constants: `CHECKS_BY_CASE_ID`
 
 ---
 
-### `src/cases/damped-resonator.ts` - Applied case: the free ring-down of a damped resonator, read out over a
-
-**External Dependencies:**
-| Package | Import |
-|---------|--------|
-| `@danielsimonjr/mathts-functions` | `findRoot` |
+### `src/cases/catalog.ts` - The applied-case catalog: `data/applied-cases.json`, validated at load.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `K_B_SI` | Import |
-| `./types.js` | `check, requirePositive, AppliedCase` | Import |
+| `../core/data-file.js` | `checkedDataFile, dataSchema, parseDataFile` | Import |
+| `../bridges/catalog-load.js` | `catalogRelations` | Import |
+| `../core/json-schema.js` | `JsonSchema` | Import (type-only) |
+| `../bridges/evaluators.js` | `EvaluatorParameter` | Import (type-only) |
+| `./types.js` | `AppliedCase, CaseComparison, CaseExample` | Import (type-only) |
 
 **Exports:**
-- Functions: `windowedLinewidthHz`
-- Constants: `MIN_Q_LORENTZIAN`, `MAX_RESOLUTION_RATIO`, `MAX_THERMAL_RATIO`, `DAMPED_RESONATOR_CASE`
+- Interfaces: `AppliedCaseCheckRecord`, `AppliedCaseOutputRecord`, `AppliedCaseRecord`, `AppliedCaseFile`
+- Functions: `readAppliedCaseFile`, `catalogSemanticProblems`, `appliedCaseCatalog`, `appliedCaseRecord`, `projectAppliedCaseRecord`, `assembleAppliedCase`, `appliedCaseIds`
+
+---
+
+### `src/cases/engine.ts` - Evaluate applied-case outputs and checks from catalog `expr`, `relation`, and
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/catalog-load.js` | `catalogRelations` | Import |
+| `../bridges/relation-eval.js` | `evaluateCatalogRelation` | Import |
+| `../bridges/expr-parse.js` | `evaluateFormula` | Import |
+| `../dimensional/units.js` | `convertValue` | Import |
+| `./catalog.js` | `AppliedCaseCheckRecord, AppliedCaseOutputRecord, AppliedCaseRecord` | Import (type-only) |
+| `./methods.js` | `CASE_METHODS` | Import |
+| `./types.js` | `check, requirePositive, CaseCheck, CaseResult` | Import |
+
+**Exports:**
+- Functions: `usesCatalogEngine`, `runAppliedCaseEngine`
 
 ---
 
@@ -2193,12 +2199,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./brownian-sphere.js` | `BROWNIAN_SPHERE_CASE` | Import |
-| `./damped-resonator.js` | `DAMPED_RESONATOR_CASE` | Import |
-| `./kepler-rv.js` | `KEPLER_RV_CASE` | Import |
-| `./lumped-cooling.js` | `LUMPED_COOLING_CASE` | Import |
-| `./resistor-noise.js` | `RESISTOR_NOISE_CASE` | Import |
-| `./skin-depth.js` | `SKIN_DEPTH_CASE` | Import |
+| `./catalog.js` | `appliedCaseCatalog` | Import |
+| `./methods.js` | `APPLIED_CASE_RUNNERS` | Import |
 | `./types.js` | `AppliedCase, CaseResult` | Import (type-only) |
 | `../bridges/input-contract.js` | `checkInputs, inputContract, InputContract` | Import |
 | `./types.js` | `AppliedCase, CaseCheck, CaseComparison, CaseExample, CaseOutput, CaseResult` | Re-export |
@@ -2210,23 +2212,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/cases/kepler-rv.ts` - Applied case: the radial-velocity semi-amplitude of a star orbited by a
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../core/constants.js` | `C_SI, G_SI` | Import |
-| `../dimensional/units.js` | `convertValue` | Import |
-| `../bridges/catalog-load.js` | `catalogRelations` | Import |
-| `../bridges/relation-eval.js` | `evaluateCatalogRelation` | Import |
-| `./types.js` | `check, requirePositive, AppliedCase` | Import |
-
-**Exports:**
-- Constants: `JULIAN_YEAR_S`, `MAX_MASS_RATIO`, `MAX_RADIUS_RATIO`, `MAX_WEAK_FIELD`, `MAX_APSIDAL_MISFIT`, `KEPLER_RV_CASE`
-
----
-
-### `src/cases/lumped-cooling.ts` - Applied case: a solid sphere cooling (or warming) in a fluid — its
+### `src/cases/methods.ts` - Numeric methods and case runners for applied cases (Part B catalog).
 
 **External Dependencies:**
 | Package | Import |
@@ -2236,16 +2222,43 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `SIGMA_SB_SI` | Import |
+| `../core/constants.js` | `C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, MU0_SI, SIGMA_SB_SI` | Import |
+| `../dimensional/units.js` | `convertValue` | Import |
+| `../bridges/catalog-load.js` | `catalogRelations` | Import |
+| `../bridges/relation-eval.js` | `evaluateCatalogRelation` | Import |
 | `../numerical/null-ray-integrator.js` | `integrateRK4` | Import |
-| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
+| `./quadrature.js` | `adaptiveQuadrature` | Import |
+| `./catalog.js` | `appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase, catalogSemanticProblems` | Import |
+| `./engine.js` | `runAppliedCaseEngine, usesCatalogEngine` | Import |
+| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase, CaseResult, LumpedRadiating` | Import |
+| `./types.js` | `LumpedRadiating` | Re-export |
 | `../core/constants.js` | `SIGMA_SB_SI` | Re-export |
 
 **Exports:**
-- Interfaces: `LumpedRadiating`
-- Functions: `lumpedRadiatingTemperature`, `sphereEigenvalues`, `sphereSeries`
-- Constants: `MAX_BIOT`, `MAX_RADIATION_RATIO`, `LUMPED_COOLING_CASE`
-- Re-exports: `SIGMA_SB_SI`
+- Functions:
+
+  ```text
+  maxwellDepthFactor, skinDeltaMaxwellM, runCaseSkinDepth, runCaseKeplerRv, windowedLinewidthHz,
+  windowedLinewidthCatalogHz, runCaseDampedResonator, runCaseResistorNoise,
+  lumpedRadiatingTemperature, sphereEigenvalues, sphereSeries, runCaseLumpedCooling, ballisticDeficit,
+  hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular, brownianSphereRegimeAt,
+  runCaseBrownianSphere
+  ```
+
+- Constants:
+
+  ```text
+  MAX_DISPLACEMENT_RATIO, MAX_MFP_RATIO, MAX_OMEGA_TAU, MIN_THICKNESS_RATIO, JULIAN_YEAR_S,
+  MAX_MASS_RATIO, MAX_RADIUS_RATIO, MAX_WEAK_FIELD, MAX_APSIDAL_MISFIT, MIN_Q_LORENTZIAN,
+  MAX_RESOLUTION_RATIO, MAX_THERMAL_RATIO, CLASSICAL_MAX_X, FLAT_BAND_MAX_WRC,
+  AMPLIFIER_MAX_REL_SIGMA, MAX_BIOT, MAX_RADIATION_RATIO, G_STANDARD, MAX_RE, MAX_TAU_P_RATIO,
+  MAX_MEMORY_CORRECTION, MAX_DRIFT_RATIO, MAX_WALL_CORRECTION, MAX_FAXEN_LAST_TERM,
+  MAX_WALL_EXCURSION, APPLIED_CASE_RUNNERS, CASE_METHOD_NAMES, CASE_METHODS, SKIN_DEPTH_CASE,
+  KEPLER_RV_CASE, DAMPED_RESONATOR_CASE, RESISTOR_NOISE_CASE, LUMPED_COOLING_CASE,
+  BROWNIAN_SPHERE_CASE
+  ```
+
+- Re-exports: `LumpedRadiating`, `SIGMA_SB_SI`
 
 ---
 
@@ -2261,36 +2274,6 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/cases/resistor-noise.ts` - Applied case: the thermal (Johnson–Nyquist) noise voltage of a resistor as an
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../core/constants.js` | `H_SI, K_B_SI` | Import |
-| `../bridges/catalog-load.js` | `catalogRelations` | Import |
-| `../bridges/relation-eval.js` | `evaluateCatalogRelation` | Import |
-| `./quadrature.js` | `adaptiveQuadrature` | Import |
-| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
-
-**Exports:**
-- Constants: `CLASSICAL_MAX_X`, `FLAT_BAND_MAX_WRC`, `AMPLIFIER_MAX_REL_SIGMA`, `RESISTOR_NOISE_CASE`
-
----
-
-### `src/cases/skin-depth.ts` - Applied case: the skin depth of a planar conductor driven at one frequency —
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../core/constants.js` | `EPS0_SI, MU0_SI` | Import |
-| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
-
-**Exports:**
-- Functions: `maxwellDepthFactor`
-- Constants: `MAX_DISPLACEMENT_RATIO`, `MAX_MFP_RATIO`, `MAX_OMEGA_TAU`, `MIN_THICKNESS_RATIO`, `SKIN_DEPTH_CASE`
-
----
-
 ### `src/cases/types.ts` - An applied case: one complete measurement problem, qualified end to end.
 
 **Internal Dependencies:**
@@ -2299,7 +2282,7 @@ The codebase is organized into the following modules:
 | `../bridges/evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `CaseOutput`, `CaseCheck`, `CaseComparison`, `CaseExample`, `CaseResult`, `AppliedCase`
+- Interfaces: `CaseOutput`, `CaseCheck`, `CaseComparison`, `CaseExample`, `CaseResult`, `LumpedRadiating`, `AppliedCase`
 - Functions: `signedRelativeDifference`, `requirePositive`
 - Constants: `check`
 
@@ -7515,7 +7498,17 @@ The codebase is organized into the following modules:
 
 ## Circular Dependency Analysis
 
-**No circular dependencies detected.**
+**1 circular dependencies detected:**
+
+- **Runtime cycles**: 1 (require attention)
+- **Type-only cycles**: 0 (safe, no runtime impact)
+
+### Runtime Circular Dependencies
+
+These cycles involve runtime imports and may cause issues:
+
+- src/cases/engine.ts -> src/cases/methods.ts -> src/cases/engine.ts
+
 ---
 
 ## Visual Dependency Graph
@@ -7550,12 +7543,12 @@ graph TD
     end
 
     subgraph Cases
-        N18[brownian-sphere]
-        N19[damped-resonator]
-        N20[index]
-        N21[kepler-rv]
-        N22[lumped-cooling]
-        N23[...4 more]
+        N18[catalog-checks]
+        N19[catalog]
+        N20[engine]
+        N21[index]
+        N22[methods]
+        N23[...2 more]
     end
 
     subgraph Cli
@@ -7646,16 +7639,16 @@ graph TD
     N16 --> N12
     N16 --> N47
     N16 --> N14
-    N18 --> N41
-    N19 --> N41
-    N20 --> N18
+    N18 --> N19
+    N19 --> N9
+    N20 --> N9
     N20 --> N19
-    N20 --> N21
     N20 --> N22
-    N21 --> N41
-    N21 --> N9
+    N21 --> N19
+    N21 --> N22
     N22 --> N41
-    N25 --> N37
+    N22 --> N9
+    N22 --> N19
 ```
 
 ---
@@ -7664,18 +7657,18 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 387 |
+| Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 87053 |
-| Total Exports | 2771 |
-| Total Re-exports | 1389 |
+| Total Lines of Code | 87016 |
+| Total Exports | 2794 |
+| Total Re-exports | 1390 |
 | Total Classes | 85 |
-| Total Interfaces | 513 |
-| Total Functions | 886 |
+| Total Interfaces | 517 |
+| Total Functions | 904 |
 | Total Type Guards | 14 |
 | Total Enums | 0 |
-| Type-only Imports | 520 |
-| Runtime Circular Deps | 0 |
+| Type-only Imports | 525 |
+| Runtime Circular Deps | 1 |
 | Type-only Circular Deps | 0 |
 
 ---

@@ -1,15 +1,16 @@
 {
   "metadata": {
-    "totalSourceFiles": 387,
-    "totalTestFiles": 677,
-    "testedCount": 378,
-    "directlyTestedCount": 344,
-    "untestedCount": 9,
-    "coveragePercent": "97.7",
-    "directCoveragePercent": "88.9"
+    "totalSourceFiles": 385,
+    "totalTestFiles": 681,
+    "testedCount": 375,
+    "directlyTestedCount": 341,
+    "untestedCount": 10,
+    "coveragePercent": "97.4",
+    "directCoveragePercent": "88.6"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
+    "src/cases/engine.ts",
     "src/cli/bindings.ts",
     "src/cli/commands/_discovery-opts.ts",
     "src/cli/conventions.ts",
@@ -139,14 +140,11 @@
     "src/canonical/residual.ts",
     "src/canonical/seed-l-layer.ts",
     "src/canonical/structural.ts",
-    "src/cases/brownian-sphere.ts",
-    "src/cases/damped-resonator.ts",
+    "src/cases/catalog-checks.ts",
+    "src/cases/catalog.ts",
     "src/cases/index.ts",
-    "src/cases/kepler-rv.ts",
-    "src/cases/lumped-cooling.ts",
+    "src/cases/methods.ts",
     "src/cases/quadrature.ts",
-    "src/cases/resistor-noise.ts",
-    "src/cases/skin-depth.ts",
     "src/cases/types.ts",
     "src/cli-api.ts",
     "src/cli/args.ts",
@@ -514,14 +512,11 @@
     "src/canonical/residual.ts",
     "src/canonical/seed-l-layer.ts",
     "src/canonical/structural.ts",
-    "src/cases/brownian-sphere.ts",
-    "src/cases/damped-resonator.ts",
+    "src/cases/catalog-checks.ts",
+    "src/cases/catalog.ts",
     "src/cases/index.ts",
-    "src/cases/kepler-rv.ts",
-    "src/cases/lumped-cooling.ts",
+    "src/cases/methods.ts",
     "src/cases/quadrature.ts",
-    "src/cases/resistor-noise.ts",
-    "src/cases/skin-depth.ts",
     "src/cli-api.ts",
     "src/cli/args.ts",
     "src/cli/closed-form-range.ts",
@@ -1936,6 +1931,7 @@
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/evaluator-inputs.ts": [
+      "tests/cases/applied-case-engine.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -1994,7 +1990,6 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
-      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/gum-monte-carlo.test.ts",
@@ -2007,6 +2002,7 @@
       "tests/bridges/domain-violations.test.ts",
       "tests/bridges/expression-names.test.ts",
       "tests/bridges/one-grammar.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
       "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/hyphen-names-corpus.test.ts",
       "tests/dimensional/unit-closure.test.ts",
@@ -2570,20 +2566,20 @@
       "tests/canonical/structural-classifier.test.ts",
       "tests/composition/algebraic-equivalence.test.ts"
     ],
-    "src/cases/brownian-sphere.ts": [
-      "tests/cases/brownian-sphere.test.ts",
-      "tests/cases/unit-table-constants.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
+    "src/cases/catalog-checks.ts": [
+      "tests/cases/applied-cases-catalog.test.ts"
     ],
-    "src/cases/damped-resonator.ts": [
-      "tests/cases/damped-resonator-spectrum.test.ts",
-      "tests/cases/damped-resonator.test.ts",
-      "tests/cases/method-text.test.ts",
-      "tests/numerical/mathts-delegation.test.ts"
+    "src/cases/catalog.ts": [
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
+      "tests/cases/applied-cases-output-wiring.test.ts"
     ],
+    "src/cases/engine.ts": [],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cli/applied-cases.test.ts",
@@ -2601,36 +2597,44 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/probe/expression-gaps.test.ts"
     ],
-    "src/cases/kepler-rv.ts": [
+    "src/cases/methods.ts": [
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-output-wiring.test.ts",
+      "tests/cases/brownian-sphere.test.ts",
+      "tests/cases/damped-resonator-spectrum.test.ts",
+      "tests/cases/damped-resonator.test.ts",
       "tests/cases/kepler-rv.test.ts",
-      "tests/cases/unit-table-constants.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
-    ],
-    "src/cases/lumped-cooling.ts": [
       "tests/cases/lumped-cooling-inverse-time.test.ts",
       "tests/cases/lumped-cooling.test.ts",
       "tests/cases/method-text.test.ts",
+      "tests/cases/resistor-noise-closed-form.test.ts",
+      "tests/cases/resistor-noise.test.ts",
+      "tests/cases/skin-depth.test.ts",
+      "tests/cases/unit-table-constants.test.ts",
       "tests/cli/signed-residual-label.test.ts",
       "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/cases/quadrature.ts": [
       "tests/numerical/mathts-delegation.test.ts"
     ],
-    "src/cases/resistor-noise.ts": [
-      "tests/cases/method-text.test.ts",
-      "tests/cases/resistor-noise-closed-form.test.ts",
-      "tests/cases/resistor-noise.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
-    ],
-    "src/cases/skin-depth.ts": [
-      "tests/cases/skin-depth.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
-    ],
     "src/cases/types.ts": [
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
+      "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/applied-cases.test.ts",
+      "tests/cases/brownian-sphere.test.ts",
+      "tests/cases/damped-resonator-spectrum.test.ts",
+      "tests/cases/damped-resonator.test.ts",
       "tests/cases/kepler-rv.test.ts",
+      "tests/cases/lumped-cooling-inverse-time.test.ts",
+      "tests/cases/lumped-cooling.test.ts",
+      "tests/cases/method-text.test.ts",
+      "tests/cases/resistor-noise-closed-form.test.ts",
+      "tests/cases/resistor-noise.test.ts",
+      "tests/cases/skin-depth.test.ts",
+      "tests/cases/unit-table-constants.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
@@ -2642,9 +2646,11 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
+      "tests/cli/signed-residual-label.test.ts",
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts",
-      "tests/composition/probe/expression-gaps.test.ts"
+      "tests/composition/probe/expression-gaps.test.ts",
+      "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/cli/args.ts": [
       "tests/cli/args.test.ts",
@@ -8079,13 +8085,20 @@
       "tests/canonical/invariants.test.ts",
       "tests/canonical/numeric-prefactor.test.ts",
       "tests/canonical/structural-classifier.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/applied-cases.test.ts",
+      "tests/cases/brownian-sphere.test.ts",
+      "tests/cases/damped-resonator-spectrum.test.ts",
+      "tests/cases/damped-resonator.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/lumped-cooling-inverse-time.test.ts",
       "tests/cases/lumped-cooling.test.ts",
       "tests/cases/method-text.test.ts",
       "tests/cases/resistor-noise-closed-form.test.ts",
+      "tests/cases/resistor-noise.test.ts",
       "tests/cases/skin-depth.test.ts",
+      "tests/cases/unit-table-constants.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
@@ -8189,6 +8202,8 @@
     "src/core/data-file.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/notice-record.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
       "tests/core/data-file.test.ts",
       "tests/core/json-file.test.ts"
     ],
@@ -11664,6 +11679,7 @@
       "tests/composition/evaluate-boundary.test.ts"
     ],
     "src/bridges/evaluator-inputs.ts": [
+      "tests/cases/applied-case-engine.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -11690,7 +11706,6 @@
       "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
-      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/numerical/gum-monte-carlo.test.ts"
     ],
@@ -11701,6 +11716,7 @@
       "tests/bridges/domain-violations.test.ts",
       "tests/bridges/expression-names.test.ts",
       "tests/bridges/one-grammar.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
       "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/hyphen-names-corpus.test.ts",
       "tests/dimensional/unit-closure.test.ts",
@@ -11923,49 +11939,44 @@
       "tests/canonical/structural-classifier.test.ts",
       "tests/composition/algebraic-equivalence.test.ts"
     ],
-    "src/cases/brownian-sphere.ts": [
-      "tests/cases/brownian-sphere.test.ts",
-      "tests/cases/unit-table-constants.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
+    "src/cases/catalog-checks.ts": [
+      "tests/cases/applied-cases-catalog.test.ts"
     ],
-    "src/cases/damped-resonator.ts": [
-      "tests/cases/damped-resonator-spectrum.test.ts",
-      "tests/cases/damped-resonator.test.ts",
-      "tests/cases/method-text.test.ts",
-      "tests/numerical/mathts-delegation.test.ts"
+    "src/cases/catalog.ts": [
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
+      "tests/cases/applied-cases-output-wiring.test.ts"
     ],
+    "src/cases/engine.ts": [],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/composition/probe/expression-gaps.test.ts"
     ],
-    "src/cases/kepler-rv.ts": [
+    "src/cases/methods.ts": [
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-output-wiring.test.ts",
+      "tests/cases/brownian-sphere.test.ts",
+      "tests/cases/damped-resonator-spectrum.test.ts",
+      "tests/cases/damped-resonator.test.ts",
       "tests/cases/kepler-rv.test.ts",
-      "tests/cases/unit-table-constants.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
-    ],
-    "src/cases/lumped-cooling.ts": [
       "tests/cases/lumped-cooling-inverse-time.test.ts",
       "tests/cases/lumped-cooling.test.ts",
       "tests/cases/method-text.test.ts",
+      "tests/cases/resistor-noise-closed-form.test.ts",
+      "tests/cases/resistor-noise.test.ts",
+      "tests/cases/skin-depth.test.ts",
+      "tests/cases/unit-table-constants.test.ts",
       "tests/cli/signed-residual-label.test.ts",
       "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/cases/quadrature.ts": [
       "tests/numerical/mathts-delegation.test.ts"
-    ],
-    "src/cases/resistor-noise.ts": [
-      "tests/cases/method-text.test.ts",
-      "tests/cases/resistor-noise-closed-form.test.ts",
-      "tests/cases/resistor-noise.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
-    ],
-    "src/cases/skin-depth.ts": [
-      "tests/cases/skin-depth.test.ts",
-      "tests/cli/signed-residual-label.test.ts"
     ],
     "src/cases/types.ts": [],
     "src/cli/args.ts": [
@@ -12905,6 +12916,8 @@
     "src/core/data-file.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/notice-record.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
       "tests/core/data-file.test.ts",
       "tests/core/json-file.test.ts"
     ],
@@ -16225,6 +16238,29 @@
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
     ],
+    "tests/cases/applied-case-engine.test.ts": [
+      "src/cases/index.ts",
+      "src/cases/types.ts",
+      "src/cases/methods.ts",
+      "src/core/constants.ts",
+      "src/bridges/evaluator-inputs.ts",
+      "src/bridges/expr-parse.ts",
+      "src/cases/catalog.ts",
+      "src/core/data-file.ts"
+    ],
+    "tests/cases/applied-cases-catalog.test.ts": [
+      "src/cases/index.ts",
+      "src/cases/types.ts",
+      "src/cases/catalog-checks.ts",
+      "src/cases/catalog.ts",
+      "src/core/data-file.ts"
+    ],
+    "tests/cases/applied-cases-output-wiring.test.ts": [
+      "src/cases/catalog.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts"
+    ],
     "tests/cases/applied-cases.test.ts": [
       "src/cases/index.ts",
       "src/cases/types.ts",
@@ -16239,22 +16275,29 @@
       "src/dimensional/units.ts"
     ],
     "tests/cases/brownian-sphere.test.ts": [
-      "src/cases/brownian-sphere.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts",
       "src/bridges/evaluator-inputs.ts",
       "src/canonical/registry.ts",
       "src/composition/expr-eval.ts"
     ],
+    "tests/cases/cases-directory.test.ts": [],
     "tests/cases/damped-resonator-spectrum.test.ts": [
-      "src/cases/damped-resonator.ts"
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts"
     ],
     "tests/cases/damped-resonator.test.ts": [
-      "src/cases/damped-resonator.ts"
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts"
     ],
     "tests/cases/kepler-rv.test.ts": [
-      "src/cases/kepler-rv.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
       "src/core/constants.ts",
       "src/cases/index.ts",
-      "src/cases/types.ts",
       "src/index.ts",
       "src/atlas/public.ts",
       "src/core/tensor.ts",
@@ -16368,34 +16411,40 @@
       "src/core/regimes-builtins.ts"
     ],
     "tests/cases/lumped-cooling-inverse-time.test.ts": [
-      "src/cases/lumped-cooling.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
       "src/core/constants.ts"
     ],
     "tests/cases/lumped-cooling.test.ts": [
-      "src/cases/lumped-cooling.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
       "src/core/constants.ts",
       "src/bridges/evaluator-inputs.ts"
     ],
     "tests/cases/method-text.test.ts": [
-      "src/cases/damped-resonator.ts",
-      "src/cases/lumped-cooling.ts",
-      "src/core/constants.ts",
-      "src/cases/resistor-noise.ts"
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts"
     ],
     "tests/cases/resistor-noise-closed-form.test.ts": [
-      "src/cases/resistor-noise.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
       "src/core/constants.ts"
     ],
     "tests/cases/resistor-noise.test.ts": [
-      "src/cases/resistor-noise.ts"
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts"
     ],
     "tests/cases/skin-depth.test.ts": [
       "src/core/constants.ts",
-      "src/cases/skin-depth.ts"
+      "src/cases/methods.ts",
+      "src/cases/types.ts"
     ],
     "tests/cases/unit-table-constants.test.ts": [
-      "src/cases/brownian-sphere.ts",
-      "src/cases/kepler-rv.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts",
       "src/dimensional/units.ts"
     ],
     "tests/cli/applied-cases.test.ts": [
@@ -20961,12 +21010,9 @@
       "src/cli/commands/testplan.ts"
     ],
     "tests/cli/signed-residual-label.test.ts": [
-      "src/cases/brownian-sphere.ts",
-      "src/cases/kepler-rv.ts",
-      "src/cases/lumped-cooling.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
       "src/core/constants.ts",
-      "src/cases/resistor-noise.ts",
-      "src/cases/skin-depth.ts",
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
       "src/cli/commands/priority.ts",
@@ -23819,7 +23865,6 @@
       "src/dimensional/units.ts"
     ],
     "tests/dimensional/unit-wrapper-cycles.test.ts": [
-      "src/bridges/evaluators.ts",
       "src/bridges/evaluator-inputs.ts",
       "src/dimensional/units.ts"
     ],
@@ -24402,9 +24447,9 @@
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/composition/probe/study.ts",
       "src/composition/probe/structure.ts",
-      "src/cases/lumped-cooling.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
       "src/core/constants.ts",
-      "src/cases/damped-resonator.ts",
       "src/cases/quadrature.ts",
       "src/numerical/quadrature.ts"
     ],
