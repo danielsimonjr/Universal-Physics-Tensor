@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Close the Lean goal CI rejected on `biot_unit_profile` (PR #564).
+  After `rw [hderiv.deriv]`, the Robin conjunct is `1 = unitWall 1`. `norm_num` does not unfold `unitWall`.
+  Done: unfold `unitWall` before `norm_num` so the unit wall `T(x) = 2 − x` closes.
+
 - [x] Review and fix UPT PR #564 (be-156, be-157, be-159).
   The PR implements the heat/mass half of `docs/plans/THIN_PROOFS_PLAN.md` from PhysJS. Check: each formerly assumed step is now derived; no `sorry`, `admit`, or new axioms; stated limits are real theorems. Push a fix commit to this branch. Do not merge, tag, publish, or release.
   Done: the internal-drop sign is a theorem from the Fourier/Robin route; the unit wall is the profile `T(x) = 2 − x`; `Nu = 1` does not give `Bi = 1`.

@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
-- **Biot and Nusselt limits that the thin-proof plan asked for are theorems.** For `h > 0`, `k > 0`, `L > 0` and `T(L) > T∞`, the steady wall is hotter inside. The unit check is the profile `T(x) = 2 − x`, not three arithmetic identities. `Nu = 1` does not give `Bi = 1`: the two lengths and conductivities are different materials.
+- **Biot and Nusselt limits that the thin-proof plan asked for are theorems.** For `h > 0`, `k > 0`, `L > 0` and `T(L) > T∞`, the steady wall is hotter inside. The unit check is the profile `T(x) = 2 − x`, not three arithmetic identities; `biot_unit_profile` unfolds that profile before `norm_num`, so the Robin conjunct is `1 = 2 − 1` rather than `1 = unitWall 1`. `Nu = 1` does not give `Bi = 1`: the two lengths and conductivities are different materials.
 
 ### Documented
 

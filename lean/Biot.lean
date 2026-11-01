@@ -158,6 +158,7 @@ theorem biot_unit_profile :
     ring
   refine ⟨hderiv, ?_, by norm_num, ?_⟩
   · rw [hderiv.deriv]
+    unfold unitWall
     norm_num
   · unfold unitWall
     norm_num
