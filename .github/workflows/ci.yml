@@ -2,12 +2,7 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
-      # Stacked MathTS PRs cannot form a pull_request merge commit once each
-      # parent refreshes architecture file-count claims. A push to the branch
-      # still runs the same jobs against the branch HEAD.
-      - 'cursor/mathts-*'
+    branches: [master]
   pull_request:
   schedule:
     - cron: '0 6 * * *'
@@ -155,7 +150,7 @@ jobs:
   # of the required contexts.
   code-docs-ratchet:
     name: code-docs ratchet (non-required)
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/cursor/mathts-')))
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     steps:
       - name: Setup Bun
@@ -195,7 +190,7 @@ jobs:
   # branch protection.
   architecture-docs-claims:
     name: architecture-docs claims (non-required)
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/cursor/mathts-')))
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     env:
       REPO_TOOLS_VERSION: '2.3.0'
