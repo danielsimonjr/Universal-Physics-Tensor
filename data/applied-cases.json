@@ -1040,61 +1040,71 @@
           "key": "omega_per_s",
           "symbol": "ω",
           "unit": "s^-1",
-          "meaning": "angular frequency 2πf"
-        },
-        {
-          "key": "delta_m",
-          "symbol": "δ",
-          "unit": "m",
-          "meaning": "classical skin depth √(2ρ/(ωμ)): the field and current fall by 1/e per δ"
-        },
-        {
-          "key": "R_s_ohm",
-          "symbol": "R_s",
-          "unit": "ohm",
-          "meaning": "surface resistance ρ/δ, per square (the real part of the surface impedance)"
-        },
-        {
-          "key": "delta_maxwell_m",
-          "symbol": "δ_M",
-          "unit": "m",
-          "meaning": "1/Im k with the displacement current kept: the parent plane-wave penetration depth"
-        },
-        {
-          "key": "maxwell_deviation",
-          "symbol": "δ/δ_M − 1",
-          "unit": "",
-          "meaning": "signed relative difference of the classical δ relative to the parent penetration depth"
+          "meaning": "angular frequency 2πf",
+          "expr": "2*pi*f_Hz"
         },
         {
           "key": "displacement_ratio",
           "symbol": "ωε/σ",
           "unit": "",
-          "meaning": "displacement current over conduction current"
+          "meaning": "displacement current over conduction current",
+          "expr": "2*pi*f_Hz*eps_r*epsilon_0*rho_ohm_m"
+        },
+        {
+          "key": "delta_m",
+          "symbol": "δ",
+          "unit": "m",
+          "meaning": "classical skin depth √(2ρ/(ωμ)): the field and current fall by 1/e per δ",
+          "expr": "sqrt(2*rho_ohm_m/(omega_per_s*mu_r*mu_0))"
+        },
+        {
+          "key": "R_s_ohm",
+          "symbol": "R_s",
+          "unit": "ohm",
+          "meaning": "surface resistance ρ/δ, per square (the real part of the surface impedance)",
+          "expr": "rho_ohm_m/delta_m"
+        },
+        {
+          "key": "delta_maxwell_m",
+          "symbol": "δ_M",
+          "unit": "m",
+          "meaning": "1/Im k with the displacement current kept: the parent plane-wave penetration depth",
+          "method": "skinDeltaMaxwellM"
+        },
+        {
+          "key": "maxwell_deviation",
+          "symbol": "δ/δ_M − 1",
+          "unit": "",
+          "meaning": "signed relative difference of the classical δ relative to the parent penetration depth",
+          "expr": "delta_m/delta_maxwell_m - 1"
         },
         {
           "key": "mfp_ratio",
           "symbol": "l/δ",
           "unit": "",
-          "meaning": "mean free path over skin depth"
+          "meaning": "mean free path over skin depth",
+          "expr": "l_mfp_m/delta_m"
         },
         {
           "key": "omega_tau",
           "symbol": "ωτ",
           "unit": "",
-          "meaning": "ω l/v: the drive period against the carrier relaxation time"
+          "meaning": "ω l/v: the drive period against the carrier relaxation time",
+          "expr": "omega_per_s*l_mfp_m/v_carrier_m_per_s"
         },
         {
           "key": "thickness_ratio",
           "symbol": "d/δ",
           "unit": "",
-          "meaning": "conductor thickness in skin depths"
+          "meaning": "conductor thickness in skin depths",
+          "expr": "thickness_m/delta_m"
         },
         {
           "key": "back_field_ratio",
           "symbol": "e^{−d/δ}",
           "unit": "",
-          "meaning": "field amplitude at the back face over the surface amplitude (half-space profile)"
+          "meaning": "field amplitude at the back face over the surface amplitude (half-space profile)",
+          "expr": "exp(-thickness_m/delta_m)"
         }
       ],
       "conditions": [

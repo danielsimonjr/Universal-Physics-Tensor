@@ -8,7 +8,15 @@ import { describe, expect, it } from 'vitest';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const dir = join(root, 'src/cases');
-const ALLOWED = new Set(['index.ts', 'types.ts', 'catalog.ts', 'catalog-checks.ts', 'methods.ts', 'quadrature.ts']);
+const ALLOWED = new Set([
+  'index.ts',
+  'types.ts',
+  'catalog.ts',
+  'catalog-checks.ts',
+  'engine.ts',
+  'methods.ts',
+  'quadrature.ts',
+]);
 
 describe('src/cases directory', () => {
   it('lists only the catalog, methods, and shared modules (no per-case files)', () => {

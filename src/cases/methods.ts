@@ -11,6 +11,7 @@ import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { integrateRK4 } from '../numerical/null-ray-integrator.js';
 import { adaptiveQuadrature } from './quadrature.js';
 import { appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase } from './catalog.js';
+import { runAppliedCaseEngine, usesCatalogEngine } from './engine.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase, type CaseResult, type LumpedRadiating } from './types.js';
 
 export type { LumpedRadiating } from './types.js';
@@ -37,6 +38,19 @@ export const MIN_THICKNESS_RATIO = 5;
  */
 export function maxwellDepthFactor(r: number): number {
   return Math.sqrt(Math.hypot(1, r) + r);
+}
+
+/** Parent penetration depth δ_M from classical δ and r = ωε/σ. @internal */
+export function skinDeltaMaxwellM(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const delta = outputs.delta_m;
+  const r = outputs.displacement_ratio;
+  if (delta === null || r === null || !Number.isFinite(delta) || !Number.isFinite(r)) {
+    throw new Error('skinDeltaMaxwellM: need finite delta_m and displacement_ratio');
+  }
+  return delta * maxwellDepthFactor(r);
 }
 /** @internal */
 export function runCaseSkinDepth(i: Readonly<Record<string, number>>): CaseResult {
@@ -712,7 +726,10 @@ const RUN_BY_ID: Readonly<Record<string, (i: Readonly<Record<string, number>>) =
 
 function buildAppliedCase(id: string): AppliedCase {
   const record = appliedCaseRecord(id);
-  const run = RUN_BY_ID[id]!;
+  const legacy = RUN_BY_ID[id]!;
+  const run = usesCatalogEngine(record)
+    ? (inputs: Readonly<Record<string, number>>) => runAppliedCaseEngine(record, inputs)
+    : legacy;
   const regimeAt = id === 'case-brownian-sphere' ? brownianSphereRegimeAt : undefined;
   return assembleAppliedCase(record, { run, regimeAt });
 }
@@ -725,6 +742,7 @@ export const APPLIED_CASE_RUNNERS: ReadonlyMap<string, AppliedCase> = new Map(
 /** Names exported numeric methods for catalog validation. @internal */
 export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'maxwellDepthFactor',
+  'skinDeltaMaxwellM',
   'windowedLinewidthHz',
   'lumpedRadiatingTemperature',
   'sphereEigenvalues',
@@ -745,6 +763,7 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
 /** Method registry for the catalog engine. @internal */
 export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   maxwellDepthFactor,
+  skinDeltaMaxwellM,
   windowedLinewidthHz,
   lumpedRadiatingTemperature,
   sphereEigenvalues,
