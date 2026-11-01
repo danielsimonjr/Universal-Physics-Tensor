@@ -14,6 +14,14 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Part A step A11a — wrapper keeps `bit` at ln 2.** `applyBitScaleOverride` in `mathts-unit-wrapper.ts` replaces MathTS axis-8 scale 1 with the `data/units.json` row on every delegated reading. `tests/dimensional/unit-wrapper-bit.test.ts` fails if `parseUnit('bit').scale` becomes 1.
+
+- **Part A step A12 (partial) — A5 in-set texts skip the local grammar.** \`tryMathtsA5Reading\` serves the agreed spellings before \`localUnitReadings\`; gap rows and policy overrides stay on the local path. \`tests/dimensional/unit-wrapper-a12-partial.test.ts\` pins the in-set table.
+
+- **Part A step A11b — cycles stay a count in convertValue.** `convertValue` keeps dividing exact scales only (not MathTS `.to()`), so `1 Hz` in `rad/s` stays 1 with `cycles: 1`; the angular evaluator path still applies 2π. `tests/dimensional/unit-wrapper-cycles.test.ts` pins both paths.
+
+- **Part A step A8 — wrapper refusal denylist.** `src/dimensional/mathts-unit-wrapper.ts` keeps `dB`, `dBm`, `dBW`, `Np`, `Mach`, `mach`, and `ton` on `UnitRefusedError` with the messages in `data/units.json`, including `ton` when MathTS parses the short ton. `src/dimensional/units.ts` consults `uptRefusalReason` before MathTS. `tests/dimensional/unit-wrapper-refusal.test.ts` pins the denylist and the source hook.
+
 - **Part A step A3 — unit file scale expressions read through MathTS.** `src/dimensional/unit-data.ts` calls `@danielsimonjr/mathts-core` `readScaleExpression` with UPT's resolver for `data/units.json` shared scales and registered constant spellings. `tests/dimensional/unit-data-delegation.test.ts` pins the source import; `tests/dimensional/unit-data.test.ts` snapshots every row's scale double.
 
 - **Part A step A4 — agreed unit scales from `Unit.exactScale`.** `src/dimensional/units.ts` and `mathts-unit-delegation.ts` take the MathTS exact scale when every symbol is admitted in UPT and MathTS and the numeric scale matches; `bit` stays on the local ln 2 row. `tests/dimensional/units-exact-scale-delegation.test.ts` pins the source call and the member/non-member predicate.
@@ -49,6 +57,8 @@ from v0.1.0 onward.
 - **The discovery verdict gains `promising-unchecked`, `upt discover --json` reports readiness per tier, and a proposal records its identification's magnitude evidence.** `VettedCandidate['verdict']` (root export) is `'promising' | 'promising-unchecked' | 'inert' | 'contradictory' | 'magnitude-clash' | 'axis-clash'`, ranked in that order. A row that merges components, unlocks a quantity, is not subsuming and survives every falsifier that ran is `promising` only when the magnitude falsifier ran and could have failed (`hasMagnitudeEvidence`: `magnitudeChecked && magnitudeAnchorInvariant !== true`); otherwise it is `promising-unchecked`. A caller that selected `verdict === 'promising'` now gets the magnitude-evidenced tier only; `isPromisingTier` selects both. The `discover --json` field `readiness` is `{ promising, promisingUnchecked }`, each `{ count, mechanismTested, dataTested, withoutMagnitudeEvidence, axisUnresolved, entailedConsequence }` (it was one object whose first field was `promising`). `ProposedBridge.derivedFrom.identification` gains a required `magnitudeEvidence: boolean`, and `upt map --proposed --json` gives each proposal that field. Score is unchanged.
 
 ### Changed
+
+- **`H0_SI` is 67.4 km/s/Mpc through MathTS `Unit.exactScale`, the same path `convertValue` delegates to.** `src/core/constants.ts` calls `Unit.exactScale('km/s/Mpc')` and `exactScaleToNumber` (the pair `tryMathtsA5Reading` uses). It cannot call `convertValue` (`core/` is tier 0). The previous `67.4 * 3.240779289444365e-20` restated that double. The rate is still `2.184285241085502e-18` s⁻¹. `tests/core/constants-owner.test.ts` fails if the owner spells the factor or omits the `Unit.exactScale` call.
 
 - **The visibility tags of four `src/` symbols match the package root.** `M_PROTON_SI`, `CANONICAL_GRAPH` and `canonicalToEdges` are root exports that carried an `@internal` tag; they are now `@public`. `CurvatureKindSpec` carried a `@public` tag and is not exported; it is now `@internal`. Four comment lines change and nothing else: the emitted declaration files (385 before and after) differ in those four lines only, and the `tests/api` closure tests pass. `sha256Hex` is unchanged: `src/composition/canonical-json.ts` holds a one-line wrapper that calls `src/core/hash.ts`, so the name appears twice and the logic once.
 

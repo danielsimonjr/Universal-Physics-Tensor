@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 11.0.0
-  totalFiles: 386
+  totalFiles: 387
   totalModules: 13
-  totalExports: 2764
+  totalExports: 2771
 entryPoints:
   - file: src/index.ts
     type: main
@@ -13013,14 +13013,15 @@ modules:
     src/core/constants.ts:
       description: Canonical CODATA 2022 + SI-defined physical constants for UPT.
       externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - Unit
+            - exactScaleToNumber
         - package: "@danielsimonjr/mathts-functions"
           imports:
             - "* as mathtsConstants"
       nodeDependencies: []
-      internalDependencies:
-        - file: ./data-file.js
-          imports:
-            - checkedDataFile
+      internalDependencies: []
       exports:
         - C_SI
         - R_INF_SI
@@ -14428,6 +14429,50 @@ modules:
         - readFileScaleExpression
         - _powerDim
         - _multiplyDim
+    src/dimensional/mathts-unit-wrapper.ts:
+      description: UPT unit wrapper policy on top of MathTS (Part A steps A8, A11, A12 partial).
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - Unit
+            - exactScaleToNumber
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./exact-scale.js
+          imports:
+            - scaleToNumber
+            - solidusSides
+            - ExactScale
+        - file: ./mathts-unit-delegation.js
+          imports:
+            - mathtsExactScaleReading
+            - mathtsParsedDimension
+        - file: ./unit-data.js
+          imports:
+            - UNIT_DATA
+        - file: ./types.js
+          imports:
+            - Dimension
+          typeOnly: true
+      exports:
+        - A5_DELEGATED_TEXTS
+        - refusedTokensIn
+        - uptRefusalReason
+        - isA5DelegatedText
+        - mathtsWouldParse
+        - applyBitScaleOverride
+        - tryMathtsA5Reading
+      interfaces:
+        - MathtsDelegatedReading
+      functions:
+        - refusedTokensIn
+        - uptRefusalReason
+        - isA5DelegatedText
+        - mathtsWouldParse
+        - applyBitScaleOverride
+        - tryMathtsA5Reading
+      constants:
+        - A5_DELEGATED_TEXTS
     src/dimensional/metric-validators.ts:
       description: Per-kind validation for v0.3.0 metric-layer AST nodes.
       externalDependencies: []
@@ -14977,6 +15022,11 @@ modules:
             - mathtsParsedDimension
             - unitExactScaleViaMathts
             - unitParserViaMathts
+        - file: ./mathts-unit-wrapper.js
+          imports:
+            - applyBitScaleOverride
+            - tryMathtsA5Reading
+            - uptRefusalReason
         - file: ./unit-data.js
           imports:
             - UNIT_DATA
@@ -19224,6 +19274,7 @@ dependencyGraph:
         - src/dimensional/killing-validators.ts
         - src/dimensional/klein-gordon-equation.ts
         - src/dimensional/mathts-unit-delegation.ts
+        - src/dimensional/mathts-unit-wrapper.ts
         - src/dimensional/metric-validators.ts
         - src/dimensional/metric.ts
         - src/dimensional/natural-units.ts
@@ -19299,18 +19350,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 386
+  totalTypeScriptFiles: 387
   totalModules: 13
-  totalLinesOfCode: 86891
-  totalExports: 2764
+  totalLinesOfCode: 87064
+  totalExports: 2771
   totalClasses: 85
-  totalInterfaces: 512
-  totalFunctions: 880
-  totalTypeGuards: 13
+  totalInterfaces: 513
+  totalFunctions: 886
+  totalTypeGuards: 14
   totalEnums: 0
-  totalConstants: 406
+  totalConstants: 407
   totalReExports: 1389
-  totalTypeOnlyImports: 519
+  totalTypeOnlyImports: 520
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

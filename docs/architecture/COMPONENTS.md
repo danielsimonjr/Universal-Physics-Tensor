@@ -475,13 +475,15 @@ Turns a human dimension string into a `Dimension`. The string names one of four 
 
 The last two forms share the formula grammar, which MathTS parses (`parseFormulaPNode`). The parser lets the `upt` CLI accept user-declared dimensions without TypeScript. The parser throws `DimensionSpecError` on bad input. Not on the public surface.
 
-### Unit reader (`src/dimensional/units.ts`, `exact-scale.ts`, `unit-data.ts`)
+### Unit reader (`src/dimensional/units.ts`, `exact-scale.ts`, `unit-data.ts`, `mathts-unit-delegation.ts`, `mathts-unit-wrapper.ts`)
 
-The unit reader turns text such as `1um`, `25degC` or `3.8e-16 kg/m^3` into an SI value and a `Dimension`. `data/units.json` holds the unit table. `unit-data.ts` loads the file once and checks it against `data/units.schema.json`. `readUnitFile(text, schema)` does the check and throws on a file that the schema or the table rules reject.
+The unit reader turns text such as `1um`, `25degC` or `3.8e-16 kg/m^3` into an SI value and a `Dimension`. `data/units.json` holds the unit table. `unit-data.ts` loads the file once and checks it against `data/units.schema.json`. Scale expressions in the file are read through MathTS `readScaleExpression` with UPT's resolver for shared scales and constant spellings.
 
 A unit is a product of factors, each `symbol[^n]`, joined by `*`, `·` or a space. Everything after the first `/` is the denominator, so `W/m*K` is W/(m·K). An exact symbol wins over a prefix: `T` is the tesla and `Ts` is a terasecond. An affine temperature (`degC`, `°C`, `degF`, `°F`) is valid only alone. Rankine is proportional, not affine.
 
-`exact-scale.ts` holds `ExactScale`. An `ExactScale` is a rational (`num` and `den` as `bigint`) times one floating factor. The floating factor holds the irrational part: π for an angle, ln 2 for a bit. Prefixes, products, quotients and integer powers multiply the rationals exactly, and `scaleToNumber` rounds once. So `g/cm^3` is 1000 with no float noise. The helpers `decimalScale`, `scaleOf`, `ratioScale`, `irrationalScale`, `multiplyScales`, `divideScales`, `powerScale` and `addScales` build and combine scales. `solidusSides` splits a unit text at its first `/`. `readScaleExpression(text, resolve)` reads the scale expressions that `data/units.json` stores.
+`exact-scale.ts` holds the UPT `ExactScale` face and delegates arithmetic to `@danielsimonjr/mathts-core`. `mathts-unit-delegation.ts` holds the A4/A5 predicates for when `Unit.exactScale` and `Unit.parse` replace the local grammar (`bit` stays on the local ln 2 row). `mathts-unit-wrapper.ts` holds the refusal denylist, the `bit` scale override, cycle counting without MathTS `.to()`, and the A5 in-set fast path. `units.ts` consults the wrapper before MathTS and keeps gap rows on the local reader.
+
+`exact-scale.ts` also exposes `solidusSides`, `readScaleExpression(text, resolve)` for scale strings in `data/units.json`, and the UPT helpers `decimalScale`, `scaleOf`, `ratioScale`, `multiplyScales`, `divideScales`, `powerScale`, `addScales`, and `scaleToNumber`.
 
 The root `src/index.ts` exports these names:
 
@@ -996,7 +998,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1156 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1161 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 

@@ -47,7 +47,7 @@ The codebase is organized into the following modules:
 - **composition**: 82 files
 - **core**: 18 files
 - **diff**: 3 files
-- **dimensional**: 43 files
+- **dimensional**: 44 files
 - **entry**: 1 file
 - **numerical**: 43 files
 - **relations**: 8 files
@@ -5310,12 +5310,8 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber` |
 | `@danielsimonjr/mathts-functions` | `* as mathtsConstants` |
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./data-file.js` | `checkedDataFile` | Import |
 
 **Exports:**
 - Constants:
@@ -6006,6 +6002,28 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/mathts-unit-wrapper.ts` - UPT unit wrapper policy on top of MathTS (Part A steps A8, A11, A12 partial).
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./exact-scale.js` | `scaleToNumber, solidusSides, ExactScale` | Import |
+| `./mathts-unit-delegation.js` | `mathtsExactScaleReading, mathtsParsedDimension` | Import |
+| `./unit-data.js` | `UNIT_DATA` | Import |
+| `./types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `MathtsDelegatedReading`
+- Functions: `refusedTokensIn`, `uptRefusalReason`, `isA5DelegatedText`, `mathtsWouldParse`, `applyBitScaleOverride`, `tryMathtsA5Reading`
+- Constants: `A5_DELEGATED_TEXTS`
+
+---
+
 ### `src/dimensional/metric-validators.ts` - Per-kind validation for v0.3.0 metric-layer AST nodes.
 
 **Internal Dependencies:**
@@ -6226,6 +6244,7 @@ The codebase is organized into the following modules:
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, solidusSides, UNIT_SCALE, ExactScale` | Import |
 | `./mathts-unit-delegation.js` | `mathtsParsedDimension, unitExactScaleViaMathts, unitParserViaMathts` | Import |
+| `./mathts-unit-wrapper.js` | `applyBitScaleOverride, tryMathtsA5Reading, uptRefusalReason` | Import |
 | `./unit-data.js` | `UNIT_DATA, AffineRow` | Import |
 
 **Exports:**
@@ -7578,7 +7597,7 @@ graph TD
         N48[ast-leaves]
         N49[ast-types]
         N50[bridge-check]
-        N51[...38 more]
+        N51[...39 more]
     end
 
     subgraph Entry
@@ -7641,17 +7660,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 386 |
+| Total TypeScript Files | 387 |
 | Total Modules | 13 |
-| Total Lines of Code | 86891 |
-| Total Exports | 2764 |
+| Total Lines of Code | 87064 |
+| Total Exports | 2771 |
 | Total Re-exports | 1389 |
 | Total Classes | 85 |
-| Total Interfaces | 512 |
-| Total Functions | 880 |
-| Total Type Guards | 13 |
+| Total Interfaces | 513 |
+| Total Functions | 886 |
+| Total Type Guards | 14 |
 | Total Enums | 0 |
-| Type-only Imports | 519 |
+| Type-only Imports | 520 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
