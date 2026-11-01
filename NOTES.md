@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-01
+
+- **Stacked MathTS CI attach (A8).** #568 vs #567 is CONFLICTING (`DIRTY`) on architecture graphs after the H0 exact-scale import. `pull_request` CI last succeeded on `a1c52e76` (before the H0 derive). `ci.yml` now pushes on `cursor/mathts-*` so this HEAD is checked. `H0_SI` stays `67.4 * exactScaleNumber('km/s/Mpc')`.
+
 ## As of 2026-10-18
 
 - **The root `npm` Dependabot entry is removed (branch `fix/drop-dead-dependabot-npm-entry`; not merged when this was written).** The `npm_and_yarn in /.` job last succeeded on 2026-09-23 and failed on 2026-09-28, 2026-09-29, 2026-10-05 and 2026-10-13. Each failure was at file fetching, with the message that the project has a `bun.lock` file and no `package-lock.json`, `yarn.lock` or `pnpm-lock.yaml` (read from the Actions logs of run 38364545058). The `github_actions in /.` job succeeded on the same dates. The line under 2026-10-09 that says `dependabot.yml` stays on the npm ecosystem is the record from before this change. `MEMORY.md` states the current rule, and the ignore rule that went with the entry is the last open row of `ACTIVE.md`.

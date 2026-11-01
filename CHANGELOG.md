@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **CI also runs on a push to `cursor/mathts-*`.** Stacked MathTS PRs cannot form a `pull_request` merge commit once each parent refreshes architecture file-count claims. The same jobs now run against the branch HEAD on push, including the code-docs and architecture-docs jobs. `tests/tools/ci-workflows.test.ts` pins the branch list (red first on `[master]` only).
+
 ### Added
 
 - **Part A step A11a — wrapper keeps `bit` at ln 2.** `applyBitScaleOverride` in `mathts-unit-wrapper.ts` replaces MathTS axis-8 scale 1 with the `data/units.json` row on every delegated reading. `tests/dimensional/unit-wrapper-bit.test.ts` fails if `parseUnit('bit').scale` becomes 1.
