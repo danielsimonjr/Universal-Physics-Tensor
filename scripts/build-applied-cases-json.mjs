@@ -10,14 +10,11 @@ const cases = [...APPLIED_CASES.values()].map((c) => {
   const { run, regimeAt, ...rest } = c;
   const checks = CHECKS_BY_CASE_ID[c.id];
   if (checks === undefined) throw new Error(`missing checks for ${c.id}`);
-  const links = rest.links.map(({ id, role }) => ({
-    id: id.replace(/^be-\$\{(\d+)\}$/, 'be-$1').replace(/^`be-\$\{(\d+)\}`$/, 'be-$1'),
-    role,
-  }));
-  for (const link of links) {
-    if (link.id.includes('${')) throw new Error(`unresolved link id ${link.id} in ${c.id}`);
-  }
-  const record = { ...rest, links, checks };
+  const record = {
+    ...rest,
+    outputs: rest.outputs.map((o) => ({ key: o.key, symbol: o.symbol, unit: o.unit, meaning: o.meaning })),
+    checks: [...checks],
+  };
   if (regimeAt !== undefined) record.regimeAt = 'brownianSphereRegimeAt';
   return record;
 });

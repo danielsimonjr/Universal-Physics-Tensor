@@ -10,6 +10,7 @@ import {
   catalogSemanticProblems,
   projectAppliedCaseRecord,
   readAppliedCaseFile,
+  appliedCaseCatalog,
   type AppliedCaseFile,
 } from '../../src/cases/catalog.js';
 import { dataSchema } from '../../src/core/data-file.js';
@@ -26,6 +27,21 @@ describe('applied-cases catalog loader', () => {
     const text = `${JSON.stringify(projectionFile())}\n`;
     const loaded = readAppliedCaseFile(text, schema);
     expect(loaded.cases.map((c) => c.id).sort()).toEqual([...APPLIED_CASES.keys()].sort());
+  });
+
+  it('loads data/applied-cases.json matching the live cases\' declarative fields', () => {
+    const text = `${JSON.stringify({ schemaVersion: 1, cases: appliedCaseCatalog().cases.map((row) => {
+      const live = APPLIED_CASES.get(row.id)!;
+      return projectAppliedCaseRecord(live, row.checks);
+    }) })}\n`;
+    readAppliedCaseFile(text, schema);
+    for (const row of appliedCaseCatalog().cases) {
+      const live = APPLIED_CASES.get(row.id)!;
+      const projected = projectAppliedCaseRecord(live, row.checks);
+      expect(row.parameters).toEqual(projected.parameters);
+      expect(row.checks).toEqual(projected.checks);
+      expect(row.examples).toEqual(projected.examples);
+    }
   });
 
   it('refuses a duplicate id, an unknown op, and a check with no expr', () => {

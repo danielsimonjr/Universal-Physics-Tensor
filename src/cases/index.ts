@@ -3,21 +3,18 @@
  *
  * @module cases
  */
-import { BROWNIAN_SPHERE_CASE } from './brownian-sphere.js';
-import { DAMPED_RESONATOR_CASE } from './damped-resonator.js';
-import { KEPLER_RV_CASE } from './kepler-rv.js';
-import { LUMPED_COOLING_CASE } from './lumped-cooling.js';
-import { RESISTOR_NOISE_CASE } from './resistor-noise.js';
-import { SKIN_DEPTH_CASE } from './skin-depth.js';
+import { appliedCaseCatalog } from './catalog.js';
+import { APPLIED_CASE_RUNNERS } from './methods.js';
 import type { AppliedCase, CaseResult } from './types.js';
 import { checkInputs, inputContract, type InputContract } from '../bridges/input-contract.js';
 
 export type { AppliedCase, CaseCheck, CaseComparison, CaseExample, CaseOutput, CaseResult } from './types.js';
 
+/** Validate the catalog once at load. @internal */
+appliedCaseCatalog();
+
 /** Case id → case. @internal */
-export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = new Map(
-  [RESISTOR_NOISE_CASE, BROWNIAN_SPHERE_CASE, DAMPED_RESONATOR_CASE, SKIN_DEPTH_CASE, LUMPED_COOLING_CASE, KEPLER_RV_CASE].map((c) => [c.id, c]),
-);
+export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = APPLIED_CASE_RUNNERS;
 
 /**
  * The declared inputs of a case: one listed slot per parameter, spelled by its

@@ -1,0 +1,1807 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "case-resistor-noise",
+      "title": "Resistor thermal-noise measurement (bandwidth, instrument loading)",
+      "parameters": [
+        {
+          "key": "T_K",
+          "quantity": "temperature",
+          "symbol": "T",
+          "unit": "K",
+          "meaning": "absolute temperature of the resistor and of the instrument input, > 0 K",
+          "temperature": "absolute"
+        },
+        {
+          "key": "R_ohm",
+          "quantity": "resistance under test",
+          "symbol": "R",
+          "unit": "ohm",
+          "meaning": "the resistor whose noise is measured, > 0"
+        },
+        {
+          "key": "R_in_ohm",
+          "quantity": "instrument input resistance",
+          "symbol": "R_in",
+          "unit": "ohm",
+          "meaning": "the input resistance in parallel with R, > 0 (a physical resistor at T)"
+        },
+        {
+          "key": "C_in_F",
+          "quantity": "input capacitance",
+          "symbol": "C_in",
+          "unit": "F",
+          "meaning": "instrument input plus cable capacitance in parallel with R, ≥ 0"
+        },
+        {
+          "key": "f_lo_Hz",
+          "quantity": "lower band edge",
+          "symbol": "f_lo",
+          "unit": "Hz",
+          "meaning": "lower edge of the ideal (brick-wall) measurement band, ≥ 0"
+        },
+        {
+          "key": "f_hi_Hz",
+          "quantity": "upper band edge",
+          "symbol": "f_hi",
+          "unit": "Hz",
+          "meaning": "upper edge of the band, > f_lo; B = f_hi − f_lo is the noise-equivalent bandwidth"
+        },
+        {
+          "key": "t_avg_s",
+          "quantity": "averaging time",
+          "symbol": "t_avg",
+          "unit": "s",
+          "meaning": "how long the RMS is averaged, > 0"
+        },
+        {
+          "key": "e_n2_V2_per_Hz",
+          "quantity": "amplifier voltage-noise power density",
+          "symbol": "e_n²",
+          "unit": "V^2/Hz",
+          "meaning": "the square of the amplifier's input voltage noise e_n, white over the band (4 nV/√Hz → 1.6e-17), ≥ 0",
+          "optional": true
+        },
+        {
+          "key": "i_n2_A2_per_Hz",
+          "quantity": "amplifier current-noise power density",
+          "symbol": "i_n²",
+          "unit": "A^2/Hz",
+          "meaning": "the square of the amplifier's input current noise i_n, white over the band (1 pA/√Hz → 1e-24), ≥ 0",
+          "optional": true
+        }
+      ],
+      "governing": {
+        "parent": [
+          "S_V(f) = 4 R_eff · hf/(e^{hf/k_BT} − 1) · 1/(1 + (2πf R_eff C_in)²)   (Nyquist 1928, thermal part; seen through the input RC)",
+          "V_rms² = ∫_{f_lo}^{f_hi} S_V(f) df"
+        ],
+        "scalar": [
+          "S_V = 4 k_B T R_eff,  R_eff = R R_in/(R + R_in)   (BE-58 with the loaded resistance)",
+          "V_rms = √(4 k_B T R_eff B),  B = f_hi − f_lo",
+          "through an amplifier: V_rms,total² = (4 k_B T R_eff + e_n² + i_n² R_eff²) B, e_n and i_n uncorrelated (the e_n–i_n model; Motchenbacher & Connelly 1993)"
+        ],
+        "distinction": "S_V(f) is a spectral density — a function of frequency fixed by the fluctuation–dissipation theorem and shaped by the input network; 4k_BTR_eff is its flat, classical value, and √(4k_BT R_eff B) integrates that constant over an ideal band. Nyquist derived it from the thermal modes of a transmission line (a 1-D field); the lumped circuit keeps only the port voltage."
+      },
+      "observable": "V_rms_V",
+      "outputs": [
+        {
+          "key": "B_Hz",
+          "symbol": "B",
+          "unit": "Hz",
+          "meaning": "noise-equivalent bandwidth f_hi − f_lo"
+        },
+        {
+          "key": "R_eff_ohm",
+          "symbol": "R_eff",
+          "unit": "ohm",
+          "meaning": "R in parallel with R_in: the resistance the instrument sees"
+        },
+        {
+          "key": "S_V_V2_per_Hz",
+          "symbol": "S_V",
+          "unit": "V^2/Hz",
+          "meaning": "flat one-sided spectral density 4k_BT R_eff"
+        },
+        {
+          "key": "V_rms_unloaded_V",
+          "symbol": "V_rms,0",
+          "unit": "V",
+          "meaning": "open-circuit value √(4k_BTRB), with no instrument attached"
+        },
+        {
+          "key": "V_rms_V",
+          "symbol": "V_rms",
+          "unit": "V",
+          "meaning": "the RMS noise voltage the instrument reads (scalar model)"
+        },
+        {
+          "key": "loading_ratio",
+          "symbol": "V_rms/V_rms,0",
+          "unit": "",
+          "meaning": "√(R_in/(R + R_in)): what the input resistance removes"
+        },
+        {
+          "key": "V_rms_parent_V",
+          "symbol": "V_rms,parent",
+          "unit": "V",
+          "meaning": "the parent spectrum integrated over the band (MathTS quad, adaptive Gauss–Kronrod)"
+        },
+        {
+          "key": "parent_deviation",
+          "symbol": "V_rms/V_rms,parent − 1",
+          "unit": "",
+          "meaning": "signed relative difference of the scalar result relative to the parent"
+        },
+        {
+          "key": "V_rms_rel_sigma",
+          "symbol": "σ(V_rms)/V_rms",
+          "unit": "",
+          "meaning": "statistical scatter of an RMS averaged over t_avg: 1/(2√(B t_avg)) (Dicke radiometer relation)"
+        },
+        {
+          "key": "V_rms_total_V",
+          "symbol": "V_rms,total",
+          "unit": "V",
+          "meaning": "what the instrument reads with its amplifier noise added in quadrature; not defined without e_n2/i_n2"
+        },
+        {
+          "key": "resistor_fraction",
+          "symbol": "φ",
+          "unit": "",
+          "meaning": "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); not defined without e_n2/i_n2"
+        },
+        {
+          "key": "T_n_K",
+          "symbol": "T_n",
+          "unit": "K",
+          "meaning": "the amplifier's noise temperature for the source R_eff, (e_n² + i_n²R_eff²)/(4k_B R_eff); not defined without e_n2/i_n2"
+        }
+      ],
+      "conditions": [
+        "thermal equilibrium: R and the instrument input at one temperature T, no DC current through R",
+        "the instrument reads the voltage across R ∥ R_in ∥ C_in (open-circuit source, no other load)",
+        "stationary Gaussian noise; the band is an ideal brick wall of width B (the real filter enters only through its noise-equivalent bandwidth)"
+      ],
+      "comparison": {
+        "reference": "the parent: Nyquist's thermal spectrum through the input RC, integrated over [f_lo, f_hi]",
+        "valueKey": "V_rms_V",
+        "referenceKey": "V_rms_parent_V",
+        "deviationKey": "parent_deviation",
+        "method": "MathTS quad, adaptive Gauss–Kronrod (G7–K15) quadrature, relative tolerance 1e-10"
+      },
+      "notIncluded": [
+        "the amplifier's noise when e_n2 and i_n2 are left out; when given, their 1/f corners and their correlation (taken white and uncorrelated)",
+        "1/f (excess) noise, which needs a current through R",
+        "the zero-point term hf/2 of the quantum fluctuation–dissipation theorem (the parent here is the thermal part)",
+        "frequency dependence of R and R_in over the band"
+      ],
+      "measurement": [
+        "digitize the voltage across R through a band-pass of noise-equivalent bandwidth B and average the RMS over t_avg; compare with V_rms_V ± V_rms_rel_sigma·V_rms_V (statistical scatter only)",
+        "measure the amplifier's own noise with its input shorted and subtract it in quadrature before comparing",
+        "`upt confront --bridge=be-58`: the NIST Johnson-noise-thermometry k_B, which tests S_V = 4k_BTR with R traceable to the quantum Hall effect"
+      ],
+      "links": [
+        {
+          "id": "be-58",
+          "role": "the flat spectral density S_V = 4k_BTR (catalog evaluator: `upt evaluate be-58`)"
+        },
+        {
+          "id": "be-55",
+          "role": "quantum Hall resistance standard to which R is traceable in the JNT comparison"
+        }
+      ],
+      "examples": {
+        "valid": {
+          "args": [
+            "T_K=300",
+            "R_ohm=1kohm",
+            "R_in_ohm=1Mohm",
+            "C_in_F=20pF",
+            "f_lo_Hz=0",
+            "f_hi_Hz=10kHz",
+            "t_avg_s=10",
+            "e_n2_V2_per_Hz=1e-18",
+            "i_n2_A2_per_Hz=1e-24"
+          ],
+          "note": "a 1 kΩ resistor at 300 K, a 1 MΩ ∥ 20 pF input with 1 nV/√Hz and 1 pA/√Hz of amplifier noise, a 10 kHz band, 10 s of averaging",
+          "fails": []
+        },
+        "failures": [
+          {
+            "args": [
+              "T_K=20mK",
+              "R_ohm=50",
+              "R_in_ohm=1Mohm",
+              "C_in_F=0",
+              "f_lo_Hz=1GHz",
+              "f_hi_Hz=2GHz",
+              "t_avg_s=1"
+            ],
+            "note": "a 50 Ω load at 20 mK read at 1–2 GHz: hf/k_BT ≈ 4.8, the spectrum is not flat and 4k_BTR overstates it",
+            "fails": [
+              "classical"
+            ]
+          },
+          {
+            "args": [
+              "T_K=300",
+              "R_ohm=1Mohm",
+              "R_in_ohm=10Mohm",
+              "C_in_F=100pF",
+              "f_lo_Hz=0",
+              "f_hi_Hz=100kHz",
+              "t_avg_s=1"
+            ],
+            "note": "a 1 MΩ resistor through 100 pF: the RC pole sits near 1.7 Hz, far below the 100 kHz band edge",
+            "fails": [
+              "flat-band"
+            ]
+          },
+          {
+            "args": [
+              "T_K=300",
+              "R_ohm=10",
+              "R_in_ohm=1Mohm",
+              "C_in_F=20pF",
+              "f_lo_Hz=0",
+              "f_hi_Hz=10kHz",
+              "t_avg_s=10",
+              "e_n2_V2_per_Hz=1.6e-17",
+              "i_n2_A2_per_Hz=1e-24"
+            ],
+            "note": "a 10 Ω resistor through a 4 nV/√Hz amplifier: the amplifier adds ~100× the resistor's noise power, which 10 s cannot resolve to 1%",
+            "fails": [
+              "amplifier"
+            ]
+          }
+        ]
+      },
+      "checks": [
+        {
+          "id": "classical",
+          "premise": "flat, classical spectrum: hf ≪ k_BT across the band",
+          "quantity": "h f_hi/(k_B T)",
+          "expr": "h*f_hi_Hz/(k_B*T_K)",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold for ≪ 1: the Planck factor at f_hi is then within x/2 ≤ 0.5% of 1"
+        },
+        {
+          "id": "flat-band",
+          "premise": "the input RC pole lies above the band",
+          "quantity": "2π f_hi R_eff C_in",
+          "expr": "2*pi*f_hi_Hz*R_eff_ohm*C_in_F",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold for ≪ 1: the RC low-pass then passes ≥ 99% of the density at f_hi"
+        },
+        {
+          "id": "amplifier",
+          "premise": "the resistor's noise is resolved above the amplifier's in t_avg",
+          "quantity": "1/(φ √(B t_avg))",
+          "expr": "1/(resistor_fraction*sqrt(B_Hz*t_avg_s))",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold: after subtracting the amplifier's power (known exactly, e.g. from a long shorted-input run) the resistor's power scatters by ≤ 1%"
+        }
+      ]
+    },
+    {
+      "id": "case-brownian-sphere",
+      "title": "Brownian sphere in a fluid (particle geometry, fluid conditions)",
+      "parameters": [
+        {
+          "key": "T_K",
+          "quantity": "temperature",
+          "symbol": "T",
+          "unit": "K",
+          "meaning": "absolute temperature of the fluid, > 0 K",
+          "temperature": "absolute"
+        },
+        {
+          "key": "eta_Pa_s",
+          "quantity": "dynamic viscosity",
+          "symbol": "η",
+          "unit": "Pa*s",
+          "meaning": "viscosity of the fluid at T (water at 20 °C ≈ 1.0e-3 Pa·s), > 0"
+        },
+        {
+          "key": "a_m",
+          "quantity": "particle radius",
+          "symbol": "a",
+          "unit": "m",
+          "meaning": "hydrodynamic radius of the sphere, > 0",
+          "geometry": "radius",
+          "alternates": [
+            {
+              "key": "diameter_m",
+              "meaning": "the diameter 2a of the sphere",
+              "toKey": 0.5
+            }
+          ]
+        },
+        {
+          "key": "rho_p_kg_per_m3",
+          "quantity": "particle density",
+          "symbol": "ρ_p",
+          "unit": "kg/m^3",
+          "meaning": "mass density of the sphere (silica ≈ 2000), > 0"
+        },
+        {
+          "key": "rho_f_kg_per_m3",
+          "quantity": "fluid density",
+          "symbol": "ρ_f",
+          "unit": "kg/m^3",
+          "meaning": "mass density of the fluid (water ≈ 998), > 0"
+        },
+        {
+          "key": "t_s",
+          "quantity": "lag time",
+          "symbol": "t",
+          "unit": "s",
+          "meaning": "the time over which the displacement is measured, > 0"
+        },
+        {
+          "key": "d",
+          "quantity": "tracked dimensions",
+          "symbol": "d",
+          "unit": "",
+          "meaning": "number of Cartesian axes tracked: 1, 2 (a microscope image plane, horizontal) or 3"
+        },
+        {
+          "key": "h_m",
+          "quantity": "distance to a wall",
+          "symbol": "h",
+          "unit": "m",
+          "meaning": "distance from the sphere's centre to one plane horizontal wall (a coverslip), > a; leave out when no wall is within many radii",
+          "geometry": "separation",
+          "optional": true
+        }
+      ],
+      "governing": {
+        "parent": [
+          "m dv/dt = −γ v + ξ(t),  ⟨ξ_i(t) ξ_j(t′)⟩ = 2γ k_BT δ_ij δ(t − t′)   (Langevin, a 3-vector equation; model-langevin)",
+          "η ∇²u = ∇p,  ∇·u = 0,  u = v on the sphere (no slip), u → 0 far away   (Stokes creeping flow, a field; model-stokes-drag) ⇒ γ = 6πηa",
+          "m dv/dt = −γ v − (m_f/2) dv/dt − 6a²√(πηρ_f) ∫_{−∞}^t v′(s)/√(t − s) ds + ξ(t), ξ coloured by the same kernel   (unsteady Stokes flow: added mass and the Basset memory force; Hinch 1975)"
+        ],
+        "scalar": [
+          "D = k_BT/(6πηa)   (Stokes–Einstein; ab-stokes-einstein)",
+          "⟨|Δr|²⟩ = 2 d D t  over the d tracked axes"
+        ],
+        "distinction": "The parents are a vector stochastic equation for the velocity and a field equation for the flow around the sphere; the scalar keeps one isotropic number D and a mean-square displacement linear in t. Dropped: the velocity as a state (the ballistic regime t ≲ τ_p), the flow field (and with it the hydrodynamic memory for t ≲ τ_f), the shape beyond the radius, and every anisotropy."
+      },
+      "observable": "MSD_m2",
+      "outputs": [
+        {
+          "key": "gamma_kg_per_s",
+          "symbol": "γ",
+          "unit": "kg/s",
+          "meaning": "Stokes drag coefficient 6πηa"
+        },
+        {
+          "key": "D_m2_per_s",
+          "symbol": "D",
+          "unit": "m^2/s",
+          "meaning": "diffusion coefficient k_BT/(6πηa)"
+        },
+        {
+          "key": "MSD_m2",
+          "symbol": "⟨|Δr|²⟩",
+          "unit": "m^2",
+          "meaning": "mean-square displacement 2dDt over the tracked axes"
+        },
+        {
+          "key": "rms_displacement_m",
+          "symbol": "√⟨|Δr|²⟩",
+          "unit": "m",
+          "meaning": "root-mean-square displacement over the tracked axes"
+        },
+        {
+          "key": "m_kg",
+          "symbol": "m",
+          "unit": "kg",
+          "meaning": "particle mass (4/3)πa³ρ_p"
+        },
+        {
+          "key": "tau_p_s",
+          "symbol": "τ_p",
+          "unit": "s",
+          "meaning": "momentum relaxation time (m + m_f/2)/γ, with the displaced-fluid added mass m_f/2"
+        },
+        {
+          "key": "tau_f_s",
+          "symbol": "τ_f",
+          "unit": "s",
+          "meaning": "vorticity diffusion time ρ_f a²/η over one radius (hydrodynamic memory)"
+        },
+        {
+          "key": "v_sed_m_per_s",
+          "symbol": "v_s",
+          "unit": "m/s",
+          "meaning": "Stokes sedimentation speed (2/9)(ρ_p − ρ_f) g a²/η; negative means the sphere rises"
+        },
+        {
+          "key": "Re",
+          "symbol": "Re",
+          "unit": "",
+          "meaning": "ρ_f a max(√(k_BT/m), |v_s|)/η — radius-based; a diameter-based Re is twice this"
+        },
+        {
+          "key": "MSD_langevin_m2",
+          "symbol": "⟨|Δr|²⟩_L",
+          "unit": "m^2",
+          "meaning": "the Langevin parent: 2dD[t − τ(1 − e^{−t/τ})], τ = m/γ (bare mass)"
+        },
+        {
+          "key": "langevin_deviation",
+          "symbol": "MSD/MSD_L − 1",
+          "unit": "",
+          "meaning": "signed relative difference of the diffusive MSD relative to the Langevin one"
+        },
+        {
+          "key": "MSD_hydro_m2",
+          "symbol": "⟨|Δr|²⟩_H",
+          "unit": "m^2",
+          "meaning": "the Langevin–Basset parent: added mass and hydrodynamic memory, unbounded incompressible fluid (branch-cut integral of its Laplace-domain VACF)"
+        },
+        {
+          "key": "hydro_correction_m2",
+          "symbol": "⟨|Δr|²⟩_H − ⟨|Δr|²⟩",
+          "unit": "m^2",
+          "meaning": "what inertia and memory change in the MSD at t; ≈ −4dD√(τ_f t/π) at t ≫ τ_f"
+        },
+        {
+          "key": "hydro_deviation",
+          "symbol": "MSD/MSD_H − 1",
+          "unit": "",
+          "meaning": "signed relative difference of the diffusive MSD relative to the Langevin–Basset one"
+        },
+        {
+          "key": "memory_correction",
+          "symbol": "MSD_H/MSD_OU − 1",
+          "unit": "",
+          "meaning": "the memory force's own share: MSD_H against the Ornstein–Uhlenbeck MSD with the same τ_p (added mass, no memory)"
+        },
+        {
+          "key": "D_parallel_m2_per_s",
+          "symbol": "D_∥",
+          "unit": "m^2/s",
+          "meaning": "D beside the wall, parallel to it: D·(Faxén series in a/h); not defined without h_m"
+        },
+        {
+          "key": "D_perp_m2_per_s",
+          "symbol": "D_⊥",
+          "unit": "m^2/s",
+          "meaning": "D normal to the wall: D/λ, λ from Brenner's exact series; not defined without h_m"
+        },
+        {
+          "key": "MSD_wall_m2",
+          "symbol": "⟨|Δr|²⟩_w",
+          "unit": "m^2",
+          "meaning": "2t(d_∥ D_∥ + d_⊥ D_⊥): the tracked horizontal axes parallel to the wall, a third one normal to it; not defined without h_m"
+        },
+        {
+          "key": "wall_deviation",
+          "symbol": "MSD/MSD_w − 1",
+          "unit": "",
+          "meaning": "signed relative difference of the unbounded-fluid MSD relative to the wall-corrected one; not defined without h_m"
+        }
+      ],
+      "comparison": {
+        "reference": "the parent Langevin model (bare mass, white noise; it has neither added mass nor hydrodynamic memory)",
+        "valueKey": "MSD_m2",
+        "referenceKey": "MSD_langevin_m2",
+        "deviationKey": "langevin_deviation",
+        "method": "closed form of the Ornstein–Uhlenbeck MSD, velocities starting in equilibrium"
+      },
+      "conditions": [
+        "a rigid sphere released at r = 0; its displacement density starts as δ(r) and spreads as a Gaussian of variance 2Dt per axis",
+        "no-slip boundary on the sphere; the fluid is at rest far from it (no imposed flow; no wall within many radii, or with h_m one plane no-slip wall)",
+        "fluid in thermal equilibrium at T; one isolated particle (dilute: no hydrodynamic interaction with others)"
+      ],
+      "notIncluded": [
+        "walls other than one plane: a second wall, a channel or a curved surface; and, with h_m, the spread of heights the sphere samples (D_∥, D_⊥ are taken at h)",
+        "localization error and camera motion blur of the tracking, which offset and bias the measured MSD",
+        "fluid compressibility: the incompressible memory kernel gives ⟨v²⟩ = k_BT/(m + m_f/2) at t = 0; sound restores k_BT/m over a/c_s (Zwanzig & Bixon 1970)",
+        "the memory force near a wall: MSD_hydro is the unbounded-fluid result, and a wall within √(νt) changes the memory tail",
+        "the rotational diffusion of the sphere, and any non-spherical shape"
+      ],
+      "measurement": [
+        "single-particle tracking: fit ⟨|Δr|²⟩(t) over the d tracked axes, slope 2dD; compare D and MSD_m2 at the chosen lag (with N independent displacements the relative scatter of the MSD is ≈ √(2/(dN)))",
+        "subtract the static localization offset 2dσ_loc² (measured on an immobilized particle) before comparing",
+        "dynamic light scattering: the field autocorrelation decays at Γ = D q², an independent route to the same D"
+      ],
+      "links": [
+        {
+          "id": "ab-stokes-einstein",
+          "role": "the derivation D = k_BT/(6πηa) with its regime Re ≤ 0.1, m/(γt) ≤ 0.01 (`upt atlas ab-stokes-einstein`)"
+        },
+        {
+          "id": "ab-langevin-diffusion",
+          "role": "the overdamped coarse-graining D = k_BT/γ and its ballistic counterexample"
+        },
+        {
+          "id": "model-stokes-drag",
+          "role": "the creeping-flow drag γ = 6πηa"
+        },
+        {
+          "id": "CE-stokes-einstein",
+          "role": "encoded only up to its dimensionless 6π (scalar-up-to-constant); the 6π here is from Stokes drag"
+        }
+      ],
+      "examples": {
+        "valid": {
+          "args": [
+            "T_K=293.15",
+            "eta_Pa_s=1e-3",
+            "a_m=1um",
+            "rho_p_kg_per_m3=2000",
+            "rho_f_kg_per_m3=998",
+            "t_s=1",
+            "d=2",
+            "h_m=100um"
+          ],
+          "note": "a 1 µm-radius silica sphere in water at 20 °C, 100 µm above the coverslip, tracked in the image plane over 1 s",
+          "fails": []
+        },
+        "failures": [
+          {
+            "args": [
+              "T_K=293.15",
+              "eta_Pa_s=1e-3",
+              "a_m=1um",
+              "rho_p_kg_per_m3=2000",
+              "rho_f_kg_per_m3=998",
+              "t_s=1us",
+              "d=2"
+            ],
+            "note": "the same sphere over 1 µs: still ballistic (t ≈ 2τ_p) and inside the hydrodynamic memory time",
+            "fails": [
+              "overdamped",
+              "memory"
+            ]
+          },
+          {
+            "args": [
+              "T_K=293.15",
+              "eta_Pa_s=1e-3",
+              "a_m=50um",
+              "rho_p_kg_per_m3=7800",
+              "rho_f_kg_per_m3=998",
+              "t_s=100",
+              "d=3"
+            ],
+            "note": "a 50 µm-radius steel sphere tracked in 3-D: it sinks at ≈ 3.7 cm/s, Re ≈ 1.9, and the drift swamps diffusion",
+            "fails": [
+              "creeping-flow",
+              "drift"
+            ]
+          },
+          {
+            "args": [
+              "T_K=293.15",
+              "eta_Pa_s=1e-3",
+              "a_m=1um",
+              "rho_p_kg_per_m3=1050",
+              "rho_f_kg_per_m3=998",
+              "t_s=50ms",
+              "d=2",
+              "h_m=3um"
+            ],
+            "note": "a 1 µm-radius polystyrene sphere 3 µm (centre) above the coverslip: the wall slows D_∥ by ≈ 19%",
+            "fails": [
+              "wall"
+            ]
+          },
+          {
+            "args": [
+              "T_K=293.15",
+              "eta_Pa_s=1e-3",
+              "a_m=1um",
+              "rho_p_kg_per_m3=1050",
+              "rho_f_kg_per_m3=998",
+              "t_s=50ms",
+              "d=2",
+              "h_m=1.2um"
+            ],
+            "note": "the same sphere with a 0.2 µm gap: past the range of the Faxén series, and its height changes by more than the gap allows over t",
+            "fails": [
+              "faxen-range",
+              "wall",
+              "wall-static"
+            ]
+          }
+        ]
+      },
+      "checks": [
+        {
+          "id": "creeping-flow",
+          "premise": "creeping flow around the sphere, Re ≪ 1",
+          "quantity": "ρ_f a max(√(k_BT/m), |v_s|)/η",
+          "expr": "Re",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "the threshold ab-stokes-einstein states: a chosen machine form of Re ≪ 1"
+        },
+        {
+          "id": "overdamped",
+          "premise": "overdamped times t ≫ τ_p",
+          "quantity": "(m + m_f/2)/(γ t)",
+          "expr": "tau_p_s/t_s",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "ab-stokes-einstein's m/(γt) ≤ 0.01, with the added mass m_f/2 included (stricter)"
+        },
+        {
+          "id": "memory",
+          "premise": "past the hydrodynamic memory, t ≫ τ_f = ρ_f a²/η",
+          "quantity": "|MSD_H/MSD_OU − 1|",
+          "expr": "abs(memory_correction)",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold: the Basset memory changes the MSD by ≤ 1% at t (computed, not estimated; ≈ 2√(τ_f/(πt)) at t ≫ τ_f)"
+        },
+        {
+          "id": "faxen-range",
+          "premise": "the Faxén series in a/h holds for D_∥",
+          "quantity": "(a/h)⁵/16 ÷ (D_∥/D)",
+          "expr": "pow(a_m/h_m,5)/16/(D_parallel_m2_per_s/D_m2_per_s)",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold: the last retained term is ≤ 1% of the series — a size estimate of the truncation, not a bound; D_⊥ (Brenner) is exact at any h > a"
+        },
+        {
+          "id": "wall",
+          "premise": "the wall correction to the tracked MSD is negligible",
+          "quantity": "|MSD/MSD_w − 1|",
+          "expr": "abs(wall_deviation)",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold: the unbounded-fluid D is then within 1% for the tracked axes; otherwise read MSD_wall_m2"
+        },
+        {
+          "id": "wall-static",
+          "premise": "the height barely changes over t",
+          "quantity": "(√(2 D_⊥ t) + |v_s| t/λ)/(h − a)",
+          "expr": "(sqrt(2*D_perp_m2_per_s*t_s)+abs(v_sed_m_per_s)*t_s/(D_m2_per_s/D_perp_m2_per_s))/(h_m-a_m)",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold: diffusion plus wall-slowed sedimentation normal to the wall move the sphere by ≤ 10% of the gap, so D_∥, D_⊥ taken at h hold over t"
+        },
+        {
+          "id": "drift",
+          "premise": "sedimentation drift negligible along gravity over t",
+          "quantity": "(v_s t)²/(2 D t)",
+          "expr": "pow(v_sed_m_per_s*t_s,2)/(2*D_m2_per_s*t_s)",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold: the vertical MSD then carries ≤ 1% from the deterministic drift"
+        }
+      ],
+      "regimeAt": "brownianSphereRegimeAt"
+    },
+    {
+      "id": "case-damped-resonator",
+      "title": "Damped resonator ring-down (damping, finite observation time)",
+      "parameters": [
+        {
+          "key": "f0_Hz",
+          "quantity": "natural frequency",
+          "symbol": "f0",
+          "unit": "Hz",
+          "meaning": "undamped natural frequency ω0/2π = √(k/m)/2π, > 0"
+        },
+        {
+          "key": "Q",
+          "quantity": "quality factor",
+          "symbol": "Q",
+          "unit": "",
+          "meaning": "Q = ω0 m/b (for an RLC: √(L/C)/R), > 0"
+        },
+        {
+          "key": "x0_m",
+          "quantity": "initial displacement",
+          "symbol": "x0",
+          "unit": "m",
+          "meaning": "displacement at release, from rest"
+        },
+        {
+          "key": "t_s",
+          "quantity": "read-out time",
+          "symbol": "t",
+          "unit": "s",
+          "meaning": "time after release at which x and the envelope are read, ≥ 0"
+        },
+        {
+          "key": "t_obs_s",
+          "quantity": "record length",
+          "symbol": "t_obs",
+          "unit": "s",
+          "meaning": "length of the recorded ring-down, starting at release, > 0"
+        },
+        {
+          "key": "T_K",
+          "quantity": "temperature",
+          "symbol": "T",
+          "unit": "K",
+          "meaning": "temperature of the damping bath, > 0 K; give with k_N_per_m for the thermal floor",
+          "temperature": "absolute",
+          "optional": true
+        },
+        {
+          "key": "k_N_per_m",
+          "quantity": "mode stiffness",
+          "symbol": "k",
+          "unit": "N/m",
+          "meaning": "effective stiffness of the mode at the read-out point, > 0 (for an RLC read as charge: 1/C in 1/F, not N/m); give with T_K",
+          "optional": true
+        }
+      ],
+      "governing": {
+        "parent": [
+          "ρA ∂²w/∂t² + c ∂w/∂t + EI ∂⁴w/∂z⁴ = 0 with the structure's boundary conditions   (e.g. a cantilever: a field w(z, t) with many modes)",
+          "one mode, w = φ(z) x(t), read at one point:  m x″ + b x′ + k x = 0   (model-damped-spring; for a circuit L q″ + R q′ + q/C = 0, ab-damped-rlc)"
+        ],
+        "scalar": [
+          "x(t) = x0 e^{−αt} [cos ω_d t + (α/ω_d) sin ω_d t],  α = ω0/(2Q),  ω_d = ω0 √(1 − 1/(4Q²))   (Q > 1/2)",
+          "envelope x0 e^{−αt}/√(1 − 1/(4Q²));  linewidth Δf = f0/Q;  resolution of a record 1/t_obs"
+        ],
+        "distinction": "The parent is a field w(z, t) with infinitely many modes and a mode shape; the scalar keeps one mode's amplitude x(t) at the read-out point, with all loss lumped into a viscous (velocity-proportional) Q. Dropped: the other modes and their coupling, the mode shape, and any frequency or amplitude dependence of the damping (structural damping gives a different Q(f))."
+      },
+      "observable": "envelope_m",
+      "outputs": [
+        {
+          "key": "alpha_per_s",
+          "symbol": "α",
+          "unit": "s^-1",
+          "meaning": "amplitude decay rate ω0/(2Q) = b/(2m)"
+        },
+        {
+          "key": "tau_s",
+          "symbol": "τ",
+          "unit": "s",
+          "meaning": "amplitude ring-down time 1/α = Q/(πf0)"
+        },
+        {
+          "key": "linewidth_Hz",
+          "symbol": "Δf",
+          "unit": "Hz",
+          "meaning": "f0/Q: FWHM of the velocity (absorbed-power) response, exact at any Q; the displacement response approaches it for Q ≫ 1"
+        },
+        {
+          "key": "f_d_Hz",
+          "symbol": "f_d",
+          "unit": "Hz",
+          "meaning": "damped oscillation frequency f0 √(1 − 1/(4Q²))"
+        },
+        {
+          "key": "x_m",
+          "symbol": "x(t)",
+          "unit": "m",
+          "meaning": "displacement at t, released from rest at x0"
+        },
+        {
+          "key": "envelope_m",
+          "symbol": "A(t)",
+          "unit": "m",
+          "meaning": "ring-down envelope at t: the amplitude a peak-detecting read-out sees"
+        },
+        {
+          "key": "resolution_Hz",
+          "symbol": "1/t_obs",
+          "unit": "Hz",
+          "meaning": "frequency resolution of the record"
+        },
+        {
+          "key": "linewidth_windowed_Hz",
+          "symbol": "Δf_T",
+          "unit": "Hz",
+          "meaning": "FWHM of the power spectrum of the truncated ring-down (rectangular window, near resonance)"
+        },
+        {
+          "key": "windowed_excess",
+          "symbol": "Δf_T/Δf − 1",
+          "unit": "",
+          "meaning": "how much the finite record broadens the measured line"
+        },
+        {
+          "key": "x_th_rms_m",
+          "symbol": "√⟨x²⟩_th",
+          "unit": "m",
+          "meaning": "thermal RMS displacement √(k_BT/k) of the mode (equipartition); not defined without T_K and k_N_per_m"
+        },
+        {
+          "key": "envelope_rms_m",
+          "symbol": "√⟨A²⟩",
+          "unit": "m",
+          "meaning": "RMS envelope with the thermal motion added: √(A² + 2k_BT/k), the Rice second moment; not defined without T_K and k_N_per_m"
+        }
+      ],
+      "conditions": [
+        "released from rest: x(0) = x0, x′(0) = 0; free ring-down, no drive after release",
+        "linear restoring force: the amplitude is small enough that f0 does not depend on it (ax-cubic-spring-lc records why a hardening spring is not this model)",
+        "the record starts at release and lasts t_obs; its spectrum is that of a rectangular window"
+      ],
+      "comparison": {
+        "reference": "the linewidth an infinitely long record would show, f0/Q",
+        "valueKey": "linewidth_windowed_Hz",
+        "referenceKey": "linewidth_Hz",
+        "deviationKey": "windowed_excess",
+        "method": "closed-form transform of the truncated ring-down, half-power point by MathTS findRoot (Brent) inside the first step past half power"
+      },
+      "notIncluded": [
+        "the detector noise floor; and the thermal drive of the resonator unless T_K and k_N_per_m are given (its equilibrium amplitude √(k_BT/k) is the fluctuation–dissipation partner of its damping; compare case-resistor-noise)",
+        "frequency drift of f0 over the record",
+        "window shapes other than rectangular, and the negative-frequency image of the line (the Q ≫ 1 approximation)",
+        "the other modes of the structure"
+      ],
+      "measurement": [
+        "ring-down: fit ln A(t) against t; the slope −α gives Q = πf0/α; compare the measured envelope at t with envelope_m",
+        "spectrum: the FWHM of the recorded line is linewidth_windowed_Hz, which approaches linewidth_Hz only when the record resolves it",
+        "for an RLC circuit read the capacitor voltage: f0 = 1/(2π√(LC)), Q = √(L/C)/R (ab-damped-rlc)"
+      ],
+      "links": [
+        {
+          "id": "model-damped-spring",
+          "role": "m x″ + b x′ + k x = 0, the single-mode equation evaluated here"
+        },
+        {
+          "id": "ab-damped-rlc",
+          "role": "the same equation for an RLC circuit, an exact equivalence"
+        },
+        {
+          "id": "ab-damped-massless",
+          "role": "the overdamped reduction, for the regime where this case refuses (Q ≤ 1/2)"
+        },
+        {
+          "id": "ax-cubic-spring-lc",
+          "role": "the refuted claim that a nonlinear (cubic) spring maps onto the linear circuit"
+        }
+      ],
+      "examples": {
+        "valid": {
+          "args": [
+            "f0_Hz=1kHz",
+            "Q=1000",
+            "x0_m=1um",
+            "t_s=0.1",
+            "t_obs_s=20",
+            "T_K=300",
+            "k_N_per_m=1"
+          ],
+          "note": "a 1 kHz, Q = 1000 resonator (1 Hz line), 1 N/m at 300 K, read 0.1 s after release, recorded for 20 s",
+          "fails": []
+        },
+        "failures": [
+          {
+            "args": [
+              "f0_Hz=1kHz",
+              "Q=1000",
+              "x0_m=1um",
+              "t_s=0.1",
+              "t_obs_s=1"
+            ],
+            "note": "the same resonator recorded for 1 s: the 1 Hz resolution cannot resolve the 1 Hz line",
+            "fails": [
+              "resolved"
+            ]
+          },
+          {
+            "args": [
+              "f0_Hz=1kHz",
+              "Q=0.3",
+              "x0_m=1um",
+              "t_s=0.1",
+              "t_obs_s=20"
+            ],
+            "note": "Q = 0.3 is overdamped: there is no ring-down, and the underdamped formulas are refused",
+            "fails": [
+              "underdamped",
+              "single-lorentzian"
+            ]
+          },
+          {
+            "args": [
+              "f0_Hz=1kHz",
+              "Q=1000",
+              "x0_m=100pm",
+              "t_s=1",
+              "t_obs_s=20",
+              "T_K=300",
+              "k_N_per_m=1"
+            ],
+            "note": "released from 100 pm and read after 1 s (≈ 3 ring-down times): the envelope, ≈ 4 pm, sits below the 64 pm thermal motion",
+            "fails": [
+              "above-thermal"
+            ]
+          }
+        ]
+      },
+      "checks": [
+        {
+          "id": "underdamped",
+          "premise": "underdamped: the solution rings (Q > 1/2)",
+          "quantity": "Q",
+          "expr": "Q",
+          "op": ">",
+          "bound": 0.5,
+          "threshold": "exact: at Q ≤ 1/2 the solution is a sum of real exponentials, with no ring-down, f_d or envelope"
+        },
+        {
+          "id": "single-lorentzian",
+          "premise": "high Q: the line near f0 is one Lorentzian",
+          "quantity": "Q",
+          "expr": "Q",
+          "op": ">=",
+          "bound": 10,
+          "threshold": "chosen threshold for Q ≫ 1: the windowed spectrum drops the negative-frequency pole"
+        },
+        {
+          "id": "resolved",
+          "premise": "the record resolves the line: 1/t_obs ≪ f0/Q",
+          "quantity": "(1/t_obs)/(f0/Q)",
+          "expr": "resolution_Hz/linewidth_Hz",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold for ≪ 1; see windowed_excess for the broadening it allows"
+        },
+        {
+          "id": "in-record",
+          "premise": "the read-out time lies inside the record",
+          "quantity": "t/t_obs",
+          "expr": "t_s/t_obs_s",
+          "op": "<=",
+          "bound": 1,
+          "threshold": "exact: an envelope read after the record ends was not measured"
+        },
+        {
+          "id": "above-thermal",
+          "premise": "the ring-down stands above the thermal motion at t",
+          "quantity": "√(k_BT/k)/A(t)",
+          "expr": "x_th_rms_m/envelope_m",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold: the RMS envelope √(A² + 2k_BT/k) then exceeds A by ≤ 1%"
+        }
+      ]
+    },
+    {
+      "id": "case-skin-depth",
+      "title": "Skin depth of a planar conductor (good-conductor, local and DC-conductivity regimes)",
+      "parameters": [
+        {
+          "key": "rho_ohm_m",
+          "quantity": "resistivity",
+          "symbol": "ρ",
+          "unit": "ohm*m",
+          "meaning": "DC resistivity 1/σ at the conductor's temperature (copper at 20 °C ≈ 1.68e-8), > 0"
+        },
+        {
+          "key": "f_Hz",
+          "quantity": "frequency",
+          "symbol": "f",
+          "unit": "Hz",
+          "meaning": "drive frequency ω/2π, > 0"
+        },
+        {
+          "key": "mu_r",
+          "quantity": "relative permeability",
+          "symbol": "μ_r",
+          "unit": "",
+          "meaning": "μ/μ0 of the conductor, taken constant and linear (1 for copper), > 0"
+        },
+        {
+          "key": "eps_r",
+          "quantity": "relative permittivity",
+          "symbol": "ε_r",
+          "unit": "",
+          "meaning": "ε/ε0 of the bound charges, beside the conduction current (1 for a metal, ≈ 11.7 for silicon), > 0"
+        },
+        {
+          "key": "l_mfp_m",
+          "quantity": "carrier mean free path",
+          "symbol": "l",
+          "unit": "m",
+          "meaning": "the conduction carriers' mean free path at the conductor's temperature (copper at 293 K ≈ 39 nm), > 0"
+        },
+        {
+          "key": "v_carrier_m_per_s",
+          "quantity": "carrier speed",
+          "symbol": "v",
+          "unit": "m/s",
+          "meaning": "speed setting τ = l/v: the Fermi velocity in a metal (copper 1.57e6), the thermal velocity in a non-degenerate semiconductor, > 0"
+        },
+        {
+          "key": "thickness_m",
+          "quantity": "conductor thickness",
+          "symbol": "d",
+          "unit": "m",
+          "meaning": "thickness of the planar conductor, driven from one face, > 0"
+        }
+      ],
+      "governing": {
+        "parent": [
+          "∇×E = −∂B/∂t,  ∇×H = σE + ∂D/∂t,  B = μH,  D = εE   (Maxwell with a local Ohm law J = σE)",
+          "one dimension, H = H_y(x, t):  (ε/σ) ∂²H/∂t² + ∂H/∂t = (1/(μσ)) ∂²H/∂x²   (the telegraph equation of model-telegraph)",
+          "driven at ω on a half-space: H ∝ e^{i(kx − ωt)},  k² = ω²με + iωμσ,  penetration depth 1/Im k"
+        ],
+        "scalar": [
+          "∂H/∂t = (1/(μσ)) ∂²H/∂x²   (displacement current dropped: magnetic diffusion; ab-telegraph-diffusion)",
+          "H(x, t) = H0 e^{−x/δ} cos(ωt − x/δ),  δ = √(2ρ/(ωμ)),  μ = μ_r μ0",
+          "surface resistance R_s = ρ/δ   (per square: the DC resistance of a sheet of thickness δ)"
+        ],
+        "distinction": "The parent is a vector field obeying a wave equation with loss, whose conductivity is a local, frequency-independent constant; the scalar keeps one decay length for one field component in a half-space. Dropped: the displacement current (the wave part, O(ωε/σ)), any non-local or frequency-dependent conductivity, the back face of a finite conductor, and the conductor's curvature and edges."
+      },
+      "observable": "delta_m",
+      "outputs": [
+        {
+          "key": "omega_per_s",
+          "symbol": "ω",
+          "unit": "s^-1",
+          "meaning": "angular frequency 2πf"
+        },
+        {
+          "key": "delta_m",
+          "symbol": "δ",
+          "unit": "m",
+          "meaning": "classical skin depth √(2ρ/(ωμ)): the field and current fall by 1/e per δ"
+        },
+        {
+          "key": "R_s_ohm",
+          "symbol": "R_s",
+          "unit": "ohm",
+          "meaning": "surface resistance ρ/δ, per square (the real part of the surface impedance)"
+        },
+        {
+          "key": "delta_maxwell_m",
+          "symbol": "δ_M",
+          "unit": "m",
+          "meaning": "1/Im k with the displacement current kept: the parent plane-wave penetration depth"
+        },
+        {
+          "key": "maxwell_deviation",
+          "symbol": "δ/δ_M − 1",
+          "unit": "",
+          "meaning": "signed relative difference of the classical δ relative to the parent penetration depth"
+        },
+        {
+          "key": "displacement_ratio",
+          "symbol": "ωε/σ",
+          "unit": "",
+          "meaning": "displacement current over conduction current"
+        },
+        {
+          "key": "mfp_ratio",
+          "symbol": "l/δ",
+          "unit": "",
+          "meaning": "mean free path over skin depth"
+        },
+        {
+          "key": "omega_tau",
+          "symbol": "ωτ",
+          "unit": "",
+          "meaning": "ω l/v: the drive period against the carrier relaxation time"
+        },
+        {
+          "key": "thickness_ratio",
+          "symbol": "d/δ",
+          "unit": "",
+          "meaning": "conductor thickness in skin depths"
+        },
+        {
+          "key": "back_field_ratio",
+          "symbol": "e^{−d/δ}",
+          "unit": "",
+          "meaning": "field amplitude at the back face over the surface amplitude (half-space profile)"
+        }
+      ],
+      "conditions": [
+        "a planar, homogeneous, isotropic conductor filling 0 ≤ x ≤ d, driven at x = 0 by a tangential field H_y(0, t) = H0 cos ωt",
+        "periodic steady state: the start-up transient has decayed (it does so over a few periods near the surface)",
+        "half-space profile: the field vanishes deep in the conductor (checked through d/δ); the medium outside x = 0 enters only through H0"
+      ],
+      "comparison": {
+        "reference": "the parent plane wave in a local ohmic medium, displacement current kept: 1/Im k, k² = ω²με + iωμσ",
+        "valueKey": "delta_m",
+        "referenceKey": "delta_maxwell_m",
+        "deviationKey": "maxwell_deviation",
+        "method": "closed form 1/Im k = δ √(√(1 + r²) + r), r = ωε/σ"
+      },
+      "notIncluded": [
+        "the temperature dependence of ρ (a conductor heated by its own AC loss has a larger δ)",
+        "surface roughness, which raises the AC loss once the rms roughness approaches δ (Hammerstad–Bekkadal)",
+        "curvature: for a round wire of radius a the Bessel-function solution replaces the planar profile, with corrections of order δ/a",
+        "ferromagnetic hysteresis and saturation: μ_r is taken constant and linear",
+        "the anomalous-regime surface impedance itself (Reuter–Sondheimer), which this case refuses rather than evaluates"
+      ],
+      "measurement": [
+        "surface resistance: the unloaded Q of a cavity walled with the conductor is Q = G/R_s, G the cavity's geometry factor; compare the R_s inferred from Q with R_s_ohm",
+        "AC resistance: per square of the driven face it is R_s = ρ/δ against ρ/d at DC, so R_ac/R_dc = d/δ for d ≫ δ",
+        "eddy-current probing: the phase lag x/δ of the field at depth x, or the transmission e^{−d/δ} through a foil when d/δ is not large (a thin foil is where this case refuses)"
+      ],
+      "links": [
+        {
+          "id": "model-telegraph",
+          "role": "τ u_tt + u_t = D u_xx: the 1-D Maxwell equations in an ohmic conductor, with τ = ε/σ and D = 1/(μσ)"
+        },
+        {
+          "id": "ab-telegraph-diffusion",
+          "role": "dropping τ u_tt (here the displacement current) to reach diffusion; its small parameter τDq² is of order ωε/σ at q ~ 1/δ"
+        },
+        {
+          "id": "model-fick",
+          "role": "the diffusion equation u_t = D u_xx that the magnetic field obeys once the displacement current is dropped"
+        },
+        {
+          "id": "CE-drude-resistivity",
+          "role": "ρ = m/(nq²τ): the DC resistivity whose τ the DC-conductivity check compares with the drive period"
+        }
+      ],
+      "examples": {
+        "valid": {
+          "args": [
+            "rho_ohm_m=1.68e-8",
+            "f_Hz=1MHz",
+            "mu_r=1",
+            "eps_r=1",
+            "l_mfp_m=39nm",
+            "v_carrier_m_per_s=1.57e6",
+            "thickness_m=1mm"
+          ],
+          "note": "a 1 mm copper plate at room temperature driven at 1 MHz: δ ≈ 65 µm",
+          "fails": []
+        },
+        "failures": [
+          {
+            "args": [
+              "rho_ohm_m=1.68e-11",
+              "f_Hz=100MHz",
+              "mu_r=1",
+              "eps_r=1",
+              "l_mfp_m=39um",
+              "v_carrier_m_per_s=1.57e6",
+              "thickness_m=1mm"
+            ],
+            "note": "high-purity copper at 4 K (residual-resistance ratio ≈ 1000) at 100 MHz: l ≈ 39 µm is ~190 δ — the anomalous skin effect",
+            "fails": [
+              "local"
+            ]
+          },
+          {
+            "args": [
+              "rho_ohm_m=1.68e-8",
+              "f_Hz=100kHz",
+              "mu_r=1",
+              "eps_r=1",
+              "l_mfp_m=39nm",
+              "v_carrier_m_per_s=1.57e6",
+              "thickness_m=35um"
+            ],
+            "note": "a 35 µm copper foil at 100 kHz: δ ≈ 206 µm, so the foil is a sixth of a skin depth and the half-space profile does not apply",
+            "fails": [
+              "thick"
+            ]
+          },
+          {
+            "args": [
+              "rho_ohm_m=0.1",
+              "f_Hz=10GHz",
+              "mu_r=1",
+              "eps_r=11.7",
+              "l_mfp_m=28nm",
+              "v_carrier_m_per_s=2.3e5",
+              "thickness_m=10mm"
+            ],
+            "note": "lightly doped silicon (10 Ω·cm) at 10 GHz: ωε/σ ≈ 0.65, a lossy dielectric rather than a good conductor",
+            "fails": [
+              "good-conductor"
+            ]
+          }
+        ]
+      },
+      "checks": [
+        {
+          "id": "good-conductor",
+          "premise": "good conductor: conduction current ≫ displacement current",
+          "quantity": "ωε/σ",
+          "expr": "2*pi*f_Hz*eps_r*epsilon_0*rho_ohm_m",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold for ≪ 1: the parent penetration depth then differs from δ by ≈ ωε/(2σ) ≤ 0.5%"
+        },
+        {
+          "id": "local",
+          "premise": "local conductivity: the carriers' mean free path well inside the skin depth, l ≪ δ",
+          "quantity": "l/δ",
+          "expr": "l_mfp_m/delta_m",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold for ≪ 1; beyond it the current at a point depends on the field over a path l and the anomalous skin effect sets in (Pippard 1947; Reuter & Sondheimer 1948)"
+        },
+        {
+          "id": "dc-conductivity",
+          "premise": "DC conductivity: the drive is slow beside the carrier relaxation, ωτ ≪ 1",
+          "quantity": "ω l/v",
+          "expr": "2*pi*f_Hz*l_mfp_m/v_carrier_m_per_s",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold for ≪ 1: the Drude σ(ω) = σ0/(1 − iωτ) is then within 0.5% of σ0 in modulus"
+        },
+        {
+          "id": "thick",
+          "premise": "the conductor is a half-space for the field: d ≫ δ",
+          "quantity": "d/δ",
+          "expr": "thickness_m/delta_m",
+          "op": ">=",
+          "bound": 5,
+          "threshold": "chosen threshold: the half-space field at the back face is then ≤ e^{−5} ≈ 0.7% of the surface field"
+        }
+      ]
+    },
+    {
+      "id": "case-lumped-cooling",
+      "title": "Lumped-capacitance cooling of a sphere (Biot number, radiation linearity)",
+      "parameters": [
+        {
+          "key": "a_m",
+          "quantity": "sphere radius",
+          "symbol": "a",
+          "unit": "m",
+          "meaning": "radius of the solid sphere, > 0",
+          "geometry": "radius",
+          "alternates": [
+            {
+              "key": "diameter_m",
+              "meaning": "the diameter 2a of the sphere",
+              "toKey": 0.5
+            }
+          ]
+        },
+        {
+          "key": "rho_kg_per_m3",
+          "quantity": "density",
+          "symbol": "ρ",
+          "unit": "kg/m^3",
+          "meaning": "mass density of the solid (copper ≈ 8933), > 0"
+        },
+        {
+          "key": "c_J_per_kg_K",
+          "quantity": "specific heat",
+          "symbol": "c",
+          "unit": "J/(kg*K)",
+          "meaning": "specific heat capacity of the solid (copper ≈ 385), > 0"
+        },
+        {
+          "key": "k_W_per_m_K",
+          "quantity": "thermal conductivity",
+          "symbol": "k",
+          "unit": "W/(m*K)",
+          "meaning": "thermal conductivity of the solid (copper ≈ 401), > 0"
+        },
+        {
+          "key": "h_W_per_m2_K",
+          "quantity": "heat-transfer coefficient",
+          "symbol": "h",
+          "unit": "W/(m^2*K)",
+          "meaning": "convective coefficient at the surface, uniform and constant (still air ≈ 5–25, stirred water ≈ 500–10000), > 0"
+        },
+        {
+          "key": "emissivity",
+          "quantity": "surface emissivity",
+          "symbol": "ε",
+          "unit": "",
+          "meaning": "total hemispherical emissivity of the surface, 0 ≤ ε ≤ 1 (polished copper ≈ 0.03–0.05)"
+        },
+        {
+          "key": "T0_K",
+          "quantity": "initial temperature",
+          "symbol": "T0",
+          "unit": "K",
+          "meaning": "uniform temperature of the sphere at t = 0, > 0 K",
+          "temperature": "absolute"
+        },
+        {
+          "key": "T_inf_K",
+          "quantity": "fluid temperature",
+          "symbol": "T∞",
+          "unit": "K",
+          "meaning": "temperature of the fluid far from the sphere, and of the radiating surroundings, > 0 K",
+          "temperature": "absolute"
+        },
+        {
+          "key": "t_s",
+          "quantity": "elapsed time",
+          "symbol": "t",
+          "unit": "s",
+          "meaning": "time since immersion, ≥ 0"
+        }
+      ],
+      "governing": {
+        "parent": [
+          "ρc ∂T/∂t = k (1/r²) ∂/∂r (r² ∂T/∂r),  0 ≤ r < a   (the heat equation of model-heat, radially symmetric)",
+          "−k ∂T/∂r = h (T − T∞) + εσ_SB (T⁴ − T∞⁴) at r = a;  T(r, 0) = T0",
+          "without the radiation term: θ/θ0 = Σ C_n e^{−ζ_n² Fo} sin(ζ_n r/a)/(ζ_n r/a),  1 − ζ_n cot ζ_n = h a/k,  C_n = 4(sin ζ_n − ζ_n cos ζ_n)/(2ζ_n − sin 2ζ_n),  Fo = αt/a²"
+        ],
+        "scalar": [
+          "ρcV dT/dt = −hA (T − T∞)   (lumped capacitance: one temperature for the whole sphere)",
+          "T(t) = T∞ + (T0 − T∞) e^{−t/τ},  τ = ρcV/(hA) = ρca/(3h)   (Newton's law of cooling)",
+          "Bi = h L_c/k,  L_c = V/A = a/3"
+        ],
+        "distinction": "The parent is a temperature field T(r, t) with a boundary condition that is nonlinear once radiation is kept; the scalar replaces the field by one number and the surface loss by a linear conductance hA. Dropped: the internal gradient (of relative size ~Bi), every eigenmode but the slowest (and that one's rate shifted by O(Bi)), and the T⁴ dependence of radiation."
+      },
+      "observable": "T_K",
+      "outputs": [
+        {
+          "key": "tau_s",
+          "symbol": "τ",
+          "unit": "s",
+          "meaning": "lumped time constant ρcV/(hA) = ρca/(3h)"
+        },
+        {
+          "key": "Bi",
+          "symbol": "Bi",
+          "unit": "",
+          "meaning": "Biot number h L_c/k with L_c = V/A = a/3 (the lumped criterion's form)"
+        },
+        {
+          "key": "Bi_radius",
+          "symbol": "Bi_a",
+          "unit": "",
+          "meaning": "h a/k: the radius-based Biot number of the series solution (3 Bi)"
+        },
+        {
+          "key": "alpha_m2_per_s",
+          "symbol": "α",
+          "unit": "m^2/s",
+          "meaning": "thermal diffusivity k/(ρc)"
+        },
+        {
+          "key": "Fo",
+          "symbol": "Fo",
+          "unit": "",
+          "meaning": "Fourier number αt/a²"
+        },
+        {
+          "key": "theta",
+          "symbol": "θ/θ0",
+          "unit": "",
+          "meaning": "lumped excess-temperature ratio e^{−t/τ}"
+        },
+        {
+          "key": "T_K",
+          "symbol": "T(t)",
+          "unit": "K",
+          "meaning": "the lumped temperature at t: what a thermometer in or on the sphere reads"
+        },
+        {
+          "key": "Q_J",
+          "symbol": "Q",
+          "unit": "J",
+          "meaning": "heat released to the fluid by t, ρcV(T0 − T(t)) (negative when the sphere warms)"
+        },
+        {
+          "key": "theta_parent_mean",
+          "symbol": "θ̄/θ0",
+          "unit": "",
+          "meaning": "volume-mean excess-temperature ratio of the series solution (convection only)"
+        },
+        {
+          "key": "parent_deviation",
+          "symbol": "θ/θ̄ − 1",
+          "unit": "",
+          "meaning": "signed relative difference of the lumped ratio relative to the parent's volume mean"
+        },
+        {
+          "key": "T_centre_K",
+          "symbol": "T(0, t)",
+          "unit": "K",
+          "meaning": "temperature at the centre from the series solution"
+        },
+        {
+          "key": "T_surface_K",
+          "symbol": "T(a, t)",
+          "unit": "K",
+          "meaning": "temperature at the surface from the series solution"
+        },
+        {
+          "key": "h_rad_max_W_per_m2_K",
+          "symbol": "h_rad",
+          "unit": "W/(m^2*K)",
+          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run"
+        },
+        {
+          "key": "Bi_radiating",
+          "symbol": "Bi_r",
+          "unit": "",
+          "meaning": "(h + h_rad)(a/3)/k: the Biot number with the largest radiative conductance added"
+        },
+        {
+          "key": "T_radiating_K",
+          "symbol": "T_r(t)",
+          "unit": "K",
+          "meaning": "the lumped temperature with the T⁴ loss kept (RK4). The linear-loss check does not apply to it; its premise is Bi_radiating ≤ 0.1, and it is not defined otherwise"
+        }
+      ],
+      "conditions": [
+        "initial condition: the sphere is at the uniform temperature T0 when it is immersed at t = 0",
+        "boundary: a uniform, constant coefficient h over the whole surface into fluid at T∞; the surroundings it radiates to are also at T∞",
+        "constant ρ, c and k over the temperature range; no internal heat source; the sphere is solid and homogeneous"
+      ],
+      "comparison": {
+        "reference": "the parent: the series solution of the sphere's heat equation with the convective boundary, volume mean",
+        "valueKey": "theta",
+        "referenceKey": "theta_parent_mean",
+        "deviationKey": "parent_deviation",
+        "method": "eigenfunction series, roots of 1 − ζ cot ζ = Bi_a by MathTS findRoot (Brent) on each interval ((n−1)π, nπ), summed until e^{−ζ²Fo} < 1e-18"
+      },
+      "notIncluded": [
+        "radiation in T_K and in the series: the linear-loss check bounds it; T_radiating_K keeps it, in the lumped model only",
+        "the temperature dependence of h (natural convection has h ∝ ΔT^{1/4}) and of ρ, c, k",
+        "the thermometer's own heat capacity and contact resistance, and conduction along its leads",
+        "phase change at the surface (boiling in a quench), which makes h neither uniform nor constant"
+      ],
+      "measurement": [
+        "record T(t) with a thermocouple embedded at the centre; plot ln((T − T∞)/(T0 − T∞)) against t — a straight line of slope −1/τ tests the lumped premise directly, and T_centre_K is the parent's prediction for that sensor",
+        "compare the measured τ with tau_s; the difference between T_centre_K and T_surface_K is the internal gradient the lumped model drops",
+        "to use this as a calorimetric measurement of h, invert τ = ρca/(3h), valid only where both checks hold"
+      ],
+      "links": [
+        {
+          "id": "model-heat",
+          "role": "ρc_p ∂T/∂t = κ ∂²T/∂x², the heat equation; here in its radial form for a sphere"
+        },
+        {
+          "id": "CE-thermal-diffusivity",
+          "role": "α = k/(ρc_p), the diffusivity in the Fourier number"
+        },
+        {
+          "id": "CE-heat-capacity",
+          "role": "Q = mcΔT, the heat released as the sphere cools"
+        },
+        {
+          "id": "CE-stefan-boltzmann",
+          "role": "j = σT⁴, the radiative loss the linear-loss check bounds"
+        }
+      ],
+      "examples": {
+        "valid": {
+          "args": [
+            "a_m=5mm",
+            "rho_kg_per_m3=8933",
+            "c_J_per_kg_K=385",
+            "k_W_per_m_K=401",
+            "h_W_per_m2_K=20",
+            "emissivity=0.05",
+            "T0_K=100degC",
+            "T_inf_K=20degC",
+            "t_s=300"
+          ],
+          "note": "a 1 cm polished copper ball cooling from 100 °C in still air at 20 °C, read after 5 minutes",
+          "fails": []
+        },
+        "failures": [
+          {
+            "args": [
+              "a_m=5cm",
+              "rho_kg_per_m3=7854",
+              "c_J_per_kg_K=434",
+              "k_W_per_m_K=60.5",
+              "h_W_per_m2_K=1000",
+              "emissivity=0",
+              "T0_K=90degC",
+              "T_inf_K=20degC",
+              "t_s=600"
+            ],
+            "note": "a 10 cm steel ball from 90 °C into stirred water: Bi ≈ 0.28, the centre lags the surface and one temperature does not describe it",
+            "fails": [
+              "lumped"
+            ]
+          },
+          {
+            "args": [
+              "a_m=5mm",
+              "rho_kg_per_m3=7854",
+              "c_J_per_kg_K=434",
+              "k_W_per_m_K=60.5",
+              "h_W_per_m2_K=10",
+              "emissivity=0.8",
+              "T0_K=1000",
+              "T_inf_K=300",
+              "t_s=60"
+            ],
+            "note": "a 1 cm oxidized steel ball at 1000 K in still air: radiation (h_rad ≈ 64 W/m²K) outweighs convection and the loss is not linear",
+            "fails": [
+              "linear-loss"
+            ]
+          }
+        ]
+      },
+      "checks": [
+        {
+          "id": "lumped",
+          "premise": "one temperature for the sphere: internal conduction fast beside surface loss, Bi ≪ 1",
+          "quantity": "h (a/3)/k",
+          "expr": "Bi",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "the conventional criterion Bi ≤ 0.1 with L_c = V/A (Incropera §5.2); parent_deviation shows the error it leaves at t"
+        },
+        {
+          "id": "linear-loss",
+          "premise": "the loss is linear in T − T∞: radiation small beside convection",
+          "quantity": "εσ_SB(T_max + T∞)(T_max² + T∞²)/h",
+          "expr": "h_rad_max_W_per_m2_K/h_W_per_m2_K",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold: the neglected radiative conductance is ≤ 10% of h at the hottest point of the run (Incropera eq. 1.9 linearization)"
+        }
+      ]
+    },
+    {
+      "id": "case-kepler-rv",
+      "title": "Radial-velocity semi-amplitude of a star with a companion (mass ratio, tides, GR apsidal advance)",
+      "parameters": [
+        {
+          "key": "M_star_kg",
+          "quantity": "stellar mass",
+          "symbol": "M_*",
+          "unit": "kg",
+          "meaning": "mass of the star whose radial velocity is measured (1Msun = 1.989e30 kg), > 0"
+        },
+        {
+          "key": "m_p_kg",
+          "quantity": "companion mass",
+          "symbol": "m_p",
+          "unit": "kg",
+          "meaning": "true mass of the companion (Jupiter ≈ 1.898e27 kg), > 0"
+        },
+        {
+          "key": "P_s",
+          "quantity": "orbital period",
+          "symbol": "P",
+          "unit": "s",
+          "meaning": "the orbital period the RV curve repeats with, > 0"
+        },
+        {
+          "key": "eccentricity",
+          "quantity": "eccentricity",
+          "symbol": "e",
+          "unit": "",
+          "meaning": "orbital eccentricity e, 0 ≤ e < 1 (a bare e is the elementary charge, so the key is spelled out)"
+        },
+        {
+          "key": "sin_i",
+          "quantity": "sine of the inclination",
+          "symbol": "sin i",
+          "unit": "",
+          "meaning": "sin of the angle between the orbit normal and the line of sight, 0 < sin i ≤ 1 (1 is edge-on)"
+        },
+        {
+          "key": "R_star_m",
+          "quantity": "stellar radius",
+          "symbol": "R_*",
+          "unit": "m",
+          "meaning": "radius of the star (the Sun ≈ 6.957e8 m), > 0"
+        },
+        {
+          "key": "T_obs_s",
+          "quantity": "observing baseline",
+          "symbol": "T_obs",
+          "unit": "s",
+          "meaning": "time span of the RV record fitted with one fixed ellipse, > 0"
+        }
+      ],
+      "governing": {
+        "parent": [
+          "r̈ = −G(M_* + m_p) r/r³ + O(G(M_* + m_p)/(c² r)) · (G(M_* + m_p)/r²)   (relative orbit, Newtonian term plus the 1PN Einstein–Infeld–Hoffmann terms)",
+          "M_* r_* + m_p r_p = 0 about the barycentre; the measured v_r is the line-of-sight component of ṙ_*",
+          "extended bodies: each is a point mass only if spherical and undeformed; tides and spin add quadrupole terms ∝ (R/r)²"
+        ],
+        "scalar": [
+          "K = (2πG/P)^{1/3} m_p sin i / M_*^{2/3} / √(1 − e²)   (test-mass form, m_p ≪ M_*)",
+          "v_r(t) = K [cos(ν(t) + ω) + e cos ω],  ω fixed over the record",
+          "a³ = G(M_* + m_p) P²/(4π²)   (Kepler III for the relative orbit; CE-kepler-third)"
+        ],
+        "distinction": "The parent is a coupled vector problem for two finite, deformable bodies in curved spacetime; the scalar keeps one number K for a fixed Keplerian ellipse of the star about the barycentre and puts the whole mass in the star. Dropped: the companion's share of the total mass (O(q)), the apsidal advance and the other 1PN terms (O(GM/(c²a))), and the tidal and rotational quadrupoles (O((R_*/r)²))."
+      },
+      "observable": "K_m_per_s",
+      "outputs": [
+        {
+          "key": "q",
+          "symbol": "q",
+          "unit": "",
+          "meaning": "mass ratio m_p/M_*"
+        },
+        {
+          "key": "a_m",
+          "symbol": "a",
+          "unit": "m",
+          "meaning": "semi-major axis of the relative orbit, from Kepler III with the total mass"
+        },
+        {
+          "key": "a_star_m",
+          "symbol": "a_*",
+          "unit": "m",
+          "meaning": "semi-major axis of the star's own orbit about the barycentre, a m_p/(M_* + m_p)"
+        },
+        {
+          "key": "K_m_per_s",
+          "symbol": "K",
+          "unit": "m/s",
+          "meaning": "RV semi-amplitude of the star, test-mass form (the scalar result)"
+        },
+        {
+          "key": "K_two_body_m_per_s",
+          "symbol": "K_2b",
+          "unit": "m/s",
+          "meaning": "the exact Newtonian two-body semi-amplitude (2πG/P)^{1/3} m_p sin i/(M_* + m_p)^{2/3}/√(1 − e²)"
+        },
+        {
+          "key": "two_body_deviation",
+          "symbol": "K/K_2b − 1",
+          "unit": "",
+          "meaning": "relative excess of the test-mass K over the two-body K: (1 + q)^{2/3} − 1"
+        },
+        {
+          "key": "r_peri_m",
+          "symbol": "r_p",
+          "unit": "m",
+          "meaning": "periastron separation a(1 − e)"
+        },
+        {
+          "key": "weak_field",
+          "symbol": "G(M_* + m_p)/(c²a)",
+          "unit": "",
+          "meaning": "the 1PN expansion parameter (half the Schwarzschild radius of the total mass, over a)"
+        },
+        {
+          "key": "dphi_rad_per_orbit",
+          "symbol": "Δω",
+          "unit": "rad",
+          "meaning": "GR apsidal advance per orbit 6πG(M_* + m_p)/(c²a(1 − e²)) (BE-52 with the total mass)"
+        },
+        {
+          "key": "omega_dot_deg_per_yr",
+          "symbol": "ω̇",
+          "unit": "deg/yr",
+          "meaning": "the same advance as a rate, degrees per Julian year"
+        },
+        {
+          "key": "apsidal_misfit",
+          "symbol": "e Δω T_obs/P",
+          "unit": "",
+          "meaning": "eccentricity times the apsidal advance accumulated over the record (rad)"
+        }
+      ],
+      "conditions": [
+        "an isolated binary: no third body within the record, the systemic velocity constant (it is fitted out as an offset)",
+        "initial condition: the orbital elements (P, e, ω, time of periastron) are those at the start of the record",
+        "the line of sight is fixed; the star's light traces its centre of mass (no spots, no convective blueshift variation)"
+      ],
+      "comparison": {
+        "reference": "the parent's Newtonian limit: the exact two-body semi-amplitude with the companion's mass in the total",
+        "valueKey": "K_m_per_s",
+        "referenceKey": "K_two_body_m_per_s",
+        "deviationKey": "two_body_deviation",
+        "method": "closed form of the two-body Keplerian semi-amplitude"
+      },
+      "notIncluded": [
+        "stellar activity (jitter), instrumental drift and the gravitational redshift and light-travel-time terms of the RV itself",
+        "the other 1PN terms beside the apsidal advance (O(GM/(c²a)) in the P–a relation and in K), bounded by the weak-field check but not applied",
+        "tidal orbital decay (dP/dt) and the tidal and rotational quadrupole precession, which the point-mass check bounds only by R_*/r_p",
+        "the inclination itself: RV alone gives m_p sin i; sin i must come from a transit or astrometry"
+      ],
+      "measurement": [
+        "fit a Keplerian (P, K, e, ω, time of periastron, systemic offset) to the RV time series and compare the fitted K with K_m_per_s; with P and e fixed, the fitted K inverts to the minimum mass m_p sin i through the same relation",
+        "where the two-body check fails, compare with K_two_body_m_per_s, which is the Newtonian parent",
+        "`upt confront --bridge=be-52`: Mercury's anomalous perihelion advance, which tests the Δω formula the apsidal check uses"
+      ],
+      "links": [
+        {
+          "id": "CE-kepler-third",
+          "role": "T² = 4π²a³/(GM), with the assumptions two-body and M ≫ m; here with M → M_* + m_p"
+        },
+        {
+          "id": "be-52",
+          "role": "the GR perihelion advance Δφ = 6πGM/(c²a(1 − e²)), evaluated with the total mass (`upt evaluate be-52`)"
+        },
+        {
+          "id": "CE-perihelion-precession",
+          "role": "the canonical entry restating BE-52"
+        },
+        {
+          "id": "CE-schwarzschild-radius",
+          "role": "r_s = 2GM/c², whose ratio to a (halved) is the weak-field check's quantity"
+        }
+      ],
+      "examples": {
+        "valid": {
+          "args": [
+            "M_star_kg=1Msun",
+            "m_p_kg=1.898e27",
+            "P_s=4332.59d",
+            "eccentricity=0.0489",
+            "sin_i=1",
+            "R_star_m=6.957e8",
+            "T_obs_s=12yr"
+          ],
+          "note": "the Sun's reflex motion from Jupiter, seen edge-on over one orbit: K ≈ 12.5 m/s",
+          "fails": []
+        },
+        "failures": [
+          {
+            "args": [
+              "M_star_kg=1.434Msun",
+              "m_p_kg=2.79e27",
+              "P_s=1.09142d",
+              "eccentricity=0",
+              "sin_i=0.993",
+              "R_star_m=1.153e9",
+              "T_obs_s=10yr"
+            ],
+            "note": "WASP-12 b, a 1.47 M_J planet on a 1.09 d orbit: the star's radius is a third of the separation, and the orbit is observed to decay by tides",
+            "fails": [
+              "point-mass"
+            ]
+          },
+          {
+            "args": [
+              "M_star_kg=1.3381Msun",
+              "m_p_kg=1.2489Msun",
+              "P_s=0.10225156248d",
+              "eccentricity=0.0877775",
+              "sin_i=0.99974",
+              "R_star_m=12km",
+              "T_obs_s=1yr"
+            ],
+            "note": "the double pulsar PSR J0737−3039A/B timed for a year: equal masses, and a GR apsidal advance of ≈ 17°/yr",
+            "fails": [
+              "test-mass",
+              "apsidal"
+            ]
+          }
+        ]
+      },
+      "checks": [
+        {
+          "id": "test-mass",
+          "premise": "the companion is light beside the star, m_p ≪ M_*",
+          "quantity": "m_p/M_*",
+          "expr": "m_p_kg/M_star_kg",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold: the test-mass K then exceeds the two-body K by (1 + q)^{2/3} − 1 ≤ 0.67%"
+        },
+        {
+          "id": "point-mass",
+          "premise": "point masses: the star is small beside the closest approach, R_* ≪ r_p",
+          "quantity": "R_*/(a(1 − e))",
+          "expr": "R_star_m/r_peri_m",
+          "op": "<=",
+          "bound": 0.1,
+          "threshold": "chosen threshold: tidal and rotational quadrupole terms scale as (R_*/r)² times a Love number or J2 (each < 1), kept ≤ 1%"
+        },
+        {
+          "id": "weak-field",
+          "premise": "Newtonian gravity: G(M_* + m_p)/(c²a) ≪ 1",
+          "quantity": "G(M_* + m_p)/(c² a)",
+          "expr": "weak_field",
+          "op": "<=",
+          "bound": 0.0001,
+          "threshold": "chosen threshold: the 1PN corrections to the P–a relation and to the orbital velocity are of this relative order"
+        },
+        {
+          "id": "apsidal",
+          "premise": "a fixed ellipse over the record: the GR apsidal advance does not reshape the RV curve",
+          "quantity": "e Δω T_obs/P",
+          "expr": "apsidal_misfit",
+          "op": "<=",
+          "bound": 0.01,
+          "threshold": "chosen threshold: beyond the mean longitude (absorbed by the fitted phase), v_r depends on ω only at O(e), so the misfit is of order e Δω K; its coefficient (order one) is not encoded"
+        }
+      ]
+    }
+  ]
+}
