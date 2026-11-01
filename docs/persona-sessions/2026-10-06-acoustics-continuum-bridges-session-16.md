@@ -138,3 +138,34 @@ All are **unproven**. No measurement was opened for any of them.
 ## 6. Scope statement
 
 No src changes. Awaiting owner review before any fix/PhysJS agents. No release, tag, publish, merge, per-equation module, catalog edit, or specification write-up was made. Bare `e` is the elementary charge and Euler's number is `exp(x)` throughout.
+
+## 7. Re-check on 1 November 2026
+
+A later run, morning America/Chicago, installed published `8.0.0` again. It did not repeat the proposal table. The bridge counts stay **6 standard** (AC-1 through AC-6) and **5 cross-domain** (AC-7 through AC-11).
+
+A fresh `npm i universal-physics-tensor@8.0.0` resolves `@danielsimonjr/mathts-functions@0.68.5` from the declared range `^0.68.0`. Importing the package throws `rationalNullspace: entry [0, 0] must be a finite number or a Fraction` from `buckinghamPi` while canonical dimensional fields are built. `upt version` exits 1 and prints `Could not load the built package`. That failure is already [#525](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/525) and [#530](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/530). Pinning `@danielsimonjr/mathts-functions@0.68.0` makes `upt version` print `8.0.0`. The commands below were run on that pin. Node was v22.23.4.
+
+### Wrong dimension kept as a scale
+
+`upt explain` multiplies by the unit's scale and does not check the quantity's dimension, except for a temperature name. `upt evaluate` rejects the same mismatch.
+
+| command | exit | printed |
+|---|---|---|
+| `upt explain sound-speed pressure=1km density=1.2 gamma=1.4 --source=canonical` | 0 | `34.1565025531987`, which is `√(1.4 × 1000 / 1.2)` |
+| `upt explain sound-speed pressure=1e5 density=1.2g gamma=1.4 --source=canonical` | 0 | `10801.2344973464`, which is `√(1.4 × 1e5 / 0.0012)` |
+| `upt explain dynamic-pressure density=1000 flow-velocity=1s --source=canonical` | 0 | `500`, which is `½ × 1000 × 1²` |
+| `upt explain sound-speed pressure=1P density=1.2 gamma=1.4 --source=canonical` | 0 | `0.341565025531987`, which is `√(1.4 × 0.1 / 1.2)`. `upt eval x x=1P` says bare `P` is the poise, `0.1` Pa·s |
+| `upt explain most-probable-speed temperature=1m molecular-mass=1 --source=canonical` | 1 | `'1m' is [length], but temperature is a temperature. An energy on a temperature is k_B T.` |
+| `upt evaluate be-131 … K_Pa=1km …` | 1 | `'km' is [length], but this input is [L^-1 M T^-2] (Pa)` |
+
+A kilometre was used as 1000 Pa, `1.2g` as `0.0012` kg/m³, one second as 1 m/s, and one poise as 0.1 Pa. No conversion line is printed. Filed as [#537](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/537). The same four explain numbers print on published `11.0.0`.
+
+### Gamma in the value, not in the derivation monomial
+
+`upt explain sound-speed pressure=101325Pa density=1.204kg/m3 gamma=1.4 --source=canonical` exits 0. The recovered value is `343.248841865287`. The derivation line names leaves `density` and `pressure` and prints `sound-speed ∝ density^-0.5·pressure^0.5`. `√(101325 / 1.204) = 290.09821913308264`. `√(1.4 × 101325 / 1.204) = 343.2488418652865`. The summary monomial includes `gamma^0.5`. The derivation monomial does not, and the number on that line does. `explainQuantity` on the canonical graph returns the same split, with `coefficient` `"group"`. With no `gamma`, explain still prints no recovered value and says the factor is unset. Filed as [#538](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/538). Published `11.0.0` prints the same split.
+
+### Young's modulus search
+
+`upt search "young modulus"` exits 1 and names no entry. `upt search "youngs modulus"` exits 0 on quantity `youngs-modulus`. `upt search young` exits 0 on that quantity and says `young is a prefix of youngs`. `upt search modulus` exits 0 on it as well. Filed as [#539](https://github.com/danielsimonjr/Universal-Physics-Tensor/issues/539).
+
+No src changes. Awaiting owner review.
