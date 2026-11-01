@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Restore #561 mergeability with master after the be-* landings.
+  `CHANGELOG.md` `[Unreleased]` on this branch replaced `### Documented` with the A1 Added bullet, so it conflicts with master's `### Fixed` be-163/148/Biot/be-158 entries. Take master's Unreleased text and put the A1 bullet in `### Added`.
+  Done: Unreleased now carries master's Fixed entries and the A1 Added bullet. `git merge-file` of this CHANGELOG against `origin/master` from merge-base `328db370` is clean.
+
 - [x] Bring the architecture documents to the architecture-docs convention: `repo-tools check . --docs=docs/architecture` exits 0 on `master` (the fleet docs carry, 2026-10-23).
   The claim tables of the architecture documents did not match the tree, the pre-push hook named a private checker that is not in the repository, and the Simplified Technical English check reported problems in the documents and the README. Re-measure the tables with `repo-tools map`, read each document against the source and correct every claim that is false, imprecise or without support, regenerate the maps under `docs/architecture/maps/`, and point the hook at the public `repo-tools` package.
   Done: the gate exits 0; `repo-tools ste docs/architecture` and `repo-tools ste README.md` report 0 problems; the maps are regenerated with the commands in `PHYSICS_MAP.md`; the pre-push hook runs `repo-tools check` through `UPT_REPO_TOOLS`. Two findings stay open as the rows below.
