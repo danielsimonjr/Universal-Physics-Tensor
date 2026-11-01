@@ -69,6 +69,16 @@ function fromCore(s: CoreExactScale): ExactScale {
   return make(s.num, s.den, irrationalFactor(s.irrationals));
 }
 
+/** UPT {@link ExactScale} to the MathTS core shape. @internal */
+export function coreExactScaleFromUpt(s: ExactScale): CoreExactScale {
+  return toCore(s);
+}
+
+/** MathTS core exact scale to UPT {@link ExactScale}. @internal */
+export function uptExactScaleFromCore(s: CoreExactScale): ExactScale {
+  return fromCore(s);
+}
+
 /** When `x / base` is a nonzero integer, that integer; otherwise null. */
 function integerMultiple(x: number, base: number): bigint | null {
   if (!Number.isFinite(x) || !Number.isFinite(base) || base === 0 || x === 0) return null;

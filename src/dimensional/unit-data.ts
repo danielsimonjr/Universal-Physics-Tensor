@@ -20,12 +20,20 @@
  * @module dimensional/unit-data
  */
 
+import { readScaleExpression } from '@danielsimonjr/mathts-core';
 import { sha256Hex } from '../core/hash.js';
 import { dataSchema, dataText, parseDataFile } from '../core/data-file.js';
 import type { JsonSchema } from '../core/json-schema.js';
 import { constantRow } from './constant-rows.js';
 import type { Dimension } from './types.js';
-import { decimalScale, irrationalScale, readScaleExpression, scaleOf, type ExactScale } from './exact-scale.js';
+import {
+  coreExactScaleFromUpt,
+  decimalScale,
+  irrationalScale,
+  scaleOf,
+  uptExactScaleFromCore,
+  type ExactScale,
+} from './exact-scale.js';
 
 type DimensionFile = Partial<Record<keyof Dimension, number>>;
 
@@ -140,7 +148,12 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
       if (done !== undefined) return done;
       if (reading.has(name)) throw new Error(`data/units.json: scale '${name}' is defined in terms of itself`);
       reading.add(name);
-      const scale = readScaleExpression(shared, resolve);
+      const scale = uptExactScaleFromCore(
+        readScaleExpression(shared, (name) => {
+          const resolved = resolve(name);
+          return resolved === undefined ? undefined : coreExactScaleFromUpt(resolved);
+        }),
+      );
       reading.delete(name);
       named.set(name, scale);
       return scale;
@@ -149,7 +162,12 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
   };
   const read = (text: string, where: string): ExactScale => {
     try {
-      return readScaleExpression(text, resolve);
+      return uptExactScaleFromCore(
+        readScaleExpression(text, (name) => {
+          const scale = resolve(name);
+          return scale === undefined ? undefined : coreExactScaleFromUpt(scale);
+        }),
+      );
     } catch (error) {
       throw new Error(`data/units.json ${where}: ${(error as Error).message}`);
     }

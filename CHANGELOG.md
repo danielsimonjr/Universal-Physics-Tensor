@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Part A steps A3–A5 — unit table scales and parser delegate to MathTS where the gap oracle agrees.** `unit-data.ts` reads every scale expression through MathTS `readScaleExpression` with UPT's resolver for shared scales and registered constants (`tests/dimensional/unit-data-delegation.test.ts`, row scale snapshot in `unit-data.test.ts`). `units.ts` takes agreed exact scales from `Unit.exactScale` and agreed spellings from `Unit.parse`, with `bit`, refusal, ambiguity, and admission policy unchanged (`tests/dimensional/units-exact-scale-delegation.test.ts`, `tests/dimensional/unit-parse-delegation.test.ts`).
+
 - **Part A step A2 — exact-scale arithmetic delegates to MathTS.** `src/dimensional/exact-scale.ts` calls `@danielsimonjr/mathts-core` for decimal and ratio scales, products, quotients, integer powers, addition, and rounding (`exactScaleToNumber`). Unlike irrational factors throw on addition (`pi` + `ln2`); a fractional power throws. `tests/dimensional/exact-scale-delegation.test.ts` pins the source assertion and the two throws. Unit conversion tests stay unchanged.
 
 - **`docs/plans/MATHTS_UNITS_AND_CASES_PLAN.md` and the Part A gap oracle.** The plan from PR #560 records how unit delegation and the applied-case catalog will land. `tests/dimensional/mathts-unit-gaps.test.ts` pins MathTS–UPT agreements and the gap rows the wrapper keeps until MathTS releases A6–A10 or UPT policy (bit, ton, cycles). No production change in this step.
