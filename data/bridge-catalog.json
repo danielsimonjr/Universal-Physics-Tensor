@@ -5769,11 +5769,11 @@
       "source_section": "Thermal catalog (be-158) — established textbook relation, PhysJS.Schmidt.schmidt_eq",
       "known_issues": [],
       "references": [
-        "Le = Sc/Pr is the second conjunct of PhysJS.Schmidt.schmidt_eq and is not a second edge. The decay rates are PhysJS.DiffusionMode.mode_solves_iff."
+        "Le = Sc/Pr is PhysJS.Schmidt.lewis_ratio, a corollary in the same file, not a second catalog target. The decay rates are PhysJS.DiffusionMode.mode_solves_iff and PhysJS.DiffusionMode.decay_rate_ratio."
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
-      "notes": "Closed-form evaluator evaluateSchmidt from the catalog record. The overlay formalRef is PhysJS.Schmidt.schmidt_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. Type standard. The edge value is Sc. Le = Sc/Pr is the second conjunct and is not a second edge. Not a mass-transfer correlation. Scope: Lewis number is not this row.",
+      "notes": "Closed-form evaluator evaluateSchmidt from the catalog record. The overlay formalRef is PhysJS.Schmidt.schmidt_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. Type standard. The edge value is Sc. Le = Sc/Pr is PhysJS.Schmidt.lewis_ratio in the same file, not a second edge. Not a mass-transfer correlation. Scope: Lewis number is not this row.",
       "dimension": {
         "L": 0,
         "M": 0,
