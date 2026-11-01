@@ -15,6 +15,7 @@ import {
   toSiDimensionVector,
   type ExactScale as CoreExactScale,
 } from '@danielsimonjr/mathts-core';
+import { symmetricRelDiff } from '../core/compare.js';
 import { equals, multiply, power } from './algebra.js';
 import { coreExactScaleFromUpt, solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
 import { UNIT_DATA } from './unit-data.js';
@@ -62,6 +63,7 @@ export function everySymbolInBothTables(text: string): boolean {
   const t = text.trim();
   if (t === '' || t === '1') return true;
   if (REFUSED.has(t)) return false;
+  if (UNIT_DATA.affine.some((row) => row.symbols.includes(t))) return getUnitRow(t) !== undefined;
   const { numerator, denominator } = solidusSides(t);
   const tokens = [...sideTokens(numerator), ...sideTokens(denominator)];
   if (tokens.length === 0) return false;
@@ -75,23 +77,32 @@ export function everySymbolInBothTables(text: string): boolean {
   return true;
 }
 
-function mathtsCoreExactScale(text: string): CoreExactScale | null {
+function mathtsScaleNumber(text: string): number | null {
   if (!everySymbolInBothTables(text)) return null;
-  if (text.trim() === 'bit' || /\bbit\b/.test(text)) return null;
-  const core = Unit.exactScale(text.trim());
-  return core ?? null;
+  if (text.trim() === 'bit') return null;
+  try {
+    const core = Unit.exactScale(text.trim());
+    return core === null ? null : exactScaleToNumber(core);
+  } catch {
+    return null;
+  }
 }
 
 /** True when `Unit.exactScale` matches the local scale and `bit` is excluded. */
-export function mathtsExactScaleAgreed(text: string, localScale: number, localExact: ExactScale): boolean {
+export function mathtsExactScaleAgreed(text: string, localScale: number, _localExact: ExactScale): boolean {
   if (text.trim() === 'bit') return false;
-  if (!everySymbolInBothTables(text)) return false;
-  const core = mathtsCoreExactScale(text);
-  if (core === null) return false;
-  const mt = exactScaleToNumber(core);
-  if (mt !== localScale) return false;
-  const upt = uptExactScaleFromCore(core);
-  return upt.num === localExact.num && upt.den === localExact.den && upt.irrational === localExact.irrational;
+  const mt = mathtsScaleNumber(text);
+  return mt !== null && (mt === localScale || symmetricRelDiff(localScale, mt) < 1e-15);
+}
+
+function mathtsCoreExactScale(text: string): CoreExactScale | null {
+  const mt = mathtsScaleNumber(text);
+  if (mt === null) return null;
+  try {
+    return Unit.exactScale(text.trim());
+  } catch {
+    return null;
+  }
 }
 
 function dimensionFromMathtsVector(dimensions: readonly number[], localDim: Dimension): Dimension {
@@ -118,9 +129,13 @@ function dimensionFromMathtsVector(dimensions: readonly number[], localDim: Dime
 /** True when the full unit text may take exact scale and dimension from MathTS (A4). */
 export function unitExactScaleViaMathts(text: string, localScale: number, localExact: ExactScale, localDim: Dimension): boolean {
   if (!mathtsExactScaleAgreed(text, localScale, localExact)) return false;
-  const u = Unit.parse(text.trim());
-  const dim = dimensionFromMathtsVector(u.dimensions, localDim);
-  return equals(dim, localDim);
+  try {
+    const u = Unit.parse(text.trim());
+    const dim = dimensionFromMathtsVector(u.dimensions, localDim);
+    return equals(dim, localDim);
+  } catch {
+    return false;
+  }
 }
 
 /** Exact scale from MathTS when {@link unitExactScaleViaMathts} is true. */
@@ -138,7 +153,11 @@ export function unitParserViaMathts(
   localDim: Dimension,
 ): boolean {
   if (!unitExactScaleViaMathts(text, localScale, localExact, localDim)) return false;
-  Unit.parse(text.trim());
+  try {
+    Unit.parse(text.trim());
+  } catch {
+    return false;
+  }
   return true;
 }
 

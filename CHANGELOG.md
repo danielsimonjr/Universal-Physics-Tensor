@@ -12,6 +12,10 @@ from v0.1.0 onward.
 
 - **Part A step A3 — unit file scale expressions read through MathTS.** `src/dimensional/unit-data.ts` calls `@danielsimonjr/mathts-core` `readScaleExpression` with UPT's resolver for `data/units.json` shared scales and registered constant spellings. `tests/dimensional/unit-data-delegation.test.ts` pins the source import; `tests/dimensional/unit-data.test.ts` snapshots every row's scale double.
 
+- **Part A step A4 — agreed unit scales from `Unit.exactScale`.** `src/dimensional/units.ts` and `mathts-unit-delegation.ts` take the MathTS exact scale when every symbol is admitted in UPT and MathTS and the numeric scale matches; `bit` stays on the local ln 2 row. `tests/dimensional/units-exact-scale-delegation.test.ts` pins the source call and the member/non-member predicate.
+
+- **Part A step A5 — agreed spellings parse through `Unit.parse`.** In-set texts (`km`, `degC`, `g/cm^3`, `mN/m`, `kohm`, `GeV`, `km/s/Mpc`) use MathTS parsing when the A4 scale predicate holds; gap and policy rows stay on the local grammar with the same error classes. `tests/dimensional/unit-parse-delegation.test.ts` pins the in/out table and `unitReadingsSource`.
+
 - **Part A step A2 — exact-scale arithmetic delegates to MathTS.** `src/dimensional/exact-scale.ts` calls `@danielsimonjr/mathts-core` for decimal and ratio scales, products, quotients, integer powers, addition, and rounding (`exactScaleToNumber`). Unlike irrational factors throw on addition (`pi` + `ln2`); a fractional power throws. `tests/dimensional/exact-scale-delegation.test.ts` pins the source assertion and the two throws. Unit conversion tests stay unchanged.
 
 - **`docs/plans/MATHTS_UNITS_AND_CASES_PLAN.md` and the Part A gap oracle.** The plan from PR #560 records how unit delegation and the applied-case catalog will land. `tests/dimensional/mathts-unit-gaps.test.ts` pins MathTS–UPT agreements and the gap rows the wrapper keeps until MathTS releases A6–A10 or UPT policy (bit, ton, cycles). No production change in this step.

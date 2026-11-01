@@ -61,7 +61,9 @@ import {
 } from './exact-scale.js';
 import {
   mathtsExactScaleReading,
+  mathtsParsedDimension,
   unitExactScaleViaMathts,
+  unitParserViaMathts,
 } from './mathts-unit-delegation.js';
 import { UNIT_DATA, type AffineRow as UnitDataAffineRow } from './unit-data.js';
 
@@ -434,7 +436,22 @@ function unitReadings(text: string): UnitReading[] {
   const t = text.trim();
   lastReadingSource = { text: t, kind: 'local' };
   const readings = localUnitReadings(text);
-  if (readings.length === 1) return [applyMathtsExactScale(t, readings[0]!)];
+  if (readings.length === 1) {
+    const local = readings[0]!;
+    if (unitParserViaMathts(t, local.scale, local.exact, local.dim)) {
+      lastReadingSource = { text: t, kind: 'mathts' };
+      const exact = mathtsExactScaleReading(t);
+      return [
+        {
+          ...local,
+          dim: mathtsParsedDimension(t, local.dim),
+          exact,
+          scale: scaleToNumber(exact),
+        },
+      ];
+    }
+    return [applyMathtsExactScale(t, local)];
+  }
   return readings;
 }
 
