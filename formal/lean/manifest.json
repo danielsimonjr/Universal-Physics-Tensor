@@ -2266,14 +2266,26 @@
       "bridgeId": "be-158",
       "theorem": "PhysJS.Schmidt.schmidt_eq",
       "kind": "bridge",
-      "covers": "one Fourier mode decays at ν q², α q² and D q² under momentum, heat and mass diffusion (PhysJS.DiffusionMode.mode_solves_iff), so Sc = ν/D with ν = μ/ρ is Sc ρ D = μ, and Le = α/D = Sc/Pr. Not a mass-transfer correlation",
+      "covers": "one Fourier mode decays at ν q² under momentum diffusion and at D q² under mass diffusion (PhysJS.DiffusionMode.decay_rate_ratio), so Sc = ν/D with ν = μ/ρ is Sc ρ D = μ. Lewis number is not this theorem. Not a mass-transfer correlation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "lewis": {
+        "theorem": "PhysJS.Schmidt.lewis_ratio",
+        "kind": "property",
+        "covers": "the three decay-rate ratios of one Fourier mode are Le = α/D and Le = Sc/Pr. This is a corollary in the same file, not a second catalog target. Not a mass-transfer correlation",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
     },
     {
       "key": "be-159",

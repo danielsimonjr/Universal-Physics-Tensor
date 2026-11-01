@@ -10,14 +10,16 @@ import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum
 
 /-!
-`be-158`. Bridge. The Schmidt number, and Lewis as `Sc / Pr`.
+`be-158`. Bridge. The Schmidt number.
+
+`be-158.lewis`. Property. `lewis_ratio`.
 
 The catalog product is `Sc ρ D = μ`. `schmidt_eq` takes one Fourier mode
 `exp(−r t) sin(q x)` under momentum diffusion (`ν`) and mass diffusion
 (`D`). `PhysJS.DiffusionMode.decay_rate_ratio` turns the rate ratio into
 `ν / D`, with `ν = μ / ρ`, so `Sc ρ D = μ`. `lewis_ratio` is the separate
-corollary `Le = Sc / Pr` from the three diffusivities. It is not a
-mass-transfer correlation.
+corollary `Le = Sc / Pr` from the three diffusivities, not a second catalog
+target. It is not a mass-transfer correlation.
 -/
 
 namespace PhysJS.Schmidt
@@ -38,6 +40,19 @@ theorem schmidt_eq (Sc ν D μ ρ q ru rc : ℝ)
   rw [hSc', hkin]
   field_simp
 
+/-- The same Schmidt product at a general advection speed. -/
+theorem schmidt_eq_advected (Sc ν D μ ρ q U ru rc : ℝ)
+    (hρ : ρ ≠ 0) (hD : D ≠ 0) (hμ : μ ≠ 0) (hq : q ≠ 0)
+    (hkin : ν = μ / ρ)
+    (hu : Solves ru q U ν) (hc : Solves rc q U D)
+    (hSc : Sc = ru / rc) :
+    Sc = ν / D ∧ Sc * ρ * D = μ := by
+  have hSc' : Sc = ν / D := by
+    rw [hSc, decay_rate_ratio ru rc q U ν D hq hD hu hc]
+  refine ⟨hSc', ?_⟩
+  rw [hSc', hkin]
+  field_simp
+
 /-- The Lewis number is the heat-to-mass diffusivity ratio and equals `Sc / Pr`. -/
 theorem lewis_ratio (Le Sc Pr ν α D q ru rθ rc : ℝ)
     (hν : ν ≠ 0) (hα : α ≠ 0) (hD : D ≠ 0) (hq : q ≠ 0)
@@ -50,6 +65,22 @@ theorem lewis_ratio (Le Sc Pr ν α D q ru rθ rc : ℝ)
     rw [hPr, decay_rate_ratio ru rθ q 0 ν α hq hα hu hθ]
   have hLe' : Le = α / D := by
     rw [hLe, decay_rate_ratio rθ rc q 0 α D hq hD hθ hc]
+  refine ⟨hLe', ?_⟩
+  rw [hLe', hSc', hPr']
+  field_simp
+
+/-- The same Lewis ratio at a general advection speed. -/
+theorem lewis_ratio_advected (Le Sc Pr ν α D q U ru rθ rc : ℝ)
+    (hν : ν ≠ 0) (hα : α ≠ 0) (hD : D ≠ 0) (hq : q ≠ 0)
+    (hu : Solves ru q U ν) (hθ : Solves rθ q U α) (hc : Solves rc q U D)
+    (hLe : Le = rθ / rc) (hSc : Sc = ru / rc) (hPr : Pr = ru / rθ) :
+    Le = α / D ∧ Le = Sc / Pr := by
+  have hSc' : Sc = ν / D := by
+    rw [hSc, decay_rate_ratio ru rc q U ν D hq hD hu hc]
+  have hPr' : Pr = ν / α := by
+    rw [hPr, decay_rate_ratio ru rθ q U ν α hq hα hu hθ]
+  have hLe' : Le = α / D := by
+    rw [hLe, decay_rate_ratio rθ rc q U α D hq hD hθ hc]
   refine ⟨hLe', ?_⟩
   rw [hLe', hSc', hPr']
   field_simp
@@ -102,5 +133,28 @@ theorem unity_of_equal_diffusivities (Sc Le Pr ν α D q ru rθ rc : ℝ)
   refine ⟨sc_one_of_equal_diffusivities Sc ν D q ru rc hq hD (hνα.trans hαD) hu hc hSc, ?_, ?_⟩
   · rw [hLe, decay_rate_ratio rθ rc q 0 α D hq hD hθ hc, hαD, div_self hD]
   · exact pr_one_of_equal_diffusivities Pr ν α ru rθ q hq hα hνα hu hθ hPr
+
+/-- Equal thermal and mass diffusivities give `Le = 1`. -/
+theorem le_one_of_equal_diffusivities (Le α D q rθ rc : ℝ)
+    (hq : q ≠ 0) (hD : D ≠ 0) (hαD : α = D)
+    (hθ : Solves rθ q 0 α) (hc : Solves rc q 0 D) (hLe : Le = rθ / rc) :
+    Le = 1 := by
+  rw [hLe, decay_rate_ratio rθ rc q 0 α D hq hD hθ hc, hαD, div_self hD]
+
+/-- `Pr = Sc` gives `Le = 1`. -/
+theorem le_one_of_pr_eq_sc (Le Sc Pr : ℝ) (hPr : Pr ≠ 0) (hEq : Pr = Sc)
+    (hLe : Le = Sc / Pr) : Le = 1 := by
+  rw [hLe, hEq, div_self hPr]
+
+/-- Doubling the wavenumber leaves `Le` unchanged. -/
+theorem le_wavenumber_invariant (Le Le' α D q rθ rc rθ' rc' : ℝ)
+    (hq : q ≠ 0) (hD : D ≠ 0)
+    (hθ : Solves rθ q 0 α) (hc : Solves rc q 0 D)
+    (hθ' : Solves rθ' (2 * q) 0 α) (hc' : Solves rc' (2 * q) 0 D)
+    (hLe : Le = rθ / rc) (hLe' : Le' = rθ' / rc') :
+    Le = Le' := by
+  have hq' : 2 * q ≠ 0 := mul_ne_zero two_ne_zero hq
+  rw [hLe, hLe', decay_rate_ratio rθ rc q 0 α D hq hD hθ hc,
+    decay_rate_ratio rθ' rc' (2 * q) 0 α D hq' hD hθ' hc']
 
 end PhysJS.Schmidt

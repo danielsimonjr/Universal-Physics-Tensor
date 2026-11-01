@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **be-158 catalog and Lean coverage name the same theorem.** `schmidt_eq` now proves only `Sc ρ D = μ`. `Le = Sc / Pr` is `PhysJS.Schmidt.lewis_ratio`, a nested manifest property (`be-158.lewis`), matching the catalog citation. The shared `decay_rate_ratio` corollary is also used at a general advection speed, and the missing Prandtl/Reynolds/Schmidt limits (`k → ∞`, density invariance, `Re → ∞` as `ν → 0⁺`, `Le = 1`) are theorems.
+
 ### Documented
 
 - **Session 14, the gravitational-wave search sentence.** The line in `docs/persona-sessions/2026-10-06-relativity-astro-bridges-session-14.md` that put `gravitational wave` on the exit-1 search list is struck. Re-measured 2026-11-01 on published `universal-physics-tensor@8.0.0` (with `@danielsimonjr/mathts-functions@0.68.0`, because a fresh install that resolves 0.68.5 does not start): `upt search "gravitational wave"` exits 0 and names `gravitational-wave-speed`. The same re-measurement is the addendum in that file. It files #525, #526, #527, #528, and #529. No `src/` change. The proposal counts in that file stay 6 standard and 5 cross-domain.

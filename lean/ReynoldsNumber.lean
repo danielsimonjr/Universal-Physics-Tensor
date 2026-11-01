@@ -5,6 +5,7 @@ Released under MIT license as described in the file LICENSE.
 
 import lean.DiffusionMode
 import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum
 
@@ -109,5 +110,12 @@ theorem re_catalog_cross_check (Re ρ v L μ ν r τvisc τadv : ℝ)
     rw [hform, hv, hL, hνval]
     norm_num
   exact ⟨hReval, by rw [hReval, hμ, hρ, hv, hL]; norm_num⟩
+
+/-- For every bound `M > 0`, a small enough positive `ν` makes `v L / ν` exceed `M`. -/
+theorem re_exceeds_of_small_nu (v L M : ℝ) (hvL : 0 < v * L) (hM : 0 < M) :
+    ∀ ν, 0 < ν → ν < v * L / M → M < v * L / ν := by
+  intro ν hν hsmall
+  have hbound : ν * M < v * L := (lt_div_iff₀ hM).mp hsmall
+  exact (lt_div_iff₀ hν).mpr (by linarith)
 
 end PhysJS.ReynoldsNumber

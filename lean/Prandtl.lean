@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import lean.DiffusionMode
+import Mathlib.Order.Filter.AtTopBot.Ring
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.NormNum
@@ -27,6 +28,7 @@ not the Reynolds analogy of `be-86`.
 
 namespace PhysJS.Prandtl
 
+open Filter Topology
 open PhysJS.DiffusionMode
 
 /-- Heat decay time over momentum decay time equals `ν / α`, the same ratio as `Pr`. -/
@@ -58,6 +60,26 @@ theorem prandtl_eq (Pr ν α μ ρ k cp q ru rθ : ℝ)
     exact div_ne_zero hk (mul_ne_zero hρ hcp)
   have hrate : Pr = ν / α := by
     rw [hPr, decay_rate_ratio ru rθ q 0 ν α hq hα hu hθ]
+  have hratio : ν / α = μ * cp / k := by
+    rw [hν, hαdef]
+    field_simp
+  refine ⟨hrate, ?_, ?_⟩
+  · rw [hrate, hratio]
+    field_simp
+  · rw [hrate, hratio]
+
+/-- The same Prandtl product at a general advection speed. -/
+theorem prandtl_eq_advected (Pr ν α μ ρ k cp q U ru rθ : ℝ)
+    (hρ : ρ ≠ 0) (hk : k ≠ 0) (hcp : cp ≠ 0) (hq : q ≠ 0)
+    (hν : ν = μ / ρ) (hαdef : α = k / (ρ * cp))
+    (hu : Solves ru q U ν) (hθ : Solves rθ q U α)
+    (hPr : Pr = ru / rθ) :
+    Pr = ν / α ∧ Pr * k = μ * cp ∧ Pr = μ * cp / k := by
+  have hα : α ≠ 0 := by
+    rw [hαdef]
+    exact div_ne_zero hk (mul_ne_zero hρ hcp)
+  have hrate : Pr = ν / α := by
+    rw [hPr, decay_rate_ratio ru rθ q U ν α hq hα hu hθ]
   have hratio : ν / α = μ * cp / k := by
     rw [hν, hαdef]
     field_simp
@@ -100,5 +122,21 @@ theorem pr_catalog_cross_check (Pr ν α μ ρ k cp q ru rθ : ℝ)
     rw [hμ, hcp, hk]
     exact pr_catalog_rational
   exact ⟨by rw [hprod, hval], by rw [hprod, hval]⟩
+
+/-- At fixed `μ` and `c_p`, the catalog product `Pr = μ c_p / k` tends to `0` as `k → ∞`. -/
+theorem pr_k_tendsto_zero (μ cp : ℝ) :
+    Tendsto (fun k : ℝ => μ * cp / k) atTop (𝓝 0) := by
+  have hinv := tendsto_inv_atTop_zero (𝕜 := ℝ)
+  have hid : Tendsto (fun k : ℝ => k) atTop atTop := tendsto_id
+  have hk : Tendsto (fun k : ℝ => k⁻¹) atTop (𝓝 0) := hinv.comp hid
+  simpa [div_eq_mul_inv] using Filter.Tendsto.const_mul (μ * cp) hk
+
+/-- Doubling density at fixed `μ`, `c_p`, and `k` leaves `ν / α` unchanged. -/
+theorem pr_density_invariant (μ cp k ρ : ℝ) (hρ : ρ ≠ 0) (hk : k ≠ 0) (hcp : cp ≠ 0) :
+    (μ / ρ) / (k / (ρ * cp)) = (μ / (2 * ρ)) / (k / (2 * ρ * cp)) := by
+  field_simp [hρ, hk, hcp]
+
+/-- Catalog unit point `μ = c_p = k = 1` gives `Pr = 1`. -/
+theorem pr_unit_inputs : (1 : ℝ) * 1 / 1 = 1 := by norm_num
 
 end PhysJS.Prandtl
