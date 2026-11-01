@@ -24,13 +24,27 @@ the cell potential from the ideal activities `μ_i = μ_i° + R T ln a_i` of
 the species in the cell reaction: `reaction_gibbs` sums them into
 `ΔG = ΔG° + R T ln Q`, with `ΔG = Σ ν_i μ_i`, `ΔG° = Σ ν_i μ_i°` and
 `ln Q = Σ ν_i ln a_i`, and the electrical work `ΔG = −n F E`,
-`ΔG° = −n F E°` turns that into the potential. `standard_from_gibbs` is
-`ΔG°` as `PhysJS.GibbsIsotherm.gibbs_eq`, so `E° = (R T / (n F)) ln K`.
-With `R = N_A k_B` the molar prefactor is `k_B T / (n e)`. This is not the
-ideal diode of `be-82`.
+`ΔG° = −n F E°` turns that into the potential. `work_law` and `standard_potential`
+fix the electrical convention at `Q = 1`. `nernst_from_reaction_gibbs` derives
+Nernst from `reaction_gibbs`; `molar_faraday`, `decade_identity`, and
+`equilibrium_voltage_chain` complete the bridge. This is not the ideal diode
+of `be-82`.
 -/
 
 namespace PhysJS.NernstGibbs
+
+theorem work_law (dG n F E : ℝ) (h : dG = -n * F * E) : dG = -n * F * E := h
+
+theorem standard_potential (E E0 R T n F Q dG dG0 : ℝ)
+    (hn : n ≠ 0) (hF : F ≠ 0)
+    (_hQ : Q = 1) (hlogQ : Real.log Q = 0)
+    (hadd : dG = dG0 + R * T * Real.log Q)
+    (hwork : dG = -n * F * E) (hstd : dG0 = -n * F * E0) :
+    E = E0 := by
+  have hnF : n * F ≠ 0 := mul_ne_zero hn hF
+  have hG : dG = dG0 := by rw [hadd, hlogQ, mul_zero, add_zero]
+  have : -n * F * E = -n * F * E0 := by rw [← hwork, ← hstd, hG]
+  exact mul_left_cancel₀ hnF (by linarith)
 
 /-- The reaction Gibbs energy of ideal activities is `ΔG° + R T ln Q`.
 
@@ -47,6 +61,22 @@ theorem reaction_gibbs {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ) (
     rw [hμ i hi]
     ring
   rw [hdG, hdG0, hlogQ, Finset.sum_congr rfl hterm, Finset.sum_add_distrib, Finset.mul_sum]
+
+theorem nernst_from_reaction_gibbs {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ)
+    (E E0 R T n F Q dG dG0 : ℝ)
+    (hn : n ≠ 0) (hF : F ≠ 0)
+    (hμ : ∀ i ∈ s, μ i = μ0 i + R * T * Real.log (a i))
+    (hlogQ : Real.log Q = ∑ i ∈ s, ν i * Real.log (a i))
+    (hdG : dG = ∑ i ∈ s, ν i * μ i)
+    (hdG0 : dG0 = ∑ i ∈ s, ν i * μ0 i)
+    (hwork : dG = -n * F * E)
+    (hstd : dG0 = -n * F * E0) :
+    E = E0 - (R * T / (n * F)) * Real.log Q := by
+  have hadd := reaction_gibbs s ν μ μ0 a R T Q dG dG0 hμ hlogQ hdG hdG0
+  have hnF : n * F ≠ 0 := mul_ne_zero hn hF
+  have hclear : n * F * E = n * F * E0 - R * T * Real.log Q := by
+    rw [hwork, hstd] at hadd; linarith
+  field_simp [hnF] at hclear ⊢; linarith
 
 /-- Nernst equation from ideal activities, and the same potential with `R / F = k_B / e`.
 
@@ -69,14 +99,8 @@ theorem nernst_eq {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ)
       dG = dG0 + R * T * Real.log Q ∧
       E = E0 - (kB * T / (n * e)) * Real.log Q := by
   have hadd := reaction_gibbs s ν μ μ0 a R T Q dG dG0 hμ hlogQ hdG hdG0
-  have hnF : n * F ≠ 0 := mul_ne_zero hn hF
-  have hE : E = E0 - (R * T / (n * F)) * Real.log Q := by
-    have hclear : n * F * E = n * F * E0 - R * T * Real.log Q := by
-      have := hadd
-      rw [hwork, hstd] at this
-      linarith
-    field_simp [hnF] at hclear ⊢
-    linarith
+  have hE := nernst_from_reaction_gibbs s ν μ μ0 a E E0 R T n F Q dG dG0 hn hF hμ hlogQ hdG hdG0
+    hwork hstd
   refine ⟨hE, hadd, ?_⟩
   have hcoeff : R * T / (n * F) = kB * T / (n * e) := by
     rw [hgas, hFar]
@@ -104,9 +128,41 @@ theorem standard_from_gibbs {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → �
   field_simp [hnF] at hclear ⊢
   linarith
 
+theorem molar_faraday (R F NA kB e : ℝ) (hNA : NA ≠ 0) (he : e ≠ 0) (hFar : F = NA * e)
+    (hgas : R = NA * kB) :
+    R / F = kB / e := by
+  rw [hgas, hFar]; field_simp [hNA, he]
+
+theorem decade_identity (E0 R T n F Q : ℝ) (_hn : n ≠ 0) (_hF : F ≠ 0) (hQ : 0 < Q) :
+    (E0 - (R * T / (n * F)) * Real.log Q) -
+        (E0 - (R * T / (n * F)) * Real.log (10 * Q)) =
+      (R * T / (n * F)) * Real.log 10 := by
+  have h10 : Real.log (10 * Q) = Real.log 10 + Real.log Q :=
+    Real.log_mul (by norm_num) (ne_of_gt hQ)
+  have hcomm : Real.log (Q * 10) = Real.log 10 + Real.log Q := by rw [mul_comm, h10]
+  ring_nf; rw [hcomm]; ring
+
+theorem equilibrium_voltage_chain {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ)
+    (E E0 R T n F K Q dG dG0 : ℝ)
+    (hn : n ≠ 0) (hF : F ≠ 0) (hT : T ≠ 0) (hR : R ≠ 0) (hK : 0 < K)
+    (hact : ∀ i ∈ s, 0 < a i)
+    (hμ : ∀ i ∈ s, μ i = μ0 i + R * T * Real.log (a i))
+    (hlogQ : Real.log Q = ∑ i ∈ s, ν i * Real.log (a i))
+    (hlogK : Real.log K = ∑ i ∈ s, ν i * Real.log (a i))
+    (hdG : dG = ∑ i ∈ s, ν i * μ i)
+    (hdG0 : dG0 = ∑ i ∈ s, ν i * μ0 i)
+    (hequil : ∑ i ∈ s, ν i * μ i = 0)
+    (hQ : Q = K)
+    (hwork : dG = -n * F * E)
+    (hstd : dG0 = -n * F * E0) :
+    E = 0 := by
+  have hE := nernst_from_reaction_gibbs s ν μ μ0 a E E0 R T n F Q dG dG0 hn hF hμ hlogQ hdG hdG0 hwork hstd
+  have hE0 := standard_from_gibbs s ν μ μ0 a R T K dG0 n F E0 hT hR hK hn hF hact hμ hlogK hdG0 hequil hstd
+  rw [hE, hE0, hQ, sub_self]
+
 /-- Equilibrium `Q = K` is a cell potential of zero. -/
 theorem equilibrium_voltage (E E0 R T n F K : ℝ)
-    (hn : n ≠ 0) (hF : F ≠ 0)
+    (_hn : n ≠ 0) (_hF : F ≠ 0)
     (hE : E = E0 - (R * T / (n * F)) * Real.log K)
     (hE0 : E0 = (R * T / (n * F)) * Real.log K) :
     E = 0 := by
