@@ -12,11 +12,12 @@ import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
 import { catalogSemanticProblems, readAppliedCaseFile } from '../../src/cases/catalog.js';
 import { CASE_METHOD_NAMES } from '../../src/cases/methods.js';
+import type { CaseResult } from '../../src/cases/types.js';
 import { dataSchema, dataText } from '../../src/core/data-file.js';
 
 const schema = dataSchema('applied-cases.json');
 
-function legacyMatch(id: string, legacy: (i: Readonly<Record<string, number>>) => { outputs: unknown; checks: { id: string; holds: boolean; value: number }[] }) {
+function legacyMatch(id: string, legacy: (i: Readonly<Record<string, number>>) => CaseResult) {
   const validArgs = APPLIED_CASES.get(id)!.examples.valid.args;
   const inputs = resolveEvaluatorInputs(APPLIED_CASES.get(id)!.parameters, validArgs).inputs;
   const fromLegacy = legacy(inputs);
@@ -59,7 +60,13 @@ describe('applied-case engine — skin depth', () => {
     const row = file.cases.find((c) => c.id === ID)!;
     const delta = row.outputs.find((o) => o.key === 'delta_m')!;
     expect(delta.expr).toContain('rho_ohm_m');
-    const scope = { ...inputs, omega_per_s: 2 * Math.PI * inputs.f_Hz!, mu_r: inputs.mu_r!, mu_0: 1.25663706127e-6 };
+    const scope = {
+      ...inputs,
+      rho_ohm_m: inputs.rho_ohm_m!,
+      omega_per_s: 2 * Math.PI * inputs.f_Hz!,
+      mu_r: inputs.mu_r!,
+      mu_0: 1.25663706127e-6,
+    };
     const wrong = Math.sqrt(scope.rho_ohm_m! / (scope.omega_per_s * scope.mu_r * scope.mu_0));
     expect(Math.abs(wrong / baseline - 1)).toBeGreaterThan(0.2);
   });
@@ -72,11 +79,12 @@ describe('applied-case engine — kepler RV', () => {
 
   it('refuses an unknown relation id at catalog validation', () => {
     const text = dataText('applied-cases.json');
-    const file = JSON.parse(text) as ReturnType<typeof readAppliedCaseFile>;
+    type MutableFile = { schemaVersion: number; cases: Array<{ id: string; outputs: Array<{ key: string; relation?: { relation: string; inputs: Record<string, string> } }> }> };
+    const file = structuredClone(JSON.parse(text)) as MutableFile;
     const row = file.cases.find((c) => c.id === 'case-kepler-rv')!;
     const dphi = row.outputs.find((o) => o.key === 'dphi_rad_per_orbit')!;
     dphi.relation = { relation: 'be-99999', inputs: dphi.relation!.inputs };
-    expect(catalogSemanticProblems(file, CASE_METHOD_NAMES)).toContainEqual(
+    expect(catalogSemanticProblems(file as unknown as ReturnType<typeof readAppliedCaseFile>, CASE_METHOD_NAMES)).toContainEqual(
       expect.stringMatching(/unknown relation 'be-99999'/),
     );
   });

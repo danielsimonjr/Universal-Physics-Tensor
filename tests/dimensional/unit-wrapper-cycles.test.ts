@@ -6,7 +6,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { unit } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
-import { resolveEvaluatorInputs, type EvaluatorParameter } from '../../src/bridges/evaluator-inputs.js';
+import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
+import type { EvaluatorParameter } from '../../src/bridges/evaluators.js';
 import { convertValue } from '../../src/dimensional/units.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');

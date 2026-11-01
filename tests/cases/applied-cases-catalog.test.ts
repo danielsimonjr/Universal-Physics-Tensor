@@ -50,8 +50,7 @@ describe('applied-cases catalog loader', () => {
       expect.stringMatching(/missing id/),
     );
 
-    const dup = structuredClone(base);
-    dup.cases = [dup.cases[0]!, dup.cases[0]!];
+    const dup = { ...structuredClone(base), cases: [base.cases[0]!, base.cases[0]!] };
     expect(() => readAppliedCaseFile(JSON.stringify(dup), schema)).toThrow(/duplicate id/);
 
     const badOp = structuredClone(base);
