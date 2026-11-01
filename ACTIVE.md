@@ -691,3 +691,7 @@ These are not authorized engineering until the owner rules. Publishing to npm is
 - [ ] Owner only, and not completable from a session: a Zenodo DOI for the composition research note needs the owner's Zenodo account; the session has no credential for it (2026-10-09). Do not send it out for physicist review. That send was a human-reviewer gate and is removed.
 
 Not a task: the Einstein-Cartan Newtonian limit and the Higgs-to-vacuum-energy residue. The repository has no derivation for either. Implementing either would fabricate physics. They are not gates.
+
+- [x] Restore #561 mergeability with master after the be-* landings.
+  `CHANGELOG.md` `[Unreleased]` on this branch replaced `### Documented` with the A1 Added bullet, so it conflicts with master's `### Fixed` be-163/148/Biot/be-158 entries. Take master's Unreleased text and put the A1 bullet in `### Added`.
+  Done: Unreleased now carries master's Fixed entries and the A1 Added bullet. This file matches master plus this row at the end, so the 3-way merge with `origin/master` is clean.

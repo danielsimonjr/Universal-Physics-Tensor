@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 385,
-    "totalTestFiles": 668,
+    "totalTestFiles": 669,
     "testedCount": 376,
     "directlyTestedCount": 342,
     "untestedCount": 9,
@@ -9777,6 +9777,7 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/mathts-unit-gaps.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
@@ -13468,6 +13469,7 @@
       "tests/core/constants-owner.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/mathts-unit-gaps.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
@@ -23523,6 +23525,9 @@
       "src/dimensional/types.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/metric-validators.ts"
+    ],
+    "tests/dimensional/mathts-unit-gaps.test.ts": [
+      "src/dimensional/units.ts"
     ],
     "tests/dimensional/metric-ast-serialization.test.ts": [
       "src/dimensional/metric.ts",
