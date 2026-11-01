@@ -20824,6 +20824,22 @@
         "description": "Exact unit scales.",
         "externalDependencies": [
           {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "addExactScales",
+              "decimalExactScale",
+              "divideExactScales",
+              "exactScaleOf",
+              "exactScaleToNumber",
+              "LN2_EXACT_SCALE",
+              "multiplyExactScales",
+              "PI_EXACT_SCALE",
+              "powerExactScale",
+              "ratioExactScale",
+              "ExactScale"
+            ]
+          },
+          {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
               "gcd"
@@ -27761,7 +27777,7 @@
   "statistics": {
     "totalTypeScriptFiles": 385,
     "totalModules": 13,
-    "totalLinesOfCode": 86634,
+    "totalLinesOfCode": 86612,
     "totalExports": 2752,
     "totalClasses": 85,
     "totalInterfaces": 512,
