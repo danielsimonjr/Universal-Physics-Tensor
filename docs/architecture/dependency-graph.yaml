@@ -3,7 +3,7 @@ metadata:
   version: 11.0.0
   totalFiles: 385
   totalModules: 13
-  totalExports: 2794
+  totalExports: 2795
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5121,9 +5121,6 @@ modules:
             - AppliedCaseOutputRecord
             - AppliedCaseRecord
           typeOnly: true
-        - file: ./methods.js
-          imports:
-            - CASE_METHODS
         - file: ./types.js
           imports:
             - check
@@ -5131,9 +5128,11 @@ modules:
             - CaseCheck
             - CaseResult
       exports:
+        - registerCaseMethods
         - usesCatalogEngine
         - runAppliedCaseEngine
       functions:
+        - registerCaseMethods
         - usesCatalogEngine
         - runAppliedCaseEngine
     src/cases/index.ts:
@@ -5230,6 +5229,7 @@ modules:
           imports:
             - runAppliedCaseEngine
             - usesCatalogEngine
+            - registerCaseMethods
         - file: ./types.js
           imports:
             - check
@@ -18964,13 +18964,10 @@ modules:
         - FORMAL_REF_KINDS
 dependencyGraph:
   circularDependencies:
-    runtime:
-      - - src/cases/engine.ts
-        - src/cases/methods.ts
-        - src/cases/engine.ts
+    runtime: []
     typeOnly: []
-    total: 1
-    runtimeCount: 1
+    total: 0
+    runtimeCount: 0
     typeOnlyCount: 0
   layers:
     - name: Atlas
@@ -19387,17 +19384,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 87016
-  totalExports: 2794
+  totalLinesOfCode: 87055
+  totalExports: 2795
   totalClasses: 85
   totalInterfaces: 517
-  totalFunctions: 904
+  totalFunctions: 905
   totalTypeGuards: 14
   totalEnums: 0
   totalConstants: 411
   totalReExports: 1390
   totalTypeOnlyImports: 525
-  runtimeCircularDeps: 1
+  runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 21
+  unusedExportsCount: 22

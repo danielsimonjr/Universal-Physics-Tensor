@@ -354,7 +354,7 @@ Regenerate: `repo-tools map . --out=<dir>` · Check: `repo-tools check . --docs=
 
 | Claim | Value | Source |
 |---|---|---|
-| runtimeCircularDeps | 1 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
+| runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 
 Both claims cover the whole repository, tests and tools included. The project generator `bun run docs:deps` reads `src/` only. `DEPENDENCY_GRAPH.md` holds its counts. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`. The other statements of this document describe the source files that the text names, and the gate does not read them. `INTEGRATION_MAP.md` lists the parallel implementations.

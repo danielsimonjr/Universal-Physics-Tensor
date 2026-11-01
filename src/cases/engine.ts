@@ -9,7 +9,6 @@ import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { evaluateFormula } from '../bridges/expr-parse.js';
 import { convertValue } from '../dimensional/units.js';
 import type { AppliedCaseCheckRecord, AppliedCaseOutputRecord, AppliedCaseRecord } from './catalog.js';
-import { CASE_METHODS } from './methods.js';
 import { check, requirePositive, type CaseCheck, type CaseResult } from './types.js';
 
 /** Resolve a catalog output field through a named numeric method. */
@@ -17,6 +16,14 @@ export type CaseOutputMethod = (
   inputs: Readonly<Record<string, number>>,
   outputs: Readonly<Record<string, number | null>>,
 ) => number | null;
+
+type CaseMethodMap = Record<string, CaseOutputMethod | ((...args: never[]) => unknown)>;
+let registeredCaseMethods: CaseMethodMap = {};
+
+/** Wire catalog `method` names to implementations (called from `methods.ts` at load). @internal */
+export function registerCaseMethods(map: CaseMethodMap): void {
+  registeredCaseMethods = map;
+}
 
 const DELEGATED_RUN_METHODS = new Set(['runCaseResistorNoise', 'runCaseLumpedCooling', 'runCaseBrownianSphere']);
 
@@ -82,7 +89,7 @@ function evalOutput(
   if (row.expr !== undefined) return evalOutputExpr(row.expr, inputs, outputs, extra);
   if (row.relation !== undefined) return evalRelationOutput(row.relation.relation, row.relation.inputs, bindings);
   if (row.method !== undefined) {
-    const fn = CASE_METHODS[row.method] as CaseOutputMethod | undefined;
+    const fn = registeredCaseMethods[row.method] as CaseOutputMethod | undefined;
     if (fn === undefined) throw new Error(`applied case: unknown method '${row.method}'`);
     return fn(inputs, outputs);
   }

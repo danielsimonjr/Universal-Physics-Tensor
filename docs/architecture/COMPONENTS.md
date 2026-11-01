@@ -999,7 +999,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 | Claim | Value | Source |
 |---|---|---|
 | totalSourceFiles | 1165 | `dependency-graph.json` `statistics.totalSourceFiles` |
-| runtimeCircularDeps | 1 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
+| runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 
 The three claims cover the whole repository, tests and tools included. `repo-tools map` uses this scope by default. The project generator `bun run docs:deps` reads `src/` only. `DEPENDENCY_GRAPH.md` holds its counts. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.

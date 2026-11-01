@@ -2186,11 +2186,10 @@ The codebase is organized into the following modules:
 | `../bridges/expr-parse.js` | `evaluateFormula` | Import |
 | `../dimensional/units.js` | `convertValue` | Import |
 | `./catalog.js` | `AppliedCaseCheckRecord, AppliedCaseOutputRecord, AppliedCaseRecord` | Import (type-only) |
-| `./methods.js` | `CASE_METHODS` | Import |
 | `./types.js` | `check, requirePositive, CaseCheck, CaseResult` | Import |
 
 **Exports:**
-- Functions: `usesCatalogEngine`, `runAppliedCaseEngine`
+- Functions: `registerCaseMethods`, `usesCatalogEngine`, `runAppliedCaseEngine`
 
 ---
 
@@ -2229,7 +2228,7 @@ The codebase is organized into the following modules:
 | `../numerical/null-ray-integrator.js` | `integrateRK4` | Import |
 | `./quadrature.js` | `adaptiveQuadrature` | Import |
 | `./catalog.js` | `appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase, catalogSemanticProblems` | Import |
-| `./engine.js` | `runAppliedCaseEngine, usesCatalogEngine` | Import |
+| `./engine.js` | `runAppliedCaseEngine, usesCatalogEngine, registerCaseMethods` | Import |
 | `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase, CaseResult, LumpedRadiating` | Import |
 | `./types.js` | `LumpedRadiating` | Re-export |
 | `../core/constants.js` | `SIGMA_SB_SI` | Re-export |
@@ -7498,17 +7497,7 @@ The codebase is organized into the following modules:
 
 ## Circular Dependency Analysis
 
-**1 circular dependencies detected:**
-
-- **Runtime cycles**: 1 (require attention)
-- **Type-only cycles**: 0 (safe, no runtime impact)
-
-### Runtime Circular Dependencies
-
-These cycles involve runtime imports and may cause issues:
-
-- src/cases/engine.ts -> src/cases/methods.ts -> src/cases/engine.ts
-
+**No circular dependencies detected.**
 ---
 
 ## Visual Dependency Graph
@@ -7643,12 +7632,12 @@ graph TD
     N19 --> N9
     N20 --> N9
     N20 --> N19
-    N20 --> N22
     N21 --> N19
     N21 --> N22
     N22 --> N41
     N22 --> N9
     N22 --> N19
+    N22 --> N20
 ```
 
 ---
@@ -7659,16 +7648,16 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 87016 |
-| Total Exports | 2794 |
+| Total Lines of Code | 87055 |
+| Total Exports | 2795 |
 | Total Re-exports | 1390 |
 | Total Classes | 85 |
 | Total Interfaces | 517 |
-| Total Functions | 904 |
+| Total Functions | 905 |
 | Total Type Guards | 14 |
 | Total Enums | 0 |
 | Type-only Imports | 525 |
-| Runtime Circular Deps | 1 |
+| Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
 ---

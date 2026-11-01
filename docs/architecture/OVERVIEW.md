@@ -89,7 +89,7 @@ Regenerate: `repo-tools map . --out=<dir>` · Check: `repo-tools check . --docs=
 |---|---|---|
 | totalSourceFiles | 1165 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | totalExports | 3825 | `dependency-graph.json` `statistics.totalExports` |
-| runtimeCircularDeps | 1 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
+| runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 
 The four counts cover the whole repository, tests and tools included. `repo-tools map` uses this scope by default. The project generator `bun run docs:deps` reads `src/` only, and `DEPENDENCY_GRAPH.md` holds its counts. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`. The catalog counts are not metrics of the dependency graph. `tests/fixtures/catalog-census.json` holds them, and a test pins them.

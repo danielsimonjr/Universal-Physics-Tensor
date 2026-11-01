@@ -3,10 +3,10 @@
     "totalSourceFiles": 385,
     "totalTestFiles": 681,
     "testedCount": 375,
-    "directlyTestedCount": 341,
+    "directlyTestedCount": 342,
     "untestedCount": 10,
     "coveragePercent": "97.4",
-    "directCoveragePercent": "88.6"
+    "directCoveragePercent": "88.8"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
@@ -517,6 +517,7 @@
     "src/cases/index.ts",
     "src/cases/methods.ts",
     "src/cases/quadrature.ts",
+    "src/cases/types.ts",
     "src/cli-api.ts",
     "src/cli/args.ts",
     "src/cli/closed-form-range.ts",
@@ -1990,6 +1991,7 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/gum-monte-carlo.test.ts",
@@ -11706,6 +11708,7 @@
       "tests/composition/evaluation-result.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-closure.test.ts",
+      "tests/dimensional/unit-wrapper-cycles.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/numerical/gum-monte-carlo.test.ts"
     ],
@@ -11978,7 +11981,9 @@
     "src/cases/quadrature.ts": [
       "tests/numerical/mathts-delegation.test.ts"
     ],
-    "src/cases/types.ts": [],
+    "src/cases/types.ts": [
+      "tests/cases/applied-case-engine.test.ts"
+    ],
     "src/cli/args.ts": [
       "tests/cli/args.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -23866,6 +23871,7 @@
     ],
     "tests/dimensional/unit-wrapper-cycles.test.ts": [
       "src/bridges/evaluator-inputs.ts",
+      "src/bridges/evaluators.ts",
       "src/dimensional/units.ts"
     ],
     "tests/dimensional/unit-wrapper-refusal.test.ts": [

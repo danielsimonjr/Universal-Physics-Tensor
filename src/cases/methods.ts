@@ -11,7 +11,7 @@ import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { integrateRK4 } from '../numerical/null-ray-integrator.js';
 import { adaptiveQuadrature } from './quadrature.js';
 import { appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase, catalogSemanticProblems } from './catalog.js';
-import { runAppliedCaseEngine, usesCatalogEngine } from './engine.js';
+import { runAppliedCaseEngine, usesCatalogEngine, registerCaseMethods } from './engine.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase, type CaseResult, type LumpedRadiating } from './types.js';
 
 /** Lumped body with radiative cooling parameters (re-export). */
@@ -815,6 +815,8 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   runCaseLumpedCooling,
   runCaseBrownianSphere,
 };
+
+registerCaseMethods(CASE_METHODS);
 
 /** Assembled skin-depth applied case (catalog + runner). */
 export const SKIN_DEPTH_CASE = APPLIED_CASE_RUNNERS.get('case-skin-depth')!;
