@@ -1622,67 +1622,85 @@
           "key": "q",
           "symbol": "q",
           "unit": "",
-          "meaning": "mass ratio m_p/M_*"
+          "meaning": "mass ratio m_p/M_*",
+          "expr": "m_p_kg/M_star_kg"
         },
         {
           "key": "a_m",
           "symbol": "a",
           "unit": "m",
-          "meaning": "semi-major axis of the relative orbit, from Kepler III with the total mass"
+          "meaning": "semi-major axis of the relative orbit, from Kepler III with the total mass",
+          "expr": "((G*(M_star_kg+m_p_kg)*P_s*P_s)/(4*pi*pi))^(1/3)"
         },
         {
           "key": "a_star_m",
           "symbol": "a_*",
           "unit": "m",
-          "meaning": "semi-major axis of the star's own orbit about the barycentre, a m_p/(M_* + m_p)"
+          "meaning": "semi-major axis of the star's own orbit about the barycentre, a m_p/(M_* + m_p)",
+          "expr": "a_m*m_p_kg/(M_star_kg+m_p_kg)"
         },
         {
           "key": "K_m_per_s",
           "symbol": "K",
           "unit": "m/s",
-          "meaning": "RV semi-amplitude of the star, test-mass form (the scalar result)"
+          "meaning": "RV semi-amplitude of the star, test-mass form (the scalar result)",
+          "expr": "((2*pi*G/P_s)^(1/3))*m_p_kg*sin_i/(M_star_kg^(2/3))/sqrt(1-eccentricity^2)"
         },
         {
           "key": "K_two_body_m_per_s",
           "symbol": "K_2b",
           "unit": "m/s",
-          "meaning": "the exact Newtonian two-body semi-amplitude (2πG/P)^{1/3} m_p sin i/(M_* + m_p)^{2/3}/√(1 − e²)"
+          "meaning": "the exact Newtonian two-body semi-amplitude (2πG/P)^{1/3} m_p sin i/(M_* + m_p)^{2/3}/√(1 − e²)",
+          "expr": "((2*pi*G/P_s)^(1/3))*m_p_kg*sin_i/((M_star_kg+m_p_kg)^(2/3))/sqrt(1-eccentricity^2)"
         },
         {
           "key": "two_body_deviation",
           "symbol": "K/K_2b − 1",
           "unit": "",
-          "meaning": "relative excess of the test-mass K over the two-body K: (1 + q)^{2/3} − 1"
+          "meaning": "relative excess of the test-mass K over the two-body K: (1 + q)^{2/3} − 1",
+          "expr": "K_m_per_s/K_two_body_m_per_s - 1"
         },
         {
           "key": "r_peri_m",
           "symbol": "r_p",
           "unit": "m",
-          "meaning": "periastron separation a(1 − e)"
+          "meaning": "periastron separation a(1 − e)",
+          "expr": "a_m*(1-eccentricity)"
         },
         {
           "key": "weak_field",
           "symbol": "G(M_* + m_p)/(c²a)",
           "unit": "",
-          "meaning": "the 1PN expansion parameter (half the Schwarzschild radius of the total mass, over a)"
+          "meaning": "the 1PN expansion parameter (half the Schwarzschild radius of the total mass, over a)",
+          "expr": "G*(M_star_kg+m_p_kg)/(c^2*a_m)"
         },
         {
           "key": "dphi_rad_per_orbit",
           "symbol": "Δω",
           "unit": "rad",
-          "meaning": "GR apsidal advance per orbit 6πG(M_* + m_p)/(c²a(1 − e²)) (BE-52 with the total mass)"
+          "meaning": "GR apsidal advance per orbit 6πG(M_* + m_p)/(c²a(1 − e²)) (BE-52 with the total mass)",
+          "relation": {
+            "relation": "be-52",
+            "inputs": {
+              "mass": "M_star_kg + m_p_kg",
+              "semi-major-axis": "a_m",
+              "eccentricity": "eccentricity"
+            }
+          }
         },
         {
           "key": "omega_dot_deg_per_yr",
           "symbol": "ω̇",
           "unit": "deg/yr",
-          "meaning": "the same advance as a rate, degrees per Julian year"
+          "meaning": "the same advance as a rate, degrees per Julian year",
+          "expr": "(dphi_rad_per_orbit/P_s)*julian_year_s*180/pi"
         },
         {
           "key": "apsidal_misfit",
           "symbol": "e Δω T_obs/P",
           "unit": "",
-          "meaning": "eccentricity times the apsidal advance accumulated over the record (rad)"
+          "meaning": "eccentricity times the apsidal advance accumulated over the record (rad)",
+          "expr": "eccentricity*dphi_rad_per_orbit*T_obs_s/P_s"
         }
       ],
       "conditions": [

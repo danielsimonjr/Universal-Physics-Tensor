@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Part B step B9 — catalog engine for skin depth.** `src/cases/engine.ts` evaluates `case-skin-depth` from `expr` and `method` fields in `data/applied-cases.json`; `skinDeltaMaxwellM` stays the method for the parent penetration depth. `tests/cases/applied-case-engine.test.ts` pins parity with the legacy runner and a mutated exponent control.
+
 - **Part B step B8 — one methods module, six case files removed.** `src/cases/methods.ts` holds every applied-case runner and numeric helper; `src/cases/` keeps only `index.ts`, `types.ts`, `catalog.ts`, `catalog-checks.ts`, `quadrature.ts`, and `methods.ts`. `tests/cases/cases-directory.test.ts` lists that set; `tests/numerical/mathts-delegation.test.ts` scans `methods.ts` for `quad`, `findRoot`, and `solveODESystem`.
 
 - **Part A step A11a — wrapper keeps `bit` at ln 2.** `applyBitScaleOverride` in `mathts-unit-wrapper.ts` replaces MathTS axis-8 scale 1 with the `data/units.json` row on every delegated reading. `tests/dimensional/unit-wrapper-bit.test.ts` fails if `parseUnit('bit').scale` becomes 1.

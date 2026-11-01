@@ -4,6 +4,7 @@
  * @module cases/catalog
  */
 import { checkedDataFile, dataSchema, parseDataFile } from '../core/data-file.js';
+import { catalogRelations } from '../bridges/catalog-load.js';
 import type { JsonSchema } from '../core/json-schema.js';
 import type { EvaluatorParameter } from '../bridges/evaluators.js';
 import type { AppliedCase, CaseComparison, CaseExample } from './types.js';
@@ -88,6 +89,11 @@ export function catalogSemanticProblems(file: AppliedCaseFile, methodNames?: Rea
           problems.push(`${row.id}: output '${output.key}' must have exactly one of expr, relation, method`);
         } else if (output.method !== undefined && !methodNames.has(output.method)) {
           problems.push(`${row.id}: output '${output.key}' names unknown method '${output.method}'`);
+        } else if (output.relation !== undefined) {
+          const rel = catalogRelations().find((r) => r.id === output.relation!.relation);
+          if (rel === undefined) {
+            problems.push(`${row.id}: output '${output.key}' names unknown relation '${output.relation.relation}'`);
+          }
         }
       }
     }
