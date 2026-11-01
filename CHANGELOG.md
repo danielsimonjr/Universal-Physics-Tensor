@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **CI also runs on a push to `cursor/mathts-*`.** Stacked MathTS PRs cannot form a `pull_request` merge commit once each parent refreshes architecture file-count claims. The same jobs now run against the branch HEAD on push, including the code-docs and architecture-docs jobs. `tests/tools/ci-workflows.test.ts` pins the branch list (red first on `[master]` only).
+
 ### Added
 
 - **Part B step B12 — catalog loader rejects unwired outputs and a per-case file coming back.** `catalogSemanticProblems` with `CASE_METHOD_NAMES` requires every output to declare exactly one of `expr`, `relation`, or a known `method`; relation ids must exist in the bridge catalog. Legacy method-only cases name their `runCase*` runner on each output; load fails on typos. `isForbiddenCaseModule` names the six deleted per-case files and any new `case-*.ts`; `tests/cases/cases-directory.test.ts` applies it to `src/cases/`. `tests/cases/applied-cases-output-wiring.test.ts` pins the wiring rule.

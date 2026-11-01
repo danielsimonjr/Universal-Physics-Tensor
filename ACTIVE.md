@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Attach GitHub Actions on stacked MathTS PRs that cannot form a merge commit.
+  `pull_request` CI needs a mergeable merge. #562/#568/#569 are CONFLICTING with their parents (architecture file-count claims). Add a `cursor/mathts-*` push trigger and run the docs jobs on those pushes so the branch HEAD is checked.
+  Done: `ci.yml` push.branches includes `cursor/mathts-*`; code-docs and architecture-docs jobs run on those refs. The pin failed on A2 while `push.branches` was `[master]` only. The six per-case files stay gone; `isForbiddenCaseModule` still refuses them.
+
 - [x] Review and fix the stacked MathTS units/cases PRs (#560–#569) against the plan.
   #568/#569 hardcode `H0_SI` as `67.4 * 3.240779289444365e-20`. Derive it from MathTS `Unit.exactScale('km/s/Mpc')`. Confirm Part B deleted the per-case files and the loader/directory gate refuses new ones. Attach CI on #562 and #569.
   Done: `H0_SI` is `67.4 * exactScaleNumber('km/s/Mpc')`. The six per-case files are gone. `isForbiddenCaseModule` refuses those names and any new `case-*.ts`; the directory test applies it. CI attach is a push of this commit.

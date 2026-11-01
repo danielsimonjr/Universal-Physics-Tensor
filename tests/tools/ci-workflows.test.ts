@@ -124,6 +124,15 @@ describe('ci.yml code-docs ratchet', () => {
   });
 });
 
+describe('ci.yml push trigger', () => {
+  it('also fires on cursor/mathts-* so a conflicting stacked PR still gets jobs', () => {
+    const raw = load(readFileSync(resolve(root, '.github/workflows/ci.yml'), 'utf8')) as {
+      on: { push: { branches: string[] } };
+    };
+    expect(raw.on.push.branches).toEqual(expect.arrayContaining(['master', 'cursor/mathts-*']));
+  });
+});
+
 describe('ci.yml architecture-docs claims job', () => {
   const text = readFileSync(resolve(root, '.github/workflows/ci.yml'), 'utf8');
   const jobText = (): string => text.slice(text.indexOf('  architecture-docs-claims:'), text.indexOf('  paths-touched:'));
