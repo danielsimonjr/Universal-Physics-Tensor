@@ -7,6 +7,7 @@
  *
  * @module tests/core/constants
  */
+import { Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { describe, it, expect } from 'vitest';
 import {
   C_SI,
@@ -66,8 +67,9 @@ describe('Flat CODATA / SI constants — src/core/constants.ts', () => {
   });
 
   it('H0_SI matches Planck 2018 Hubble parameter (s⁻¹)', () => {
-    // 67.4 km/s/Mpc through the unit reader's compound scale to Hz.
-    expect(H0_SI).toBe(67.4 * 3.240779289444365e-20);
+    const exact = Unit.exactScale('km/s/Mpc');
+    expect(exact).not.toBeNull();
+    expect(H0_SI).toBe(67.4 * exactScaleToNumber(exact!));
   });
 
   // ── Cross-consistency checks ─────────────────────────────────────────────

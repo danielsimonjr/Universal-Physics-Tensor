@@ -10,22 +10,22 @@
  *     2019 SI redefinition fixed their values exactly.
  *   • `HBAR_SI` is the exact quotient `H_SI / (2π)`, not the truncated CODATA display.
  *   • CODATA 2022 best estimates for measured constants (`G_SI`, `ALPHA`, Planck units).
- *   • Planck 2018 best estimate for `H0_SI`, in SI through the unit table's parsec.
+ *   • Planck 2018 best estimate for `H0_SI`, in SI through MathTS
+ *     `Unit.exactScale('km/s/Mpc')` — the same exact-scale path the unit
+ *     reader delegates to. This module cannot import `convertValue`
+ *     (`dimensional/` is tier 1; `core/` is tier 0).
  *
  * This file is the one owner of every value. `PhysicalConstants` in
  * `src/core/types.ts` and the constant registry in
  * `src/dimensional/symbolic-constants.ts` are projections of it, and a test
- * refuses a CODATA literal anywhere else under `src/`. A unit is the unit
- * table's: `H0_SI` reads the parsec from `data/units.json` rather than
- * restating it, so the Hubble rate here and `67.4 km/s/Mpc` read through the
- * unit table are one number.
+ * refuses a CODATA literal anywhere else under `src/`.
  *
  * @module core/constants
  * @public
  */
 
+import { Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import * as mathtsConstants from '@danielsimonjr/mathts-functions';
-import { checkedDataFile } from './data-file.js';
 
 /**
  * A measured constant's SI value, read from MathTS (CODATA 2022). MathTS is the
@@ -91,28 +91,28 @@ export const L_P_SI = codata('planckLength');
 /** Planck time √(ℏG/c⁵) (s). CODATA 2022. */
 export const T_P_SI = codata('planckTime');
 
-/** The `scale` of the `symbol` row in `data/units.json`, which must be a plain decimal (metres for a length). */
-function unitTableDecimal(symbol: string): number {
-  const file = checkedDataFile('units.json') as { readonly units: readonly { readonly symbols: readonly string[]; readonly scale: string }[] };
-  const scale = file.units.find((row) => row.symbols.includes(symbol))?.scale;
-  const value = scale === undefined ? Number.NaN : Number(scale);
-  if (!Number.isFinite(value)) throw new Error(`data/units.json: the '${symbol}' row must state a decimal scale (got ${scale ?? 'no row'})`);
-  return value;
+/**
+ * MathTS exact scale of a valueless unit text, rounded once. This is the
+ * same pair of calls the delegated unit reader uses (`Unit.exactScale` then
+ * `exactScaleToNumber`).
+ */
+function exactScaleNumber(text: string): number {
+  const exact = Unit.exactScale(text);
+  if (exact === null) throw new Error(`MathTS has no exact scale for '${text}'`);
+  return exactScaleToNumber(exact);
 }
 
 /**
  * Hubble parameter H₀ (s⁻¹).
  *
- * Planck 2018 TT,TE,EE+lowE+lensing best estimate: 67.4 km/s/Mpc, converted
- * with the parsec of the unit table (`data/units.json`, 648000/π au), so it is
- * the value `convertValue('67.4km/s/Mpc', 'Hz')` reads: one Hubble rate,
- * 2.184285241085502e-18 s⁻¹. The unit table is the one place the parsec is
- * written; the rate uses the same compound scale as the unit reader (not the
- * separate float of `67.4e3/(1e6×pc)` alone).
+ * Planck 2018 TT,TE,EE+lowE+lensing best estimate: 67.4 km/s/Mpc. The
+ * conversion to Hz is `Unit.exactScale('km/s/Mpc')` rounded once — the same
+ * exact-scale path `convertValue('67.4km/s/Mpc', 'Hz')` delegates to. Calling
+ * `convertValue` from this file is a layer-order violation (`core/` cannot
+ * import `dimensional/units.ts`).
+ * @public
  */
-const KM_S_MPC_TO_HZ = 3.240779289444365e-20;
-/** Planck 2018 Hubble rate in SI (s⁻¹), matching delegated `convertValue('67.4km/s/Mpc', 'Hz')`. */
-export const H0_SI = 67.4 * KM_S_MPC_TO_HZ;
+export const H0_SI = 67.4 * exactScaleNumber('km/s/Mpc');
 
 /**
  * Solar mass (kg). IAU 2015 nominal value rounded to the
