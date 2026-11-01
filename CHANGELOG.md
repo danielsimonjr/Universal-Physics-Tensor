@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **be-148/149/151 thin-proof ends are derived, not assumed.** Nernst keeps one work law `ΔG = −n F E` and defines `E° = −ΔG°/(n F)` as its `Q = 1` case, instead of assuming both work identities. van 't Hoff's `ΔC_p` counterexample is the Kirchhoff enthalpy `ΔH(T) = ΔH₀ + ΔC_p(T−T₀)`, so the constant-`ΔH₀` integrated form cannot hold when `ΔC_p ≠ 0`. The decade/`n` Nernst identities, the exact slopes `1` and `−1/T²`, and Eyring's `exp(−1)` gap stay theorems.
+
 ### Documented
 
 - **Session 14, the gravitational-wave search sentence.** The line in `docs/persona-sessions/2026-10-06-relativity-astro-bridges-session-14.md` that put `gravitational wave` on the exit-1 search list is struck. Re-measured 2026-11-01 on published `universal-physics-tensor@8.0.0` (with `@danielsimonjr/mathts-functions@0.68.0`, because a fresh install that resolves 0.68.5 does not start): `upt search "gravitational wave"` exits 0 and names `gravitational-wave-speed`. The same re-measurement is the addendum in that file. It files #525, #526, #527, #528, and #529. No `src/` change. The proposal counts in that file stay 6 standard and 5 cross-domain.

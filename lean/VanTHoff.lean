@@ -24,7 +24,8 @@ d ln K / dT = ΔH° / (R T²)
 `vant_hoff` derives the slope from the reacting species at every nonzero
 temperature `t`, via the Gibbs–Helmholtz route and constant-`ΔH°` closure.
 `slope_sign`, `two_temperature`, and `delta_cp_counterexample` record sign,
-integrated, and `ΔC_p` counterexamples. A van 't Hoff plot is not this row.
+integrated, and Kirchhoff `ΔH(T) = ΔH₀ + ΔC_p (T − T₀)` counterexamples.
+A van 't Hoff plot is not this row.
 -/
 
 namespace PhysJS.VanTHoff
@@ -129,21 +130,43 @@ theorem two_temperature (K : ℝ → ℝ) (dH dS R T1 T2 : ℝ)
     field_simp [hR, hT1, hT2]; ring
   simpa using this
 
-theorem delta_cp_counterexample (K : ℝ → ℝ) (dCp R c T : ℝ)
-    (hR : R ≠ 0) (hT : T ≠ 0)
-    (hlog : ∀ t, t ≠ 0 → Real.log (K t) = -(dCp / R) * Real.log t + c) :
-    HasDerivAt (fun t => Real.log (K t)) (-dCp / (R * T)) T := by
-  have hfun : (fun t => Real.log (K t)) =ᶠ[nhds T]
-      fun t => -(dCp / R) * Real.log t + c := by
-    filter_upwards [eventually_ne_nhds hT] with t ht; exact hlog t ht
-  have hlin := (Real.hasDerivAt_log hT).const_mul (-(dCp / R))
-  have hconst : HasDerivAt (fun _ : ℝ => c) 0 T := hasDerivAt_const T c
-  refine ((hlin.add hconst).congr_of_eventuallyEq hfun).congr_deriv (by field_simp [hR, hT]; ring)
+/-- Kirchhoff enthalpy `ΔH(T) = ΔH₀ + ΔC_p (T − T₀)`. -/
+noncomputable def kirchhoffEnthalpy (dH0 dCp T0 T : ℝ) : ℝ :=
+  dH0 + dCp * (T - T0)
 
-theorem delta_cp_slope_ne_constant_reference (dCp R T : ℝ)
-    (hR : 0 < R) (hT : 0 < T) (hCp : dCp ≠ 0) :
-    -dCp / (R * T) ≠ (0 : ℝ) / (R * T ^ 2) := by
-  simpa using div_ne_zero (neg_ne_zero.mpr hCp) (mul_ne_zero hR.ne' hT.ne')
+/-- Variable `ΔC_p` makes the slope differ from the constant-`ΔH₀` reference. -/
+theorem delta_cp_slope_ne_constant_reference (dH0 dCp R T0 T : ℝ)
+    (hR : R ≠ 0) (hT : T ≠ 0) (hCp : dCp ≠ 0) (hTT0 : T ≠ T0) :
+    kirchhoffEnthalpy dH0 dCp T0 T / (R * T ^ 2) ≠ dH0 / (R * T ^ 2) := by
+  unfold kirchhoffEnthalpy
+  intro h
+  have hden : R * T ^ 2 ≠ 0 := mul_ne_zero hR (pow_ne_zero 2 hT)
+  have heq : dH0 + dCp * (T - T0) = dH0 := by
+    field_simp [hden] at h
+    linarith
+  have hprod : dCp * (T - T0) = 0 := by linarith
+  rcases mul_eq_zero.mp hprod with h0 | h1
+  · exact hCp h0
+  · exact hTT0 (sub_eq_zero.mp h1)
+
+/-- The constant-`ΔH₀` integrated form cannot hold if the slope uses Kirchhoff `ΔH(T)`. -/
+theorem delta_cp_counterexample (K : ℝ → ℝ) (dH0 dS R T0 T dCp : ℝ)
+    (hR : R ≠ 0) (hT : T ≠ 0) (hCp : dCp ≠ 0) (hTT0 : T ≠ T0)
+    (hlog : ∀ t, t ≠ 0 → Real.log (K t) = -dH0 / (R * t) + dS / R) :
+    ¬ HasDerivAt (fun t => Real.log (K t))
+        (kirchhoffEnthalpy dH0 dCp T0 T / (R * T ^ 2)) T := by
+  have hconst := slope_of_log K dH0 dS R T hR hT hlog
+  intro hvar
+  exact delta_cp_slope_ne_constant_reference dH0 dCp R T0 T hR hT hCp hTT0
+    (HasDerivAt.unique hvar hconst)
+
+theorem slope_unit_enthalpy (R : ℝ) (hR : R ≠ 0) :
+    R / (R * (1 : ℝ) ^ 2) = 1 := by
+  field_simp [hR]
+
+theorem slope_exothermic (R T : ℝ) (hR : R ≠ 0) (hT : T ≠ 0) :
+    (-R) / (R * T ^ 2) = -1 / T ^ 2 := by
+  field_simp [hR, hT]
 
 theorem vant_hoff_constant {ι : Type*} (s : Finset ι) (ν : ι → ℝ) (μ μ0 a : ℝ → ι → ℝ)
     (K dG : ℝ → ℝ) (dH dS R T : ℝ)

@@ -173,7 +173,8 @@ theorem exp_minus_one_gap_ne (dH dS R kB hpl T : ℝ) (hR : R ≠ 0) (hT : T ≠
 
 `k(t) = (k_B t / h) exp(ΔS‡ / R) exp(−ΔH‡ / (R t))`. The effective
 Arrhenius energy `R T² d(ln k)/dT` equals `ΔH‡ + R T`. It is not the
-exponent in a temperature-independent prefactor. -/
+exponent in a temperature-independent prefactor. This file does not
+interchange `d/dT` with `ν → 0`. -/
 theorem effective_arrhenius (k : ℝ → ℝ) (hpl dH dS R kB T Ea : ℝ)
     (hR : R ≠ 0) (_hkB : kB ≠ 0) (_hh : hpl ≠ 0) (hT : T ≠ 0)
     (hpre : 0 < kB / hpl) (_hS : Real.exp (dS / R) ≠ 0)

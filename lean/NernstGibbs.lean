@@ -23,28 +23,38 @@ with `F = N_A e`. Here `e` is the elementary charge. `nernst_eq` derives
 the cell potential from the ideal activities `μ_i = μ_i° + R T ln a_i` of
 the species in the cell reaction: `reaction_gibbs` sums them into
 `ΔG = ΔG° + R T ln Q`, with `ΔG = Σ ν_i μ_i`, `ΔG° = Σ ν_i μ_i°` and
-`ln Q = Σ ν_i ln a_i`, and the electrical work `ΔG = −n F E`,
-`ΔG° = −n F E°` turns that into the potential. `work_law` and `standard_potential`
-fix the electrical convention at `Q = 1`. `nernst_from_reaction_gibbs` derives
-Nernst from `reaction_gibbs`; `molar_faraday`, `decade_identity`, and
-`equilibrium_voltage_chain` complete the bridge. This is not the ideal diode
-of `be-82`.
+`ln Q = Σ ν_i ln a_i`. One work law, `ΔG = −n F E` (work done by the cell),
+and the definition `E° = −ΔG° / (n F)` of the `Q = 1` case of that same
+law, turn that into the potential. `standard_potential_of_work` and
+`standard_potential` fix the electrical convention at `Q = 1`.
+`nernst_from_reaction_gibbs` derives Nernst from `reaction_gibbs`;
+`molar_faraday`, `decade_identity`, `n_scaling`, `catalog_decade_half`,
+and `equilibrium_voltage_chain` complete the bridge. This is not the
+ideal diode of `be-82`.
 -/
 
 namespace PhysJS.NernstGibbs
 
-theorem work_law (dG n F E : ℝ) (h : dG = -n * F * E) : dG = -n * F * E := h
+/-- `E°` is the `Q = 1` case of the one work law: `E° = −ΔG° / (n F)`. -/
+theorem standard_potential_of_work (E0 dG0 n F : ℝ) (hnF : n * F ≠ 0)
+    (hwork0 : dG0 = -n * F * E0) :
+    E0 = -dG0 / (n * F) := by
+  field_simp [hnF]
+  linarith [hwork0]
 
 theorem standard_potential (E E0 R T n F Q dG dG0 : ℝ)
     (hn : n ≠ 0) (hF : F ≠ 0)
-    (_hQ : Q = 1) (hlogQ : Real.log Q = 0)
+    (hlogQ : Real.log Q = 0)
     (hadd : dG = dG0 + R * T * Real.log Q)
-    (hwork : dG = -n * F * E) (hstd : dG0 = -n * F * E0) :
+    (hwork : dG = -n * F * E)
+    (hE0 : E0 = -dG0 / (n * F)) :
     E = E0 := by
   have hnF : n * F ≠ 0 := mul_ne_zero hn hF
   have hG : dG = dG0 := by rw [hadd, hlogQ, mul_zero, add_zero]
-  have : -n * F * E = -n * F * E0 := by rw [← hwork, ← hstd, hG]
-  exact mul_left_cancel₀ hnF (by linarith)
+  have : E = -dG / (n * F) := by
+    field_simp [hnF]
+    linarith [hwork]
+  rw [this, hG, hE0]
 
 /-- The reaction Gibbs energy of ideal activities is `ΔG° + R T ln Q`.
 
@@ -70,20 +80,24 @@ theorem nernst_from_reaction_gibbs {ι : Type*} (s : Finset ι) (ν μ μ0 a : �
     (hdG : dG = ∑ i ∈ s, ν i * μ i)
     (hdG0 : dG0 = ∑ i ∈ s, ν i * μ0 i)
     (hwork : dG = -n * F * E)
-    (hstd : dG0 = -n * F * E0) :
+    (hE0 : E0 = -dG0 / (n * F)) :
     E = E0 - (R * T / (n * F)) * Real.log Q := by
   have hadd := reaction_gibbs s ν μ μ0 a R T Q dG dG0 hμ hlogQ hdG hdG0
   have hnF : n * F ≠ 0 := mul_ne_zero hn hF
-  have hclear : n * F * E = n * F * E0 - R * T * Real.log Q := by
-    rw [hwork, hstd] at hadd; linarith
-  field_simp [hnF] at hclear ⊢; linarith
+  have hE : E = -dG / (n * F) := by
+    field_simp [hnF]
+    linarith [hwork]
+  rw [hE, hadd, hE0]
+  field_simp [hnF]
+  ring
 
 /-- Nernst equation from ideal activities, and the same potential with `R / F = k_B / e`.
 
 The species of the cell reaction have `μ_i = μ_i° + R T ln a_i`, the
 reaction quotient is `ln Q = Σ ν_i ln a_i`, and `ΔG = Σ ν_i μ_i`,
-`ΔG° = Σ ν_i μ_i°`. `hwork` and `hstd` are `ΔG = −n F E` and
-`ΔG° = −n F E°`. `e` is the elementary charge. -/
+`ΔG° = Σ ν_i μ_i°`. `hwork` is the one work law `ΔG = −n F E`.
+`hE0` defines `E° = −ΔG° / (n F)`, the `Q = 1` case of that law.
+`e` is the elementary charge. -/
 theorem nernst_eq {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ)
     (E E0 R T n F Q dG dG0 NA kB e : ℝ)
     (hn : n ≠ 0) (hF : F ≠ 0) (he : e ≠ 0) (hNA : NA ≠ 0)
@@ -92,7 +106,7 @@ theorem nernst_eq {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ)
     (hdG : dG = ∑ i ∈ s, ν i * μ i)
     (hdG0 : dG0 = ∑ i ∈ s, ν i * μ0 i)
     (hwork : dG = -n * F * E)
-    (hstd : dG0 = -n * F * E0)
+    (hE0 : E0 = -dG0 / (n * F))
     (hFar : F = NA * e)
     (hgas : R = NA * kB) :
     E = E0 - (R * T / (n * F)) * Real.log Q ∧
@@ -100,7 +114,7 @@ theorem nernst_eq {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι → ℝ)
       E = E0 - (kB * T / (n * e)) * Real.log Q := by
   have hadd := reaction_gibbs s ν μ μ0 a R T Q dG dG0 hμ hlogQ hdG hdG0
   have hE := nernst_from_reaction_gibbs s ν μ μ0 a E E0 R T n F Q dG dG0 hn hF hμ hlogQ hdG hdG0
-    hwork hstd
+    hwork hE0
   refine ⟨hE, hadd, ?_⟩
   have hcoeff : R * T / (n * F) = kB * T / (n * e) := by
     rw [hgas, hFar]
@@ -154,11 +168,17 @@ theorem equilibrium_voltage_chain {ι : Type*} (s : Finset ι) (ν μ μ0 a : ι
     (hequil : ∑ i ∈ s, ν i * μ i = 0)
     (hQ : Q = K)
     (hwork : dG = -n * F * E)
-    (hstd : dG0 = -n * F * E0) :
+    (hE0 : E0 = -dG0 / (n * F)) :
     E = 0 := by
-  have hE := nernst_from_reaction_gibbs s ν μ μ0 a E E0 R T n F Q dG dG0 hn hF hμ hlogQ hdG hdG0 hwork hstd
-  have hE0 := standard_from_gibbs s ν μ μ0 a R T K dG0 n F E0 hT hR hK hn hF hact hμ hlogK hdG0 hequil hstd
-  rw [hE, hE0, hQ, sub_self]
+  have hnF : n * F ≠ 0 := mul_ne_zero hn hF
+  have hstd : dG0 = -n * F * E0 := by
+    field_simp [hnF] at hE0 ⊢
+    linarith
+  have hE := nernst_from_reaction_gibbs s ν μ μ0 a E E0 R T n F Q dG dG0 hn hF hμ hlogQ hdG hdG0
+    hwork hE0
+  have hE0K := standard_from_gibbs s ν μ μ0 a R T K dG0 n F E0 hT hR hK hn hF hact hμ hlogK hdG0
+    hequil hstd
+  rw [hE, hE0K, hQ, sub_self]
 
 /-- Equilibrium `Q = K` is a cell potential of zero. -/
 theorem equilibrium_voltage (E E0 R T n F K : ℝ)
@@ -168,5 +188,19 @@ theorem equilibrium_voltage (E E0 R T n F K : ℝ)
     E = 0 := by
   rw [hE, hE0]
   ring
+
+/-- Large `n` scales the Nernst correction as `1/n` times the `n = 1` term. -/
+theorem n_scaling (R T n F Q : ℝ) (hn : n ≠ 0) (hF : F ≠ 0) :
+    (R * T / (n * F)) * Real.log Q =
+      (1 / n) * ((R * T / ((1 : ℝ) * F)) * Real.log Q) := by
+  field_simp [hn, hF]
+
+/-- Catalog point `n = 2`, `Q = 10`: the correction is half of `(R T / F) ln 10`. -/
+theorem catalog_decade_half (E E0 R T F : ℝ) (hF : F ≠ 0)
+    (hE : E = E0 - (R * T / (2 * F)) * Real.log 10) :
+    E = E0 - (1 / 2) * (R * T / F) * Real.log 10 := by
+  have h2 : (2 : ℝ) ≠ 0 := by norm_num
+  rw [hE]
+  field_simp [hF, h2]
 
 end PhysJS.NernstGibbs
