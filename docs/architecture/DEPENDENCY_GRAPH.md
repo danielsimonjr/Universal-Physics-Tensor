@@ -5839,6 +5839,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
+| `@danielsimonjr/mathts-core` | `addExactScales, decimalExactScale, divideExactScales, exactScaleOf, exactScaleToNumber, LN2_EXACT_SCALE, multiplyExactScales, PI_EXACT_SCALE, powerExactScale, ratioExactScale, ExactScale` |
 | `@danielsimonjr/mathts-functions` | `gcd` |
 
 **Internal Dependencies:**
@@ -7603,7 +7604,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 86645 |
+| Total Lines of Code | 86623 |
 | Total Exports | 2752 |
 | Total Re-exports | 1389 |
 | Total Classes | 85 |

@@ -20,6 +20,13 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Attach GitHub Actions on stacked MathTS PRs that cannot form a merge commit.
+  `pull_request` CI needs a mergeable merge. #562/#568/#569 are CONFLICTING with their parents (architecture file-count claims). Add a `cursor/mathts-*` push trigger and run the docs jobs on those pushes so the branch HEAD is checked.
+  Done: `ci.yml` push.branches includes `cursor/mathts-*`; code-docs and architecture-docs jobs run on those refs. `tests/tools/ci-workflows.test.ts` failed on `[master]` only, then passed.
+
+- [x] Attach CI on stacked MathTS A2 PR #562 after architecture-claim refresh.
+  Empty re-run commits did not start Actions. A real test commit (A2 rational addScales positive control and file-boundary pin) starts the workflow.
+
 - [x] Merge master (`8d22f36f`, #563) into PR #566 and keep both sides of the ledger.
   #563 landing conflicted `ACTIVE.md` and `CHANGELOG.md` with the Joule–Thomson/Planck/Saha/Onsager rows.
   Done: both sides' rows and changelog entries are kept; the merge is a normal merge commit.

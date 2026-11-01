@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 385,
-    "totalTestFiles": 669,
+    "totalTestFiles": 670,
     "testedCount": 376,
     "directlyTestedCount": 342,
     "untestedCount": 9,
@@ -9184,6 +9184,7 @@
       "tests/tensor.test.ts"
     ],
     "src/dimensional/exact-scale.ts": [
+      "tests/dimensional/exact-scale-delegation.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-data.test.ts"
     ],
@@ -13156,6 +13157,7 @@
       "tests/numerical/errors.test.ts"
     ],
     "src/dimensional/exact-scale.ts": [
+      "tests/dimensional/exact-scale-delegation.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-data.test.ts"
     ],
@@ -23465,6 +23467,9 @@
     ],
     "tests/dimensional/error-message-discoverability.test.ts": [
       "src/dimensional/errors.ts"
+    ],
+    "tests/dimensional/exact-scale-delegation.test.ts": [
+      "src/dimensional/exact-scale.ts"
     ],
     "tests/dimensional/exact-unit-scale.test.ts": [
       "src/dimensional/exact-scale.ts",

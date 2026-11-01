@@ -11,6 +11,8 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-01
 
+- **Stacked MathTS CI attach.** #562 vs #561, #568 vs #567, and #569 vs #568 are CONFLICTING (`DIRTY`) because each unique parent commit refreshed architecture file-count claims (`totalSourceFiles` 1151 vs 1152 and later graphs). GitHub Actions `pull_request` will not start without a merge commit; `workflow_dispatch` is 403 for this integration. `ci.yml` now pushes on `cursor/mathts-*` and runs the docs jobs on those refs so the branch HEAD is checked. The A2 pin `addScales(1/2,1/3)={5/6}` and the units.ts boundary stay. #561 vs master was restored to mergeable by taking master's CHANGELOG/ACTIVE text (A1 head `d2a36e1b`). #560 stays MERGEABLE/CLEAN and should merge first.
+
 - **#561 CHANGELOG vs master.** After #563–#566 landed, `CHANGELOG.md` `[Unreleased]` on `cursor/mathts-a1-gap-oracle-9b71` conflicted with `origin/master` (`731e1b30`): this branch had replaced `### Documented` with the A1 Added bullet, and master had inserted the be-163/148/Biot/be-158 Fixed entries above that header. The file is now master's Unreleased text with the A1 gap-oracle bullet as the first `### Added` item. `git merge-file` against `origin/master` from merge-base `328db370` is clean. Architecture claims stay 1151; those files already auto-merged with master.
 
 ## As of 2026-10-18

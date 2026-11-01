@@ -8,6 +8,16 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **CI also runs on a push to `cursor/mathts-*`.** Stacked MathTS PRs cannot form a `pull_request` merge commit once each parent refreshes architecture file-count claims (`totalSourceFiles` 1151 vs 1152). The same jobs now run against the branch HEAD on push, including the code-docs and architecture-docs jobs. `tests/tools/ci-workflows.test.ts` pins the branch list (red first on `[master]` only).
+
+### Added
+
+- **Part A step A2 — exact-scale arithmetic delegates to MathTS.** `src/dimensional/exact-scale.ts` calls `@danielsimonjr/mathts-core` for decimal and ratio scales, products, quotients, integer powers, addition, and rounding (`exactScaleToNumber`). Unlike irrational factors throw on addition (`pi` + `ln2`); a fractional power throws. `tests/dimensional/exact-scale-delegation.test.ts` pins the source assertion, the two throws, a rational `addScales` that stays exact, and that `units.ts` / `unit-data.ts` are not imported. Unit conversion tests stay unchanged.
+
+- **`docs/plans/MATHTS_UNITS_AND_CASES_PLAN.md` and the Part A gap oracle.** The plan from PR #560 records how unit delegation and the applied-case catalog will land. `tests/dimensional/mathts-unit-gaps.test.ts` pins MathTS–UPT agreements and the gap rows the wrapper keeps until MathTS releases A6–A10 or UPT policy (bit, ton, cycles). No production change in this step.
+
 ### Fixed
 
 - **be-163/164/168/170 stated limits are theorems, not comments.** The virial `B = b − a/(R T)` is differentiable at the working `T`, not on all of `ℝ`. Rayleigh–Jeans is `u → (8 π ν²/c³) k_B T` and Wien is `u / ((8 π h ν³/c³) exp(−x)) → 1`. The Saha chemical potential is derived from `Z₁ = g V λ⁻³ exp(−E/(k_B T))`. The ion-to-atom wavelength factor is `1/8` after `8 = 2³`; the high-`T` Boltzmann factor is `exp 0 = 1`, not a leftover `𝓝 (exp 0)`; `K / T^{3/2}` tends to the prefactor after cancelling `c * 1`. Maxwell's relation comes from mixed partials; `W = 0` and the reversed cycle are Onsager limits.
