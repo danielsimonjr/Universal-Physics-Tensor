@@ -131,7 +131,7 @@ theorem saha_eq (K nA nI ne gA gI ge EA EI Ee I kB T m ℏ hpl lam : ℝ)
   rw [hgen, hg, div_self hgA.ne', one_mul]
 
 /-- The typed formula does not contain the electron spin weight `2`. -/
-theorem spin_not_included (nQ I kB T : ℝ) (hkB : kB ≠ 0) (hT : T ≠ 0)
+theorem spin_not_included (nQ I kB T : ℝ) (_hkB : kB ≠ 0) (_hT : T ≠ 0)
     (hnQ : nQ ≠ 0) :
     (2 : ℝ) * nQ * exp (-I / (kB * T)) ≠ nQ * exp (-I / (kB * T)) := by
   intro hEq
@@ -191,6 +191,7 @@ theorem unequal_heavy_wavelength (lamA lamI : ℝ) (hA : 0 < lamA)
   rw [hI]
   have h2 : (2 : ℝ) ≠ 0 := by norm_num
   field_simp [hA.ne', h2]
+  norm_num
 
 theorem zero_ionization_energy (K gI ge gA thermal : ℝ) (hK : K = gI * ge / gA * thermal * exp (0)) :
     K = gI * ge / gA * thermal := by
@@ -239,7 +240,7 @@ theorem saha_high_T_exp (I kB : ℝ) (hkB : kB ≠ 0) :
     simpa using hinv.const_mul (-I / kB)
   have hcomp : (fun T : ℝ => exp (-I / (kB * T))) = exp ∘ fun T => -I / (kB * T) := rfl
   rw [hcomp]
-  exact (continuous_exp.tendsto 0).comp harg
+  simpa [exp_zero] using (continuous_exp.tendsto 0).comp harg
 
 /-- As `T → ∞`, `K / T^{3/2}` tends to `(g₊ g_e / g_A) (2 π m k_B / h²)^{3/2}`. -/
 theorem saha_high_T_prefactor (gI ge gA m kB hpl I : ℝ)
@@ -266,6 +267,11 @@ theorem saha_high_T_prefactor (gI ge gA m kB hpl I : ℝ)
         field_simp [hT0]
       _ = gI * ge / gA * (2 * π * m * kB / hpl ^ 2) ^ ((3 : ℝ) / 2) *
             exp (-I / (kB * T)) := by rw [hsc]
-  exact (tendsto_const_nhds.mul hexp).congr' (hscale.mono fun _ h => h.symm)
+  have hmul : Tendsto (fun T : ℝ =>
+      (gI * ge / gA * (2 * π * m * kB / hpl ^ 2) ^ ((3 : ℝ) / 2)) *
+        exp (-I / (kB * T)))
+      atTop (nhds (gI * ge / gA * (2 * π * m * kB / hpl ^ 2) ^ ((3 : ℝ) / 2))) := by
+    simpa using tendsto_const_nhds.mul hexp
+  exact hmul.congr' (hscale.mono fun _ h => h.symm)
 
 end PhysJS.Saha
