@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
-- **be-158 catalog and Lean coverage name the same theorem.** `schmidt_eq` now proves only `Sc ρ D = μ`. `Le = Sc / Pr` is `PhysJS.Schmidt.lewis_ratio`, a nested manifest property (`be-158.lewis`), matching the catalog citation. The shared `decay_rate_ratio` corollary is also used at a general advection speed, and the missing Prandtl/Reynolds/Schmidt limits (`k → ∞`, density invariance, `Re → ∞` as `ν → 0⁺`, `Le = 1`) are theorems.
+- **be-158 catalog and Lean coverage name the same theorem.** `schmidt_eq` now proves only `Sc ρ D = μ`. `Le = Sc / Pr` is `PhysJS.Schmidt.lewis_ratio`, a nested manifest property (`be-158.lewis`). The catalog citation now names that split: the evaluator target is `Sc ρ D = μ`, and `Le = Sc/Pr` is the corollary, not a second target. `le_one_of_pr_eq_sc` derives `Le = 1` from `Pr = Sc` without rewriting `div_self` at the old `Pr ≠ 0` after `Pr` has become `Sc`. The shared `decay_rate_ratio` corollary is also used at a general advection speed, and the missing Prandtl/Reynolds/Schmidt limits (`k → ∞`, density invariance, `Re → ∞` as `ν → 0⁺`, `Le = 1`) are theorems.
 
 ### Documented
 

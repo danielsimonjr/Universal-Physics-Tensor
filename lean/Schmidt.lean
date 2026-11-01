@@ -144,7 +144,8 @@ theorem le_one_of_equal_diffusivities (Le α D q rθ rc : ℝ)
 /-- `Pr = Sc` gives `Le = 1`. -/
 theorem le_one_of_pr_eq_sc (Le Sc Pr : ℝ) (hPr : Pr ≠ 0) (hEq : Pr = Sc)
     (hLe : Le = Sc / Pr) : Le = 1 := by
-  rw [hLe, hEq, div_self hPr]
+  have hSc : Sc ≠ 0 := hEq ▸ hPr
+  rw [hLe, hEq, div_self hSc]
 
 /-- Doubling the wavenumber leaves `Le` unchanged. -/
 theorem le_wavenumber_invariant (Le Le' α D q rθ rc rθ' rc' : ℝ)

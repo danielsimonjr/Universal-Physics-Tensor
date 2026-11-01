@@ -5773,7 +5773,7 @@
       ],
       "dependencies": [],
       "dimensional_signature": "[1]",
-      "notes": "Closed-form evaluator evaluateSchmidt from the catalog record. The overlay formalRef is PhysJS.Schmidt.schmidt_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. Type standard. The edge value is Sc. Le = Sc/Pr is PhysJS.Schmidt.lewis_ratio in the same file, not a second edge. Not a mass-transfer correlation. Scope: Lewis number is not this row.",
+      "notes": "Closed-form evaluator evaluateSchmidt from the catalog record. The overlay formalRef is PhysJS.Schmidt.schmidt_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation. Type standard. The edge value is Sc. Le = Sc/Pr is PhysJS.Schmidt.lewis_ratio in the same file, not a second edge. Not a mass-transfer correlation. Scope: Le = Sc/Pr is PhysJS.Schmidt.lewis_ratio, a corollary, not a second catalog target.",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -10325,7 +10325,7 @@
         ]
       },
       "holds": "isFinite(schmidtrho) and schmidtrho != 0 and isFinite(schmidtdiff) and schmidtdiff != 0",
-      "citation": "PhysJS.Schmidt.schmidt_eq. Lewis number is not this row.",
+      "citation": "PhysJS.Schmidt.schmidt_eq. The evaluator target is Sc ρ D = μ. Le = Sc/Pr is PhysJS.Schmidt.lewis_ratio, a corollary in the same file, not a second target.",
       "reference": {
         "inputs": {
           "schmidtmu": 0.00089,
