@@ -70,6 +70,7 @@ const SENTINELS: readonly (readonly [string, string, string, RegExp])[] = [
   ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', 'bridge', /The id is contested\./],
   ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', 'bridge', /Not a derivation from the five-dimensional Einstein equation$/],
   ['be-60', 'PhysJS.Laughlin.filling_fraction', 'bridge', /Not the Laughlin wavefunction, and not the anyon charge e\/3$/],
+  ['be-158', 'PhysJS.Schmidt.schmidt_eq', 'bridge', /Lewis number is not this theorem/],
 ];
 
 /** A covers line that opens with a kind word, which the v2 manifest does not write. */
