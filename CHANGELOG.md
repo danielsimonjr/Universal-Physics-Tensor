@@ -12,7 +12,9 @@ from v0.1.0 onward.
 
 - **Part A step A11a — wrapper keeps `bit` at ln 2.** `applyBitScaleOverride` in `mathts-unit-wrapper.ts` replaces MathTS axis-8 scale 1 with the `data/units.json` row on every delegated reading. `tests/dimensional/unit-wrapper-bit.test.ts` fails if `parseUnit('bit').scale` becomes 1.
 
-- **Part A step A11b — cycles stay a count in convertValue.** `convertValue` keeps dividing exact scales only (not MathTS \`.to()\`), so \`1 Hz\` in \`rad/s\` stays 1 with \`cycles: 1\`; the angular evaluator path still applies 2π. \`tests/dimensional/unit-wrapper-cycles.test.ts\` pins both paths.
+- **Part A step A12 (partial) — A5 in-set texts skip the local grammar.** \`tryMathtsA5Reading\` serves the agreed spellings before \`localUnitReadings\`; gap rows and policy overrides stay on the local path. \`tests/dimensional/unit-wrapper-a12-partial.test.ts\` pins the in-set table.
+
+- **Part A step A11b — cycles stay a count in convertValue.** `convertValue` keeps dividing exact scales only (not MathTS `.to()`), so `1 Hz` in `rad/s` stays 1 with `cycles: 1`; the angular evaluator path still applies 2π. `tests/dimensional/unit-wrapper-cycles.test.ts` pins both paths.
 
 - **Part A step A8 — wrapper refusal denylist.** `src/dimensional/mathts-unit-wrapper.ts` keeps `dB`, `dBm`, `dBW`, `Np`, `Mach`, `mach`, and `ton` on `UnitRefusedError` with the messages in `data/units.json`, including `ton` when MathTS parses the short ton. `src/dimensional/units.ts` consults `uptRefusalReason` before MathTS. `tests/dimensional/unit-wrapper-refusal.test.ts` pins the denylist and the source hook.
 

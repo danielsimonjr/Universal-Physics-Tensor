@@ -439,6 +439,7 @@ function unitReadings(text: string): UnitReading[] {
 
   const a5 = tryMathtsA5Reading(t);
   if (a5 !== null) {
+    // A12 partial: A5 in-set texts skip localUnitReadings when MathTS agrees.
     lastReadingSource = { text: t, kind: 'mathts' };
     const affine = affineRow(t);
     return [
