@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 9
+- **Potentially unused exports**: 14
 
 ## Potentially Unused Files
 
@@ -47,6 +47,14 @@ These exports are not imported by any other file in the codebase:
 ### `src/composition/rational-exponent.ts`
 
 - `DEFAULT_MAX_DENOMINATOR` (constant)
+
+### `src/dimensional/mathts-unit-delegation.ts`
+
+- `everySymbolInBothTables` (function)
+- `mathtsExactScaleReading` (function)
+- `readFileScaleExpression` (function)
+- `_powerDim` (function)
+- `_multiplyDim` (function)
 
 ### `src/numerical/spacetime-metrics.ts`
 

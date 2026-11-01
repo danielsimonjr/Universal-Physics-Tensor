@@ -47,7 +47,7 @@ The codebase is organized into the following modules:
 - **composition**: 82 files
 - **core**: 18 files
 - **diff**: 3 files
-- **dimensional**: 42 files
+- **dimensional**: 43 files
 - **entry**: 1 file
 - **numerical**: 43 files
 - **relations**: 8 files
@@ -5852,8 +5852,9 @@ The codebase is organized into the following modules:
 - Functions:
 
   ```text
-  decimalScale, scaleOf, ratioScale, irrationalScale, multiplyScales, divideScales, powerScale,
-  addScales, scaleToNumber, solidusSides, readScaleExpression
+  coreExactScaleFromUpt, uptExactScaleFromCore, decimalScale, scaleOf, ratioScale, irrationalScale,
+  multiplyScales, divideScales, powerScale, addScales, scaleToNumber, solidusSides,
+  readScaleExpression
   ```
 
 - Constants: `UNIT_SCALE`
@@ -5975,6 +5976,33 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `ScalarFieldNode`, `KleinGordonEquationNode`, `KleinGordonEquationValidationResult`
 - Functions: `validateKleinGordonEquation`
+
+---
+
+### `src/dimensional/mathts-unit-delegation.ts` - MathTS unit delegation predicates (Part A steps A4–A5).
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber, getUnitRow, readScaleExpression, toSiDimensionVector, ExactScale` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/compare.js` | `symmetricRelDiff` | Import |
+| `./algebra.js` | `equals, multiply, power` | Import |
+| `./exact-scale.js` | `coreExactScaleFromUpt, solidusSides, uptExactScaleFromCore, ExactScale` | Import |
+| `./unit-data.js` | `UNIT_DATA` | Import |
+| `./types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Functions:
+
+  ```text
+  everySymbolInBothTables, mathtsExactScaleAgreed, unitExactScaleViaMathts, mathtsExactScaleReading,
+  unitParserViaMathts, mathtsParsedDimension, readFileScaleExpression, _powerDim, _multiplyDim
+  ```
+
 
 ---
 
@@ -6162,6 +6190,11 @@ The codebase is organized into the following modules:
 
 ### `src/dimensional/unit-data.ts` - The unit table, loaded from `data/units.json` and validated once.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `readScaleExpression` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -6170,7 +6203,7 @@ The codebase is organized into the following modules:
 | `../core/json-schema.js` | `JsonSchema` | Import (type-only) |
 | `./constant-rows.js` | `constantRow` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./exact-scale.js` | `decimalScale, irrationalScale, readScaleExpression, scaleOf, ExactScale` | Import |
+| `./exact-scale.js` | `coreExactScaleFromUpt, decimalScale, irrationalScale, scaleOf, uptExactScaleFromCore, ExactScale` | Import |
 
 **Exports:**
 - Interfaces: `UnitRow`, `AffineRow`, `UnitTableData`
@@ -6181,12 +6214,18 @@ The codebase is organized into the following modules:
 
 ### `src/dimensional/units.ts` - Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./algebra.js` | `equals, format, multiply, power` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, solidusSides, UNIT_SCALE, ExactScale` | Import |
+| `./mathts-unit-delegation.js` | `mathtsParsedDimension, unitExactScaleViaMathts, unitParserViaMathts` | Import |
 | `./unit-data.js` | `UNIT_DATA, AffineRow` | Import |
 
 **Exports:**
@@ -6195,8 +6234,8 @@ The codebase is organized into the following modules:
 - Functions:
 
   ```text
-  affineReadingNote, unitConventionNotes, readUnit, parseUnit, readQuantityLiteral, convertValue,
-  unitDimension, unitRows, unitTables
+  affineReadingNote, unitConventionNotes, readUnit, unitReadingsSource, parseUnit,
+  readQuantityLiteral, convertValue, unitDimension, unitRows, unitTables
   ```
 
 
@@ -7539,7 +7578,7 @@ graph TD
         N48[ast-leaves]
         N49[ast-types]
         N50[bridge-check]
-        N51[...37 more]
+        N51[...38 more]
     end
 
     subgraph Entry
@@ -7602,17 +7641,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 385 |
+| Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 86612 |
-| Total Exports | 2752 |
+| Total Lines of Code | 86873 |
+| Total Exports | 2764 |
 | Total Re-exports | 1389 |
 | Total Classes | 85 |
 | Total Interfaces | 512 |
-| Total Functions | 868 |
+| Total Functions | 880 |
 | Total Type Guards | 13 |
 | Total Enums | 0 |
-| Type-only Imports | 518 |
+| Type-only Imports | 519 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
