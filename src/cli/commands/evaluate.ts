@@ -51,8 +51,8 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         (temperature-change, dT) and a --sigma take the interval, with no offset.
         An undeclared key exits 1 instead of being ignored. A declared
         alternate (major_axis_m for a_m) is converted exactly and said so.
-        e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_⊙
-              (ideal degenerate gas, with m_u and M_⊙ = 1.989e30 kg)
+        e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 2.896e30 kg (≈ 1.456 M_⊙
+              with M_⊙ = 1.989e30 kg; ideal degenerate gas, with m_u)
               upt evaluate be-55 C=1      → quantum Hall σ_xy = e²/h in siemens (R_H = 1/σ_xy = h/e²,
                                             the von Klitzing constant)
         With no bridge id, lists the evaluable bridges and their declared inputs.

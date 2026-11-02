@@ -12814,6 +12814,14 @@
           "meaning": "fin length, ≠ 0",
           "sign": "positive"
         }
+      ],
+      "outputs": [
+        {
+          "name": "m_per_m",
+          "unit": "1/m",
+          "meaning": "fin parameter m = sqrt(2 h/(k t))",
+          "expression": "sqrt(2*h_W_per_m2_K/(k_W_per_m_K*t_m))"
+        }
       ]
     },
     {
@@ -12893,6 +12901,14 @@
           "symbol": "e_wall",
           "unit": "m",
           "meaning": "wall thickness, > 0"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c_m_per_s",
+          "unit": "m/s",
+          "meaning": "thin-wall (Korteweg) wave speed c = sqrt(K/rho)/sqrt(1 + (K/E)(D/e))",
+          "expression": "sqrt(K_Pa/rho_kg_per_m3)/sqrt(1 + (K_Pa/E_Pa)*(pipe_D_m/wall_m))"
         }
       ]
     },
