@@ -211,7 +211,7 @@ describe('static attribution', () => {
     mkdirSync(join(copy, 'bin'));
     cpSync(join(repo, 'bin', 'upt.mjs'), join(copy, 'bin', 'upt.mjs'));
     cpSync(join(repo, 'package.json'), join(copy, 'package.json'));
-    symlinkSync(join(repo, 'node_modules'), join(copy, 'node_modules'));
+    symlinkSync(join(repo, 'node_modules'), join(copy, 'node_modules'), 'junction');
     // The catalog and the quantity registry are read from data/ beside dist.
     symlinkSync(join(repo, 'data'), join(copy, 'data'), 'junction');
     const constants = join(copy, 'dist', 'core', 'constants.js');
