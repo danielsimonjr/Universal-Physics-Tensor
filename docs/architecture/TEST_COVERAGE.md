@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 385 |
-| Total Test Files | 681 |
+| Total Test Files | 682 |
 | Source files imported directly by a test | 342 |
 | Source files reached directly or through a barrel or side-effect import | 375 |
 | Source files no test reaches either way | 10 |
@@ -730,6 +730,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `cli/regime.test.ts` | 30 files |
 | `cli/retrieve.test.ts` | 32 files |
 | `cli/review-502.test.ts` | 30 files |
+| `cli/round9-unit-pins.test.ts` | 0 files |
 | `cli/search-formula-route.test.ts` | 30 files |
 | `cli/search-noun-phrase.test.ts` | 30 files |
 | `cli/search-word-breaks.test.ts` | 30 files |

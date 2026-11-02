@@ -41,6 +41,7 @@ exports[`data/units.json is the unit table > every admitted row scale double is 
   "angstrom": 1e-10,
   "arcmin": 0.0002908882086657216,
   "arcsec": 0.00000484813681109536,
+  "arcsecond": 0.00000484813681109536,
   "atm": 101325,
   "au": 149597870700,
   "bar": 100000,
