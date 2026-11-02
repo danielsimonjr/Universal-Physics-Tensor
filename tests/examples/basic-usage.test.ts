@@ -25,7 +25,7 @@ describe('examples/basic-usage.ts', () => {
   it('runs against the package exports', () => {
     const dir = tempDir('upt-basic-usage-');
     mkdirSync(join(dir, 'node_modules'));
-    symlinkSync(root, join(dir, 'node_modules', 'universal-physics-tensor'));
+    symlinkSync(root, join(dir, 'node_modules', 'universal-physics-tensor'), 'junction');
     copyFileSync(resolve(root, 'examples/basic-usage.ts'), join(dir, 'basic-usage.ts'));
     const result = spawnSync(process.execPath, ['--experimental-strip-types', 'basic-usage.ts'], {
       cwd: dir,
