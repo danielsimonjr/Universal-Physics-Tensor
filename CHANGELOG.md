@@ -20,6 +20,8 @@ from v0.1.0 onward.
 
 ### Added
 
+- **be-129 and be-131 return the quantities their records state on the same result (issue 551).** The fin-efficiency record states the fin parameter and the Joukowsky record states the thin-wall (Korteweg) wave speed, but their `outputs` records were absent, so `upt evaluate` returned only η and Δp. Each evaluator row now carries the output: be-129 `m_per_m` (`1/m`, √(2h/(kt))) and be-131 `c_m_per_s` (`m/s`, √(K/ρ)/√(1 + (K/E)(D/e))), expressed over the records' parameter keys. `tests/cli/issue-551-extras.test.ts` pins both through the evaluate path and the CLI command, with the value re-derived independently (η = tanh(mL)/(mL); value = ρcΔv). The be-63 help example now names the printed kg value (≈ 2.896e30 kg, ≈ 1.456 M_⊙) instead of only the solar-mass figure.
+
 - **Part B step B12 — catalog loader rejects unwired outputs and a per-case file coming back.** `catalogSemanticProblems` with `CASE_METHOD_NAMES` requires every output to declare exactly one of `expr`, `relation`, or a known `method`; relation ids must exist in the bridge catalog. Legacy method-only cases name their `runCase*` runner on each output; load fails on typos. `isForbiddenCaseModule` names the six deleted per-case files and any new `case-*.ts`; `tests/cases/cases-directory.test.ts` applies it to `src/cases/`. `tests/cases/applied-cases-output-wiring.test.ts` pins the wiring rule.
 
 - **Part B step B11 — damped resonator ring-down expressions.** `case-damped-resonator` closed-form outputs run through the catalog engine; `windowedLinewidthCatalogHz` stays the method for the truncated-spectrum linewidth.
