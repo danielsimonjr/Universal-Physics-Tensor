@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 385 |
-| Total Test Files | 682 |
+| Total Test Files | 683 |
 | Source files imported directly by a test | 342 |
 | Source files reached directly or through a barrel or side-effect import | 375 |
 | Source files no test reaches either way | 10 |
