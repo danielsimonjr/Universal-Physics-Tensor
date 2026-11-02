@@ -21,6 +21,9 @@ import { splitAssignments } from '../bindings.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
 
+/** The exact SI dimension, as the barrel's `dimensionsEqual` takes it. */
+type QuantityDimension = Parameters<CommandCtx['api']['dimensionsEqual']>[0];
+
 /** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
 const SEARCH_HITS_SHOWN = 5;
 
@@ -56,13 +59,29 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         e.g.  upt explain hawking-temperature mass=1.989e30`;
 
 /**
+ * The quantity dimension the graph carries for a resolved input name.
+ * `inputNames` and `aliases` are the same lookups `rebind` uses, so a name the
+ * rebind accepts is checked, and a name outside the graph (a dimensionless
+ * group such as `gamma`) has no dimension and is not checked here.
+ */
+interface BindingDimensions {
+  readonly inputNames: ReadonlySet<string>;
+  readonly aliases: ReadonlyMap<string, string>;
+  readonly dims: ReadonlyMap<string, QuantityDimension>;
+}
+
+/**
  * Two modes, never mixed: bare names (structural analysis) OR name=value
  * (adds value recovery). Malformed inputs are rejected with a `UsageError`
  * rather than silently coerced — `mass=abc`→dropped, `mass=`→0,
  * `mass=1e500`→∞, and a bare name alongside a valued one were all silent
  * wrong-physics footguns.
  */
-function parseKnown(api: CommandCtx['api'], args: readonly string[]): { known: string[] | Record<string, number>; notes: string[] } {
+function parseKnown(
+  api: CommandCtx['api'],
+  args: readonly string[],
+  dimensions: BindingDimensions,
+): { known: string[] | Record<string, number>; notes: string[] } {
   const valued = args.filter((a) => a.includes('='));
   if (valued.length === 0) return { known: [...args], notes: [] }; // names mode
 
@@ -94,6 +113,19 @@ function parseKnown(api: CommandCtx['api'], args: readonly string[]): { known: s
       throw new CliError(`upt explain: '${a.assignment}' is not a finite number. Expected ${a.name}=<number or unit>.`);
     }
     values[a.name] = read.value;
+    // A dimensioned value must be the quantity's dimension (issues #542, #537):
+    // `nu=500nm` used to keep the 5e-7 scale and drop the length, so a metre
+    // was read as a hertz. A bare number is already in the quantity's unit.
+    // The message is the same sentence `bindingInUnit` gives `upt evaluate`,
+    // with the quantity's own dimension where evaluate states a declared unit.
+    const resolved = api.resolveQuantityName(a.name, dimensions.inputNames, dimensions.aliases);
+    const quantityDim = resolved === null ? undefined : dimensions.dims.get(resolved);
+    if (read.dimensioned && quantityDim !== undefined && !api.dimensionsEqual(read.dimension, quantityDim)) {
+      throw new CliError(
+        `upt explain: '${a.assignment}': '${a.raw.trim()}' is ${api.format(read.dimension)}, ` +
+          `but this input is ${api.format(quantityDim)} (${resolved})`,
+      );
+    }
     // Unit-convention notes were already on the binding and explain did not
     // print them. The temperature reading adds a note; the reader returns that
     // one on its own field.
@@ -292,7 +324,15 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
   const aliases = api.aliasesForTarget(graph, resolvedTarget);
-  const parsed = parseKnown(api, rest);
+  // The dimension of each graph quantity, from the nodes the edges already
+  // carry (projected from `data/quantities.json`): the check
+  // `parseKnown` makes for a dimensioned binding, in the terms this graph uses.
+  const dims = new Map<string, QuantityDimension>();
+  for (const e of graph) {
+    dims.set(e.target.name, e.target.dim);
+    for (const s of e.sources) dims.set(s.name, s.dim);
+  }
+  const parsed = parseKnown(api, rest, { inputNames, aliases, dims });
   for (const note of parsed.notes) ctx.err(note);
   if (!Array.isArray(parsed.known)) {
     try {

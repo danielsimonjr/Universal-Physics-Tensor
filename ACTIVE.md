@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Fix #542 and #537: `upt explain` keeps a unit's SI scale and drops its dimension (`nu=500nm` used as hertz, `pressure=1km` as Pa, `flow-velocity=1s` as m/s, `wavelength=1kg` as m).
+  `parseKnown` stores only `read.value` from `readNamedBinding`; the reader refuses a mismatch only when a declared unit is passed, which `upt explain` never did.
+  Done: `parseKnown` checks a dimensioned binding against the resolved graph quantity's own dimension, read from the `Quantity` nodes the graph edges already carry; the bare-number and `k_B T` temperature paths are unchanged, and the refusal message is `bindingInUnit`'s evaluate-style sentence naming the unit dimension, the quantity dimension and the resolved name. Tests are `tests/cli/explain-unit-dimension.test.ts` (10 tests: the five mismatches exit 1 with the message, and five matching-unit or bare-number controls exit 0 with the right recovered values), proven RED on the tree before the fix. `npx tsc`, `npx tsc -p tsconfig.tests.json`, all 13 explain test files (72 tests), and the whole `tests/cli` directory (131 files, 1439 tests) pass; `repo-tools docs check src` and `repo-tools check . --docs=docs/architecture` both PASS with no generated doc edited. Not committed or pushed (the session's brief asked for no commit); the branch is `ollama/explain-unit-dimension`.
+
 - [x] Fix #569 architecture-docs `totalExports` 3826 vs measured 3828.
   `repo-tools check` on this HEAD fails in API.md, OVERVIEW.md, and duplicate-symbols.md. Re-measure and set the three claim tables to 3828.
   Done: the three tables say 3828. `repo-tools check . --docs=docs/architecture` prints `check passed`.
