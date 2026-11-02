@@ -43,7 +43,6 @@ docs/research/phase-1-citation-quote-check.out.md text eol=lf
 # core.autocrlf=true wrote them CRLF and four tests failed on a tree with no content difference.
 tests/fixtures/probe-study/** text eol=lf
 
-
 # Binary-ish: never touch these.
 *.png binary
 *.jpg binary
