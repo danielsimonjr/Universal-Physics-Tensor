@@ -627,7 +627,8 @@
     },
     {
       "symbols": [
-        "arcsec"
+        "arcsec",
+        "arcsecond"
       ],
       "scale": "pi/648000",
       "dimension": {},

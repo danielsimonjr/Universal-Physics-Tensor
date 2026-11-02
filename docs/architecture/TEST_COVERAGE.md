@@ -731,6 +731,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `cli/regime.test.ts` | 30 files |
 | `cli/retrieve.test.ts` | 32 files |
 | `cli/review-502.test.ts` | 30 files |
+| `cli/round9-unit-pins.test.ts` | 0 files |
 | `cli/search-formula-route.test.ts` | 30 files |
 | `cli/search-noun-phrase.test.ts` | 30 files |
 | `cli/search-word-breaks.test.ts` | 30 files |

@@ -20988,6 +20988,7 @@
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts"
     ],
+    "tests/cli/round9-unit-pins.test.ts": [],
     "tests/cli/search-formula-route.test.ts": [
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
