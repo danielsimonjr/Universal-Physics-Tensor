@@ -20,6 +20,10 @@ Code review is a standing gate. The owner's rule (Daniel, 2026-10-06): Tom deep-
 
 ## Open tasks, easiest first
 
+- [x] Fix #555: pin in/inch/mil unit acceptance with a test, now that the unit file carries them.
+  #555 was filed against 8.0.0, where `parseUnit`'s table had `psi` and not `in`, `inch`, or `mil`. The unit-file change (#499) already added all three, non-prefixable, in `data/units.json`. Nothing was left to add; the pin-able properties (length dimension, non-prefixable refusals, `min`/`mm` keeping their readings, `in^2`/`mil^2` compounds) had no test.
+  Done: one test in `tests/dimensional/units.test.ts` asserts `in`, `inch` (0.0254 m) and `mil` (2.54e-5 m) at their stated values with the `{L: 1}` dimension, `kin`/`kmil` refused as `UnknownUnitError`, `1min` = 60 s and `mm` = 1e-3 m unchanged, and `1in^2`, `1mil^2` squared. The mutation that removes the three symbols makes this test go red. All six #555 repros pass through `bin/upt.mjs` on the built tree.
+
 - [x] Fix #569 architecture-docs `totalExports` 3826 vs measured 3828.
   `repo-tools check` on this HEAD fails in API.md, OVERVIEW.md, and duplicate-symbols.md. Re-measure and set the three claim tables to 3828.
   Done: the three tables say 3828. `repo-tools check . --docs=docs/architecture` prints `check passed`.

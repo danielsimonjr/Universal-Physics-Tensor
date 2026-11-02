@@ -111,6 +111,25 @@ describe('convertValue', () => {
     expect(convertValue('0degR', 'K').value).toBeCloseTo(0, 12);
   });
 
+  it('reads the length units in, inch and mil at their stated values, and they do not take a prefix', () => {
+    expect(parseUnit('in').scale).toBe(0.0254);
+    expect(parseUnit('in').dim).toMatchObject({ L: 1 });
+    expect(parseUnit('inch').scale).toBe(0.0254);
+    expect(parseUnit('inch').dim).toMatchObject({ L: 1 });
+    expect(parseUnit('mil').scale).toBe(2.54e-5);
+    expect(parseUnit('mil').dim).toMatchObject({ L: 1 });
+    // Non-prefixable: a prefix letter before them is refused, not read.
+    expect(() => parseUnit('kin')).toThrow(UnknownUnitError);
+    expect(() => parseUnit('kmil')).toThrow(UnknownUnitError);
+    // Existing readings keep theirs: 'min' stays the minute, and 'mm' stays
+    // the millimetre, so neither new spelling shadows a prefixed parse.
+    expect(convertValue('1min', 's').value).toBe(60);
+    expect(parseUnit('mm').scale).toBe(0.001);
+    // Compounds square the length, as the be-78 psi bindings rely on.
+    expect(convertValue('1in^2', 'm^2').value).toBeCloseTo(0.0254 ** 2, 15);
+    expect(convertValue('1mil^2', 'm^2').value).toBeCloseTo(2.54e-5 ** 2, 15);
+  });
+
   it('reads the defined engineering units, including a prefix', () => {
     const pound = 0.45359237;
     const gravity = 9.80665;
