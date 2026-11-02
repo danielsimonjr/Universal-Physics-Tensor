@@ -7,8 +7,11 @@
 # tree dirty with changes that contain no content difference at all. A dirty tree
 # that means nothing is worse than noise: it hides a dirty tree that means something.
 #
-# `text=auto` fixes the index side for everyone regardless of their global config.
-* text=auto
+# `text=auto` fixes the index side for everyone regardless of their global config, and `eol=lf`
+# fixes the working tree: the test suite reads Markdown fences with `\n`, compares generated JSON,
+# goldens and censuses byte for byte, and hashes frozen files. A Windows checkout with
+# core.autocrlf=true wrote all of them CRLF, and 40+ tests failed on content-identical files.
+* text=auto eol=lf
 
 # These files are WRITTEN BY TOOLS that always emit LF. Checking them out as CRLF
 # guarantees a spurious diff the moment the tool runs, so they are LF in the working
@@ -39,6 +42,7 @@ docs/research/phase-1-citation-quote-check.out.md text eol=lf
 # committed files with the generator output and edit the CSV text line by line. A Windows checkout with
 # core.autocrlf=true wrote them CRLF and four tests failed on a tree with no content difference.
 tests/fixtures/probe-study/** text eol=lf
+
 
 # Binary-ish: never touch these.
 *.png binary

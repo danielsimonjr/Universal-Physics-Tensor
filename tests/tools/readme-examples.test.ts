@@ -32,7 +32,7 @@ const fence = (needle: string): string => {
 function runFence(source: string): { status: number; stdout: string; stderr: string } {
   const dir = tempDir('upt-readme-');
   mkdirSync(join(dir, 'node_modules'));
-  symlinkSync(root, join(dir, 'node_modules', 'universal-physics-tensor'));
+  symlinkSync(root, join(dir, 'node_modules', 'universal-physics-tensor'), 'junction');
   writeFileSync(join(dir, 'snippet.ts'), source);
   const result = spawnSync(process.execPath, ['--experimental-strip-types', '--no-warnings', 'snippet.ts'], { cwd: dir, encoding: 'utf8' });
   return { status: result.status ?? 1, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
