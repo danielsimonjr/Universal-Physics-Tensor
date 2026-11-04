@@ -11,13 +11,12 @@ import {
   Unit,
   exactScaleToNumber,
   getUnitRow,
-  readScaleExpression as mathtsReadScaleExpression,
   toSiDimensionVector,
   type ExactScale as CoreExactScale,
 } from '@danielsimonjr/mathts-core';
 import { symmetricRelDiff } from '../core/compare.js';
 import { equals, multiply, power } from './algebra.js';
-import { coreExactScaleFromUpt, solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
+import { solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
 import { UNIT_DATA } from './unit-data.js';
 import type { Dimension } from './types.js';
 
@@ -105,23 +104,30 @@ function mathtsCoreExactScale(text: string): CoreExactScale | null {
   }
 }
 
+/** A MathTS SI-dimension entry: 0.20.0 states exact rational exponents, so a number or a `Fraction`. */
+type SiEntry = number | { readonly toNumber: () => number };
+
+function siNumber(entry: SiEntry): number {
+  return typeof entry === 'number' ? entry : entry.toNumber();
+}
+
 function dimensionFromMathtsVector(dimensions: readonly number[], localDim: Dimension): Dimension {
   try {
     const v = toSiDimensionVector(dimensions);
-    return { L: v[0]!, M: v[1]!, T: v[2]!, I: v[3]!, Theta: v[4]!, N: v[5]!, J: v[6]! };
+    return { L: siNumber(v[0]!), M: siNumber(v[1]!), T: siNumber(v[2]!), I: siNumber(v[3]!), Theta: siNumber(v[4]!), N: siNumber(v[5]!), J: siNumber(v[6]!) };
   } catch {
     const ignored = toSiDimensionVector(dimensions, { ignoreExtra: true });
     if (equals(localDim, DIMENSIONLESS)) {
       return DIMENSIONLESS;
     }
     return {
-      L: ignored[0]!,
-      M: ignored[1]!,
-      T: ignored[2]!,
-      I: ignored[3]!,
-      Theta: ignored[4]!,
-      N: ignored[5]!,
-      J: ignored[6]!,
+      L: siNumber(ignored[0]!),
+      M: siNumber(ignored[1]!),
+      T: siNumber(ignored[2]!),
+      I: siNumber(ignored[3]!),
+      Theta: siNumber(ignored[4]!),
+      N: siNumber(ignored[5]!),
+      J: siNumber(ignored[6]!),
     };
   }
 }
@@ -165,16 +171,6 @@ export function unitParserViaMathts(
 export function mathtsParsedDimension(text: string, localDim: Dimension): Dimension {
   const u = Unit.parse(text.trim());
   return dimensionFromMathtsVector(u.dimensions, localDim);
-}
-
-/** Scale expression for `data/units.json` through MathTS (A3 helper re-export for tests). */
-export function readFileScaleExpression(text: string, resolve: (name: string) => ExactScale | undefined): ExactScale {
-  return uptExactScaleFromCore(
-    mathtsReadScaleExpression(text, (name) => {
-      const scale = resolve(name);
-      return scale === undefined ? undefined : coreExactScaleFromUpt(scale);
-    }),
-  );
 }
 
 /**

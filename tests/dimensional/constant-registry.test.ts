@@ -30,7 +30,8 @@ interface MathTsUnit {
 const unitOf = (name: string): MathTsUnit => (mathts as unknown as Record<string, MathTsUnit>)[name]!;
 const siValue = (u: MathTsUnit): number => Number(u.toSI().value);
 const siDimension = (u: MathTsUnit): Dimension => {
-  const v = toSiDimensionVector(u.dimensions, { ignoreExtra: true });
+  // 0.20.0 states the exponents as exact Fractions; the registry stores numbers.
+  const v = toSiDimensionVector(u.dimensions, { ignoreExtra: true }).map((f) => (typeof f === 'number' ? f : f.toNumber()));
   return { L: v[0]!, M: v[1]!, T: v[2]!, I: v[3]!, Theta: v[4]!, N: v[5]!, J: v[6]! };
 };
 
