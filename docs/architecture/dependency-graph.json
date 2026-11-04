@@ -4,7 +4,7 @@
     "version": "11.0.0",
     "totalFiles": 385,
     "totalModules": 13,
-    "totalExports": 2797
+    "totalExports": 2798
   },
   "entryPoints": [
     {
@@ -21250,6 +21250,7 @@
           {
             "file": "./exact-scale.js",
             "imports": [
+              "scaleToNumber",
               "solidusSides",
               "uptExactScaleFromCore",
               "ExactScale"
@@ -21272,6 +21273,7 @@
         "exports": [
           "everySymbolInBothTables",
           "mathtsExactScaleAgreed",
+          "isSubKiloParsec",
           "unitExactScaleViaMathts",
           "mathtsExactScaleReading",
           "unitParserViaMathts",
@@ -21282,6 +21284,7 @@
         "functions": [
           "everySymbolInBothTables",
           "mathtsExactScaleAgreed",
+          "isSubKiloParsec",
           "unitExactScaleViaMathts",
           "mathtsExactScaleReading",
           "unitParserViaMathts",
@@ -21315,6 +21318,7 @@
           {
             "file": "./mathts-unit-delegation.js",
             "imports": [
+              "isSubKiloParsec",
               "mathtsExactScaleReading",
               "mathtsParsedDimension"
             ]
@@ -21334,12 +21338,12 @@
           }
         ],
         "exports": [
+          "isSubKiloParsec",
           "A5_DELEGATED_TEXTS",
           "refusedTokensIn",
           "uptRefusalReason",
           "isA5DelegatedText",
           "mathtsWouldParse",
-          "isSubKiloParsec",
           "applyBitScaleOverride",
           "tryMathtsA5Reading"
         ],
@@ -21351,7 +21355,6 @@
           "uptRefusalReason",
           "isA5DelegatedText",
           "mathtsWouldParse",
-          "isSubKiloParsec",
           "applyBitScaleOverride",
           "tryMathtsA5Reading"
         ],
@@ -27976,8 +27979,8 @@
   "statistics": {
     "totalTypeScriptFiles": 385,
     "totalModules": 13,
-    "totalLinesOfCode": 87206,
-    "totalExports": 2797,
+    "totalLinesOfCode": 87210,
+    "totalExports": 2798,
     "totalClasses": 85,
     "totalInterfaces": 517,
     "totalFunctions": 906,
