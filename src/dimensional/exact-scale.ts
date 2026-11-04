@@ -12,6 +12,11 @@
  * through its shortest round-trip decimal (`String(x)`), which is the
  * literal a constant was written with.
  *
+ * The arithmetic is MathTS's (`@danielsimonjr/mathts-core`); the UPT
+ * {@link ExactScale} shape and function names are the thin layer over it, and
+ * a scale expression (`data/units.json`) reads through MathTS
+ * `readScaleExpression` under this module's UPT-facing signature.
+ *
  * @module dimensional/exact-scale
  * @internal
  */
@@ -26,6 +31,7 @@ import {
   PI_EXACT_SCALE,
   powerExactScale,
   ratioExactScale,
+  readScaleExpression as mathtsReadScaleExpression,
   type ExactScale as CoreExactScale,
 } from '@danielsimonjr/mathts-core';
 import { gcd } from '@danielsimonjr/mathts-functions';
@@ -90,10 +96,28 @@ function integerMultiple(x: number, base: number): bigint | null {
   return BigInt(n);
 }
 
+/**
+ * When `x` is `base` raised to a small integer power (π⁻¹ for a parsec-scale,
+ * ln 2 for a bit), that integer; otherwise null. The factor is compared
+ * exactly: `irrationalFactor` built it as `base ** n`, so the same expression
+ * reads it back.
+ */
+function irrationalExponent(x: number, base: number): number | null {
+  if (!Number.isFinite(x) || x <= 0 || !Number.isFinite(base) || base <= 0) return null;
+  for (let n = -8; n <= 8; n++) {
+    if (x === base ** n) return n;
+  }
+  return null;
+}
+
 function toCore(s: ExactScale): CoreExactScale {
   let core = ratioExactScale(s.num, s.den);
   const ir = s.irrational;
   if (ir === 1) return core;
+  const piPower = irrationalExponent(ir, Math.PI);
+  if (piPower !== null) return multiplyExactScales(core, powerExactScale(PI_EXACT_SCALE, piPower));
+  const ln2Power = irrationalExponent(ir, Math.LN2);
+  if (ln2Power !== null) return multiplyExactScales(core, powerExactScale(LN2_EXACT_SCALE, ln2Power));
   const piMultiple = integerMultiple(ir, Math.PI);
   if (piMultiple !== null) {
     if (piMultiple !== 1n) core = multiplyExactScales(core, ratioExactScale(piMultiple, 1n));
@@ -170,16 +194,14 @@ export function scaleToNumber(s: ExactScale): number {
   return exactScaleToNumber(toCore(s));
 }
 
-const FACTOR = /^([^*/^\s]+)(?:\^([+-]?\d+))?$/;
-
 /**
- * The two sides of a unit text or a scale expression under the single-solidus
- * convention of ISO 80000-1: everything after the first `/` is the
- * denominator, so a chain is one denominator (`km/s/Mpc` is km/(s·Mpc), and
- * `W/m*K` is W/(m·K), not (W/m)·K). The denominator comes back as one
- * `*`-joined product, each `/`-part's outer parentheses dropped. `units.ts`
- * and {@link readScaleExpression} both split here, so a unit text and a scale
- * expression in `data/units.json` read a `/` the same way.
+ * The two sides of a unit text under the single-solidus convention of
+ * ISO 80000-1: everything after the first `/` is the denominator, so a chain
+ * is one denominator (`km/s/Mpc` is km/(s·Mpc), and `W/m*K` is W/(m·K), not
+ * (W/m)·K). The denominator comes back as one `*`-joined product, each
+ * `/`-part's outer parentheses dropped. `units.ts` splits here, so a unit text
+ * reads a `/` the same way a scale expression does. MathTS states the same
+ * rule inside its `readScaleExpression` and does not export the split.
  * @internal
  */
 export function solidusSides(text: string): { readonly numerator: string; readonly denominator: string } {
@@ -199,26 +221,19 @@ export function solidusSides(text: string): { readonly numerator: string; readon
  * each a decimal literal or a name with an optional integer power
  * (`4.1868*453.59237/1.8`, `pi/180`, `lbf/inch^2`). A `/` follows the unit
  * grammar ({@link solidusSides}): `a/b*c` is a/(b·c). `resolve` gives a name
- * its scale and returns undefined for a name it does not know, which throws
- * here. A decimal literal is read digit for digit, so the result is the
- * rational the text states.
+ * its scale and returns undefined for a name it does not know, which throws.
+ * A decimal literal is read digit for digit, so the result is the rational the
+ * text states.
+ *
+ * MathTS's `readScaleExpression` is the reader; this is the UPT-facing
+ * signature over it, the one adapter between its exact scale and UPT's.
  * @internal
  */
 export function readScaleExpression(text: string, resolve: (name: string) => ExactScale | undefined): ExactScale {
-  const product = (side: string): ExactScale => {
-    let scale = UNIT_SCALE;
-    for (const part of side.split('*')) {
-      const m = FACTOR.exec(part);
-      if (m === null) throw new RangeError(`exact scale: '${text}' is not a product of factors`);
-      const atom = m[1]!;
-      const base = decimalScale(atom) ?? resolve(atom);
-      if (base === undefined) throw new RangeError(`exact scale: '${text}' names '${atom}', which is not a known scale`);
-      scale = multiplyScales(scale, m[2] === undefined ? base : powerScale(base, Number(m[2])));
-    }
-    return scale;
-  };
-  const trimmed = text.trim();
-  const { numerator, denominator } = solidusSides(trimmed);
-  const top = product(numerator);
-  return trimmed.includes('/') ? divideScales(top, product(denominator)) : top;
+  return uptExactScaleFromCore(
+    mathtsReadScaleExpression(text.trim(), (name) => {
+      const scale = resolve(name);
+      return scale === undefined ? undefined : coreExactScaleFromUpt(scale);
+    }),
+  );
 }

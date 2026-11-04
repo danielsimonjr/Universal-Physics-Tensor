@@ -5818,7 +5818,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-core` | `addExactScales, decimalExactScale, divideExactScales, exactScaleOf, exactScaleToNumber, LN2_EXACT_SCALE, multiplyExactScales, PI_EXACT_SCALE, powerExactScale, ratioExactScale, ExactScale` |
+| `@danielsimonjr/mathts-core` | `addExactScales, decimalExactScale, divideExactScales, exactScaleOf, exactScaleToNumber, LN2_EXACT_SCALE, multiplyExactScales, PI_EXACT_SCALE, powerExactScale, ratioExactScale, readScaleExpression, ExactScale` |
 | `@danielsimonjr/mathts-functions` | `gcd` |
 
 **Internal Dependencies:**
@@ -5963,25 +5963,19 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber, getUnitRow, readScaleExpression, toSiDimensionVector, ExactScale` |
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber, getUnitRow, toSiDimensionVector, ExactScale` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `../core/compare.js` | `symmetricRelDiff` | Import |
 | `./algebra.js` | `equals, multiply, power` | Import |
-| `./exact-scale.js` | `coreExactScaleFromUpt, solidusSides, uptExactScaleFromCore, ExactScale` | Import |
+| `./exact-scale.js` | `solidusSides, uptExactScaleFromCore, ExactScale` | Import |
 | `./unit-data.js` | `UNIT_DATA` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
-- Functions:
-
-  ```text
-  everySymbolInBothTables, mathtsExactScaleAgreed, unitExactScaleViaMathts, mathtsExactScaleReading,
-  unitParserViaMathts, mathtsParsedDimension, readFileScaleExpression, _powerDim, _multiplyDim
-  ```
-
+- Functions: `everySymbolInBothTables`, `mathtsExactScaleAgreed`, `unitExactScaleViaMathts`, `mathtsExactScaleReading`, `unitParserViaMathts`, `mathtsParsedDimension`, `_powerDim`, `_multiplyDim`
 
 ---
 
@@ -5990,7 +5984,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber` |
+| `@danielsimonjr/mathts-core` | `REFUSED_UNIT_SPELLINGS, Unit, exactScaleToNumber` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -6002,7 +5996,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `MathtsDelegatedReading`
-- Functions: `refusedTokensIn`, `uptRefusalReason`, `isA5DelegatedText`, `mathtsWouldParse`, `applyBitScaleOverride`, `tryMathtsA5Reading`
+- Functions: `refusedTokensIn`, `uptRefusalReason`, `isA5DelegatedText`, `mathtsWouldParse`, `isSubKiloParsec`, `applyBitScaleOverride`, `tryMathtsA5Reading`
 - Constants: `A5_DELEGATED_TEXTS`
 
 ---
@@ -6194,7 +6188,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-core` | `readScaleExpression` |
+| `@danielsimonjr/mathts-core` | `REFUSED_UNIT_SPELLINGS, readScaleExpression` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -7645,13 +7639,13 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 87126 |
+| Total Lines of Code | 87206 |
 | Total Exports | 2797 |
 | Total Re-exports | 1390 |
 | Total Classes | 85 |
 | Total Interfaces | 517 |
 | Total Functions | 906 |
-| Total Type Guards | 15 |
+| Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 525 |
 | Runtime Circular Deps | 0 |

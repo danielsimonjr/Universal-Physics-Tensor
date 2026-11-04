@@ -14165,6 +14165,7 @@ modules:
             - PI_EXACT_SCALE
             - powerExactScale
             - ratioExactScale
+            - readScaleExpression
             - ExactScale
         - package: "@danielsimonjr/mathts-functions"
           imports:
@@ -14423,7 +14424,6 @@ modules:
             - Unit
             - exactScaleToNumber
             - getUnitRow
-            - readScaleExpression
             - toSiDimensionVector
             - ExactScale
       nodeDependencies: []
@@ -14438,7 +14438,6 @@ modules:
             - power
         - file: ./exact-scale.js
           imports:
-            - coreExactScaleFromUpt
             - solidusSides
             - uptExactScaleFromCore
             - ExactScale
@@ -14456,7 +14455,6 @@ modules:
         - mathtsExactScaleReading
         - unitParserViaMathts
         - mathtsParsedDimension
-        - readFileScaleExpression
         - _powerDim
         - _multiplyDim
       functions:
@@ -14466,7 +14464,6 @@ modules:
         - mathtsExactScaleReading
         - unitParserViaMathts
         - mathtsParsedDimension
-        - readFileScaleExpression
         - _powerDim
         - _multiplyDim
     src/dimensional/mathts-unit-wrapper.ts:
@@ -14474,6 +14471,7 @@ modules:
       externalDependencies:
         - package: "@danielsimonjr/mathts-core"
           imports:
+            - REFUSED_UNIT_SPELLINGS
             - Unit
             - exactScaleToNumber
       nodeDependencies: []
@@ -14500,6 +14498,7 @@ modules:
         - uptRefusalReason
         - isA5DelegatedText
         - mathtsWouldParse
+        - isSubKiloParsec
         - applyBitScaleOverride
         - tryMathtsA5Reading
       interfaces:
@@ -14509,6 +14508,7 @@ modules:
         - uptRefusalReason
         - isA5DelegatedText
         - mathtsWouldParse
+        - isSubKiloParsec
         - applyBitScaleOverride
         - tryMathtsA5Reading
       constants:
@@ -14985,6 +14985,7 @@ modules:
       externalDependencies:
         - package: "@danielsimonjr/mathts-core"
           imports:
+            - REFUSED_UNIT_SPELLINGS
             - readScaleExpression
       nodeDependencies: []
       internalDependencies:
@@ -19390,12 +19391,12 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 87126
+  totalLinesOfCode: 87206
   totalExports: 2797
   totalClasses: 85
   totalInterfaces: 517
   totalFunctions: 906
-  totalTypeGuards: 15
+  totalTypeGuards: 16
   totalEnums: 0
   totalConstants: 412
   totalReExports: 1390

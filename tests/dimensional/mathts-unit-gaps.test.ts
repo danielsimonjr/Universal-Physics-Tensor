@@ -12,6 +12,7 @@ import {
   exactScaleToNumber,
   toSiDimensionVector,
   UnitParseError,
+  REFUSED_UNIT_SPELLINGS,
 } from '@danielsimonjr/mathts-core';
 import { symmetricRelDiff } from '../../src/core/compare.js';
 import { unit } from '@danielsimonjr/mathts-functions';
@@ -51,6 +52,31 @@ describe('MathTS agrees with UPT on delegated readings', () => {
     expect(exactScaleToNumber(hz!)).toBe(1);
     expect(convertValue('1 Hz', 's^-1').value).toBe(1);
   });
+
+  it('the day symbol reads 86400 s on both sides (closed by 0.20.0)', () => {
+    expect(exactScaleToNumber(Unit.exactScale('d')!)).toBe(86400);
+    expect(convertValue('1 d', 's').value).toBe(86400);
+    expect(parseUnit('dm').scale).toBe(0.1);
+  });
+
+  it('psi and torr take SI prefixes on both sides (closed by 0.21.0)', () => {
+    for (const text of ['kpsi', 'Mpsi', 'mtorr', 'utorr']) {
+      const mt = exactScaleToNumber(Unit.exactScale(text)!);
+      expect(symmetricRelDiff(mt, parseUnit(text).scale)).toBeLessThan(1e-15);
+    }
+  });
+
+  it('the MathTS refusal registry states the same reasons UPT prints', () => {
+    for (const [symbol, reason] of Object.entries(REFUSED_UNIT_SPELLINGS)) {
+      expect(() => Unit.parse(symbol)).toThrow(/refused/);
+      expect(() => parseUnit(symbol)).toThrow(UnitRefusedError);
+      try {
+        parseUnit(symbol);
+      } catch (error) {
+        expect((error as Error).message).toBe(reason);
+      }
+    }
+  });
 });
 
 describe('MathTS gaps the UPT wrapper must keep', () => {
@@ -70,14 +96,17 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       id: 'ton accepted in MathTS',
       check: () => {
         expect(() => Unit.parse('ton')).not.toThrow();
+        // 0.21.0 still reads `ton` as the US short ton, 2000 lb.
+        expect(exactScaleToNumber(Unit.exactScale('ton')!)).toBe(907.18474);
         expect(() => parseUnit('ton')).toThrow(UnitRefusedError);
       },
     },
     {
-      id: 'bare d unknown in MathTS',
+      id: 'pc takes only k-and-up prefixes in MathTS',
       check: () => {
-        expect(() => Unit.parse('d')).toThrow(UnitParseError);
-        expect(parseUnit('d').scale).toBe(86400);
+        expect(() => Unit.parse('Mpc')).not.toThrow();
+        expect(() => Unit.parse('mpc')).toThrow(UnitParseError);
+        expect(parseUnit('mpc').scale).toBeCloseTo(parseUnit('pc').scale / 1000, -18);
       },
     },
     {

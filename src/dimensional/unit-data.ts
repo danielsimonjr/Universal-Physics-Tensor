@@ -7,8 +7,12 @@
  * spelling and an affine spelling are not also a unit, every prefix letter is
  * both a prefix and a unit, and every `{NAME}` in a note is a constant. A
  * file that breaks one throws here, so `units.ts` never reads a half-valid table.
+ * The refusal definitions MathTS ships (`REFUSED_UNIT_SPELLINGS`) are
+ * delegated, not restated: a spelling MathTS refuses may not be a unit row,
+ * and a local refusal MathTS also refuses must state the same reason.
  *
- * A scale is an exact expression, read by `exact-scale.ts`. A name in it is a
+ * A scale is an exact expression, read by MathTS `readScaleExpression` with
+ * this file's resolver. A name in it is a
  * shared scale from the file's `scales`, `pi`, or a constant under its registry
  * spelling (`c`, `e`, `m_u`, `M_sun`, `Msun_iau`, `ln2`; `constant-rows.ts`),
  * the same spelling a `{NAME}` note placeholder uses. A constant is read through
@@ -20,7 +24,7 @@
  * @module dimensional/unit-data
  */
 
-import { readScaleExpression } from '@danielsimonjr/mathts-core';
+import { REFUSED_UNIT_SPELLINGS, readScaleExpression } from '@danielsimonjr/mathts-core';
 import { sha256Hex } from '../core/hash.js';
 import { dataSchema, dataText, parseDataFile } from '../core/data-file.js';
 import type { JsonSchema } from '../core/json-schema.js';
@@ -187,6 +191,18 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
   for (const { symbol, reason } of file.refused) {
     if (units.has(symbol) || refused.has(symbol)) throw new Error(`data/units.json: refused '${symbol}' is also a unit or refused twice`);
     refused.set(symbol, reason);
+  }
+  // The refusal definitions MathTS ships (`dB` and friends) are delegated, not restated here:
+  // a spelling MathTS refuses may not be a unit row, and a local row MathTS also refuses must
+  // state the same reason, or the two tables drift.
+  for (const symbol of Object.keys(REFUSED_UNIT_SPELLINGS)) {
+    if (units.has(symbol)) throw new Error(`data/units.json: unit '${symbol}' is also refused by MathTS; one table decides`);
+  }
+  for (const { symbol, reason } of file.refused) {
+    const mathtsReason = REFUSED_UNIT_SPELLINGS[symbol];
+    if (mathtsReason !== undefined && mathtsReason !== reason) {
+      throw new Error(`data/units.json: refused '${symbol}' states a different reason than MathTS does`);
+    }
   }
   for (const letter of file.prefixLetterUnits.letters) {
     if (!prefixes.has(letter) || !units.has(letter)) {

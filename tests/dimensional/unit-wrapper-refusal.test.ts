@@ -1,10 +1,13 @@
 /**
- * Part A step A8: wrapper refusal denylist before MathTS.
+ * Part A step A8: the wrapper refusal layer. `ton` is UPT policy and stays in
+ * `data/units.json`; the logarithmic and ratio refusals (`dB`, `dBm`, `dBW`,
+ * `Np`, `Mach`, `mach`) are MathTS's `REFUSED_UNIT_SPELLINGS` since 0.21.0,
+ * consulted by the wrapper before any parse, compounds included.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Unit } from '@danielsimonjr/mathts-core';
+import { REFUSED_UNIT_SPELLINGS, Unit } from '@danielsimonjr/mathts-core';
 import { describe, expect, it } from 'vitest';
 import { UNIT_DATA } from '../../src/dimensional/unit-data.js';
 import {
@@ -17,17 +20,19 @@ import { parseUnit, UnitRefusedError } from '../../src/dimensional/units.js';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const unitsSource = readFileSync(resolve(root, 'src/dimensional/units.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
 
-const denylistSymbols = ['dB', 'dBm', 'dBW', 'Np', 'Mach', 'mach', 'ton'] as const;
+const mathtsRefused = ['dB', 'dBm', 'dBW', 'Np', 'Mach', 'mach'] as const;
+const denylistSymbols = [...mathtsRefused, 'ton'] as const;
 
-describe('wrapper refusal denylist (A8)', () => {
-  it('unitReadings consults the wrapper denylist before MathTS', () => {
+describe('wrapper refusal layer (A8)', () => {
+  it('unitReadings consults the wrapper refusal layer before MathTS', () => {
     expect(unitsSource).toMatch(/from '\.\/mathts-unit-wrapper\.js'/);
     expect(unitsSource).toMatch(/\buptRefusalReason\b/);
   });
 
-  it.each(denylistSymbols)('%s is UnitRefusedError with the units.json message', (symbol) => {
-    const reason = UNIT_DATA.refused.get(symbol);
+  it.each(mathtsRefused)('%s is UnitRefusedError with the MathTS reason', (symbol) => {
+    const reason = REFUSED_UNIT_SPELLINGS[symbol];
     expect(reason).toBeDefined();
+    expect(UNIT_DATA.refused.has(symbol)).toBe(false);
     expect(uptRefusalReason(symbol)).toBe(reason);
     expect(refusedTokensIn(symbol)).toContain(symbol);
     try {
@@ -37,6 +42,20 @@ describe('wrapper refusal denylist (A8)', () => {
       expect(error).toBeInstanceOf(UnitRefusedError);
       expect((error as UnitRefusedError).message).toBe(reason);
     }
+  });
+
+  it('ton is UnitRefusedError with the units.json message', () => {
+    const reason = UNIT_DATA.refused.get('ton');
+    expect(reason).toBeDefined();
+    expect(uptRefusalReason('ton')).toBe(reason);
+    expect(REFUSED_UNIT_SPELLINGS['ton']).toBeUndefined();
+    expect(refusedTokensIn('ton')).toContain('ton');
+  });
+
+  it.each(denylistSymbols)('%s is refused inside a compound', (symbol) => {
+    const compound = `${symbol}/s`;
+    expect(uptRefusalReason(compound)).toBeDefined();
+    expect(() => parseUnit(compound)).toThrow(UnitRefusedError);
   });
 
   it('ton stays refused even when MathTS parses the short ton', () => {
