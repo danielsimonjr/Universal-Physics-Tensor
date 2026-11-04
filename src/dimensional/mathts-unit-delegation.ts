@@ -16,7 +16,7 @@ import {
 } from '@danielsimonjr/mathts-core';
 import { symmetricRelDiff } from '../core/compare.js';
 import { equals, multiply, power } from './algebra.js';
-import { solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
+import { scaleToNumber, solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
 import { UNIT_DATA } from './unit-data.js';
 import type { Dimension } from './types.js';
 
@@ -132,8 +132,24 @@ function dimensionFromMathtsVector(dimensions: readonly number[], localDim: Dime
   }
 }
 
+/**
+ * The sub-kilo parsec spellings, UPT's by policy: MathTS 0.21.0 admits only the
+ * k-and-up prefixes on `pc` (its row is `SHORT_UP_ONLY`), while UPT's prefix table
+ * applies to every prefixable row in `data/units.json`. Those readings stay local.
+ */
+export function isSubKiloParsec(text: string): boolean {
+  const t = text.trim();
+  if (!t.endsWith('pc')) return false;
+  const prefix = t.slice(0, -2);
+  if (prefix === '') return false;
+  const base = UNITS.get('pc');
+  const factor = PREFIXES.get(prefix);
+  return base !== undefined && base.prefixable && factor !== undefined && scaleToNumber(factor) < 1000;
+}
+
 /** True when the full unit text may take exact scale and dimension from MathTS (A4). */
 export function unitExactScaleViaMathts(text: string, localScale: number, localExact: ExactScale, localDim: Dimension): boolean {
+  if (isSubKiloParsec(text)) return false;
   if (!mathtsExactScaleAgreed(text, localScale, localExact)) return false;
   try {
     const u = Unit.parse(text.trim());
@@ -158,6 +174,7 @@ export function unitParserViaMathts(
   localExact: ExactScale,
   localDim: Dimension,
 ): boolean {
+  if (isSubKiloParsec(text)) return false;
   if (!unitExactScaleViaMathts(text, localScale, localExact, localDim)) return false;
   try {
     Unit.parse(text.trim());
