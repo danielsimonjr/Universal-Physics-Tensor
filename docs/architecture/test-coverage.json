@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 385,
-    "totalTestFiles": 684,
+    "totalTestFiles": 686,
     "testedCount": 375,
     "directlyTestedCount": 342,
     "untestedCount": 10,
@@ -9445,6 +9445,8 @@
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
+      "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/unit-wrapper-a12-partial.test.ts",
       "tests/dimensional/unit-wrapper-bit.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts"
@@ -9840,6 +9842,7 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
+      "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts"
     ],
@@ -9875,10 +9878,12 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
+      "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/unit-parse-delegation.test.ts",
       "tests/dimensional/unit-wrapper-a12-partial.test.ts",
       "tests/dimensional/unit-wrapper-bit.test.ts",
@@ -13307,6 +13312,8 @@
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
+      "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/unit-wrapper-a12-partial.test.ts",
       "tests/dimensional/unit-wrapper-bit.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts"
@@ -13579,6 +13586,7 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
+      "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts"
     ],
@@ -13593,10 +13601,12 @@
       "tests/core/constants-owner.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
+      "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/unit-parse-delegation.test.ts",
       "tests/dimensional/unit-wrapper-a12-partial.test.ts",
       "tests/dimensional/unit-wrapper-bit.test.ts",
@@ -23761,6 +23771,11 @@
       "src/dimensional/errors.ts",
       "src/dimensional/metric-validators.ts"
     ],
+    "tests/dimensional/mathts-refusal-delegation.test.ts": [
+      "src/dimensional/unit-data.ts",
+      "src/dimensional/mathts-unit-wrapper.ts",
+      "src/dimensional/units.ts"
+    ],
     "tests/dimensional/mathts-unit-gaps.test.ts": [
       "src/core/compare.ts",
       "src/dimensional/units.ts"
@@ -23994,6 +24009,10 @@
       "src/dimensional/errors.ts",
       "src/dimensional/units.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/dimensional/unit-override-parsec.test.ts": [
+      "src/dimensional/mathts-unit-wrapper.ts",
+      "src/dimensional/units.ts"
     ],
     "tests/dimensional/unit-parse-delegation.test.ts": [
       "src/dimensional/units.ts"
