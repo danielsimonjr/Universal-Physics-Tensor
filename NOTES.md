@@ -9,6 +9,11 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-04
+
+- **Lean migration plan.** `docs/plans/LEAN_PROOFS_MIGRATION_PLAN.md` records the layout that is already this tree. PhysJS `main` `e725e73ff23b3775f0e596b9480db2b9fbf19dd9` (2026-11-02) has no `lean/`, no `lakefile.toml`, and no `lean-toolchain`; its README points at this repository's `lean/`. Tag `lean-archive` is `9010fa88e54120ee45a52222fd683dd2791c4392`, the last PhysJS commit that changed the proofs (233 files under `lean/`, plus `lean.lean`). This tree has those names plus `lean/DiffusionMode.lean` and `lean/SteadyProfile.lean`. No follow-up pull request copies the files again.
+- **Proof URLs still name `v11.0.0`.** `LEAN_SOURCE_TAG` is `v11.0.0`. That tag's commit `6ebf4e17bff4cc103c61a749f0ac809b1eec3988` is an ancestor of this HEAD, and its `lean/` has 235 files. Its `lean/Eyring.lean` declares `classical_limit`, `eyring_eq`, `molar_matches_molecular`, and `effective_arrhenius`. `barrier_zero_limit` is absent on the tag and present on this HEAD (`3521c179`, #565). A permalink built by `physjsFileUrl` shows the tag's file. Retargeting the tag is a release. This plan does not tag or publish.
+
 ## As of 2026-11-01
 
 - **#569 architecture-docs.** Push CI failed `architecture-docs claims` because API.md, OVERVIEW.md, and duplicate-symbols.md claimed `totalExports` 3826. `repo-tools check` (2.3.0) measured 3828 on this tree. The three tables now say 3828; the command prints `check passed: every claim matches the graph (17 claims in 8 documents; 15 documents opted out)`.

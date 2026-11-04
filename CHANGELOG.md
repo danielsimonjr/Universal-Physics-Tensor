@@ -65,6 +65,8 @@ from v0.1.0 onward.
 
 ### Documented
 
+- **`docs/plans/LEAN_PROOFS_MIGRATION_PLAN.md`.** The Lean proofs already live in this repository's `lean/`, and PhysJS `main` no longer holds them (pointer, tag `lean-archive`). The plan records the root lake project, the toolchain and Mathlib pin, the CI build and its caches, the catalog-to-theorem link and the tests that resolve it, the removed PhysJS commit pin, history and attribution, and the thin ids (`be-148`, `be-151`, `be-154`–`be-159`, `be-163`, `be-164`, `be-168`, `be-170`, borderline `be-149`). It opens no second import and does not edit those proofs. Proof URLs still name the `v11.0.0` tag; the comparison with this branch is in `NOTES.md`. No release, tag, or publish.
+
 - **Session 14, the gravitational-wave search sentence.** The line in `docs/persona-sessions/2026-10-06-relativity-astro-bridges-session-14.md` that put `gravitational wave` on the exit-1 search list is struck. Re-measured 2026-11-01 on published `universal-physics-tensor@8.0.0` (with `@danielsimonjr/mathts-functions@0.68.0`, because a fresh install that resolves 0.68.5 does not start): `upt search "gravitational wave"` exits 0 and names `gravitational-wave-speed`. The same re-measurement is the addendum in that file. It files #525, #526, #527, #528, and #529. No `src/` change. The proposal counts in that file stay 6 standard and 5 cross-domain.
 
 ### Dependencies
