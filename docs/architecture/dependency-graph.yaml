@@ -3,7 +3,7 @@ metadata:
   version: 11.0.0
   totalFiles: 385
   totalModules: 13
-  totalExports: 2797
+  totalExports: 2798
 entryPoints:
   - file: src/index.ts
     type: main
@@ -14438,6 +14438,7 @@ modules:
             - power
         - file: ./exact-scale.js
           imports:
+            - scaleToNumber
             - solidusSides
             - uptExactScaleFromCore
             - ExactScale
@@ -14451,6 +14452,7 @@ modules:
       exports:
         - everySymbolInBothTables
         - mathtsExactScaleAgreed
+        - isSubKiloParsec
         - unitExactScaleViaMathts
         - mathtsExactScaleReading
         - unitParserViaMathts
@@ -14460,6 +14462,7 @@ modules:
       functions:
         - everySymbolInBothTables
         - mathtsExactScaleAgreed
+        - isSubKiloParsec
         - unitExactScaleViaMathts
         - mathtsExactScaleReading
         - unitParserViaMathts
@@ -14483,6 +14486,7 @@ modules:
             - ExactScale
         - file: ./mathts-unit-delegation.js
           imports:
+            - isSubKiloParsec
             - mathtsExactScaleReading
             - mathtsParsedDimension
         - file: ./unit-data.js
@@ -14493,12 +14497,12 @@ modules:
             - Dimension
           typeOnly: true
       exports:
+        - isSubKiloParsec
         - A5_DELEGATED_TEXTS
         - refusedTokensIn
         - uptRefusalReason
         - isA5DelegatedText
         - mathtsWouldParse
-        - isSubKiloParsec
         - applyBitScaleOverride
         - tryMathtsA5Reading
       interfaces:
@@ -14508,7 +14512,6 @@ modules:
         - uptRefusalReason
         - isA5DelegatedText
         - mathtsWouldParse
-        - isSubKiloParsec
         - applyBitScaleOverride
         - tryMathtsA5Reading
       constants:
@@ -19391,8 +19394,8 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 87206
-  totalExports: 2797
+  totalLinesOfCode: 87210
+  totalExports: 2798
   totalClasses: 85
   totalInterfaces: 517
   totalFunctions: 906
