@@ -26,8 +26,6 @@
 import { REFUSED_UNIT_SPELLINGS, Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
 import { isSubKiloParsec, mathtsExactScaleReading, mathtsParsedDimension } from './mathts-unit-delegation.js';
-
-export { isSubKiloParsec };
 import { UNIT_DATA } from './unit-data.js';
 import type { Dimension } from './types.js';
 

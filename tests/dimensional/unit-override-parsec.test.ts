@@ -11,7 +11,8 @@
  */
 import { exactScaleToNumber, Unit } from '@danielsimonjr/mathts-core';
 import { describe, expect, it } from 'vitest';
-import { isSubKiloParsec, mathtsWouldParse } from '../../src/dimensional/mathts-unit-wrapper.js';
+import { isSubKiloParsec } from '../../src/dimensional/mathts-unit-delegation.js';
+import { mathtsWouldParse } from '../../src/dimensional/mathts-unit-wrapper.js';
 import { parseUnit, readUnit, unitReadingsSource } from '../../src/dimensional/units.js';
 
 const PC_SCALE = parseUnit('pc').scale;

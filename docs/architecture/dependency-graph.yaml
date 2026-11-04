@@ -3,7 +3,7 @@ metadata:
   version: 11.0.0
   totalFiles: 385
   totalModules: 13
-  totalExports: 2798
+  totalExports: 2797
 entryPoints:
   - file: src/index.ts
     type: main
@@ -14497,7 +14497,6 @@ modules:
             - Dimension
           typeOnly: true
       exports:
-        - isSubKiloParsec
         - A5_DELEGATED_TEXTS
         - refusedTokensIn
         - uptRefusalReason
@@ -19394,8 +19393,8 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 385
   totalModules: 13
-  totalLinesOfCode: 87210
-  totalExports: 2798
+  totalLinesOfCode: 87208
+  totalExports: 2797
   totalClasses: 85
   totalInterfaces: 517
   totalFunctions: 906

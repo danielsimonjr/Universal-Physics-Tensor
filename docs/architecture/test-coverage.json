@@ -9442,6 +9442,7 @@
       "tests/tensor.test.ts"
     ],
     "src/dimensional/mathts-unit-delegation.ts": [
+      "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
@@ -13309,6 +13310,7 @@
       "tests/dimensional/klein-gordon-equation.test.ts"
     ],
     "src/dimensional/mathts-unit-delegation.ts": [
+      "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
@@ -24011,6 +24013,7 @@
       "src/dimensional/types.ts"
     ],
     "tests/dimensional/unit-override-parsec.test.ts": [
+      "src/dimensional/mathts-unit-delegation.ts",
       "src/dimensional/mathts-unit-wrapper.ts",
       "src/dimensional/units.ts"
     ],

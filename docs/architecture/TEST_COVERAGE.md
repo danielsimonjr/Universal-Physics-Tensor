@@ -365,7 +365,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `dimensional/hyphen-names.ts` | `hyphen-names-corpus.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
 | `dimensional/killing-validators.ts` | `killing-validators.test.ts` | — |
 | `dimensional/klein-gordon-equation.ts` | `friedmann-equation.test.ts`, `klein-gordon-equation.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `dimensional/mathts-unit-delegation.ts` | `units-exact-scale-delegation.test.ts` | — |
+| `dimensional/mathts-unit-delegation.ts` | `unit-override-parsec.test.ts`, `units-exact-scale-delegation.test.ts` | — |
 | `dimensional/mathts-unit-wrapper.ts` | `mathts-refusal-delegation.test.ts`, `unit-override-parsec.test.ts`, `unit-wrapper-a12-partial.test.ts`, `unit-wrapper-bit.test.ts`, `unit-wrapper-refusal.test.ts` | — |
 | `dimensional/metric-validators.ts` | `curvature-invariants.test.ts`, `derivative-strategy-field.test.ts`, `einstein-equation.test.ts`, `kronecker-delta.test.ts`, `metric-tensor.test.ts`, `tensor-partial-derivative.test.ts`, `tensor-trace.test.ts`, `validator-registry.test.ts`, `kretschmann-lowering.test.ts` | — |
 | `dimensional/metric.ts` | `public-api-stability.test.ts`, `bianchi-residual.test.ts`, `christoffel-helper.test.ts`, `connection-validators.test.ts`, `covariant-derivative-node.test.ts`, `covariant-derivative-preview.test.ts`, `derivative-strategy-field.test.ts`, `derivative-strategy-propagation.test.ts`, `duplicate-coord-warning.test.ts`, `einstein-equation.test.ts`, `einstein.test.ts`, `metric-ast-serialization.test.ts`, `metric-helpers.test.ts`, `minkowski-curvature.test.ts`, `numerical-form-preservation.test.ts`, `raise-lower.test.ts`, `ricci.test.ts`, `riemann-tensor.test.ts`, `lowering-utils.test.ts`, `metric-inverse-curvature-walk.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-partial-derivative-lowering.test.ts` | — |
@@ -966,7 +966,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `dimensional/unit-data-delegation.test.ts` | 0 files |
 | `dimensional/unit-data.test.ts` | 7 files |
 | `dimensional/unit-grammar.test.ts` | 4 files |
-| `dimensional/unit-override-parsec.test.ts` | 2 files |
+| `dimensional/unit-override-parsec.test.ts` | 3 files |
 | `dimensional/unit-parse-delegation.test.ts` | 1 files |
 | `dimensional/unit-wrapper-a12-partial.test.ts` | 2 files |
 | `dimensional/unit-wrapper-bit.test.ts` | 2 files |
