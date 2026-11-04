@@ -25,7 +25,7 @@
  */
 import { REFUSED_UNIT_SPELLINGS, Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
-import { mathtsExactScaleReading, mathtsParsedDimension } from './mathts-unit-delegation.js';
+import { isSubKiloParsec, mathtsExactScaleReading, mathtsParsedDimension } from './mathts-unit-delegation.js';
 import { UNIT_DATA } from './unit-data.js';
 import type { Dimension } from './types.js';
 
@@ -143,22 +143,6 @@ export function mathtsWouldParse(text: string): boolean {
   }
 }
 
-/**
- * The sub-kilo parsec spellings, UPT's by policy: MathTS 0.21.0 admits only the
- * k-and-up prefixes on `pc` (its row is `SHORT_UP_ONLY`, so `mpc` beside `Mpc`
- * is refused there as a typo trap), while UPT's prefix table applies to every
- * prefixable row in `data/units.json`. Those readings stay on the local grammar.
- */
-export function isSubKiloParsec(text: string): boolean {
-  const t = text.trim();
-  if (!t.endsWith('pc')) return false;
-  const prefix = t.slice(0, -2);
-  if (prefix === '') return false;
-  const base = UNITS.get('pc');
-  const factor = UNIT_DATA.prefixes.get(prefix);
-  return base !== undefined && base.prefixable && factor !== undefined && scaleToNumber(factor) < 1000;
-}
-
 /** Keep `bit` at ln 2 nat on the 7-vector (A11a). */
 export function applyBitScaleOverride(text: string, exact: ExactScale, scale: number): { readonly exact: ExactScale; readonly scale: number } {
   if (text.trim() !== 'bit') return { exact, scale };
@@ -187,6 +171,7 @@ function affineDim(text: string): Dimension | null {
  */
 export function tryMathtsA5Reading(text: string): MathtsDelegatedReading | null {
   const t = text.trim();
+  if (isSubKiloParsec(t)) return null;
   if (!isA5DelegatedText(t)) return null;
   const affineDimHint = affineDim(t);
   try {

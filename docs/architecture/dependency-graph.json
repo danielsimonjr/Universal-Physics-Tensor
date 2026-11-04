@@ -21250,6 +21250,7 @@
           {
             "file": "./exact-scale.js",
             "imports": [
+              "scaleToNumber",
               "solidusSides",
               "uptExactScaleFromCore",
               "ExactScale"
@@ -21272,6 +21273,7 @@
         "exports": [
           "everySymbolInBothTables",
           "mathtsExactScaleAgreed",
+          "isSubKiloParsec",
           "unitExactScaleViaMathts",
           "mathtsExactScaleReading",
           "unitParserViaMathts",
@@ -21282,6 +21284,7 @@
         "functions": [
           "everySymbolInBothTables",
           "mathtsExactScaleAgreed",
+          "isSubKiloParsec",
           "unitExactScaleViaMathts",
           "mathtsExactScaleReading",
           "unitParserViaMathts",
@@ -21315,6 +21318,7 @@
           {
             "file": "./mathts-unit-delegation.js",
             "imports": [
+              "isSubKiloParsec",
               "mathtsExactScaleReading",
               "mathtsParsedDimension"
             ]
@@ -21339,7 +21343,6 @@
           "uptRefusalReason",
           "isA5DelegatedText",
           "mathtsWouldParse",
-          "isSubKiloParsec",
           "applyBitScaleOverride",
           "tryMathtsA5Reading"
         ],
@@ -21351,7 +21354,6 @@
           "uptRefusalReason",
           "isA5DelegatedText",
           "mathtsWouldParse",
-          "isSubKiloParsec",
           "applyBitScaleOverride",
           "tryMathtsA5Reading"
         ],
@@ -27976,7 +27978,7 @@
   "statistics": {
     "totalTypeScriptFiles": 385,
     "totalModules": 13,
-    "totalLinesOfCode": 87206,
+    "totalLinesOfCode": 87208,
     "totalExports": 2797,
     "totalClasses": 85,
     "totalInterfaces": 517,

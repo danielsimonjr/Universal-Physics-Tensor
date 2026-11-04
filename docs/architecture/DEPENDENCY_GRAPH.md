@@ -5970,12 +5970,18 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../core/compare.js` | `symmetricRelDiff` | Import |
 | `./algebra.js` | `equals, multiply, power` | Import |
-| `./exact-scale.js` | `solidusSides, uptExactScaleFromCore, ExactScale` | Import |
+| `./exact-scale.js` | `scaleToNumber, solidusSides, uptExactScaleFromCore, ExactScale` | Import |
 | `./unit-data.js` | `UNIT_DATA` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
-- Functions: `everySymbolInBothTables`, `mathtsExactScaleAgreed`, `unitExactScaleViaMathts`, `mathtsExactScaleReading`, `unitParserViaMathts`, `mathtsParsedDimension`, `_powerDim`, `_multiplyDim`
+- Functions:
+
+  ```text
+  everySymbolInBothTables, mathtsExactScaleAgreed, isSubKiloParsec, unitExactScaleViaMathts,
+  mathtsExactScaleReading, unitParserViaMathts, mathtsParsedDimension, _powerDim, _multiplyDim
+  ```
+
 
 ---
 
@@ -5990,13 +5996,13 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./exact-scale.js` | `scaleToNumber, solidusSides, ExactScale` | Import |
-| `./mathts-unit-delegation.js` | `mathtsExactScaleReading, mathtsParsedDimension` | Import |
+| `./mathts-unit-delegation.js` | `isSubKiloParsec, mathtsExactScaleReading, mathtsParsedDimension` | Import |
 | `./unit-data.js` | `UNIT_DATA` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `MathtsDelegatedReading`
-- Functions: `refusedTokensIn`, `uptRefusalReason`, `isA5DelegatedText`, `mathtsWouldParse`, `isSubKiloParsec`, `applyBitScaleOverride`, `tryMathtsA5Reading`
+- Functions: `refusedTokensIn`, `uptRefusalReason`, `isA5DelegatedText`, `mathtsWouldParse`, `applyBitScaleOverride`, `tryMathtsA5Reading`
 - Constants: `A5_DELEGATED_TEXTS`
 
 ---
@@ -7639,7 +7645,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 87206 |
+| Total Lines of Code | 87208 |
 | Total Exports | 2797 |
 | Total Re-exports | 1390 |
 | Total Classes | 85 |
