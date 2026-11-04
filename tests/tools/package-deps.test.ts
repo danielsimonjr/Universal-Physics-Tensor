@@ -10,13 +10,13 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf-8'));
 
 const MATHTS: Record<string, string> = {
-  '@danielsimonjr/mathts-autograd': '^0.3.19',
-  '@danielsimonjr/mathts-core': '^0.19.0',
-  '@danielsimonjr/mathts-expression': '^0.10.3',
-  '@danielsimonjr/mathts-functions': '^0.69.1',
-  '@danielsimonjr/mathts-matrix': '^0.7.9',
-  '@danielsimonjr/mathts-parallel': '^0.6.11',
-  '@danielsimonjr/mathts-tensor': '^0.2.25',
+  '@danielsimonjr/mathts-autograd': '^0.3.21',
+  '@danielsimonjr/mathts-core': '^0.21.0',
+  '@danielsimonjr/mathts-expression': '^0.11.1',
+  '@danielsimonjr/mathts-functions': '^0.70.1',
+  '@danielsimonjr/mathts-matrix': '^0.8.1',
+  '@danielsimonjr/mathts-parallel': '^0.7.1',
+  '@danielsimonjr/mathts-tensor': '^0.2.27',
   '@danielsimonjr/mathts-wasm': '^0.3.0',
   '@danielsimonjr/mathts-workerpool': '^0.2.6',
 };

@@ -12,8 +12,8 @@ import {
   readUnit,
 } from '../../src/dimensional/units.js';
 
-const inSet = ['km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc'] as const;
-const outOfSetLocal = ['bit', 'd', 'm2K', 'K²'] as const;
+const inSet = ['km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc', 'd', 'day', 'Angstrom'] as const;
+const outOfSetLocal = ['bit', 'm2K', 'K²', 'mpc'] as const;
 const outOfSetThrow = ['ton', 'dB', 'mAs', 'mol/mL', 'degC/s', 'furlong'] as const;
 
 describe('Unit.parse delegation set (A5)', () => {
@@ -43,5 +43,17 @@ describe('Unit.parse delegation set (A5)', () => {
   it('difference readings stay on the local affine branch', () => {
     expect(convertValue('25 degC', 'K', 'difference').value).toBe(25);
     expect(unitReadingsSource('degC')).toBe('mathts');
+  });
+
+  it('the day symbol and its compounds read through MathTS 0.21.0', () => {
+    expect(parseUnit('d').scale).toBe(86400);
+    expect(parseUnit('dm').scale).toBe(0.1);
+    expect(unitReadingsSource('d')).toBe('mathts');
+  });
+
+  it('the MathTS refusal registry refusal keeps the UPT class', () => {
+    expect(() => parseUnit('dB')).toThrow(UnitRefusedError);
+    expect(() => parseUnit('Np')).toThrow(UnitRefusedError);
+    expect(() => parseUnit('Mach')).toThrow(UnitRefusedError);
   });
 });

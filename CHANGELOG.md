@@ -8,6 +8,26 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **The MathTS minimum versions are the 0.21.0 generation.** `@danielsimonjr/mathts-core` moves to `^0.21.0` (MathTS #577: `psi` and `torr` take SI prefixes; `dB`, `dBm`, `dBW`, `Np`, `Mach` and `mach` are refused with a reason, exported as `REFUSED_UNIT_SPELLINGS`), with `@danielsimonjr/mathts-functions` `^0.70.1`, `mathts-expression` `^0.11.1`, `mathts-matrix` `^0.8.1`, `mathts-parallel` `^0.7.1`, `mathts-tensor` `^0.2.27` and `mathts-autograd` `^0.3.21` — the releases built against core 0.21.0, so `bun.lock` shares one core again. Two core API changes are read at the adapters: `toSiDimensionVector` now states the exponents as exact `Fraction`s, and `rationalNullspace` rejects a `Fraction` it did not build (a `Fraction` from core 0.19.0 carried an `isFraction` prototype flag; 0.21.0 does not, so a shared core is what makes the cross-package call work at all).
+
+- **The six logarithmic and ratio refusal definitions are MathTS's, not a second table.** `data/units.json` keeps only `ton`; `dB`, `dBm`, `dBW`, `Np`, `Mach` and `mach` are read from MathTS `REFUSED_UNIT_SPELLINGS` by the wrapper, before any parse, compounds included (`dB/m`, `s/dB`). The messages are the same strings the file carried, now stated once. `readUnitFile` refuses a unit row that spells a MathTS-refused name, and a local refusal that states a different reason than MathTS for the same spelling, so the two tables cannot drift apart silently.
+
+- **`readScaleExpression` is delegated, not duplicated.** `exact-scale.ts` keeps the UPT-facing signature (a resolver over UPT `ExactScale`s) and calls MathTS `readScaleExpression` underneath; the local factor-product body is deleted, and the dead `readFileScaleExpression` re-export in `mathts-unit-delegation.ts` goes with it. The MathTS reader's two error texts (`'…' is not a product of factors`, `names '…', which is not a known scale`) are the ones the local body printed, so the pinned tests read the same words.
+
+- **The delegated parse set takes what the newer core parses.** `d` and `day`, the three angstrom spellings, `psi` and `torr` with their SI prefixes (`kpsi`, `Mpsi`, `mtorr`, `utorr`), and the k-and-up parsec spellings (`kpc`, `Mpc`, `Gpc`) read through MathTS `Unit.parse`/`Unit.exactScale`; the A5 in-set texts skip the local grammar entirely.
+
+- **A π⁻¹ exact scale round-trips through MathTS exactly.** `toCore` recognized only positive integer multiples of π and ln 2, so the parsec family (`pc` is `648000*astronomical_unit/pi`) degraded to a float factor on the way back to core and rounded one ulp away from MathTS's own double (`kpc` read …13675 where MathTS states …13670). `toCore` now recognizes a negative or positive integer power of each named irrational, so the delegated parsec spellings round to the MathTS double.
+
+- **The four UPT overrides are named where they live.** The wrapper's module comment lists them with their tests: `ton` refused while MathTS parses the US short ton (907.18474 kg); an affine temperature refused inside a compound while MathTS accepts `degC/s`; every SI prefix on `pc` while MathTS admits only k and up (`isSubKiloParsec` names the spellings that stay local); `bit` at ln 2 while MathTS reports axis-8 scale 1 (`applyBitScaleOverride`).
+
+- **The CT-1b golden follows the 0.21.0-generation simplifier.** `simplify` on the composed Hawking-temperature form no longer leaves `hbar·c / (4pi·k_B·(2·G·mass / c^2))` untouched; it returns the flattened `((c^3·hbar·(1 / k_B)·(1 / 4pi) / 2) / mass) / G` and lists the symbols in the new expression's order. The value at the solar mass (`6.16842971641034e-8`), the constants and their provenance are unchanged; `tests/cli/golden/symbolic-simplify.txt` is regenerated with `node tests/cli/golden-capture.mjs symbolic-simplify`, not hand-edited.
+
+### Added
+
+- **The MathTS gap oracle states the 0.21.0 agreements and the overrides that remain.** `tests/dimensional/mathts-unit-gaps.test.ts` moves the day-symbol row from gaps to agreements, adds the `psi`/`torr` prefix agreement, pins the refusal-registry reasons beside the UPT error, and states the `pc` `SHORT_UP_ONLY` gap the wrapper keeps. `tests/dimensional/mathts-refusal-delegation.test.ts` and `tests/dimensional/unit-override-parsec.test.ts` prove, respectively, that the refusal definitions come from MathTS and that the sub-k parsec spellings stay UPT policy while the k-and-up ones delegate.
+
 ### Removed
 
 - **The temporary `cursor/mathts-*` push trigger in `ci.yml`.** The stacked MathTS units/cases PRs (#560–#569) are merged, so CI runs again only on pushes to `master`, pull requests, and the schedule. The code-docs and architecture-docs push conditions are back to `master` only, and the matching pin in `tests/tools/ci-workflows.test.ts` is removed.

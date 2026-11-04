@@ -44,4 +44,10 @@ describe('exact-scale.ts delegates arithmetic to MathTS (A2)', () => {
     expect(code).not.toMatch(/from ['"]\.\/units\.js['"]/);
     expect(code).not.toMatch(/from ['"]\.\/unit-data\.js['"]/);
   });
+
+  it('readScaleExpression delegates to MathTS: no local factor product stays in the file', () => {
+    const code = exactScaleSource.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+    expect(code).toMatch(/readScaleExpression/);
+    expect(code).not.toMatch(/const FACTOR|const product =/);
+  });
 });

@@ -20853,6 +20853,7 @@
               "PI_EXACT_SCALE",
               "powerExactScale",
               "ratioExactScale",
+              "readScaleExpression",
               "ExactScale"
             ]
           },
@@ -21225,7 +21226,6 @@
               "Unit",
               "exactScaleToNumber",
               "getUnitRow",
-              "readScaleExpression",
               "toSiDimensionVector",
               "ExactScale"
             ]
@@ -21250,7 +21250,6 @@
           {
             "file": "./exact-scale.js",
             "imports": [
-              "coreExactScaleFromUpt",
               "solidusSides",
               "uptExactScaleFromCore",
               "ExactScale"
@@ -21277,7 +21276,6 @@
           "mathtsExactScaleReading",
           "unitParserViaMathts",
           "mathtsParsedDimension",
-          "readFileScaleExpression",
           "_powerDim",
           "_multiplyDim"
         ],
@@ -21288,7 +21286,6 @@
           "mathtsExactScaleReading",
           "unitParserViaMathts",
           "mathtsParsedDimension",
-          "readFileScaleExpression",
           "_powerDim",
           "_multiplyDim"
         ]
@@ -21299,6 +21296,7 @@
           {
             "package": "@danielsimonjr/mathts-core",
             "imports": [
+              "REFUSED_UNIT_SPELLINGS",
               "Unit",
               "exactScaleToNumber"
             ]
@@ -21341,6 +21339,7 @@
           "uptRefusalReason",
           "isA5DelegatedText",
           "mathtsWouldParse",
+          "isSubKiloParsec",
           "applyBitScaleOverride",
           "tryMathtsA5Reading"
         ],
@@ -21352,6 +21351,7 @@
           "uptRefusalReason",
           "isA5DelegatedText",
           "mathtsWouldParse",
+          "isSubKiloParsec",
           "applyBitScaleOverride",
           "tryMathtsA5Reading"
         ],
@@ -22015,6 +22015,7 @@
           {
             "package": "@danielsimonjr/mathts-core",
             "imports": [
+              "REFUSED_UNIT_SPELLINGS",
               "readScaleExpression"
             ]
           }
@@ -27975,12 +27976,12 @@
   "statistics": {
     "totalTypeScriptFiles": 385,
     "totalModules": 13,
-    "totalLinesOfCode": 87126,
+    "totalLinesOfCode": 87206,
     "totalExports": 2797,
     "totalClasses": 85,
     "totalInterfaces": 517,
     "totalFunctions": 906,
-    "totalTypeGuards": 15,
+    "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 412,
     "totalReExports": 1390,
@@ -27988,6 +27989,6 @@
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 22
+    "unusedExportsCount": 21
   }
 }

@@ -1,13 +1,29 @@
 /**
  * UPT unit wrapper policy on top of MathTS (Part A steps A8, A11, A12 partial).
  *
- * Admission, refusal denylist, the `bit` scale, and cycle counting stay here
- * even when parsing and scales delegate to MathTS.
+ * Admission, refusal policy, and cycle counting stay here even when parsing and
+ * scales delegate to MathTS. Four deliberate overrides of MathTS defaults are
+ * layered here, each pinned by a test that reads both sides:
+ *
+ * 1. `ton` — MathTS parses the US short ton (907.18474 kg); UPT refuses it as
+ *    ambiguous (`data/units.json`, `tests/dimensional/unit-wrapper-refusal.test.ts`).
+ * 2. An affine temperature inside a compound — MathTS accepts `degC/s`;
+ *    UPT refuses it (`localUnitReadings`, `tests/dimensional/units.test.ts`).
+ * 3. `pc` prefixes — MathTS admits only k and up (`SHORT_UP_ONLY`); UPT's
+ *    prefix table applies to every prefixable row, so `mpc` stays on the local
+ *    grammar (`isSubKiloParsec`, `tests/dimensional/unit-override-parsec.test.ts`).
+ * 4. `bit` — MathTS reports scale 1 on its bit axis; UPT keeps ln 2 nat
+ *    (`applyBitScaleOverride`, `tests/dimensional/unit-wrapper-bit.test.ts`).
+ *
+ * The refusal *definitions* for `dB`, `dBm`, `dBW`, `Np`, `Mach` and `mach` are
+ * MathTS's `REFUSED_UNIT_SPELLINGS` (0.21.0); `data/units.json` no longer
+ * repeats them. The wrapper turns a MathTS refusal into `UnitRefusedError`
+ * before any parse, compounds included.
  *
  * @module dimensional/mathts-unit-wrapper
  * @internal
  */
-import { Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
+import { REFUSED_UNIT_SPELLINGS, Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
 import { mathtsExactScaleReading, mathtsParsedDimension } from './mathts-unit-delegation.js';
 import { UNIT_DATA } from './unit-data.js';
@@ -18,7 +34,9 @@ const DIMENSIONLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 
 const REFUSED = UNIT_DATA.refused;
 const UNITS = UNIT_DATA.units;
 
-/** Agreed spellings that fully parse through MathTS (Part A step A5). */
+/** Agreed spellings that fully parse through MathTS (Part A step A5). The 0.21.0
+ * core adds the day symbol, the angstrom spellings, and SI prefixes on `psi` and
+ * `torr`; the k-and-up parsec spellings agree with the table double for double. */
 export const A5_DELEGATED_TEXTS = [
   'km',
   'degC',
@@ -27,6 +45,20 @@ export const A5_DELEGATED_TEXTS = [
   'kohm',
   'GeV',
   'km/s/Mpc',
+  'd',
+  'day',
+  'Angstrom',
+  'angstrom',
+  'Å',
+  'psi',
+  'torr',
+  'kpsi',
+  'Mpsi',
+  'mtorr',
+  'utorr',
+  'kpc',
+  'Mpc',
+  'Gpc',
 ] as const;
 
 const A5_DELEGATED = new Set<string>(A5_DELEGATED_TEXTS);
@@ -63,32 +95,37 @@ function factorBase(token: string): string | null {
   return trySymbolBase(base);
 }
 
-/** Tokens whose spelling is on the UPT refusal denylist. */
+/** A token MathTS refuses by name: UPT policy rows first, then the MathTS registry. */
+function refusalReasonFor(token: string): string | undefined {
+  return REFUSED.get(token) ?? REFUSED_UNIT_SPELLINGS[token];
+}
+
+/** Tokens whose spelling carries a refusal reason: UPT policy rows first, then MathTS's registry. */
 export function refusedTokensIn(text: string): readonly string[] {
   const t = text.trim();
   if (t === '' || t === '1') return [];
-  const whole = REFUSED.get(t);
+  const whole = refusalReasonFor(t);
   if (whole !== undefined) return [t];
   const { numerator, denominator } = solidusSides(t);
   const tokens = [...sideTokens(numerator), ...sideTokens(denominator)];
   const hits: string[] = [];
   for (const token of tokens) {
     if (token === '1') continue;
-    if (REFUSED.has(token)) hits.push(token);
+    if (refusalReasonFor(token) !== undefined) hits.push(token);
     else {
       const base = factorBase(token);
-      if (base !== null && REFUSED.has(base)) hits.push(base);
+      if (base !== null && refusalReasonFor(base) !== undefined) hits.push(base);
     }
   }
   return hits;
 }
 
-/** Refusal message from `data/units.json`, or null when the text is not denied. */
+/** Refusal message: UPT policy (`ton`) first, then the MathTS registry (`dB` and friends). Null when the text is not denied. */
 export function uptRefusalReason(text: string): string | null {
   const hits = refusedTokensIn(text);
   if (hits.length === 0) return null;
   const token = hits[0]!;
-  return REFUSED.get(token) ?? null;
+  return refusalReasonFor(token) ?? null;
 }
 
 /** Whether `text` is on the Part A step A5 delegated spelling list. */
@@ -104,6 +141,22 @@ export function mathtsWouldParse(text: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * The sub-kilo parsec spellings, UPT's by policy: MathTS 0.21.0 admits only the
+ * k-and-up prefixes on `pc` (its row is `SHORT_UP_ONLY`, so `mpc` beside `Mpc`
+ * is refused there as a typo trap), while UPT's prefix table applies to every
+ * prefixable row in `data/units.json`. Those readings stay on the local grammar.
+ */
+export function isSubKiloParsec(text: string): boolean {
+  const t = text.trim();
+  if (!t.endsWith('pc')) return false;
+  const prefix = t.slice(0, -2);
+  if (prefix === '') return false;
+  const base = UNITS.get('pc');
+  const factor = UNIT_DATA.prefixes.get(prefix);
+  return base !== undefined && base.prefixable && factor !== undefined && scaleToNumber(factor) < 1000;
 }
 
 /** Keep `bit` at ln 2 nat on the 7-vector (A11a). */

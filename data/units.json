@@ -1060,30 +1060,6 @@
   ],
   "refused": [
     {
-      "symbol": "dB",
-      "reason": "dB is a logarithmic unit; give the quantity in its linear unit, or a reference level"
-    },
-    {
-      "symbol": "dBm",
-      "reason": "dBm is a logarithmic unit (decibels over 1 mW); give watts"
-    },
-    {
-      "symbol": "dBW",
-      "reason": "dBW is a logarithmic unit (decibels over 1 W); give watts"
-    },
-    {
-      "symbol": "Np",
-      "reason": "Np is a logarithmic unit (the neper); give the quantity in its linear unit, or a reference level"
-    },
-    {
-      "symbol": "Mach",
-      "reason": "Mach is a ratio to the local speed of sound; give m/s, or the ratio as a bare number"
-    },
-    {
-      "symbol": "mach",
-      "reason": "mach is a ratio to the local speed of sound; give m/s, or the ratio as a bare number"
-    },
-    {
       "symbol": "ton",
       "reason": "'ton' is ambiguous: short ton (907.185 kg), long ton (1016.047 kg), or metric tonne (1000 kg); write tonne"
     }

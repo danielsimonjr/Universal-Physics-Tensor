@@ -197,7 +197,8 @@ describe('MathTS states the same unit scales (the independent second method)', (
     try {
       const u = unit(1, spelling(symbol)) as { toSI(): { value: unknown }; dimensions: number[] };
       si = Number(u.toSI().value);
-      dim = toSiDimensionVector(u.dimensions, { ignoreExtra: true });
+      // 0.20.0 states the exponents as exact Fractions; the row stores numbers.
+      dim = toSiDimensionVector(u.dimensions, { ignoreExtra: true }).map((f) => (typeof f === 'number' ? f : f.toNumber()));
     } catch {
       continue;
     }

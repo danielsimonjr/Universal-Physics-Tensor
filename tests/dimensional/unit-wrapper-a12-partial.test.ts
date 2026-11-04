@@ -18,7 +18,7 @@ describe('MathTS A5 path without local grammar (A12 partial)', () => {
 
   it('gap rows still use the local grammar', () => {
     expect(unitReadingsSource('bit')).toBe('local');
-    expect(unitReadingsSource('d')).toBe('local');
     expect(unitReadingsSource('m2K')).toBe('local');
+    expect(unitReadingsSource('K²')).toBe('local');
   });
 });
