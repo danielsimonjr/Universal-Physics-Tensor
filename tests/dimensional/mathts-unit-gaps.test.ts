@@ -146,6 +146,16 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       },
     },
     {
+      id: 'a spaced affine spelling inside a compound parses in MathTS, refused in UPT',
+      check: () => {
+        // MathTS refuses `degC/s` but reads `deg C/s` as a product of other units.
+        for (const text of ['deg C/s', '° C/s']) {
+          expect(() => Unit.parse(text)).not.toThrow();
+          expect(() => parseUnit(text)).toThrow(UnitRefusedError);
+        }
+      },
+    },
+    {
       id: 'furlong wider MathTS table',
       check: () => {
         expect(() => Unit.parse('furlong')).not.toThrow();
