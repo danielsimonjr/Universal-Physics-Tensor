@@ -61,12 +61,12 @@ export function rationalize(x: number, options: RationalizeOptions = {}): Fracti
   return undefined;
 }
 
-/** The double a fraction stands for (numerator over denominator, one rounding). @internal */
+/** The double a fraction stands for, MathTS `Fraction#toNumber`. @internal */
 export function fractionToNumber(f: Fraction): number {
-  return Number(f.numerator) / Number(f.denominator);
+  return f.toNumber();
 }
 
-/** `9/8`, `2`, `-1/3`: the fraction in lowest terms, no sign on the denominator. @internal */
+/** `9/8`, `2`, `-1/3`: the fraction in lowest terms, no sign on the denominator; MathTS `Fraction#toString`. @internal */
 export function formatRational(f: Fraction): string {
-  return f.denominator === 1n ? f.numerator.toString() : `${f.numerator}/${f.denominator}`;
+  return f.toString();
 }

@@ -46,7 +46,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `tests/numerical/mathts-gaps.test.ts` pins the M1 to M4 limitations, each with a control.
 - [x] MathTS leverage U1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U1).
   Done: `rowMajorStrides` is the MathTS core function; the `pderiv.ts` inline copy is gone.
-- [ ] MathTS leverage U2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U2).
+- [x] MathTS leverage U2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U2).
+  Done: `fractionToNumber` and `formatRational` call MathTS `Fraction#toNumber` and `#toString`.
 - [ ] MathTS leverage U3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U3).
 - [ ] MathTS leverage U4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U4).
 - [ ] MathTS leverage U5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U5).
