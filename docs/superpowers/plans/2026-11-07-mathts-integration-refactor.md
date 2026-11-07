@@ -58,6 +58,8 @@ P1 already flipped the oracle rows. Do not widen the admission list in `data/uni
 
 Start after P2a and P2b are merged.
 
+P2a delegates four listed spellings, not the glued grammar. Before the splitter can go, either every glued spelling that the CLI goldens and `data/` use is on the A5 list, or the routing gate (`everySymbolInBothTables` and `tryOneFactorBase` in `mathts-unit-delegation.ts`) splits a glued token the way the local grammar does. Choose one and state it in the P3 plan.
+
 1. RED: a test that asserts the wrapper module does not import the local glued splitter or the local ambiguity check.
 2. Delete the glued splitter. Delete the local ambiguity check only if no gap row needs it (see P2b). The wrapper keeps admission, `bit`, the `pc` prefixes, cycles, spelling notes and error classes.
 3. Gate: the full suite and the CLI goldens pass with no golden change.

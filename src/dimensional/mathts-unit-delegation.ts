@@ -12,11 +12,10 @@ import {
   exactScaleToNumber,
   getUnitRow,
   toSiDimensionVector,
-  type ExactScale as CoreExactScale,
 } from '@danielsimonjr/mathts-core';
 import { symmetricRelDiff } from '../core/compare.js';
 import { equals, multiply, power } from './algebra.js';
-import { scaleToNumber, solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
+import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
 import { UNIT_DATA } from './unit-data.js';
 import type { Dimension } from './types.js';
 
@@ -94,15 +93,6 @@ export function mathtsExactScaleAgreed(text: string, localScale: number, _localE
   return mt !== null && (mt === localScale || symmetricRelDiff(localScale, mt) < 1e-15);
 }
 
-function mathtsCoreExactScale(text: string): CoreExactScale | null {
-  const mt = mathtsScaleNumber(text);
-  if (mt === null) return null;
-  try {
-    return Unit.exactScale(text.trim());
-  } catch {
-    return null;
-  }
-}
 
 /** A MathTS SI-dimension entry: 0.20.0 states exact rational exponents, so a number or a `Fraction`. */
 type SiEntry = number | { readonly toNumber: () => number };
@@ -160,12 +150,6 @@ export function unitExactScaleViaMathts(text: string, localScale: number, localE
   }
 }
 
-/** Exact scale from MathTS when {@link unitExactScaleViaMathts} is true. */
-export function mathtsExactScaleReading(text: string): ExactScale {
-  const core = mathtsCoreExactScale(text);
-  if (core === null) throw new RangeError(`mathts exact scale: '${text}' is not delegated`);
-  return uptExactScaleFromCore(core);
-}
 
 /** True when `Unit.parse` may replace the local grammar for `text` (A5). */
 export function unitParserViaMathts(

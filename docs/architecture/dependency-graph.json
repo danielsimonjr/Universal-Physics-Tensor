@@ -4,7 +4,7 @@
     "version": "11.0.0",
     "totalFiles": 385,
     "totalModules": 13,
-    "totalExports": 2797
+    "totalExports": 2796
   },
   "entryPoints": [
     {
@@ -21226,8 +21226,7 @@
               "Unit",
               "exactScaleToNumber",
               "getUnitRow",
-              "toSiDimensionVector",
-              "ExactScale"
+              "toSiDimensionVector"
             ]
           }
         ],
@@ -21252,7 +21251,6 @@
             "imports": [
               "scaleToNumber",
               "solidusSides",
-              "uptExactScaleFromCore",
               "ExactScale"
             ]
           },
@@ -21275,7 +21273,6 @@
           "mathtsExactScaleAgreed",
           "isSubKiloParsec",
           "unitExactScaleViaMathts",
-          "mathtsExactScaleReading",
           "unitParserViaMathts",
           "mathtsParsedDimension",
           "_powerDim",
@@ -21286,7 +21283,6 @@
           "mathtsExactScaleAgreed",
           "isSubKiloParsec",
           "unitExactScaleViaMathts",
-          "mathtsExactScaleReading",
           "unitParserViaMathts",
           "mathtsParsedDimension",
           "_powerDim",
@@ -21312,6 +21308,7 @@
             "imports": [
               "scaleToNumber",
               "solidusSides",
+              "uptExactScaleFromCore",
               "ExactScale"
             ]
           },
@@ -21319,7 +21316,6 @@
             "file": "./mathts-unit-delegation.js",
             "imports": [
               "isSubKiloParsec",
-              "mathtsExactScaleReading",
               "mathtsParsedDimension"
             ]
           },
@@ -27978,11 +27974,11 @@
   "statistics": {
     "totalTypeScriptFiles": 385,
     "totalModules": 13,
-    "totalLinesOfCode": 87208,
-    "totalExports": 2797,
+    "totalLinesOfCode": 87197,
+    "totalExports": 2796,
     "totalClasses": 85,
     "totalInterfaces": 517,
-    "totalFunctions": 906,
+    "totalFunctions": 905,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 412,
