@@ -7,7 +7,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REFUSED_UNIT_SPELLINGS, Unit } from '@danielsimonjr/mathts-core';
+import { AmbiguousUnitError, REFUSED_UNIT_SPELLINGS, Unit } from '@danielsimonjr/mathts-core';
 import { describe, expect, it } from 'vitest';
 import { UNIT_DATA } from '../../src/dimensional/unit-data.js';
 import {
@@ -21,7 +21,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const unitsSource = readFileSync(resolve(root, 'src/dimensional/units.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
 
 const mathtsRefused = ['dB', 'dBm', 'dBW', 'Np', 'Mach', 'mach'] as const;
-const denylistSymbols = [...mathtsRefused, 'ton'] as const;
+const denylistSymbols = [...mathtsRefused, 'ton', 'tons'] as const;
 
 describe('wrapper refusal layer (A8)', () => {
   it('unitReadings consults the wrapper refusal layer before MathTS', () => {
@@ -50,6 +50,12 @@ describe('wrapper refusal layer (A8)', () => {
     expect(uptRefusalReason('ton')).toBe(reason);
     expect(REFUSED_UNIT_SPELLINGS['ton']).toBeUndefined();
     expect(refusedTokensIn('ton')).toContain('ton');
+  });
+
+  it('tons is refused like ton: MathTS 0.22 names both ambiguous', () => {
+    expect(() => Unit.parse('tons')).toThrow(AmbiguousUnitError);
+    expect(UNIT_DATA.refused.get('tons')).toBeDefined();
+    expect(() => parseUnit('tons')).toThrow(UnitRefusedError);
   });
 
   it.each(denylistSymbols)('%s is refused inside a compound', (symbol) => {
