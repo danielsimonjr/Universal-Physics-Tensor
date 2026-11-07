@@ -7205,6 +7205,7 @@ The codebase is organized into the following modules:
 | `./types.js` | `NestedArray` | Import (type-only) |
 | `./errors.js` | `NumericalBackendError` | Import |
 | `./connection-lowering-helpers.js` | `flattenNA` | Import |
+| `./strides.js` | `rowMajorStrides` | Import |
 
 **Exports:**
 - Functions: `pderivGrid`, `pderivNumericalFn`, `pderivSymbolic`, `metricDerivSupplied`
@@ -7339,8 +7340,13 @@ The codebase is organized into the following modules:
 
 ### `src/numerical/strides.ts` - Shared stride and flat-index utilities for row-major tensor storage.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `rowMajorStrides` |
+
 **Exports:**
-- Functions: `rowMajorStrides`, `flatIndex`, `sameShape`
+- Functions: `flatIndex`, `sameShape`
 
 ---
 
@@ -7666,12 +7672,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87472 |
+| Total Lines of Code | 87465 |
 | Total Exports | 2802 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
-| Total Functions | 909 |
+| Total Functions | 908 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 529 |
