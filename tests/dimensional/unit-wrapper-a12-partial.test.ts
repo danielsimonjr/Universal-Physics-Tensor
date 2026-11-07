@@ -19,6 +19,10 @@ describe('MathTS A5 path without local grammar (A12 partial)', () => {
   it('gap rows still use the local grammar', () => {
     expect(unitReadingsSource('bit')).toBe('local');
     expect(unitReadingsSource('m2K')).toBe('local');
+  });
+
+  it('a single factor with a superscript reads through MathTS once MathTS parses it (K², core 0.22.0)', () => {
+    // The delegation gate admits a token that is one factor. K² is one factor; m2K is two factors glued.
     expect(unitReadingsSource('K²')).toBe('mathts');
   });
 });
