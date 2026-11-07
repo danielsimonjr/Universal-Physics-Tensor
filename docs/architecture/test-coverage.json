@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 695,
+    "totalTestFiles": 696,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -7715,7 +7715,8 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/probe/batch-coverage.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
-      "tests/composition/probe/structure-tests.test.ts"
+      "tests/composition/probe/structure-tests.test.ts",
+      "tests/composition/probe/t-tail-mathts.test.ts"
     ],
     "src/composition/probe/types.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -12870,7 +12871,8 @@
     ],
     "src/composition/probe/t-tail.ts": [
       "tests/composition/probe/batch-coverage.test.ts",
-      "tests/composition/probe/structure-tests.test.ts"
+      "tests/composition/probe/structure-tests.test.ts",
+      "tests/composition/probe/t-tail-mathts.test.ts"
     ],
     "src/composition/probe/types.ts": [
       "tests/composition/probe/generator-budget.test.ts",
@@ -23080,6 +23082,9 @@
     ],
     "tests/composition/probe/study.test.ts": [
       "src/composition/probe/study.ts"
+    ],
+    "tests/composition/probe/t-tail-mathts.test.ts": [
+      "src/composition/probe/t-tail.ts"
     ],
     "tests/composition/proposed-bridges.test.ts": [
       "src/composition/proposed-bridges.ts",

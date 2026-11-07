@@ -5046,7 +5046,12 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `betainc` |
+| `@danielsimonjr/mathts-functions` | `studentTCDF` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../core/mathts-read.js` | `numberFrom` | Import |
 
 **Exports:**
 - Functions: `studentTwoSidedP`
@@ -7673,7 +7678,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87456 |
+| Total Lines of Code | 87454 |
 | Total Exports | 2802 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |

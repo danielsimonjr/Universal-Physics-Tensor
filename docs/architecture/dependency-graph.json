@@ -18539,12 +18539,19 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "betainc"
+              "studentTCDF"
             ]
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          }
+        ],
         "exports": [
           "studentTwoSidedP"
         ],
@@ -28092,7 +28099,7 @@
   "statistics": {
     "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 87456,
+    "totalLinesOfCode": 87454,
     "totalExports": 2802,
     "totalClasses": 86,
     "totalInterfaces": 518,
