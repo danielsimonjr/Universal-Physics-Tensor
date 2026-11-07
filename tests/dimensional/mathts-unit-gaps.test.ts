@@ -66,6 +66,26 @@ describe('MathTS agrees with UPT on delegated readings', () => {
     }
   });
 
+  it('glued products and superscripts parse on both sides (closed by 0.22.0)', () => {
+    for (const [text, dim] of [['m2K', { L: 2, Theta: 1 }], ['K²', { Theta: 2 }], ['Vs', {}], ['cm^2/Vs', {}]] as const) {
+      expect(() => Unit.parse(text)).not.toThrow();
+      const local = parseUnit(text);
+      expect(symmetricRelDiff(exactScaleToNumber(Unit.exactScale(text)!), local.scale)).toBeLessThan(1e-15);
+      for (const [axis, power] of Object.entries(dim)) expect(local.dim[axis as 'L'], `${text} ${axis}`).toBe(power);
+    }
+  });
+
+  it('an affine unit inside a compound is refused on both sides (closed by 0.22.0)', () => {
+    expect(() => Unit.parse('degC/s')).toThrow(/affine/);
+    expect(() => parseUnit('degC/s')).toThrow(UnitRefusedError);
+  });
+
+  it('a difference reading omits the offset on both sides (closed by 0.22.0)', () => {
+    const mt = Number((unit(25, 'degC') as { to(t: string, o: object): { toNumeric(): unknown } }).to('K', { reading: 'difference' }).toNumeric());
+    expect(mt).toBe(25);
+    expect(convertValue('25 degC', 'K', 'difference').value).toBe(25);
+  });
+
   it('the MathTS refusal registry states the same reasons UPT prints', () => {
     for (const [symbol, reason] of Object.entries(REFUSED_UNIT_SPELLINGS)) {
       expect(() => Unit.parse(symbol)).toThrow(/refused/);
@@ -93,11 +113,11 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       },
     },
     {
-      id: 'ton accepted in MathTS',
+      id: 'ton ambiguous in MathTS, refused in UPT',
       check: () => {
-        expect(() => Unit.parse('ton')).not.toThrow();
-        // 0.21.0 still reads `ton` as the US short ton, 2000 lb.
-        expect(exactScaleToNumber(Unit.exactScale('ton')!)).toBe(907.18474);
+        // From 0.22.0 MathTS names the readings (short, long, metric) instead of picking one.
+        expect(() => Unit.parse('ton')).toThrow(/ambiguous/);
+        expect(exactScaleToNumber(Unit.exactScale('shortton')!)).toBe(907.18474);
         expect(() => parseUnit('ton')).toThrow(UnitRefusedError);
       },
     },
@@ -107,27 +127,6 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
         expect(() => Unit.parse('Mpc')).not.toThrow();
         expect(() => Unit.parse('mpc')).toThrow(UnitParseError);
         expect(parseUnit('mpc').scale).toBeCloseTo(parseUnit('pc').scale / 1000, -18);
-      },
-    },
-    {
-      id: 'glued m2K rejected in MathTS',
-      check: () => {
-        expect(() => Unit.parse('m2K')).toThrow(UnitParseError);
-        expect(parseUnit('m2K').dim.L).toBe(2);
-      },
-    },
-    {
-      id: 'Unicode K² rejected in MathTS',
-      check: () => {
-        expect(() => Unit.parse('K²')).toThrow(UnitParseError);
-        expect(parseUnit('K²').dim.Theta).toBe(2);
-      },
-    },
-    {
-      id: 'degC/s accepted in MathTS',
-      check: () => {
-        expect(() => Unit.parse('degC/s')).not.toThrow();
-        expect(() => parseUnit('degC/s')).toThrow(UnitRefusedError);
       },
     },
     {

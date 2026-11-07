@@ -58,9 +58,9 @@ describe('wrapper refusal layer (A8)', () => {
     expect(() => parseUnit(compound)).toThrow(UnitRefusedError);
   });
 
-  it('ton stays refused even when MathTS parses the short ton', () => {
-    expect(mathtsWouldParse('ton')).toBe(true);
+  it('ton stays refused while MathTS names it ambiguous', () => {
+    expect(mathtsWouldParse('ton')).toBe(false);
     expect(() => parseUnit('ton')).toThrow(UnitRefusedError);
-    expect(() => Unit.parse('ton')).not.toThrow();
+    expect(() => Unit.parse('ton')).toThrow(/ambiguous/);
   });
 });
