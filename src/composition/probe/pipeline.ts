@@ -346,7 +346,7 @@ export async function runProbeSearch(
     rec = applyStatus(rec, 'structurally-valid', 'validate() ok', runId, at);
     store.replace(rec);
 
-    const corp = compareToCorpus(bodyExpression(rec.body), corpusVersion);
+    const corp = compareToCorpus(bodyExpression(rec.body), corpusVersion, at);
     corpus[rec.id] = corp;
     wording.push(corpusRelativeWording(corp));
     const known = corp.algebraicMatches.length > 0;

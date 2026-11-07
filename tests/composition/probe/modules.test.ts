@@ -285,6 +285,11 @@ describe('fit / scoring / corpus', () => {
     const none = compareToCorpus(sym('not-a-law', DIMENSIONLESS), '0');
     expect(corpusRelativeWording(none)).toMatch(/SCIENTIFIC NOVELTY NOT ESTABLISHED/);
   });
+
+  it('stamps the given search time, so a run with a pinned time repeats', () => {
+    const expr = monomialToExpr({ length: 0.5, gravity: -0.5 }, [period, length, gravity]);
+    expect(compareToCorpus(expr, '0', '2026-01-01T00:00:00.000Z').searchedAt).toBe('2026-01-01T00:00:00.000Z');
+  });
 });
 
 describe('limits / falsify / structure / design / metadata', () => {
