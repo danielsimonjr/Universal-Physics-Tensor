@@ -14,7 +14,7 @@
  * @internal
  */
 
-import { lgamma, normalQuantile } from '@danielsimonjr/mathts-functions';
+import { binomialTest, normalQuantile } from '@danielsimonjr/mathts-functions';
 import { numberFrom } from '../../core/mathts-read.js';
 
 /** The two-sided 95% normal quantile, MathTS `normalQuantile(0.975)` (1.959963984540054). @internal */
@@ -66,21 +66,6 @@ export interface McNemarResult {
   readonly exactP: number;
 }
 
-/** `log Γ(z)`, MathTS `lgamma`, read back as the number it is for a number. */
-function logGamma(z: number): number {
-  return numberFrom('lgamma', lgamma(z));
-}
-
-/**
- * `ln C(n, k) = ln Γ(n+1) − ln Γ(k+1) − ln Γ(n−k+1)`, through MathTS `lgamma`:
- * the same three terms as `logChoose` in `numerical/statistics`, the owner
- * the lattice random walk reads. This copy stays because the delegation scan
- * (`tests/numerical/mathts-delegation.test.ts`) pins this file's body text.
- */
-function logChoose(n: number, k: number): number {
-  return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
-}
-
 /**
  * McNemar's paired test. The EXACT binomial p-value is the one to report at
  * these sample sizes; the χ² is given because readers expect it.
@@ -91,10 +76,9 @@ export function mcnemar(table: PairedTable): McNemarResult {
   const n = table.b + table.c;
   if (n === 0) return { chiSquared: 0, exactP: 1 };
   const chiSquared = Math.max(0, Math.abs(table.b - table.c) - 1) ** 2 / n;
-  const k = Math.min(table.b, table.c);
-  let tail = 0;
-  for (let i = 0; i <= k; i++) tail += Math.exp(logChoose(n, i) - n * Math.LN2);
-  return { chiSquared, exactP: Math.min(1, 2 * tail) };
+  // MathTS `binomialTest` sums every outcome no more likely than the observed one; at p = ½ that is twice the smaller tail.
+  const exactP = numberFrom('binomialTest', binomialTest(Math.min(table.b, table.c), n).pValue);
+  return { chiSquared, exactP };
 }
 
 /**

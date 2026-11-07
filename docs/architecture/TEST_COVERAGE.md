@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 386 |
-| Total Test Files | 696 |
+| Total Test Files | 697 |
 | Source files imported directly by a test | 343 |
 | Source files reached directly or through a barrel or side-effect import | 376 |
 | Source files no test reaches either way | 10 |
@@ -67,7 +67,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `benchmark/leakage.ts` | `benchmark.test.ts`, `residual.test.ts`, `algebraic-equivalence.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/loader.ts` | `benchmark-model-set.test.ts`, `benchmark-preregistration.test.ts`, `benchmark.test.ts`, `json-file-readers.test.ts` | — |
 | `benchmark/run-atlas.ts` | `benchmark-ablation.test.ts`, `benchmark-run-atlas.test.ts` | `barrel-completeness.test.ts` |
-| `benchmark/stats.ts` | `benchmark-model-set.test.ts`, `benchmark-stats.test.ts`, `link-prediction.test.ts`, `mathts-delegation.test.ts`, `criterion3-run.test.ts` | `barrel-completeness.test.ts` |
+| `benchmark/stats.ts` | `benchmark-model-set.test.ts`, `benchmark-stats.test.ts`, `link-prediction.test.ts`, `mcnemar-binomial.test.ts`, `mathts-delegation.test.ts`, `criterion3-run.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/study.ts` | `benchmark-ablation.test.ts`, `benchmark-study.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/types.ts` | `benchmark-ablation.test.ts`, `benchmark-preregistration.test.ts`, `benchmark-run-atlas.test.ts`, `benchmark.test.ts` | `barrel-completeness.test.ts` |
 | `atlas/bridge-record.ts` | `bridge-record.test.ts` | — |
@@ -504,6 +504,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `atlas/link-prediction-intervals.test.ts` | 6 files |
 | `atlas/link-prediction.test.ts` | 7 files |
 | `atlas/make-regime.test.ts` | 5 files |
+| `atlas/mcnemar-binomial.test.ts` | 1 files |
 | `atlas/model.test.ts` | 7 files |
 | `atlas/models.test.ts` | 8 files |
 | `atlas/negative-controls.test.ts` | 13 files |

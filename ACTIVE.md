@@ -54,7 +54,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `chiSquareCdf` is MathTS `chiSquaredCDF`; no frozen output stores the value.
 - [x] MathTS leverage U5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U5).
   Done: `studentTwoSidedP` is `2·studentTCDF(−|t|, ν)`; the wrapper and its edge results stay.
-- [ ] MathTS leverage U6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U6).
+- [x] MathTS leverage U6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U6).
+  Done: `mcnemar` exact p is MathTS `binomialTest` on the smaller discordant cell; the local tail loop and its `logChoose` copy are gone.
 - [ ] MathTS leverage U7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U7).
 - [ ] MathTS leverage U8 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U8).
 - [ ] MathTS leverage U9 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U9).

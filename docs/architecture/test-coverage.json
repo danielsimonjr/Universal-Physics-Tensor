@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 696,
+    "totalTestFiles": 697,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -805,6 +805,7 @@
       "tests/atlas/benchmark-model-set.test.ts",
       "tests/atlas/benchmark-stats.test.ts",
       "tests/atlas/link-prediction.test.ts",
+      "tests/atlas/mcnemar-binomial.test.ts",
       "tests/numerical/mathts-delegation.test.ts",
       "tests/tools/criterion3-run.test.ts"
     ],
@@ -11247,6 +11248,7 @@
       "tests/atlas/benchmark-model-set.test.ts",
       "tests/atlas/benchmark-stats.test.ts",
       "tests/atlas/link-prediction.test.ts",
+      "tests/atlas/mcnemar-binomial.test.ts",
       "tests/numerical/mathts-delegation.test.ts",
       "tests/tools/criterion3-run.test.ts"
     ],
@@ -15254,6 +15256,9 @@
       "src/atlas/witness-artifact.ts",
       "src/dimensional/types.ts",
       "src/relations/regime.ts"
+    ],
+    "tests/atlas/mcnemar-binomial.test.ts": [
+      "src/atlas/benchmark/stats.ts"
     ],
     "tests/atlas/model.test.ts": [
       "src/atlas/oscillators/models.ts",

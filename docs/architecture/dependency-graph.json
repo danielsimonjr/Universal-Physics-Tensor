@@ -407,7 +407,7 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "lgamma",
+              "binomialTest",
               "normalQuantile"
             ]
           }
@@ -28099,7 +28099,7 @@
   "statistics": {
     "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 87454,
+    "totalLinesOfCode": 87438,
     "totalExports": 2802,
     "totalClasses": 86,
     "totalInterfaces": 518,
