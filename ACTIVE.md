@@ -52,7 +52,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `rationalCandidates` reduces through MathTS `gcd`; the local copy is gone.
 - [x] MathTS leverage U4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U4).
   Done: `chiSquareCdf` is MathTS `chiSquaredCDF`; no frozen output stores the value.
-- [ ] MathTS leverage U5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U5).
+- [x] MathTS leverage U5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U5).
+  Done: `studentTwoSidedP` is `2·studentTCDF(−|t|, ν)`; the wrapper and its edge results stay.
 - [ ] MathTS leverage U6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U6).
 - [ ] MathTS leverage U7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U7).
 - [ ] MathTS leverage U8 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U8).
