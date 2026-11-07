@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 7 files
 - **cli**: 58 files
 - **root**: 1 file
-- **composition**: 82 files
+- **composition**: 83 files
 - **core**: 18 files
 - **diff**: 3 files
 - **dimensional**: 44 files
@@ -4639,7 +4639,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `RawCandidate`
-- Functions: `monomialToExpr`, `nativeDetermination`
+- Functions: `monomialToExpr`, `nativeDetermination`, `withinAstCaps`
 - Re-exports: `powerLawDetermination`, `powerLawWording`, `rationalizeExponent`, `PowerLawDetermination`, `PowerLawExponent`, `PowerLawFit`
 
 ---
@@ -4777,10 +4777,10 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../dimensional/validator.js` | `validate` | Import |
 | `../../dimensional/algebra.js` | `equals` | Import |
-| `./types.js` | `ProbeCandidateRecord, ProbeRejectionRecord, SearchBudget, SearchProblem, SearchStopReason, DiscoveryRunManifest` | Import (type-only) |
+| `./types.js` | `DiscoveryBackendDescriptor, ProbeCandidateRecord, ProbeRejectionRecord, SearchBudget, SearchProblem, SearchStopReason, DiscoveryRunManifest` | Import (type-only) |
 | `./types.js` | `DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION` | Import |
 | `./search-budget.js` | `openBudget, budgetStopReason, BudgetState` | Import |
-| `./generator.js` | `generateNative, nativeDetermination, powerLawDetermination, powerLawWording, RawCandidate` | Import |
+| `./generator.js` | `generateNative, nativeDetermination, powerLawDetermination, powerLawWording, withinAstCaps, RawCandidate` | Import |
 | `./fingerprint.js` | `fingerprintExpr, complexityOf, bodyExpression` | Import |
 | `./corpus.js` | `compareToCorpus, corpusPrefactorNotes, corpusRelativeWording, CorpusComparisonResult` | Import |
 | `./fit.js` | `fitPrefactor, FitResult` | Import |
@@ -4790,6 +4790,7 @@ The codebase is organized into the following modules:
 | `./serialize.js` | `hashCanonical` | Import |
 | `./scoring.js` | `scoreCandidate, rankPareto, RankedCandidate` | Import |
 | `./backend-protocol.js` | `runBackendWorker` | Import |
+| `./scalar-search.js` | `SCALAR_SEARCH_ORIGIN, scalarSearchCandidates, UnsupportedScalarFunctionError, ProbeScalarSearchOptions` | Import |
 
 **Exports:**
 - Interfaces: `ProbeSearchOptions`, `ProbeSearchResult`
@@ -4890,6 +4891,32 @@ The codebase is organized into the following modules:
 - Interfaces: `ManifestDraft`
 - Functions: `openManifest`, `closeManifest`
 - Re-exports: `captureEnvironment`
+
+---
+
+### `src/composition/probe/scalar-search.ts` - MathTS scalar-search trees as UPT probe candidates (plan task P5).
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-expression` | `SCALAR_FUNCTION_LOWERING, ScalarGrammar, ScalarNode, ScalarOperator` |
+| `@danielsimonjr/mathts-core` | `Fraction, SiDimensionVector` |
+| `@danielsimonjr/mathts-functions` | `runScalarSearch` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../rational-exponent.js` | `rationalize` | Import |
+| `./generator.js` | `RawCandidate` | Import (type-only) |
+| `./types.js` | `SearchProblem` | Import (type-only) |
+
+**Exports:**
+- Classes: `UnsupportedScalarFunctionError`
+- Interfaces: `ProbeScalarSearchOptions`
+- Functions: `scalarNodeToExpr`, `dimensionToRational`, `scalarSearchCandidates`
+- Constants: `SCALAR_SEARCH_ORIGIN`
 
 ---
 
@@ -7550,7 +7577,7 @@ graph TD
         N33[aliases]
         N34[audit-coverage]
         N35[axes]
-        N36[...77 more]
+        N36[...78 more]
     end
 
     subgraph Core
@@ -7637,17 +7664,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 385 |
+| Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87198 |
-| Total Exports | 2796 |
+| Total Lines of Code | 87472 |
+| Total Exports | 2802 |
 | Total Re-exports | 1390 |
-| Total Classes | 85 |
-| Total Interfaces | 517 |
-| Total Functions | 905 |
+| Total Classes | 86 |
+| Total Interfaces | 518 |
+| Total Functions | 909 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
-| Type-only Imports | 525 |
+| Type-only Imports | 529 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

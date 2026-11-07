@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "totalSourceFiles": 385,
-    "totalTestFiles": 688,
-    "testedCount": 375,
-    "directlyTestedCount": 342,
+    "totalSourceFiles": 386,
+    "totalTestFiles": 690,
+    "testedCount": 376,
+    "directlyTestedCount": 343,
     "untestedCount": 10,
     "coveragePercent": "97.4",
-    "directCoveragePercent": "88.8"
+    "directCoveragePercent": "88.9"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
@@ -265,6 +265,7 @@
     "src/composition/probe/report.ts",
     "src/composition/probe/residual.ts",
     "src/composition/probe/run-manifest.ts",
+    "src/composition/probe/scalar-search.ts",
     "src/composition/probe/scoring.ts",
     "src/composition/probe/search-budget.ts",
     "src/composition/probe/serialize.ts",
@@ -611,6 +612,7 @@
     "src/composition/probe/report.ts",
     "src/composition/probe/residual.ts",
     "src/composition/probe/run-manifest.ts",
+    "src/composition/probe/scalar-search.ts",
     "src/composition/probe/scoring.ts",
     "src/composition/probe/search-budget.ts",
     "src/composition/probe/serialize.ts",
@@ -7489,7 +7491,8 @@
       "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/no-holdout-wording.test.ts",
-      "tests/composition/probe/power-law.test.ts"
+      "tests/composition/probe/power-law.test.ts",
+      "tests/composition/probe/scalar-search-pipeline.test.ts"
     ],
     "src/composition/probe/power-law.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -7545,7 +7548,8 @@
       "tests/composition/probe/no-holdout-wording.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
       "tests/composition/probe/power-law.test.ts",
-      "tests/composition/probe/problem-file-refusals.test.ts"
+      "tests/composition/probe/problem-file-refusals.test.ts",
+      "tests/composition/probe/scalar-search-pipeline.test.ts"
     ],
     "src/composition/probe/report.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -7601,6 +7605,9 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
+    ],
+    "src/composition/probe/scalar-search.ts": [
+      "tests/composition/probe/scalar-search-convert.test.ts"
     ],
     "src/composition/probe/scoring.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -9756,6 +9763,7 @@
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/probe/scalar-search-convert.test.ts",
       "tests/composition/probe/standard-errors.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/relation-refusal.test.ts",
@@ -12782,7 +12790,8 @@
       "tests/composition/probe/dimensionless-input.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/no-holdout-wording.test.ts",
-      "tests/composition/probe/power-law.test.ts"
+      "tests/composition/probe/power-law.test.ts",
+      "tests/composition/probe/scalar-search-pipeline.test.ts"
     ],
     "src/composition/probe/power-law.ts": [
       "tests/composition/probe/batch-coverage.test.ts"
@@ -12801,7 +12810,8 @@
       "tests/composition/probe/no-holdout-wording.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
       "tests/composition/probe/power-law.test.ts",
-      "tests/composition/probe/problem-file-refusals.test.ts"
+      "tests/composition/probe/problem-file-refusals.test.ts",
+      "tests/composition/probe/scalar-search-pipeline.test.ts"
     ],
     "src/composition/probe/report.ts": [
       "tests/composition/probe/coverage-backfill.test.ts",
@@ -12815,6 +12825,9 @@
     ],
     "src/composition/probe/run-manifest.ts": [
       "tests/composition/probe/modules.test.ts"
+    ],
+    "src/composition/probe/scalar-search.ts": [
+      "tests/composition/probe/scalar-search-convert.test.ts"
     ],
     "src/composition/probe/scoring.ts": [
       "tests/composition/probe/modules.test.ts"
@@ -13507,6 +13520,7 @@
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/probe/scalar-search-convert.test.ts",
       "tests/composition/probe/standard-errors.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/relation-refusal.test.ts",
@@ -23011,6 +23025,14 @@
       "src/composition/probe/structure.ts"
     ],
     "tests/composition/probe/problem-file-refusals.test.ts": [
+      "src/composition/probe/problem.ts"
+    ],
+    "tests/composition/probe/scalar-search-convert.test.ts": [
+      "src/composition/probe/scalar-search.ts",
+      "src/dimensional/types.ts"
+    ],
+    "tests/composition/probe/scalar-search-pipeline.test.ts": [
+      "src/composition/probe/pipeline.ts",
       "src/composition/probe/problem.ts"
     ],
     "tests/composition/probe/serialize.test.ts": [

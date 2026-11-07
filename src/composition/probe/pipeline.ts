@@ -12,6 +12,7 @@
 import { validate } from '../../dimensional/validator.js';
 import { equals } from '../../dimensional/algebra.js';
 import type {
+  DiscoveryBackendDescriptor,
   ProbeCandidateRecord,
   ProbeRejectionRecord,
   SearchBudget,
@@ -21,7 +22,14 @@ import type {
 } from './types.js';
 import { DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
 import { openBudget, budgetStopReason, type BudgetState } from './search-budget.js';
-import { generateNative, nativeDetermination, powerLawDetermination, powerLawWording, type RawCandidate } from './generator.js';
+import {
+  generateNative,
+  nativeDetermination,
+  powerLawDetermination,
+  powerLawWording,
+  withinAstCaps,
+  type RawCandidate,
+} from './generator.js';
 import { fingerprintExpr, complexityOf, bodyExpression } from './fingerprint.js';
 import {
   compareToCorpus,
@@ -36,6 +44,12 @@ import { openManifest, closeManifest } from './run-manifest.js';
 import { hashCanonical } from './serialize.js';
 import { scoreCandidate, rankPareto, type RankedCandidate } from './scoring.js';
 import { runBackendWorker } from './backend-protocol.js';
+import {
+  SCALAR_SEARCH_ORIGIN,
+  scalarSearchCandidates,
+  UnsupportedScalarFunctionError,
+  type ProbeScalarSearchOptions,
+} from './scalar-search.js';
 
 /** Stop wording when the problem carried no holdout rows. @internal */
 export const NO_HOLDOUT_WORDING = 'no holdout observations: no candidate was tested on withheld data';
@@ -55,6 +69,8 @@ export interface ProbeSearchOptions {
   readonly repositoryCommit?: string;
   readonly holdoutTol?: number;
   readonly backendArgv?: readonly string[];
+  /** Opt-in MathTS scalar-search candidate source (plan task P5). Absent: the search does not run. */
+  readonly scalarSearch?: ProbeScalarSearchOptions;
   readonly corpusVersion?: string;
   readonly now?: string;
 }
@@ -186,6 +202,42 @@ function makeGenerated(
 }
 
 /**
+ * The manifest's backend list: the native enumerator, then each opted-in source.
+ * `undefined` when no source is opted in, so a default run's manifest is unchanged.
+ */
+function backendDescriptorsFor(opts: ProbeSearchOptions): readonly DiscoveryBackendDescriptor[] | undefined {
+  if (!opts.backendArgv && !opts.scalarSearch) return undefined;
+  const list: DiscoveryBackendDescriptor[] = [
+    {
+      protocolVersion: '0',
+      backendId: 'native',
+      backendVersion: SCHEMA_VERSION,
+      capabilities: ['grammar-enumerator'],
+      deterministic: 'yes',
+    },
+  ];
+  if (opts.backendArgv) {
+    list.push({
+      protocolVersion: '0',
+      backendId: opts.backendArgv.join(' '),
+      backendVersion: 'external',
+      capabilities: ['external-backend'],
+      deterministic: 'unknown',
+    });
+  }
+  if (opts.scalarSearch) {
+    list.push({
+      protocolVersion: '0',
+      backendId: SCALAR_SEARCH_ORIGIN,
+      backendVersion: 'mathts-functions',
+      capabilities: ['scalar-search'],
+      deterministic: 'seeded',
+    });
+  }
+  return list;
+}
+
+/**
  * Run a bounded Product B search. Never mutates Product A catalogs.
  *
  * @internal
@@ -263,6 +315,23 @@ export async function runProbeSearch(
     }
   }
 
+  if (opts.scalarSearch && !budgetStopReason(state)) {
+    const remainingMs = Math.max(1, budget.maxWallClockMs - (performance.now() - state.startedAtMs));
+    try {
+      const found = await scalarSearchCandidates(problem, opts.scalarSearch, remainingMs);
+      if (found.note !== undefined) wording.push(found.note);
+      for (const raw of found.raws) {
+        if (budgetStopReason(state)) break;
+        if (!withinAstCaps(raw.expression, budget)) continue;
+        state.candidates += 1;
+        raws.push(raw);
+      }
+    } catch (err) {
+      if (err instanceof UnsupportedScalarFunctionError) throw err;
+      wording.push(`scalar search abstained: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
+
   const open = openManifest({
     runId,
     repositoryCommit: opts.repositoryCommit ?? 'unknown',
@@ -274,24 +343,7 @@ export async function runProbeSearch(
     tolerances: { holdoutRmse: opts.holdoutTol ?? DEFAULT_HOLDOUT_TOL },
     searchBudget: budget,
     startedAt: at,
-    backendDescriptors: opts.backendArgv
-      ? [
-          {
-            protocolVersion: '0',
-            backendId: 'native',
-            backendVersion: SCHEMA_VERSION,
-            capabilities: ['grammar-enumerator'],
-            deterministic: 'yes',
-          },
-          {
-            protocolVersion: '0',
-            backendId: opts.backendArgv.join(' '),
-            backendVersion: 'external',
-            capabilities: ['external-backend'],
-            deterministic: 'unknown',
-          },
-        ]
-      : undefined,
+    backendDescriptors: backendDescriptorsFor(opts),
   });
 
   for (const raw of raws) {
@@ -300,7 +352,9 @@ export async function runProbeSearch(
 
     const origin: ProbeCandidateRecord['origin'] = raw.originNote === 'external-backend'
       ? { kind: 'external-backend', backendId: 'external', runId }
-      : { kind: 'grammar-enumerator', runId };
+      : raw.originNote === SCALAR_SEARCH_ORIGIN
+        ? { kind: 'external-backend', backendId: SCALAR_SEARCH_ORIGIN, runId }
+        : { kind: 'grammar-enumerator', runId };
     seq += 1;
     let rec = makeGenerated(raw.expression, problem, runId, at, origin, seq);
     if (seenHash.has(rec.fingerprint.canonicalAstHash)) continue;

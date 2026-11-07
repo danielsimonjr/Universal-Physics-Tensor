@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "11.0.0",
-    "totalFiles": 385,
+    "totalFiles": 386,
     "totalModules": 13,
-    "totalExports": 2796
+    "totalExports": 2802
   },
   "entryPoints": [
     {
@@ -16741,6 +16741,7 @@
           "rationalizeExponent",
           "monomialToExpr",
           "nativeDetermination",
+          "withinAstCaps",
           "PowerLawDetermination",
           "PowerLawExponent",
           "PowerLawFit"
@@ -16758,7 +16759,8 @@
         ],
         "functions": [
           "monomialToExpr",
-          "nativeDetermination"
+          "nativeDetermination",
+          "withinAstCaps"
         ]
       },
       "src/composition/probe/index.ts": {
@@ -17663,6 +17665,7 @@
           {
             "file": "./types.js",
             "imports": [
+              "DiscoveryBackendDescriptor",
               "ProbeCandidateRecord",
               "ProbeRejectionRecord",
               "SearchBudget",
@@ -17695,6 +17698,7 @@
               "nativeDetermination",
               "powerLawDetermination",
               "powerLawWording",
+              "withinAstCaps",
               "RawCandidate"
             ]
           },
@@ -17761,6 +17765,15 @@
             "file": "./backend-protocol.js",
             "imports": [
               "runBackendWorker"
+            ]
+          },
+          {
+            "file": "./scalar-search.js",
+            "imports": [
+              "SCALAR_SEARCH_ORIGIN",
+              "scalarSearchCandidates",
+              "UnsupportedScalarFunctionError",
+              "ProbeScalarSearchOptions"
             ]
           }
         ],
@@ -18062,6 +18075,91 @@
         "functions": [
           "openManifest",
           "closeManifest"
+        ]
+      },
+      "src/composition/probe/scalar-search.ts": {
+        "description": "MathTS scalar-search trees as UPT probe candidates (plan task P5).",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-expression",
+            "imports": [
+              "SCALAR_FUNCTION_LOWERING",
+              "ScalarGrammar",
+              "ScalarNode",
+              "ScalarOperator"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Fraction",
+              "SiDimensionVector"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "runScalarSearch"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../rational-exponent.js",
+            "imports": [
+              "rationalize"
+            ]
+          },
+          {
+            "file": "./generator.js",
+            "imports": [
+              "RawCandidate"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "SearchProblem"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "SCALAR_SEARCH_ORIGIN",
+          "scalarNodeToExpr",
+          "dimensionToRational",
+          "scalarSearchCandidates",
+          "UnsupportedScalarFunctionError"
+        ],
+        "classes": [
+          "UnsupportedScalarFunctionError"
+        ],
+        "interfaces": [
+          "ProbeScalarSearchOptions"
+        ],
+        "functions": [
+          "scalarNodeToExpr",
+          "dimensionToRational",
+          "scalarSearchCandidates"
+        ],
+        "constants": [
+          "SCALAR_SEARCH_ORIGIN"
         ]
       },
       "src/composition/probe/scoring.ts": {
@@ -27804,6 +27902,7 @@
           "src/composition/probe/report.ts",
           "src/composition/probe/residual.ts",
           "src/composition/probe/run-manifest.ts",
+          "src/composition/probe/scalar-search.ts",
           "src/composition/probe/scoring.ts",
           "src/composition/probe/search-budget.ts",
           "src/composition/probe/serialize.ts",
@@ -27972,18 +28071,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 385,
+    "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 87198,
-    "totalExports": 2796,
-    "totalClasses": 85,
-    "totalInterfaces": 517,
-    "totalFunctions": 905,
+    "totalLinesOfCode": 87472,
+    "totalExports": 2802,
+    "totalClasses": 86,
+    "totalInterfaces": 518,
+    "totalFunctions": 909,
     "totalTypeGuards": 16,
     "totalEnums": 0,
-    "totalConstants": 412,
+    "totalConstants": 413,
     "totalReExports": 1390,
-    "totalTypeOnlyImports": 525,
+    "totalTypeOnlyImports": 529,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

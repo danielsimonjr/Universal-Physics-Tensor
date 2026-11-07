@@ -81,11 +81,7 @@ function* emitWithPrefactors(
   for (const candidate of extraPrefactors(expr)) {
     if (!canEmitCandidate(state)) return;
     if (validate(candidate).ok !== true) continue;
-    // Depth / operator caps
-    const depth = astDepth(candidate);
-    const ops = opCount(candidate);
-    if (depth > state.budget.maxAstDepth) continue;
-    if (ops > state.budget.maxOperators) continue;
+    if (!withinAstCaps(candidate, state.budget)) continue;
     const key = JSON.stringify(candidate);
     if (seen.has(key)) continue;
     seen.add(key);
@@ -166,6 +162,11 @@ function astDepth(node: ExprNode): number {
 function opCount(node: ExprNode): number {
   if (node.kind === 'op') return 1 + node.args.reduce((n, a) => n + opCount(a), 0);
   return 0;
+}
+
+/** Whether a candidate is within the budget's AST depth and operator caps. @internal */
+export function withinAstCaps(node: ExprNode, budget: SearchBudget): boolean {
+  return astDepth(node) <= budget.maxAstDepth && opCount(node) <= budget.maxOperators;
 }
 
 /**
