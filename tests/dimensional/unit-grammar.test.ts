@@ -116,41 +116,62 @@ describe('unit juxtaposition grammar', () => {
       [...units.entries()].filter(([, spec]) => spec[2]).map(([symbol]) => `${prefix}${symbol}`),
     );
     const lefts = [...bases, ...bases.flatMap((symbol) => [`${symbol}2`, `${symbol}^2`]), ...prefixed];
+    // The walk covers about 1.4e5 tokens. A vitest `expect` per token cost about two thirds of the
+    // run time, so each check records a failure as text and one assertion reads the list.
+    const failures: string[] = [];
+    const within = (actual: number, expected: number): boolean =>
+      Math.abs(actual - expected) / Math.max(Math.abs(actual), Math.abs(expected), 1) < 1e-9;
+    const factorMismatch = (token: string, want: Factor): string | null => {
+      const got = parseUnit(token);
+      if (!within(got.scale, want.scale)) return `${token}: scale ${got.scale} is not ${want.scale}`;
+      if (!equals(got.dim, want.dim)) return `${token}: dimension is not the single factor`;
+      return null;
+    };
+    const rightFactors = new Map(bases.map((right) => [right, oneFactor(right)] as const));
     for (const left of lefts) {
+      const a = oneFactor(left);
+      if (a === null) failures.push(`${left}: not one factor`);
       for (const right of bases) {
         const token = `${left}${right}`;
         if (token === 'degC' || token === '°C' || token === 'degF' || token === '°F') {
-          expect(parseUnit(token).affine).toBe(token.endsWith('C') ? 'celsius' : 'fahrenheit');
+          const affine = parseUnit(token).affine;
+          if (affine !== (token.endsWith('C') ? 'celsius' : 'fahrenheit')) failures.push(`${token}: affine ${affine}`);
           continue;
         }
         const single = oneFactor(token);
         if (single !== null) {
-          expectFactor(token, single);
+          const mismatch = factorMismatch(token, single);
+          if (mismatch !== null) failures.push(mismatch);
           continue;
         }
-        const a = oneFactor(left);
-        const b = oneFactor(right);
-        expect(a, left).not.toBeNull();
-        expect(b, right).not.toBeNull();
+        const b = rightFactors.get(right) ?? null;
+        if (a === null || b === null) {
+          if (b === null) failures.push(`${right}: not one factor`);
+          continue;
+        }
         let got: ReturnType<typeof parseUnit>;
         try {
           got = parseUnit(token);
         } catch (error) {
-          expect(error, token).toBeInstanceOf(UnitError);
-          const message = (error as Error).message;
+          if (!(error instanceof UnitError)) {
+            failures.push(`${token}: threw ${String(error)}`);
+            continue;
+          }
+          const message = error.message;
           if (/ambiguous/.test(message)) {
-            expect(message, token).toContain(' or ');
+            if (!message.includes(' or ')) failures.push(`${token}: ambiguous message names one reading`);
             ambiguous += 1;
             continue;
           }
-          expect(message, token).toMatch(/Fahrenheit|affine|unknown unit/);
+          if (!/Fahrenheit|affine|unknown unit/.test(message)) failures.push(`${token}: ${message}`);
           continue;
         }
-        close(got.scale, a!.scale * b!.scale);
-        expect(equals(got.dim, multiply(a!.dim, b!.dim)), token).toBe(true);
+        if (!within(got.scale, a.scale * b.scale)) failures.push(`${token}: product scale ${got.scale}`);
+        if (!equals(got.dim, multiply(a.dim, b.dim))) failures.push(`${token}: product dimension`);
         products += 1;
       }
     }
+    expect(failures.slice(0, 20)).toEqual([]);
     expect(products).toBeGreaterThan(0);
     expect(ambiguous).toBeGreaterThan(0);
     const metreSquared = oneFactor('m^2')!;
