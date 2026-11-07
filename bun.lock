@@ -10,10 +10,7 @@
         "@danielsimonjr/mathts-expression": "^0.11.1",
         "@danielsimonjr/mathts-functions": "^0.70.1",
         "@danielsimonjr/mathts-matrix": "^0.8.1",
-        "@danielsimonjr/mathts-parallel": "^0.7.1",
         "@danielsimonjr/mathts-tensor": "^0.2.27",
-        "@danielsimonjr/mathts-wasm": "^0.3.0",
-        "@danielsimonjr/mathts-workerpool": "^0.2.6",
       },
       "devDependencies": {
         "@types/node": "^22.0.0",
@@ -60,8 +57,6 @@
     "@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.7.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.21.0", "@danielsimonjr/mathts-workerpool": "^0.2.7" } }, "sha512-Ulb9R7VuC9yFEAfUFNDhWBTKTOhEZKhR2szQOlnwHRPySLMDu6QpZkoPHFlA5M5rWwub7l1IJwpOcyOV2zgv3A=="],
 
     "@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.2.27", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.21.0", "@danielsimonjr/mathts-matrix": "^0.8.1" } }, "sha512-dNwTpx/JILD/lILwmJV/4PjUE+4p9bQI9WEkpvTsVky8+8OZrKhzPxYPlg7AQ9GlCDXWo7UF4DSotu1bGeCHLA=="],
-
-    "@danielsimonjr/mathts-wasm": ["@danielsimonjr/mathts-wasm@0.3.1", "", {}, "sha512-6YQIe7QtPZfcfMKoAOMCNlJfnTQBrU9m5lAEL/qK7mqT71jgX1ECaEOYiL6KzYFuyQimEwoBVq2A8EtbPzJD4g=="],
 
     "@danielsimonjr/mathts-workerpool": ["@danielsimonjr/mathts-workerpool@0.2.7", "", { "dependencies": { "workerpool": "npm:@danielsimonjr/workerpool@10.2.2" } }, "sha512-n/TiXbaEMmE69pat1T/5QhU/YkTmlglZygOsNlfSzihSyhqI/KV/I60xO7GaLSqfOWOAqF+eY4zQWgug56cnjw=="],
 

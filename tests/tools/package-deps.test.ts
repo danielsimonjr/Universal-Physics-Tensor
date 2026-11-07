@@ -15,16 +15,19 @@ const MATHTS: Record<string, string> = {
   '@danielsimonjr/mathts-expression': '^0.11.1',
   '@danielsimonjr/mathts-functions': '^0.70.1',
   '@danielsimonjr/mathts-matrix': '^0.8.1',
-  '@danielsimonjr/mathts-parallel': '^0.7.1',
   '@danielsimonjr/mathts-tensor': '^0.2.27',
-  '@danielsimonjr/mathts-wasm': '^0.3.0',
-  '@danielsimonjr/mathts-workerpool': '^0.2.6',
 };
 
 describe('package.json dependency blocks', () => {
   it('requires the published MathTS packages and has no optionalDependencies', () => {
     expect(pkg.optionalDependencies ?? {}).toEqual({});
     expect(pkg.dependencies).toEqual(MATHTS);
+  });
+
+  it('does not list the MathTS packages that src/ never imports', () => {
+    for (const name of ['wasm', 'parallel', 'workerpool']) {
+      expect(pkg.dependencies[`@danielsimonjr/mathts-${name}`], name).toBeUndefined();
+    }
   });
 
   it('keeps only @viz-js/viz as an optional peer, mirrored as a devDependency', () => {
