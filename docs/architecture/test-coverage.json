@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 692,
+    "totalTestFiles": 693,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -7839,7 +7839,8 @@
       "tests/tensor.test.ts"
     ],
     "src/composition/rational-exponent.ts": [
-      "tests/composition/clean-prefactor.test.ts"
+      "tests/composition/clean-prefactor.test.ts",
+      "tests/composition/rational-exponent-mathts.test.ts"
     ],
     "src/composition/representative-values.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -12903,7 +12904,8 @@
       "tests/composition/user-equation.test.ts"
     ],
     "src/composition/rational-exponent.ts": [
-      "tests/composition/clean-prefactor.test.ts"
+      "tests/composition/clean-prefactor.test.ts",
+      "tests/composition/rational-exponent-mathts.test.ts"
     ],
     "src/composition/representative-values.ts": [
       "tests/composition/axis-audit-evidence.test.ts",
@@ -23140,6 +23142,9 @@
       "src/dimensional/formula-names.ts",
       "src/core/format.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/rational-exponent-mathts.test.ts": [
+      "src/composition/rational-exponent.ts"
     ],
     "tests/composition/relation-refusal.test.ts": [
       "src/dimensional/ast-builders.ts",
