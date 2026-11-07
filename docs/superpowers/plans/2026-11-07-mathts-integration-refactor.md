@@ -54,15 +54,14 @@ P1 already flipped the oracle rows. Do not widen the admission list in `data/uni
 - P2d: `ton` (U2). The `ton` and `tons` refusal rows in `data/units.json` stay: `ton` does not reach MathTS under the routing gate, and the CLI goldens pin the UPT message. A test requires a refusal row for every key of MathTS `AMBIGUOUS_UNIT_SPELLINGS`.
 - P2e: cycles (U9). Cycles stay on the UPT table. MathTS `Unit.cycles` is the bridge factor of the last `to()`, not the count in the given unit. A test requires the two tables to agree on the cycle flag, and no A5 text to count cycles. Keep the UPT angular rule (2π only on a parameter marked angular).
 
-## Task P3: delete the local splitter (UPT-7)
+## Task P3: keep the local grammar (UPT-7)
 
-Start after P2a and P2b are merged.
+The local grammar stays the authority for a unit text. `localUnitReadings` in `units.ts` lists every reading of a glued token. The local ambiguity check is the same code: a text is ambiguous when it has more than one reading. The gap rows `mol/mL`, `mAs`, `Pas` and `Pam` need these readings, so the splitter is not a duplicate of MathTS. The wrapper does not import the splitter.
 
-P2a delegates four listed spellings, not the glued grammar. Before the splitter can go, either every glued spelling that the CLI goldens and `data/` use is on the A5 list, or the routing gate (`everySymbolInBothTables` and `tryOneFactorBase` in `mathts-unit-delegation.ts`) splits a glued token the way the local grammar does. Choose one and state it in the P3 plan. Either choice must keep `Pas` and `Pam` ambiguous: they are the RED pair for the gate change.
-
-1. RED: a test that asserts the wrapper module does not import the local glued splitter or the local ambiguity check.
-2. Delete the glued splitter. Delete the local ambiguity check only if no gap row needs it (see P2b). The wrapper keeps admission, `bit`, the `pc` prefixes, cycles, spelling notes and error classes.
-3. Gate: the full suite and the CLI goldens pass with no golden change.
+1. Keep the splitter and the ambiguity check. Do not add a test that the wrapper does not import the splitter: that test passes on the present tree.
+2. MathTS task M6 exports the reading list (the internal `readings` function). After that release, UPT calls it and applies its own policy filter (refusals, prefixes, `bit`). That change deletes `segmentations`, `tokenWays` and `cartesian`. RED: each gap row keeps its present verdict.
+3. MathTS task M7 accepts the middle dot (`·`) as a product. Today MathTS refuses `m^2/(V·s)`, so that text routes to the local grammar.
+4. A change that makes MathTS the authority changes which texts `parseUnit` accepts. `parseUnit` is public, so that change needs an ADR.
 
 ## Task P4: drop the typed-mean copy
 
