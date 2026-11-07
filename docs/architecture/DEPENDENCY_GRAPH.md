@@ -4804,11 +4804,12 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `matrixRank, ols` |
+| `@danielsimonjr/mathts-functions` | `gcd, matrixRank, ols` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../core/mathts-read.js` | `numberFrom` | Import |
 | `../../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines, PiGroup` | Import |
 | `./types.js` | `DimensionalVariableRef, ObservationRow, SearchProblem` | Import (type-only) |
 
@@ -7672,7 +7673,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87465 |
+| Total Lines of Code | 87461 |
 | Total Exports | 2802 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |

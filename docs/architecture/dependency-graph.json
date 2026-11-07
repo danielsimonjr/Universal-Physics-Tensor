@@ -17800,6 +17800,7 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
+              "gcd",
               "matrixRank",
               "ols"
             ]
@@ -17807,6 +17808,12 @@
         ],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../core/mathts-read.js",
+            "imports": [
+              "numberFrom"
+            ]
+          },
           {
             "file": "../../dimensional/buckingham.js",
             "imports": [
@@ -28085,7 +28092,7 @@
   "statistics": {
     "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 87465,
+    "totalLinesOfCode": 87461,
     "totalExports": 2802,
     "totalClasses": 86,
     "totalInterfaces": 518,

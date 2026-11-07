@@ -48,7 +48,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `rowMajorStrides` is the MathTS core function; the `pderiv.ts` inline copy is gone.
 - [x] MathTS leverage U2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U2).
   Done: `fractionToNumber` and `formatRational` call MathTS `Fraction#toNumber` and `#toString`.
-- [ ] MathTS leverage U3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U3).
+- [x] MathTS leverage U3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U3).
+  Done: `rationalCandidates` reduces through MathTS `gcd`; the local copy is gone.
 - [ ] MathTS leverage U4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U4).
 - [ ] MathTS leverage U5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U5).
 - [ ] MathTS leverage U6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U6).

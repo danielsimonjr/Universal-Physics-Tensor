@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 693,
+    "totalTestFiles": 694,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -7517,6 +7517,7 @@
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
+      "tests/composition/probe/power-law-gcd.test.ts",
       "tests/composition/probe/power-law.test.ts",
       "tests/composition/probe/standard-errors.test.ts"
     ],
@@ -12797,7 +12798,8 @@
       "tests/composition/probe/scalar-search-pipeline.test.ts"
     ],
     "src/composition/probe/power-law.ts": [
-      "tests/composition/probe/batch-coverage.test.ts"
+      "tests/composition/probe/batch-coverage.test.ts",
+      "tests/composition/probe/power-law-gcd.test.ts"
     ],
     "src/composition/probe/problem.ts": [
       "tests/cli/probe-help-problem-format.test.ts",
@@ -23016,6 +23018,9 @@
       "src/composition/probe/problem.ts",
       "src/dimensional/ast-builders.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/probe/power-law-gcd.test.ts": [
+      "src/composition/probe/power-law.ts"
     ],
     "tests/composition/probe/power-law.test.ts": [
       "src/dimensional/buckingham.ts",
