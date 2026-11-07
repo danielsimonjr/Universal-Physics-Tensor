@@ -3,6 +3,7 @@
  * mutate its input, and the frozen-input row in `statistics.test.ts` fails if a release starts to.
  */
 import { describe, expect, it, vi } from 'vitest';
+import { meanOf } from '../../src/numerical/statistics.js';
 
 const seen: unknown[] = [];
 vi.mock('@danielsimonjr/mathts-functions', async (importOriginal) => {
@@ -15,8 +16,6 @@ vi.mock('@danielsimonjr/mathts-functions', async (importOriginal) => {
     },
   };
 });
-
-const { meanOf } = await import('../../src/numerical/statistics.js');
 
 describe('meanOf argument', () => {
   it('gives MathTS mean the caller array itself, not a copy', () => {
