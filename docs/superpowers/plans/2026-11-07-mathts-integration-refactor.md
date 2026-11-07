@@ -63,11 +63,10 @@ The local grammar stays the authority for a unit text. `localUnitReadings` in `u
 3. MathTS task M7 accepts the middle dot (`·`) as a product. Today MathTS refuses `m^2/(V·s)`, so that text routes to the local grammar.
 4. A change that makes MathTS the authority changes which texts `parseUnit` accepts. `parseUnit` is public, so that change needs an ADR.
 
-## Task P4: drop the typed-mean copy
+## Task P4: drop the mean copy
 
-Start after P1. `meanOf` copies a typed array to a plain array, because MathTS returned a Promise.
-RED: a test that `meanOf` on a `Float64Array` gives a number without the copy (spy on the call).
-Then delete the copy. From functions 0.73.0 `mean` returns a number for a `Float64Array` and a `Float32Array`.
+`meanOf` takes a plain `readonly number[]`, and no caller passes a typed array. It copied the array before MathTS `mean`. MathTS `mean` does not mutate its input and accepts a frozen array, so the copy is not needed.
+RED: a test that MathTS `mean` receives the caller's array itself (a mock of `mean` records the argument). Then delete the copy. The frozen-input row in `tests/numerical/statistics.test.ts` fails if a MathTS release starts to mutate the input.
 
 ## Task P5: scalar-search probe behind a flag (UPT-5)
 

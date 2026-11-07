@@ -38,7 +38,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: cycles stay on the UPT table. A test requires the UPT and MathTS cycle flags to agree and no A5 text to count cycles.
 - [x] MathTS 0.22 integration P3 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P3).
   Done: the local grammar stays. Its readings carry the gap rows; MathTS tasks M6 and M7 open the deletion.
-- [ ] MathTS 0.22 integration P4 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P4).
+- [x] MathTS 0.22 integration P4 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P4).
+  Done: `meanOf` passes the caller array to MathTS `mean` without a copy.
 - [ ] MathTS 0.22 integration P5 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P5).
 - [ ] MathTS leverage U0 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U0).
 - [ ] MathTS leverage U1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U1).
