@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 691,
+    "totalTestFiles": 692,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -10895,6 +10895,7 @@
       "tests/numerical/statistics.test.ts"
     ],
     "src/numerical/strides.ts": [
+      "tests/numerical/strides-mathts.test.ts",
       "tests/numerical/strides.test.ts"
     ],
     "src/numerical/tensor-engine.ts": [
@@ -14003,6 +14004,7 @@
       "tests/numerical/statistics.test.ts"
     ],
     "src/numerical/strides.ts": [
+      "tests/numerical/strides-mathts.test.ts",
       "tests/numerical/strides.test.ts"
     ],
     "src/numerical/tensor-engine.ts": [
@@ -24814,6 +24816,9 @@
     ],
     "tests/numerical/statistics.test.ts": [
       "src/numerical/statistics.ts"
+    ],
+    "tests/numerical/strides-mathts.test.ts": [
+      "src/numerical/strides.ts"
     ],
     "tests/numerical/strides.test.ts": [
       "src/numerical/strides.ts"

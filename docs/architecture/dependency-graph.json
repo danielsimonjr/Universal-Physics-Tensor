@@ -26943,6 +26943,12 @@
             "imports": [
               "flattenNA"
             ]
+          },
+          {
+            "file": "./strides.js",
+            "imports": [
+              "rowMajorStrides"
+            ]
           }
         ],
         "exports": [
@@ -27277,7 +27283,14 @@
       },
       "src/numerical/strides.ts": {
         "description": "Shared stride and flat-index utilities for row-major tensor storage.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "rowMajorStrides"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
@@ -27286,7 +27299,6 @@
           "sameShape"
         ],
         "functions": [
-          "rowMajorStrides",
           "flatIndex",
           "sameShape"
         ]
@@ -28073,11 +28085,11 @@
   "statistics": {
     "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 87472,
+    "totalLinesOfCode": 87465,
     "totalExports": 2802,
     "totalClasses": 86,
     "totalInterfaces": 518,
-    "totalFunctions": 909,
+    "totalFunctions": 908,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 413,

@@ -44,7 +44,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `ProbeSearchOptions.scalarSearch` adds MathTS `runScalarSearch` front trees as probe candidates; default off.
 - [x] MathTS leverage U0 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U0).
   Done: `tests/numerical/mathts-gaps.test.ts` pins the M1 to M4 limitations, each with a control.
-- [ ] MathTS leverage U1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U1).
+- [x] MathTS leverage U1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U1).
+  Done: `rowMajorStrides` is the MathTS core function; the `pderiv.ts` inline copy is gone.
 - [ ] MathTS leverage U2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U2).
 - [ ] MathTS leverage U3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U3).
 - [ ] MathTS leverage U4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U4).

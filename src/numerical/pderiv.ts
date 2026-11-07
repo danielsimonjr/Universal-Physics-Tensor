@@ -11,6 +11,7 @@ import type { GridField } from './grid-field.js';
 import type { NestedArray } from './types.js';
 import { NumericalBackendError } from './errors.js';
 import { flattenNA } from './connection-lowering-helpers.js';
+import { rowMajorStrides } from './strides.js';
 
 /**
  * Centered finite-difference of a GridField along `axis`. Returns a flat
@@ -31,9 +32,7 @@ export function pderivGrid(grid: GridField, axis: number): number[] {
   }
   const flat = flattenNA(grid.data);
   const shape = grid.shape;
-  const strides: number[] = new Array(shape.length);
-  let acc = 1;
-  for (let k = shape.length - 1; k >= 0; k--) { strides[k] = acc; acc *= shape[k]; }
+  const strides = rowMajorStrides(shape);
   const out = new Array<number>(flat.length).fill(0);
   const n = shape[axis];
   const step = strides[axis];

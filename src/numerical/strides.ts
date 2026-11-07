@@ -8,20 +8,14 @@
  * @internal
  */
 
+import { rowMajorStrides } from '@danielsimonjr/mathts-core';
+
 /**
- * Compute row-major strides for a given shape.
+ * Row-major strides for a shape, MathTS core `rowMajorStrides`:
  * strides[k] = product of shape[k+1..end], so that
  * flatIndex = sum(idx[k] * strides[k]).
  */
-export function rowMajorStrides(shape: ReadonlyArray<number>): number[] {
-  const strides = new Array<number>(shape.length);
-  let s = 1;
-  for (let k = shape.length - 1; k >= 0; k--) {
-    strides[k] = s;
-    s *= shape[k];
-  }
-  return strides;
-}
+export { rowMajorStrides };
 
 /**
  * Compute the flat (linear) index from a multi-index and precomputed strides.
