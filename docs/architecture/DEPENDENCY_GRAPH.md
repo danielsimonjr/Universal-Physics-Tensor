@@ -5963,25 +5963,19 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber, getUnitRow, toSiDimensionVector, ExactScale` |
+| `@danielsimonjr/mathts-core` | `Unit, exactScaleToNumber, getUnitRow, toSiDimensionVector` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `../core/compare.js` | `symmetricRelDiff` | Import |
 | `./algebra.js` | `equals, multiply, power` | Import |
-| `./exact-scale.js` | `scaleToNumber, solidusSides, uptExactScaleFromCore, ExactScale` | Import |
+| `./exact-scale.js` | `scaleToNumber, solidusSides, ExactScale` | Import |
 | `./unit-data.js` | `UNIT_DATA` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
-- Functions:
-
-  ```text
-  everySymbolInBothTables, mathtsExactScaleAgreed, isSubKiloParsec, unitExactScaleViaMathts,
-  mathtsExactScaleReading, unitParserViaMathts, mathtsParsedDimension, _powerDim, _multiplyDim
-  ```
-
+- Functions: `everySymbolInBothTables`, `mathtsExactScaleAgreed`, `isSubKiloParsec`, `unitExactScaleViaMathts`, `unitParserViaMathts`, `mathtsParsedDimension`, `_powerDim`, `_multiplyDim`
 
 ---
 
@@ -5995,8 +5989,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./exact-scale.js` | `scaleToNumber, solidusSides, ExactScale` | Import |
-| `./mathts-unit-delegation.js` | `isSubKiloParsec, mathtsExactScaleReading, mathtsParsedDimension` | Import |
+| `./exact-scale.js` | `scaleToNumber, solidusSides, uptExactScaleFromCore, ExactScale` | Import |
+| `./mathts-unit-delegation.js` | `isSubKiloParsec, mathtsParsedDimension` | Import |
 | `./unit-data.js` | `UNIT_DATA` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
@@ -7645,12 +7639,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 385 |
 | Total Modules | 13 |
-| Total Lines of Code | 87208 |
-| Total Exports | 2797 |
+| Total Lines of Code | 87197 |
+| Total Exports | 2796 |
 | Total Re-exports | 1390 |
 | Total Classes | 85 |
 | Total Interfaces | 517 |
-| Total Functions | 906 |
+| Total Functions | 905 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 525 |

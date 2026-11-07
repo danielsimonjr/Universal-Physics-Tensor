@@ -36,6 +36,17 @@ describe('Unit.parse delegation set (A5)', () => {
     expect(parseUnit('m2K').dim).toMatchObject({ L: 2, Theta: 1 });
   });
 
+  it.each([
+    ['m2K', 1, { L: 2, Theta: 1 }],
+    ['Vs', 1, { M: 1, L: 2, T: -2, I: -1 }],
+    ['cm^2/Vs', 1e-4, { M: -1, T: 2, I: 1 }],
+    ['W/m2K', 1, { M: 1, T: -3, Theta: -1 }],
+  ] as const)('%s read through MathTS has the pinned SI scale and dimension', (text, scale, dim) => {
+    const u = parseUnit(text);
+    expect(Math.abs(u.scale - scale) / scale).toBeLessThan(1e-15);
+    expect(u.dim).toMatchObject(dim);
+  });
+
   it('out-of-set rows keep today UPT error classes', () => {
     expect(() => parseUnit('ton')).toThrow(UnitRefusedError);
     expect(() => parseUnit('dB')).toThrow(UnitRefusedError);

@@ -26,7 +26,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `mathts-wasm`, `-parallel` and `-workerpool` removed from `package.json` and `bun.lock`; `package-deps.test.ts` refuses them (red first); `MEMORY.md` and `INTEGRATION_MAP.md` name six packages. PR #583.
 - [x] MathTS 0.22 integration P1 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P1).
   Done: the six ranges moved to the 0.22 generation, one core in `bun.lock`. Gap-oracle rows that 0.22.0 closed are agreements; `ton` is ambiguous in MathTS and refused in UPT; `K²` reads through MathTS. No `src/` change. The details are the `NOTES.md` block of 2026-11-07.
-- [ ] MathTS 0.22 integration P2a (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2a).
+- [x] MathTS 0.22 integration P2a (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2a).
+  Done: the four glued spellings read through MathTS; the exact scale comes from `uptExactScaleFromCore(Unit.exactScale(t))`. Relay: DeepSeek worker, Sonnet checker, Haiku reviewer.
 - [ ] MathTS 0.22 integration P2b (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2b).
 - [ ] MathTS 0.22 integration P2c (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2c).
 - [ ] MathTS 0.22 integration P2d (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2d).
