@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 385,
-    "totalTestFiles": 687,
+    "totalTestFiles": 688,
     "testedCount": 375,
     "directlyTestedCount": 342,
     "untestedCount": 10,
@@ -10882,6 +10882,7 @@
       "tests/numerical/spacetime-metrics.test.ts"
     ],
     "src/numerical/statistics.ts": [
+      "tests/numerical/statistics-mean-arg.test.ts",
       "tests/numerical/statistics.test.ts"
     ],
     "src/numerical/strides.ts": [
@@ -13982,6 +13983,7 @@
       "tests/numerical/spacetime-metrics.test.ts"
     ],
     "src/numerical/statistics.ts": [
+      "tests/numerical/statistics-mean-arg.test.ts",
       "tests/numerical/statistics.test.ts"
     ],
     "src/numerical/strides.ts": [
@@ -24779,6 +24781,9 @@
     "tests/numerical/spacetime-metrics.test.ts": [
       "src/core/constants.ts",
       "src/numerical/spacetime-metrics.ts"
+    ],
+    "tests/numerical/statistics-mean-arg.test.ts": [
+      "src/numerical/statistics.ts"
     ],
     "tests/numerical/statistics.test.ts": [
       "src/numerical/statistics.ts"

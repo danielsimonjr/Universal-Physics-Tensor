@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 385 |
-| Total Test Files | 687 |
+| Total Test Files | 688 |
 | Source files imported directly by a test | 342 |
 | Source files reached directly or through a barrel or side-effect import | 375 |
 | Source files no test reaches either way | 10 |
@@ -421,7 +421,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `numerical/rk4-trajectory.ts` | `exact-propagators.test.ts`, `rk4-trajectory.test.ts` | — |
 | `numerical/schwarzschild.ts` | `schwarzschild.test.ts` | — |
 | `numerical/spacetime-metrics.ts` | `metric-value-error.test.ts`, `spacetime-metrics.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
-| `numerical/statistics.ts` | `statistics.test.ts` | — |
+| `numerical/statistics.ts` | `statistics-mean-arg.test.ts`, `statistics.test.ts` | — |
 | `numerical/strides.ts` | `strides.test.ts` | — |
 | `numerical/tensor-engine.ts` | `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-reencode-batch.test.ts`, `bridge-ast-reencode.test.ts`, `integral-ad.test.ts`, `dimensionful-power-ad.test.ts`, `einsum-precompute.test.ts`, `engine-capability.test.ts`, `mathts-autograd.test.ts`, `mathts-engine-typing.test.ts`, `tensor-engine-types.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `covariant-eikonal-real.test.ts`, `covariant-eikonal-step-sweep.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `one-function-table.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/types.ts` | `connection-lowering-helpers.test.ts`, `correctness.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-utils.test.ts`, `metric-inverse.test.ts`, `tensor-engine-types.test.ts`, `tensor-partial-derivative-lowering.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `covariant-derivative-lowering.test.ts`, `covariant-eikonal-real.test.ts`, `covariant-eikonal-step-sweep.test.ts`, `engine-default.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `one-function-table.test.ts`, `pderiv.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
@@ -1083,6 +1083,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `numerical/schwarzschild-radial-geodesic.test.ts` | 2 files |
 | `numerical/schwarzschild.test.ts` | 1 files |
 | `numerical/spacetime-metrics.test.ts` | 2 files |
+| `numerical/statistics-mean-arg.test.ts` | 1 files |
 | `numerical/statistics.test.ts` | 1 files |
 | `numerical/strides.test.ts` | 1 files |
 | `numerical/tensor-engine-types.test.ts` | 3 files |
