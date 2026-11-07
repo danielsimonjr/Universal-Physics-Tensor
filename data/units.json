@@ -1062,6 +1062,10 @@
     {
       "symbol": "ton",
       "reason": "'ton' is ambiguous: short ton (907.185 kg), long ton (1016.047 kg), or metric tonne (1000 kg); write tonne"
+    },
+    {
+      "symbol": "tons",
+      "reason": "'tons' is ambiguous: short ton (907.185 kg), long ton (1016.047 kg), or metric tonne (1000 kg); write tonne"
     }
   ],
   "prefixLetterUnits": {

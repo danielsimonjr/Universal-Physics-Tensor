@@ -49,7 +49,7 @@ through MathTS. RED is a wrapper test asserting that each text takes the delegat
 P1 already flipped the oracle rows. Do not widen the admission list in `data/units.json`.
 
 - P2a: glued products and superscripts (U5, U6): `m2K`, `Vs`, `cm^2/Vs`, `K²`.
-- P2b: ambiguous splits (U7). MathTS core 0.22.0 reads `mol/mL` as one reading and reports `mAs` as not found, so neither is a MathTS `AmbiguousUnitError`. First enumerate the tokens that MathTS names ambiguous (`ton` and `tons` are known). Delegate only those, and map the MathTS error to the UPT error class. `mol/mL` and `mAs` stay on the local ambiguity check, and P3 keeps that check while either stays a gap.
+- P2b: ambiguous splits (U7). MathTS core 0.22.0 has two sources of ambiguity: the static table (`ton`, `tons`) and a rule, a glued token whose splits give different dimensions (`Pas`, `Pam`). `ton` and `tons` are UPT policy refusals in `data/units.json`, read before MathTS. A glued token does not reach MathTS under the routing gate. `mol/mL` and `mAs` stay on the local ambiguity check.
 - P2c: affine compounds and difference readings (U3, U4): use `to(target, { reading: 'difference' })` for a difference temperature, and map the MathTS affine-compound refusal to the UPT refusal.
 - P2d: `ton` (U2): MathTS throws `AmbiguousUnitError` for `ton` and `tons`. The wrapper maps that error to the present UPT `UnitRefusedError`, so the CLI goldens do not change. `shortton` and `longton` stay out of `data/units.json` unless they are admitted as a separate product decision. Remove the local `ton` override after the mapping test passes.
 - P2e: cycles (U9): read `cycles` from the MathTS conversion result. Keep the UPT angular rule (2π only on a parameter marked angular).
@@ -58,7 +58,7 @@ P1 already flipped the oracle rows. Do not widen the admission list in `data/uni
 
 Start after P2a and P2b are merged.
 
-P2a delegates four listed spellings, not the glued grammar. Before the splitter can go, either every glued spelling that the CLI goldens and `data/` use is on the A5 list, or the routing gate (`everySymbolInBothTables` and `tryOneFactorBase` in `mathts-unit-delegation.ts`) splits a glued token the way the local grammar does. Choose one and state it in the P3 plan.
+P2a delegates four listed spellings, not the glued grammar. Before the splitter can go, either every glued spelling that the CLI goldens and `data/` use is on the A5 list, or the routing gate (`everySymbolInBothTables` and `tryOneFactorBase` in `mathts-unit-delegation.ts`) splits a glued token the way the local grammar does. Choose one and state it in the P3 plan. Either choice must keep `Pas` and `Pam` ambiguous: they are the RED pair for the gate change.
 
 1. RED: a test that asserts the wrapper module does not import the local glued splitter or the local ambiguity check.
 2. Delete the glued splitter. Delete the local ambiguity check only if no gap row needs it (see P2b). The wrapper keeps admission, `bit`, the `pc` prefixes, cycles, spelling notes and error classes.
