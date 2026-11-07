@@ -18,7 +18,8 @@
  * @internal
  */
 
-import { matrixRank, ols } from '@danielsimonjr/mathts-functions';
+import { gcd, matrixRank, ols } from '@danielsimonjr/mathts-functions';
+import { numberFrom } from '../../core/mathts-read.js';
 import { buckinghamPi, dimensionallyDetermines, type PiGroup } from '../../dimensional/buckingham.js';
 import type { DimensionalVariableRef, ObservationRow, SearchProblem } from './types.js';
 
@@ -79,7 +80,7 @@ export function rationalCandidates(x: number, tol: number, maxDen = MAX_EXPONENT
     const lo = Math.ceil((x - tol) * d);
     const hi = Math.floor((x + tol) * d);
     for (let n = lo; n <= hi; n++) {
-      const g = gcd(Math.abs(n), d);
+      const g = numberFrom('gcd', gcd(Math.abs(n), d));
       const r = { numerator: n / g, denominator: d / g };
       if (!out.some((o) => o.numerator === r.numerator && o.denominator === r.denominator)) out.push(r);
     }
@@ -95,11 +96,6 @@ export function rationalCandidates(x: number, tol: number, maxDen = MAX_EXPONENT
 export function rationalizeExponent(x: number, tol: number, maxDen = MAX_EXPONENT_DENOMINATOR): Rational | null {
   const all = rationalCandidates(x, tol, maxDen);
   return all.length === 1 ? all[0]! : null;
-}
-
-function gcd(a: number, b: number): number {
-  while (b !== 0) [a, b] = [b, a % b];
-  return a === 0 ? 1 : a;
 }
 
 /** The π-groups of the governing set and the target's base monomial over a maximal dimensionally independent subset. @internal */
