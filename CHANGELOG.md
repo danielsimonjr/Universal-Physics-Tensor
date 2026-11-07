@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Changed
 
+- **UPT refusals cover the MathTS ambiguous spellings.** A test requires a `data/units.json` refusal row for every key of MathTS `AMBIGUOUS_UNIT_SPELLINGS`, so a new MathTS ambiguous spelling fails it (it fails with the `tons` row removed). The `ton` rows stay, because `ton` does not reach MathTS and the CLI goldens pin the UPT message. Two wrapper comments that said MathTS parses `ton` and `degC/s` are corrected.
 - **Plan: MathTS leverage.** `docs/superpowers/plans/2026-11-07-mathts-leverage.md` lists nine UPT routines to replace with MathTS calls (U1-U9), a gap-row task that pins every kept-local reason (U0), and five MathTS changes (M1-M5). It follows an inventory of `src/` against the installed MathTS exports.
 - **The affine-compound guard stays in UPT.** MathTS 0.22 refuses `degC/s` but parses the spaced `deg C/s` and `° C/s` as a product of other units, which UPT refuses. A gap row in `tests/dimensional/mathts-unit-gaps.test.ts` pins the difference; removing the UPT spaced-form check fails it. The difference reading stays on the local exact-rational path.
 - **`tons` is refused like `ton`.** MathTS 0.22 names `ton` and `tons` ambiguous; UPT read `tons` as an unknown unit. `data/units.json` refuses it with the `ton` reason, so `parseUnit('tons')` throws `UnitRefusedError` (was `UnknownUnitError`).
