@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 385,
-    "totalTestFiles": 686,
+    "totalTestFiles": 687,
     "testedCount": 375,
     "directlyTestedCount": 342,
     "untestedCount": 10,
@@ -9447,6 +9447,7 @@
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
       "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/unit-wrapper-a12-partial.test.ts",
       "tests/dimensional/unit-wrapper-bit.test.ts",
@@ -9844,6 +9845,7 @@
     ],
     "src/dimensional/unit-data.ts": [
       "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts"
     ],
@@ -13315,6 +13317,7 @@
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
       "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-override-parsec.test.ts",
       "tests/dimensional/unit-wrapper-a12-partial.test.ts",
       "tests/dimensional/unit-wrapper-bit.test.ts",
@@ -13589,6 +13592,7 @@
     ],
     "src/dimensional/unit-data.ts": [
       "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts"
     ],
@@ -23995,6 +23999,10 @@
       "src/bridges/evaluator-inputs.ts",
       "src/bridges/evaluators.ts",
       "src/bridges/expr-parse.ts"
+    ],
+    "tests/dimensional/unit-cycles-mathts.test.ts": [
+      "src/dimensional/mathts-unit-wrapper.ts",
+      "src/dimensional/unit-data.ts"
     ],
     "tests/dimensional/unit-data-delegation.test.ts": [],
     "tests/dimensional/unit-data.test.ts": [
