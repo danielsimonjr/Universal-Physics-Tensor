@@ -24,8 +24,8 @@
  * @internal
  */
 import { REFUSED_UNIT_SPELLINGS, Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
-import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
-import { isSubKiloParsec, mathtsExactScaleReading, mathtsParsedDimension } from './mathts-unit-delegation.js';
+import { scaleToNumber, solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
+import { isSubKiloParsec, mathtsParsedDimension } from './mathts-unit-delegation.js';
 import { UNIT_DATA } from './unit-data.js';
 import type { Dimension } from './types.js';
 
@@ -36,7 +36,8 @@ const UNITS = UNIT_DATA.units;
 
 /** Agreed spellings that fully parse through MathTS (Part A step A5). The 0.21.0
  * core adds the day symbol, the angstrom spellings, and SI prefixes on `psi` and
- * `torr`; the k-and-up parsec spellings agree with the table double for double. */
+ * `torr`; the k-and-up parsec spellings agree with the table double for double.
+ * The 0.22.0 core adds the glued products `m2K`, `Vs`, `cm^2/Vs` and `W/m2K`. */
 export const A5_DELEGATED_TEXTS = [
   'km',
   'degC',
@@ -59,6 +60,10 @@ export const A5_DELEGATED_TEXTS = [
   'kpc',
   'Mpc',
   'Gpc',
+  'm2K',
+  'Vs',
+  'cm^2/Vs',
+  'W/m2K',
 ] as const;
 
 const A5_DELEGATED = new Set<string>(A5_DELEGATED_TEXTS);
@@ -183,7 +188,7 @@ export function tryMathtsA5Reading(text: string): MathtsDelegatedReading | null 
   if (core === null) return null;
   const scale = exactScaleToNumber(core);
   const dim = mathtsParsedDimension(t, affineDimHint ?? DIMENSIONLESS);
-  const exact = UNITS.get(t)?.scale ?? mathtsExactScaleReading(t);
+  const exact = UNITS.get(t)?.scale ?? uptExactScaleFromCore(core);
   const overridden = applyBitScaleOverride(t, exact, scale);
   return { exact: overridden.exact, scale: overridden.scale, dim, cycles: 0 };
 }
