@@ -49,7 +49,7 @@ through MathTS. RED is a wrapper test asserting that each text takes the delegat
 P1 already flipped the oracle rows. Do not widen the admission list in `data/units.json`.
 
 - P2a: glued products and superscripts (U5, U6): `m2K`, `Vs`, `cm^2/Vs`, `K²`.
-- P2b: ambiguous splits (U7): the MathTS `AmbiguousUnitError` maps to the UPT error class.
+- P2b: ambiguous splits (U7). MathTS core 0.22.0 reads `mol/mL` as one reading and reports `mAs` as not found, so neither is a MathTS `AmbiguousUnitError`. First enumerate the tokens that MathTS names ambiguous (`ton` and `tons` are known). Delegate only those, and map the MathTS error to the UPT error class. `mol/mL` and `mAs` stay on the local ambiguity check, and P3 keeps that check while either stays a gap.
 - P2c: affine compounds and difference readings (U3, U4): use `to(target, { reading: 'difference' })` for a difference temperature, and map the MathTS affine-compound refusal to the UPT refusal.
 - P2d: `ton` (U2): MathTS throws `AmbiguousUnitError` for `ton` and `tons`. The wrapper maps that error to the present UPT `UnitRefusedError`, so the CLI goldens do not change. `shortton` and `longton` stay out of `data/units.json` unless they are admitted as a separate product decision. Remove the local `ton` override after the mapping test passes.
 - P2e: cycles (U9): read `cycles` from the MathTS conversion result. Keep the UPT angular rule (2π only on a parameter marked angular).
@@ -59,14 +59,14 @@ P1 already flipped the oracle rows. Do not widen the admission list in `data/uni
 Start after P2a and P2b are merged.
 
 1. RED: a test that asserts the wrapper module does not import the local glued splitter or the local ambiguity check.
-2. Delete those functions. The wrapper keeps admission, `bit`, the `pc` prefixes, cycles, spelling notes and error classes.
+2. Delete the glued splitter. Delete the local ambiguity check only if no gap row needs it (see P2b). The wrapper keeps admission, `bit`, the `pc` prefixes, cycles, spelling notes and error classes.
 3. Gate: the full suite and the CLI goldens pass with no golden change.
 
 ## Task P4: drop the typed-mean copy
 
 Start after P1. `meanOf` copies a typed array to a plain array, because MathTS returned a Promise.
 RED: a test that `meanOf` on a `Float64Array` gives a number without the copy (spy on the call).
-Then delete the copy. Skip the task for any caller that passes a `Float32Array`, because MathTS still refuses it.
+Then delete the copy. From functions 0.73.0 `mean` returns a number for a `Float64Array` and a `Float32Array`.
 
 ## Task P5: scalar-search probe behind a flag (UPT-5)
 
