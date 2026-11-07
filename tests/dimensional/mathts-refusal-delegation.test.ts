@@ -69,9 +69,9 @@ describe('refusal definitions come from MathTS (A8 delegated)', () => {
     expect(() => parseUnit('dB')).not.toThrow(UnknownUnitError);
   });
 
-  it('ton is UPT policy alone: MathTS parses the short ton and has no registry row', () => {
+  it('ton is UPT policy alone: MathTS names it ambiguous and has no registry row', () => {
     expect(REFUSED_UNIT_SPELLINGS['ton']).toBeUndefined();
-    expect(() => Unit.parse('ton')).not.toThrow();
+    expect(() => Unit.parse('ton')).toThrow(/ambiguous/);
     expect(uptRefusalReason('ton')).toBe(UNIT_DATA.refused.get('ton'));
     expect(() => parseUnit('ton')).toThrow(UnitRefusedError);
   });

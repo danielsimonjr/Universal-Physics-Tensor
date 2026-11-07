@@ -12,8 +12,8 @@ import {
   readUnit,
 } from '../../src/dimensional/units.js';
 
-const inSet = ['km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc', 'd', 'day', 'Angstrom'] as const;
-const outOfSetLocal = ['bit', 'm2K', 'K²', 'mpc'] as const;
+const inSet = ['km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc', 'd', 'day', 'Angstrom', 'K²'] as const;
+const outOfSetLocal = ['bit', 'm2K', 'mpc'] as const;
 const outOfSetThrow = ['ton', 'dB', 'mAs', 'mol/mL', 'degC/s', 'furlong'] as const;
 
 describe('Unit.parse delegation set (A5)', () => {
