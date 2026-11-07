@@ -1,0 +1,50 @@
+/**
+ * Gap rows for the MathTS leverage plan (`docs/superpowers/plans/2026-11-07-mathts-leverage.md`,
+ * task U0). Each row asserts a present MathTS limitation that keeps a UPT routine local. A row
+ * fails on the day a MathTS release removes the limitation. The matching M task then turns the
+ * row into an agreement test and deletes the UPT copy.
+ */
+import * as functions from '@danielsimonjr/mathts-functions';
+import { mcnemar, rootsLegendre } from '@danielsimonjr/mathts-functions';
+import { describe, expect, it } from 'vitest';
+import { GAUSS_LEGENDRE_16 } from '../../src/numerical/quadrature.js';
+
+const exported = (name: string): boolean => Object.prototype.hasOwnProperty.call(functions, name);
+
+describe('MathTS gaps that keep UPT routines local', () => {
+  it('M1: studentTTwoSidedP is not exported (UPT t-tail uses studentTCDF instead)', () => {
+    expect(exported('studentTTwoSidedP')).toBe(false);
+    expect(exported('studentTCDF')).toBe(true);
+  });
+
+  it('M2: mcnemar reads p as 1 - CDF, so a large statistic gives p = 0 (UPT keeps the direct tail)', () => {
+    // 100 discordant pairs on one side: chi2 = 99^2 / 100 = 98.01, true upper tail ~ 1e-23.
+    const r = mcnemar([[0, 100], [0, 0]]);
+    expect(r.chi2).toBeCloseTo(98.01, 10);
+    expect(r.pValue).toBe(0);
+    // Control: a small statistic gives a p strictly inside (0, 1), so the row reads a real p.
+    const small = mcnemar([[10, 5], [3, 12]], { correction: false });
+    expect(small.pValue).toBeGreaterThan(0);
+    expect(small.pValue).toBeLessThan(1);
+  });
+
+  it('M3: rootsLegendre(16) weights are off by more than 1e-14 relative (UPT keeps the closed form)', () => {
+    const { weights } = rootsLegendre(16);
+    let worst = 0;
+    weights.forEach((w, i) => {
+      const local = GAUSS_LEGENDRE_16[i]!.weight;
+      worst = Math.max(worst, Math.abs(w - local) / local);
+    });
+    expect(worst).toBeGreaterThan(1e-14);
+    const sum = GAUSS_LEGENDRE_16.reduce((s, n) => s + n.weight, 0);
+    expect(Math.abs(sum - 2)).toBeLessThan(1e-15);
+  });
+
+  it('M4: Wilson and Newcombe intervals and Cohen kappa are not exported (UPT keeps stats.ts)', () => {
+    for (const name of ['wilsonInterval', 'newcombeInterval', 'cohensKappa']) {
+      expect(exported(name), name).toBe(false);
+    }
+    // Control: the reader sees an export that exists.
+    expect(exported('mcnemar')).toBe(true);
+  });
+});

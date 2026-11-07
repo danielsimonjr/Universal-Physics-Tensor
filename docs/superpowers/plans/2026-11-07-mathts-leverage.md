@@ -24,7 +24,7 @@ Order: U0 first, then lowest risk first. Each row names the local routine, the M
 
 | Id | Local routine | MathTS call | Edge inputs and RED shape |
 |---|---|---|---|
-| U0 | the reasons in "Kept local" | none | one gap row per reason in `tests/dimensional/mathts-unit-gaps.test.ts` style, in a new `tests/numerical/mathts-gaps.test.ts`: each row asserts the MathTS limitation, so it fails the day a MathTS release removes it. Every M task below is done when its row fails and is turned into an agreement test |
+| U0 | the reasons in "Kept local" that an M task removes | none | one gap row per M task (M1 to M4) in a new `tests/numerical/mathts-gaps.test.ts`: each row asserts the MathTS limitation, so it fails the day a MathTS release removes it, and each row has a control that the reader sees a real value. Every M task below is done when its row fails and is turned into an agreement test. M5 is a type-level change and has no runtime row. The other kept-local reasons are UPT design choices (step halving, stencils, the structural hash), not MathTS gaps |
 | U1 | `rowMajorStrides` (`src/numerical/strides.ts`) and the inline copy in `src/numerical/pderiv.ts` | core `rowMajorStrides` | `[]`, `[1]`, a zero extent, rank 6 |
 | U2 | `fractionToNumber` and `formatRational` (`src/composition/rational-exponent.ts`) | core `Fraction#toNumber`, `Fraction#toString` | a negative value, an integer, a numerator above 2^53; the text must be byte-identical on every call site's output path (CLI, report, golden) |
 | U3 | `gcd` (`src/composition/probe/power-law.ts`) | functions `gcd`, read through `bigintFrom` or `numberFrom` | the pairs the caller can reach; `gcd(0,0)` is out of the caller's domain |

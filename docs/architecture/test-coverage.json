@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 690,
+    "totalTestFiles": 691,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -10864,6 +10864,7 @@
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
       "tests/numerical/mathts-delegation.test.ts",
+      "tests/numerical/mathts-gaps.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/numerical/rk4-trajectory.ts": [
@@ -13983,6 +13984,7 @@
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
       "tests/numerical/mathts-delegation.test.ts",
+      "tests/numerical/mathts-gaps.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/numerical/rk4-trajectory.ts": [
@@ -24654,6 +24656,9 @@
       "src/numerical/mathts-engine.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/errors.ts"
+    ],
+    "tests/numerical/mathts-gaps.test.ts": [
+      "src/numerical/quadrature.ts"
     ],
     "tests/numerical/mathts-required.test.ts": [
       "src/numerical/formula-registry.ts"

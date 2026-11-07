@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 386 |
-| Total Test Files | 690 |
+| Total Test Files | 691 |
 | Source files imported directly by a test | 343 |
 | Source files reached directly or through a barrel or side-effect import | 376 |
 | Source files no test reaches either way | 10 |
@@ -418,7 +418,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `numerical/painleve-gullstrand-metric.ts` | `kretschmann-factored-raising.test.ts`, `lower-first-index-n4-unroll.test.ts`, `painleve-gullstrand-curvature.test.ts` | — |
 | `numerical/pderiv.ts` | `metric-deriv-supplied.test.ts`, `pderiv-flatten-consolidation.test.ts`, `pderiv-order-default.test.ts`, `pderiv-order.test.ts`, `pderiv.test.ts` | — |
 | `numerical/perihelion-finder.ts` | `perihelion-finder-roundtrip.test.ts`, `perihelion-finder.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `covariant-eikonal-real.test.ts`, `covariant-eikonal-step-sweep.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `one-function-table.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
-| `numerical/quadrature.ts` | `finiteness-guards.test.ts`, `integral-quadrature.test.ts`, `mathts-delegation.test.ts`, `round2-numerical-dimensional.test.ts` | — |
+| `numerical/quadrature.ts` | `finiteness-guards.test.ts`, `integral-quadrature.test.ts`, `mathts-delegation.test.ts`, `mathts-gaps.test.ts`, `round2-numerical-dimensional.test.ts` | — |
 | `numerical/rk4-trajectory.ts` | `exact-propagators.test.ts`, `rk4-trajectory.test.ts` | — |
 | `numerical/schwarzschild.ts` | `schwarzschild.test.ts` | — |
 | `numerical/spacetime-metrics.ts` | `metric-value-error.test.ts`, `spacetime-metrics.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
@@ -1061,6 +1061,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `numerical/mathts-autograd.test.ts` | 3 files |
 | `numerical/mathts-delegation.test.ts` | 12 files |
 | `numerical/mathts-engine-typing.test.ts` | 3 files |
+| `numerical/mathts-gaps.test.ts` | 1 files |
 | `numerical/mathts-required.test.ts` | 1 files |
 | `numerical/metric-deriv-supplied.test.ts` | 1 files |
 | `numerical/metric-inverse-curvature-walk.test.ts` | 16 files |
