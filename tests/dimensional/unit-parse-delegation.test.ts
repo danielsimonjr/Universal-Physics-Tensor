@@ -12,8 +12,8 @@ import {
   readUnit,
 } from '../../src/dimensional/units.js';
 
-const inSet = ['km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc', 'd', 'day', 'Angstrom', 'K²'] as const;
-const outOfSetLocal = ['bit', 'm2K', 'mpc'] as const;
+const inSet = ['km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc', 'd', 'day', 'Angstrom', 'K²', 'm2K', 'Vs', 'cm^2/Vs', 'W/m2K'] as const;
+const outOfSetLocal = ['bit', 'mpc'] as const;
 const outOfSetThrow = ['ton', 'dB', 'mAs', 'mol/mL', 'degC/s', 'furlong'] as const;
 
 describe('Unit.parse delegation set (A5)', () => {
@@ -29,6 +29,11 @@ describe('Unit.parse delegation set (A5)', () => {
 
   it.each(outOfSetThrow)('%s stays on the local grammar', (text) => {
     expect(() => readUnit(text)).toThrow();
+  });
+
+  it('a glued product keeps its dimension through MathTS (heat-transfer coefficient)', () => {
+    expect(parseUnit('W/m2K').dim).toMatchObject({ M: 1, T: -3, Theta: -1, L: 0 });
+    expect(parseUnit('m2K').dim).toMatchObject({ L: 2, Theta: 1 });
   });
 
   it('out-of-set rows keep today UPT error classes', () => {
