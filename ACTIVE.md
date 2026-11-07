@@ -50,7 +50,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `fractionToNumber` and `formatRational` call MathTS `Fraction#toNumber` and `#toString`.
 - [x] MathTS leverage U3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U3).
   Done: `rationalCandidates` reduces through MathTS `gcd`; the local copy is gone.
-- [ ] MathTS leverage U4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U4).
+- [x] MathTS leverage U4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U4).
+  Done: `chiSquareCdf` is MathTS `chiSquaredCDF`; no frozen output stores the value.
 - [ ] MathTS leverage U5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U5).
 - [ ] MathTS leverage U6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U6).
 - [ ] MathTS leverage U7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U7).

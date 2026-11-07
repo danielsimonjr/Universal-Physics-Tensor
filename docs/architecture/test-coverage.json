@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 694,
+    "totalTestFiles": 695,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -7688,6 +7688,7 @@
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/probe/batch-pins.test.ts",
+      "tests/composition/probe/chi-square-cdf-mathts.test.ts",
       "tests/composition/probe/effective-sigma.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/json-file-readers.test.ts",
@@ -12857,6 +12858,7 @@
     ],
     "src/composition/probe/study.ts": [
       "tests/composition/probe/batch-pins.test.ts",
+      "tests/composition/probe/chi-square-cdf-mathts.test.ts",
       "tests/composition/probe/effective-sigma.test.ts",
       "tests/composition/probe/json-file-readers.test.ts",
       "tests/composition/probe/standard-errors.test.ts",
@@ -22862,6 +22864,9 @@
       "src/composition/probe/generator.ts",
       "src/composition/probe/power-law.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/probe/chi-square-cdf-mathts.test.ts": [
+      "src/composition/probe/study.ts"
     ],
     "tests/composition/probe/corpus-prefactor.test.ts": [
       "src/composition/probe/problem.ts",
