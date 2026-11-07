@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Changed
 
+- **Plan: MathTS leverage.** `docs/superpowers/plans/2026-11-07-mathts-leverage.md` lists nine UPT routines to replace with MathTS calls (U1-U9), a gap-row task that pins every kept-local reason (U0), and five MathTS changes (M1-M5). It follows an inventory of `src/` against the installed MathTS exports.
 - **The affine-compound guard stays in UPT.** MathTS 0.22 refuses `degC/s` but parses the spaced `deg C/s` and `° C/s` as a product of other units, which UPT refuses. A gap row in `tests/dimensional/mathts-unit-gaps.test.ts` pins the difference; removing the UPT spaced-form check fails it. The difference reading stays on the local exact-rational path.
 - **`tons` is refused like `ton`.** MathTS 0.22 names `ton` and `tons` ambiguous; UPT read `tons` as an unknown unit. `data/units.json` refuses it with the `ton` reason, so `parseUnit('tons')` throws `UnitRefusedError` (was `UnknownUnitError`).
 - **Glued unit products read through MathTS.** `m2K`, `Vs`, `cm^2/Vs` and `W/m2K` are on the A5 delegated list. `tryMathtsA5Reading` takes the exact scale from the `Unit.exactScale` result it already holds, because the delegation scale reader refused a token that glues two factors (`RangeError: mathts exact scale: 'm2K' is not delegated`). Scales and dimensions are unchanged (`W/m2K` is M T⁻³ Θ⁻¹).

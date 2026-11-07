@@ -37,6 +37,21 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 - [ ] MathTS 0.22 integration P3 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P3).
 - [ ] MathTS 0.22 integration P4 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P4).
 - [ ] MathTS 0.22 integration P5 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P5).
+- [ ] MathTS leverage U0 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U0).
+- [ ] MathTS leverage U1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U1).
+- [ ] MathTS leverage U2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U2).
+- [ ] MathTS leverage U3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U3).
+- [ ] MathTS leverage U4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U4).
+- [ ] MathTS leverage U5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U5).
+- [ ] MathTS leverage U6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U6).
+- [ ] MathTS leverage U7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U7).
+- [ ] MathTS leverage U8 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U8).
+- [ ] MathTS leverage U9 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U9).
+- [ ] MathTS leverage M1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M1).
+- [ ] MathTS leverage M2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M2).
+- [ ] MathTS leverage M3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M3).
+- [ ] MathTS leverage M4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M4).
+- [ ] MathTS leverage M5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M5).
 
 - [x] Make the units layer a thin layer over `@danielsimonjr/mathts-core` 0.21.0 (MathTS #577's units changes: `psi`/`torr` prefixes, `REFUSED_UNIT_SPELLINGS`).
   Bump the core dependency to `^0.21.0` and refresh `bun.lock`. Delegate to MathTS what it now provides and delete UPT's duplicates: the six refusal definitions (`dB`, `dBm`, `dBW`, `Np`, `Mach`, `mach`) move to MathTS's `REFUSED_UNIT_SPELLINGS` (`data/units.json` keeps `ton`), `data/units.json` reads its scale expressions through MathTS `readScaleExpression` (the local copy in `exact-scale.ts` goes), and the A5 delegated set takes the spellings the newer core parses (`d`, `day`, `Angstrom`, `psi`/`torr` with prefixes, `kpc`/`Mpc`/`Gpc`). UPT keeps its four policy overrides, each documented and tested against both sides: `ton` refused while MathTS parses the US short ton, an affine temperature refused inside a compound while MathTS accepts it, every SI prefix on `pc` while MathTS admits only k-and-up (`mpc` stays local), and `bit` at ln 2 while MathTS reports axis-8 scale 1. Public API and every existing test stay. New tests are red first. Full suite, typecheck, lint and doc gates locally; one PR against master; no merge, tag, release or publish.

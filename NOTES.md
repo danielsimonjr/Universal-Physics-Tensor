@@ -11,6 +11,8 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-07
 
+- MathTS leverage inventory (functions 0.73.0, core 0.22.0): `rootsLegendre(16)` weights are off by 8.3e-14 relative, the local table by 2.0e-15. `2·studentTCDF(−|t|, df)` equals the local direct t tail bit for bit for df 1, 5, 30 and |t| 2 to 1e8. `chiSquaredCDF` agrees with the local `chiSquareCdf` to 6e-16 relative, not bit for bit. MathTS `mcnemar` gives p = 0 for chi-square ≥ 79.
+
 - MathTS 0.22 refuses an affine unit in a compound (`degC/s`, `W/degC`, `J/(kg*degC)`, `degC^2`) and parses the spaced `deg C/s` and `° C/s`. Its difference reading is a float (`25 degF` gives 13.88888888888889 K); UPT keeps the exact rational.
 
 - MathTS 0.22 ambiguity has two sources: the static table (`ton`, `tons`) and a rule, a glued token whose splits give different dimensions (`Pas`, `Pam`). A probe of 169 UPT unit spellings found only `ton` and `tons`. No MathTS ambiguity reaches UPT: `ton` and `tons` are policy refusals, and a glued token is split by the local grammar. `mol/mL` and `mAs` are UPT-only ambiguities.
