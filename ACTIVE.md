@@ -34,7 +34,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: the affine guard and the difference reading stay local. MathTS parses `deg C/s` and `° C/s`; a gap row pins the UPT refusal.
 - [x] MathTS 0.22 integration P2d (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2d).
   Done: the `ton` and `tons` rows stay; a test requires a UPT refusal row for every spelling in MathTS `AMBIGUOUS_UNIT_SPELLINGS`.
-- [ ] MathTS 0.22 integration P2e (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2e).
+- [x] MathTS 0.22 integration P2e (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2e).
+  Done: cycles stay on the UPT table. A test requires the UPT and MathTS cycle flags to agree and no A5 text to count cycles.
 - [ ] MathTS 0.22 integration P3 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P3).
 - [ ] MathTS 0.22 integration P4 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P4).
 - [ ] MathTS 0.22 integration P5 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P5).
