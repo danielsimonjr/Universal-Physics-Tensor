@@ -4989,7 +4989,7 @@ The codebase is organized into the following modules:
 | Package | Import |
 |---------|--------|
 | `@danielsimonjr/mathts-core` | `pairwiseDot, pairwiseSum` |
-| `@danielsimonjr/mathts-functions` | `betainc, gammainc, gammaincp, inv, propagateUncertainty` |
+| `@danielsimonjr/mathts-functions` | `betainc, chiSquaredCDF, gammaincp, inv, propagateUncertainty` |
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -7673,7 +7673,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87461 |
+| Total Lines of Code | 87456 |
 | Total Exports | 2802 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |

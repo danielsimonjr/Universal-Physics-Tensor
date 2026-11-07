@@ -18340,7 +18340,7 @@
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
               "betainc",
-              "gammainc",
+              "chiSquaredCDF",
               "gammaincp",
               "inv",
               "propagateUncertainty"
@@ -28092,7 +28092,7 @@
   "statistics": {
     "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 87461,
+    "totalLinesOfCode": 87456,
     "totalExports": 2802,
     "totalClasses": 86,
     "totalInterfaces": 518,

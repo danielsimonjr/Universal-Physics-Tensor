@@ -28,7 +28,7 @@
  */
 
 import { pairwiseDot, pairwiseSum } from '@danielsimonjr/mathts-core';
-import { betainc, gammainc, gammaincp, inv, propagateUncertainty } from '@danielsimonjr/mathts-functions';
+import { betainc, chiSquaredCDF, gammaincp, inv, propagateUncertainty } from '@danielsimonjr/mathts-functions';
 import { numberFrom } from '../../core/mathts-read.js';
 import { readJsonFile } from '../../core/data-file.js';
 import { isPlainObject } from '../../core/json-schema.js';
@@ -837,11 +837,8 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
 // Lentz continued fraction for x ≥ a + 1, computed directly; before that it
 // was `1 − gammainc`, which rounded a far upper tail to 0, and the χ² p-value
 // of a bad fit IS that tail) and the regularized incomplete beta `betainc`.
-
-/** Regularized lower incomplete gamma P(a, x), MathTS `gammainc`. */
-function gammaP(a: number, x: number): number {
-  return numberFrom('gammainc', gammainc(a, x));
-}
+// The χ² CDF is MathTS `chiSquaredCDF`; the survival functions below use
+// `gammaincp` and `betainc`.
 
 /** Regularized upper incomplete gamma Q(a, x), MathTS `gammaincp` (direct in the upper tail). */
 function gammaQ(a: number, x: number): number {
@@ -857,15 +854,13 @@ export function chiSquareSurvival(chi2: number, dof: number): number {
 }
 
 /**
- * P(χ²_ν ≤ chi2), computed directly in the lower tail (MathTS `gammainc` is
- * the series there), where 1 − Q would round a small probability away. @internal
+ * P(χ²_ν ≤ chi2), MathTS `chiSquaredCDF`. It is direct in the lower tail, where
+ * 1 − Q would round a small probability away. @internal
  */
 export function chiSquareCdf(chi2: number, dof: number): number {
   if (!(dof > 0)) throw new RangeError('chiSquareCdf: dof must be positive');
   if (!(chi2 > 0)) return 0;
-  const a = dof / 2;
-  const x = chi2 / 2;
-  return x < a + 1 ? Math.min(1, gammaP(a, x)) : 1 - gammaQ(a, x);
+  return numberFrom('chiSquaredCDF', chiSquaredCDF(chi2, dof));
 }
 
 /** Regularized incomplete beta I_x(a, b), MathTS `betainc`. */
