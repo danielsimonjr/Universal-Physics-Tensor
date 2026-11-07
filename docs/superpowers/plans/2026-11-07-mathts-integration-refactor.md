@@ -51,7 +51,7 @@ P1 already flipped the oracle rows. Do not widen the admission list in `data/uni
 - P2a: glued products and superscripts (U5, U6): `m2K`, `Vs`, `cm^2/Vs`, `K²`.
 - P2b: ambiguous splits (U7). MathTS core 0.22.0 has two sources of ambiguity: the static table (`ton`, `tons`) and a rule, a glued token whose splits give different dimensions (`Pas`, `Pam`). `ton` and `tons` are UPT policy refusals in `data/units.json`, read before MathTS. A glued token does not reach MathTS under the routing gate. `mol/mL` and `mAs` stay on the local ambiguity check.
 - P2c: affine compounds and difference readings (U3, U4). The affine-compound guard and the difference reading stay local. MathTS parses the spaced `deg C/s` and `° C/s`, and its difference reading is a float. A gap row pins the spaced spelling.
-- P2d: `ton` (U2): MathTS throws `AmbiguousUnitError` for `ton` and `tons`. The wrapper maps that error to the present UPT `UnitRefusedError`, so the CLI goldens do not change. `shortton` and `longton` stay out of `data/units.json` unless they are admitted as a separate product decision. Remove the local `ton` override after the mapping test passes.
+- P2d: `ton` (U2). The `ton` and `tons` refusal rows in `data/units.json` stay: `ton` does not reach MathTS under the routing gate, and the CLI goldens pin the UPT message. A test requires a refusal row for every key of MathTS `AMBIGUOUS_UNIT_SPELLINGS`.
 - P2e: cycles (U9): read `cycles` from the MathTS conversion result. Keep the UPT angular rule (2π only on a parameter marked angular).
 
 ## Task P3: delete the local splitter (UPT-7)

@@ -7,7 +7,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AmbiguousUnitError, REFUSED_UNIT_SPELLINGS, Unit } from '@danielsimonjr/mathts-core';
+import { AMBIGUOUS_UNIT_SPELLINGS, AmbiguousUnitError, REFUSED_UNIT_SPELLINGS, Unit } from '@danielsimonjr/mathts-core';
 import { describe, expect, it } from 'vitest';
 import { UNIT_DATA } from '../../src/dimensional/unit-data.js';
 import {
@@ -50,6 +50,12 @@ describe('wrapper refusal layer (A8)', () => {
     expect(uptRefusalReason('ton')).toBe(reason);
     expect(REFUSED_UNIT_SPELLINGS['ton']).toBeUndefined();
     expect(refusedTokensIn('ton')).toContain('ton');
+  });
+
+  it('every spelling MathTS names ambiguous has a UPT refusal row', () => {
+    const keys = Object.keys(AMBIGUOUS_UNIT_SPELLINGS);
+    expect(keys.length).toBeGreaterThan(0);
+    expect(keys.filter((k) => UNIT_DATA.refused.get(k) === undefined)).toEqual([]);
   });
 
   it('tons is refused like ton: MathTS 0.22 names both ambiguous', () => {

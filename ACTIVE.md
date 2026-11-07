@@ -32,7 +32,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `tons` is a UPT policy refusal like `ton`. No MathTS ambiguity reaches UPT today: `ton` and `tons` are refused before MathTS, and a glued token (`Pas`, `Pam`) is split by the local grammar.
 - [x] MathTS 0.22 integration P2c (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2c).
   Done: the affine guard and the difference reading stay local. MathTS parses `deg C/s` and `° C/s`; a gap row pins the UPT refusal.
-- [ ] MathTS 0.22 integration P2d (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2d).
+- [x] MathTS 0.22 integration P2d (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2d).
+  Done: the `ton` and `tons` rows stay; a test requires a UPT refusal row for every spelling in MathTS `AMBIGUOUS_UNIT_SPELLINGS`.
 - [ ] MathTS 0.22 integration P2e (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P2e).
 - [ ] MathTS 0.22 integration P3 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P3).
 - [ ] MathTS 0.22 integration P4 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P4).

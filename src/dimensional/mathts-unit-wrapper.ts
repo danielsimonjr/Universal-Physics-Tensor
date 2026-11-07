@@ -5,10 +5,11 @@
  * scales delegate to MathTS. Four deliberate overrides of MathTS defaults are
  * layered here, each pinned by a test that reads both sides:
  *
- * 1. `ton` — MathTS parses the US short ton (907.18474 kg); UPT refuses it as
- *    ambiguous (`data/units.json`, `tests/dimensional/unit-wrapper-refusal.test.ts`).
- * 2. An affine temperature inside a compound — MathTS accepts `degC/s`;
- *    UPT refuses it (`localUnitReadings`, `tests/dimensional/units.test.ts`).
+ * 1. `ton` and `tons` — MathTS names them ambiguous; UPT refuses them with its own
+ *    message (`data/units.json`, `tests/dimensional/unit-wrapper-refusal.test.ts`).
+ * 2. An affine temperature inside a compound — MathTS refuses `degC/s` but parses the
+ *    spaced `deg C/s`; UPT refuses both (`localUnitReadings`,
+ *    `tests/dimensional/mathts-unit-gaps.test.ts`).
  * 3. `pc` prefixes — MathTS admits only k and up (`SHORT_UP_ONLY`); UPT's
  *    prefix table applies to every prefixable row, so `mpc` stays on the local
  *    grammar (`isSubKiloParsec`, `tests/dimensional/unit-override-parsec.test.ts`).
@@ -138,7 +139,7 @@ export function isA5DelegatedText(text: string): boolean {
   return A5_DELEGATED.has(text.trim());
 }
 
-/** MathTS parses `ton`; UPT refuses it by policy (A8). */
+/** Whether MathTS `Unit.parse` accepts `text`. */
 export function mathtsWouldParse(text: string): boolean {
   try {
     Unit.parse(text.trim());
