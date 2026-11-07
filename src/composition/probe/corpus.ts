@@ -33,8 +33,12 @@ export interface CorpusComparisonResult {
 
 const CORPUS_ID = 'upt-l-layer+b-layer';
 
-/** Compare an expression to the in-repo L- and B-layers. @internal */
-export function compareToCorpus(expr: ExprNode, corpusVersion: string): CorpusComparisonResult {
+/** Compare an expression to the in-repo L- and B-layers. `searchedAt` is the run's pinned time; default now. @internal */
+export function compareToCorpus(
+  expr: ExprNode,
+  corpusVersion: string,
+  searchedAt: string = new Date().toISOString(),
+): CorpusComparisonResult {
   const form = normalForm(expr);
   const algebraic: CorpusMatch[] = [];
   for (const ce of CANONICAL_EQUATIONS) {
@@ -60,7 +64,7 @@ export function compareToCorpus(expr: ExprNode, corpusVersion: string): CorpusCo
     corpusVersion,
     exactMatches: [],
     algebraicMatches: algebraic,
-    searchedAt: new Date().toISOString(),
+    searchedAt,
   };
 }
 
