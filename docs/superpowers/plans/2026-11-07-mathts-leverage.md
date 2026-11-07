@@ -58,6 +58,8 @@ Each one is a MathTS pull request and a release. The matching UPT task starts af
 | M3 | `rootsLegendre` weights to the accuracy of the local table (the measured gap is in `NOTES.md`) | delete the local quadrature weights |
 | M4 | Wilson and Newcombe intervals, Cohen's kappa | delete the three `stats.ts` intervals |
 | M5 | a typed `gcd` result type | simplify U3 |
+| M6 | export the unit reading list (the internal `readings` function) | delete the UPT glued splitter (integration plan, P3 item 2) |
+| M7 | accept the middle dot (`·`) as a product in `Unit.parse` | route `m^2/(V·s)` to MathTS |
 
 ## Out of scope
 

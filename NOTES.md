@@ -11,6 +11,8 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-07
 
+- Plan task P3 premise was wrong on this tree: the local splitter is the source of the gap-row readings, not a copy of MathTS. MathTS core 0.22.0 does not export its `readings` function and refuses `·` (`m^2/(V·s)`, `N·m`). Of the corpus units in `data/` and `tests/fixtures`, 54 route to MathTS, 1 (`m^2/(V·s)`) to the local grammar, and 19 do not parse.
+
 - MathTS leverage inventory (functions 0.73.0, core 0.22.0): `rootsLegendre(16)` weights are off by 8.3e-14 relative, the local table by 2.0e-15. `2·studentTCDF(−|t|, df)` equals the local direct t tail bit for bit for df 1, 5, 30 and |t| 2 to 1e8. `chiSquaredCDF` agrees with the local `chiSquareCdf` to 6e-16 relative, not bit for bit. MathTS `mcnemar` gives p = 0 for chi-square ≥ 79.
 
 - MathTS 0.22 refuses an affine unit in a compound (`degC/s`, `W/degC`, `J/(kg*degC)`, `degC^2`) and parses the spaced `deg C/s` and `° C/s`. Its difference reading is a float (`25 degF` gives 13.88888888888889 K); UPT keeps the exact rational.
