@@ -57,13 +57,12 @@ describe('MathTS carries the special functions', () => {
     expect(fSurvival(2, 1, 1)).toBeCloseTo(1 - (2 / Math.PI) * Math.atan(Math.SQRT2), 13);
   });
 
-  it('the random walk, the McNemar tail and the Wilson z read lgamma and normalQuantile', () => {
+  it('the random walk, the McNemar tail and the Wilson z read lgamma, binomialTest and normalQuantile (U6)', () => {
     expect(source('../../src/atlas/diffusion/numerics.ts')).toMatch(/\blgamma\b/);
     expect(source('../../src/atlas/diffusion/numerics.ts')).not.toMatch(/function logBinomial\b/);
     const stats = source('../../src/atlas/benchmark/stats.ts');
-    expect(stats).toMatch(/\blgamma\b/);
+    expect(stats).toMatch(/\bbinomialTest\b/);
     expect(stats).toMatch(/normalQuantile/);
-    expect(stats).toMatch(/function logChoose[^}]*logGamma\(n \+ 1\)/);
     expect(stats).not.toMatch(/Z95 = 1\.9/);
     expect(Z95).toBeCloseTo(1.959963984540054, 14);
     expect(mcnemar({ a: 0, b: 10, c: 2, d: 0 }).exactP).toBeCloseTo(158 / 4096, 12);

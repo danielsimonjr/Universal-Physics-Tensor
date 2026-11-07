@@ -193,7 +193,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `lgamma, normalQuantile` |
+| `@danielsimonjr/mathts-functions` | `binomialTest, normalQuantile` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -7678,7 +7678,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87454 |
+| Total Lines of Code | 87438 |
 | Total Exports | 2802 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |
