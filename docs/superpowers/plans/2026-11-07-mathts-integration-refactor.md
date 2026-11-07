@@ -68,13 +68,25 @@ The local grammar stays the authority for a unit text. `localUnitReadings` in `u
 `meanOf` takes a plain `readonly number[]`, and no caller passes a typed array. It copied the array before MathTS `mean`. MathTS `mean` does not mutate its input and accepts a frozen array, so the copy is not needed.
 RED: a test that MathTS `mean` receives the caller's array itself (a mock of `mean` records the argument). Then delete the copy. The frozen-input row in `tests/numerical/statistics.test.ts` fails if a MathTS release starts to mutate the input.
 
-## Task P5: scalar-search probe behind a flag (UPT-5)
+## Task P5: scalar-search candidates behind a flag (UPT-5)
 
-Start after P1, because the `dimensions` filter needs functions 0.72 or later.
+MathTS `runScalarSearch` (functions 0.73.0) returns a Pareto `front` of MathTS `ScalarNode` trees. It takes `columns` as a record keyed by variable name, the shape of a UPT `ObservationRow`. The probe takes candidates as UPT `ExprNode` trees. `runProbeSearch` in `src/composition/probe/pipeline.ts` adds external candidates in its `backendArgv` branch. P5 adds a second source of the same shape in a new module `src/composition/probe/scalar-search.ts`.
 
-1. RED: a test that runs `searchScalars` on one catalog relation with a known answer, through a new opt-in flag of the probe. The `grammar.admit` hook calls UPT `validate`. The `dimensions` option receives the UPT 7-vector through `mapUnit` (MT-9).
-2. Add the flag. Default off. Do not change `generator.ts`.
-3. Keep the holdout and the existing falsifiers. A search result is a candidate, not a verdict.
+1. Structure only. The search runs with `parameters: []`. The probe's existing fit supplies the constant, as it does for a backend candidate (the `backendArgv` branch drops the backend prefactor). A later task can add fitted parameters.
+2. Tree converter, `ScalarNode` to `ExprNode`:
+   - A `symbol` node takes the `dim` of the governing variable of the same name. Any other name throws.
+   - A `number` node becomes a dimensionless literal symbol (`'2'`, `'0.5'`). UPT `validate` accepts these.
+   - An `op` node keeps its operator. Both sets are `+ - * / ^`.
+   - A `call` node stores a lowered MathTS name. The converter reads the inverse of the exported MathTS `SCALAR_FUNCTION_LOWERING`; it does not write a second table. The table is not one-to-one (`log` and `log10` both lower to `log10`), so the inverse picks the UPT `TranscendentalFn` spelling. A lowered `abs` becomes the UPT `abs` node. `sqrt(x)` becomes `x ^ '0.5'`.
+   - `atan` has no UPT form. The option refuses a grammar that lists it. The accepted names come from the same inverse table.
+3. Dimension converter, UPT `Dimension` to MathTS `RationalDimension`. Map each UPT key by name to the BIPM order `[L, M, T, I, Θ, N, J]` of `SiDimensionVector`, never by position. Read each exponent through `rationalize` in `src/composition/rational-exponent.ts`. An exponent that does not rationalize throws.
+4. Option. `ProbeSearchOptions.scalarSearch` holds the grammar knobs, a seed and `maxCandidates`. Default: absent, and the search does not run. The wall-clock limit is the probe's remaining budget, computed as the `backendArgv` branch computes `remainingMs`. `parallel` stays unset, so scoring stays on the caller thread. With no `exploratory` data the search does not run, and `wording` gets one line. The observed column is the dataset's `observable`. A search error (a missing column, a non-finite target) is an abstention: `wording` records it and the run goes on. A grammar that lists `atan` is a caller error and throws. A stop reason other than `max-evaluations` goes to `wording`. The `dimensions` filter gets each governing variable's dimension and the target's dimension as `target`. The grammar `admit` hook stays unset.
+5. Each front tree becomes a raw candidate with `originNote: 'mathts-scalar-search'`. Its record origin is the existing `{ kind: 'external-backend', backendId: 'mathts-scalar-search' }`, so the `ProbeCandidateOrigin` union and the serialized schema do not change. The manifest lists a backend descriptor for it. The existing fit, holdout and falsifiers judge it. A search result is a candidate, not a verdict.
+6. RED, in three parts:
+   - (a) Tree converter: three hand-built `ScalarNode` trees convert to the expected `ExprNode` trees exactly, and an unknown symbol throws.
+   - (a′) Dimension converter: the dimension of a known unit agrees per axis with MathTS `unitToRationalDimension` of the same unit. This test catches an axis-order error.
+   - (b) Pipeline: with the flag set, a fixed seed and a small budget, at least one record in `candidates` (a rejected candidate stays there with status `rejected`) has the origin `backendId` `mathts-scalar-search`, and the manifest lists the descriptor. With the flag absent, the result equals the present result for the same problem, with `now` and `repositoryCommit` pinned in both calls. CI does not assert that the search finds a known relation; that is a stochastic search outcome.
+7. `generator.ts` changes only to export `withinAstCaps`, its depth and operator check. A scalar-search candidate passes the same check.
 
 ## Out of scope
 

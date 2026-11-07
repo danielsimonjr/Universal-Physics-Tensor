@@ -40,7 +40,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: the local grammar stays. Its readings carry the gap rows; MathTS tasks M6 and M7 open the deletion.
 - [x] MathTS 0.22 integration P4 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P4).
   Done: `meanOf` passes the caller array to MathTS `mean` without a copy.
-- [ ] MathTS 0.22 integration P5 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P5).
+- [x] MathTS 0.22 integration P5 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P5).
+  Done: `ProbeSearchOptions.scalarSearch` adds MathTS `runScalarSearch` front trees as probe candidates; default off.
 - [ ] MathTS leverage U0 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U0).
 - [ ] MathTS leverage U1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U1).
 - [ ] MathTS leverage U2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U2).
