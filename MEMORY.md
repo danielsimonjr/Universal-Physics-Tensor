@@ -28,7 +28,7 @@ read it.
 - Test runner: **vitest**. No Python in the codebase. The test suite needs Node ≥ 22.6
   (`tests/node-floor.test.ts`); `engines.node` is the library's floor, not the suite's.
 - **Required dependencies:** the `@danielsimonjr/mathts-*` packages (core, expression,
-  functions, matrix, tensor, autograd, parallel, wasm, workerpool). The library does not
+  functions, matrix, tensor, autograd). The library does not
   start without them.
   `@viz-js/viz` (SVG map rendering) stays an optional peer and must degrade when absent.
 - The lockfile is **`bun.lock` only** (no `package-lock.json`). **No Dependabot version-update

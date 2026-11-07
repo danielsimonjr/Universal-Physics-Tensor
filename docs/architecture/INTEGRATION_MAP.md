@@ -233,7 +233,7 @@ Three groups of names have more than one declaration:
 
 ## 3. MathTS boundary
 
-MathTS packages are required dependencies. `package.json` lists nine `@danielsimonjr/mathts-*` packages. `src/` imports `mathts-functions`, `mathts-core`, `mathts-autograd`, `mathts-tensor`, `mathts-expression` and `mathts-matrix`. `src/numerical/evaluator-uncertainty.ts` imports `eigvals` from `mathts-matrix`. No file in `src/` imports `mathts-wasm`, `mathts-parallel` or `mathts-workerpool`.
+MathTS packages are required dependencies. `package.json` lists six `@danielsimonjr/mathts-*` packages. `src/` imports `mathts-functions`, `mathts-core`, `mathts-autograd`, `mathts-tensor`, `mathts-expression` and `mathts-matrix`. `src/numerical/evaluator-uncertainty.ts` imports `eigvals` from `mathts-matrix`. `mathts-wasm`, `mathts-parallel` and `mathts-workerpool` are not direct dependencies; `mathts-functions` brings `mathts-parallel` in.
 
 `getFormulaParserKind` (`src/numerical/formula-registry.ts`) returns `'mathts'` only. The library has no second formula parser. `src/numerical/formula-contract.ts` holds the shared function table `SCALAR_FUNCTIONS` (`ln` is one entry) and the dispatcher `callBuiltinFunction`. The file is not a parser.
 
