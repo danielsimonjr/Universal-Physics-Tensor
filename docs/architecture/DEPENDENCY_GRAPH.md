@@ -193,7 +193,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `binomialTest, cohensKappa, newcombePairedInterval, normalQuantile, wilsonInterval` |
+| `@danielsimonjr/mathts-functions` | `binomialTest, cohensKappa, newcombePairedInterval, wilsonInterval` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -203,7 +203,6 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `Interval`, `PairedTable`, `McNemarResult`, `PowerReport`
 - Functions: `wilsonInterval`, `mcnemar`, `pairedDifferenceInterval`, `cohensKappa`, `powerReport`
-- Constants: `Z95`
 
 ---
 
@@ -592,7 +591,7 @@ The codebase is organized into the following modules:
 | `./benchmark/hybrid-retrieval.js` | `ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS, FROZEN_VECTOR_SHA256, OLLAMA_EMBEDDING_MODEL, OLLAMA_TIMEOUT_MS, PROPOSAL_NOTE, EmbeddingUnavailable, canonicalRetrievalCorpus, cosine, decodeFloat32, ollamaEmbedder, queryInput, rankByCosine, retrieveHybrid, stubEmbedder, stubVector` | Re-export |
 | `./benchmark/hybrid-retrieval.js` | `Embedder, EmbeddingFallbackReason, HybridRetrieval, OllamaEmbedderOptions` | Re-export |
 | `./benchmark/backend-shapes.js` | `parseBackendResponse` | Re-export |
-| `./benchmark/stats.js` | `cohensKappa, mcnemar, pairedDifferenceInterval, powerReport, wilsonInterval, Z95` | Re-export |
+| `./benchmark/stats.js` | `cohensKappa, mcnemar, pairedDifferenceInterval, powerReport, wilsonInterval` | Re-export |
 | `./benchmark/stats.js` | `Interval, McNemarResult, PairedTable, PowerReport` | Re-export |
 | `./benchmark/study.js` | `pairedRejection, scoreAblation, scoreCondition` | Re-export |
 | `./benchmark/study.js` | `AblationRow, ConditionAnswer, ConditionMetrics, ItemLabel, PairedRejection` | Re-export |
@@ -642,7 +641,7 @@ The codebase is organized into the following modules:
   EmbeddingUnavailable, canonicalRetrievalCorpus, cosine, decodeFloat32, ollamaEmbedder, queryInput,
   rankByCosine, retrieveHybrid, stubEmbedder, stubVector, Embedder, EmbeddingFallbackReason,
   HybridRetrieval, OllamaEmbedderOptions, parseBackendResponse, cohensKappa, mcnemar,
-  pairedDifferenceInterval, powerReport, wilsonInterval, Z95, Interval, McNemarResult, PairedTable,
+  pairedDifferenceInterval, powerReport, wilsonInterval, Interval, McNemarResult, PairedTable,
   PowerReport, pairedRejection, scoreAblation, scoreCondition, AblationRow, ConditionAnswer,
   ConditionMetrics, ItemLabel, PairedRejection, BackendShapeError, BenchmarkBackendRequest,
   BenchmarkBackendResponse, runWitnessRegistry, artifactPassingWitnessIds, WitnessResultRecord,
@@ -7741,9 +7740,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87181 |
-| Total Exports | 2820 |
-| Total Re-exports | 1393 |
+| Total Lines of Code | 87176 |
+| Total Exports | 2818 |
+| Total Re-exports | 1392 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
 | Total Functions | 921 |
