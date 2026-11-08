@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "11.0.0",
-    "totalFiles": 386,
+    "totalFiles": 387,
     "totalModules": 13,
-    "totalExports": 2801
+    "totalExports": 2802
   },
   "entryPoints": [
     {
@@ -14840,7 +14840,6 @@
           {
             "package": "@danielsimonjr/mathts-expression",
             "imports": [
-              "createScalarBuilder",
               "ScalarBuildError"
             ]
           },
@@ -14878,6 +14877,12 @@
             "file": "../dimensional/formula-names.js",
             "imports": [
               "FORMULA_NAMED"
+            ]
+          },
+          {
+            "file": "../dimensional/scalar-lowering.js",
+            "imports": [
+              "toScalarNode"
             ]
           }
         ],
@@ -19951,17 +19956,36 @@
     },
     "diff": {
       "src/diff/bridge-ast-gradient.ts": {
-        "description": "Exact bridge-gradients via reverse-mode AD over the symbolic RHS AST.",
-        "externalDependencies": [],
+        "description": "Exact bridge-gradients over the symbolic RHS AST.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-expression",
+            "imports": [
+              "ScalarBuildError"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "compileScalarGradient"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
             "file": "../dimensional/validator.js",
             "imports": [
-              "ExprNode",
-              "TranscendentalFn"
+              "ExprNode"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/ast-leaves.js",
+            "imports": [
+              "forEachScalarLeaf",
+              "isDecimalLiteral"
+            ]
           },
           {
             "file": "../dimensional/symbolic-constants.js",
@@ -19970,9 +19994,9 @@
             ]
           },
           {
-            "file": "../numerical/errors.js",
+            "file": "../dimensional/scalar-lowering.js",
             "imports": [
-              "EngineCapabilityError"
+              "toScalarNode"
             ]
           },
           {
@@ -19980,12 +20004,6 @@
             "imports": [
               "BRIDGE_RHS_BY_ID",
               "parseBridgeId"
-            ]
-          },
-          {
-            "file": "../numerical/quadrature.js",
-            "imports": [
-              "GAUSS_LEGENDRE_16"
             ]
           }
         ],
@@ -21772,6 +21790,40 @@
           "rgCoupling",
           "validateRGCoupling",
           "validateBetaFunction"
+        ]
+      },
+      "src/dimensional/scalar-lowering.ts": {
+        "description": "The one lowering of a UPT scalar `ExprNode` to a MathTS `ScalarNode`.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-expression",
+            "imports": [
+              "createScalarBuilder",
+              "ScalarNode"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          }
+        ],
+        "exports": [
+          "toScalarNode"
+        ],
+        "functions": [
+          "toScalarNode"
         ]
       },
       "src/dimensional/stress-energy-validators.ts": {
@@ -27035,7 +27087,7 @@
         ]
       },
       "src/numerical/quadrature.ts": {
-        "description": "Gauss–Legendre quadrature — shared between the numerical AST lowering and the",
+        "description": "Gauss–Legendre quadrature for the numerical AST lowering of definite",
         "externalDependencies": [
           {
             "package": "@danielsimonjr/mathts-functions",
@@ -28027,6 +28079,7 @@
           "src/dimensional/natural-units.ts",
           "src/dimensional/quantity-registry.ts",
           "src/dimensional/rg-flow.ts",
+          "src/dimensional/scalar-lowering.ts",
           "src/dimensional/stress-energy-validators.ts",
           "src/dimensional/symbolic-constants.ts",
           "src/dimensional/tensor-trace.ts",
@@ -28110,18 +28163,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 386,
+    "totalTypeScriptFiles": 387,
     "totalModules": 13,
-    "totalLinesOfCode": 87410,
-    "totalExports": 2801,
+    "totalLinesOfCode": 87306,
+    "totalExports": 2802,
     "totalClasses": 86,
     "totalInterfaces": 518,
-    "totalFunctions": 907,
+    "totalFunctions": 908,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 413,
     "totalReExports": 1390,
-    "totalTypeOnlyImports": 529,
+    "totalTypeOnlyImports": 530,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

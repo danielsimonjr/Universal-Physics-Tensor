@@ -8,6 +8,16 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Breaking
+
+- **`bridgeGradientAST` and `bridgeGradientASTById` return synchronously (U9).** They return `ASTGradientResult`, not a `Promise`. They differentiate through MathTS `compileScalarGradient` over the scalar builder, in place of the reverse-mode tape of `@danielsimonjr/mathts-autograd`. The definite-integral arm is removed: no catalog bridge uses it, and the function now throws `TypeError` for an `integral` node. Where the value overflows, the value and the gradient are NaN, not ±Infinity (BE-82 at a synthetic point; at a physical point the two paths agree to 1.2e-16). Measured over the catalog: 402 (bridge, variable) pairs; 391 agree to 1e-12, 2 are NaN on both paths, 3 are the BE-82 overflow, 6 are the exponent-variable refusal, which stays a UPT pre-check. `EngineCapabilityError` is no longer thrown by this path. `tests/diff/integral-ad.test.ts` is removed; `tests/diff/bridge-ast-gradient-sync.test.ts` checks every pair against `evalExpr`.
+
+### Fixed
+
+- **A one-argument minus is a negation in `evalExpr` and in the gradient.** MathTS `evaluateScalar` and `compileScalarGradient` read `op('-', [x])` as the identity. The new `dimensional/scalar-lowering.ts` (`toScalarNode`) writes `−x` as `(−1)·x` and `+x` as `x` before the MathTS builder reads the tree; `evalExpr` and `bridgeGradientAST` both call it. No catalog or canonical AST uses a one-argument minus (0 of 249 scanned), so no recorded value changes. A control test fails when MathTS fixes the reading.
+- **The simplifier renders a one-argument minus as a negation.** `renderGensym` in `composition/expr-simplify.ts` joined the one part with the operator, so `−x` went to MathTS as `x`. The old `evalExpr` reading hid the error; with the lowering fix, Guard 3 refused the result. `tests/composition/expr-simplify-unary-minus.test.ts` failed before the change. No catalog right-hand side has a one-argument op.
+- **The simplifier walk-back reads a one-argument plus as its argument.** `composition/expr-simplify.ts` returned `(−1)·x` for `+x`. MathTS simplify removes a unary plus first, so no current input reaches the branch.
+
 ### Changed
 
 - **`flatToNested` is MathTS `Tensor.toNested` (U8).** `numerical/connection-lowering-helpers.ts` nests a flat row-major array through `new Tensor(shape, data).toNested()` in place of its recursive slicer `flatToNestedImpl`. **Fixed with it:** the slicer did not check the data length. It divided the length by the first axis and returned a wrong nesting for a length that is not the product of the shape, and it returned 0 for an empty array of shape `[]`. The MathTS constructor refuses both, and the helper re-throws the refusal as `NumericalBackendError`. An empty axis and a NaN entry are unchanged. `tests/numerical/flat-to-nested-mathts.test.ts` failed before the change.

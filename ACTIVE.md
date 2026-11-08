@@ -60,8 +60,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `expr-simplify.ts` imports MathTS `parse` and `simplify` statically; `isSimplifierAvailable` returns true and a failed smoke throws. The async `quietly` window is removed (no other caller); the smoke runs once inside `quietlySync`, as in the two sibling modules. Tests deleted: none. Rewritten: `tests/composition/mathts-quiet.test.ts` (the async-helper restore line). The false branch stays reachable by passing `null` to `runSymbolicWitness` (`tests/atlas/witness-runners.test.ts`, `witness-results.test.ts`, `witness-numeric-probe.test.ts`); the `skipIf(!simplifierPresent)` guards now always run.
 - [x] MathTS leverage U8 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U8).
   Done: `flatToNested` is MathTS `new Tensor(shape, data).toNested()`; a data length that is not the product of the shape now throws `NumericalBackendError` (the local slicer returned a wrong nesting).
-- [ ] MathTS leverage U9 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U9).
-  Spike done (`scripts/u9-gradient-spike.ts`; the numbers are in `NOTES.md`, 2026-11-07). DECISION PENDING (ADR, the owner's): a breaking synchronous return (a major version), or a `Promise` wrapper over MathTS that keeps the public signature. No U9 code before that decision.
+- [x] MathTS leverage U9 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U9).
+  Spike done (`scripts/u9-gradient-spike.ts`; the numbers are in `NOTES.md`, 2026-11-07). Decision (the owner's, 2026-11-07): option D, a synchronous return through `compileScalarGradient` with the integral arm dropped. It is a breaking change and ships with the next major version.
 - [ ] MathTS leverage M1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M1).
 - [ ] MathTS leverage M2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M2).
 - [ ] MathTS leverage M3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M3).

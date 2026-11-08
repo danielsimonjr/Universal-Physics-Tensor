@@ -75,7 +75,7 @@ The modules are `atlas`, `bridges`, `canonical`, `cases`, `cli`, `composition`, 
 | `dimensional/` | SI dimensional types, algebra, AST, validator, metric + connection + curvature layer + the Buckingham-π enumerator + the (internal) dimension-spec parser + single-unknown `dimension-inference` |
 | `numerical/` | TensorEngine interface, the MathTS engine, lowering, geodesic + GL4 integrators, perihelion finder, Killing/Einstein/Kretschmann evaluators, Klein-Gordon dispersion evaluator, the (internal) scalar-formula parser — MathTS-backed, behind `getFormulaParser` — plus the formula dimensional checker, the geometrized-units boundary adapters (`toGeometrized`/`fromGeometrized`/`geometrizedFactor`, dimension-functor-driven `G^M·c^(T−2M)`) — public — and the `input-validation.ts` leaf (the input validator, which keeps `numerical/` free of an upward dependency on `bridges/`; `grid-field.ts` is a thin re-export, and `GridField` lives in `numerical/types.ts`) |
 | `core/` | `UniversalTensor` class, `PhysicalConstants` lookup, flat `*_SI` constants, the `LabeledTensor`/`Cell`/regime-registry layer (flux Rule 3 is ERROR-tier; `LabeledTensor` has an explicit `axisOrder` invariant + `axisOf` and the `mergeAxes`/`splitAxis` rank-changing reshape) |
-| `diff/` | Bridge-gradient layer — `bridgeGradientNumerical` (central finite differences over a `BridgeDiffSpec`), `bridgeGradientAST` (exact reverse-mode AD over the right-hand side AST of a bridge) and the bridge specs |
+| `diff/` | Bridge-gradient layer — `bridgeGradientNumerical` (central finite differences over a `BridgeDiffSpec`), `bridgeGradientAST` (the exact derivative of the right-hand side AST of a bridge, through MathTS `compileScalarGradient`) and the bridge specs |
 | `cases/` | Qualified applied cases that connect catalog reductions to end-to-end CLI scenarios |
 | `entry/` | `src/index.ts` — public re-export surface |
 | `relations/` | Shared relation vocabulary: types, composition table, regime algebra, convention check, and category morphisms. `src/atlas/` re-exports the names that moved. |
@@ -91,7 +91,7 @@ Every bridge equation that has a symbolic form is an `ExprNode` tree. A few cata
 
 ### 2. Honest Framing
 
-Capabilities that are not implemented are not claimed. The bridge catalog marks equations whose status is unclear. Engine AD operates on user-supplied function closures, not on `ExprNode` trees directly; exact AD over a bridge's RHS AST is the separate `bridgeGradientAST` path. In the lowering, the `derivativeStrategy: 'computed'` default on `MetricTensorNode` treats a raw-tensor metric as constant (∂g = 0).
+Capabilities that are not implemented are not claimed. The bridge catalog marks equations whose status is unclear. Engine AD operates on user-supplied function closures, not on `ExprNode` trees directly; the exact derivative of a bridge's RHS AST is the separate `bridgeGradientAST` path. In the lowering, the `derivativeStrategy: 'computed'` default on `MetricTensorNode` treats a raw-tensor metric as constant (∂g = 0).
 
 ### 3. Interface + Conformance Suite
 
@@ -309,7 +309,7 @@ Both return `Promise`.
 
 ### What is NOT implemented
 
-AD does not differentiate `ExprNode` trees symbolically: differentiating an `ExprNode` to produce another `ExprNode` is not implemented. In the lowering, `derivativeStrategy: 'computed'` (the default) on a `MetricTensorNode` treats a raw-tensor metric as constant, ∂g = 0. Exact AD over a bridge's RHS AST exists as a separate numeric path, `bridgeGradientAST` (`src/diff/`), through `@danielsimonjr/mathts-autograd`.
+AD does not differentiate `ExprNode` trees symbolically: differentiating an `ExprNode` to produce another `ExprNode` is not implemented. In the lowering, `derivativeStrategy: 'computed'` (the default) on a `MetricTensorNode` treats a raw-tensor metric as constant, ∂g = 0. The exact derivative of a bridge's RHS AST is a separate numeric path, `bridgeGradientAST` (`src/diff/`), through MathTS `compileScalarGradient`.
 
 ### MathTSEngine delegation
 

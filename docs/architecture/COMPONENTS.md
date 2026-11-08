@@ -596,7 +596,7 @@ Returns `true` iff the engine implements both `forwardGrad` and `reverseGrad`. U
 
 ### `EngineCapabilityError` (`src/numerical/errors.ts`, re-exported by `src/numerical/tensor-engine.ts`)
 
-Extends `NumericalBackendError`. The constructor takes the engine name and the missing capability. `MathTSEngine.forwardGrad` and `MathTSEngine.reverseGrad` throw it when `@danielsimonjr/mathts-autograd` fails to load. `bridge-ast-gradient.ts` (`src/diff/`) throws it for the same reason.
+Extends `NumericalBackendError`. The constructor takes the engine name and the missing capability. `MathTSEngine.forwardGrad` and `MathTSEngine.reverseGrad` throw it when `@danielsimonjr/mathts-autograd` fails to load.
 
 ### `evaluateNumerical(node, inputs, options?)` (`src/numerical/index.ts`)
 
@@ -998,7 +998,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1185 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1188 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 

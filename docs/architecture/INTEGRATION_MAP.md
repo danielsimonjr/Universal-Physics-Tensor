@@ -24,7 +24,7 @@ The document holds no source counts. `DEPENDENCY_GRAPH.md`, `TEST_COVERAGE.md` a
 | `relations` | Shared relation vocabulary that the atlas shims re-export | the types `RelationContract` and `Conventions` from `src/index.ts`; the values through atlas and `cli-api` |
 | `cases` | Applied-case evaluators (`upt evaluate case-*`) | `APPLIED_CASES` through `cli-api`. The package root does not export it |
 | `core` | `UniversalTensor`, SI constants, labeled tensors, hashing | constants and tensor types |
-| `diff` | Bridge gradients: exact AD over the right-hand-side tree through MathTS autograd, and central finite differences | gradient helpers that the root exports |
+| `diff` | Bridge gradients: the exact derivative of the right-hand-side tree through MathTS `compileScalarGradient`, and central finite differences | gradient helpers that the root exports |
 
 `MathTSEngine` (`src/numerical/mathts-engine.ts`) is the only class in `src/` that implements `TensorEngine`.
 
@@ -252,7 +252,7 @@ The API walk of the project generator (`--api-surface`) lists an external specif
 | formula parse and compile | `parse`, `compileExpr` | `src/numerical/formula-mathts.ts` |
 | dimension parse of a formula string | `parse` | `src/numerical/formula-dimension.ts` |
 | `MathTSEngine` | `Tensor`; dynamic `forwardGrad` and `reverseGrad` | `src/numerical/mathts-engine.ts` |
-| `bridgeGradientAST` | dynamic autograd and tensor | `src/diff/bridge-ast-gradient.ts` |
+| `bridgeGradientAST` | static `compileScalarGradient` over the scalar builder | `src/diff/bridge-ast-gradient.ts` |
 | `simplifyExpr` | dynamic `parse` and `simplify` | `src/composition/expr-simplify.ts` |
 | scalar-symbol filter | `parse` through a static import | `src/composition/mathts-scalar-symbols.ts` |
 | `evalExpr` | `createScalarBuilder`, `evaluateScalar` | `src/composition/expr-eval.ts` |

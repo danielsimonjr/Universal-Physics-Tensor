@@ -47,7 +47,7 @@ The codebase is organized into the following modules:
 - **composition**: 83 files
 - **core**: 18 files
 - **diff**: 3 files
-- **dimensional**: 44 files
+- **dimensional**: 45 files
 - **entry**: 1 file
 - **numerical**: 43 files
 - **relations**: 8 files
@@ -4122,7 +4122,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-expression` | `createScalarBuilder, ScalarBuildError` |
+| `@danielsimonjr/mathts-expression` | `ScalarBuildError` |
 | `@danielsimonjr/mathts-functions` | `evaluateScalar, ScalarEvalError` |
 
 **Internal Dependencies:**
@@ -4132,6 +4132,7 @@ The codebase is organized into the following modules:
 | `../dimensional/ast-leaves.js` | `forEachScalarLeaf` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
+| `../dimensional/scalar-lowering.js` | `toScalarNode` | Import |
 
 **Exports:**
 - Classes: `SymbolicEvalError`
@@ -5516,16 +5517,22 @@ The codebase is organized into the following modules:
 
 ## Diff Dependencies
 
-### `src/diff/bridge-ast-gradient.ts` - Exact bridge-gradients via reverse-mode AD over the symbolic RHS AST.
+### `src/diff/bridge-ast-gradient.ts` - Exact bridge-gradients over the symbolic RHS AST.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-expression` | `ScalarBuildError` |
+| `@danielsimonjr/mathts-functions` | `compileScalarGradient` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/validator.js` | `ExprNode, TranscendentalFn` | Import (type-only) |
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/ast-leaves.js` | `forEachScalarLeaf, isDecimalLiteral` | Import |
 | `../dimensional/symbolic-constants.js` | `constantScope` | Import |
-| `../numerical/errors.js` | `EngineCapabilityError` | Import |
+| `../dimensional/scalar-lowering.js` | `toScalarNode` | Import |
 | `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID, parseBridgeId` | Import |
-| `../numerical/quadrature.js` | `GAUSS_LEGENDRE_16` | Import |
 
 **Exports:**
 - Interfaces: `ASTGradientResult`
@@ -6121,6 +6128,24 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `RGCouplingNode`, `BetaFunctionNode`, `BetaFunctionValidationResult`
 - Functions: `rgCoupling`, `validateRGCoupling`, `validateBetaFunction`
+
+---
+
+### `src/dimensional/scalar-lowering.ts` - The one lowering of a UPT scalar `ExprNode` to a MathTS `ScalarNode`.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-expression` | `createScalarBuilder, ScalarNode` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./validator.js` | `ExprNode` | Import (type-only) |
+| `./types.js` | `DIMENSIONLESS` | Import |
+
+**Exports:**
+- Functions: `toScalarNode`
 
 ---
 
@@ -7248,7 +7273,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/numerical/quadrature.ts` - Gauss–Legendre quadrature — shared between the numerical AST lowering and the
+### `src/numerical/quadrature.ts` - Gauss–Legendre quadrature for the numerical AST lowering of definite
 
 **External Dependencies:**
 | Package | Import |
@@ -7623,7 +7648,7 @@ graph TD
         N48[ast-leaves]
         N49[ast-types]
         N50[bridge-check]
-        N51[...39 more]
+        N51[...40 more]
     end
 
     subgraph Entry
@@ -7686,17 +7711,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 386 |
+| Total TypeScript Files | 387 |
 | Total Modules | 13 |
-| Total Lines of Code | 87410 |
-| Total Exports | 2801 |
+| Total Lines of Code | 87306 |
+| Total Exports | 2802 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
-| Total Functions | 907 |
+| Total Functions | 908 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
-| Type-only Imports | 529 |
+| Type-only Imports | 530 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

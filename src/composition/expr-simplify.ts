@@ -142,6 +142,11 @@ export function renderGensym(
         return `(${renderGensym(expr.args[0], gensymOf, meta)})^${Number(exp.name)}`;
       }
       if (expr.args.length === 0) throw new Unsupported();
+      if (expr.args.length === 1) {
+        const arg = renderGensym(expr.args[0]!, gensymOf, meta);
+        if (expr.op === '-') return `(-(${arg}))`;
+        if (expr.op === '+') return `(${arg})`;
+      }
       const parts = expr.args.map((a) => `(${renderGensym(a, gensymOf, meta)})`);
       return `(${parts.join(expr.op)})`;
     }
@@ -190,10 +195,11 @@ function walkBack(node: MathNode, meta: Map<string, LeafMeta>): ExprNode {
           args: [walkBack(args[0], meta), lit(exp.value)],
         };
       }
-      if ((op === '+' || op === '-') && args.length === 1) {
+      if (op === '-' && args.length === 1) {
         // unary minus → (-1) * arg
         return { kind: 'op', op: '*', args: [lit(-1), walkBack(args[0], meta)] };
       }
+      if (op === '+' && args.length === 1) return walkBack(args[0], meta); // unary plus is the argument
       if (op === '+' || op === '-' || op === '*' || op === '/') {
         if (args.length < 2) throw new Unsupported();
         return { kind: 'op', op, args: args.map((a) => walkBack(a, meta)) };

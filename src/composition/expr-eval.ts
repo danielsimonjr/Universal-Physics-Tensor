@@ -7,7 +7,7 @@
  * DIFFERENT AST — so this is the missing primitive that makes a bridge's
  * `symbolic` form executable.
  *
- * The tree is lowered with `createScalarBuilder` and evaluated with
+ * The tree is lowered with `toScalarNode` (`dimensional/scalar-lowering`, which writes a one-argument `-` as a negation) and evaluated with
  * `evaluateScalar`. This module does not print a formula and does not parse
  * one. Leaf resolution order (Adam A-1, A-5): caller `values` win, then the
  * `CONSTANTS` registry, then a spelled-out multiple of π, then a base-10
@@ -20,12 +20,13 @@
  * @module composition/expr-eval
  */
 
-import { createScalarBuilder, ScalarBuildError } from '@danielsimonjr/mathts-expression';
+import { ScalarBuildError } from '@danielsimonjr/mathts-expression';
 import { evaluateScalar, ScalarEvalError } from '@danielsimonjr/mathts-functions';
 import type { ExprNode } from '../dimensional/validator.js';
 import { forEachScalarLeaf } from '../dimensional/ast-leaves.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
+import { toScalarNode } from '../dimensional/scalar-lowering.js';
 
 /** A scalar `ExprNode` could not be evaluated (unsupported arm / unresolved
  *  leaf / non-finite result). @public */
@@ -35,8 +36,6 @@ export class SymbolicEvalError extends Error {
     this.name = 'SymbolicEvalError';
   }
 }
-
-const builder = createScalarBuilder();
 
 /** Symbol names on the scalar arms. Other kinds are left for the builder to reject. */
 function symbolNames(node: ExprNode, out: Set<string>): void {
@@ -92,7 +91,7 @@ export function evalExpr(
   values: Readonly<Record<string, number>> = {},
 ): number {
   try {
-    const lowered = builder.from(node);
+    const lowered = toScalarNode(node);
     return evaluateScalar(lowered, scopeFor(node, values));
   } catch (err) {
     throw asSymbolic(err);
