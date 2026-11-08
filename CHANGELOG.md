@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [12.0.0] - 2026-11-07
+
+Dependency health at this release: `bun audit --audit-level=high` finds no vulnerabilities (140 packages). `bun outdated` lists only development dependencies: `@types/node` is pinned to the CI Node major (22.20.5; 26.6.6 is latest), `@vitest/coverage-v8`/`vitest` 4.1.12 (5.1.0 latest), and `tree-sitter` 0.22.4 (0.25.1).
+
 ### Breaking
 
 - **`bridgeGradientAST` and `bridgeGradientASTById` return synchronously (U9).** They return `ASTGradientResult`, not a `Promise`. They differentiate through MathTS `compileScalarGradient` over the scalar builder, in place of the reverse-mode tape of `@danielsimonjr/mathts-autograd`. The definite-integral arm is removed: no catalog bridge uses it, and the function now throws `TypeError` for an `integral` node. Where the value overflows, the value and the gradient are NaN, not ±Infinity (BE-82 at a synthetic point; at a physical point the two paths agree to 1.2e-16). Measured over the catalog: 402 (bridge, variable) pairs; 391 agree to 1e-12, 2 are NaN on both paths, 3 are the BE-82 overflow, 6 are the exponent-variable refusal, which stays a UPT pre-check. `EngineCapabilityError` is no longer thrown by this path. `tests/diff/integral-ad.test.ts` is removed; `tests/diff/bridge-ast-gradient-sync.test.ts` checks every pair against `evalExpr`.
