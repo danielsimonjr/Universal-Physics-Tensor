@@ -35,7 +35,6 @@ import {
   type ExactScale as CoreExactScale,
 } from '@danielsimonjr/mathts-core';
 import { gcd } from '@danielsimonjr/mathts-functions';
-import { bigintFrom } from '../core/mathts-read.js';
 
 
 /** `num / den × irrational`, with `den > 0` and the fraction in lowest terms. @internal */
@@ -46,9 +45,9 @@ export interface ExactScale {
   readonly irrational: number;
 }
 
-/** The bigint gcd, MathTS `gcd` on its `bigint, bigint` signature, read back as the bigint it is. */
+/** The bigint gcd, MathTS `gcd` on its typed `bigint, bigint` signature. */
 function bigGcd(a: bigint, b: bigint): bigint {
-  const g = bigintFrom('gcd', gcd(a, b));
+  const g = gcd(a, b);
   return g < 0n ? -g : g;
 }
 

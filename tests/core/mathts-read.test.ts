@@ -1,12 +1,12 @@
 /**
  * The typed MathTS functions return `unknown`; `core/mathts-read` is the one
- * place that turns such a result back into the number, bigint or number
+ * place that turns such a result back into the number or number
  * matrix it is, and names the MathTS function in the TypeError otherwise.
  * Twelve readers across `src/` carried that check inline before.
  */
 import { describe, expect, it } from 'vitest';
-import { det, gcd, inv, lgamma } from '@danielsimonjr/mathts-functions';
-import { bigintFrom, numberFrom, numberMatrixFrom } from '../../src/core/mathts-read.js';
+import { det, inv, lgamma } from '@danielsimonjr/mathts-functions';
+import { numberFrom, numberMatrixFrom } from '../../src/core/mathts-read.js';
 
 describe('numberFrom', () => {
   it('returns the number a typed function returned', () => {
@@ -21,17 +21,6 @@ describe('numberFrom', () => {
     expect(() => numberFrom('lgamma', undefined)).toThrow(/^lgamma did not return a number/);
     expect(() => numberFrom('mean', [1])).toThrow(/mean/);
     expect(() => numberFrom('gcd', 6n)).toThrow(/gcd did not return a number/);
-  });
-});
-
-describe('bigintFrom', () => {
-  it('returns the bigint MathTS gcd returned for bigint arguments', () => {
-    expect(bigintFrom('gcd', gcd(12n, 18n))).toBe(6n);
-  });
-
-  it('throws a TypeError naming the function for a number', () => {
-    expect(() => bigintFrom('gcd', 6)).toThrow(TypeError);
-    expect(() => bigintFrom('gcd', 6)).toThrow(/^gcd did not return a bigint/);
   });
 });
 

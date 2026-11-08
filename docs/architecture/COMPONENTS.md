@@ -796,7 +796,7 @@ The intelligent-index layer lives in `core/`. This layer has three parts: `Label
 - `format.ts`: the printed forms of a number (`formatQuantity`, `formatExact`, `formatPercent`).
 - `hash.ts`: `sha256Hex`, the one SHA-256 digest.
 - `json-schema.ts`: the reader for the subset of JSON Schema keywords that the data schemas use (`schemaProblems`). A keyword outside the subset is an error in the schema.
-- `mathts-read.ts`: `numberFrom`, `bigintFrom` and `numberMatrixFrom`, the typed readers of MathTS results. Each reader throws a `TypeError` that names the MathTS function.
+- `mathts-read.ts`: `numberFrom` and `numberMatrixFrom`, the typed readers of MathTS results. Each reader throws a `TypeError` that names the MathTS function.
 - `regime-rule-install.ts`: installs the body of Rule 4 (regime consistency, WARNING tier) into the flux-rule registry when the module loads.
 - `regimes-builtins.ts`: registers the built-in regime values of `types.ts` under their axes when the module loads. A second load changes nothing.
 

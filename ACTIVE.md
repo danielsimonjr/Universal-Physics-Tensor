@@ -73,7 +73,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 - [ ] MathTS leverage M3 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M3).
 - [x] MathTS leverage M4 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M4).
   Done: functions `^0.76.0`; the three `stats.ts` statistics call MathTS behind the UPT checks; the M4 gap row is an agreement test.
-- [ ] MathTS leverage M5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M5).
+- [x] MathTS leverage M5 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M5).
+  Done: functions `^0.77.2`; `power-law.ts` and `exact-scale.ts` read the typed `gcd` result with no reader; `bigintFrom` is removed.
 - [ ] MathTS leverage M6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M6; integration plan P3 item 2).
 - [ ] MathTS leverage M7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M7).
 - [x] Remove the 11 reviewed code duplicates of `repo-tools clones` (todo.md, 2026-11-07 five-axis pass): one commit per merge action, byte-identical output (`tests/cli/golden/`), and record the declined pairs with reasons in `todo.md`.

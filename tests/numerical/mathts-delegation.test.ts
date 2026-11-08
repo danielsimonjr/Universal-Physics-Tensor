@@ -121,6 +121,9 @@ describe('MathTS carries the rational arithmetic and the stable sums', () => {
     expect(buckingham).not.toMatch(/function gcd|interface Frac\b/);
     expect(source('../../src/dimensional/exact-scale.ts')).not.toMatch(/function gcd/);
     expect(source('../../src/dimensional/exact-scale.ts')).toMatch(/\bgcd\b/);
+    // M5: the bigint signature is typed, so no reader wraps the result.
+    expect(source('../../src/dimensional/exact-scale.ts')).not.toMatch(/bigintFrom/);
+    expect(source('../../src/core/mathts-read.ts')).not.toMatch(/export function bigintFrom/);
   });
 
   it('the prefactor fit, the ratio spread and the changepoint read the stable primitives', () => {
