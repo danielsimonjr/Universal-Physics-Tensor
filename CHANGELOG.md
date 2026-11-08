@@ -18,6 +18,7 @@ Dependency health at this release: `bun audit --audit-level=high` finds no vulne
 
 ### Fixed
 
+- **The unit reader accepts `arcsecond` (#574).** `arcsec` was already read; the longer spelling was refused. Regression tests pin the round-9 unit reports #545, #549, #534, #551 and #532, which already passed on `master`. On Windows two float tests (be-42, be-164) allow a 1 to 4 ulp tolerance for the platform libm; Linux stays exact.
 - **A one-argument minus is a negation in `evalExpr` and in the gradient.** MathTS `evaluateScalar` and `compileScalarGradient` read `op('-', [x])` as the identity. The new `dimensional/scalar-lowering.ts` (`toScalarNode`) writes `−x` as `(−1)·x` and `+x` as `x` before the MathTS builder reads the tree; `evalExpr` and `bridgeGradientAST` both call it. No catalog or canonical AST uses a one-argument minus (0 of 249 scanned), so no recorded value changes. A control test fails when MathTS fixes the reading.
 - **The simplifier renders a one-argument minus as a negation.** `renderGensym` in `composition/expr-simplify.ts` joined the one part with the operator, so `−x` went to MathTS as `x`. The old `evalExpr` reading hid the error; with the lowering fix, Guard 3 refused the result. `tests/composition/expr-simplify-unary-minus.test.ts` failed before the change. No catalog right-hand side has a one-argument op.
 - **The simplifier walk-back reads a one-argument plus as its argument.** `composition/expr-simplify.ts` returned `(−1)·x` for `+x`. MathTS simplify removes a unary plus first, so no current input reaches the branch.
