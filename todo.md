@@ -2944,3 +2944,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Security: not touched.
 - Maintainability: the local `gammaQ`, `betaI`, `legendre`, `legendre16Derivative` and `rewriteSigns` are gone. `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups, unchanged.
 - Left: the Student t tail stays on `studentTCDF` (task U5); the M4 intervals wait for a MathTS release that exports them.
+
+## 2026-11-08 — five-axis pass (MathTS functions 0.76.0)
+
+- Speed: not measured; the changes replace one call with another.
+- Stability: not changed; the new rows are deterministic.
+- Reliability: the Wilson, Newcombe and kappa values come from MathTS. The M4 row fails on a Wald interval, on Newcombe method 8 (φ = 0) and on raw agreement in place of kappa.
+- Security: not touched.
+- Maintainability: the local Wilson, Newcombe and kappa formulas are gone. `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups before and after.
+- Left: M5 to M7 wait for MathTS. The curvature refusal is a separate task.
