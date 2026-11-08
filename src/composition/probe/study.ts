@@ -28,7 +28,7 @@
  */
 
 import { pairwiseDot, pairwiseSum } from '@danielsimonjr/mathts-core';
-import { betainc, chiSquaredCDF, gammaincp, inv, propagateUncertainty } from '@danielsimonjr/mathts-functions';
+import { chiSquaredCDF, chiSquaredSF, fSF, inv, propagateUncertainty } from '@danielsimonjr/mathts-functions';
 import { numberFrom } from '../../core/mathts-read.js';
 import { readJsonFile } from '../../core/data-file.js';
 import { isPlainObject } from '../../core/json-schema.js';
@@ -831,26 +831,18 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
 
 // --- χ² and F survival functions ------------------------------------------
 //
-// MathTS carries the regularized lower incomplete gamma `gammainc` (the
-// series for x < a + 1, else 1 − Q by continued fraction), the upper one
-// `gammaincp` (from `@danielsimonjr/mathts-functions` 0.68.3 the modified
-// Lentz continued fraction for x ≥ a + 1, computed directly; before that it
-// was `1 − gammainc`, which rounded a far upper tail to 0, and the χ² p-value
-// of a bad fit IS that tail) and the regularized incomplete beta `betainc`.
-// The χ² CDF is MathTS `chiSquaredCDF`; the survival functions below use
-// `gammaincp` and `betainc`.
-
-/** Regularized upper incomplete gamma Q(a, x), MathTS `gammaincp` (direct in the upper tail). */
-function gammaQ(a: number, x: number): number {
-  if (x <= 0) return 1;
-  return numberFrom('gammaincp', gammaincp(a, x));
-}
+// The survival functions are MathTS `chiSquaredSF` and `fSF` (from
+// `@danielsimonjr/mathts-functions` 0.75.1). Both compute the upper tail
+// directly, so a far tail does not round to 0, and the χ² p-value of a bad
+// fit IS that tail. The χ² CDF is MathTS `chiSquaredCDF`. The guards stay in
+// UPT: MathTS returns NaN or 1 for a bad degree of freedom, and a probe must
+// refuse that input.
 
 /** P(χ²_ν ≥ chi2): the probability of a χ² at least this large if the model and σ are right. @internal */
 export function chiSquareSurvival(chi2: number, dof: number): number {
   if (!(dof > 0)) throw new RangeError('chiSquareSurvival: dof must be positive');
   if (!(chi2 > 0)) return 1;
-  return gammaQ(dof / 2, chi2 / 2);
+  return numberFrom('chiSquaredSF', chiSquaredSF(chi2, dof));
 }
 
 /**
@@ -863,19 +855,12 @@ export function chiSquareCdf(chi2: number, dof: number): number {
   return numberFrom('chiSquaredCDF', chiSquaredCDF(chi2, dof));
 }
 
-/** Regularized incomplete beta I_x(a, b), MathTS `betainc`. */
-function betaI(a: number, b: number, x: number): number {
-  if (x <= 0) return 0;
-  if (x >= 1) return 1;
-  return numberFrom('betainc', betainc(a, b, x));
-}
-
 /** P(F_{d1,d2} ≥ f): the probability of an F ratio at least this large if the extra terms explain nothing. @internal */
 export function fSurvival(f: number, d1: number, d2: number): number {
   if (!(d1 > 0 && d2 > 0)) throw new RangeError('fSurvival: degrees of freedom must be positive');
   if (!(f > 0)) return 1;
   if (f === Infinity) return 0;
-  return betaI(d2 / 2, d1 / 2, d2 / (d2 + d1 * f));
+  return numberFrom('fSF', fSF(f, d1, d2));
 }
 
 // --- tests of a model on a set of rows -------------------------------------
