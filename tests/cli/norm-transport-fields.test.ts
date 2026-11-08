@@ -38,9 +38,16 @@ describe('normTransportFields', () => {
     expect(row.witness).toEqual({ id: nt.witness.id, kind: nt.witness.kind, test: nt.witness.test, tolerance: nt.witness.tolerance ?? null });
   });
 
-  it('is the one projection: both commands call it', () => {
-    const read = (f: string): string => readFileSync(new URL(`../../src/cli/commands/${f}`, import.meta.url), 'utf8');
-    expect(read('_atlas-route.ts')).toContain('...normTransportFields(a.transport)');
-    expect(read('atlas.ts')).toContain('...normTransportFields(nt)');
+  it('is the one projection: serialize.ts owns it, and the atlas JSON and both commands call it', () => {
+    const read = (f: string): string => readFileSync(new URL(`../../src/${f}`, import.meta.url), 'utf8');
+    const serialize = read('atlas/serialize.ts');
+    expect(serialize).toContain('export function normTransportFields(');
+    expect(serialize).toContain('...normTransportFields(nt)');
+    for (const f of ['cli/commands/_atlas-route.ts', 'cli/commands/atlas.ts']) {
+      expect(read(f), f).toContain("import { normTransportFields } from '../../atlas/serialize.js';");
+      expect(read(f), f).not.toContain('export function normTransportFields(');
+    }
+    expect(read('cli/commands/_atlas-route.ts')).toContain('...normTransportFields(a.transport)');
+    expect(read('cli/commands/atlas.ts')).toContain('...normTransportFields(nt)');
   });
 });

@@ -7,6 +7,7 @@ import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
 import type { AppliedTransport, AtlasBridge } from '../../cli-api.js';
 import { publishedUrl } from '../published-url.js';
+import { normTransportFields } from '../../atlas/serialize.js';
 
 /** What composing an atlas route yields: `boundPath`'s claim or refusal, or a refusal for a missing Lipschitz constant. */
 export type RouteClaim =
@@ -145,30 +146,6 @@ export function explainsRefusal(claim: RouteClaim): boolean {
 /** The declarative fields of an applied norm transport, as a JSON envelope carries them (no functions). */
 export function transportReport(a: AppliedTransport) {
   return { index: a.index, bridgeId: a.bridgeId, ...normTransportFields(a.transport) };
-}
-
-/**
- * The declarative fields of one norm transport, in the order the JSON envelopes print the fields.
- * `transportReport` and `upt atlas --json` (`atlas.ts`) build rows from these fields.
- *
- * @param nt - The norm transport.
- * @returns The fields, with no functions.
- */
-export function normTransportFields(nt: AppliedTransport['transport']) {
-  return {
-    id: nt.id,
-    fromModel: nt.fromModel,
-    toModel: nt.toModel,
-    from: nt.from,
-    to: nt.to,
-    K: nt.K,
-    domain: nt.domain,
-    derivation: nt.derivation,
-    timeMap: { map: nt.timeMap.map, uniform: nt.timeMap.uniform, horizon: nt.timeMap.horizon },
-    uniformity: nt.uniformity,
-    witness: { id: nt.witness.id, kind: nt.witness.kind, test: nt.witness.test, tolerance: nt.witness.tolerance },
-    basis: nt.basis,
-  };
 }
 
 /** The JSON form of an applied norm transport, as {@link transportReport} builds it. */

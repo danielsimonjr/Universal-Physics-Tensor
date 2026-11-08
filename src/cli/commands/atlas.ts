@@ -33,7 +33,7 @@ import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 import { publishedUrl } from '../published-url.js';
-import { normTransportFields } from './_atlas-route.js';
+import { normTransportFields } from '../../atlas/serialize.js';
 
 const WITNESS_RESULTS_URL = publishedUrl('data/atlas/witness-results.json');
 

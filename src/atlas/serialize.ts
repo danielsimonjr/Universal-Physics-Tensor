@@ -161,19 +161,37 @@ const serializeNormTransports = (
   transports: NonNullable<AtlasBridge['normTransports']>,
 ): readonly JsonValue[] =>
   transports.map((nt) => ({
+    ...normTransportFields(nt),
+    // An overwritten spread key keeps its place, so the key order is unchanged.
+    K: zeroSafe(nt.K),
+    witness: serializeWitnesses([nt.witness])[0]!,
+  }));
+
+/**
+ * The declarative fields of one norm transport, in the order the JSON envelopes print the fields.
+ * The atlas JSON, `transportReport` (`cli/commands/_atlas-route.ts`) and `upt atlas --json`
+ * (`cli/commands/atlas.ts`) build their rows from these fields.
+ *
+ * @param nt - The norm transport.
+ * @returns The fields, with no functions.
+ * @internal
+ */
+export function normTransportFields(nt: NonNullable<AtlasBridge['normTransports']>[number]) {
+  return {
     id: nt.id,
     fromModel: nt.fromModel,
     toModel: nt.toModel,
     from: nt.from,
     to: nt.to,
-    K: zeroSafe(nt.K),
+    K: nt.K,
     domain: nt.domain,
     derivation: nt.derivation,
     timeMap: { map: nt.timeMap.map, uniform: nt.timeMap.uniform, horizon: nt.timeMap.horizon },
     uniformity: nt.uniformity,
-    witness: serializeWitnesses([nt.witness])[0]!,
+    witness: { id: nt.witness.id, kind: nt.witness.kind, test: nt.witness.test, tolerance: nt.witness.tolerance },
     basis: nt.basis,
-  }));
+  };
+}
 
 const serializeBridge = (bridge: AtlasBridge, witnessResults: WitnessResultsArtifact): JsonValue => ({
   id: bridge.id,
