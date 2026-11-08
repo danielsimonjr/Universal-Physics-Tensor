@@ -568,7 +568,11 @@ Flags:
         polar turning point, at any other θ). Kerr's a is a length in metres;
         the report prints a/M = a/(GM/c²). A Ricci scalar that has a closed
         form is that form; a vacuum finite-difference residual is not listed
-        as Ricci. A parameter is a number, a unit (M=1Msun, r=1km) or a
+        as Ricci. Each Ricci component, the Ricci scalar and the Kretschmann
+        scalar carry an upper bound of their finite-difference error; a
+        value within its bound is marked "unresolved: |R| <= bound" (|K|
+        for the Kretschmann scalar). A
+        parameter is a number, a unit (M=1Msun, r=1km) or a
         constant expression (theta=pi/2). A bare number is already in the
         parameter's SI unit; a dimensioned quantity must match it.
         `upt help metric` describes every flag.

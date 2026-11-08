@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 388,
-    "totalTestFiles": 708,
+    "totalTestFiles": 709,
     "testedCount": 378,
     "directlyTestedCount": 345,
     "untestedCount": 10,
@@ -10442,6 +10442,7 @@
     "src/numerical/curvature-lowering-helpers.ts": [
       "tests/dimensional/bianchi-residual.test.ts",
       "tests/fixtures/schwarzschild-riemann.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/exact-christoffel-schwarzschild.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
       "tests/numerical/kretschmann-factored-raising.test.ts",
@@ -11009,6 +11010,7 @@
       "tests/dimensional/bianchi-residual.test.ts",
       "tests/fixtures/schwarzschild-riemann.test.ts",
       "tests/internal/clone-helpers.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/exact-christoffel-schwarzschild.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
       "tests/numerical/kretschmann-factored-raising.test.ts",
@@ -11041,6 +11043,7 @@
       "tests/numerical/ad-conformance.test.ts",
       "tests/numerical/christoffel-precompute.test.ts",
       "tests/numerical/connection-lowering-nonfinite.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/einsum-precompute.test.ts",
       "tests/numerical/einsum-properties.test.ts",
       "tests/numerical/engine-capability.test.ts",
@@ -11206,6 +11209,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/metric-value-error.test.ts",
       "tests/numerical/spacetime-metrics.test.ts"
     ],
@@ -11307,6 +11311,7 @@
       "tests/numerical/covariant-derivative-lowering.test.ts",
       "tests/numerical/covariant-eikonal-real.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/engine-default.test.ts",
       "tests/numerical/evaluate.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
@@ -14163,6 +14168,7 @@
     "src/numerical/curvature-lowering-helpers.ts": [
       "tests/dimensional/bianchi-residual.test.ts",
       "tests/fixtures/schwarzschild-riemann.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/exact-christoffel-schwarzschild.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
       "tests/numerical/kretschmann-factored-raising.test.ts",
@@ -14321,6 +14327,7 @@
       "tests/numerical/ad-conformance.test.ts",
       "tests/numerical/christoffel-precompute.test.ts",
       "tests/numerical/connection-lowering-nonfinite.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/einsum-precompute.test.ts",
       "tests/numerical/einsum-properties.test.ts",
       "tests/numerical/engine-capability.test.ts",
@@ -14388,6 +14395,7 @@
       "tests/numerical/schwarzschild.test.ts"
     ],
     "src/numerical/spacetime-metrics.ts": [
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/metric-value-error.test.ts",
       "tests/numerical/spacetime-metrics.test.ts"
     ],
@@ -14414,6 +14422,7 @@
       "tests/internal/clone-helpers.test.ts",
       "tests/numerical/connection-lowering-helpers.test.ts",
       "tests/numerical/correctness.test.ts",
+      "tests/numerical/curvature-error-bound.test.ts",
       "tests/numerical/evaluate.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
       "tests/numerical/lowering-contract.test.ts",
@@ -25073,6 +25082,13 @@
       "src/numerical/perihelion-finder.ts",
       "src/bridges/catalog-load.ts",
       "src/bridges/relation-eval.ts"
+    ],
+    "tests/numerical/curvature-error-bound.test.ts": [
+      "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
+      "src/numerical/mathts-engine.ts",
+      "src/numerical/spacetime-metrics.ts",
+      "src/numerical/types.ts"
     ],
     "tests/numerical/einstein-desitter.test.ts": [
       "src/numerical/einstein-equation.ts",

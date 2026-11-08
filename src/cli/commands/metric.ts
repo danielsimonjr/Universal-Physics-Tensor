@@ -39,7 +39,11 @@ const HELP = `upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--
         polar turning point, at any other θ). Kerr's a is a length in metres;
         the report prints a/M = a/(GM/c²). A Ricci scalar that has a closed
         form is that form; a vacuum finite-difference residual is not listed
-        as Ricci. A parameter is a number, a unit (M=1Msun, r=1km) or a
+        as Ricci. Each Ricci component, the Ricci scalar and the Kretschmann
+        scalar carry an upper bound of their finite-difference error; a
+        value within its bound is marked "unresolved: |R| <= bound" (|K|
+        for the Kretschmann scalar). A
+        parameter is a number, a unit (M=1Msun, r=1km) or a
         constant expression (theta=pi/2). A bare number is already in the
         parameter's SI unit; a dimensioned quantity must match it.
         \`upt help metric\` describes every flag.
@@ -64,6 +68,12 @@ function metricValueError(api: CommandCtx['api'], e: unknown): unknown {
     return new CliError(`upt metric: ${e.message}`);
   }
   return e;
+}
+
+/** The error-bound suffix of one printed curvature value. */
+function boundText(bound: number | undefined, resolved: boolean | undefined, symbol = 'R'): string {
+  if (bound === undefined) return '';
+  return resolved === true ? `  (bound ${bound})` : `  (unresolved: |${symbol}| <= bound ${bound})`;
 }
 
 async function run(ctx: CommandCtx): Promise<number> {
@@ -180,9 +190,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const c of report.christoffel) out(`    ${c.index} = ${c.value}`);
   out('  Ricci (nonzero):');
   if (report.ricci.length === 0) out('    (none)');
-  for (const c of report.ricci) out(`    ${c.index} = ${c.value}`);
-  out(`  Ricci scalar R = ${report.ricciScalar}`);
-  out(`  Kretschmann K = ${report.kretschmann}`);
+  for (const c of report.ricci) out(`    ${c.index} = ${c.value}${boundText(c.bound, c.resolved)}`);
+  out(`  Ricci scalar R = ${report.ricciScalar}${boundText(report.ricciScalarBound, report.ricciScalarResolved)}`);
+  out(`  Kretschmann K = ${report.kretschmann}${boundText(report.kretschmannBound, report.kretschmannResolved, 'K')}`);
   out('  closed form: ' + Object.entries(report.closedForm).map(([k, v]) => `${k}=${v}`).join(' '));
   if (geodesic) {
     const cons =

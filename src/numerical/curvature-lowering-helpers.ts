@@ -258,28 +258,62 @@ export function dGammaAt(
   N: number,
   engine: TensorEngine,
 ): DGammaTensor {
-  // Allocate dGamma[λ][ρ][σ][ν]
-  const dGamma: number[][][][] = nestedZeros4(N);
+  return dGammaSampled(x, gFn, gInverseFn, N, engine, null).dGamma;
+}
 
-  // v0.5.1 PD-7: 4th-order centered stencil via the shared
-  // `pderivNumericalFn(..., {order: 4})` (h = 1e-4·max(|x|,1) default matches
-  // the v0.5.0 `outerStep`). Each axis returns a flat number[] of length N³;
-  // unflatten into the `dGamma[λ][ρ][σ][ν]` axis-0 slab.
-  const christFn = (xs: ReadonlyArray<number>): NestedArray =>
-    christoffelAt(xs, gFn, gInverseFn, N, engine);
+/**
+ * The outer difference of `dGammaAt`, and its error bound when `gammaBound` is given.
+ *
+ * The stencil is the 4th-order centered form of `pderivNumericalFn`, with the same step
+ * `h = 1e-4·max(|x|,1)` and the same rule that a component which is equal at every stencil
+ * point has the derivative 0, and that component has the bound 0. The bound of any other
+ * component of ∂_λ Γ is the sum of three terms:
+ * the truncation estimate |D4 − D2|, where D2 is the 2nd-order form on the ±h samples; the
+ * propagated error 1.5·δΓ/h of the sampled Γ; and the rounding of the stencil sum.
+ */
+function dGammaSampled(
+  x: ReadonlyArray<number>,
+  gFn: MetricFn,
+  gInverseFn: MetricFn,
+  N: number,
+  engine: TensorEngine,
+  gammaBound: GammaTensor | null,
+): { dGamma: DGammaTensor; bound: number[][][][] | null } {
+  const dGamma: number[][][][] = nestedZeros4(N);
+  const bound: number[][][][] | null = gammaBound === null ? null : nestedZeros4(N);
+  const christFn = (xs: ReadonlyArray<number>): number[] =>
+    flattenNA(christoffelAt(xs, gFn, gInverseFn, N, engine));
+  const N2 = N * N;
   for (let lam = 0; lam < N; lam++) {
-    const d = pderivNumericalFn(christFn, x, lam, { order: 4 });
-    const flat = Array.isArray(d) ? (d as number[]) : [d as number];
-    if (flat.length !== N * N * N) {
+    const xl = x[lam];
+    const h = 1e-4 * Math.max(Math.abs(xl), 1);
+    const p1 = [...x]; p1[lam] = xl + h;
+    const m1 = [...x]; m1[lam] = xl - h;
+    const p2 = [...x]; p2[lam] = xl + 2 * h;
+    const m2 = [...x]; m2[lam] = xl - 2 * h;
+    const fp1 = christFn(p1);
+    const fm1 = christFn(m1);
+    const fp2 = christFn(p2);
+    const fm2 = christFn(m2);
+    if (fp1.length !== N * N2 || fm1.length !== N * N2 || fp2.length !== N * N2 || fm2.length !== N * N2) {
       throw new NumericalBackendError(
-        `dGammaAt: christoffelAt derivative shape mismatch — expected ${N * N * N}, got ${flat.length}`,
+        `dGammaAt: christoffelAt derivative shape mismatch — expected ${N * N2}, got ${fp1.length}`,
       );
     }
-    const N2 = N * N;
+    const inv12h = 1 / (12 * h);
     for (let rho = 0; rho < N; rho++) {
       for (let sigma = 0; sigma < N; sigma++) {
         for (let nu = 0; nu < N; nu++) {
-          dGamma[lam][rho][sigma][nu] = flat[rho * N2 + sigma * N + nu];
+          const i = rho * N2 + sigma * N + nu;
+          const still = fp1[i] === fm1[i] && fp1[i] === fp2[i] && fp1[i] === fm2[i];
+          const d4 = still ? 0 : (-fp2[i] + 8 * fp1[i] - 8 * fm1[i] + fm2[i]) * inv12h;
+          dGamma[lam][rho][sigma][nu] = d4;
+          if (bound !== null && gammaBound !== null && !still) {
+            const d2 = still ? 0 : (fp1[i] - fm1[i]) / (2 * h);
+            const sum = Math.abs(fp2[i]) + 8 * Math.abs(fp1[i]) + 8 * Math.abs(fm1[i]) + Math.abs(fm2[i]);
+            bound[lam][rho][sigma][nu] =
+              Math.abs(d4 - d2) + (1.5 * gammaBound[rho][sigma][nu]) / h + ROUND * 4 * sum * inv12h;
+          }
         }
       }
     }
@@ -297,7 +331,7 @@ export function dGammaAt(
     );
   }
 
-  return dGamma as DGammaTensor;
+  return { dGamma: dGamma as DGammaTensor, bound };
 }
 
 /**
@@ -826,7 +860,7 @@ export function lowerBianchiResidual(
  * Implements the F-5 Weyl-formula pipeline:
  *
  *   1. Resolve `x`, `g`, `g_inv`, `g(x)`, `g_inv(x)` from `inputs`.
- *   2. Compute Riemann R^ρ_{σμν} via `christoffelAt` + `dGammaAt` + `buildRiemann`.
+ *   2. Compute Riemann R^ρ_{σμν} and its error bound via `riemannUpperWithBoundAt`.
  *   3. Contract Ricci R_{μν} = R^λ_{μλν} via `contractRiemannJS`.
  *   4. Compute Ricci scalar R = Σ_{μν} g^{μν} R_{μν}.
  *   5. Assemble Weyl via `computeWeylTensor({...})` using the F-5 formula.
@@ -852,51 +886,19 @@ export function lowerWeylTensor(
   const x = flattenNestedArray(requireValue('x', inputs), N);
   const { gFn, gInverseFn } = requireMetricClosures('weyl-tensor', inputs, metricName, metricInvName);
 
-  // Step 1-2: Riemann R^ρ_{σμν} via FD pipeline.
-  const gamma = christoffelAt(x, gFn, gInverseFn, N, engine);
-  const dGamma = dGammaAt(x, gFn, gInverseFn, N, engine);
-  const Rup = buildRiemann(gamma, dGamma, N);
-
-  // Step 3: Ricci R_{μν} = R^λ_{μλν} (Carroll Eq. 3.91).
-  const flatRup = flattenNestedArray(Rup as unknown as NestedArray, N * N * N * N);
-  const Ric = contractRiemannJS(flatRup, N, {
-    upperAxis: 0, lowerAxis: 2, outAxes: [1, 3],
-  });
-
-  // Step 4: Ricci scalar R = Σ_{μν} g^{μν} R_{μν}.
-  const gInvFlat = flattenNestedArray(requireValue(metricInvName, inputs), N * N);
-  let Rscalar = 0;
-  for (let mu = 0; mu < N; mu++) {
-    for (let nu = 0; nu < N; nu++) {
-      Rscalar += gInvFlat[mu * N + nu] * Ric[mu][nu];
-    }
-  }
-
-  // Step 5: point-sample of covariant metric + inverse, then assemble.
+  // Point samples of the covariant metric and its inverse.
   const gFlat = flattenNestedArray(requireValue(metricName, inputs), N * N);
-  // Bolt: Using manual loops over Array.from to avoid massive TypedArray conversion overhead
+  const gInvFlat = flattenNestedArray(requireValue(metricInvName, inputs), N * N);
   const gMat: number[][] = new Array(N);
   const gInvMat: number[][] = new Array(N);
   for (let i = 0; i < N; i++) {
-    const rowG = new Array(N);
-    const rowGInv = new Array(N);
-    const base = i * N;
-    for (let j = 0; j < N; j++) {
-      const idx = base + j;
-      rowG[j] = gFlat[idx];
-      rowGInv[j] = gInvFlat[idx];
-    }
-    gMat[i] = rowG;
-    gInvMat[i] = rowGInv;
+    gMat[i] = gFlat.slice(i * N, i * N + N);
+    gInvMat[i] = gInvFlat.slice(i * N, i * N + N);
   }
 
-  const C = computeWeylTensor({
-    riemann: Rup,
-    ricci: Ric,
-    ricciScalar: Rscalar,
-    metric: gMat,
-    metricInverse: gInvMat,
-  });
+  // Riemann, Ricci, the Ricci scalar and Weyl through the bounded pipeline; the lowering
+  // returns the value. `weylTensorWithBoundAt` gives the bound to a caller that needs it.
+  const C = weylTensorWithBoundAt(x, gFn, gInverseFn, gMat, gInvMat, N, engine).weyl;
   return engine.fromNested(C as NestedArray, [N, N, N, N]);
 }
 
@@ -924,4 +926,350 @@ export function lowerKretschmannScalar(
   const gInvFlat = flattenNestedArray(requireValue(metricInvName, inputs), N * N);
   const K = computeKretschmann(rLower, Float64Array.from(gInvFlat));
   return engine.fromNested(K, []);
+}
+
+// ---------------------------------------------------------------------------
+// Error bound of the finite-difference curvature pipeline
+// ---------------------------------------------------------------------------
+
+/** The unit roundoff of a double, 2⁻⁵³. */
+const ROUND = Number.EPSILON / 2;
+
+/**
+ * The rounding of one metric-closure value, in units of `ROUND` times the size of the value.
+ * A closure such as `−c²(1 − r_s/r)` rounds its result a few times. The factor 4 covers that.
+ */
+const METRIC_ROUNDING = 4;
+
+/** The inner step of `makeInnerGradFn`. */
+function innerStep(x: number): number {
+  return 1e-3 * Math.max(Math.abs(x), 1);
+}
+
+/**
+ * The error bound of each component of ∂_μ g_{ab} that `makeInnerGradFn` returns.
+ *
+ * The bound adds two terms. The roundoff term is 1.5·κ·u·max|g_{ab}|/h. The maximum is over
+ * the stencil points. u is the unit roundoff. κ is `METRIC_ROUNDING`. The truncation term is
+ * |D4(h) − D4(2h)|/7, about two times the Richardson estimate of the error of D4(h). A
+ * component that is bit-equal at all six samples gets the bound 0. The difference of the
+ * closure, as the closure is evaluated, is then exactly 0.
+ *
+ * @returns dg[μ][a·N + b], the bound of ∂_μ g_{ab}.
+ */
+function metricDerivBound(gFn: MetricFn, x: ReadonlyArray<number>, N: number): number[][] {
+  const out: number[][] = [];
+  for (let mu = 0; mu < N; mu++) {
+    const h = innerStep(x[mu]);
+    const at = (k: number): number[] => {
+      const y = [...x];
+      y[mu] = x[mu] + k * h;
+      return flattenNA(gFn(y));
+    };
+    const m4 = at(-4);
+    const m2 = at(-2);
+    const m1 = at(-1);
+    const p1 = at(1);
+    const p2 = at(2);
+    const p4 = at(4);
+    const row: number[] = new Array(N * N);
+    for (let i = 0; i < N * N; i++) {
+      const v = m4[i];
+      if (m2[i] === v && m1[i] === v && p1[i] === v && p2[i] === v && p4[i] === v) {
+        row[i] = 0;
+        continue;
+      }
+      const big = Math.max(
+        Math.abs(m4[i]), Math.abs(m2[i]), Math.abs(m1[i]), Math.abs(p1[i]), Math.abs(p2[i]), Math.abs(p4[i]),
+      );
+      const d4h = (-p2[i] + 8 * p1[i] - 8 * m1[i] + m2[i]) / (12 * h);
+      const d42h = (-p4[i] + 8 * p2[i] - 8 * m2[i] + m4[i]) / (24 * h);
+      row[i] = (1.5 * METRIC_ROUNDING * ROUND * big) / h + Math.abs(d4h - d42h) / 7;
+    }
+    out.push(row);
+  }
+  return out;
+}
+
+/** The N×N matrix of the absolute values of a metric value. */
+function absMatrix(m: NestedArray, N: number): number[][] {
+  const flat = flattenNA(m);
+  return Array.from({ length: N }, (_, i) => Array.from({ length: N }, (_, j) => Math.abs(flat[i * N + j])));
+}
+
+/**
+ * The error bound of each Christoffel symbol Γ^ρ_{σν} at x, as `christoffelAt` computes it.
+ *
+ * Γ^ρ_{σν} = ½ Σ_λ g^{ρλ} B_{λσν}, with B_{λσν} = ∂_σ g_{λν} + ∂_ν g_{λσ} − ∂_λ g_{σν} = 2 Γ_{λσν}.
+ * The bound is ½ Σ_λ (|g^{ρλ}| δB + δg^{ρλ} |B|), plus the rounding of the sum. δB is the
+ * sum of three `metricDerivBound` terms. δg^{ρλ} is the first-order bound of the inverse,
+ * Σ |g^{ρa}| κu|g_{ab}| |g^{bλ}|, plus the rounding of g^{ρλ}.
+ */
+function christoffelBoundAt(
+  x: ReadonlyArray<number>,
+  gFn: MetricFn,
+  gInverseFn: MetricFn,
+  gamma: GammaTensor,
+  N: number,
+): number[][][] {
+  const dgB = metricDerivBound(gFn, x, N);
+  const gFlat = flattenNA(gFn(x));
+  const gA = absMatrix(gFlat, N);
+  const giA = absMatrix(gInverseFn(x), N);
+  const giErr: number[][] = Array.from({ length: N }, (_, r) =>
+    Array.from({ length: N }, (_, l) => {
+      let s = METRIC_ROUNDING * ROUND * giA[r][l];
+      for (let a = 0; a < N; a++) {
+        for (let b = 0; b < N; b++) s += giA[r][a] * METRIC_ROUNDING * ROUND * gA[a][b] * giA[b][l];
+      }
+      return s;
+    }),
+  );
+  const out: number[][][] = Array.from({ length: N }, () => Array.from({ length: N }, () => new Array<number>(N).fill(0)));
+  for (let rho = 0; rho < N; rho++) {
+    for (let sigma = 0; sigma < N; sigma++) {
+      for (let nu = 0; nu < N; nu++) {
+        let s = 0;
+        let size = 0;
+        for (let lam = 0; lam < N; lam++) {
+          let low = 0;
+          for (let p = 0; p < N; p++) low += gFlat[lam * N + p] * gamma[p][sigma][nu];
+          const B = 2 * Math.abs(low);
+          const dB = dgB[sigma][lam * N + nu] + dgB[nu][lam * N + sigma] + dgB[lam][sigma * N + nu];
+          s += giA[rho][lam] * dB + giErr[rho][lam] * B;
+          size += giA[rho][lam] * B;
+        }
+        out[rho][sigma][nu] = 0.5 * s + (N + 3) * ROUND * 0.5 * size;
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * The Riemann tensor R^ρ_{σμν} at x, and an upper bound of its finite-difference error.
+ *
+ * The bound is componentwise, in the coordinate units of each component. Compare a component
+ * only with its own bound. The bound covers the truncation of both differences, an
+ * a-posteriori estimate from the stencil values. The bound covers the roundoff of the metric
+ * closure, which both differences amplify by 1/h. The bound covers the rounding of the sums.
+ * The bound is an estimate that over-covers, not a proof. A closure that rounds by more than
+ * `METRIC_ROUNDING` units can exceed the bound. A metric with a large fifth derivative on the
+ * stencil can exceed the bound.
+ *
+ * The bound is relative to the closure as the closure is evaluated in double. The bound does
+ * not include the representation error of the closure. De Sitter at Λ = 1.1e-52 m⁻² and
+ * r = 1e3 m gives `1 − Λr²/3 = 1` exactly, so the closure holds no curvature. There the
+ * computed value is noise inside its bound, and the value is unresolved.
+ *
+ * When |R| ≤ bound, the difference does not resolve the value.
+ * @internal
+ */
+export function riemannUpperWithBoundAt(
+  x: ReadonlyArray<number>,
+  gFn: MetricFn,
+  gInverseFn: MetricFn,
+  N: number,
+  engine: TensorEngine,
+  gammaAtX?: number[][][],
+): { riemann: number[][][][]; bound: number[][][][] } {
+  const gamma = gammaAtX ?? christoffelAt(x, gFn, gInverseFn, N, engine);
+  const dG = christoffelBoundAt(x, gFn, gInverseFn, gamma, N);
+  const sampled = dGammaSampled(x, gFn, gInverseFn, N, engine, dG);
+  const dGamma = sampled.dGamma;
+  const b = sampled.bound as number[][][][];
+  const riemann = buildRiemann(gamma, dGamma, N);
+  const bound = nestedZeros4(N);
+  for (let rho = 0; rho < N; rho++) {
+    for (let sigma = 0; sigma < N; sigma++) {
+      for (let mu = 0; mu < N; mu++) {
+        for (let nu = 0; nu < N; nu++) {
+          let e = b[mu][rho][sigma][nu] + b[nu][rho][sigma][mu];
+          let size = Math.abs(dGamma[mu][rho][sigma][nu]) + Math.abs(dGamma[nu][rho][sigma][mu]);
+          for (let lam = 0; lam < N; lam++) {
+            const a1 = Math.abs(gamma[rho][lam][mu]);
+            const a2 = Math.abs(gamma[lam][sigma][nu]);
+            const a3 = Math.abs(gamma[rho][lam][nu]);
+            const a4 = Math.abs(gamma[lam][sigma][mu]);
+            e += dG[rho][lam][mu] * a2 + a1 * dG[lam][sigma][nu] + dG[rho][lam][mu] * dG[lam][sigma][nu];
+            e += dG[rho][lam][nu] * a4 + a3 * dG[lam][sigma][mu] + dG[rho][lam][nu] * dG[lam][sigma][mu];
+            size += a1 * a2 + a3 * a4;
+          }
+          bound[rho][sigma][mu][nu] = e + (2 * N + 2) * ROUND * size;
+        }
+      }
+    }
+  }
+  return { riemann, bound };
+}
+
+/** T'[a][b][c][d] = Σ M0[a][p] M1[b][q] M2[c][r] M3[d][s] T[p][q][r][s], one index at a time. */
+function transform4(T: number[][][][], M: readonly (readonly (readonly number[])[])[], N: number): number[][][][] {
+  let cur = T;
+  for (let axis = 0; axis < 4; axis++) {
+    const m = M[axis];
+    const next = nestedZeros4(N);
+    const idx = [0, 0, 0, 0];
+    for (let a = 0; a < N; a++) {
+      for (let b = 0; b < N; b++) {
+        for (let c = 0; c < N; c++) {
+          for (let d = 0; d < N; d++) {
+            idx[0] = a; idx[1] = b; idx[2] = c; idx[3] = d;
+            const outIndex = idx[axis];
+            let s = 0;
+            for (let p = 0; p < N; p++) {
+              idx[axis] = p;
+              s += m[outIndex][p] * cur[idx[0]][idx[1]][idx[2]][idx[3]];
+            }
+            next[a][b][c][d] = s;
+          }
+        }
+      }
+    }
+    cur = next;
+  }
+  return cur;
+}
+
+const absTensor4 = (T: number[][][][]): number[][][][] => T.map((x) => x.map((y) => y.map((z) => z.map(Math.abs))));
+
+/**
+ * The Kretschmann scalar K = R^a_{bcd} R_a^{bcd}, and an upper bound of its error, from a
+ * Riemann tensor and its componentwise bound (`riemannUpperWithBoundAt`).
+ *
+ * K is a scalar, so the bound needs no frame. S is R_a^{bcd}. δS is the same transform of δR
+ * through |g| and |g⁻¹|. The bound is Σ (|S| δR + |R| δS + δR δS), plus the rounding of
+ * the contractions. `resolved` is |K| > bound.
+ * @internal
+ */
+export function kretschmannWithBound(
+  riemann: number[][][][],
+  bound: number[][][][],
+  g: number[][],
+  gInv: number[][],
+): { value: number; bound: number; resolved: boolean } {
+  const N = g.length;
+  const gA = g.map((r) => r.map(Math.abs));
+  const giA = gInv.map((r) => r.map(Math.abs));
+  const S = transform4(riemann, [g, gInv, gInv, gInv], N);
+  const Sabs = transform4(absTensor4(riemann), [gA, giA, giA, giA], N);
+  const dS = transform4(bound, [gA, giA, giA, giA], N);
+  let value = 0;
+  let err = 0;
+  let size = 0;
+  for (let a = 0; a < N; a++) {
+    for (let b = 0; b < N; b++) {
+      for (let c = 0; c < N; c++) {
+        for (let d = 0; d < N; d++) {
+          const r = riemann[a][b][c][d];
+          const dr = bound[a][b][c][d];
+          value += r * S[a][b][c][d];
+          err += Sabs[a][b][c][d] * dr + Math.abs(r) * dS[a][b][c][d] + dr * dS[a][b][c][d];
+          size += Math.abs(r) * Sabs[a][b][c][d];
+        }
+      }
+    }
+  }
+  const total = err + (4 * N + 2) * ROUND * size;
+  return { value, bound: total, resolved: Math.abs(value) > total };
+}
+
+/**
+ * The Ricci tensor R_{σν} = R^ρ_{σρν}, the Ricci scalar, and their bounds, from a Riemann
+ * tensor and its componentwise bound. Each Ricci component has its own bound, in its own
+ * coordinate units.
+ * @internal
+ */
+export function ricciWithBound(
+  riemann: number[][][][],
+  bound: number[][][][],
+  gInv: number[][],
+): { ricci: number[][]; ricciBound: number[][]; scalar: number; scalarBound: number } {
+  const N = gInv.length;
+  const ricci: number[][] = [];
+  const ricciBound: number[][] = [];
+  for (let s = 0; s < N; s++) {
+    const row: number[] = [];
+    const brow: number[] = [];
+    for (let n = 0; n < N; n++) {
+      let v = 0;
+      let e = 0;
+      let size = 0;
+      for (let r = 0; r < N; r++) {
+        v += riemann[r][s][r][n];
+        e += bound[r][s][r][n];
+        size += Math.abs(riemann[r][s][r][n]);
+      }
+      row.push(v);
+      brow.push(e + N * ROUND * size);
+    }
+    ricci.push(row);
+    ricciBound.push(brow);
+  }
+  let scalar = 0;
+  let scalarBound = 0;
+  let size = 0;
+  for (let a = 0; a < N; a++) {
+    for (let b = 0; b < N; b++) {
+      scalar += gInv[a][b] * ricci[a][b];
+      scalarBound += Math.abs(gInv[a][b]) * ricciBound[a][b];
+      size += Math.abs(gInv[a][b] * ricci[a][b]);
+    }
+  }
+  return { ricci, ricciBound, scalar, scalarBound: scalarBound + N * N * ROUND * size };
+}
+
+/**
+ * The Weyl tensor C^ρ_{σμν} at x, and a componentwise bound, from the bounded Riemann tensor.
+ *
+ * C = R − ½(δ^ρ_μ R_{σν} − δ^ρ_ν R_{σμ} − g_{σμ} R^ρ_ν + g_{σν} R^ρ_μ) + (R/6)(δ^ρ_μ g_{σν} − δ^ρ_ν g_{σμ}).
+ * The bound is δR plus the same terms, with each factor in absolute value and each curvature
+ * replaced by its bound. `lowerWeylTensor` calls this function and returns the value.
+ * @internal
+ */
+export function weylTensorWithBoundAt(
+  x: ReadonlyArray<number>,
+  gFn: MetricFn,
+  gInverseFn: MetricFn,
+  g: number[][],
+  gInv: number[][],
+  N: number,
+  engine: TensorEngine,
+): { weyl: number[][][][]; bound: number[][][][] } {
+  const { riemann, bound: dR } = riemannUpperWithBoundAt(x, gFn, gInverseFn, N, engine);
+  const flatRup = flattenNestedArray(riemann as unknown as NestedArray, N * N * N * N);
+  const Ric = contractRiemannJS(flatRup, N, { upperAxis: 0, lowerAxis: 2, outAxes: [1, 3] });
+  let Rscalar = 0;
+  for (let mu = 0; mu < N; mu++) {
+    for (let nu = 0; nu < N; nu++) Rscalar += gInv[mu][nu] * Ric[mu][nu];
+  }
+  const weyl = computeWeylTensor({ riemann, ricci: Ric, ricciScalar: Rscalar, metric: g, metricInverse: gInv });
+  const { ricciBound: dRic, scalarBound: dRs } = ricciWithBound(riemann, dR, gInv);
+  const gA = g.map((r) => r.map(Math.abs));
+  const giA = gInv.map((r) => r.map(Math.abs));
+  const dRicUp: number[][] = Array.from({ length: N }, (_, r) =>
+    Array.from({ length: N }, (_, n) => {
+      let s = 0;
+      for (let a = 0; a < N; a++) s += giA[r][a] * dRic[a][n];
+      return s;
+    }),
+  );
+  const bound = nestedZeros4(N);
+  for (let rho = 0; rho < N; rho++) {
+    for (let sigma = 0; sigma < N; sigma++) {
+      for (let mu = 0; mu < N; mu++) {
+        for (let nu = 0; nu < N; nu++) {
+          const dm = rho === mu ? 1 : 0;
+          const dn = rho === nu ? 1 : 0;
+          const lin = 0.5 * (
+            dm * dRic[sigma][nu] + dn * dRic[sigma][mu] + gA[sigma][mu] * dRicUp[rho][nu] + gA[sigma][nu] * dRicUp[rho][mu]
+          );
+          const sc = (dRs / 6) * (dm * gA[sigma][nu] + dn * gA[sigma][mu]);
+          const size = Math.abs(riemann[rho][sigma][mu][nu]) + Math.abs(weyl[rho][sigma][mu][nu]);
+          bound[rho][sigma][mu][nu] = dR[rho][sigma][mu][nu] + lin + sc + 16 * ROUND * size;
+        }
+      }
+    }
+  }
+  return { weyl, bound };
 }

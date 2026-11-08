@@ -4,7 +4,7 @@
     "version": "12.0.0",
     "totalFiles": 388,
     "totalModules": 13,
-    "totalExports": 2818
+    "totalExports": 2822
   },
   "entryPoints": [
     {
@@ -25586,6 +25586,10 @@
           "lowerBianchiResidual",
           "lowerWeylTensor",
           "lowerKretschmannScalar",
+          "riemannUpperWithBoundAt",
+          "kretschmannWithBound",
+          "ricciWithBound",
+          "weylTensorWithBoundAt",
           "MetricFn"
         ],
         "reExported": [
@@ -25602,7 +25606,11 @@
           "contractRiemannJS",
           "lowerBianchiResidual",
           "lowerWeylTensor",
-          "lowerKretschmannScalar"
+          "lowerKretschmannScalar",
+          "riemannUpperWithBoundAt",
+          "kretschmannWithBound",
+          "ricciWithBound",
+          "weylTensorWithBoundAt"
         ]
       },
       "src/numerical/derivative-lowering.ts": {
@@ -27334,8 +27342,10 @@
             "file": "./curvature-lowering-helpers.js",
             "imports": [
               "christoffelAt",
+              "kretschmannWithBound",
               "lowerFirstIndex",
-              "riemannUpperAt"
+              "ricciWithBound",
+              "riemannUpperWithBoundAt"
             ]
           },
           {
@@ -28261,11 +28271,11 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87176,
-    "totalExports": 2818,
+    "totalLinesOfCode": 87547,
+    "totalExports": 2822,
     "totalClasses": 86,
     "totalInterfaces": 518,
-    "totalFunctions": 921,
+    "totalFunctions": 925,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 414,
