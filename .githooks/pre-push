@@ -165,41 +165,49 @@ fi
 #
 # repo-tools is the public npm package @danielsimonjr/repo-tools (Node 20+).
 # Its location is a machine fact, not a repository fact: UPT_REPO_TOOLS names
-# the executable, and `repo-tools` on PATH is only the default. Both gates are
-# SKIPPED, each with a printed line, only when the executable is missing. CI
-# runs the claims check in its own job; its code-docs job is the in-repo
-# stand-in for changed paths, and CI does not run `repo-tools docs check src`.
-REPO_TOOLS="${UPT_REPO_TOOLS:-repo-tools}"
-if command -v "$REPO_TOOLS" >/dev/null 2>&1; then
-  echo "pre-push gate: code-docs (repo-tools docs check src)"
-  if ! cd_out=$("$REPO_TOOLS" docs check src 2>&1); then
-    echo ""
-    echo "PRE-PUSH GATE FAILED: code-docs found MUST issues, or the checker did not run."
-    printf '%s\n' "$cd_out"
-    echo "Document each exported symbol the list names. The command needs"
-    echo "@danielsimonjr/repo-tools 2.2.2 or later."
-    exit 1
-  fi
-  if ! printf '%s\n' "$cd_out" | grep -E "^PASS -- "; then
-    echo ""
-    echo "PRE-PUSH GATE FAILED: code-docs exited 0 but printed no PASS line."
-    echo "The checker's output changed or it did not check; its output was:"
-    printf '%s\n' "$cd_out" | tail -20
-    exit 1
-  fi
+# the executable, and the hook has no built-in default name. The push fails
+# when UPT_REPO_TOOLS is not set and when the named executable is missing: a
+# check that could not run never reports clean. CI runs the claims check in
+# its own job; its code-docs job is the in-repo stand-in for changed paths,
+# and CI does not run `repo-tools docs check src`.
+if [ -z "${UPT_REPO_TOOLS:-}" ]; then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: UPT_REPO_TOOLS is not set."
+  echo "Set it to the repo-tools executable (@danielsimonjr/repo-tools 2.2.2 or later)."
+  exit 1
+fi
+REPO_TOOLS="$UPT_REPO_TOOLS"
+if ! command -v "$REPO_TOOLS" >/dev/null 2>&1; then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: repo-tools not found: $REPO_TOOLS"
+  echo "Install @danielsimonjr/repo-tools or correct UPT_REPO_TOOLS."
+  exit 1
+fi
+echo "pre-push gate: code-docs (repo-tools docs check src)"
+if ! cd_out=$("$REPO_TOOLS" docs check src 2>&1); then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: code-docs found MUST issues, or the checker did not run."
+  printf '%s\n' "$cd_out"
+  echo "Document each exported symbol the list names. The command needs"
+  echo "@danielsimonjr/repo-tools 2.2.2 or later."
+  exit 1
+fi
+if ! printf '%s\n' "$cd_out" | grep -E "^PASS -- "; then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: code-docs exited 0 but printed no PASS line."
+  echo "The checker's output changed or it did not check; its output was:"
+  printf '%s\n' "$cd_out" | tail -20
+  exit 1
+fi
 
-  echo "pre-push gate: architecture-docs claims (repo-tools check)"
-  if ! rt_out=$("$REPO_TOOLS" check . --docs=docs/architecture 2>&1); then
-    echo ""
-    echo "PRE-PUSH GATE FAILED: architecture-docs claims do not match the source."
-    printf '%s\n' "$rt_out" | tail -40
-    echo "Re-measure with repo-tools map and correct the Verification tables and the"
-    echo "text that restates them. Never edit a generated report to make this pass."
-    exit 1
-  fi
-else
-  echo "pre-push gate: code-docs SKIPPED (not found: $REPO_TOOLS; install @danielsimonjr/repo-tools or set UPT_REPO_TOOLS)"
-  echo "pre-push gate: architecture-docs claims SKIPPED (not found: $REPO_TOOLS; install @danielsimonjr/repo-tools or set UPT_REPO_TOOLS)"
+echo "pre-push gate: architecture-docs claims (repo-tools check)"
+if ! rt_out=$("$REPO_TOOLS" check . --docs=docs/architecture 2>&1); then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: architecture-docs claims do not match the source."
+  printf '%s\n' "$rt_out" | tail -40
+  echo "Re-measure with repo-tools map and correct the Verification tables and the"
+  echo "text that restates them. Never edit a generated report to make this pass."
+  exit 1
 fi
 
 echo "pre-push gate: OK"
