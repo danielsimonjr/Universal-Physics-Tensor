@@ -1138,7 +1138,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `AtlasRecordJson`
-- Functions: `toAtlasJson`
+- Functions: `normTransportFields`, `toAtlasJson`
 - Constants: `ATLAS_RECORD_SCHEMA_VERSION`
 
 ---
@@ -2404,7 +2404,7 @@ The codebase is organized into the following modules:
 | `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
-- Functions: `selectRoute`, `routeClaim`, `missingForComposite`, `explainsRefusal`, `transportReport`, `normTransportFields`, `claimReport`
+- Functions: `selectRoute`, `routeClaim`, `missingForComposite`, `explainsRefusal`, `transportReport`, `claimReport`
 
 ---
 
@@ -2437,7 +2437,6 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
-| `./_atlas-route.js` | `normTransportFields` | Import |
 
 **Exports:**
 - Functions: `summarizeWitnessRuns`
@@ -3398,6 +3397,7 @@ The codebase is organized into the following modules:
 | `./composition/grounding.js` | `CandidateGrounding, CandidateReadiness` | Re-export |
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
 | `./atlas/families.js` | `ATLAS_FAMILIES` | Re-export |
+| `./atlas/serialize.js` | `normTransportFields` | Re-export |
 | `./atlas/derive-evidence.js` | `deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample` | Re-export |
 | `./atlas/coverage.js` | `summarizeEvidence, ALL_EVIDENCE_TAGS` | Re-export |
 | `./atlas/witness-artifact.js` | `runWitnessRegistry` | Re-export |
@@ -3486,18 +3486,18 @@ The codebase is organized into the following modules:
   constantRatio, fixedPoint, recoverMonomialPrefactor, ConstantRatio, ConstantRatioOptions,
   FixedPointScheme, PrefactorRecovery, PrefactorRecoveryScheme, RatioStatistic, CONSTANTS,
   CONSTANT_PROVENANCE, isDecimalLiteral, forEachScalarLeaf, CandidateGrounding, CandidateReadiness,
-  OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES,
-  provedWithUnresolvedCounterexample, summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry,
-  WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf,
-  runTranslationCheck, translationsOf, ObservableCarriage, ObservableTranslation, PointCheck,
-  AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions,
-  domainRegimeRegistrations, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon,
-  findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels,
-  allAtlasBridges, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
-  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
-  catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
-  kerrTurningPointOrbit, MetricMassError, MetricValueError, schwarzschildCircularOrbit, type MetricId,
-  splitAssignment, readBinding, bindingInUnit, readNamedBinding, BindingNumberError,
+  OSCILLATOR_FAMILY, ATLAS_FAMILIES, normTransportFields, deriveEvidence, deriveCompositeEvidence,
+  NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample, summarizeEvidence, ALL_EVIDENCE_TAGS,
+  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
+  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
+  ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap,
+  uncoveredRegions, domainRegimeRegistrations, RegimeCheck, RegimeOverlap, RegionSample,
+  familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
+  routeEntryModels, allAtlasBridges, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim,
+  AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
+  ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
+  kerrGeodesic, kerrTurningPointOrbit, MetricMassError, MetricValueError, schwarzschildCircularOrbit,
+  type MetricId, splitAssignment, readBinding, bindingInUnit, readNamedBinding, BindingNumberError,
   TemperatureBindingError, propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite,
   PropagatedOutput, UncertaintyContribution, constantAgreement, ConstantDisagreementError,
   FormulaError, FormulaValueError, aliasesForTarget, nearQuantityNames, shareSynonyms,
@@ -7747,9 +7747,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87272 |
-| Total Exports | 2819 |
-| Total Re-exports | 1392 |
+| Total Lines of Code | 87267 |
+| Total Exports | 2820 |
+| Total Re-exports | 1393 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
 | Total Functions | 921 |

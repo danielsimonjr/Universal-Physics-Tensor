@@ -1,7 +1,7 @@
 /**
  * Values of the `weyl-tensor` lowering (`lowerWeylTensor`) through `lowerNode`.
  * Schwarzschild is a vacuum, so its Weyl tensor equals its Riemann tensor.
- * De Sitter is conformally flat, so its Weyl tensor is zero while its Riemann tensor is not.
+ * De Sitter is conformally flat, so its Weyl tensor is zero. Its Riemann tensor is not zero.
  */
 import { describe, expect, it } from 'vitest';
 import { lowerNode } from '../../src/numerical/lowering.js';

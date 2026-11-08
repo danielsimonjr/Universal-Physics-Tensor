@@ -2924,4 +2924,14 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
   - Row 22, `totals` against `buildAtlasEvidenceView`: the shared part is a trivial count literal.
   - Rows 17, 18, 20, 21, 24, 26, 28, 29, 30, 31, 32, 33 and 35: each is the field-copy object literal of `assembleAppliedCase` contained in a large builder. They share no logic.
 - New in the after run: `normTransportFields` is now a unit of its own, so it pairs by containment with five large builders (the same object-literal class as the declined rows). One of its pairs is real: `serializeNormTransports` (`src/atlas/serialize.ts`) copies the same twelve fields, with `K` through `zeroSafe` and the witness through `serializeWitnesses`.
-- [ ] Merge `serializeNormTransports` (`src/atlas/serialize.ts`) and `normTransportFields` (`src/cli/commands/_atlas-route.ts`). The projection must move to the atlas layer, because the atlas layer does not import the CLI; the CLI commands then import it through `cli-api.ts`. Keep the `K` and witness overrides of the atlas JSON, and keep `data/atlas/*.json` byte-identical.
+- [x] Merge `serializeNormTransports` (`src/atlas/serialize.ts`) and `normTransportFields` (`src/cli/commands/_atlas-route.ts`). The projection must move to the atlas layer, because the atlas layer does not import the CLI; the CLI commands then import it through `cli-api.ts`. Keep the `K` and witness overrides of the atlas JSON, and keep `data/atlas/*.json` byte-identical.
+
+## 2026-11-08 — five-axis pass (clone-removal follow-ups)
+
+- Speed: not changed. Stability: not changed; the new tests are deterministic.
+- Reliability: the pre-push hook fails when `UPT_REPO_TOOLS` is not set or names no executable. Before, it defaulted to `repo-tools` on PATH and skipped both repo-tools gates when that was missing.
+- Security: not touched.
+- Maintainability: `normTransportFields` moved to `src/atlas/serialize.ts`; `serializeNormTransports` and both CLI commands use it (the commands through `cli-api.ts`). `repo-tools clones .` (2.4.0) measured 22 near pairs and 0 exact groups after #607, and 21 near pairs and 0 exact groups on this tree.
+- New tests: a Hermite crossing case that 0 and 1 Newton steps fail, the golden `atlas-spring-lc-json` (it fails when `basis` is dropped), and a Weyl lowering value test.
+- Finding, negative result: the finite-difference Weyl lowering is not usable at SI cosmological scales. De Sitter at Λ = 1.1e-52 and r ≈ 5e25 gave max|C|/max|R| ≈ 2.7e16; at Λ = 1 and r = 1 the ratio is below 1e-3. The test uses Λ = 1.
+- Left: the 21 remaining near pairs are the declined classes above.
