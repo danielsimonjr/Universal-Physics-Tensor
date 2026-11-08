@@ -33,9 +33,9 @@ export interface Interval {
 }
 
 /**
- * Wilson score interval for a binomial proportion, from MathTS `wilsonInterval`.
+ * Calculates the Wilson score interval for a binomial proportion with MathTS `wilsonInterval`.
  *
- * @param confidence The confidence level in (0, 1). The default is 0.95.
+ * @param confidence The confidence level in (0, 1). The default value is 0.95.
  * @throws Error when `n` is not a positive integer or `successes` is outside `[0, n]`.
  * @internal
  */
@@ -80,10 +80,11 @@ export function mcnemar(table: PairedTable): McNemarResult {
 }
 
 /**
- * Newcombe's method 10: a 95% interval for the PAIRED difference in proportions
- * p_A − p_B = (b − c)/n, from MathTS `newcombePairedInterval` (the two marginal
- * Wilson intervals and a correlation correction φ). Pre-registered criterion: the
- * interval for the atlas-minus-baseline difference must exclude zero.
+ * Applies Newcombe's method 10 with MathTS `newcombePairedInterval`. The method gives
+ * an interval for the PAIRED difference in proportions, p_A − p_B = (b − c)/n.
+ * The method uses the two marginal Wilson intervals and a correlation correction φ.
+ * The pre-registered criterion requires the interval for the atlas-minus-baseline
+ * difference to exclude zero.
  *
  * Newcombe, Statistics in Medicine 17 (1998) 2635.
  *
@@ -107,7 +108,7 @@ export function cohensKappa(matrix: readonly (readonly number[])[]): number {
   const k = matrix.length;
   if (k === 0 || matrix.some((row) => row.length !== k)) throw new Error('cohensKappa: matrix must be square and non-empty');
   if (matrix.every((row) => row.every((v) => v === 0))) throw new Error('cohensKappa: no ratings');
-  // MathTS returns 0/0 = NaN when chance agreement is 1.
+  // MathTS returns `NaN` for 0/0 when chance agreement is 1.
   return mathtsKappa(matrix);
 }
 
