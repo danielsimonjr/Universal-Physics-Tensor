@@ -114,7 +114,7 @@ not published.
    `docs-fresh` job fails on a release commit that regenerated first.
 4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
-5. Commit and open the release PR. The review rule recorded in `ACTIVE.md` applies: Tom deep-reviews it before it merges, and an agent does not merge its own PR. After the merge, wait until CI on the merge commit is green.
+5. Commit and open the release PR. The review rule recorded in `ACTIVE.md` applies: the advisor reviews the whole diff before it merges, and the session lead merges it. After the merge, wait until CI on the merge commit is green.
 6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
    workflow checks out the tag, fetches `origin/master` (the layer-order gate reads that ref,
    and a tag checkout does not have it), installs, refuses a tag whose version (the leading `v` removed) is not
