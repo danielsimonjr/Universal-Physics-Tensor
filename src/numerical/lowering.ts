@@ -56,7 +56,6 @@ import {
   lowerBianchiResidual,
   lowerWeylTensor,
   lowerKretschmannScalar,
-  type MetricFn,
 } from './curvature-lowering-helpers.js';
 // v0.7 follow-up to v0.6.1's LOC-target miss: the four private helpers
 // (isMetricTensorNode, dimensionOf, requireValue, flattenNestedArray)
@@ -67,6 +66,7 @@ import {
   dimensionOf,
   requireValue,
   flattenNestedArray,
+  requireMetricClosures,
 } from './lowering-utils.js';
 // v0.7 follow-up: tensor-partial-derivative + covariant-derivative
 // case arms extracted (was lines 523-820, ~298 LOC). The recursive
@@ -342,16 +342,7 @@ function lowerCurvature(
       // ∂Γ (outer FD). Looked up by name in inputs.fields.
       const gName = rNode.gLower.name;
       const gInvName = rNode.gInverse.name;
-      const gFn = inputs.fields?.get(gName) as MetricFn | undefined;
-      const gInverseFn = inputs.fields?.get(gInvName) as MetricFn | undefined;
-      if (!gFn || !gInverseFn) {
-        throw new NumericalBackendError(
-          `lowering: riemann-tensor numerical evaluation requires coordinate-` +
-          `dependent metric closures in inputs.fields for "${gName}" and "${gInvName}" ` +
-          `(constant-metric Riemann is identically zero — the test wouldn't fire here). ` +
-          `Got fields=[${[...(inputs.fields?.keys() ?? [])].join(',')}].`,
-        );
-      }
+      const { gFn, gInverseFn } = requireMetricClosures('riemann-tensor', inputs, gName, gInvName);
 
       // Γ^ρ_{σν}(x) and ∂_λ Γ^ρ_{σν}(x).
       const gamma = christoffelAt(x, gFn, gInverseFn, N, engine);
