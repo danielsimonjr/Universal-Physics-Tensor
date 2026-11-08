@@ -47,7 +47,7 @@ Top-level layout; each subsystem's local `README.md` has depth.
 |---|---|
 | `src/index.ts` | Public-API manifest (every `@public` symbol). **`MathTSEngine` is intentionally NOT re-exported here**; it is reachable only through the `universal-physics-tensor/numerical/mathts-engine` subpath. |
 | `src/core/` | `UniversalTensor`, runtime law/bridge/emergent-phenomenon types (`tensor.ts`, `types.ts`). |
-| `src/core/mathts-read.ts` | The one reader of a typed MathTS result (`numberFrom`, `bigintFrom`, `numberMatrixFrom`): a `typeof` check that throws a `TypeError` naming the MathTS function, never a cast. |
+| `src/core/mathts-read.ts` | The one reader of a typed MathTS result (`numberFrom`, `numberMatrixFrom`): a `typeof` check that throws a `TypeError` naming the MathTS function, never a cast. |
 | `src/core/compare.ts` | The one owner of relative comparison (`relDiff`, `symmetricRelDiff`, `withinRel`, `withinMixed`, `withinSymmetric`) and of codepoint ordering (`compareCodepoint`, `byKey`); each caller passes its own tolerance. |
 | `src/core/format.ts` | The one owner of number text: `formatQuantity`, `formatExact`, `formatPercent`. |
 | `src/core/hash.ts` | `sha256Hex`, the one SHA-256 every record, manifest and table hash reads. |

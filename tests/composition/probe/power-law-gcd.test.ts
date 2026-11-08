@@ -1,10 +1,12 @@
 /**
  * Leverage plan task U3: `rationalCandidates` reduces each fraction through MathTS functions
- * `gcd`, read back through `numberFrom`. The rows hold the gcd pairs the caller can reach:
- * a zero numerator, a negative numerator, and coprime and shared-factor pairs.
+ * `gcd`. From functions 0.77.0 (MathTS task M5) the `number, number` signature returns `number`,
+ * so the caller reads the result with no `numberFrom` check. The rows hold the gcd pairs the
+ * caller can reach: a zero numerator, a negative numerator, and coprime and shared-factor pairs.
  */
 import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { gcd } from '@danielsimonjr/mathts-functions';
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import { rationalCandidates } from '../../../src/composition/probe/power-law.js';
 
 const text = (x: number, tol: number) => rationalCandidates(x, tol).map((r) => `${r.numerator}/${r.denominator}`);
@@ -22,5 +24,12 @@ describe('rationalCandidates reduction', () => {
     const src = readFileSync(new URL('../../../src/composition/probe/power-law.ts', import.meta.url), 'utf8');
     expect(src).toMatch(/import \{[^}]*\bgcd\b[^}]*\} from '@danielsimonjr\/mathts-functions'/);
     expect(src).not.toMatch(/function gcd\(/);
+  });
+
+  it('reads the typed gcd result directly (M5): no numberFrom around gcd', () => {
+    const src = readFileSync(new URL('../../../src/composition/probe/power-law.ts', import.meta.url), 'utf8');
+    expect(src).not.toMatch(/numberFrom\('gcd'/);
+    expectTypeOf(gcd(4, 6)).toEqualTypeOf<number>();
+    expectTypeOf(gcd(4n, 6n)).toEqualTypeOf<bigint>();
   });
 });
