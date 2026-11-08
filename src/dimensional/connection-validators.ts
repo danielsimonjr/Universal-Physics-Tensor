@@ -178,21 +178,7 @@ interface RiemannTensorValidationResult {
 export function validateRiemannTensor(
   node: RiemannTensorNode,
 ): RiemannTensorValidationResult {
-  if (node.upperIndex.variance !== 'upper') {
-    throw new PartialDerivativeIndexVarianceError(
-      `riemann-tensor: upperIndex '${node.upperIndex.label}' must be 'upper', ` +
-        `got '${(node.upperIndex as { variance: string }).variance}'`,
-    );
-  }
-  for (let i = 0; i < 3; i++) {
-    const idx = node.lowerIndices[i] as { label: string; variance: string };
-    if (idx.variance !== 'lower') {
-      throw new PartialDerivativeIndexVarianceError(
-        `riemann-tensor: lowerIndices[${i}] '${idx.label}' must be 'lower', ` +
-          `got '${idx.variance}'`,
-      );
-    }
-  }
+  requireOneUpThreeDownVariance('riemann-tensor', node);
   if (
     node.gLower.indices[0].variance !== 'lower' ||
     node.gLower.indices[1].variance !== 'lower'
@@ -220,25 +206,7 @@ export function validateRiemannTensor(
   // bare Riemann node's. We deliberately do NOT compare against gLower /
   // gInverse / xCoord labels: those are H1-suppressed dummies, and legal
   // post-raise/lower algebra may reuse those labels (see plan §M9).
-  const labels = [
-    node.upperIndex.label,
-    node.lowerIndices[0].label,
-    node.lowerIndices[1].label,
-    node.lowerIndices[2].label,
-  ];
-  const seen = new Set<string>();
-  for (const label of labels) {
-    if (seen.has(label)) {
-      throw new IndexLabelCollisionError(label, 2, ['riemann-tensor']);
-    }
-    seen.add(label);
-  }
-
-  const freeIndices = new Map<string, { upper: number; lower: number }>();
-  freeIndices.set(node.upperIndex.label, { upper: 1, lower: 0 });
-  for (const idx of node.lowerIndices) {
-    freeIndices.set(idx.label, { upper: 0, lower: 1 });
-  }
+  const freeIndices = oneUpThreeDownFreeIndices('riemann-tensor', node);
 
   // F8/I3: Riemann carries inverse-length-squared. Hard-coded — same shape
   // as the dim is structurally fixed for every Riemann tensor regardless of
@@ -250,4 +218,67 @@ export function validateRiemannTensor(
   // don't need a role tag here. Mirrors CovariantDerivativeNode's
   // role-on-passthrough-only pattern.
   return { dim, freeIndices };
+}
+
+/** The index shape that the Riemann and Weyl nodes share: one upper index, then three lower indices. */
+type OneUpThreeDown = { readonly upperIndex: UpperIndex; readonly lowerIndices: readonly [CovariantIndex, CovariantIndex, CovariantIndex] };
+
+/**
+ * Make sure that the upper index of `node` is 'upper' and that its three lower indices are 'lower'.
+ * @param kind - The node kind, at the start of the message.
+ * @param node - The node to check.
+ * @throws PartialDerivativeIndexVarianceError if an index has the wrong variance.
+ * @internal
+ */
+export function requireOneUpThreeDownVariance(kind: string, node: OneUpThreeDown): void {
+  if (node.upperIndex.variance !== 'upper') {
+    throw new PartialDerivativeIndexVarianceError(
+      `${kind}: upperIndex '${node.upperIndex.label}' must be 'upper', ` +
+        `got '${(node.upperIndex as { variance: string }).variance}'`,
+    );
+  }
+  for (let i = 0; i < 3; i++) {
+    const idx = node.lowerIndices[i] as { label: string; variance: string };
+    if (idx.variance !== 'lower') {
+      throw new PartialDerivativeIndexVarianceError(
+        `${kind}: lowerIndices[${i}] '${idx.label}' must be 'lower', ` +
+          `got '${idx.variance}'`,
+      );
+    }
+  }
+}
+
+/**
+ * Make sure that the four free labels of `node` are different, and return them as free indices.
+ * The upper label counts as upper; each lower label counts as lower.
+ * @param kind - The node kind that the collision error names.
+ * @param node - The node to read.
+ * @returns The free-index map of the node.
+ * @throws IndexLabelCollisionError if two of the four labels are the same.
+ * @internal
+ */
+export function oneUpThreeDownFreeIndices(
+  kind: string,
+  node: OneUpThreeDown,
+): Map<string, { upper: number; lower: number }> {
+  const labels = [
+    node.upperIndex.label,
+    node.lowerIndices[0].label,
+    node.lowerIndices[1].label,
+    node.lowerIndices[2].label,
+  ];
+  const seen = new Set<string>();
+  for (const label of labels) {
+    if (seen.has(label)) {
+      throw new IndexLabelCollisionError(label, 2, [kind]);
+    }
+    seen.add(label);
+  }
+
+  const freeIndices = new Map<string, { upper: number; lower: number }>();
+  freeIndices.set(node.upperIndex.label, { upper: 1, lower: 0 });
+  for (const idx of node.lowerIndices) {
+    freeIndices.set(idx.label, { upper: 0, lower: 1 });
+  }
+  return freeIndices;
 }
