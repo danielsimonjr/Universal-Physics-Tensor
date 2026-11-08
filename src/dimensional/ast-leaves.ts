@@ -73,8 +73,29 @@ export interface LeafWalkArms {
   readonly tensorProduct?: boolean;
 }
 
-/** The children a walk enters under `arms`, in source order. */
-function walkedChildren(node: ExprNode, arms: LeafWalkArms): readonly ExprNode[] {
+/**
+ * Every scalar arm, with both integral bounds. A tensor product is not entered.
+ * @internal
+ */
+export const ALL_SCALAR_ARMS: LeafWalkArms = {
+  transcendental: true,
+  abs: true,
+  diracDelta: true,
+  integral: 'all',
+  derivative: true,
+  variationalDerivative: true,
+};
+
+/**
+ * The children a walk enters under `arms`, in source order.
+ * An `op` node gives its arguments. Another node gives its children only when `arms` names its arm.
+ *
+ * @param node - The node to read.
+ * @param arms - The non-`op` arms to enter.
+ * @returns The children, or an empty list for a leaf or an arm that is not entered.
+ * @internal
+ */
+export function scalarChildren(node: ExprNode, arms: LeafWalkArms): readonly ExprNode[] {
   switch (node.kind) {
     case 'op':
       return node.args;
@@ -119,7 +140,7 @@ export function forEachScalarLeaf(
     visit(node);
     return;
   }
-  for (const child of walkedChildren(node, arms)) forEachScalarLeaf(child, visit, arms);
+  for (const child of scalarChildren(node, arms)) forEachScalarLeaf(child, visit, arms);
 }
 
 /** Rebuild `node` with the walked children replaced, keeping the node when none changed. */
@@ -168,7 +189,7 @@ export function mapScalarLeaves(
   arms: LeafWalkArms,
 ): ExprNode {
   if (node.kind === 'symbol') return f(node);
-  const children = walkedChildren(node, arms);
+  const children = scalarChildren(node, arms);
   if (children.length === 0) return node;
   let changed = false;
   const mapped = children.map((child) => {

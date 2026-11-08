@@ -35,7 +35,13 @@ import { validate } from '../dimensional/validator.js';
 import type { AtlasModel } from './model.js';
 import type { Conventions } from './types.js';
 import { checkConventions, unknownConventionKeys } from './conventions.js';
-import { forEachScalarLeaf, isDecimalLiteral, literalValue as leafLiteral, type LeafWalkArms } from '../dimensional/ast-leaves.js';
+import {
+  ALL_SCALAR_ARMS,
+  forEachScalarLeaf,
+  isDecimalLiteral,
+  literalValue as leafLiteral,
+  scalarChildren,
+} from '../dimensional/ast-leaves.js';
 
 /** Whether a finding is a contradiction in the data or a silence in it. @internal */
 export type ApplicabilitySeverity = 'blocking' | 'question';
@@ -121,52 +127,10 @@ const NONVANISHING_MARKERS: readonly string[] = [
   'positive',
 ];
 
-/**
- * The arms this checker descends into: every scalar child {@link childNodes} lists, and no
- * tensor-product argument (a tensor node has no children here).
- */
-const SCALAR_ARMS: LeafWalkArms = {
-  transcendental: true,
-  abs: true,
-  diracDelta: true,
-  integral: 'all',
-  derivative: true,
-  variationalDerivative: true,
-};
-
 /** Symbol names (literals included, as a divisor's names always were) appearing anywhere in a subtree. */
 function symbolNames(node: ExprNode, into: Set<string> = new Set()): Set<string> {
-  forEachScalarLeaf(node, (leaf) => into.add(leaf.name), SCALAR_ARMS);
+  forEachScalarLeaf(node, (leaf) => into.add(leaf.name), ALL_SCALAR_ARMS);
   return into;
-}
-
-/**
- * The `ExprNode` children of a node, for the scalar grammar this checker
- * reasons about. Tensor and curvature node families have no children here and
- * return `[]`: the side-condition and squaring rules are statements about
- * scalar algebra, and silently descending into a tensor node would invite
- * findings whose `where` path means nothing to a reader.
- */
-function childNodes(node: ExprNode): readonly ExprNode[] {
-  switch (node.kind) {
-    case 'op':
-      return node.args;
-    case 'integral':
-      return [node.over, node.integrand, ...(node.lower ? [node.lower] : []),
-        ...(node.upper ? [node.upper] : [])];
-    case 'derivative':
-      return [node.of, node.wrt];
-    case 'dirac-delta':
-      return [node.arg];
-    case 'variational-derivative':
-      return [node.functional, node.field, node.over];
-    case 'transcendental':
-      return [node.arg];
-    case 'abs':
-      return [node.arg];
-    default:
-      return [];
-  }
 }
 
 /**
@@ -278,7 +242,10 @@ function checkAst(
     }
   }
 
-  const children = childNodes(node);
+  // Tensor and curvature nodes have no children under ALL_SCALAR_ARMS: the side-condition and
+  // squaring rules are statements about scalar algebra, and a `where` path into a tensor
+  // node would mean nothing to a reader.
+  const children = scalarChildren(node, ALL_SCALAR_ARMS);
   for (let i = 0; i < children.length; i += 1) {
     const child = children[i];
     if (child !== undefined) checkAst(child, sideConditions, `${path}args[${i}].`, out);

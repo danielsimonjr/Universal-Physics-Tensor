@@ -12,7 +12,7 @@
 
 import { Fraction } from '@danielsimonjr/mathts-core';
 import type { ExprNode } from '../dimensional/ast-types.js';
-import { isDecimalLiteral } from '../dimensional/ast-leaves.js';
+import { ALL_SCALAR_ARMS, isDecimalLiteral, scalarChildren } from '../dimensional/ast-leaves.js';
 import { divide, equals, multiply, power } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -155,18 +155,6 @@ function dimOf(node: ExprNode): Dimension | undefined {
   return undefined;
 }
 
-/** Scalar children. A tensor node this walker does not understand contributes none. */
-function children(node: ExprNode): readonly ExprNode[] {
-  if (node.kind === 'op') return node.args;
-  if (node.kind === 'abs' || node.kind === 'transcendental' || node.kind === 'dirac-delta') return [node.arg];
-  if (node.kind === 'integral') {
-    return [node.over, node.integrand, ...(node.lower === undefined ? [] : [node.lower]), ...(node.upper === undefined ? [] : [node.upper])];
-  }
-  if (node.kind === 'derivative') return [node.of, node.wrt];
-  if (node.kind === 'variational-derivative') return [node.functional, node.field, node.over];
-  return [];
-}
-
 /**
  * True when `node` adds terms that are not all dimensionless. An addend whose
  * dimension cannot be read counts as dimensionful: a sum we cannot see is not
@@ -181,7 +169,8 @@ function isDimensionalSum(node: ExprNode): boolean {
 
 function hasDimensionalSum(node: ExprNode): boolean {
   if (isDimensionalSum(node)) return true;
-  return children(node).some(hasDimensionalSum);
+  // A tensor node this walker does not understand contributes no children.
+  return scalarChildren(node, ALL_SCALAR_ARMS).some(hasDimensionalSum);
 }
 
 /**
