@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **Eleven code duplicates of `repo-tools clones` have one copy each.** No output changes: `tests/cli/golden/` is unchanged, and each copy's tests pass. The shared helpers are internal and are not on the public barrel. `hermiteCrossingFraction` (`src/numerical/hermite-crossing.ts`) times the zero crossing for the two oscillator witnesses. `propagate` (`identifiability.ts`) is the fixed point of `forwardClosure` and of `dependents` in `discovery.ts`. `raise()` and `lower()` share the private `raiseOrLower`. `path-bound.ts` shares `requireAtlasEndpoints` and `allAtlasBridges`. `splitPrefix`, `SUPERSCRIPT` and `sideTokens` (`unit-data.ts`) serve the four unit readers. `requireOneUpThreeDownVariance` and `oneUpThreeDownFreeIndices` serve the Riemann and Weyl validators. `scalarChildren` and `ALL_SCALAR_ARMS` (`ast-leaves.ts`) serve the fingerprint counts, the applicability walk and the formula-shape walk. `MathTSEngine` loads autograd through `loadAutograd`. `compareChainOrder` orders chain candidates and chain records. `requireMetricClosures` (`lowering-utils.ts`) checks the metric closures of four curvature lowerings. `normTransportFields` is the norm-transport projection of `transportReport` and `upt atlas --json`. Why: two copies of one rule can drift apart. The declined pairs and their reasons are in `todo.md`.
+
 ## [12.0.0] - 2026-11-07
 
 Dependency health at this release: `bun audit --audit-level=high` finds no vulnerabilities (140 packages). `bun outdated` lists only development dependencies: `@types/node` is pinned to the CI Node major (22.20.5; 26.6.6 is latest), `@vitest/coverage-v8`/`vitest` 4.1.12 (5.1.0 latest), and `tree-sitter` 0.22.4 (0.25.1).

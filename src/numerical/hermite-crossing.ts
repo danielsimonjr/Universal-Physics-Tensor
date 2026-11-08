@@ -10,7 +10,7 @@
 /**
  * Find the zero of the cubic Hermite interpolant on [0, 1].
  * The interpolant has values `p0`, `p1` and step-scaled slopes `m0`, `m1` at the two ends.
- * The start value is the secant root `p0 / (p0 - p1)`. Eight Newton steps refine it.
+ * The start value is the secant root `p0 / (p0 - p1)`. Eight Newton steps refine the start value.
  *
  * @param p0 - The value at s = 0.
  * @param m0 - The slope at s = 0, multiplied by the step length.

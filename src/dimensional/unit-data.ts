@@ -241,8 +241,8 @@ export const UNIT_DATA: UnitTableData = readUnitFile(dataText('units.json'), dat
 
 /**
  * The first SI-prefix reading of `symbol`: a prefix of the table, then a prefixable unit.
- * The prefixes are tried in table order. The function does not read `symbol` as an exact unit;
- * each caller does that first, and the callers give different answers for an exact unit.
+ * The function tries the prefixes in table order. The function does not read `symbol` as an exact unit.
+ * Each caller reads `symbol` as an exact unit first. The callers give different answers for an exact unit.
  *
  * @param symbol - The spelling to split.
  * @returns The prefix, its factor, the unit and its row, or null when no prefix reading exists.

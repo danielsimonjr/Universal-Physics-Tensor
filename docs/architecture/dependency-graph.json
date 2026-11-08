@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "12.0.0",
-    "totalFiles": 387,
+    "totalFiles": 388,
     "totalModules": 13,
-    "totalExports": 2802
+    "totalExports": 2819
   },
   "entryPoints": [
     {
@@ -57,10 +57,11 @@
           {
             "file": "../dimensional/ast-leaves.js",
             "imports": [
+              "ALL_SCALAR_ARMS",
               "forEachScalarLeaf",
               "isDecimalLiteral",
               "literalValue",
-              "LeafWalkArms"
+              "scalarChildren"
             ]
           }
         ],
@@ -2919,6 +2920,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../numerical/hermite-crossing.js",
+            "imports": [
+              "hermiteCrossingFraction"
+            ]
+          },
+          {
             "file": "../../numerical/rk4-trajectory.js",
             "imports": [
               "rk4Trajectory"
@@ -3012,6 +3019,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../numerical/hermite-crossing.js",
+            "imports": [
+              "hermiteCrossingFraction"
+            ]
+          },
           {
             "file": "./pendulum-motion.js",
             "imports": [
@@ -3386,6 +3399,7 @@
           "IDENTITY_BOUND",
           "findPath",
           "findAtlasPath",
+          "allAtlasBridges",
           "enumerateAtlasRoutes",
           "enumerateRoutes",
           "boundPath",
@@ -3405,6 +3419,7 @@
         "functions": [
           "findPath",
           "findAtlasPath",
+          "allAtlasBridges",
           "enumerateAtlasRoutes",
           "enumerateRoutes",
           "boundPath",
@@ -8128,6 +8143,7 @@
           "missingForComposite",
           "explainsRefusal",
           "transportReport",
+          "normTransportFields",
           "claimReport"
         ],
         "functions": [
@@ -8136,6 +8152,7 @@
           "missingForComposite",
           "explainsRefusal",
           "transportReport",
+          "normTransportFields",
           "claimReport"
         ]
       },
@@ -8247,6 +8264,12 @@
             "file": "../published-url.js",
             "imports": [
               "publishedUrl"
+            ]
+          },
+          {
+            "file": "./_atlas-route.js",
+            "imports": [
+              "normTransportFields"
             ]
           }
         ],
@@ -11780,6 +11803,7 @@
               "findPath",
               "findAtlasPath",
               "enumerateAtlasRoutes",
+              "allAtlasBridges",
               "boundPath",
               "horizonOnRoute",
               "routeEntryModels"
@@ -12239,6 +12263,7 @@
           "findPath",
           "findAtlasPath",
           "enumerateAtlasRoutes",
+          "allAtlasBridges",
           "boundPath",
           "horizonOnRoute",
           "routeEntryModels",
@@ -12541,6 +12566,7 @@
           "findPath",
           "findAtlasPath",
           "enumerateAtlasRoutes",
+          "allAtlasBridges",
           "boundPath",
           "horizonOnRoute",
           "routeEntryModels",
@@ -13571,7 +13597,8 @@
         "exports": [
           "chainClassIndex",
           "compareChainEdgeIds",
-          "orderChainCandidates"
+          "orderChainCandidates",
+          "compareChainOrder"
         ],
         "interfaces": [
           "ChainCandidate"
@@ -13579,7 +13606,8 @@
         "functions": [
           "chainClassIndex",
           "compareChainEdgeIds",
-          "orderChainCandidates"
+          "orderChainCandidates",
+          "compareChainOrder"
         ]
       },
       "src/composition/chain-match.ts": {
@@ -13709,8 +13737,7 @@
           {
             "file": "./chain-candidate.js",
             "imports": [
-              "chainClassIndex",
-              "compareChainEdgeIds",
+              "compareChainOrder",
               "ChainCandidateKind"
             ]
           },
@@ -14317,7 +14344,8 @@
             "file": "./identifiability.js",
             "imports": [
               "classifyIdentifiability",
-              "forwardClosure"
+              "forwardClosure",
+              "propagate"
             ]
           },
           {
@@ -14413,6 +14441,7 @@
           "hasMagnitudeEvidence",
           "isPromisingTier",
           "buildDiscoveryContext",
+          "dependents",
           "magnitudeStrength",
           "magnitudeGate",
           "vetLinkCandidate",
@@ -14429,6 +14458,7 @@
           "hasMagnitudeEvidence",
           "isPromisingTier",
           "buildDiscoveryContext",
+          "dependents",
           "magnitudeStrength",
           "magnitudeGate",
           "vetLinkCandidate",
@@ -15051,7 +15081,9 @@
           {
             "file": "../dimensional/ast-leaves.js",
             "imports": [
-              "isDecimalLiteral"
+              "ALL_SCALAR_ARMS",
+              "isDecimalLiteral",
+              "scalarChildren"
             ]
           },
           {
@@ -15411,6 +15443,7 @@
         ],
         "exports": [
           "forwardClosure",
+          "propagate",
           "edgeMonomial",
           "identifiabilityByRankWith",
           "identifiabilityByRank",
@@ -15424,6 +15457,7 @@
         ],
         "functions": [
           "forwardClosure",
+          "propagate",
           "edgeMonomial",
           "identifiabilityByRankWith",
           "identifiabilityByRank",
@@ -16470,6 +16504,20 @@
             "file": "../../dimensional/ast-types.js",
             "imports": [
               "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/ast-leaves.js",
+            "imports": [
+              "ALL_SCALAR_ARMS",
+              "scalarChildren"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-leaves.js",
+            "imports": [
+              "LeafWalkArms"
             ],
             "typeOnly": true
           },
@@ -20213,8 +20261,10 @@
         ],
         "exports": [
           "DECIMAL_LITERAL",
+          "ALL_SCALAR_ARMS",
           "isDecimalLiteral",
           "literalValue",
+          "scalarChildren",
           "forEachScalarLeaf",
           "mapScalarLeaves"
         ],
@@ -20224,11 +20274,13 @@
         "functions": [
           "isDecimalLiteral",
           "literalValue",
+          "scalarChildren",
           "forEachScalarLeaf",
           "mapScalarLeaves"
         ],
         "constants": [
-          "DECIMAL_LITERAL"
+          "DECIMAL_LITERAL",
+          "ALL_SCALAR_ARMS"
         ]
       },
       "src/dimensional/ast-types.ts": {
@@ -20436,6 +20488,8 @@
         "exports": [
           "validateCovariantDerivative",
           "validateRiemannTensor",
+          "requireOneUpThreeDownVariance",
+          "oneUpThreeDownFreeIndices",
           "UpperIndex",
           "CovariantDerivativeNode",
           "RiemannTensorNode"
@@ -20447,7 +20501,9 @@
         ],
         "functions": [
           "validateCovariantDerivative",
-          "validateRiemannTensor"
+          "validateRiemannTensor",
+          "requireOneUpThreeDownVariance",
+          "oneUpThreeDownFreeIndices"
         ]
       },
       "src/dimensional/connection.ts": {
@@ -21393,7 +21449,10 @@
           {
             "file": "./unit-data.js",
             "imports": [
-              "UNIT_DATA"
+              "SUPERSCRIPT",
+              "UNIT_DATA",
+              "sideTokens",
+              "splitPrefix"
             ]
           },
           {
@@ -21405,6 +21464,7 @@
           }
         ],
         "exports": [
+          "tryOneFactorBase",
           "everySymbolInBothTables",
           "mathtsExactScaleAgreed",
           "isSubKiloParsec",
@@ -21415,6 +21475,7 @@
           "_multiplyDim"
         ],
         "functions": [
+          "tryOneFactorBase",
           "everySymbolInBothTables",
           "mathtsExactScaleAgreed",
           "isSubKiloParsec",
@@ -21452,13 +21513,15 @@
             "file": "./mathts-unit-delegation.js",
             "imports": [
               "isSubKiloParsec",
-              "mathtsParsedDimension"
+              "mathtsParsedDimension",
+              "tryOneFactorBase"
             ]
           },
           {
             "file": "./unit-data.js",
             "imports": [
-              "UNIT_DATA"
+              "UNIT_DATA",
+              "sideTokens"
             ]
           },
           {
@@ -22238,7 +22301,10 @@
         ],
         "exports": [
           "UNIT_DATA",
-          "readUnitFile"
+          "SUPERSCRIPT",
+          "readUnitFile",
+          "splitPrefix",
+          "sideTokens"
         ],
         "interfaces": [
           "UnitRow",
@@ -22246,10 +22312,13 @@
           "UnitTableData"
         ],
         "functions": [
-          "readUnitFile"
+          "readUnitFile",
+          "splitPrefix",
+          "sideTokens"
         ],
         "constants": [
-          "UNIT_DATA"
+          "UNIT_DATA",
+          "SUPERSCRIPT"
         ]
       },
       "src/dimensional/units.ts": {
@@ -22315,7 +22384,10 @@
           {
             "file": "./unit-data.js",
             "imports": [
+              "SUPERSCRIPT",
               "UNIT_DATA",
+              "sideTokens",
+              "splitPrefix",
               "AffineRow"
             ]
           }
@@ -22653,10 +22725,10 @@
             "typeOnly": true
           },
           {
-            "file": "./errors.js",
+            "file": "./connection-validators.js",
             "imports": [
-              "PartialDerivativeIndexVarianceError",
-              "IndexLabelCollisionError"
+              "oneUpThreeDownFreeIndices",
+              "requireOneUpThreeDownVariance"
             ]
           },
           {
@@ -25485,8 +25557,23 @@
             "imports": [
               "dimensionOf",
               "requireValue",
-              "flattenNestedArray"
+              "flattenNestedArray",
+              "requireMetricClosures"
             ]
+          },
+          {
+            "file": "./lowering-utils.js",
+            "imports": [
+              "MetricFn"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./lowering-utils.js",
+            "imports": [
+              "MetricFn"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -25500,7 +25587,11 @@
           "contractRiemannJS",
           "lowerBianchiResidual",
           "lowerWeylTensor",
-          "lowerKretschmannScalar"
+          "lowerKretschmannScalar",
+          "MetricFn"
+        ],
+        "reExported": [
+          "MetricFn"
         ],
         "functions": [
           "christoffelAt",
@@ -26171,6 +26262,18 @@
           "GridField"
         ]
       },
+      "src/numerical/hermite-crossing.ts": {
+        "description": "The zero crossing inside one integrator step, read from the cubic Hermite",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "hermiteCrossingFraction"
+        ],
+        "functions": [
+          "hermiteCrossingFraction"
+        ]
+      },
       "src/numerical/index.ts": {
         "description": "Public surface of the UPT numerical-contraction backend (v0.3.5).",
         "externalDependencies": [],
@@ -26612,13 +26715,15 @@
           "isMetricTensorNode",
           "dimensionOf",
           "requireValue",
-          "flattenNestedArray"
+          "flattenNestedArray",
+          "requireMetricClosures"
         ],
         "functions": [
           "isMetricTensorNode",
           "dimensionOf",
           "requireValue",
-          "flattenNestedArray"
+          "flattenNestedArray",
+          "requireMetricClosures"
         ]
       },
       "src/numerical/lowering.ts": {
@@ -26781,8 +26886,7 @@
               "contractRiemannJS",
               "lowerBianchiResidual",
               "lowerWeylTensor",
-              "lowerKretschmannScalar",
-              "MetricFn"
+              "lowerKretschmannScalar"
             ]
           },
           {
@@ -26791,7 +26895,8 @@
               "isMetricTensorNode",
               "dimensionOf",
               "requireValue",
-              "flattenNestedArray"
+              "flattenNestedArray",
+              "requireMetricClosures"
             ]
           },
           {
@@ -28122,6 +28227,7 @@
           "src/numerical/geometrized.ts",
           "src/numerical/gl4-integrator.ts",
           "src/numerical/grid-field.ts",
+          "src/numerical/hermite-crossing.ts",
           "src/numerical/index.ts",
           "src/numerical/input-validation.ts",
           "src/numerical/killing.ts",
@@ -28163,18 +28269,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 387,
+    "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87307,
-    "totalExports": 2802,
+    "totalLinesOfCode": 87270,
+    "totalExports": 2819,
     "totalClasses": 86,
     "totalInterfaces": 518,
-    "totalFunctions": 908,
+    "totalFunctions": 921,
     "totalTypeGuards": 16,
     "totalEnums": 0,
-    "totalConstants": 413,
-    "totalReExports": 1390,
-    "totalTypeOnlyImports": 530,
+    "totalConstants": 415,
+    "totalReExports": 1392,
+    "totalTypeOnlyImports": 532,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

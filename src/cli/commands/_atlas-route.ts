@@ -148,8 +148,8 @@ export function transportReport(a: AppliedTransport) {
 }
 
 /**
- * The declarative fields of one norm transport, in the order the JSON envelopes print them.
- * `transportReport` and `upt atlas --json` (`atlas.ts`) build their rows from it.
+ * The declarative fields of one norm transport, in the order the JSON envelopes print the fields.
+ * `transportReport` and `upt atlas --json` (`atlas.ts`) build rows from these fields.
  *
  * @param nt - The norm transport.
  * @returns The fields, with no functions.

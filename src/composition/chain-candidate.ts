@@ -84,7 +84,7 @@ export function orderChainCandidates(candidates: readonly ChainCandidate[]): Cha
 
 /**
  * The chain order: class by {@link chainClassIndex} first, then {@link compareChainEdgeIds}.
- * {@link orderChainCandidates} and `orderChainRecords` (`chain-result.ts`) sort by it.
+ * {@link orderChainCandidates} and `orderChainRecords` (`chain-result.ts`) sort by the chain order.
  *
  * @param leftKind - The class of the left chain.
  * @param leftIds - The edge ids of the left chain.

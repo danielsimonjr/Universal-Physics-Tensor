@@ -160,7 +160,7 @@ export function lower(
 /**
  * The shared body of raise() (`variance` 'upper', `metric` the inverse metric)
  * and lower() (`variance` 'lower', `metric` the covariant metric).
- * One index of `metric` gets the name `label`, so that the contraction finds it.
+ * One index of `metric` gets the name `label`, so that the contraction finds the index.
  * The other index gets a new name that is not a free index of `operand`.
  *
  * @throws MetricSignatureError if an index of `metric` does not have `variance`.
