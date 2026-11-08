@@ -51,6 +51,7 @@ from v0.1.0 onward.
 
 ### Added
 
+- **The U9 spike script (`scripts/u9-gradient-spike.ts`).** It compares `bridgeGradientAST` with MathTS `compileScalarGradient` on every (bridge, variable) pair of the catalog and times both. It changes no file and no behavior. The result is in `NOTES.md` and is the evidence for the open U9 decision in `ACTIVE.md`.
 - **The MathTS gap oracle states the 0.21.0 agreements and the overrides that remain.** `tests/dimensional/mathts-unit-gaps.test.ts` moves the day-symbol row from gaps to agreements, adds the `psi`/`torr` prefix agreement, pins the refusal-registry reasons beside the UPT error, and states the `pc` `SHORT_UP_ONLY` gap the wrapper keeps. `tests/dimensional/mathts-refusal-delegation.test.ts` and `tests/dimensional/unit-override-parsec.test.ts` prove, respectively, that the refusal definitions come from MathTS and that the sub-k parsec spellings stay UPT policy while the k-and-up ones delegate.
 
 ### Removed
