@@ -298,14 +298,14 @@ export async function simplifyExpr(expr: ExprNode): Promise<SimplifyResult> {
   let candidate: ExprNode;
   try {
     const str = renderGensym(expr, gensymOf, meta);
-    // The peer can THROW on some forms (e.g. a known mathts `simplify` BigInt
+    // MathTS can THROW on some forms (e.g. a known mathts `simplify` BigInt
     // bug on nested `a/(b/c²)`); that, like an unsupported node, is a graceful
     // no-op, not an error. The console is not touched here: the first use
     // already ran inside `loadSimplifier`'s window.
     const simplifiedNode = mod.simplify(mod.parse(str));
     candidate = walkBack(simplifiedNode, meta);
   } catch {
-    return { expr, simplified: false }; // unsupported / unrepresentable / peer threw
+    return { expr, simplified: false }; // unsupported / unrepresentable / MathTS threw
   }
 
   // Guard 1 — dimensional. Inability to validate ⇒ no-op; a CHANGED dimension

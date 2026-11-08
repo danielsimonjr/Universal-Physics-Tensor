@@ -16,6 +16,8 @@ describe('studentTwoSidedP through MathTS', () => {
       }
     }
     expect(studentTwoSidedP(1e8, 30)).toBeGreaterThan(0);
+    // A point where the retired incomplete beta differs (1.0000000000001e-308), so a revert fails here.
+    expect(studentTwoSidedP(1e154, 2)).toBe(2 * (studentTCDF(-1e154, 2) as number));
   });
 
   it('keeps its edge results: 1 at t = 0, 0 at infinite t, RangeError for NaN or ν <= 0', () => {

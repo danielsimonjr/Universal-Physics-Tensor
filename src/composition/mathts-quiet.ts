@@ -1,5 +1,5 @@
 /**
- * Load the MathTS peer without its console chatter reaching stderr.
+ * Load the MathTS dependency without its console chatter reaching stderr.
  *
  * MathTS writes with `console.warn`/`console.error` directly (its `warnOnce`,
  * the factorisation fallbacks, the WASM-integrity notice) and offers no option
@@ -12,7 +12,7 @@
  * THE INVARIANT: the replacement is process-global, so a concurrent caller in
  * the same process (a worker pool thread, a vitest worker sharing a process)
  * loses its console for the window. The window is therefore confined to the
- * peer's ONE-TIME load and first-use smoke in `expr-simplify.ts`,
+ * dependency's ONE-TIME load and first-use smoke in `expr-simplify.ts`,
  * `mathts-scalar-symbols.ts` and `algebraic-equivalence.ts`: each caches the
  * loaded function, so the sinks are replaced once per process, and never
  * around a per-call parse or simplify.

@@ -40,7 +40,9 @@ describe('mcnemar exact p through MathTS binomialTest (U6)', () => {
   it('keeps the edge rows: no discordant pair, one pair, a large equal split, a one-sided far tail', () => {
     expect(mcnemar({ a: 3, b: 0, c: 0, d: 4 })).toEqual({ chiSquared: 0, exactP: 1 });
     expect(mcnemar({ a: 0, b: 0, c: 1, d: 0 }).exactP).toBe(1);
-    expect(mcnemar({ a: 0, b: 500, c: 500, d: 0 }).exactP).toBeCloseTo(1, 12);
+    // An equal split is p = 1 exactly, by symmetry; MathTS binomialTest sums to 0.99999999999989 at n = 1000.
+    expect(mcnemar({ a: 0, b: 500, c: 500, d: 0 }).exactP).toBe(1);
+    expect(mcnemar({ a: 0, b: 37, c: 37, d: 0 }).exactP).toBe(1);
     // 100 discordant pairs on one side: 2/2¹⁰⁰, the tail MathTS `mcnemar` rounds to 0 (gap row M2).
     expect(mcnemar({ a: 0, b: 0, c: 100, d: 0 }).exactP).toBeCloseTo(2 / 2 ** 100, 40);
     expect(mcnemar({ a: 0, b: 0, c: 100, d: 0 }).exactP).toBeGreaterThan(0);
