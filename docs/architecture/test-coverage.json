@@ -813,6 +813,7 @@
       "tests/atlas/link-prediction.test.ts",
       "tests/atlas/mcnemar-binomial.test.ts",
       "tests/numerical/mathts-delegation.test.ts",
+      "tests/numerical/mathts-gaps.test.ts",
       "tests/tools/criterion3-run.test.ts"
     ],
     "src/atlas/benchmark/study.ts": [
@@ -11573,6 +11574,7 @@
       "tests/atlas/link-prediction.test.ts",
       "tests/atlas/mcnemar-binomial.test.ts",
       "tests/numerical/mathts-delegation.test.ts",
+      "tests/numerical/mathts-gaps.test.ts",
       "tests/tools/criterion3-run.test.ts"
     ],
     "src/atlas/benchmark/study.ts": [
@@ -25391,7 +25393,8 @@
     "tests/numerical/mathts-gaps.test.ts": [
       "src/numerical/quadrature.ts",
       "src/composition/probe/t-tail.ts",
-      "src/composition/probe/study.ts"
+      "src/composition/probe/study.ts",
+      "src/atlas/benchmark/stats.ts"
     ],
     "tests/numerical/mathts-required.test.ts": [
       "src/numerical/formula-registry.ts"

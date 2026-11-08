@@ -67,7 +67,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `benchmark/leakage.ts` | `benchmark.test.ts`, `residual.test.ts`, `algebraic-equivalence.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/loader.ts` | `benchmark-model-set.test.ts`, `benchmark-preregistration.test.ts`, `benchmark.test.ts`, `json-file-readers.test.ts` | — |
 | `benchmark/run-atlas.ts` | `benchmark-ablation.test.ts`, `benchmark-run-atlas.test.ts` | `barrel-completeness.test.ts` |
-| `benchmark/stats.ts` | `benchmark-model-set.test.ts`, `benchmark-stats.test.ts`, `link-prediction.test.ts`, `mcnemar-binomial.test.ts`, `mathts-delegation.test.ts`, `criterion3-run.test.ts` | `barrel-completeness.test.ts` |
+| `benchmark/stats.ts` | `benchmark-model-set.test.ts`, `benchmark-stats.test.ts`, `link-prediction.test.ts`, `mcnemar-binomial.test.ts`, `mathts-delegation.test.ts`, `mathts-gaps.test.ts`, `criterion3-run.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/study.ts` | `benchmark-ablation.test.ts`, `benchmark-study.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/types.ts` | `benchmark-ablation.test.ts`, `benchmark-preregistration.test.ts`, `benchmark-run-atlas.test.ts`, `benchmark.test.ts` | `barrel-completeness.test.ts` |
 | `atlas/bridge-record.ts` | `bridge-record.test.ts` | — |
@@ -1078,7 +1078,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `numerical/mathts-delegation.test.ts` | 12 files |
 | `numerical/mathts-engine-load-autograd.test.ts` | 2 files |
 | `numerical/mathts-engine-typing.test.ts` | 3 files |
-| `numerical/mathts-gaps.test.ts` | 3 files |
+| `numerical/mathts-gaps.test.ts` | 4 files |
 | `numerical/mathts-required.test.ts` | 1 files |
 | `numerical/metric-deriv-supplied.test.ts` | 1 files |
 | `numerical/metric-inverse-curvature-walk.test.ts` | 16 files |

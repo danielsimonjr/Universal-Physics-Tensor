@@ -276,7 +276,10 @@ modules:
         - package: "@danielsimonjr/mathts-functions"
           imports:
             - binomialTest
+            - cohensKappa
+            - newcombePairedInterval
             - normalQuantile
+            - wilsonInterval
       nodeDependencies: []
       internalDependencies:
         - file: ../../core/mathts-read.js
@@ -19579,7 +19582,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 388
   totalModules: 13
-  totalLinesOfCode: 87217
+  totalLinesOfCode: 87181
   totalExports: 2820
   totalClasses: 86
   totalInterfaces: 518

@@ -409,7 +409,10 @@
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
               "binomialTest",
-              "normalQuantile"
+              "cohensKappa",
+              "newcombePairedInterval",
+              "normalQuantile",
+              "wilsonInterval"
             ]
           }
         ],
@@ -28266,7 +28269,7 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87217,
+    "totalLinesOfCode": 87181,
     "totalExports": 2820,
     "totalClasses": 86,
     "totalInterfaces": 518,
