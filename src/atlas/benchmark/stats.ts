@@ -14,7 +14,13 @@
  * @internal
  */
 
-import { binomialTest, normalQuantile } from '@danielsimonjr/mathts-functions';
+import {
+  binomialTest,
+  cohensKappa as mathtsKappa,
+  newcombePairedInterval,
+  normalQuantile,
+  wilsonInterval as mathtsWilson,
+} from '@danielsimonjr/mathts-functions';
 import { numberFrom } from '../../core/mathts-read.js';
 
 /** The two-sided 95% normal quantile, MathTS `normalQuantile(0.975)` (1.959963984540054). @internal */
@@ -27,27 +33,18 @@ export interface Interval {
 }
 
 /**
- * Wilson score interval for a binomial proportion.
+ * Wilson score interval for a binomial proportion, from MathTS `wilsonInterval`.
  *
+ * @param confidence The confidence level in (0, 1). The default is 0.95.
  * @throws Error when `n` is not a positive integer or `successes` is outside `[0, n]`.
  * @internal
  */
-export function wilsonInterval(successes: number, n: number, z = Z95): Interval {
+export function wilsonInterval(successes: number, n: number, confidence = 0.95): Interval {
   if (!Number.isInteger(n) || n <= 0) throw new Error(`wilsonInterval: n must be a positive integer, got ${n}`);
   if (!Number.isInteger(successes) || successes < 0 || successes > n) {
     throw new Error(`wilsonInterval: successes must be an integer in [0, n], got ${successes}`);
   }
-  const p = successes / n;
-  const z2 = z * z;
-  const denom = 1 + z2 / n;
-  const centre = (p + z2 / (2 * n)) / denom;
-  const half = (z / denom) * Math.sqrt((p * (1 - p)) / n + z2 / (4 * n * n));
-  // At x = 0 the lower bound, and at x = n the upper bound, are EXACTLY 0 and 1
-  // analytically; the formula reaches them only to within float rounding.
-  return {
-    lower: successes === 0 ? 0 : Math.max(0, centre - half),
-    upper: successes === n ? 1 : Math.min(1, centre + half),
-  };
+  return mathtsWilson(successes, n, confidence);
 }
 
 /** A paired 2×2 table: a = both right, b = only A right, c = only B right, d = both wrong. @internal */
@@ -84,37 +81,19 @@ export function mcnemar(table: PairedTable): McNemarResult {
 
 /**
  * Newcombe's method 10: a 95% interval for the PAIRED difference in proportions
- * p_A − p_B = (b − c)/n, built from the two marginal Wilson intervals and a
- * correlation correction φ. Pre-registered criterion: the interval for the
- * atlas-minus-baseline difference must exclude zero.
+ * p_A − p_B = (b − c)/n, from MathTS `newcombePairedInterval` (the two marginal
+ * Wilson intervals and a correlation correction φ). Pre-registered criterion: the
+ * interval for the atlas-minus-baseline difference must exclude zero.
  *
  * Newcombe, Statistics in Medicine 17 (1998) 2635.
  *
+ * @param confidence The confidence level in (0, 1). The default is 0.95.
+ * @throws Error when the table has no observation.
  * @internal
  */
-export function pairedDifferenceInterval(table: PairedTable, z = Z95): Interval & { readonly diff: number } {
-  const { a, b, c, d } = table;
-  const n = a + b + c + d;
-  if (n === 0) throw new Error('pairedDifferenceInterval: empty table');
-  const p1 = (a + b) / n;
-  const p2 = (a + c) / n;
-  const w1 = wilsonInterval(a + b, n, z);
-  const w2 = wilsonInterval(a + c, n, z);
-  const denom = Math.sqrt((a + b) * (c + d) * (a + c) * (b + d));
-  let phi = 0;
-  if (denom > 0) {
-    const cross = a * d - b * c;
-    // Newcombe's continuity adjustment of φ, applied only when ad > bc.
-    phi = (cross > 0 ? Math.max(cross - n / 2, 0) : cross) / denom;
-  }
-  const diff = p1 - p2;
-  const dl1 = p1 - w1.lower;
-  const du1 = w1.upper - p1;
-  const dl2 = p2 - w2.lower;
-  const du2 = w2.upper - p2;
-  const lower = diff - Math.sqrt(Math.max(0, dl1 * dl1 - 2 * phi * dl1 * du2 + du2 * du2));
-  const upper = diff + Math.sqrt(Math.max(0, du1 * du1 - 2 * phi * du1 * dl2 + dl2 * dl2));
-  return { diff, lower: Math.max(-1, lower), upper: Math.min(1, upper) };
+export function pairedDifferenceInterval(table: PairedTable, confidence = 0.95): Interval & { readonly diff: number } {
+  if (table.a + table.b + table.c + table.d === 0) throw new Error('pairedDifferenceInterval: empty table');
+  return newcombePairedInterval(table, confidence);
 }
 
 /**
@@ -127,25 +106,9 @@ export function pairedDifferenceInterval(table: PairedTable, z = Z95): Interval 
 export function cohensKappa(matrix: readonly (readonly number[])[]): number {
   const k = matrix.length;
   if (k === 0 || matrix.some((row) => row.length !== k)) throw new Error('cohensKappa: matrix must be square and non-empty');
-  let n = 0;
-  let agree = 0;
-  const rows = new Array<number>(k).fill(0);
-  const cols = new Array<number>(k).fill(0);
-  for (let i = 0; i < k; i++) {
-    for (let j = 0; j < k; j++) {
-      const v = matrix[i]![j]!;
-      n += v;
-      rows[i]! += v;
-      cols[j]! += v;
-      if (i === j) agree += v;
-    }
-  }
-  if (n === 0) throw new Error('cohensKappa: no ratings');
-  const po = agree / n;
-  let pe = 0;
-  for (let i = 0; i < k; i++) pe += (rows[i]! / n) * (cols[i]! / n);
-  if (pe === 1) return Number.NaN;
-  return (po - pe) / (1 - pe);
+  if (matrix.every((row) => row.every((v) => v === 0))) throw new Error('cohensKappa: no ratings');
+  // MathTS returns 0/0 = NaN when chance agreement is 1.
+  return mathtsKappa(matrix);
 }
 
 /** What a frozen set of a given size can and cannot resolve. @internal */
