@@ -195,7 +195,7 @@ describe('pairedDifferenceInterval — Newcombe (1998) Table III, the PUBLISHED 
     for (const row of NEWCOMBE_TABLE_III) {
       const [a, b, c, d] = row.cells;
       if (row.m10[0] === row.m10[1]) continue;
-      expect(worstError(pairedDifferenceInterval({ a, b, c, d }, 1.6448536269514722), row.m10)).toBeGreaterThan(2 * HALF_ULP);
+      expect(worstError(pairedDifferenceInterval({ a, b, c, d }, 0.9), row.m10)).toBeGreaterThan(2 * HALF_ULP);
     }
   });
 });

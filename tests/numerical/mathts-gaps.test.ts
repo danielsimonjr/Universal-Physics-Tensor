@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { GAUSS_LEGENDRE_16 } from '../../src/numerical/quadrature.js';
 import { studentTwoSidedP } from '../../src/composition/probe/t-tail.js';
 import { chiSquareSurvival, fSurvival } from '../../src/composition/probe/study.js';
+import { cohensKappa, pairedDifferenceInterval, wilsonInterval } from '../../src/atlas/benchmark/stats.js';
 
 const exported = (name: string): boolean => Object.prototype.hasOwnProperty.call(functions, name);
 
@@ -64,11 +65,32 @@ describe('MathTS gaps that keep UPT routines local', () => {
     expect(Math.abs(sum - 2)).toBeLessThan(1e-15);
   });
 
-  it('M4: Wilson and Newcombe intervals and Cohen kappa are not exported (UPT keeps stats.ts)', () => {
-    for (const name of ['wilsonInterval', 'newcombeInterval', 'cohensKappa']) {
-      expect(exported(name), name).toBe(false);
+  it('M4 (agreement): UPT Wilson, Newcombe and kappa equal MathTS on the pinned cases', () => {
+    for (const name of ['wilsonInterval', 'newcombePairedInterval', 'cohensKappa']) {
+      expect(exported(name), name).toBe(true);
     }
-    // Control: the reader sees an export that exists.
-    expect(exported('mcnemar')).toBe(true);
+    const wilsonCases = [[48, 60], [160, 200], [0, 10], [10, 10], [1, 3], [7, 97], [2, 4]] as const;
+    for (const [s, n] of wilsonCases) {
+      expect(wilsonInterval(s, n), `wilson ${s}/${n}`).toEqual(functions.wilsonInterval(s, n, 0.95));
+      expect(wilsonInterval(s, n, 0.9), `wilson90 ${s}/${n}`).toEqual(functions.wilsonInterval(s, n, 0.9));
+    }
+    // The textbook value 48/60 -> [0.682, 0.882] holds through the MathTS call.
+    expect(wilsonInterval(48, 60).lower).toBeCloseTo(0.682, 3);
+    expect(wilsonInterval(48, 60).upper).toBeCloseTo(0.882, 3);
+    const tables = [
+      { a: 40, b: 12, c: 3, d: 5 }, { a: 1, b: 97, c: 1, d: 1 }, { a: 0, b: 1, c: 1, d: 1 },
+      { a: 27, b: 0, c: 0, d: 27 }, { a: 40, b: 6, c: 6, d: 8 }, { a: 0, b: 0, c: 0, d: 5 },
+    ];
+    for (const t of tables) {
+      expect(pairedDifferenceInterval(t), JSON.stringify(t)).toEqual(functions.newcombePairedInterval(t, 0.95));
+    }
+    const matrices = [[[20, 5], [10, 15]], [[10, 0], [0, 10]], [[25, 25], [25, 25]], [[3, 1, 0], [2, 9, 4], [0, 1, 7]]];
+    for (const m of matrices) expect(cohensKappa(m), JSON.stringify(m)).toBe(functions.cohensKappa(m));
+    // Chance agreement 1: both return NaN, never 1.
+    expect(cohensKappa([[10, 0], [0, 0]])).toBeNaN();
+    // UPT keeps its own input checks and messages in front of the MathTS call.
+    expect(() => wilsonInterval(11, 10)).toThrow(/^wilsonInterval: successes/);
+    expect(() => pairedDifferenceInterval({ a: 0, b: 0, c: 0, d: 0 })).toThrow(/^pairedDifferenceInterval: empty table/);
+    expect(() => cohensKappa([[1, 2]])).toThrow(/^cohensKappa: matrix must be square/);
   });
 });
