@@ -12,7 +12,7 @@
 import type { ChainClassification } from '../canonical/structural.js';
 import type { CompositionResult } from '../relations/composition-table.js';
 import type { BuckinghamFilterRecord } from './buckingham-filter.js';
-import { chainClassIndex, compareChainEdgeIds, type ChainCandidateKind } from './chain-candidate.js';
+import { compareChainOrder, type ChainCandidateKind } from './chain-candidate.js';
 import type { ChainRegimeMismatch } from './chain-regime.js';
 
 /**
@@ -60,9 +60,5 @@ export function chainOrderKey(record: ChainRecord): ChainCandidateKind {
  * @internal
  */
 export function orderChainRecords(records: readonly ChainRecord[]): ChainRecord[] {
-  return [...records].sort((a, b) => {
-    const byClass = chainClassIndex(chainOrderKey(a)) - chainClassIndex(chainOrderKey(b));
-    if (byClass !== 0) return byClass < 0 ? -1 : 1;
-    return compareChainEdgeIds(a.edgeIds, b.edgeIds);
-  });
+  return [...records].sort((a, b) => compareChainOrder(chainOrderKey(a), a.edgeIds, chainOrderKey(b), b.edgeIds));
 }

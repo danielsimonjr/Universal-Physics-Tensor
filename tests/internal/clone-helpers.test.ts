@@ -9,6 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { hermiteCrossingFraction } from '../../src/numerical/hermite-crossing.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { allAtlasBridges, enumerateAtlasRoutes, findAtlasPath } from '../../src/atlas/path-bound.js';
+import { compareChainOrder } from '../../src/composition/chain-candidate.js';
 import { lower, metric, raise } from '../../src/dimensional/metric.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -85,5 +86,20 @@ describe('requireAtlasEndpoints and allAtlasBridges (path-bound.ts)', () => {
     expect(allAtlasBridges()).toEqual(ATLAS_FAMILIES.flatMap((f) => f.bridges));
     expect(src('src/atlas/path-bound.ts').match(/ATLAS_FAMILIES\.flatMap\(\(f\) => f\.bridges\)/g)).toHaveLength(1);
     expect(src('src/cli/commands/_atlas-map.ts')).not.toContain('ATLAS_FAMILIES.flatMap((f) => f.bridges)');
+  });
+});
+
+describe('compareChainOrder (chain-candidate.ts)', () => {
+  it('orders by class first, then by edge ids', () => {
+    expect(compareChainOrder('confirmation', ['z', 'z'], 'restatement', ['a'])).toBe(-1);
+    expect(compareChainOrder('unfixed-shape', ['a'], 'unique-monomial', ['a'])).toBe(1);
+    expect(compareChainOrder('restatement', ['a'], 'restatement', ['a', 'b'])).toBe(-1);
+    expect(compareChainOrder('restatement', ['b'], 'restatement', ['a'])).toBe(1);
+    expect(compareChainOrder('restatement', ['a'], 'restatement', ['a'])).toBe(0);
+  });
+
+  it('is the one comparator: both sorts call it', () => {
+    expect(src('src/composition/chain-candidate.ts')).toContain('compareChainOrder(a.kind, a.edgeIds, b.kind, b.edgeIds)');
+    expect(src('src/composition/chain-result.ts')).toContain('compareChainOrder(chainOrderKey(a), a.edgeIds, chainOrderKey(b), b.edgeIds)');
   });
 });
