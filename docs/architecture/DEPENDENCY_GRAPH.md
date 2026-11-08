@@ -3409,7 +3409,8 @@ The codebase is organized into the following modules:
 | `./atlas/regime.js` | `collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
 | `./relations/regime-registration.js` | `domainRegimeRegistrations` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
-| `./atlas/path-bound.js` | `familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, allAtlasBridges, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
+| `./atlas/path-bound.js` | `familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
+| `./atlas/path-bound.js` | `allAtlasBridges` | Re-export |
 | `./atlas/composition-table.js` | `composeRelation` | Re-export |
 | `./atlas/path-bound.js` | `PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport` | Re-export |
 | `./atlas/types.js` | `AtlasBridge, RegimeInequality, Witness` | Re-export |
@@ -3491,8 +3492,8 @@ The codebase is organized into the following modules:
   runTranslationCheck, translationsOf, ObservableCarriage, ObservableTranslation, PointCheck,
   AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions,
   domainRegimeRegistrations, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon,
-  findPath, findAtlasPath, enumerateAtlasRoutes, allAtlasBridges, boundPath, horizonOnRoute,
-  routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
+  findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels,
+  allAtlasBridges, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
   AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
   catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
   kerrTurningPointOrbit, MetricMassError, MetricValueError, schwarzschildCircularOrbit, type MetricId,
@@ -7746,7 +7747,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87270 |
+| Total Lines of Code | 87272 |
 | Total Exports | 2819 |
 | Total Re-exports | 1392 |
 | Total Classes | 86 |
