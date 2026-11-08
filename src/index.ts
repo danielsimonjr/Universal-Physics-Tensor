@@ -138,8 +138,8 @@ import './core/regimes-builtins.js';
 // no tape); the exact AD path is `bridgeGradientAST` over the symbolic RHS.
 export type { BridgeDiffSpec, BridgeNumericalGradientResult } from './diff/bridge-gradient.js';
 export { bridgeGradientNumerical } from './diff/bridge-gradient.js';
-// Exact bridge gradients via reverse-mode AD over the symbolic RHS AST
-// (traced lowering through mathts-autograd; faithful encodings only).
+// Exact bridge gradients over the symbolic RHS AST, through MathTS
+// compileScalarGradient (faithful encodings only).
 export type { ASTGradientResult } from './diff/bridge-ast-gradient.js';
 export {
   bridgeGradientAST,

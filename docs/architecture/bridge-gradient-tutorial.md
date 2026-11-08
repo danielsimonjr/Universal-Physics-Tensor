@@ -20,9 +20,11 @@ compute the gradient of such a relation with respect to its inputs:
   catalog's plain-JS closed forms return a `number` and so carry no
   autograd tape, so they use this function.
 - `bridgeGradientAST(rhs, varName, bindings)` and
-  `bridgeGradientASTById(bridgeId, varName, bindings)` — exact
-  reverse-mode AD over a bridge's symbolic RHS AST, lowered through
-  `@danielsimonjr/mathts-autograd` (a required dependency).
+  `bridgeGradientASTById(bridgeId, varName, bindings)` — the exact
+  derivative of a bridge's symbolic RHS AST, through MathTS
+  `compileScalarGradient`. Both functions return the result directly,
+  not a `Promise`. A `^` exponent must not contain the variable, and an
+  `integral` node is refused.
 
 No engine-AD function exists over a spec. A spec's `evaluate` returns
 a number, and no tape survives that, so such a function could only

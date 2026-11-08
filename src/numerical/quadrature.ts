@@ -1,11 +1,11 @@
 /**
- * Gauss–Legendre quadrature — shared between the numerical AST lowering and the
- * traced reverse-mode-AD lowering of definite `integral` nodes.
+ * Gauss–Legendre quadrature for the numerical AST lowering of definite
+ * `integral` nodes.
  *
  * 16-point Gauss–Legendre on [−1, 1]: exact for polynomials of degree ≤ 31, and
  * highly accurate for smooth integrands (√, exp, trig away from singularities).
  * It is NOT reliable for highly oscillatory integrands or singularities at/near
- * the bounds — those are out of scope for the differentiable-integral feature.
+ * the bounds.
  *
  * The affine map from [−1, 1] to [a, b] is x = (b−a)/2·ξ + (a+b)/2 with Jacobian
  * (b−a)/2, so ∫ₐᵇ f dx ≈ (b−a)/2 · Σᵢ wᵢ·f(xᵢ). For b < a the (b−a)/2 factor is

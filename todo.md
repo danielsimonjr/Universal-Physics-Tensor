@@ -2903,3 +2903,11 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
   that signal is unreliable here — `pr165` reads UNMERGED and its PR was demonstrably squash-merged.
   Judging them needs per-branch PR state, and deleting branches is destructive, so nothing was
   deleted and nothing should be until that check is done.
+
+## 2026-11-07 — five-axis pass (U9, synchronous bridge gradient)
+
+- Speed: warm gradient about 10 ms for the catalog sweep, against 3.5 ms on the old tape (spike, `NOTES.md`); accepted for the simpler path.
+- Stability and reliability: one lowering (`toScalarNode`) for `evalExpr` and the gradient; the one-argument minus is a negation in both, and in the simplifier render.
+- Maintainability: clones 35 near pairs and 4 exact groups before and after; none in the files of this change. Declined in this commit: all, because they predate U9.
+- [ ] Review the 35 near clone pairs and 4 exact groups of `repo-tools clones` (none in `src/diff/`).
+- [ ] File a MathTS issue: `evaluateScalar` and `compileScalarGradient` read a one-argument `-` as the identity. The control in `tests/dimensional/scalar-lowering.test.ts` fails when MathTS fixes it.

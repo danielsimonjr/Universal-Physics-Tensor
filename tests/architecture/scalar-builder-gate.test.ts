@@ -18,6 +18,7 @@ import { sym } from '../../src/dimensional/ast-builders.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const evalSource = readFileSync(resolve(root, 'src/composition/expr-eval.ts'), 'utf8');
+const loweringSource = readFileSync(resolve(root, 'src/dimensional/scalar-lowering.ts'), 'utf8');
 
 const op = (operator: '+' | '-' | '*' | '/' | '^', args: ExprNode[]): ExprNode => ({
   kind: 'op',
@@ -36,7 +37,8 @@ describe('MathTS scalar builder', () => {
     expect('SCALAR_FUNCTIONS' in expression).toBe(true);
     expect('scalar' in functions).toBe(true);
     expect('evaluateScalar' in functions).toBe(true);
-    expect(evalSource).toMatch(/createScalarBuilder\s*\(/);
+    expect(loweringSource).toMatch(/createScalarBuilder\s*\(/);
+    expect(evalSource).toMatch(/toScalarNode\s*\(/);
     expect(evalSource).toMatch(/evaluateScalar\s*\(/);
     expect(localArithmetic(evalSource)).toBe(false);
     expect(evalSource).not.toMatch(/\bparse\s*\(/);
