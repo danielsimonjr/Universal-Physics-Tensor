@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 698,
+    "totalTestFiles": 699,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -10117,6 +10117,7 @@
       "tests/numerical/christoffel-precompute.test.ts",
       "tests/numerical/connection-lowering-helpers.test.ts",
       "tests/numerical/connection-lowering-nonfinite.test.ts",
+      "tests/numerical/flat-to-nested-mathts.test.ts",
       "tests/numerical/flatten-na-accuracy.test.ts",
       "tests/numerical/foreach-multi-index.test.ts",
       "tests/numerical/lowering-strategy-cast.test.ts"
@@ -10297,6 +10298,7 @@
       "tests/numerical/engine-default.test.ts",
       "tests/numerical/errors.test.ts",
       "tests/numerical/evaluate.test.ts",
+      "tests/numerical/flat-to-nested-mathts.test.ts",
       "tests/numerical/geodesic-tau-range.test.ts",
       "tests/numerical/gl4-integrator-options.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
@@ -13787,6 +13789,7 @@
       "tests/numerical/christoffel-precompute.test.ts",
       "tests/numerical/connection-lowering-helpers.test.ts",
       "tests/numerical/connection-lowering-nonfinite.test.ts",
+      "tests/numerical/flat-to-nested-mathts.test.ts",
       "tests/numerical/flatten-na-accuracy.test.ts",
       "tests/numerical/foreach-multi-index.test.ts",
       "tests/numerical/lowering-strategy-cast.test.ts"
@@ -13819,6 +13822,7 @@
     ],
     "src/numerical/errors.ts": [
       "tests/numerical/errors.test.ts",
+      "tests/numerical/flat-to-nested-mathts.test.ts",
       "tests/numerical/geodesic-tau-range.test.ts",
       "tests/numerical/gl4-integrator-options.test.ts",
       "tests/numerical/lowering-covariant-guard.test.ts"
@@ -24480,6 +24484,10 @@
     "tests/numerical/finiteness-guards.test.ts": [
       "src/numerical/quadrature.ts",
       "src/numerical/formula-mathts.ts"
+    ],
+    "tests/numerical/flat-to-nested-mathts.test.ts": [
+      "src/numerical/connection-lowering-helpers.ts",
+      "src/numerical/errors.ts"
     ],
     "tests/numerical/flatten-na-accuracy.test.ts": [
       "src/numerical/connection-lowering-helpers.ts"

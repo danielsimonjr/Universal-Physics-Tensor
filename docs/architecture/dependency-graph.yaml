@@ -17472,7 +17472,10 @@ modules:
         - christoffelFnFlat
     src/numerical/connection-lowering-helpers.ts:
       description: Numerical helpers for covariant-derivative lowering (Task 12 [U]).
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-tensor"
+          imports:
+            - Tensor
       nodeDependencies: []
       internalDependencies:
         - file: ./tensor-engine.js
@@ -19467,7 +19470,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 386
   totalModules: 13
-  totalLinesOfCode: 87414
+  totalLinesOfCode: 87410
   totalExports: 2801
   totalClasses: 86
   totalInterfaces: 518
