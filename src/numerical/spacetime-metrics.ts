@@ -555,6 +555,8 @@ function stateCurvature(report: CurvatureReport): CurvatureReport {
   const notes = [...report.notes];
   let ricci = report.ricci;
   let ricciScalar = report.ricciScalar;
+  let ricciScalarBound = report.ricciScalarBound;
+  let ricciScalarResolved = report.ricciScalarResolved;
   const exactR = report.closedForm.ricciScalar;
   if (exactR === 0 && !report.ricciScalarResolved) {
     ricciScalar = 0;
@@ -562,6 +564,9 @@ function stateCurvature(report: CurvatureReport): CurvatureReport {
     notes.push('Ricci is 0 for this vacuum metric. A finite-difference residual is not listed: it is within its error bound.');
   } else if (exactR !== undefined && relDiff(report.ricciScalar, exactR, 1e-30) > 1e-2) {
     ricciScalar = exactR;
+    // The closed form is not a difference, so the finite-difference bound does not apply to it.
+    ricciScalarBound = 0;
+    ricciScalarResolved = exactR !== 0;
     ricci = [];
     notes.push(
       'Ricci scalar is the closed form. The finite-difference scalar, restored from a c = 1 difference by 1/c², does not match it when spatial curvature is present, so those components are not listed.',
@@ -574,7 +579,7 @@ function stateCurvature(report: CurvatureReport): CurvatureReport {
       'H² and the Friedmann right-hand side differ, so this scale factor is not a solution of the Friedmann equation at the stated ρ, k and Λ. k is a curvature in 1/length²: k = 1 with c in m/s is a curvature radius of about a metre, not the dimensionless k = ±1 of geometrized cosmology.',
     );
   }
-  return { ...report, ricci, ricciScalar, notes };
+  return { ...report, ricci, ricciScalar, ricciScalarBound, ricciScalarResolved, notes };
 }
 
 function pack(
