@@ -7881,7 +7881,8 @@
       "tests/composition/probe/study-refusals.test.ts",
       "tests/composition/probe/study-replication.test.ts",
       "tests/composition/probe/study.test.ts",
-      "tests/numerical/mathts-delegation.test.ts"
+      "tests/numerical/mathts-delegation.test.ts",
+      "tests/numerical/mathts-gaps.test.ts"
     ],
     "src/composition/probe/t-tail.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -7901,7 +7902,8 @@
       "tests/composition/probe/batch-coverage.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/structure-tests.test.ts",
-      "tests/composition/probe/t-tail-mathts.test.ts"
+      "tests/composition/probe/t-tail-mathts.test.ts",
+      "tests/numerical/mathts-gaps.test.ts"
     ],
     "src/composition/probe/types.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -13209,12 +13211,14 @@
       "tests/composition/probe/study-refusals.test.ts",
       "tests/composition/probe/study-replication.test.ts",
       "tests/composition/probe/study.test.ts",
-      "tests/numerical/mathts-delegation.test.ts"
+      "tests/numerical/mathts-delegation.test.ts",
+      "tests/numerical/mathts-gaps.test.ts"
     ],
     "src/composition/probe/t-tail.ts": [
       "tests/composition/probe/batch-coverage.test.ts",
       "tests/composition/probe/structure-tests.test.ts",
-      "tests/composition/probe/t-tail-mathts.test.ts"
+      "tests/composition/probe/t-tail-mathts.test.ts",
+      "tests/numerical/mathts-gaps.test.ts"
     ],
     "src/composition/probe/types.ts": [
       "tests/composition/probe/generator-budget.test.ts",
@@ -25385,7 +25389,9 @@
       "src/numerical/errors.ts"
     ],
     "tests/numerical/mathts-gaps.test.ts": [
-      "src/numerical/quadrature.ts"
+      "src/numerical/quadrature.ts",
+      "src/composition/probe/t-tail.ts",
+      "src/composition/probe/study.ts"
     ],
     "tests/numerical/mathts-required.test.ts": [
       "src/numerical/formula-registry.ts"

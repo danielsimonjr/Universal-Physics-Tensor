@@ -11,6 +11,8 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-08
 
+- **MathTS functions 0.75.1 (plan M1 to M3).** `chiSquaredSF`, `fSF` and `studentTTwoSidedP` are exported. `chiSquaredSF` and `fSF` equal the local tails they replace on the tested points; mcnemar's p at 100 one-sided pairs is 4.16e-23, `chiSquaredSF(98.01, 1)`. `rootsLegendre(16)` weights: at most 2.6e-16 relative from a 40-digit mpmath reference, Σ − 2 = 0; the retired closed form was 1.9e-15, Σ − 2 = 4.4e-16. `studentTTwoSidedP(1e154, 2)` is 1.0000000000001e-308 and `2·studentTCDF(−1e154, 2)` is 1.0000000000000997e-308; mpmath gives 1e-308. MathTS #624 (unary minus) is fixed. M4 (functions 0.76.0) is not on the registry.
+
 - **The FD curvature pipeline at the SI cosmological constant** (`christoffelAt`, `dGammaAt`; Riemann, Ricci, Einstein, Kretschmann and Weyl share it), de Sitter Λ = 1.1e-52 m⁻², θ = π/4, measured in the orthonormal frame and by the invariant √(C·C/R·R). r = 5e25 m: Riemann error 7.5e-9 of K, Weyl 1.5e-9, R/(4Λ) − 1 = 2.2e-9. r = 1e25 m: 2.1e-7, 7.6e-8, −9.0e-8. r = 1e3 m: 1.5e37, garbage, because `f = 1 − Λr²/3` is exactly 1 in double; the metric holds no curvature before any difference is taken. The relative error grows about as 1e-10/(Λr²). This is a representation floor of the metric closure, not a step-size fault. The lowering does not refuse such a point; whether it should is open. A maximum over raw coordinate components is not a measure of error here (it gave 1.4e16 at r = 5e25 m).
 
 ## As of 2026-11-07

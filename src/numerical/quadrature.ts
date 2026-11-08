@@ -28,10 +28,10 @@ interface GaussLegendreNode {
 const legendre16 = rootsLegendre(16);
 
 /**
- * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2), MathTS
- * `rootsLegendre(16)`. From `@danielsimonjr/mathts-functions` 0.75.1 the
- * weights have a relative error of at most 2.7e-16 against a 40-digit
- * reference, and Σ weights − 2 is 0 in double precision.
+ * The 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2) are
+ * MathTS `rootsLegendre(16)`. From `@danielsimonjr/mathts-functions` 0.75.1, the
+ * weights have a relative error of at most 2.7e-16 against a 40-digit reference.
+ * Σ weights − 2 is 0 in double precision.
  */
 export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = legendre16.nodes.map((node, i) => ({
   node,

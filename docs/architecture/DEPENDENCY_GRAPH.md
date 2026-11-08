@@ -5013,7 +5013,7 @@ The codebase is organized into the following modules:
 | Package | Import |
 |---------|--------|
 | `@danielsimonjr/mathts-core` | `pairwiseDot, pairwiseSum` |
-| `@danielsimonjr/mathts-functions` | `betainc, chiSquaredCDF, gammaincp, inv, propagateUncertainty` |
+| `@danielsimonjr/mathts-functions` | `chiSquaredCDF, chiSquaredSF, fSF, inv, propagateUncertainty` |
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -6166,7 +6166,6 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./validator.js` | `ExprNode` | Import (type-only) |
-| `./types.js` | `DIMENSIONLESS` | Import |
 
 **Exports:**
 - Functions: `toScalarNode`
@@ -7312,12 +7311,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `legendreP, rootsLegendre` |
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../core/mathts-read.js` | `numberFrom` | Import |
+| `@danielsimonjr/mathts-functions` | `rootsLegendre` |
 
 **Exports:**
 - Functions: `integrateGaussLegendre`
@@ -7747,7 +7741,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87267 |
+| Total Lines of Code | 87217 |
 | Total Exports | 2820 |
 | Total Re-exports | 1393 |
 | Total Classes | 86 |

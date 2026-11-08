@@ -18407,9 +18407,9 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "betainc",
               "chiSquaredCDF",
-              "gammaincp",
+              "chiSquaredSF",
+              "fSF",
               "inv",
               "propagateUncertainty"
             ]
@@ -21883,12 +21883,6 @@
               "ExprNode"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "./types.js",
-            "imports": [
-              "DIMENSIONLESS"
-            ]
           }
         ],
         "exports": [
@@ -27206,20 +27200,12 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
-              "legendreP",
               "rootsLegendre"
             ]
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../core/mathts-read.js",
-            "imports": [
-              "numberFrom"
-            ]
-          }
-        ],
+        "internalDependencies": [],
         "exports": [
           "GAUSS_LEGENDRE_16",
           "integrateGaussLegendre"
@@ -28280,7 +28266,7 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87267,
+    "totalLinesOfCode": 87217,
     "totalExports": 2820,
     "totalClasses": 86,
     "totalInterfaces": 518,
