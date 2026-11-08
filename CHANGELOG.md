@@ -16,6 +16,7 @@ from v0.1.0 onward.
 
 ### Added
 
+- Tests: the Weyl lowering at Λ = 1.1e-52 m⁻² (de Sitter, r = 5e25 m), measured in the orthonormal frame and by the invariant √(C·C/R·R), and the shared Riemann pipeline against the closed form with R = 4Λ. A maximum over raw coordinate components compares numbers in different units; the Schwarzschild and Λ = 1 cases now use the frame measure too. No source change: the lowering is accurate to about 1e-9 there.
 - Tests: a Hermite crossing input that 0 and 1 Newton steps fail, checked against a 50-digit root; a Weyl lowering value test (Schwarzschild against the closed form, de Sitter conformally flat).
 
 ## [12.0.0] - 2026-11-07

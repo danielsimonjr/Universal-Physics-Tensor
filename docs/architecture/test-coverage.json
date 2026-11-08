@@ -10446,6 +10446,7 @@
       "tests/numerical/kretschmann-schwarzschild.test.ts",
       "tests/numerical/lower-first-index-n4-unroll.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
+      "tests/numerical/weyl-lowering-value.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts"
     ],
     "src/numerical/derivative-lowering.ts": [
@@ -11013,6 +11014,7 @@
       "tests/numerical/lower-first-index-n4-unroll.test.ts",
       "tests/numerical/lowering-utils.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
+      "tests/numerical/weyl-lowering-value.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts"
     ],
     "src/numerical/lowering.ts": [
@@ -14162,6 +14164,7 @@
       "tests/numerical/kretschmann-schwarzschild.test.ts",
       "tests/numerical/lower-first-index-n4-unroll.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
+      "tests/numerical/weyl-lowering-value.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts"
     ],
     "src/numerical/derivative-lowering.ts": [
@@ -25566,6 +25569,8 @@
     ],
     "tests/numerical/weyl-lowering-value.test.ts": [
       "src/numerical/lowering.ts",
+      "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/dimensional/weyl-validators.ts",
       "src/dimensional/ast-types.ts",

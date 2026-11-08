@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-08
+
+- **The FD curvature pipeline at the SI cosmological constant** (`christoffelAt`, `dGammaAt`; Riemann, Ricci, Einstein, Kretschmann and Weyl share it), de Sitter Λ = 1.1e-52 m⁻², θ = π/4, measured in the orthonormal frame and by the invariant √(C·C/R·R). r = 5e25 m: Riemann error 7.5e-9 of K, Weyl 1.5e-9, R/(4Λ) − 1 = 2.2e-9. r = 1e25 m: 2.1e-7, 7.6e-8, −9.0e-8. r = 1e3 m: 1.5e37, garbage, because `f = 1 − Λr²/3` is exactly 1 in double; the metric holds no curvature before any difference is taken. The relative error grows about as 1e-10/(Λr²). This is a representation floor of the metric closure, not a step-size fault. The lowering does not refuse such a point; whether it should is open. A maximum over raw coordinate components is not a measure of error here (it gave 1.4e16 at r = 5e25 m).
+
 ## As of 2026-11-07
 
 - **U9 spike (MathTS leverage plan), measured by `scripts/u9-gradient-spike.ts`.** `astDifferentiableBridgeIds()` is 156 ids with 402 (bridge, variable) pairs at the synthetic point 1.1 + 0.37·i. MathTS `compileScalarGradient` over `createScalarBuilder` computes all 402. UPT refuses 6, the exponent-symbol pre-check (BE-33 `dynamic-exponent-z`; BE-34 `spatial-dimension`, `static-exponent-nu`, `dynamic-exponent-z`; BE-49; BE-162 `ottogamma`), where MathTS differentiates; the plan keeps that pre-check in front of MathTS. Of the 396 both compute, 391 agree within 1e-12 relative (largest 4.2e-15), 2 are NaN in both (BE-68 at that point), and 3 differ only in the overflow contract: BE-82 gives ±Infinity in UPT and NaN in MathTS, which marks the row invalid. At a physical Shockley point (1 pA, 0.6 V, 300 K) BE-82 agrees within 1.2e-16 for all three variables.
