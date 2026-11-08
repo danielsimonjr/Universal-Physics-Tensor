@@ -32,7 +32,7 @@ import { DIMENSIONLESS, GRAVITATIONAL_CONSTANT, LENGTH, MASS, MASS_DENSITY, TIME
 import { UnitError } from '../dimensional/units.js';
 import { readParameter } from './binding-value.js';
 import { computeChristoffelTensor } from './connection-lowering-helpers.js';
-import { christoffelAt, lowerFirstIndex, riemannUpperAt } from './curvature-lowering-helpers.js';
+import { christoffelAt, kretschmannWithBound, lowerFirstIndex, ricciWithBound, riemannUpperWithBoundAt } from './curvature-lowering-helpers.js';
 import { integrateGeodesic as integrateGeodesicRK4 } from './geodesic-integrator.js';
 import { computeKretschmann } from './kretschmann.js';
 import { MathTSEngine } from './mathts-engine.js';
@@ -61,6 +61,10 @@ export type MetricId = 'minkowski' | 'schwarzschild' | 'flrw' | 'kerr';
 export interface Component {
   readonly index: string;
   readonly value: number;
+  /** Upper bound of the finite-difference error of `value`, in the units of `value`. */
+  readonly bound?: number;
+  /** `|value| > bound`: the difference resolves this component. */
+  readonly resolved?: boolean;
 }
 
 /** What `upt metric` prints. @internal */
@@ -74,7 +78,15 @@ export interface CurvatureReport {
   readonly christoffel: readonly Component[];
   readonly ricci: readonly Component[];
   readonly ricciScalar: number;
+  /** Upper bound of the finite-difference error of `ricciScalar`. */
+  readonly ricciScalarBound: number;
+  /** `|ricciScalar| > ricciScalarBound`. */
+  readonly ricciScalarResolved: boolean;
   readonly kretschmann: number;
+  /** Upper bound of the finite-difference error of `kretschmann`. */
+  readonly kretschmannBound: number;
+  /** `|kretschmann| > kretschmannBound`. */
+  readonly kretschmannResolved: boolean;
   /** Closed forms the numeric tensors are checked against. */
   readonly closedForm: Readonly<Record<string, number>>;
   readonly notes: readonly string[];
@@ -137,8 +149,11 @@ function christoffelOf(g: MetricFn, x: Pt): Gamma {
 
 interface Tensors {
   readonly ricciScalar: number;
+  readonly ricciScalarBound: number;
   readonly kretschmann: number;
+  readonly kretschmannBound: number;
   readonly ricci: number[][];
+  readonly ricciBound: number[][];
   readonly christoffel: Gamma;
 }
 
@@ -154,31 +169,22 @@ function tensorsOf(g: MetricFn, x: Pt): Tensors {
   const g0 = g(x);
   const gi = invert4(g0);
   const gamma = christoffelAt(x, gFn, gInverseFn, 4, ENGINE);
-  const up = riemannUpperAt(x, gFn, gInverseFn, 4, ENGINE, gamma);
-  const ricci = mat4();
-  for (let sigma = 0; sigma < 4; sigma++) {
-    for (let nu = 0; nu < 4; nu++) {
-      let s = 0;
-      for (let rho = 0; rho < 4; rho++) s += up[rho]![sigma]![rho]![nu]!;
-      ricci[sigma]![nu] = s;
-    }
-  }
-  let ricciScalar = 0;
-  for (let a = 0; a < 4; a++) {
-    for (let b = 0; b < 4; b++) ricciScalar += gi[a]![b]! * ricci[a]![b]!;
-  }
+  const { riemann: up, bound } = riemannUpperWithBoundAt(x, gFn, gInverseFn, 4, ENGINE, gamma);
+  const { ricci, ricciBound, scalar: ricciScalar, scalarBound: ricciScalarBound } = ricciWithBound(up, bound, gi);
   const lower = lowerFirstIndex(up, g0.flat(), 4);
   const kretschmann = computeKretschmann(lower, gi);
-  return { ricciScalar, kretschmann, ricci, christoffel: gamma };
+  const kretschmannBound = kretschmannWithBound(up, bound, g0, gi).bound;
+  return { ricciScalar, ricciScalarBound, kretschmann, kretschmannBound, ricci, ricciBound, christoffel: gamma };
 }
 
-function nonzeroMatrix(m: number[][], label: (i: number, j: number) => string): Component[] {
+function nonzeroMatrix(m: number[][], bound: number[][], label: (i: number, j: number) => string): Component[] {
   const out: Component[] = [];
   const scale = Math.max(1, ...m.flat().map((v) => Math.abs(v)));
   for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 4; j++) {
       const v = m[i]![j]!;
-      if (Math.abs(v) > Z * scale) out.push({ index: label(i, j), value: v });
+      const b = bound[i]![j]!;
+      if (Math.abs(v) > Z * scale) out.push({ index: label(i, j), value: v, bound: b, resolved: Math.abs(v) > b });
     }
   }
   return out;
@@ -475,8 +481,11 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     const t = {
       christoffel: tSi.christoffel,
       ricci: t1.ricci.map((row) => row.map((v) => v / c2)),
+      ricciBound: t1.ricciBound.map((row) => row.map((v) => v / c2)),
       ricciScalar: t1.ricciScalar / c2,
+      ricciScalarBound: t1.ricciScalarBound / c2,
       kretschmann: t1.kretschmann / (c2 * c2),
+      kretschmannBound: t1.kretschmannBound / (c2 * c2),
     };
     const R = flrwRicciScalar(p.t!, p.a0!, p.t0!, p.n!, p.k!, p.r!, p.c!);
     const sides = friedmannSides({
@@ -547,10 +556,10 @@ function stateCurvature(report: CurvatureReport): CurvatureReport {
   let ricci = report.ricci;
   let ricciScalar = report.ricciScalar;
   const exactR = report.closedForm.ricciScalar;
-  if (exactR === 0 && Math.abs(report.ricciScalar) < 1e-6) {
+  if (exactR === 0 && !report.ricciScalarResolved) {
     ricciScalar = 0;
     ricci = [];
-    notes.push('Ricci is 0 for this vacuum metric. A finite-difference residual is not listed.');
+    notes.push('Ricci is 0 for this vacuum metric. A finite-difference residual is not listed: it is within its error bound.');
   } else if (exactR !== undefined && relDiff(report.ricciScalar, exactR, 1e-30) > 1e-2) {
     ricciScalar = exactR;
     ricci = [];
@@ -585,9 +594,13 @@ function pack(
     parameters,
     point: { t: x[0], r: x[1], theta: x[2], phi: x[3] },
     christoffel: nonzeroGamma(t.christoffel),
-    ricci: nonzeroMatrix(t.ricci, (i, j) => `R_${names[i]}${names[j]}`),
+    ricci: nonzeroMatrix(t.ricci, t.ricciBound, (i, j) => `R_${names[i]}${names[j]}`),
     ricciScalar: t.ricciScalar,
+    ricciScalarBound: t.ricciScalarBound,
+    ricciScalarResolved: Math.abs(t.ricciScalar) > t.ricciScalarBound,
     kretschmann: t.kretschmann,
+    kretschmannBound: t.kretschmannBound,
+    kretschmannResolved: Math.abs(t.kretschmann) > t.kretschmannBound,
     closedForm,
     notes,
   };

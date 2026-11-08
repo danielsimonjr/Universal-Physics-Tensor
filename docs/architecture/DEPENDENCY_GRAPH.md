@@ -6789,7 +6789,8 @@ The codebase is organized into the following modules:
   ```text
   christoffelAt, dGammaAt, buildRiemann, riemannUpperAt, lowerFirstIndex, riemannLowerAt,
   covariantDerivRiemannLowerAt, contractRiemannJS, lowerBianchiResidual, lowerWeylTensor,
-  lowerKretschmannScalar
+  lowerKretschmannScalar, riemannUpperWithBoundAt, kretschmannWithBound, ricciWithBound,
+  weylTensorWithBoundAt
   ```
 
 - Re-exports: `MetricFn`
@@ -7365,7 +7366,7 @@ The codebase is organized into the following modules:
 | `../dimensional/units.js` | `UnitError` | Import |
 | `./binding-value.js` | `readParameter` | Import |
 | `./connection-lowering-helpers.js` | `computeChristoffelTensor` | Import |
-| `./curvature-lowering-helpers.js` | `christoffelAt, lowerFirstIndex, riemannUpperAt` | Import |
+| `./curvature-lowering-helpers.js` | `christoffelAt, kretschmannWithBound, lowerFirstIndex, ricciWithBound, riemannUpperWithBoundAt` | Import |
 | `./geodesic-integrator.js` | `integrateGeodesic` | Import |
 | `./kretschmann.js` | `computeKretschmann` | Import |
 | `./mathts-engine.js` | `MathTSEngine` | Import |
@@ -7740,12 +7741,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87176 |
-| Total Exports | 2818 |
+| Total Lines of Code | 87547 |
+| Total Exports | 2822 |
 | Total Re-exports | 1392 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
-| Total Functions | 921 |
+| Total Functions | 925 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 532 |
