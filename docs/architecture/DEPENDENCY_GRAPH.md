@@ -49,7 +49,7 @@ The codebase is organized into the following modules:
 - **diff**: 3 files
 - **dimensional**: 45 files
 - **entry**: 1 file
-- **numerical**: 43 files
+- **numerical**: 44 files
 - **relations**: 8 files
 
 ---
@@ -66,7 +66,7 @@ The codebase is organized into the following modules:
 | `./model.js` | `AtlasModel` | Import (type-only) |
 | `./types.js` | `Conventions` | Import (type-only) |
 | `./conventions.js` | `checkConventions, unknownConventionKeys` | Import |
-| `../dimensional/ast-leaves.js` | `forEachScalarLeaf, isDecimalLiteral, literalValue, LeafWalkArms` | Import |
+| `../dimensional/ast-leaves.js` | `ALL_SCALAR_ARMS, forEachScalarLeaf, isDecimalLiteral, literalValue, scalarChildren` | Import |
 
 **Exports:**
 - Interfaces: `ApplicabilityFinding`, `ApplicabilityInput`
@@ -789,6 +789,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../numerical/hermite-crossing.js` | `hermiteCrossingFraction` | Import |
 | `../../numerical/rk4-trajectory.js` | `rk4Trajectory` | Import |
 | `./norm-transport-witness.js` | `quarterPeriod` | Import |
 
@@ -820,6 +821,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../numerical/hermite-crossing.js` | `hermiteCrossingFraction` | Import |
 | `./pendulum-motion.js` | `rk4Step` | Import |
 | `./norm-transport.js` | `W1TAU_FIXTURE` | Import |
 
@@ -948,7 +950,13 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `RouteEnumeration`, `PathBoundClaim`, `AppliedTransport`, `PathNoClaim`
-- Functions: `findPath`, `findAtlasPath`, `enumerateAtlasRoutes`, `enumerateRoutes`, `boundPath`, `routeEntryModels`, `familyChangeBlocksHorizon`, `horizonOnRoute`
+- Functions:
+
+  ```text
+  findPath, findAtlasPath, allAtlasBridges, enumerateAtlasRoutes, enumerateRoutes, boundPath,
+  routeEntryModels, familyChangeBlocksHorizon, horizonOnRoute
+  ```
+
 - Re-exports: `IDENTITY_BOUND`
 
 ---
@@ -2396,7 +2404,7 @@ The codebase is organized into the following modules:
 | `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
-- Functions: `selectRoute`, `routeClaim`, `missingForComposite`, `explainsRefusal`, `transportReport`, `claimReport`
+- Functions: `selectRoute`, `routeClaim`, `missingForComposite`, `explainsRefusal`, `transportReport`, `normTransportFields`, `claimReport`
 
 ---
 
@@ -2429,6 +2437,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
+| `./_atlas-route.js` | `normTransportFields` | Import |
 
 **Exports:**
 - Functions: `summarizeWitnessRuns`
@@ -3400,7 +3409,7 @@ The codebase is organized into the following modules:
 | `./atlas/regime.js` | `collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
 | `./relations/regime-registration.js` | `domainRegimeRegistrations` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
-| `./atlas/path-bound.js` | `familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
+| `./atlas/path-bound.js` | `familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, allAtlasBridges, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
 | `./atlas/composition-table.js` | `composeRelation` | Re-export |
 | `./atlas/path-bound.js` | `PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport` | Re-export |
 | `./atlas/types.js` | `AtlasBridge, RegimeInequality, Witness` | Re-export |
@@ -3482,10 +3491,10 @@ The codebase is organized into the following modules:
   runTranslationCheck, translationsOf, ObservableCarriage, ObservableTranslation, PointCheck,
   AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions,
   domainRegimeRegistrations, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon,
-  findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels,
-  composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge,
-  RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId, catalogFormalRef,
-  scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
+  findPath, findAtlasPath, enumerateAtlasRoutes, allAtlasBridges, boundPath, horizonOnRoute,
+  routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
+  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
+  catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
   kerrTurningPointOrbit, MetricMassError, MetricValueError, schwarzschildCircularOrbit, type MetricId,
   splitAssignment, readBinding, bindingInUnit, readNamedBinding, BindingNumberError,
   TemperatureBindingError, propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite,
@@ -3780,7 +3789,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ChainCandidate`
-- Functions: `chainClassIndex`, `compareChainEdgeIds`, `orderChainCandidates`
+- Functions: `chainClassIndex`, `compareChainEdgeIds`, `orderChainCandidates`, `compareChainOrder`
 
 ---
 
@@ -3826,7 +3835,7 @@ The codebase is organized into the following modules:
 | `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
 | `../relations/composition-table.js` | `CompositionResult` | Import (type-only) |
 | `./buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
-| `./chain-candidate.js` | `chainClassIndex, compareChainEdgeIds, ChainCandidateKind` | Import |
+| `./chain-candidate.js` | `compareChainOrder, ChainCandidateKind` | Import |
 | `./chain-regime.js` | `ChainRegimeMismatch` | Import (type-only) |
 
 **Exports:**
@@ -4002,7 +4011,7 @@ The codebase is organized into the following modules:
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS, effectiveAttributes` | Import |
 | `./axes.js` | `GATE_AXES` | Import |
 | `./quantity.js` | `RegimeAttributes` | Import (type-only) |
-| `./identifiability.js` | `classifyIdentifiability, forwardClosure` | Import |
+| `./identifiability.js` | `classifyIdentifiability, forwardClosure, propagate` | Import |
 | `./retrodiction.js` | `retrodict, retrodictNode, forwardEvaluate` | Import |
 | `./bridge-analysis.js` | `proposeLinkCandidates` | Import |
 | `./bridge-analysis.js` | `LinkCandidate` | Import (type-only) |
@@ -4019,7 +4028,13 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `VettedCandidate`, `DiscoveryOptions`, `DiscoveryContext`, `MagnitudeGate`
-- Functions: `hasMagnitudeEvidence`, `isPromisingTier`, `buildDiscoveryContext`, `magnitudeStrength`, `magnitudeGate`, `vetLinkCandidate`, `vetInContext`, `rankDiscoveries`
+- Functions:
+
+  ```text
+  hasMagnitudeEvidence, isPromisingTier, buildDiscoveryContext, dependents, magnitudeStrength,
+  magnitudeGate, vetLinkCandidate, vetInContext, rankDiscoveries
+  ```
+
 - Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`, `DEFAULT_MAX_ORDERS_OF_MAGNITUDE`
 
 ---
@@ -4193,7 +4208,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
-| `../dimensional/ast-leaves.js` | `isDecimalLiteral` | Import |
+| `../dimensional/ast-leaves.js` | `ALL_SCALAR_ARMS, isDecimalLiteral, scalarChildren` | Import |
 | `../dimensional/algebra.js` | `divide, equals, multiply, power` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -4310,7 +4325,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `IdentifiabilityOptions`, `RankIdentifiability`, `IdentifiabilityResult`
-- Functions: `forwardClosure`, `edgeMonomial`, `identifiabilityByRankWith`, `identifiabilityByRank`, `classifyIdentifiability`, `classifyAll`
+- Functions: `forwardClosure`, `propagate`, `edgeMonomial`, `identifiabilityByRankWith`, `identifiabilityByRank`, `classifyIdentifiability`, `classifyAll`
 
 ---
 
@@ -4574,6 +4589,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/ast-leaves.js` | `ALL_SCALAR_ARMS, scalarChildren` | Import |
+| `../../dimensional/ast-leaves.js` | `LeafWalkArms` | Import (type-only) |
 | `../../dimensional/validator.js` | `validate` | Import |
 | `../../dimensional/algebra.js` | `format` | Import |
 | `../../canonical/normal-form.js` | `normalForm` | Import |
@@ -5615,8 +5632,8 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `LeafWalkArms`
-- Functions: `isDecimalLiteral`, `literalValue`, `forEachScalarLeaf`, `mapScalarLeaves`
-- Constants: `DECIMAL_LITERAL`
+- Functions: `isDecimalLiteral`, `literalValue`, `scalarChildren`, `forEachScalarLeaf`, `mapScalarLeaves`
+- Constants: `DECIMAL_LITERAL`, `ALL_SCALAR_ARMS`
 
 ---
 
@@ -5682,7 +5699,7 @@ The codebase is organized into the following modules:
 | `./ast-types.js` | `UpperIndex, CovariantDerivativeNode, RiemannTensorNode` | Re-export |
 
 **Exports:**
-- Functions: `validateCovariantDerivative`, `validateRiemannTensor`
+- Functions: `validateCovariantDerivative`, `validateRiemannTensor`, `requireOneUpThreeDownVariance`, `oneUpThreeDownFreeIndices`
 - Re-exports: `UpperIndex`, `CovariantDerivativeNode`, `RiemannTensorNode`
 
 ---
@@ -6016,11 +6033,17 @@ The codebase is organized into the following modules:
 | `../core/compare.js` | `symmetricRelDiff` | Import |
 | `./algebra.js` | `equals, multiply, power` | Import |
 | `./exact-scale.js` | `scaleToNumber, solidusSides, ExactScale` | Import |
-| `./unit-data.js` | `UNIT_DATA` | Import |
+| `./unit-data.js` | `SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
-- Functions: `everySymbolInBothTables`, `mathtsExactScaleAgreed`, `isSubKiloParsec`, `unitExactScaleViaMathts`, `unitParserViaMathts`, `mathtsParsedDimension`, `_powerDim`, `_multiplyDim`
+- Functions:
+
+  ```text
+  tryOneFactorBase, everySymbolInBothTables, mathtsExactScaleAgreed, isSubKiloParsec,
+  unitExactScaleViaMathts, unitParserViaMathts, mathtsParsedDimension, _powerDim, _multiplyDim
+  ```
+
 
 ---
 
@@ -6035,8 +6058,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./exact-scale.js` | `scaleToNumber, solidusSides, uptExactScaleFromCore, ExactScale` | Import |
-| `./mathts-unit-delegation.js` | `isSubKiloParsec, mathtsParsedDimension` | Import |
-| `./unit-data.js` | `UNIT_DATA` | Import |
+| `./mathts-unit-delegation.js` | `isSubKiloParsec, mathtsParsedDimension, tryOneFactorBase` | Import |
+| `./unit-data.js` | `UNIT_DATA, sideTokens` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -6265,8 +6288,8 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `UnitRow`, `AffineRow`, `UnitTableData`
-- Functions: `readUnitFile`
-- Constants: `UNIT_DATA`
+- Functions: `readUnitFile`, `splitPrefix`, `sideTokens`
+- Constants: `UNIT_DATA`, `SUPERSCRIPT`
 
 ---
 
@@ -6285,7 +6308,7 @@ The codebase is organized into the following modules:
 | `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, solidusSides, UNIT_SCALE, ExactScale` | Import |
 | `./mathts-unit-delegation.js` | `mathtsParsedDimension, unitExactScaleViaMathts, unitParserViaMathts` | Import |
 | `./mathts-unit-wrapper.js` | `applyBitScaleOverride, tryMathtsA5Reading, uptRefusalReason` | Import |
-| `./unit-data.js` | `UNIT_DATA, AffineRow` | Import |
+| `./unit-data.js` | `SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix, AffineRow` | Import |
 
 **Exports:**
 - Classes: `UnitError`, `UnknownUnitError`, `UnitRefusedError`, `AmbiguousUnitError`
@@ -6359,7 +6382,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./ast-types.js` | `MetricTensorNode, CovariantIndex, UpperIndex, WeylTensorNode` | Import (type-only) |
-| `./errors.js` | `PartialDerivativeIndexVarianceError, IndexLabelCollisionError` | Import |
+| `./connection-validators.js` | `oneUpThreeDownFreeIndices, requireOneUpThreeDownVariance` | Import |
 | `./curvature-composite.js` | `CurvatureCompositeNode` | Import (type-only) |
 | `./ast-types.js` | `WeylTensorNode` | Re-export |
 
@@ -6757,7 +6780,9 @@ The codebase is organized into the following modules:
 | `../dimensional/curvature-invariants.js` | `KretschmannScalarNode` | Import (type-only) |
 | `./weyl-lowering.js` | `computeWeylTensor` | Import |
 | `./kretschmann.js` | `computeKretschmann` | Import |
-| `./lowering-utils.js` | `dimensionOf, requireValue, flattenNestedArray` | Import |
+| `./lowering-utils.js` | `dimensionOf, requireValue, flattenNestedArray, requireMetricClosures` | Import |
+| `./lowering-utils.js` | `MetricFn` | Import (type-only) |
+| `./lowering-utils.js` | `MetricFn` | Re-export |
 
 **Exports:**
 - Functions:
@@ -6768,6 +6793,7 @@ The codebase is organized into the following modules:
   lowerKretschmannScalar
   ```
 
+- Re-exports: `MetricFn`
 
 ---
 
@@ -7001,6 +7027,13 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/numerical/hermite-crossing.ts` - The zero crossing inside one integrator step, read from the cubic Hermite
+
+**Exports:**
+- Functions: `hermiteCrossingFraction`
+
+---
+
 ### `src/numerical/index.ts` - Public surface of the UPT numerical-contraction backend (v0.3.5).
 
 **Internal Dependencies:**
@@ -7128,7 +7161,7 @@ The codebase is organized into the following modules:
 | `./connection-lowering-helpers.js` | `flattenNA` | Import |
 
 **Exports:**
-- Functions: `isMetricTensorNode`, `dimensionOf`, `requireValue`, `flattenNestedArray`
+- Functions: `isMetricTensorNode`, `dimensionOf`, `requireValue`, `flattenNestedArray`, `requireMetricClosures`
 
 ---
 
@@ -7156,8 +7189,8 @@ The codebase is organized into the following modules:
 | `./errors.js` | `NumericalBackendError` | Import |
 | `./quadrature.js` | `integrateGaussLegendre` | Import |
 | `./connection-lowering-helpers.js` | `zeroTensor, zeroTensorLike, flatToNested, flattenNA, tensorAdd, tensorAddScaled, computeChristoffelTensor, contractChristoffelWithOperand, getMetricDerivFlat` | Import |
-| `./curvature-lowering-helpers.js` | `christoffelAt, dGammaAt, buildRiemann, contractRiemannJS, lowerBianchiResidual, lowerWeylTensor, lowerKretschmannScalar, MetricFn` | Import |
-| `./lowering-utils.js` | `isMetricTensorNode, dimensionOf, requireValue, flattenNestedArray` | Import |
+| `./curvature-lowering-helpers.js` | `christoffelAt, dGammaAt, buildRiemann, contractRiemannJS, lowerBianchiResidual, lowerWeylTensor, lowerKretschmannScalar` | Import |
+| `./lowering-utils.js` | `isMetricTensorNode, dimensionOf, requireValue, flattenNestedArray, requireMetricClosures` | Import |
 | `./derivative-lowering.js` | `lowerTensorPartialDerivative, lowerCovariantDerivative` | Import |
 
 **Exports:**
@@ -7661,7 +7694,7 @@ graph TD
         N55[christoffel-flat]
         N56[connection-lowering-helpers]
         N57[covariant-eikonal]
-        N58[...38 more]
+        N58[...39 more]
     end
 
     subgraph Relations
@@ -7711,17 +7744,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 387 |
+| Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87307 |
-| Total Exports | 2802 |
-| Total Re-exports | 1390 |
+| Total Lines of Code | 87270 |
+| Total Exports | 2819 |
+| Total Re-exports | 1392 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
-| Total Functions | 908 |
+| Total Functions | 921 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
-| Type-only Imports | 530 |
+| Type-only Imports | 532 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

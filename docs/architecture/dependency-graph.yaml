@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 12.0.0
-  totalFiles: 387
+  totalFiles: 388
   totalModules: 13
-  totalExports: 2802
+  totalExports: 2819
 entryPoints:
   - file: src/index.ts
     type: main
@@ -36,10 +36,11 @@ modules:
             - unknownConventionKeys
         - file: ../dimensional/ast-leaves.js
           imports:
+            - ALL_SCALAR_ARMS
             - forEachScalarLeaf
             - isDecimalLiteral
             - literalValue
-            - LeafWalkArms
+            - scalarChildren
       exports:
         - checkApplicability
         - blockingFindings
@@ -2067,6 +2068,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../../numerical/hermite-crossing.js
+          imports:
+            - hermiteCrossingFraction
         - file: ../../numerical/rk4-trajectory.js
           imports:
             - rk4Trajectory
@@ -2130,6 +2134,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../../numerical/hermite-crossing.js
+          imports:
+            - hermiteCrossingFraction
         - file: ./pendulum-motion.js
           imports:
             - rk4Step
@@ -2379,6 +2386,7 @@ modules:
         - IDENTITY_BOUND
         - findPath
         - findAtlasPath
+        - allAtlasBridges
         - enumerateAtlasRoutes
         - enumerateRoutes
         - boundPath
@@ -2395,6 +2403,7 @@ modules:
       functions:
         - findPath
         - findAtlasPath
+        - allAtlasBridges
         - enumerateAtlasRoutes
         - enumerateRoutes
         - boundPath
@@ -5624,6 +5633,7 @@ modules:
         - missingForComposite
         - explainsRefusal
         - transportReport
+        - normTransportFields
         - claimReport
       functions:
         - selectRoute
@@ -5631,6 +5641,7 @@ modules:
         - missingForComposite
         - explainsRefusal
         - transportReport
+        - normTransportFields
         - claimReport
     src/cli/commands/_discovery-opts.ts:
       description: Shared `--max-orders`/`--anchor` parsing — used by both `discover` and
@@ -5699,6 +5710,9 @@ modules:
         - file: ../published-url.js
           imports:
             - publishedUrl
+        - file: ./_atlas-route.js
+          imports:
+            - normTransportFields
       exports:
         - command
         - summarizeWitnessRuns
@@ -7887,6 +7901,7 @@ modules:
             - findPath
             - findAtlasPath
             - enumerateAtlasRoutes
+            - allAtlasBridges
             - boundPath
             - horizonOnRoute
             - routeEntryModels
@@ -8229,6 +8244,7 @@ modules:
         - findPath
         - findAtlasPath
         - enumerateAtlasRoutes
+        - allAtlasBridges
         - boundPath
         - horizonOnRoute
         - routeEntryModels
@@ -8530,6 +8546,7 @@ modules:
         - findPath
         - findAtlasPath
         - enumerateAtlasRoutes
+        - allAtlasBridges
         - boundPath
         - horizonOnRoute
         - routeEntryModels
@@ -9198,12 +9215,14 @@ modules:
         - chainClassIndex
         - compareChainEdgeIds
         - orderChainCandidates
+        - compareChainOrder
       interfaces:
         - ChainCandidate
       functions:
         - chainClassIndex
         - compareChainEdgeIds
         - orderChainCandidates
+        - compareChainOrder
     src/composition/chain-match.ts:
       description: Pipeline match for a chain of proved edges.
       externalDependencies: []
@@ -9281,8 +9300,7 @@ modules:
           typeOnly: true
         - file: ./chain-candidate.js
           imports:
-            - chainClassIndex
-            - compareChainEdgeIds
+            - compareChainOrder
             - ChainCandidateKind
         - file: ./chain-regime.js
           imports:
@@ -9652,6 +9670,7 @@ modules:
           imports:
             - classifyIdentifiability
             - forwardClosure
+            - propagate
         - file: ./retrodiction.js
           imports:
             - retrodict
@@ -9705,6 +9724,7 @@ modules:
         - hasMagnitudeEvidence
         - isPromisingTier
         - buildDiscoveryContext
+        - dependents
         - magnitudeStrength
         - magnitudeGate
         - vetLinkCandidate
@@ -9719,6 +9739,7 @@ modules:
         - hasMagnitudeEvidence
         - isPromisingTier
         - buildDiscoveryContext
+        - dependents
         - magnitudeStrength
         - magnitudeGate
         - vetLinkCandidate
@@ -10099,7 +10120,9 @@ modules:
           typeOnly: true
         - file: ../dimensional/ast-leaves.js
           imports:
+            - ALL_SCALAR_ARMS
             - isDecimalLiteral
+            - scalarChildren
         - file: ../dimensional/algebra.js
           imports:
             - divide
@@ -10329,6 +10352,7 @@ modules:
             - canonicalById
       exports:
         - forwardClosure
+        - propagate
         - edgeMonomial
         - identifiabilityByRankWith
         - identifiabilityByRank
@@ -10340,6 +10364,7 @@ modules:
         - IdentifiabilityResult
       functions:
         - forwardClosure
+        - propagate
         - edgeMonomial
         - identifiabilityByRankWith
         - identifiabilityByRank
@@ -11076,6 +11101,14 @@ modules:
         - file: ../../dimensional/ast-types.js
           imports:
             - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/ast-leaves.js
+          imports:
+            - ALL_SCALAR_ARMS
+            - scalarChildren
+        - file: ../../dimensional/ast-leaves.js
+          imports:
+            - LeafWalkArms
           typeOnly: true
         - file: ../../dimensional/validator.js
           imports:
@@ -13715,8 +13748,10 @@ modules:
           typeOnly: true
       exports:
         - DECIMAL_LITERAL
+        - ALL_SCALAR_ARMS
         - isDecimalLiteral
         - literalValue
+        - scalarChildren
         - forEachScalarLeaf
         - mapScalarLeaves
       interfaces:
@@ -13724,10 +13759,12 @@ modules:
       functions:
         - isDecimalLiteral
         - literalValue
+        - scalarChildren
         - forEachScalarLeaf
         - mapScalarLeaves
       constants:
         - DECIMAL_LITERAL
+        - ALL_SCALAR_ARMS
     src/dimensional/ast-types.ts:
       description: The dimensional AST type system — `ExprNode` and every node/index interface
       externalDependencies: []
@@ -13863,6 +13900,8 @@ modules:
       exports:
         - validateCovariantDerivative
         - validateRiemannTensor
+        - requireOneUpThreeDownVariance
+        - oneUpThreeDownFreeIndices
         - UpperIndex
         - CovariantDerivativeNode
         - RiemannTensorNode
@@ -13873,6 +13912,8 @@ modules:
       functions:
         - validateCovariantDerivative
         - validateRiemannTensor
+        - requireOneUpThreeDownVariance
+        - oneUpThreeDownFreeIndices
     src/dimensional/connection.ts:
       description: v0.4.0 connection-layer helpers (composite-formula builders that produce
       externalDependencies: []
@@ -14522,12 +14563,16 @@ modules:
             - ExactScale
         - file: ./unit-data.js
           imports:
+            - SUPERSCRIPT
             - UNIT_DATA
+            - sideTokens
+            - splitPrefix
         - file: ./types.js
           imports:
             - Dimension
           typeOnly: true
       exports:
+        - tryOneFactorBase
         - everySymbolInBothTables
         - mathtsExactScaleAgreed
         - isSubKiloParsec
@@ -14537,6 +14582,7 @@ modules:
         - _powerDim
         - _multiplyDim
       functions:
+        - tryOneFactorBase
         - everySymbolInBothTables
         - mathtsExactScaleAgreed
         - isSubKiloParsec
@@ -14565,9 +14611,11 @@ modules:
           imports:
             - isSubKiloParsec
             - mathtsParsedDimension
+            - tryOneFactorBase
         - file: ./unit-data.js
           imports:
             - UNIT_DATA
+            - sideTokens
         - file: ./types.js
           imports:
             - Dimension
@@ -15116,15 +15164,21 @@ modules:
             - ExactScale
       exports:
         - UNIT_DATA
+        - SUPERSCRIPT
         - readUnitFile
+        - splitPrefix
+        - sideTokens
       interfaces:
         - UnitRow
         - AffineRow
         - UnitTableData
       functions:
         - readUnitFile
+        - splitPrefix
+        - sideTokens
       constants:
         - UNIT_DATA
+        - SUPERSCRIPT
     src/dimensional/units.ts:
       description: "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`."
       externalDependencies:
@@ -15168,7 +15222,10 @@ modules:
             - uptRefusalReason
         - file: ./unit-data.js
           imports:
+            - SUPERSCRIPT
             - UNIT_DATA
+            - sideTokens
+            - splitPrefix
             - AffineRow
       exports:
         - affineReadingNote
@@ -15424,10 +15481,10 @@ modules:
             - UpperIndex
             - WeylTensorNode
           typeOnly: true
-        - file: ./errors.js
+        - file: ./connection-validators.js
           imports:
-            - PartialDerivativeIndexVarianceError
-            - IndexLabelCollisionError
+            - oneUpThreeDownFreeIndices
+            - requireOneUpThreeDownVariance
         - file: ./curvature-composite.js
           imports:
             - CurvatureCompositeNode
@@ -17624,6 +17681,15 @@ modules:
             - dimensionOf
             - requireValue
             - flattenNestedArray
+            - requireMetricClosures
+        - file: ./lowering-utils.js
+          imports:
+            - MetricFn
+          typeOnly: true
+        - file: ./lowering-utils.js
+          imports:
+            - MetricFn
+          reExport: true
       exports:
         - christoffelAt
         - dGammaAt
@@ -17636,6 +17702,9 @@ modules:
         - lowerBianchiResidual
         - lowerWeylTensor
         - lowerKretschmannScalar
+        - MetricFn
+      reExported:
+        - MetricFn
       functions:
         - christoffelAt
         - dGammaAt
@@ -18077,6 +18146,15 @@ modules:
         - GridField
       reExported:
         - GridField
+    src/numerical/hermite-crossing.ts:
+      description: The zero crossing inside one integrator step, read from the cubic Hermite
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - hermiteCrossingFraction
+      functions:
+        - hermiteCrossingFraction
     src/numerical/index.ts:
       description: Public surface of the UPT numerical-contraction backend (v0.3.5).
       externalDependencies: []
@@ -18367,11 +18445,13 @@ modules:
         - dimensionOf
         - requireValue
         - flattenNestedArray
+        - requireMetricClosures
       functions:
         - isMetricTensorNode
         - dimensionOf
         - requireValue
         - flattenNestedArray
+        - requireMetricClosures
     src/numerical/lowering.ts:
       description: AST → EngineTensor lowering. Walks a validated ExprNode tree and emits
       externalDependencies: []
@@ -18475,13 +18555,13 @@ modules:
             - lowerBianchiResidual
             - lowerWeylTensor
             - lowerKretschmannScalar
-            - MetricFn
         - file: ./lowering-utils.js
           imports:
             - isMetricTensorNode
             - dimensionOf
             - requireValue
             - flattenNestedArray
+            - requireMetricClosures
         - file: ./derivative-lowering.js
           imports:
             - lowerTensorPartialDerivative
@@ -19463,6 +19543,7 @@ dependencyGraph:
         - src/numerical/geometrized.ts
         - src/numerical/gl4-integrator.ts
         - src/numerical/grid-field.ts
+        - src/numerical/hermite-crossing.ts
         - src/numerical/index.ts
         - src/numerical/input-validation.ts
         - src/numerical/killing.ts
@@ -19497,18 +19578,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 387
+  totalTypeScriptFiles: 388
   totalModules: 13
-  totalLinesOfCode: 87307
-  totalExports: 2802
+  totalLinesOfCode: 87270
+  totalExports: 2819
   totalClasses: 86
   totalInterfaces: 518
-  totalFunctions: 908
+  totalFunctions: 921
   totalTypeGuards: 16
   totalEnums: 0
-  totalConstants: 413
-  totalReExports: 1390
-  totalTypeOnlyImports: 530
+  totalConstants: 415
+  totalReExports: 1392
+  totalTypeOnlyImports: 532
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

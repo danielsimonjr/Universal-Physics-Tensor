@@ -2909,5 +2909,19 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Speed: warm gradient about 10 ms for the catalog sweep, against 3.5 ms on the old tape (spike, `NOTES.md`); accepted for the simpler path.
 - Stability and reliability: one lowering (`toScalarNode`) for `evalExpr` and the gradient; the one-argument minus is a negation in both, and in the simplifier render.
 - Maintainability: clones 35 near pairs and 4 exact groups before and after; none in the files of this change. Declined in this commit: all, because they predate U9.
-- [ ] Review the 35 near clone pairs and 4 exact groups of `repo-tools clones` (none in `src/diff/`).
+- [x] Review the 35 near clone pairs and 4 exact groups of `repo-tools clones` (none in `src/diff/`).
+  Done: the 2026-11-08 five-axis pass below.
 - [ ] File a MathTS issue: `evaluateScalar` and `compileScalarGradient` read a one-argument `-` as the identity. The control in `tests/dimensional/scalar-lowering.test.ts` fails when MathTS fixes it.
+
+## 2026-11-08 — five-axis pass (clone removal)
+
+- Speed, stability and reliability: not changed. Each merge keeps the arithmetic, the messages and the JSON key order; `tests/cli/golden/` is unchanged.
+- Security: not touched.
+- Maintainability: `repo-tools clones .` measured 35 near pairs and 4 exact groups before. After: 22 near pairs and 0 exact groups. Eleven merges took rows 1 to 10, 13 to 16 and 34. Rows 19, 23, 25 and 27 were the inner `p` and `dp` of the Hermite step inside `quarterPeriod` and `measureChainDispersionError`; they went with row 1.
+- Declined, 16 rows:
+  - Row 11, the Painlevé-Gullstrand metric and its inverse: they share only a 5-line prologue, and the two closures are on the hot path.
+  - Row 12, the heat and wave residuals: they are different PDEs and share only a 2-line stencil.
+  - Row 22, `totals` against `buildAtlasEvidenceView`: the shared part is a trivial count literal.
+  - Rows 17, 18, 20, 21, 24, 26, 28, 29, 30, 31, 32, 33 and 35: each is the field-copy object literal of `assembleAppliedCase` contained in a large builder. They share no logic.
+- New in the after run: `normTransportFields` is now a unit of its own, so it pairs by containment with five large builders (the same object-literal class as the declined rows). One of its pairs is real: `serializeNormTransports` (`src/atlas/serialize.ts`) copies the same twelve fields, with `K` through `zeroSafe` and the witness through `serializeWitnesses`.
+- [ ] Merge `serializeNormTransports` (`src/atlas/serialize.ts`) and `normTransportFields` (`src/cli/commands/_atlas-route.ts`). The projection must move to the atlas layer, because the atlas layer does not import the CLI; the CLI commands then import it through `cli-api.ts`. Keep the `K` and witness overrides of the atlas JSON, and keep `data/atlas/*.json` byte-identical.

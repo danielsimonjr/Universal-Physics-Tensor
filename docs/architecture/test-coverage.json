@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "totalSourceFiles": 387,
-    "totalTestFiles": 701,
-    "testedCount": 377,
-    "directlyTestedCount": 344,
+    "totalSourceFiles": 388,
+    "totalTestFiles": 707,
+    "testedCount": 378,
+    "directlyTestedCount": 345,
     "untestedCount": 10,
     "coveragePercent": "97.4",
     "directCoveragePercent": "88.9"
@@ -368,6 +368,7 @@
     "src/numerical/geometrized.ts",
     "src/numerical/gl4-integrator.ts",
     "src/numerical/grid-field.ts",
+    "src/numerical/hermite-crossing.ts",
     "src/numerical/index.ts",
     "src/numerical/killing.ts",
     "src/numerical/klein-gordon.ts",
@@ -714,6 +715,7 @@
     "src/numerical/geometrized.ts",
     "src/numerical/gl4-integrator.ts",
     "src/numerical/grid-field.ts",
+    "src/numerical/hermite-crossing.ts",
     "src/numerical/index.ts",
     "src/numerical/killing.ts",
     "src/numerical/klein-gordon.ts",
@@ -749,7 +751,8 @@
     "src/atlas/applicability.ts": [
       "tests/atlas/applicability.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
-      "tests/atlas/scalar-leaf-owners.test.ts"
+      "tests/atlas/scalar-leaf-owners.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts"
     ],
     "src/atlas/association.ts": [
       "tests/atlas/association.test.ts"
@@ -1031,6 +1034,7 @@
       "tests/composition/evaluate-relation.test.ts",
       "tests/diff/bridge-gradient.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/atlas/export.ts": [
@@ -1076,12 +1080,14 @@
       "tests/cli/graphs.test.ts",
       "tests/cli/map-atlas-results.test.ts",
       "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/proved-counterexample.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/one-copy.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts"
     ],
     "src/atlas/family.ts": [
@@ -1261,7 +1267,8 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/stored-results-module.test.ts",
-      "tests/cli/suggest-token-length.test.ts"
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/internal/clone-helpers.test.ts"
     ],
     "src/atlas/physjs-entries.generated.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
@@ -1923,6 +1930,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
@@ -2689,7 +2697,8 @@
       "tests/cli/map-atlas-results.test.ts"
     ],
     "src/cli/commands/_atlas-route.ts": [
-      "tests/cli/atlas-route-errors.test.ts"
+      "tests/cli/atlas-route-errors.test.ts",
+      "tests/cli/norm-transport-fields.test.ts"
     ],
     "src/cli/commands/_discovery-opts.ts": [],
     "src/cli/commands/atlas.ts": [
@@ -2753,6 +2762,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -2854,6 +2864,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -2955,6 +2966,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3056,6 +3068,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3157,6 +3170,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3258,6 +3272,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3359,6 +3374,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3460,6 +3476,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3561,6 +3578,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3662,6 +3680,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3763,6 +3782,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3864,6 +3884,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -3966,6 +3987,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4067,6 +4089,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4168,6 +4191,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4269,6 +4293,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4370,6 +4395,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4471,6 +4497,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4572,6 +4599,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4673,6 +4701,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4775,6 +4804,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4876,6 +4906,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -4977,6 +5008,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -5079,6 +5111,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -5180,6 +5213,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -5281,6 +5315,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -5382,6 +5417,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -5483,6 +5519,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -5584,6 +5621,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -5713,6 +5751,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -6074,6 +6113,7 @@
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/probe/modules.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
@@ -6198,6 +6238,7 @@
       "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/modules.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
@@ -6214,7 +6255,8 @@
     "src/composition/chain-candidate.ts": [
       "tests/atlas/proof-target.test.ts",
       "tests/composition/chain-candidate.test.ts",
-      "tests/composition/chain-class-index.test.ts"
+      "tests/composition/chain-class-index.test.ts",
+      "tests/internal/clone-helpers.test.ts"
     ],
     "src/composition/chain-match.ts": [
       "tests/canonical/structural-classifier.test.ts",
@@ -6300,6 +6342,7 @@
       "tests/composition/linkage-map.test.ts",
       "tests/composition/mathts-scalar-symbols.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -6356,6 +6399,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -6451,6 +6495,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -6509,6 +6554,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -6553,6 +6599,7 @@
       "tests/composition/discovery.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/grounding.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/diff/bridge-gradient.test.ts",
@@ -6617,6 +6664,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/relation-refusal.test.ts",
@@ -6674,6 +6722,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/relation-refusal.test.ts",
@@ -6739,6 +6788,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -6805,6 +6855,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -6870,6 +6921,7 @@
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/probe/family-b.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -6908,7 +6960,8 @@
       "tests/atlas/witness-numeric-probe.test.ts"
     ],
     "src/composition/formula-shape.ts": [
-      "tests/composition/exact-exponents.test.ts"
+      "tests/composition/exact-exponents.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts"
     ],
     "src/composition/frontier-account.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -6987,6 +7040,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -7045,6 +7099,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -7128,6 +7183,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -7182,6 +7238,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -7354,7 +7411,8 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
-      "tests/composition/probe/modules.test.ts"
+      "tests/composition/probe/modules.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts"
     ],
     "src/composition/probe/fit.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -7840,6 +7898,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -7929,6 +7988,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -7984,6 +8044,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -8041,6 +8102,7 @@
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -8236,6 +8298,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
@@ -8377,6 +8440,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -8868,6 +8932,7 @@
       "tests/composition/probe/corpus-prefactor.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/family-b.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/relation-refusal.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
@@ -8902,6 +8967,7 @@
       "tests/dimensional/minkowski-curvature.test.ts",
       "tests/dimensional/numerical-form-field.test.ts",
       "tests/dimensional/numerical-form-preservation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/op-tensor-interactions.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/rg-flow.test.ts",
@@ -8927,6 +8993,7 @@
       "tests/dimensional/violation-severity.test.ts",
       "tests/dimensional/weyl-validators.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/evaluate.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
@@ -9007,6 +9074,7 @@
     "src/dimensional/connection-validators.ts": [
       "tests/dimensional/curvature-invariants.test.ts",
       "tests/dimensional/einstein-equation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/validator-registry.test.ts",
       "tests/numerical/kretschmann-lowering.test.ts"
     ],
@@ -9264,6 +9332,7 @@
       "tests/dimensional/metric-tensor.test.ts",
       "tests/dimensional/metric-validation-errors.test.ts",
       "tests/dimensional/minkowski-curvature.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/op-tensor-interactions.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/ricci.test.ts",
@@ -9349,6 +9418,7 @@
       "tests/composition/linkage-map.test.ts",
       "tests/composition/name-table.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -9504,9 +9574,11 @@
       "tests/dimensional/metric-helpers.test.ts",
       "tests/dimensional/minkowski-curvature.test.ts",
       "tests/dimensional/numerical-form-preservation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/ricci.test.ts",
       "tests/dimensional/riemann-tensor.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/lowering-utils.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
@@ -9669,6 +9741,7 @@
       "tests/dimensional/minkowski-curvature.test.ts",
       "tests/dimensional/numerical-form-field.test.ts",
       "tests/dimensional/numerical-form-preservation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/ricci.test.ts",
       "tests/dimensional/riemann-tensor.test.ts",
@@ -9676,6 +9749,7 @@
       "tests/dimensional/tensor-partial-derivative.test.ts",
       "tests/dimensional/tensor-product.test.ts",
       "tests/dimensional/tensor-step-c.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/evaluate.test.ts",
       "tests/numerical/lowering-contract.test.ts",
@@ -9786,8 +9860,10 @@
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts",
       "tests/composition/probe/scalar-search-convert.test.ts",
       "tests/composition/probe/standard-errors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/relation-refusal.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -9834,6 +9910,7 @@
       "tests/dimensional/named-shape-owner.test.ts",
       "tests/dimensional/numerical-form-field.test.ts",
       "tests/dimensional/numerical-form-preservation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/rg-flow.test.ts",
       "tests/dimensional/ricci.test.ts",
@@ -9851,6 +9928,7 @@
       "tests/dimensional/validator.test.ts",
       "tests/dimensional/violation-severity.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/euler-rejected.test.ts",
@@ -9879,7 +9957,8 @@
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
-      "tests/dimensional/unit-wrapper-refusal.test.ts"
+      "tests/dimensional/unit-wrapper-refusal.test.ts",
+      "tests/internal/clone-helpers.test.ts"
     ],
     "src/dimensional/units.ts": [
       "tests/api/api-reference-symbols.test.ts",
@@ -10050,6 +10129,7 @@
       "tests/tensor.test.ts"
     ],
     "src/dimensional/weyl-validators.ts": [
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/weyl-validators.test.ts"
     ],
     "src/index.ts": [
@@ -10323,6 +10403,7 @@
       "tests/numerical/lowering-covariant-guard.test.ts",
       "tests/numerical/lowering-strategy-cast.test.ts",
       "tests/numerical/mathts-autograd.test.ts",
+      "tests/numerical/mathts-engine-load-autograd.test.ts",
       "tests/numerical/mathts-engine-typing.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
@@ -10599,6 +10680,9 @@
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/numerical/hermite-crossing.ts": [
+      "tests/internal/clone-helpers.test.ts"
+    ],
     "src/numerical/index.ts": [
       "tests/api/api-reference-symbols.test.ts",
       "tests/api/atlas-public-closure.test.ts",
@@ -10732,7 +10816,18 @@
       "tests/tensor.test.ts"
     ],
     "src/numerical/lowering-utils.ts": [
-      "tests/numerical/lowering-utils.test.ts"
+      "tests/dimensional/bianchi-residual.test.ts",
+      "tests/fixtures/schwarzschild-riemann.test.ts",
+      "tests/internal/clone-helpers.test.ts",
+      "tests/numerical/exact-christoffel-schwarzschild.test.ts",
+      "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
+      "tests/numerical/kretschmann-factored-raising.test.ts",
+      "tests/numerical/kretschmann-horizon.test.ts",
+      "tests/numerical/kretschmann-schwarzschild.test.ts",
+      "tests/numerical/lower-first-index-n4-unroll.test.ts",
+      "tests/numerical/lowering-utils.test.ts",
+      "tests/numerical/painleve-gullstrand-curvature.test.ts",
+      "tests/numerical/weyl-schwarzschild.test.ts"
     ],
     "src/numerical/lowering.ts": [
       "tests/numerical/kretschmann-lowering.test.ts",
@@ -10771,6 +10866,7 @@
       "tests/numerical/lowering-covariant-guard.test.ts",
       "tests/numerical/lowering-deferred-arms.test.ts",
       "tests/numerical/mathts-autograd.test.ts",
+      "tests/numerical/mathts-engine-load-autograd.test.ts",
       "tests/numerical/mathts-engine-typing.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
@@ -11007,6 +11103,7 @@
       "tests/dimensional/minkowski-curvature.test.ts",
       "tests/dimensional/ricci.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/connection-lowering-helpers.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/covariant-derivative-lowering.test.ts",
@@ -11229,7 +11326,8 @@
   "directMap": {
     "src/atlas/applicability.ts": [
       "tests/atlas/applicability.test.ts",
-      "tests/atlas/scalar-leaf-owners.test.ts"
+      "tests/atlas/scalar-leaf-owners.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts"
     ],
     "src/atlas/association.ts": [
       "tests/atlas/association.test.ts"
@@ -11422,8 +11520,10 @@
       "tests/cases/applied-cases.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/proved-counterexample.test.ts",
       "tests/composition/one-copy.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/tools/formalref-axiom-gate.test.ts"
     ],
     "src/atlas/family.ts": [
@@ -11537,7 +11637,8 @@
       "tests/atlas/bound-machine-form.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/transported-norm-demo.test.ts",
-      "tests/cli/map-atlas-results.test.ts"
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/internal/clone-helpers.test.ts"
     ],
     "src/atlas/physjs-entries.generated.ts": [
       "tests/atlas/physjs-generated-table.test.ts",
@@ -12123,7 +12224,8 @@
       "tests/cli/map-atlas-results.test.ts"
     ],
     "src/cli/commands/_atlas-route.ts": [
-      "tests/cli/atlas-route-errors.test.ts"
+      "tests/cli/atlas-route-errors.test.ts",
+      "tests/cli/norm-transport-fields.test.ts"
     ],
     "src/cli/commands/_discovery-opts.ts": [],
     "src/cli/commands/atlas.ts": [
@@ -12262,6 +12364,7 @@
       "tests/cli/map-filters.test.ts",
       "tests/cli/metric-guards.test.ts",
       "tests/cli/new-commands.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/numeric-flags.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
@@ -12506,7 +12609,8 @@
     "src/composition/chain-candidate.ts": [
       "tests/atlas/proof-target.test.ts",
       "tests/composition/chain-candidate.test.ts",
-      "tests/composition/chain-class-index.test.ts"
+      "tests/composition/chain-class-index.test.ts",
+      "tests/internal/clone-helpers.test.ts"
     ],
     "src/composition/chain-match.ts": [
       "tests/canonical/structural-classifier.test.ts",
@@ -12559,6 +12663,7 @@
       "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/grounding.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantity-clusters.test.ts"
     ],
@@ -12590,6 +12695,7 @@
       "tests/composition/identifiability-rank.test.ts",
       "tests/composition/identifiability.test.ts",
       "tests/composition/junction-dimension.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/relation-refusal.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -12662,7 +12768,8 @@
       "tests/atlas/witness-numeric-probe.test.ts"
     ],
     "src/composition/formula-shape.ts": [
-      "tests/composition/exact-exponents.test.ts"
+      "tests/composition/exact-exponents.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts"
     ],
     "src/composition/frontier-account.ts": [
       "tests/composition/frontier-account.test.ts",
@@ -12691,7 +12798,8 @@
     "src/composition/identifiability.ts": [
       "tests/composition/discovery.test.ts",
       "tests/composition/identifiability-rank.test.ts",
-      "tests/composition/identifiability.test.ts"
+      "tests/composition/identifiability.test.ts",
+      "tests/composition/propagate.test.ts"
     ],
     "src/composition/index.ts": [
       "tests/atlas/association.test.ts",
@@ -12718,6 +12826,7 @@
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -12774,7 +12883,8 @@
     ],
     "src/composition/probe/fingerprint.ts": [
       "tests/composition/probe/coverage-backfill.test.ts",
-      "tests/composition/probe/modules.test.ts"
+      "tests/composition/probe/modules.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts"
     ],
     "src/composition/probe/fit.ts": [
       "tests/composition/probe/batch-pins.test.ts",
@@ -13250,8 +13360,10 @@
       "tests/composition/identifiability-rank.test.ts",
       "tests/composition/probe/corpus-prefactor.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/dimensional/ast-leaves.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/one-function-table.test.ts",
@@ -13272,6 +13384,7 @@
     "src/dimensional/connection-validators.ts": [
       "tests/dimensional/curvature-invariants.test.ts",
       "tests/dimensional/einstein-equation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/validator-registry.test.ts",
       "tests/numerical/kretschmann-lowering.test.ts"
     ],
@@ -13320,6 +13433,7 @@
       "tests/dimensional/kronecker-delta.test.ts",
       "tests/dimensional/metric-tensor.test.ts",
       "tests/dimensional/metric-validation-errors.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/op-tensor-interactions.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
@@ -13404,9 +13518,11 @@
       "tests/dimensional/metric-helpers.test.ts",
       "tests/dimensional/minkowski-curvature.test.ts",
       "tests/dimensional/numerical-form-preservation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/ricci.test.ts",
       "tests/dimensional/riemann-tensor.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/lowering-utils.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
@@ -13472,6 +13588,7 @@
       "tests/dimensional/minkowski-curvature.test.ts",
       "tests/dimensional/numerical-form-field.test.ts",
       "tests/dimensional/numerical-form-preservation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/ricci.test.ts",
       "tests/dimensional/riemann-tensor.test.ts",
@@ -13479,6 +13596,7 @@
       "tests/dimensional/tensor-partial-derivative.test.ts",
       "tests/dimensional/tensor-product.test.ts",
       "tests/dimensional/tensor-step-c.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/evaluate.test.ts",
       "tests/numerical/lowering-contract.test.ts",
@@ -13566,8 +13684,10 @@
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/probe/scalar-children-walk.test.ts",
       "tests/composition/probe/scalar-search-convert.test.ts",
       "tests/composition/probe/standard-errors.test.ts",
+      "tests/composition/propagate.test.ts",
       "tests/composition/quantity-clusters.test.ts",
       "tests/composition/relation-refusal.test.ts",
       "tests/composition/retrodiction.test.ts",
@@ -13613,6 +13733,7 @@
       "tests/dimensional/named-shape-owner.test.ts",
       "tests/dimensional/numerical-form-field.test.ts",
       "tests/dimensional/numerical-form-preservation.test.ts",
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/raise-lower.test.ts",
       "tests/dimensional/rg-flow.test.ts",
       "tests/dimensional/ricci.test.ts",
@@ -13629,6 +13750,7 @@
       "tests/dimensional/validator-probe-ctx.test.ts",
       "tests/dimensional/validator.test.ts",
       "tests/dimensional/violation-severity.test.ts",
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/euler-rejected.test.ts",
@@ -13656,7 +13778,8 @@
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
-      "tests/dimensional/unit-wrapper-refusal.test.ts"
+      "tests/dimensional/unit-wrapper-refusal.test.ts",
+      "tests/internal/clone-helpers.test.ts"
     ],
     "src/dimensional/units.ts": [
       "tests/bridges/evaluators.test.ts",
@@ -13780,6 +13903,7 @@
       "tests/review/round2-numerical-dimensional.test.ts"
     ],
     "src/dimensional/weyl-validators.ts": [
+      "tests/dimensional/one-up-three-down-order.test.ts",
       "tests/dimensional/weyl-validators.test.ts"
     ],
     "src/index.ts": [
@@ -13854,7 +13978,8 @@
       "tests/numerical/flat-to-nested-mathts.test.ts",
       "tests/numerical/geodesic-tau-range.test.ts",
       "tests/numerical/gl4-integrator-options.test.ts",
-      "tests/numerical/lowering-covariant-guard.test.ts"
+      "tests/numerical/lowering-covariant-guard.test.ts",
+      "tests/numerical/mathts-engine-load-autograd.test.ts"
     ],
     "src/numerical/evaluator-uncertainty.ts": [
       "tests/cli/cli-boundary.test.ts",
@@ -13920,6 +14045,9 @@
     "src/numerical/grid-field.ts": [
       "tests/numerical/pderiv.test.ts"
     ],
+    "src/numerical/hermite-crossing.ts": [
+      "tests/internal/clone-helpers.test.ts"
+    ],
     "src/numerical/index.ts": [
       "tests/bridges/public-api-stability.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
@@ -13958,6 +14086,7 @@
       "tests/numerical/painleve-gullstrand-curvature.test.ts"
     ],
     "src/numerical/lowering-utils.ts": [
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/lowering-utils.test.ts"
     ],
     "src/numerical/lowering.ts": [
@@ -13997,6 +14126,7 @@
       "tests/numerical/lowering-covariant-guard.test.ts",
       "tests/numerical/lowering-deferred-arms.test.ts",
       "tests/numerical/mathts-autograd.test.ts",
+      "tests/numerical/mathts-engine-load-autograd.test.ts",
       "tests/numerical/mathts-engine-typing.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
@@ -14068,6 +14198,7 @@
       "tests/numerical/tensor-engine-types.test.ts"
     ],
     "src/numerical/types.ts": [
+      "tests/internal/clone-helpers.test.ts",
       "tests/numerical/connection-lowering-helpers.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/evaluate.test.ts",
@@ -19984,6 +20115,40 @@
       "src/cli/commands/testplan.ts",
       "src/core/constants.ts"
     ],
+    "tests/cli/norm-transport-fields.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/atlas/families.ts",
+      "src/cli/commands/_atlas-route.ts"
+    ],
     "tests/cli/numeric-flags.test.ts": [
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
@@ -23101,6 +23266,13 @@
     "tests/composition/probe/problem-file-refusals.test.ts": [
       "src/composition/probe/problem.ts"
     ],
+    "tests/composition/probe/scalar-children-walk.test.ts": [
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/types.ts",
+      "src/composition/probe/fingerprint.ts",
+      "src/composition/formula-shape.ts",
+      "src/atlas/applicability.ts"
+    ],
     "tests/composition/probe/scalar-search-convert.test.ts": [
       "src/composition/probe/scalar-search.ts",
       "src/dimensional/types.ts"
@@ -23141,6 +23313,33 @@
     ],
     "tests/composition/probe/t-tail-mathts.test.ts": [
       "src/composition/probe/t-tail.ts"
+    ],
+    "tests/composition/propagate.test.ts": [
+      "src/composition/identifiability.ts",
+      "src/composition/discovery.ts",
+      "src/composition/index.ts",
+      "src/composition/quantity.ts",
+      "src/composition/edge.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/composition/compose.ts",
+      "src/composition/consistency.ts",
+      "src/core/constants.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/canonical-graph.ts",
+      "src/composition/enumerate.ts",
+      "src/composition/uncertainty.ts",
+      "src/composition/retrodiction.ts",
+      "src/composition/explain.ts",
+      "src/composition/evaluate-relation.ts",
+      "src/composition/compose-symbolic.ts",
+      "src/composition/expr-eval.ts",
+      "src/composition/graph-viz.ts",
+      "src/composition/graph-viz-svg.ts",
+      "src/composition/dimension-adjacency.ts",
+      "src/composition/user-equation.ts",
+      "src/dimensional/formula-names.ts",
+      "src/core/format.ts",
+      "src/dimensional/types.ts"
     ],
     "tests/composition/proposed-bridges.test.ts": [
       "src/composition/proposed-bridges.ts",
@@ -23560,7 +23759,8 @@
       "src/dimensional/tensor.ts",
       "src/dimensional/metric.ts",
       "src/dimensional/types.ts",
-      "src/numerical/curvature-lowering-helpers.ts"
+      "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts"
     ],
     "tests/dimensional/bridge-derivation-audit.test.ts": [
       "src/composition/bridge-analysis.ts",
@@ -23949,6 +24149,15 @@
       "src/dimensional/types.ts",
       "src/dimensional/validator.ts"
     ],
+    "tests/dimensional/one-up-three-down-order.test.ts": [
+      "src/dimensional/connection-validators.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/weyl-validators.ts",
+      "src/dimensional/metric.ts",
+      "src/dimensional/tensor.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/errors.ts"
+    ],
     "tests/dimensional/op-tensor-interactions.test.ts": [
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
@@ -24333,6 +24542,7 @@
     ],
     "tests/fixtures/schwarzschild-riemann.test.ts": [
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/core/constants.ts"
     ],
@@ -24340,6 +24550,20 @@
       "src/core/constants.ts"
     ],
     "tests/formal/lean-theorems.test.ts": [],
+    "tests/internal/clone-helpers.test.ts": [
+      "src/numerical/hermite-crossing.ts",
+      "src/numerical/lowering-utils.ts",
+      "src/numerical/types.ts",
+      "src/atlas/families.ts",
+      "src/atlas/path-bound.ts",
+      "src/atlas/error-algebra.ts",
+      "src/composition/chain-candidate.ts",
+      "src/dimensional/unit-data.ts",
+      "src/dimensional/metric.ts",
+      "src/dimensional/tensor.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/types.ts"
+    ],
     "tests/internal/no-network-in-tests.test.ts": [],
     "tests/internal/no-raw-nul.test.ts": [],
     "tests/internal/no-removed-paths.test.ts": [],
@@ -24516,7 +24740,8 @@
     ],
     "tests/numerical/exact-christoffel-schwarzschild.test.ts": [
       "src/numerical/mathts-engine.ts",
-      "src/numerical/curvature-lowering-helpers.ts"
+      "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts"
     ],
     "tests/numerical/finite-difference.test.ts": [
       "src/numerical/finite-difference.ts",
@@ -24564,6 +24789,7 @@
     "tests/numerical/geometrized-schwarzschild-equivalence.test.ts": [
       "src/numerical/kretschmann.ts",
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/numerical/geometrized.ts",
       "src/dimensional/types.ts",
@@ -24627,12 +24853,14 @@
     "tests/numerical/kretschmann-factored-raising.test.ts": [
       "src/numerical/kretschmann.ts",
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/numerical/painleve-gullstrand-metric.ts"
     ],
     "tests/numerical/kretschmann-horizon.test.ts": [
       "src/numerical/kretschmann.ts",
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/core/constants.ts"
     ],
@@ -24648,11 +24876,13 @@
     "tests/numerical/kretschmann-schwarzschild.test.ts": [
       "src/numerical/kretschmann.ts",
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/core/constants.ts"
     ],
     "tests/numerical/lower-first-index-n4-unroll.test.ts": [
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/numerical/painleve-gullstrand-metric.ts"
     ],
@@ -24741,6 +24971,10 @@
       "src/core/constants.ts",
       "src/cases/quadrature.ts",
       "src/numerical/quadrature.ts"
+    ],
+    "tests/numerical/mathts-engine-load-autograd.test.ts": [
+      "src/numerical/mathts-engine.ts",
+      "src/numerical/errors.ts"
     ],
     "tests/numerical/mathts-engine-typing.test.ts": [
       "src/numerical/mathts-engine.ts",
@@ -24831,6 +25065,7 @@
     "tests/numerical/painleve-gullstrand-curvature.test.ts": [
       "src/numerical/kretschmann.ts",
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/numerical/painleve-gullstrand-metric.ts",
       "src/core/constants.ts"
@@ -24935,6 +25170,7 @@
     "tests/numerical/weyl-schwarzschild.test.ts": [
       "src/numerical/weyl-lowering.ts",
       "src/numerical/curvature-lowering-helpers.ts",
+      "src/numerical/lowering-utils.ts",
       "src/numerical/mathts-engine.ts",
       "src/core/constants.ts"
     ],
