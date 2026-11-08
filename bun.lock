@@ -8,7 +8,7 @@
         "@danielsimonjr/mathts-autograd": "^0.4.1",
         "@danielsimonjr/mathts-core": "^0.22.0",
         "@danielsimonjr/mathts-expression": "^0.12.2",
-        "@danielsimonjr/mathts-functions": "^0.75.1",
+        "@danielsimonjr/mathts-functions": "^0.76.0",
         "@danielsimonjr/mathts-matrix": "^0.9.1",
         "@danielsimonjr/mathts-tensor": "^0.3.1",
       },
@@ -48,7 +48,7 @@
 
     "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.12.2", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.22.0" } }, "sha512-gpRWIFwJabT9SQG7C2dNh5eKTh1g3mXd1ZIEDvMPJEjScwNo2oqLv0glsV+yW4z9v6RQ0mLSCG8pKmGC0I4bYg=="],
 
-    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.75.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.22.0", "@danielsimonjr/mathts-expression": "^0.12.2", "@danielsimonjr/mathts-gpu": "^0.2.1", "@danielsimonjr/mathts-matrix": "^0.9.1", "@danielsimonjr/mathts-parallel": "^0.8.1", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "javascript-natural-sort": "^0.7.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-MK2W3VgoWybvDJoiEa2ScrokkECYZHWKe1T5hkyDoY1DSrO+98DDmqKgxIhri8slSdYvIRFwpNyDX0mD/Z/1ww=="],
+    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.76.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.22.0", "@danielsimonjr/mathts-expression": "^0.12.2", "@danielsimonjr/mathts-gpu": "^0.2.1", "@danielsimonjr/mathts-matrix": "^0.9.1", "@danielsimonjr/mathts-parallel": "^0.8.1", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "javascript-natural-sort": "^0.7.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-lryH/ukaMdAE3fGqt/+1/NQV3g/vfxkzB27KAEDE4QUXk6GmeUcOCwSfiNh2pWdqXdePw1e4+j4XsIF5VLYEoA=="],
 
     "@danielsimonjr/mathts-gpu": ["@danielsimonjr/mathts-gpu@0.2.1", "", { "peerDependencies": { "@webgpu/types": "^0.1.72" }, "optionalPeers": ["@webgpu/types"] }, "sha512-bxfmnIeM7hhtOoq6EvidPghzpjcxgoi7SWFeVfjU+kxbO/NNbOFo4deYFfvmOjCJ8fNTi/YisxouZHWlPZmfcQ=="],
 
