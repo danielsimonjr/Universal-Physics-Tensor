@@ -74,8 +74,8 @@ export interface McNemarResult {
  */
 export function mcnemar(table: PairedTable): McNemarResult {
   const n = table.b + table.c;
-  // No discordant pair, or an equal split: every outcome is at most as likely as the observed one, so p = 1 exactly.
-  if (table.b === table.c) return { chiSquared: 0, exactP: 1 };
+  // No discordant pair: the χ² below would be 0/0. An equal split needs no branch: the χ² is 0 and binomialTest gives p = 1.
+  if (n === 0) return { chiSquared: 0, exactP: 1 };
   const chiSquared = Math.max(0, Math.abs(table.b - table.c) - 1) ** 2 / n;
   // MathTS `binomialTest` sums every outcome no more likely than the observed one; at p = ½ that is twice the smaller tail.
   const exactP = numberFrom('binomialTest', binomialTest(Math.min(table.b, table.c), n).pValue);
