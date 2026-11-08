@@ -40,15 +40,15 @@ describe('MathTS carries the special functions', () => {
     expect(theta0OfPeriodError(pendulumPeriodErrorAt({ theta0: 0.3 }))).toBeCloseTo(0.3, 12);
   });
 
-  it('the probe study reads betainc, gammainc and gammaincp, and the upper tail still resolves', () => {
+  it('the probe study reads chiSquaredSF, chiSquaredCDF and fSF, and the upper tail still resolves', () => {
     const study = source('../../src/composition/probe/study.ts');
-    expect(study).toMatch(/\bbetainc\b/);
-    expect(study).toMatch(/\bgammainc\b/);
-    expect(study).toMatch(/import \{[^}]*gammaincp/);
+    expect(study).toMatch(/import \{[^}]*\bchiSquaredSF\b/);
+    expect(study).toMatch(/import \{[^}]*\bchiSquaredCDF\b/);
+    expect(study).toMatch(/import \{[^}]*\bfSF\b/);
+    expect(study).not.toMatch(/function gammaQ|function betaI\b/);
     expect(study).not.toMatch(/function lnGamma|function betaCf|function gammaSeries|LANCZOS|modified Lentz\)/);
-    // Before @danielsimonjr/mathts-functions 0.68.3, `gammaincp` was 1 − P and rounded the far
-    // tail to 0 (gammaincp(5, 80) = 0); the survival function is that call now, and this is the
-    // tail it must resolve (the dependency range is pinned in tests/tools/package-deps.test.ts).
+    // A 1 − P tail rounds this far tail to 0 (gammaincp before 0.68.3 gave gammaincp(5, 80) = 0);
+    // the survival function is MathTS chiSquaredSF now, and this is the tail it must resolve (the dependency range is pinned in tests/tools/package-deps.test.ts).
     expect(chiSquareSurvival(160, 10)).toBeGreaterThan(0);
     expect(chiSquareSurvival(160, 10)).toBeCloseTo(Math.exp(-80) * (1 + 80 + 80 ** 2 / 2 + 80 ** 3 / 6 + 80 ** 4 / 24), 40);
     // Closed forms: χ²₂ is exponential and the F(1, 1) tail is the Cauchy t².
@@ -74,8 +74,9 @@ describe('MathTS carries the special functions', () => {
 });
 
 describe('MathTS carries the quadrature, the interpolation and the statistics', () => {
-  it('the Gauss–Legendre weights come from legendreP, cosine from pairwiseDot, the scale exponent from linearRegression', () => {
-    expect(source('../../src/numerical/quadrature.ts')).toMatch(/legendreP/);
+  it('the Gauss–Legendre weights come from rootsLegendre, cosine from pairwiseDot, the scale exponent from linearRegression', () => {
+    expect(source('../../src/numerical/quadrature.ts')).toMatch(/weight: legendre16\.weights\[i\]/);
+    expect(source('../../src/numerical/quadrature.ts')).not.toMatch(/legendreP|legendre16Derivative/);
         expect(GAUSS_LEGENDRE_16.reduce((s, n) => s + n.weight, 0)).toBeCloseTo(2, 15);
     const retrieval = source('../../src/atlas/benchmark/hybrid-retrieval.ts');
     expect(retrieval).toMatch(/pairwiseDot/);

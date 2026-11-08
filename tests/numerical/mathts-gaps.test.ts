@@ -43,14 +43,23 @@ describe('MathTS gaps that keep UPT routines local', () => {
     expect(() => fSurvival(1, 0, 3)).toThrow(RangeError);
   });
 
-  it('M3: rootsLegendre(16) weights are off by more than 1e-14 relative (UPT keeps the closed form)', () => {
-    const { weights } = rootsLegendre(16);
+  it('M3 (agreement): UPT GAUSS_LEGENDRE_16 is MathTS rootsLegendre(16), within 5e-16 of a 40-digit reference', () => {
+    // Half of the symmetric weight set, from mpmath at 40 digits (the weights at the refined roots of P16).
+    const reference = [
+      0.02715245941175409485178057, 0.06225352393864789286284384, 0.09515851168249278480992511,
+      0.1246289712555338720524763, 0.1495959888165767320815017, 0.1691565193950025381893121,
+      0.1826034150449235888667637, 0.1894506104550684962853967,
+    ];
+    const { nodes, weights } = rootsLegendre(16);
     let worst = 0;
-    weights.forEach((w, i) => {
-      const local = GAUSS_LEGENDRE_16[i]!.weight;
-      worst = Math.max(worst, Math.abs(w - local) / local);
+    GAUSS_LEGENDRE_16.forEach((n, i) => {
+      expect(n.node).toBe(nodes[i]);
+      expect(n.weight).toBe(weights[i]);
+      const ref = reference[i < 8 ? i : 15 - i]!;
+      worst = Math.max(worst, Math.abs(n.weight - ref) / ref);
     });
-    expect(worst).toBeGreaterThan(1e-14);
+    // The retired closed form 2 / ((1 - x^2) P16'(x)^2) was 1.9e-15 off; MathTS 0.75.1 is 2.7e-16.
+    expect(worst).toBeLessThan(5e-16);
     const sum = GAUSS_LEGENDRE_16.reduce((s, n) => s + n.weight, 0);
     expect(Math.abs(sum - 2)).toBeLessThan(1e-15);
   });

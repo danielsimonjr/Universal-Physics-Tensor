@@ -11,14 +11,13 @@
  * (b−a)/2, so ∫ₐᵇ f dx ≈ (b−a)/2 · Σᵢ wᵢ·f(xᵢ). For b < a the (b−a)/2 factor is
  * negative, giving the correct signed integral (∫ₐᵇ = −∫ᵦᵃ).
  *
- * The nodes are MathTS `rootsLegendre(16)`. `gaussQuad` is not this rule: its
+ * The nodes and weights are MathTS `rootsLegendre(16)`. `gaussQuad` is not this rule: its
  * single-interval order is only 2–5, and a larger `n` is that many panels of
  * order 5. `quad` is adaptive Gauss–Kronrod, not a fixed degree.
  *
  * @module numerical/quadrature
  */
-import { legendreP, rootsLegendre } from '@danielsimonjr/mathts-functions';
-import { numberFrom } from '../core/mathts-read.js';
+import { rootsLegendre } from '@danielsimonjr/mathts-functions';
 
 /** A Gauss–Legendre abscissa/weight pair on the reference interval [−1, 1]. @internal */
 interface GaussLegendreNode {
@@ -28,27 +27,16 @@ interface GaussLegendreNode {
 
 const legendre16 = rootsLegendre(16);
 
-/** `Pₙ(x)`, MathTS `legendreP`, read back as the number it is for a number. */
-function legendre(n: number, x: number): number {
-  return numberFrom('legendreP', legendreP(n, x));
-}
-
-/** P₁₆'(x) = 16 (x P₁₆(x) − P₁₅(x)) / (x² − 1), the derivative identity on MathTS `legendreP`. */
-function legendre16Derivative(x: number): number {
-  return (16 * (x * legendre(16, x) - legendre(15, x))) / (x * x - 1);
-}
-
 /**
- * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2). The
- * nodes are MathTS `rootsLegendre(16)`'s. The weights are the closed form
- * `2 / ((1 − x²) P₁₆'(x)²)` on those nodes: MathTS's tabulated weights carried a
- * relative error of 8e-14 (Σ = 1.9999999999999956), 400 times the double
- * precision the degree-31 exactness claim rests on (Tom's second round).
+ * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2), MathTS
+ * `rootsLegendre(16)`. From `@danielsimonjr/mathts-functions` 0.75.1 the
+ * weights have a relative error of at most 2.7e-16 against a 40-digit
+ * reference, and Σ weights − 2 is 0 in double precision.
  */
-export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = legendre16.nodes.map((node) => {
-  const dp = legendre16Derivative(node);
-  return { node, weight: 2 / ((1 - node * node) * dp * dp) };
-});
+export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = legendre16.nodes.map((node, i) => ({
+  node,
+  weight: legendre16.weights[i]!,
+}));
 
 /**
  * Evaluate the definite integral ∫ₐᵇ f(x) dx by 16-point Gauss–Legendre
