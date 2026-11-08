@@ -166,8 +166,8 @@ fi
 # repo-tools is the public npm package @danielsimonjr/repo-tools (Node 20+).
 # Its location is a machine fact, not a repository fact: UPT_REPO_TOOLS names
 # the executable, and the hook has no built-in default name. The push fails
-# when UPT_REPO_TOOLS is not set and when the named executable is missing: a
-# check that could not run never reports clean. CI runs the claims check in
+# if UPT_REPO_TOOLS is not set or if the named executable does not exist. A
+# check that cannot run never reports clean. CI runs the claims check in
 # its own job; its code-docs job is the in-repo stand-in for changed paths,
 # and CI does not run `repo-tools docs check src`.
 if [ -z "${UPT_REPO_TOOLS:-}" ]; then

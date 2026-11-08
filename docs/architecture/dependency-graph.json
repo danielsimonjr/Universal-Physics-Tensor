@@ -4,7 +4,7 @@
     "version": "12.0.0",
     "totalFiles": 388,
     "totalModules": 13,
-    "totalExports": 2819
+    "totalExports": 2820
   },
   "entryPoints": [
     {
@@ -4041,12 +4041,14 @@
         ],
         "exports": [
           "ATLAS_RECORD_SCHEMA_VERSION",
+          "normTransportFields",
           "toAtlasJson"
         ],
         "interfaces": [
           "AtlasRecordJson"
         ],
         "functions": [
+          "normTransportFields",
           "toAtlasJson"
         ],
         "constants": [
@@ -8143,7 +8145,6 @@
           "missingForComposite",
           "explainsRefusal",
           "transportReport",
-          "normTransportFields",
           "claimReport"
         ],
         "functions": [
@@ -8152,7 +8153,6 @@
           "missingForComposite",
           "explainsRefusal",
           "transportReport",
-          "normTransportFields",
           "claimReport"
         ]
       },
@@ -8264,12 +8264,6 @@
             "file": "../published-url.js",
             "imports": [
               "publishedUrl"
-            ]
-          },
-          {
-            "file": "./_atlas-route.js",
-            "imports": [
-              "normTransportFields"
             ]
           }
         ],
@@ -11705,6 +11699,13 @@
             "reExport": true
           },
           {
+            "file": "./atlas/serialize.js",
+            "imports": [
+              "normTransportFields"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./atlas/derive-evidence.js",
             "imports": [
               "deriveEvidence",
@@ -12246,6 +12247,7 @@
           "forEachScalarLeaf",
           "OSCILLATOR_FAMILY",
           "ATLAS_FAMILIES",
+          "normTransportFields",
           "deriveEvidence",
           "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
@@ -12542,6 +12544,7 @@
           "CandidateReadiness",
           "OSCILLATOR_FAMILY",
           "ATLAS_FAMILIES",
+          "normTransportFields",
           "deriveEvidence",
           "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
@@ -28277,15 +28280,15 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87272,
-    "totalExports": 2819,
+    "totalLinesOfCode": 87267,
+    "totalExports": 2820,
     "totalClasses": 86,
     "totalInterfaces": 518,
     "totalFunctions": 921,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 415,
-    "totalReExports": 1392,
+    "totalReExports": 1393,
     "totalTypeOnlyImports": 532,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
