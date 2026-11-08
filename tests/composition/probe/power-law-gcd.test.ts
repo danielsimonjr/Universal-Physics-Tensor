@@ -1,8 +1,8 @@
 /**
  * Leverage plan task U3: `rationalCandidates` reduces each fraction through MathTS functions
- * `gcd`. From functions 0.77.0 (MathTS task M5) the `number, number` signature returns `number`,
- * so the caller reads the result with no `numberFrom` check. The rows hold the gcd pairs the
- * caller can reach: a zero numerator, a negative numerator, and coprime and shared-factor pairs.
+ * `gcd`. From functions 0.77.0 (MathTS task M5), the `number, number` signature returns `number`.
+ * The caller reads the result with no `numberFrom` check. The rows hold the gcd pairs the caller
+ * can reach. The pairs are a zero numerator, a negative numerator, and coprime and shared-factor pairs.
  */
 import { readFileSync } from 'node:fs';
 import { gcd } from '@danielsimonjr/mathts-functions';
