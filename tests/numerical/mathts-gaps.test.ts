@@ -13,7 +13,9 @@ import { studentTwoSidedP } from '../../src/composition/probe/t-tail.js';
 const exported = (name: string): boolean => Object.prototype.hasOwnProperty.call(functions, name);
 
 describe('MathTS gaps that keep UPT routines local', () => {
-  it('M1 (agreement): UPT studentTwoSidedP is MathTS studentTTwoSidedP, and the far tail stays above 0', () => {
+  it('M1 (agreement): MathTS studentTTwoSidedP is exported and equals UPT studentTwoSidedP on normal tails', () => {
+    // UPT keeps 2·studentTCDF(−|t|, ν) (task U5, t-tail-mathts.test.ts): at t = 1e154, ν = 2 the two
+    // differ by about 1e-13 relative in the subnormal range, and neither is nearer the true 1e-308.
     expect(exported('studentTTwoSidedP')).toBe(true);
     for (const [t, df] of [[0.3, 1], [-1.7, 3], [2.5, 10], [12, 4], [40, 10], [80, 30]] as const) {
       expect(studentTwoSidedP(t, df), `t=${t} df=${df}`).toBe(functions.studentTTwoSidedP(t, df));
