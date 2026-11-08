@@ -2962,3 +2962,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Security: not touched.
 - Maintainability: `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups before and after.
 - Left: the bound does not include the representation error of the metric closure (for example `1 − Λr²/3 == 1` in double). The `nonzeroMatrix` filter still uses raw coordinate components.
+
+## 2026-11-08 — five-axis pass (MathTS core 0.24.0, M5 to M7)
+
+- Speed: not measured; two `typeof` checks are gone from the gcd calls.
+- Stability: not changed; the new rows are deterministic.
+- Reliability: the gcd types come from MathTS, and `tsc` refuses a mistyped read. A dotted unit text reads through MathTS; over 22,050 dotted texts the result equals the local reading.
+- Security: not touched. `bun.lock` resolves one core, 0.24.0.
+- Maintainability: `bigintFrom` is gone. `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups before and after.
+- Left: the local splitter stays, because `Unit.readings` misses readings with `°R` and with a sub-kilo prefix on `pc` (two gap rows). A MathTS change on either gap opens the deletion.
