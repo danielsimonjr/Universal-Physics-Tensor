@@ -144,10 +144,18 @@ export function explainsRefusal(claim: RouteClaim): boolean {
 
 /** The declarative fields of an applied norm transport, as a JSON envelope carries them (no functions). */
 export function transportReport(a: AppliedTransport) {
-  const nt = a.transport;
+  return { index: a.index, bridgeId: a.bridgeId, ...normTransportFields(a.transport) };
+}
+
+/**
+ * The declarative fields of one norm transport, in the order the JSON envelopes print them.
+ * `transportReport` and `upt atlas --json` (`atlas.ts`) build their rows from it.
+ *
+ * @param nt - The norm transport.
+ * @returns The fields, with no functions.
+ */
+export function normTransportFields(nt: AppliedTransport['transport']) {
   return {
-    index: a.index,
-    bridgeId: a.bridgeId,
     id: nt.id,
     fromModel: nt.fromModel,
     toModel: nt.toModel,

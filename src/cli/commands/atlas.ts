@@ -33,6 +33,7 @@ import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 import { publishedUrl } from '../published-url.js';
+import { normTransportFields } from './_atlas-route.js';
 
 const WITNESS_RESULTS_URL = publishedUrl('data/atlas/witness-results.json');
 
@@ -373,18 +374,9 @@ async function run(ctx: CommandCtx): Promise<number> {
           const r = ranTransports?.find((x) => x.recordId === nt.id && x.witnessId === nt.witness.id);
           const registeredHere = transportEntries.some((e) => e.recordId === nt.id && e.spec.id === nt.witness.id);
           return {
-            id: nt.id,
-            fromModel: nt.fromModel,
-            toModel: nt.toModel,
-            from: nt.from,
-            to: nt.to,
-            K: nt.K,
-            domain: nt.domain,
-            derivation: nt.derivation,
-            timeMap: { map: nt.timeMap.map, uniform: nt.timeMap.uniform, horizon: nt.timeMap.horizon },
-            uniformity: nt.uniformity,
+            ...normTransportFields(nt),
+            // A spread key keeps its place when it is overwritten, so the JSON key order is unchanged.
             witness: { id: nt.witness.id, kind: nt.witness.kind, test: nt.witness.test, tolerance: nt.witness.tolerance ?? null },
-            basis: nt.basis,
             status: r === undefined ? (registeredHere ? ('runnable' as const) : ('not-observed' as const)) : r.status,
             ...(r?.reason === undefined ? {} : { reason: r.reason }),
           };
