@@ -25,6 +25,13 @@ describe('hermiteCrossingFraction', () => {
     expect(hermiteCrossingFraction(1, -2, -1, -2)).toBeCloseTo(0.5, 14);
   });
 
+  it('converges to the cubic root when the secant start is far from it (0 or 1 Newton steps do not)', () => {
+    // Root measured with mpmath at 50 digits: 0.84524359124347405207240223211170631858824432335753.
+    // The secant start p0 / (p0 - p1) = 0.909 is 6.4e-2 away; one Newton step leaves 1.1e-2.
+    const root = 0.845243591243474052072402232111706;
+    expect(Math.abs(hermiteCrossingFraction(1, -0.2, -0.1, -0.3) - root)).toBeLessThan(1e-13);
+  });
+
   it('is the one copy: both oscillator witnesses call it and keep no local interpolant', () => {
     for (const file of ['src/atlas/oscillators/limit-witnesses.ts', 'src/atlas/oscillators/norm-transport-witness.ts']) {
       const text = src(file);
