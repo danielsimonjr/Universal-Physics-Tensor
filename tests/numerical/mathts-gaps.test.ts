@@ -8,13 +8,19 @@ import * as functions from '@danielsimonjr/mathts-functions';
 import { mcnemar, rootsLegendre } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
 import { GAUSS_LEGENDRE_16 } from '../../src/numerical/quadrature.js';
+import { studentTwoSidedP } from '../../src/composition/probe/t-tail.js';
 
 const exported = (name: string): boolean => Object.prototype.hasOwnProperty.call(functions, name);
 
 describe('MathTS gaps that keep UPT routines local', () => {
-  it('M1: studentTTwoSidedP is not exported (UPT t-tail uses studentTCDF instead)', () => {
-    expect(exported('studentTTwoSidedP')).toBe(false);
-    expect(exported('studentTCDF')).toBe(true);
+  it('M1 (agreement): UPT studentTwoSidedP is MathTS studentTTwoSidedP, and the far tail stays above 0', () => {
+    expect(exported('studentTTwoSidedP')).toBe(true);
+    for (const [t, df] of [[0.3, 1], [-1.7, 3], [2.5, 10], [12, 4], [40, 10], [80, 30]] as const) {
+      expect(studentTwoSidedP(t, df), `t=${t} df=${df}`).toBe(functions.studentTTwoSidedP(t, df));
+    }
+    // 2(1 - CDF) rounds this tail to 0; the direct tail does not.
+    expect(studentTwoSidedP(80, 30)).toBeGreaterThan(0);
+    expect(studentTwoSidedP(80, 30)).toBeLessThan(1e-30);
   });
 
   it('M2: mcnemar reads p as 1 - CDF, so a large statistic gives p = 0 (UPT keeps the direct tail)', () => {
