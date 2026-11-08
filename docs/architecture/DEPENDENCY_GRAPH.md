@@ -4386,7 +4386,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/mathts-quiet.ts` - Load the MathTS peer without its console chatter reaching stderr.
+### `src/composition/mathts-quiet.ts` - Load the MathTS dependency without its console chatter reaching stderr.
 
 **Exports:**
 - Functions: `quietlySync`
@@ -7713,7 +7713,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 387 |
 | Total Modules | 13 |
-| Total Lines of Code | 87306 |
+| Total Lines of Code | 87307 |
 | Total Exports | 2802 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |
