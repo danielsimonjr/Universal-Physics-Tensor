@@ -47,6 +47,19 @@ interface MathTSAutograd {
 }
 
 /**
+ * Load `@danielsimonjr/mathts-autograd` at the call.
+ * @param method - The engine method that needs it, named in the error.
+ * @returns The package, narrowed to the call-site shape.
+ * @throws EngineCapabilityError if the import fails.
+ */
+async function loadAutograd(method: 'forwardGrad' | 'reverseGrad'): Promise<MathTSAutograd> {
+  try {
+    // Narrow the dynamic import to the local call-site shape.
+    return await import('@danielsimonjr/mathts-autograd') as unknown as MathTSAutograd;
+  } catch (cause) { throw new EngineCapabilityError('MathTSEngine', method, { cause }); }
+}
+
+/**
  * `TensorEngine` backed by `@danielsimonjr/mathts-tensor`'s rank-N Tensor.
  * The MathTS packages are required dependencies.
  *
@@ -144,11 +157,7 @@ export class MathTSEngine implements TensorEngine {
     fn: (x: EngineTensor) => EngineTensor,
     x: EngineTensor,
   ): Promise<ForwardGradResult> {
-    let autograd: MathTSAutograd;
-    try {
-      // Narrow the dynamic import to the local call-site shape.
-      autograd = await import('@danielsimonjr/mathts-autograd') as unknown as MathTSAutograd;
-    } catch (cause) { throw new EngineCapabilityError('MathTSEngine', 'forwardGrad', { cause }); }
+    const autograd = await loadAutograd('forwardGrad');
 
     // S1 fix: pass fn UNCHANGED. autograd.forwardGrad wraps x as a DualTensor;
     // MathTSEngine's arithmetic methods (mul/add/sub/scale) MUST dispatch
@@ -182,11 +191,7 @@ export class MathTSEngine implements TensorEngine {
     x: EngineTensor,
     cotangent?: EngineTensor,
   ): Promise<ReverseGradResult> {
-    let autograd: MathTSAutograd;
-    try {
-      // Narrow the dynamic import to the local call-site shape.
-      autograd = await import('@danielsimonjr/mathts-autograd') as unknown as MathTSAutograd;
-    } catch (cause) { throw new EngineCapabilityError('MathTSEngine', 'reverseGrad', { cause }); }
+    const autograd = await loadAutograd('reverseGrad');
 
     // S1 fix: pass fn UNCHANGED (see forwardGrad note above). autograd.reverseGrad
     // wraps x as a TapedTensor; MathTSEngine's mul/add/sub/scale dispatch
