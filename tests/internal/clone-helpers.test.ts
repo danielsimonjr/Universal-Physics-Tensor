@@ -12,6 +12,7 @@ import type { NumericalInputs } from '../../src/numerical/types.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { allAtlasBridges, enumerateAtlasRoutes, findAtlasPath } from '../../src/atlas/path-bound.js';
 import { compareChainOrder } from '../../src/composition/chain-candidate.js';
+import { SUPERSCRIPT, sideTokens, splitPrefix } from '../../src/dimensional/unit-data.js';
 import { lower, metric, raise } from '../../src/dimensional/metric.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -140,5 +141,33 @@ describe('requireMetricClosures (numerical/lowering-utils.ts)', () => {
     }
     expect(src('src/numerical/lowering.ts')).toContain("requireMetricClosures('riemann-tensor', inputs, gName, gInvName)");
     expect(helpers).not.toContain('metric closures in');
+  });
+});
+
+describe('splitPrefix, SUPERSCRIPT and sideTokens (dimensional/unit-data.ts)', () => {
+  it('reads the first prefix of the table that leaves a prefixable unit', () => {
+    expect(splitPrefix('km')).toMatchObject({ prefix: 'k', base: 'm' });
+    expect(splitPrefix('k')).toBeNull();
+    expect(splitPrefix('xyz')).toBeNull();
+  });
+
+  it('splits one side of a unit text into factor tokens', () => {
+    expect(sideTokens('kg*m·s  A.V')).toEqual(['kg', 'm', 's', 'A', 'V']);
+    expect(SUPERSCRIPT['⁻²']).toBe(-2);
+  });
+
+  it('is the one prefix scan: the four readers call it and keep their own exact-symbol answer', () => {
+    const delegation = src('src/dimensional/mathts-unit-delegation.ts');
+    const wrapper = src('src/dimensional/mathts-unit-wrapper.ts');
+    const units = src('src/dimensional/units.ts');
+    expect(delegation).toContain('if (UNITS.has(sym)) return { base: sym };\n  const split = splitPrefix(sym);');
+    expect(units).toContain('if (UNITS.has(symbol)) return null;\n  return splitPrefix(symbol)?.base ?? null;');
+    expect(units).toContain('const split = splitPrefix(sym);');
+    expect(wrapper).toContain('tryOneFactorBase(token)');
+    for (const [file, text] of [['delegation', delegation], ['wrapper', wrapper], ['units', units]] as const) {
+      expect(text, file).not.toMatch(/startsWith\(p(refix)?\) \|\|/);
+      expect(text, file).not.toContain("const SUPERSCRIPT");
+      expect(text, file).not.toContain('function sideTokens');
+    }
   });
 });

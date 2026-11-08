@@ -16,7 +16,7 @@ import {
 import { symmetricRelDiff } from '../core/compare.js';
 import { equals, multiply, power } from './algebra.js';
 import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
-import { UNIT_DATA } from './unit-data.js';
+import { SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix } from './unit-data.js';
 import type { Dimension } from './types.js';
 
 const DIMENSIONLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
@@ -24,20 +24,22 @@ const UNITS = UNIT_DATA.units;
 const PREFIXES = UNIT_DATA.prefixes;
 const REFUSED = UNIT_DATA.refused;
 
-const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
-
+/** The unit that `sym` names, exactly or after an SI prefix, or null. */
 function trySymbol(sym: string): { readonly base: string } | null {
   if (UNITS.has(sym)) return { base: sym };
-  for (const [prefix] of PREFIXES) {
-    if (!sym.startsWith(prefix) || sym.length === prefix.length) continue;
-    const base = sym.slice(prefix.length);
-    const row = UNITS.get(base);
-    if (row !== undefined && row.prefixable) return { base };
-  }
-  return null;
+  const split = splitPrefix(sym);
+  return split === null ? null : { base: split.base };
 }
 
-function tryOneFactorBase(token: string): string | null {
+/**
+ * The unit of one factor token, with its exponent (`^n`, a superscript, or glued digits) removed.
+ * `mathts-unit-wrapper.ts` reads its factor bases with it too.
+ *
+ * @param token - One factor token.
+ * @returns The unprefixed unit, or null when the token is not one unit with an optional exponent.
+ * @internal
+ */
+export function tryOneFactorBase(token: string): string | null {
   let base = token;
   const caret = /^(.+)\^([+-]?\d+)$/.exec(token);
   if (caret !== null) base = caret[1]!;
@@ -50,10 +52,6 @@ function tryOneFactorBase(token: string): string | null {
     }
   }
   return trySymbol(base)?.base ?? null;
-}
-
-function sideTokens(text: string): string[] {
-  return text.split(/[*·\s]+|(?<=[A-Za-zµμΩ])\.(?=[A-Za-zµμΩ])/).filter((part) => part.length > 0);
 }
 
 /** Every factor base in `text` is admitted in UPT and present in MathTS. */

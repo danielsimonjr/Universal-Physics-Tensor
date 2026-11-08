@@ -65,7 +65,7 @@ import {
   unitParserViaMathts,
 } from './mathts-unit-delegation.js';
 import { applyBitScaleOverride, tryMathtsA5Reading, uptRefusalReason } from './mathts-unit-wrapper.js';
-import { UNIT_DATA, type AffineRow as UnitDataAffineRow } from './unit-data.js';
+import { SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix, type AffineRow as UnitDataAffineRow } from './unit-data.js';
 
 /** An affine temperature scale: a lone `degC` or `degF`. @public */
 export type AffineTemperature = 'celsius' | 'fahrenheit';
@@ -181,17 +181,10 @@ interface SymbolReading {
 function trySymbol(sym: string): SymbolReading | null {
   const exact = UNITS.get(sym);
   if (exact !== undefined) return { scale: exact.scale, dim: exact.dim, cycles: exact.cycles === true ? 1 : 0 };
-  for (const [p, f] of PREFIXES) {
-    if (!sym.startsWith(p) || sym.length === p.length) continue;
-    const base = UNITS.get(sym.slice(p.length));
-    if (base !== undefined && base.prefixable) {
-      return { scale: multiplyScales(f, base.scale), dim: base.dim, cycles: base.cycles === true ? 1 : 0 };
-    }
-  }
-  return null;
+  const split = splitPrefix(sym);
+  if (split === null) return null;
+  return { scale: multiplyScales(split.factor, split.row.scale), dim: split.row.dim, cycles: split.row.cycles === true ? 1 : 0 };
 }
-
-const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
 
 interface FactorReading {
   readonly base: string;
@@ -235,13 +228,7 @@ function formatReading(factors: readonly FactorReading[]): string {
 /** The unprefixed unit a prefix spelling attaches to, or null when `symbol` is exact. */
 function attachedUnit(symbol: string): string | null {
   if (UNITS.has(symbol)) return null;
-  for (const [prefix] of PREFIXES) {
-    if (!symbol.startsWith(prefix) || symbol.length === prefix.length) continue;
-    const base = symbol.slice(prefix.length);
-    const unitRow = UNITS.get(base);
-    if (unitRow !== undefined && unitRow.prefixable) return base;
-  }
-  return null;
+  return splitPrefix(symbol)?.base ?? null;
 }
 
 /**
@@ -321,10 +308,6 @@ export interface UnitReading extends ParsedUnit {
   readonly exact: ExactScale;
   /** Net power of cycle-counting units (Hz, rpm): 1 for a lone `kHz`, 0 for `1/s`. */
   readonly cycles: number;
-}
-
-function sideTokens(text: string): string[] {
-  return text.split(/[*·\s]+|(?<=[A-Za-zµμΩ])\.(?=[A-Za-zµμΩ])/).filter((part) => part.length > 0);
 }
 
 function formatSide(tokens: readonly (readonly FactorReading[])[]): string {

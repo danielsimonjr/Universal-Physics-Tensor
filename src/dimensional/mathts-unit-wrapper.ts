@@ -26,8 +26,8 @@
  */
 import { REFUSED_UNIT_SPELLINGS, Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
 import { scaleToNumber, solidusSides, uptExactScaleFromCore, type ExactScale } from './exact-scale.js';
-import { isSubKiloParsec, mathtsParsedDimension } from './mathts-unit-delegation.js';
-import { UNIT_DATA } from './unit-data.js';
+import { isSubKiloParsec, mathtsParsedDimension, tryOneFactorBase } from './mathts-unit-delegation.js';
+import { UNIT_DATA, sideTokens } from './unit-data.js';
 import type { Dimension } from './types.js';
 
 const DIMENSIONLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
@@ -69,38 +69,6 @@ export const A5_DELEGATED_TEXTS = [
 
 const A5_DELEGATED = new Set<string>(A5_DELEGATED_TEXTS);
 
-const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
-
-function sideTokens(text: string): string[] {
-  return text.split(/[*·\s]+|(?<=[A-Za-zµμΩ])\.(?=[A-Za-zµμΩ])/).filter((part) => part.length > 0);
-}
-
-function trySymbolBase(token: string): string | null {
-  if (UNITS.has(token)) return token;
-  for (const [prefix] of UNIT_DATA.prefixes) {
-    if (!token.startsWith(prefix) || token.length === prefix.length) continue;
-    const base = token.slice(prefix.length);
-    const row = UNITS.get(base);
-    if (row !== undefined && row.prefixable) return base;
-  }
-  return null;
-}
-
-function factorBase(token: string): string | null {
-  let base = token;
-  const caret = /^(.+)\^([+-]?\d+)$/.exec(token);
-  if (caret !== null) base = caret[1]!;
-  else {
-    const uni = /^(.*?)(⁻?[¹²³])$/.exec(token);
-    if (uni !== null && SUPERSCRIPT[uni[2]!] !== undefined && uni[1]!.length > 0) base = uni[1]!;
-    else {
-      const glued = /^(.*?)([1-9]\d*)$/.exec(token);
-      if (glued !== null && glued[1]!.length > 0 && trySymbolBase(glued[1]!) !== null) base = glued[1]!;
-    }
-  }
-  return trySymbolBase(base);
-}
-
 /** A token MathTS refuses by name: UPT policy rows first, then the MathTS registry. */
 function refusalReasonFor(token: string): string | undefined {
   return REFUSED.get(token) ?? REFUSED_UNIT_SPELLINGS[token];
@@ -119,7 +87,7 @@ export function refusedTokensIn(text: string): readonly string[] {
     if (token === '1') continue;
     if (refusalReasonFor(token) !== undefined) hits.push(token);
     else {
-      const base = factorBase(token);
+      const base = tryOneFactorBase(token);
       if (base !== null && refusalReasonFor(base) !== undefined) hits.push(base);
     }
   }

@@ -238,3 +238,39 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
 
 /** The unit table, read once from `data/units.json`. @internal */
 export const UNIT_DATA: UnitTableData = readUnitFile(dataText('units.json'), dataSchema('units.json'));
+
+/**
+ * The first SI-prefix reading of `symbol`: a prefix of the table, then a prefixable unit.
+ * The prefixes are tried in table order. The function does not read `symbol` as an exact unit;
+ * each caller does that first, and the callers give different answers for an exact unit.
+ *
+ * @param symbol - The spelling to split.
+ * @returns The prefix, its factor, the unit and its row, or null when no prefix reading exists.
+ * @internal
+ */
+export function splitPrefix(
+  symbol: string,
+): { readonly prefix: string; readonly factor: ExactScale; readonly base: string; readonly row: UnitRow } | null {
+  for (const [prefix, factor] of UNIT_DATA.prefixes) {
+    if (!symbol.startsWith(prefix) || symbol.length === prefix.length) continue;
+    const base = symbol.slice(prefix.length);
+    const row = UNIT_DATA.units.get(base);
+    if (row !== undefined && row.prefixable) return { prefix, factor, base, row };
+  }
+  return null;
+}
+
+/** The exponent of each superscript suffix that a unit factor can carry. @internal */
+export const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
+
+/**
+ * The factor tokens of one side of a unit text.
+ * A `*`, a `·`, white space, or a `.` between two letters separates two tokens.
+ *
+ * @param text - One side of the solidus.
+ * @returns The tokens, with no empty token.
+ * @internal
+ */
+export function sideTokens(text: string): string[] {
+  return text.split(/[*·\s]+|(?<=[A-Za-zµμΩ])\.(?=[A-Za-zµμΩ])/).filter((part) => part.length > 0);
+}
