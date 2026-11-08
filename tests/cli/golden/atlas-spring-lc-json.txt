@@ -1,0 +1,209 @@
+{
+  "command": "atlas",
+  "epistemics": "Every qualification is included; empty lists mean \"none stated\", not \"none needed\". symbolically-checked is decided by https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json, which is not shipped in the package; symbolicWitnesses names the witnesses it is decided over.",
+  "options": {
+    "id": "ab-spring-lc",
+    "run": false
+  },
+  "definitions": {
+    "vacuous": "the record states no machine inequality, so nothing was evaluated: not a pass, and not evidence that the record applies at the point",
+    "checked": "a witness ran in this invocation and its claim held",
+    "refuted": "a witness ran and its claim failed. On a negative control the wrong hypothesis is refuted, which is the control working. A refuted witness makes `--run` exit 3",
+    "unresolved": "a witness did not run (its peer is absent, it timed out, its input did not parse) or ran and could not decide (a CAS difference that did not simplify to zero, no convergence). Not a refutation, and never counted with the refuted"
+  },
+  "result": {
+    "id": "ab-spring-lc",
+    "family": "oscillators",
+    "relation": "exact-equivalence",
+    "premises": [
+      {
+        "id": "model-spring",
+        "family": "oscillators"
+      }
+    ],
+    "conclusion": {
+      "id": "model-lc",
+      "family": "oscillators"
+    },
+    "transformation": "force–voltage analogy m ↔ L, k ↔ 1/C, x ↔ q (so ω0² = k/m ↔ 1/(LC)); u = x/x0 or q/q0, τ = ω0 t; composed, q(t) = (q0/x0)·x(ω_LC t / ω_s)",
+    "inverse": "x = x0 u, t = τ/ω0",
+    "sideConditions": [
+      "m, k, L, C > 0",
+      "lossless",
+      "unforced",
+      "x0, q0 nonzero"
+    ],
+    "regime": {
+      "inequalities": [],
+      "vacuous": true
+    },
+    "bound": null,
+    "preserves": [
+      "the natural frequency in units of ω0 (ω = 1 in τ = ω0 t)",
+      "energy up to scale",
+      "phase portrait"
+    ],
+    "doesNotPreserve": [
+      "physical interpretation",
+      "units"
+    ],
+    "formallyProved": true,
+    "derivedEvidence": [
+      "formally-proved",
+      "contradicted"
+    ],
+    "provedWithUnresolvedCounterexample": true,
+    "symbolicWitnesses": [
+      "W1",
+      "W1s"
+    ],
+    "witnesses": [
+      {
+        "id": "W1",
+        "kind": "symbolic",
+        "test": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts",
+        "tolerance": "exact — rational exponent arithmetic, no floating point"
+      },
+      {
+        "id": "W1a",
+        "kind": "numeric",
+        "test": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts",
+        "tolerance": "|u_spring − u_lc| < 1e-8; each within 1e-8 of cos τ"
+      },
+      {
+        "id": "W1b",
+        "kind": "numeric",
+        "test": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts",
+        "tolerance": "inverse-mapped trajectory solves m x″ + k x = 0 within 1e-8; a 1% wrong ω0 fails"
+      },
+      {
+        "id": "W2b",
+        "kind": "numeric",
+        "test": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts",
+        "tolerance": "separation > 1e-2 at τ = π"
+      },
+      {
+        "id": "W1s",
+        "kind": "symbolic",
+        "test": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/witness-results.test.ts",
+        "tolerance": "CAS: k/m under m ↔ L, k ↔ 1/C minus 1/(LC) simplifies to literal 0"
+      }
+    ],
+    "counterexamples": [
+      {
+        "description": "adding R to bridge 1 breaks it: the circuit L = 2, C = 0.125 of witness W2b with R = 4 has ζ_RLC = (R/2)√(C/L) = 0.5, which no lossless spring matches — the trajectories separate by more than 1e-2 at τ = π",
+        "witness": "W2b"
+      }
+    ],
+    "formalRef": {
+      "system": "lean4-physjs",
+      "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
+      "version": "upt-lean@v12.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "fidelity": "sanity-lemmas",
+      "kind": "bridge",
+      "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v12.0.0/lean/OscillatorDictionary.lean",
+      "covers": "the oscillator dictionary — covers its statement only"
+    },
+    "formalRefCovers": "the oscillator dictionary — covers its statement only",
+    "citations": [
+      "Olson, Dynamical Analogies - the force-voltage (impedance) analogy between a mass-spring–damper and a series RLC circuit",
+      "Feynman, Lectures on Physics Vol. II, chapter on resonance - the LC oscillator and its mechanical counterpart"
+    ],
+    "reviewStatus": "proposed",
+    "claims": {
+      "correspondence": {
+        "formalReference": {
+          "system": "lean4-physjs",
+          "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
+          "fidelity": "sanity-lemmas",
+          "kind": "bridge",
+          "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v12.0.0/lean/OscillatorDictionary.lean"
+        },
+        "text": "formal reference lean4-physjs, fidelity sanity-lemmas — covers its statement only"
+      },
+      "regime": {
+        "inequalities": 0,
+        "vacuous": true,
+        "text": "VACUOUS — no machine inequality to check"
+      },
+      "bound": null,
+      "horizon": {
+        "machineForm": false,
+        "text": "none stated (no bound)"
+      },
+      "preserves": {
+        "evidence": null,
+        "text": "no evidence is attributed to a preserved property"
+      }
+    },
+    "witnessExecution": [
+      {
+        "id": "W1",
+        "kind": "symbolic",
+        "claim": null,
+        "status": "not-observed",
+        "rerun": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts"
+      },
+      {
+        "id": "W1a",
+        "kind": "numeric",
+        "claim": null,
+        "status": "not-observed",
+        "rerun": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts"
+      },
+      {
+        "id": "W1b",
+        "kind": "numeric",
+        "claim": null,
+        "status": "not-observed",
+        "rerun": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts"
+      },
+      {
+        "id": "W2b",
+        "kind": "numeric",
+        "claim": null,
+        "status": "not-observed",
+        "rerun": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-exact.test.ts"
+      },
+      {
+        "id": "W1s",
+        "kind": "symbolic",
+        "claim": null,
+        "status": "runnable",
+        "rerun": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/witness-results.test.ts"
+      }
+    ],
+    "witnessRun": null,
+    "normTransports": [
+      {
+        "id": "nt-spring-lc-relative-period",
+        "fromModel": "model-spring",
+        "toModel": "model-lc",
+        "from": "relative period error, normalized by the value of the reduced model",
+        "to": "relative period error, normalized by the value of the reduced model",
+        "K": 1,
+        "domain": "every m, k, L, C > 0 and x0, q0 ≠ 0 (the bridge's side conditions); K is the same constant throughout",
+        "derivation": "q(t_LC) = (q0/x0)·x(t) with t_LC = t·ω_s/ω_LC scales every period by the same ω_s/ω_LC, so a ratio of two periods, T_full/T_reduced − 1, is unchanged: K = 1 and nothing is added",
+        "timeMap": {
+          "map": "t_LC = t·ω_s/ω_LC, one constant factor for every t",
+          "uniform": true,
+          "horizon": "a horizon that reads time only through t/T0 holds unchanged with t read on the circuit clock and T0 = 2π√(LC): a uniform time scale leaves t/T0 invariant"
+        },
+        "uniformity": "preserved: K is one constant over the whole domain, so the incoming bound's uniformity holds unchanged",
+        "witness": {
+          "id": "W1τ",
+          "kind": "numeric",
+          "test": "tests/atlas/spring-lc-norm-transport.test.ts",
+          "tolerance": "RK4 relative period error of the pendulum's image q'' = −ω_LC²(q0/θ0) sin(θ0 q/q0) against the LC period, in circuit time (L = 0.5, C = 0.25, ω_LC = 2√2 ≠ ω_s = 2), at 640 steps per LC period within 1e-9 of K times the closed-form elliptic error at θ0 = 0.5; 160 steps is the coarse resolution"
+        },
+        "basis": "numerically-supported",
+        "status": "runnable"
+      }
+    ]
+  }
+}
