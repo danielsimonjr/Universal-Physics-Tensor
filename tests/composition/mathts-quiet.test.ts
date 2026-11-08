@@ -15,7 +15,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { quietly, quietlySync } from '../../src/composition/mathts-quiet.js';
+import { quietlySync } from '../../src/composition/mathts-quiet.js';
 import { scalarSymbolsFromMathTs } from '../../src/composition/mathts-scalar-symbols.js';
 import { isSimplifierAvailable, simplifyExpr } from '../../src/composition/expr-simplify.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -86,7 +86,6 @@ describe('the MathTS console silencer', () => {
     const before = { warn: console.warn, error: console.error, write: process.stderr.write };
     expect(quietlySync(() => 7)).toBe(7);
     expect(() => quietlySync(() => { throw new RangeError('inside'); })).toThrow(RangeError);
-    await expect(quietly(async () => { throw new RangeError('inside'); })).rejects.toThrow(RangeError);
     expect(console.warn).toBe(before.warn);
     expect(console.error).toBe(before.error);
     expect(process.stderr.write).toBe(before.write);

@@ -56,7 +56,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `studentTwoSidedP` is `2·studentTCDF(−|t|, ν)`; the wrapper and its edge results stay.
 - [x] MathTS leverage U6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U6).
   Done: `mcnemar` exact p is MathTS `binomialTest` on the smaller discordant cell; the local tail loop and its `logChoose` copy are gone.
-- [ ] MathTS leverage U7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U7).
+- [x] MathTS leverage U7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U7).
+  Done: `expr-simplify.ts` imports MathTS `parse` and `simplify` statically; `isSimplifierAvailable` returns true and a failed smoke throws. The async `quietly` window is removed (no other caller); the smoke runs once inside `quietlySync`, as in the two sibling modules. Tests deleted: none. Rewritten: `tests/composition/mathts-quiet.test.ts` (the async-helper restore line). The false branch stays reachable by passing `null` to `runSymbolicWitness` (`tests/atlas/witness-runners.test.ts`, `witness-results.test.ts`, `witness-numeric-probe.test.ts`); the `skipIf(!simplifierPresent)` guards now always run.
 - [ ] MathTS leverage U8 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U8).
 - [ ] MathTS leverage U9 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U9).
 - [ ] MathTS leverage M1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M1).

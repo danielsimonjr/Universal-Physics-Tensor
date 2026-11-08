@@ -1,11 +1,11 @@
 /**
- * Symbolic simplification of a scalar `ExprNode` via MathTS (v0.12 — optional
- * supplement to symbolic composition).
+ * Symbolic simplification of a scalar `ExprNode` through MathTS, a supplement
+ * to symbolic composition.
  *
  * Composing two bridges' symbolic forms leaves an UNSIMPLIFIED AST — CT-1 is
  * `k_B·(ℏc³/8πG·mass·k_B)·ln2`, with `k_B` uncancelled. This folds it to the
  * canonical `ℏc³·ln2/(8πG·mass)` using `@danielsimonjr/mathts-functions`'
- * `simplify` (the same OPTIONAL peer the Path-A formula parser loads).
+ * `simplify`, a required dependency.
  *
  * Pipeline (Adam+Eve-vetted — docs/planning/v0.12.0-Symbolic-Simplification-
  * Design.md): GENSYM every non-exponent leaf to a mathjs-safe identifier
@@ -19,7 +19,7 @@
  *   3. numeric    — `evalExpr` agrees over ≥2 finite synthesized probes at
  *      rel tol 1e-9 (Adam CRITICAL-2 / EVE-C).
  * A representable result that DISAGREES dimensionally/numerically THROWS (a
- * bug to surface); anything we cannot represent / verify / load degrades to a
+ * bug to surface); anything we cannot represent or verify degrades to a
  * graceful no-op (return the original, `simplified:false`).
  *
  * INTERNAL — surfaced via `upt symbolic --simplify`.
@@ -38,7 +38,8 @@ import { isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import type { Observable } from './compose-symbolic.js';
 import { makeObservable } from './compose-symbolic.js';
 import { renderScalarLeaf } from './mathts-scalar-symbols.js';
-import { quietly } from './mathts-quiet.js';
+import { parse as mathtsParse, simplify as mathtsSimplify } from '@danielsimonjr/mathts-functions';
+import { quietlySync } from './mathts-quiet.js';
 
 /** A simplification completed but produced a dimensionally/numerically wrong
  *  result (a real bug — not a graceful no-op). @internal */
@@ -70,41 +71,30 @@ interface MathtsSimplifyModule {
 class Unsupported extends Error {}
 
 // ---------------------------------------------------------------------------
-// Optional-peer load — cache + quietly + simplify-smoke (mirrors
-// formula-registry.ts).
+// The MathTS simplifier: a static import, bound once after a smoke test.
 // ---------------------------------------------------------------------------
 
-let cached: Promise<MathtsSimplifyModule | null> | undefined;
+let cached: MathtsSimplifyModule | undefined;
 
-/** Load + smoke-test the peer. A peer with `parse` but a missing/broken
- *  `simplify` (it must actually CANCEL) is rejected → null (graceful no-op). */
-async function detect(): Promise<MathtsSimplifyModule | null> {
-  try {
-    // Import AND smoke-test inside the ONE suppression window this module
-    // opens (`mathts-quiet.ts` states the invariant): the WASM-fallback
-    // chatter fires lazily on first parse/simplify, not only at import, and
-    // the smoke below is that first use. Later calls run with the console
-    // untouched.
-    return await quietly(async () => {
-      const mod = (await import(
-        '@danielsimonjr/mathts-functions'
-      )) as unknown as MathtsSimplifyModule;
-      if (typeof mod.parse !== 'function' || typeof mod.simplify !== 'function') {
-        return null;
-      }
-      // Smoke: g0 must cancel out of (g0)*((g1)/(g0)) → only g1 remains.
-      const s = mod.simplify(mod.parse('(g0)*((g1)/(g0))'));
-      const names = new Set<string>();
-      collectMathSymbols(s, names);
-      return names.size === 1 && names.has('g1') ? mod : null;
-    });
-  } catch {
-    return null;
+/**
+ * `parse` and `simplify`, bound once after a smoke test that `simplify`
+ * CANCELS (`(g0)*((g1)/(g0))` must come back as `g1` alone). The smoke is the
+ * first use, so it runs inside the one console window (`mathts-quiet.ts`).
+ * MathTS is a required dependency, so a failed smoke is a defect of that
+ * dependency and throws; it is not read as an absent simplifier.
+ */
+function loadSimplifier(): MathtsSimplifyModule {
+  if (cached !== undefined) return cached;
+  const mod: MathtsSimplifyModule = {
+    parse: (text) => mathtsParse(text) as unknown as MathNode,
+    simplify: (node) => mathtsSimplify(node as never) as unknown as MathNode,
+  };
+  const names = new Set<string>();
+  quietlySync(() => collectMathSymbols(mod.simplify(mod.parse('(g0)*((g1)/(g0))')), names));
+  if (names.size !== 1 || !names.has('g1')) {
+    throw new Error(`expr-simplify: MathTS simplify did not cancel g0 in the smoke test (left ${[...names].join(', ')})`);
   }
-}
-
-function loadSimplifier(): Promise<MathtsSimplifyModule | null> {
-  cached ??= detect();
+  cached = mod;
   return cached;
 }
 
@@ -274,32 +264,28 @@ interface SimplifyResult {
 }
 
 /**
- * Whether the optional MathTS simplifier peer is installed AND passes its
- * smoke test.
- *
- * {@link simplifyExpr} returns `simplified: false` both when the peer is absent
- * and when it is present but could not reduce the expression, so a caller that
- * must report WHY nothing happened (the atlas witness runner's `peer-absent`
- * versus `not-simplified`) needs this separate signal. Shares the same cached
- * detection, so it costs nothing after the first call.
+ * Whether the MathTS simplifier is usable. MathTS is a required dependency, so
+ * the answer is true; a simplifier that fails its smoke test throws instead.
+ * The atlas witness runner reads it to choose between the simplifier and its
+ * `peer-absent` path, which a caller still reaches by passing `null`.
  *
  * @internal
  */
 export async function isSimplifierAvailable(): Promise<boolean> {
-  return (await loadSimplifier()) !== null;
+  loadSimplifier();
+  return true;
 }
 
 /**
  * Simplify a scalar `ExprNode` via MathTS, guarded. Returns the original
- * unchanged (`simplified:false`) when the peer is absent or the result cannot
- * be represented/verified; THROWS {@link SimplificationError} only when a
+ * unchanged (`simplified:false`) when the result cannot be represented or
+ * verified; THROWS {@link SimplificationError} only when a
  * representable result disagrees dimensionally/numerically. See module docs.
  *
  * @internal
  */
 export async function simplifyExpr(expr: ExprNode): Promise<SimplifyResult> {
-  const mod = await loadSimplifier();
-  if (!mod) return { expr, simplified: false };
+  const mod = loadSimplifier();
 
   const gensymOf = new Map<string, string>();
   const meta = new Map<string, LeafMeta>();
@@ -308,8 +294,8 @@ export async function simplifyExpr(expr: ExprNode): Promise<SimplifyResult> {
     const str = renderGensym(expr, gensymOf, meta);
     // The peer can THROW on some forms (e.g. a known mathts `simplify` BigInt
     // bug on nested `a/(b/c²)`); that, like an unsupported node, is a graceful
-    // no-op, not an error. The console is not touched here: the peer's first
-    // use already ran inside `detect`'s load window.
+    // no-op, not an error. The console is not touched here: the first use
+    // already ran inside `loadSimplifier`'s window.
     const simplifiedNode = mod.simplify(mod.parse(str));
     candidate = walkBack(simplifiedNode, meta);
   } catch {
