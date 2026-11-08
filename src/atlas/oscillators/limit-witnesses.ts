@@ -13,6 +13,7 @@
  * @internal
  */
 
+import { hermiteCrossingFraction } from '../../numerical/hermite-crossing.js';
 import { rk4Trajectory } from '../../numerical/rk4-trajectory.js';
 import { quarterPeriod } from './norm-transport-witness.js';
 
@@ -135,13 +136,7 @@ export function measureChainDispersionError(
     const v0 = state[N]!;
     const nv0 = next[N]!;
     if (u0 > 0 && nu0 <= 0) {
-      const [p0, m0, p1, m1] = [u0, v0 * h, nu0, nv0 * h];
-      const p = (s: number): number =>
-        (2 * s ** 3 - 3 * s ** 2 + 1) * p0 + (s ** 3 - 2 * s ** 2 + s) * m0 + (-2 * s ** 3 + 3 * s ** 2) * p1 + (s ** 3 - s ** 2) * m1;
-      const dp = (s: number): number =>
-        (6 * s ** 2 - 6 * s) * p0 + (3 * s ** 2 - 4 * s + 1) * m0 + (-6 * s ** 2 + 6 * s) * p1 + (3 * s ** 2 - 2 * s) * m1;
-      let s = p0 / (p0 - p1);
-      for (let j = 0; j < 8; j++) s -= p(s) / dp(s);
+      const s = hermiteCrossingFraction(u0, v0 * h, nu0, nv0 * h);
       const omega = Math.PI / (2 * (i + s) * h);
       const c = a * Math.sqrt(w);
       const q = (2 * Math.PI) / (N * a);
