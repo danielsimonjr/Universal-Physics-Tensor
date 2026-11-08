@@ -512,9 +512,9 @@ function composeSteps(api: Api, bridges: readonly AtlasBridge[], results: Witnes
   const claim = routeClaim(api, bridges);
   const missing = explainsRefusal(claim) ? missingForComposite(api, bridges) : [];
   const applied = claim.kind === 'bound' ? (claim.transports ?? []) : [];
-  const transports = applied.map((a) => ({ ...transportReport(a), result: transportResult(a.transport, results) }));
+  const transports = applied.map((a) => ({ ...transportReport(api, a), result: transportResult(a.transport, results) }));
   const evidence = claim.kind === 'bound' ? compositeEvidence(api, bridges, applied, results) : null;
-  return { running, breaksAt, claim: claimReport(claim), missing, transports, evidence };
+  return { running, breaksAt, claim: claimReport(api, claim), missing, transports, evidence };
 }
 
 /** Build the focused atlas route view for two model ids. */
