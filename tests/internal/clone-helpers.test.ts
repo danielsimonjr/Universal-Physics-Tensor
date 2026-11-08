@@ -7,6 +7,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { hermiteCrossingFraction } from '../../src/numerical/hermite-crossing.js';
+import { requireMetricClosures } from '../../src/numerical/lowering-utils.js';
+import type { NumericalInputs } from '../../src/numerical/types.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { allAtlasBridges, enumerateAtlasRoutes, findAtlasPath } from '../../src/atlas/path-bound.js';
 import { compareChainOrder } from '../../src/composition/chain-candidate.js';
@@ -101,5 +103,42 @@ describe('compareChainOrder (chain-candidate.ts)', () => {
   it('is the one comparator: both sorts call it', () => {
     expect(src('src/composition/chain-candidate.ts')).toContain('compareChainOrder(a.kind, a.edgeIds, b.kind, b.edgeIds)');
     expect(src('src/composition/chain-result.ts')).toContain('compareChainOrder(chainOrderKey(a), a.edgeIds, chainOrderKey(b), b.edgeIds)');
+  });
+});
+
+describe('requireMetricClosures (numerical/lowering-utils.ts)', () => {
+  const inputs = { tensors: new Map(), fields: new Map([['h', () => [[1]]]]) } as unknown as NumericalInputs;
+  const tail = 'Got fields=[h].';
+
+  it('keeps the message of each of the four lowerings', () => {
+    expect(() => requireMetricClosures('weyl-tensor', inputs, 'g', 'g_inv')).toThrow(
+      `lowering: weyl-tensor requires coordinate-dependent metric closures in inputs.fields for "g" and "g_inv". ${tail}`,
+    );
+    expect(() => requireMetricClosures('kretschmann-scalar', inputs, 'g', 'g_inv')).toThrow(
+      `lowering: kretschmann-scalar requires coordinate-dependent metric closures in inputs.fields for "g" and "g_inv". ${tail}`,
+    );
+    expect(() => requireMetricClosures('bianchi-residual', inputs, 'g', 'gInv')).toThrow(
+      `lowering: bianchi-residual numerical evaluation requires coordinate-dependent metric closures in inputs.fields for "g" and "gInv". ${tail}`,
+    );
+    expect(() => requireMetricClosures('riemann-tensor', inputs, 'g', 'gInv')).toThrow(
+      'lowering: riemann-tensor numerical evaluation requires coordinate-dependent metric closures in inputs.fields for "g" and "gInv" ' +
+        `(constant-metric Riemann is identically zero — the test wouldn't fire here). ${tail}`,
+    );
+  });
+
+  it('returns both closures when both are present', () => {
+    const g = (): number[][] => [[1]];
+    const gi = (): number[][] => [[2]];
+    const both = { tensors: new Map(), fields: new Map([['g', g], ['g_inv', gi]]) } as unknown as NumericalInputs;
+    expect(requireMetricClosures('weyl-tensor', both, 'g', 'g_inv')).toEqual({ gFn: g, gInverseFn: gi });
+  });
+
+  it('is the one check: the four lowerings call it', () => {
+    const helpers = src('src/numerical/curvature-lowering-helpers.ts');
+    for (const kind of ['bianchi-residual', 'weyl-tensor', 'kretschmann-scalar']) {
+      expect(helpers).toContain(`requireMetricClosures('${kind}', inputs,`);
+    }
+    expect(src('src/numerical/lowering.ts')).toContain("requireMetricClosures('riemann-tensor', inputs, gName, gInvName)");
+    expect(helpers).not.toContain('metric closures in');
   });
 });

@@ -39,7 +39,8 @@ import type { WeylTensorNode } from '../dimensional/weyl-validators.js';
 import type { KretschmannScalarNode } from '../dimensional/curvature-invariants.js';
 import { computeWeylTensor } from './weyl-lowering.js';
 import { computeKretschmann } from './kretschmann.js';
-import { dimensionOf, requireValue, flattenNestedArray } from './lowering-utils.js';
+import { dimensionOf, requireValue, flattenNestedArray, requireMetricClosures } from './lowering-utils.js';
+import type { MetricFn } from './lowering-utils.js';
 
 /** A coordinate-dependent rank-2 closure returning the FLAT layout:
  *  f(x) → Float64Array(N²), row-major `flat[mu*N + nu]` (v0.9.0
@@ -51,11 +52,8 @@ export type MetricFnFlat = (x: ReadonlyArray<number>) => Float64Array;
  *  minkowski stay nested for this release per Decision #8). */
 type MetricFnNested = (x: ReadonlyArray<number>) => number[][];
 
-/** A coordinate-dependent rank-2 closure: f(x) → N×N as a NestedArray
- *  (number[][], Float64Array, or any form `flattenNA` can flatten —
- *  the union of `MetricFnFlat` and `MetricFnNested` plus deeper
- *  nestings; NestedArray itself admits Float64Array since v0.9.0). */
-export type MetricFn = (x: ReadonlyArray<number>) => NestedArray;
+// The closure type lives in `lowering-utils.ts` with `requireMetricClosures`; re-exported here.
+export type { MetricFn } from './lowering-utils.js';
 
 /**
  * dGamma[λ][ρ][σ][ν] = ∂_λ Γ^ρ_{σν} at the given coordinates (I3).
@@ -816,16 +814,7 @@ export function lowerBianchiResidual(
   const rNode = node.riemann;
   const N = dimensionOf(inputs);
   const x = flattenNestedArray(requireValue(rNode.xCoord.name, inputs), N);
-  const gFn = inputs.fields?.get(rNode.gLower.name) as MetricFn | undefined;
-  const gInverseFn = inputs.fields?.get(rNode.gInverse.name) as MetricFn | undefined;
-  if (!gFn || !gInverseFn) {
-    throw new NumericalBackendError(
-      `lowering: bianchi-residual numerical evaluation requires coordinate-` +
-      `dependent metric closures in inputs.fields for "${rNode.gLower.name}" ` +
-      `and "${rNode.gInverse.name}". ` +
-      `Got fields=[${[...(inputs.fields?.keys() ?? [])].join(',')}].`,
-    );
-  }
+  const { gFn, gInverseFn } = requireMetricClosures('bianchi-residual', inputs, rNode.gLower.name, rNode.gInverse.name);
   const B = bianchiResidualAt(x, gFn, gInverseFn, N, engine);
   return engine.fromNested(B as NestedArray, [N, N, N, N, N]);
 }
@@ -861,15 +850,7 @@ export function lowerWeylTensor(
   const metricInvName = `${metricName}_inv`;
 
   const x = flattenNestedArray(requireValue('x', inputs), N);
-  const gFn = inputs.fields?.get(metricName) as MetricFn | undefined;
-  const gInverseFn = inputs.fields?.get(metricInvName) as MetricFn | undefined;
-  if (!gFn || !gInverseFn) {
-    throw new NumericalBackendError(
-      `lowering: weyl-tensor requires coordinate-dependent metric closures in ` +
-      `inputs.fields for "${metricName}" and "${metricInvName}". ` +
-      `Got fields=[${[...(inputs.fields?.keys() ?? [])].join(',')}].`,
-    );
-  }
+  const { gFn, gInverseFn } = requireMetricClosures('weyl-tensor', inputs, metricName, metricInvName);
 
   // Step 1-2: Riemann R^ρ_{σμν} via FD pipeline.
   const gamma = christoffelAt(x, gFn, gInverseFn, N, engine);
@@ -935,15 +916,7 @@ export function lowerKretschmannScalar(
   const metricInvName = `${metricName}_inv`;
 
   const x = flattenNestedArray(requireValue('x', inputs), N);
-  const gFn = inputs.fields?.get(metricName) as MetricFn | undefined;
-  const gInverseFn = inputs.fields?.get(metricInvName) as MetricFn | undefined;
-  if (!gFn || !gInverseFn) {
-    throw new NumericalBackendError(
-      `lowering: kretschmann-scalar requires coordinate-dependent metric closures in ` +
-        `inputs.fields for "${metricName}" and "${metricInvName}". ` +
-        `Got fields=[${[...(inputs.fields?.keys() ?? [])].join(',')}].`,
-    );
-  }
+  const { gFn, gInverseFn } = requireMetricClosures('kretschmann-scalar', inputs, metricName, metricInvName);
 
   const rLower = riemannLowerAt(x, gFn, gInverseFn, N, engine);
   // `flattenNestedArray` has checked the length is N·N, so the flat row-major form is the one

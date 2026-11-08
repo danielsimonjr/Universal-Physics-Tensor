@@ -70,3 +70,46 @@ export function flattenNestedArray(data: NestedArray, expectedSize: number): num
   }
   return out;
 }
+
+/** A coordinate-dependent rank-2 closure: f(x) → N×N as a NestedArray
+ *  (number[][], Float64Array, or any form `flattenNA` can flatten —
+ *  the union of `MetricFnFlat` and `MetricFnNested` plus deeper
+ *  nestings; NestedArray itself admits Float64Array since v0.9.0). */
+export type MetricFn = (x: ReadonlyArray<number>) => NestedArray;
+
+/** The curvature lowerings that need the two metric closures. */
+type ClosureKind = 'riemann-tensor' | 'bianchi-residual' | 'weyl-tensor' | 'kretschmann-scalar';
+
+/**
+ * Read the metric closure `gName` and the inverse-metric closure `gInvName` from `inputs.fields`.
+ * The message of each `kind` is the message of that lowering before the closures were shared.
+ *
+ * @param kind - The lowering that needs the closures.
+ * @param inputs - The numerical inputs.
+ * @param gName - The field name of the metric closure.
+ * @param gInvName - The field name of the inverse-metric closure.
+ * @returns The two closures.
+ * @throws NumericalBackendError if a closure is missing.
+ * @internal
+ */
+export function requireMetricClosures(
+  kind: ClosureKind,
+  inputs: NumericalInputs,
+  gName: string,
+  gInvName: string,
+): { readonly gFn: MetricFn; readonly gInverseFn: MetricFn } {
+  const gFn = inputs.fields?.get(gName) as MetricFn | undefined;
+  const gInverseFn = inputs.fields?.get(gInvName) as MetricFn | undefined;
+  if (!gFn || !gInverseFn) {
+    const what = kind === 'riemann-tensor' || kind === 'bianchi-residual' ? `${kind} numerical evaluation` : kind;
+    const note = kind === 'riemann-tensor'
+      ? ` (constant-metric Riemann is identically zero — the test wouldn't fire here)`
+      : '';
+    throw new NumericalBackendError(
+      `lowering: ${what} requires coordinate-dependent metric closures in ` +
+        `inputs.fields for "${gName}" and "${gInvName}"${note}. ` +
+        `Got fields=[${[...(inputs.fields?.keys() ?? [])].join(',')}].`,
+    );
+  }
+  return { gFn, gInverseFn };
+}
