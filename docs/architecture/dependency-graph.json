@@ -15944,7 +15944,7 @@
         ]
       },
       "src/composition/mathts-quiet.ts": {
-        "description": "Load the MathTS peer without its console chatter reaching stderr.",
+        "description": "Load the MathTS dependency without its console chatter reaching stderr.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
@@ -28165,7 +28165,7 @@
   "statistics": {
     "totalTypeScriptFiles": 387,
     "totalModules": 13,
-    "totalLinesOfCode": 87306,
+    "totalLinesOfCode": 87307,
     "totalExports": 2802,
     "totalClasses": 86,
     "totalInterfaces": 518,
