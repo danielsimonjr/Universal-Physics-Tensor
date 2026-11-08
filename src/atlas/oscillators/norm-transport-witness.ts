@@ -12,6 +12,7 @@
  * @internal
  */
 
+import { hermiteCrossingFraction } from '../../numerical/hermite-crossing.js';
 import { rk4Step } from './pendulum-motion.js';
 import { W1TAU_FIXTURE } from './norm-transport.js';
 
@@ -36,13 +37,7 @@ export function quarterPeriod(accel: (q: number) => number, q0: number, h: numbe
   for (let i = 0; i < maxSteps; i++) {
     const [nx, nv] = rk4Step(x, v, h, accel);
     if (x > 0 && nx <= 0) {
-      const [p0, m0, p1, m1] = [x, v * h, nx, nv * h];
-      const p = (s: number): number =>
-        (2 * s ** 3 - 3 * s ** 2 + 1) * p0 + (s ** 3 - 2 * s ** 2 + s) * m0 + (-2 * s ** 3 + 3 * s ** 2) * p1 + (s ** 3 - s ** 2) * m1;
-      const dp = (s: number): number =>
-        (6 * s ** 2 - 6 * s) * p0 + (3 * s ** 2 - 4 * s + 1) * m0 + (-6 * s ** 2 + 6 * s) * p1 + (3 * s ** 2 - 2 * s) * m1;
-      let s = p0 / (p0 - p1);
-      for (let k = 0; k < 8; k++) s -= p(s) / dp(s);
+      const s = hermiteCrossingFraction(x, v * h, nx, nv * h);
       return (i + s) * h;
     }
     x = nx;
