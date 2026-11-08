@@ -4139,7 +4139,12 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/expr-simplify.ts` - Symbolic simplification of a scalar `ExprNode` via MathTS (v0.12 — optional
+### `src/composition/expr-simplify.ts` - Symbolic simplification of a scalar `ExprNode` through MathTS, a supplement
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `parse, simplify` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -4155,7 +4160,7 @@ The codebase is organized into the following modules:
 | `./compose-symbolic.js` | `Observable` | Import (type-only) |
 | `./compose-symbolic.js` | `makeObservable` | Import |
 | `./mathts-scalar-symbols.js` | `renderScalarLeaf` | Import |
-| `./mathts-quiet.js` | `quietly` | Import |
+| `./mathts-quiet.js` | `quietlySync` | Import |
 
 **Exports:**
 - Interfaces: `LeafMeta`
@@ -4383,7 +4388,7 @@ The codebase is organized into the following modules:
 ### `src/composition/mathts-quiet.ts` - Load the MathTS peer without its console chatter reaching stderr.
 
 **Exports:**
-- Functions: `quietlySync`, `quietly`
+- Functions: `quietlySync`
 
 ---
 
@@ -7678,12 +7683,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87438 |
-| Total Exports | 2802 |
+| Total Lines of Code | 87414 |
+| Total Exports | 2801 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
-| Total Functions | 908 |
+| Total Functions | 907 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 529 |

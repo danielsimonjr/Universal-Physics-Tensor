@@ -4,7 +4,7 @@
     "version": "11.0.0",
     "totalFiles": 386,
     "totalModules": 13,
-    "totalExports": 2802
+    "totalExports": 2801
   },
   "entryPoints": [
     {
@@ -14893,8 +14893,16 @@
         ]
       },
       "src/composition/expr-simplify.ts": {
-        "description": "Symbolic simplification of a scalar `ExprNode` via MathTS (v0.12 — optional",
-        "externalDependencies": [],
+        "description": "Symbolic simplification of a scalar `ExprNode` through MathTS, a supplement",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "parse",
+              "simplify"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -14970,7 +14978,7 @@
           {
             "file": "./mathts-quiet.js",
             "imports": [
-              "quietly"
+              "quietlySync"
             ]
           }
         ],
@@ -15936,12 +15944,10 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
-          "quietlySync",
-          "quietly"
+          "quietlySync"
         ],
         "functions": [
-          "quietlySync",
-          "quietly"
+          "quietlySync"
         ]
       },
       "src/composition/mathts-scalar-symbols.ts": {
@@ -28099,11 +28105,11 @@
   "statistics": {
     "totalTypeScriptFiles": 386,
     "totalModules": 13,
-    "totalLinesOfCode": 87438,
-    "totalExports": 2802,
+    "totalLinesOfCode": 87414,
+    "totalExports": 2801,
     "totalClasses": 86,
     "totalInterfaces": 518,
-    "totalFunctions": 908,
+    "totalFunctions": 907,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 413,

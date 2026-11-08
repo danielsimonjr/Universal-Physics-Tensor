@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 386,
-    "totalTestFiles": 697,
+    "totalTestFiles": 698,
     "testedCount": 376,
     "directlyTestedCount": 343,
     "untestedCount": 10,
@@ -6893,6 +6893,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/composition/expr-simplify-static.test.ts",
       "tests/composition/mathts-quiet.test.ts"
     ],
     "src/composition/expr-subst.ts": [
@@ -8851,6 +8852,7 @@
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/exact-exponents.test.ts",
+      "tests/composition/expr-simplify-static.test.ts",
       "tests/composition/identifiability-rank.test.ts",
       "tests/composition/mathts-quiet.test.ts",
       "tests/composition/mathts-scalar-symbols.test.ts",
@@ -9748,6 +9750,7 @@
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/exact-exponents.test.ts",
       "tests/composition/explain.test.ts",
+      "tests/composition/expr-simplify-static.test.ts",
       "tests/composition/frontier-account.test.ts",
       "tests/composition/gr-formula-compare.test.ts",
       "tests/composition/graph-structure.test.ts",
@@ -9962,6 +9965,7 @@
       "tests/composition/collect-symbols-transcendental.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/exact-exponents.test.ts",
+      "tests/composition/expr-simplify-static.test.ts",
       "tests/composition/mathts-quiet.test.ts",
       "tests/composition/mathts-scalar-symbols.test.ts",
       "tests/composition/probe/family-b.test.ts",
@@ -12628,6 +12632,7 @@
       "tests/atlas/witness-numeric-probe.test.ts",
       "tests/atlas/witness-results.test.ts",
       "tests/atlas/witness-runners.test.ts",
+      "tests/composition/expr-simplify-static.test.ts",
       "tests/composition/mathts-quiet.test.ts"
     ],
     "src/composition/expr-subst.ts": [
@@ -13512,6 +13517,7 @@
       "tests/composition/enumerate-rethrow.test.ts",
       "tests/composition/exact-exponents.test.ts",
       "tests/composition/explain.test.ts",
+      "tests/composition/expr-simplify-static.test.ts",
       "tests/composition/frontier-account.test.ts",
       "tests/composition/gr-formula-compare.test.ts",
       "tests/composition/graph-structure.test.ts",
@@ -13679,6 +13685,7 @@
       "tests/composition/chain-regime.test.ts",
       "tests/composition/collect-symbols-transcendental.test.ts",
       "tests/composition/exact-exponents.test.ts",
+      "tests/composition/expr-simplify-static.test.ts",
       "tests/composition/mathts-quiet.test.ts",
       "tests/composition/mathts-scalar-symbols.test.ts",
       "tests/composition/probe/family-b.test.ts",
@@ -22604,6 +22611,12 @@
     ],
     "tests/composition/exponent-difference.test.ts": [
       "src/composition/canonical-compare.ts"
+    ],
+    "tests/composition/expr-simplify-static.test.ts": [
+      "src/composition/expr-simplify.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts"
     ],
     "tests/composition/frontier-account.test.ts": [
       "src/dimensional/types.ts",

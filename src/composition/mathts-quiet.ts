@@ -6,7 +6,7 @@
  * to route or silence them: `ImportOptions.silent` is for importing user
  * functions, not for logging. The only way to keep that text out of a CLI's
  * stderr is to replace the three process-global sinks for the duration of the
- * call, which is what the two helpers here do, and nothing else in `src/` may
+ * call, which is what the helper here does, and nothing else in `src/` may
  * do.
  *
  * THE INVARIANT: the replacement is process-global, so a concurrent caller in
@@ -16,7 +16,7 @@
  * `mathts-scalar-symbols.ts` and `algebraic-equivalence.ts`: each caches the
  * loaded function, so the sinks are replaced once per process, and never
  * around a per-call parse or simplify.
- * Both helpers restore the sinks in `finally`, so a throw inside the window
+ * The helper restores the sinks in `finally`, so a throw inside the window
  * cannot leave them replaced. `tests/composition/mathts-quiet.test.ts` scans
  * `src/` for any other reassignment and traps the sinks during a call.
  *
@@ -48,16 +48,6 @@ export function quietlySync<T>(fn: () => T): T {
   const saved = silence();
   try {
     return fn();
-  } finally {
-    restore(saved);
-  }
-}
-
-/** The asynchronous form of {@link quietlySync}: the window spans the awaited promise. @internal */
-export async function quietly<T>(fn: () => Promise<T>): Promise<T> {
-  const saved = silence();
-  try {
-    return await fn();
   } finally {
     restore(saved);
   }
