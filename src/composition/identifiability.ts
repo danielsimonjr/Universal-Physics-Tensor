@@ -153,25 +153,50 @@ export function forwardClosure(
   knownNames: readonly string[],
   identifications: readonly QuantityIdentification[] = QUANTITY_IDENTIFICATIONS,
 ): Set<string> {
-  const determinable = new Set<string>(knownNames);
+  return propagate(edges, knownNames, identifications, (e, determinable) =>
+    e.sources.every((s) => determinable.has(s.name)),
+  );
+}
+
+/**
+ * The least set that contains `seeds` and is closed under two rules.
+ * An identification adds its `to` when its `from` is in the set.
+ * An edge adds its target when `fires(edge, set)` is true.
+ * `forwardClosure` fires an edge when all of its sources are in the set.
+ * `dependents` in `discovery.ts` fires an edge when one of its sources is in the set.
+ *
+ * @param edges - The edges to propagate along.
+ * @param seeds - The names in the set at the start.
+ * @param idents - The directed name-equivalences.
+ * @param fires - The rule that decides whether an edge adds its target.
+ * @returns The closed set. The caller owns it.
+ * @internal
+ */
+export function propagate(
+  edges: readonly BridgeEdge[],
+  seeds: readonly string[],
+  idents: readonly QuantityIdentification[],
+  fires: (edge: BridgeEdge, set: ReadonlySet<string>) => boolean,
+): Set<string> {
+  const set = new Set<string>(seeds);
   let changed = true;
   while (changed) {
     changed = false;
-    for (const ident of identifications) {
-      if (determinable.has(ident.from) && !determinable.has(ident.to)) {
-        determinable.add(ident.to);
+    for (const ident of idents) {
+      if (set.has(ident.from) && !set.has(ident.to)) {
+        set.add(ident.to);
         changed = true;
       }
     }
     for (const e of edges) {
-      if (determinable.has(e.target.name)) continue;
-      if (e.sources.every((s) => determinable.has(s.name))) {
-        determinable.add(e.target.name);
+      if (set.has(e.target.name)) continue;
+      if (fires(e, set)) {
+        set.add(e.target.name);
         changed = true;
       }
     }
   }
-  return determinable;
+  return set;
 }
 
 // ---------------------------------------------------------------------------

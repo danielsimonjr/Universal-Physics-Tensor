@@ -39,7 +39,7 @@ import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS, effectiveAttributes } from './compose.js';
 import { GATE_AXES } from './axes.js';
 import type { RegimeAttributes } from './quantity.js';
-import { classifyIdentifiability, forwardClosure } from './identifiability.js';
+import { classifyIdentifiability, forwardClosure, propagate } from './identifiability.js';
 import { retrodict, retrodictNode, forwardEvaluate } from './retrodiction.js';
 import { proposeLinkCandidates } from './bridge-analysis.js';
 import type { LinkCandidate } from './bridge-analysis.js';
@@ -494,31 +494,15 @@ export function buildDiscoveryContext(
  * source in the set, to a fixed point. An over-approximation (an edge that
  * does not fire still lists its target), which is the safe side: a target
  * left out would keep its base retrodiction unexamined.
+ *
+ * @internal
  */
-function dependents(
+export function dependents(
   edges: readonly BridgeEdge[],
   seeds: readonly string[],
   idents: readonly QuantityIdentification[],
 ): Set<string> {
-  const set = new Set<string>(seeds);
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const id of idents) {
-      if (set.has(id.from) && !set.has(id.to)) {
-        set.add(id.to);
-        changed = true;
-      }
-    }
-    for (const e of edges) {
-      if (set.has(e.target.name)) continue;
-      if (e.sources.some((s) => set.has(s.name))) {
-        set.add(e.target.name);
-        changed = true;
-      }
-    }
-  }
-  return set;
+  return propagate(edges, seeds, idents, (e, set) => e.sources.some((s) => set.has(s.name)));
 }
 
 /**
