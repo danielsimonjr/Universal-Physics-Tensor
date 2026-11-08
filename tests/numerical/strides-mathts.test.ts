@@ -13,7 +13,7 @@ function byDefinition(shape: readonly number[]): number[] {
 
 describe('rowMajorStrides', () => {
   it('agrees with the definition on the edge shapes', () => {
-    for (const shape of [[], [1], [3, 0, 2], [2, 3, 4], [2, 3, 4, 5, 6, 7]]) {
+    for (const shape of [[], [1], [3, 0, 2], [2, 3, 4], [2, 3, 4, 5, 6, 7], [-1, 2], [1.5, 2], [2, -3]]) {
       expect(rowMajorStrides(shape), JSON.stringify(shape)).toEqual(byDefinition(shape));
     }
   });
