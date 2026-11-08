@@ -79,9 +79,27 @@ export function compareChainEdgeIds(left: readonly string[], right: readonly str
  * @internal
  */
 export function orderChainCandidates(candidates: readonly ChainCandidate[]): ChainCandidate[] {
-  return [...candidates].sort((a, b) => {
-    const byClass = chainClassIndex(a.kind) - chainClassIndex(b.kind);
-    if (byClass !== 0) return byClass < 0 ? -1 : 1;
-    return compareChainEdgeIds(a.edgeIds, b.edgeIds);
-  });
+  return [...candidates].sort((a, b) => compareChainOrder(a.kind, a.edgeIds, b.kind, b.edgeIds));
+}
+
+/**
+ * The chain order: class by {@link chainClassIndex} first, then {@link compareChainEdgeIds}.
+ * {@link orderChainCandidates} and `orderChainRecords` (`chain-result.ts`) sort by it.
+ *
+ * @param leftKind - The class of the left chain.
+ * @param leftIds - The edge ids of the left chain.
+ * @param rightKind - The class of the right chain.
+ * @param rightIds - The edge ids of the right chain.
+ * @returns -1, 0 or 1.
+ * @internal
+ */
+export function compareChainOrder(
+  leftKind: ChainCandidateKind,
+  leftIds: readonly string[],
+  rightKind: ChainCandidateKind,
+  rightIds: readonly string[],
+): -1 | 0 | 1 {
+  const byClass = chainClassIndex(leftKind) - chainClassIndex(rightKind);
+  if (byClass !== 0) return byClass < 0 ? -1 : 1;
+  return compareChainEdgeIds(leftIds, rightIds);
 }

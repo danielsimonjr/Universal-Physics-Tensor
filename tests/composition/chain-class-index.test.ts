@@ -31,6 +31,7 @@ describe('chainClassIndex', () => {
   it('chain-result.ts has no copy of its own', () => {
     const source = readFileSync(resolve(root, 'src/composition/chain-result.ts'), 'utf8');
     expect(source).not.toMatch(/function classIndex\(/);
-    expect(source).toMatch(/chainClassIndex/);
+    // It sorts through compareChainOrder, which reads chainClassIndex.
+    expect(source).toMatch(/compareChainOrder/);
   });
 });
