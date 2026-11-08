@@ -2953,3 +2953,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Security: not touched.
 - Maintainability: the local Wilson, Newcombe and kappa formulas are gone. `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups before and after.
 - Left: M5 to M7 wait for MathTS. The curvature refusal is a separate task.
+
+## 2026-11-08 — five-axis pass (FD curvature error bound)
+
+- Speed: not measured. The bound adds four metric samples per inner derivative and O(N⁴) loops per point. `riemannUpperAt` is unchanged, so only the bounded callers pay.
+- Stability: not changed; the bounds are deterministic.
+- Reliability: `curvatureReport` marks a value "unresolved" when it is within its bound. That test replaces the fixed 1e-6 vacuum threshold. The FLRW closed-form Ricci scalar carries bound 0, not the bound of the discarded difference.
+- Security: not touched.
+- Maintainability: `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups before and after.
+- Left: the bound does not include the representation error of the metric closure (for example `1 − Λr²/3 == 1` in double). The `nonzeroMatrix` filter still uses raw coordinate components.

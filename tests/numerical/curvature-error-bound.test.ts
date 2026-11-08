@@ -169,6 +169,23 @@ describe('curvatureReport bounds', () => {
     expect(Math.abs(flrw.ricciScalar - flrw.closedForm.ricciScalar!)).toBeLessThanOrEqual(flrw.ricciScalarBound);
   });
 
+  it('FLRW at c = 1: each Ricci component carries its own bound and is resolved', () => {
+    const rep = curvatureReport('flrw', ['c=1']);
+    expect(rep.ricci.length).toBeGreaterThan(0);
+    for (const c of rep.ricci) {
+      expect(c.bound).toBeGreaterThan(0);
+      expect(c.resolved).toBe(true);
+      expect(c.bound!).toBeLessThan(1e-4 * Math.abs(c.value));
+    }
+  });
+
+  it('FLRW with spatial curvature: the closed-form Ricci scalar does not carry the bound of the discarded difference', () => {
+    const rep = curvatureReport('flrw', ['k=1', 't=2']);
+    expect(rep.ricciScalar).toBe(rep.closedForm.ricciScalar);
+    expect(rep.ricciScalarBound).toBe(0);
+    expect(rep.ricciScalarResolved).toBe(true);
+  });
+
   it('Schwarzschild far out (r = 5e25 m): K is unresolved, not refused', () => {
     const rep = curvatureReport('schwarzschild', ['r=5e25']);
     expect(rep.kretschmannResolved).toBe(false);
