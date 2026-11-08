@@ -832,11 +832,11 @@ export function studyCsvToRaw(text: string, source = 'inline.csv'): Record<strin
 // --- χ² and F survival functions ------------------------------------------
 //
 // The survival functions are MathTS `chiSquaredSF` and `fSF` (from
-// `@danielsimonjr/mathts-functions` 0.75.1). Both compute the upper tail
-// directly, so a far tail does not round to 0, and the χ² p-value of a bad
-// fit IS that tail. The χ² CDF is MathTS `chiSquaredCDF`. The guards stay in
-// UPT: MathTS returns NaN or 1 for a bad degree of freedom, and a probe must
-// refuse that input.
+// `@danielsimonjr/mathts-functions` 0.75.1). `chiSquaredSF` and `fSF` compute
+// the upper tail directly. A far tail does not round to 0. The χ² p-value of a
+// bad fit is the upper tail. The χ² CDF is MathTS `chiSquaredCDF`. The guards
+// stay in UPT. MathTS returns NaN or 1 for a bad degree of freedom. A probe
+// must refuse an input with a bad degree of freedom.
 
 /** P(χ²_ν ≥ chi2): the probability of a χ² at least this large if the model and σ are right. @internal */
 export function chiSquareSurvival(chi2: number, dof: number): number {

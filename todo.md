@@ -2935,3 +2935,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - New tests: a Hermite crossing case that 0 and 1 Newton steps fail, the golden `atlas-spring-lc-json` (it fails when `basis` is dropped), and a Weyl lowering value test.
 - ~~Finding, negative result: the finite-difference Weyl lowering is not usable at SI cosmological scales. De Sitter at Λ = 1.1e-52 and r ≈ 5e25 gave max|C|/max|R| ≈ 2.7e16; at Λ = 1 and r = 1 the ratio is below 1e-3. The test uses Λ = 1.~~ Retracted 2026-11-08: the lowering is accurate at that point. The 2.7e16 came from the measure, a maximum over coordinate components in different units (c² in each t slot, a length in each angular slot). In the orthonormal frame, max|C|/max|R| is 1.5e-9; the invariant √(C·C/R·R) is 1.5e-9; the FD Ricci scalar is 4Λ to 2.2e-9. `tests/numerical/weyl-lowering-value.test.ts` now tests Λ = 1.1e-52 m⁻² at r = 5e25 m with the frame and invariant measures.
 - Left: the 21 remaining near pairs are the declined classes above.
+
+## 2026-11-08 — five-axis pass (MathTS functions 0.75.1)
+
+- Speed: not measured; the changes replace one call with another.
+- Stability: not changed; the new rows are deterministic.
+- Reliability: the χ² and F survival tails, the quadrature weights and the unary minus now come from MathTS; each agreement row fails on a 1 − CDF tail, the old closed form or a dropped minus.
+- Security: not touched.
+- Maintainability: the local `gammaQ`, `betaI`, `legendre`, `legendre16Derivative` and `rewriteSigns` are gone. `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups, unchanged.
+- Left: the Student t tail stays on `studentTCDF` (task U5); the M4 intervals wait for a MathTS release that exports them.
