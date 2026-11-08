@@ -5,6 +5,8 @@
  */
 
 import type { ExprNode } from '../../dimensional/ast-types.js';
+import { ALL_SCALAR_ARMS, scalarChildren } from '../../dimensional/ast-leaves.js';
+import type { LeafWalkArms } from '../../dimensional/ast-leaves.js';
 import { validate } from '../../dimensional/validator.js';
 import { format } from '../../dimensional/algebra.js';
 import { normalForm } from '../../canonical/normal-form.js';
@@ -16,57 +18,23 @@ export function bodyExpression(body: ProbeCandidateBody): ExprNode {
   return body.kind === 'scalar-expr' ? body.expression : body.correction;
 }
 
+/**
+ * The arms {@link countOperators} descends into: every scalar arm except a
+ * variational derivative, which counts as zero operators.
+ */
+const OPERATOR_ARMS: LeafWalkArms = { ...ALL_SCALAR_ARMS, variationalDerivative: false };
+
+/** The node kinds that count as one operator each. */
+const OPERATOR_KINDS: ReadonlySet<ExprNode['kind']> = new Set(['op', 'transcendental', 'integral', 'derivative']);
+
 /** Recursively count AST nodes. @internal */
 export function countAstNodes(node: ExprNode): number {
-  switch (node.kind) {
-    case 'symbol':
-      return 1;
-    case 'op':
-      return 1 + node.args.reduce((n, a) => n + countAstNodes(a), 0);
-    case 'transcendental':
-    case 'abs':
-    case 'dirac-delta':
-      return 1 + countAstNodes(node.arg);
-    case 'integral':
-      return (
-        1 +
-        countAstNodes(node.integrand) +
-        countAstNodes(node.over) +
-        (node.lower ? countAstNodes(node.lower) : 0) +
-        (node.upper ? countAstNodes(node.upper) : 0)
-      );
-    case 'derivative':
-      return 1 + countAstNodes(node.of) + countAstNodes(node.wrt);
-    case 'variational-derivative':
-      return 1 + countAstNodes(node.functional) + countAstNodes(node.field) + countAstNodes(node.over);
-    default:
-      return 1;
-  }
+  return scalarChildren(node, ALL_SCALAR_ARMS).reduce((n, child) => n + countAstNodes(child), 1);
 }
 
 /** Operator / transcendental count. @internal */
 export function countOperators(node: ExprNode): number {
-  switch (node.kind) {
-    case 'op':
-      return 1 + node.args.reduce((n, a) => n + countOperators(a), 0);
-    case 'transcendental':
-      return 1 + countOperators(node.arg);
-    case 'abs':
-    case 'dirac-delta':
-      return countOperators(node.arg);
-    case 'integral':
-      return (
-        1 +
-        countOperators(node.integrand) +
-        countOperators(node.over) +
-        (node.lower ? countOperators(node.lower) : 0) +
-        (node.upper ? countOperators(node.upper) : 0)
-      );
-    case 'derivative':
-      return 1 + countOperators(node.of) + countOperators(node.wrt);
-    default:
-      return 0;
-  }
+  return scalarChildren(node, OPERATOR_ARMS).reduce((n, child) => n + countOperators(child), OPERATOR_KINDS.has(node.kind) ? 1 : 0);
 }
 
 /** Max `^` numeric exponent used as a derivative-order proxy for monomials. @internal */
