@@ -176,7 +176,6 @@ export {
   pairedDifferenceInterval,
   powerReport,
   wilsonInterval,
-  Z95,
 } from './benchmark/stats.js';
 export type { Interval, McNemarResult, PairedTable, PowerReport } from './benchmark/stats.js';
 export { pairedRejection, scoreAblation, scoreCondition } from './benchmark/study.js';

@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import { pendulumPeriodErrorAt } from '../../src/atlas/oscillators/bridges-limits.js';
 import { pendulumNome, theta0OfPeriodError } from '../../src/atlas/oscillators/pendulum-motion.js';
 import { randomWalkCentralDensity, diffusionKernel } from '../../src/atlas/diffusion/numerics.js';
-import { Z95, mcnemar } from '../../src/atlas/benchmark/stats.js';
+import { mcnemar } from '../../src/atlas/benchmark/stats.js';
 import { cosine } from '../../src/atlas/benchmark/hybrid-retrieval.js';
 import { chiSquareCdf, chiSquareSurvival, fSurvival } from '../../src/composition/probe/study.js';
 import { estimateScaleExponent } from '../../src/composition/probe/structure.js';
@@ -57,14 +57,13 @@ describe('MathTS carries the special functions', () => {
     expect(fSurvival(2, 1, 1)).toBeCloseTo(1 - (2 / Math.PI) * Math.atan(Math.SQRT2), 13);
   });
 
-  it('the random walk, the McNemar tail and the Wilson z read lgamma, binomialTest and normalQuantile (U6)', () => {
+  it('the random walk, the McNemar tail and the Wilson interval read lgamma, binomialTest and wilsonInterval (U6, M4)', () => {
     expect(source('../../src/atlas/diffusion/numerics.ts')).toMatch(/\blgamma\b/);
     expect(source('../../src/atlas/diffusion/numerics.ts')).not.toMatch(/function logBinomial\b/);
     const stats = source('../../src/atlas/benchmark/stats.ts');
     expect(stats).toMatch(/\bbinomialTest\b/);
-    expect(stats).toMatch(/normalQuantile/);
+    expect(stats).toMatch(/wilsonInterval as mathtsWilson/);
     expect(stats).not.toMatch(/Z95 = 1\.9/);
-    expect(Z95).toBeCloseTo(1.959963984540054, 14);
     expect(mcnemar({ a: 0, b: 10, c: 2, d: 0 }).exactP).toBeCloseTo(158 / 4096, 12);
     // The lattice density tends to the Gaussian kernel: the n = 10⁴ value is within 1e-4 of it.
     const D = 0.5;

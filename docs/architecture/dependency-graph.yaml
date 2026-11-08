@@ -3,7 +3,7 @@ metadata:
   version: 12.0.0
   totalFiles: 388
   totalModules: 13
-  totalExports: 2820
+  totalExports: 2818
 entryPoints:
   - file: src/index.ts
     type: main
@@ -278,7 +278,6 @@ modules:
             - binomialTest
             - cohensKappa
             - newcombePairedInterval
-            - normalQuantile
             - wilsonInterval
       nodeDependencies: []
       internalDependencies:
@@ -286,7 +285,6 @@ modules:
           imports:
             - numberFrom
       exports:
-        - Z95
         - wilsonInterval
         - mcnemar
         - pairedDifferenceInterval
@@ -303,8 +301,6 @@ modules:
         - pairedDifferenceInterval
         - cohensKappa
         - powerReport
-      constants:
-        - Z95
     src/atlas/benchmark/study.ts:
       description: Atlas Phase 6, S6.1 — scoring a benchmark condition against the answer key.
       externalDependencies: []
@@ -1289,7 +1285,6 @@ modules:
             - pairedDifferenceInterval
             - powerReport
             - wilsonInterval
-            - Z95
           reExport: true
         - file: ./benchmark/stats.js
           imports:
@@ -1484,7 +1479,6 @@ modules:
         - pairedDifferenceInterval
         - powerReport
         - wilsonInterval
-        - Z95
         - pairedRejection
         - scoreAblation
         - scoreCondition
@@ -1748,7 +1742,6 @@ modules:
         - pairedDifferenceInterval
         - powerReport
         - wilsonInterval
-        - Z95
         - Interval
         - McNemarResult
         - PairedTable
@@ -19582,15 +19575,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 388
   totalModules: 13
-  totalLinesOfCode: 87181
-  totalExports: 2820
+  totalLinesOfCode: 87176
+  totalExports: 2818
   totalClasses: 86
   totalInterfaces: 518
   totalFunctions: 921
   totalTypeGuards: 16
   totalEnums: 0
-  totalConstants: 415
-  totalReExports: 1393
+  totalConstants: 414
+  totalReExports: 1392
   totalTypeOnlyImports: 532
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

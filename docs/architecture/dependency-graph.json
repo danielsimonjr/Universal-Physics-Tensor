@@ -4,7 +4,7 @@
     "version": "12.0.0",
     "totalFiles": 388,
     "totalModules": 13,
-    "totalExports": 2820
+    "totalExports": 2818
   },
   "entryPoints": [
     {
@@ -411,7 +411,6 @@
               "binomialTest",
               "cohensKappa",
               "newcombePairedInterval",
-              "normalQuantile",
               "wilsonInterval"
             ]
           }
@@ -426,7 +425,6 @@
           }
         ],
         "exports": [
-          "Z95",
           "wilsonInterval",
           "mcnemar",
           "pairedDifferenceInterval",
@@ -445,9 +443,6 @@
           "pairedDifferenceInterval",
           "cohensKappa",
           "powerReport"
-        ],
-        "constants": [
-          "Z95"
         ]
       },
       "src/atlas/benchmark/study.ts": {
@@ -1936,8 +1931,7 @@
               "mcnemar",
               "pairedDifferenceInterval",
               "powerReport",
-              "wilsonInterval",
-              "Z95"
+              "wilsonInterval"
             ],
             "reExport": true
           },
@@ -2183,7 +2177,6 @@
           "pairedDifferenceInterval",
           "powerReport",
           "wilsonInterval",
-          "Z95",
           "pairedRejection",
           "scoreAblation",
           "scoreCondition",
@@ -2448,7 +2441,6 @@
           "pairedDifferenceInterval",
           "powerReport",
           "wilsonInterval",
-          "Z95",
           "Interval",
           "McNemarResult",
           "PairedTable",
@@ -28269,15 +28261,15 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87181,
-    "totalExports": 2820,
+    "totalLinesOfCode": 87176,
+    "totalExports": 2818,
     "totalClasses": 86,
     "totalInterfaces": 518,
     "totalFunctions": 921,
     "totalTypeGuards": 16,
     "totalEnums": 0,
-    "totalConstants": 415,
-    "totalReExports": 1393,
+    "totalConstants": 414,
+    "totalReExports": 1392,
     "totalTypeOnlyImports": 532,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

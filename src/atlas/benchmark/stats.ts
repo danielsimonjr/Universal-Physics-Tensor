@@ -18,13 +18,9 @@ import {
   binomialTest,
   cohensKappa as mathtsKappa,
   newcombePairedInterval,
-  normalQuantile,
   wilsonInterval as mathtsWilson,
 } from '@danielsimonjr/mathts-functions';
 import { numberFrom } from '../../core/mathts-read.js';
-
-/** The two-sided 95% normal quantile, MathTS `normalQuantile(0.975)` (1.959963984540054). @internal */
-export const Z95: number = normalQuantile(0.975);
 
 /** A closed interval. @internal */
 export interface Interval {
