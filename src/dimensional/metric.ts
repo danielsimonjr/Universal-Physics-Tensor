@@ -138,52 +138,7 @@ export function raise(
   gInverse: MetricTensorNode,
   label: string,
 ): TensorProductNode {
-  if (
-    gInverse.indices[0].variance !== 'upper' ||
-    gInverse.indices[1].variance !== 'upper'
-  ) {
-    throw new MetricSignatureError(
-      gInverse.name,
-      `raise() requires both indices of the inverse metric to have variance 'upper'`,
-    );
-  }
-  const operandLabels = collectFreeIndexLabels(operand);
-  const operandVariance = operandLabels.get(label);
-  if (operandVariance === undefined) {
-    throw new RaiseLowerInvalidLabelError(
-      `raise(): label '${label}' is not a free index of the operand. ` +
-        `Operand free indices: ${Array.from(operandLabels.keys()).join(', ') || '(none)'}.`,
-    );
-  }
-  if (operandVariance === 'upper') {
-    throw new RaiseLowerInvalidLabelError(
-      `raise(): label '${label}' is already 'upper' in the operand. ` +
-        `Use lower() to lower it, or pick a different label.`,
-    );
-  }
-
-  // Alpha-conversion: rename gInverse[0] → label (the dummy that contracts);
-  // gInverse[1] → freshLabel(gInverse[1].label, operand-free-labels).
-  const taken = new Set(operandLabels.keys());
-  taken.add(label);
-  const renamed = freshLabel(gInverse.indices[1].label, taken);
-
-  const renamedGInverse: MetricTensorNode = {
-    kind: 'metric-tensor',
-    name: gInverse.name,
-    indices: [
-      { label, variance: 'upper' },
-      { label: renamed, variance: 'upper' },
-    ],
-    signature: gInverse.signature,
-    dim: gInverse.dim,
-  };
-  if (gInverse.derivativeStrategy !== undefined) {
-    (renamedGInverse as { derivativeStrategy: typeof gInverse.derivativeStrategy }).derivativeStrategy =
-      gInverse.derivativeStrategy;
-  }
-
-  return { kind: 'tensor-product', args: [renamedGInverse, operand] };
+  return raiseOrLower(operand, gInverse, label, 'upper');
 }
 
 /**
@@ -199,48 +154,70 @@ export function lower(
   g: MetricTensorNode,
   label: string,
 ): TensorProductNode {
+  return raiseOrLower(operand, g, label, 'lower');
+}
+
+/**
+ * The shared body of raise() (`variance` 'upper', `metric` the inverse metric)
+ * and lower() (`variance` 'lower', `metric` the covariant metric).
+ * One index of `metric` gets the name `label`, so that the contraction finds it.
+ * The other index gets a new name that is not a free index of `operand`.
+ *
+ * @throws MetricSignatureError if an index of `metric` does not have `variance`.
+ * @throws RaiseLowerInvalidLabelError if `label` is not free in `operand`, or already has `variance`.
+ */
+function raiseOrLower(
+  operand: ExprNode,
+  metric: MetricTensorNode,
+  label: string,
+  variance: 'upper' | 'lower',
+): TensorProductNode {
+  const fn = variance === 'upper' ? 'raise' : 'lower';
+  const other = variance === 'upper' ? 'lower' : 'raise';
   if (
-    g.indices[0].variance !== 'lower' ||
-    g.indices[1].variance !== 'lower'
+    metric.indices[0].variance !== variance ||
+    metric.indices[1].variance !== variance
   ) {
     throw new MetricSignatureError(
-      g.name,
-      `lower() requires both indices of the metric to have variance 'lower'`,
+      metric.name,
+      `${fn}() requires both indices of ${variance === 'upper' ? 'the inverse metric' : 'the metric'} to have variance '${variance}'`,
     );
   }
   const operandLabels = collectFreeIndexLabels(operand);
   const operandVariance = operandLabels.get(label);
   if (operandVariance === undefined) {
     throw new RaiseLowerInvalidLabelError(
-      `lower(): label '${label}' is not a free index of the operand. ` +
+      `${fn}(): label '${label}' is not a free index of the operand. ` +
         `Operand free indices: ${Array.from(operandLabels.keys()).join(', ') || '(none)'}.`,
     );
   }
-  if (operandVariance === 'lower') {
+  if (operandVariance === variance) {
     throw new RaiseLowerInvalidLabelError(
-      `lower(): label '${label}' is already 'lower' in the operand. ` +
-        `Use raise() to raise it, or pick a different label.`,
+      `${fn}(): label '${label}' is already '${variance}' in the operand. ` +
+        `Use ${other}() to ${other} it, or pick a different label.`,
     );
   }
 
+  // Alpha-conversion: rename metric[0] → label (the dummy that contracts);
+  // metric[1] → freshLabel(metric[1].label, operand-free-labels).
   const taken = new Set(operandLabels.keys());
   taken.add(label);
-  const renamed = freshLabel(g.indices[1].label, taken);
+  const renamed = freshLabel(metric.indices[1].label, taken);
 
-  const renamedG: MetricTensorNode = {
+  const renamedMetric: MetricTensorNode = {
     kind: 'metric-tensor',
-    name: g.name,
+    name: metric.name,
     indices: [
-      { label, variance: 'lower' },
-      { label: renamed, variance: 'lower' },
+      { label, variance },
+      { label: renamed, variance },
     ],
-    signature: g.signature,
-    dim: g.dim,
+    signature: metric.signature,
+    dim: metric.dim,
   };
-  if (g.derivativeStrategy !== undefined) {
-    (renamedG as { derivativeStrategy: typeof g.derivativeStrategy }).derivativeStrategy =
-      g.derivativeStrategy;
+  if (metric.derivativeStrategy !== undefined) {
+    (renamedMetric as { derivativeStrategy: typeof metric.derivativeStrategy }).derivativeStrategy =
+      metric.derivativeStrategy;
   }
 
-  return { kind: 'tensor-product', args: [renamedG, operand] };
+  return { kind: 'tensor-product', args: [renamedMetric, operand] };
 }
