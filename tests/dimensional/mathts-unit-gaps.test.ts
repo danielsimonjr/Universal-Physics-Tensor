@@ -164,9 +164,10 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       },
     },
     {
-      // M6 (core 0.23.0) exports `Unit.readings`. It cannot replace the local splitter yet:
-      // over 13,496 glued tokens, 280 lose a reading and none gains one. These two rows are
-      // the two classes. Control: `mAs` has readings, so an empty result is a real gap.
+      // M6 (core 0.23.0) exports `Unit.readings`. `Unit.readings` cannot replace the local
+      // splitter yet. Over 13,496 glued tokens, 280 lose a reading. No token gains a reading.
+      // The two rows correspond to the two classes. Control: `mAs` has readings. An empty
+      // result is a real gap.
       id: 'Unit.readings: a glued token with °R has no reading in MathTS',
       check: () => {
         expect(Unit.readings('mAs').length).toBe(2);
@@ -178,7 +179,7 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       id: 'Unit.readings: a glued token omits a sub-kilo prefix on pc',
       check: () => {
         expect(Unit.readings('Hzpc').map((r) => r.map((f) => f.name).join('·'))).toEqual(['Hz·pc']);
-        // The local splitter also reads H·zpc (henry, zeptoparsec), so the text stays ambiguous.
+        // The local splitter also reads H·zpc (henry, zeptoparsec). The text stays ambiguous.
         expect(() => parseUnit('1/Hzpc')).toThrow(AmbiguousUnitError);
       },
     },

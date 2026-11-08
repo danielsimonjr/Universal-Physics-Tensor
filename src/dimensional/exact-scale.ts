@@ -45,7 +45,7 @@ export interface ExactScale {
   readonly irrational: number;
 }
 
-/** The bigint gcd, MathTS `gcd` on its typed `bigint, bigint` signature. */
+/** MathTS `gcd` computes the bigint gcd on the typed `bigint, bigint` signature. */
 function bigGcd(a: bigint, b: bigint): bigint {
   const g = gcd(a, b);
   return g < 0n ? -g : g;
