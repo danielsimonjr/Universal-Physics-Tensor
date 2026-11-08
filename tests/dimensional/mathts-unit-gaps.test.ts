@@ -23,6 +23,7 @@ import {
   parseUnit,
   UnitRefusedError,
   UnknownUnitError,
+  unitReadingsSource,
 } from '../../src/dimensional/units.js';
 
 describe('MathTS agrees with UPT on delegated readings', () => {
@@ -72,6 +73,13 @@ describe('MathTS agrees with UPT on delegated readings', () => {
       const local = parseUnit(text);
       expect(symmetricRelDiff(exactScaleToNumber(Unit.exactScale(text)!), local.scale)).toBeLessThan(1e-15);
       for (const [axis, power] of Object.entries(dim)) expect(local.dim[axis as 'L'], `${text} ${axis}`).toBe(power);
+    }
+  });
+
+  it('the middle dot is a product sign on both sides, and a dotted text reads through MathTS (closed by 0.24.0)', () => {
+    for (const [dotted, starred] of [['m^2/(V·s)', 'm^2/(V*s)'], ['N·m', 'N*m'], ['W/(m·K)', 'W/(m*K)'], ['cm^2/(V·s)', 'cm^2/(V*s)']] as const) {
+      expect(unitReadingsSource(dotted), dotted).toBe('mathts');
+      expect(parseUnit(dotted)).toEqual(parseUnit(starred));
     }
   });
 

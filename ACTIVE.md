@@ -77,7 +77,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: functions `^0.77.2`; `power-law.ts` and `exact-scale.ts` read the typed `gcd` result with no reader; `bigintFrom` is removed.
 - [x] MathTS leverage M6 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M6; integration plan P3 item 2).
   Done, negative result: the splitter stays. `Unit.readings` misses readings on 280 of 13,496 glued tokens (`°R`, and sub-kilo prefixes on `pc`); two gap rows in `tests/dimensional/mathts-unit-gaps.test.ts` pin them. The numbers are in `NOTES.md`, 2026-11-08.
-- [ ] MathTS leverage M7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M7).
+- [x] MathTS leverage M7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M7).
+  Done: core `^0.24.0`; `m^2/(V·s)` reads through MathTS, pinned by an agreement row in `tests/dimensional/mathts-unit-gaps.test.ts`. No local rewrite existed to delete.
 - [x] Remove the 11 reviewed code duplicates of `repo-tools clones` (todo.md, 2026-11-07 five-axis pass): one commit per merge action, byte-identical output (`tests/cli/golden/`), and record the declined pairs with reasons in `todo.md`.
   Done: eleven merge commits; clones 35 near pairs and 4 exact groups before, 22 and 0 after. The 16 declines and one new pair are in `todo.md` (2026-11-08 five-axis pass).
 - [x] Follow-ups of the clone removal: move the norm-transport projection to `src/atlas/serialize.ts` (the third copy), a Hermite convergence test, a CLI-level test of the `upt atlas --json` norm-transport fields, a Weyl lowering value test, a pre-push hook that fails when `UPT_REPO_TOOLS` is unset, and the clones count after.
