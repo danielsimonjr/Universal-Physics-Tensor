@@ -52,7 +52,7 @@ export type MetricFnFlat = (x: ReadonlyArray<number>) => Float64Array;
  *  minkowski stay nested for this release per Decision #8). */
 type MetricFnNested = (x: ReadonlyArray<number>) => number[][];
 
-// The closure type lives in `lowering-utils.ts` with `requireMetricClosures`; re-exported here.
+/** A coordinate-dependent metric closure. The type lives in `lowering-utils.ts`. */
 export type { MetricFn } from './lowering-utils.js';
 
 /**

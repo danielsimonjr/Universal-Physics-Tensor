@@ -11803,10 +11803,16 @@
               "findPath",
               "findAtlasPath",
               "enumerateAtlasRoutes",
-              "allAtlasBridges",
               "boundPath",
               "horizonOnRoute",
               "routeEntryModels"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./atlas/path-bound.js",
+            "imports": [
+              "allAtlasBridges"
             ],
             "reExport": true
           },
@@ -12263,10 +12269,10 @@
           "findPath",
           "findAtlasPath",
           "enumerateAtlasRoutes",
-          "allAtlasBridges",
           "boundPath",
           "horizonOnRoute",
           "routeEntryModels",
+          "allAtlasBridges",
           "composeRelation",
           "MissingLipschitzError",
           "catalogFormalRef",
@@ -12566,10 +12572,10 @@
           "findPath",
           "findAtlasPath",
           "enumerateAtlasRoutes",
-          "allAtlasBridges",
           "boundPath",
           "horizonOnRoute",
           "routeEntryModels",
+          "allAtlasBridges",
           "composeRelation",
           "PathBoundResult",
           "PathBoundClaim",
@@ -28271,7 +28277,7 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87270,
+    "totalLinesOfCode": 87272,
     "totalExports": 2819,
     "totalClasses": 86,
     "totalInterfaces": 518,
