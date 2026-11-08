@@ -30,10 +30,7 @@ import type {
 
 // The Weyl node now lives in the leaf `ast-types.ts`; re-exported for compat.
 export type { WeylTensorNode } from './ast-types.js';
-import {
-  PartialDerivativeIndexVarianceError,
-  IndexLabelCollisionError,
-} from './errors.js';
+import { oneUpThreeDownFreeIndices, requireOneUpThreeDownVariance } from './connection-validators.js';
 import type { CurvatureCompositeNode } from './curvature-composite.js';
 
 /**
@@ -80,47 +77,9 @@ interface WeylTensorValidationResult {
 export function validateWeylTensor(
   node: WeylTensorNode,
 ): WeylTensorValidationResult {
-  // Variance checks — mirrors validateRiemannTensor's pattern exactly.
-  if (node.upperIndex.variance !== 'upper') {
-    throw new PartialDerivativeIndexVarianceError(
-      `weyl-tensor: upperIndex '${node.upperIndex.label}' must be 'upper', ` +
-        `got '${(node.upperIndex as { variance: string }).variance}'`,
-    );
-  }
-  for (let i = 0; i < 3; i++) {
-    const idx = node.lowerIndices[i] as { label: string; variance: string };
-    if (idx.variance !== 'lower') {
-      throw new PartialDerivativeIndexVarianceError(
-        `weyl-tensor: lowerIndices[${i}] '${idx.label}' must be 'lower', ` +
-          `got '${idx.variance}'`,
-      );
-    }
-  }
-
-  // M9: disjointness check on the four free labels {ρ, σ, μ, ν}.
-  // Repeated labels would imply an implicit contraction that belongs to
-  // a different tensor node. We deliberately do NOT compare against the
-  // metric's dummy indices (H1-suppressed).
-  const labels = [
-    node.upperIndex.label,
-    node.lowerIndices[0].label,
-    node.lowerIndices[1].label,
-    node.lowerIndices[2].label,
-  ];
-  const seen = new Set<string>();
-  for (const label of labels) {
-    if (seen.has(label)) {
-      throw new IndexLabelCollisionError(label, 2, ['weyl-tensor']);
-    }
-    seen.add(label);
-  }
-
-  // Build free-index map: ρ → upper, σ/μ/ν → lower.
-  const freeIndices = new Map<string, { upper: number; lower: number }>();
-  freeIndices.set(node.upperIndex.label, { upper: 1, lower: 0 });
-  for (const idx of node.lowerIndices) {
-    freeIndices.set(idx.label, { upper: 0, lower: 1 });
-  }
+  // The same variance, label and free-index rules as validateRiemannTensor.
+  requireOneUpThreeDownVariance('weyl-tensor', node);
+  const freeIndices = oneUpThreeDownFreeIndices('weyl-tensor', node);
 
   // F8/I3: Weyl carries the same inverse-length-squared dimension as Riemann.
   // Hard-coded — identical for every Weyl tensor regardless of metric dim
