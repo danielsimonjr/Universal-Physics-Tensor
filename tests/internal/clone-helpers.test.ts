@@ -7,6 +7,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { hermiteCrossingFraction } from '../../src/numerical/hermite-crossing.js';
+import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
+import { allAtlasBridges, enumerateAtlasRoutes, findAtlasPath } from '../../src/atlas/path-bound.js';
 import { lower, metric, raise } from '../../src/dimensional/metric.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -68,5 +70,20 @@ describe('raiseOrLower (metric.ts)', () => {
     const text = src('src/dimensional/metric.ts');
     expect(text).toContain("return raiseOrLower(operand, gInverse, label, 'upper');");
     expect(text).toContain("return raiseOrLower(operand, g, label, 'lower');");
+  });
+});
+
+describe('requireAtlasEndpoints and allAtlasBridges (path-bound.ts)', () => {
+  it('keeps each caller name in the endpoint message', () => {
+    expect(() => findAtlasPath('model-nope', 'model-lc')).toThrow("findAtlasPath: 'model-nope' is not a model of any atlas family");
+    expect(() => enumerateAtlasRoutes('model-pendulum', 'model-nope', 1)).toThrow(
+      "enumerateAtlasRoutes: 'model-nope' is not a model of any atlas family",
+    );
+  });
+
+  it('lists every bridge in family order, and the callers use the one list', () => {
+    expect(allAtlasBridges()).toEqual(ATLAS_FAMILIES.flatMap((f) => f.bridges));
+    expect(src('src/atlas/path-bound.ts').match(/ATLAS_FAMILIES\.flatMap\(\(f\) => f\.bridges\)/g)).toHaveLength(1);
+    expect(src('src/cli/commands/_atlas-map.ts')).not.toContain('ATLAS_FAMILIES.flatMap((f) => f.bridges)');
   });
 });

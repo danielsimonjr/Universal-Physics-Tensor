@@ -164,17 +164,32 @@ export function findPath(
  * @internal
  */
 export function findAtlasPath(from: string, to: string): readonly AtlasBridge[] | null {
+  requireAtlasEndpoints('findAtlasPath', from, to);
+  return shortestChain(allAtlasBridges(), from, to);
+}
+
+/**
+ * Every bridge of every registered family, in {@link ATLAS_FAMILIES} order and then bridge order.
+ * @internal
+ */
+export function allAtlasBridges(): readonly AtlasBridge[] {
+  return ATLAS_FAMILIES.flatMap((f) => f.bridges);
+}
+
+/**
+ * Make sure that `from` and `to` are models of a registered family.
+ * @param fnName - The name of the caller, at the start of the message.
+ * @param from - The first endpoint.
+ * @param to - The second endpoint.
+ * @throws RangeError if an endpoint is not a model of any family.
+ */
+function requireAtlasEndpoints(fnName: string, from: string, to: string): void {
   const models = new Set(ATLAS_FAMILIES.flatMap((f) => f.models.map((m) => m.id)));
   for (const endpoint of [from, to]) {
     if (!models.has(endpoint)) {
-      throw new RangeError(`findAtlasPath: '${endpoint}' is not a model of any atlas family`);
+      throw new RangeError(`${fnName}: '${endpoint}' is not a model of any atlas family`);
     }
   }
-  return shortestChain(
-    ATLAS_FAMILIES.flatMap((f) => f.bridges),
-    from,
-    to,
-  );
 }
 
 /**
@@ -202,13 +217,8 @@ export function enumerateAtlasRoutes(
   limit: number,
   budget = 100_000,
 ): RouteEnumeration {
-  const models = new Set(ATLAS_FAMILIES.flatMap((f) => f.models.map((m) => m.id)));
-  for (const endpoint of [from, to]) {
-    if (!models.has(endpoint)) {
-      throw new RangeError(`enumerateAtlasRoutes: '${endpoint}' is not a model of any atlas family`);
-    }
-  }
-  return enumerateRoutes(ATLAS_FAMILIES.flatMap((f) => f.bridges), from, to, limit, budget);
+  requireAtlasEndpoints('enumerateAtlasRoutes', from, to);
+  return enumerateRoutes(allAtlasBridges(), from, to, limit, budget);
 }
 
 /** What {@link enumerateAtlasRoutes} found, and whether the search was cut short. @internal */

@@ -253,7 +253,7 @@ export type { AtlasFamily } from './atlas/family.js';
 export { collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export { domainRegimeRegistrations } from './relations/regime-registration.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
-export { familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels } from './atlas/path-bound.js';
+export { familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, allAtlasBridges, boundPath, horizonOnRoute, routeEntryModels } from './atlas/path-bound.js';
 export { composeRelation } from './atlas/composition-table.js';
 export type { PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport } from './atlas/path-bound.js';
 export type { AtlasBridge, RegimeInequality, Witness } from './atlas/types.js';

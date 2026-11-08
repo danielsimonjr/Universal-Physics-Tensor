@@ -226,7 +226,7 @@ export function loadStoredResults(command = 'upt map', file = storedResultsFile(
  * the norm transports the bridges declare (registered under the transport id).
  */
 export async function runResults(api: Api, bridgeIds: ReadonlySet<string>): Promise<WitnessResults> {
-  const transportIds = api.ATLAS_FAMILIES.flatMap((f) => f.bridges)
+  const transportIds = api.allAtlasBridges()
     .filter((b) => bridgeIds.has(b.id))
     .flatMap((b) => (b.normTransports ?? []).map((nt) => nt.id));
   const ids = new Set([...bridgeIds, ...transportIds]);
@@ -793,7 +793,7 @@ export function buildAtlasEvidenceView(api: Api, results: WitnessResults | null 
     },
     bridges: views.map((v) => ({ id: v.id, family: v.family, relation: v.relation, evidence: v.evidence })),
     byTag: api.ALL_EVIDENCE_TAGS.map((tag) => ({ tag, derived: derived.byTag[tag], undecided: undecided.byTag[tag] })),
-    normTransports: api.ATLAS_FAMILIES.flatMap((f) => f.bridges).flatMap((b) =>
+    normTransports: api.allAtlasBridges().flatMap((b) =>
       (b.normTransports ?? []).map((nt) => ({ id: nt.id, bridge: b.id, witness: nt.witness.id, status: transportResult(nt, results) })),
     ),
     ...(witnessResults === undefined ? {} : { witnessResults }),
