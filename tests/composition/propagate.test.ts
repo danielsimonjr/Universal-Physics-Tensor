@@ -29,7 +29,7 @@ const edge = (id: string, sourceNames: string[], targetName: string): BridgeEdge
 
 describe('propagate: the shared fixed point', () => {
   const edges = [edge('konst', [], 'k'), edge('e', ['a', 'b'], 't'), edge('f', ['k'], 'u')];
-  const idents = [{ from: 'a', to: 'a2' }] as const;
+  const idents = [{ from: 'a', to: 'a2', rationale: 'synthetic' }];
 
   it('dependents (any source) leaves the target of a source-free edge out', () => {
     expect([...dependents(edges, ['a'], idents)].sort()).toEqual(['a', 'a2', 't']);
