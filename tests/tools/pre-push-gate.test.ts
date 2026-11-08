@@ -51,15 +51,16 @@ describe('pre-push hook: a gate command that fails must fail the hook', () => {
   });
 });
 
-describe('pre-push hook: the checker is found by an overridable path and skips aloud', () => {
+describe('pre-push hook: the checker is found by an overridable path and never skips', () => {
   it('names no private skills checkout and no private script', () => {
     expect(hook).not.toMatch(/UPT_SKILLS_DIR|SKILLS_DIR|code_docs\.py|\$CODE_DOCS|repo_map\.py|\$REPO_MAP\b/);
     const hardCoded = lines.filter((l) => /\$HOME\/Github\/skills\//.test(l));
     expect(hardCoded, hardCoded.join('\n')).toEqual([]);
   });
 
-  it('locates repo-tools through UPT_REPO_TOOLS, defaulting to the name on PATH', () => {
-    expect(hook).toMatch(/REPO_TOOLS="\$\{UPT_REPO_TOOLS:-repo-tools\}"/);
+  it('locates repo-tools through UPT_REPO_TOOLS only, with no built-in default name', () => {
+    expect(hook).toMatch(/REPO_TOOLS="\$UPT_REPO_TOOLS"/);
+    expect(hook).not.toMatch(/UPT_REPO_TOOLS:-repo-tools/);
     // A path to the executable, on a line that runs something (the skip message names the npm scope).
     const hardCoded = lines.filter((l) => !/^\s*(#|echo\b)/.test(l) && /[/\\]repo-tools\b/.test(l));
     expect(hardCoded, hardCoded.join('\n')).toEqual([]);
@@ -88,9 +89,10 @@ describe('pre-push hook: the checker is found by an overridable path and skips a
     expect(hook).not.toMatch(/repo-tools 2\.2 or later/);
   });
 
-  it('names the executable it looked for when it skips, once for each gate', () => {
-    expect(hook).toMatch(/code-docs SKIPPED \(not found: \$REPO_TOOLS/);
-    expect(hook).toMatch(/architecture-docs claims SKIPPED \(not found: \$REPO_TOOLS/);
+  it('never skips a gate: an unset variable and a missing executable both fail the push', () => {
+    expect(hook).not.toMatch(/SKIPPED/);
+    expect(hook).toMatch(/PRE-PUSH GATE FAILED: UPT_REPO_TOOLS is not set/);
+    expect(hook).toMatch(/PRE-PUSH GATE FAILED: repo-tools not found: \$REPO_TOOLS/);
   });
 });
 
@@ -98,7 +100,7 @@ describe('pre-push hook: the repo-tools block, run under sh against a stub execu
   // The text checks above can still match a block that no longer fails. This runs the block itself.
   // The block is cut from the `REPO_TOOLS=` line to the line before the final OK echo, and the
   // anchors are asserted, so a restructured hook fails here instead of testing an empty string.
-  const start = lines.findIndex((l) => l.startsWith('REPO_TOOLS="${UPT_REPO_TOOLS'));
+  const start = lines.findIndex((l) => l.startsWith('if [ -z "${UPT_REPO_TOOLS:-}" ]; then'));
   const end = lines.findIndex((l) => l.startsWith('echo "pre-push gate: OK"'));
   const block = lines.slice(start, end).join('\n');
   const hasSh = spawnSync('sh', ['-c', 'exit 0']).status === 0;
@@ -108,8 +110,11 @@ describe('pre-push hook: the repo-tools block, run under sh against a stub execu
     for (const d of dirs.splice(0)) rmSync(d, { recursive: true, force: true });
   });
 
-  /** Runs the block with `stub` as the repo-tools executable (null: a path that does not exist). */
-  const run = (stub: string[] | null) => {
+  /**
+   * Runs the block with `stub` as the repo-tools executable (null: a path that does not exist).
+   * `unset` runs it with UPT_REPO_TOOLS removed from the environment.
+   */
+  const run = (stub: string[] | null, unset = false) => {
     const dir = mkdtempSync(join(tmpdir(), 'upt-prepush-'));
     dirs.push(dir);
     const exe = join(dir, 'repo-tools-stub').replace(/\\/g, '/');
@@ -119,7 +124,9 @@ describe('pre-push hook: the repo-tools block, run under sh against a stub execu
     }
     const r = spawnSync('sh', ['-c', `set -e\n${block}`], {
       cwd: dir,
-      env: { ...process.env, UPT_REPO_TOOLS: stub ? exe : `${dir.replace(/\\/g, '/')}/absent/repo-tools` },
+      env: unset
+        ? Object.fromEntries(Object.entries(process.env).filter(([k]) => k !== 'UPT_REPO_TOOLS'))
+        : { ...process.env, UPT_REPO_TOOLS: stub ? exe : `${dir.replace(/\\/g, '/')}/absent/repo-tools` },
       encoding: 'utf8',
     });
     // A hook that fails before it calls the stub leaves no calls.txt; the output must still show.
@@ -207,11 +214,18 @@ describe('pre-push hook: the repo-tools block, run under sh against a stub execu
     expect(r.out).toMatch(/totalSourceFiles is stale/);
   });
 
-  it.skipIf(!hasSh)('skips both gates aloud, naming the path, only when the executable is missing', () => {
+  it.skipIf(!hasSh)('fails, naming the path, when the executable is missing', () => {
     const r = run(null);
-    expect(r.status, r.out).toBe(0);
-    expect(r.out).toMatch(/code-docs SKIPPED \(not found: .*\/absent\/repo-tools;/);
-    expect(r.out).toMatch(/architecture-docs claims SKIPPED \(not found: .*\/absent\/repo-tools;/);
+    expect(r.status, r.out).toBe(1);
+    expect(r.out).toMatch(/PRE-PUSH GATE FAILED: repo-tools not found: .*\/absent\/repo-tools/);
+    expect(r.calls).toBe('');
+  });
+
+  it.skipIf(!hasSh)('fails before it runs anything when UPT_REPO_TOOLS is not set', () => {
+    const r = run(dispatch(passDocs, passCheck), true);
+    expect(r.status, r.out).toBe(1);
+    expect(r.out).toMatch(/PRE-PUSH GATE FAILED: UPT_REPO_TOOLS is not set/);
+    expect(r.calls).toBe('');
   });
 });
 
