@@ -44,4 +44,6 @@ export const GOLDEN_CASES = [
   { name: 'derive-formula',      args: ['derive', 'period:time', 'length:length', 'gravity:acceleration', '--formula', '2*pi*sqrt(length/gravity)'] },
   { name: 'atlas-list',          args: ['atlas'] },
   { name: 'atlas-pendulum',      args: ['atlas', 'ab-pendulum-linear'] },
+  // The norm-transport rows of the JSON envelope (normTransportFields, src/atlas/serialize.ts).
+  { name: 'atlas-spring-lc-json', args: ['atlas', 'ab-spring-lc', '--json'] },
 ];
