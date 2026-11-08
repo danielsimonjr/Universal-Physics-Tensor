@@ -12,6 +12,7 @@
  * @module numerical/connection-lowering-helpers
  */
 
+import { Tensor } from '@danielsimonjr/mathts-tensor';
 import type { EngineTensor, TensorEngine } from './tensor-engine.js';
 import type { NestedArray } from './types.js';
 import { NumericalBackendError } from './errors.js';
@@ -117,22 +118,17 @@ export function zeroTensor(shape: ReadonlyArray<number>, engine: TensorEngine): 
 }
 
 /**
- * Convert a flat number[] to a properly-nested NestedArray matching `shape`.
+ * Convert a flat number[] to a properly-nested NestedArray matching `shape`,
+ * in row-major order, through MathTS `new Tensor(shape, data).toNested()`.
  * Exported for use in lowering.ts where the engine requires nested structure.
+ * @throws NumericalBackendError when the data length is not the product of the shape.
  */
 export function flatToNested(flat: number[], shape: ReadonlyArray<number>): NestedArray {
-  return flatToNestedImpl(flat, shape);
-}
-
-function flatToNestedImpl(flat: number[], shape: ReadonlyArray<number>): NestedArray {
-  if (shape.length === 0) return flat[0] ?? 0;
-  if (shape.length === 1) return flat.slice();
-  const stride = flat.length / shape[0];
-  const result: NestedArray[] = [];
-  for (let i = 0; i < shape[0]; i++) {
-    result.push(flatToNestedImpl(flat.slice(i * stride, (i + 1) * stride), shape.slice(1)));
+  try {
+    return new Tensor([...shape], Float64Array.from(flat)).toNested() as NestedArray;
+  } catch (e) {
+    throw new NumericalBackendError(`flatToNested: ${(e as Error).message}`);
   }
-  return result;
 }
 
 /**
@@ -231,7 +227,7 @@ export function computeChristoffelTensor(
     }
   }
 
-  return engine.fromNested(flatToNestedImpl(Gamma, [N, N, N]), [N, N, N]);
+  return engine.fromNested(flatToNested(Gamma, [N, N, N]), [N, N, N]);
 }
 
 // ---------------------------------------------------------------------------
@@ -359,7 +355,7 @@ export function contractChristoffelWithOperand(
     }
   }
 
-  return engine.fromNested(flatToNestedImpl(out, outShape), outShape);
+  return engine.fromNested(flatToNested(out, outShape), outShape);
 }
 
 // ---------------------------------------------------------------------------

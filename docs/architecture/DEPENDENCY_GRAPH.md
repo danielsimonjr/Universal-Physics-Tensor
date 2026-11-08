@@ -6671,6 +6671,11 @@ The codebase is organized into the following modules:
 
 ### `src/numerical/connection-lowering-helpers.ts` - Numerical helpers for covariant-derivative lowering (Task 12 [U]).
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-tensor` | `Tensor` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -7683,7 +7688,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 386 |
 | Total Modules | 13 |
-| Total Lines of Code | 87414 |
+| Total Lines of Code | 87410 |
 | Total Exports | 2801 |
 | Total Re-exports | 1390 |
 | Total Classes | 86 |

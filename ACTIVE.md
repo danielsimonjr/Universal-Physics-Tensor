@@ -58,7 +58,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: `mcnemar` exact p is MathTS `binomialTest` on the smaller discordant cell; the local tail loop and its `logChoose` copy are gone.
 - [x] MathTS leverage U7 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U7).
   Done: `expr-simplify.ts` imports MathTS `parse` and `simplify` statically; `isSimplifierAvailable` returns true and a failed smoke throws. The async `quietly` window is removed (no other caller); the smoke runs once inside `quietlySync`, as in the two sibling modules. Tests deleted: none. Rewritten: `tests/composition/mathts-quiet.test.ts` (the async-helper restore line). The false branch stays reachable by passing `null` to `runSymbolicWitness` (`tests/atlas/witness-runners.test.ts`, `witness-results.test.ts`, `witness-numeric-probe.test.ts`); the `skipIf(!simplifierPresent)` guards now always run.
-- [ ] MathTS leverage U8 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U8).
+- [x] MathTS leverage U8 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U8).
+  Done: `flatToNested` is MathTS `new Tensor(shape, data).toNested()`; a data length that is not the product of the shape now throws `NumericalBackendError` (the local slicer returned a wrong nesting).
 - [ ] MathTS leverage U9 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task U9).
 - [ ] MathTS leverage M1 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M1).
 - [ ] MathTS leverage M2 (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, task M2).
