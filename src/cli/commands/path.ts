@@ -1289,7 +1289,7 @@ async function run(ctx: CommandCtx): Promise<number> {
                 ...(claimWithdrawn ? {} : { bound: result.bound }),
                 norm: result.norm,
                 terminal: result.terminal,
-                ...(result.transports === undefined ? {} : { transports: result.transports.map(transportReport) }),
+                ...(result.transports === undefined ? {} : { transports: result.transports.map((a) => transportReport(ctx.api, a)) }),
               }
             : {
                 kind: 'no-claim',

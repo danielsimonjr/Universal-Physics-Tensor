@@ -236,6 +236,8 @@ export type { CandidateGrounding, CandidateReadiness } from './composition/groun
 // route bounds are `@internal`; the CLI is their only consumer today.
 export { OSCILLATOR_FAMILY } from './atlas/oscillators/index.js';
 export { ATLAS_FAMILIES } from './atlas/families.js';
+/** The declarative fields of a norm transport, as the atlas JSON and the CLI envelopes carry them. */
+export { normTransportFields } from './atlas/serialize.js';
 export { deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample } from './atlas/derive-evidence.js';
 export { summarizeEvidence, ALL_EVIDENCE_TAGS } from './atlas/coverage.js';
 export { runWitnessRegistry } from './atlas/witness-artifact.js';

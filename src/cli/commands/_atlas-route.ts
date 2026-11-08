@@ -7,7 +7,6 @@ import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
 import type { AppliedTransport, AtlasBridge } from '../../cli-api.js';
 import { publishedUrl } from '../published-url.js';
-import { normTransportFields } from '../../atlas/serialize.js';
 
 /** What composing an atlas route yields: `boundPath`'s claim or refusal, or a refusal for a missing Lipschitz constant. */
 export type RouteClaim =
@@ -144,16 +143,16 @@ export function explainsRefusal(claim: RouteClaim): boolean {
 }
 
 /** The declarative fields of an applied norm transport, as a JSON envelope carries them (no functions). */
-export function transportReport(a: AppliedTransport) {
-  return { index: a.index, bridgeId: a.bridgeId, ...normTransportFields(a.transport) };
+export function transportReport(api: CommandCtx['api'], a: AppliedTransport) {
+  return { index: a.index, bridgeId: a.bridgeId, ...api.normTransportFields(a.transport) };
 }
 
 /** The JSON form of an applied norm transport, as {@link transportReport} builds it. */
 export type TransportReport = ReturnType<typeof transportReport>;
 
 /** A route claim with its transports reduced to their declarative fields, so it serializes as data. */
-export function claimReport(claim: RouteClaim) {
+export function claimReport(api: CommandCtx['api'], claim: RouteClaim) {
   if (claim.kind !== 'bound' || claim.transports === undefined) return claim;
   const { transports, ...rest } = claim;
-  return { ...rest, transports: transports.map(transportReport) };
+  return { ...rest, transports: transports.map((a) => transportReport(api, a)) };
 }
