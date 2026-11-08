@@ -9,6 +9,7 @@ import { mcnemar, rootsLegendre } from '@danielsimonjr/mathts-functions';
 import { describe, expect, it } from 'vitest';
 import { GAUSS_LEGENDRE_16 } from '../../src/numerical/quadrature.js';
 import { studentTwoSidedP } from '../../src/composition/probe/t-tail.js';
+import { chiSquareSurvival, fSurvival } from '../../src/composition/probe/study.js';
 
 const exported = (name: string): boolean => Object.prototype.hasOwnProperty.call(functions, name);
 
@@ -25,15 +26,21 @@ describe('MathTS gaps that keep UPT routines local', () => {
     expect(studentTwoSidedP(80, 30)).toBeLessThan(1e-30);
   });
 
-  it('M2: mcnemar reads p as 1 - CDF, so a large statistic gives p = 0 (UPT keeps the direct tail)', () => {
-    // 100 discordant pairs on one side: chi2 = 99^2 / 100 = 98.01, true upper tail ~ 1e-23.
+  it('M2 (agreement): mcnemar p and the study survival tails are direct upper tails, not 1 - CDF', () => {
+    // 100 discordant pairs on one side: chi2 = 99^2 / 100 = 98.01, true upper tail ~ 4e-23.
     const r = mcnemar([[0, 100], [0, 0]]);
     expect(r.chi2).toBeCloseTo(98.01, 10);
-    expect(r.pValue).toBe(0);
-    // Control: a small statistic gives a p strictly inside (0, 1), so the row reads a real p.
-    const small = mcnemar([[10, 5], [3, 12]], { correction: false });
-    expect(small.pValue).toBeGreaterThan(0);
-    expect(small.pValue).toBeLessThan(1);
+    expect(r.pValue).toBe(functions.chiSquaredSF(98.01, 1));
+    expect(r.pValue).toBeGreaterThan(0);
+    expect(r.pValue).toBeLessThan(1e-20);
+    // The study tails: 1 - CDF rounds each of these to 0.
+    expect(chiSquareSurvival(400, 3)).toBe(functions.chiSquaredSF(400, 3));
+    expect(chiSquareSurvival(400, 3)).toBeGreaterThan(0);
+    expect(fSurvival(1e4, 2, 40)).toBe(functions.fSF(1e4, 2, 40));
+    expect(fSurvival(1e4, 2, 40)).toBeGreaterThan(0);
+    // The UPT guards refuse a bad degree of freedom, where MathTS returns NaN or 1.
+    expect(() => chiSquareSurvival(1, 0)).toThrow(RangeError);
+    expect(() => fSurvival(1, 0, 3)).toThrow(RangeError);
   });
 
   it('M3: rootsLegendre(16) weights are off by more than 1e-14 relative (UPT keeps the closed form)', () => {
