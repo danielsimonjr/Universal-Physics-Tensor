@@ -156,6 +156,25 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       },
     },
     {
+      // M6 (core 0.23.0) exports `Unit.readings`. It cannot replace the local splitter yet:
+      // over 13,496 glued tokens, 280 lose a reading and none gains one. These two rows are
+      // the two classes. Control: `mAs` has readings, so an empty result is a real gap.
+      id: 'Unit.readings: a glued token with °R has no reading in MathTS',
+      check: () => {
+        expect(Unit.readings('mAs').length).toBe(2);
+        expect(Unit.readings('m°R')).toEqual([]);
+        expect(parseUnit('J/m°R').scale).toBe(1.8);
+      },
+    },
+    {
+      id: 'Unit.readings: a glued token omits a sub-kilo prefix on pc',
+      check: () => {
+        expect(Unit.readings('Hzpc').map((r) => r.map((f) => f.name).join('·'))).toEqual(['Hz·pc']);
+        // The local splitter also reads H·zpc (henry, zeptoparsec), so the text stays ambiguous.
+        expect(() => parseUnit('1/Hzpc')).toThrow(AmbiguousUnitError);
+      },
+    },
+    {
       id: 'furlong wider MathTS table',
       check: () => {
         expect(() => Unit.parse('furlong')).not.toThrow();
