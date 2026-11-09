@@ -497,8 +497,9 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     const g = flrwMetric(p.a0!, p.t0!, p.n!, p.k!, p.c!);
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
     // Christoffel in the SI metric. With g_tt = −c², the time part of the SI
-    // curvature is smaller than the roundoff of the difference, so the
-    // curvature is differenced in a metric of order one and then restored.
+    // curvature is smaller than the roundoff of the difference. The code
+    // therefore takes the difference in a metric of order one. Then it
+    // restores the SI values.
     // k = 0: x = c y gives −c² dt² + a² dx² = c² (−dt² + a² dy²). A constant
     // factor leaves R_μν unchanged, so the c = 1 difference restores as
     // R_tt × 1, R_ti × 1/c, R_ij × 1/c², R × 1/c², K × 1/c⁴.
