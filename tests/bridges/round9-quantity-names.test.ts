@@ -13,7 +13,7 @@ import { bridgeCatalog } from '../../src/bridges/catalog-load.js';
 import { quantityRecord } from '../../src/dimensional/quantity-registry.js';
 import { quantityIdForSpelling, synonymGroup } from '../../src/dimensional/formula-names.js';
 
-const ROUND_9 = (id: number): boolean => id >= 147 && id <= 170;
+const ROUND_9 = (id: number | null): boolean => id !== null && id >= 147 && id <= 170;
 const catalog = bridgeCatalog();
 const relations = catalog.relations.filter((r) => ROUND_9(r.catalogId));
 const evaluators = catalog.evaluators.filter((e) => ROUND_9(e.catalogId));
