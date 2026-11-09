@@ -146,11 +146,23 @@ function presentSpellings(group: readonly string[], values: Readonly<Record<stri
  * The message names the keys the caller typed.
  */
 export function assertSynonymAgreement(values: Readonly<Record<string, number>>): void {
-  for (const group of SYNONYM_GROUPS) {
+  for (const group of [...SYNONYM_GROUPS, ...AGREEMENT_GROUPS]) {
     const disagreement = synonymDisagreement(presentSpellings(group, values), values);
     if (disagreement !== null) throw disagreement;
   }
 }
+
+/** Every spelling of `id`: its synonym group, or the id alone. */
+const spellingsOf = (id: string): readonly string[] => synonymGroup(id) ?? [id];
+
+/**
+ * A specialization and the generic quantities that it declares in
+ * `agreesWith`, each with every spelling. A group copies no value onto
+ * another member. When a caller binds two members, the two numbers must agree.
+ */
+const AGREEMENT_GROUPS: readonly (readonly string[])[] = allQuantityRecords()
+  .filter((row) => row.agreesWith !== undefined)
+  .map((row) => [...spellingsOf(row.id), ...row.agreesWith!.flatMap(spellingsOf)]);
 
 /**
  * Copy an agreed value onto every spelling in its group.

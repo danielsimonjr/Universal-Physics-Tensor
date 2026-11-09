@@ -9994,6 +9994,9 @@
     },
     {
       "id": "photon-frequency",
+      "agreesWith": [
+        "frequency"
+      ],
       "symbol": "ν",
       "dimension": {
         "L": 0,

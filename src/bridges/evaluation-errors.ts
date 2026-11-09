@@ -31,8 +31,13 @@ export class UnknownInputError extends Error {
     readonly id: string | undefined,
     readonly key: string,
     readonly inputs: readonly string[],
+    /** Where the key is read instead, when the id declares it. */
+    readonly elsewhere?: string,
   ) {
-    super(`${prefix(id)}'${key}' is not an input here; the inputs are: ${inputs.join(', ')}`);
+    super(
+      `${prefix(id)}'${key}' is not an input here; the inputs are: ${inputs.join(', ')}` +
+        (elsewhere === undefined ? '' : `. Use ${elsewhere}`),
+    );
     this.name = 'UnknownInputError';
   }
 }

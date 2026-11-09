@@ -69,15 +69,32 @@ describe('issue 543: one temperature spelling table for the library and the CLI'
   });
 });
 
+describe('issue 544: a photon frequency and a plain frequency given together must agree', () => {
+  it.each([
+    ['photon-energy', 'nu=5e14', 'frequency=6e14'],
+    ['photon-energy', 'photon-frequency=5e14', 'frequency=6e14'],
+    ['speed', 'frequency=5e14', 'nu=6e14', 'wavelength=500nm'],
+  ])('upt explain %s %s %s refuses the two numbers', async (...args) => {
+    const r = await cli(['explain', ...args, '--source=canonical']);
+    expect(r.code, r.text).toBe(1);
+    expect(r.text).toMatch(/are one quantity and disagree/);
+    expect(r.text).not.toMatch(/Recovered value/);
+  });
+  it('a plain frequency alone still does not bind the photon frequency (control, issue 473)', async () => {
+    const r = await cli(['explain', 'photon-energy', 'frequency=5e14', '--source=canonical']);
+    expect(r.text).not.toMatch(/Recovered value/);
+  });
+});
+
 describe('issue 544: explain names a given input that the derivation did not use', () => {
   it('photon-energy from nu with a plain frequency also given says frequency was not used', async () => {
-    const r = await cli(['explain', 'photon-energy', 'nu=5e14', 'frequency=6e14', '--source=canonical']);
+    const r = await cli(['explain', 'photon-energy', 'nu=5e14', 'frequency=5e14', '--source=canonical']);
     expect(r.code, r.text).toBe(0);
     expect(r.text).toMatch(/not used: \{frequency\}/);
     expect(r.text).not.toMatch(/determined from \{nu, frequency\}/);
   });
   it('speed from frequency and wavelength with nu also given says photon-frequency was not used', async () => {
-    const r = await cli(['explain', 'speed', 'frequency=5e14', 'nu=6e14', 'wavelength=500nm', '--source=canonical']);
+    const r = await cli(['explain', 'speed', 'frequency=5e14', 'nu=5e14', 'wavelength=500nm', '--source=canonical']);
     expect(r.code, r.text).toBe(0);
     expect(r.text).toMatch(/not used: \{photon-frequency\}/);
   });
@@ -97,9 +114,9 @@ describe('issue 528: be-37 has an evaluator on both surfaces, and the ray is rad
     expect(Math.abs(cliValue(r.text)! / reference - 1)).toBeLessThan(1e-12);
   });
   it('an impact parameter is refused on both surfaces: the relation is the radial delay', async () => {
-    expect(() => evaluateRelation('be-37', { ...sun, b_m: 6.957e8 })).toThrow(/'b_m' is not an input here/);
+    expect(() => evaluateRelation('be-37', { ...sun, b_m: 6.957e8 })).toThrow(/'b_m' is not an input here.*evaluateCovariantEikonalNumerical.*b_m/);
     const r = await cli(['evaluate', 'be-37', ...Object.entries({ ...sun, b_m: 6.957e8 }).map(([k, v]) => `${k}=${v}`)]);
     expect(r.code).toBe(1);
-    expect(r.text).toMatch(/'b_m' is not an input here/);
+    expect(r.text).toMatch(/'b_m' is not an input here.*evaluateCovariantEikonalNumerical.*b_m/);
   });
 });

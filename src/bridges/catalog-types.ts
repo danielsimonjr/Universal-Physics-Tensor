@@ -136,6 +136,8 @@ export interface CatalogEvaluator {
   readonly name: string;
   readonly parameters: readonly CatalogEvaluatorParameter[];
   readonly outputs?: readonly CatalogEvaluatorOutput[];
+  /** Keys that the evaluator refuses, each with the API that reads the key. */
+  readonly refusedInputs?: readonly { readonly key: string; readonly use: string }[];
 }
 
 /**

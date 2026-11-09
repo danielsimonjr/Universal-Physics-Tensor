@@ -129,7 +129,12 @@ export function unusedInputKeys(spec: EvaluatorSpec): string[] {
  * source no parameter owns, which a named constant fills when not given.
  * Building it throws when one spelling would bind two slots.
  */
-function evaluatorContract(catalogId: number, relation: CatalogRelation, parameters: readonly EvaluatorParameter[]): InputContract {
+function evaluatorContract(
+  catalogId: number,
+  relation: CatalogRelation,
+  parameters: readonly EvaluatorParameter[],
+  elsewhere?: Readonly<Record<string, string>>,
+): InputContract {
   const quantityCount = new Map<string, number>();
   for (const p of parameters) quantityCount.set(p.quantity, (quantityCount.get(p.quantity) ?? 0) + 1);
   const owned = new Set<string>();
@@ -161,7 +166,7 @@ function evaluatorContract(catalogId: number, relation: CatalogRelation, paramet
       listed: false,
     });
   }
-  return inputContract(`be-${catalogId}`, slots);
+  return inputContract(`be-${catalogId}`, slots, elsewhere);
 }
 
 /**
@@ -219,7 +224,8 @@ export function buildEvaluatorSpec(row: CatalogEvaluator): EvaluatorSpec {
   const relation = primaryRelation(row.catalogId);
   if (relation === undefined) throw new Error(missingEvaluatorMessage(row.catalogId));
   const parameters = row.parameters.map((p) => toParameter(p, sourceOfParameter(relation, p) === undefined));
-  return buildSpec(row.catalogId, row.name, parameters, row.outputs ?? []);
+  const elsewhere = row.refusedInputs === undefined ? undefined : Object.fromEntries(row.refusedInputs.map((r) => [r.key, r.use]));
+  return buildSpec(row.catalogId, row.name, parameters, row.outputs ?? [], elsewhere);
 }
 
 function buildSpec(
@@ -227,10 +233,11 @@ function buildSpec(
   name: string,
   parameters: readonly EvaluatorParameter[],
   outputs: readonly CatalogEvaluatorOutput[],
+  elsewhere?: Readonly<Record<string, string>>,
 ): EvaluatorSpec {
   const relation = primaryRelation(catalogId);
   if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
-  const contract = evaluatorContract(catalogId, relation, parameters);
+  const contract = evaluatorContract(catalogId, relation, parameters, elsewhere);
   const keys = parameters.map((parameter) => parameter.key);
   const reserved = reservedFormulaNames();
   for (const output of outputs) {
