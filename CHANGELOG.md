@@ -8,6 +8,16 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [13.0.0] - 2026-11-09
+
+Dependency health at this release: `bun audit` finds no vulnerabilities (140 packages). `bun outdated` lists only development dependencies: `@types/node` is pinned to the CI Node major (22.20.5; 26.6.6 is latest), `@vitest/coverage-v8`/`vitest` 4.1.12 (5.1.0 latest), and `tree-sitter` 0.22.4 (0.25.1).
+
+### Breaking
+
+- **Four glued unit classes are ambiguous.** `degR`, `°R`, `sr`, `hr` and `Rsun` before a unit that takes a prefix now throw `AmbiguousUnitError` (`W/degRm`, `W/srm`). Before, they read once. Use a separator: `W/(degR*m)` reads once.
+- **`Z95` and `bigintFrom` are removed.** No caller is left.
+- **`wilsonInterval` and `pairedDifferenceInterval` take a confidence level, not z.** The default is 0.95. A z value such as 1.96 throws `RangeError`.
+
 ### Added
 
 - **A superscript power reads every integer that a caret power reads.** `superscriptPower` (`src/dimensional/unit-data.ts`) maps a run of `⁰` to `⁹`, with an optional `⁻` or `⁺`, to its integer. `tryOneFactor` (`units.ts`) and `tryOneFactorBase` (`mathts-unit-delegation.ts`) call it, and the `SUPERSCRIPT` table and the two `(⁻?[¹²³])` patterns are gone. `m⁴`, `m⁰`, `m¹⁰`, `K⁻⁴`, `m⁴K` and `W/m⁴K` read as `m^4`, `m^0`, `m^10`, `K^-4`, `m^4K` and `W/m^4K`. Why: the caret reads `^([+-]?\d+)`, so `W/m^4K` read and `W/m⁴K` was `UnknownUnitError` for the same unit. Glued plain digits stay `[1-9]\d*`. The gap row for superscripts above `³` is an agreement row. The M6 comparison gives 0 differing tokens in both directions on all four sets (28,547 base, 56,166 caret and superscript, 302,500 prefixed, 67,409 superscript). `segmentations` is still not replaced by `Unit.readings`: MathTS reads a glued `0` (`m0K`, `mK0`, `m00K`, `m01K`) that UPT refuses, UPT reads `m⁺²K` that MathTS refuses, and the two order the readings of an ambiguous token differently (`umK`, `mAs`). The 0.24.4 entry's reason (superscripts above `³`) no longer holds; these three reasons replace it.
