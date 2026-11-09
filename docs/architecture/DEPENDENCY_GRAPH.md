@@ -3362,7 +3362,8 @@ The codebase is organized into the following modules:
 | `./bridges/evaluation-errors.js` | `DuplicateInputError, InputTypeError, isInputContractError, MissingInputError, NonFiniteInputError, UnknownInputError` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter` | Re-export |
 | `./bridges/evaluator-inputs.js` | `resolveEvaluatorInputs` | Re-export |
-| `./cases/index.js` | `APPLIED_CASES, CASE_CONTRACTS, runAppliedCase` | Re-export |
+| `./cases/index.js` | `APPLIED_CASES, runAppliedCase` | Re-export |
+| `./cases/index.js` | `CASE_CONTRACTS` | Re-export |
 | `./bridges/input-contract.js` | `slotForSpelling` | Re-export |
 | `./cases/index.js` | `AppliedCase, CaseCheck, CaseResult` | Re-export |
 | `./dimensional/units.js` | `convertValue, UnitError, unitRows` | Re-export |
@@ -3469,8 +3470,8 @@ The codebase is organized into the following modules:
   catalogEdgeKey, foldName, demonstrationEdges, ConfrontationEntry, RigorTier, consistencyComparison,
   ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, DuplicateInputError,
   InputTypeError, isInputContractError, MissingInputError, NonFiniteInputError, UnknownInputError,
-  EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, CASE_CONTRACTS,
-  runAppliedCase, slotForSpelling, AppliedCase, CaseCheck, CaseResult, convertValue, UnitError,
+  EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase,
+  CASE_CONTRACTS, slotForSpelling, AppliedCase, CaseCheck, CaseResult, convertValue, UnitError,
   unitRows, auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination, AXES, AxisSpec,
   simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
   scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
@@ -7741,7 +7742,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87690 |
+| Total Lines of Code | 87693 |
 | Total Exports | 2826 |
 | Total Re-exports | 1394 |
 | Total Classes | 86 |
