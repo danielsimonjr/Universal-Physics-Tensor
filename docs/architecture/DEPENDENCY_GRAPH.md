@@ -4832,7 +4832,6 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../../core/mathts-read.js` | `numberFrom` | Import |
 | `../../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines, PiGroup` | Import |
 | `./types.js` | `DimensionalVariableRef, ObservationRow, SearchProblem` | Import (type-only) |
 
@@ -5452,7 +5451,7 @@ The codebase is organized into the following modules:
 ### `src/core/mathts-read.ts` - Readers for the typed MathTS results.
 
 **Exports:**
-- Functions: `numberFrom`, `bigintFrom`, `numberMatrixFrom`
+- Functions: `numberFrom`, `numberMatrixFrom`
 
 ---
 
@@ -5882,11 +5881,6 @@ The codebase is organized into the following modules:
 |---------|--------|
 | `@danielsimonjr/mathts-core` | `addExactScales, decimalExactScale, divideExactScales, exactScaleOf, exactScaleToNumber, LN2_EXACT_SCALE, multiplyExactScales, PI_EXACT_SCALE, powerExactScale, ratioExactScale, readScaleExpression, ExactScale` |
 | `@danielsimonjr/mathts-functions` | `gcd` |
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../core/mathts-read.js` | `bigintFrom` | Import |
 
 **Exports:**
 - Interfaces: `ExactScale`
@@ -7741,12 +7735,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87552 |
-| Total Exports | 2822 |
+| Total Lines of Code | 87544 |
+| Total Exports | 2821 |
 | Total Re-exports | 1392 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
-| Total Functions | 925 |
+| Total Functions | 924 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 532 |

@@ -3,7 +3,7 @@ metadata:
   version: 12.0.0
   totalFiles: 388
   totalModules: 13
-  totalExports: 2822
+  totalExports: 2821
 entryPoints:
   - file: src/index.ts
     type: main
@@ -12123,9 +12123,6 @@ modules:
             - ols
       nodeDependencies: []
       internalDependencies:
-        - file: ../../core/mathts-read.js
-          imports:
-            - numberFrom
         - file: ../../dimensional/buckingham.js
           imports:
             - buckinghamPi
@@ -13397,11 +13394,9 @@ modules:
       internalDependencies: []
       exports:
         - numberFrom
-        - bigintFrom
         - numberMatrixFrom
       functions:
         - numberFrom
-        - bigintFrom
         - numberMatrixFrom
     src/core/regime-registry.ts:
       description: "`RegimeType` extension system — v0.8 Proposal 5."
@@ -14294,10 +14289,7 @@ modules:
           imports:
             - gcd
       nodeDependencies: []
-      internalDependencies:
-        - file: ../core/mathts-read.js
-          imports:
-            - bigintFrom
+      internalDependencies: []
       exports:
         - UNIT_SCALE
         - coreExactScaleFromUpt
@@ -19585,11 +19577,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 388
   totalModules: 13
-  totalLinesOfCode: 87552
-  totalExports: 2822
+  totalLinesOfCode: 87544
+  totalExports: 2821
   totalClasses: 86
   totalInterfaces: 518
-  totalFunctions: 925
+  totalFunctions: 924
   totalTypeGuards: 16
   totalEnums: 0
   totalConstants: 414
