@@ -104,6 +104,7 @@ exports[`data/units.json is the unit table > every admitted row scale double is 
   "u": 1.66053906892e-27,
   "uas": 4.84813681109536e-12,
   "yr": 31557600,
+  "°": 0.017453292519943295,
   "°R": 0.5555555555555556,
   "Å": 1e-10,
   "Ω": 1,

@@ -267,7 +267,8 @@
     },
     {
       "symbols": [
-        "deg"
+        "deg",
+        "°"
       ],
       "scale": "pi/180",
       "dimension": {},

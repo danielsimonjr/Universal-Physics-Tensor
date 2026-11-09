@@ -24,8 +24,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
   Done: core 0.24.3 reads `µ` and `μ` as a prefix only, and `Unit.parse('5 µ')` throws. No UPT test read `µ` as the atomic mass unit.
 - [x] Add the 2022 SI prefixes q, r, R and Q to `data/units.json` (2026-11-09), and report each new ambiguity.
   Done: `Qm` is 1e30 m, `qg` 1e-33 kg, `Rg` 1e24 kg. No prefixed spelling hides an exact symbol. Over 22,236 tokens (each symbol and each pair, bare and after `W/`), 330 change from one reading to ambiguous, in four classes: `degR`, `sr`, `hr` and `Rsun` before a glued unit. MathTS reads each class the same way. 64 more tokens that were already ambiguous gain a reading.
-- [ ] Rerun the M6 comparison with all 24 SI prefixes plus `µ` and `μ`, in both directions (2026-11-09). Delete the local split only when 0 tokens differ.
-
+- [x] Rerun the M6 comparison with all 24 SI prefixes plus `µ` and `μ`, in both directions (2026-11-09). Delete the local split only when 0 tokens differ.
+  Done: 490 of 296,809 tokens differed, each `°R` before a prefixable unit, because MathTS reads a bare `°` as the degree. The `deg` row now has the symbol `°`. Then 0 of 302,500 prefixed tokens and 0 of 28,547 base tokens differ, in both directions. The numbers are in `NOTES.md`, 2026-11-09.
 - [x] MathTS core 0.24.2: rerun the M6 comparison of `Unit.readings` against the local splitter (2026-11-08). Core 0.24.1 reads `°R` inside a glued token, and core 0.24.2 gives every prefix to `readings`. Delete the local split only when 0 tokens differ.
   Done, negative result: the splitter stays. The `°R` and `pc` classes agree now (0 of 25,703 tokens differ). With every SI prefix, 24,011 of 269,171 tokens differ: `Unit.readings` reads `µ` and `μ` as the unit `u`. A gap row in `tests/dimensional/mathts-unit-gaps.test.ts` pins it. The numbers are in `NOTES.md`, 2026-11-08.
 - [x] `tools/plan-doc-audit` counts a whole-word match in a comment or a string as a shipped symbol (2026-11-08): a row that backticks `master` reads as complete.

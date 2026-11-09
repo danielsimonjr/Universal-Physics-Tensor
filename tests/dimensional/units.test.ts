@@ -42,12 +42,20 @@ describe('parseUnit', () => {
   });
 
   it('a glued r or R after degR, sr, hr or Rsun is a second reading, so the token is ambiguous', () => {
-    // The SI lets a prefix attach to any unit, so `deg·Rm` (degree times ronnametre) is a reading.
+    // The SI lets a prefix attach to any unit. `deg·Rm` (degree times ronnametre) is a reading.
     // MathTS core 0.24.3 `Unit.readings` gives the same two readings for each token.
     for (const [glued, spaced] of [['W/degRm', 'W/(degR*m)'], ['W/srm', 'W/(sr*m)'], ['W/hrm', 'W/(hr*m)'], ['W/Rsunm', 'W/(Rsun*m)']] as const) {
       expect(() => parseUnit(glued), glued).toThrow(AmbiguousUnitError);
       expect(() => parseUnit(spaced), spaced).not.toThrow();
     }
+  });
+
+  it('a bare degree sign is the angle degree, and the affine spellings read as before', () => {
+    expect(parseUnit('°')).toEqual(parseUnit('deg'));
+    expect(() => parseUnit('W/°Rm')).toThrow(AmbiguousUnitError);
+    expect(parseUnit('°R').scale).toBe(parseUnit('degR').scale);
+    expect(parseUnit('°C').affine).toBe('celsius');
+    expect(() => parseUnit('° C/s')).toThrow(UnitError);
   });
 
   it('the farad is C/V: 10pF converts to 1e-11 F, and a pF is not a Fahrenheit', () => {
