@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`bun run audit:plans` no longer counts a word in a comment or a string as a shipped symbol.** `checkSymbol` took every whole-word `git grep` match under `src/` as an implementation. The only symbol of a performance row was a branch name, `master`, which occurs in `src/` only in a URL string and in a covers sentence. The audit marked that row flip-eligible, and the `quality` job of PR 612 failed. A match now counts only on a line that declares the symbol: a function, class, interface, type, enum, namespace or variable declaration, or a class method with a body. `tests/tools/plan-doc-audit.test.ts` runs the row text against a fixture repository (it failed before the fix). Its control is a row that names a declared function, which stays eligible. A mutation that refuses every declaration fails the control. Why: a row that names its subject, not its deliverable, is open work.
+
 ### Changed
 
 - **`@danielsimonjr/mathts-functions` is `^0.76.0`, and the Wilson, Newcombe and kappa statistics are MathTS calls (plan `docs/superpowers/plans/2026-11-07-mathts-leverage.md`, M4).** `wilsonInterval`, `pairedDifferenceInterval` and `cohensKappa` in `src/atlas/benchmark/stats.ts` keep their UPT input checks and messages, then call MathTS `wilsonInterval`, `newcombePairedInterval` and `cohensKappa`; the local formulas go. The two intervals now take a confidence level (default 0.95) in place of z, the MathTS signature; both are `@internal`, and a caller that still passes z (1.96) gets the MathTS `RangeError` "confidence must be in (0, 1)". A negative or non-integer cell is now a MathTS `RangeError` too, where the local code computed through. `Z95` is removed: no reader was left. Before the deletion the two sides differed by at most 1.1e-16 (Wilson, every s/n with n ≤ 300), 2.2e-16 (Newcombe, every table with cells 0 to 12) and 6.7e-16 (kappa, 20000 random matrices). The M4 gap row is an agreement test; it had checked the name `newcombeInterval`, and MathTS exports `newcombePairedInterval`.

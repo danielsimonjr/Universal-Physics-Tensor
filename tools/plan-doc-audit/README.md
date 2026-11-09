@@ -10,7 +10,7 @@ The tool exists to prevent **plan-doc rot**: the situation where plan checkboxes
 
 ## Why it reads function bodies
 
-The load-bearing lesson: `git grep <symbol>` matches whether a function is real **or just a stub that throws `"Not implemented"`**. A symbol-presence check based purely on grep would misclassify a stub as shipped before its body is actually written. To avoid this, the tool reads a small window around each match and rejects matches whose body contains stub markers.
+The load-bearing lesson: `git grep <symbol>` matches whether a function is real **or just a stub that throws `"Not implemented"`**. A symbol-presence check based purely on grep would misclassify a stub as shipped before its body is actually written. To avoid this, the tool reads a small window around each match and rejects matches whose body contains stub markers. A whole-word match in a comment, a string or a call site is not a definition either. The tool keeps only the lines that declare the symbol: a function, class, interface, type, enum, namespace or variable declaration, or a class method with a body.
 
 This also implies a tight window: a multi-class file like `class A { real() } class B { throw() }` would false-positive A's class-declaration line if the window were too large. The window is currently 3 lines (matched line + 2 lines after), which catches one-line method stubs but does not bleed into adjacent class bodies.
 
