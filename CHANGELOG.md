@@ -14,9 +14,15 @@ Dependency health at this release: `bun audit` finds no vulnerabilities (140 pac
 
 ### Breaking
 
-- **Four glued unit classes are ambiguous.** `degR`, `°R`, `sr`, `hr` and `Rsun` before a unit that takes a prefix now throw `AmbiguousUnitError` (`W/degRm`, `W/srm`). Before, they read once. Use a separator: `W/(degR*m)` reads once.
-- **`Z95` and `bigintFrom` are removed.** No caller is left.
-- **`wilsonInterval` and `pairedDifferenceInterval` take a confidence level, not z.** The default is 0.95. A z value such as 1.96 throws `RangeError`.
+- **Four glued unit classes are ambiguous.** `degR` (also spelled `°R`), `sr`, `hr` and `Rsun` before a unit that takes a prefix now throw `AmbiguousUnitError` (`W/degRm`, `W/srm`). Before, they read once. Use a separator: `W/(degR*m)` reads once.
+
+### Removed
+
+- **`Z95` and `bigintFrom` (`@internal`, not on the package root or the `atlas` facade).** No caller is left.
+
+### Changed
+
+- **`wilsonInterval` and `pairedDifferenceInterval` (`@internal`) take a confidence level, not z.** The default is 0.95. A z value such as 1.96 throws `RangeError`.
 
 ### Added
 
