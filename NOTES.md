@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-09
+
+- **MathTS core 0.24.3 is installed.** `bun.lock` resolves one core, 0.24.3. On 0.24.3, `Unit.readings('µmK')` is `[[um, K]]` and `Unit.parse('5 µ')` throws. The 0.24.2 line below that says `Unit.readings` reads `µ` as `u` is the record from before this install. Full suite on 0.24.3: 709 files, 8376 passed, 4 skipped, 0 failed (local run).
+
 ## As of 2026-11-08
 
 - **The FD curvature error bound (`riemannUpperWithBoundAt`), measured against the closed-form Riemann tensors.** Errors and bounds are per component and are read in the orthonormal frame of the diagonal metric; "err/bound" is the largest actual error over its own bound. Schwarzschild (M = 1.989e30 kg, θ = π/3): 1.05 r_s error 3.9e-6 of R, bound 7.6e-2, err/bound 0.46; 1.5 r_s 1.6e-9, 3.2e-5, 0.43; 3 r_s 3.3e-9, 2.1e-6, 0.37; 10 r_s 1.6e-8, 9.1e-7, 0.28; 100 r_s 1.1e-7, 5.0e-6, 0.21; r = 1e8 m 8.1e-6, 1.0e-3, 0.044. De Sitter Λ = 1, r = 1: 2.3e-9, 3.0e-6, 0.30. De Sitter Λ = 1.1e-52 m⁻²: r = 5e25 m 7.8e-9, 1.1e-6, 0.13 (resolved; K bound 2.2e-7 of K); r = 1e25 m 2.1e-7, 2.7e-5, 0.11 (resolved); r = 1e20 m 4.4e3, bound 61 times |R| (unresolved); r = 1e3 m 1.5e37, bound 173 times |R| (unresolved). Schwarzschild at r = 5e25 m: `1 − r_s/r` is 1 in double, error 7.8e12 of R, bound 66 times |R| (unresolved). At the two points where the closure is flat in double the bound covers the computed noise, not the error against the closed form, because the true curvature is not in the closure. The `upt metric` defaults: Minkowski R = K = 0 with bound 0, unresolved; Schwarzschild K bound 2.4e-7 of K (actual error 2.5e-9), R unresolved; FLRW R bound 3.6e-6 of R, K bound 2.9e-6 of K, both resolved; Kerr K bound 1.4e-7 of K, R unresolved. Schwarzschild at r = 1e3 m is refused as inside the horizon (r_s = 2954 m), not reported. The question under the previous block, whether the lowering should refuse a point like de Sitter r = 1e3 m, is answered: it does not refuse; it reports unresolved.
