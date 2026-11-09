@@ -2971,3 +2971,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Security: not touched. `bun.lock` resolves one core, 0.24.0.
 - Maintainability: `bigintFrom` is gone. `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups before and after.
 - Left: the local splitter stays, because `Unit.readings` misses readings with `°R` and with a sub-kilo prefix on `pc` (two gap rows). A MathTS change on either gap opens the deletion.
+
+## 2026-11-08 — five-axis pass (MathTS core 0.24.2, M6 rerun)
+
+- Speed: not measured; no source change.
+- Stability: not changed; the new rows are deterministic.
+- Reliability: two gap rows are agreement rows now (`°R`, sub-kilo `pc`). A new gap row pins the micro-sign class, so a swap to `Unit.readings` fails a test.
+- Security: not touched. `bun.lock` resolves one core, 0.24.2.
+- Maintainability: `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups before and after.
+- Left: the local splitter stays. `Unit.readings` reads `µ` and `μ` as the atomic mass unit `u` in 24,011 of 269,171 glued tokens.

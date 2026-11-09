@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
+- [x] MathTS core 0.24.2: rerun the M6 comparison of `Unit.readings` against the local splitter (2026-11-08). Core 0.24.1 reads `°R` inside a glued token, and core 0.24.2 gives every prefix to `readings`. Delete the local split only when 0 tokens differ.
+  Done, negative result: the splitter stays. The `°R` and `pc` classes agree now (0 of 25,703 tokens differ). With every SI prefix, 24,011 of 269,171 tokens differ: `Unit.readings` reads `µ` and `μ` as the unit `u`. A gap row in `tests/dimensional/mathts-unit-gaps.test.ts` pins it. The numbers are in `NOTES.md`, 2026-11-08.
 - [x] `tools/plan-doc-audit` counts a whole-word match in a comment or a string as a shipped symbol (2026-11-08): a row that backticks `master` reads as complete.
   Done: a match counts only on a line that declares the symbol. The test of the exact row fails first, and the control row with a declared function stays eligible.
 - [x] `tests/dimensional/unit-grammar.test.ts` "reads a unique product, and names every reading of an ambiguous token" takes 43.7 s alone on the ZBOOK (2026-11-07) against a 60 s timeout, and timed out once inside the full local suite. The cause is the exhaustive left-by-base cross product, each token through `parseUnit`. Measure where the time goes and make the walk cheaper. Do not raise the timeout.

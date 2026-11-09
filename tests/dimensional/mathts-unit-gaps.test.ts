@@ -107,6 +107,20 @@ describe('MathTS agrees with UPT on delegated readings', () => {
   });
 });
 
+describe('Unit.readings agrees with the local splitter on °R and pc (closed by core 0.24.1 and 0.24.2)', () => {
+  const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => f.name).join('·'));
+
+  it('a glued token with °R has a reading (core 0.24.1)', () => {
+    expect(names('m°R')).toEqual(['m·degR']);
+    expect(parseUnit('J/m°R').scale).toBe(1.8);
+  });
+
+  it('a glued token keeps a sub-kilo prefix on pc (core 0.24.2)', () => {
+    expect(names('Hzpc')).toEqual(['H·zpc', 'Hz·pc']);
+    expect(() => parseUnit('1/Hzpc')).toThrow(AmbiguousUnitError);
+  });
+});
+
 describe('MathTS gaps the UPT wrapper must keep', () => {
   const gapRows: { readonly id: string; readonly check: () => void }[] = [
     {
@@ -164,23 +178,20 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       },
     },
     {
-      // M6 (core 0.23.0) exports `Unit.readings`. `Unit.readings` cannot replace the local
-      // splitter yet. Over 13,496 glued tokens, 280 lose a reading. No token gains a reading.
-      // The two rows correspond to the two classes. Control: `mAs` has readings. An empty
-      // result is a real gap.
-      id: 'Unit.readings: a glued token with °R has no reading in MathTS',
+      // `Unit.readings` cannot replace the local splitter.
+      // From core 0.24.1, MathTS spells the micro sign as `u` inside a reading.
+      // As a result, a lone `µ` or `μ` also reads as the atomic mass unit.
+      // Over 269,171 glued tokens, 24,011 gain an atomic mass reading.
+      // Every one of these 24,011 tokens contains `µ` or `μ`.
+      // No token loses a reading.
+      // Control: `umK` is ambiguous on both sides.
+      id: 'Unit.readings: a micro sign reads as the atomic mass unit u',
       check: () => {
-        expect(Unit.readings('mAs').length).toBe(2);
-        expect(Unit.readings('m°R')).toEqual([]);
-        expect(parseUnit('J/m°R').scale).toBe(1.8);
-      },
-    },
-    {
-      id: 'Unit.readings: a glued token omits a sub-kilo prefix on pc',
-      check: () => {
-        expect(Unit.readings('Hzpc').map((r) => r.map((f) => f.name).join('·'))).toEqual(['Hz·pc']);
-        // The local splitter also reads H·zpc (henry, zeptoparsec). The text stays ambiguous.
-        expect(() => parseUnit('1/Hzpc')).toThrow(AmbiguousUnitError);
+        const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => f.name).join('·'));
+        expect(names('umK')).toContain('u·m·K');
+        expect(() => parseUnit('W/umK')).toThrow(AmbiguousUnitError);
+        expect(names('µmK')).toContain('u·m·K');
+        expect(parseUnit('W/µmK').scale).toBe(1e6);
       },
     },
     {
