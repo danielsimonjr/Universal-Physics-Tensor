@@ -59,3 +59,17 @@ describe('#551 / #532 evaluate names its target', () => {
     for (const text of [be78, be131, be120]) expect(text).not.toMatch(/^\s*value = /m);
   });
 });
+
+describe('#550 a degC excess temperature on Newton cooling is a difference', () => {
+  const base = ['evaluate', 'be-161', 'rho_kg_per_m3=1000', 'c_J_per_kg_K=4180', 'V_m3=0.001', 'h_W_per_m2_K=20', 'A_m2=0.01', 't_s=0'];
+  const value = (text: string): string | undefined => /\] = (\S+) — θ\(t\)/.exec(text)?.[1];
+
+  it('10degC, 10K and a bare 10 give theta(0) = 10, with no absolute offset', async () => {
+    const celsius = await ok([...base, 'theta_difference_K=10degC']);
+    expect(value(celsius)).toBe('10');
+    expect(value(await ok([...base, 'theta_difference_K=10K']))).toBe('10');
+    expect(value(await ok([...base, 'theta_difference_K=10']))).toBe('10');
+    expect(celsius).toContain('10degC → 10 K (a difference: no offset)');
+    expect(celsius).not.toContain('273.15');
+  });
+});

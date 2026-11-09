@@ -20,7 +20,12 @@ const report = JSON.parse(raw)[0];
 const files = new Set(report.files.map((f) => f.path));
 const required = new Set(['package.json', 'README.md', 'LICENSE', pkg.bin.upt]);
 for (const target of Object.values(pkg.exports)) {
-  for (const path of Object.values(target)) required.add(path.replace(/^\.\//, ''));
+  const paths = typeof target === 'string' ? [target] : Object.values(target);
+  for (const path of paths) required.add(path.replace(/^\.\//, ''));
+}
+// A consumer reads the version through the exports map (issue 556).
+if (pkg.exports['./package.json'] !== './package.json') {
+  throw new Error('package smoke: exports must map ./package.json to ./package.json');
 }
 // The runtime reads data files by a path relative to its module (`data/units.json`,
 // `data/units.schema.json`, `data/quantities.json`, the catalog), so every file under `data/`

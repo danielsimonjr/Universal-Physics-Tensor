@@ -9495,7 +9495,7 @@
           "b_m"
         ]
       },
-      "holds": "coax-inner > 0 and coax-outer > 0 and coax-inner != coax-outer and coax-liner != 0",
+      "holds": "coax-inner > 0 and coax-outer > coax-inner and coax-liner != 0",
       "citation": "PhysJS.CoaxialCapacitance.capacitance_per_length. Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d.",
       "reference": {
         "inputs": {
@@ -12937,7 +12937,7 @@
           "quantity": "coax-outer",
           "symbol": "b",
           "unit": "m",
-          "meaning": "outer radius, > 0 and ≠ a",
+          "meaning": "outer radius, > a",
           "geometry": "radius"
         }
       ]
