@@ -333,3 +333,62 @@ function minoProperTime(opts: {
   }
   return { theta: th, phi };
 }
+
+/**
+ * Issue #527. For a = (t/t0)^n with a0 = t0 = 1, at t = 1 (Carroll §8.3, c = 1):
+ * R_tt = −3ä/a, R_ij = (a ä + 2 ȧ² + 2k) γ_ij, R = 6(ä/a + H² + k/a²).
+ * In SI, with T = c t, R_tt = c² R_TT and R_ij keeps its value: flat dust gives
+ * R_tt = 2/3 s⁻² and R_rr = (2/3)/c². Radiation (n = ½) is trace-free
+ * (R = −κT = 0), and its Ricci tensor is not zero.
+ */
+describe('FLRW Ricci tensor in SI (#527)', () => {
+  const ric = (r: ReturnType<typeof curvatureReport>, index: string) => r.ricci.find((c) => c.index === index);
+
+  it('flat dust at SI c lists the Ricci components whose scalar it reports', () => {
+    const r = curvatureReport('flrw', ['k=0', 't=1', 'rho=1e-26', 'Lambda=0']);
+    const tt = ric(r, 'R_tt');
+    const rr = ric(r, 'R_rr');
+    expect(tt).toBeDefined();
+    expect(rr).toBeDefined();
+    expect(tt!.value).toBeCloseTo(2 / 3, 6);
+    expect(rr!.value / (2 / 3 / C_SI ** 2) - 1).toBeCloseTo(0, 4);
+    expect(Math.abs(r.ricciScalar / (4 / 3 / C_SI ** 2) - 1)).toBeLessThan(1e-4);
+    const notes = r.notes.join(' ');
+    expect(notes).not.toMatch(/vacuum/);
+    expect(notes).not.toMatch(/k = 1/);
+    expect(notes).toMatch(/not a solution of the Friedmann equation/);
+  });
+
+  it('flat radiation is trace-free, not vacuum', () => {
+    const r = curvatureReport('flrw', ['k=0', 't=1', 'n=0.5', 'rho=1e-26', 'Lambda=0']);
+    expect(r.ricciScalar).toBe(0);
+    expect(ric(r, 'R_tt')?.value).toBeCloseTo(3 / 4, 6);
+    expect(ric(r, 'R_rr')!.value / (1 / 4 / C_SI ** 2) - 1).toBeCloseTo(0, 4);
+    const notes = r.notes.join(' ');
+    expect(notes).not.toMatch(/vacuum/);
+    expect(notes).toMatch(/trace-free/);
+  });
+
+  it('flat radiation at c = 1 also keeps its Ricci tensor', () => {
+    const r = curvatureReport('flrw', ['k=0', 't=1', 'n=0.5', 'c=1', 'rho=1e-26', 'Lambda=0']);
+    expect(r.ricciScalar).toBe(0);
+    expect(ric(r, 'R_tt')?.value).toBeCloseTo(3 / 4, 6);
+  });
+
+  it.each(['1', '-1'])('k = %s: the finite-difference scalar is within its bound of the closed form', (k) => {
+    const r = curvatureReport('flrw', [`k=${k}`, 't=2', 'rho=0', 'Lambda=0']);
+    const exact = r.closedForm.ricciScalar!;
+    expect(r.ricciScalarBound).toBeGreaterThan(0);
+    expect(Math.abs(r.ricciScalar - exact)).toBeLessThanOrEqual(r.ricciScalarBound);
+    expect(r.ricci.length).toBeGreaterThan(0);
+    expect(r.notes.join(' ')).toMatch(/k = 1 with c in m\/s/);
+  });
+
+  it('lists Γ^t_rr = a ȧ/c² beside Γ^r_tr = H', () => {
+    const r = curvatureReport('flrw', ['k=0', 't=1', 'rho=1e-26', 'Lambda=0']);
+    const g = r.christoffel.find((c) => c.index === 'Γ^t_rr');
+    expect(g).toBeDefined();
+    expect(g!.value / (2 / 3 / C_SI ** 2) - 1).toBeCloseTo(0, 4);
+    expect(r.christoffel.find((c) => c.index === 'Γ^r_tr')?.value).toBeCloseTo(2 / 3, 6);
+  });
+});
