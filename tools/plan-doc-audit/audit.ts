@@ -124,6 +124,19 @@ const FUTURE_WORK_VERBS = [
   /\bPropagate\b/i,
 ];
 
+/** A line that declares `symbol`: a function, class, interface, type, enum,
+ * namespace or variable declaration, or a class method with a body. A call
+ * (`symbol(x);`) has no `{` after its parameter list, so it is not a
+ * declaration. */
+function declarationPattern(symbol: string): RegExp {
+  const name = symbol.replace(/[$]/g, '\\$');
+  return new RegExp(
+    `\\b(?:function\\*?|class|interface|type|enum|namespace|const|let|var)\\s+${name}\\b` +
+      `|^\\s*(?:(?:public|private|protected|static|async|readonly|override|get|set)\\s+)*` +
+      `${name}\\s*(?:<[^>]*>)?\\s*\\([^)]*\\)\\s*(?::[^{;=]+)?\\{`,
+  );
+}
+
 /** Check whether a symbol is shipped, a stub, or absent. The optional
  * `cwd` lets tests point at a synthetic repo without changing the
  * process-wide cwd (which is unsafe under vitest workers). */
@@ -144,7 +157,15 @@ export function checkSymbol(
     return { symbol, status: 'absent' };
   }
 
-  const lines = stdout.split('\n').filter(Boolean);
+  // A whole-word match is not a definition: a word in a comment, a string
+  // or a call site would mark a row complete when the row names only its
+  // subject (a branch name such as `master` in a URL did that). Keep only
+  // the lines that declare the symbol.
+  const declares = declarationPattern(symbol);
+  const lines = stdout
+    .split('\n')
+    .filter(Boolean)
+    .filter((l) => declares.test(l.slice(l.indexOf(':', l.indexOf(':') + 1) + 1)));
   if (lines.length === 0) return { symbol, status: 'absent' };
 
   // For each match, look at a small window around the line to detect stubs.

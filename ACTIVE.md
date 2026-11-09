@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
+- [x] `tools/plan-doc-audit` counts a whole-word match in a comment or a string as a shipped symbol (2026-11-08): a row that backticks `master` reads as complete.
+  Done: a match counts only on a line that declares the symbol. The test of the exact row fails first, and the control row with a declared function stays eligible.
 - [x] `tests/dimensional/unit-grammar.test.ts` "reads a unique product, and names every reading of an ambiguous token" takes 43.7 s alone on the ZBOOK (2026-11-07) against a 60 s timeout, and timed out once inside the full local suite. The cause is the exhaustive left-by-base cross product, each token through `parseUnit`. Measure where the time goes and make the walk cheaper. Do not raise the timeout.
   Done: the walk is 139,335 tokens. `parseUnit` takes 13.2 s of them; a vitest `expect` per token took most of the rest. The loop records each failure as text, and one assertion reads the list. The test takes 12.6 s alone. A mutation of the product scale (×2) fails it and names `mnat`. The timeout is unchanged.
 - [x] MathTS 0.22 integration P0 (plan `docs/superpowers/plans/2026-11-07-mathts-integration-refactor.md`, task P0).
