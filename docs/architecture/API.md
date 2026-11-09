@@ -1242,7 +1242,7 @@ Regenerate: `repo-tools map . --out=<dir>` · Check: `repo-tools check . --docs=
 
 | Claim | Value | Source |
 |---|---|---|
-| totalExports | 3858 | `dependency-graph.json` `statistics.totalExports` |
+| totalExports | 3859 | `dependency-graph.json` `statistics.totalExports` |
 | unusedExportsCount | 216 | `dependency-graph.json` `statistics.unusedExportsCount` |
 
 Both counts cover the whole repository, which is the default scope of `repo-tools map`. The project generator `bun run docs:deps` reads `src/` only and reports other numbers. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.
