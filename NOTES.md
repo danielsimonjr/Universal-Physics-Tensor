@@ -12,6 +12,19 @@ nothing validates prose and the next reader cannot tell.
 ## As of 2026-11-09
 
 - **MathTS core 0.24.3 is installed.** `bun.lock` resolves one core, 0.24.3. On 0.24.3, `Unit.readings('µmK')` is `[[um, K]]` and `Unit.parse('5 µ')` throws. The 0.24.2 line below that says `Unit.readings` reads `µ` as `u` is the record from before this install. Full suite on 0.24.3: 709 files, 8376 passed, 4 skipped, 0 failed (local run).
+- **The M6 comparison on core 0.24.3, with all 24 SI prefixes plus `µ` and `μ` (26 spellings).** The script is rebuilt from the 2026-11-08 description and is not committed. It compares the filtered `Unit.readings` with a copy of the local `segmentations`, by exact scale, dimension and power per factor, in both directions. The base set (every pair of the 105 symbols and 20,000 seeded products, mulberry32 seed 20261108) has 28,382 tokens, not 25,703: the product generator is a second rebuild. The prefixed set is every one of the 26 spellings before every pair.
+
+  | Set | Prefix table | Tokens | Agree | MathTS-only | UPT-only |
+  |---|---|---|---|---|---|
+  | base | 22 spellings | 28,382 | 28,382 | 0 | 0 |
+  | prefix before pair | 22 spellings | 252,737 | 252,737 | 0 | 0 |
+  | base | 26 spellings | 28,382 | 28,278 | 104 | 0 |
+  | prefix before pair | 26 spellings | 296,809 | 296,319 | 490 | 0 |
+
+  | base | 26 spellings, `°` in the `deg` row | 28,547 | 28,547 | 0 | 0 |
+  | prefix before pair | 26 spellings, `°` in the `deg` row | 302,500 | 302,500 | 0 | 0 |
+
+  On the 22-spelling table, 0 tokens differ: the micro-sign class of core 0.24.2 is gone. With the 26 spellings and no bare `°`, every differing token has `°R` before a unit that takes a prefix (`°Rm`, `G°Rs`, `u°RK`): MathTS reads a bare `°` as the degree, so `°Rm` also reads `deg·Rm` (degree times ronnametre). The `deg` row now also has the symbol `°` (the angle degree), and the differences go to 0 in both directions; the table then has 106 symbols. That row makes 82 more of 22,660 probed tokens ambiguous, all `°R` before a glued unit, the class `degR` already has. The new prefixes add 330 ambiguous tokens (`degR`, `sr`, `hr` and `Rsun` before a glued unit), and MathTS agrees on each.
 
 ## As of 2026-11-08
 

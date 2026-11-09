@@ -2972,6 +2972,15 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Maintainability: `bigintFrom` is gone. `repo-tools clones .` (2.4.0): 21 near pairs and 0 exact groups before and after.
 - Left: the local splitter stays, because `Unit.readings` misses readings with `°R` and with a sub-kilo prefix on `pc` (two gap rows). A MathTS change on either gap opens the deletion.
 
+## 2026-11-09 — five-axis pass (MathTS core 0.24.3, 2022 SI prefixes, M6 rerun)
+
+- Speed: not measured; the prefix table grows from 22 to 26 rows, and each lookup is a linear scan.
+- Stability: not changed; the new rows are deterministic.
+- Reliability: the micro-sign gap row is an agreement row. Four new prefixes read at exact powers. Four glued classes turn ambiguous, and a test pins each.
+- Security: not touched. `bun.lock` resolves one core, 0.24.3.
+- Maintainability: `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups before and after.
+- Left: the local splitter stays. `Unit.readings` gives no reading for a caret or a superscript inside a glued token (`m^2K`), and `W/m^2K` needs one.
+
 ## 2026-11-08 — five-axis pass (MathTS core 0.24.2, M6 rerun)
 
 - Speed: not measured; no source change.
