@@ -4,7 +4,7 @@
     "version": "12.0.0",
     "totalFiles": 388,
     "totalModules": 13,
-    "totalExports": 2822
+    "totalExports": 2821
   },
   "entryPoints": [
     {
@@ -17872,12 +17872,6 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../../core/mathts-read.js",
-            "imports": [
-              "numberFrom"
-            ]
-          },
-          {
             "file": "../../dimensional/buckingham.js",
             "imports": [
               "buckinghamPi",
@@ -19758,12 +19752,10 @@
         "internalDependencies": [],
         "exports": [
           "numberFrom",
-          "bigintFrom",
           "numberMatrixFrom"
         ],
         "functions": [
           "numberFrom",
-          "bigintFrom",
           "numberMatrixFrom"
         ]
       },
@@ -21061,14 +21053,7 @@
           }
         ],
         "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../core/mathts-read.js",
-            "imports": [
-              "bigintFrom"
-            ]
-          }
-        ],
+        "internalDependencies": [],
         "exports": [
           "UNIT_SCALE",
           "coreExactScaleFromUpt",
@@ -28271,11 +28256,11 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87552,
-    "totalExports": 2822,
+    "totalLinesOfCode": 87544,
+    "totalExports": 2821,
     "totalClasses": 86,
     "totalInterfaces": 518,
-    "totalFunctions": 925,
+    "totalFunctions": 924,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 414,
