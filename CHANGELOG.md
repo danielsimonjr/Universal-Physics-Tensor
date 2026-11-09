@@ -8,6 +8,11 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **`AmbiguousUnitError` lists its readings in codepoint order.** The message and the `readings` field no longer depend on the order in which a splitter finds the readings. `parseUnit('umK')` now throws `'umK' is ambiguous: um·K or u·mK or u·m·K`; before, it printed `u·mK or um·K or u·m·K`. The reason: the local splitter and MathTS `Unit.readings` list the readings in different orders, and the message must not depend on the producer.
+- **`@danielsimonjr/mathts-core` is `^0.24.5`.** Core 0.24.5 refuses a glued zero power (`m0K`) and reads a superscript plus (`m⁺²K`) in `Unit.readings`. The local splitter `segmentations` stays (negative result): the M6 comparison gives 0 differing readings by scale, dimension and power, but `Unit.readings` prints `ohm`, `deg`, `angstrom`, `degR` and `um` for `Ω`, `°`, `Å`, `°R` and `µm`, which would change the printed labels. The counts are in `NOTES.md`.
+
 ## [13.0.0] - 2026-11-09
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (140 packages). `bun outdated` lists only development dependencies: `@types/node` is pinned to the CI Node major (22.20.5; 26.6.6 is latest), `@vitest/coverage-v8`/`vitest` 4.1.12 (5.1.0 latest), and `tree-sitter` 0.22.4 (0.25.1).

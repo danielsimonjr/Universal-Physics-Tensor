@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 388,
-    "totalTestFiles": 710,
+    "totalTestFiles": 711,
     "testedCount": 378,
     "directlyTestedCount": 345,
     "untestedCount": 10,
@@ -10159,6 +10159,7 @@
       "tests/composition/evaluation-result.test.ts",
       "tests/core/constants-owner.test.ts",
       "tests/diff/bridge-gradient.test.ts",
+      "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
@@ -14007,6 +14008,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/evaluation-result.test.ts",
       "tests/core/constants-owner.test.ts",
+      "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
@@ -24158,6 +24160,9 @@
       "src/dimensional/algebra.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/dimensional/ambiguous-reading-order.test.ts": [
+      "src/dimensional/units.ts"
     ],
     "tests/dimensional/ast-builders.test.ts": [
       "src/dimensional/ast-builders.ts",

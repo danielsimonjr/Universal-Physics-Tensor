@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
+- [x] MathTS core 0.24.5: move the core range, rerun the M6 comparison on every set and on the 35-token edge probe, sort the readings of an ambiguous token before `AmbiguousUnitError` prints them, and replace `segmentations` with filtered `Unit.readings` only when 0 tokens differ in both directions.
+  Done for the range and the order. The swap is not made (negative result): every set and the edge probe give 0 differing tokens by scale, dimension and power, but `Unit.readings` names `Ω`, `°`, `Å`, `°R`, `µ` and `μ` by its own spellings, so the printed labels change. The counts are in `NOTES.md`, 2026-11-09.
 - [x] Superscript powers: read every superscript integer (`⁰` to `⁹`, digit runs, `⁻` or `⁺`) as the caret reads it, with one helper for the three sites; then rerun the M6 comparison on every set, and replace `segmentations` with `Unit.readings` only when 0 tokens differ in both directions.
   Done for the grammar. The swap is not made (negative result): the four M6 sets give 0 differing tokens in both directions, and a probe of other token classes gives 5 of 35 that differ. The tokens are in `NOTES.md`, 2026-11-09.
 - [x] MathTS core 0.24.4: move the core range, turn the caret gap row into an agreement row, and rerun the M6 comparison in both directions on every set, with superscripts beyond ³. Replace `segmentations` with `Unit.readings` only when 0 tokens differ.
