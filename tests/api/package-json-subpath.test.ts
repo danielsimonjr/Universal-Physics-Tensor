@@ -1,10 +1,10 @@
 /**
  * Issue 556: `require('universal-physics-tensor/package.json')` must resolve.
  *
- * Node resolves a package's own name from inside the package (self-reference),
- * through the same `exports` map a consumer sees. The control proves that
- * self-reference works in this tree, so a refusal of `./package.json` is the
- * exports map and not the resolver.
+ * Node resolves the own name of a package from inside the package
+ * (self-reference). Node uses the same `exports` map as a consumer uses.
+ * The control proves self-reference works in this tree. Thus a refusal of
+ * `./package.json` comes from the `exports` map, not from the resolver.
  */
 import { describe, it, expect } from 'vitest';
 import { createRequire } from 'node:module';

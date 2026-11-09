@@ -9942,31 +9942,31 @@
       "catalogId": 147,
       "kind": "law",
       "label": "k = A exp(−Ea/(R T)), R = N_A k_B",
-      "expression": "arrhprefac*exp(-1*(arrhbarrier/(N_A*k_B*arrhwarmth)))",
-      "target": "arrhrate",
+      "expression": "arrhenius-prefactor*exp(-1*(arrhenius-barrier/(N_A*k_B*arrhenius-warmth)))",
+      "target": "arrhenius-rate",
       "sources": [
-        "arrhprefac",
-        "arrhbarrier",
-        "arrhwarmth"
+        "arrhenius-prefactor",
+        "arrhenius-barrier",
+        "arrhenius-warmth"
       ],
       "aliases": {
-        "arrhprefac": [
+        "arrhenius-prefactor": [
           "A_Hz"
         ],
-        "arrhbarrier": [
+        "arrhenius-barrier": [
           "Ea_J_per_mol"
         ],
-        "arrhwarmth": [
+        "arrhenius-warmth": [
           "T_K"
         ]
       },
-      "holds": "isFinite(arrhwarmth) and arrhwarmth != 0",
+      "holds": "isFinite(arrhenius-warmth) and arrhenius-warmth != 0",
       "citation": "PhysJS.Arrhenius.arrhenius_eq. The prefactor is temperature-independent. Not the Eyring identification of A.",
       "reference": {
         "inputs": {
-          "arrhprefac": 10000000000000,
-          "arrhbarrier": 209200,
-          "arrhwarmth": 298.15
+          "arrhenius-prefactor": 10000000000000,
+          "arrhenius-barrier": 209200,
+          "arrhenius-warmth": 298.15
         },
         "value": 2.2374104777519227e-24
       }
@@ -9976,26 +9976,26 @@
       "catalogId": 148,
       "kind": "law",
       "label": "k = (k_B T/h) exp(−ΔG‡/(k_B T))",
-      "expression": "(k_B*eyringwarmth/h)*exp(-1*(eyringbarrier/(k_B*eyringwarmth)))",
-      "target": "eyringrate",
+      "expression": "(k_B*eyring-warmth/h)*exp(-1*(eyring-barrier/(k_B*eyring-warmth)))",
+      "target": "eyring-rate",
       "sources": [
-        "eyringbarrier",
-        "eyringwarmth"
+        "eyring-barrier",
+        "eyring-warmth"
       ],
       "aliases": {
-        "eyringbarrier": [
+        "eyring-barrier": [
           "dG_J"
         ],
-        "eyringwarmth": [
+        "eyring-warmth": [
           "T_K"
         ]
       },
-      "holds": "isFinite(eyringwarmth) and eyringwarmth != 0",
+      "holds": "isFinite(eyring-warmth) and eyring-warmth != 0",
       "citation": "PhysJS.Eyring.eyring_eq. Transmission coefficient 1. The molar substitutions differ by exp(−1).",
       "reference": {
         "inputs": {
-          "eyringbarrier": 1e-19,
-          "eyringwarmth": 300
+          "eyring-barrier": 1e-19,
+          "eyring-warmth": 300
         },
         "value": 204.49125908199358
       }
@@ -10005,26 +10005,26 @@
       "catalogId": 149,
       "kind": "law",
       "label": "d ln K/dT = ΔH°/(R T²)",
-      "expression": "vanthoffenthalpy/(N_A*k_B*vanthoffwarmth*vanthoffwarmth)",
-      "target": "vanthoffslope",
+      "expression": "vanthoff-enthalpy/(N_A*k_B*vanthoff-warmth*vanthoff-warmth)",
+      "target": "vanthoff-slope",
       "sources": [
-        "vanthoffenthalpy",
-        "vanthoffwarmth"
+        "vanthoff-enthalpy",
+        "vanthoff-warmth"
       ],
       "aliases": {
-        "vanthoffenthalpy": [
+        "vanthoff-enthalpy": [
           "dH_J_per_mol"
         ],
-        "vanthoffwarmth": [
+        "vanthoff-warmth": [
           "T_K"
         ]
       },
-      "holds": "isFinite(vanthoffwarmth) and vanthoffwarmth != 0",
+      "holds": "isFinite(vanthoff-warmth) and vanthoff-warmth != 0",
       "citation": "PhysJS.VanTHoff.vant_hoff. Not a plot and not a second proof of be-150.",
       "reference": {
         "inputs": {
-          "vanthoffenthalpy": 1000,
-          "vanthoffwarmth": 300
+          "vanthoff-enthalpy": 1000,
+          "vanthoff-warmth": 300
         },
         "value": 0.0013363595004747338
       }
@@ -10034,26 +10034,26 @@
       "catalogId": 150,
       "kind": "law",
       "label": "ΔG° = −R T ln K",
-      "expression": "-1*N_A*k_B*gibbsisowarmth*ln(gibbsisok)",
-      "target": "gibbsisodg",
+      "expression": "-1*N_A*k_B*gibbs-isotherm-warmth*ln(gibbs-isotherm-k)",
+      "target": "gibbs-isotherm-dg",
       "sources": [
-        "gibbsisok",
-        "gibbsisowarmth"
+        "gibbs-isotherm-k",
+        "gibbs-isotherm-warmth"
       ],
       "aliases": {
-        "gibbsisok": [
+        "gibbs-isotherm-k": [
           "K"
         ],
-        "gibbsisowarmth": [
+        "gibbs-isotherm-warmth": [
           "T_K"
         ]
       },
-      "holds": "isFinite(gibbsisok) and gibbsisok > 0 and isFinite(gibbsisowarmth) and gibbsisowarmth != 0",
+      "holds": "isFinite(gibbs-isotherm-k) and gibbs-isotherm-k > 0 and isFinite(gibbs-isotherm-warmth) and gibbs-isotherm-warmth != 0",
       "citation": "PhysJS.GibbsIsotherm.gibbs_eq. Not an activity model.",
       "reference": {
         "inputs": {
-          "gibbsisok": 10,
-          "gibbsisowarmth": 298.15
+          "gibbs-isotherm-k": 10,
+          "gibbs-isotherm-warmth": 298.15
         },
         "value": -5708.009502535258
       }
@@ -10063,36 +10063,36 @@
       "catalogId": 151,
       "kind": "law",
       "label": "E = E° − (R T/(n F)) ln Q, F = N_A e",
-      "expression": "nernstge0-((N_A*k_B*nernstgwarmth)/(nernstgn*N_A*e))*ln(nernstgq)",
-      "target": "nernstge",
+      "expression": "nernst-standard-potential-((N_A*k_B*nernst-warmth)/(nernst-electron-count*N_A*e))*ln(nernst-quotient)",
+      "target": "nernst-potential",
       "sources": [
-        "nernstge0",
-        "nernstgn",
-        "nernstgq",
-        "nernstgwarmth"
+        "nernst-standard-potential",
+        "nernst-electron-count",
+        "nernst-quotient",
+        "nernst-warmth"
       ],
       "aliases": {
-        "nernstge0": [
+        "nernst-standard-potential": [
           "E0_volts"
         ],
-        "nernstgn": [
+        "nernst-electron-count": [
           "n"
         ],
-        "nernstgq": [
+        "nernst-quotient": [
           "Q"
         ],
-        "nernstgwarmth": [
+        "nernst-warmth": [
           "T_K"
         ]
       },
-      "holds": "isFinite(nernstgn) and nernstgn != 0 and isFinite(nernstgq) and nernstgq > 0",
+      "holds": "isFinite(nernst-electron-count) and nernst-electron-count != 0 and isFinite(nernst-quotient) and nernst-quotient > 0",
       "citation": "PhysJS.NernstGibbs.nernst_eq. e is the elementary charge.",
       "reference": {
         "inputs": {
-          "nernstge0": 0.34,
-          "nernstgn": 2,
-          "nernstgq": 10,
-          "nernstgwarmth": 298.15
+          "nernst-standard-potential": 0.34,
+          "nernst-electron-count": 2,
+          "nernst-quotient": 10,
+          "nernst-warmth": 298.15
         },
         "value": 0.31042032515760887
       }
@@ -10102,31 +10102,31 @@
       "catalogId": 152,
       "kind": "law",
       "label": "ln(P2/P1) = −(ΔH/R)(1/T2 − 1/T1)",
-      "expression": "-1*(clapintlatent/(N_A*k_B))*(1/clapintwarm2-1/clapintwarm1)",
-      "target": "clapintln",
+      "expression": "-1*(clausius-latent/(N_A*k_B))*(1/clausius-warmth-2-1/clausius-warmth-1)",
+      "target": "clausius-log-ratio",
       "sources": [
-        "clapintlatent",
-        "clapintwarm1",
-        "clapintwarm2"
+        "clausius-latent",
+        "clausius-warmth-1",
+        "clausius-warmth-2"
       ],
       "aliases": {
-        "clapintlatent": [
+        "clausius-latent": [
           "dH_J_per_mol"
         ],
-        "clapintwarm1": [
+        "clausius-warmth-1": [
           "T1_K"
         ],
-        "clapintwarm2": [
+        "clausius-warmth-2": [
           "T2_K"
         ]
       },
-      "holds": "isFinite(clapintwarm1) and clapintwarm1 > 0 and isFinite(clapintwarm2) and clapintwarm2 > 0",
+      "holds": "isFinite(clausius-warmth-1) and clausius-warmth-1 > 0 and isFinite(clausius-warmth-2) and clausius-warmth-2 > 0",
       "citation": "PhysJS.ClausiusClapeyron.integrated_eq. A separate liquid volume is not this row.",
       "reference": {
         "inputs": {
-          "clapintlatent": 40000,
-          "clapintwarm1": 300,
-          "clapintwarm2": 373.15
+          "clausius-latent": 40000,
+          "clausius-warmth-1": 300,
+          "clausius-warmth-2": 373.15
         },
         "value": 3.1436590366252757
       }
@@ -10136,26 +10136,26 @@
       "catalogId": 153,
       "kind": "law",
       "label": "P = x P*",
-      "expression": "raoultmole*raoultsat",
-      "target": "raoultvapor",
+      "expression": "raoult-mole-fraction*raoult-saturation",
+      "target": "raoult-vapor",
       "sources": [
-        "raoultmole",
-        "raoultsat"
+        "raoult-mole-fraction",
+        "raoult-saturation"
       ],
       "aliases": {
-        "raoultmole": [
+        "raoult-mole-fraction": [
           "x"
         ],
-        "raoultsat": [
+        "raoult-saturation": [
           "Psat_Pa"
         ]
       },
-      "holds": "isFinite(raoultsat) and raoultsat > 0 and raoultmole >= 0 and raoultmole <= 1",
+      "holds": "isFinite(raoult-saturation) and raoult-saturation > 0 and raoult-mole-fraction >= 0 and raoult-mole-fraction <= 1",
       "citation": "PhysJS.Raoult.raoult_eq. Not a second proof of the Gibbs isotherm.",
       "reference": {
         "inputs": {
-          "raoultmole": 0.25,
-          "raoultsat": 101325
+          "raoult-mole-fraction": 0.25,
+          "raoult-saturation": 101325
         },
         "value": 25331.25
       }
@@ -10165,31 +10165,31 @@
       "catalogId": 154,
       "kind": "law",
       "label": "Pr k = μ c_p",
-      "expression": "prandtlmu*prandtlcp/prandtlk",
-      "target": "prandtlratio",
+      "expression": "prandtl-mu*prandtl-cp/prandtl-k",
+      "target": "prandtl-ratio",
       "sources": [
-        "prandtlmu",
-        "prandtlcp",
-        "prandtlk"
+        "prandtl-mu",
+        "prandtl-cp",
+        "prandtl-k"
       ],
       "aliases": {
-        "prandtlmu": [
+        "prandtl-mu": [
           "mu_Pa_s"
         ],
-        "prandtlcp": [
+        "prandtl-cp": [
           "cp_J_per_kg_K"
         ],
-        "prandtlk": [
+        "prandtl-k": [
           "k_W_per_m_K"
         ]
       },
-      "holds": "isFinite(prandtlk) and prandtlk != 0",
+      "holds": "isFinite(prandtl-k) and prandtl-k != 0",
       "citation": "PhysJS.Prandtl.prandtl_eq. Not a heat-transfer correlation.",
       "reference": {
         "inputs": {
-          "prandtlmu": 0.001,
-          "prandtlcp": 4180,
-          "prandtlk": 0.6
+          "prandtl-mu": 0.001,
+          "prandtl-cp": 4180,
+          "prandtl-k": 0.6
         },
         "value": 6.966666666666667
       }
@@ -10199,36 +10199,36 @@
       "catalogId": 155,
       "kind": "law",
       "label": "Re μ = ρ v L",
-      "expression": "reynumrho*reynumvel*reynumlen/reynummu",
-      "target": "reynumratio",
+      "expression": "reynolds-rho*reynolds-velocity*reynolds-length/reynolds-mu",
+      "target": "reynolds-ratio",
       "sources": [
-        "reynumrho",
-        "reynumvel",
-        "reynumlen",
-        "reynummu"
+        "reynolds-rho",
+        "reynolds-velocity",
+        "reynolds-length",
+        "reynolds-mu"
       ],
       "aliases": {
-        "reynumrho": [
+        "reynolds-rho": [
           "rho_kg_per_m3"
         ],
-        "reynumvel": [
+        "reynolds-velocity": [
           "v_m_per_s"
         ],
-        "reynumlen": [
+        "reynolds-length": [
           "L_m"
         ],
-        "reynummu": [
+        "reynolds-mu": [
           "mu_Pa_s"
         ]
       },
-      "holds": "isFinite(reynummu) and reynummu != 0",
+      "holds": "isFinite(reynolds-mu) and reynolds-mu != 0",
       "citation": "PhysJS.ReynoldsNumber.reynolds_eq. Not a friction correlation.",
       "reference": {
         "inputs": {
-          "reynumrho": 1000,
-          "reynumvel": 2,
-          "reynumlen": 0.05,
-          "reynummu": 0.001
+          "reynolds-rho": 1000,
+          "reynolds-velocity": 2,
+          "reynolds-length": 0.05,
+          "reynolds-mu": 0.001
         },
         "value": 100000
       }
@@ -10238,31 +10238,31 @@
       "catalogId": 156,
       "kind": "law",
       "label": "Bi k = h L_c",
-      "expression": "biotfilm*biotlength/biotk",
-      "target": "biotratio",
+      "expression": "biot-film*biot-length/biot-k",
+      "target": "biot-ratio",
       "sources": [
-        "biotfilm",
-        "biotlength",
-        "biotk"
+        "biot-film",
+        "biot-length",
+        "biot-k"
       ],
       "aliases": {
-        "biotfilm": [
+        "biot-film": [
           "h_W_per_m2_K"
         ],
-        "biotlength": [
+        "biot-length": [
           "Lc_m"
         ],
-        "biotk": [
+        "biot-k": [
           "k_W_per_m_K"
         ]
       },
-      "holds": "isFinite(biotk) and biotk != 0",
+      "holds": "isFinite(biot-k) and biot-k != 0",
       "citation": "PhysJS.Biot.biot_eq. Not a lumped-capacitance criterion.",
       "reference": {
         "inputs": {
-          "biotfilm": 25,
-          "biotlength": 0.02,
-          "biotk": 16
+          "biot-film": 25,
+          "biot-length": 0.02,
+          "biot-k": 16
         },
         "value": 0.03125
       }
@@ -10272,31 +10272,31 @@
       "catalogId": 157,
       "kind": "law",
       "label": "Nu k = h L",
-      "expression": "nusseltfilm*nusseltlen/nusseltk",
-      "target": "nusseltratio",
+      "expression": "nusselt-film*nusselt-length/nusselt-k",
+      "target": "nusselt-ratio",
       "sources": [
-        "nusseltfilm",
-        "nusseltlen",
-        "nusseltk"
+        "nusselt-film",
+        "nusselt-length",
+        "nusselt-k"
       ],
       "aliases": {
-        "nusseltfilm": [
+        "nusselt-film": [
           "h_W_per_m2_K"
         ],
-        "nusseltlen": [
+        "nusselt-length": [
           "L_m"
         ],
-        "nusseltk": [
+        "nusselt-k": [
           "k_W_per_m_K"
         ]
       },
-      "holds": "isFinite(nusseltk) and nusseltk != 0",
+      "holds": "isFinite(nusselt-k) and nusselt-k != 0",
       "citation": "PhysJS.Nusselt.nusselt_eq. Not a correlation for Nu.",
       "reference": {
         "inputs": {
-          "nusseltfilm": 40,
-          "nusseltlen": 0.2,
-          "nusseltk": 0.026
+          "nusselt-film": 40,
+          "nusselt-length": 0.2,
+          "nusselt-k": 0.026
         },
         "value": 307.6923076923077
       }
@@ -10306,31 +10306,31 @@
       "catalogId": 158,
       "kind": "law",
       "label": "Sc ρ D = μ",
-      "expression": "schmidtmu/(schmidtrho*schmidtdiff)",
-      "target": "schmidtratio",
+      "expression": "schmidt-mu/(schmidt-rho*schmidt-diffusivity)",
+      "target": "schmidt-ratio",
       "sources": [
-        "schmidtmu",
-        "schmidtrho",
-        "schmidtdiff"
+        "schmidt-mu",
+        "schmidt-rho",
+        "schmidt-diffusivity"
       ],
       "aliases": {
-        "schmidtmu": [
+        "schmidt-mu": [
           "mu_Pa_s"
         ],
-        "schmidtrho": [
+        "schmidt-rho": [
           "rho_kg_per_m3"
         ],
-        "schmidtdiff": [
+        "schmidt-diffusivity": [
           "D_m2_per_s"
         ]
       },
-      "holds": "isFinite(schmidtrho) and schmidtrho != 0 and isFinite(schmidtdiff) and schmidtdiff != 0",
+      "holds": "isFinite(schmidt-rho) and schmidt-rho != 0 and isFinite(schmidt-diffusivity) and schmidt-diffusivity != 0",
       "citation": "PhysJS.Schmidt.schmidt_eq. The evaluator target is Sc ρ D = μ. Le = Sc/Pr is PhysJS.Schmidt.lewis_ratio, a corollary in the same file, not a second target.",
       "reference": {
         "inputs": {
-          "schmidtmu": 0.00089,
-          "schmidtrho": 997,
-          "schmidtdiff": 2.3e-09
+          "schmidt-mu": 0.00089,
+          "schmidt-rho": 997,
+          "schmidt-diffusivity": 2.3e-09
         },
         "value": 388.1208843923073
       }
@@ -10340,31 +10340,31 @@
       "catalogId": 159,
       "kind": "law",
       "label": "Sh D = k_m L",
-      "expression": "sherwoodkm*sherwoodlen/sherwooddiff",
-      "target": "sherwoodratio",
+      "expression": "sherwood-km*sherwood-length/sherwood-diffusivity",
+      "target": "sherwood-ratio",
       "sources": [
-        "sherwoodkm",
-        "sherwoodlen",
-        "sherwooddiff"
+        "sherwood-km",
+        "sherwood-length",
+        "sherwood-diffusivity"
       ],
       "aliases": {
-        "sherwoodkm": [
+        "sherwood-km": [
           "km_m_per_s"
         ],
-        "sherwoodlen": [
+        "sherwood-length": [
           "L_m"
         ],
-        "sherwooddiff": [
+        "sherwood-diffusivity": [
           "D_m2_per_s"
         ]
       },
-      "holds": "isFinite(sherwooddiff) and sherwooddiff != 0",
+      "holds": "isFinite(sherwood-diffusivity) and sherwood-diffusivity != 0",
       "citation": "PhysJS.Sherwood.sherwood_eq. Not a correlation for Sh.",
       "reference": {
         "inputs": {
-          "sherwoodkm": 0.01,
-          "sherwoodlen": 0.2,
-          "sherwooddiff": 2e-05
+          "sherwood-km": 0.01,
+          "sherwood-length": 0.2,
+          "sherwood-diffusivity": 2e-05
         },
         "value": 100
       }
@@ -10374,36 +10374,36 @@
       "catalogId": 160,
       "kind": "law",
       "label": "q L = −k (T(L) − T(0))",
-      "expression": "(-1*fourierslabk*(fourierslabend-fourierslabstart))/fourierslablen",
-      "target": "fourierslabflux",
+      "expression": "(-1*fourier-slab-k*(fourier-slab-end-fourier-slab-start))/fourier-slab-length",
+      "target": "fourier-slab-flux",
       "sources": [
-        "fourierslabk",
-        "fourierslabend",
-        "fourierslabstart",
-        "fourierslablen"
+        "fourier-slab-k",
+        "fourier-slab-end",
+        "fourier-slab-start",
+        "fourier-slab-length"
       ],
       "aliases": {
-        "fourierslabk": [
+        "fourier-slab-k": [
           "k_W_per_m_K"
         ],
-        "fourierslabend": [
+        "fourier-slab-end": [
           "T_L_K"
         ],
-        "fourierslabstart": [
+        "fourier-slab-start": [
           "T_0_K"
         ],
-        "fourierslablen": [
+        "fourier-slab-length": [
           "L_m"
         ]
       },
-      "holds": "isFinite(fourierslabk) and fourierslabk != 0 and isFinite(fourierslablen) and fourierslablen != 0",
+      "holds": "isFinite(fourier-slab-k) and fourier-slab-k != 0 and isFinite(fourier-slab-length) and fourier-slab-length != 0",
       "citation": "PhysJS.FourierConduction.fourier_eq. The sign is part of the statement.",
       "reference": {
         "inputs": {
-          "fourierslabk": 401,
-          "fourierslabend": 373.15,
-          "fourierslabstart": 293.15,
-          "fourierslablen": 0.01
+          "fourier-slab-k": 401,
+          "fourier-slab-end": 373.15,
+          "fourier-slab-start": 293.15,
+          "fourier-slab-length": 0.01
         },
         "value": -3208000
       }
@@ -10413,51 +10413,51 @@
       "catalogId": 161,
       "kind": "law",
       "label": "θ(t) = θ(0) exp(−t/τ), τ = ρ c V/(h A)",
-      "expression": "newtontheta0*exp(-1*(newtontime*newtonfilm*newtonarea)/(newtonrho*newtoncp*newtonvol))",
-      "target": "newtontheta",
+      "expression": "newton-theta-0*exp(-1*(newton-time*newton-film*newton-area)/(newton-rho*newton-cp*newton-volume))",
+      "target": "newton-theta",
       "sources": [
-        "newtonrho",
-        "newtoncp",
-        "newtonvol",
-        "newtonfilm",
-        "newtonarea",
-        "newtontime",
-        "newtontheta0"
+        "newton-rho",
+        "newton-cp",
+        "newton-volume",
+        "newton-film",
+        "newton-area",
+        "newton-time",
+        "newton-theta-0"
       ],
       "aliases": {
-        "newtonrho": [
+        "newton-rho": [
           "rho_kg_per_m3"
         ],
-        "newtoncp": [
+        "newton-cp": [
           "c_J_per_kg_K"
         ],
-        "newtonvol": [
+        "newton-volume": [
           "V_m3"
         ],
-        "newtonfilm": [
+        "newton-film": [
           "h_W_per_m2_K"
         ],
-        "newtonarea": [
+        "newton-area": [
           "A_m2"
         ],
-        "newtontime": [
+        "newton-time": [
           "t_s"
         ],
-        "newtontheta0": [
+        "newton-theta-0": [
           "theta_difference_K"
         ]
       },
-      "holds": "isFinite(newtonrho) and isFinite(newtoncp) and isFinite(newtonvol) and newtonrho*newtoncp*newtonvol != 0 and isFinite(newtonfilm) and isFinite(newtonarea) and newtonfilm*newtonarea != 0",
+      "holds": "isFinite(newton-rho) and isFinite(newton-cp) and isFinite(newton-volume) and newton-rho*newton-cp*newton-volume != 0 and isFinite(newton-film) and isFinite(newton-area) and newton-film*newton-area != 0",
       "citation": "PhysJS.NewtonCooling.newton_eq. Radiation in T^4 is not this row.",
       "reference": {
         "inputs": {
-          "newtonrho": 1000,
-          "newtoncp": 4180,
-          "newtonvol": 0.002,
-          "newtonfilm": 20,
-          "newtonarea": 0.05,
-          "newtontime": 8000,
-          "newtontheta0": 10
+          "newton-rho": 1000,
+          "newton-cp": 4180,
+          "newton-volume": 0.002,
+          "newton-film": 20,
+          "newton-area": 0.05,
+          "newton-time": 8000,
+          "newton-theta-0": 10
         },
         "value": 3.8406717797837926
       }
@@ -10467,26 +10467,26 @@
       "catalogId": 162,
       "kind": "law",
       "label": "η = 1 − r^(1−γ)",
-      "expression": "1-ottoratio^(1-ottogamma)",
-      "target": "ottoeta",
+      "expression": "1-otto-ratio^(1-otto-gamma)",
+      "target": "otto-eta",
       "sources": [
-        "ottoratio",
-        "ottogamma"
+        "otto-ratio",
+        "otto-gamma"
       ],
       "aliases": {
-        "ottoratio": [
+        "otto-ratio": [
           "r"
         ],
-        "ottogamma": [
+        "otto-gamma": [
           "gamma"
         ]
       },
-      "holds": "isFinite(ottoratio) and ottoratio > 0 and isFinite(ottogamma) and ottogamma > 1 and ottoratio > 1",
+      "holds": "isFinite(otto-ratio) and otto-ratio > 0 and isFinite(otto-gamma) and otto-gamma > 1 and otto-ratio > 1",
       "citation": "PhysJS.Otto.otto_eq. The exponent γ−1 is not 1−γ.",
       "reference": {
         "inputs": {
-          "ottoratio": 8,
-          "ottogamma": 1.4
+          "otto-ratio": 8,
+          "otto-gamma": 1.4
         },
         "value": 0.5647247183519378
       }
@@ -10496,36 +10496,36 @@
       "catalogId": 163,
       "kind": "law",
       "label": "μ_JT c_p = T (∂v/∂T)_p − v",
-      "expression": "(jtcwarmth*jtcdvdt-jtcvolume)/jtcp",
-      "target": "jtcmu",
+      "expression": "(joule-thomson-warmth*joule-thomson-dvdt-joule-thomson-volume)/joule-thomson-cp",
+      "target": "joule-thomson-mu",
       "sources": [
-        "jtcwarmth",
-        "jtcdvdt",
-        "jtcvolume",
-        "jtcp"
+        "joule-thomson-warmth",
+        "joule-thomson-dvdt",
+        "joule-thomson-volume",
+        "joule-thomson-cp"
       ],
       "aliases": {
-        "jtcwarmth": [
+        "joule-thomson-warmth": [
           "T_K"
         ],
-        "jtcdvdt": [
+        "joule-thomson-dvdt": [
           "dv_dT_m3_per_kg_K"
         ],
-        "jtcvolume": [
+        "joule-thomson-volume": [
           "v_m3_per_kg"
         ],
-        "jtcp": [
+        "joule-thomson-cp": [
           "cp_J_per_kg_K"
         ]
       },
-      "holds": "isFinite(jtcp) and jtcp != 0",
+      "holds": "isFinite(joule-thomson-cp) and joule-thomson-cp != 0",
       "citation": "PhysJS.JouleThomson.joule_thomson_eq. The ideal-gas bracket vanishes.",
       "reference": {
         "inputs": {
-          "jtcwarmth": 300,
-          "jtcdvdt": 0.002,
-          "jtcvolume": 0.2,
-          "jtcp": 1000
+          "joule-thomson-warmth": 300,
+          "joule-thomson-dvdt": 0.002,
+          "joule-thomson-volume": 0.2,
+          "joule-thomson-cp": 1000
         },
         "value": 0.00039999999999999996
       }
@@ -10535,26 +10535,26 @@
       "catalogId": 164,
       "kind": "law",
       "label": "u (exp(hν/kT) − 1) c³ = 8 π h ν³",
-      "expression": "((8*pi)*h*planckfreq^3)/(c^3*(exp(h*planckfreq/(k_B*planckwarmth))-1))",
-      "target": "plancku",
+      "expression": "((8*pi)*h*planck-frequency^3)/(c^3*(exp(h*planck-frequency/(k_B*planck-warmth))-1))",
+      "target": "planck-u",
       "sources": [
-        "planckfreq",
-        "planckwarmth"
+        "planck-frequency",
+        "planck-warmth"
       ],
       "aliases": {
-        "planckfreq": [
+        "planck-frequency": [
           "nu_Hz"
         ],
-        "planckwarmth": [
+        "planck-warmth": [
           "T_K"
         ]
       },
-      "holds": "isFinite(planckfreq) and planckfreq > 0 and isFinite(planckwarmth) and planckwarmth > 0",
+      "holds": "isFinite(planck-frequency) and planck-frequency > 0 and isFinite(planck-warmth) and planck-warmth > 0",
       "citation": "PhysJS.PlanckSpectrum.planck_eq. Two polarizations. One polarization is not this density.",
       "reference": {
         "inputs": {
-          "planckfreq": 100000000000000,
-          "planckwarmth": 2273.15
+          "planck-frequency": 100000000000000,
+          "planck-warmth": 2273.15
         },
         "value": 8.514740991722424e-17
       }
@@ -10565,7 +10565,7 @@
       "kind": "law",
       "label": "σ = π² k_B⁴ / (60 ℏ³ c²)",
       "expression": "(pi^2*k_B^4)/(60*hbar^3*c^2)",
-      "target": "stefansigma",
+      "target": "stefan-sigma",
       "sources": [],
       "aliases": {},
       "holds": "true",
@@ -10580,21 +10580,21 @@
       "catalogId": 166,
       "kind": "law",
       "label": "b k_B x = h c, with x in (4, 5)",
-      "expression": "h*c/(k_B*wienroot)",
-      "target": "wienb",
+      "expression": "h*c/(k_B*wien-root)",
+      "target": "wien-b",
       "sources": [
-        "wienroot"
+        "wien-root"
       ],
       "aliases": {
-        "wienroot": [
+        "wien-root": [
           "wien_x"
         ]
       },
-      "holds": "isFinite(wienroot) and wienroot > 4 and wienroot < 5 and abs((5 - wienroot) - 5 * exp(-wienroot)) < 0.00001",
+      "holds": "isFinite(wien-root) and wien-root > 4 and wien-root < 5 and abs((5 - wien-root) - 5 * exp(-wien-root)) < 0.00001",
       "citation": "PhysJS.WienDisplacement.wien_eq. The decimal root is not evaluated.",
       "reference": {
         "inputs": {
-          "wienroot": 4.965114231744276
+          "wien-root": 4.965114231744276
         },
         "value": 0.0028977719551851727
       }
@@ -10604,31 +10604,31 @@
       "catalogId": 167,
       "kind": "law",
       "label": "S = N k_B (ln(n_Q/n) + 5/2)",
-      "expression": "sackurcount*k_B*(ln(sackurquantum/sackurdensity)+2.5)",
-      "target": "sackurentropy",
+      "expression": "sackur-count*k_B*(ln(sackur-quantum/sackur-density)+2.5)",
+      "target": "sackur-entropy",
       "sources": [
-        "sackurcount",
-        "sackurquantum",
-        "sackurdensity"
+        "sackur-count",
+        "sackur-quantum",
+        "sackur-density"
       ],
       "aliases": {
-        "sackurcount": [
+        "sackur-count": [
           "N"
         ],
-        "sackurquantum": [
+        "sackur-quantum": [
           "nQ_per_m3"
         ],
-        "sackurdensity": [
+        "sackur-density": [
           "n_per_m3"
         ]
       },
-      "holds": "isFinite(sackurquantum) and sackurquantum > 0 and isFinite(sackurdensity) and sackurdensity > 0 and 10 * sackurdensity <= sackurquantum",
+      "holds": "isFinite(sackur-quantum) and sackur-quantum > 0 and isFinite(sackur-density) and sackur-density > 0 and 10 * sackur-density <= sackur-quantum",
       "citation": "PhysJS.SackurTetrode.sackur_tetrode. Stirling is ln N! = N ln N − N.",
       "reference": {
         "inputs": {
-          "sackurcount": 1000,
-          "sackurquantum": 1e+30,
-          "sackurdensity": 1e+27
+          "sackur-count": 1000,
+          "sackur-quantum": 1e+30,
+          "sackur-density": 1e+27
         },
         "value": 1.2988807918171409e-19
       }
@@ -10638,31 +10638,31 @@
       "catalogId": 168,
       "kind": "law",
       "label": "K = (2 π m k_B T/h²)^{3/2} exp(−I/(k_B T))",
-      "expression": "(((2*pi)*sahamass*k_B*sahawarmth)/h^2)^1.5*exp(-1*(sahaion/(k_B*sahawarmth)))",
-      "target": "sahaconst",
+      "expression": "(((2*pi)*saha-mass*k_B*saha-warmth)/h^2)^1.5*exp(-1*(saha-ionization/(k_B*saha-warmth)))",
+      "target": "saha-constant",
       "sources": [
-        "sahamass",
-        "sahawarmth",
-        "sahaion"
+        "saha-mass",
+        "saha-warmth",
+        "saha-ionization"
       ],
       "aliases": {
-        "sahamass": [
+        "saha-mass": [
           "m_kg"
         ],
-        "sahawarmth": [
+        "saha-warmth": [
           "T_K"
         ],
-        "sahaion": [
+        "saha-ionization": [
           "I_J"
         ]
       },
-      "holds": "isFinite(sahamass) and sahamass > 0 and isFinite(sahawarmth) and sahawarmth > 0",
+      "holds": "isFinite(saha-mass) and saha-mass > 0 and isFinite(saha-warmth) and saha-warmth > 0",
       "citation": "PhysJS.Saha.saha_eq. The electron weight 2 is not in this statement.",
       "reference": {
         "inputs": {
-          "sahamass": 9.1093837015e-31,
-          "sahawarmth": 10000,
-          "sahaion": 1.0550558526199999e-17
+          "saha-mass": 9.1093837015e-31,
+          "saha-warmth": 10000,
+          "saha-ionization": 1.0550558526199999e-17
         },
         "value": 1.567515321125971e-06
       }
@@ -10672,31 +10672,31 @@
       "catalogId": 169,
       "kind": "law",
       "label": "J h³ exp(φ/(k_B T)) = 4 π m e k_B² T²",
-      "expression": "(((4*pi)*richardsmass*e*k_B^2)/h^3)*richardswarmth^2*exp(-1*(richardsphi/(k_B*richardswarmth)))",
-      "target": "richardsj",
+      "expression": "(((4*pi)*richardson-mass*e*k_B^2)/h^3)*richardson-warmth^2*exp(-1*(richardson-phi/(k_B*richardson-warmth)))",
+      "target": "richardson-j",
       "sources": [
-        "richardsmass",
-        "richardswarmth",
-        "richardsphi"
+        "richardson-mass",
+        "richardson-warmth",
+        "richardson-phi"
       ],
       "aliases": {
-        "richardsmass": [
+        "richardson-mass": [
           "m_kg"
         ],
-        "richardswarmth": [
+        "richardson-warmth": [
           "T_K"
         ],
-        "richardsphi": [
+        "richardson-phi": [
           "phi_J"
         ]
       },
-      "holds": "isFinite(richardswarmth) and richardswarmth > 0",
+      "holds": "isFinite(richardson-warmth) and richardson-warmth > 0",
       "citation": "PhysJS.RichardsonDushman.richardson_eq. Reflection coefficient 1. e is the elementary charge.",
       "reference": {
         "inputs": {
-          "richardsmass": 9.1093837015e-31,
-          "richardswarmth": 1000,
-          "richardsphi": 1.05505585262e-20
+          "richardson-mass": 9.1093837015e-31,
+          "richardson-warmth": 1000,
+          "richardson-phi": 1.05505585262e-20
         },
         "value": 559668993574.4071
       }
@@ -10706,26 +10706,26 @@
       "catalogId": 170,
       "kind": "law",
       "label": "L12 = L21 at B = 0",
-      "expression": "onsagerl12",
-      "target": "onsagerl21",
+      "expression": "onsager-l12",
+      "target": "onsager-l21",
       "sources": [
-        "onsagerl12",
-        "onsagerb0"
+        "onsager-l12",
+        "onsager-b0"
       ],
       "aliases": {
-        "onsagerl12": [
+        "onsager-l12": [
           "L12"
         ],
-        "onsagerb0": [
+        "onsager-b0": [
           "onsager_B_T"
         ]
       },
-      "holds": "isFinite(onsagerb0) and abs(onsagerb0) <= 1e-12 and isFinite(onsagerl12)",
+      "holds": "isFinite(onsager-b0) and abs(onsager-b0) <= 1e-12 and isFinite(onsager-l12)",
       "citation": "PhysJS.OnsagerReciprocity.onsager_eq. L12(B) = L21(−B) is not this row.",
       "reference": {
         "inputs": {
-          "onsagerl12": 3,
-          "onsagerb0": 5e-13
+          "onsager-l12": 3,
+          "onsager-b0": 5e-13
         },
         "value": 3
       }
@@ -13330,24 +13330,24 @@
       "parameters": [
         {
           "key": "A_Hz",
-          "quantity": "arrhprefac",
-          "symbol": "A_Hz",
+          "quantity": "arrhenius-prefactor",
+          "symbol": "A",
           "unit": "Hz",
           "meaning": "pre-exponential frequency factor, > 0",
           "sign": "positive"
         },
         {
           "key": "Ea_J_per_mol",
-          "quantity": "arrhbarrier",
-          "symbol": "Ea_J_per_mol",
+          "quantity": "arrhenius-barrier",
+          "symbol": "E_a",
           "unit": "J/mol",
           "meaning": "molar activation energy",
           "sign": "any"
         },
         {
           "key": "T_K",
-          "quantity": "arrhwarmth",
-          "symbol": "T_K",
+          "quantity": "arrhenius-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
@@ -13360,16 +13360,16 @@
       "parameters": [
         {
           "key": "dG_J",
-          "quantity": "eyringbarrier",
-          "symbol": "dG_J",
+          "quantity": "eyring-barrier",
+          "symbol": "ΔG^‡",
           "unit": "J",
           "meaning": "free energy of activation per molecule",
           "sign": "any"
         },
         {
           "key": "T_K",
-          "quantity": "eyringwarmth",
-          "symbol": "T_K",
+          "quantity": "eyring-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
@@ -13382,16 +13382,16 @@
       "parameters": [
         {
           "key": "dH_J_per_mol",
-          "quantity": "vanthoffenthalpy",
-          "symbol": "dH_J_per_mol",
+          "quantity": "vanthoff-enthalpy",
+          "symbol": "ΔH°",
           "unit": "J/mol",
           "meaning": "molar reaction enthalpy (ΔH)",
           "sign": "any"
         },
         {
           "key": "T_K",
-          "quantity": "vanthoffwarmth",
-          "symbol": "T_K",
+          "quantity": "vanthoff-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
@@ -13404,15 +13404,15 @@
       "parameters": [
         {
           "key": "K",
-          "quantity": "gibbsisok",
+          "quantity": "gibbs-isotherm-k",
           "symbol": "K",
           "unit": "",
           "meaning": "equilibrium constant, > 0"
         },
         {
           "key": "T_K",
-          "quantity": "gibbsisowarmth",
-          "symbol": "T_K",
+          "quantity": "gibbs-isotherm-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
@@ -13425,29 +13425,29 @@
       "parameters": [
         {
           "key": "E0_volts",
-          "quantity": "nernstge0",
-          "symbol": "E0_volts",
+          "quantity": "nernst-standard-potential",
+          "symbol": "E°",
           "unit": "V",
           "meaning": "standard electrode potential"
         },
         {
           "key": "n",
-          "quantity": "nernstgn",
+          "quantity": "nernst-electron-count",
           "symbol": "n",
           "unit": "",
           "meaning": "electrons transferred"
         },
         {
           "key": "Q",
-          "quantity": "nernstgq",
+          "quantity": "nernst-quotient",
           "symbol": "Q",
           "unit": "",
           "meaning": "reaction quotient, > 0"
         },
         {
           "key": "T_K",
-          "quantity": "nernstgwarmth",
-          "symbol": "T_K",
+          "quantity": "nernst-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
@@ -13460,24 +13460,24 @@
       "parameters": [
         {
           "key": "dH_J_per_mol",
-          "quantity": "clapintlatent",
-          "symbol": "dH_J_per_mol",
+          "quantity": "clausius-latent",
+          "symbol": "ΔH",
           "unit": "J/mol",
           "meaning": "molar reaction enthalpy (ΔH)",
           "sign": "any"
         },
         {
           "key": "T1_K",
-          "quantity": "clapintwarm1",
-          "symbol": "T1_K",
+          "quantity": "clausius-warmth-1",
+          "symbol": "T_1",
           "unit": "K",
           "meaning": "first temperature, > 0",
           "temperature": "absolute"
         },
         {
           "key": "T2_K",
-          "quantity": "clapintwarm2",
-          "symbol": "T2_K",
+          "quantity": "clausius-warmth-2",
+          "symbol": "T_2",
           "unit": "K",
           "meaning": "second temperature, > 0",
           "temperature": "absolute"
@@ -13490,15 +13490,15 @@
       "parameters": [
         {
           "key": "x",
-          "quantity": "raoultmole",
+          "quantity": "raoult-mole-fraction",
           "symbol": "x",
           "unit": "",
           "meaning": "mole fraction of the solvent, 0 ≤ x ≤ 1"
         },
         {
           "key": "Psat_Pa",
-          "quantity": "raoultsat",
-          "symbol": "Psat_Pa",
+          "quantity": "raoult-saturation",
+          "symbol": "P^*",
           "unit": "Pa",
           "meaning": "pure-component saturation pressure, > 0"
         }
@@ -13510,24 +13510,24 @@
       "parameters": [
         {
           "key": "mu_Pa_s",
-          "quantity": "prandtlmu",
-          "symbol": "mu_Pa_s",
+          "quantity": "prandtl-mu",
+          "symbol": "μ",
           "unit": "Pa*s",
           "meaning": "dynamic viscosity, > 0",
           "sign": "positive"
         },
         {
           "key": "cp_J_per_kg_K",
-          "quantity": "prandtlcp",
-          "symbol": "cp_J_per_kg_K",
+          "quantity": "prandtl-cp",
+          "symbol": "c_p",
           "unit": "J/(kg*K)",
           "meaning": "specific heat capacity at constant pressure, > 0",
           "sign": "positive"
         },
         {
           "key": "k_W_per_m_K",
-          "quantity": "prandtlk",
-          "symbol": "k_W_per_m_K",
+          "quantity": "prandtl-k",
+          "symbol": "k",
           "unit": "W/(m*K)",
           "meaning": "thermal conductivity, > 0",
           "sign": "positive"
@@ -13540,31 +13540,31 @@
       "parameters": [
         {
           "key": "rho_kg_per_m3",
-          "quantity": "reynumrho",
-          "symbol": "rho_kg_per_m3",
+          "quantity": "reynolds-rho",
+          "symbol": "ρ",
           "unit": "kg/m^3",
           "meaning": "mass density, > 0",
           "sign": "positive"
         },
         {
           "key": "v_m_per_s",
-          "quantity": "reynumvel",
-          "symbol": "v_m_per_s",
+          "quantity": "reynolds-velocity",
+          "symbol": "v",
           "unit": "m/s",
           "meaning": "flow speed"
         },
         {
           "key": "L_m",
-          "quantity": "reynumlen",
-          "symbol": "L_m",
+          "quantity": "reynolds-length",
+          "symbol": "L",
           "unit": "m",
           "meaning": "characteristic length, > 0",
           "sign": "positive"
         },
         {
           "key": "mu_Pa_s",
-          "quantity": "reynummu",
-          "symbol": "mu_Pa_s",
+          "quantity": "reynolds-mu",
+          "symbol": "μ",
           "unit": "Pa*s",
           "meaning": "dynamic viscosity, > 0",
           "sign": "positive"
@@ -13577,24 +13577,24 @@
       "parameters": [
         {
           "key": "h_W_per_m2_K",
-          "quantity": "biotfilm",
-          "symbol": "h_W_per_m2_K",
+          "quantity": "biot-film",
+          "symbol": "h",
           "unit": "W/(m^2*K)",
           "meaning": "convective film coefficient, > 0",
           "sign": "positive"
         },
         {
           "key": "Lc_m",
-          "quantity": "biotlength",
-          "symbol": "Lc_m",
+          "quantity": "biot-length",
+          "symbol": "L_c",
           "unit": "m",
           "meaning": "characteristic length, > 0",
           "sign": "positive"
         },
         {
           "key": "k_W_per_m_K",
-          "quantity": "biotk",
-          "symbol": "k_W_per_m_K",
+          "quantity": "biot-k",
+          "symbol": "k",
           "unit": "W/(m*K)",
           "meaning": "thermal conductivity, > 0",
           "sign": "positive"
@@ -13607,24 +13607,24 @@
       "parameters": [
         {
           "key": "h_W_per_m2_K",
-          "quantity": "nusseltfilm",
-          "symbol": "h_W_per_m2_K",
+          "quantity": "nusselt-film",
+          "symbol": "h",
           "unit": "W/(m^2*K)",
           "meaning": "convective film coefficient, > 0",
           "sign": "positive"
         },
         {
           "key": "L_m",
-          "quantity": "nusseltlen",
-          "symbol": "L_m",
+          "quantity": "nusselt-length",
+          "symbol": "L",
           "unit": "m",
           "meaning": "characteristic length, > 0",
           "sign": "positive"
         },
         {
           "key": "k_W_per_m_K",
-          "quantity": "nusseltk",
-          "symbol": "k_W_per_m_K",
+          "quantity": "nusselt-k",
+          "symbol": "k",
           "unit": "W/(m*K)",
           "meaning": "thermal conductivity, > 0",
           "sign": "positive"
@@ -13637,24 +13637,24 @@
       "parameters": [
         {
           "key": "mu_Pa_s",
-          "quantity": "schmidtmu",
-          "symbol": "mu_Pa_s",
+          "quantity": "schmidt-mu",
+          "symbol": "μ",
           "unit": "Pa*s",
           "meaning": "dynamic viscosity, > 0",
           "sign": "positive"
         },
         {
           "key": "rho_kg_per_m3",
-          "quantity": "schmidtrho",
-          "symbol": "rho_kg_per_m3",
+          "quantity": "schmidt-rho",
+          "symbol": "ρ",
           "unit": "kg/m^3",
           "meaning": "mass density, > 0",
           "sign": "positive"
         },
         {
           "key": "D_m2_per_s",
-          "quantity": "schmidtdiff",
-          "symbol": "D_m2_per_s",
+          "quantity": "schmidt-diffusivity",
+          "symbol": "D",
           "unit": "m^2/s",
           "meaning": "diffusivity, > 0",
           "sign": "positive"
@@ -13667,24 +13667,24 @@
       "parameters": [
         {
           "key": "km_m_per_s",
-          "quantity": "sherwoodkm",
-          "symbol": "km_m_per_s",
+          "quantity": "sherwood-km",
+          "symbol": "k_m",
           "unit": "m/s",
           "meaning": "mass-transfer coefficient, > 0",
           "sign": "positive"
         },
         {
           "key": "L_m",
-          "quantity": "sherwoodlen",
-          "symbol": "L_m",
+          "quantity": "sherwood-length",
+          "symbol": "L",
           "unit": "m",
           "meaning": "characteristic length, > 0",
           "sign": "positive"
         },
         {
           "key": "D_m2_per_s",
-          "quantity": "sherwooddiff",
-          "symbol": "D_m2_per_s",
+          "quantity": "sherwood-diffusivity",
+          "symbol": "D",
           "unit": "m^2/s",
           "meaning": "diffusivity, > 0",
           "sign": "positive"
@@ -13697,32 +13697,32 @@
       "parameters": [
         {
           "key": "k_W_per_m_K",
-          "quantity": "fourierslabk",
-          "symbol": "k_W_per_m_K",
+          "quantity": "fourier-slab-k",
+          "symbol": "k",
           "unit": "W/(m*K)",
           "meaning": "thermal conductivity, > 0",
           "sign": "positive"
         },
         {
           "key": "T_L_K",
-          "quantity": "fourierslabend",
-          "symbol": "T_L_K",
+          "quantity": "fourier-slab-end",
+          "symbol": "T(L)",
           "unit": "K",
           "meaning": "temperature at x = L",
           "temperature": "absolute"
         },
         {
           "key": "T_0_K",
-          "quantity": "fourierslabstart",
-          "symbol": "T_0_K",
+          "quantity": "fourier-slab-start",
+          "symbol": "T(0)",
           "unit": "K",
           "meaning": "temperature at x = 0",
           "temperature": "absolute"
         },
         {
           "key": "L_m",
-          "quantity": "fourierslablen",
-          "symbol": "L_m",
+          "quantity": "fourier-slab-length",
+          "symbol": "L",
           "unit": "m",
           "meaning": "characteristic length, > 0",
           "sign": "positive"
@@ -13735,56 +13735,56 @@
       "parameters": [
         {
           "key": "rho_kg_per_m3",
-          "quantity": "newtonrho",
-          "symbol": "rho_kg_per_m3",
+          "quantity": "newton-rho",
+          "symbol": "ρ",
           "unit": "kg/m^3",
           "meaning": "mass density, > 0",
           "sign": "positive"
         },
         {
           "key": "c_J_per_kg_K",
-          "quantity": "newtoncp",
-          "symbol": "c_J_per_kg_K",
+          "quantity": "newton-cp",
+          "symbol": "c",
           "unit": "J/(kg*K)",
           "meaning": "specific heat capacity, > 0",
           "sign": "positive"
         },
         {
           "key": "V_m3",
-          "quantity": "newtonvol",
-          "symbol": "V_m3",
+          "quantity": "newton-volume",
+          "symbol": "V",
           "unit": "m^3",
           "meaning": "body volume, > 0",
           "sign": "positive"
         },
         {
           "key": "h_W_per_m2_K",
-          "quantity": "newtonfilm",
-          "symbol": "h_W_per_m2_K",
+          "quantity": "newton-film",
+          "symbol": "h",
           "unit": "W/(m^2*K)",
           "meaning": "convective film coefficient, > 0",
           "sign": "positive"
         },
         {
           "key": "A_m2",
-          "quantity": "newtonarea",
-          "symbol": "A_m2",
+          "quantity": "newton-area",
+          "symbol": "A",
           "unit": "m^2",
           "meaning": "surface area, > 0",
           "sign": "positive"
         },
         {
           "key": "t_s",
-          "quantity": "newtontime",
-          "symbol": "t_s",
+          "quantity": "newton-time",
+          "symbol": "t",
           "unit": "s",
           "meaning": "elapsed time, ≥ 0",
           "sign": "nonnegative"
         },
         {
           "key": "theta_difference_K",
-          "quantity": "newtontheta0",
-          "symbol": "theta_difference_K",
+          "quantity": "newton-theta-0",
+          "symbol": "θ(0)",
           "unit": "K",
           "meaning": "initial temperature excess over the surroundings"
         }
@@ -13796,15 +13796,15 @@
       "parameters": [
         {
           "key": "r",
-          "quantity": "ottoratio",
+          "quantity": "otto-ratio",
           "symbol": "r",
           "unit": "",
           "meaning": "compression ratio, > 1"
         },
         {
           "key": "gamma",
-          "quantity": "ottogamma",
-          "symbol": "gamma",
+          "quantity": "otto-gamma",
+          "symbol": "γ",
           "unit": "",
           "meaning": "heat-capacity ratio, > 1"
         }
@@ -13816,30 +13816,30 @@
       "parameters": [
         {
           "key": "T_K",
-          "quantity": "jtcwarmth",
-          "symbol": "T_K",
+          "quantity": "joule-thomson-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         },
         {
           "key": "dv_dT_m3_per_kg_K",
-          "quantity": "jtcdvdt",
-          "symbol": "dv_dT_m3_per_kg_K",
+          "quantity": "joule-thomson-dvdt",
+          "symbol": "(∂v/∂T)_p",
           "unit": "m^3/(kg*K)",
           "meaning": "∂v/∂T at constant pressure"
         },
         {
           "key": "v_m3_per_kg",
-          "quantity": "jtcvolume",
-          "symbol": "v_m3_per_kg",
+          "quantity": "joule-thomson-volume",
+          "symbol": "v",
           "unit": "m^3/kg",
           "meaning": "specific volume"
         },
         {
           "key": "cp_J_per_kg_K",
-          "quantity": "jtcp",
-          "symbol": "cp_J_per_kg_K",
+          "quantity": "joule-thomson-cp",
+          "symbol": "c_p",
           "unit": "J/(kg*K)",
           "meaning": "specific heat capacity at constant pressure, > 0",
           "sign": "positive"
@@ -13852,15 +13852,15 @@
       "parameters": [
         {
           "key": "nu_Hz",
-          "quantity": "planckfreq",
-          "symbol": "nu_Hz",
+          "quantity": "planck-frequency",
+          "symbol": "ν",
           "unit": "Hz",
           "meaning": "frequency, > 0"
         },
         {
           "key": "T_K",
-          "quantity": "planckwarmth",
-          "symbol": "T_K",
+          "quantity": "planck-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
@@ -13878,8 +13878,8 @@
       "parameters": [
         {
           "key": "wien_x",
-          "quantity": "wienroot",
-          "symbol": "wien_x",
+          "quantity": "wien-root",
+          "symbol": "x",
           "unit": "",
           "meaning": "the positive root of (5 − x) = 5 exp(−x), in (4, 5)"
         }
@@ -13891,7 +13891,7 @@
       "parameters": [
         {
           "key": "N",
-          "quantity": "sackurcount",
+          "quantity": "sackur-count",
           "symbol": "N",
           "unit": "",
           "meaning": "number of particles",
@@ -13899,15 +13899,15 @@
         },
         {
           "key": "nQ_per_m3",
-          "quantity": "sackurquantum",
-          "symbol": "nQ_per_m3",
+          "quantity": "sackur-quantum",
+          "symbol": "n_Q",
           "unit": "m^-3",
           "meaning": "quantum concentration, > 0"
         },
         {
           "key": "n_per_m3",
-          "quantity": "sackurdensity",
-          "symbol": "n_per_m3",
+          "quantity": "sackur-density",
+          "symbol": "n",
           "unit": "m^-3",
           "meaning": "number density, > 0"
         }
@@ -13919,23 +13919,23 @@
       "parameters": [
         {
           "key": "m_kg",
-          "quantity": "sahamass",
-          "symbol": "m_kg",
+          "quantity": "saha-mass",
+          "symbol": "m",
           "unit": "kg",
           "meaning": "particle mass, > 0"
         },
         {
           "key": "T_K",
-          "quantity": "sahawarmth",
-          "symbol": "T_K",
+          "quantity": "saha-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         },
         {
           "key": "I_J",
-          "quantity": "sahaion",
-          "symbol": "I_J",
+          "quantity": "saha-ionization",
+          "symbol": "I",
           "unit": "J",
           "meaning": "ionization energy"
         }
@@ -13947,23 +13947,23 @@
       "parameters": [
         {
           "key": "m_kg",
-          "quantity": "richardsmass",
-          "symbol": "m_kg",
+          "quantity": "richardson-mass",
+          "symbol": "m",
           "unit": "kg",
           "meaning": "particle mass, > 0"
         },
         {
           "key": "T_K",
-          "quantity": "richardswarmth",
-          "symbol": "T_K",
+          "quantity": "richardson-warmth",
+          "symbol": "T",
           "unit": "K",
           "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         },
         {
           "key": "phi_J",
-          "quantity": "richardsphi",
-          "symbol": "phi_J",
+          "quantity": "richardson-phi",
+          "symbol": "φ",
           "unit": "J",
           "meaning": "work function"
         }
@@ -13975,14 +13975,14 @@
       "parameters": [
         {
           "key": "L12",
-          "quantity": "onsagerl12",
-          "symbol": "L12",
+          "quantity": "onsager-l12",
+          "symbol": "L_{12}",
           "unit": "",
           "meaning": "Onsager cross coefficient L12"
         },
         {
           "key": "B_T",
-          "quantity": "onsagerb0",
+          "quantity": "onsager-b0",
           "symbol": "B",
           "unit": "T",
           "meaning": "magnetic field, |B| ≤ 1 pT"

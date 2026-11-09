@@ -50,14 +50,14 @@
   "linkCandidates": {
     "total": 4169,
     "touchingCore": 4135,
-    "touchingCoreSameKind": 822
+    "touchingCoreSameKind": 1087
   },
   "discovery": {
     "catalog": {
       "total": 4169,
       "promising": 1,
-      "promisingUnchecked": 31,
-      "inert": 2360,
+      "promisingUnchecked": 29,
+      "inert": 2362,
       "magnitudeClash": 20,
       "contradictory": 0,
       "axisClash": 1757,
