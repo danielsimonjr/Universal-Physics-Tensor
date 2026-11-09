@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
+- [x] MathTS core 0.24.4: move the core range, turn the caret gap row into an agreement row, and rerun the M6 comparison in both directions on every set, with superscripts beyond ³. Replace `segmentations` with `Unit.readings` only when 0 tokens differ.
+  Done, negative result: the swap is not made. The base, caret and prefix sets give 0 differing tokens in both directions. Superscripts `⁰`, `⁴` to `⁹` and digit runs give 56,148 of 67,409 tokens with a MathTS reading and no local reading. A gap row pins the class. The numbers are in `NOTES.md`, 2026-11-09.
 - [x] MathTS core 0.24.3: move the core range, and turn the micro-sign gap row into an agreement row (2026-11-09).
   Done: core 0.24.3 reads `µ` and `μ` as a prefix only, and `Unit.parse('5 µ')` throws. No UPT test read `µ` as the atomic mass unit.
 - [x] Add the 2022 SI prefixes q, r, R and Q to `data/units.json` (2026-11-09), and report each new ambiguity.

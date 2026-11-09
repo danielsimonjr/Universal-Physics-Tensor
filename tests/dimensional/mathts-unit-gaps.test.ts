@@ -107,7 +107,7 @@ describe('MathTS agrees with UPT on delegated readings', () => {
   });
 });
 
-describe('Unit.readings agrees with the local splitter on °R, pc and the micro sign (closed by core 0.24.1 to 0.24.3)', () => {
+describe('Unit.readings agrees with the local splitter on °R, pc and the micro sign (closed by core 0.24.1 to 0.24.4)', () => {
   const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => f.name).join('·'));
 
   it('a glued token with °R has a reading (core 0.24.1)', () => {
@@ -129,6 +129,14 @@ describe('Unit.readings agrees with the local splitter on °R, pc and the micro 
       expect(() => Unit.parse(`5 ${micro}`), micro).toThrow();
       expect(parseUnit(`W/${micro}mK`).scale, micro).toBe(1e6);
     }
+  });
+  it('a caret or a superscript inside a glued token has a reading (core 0.24.4)', () => {
+    expect(names('m^2K')).toEqual(['m·K']);
+    for (const glued of ['m^2K', 'm²K', 'mK^2']) expect(Unit.readings(glued).length, glued).toBeGreaterThan(0);
+    expect(Unit.readings('m^2K')[0]!.map((f) => f.power)).toEqual([2, 1]);
+    expect(Unit.readings('mK^2')[0]!.map((f) => f.power)).toEqual([1, 2]);
+    expect(parseUnit('W/m^2K')).toEqual(parseUnit('W/(m^2*K)'));
+    expect(parseUnit('W/m²K')).toEqual(parseUnit('W/(m^2*K)'));
   });
 });
 
@@ -190,15 +198,18 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
     },
     {
       // `Unit.readings` cannot replace the local splitter.
-      // A caret or a superscript inside a glued token gives no reading in MathTS.
-      // The local splitter reads `m^2K` as `m^2·K`, so `W/m^2K` is the heat transfer coefficient unit.
-      // Over 56,166 such tokens, 56,141 have a local reading, but MathTS gives no such reading.
-      id: 'Unit.readings: a caret or a superscript inside a glued token has no reading',
+      // MathTS reads a superscript power that UPT refuses: ⁰ and ⁴ to ⁹, and a run of two or more digits.
+      // UPT reads only ¹, ² and ³, with an optional ⁻.
+      // 56,148 of 67,409 such tokens (`a⁴b`, `ab⁴`, `a⁰b`, `a¹⁰b`, `a⁻⁴b` and `a²b³` for every pair) have a MathTS reading and no local reading.
+      id: 'Unit.readings: a superscript power above ³, ⁰ or a digit run has a reading in MathTS, and UPT refuses it',
       check: () => {
-        for (const glued of ['m^2K', 'm²K', 'mK^2']) expect(Unit.readings(glued), glued).toEqual([]);
-        expect(Unit.readings('m2K').length).toBeGreaterThan(0);
-        expect(parseUnit('W/m^2K')).toEqual(parseUnit('W/(m^2*K)'));
-        expect(parseUnit('W/m²K')).toEqual(parseUnit('W/(m^2*K)'));
+        const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => `${f.name}^${f.power}`).join('·'));
+        expect(names('m⁴K')).toEqual(['m^4·K^1']);
+        expect(names('m⁰K')).toEqual(['m^0·K^1']);
+        expect(names('m¹⁰K')).toEqual(['m^10·K^1']);
+        for (const glued of ['m⁴K', 'm⁰K', 'm¹⁰K', 'mK⁻⁴']) expect(() => parseUnit(`W/${glued}`), glued).toThrow(UnknownUnitError);
+        // Control: the caret spelling of the same power reads on both sides.
+        expect(parseUnit('W/m^4K')).toEqual(parseUnit('W/(m^4*K)'));
       },
     },
     {
