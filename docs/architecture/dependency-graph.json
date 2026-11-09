@@ -11402,8 +11402,14 @@
             "file": "./cases/index.js",
             "imports": [
               "APPLIED_CASES",
-              "CASE_CONTRACTS",
               "runAppliedCase"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./cases/index.js",
+            "imports": [
+              "CASE_CONTRACTS"
             ],
             "reExport": true
           },
@@ -12203,8 +12209,8 @@
           "UnknownInputError",
           "resolveEvaluatorInputs",
           "APPLIED_CASES",
-          "CASE_CONTRACTS",
           "runAppliedCase",
+          "CASE_CONTRACTS",
           "slotForSpelling",
           "convertValue",
           "UnitError",
@@ -12477,8 +12483,8 @@
           "EvaluatorParameter",
           "resolveEvaluatorInputs",
           "APPLIED_CASES",
-          "CASE_CONTRACTS",
           "runAppliedCase",
+          "CASE_CONTRACTS",
           "slotForSpelling",
           "AppliedCase",
           "CaseCheck",
@@ -28298,7 +28304,7 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87690,
+    "totalLinesOfCode": 87693,
     "totalExports": 2826,
     "totalClasses": 86,
     "totalInterfaces": 518,
