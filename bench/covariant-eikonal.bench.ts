@@ -50,6 +50,7 @@ const COVARIANT_INPUTS = {
   M_kg: 1.989e30,     // solar mass
   R_far_m: 1.5e11,    // ~1 AU (far-point radius)
   R_near_m: 1.0e9,    // inner radius (≤ R_far_m, required by API)
+  steps: 2048,        // explicit, so the label and the baseline keep one step count
 } as const;
 
 // ---------------------------------------------------------------------------

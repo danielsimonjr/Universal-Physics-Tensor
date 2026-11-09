@@ -53,16 +53,12 @@ describe('BE-37 covariant-eikonal preview (v0.4.0)', () => {
     expect(Math.abs(result.eikonalResidual)).toBeLessThan(1e-10);
   });
 
-  // v0.5.0 Task 11 [U]: BE-37 covariant-eikonal Shapiro cross-check ACTIVATED.
-  // Task 12 wired evaluateCovariantEikonalNumerical to drive GL4 null-
-  // geodesic integration on the canonical (x, p) state; shapiroDelaySec now
-  // returns the real coord-time delay vs the flat-space straight-line ray.
-  // I5 re-relaxation: original v0.4.0 tolerance ±1×10⁻⁴ relative on the
-  // Earth-Mars 2×10⁻¹⁰ s baseline = 2×10⁻¹⁴ s absolute, BELOW the
-  // ~3×10⁻¹³ s double-precision floor on a 1500 s coord-time accumulation.
-  // Relaxed to ±2×10⁻³ relative (4×10⁻¹³ s absolute, above the floor).
-  // Best-effort numeric — Earth-Mars Shapiro ≈ 2e-10 s is near double-precision floor.
-  it('Shapiro delay via geodesic integration agrees with closed form to ±2×10⁻³ relative', async () => {
+  // The geodesic delay (exact radial form at the derived step count, 5708
+  // steps here) against the weak-field closed form (2GM/c³)·ln(R_far/R_near)
+  // of the catalog relation. The two forms differ by about 9e-7 relative at
+  // R_near = 6.96e8 m (measured: 8.7e-7), so the bound is 2e-6, not the
+  // 2e-3 of the fixed 2048 steps before #526.
+  it('Shapiro delay via geodesic integration agrees with the weak-field closed form to 2e-6 relative', async () => {
     const M_kg = 1.989e30;
     // Closed-form (2GM/c³)·ln(R_far/R_near) for radial null geodesic; Task 12's
     // GL4 integrator reproduces this same form at the default b_m = 0.
@@ -78,13 +74,6 @@ describe('BE-37 covariant-eikonal preview (v0.4.0)', () => {
     });
     const relErr = Math.abs(geodesic.shapiroDelaySec - closedFormDelaySec)
       / Math.abs(closedFormDelaySec);
-    // v0.5.1 Task 1 PC-1 (constants canonicalization): empirical relErr
-    // = 2.51×10⁻⁴ post-migration to canonical `C_SI = 299792458` exact (was
-    // 1.76×10⁻⁴ pre-migration with the local truncated `c_SI = 2.998e8`).
-    // PC-1 hypothesis (c_SI drift dominates residual) is REFUTED: residual
-    // is unchanged-or-worse after canonicalization. Dominant residual source
-    // is elsewhere (likely Schwarzschild fixture c_SI mismatch — pending
-    // Task 4, or GL4 step-count floor / null IC reconstruction).
-    expect(relErr).toBeLessThan(2e-3);
+    expect(relErr).toBeLessThan(2e-6);
   });
 });

@@ -21,8 +21,11 @@
  * straight-line transit time is returned as the Shapiro delay.
  *
  * For the default radial geometry (impact parameter `b_m = 0`) the
- * integrator reproduces the closed-form `(2GM/c³) · ln(R_far/R_near)`
- * (Task 11 cross-checks this to ±2×10⁻³).
+ * integrator reproduces the exact radial delay
+ * `(r_s/c) · ln((R_far − r_s)/(R_near − r_s))` (the tortoise coordinate) to
+ * 1e-6 relative at the derived step count. The weak-field form
+ * `(2GM/c³) · ln(R_far/R_near)` of catalog relation be-37 differs from the
+ * exact form by about 8e-7 relative at the solar surface.
  *
  * @see tests/numerical/covariant-eikonal-real.test.ts (Task 12 [U])
  * @see tests/dimensional/covariant-derivative-preview.test.ts (Task 17 [U]/Task 11 [U])
@@ -55,25 +58,28 @@ export interface CovariantEikonalInputs {
    *  (must be > 0, ≤ R_far_m, and outside the Schwarzschild horizon). */
   readonly R_near_m: number;
   /**
-   * Optional impact parameter `b` in metres for the null geodesic. The
-   * photon's angular momentum is set such that the minimum r (closest
-   * approach) is `b` in the flat-space limit; `p_φ = b · c` in the
-   * affine-parameter normalization used here (`p_t = −c²`).
+   * Optional impact parameter `b` in metres for the null geodesic, set by
+   * `p_φ = b · c` in the affine-parameter normalization used here
+   * (`p_t = −c²`). The ray turns at `r_min² = b² (1 − r_s/r_min)`, about
+   * `b − r_s/2`, not at `b`.
    *
-   * Default `0` — purely radial null geodesic, which reproduces the
-   * closed-form `(2GM/c³) · ln(R_far/R_near)` Shapiro delay. Non-zero
-   * `b` modifies the geometry and the closed-form comparator changes
-   * to `(2GM/c³) · ln((R_far + √(R_far²−b²)) / (R_near + √(R_near²−b²)))`
-   * for the single-leg path (closest-approach not crossed).
+   * Default `0`: a radial null geodesic. A non-zero `b` gives the single-leg
+   * delay from `R_far` to `R_near`, which does not pass closest approach.
    *
-   * Must satisfy `b ≤ R_near` if non-zero (otherwise the photon cannot
-   * reach `R_near` without crossing closest approach).
+   * The ray must cross `R_near` transversally: `b ≤ R_near`, and the crossing
+   * cosine `s = √(1 − b² (1 − r_s/R_near)/R_near²)` must be at least 0.01.
+   * Otherwise the call is a RangeError. The two-leg delay through closest
+   * approach is the closed form of catalog relation be-37.
    */
   readonly b_m?: number;
   /**
-   * Optional GL4 step count override. Default `2048` — sufficient for
-   * the default radial geometry to reach ≤1e-6 relative agreement with
-   * `evaluateShapiroDelay` on Earth/Mars/Sun scales (Task 11).
+   * Optional GL4 step count. An explicit value is used as given. When the
+   * input gives no value, the count is `max(2048, ⌈40 · L / (R_near · s)⌉)`, where `L`
+   * is the flat transit length and `s` the crossing cosine. The derived count gives
+   * 1e-6 relative on a radial ray (1.0e-7 from 1 AU to the solar surface, at
+   * 8562 steps) and 1e-4 with an impact parameter. A derived count above
+   * 131072 is a RangeError: pass `steps` explicitly. The cost is linear in
+   * the count, of order 10 to 50 µs per step.
    */
   readonly steps?: number;
 }
@@ -99,10 +105,9 @@ export interface CovariantEikonalResult {
    * Shapiro coordinate-time delay in seconds, computed via GL4
    * null-geodesic integration on the canonical (x, p) state.
    *
-   * **v0.5.0 Task 12:** real value (was a documented stub returning 0 in
-   * v0.4.0). For the default radial geometry (`b_m = 0`) this agrees with
-   * the closed-form `(2GM/c³) · ln(R_far/R_near)` to ≤1e-6 relative at
-   * the default step count (Task 11 [U]).
+   * For the default radial geometry (`b_m = 0`) this agrees with the exact
+   * radial delay `(r_s/c) · ln((R_far − r_s)/(R_near − r_s))` to 1e-6
+   * relative at the derived step count.
    */
   readonly shapiroDelaySec: number;
 
@@ -112,6 +117,44 @@ export interface CovariantEikonalResult {
    * `evaluateShapiroDelay`.
    */
   readonly closedFormDelaySec?: number;
+}
+
+/**
+ * The smallest crossing cosine `s = |dr/dτ|/c` at `R_near` that the evaluator
+ * accepts. Measured: at s = 0.01 the delay agrees with the quadrature
+ * reference to 2.1e-7 (Earth–Mars, 4558 derived steps) and 6.3e-8 (1 AU to
+ * the solar surface, 860081 explicit steps). No test measures a smaller s,
+ * so the evaluator refuses a smaller s.
+ */
+const CROSSING_COSINE_MIN = 0.01;
+/** Steps per `R_near · s` of flat transit for the derived step count. */
+const STEPS_PER_NEAR_SCALE = 40;
+/** Floor of the derived step count. */
+const MIN_DERIVED_STEPS = 2048;
+/** The largest derived step count. Above it the caller passes `steps`. */
+const MAX_DERIVED_STEPS = 131072;
+
+/**
+ * The step count when `steps` is not given. The GL4 error comes from the
+ * region near `R_near`. There, the ray changes over a length `R_near · s`.
+ * The count therefore grows with the flat transit over that length. The
+ * code does not change an explicit `steps`. A count above `MAX_DERIVED_STEPS` is a RangeError.
+ */
+function derivedSteps(flatTransit_m: number, R_near_m: number, crossingCosine: number): number {
+  const n = Math.max(MIN_DERIVED_STEPS, Math.ceil((STEPS_PER_NEAR_SCALE * flatTransit_m) / (R_near_m * crossingCosine)));
+  if (n > MAX_DERIVED_STEPS) {
+    throw new RangeError(
+      `evaluateCovariantEikonalNumerical: this geometry needs ${n} steps for the stated accuracy, above the derived limit ${MAX_DERIVED_STEPS}. Pass steps explicitly (the cost is linear in steps).`,
+    );
+  }
+  return n;
+}
+
+/** Closest approach `r_min` of `r_min² = b² (1 − r_s/r_min)`, by fixed-point iteration. */
+function closestApproach(b_m: number, r_s: number): number {
+  let r = b_m;
+  for (let i = 0; i < 50 && r > r_s; i++) r = b_m * Math.sqrt(1 - r_s / r);
+  return r;
 }
 
 /**
@@ -223,11 +266,11 @@ function buildDgInverseFn(
  * gravitational potential). A negative result indicates an integration
  * or reference-frame bug.
  *
- * **Impact parameter `b_m`.** Default `0` (radial). The default geometry
- * reproduces the closed-form `evaluateShapiroDelay` to ≤1e-6 relative at
- * 2048 steps for solar-scale Earth/Mars distances (Task 11 cross-check).
- * Non-zero `b_m` requires `b_m ≤ R_near_m` (closest approach `r_min ≈ b`
- * must not lie between R_far and R_near).
+ * **Impact parameter `b_m`.** Default `0` (radial). The radial delay agrees
+ * with the exact form to 1e-6 relative at the derived step count. A
+ * non-zero `b_m` must give a transverse crossing of `R_near_m`: `b_m ≤
+ * R_near_m` and a crossing cosine of at least 0.01. The ray turns at
+ * `r_min ≈ b − r_s/2`, so `b_m = R_near_m` is tangent and is refused.
  *
  * @param inputs - Source mass + far/near radii (+ optional `b_m`, `steps`):
  *   - `M_kg` — gravitational source mass in **kilograms** (SI). Must be a
@@ -238,16 +281,18 @@ function buildDgInverseFn(
  *     satisfy `0 < R_near_m ≤ R_far_m` and `R_near_m > 1.01 · r_s` (stay
  *     comfortably outside the Schwarzschild horizon `r_s = 2GM/c²`).
  *   - `b_m` — optional impact parameter in **metres** (SI). Default `0`
- *     (purely radial geodesic). Non-zero `b_m` requires `b_m ≤ R_near_m`.
- *   - `steps` — optional GL4 integrator step count (dimensionless). Default
- *     2048. Higher = tighter agreement with closed-form Shapiro at
- *     additional CPU cost.
+ *     (purely radial geodesic). Non-zero `b_m` needs a transverse
+ *     crossing of `R_near_m` (see above).
+ *   - `steps` — optional GL4 integrator step count (dimensionless). An
+ *     explicit value is used as given. When it is not given, it is derived
+ *     from the geometry (see `CovariantEikonalInputs.steps`).
  * @returns `{ eikonalResidual, shapiroDelaySec }`:
  *   - `eikonalResidual` — **dimensionless** relative residual of
  *     `g^μν p_μ p_ν = 0`, computed on the null wave-covector (~machine-ε).
  *   - `shapiroDelaySec` — gravitational-time-delay in **seconds** (SI).
  *     Positive by sign convention (light is slowed in the potential well).
- * @throws RangeError on out-of-domain inputs.
+ * @throws RangeError on out-of-domain inputs, on a ray that does not cross
+ *   `R_near_m` transversally, and on a derived step count above 131072.
  *
  * @example
  * ```typescript
@@ -264,7 +309,7 @@ function buildDgInverseFn(
  *   R_near_m,
  * });
  * // result.eikonalResidual ≈ 1e-16 (computed; confirms the null construction)
- * // result.shapiroDelaySec ≈ 2e-4 s (Shapiro delay near the Sun)
+ * // result.shapiroDelaySec ≈ 5.29e-5 s (radial, 1 AU to the solar surface)
  * ```
  *
  * @public
@@ -272,7 +317,7 @@ function buildDgInverseFn(
 export async function evaluateCovariantEikonalNumerical(
   inputs: CovariantEikonalInputs,
 ): Promise<CovariantEikonalResult> {
-  const { M_kg, R_far_m, R_near_m, b_m = 0, steps = 2048 } = inputs;
+  const { M_kg, R_far_m, R_near_m, b_m = 0 } = inputs;
 
   // ─── Domain guards ──────────────────────────────────────────────────────
   if (!Number.isFinite(M_kg) || M_kg <= 0) {
@@ -300,15 +345,20 @@ export async function evaluateCovariantEikonalNumerical(
       `evaluateCovariantEikonalNumerical: b_m must be a finite non-negative number, got ${b_m}`,
     );
   }
-  if (b_m > R_near_m) {
-    throw new RangeError(
-      `evaluateCovariantEikonalNumerical: b_m (${b_m}) must be ≤ R_near_m (${R_near_m}); closest-approach geometry not supported`,
-    );
-  }
   const r_s = schwarzschildRs(M_kg);
   if (R_near_m <= r_s * 1.01) {
     throw new RangeError(
       `evaluateCovariantEikonalNumerical: R_near_m (${R_near_m}) must be safely outside the Schwarzschild horizon r_s=${r_s}`,
+    );
+  }
+  // Crossing cosine at R_near: s = |dr/dτ|/c = √(1 − b² f(R_near)/R_near²).
+  // With p_t = −c² and p_φ = b c, the ray turns at r_min² = b² f(r_min), about
+  // b − r_s/2, not at b. A single-leg delay needs a transverse crossing.
+  const s2 = 1 - (b_m * b_m * (1 - r_s / R_near_m)) / (R_near_m * R_near_m);
+  const crossingCosine = Math.sqrt(Math.max(s2, 0));
+  if (b_m > R_near_m || !(crossingCosine >= CROSSING_COSINE_MIN)) {
+    throw new RangeError(
+      `evaluateCovariantEikonalNumerical: the ray with b_m=${b_m} has its closest approach at r_min≈${closestApproach(b_m, r_s)} m and crosses R_near_m=${R_near_m} with cosine ${crossingCosine}, which is below ${CROSSING_COSINE_MIN} or not a crossing (b_m must also be ≤ R_near_m). A single-leg delay is defined only for a transverse crossing. For the two-leg delay through closest approach, use the closed form of catalog relation be-37.`,
     );
   }
 
@@ -369,6 +419,7 @@ export async function evaluateCovariantEikonalNumerical(
   const flatLegNear = Math.sqrt(R_near_m * R_near_m - b_m * b_m);
   const t_flat = (flatLegFar - flatLegNear) / c_SI;
   const tauMax = t_flat * 1.5;
+  const steps = inputs.steps ?? derivedSteps(flatLegFar - flatLegNear, R_near_m, crossingCosine);
 
   const snapshots = integrateGeodesicGL4(initialState, {
     steps,
@@ -416,7 +467,7 @@ export async function evaluateCovariantEikonalNumerical(
   if (t_geodesic === undefined) {
     const rFinal = snapshots[snapshots.length - 1].x[1];
     throw new Error(
-      `evaluateCovariantEikonalNumerical: photon did not reach R_near=${R_near_m} within tauMax=${tauMax} s; final r=${rFinal}. Try increasing steps or tauMax.`,
+      `evaluateCovariantEikonalNumerical: the ray did not cross R_near=${R_near_m} in ${steps} steps (final r=${rFinal}). The crossing guard admitted it, so this is a defect of the evaluator; report it with the inputs.`,
     );
   }
 

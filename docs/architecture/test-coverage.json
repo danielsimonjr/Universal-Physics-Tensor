@@ -8599,6 +8599,7 @@
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/conserved-charge-mercury.test.ts",
       "tests/numerical/covariant-eikonal-impact.test.ts",
+      "tests/numerical/covariant-eikonal-solar-surface.test.ts",
       "tests/numerical/einstein-desitter.test.ts",
       "tests/numerical/einstein-flrw.test.ts",
       "tests/numerical/einstein-vacuum-schwarzschild.test.ts",
@@ -10615,6 +10616,7 @@
       "tests/numerical/covariant-derivative-lowering.test.ts",
       "tests/numerical/covariant-eikonal-impact.test.ts",
       "tests/numerical/covariant-eikonal-real.test.ts",
+      "tests/numerical/covariant-eikonal-solar-surface.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts",
       "tests/numerical/engine-default.test.ts",
       "tests/numerical/evaluate.test.ts",
@@ -13561,6 +13563,7 @@
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/conserved-charge-mercury.test.ts",
       "tests/numerical/covariant-eikonal-impact.test.ts",
+      "tests/numerical/covariant-eikonal-solar-surface.test.ts",
       "tests/numerical/einstein-desitter.test.ts",
       "tests/numerical/einstein-flrw.test.ts",
       "tests/numerical/einstein-vacuum-schwarzschild.test.ts",
@@ -14382,7 +14385,8 @@
       "tests/numerical/lowering-strategy-cast.test.ts"
     ],
     "src/numerical/covariant-eikonal.ts": [
-      "tests/numerical/covariant-eikonal-impact.test.ts"
+      "tests/numerical/covariant-eikonal-impact.test.ts",
+      "tests/numerical/covariant-eikonal-solar-surface.test.ts"
     ],
     "src/numerical/curvature-lowering-helpers.ts": [
       "tests/dimensional/bianchi-residual.test.ts",
@@ -25507,6 +25511,10 @@
       "src/numerical/covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts"
+    ],
+    "tests/numerical/covariant-eikonal-solar-surface.test.ts": [
+      "src/core/constants.ts",
+      "src/numerical/covariant-eikonal.ts"
     ],
     "tests/numerical/covariant-eikonal-step-sweep.test.ts": [
       "src/numerical/index.ts",
