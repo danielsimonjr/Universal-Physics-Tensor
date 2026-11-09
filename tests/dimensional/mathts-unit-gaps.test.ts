@@ -144,7 +144,7 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       },
     },
     {
-      id: 'pc takes only k-and-up prefixes in MathTS',
+      id: 'pc takes only k-and-up prefixes in MathTS Unit.parse',
       check: () => {
         expect(() => Unit.parse('Mpc')).not.toThrow();
         expect(() => Unit.parse('mpc')).toThrow(UnitParseError);
