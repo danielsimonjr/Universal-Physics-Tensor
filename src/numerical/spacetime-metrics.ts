@@ -177,29 +177,47 @@ function tensorsOf(g: MetricFn, x: Pt): Tensors {
   return { ricciScalar, ricciScalarBound, kretschmann, kretschmannBound, ricci, ricciBound, christoffel: gamma };
 }
 
+/**
+ * The components that the difference resolves: `|value| > bound`. An empty
+ * list means that every component is within its bound of zero. An absolute
+ * floor is not used: SI components differ in size by c² and more.
+ */
 function nonzeroMatrix(m: number[][], bound: number[][], label: (i: number, j: number) => string): Component[] {
   const out: Component[] = [];
-  const scale = Math.max(1, ...m.flat().map((v) => Math.abs(v)));
   for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 4; j++) {
       const v = m[i]![j]!;
       const b = bound[i]![j]!;
-      if (Math.abs(v) > Z * scale) out.push({ index: label(i, j), value: v, bound: b, resolved: Math.abs(v) > b });
+      if (Math.abs(v) > b) out.push({ index: label(i, j), value: v, bound: b, resolved: true });
     }
   }
   return out;
 }
 
+/**
+ * The Christoffel symbols above `Z` times the largest symbol of the same
+ * class. A class is the index place of t (upper, and the count of lower t
+ * indices), so all symbols in a class have one SI dimension. There is no
+ * absolute floor: Γ^t_rr = a ȧ/c² is about 1e-17 s/m² in SI.
+ */
 function nonzeroGamma(G: Gamma): Component[] {
   const names = ['t', 'r', 'θ', 'φ'];
   const out: Component[] = [];
-  let scale = 1;
-  for (const block of G) for (const row of block) for (const v of row) scale = Math.max(scale, Math.abs(v));
+  const cls = (rho: number, mu: number, nu: number) => (rho === 0 ? 3 : 0) + (mu === 0 ? 1 : 0) + (nu === 0 ? 1 : 0);
+  const scale = [0, 0, 0, 0, 0, 0];
+  for (let rho = 0; rho < 4; rho++) {
+    for (let mu = 0; mu < 4; mu++) {
+      for (let nu = mu; nu < 4; nu++) {
+        const k = cls(rho, mu, nu);
+        scale[k] = Math.max(scale[k]!, Math.abs(G[rho]![mu]![nu]!));
+      }
+    }
+  }
   for (let rho = 0; rho < 4; rho++) {
     for (let mu = 0; mu < 4; mu++) {
       for (let nu = mu; nu < 4; nu++) {
         const v = G[rho]![mu]![nu]!;
-        if (Math.abs(v) > Z * scale) {
+        if (v !== 0 && Math.abs(v) > Z * scale[cls(rho, mu, nu)]!) {
           out.push({ index: `Γ^${names[rho]}_${names[mu]}${names[nu]}`, value: v });
         }
       }
@@ -247,6 +265,12 @@ function flrwMetric(a0: number, t0: number, n: number, k: number, c: number): Me
     g[3]![3] = a * a * r * r * Math.sin(th) * Math.sin(th);
     return g;
   };
+}
+
+/** The FLRW metric in the coordinate T = c t: ds² = −dT² + a(T/c)² dΣ_k². */
+function flrwMetricInT(a0: number, t0: number, n: number, k: number, c: number): MetricFn {
+  const inT = flrwMetric(a0, t0, n, k, 1);
+  return (x) => inT([x[0] / c, x[1], x[2], x[3]]);
 }
 
 /** FLRW Ricci scalar 6/c² (ä/a + H² + k c²/a²). @internal */
@@ -430,7 +454,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     return stateCurvature(pack('minkowski', p, x, t, { ricciScalar: 0, kretschmann: 0 }, [
       'Minkowski in Cartesian-like coordinates (the angular part is not a sphere here; g_θθ = g_φφ = 1).',
       ...notes,
-    ]));
+    ]), true);
   }
   if (metric === 'schwarzschild') {
     // NaN marks r as not supplied. A supplied r = 0 is a point, not the default.
@@ -448,7 +472,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
       'Closed form: Kretschmann = 48 G² M² / (c⁴ r⁶), Ricci = 0.',
       'Christoffel symbols below are the finite-difference values.',
       ...notes,
-    ]));
+    ]), true);
   }
   if (metric === 'flrw') {
     const { values: p, notes } = metricParams(pairs, {
@@ -472,21 +496,40 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     }
     const g = flrwMetric(p.a0!, p.t0!, p.n!, p.k!, p.c!);
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
-    // Christoffel in the SI metric. Ricci and Kretschmann are computed at c = 1
-    // and divided by c² and c⁴: g_tt = −c² makes those scalars smaller than the
-    // roundoff of an SI finite difference.
+    // Christoffel in the SI metric. With g_tt = −c², the time part of the SI
+    // curvature is smaller than the roundoff of the difference, so the
+    // curvature is differenced in a metric of order one and then restored.
+    // k = 0: x = c y gives −c² dt² + a² dx² = c² (−dt² + a² dy²). A constant
+    // factor leaves R_μν unchanged, so the c = 1 difference restores as
+    // R_tt × 1, R_ti × 1/c, R_ij × 1/c², R × 1/c², K × 1/c⁴.
+    // k ≠ 0: that scaling changes k, so the difference is in T = c t
+    // (−dT² + a(T/c)² dΣ_k²). The scalars are invariants, and a component
+    // takes one factor c for each t index. Each bound takes the factor of
+    // its component.
     const tSi = tensorsOf(g, x);
-    const t1 = p.c === 1 ? tSi : tensorsOf(flrwMetric(p.a0!, p.t0!, p.n!, p.k!, 1), x);
-    const c2 = p.c! * p.c!;
-    const t = {
-      christoffel: tSi.christoffel,
-      ricci: t1.ricci.map((row) => row.map((v) => v / c2)),
-      ricciBound: t1.ricciBound.map((row) => row.map((v) => v / c2)),
-      ricciScalar: t1.ricciScalar / c2,
-      ricciScalarBound: t1.ricciScalarBound / c2,
-      kretschmann: t1.kretschmann / (c2 * c2),
-      kretschmannBound: t1.kretschmannBound / (c2 * c2),
-    };
+    const c = p.c!;
+    const nt = (i: number, j: number) => (i === 0 ? 1 : 0) + (j === 0 ? 1 : 0);
+    const restore = (m: number[][], pow: (i: number, j: number) => number) =>
+      m.map((row, i) => row.map((v, j) => v * c ** pow(i, j)));
+    let t: Tensors;
+    if (c === 1) {
+      t = tSi;
+    } else if (p.k === 0) {
+      const t1 = tensorsOf(flrwMetric(p.a0!, p.t0!, p.n!, 0, 1), x);
+      const pow = (i: number, j: number) => nt(i, j) - 2;
+      t = {
+        christoffel: tSi.christoffel,
+        ricci: restore(t1.ricci, pow),
+        ricciBound: restore(t1.ricciBound, pow),
+        ricciScalar: t1.ricciScalar / (c * c),
+        ricciScalarBound: t1.ricciScalarBound / (c * c),
+        kretschmann: t1.kretschmann / c ** 4,
+        kretschmannBound: t1.kretschmannBound / c ** 4,
+      };
+    } else {
+      const tT = tensorsOf(flrwMetricInT(p.a0!, p.t0!, p.n!, p.k!, c), [c * x[0], x[1], x[2], x[3]]);
+      t = { ...tT, christoffel: tSi.christoffel, ricci: restore(tT.ricci, nt), ricciBound: restore(tT.ricciBound, nt) };
+    }
     const R = flrwRicciScalar(p.t!, p.a0!, p.t0!, p.n!, p.k!, p.r!, p.c!);
     const sides = friedmannSides({
       t: p.t!,
@@ -504,9 +547,11 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
       'ds² = −c² dt² + a(t)² [dr²/(1−k r²) + r² dΩ²], a(t) = a0 (t/t0)^n.',
       'Friedmann: H² = 8πGρ/3 − k c²/a² + Λ c²/3. Flat dust defaults n = 2/3 and ρ = 3 H²/(8πG). CE-friedmann is the flat term; CE-friedmann-curvature carries −k c²/a².',
       'Ricci scalar closed form: R = 6/c² (ä/a + H² + k c²/a²). Flat dust: R = 3 H²/c².',
-      'Ricci and Kretschmann are finite-differenced at c = 1 and restored with 1/c² and 1/c⁴. Christoffel symbols are the SI difference.',
+      p.k === 0
+        ? 'Ricci and Kretschmann are finite-differenced at c = 1 and restored: R_tt × 1, R_ti × 1/c, R_ij × 1/c², R × 1/c², K × 1/c⁴. Christoffel symbols are the SI difference.'
+        : 'Ricci and Kretschmann are finite-differenced in T = c t: the scalars are invariants, and a Ricci component takes one factor c for each t index. Christoffel symbols are the SI difference.',
       ...notes,
-    ]));
+    ]), false);
   }
   const { values: p, notes: paramNotes } = metricParams(pairs, {
     M: M_SUN_SI,
@@ -543,7 +588,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     'Closed form: K = 48 M² (r² − a² cos²θ) [(r² + a² cos²θ)² − 16 r² a² cos²θ] / (r² + a² cos²θ)⁶.',
     'a = 0 reduces to the Schwarzschild Kretschmann 48 M²/r⁶.',
     'Geodesics (--geodesic) use the Carter constant. θ = π/2 is an equatorial circular orbit. Any other θ is an inclined spherical orbit with that polar turning point. ISCO and photon radii are closed forms in r/M.',
-  ]));
+  ]), true);
 }
 
 /**
@@ -551,35 +596,36 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
  * does not match it. A vacuum metric's finite-difference residual is not
  * listed as Ricci. A scale factor that does not solve Friedmann says so.
  */
-function stateCurvature(report: CurvatureReport): CurvatureReport {
+function stateCurvature(report: CurvatureReport, vacuum: boolean): CurvatureReport {
   const notes = [...report.notes];
   let ricci = report.ricci;
   let ricciScalar = report.ricciScalar;
-  let ricciScalarBound = report.ricciScalarBound;
-  let ricciScalarResolved = report.ricciScalarResolved;
   const exactR = report.closedForm.ricciScalar;
-  if (exactR === 0 && !report.ricciScalarResolved) {
+  // The order is part of the rule: a vacuum metric first, then a source with
+  // R = 0. A relative difference against a zero closed form is not a test.
+  if (vacuum && exactR === 0 && !report.ricciScalarResolved) {
     ricciScalar = 0;
     ricci = [];
     notes.push('Ricci is 0 for this vacuum metric. A finite-difference residual is not listed: it is within its error bound.');
-  } else if (exactR !== undefined && relDiff(report.ricciScalar, exactR, 1e-30) > 1e-2) {
-    ricciScalar = exactR;
-    // The closed form is not a difference, so the finite-difference bound does not apply to it.
-    ricciScalarBound = 0;
-    ricciScalarResolved = exactR !== 0;
-    ricci = [];
+  } else if (!vacuum && exactR === 0) {
+    ricciScalar = 0;
     notes.push(
-      'Ricci scalar is the closed form. The finite-difference scalar, restored from a c = 1 difference by 1/c², does not match it when spatial curvature is present, so those components are not listed.',
+      'R = 0 is the closed form: the source is trace-free (R = −κT), and the Ricci tensor is not zero. The components are listed from the finite difference.',
     );
   }
   const H2 = report.closedForm.H2;
   const rhs = report.closedForm.friedmannRhs;
   if (H2 !== undefined && rhs !== undefined && relDiff(H2, rhs, 1e-30) > 1e-6) {
     notes.push(
-      'H² and the Friedmann right-hand side differ, so this scale factor is not a solution of the Friedmann equation at the stated ρ, k and Λ. k is a curvature in 1/length²: k = 1 with c in m/s is a curvature radius of about a metre, not the dimensionless k = ±1 of geometrized cosmology.',
+      'H² and the Friedmann right-hand side differ, so this scale factor is not a solution of the Friedmann equation at the stated ρ, k and Λ.',
+    );
+    notes.push(
+      report.parameters.k !== 0
+        ? 'k is a curvature in 1/length²: k = 1 with c in m/s is a curvature radius of about a metre, not the dimensionless k = ±1 of geometrized cosmology.'
+        : 'With k = 0, the stated ρ and Λ do not give the H² of this scale factor (flat, Λ = 0: ρ = 3 H²/(8πG)).',
     );
   }
-  return { ...report, ricci, ricciScalar, ricciScalarBound, ricciScalarResolved, notes };
+  return { ...report, ricci, ricciScalar, notes };
 }
 
 function pack(

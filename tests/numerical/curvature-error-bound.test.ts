@@ -179,10 +179,11 @@ describe('curvatureReport bounds', () => {
     }
   });
 
-  it('FLRW with spatial curvature: the closed-form Ricci scalar does not carry the bound of the discarded difference', () => {
+  it('FLRW with spatial curvature: the difference in T = c t matches the closed form within its bound (#527)', () => {
+    // Before #527 the c = 1 difference dropped the k c²/a² term, and the report put the closed form in its place.
     const rep = curvatureReport('flrw', ['k=1', 't=2']);
-    expect(rep.ricciScalar).toBe(rep.closedForm.ricciScalar);
-    expect(rep.ricciScalarBound).toBe(0);
+    expect(rep.ricciScalarBound).toBeGreaterThan(0);
+    expect(Math.abs(rep.ricciScalar - rep.closedForm.ricciScalar!)).toBeLessThanOrEqual(rep.ricciScalarBound);
     expect(rep.ricciScalarResolved).toBe(true);
   });
 
