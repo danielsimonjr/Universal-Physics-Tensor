@@ -107,7 +107,7 @@ describe('MathTS agrees with UPT on delegated readings', () => {
   });
 });
 
-describe('Unit.readings agrees with the local splitter on °R and pc (closed by core 0.24.1 and 0.24.2)', () => {
+describe('Unit.readings agrees with the local splitter on °R, pc and the micro sign (closed by core 0.24.1 to 0.24.3)', () => {
   const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => f.name).join('·'));
 
   it('a glued token with °R has a reading (core 0.24.1)', () => {
@@ -118,6 +118,17 @@ describe('Unit.readings agrees with the local splitter on °R and pc (closed by 
   it('a glued token keeps a sub-kilo prefix on pc (core 0.24.2)', () => {
     expect(names('Hzpc')).toEqual(['H·zpc', 'Hz·pc']);
     expect(() => parseUnit('1/Hzpc')).toThrow(AmbiguousUnitError);
+  });
+
+  it('a micro sign is a prefix only, never the atomic mass unit u (core 0.24.3)', () => {
+    // Control: `umK` is ambiguous on both sides, because `u` is also the atomic mass unit.
+    expect(names('umK')).toContain('u·m·K');
+    expect(() => parseUnit('W/umK')).toThrow(AmbiguousUnitError);
+    for (const micro of ['µ', 'μ']) {
+      expect(names(`${micro}mK`).some((r) => r.startsWith('u·')), micro).toBe(false);
+      expect(() => Unit.parse(`5 ${micro}`), micro).toThrow();
+      expect(parseUnit(`W/${micro}mK`).scale, micro).toBe(1e6);
+    }
   });
 });
 
@@ -175,23 +186,6 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
           expect(() => Unit.parse(text)).not.toThrow();
           expect(() => parseUnit(text)).toThrow(UnitRefusedError);
         }
-      },
-    },
-    {
-      // `Unit.readings` cannot replace the local splitter.
-      // From core 0.24.1, MathTS spells the micro sign as `u` inside a reading.
-      // As a result, a lone `µ` or `μ` also reads as the atomic mass unit.
-      // Over 269,171 glued tokens, 24,011 gain an atomic mass reading.
-      // Every one of these 24,011 tokens contains `µ` or `μ`.
-      // No token loses a reading.
-      // Control: `umK` is ambiguous on both sides.
-      id: 'Unit.readings: a micro sign reads as the atomic mass unit u',
-      check: () => {
-        const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => f.name).join('·'));
-        expect(names('umK')).toContain('u·m·K');
-        expect(() => parseUnit('W/umK')).toThrow(AmbiguousUnitError);
-        expect(names('µmK')).toContain('u·m·K');
-        expect(parseUnit('W/µmK').scale).toBe(1e6);
       },
     },
     {

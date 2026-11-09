@@ -20,6 +20,11 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
+- [x] MathTS core 0.24.3: move the core range, and turn the micro-sign gap row into an agreement row (2026-11-09).
+  Done: core 0.24.3 reads `µ` and `μ` as a prefix only, and `Unit.parse('5 µ')` throws. No UPT test read `µ` as the atomic mass unit.
+- [ ] Add the 2022 SI prefixes q, r, R and Q to `data/units.json` (2026-11-09), and report each new ambiguity.
+- [ ] Rerun the M6 comparison with all 24 SI prefixes plus `µ` and `μ`, in both directions (2026-11-09). Delete the local split only when 0 tokens differ.
+
 - [x] MathTS core 0.24.2: rerun the M6 comparison of `Unit.readings` against the local splitter (2026-11-08). Core 0.24.1 reads `°R` inside a glued token, and core 0.24.2 gives every prefix to `readings`. Delete the local split only when 0 tokens differ.
   Done, negative result: the splitter stays. The `°R` and `pc` classes agree now (0 of 25,703 tokens differ). With every SI prefix, 24,011 of 269,171 tokens differ: `Unit.readings` reads `µ` and `μ` as the unit `u`. A gap row in `tests/dimensional/mathts-unit-gaps.test.ts` pins it. The numbers are in `NOTES.md`, 2026-11-08.
 - [x] `tools/plan-doc-audit` counts a whole-word match in a comment or a string as a shipped symbol (2026-11-08): a row that backticks `master` reads as complete.
