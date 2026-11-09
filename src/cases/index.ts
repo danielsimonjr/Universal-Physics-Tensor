@@ -6,7 +6,7 @@
 import { appliedCaseCatalog } from './catalog.js';
 import { APPLIED_CASE_RUNNERS } from './methods.js';
 import type { AppliedCase, CaseResult } from './types.js';
-import { checkInputs, inputContract, type InputContract } from '../bridges/input-contract.js';
+import { checkInputs, parameterContract, type InputContract } from '../bridges/input-contract.js';
 
 export type { AppliedCase, CaseCheck, CaseComparison, CaseExample, CaseOutput, CaseResult } from './types.js';
 
@@ -21,17 +21,7 @@ export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = APPLIED_CASE_RUNN
  * key and converted from its alternates, required unless the parameter is optional.
  */
 function caseContract(c: AppliedCase): InputContract {
-  return inputContract(
-    c.id,
-    c.parameters.map((p) => ({
-      key: p.key,
-      spellings: [p.key],
-      alternates: (p.alternates ?? []).map((alt) => ({ key: alt.key, toKey: alt.toKey })),
-      optional: p.optional === true,
-      readBy: 'value' as const,
-      listed: true,
-    })),
-  );
+  return parameterContract(c.id, c.parameters);
 }
 
 /** Case id → its input contract, built once at load (a contract that spells one key twice fails here). @internal */

@@ -238,7 +238,7 @@ describe('--record, --replay and --show-record end to end', () => {
 
   it('a recorded failure is a record too, and its replay reproduces the failure', async () => {
     const f = join(tmp, 'failure.jsonl');
-    const bad = await run([`--record=${f}`, 'evaluate', 'be-16', 'T_K=300']);
+    const bad = await run([`--record=${f}`, 'evaluate', 'be-16', 'Tc_K=300']);
     expect(bad.code).toBe(1);
     const replayed = await run([`--replay=${f}`]);
     expect(replayed.out).toMatch(/reproduced — exit 1/);

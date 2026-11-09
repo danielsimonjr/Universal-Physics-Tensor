@@ -178,7 +178,7 @@ describe('BRIDGE_EVALUATORS', () => {
       T_L_K: 400, T_0_K: 300, c_J_per_kg_K: 4180, V_m3: 1e-3, t_s: 10,
       theta_difference_K: 20, r: 8, gamma: 1.4, dv_dT_m3_per_kg_K: 1e-6,
       v_m3_per_kg: 1e-3, nu_Hz: 1e14, wien_x: 4.965114231744276, nQ_per_m3: 1e32,
-      I_J: 2.18e-18, phi_J: 4e-19, L12: 3,
+      I_J: 2.18e-18, phi_J: 4e-19, L12: 3, R_near_m: 6.957e8, R_far_m: 1.496e11,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

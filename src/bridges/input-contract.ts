@@ -27,6 +27,8 @@ import {
   NonFiniteInputError,
   UnknownInputError,
 } from './evaluation-errors.js';
+import { foldName } from '../dimensional/quantity-registry.js';
+import { synonymDisagreement, synonymGroup } from '../dimensional/formula-names.js';
 
 /** A second key that converts into a slot's key by a factor. @public */
 export interface ContractAlternate {
@@ -80,8 +82,91 @@ function spellingIndex(contract: InputContract): SpellingIndex {
   };
   for (const slot of contract.slots) for (const spelling of slot.spellings) bind(spelling, slot, 1);
   for (const slot of contract.slots) for (const alt of slot.alternates) bind(alt.key, slot, alt.toKey);
+  // A synonym of a spelling binds the same slot. If two slots claim a synonym, the synonym binds neither slot.
+  const candidates = new Map<string, Set<InputSlot>>();
+  const claim = (spelling: string, slot: InputSlot): void => {
+    if (index.has(spelling)) return;
+    const slots = candidates.get(spelling) ?? new Set<InputSlot>();
+    slots.add(slot);
+    candidates.set(spelling, slots);
+  };
+  for (const slot of contract.slots) {
+    for (const spelling of slot.spellings) {
+      for (const member of synonymGroup(spelling) ?? []) {
+        claim(member, slot);
+        const folded = foldName(member);
+        if (folded !== member) claim(folded, slot);
+      }
+    }
+  }
+  for (const [spelling, slots] of candidates) {
+    if (slots.size === 1) bind(spelling, [...slots][0]!, 1);
+  }
   INDEX.set(contract, index);
   return index;
+}
+
+/**
+ * `key` binds a slot in `contract`. The function returns the slot and the
+ * factor for the key of the slot. A key is a spelling, an alternate, or a
+ * synonym of a spelling. The function returns `undefined` when `key` binds no
+ * slot. `checkInputs` and `upt evaluate` use the same lookup.
+ * @internal
+ */
+export function slotForSpelling(
+  contract: InputContract,
+  key: string,
+): { readonly slot: InputSlot; readonly factor: number } | undefined {
+  return spellingIndex(contract).get(key);
+}
+
+/**
+ * Decide a second key on a slot that an earlier key already bound.
+ * Two spellings of one synonym group with one number bind once (`'skip'`).
+ *
+ * @throws SynonymDisagreementError two spellings of one synonym group with different numbers.
+ * @throws DuplicateInputError any other second key on the slot.
+ * @internal
+ */
+export function repeatedInput(
+  id: string | undefined,
+  slotKey: string,
+  earlier: { readonly key: string; readonly value: number },
+  key: string,
+  value: number,
+): 'skip' {
+  const group = synonymGroup(key);
+  const sameGroup = group !== undefined && earlier.key !== key && synonymGroup(earlier.key) === group;
+  if (!sameGroup) throw new DuplicateInputError(id, slotKey, [earlier.key, key]);
+  if (earlier.value === value) return 'skip';
+  throw synonymDisagreement([earlier.key, key], { [earlier.key]: earlier.value, [key]: value })!;
+}
+
+/** One declared parameter as a plain contract reads it: its key and its alternates. @internal */
+interface ContractParameter {
+  readonly key: string;
+  readonly alternates?: readonly ContractAlternate[];
+  readonly optional?: boolean;
+}
+
+/**
+ * A contract of one listed slot per parameter. The key spells the slot, and
+ * so do the synonyms of the key. An alternate converts onto the key. A slot
+ * is required unless its parameter is optional.
+ * @internal
+ */
+export function parameterContract(id: string, parameters: readonly ContractParameter[]): InputContract {
+  return inputContract(
+    id,
+    parameters.map((p) => ({
+      key: p.key,
+      spellings: [p.key],
+      alternates: (p.alternates ?? []).map((alt) => ({ key: alt.key, toKey: alt.toKey })),
+      optional: p.optional === true,
+      readBy: 'value' as const,
+      listed: true,
+    })),
+  );
 }
 
 /**
@@ -122,7 +207,10 @@ export function checkInputs(
     if (typeof value !== 'number') throw new InputTypeError(contract.id, key, typeof value);
     if (!Number.isFinite(value)) throw new NonFiniteInputError(contract.id, key, value);
     const earlier = givenAs.get(found.slot.key);
-    if (earlier !== undefined) throw new DuplicateInputError(contract.id, found.slot.key, [earlier, key]);
+    if (earlier !== undefined) {
+      repeatedInput(contract.id, found.slot.key, { key: earlier, value: out[found.slot.key]! }, key, value * found.factor);
+      continue;
+    }
     givenAs.set(found.slot.key, key);
     out[found.slot.key] = value * found.factor;
   }
