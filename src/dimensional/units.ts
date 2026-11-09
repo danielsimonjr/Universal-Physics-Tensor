@@ -45,6 +45,7 @@
  * @module dimensional/units
  */
 import { Unit, exactScaleToNumber } from '@danielsimonjr/mathts-core';
+import { compareCodepoint } from '../core/compare.js';
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
 import {
@@ -106,10 +107,20 @@ export class UnitRefusedError extends UnitError {
   }
 }
 
-/** A unit expression with more than one dimensionally distinct reading. @public */
+/**
+ * A unit expression has more than one reading. The readings have different
+ * dimensions. The error keeps the readings in codepoint order. As a result,
+ * the message does not change when a producer lists the readings in a
+ * different order.
+ * @public
+ */
 export class AmbiguousUnitError extends UnitError {
-  constructor(readonly text: string, readonly readings: readonly string[]) {
-    super(`'${text}' is ambiguous: ${readings.join(' or ')}`);
+  readonly readings: readonly string[];
+
+  constructor(readonly text: string, readings: readonly string[]) {
+    const sorted = [...readings].sort(compareCodepoint);
+    super(`'${text}' is ambiguous: ${sorted.join(' or ')}`);
+    this.readings = sorted;
     this.name = 'AmbiguousUnitError';
   }
 }
