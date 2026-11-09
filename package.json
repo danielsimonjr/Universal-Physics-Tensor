@@ -27,7 +27,8 @@
       "types": "./dist/atlas/index.d.ts",
       "import": "./dist/atlas/index.js",
       "default": "./dist/atlas/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "prepare": "git config core.hooksPath .githooks || exit 0",

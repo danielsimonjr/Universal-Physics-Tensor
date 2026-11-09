@@ -11,6 +11,12 @@ from v0.1.0 onward.
 ### Fixed
 
 - **`upt search` finds an evaluator input, a possessive name, and refuses a stray letter in a phrase (#536, #539, #546).** `upt search "coulomb logarithm"` names be-116 (`words in: inputs`): the meaning of each evaluator input is now a search field, one field per input, and a clause that opens with "not" is dropped, so `upt search "landau diamagnetism"` still matches nothing. `upt search "young modulus"` and `upt search "young's modulus"` name `youngs-modulus`: in a phrase a field word matches the query word or its possessive form, and a query `'s` joins its word. `upt search f-number` no longer names `flavor-number`, and `upt search "v number"` no longer names be-156: in a phrase a word of one or two letters matches only a symbol, an alias or an id segment exactly, as it already did alone, or as a whole segment of a quantity name (`truncation coefficient a` still names `truncation-coefficient-a`). Before, the phrase matcher compared it with every word of every field, so `f` matched the `f` of `N_f` and `v` the `V` of `V/A`.
+- **be-132 refuses an outer radius that is not above the inner radius (issue 553).** The domain was `a > 0, b > 0, a ≠ b`, so `upt evaluate be-132 eps_F_per_m=8.854e-12 a_m=5mm b_m=1mm` exited 0 with a negative capacitance per length: `ln(b/a)` is negative for `b < a`. The domain is now `a > 0, b > a, ε ≠ 0`, and that command exits 1 with `b_m = 0.001, a_m = 0.005 violate b_m > a_m`. Why: `a` and `b` are named the inner and the outer radius, and `C' = 2 π ε / ln(b/a)` is a capacitance per length of that geometry only for `b > a`.
+- **`require('universal-physics-tensor/package.json')` resolves (issue 556).** `exports` maps `./package.json` to the file. Before, Node refused the subpath with `ERR_PACKAGE_PATH_NOT_EXPORTED`, though the file is in the tarball. `scripts/package-smoke.mjs` now fails when that entry is missing.
+
+### Added
+
+- **A CLI test pins issue 550.** `upt evaluate be-161 … theta_difference_K=10degC` gives θ(0) = 10, the same as `10K` and a bare `10`, and the conversion line says a difference with no offset. The library reader already had a pin (`tests/dimensional/unit-closure.test.ts`); the new test runs the command of the issue.
 
 ### Changed
 
