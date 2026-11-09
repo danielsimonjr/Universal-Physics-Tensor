@@ -101,7 +101,10 @@ export {
 } from './bridges/evaluation-errors.js';
 export type { EvaluatorSpec, EvaluatorParameter } from './bridges/evaluators.js';
 export { resolveEvaluatorInputs } from './bridges/evaluator-inputs.js';
-export { APPLIED_CASES, CASE_CONTRACTS, runAppliedCase } from './cases/index.js';
+export { APPLIED_CASES, runAppliedCase } from './cases/index.js';
+/** The input contract of each applied case, which `upt evaluate` reads for a case. */
+export { CASE_CONTRACTS } from './cases/index.js';
+/** The one lookup of the slot that a key binds in an input contract. */
 export { slotForSpelling } from './bridges/input-contract.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
 /** The unit reader's conversion, its refusal and the rows of the unit table. */
