@@ -98,7 +98,7 @@
     "formalRef": {
       "system": "lean4-physjs",
       "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
-      "version": "upt-lean@v12.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+      "version": "upt-lean@v13.0.0 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
       "axioms": [
         "propext",
         "Classical.choice",
@@ -106,7 +106,7 @@
       ],
       "fidelity": "sanity-lemmas",
       "kind": "bridge",
-      "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v12.0.0/lean/OscillatorDictionary.lean",
+      "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v13.0.0/lean/OscillatorDictionary.lean",
       "covers": "the oscillator dictionary — covers its statement only"
     },
     "formalRefCovers": "the oscillator dictionary — covers its statement only",
@@ -122,7 +122,7 @@
           "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
           "fidelity": "sanity-lemmas",
           "kind": "bridge",
-          "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v12.0.0/lean/OscillatorDictionary.lean"
+          "url": "https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/v13.0.0/lean/OscillatorDictionary.lean"
         },
         "text": "formal reference lean4-physjs, fidelity sanity-lemmas — covers its statement only"
       },
