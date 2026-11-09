@@ -27,6 +27,7 @@
           "kind": { "enum": ["absolute", "interval"], "description": "The QuantityKind of a temperature-like quantity." },
           "aliases": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
           "signRole": { "enum": ["charge", "mobility"], "description": "The SignRole of a signed quantity." },
+          "agreesWith": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 }, "description": "Generic quantities of which this row is a specialization. A binding of a generic quantity does not bind this row. When a caller binds both, the two numbers must agree." },
           "graphNode": { "type": "boolean" }
         }
       }

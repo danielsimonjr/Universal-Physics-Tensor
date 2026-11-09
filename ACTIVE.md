@@ -21,7 +21,7 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 ## Open tasks, easiest first
 
 - [x] Issues 543, 544 and 528: one spelling table for `upt evaluate` and `evaluateRelation` (a temperature synonym binds the slot on both surfaces), `upt explain` names the inputs a derivation did not use, and be-37 gets an evaluator row so the CLI evaluates the radial Shapiro delay.
-  Done. `frequency` and `photon-frequency` stay two quantities (a generic quantity and its specialization), so a different number under each is not refused. be-37 keeps the radial relation; a delay that depends on the impact parameter is a new relation and is not added.
+  Done. `photon-frequency` declares `agreesWith: [frequency]`: when both are bound, the two numbers must agree (exit 1 on a disagreement), and `frequency` alone still does not bind `photon-frequency` (#473, #494). be-37 keeps the radial relation and refuses `b_m` with a message that names `evaluateCovariantEikonalNumerical`.
 - [x] Fix #536, #539 and #546: `upt search "coulomb logarithm"` misses be-116, `upt search "young modulus"` misses `youngs-modulus`, and `upt search f-number` and `upt search "v number"` name `flavor-number` and the Biot number.
   Done: an evaluator input's meaning is a search field (`inputs`), one field per input, with a denying clause dropped. In a phrase a field word matches its possessive form (`youngs` is `young`), and `young's` is the query word `youngs`. In a phrase a word of one or two letters matches only as a symbol, an alias or an id segment. `upt search "landau diamagnetism"` still matches nothing.
 

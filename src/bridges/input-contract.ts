@@ -56,6 +56,8 @@ export type EvaluationWant = 'value' | 'all';
 export interface InputContract {
   readonly id: string;
   readonly slots: readonly InputSlot[];
+  /** A refused key → the API that reads the key. The refusal names the API. */
+  readonly elsewhere?: Readonly<Record<string, string>>;
 }
 
 /** Spelling → the slot it binds and the factor onto the slot's key. */
@@ -176,8 +178,12 @@ export function parameterContract(id: string, parameters: readonly ContractParam
  * @throws Error when a spelling or an alternate names two slots.
  * @public
  */
-export function inputContract(id: string, slots: readonly InputSlot[]): InputContract {
-  const contract: InputContract = { id, slots };
+export function inputContract(
+  id: string,
+  slots: readonly InputSlot[],
+  elsewhere?: Readonly<Record<string, string>>,
+): InputContract {
+  const contract: InputContract = elsewhere === undefined ? { id, slots } : { id, slots, elsewhere };
   spellingIndex(contract);
   return contract;
 }
@@ -203,7 +209,7 @@ export function checkInputs(
   const givenAs = new Map<string, string>();
   for (const [key, value] of Object.entries(bindings)) {
     const found = bySpelling.get(key);
-    if (found === undefined) throw new UnknownInputError(contract.id, key, listed);
+    if (found === undefined) throw new UnknownInputError(contract.id, key, listed, contract.elsewhere?.[key]);
     if (typeof value !== 'number') throw new InputTypeError(contract.id, key, typeof value);
     if (!Number.isFinite(value)) throw new NonFiniteInputError(contract.id, key, value);
     const earlier = givenAs.get(found.slot.key);

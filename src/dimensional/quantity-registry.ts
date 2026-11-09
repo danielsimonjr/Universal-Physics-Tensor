@@ -26,6 +26,8 @@ export interface QuantityRecord {
   readonly kind?: QuantityKind;
   readonly aliases?: readonly string[];
   readonly signRole?: SignRole;
+  /** Generic quantities that must carry the same number when a caller binds both. */
+  readonly agreesWith?: readonly string[];
   readonly graphNode: boolean;
 }
 

@@ -93,7 +93,7 @@ export function resolveEvaluatorInputs(
     const [key, raw] = splitArg(arg);
     const slot = slotForSpelling(contract, key)?.slot;
     const p = slot === undefined ? undefined : parameters.find((candidate) => candidate.key === slot.key);
-    if (p === undefined) throw new UnknownInputError(id, key, known);
+    if (p === undefined) throw new UnknownInputError(id, key, known, contract.elsewhere?.[key]);
     const earlier = resolved.find((r) => r.key === p.key);
     const role = temperatureQuantityRole(p.quantity) === 'difference' ? 'difference' : temperatureQuantityRole(key);
     const c = convert(p, raw, role, siblings, key);

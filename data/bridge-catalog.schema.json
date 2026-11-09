@@ -817,6 +817,20 @@
               }
             }
           },
+          "refusedInputs": {
+            "description": "Keys that this evaluator refuses, each with the API that reads that key. The refusal message names the API.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["key", "use"],
+              "additionalProperties": false,
+              "properties": {
+                "key": { "type": "string", "minLength": 1 },
+                "use": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
           "outputs": {
             "type": "array",
             "items": {

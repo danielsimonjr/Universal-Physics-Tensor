@@ -10962,6 +10962,12 @@
           "unit": "m",
           "meaning": "outer radial distance of the same radial ray, ≥ R_near"
         }
+      ],
+      "refusedInputs": [
+        {
+          "key": "b_m",
+          "use": "evaluateCovariantEikonalNumerical (input b_m) for the delay of a ray with an impact parameter"
+        }
       ]
     },
     {
