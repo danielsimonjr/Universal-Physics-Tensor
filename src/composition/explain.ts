@@ -516,9 +516,17 @@ export function explainQuantity(
           merged !== undefined &&
           encodedMatchesMonomial(edges, target, leaves, merged, identifications);
         if (!sum && !missingCount && merged !== undefined && agrees) {
+          // A bound group factor (gamma in √(γp/ρ)) is not a graph quantity, so
+          // the agreement check above does not see it. Add it to the printed
+          // monomial only after that check.
+          const printed = { ...merged };
+          const group = CANONICAL_GROUP_PREFACTORS.find(
+            (p) => p.id === e?.id && values !== null && Number.isFinite(values[p.group]),
+          );
+          if (group !== undefined) printed[group.group] = group.exponent;
           dimensionalForm = {
-            monomial: merged,
-            formula: `${target} ∝ ${formatMonomial(merged, new Set(e?.evenInputs ?? []))}`,
+            monomial: printed,
+            formula: `${target} ∝ ${formatMonomial(printed, new Set(e?.evenInputs ?? []))}`,
           };
         }
       }

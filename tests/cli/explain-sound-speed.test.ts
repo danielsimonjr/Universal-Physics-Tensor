@@ -60,6 +60,33 @@ describe('sound-speed explain uses CE-sound-speed', () => {
     expect(body).not.toContain('sets the dimensionless constant to 1');
   });
 
+  it('the derivation line names gamma when gamma supplies the factor (#538)', async () => {
+    const args = ['explain', 'sound-speed', 'pressure=101325Pa', 'density=1.204kg/m3', 'gamma=1.4', '--source=canonical'];
+    const cap = capture();
+    expect(await runCli([...args, '--json'], cap.io)).toBe(0);
+    const d = JSON.parse(allText(cap)).result.derivations[0];
+    expect(d.dimensionalForm).toBeDefined();
+    const m = d.dimensionalForm.monomial;
+    expect(m.gamma).toBe(0.5);
+    expect(Math.pow(1.4, m.gamma) * Math.pow(101325, m.pressure) * Math.pow(1.204, m.density)).toBeCloseTo(d.value, 9);
+    const text = capture();
+    expect(await runCli(args, text.io)).toBe(0);
+    const lines = allText(text).split('\n');
+    const at = lines.findIndex((line) => /- CE-sound-speed/.test(line));
+    expect(at).toBeGreaterThanOrEqual(0);
+    expect(lines.slice(at, at + 4).join('\n')).toMatch(/gamma\^0\.5/);
+  });
+
+  it('an unbound gamma is not in the derivation formula (#538)', async () => {
+    const cap = capture();
+    expect(
+      await runCli(['explain', 'sound-speed', 'pressure=1e5', 'density=1.2', '--source=canonical', '--json'], cap.io),
+    ).toBe(0);
+    const d = JSON.parse(allText(cap)).result.derivations[0];
+    expect(d.dimensionalForm?.monomial?.gamma).toBeUndefined();
+    expect(d.dimensionalForm?.formula ?? '').not.toMatch(/gamma/);
+  });
+
   it('explain speed with pressure and density does not use the sound-speed equation', async () => {
     const cap = capture();
     expect(
