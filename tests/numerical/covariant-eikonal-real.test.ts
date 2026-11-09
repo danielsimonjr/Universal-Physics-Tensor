@@ -25,8 +25,7 @@
  * Mars as R_far, Earth as R_near, and asserts the geometrically-consistent
  * magnitude bracket [1e-7, 1e-4] (±2 OOM around the closed-form 4.15e-6).
  *
- * The tight ±2×10⁻³ cross-check against `evaluateShapiroDelay` is Task 11's
- * job (the `it.skip` reactivation in covariant-derivative-preview.test.ts).
+ * The 2e-6 cross-check against the weak-field form is in covariant-derivative-preview.test.ts.
  *
  * @see docs/planning/v0.5.0-Implementation-Plan.md Task 12
  */
