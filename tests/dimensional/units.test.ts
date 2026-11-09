@@ -30,6 +30,26 @@ describe('parseUnit', () => {
     expect(parseUnit('yr').scale).toBe(31557600);
   });
 
+  it('reads the four 2022 SI prefixes quecto, ronto, ronna and quetta at their exact powers', () => {
+    expect(parseUnit('Qm')).toMatchObject({ scale: 1e30, dim: { L: 1 } });
+    expect(parseUnit('qg')).toMatchObject({ scale: 1e-33, dim: { M: 1 } });
+    expect(parseUnit('Rg')).toMatchObject({ scale: 1e24, dim: { M: 1 } });
+    expect(parseUnit('rs')).toMatchObject({ scale: 1e-27, dim: { T: 1 } });
+    expect(convertValue('2 QW', 'W').value).toBe(2e30);
+    // The exact symbols that begin with r or R stay exact: rad, rpm, rayl, Rsun.
+    expect(parseUnit('rpm').scale).toBe(1 / 60);
+    expect(parseUnit('Rsun').dim).toMatchObject({ L: 1 });
+  });
+
+  it('a glued r or R after degR, sr, hr or Rsun is a second reading, so the token is ambiguous', () => {
+    // The SI lets a prefix attach to any unit, so `deg·Rm` (degree times ronnametre) is a reading.
+    // MathTS core 0.24.3 `Unit.readings` gives the same two readings for each token.
+    for (const [glued, spaced] of [['W/degRm', 'W/(degR*m)'], ['W/srm', 'W/(sr*m)'], ['W/hrm', 'W/(hr*m)'], ['W/Rsunm', 'W/(Rsun*m)']] as const) {
+      expect(() => parseUnit(glued), glued).toThrow(AmbiguousUnitError);
+      expect(() => parseUnit(spaced), spaced).not.toThrow();
+    }
+  });
+
   it('the farad is C/V: 10pF converts to 1e-11 F, and a pF is not a Fahrenheit', () => {
     expect(parseUnit('F').dim).toEqual(parseUnit('C/V').dim);
     expect(convertValue('10pF', 'F').value).toBeCloseTo(1e-11, 24);

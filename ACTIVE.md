@@ -22,7 +22,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 - [x] MathTS core 0.24.3: move the core range, and turn the micro-sign gap row into an agreement row (2026-11-09).
   Done: core 0.24.3 reads `µ` and `μ` as a prefix only, and `Unit.parse('5 µ')` throws. No UPT test read `µ` as the atomic mass unit.
-- [ ] Add the 2022 SI prefixes q, r, R and Q to `data/units.json` (2026-11-09), and report each new ambiguity.
+- [x] Add the 2022 SI prefixes q, r, R and Q to `data/units.json` (2026-11-09), and report each new ambiguity.
+  Done: `Qm` is 1e30 m, `qg` 1e-33 kg, `Rg` 1e24 kg. No prefixed spelling hides an exact symbol. Over 22,236 tokens (each symbol and each pair, bare and after `W/`), 330 change from one reading to ambiguous, in four classes: `degR`, `sr`, `hr` and `Rsun` before a glued unit. MathTS reads each class the same way. 64 more tokens that were already ambiguous gain a reading.
 - [ ] Rerun the M6 comparison with all 24 SI prefixes plus `µ` and `μ`, in both directions (2026-11-09). Delete the local split only when 0 tokens differ.
 
 - [x] MathTS core 0.24.2: rerun the M6 comparison of `Unit.readings` against the local splitter (2026-11-08). Core 0.24.1 reads `°R` inside a glued token, and core 0.24.2 gives every prefix to `readings`. Delete the local split only when 0 tokens differ.

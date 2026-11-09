@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Added
+
+- **The unit reader takes the four SI prefixes of 2022: quecto `q` (1e-30), ronto `r` (1e-27), ronna `R` (1e27) and quetta `Q` (1e30).** `Qm` is 1e30 m, `qg` is 1e-33 kg and `Rg` is 1e24 kg. MathTS core already reads them, so `data/units.json` was the only table that did not. No new prefixed spelling is also an exact symbol, so `rad`, `rpm`, `rayl`, `Rsun`, `Rearth` and `Rjup` read as before. Four glued classes gain a second reading and turn ambiguous: `degR`, `sr`, `hr` and `Rsun` before a unit that takes a prefix (`W/degRm` is `W/(degR·m)` or `W/(deg·Rm)`, `W/srm` is `W/(sr·m)` or `W/(s·rm)`). The SI lets any prefix attach to any unit, so the second reading is valid, and MathTS core 0.24.3 `Unit.readings` gives the same two. A separator (`W/(degR*m)`) reads once. Over 22,236 tokens (each table symbol and each pair, bare and after `W/`), 330 change from one reading to ambiguous, all in those four classes, and 64 that were already ambiguous gain a reading. No test or recorded value used one of those spellings.
+
 ### Fixed
 
 - **`bun run audit:plans` no longer counts a word in a comment or a string as a shipped symbol.** `checkSymbol` took every whole-word `git grep` match under `src/` as an implementation. The only symbol of a performance row was a branch name, `master`, which occurs in `src/` only in a URL string and in a covers sentence. The audit marked that row flip-eligible, and the `quality` job of PR 612 failed. A match now counts only on a line that declares the symbol: a function, class, interface, type, enum, namespace or variable declaration, or a class method with a body. `tests/tools/plan-doc-audit.test.ts` runs the row text against a fixture repository (it failed before the fix). Its control is a row that names a declared function, which stays eligible. A mutation that refuses every declaration fails the control. Why: a row that names its subject, not its deliverable, is open work.
