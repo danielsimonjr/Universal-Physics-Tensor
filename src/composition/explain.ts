@@ -309,8 +309,13 @@ function buildSummary(
   /** The identification that determines the target when no edge does. */
   viaIdentification: QuantityIdentification | undefined,
 ): string {
-  const known = knownNames.length
-    ? `{${knownNames.join(', ')}}`
+  // No derivation reads an unused input. The input is not a determinant, and the summary names it separately.
+  const derived = derivations.length > 0 && (id.verdict === 'exactly-determined' || id.verdict === 'over-determined');
+  const used = new Set(derivations.flatMap((d) => d.leafInputs));
+  const unused = derived ? knownNames.filter((name) => !used.has(name)) : [];
+  const determinants = knownNames.filter((name) => !unused.includes(name));
+  const known = determinants.length
+    ? `{${determinants.join(', ')}}`
     : '{} (no inputs)';
   const ids = derivations.map((d) => d.edge).join(', ');
   let s: string;
@@ -384,6 +389,8 @@ function buildSummary(
       break;
     }
   }
+
+  if (unused.length > 0) s += ` Given but not used: {${unused.join(', ')}}.`;
 
   if (dimensional?.determined && dimensional.monomial && formulaIsSum) {
     s += ` The encoded formula adds dimensionful terms, so it is not a proportionality.`;

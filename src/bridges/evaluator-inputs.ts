@@ -13,15 +13,11 @@
 import { splitAssignment } from '../core/assignment.js';
 import { formatQuantity } from '../core/format.js';
 import { affineReadingNote, unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
-import {
-  resolveQuantityName,
-  synonymGroup,
-  synonymDisagreement,
-  temperatureQuantityRole,
-} from '../dimensional/formula-names.js';
+import { temperatureQuantityRole } from '../dimensional/formula-names.js';
 import { readNamedBinding, type NamedBindingSibling } from '../numerical/binding-value.js';
 import type { EvaluatorParameter } from './evaluators.js';
-import { DuplicateInputError, UnknownInputError } from './evaluation-errors.js';
+import { UnknownInputError } from './evaluation-errors.js';
+import { parameterContract, repeatedInput, slotForSpelling, type InputContract } from './input-contract.js';
 
 /** One input as it was given and as the evaluator receives it. @internal */
 export interface ResolvedInput {
@@ -73,6 +69,8 @@ function convert(
 
 /**
  * Resolve `args` against `parameters`. `id` names the evaluated id in an input error.
+ * `contract` is the spelling table of the id, the same table `evaluateRelation`
+ * reads. Without it, a plain contract of the parameter keys is used.
  * @throws UnknownInputError on an unknown key.
  * @throws DuplicateInputError on an input given twice.
  * @throws UnitError on a unit that does not fit.
@@ -82,38 +80,28 @@ export function resolveEvaluatorInputs(
   parameters: readonly EvaluatorParameter[],
   args: readonly string[],
   id?: string,
+  contract: InputContract = parameterContract(id ?? '', parameters),
 ): { inputs: Record<string, number>; resolved: ResolvedInput[] } {
   const inputs: Record<string, number> = {};
   const resolved: ResolvedInput[] = [];
   const known = parameters.flatMap((p) => [p.key, ...(p.alternates ?? []).map((a) => a.key)]);
-  const parameterNames = new Set(parameters.map((p) => p.key));
   const siblings: NamedBindingSibling[] = args.map((arg) => {
     const [key, raw] = splitArg(arg);
     return { name: key, raw };
   });
   for (const arg of args) {
     const [key, raw] = splitArg(arg);
-    const direct = parameters.find((p) => p.key === key);
-    const viaAlt = parameters.find((p) => (p.alternates ?? []).some((a) => a.key === key));
-    const viaName = direct === undefined && viaAlt === undefined ? resolveQuantityName(key, parameterNames) : null;
-    const viaSynonym = viaName === null ? undefined : parameters.find((p) => p.key === viaName);
-    const p = direct ?? viaAlt ?? viaSynonym;
+    const slot = slotForSpelling(contract, key)?.slot;
+    const p = slot === undefined ? undefined : parameters.find((candidate) => candidate.key === slot.key);
     if (p === undefined) throw new UnknownInputError(id, key, known);
     const earlier = resolved.find((r) => r.key === p.key);
     const role = temperatureQuantityRole(p.quantity) === 'difference' ? 'difference' : temperatureQuantityRole(key);
     const c = convert(p, raw, role, siblings, key);
-    const alt = direct === undefined && viaAlt !== undefined ? p.alternates!.find((a) => a.key === key)! : undefined;
+    const alt = (p.alternates ?? []).find((a) => a.key === key);
     const value = alt === undefined ? c.value : c.value * alt.toKey;
     if (earlier !== undefined) {
-      const earlierName = earlier.via ?? earlier.key;
-      const group = synonymGroup(key);
-      const synonymRepeat =
-        group !== undefined && earlierName !== key && group.includes(earlierName) && group.includes(key);
-      if (synonymRepeat && earlier.value === value) continue;
-      if (synonymRepeat) {
-        throw synonymDisagreement([earlierName, key], { [earlierName]: earlier.value, [key]: value })!;
-      }
-      throw new DuplicateInputError(id, p.key, [earlierName, key]);
+      repeatedInput(id, p.key, { key: earlier.via ?? earlier.key, value: earlier.value }, key, value);
+      continue;
     }
     inputs[p.key] = value;
     resolved.push({
@@ -121,7 +109,7 @@ export function resolveEvaluatorInputs(
       value,
       unit: p.unit,
       given: raw,
-      ...(alt !== undefined || viaSynonym !== undefined ? { via: key } : {}),
+      ...(key !== p.key ? { via: key } : {}),
       ...(alt !== undefined
         ? { note: `${key}=${raw.trim()} is ${alt.meaning}; ${p.key} = ${alt.toKey} × ${show(c.value)} = ${show(value)} ${p.unit}` }
         : c.note === undefined

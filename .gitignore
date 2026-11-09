@@ -74,3 +74,6 @@ tools/**/dist
 
 # Lake build output for lean/ (CI-built, never committed)
 .lake/
+
+# Agent scratch inside a worktree
+scratch.tmp/

@@ -90,10 +90,10 @@ function evaluationFailure(api: CommandCtx['api'], e: unknown, label: string): u
 }
 
 /** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2); a key twice is refused. */
-function resolveInputs(api: CommandCtx['api'], label: string, parameters: readonly EvaluatorParameter[], args: readonly string[]) {
+function resolveInputs(api: CommandCtx['api'], label: string, spec: ContractedInputs, args: readonly string[]) {
   splitAssignments('evaluate', args, 'key=value (e.g. mu_e=2)');
   try {
-    return api.resolveEvaluatorInputs(parameters, args, label);
+    return api.resolveEvaluatorInputs(spec.parameters, args, label, spec.contract);
   } catch (e) {
     if (e instanceof api.UnitError || e instanceof api.SynonymDisagreementError) {
       throw new CliError(`upt evaluate: ${label}: ${e.message}`);
@@ -116,31 +116,31 @@ function describeParameter(p: EvaluatorParameter): string {
   );
 }
 
+/** The parameters of an evaluator or a case, and the spelling table that binds them. */
+interface ContractedInputs {
+  readonly parameters: readonly EvaluatorParameter[];
+  readonly contract: Parameters<CommandCtx['api']['slotForSpelling']>[0];
+}
+
 /**
- * The parameter a `--sigma` spelling names, through the same contract the inputs use
- * (`resolveEvaluatorInputs`): the key itself, a declared alternate (`diameter_m` for `a_m`,
- * whose σ is scaled by the alternate's `toKey`), or a synonym spelling of the key. `undefined`
- * when the spelling names none of them.
+ * The parameter a `--sigma` spelling names, through the contract the inputs use
+ * (`slotForSpelling`): the key, a declared alternate (`diameter_m` for `a_m`, whose σ is
+ * scaled by the alternate's `toKey`), or a synonym of a spelling. `undefined` when the
+ * spelling names no parameter.
  */
 function sigmaSlot(
   api: CommandCtx['api'],
-  parameters: readonly EvaluatorParameter[],
+  spec: ContractedInputs,
   given: string,
 ): { key: string; unit: string; factor: number } | undefined {
-  const direct = parameters.find((p) => p.key === given);
-  if (direct !== undefined) return { key: direct.key, unit: direct.unit, factor: 1 };
-  for (const p of parameters) {
-    const alt = (p.alternates ?? []).find((a) => a.key === given);
-    if (alt !== undefined) return { key: p.key, unit: p.unit, factor: alt.toKey };
-  }
-  const viaName = api.resolveQuantityName(given, new Set(parameters.map((p) => p.key)));
-  const synonym = viaName === null ? undefined : parameters.find((p) => p.key === viaName);
-  return synonym === undefined ? undefined : { key: synonym.key, unit: synonym.unit, factor: 1 };
+  const found = api.slotForSpelling(spec.contract, given);
+  const p = found === undefined ? undefined : spec.parameters.find((candidate) => candidate.key === found.slot.key);
+  return p === undefined ? undefined : { key: p.key, unit: p.unit, factor: found!.factor };
 }
 
 function parseUncertainty(
   api: CommandCtx['api'],
-  spec: { readonly parameters: readonly EvaluatorParameter[] },
+  spec: ContractedInputs,
   sigmaArgs: readonly string[],
   corrArgs: readonly string[],
   inputs: Readonly<Record<string, number>>,
@@ -151,7 +151,7 @@ function parseUncertainty(
     const m = /^([^=]+)=(.+)$/.exec(a);
     const given = m?.[1];
     // The same spellings the inputs take: the key, a declared alternate, or a synonym.
-    const slot = given === undefined ? undefined : sigmaSlot(api, spec.parameters, given);
+    const slot = given === undefined ? undefined : sigmaSlot(api, spec, given);
     const key = slot?.key;
     if (m !== null && (key === undefined || !(key in inputs))) {
       throw new CliError(`upt evaluate: --sigma '${given}' is not one of the inputs given (${Object.keys(inputs).join(', ')})`);
@@ -208,7 +208,7 @@ interface Uncertainty {
 
 function uncertaintyOf(
   ctx: CommandCtx,
-  spec: { readonly parameters: readonly EvaluatorParameter[] },
+  spec: ContractedInputs,
   inputs: Readonly<Record<string, number>>,
   f: (inputs: Record<string, number>) => Record<string, unknown>,
   notIncluded: string,
@@ -283,17 +283,24 @@ function printInputs(fmt: Fmt, out: CommandCtx['out'], parameters: readonly Eval
 const withUnit = (fmt: Fmt, v: number | null, unit: string): string =>
   v === null ? 'undefined here (its premise fails, or it needs an optional input not given)' : `${fmt(v)}${unit === '' ? '' : ` ${unit}`}`;
 
+/** A case's parameters with the contract `runAppliedCase` checks them against. */
+function caseInputs(api: CommandCtx['api'], c: AppliedCase): ContractedInputs {
+  const contract = api.CASE_CONTRACTS.get(c.id);
+  if (contract === undefined) throw new CliError(`upt evaluate: no contract for case '${c.id}'`);
+  return { parameters: c.parameters, contract };
+}
+
 /** A violated regime check is a check that ran and failed: exit 3. */
 async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[]): Promise<number> {
   const { args, api, out } = ctx;
-  const { inputs, resolved } = resolveInputs(api, c.id, c.parameters, rest);
+  const { inputs, resolved } = resolveInputs(api, c.id, caseInputs(api, c), rest);
   let result: CaseResult;
   try {
     result = api.runAppliedCase(c.id, inputs);
   } catch (e) {
     throw evaluationFailure(api, e, c.id);
   }
-  const u = uncertaintyOf(ctx, c, inputs, (i) => ({ ...api.runAppliedCase(c.id, i).outputs }), CASE_NOT_INCLUDED);
+  const u = uncertaintyOf(ctx, caseInputs(api, c), inputs, (i) => ({ ...api.runAppliedCase(c.id, i).outputs }), CASE_NOT_INCLUDED);
   const failed = result.checks.filter((k) => !k.holds).map((k) => k.id);
   const code = failed.length === 0 ? 0 : 3;
   const regimeLine = c.regimeAt?.(inputs, result.outputs) ?? '';
@@ -447,7 +454,7 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
   }
   const spec = found.evaluator;
   const key = api.catalogEdgeKey(spec.bridgeId);
-  const { inputs, resolved } = resolveInputs(api, key, spec.parameters, rest);
+  const { inputs, resolved } = resolveInputs(api, key, spec, rest);
 
   // The one evaluation, the library's result builder: `run` checks the inputs (missing, unknown,
   // type) before the domain, and the result carries the output's name, unit, meaning and extras.

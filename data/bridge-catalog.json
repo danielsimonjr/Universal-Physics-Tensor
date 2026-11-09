@@ -10938,6 +10938,33 @@
       ]
     },
     {
+      "catalogId": 37,
+      "name": "Shapiro delay (radial ray)",
+      "parameters": [
+        {
+          "key": "M_kg",
+          "quantity": "mass",
+          "symbol": "M",
+          "unit": "kg",
+          "meaning": "mass of the central body, > 0"
+        },
+        {
+          "key": "R_near_m",
+          "quantity": "near-radius",
+          "symbol": "R_near",
+          "unit": "m",
+          "meaning": "inner radial distance of a radial ray from the centre, > 0; not a closest approach of a passing ray"
+        },
+        {
+          "key": "R_far_m",
+          "quantity": "far-radius",
+          "symbol": "R_far",
+          "unit": "m",
+          "meaning": "outer radial distance of the same radial ray, ≥ R_near"
+        }
+      ]
+    },
+    {
       "catalogId": 42,
       "name": "Hawking temperature",
       "parameters": [

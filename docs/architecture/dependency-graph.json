@@ -4,7 +4,7 @@
     "version": "13.0.0",
     "totalFiles": 388,
     "totalModules": 13,
-    "totalExports": 2821
+    "totalExports": 2826
   },
   "entryPoints": [
     {
@@ -5478,9 +5478,6 @@
           {
             "file": "../dimensional/formula-names.js",
             "imports": [
-              "resolveQuantityName",
-              "synonymGroup",
-              "synonymDisagreement",
               "temperatureQuantityRole"
             ]
           },
@@ -5501,8 +5498,16 @@
           {
             "file": "./evaluation-errors.js",
             "imports": [
-              "DuplicateInputError",
               "UnknownInputError"
+            ]
+          },
+          {
+            "file": "./input-contract.js",
+            "imports": [
+              "parameterContract",
+              "repeatedInput",
+              "slotForSpelling",
+              "InputContract"
             ]
           }
         ],
@@ -5854,9 +5859,25 @@
               "NonFiniteInputError",
               "UnknownInputError"
             ]
+          },
+          {
+            "file": "../dimensional/quantity-registry.js",
+            "imports": [
+              "foldName"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "synonymDisagreement",
+              "synonymGroup"
+            ]
           }
         ],
         "exports": [
+          "slotForSpelling",
+          "repeatedInput",
+          "parameterContract",
           "inputContract",
           "checkInputs"
         ],
@@ -5866,6 +5887,9 @@
           "InputContract"
         ],
         "functions": [
+          "slotForSpelling",
+          "repeatedInput",
+          "parameterContract",
           "inputContract",
           "checkInputs"
         ]
@@ -7516,7 +7540,7 @@
             "file": "../bridges/input-contract.js",
             "imports": [
               "checkInputs",
-              "inputContract",
+              "parameterContract",
               "InputContract"
             ]
           },
@@ -11378,7 +11402,15 @@
             "file": "./cases/index.js",
             "imports": [
               "APPLIED_CASES",
+              "CASE_CONTRACTS",
               "runAppliedCase"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/input-contract.js",
+            "imports": [
+              "slotForSpelling"
             ],
             "reExport": true
           },
@@ -12171,7 +12203,9 @@
           "UnknownInputError",
           "resolveEvaluatorInputs",
           "APPLIED_CASES",
+          "CASE_CONTRACTS",
           "runAppliedCase",
+          "slotForSpelling",
           "convertValue",
           "UnitError",
           "unitRows",
@@ -12443,7 +12477,9 @@
           "EvaluatorParameter",
           "resolveEvaluatorInputs",
           "APPLIED_CASES",
+          "CASE_CONTRACTS",
           "runAppliedCase",
+          "slotForSpelling",
           "AppliedCase",
           "CaseCheck",
           "CaseResult",
@@ -28262,15 +28298,15 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87609,
-    "totalExports": 2821,
+    "totalLinesOfCode": 87690,
+    "totalExports": 2826,
     "totalClasses": 86,
     "totalInterfaces": 518,
-    "totalFunctions": 925,
+    "totalFunctions": 928,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 413,
-    "totalReExports": 1392,
+    "totalReExports": 1394,
     "totalTypeOnlyImports": 532,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
