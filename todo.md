@@ -2998,3 +2998,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Security: not touched. `bun.lock` resolves one core, 0.24.4.
 - Maintainability: `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups before and after.
 - Left: the local splitter stays. `Unit.readings` reads `⁰`, `⁴` to `⁹` and superscript digit runs that the local grammar refuses (56,148 of 67,409 tokens).
+
+## 2026-11-09 — five-axis pass (superscript powers, M6 rerun)
+
+- Speed: `parseUnit` after the change, 2000 calls each: `W/m^4K` 373 µs, `W/m⁴K` 251 µs, `W/m2K` 664 µs per call; not measured before the change.
+- Stability: not changed; the rows are deterministic.
+- Reliability: `W/m⁴K` reads as `W/m^4K` (was `UnknownUnitError`). A mutation that caps the helper at `¹²³` fails 12 rows.
+- Security: not touched.
+- Maintainability: one helper replaces the `SUPERSCRIPT` table and two patterns. `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups before and after.
+- Left: the local splitter stays. Glued zeros, a superscript `⁺` and the order of ambiguous readings differ from `Unit.readings` (`NOTES.md`, 2026-11-09).

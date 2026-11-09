@@ -264,7 +264,8 @@ const SUPERSCRIPT_DIGITS = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 
 /**
  * The unit and the power of a token that ends in a superscript power.
- * The power is a run of superscript digits with an optional `⁻` or `⁺`, the same integers as a caret power.
+ * The power is a run of superscript digits with an optional `⁻` or `⁺`.
+ * The run gives the same integers as a caret power.
  *
  * @param token - One factor token, for example `m⁴` or `K⁻¹⁰`.
  * @returns The text before the power and the power, or null when the token has no unit before a superscript power.
