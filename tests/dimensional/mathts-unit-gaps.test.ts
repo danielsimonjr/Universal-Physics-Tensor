@@ -138,6 +138,18 @@ describe('Unit.readings agrees with the local splitter on °R, pc and the micro 
     expect(parseUnit('W/m^2K')).toEqual(parseUnit('W/(m^2*K)'));
     expect(parseUnit('W/m²K')).toEqual(parseUnit('W/(m^2*K)'));
   });
+
+  it('a superscript power above ³, ⁰ or a digit run reads on both sides (UPT grammar: a superscript reads the caret integers)', () => {
+    // This was a gap row: UPT read only ¹, ² and ³, and refused `W/m⁴K` with UnknownUnitError.
+    const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => `${f.name}^${f.power}`).join('·'));
+    expect(names('m⁴K')).toEqual(['m^4·K^1']);
+    expect(names('m⁰K')).toEqual(['m^0·K^1']);
+    expect(names('m¹⁰K')).toEqual(['m^10·K^1']);
+    for (const [glued, caret] of [['m⁴K', 'm^4K'], ['m⁰K', 'm^0K'], ['m¹⁰K', 'm^10K'], ['sK⁻⁴', 'sK^-4']] as const) {
+      expect(parseUnit(`W/${glued}`), glued).toEqual(parseUnit(`W/${caret}`));
+    }
+    expect(parseUnit('W/m⁴K')).toEqual(parseUnit('W/(m^4*K)'));
+  });
 });
 
 describe('MathTS gaps the UPT wrapper must keep', () => {
@@ -194,22 +206,6 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
           expect(() => Unit.parse(text)).not.toThrow();
           expect(() => parseUnit(text)).toThrow(UnitRefusedError);
         }
-      },
-    },
-    {
-      // `Unit.readings` cannot replace the local splitter.
-      // MathTS reads a superscript power that UPT refuses: ⁰ and ⁴ to ⁹, and a run of two or more digits.
-      // UPT reads only ¹, ² and ³, with an optional ⁻.
-      // 56,148 of 67,409 such tokens (`a⁴b`, `ab⁴`, `a⁰b`, `a¹⁰b`, `a⁻⁴b` and `a²b³` for every pair) have a MathTS reading and no local reading.
-      id: 'Unit.readings: a superscript power above ³, ⁰ or a digit run has a reading in MathTS, and UPT refuses it',
-      check: () => {
-        const names = (t: string) => Unit.readings(t).map((r) => r.map((f) => `${f.name}^${f.power}`).join('·'));
-        expect(names('m⁴K')).toEqual(['m^4·K^1']);
-        expect(names('m⁰K')).toEqual(['m^0·K^1']);
-        expect(names('m¹⁰K')).toEqual(['m^10·K^1']);
-        for (const glued of ['m⁴K', 'm⁰K', 'm¹⁰K', 'mK⁻⁴']) expect(() => parseUnit(`W/${glued}`), glued).toThrow(UnknownUnitError);
-        // Control: the caret spelling of the same power reads on both sides.
-        expect(parseUnit('W/m^4K')).toEqual(parseUnit('W/(m^4*K)'));
       },
     },
     {

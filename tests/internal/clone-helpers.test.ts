@@ -12,7 +12,7 @@ import type { NumericalInputs } from '../../src/numerical/types.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { allAtlasBridges, enumerateAtlasRoutes, findAtlasPath } from '../../src/atlas/path-bound.js';
 import { compareChainOrder } from '../../src/composition/chain-candidate.js';
-import { SUPERSCRIPT, sideTokens, splitPrefix } from '../../src/dimensional/unit-data.js';
+import { sideTokens, splitPrefix, superscriptPower } from '../../src/dimensional/unit-data.js';
 import { lower, metric, raise } from '../../src/dimensional/metric.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -151,7 +151,7 @@ describe('requireMetricClosures (numerical/lowering-utils.ts)', () => {
   });
 });
 
-describe('splitPrefix, SUPERSCRIPT and sideTokens (dimensional/unit-data.ts)', () => {
+describe('splitPrefix, superscriptPower and sideTokens (dimensional/unit-data.ts)', () => {
   it('reads the first prefix of the table that leaves a prefixable unit', () => {
     expect(splitPrefix('km')).toMatchObject({ prefix: 'k', base: 'm' });
     expect(splitPrefix('k')).toBeNull();
@@ -160,7 +160,7 @@ describe('splitPrefix, SUPERSCRIPT and sideTokens (dimensional/unit-data.ts)', (
 
   it('splits one side of a unit text into factor tokens', () => {
     expect(sideTokens('kg*m·s  A.V')).toEqual(['kg', 'm', 's', 'A', 'V']);
-    expect(SUPERSCRIPT['⁻²']).toBe(-2);
+    expect(superscriptPower('m⁻²')).toEqual({ base: 'm', exp: -2 });
   });
 
   it('is the one prefix scan: the four readers call it and keep their own exact-symbol answer', () => {
@@ -174,6 +174,7 @@ describe('splitPrefix, SUPERSCRIPT and sideTokens (dimensional/unit-data.ts)', (
     for (const [file, text] of [['delegation', delegation], ['wrapper', wrapper], ['units', units]] as const) {
       expect(text, file).not.toMatch(/startsWith\(p(refix)?\) \|\|/);
       expect(text, file).not.toContain("const SUPERSCRIPT");
+      expect(text, file).not.toMatch(/[¹²³]\]\)\$\//);
       expect(text, file).not.toContain('function sideTokens');
     }
   });

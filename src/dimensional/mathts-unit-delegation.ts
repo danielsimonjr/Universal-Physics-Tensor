@@ -16,7 +16,7 @@ import {
 import { symmetricRelDiff } from '../core/compare.js';
 import { equals, multiply, power } from './algebra.js';
 import { scaleToNumber, solidusSides, type ExactScale } from './exact-scale.js';
-import { SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix } from './unit-data.js';
+import { superscriptPower, UNIT_DATA, sideTokens, splitPrefix } from './unit-data.js';
 import type { Dimension } from './types.js';
 
 const DIMENSIONLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
@@ -44,8 +44,8 @@ export function tryOneFactorBase(token: string): string | null {
   const caret = /^(.+)\^([+-]?\d+)$/.exec(token);
   if (caret !== null) base = caret[1]!;
   else {
-    const uni = /^(.*?)(⁻?[¹²³])$/.exec(token);
-    if (uni !== null && SUPERSCRIPT[uni[2]!] !== undefined && uni[1]!.length > 0) base = uni[1]!;
+    const sup = superscriptPower(token);
+    if (sup !== null) base = sup.base;
     else {
       const glued = /^(.*?)([1-9]\d*)$/.exec(token);
       if (glued !== null && glued[1]!.length > 0 && trySymbol(glued[1]!) !== null) base = glued[1]!;

@@ -260,8 +260,23 @@ export function splitPrefix(
   return null;
 }
 
-/** The exponent of each superscript suffix that a unit factor can carry. @internal */
-export const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3, '⁻¹': -1, '⁻²': -2, '⁻³': -3 };
+const SUPERSCRIPT_DIGITS = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+
+/**
+ * The unit and the power of a token that ends in a superscript power.
+ * The power is a run of superscript digits with an optional `⁻` or `⁺`, the same integers as a caret power.
+ *
+ * @param token - One factor token, for example `m⁴` or `K⁻¹⁰`.
+ * @returns The text before the power and the power, or null when the token has no unit before a superscript power.
+ * @internal
+ */
+export function superscriptPower(token: string): { readonly base: string; readonly exp: number } | null {
+  const match = /^(.+?)([⁻⁺]?)([⁰¹²³⁴⁵⁶⁷⁸⁹]+)$/.exec(token);
+  if (match === null) return null;
+  let exp = 0;
+  for (const digit of match[3]!) exp = exp * 10 + SUPERSCRIPT_DIGITS.indexOf(digit);
+  return { base: match[1]!, exp: match[2] === '⁻' ? -exp : exp };
+}
 
 /**
  * The factor tokens of one side of a unit text.
