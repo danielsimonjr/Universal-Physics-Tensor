@@ -20,7 +20,8 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
-- [ ] Superscript powers: read every superscript integer (`⁰` to `⁹`, digit runs, `⁻` or `⁺`) as the caret reads it, with one helper for the three sites; then rerun the M6 comparison on every set, and replace `segmentations` with `Unit.readings` only when 0 tokens differ in both directions.
+- [x] Superscript powers: read every superscript integer (`⁰` to `⁹`, digit runs, `⁻` or `⁺`) as the caret reads it, with one helper for the three sites; then rerun the M6 comparison on every set, and replace `segmentations` with `Unit.readings` only when 0 tokens differ in both directions.
+  Done for the grammar. The swap is not made (negative result): the four M6 sets give 0 differing tokens in both directions, and a probe of other token classes gives 5 of 35 that differ. The tokens are in `NOTES.md`, 2026-11-09.
 - [x] MathTS core 0.24.4: move the core range, turn the caret gap row into an agreement row, and rerun the M6 comparison in both directions on every set, with superscripts beyond ³. Replace `segmentations` with `Unit.readings` only when 0 tokens differ.
   Done, negative result: the swap is not made. The base, caret and prefix sets give 0 differing tokens in both directions. Superscripts `⁰`, `⁴` to `⁹` and digit runs give 56,148 of 67,409 tokens with a MathTS reading and no local reading. A gap row pins the class. The numbers are in `NOTES.md`, 2026-11-09.
 - [x] MathTS core 0.24.3: move the core range, and turn the micro-sign gap row into an agreement row (2026-11-09).

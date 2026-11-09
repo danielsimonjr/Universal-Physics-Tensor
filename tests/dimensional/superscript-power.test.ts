@@ -3,8 +3,9 @@
  *
  * The caret reads any integer (`^([+-]?\d+)`), so a superscript run reads the same set:
  * the ten digits `⁰` to `⁹`, more than one digit, and an optional `⁻` or `⁺`.
- * Control: each row also reads the caret spelling, so a superscript that reads as a
- * different power fails the equality, and a refused superscript fails the parse.
+ * Control: each row also reads the caret spelling.
+ * A superscript that reads as a different power fails the equality.
+ * A refused superscript fails the parse.
  */
 import { describe, expect, it } from 'vitest';
 import { parseUnit, UnknownUnitError } from '../../src/dimensional/units.js';

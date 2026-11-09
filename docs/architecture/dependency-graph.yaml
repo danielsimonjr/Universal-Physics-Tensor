@@ -14557,7 +14557,7 @@ modules:
             - ExactScale
         - file: ./unit-data.js
           imports:
-            - SUPERSCRIPT
+            - superscriptPower
             - UNIT_DATA
             - sideTokens
             - splitPrefix
@@ -15155,9 +15155,9 @@ modules:
             - ExactScale
       exports:
         - UNIT_DATA
-        - SUPERSCRIPT
         - readUnitFile
         - splitPrefix
+        - superscriptPower
         - sideTokens
       interfaces:
         - UnitRow
@@ -15166,10 +15166,10 @@ modules:
       functions:
         - readUnitFile
         - splitPrefix
+        - superscriptPower
         - sideTokens
       constants:
         - UNIT_DATA
-        - SUPERSCRIPT
     src/dimensional/units.ts:
       description: "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`."
       externalDependencies:
@@ -15213,7 +15213,7 @@ modules:
             - uptRefusalReason
         - file: ./unit-data.js
           imports:
-            - SUPERSCRIPT
+            - superscriptPower
             - UNIT_DATA
             - sideTokens
             - splitPrefix
@@ -19577,14 +19577,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 388
   totalModules: 13
-  totalLinesOfCode: 87544
+  totalLinesOfCode: 87559
   totalExports: 2821
   totalClasses: 86
   totalInterfaces: 518
-  totalFunctions: 924
+  totalFunctions: 925
   totalTypeGuards: 16
   totalEnums: 0
-  totalConstants: 414
+  totalConstants: 413
   totalReExports: 1392
   totalTypeOnlyImports: 532
   runtimeCircularDeps: 0

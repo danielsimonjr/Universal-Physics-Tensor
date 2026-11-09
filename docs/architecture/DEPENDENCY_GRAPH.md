@@ -6027,7 +6027,7 @@ The codebase is organized into the following modules:
 | `../core/compare.js` | `symmetricRelDiff` | Import |
 | `./algebra.js` | `equals, multiply, power` | Import |
 | `./exact-scale.js` | `scaleToNumber, solidusSides, ExactScale` | Import |
-| `./unit-data.js` | `SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix` | Import |
+| `./unit-data.js` | `superscriptPower, UNIT_DATA, sideTokens, splitPrefix` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -6281,8 +6281,8 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `UnitRow`, `AffineRow`, `UnitTableData`
-- Functions: `readUnitFile`, `splitPrefix`, `sideTokens`
-- Constants: `UNIT_DATA`, `SUPERSCRIPT`
+- Functions: `readUnitFile`, `splitPrefix`, `superscriptPower`, `sideTokens`
+- Constants: `UNIT_DATA`
 
 ---
 
@@ -6301,7 +6301,7 @@ The codebase is organized into the following modules:
 | `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, solidusSides, UNIT_SCALE, ExactScale` | Import |
 | `./mathts-unit-delegation.js` | `mathtsParsedDimension, unitExactScaleViaMathts, unitParserViaMathts` | Import |
 | `./mathts-unit-wrapper.js` | `applyBitScaleOverride, tryMathtsA5Reading, uptRefusalReason` | Import |
-| `./unit-data.js` | `SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix, AffineRow` | Import |
+| `./unit-data.js` | `superscriptPower, UNIT_DATA, sideTokens, splitPrefix, AffineRow` | Import |
 
 **Exports:**
 - Classes: `UnitError`, `UnknownUnitError`, `UnitRefusedError`, `AmbiguousUnitError`
@@ -7735,12 +7735,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87544 |
+| Total Lines of Code | 87559 |
 | Total Exports | 2821 |
 | Total Re-exports | 1392 |
 | Total Classes | 86 |
 | Total Interfaces | 518 |
-| Total Functions | 924 |
+| Total Functions | 925 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 532 |

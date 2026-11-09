@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 388,
-    "totalTestFiles": 709,
+    "totalTestFiles": 710,
     "testedCount": 378,
     "directlyTestedCount": 345,
     "untestedCount": 10,
@@ -10122,6 +10122,7 @@
     ],
     "src/dimensional/unit-data.ts": [
       "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts",
@@ -10162,6 +10163,7 @@
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
+      "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
@@ -13990,6 +13992,7 @@
     ],
     "src/dimensional/unit-data.ts": [
       "tests/dimensional/mathts-refusal-delegation.test.ts",
+      "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts",
@@ -14008,6 +14011,7 @@
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
+      "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
@@ -24641,6 +24645,10 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/stress-energy-validators.ts"
+    ],
+    "tests/dimensional/superscript-power.test.ts": [
+      "src/dimensional/units.ts",
+      "src/dimensional/unit-data.ts"
     ],
     "tests/dimensional/symbolic-exponent.test.ts": [
       "src/dimensional/validator.ts",
