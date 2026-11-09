@@ -37,15 +37,15 @@ describe('the sub-k parsec spellings stay UPT policy (the override)', () => {
   });
 
   it('the wrapper names the sub-k spellings', () => {
-    for (const prefix of ['d', 'c', 'm', 'u', 'µ', 'μ', 'n', 'p', 'f', 'a', 'z', 'y', 'h', 'da']) {
+    for (const prefix of ['d', 'c', 'm', 'u', 'µ', 'μ', 'n', 'p', 'f', 'a', 'z', 'y', 'r', 'q', 'h', 'da']) {
       expect(isSubKiloParsec(`${prefix}pc`)).toBe(true);
     }
-    for (const text of ['Mpc', 'kpc', 'pc', 'mp', 'km', 'min']) {
+    for (const text of ['Mpc', 'kpc', 'Rpc', 'Qpc', 'pc', 'mp', 'km', 'min']) {
       expect(isSubKiloParsec(text)).toBe(false);
     }
   });
 
-  it.each(['mpc', 'cpc', 'dpc', 'hpc', 'dapc', 'mpc', 'µpc', 'npc', 'ppc', 'fpc', 'apc', 'zpc', 'ypc'])(
+  it.each(['mpc', 'cpc', 'dpc', 'hpc', 'dapc', 'mpc', 'µpc', 'npc', 'ppc', 'fpc', 'apc', 'zpc', 'ypc', 'rpc', 'qpc'])(
     '%s parses at its prefix times the parsec, on the local grammar',
     (text) => {
       const factor = parseUnit(text).scale / PC_SCALE;
