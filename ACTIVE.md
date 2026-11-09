@@ -20,6 +20,9 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
+- [x] #538: the per-derivation `dimensionalForm.monomial` of `upt explain sound-speed` omits the bound `gamma` exponent that the summary monomial and the recovered value carry.
+- [ ] #527: `upt metric flrw` prints an empty Ricci tensor beside a nonzero scalar (an absolute 1e-8 floor), reads radiation (R = 0) as vacuum, prints the k = 1 sentence on a k = 0 run, and restores c uniformly on the tensor.
+- [ ] #526: `evaluateCovariantEikonalNumerical` misses its 1e-6 radial contract over AU to the solar surface at the fixed 2048 steps, and a near-tangent `b_m` returns a wrong number or a plain `Error` instead of a `RangeError`.
 - [x] Issues 543, 544 and 528: one spelling table for `upt evaluate` and `evaluateRelation` (a temperature synonym binds the slot on both surfaces), `upt explain` names the inputs a derivation did not use, and be-37 gets an evaluator row so the CLI evaluates the radial Shapiro delay.
   Done. `photon-frequency` declares `agreesWith: [frequency]`: when both are bound, the two numbers must agree (exit 1 on a disagreement), and `frequency` alone still does not bind `photon-frequency` (#473, #494). be-37 keeps the radial relation and refuses `b_m` with a message that names `evaluateCovariantEikonalNumerical`.
 - [x] Fix #536, #539 and #546: `upt search "coulomb logarithm"` misses be-116, `upt search "young modulus"` misses `youngs-modulus`, and `upt search f-number` and `upt search "v number"` name `flavor-number` and the Biot number.
