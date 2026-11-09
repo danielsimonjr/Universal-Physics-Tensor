@@ -22318,6 +22318,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/compare.js",
+            "imports": [
+              "compareCodepoint"
+            ]
+          },
+          {
             "file": "./algebra.js",
             "imports": [
               "equals",
@@ -28256,7 +28262,7 @@
   "statistics": {
     "totalTypeScriptFiles": 388,
     "totalModules": 13,
-    "totalLinesOfCode": 87559,
+    "totalLinesOfCode": 87570,
     "totalExports": 2821,
     "totalClasses": 86,
     "totalInterfaces": 518,
