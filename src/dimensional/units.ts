@@ -65,7 +65,7 @@ import {
   unitParserViaMathts,
 } from './mathts-unit-delegation.js';
 import { applyBitScaleOverride, tryMathtsA5Reading, uptRefusalReason } from './mathts-unit-wrapper.js';
-import { SUPERSCRIPT, UNIT_DATA, sideTokens, splitPrefix, type AffineRow as UnitDataAffineRow } from './unit-data.js';
+import { superscriptPower, UNIT_DATA, sideTokens, splitPrefix, type AffineRow as UnitDataAffineRow } from './unit-data.js';
 
 /** An affine temperature scale: a lone `degC` or `degF`. @public */
 export type AffineTemperature = 'celsius' | 'fahrenheit';
@@ -203,11 +203,10 @@ function tryOneFactor(token: string): FactorReading | null {
     base = caret[1]!;
     exp = Number(caret[2]);
   } else {
-    const uni = /^(.*?)(⁻?[¹²³])$/.exec(token);
-    const superExp = uni === null ? undefined : SUPERSCRIPT[uni[2]!];
-    if (uni !== null && superExp !== undefined && uni[1]!.length > 0) {
-      base = uni[1]!;
-      exp = superExp;
+    const sup = superscriptPower(token);
+    if (sup !== null) {
+      base = sup.base;
+      exp = sup.exp;
     } else {
       const glued = /^(.*?)([1-9]\d*)$/.exec(token);
       if (glued !== null && glued[1]!.length > 0 && trySymbol(glued[1]!) !== null) {
