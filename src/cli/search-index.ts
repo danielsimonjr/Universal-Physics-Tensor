@@ -122,6 +122,8 @@ const MIN_SUGGESTION_TOKEN = 3;
 
 export const fold = (s: string): string => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 const WORD_BREAK = /[^\p{L}\p{N}]+/u;
+/** A possessive `'s` joins its word: `young's` is the word `youngs`, as in `youngs-modulus`. */
+const POSSESSIVE = /['’]s(?![\p{L}\p{N}])/gu;
 const words = (s: string): string[] => fold(s).split(WORD_BREAK).filter((w) => w.length > 0);
 
 /**
@@ -134,7 +136,7 @@ const words = (s: string): string[] => fold(s).split(WORD_BREAK).filter((w) => w
 export function queryWords(positionals: readonly string[]): string[] {
   const out: string[] = [];
   for (const p of positionals) {
-    for (const w of p.split(WORD_BREAK)) if (w.length > 0) out.push(w);
+    for (const w of p.replace(POSSESSIVE, 's').split(WORD_BREAK)) if (w.length > 0) out.push(w);
   }
   return out;
 }
@@ -150,6 +152,15 @@ function affirmativeSentences(text: string): string {
     .split(/(?<=[.!?])\s+/)
     .filter((sentence) => !/^\s*not\b/i.test(sentence) && !/\bis a different\b/i.test(sentence))
     .join(' ');
+}
+
+/**
+ * From the meaning of an input, drop a clause that denies an identity. A `;`
+ * or a sentence end separates the clauses. "supplied; not Landau diamagnetism"
+ * keeps only "supplied".
+ */
+function affirmativeClauses(text: string): string {
+  return affirmativeSentences(text.split(/;\s*/).filter((clause) => !/^\s*not\b/i.test(clause)).join('. '));
 }
 
 /** The fields of `e` that `q` matches, or `null` when it matches none.
@@ -213,6 +224,8 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
         { label: 'id', text: `be ${b.id}`, exact: [key] },
         ...titleAndGloss('name', b.name),
         { label: 'description', text: affirmativeSentences(b.context ?? '') },
+        // One field per input, so a phrase does not run from one input's meaning into the next.
+        ...(ev?.parameters ?? []).map((p) => ({ label: 'inputs', text: affirmativeClauses(p.meaning) })),
       ],
     });
   }
@@ -324,12 +337,24 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
   return entries;
 }
 
-/** True when `window` and `query` are the same words, order aside. */
+/**
+ * True when the field word `w` is the query word `q`, or its possessive form.
+ * `youngs` (from `youngs-modulus`) is the word `young`.
+ */
+function sameWord(w: string, q: string): boolean {
+  return w === q || w === `${q}s`;
+}
+
+/** True when `window` and `query` are the same words, in any order. Each word in `window` matches one word in `query`. */
 function sameWords(window: readonly string[], query: readonly string[]): boolean {
   if (window.length !== query.length) return false;
-  const a = [...window].sort();
-  const b = [...query].sort();
-  return a.every((w, i) => w === b[i]);
+  const used = new Set<number>();
+  return query.every((q) => {
+    const i = window.findIndex((w, j) => !used.has(j) && sameWord(w, q));
+    if (i < 0) return false;
+    used.add(i);
+    return true;
+  });
 }
 
 /**
@@ -353,7 +378,9 @@ function phraseInField(text: string, query: readonly string[]): boolean {
  *  field; a field that scatters them does not count. Words that never share a non-gloss field
  *  still match, so "thermal" in a description and "noise" in a name still find Johnson–Nyquist.
  *  A gloss does not combine with another field. A query whose words are the gloss is labeled
- *  gloss. A query split across the title and the gloss matches nothing. */
+ *  gloss. A query split across the title and the gloss matches nothing. A field word also matches
+ *  its possessive form (`youngs` is `young`). A word of one or two letters matches only as a
+ *  symbol, an alias or an id segment. Thus `f` is not the `f` of `N_f`. */
 export function matchEveryWord(
   api: CommandCtx['api'],
   index: readonly SearchEntry[],
@@ -382,10 +409,21 @@ export function matchEveryWord(
       }
       const labels: string[] = [];
       const covered = new Set<string>();
+      // A word of one or two letters is also a symbol in a phrase. It matches a
+      // symbol, an alias or an id segment exactly. It never matches a letter in a field.
+      for (const q of folded) {
+        if (q.length > 2) continue;
+        // The name of a quantity is its id, so a whole segment of it also matches.
+        const segment = e.kind === 'quantity' && e.fields.some((f) => f.label === 'name' && words(f.text).includes(q));
+        const hit = segment ? { labels: ['name'] } : matchWord(significant.find((s) => fold(s) === q) ?? q, e);
+        if (hit === null) continue;
+        labels.push(...hit.labels);
+        covered.add(q);
+      }
       for (const f of e.fields) {
         if (f.label === 'gloss') continue;
         const fieldWords = words(f.text).filter((w) => !STOP_WORDS.has(w));
-        const present = folded.filter((q) => fieldWords.includes(q));
+        const present = folded.filter((q) => q.length > 2 && fieldWords.some((w) => sameWord(w, q)));
         if (present.length === 0) continue;
         // Scattered co-occurrence is not the phrase. "Reynolds" and "number"
         // both sit in "Reynolds analogy (Prandtl number 1)" and are not it.
@@ -394,7 +432,8 @@ export function matchEveryWord(
         for (const q of present) covered.add(q);
       }
       if (folded.some((q) => !covered.has(q))) continue;
-      matches.push({ entry: e, matchedIn: labels });
+      const order = e.fields.map((f) => f.label);
+      matches.push({ entry: e, matchedIn: order.filter((l, i) => labels.includes(l) && order.indexOf(l) === i) });
       continue;
     }
     const alias = e.kind === 'quantity' ? aliasTargets.get(e.id) : undefined;

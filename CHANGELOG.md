@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`upt search` finds an evaluator input, a possessive name, and refuses a stray letter in a phrase (#536, #539, #546).** `upt search "coulomb logarithm"` names be-116 (`words in: inputs`): the meaning of each evaluator input is now a search field, one field per input, and a clause that opens with "not" is dropped, so `upt search "landau diamagnetism"` still matches nothing. `upt search "young modulus"` and `upt search "young's modulus"` name `youngs-modulus`: in a phrase a field word matches the query word or its possessive form, and a query `'s` joins its word. `upt search f-number` no longer names `flavor-number`, and `upt search "v number"` no longer names be-156: in a phrase a word of one or two letters matches only a symbol, an alias or an id segment exactly, as it already did alone, or as a whole segment of a quantity name (`truncation coefficient a` still names `truncation-coefficient-a`). Before, the phrase matcher compared it with every word of every field, so `f` matched the `f` of `N_f` and `v` the `V` of `V/A`.
+
 ### Changed
 
 - **`AmbiguousUnitError` lists its readings in codepoint order.** The message and the `readings` field no longer depend on the order in which a splitter finds the readings. `parseUnit('umK')` now throws `'umK' is ambiguous: um·K or u·mK or u·m·K`; before, it printed `u·mK or um·K or u·m·K`. The reason: the local splitter and MathTS `Unit.readings` list the readings in different orders, and the message must not depend on the producer.
