@@ -1,11 +1,10 @@
 /**
- * Issue 553: be-132 is the capacitance per length of a coaxial line,
- * C' = 2 π ε / ln(b/a), with a the inner radius and b the outer radius.
- *
- * For b < a the logarithm is negative and so is C'. That geometry is not a
- * coaxial line with those names, so the domain refuses it like any other
- * domain violation. The control is the issue's own check: b/a = e gives
- * C' = 2 π ε.
+ * Issue 553: `be-132` is the capacitance per length of a coaxial line.
+ * The formula is C' = 2 π ε / ln(b/a), with a the inner radius and b the
+ * outer radius. If b < a, the logarithm is negative, and C' is negative.
+ * The parameters a and b then give no coaxial line. The domain therefore
+ * refuses `be-132` like any other domain violation. The control is the check
+ * in the issue: b/a = e gives C' = 2 π ε.
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';

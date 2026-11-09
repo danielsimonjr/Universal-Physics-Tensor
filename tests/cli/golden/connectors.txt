@@ -5,7 +5,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  70 of the isolated bridges share a name token with the core; 23 are truly unconnected.
+  84 of the isolated bridges share a name token with the core; 23 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -305,6 +305,106 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         boundary-entanglement-entropy ≟ entropy-change         [[entropy]]  → CE-clausius-entropy
         minimal-surface-area ≟ area                            [[area]]  → CE-resistance-material
         minimal-surface-area ≟ cross-sectional-area            [[area]]  → CE-volume-flow-rate
+    ── be-147 (isolated):
+        arrhenius-rate ≟ decoherence-rate                      [[frequency]]  → be-11-zurek
+        arrhenius-rate ≟ grw-localization-rate                 [[frequency]]  → be-48
+        arrhenius-rate ≟ hubble-rate                           [[frequency]]  → be-47
+        arrhenius-rate ≟ relaxation-rate                       [[frequency]]  → be-11-zurek
+    ── be-148 (isolated):
+        eyring-rate ≟ decoherence-rate                         [[frequency]]  → be-11-zurek
+        eyring-rate ≟ grw-localization-rate                    [[frequency]]  → be-48
+        eyring-rate ≟ hubble-rate                              [[frequency]]  → be-47
+        eyring-rate ≟ relaxation-rate                          [[frequency]]  → be-11-zurek
+    ── be-155 (isolated):
+        reynolds-length ≟ coarsening-length                    [[length]]  → be-15
+        reynolds-length ≟ length                               [[length]]  → CE-pendulum-period
+        reynolds-length ≟ pipe-length                          [[length]]  → be-77
+        reynolds-length ≟ planck-length                        [[length]]  → be-31
+        reynolds-length ≟ quantum-correlation-length           [[length]]  → be-33
+        reynolds-length ≟ reference-correlation-length         [[length]]  → be-33
+        reynolds-rho ≟ rho                                     [[L^-3 M]]  → CE-friedmann-curvature
+        reynolds-velocity ≟ drift-velocity                     [[velocity]]  → CE-drift-velocity
+        reynolds-velocity ≟ fermi-velocity                     [[velocity]]  → CE-fermi-velocity
+        reynolds-velocity ≟ flow-velocity                      [[velocity]]  → CE-volume-flow-rate
+        reynolds-velocity ≟ velocity                           [[velocity]]  → CE-momentum
+    ── be-156 (isolated):
+        biot-length ≟ coarsening-length                        [[length]]  → be-15
+        biot-length ≟ length                                   [[length]]  → CE-pendulum-period
+        biot-length ≟ pipe-length                              [[length]]  → be-77
+        biot-length ≟ planck-length                            [[length]]  → be-31
+        biot-length ≟ quantum-correlation-length               [[length]]  → be-33
+        biot-length ≟ reference-correlation-length             [[length]]  → be-33
+    ── be-157 (isolated):
+        nusselt-length ≟ coarsening-length                     [[length]]  → be-15
+        nusselt-length ≟ length                                [[length]]  → CE-pendulum-period
+        nusselt-length ≟ pipe-length                           [[length]]  → be-77
+        nusselt-length ≟ planck-length                         [[length]]  → be-31
+        nusselt-length ≟ quantum-correlation-length            [[length]]  → be-33
+        nusselt-length ≟ reference-correlation-length          [[length]]  → be-33
+    ── be-158 (isolated):
+        schmidt-diffusivity ≟ thermal-diffusivity              [[L^2 T^-1]]  → CE-thermal-diffusivity
+        schmidt-rho ≟ rho                                      [[L^-3 M]]  → CE-friedmann-curvature
+    ── be-159 (isolated):
+        sherwood-diffusivity ≟ thermal-diffusivity             [[L^2 T^-1]]  → CE-thermal-diffusivity
+        sherwood-length ≟ coarsening-length                    [[length]]  → be-15
+        sherwood-length ≟ length                               [[length]]  → CE-pendulum-period
+        sherwood-length ≟ pipe-length                          [[length]]  → be-77
+        sherwood-length ≟ planck-length                        [[length]]  → be-31
+        sherwood-length ≟ quantum-correlation-length           [[length]]  → be-33
+        sherwood-length ≟ reference-correlation-length         [[length]]  → be-33
+    ── be-160 (isolated):
+        fourier-slab-flux ≟ poynting-flux                      [[M T^-3]]  → be-66
+        fourier-slab-flux ≟ radiative-flux                     [[M T^-3]]  → CE-stefan-boltzmann
+        fourier-slab-length ≟ coarsening-length                [[length]]  → be-15
+        fourier-slab-length ≟ length                           [[length]]  → CE-pendulum-period
+        fourier-slab-length ≟ pipe-length                      [[length]]  → be-77
+        fourier-slab-length ≟ planck-length                    [[length]]  → be-31
+        fourier-slab-length ≟ quantum-correlation-length       [[length]]  → be-33
+        fourier-slab-length ≟ reference-correlation-length     [[length]]  → be-33
+    ── be-161 (isolated):
+        newton-area ≟ area                                     [[area]]  → CE-resistance-material
+        newton-area ≟ cross-sectional-area                     [[area]]  → CE-volume-flow-rate
+        newton-rho ≟ rho                                       [[L^-3 M]]  → CE-friedmann-curvature
+        newton-time ≟ elapsed-time                             [[time]]  → CE-radioactive-decay
+        newton-time ≟ microscopic-relaxation-time              [[time]]  → be-34
+        newton-time ≟ rc-time-constant                         [[time]]  → CE-rc-time-constant
+        newton-time ≟ relaxation-time                          [[time]]  → CE-carrier-mobility
+        newton-time ≟ time                                     [[time]]  → be-15
+        newton-volume ≟ volume                                 [[L^3]]  → CE-density-definition
+    ── be-163 (isolated):
+        joule-thomson-volume ≟ specific-volume-change          [[L^3 M^-1]]  → be-71
+    ── be-164 (isolated):
+        planck-frequency ≟ angular-frequency                   [[frequency]]  → CE-lc-resonance
+        planck-frequency ≟ cyclotron-frequency                 [[frequency]]  → CE-cyclotron-frequency
+        planck-frequency ≟ debye-frequency                     [[frequency]]  → CE-debye-frequency
+        planck-frequency ≟ frequency                           [[frequency]]  → be-59
+        planck-frequency ≟ plasma-frequency                    [[frequency]]  → CE-plasma-frequency
+    ── be-167 (isolated):
+        sackur-density ≟ carrier-density                       [[L^-3]]  → be-23
+        sackur-density ≟ dark-species-density                  [[L^-3]]  → be-47
+        sackur-density ≟ neutron-density                       [[L^-3]]  → be-47
+        sackur-density ≟ nucleon-yield-density                 [[L^-3]]  → be-47
+        sackur-density ≟ number-density                        [[L^-3]]  → CE-debye-frequency
+        sackur-density ≟ proton-density                        [[L^-3]]  → be-47
+        sackur-entropy ≟ entropy-change                        [[entropy]]  → CE-clausius-entropy
+    ── be-168 (isolated):
+        saha-mass ≟ defect-rest-mass                           [[mass]]  → be-34
+        saha-mass ≟ effective-mass                             [[mass]]  → be-23
+        saha-mass ≟ mass                                       [[mass]]  → be-12
+        saha-mass ≟ molecular-mass                             [[mass]]  → CE-kinetic-pressure
+        saha-mass ≟ planck-mass                                [[mass]]  → be-41
+        saha-mass ≟ reference-mass                             [[mass]]  → be-41
+        saha-mass ≟ secondary-mass                             [[mass]]  → CE-newton-gravitation
+        saha-mass ≟ swampland-tower-mass                       [[mass]]  → be-41
+    ── be-169 (isolated):
+        richardson-mass ≟ defect-rest-mass                     [[mass]]  → be-34
+        richardson-mass ≟ effective-mass                       [[mass]]  → be-23
+        richardson-mass ≟ mass                                 [[mass]]  → be-12
+        richardson-mass ≟ molecular-mass                       [[mass]]  → CE-kinetic-pressure
+        richardson-mass ≟ planck-mass                          [[mass]]  → be-41
+        richardson-mass ≟ reference-mass                       [[mass]]  → be-41
+        richardson-mass ≟ secondary-mass                       [[mass]]  → CE-newton-gravitation
+        richardson-mass ≟ swampland-tower-mass                 [[mass]]  → be-41
     ── be-22 (isolated):
         boundary-length ≟ coarsening-length                    [[length]]  → be-15
         boundary-length ≟ length                               [[length]]  → CE-pendulum-period

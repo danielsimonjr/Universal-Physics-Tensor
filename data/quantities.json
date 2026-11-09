@@ -7717,7 +7717,7 @@
       "graphNode": false
     },
     {
-      "id": "arrhprefac",
+      "id": "arrhenius-prefactor",
       "symbol": "A",
       "dimension": {
         "L": 0,
@@ -7732,10 +7732,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "arrhprefac"
+      ]
     },
     {
-      "id": "arrhbarrier",
+      "id": "arrhenius-barrier",
       "symbol": "E_a",
       "dimension": {
         "L": 2,
@@ -7750,10 +7753,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "arrhbarrier"
+      ]
     },
     {
-      "id": "arrhwarmth",
+      "id": "arrhenius-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -7769,10 +7775,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "arrhwarmth"
+      ]
     },
     {
-      "id": "arrhrate",
+      "id": "arrhenius-rate",
       "symbol": "k",
       "dimension": {
         "L": 0,
@@ -7787,10 +7796,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "arrhrate"
+      ]
     },
     {
-      "id": "eyringbarrier",
+      "id": "eyring-barrier",
       "symbol": "ΔG^‡",
       "dimension": {
         "L": 2,
@@ -7805,10 +7817,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "eyringbarrier"
+      ]
     },
     {
-      "id": "eyringwarmth",
+      "id": "eyring-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -7824,10 +7839,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "eyringwarmth"
+      ]
     },
     {
-      "id": "eyringrate",
+      "id": "eyring-rate",
       "symbol": "k",
       "dimension": {
         "L": 0,
@@ -7842,10 +7860,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "eyringrate"
+      ]
     },
     {
-      "id": "vanthoffenthalpy",
+      "id": "vanthoff-enthalpy",
       "symbol": "ΔH°",
       "dimension": {
         "L": 2,
@@ -7860,10 +7881,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "vanthoffenthalpy"
+      ]
     },
     {
-      "id": "vanthoffwarmth",
+      "id": "vanthoff-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -7879,10 +7903,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "vanthoffwarmth"
+      ]
     },
     {
-      "id": "vanthoffslope",
+      "id": "vanthoff-slope",
       "symbol": "d\\\\ln K/dT",
       "dimension": {
         "L": 0,
@@ -7897,10 +7924,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "vanthoffslope"
+      ]
     },
     {
-      "id": "gibbsisok",
+      "id": "gibbs-isotherm-k",
       "symbol": "K",
       "dimension": {
         "L": 0,
@@ -7915,10 +7945,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "gibbsisok"
+      ]
     },
     {
-      "id": "gibbsisowarmth",
+      "id": "gibbs-isotherm-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -7934,10 +7967,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "gibbsisowarmth"
+      ]
     },
     {
-      "id": "gibbsisodg",
+      "id": "gibbs-isotherm-dg",
       "symbol": "ΔG°",
       "dimension": {
         "L": 2,
@@ -7952,10 +7988,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "gibbsisodg"
+      ]
     },
     {
-      "id": "nernstge0",
+      "id": "nernst-standard-potential",
       "symbol": "E°",
       "dimension": {
         "L": 2,
@@ -7970,10 +8009,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nernstge0"
+      ]
     },
     {
-      "id": "nernstgn",
+      "id": "nernst-electron-count",
       "symbol": "n",
       "dimension": {
         "L": 0,
@@ -7988,10 +8030,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nernstgn"
+      ]
     },
     {
-      "id": "nernstgq",
+      "id": "nernst-quotient",
       "symbol": "Q",
       "dimension": {
         "L": 0,
@@ -8006,10 +8051,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nernstgq"
+      ]
     },
     {
-      "id": "nernstgwarmth",
+      "id": "nernst-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -8025,10 +8073,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "nernstgwarmth"
+      ]
     },
     {
-      "id": "nernstge",
+      "id": "nernst-potential",
       "symbol": "E",
       "dimension": {
         "L": 2,
@@ -8043,10 +8094,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nernstge"
+      ]
     },
     {
-      "id": "clapintlatent",
+      "id": "clausius-latent",
       "symbol": "ΔH",
       "dimension": {
         "L": 2,
@@ -8061,10 +8115,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "clapintlatent"
+      ]
     },
     {
-      "id": "clapintwarm1",
+      "id": "clausius-warmth-1",
       "symbol": "T_1",
       "dimension": {
         "L": 0,
@@ -8080,10 +8137,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "clapintwarm1"
+      ]
     },
     {
-      "id": "clapintwarm2",
+      "id": "clausius-warmth-2",
       "symbol": "T_2",
       "dimension": {
         "L": 0,
@@ -8099,10 +8159,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "clapintwarm2"
+      ]
     },
     {
-      "id": "clapintln",
+      "id": "clausius-log-ratio",
       "symbol": "\\\\ln(P_2/P_1)",
       "dimension": {
         "L": 0,
@@ -8117,10 +8180,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "clapintln"
+      ]
     },
     {
-      "id": "raoultmole",
+      "id": "raoult-mole-fraction",
       "symbol": "x",
       "dimension": {
         "L": 0,
@@ -8135,10 +8201,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "raoultmole"
+      ]
     },
     {
-      "id": "raoultsat",
+      "id": "raoult-saturation",
       "symbol": "P^*",
       "dimension": {
         "L": -1,
@@ -8153,10 +8222,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "raoultsat"
+      ]
     },
     {
-      "id": "raoultvapor",
+      "id": "raoult-vapor",
       "symbol": "P",
       "dimension": {
         "L": -1,
@@ -8171,10 +8243,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "raoultvapor"
+      ]
     },
     {
-      "id": "prandtlmu",
+      "id": "prandtl-mu",
       "symbol": "μ",
       "dimension": {
         "L": -1,
@@ -8189,10 +8264,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "prandtlmu"
+      ]
     },
     {
-      "id": "prandtlcp",
+      "id": "prandtl-cp",
       "symbol": "c_p",
       "dimension": {
         "L": 2,
@@ -8207,10 +8285,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "prandtlcp"
+      ]
     },
     {
-      "id": "prandtlk",
+      "id": "prandtl-k",
       "symbol": "k",
       "dimension": {
         "L": 1,
@@ -8225,10 +8306,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "prandtlk"
+      ]
     },
     {
-      "id": "prandtlratio",
+      "id": "prandtl-ratio",
       "symbol": "Pr",
       "dimension": {
         "L": 0,
@@ -8243,10 +8327,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "prandtlratio"
+      ]
     },
     {
-      "id": "reynumrho",
+      "id": "reynolds-rho",
       "symbol": "ρ",
       "dimension": {
         "L": -3,
@@ -8261,10 +8348,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "reynumrho"
+      ]
     },
     {
-      "id": "reynumvel",
+      "id": "reynolds-velocity",
       "symbol": "v",
       "dimension": {
         "L": 1,
@@ -8279,10 +8369,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "reynumvel"
+      ]
     },
     {
-      "id": "reynumlen",
+      "id": "reynolds-length",
       "symbol": "L",
       "dimension": {
         "L": 1,
@@ -8297,10 +8390,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "reynumlen"
+      ]
     },
     {
-      "id": "reynummu",
+      "id": "reynolds-mu",
       "symbol": "μ",
       "dimension": {
         "L": -1,
@@ -8315,10 +8411,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "reynummu"
+      ]
     },
     {
-      "id": "reynumratio",
+      "id": "reynolds-ratio",
       "symbol": "Re",
       "dimension": {
         "L": 0,
@@ -8333,10 +8432,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "reynumratio"
+      ]
     },
     {
-      "id": "biotfilm",
+      "id": "biot-film",
       "symbol": "h",
       "dimension": {
         "L": 0,
@@ -8351,10 +8453,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "biotfilm"
+      ]
     },
     {
-      "id": "biotlength",
+      "id": "biot-length",
       "symbol": "L_c",
       "dimension": {
         "L": 1,
@@ -8369,10 +8474,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "biotlength"
+      ]
     },
     {
-      "id": "biotk",
+      "id": "biot-k",
       "symbol": "k",
       "dimension": {
         "L": 1,
@@ -8387,10 +8495,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "biotk"
+      ]
     },
     {
-      "id": "biotratio",
+      "id": "biot-ratio",
       "symbol": "Bi",
       "dimension": {
         "L": 0,
@@ -8405,10 +8516,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "biotratio"
+      ]
     },
     {
-      "id": "nusseltfilm",
+      "id": "nusselt-film",
       "symbol": "h",
       "dimension": {
         "L": 0,
@@ -8423,10 +8537,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nusseltfilm"
+      ]
     },
     {
-      "id": "nusseltlen",
+      "id": "nusselt-length",
       "symbol": "L",
       "dimension": {
         "L": 1,
@@ -8441,10 +8558,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nusseltlen"
+      ]
     },
     {
-      "id": "nusseltk",
+      "id": "nusselt-k",
       "symbol": "k",
       "dimension": {
         "L": 1,
@@ -8459,10 +8579,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nusseltk"
+      ]
     },
     {
-      "id": "nusseltratio",
+      "id": "nusselt-ratio",
       "symbol": "Nu",
       "dimension": {
         "L": 0,
@@ -8477,10 +8600,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "nusseltratio"
+      ]
     },
     {
-      "id": "schmidtmu",
+      "id": "schmidt-mu",
       "symbol": "μ",
       "dimension": {
         "L": -1,
@@ -8495,10 +8621,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "schmidtmu"
+      ]
     },
     {
-      "id": "schmidtrho",
+      "id": "schmidt-rho",
       "symbol": "ρ",
       "dimension": {
         "L": -3,
@@ -8513,10 +8642,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "schmidtrho"
+      ]
     },
     {
-      "id": "schmidtdiff",
+      "id": "schmidt-diffusivity",
       "symbol": "D",
       "dimension": {
         "L": 2,
@@ -8531,10 +8663,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "schmidtdiff"
+      ]
     },
     {
-      "id": "schmidtratio",
+      "id": "schmidt-ratio",
       "symbol": "Sc",
       "dimension": {
         "L": 0,
@@ -8549,10 +8684,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "schmidtratio"
+      ]
     },
     {
-      "id": "sherwoodkm",
+      "id": "sherwood-km",
       "symbol": "k_m",
       "dimension": {
         "L": 1,
@@ -8567,10 +8705,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sherwoodkm"
+      ]
     },
     {
-      "id": "sherwoodlen",
+      "id": "sherwood-length",
       "symbol": "L",
       "dimension": {
         "L": 1,
@@ -8585,10 +8726,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sherwoodlen"
+      ]
     },
     {
-      "id": "sherwooddiff",
+      "id": "sherwood-diffusivity",
       "symbol": "D",
       "dimension": {
         "L": 2,
@@ -8603,10 +8747,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sherwooddiff"
+      ]
     },
     {
-      "id": "sherwoodratio",
+      "id": "sherwood-ratio",
       "symbol": "Sh",
       "dimension": {
         "L": 0,
@@ -8621,10 +8768,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sherwoodratio"
+      ]
     },
     {
-      "id": "fourierslabk",
+      "id": "fourier-slab-k",
       "symbol": "k",
       "dimension": {
         "L": 1,
@@ -8639,10 +8789,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "fourierslabk"
+      ]
     },
     {
-      "id": "fourierslabend",
+      "id": "fourier-slab-end",
       "symbol": "T(L)",
       "dimension": {
         "L": 0,
@@ -8658,10 +8811,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "fourierslabend"
+      ]
     },
     {
-      "id": "fourierslabstart",
+      "id": "fourier-slab-start",
       "symbol": "T(0)",
       "dimension": {
         "L": 0,
@@ -8677,10 +8833,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "fourierslabstart"
+      ]
     },
     {
-      "id": "fourierslablen",
+      "id": "fourier-slab-length",
       "symbol": "L",
       "dimension": {
         "L": 1,
@@ -8695,10 +8854,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "fourierslablen"
+      ]
     },
     {
-      "id": "fourierslabflux",
+      "id": "fourier-slab-flux",
       "symbol": "q",
       "dimension": {
         "L": 0,
@@ -8713,10 +8875,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "fourierslabflux"
+      ]
     },
     {
-      "id": "newtonrho",
+      "id": "newton-rho",
       "symbol": "ρ",
       "dimension": {
         "L": -3,
@@ -8731,10 +8896,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "newtonrho"
+      ]
     },
     {
-      "id": "newtoncp",
+      "id": "newton-cp",
       "symbol": "c",
       "dimension": {
         "L": 2,
@@ -8749,10 +8917,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "newtoncp"
+      ]
     },
     {
-      "id": "newtonvol",
+      "id": "newton-volume",
       "symbol": "V",
       "dimension": {
         "L": 3,
@@ -8767,10 +8938,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "newtonvol"
+      ]
     },
     {
-      "id": "newtonfilm",
+      "id": "newton-film",
       "symbol": "h",
       "dimension": {
         "L": 0,
@@ -8785,10 +8959,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "newtonfilm"
+      ]
     },
     {
-      "id": "newtonarea",
+      "id": "newton-area",
       "symbol": "A",
       "dimension": {
         "L": 2,
@@ -8803,10 +8980,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "newtonarea"
+      ]
     },
     {
-      "id": "newtontime",
+      "id": "newton-time",
       "symbol": "t",
       "dimension": {
         "L": 0,
@@ -8821,10 +9001,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "newtontime"
+      ]
     },
     {
-      "id": "newtontheta0",
+      "id": "newton-theta-0",
       "symbol": "θ(0)",
       "dimension": {
         "L": 0,
@@ -8840,10 +9023,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "interval"
+      "kind": "interval",
+      "aliases": [
+        "newtontheta0"
+      ]
     },
     {
-      "id": "newtontheta",
+      "id": "newton-theta",
       "symbol": "θ(t)",
       "dimension": {
         "L": 0,
@@ -8859,10 +9045,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "newtontheta"
+      ]
     },
     {
-      "id": "ottoratio",
+      "id": "otto-ratio",
       "symbol": "r",
       "dimension": {
         "L": 0,
@@ -8877,10 +9066,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "ottoratio"
+      ]
     },
     {
-      "id": "ottogamma",
+      "id": "otto-gamma",
       "symbol": "γ",
       "dimension": {
         "L": 0,
@@ -8895,10 +9087,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "ottogamma"
+      ]
     },
     {
-      "id": "ottoeta",
+      "id": "otto-eta",
       "symbol": "η",
       "dimension": {
         "L": 0,
@@ -8913,10 +9108,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "ottoeta"
+      ]
     },
     {
-      "id": "jtcdvdt",
+      "id": "joule-thomson-dvdt",
       "symbol": "(∂v/∂T)_p",
       "dimension": {
         "L": 3,
@@ -8931,10 +9129,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "jtcdvdt"
+      ]
     },
     {
-      "id": "jtcvolume",
+      "id": "joule-thomson-volume",
       "symbol": "v",
       "dimension": {
         "L": 3,
@@ -8949,10 +9150,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "jtcvolume"
+      ]
     },
     {
-      "id": "jtcwarmth",
+      "id": "joule-thomson-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -8968,10 +9172,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "jtcwarmth"
+      ]
     },
     {
-      "id": "jtcp",
+      "id": "joule-thomson-cp",
       "symbol": "c_p",
       "dimension": {
         "L": 2,
@@ -8986,10 +9193,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "jtcp"
+      ]
     },
     {
-      "id": "jtcmu",
+      "id": "joule-thomson-mu",
       "symbol": "μ_{JT}",
       "dimension": {
         "L": 1,
@@ -9004,10 +9214,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "jtcmu"
+      ]
     },
     {
-      "id": "planckfreq",
+      "id": "planck-frequency",
       "symbol": "ν",
       "dimension": {
         "L": 0,
@@ -9022,10 +9235,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "planckfreq"
+      ]
     },
     {
-      "id": "planckwarmth",
+      "id": "planck-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -9041,10 +9257,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "planckwarmth"
+      ]
     },
     {
-      "id": "plancku",
+      "id": "planck-u",
       "symbol": "u_ν",
       "dimension": {
         "L": -1,
@@ -9059,10 +9278,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "plancku"
+      ]
     },
     {
-      "id": "stefansigma",
+      "id": "stefan-sigma",
       "symbol": "σ",
       "dimension": {
         "L": 0,
@@ -9077,10 +9299,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "stefansigma"
+      ]
     },
     {
-      "id": "wienroot",
+      "id": "wien-root",
       "symbol": "x",
       "dimension": {
         "L": 0,
@@ -9095,10 +9320,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "wienroot"
+      ]
     },
     {
-      "id": "wienb",
+      "id": "wien-b",
       "symbol": "b",
       "dimension": {
         "L": 1,
@@ -9113,10 +9341,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "wienb"
+      ]
     },
     {
-      "id": "sackurcount",
+      "id": "sackur-count",
       "symbol": "N",
       "dimension": {
         "L": 0,
@@ -9131,10 +9362,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sackurcount"
+      ]
     },
     {
-      "id": "sackurquantum",
+      "id": "sackur-quantum",
       "symbol": "n_Q",
       "dimension": {
         "L": -3,
@@ -9149,10 +9383,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sackurquantum"
+      ]
     },
     {
-      "id": "sackurdensity",
+      "id": "sackur-density",
       "symbol": "n",
       "dimension": {
         "L": -3,
@@ -9167,10 +9404,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sackurdensity"
+      ]
     },
     {
-      "id": "sackurentropy",
+      "id": "sackur-entropy",
       "symbol": "S",
       "dimension": {
         "L": 2,
@@ -9185,10 +9425,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sackurentropy"
+      ]
     },
     {
-      "id": "sahamass",
+      "id": "saha-mass",
       "symbol": "m",
       "dimension": {
         "L": 0,
@@ -9203,10 +9446,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sahamass"
+      ]
     },
     {
-      "id": "sahawarmth",
+      "id": "saha-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -9222,10 +9468,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "sahawarmth"
+      ]
     },
     {
-      "id": "sahaion",
+      "id": "saha-ionization",
       "symbol": "I",
       "dimension": {
         "L": 2,
@@ -9240,10 +9489,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sahaion"
+      ]
     },
     {
-      "id": "sahaconst",
+      "id": "saha-constant",
       "symbol": "K",
       "dimension": {
         "L": -3,
@@ -9258,10 +9510,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "sahaconst"
+      ]
     },
     {
-      "id": "richardsmass",
+      "id": "richardson-mass",
       "symbol": "m",
       "dimension": {
         "L": 0,
@@ -9276,10 +9531,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "richardsmass"
+      ]
     },
     {
-      "id": "richardswarmth",
+      "id": "richardson-warmth",
       "symbol": "T",
       "dimension": {
         "L": 0,
@@ -9295,10 +9553,13 @@
         "force": "electromagnetic"
       },
       "graphNode": true,
-      "kind": "absolute"
+      "kind": "absolute",
+      "aliases": [
+        "richardswarmth"
+      ]
     },
     {
-      "id": "richardsphi",
+      "id": "richardson-phi",
       "symbol": "φ",
       "dimension": {
         "L": 2,
@@ -9313,10 +9574,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "richardsphi"
+      ]
     },
     {
-      "id": "richardsj",
+      "id": "richardson-j",
       "symbol": "J",
       "dimension": {
         "L": -2,
@@ -9331,10 +9595,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "richardsj"
+      ]
     },
     {
-      "id": "onsagerl12",
+      "id": "onsager-l12",
       "symbol": "L_{12}",
       "dimension": {
         "L": 0,
@@ -9349,10 +9616,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "onsagerl12"
+      ]
     },
     {
-      "id": "onsagerb0",
+      "id": "onsager-b0",
       "symbol": "B",
       "dimension": {
         "L": 0,
@@ -9367,10 +9637,13 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "onsagerb0"
+      ]
     },
     {
-      "id": "onsagerl21",
+      "id": "onsager-l21",
       "symbol": "L_{21}",
       "dimension": {
         "L": 0,
@@ -9385,7 +9658,10 @@
         "scale": "classical",
         "force": "electromagnetic"
       },
-      "graphNode": true
+      "graphNode": true,
+      "aliases": [
+        "onsagerl21"
+      ]
     },
     {
       "id": "plate-separation",

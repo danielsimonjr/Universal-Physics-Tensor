@@ -1797,10 +1797,10 @@
           "be-147"
         ],
         "quantities": [
-          "arrhbarrier",
-          "arrhprefac",
-          "arrhrate",
-          "arrhwarmth"
+          "arrhenius-barrier",
+          "arrhenius-prefactor",
+          "arrhenius-rate",
+          "arrhenius-warmth"
         ],
         "anchored": true
       },
@@ -1809,9 +1809,9 @@
           "be-148"
         ],
         "quantities": [
-          "eyringbarrier",
-          "eyringrate",
-          "eyringwarmth"
+          "eyring-barrier",
+          "eyring-rate",
+          "eyring-warmth"
         ],
         "anchored": true
       },
@@ -1820,9 +1820,9 @@
           "be-149"
         ],
         "quantities": [
-          "vanthoffenthalpy",
-          "vanthoffslope",
-          "vanthoffwarmth"
+          "vanthoff-enthalpy",
+          "vanthoff-slope",
+          "vanthoff-warmth"
         ],
         "anchored": true
       },
@@ -1842,9 +1842,9 @@
           "be-150"
         ],
         "quantities": [
-          "gibbsisodg",
-          "gibbsisok",
-          "gibbsisowarmth"
+          "gibbs-isotherm-dg",
+          "gibbs-isotherm-k",
+          "gibbs-isotherm-warmth"
         ],
         "anchored": true
       },
@@ -1853,11 +1853,11 @@
           "be-151"
         ],
         "quantities": [
-          "nernstge",
-          "nernstge0",
-          "nernstgn",
-          "nernstgq",
-          "nernstgwarmth"
+          "nernst-electron-count",
+          "nernst-potential",
+          "nernst-quotient",
+          "nernst-standard-potential",
+          "nernst-warmth"
         ],
         "anchored": true
       },
@@ -1866,10 +1866,10 @@
           "be-152"
         ],
         "quantities": [
-          "clapintlatent",
-          "clapintln",
-          "clapintwarm1",
-          "clapintwarm2"
+          "clausius-latent",
+          "clausius-log-ratio",
+          "clausius-warmth-1",
+          "clausius-warmth-2"
         ],
         "anchored": true
       },
@@ -1878,9 +1878,9 @@
           "be-153"
         ],
         "quantities": [
-          "raoultmole",
-          "raoultsat",
-          "raoultvapor"
+          "raoult-mole-fraction",
+          "raoult-saturation",
+          "raoult-vapor"
         ],
         "anchored": true
       },
@@ -1889,10 +1889,10 @@
           "be-154"
         ],
         "quantities": [
-          "prandtlcp",
-          "prandtlk",
-          "prandtlmu",
-          "prandtlratio"
+          "prandtl-cp",
+          "prandtl-k",
+          "prandtl-mu",
+          "prandtl-ratio"
         ],
         "anchored": true
       },
@@ -1901,11 +1901,11 @@
           "be-155"
         ],
         "quantities": [
-          "reynumlen",
-          "reynummu",
-          "reynumratio",
-          "reynumrho",
-          "reynumvel"
+          "reynolds-length",
+          "reynolds-mu",
+          "reynolds-ratio",
+          "reynolds-rho",
+          "reynolds-velocity"
         ],
         "anchored": true
       },
@@ -1914,10 +1914,10 @@
           "be-156"
         ],
         "quantities": [
-          "biotfilm",
-          "biotk",
-          "biotlength",
-          "biotratio"
+          "biot-film",
+          "biot-k",
+          "biot-length",
+          "biot-ratio"
         ],
         "anchored": true
       },
@@ -1926,10 +1926,10 @@
           "be-157"
         ],
         "quantities": [
-          "nusseltfilm",
-          "nusseltk",
-          "nusseltlen",
-          "nusseltratio"
+          "nusselt-film",
+          "nusselt-k",
+          "nusselt-length",
+          "nusselt-ratio"
         ],
         "anchored": true
       },
@@ -1938,10 +1938,10 @@
           "be-158"
         ],
         "quantities": [
-          "schmidtdiff",
-          "schmidtmu",
-          "schmidtratio",
-          "schmidtrho"
+          "schmidt-diffusivity",
+          "schmidt-mu",
+          "schmidt-ratio",
+          "schmidt-rho"
         ],
         "anchored": true
       },
@@ -1950,10 +1950,10 @@
           "be-159"
         ],
         "quantities": [
-          "sherwooddiff",
-          "sherwoodkm",
-          "sherwoodlen",
-          "sherwoodratio"
+          "sherwood-diffusivity",
+          "sherwood-km",
+          "sherwood-length",
+          "sherwood-ratio"
         ],
         "anchored": true
       },
@@ -1962,11 +1962,11 @@
           "be-160"
         ],
         "quantities": [
-          "fourierslabend",
-          "fourierslabflux",
-          "fourierslabk",
-          "fourierslablen",
-          "fourierslabstart"
+          "fourier-slab-end",
+          "fourier-slab-flux",
+          "fourier-slab-k",
+          "fourier-slab-length",
+          "fourier-slab-start"
         ],
         "anchored": true
       },
@@ -1975,14 +1975,14 @@
           "be-161"
         ],
         "quantities": [
-          "newtonarea",
-          "newtoncp",
-          "newtonfilm",
-          "newtonrho",
-          "newtontheta",
-          "newtontheta0",
-          "newtontime",
-          "newtonvol"
+          "newton-area",
+          "newton-cp",
+          "newton-film",
+          "newton-rho",
+          "newton-theta",
+          "newton-theta-0",
+          "newton-time",
+          "newton-volume"
         ],
         "anchored": true
       },
@@ -1991,9 +1991,9 @@
           "be-162"
         ],
         "quantities": [
-          "ottoeta",
-          "ottogamma",
-          "ottoratio"
+          "otto-eta",
+          "otto-gamma",
+          "otto-ratio"
         ],
         "anchored": true
       },
@@ -2002,11 +2002,11 @@
           "be-163"
         ],
         "quantities": [
-          "jtcdvdt",
-          "jtcmu",
-          "jtcp",
-          "jtcvolume",
-          "jtcwarmth"
+          "joule-thomson-cp",
+          "joule-thomson-dvdt",
+          "joule-thomson-mu",
+          "joule-thomson-volume",
+          "joule-thomson-warmth"
         ],
         "anchored": true
       },
@@ -2015,9 +2015,9 @@
           "be-164"
         ],
         "quantities": [
-          "planckfreq",
-          "plancku",
-          "planckwarmth"
+          "planck-frequency",
+          "planck-u",
+          "planck-warmth"
         ],
         "anchored": true
       },
@@ -2026,7 +2026,7 @@
           "be-165"
         ],
         "quantities": [
-          "stefansigma"
+          "stefan-sigma"
         ],
         "anchored": true
       },
@@ -2035,8 +2035,8 @@
           "be-166"
         ],
         "quantities": [
-          "wienb",
-          "wienroot"
+          "wien-b",
+          "wien-root"
         ],
         "anchored": true
       },
@@ -2045,10 +2045,10 @@
           "be-167"
         ],
         "quantities": [
-          "sackurcount",
-          "sackurdensity",
-          "sackurentropy",
-          "sackurquantum"
+          "sackur-count",
+          "sackur-density",
+          "sackur-entropy",
+          "sackur-quantum"
         ],
         "anchored": true
       },
@@ -2057,10 +2057,10 @@
           "be-168"
         ],
         "quantities": [
-          "sahaconst",
-          "sahaion",
-          "sahamass",
-          "sahawarmth"
+          "saha-constant",
+          "saha-ionization",
+          "saha-mass",
+          "saha-warmth"
         ],
         "anchored": true
       },
@@ -2069,10 +2069,10 @@
           "be-169"
         ],
         "quantities": [
-          "richardsj",
-          "richardsmass",
-          "richardsphi",
-          "richardswarmth"
+          "richardson-j",
+          "richardson-mass",
+          "richardson-phi",
+          "richardson-warmth"
         ],
         "anchored": true
       },
@@ -2092,9 +2092,9 @@
           "be-170"
         ],
         "quantities": [
-          "onsagerb0",
-          "onsagerl12",
-          "onsagerl21"
+          "onsager-b0",
+          "onsager-l12",
+          "onsager-l21"
         ],
         "anchored": true
       },
@@ -5893,10 +5893,10 @@
           "be-147"
         ],
         "quantities": [
-          "arrhbarrier",
-          "arrhprefac",
-          "arrhrate",
-          "arrhwarmth"
+          "arrhenius-barrier",
+          "arrhenius-prefactor",
+          "arrhenius-rate",
+          "arrhenius-warmth"
         ],
         "anchored": true
       },
@@ -5905,9 +5905,9 @@
           "be-148"
         ],
         "quantities": [
-          "eyringbarrier",
-          "eyringrate",
-          "eyringwarmth"
+          "eyring-barrier",
+          "eyring-rate",
+          "eyring-warmth"
         ],
         "anchored": true
       },
@@ -5916,9 +5916,9 @@
           "be-149"
         ],
         "quantities": [
-          "vanthoffenthalpy",
-          "vanthoffslope",
-          "vanthoffwarmth"
+          "vanthoff-enthalpy",
+          "vanthoff-slope",
+          "vanthoff-warmth"
         ],
         "anchored": true
       },
@@ -5927,9 +5927,9 @@
           "be-150"
         ],
         "quantities": [
-          "gibbsisodg",
-          "gibbsisok",
-          "gibbsisowarmth"
+          "gibbs-isotherm-dg",
+          "gibbs-isotherm-k",
+          "gibbs-isotherm-warmth"
         ],
         "anchored": true
       },
@@ -5938,11 +5938,11 @@
           "be-151"
         ],
         "quantities": [
-          "nernstge",
-          "nernstge0",
-          "nernstgn",
-          "nernstgq",
-          "nernstgwarmth"
+          "nernst-electron-count",
+          "nernst-potential",
+          "nernst-quotient",
+          "nernst-standard-potential",
+          "nernst-warmth"
         ],
         "anchored": true
       },
@@ -5951,10 +5951,10 @@
           "be-152"
         ],
         "quantities": [
-          "clapintlatent",
-          "clapintln",
-          "clapintwarm1",
-          "clapintwarm2"
+          "clausius-latent",
+          "clausius-log-ratio",
+          "clausius-warmth-1",
+          "clausius-warmth-2"
         ],
         "anchored": true
       },
@@ -5963,9 +5963,9 @@
           "be-153"
         ],
         "quantities": [
-          "raoultmole",
-          "raoultsat",
-          "raoultvapor"
+          "raoult-mole-fraction",
+          "raoult-saturation",
+          "raoult-vapor"
         ],
         "anchored": true
       },
@@ -5974,10 +5974,10 @@
           "be-154"
         ],
         "quantities": [
-          "prandtlcp",
-          "prandtlk",
-          "prandtlmu",
-          "prandtlratio"
+          "prandtl-cp",
+          "prandtl-k",
+          "prandtl-mu",
+          "prandtl-ratio"
         ],
         "anchored": true
       },
@@ -5986,11 +5986,11 @@
           "be-155"
         ],
         "quantities": [
-          "reynumlen",
-          "reynummu",
-          "reynumratio",
-          "reynumrho",
-          "reynumvel"
+          "reynolds-length",
+          "reynolds-mu",
+          "reynolds-ratio",
+          "reynolds-rho",
+          "reynolds-velocity"
         ],
         "anchored": true
       },
@@ -5999,10 +5999,10 @@
           "be-156"
         ],
         "quantities": [
-          "biotfilm",
-          "biotk",
-          "biotlength",
-          "biotratio"
+          "biot-film",
+          "biot-k",
+          "biot-length",
+          "biot-ratio"
         ],
         "anchored": true
       },
@@ -6011,10 +6011,10 @@
           "be-157"
         ],
         "quantities": [
-          "nusseltfilm",
-          "nusseltk",
-          "nusseltlen",
-          "nusseltratio"
+          "nusselt-film",
+          "nusselt-k",
+          "nusselt-length",
+          "nusselt-ratio"
         ],
         "anchored": true
       },
@@ -6023,10 +6023,10 @@
           "be-158"
         ],
         "quantities": [
-          "schmidtdiff",
-          "schmidtmu",
-          "schmidtratio",
-          "schmidtrho"
+          "schmidt-diffusivity",
+          "schmidt-mu",
+          "schmidt-ratio",
+          "schmidt-rho"
         ],
         "anchored": true
       },
@@ -6035,10 +6035,10 @@
           "be-159"
         ],
         "quantities": [
-          "sherwooddiff",
-          "sherwoodkm",
-          "sherwoodlen",
-          "sherwoodratio"
+          "sherwood-diffusivity",
+          "sherwood-km",
+          "sherwood-length",
+          "sherwood-ratio"
         ],
         "anchored": true
       },
@@ -6047,11 +6047,11 @@
           "be-160"
         ],
         "quantities": [
-          "fourierslabend",
-          "fourierslabflux",
-          "fourierslabk",
-          "fourierslablen",
-          "fourierslabstart"
+          "fourier-slab-end",
+          "fourier-slab-flux",
+          "fourier-slab-k",
+          "fourier-slab-length",
+          "fourier-slab-start"
         ],
         "anchored": true
       },
@@ -6060,14 +6060,14 @@
           "be-161"
         ],
         "quantities": [
-          "newtonarea",
-          "newtoncp",
-          "newtonfilm",
-          "newtonrho",
-          "newtontheta",
-          "newtontheta0",
-          "newtontime",
-          "newtonvol"
+          "newton-area",
+          "newton-cp",
+          "newton-film",
+          "newton-rho",
+          "newton-theta",
+          "newton-theta-0",
+          "newton-time",
+          "newton-volume"
         ],
         "anchored": true
       },
@@ -6076,9 +6076,9 @@
           "be-162"
         ],
         "quantities": [
-          "ottoeta",
-          "ottogamma",
-          "ottoratio"
+          "otto-eta",
+          "otto-gamma",
+          "otto-ratio"
         ],
         "anchored": true
       },
@@ -6087,11 +6087,11 @@
           "be-163"
         ],
         "quantities": [
-          "jtcdvdt",
-          "jtcmu",
-          "jtcp",
-          "jtcvolume",
-          "jtcwarmth"
+          "joule-thomson-cp",
+          "joule-thomson-dvdt",
+          "joule-thomson-mu",
+          "joule-thomson-volume",
+          "joule-thomson-warmth"
         ],
         "anchored": true
       },
@@ -6100,9 +6100,9 @@
           "be-164"
         ],
         "quantities": [
-          "planckfreq",
-          "plancku",
-          "planckwarmth"
+          "planck-frequency",
+          "planck-u",
+          "planck-warmth"
         ],
         "anchored": true
       },
@@ -6111,7 +6111,7 @@
           "be-165"
         ],
         "quantities": [
-          "stefansigma"
+          "stefan-sigma"
         ],
         "anchored": true
       },
@@ -6120,8 +6120,8 @@
           "be-166"
         ],
         "quantities": [
-          "wienb",
-          "wienroot"
+          "wien-b",
+          "wien-root"
         ],
         "anchored": true
       },
@@ -6130,10 +6130,10 @@
           "be-167"
         ],
         "quantities": [
-          "sackurcount",
-          "sackurdensity",
-          "sackurentropy",
-          "sackurquantum"
+          "sackur-count",
+          "sackur-density",
+          "sackur-entropy",
+          "sackur-quantum"
         ],
         "anchored": true
       },
@@ -6142,10 +6142,10 @@
           "be-168"
         ],
         "quantities": [
-          "sahaconst",
-          "sahaion",
-          "sahamass",
-          "sahawarmth"
+          "saha-constant",
+          "saha-ionization",
+          "saha-mass",
+          "saha-warmth"
         ],
         "anchored": true
       },
@@ -6154,10 +6154,10 @@
           "be-169"
         ],
         "quantities": [
-          "richardsj",
-          "richardsmass",
-          "richardsphi",
-          "richardswarmth"
+          "richardson-j",
+          "richardson-mass",
+          "richardson-phi",
+          "richardson-warmth"
         ],
         "anchored": true
       },
@@ -6177,9 +6177,9 @@
           "be-170"
         ],
         "quantities": [
-          "onsagerb0",
-          "onsagerl12",
-          "onsagerl21"
+          "onsager-b0",
+          "onsager-l12",
+          "onsager-l21"
         ],
         "anchored": true
       },
