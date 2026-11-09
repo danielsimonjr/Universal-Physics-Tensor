@@ -2989,3 +2989,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Security: not touched. `bun.lock` resolves one core, 0.24.2.
 - Maintainability: `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups before and after.
 - Left: the local splitter stays. `Unit.readings` reads `µ` and `μ` as the atomic mass unit `u` in 24,011 of 269,171 glued tokens.
+
+## 2026-11-09 — five-axis pass (MathTS core 0.24.4, M6 rerun with superscripts)
+
+- Speed: not measured; no source change.
+- Stability: not changed; the rows are deterministic.
+- Reliability: the caret gap row is an agreement row. A new gap row pins superscripts beyond `³`, so a swap to `Unit.readings` fails a test (mutation: adding `⁴` to the local table fails the row).
+- Security: not touched. `bun.lock` resolves one core, 0.24.4.
+- Maintainability: `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups before and after.
+- Left: the local splitter stays. `Unit.readings` reads `⁰`, `⁴` to `⁹` and superscript digit runs that the local grammar refuses (56,148 of 67,409 tokens).
