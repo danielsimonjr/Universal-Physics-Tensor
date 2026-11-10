@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 21
+- **Potentially unused exports**: 20
 
 ## Potentially Unused Files
 
@@ -40,10 +40,6 @@ These exports are not imported by any other file in the codebase:
 ### `src/cli/record.ts`
 
 - `sha256` (constant)
-
-### `src/composition/discovery.ts`
-
-- `magnitudeStrength` (function)
 
 ### `src/composition/graph-structure.ts`
 

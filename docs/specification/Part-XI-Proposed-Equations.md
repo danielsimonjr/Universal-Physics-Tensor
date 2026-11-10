@@ -176,7 +176,7 @@ looser than those orders readmits it).
 The surfacer cannot author physics, only restate it under a hypothesis, so the
 implementation enforces:
 
-1. **Separate registry.** Proposals live in `PROPOSED_BRIDGES` /
+1. **Separate registry.** Proposals live in `proposedBridges()` /
    `ProposedBridgeEntry`, never in `BRIDGE_EQUATIONS`; the generator is pinned not
    to mutate the catalog (reference-identity + content-hash test).
 2. **Distinct status.** `status: 'unadjudicated'` is **not** a

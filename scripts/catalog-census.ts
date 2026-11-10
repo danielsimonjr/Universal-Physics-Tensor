@@ -40,7 +40,7 @@ import {
 } from '../src/composition/bridge-analysis.js';
 import { rankDiscoveries } from '../src/composition/discovery.js';
 import { annotateConsequences } from '../src/composition/consequence.js';
-import { PROPOSED_BRIDGES } from '../src/composition/proposed-bridges.js';
+import { proposedBridges } from '../src/composition/proposed-bridges.js';
 import {
   CANONICAL_EQUATIONS,
   bridgesWithoutCanonicalPartner,
@@ -315,7 +315,7 @@ export function deriveCensus(): CatalogCensus {
         promisingNovelConsequence: novelIn('promising'),
         promisingUncheckedNovelConsequence: novelIn('promising-unchecked'),
       },
-      proposedBridges: PROPOSED_BRIDGES.length,
+      proposedBridges: proposedBridges().length,
     },
     evidence: {
       formallyProved: evidence.byTag['formally-proved'],

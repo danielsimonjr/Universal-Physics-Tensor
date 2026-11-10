@@ -637,7 +637,7 @@ export function promoteProposal(
   return { proposal, evidence };
 }
 
-// ── PROPOSED_BRIDGES review surface (catalog field-shape, own registry) ──────
+// ── proposedBridges() review surface (catalog field-shape, own registry) ──────
 
 /**
  * A derived proposal in the catalog's field SHAPE, for review — but in its OWN
@@ -727,6 +727,9 @@ export function toProposedEntry(p: ProposedBridge): ProposedBridgeEntry {
   };
 }
 
+/** The result of the first {@link proposedBridges} call. The derivation runs when a caller first reads the result, not when the module loads. */
+let proposedBridgeCache: readonly ProposedBridgeEntry[] | undefined;
+
 /**
  * The PROPOSED-BRIDGE review surface: derived identity-consequences in the
  * catalog's field shape, in their OWN registry, every entry `status:
@@ -736,5 +739,7 @@ export function toProposedEntry(p: ProposedBridge): ProposedBridgeEntry {
  *
  * @internal
  */
-export const PROPOSED_BRIDGES: readonly ProposedBridgeEntry[] =
-  deriveProposedBridges().map(toProposedEntry);
+export function proposedBridges(): readonly ProposedBridgeEntry[] {
+  proposedBridgeCache ??= deriveProposedBridges().map(toProposedEntry);
+  return proposedBridgeCache;
+}

@@ -4,7 +4,7 @@ import {
   dedupByNormalForm,
   resolveSources,
   toProposedEntry,
-  PROPOSED_BRIDGES,
+  proposedBridges,
   toMonomial,
   fromMonomial,
   NotAMonomialError,
@@ -283,10 +283,10 @@ describe('bridge-source adapter + leaf canonicalization', () => {
   });
 });
 
-describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', () => {
+describe('proposedBridges() surface (catalog field-shape, separate registry)', () => {
   it('materializes the pilot as an unadjudicated, honest entry', () => {
-    expect(PROPOSED_BRIDGES).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + hν=mc² (6 before the Hubble distance had a magnitude)
-    const e = PROPOSED_BRIDGES.find(
+    expect(proposedBridges()).toHaveLength(CENSUS.discovery.proposedBridges); // Landauer photon + hν=mc² (6 before the Hubble distance had a magnitude)
+    const e = proposedBridges().find(
       (b) => b.id === 'IC-erasure-energy--photon-energy--nu',
     )!;
     expect(e).toBeDefined();
@@ -313,8 +313,8 @@ describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', ()
     // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
-    // PROPOSED_BRIDGES ids are string IC-*, never numeric catalog ids.
-    for (const e of PROPOSED_BRIDGES) expect(e.id).toMatch(/^IC-/);
+    // proposedBridges() ids are string IC-*, never numeric catalog ids.
+    for (const e of proposedBridges()) expect(e.id).toMatch(/^IC-/);
   });
 });
 

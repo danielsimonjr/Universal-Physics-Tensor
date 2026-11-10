@@ -13,7 +13,7 @@ UPT's bridge/law catalog is a **graph**. Round nodes are *quantities*
 laws, bridges, or machine-derived proposals. Each one is an n-ary
 junction whose source quantities point in and whose target points out.
 `upt map` renders that graph straight from the live data
-(`CATALOG_GRAPH` / `CANONICAL_GRAPH` / `PROPOSED_BRIDGES`), as Mermaid
+(`CATALOG_GRAPH` / `CANONICAL_GRAPH` / `proposedBridges()`), as Mermaid
 or Graphviz-DOT **source text**, or as rendered SVG.
 
 > **Read this map honestly.** It is *deliberately disjointed*. The catalog is
