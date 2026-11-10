@@ -89,7 +89,7 @@ jobs:
       - name: Fail when the unit splitter disagrees with the frozen local splitter
         run: bun scripts/m6-readings-agreement.ts
       - name: Fail when a token of the unit product walk reads wrong
-        run: bun scripts/unit-product-walk.ts
+        run: bun scripts/unit-product-walk.ts --control
       # `npm audit` requires package-lock.json; Bun owns the lockfile now.
       - run: bun audit --audit-level=high
 
