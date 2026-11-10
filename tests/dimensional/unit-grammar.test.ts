@@ -9,11 +9,15 @@
  */
 import { describe, expect, it } from 'vitest';
 import { equals, multiply } from '../../src/dimensional/algebra.js';
-import { convertValue, parseUnit, unitTables, UnitError } from '../../src/dimensional/units.js';
+import { convertValue, parseUnit, unitTables } from '../../src/dimensional/units.js';
+import { oneFactor, powerDim, productWalkTokens, sampleTokens, walkProducts } from '../helpers/unit-product-walk.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 
 const { units, prefixes } = unitTables();
-const SUPERSCRIPT: Readonly<Record<string, number>> = { '²': 2, '³': 3 };
+
+/** Seed and share of the sampled product walk; `scripts/unit-product-walk.ts` runs every token. */
+const WALK_SEED = 20261109;
+const WALK_FRACTION = 0.1;
 
 interface Factor {
   readonly scale: number;
@@ -23,51 +27,6 @@ interface Factor {
 function close(actual: number, expected: number): void {
   const scale = Math.max(Math.abs(actual), Math.abs(expected), 1);
   expect(Math.abs(actual - expected) / scale).toBeLessThan(1e-9);
-}
-
-/** Exact unit, or prefix plus a unit. No product split. */
-function trySymbol(sym: string): Factor | null {
-  const exact = units.get(sym);
-  if (exact !== undefined) return { scale: exact[0], dim: exact[1] };
-  for (const [prefix, factor] of prefixes) {
-    if (!sym.startsWith(prefix) || sym.length === prefix.length) continue;
-    const base = units.get(sym.slice(prefix.length));
-    if (base !== undefined && base[2]) return { scale: factor * base[0], dim: base[1] };
-  }
-  return null;
-}
-
-/** One factor with an optional exponent, or null. This is not the product search. */
-function oneFactor(token: string): Factor | null {
-  let base = token;
-  let exp = 1;
-  const caret = /^(.+)\^([+-]?\d+)$/.exec(token);
-  if (caret !== null) {
-    base = caret[1]!;
-    exp = Number(caret[2]);
-  } else {
-    const uni = /^(.*?)([²³])$/.exec(token);
-    const superExp = uni === null ? undefined : SUPERSCRIPT[uni[2]!];
-    if (uni !== null && superExp !== undefined && uni[1]!.length > 0) {
-      base = uni[1]!;
-      exp = superExp;
-    } else {
-      const glued = /^(.*?)([1-9]\d*)$/.exec(token);
-      if (glued !== null && glued[1]!.length > 0 && trySymbol(glued[1]!) !== null) {
-        base = glued[1]!;
-        exp = Number(glued[2]);
-      }
-    }
-  }
-  const parsed = trySymbol(base);
-  if (parsed === null || !Number.isFinite(exp)) return null;
-  return { scale: parsed.scale ** exp, dim: powerDim(parsed.dim, exp) };
-}
-
-function powerDim(dim: Dimension, exp: number): Dimension {
-  const out: Record<string, number> = {};
-  for (const [key, value] of Object.entries(dim)) out[key] = value * exp;
-  return out as unknown as Dimension;
 }
 
 function expectFactor(token: string, factor: Factor): void {
@@ -108,72 +67,14 @@ describe('unit juxtaposition grammar', () => {
     expect(atoms).toContain('mm');
   });
 
-  it('reads a unique product, and names every reading of an ambiguous token', () => {
-    let products = 0;
-    let ambiguous = 0;
-    const bases = [...units.keys()];
-    const prefixed = [...prefixes.keys()].flatMap((prefix) =>
-      [...units.entries()].filter(([, spec]) => spec[2]).map(([symbol]) => `${prefix}${symbol}`),
-    );
-    const lefts = [...bases, ...bases.flatMap((symbol) => [`${symbol}2`, `${symbol}^2`]), ...prefixed];
-    // The walk covers about 1.4e5 tokens. A vitest `expect` per token cost about two thirds of the
-    // run time, so each check records a failure as text and one assertion reads the list.
-    const failures: string[] = [];
-    const within = (actual: number, expected: number): boolean =>
-      Math.abs(actual - expected) / Math.max(Math.abs(actual), Math.abs(expected), 1) < 1e-9;
-    const factorMismatch = (token: string, want: Factor): string | null => {
-      const got = parseUnit(token);
-      if (!within(got.scale, want.scale)) return `${token}: scale ${got.scale} is not ${want.scale}`;
-      if (!equals(got.dim, want.dim)) return `${token}: dimension is not the single factor`;
-      return null;
-    };
-    const rightFactors = new Map(bases.map((right) => [right, oneFactor(right)] as const));
-    for (const left of lefts) {
-      const a = oneFactor(left);
-      if (a === null) failures.push(`${left}: not one factor`);
-      for (const right of bases) {
-        const token = `${left}${right}`;
-        if (token === 'degC' || token === '°C' || token === 'degF' || token === '°F') {
-          const affine = parseUnit(token).affine;
-          if (affine !== (token.endsWith('C') ? 'celsius' : 'fahrenheit')) failures.push(`${token}: affine ${affine}`);
-          continue;
-        }
-        const single = oneFactor(token);
-        if (single !== null) {
-          const mismatch = factorMismatch(token, single);
-          if (mismatch !== null) failures.push(mismatch);
-          continue;
-        }
-        const b = rightFactors.get(right) ?? null;
-        if (a === null || b === null) {
-          if (b === null) failures.push(`${right}: not one factor`);
-          continue;
-        }
-        let got: ReturnType<typeof parseUnit>;
-        try {
-          got = parseUnit(token);
-        } catch (error) {
-          if (!(error instanceof UnitError)) {
-            failures.push(`${token}: threw ${String(error)}`);
-            continue;
-          }
-          const message = error.message;
-          if (/ambiguous/.test(message)) {
-            if (!message.includes(' or ')) failures.push(`${token}: ambiguous message names one reading`);
-            ambiguous += 1;
-            continue;
-          }
-          if (!/Fahrenheit|affine|unknown unit/.test(message)) failures.push(`${token}: ${message}`);
-          continue;
-        }
-        if (!within(got.scale, a.scale * b.scale)) failures.push(`${token}: product scale ${got.scale}`);
-        if (!equals(got.dim, multiply(a.dim, b.dim))) failures.push(`${token}: product dimension`);
-        products += 1;
-      }
-    }
-    expect(failures.slice(0, 20)).toEqual([]);
-    expect(products).toBeGreaterThan(0);
-    expect(ambiguous).toBeGreaterThan(0);
+  it('reads a unique product, and names every reading of an ambiguous token (a seeded sample of the walk)', () => {
+    // The full walk is about 1.6e5 tokens and runs in `scripts/unit-product-walk.ts`, in CI,
+    // with no time limit. This test reads a seeded tenth of it. Each failure names its token.
+    const sample = sampleTokens(productWalkTokens(), WALK_FRACTION, WALK_SEED);
+    const result = walkProducts(sample);
+    expect(result.failures.slice(0, 20)).toEqual([]);
+    expect(result.products).toBeGreaterThan(0);
+    expect(result.ambiguous).toBeGreaterThan(0);
     const metreSquared = oneFactor('m^2')!;
     const kelvin = oneFactor('K')!;
     expectFactor('m2K', { scale: metreSquared.scale * kelvin.scale, dim: multiply(metreSquared.dim, kelvin.dim) });
