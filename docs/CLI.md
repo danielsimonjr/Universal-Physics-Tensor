@@ -525,7 +525,7 @@ upt coverage
 Search the atlas for a claim. --embed asks a local Ollama model and does not accept that order.
 
 ```
-upt retrieve <claim> [--embed] [--ollama-url=URL]
+upt retrieve <claim> [--embed] [--ollama-url=URL] [--embed-model=NAME]
 ```
 
 | Flag | Value | Default | Description |
@@ -533,6 +533,7 @@ upt retrieve <claim> [--embed] [--ollama-url=URL]
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 | `--embed` | no |  | Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0. |
 | `--ollama-url=VALUE` | `=` value | http://127.0.0.1:11434 | Ollama base URL. Used only with --embed. |
+| `--embed-model=VALUE` | `=` value | qwen3-embedding:4b | Ollama embedding model. Used only with --embed. |
 
 ```
 upt retrieve period of a pendulum

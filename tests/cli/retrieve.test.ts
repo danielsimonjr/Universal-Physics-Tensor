@@ -7,7 +7,8 @@ import { captureMerged, text } from '../helpers/cli.js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { rankByStructure } from '../../src/atlas/benchmark/baselines.js';
-import { canonicalRetrievalCorpus } from '../../src/atlas/benchmark/hybrid-retrieval.js';
+import { canonicalRetrievalCorpus, OLLAMA_EMBEDDING_MODEL } from '../../src/atlas/benchmark/hybrid-retrieval.js';
+import { command as retrieveCommand } from '../../dist/cli/commands/retrieve.js';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -33,7 +34,7 @@ describe('upt retrieve', () => {
     expect(await runCli(['retrieve', 'mass', '--json'], c.io)).toBe(0);
     const env = JSON.parse(text(c));
     expect(env.command).toBe('retrieve');
-    expect(env.options).toEqual({ embed: false, ollamaUrl: null });
+    expect(env.options).toEqual({ embed: false, ollamaUrl: null, embedModel: null });
 
     expect(env.result.embeddings).toBe('not-requested');
     expect(env.result.proposals).toBeNull();
@@ -62,6 +63,45 @@ describe('upt retrieve', () => {
     expect(env.result.accepted).toEqual([]);
   });
 
+  /** Stub `fetch` and keep the model name of each request body. */
+  function captureModels(): string[] {
+    const models: string[] = [];
+    vi.stubGlobal('fetch', async (_url: string, init?: RequestInit) => {
+      models.push((JSON.parse(String(init?.body)) as { model: string }).model);
+      return new Response(JSON.stringify({ error: 'model not found' }), { status: 404 });
+    });
+    return models;
+  }
+
+  it('--embed --embed-model=NAME asks Ollama for NAME and reports it', async () => {
+    const models = captureModels();
+    const c = captureMerged();
+    expect(await runCli(['retrieve', 'mass', '--embed', '--embed-model=x', '--json'], c.io)).toBe(0);
+    const env = JSON.parse(text(c));
+    expect(models).toEqual(['x']);
+    expect(env.options.embedModel).toBe('x');
+    expect(env.result.fallback).toBe('model-not-there');
+  });
+
+  it('--embed without --embed-model asks for the default model', async () => {
+    const models = captureModels();
+    const c = captureMerged();
+    expect(await runCli(['retrieve', 'mass', '--embed'], c.io)).toBe(0);
+    expect(models).toEqual([OLLAMA_EMBEDDING_MODEL]);
+    expect(text(c)).toContain(`(Ollama at http://127.0.0.1:11434), model ${OLLAMA_EMBEDDING_MODEL}`);
+  });
+
+  it('the --embed-model default is the one default of the embedder', () => {
+    const flag = retrieveCommand.flags.find((f) => f.name === '--embed-model');
+    expect(flag?.defaultValue).toBe(OLLAMA_EMBEDDING_MODEL);
+  });
+
+  it('an empty --embed-model is a usage error', async () => {
+    const c = captureMerged();
+    expect(await runCli(['retrieve', 'mass', '--embed', '--embed-model='], c.io)).toBe(2);
+    expect(text(c)).toMatch(/--embed-model/);
+  });
+
   it('a missing claim is a usage error', async () => {
     const c = captureMerged();
     expect(await runCli(['retrieve'], c.io)).toBe(2);
@@ -75,6 +115,8 @@ describe('upt retrieve', () => {
     expect(t).toMatch(/does not call out of process/);
     expect(t).toMatch(/--embed/);
     expect(t).toMatch(/--ollama-url/);
+    expect(t).toMatch(/--embed-model=NAME/);
+    expect(t).toContain(OLLAMA_EMBEDDING_MODEL);
     expect(t).toMatch(/the process is not there/);
     expect(t).toMatch(/the model is not there/);
     expect(t).toMatch(/the call does\s+not finish/);

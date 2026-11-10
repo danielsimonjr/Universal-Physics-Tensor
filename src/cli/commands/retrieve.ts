@@ -15,6 +15,12 @@ import { emitJson } from '../output.js';
 /** Where `--embed` looks for Ollama when `--ollama-url` is not given. */
 const OLLAMA_DEFAULT_URL = 'http://127.0.0.1:11434';
 
+/**
+ * The model `--embed` asks for when `--embed-model` is not given. It is the
+ * embedder's own default, `OLLAMA_EMBEDDING_MODEL`; a test binds the two.
+ */
+const OLLAMA_DEFAULT_MODEL = 'qwen3-embedding:4b';
+
 const FLAGS: FlagSpec[] = [
   JSON_FLAG,
   {
@@ -28,20 +34,30 @@ const FLAGS: FlagSpec[] = [
     description: 'Ollama base URL. Used only with --embed.',
     defaultValue: OLLAMA_DEFAULT_URL,
   },
+  {
+    name: '--embed-model',
+    valueStyle: 'attached',
+    description: 'Ollama embedding model. Used only with --embed.',
+    defaultValue: OLLAMA_DEFAULT_MODEL,
+  },
 ];
 
-const HELP = `upt retrieve <claim> [--embed] [--ollama-url=URL]
+const HELP = `upt retrieve <claim> [--embed] [--ollama-url=URL] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
         search (typed structural ranking) and does not call out of process. The output
-        says so. --embed asks a local Ollama model, qwen3-embedding:4b, for
-        an order. That order is a proposal, not evidence. Acceptance stays
-        the atlas search, and cosine similarity does not enter its score.
+        says so. --embed asks a local Ollama model for an order. The
+        default model is ${OLLAMA_DEFAULT_MODEL}. That order is a proposal,
+        not evidence. Acceptance stays the atlas search, and cosine
+        similarity does not enter its score.
         If Ollama cannot be used, the same atlas search is printed and the
         reason is named: the process is not there, the model is not there,
         the server answered an error status, the reply is not a vector or its
-        length is not the length stored in the frozen file, or the call does
+        length is not the length expected for the model, or the call does
         not finish. A fallback exits 0.
         --ollama-url is used only with --embed (default ${OLLAMA_DEFAULT_URL}).
+        --embed-model is used only with --embed. The default model must
+        give the length of the frozen file. Another model, or another
+        spelling of the default, must give one length for every vector.
         A claim is text. It has no expression, so the atlas search accepts
         nothing: it ranks by structure, and a text claim has none to rank.
         The command does not invent one. --embed still proposes an order.
@@ -59,13 +75,17 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const embed = args.flags.has('embed');
   const ollamaUrl = args.flags.get('ollama-url')?.[0] ?? OLLAMA_DEFAULT_URL;
+  const embedModel = args.flags.get('embed-model')?.[0] ?? OLLAMA_DEFAULT_MODEL;
+  if (embedModel.length === 0) {
+    throw new UsageError('upt retrieve: --embed-model needs a model name, e.g. `--embed-model=qwen3-embedding:4b`');
+  }
   const corpus = api.canonicalRetrievalCorpus();
   const result = await api.retrieveHybrid({
     query: { text: claim },
     corpus,
     embeddings: embed,
     embedder: embed
-      ? api.ollamaEmbedder({ baseUrl: ollamaUrl })
+      ? api.ollamaEmbedder({ baseUrl: ollamaUrl, model: embedModel })
       : undefined,
   });
   if (args.flags.has('json')) {
@@ -73,7 +93,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       {
         command: 'retrieve',
         epistemics: EPISTEMICS,
-        options: { embed, ollamaUrl: embed ? ollamaUrl : null },
+        options: { embed, ollamaUrl: embed ? ollamaUrl : null, embedModel: embed ? embedModel : null },
         result,
       },
       ctx.write,
@@ -82,7 +102,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   out(`upt retrieve — ${result.embeddings === 'used' ? 'embedding proposal and atlas search' : 'atlas search'}`);
   out(result.note);
-  if (result.fallback !== null) out(`  fallback reason: ${result.fallback} (Ollama at ${ollamaUrl})`);
+  if (result.fallback !== null) out(`  fallback reason: ${result.fallback} (Ollama at ${ollamaUrl}), model ${embedModel}`);
   if (result.proposals !== null) {
     out('  proposed (cosine, not accepted):');
     for (const id of result.proposals) out(`    ${id}`);

@@ -494,6 +494,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--depth` | `map` | Hop count for --around. |
 | `--derive` | `discover` | For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge. |
 | `--embed` | `retrieve` | Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0. |
+| `--embed-model` | `retrieve` | Ollama embedding model. Used only with --embed. |
 | `--equation` | `map` | Inject TARGET = EXPR as a user node and report where it lands. |
 | `--equation-only` | `map` | Print only the equation verdict. Errors when --equation is missing. |
 | `--evidence` | `atlas`, `map` | atlas: With no bridge id, list every bridge's derived evidence and the witness results it observes. map: Keep atlas edges whose derived evidence set contains TAG. |

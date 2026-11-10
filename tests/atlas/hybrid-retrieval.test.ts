@@ -16,6 +16,7 @@ import {
   EmbeddingUnavailable,
   FROZEN_VECTOR_DIMS,
   FROZEN_VECTOR_SHA256,
+  OLLAMA_EMBEDDING_MODEL,
   cosine,
   decodeFloat32,
   ollamaEmbedder,
@@ -213,5 +214,25 @@ describe('Ollama fallback', () => {
         }),
     });
     await expect(hung(['claim'])).rejects.toMatchObject({ reason: 'call-did-not-finish' });
+  });
+
+  it('a model that is not the default is held to one length per reply, not to the frozen length', async () => {
+    const reply = (embeddings: unknown) =>
+      ollamaEmbedder({
+        baseUrl: 'http://127.0.0.1:9',
+        model: 'other-embedding',
+        fetchImpl: async () => new Response(JSON.stringify({ embeddings }), { status: 200 }),
+      });
+    const row = Array.from({ length: 1024 }, (_, i) => i / 1024);
+    await expect(reply([row, row])(['a', 'b'])).resolves.toHaveLength(2);
+    await expect(reply([row, row.slice(1)])(['a', 'b'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
+    await expect(reply([[]])(['a'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
+
+    const defaultModel = ollamaEmbedder({
+      baseUrl: 'http://127.0.0.1:9',
+      model: OLLAMA_EMBEDDING_MODEL,
+      fetchImpl: async () => new Response(JSON.stringify({ embeddings: [row] }), { status: 200 }),
+    });
+    await expect(defaultModel(['a'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
   });
 });
