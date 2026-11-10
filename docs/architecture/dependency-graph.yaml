@@ -3,7 +3,7 @@ metadata:
   version: 13.0.0
   totalFiles: 388
   totalModules: 13
-  totalExports: 2826
+  totalExports: 2828
 entryPoints:
   - file: src/index.ts
     type: main
@@ -15250,6 +15250,8 @@ modules:
             - AffineRow
       exports:
         - affineReadingNote
+        - formatReading
+        - segmentations
         - unitConventionNotes
         - readUnit
         - unitReadingsSource
@@ -15270,11 +15272,14 @@ modules:
         - AmbiguousUnitError
       interfaces:
         - ParsedUnit
+        - FactorReading
         - UnitReading
         - QuantityLiteral
         - ConvertedValue
       functions:
         - affineReadingNote
+        - formatReading
+        - segmentations
         - unitConventionNotes
         - readUnit
         - unitReadingsSource
@@ -19607,11 +19612,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 388
   totalModules: 13
-  totalLinesOfCode: 87833
-  totalExports: 2826
+  totalLinesOfCode: 87844
+  totalExports: 2828
   totalClasses: 86
-  totalInterfaces: 518
-  totalFunctions: 928
+  totalInterfaces: 519
+  totalFunctions: 930
   totalTypeGuards: 16
   totalEnums: 0
   totalConstants: 413

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 388,
-    "totalTestFiles": 717,
+    "totalTestFiles": 719,
     "testedCount": 378,
     "directlyTestedCount": 345,
     "untestedCount": 10,
@@ -10302,6 +10302,7 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
+      "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
@@ -10344,6 +10345,8 @@
       "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/m6-splitter-refusal.test.ts",
+      "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
       "tests/dimensional/superscript-power.test.ts",
@@ -14207,6 +14210,7 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
+      "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
@@ -14226,6 +14230,8 @@
       "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/m6-splitter-refusal.test.ts",
+      "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
       "tests/dimensional/superscript-power.test.ts",
@@ -24938,6 +24944,13 @@
       "src/dimensional/types.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/metric-validators.ts"
+    ],
+    "tests/dimensional/m6-splitter-refusal.test.ts": [
+      "src/dimensional/units.ts"
+    ],
+    "tests/dimensional/m6-splitter-source.test.ts": [
+      "src/dimensional/unit-data.ts",
+      "src/dimensional/units.ts"
     ],
     "tests/dimensional/mathts-refusal-delegation.test.ts": [
       "src/dimensional/unit-data.ts",
