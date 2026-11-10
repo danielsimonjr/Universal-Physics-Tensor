@@ -6,7 +6,7 @@
       "name": "universal-physics-tensor",
       "dependencies": {
         "@danielsimonjr/mathts-autograd": "^0.4.4",
-        "@danielsimonjr/mathts-core": "^0.25.1",
+        "@danielsimonjr/mathts-core": "^0.25.3",
         "@danielsimonjr/mathts-expression": "^0.12.5",
         "@danielsimonjr/mathts-functions": "^0.79.0",
         "@danielsimonjr/mathts-matrix": "^0.9.5",
@@ -44,7 +44,7 @@
 
     "@danielsimonjr/mathts-autograd": ["@danielsimonjr/mathts-autograd@0.4.4", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0", "@danielsimonjr/mathts-tensor": "^0.3.4" } }, "sha512-K72CP//V+QvJ0MoJ35qe9zbvWb2J61XLVlVWzKgyIVX7DSADlW64i9cfMWT5gGdkGGtMmPtX+4TlB5dZIkXLBw=="],
 
-    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.25.1", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-3tVl0JUXpk68N0iZQ8XL+5q0EKdvXB7rRuWyOKSvsUTxbItXpM3boR/2BDW98aaLMSLlrzazchJ9K43nKzqySg=="],
+    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.25.3", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-sClVztXoywcJRIWEnTbJI2XjQHKj+92Qp7vtA4jPj6tr6W8C2G+g7wrh/n74E30j2FEOyBWrxvexXAoP3y/q8A=="],
 
     "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.12.5", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0" } }, "sha512-ha4S7zUV99BHeptggiAYEXAT3O1XDe3qoxIjh/dRJb55ffq0KmuAWAWVGtM4q0SsVnCuSc0dT56tR6cQ/7cayg=="],
 

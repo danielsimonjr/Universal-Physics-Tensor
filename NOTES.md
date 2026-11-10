@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-10
+
+- **M6 on core 0.25.3: the cost of the swap is 7 to 17%.** Core 0.25.3 searches a glued unit token in one pass (MathTS #674). `scripts/m6-readings-agreement.ts` gives 0 differences in both directions on every set, with the four digests of the table below. A/B of `parseUnit('1/<token>')` on the base set (25,933 tokens), median of 9, the eb8f4bcd `units.ts` against the swapped one, three alternating pairs in one session: 3,050 against 3,252 ms (1.07×), 3,085 against 3,613 ms (1.17×, three of the nine swapped runs were above 6,500 ms), 3,059 against 3,520 ms (1.15×). The CPU load was not sampled. On 0.25.1 the ratio was 1.37× to 1.69×. The live `segmentations` is 1.05× to 1.11× the frozen splitter (1,033 against 984 ms and 1,013 against 910 ms); on 0.25.1 it was 1.85× to 2.29×. Installed: core 0.25.3; the other five MathTS packages do not change; `grep -c 'mathts-core@' bun.lock` prints 1.
+
 ## As of 2026-11-09
 
 - **M6 on core 0.25.1 and functions 0.79.0: the swap meets the speed line.** Core 0.25.1 indexes the unit lookup by its last character (MathTS #660). The harness still gives 0 differences in both directions on every set, with the four digests of the table below. A/B of `parseUnit('1/<token>')` on the base set (25,933 tokens), median of 9, the eb8f4bcd `units.ts` against the swapped one, alternating in one session with the CPU load sampled every 3 s: 3,264 against 5,475 ms (1.68×), 3,636 against 6,145 ms (1.69×), 3,864 against 5,310 ms (1.37×); load between 0 and 100%, mostly 10 to 40%. The line of the plan is 2×. **The stated cost is the splitter:** the live `segmentations` is 1.85× to 2.29× the frozen splitter (2,808 against 1,515 ms and 2,723 against 1,190 ms) in two runs on 0.25.1. Installed: core 0.25.1, functions 0.79.0, matrix 0.9.5, expression 0.12.5, tensor 0.3.4, autograd 0.4.4; `grep -c 'mathts-core@' bun.lock` prints 1. The sentence below that the swap is about 10 times slower is the record for core 0.25.0.
