@@ -55,7 +55,7 @@ const REASON_TEXT = {
   'model-not-there': 'the model is not there',
   'server-error': 'the server answered an error status',
   'reply-not-a-vector':
-    'the reply is not a vector, or its length is not the length stored in the frozen file',
+    'the reply is not a vector, or its length is not the length expected for the model',
   'call-did-not-finish': 'the call does not finish',
 } as const;
 
@@ -155,6 +155,10 @@ export function canonicalRetrievalCorpus(): CorpusRecord[] {
 export interface OllamaEmbedderOptions {
   readonly baseUrl: string;
   readonly model?: string;
+  /**
+   * The vector length to require. When this is not given, the default model
+   * must give `FROZEN_VECTOR_DIMS`, and another model must give one length for every row.
+   */
   readonly expectedDims?: number;
   readonly timeoutMs?: number;
   readonly fetchImpl?: (url: string, init?: RequestInit) => Promise<Response>;
@@ -163,7 +167,9 @@ export interface OllamaEmbedderOptions {
 /** A local Ollama embedder. Off unless a caller constructs it. @internal */
 export function ollamaEmbedder(options: OllamaEmbedderOptions): Embedder {
   const model = options.model ?? OLLAMA_EMBEDDING_MODEL;
-  const expectedDims = options.expectedDims ?? FROZEN_VECTOR_DIMS;
+  // Only the default model is held to the frozen file's length. Another model
+  // is held to one length for every row of a reply.
+  const expectedDims = options.expectedDims ?? (model === OLLAMA_EMBEDDING_MODEL ? FROZEN_VECTOR_DIMS : undefined);
   const timeoutMs = options.timeoutMs ?? OLLAMA_TIMEOUT_MS;
   const fetchImpl = options.fetchImpl ?? fetch;
   const base = options.baseUrl.replace(/\/$/, '');
@@ -199,8 +205,10 @@ export function ollamaEmbedder(options: OllamaEmbedderOptions): Embedder {
         throw new EmbeddingUnavailable('reply-not-a-vector');
       }
       const vectors: number[][] = [];
+      const first: unknown = embeddings[0];
+      const want = expectedDims ?? (Array.isArray(first) ? first.length : 0);
       for (const row of embeddings) {
-        if (!Array.isArray(row) || row.length !== expectedDims || row.some((x) => typeof x !== 'number' || !Number.isFinite(x))) {
+        if (!Array.isArray(row) || want < 1 || row.length !== want || row.some((x) => typeof x !== 'number' || !Number.isFinite(x))) {
           throw new EmbeddingUnavailable('reply-not-a-vector');
         }
         vectors.push(row);

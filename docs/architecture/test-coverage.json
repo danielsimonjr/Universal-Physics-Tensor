@@ -3,10 +3,10 @@
     "totalSourceFiles": 388,
     "totalTestFiles": 719,
     "testedCount": 378,
-    "directlyTestedCount": 345,
+    "directlyTestedCount": 346,
     "untestedCount": 10,
     "coveragePercent": "97.4",
-    "directCoveragePercent": "88.9"
+    "directCoveragePercent": "89.2"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
@@ -534,6 +534,7 @@
     "src/cli/commands/probe.ts",
     "src/cli/commands/recover.ts",
     "src/cli/commands/regime.ts",
+    "src/cli/commands/retrieve.ts",
     "src/cli/errors.ts",
     "src/cli/euler-guard.ts",
     "src/cli/eval-numbers.ts",
@@ -12696,7 +12697,9 @@
     "src/cli/commands/regime.ts": [
       "tests/cli/explain-temperature-binding.test.ts"
     ],
-    "src/cli/commands/retrieve.ts": [],
+    "src/cli/commands/retrieve.ts": [
+      "tests/cli/retrieve.test.ts"
+    ],
     "src/cli/commands/search.ts": [],
     "src/cli/commands/symbolic.ts": [],
     "src/cli/commands/testplan.ts": [],

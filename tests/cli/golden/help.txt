@@ -892,18 +892,22 @@ Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
 
-  upt retrieve <claim> [--embed] [--ollama-url=URL]
+  upt retrieve <claim> [--embed] [--ollama-url=URL] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
         search (typed structural ranking) and does not call out of process. The output
-        says so. --embed asks a local Ollama model, qwen3-embedding:4b, for
-        an order. That order is a proposal, not evidence. Acceptance stays
-        the atlas search, and cosine similarity does not enter its score.
+        says so. --embed asks a local Ollama model for an order. The
+        default model is qwen3-embedding:4b. That order is a proposal,
+        not evidence. Acceptance stays the atlas search, and cosine
+        similarity does not enter its score.
         If Ollama cannot be used, the same atlas search is printed and the
         reason is named: the process is not there, the model is not there,
         the server answered an error status, the reply is not a vector or its
-        length is not the length stored in the frozen file, or the call does
+        length is not the length expected for the model, or the call does
         not finish. A fallback exits 0.
         --ollama-url is used only with --embed (default http://127.0.0.1:11434).
+        --embed-model is used only with --embed. The default model must
+        give the length of the frozen file. Another model, or another
+        spelling of the default, must give one length for every vector.
         A claim is text. It has no expression, so the atlas search accepts
         nothing: it ranks by structure, and a text claim has none to rank.
         The command does not invent one. --embed still proposes an order.
@@ -916,6 +920,8 @@ Flags:
         Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0.
   --ollama-url=VALUE
         Ollama base URL. Used only with --embed. Default: http://127.0.0.1:11434.
+  --embed-model=VALUE
+        Ollama embedding model. Used only with --embed. Default: qwen3-embedding:4b.
 
   upt search <word> ...
         Find a catalog bridge, canonical equation, atlas model, atlas bridge,

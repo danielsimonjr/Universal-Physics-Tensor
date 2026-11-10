@@ -34,8 +34,10 @@ sit behind that function.
 
 - **Stub.** A pure function of the text. The same text is the same
   vector. Tests use this. It does not open a socket.
-- **Ollama.** A local process, spoken to over its HTTP API, model
-  `qwen3-embedding:4b`. The package does not depend on that binary, on
+- **Ollama.** A local process, spoken to over its HTTP API. The
+  default model is `qwen3-embedding:4b`. A caller can specify a
+  different model, and `upt retrieve` accepts `--embed-model=NAME` for
+  that. The package does not depend on that binary, on
   a client library, or on a GPU. The call is off unless a caller asks
   for it.
 
@@ -43,6 +45,14 @@ The query string uses the form registered with the embedding condition:
 an instruction line, a newline, then `Query:` and the claim. Corpus
 records are embedded as their text, with no instruction prefix. A
 second instruction would not be comparable to the frozen vectors.
+When the caller names a different model, the registered query form
+stays the same. The returned vectors are not comparable to the vectors
+in the frozen file.
+
+The reply from the default model must have the length stored in the
+frozen file. For any other model, each row of the reply must have the
+same length. The length must be at least one. An explicit expected
+length replaces both rules.
 
 Ranking is cosine similarity, best first. A tie breaks by record id,
 so the order does not depend on which vector happened to be computed
@@ -67,8 +77,9 @@ are:
 
 - the process is not there;
 - the model is not there;
-- the reply is not a vector, or its length is not the length stored
-  in the frozen file;
+- the server answered an error status;
+- the reply is not a vector, or its length is not the length expected
+  for the model;
 - the call does not finish.
 
 A fallback is a successful atlas answer plus a named reason. It is not

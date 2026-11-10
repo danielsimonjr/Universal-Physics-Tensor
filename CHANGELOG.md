@@ -27,6 +27,7 @@ from v0.1.0 onward.
 
 ### Added
 
+- **`upt retrieve --embed --embed-model=NAME` asks Ollama for NAME.** The default model is still `qwen3-embedding:4b`, and the command takes that name from one constant (a test binds it to `OLLAMA_EMBEDDING_MODEL`). The JSON `options` gain `embedModel` (null without `--embed`), and the text fallback line names the model after the URL: `(Ollama at <url>), model <name>`. An empty `--embed-model=` is a usage error (exit 2). `ollamaEmbedder` holds only the default model to the 2560 length of the frozen file; another model must give one length of at least 1 for every row, and an explicit `expectedDims` still wins. The `reply-not-a-vector` text now says "the length expected for the model". The frozen file, its length and its hash do not change. Why: a host with another embedding model could not use `--embed`, because the model name was fixed and every other length was refused.
 - **A CLI test pins issue 550.** `upt evaluate be-161 … theta_difference_K=10degC` gives θ(0) = 10, the same as `10K` and a bare `10`, and the conversion line says a difference with no offset. The library reader already had a pin (`tests/dimensional/unit-closure.test.ts`); the new test runs the command of the issue.
 
 ### Changed

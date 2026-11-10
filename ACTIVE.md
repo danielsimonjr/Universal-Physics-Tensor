@@ -20,6 +20,7 @@ Code review is a standing gate. ~~The owner's rule (Daniel, 2026-10-06): Tom dee
 
 ## Open tasks, easiest first
 
+- [x] `upt retrieve --embed --embed-model=NAME`: ask Ollama for NAME. The default stays `qwen3-embedding:4b`, and a model that is not the default is not held to the 2560 length of the frozen file.
 - [x] #538: the per-derivation `dimensionalForm.monomial` of `upt explain sound-speed` omits the bound `gamma` exponent that the summary monomial and the recovered value carry.
 - [x] #527: `upt metric flrw` prints an empty Ricci tensor beside a nonzero scalar (an absolute 1e-8 floor), reads radiation (R = 0) as vacuum, prints the k = 1 sentence on a k = 0 run, and restores c uniformly on the tensor.
 - [x] #526: `evaluateCovariantEikonalNumerical` misses its 1e-6 radial contract over AU to the solar surface at the fixed 2048 steps, and a near-tangent `b_m` returns a wrong number or a plain `Error` instead of a `RangeError`.
