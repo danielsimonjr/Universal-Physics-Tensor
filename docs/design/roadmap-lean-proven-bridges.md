@@ -12,7 +12,7 @@ composition table.
   §4.3, taken by route A in §4.5.
 - The Lean 4 project is this repository's `lean/` (it moved from PhysJS in
   11.0.0), built and axiom-audited by CI. The project requires Mathlib and
-  the Physlib package (the library Daniel calls PhysLean), both as direct
+  the Physlib package (the library the owner calls PhysLean), both as direct
   requires. That standing fact is `MEMORY.md`. The scoping report's correction
   records the same assignment.
 - A reviewed `formalRef` is the record in

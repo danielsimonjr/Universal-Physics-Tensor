@@ -5,7 +5,7 @@
 This note specifies a staged refactor of import direction. It changes no
 code, no public export, and no cell of the composition table. Approval is
 recorded outside this file. Landing the note does not authorize a stage.
-A stage becomes work when Daniel accepts this note and an `ACTIVE.md` task
+A stage becomes work when the owner accepts this note and an `ACTIVE.md` task
 names that stage. Publishing the package is the owner's job and is not part
 of any stage.
 
@@ -319,7 +319,7 @@ each one edits the meaning or the reader of those call sites:
 2. Bucket-A catalog links. `docs/planning/Unproven-Bridges-Lean-Feasibility.md`
    marks a set of easy rows Bucket A. `ACTIVE.md` leaves authorizing any row
    of that triage as an owner decision. No pull request on this repository
-   links them. If Daniel authorizes them, they are further
+   links them. If the owner authorizes them, they are further
    `physjsFormalRef` lines in `bridges/index.ts`, and they land before this
    stage.
 3. Pull request 252, "Show catalog formalRefs from `upt atlas be-<n>`",
@@ -370,7 +370,7 @@ Splitting `atlas` into its own npm package. The subpath stays an export of
 Also out of scope: editing `src/atlas/public.ts`, promoting Tier 2,
 changing the composition table, and any release.
 
-## Open questions for Daniel
+## Open questions for the owner
 
 1. **The thin tensor core.** `UniversalTensor` is defined in
    `src/core/tensor.ts`. Four modules import it: the package barrel, which

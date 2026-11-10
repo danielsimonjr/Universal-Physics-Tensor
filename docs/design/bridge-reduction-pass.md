@@ -6,7 +6,7 @@ which of those generators are the cross-domain ones. This note is the
 design. It changes no code, no catalog row, no canonical entry, no
 composition edge, and no cell of the composition table. Approval, and any
 later implementation, are recorded outside this file. Landing the note does
-not authorize the pass. A run becomes work when Daniel accepts this note
+not authorize the pass. A run becomes work when the owner accepts this note
 and an `ACTIVE.md` task names that run. Publishing the package is the
 owner's job.
 
@@ -22,7 +22,7 @@ owner's job.
 - The Lean proofs are this repository's `lean/`, built and axiom-audited
   by CI; the library and this pass do not run Lean. The procedure is the
   `lean4-physjs` section of `WORKFLOWS.md`. The manifest schema stays
-  `upt-lean-manifest/v1` unless Daniel bumps it.
+  `upt-lean-manifest/v1` unless the owner bumps it.
 - Symbolic composition is `composeSymbolic` and `substitute`
   (`src/composition/compose-symbolic.ts`, `src/composition/expr-subst.ts`).
   Simplification is MathTS `simplify` behind `src/composition/expr-simplify.ts`,
@@ -45,7 +45,7 @@ owner's job.
   regenerate the golden.
 - `CANONICAL_GRAPH` (`src/composition/canonical-graph.ts`) projects
   textbook equations into the edge vocabulary, with universal constants
-  baked into the evaluator. It is a definition source only if Daniel
+  baked into the evaluator. It is a definition source only if the owner
   accepts that use. It is not a second catalog.
 
 ## What "derivable" means
@@ -106,7 +106,7 @@ These are not derivations:
   catalog already has.
 - A units-only Buckingham match. The discovery pipeline already treats
   that as partial. This pass does not reopen it.
-- A limit, an inequality, or a derivative, unless Daniel adds that
+- A limit, an inequality, or a derivative, unless the owner adds that
   operation to the fragment. The product rule is the worked case that
   sits outside substitution.
 
@@ -147,7 +147,7 @@ The pool is every catalog edge in `CATALOG_GRAPH` whose `symbolic` form is
 present. An edge with no `symbolic` form is listed as unscanned. An
 unscanned row is neither a generator nor a consequence. Canonical edges
 enter the pool only as the fixed definitions above, plus `CE-ideal-gas`
-if Daniel accepts canonical premises. A canonical edge is not itself a
+if the owner accepts canonical premises. A canonical edge is not itself a
 member of the bridge generating set.
 
 ### 2. Linking-constant graph
@@ -186,7 +186,7 @@ sees an inlined `B²/(μ₀ ρ)` where the junction composer sees no
 A proposed third generator, **specialization**, substitutes a constant for
 one free symbol (`cos θ = 0`) and then runs the identity test. The worked
 example shows a case where the formulas agree and the existing theorem
-says the statements differ. The generator stays off until Daniel accepts
+says the statements differ. The generator stays off until the owner accepts
 it.
 
 The pass does not add a `QuantityIdentification`. A junction that needs a
@@ -233,7 +233,7 @@ order above is the proposal, and it is an open question.
 ### 6. What the greedy set is not
 
 The set is a candidate. The catalog gains `derivedFrom` and `basis` only
-from pinned derivation theorems, and only for the candidates Daniel
+from pinned derivation theorems, and only for the candidates the owner
 accepts out of the report. An id the greedy set deleted, with no pinned
 derivation theorem, stays unmarked.
 
@@ -295,7 +295,7 @@ the formalRef note already uses for a second statement. It has no second
 `key` and no second `bridgeId`.
 
 Proposed nested object, under the manifest schema `upt-lean-manifest/v1`
-until Daniel bumps it:
+until the owner bumps it:
 
 | Field | What it holds |
 |---|---|
@@ -475,7 +475,7 @@ by a Seebeck slope. Peltier coefficient is not a leaf, so
 Kelvin relation along temperature and the split `μ = dΠ/dT − S`, and the
 product rule yields `μ = T dS/dT`. The product rule is outside the
 fragment this note defines. The report can cite the covers line. It
-cannot mark BE-83 derived unless Daniel adds differentiation and names
+cannot mark BE-83 derived unless the owner adds differentiation and names
 the Thomson split as a premise.
 
 ### Grouping by linking constant
@@ -521,7 +521,7 @@ False friends a latex scan picks up and this table leaves out:
 | 129 | `h` | A convection coefficient. |
 | 40 | `h` | The Higgs field in `V(h)`. |
 
-## Open questions for Daniel
+## Open questions for the owner
 
 1. **Fragment.** Is derivable limited to junction substitution,
    subexpression replacement, field operations, and the fixed definitions?

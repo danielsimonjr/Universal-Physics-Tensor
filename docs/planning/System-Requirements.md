@@ -159,7 +159,7 @@ The "Version 2.0 / Version 3.0" milestones from earlier drafts (advanced visuali
 | Risk | Probability | Impact | Mitigation |
 |------|------------|--------|------------|
 | Dimensional tool reveals many flagged equations | High | Medium | That is the tool's job; triage by status label. |
-| Bridge Eq 16 self-refutation | Confirmed | Medium | Decision artifact: retain corrected / demote to annex / remove. Owner: Daniel. |
+| Bridge Eq 16 self-refutation | Confirmed | Medium | Decision artifact: retain corrected / demote to annex / remove. Owner: the repository owner. |
 | Speculative bridges accumulate issues | High | Low | Status label already signals exploratory nature. |
 | Physics validation against published values is harder than expected | Medium | High | Start with one bridge (Ryu-Takayanagi, BE-14, Established and dimensionally clean) before scaling. |
 | Catalog metadata schema needs revision after first implementation | High | Low | Co-evolve schema with first implementation; pre-1.0 versioning permits breakage. |

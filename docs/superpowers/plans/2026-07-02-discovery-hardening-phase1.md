@@ -440,7 +440,7 @@ git commit -m "test(composition): discovery calibration benchmark (funnel pins +
 - [ ] Docs edits above (step-12 check: run `npm run docs:deps` and confirm the new module lands in the reports; never hand-edit generated reports).
 - [ ] Release gate: `npm run build && npm test && npm run smoke` (the ONE full-suite run), plus `npm audit` + `npm outdated` per release pre-flight.
 - [ ] Commit: `git commit -m "docs: adjudication ledger + calibration benchmark recorded (phase 1 wrap)"`
-- [ ] Push master. **Release ritual (user-triggered per convention):** bump to 0.31.0 → CHANGELOG header → tag `v0.31.0` → push tag → `npm publish --ignore-scripts --access public` (Daniel runs publish).
+- [ ] Push master. **Release ritual (user-triggered per convention):** bump to 0.31.0 → CHANGELOG header → tag `v0.31.0` → push tag → `npm publish --ignore-scripts --access public` (the owner runs publish).
 
 ---
 

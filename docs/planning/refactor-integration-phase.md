@@ -3,7 +3,7 @@
 This note specifies a refactor-and-integration phase for the library as it
 stands after the layering refactor and the bridge-discovery pipeline. It
 changes no code, no public export, and no cell of the composition table.
-Daniel approved this amendment on 2026-10-02. The step table in the
+The owner approved this amendment on 2026-10-02. The step table in the
 sequenced plan records which steps have a merge commit. A row marked next
 is not started. The MathTS packages those steps name are published. A next step
 becomes work when an `ACTIVE.md` task names it. Publishing the package is
@@ -99,7 +99,7 @@ past `src/cli-api.ts`.
 The phase is a sequence of small pull requests that make those contracts
 meet, then a migration that makes MathTS the mathematics. That migration is
 a 2.0.0. A shrink or rename of the root barrel is still not a step until
-Daniel says so. The atlas public namespace stays as it is.
+The owner says so. The atlas public namespace stays as it is.
 
 Rough size, `src/` only, comments included: about 420 TypeScript files and
 about 92 000 lines. The large areas are `src/bridges/` (91 files, about
@@ -543,7 +543,7 @@ evidence tag.
 
 ## Mathematics moves to MathTS
 
-Daniel's decision, recorded here so the sequence below can follow it: the
+The owner's decision, recorded here so the sequence below can follow it: the
 `@danielsimonjr/mathts-*` packages already published on npm are required.
 UPT stops implementing mathematics those packages export, and calls them.
 This repository does not republish, repackage, or vendor MathTS. A missing
@@ -649,7 +649,7 @@ The release that contains step 6 is 2.0.0. Steps 7, 8, and 12 ship on that
 major and do not each open a new major. Steps 9, 10, and 11 merged on 1.x
 before that break.
 
-Daniel approved this amendment on 2026-10-02. The table is the record of
+The owner approved this amendment on 2026-10-02. The table is the record of
 which steps have a merge commit. A row marked next is not started.
 
 | Step | Work | State | Pull request | Merge |
@@ -984,7 +984,7 @@ engine, is still its own major. Step 6 lists the names it actually deletes.
 The atlas Tier 2 decision in `docs/planning/Atlas-API-Review.md` stays
 deferred and is not this 2.0.0.
 
-## Open questions for Daniel
+## Open questions for the owner
 
 1. Should a silent composition-table cell stay indistinguishable from a
    dimension mismatch, or should step 1's refusal list become the permanent
@@ -1012,14 +1012,14 @@ deferred and is not this 2.0.0.
 
 ## Amendment proposal
 
-Daniel approved this amendment on 2026-10-02. This note does not edit
+The owner approved this amendment on 2026-10-02. This note does not edit
 `ACTIVE.md` or `ROADMAP.md`. The tasks for the done rows were filed with
 those pull requests. Rows marked next are not started here. They wait for
 the MathTS release. Landing the note does not start them.
 
 ### Proposed `ACTIVE.md` tasks
 
-File these under open tasks, easiest first, and only the steps Daniel
+File these under open tasks, easiest first, and only the steps the owner
 accepts. Each line is the task title. The body of the task points back at
 this note's step and does not restate the design. Tasks 1–4 and 9–11 are
 the done rows of the step table. Tasks 5–8 and 12 are next and are not

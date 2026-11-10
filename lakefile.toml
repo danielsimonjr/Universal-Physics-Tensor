@@ -7,7 +7,7 @@ pp.unicode.fun = true
 autoImplicit = false
 relaxedAutoImplicit = false
 
-# Both requires are direct. Physlib (the library Daniel calls PhysLean) already
+# Both requires are direct. Physlib (the library the owner calls PhysLean) already
 # depends on Mathlib; this package requires Mathlib itself so a Mathlib lemma
 # is not reached only by accident through Physlib.
 [[require]]

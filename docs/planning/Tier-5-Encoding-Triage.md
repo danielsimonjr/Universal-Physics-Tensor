@@ -149,7 +149,7 @@ encoding their broken spec form would lock in the gap.
 | 19 | speculative | `yes-ready` | Pure scalar Friedmann `H² = (8πG/3)ρ(1−ρ/ρ_c) + Λ/3`. |
 | 20 | speculative | `no-operator-algebra` | The 3-momentum integral `∫d³k (ℏω_k/2)ζ(k/k_UV)` is a vacuum-fluctuation sum over modes; the AST treats integration as multiply, but the integration measure `d³k` is not an `ExprNode` and `ω_k` requires a dispersion relation symbol. Could be encoded but bracket-check leads into the cosmological-constant problem; not first-wave material. |
 | 21 | established | `no-tensor` | `(g^rr/√g^tt)` — explicit metric components, retarded Green's function with limit and partial derivatives in radial coordinate. |
-| 22 | speculative | **yes-ready (encoded 2026-05-05)** | **Reformulated** to canonical Kitaev-Preskill / Levin-Wen `S(R) = αL − γ` (Daniel approved 2026-05-05 per Action 2 of the 1/2/3 directive). The broken `α log(ξ/a)` and `β(T/T_c)^ν log(A/ℓ_P²)` terms were dropped; new form has α [L⁻¹], L [L], γ [1] — round-trips to `[1]`. AST module at `src/bridges/equations/be-22-topological-entanglement.ts`. References: Kitaev-Preskill PRL 96:110404, Levin-Wen PRL 96:110405. |
+| 22 | speculative | **yes-ready (encoded 2026-05-05)** | **Reformulated** to canonical Kitaev-Preskill / Levin-Wen `S(R) = αL − γ` (the owner approved 2026-05-05 per Action 2 of the 1/2/3 directive). The broken `α log(ξ/a)` and `β(T/T_c)^ν log(A/ℓ_P²)` terms were dropped; new form has α [L⁻¹], L [L], γ [1] — round-trips to `[1]`. AST module at `src/bridges/equations/be-22-topological-entanglement.ts`. References: Kitaev-Preskill PRL 96:110404, Levin-Wen PRL 96:110405. |
 | 23 | speculative (Wave P-C R-C1) | `yes-after-symbol-stub` | **Reformulated 2026-05-06** to SYK / Planckian-dissipation linear-in-T resistivity `ρ(T) = ρ_0 + (k_B T/ℏ)(1/n_e e²)α_SYK`. tractability_class: `numerical-tractable`. |
 | 24 | speculative (Wave P-C R-C2) | `yes-ready` | **Reformulated 2026-05-06** to canonical Förster FRET `η = 1/(1+(R/R_0)⁶)`, `k_FRET = (1/τ_D)(R_0/R)⁶`. Bound-respecting, scalar-algebraic. tractability_class: `closed-form`. |
 | 25 | speculative (Wave P-D R-D2) | **stale-AST + no-tractable-encoding** | **Reformulated 2026-05-06** to canonical IIT Φ_max integrated information form `Φ_max(S) = min_θ [ii(s,s̃) - ii_θ(s,s̃)]` with intrinsic info `ii(s,s̃) = p(s̃|s) log₂[p(s̃|s)/p(s̃)]`. Φ_max computation is exponential in system size (intractable beyond ~10 elements). Legacy Penrose-Hameroff AST module `src/bridges/equations/be-25-orch-or.ts` is preserved as stale-but-traceable but no longer participates in the dimensional_signature catalog (BE-25 removed). tractability_class: `formally-divergent`. |
@@ -256,7 +256,7 @@ Each gets one TDD-strict commit.
 
 - **BE-22** (topological entanglement) — *Wave-1 status: skipped due to
   log-of-length-ratio dimensionless-handling.* **2026-05-05: reformulated
-  to canonical Kitaev-Preskill / Levin-Wen `S(R) = αL − γ` (Daniel
+  to canonical Kitaev-Preskill / Levin-Wen `S(R) = αL − γ` (the owner
   approved); now encoded.** Moved to `yes-ready (encoded)` above.
 - **BE-43** (wormhole dynamics) — `S_entanglement` is operator-derived.
 - **BE-45** (TCC bound) — inequality.
@@ -268,4 +268,4 @@ Each gets one TDD-strict commit.
 After Wave 1, BE-39 might become encodable if a functional-derivative
 primitive lands, BE-21 if the AST learns metric-component-blind tensor
 contractions, and BE-20 if a dispersion-relation primitive lands.
-Daniel will decide.
+The owner will decide.

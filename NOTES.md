@@ -356,7 +356,7 @@ Every block below is dated before the 9.0.0 release. A sentence here was true on
 - **MathTS optional peers, 2026-09-29.** Ranges match `npm view`: autograd 0.3.15, core 0.15.5,
   expression 0.8.2, functions 0.65.0, matrix 0.7.5, parallel 0.6.7, tensor 0.2.21, wasm 0.3.0,
   workerpool 0.2.6. Still optional peers. The packages themselves were not republished.
-- **Tier 10, as of 2026-09-29.** Daniel approved the §11 defaults in
+- **Tier 10, as of 2026-09-29.** The owner approved the §11 defaults in
   `docs/design/tier-10-cross-family-path.md`. M1–M4 are in. `upt path` labels `crossFamily` and
   `modelFamilies` from the models the route visits. Across families a matching norm name is not a
   transport: only a witnessed `NormTransport` carries a bound, and its factor is applied; otherwise
