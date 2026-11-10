@@ -26,7 +26,9 @@
  * power is written `m2` or `m^2`: `mm` is a millimetre, not metre·metre,
  * and `mmin` is metre·minute or millimetre·inch, not metre·metre·inch.
  * A unit that is not a prefix letter still juxtaposes with itself (`NN` is
- * N·N). `parseUnit` names
+ * N·N). MathTS `Unit.readingsWithSource` gives the product splits of a
+ * token. UPT reads each factor from the factor's source text with UPT tables.
+ * UPT keeps the reading policy below. `parseUnit` names
  * every remaining reading and refuses. `convertValue` keeps the one reading
  * whose dimension is the declared unit. A token that is not one factor is a
  * product when exactly one split exists: `m2K` is `m^2·K`, `Vs` is `V·s`,
@@ -197,7 +199,8 @@ function trySymbol(sym: string): SymbolReading | null {
   return { scale: multiplyScales(split.factor, split.row.scale), dim: split.row.dim, cycles: split.row.cycles === true ? 1 : 0 };
 }
 
-interface FactorReading {
+/** One factor of a reading: the token's own spelling, its power, and its exact scale. @internal */
+export interface FactorReading {
   readonly base: string;
   readonly exp: number;
   readonly scale: ExactScale;
@@ -231,7 +234,8 @@ function tryOneFactor(token: string): FactorReading | null {
   return { base, exp, scale: parsed.scale, dim: parsed.dim, cycles: parsed.cycles };
 }
 
-function formatReading(factors: readonly FactorReading[]): string {
+/** The printed label of a reading: `base^exp` factors joined by `·`. @internal */
+export function formatReading(factors: readonly FactorReading[]): string {
   return factors.map((factor) => (factor.exp === 1 ? factor.base : `${factor.base}^${factor.exp}`)).join('·');
 }
 
@@ -245,32 +249,41 @@ function attachedUnit(symbol: string): string | null {
  * `X·X` where `XX` is X's own prefix spelling (`m·m` beside `mm`, `d·d`
  * beside `dd`): not a split, because a power is written `X2` or `X^2`. A
  * run of a unit that is not also a prefix letter (`N·N`) stays a product.
+ * MathTS drops the plain run (`m·m` in `mm`). MathTS keeps a run with a power
+ * (`m·m^2` in `mm2`). Thus UPT keeps this rule.
  */
 function prefixRun(last: FactorReading, next: FactorReading): boolean {
   return last.base === next.base && attachedUnit(last.base + next.base) === last.base;
 }
 
 /**
- * Every way to split `token` into one or more factors. A one-factor token is
- * included. A split that puts a prefix letter's own unit twice in a row
- * (`m·m`, `m·m²`, `m·m·in`) is not a way, inside any split.
+ * Every product reading of `token` with two or more factors, in the token's own spelling.
+ * MathTS `Unit.readingsWithSource` gives the splits and the source text of each factor.
+ * UPT reads each source with UPT tables. Thus a label keeps the token's spelling
+ * (`Ω`, `°`, `Å`, `µ`). The scale stays UPT's exact scale. UPT drops a reading whole
+ * when a source is empty or unreadable (`tryOneFactor('')` is null). UPT refuses an
+ * affine spelling such as `℃` before this function runs. Therefore no source is empty
+ * today. A MathTS unit that UPT does not have (`b`, `mi`) is unreadable. `prefixRun` drops a reading when a prefix letter's
+ * own unit occurs twice in a row (`m·m^2` in `mm2`). `tokenWays` keeps the one-factor
+ * reading.
+ * @internal
  */
-function segmentations(token: string): FactorReading[][] {
-  const ways: FactorReading[][][] = Array.from({ length: token.length + 1 }, () => []);
-  ways[0]!.push([]);
-  for (let i = 0; i < token.length; i++) {
-    if (ways[i]!.length === 0) continue;
-    for (let j = i + 1; j <= token.length; j++) {
-      const factor = tryOneFactor(token.slice(i, j));
-      if (factor === null) continue;
-      for (const prev of ways[i]!) {
-        if (prev.length > 0 && prefixRun(prev[prev.length - 1]!, factor)) continue;
-        ways[j]!.push([...prev, factor]);
-      }
-    }
-  }
+export function segmentations(token: string): FactorReading[][] {
   const unique = new Map<string, FactorReading[]>();
-  for (const way of ways[token.length]!) unique.set(formatReading(way), way);
+  for (const way of Unit.readingsWithSource(token)) {
+    if (way.length < 2) continue;
+    const readings: FactorReading[] = [];
+    for (const factor of way) {
+      const reading = tryOneFactor(factor.source);
+      if (reading === null) break;
+      const last = readings[readings.length - 1];
+      if (last !== undefined && prefixRun(last, reading)) break;
+      readings.push(reading);
+    }
+    if (readings.length !== way.length) continue;
+    const label = formatReading(readings);
+    if (!unique.has(label)) unique.set(label, readings);
+  }
   return [...unique.values()];
 }
 
@@ -289,9 +302,7 @@ function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denomin
   // A denominator keeps the product readings (`W/mK`), and a target dimension chooses.
   if (single !== null && side === 'numerator') return [[single]];
   const prefixWins = single !== null && PREFIX_LETTER_UNITS.has(token[0]!) && attachedUnit(single.base) !== null;
-  const products = segmentations(token)
-    .filter((way) => way.length > 1)
-    .filter(() => !prefixWins);
+  const products = prefixWins ? [] : segmentations(token);
   const ways: FactorReading[][] = [];
   if (single !== null) ways.push([single]);
   for (const way of products) ways.push(way);
