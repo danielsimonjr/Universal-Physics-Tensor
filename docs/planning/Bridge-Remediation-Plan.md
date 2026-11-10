@@ -382,7 +382,7 @@ status downgrade to `speculative` for honesty.
        the result. This is a research project, not a spec edit — XL effort
        and may not converge to a physically defensible form.
   - **Tier-3 author has not pre-decided.** All three options are physically
-    defensible given the spec text. Daniel decides.
+    defensible given the spec text. The owner decides.
   - Honest-claude qualifier: the algebraic argument as written assumes
     `S = S_vN` (i.e., that "entropy" in `dS/dt` and "von Neumann entropy" are
     the same quantity). The argument is correct *under that assumption*. A
@@ -482,7 +482,7 @@ passing tests across 7 atomic commits on branch `fix/r1-batch-spec-edits`.
 
 **Reclassifications:** none auto-applied. Two flagged for owner attention:
 
-- **BE-37 (VSL)** — **R3 APPLIED 2026-05-05.** Daniel accepted the
+- **BE-37 (VSL)** — **R3 APPLIED 2026-05-05.** The owner accepted the
   Wave-2 disposition brief recommendation (R3 mark-invalid, confidence 60).
   Ellis-Uzan 2005 critique (operational meaninglessness of bare c(t))
   combined with non-equivalence of the three canonical VSL frameworks

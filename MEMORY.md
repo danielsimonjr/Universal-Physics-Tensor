@@ -139,7 +139,7 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   registry itself (`WORKFLOWS.md`, Release step 7).
 - The Lean proofs are this repository's **`lean/`** (with `lean.lean`, `lakefile.toml`,
   `lean-toolchain` and `lake-manifest.json` at the root), outside the npm package. The Lean
-  project requires Mathlib and the Physlib package (the library Daniel calls PhysLean;
+  project requires Mathlib and the Physlib package (the library the owner calls PhysLean;
   repository `leanprover-community/physlib`). Both requires are firm. CI's `lean` job builds and
   axiom-audits it; the TypeScript library records a reviewed `formalRef` and does not run Lean.
   Theorem names stay `PhysJS.*`: Lean namespaces, not a dependency on the PhysJS repository.

@@ -12,7 +12,7 @@ a `leanProof`. Kind is not `bridge`. Passing a units result to
 written against PhysJS `2e09357f9674bc60b60b378155a1623c27dc7b04`, toolchain
 `leanprover/lean4:v4.34.1`, Mathlib `v4.34.1`, and Physlib
 `af484f78ee0701290595f8bf892b157b10d64940`. The PhysJS lakefile at that pin
-calls Physlib the library Daniel calls PhysLean, and it requires Mathlib and
+calls Physlib the library the owner calls PhysLean, and it requires Mathlib and
 Physlib directly. A later library can move a dependency. This note does not
 track that move. UPT does not run Lean.
 

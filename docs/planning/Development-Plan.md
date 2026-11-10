@@ -66,7 +66,7 @@ Using the dimensional-analysis tool plus a manual read of Part-I:
 
 - Run dimensional check on every catalogued bridge.
 - For each failure, record the discrepancy in the bridge's `known_issues` field.
-- For Bridge Eq 16 specifically: decide retain (with corrected derivation), demote (move to a "rejected candidates" appendix), or remove. The user's brief flagged this as self-refuting; that decision belongs to Daniel, not the planning doc.
+- For Bridge Eq 16 specifically: decide retain (with corrected derivation), demote (move to a "rejected candidates" appendix), or remove. The user's brief flagged this as self-refuting; that decision belongs to the owner, not the planning doc.
 - For Highly speculative entries: review and decide which stay in the catalog vs. moving to a separate exploratory annex.
 
 Output: a remediation plan in `docs/planning/bridge-remediation.md` (created when this work begins, not now) listing each flagged bridge and the chosen action.

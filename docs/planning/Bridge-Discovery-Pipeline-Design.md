@@ -4,7 +4,7 @@ This note specifies how UPT discovers candidate bridge equations by chaining
 Lean-proved facts, filtering the chain with dimensional analysis, and emitting
 each survivor as a PhysJS proof target. It changes no code, no public export,
 and no cell of the composition table. Approval is recorded outside this file.
-Landing the note does not authorize a step. A step becomes work when Daniel
+Landing the note does not authorize a step. A step becomes work when the owner
 accepts this note and an `ACTIVE.md` task names that step. Publishing the
 package is the owner's job and is not part of any step.
 
@@ -120,7 +120,7 @@ tag when its own reviewed reference exists, and not before.
 
 ## Decisions
 
-Daniel decided (a) and (b). The steps implement them. They are not open
+The owner decided (a) and (b). The steps implement them. They are not open
 questions.
 
 **(a) A new chain stays provisional until Lean proves it.** A chain whose

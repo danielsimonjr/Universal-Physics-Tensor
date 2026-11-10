@@ -41,7 +41,7 @@ bare claim; it requires specifying which *dimensionless* ratio varies —
 physics (propagation, E = mc², gravitational coupling, α). Operationally
 meaningful varying-α theories exist (Bekenstein 1982, Sandvik-Barrow-
 Magueijo 2002); Ellis-Uzan's stance is that "VSL" is a confused renaming.
-**Daniel should verify this reconstruction against the paper body.**
+**The owner should verify this reconstruction against the paper body.**
 
 ## 3. Arguments for R2
 
