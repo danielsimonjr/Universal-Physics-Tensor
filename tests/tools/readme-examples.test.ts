@@ -46,11 +46,12 @@ describe('README.md TypeScript fences', () => {
     }
   });
 
-  it('every fence runs', () => {
-    for (const source of fences) {
+  // One test per fence: each one starts a process, and a failure names its fence.
+  fences.forEach((source, index) => {
+    it(`fence ${index + 1} of ${fences.length} runs`, () => {
       const result = runFence(source);
       expect(result.status, result.stderr).toBe(0);
-    }
+    });
   });
 
   it('the composing fence gives the erasure cost and confidence its comments state', () => {
