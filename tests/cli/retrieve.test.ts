@@ -102,6 +102,22 @@ describe('upt retrieve', () => {
     expect(text(c)).toMatch(/--embed-model/);
   });
 
+  it('a --embed-model of spaces only is a usage error, and no request leaves', async () => {
+    const models = captureModels();
+    const c = captureMerged();
+    expect(await runCli(['retrieve', 'mass', '--embed', '--embed-model=  '], c.io)).toBe(2);
+    expect(text(c)).toMatch(/--embed-model/);
+    expect(models).toEqual([]);
+  });
+
+  it('spaces around the --embed-model name do not reach Ollama', async () => {
+    const models = captureModels();
+    const c = captureMerged();
+    expect(await runCli(['retrieve', 'mass', '--embed', '--embed-model= x ', '--json'], c.io)).toBe(0);
+    expect(models).toEqual(['x']);
+    expect(JSON.parse(text(c)).options.embedModel).toBe('x');
+  });
+
   it('a missing claim is a usage error', async () => {
     const c = captureMerged();
     expect(await runCli(['retrieve'], c.io)).toBe(2);

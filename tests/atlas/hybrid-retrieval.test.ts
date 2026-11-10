@@ -227,6 +227,10 @@ describe('Ollama fallback', () => {
     await expect(reply([row, row])(['a', 'b'])).resolves.toHaveLength(2);
     await expect(reply([row, row.slice(1)])(['a', 'b'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
     await expect(reply([[]])(['a'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
+    await expect(reply(['not a row'])(['a'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
+    await expect(reply([row, 7])(['a', 'b'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
+    await expect(reply([[1, 'x', 3]])(['a'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
+    await expect(reply([[1, null, 3]])(['a'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
 
     const defaultModel = ollamaEmbedder({
       baseUrl: 'http://127.0.0.1:9',
