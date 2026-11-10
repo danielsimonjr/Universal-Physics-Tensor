@@ -75,7 +75,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const embed = args.flags.has('embed');
   const ollamaUrl = args.flags.get('ollama-url')?.[0] ?? OLLAMA_DEFAULT_URL;
-  const embedModel = args.flags.get('embed-model')?.[0] ?? OLLAMA_DEFAULT_MODEL;
+  const embedModel = (args.flags.get('embed-model')?.[0] ?? OLLAMA_DEFAULT_MODEL).trim();
   if (embedModel.length === 0) {
     throw new UsageError('upt retrieve: --embed-model needs a model name, e.g. `--embed-model=qwen3-embedding:4b`');
   }
