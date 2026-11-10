@@ -4,8 +4,8 @@
  *
  * The frozen copy below is `trySymbol`, `tryOneFactor`, `formatReading`, `attachedUnit`,
  * `prefixRun` and the split loop of `segmentations`, verbatim from
- * `src/dimensional/units.ts` at commit eb8f4bcd (git blob of that file at eb8f4bcd:
- * see FROZEN_BLOB). It reads the live unit tables of `unit-data.ts`.
+ * `src/dimensional/units.ts` at commit eb8f4bcd (the blob hash of that file is
+ * FROZEN_BLOB). It reads the live unit tables of `unit-data.ts`.
  *
  * For each token set the script prints the token count and the tokens that differ:
  *   - old ⊆ new: a multi-factor reading of the old splitter that the new one lacks,
@@ -18,7 +18,11 @@
  * Usage:
  *   bun scripts/m6-readings-agreement.ts            the gate
  *   bun scripts/m6-readings-agreement.ts --control  injects one wrong label; must exit 1
- *   bun scripts/m6-readings-agreement.ts --timing   parseUnit timing, median of 9 runs
+ *   bun scripts/m6-readings-agreement.ts --timing   parseUnit timing, median of the runs
+ *
+ * Flags (the defaults are in DEFAULTS): `--seed=N` and `--count=N` set the seeded products
+ * of the base set, and `--runs=N` sets the number of timing runs. The script throws when
+ * MathTS core has no `Unit.readingsWithSource`.
  *
  * @module scripts/m6-readings-agreement
  */
@@ -29,9 +33,32 @@ import { multiplyScales, type ExactScale } from '../src/dimensional/exact-scale.
 import type { Dimension } from '../src/dimensional/types.js';
 import { superscriptPower, splitPrefix, UNIT_DATA } from '../src/dimensional/unit-data.js';
 import { formatReading, parseUnit, segmentations, type FactorReading } from '../src/dimensional/units.js';
+import { mulberry32 } from '../tests/helpers/mulberry32.js';
 
-/** The source of the frozen copy. */
-export const FROZEN_BLOB = 'src/dimensional/units.ts at eb8f4bcd';
+/** The source of the frozen copy: the blob hash of `src/dimensional/units.ts` at eb8f4bcd. */
+export const FROZEN_BLOB = '44884675c515ebaad11c48d0f20c06c6bc6e4c26';
+
+/** The defaults of the command-line flags, in one place. */
+export const DEFAULTS = { seed: 20261108, count: 20_000, runs: 9 } as const;
+
+/** The options of one run: the base-set seed and product count, and the timing run count. */
+interface Options {
+  readonly seed: number;
+  readonly count: number;
+  readonly runs: number;
+}
+
+/** Read `--seed=N`, `--count=N` and `--runs=N`. Each is an integer; `runs` is at least 1. */
+function readOptions(args: readonly string[]): Options {
+  const read = (name: keyof Options, min: number): number => {
+    const arg = args.find((a) => a.startsWith(`--${name}=`));
+    if (arg === undefined) return DEFAULTS[name];
+    const text = arg.slice(name.length + 3);
+    if (!/^\d+$/.test(text) || Number(text) < min) throw new Error(`--${name} must be an integer of at least ${min}, not '${text}'`);
+    return Number(text);
+  };
+  return { seed: read('seed', 0), count: read('count', 0), runs: read('runs', 1) };
+}
 
 const UNITS = UNIT_DATA.units;
 
@@ -121,17 +148,6 @@ function key(way: readonly FactorReading[], label: string): string {
   return `${label}|${factors.join(';')}`;
 }
 
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 const SYMBOLS = [...UNITS.keys()];
 const PREFIX_SPELLINGS = [...UNIT_DATA.prefixes.keys()];
 
@@ -141,13 +157,13 @@ function pairs(): string[] {
   return out;
 }
 
-function baseSet(): string[] {
+function baseSet(options: Options): string[] {
   const out = new Set(pairs());
-  const rand = mulberry32(20261108);
+  const rand = mulberry32(options.seed);
   const pick = <T>(list: readonly T[]): T => list[Math.floor(rand() * list.length)]!;
   const prefixes = ['', '', '', 'k', 'M', 'G', 'm', 'c', 'u', 'n'];
   const powers = ['', '', '', '2', '3'];
-  for (let i = 0; i < 20_000; i++) {
+  for (let i = 0; i < options.count; i++) {
     const n = 1 + Math.floor(rand() * 3);
     let token = '';
     for (let f = 0; f < n; f++) token += pick(prefixes) + pick(SYMBOLS) + pick(powers);
@@ -201,7 +217,6 @@ interface SetResult {
 }
 
 function drops(token: string): number {
-  if (typeof Unit.readingsWithSource !== 'function') return 0;
   let n = 0;
   for (const reading of Unit.readingsWithSource(token)) {
     if (reading.length < 2) continue;
@@ -243,9 +258,9 @@ function median(values: number[]): number {
   return sorted[Math.floor(sorted.length / 2)]!;
 }
 
-function timeRuns(work: () => void): number[] {
+function timeRuns(work: () => void, count: number): number[] {
   const runs: number[] = [];
-  for (let r = 0; r < 9; r++) {
+  for (let r = 0; r < count; r++) {
     const t0 = performance.now();
     work();
     runs.push(performance.now() - t0);
@@ -253,30 +268,34 @@ function timeRuns(work: () => void): number[] {
   return runs;
 }
 
-function timing(): void {
-  const tokens = baseSet();
-  const show = (runs: number[]): string => `median of 9 = ${median(runs).toFixed(0)} ms; runs ${runs.map((x) => x.toFixed(0)).join(' ')}`;
+function timing(options: Options): void {
+  const tokens = baseSet(options);
+  const show = (runs: number[]): string => `median of ${options.runs} = ${median(runs).toFixed(0)} ms; runs ${runs.map((x) => x.toFixed(0)).join(' ')}`;
   console.log(`core ${CORE_VERSION}; base set, ${tokens.length} tokens`);
-  console.log(`parseUnit('1/<token>'): ${show(timeRuns(() => tokens.forEach(outcome)))}`);
-  console.log(`frozen splitter: ${show(timeRuns(() => tokens.forEach(oldSegmentations)))}`);
-  console.log(`live segmentations: ${show(timeRuns(() => tokens.forEach(segmentations)))}`);
+  console.log(`parseUnit('1/<token>'): ${show(timeRuns(() => tokens.forEach(outcome), options.runs))}`);
+  console.log(`frozen splitter: ${show(timeRuns(() => tokens.forEach(oldSegmentations), options.runs))}`);
+  console.log(`live segmentations: ${show(timeRuns(() => tokens.forEach(segmentations), options.runs))}`);
 }
 
 function main(): number {
   const args = process.argv.slice(2);
+  if (typeof Unit.readingsWithSource !== 'function') {
+    throw new Error(`MathTS core ${CORE_VERSION} has no Unit.readingsWithSource; the harness needs core 0.25.0 or later`);
+  }
+  const options = readOptions(args);
   if (args.includes('--timing')) {
-    timing();
+    timing(options);
     return 0;
   }
   const control = args.includes('--control');
   const sets: Array<[string, string[]]> = [
-    ['base', baseSet()],
+    ['base', baseSet(options)],
     ['prefixes', prefixSet()],
     ['powers', powerSet()],
     ['edge', EDGE],
   ];
   let failed = false;
-  console.log(`core ${CORE_VERSION}; symbols ${SYMBOLS.length}, prefix spellings ${PREFIX_SPELLINGS.length}; ${FROZEN_BLOB}`);
+  console.log(`core ${CORE_VERSION}; symbols ${SYMBOLS.length}, prefix spellings ${PREFIX_SPELLINGS.length}; frozen blob ${FROZEN_BLOB}; seed ${options.seed}, count ${options.count}`);
   console.log('set | tokens | old multi-factor readings | old not in new | new not in old | MathTS drops | ambiguous | outcome digest');
   for (const [name, tokens] of sets) {
     const r = runSet(name, tokens, control && name === 'edge');
