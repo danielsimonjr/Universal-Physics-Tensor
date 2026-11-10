@@ -6312,12 +6312,12 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `UnitError`, `UnknownUnitError`, `UnitRefusedError`, `AmbiguousUnitError`
-- Interfaces: `ParsedUnit`, `UnitReading`, `QuantityLiteral`, `ConvertedValue`
+- Interfaces: `ParsedUnit`, `FactorReading`, `UnitReading`, `QuantityLiteral`, `ConvertedValue`
 - Functions:
 
   ```text
-  affineReadingNote, unitConventionNotes, readUnit, unitReadingsSource, parseUnit,
-  readQuantityLiteral, convertValue, unitDimension, unitRows, unitTables
+  affineReadingNote, formatReading, segmentations, unitConventionNotes, readUnit, unitReadingsSource,
+  parseUnit, readQuantityLiteral, convertValue, unitDimension, unitRows, unitTables
   ```
 
 
@@ -7742,12 +7742,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87833 |
-| Total Exports | 2826 |
+| Total Lines of Code | 87844 |
+| Total Exports | 2828 |
 | Total Re-exports | 1394 |
 | Total Classes | 86 |
-| Total Interfaces | 518 |
-| Total Functions | 928 |
+| Total Interfaces | 519 |
+| Total Functions | 930 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 532 |
