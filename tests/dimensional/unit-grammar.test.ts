@@ -70,6 +70,7 @@ describe('unit juxtaposition grammar', () => {
   it('reads a unique product, and names every reading of an ambiguous token (a seeded sample of the walk)', () => {
     // The full walk is about 1.6e5 tokens and runs in `scripts/unit-product-walk.ts`, in CI,
     // with no time limit. This test reads a seeded tenth of it. Each failure names its token.
+    // This sample is not the gate: the gate is `scripts/unit-product-walk.ts` in the CI quality job.
     const sample = sampleTokens(productWalkTokens(), WALK_FRACTION, WALK_SEED);
     const result = walkProducts(sample);
     expect(result.failures.slice(0, 20)).toEqual([]);

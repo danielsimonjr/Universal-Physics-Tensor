@@ -10,6 +10,7 @@
 import { equals, multiply } from '../../src/dimensional/algebra.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 import { parseUnit, unitTables, UnitError } from '../../src/dimensional/units.js';
+import { mulberry32 } from './mulberry32.js';
 
 const { units, prefixes } = unitTables();
 const SUPERSCRIPT: Readonly<Record<string, number>> = { '²': 2, '³': 3 };
@@ -95,14 +96,7 @@ export function productWalkTokens(): WalkToken[] {
 
 /** A seeded sample of `tokens` (mulberry32), about `fraction` of them, in walk order. */
 export function sampleTokens(tokens: readonly WalkToken[], fraction: number, seed: number): WalkToken[] {
-  let a = seed >>> 0;
-  const rand = (): number => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+  const rand = mulberry32(seed);
   return tokens.filter(() => rand() < fraction);
 }
 
