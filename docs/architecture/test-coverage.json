@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 388,
-    "totalTestFiles": 719,
+    "totalTestFiles": 720,
     "testedCount": 378,
     "directlyTestedCount": 346,
     "untestedCount": 10,
@@ -6425,6 +6425,7 @@
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability-rank.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/one-copy.test.ts",
@@ -6809,6 +6810,7 @@
       "tests/composition/discovery.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/grounding.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantity-clusters.test.ts",
@@ -6872,6 +6874,7 @@
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability-rank.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/junction-dimension.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
@@ -8093,6 +8096,7 @@
       "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/composition/exact-exponents.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/monomial-builders.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/diff/bridge-gradient.test.ts",
@@ -13027,6 +13031,7 @@
       "tests/composition/graph-viz-svg.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability-rank.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/one-copy.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
@@ -13095,6 +13100,7 @@
       "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/grounding.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/propagate.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantity-clusters.test.ts"
@@ -13126,6 +13132,7 @@
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability-rank.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/junction-dimension.test.ts",
       "tests/composition/propagate.test.ts",
       "tests/composition/quantity-clusters.test.ts",
@@ -13456,6 +13463,7 @@
       "tests/composition/algebraic-equivalence.test.ts",
       "tests/composition/discovery-own-equation.test.ts",
       "tests/composition/exact-exponents.test.ts",
+      "tests/composition/import-cost.test.ts",
       "tests/composition/monomial-builders.test.ts",
       "tests/composition/proposed-bridges.test.ts"
     ],
@@ -23791,6 +23799,12 @@
       "src/dimensional/formula-names.ts",
       "src/core/format.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/import-cost.test.ts": [
+      "src/composition/discovery.ts",
+      "src/composition/proposed-bridges.ts",
+      "src/composition/edge.ts",
+      "src/composition/catalog-graph.ts"
     ],
     "tests/composition/junction-dimension.test.ts": [
       "src/composition/compose.ts",

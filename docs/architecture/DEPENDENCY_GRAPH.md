@@ -5152,10 +5152,9 @@ The codebase is organized into the following modules:
 
   ```text
   toMonomial, fromMonomial, latexFromMono, isolateLeaf, resolveSources, deriveProposedBridges,
-  dedupByNormalForm, promoteProposal, toProposedEntry
+  dedupByNormalForm, promoteProposal, toProposedEntry, proposedBridges
   ```
 
-- Constants: `PROPOSED_BRIDGES`
 
 ---
 
@@ -7742,12 +7741,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 388 |
 | Total Modules | 13 |
-| Total Lines of Code | 87872 |
+| Total Lines of Code | 87880 |
 | Total Exports | 2828 |
 | Total Re-exports | 1394 |
 | Total Classes | 86 |
 | Total Interfaces | 519 |
-| Total Functions | 930 |
+| Total Functions | 931 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 532 |

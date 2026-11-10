@@ -375,7 +375,10 @@ export function withBoundAliases<E extends BridgeEdge>(edge: E): E {
   return {
     ...edge,
     domain: {
-      description: edge.domain.description,
+      // The description is an accessor. The code builds the text only when a caller reads it.
+      get description() {
+        return edge.domain.description;
+      },
       predicate: (inputs) => edge.domain.predicate(bindAliasInputs(edge, inputs)),
       violations: (inputs, keyOf = (name) => name) =>
         edge.domain.violations(bindAliasInputs(edge, inputs), (name) => keyOf(givenKey(edge, inputs, name))),

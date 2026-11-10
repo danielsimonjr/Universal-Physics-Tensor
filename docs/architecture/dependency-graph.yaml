@@ -12784,7 +12784,6 @@ modules:
             - formatRational
             - fractionToNumber
       exports:
-        - PROPOSED_BRIDGES
         - toMonomial
         - fromMonomial
         - latexFromMono
@@ -12794,6 +12793,7 @@ modules:
         - dedupByNormalForm
         - promoteProposal
         - toProposedEntry
+        - proposedBridges
         - NotAMonomialError
         - MissingEvidenceError
       classes:
@@ -12812,8 +12812,7 @@ modules:
         - dedupByNormalForm
         - promoteProposal
         - toProposedEntry
-      constants:
-        - PROPOSED_BRIDGES
+        - proposedBridges
     src/composition/quantities.ts:
       description: Graph quantity nodes, projected from the quantity registry.
       externalDependencies: []
@@ -19612,17 +19611,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 388
   totalModules: 13
-  totalLinesOfCode: 87872
+  totalLinesOfCode: 87880
   totalExports: 2828
   totalClasses: 86
   totalInterfaces: 519
-  totalFunctions: 930
+  totalFunctions: 931
   totalTypeGuards: 16
   totalEnums: 0
-  totalConstants: 413
+  totalConstants: 412
   totalReExports: 1394
   totalTypeOnlyImports: 532
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 21
+  unusedExportsCount: 20
