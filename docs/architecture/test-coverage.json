@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 388,
-    "totalTestFiles": 720,
+    "totalTestFiles": 721,
     "testedCount": 378,
     "directlyTestedCount": 346,
     "untestedCount": 10,
@@ -2074,6 +2074,7 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/domain-violations.test.ts",
+      "tests/bridges/expr-parse-memo.test.ts",
       "tests/bridges/expression-names.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/cases/applied-case-engine.test.ts",
@@ -12357,6 +12358,7 @@
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
       "tests/bridges/domain-violations.test.ts",
+      "tests/bridges/expr-parse-memo.test.ts",
       "tests/bridges/expression-names.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/cases/applied-case-engine.test.ts",
@@ -16429,6 +16431,9 @@
       "src/core/constants.ts",
       "src/cases/index.ts",
       "src/cases/types.ts"
+    ],
+    "tests/bridges/expr-parse-memo.test.ts": [
+      "src/bridges/expr-parse.ts"
     ],
     "tests/bridges/expression-names.test.ts": [
       "src/bridges/expr-parse.ts",
