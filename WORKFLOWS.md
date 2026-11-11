@@ -110,6 +110,7 @@ not published.
 1. Bump `package.json` to `X.Y.Z`, set `packageVersion` in `data/bridge-catalog.json` to the same value (`npm run catalog:json` checks the two agree), and turn `[Unreleased]` into `## [X.Y.Z] - <date>` in `CHANGELOG.md`. `tests/dimensional/part-viii-spec-vs-impl.test.ts` fails when `package.json` is not the newest dated CHANGELOG heading.
 2. `bun run atlas:json` — AFTER the bump: `data/atlas/oscillators.json` embeds `packageVersion`,
    and `tests/atlas/atlas-json.test.ts` fails on a stale artifact.
+2b. `bun run physjs:table`, then `bun run atlas:json` again — AFTER the bump: `LEAN_SOURCE_TAG` and every proof permalink name `v<package.json version>`, and `tests/atlas/physjs-generated-table.test.ts` and `tests/atlas/physjs-manifest.test.ts` fail on the old tag. The CLI goldens `tests/cli/golden/atlas-pendulum.txt` and `atlas-spring-lc-json.txt` print the tag; replace the old tag in both and read the diff (only the tag moves).
 3. `bun run docs:deps` — AFTER the bump: `DEPENDENCY_GRAPH.md` embeds the version, and the
    `docs-fresh` job fails on a release commit that regenerated first.
 4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
