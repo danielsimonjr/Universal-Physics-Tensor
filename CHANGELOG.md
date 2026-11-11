@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [13.0.1] - 2026-11-11
+
+Dependency health at this release: `bun audit` finds no vulnerabilities (140 packages). `bun outdated` lists three MathTS runtime packages: `@danielsimonjr/mathts-functions` 0.79.0 (0.84.0 is latest, outside the `^0.79` range), `@danielsimonjr/mathts-matrix` 0.9.5 (0.9.6 in range, 0.10.0 latest) and `@danielsimonjr/mathts-tensor` 0.3.4 (0.3.5 in range). This patch release does not move them. The development dependencies are as at 13.0.0.
+
 ### Changed
 
 - **`upt audit` and catalog formula evaluation rewrite each expression text once.** `formulaNames()` returned a new Set of every catalog name on each call, and each of the four rewrite calls in `src/bridges/expr-parse.ts` then rebuilt the hyphenated-name subset of it. The Set is now built once at load, and the rewrite is memoized per text (a pure function of the text, because the names are static). `upt audit`: median 2.757 s to 2.528 s, output unchanged.
