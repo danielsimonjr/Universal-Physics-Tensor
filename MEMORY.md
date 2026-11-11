@@ -136,7 +136,7 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
 
 - What shipped and when: `CHANGELOG.md`. What is in flight, and the authorization gate:
   `ACTIVE.md`. `todo.md` is the historical ledger. The current version: `package.json`. What is on the registry: the
-  registry itself (`WORKFLOWS.md`, Release step 7).
+  registry itself (`WORKFLOWS.md`, Release step 8).
 - The Lean proofs are this repository's **`lean/`** (with `lean.lean`, `lakefile.toml`,
   `lean-toolchain` and `lake-manifest.json` at the root), outside the npm package. The Lean
   project requires Mathlib and the Physlib package (the library the owner calls PhysLean;

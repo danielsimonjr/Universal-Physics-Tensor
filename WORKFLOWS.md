@@ -110,18 +110,18 @@ not published.
 1. Bump `package.json` to `X.Y.Z`, set `packageVersion` in `data/bridge-catalog.json` to the same value (`npm run catalog:json` checks the two agree), and turn `[Unreleased]` into `## [X.Y.Z] - <date>` in `CHANGELOG.md`. `tests/dimensional/part-viii-spec-vs-impl.test.ts` fails when `package.json` is not the newest dated CHANGELOG heading.
 2. `bun run atlas:json` — AFTER the bump: `data/atlas/oscillators.json` embeds `packageVersion`,
    and `tests/atlas/atlas-json.test.ts` fails on a stale artifact.
-2b. `bun run physjs:table`, then `bun run atlas:json` again — AFTER the bump: `LEAN_SOURCE_TAG` and every proof permalink name `v<package.json version>`, and `tests/atlas/physjs-generated-table.test.ts` and `tests/atlas/physjs-manifest.test.ts` fail on the old tag. The CLI goldens `tests/cli/golden/atlas-pendulum.txt` and `atlas-spring-lc-json.txt` print the tag; replace the old tag in both and read the diff (only the tag moves).
-3. `bun run docs:deps` — AFTER the bump: `DEPENDENCY_GRAPH.md` embeds the version, and the
+3. `bun run physjs:table`, then `bun run atlas:json` again — AFTER the bump: `LEAN_SOURCE_TAG` and every proof permalink name `v<package.json version>`, and `tests/atlas/physjs-generated-table.test.ts` and `tests/atlas/physjs-manifest.test.ts` fail on the old tag. The CLI goldens `tests/cli/golden/atlas-pendulum.txt` and `atlas-spring-lc-json.txt` print the tag; replace the old tag in both and read the diff (only the tag moves).
+4. `bun run docs:deps` — AFTER the bump: `DEPENDENCY_GRAPH.md` embeds the version, and the
    `docs-fresh` job fails on a release commit that regenerated first.
-4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
+5. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
-5. Commit and open the release PR. The review rule recorded in `ACTIVE.md` applies: the advisor reviews the whole diff before it merges, and the session lead merges it. After the merge, wait until CI on the merge commit is green.
-6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
+6. Commit and open the release PR. The review rule recorded in `ACTIVE.md` applies: the advisor reviews the whole diff before it merges, and the session lead merges it. After the merge, wait until CI on the merge commit is green.
+7. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
    workflow checks out the tag, fetches `origin/master` (the layer-order gate reads that ref,
    and a tag checkout does not have it), installs, refuses a tag whose version (the leading `v` removed) is not
    `package.json`'s, and then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish),
    whose `prepublishOnly` runs the build, the typecheck and the suite once.
-7. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
+8. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
    Plain `npm view` serves a stale cache right after a publish.
 
 The Actions secret `NPM` must exist (repository Settings → Secrets and variables →

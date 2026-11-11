@@ -20,6 +20,7 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [ ] Release 14.0.0: bump, regenerate (atlas JSON, Lean table, dependency graph, the two tag goldens), dependency snapshot, release PR, tag `v14.0.0`, registry check. `[Unreleased]` holds Breaking entries since `v13.0.0`, so the version is a major.
 - [x] `upt retrieve --embed --embed-model=NAME`: ask Ollama for NAME. The default stays `qwen3-embedding:4b`, and a model that is not the default is not held to the 2560 length of the frozen file.
 - [x] #538: the per-derivation `dimensionalForm.monomial` of `upt explain sound-speed` omits the bound `gamma` exponent that the summary monomial and the recovered value carry.
 - [x] #527: `upt metric flrw` prints an empty Ricci tensor beside a nonzero scalar (an absolute 1e-8 floor), reads radiation (R = 0) as vacuum, prints the k = 1 sentence on a k = 0 run, and restores c uniformly on the tensor.

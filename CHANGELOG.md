@@ -8,9 +8,9 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
-## [13.0.1] - 2026-11-11
+## [14.0.0] - 2026-11-11
 
-Dependency health at this release: `bun audit` finds no vulnerabilities (140 packages). `bun outdated` lists three MathTS runtime packages: `@danielsimonjr/mathts-functions` 0.79.0 (0.84.0 is latest, outside the `^0.79` range), `@danielsimonjr/mathts-matrix` 0.9.5 (0.9.6 in range, 0.10.0 latest) and `@danielsimonjr/mathts-tensor` 0.3.4 (0.3.5 in range). This patch release does not move them. The development dependencies are as at 13.0.0.
+Dependency health at this release: `bun audit` finds no vulnerabilities (140 packages). `bun outdated` lists three MathTS runtime packages: `@danielsimonjr/mathts-functions` 0.79.0 (0.84.0 is latest, outside the `^0.79` range), `@danielsimonjr/mathts-matrix` 0.9.5 (0.9.6 in range, 0.10.0 latest) and `@danielsimonjr/mathts-tensor` 0.3.4 (0.3.5 in range). This release does not move them. The development dependencies are as at 13.0.0.
 
 ### Changed
 
@@ -46,6 +46,10 @@ Dependency health at this release: `bun audit` finds no vulnerabilities (140 pac
 - **The MathTS ranges move to the core 0.25.3 generation.** `@danielsimonjr/mathts-core` `^0.25.3`, `-functions` `^0.79.0`, `-expression` `^0.12.5`, `-matrix` `^0.9.5`, `-tensor` `^0.3.4` and `-autograd` `^0.4.4`; installed 0.25.3, 0.79.0, 0.12.5, 0.9.5, 0.3.4 and 0.4.4, and `bun.lock` resolves one core. `bun audit` finds no vulnerability. The `TOOLS.md` line on typed MathTS functions now states the 0.79.0 behaviour: every typed signature on a typed array is synchronous, and worker parallelism is explicit. No `src/` line awaits a typed MathTS call, chains `.then(` on one, or passes `workerCount`. Why: core 0.25.0 has `Unit.readingsWithSource`, core 0.25.1 makes its unit lookup fast enough to use, and core 0.25.3 searches a glued token in one pass.
 - **`AmbiguousUnitError` lists its readings in codepoint order.** The message and the `readings` field no longer depend on the order in which a splitter finds the readings. `parseUnit('umK')` now throws `'umK' is ambiguous: um·K or u·mK or u·m·K`; before, it printed `u·mK or um·K or u·m·K`. The reason: the local splitter and MathTS `Unit.readings` list the readings in different orders, and the message must not depend on the producer.
 - **`@danielsimonjr/mathts-core` was `^0.24.5` before the M6 swap above.** Core 0.24.5 refuses a glued zero power (`m0K`) and reads a superscript plus (`m⁺²K`) in `Unit.readings`. `Unit.readings` prints `ohm`, `deg`, `angstrom`, `degR` and `um` for `Ω`, `°`, `Å`, `°R` and `µm`, so a swap to `Unit.readings` would change the printed labels; the swap above reads `Unit.readingsWithSource` (core 0.25.0) instead, which keeps the token's own spelling. The counts are in `NOTES.md`.
+
+### Documented
+
+- **The release procedure regenerates the Lean table.** `WORKFLOWS.md` Release step 3 runs `bun run physjs:table` after the bump, because `LEAN_SOURCE_TAG` and every proof permalink name the release tag, and lists the two CLI goldens that print it.
 
 ## [13.0.0] - 2026-11-09
 
