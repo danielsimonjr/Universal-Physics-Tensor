@@ -43,13 +43,27 @@ function numberSymbol(text: string): ExprNode {
   return { kind: 'symbol', name: text, dim: DIMENSIONLESS };
 }
 
+const FORMULA_NAME_SET = new Set<string>(quantityNames);
+for (const name of Object.keys(CONSTANTS)) FORMULA_NAME_SET.add(name);
+for (const named of FORMULA_NAMED) FORMULA_NAME_SET.add(named.name);
+FORMULA_NAME_SET.add('pi');
+
 /** Names a formula may mention: quantities, constants, and formula overlays. */
 export function formulaNames(): ReadonlySet<string> {
-  const names = new Set<string>(quantityNames);
-  for (const name of Object.keys(CONSTANTS)) names.add(name);
-  for (const named of FORMULA_NAMED) names.add(named.name);
-  names.add('pi');
-  return names;
+  return FORMULA_NAME_SET;
+}
+
+// Rewritten text per expression text. The rewrite is pure: the names are static.
+const REWRITTEN = new Map<string, string>();
+
+/** The hyphen-rewritten form of an expression, computed once per text. */
+function rewritten(expression: string): string {
+  let text = REWRITTEN.get(expression);
+  if (text === undefined) {
+    text = rewriteCatalogHyphens(expression, formulaNames());
+    REWRITTEN.set(expression, text);
+  }
+  return text;
 }
 
 const RESERVED = new Set<string>(['pi', ...Object.keys(CONSTANTS), ...FORMULA_NAMED.map((named) => named.name)]);
@@ -91,7 +105,7 @@ export function formulaScope(
  * quantity written with underscores.
  */
 export function formulaVariables(expression: string): readonly string[] {
-  return parseFormula(rewriteCatalogHyphens(expression, formulaNames())).variables;
+  return parseFormula(rewritten(expression)).variables;
 }
 
 const VARIABLES = new Map<string, ReadonlySet<string>>();
@@ -111,7 +125,7 @@ const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
 export function expressionNames(expression: string): ReadonlySet<string> {
   let names = VARIABLES.get(expression);
   if (names === undefined) {
-    names = new Set(rewriteCatalogHyphens(expression, formulaNames()).match(IDENTIFIER) ?? []);
+    names = new Set(rewritten(expression).match(IDENTIFIER) ?? []);
     VARIABLES.set(expression, names);
   }
   return names;
@@ -160,9 +174,8 @@ export function evaluateFormula(
     parseCatalogExpression(expression);
     GRAMMAR_CHECKED.add(expression);
   }
-  const rewritten = rewriteCatalogHyphens(expression, formulaNames());
   const scope = formulaScope(withoutUnreadConstants(inputs, expressionNames(expression), declared), declared);
-  return parseFormula(rewritten).evaluate(scope);
+  return parseFormula(rewritten(expression)).evaluate(scope);
 }
 
 const GRAMMAR_CHECKED = new Set<string>();
@@ -259,6 +272,5 @@ function foldKnownConstants(node: ExprNode): ExprNode {
 
 /** Parse a catalog expression into a sign-preserving `ExprNode`, through the one MathTS parser. */
 export function parseCatalogExpression(expression: string): ExprNode {
-  const rewritten = rewriteCatalogHyphens(expression, formulaNames());
-  return foldKnownConstants(exprOf(parseFormulaPNode(rewritten)));
+  return foldKnownConstants(exprOf(parseFormulaPNode(rewritten(expression))));
 }

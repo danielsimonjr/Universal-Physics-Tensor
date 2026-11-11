@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-11
+
+- **`upt audit`: 2.757 s to 2.528 s (median of 10 alternating runs, ZBOOK).** Ranges 2.605 to 3.796 s on master, 2.441 to 3.408 s after. The ACTIVE row's 18.3 s (2026-11-08) was already gone: 4.77 s before 979ec0f5, 2.5 to 2.65 s after it. A CPU profile of one run put about 255 ms in `rewriteCatalogHyphens`, rebuilding the hyphenated-name set on each call: 168 samples from `expr-parse.ts` callers (116 of them `evaluateFormula`), 6 from `holdsConditions`. `formulaNames()` now returns one Set built at load, and `expr-parse.ts` memoizes the rewrite per text. Output is byte-identical (stdout, stderr, exit 0). The rest of the run is load cost outside this repo: ESM compile about 220 ms, module stat 132 ms, typed-function about 340 ms, MathTS Fraction and gcd about 250 ms.
+
 ## As of 2026-11-10
 
 - **M6 on core 0.25.3: the cost of the swap is 7 to 17%.** Core 0.25.3 searches a glued unit token in one pass (MathTS #674). `scripts/m6-readings-agreement.ts` gives 0 differences in both directions on every set, with the four digests of the table below. A/B of `parseUnit('1/<token>')` on the base set (25,933 tokens), median of 9, the eb8f4bcd `units.ts` against the swapped one, three alternating pairs in one session: 3,050 against 3,252 ms (1.07×), 3,085 against 3,613 ms (1.17×, three of the nine swapped runs were above 6,500 ms), 3,059 against 3,520 ms (1.15×). The CPU load was not sampled. On 0.25.1 the ratio was 1.37× to 1.69×. The live `segmentations` is 1.05× to 1.11× the frozen splitter (1,033 against 984 ms and 1,013 against 910 ms); on 0.25.1 it was 1.85× to 2.29×. Installed: core 0.25.3; the other five MathTS packages do not change; `grep -c 'mathts-core@' bun.lock` prints 1.

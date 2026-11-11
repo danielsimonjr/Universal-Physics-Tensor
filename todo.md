@@ -3007,3 +3007,12 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Security: not touched.
 - Maintainability: one helper replaces the `SUPERSCRIPT` table and two patterns. `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups before and after.
 - Left: the local splitter stays. Glued zeros, a superscript `⁺` and the order of ambiguous readings differ from `Unit.readings` (`NOTES.md`, 2026-11-09).
+
+## 2026-11-11 — five-axis pass (`upt audit` rewrite memo)
+
+- Speed: `upt audit` median 2.757 s to 2.528 s (10 alternating runs each). The rest is MathTS and typed-function load cost, recorded in `NOTES.md`.
+- Stability: not changed. The internal-error-exit control passes alone in 15.9 s against 60 s.
+- Reliability: output byte-identical before and after. A memo that ignores its key fails `tests/bridges/expr-parse-memo.test.ts` (interleaved texts against the frozen oracle) and 608 tests under `tests/bridges`.
+- Security: not touched.
+- Maintainability: `repo-tools clones .` (2.6.0): 21 near pairs and 0 exact groups, none in `expr-parse.ts`. The memo Map grows like `VARIABLES` and `GRAMMAR_CHECKED` in the same file.
+- Left: a text that fails the grammar check is memoized before `parseCatalogExpression` throws. Only catalog text reaches that path today; set the memo after a successful parse if that path is ever given caller text.
