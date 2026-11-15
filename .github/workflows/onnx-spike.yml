@@ -1,0 +1,42 @@
+name: onnx-spike
+on:
+  push:
+    branches: [spike/onnx-load]
+jobs:
+  load:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: ['18', '22']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ matrix.node }}' }
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: '1.4.2' }
+      - name: install
+        shell: bash
+        working-directory: ${{ runner.temp }}
+        run: |
+          echo '{"name":"onnx-spike","private":true,"type":"module"}' > package.json
+          bun add @huggingface/transformers@4.3.2
+          bun pm untrusted || true
+      - name: load and embed
+        shell: bash
+        working-directory: ${{ runner.temp }}
+        run: |
+          cat > embed.mjs <<'JS'
+          import { pipeline, env } from '@huggingface/transformers';
+          env.cacheDir = process.argv[2];
+          const t0=Date.now();
+          const fe = await pipeline('feature-extraction','onnx-community/Qwen3-Embedding-0.6B-ONNX',{dtype:'q8'});
+          const t1=Date.now();
+          const q='Instruct: Given a physics claim, retrieve the established physical relation that the claim restates or misuses\nQuery: F equals m a';
+          const out = await fe([q,'Newton second law: force equals mass times acceleration'],{pooling:'last_token',normalize:true});
+          const [a,b]=out.tolist(); const cos=a.reduce((s,x,i)=>s+x*b[i],0);
+          console.log(JSON.stringify({loadMs:t1-t0,embedMs:Date.now()-t1,dims:out.dims,cos,rssMB:Math.round(process.memoryUsage().rss/1e6),node:process.version}));
+          JS
+          node embed.mjs "$RUNNER_TEMP/hf-cache"
+          node embed.mjs "$RUNNER_TEMP/hf-cache"
