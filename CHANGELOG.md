@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Documented
+
+- `docs/plans/ONNX_EMBEDDING_PLAN.md` plans an in-process ONNX Runtime embedder (transformers.js, `onnx-community/Qwen3-Embedding-0.6B-ONNX`) for `upt retrieve --embed`, because `qwen3-embedding:4b` is no longer installed on the fleet. No code changes. The study record of Amendments 11 and 12 is unchanged.
+
 ## [14.0.0] - 2026-11-11
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (140 packages). `bun outdated` lists three MathTS runtime packages: `@danielsimonjr/mathts-functions` 0.79.0 (0.84.0 is latest, outside the `^0.79` range), `@danielsimonjr/mathts-matrix` 0.9.5 (0.9.6 in range, 0.10.0 latest) and `@danielsimonjr/mathts-tensor` 0.3.4 (0.3.5 in range). This release does not move them. The development dependencies are as at 13.0.0.
