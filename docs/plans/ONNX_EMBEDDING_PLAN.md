@@ -100,7 +100,9 @@ Recommendation: keep it for one major version as an explicit backend, then remov
 frozen-file test does not need either backend.
 
 A kept Ollama backend needs a new default model, because `qwen3-embedding:4b` is not installed.
-The default becomes `qwen3-embedding:8b`. The width rule `model === OLLAMA_EMBEDDING_MODEL ?
+The default becomes `qwen3-embedding:0.6b`, the owner's choice. It is the same model as the ONNX
+default, so both backends give 1024-wide vectors from one model, and it is installed on both fleet
+machines. The width rule `model === OLLAMA_EMBEDDING_MODEL ?
 FROZEN_VECTOR_DIMS : undefined` then no longer applies to the live default: the frozen width is
 checked only where the frozen file is read. `--embed-model` names a Hugging Face model id for the
 ONNX backend and an Ollama tag for the Ollama backend.
