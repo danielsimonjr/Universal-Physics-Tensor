@@ -13,7 +13,9 @@ Two options:
   test reads the file and never embeds, so it does not need the 4b model. The new embedder serves
   only the live `--embed` path. A new pre-registration amendment records the owner decision that
   replaces Amendment 12 item (b), which named `qwen3-embedding:4b` for the future hybrid work. The
-  amendment re-runs nothing and re-scores nothing.
+  amendment re-runs nothing and re-scores nothing. It quotes the owner decision verbatim with its
+  date, as Amendment 12 does: "For UPT, we need to plan to use an ONNX Runtime enable embedding like
+  transformerjs instead of qwen3 embedding 4b." (2026-11-15).
 - **(b) Register a new embedding condition.** A new amendment registers the ONNX model, its file
   hash, the query form and a new frozen vector file before any score. The condition is then scored
   beside the closed one. This re-opens a closed study, so it needs an explicit owner decision.
@@ -41,6 +43,9 @@ The design rules of `docs/design/tier-11-hybrid-retrieval.md` stay:
 | same repository, dtype `fp16` | 1024 | `onnx/model_fp16.onnx` + data 1.20 GB | Option for a caller that wants less quantization error. |
 | same repository, dtype `fp32` | 1024 | `onnx/model.onnx` + data 2.40 GB | Reference only. |
 | `onnx-community/Qwen3-Embedding-4B-ONNX` | 2560 | `model.onnx_data` 16.1 GB, fp32 only | Refused: too large for a CPU library default. |
+| third-party INT8 builds of the 4B model (for example `mariusbrt/Qwen3-Embedding-4B-ONNX-int8`) | 2560 | not measured | Not chosen: not from `onnx-community`, and the 2560 width matters only under option (b). |
+
+The width 1024 is `hidden_size` in the repository's `config.json`.
 
 Facts from the model card that the implementation must obey:
 
@@ -81,7 +86,7 @@ The present reasons are Ollama-shaped. The in-process path adds these:
 The first run downloads the model. A download must not count as "the call does not finish".
 `--embed` therefore never downloads by default. A new `upt retrieve --fetch-model` downloads to the
 transformers.js cache and prints the path and the file hash. The cache location is the
-transformers.js `env.cacheDir`, and an environment variable replaces it.
+transformers.js cache setting, verified in spike 1, and an environment variable replaces it.
 
 ## 5. The Ollama backend and the version
 
@@ -94,18 +99,28 @@ transformers.js `env.cacheDir`, and an environment variable replaces it.
 Recommendation: keep it for one major version as an explicit backend, then remove it. The
 frozen-file test does not need either backend.
 
+A kept Ollama backend needs a new default model, because `qwen3-embedding:4b` is not installed.
+The default becomes `qwen3-embedding:8b`. The width rule `model === OLLAMA_EMBEDDING_MODEL ?
+FROZEN_VECTOR_DIMS : undefined` then no longer applies to the live default: the frozen width is
+checked only where the frozen file is read. `--embed-model` names a Hugging Face model id for the
+ONNX backend and an Ollama tag for the Ollama backend.
+
 ## 6. Spikes before implementation
 
 Each spike is a measurement, recorded in the PR body.
 
-1. **Install and load.** `@huggingface/transformers` 4.3.2 under bun 1.4.2 (the CI pin) on
-   ubuntu-latest, and on Windows 11. Record whether `sharp` and `onnxruntime-node` install and
-   whether a session loads.
+1. **Install and load.** The CLI runs under Node (`bin/upt.mjs`), and `onnxruntime-node` is a
+   native addon. Load `@huggingface/transformers` 4.3.2 under Node 22 (the CI Node) and under the
+   `engines.node` floor of `package.json`, on ubuntu-latest and on Windows 11. Install under bun 1.4.2
+   (the CI pin). Record whether `sharp` and `onnxruntime-node` install and whether a session loads.
+   If the addon needs a higher Node than the package floor, the optional path states that floor.
 2. **Cost.** Cold load time, warm time per text, and peak resident memory for q8 and fp16, on the
    107 corpus records and 125 queries. Compare with the present `OLLAMA_TIMEOUT_MS = 5000`, and set
    the in-process timeout from the measured numbers.
 3. **Agreement.** Recall at depth 10 on the criterion 3 PRIMARY queries, q8 against fp16. This is a
-   disclosed measurement, not a study score, under option (a).
+   disclosed measurement, not a study score, under option (a). The study is closed (Amendment 13:
+   not re-run and not re-scored), so the new amendment explicitly authorizes this measurement as
+   disclosed and non-scoring. Read the guard of `tools/criterion3-study/run.ts` before the run.
 4. **The query space.** `Query: x` against `Query:x`: the count of queries whose top-10 changes.
 5. **Determinism.** Two runs on the same input: byte-identical or not, and the minimum cosine
    between them.
@@ -122,12 +137,18 @@ Each spike is a measurement, recorded in the PR body.
 ## 8. Documentation
 
 - `docs/design/tier-11-hybrid-retrieval.md` §2: the ONNX implementation replaces the Ollama one as the
-  default, and §3 lists the new reasons. §5 "no new package dependency" becomes "no required
+  default. The sentence that the reply of the default model has the length of the frozen file
+  changes: the frozen width applies only where the frozen file is read. §3 lists the new reasons. §5 "no new package dependency" becomes "no required
   dependency: the library is an optional peer".
-- `src/cli/commands/retrieve.ts` help text, `docs/CLI.md`, `README.md` and `ROADMAP.md` §8.
+- `src/cli/commands/retrieve.ts` help text, `README.md` and `ROADMAP.md` §8. `docs/CLI.md` is
+  generated: run `bun scripts/cli-reference.ts`. Regenerate `tests/cli/golden/help.txt` by running
+  the CLI.
 - A new pre-registration amendment, as in section 0.
 - `CHANGELOG.md` under Unreleased.
-- The two doc gates: `repo-tools check . --docs=docs/architecture` and `repo-tools docs check src`.
+- The gates that fail on this change: `bun run docs:deps` (a new `src/` file moves the
+  architecture claims), `bun scripts/readme-status.ts --check`, `bun scripts/cli-reference.ts
+  --check`, `bun run layer:check`, `tests/internal/src-parses.test.ts`, and the two doc gates
+  `repo-tools check . --docs=docs/architecture` and `repo-tools docs check src`.
 
 ## 9. Order of work
 
