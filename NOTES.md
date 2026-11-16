@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-16 (vector cache)
+
+- **The ONNX vector cache, measured on the test fake only.** Tests: `tests/atlas/onnx-vector-cache.test.ts` 15, `tests/cli/retrieve.test.ts` 3 new. Mutations, each run against the unmutated suite first (15 passed): a key on one text of the batch fails the shifted-corpus test; a key with no model file stamp fails the model-file test; a length check of `<` in place of `!==` fails the corrupt-file test; Float32 values fail 5 tests; a CLI that always caches and prints no note fails 2. Two of these first survived: the model-file case changed the library version at the same time, and no file was too long. Both tests now isolate the one cause. The file records the library version, and the key does not. A location that `UPT_VECTOR_CACHE` names, with a named model root, loads no library. On that path the version is unknown and is not checked. The cost on the real model is not measured; the live fp16 run waits for the shared CPU.
+
 ## As of 2026-11-16
 
 - **`--fetch-model` with an unreachable host.** The crash needs the JSON files cached, the ONNX files absent and the host down. An empty cache fails cleanly. The fix checks each missing file before the load. Residual, measured with a local server: a host that answers the 1-byte check and then resets the `.onnx` download still ends the process (transformers.js 4.3.2 `getSession`, unawaited `getCoreModelFile`). An upstream issue is the owner's call. The probes have no time limit: a host that accepts the connection and sends no headers holds each probe for the undici headers timeout (300 s). The old load path waited the same way. Not looked into: the embedder pre-check does not require `onnx/<stem>.onnx_data`.

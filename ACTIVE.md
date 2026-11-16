@@ -21,7 +21,7 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 ## Open tasks, easiest first
 
 - [x] `upt retrieve --fetch-model` must not crash when the model JSON files are cached, the ONNX files are not, and the host is unreachable. Probe each missing file before the load, and refuse with `model-not-cached`.
-- [ ] `upt retrieve --embed` with the ONNX backend: cache corpus vectors per batch, so a repeat run embeds only the batches that changed and gives the same vectors.
+- [x] `upt retrieve --embed` with the ONNX backend: cache corpus vectors per batch, so a repeat run embeds only the batches that changed and gives the same vectors.
 - [ ] Release 14.0.0: bump, regenerate (atlas JSON, Lean table, dependency graph, the two tag goldens), dependency snapshot, release PR, tag `v14.0.0`, registry check. `[Unreleased]` holds Breaking entries since `v13.0.0`, so the version is a major.
 - [x] `upt retrieve --embed --embed-model=NAME`: ask Ollama for NAME. The default stays `qwen3-embedding:4b`, and a model that is not the default is not held to the 2560 length of the frozen file.
 - [x] #538: the per-derivation `dimensionalForm.monomial` of `upt explain sound-speed` omits the bound `gamma` exponent that the summary monomial and the recovered value carry.

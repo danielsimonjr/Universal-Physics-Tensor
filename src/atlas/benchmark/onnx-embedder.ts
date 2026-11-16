@@ -51,7 +51,7 @@ export const VECTOR_CACHE_ENV = 'UPT_VECTOR_CACHE';
  */
 export const VECTOR_CACHE_SUBDIR = '.upt-vectors';
 
-/** The format of a vector file and of its key. Changing it makes every stored file a miss. */
+/** The format of a vector file and of its key. Changing the format makes every stored file a miss. */
 const VECTOR_FORMAT = 1;
 
 /** The first four bytes of a vector file. */
@@ -69,7 +69,7 @@ const RENAME_RETRY_MS = 50;
 /** The error codes of a rename that another process may cause and that a later attempt can pass. */
 const RETRYABLE_RENAME = new Set(['EPERM', 'EBUSY']);
 
-/** The padding side that last-token pooling needs. The extractor is refused unless it pads on this side. */
+/** The padding side that last-token pooling needs. The embedder refuses an extractor that pads on the other side. */
 const PADDING_SIDE = 'left';
 
 /** The pooling and normalisation of every model call. The cache key reads this same object. */
@@ -153,7 +153,7 @@ export interface OnnxEmbedderOptions {
   readonly checkCache?: boolean;
   /**
    * Store the vectors of each batch in files. A repeat call with the same ordered batch
-   * returns the stored vectors and loads no model. The default is off, so a harness or a
+   * returns the stored vectors. It loads no model. The default is off, so a harness or a
    * benchmark embeds every call. The stored vectors are the ones an earlier call returned.
    */
   readonly vectorCache?: boolean;
@@ -261,7 +261,7 @@ function isVectorRow(row: unknown, width: number): row is number[] {
 
 /**
  * Checks the rows of one model reply: the row count, and one width for every
- * row. The width is `width` when the call fixed it, else the width of the first row.
+ * row. The width is `width` when the call fixes the width, else the width of the first row.
  */
 function checkedRows(rows: unknown, count: number, width: number | undefined): Embedded {
   if (!Array.isArray(rows) || rows.length !== count) throw new EmbeddingUnavailable('reply-not-a-vector');
@@ -401,7 +401,7 @@ async function renameWithRetry(from: string, to: string): Promise<void> {
 
 /**
  * Writes one batch with its library version. It writes a temporary file and
- * renames it over the key, so a reader sees a whole file or no file. It returns
+ * renames that file over the key. A reader sees a whole file or no file. It returns
  * the reason of a failure. A failure does not throw: the vectors are valid.
  */
 async function writeBatch(dir: string, key: string, rows: number[][], width: number, version: string): Promise<string | undefined> {
@@ -440,7 +440,7 @@ function resolveVectorDir(option: string | undefined): string | undefined {
 }
 
 /**
- * Makes sure a named cache directory exists. A path that is a file, or that cannot
+ * Makes sure a named cache directory exists. A path that is a file, or a path that cannot
  * be created, is a configuration error and not a miss.
  */
 async function ensureVectorDir(dir: string): Promise<void> {

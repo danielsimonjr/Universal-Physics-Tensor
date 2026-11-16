@@ -174,20 +174,29 @@ The codebase is organized into the following modules:
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
-| `crypto` | `createHash` |
-| `fs` | `createReadStream, existsSync, readdirSync` |
+| `crypto` | `createHash, randomBytes` |
+| `fs` | `createReadStream, existsSync, readdirSync, statSync` |
+| `fs/promises` | `mkdir, readFile, rename, rm, stat, writeFile` |
 | `path` | `join` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `../../core/compare.js` | `compareCodepoint` | Import |
+| `../../core/hash.js` | `sha256Hex` | Import |
 | `./hybrid-retrieval.js` | `EmbeddingUnavailable, Embedder` | Import |
 
 **Exports:**
 - Interfaces: `TransformersLibrary`, `OnnxEmbedderOptions`, `OnnxModelFile`, `OnnxModelReport`
 - Functions: `onnxEmbedder`, `fetchOnnxModel`
-- Constants: `ONNX_EMBEDDING_MODEL`, `ONNX_DTYPES`, `ONNX_DEFAULT_DTYPE`, `ONNX_VECTOR_DIMS`, `ONNX_BATCH_SIZE`, `ONNX_CACHE_ENV`, `ONNX_LOAD_TIMEOUT_MS`, `ONNX_PER_TEXT_TIMEOUT_MS`
+- Constants:
+
+  ```text
+  ONNX_EMBEDDING_MODEL, ONNX_DTYPES, ONNX_DEFAULT_DTYPE, ONNX_VECTOR_DIMS, ONNX_BATCH_SIZE,
+  ONNX_CACHE_ENV, VECTOR_CACHE_ENV, VECTOR_CACHE_SUBDIR, ONNX_LOAD_TIMEOUT_MS,
+  ONNX_PER_TEXT_TIMEOUT_MS
+  ```
+
 
 ---
 
@@ -7586,7 +7595,7 @@ The codebase is organized into the following modules:
 | `hybrid-retrieval` | 3 files | 3 files |
 | `leakage` | 4 files | 2 files |
 | `loader` | 2 files | 0 files |
-| `onnx-embedder` | 2 files | 1 files |
+| `onnx-embedder` | 3 files | 1 files |
 | `run-atlas` | 5 files | 1 files |
 | `stats` | 1 files | 3 files |
 | `study` | 2 files | 1 files |
@@ -7765,8 +7774,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 389 |
 | Total Modules | 13 |
-| Total Lines of Code | 88395 |
-| Total Exports | 2841 |
+| Total Lines of Code | 88733 |
+| Total Exports | 2843 |
 | Total Re-exports | 1397 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
