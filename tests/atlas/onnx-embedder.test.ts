@@ -4,7 +4,7 @@
  * cache that holds the default model.
  */
 import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -51,6 +51,7 @@ function fake(opts: {
   const row = opts.row ?? ((text: string) => Array.from({ length: ONNX_VECTOR_DIMS }, (_, i) => (text.length + i) / 1e4));
   const lib: TransformersLibrary = {
     env: {},
+    ModelRegistry: registry({ cached: [], missing: [] }).reg,
     pipeline: async (task, model, options) => {
       loads.push({ task, model, options: { ...options } });
       if (opts.loadNever === true) return new Promise(() => {});
@@ -297,6 +298,162 @@ describe('fetchOnnxModel', () => {
   it('a load that fails after the download is session-failed', async () => {
     const f = fake({ loadError: new Error('network down') });
     await expect(fetchOnnxModel({ loadLibrary: async () => f.lib, cacheDir: '/x' })).rejects.toMatchObject({ reason: 'session-failed' });
+  });
+});
+
+/** A fake model registry. `cached` lists the files the cache holds; `meta` answers each probe. */
+function registry(opts: {
+  readonly cached: readonly string[];
+  readonly missing: readonly string[];
+  readonly meta?: (file: string) => Promise<{ exists: boolean }>;
+  readonly listError?: Error;
+}) {
+  const probes: string[] = [];
+  const listCalls: { task: string; model: string; options: Record<string, unknown> }[] = [];
+  const metaCalls: { model: string; file: string; options: unknown }[] = [];
+  const reg = {
+    is_pipeline_cached_files: async (task: string, model: string, options: Record<string, unknown>) => {
+      listCalls.push({ task, model, options: { ...options } });
+      if (opts.listError !== undefined) throw opts.listError;
+      return {
+      allCached: opts.missing.length === 0,
+      files: [
+        ...opts.cached.map((file) => ({ file, cached: true })),
+        ...opts.missing.map((file) => ({ file, cached: false })),
+      ],
+      };
+    },
+    get_file_metadata: async (model: string, file: string, options?: Record<string, unknown>) => {
+      metaCalls.push({ model, file, options });
+      probes.push(file);
+      return opts.meta !== undefined ? opts.meta(file) : { exists: true };
+    },
+  };
+  return { reg, probes, listCalls, metaCalls };
+}
+
+/** A pipeline that leaves a rejected download unawaited, as transformers.js 4.3.2 getSession does. */
+function orphaningPipeline(loads: string[]): TransformersLibrary['pipeline'] {
+  return async (_task, model) => {
+    loads.push(model);
+    const core = Promise.reject(new TypeError('fetch failed'));
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    void core;
+    throw new TypeError('fetch failed');
+  };
+}
+
+describe('fetchOnnxModel with an unreachable host', () => {
+  const JSON_FILES = ['config.json', 'tokenizer.json', 'tokenizer_config.json'];
+  const ONNX_FILES = ['onnx/model_fp16.onnx', 'onnx/model_fp16.onnx_data'];
+
+  it('JSON cached, ONNX absent, host down: model-not-cached, and the library never loads', async () => {
+    const loads: string[] = [];
+    const { reg, probes } = registry({
+      cached: JSON_FILES,
+      missing: ONNX_FILES,
+      meta: async () => {
+        throw new TypeError('fetch failed');
+      },
+    });
+    const lib = { env: {}, pipeline: orphaningPipeline(loads), ModelRegistry: reg } as TransformersLibrary;
+    await expect(fetchOnnxModel({ loadLibrary: async () => lib, cacheDir: '/x' })).rejects.toMatchObject({
+      reason: 'model-not-cached',
+    });
+    expect(loads).toEqual([]);
+    expect(probes[0]).toBe('onnx/model_fp16.onnx');
+  });
+
+  it('a missing file the host does not have is model-not-cached, and the library never loads', async () => {
+    const loads: string[] = [];
+    const { reg } = registry({
+      cached: JSON_FILES,
+      missing: ONNX_FILES,
+      meta: async (file) => ({ exists: file !== 'onnx/model_fp16.onnx_data' }),
+    });
+    const lib = { env: {}, pipeline: orphaningPipeline(loads), ModelRegistry: reg } as TransformersLibrary;
+    await expect(fetchOnnxModel({ loadLibrary: async () => lib, cacheDir: '/x' })).rejects.toMatchObject({
+      reason: 'model-not-cached',
+    });
+    expect(loads).toEqual([]);
+  });
+
+  it('every file cached: no probe, and the library loads', async () => {
+    const f = fake({ loadError: new Error('stop after the load') });
+    const { reg, probes } = registry({ cached: [...JSON_FILES, ...ONNX_FILES], missing: [] });
+    const lib = { ...f.lib, ModelRegistry: reg } as TransformersLibrary;
+    await expect(fetchOnnxModel({ loadLibrary: async () => lib, cacheDir: '/x' })).rejects.toMatchObject({
+      reason: 'session-failed',
+    });
+    expect(probes).toEqual([]);
+    expect(f.loads).toHaveLength(1);
+  });
+
+  it('the list call carries the dtype and the model of the load, and each probe names the model', async () => {
+    for (const dtype of ['q8', 'fp32'] as const) {
+      const f = fake({ loadError: new Error('stop after the load') });
+      const { reg, listCalls, metaCalls } = registry({ cached: JSON_FILES, missing: ['onnx/x.onnx'] });
+      const lib = { ...f.lib, ModelRegistry: reg } as TransformersLibrary;
+      await fetchOnnxModel({ loadLibrary: async () => lib, cacheDir: '/x', dtype, modelId: 'org/other' }).catch(() => undefined);
+      expect(listCalls).toEqual([{ task: 'feature-extraction', model: 'org/other', options: { dtype } }]);
+      expect(metaCalls.map((c) => [c.model, c.file])).toEqual([['org/other', 'onnx/x.onnx']]);
+      expect(f.loads[0]?.options).toEqual({ dtype });
+    }
+  });
+
+  it('a list call that rejects is session-failed with the cause, and the library never loads', async () => {
+    const loads: string[] = [];
+    const { reg } = registry({ cached: [], missing: [], listError: new TypeError('fetch failed') });
+    const lib = { env: {}, pipeline: orphaningPipeline(loads), ModelRegistry: reg } as TransformersLibrary;
+    await expect(fetchOnnxModel({ loadLibrary: async () => lib, cacheDir: '/x' })).rejects.toMatchObject({
+      reason: 'session-failed',
+      message: expect.stringContaining('fetch failed'),
+    });
+    expect(loads).toEqual([]);
+  });
+
+  it('a library with no ModelRegistry is refused as session-failed, and never loads', async () => {
+    const f = fake();
+    const { ModelRegistry: _omit, ...rest } = f.lib;
+    await expect(fetchOnnxModel({ loadLibrary: async () => rest as TransformersLibrary, cacheDir: '/x' })).rejects.toMatchObject({
+      reason: 'session-failed',
+      message: expect.stringContaining('ModelRegistry'),
+    });
+    expect(f.loads).toEqual([]);
+  });
+
+  it('missing files the host has: each is probed, then the library loads', async () => {
+    const f = fake({ loadError: new Error('stop after the load') });
+    const { reg, probes } = registry({ cached: JSON_FILES, missing: ONNX_FILES });
+    const lib = { ...f.lib, ModelRegistry: reg } as TransformersLibrary;
+    await expect(fetchOnnxModel({ loadLibrary: async () => lib, cacheDir: '/x' })).rejects.toMatchObject({
+      reason: 'session-failed',
+    });
+    expect(probes).toEqual(ONNX_FILES);
+    expect(f.loads).toHaveLength(1);
+  });
+});
+
+// The optional peer is not installed in every checkout, so this block runs only where it is.
+const PEER_INSTALLED = existsSync(join(process.cwd(), 'node_modules', '@huggingface', 'transformers', 'package.json'));
+describe.skipIf(!PEER_INSTALLED)('fetchOnnxModel, real transformers.js, host down', () => {
+  it('JSON files cached, ONNX files absent: model-not-cached, with the host refusing connections', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'upt-onnx-real-'));
+    const model = join(dir, ...ONNX_EMBEDDING_MODEL.split('/'));
+    mkdirSync(model, { recursive: true });
+    writeFileSync(join(model, 'config.json'), JSON.stringify({ model_type: 'qwen3', architectures: ['Qwen3Model'] }));
+    writeFileSync(join(model, 'tokenizer.json'), '{}');
+    writeFileSync(join(model, 'tokenizer_config.json'), '{}');
+    const peer = '@huggingface/transformers';
+    const lib = (await import(peer)) as unknown as TransformersLibrary & { env: { remoteHost?: string } };
+    const savedHost = lib.env.remoteHost;
+    lib.env.remoteHost = 'http://127.0.0.1:9/';
+    try {
+      await expect(fetchOnnxModel({ loadLibrary: async () => lib, cacheDir: dir })).rejects.toMatchObject({ reason: 'model-not-cached' });
+    } finally {
+      if (savedHost !== undefined) lib.env.remoteHost = savedHost;
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });
 

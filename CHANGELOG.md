@@ -26,6 +26,10 @@ from v0.1.0 onward.
 - Pre-registration Amendment 14 registers `onnx-community/Qwen3-Embedding-0.6B-ONNX` (`q8`, 1024 wide, `last_token`, L2-normalized) as the live-path embedding model and supersedes Amendment 12 item (b), because the owner chose an in-process ONNX Runtime embedder over `qwen3-embedding:4b`. It authorizes spikes 3 to 5 of the ONNX plan as disclosed, non-scoring measurements on the frozen corpus. The closed criterion 3 study is not re-run or re-scored, and no frozen file or hash changes.
 - `docs/plans/ONNX_EMBEDDING_PLAN.md` plans an in-process ONNX Runtime embedder (transformers.js, `onnx-community/Qwen3-Embedding-0.6B-ONNX`) for `upt retrieve --embed`, because `qwen3-embedding:4b` is no longer installed on the fleet. No code changes. The study record of Amendments 11 and 12 is unchanged.
 
+### Fixed
+
+- `upt retrieve --fetch-model` no longer exits 1 with a stack trace when the JSON files of the model are in the cache, its ONNX files are not, and the host cannot be reached. Before the load, the fetch asks the host about each file that is not in the cache. When the JSON files are cached, a file the host cannot give is `model-not-cached`, and the library does not load. Why: transformers.js 4.3.2 `getSession` starts the `.onnx` download without awaiting it. It then awaits the external-data download. When the two downloads fail, the first rejection has no handler, and Node ends the process. A library with no `ModelRegistry` is `session-failed`. A network failure that starts after the checks can still end the process inside the library.
+
 ## [14.0.0] - 2026-11-11
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (140 packages). `bun outdated` lists three MathTS runtime packages: `@danielsimonjr/mathts-functions` 0.79.0 (0.84.0 is latest, outside the `^0.79` range), `@danielsimonjr/mathts-matrix` 0.9.5 (0.9.6 in range, 0.10.0 latest) and `@danielsimonjr/mathts-tensor` 0.3.4 (0.3.5 in range). This release does not move them. The development dependencies are as at 13.0.0.
