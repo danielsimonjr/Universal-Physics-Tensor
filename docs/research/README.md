@@ -103,6 +103,7 @@ adjudication/calibration notes that close out the discovery pipeline
   three 2026-06-18 fixes (magnitude-gate sourcing, canonical name unification,
   declared compton↔de-Broglie link). `upt {map,discover} --source=canonical`;
   pinned by `tests/composition/canonical-graph.test.ts`.
+- `Catalog-Judgments-Record.md` — for each item of the ACTIVE row "Record catalog judgments", the judgment the repository already holds, quoted with file and line, or "No verdict is recorded" with the search. Written 2026-11-16 against commit 2fa530ab. No code reads it.
 - `v0.11.0-novel-candidates.md` — Phase-D review surface
   (41-edge graph: 7 novel candidates + 1 collision awaiting an
   AliasDisposition). Supersedes the v0.10.0 report (kept for
