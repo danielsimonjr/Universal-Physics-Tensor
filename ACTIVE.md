@@ -218,7 +218,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
   The ratchet counts issues with a private checker, and it prints one skip line and passes when that checker is missing. The fix adds doc comments under `src/`, so it changes the shipped declaration files. Release timing is the maintainer's call.
   Done: the doc-check command reports 0 MUST issues for src, and the pre-push hook runs it through `UPT_REPO_TOOLS`. The hook fails on any MUST issue and on a run with no `PASS --` line. It keeps no baseline, and `.githooks/code-docs-baseline.txt` is removed. A missing `repo-tools` executable still prints one `SKIPPED` line for each gate, and the push continues. `tests/tools/pre-push-gate.test.ts` runs the gate block against a stub executable.
 
-- [ ] Plan the in-process ONNX embedder for `upt retrieve --embed` (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`). Owner decisions first: the study-record option (section 0) and the Ollama backend (section 5).
+- [ ] Amendment 14: register the ONNX live-path model and authorize spikes 3-5 of `docs/plans/ONNX_EMBEDDING_PLAN.md` as disclosed, non-scoring measurements.
+- [x] Plan the in-process ONNX embedder for `upt retrieve --embed` (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`). Owner decisions first: the study-record option (section 0) and the Ollama backend (section 5).
 - [ ] Find why `repo-tools map` marks every file under `src/` as an entry root in this repository.
   Until the cause is fixed, no Verification table may hold `entryRoots`, `reachableFiles` or `testOnlyFiles`, and `orphanedFiles` is not a safe claim.
 

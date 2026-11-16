@@ -406,3 +406,20 @@ are unchanged, and their Amendment 8 hash still matches.
 
 The live export has 109 records and 92 expressions, pinned at commit
 d93e0b8edc8aee7bbe25cc223b490adbc6d7d022. No threshold, item, rater assignment or truth set changes.
+
+**Amendment 14 (2026-11-15) — UPT embeds with an ONNX Runtime model, and the closed study is not reopened.**
+
+The owner decided the UPT embedding path on 2026-11-15, in these words: "For UPT, we need to plan to use an ONNX Runtime enable embedding like transformerjs instead of qwen3 embedding 4b."
+
+- **Supersession.** This amendment supersedes Amendment 12 item (b). Item (b) named `qwen3-embedding:4b` for the future hybrid work. Amendment 12 stays unchanged in this file.
+- **Live-path model.** The live-path embedding model is `onnx-community/Qwen3-Embedding-0.6B-ONNX`. It runs through `@huggingface/transformers` 4.3.2 and `onnxruntime-node` 1.30.0. The default dtype is `q8`. The vectors are 1024 wide (`hidden_size`). The pooling is `last_token`. The vectors are L2-normalized.
+- **Query form.** The model card writes a query as `Query:<text>`, with no space. The registered UPT form keeps the space after `Query:`. A query is `Instruct: <instruction>`, a newline, then `Query: <text>`. Amendment 11 fixed the instruction, and it does not change. Each record is embedded as its raw `text`, with no prefix.
+- **Measurements.** Spike 2 measures time and memory. It keeps no vector and ranks nothing. Spike 3 compares the recall of the `q8` and `fp16` dtypes. Spike 4 compares the two query forms. Spike 5 compares two runs of the same dtype and form.
+- **Authorized spikes.** Spikes 3, 4 and 5 are authorized as disclosed, non-scoring measurements. They read the frozen corpus: 107 records at commit 1263bce, SHA-256 232062ff... as Amendment 13 records. They read `queries.json` (SHA-256 dea19d47...) and `truth.json`, unchanged since Amendment 8. They run from a scratch harness outside the repository. They change no file under `docs/research/criterion3/`.
+- **Disclosed earlier activity.** Before this amendment, smoke runs embedded the same two short texts, which are not study inputs. The runs ranked nothing and scored nothing. The `q8` and `fp16` model files were downloaded without embedding any text. No study text was embedded and no vector was kept.
+- **Frozen study stays closed.** The frozen vector file, its hash, `FROZEN_VECTOR_DIMS` (2560), `FROZEN_VECTOR_SHA256` and the frozen-file test stay unchanged. Nothing is re-run or re-scored. The spike numbers are not a criterion score. They decide no verdict. Spike 3 places its recall beside the closed study's PRIMARY result of 49/50 (Amendment 12) as context only.
+- **Order.** The spikes that read the corpus run after the commit that adds this amendment exists and its CI run is green. That commit is the authorizing commit. Each result records its SHA and the CI run. If the authorizing sentences change before merge, the spikes run again, or the implementation pull request body discloses the change.
+- **Environment.** Each result records the Node version, the library versions, the dtype, the batch size, the thread count and the load samples. The scratch runs can use a Node version that differs from CI. The implementation pull request body states any difference.
+- **Where results live.** The numbers go in the implementation pull request body and in a dated block of `NOTES.md`. The results file and the vector files stay outside the repository. No results file is committed under `docs/research/`.
+
+No threshold, item, rater assignment, truth set or hash changes.

@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Documented
 
+- Pre-registration Amendment 14 registers `onnx-community/Qwen3-Embedding-0.6B-ONNX` (`q8`, 1024 wide, `last_token`, L2-normalized) as the live-path embedding model and supersedes Amendment 12 item (b), because the owner chose an in-process ONNX Runtime embedder over `qwen3-embedding:4b`. It authorizes spikes 3 to 5 of the ONNX plan as disclosed, non-scoring measurements on the frozen corpus. The closed criterion 3 study is not re-run or re-scored, and no frozen file or hash changes.
 - `docs/plans/ONNX_EMBEDDING_PLAN.md` plans an in-process ONNX Runtime embedder (transformers.js, `onnx-community/Qwen3-Embedding-0.6B-ONNX`) for `upt retrieve --embed`, because `qwen3-embedding:4b` is no longer installed on the fleet. No code changes. The study record of Amendments 11 and 12 is unchanged.
 
 ## [14.0.0] - 2026-11-11
