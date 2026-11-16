@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 389 |
-| Total Test Files | 722 |
+| Total Test Files | 723 |
 | Source files imported directly by a test | 347 |
 | Source files reached directly or through a barrel or side-effect import | 379 |
 | Source files no test reaches either way | 10 |
@@ -66,7 +66,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `benchmark/hybrid-retrieval.ts` | `hybrid-retrieval.test.ts`, `onnx-embedder.test.ts`, `retrieve.test.ts`, `mathts-delegation.test.ts`, `round3-owner-decisions.test.ts` | `barrel-completeness.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
 | `benchmark/leakage.ts` | `benchmark.test.ts`, `residual.test.ts`, `algebraic-equivalence.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/loader.ts` | `benchmark-model-set.test.ts`, `benchmark-preregistration.test.ts`, `benchmark.test.ts`, `json-file-readers.test.ts` | — |
-| `benchmark/onnx-embedder.ts` | `onnx-embedder.test.ts`, `retrieve.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
+| `benchmark/onnx-embedder.ts` | `onnx-embedder.test.ts`, `onnx-vector-cache.test.ts`, `retrieve.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
 | `benchmark/run-atlas.ts` | `benchmark-ablation.test.ts`, `benchmark-run-atlas.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/stats.ts` | `benchmark-model-set.test.ts`, `benchmark-stats.test.ts`, `link-prediction.test.ts`, `mcnemar-binomial.test.ts`, `mathts-delegation.test.ts`, `mathts-gaps.test.ts`, `criterion3-run.test.ts` | `barrel-completeness.test.ts` |
 | `benchmark/study.ts` | `benchmark-ablation.test.ts`, `benchmark-study.test.ts` | `barrel-completeness.test.ts` |
@@ -514,6 +514,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `atlas/negative-controls.test.ts` | 13 files |
 | `atlas/ode-helper.test.ts` | 1 files |
 | `atlas/onnx-embedder.test.ts` | 2 files |
+| `atlas/onnx-vector-cache.test.ts` | 1 files |
 | `atlas/oscillators-coarse.test.ts` | 11 files |
 | `atlas/oscillators-exact.test.ts` | 1 files |
 | `atlas/oscillators-limits.test.ts` | 6 files |

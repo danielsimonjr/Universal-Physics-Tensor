@@ -11,10 +11,12 @@
  * @internal
  */
 
-import { createHash } from 'node:crypto';
-import { createReadStream, existsSync, readdirSync } from 'node:fs';
+import { createHash, randomBytes } from 'node:crypto';
+import { createReadStream, existsSync, readdirSync, statSync } from 'node:fs';
+import { mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { compareCodepoint } from '../../core/compare.js';
+import { sha256Hex } from '../../core/hash.js';
 import { EmbeddingUnavailable, type Embedder } from './hybrid-retrieval.js';
 
 /** The Hugging Face model id of the default embedding model. @internal */
@@ -38,6 +40,32 @@ export const ONNX_BATCH_SIZE = 8;
 /** The environment variable that names the model cache directory. @internal */
 export const ONNX_CACHE_ENV = 'UPT_MODEL_CACHE';
 
+/** The environment variable that names the vector cache directory. @internal */
+export const VECTOR_CACHE_ENV = 'UPT_VECTOR_CACHE';
+
+/**
+ * The folder under the model cache root that holds the vector cache when the
+ * caller names no other location. A leading dot is not a valid Hugging Face
+ * organisation name, so the folder cannot collide with a model folder.
+ * @internal
+ */
+export const VECTOR_CACHE_SUBDIR = '.upt-vectors';
+
+/** The format of a vector file and of its key. Changing the format makes every stored file a miss. */
+const VECTOR_FORMAT = 1;
+
+/** The first four bytes of a vector file. */
+const VECTOR_MAGIC = 'UPTV';
+
+/** The fixed part of a vector file: the magic, the row count and the width, as 32-bit integers. */
+const VECTOR_HEADER_BYTES = 12;
+
+/** The padding side that last-token pooling needs. The embedder refuses an extractor that pads on the other side. */
+const PADDING_SIDE = 'left';
+
+/** The pooling and normalisation of every model call. The cache key reads this same object. */
+const EMBED_OPTIONS = { pooling: 'last_token', normalize: true } as const;
+
 /**
  * How long a model load may run before it counts as not finishing. The
  * measured fp16 cold load on the EVO-X2 is 5.35 s. The allowance is about 5 times that.
@@ -55,7 +83,8 @@ export const ONNX_PER_TEXT_TIMEOUT_MS = 2_000;
 
 /** The part of the `@huggingface/transformers` module that this file uses. @internal */
 export interface TransformersLibrary {
-  readonly env: { cacheDir?: string };
+  /** The library settings. `version` is the library release, when it reports one. */
+  readonly env: { cacheDir?: string; version?: string };
   pipeline(task: string, model: string, options: Record<string, unknown>): Promise<unknown>;
   /**
    * The library's model registry. It names the cached files and asks the host
@@ -113,6 +142,19 @@ export interface OnnxEmbedderOptions {
    * for an injected one.
    */
   readonly checkCache?: boolean;
+  /**
+   * Store the vectors of each batch in files. A repeat call with the same ordered batch
+   * returns the stored vectors. It loads no model. The default is off, so a harness or a
+   * benchmark embeds every call. The stored vectors are the ones an earlier call returned.
+   */
+  readonly vectorCache?: boolean;
+  /**
+   * The vector cache directory. Defaults to the `UPT_VECTOR_CACHE` variable, then to
+   * `.upt-vectors` under the model cache root. A named directory that is a file is an error.
+   */
+  readonly vectorCacheDir?: string;
+  /** Receives one event per batch when the vector cache is on: a hit, a miss, or a write that failed. */
+  readonly onCacheEvent?: (e: { kind: 'hit' | 'miss' | 'write-failed'; batch: number; detail?: string }) => void;
   /** Loads the library. Defaults to a dynamic import of the optional peer. */
   readonly loadLibrary?: () => Promise<TransformersLibrary>;
 }
@@ -189,41 +231,208 @@ async function within<T>(work: Promise<T>, ms: number): Promise<T> {
   }
 }
 
+/** The vectors of one batch and their width. */
+interface Embedded {
+  readonly rows: number[][];
+  readonly width: number;
+}
+
 /**
- * Embeds every text in batches. It checks each row: the row count, the finite
- * numbers, and one width for every row.
+ * The one row check. A row is an array of `width` finite numbers. The model
+ * reply and a cached row both pass this check.
  */
-async function embedAll(
+function isVectorRow(row: unknown, width: number): row is number[] {
+  return (
+    Array.isArray(row) &&
+    width >= 1 &&
+    row.length === width &&
+    row.every((x) => typeof x === 'number' && Number.isFinite(x))
+  );
+}
+
+/**
+ * Checks the rows of one model reply: the row count, and one width for every
+ * row. The width is `width` when the call fixes the width, else the width of the first row.
+ */
+function checkedRows(rows: unknown, count: number, width: number | undefined): Embedded {
+  if (!Array.isArray(rows) || rows.length !== count) throw new EmbeddingUnavailable('reply-not-a-vector');
+  const fixed = width ?? (Array.isArray(rows[0]) ? rows[0].length : 0);
+  for (const row of rows as unknown[]) {
+    if (!isVectorRow(row, fixed)) throw new EmbeddingUnavailable('reply-not-a-vector');
+  }
+  return { rows: rows as number[][], width: fixed };
+}
+
+/** Embeds one batch in one model call, and checks the reply. */
+async function embedBatch(extract: Extractor, batch: string[], width: number | undefined): Promise<Embedded> {
+  const reply = await extract(batch, EMBED_OPTIONS);
+  let rows: unknown;
+  try {
+    rows = reply.tolist();
+  } catch {
+    throw new EmbeddingUnavailable('reply-not-a-vector');
+  }
+  return checkedRows(rows, batch.length, width);
+}
+
+/**
+ * Embeds the batches with the given indices, in order, into `out`. The first batch
+ * fixes the width when no width is known. A call that runs out of time starts no
+ * further batch. The caller owns `out`. The batches that finish before a timeout stay in `out`.
+ */
+async function embedBatches(
   extract: Extractor,
-  texts: readonly string[],
-  modelId: string,
-  expectedDims: number | undefined,
+  batches: readonly (readonly string[])[],
+  indices: readonly number[],
+  width: number | undefined,
   cancelled: () => boolean,
-): Promise<number[][]> {
-  const vectors: number[][] = [];
-  let width: number | undefined = expectedDims ?? (modelId === ONNX_EMBEDDING_MODEL ? ONNX_VECTOR_DIMS : undefined);
-  for (let start = 0; start < texts.length; start += ONNX_BATCH_SIZE) {
+  out: Map<number, Embedded>,
+): Promise<void> {
+  let fixed = width;
+  for (const index of indices) {
     // A call that timed out is over. Do not start the next batch for it.
     if (cancelled()) throw new EmbeddingUnavailable('call-did-not-finish');
-    const batch = texts.slice(start, start + ONNX_BATCH_SIZE);
-    const reply = await extract(batch, { pooling: 'last_token', normalize: true });
-    let rows: unknown;
-    try {
-      rows = reply.tolist();
-    } catch {
-      throw new EmbeddingUnavailable('reply-not-a-vector');
+    const done = await embedBatch(extract, [...batches[index]!], fixed);
+    fixed = done.width;
+    out.set(index, done);
+  }
+}
+
+/** Splits the texts into batches of `ONNX_BATCH_SIZE`, in input order. */
+function batchesOf(texts: readonly string[]): string[][] {
+  const out: string[][] = [];
+  for (let start = 0; start < texts.length; start += ONNX_BATCH_SIZE) {
+    out.push(texts.slice(start, start + ONNX_BATCH_SIZE));
+  }
+  return out;
+}
+
+/**
+ * The SHA-256 key of one batch. It covers the ordered texts, the model, the dtype,
+ * the pooling, the padding side and the model file stamp. It does not cover the
+ * library version: a file records that version and a read checks it.
+ */
+function batchKey(modelId: string, dtype: OnnxDtype, stamp: readonly [number, number] | null, batch: readonly string[]): string {
+  return sha256Hex(JSON.stringify([VECTOR_FORMAT, modelId, dtype, EMBED_OPTIONS, PADDING_SIDE, stamp, batch]));
+}
+
+/**
+ * The size and modification time of the model file of the dtype. The stamp
+ * changes when the file is replaced. It is null when the file cannot be read.
+ */
+function modelFileStamp(root: string, modelId: string, dtype: OnnxDtype): readonly [number, number] | null {
+  try {
+    const file = statSync(join(root, ...modelId.split('/'), 'onnx', `${STEM[dtype]}.onnx`));
+    return [file.size, file.mtimeMs];
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Reads one stored batch. It returns the rows only when the file is whole and
+ * matches: the magic, the row count, the width, the stored library version when
+ * the call knows the version, and every value. Any other file is a miss, never an
+ * error, so the caller re-embeds the batch and writes the file again.
+ */
+async function readBatch(
+  path: string,
+  count: number,
+  width: number | undefined,
+  version: string | undefined,
+): Promise<Embedded | undefined> {
+  let bytes: Buffer;
+  try {
+    bytes = await readFile(path);
+  } catch {
+    return undefined;
+  }
+  if (bytes.length < VECTOR_HEADER_BYTES || bytes.toString('latin1', 0, 4) !== VECTOR_MAGIC) return undefined;
+  const rowCount = bytes.readUInt32LE(4);
+  const cols = bytes.readUInt32LE(8);
+  if (rowCount !== count || cols < 1 || (width !== undefined && cols !== width)) return undefined;
+  let at = VECTOR_HEADER_BYTES;
+  if (bytes.length < at + 4) return undefined;
+  const versionLength = bytes.readUInt32LE(at);
+  at += 4;
+  if (bytes.length < at + versionLength) return undefined;
+  const stored = bytes.toString('utf8', at, at + versionLength);
+  at += versionLength;
+  if (bytes.length !== at + rowCount * cols * 8) return undefined;
+  if (version !== undefined && stored !== version) return undefined;
+  const rows: number[][] = [];
+  for (let r = 0; r < rowCount; r++) {
+    const row: number[] = [];
+    for (let c = 0; c < cols; c++) {
+      row.push(bytes.readDoubleLE(at));
+      at += 8;
     }
-    if (!Array.isArray(rows) || rows.length !== batch.length) throw new EmbeddingUnavailable('reply-not-a-vector');
-    for (const row of rows as unknown[]) {
-      if (!Array.isArray(row)) throw new EmbeddingUnavailable('reply-not-a-vector');
-      width ??= row.length;
-      if (width < 1 || row.length !== width || row.some((x) => typeof x !== 'number' || !Number.isFinite(x))) {
-        throw new EmbeddingUnavailable('reply-not-a-vector');
-      }
-      vectors.push(row as number[]);
+    if (!isVectorRow(row, cols)) return undefined;
+    rows.push(row);
+  }
+  return { rows, width: cols };
+}
+
+
+/**
+ * Writes one batch with its library version. It writes a temporary file and
+ * renames that file over the key. A reader sees a whole file or no file. It returns
+ * the reason of a failure. A failure does not throw: the vectors are valid.
+ */
+async function writeBatch(dir: string, key: string, rows: number[][], width: number, version: string): Promise<string | undefined> {
+  const versionBytes = Buffer.from(version, 'utf8');
+  const body = Buffer.alloc(VECTOR_HEADER_BYTES + 4 + versionBytes.length + rows.length * width * 8);
+  body.write(VECTOR_MAGIC, 0, 'latin1');
+  body.writeUInt32LE(rows.length, 4);
+  body.writeUInt32LE(width, 8);
+  body.writeUInt32LE(versionBytes.length, VECTOR_HEADER_BYTES);
+  versionBytes.copy(body, VECTOR_HEADER_BYTES + 4);
+  let at = VECTOR_HEADER_BYTES + 4 + versionBytes.length;
+  for (const row of rows) {
+    for (const x of row) {
+      body.writeDoubleLE(x, at);
+      at += 8;
     }
   }
-  return vectors;
+  const target = join(dir, `${key}.vec`);
+  const temporary = `${target}.tmp-${process.pid}-${randomBytes(6).toString('hex')}`;
+  try {
+    await mkdir(dir, { recursive: true });
+    await writeFile(temporary, body);
+    // A failed rename (Windows refuses one while a reader holds the target) is a write-failed event; the next run writes the batch again.
+    await rename(temporary, target);
+    return undefined;
+  } catch (error) {
+    await rm(temporary, { force: true }).catch(() => undefined);
+    return messageOf(error);
+  }
+}
+
+/** The directory the caller named, or undefined. The option wins over the variable. */
+function resolveVectorDir(option: string | undefined): string | undefined {
+  if (option !== undefined) return option;
+  const fromEnv = process.env[VECTOR_CACHE_ENV];
+  return fromEnv !== undefined && fromEnv.length > 0 ? fromEnv : undefined;
+}
+
+/**
+ * Makes sure a named cache directory exists. A path that is a file, or a path that cannot
+ * be created, is a configuration error and not a miss.
+ */
+async function ensureVectorDir(dir: string): Promise<void> {
+  const unusable = () => new EmbeddingUnavailable('session-failed', `vector cache directory unusable: ${dir}`);
+  const existing = await stat(dir).catch(() => undefined);
+  if (existing !== undefined && !existing.isDirectory()) throw unusable();
+  await mkdir(dir, { recursive: true }).catch(() => {
+    throw unusable();
+  });
+}
+
+/** The vector cache of one call: its directory, the model file stamp, and the library version when known. */
+interface OpenCache {
+  readonly dir: string;
+  readonly stamp: readonly [number, number] | null;
+  readonly version: string | undefined;
 }
 
 /**
@@ -238,9 +447,46 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
   const loadMs = options.loadTimeoutMs ?? ONNX_LOAD_TIMEOUT_MS;
   const perTextMs = options.perTextTimeoutMs ?? ONNX_PER_TEXT_TIMEOUT_MS;
   const loadLibrary = options.loadLibrary ?? defaultLoadLibrary;
+  const fixedWidth = options.expectedDims ?? (modelId === ONNX_EMBEDDING_MODEL ? ONNX_VECTOR_DIMS : undefined);
+
+  // The library loads once per embedder. A failed load is not kept, so the next call tries again.
+  let library: Promise<TransformersLibrary> | undefined;
+  const getLibrary = (): Promise<TransformersLibrary> => {
+    library ??= loadLibraryOrRefuse(loadLibrary).catch((error: unknown) => {
+      library = undefined;
+      throw error;
+    });
+    return library;
+  };
+  // The vector cache reads the library version when it can, within the load timeout.
+  // A library that is missing, fails or hangs gives no version. A missing version is not an error here:
+  // an all-hit run then returns the stored vectors, and a miss still loads the model and refuses.
+  const tryLibrary = async (): Promise<TransformersLibrary | undefined> => {
+    try {
+      return await within(getLibrary(), loadMs);
+    } catch {
+      return undefined;
+    }
+  };
+
+  /** The cache of this call, or undefined when no location can be found. */
+  const openVectorCache = async (): Promise<OpenCache | undefined> => {
+    const named = resolveVectorDir(options.vectorCacheDir);
+    let root = resolveCacheDir(options.cacheDir);
+    // The library gives the version that every read checks, and the root when none is named.
+    const lib = await tryLibrary();
+    root ??= lib?.env.cacheDir;
+    if (root === undefined) return undefined;
+    if (named !== undefined) await ensureVectorDir(named);
+    return {
+      dir: named ?? join(root, VECTOR_CACHE_SUBDIR),
+      stamp: modelFileStamp(root, modelId, dtype),
+      version: lib?.env.version,
+    };
+  };
 
   const loadExtractor = async (): Promise<Extractor> => {
-    const lib = await loadLibraryOrRefuse(loadLibrary);
+    const lib = await getLibrary();
     const cacheDir = resolveCacheDir(options.cacheDir);
     if (cacheDir !== undefined) lib.env.cacheDir = cacheDir;
     // `env.cacheDir` is global to the process, and the library reads it for its tokenizer
@@ -279,18 +525,64 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
 
   return async (texts) => {
     if (texts.length === 0) return [];
-    const extract = await getExtractor();
-    let timedOut = false;
-    try {
-      return await within(
-        embedAll(extract, texts, modelId, options.expectedDims, () => timedOut),
-        texts.length * perTextMs,
+    const batches = batchesOf(texts);
+    const caching = options.vectorCache === true;
+    const cache = caching ? await openVectorCache() : undefined;
+    const emit = (kind: 'hit' | 'miss' | 'write-failed', batch: number, detail?: string): void => {
+      options.onCacheEvent?.(detail === undefined ? { kind, batch } : { kind, batch, detail });
+    };
+
+    // Read every stored batch. Without a fixed width, the first hit sets it, and a hit of another width is a miss.
+    const keys = cache === undefined ? [] : batches.map((batch) => batchKey(modelId, dtype, cache.stamp, batch));
+    const found: (Embedded | undefined)[] = [];
+    for (let i = 0; i < batches.length; i++) {
+      const path = cache === undefined ? undefined : join(cache.dir, `${keys[i]!}.vec`);
+      found.push(
+        path === undefined || cache === undefined
+          ? undefined
+          : await readBatch(path, batches[i]!.length, fixedWidth, cache.version),
       );
-    } catch (error) {
-      timedOut = true;
-      if (error instanceof EmbeddingUnavailable) throw error;
-      throw new EmbeddingUnavailable('session-failed', messageOf(error));
     }
+    const width = fixedWidth ?? found.find((f) => f !== undefined)?.width;
+    for (let i = 0; i < found.length; i++) {
+      if (found[i] !== undefined && found[i]!.width !== width) found[i] = undefined;
+    }
+    if (caching) {
+      batches.forEach((_, i) => {
+        if (found[i] !== undefined) emit('hit', i);
+        else emit('miss', i, cache === undefined ? 'no cache location' : undefined);
+      });
+    }
+
+    // Embed only the missed batches. The allowance counts only their texts.
+    const missing = batches.flatMap((_, i) => (found[i] === undefined ? [i] : []));
+    if (missing.length > 0) {
+      const extract = await getExtractor();
+      const missedTexts = missing.reduce((n, i) => n + batches[i]!.length, 0);
+      let timedOut = false;
+      const fresh = new Map<number, Embedded>();
+      // The writes come after the budget. A failed write is an event, not an error.
+      // The batches that finished before a timeout are written too, so a slow corpus progresses.
+      const writeFresh = async (): Promise<void> => {
+        if (cache === undefined) return;
+        const version = (await getLibrary()).env.version ?? '';
+        for (const [i, got] of [...fresh]) {
+          const detail = await writeBatch(cache.dir, keys[i]!, got.rows, got.width, version);
+          if (detail !== undefined) emit('write-failed', i, detail);
+        }
+      };
+      try {
+        await within(embedBatches(extract, batches, missing, width, () => timedOut, fresh), missedTexts * perTextMs);
+      } catch (error) {
+        timedOut = true;
+        await writeFresh();
+        if (error instanceof EmbeddingUnavailable) throw error;
+        throw new EmbeddingUnavailable('session-failed', messageOf(error));
+      }
+      await writeFresh();
+      for (const [i, got] of fresh) found[i] = got;
+    }
+    return found.flatMap((f) => f!.rows);
   };
 }
 

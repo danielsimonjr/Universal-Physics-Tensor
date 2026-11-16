@@ -4,7 +4,7 @@
     "version": "14.0.0",
     "totalFiles": 389,
     "totalModules": 13,
-    "totalExports": 2841
+    "totalExports": 2843
   },
   "entryPoints": [
     {
@@ -343,7 +343,8 @@
           {
             "module": "crypto",
             "imports": [
-              "createHash"
+              "createHash",
+              "randomBytes"
             ]
           },
           {
@@ -351,7 +352,19 @@
             "imports": [
               "createReadStream",
               "existsSync",
-              "readdirSync"
+              "readdirSync",
+              "statSync"
+            ]
+          },
+          {
+            "module": "fs/promises",
+            "imports": [
+              "mkdir",
+              "readFile",
+              "rename",
+              "rm",
+              "stat",
+              "writeFile"
             ]
           },
           {
@@ -369,6 +382,12 @@
             ]
           },
           {
+            "file": "../../core/hash.js",
+            "imports": [
+              "sha256Hex"
+            ]
+          },
+          {
             "file": "./hybrid-retrieval.js",
             "imports": [
               "EmbeddingUnavailable",
@@ -383,6 +402,8 @@
           "ONNX_VECTOR_DIMS",
           "ONNX_BATCH_SIZE",
           "ONNX_CACHE_ENV",
+          "VECTOR_CACHE_ENV",
+          "VECTOR_CACHE_SUBDIR",
           "ONNX_LOAD_TIMEOUT_MS",
           "ONNX_PER_TEXT_TIMEOUT_MS",
           "onnxEmbedder",
@@ -405,6 +426,8 @@
           "ONNX_VECTOR_DIMS",
           "ONNX_BATCH_SIZE",
           "ONNX_CACHE_ENV",
+          "VECTOR_CACHE_ENV",
+          "VECTOR_CACHE_SUBDIR",
           "ONNX_LOAD_TIMEOUT_MS",
           "ONNX_PER_TEXT_TIMEOUT_MS"
         ]
@@ -10050,7 +10073,14 @@
       "src/cli/commands/retrieve.ts": {
         "description": "`upt retrieve <claim>` — optional embedding proposals, atlas acceptance.",
         "externalDependencies": [],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "statSync"
+            ]
+          }
+        ],
         "internalDependencies": [
           {
             "file": "../args.js",
@@ -28397,14 +28427,14 @@
   "statistics": {
     "totalTypeScriptFiles": 389,
     "totalModules": 13,
-    "totalLinesOfCode": 88395,
-    "totalExports": 2841,
+    "totalLinesOfCode": 88737,
+    "totalExports": 2843,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 933,
     "totalTypeGuards": 16,
     "totalEnums": 0,
-    "totalConstants": 420,
+    "totalConstants": 422,
     "totalReExports": 1397,
     "totalTypeOnlyImports": 532,
     "runtimeCircularDeps": 0,

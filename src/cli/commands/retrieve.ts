@@ -9,6 +9,7 @@
  * embedder cannot be used, the atlas search is still the answer and the output
  * names the reason. That is exit 0.
  */
+import { statSync } from 'node:fs';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
@@ -34,6 +35,12 @@ const ONNX_DEFAULT_MODEL = 'onnx-community/Qwen3-Embedding-0.6B-ONNX';
 const ONNX_DTYPES = ['q8', 'fp16', 'fp32'] as const;
 type EmbedDtype = (typeof ONNX_DTYPES)[number];
 const ONNX_DEFAULT_DTYPE: EmbedDtype = 'fp16';
+
+/**
+ * The environment variable that names the ONNX vector cache directory. It is the
+ * embedder's own name; a test binds the two.
+ */
+const VECTOR_CACHE_ENV = 'UPT_VECTOR_CACHE';
 
 /** The backends `--embed-backend` accepts. */
 const BACKENDS: readonly string[] = ['onnx', 'ollama'];
@@ -80,10 +87,15 @@ const FLAGS: FlagSpec[] = [
     valueStyle: 'none',
     description: 'Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON.',
   },
+  {
+    name: '--no-vector-cache',
+    valueStyle: 'none',
+    description: 'Do not read or write the ONNX vector cache. Every batch is embedded again. Used only with --embed and the onnx backend.',
+  },
 ];
 
 const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
-        [--embed-model=NAME] [--ollama-url=URL]
+        [--embed-model=NAME] [--ollama-url=URL] [--no-vector-cache]
         upt retrieve --fetch-model [--embed-dtype=q8|fp16|fp32] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
         search (typed structural ranking) and does not call out of process. The output
@@ -94,7 +106,14 @@ const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--em
         @huggingface/transformers library, at the precision of --embed-dtype
         (default fp16). A q8 vector changes with the batch that holds the text, so a
         q8 order depends on the corpus size. One --embed embeds the query plus every corpus record in
-        process, which takes about a minute of CPU with fp16. ollama asks a local
+        process, in batches of 8, which takes about a minute of CPU with fp16.
+        The onnx backend stores the vectors of each batch in a vector cache
+        (${VECTOR_CACHE_ENV}, else .upt-vectors in the model cache). A batch whose
+        ordered texts, model, dtype and model file are unchanged is read from the
+        cache, so a repeat run returns the stored vectors and is not a new
+        measurement. An inserted or removed record changes its batch and every
+        later batch. A changed record changes only its batch. --no-vector-cache embeds every batch again. The ollama
+        backend is not cached. ollama asks a local
         Ollama server for ${OLLAMA_DEFAULT_MODEL} (--ollama-url, default ${OLLAMA_DEFAULT_URL}).
         If the embedder cannot be used, the same atlas search is printed and the
         reason is named: the embedding library is not installed,
@@ -144,6 +163,24 @@ async function fetchModel(
   }
 }
 
+/**
+ * Refuses a vector cache location that exists and is not a directory. The embedder
+ * refuses the location too, but the search would print the refusal as a fallback. A wrong setting is exit 1.
+ */
+function refuseFileAsCacheDir(): void {
+  const dir = process.env[VECTOR_CACHE_ENV];
+  if (dir === undefined || dir.length === 0) return;
+  let isDirectory = true;
+  try {
+    isDirectory = statSync(dir).isDirectory();
+  } catch {
+    return; // A missing directory is created on the first write.
+  }
+  if (!isDirectory) {
+    throw new CliError(`upt retrieve: ${VECTOR_CACHE_ENV} names a file, not a directory: ${dir}. hint: unset it or pass --no-vector-cache`);
+  }
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, out, api } = ctx;
   const backendFlag = args.flags.get('embed-backend')?.[0];
@@ -172,11 +209,24 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const embed = args.flags.has('embed');
   const embedModel = modelFlag ?? (backend === 'ollama' ? OLLAMA_DEFAULT_MODEL : ONNX_DEFAULT_MODEL);
+  const vectorCache = embed && backend === 'onnx' && !args.flags.has('no-vector-cache');
+  if (vectorCache) refuseFileAsCacheDir();
+  // One note per run: a full or read-only cache fails every batch the same way.
+  let writeNoted = false;
   const embedder = !embed
     ? undefined
     : backend === 'ollama'
       ? api.ollamaEmbedder({ baseUrl: ollamaUrl, model: embedModel })
-      : api.onnxEmbedder({ modelId: embedModel, dtype });
+      : api.onnxEmbedder({
+          modelId: embedModel,
+          dtype,
+          vectorCache,
+          onCacheEvent: (event) => {
+            if (event.kind !== 'write-failed' || writeNoted) return;
+            writeNoted = true;
+            ctx.err(`upt retrieve: vector cache not written: ${event.detail ?? 'unknown reason'}`);
+          },
+        });
   const corpus = api.canonicalRetrievalCorpus();
   const result = await api.retrieveHybrid({
     query: { text: claim },

@@ -537,6 +537,7 @@ upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|f
 | `--embed-model=VALUE` | `=` value | onnx-community/Qwen3-Embedding-0.6B-ONNX | Embedding model. For the onnx backend, a Hugging Face model id. For the ollama backend, an Ollama tag. Used with --embed or --fetch-model. |
 | `--ollama-url=VALUE` | `=` value | http://127.0.0.1:11434 | Ollama base URL. Used only with --embed and the ollama backend. Naming it selects the ollama backend when --embed-backend is not given. |
 | `--fetch-model` | no |  | Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON. |
+| `--no-vector-cache` | no |  | Do not read or write the ONNX vector cache. Every batch is embedded again. Used only with --embed and the onnx backend. |
 
 ```
 upt retrieve period of a pendulum

@@ -514,6 +514,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--max-orders` | `discover`, `ground`, `map` | discover: Magnitude-clash threshold. A larger value keeps more pairs promising. ground: Magnitude-clash threshold. A larger value keeps more pairs promising. map: Magnitude-clash threshold for the --proposed overlay. |
 | `--max-routes` | `map` | Cap on --all-routes. The maximum accepted is 1000. |
 | `--natural` | `eval`, `map` | eval: Set ħ = c = 1 (and h = 2π) when reading values. map: Set ħ = c = 1 when a dimension difference is a power of those constants. |
+| `--no-vector-cache` | `retrieve` | Do not read or write the ONNX vector cache. Every batch is embedded again. Used only with --embed and the onnx backend. |
 | `--observable` | `map` | Map bridges whose recorded text names this observable. |
 | `--ollama-url` | `retrieve` | Ollama base URL. Used only with --embed and the ollama backend. Naming it selects the ollama backend when --embed-backend is not given. |
 | `--out` | `map` | Write the report to PATH instead of stdout. |

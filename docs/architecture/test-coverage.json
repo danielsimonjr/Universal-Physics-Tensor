@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 389,
-    "totalTestFiles": 722,
+    "totalTestFiles": 723,
     "testedCount": 379,
     "directlyTestedCount": 347,
     "untestedCount": 10,
@@ -807,6 +807,7 @@
     ],
     "src/atlas/benchmark/onnx-embedder.ts": [
       "tests/atlas/onnx-embedder.test.ts",
+      "tests/atlas/onnx-vector-cache.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -11995,6 +11996,7 @@
     ],
     "src/atlas/benchmark/onnx-embedder.ts": [
       "tests/atlas/onnx-embedder.test.ts",
+      "tests/atlas/onnx-vector-cache.test.ts",
       "tests/cli/retrieve.test.ts"
     ],
     "src/atlas/benchmark/run-atlas.ts": [
@@ -16145,6 +16147,9 @@
     ],
     "tests/atlas/onnx-embedder.test.ts": [
       "src/atlas/benchmark/hybrid-retrieval.ts",
+      "src/atlas/benchmark/onnx-embedder.ts"
+    ],
+    "tests/atlas/onnx-vector-cache.test.ts": [
       "src/atlas/benchmark/onnx-embedder.ts"
     ],
     "tests/atlas/oscillators-coarse.test.ts": [
