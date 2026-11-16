@@ -53,19 +53,6 @@ export const ONNX_LOAD_TIMEOUT_MS = 30_000;
  */
 export const ONNX_PER_TEXT_TIMEOUT_MS = 2_000;
 
-/**
- * The time allowed for an embedding call of `count` texts.
- * It is the load allowance plus the per-text allowance for each text.
- * @internal
- */
-export function embedBudgetMs(
-  count: number,
-  perTextMs: number = ONNX_PER_TEXT_TIMEOUT_MS,
-  loadMs: number = ONNX_LOAD_TIMEOUT_MS,
-): number {
-  return loadMs + count * perTextMs;
-}
-
 /** The part of the `@huggingface/transformers` module that this file uses. @internal */
 export interface TransformersLibrary {
   readonly env: { cacheDir?: string };

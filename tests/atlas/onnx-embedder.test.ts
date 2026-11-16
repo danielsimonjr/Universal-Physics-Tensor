@@ -18,7 +18,6 @@ import {
   ONNX_LOAD_TIMEOUT_MS,
   ONNX_PER_TEXT_TIMEOUT_MS,
   ONNX_VECTOR_DIMS,
-  embedBudgetMs,
   fetchOnnxModel,
   onnxEmbedder,
   type TransformersLibrary,
@@ -83,9 +82,7 @@ describe('onnx embedder defaults', () => {
     expect(ONNX_VECTOR_DIMS).toBe(1024);
   });
 
-  it('the budget is the load allowance plus a per-text allowance for each text', () => {
-    expect(embedBudgetMs(0)).toBe(ONNX_LOAD_TIMEOUT_MS);
-    expect(embedBudgetMs(110)).toBe(ONNX_LOAD_TIMEOUT_MS + 110 * ONNX_PER_TEXT_TIMEOUT_MS);
+  it('the load and per-text allowances are above the measured spike costs', () => {
     // The spike measured an fp16 cold load of 5.35 s and a per-text p95 of 962 ms.
     expect(ONNX_LOAD_TIMEOUT_MS).toBeGreaterThanOrEqual(5350);
     expect(ONNX_PER_TEXT_TIMEOUT_MS).toBeGreaterThanOrEqual(962);

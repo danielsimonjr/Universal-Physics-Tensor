@@ -44,7 +44,8 @@ sit behind that function.
   an optional peer. The embedder loads the library by a dynamic import
   on the first call. The
   embedder reads the model from the local cache only. `upt retrieve
-  --fetch-model` downloads the model and prints the hash of each file.
+  --fetch-model` downloads the model and prints the SHA-256 of each
+  ONNX weight file.
 - **Ollama.** A local process, spoken to over its HTTP API, selected
   with `--embed-backend=ollama`. The default model is
   `qwen3-embedding:0.6b`, the same model as the ONNX default. The

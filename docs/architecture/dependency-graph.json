@@ -4,7 +4,7 @@
     "version": "14.0.0",
     "totalFiles": 389,
     "totalModules": 13,
-    "totalExports": 2842
+    "totalExports": 2841
   },
   "entryPoints": [
     {
@@ -385,7 +385,6 @@
           "ONNX_CACHE_ENV",
           "ONNX_LOAD_TIMEOUT_MS",
           "ONNX_PER_TEXT_TIMEOUT_MS",
-          "embedBudgetMs",
           "onnxEmbedder",
           "fetchOnnxModel"
         ],
@@ -396,7 +395,6 @@
           "OnnxModelReport"
         ],
         "functions": [
-          "embedBudgetMs",
           "onnxEmbedder",
           "fetchOnnxModel"
         ],
@@ -28399,11 +28397,11 @@
   "statistics": {
     "totalTypeScriptFiles": 389,
     "totalModules": 13,
-    "totalLinesOfCode": 88359,
-    "totalExports": 2842,
+    "totalLinesOfCode": 88346,
+    "totalExports": 2841,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 934,
+    "totalFunctions": 933,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 420,

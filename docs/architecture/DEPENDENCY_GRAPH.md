@@ -186,7 +186,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `TransformersLibrary`, `OnnxEmbedderOptions`, `OnnxModelFile`, `OnnxModelReport`
-- Functions: `embedBudgetMs`, `onnxEmbedder`, `fetchOnnxModel`
+- Functions: `onnxEmbedder`, `fetchOnnxModel`
 - Constants: `ONNX_EMBEDDING_MODEL`, `ONNX_DTYPES`, `ONNX_DEFAULT_DTYPE`, `ONNX_VECTOR_DIMS`, `ONNX_BATCH_SIZE`, `ONNX_CACHE_ENV`, `ONNX_LOAD_TIMEOUT_MS`, `ONNX_PER_TEXT_TIMEOUT_MS`
 
 ---
@@ -7765,12 +7765,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 389 |
 | Total Modules | 13 |
-| Total Lines of Code | 88359 |
-| Total Exports | 2842 |
+| Total Lines of Code | 88346 |
+| Total Exports | 2841 |
 | Total Re-exports | 1397 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 934 |
+| Total Functions | 933 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 532 |
