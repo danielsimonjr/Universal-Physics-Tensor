@@ -11,7 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-16 (residual retrieval corpus)
 
-- **The product retrieval corpus is in residual form.** `canonicalRetrievalCorpus` gives each entry with a `scalarAst` the expression `target − scalarAst`. Measured on the live registry: the claim `F − m·a` key-matches only `CE-newton-second-law`, and `F − m·v` key-matches no record. Four pairs of entries share a residual key (CE-mass-energy/CE-kinetic-energy, CE-work/CE-torque, CE-spring-potential-energy/CE-oscillator-energy, CE-landauer/CE-equipartition), so a key match is not unique in general. 93 of the 109 live entries have a `scalarAst`, so 93 records carry an expression. The frozen criterion 3 corpus and its runner are unchanged. `tools/criterion3-export/export.ts` still maps `scalarAst` to `expr`: it is the frozen labeler export, bound by `freeze.json`.
+- **The product retrieval corpus is in residual form.** `canonicalRetrievalCorpus` gives each entry with a `scalarAst` the expression `target − scalarAst`. Measured on the live registry: the claim `F − m·a` key-matches only `CE-newton-second-law`, and `F − m·v` key-matches no record. Four pairs of entries share a residual key (CE-mass-energy/CE-kinetic-energy, CE-work/CE-torque, CE-spring-potential-energy/CE-oscillator-energy, CE-landauer/CE-equipartition), so a key match is not unique in general. 93 of the 109 live entries have a `scalarAst`, so 93 records carry an expression. The frozen criterion 3 corpus and its runner are unchanged. `tools/criterion3-export/export.ts` still maps `scalarAst` to `expr`: that file is the frozen labeler export, bound by `freeze.json`.
 
 ## As of 2026-11-16 (vector cache)
 
