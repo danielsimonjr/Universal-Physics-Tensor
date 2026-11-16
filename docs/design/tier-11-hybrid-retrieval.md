@@ -29,17 +29,30 @@ retrieve, by the atlas search it already has.
 ## 2. The seam
 
 An embedder is a function from a list of strings to a list of vectors,
-one vector per string, every vector the same length. Two implementations
+one vector per string, every vector the same length. Three implementations
 sit behind that function.
 
 - **Stub.** A pure function of the text. The same text is the same
   vector. Tests use this. It does not open a socket.
-- **Ollama.** A local process, spoken to over its HTTP API. The
-  default model is `qwen3-embedding:4b`. A caller can specify a
-  different model, and `upt retrieve` accepts `--embed-model=NAME` for
-  that. The package does not depend on that binary, on
-  a client library, or on a GPU. The call is off unless a caller asks
-  for it.
+- **ONNX, in process.** The default backend of `upt retrieve --embed`.
+  ONNX Runtime runs `onnx-community/Qwen3-Embedding-0.6B-ONNX` through
+  `@huggingface/transformers`. The default dtype is `fp16`; `q8` and
+  `fp32` are options. A `q8` vector changes with the batch that holds
+  the text, so a `q8` order depends on the corpus size. Pooling is the
+  last token, and the vectors are L2-normalized. The tokenizer must pad
+  on the left; another padding side is a failed session. The library is
+  an optional peer, loaded by a dynamic import on the first call. The
+  embedder reads the model from the local cache only. `upt retrieve
+  --fetch-model` downloads the model and prints the hash of each file.
+- **Ollama.** A local process, spoken to over its HTTP API, selected
+  with `--embed-backend=ollama`. The default model is
+  `qwen3-embedding:0.6b`, the same model as the ONNX default. The
+  package does not depend on that binary, on a client library, or on a
+  GPU.
+
+A caller can specify a different model with `--embed-model=NAME`: a
+Hugging Face model id for the ONNX backend, an Ollama tag for the
+Ollama backend. Every backend is off unless a caller asks for it.
 
 The query string uses the form registered with the embedding condition:
 an instruction line, a newline, then `Query:` and the claim. Corpus
@@ -49,10 +62,15 @@ When the caller names a different model, the registered query form
 stays the same. The returned vectors are not comparable to the vectors
 in the frozen file.
 
-The reply from the default model must have the length stored in the
-frozen file. For any other model, each row of the reply must have the
-same length. The length must be at least one. An explicit expected
-length replaces both rules.
+The ONNX default model must give 1024-wide vectors. For any other model,
+each row of the reply must have the same length. The length must be at
+least one. An explicit expected length replaces both rules. The length
+of the frozen file applies only where the frozen file is read.
+
+The in-process time budget grows with the input. The load has its own
+allowance, and each text adds a fixed allowance. One `--embed` call
+embeds the query and every corpus record, so the budget is the load
+allowance plus that per-text allowance times the number of texts.
 
 Ranking is cosine similarity, best first. A tie breaks by record id,
 so the order does not depend on which vector happened to be computed
@@ -71,10 +89,14 @@ does not collapse them into one verdict.
 When the caller did not ask for embeddings, the result is the atlas
 search alone, and the output says so.
 
-When the caller asked and the Ollama path cannot be used, the result
+When the caller asked and the embedder cannot be used, the result
 is the same atlas search, and the output names the reason. The reasons
 are:
 
+- the embedding library is not installed;
+- the model is not in the local cache, and the download is not allowed
+  or failed;
+- the ONNX session did not load;
 - the process is not there;
 - the model is not there;
 - the server answered an error status;
@@ -100,14 +122,21 @@ A third test points the Ollama implementation at a closed port and
 asserts the fallback reason and the atlas ranking. That test does not
 require the binary.
 
+The ONNX tests inject a fake library. They assert the pipeline options,
+the pooling options, the batches, the width check, the time budget and
+each fallback reason. They do not load a model. A test of the command
+without the library asserts `library-not-installed` and the atlas
+order. One live test runs only when `UPT_ONNX_LIVE_CACHE` names a cache
+that holds the default model.
+
 A live call, on a machine that has the model, is outside this gate. It
 waits on a reservation. Its output is a record of that run. It does not
 replace the frozen file and it does not decide a study criterion.
 
 ## 5. What stays refused
 
-- No new package dependency, and no import of an embedding library on
-  the default path.
+- No required package dependency: the embedding library is an optional
+  peer. No import of an embedding library on the default path.
 - The default command path does not call out of process.
 - An embedding rank is not evidence. Evidence stays something the atlas
   derived.

@@ -344,8 +344,10 @@ export { siUnitOf } from './dimensional/algebra.js';
 export { unusedInputKeys } from './bridges/evaluators.js';
 /** Two spellings of one quantity were given different numbers. The formula is not run. */
 export { SynonymDisagreementError } from './dimensional/formula-names.js';
-/** `upt retrieve`: the canonical corpus, the optional Ollama embedder, and the atlas-accepted hybrid search. */
-export { canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid } from './atlas/benchmark/hybrid-retrieval.js';
+/** `upt retrieve`: the canonical corpus, the optional embedders (Ollama and ONNX), and the atlas-accepted hybrid search. */
+export { canonicalRetrievalCorpus, EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid } from './atlas/benchmark/hybrid-retrieval.js';
+/** `upt retrieve`: the in-process ONNX embedder and the model fetch behind `--fetch-model`. */
+export { fetchOnnxModel, onnxEmbedder } from './atlas/benchmark/onnx-embedder.js';
 
 /**
  * Builtin dimension checker for `upt eval`.

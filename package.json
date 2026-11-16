@@ -118,9 +118,13 @@
     "vitest": "^4.1.12"
   },
   "peerDependencies": {
+    "@huggingface/transformers": "^4.3.2",
     "@viz-js/viz": "^3.28.0"
   },
   "peerDependenciesMeta": {
+    "@huggingface/transformers": {
+      "optional": true
+    },
     "@viz-js/viz": {
       "optional": true
     }
