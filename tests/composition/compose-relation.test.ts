@@ -184,12 +184,20 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
   const liveByPair = new Map(live.map((s) => [s.pair, s]));
 
 /**
- * Windows' floating-point library puts five be-42 pairs one or two ulp off their `evaluateAtOnes`
- * bytes (measured on the EVO-X2). On win32 only, a value within two ulp of the golden is taken as
- * the golden's own bytes; every other host compares bytes exactly, as before.
+ * The golden's `evaluateAtOnes` bytes come from Node 22. be-42 computes c³ with `Math.pow`, which
+ * ECMAScript lets a runtime approximate, and Node 24 returns a different last bit. So five be-42
+ * pairs land one or two ulp off the golden there. For a pair that holds be-42, a value within two
+ * ulp of the golden is taken as the golden's own bytes. Every other pair, and every other field,
+ * compares exactly.
  */
-function sameOnWindowsLibm(golden: PairSnapshot, now: PairSnapshot | undefined): PairSnapshot | undefined {
-  if (process.platform !== 'win32' || now === undefined) return now;
+const POW_DRIFT_EDGE = 'be-42';
+
+function holdsPowDriftEdge(pair: string): boolean {
+  return pair.split('>>').includes(POW_DRIFT_EDGE);
+}
+
+function sameWithinPowUlp(golden: PairSnapshot, now: PairSnapshot | undefined): PairSnapshot | undefined {
+  if (now === undefined || !holdsPowDriftEdge(String((golden as { pair?: unknown }).pair))) return now;
   const g = /^ok:(.+)$/.exec(String((golden as { evaluateAtOnes?: unknown }).evaluateAtOnes));
   const n = /^ok:(.+)$/.exec(String((now as { evaluateAtOnes?: unknown }).evaluateAtOnes));
   if (g === null || n === null) return now;
@@ -239,7 +247,7 @@ function sameOnWindowsLibm(golden: PairSnapshot, now: PairSnapshot | undefined):
     expect(GOLDEN.some((s) => s.outcome === 'composed')).toBe(true);
     const moved: string[] = [];
     for (const row of GOLDEN) {
-      const now = sameOnWindowsLibm(row, liveByPair.get(row.pair));
+      const now = sameWithinPowUlp(row, liveByPair.get(row.pair));
       if (now === undefined) {
         moved.push(`${row.pair}: no longer a pair of the live graph`);
         continue;
