@@ -55,8 +55,8 @@ cell is a reviewed act of its own.
 
 The public atlas surface stays the one namespace in `src/atlas/public.ts`.
 No step edits that file or adds a name to the package barrel. Promoting the
-deferred Tier 2 set remains the owner decision already open in
-`docs/planning/Atlas-API-Review.md`.
+deferred Tier 2 set is a Mothership decision under the owner's delegation
+for ADR-level calls (`docs/planning/Atlas-API-Review.md`).
 
 Product A (`src/composition/discovery.ts`) and Product B
 (`src/composition/probe/`) stay what they are. The chain pipeline stays a

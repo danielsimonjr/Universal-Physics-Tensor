@@ -78,7 +78,7 @@ The reasons:
   adopters, and the root gets only the audited subset. That keeps two surfaces with two
   stability promises, which is what the `@internal`/`@public` split exists for.
 - **The invariant test must be extended first (checked).** `tests/api/public-tag-vs-index-invariant.test.ts`
-  recognises `export * from '…'` (its regex is `export\s+\*\s+from`). It does NOT recognise
+  recognises `export * from '…'` (its regex is `export\s+\*\s+from`). The regex does NOT recognise
   `export * as atlas from '…'`, so `@public` tags in the facade would fail it as unreachable until
   its parser learns the namespace form. `public-surface.test.ts` then gains one entry per promoted
   symbol.
