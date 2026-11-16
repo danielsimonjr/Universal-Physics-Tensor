@@ -95,12 +95,12 @@ export interface OnnxEmbedderOptions {
   readonly loadTimeoutMs?: number;
   /** The time allowed for each text. Defaults to `ONNX_PER_TEXT_TIMEOUT_MS`. */
   readonly perTextTimeoutMs?: number;
-  /** Loads the library. Defaults to a dynamic import of the optional peer. */
   /**
    * Check the cache files before the load. The default is on for the real library and off
    * for an injected one.
    */
   readonly checkCache?: boolean;
+  /** Loads the library. Defaults to a dynamic import of the optional peer. */
   readonly loadLibrary?: () => Promise<TransformersLibrary>;
 }
 
