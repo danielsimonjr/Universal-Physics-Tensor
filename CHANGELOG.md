@@ -22,6 +22,7 @@ from v0.1.0 onward.
 
 ### Documented
 
+- `ACTIVE.md` closes the MathTS leverage rows M1, M2 and M3. Their work landed in a214019e, 6d989764 and 74cec997, and each row now names its commit and its agreement test in `tests/numerical/mathts-gaps.test.ts`.
 - Pre-registration Amendment 15 changes the live-path default dtype from `q8` to `fp16`. Why: spikes 2 to 5 measured that a `q8` vector changes with the batch that holds the text (cosine 0.912 to 0.946 alone against in a batch), while `fp16` does not (0.999998 to 1.0). The owner chose `fp16`.
 
 - Pre-registration Amendment 14 registers `onnx-community/Qwen3-Embedding-0.6B-ONNX` (`q8`, 1024 wide, `last_token`, L2-normalized) as the live-path embedding model and supersedes Amendment 12 item (b), because the owner chose an in-process ONNX Runtime embedder over `qwen3-embedding:4b`. It authorizes spikes 3 to 5 of the ONNX plan as disclosed, non-scoring measurements on the frozen corpus. The closed criterion 3 study is not re-run or re-scored, and no frozen file or hash changes.
