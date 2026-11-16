@@ -17,6 +17,7 @@
 import { pairwiseDot } from '@danielsimonjr/mathts-core';
 import { compareCodepoint } from '../../core/compare.js';
 import { CANONICAL_EQUATIONS } from '../../canonical/registry.js';
+import { canonicalResidual } from '../../canonical/residual.js';
 import { rankByStructure, type CorpusRecord, type RetrievalQuery } from './baselines.js';
 
 /** The instruction line registered with the embedding condition. @internal */
@@ -150,13 +151,21 @@ export function decodeFloat32(encoded: string): Float32Array {
   return new Float32Array(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
 }
 
-/** The live canonical registry as retrieval records. Text is the name and the latex. @internal */
+/**
+ * The live canonical registry as retrieval records. Text is the name and the latex.
+ * The expression is the residual `target − scalarAst` (`canonicalResidual`), so a
+ * claim written as a relation can key-match. An entry with no `scalarAst` has no
+ * `expr` key. @internal
+ */
 export function canonicalRetrievalCorpus(): CorpusRecord[] {
-  return CANONICAL_EQUATIONS.map((equation) => ({
-    id: equation.id,
-    text: `${equation.name}. ${equation.formula_latex}`,
-    ...(equation.scalarAst === undefined ? {} : { expr: equation.scalarAst }),
-  }));
+  return CANONICAL_EQUATIONS.map((equation) => {
+    const expr = canonicalResidual(equation);
+    return {
+      id: equation.id,
+      text: `${equation.name}. ${equation.formula_latex}`,
+      ...(expr === undefined ? {} : { expr }),
+    };
+  });
 }
 
 /** Where an Ollama embedder reaches the server, which model it asks for, and the vector width it expects. @internal */

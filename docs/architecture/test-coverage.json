@@ -796,6 +796,7 @@
     "src/atlas/benchmark/leakage.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/benchmark.test.ts",
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/canonical/residual.test.ts",
       "tests/composition/algebraic-equivalence.test.ts"
     ],
@@ -2634,6 +2635,7 @@
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/atlas/model.test.ts",
       "tests/atlas/models.test.ts",
       "tests/atlas/scalar-leaf-owners.test.ts",
@@ -11985,6 +11987,7 @@
     ],
     "src/atlas/benchmark/leakage.ts": [
       "tests/atlas/benchmark.test.ts",
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/canonical/residual.test.ts",
       "tests/composition/algebraic-equivalence.test.ts"
     ],
@@ -12745,6 +12748,7 @@
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/atlas/model.test.ts",
       "tests/atlas/models.test.ts",
       "tests/atlas/scalar-leaf-owners.test.ts",
@@ -16072,7 +16076,9 @@
       "src/dimensional/ast-builders.ts",
       "src/dimensional/ast-types.ts",
       "src/atlas/benchmark/baselines.ts",
-      "src/atlas/benchmark/hybrid-retrieval.ts"
+      "src/atlas/benchmark/hybrid-retrieval.ts",
+      "src/canonical/registry.ts",
+      "src/atlas/benchmark/leakage.ts"
     ],
     "tests/atlas/import-graph.test.ts": [],
     "tests/atlas/lc-analogy-text.test.ts": [
