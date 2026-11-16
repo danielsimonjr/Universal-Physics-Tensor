@@ -228,8 +228,9 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 - [x] Amendment 15: the live-path default dtype is `fp16`, not `q8` (owner choice after spikes 2 to 5).
 - [x] Amendment 14: register the ONNX live-path model and authorize spikes 3-5 of `docs/plans/ONNX_EMBEDDING_PLAN.md` as disclosed, non-scoring measurements.
 - [x] Plan the in-process ONNX embedder for `upt retrieve --embed` (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`). Owner decisions first: the study-record option (section 0) and the Ollama backend (section 5).
-- [ ] Find why `repo-tools map` marks every file under `src/` as an entry root in this repository.
+- [x] Find why `repo-tools map` marks every file under `src/` as an entry root in this repository.
   Until the cause is fixed, no Verification table may hold `entryRoots`, `reachableFiles` or `testOnlyFiles`, and `orphanedFiles` is not a safe claim.
+  Done: the cause is in `repo-tools`. A `tsc -p` command whose project emits nothing seeded every file as an entry root. repo-tools PR 70 (caa1c5e) fixes the cause, and repo-tools 2.6.1 ships the fix. The CI pin moves from 2.3.0 to 2.6.1. On the same tree, 2.3.0 gives 444 entry roots and 2.6.1 gives 6 (`NOTES.md`, 2026-11-16). The rule above no longer applies under 2.6.1 or later.
 
 - [x] Reconcile the visibility tags in `src/` with the package root.
   Done: M_PROTON_SI, CANONICAL_GRAPH and canonicalToEdges are exported from the root barrel and listed in API.md, so their tags are now @public. CurvatureKindSpec is not exported and no other src file names it, so its tag is now @internal. The function sha256Hex keeps its name in two modules: src/composition/canonical-json.ts holds a one-line wrapper that calls the definition in src/core/hash.ts, so the name appears twice and the logic once. The wrapper stays. The change edits tags only, so the emitted declaration files differ only in the tag text of those four comments.
