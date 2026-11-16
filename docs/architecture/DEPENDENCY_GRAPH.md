@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 75 files
+- **atlas**: 76 files
 - **bridges**: 25 files
 - **canonical**: 20 files
 - **cases**: 7 files
@@ -166,6 +166,28 @@ The codebase is organized into the following modules:
 - Classes: `BenchmarkAdmissionError`
 - Interfaces: `ItemProblem`
 - Functions: `validateItems`, `loadFrozenItems`, `loadContestedDrafts`
+
+---
+
+### `src/atlas/benchmark/onnx-embedder.ts` - The in-process ONNX embedder. It runs the default Qwen3 embedding model
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `crypto` | `createHash` |
+| `fs` | `createReadStream, existsSync, readdirSync` |
+| `path` | `join` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../core/compare.js` | `compareCodepoint` | Import |
+| `./hybrid-retrieval.js` | `EmbeddingUnavailable, Embedder` | Import |
+
+**Exports:**
+- Interfaces: `TransformersLibrary`, `OnnxEmbedderOptions`, `OnnxModelFile`, `OnnxModelReport`
+- Functions: `onnxEmbedder`, `fetchOnnxModel`
+- Constants: `ONNX_EMBEDDING_MODEL`, `ONNX_DTYPES`, `ONNX_DEFAULT_DTYPE`, `ONNX_VECTOR_DIMS`, `ONNX_BATCH_SIZE`, `ONNX_CACHE_ENV`, `ONNX_LOAD_TIMEOUT_MS`, `ONNX_PER_TEXT_TIMEOUT_MS`
 
 ---
 
@@ -2923,7 +2945,7 @@ The codebase is organized into the following modules:
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
-| `../errors.js` | `UsageError` | Import |
+| `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3444,7 +3466,8 @@ The codebase is organized into the following modules:
 | `./dimensional/algebra.js` | `siUnitOf` | Re-export |
 | `./bridges/evaluators.js` | `unusedInputKeys` | Re-export |
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
-| `./atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid` | Re-export |
+| `./atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid` | Re-export |
+| `./atlas/benchmark/onnx-embedder.js` | `fetchOnnxModel, onnxEmbedder` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./bridges/notices.js` | `relationNotices` | Re-export |
@@ -3509,9 +3532,10 @@ The codebase is organized into the following modules:
   assertSynonymAgreement, expandSynonymValues, CANONICAL_GROUP_PREFACTORS, formatQuantity,
   formatExact, formatPercent, CarrierSignError, naturalConstantOverrides, UnitMode, escapeRegExp,
   rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved, resolveEvaluable,
-  siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus, ollamaEmbedder,
-  retrieveHybrid, builtinFormulaDimensionChecker, missingEvaluatorMessage, relationNotices,
-  constantNotes, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
+  siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus, EmbeddingUnavailable,
+  ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder, builtinFormulaDimensionChecker,
+  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
+  EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -7559,9 +7583,10 @@ The codebase is organized into the following modules:
 | `association` | 0 files | 1 files |
 | `backend-shapes` | 1 files | 1 files |
 | `baselines` | 2 files | 2 files |
-| `hybrid-retrieval` | 3 files | 2 files |
+| `hybrid-retrieval` | 3 files | 3 files |
 | `leakage` | 4 files | 2 files |
 | `loader` | 2 files | 0 files |
+| `onnx-embedder` | 2 files | 1 files |
 | `run-atlas` | 5 files | 1 files |
 | `stats` | 1 files | 3 files |
 | `study` | 2 files | 1 files |
@@ -7584,7 +7609,6 @@ The codebase is organized into the following modules:
 | `export` | 3 files | 1 files |
 | `families` | 5 files | 3 files |
 | `family` | 2 files | 10 files |
-| `index` | 39 files | 0 files |
 
 ---
 
@@ -7603,7 +7627,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...70 more]
+        N5[...71 more]
     end
 
     subgraph Bridges
@@ -7739,14 +7763,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 388 |
+| Total TypeScript Files | 389 |
 | Total Modules | 13 |
-| Total Lines of Code | 87892 |
-| Total Exports | 2828 |
-| Total Re-exports | 1394 |
+| Total Lines of Code | 88346 |
+| Total Exports | 2841 |
+| Total Re-exports | 1397 |
 | Total Classes | 86 |
-| Total Interfaces | 519 |
-| Total Functions | 931 |
+| Total Interfaces | 523 |
+| Total Functions | 933 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 532 |

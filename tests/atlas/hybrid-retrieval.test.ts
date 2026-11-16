@@ -237,6 +237,20 @@ describe('Ollama fallback', () => {
       model: OLLAMA_EMBEDDING_MODEL,
       fetchImpl: async () => new Response(JSON.stringify({ embeddings: [row] }), { status: 200 }),
     });
-    await expect(defaultModel(['a'])).rejects.toMatchObject({ reason: 'reply-not-a-vector' });
+    // The frozen width applies only where the frozen file is read: the live default
+    // model is 1024 wide, and a 1024 row is a vector.
+    await expect(defaultModel(['a'])).resolves.toEqual([row]);
+  });
+
+  it('the live Ollama default is qwen3-embedding:0.6b, the model of the ONNX default', () => {
+    expect(OLLAMA_EMBEDDING_MODEL).toBe('qwen3-embedding:0.6b');
+  });
+
+  it('names the in-process reasons', () => {
+    expect(new EmbeddingUnavailable('library-not-installed').message).toBe('the embedding library is not installed');
+    expect(new EmbeddingUnavailable('model-not-cached').message).toBe(
+      'the model is not in the local cache, and the download is not allowed or failed',
+    );
+    expect(new EmbeddingUnavailable('session-failed').message).toBe('the ONNX session did not load');
   });
 });

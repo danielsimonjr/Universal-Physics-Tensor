@@ -8,7 +8,20 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Added
+
+- `upt retrieve --embed` embeds in process with ONNX Runtime by default (`src/atlas/benchmark/onnx-embedder.ts`). The model is `onnx-community/Qwen3-Embedding-0.6B-ONNX`, and the default dtype is `fp16`. `--embed-dtype` selects `q8`, `fp16` or `fp32`. `--embed-backend=ollama` keeps the Ollama path. `--fetch-model` downloads the model to the cache and prints the size and SHA-256 of each ONNX weight file. Why: the owner asked for an in-process embedder in place of an Ollama process (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`). `@huggingface/transformers` is an optional peer, so an install that does not embed gets no native addon.
+- Three fallback reasons: `library-not-installed`, `model-not-cached` and `session-failed`. A fallback still prints the atlas search and exits 0.
+- Before the ONNX load, the embedder checks that `config.json`, `tokenizer.json`, `tokenizer_config.json` and `onnx/<stem>.onnx` are in the cache. Why: with a missing file, transformers.js 4.3.2 leaves one rejection without a handler, and the process exits 1. The tokenizer lookup of transformers.js also reaches the network, although the call sets `local_files_only`. The embedder keeps and reuses a timed-out load. A timed-out embedding stops at the next batch. `--fetch-model --json` prints a JSON envelope.
+
+### Changed
+
+- The Ollama default model is `qwen3-embedding:0.6b`, the same model as the ONNX default. Why: `qwen3-embedding:4b` is not installed on the fleet machines. The width of the frozen file (2560) no longer applies to a live reply. It applies only where the frozen file is read. Before, the 1024-wide default would fall back with `reply-not-a-vector` on every call.
+- The in-process time budget is a load allowance plus a per-text allowance for each text. Why: one `--embed` call embeds the query and every corpus record. At the measured fp16 cost (median 551 ms per text in batches of 8), that is about a minute. A fixed 5 s budget would fail every call.
+
 ### Documented
+
+- Pre-registration Amendment 15 changes the live-path default dtype from `q8` to `fp16`. Why: spikes 2 to 5 measured that a `q8` vector changes with the batch that holds the text (cosine 0.912 to 0.946 alone against in a batch), while `fp16` does not (0.999998 to 1.0). The owner chose `fp16`.
 
 - Pre-registration Amendment 14 registers `onnx-community/Qwen3-Embedding-0.6B-ONNX` (`q8`, 1024 wide, `last_token`, L2-normalized) as the live-path embedding model and supersedes Amendment 12 item (b), because the owner chose an in-process ONNX Runtime embedder over `qwen3-embedding:4b`. It authorizes spikes 3 to 5 of the ONNX plan as disclosed, non-scoring measurements on the frozen corpus. The closed criterion 3 study is not re-run or re-scored, and no frozen file or hash changes.
 - `docs/plans/ONNX_EMBEDDING_PLAN.md` plans an in-process ONNX Runtime embedder (transformers.js, `onnx-community/Qwen3-Embedding-0.6B-ONNX`) for `upt retrieve --embed`, because `qwen3-embedding:4b` is no longer installed on the fleet. No code changes. The study record of Amendments 11 and 12 is unchanged.

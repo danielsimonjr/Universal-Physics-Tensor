@@ -2,9 +2,10 @@
  * Optional embedding retrieval. An embedder proposes an order. `rankByStructure`
  * decides what is accepted. Cosine similarity does not enter that score.
  *
- * The Ollama implementation speaks HTTP to a local process. Nothing here
- * imports an embedding library, and nothing calls out of process unless a
- * caller asks for embeddings and supplies that implementation.
+ * The Ollama implementation speaks HTTP to a local process. The ONNX embedder
+ * lives in `onnx-embedder.ts` and loads its library by dynamic import only when
+ * it is called. Nothing calls out of process unless a caller asks for
+ * embeddings and supplies that implementation.
  *
  * The query form is the one registered in pre-registration Amendment 11.
  * Corpus records are embedded as their text, with no instruction prefix.
@@ -22,8 +23,12 @@ import { rankByStructure, type CorpusRecord, type RetrievalQuery } from './basel
 export const EMBEDDING_INSTRUCTION =
   'Given a physics claim, retrieve the established physical relation that the claim restates or misuses';
 
-/** qwen3-embedding:4b, the model the design names. The package does not install it. @internal */
-export const OLLAMA_EMBEDDING_MODEL = 'qwen3-embedding:4b';
+/**
+ * The Ollama tag of the default embedding model. It is the same model as the
+ * ONNX default (`onnx-community/Qwen3-Embedding-0.6B-ONNX`), and both give
+ * 1024-wide vectors. @internal
+ */
+export const OLLAMA_EMBEDDING_MODEL = 'qwen3-embedding:0.6b';
 
 /**
  * Length stored in the frozen vector file
@@ -57,6 +62,9 @@ const REASON_TEXT = {
   'reply-not-a-vector':
     'the reply is not a vector, or its length is not the length expected for the model',
   'call-did-not-finish': 'the call does not finish',
+  'library-not-installed': 'the embedding library is not installed',
+  'model-not-cached': 'the model is not in the local cache, and the download is not allowed or failed',
+  'session-failed': 'the ONNX session did not load',
 } as const;
 
 /** Why an embedding request fell back to the atlas search. @internal */
@@ -156,8 +164,8 @@ export interface OllamaEmbedderOptions {
   readonly baseUrl: string;
   readonly model?: string;
   /**
-   * The vector length to require. When this is not given, the default model
-   * must give `FROZEN_VECTOR_DIMS`, and another model must give one length for every row.
+   * The vector length to require. When this is not given, every row of a reply
+   * must have the length of the first row, so one length serves every row.
    */
   readonly expectedDims?: number;
   readonly timeoutMs?: number;
@@ -167,9 +175,9 @@ export interface OllamaEmbedderOptions {
 /** A local Ollama embedder. Off unless a caller constructs it. @internal */
 export function ollamaEmbedder(options: OllamaEmbedderOptions): Embedder {
   const model = options.model ?? OLLAMA_EMBEDDING_MODEL;
-  // Only the default model is held to the frozen file's length. Another model
-  // is held to one length for every row of a reply.
-  const expectedDims = options.expectedDims ?? (model === OLLAMA_EMBEDDING_MODEL ? FROZEN_VECTOR_DIMS : undefined);
+  // No model is held to a fixed length here. The caller names a length, or
+  // every row of a reply must share the length of the first row.
+  const expectedDims = options.expectedDims;
   const timeoutMs = options.timeoutMs ?? OLLAMA_TIMEOUT_MS;
   const fetchImpl = options.fetchImpl ?? fetch;
   const base = options.baseUrl.replace(/\/$/, '');

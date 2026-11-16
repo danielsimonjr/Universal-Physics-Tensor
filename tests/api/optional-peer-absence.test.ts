@@ -65,8 +65,8 @@ describe('the public barrel reaches MathTS and not the optional viz peer', () =>
     expect(existsSync(entry)).toBe(true);
   });
 
-  it('the only optional peer is @viz-js/viz', () => {
-    expect(optionalPeers()).toEqual(['@viz-js/viz']);
+  it('the optional peers are @huggingface/transformers and @viz-js/viz', () => {
+    expect(optionalPeers()).toEqual(['@huggingface/transformers', '@viz-js/viz']);
   });
 
   it('the barrel statically imports a MathTS package and not @viz-js/viz', () => {

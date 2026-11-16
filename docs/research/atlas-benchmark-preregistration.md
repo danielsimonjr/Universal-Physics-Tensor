@@ -423,3 +423,14 @@ The owner decided the UPT embedding path on 2026-11-15, in these words: "For UPT
 - **Where results live.** The numbers go in the implementation pull request body and in a dated block of `NOTES.md`. The results file and the vector files stay outside the repository. No results file is committed under `docs/research/`.
 
 No threshold, item, rater assignment, truth set or hash changes.
+
+**Amendment 15 (2026-11-15) — the live-path default dtype is `fp16`, not `q8`.**
+
+The owner chose the default dtype on 2026-11-15, after spikes 2 to 5 of Amendment 14. Amendment 14 registered `q8` as the default dtype. This amendment changes that sentence only.
+
+- **What the spikes measured.** The same text, embedded alone and inside a batch of three, gave a cosine of 0.912 to 0.946 with `q8`. With `fp16` the cosine was 0.999998 to 1.0. The cause is inferred and not tested: `q8` quantizes the activations with one scale for the whole batch.
+- **Why the default changes.** One `upt retrieve --embed` call embeds the query and every corpus record in batches. A `q8` order therefore depends on the corpus size and the batch size. An `fp16` order does not.
+- **What stays selectable.** `--embed-dtype=q8`, `fp16` and `fp32` all stay available. The help text states that `q8` vectors change with the batch.
+- **What does not change.** The study stays closed (Amendment 13). The spike numbers are disclosed measurements and score nothing.
+
+No threshold, item, rater assignment, truth set or hash changes.

@@ -39,8 +39,8 @@ The design rules of `docs/design/tier-11-hybrid-retrieval.md` stay:
 
 | Candidate | Width | Files (from the Hub listing) | Verdict |
 |---|---|---|---|
-| `onnx-community/Qwen3-Embedding-0.6B-ONNX`, dtype `q8` | 1024 | `onnx/model_quantized.onnx` 614 MB | **Default.** Same family and query form as the study model. Card shows transformers.js use. |
-| same repository, dtype `fp16` | 1024 | `onnx/model_fp16.onnx` + data 1.20 GB | Option for a caller that wants less quantization error. |
+| `onnx-community/Qwen3-Embedding-0.6B-ONNX`, dtype `q8` | 1024 | `onnx/model_quantized.onnx` 614 MB | Option. The vectors change with the batch that holds the text (spike record), so the order depends on the corpus size. |
+| same repository, dtype `fp16` | 1024 | `onnx/model_fp16.onnx` + data 1.20 GB | **UPT default** (Amendment 15). Same family and query form as the study model. The vectors do not change with the batch. |
 | same repository, dtype `fp32` | 1024 | `onnx/model.onnx` + data 2.40 GB | Reference only. |
 | `onnx-community/Qwen3-Embedding-4B-ONNX` | 2560 | `model.onnx_data` 16.1 GB, fp32 only | Refused: too large for a CPU library default. |
 | third-party INT8 builds of the 4B model (for example `mariusbrt/Qwen3-Embedding-4B-ONNX-int8`) | 2560 | not measured | Not chosen: not from `onnx-community`, and the 2560 width matters only under option (b). |
@@ -157,7 +157,9 @@ Each spike is a measurement, recorded in the PR body.
 1. Owner decision on section 0 and section 5.
 2. Spikes 1 and 2. Stop if spike 1 fails on a supported platform, and choose the lighter path of
    section 3.
-3. The amendment, committed before any implementation.
-4. Tests first, then `onnx-embedder.ts`, then the CLI flags, then the docs.
-5. Spikes 3 to 5 as disclosed records.
+3. The amendment, committed before any implementation. Spikes 3 to 5 read the corpus, so they run
+   after the authorizing commit of the amendment exists and its CI run is green (Amendment 14,
+   Order). Section 6 lists the spikes by number, not in the order of work.
+4. Spikes 3 to 5 as disclosed records.
+5. Tests first, then `onnx-embedder.ts`, then the CLI flags, then the docs.
 6. PR for Mothership. Mothership merges and releases.

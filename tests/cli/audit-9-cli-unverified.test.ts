@@ -147,7 +147,7 @@ describe('retrieve --embed with no Ollama: the fallback names its reason and exi
       const embeddings = Array.from({ length: count }, (_, k) => Array.from({ length: 2560 }, (_, i) => Math.sin(i * 0.01 + k)));
       return { ok: true, status: 200, json: async () => ({ embeddings }) };
     });
-    const r = await run(['retrieve', 'mass', '--embed', '--json']);
+    const r = await run(['retrieve', 'mass', '--embed', '--embed-backend=ollama', '--json']);
     expect(r.code).toBe(0);
     const env = JSON.parse(r.out);
     expect(env.result.embeddings).toBe('used');
