@@ -38,10 +38,11 @@ sit behind that function.
   ONNX Runtime runs `onnx-community/Qwen3-Embedding-0.6B-ONNX` through
   `@huggingface/transformers`. The default dtype is `fp16`; `q8` and
   `fp32` are options. A `q8` vector changes with the batch that holds
-  the text, so a `q8` order depends on the corpus size. Pooling is the
-  last token, and the vectors are L2-normalized. The tokenizer must pad
+  the text, so a `q8` order depends on the corpus size. The embedder uses
+  last-token pooling and L2-normalizes the vectors. The tokenizer must pad
   on the left; another padding side is a failed session. The library is
-  an optional peer, loaded by a dynamic import on the first call. The
+  an optional peer. The embedder loads the library by a dynamic import
+  on the first call. The
   embedder reads the model from the local cache only. `upt retrieve
   --fetch-model` downloads the model and prints the hash of each file.
 - **Ollama.** A local process, spoken to over its HTTP API, selected
@@ -69,8 +70,8 @@ of the frozen file applies only where the frozen file is read.
 
 The in-process time budget grows with the input. The load has its own
 allowance, and each text adds a fixed allowance. One `--embed` call
-embeds the query and every corpus record, so the budget is the load
-allowance plus that per-text allowance times the number of texts.
+embeds the query and every corpus record. The budget is the load
+allowance plus the per-text allowance times the number of texts.
 
 Ranking is cosine similarity, best first. A tie breaks by record id,
 so the order does not depend on which vector happened to be computed

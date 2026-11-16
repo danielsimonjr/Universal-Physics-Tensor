@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "14.0.0",
-    "totalFiles": 388,
+    "totalFiles": 389,
     "totalModules": 13,
-    "totalExports": 2828
+    "totalExports": 2842
   },
   "entryPoints": [
     {
@@ -334,6 +334,81 @@
           "validateItems",
           "loadFrozenItems",
           "loadContestedDrafts"
+        ]
+      },
+      "src/atlas/benchmark/onnx-embedder.ts": {
+        "description": "The in-process ONNX embedder. It runs the default Qwen3 embedding model",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "createReadStream",
+              "existsSync",
+              "readdirSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "join"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../../core/compare.js",
+            "imports": [
+              "compareCodepoint"
+            ]
+          },
+          {
+            "file": "./hybrid-retrieval.js",
+            "imports": [
+              "EmbeddingUnavailable",
+              "Embedder"
+            ]
+          }
+        ],
+        "exports": [
+          "ONNX_EMBEDDING_MODEL",
+          "ONNX_DTYPES",
+          "ONNX_DEFAULT_DTYPE",
+          "ONNX_VECTOR_DIMS",
+          "ONNX_BATCH_SIZE",
+          "ONNX_CACHE_ENV",
+          "ONNX_LOAD_TIMEOUT_MS",
+          "ONNX_PER_TEXT_TIMEOUT_MS",
+          "embedBudgetMs",
+          "onnxEmbedder",
+          "fetchOnnxModel"
+        ],
+        "interfaces": [
+          "TransformersLibrary",
+          "OnnxEmbedderOptions",
+          "OnnxModelFile",
+          "OnnxModelReport"
+        ],
+        "functions": [
+          "embedBudgetMs",
+          "onnxEmbedder",
+          "fetchOnnxModel"
+        ],
+        "constants": [
+          "ONNX_EMBEDDING_MODEL",
+          "ONNX_DTYPES",
+          "ONNX_DEFAULT_DTYPE",
+          "ONNX_VECTOR_DIMS",
+          "ONNX_BATCH_SIZE",
+          "ONNX_CACHE_ENV",
+          "ONNX_LOAD_TIMEOUT_MS",
+          "ONNX_PER_TEXT_TIMEOUT_MS"
         ]
       },
       "src/atlas/benchmark/run-atlas.ts": {
@@ -10004,6 +10079,7 @@
           {
             "file": "../errors.js",
             "imports": [
+              "CliError",
               "UsageError"
             ]
           },
@@ -12084,8 +12160,17 @@
             "file": "./atlas/benchmark/hybrid-retrieval.js",
             "imports": [
               "canonicalRetrievalCorpus",
+              "EmbeddingUnavailable",
               "ollamaEmbedder",
               "retrieveHybrid"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./atlas/benchmark/onnx-embedder.js",
+            "imports": [
+              "fetchOnnxModel",
+              "onnxEmbedder"
             ],
             "reExport": true
           },
@@ -12355,8 +12440,11 @@
           "unusedInputKeys",
           "SynonymDisagreementError",
           "canonicalRetrievalCorpus",
+          "EmbeddingUnavailable",
           "ollamaEmbedder",
           "retrieveHybrid",
+          "fetchOnnxModel",
+          "onnxEmbedder",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "relationNotices",
@@ -12673,8 +12761,11 @@
           "unusedInputKeys",
           "SynonymDisagreementError",
           "canonicalRetrievalCorpus",
+          "EmbeddingUnavailable",
           "ollamaEmbedder",
           "retrieveHybrid",
+          "fetchOnnxModel",
+          "onnxEmbedder",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "relationNotices",
@@ -27859,6 +27950,7 @@
           "src/atlas/benchmark/hybrid-retrieval.ts",
           "src/atlas/benchmark/leakage.ts",
           "src/atlas/benchmark/loader.ts",
+          "src/atlas/benchmark/onnx-embedder.ts",
           "src/atlas/benchmark/run-atlas.ts",
           "src/atlas/benchmark/stats.ts",
           "src/atlas/benchmark/study.ts",
@@ -28305,17 +28397,17 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 388,
+    "totalTypeScriptFiles": 389,
     "totalModules": 13,
-    "totalLinesOfCode": 87892,
-    "totalExports": 2828,
+    "totalLinesOfCode": 88359,
+    "totalExports": 2842,
     "totalClasses": 86,
-    "totalInterfaces": 519,
-    "totalFunctions": 931,
+    "totalInterfaces": 523,
+    "totalFunctions": 934,
     "totalTypeGuards": 16,
     "totalEnums": 0,
-    "totalConstants": 412,
-    "totalReExports": 1394,
+    "totalConstants": 420,
+    "totalReExports": 1397,
     "totalTypeOnlyImports": 532,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

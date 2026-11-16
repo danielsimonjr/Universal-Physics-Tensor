@@ -522,18 +522,21 @@ upt coverage
 
 ### `retrieve`
 
-Search the atlas for a claim. --embed asks a local Ollama model and does not accept that order.
+Search the atlas for a claim. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model.
 
 ```
-upt retrieve <claim> [--embed] [--ollama-url=URL] [--embed-model=NAME]
+upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
 ```
 
 | Flag | Value | Default | Description |
 |---|---|---|---|
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
-| `--embed` | no |  | Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0. |
-| `--ollama-url=VALUE` | `=` value | http://127.0.0.1:11434 | Ollama base URL. Used only with --embed. |
-| `--embed-model=VALUE` | `=` value | qwen3-embedding:4b | Ollama embedding model. Used only with --embed. |
+| `--embed` | no |  | Embed the claim and every corpus record with the chosen backend. Acceptance stays the atlas search. A failure of the embedder still prints that search and exits 0. |
+| `--embed-backend=VALUE` | `=` value | onnx | Embedding backend: onnx (in process) or ollama (a local server). Used only with --embed. |
+| `--embed-dtype=VALUE` | `=` value | fp16 | ONNX weight precision: q8, fp16 or fp32. Used only with the onnx backend or --fetch-model. |
+| `--embed-model=VALUE` | `=` value | onnx-community/Qwen3-Embedding-0.6B-ONNX | Embedding model. For the onnx backend, a Hugging Face model id. For the ollama backend, an Ollama tag. Used with --embed or --fetch-model. |
+| `--ollama-url=VALUE` | `=` value | http://127.0.0.1:11434 | Ollama base URL. Used only with --embed and the ollama backend. Naming it selects the ollama backend when --embed-backend is not given. |
+| `--fetch-model` | no |  | Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON. |
 
 ```
 upt retrieve period of a pendulum

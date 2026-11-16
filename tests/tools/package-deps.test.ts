@@ -30,10 +30,13 @@ describe('package.json dependency blocks', () => {
     }
   });
 
-  it('keeps only @viz-js/viz as an optional peer, mirrored as a devDependency', () => {
-    expect(pkg.peerDependencies).toEqual({ '@viz-js/viz': '^3.28.0' });
-    expect(pkg.peerDependenciesMeta).toEqual({ '@viz-js/viz': { optional: true } });
+  it('keeps @viz-js/viz (mirrored as a devDependency) and @huggingface/transformers (not installed) as optional peers', () => {
+    expect(pkg.peerDependencies).toEqual({ '@huggingface/transformers': '^4.3.2', '@viz-js/viz': '^3.28.0' });
+    expect(pkg.peerDependenciesMeta).toEqual({ '@huggingface/transformers': { optional: true }, '@viz-js/viz': { optional: true } });
     expect(pkg.devDependencies['@viz-js/viz']).toBe('^3.28.0');
+    // The embedding library is not a devDependency: a CLI test asserts library-not-installed,
+    // and CI installs no native onnxruntime addon.
+    expect(pkg.devDependencies['@huggingface/transformers']).toBeUndefined();
     for (const name of Object.keys(MATHTS)) {
       expect(pkg.peerDependencies[name], name).toBeUndefined();
       expect(pkg.devDependencies[name], name).toBeUndefined();

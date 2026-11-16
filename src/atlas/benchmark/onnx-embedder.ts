@@ -109,6 +109,11 @@ export interface OnnxEmbedderOptions {
   /** The time allowed for each text. Defaults to `ONNX_PER_TEXT_TIMEOUT_MS`. */
   readonly perTextTimeoutMs?: number;
   /** Loads the library. Defaults to a dynamic import of the optional peer. */
+  /**
+   * Check the cache files before the load. The default is on for the real library and off
+   * for an injected one.
+   */
+  readonly checkCache?: boolean;
   readonly loadLibrary?: () => Promise<TransformersLibrary>;
 }
 
@@ -243,9 +248,10 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
     // The real library has two defects on a cache miss. One of its own file reads has no
     // handler, so that read rejects with nothing to catch it and Node ends the process.
     // It also asks the network for `tokenizer_config.json` and `config.json`, although the
-    // call says `local_files_only`. Look for the files first. A fake library is not checked.
+    // call says `local_files_only`. Look for the files first. An injected library is not checked
+    // unless `checkCache` is set.
     const root = cacheDir ?? lib.env.cacheDir;
-    if (options.loadLibrary === undefined && root !== undefined) {
+    if ((options.checkCache ?? options.loadLibrary === undefined) && root !== undefined) {
       const missing = requiredCacheFiles(modelId, dtype).find((file) => !existsSync(join(root, file)));
       if (missing !== undefined) throw new EmbeddingUnavailable('model-not-cached', `no ${missing} in ${root}`);
     }

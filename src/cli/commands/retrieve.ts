@@ -90,9 +90,10 @@ const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--em
         says so. --embed asks an embedding model for an order. The order is a
         proposal, not evidence. Acceptance stays the atlas search, and cosine
         similarity does not enter its score.
-        Backends: onnx (the default) runs ${ONNX_DEFAULT_MODEL} in process through the
-        optional @huggingface/transformers library, at the precision of --embed-dtype
-        (default fp16). One --embed embeds the query plus every corpus record in
+        Backends: onnx (the default) runs the model in process through the optional
+        @huggingface/transformers library, at the precision of --embed-dtype
+        (default fp16). A q8 vector changes with the batch that holds the text, so a
+        q8 order depends on the corpus size. One --embed embeds the query plus every corpus record in
         process, which takes about a minute of CPU with fp16. ollama asks a local
         Ollama server for ${OLLAMA_DEFAULT_MODEL} (--ollama-url, default ${OLLAMA_DEFAULT_URL}).
         If the embedder cannot be used, the same atlas search is printed and the

@@ -315,3 +315,72 @@ describe.skipIf(LIVE === undefined)('onnx embedder, live model (UPT_ONNX_LIVE_CA
     expect(dot).toBeGreaterThan(0.9999);
   }, 300_000);
 });
+
+describe('onnxEmbedder: review findings (cache check, kept load, deadline, error mapping)', () => {
+  it('with checkCache, a cache without the model files is model-not-cached and the pipeline is never called', async () => {
+    const empty = mkdtempSync(join(tmpdir(), 'upt-onnx-check-'));
+    try {
+      const f = fake();
+      const embed = onnxEmbedder({ loadLibrary: async () => f.lib, cacheDir: empty, checkCache: true });
+      await expect(embed(['a'])).rejects.toMatchObject({ reason: 'model-not-cached' });
+      expect(f.loads).toHaveLength(0);
+    } finally {
+      rmSync(empty, { recursive: true, force: true });
+    }
+  });
+
+  it('control: with checkCache and every required file present, the pipeline loads', async () => {
+    const full = mkdtempSync(join(tmpdir(), 'upt-onnx-check-'));
+    try {
+      const dir = join(full, ...ONNX_EMBEDDING_MODEL.split('/'));
+      mkdirSync(join(dir, 'onnx'), { recursive: true });
+      for (const name of ['config.json', 'tokenizer.json', 'tokenizer_config.json', 'onnx/model_fp16.onnx']) writeFileSync(join(dir, name), 'x');
+      const f = fake();
+      const embed = onnxEmbedder({ loadLibrary: async () => f.lib, cacheDir: full, checkCache: true });
+      await expect(embed(['a'])).resolves.toHaveLength(1);
+      expect(f.loads).toHaveLength(1);
+    } finally {
+      rmSync(full, { recursive: true, force: true });
+    }
+  });
+
+  it('a load that timed out is kept: a second call starts no second load', async () => {
+    const f = fake({ loadNever: true });
+    const embed = onnxEmbedder({ loadLibrary: async () => f.lib, loadTimeoutMs: 10 });
+    await expect(embed(['a'])).rejects.toMatchObject({ reason: 'call-did-not-finish' });
+    await expect(embed(['a'])).rejects.toMatchObject({ reason: 'call-did-not-finish' });
+    expect(f.loads).toHaveLength(1);
+  });
+
+  it('a timed-out embedding stops at its next batch', async () => {
+    const batches: number[] = [];
+    const extractor = Object.assign(
+      async (texts: string[]) => {
+        batches.push(texts.length);
+        await new Promise((r) => setTimeout(r, 40));
+        return { tolist: () => texts.map(() => Array.from({ length: ONNX_VECTOR_DIMS }, () => 0.1)) };
+      },
+      { tokenizer: { padding_side: 'left' } },
+    );
+    const lib: TransformersLibrary = { env: {}, pipeline: async () => extractor };
+    const texts = Array.from({ length: 3 * ONNX_BATCH_SIZE }, (_, i) => `t${i}`);
+    const embed = onnxEmbedder({ loadLibrary: async () => lib, perTextTimeoutMs: 1 });
+    await expect(embed(texts)).rejects.toMatchObject({ reason: 'call-did-not-finish' });
+    await new Promise((r) => setTimeout(r, 150));
+    expect(batches).toHaveLength(1);
+  });
+
+  it('an import error with a code other than a missing module is session-failed', async () => {
+    const embed = onnxEmbedder({ loadLibrary: async () => { throw Object.assign(new Error('dlopen'), { code: 'ERR_DLOPEN_FAILED' }); } });
+    await expect(embed(['a'])).rejects.toMatchObject({ reason: 'session-failed' });
+    const missing = onnxEmbedder({ loadLibrary: async () => { throw Object.assign(new Error('no'), { code: 'ERR_MODULE_NOT_FOUND' }); } });
+    await expect(missing(['a'])).rejects.toMatchObject({ reason: 'library-not-installed' });
+  });
+
+  it('the configuration error that names local_files_only is session-failed, not a cache miss', async () => {
+    const f = fake({ loadError: new Error('Invalid configuration detected: (`local_files_only=true`) conflicts') });
+    await expect(onnxEmbedder({ loadLibrary: async () => f.lib })(['a'])).rejects.toMatchObject({ reason: 'session-failed' });
+    const g = fake({ loadError: new Error('`local_files_only=true` or `env.allowRemoteModels=false` and file was not found locally at "x"') });
+    await expect(onnxEmbedder({ loadLibrary: async () => g.lib })(['a'])).rejects.toMatchObject({ reason: 'model-not-cached' });
+  });
+});

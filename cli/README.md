@@ -123,7 +123,7 @@ Every command the registry holds, grouped as the registry groups them. The table
 |---|---|
 | `confront` | Run the committed predicted-versus-observed confrontations. |
 | `coverage` (`grounding`) | Count catalog bridges by empirical grounding tier. |
-| `retrieve` | Search the atlas for a claim. --embed asks a local Ollama model and does not accept that order. |
+| `retrieve` | Search the atlas for a claim. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model. |
 | `testplan` | Print the measurement plan stored on a confrontation or an applied case. |
 
 **Utilities**
@@ -493,12 +493,15 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--deny` | `regime` | Mark one prose premise contradicted. The others stay unspecified. |
 | `--depth` | `map` | Hop count for --around. |
 | `--derive` | `discover` | For each promising identification (either tier), print the one algebraic relation it implies, and say when the identification had no magnitude evidence. That relation is not a bridge. |
-| `--embed` | `retrieve` | Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0. |
-| `--embed-model` | `retrieve` | Ollama embedding model. Used only with --embed. |
+| `--embed` | `retrieve` | Embed the claim and every corpus record with the chosen backend. Acceptance stays the atlas search. A failure of the embedder still prints that search and exits 0. |
+| `--embed-backend` | `retrieve` | Embedding backend: onnx (in process) or ollama (a local server). Used only with --embed. |
+| `--embed-dtype` | `retrieve` | ONNX weight precision: q8, fp16 or fp32. Used only with the onnx backend or --fetch-model. |
+| `--embed-model` | `retrieve` | Embedding model. For the onnx backend, a Hugging Face model id. For the ollama backend, an Ollama tag. Used with --embed or --fetch-model. |
 | `--equation` | `map` | Inject TARGET = EXPR as a user node and report where it lands. |
 | `--equation-only` | `map` | Print only the equation verdict. Errors when --equation is missing. |
 | `--evidence` | `atlas`, `map` | atlas: With no bridge id, list every bridge's derived evidence and the witness results it observes. map: Keep atlas edges whose derived evidence set contains TAG. |
 | `--family` | `map` | Map one atlas family by name. |
+| `--fetch-model` | `retrieve` | Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON. |
 | `--format` | `map` | Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer. |
 | `--formula` | `derive` | Check EXPR against the declared dimensions and recover the dimensionless prefactor. |
 | `--frontier` | `confront` | Rank the σ-tests by margin to this tool's 1σ acceptance line. That line is a software criterion. |
@@ -512,7 +515,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--max-routes` | `map` | Cap on --all-routes. The maximum accepted is 1000. |
 | `--natural` | `eval`, `map` | eval: Set ħ = c = 1 (and h = 2π) when reading values. map: Set ħ = c = 1 when a dimension difference is a power of those constants. |
 | `--observable` | `map` | Map bridges whose recorded text names this observable. |
-| `--ollama-url` | `retrieve` | Ollama base URL. Used only with --embed. |
+| `--ollama-url` | `retrieve` | Ollama base URL. Used only with --embed and the ollama backend. Naming it selects the ollama backend when --embed-backend is not given. |
 | `--out` | `map` | Write the report to PATH instead of stdout. |
 | `--problem` | `probe` | Problem JSON file for run, candidates, falsify, rank, and reproduce. |
 | `--proposed` | `map` | Overlay unadjudicated identity-consequence relations. |

@@ -141,7 +141,7 @@ by the two routes of BE-42 (`be-42` and `be-42-via-rs`). `upt evaluate be-63 mu_
 |---|---|
 | `confront` | Run the committed predicted-versus-observed confrontations. |
 | `coverage` (`grounding`) | Count catalog bridges by empirical grounding tier. |
-| `retrieve` | Search the atlas for a claim. --embed asks a local Ollama model and does not accept that order. |
+| `retrieve` | Search the atlas for a claim. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model. |
 | `testplan` | Print the measurement plan stored on a confrontation or an applied case. |
 
 **Utilities**

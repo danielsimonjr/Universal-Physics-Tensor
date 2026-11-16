@@ -187,3 +187,34 @@ describe('upt retrieve', () => {
     expect(t).toMatch(/not evidence/);
   });
 });
+
+describe('upt retrieve --fetch-model with a stubbed library call', () => {
+  const report = { modelId: ONNX_EMBEDDING_MODEL, dtype: 'fp16', cacheDir: '/c', files: [{ path: '/c/onnx/model_fp16.onnx', bytes: 3, sha256: 'ab' }] };
+  async function runFetch(argv: string[], fetchOnnxModel: () => Promise<unknown>) {
+    const { parseArgs } = await import('../../dist/cli/args.js');
+    const api = await import('../../dist/cli-api.js');
+    let written = '';
+    const lines: string[] = [];
+    const ctx = {
+      args: parseArgs('retrieve', argv, retrieveCommand.flags, retrieveCommand.positionals),
+      api: { ...api, fetchOnnxModel },
+      out: (l?: string) => lines.push(l ?? ''),
+      err: () => {},
+      write: (s: string) => { written += s; },
+    };
+    return { code: retrieveCommand.run(ctx as never), written: () => written, lines };
+  }
+
+  it('--json prints a JSON envelope with the files', async () => {
+    const r = await runFetch(['--fetch-model', '--json'], async () => report);
+    expect(await r.code).toBe(0);
+    expect(JSON.parse(r.written()).result.files[0].sha256).toBe('ab');
+  });
+
+  it('a failed download names no install hint', async () => {
+    const api = await import('../../dist/cli-api.js');
+    const r = await runFetch(['--fetch-model'], async () => { throw new api.EmbeddingUnavailable('session-failed', 'fetch failed'); });
+    await expect(r.code).rejects.toThrow(/did not load/);
+    await expect((await runFetch(['--fetch-model'], async () => { throw new api.EmbeddingUnavailable('session-failed'); })).code).rejects.not.toThrow(/npm i/);
+  });
+});
