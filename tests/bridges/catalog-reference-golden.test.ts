@@ -14,10 +14,11 @@
  * themselves, and the exponent rule has no input to apply to.
  *
  * Which rows land bitwise and which land a unit or two in the last place away
- * depends on the host's floating-point library (on Linux x86-64 three rows are two
- * units off), so the rule is the assertion, not a list: every row is within two ulp
- * of its reference. Two ulp is the measured maximum across hosts, below the relative
- * 1e-15 the old test required; it is not a widened physics tolerance.
+ * depends on the runtime: ECMAScript lets `Math.pow` return an approximation, and
+ * V8 13 (Node 24) returns a different last bit than V8 12 (Node 22) for some
+ * inputs. So the rule is the assertion, not a list. Every row is within two ulp
+ * of its reference, below the relative 1e-15 the old test required. `ULP_ALLOWANCE`
+ * names each row that needs more, with its cause. The allowance is not a widened physics tolerance.
  */
 import { describe, expect, it } from 'vitest';
 import { catalogRelations } from '../../src/bridges/catalog-load.js';
@@ -72,17 +73,17 @@ describe('catalog reference goldens', () => {
     expect(zero.map((relation) => relation.id)).toEqual([]);
   });
 
-  // Windows' floating-point library lands be-164 four ulp off (measured on the EVO-X2); every other
-  // host measured stays within two, and keeps the two-ulp bound.
+  // be-164 computes ν³ and c³ with `Math.pow`. Node 24 rounds each to the correctly rounded
+  // double, and Node 22 lands one ulp off on each; the two moves add to four ulp of the result.
   const MAX_ULP = 2;
-  const HOST_MAX_ULP = process.platform === 'win32' ? 4 : MAX_ULP;
+  const ULP_ALLOWANCE: Readonly<Record<string, number>> = { 'be-164': 4 };
 
   it('evaluateEdge matches each stored reference to within two units in the last place', () => {
     const beyond: string[] = [];
     for (const relation of relations) {
       const reference = relation.reference!;
       const value = evaluateEdge(catalogEdge(relation.id), { ...reference.inputs });
-      if (Math.abs(value - reference.value) > HOST_MAX_ULP * ulp(reference.value)) {
+      if (Math.abs(value - reference.value) > (ULP_ALLOWANCE[relation.id] ?? MAX_ULP) * ulp(reference.value)) {
         beyond.push(`${relation.id}: ${value} vs ${reference.value}`);
       }
     }

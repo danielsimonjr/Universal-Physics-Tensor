@@ -15,6 +15,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-16
 
+- **Math.pow goldens on Node 24.** `Math.pow(1e14, 3)` is `1e42` on Node 24 and `9.999999999999999e41` on Node 22; `Math.pow(299792458, 3)` is `2.694400241737399e25` and `2.6944002417373993e25`. `Math.exp` of the be-164 argument is equal on Node 22 and Node 24. be-164 is `8.514740991722428e-17` on Node 24 against the stored `8.514740991722424e-17`, four ulp. Before the change, Linux Node 22 passed both files. Linux Node 24 failed 2 tests (be-164, five be-42 pairs), the same rows Windows Node 26 needed its win32 branch for. After the change, both files pass on Windows Node 22, 24 and 26. A planted two-ulp be-164 bound fails on Node 24, and a planted zero-ulp compose bound fails on Node 24 and passes on Node 22.
 - **`--fetch-model` with an unreachable host.** The crash needs the JSON files cached, the ONNX files absent and the host down. An empty cache fails cleanly. The fix checks each missing file before the load. Residual, measured with a local server: a host that answers the 1-byte check and then resets the `.onnx` download still ends the process (transformers.js 4.3.2 `getSession`, unawaited `getCoreModelFile`). An upstream issue is the owner's call. The probes have no time limit: a host that accepts the connection and sends no headers holds each probe for the undici headers timeout (300 s). The old load path waited the same way. Not looked into: the embedder pre-check does not require `onnx/<stem>.onnx_data`.
 
 ## As of 2026-11-11
