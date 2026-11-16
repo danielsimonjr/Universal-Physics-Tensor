@@ -88,7 +88,8 @@ No line records an agreement with, or a rebuttal of, an entry.
 The search covers every file type, without `node_modules` and `.git`, for `Hartnoll`.
 The hits are 19 files.
 They are the catalog record, `docs/specification/Part-II.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, five issue templates, four planning documents and the two trackers.
-The other hits are the citation strings of `tests/composition/compose-relation.golden.json` and three files under `docs/architecture/archive/bridge-audit/`: the catalog snapshot, the entry 23 prompt and the entry 23 response.
+The other hits are the citation strings of `tests/composition/compose-relation.golden.json` and three files under `docs/architecture/archive/bridge-audit/`.
+Those three are the catalog snapshot, the entry 23 prompt and the entry 23 response.
 No line states the result of the check that `CONTRIBUTING.md:46-48` asks for.
 
 **Evidence:**
