@@ -218,8 +218,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
   The ratchet counts issues with a private checker, and it prints one skip line and passes when that checker is missing. The fix adds doc comments under `src/`, so it changes the shipped declaration files. Release timing is the maintainer's call.
   Done: the doc-check command reports 0 MUST issues for src, and the pre-push hook runs it through `UPT_REPO_TOOLS`. The hook fails on any MUST issue and on a run with no `PASS --` line. It keeps no baseline, and `.githooks/code-docs-baseline.txt` is removed. A missing `repo-tools` executable still prints one `SKIPPED` line for each gate, and the push continues. `tests/tools/pre-push-gate.test.ts` runs the gate block against a stub executable.
 
-- [ ] Implement the in-process ONNX embedder for `upt retrieve --embed` (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`, sections 3 to 8): `onnx-embedder.ts`, `--embed-backend`, `--embed-dtype`, `--fetch-model`, the three new fallback reasons, and a time budget that grows with the number of texts.
-- [ ] Amendment 15: the live-path default dtype is `fp16`, not `q8` (owner choice after spikes 2 to 5).
+- [x] Implement the in-process ONNX embedder for `upt retrieve --embed` (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`, sections 3 to 8): `onnx-embedder.ts`, `--embed-backend`, `--embed-dtype`, `--fetch-model`, the three new fallback reasons, and a time budget that grows with the number of texts.
+- [x] Amendment 15: the live-path default dtype is `fp16`, not `q8` (owner choice after spikes 2 to 5).
 - [x] Amendment 14: register the ONNX live-path model and authorize spikes 3-5 of `docs/plans/ONNX_EMBEDDING_PLAN.md` as disclosed, non-scoring measurements.
 - [x] Plan the in-process ONNX embedder for `upt retrieve --embed` (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`). Owner decisions first: the study-record option (section 0) and the Ollama backend (section 5).
 - [ ] Find why `repo-tools map` marks every file under `src/` as an entry root in this repository.
