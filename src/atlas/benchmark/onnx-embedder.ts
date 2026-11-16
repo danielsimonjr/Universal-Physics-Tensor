@@ -12,7 +12,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { createReadStream, readdirSync } from 'node:fs';
+import { createReadStream, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { compareCodepoint } from '../../core/compare.js';
 import { EmbeddingUnavailable, type Embedder } from './hybrid-retrieval.js';
@@ -80,8 +80,12 @@ type Extractor = ((texts: string[], opts: Record<string, unknown>) => Promise<{ 
 /** The module specifier. It is a variable so the compiler does not resolve the optional peer. */
 const SPECIFIER = '@huggingface/transformers';
 
-/** The messages of a load that found no model file in the cache. */
-const CACHE_MISS = /Could not locate file|local_files_only|ENOENT/;
+/**
+ * The messages of a load that found no model file in the cache. The library
+ * says "was not found locally" for a miss with `local_files_only`. Its other
+ * message that names `local_files_only` is a configuration error, not a miss.
+ */
+const CACHE_MISS = /Could not locate file|was not found locally|ENOENT/;
 
 /** The file stem of each dtype, as the model repository names it. */
 const STEM: Readonly<Record<OnnxDtype, string>> = {
@@ -128,13 +132,31 @@ async function defaultLoadLibrary(): Promise<TransformersLibrary> {
   return (await import(SPECIFIER)) as unknown as TransformersLibrary;
 }
 
-/** Loads the library, or refuses with `library-not-installed`. */
+/** The error codes of an import that found no module. */
+const MODULE_NOT_FOUND = new Set(['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND']);
+
+/**
+ * Loads the library. A missing module is `library-not-installed`. An installed
+ * library that fails for another reason (for example a native binding that
+ * does not load) has a different error code and is `session-failed`.
+ */
 async function loadLibraryOrRefuse(loadLibrary: () => Promise<TransformersLibrary>): Promise<TransformersLibrary> {
   try {
     return await loadLibrary();
-  } catch {
+  } catch (error) {
+    const code = (error as { code?: unknown } | null)?.code;
+    if (typeof code === 'string' && !MODULE_NOT_FOUND.has(code)) {
+      throw new EmbeddingUnavailable('session-failed', messageOf(error));
+    }
     throw new EmbeddingUnavailable('library-not-installed');
   }
+}
+
+/** The files of the model that a cache must hold before the library may load it. */
+function requiredCacheFiles(modelId: string, dtype: OnnxDtype): readonly string[] {
+  return ['config.json', 'tokenizer.json', 'tokenizer_config.json', `onnx/${STEM[dtype]}.onnx`].map((name) =>
+    join(...modelId.split('/'), ...name.split('/')),
+  );
 }
 
 /** The cache directory the caller named, the environment variable, or none. Read at call time. */
@@ -171,10 +193,13 @@ async function embedAll(
   texts: readonly string[],
   modelId: string,
   expectedDims: number | undefined,
+  cancelled: () => boolean,
 ): Promise<number[][]> {
   const vectors: number[][] = [];
   let width: number | undefined = expectedDims ?? (modelId === ONNX_EMBEDDING_MODEL ? ONNX_VECTOR_DIMS : undefined);
   for (let start = 0; start < texts.length; start += ONNX_BATCH_SIZE) {
+    // A call that timed out is over. Do not start the next batch for it.
+    if (cancelled()) throw new EmbeddingUnavailable('call-did-not-finish');
     const batch = texts.slice(start, start + ONNX_BATCH_SIZE);
     const reply = await extract(batch, { pooling: 'last_token', normalize: true });
     let rows: unknown;
@@ -213,6 +238,17 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
     const lib = await loadLibraryOrRefuse(loadLibrary);
     const cacheDir = resolveCacheDir(options.cacheDir);
     if (cacheDir !== undefined) lib.env.cacheDir = cacheDir;
+    // `env.cacheDir` is global to the process, and the library reads it for its tokenizer
+    // lookup even when a call names `cache_dir`. So one process serves one cache directory.
+    // The real library has two defects on a cache miss. One of its own file reads has no
+    // handler, so that read rejects with nothing to catch it and Node ends the process.
+    // It also asks the network for `tokenizer_config.json` and `config.json`, although the
+    // call says `local_files_only`. Look for the files first. A fake library is not checked.
+    const root = cacheDir ?? lib.env.cacheDir;
+    if (options.loadLibrary === undefined && root !== undefined) {
+      const missing = requiredCacheFiles(modelId, dtype).find((file) => !existsSync(join(root, file)));
+      if (missing !== undefined) throw new EmbeddingUnavailable('model-not-cached', `no ${missing} in ${root}`);
+    }
     let extractor: Extractor;
     try {
       extractor = (await lib.pipeline('feature-extraction', modelId, { dtype, local_files_only: true })) as Extractor;
@@ -224,21 +260,28 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
     return extractor;
   };
 
-  let loaded: Promise<Extractor> | undefined;
+  // The load itself is kept until it settles. A call that times out stops waiting,
+  // and the next call waits for the same load. A failed load is not kept.
+  let loading: Promise<Extractor> | undefined;
   const getExtractor = (): Promise<Extractor> => {
-    loaded ??= within(loadExtractor(), loadMs).catch((error: unknown) => {
-      loaded = undefined;
+    loading ??= loadExtractor().catch((error: unknown) => {
+      loading = undefined;
       throw error;
     });
-    return loaded;
+    return within(loading, loadMs);
   };
 
   return async (texts) => {
     if (texts.length === 0) return [];
     const extract = await getExtractor();
+    let timedOut = false;
     try {
-      return await within(embedAll(extract, texts, modelId, options.expectedDims), texts.length * perTextMs);
+      return await within(
+        embedAll(extract, texts, modelId, options.expectedDims, () => timedOut),
+        texts.length * perTextMs,
+      );
     } catch (error) {
+      timedOut = true;
       if (error instanceof EmbeddingUnavailable) throw error;
       throw new EmbeddingUnavailable('session-failed', messageOf(error));
     }
@@ -270,8 +313,8 @@ export async function fetchOnnxModel(options: OnnxEmbedderOptions = {}): Promise
   if (requested !== undefined) lib.env.cacheDir = requested;
   try {
     await lib.pipeline('feature-extraction', modelId, { dtype });
-  } catch {
-    throw new EmbeddingUnavailable('session-failed');
+  } catch (error) {
+    throw new EmbeddingUnavailable('session-failed', messageOf(error));
   }
   const cacheDir = requested ?? lib.env.cacheDir;
   if (cacheDir === undefined) {

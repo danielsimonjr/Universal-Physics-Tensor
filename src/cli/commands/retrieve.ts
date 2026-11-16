@@ -78,7 +78,7 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--fetch-model',
     valueStyle: 'none',
-    description: 'Download the ONNX model to the local cache and print each model file with its size and SHA-256. The claim is not needed.',
+    description: 'Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON.',
   },
 ];
 
@@ -102,7 +102,8 @@ const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--em
         answered an error status, the reply is not a vector or its length is not
         the length expected for the model, or the call does not finish. A fallback
         exits 0.
-        --fetch-model downloads the ONNX model to the cache and prints its files.
+        --fetch-model downloads the ONNX model to the cache and prints each ONNX
+        weight file with its size and SHA-256 (as JSON with --json).
         A missing library exits 1 and prints the install hint.
         --embed-model is used with --embed or --fetch-model. A claim is text. It has
         no expression, so the atlas search accepts nothing: it ranks by structure,
@@ -124,6 +125,10 @@ async function fetchModel(
   const { out, api } = ctx;
   try {
     const report = await api.fetchOnnxModel({ modelId, dtype });
+    if (ctx.args.flags.has('json')) {
+      emitJson({ command: 'retrieve', options: { fetchModel: true }, result: report }, ctx.write);
+      return 0;
+    }
     out(`upt retrieve --fetch-model: ${report.modelId}`);
     out(`  dtype ${report.dtype}`);
     out(`  cache dir ${report.cacheDir}`);
@@ -131,7 +136,8 @@ async function fetchModel(
     return 0;
   } catch (error) {
     if (error instanceof api.EmbeddingUnavailable) {
-      throw new CliError(`upt retrieve --fetch-model: ${error.message}. hint: npm i @huggingface/transformers`);
+      const hint = error.reason === 'library-not-installed' ? '. hint: npm i @huggingface/transformers' : '';
+      throw new CliError(`upt retrieve --fetch-model: ${error.message}${hint}`);
     }
     throw error;
   }

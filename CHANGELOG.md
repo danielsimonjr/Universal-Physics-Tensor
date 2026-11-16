@@ -12,6 +12,7 @@ from v0.1.0 onward.
 
 - `upt retrieve --embed` embeds in process with ONNX Runtime by default (`src/atlas/benchmark/onnx-embedder.ts`). The model is `onnx-community/Qwen3-Embedding-0.6B-ONNX`, and the default dtype is `fp16`. `--embed-dtype` selects `q8`, `fp16` or `fp32`. `--embed-backend=ollama` keeps the Ollama path. `--fetch-model` downloads the model to the cache and prints the hash of each file. Why: the owner asked for an in-process embedder in place of an Ollama process (plan `docs/plans/ONNX_EMBEDDING_PLAN.md`). `@huggingface/transformers` is an optional peer, so an install that does not embed gets no native addon.
 - Three fallback reasons: `library-not-installed`, `model-not-cached` and `session-failed`. A fallback still prints the atlas search and exits 0.
+- Before the ONNX load, the embedder checks that `config.json`, `tokenizer.json`, `tokenizer_config.json` and `onnx/<stem>.onnx` are in the cache. Why: with a missing file, transformers.js 4.3.2 leaves one rejection without a handler and the process exits 1, and its tokenizer lookup reaches the network although `local_files_only` is set. A timed-out load is kept and reused, and a timed-out embedding stops at its next batch. `--fetch-model --json` prints a JSON envelope.
 
 ### Changed
 
