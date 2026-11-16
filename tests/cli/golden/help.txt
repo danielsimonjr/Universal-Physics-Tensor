@@ -909,8 +909,8 @@ Flags:
         (UPT_VECTOR_CACHE, else .upt-vectors in the model cache). A batch whose
         ordered texts, model, dtype and model file are unchanged is read from the
         cache, so a repeat run returns the stored vectors and is not a new
-        measurement. A changed, inserted or removed record changes its batch and
-        every later batch. --no-vector-cache embeds every batch again. The ollama
+        measurement. An inserted or removed record changes its batch and every
+        later batch. A changed record changes only its batch. --no-vector-cache embeds every batch again. The ollama
         backend is not cached. ollama asks a local
         Ollama server for qwen3-embedding:0.6b (--ollama-url, default http://127.0.0.1:11434).
         If the embedder cannot be used, the same atlas search is printed and the

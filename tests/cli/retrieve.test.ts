@@ -229,7 +229,7 @@ describe('upt retrieve and the ONNX vector cache', () => {
       seen.push(options);
       return async (texts: string[]) => {
         const hook = options.onCacheEvent as ((e: unknown) => void) | undefined;
-        hook?.({ kind: 'write-failed', batch: 0, detail: 'EACCES' });
+        for (const batch of [0, 1, 2]) hook?.({ kind: 'write-failed', batch, detail: 'EACCES' });
         return texts.map(() => Array.from({ length: 1024 }, (_, i) => (i === 0 ? 1 : 0)));
       };
     };
@@ -253,6 +253,23 @@ describe('upt retrieve and the ONNX vector cache', () => {
     const r = await runWith(['pendulum', '--embed']);
     expect(r.code).toBe(0);
     expect(r.errors).toEqual(['upt retrieve: vector cache not written: EACCES']);
+  });
+
+  it('a cache location that is a file exits 1 and names the path', async () => {
+    const { mkdtempSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const dir = mkdtempSync(join(tmpdir(), 'upt-vc-'));
+    const file = join(dir, 'a-file');
+    writeFileSync(file, 'x');
+    vi.stubEnv(VECTOR_CACHE_ENV, file);
+    try {
+      await expect(runWith(['pendulum', '--embed'])).rejects.toThrow(/names a file, not a directory/);
+      expect((await runWith(['pendulum', '--embed', '--no-vector-cache'])).code).toBe(0);
+    } finally {
+      vi.unstubAllEnvs();
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it('help names the cache variable of the embedder and says a repeat run is not a new measurement', async () => {

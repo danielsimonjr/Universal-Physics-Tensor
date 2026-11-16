@@ -285,8 +285,9 @@ async function embedBatch(extract: Extractor, batch: string[], width: number | u
 }
 
 /**
- * Embeds the batches with the given indices, in order. The first batch fixes the
- * width when no width is known. A call that timed out starts no further batch.
+ * Embeds the batches with the given indices, in order, into `out`. The first batch
+ * fixes the width when no width is known. A call that runs out of time starts no
+ * further batch. The caller owns `out`. The batches that finish before a timeout stay in `out`.
  */
 async function embedBatches(
   extract: Extractor,
@@ -294,8 +295,8 @@ async function embedBatches(
   indices: readonly number[],
   width: number | undefined,
   cancelled: () => boolean,
-): Promise<Map<number, Embedded>> {
-  const out = new Map<number, Embedded>();
+  out: Map<number, Embedded>,
+): Promise<void> {
   let fixed = width;
   for (const index of indices) {
     // A call that timed out is over. Do not start the next batch for it.
@@ -304,7 +305,6 @@ async function embedBatches(
     fixed = done.width;
     out.set(index, done);
   }
-  return out;
 }
 
 /** Splits the texts into batches of `ONNX_BATCH_SIZE`, in input order. */
@@ -482,10 +482,12 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
     });
     return library;
   };
-  // The vector cache reads the library version when it can. It never decides a miss, so a missing library is not an error here.
+  // The vector cache reads the library version when it can, within the load timeout.
+  // A library that is missing, fails or hangs gives no version. A missing version is not an error here:
+  // an all-hit run then returns the stored vectors, and a miss still loads the model and refuses.
   const tryLibrary = async (): Promise<TransformersLibrary | undefined> => {
     try {
-      return await getLibrary();
+      return await within(getLibrary(), loadMs);
     } catch {
       return undefined;
     }
@@ -495,9 +497,8 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
   const openVectorCache = async (): Promise<OpenCache | undefined> => {
     const named = resolveVectorDir(options.vectorCacheDir);
     let root = resolveCacheDir(options.cacheDir);
-    let lib: TransformersLibrary | undefined;
-    // The library is read when the root or the version is needed. A named location with a named root needs neither.
-    if (root === undefined || named === undefined) lib = await tryLibrary();
+    // The library gives the version that every read checks, and the root when none is named.
+    const lib = await tryLibrary();
     root ??= lib?.env.cacheDir;
     if (root === undefined) return undefined;
     if (named !== undefined) await ensureVectorDir(named);
@@ -583,25 +584,27 @@ export function onnxEmbedder(options: OnnxEmbedderOptions = {}): Embedder {
       const extract = await getExtractor();
       const missedTexts = missing.reduce((n, i) => n + batches[i]!.length, 0);
       let timedOut = false;
-      let fresh: Map<number, Embedded> = new Map();
+      const fresh = new Map<number, Embedded>();
+      // The writes come after the budget. A failed write is an event, not an error.
+      // The batches that finished before a timeout are written too, so a slow corpus progresses.
+      const writeFresh = async (): Promise<void> => {
+        if (cache === undefined) return;
+        const version = (await getLibrary()).env.version ?? '';
+        for (const [i, got] of [...fresh]) {
+          const detail = await writeBatch(cache.dir, keys[i]!, got.rows, got.width, version);
+          if (detail !== undefined) emit('write-failed', i, detail);
+        }
+      };
       try {
-        fresh = await within(
-          embedBatches(extract, batches, missing, width, () => timedOut),
-          missedTexts * perTextMs,
-        );
+        await within(embedBatches(extract, batches, missing, width, () => timedOut, fresh), missedTexts * perTextMs);
       } catch (error) {
         timedOut = true;
+        await writeFresh();
         if (error instanceof EmbeddingUnavailable) throw error;
         throw new EmbeddingUnavailable('session-failed', messageOf(error));
       }
-      // The writes come after the budget. A failed write is an event, not an error.
-      const version = cache === undefined ? '' : ((await getLibrary()).env.version ?? '');
-      for (const [i, got] of fresh) {
-        found[i] = got;
-        if (cache === undefined) continue;
-        const detail = await writeBatch(cache.dir, keys[i]!, got.rows, got.width, version);
-        if (detail !== undefined) emit('write-failed', i, detail);
-      }
+      await writeFresh();
+      for (const [i, got] of fresh) found[i] = got;
     }
     return found.flatMap((f) => f!.rows);
   };

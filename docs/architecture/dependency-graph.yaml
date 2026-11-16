@@ -6792,7 +6792,10 @@ modules:
     src/cli/commands/retrieve.ts:
       description: "`upt retrieve <claim>` — optional embedding proposals, atlas acceptance."
       externalDependencies: []
-      nodeDependencies: []
+      nodeDependencies:
+        - module: fs
+          imports:
+            - statSync
       internalDependencies:
         - file: ../args.js
           imports:
@@ -19693,7 +19696,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 389
   totalModules: 13
-  totalLinesOfCode: 88733
+  totalLinesOfCode: 88761
   totalExports: 2843
   totalClasses: 86
   totalInterfaces: 523

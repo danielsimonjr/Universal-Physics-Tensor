@@ -2948,6 +2948,11 @@ The codebase is organized into the following modules:
 
 ### `src/cli/commands/retrieve.ts` - `upt retrieve <claim>` — optional embedding proposals, atlas acceptance.
 
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `fs` | `statSync` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -7774,7 +7779,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 389 |
 | Total Modules | 13 |
-| Total Lines of Code | 88733 |
+| Total Lines of Code | 88761 |
 | Total Exports | 2843 |
 | Total Re-exports | 1397 |
 | Total Classes | 86 |

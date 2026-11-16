@@ -9,6 +9,7 @@
  * embedder cannot be used, the atlas search is still the answer and the output
  * names the reason. That is exit 0.
  */
+import { statSync } from 'node:fs';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
@@ -110,8 +111,8 @@ const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--em
         (${VECTOR_CACHE_ENV}, else .upt-vectors in the model cache). A batch whose
         ordered texts, model, dtype and model file are unchanged is read from the
         cache, so a repeat run returns the stored vectors and is not a new
-        measurement. A changed, inserted or removed record changes its batch and
-        every later batch. --no-vector-cache embeds every batch again. The ollama
+        measurement. An inserted or removed record changes its batch and every
+        later batch. A changed record changes only its batch. --no-vector-cache embeds every batch again. The ollama
         backend is not cached. ollama asks a local
         Ollama server for ${OLLAMA_DEFAULT_MODEL} (--ollama-url, default ${OLLAMA_DEFAULT_URL}).
         If the embedder cannot be used, the same atlas search is printed and the
@@ -162,6 +163,24 @@ async function fetchModel(
   }
 }
 
+/**
+ * Refuses a vector cache location that exists and is not a directory. The embedder
+ * refuses the location too, but the search would print the refusal as a fallback. A wrong setting is exit 1.
+ */
+function refuseFileAsCacheDir(): void {
+  const dir = process.env[VECTOR_CACHE_ENV];
+  if (dir === undefined || dir.length === 0) return;
+  let isDirectory = true;
+  try {
+    isDirectory = statSync(dir).isDirectory();
+  } catch {
+    return; // A missing directory is created on the first write.
+  }
+  if (!isDirectory) {
+    throw new CliError(`upt retrieve: ${VECTOR_CACHE_ENV} names a file, not a directory: ${dir}. hint: unset it or pass --no-vector-cache`);
+  }
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, out, api } = ctx;
   const backendFlag = args.flags.get('embed-backend')?.[0];
@@ -190,6 +209,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const embed = args.flags.has('embed');
   const embedModel = modelFlag ?? (backend === 'ollama' ? OLLAMA_DEFAULT_MODEL : ONNX_DEFAULT_MODEL);
+  const vectorCache = embed && backend === 'onnx' && !args.flags.has('no-vector-cache');
+  if (vectorCache) refuseFileAsCacheDir();
+  // One note per run: a full or read-only cache fails every batch the same way.
+  let writeNoted = false;
   const embedder = !embed
     ? undefined
     : backend === 'ollama'
@@ -197,9 +220,11 @@ async function run(ctx: CommandCtx): Promise<number> {
       : api.onnxEmbedder({
           modelId: embedModel,
           dtype,
-          vectorCache: !args.flags.has('no-vector-cache'),
+          vectorCache,
           onCacheEvent: (event) => {
-            if (event.kind === 'write-failed') ctx.err(`upt retrieve: vector cache not written: ${event.detail ?? 'unknown reason'}`);
+            if (event.kind !== 'write-failed' || writeNoted) return;
+            writeNoted = true;
+            ctx.err(`upt retrieve: vector cache not written: ${event.detail ?? 'unknown reason'}`);
           },
         });
   const corpus = api.canonicalRetrievalCorpus();

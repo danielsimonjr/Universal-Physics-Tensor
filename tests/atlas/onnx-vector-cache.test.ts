@@ -156,7 +156,7 @@ describe('onnx vector cache', () => {
     expect(b).toEqual(a);
   });
 
-  it('reads the location from UPT_VECTOR_CACHE, and an all-hit run needs no library', async () => {
+  it('reads the location from UPT_VECTOR_CACHE, and an all-hit run returns vectors when the library cannot load', async () => {
     const dir = join(root, 'elsewhere');
     process.env[VECTOR_CACHE_ENV] = dir;
     const inputs = ['query', ...corpus(9)];
@@ -172,7 +172,8 @@ describe('onnx vector cache', () => {
       expectedDims: WIDTH,
       vectorCache: true,
     })(inputs);
-    expect(imported).toBe(0);
+    // The library is tried once for its version. It fails, so the version is not checked.
+    expect(imported).toBe(1);
     expect(b).toEqual(a);
   });
 
@@ -247,6 +248,51 @@ describe('onnx vector cache', () => {
     expect(out2).toEqual(out);
     const failed = events.filter((e) => e.kind === 'write-failed').map((e) => e.batch);
     expect(failed).toEqual([0, 1]);
+  });
+
+  it('a changed record in a middle batch misses only that batch, and the order stays', async () => {
+    const inputs = ['query', ...corpus(20)];
+    await embedder(batchMateLibrary().lib)(inputs);
+    const changed = [...inputs];
+    changed[10] = 'a replaced record';
+    const next = batchMateLibrary();
+    const events: string[] = [];
+    const out = await embedder(next.lib, { onCacheEvent: (e) => events.push(`${e.kind}:${e.batch}`) })(changed);
+    expect(next.counts.batches).toBe(1);
+    expect(events).toEqual(['hit:0', 'miss:1', 'hit:2']);
+    const fresh = await onnxEmbedder({ loadLibrary: async () => batchMateLibrary().lib, cacheDir: root, expectedDims: WIDTH })(changed);
+    expect(out).toEqual(fresh);
+  });
+
+  it('a library with no cache directory and no named location is a miss with that reason', async () => {
+    const events: { kind: string; detail?: string }[] = [];
+    const { lib } = batchMateLibrary();
+    await onnxEmbedder({ loadLibrary: async () => lib, expectedDims: WIDTH, vectorCache: true, onCacheEvent: (e) => events.push(e) })(['q']);
+    expect(events).toEqual([{ kind: 'miss', batch: 0, detail: 'no cache location' }]);
+  });
+
+  it('a timeout still writes the batches that finished, and the budget counts only missed texts', async () => {
+    const inputs = ['query', ...corpus(20)];
+    const slow = batchMateLibrary();
+    const pipeline = slow.lib.pipeline;
+    let calls = 0;
+    slow.lib.pipeline = async (...args: Parameters<typeof pipeline>) => {
+      const extract = (await pipeline(...args)) as (t: string[]) => Promise<unknown>;
+      return Object.assign(async (t: string[]) => {
+        calls += 1;
+        if (calls >= 3) await new Promise((r) => setTimeout(r, 3000));
+        return extract(t);
+      }, { tokenizer: { padding_side: 'left' } });
+    };
+    // 21 texts at 25 ms each is 525 ms: batches 1 and 2 finish, batch 3 waits 3 s and does not.
+    await expect(embedder(slow.lib, { perTextTimeoutMs: 25 })(inputs)).rejects.toMatchObject({ reason: 'call-did-not-finish' });
+    expect(vecFiles()).toHaveLength(2);
+    // Now only batch 3 misses: 5 texts at 25 ms is 125 ms, which the fast fake meets.
+    const quick = batchMateLibrary();
+    const events: string[] = [];
+    await embedder(quick.lib, { perTextTimeoutMs: 25, onCacheEvent: (e) => events.push(e.kind) })(inputs);
+    expect(events).toEqual(['hit', 'hit', 'miss']);
+    expect(quick.counts.batches).toBe(1);
   });
 
   it('two calls at once leave only whole files', async () => {
