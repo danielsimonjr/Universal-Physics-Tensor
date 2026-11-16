@@ -73,12 +73,12 @@ describe('catalog reference goldens', () => {
     expect(zero.map((relation) => relation.id)).toEqual([]);
   });
 
-  // be-164 computes ν³ and c³ with `Math.pow`. Node 24 rounds each to the correctly rounded
-  // double, and Node 22 lands one ulp off on each; the two moves add to four ulp of the result.
+  // be-164 computes ν³ and c³ with `Math.pow`. Node 22 and Node 24 differ by one ulp on each;
+  // the two moves add to four ulp of the result.
   const MAX_ULP = 2;
   const ULP_ALLOWANCE: Readonly<Record<string, number>> = { 'be-164': 4 };
 
-  it('evaluateEdge matches each stored reference to within two units in the last place', () => {
+  it('evaluateEdge matches each stored reference to within two ulp, or its named ULP_ALLOWANCE', () => {
     const beyond: string[] = [];
     for (const relation of relations) {
       const reference = relation.reference!;

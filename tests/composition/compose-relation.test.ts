@@ -186,11 +186,18 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
 /**
  * The golden's `evaluateAtOnes` bytes come from Node 22. be-42 computes c³ with `Math.pow`, which
  * ECMAScript lets a runtime approximate, and Node 24 returns a different last bit. So five be-42
- * pairs land one or two ulp off the golden there. A value within two ulp of the golden is taken
- * as the golden's own bytes; every other field compares exactly.
+ * pairs land one or two ulp off the golden there. For a pair that holds be-42, a value within two
+ * ulp of the golden is taken as the golden's own bytes. Every other pair, and every other field,
+ * compares exactly.
  */
+const POW_DRIFT_EDGE = 'be-42';
+
+function holdsPowDriftEdge(pair: string): boolean {
+  return pair.split('>>').includes(POW_DRIFT_EDGE);
+}
+
 function sameWithinPowUlp(golden: PairSnapshot, now: PairSnapshot | undefined): PairSnapshot | undefined {
-  if (now === undefined) return now;
+  if (now === undefined || !holdsPowDriftEdge(String((golden as { pair?: unknown }).pair))) return now;
   const g = /^ok:(.+)$/.exec(String((golden as { evaluateAtOnes?: unknown }).evaluateAtOnes));
   const n = /^ok:(.+)$/.exec(String((now as { evaluateAtOnes?: unknown }).evaluateAtOnes));
   if (g === null || n === null) return now;
