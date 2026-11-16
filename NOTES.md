@@ -20,7 +20,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-16 (M6 follow-on)
 
-- **M6 follow-on: the prefix gate of `tokenWays` stops 1,386 tokens that have product readings, so `segmentations` stays (negative result).** A temporary probe (not committed) counted, for each harness set, the tokens for which `tokenWays` takes the prefix reading and never calls the splitter, and of those the tokens for which `segmentations` gives a reading of two or more factors. Base: 25,933 tokens, 647 gated, 640 with products (`hm`, `hg`, `hs`, `hK`). Prefixes: 291,848, 18 gated, 18 with products (`Plm`, `Pcd`). Powers: 78,638, 736 gated, 728 with products (`hm^2`, `hm²`). Edge: 45, 0. The tokens of the two `m6-splitter` tests (`mK`, `mm`, `mm2`): 0. A harness that reads through `tokenWays` would not compare the 1,386 gated tokens.
+- **M6 follow-on: the prefix gate of `tokenWays` stops 1,386 tokens that have product readings, so `segmentations` stays (negative result).** A temporary probe (not committed) counted, for each harness set, the tokens for which `tokenWays` takes the prefix reading and never calls the splitter, and of those the tokens for which `segmentations` gives a reading of two or more factors. Base: 25,933 tokens, 647 gated, 640 with products (`hm`, `hg`, `hs`, `hK`). Prefixes: 291,848, 18 gated, 18 with products (`Plm`, `Pcd`). Powers: 78,638, 736 gated, 728 with products (`hm^2`, `hm²`). Edge: 45, 0. The tokens of the two `m6-splitter` tests (`mK`, `mm`, `mm2`): 0. A harness that reads through `tokenWays` without an option to turn off the prefix gate would not compare the 1,386 gated tokens. Such an option is possible, and its cost is in the ACTIVE Done note.
 
 ## As of 2026-11-11
 
