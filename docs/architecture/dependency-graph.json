@@ -183,6 +183,12 @@
             ]
           },
           {
+            "file": "../../canonical/residual.js",
+            "imports": [
+              "canonicalResidual"
+            ]
+          },
+          {
             "file": "./baselines.js",
             "imports": [
               "rankByStructure",
@@ -28427,7 +28433,7 @@
   "statistics": {
     "totalTypeScriptFiles": 389,
     "totalModules": 13,
-    "totalLinesOfCode": 88737,
+    "totalLinesOfCode": 88746,
     "totalExports": 2843,
     "totalClasses": 86,
     "totalInterfaces": 523,
