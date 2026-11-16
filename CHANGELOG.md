@@ -22,6 +22,7 @@ from v0.1.0 onward.
 
 ### Documented
 
+- `ACTIVE.md` closes the M6 follow-on as a negative result: `segmentations` stays. The prefix gate of `tokenWays` stops 1,386 harness tokens that have product readings before the split, so a harness through `tokenWays` would compare a smaller set (`NOTES.md`, 2026-11-16). The harness checks the split as a function; the prefix gate is a separate rule above it. A test-only option on `tokenWays` could keep the comparison, at a higher cost than the deletion saves.
 - `ACTIVE.md` closes the MathTS leverage rows M1, M2 and M3. Their work landed in a214019e, 6d989764 and 74cec997, and each row now names its commit and its agreement test in `tests/numerical/mathts-gaps.test.ts`.
 - Pre-registration Amendment 15 changes the live-path default dtype from `q8` to `fp16`. Why: spikes 2 to 5 measured that a `q8` vector changes with the batch that holds the text (cosine 0.912 to 0.946 alone against in a batch), while `fp16` does not (0.999998 to 1.0). The owner chose `fp16`.
 

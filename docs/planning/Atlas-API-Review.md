@@ -1,6 +1,6 @@
 # Atlas API review (S6.7): what moves from `@internal` to `@public`
 
-Moving a symbol onto the public API is an ADR-level decision, and it belongs to Mothership.
+Moving a symbol onto the public API is an ADR-level decision. An ADR-level decision is confirm-first with the owner.
 This note originally said the repository was private and unreleased, with no external
 dependents, so the call was not owner-level. That premise is false: the repository is
 public and published on npm. Whether a public-API change stays a Mothership call is an
