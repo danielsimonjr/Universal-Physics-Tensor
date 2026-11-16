@@ -28,7 +28,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
-- `upt retrieve --fetch-model` no longer exits 1 with a stack trace when the JSON files of the model are in the cache, its ONNX files are not, and the host cannot be reached. Before the load, the fetch asks the host about each file that is not in the cache. A file the host cannot give is `model-not-cached`, and the library does not load. Why: transformers.js 4.3.2 `getSession` starts the `.onnx` download without awaiting it. It then awaits the external-data download. When the two downloads fail, the first rejection has no handler, and Node ends the process. A library with no `ModelRegistry` is `session-failed`. A network failure that starts after the checks can still end the process inside the library.
+- `upt retrieve --fetch-model` no longer exits 1 with a stack trace when the JSON files of the model are in the cache, its ONNX files are not, and the host cannot be reached. Before the load, the fetch asks the host about each file that is not in the cache. When the JSON files are cached, a file the host cannot give is `model-not-cached`, and the library does not load. Why: transformers.js 4.3.2 `getSession` starts the `.onnx` download without awaiting it. It then awaits the external-data download. When the two downloads fail, the first rejection has no handler, and Node ends the process. A library with no `ModelRegistry` is `session-failed`. A network failure that starts after the checks can still end the process inside the library.
 
 ## [14.0.0] - 2026-11-11
 

@@ -11,7 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-11-16
 
-- **`--fetch-model` with an unreachable host.** The crash needs the JSON files cached, the ONNX files absent and the host down. An empty cache fails cleanly. The fix checks each missing file before the load. Residual, measured by the reviewer: a host that answers the 1-byte check and then resets the `.onnx` download still ends the process (transformers.js 4.3.2 `getSession`, unawaited `getCoreModelFile`). An upstream issue is the owner's call. Not looked into: the embedder pre-check does not require `onnx/<stem>.onnx_data`.
+- **`--fetch-model` with an unreachable host.** The crash needs the JSON files cached, the ONNX files absent and the host down. An empty cache fails cleanly. The fix checks each missing file before the load. Residual, measured with a local server: a host that answers the 1-byte check and then resets the `.onnx` download still ends the process (transformers.js 4.3.2 `getSession`, unawaited `getCoreModelFile`). An upstream issue is the owner's call. The probes have no time limit: a host that accepts the connection and sends no headers holds each probe for the undici headers timeout (300 s). The old load path waited the same way. Not looked into: the embedder pre-check does not require `onnx/<stem>.onnx_data`.
 
 ## As of 2026-11-11
 

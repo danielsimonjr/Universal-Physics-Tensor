@@ -307,9 +307,8 @@ async function hashFile(path: string): Promise<{ bytes: number; sha256: string }
 
 /**
  * Probes each model file that the cache lacks, in order, before the load. It
- * stops at the first file the host cannot give. The calls carry the options of the
- * load (`dtype` only), so the registry reads the same cache directory as the load:
- * `env.cacheDir`.
+ * stops at the first file the host cannot give. The list call carries the `dtype`
+ * of the load. The probes carry no options. Both read `env.cacheDir`, as the load does.
  */
 async function probeMissingModelFiles(
   registry: NonNullable<TransformersLibrary['ModelRegistry']>,
@@ -336,8 +335,10 @@ async function probeMissingModelFiles(
  * dtype with its size and SHA-256. Any load failure is `session-failed`, and a
  * missing library is `library-not-installed`.
  *
- * The fetch probes each missing file first. A missing file the host cannot give
- * is `model-not-cached`, and the library does not load. A network failure that
+ * The fetch probes each missing file first. When the JSON files are cached, a
+ * missing file the host cannot give is `model-not-cached`, and the library does not
+ * load. Without the JSON files, the list call needs the host, and its failure is
+ * `session-failed`. A network failure that
  * starts after these probes can still be unhandled inside transformers.js 4.3.2
  * `getSession`.
  * @internal
