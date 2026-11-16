@@ -60,15 +60,6 @@ const VECTOR_MAGIC = 'UPTV';
 /** The fixed part of a vector file: the magic, the row count and the width, as 32-bit integers. */
 const VECTOR_HEADER_BYTES = 12;
 
-/** The attempts of an atomic rename. Windows refuses a rename while another process reads the file. */
-const RENAME_ATTEMPTS = 5;
-
-/** The wait between two attempts of a rename. */
-const RENAME_RETRY_MS = 50;
-
-/** The error codes of a rename that another process may cause and that a later attempt can pass. */
-const RETRYABLE_RENAME = new Set(['EPERM', 'EBUSY']);
-
 /** The padding side that last-token pooling needs. The embedder refuses an extractor that pads on the other side. */
 const PADDING_SIDE = 'left';
 
@@ -382,22 +373,6 @@ async function readBatch(
   return { rows, width: cols };
 }
 
-/**
- * Renames a file over another one. A Windows rename can fail while a reader
- * holds the file, so a few attempts wait and try again.
- */
-async function renameWithRetry(from: string, to: string): Promise<void> {
-  for (let attempt = 1; ; attempt++) {
-    try {
-      await rename(from, to);
-      return;
-    } catch (error) {
-      const code = (error as { code?: unknown } | null)?.code;
-      if (typeof code !== 'string' || !RETRYABLE_RENAME.has(code) || attempt >= RENAME_ATTEMPTS) throw error;
-      await new Promise((resolve) => setTimeout(resolve, RENAME_RETRY_MS));
-    }
-  }
-}
 
 /**
  * Writes one batch with its library version. It writes a temporary file and
@@ -424,7 +399,8 @@ async function writeBatch(dir: string, key: string, rows: number[][], width: num
   try {
     await mkdir(dir, { recursive: true });
     await writeFile(temporary, body);
-    await renameWithRetry(temporary, target);
+    // A failed rename (Windows refuses one while a reader holds the target) is a write-failed event; the next run writes the batch again.
+    await rename(temporary, target);
     return undefined;
   } catch (error) {
     await rm(temporary, { force: true }).catch(() => undefined);
