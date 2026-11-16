@@ -17,6 +17,7 @@ from v0.1.0 onward.
 
 ### Changed
 
+- **The CI job `architecture-docs claims` pins `repo-tools` 2.6.1 (was 2.3.0).** repo-tools 2.6.1 holds the fix for the entry roots of this repository: a `tsc -p` command whose project emits nothing no longer seeds every file as a root. On the same tree, `entryRoots` falls from 444 to 6 and `testOnlyFiles` rises from 0 to 23. The ACTIVE row that held back `entryRoots`, `reachableFiles`, `testOnlyFiles` and `orphanedFiles` closes.
 - The Ollama default model is `qwen3-embedding:0.6b`, the same model as the ONNX default. Why: `qwen3-embedding:4b` is not installed on the fleet machines. The width of the frozen file (2560) no longer applies to a live reply. It applies only where the frozen file is read. Before, the 1024-wide default would fall back with `reply-not-a-vector` on every call.
 - The in-process time budget is a load allowance plus a per-text allowance for each text. Why: one `--embed` call embeds the query and every corpus record. At the measured fp16 cost (median 551 ms per text in batches of 8), that is about a minute. A fixed 5 s budget would fail every call.
 
