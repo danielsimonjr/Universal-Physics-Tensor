@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-16
+
+- **`--fetch-model` with an unreachable host.** The crash needs the JSON files cached, the ONNX files absent and the host down. An empty cache fails cleanly. The fix checks each missing file before the load. Residual, measured by the reviewer: a host that answers the 1-byte check and then resets the `.onnx` download still ends the process (transformers.js 4.3.2 `getSession`, unawaited `getCoreModelFile`). An upstream issue is the owner's call. Not looked into: the embedder pre-check does not require `onnx/<stem>.onnx_data`.
+
 ## As of 2026-11-11
 
 - **`upt audit`: 2.757 s to 2.528 s (median of 10 alternating runs, ZBOOK).** Ranges 2.605 to 3.796 s on master, 2.441 to 3.408 s after. The ACTIVE row's 18.3 s (2026-11-08) was already gone: 4.77 s before 979ec0f5, 2.5 to 2.65 s after it. A CPU profile of one run put about 255 ms in `rewriteCatalogHyphens`, rebuilding the hyphenated-name set on each call: 168 samples from `expr-parse.ts` callers (116 of them `evaluateFormula`), 6 from `holdsConditions`. `formulaNames()` now returns one Set built at load, and `expr-parse.ts` memoizes the rewrite per text. Output is byte-identical (stdout, stderr, exit 0). The rest of the run is load cost outside this repo: ESM compile about 220 ms, module stat 132 ms, typed-function about 340 ms, MathTS Fraction and gcd about 250 ms.

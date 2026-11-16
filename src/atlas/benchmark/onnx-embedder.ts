@@ -57,6 +57,19 @@ export const ONNX_PER_TEXT_TIMEOUT_MS = 2_000;
 export interface TransformersLibrary {
   readonly env: { cacheDir?: string };
   pipeline(task: string, model: string, options: Record<string, unknown>): Promise<unknown>;
+  /**
+   * The library's model registry. It names the cached files and asks the host
+   * about a file that is not cached. The fetch needs it. A library without it is
+   * refused, because the fetch cannot check the files before the load.
+   */
+  readonly ModelRegistry?: {
+    is_pipeline_cached_files(
+      task: string,
+      model: string,
+      options: Record<string, unknown>,
+    ): Promise<{ readonly files: readonly { readonly file: string; readonly cached: boolean }[] }>;
+    get_file_metadata(model: string, file: string, options?: Record<string, unknown>): Promise<{ readonly exists: boolean }>;
+  };
 }
 
 /** A loaded feature-extraction pipeline. Its tokenizer pads on the left. */
@@ -293,9 +306,40 @@ async function hashFile(path: string): Promise<{ bytes: number; sha256: string }
 }
 
 /**
+ * Probes each model file that the cache lacks, in order, before the load. It
+ * stops at the first file the host cannot give. The calls carry the options of the
+ * load (`dtype` only), so the registry reads the same cache directory as the load:
+ * `env.cacheDir`.
+ */
+async function probeMissingModelFiles(
+  registry: NonNullable<TransformersLibrary['ModelRegistry']>,
+  modelId: string,
+  dtype: OnnxDtype,
+): Promise<void> {
+  const options: Record<string, unknown> = { dtype };
+  const status = await registry
+    .is_pipeline_cached_files('feature-extraction', modelId, options)
+    .catch((error: unknown) => {
+      throw new EmbeddingUnavailable('session-failed', messageOf(error));
+    });
+  for (const { file, cached } of status.files) {
+    if (cached) continue;
+    const metadata = await registry.get_file_metadata(modelId, file).catch((error: unknown) => {
+      throw new EmbeddingUnavailable('model-not-cached', `cannot download ${file}: ${messageOf(error)}`);
+    });
+    if (!metadata.exists) throw new EmbeddingUnavailable('model-not-cached', `the host has no ${file}`);
+  }
+}
+
+/**
  * Loads the model with downloads allowed, then reports each model file of the
  * dtype with its size and SHA-256. Any load failure is `session-failed`, and a
  * missing library is `library-not-installed`.
+ *
+ * The fetch probes each missing file first. A missing file the host cannot give
+ * is `model-not-cached`, and the library does not load. A network failure that
+ * starts after these probes can still be unhandled inside transformers.js 4.3.2
+ * `getSession`.
  * @internal
  */
 export async function fetchOnnxModel(options: OnnxEmbedderOptions = {}): Promise<OnnxModelReport> {
@@ -304,6 +348,10 @@ export async function fetchOnnxModel(options: OnnxEmbedderOptions = {}): Promise
   const lib = await loadLibraryOrRefuse(options.loadLibrary ?? defaultLoadLibrary);
   const requested = resolveCacheDir(options.cacheDir);
   if (requested !== undefined) lib.env.cacheDir = requested;
+  if (lib.ModelRegistry === undefined) {
+    throw new EmbeddingUnavailable('session-failed', 'the library has no ModelRegistry: install @huggingface/transformers 4.3.2 or later');
+  }
+  await probeMissingModelFiles(lib.ModelRegistry, modelId, dtype);
   try {
     await lib.pipeline('feature-extraction', modelId, { dtype });
   } catch (error) {
