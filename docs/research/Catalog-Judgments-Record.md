@@ -1,6 +1,6 @@
 # Catalog judgments record
 
-Written against commit 2fa530ab.
+Written against commit 2fa530ab. Each file and line is read at that commit. `CHANGELOG.md` grows at its head, so a line number in that file moves with each new entry.
 
 This file records the judgment that the repository already holds for each item of the `ACTIVE.md` row "Record catalog judgments".
 A judgment is not a gate. No code reads this file.
@@ -86,13 +86,16 @@ No line records an agreement with, or a rebuttal of, an entry.
 
 **Recorded judgment:** No verdict is recorded for this check.
 The search covers every file type, without `node_modules` and `.git`, for `Hartnoll`.
-The hits are references, issue-template text, planning text, tracker rows and two archived audit files.
+The hits are 19 files.
+They are the catalog record, `docs/specification/Part-II.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, five issue templates, four planning documents and the two trackers.
+The other hits are the citation strings of `tests/composition/compose-relation.golden.json` and three files under `docs/architecture/archive/bridge-audit/`: the catalog snapshot, the entry 23 prompt and the entry 23 response.
 No line states the result of the check that `CONTRIBUTING.md:46-48` asks for.
 
 **Evidence:**
 - The catalog entry for id 23 starts at `data/bridge-catalog.json:581`. The encoded formula is at `:593`.
 - The entry `description` calls the form "the canonical strange-metal phenomenology" and cites the Hartnoll 2015 review (`data/bridge-catalog.json:599`).
 - An archived reviewer response (`docs/architecture/archive/bridge-audit/responses/entry-23-adam.txt:47`) says: "Therefore, the formula is canonical as a phenomenological model, but it is not a derived equation of the SYK model itself." No file links that response to the `CONTRIBUTING.md` task.
+  A search of the repository, without `node_modules` and `.git`, for `entry-23-adam` finds no file other than this one.
 - "Hartnoll 2015 reviews the phenomenology and does not derive a unique `α`." (`docs/planning/Unproven-Bridges-Lean-Feasibility.md:196`)
 - The recorded data comparison for id 23 uses Legros et al. 2019, not Hartnoll 2015: predicted 1, observed 1, sigma 0.4, within the observed range (`data/bridge-catalog.json:14637-14647`).
 
@@ -125,7 +128,7 @@ The v0.8 adjudication covers nine `['unknown','unknown']` entries (`CHANGELOG.md
 **Evidence:**
 - In the audit, a "rename" is a regime-tuple assignment: "**17 `unknown↔unknown` renames** applied (BE-21/22/26/27/30/31/33/34/37/38/39/41/43/45/47/48/49)." (`docs/architecture/BRIDGE-PHYSICS-AUDIT-v2.md:27`)
 - For BE-31 the audit table proposes "[quantum, classical] would be slightly tighter", rated "LOW (preference)" (`docs/architecture/BRIDGE-PHYSICS-AUDIT-v2.md:494`).
-- The changelog lists "Eve-E8 BE-22/31 marginal renames." under "**Eve gap findings deferred** (low-priority ride-alongs):" (`CHANGELOG.md:8599`, `:8603`).
+- The changelog lists "Eve-E8 BE-22/31 marginal renames." under "**Eve gap findings deferred** (low-priority ride-alongs):" (`CHANGELOG.md:8603`, under the heading at `:8599`).
 - The catalog tuples are `["quantum","holography"]` for be-22 (`data/bridge-catalog.json:529-532`) and `["quantum","cosmological"]` for be-31 (`:947-950`).
 - "The rename review of bridges 22 and 31 does not change the formulas below." (`docs/planning/Unproven-Bridges-Lean-Feasibility.md:51`)
 
