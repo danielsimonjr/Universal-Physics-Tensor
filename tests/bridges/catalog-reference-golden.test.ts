@@ -16,7 +16,8 @@
  * Which rows land bitwise and which land a unit or two in the last place away
  * depends on the runtime: ECMAScript lets `Math.pow` return an approximation, and
  * V8 13 (Node 24) returns a different last bit than V8 12 (Node 22) for some
- * inputs. So the rule is the assertion, not a list. Every row is within two ulp
+ * inputs. The floating-point library also differs between hosts on one V8: on Linux x86-64
+ * three rows are two units off. So the rule is the assertion, not a list. Every row is within two ulp
  * of its reference, below the relative 1e-15 the old test required. `ULP_ALLOWANCE`
  * names each row that needs more, with its cause. The allowance is not a widened physics tolerance.
  */
