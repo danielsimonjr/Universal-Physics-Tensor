@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { rankByStructure } from '../../src/atlas/benchmark/baselines.js';
 import { canonicalRetrievalCorpus, OLLAMA_EMBEDDING_MODEL } from '../../src/atlas/benchmark/hybrid-retrieval.js';
-import { ONNX_DEFAULT_DTYPE, ONNX_EMBEDDING_MODEL } from '../../src/atlas/benchmark/onnx-embedder.js';
+import { ONNX_DEFAULT_DTYPE, ONNX_EMBEDDING_MODEL, VECTOR_CACHE_ENV } from '../../src/atlas/benchmark/onnx-embedder.js';
 import { command as retrieveCommand } from '../../dist/cli/commands/retrieve.js';
 
 afterEach(() => vi.unstubAllGlobals());
@@ -216,5 +216,52 @@ describe('upt retrieve --fetch-model with a stubbed library call', () => {
     const r = await runFetch(['--fetch-model'], async () => { throw new api.EmbeddingUnavailable('session-failed', 'fetch failed'); });
     await expect(r.code).rejects.toThrow(/did not load/);
     await expect((await runFetch(['--fetch-model'], async () => { throw new api.EmbeddingUnavailable('session-failed'); })).code).rejects.not.toThrow(/npm i/);
+  });
+});
+
+describe('upt retrieve and the ONNX vector cache', () => {
+  async function runWith(argv: string[]) {
+    const { parseArgs } = await import('../../dist/cli/args.js');
+    const api = await import('../../dist/cli-api.js');
+    const seen: Record<string, unknown>[] = [];
+    const errors: string[] = [];
+    const onnxEmbedder = (options: Record<string, unknown>) => {
+      seen.push(options);
+      return async (texts: string[]) => {
+        const hook = options.onCacheEvent as ((e: unknown) => void) | undefined;
+        hook?.({ kind: 'write-failed', batch: 0, detail: 'EACCES' });
+        return texts.map(() => Array.from({ length: 1024 }, (_, i) => (i === 0 ? 1 : 0)));
+      };
+    };
+    const ctx = {
+      args: parseArgs('retrieve', argv, retrieveCommand.flags, retrieveCommand.positionals),
+      api: { ...api, onnxEmbedder },
+      out: () => {},
+      err: (l?: string) => errors.push(l ?? ''),
+      write: () => {},
+    };
+    const code = await retrieveCommand.run(ctx as never);
+    return { code, seen, errors };
+  }
+
+  it('--embed turns the cache on, and --no-vector-cache turns it off', async () => {
+    expect((await runWith(['pendulum', '--embed'])).seen[0]?.vectorCache).toBe(true);
+    expect((await runWith(['pendulum', '--embed', '--no-vector-cache'])).seen[0]?.vectorCache).toBe(false);
+  });
+
+  it('a failed cache write prints one stderr note and still exits 0', async () => {
+    const r = await runWith(['pendulum', '--embed']);
+    expect(r.code).toBe(0);
+    expect(r.errors).toEqual(['upt retrieve: vector cache not written: EACCES']);
+  });
+
+  it('help names the cache variable of the embedder and says a repeat run is not a new measurement', async () => {
+    const c = captureMerged();
+    expect(await runCli(['help', 'retrieve'], c.io)).toBe(0);
+    const t = text(c).replace(/\s+/g, ' ');
+    expect(t).toContain(VECTOR_CACHE_ENV);
+    expect(t).toContain('--no-vector-cache');
+    expect(t).toContain('is not a new measurement');
+    expect(t).toContain('The ollama backend is not cached');
   });
 });

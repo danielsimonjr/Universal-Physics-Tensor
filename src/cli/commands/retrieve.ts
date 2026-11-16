@@ -35,6 +35,12 @@ const ONNX_DTYPES = ['q8', 'fp16', 'fp32'] as const;
 type EmbedDtype = (typeof ONNX_DTYPES)[number];
 const ONNX_DEFAULT_DTYPE: EmbedDtype = 'fp16';
 
+/**
+ * The environment variable that names the ONNX vector cache directory. It is the
+ * embedder's own name; a test binds the two.
+ */
+const VECTOR_CACHE_ENV = 'UPT_VECTOR_CACHE';
+
 /** The backends `--embed-backend` accepts. */
 const BACKENDS: readonly string[] = ['onnx', 'ollama'];
 
@@ -80,10 +86,15 @@ const FLAGS: FlagSpec[] = [
     valueStyle: 'none',
     description: 'Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON.',
   },
+  {
+    name: '--no-vector-cache',
+    valueStyle: 'none',
+    description: 'Do not read or write the ONNX vector cache. Every batch is embedded again. Used only with --embed and the onnx backend.',
+  },
 ];
 
 const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
-        [--embed-model=NAME] [--ollama-url=URL]
+        [--embed-model=NAME] [--ollama-url=URL] [--no-vector-cache]
         upt retrieve --fetch-model [--embed-dtype=q8|fp16|fp32] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
         search (typed structural ranking) and does not call out of process. The output
@@ -94,7 +105,14 @@ const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--em
         @huggingface/transformers library, at the precision of --embed-dtype
         (default fp16). A q8 vector changes with the batch that holds the text, so a
         q8 order depends on the corpus size. One --embed embeds the query plus every corpus record in
-        process, which takes about a minute of CPU with fp16. ollama asks a local
+        process, in batches of 8, which takes about a minute of CPU with fp16.
+        The onnx backend stores the vectors of each batch in a vector cache
+        (${VECTOR_CACHE_ENV}, else .upt-vectors in the model cache). A batch whose
+        ordered texts, model, dtype and model file are unchanged is read from the
+        cache, so a repeat run returns the stored vectors and is not a new
+        measurement. A changed, inserted or removed record changes its batch and
+        every later batch. --no-vector-cache embeds every batch again. The ollama
+        backend is not cached. ollama asks a local
         Ollama server for ${OLLAMA_DEFAULT_MODEL} (--ollama-url, default ${OLLAMA_DEFAULT_URL}).
         If the embedder cannot be used, the same atlas search is printed and the
         reason is named: the embedding library is not installed,
@@ -176,7 +194,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     ? undefined
     : backend === 'ollama'
       ? api.ollamaEmbedder({ baseUrl: ollamaUrl, model: embedModel })
-      : api.onnxEmbedder({ modelId: embedModel, dtype });
+      : api.onnxEmbedder({
+          modelId: embedModel,
+          dtype,
+          vectorCache: !args.flags.has('no-vector-cache'),
+          onCacheEvent: (event) => {
+            if (event.kind === 'write-failed') ctx.err(`upt retrieve: vector cache not written: ${event.detail ?? 'unknown reason'}`);
+          },
+        });
   const corpus = api.canonicalRetrievalCorpus();
   const result = await api.retrieveHybrid({
     query: { text: claim },
