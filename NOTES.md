@@ -9,6 +9,11 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-16 (owner rulings)
+
+- **Tier 2 promotion: the delegation stands.** The owner keeps the delegation for ADR-level calls on this repository: Mothership decides which Tier 2 symbols move onto the public API (`docs/planning/Atlas-API-Review.md`, ACTIVE row "Promote the Tier 2 set"). A reviewer read of 2026-11-16 found that six symbols pass the review tests today: `AtlasBridge`, `FormalRef`, `FormalFidelity`, `ATLAS_FAMILIES`, `toAtlasJson`, `ATLAS_RECORD_SCHEMA_VERSION`. That list is input for Mothership, not a decision.
+- **Zenodo DOI for the composition research note: not planned.** The owner closed the ACTIVE row without a deposit.
+
 ## As of 2026-11-16 (vector cache)
 
 - **The ONNX vector cache, measured on the test fake only.** Tests: `tests/atlas/onnx-vector-cache.test.ts` 18, `tests/cli/retrieve.test.ts` 4 new. Mutations, each run against the unmutated suite first (15 passed): a key on one text of the batch fails the shifted-corpus test; a key with no model file stamp fails the model-file test; a length check of `<` in place of `!==` fails the corrupt-file test; Float32 values fail 5 tests; a CLI that always caches and prints no note fails 2; a note per batch fails 1; no file check of the location fails 1; no write of the finished batches after a timeout fails 1; a version read only when no root is named fails 2. Two of these first survived: the model-file case changed the library version at the same time, and no file was too long. Both tests now isolate the one cause. The file records the library version, and the key does not. Every call tries the library for that version, within the load timeout; when the library cannot load, the version is not checked. The model file stamp covers `onnx/<stem>.onnx` only: not the `.onnx_data` weights, the tokenizer or the config files, and not the onnxruntime-node version. A model that is not at the expected path has a null stamp. A null stamp never detects a replaced file. The cost on the real model is not measured; the live fp16 run waits for the shared CPU.
