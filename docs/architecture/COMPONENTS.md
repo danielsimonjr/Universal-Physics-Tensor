@@ -304,7 +304,7 @@ The structural hash: "the same relation up to dimensionless **constants**." Nume
 
 ### `canonicalResidual` (`src/canonical/residual.ts`)
 
-The residual form of a canonical entry, `target − scalarAst`. An entry stores the right-hand side of one target, while a claim is a relation `lhs − rhs`. The structural key of a residual and of a right-hand side is never equal, so a structural search must compare residuals on both sides. Only the tests and the criterion 3 study reach the module (`test-only`).
+The residual form of a canonical entry, `target − scalarAst`. An entry stores the right-hand side of one target, while a claim is a relation `lhs − rhs`. The structural key of a residual and of a right-hand side is never equal, so a structural search must compare residuals on both sides. `canonicalRetrievalCorpus` (`src/atlas/benchmark/hybrid-retrieval.ts`) and the criterion 3 study reach the module.
 
 ### `classifyLinkage` / `scanLinkages` (`src/canonical/linkage.ts`)
 

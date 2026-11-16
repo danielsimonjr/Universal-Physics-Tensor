@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { dim, sym } from '../../src/dimensional/ast-builders.js';
 import type { ExprNode } from '../../src/dimensional/ast-types.js';
-import { rankByStructure, type CorpusRecord, type RetrievalQuery } from '../../src/atlas/benchmark/baselines.js';
+import { rankBySymbolOverlap, rankByStructure, type CorpusRecord, type RetrievalQuery } from '../../src/atlas/benchmark/baselines.js';
 import {
   ATLAS_ONLY_NOTE,
   EMBEDDING_INSTRUCTION,
@@ -19,6 +19,7 @@ import {
   OLLAMA_EMBEDDING_MODEL,
   cosine,
   decodeFloat32,
+  canonicalRetrievalCorpus,
   ollamaEmbedder,
   queryInput,
   rankByCosine,
@@ -26,6 +27,8 @@ import {
   stubEmbedder,
   stubVector,
 } from '../../src/atlas/benchmark/hybrid-retrieval.js';
+import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
+import { leakageKey } from '../../src/atlas/benchmark/leakage.js';
 import { queryInput as registeredQueryInput } from '../../tools/criterion3-study/embedding.js';
 
 const L = dim(1);
@@ -252,5 +255,60 @@ describe('Ollama fallback', () => {
       'the model is not in the local cache, and the download is not allowed or failed',
     );
     expect(new EmbeddingUnavailable('session-failed').message).toBe('the ONNX session did not load');
+  });
+});
+
+describe('canonicalRetrievalCorpus: residual form', () => {
+  const op = (o: '-' | '*', ...args: ExprNode[]): ExprNode => ({ kind: 'op', op: o, args }) as ExprNode;
+  const claim = op('-', sym('F', dim(1, 1, -2)), op('*', sym('m', dim(0, 1, 0)), sym('a', dim(1, 0, -2))));
+  const wrong = op('-', sym('F', dim(1, 1, -2)), op('*', sym('m', dim(0, 1, 0)), sym('v', dim(1, 0, -1))));
+  // Ids of the corpus records whose key equals the key of the query expression.
+  const hits = (expr: ExprNode): string[] =>
+    canonicalRetrievalCorpus()
+      .filter((r) => r.expr && leakageKey(r.expr) === leakageKey(expr))
+      .map((r) => r.id);
+
+  it('ranks the matching entry first by structure, with equal keys', () => {
+    // The claim names its target F; the registry names it force. The names differ,
+    // so only the structural tier ranks the entry first.
+    const corpus = canonicalRetrievalCorpus();
+    const ranked = rankByStructure({ text: 'F = m a', expr: claim }, corpus);
+    expect(ranked[0]).toBe('CE-newton-second-law');
+    const record = corpus.find((r) => r.id === 'CE-newton-second-law')!;
+    expect(leakageKey(record.expr!)).toBe(leakageKey(claim));
+    expect(rankBySymbolOverlap({ text: '', expr: claim }, corpus)[0]).not.toBe('CE-newton-second-law');
+  });
+
+  it('control: the claim key-matches its entry and a wrong relation key-matches none (keys are NOT unique corpus-wide: four pairs collide)', () => {
+    expect(hits(claim)).toEqual(['CE-newton-second-law']);
+    expect(hits(wrong)).toEqual([]);
+  });
+
+  it('wiring: retrieveHybrid, the public entry point, accepts the matching entry first', async () => {
+    const out = await retrieveHybrid({ query: { text: 'F = m a', expr: claim }, corpus: canonicalRetrievalCorpus() });
+    expect(out.accepted[0]).toBe('CE-newton-second-law');
+    expect(out.embeddings).toBe('not-requested');
+  });
+
+  it('every record is target - scalarAst, and has no expr key without a scalarAst', () => {
+    const corpus = canonicalRetrievalCorpus();
+    const without = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined);
+    expect(without.length).toBeGreaterThan(0);
+    for (const entry of without) {
+      expect('expr' in corpus.find((r) => r.id === entry.id)!).toBe(false);
+    }
+    let withAst = 0;
+    for (const entry of CANONICAL_EQUATIONS) {
+      if (entry.scalarAst === undefined) continue;
+      withAst++;
+      const expr = corpus.find((r) => r.id === entry.id)!.expr!;
+      expect(expr.kind).toBe('op');
+      if (expr.kind !== 'op') continue;
+      expect(expr.op).toBe('-');
+      const target = entry.dimensional.target;
+      expect(expr.args[0]).toEqual({ kind: 'symbol', name: target.name, dim: target.dim });
+      expect(expr.args[1]).toBe(entry.scalarAst);
+    }
+    expect(withAst).toBeGreaterThan(0);
   });
 });

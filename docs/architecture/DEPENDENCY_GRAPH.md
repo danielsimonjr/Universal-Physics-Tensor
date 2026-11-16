@@ -122,6 +122,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../core/compare.js` | `compareCodepoint` | Import |
 | `../../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `../../canonical/residual.js` | `canonicalResidual` | Import |
 | `./baselines.js` | `rankByStructure, CorpusRecord, RetrievalQuery` | Import |
 
 **Exports:**
@@ -7597,7 +7598,7 @@ The codebase is organized into the following modules:
 | `association` | 0 files | 1 files |
 | `backend-shapes` | 1 files | 1 files |
 | `baselines` | 2 files | 2 files |
-| `hybrid-retrieval` | 3 files | 3 files |
+| `hybrid-retrieval` | 4 files | 3 files |
 | `leakage` | 4 files | 2 files |
 | `loader` | 2 files | 0 files |
 | `onnx-embedder` | 3 files | 1 files |
@@ -7779,7 +7780,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 389 |
 | Total Modules | 13 |
-| Total Lines of Code | 88737 |
+| Total Lines of Code | 88746 |
 | Total Exports | 2843 |
 | Total Re-exports | 1397 |
 | Total Classes | 86 |
