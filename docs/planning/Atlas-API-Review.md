@@ -1,11 +1,9 @@
 # Atlas API review (S6.7): what moves from `@internal` to `@public`
 
-Moving a symbol onto the public API is an ADR-level decision. An ADR-level decision is confirm-first with the owner.
-This note originally said the repository was private and unreleased, with no external
-dependents, so the call was not owner-level. That premise is false: the repository is
-public and published on npm. Whether a public-API change stays a Mothership call is an
-open owner decision; this wording fix does not make it. `package.json` stays `0.x`
-whatever is decided.
+Moving a symbol onto the public API is an ADR-level decision.
+Mothership makes that decision, under the owner's delegation for ADR-level calls on this repository
+(`docs/decisions/atlas-tier1-namespace.md`). The delegation covers public-API changes, although the
+package is public and published on npm.
 
 ## 0. The starting point
 
@@ -80,7 +78,7 @@ The reasons:
   adopters, and the root gets only the audited subset. That keeps two surfaces with two
   stability promises, which is what the `@internal`/`@public` split exists for.
 - **The invariant test must be extended first (checked).** `tests/api/public-tag-vs-index-invariant.test.ts`
-  recognises `export * from '…'` (its regex is `export\s+\*\s+from`). It does NOT recognise
+  recognises `export * from '…'` (its regex is `export\s+\*\s+from`). The regex does NOT recognise
   `export * as atlas from '…'`, so `@public` tags in the facade would fail it as unreachable until
   its parser learns the namespace form. `public-surface.test.ts` then gains one entry per promoted
   symbol.

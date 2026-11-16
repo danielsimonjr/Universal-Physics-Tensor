@@ -9,6 +9,11 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-16 (owner rulings)
+
+- **Tier 2 promotion: the delegation stands.** The owner keeps the delegation for ADR-level calls on this repository: Mothership decides which Tier 2 symbols move onto the public API (`docs/planning/Atlas-API-Review.md`, ACTIVE row "Promote the Tier 2 set"). A reviewer read of 2026-11-16 found that six symbols pass the review tests today: `AtlasBridge`, `FormalRef`, `FormalFidelity`, `ATLAS_FAMILIES`, `toAtlasJson`, `ATLAS_RECORD_SCHEMA_VERSION`. That list is input for Mothership, not a decision.
+- **Zenodo DOI for the composition research note: not planned.** The owner closed the ACTIVE row without a deposit.
+
 ## As of 2026-11-16 (residual retrieval corpus)
 
 - **The product retrieval corpus is in residual form.** `canonicalRetrievalCorpus` gives each entry with a `scalarAst` the expression `target − scalarAst`. Measured on the live registry: the claim `F − m·a` key-matches only `CE-newton-second-law`, and `F − m·v` key-matches no record. Four pairs of entries share a residual key (CE-mass-energy/CE-kinetic-energy, CE-work/CE-torque, CE-spring-potential-energy/CE-oscillator-energy, CE-landauer/CE-equipartition), so a key match is not unique in general. 93 of the 109 live entries have a `scalarAst`, so 93 records carry an expression. The frozen criterion 3 corpus and its runner are unchanged. `tools/criterion3-export/export.ts` still maps `scalarAst` to `expr`: that file is the frozen labeler export, bound by `freeze.json`.
