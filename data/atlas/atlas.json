@@ -869,15 +869,15 @@
           ],
           "bound": {
             "K": 1,
-            "delta": 3,
+            "delta": 1.5,
             "norm": "sup |x − x_reduced| for t ≥ 5 m/b",
-            "domain": "t ≥ 5 m/b, overdamped, at the witness normalisation b = k = 1",
+            "domain": "t ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1; norm sup |x − x_reduced|, carried with K = 1",
             "horizon": "t ≥ 5 m/b (outside the boundary layer)",
             "parameterRange": "m k / b² < 1/4, |v0| ≤ 5; with b = k = 1 this is m < 1/4",
             "limitCharacter": "singular",
             "uniformity": [
-              "t ≥ 5 m/b, overdamped, at the witness normalisation b = k = 1",
-              "m k / b² < 1/4, |v0| ≤ 5"
+              "t ≥ 5 m/b, overdamped, at the witness normalisation b = k = x0 = 1",
+              "m k / b² < 1/4, |v0| ≤ 5; the small parameter is ε = m k / b², and the bound is leading order in ε"
             ],
             "deltaAtBasis": "numerically-supported"
           },
@@ -917,13 +917,13 @@
               "id": "W8",
               "kind": "numeric",
               "test": "tests/atlas/oscillators-limits.test.ts",
-              "tolerance": "|r_slow + k/b| < 2m and |r_fast·m + b| < 2m for m ∈ {1e-1, 1e-2, 1e-3}"
+              "tolerance": "|r_slow + k/b| < 2mk²/b³ and |r_fast·m + b| < 2mk/b for m ∈ {1e-1, 1e-2, 1e-3} at b = k = 1 and for m ∈ {1e-2, 1e-3} at b = 0.5, k = 1"
             },
             {
               "id": "W8b",
               "kind": "numeric",
               "test": "tests/atlas/oscillators-limits.test.ts",
-              "tolerance": "|x_full − x_red| < 2(1+v0)·m for t ≥ 5 m/b; |x'| error > 1 at 0.5 m/b and < 0.05 at 5 m/b"
+              "tolerance": "|x_full − x_red| < (m/b)(|v0| + k|x0|/b) for t ≥ 5 m/b; |x'| error > 1 at 0.5 m/b and < 0.05 at 5 m/b"
             }
           ],
           "citations": [

@@ -2,7 +2,7 @@
  * `deltaAt(point)` is printed by `upt path` as "bound at this point" ONLY where it is PROVEN
  * (Mothership ruling on persona finding L9, 2026-09-25). A bound is proven here when `deltaAt` is
  * the exact error in closed form, so it holds with equality. `ab-damped-massless`'s
- * 2(1 + |v0|) m/b is supported by witness W8b numerically and is NOT proven; it is labelled so,
+ * (m/b)(|v0| + k|x0|/b) is supported by witness W8b numerically and is NOT proven; it is labelled so,
  * and the path never prints it as a bound.
  *
  * The exact values below are computed independently of the code under test: the pendulum period

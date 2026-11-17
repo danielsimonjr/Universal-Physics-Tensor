@@ -87,22 +87,28 @@ export function pendulumPeriodErrorAt(params: Readonly<Record<string, number>>):
 
 /**
  * The position-offset bound of `ab-damped-massless` at a point:
- * `2 (1 + |v0|) m / b`, the formula this record's docstring has always
- * carried. It is a bound ONLY at the witness normalisation `b = k = x0 = 1`:
- * the leading offset is `(m/b)(v0 + k x0/b)`, and the formula has no `k` or
- * `x0` in it. At `m = 1e-3, b = 1, k = 100` (inside `m k/b² < 1/4`) the true
- * error is more than 20 times the formula.
+ * `(m/b)(|v0| + k |x0|/b)`, a length.
  *
- * @returns `Infinity` unless `m`, `b`, `k`, `x0` and `v0` are all finite and
- *   `b = k = x0 = 1` — a missing parameter would otherwise silently return a
- *   bound for a normalisation the caller did not ask about.
+ * Derivation, leading order in the small parameter `ε = m k/b²` with
+ * `s = k t/b`: `x_full − x_red ≈ (m/b) e^{−s} [v0 + (k x0/b)(1 − s)]`. The
+ * fast term `e^{r_fast t}` has the opposite sign to the slow term and only
+ * reduces the magnitude. For `α = v0` and `β = k x0/b`,
+ * `sup_{s ≥ 0} |α + β(1 − s)| e^{−s} = |α| + |β|`: the value at `s = 0` is
+ * `|α + β|`, and the interior extremum at `s* = 2 + α/β` equals
+ * `|β| e^{−s*} ≤ |β|`. So the coefficient of the `k|x0|/b` term is 1.
+ * For finite `ε` up to the open edge `1/4` the bound is supported by a grid of
+ * the exact two-root solution (`tests/atlas/bound-machine-form.test.ts`), not
+ * proven. At `m = 0` the bound is 0, which is exact: the two models agree.
+ *
+ * @returns `Infinity` when a parameter is missing or not finite, or when
+ *   `b ≤ 0`, `k ≤ 0` or `m < 0`.
  * @internal
  */
 export function dampedOffsetBoundAt(params: Readonly<Record<string, number>>): number {
   const { m, b, k, x0, v0 } = params;
   if (![m, b, k, x0, v0].every(Number.isFinite)) return Infinity;
-  if (b !== 1 || k !== 1 || x0 !== 1) return Infinity;
-  return (2 * (1 + Math.abs(v0)) * m) / b;
+  if (b <= 0 || k <= 0 || m < 0) return Infinity;
+  return (m / b) * (Math.abs(v0) + (k * Math.abs(x0)) / b);
 }
 
 /** Pendulum regime: `θ0 ≤ 0.5 rad`, stated on the dimensionless input. @internal */
@@ -163,6 +169,9 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
   doesNotPreserve: ['the amplitude dependence of the period', 'phase over times t ≳ 16 T0/θ0²'],
   sideConditions: ['θ0 ≤ 0.5 rad', 'the bound is a PERIOD error and is not uniform in time'],
   bound: makeApproximation({
+    // K = 1: the map carries the observable period unchanged (period ↦ period
+    // in the relative period norm), so the whole discrepancy sits in delta.
+    // Witnessed in tests/atlas/oscillators-limits.test.ts with an x ↦ 2x control.
     K: 1,
     // Sup over `θ0 ≤ 0.5`: the error is strictly increasing in |θ0|, so the
     // edge value IS the supremum. 0.0158525311014... (MathTS ellipticK, by the
@@ -238,7 +247,7 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
 /**
  * `ab-damped-massless` — the SINGULAR `m → 0` limit of the damped spring.
  *
- * `deltaAt = 2(1 + |v0|) m/b` bounds the position offset outside the boundary
+ * `deltaAt = (m/b)(|v0| + k|x0|/b)` bounds the position offset outside the boundary
  * layer, and `delta` is its supremum over the declared range rather than its
  * value at one fixture. The lost initial condition is visible in the VELOCITY: inside the
  * layer the reduced model's `x'` is wrong by O(1/m·…), and it is only after
@@ -263,30 +272,39 @@ export const AB_DAMPED_MASSLESS: AtlasBridge = {
     'the bound holds only outside the boundary layer, t ≥ 5 m/b',
   ],
   bound: makeApproximation({
+    // K = 1: the map carries the observable x unchanged (x ↦ x in the sup
+    // norm), so the whole discrepancy sits in delta. Same convention as the K
+    // of norm-transport.ts; witnessed with an x ↦ 2x control in
+    // tests/atlas/oscillators-limits.test.ts.
     K: 1,
-    // Sup over the DECLARED range, not the fixture. `2(1+|v0|)m/b` increases
-    // in both m and |v0|, and the declared range is `m k/b² < 1/4` with
-    // `|v0| ≤ 5`; at the witness normalisation `b = k = 1` that is `m < 1/4`,
-    // so the supremum is `2·(1+5)·(1/4) = 3`, approached at the open edge and
-    // not attained. The record previously declared `2·(1+5)·1e-3 = 0.012`,
-    // the same formula frozen at the ONE fixture mass `m = 1e-3` — true error
-    // there is 5.96e-3, but at m = 0.24 it is 5.19e-1, forty times the
-    // declared bound.
+    // Sup over the DECLARED range, not the fixture. `(m/b)(|v0| + k|x0|/b)`
+    // increases in m and |v0|, and the declared range is `m k/b² < 1/4` with
+    // `|v0| ≤ 5`; at the witness normalisation `b = k = x0 = 1` that is
+    // `m < 1/4`, so the supremum is `0.25·(5 + 1) = 1.5`, approached at the
+    // open edge and not attained. delta stays stated at that normalisation:
+    // over free b, k and x0 the bound is unbounded. The record once declared
+    // `0.012`, a formula frozen at the ONE fixture mass `m = 1e-3` — true
+    // error at m = 0.24 is 5.19e-1, forty times that value.
     // KNOWN LOOSENESS (0.47.0 persona re-test, L9 residual; documented, not
     // tightened): for x0 = 1 the measured sup of |x − x_reduced| over the whole
     // declared range (m < 1/4, |v0| ≤ 5, t ≥ 5m/b) is 0.524, at m ≈ 0.21 and
     // v0 = +5, and it does not grow toward critical damping (0.514 at
-    // m = 0.249999). So δ = 3 holds but is 5.7× loose, and it exceeds the unit
+    // m = 0.249999). So δ = 1.5 holds but is 2.86× loose, and it exceeds the unit
     // signal it bounds. A tighter δ needs a bound with its own basis, not a grid
     // maximum; until then `upt path` withholds the point bound
     // (deltaAtBasis below). Independent check: the persona's
     // checks/recheck_047.py and a 115 × 2 grid over (m, ±5).
     delta: dampedOffsetBoundAt({ m: 0.25, b: 1, k: 1, x0: 1, v0: 5 }),
     deltaAt: dampedOffsetBoundAt,
-    // Witness W8b supports it numerically for m ∈ {1e-1, 1e-2, 1e-3}; no proof covers it.
+    // The small parameter of the singular limit is ε = m k/b². The bound is
+    // leading order in ε and grid-supported for finite ε; its quality degrades
+    // toward ε = 1/4 (sup/bound 0.524/1.26 = 0.42 at m = 0.21, b = k = x0 = 1,
+    // v0 = 5, against ≈ 1 as ε → 0). Witness W8b checks it at m = 0.01, where
+    // the tolerance 0.06 sits 4.3% above the RK4 error 0.0574. No proof covers
+    // finite ε.
     deltaAtBasis: 'numerically-supported',
     norm: 'sup |x − x_reduced| for t ≥ 5 m/b',
-    domain: 't ≥ 5 m/b, overdamped, at the witness normalisation b = k = 1',
+    domain: 't ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1; norm sup |x − x_reduced|, carried with K = 1',
     horizon: 't ≥ 5 m/b (outside the boundary layer)',
     horizonHolds: (t, params) => {
       const { m, b } = params;
@@ -296,8 +314,8 @@ export const AB_DAMPED_MASSLESS: AtlasBridge = {
     parameterRange: 'm k / b² < 1/4, |v0| ≤ 5; with b = k = 1 this is m < 1/4',
     limitCharacter: 'singular',
     uniformity: [
-      't ≥ 5 m/b, overdamped, at the witness normalisation b = k = 1',
-      'm k / b² < 1/4, |v0| ≤ 5',
+      't ≥ 5 m/b, overdamped, at the witness normalisation b = k = x0 = 1',
+      'm k / b² < 1/4, |v0| ≤ 5; the small parameter is ε = m k / b², and the bound is leading order in ε',
     ],
   }),
   regime: DAMPED_REGIME,
@@ -314,14 +332,16 @@ export const AB_DAMPED_MASSLESS: AtlasBridge = {
       id: 'W8',
       kind: 'numeric',
       test: TEST_FILE,
-      tolerance: '|r_slow + k/b| < 2m and |r_fast·m + b| < 2m for m ∈ {1e-1, 1e-2, 1e-3}',
+      tolerance:
+        '|r_slow + k/b| < 2mk²/b³ and |r_fast·m + b| < 2mk/b for m ∈ {1e-1, 1e-2, 1e-3} at b = k = 1 ' +
+        'and for m ∈ {1e-2, 1e-3} at b = 0.5, k = 1',
     },
     {
       id: 'W8b',
       kind: 'numeric',
       test: TEST_FILE,
       tolerance:
-        "|x_full − x_red| < 2(1+v0)·m for t ≥ 5 m/b; |x'| error > 1 at 0.5 m/b and < 0.05 at 5 m/b",
+        "|x_full − x_red| < (m/b)(|v0| + k|x0|/b) for t ≥ 5 m/b; |x'| error > 1 at 0.5 m/b and < 0.05 at 5 m/b",
     },
   ],
   citations: [

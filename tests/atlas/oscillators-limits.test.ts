@@ -169,12 +169,26 @@ function roots(m: number, b: number, k: number): { slow: number; fast: number } 
 }
 
 describe('ab-damped-massless — W8: the order drops and the roots separate', () => {
-  it.each([1e-1, 1e-2, 1e-3])('splits into a slow and a fast root at m = %s', (m) => {
-    const b = 1;
-    const k = 1;
+  // Leading order in ε = m k/b²: r_slow + k/b ≈ −m k²/b³ [1/T] and
+  // r_fast·m + b ≈ m k/b [M/T]; each tolerance is twice its shift.
+  it.each([
+    [1e-1, 1, 1],
+    [1e-2, 1, 1],
+    [1e-3, 1, 1],
+    [1e-2, 0.5, 1],
+    [1e-3, 0.5, 1],
+  ])('splits into a slow and a fast root at m = %s, b = %s, k = %s', (m, b, k) => {
     const { slow, fast } = roots(m, b, k);
-    expect(Math.abs(slow + k / b)).toBeLessThan(2 * m);
-    expect(Math.abs(fast * m + b)).toBeLessThan(2 * m);
+    expect(Math.abs(slow + k / b)).toBeLessThan((2 * m * k * k) / b ** 3);
+    expect(Math.abs(fast * m + b)).toBeLessThan((2 * m * k) / b);
+  });
+
+  it('NEGATIVE CONTROL: the old tolerance 2m (wrong dimension) fails both roots at b = 0.5, k = 1', () => {
+    for (const m of [1e-2, 1e-3]) {
+      const { slow, fast } = roots(m, 0.5, 1);
+      expect(Math.abs(slow + 1 / 0.5)).toBeGreaterThan(2 * m);
+      expect(Math.abs(fast * m + 0.5)).toBeGreaterThan(2 * m);
+    }
   });
 
   it('records the limit as singular', () => {
@@ -203,7 +217,7 @@ describe('ab-damped-massless — W8b: the lost initial condition shows in the VE
   const reducedV = (t: number): number => (-k / b) * Math.exp((-k / b) * t);
 
   it.each([0, 5])(
-    'holds the position within 2(1+v0)m across the whole outer region, v0 = %s',
+    'holds the position within (m/b)(|v0| + k/b) across the whole outer region, v0 = %s',
     (v0) => {
       const { x } = full(v0);
       const t0 = (5 * m) / b;
@@ -213,7 +227,7 @@ describe('ab-damped-massless — W8b: the lost initial condition shows in the VE
         sup = Math.max(sup, Math.abs(x(t) - reducedX(t)));
       }
       expect(sup).toBeGreaterThan(0);
-      expect(sup).toBeLessThan(2 * (1 + v0) * m);
+      expect(sup).toBeLessThan((m / b) * (Math.abs(v0) + k / b));
     },
   );
 
@@ -334,10 +348,10 @@ describe('W8b — the registered in-process spec: the damped spring integrated, 
     }
   });
 
-  it('checks against the tolerance 2(1+|v0|)m/b = 0.12 at m = 0.01, and the offset about halves with m', () => {
+  it('checks against the tolerance (m/b)(|v0| + k|x0|/b) = 0.06 at m = 0.01, and the offset about halves with m', () => {
     const { spec } = registeredNumeric('W8b');
     expect(spec.tolerance).toBe(AB_DAMPED_MASSLESS.bound!.deltaAt!({ m: 0.01, b: 1, k: 1, x0: 1, v0: 5 }));
-    expect(spec.tolerance).toBeCloseTo(0.12, 15);
+    expect(spec.tolerance).toBeCloseTo(0.06, 15);
     const r = runNumericWitness(spec);
     expect(r.status).toBe('checked');
     expect(r.convergence!.ratio).toBeGreaterThan(1.8);
@@ -349,12 +363,56 @@ describe('W8b — the registered in-process spec: the damped spring integrated, 
     expect(Math.abs(measureMasslessOffset(0.015) - exact) / exact).toBeLessThan(1e-7);
   });
 
-  it('NEGATIVE CONTROL: 2m/b, the bound without its (1 + |v0|) factor, is refuted', () => {
+  it('NEGATIVE CONTROL: (m/b)(k|x0|/b), the bound without its |v0| term, is refuted', () => {
     const { spec } = registeredNumeric('W8b');
-    expect(runNumericWitness({ ...spec, tolerance: (2 * 0.01) / b }).status).toBe('refuted');
+    expect(runNumericWitness({ ...spec, tolerance: (0.01 / b) * (k / b) }).status).toBe('refuted');
   });
 
   it('META-CHECK: the same assertion FAILS on the true spec (the control can fail)', () => {
     expect(runNumericWitness(registeredNumeric('W8b').spec).status).not.toBe('refuted');
+  });
+});
+/**
+ * Panel C7: what `K = 1` on the two limit bridges means, and nothing more.
+ *
+ * The repo's K convention (`path-bound.ts` composes the bound's K with the K
+ * of `norm-transport.ts`, witnessed by W1τ): an error measured in the stated
+ * norm BEFORE the bridge's map of the observable is carried to at most K times
+ * that error AFTER it. Both bridges map their observable by the identity
+ * (period ↦ period; x ↦ x), so K = 1 and the whole discrepancy sits in delta.
+ * This test does not prove delta; it proves the factor K multiplies.
+ */
+describe('both limit bridges — K = 1 is the identity on the observable of the stated norm', () => {
+  /** sup-norm distance of two sampled trajectories. */
+  const supDist = (a: readonly number[], b: readonly number[]): number =>
+    Math.max(...a.map((v, i) => Math.abs(v - (b[i] ?? Number.NaN))));
+  const ts = Array.from({ length: 201 }, (_, i) => i * 0.05);
+  const xa = ts.map((t) => Math.exp(-t));
+  const xb = ts.map((t) => Math.exp(-t) + 0.01 * Math.sin(3 * t));
+
+  /** The observable maps the two bridges apply, read from their `transformation` text. */
+  const identity = (x: number): number => x;
+  const doubled = (x: number): number => 2 * x;
+
+  it.each([AB_DAMPED_MASSLESS, AB_PENDULUM_LINEAR])('$id declares K = 1', (bridge) => {
+    expect(bridge.bound?.K).toBe(1);
+  });
+
+  it('ab-damped-massless: x ↦ x carries the sup-norm error with factor 1 ≤ K', () => {
+    const before = supDist(xa, xb);
+    const after = supDist(xa.map(identity), xb.map(identity));
+    expect(after / before).toBeLessThanOrEqual(AB_DAMPED_MASSLESS.bound!.K);
+  });
+
+  it('ab-pendulum-linear: period ↦ period carries the relative period error with factor 1 ≤ K', () => {
+    const [tFull, tRed] = [1.0158525311014, 1];
+    const rel = (a: number, b: number): number => Math.abs(a / b - 1);
+    expect(rel(identity(tFull), identity(tRed)) / rel(tFull, tRed)).toBeLessThanOrEqual(AB_PENDULUM_LINEAR.bound!.K);
+  });
+
+  it('NEGATIVE CONTROL: a map x ↦ 2x needs K = 2 and refutes K = 1', () => {
+    const before = supDist(xa, xb);
+    const after = supDist(xa.map(doubled), xb.map(doubled));
+    expect(after / before).toBeGreaterThan(AB_DAMPED_MASSLESS.bound!.K);
   });
 });
