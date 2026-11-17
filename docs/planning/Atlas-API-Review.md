@@ -36,10 +36,10 @@ consistently.
 | `regimeHolds`, `RegimeCheck` | The tri-state contract from Phase 2, unchanged since then |
 | `composeBounds`, `composeBoundPath`, `IDENTITY_BOUND`, `BoundPair`, `ComposedPath` | The Phase 2 error algebra, unchanged |
 | `composeRelation`, `COMPOSITION_TABLE`, `NO_COMPOSITE_CLAIM`, `CompositionResult`, `NoCompositeClaim` | Phase 3 table lookup, unchanged. `NoCompositeClaim` is included because `CompositionResult` names it |
+| `AtlasBridge`, `FormalRef`, `FormalFidelity`, `FormalRefKind`, `NormTransport` | The bridge record and the formal reference it carries. `formalRef` is the one path to `formally-proved` (`AGENTS.md`, law 1), so a caller who reads evidence must be able to read the reference by type. `NormTransport` and `FormalRefKind` are included because `AtlasBridge` and `FormalRef` name them (§6, closure) |
+| `ATLAS_FAMILIES`, `AtlasFamily`, `ATLAS_RECORD_SCHEMA_VERSION` | `ATLAS_FAMILIES` is the stable handle on the atlas content (Tier 3 names it as such). `AtlasFamily` is its element type. The schema version is the `schemaVersion` field of every record under `data/atlas/`, which the package ships; a reader of those files needs the value to compare against |
 
 ### Tier 2 — DEFER one release (promising, but new in Sprints 4–6)
-
-**Promoted from Tier 2 to the `atlas` namespace:** `AtlasBridge`, `FormalRef`, `FormalFidelity`, `FormalRefKind`, `ATLAS_FAMILIES`, `ATLAS_RECORD_SCHEMA_VERSION`. The closure rule (§6) pulled in two more types. `NormTransport` is a field of `AtlasBridge`. `AtlasFamily` is the element type of `ATLAS_FAMILIES`. All eight carry `@public` and are listed in `src/atlas/public.ts`. `toAtlasJson` did NOT move. Its signature names `WitnessResultsArtifact`, the shape of the unshipped `data/atlas/witness-results.json`, and that type names `WitnessResultRecord`, which names more witness types. Promoting `toAtlasJson` would put Tier 3 witness types in the public set. Every other row below keeps its reason.
 
 | Symbols | Why they wait |
 |---|---|
@@ -47,9 +47,7 @@ consistently.
 | `findPath`, `boundPath` | Scoped to ONE family, while bridges now cross families (`ab-kg-oscillator`). Promoting a single-family route API now would freeze a scope that is already too narrow |
 | `toCombinedAtlasJson`, `toAtlasJsonLd`, `QudtResolution`, `ATLAS_ID_PREFIX` | Landed in S6.4. The QUDT table is repository data the caller must supply, which fails test 3 |
 | `leakageKey` | Correct for its purpose, but it over-merges by design, so it is a leakage key and not a general equivalence |
-| `AtlasBridge`, `FormalRef`, `FormalFidelity` | `AtlasBridge` gained `formalRef` in S4.3, and both types were added the same day. That is additive, but criterion 1 says unchanged within the last sprint |
 | `deriveEvidence`, `NO_PASSING_WITNESSES`, `ALL_EVIDENCE_TAGS` | `deriveEvidence` gained its `formally-proved` rule in S4.3. Its `symbolically-checked` answer depends on the caller's `passingWitnessIds`, which come from an UNSHIPPED artifact. That is the same repository coupling that defers QUDT below, so promoting it would contradict this review's own rule |
-| `ATLAS_FAMILIES`, `toAtlasJson`, `ATLAS_RECORD_SCHEMA_VERSION` | The families went from 1 to 3 and the bridges from 5 to 20 in Sprint 4, and the serializer gained `formalRef` output in S4.6. A public schema version for a format that moved this sprint invites churn |
 
 ### Tier 3 — KEEP `@internal`
 
@@ -57,7 +55,7 @@ consistently.
 |---|---|
 | Everything under `benchmark/` (runner, baselines, stats, study, schema) | The benchmark surface is experimental, `runLinkPrediction`'s hypothesis was not supported, and promoting the harness would freeze it |
 | `runLinkPrediction` | Its one result did NOT support the hypothesis it tests |
-| Witness runners, `WITNESS_REGISTRY`, `runWitnessRegistry`, `artifactPassingWitnessIds` | Coupled to `data/atlas/witness-results.json`, which is not shipped (fails test 3) |
+| Witness runners, `WITNESS_REGISTRY`, `runWitnessRegistry`, `artifactPassingWitnessIds`, `toAtlasJson`, `WitnessResultsArtifact` | Each takes the parsed `data/atlas/witness-results.json`, which the caller must load and pass in: repository data as an input, which fails test 3 as the QUDT row does. `toAtlasJson` takes a `WitnessResultsArtifact`, and that type names the witness record types, so promoting the serializer would pull this whole row into the public set (§6, closure) |
 | Per-family constants: `BRIDGE_*`, `*_MODELS`, `*_BRIDGES`, the dimension constants | Content, not API. `ATLAS_FAMILIES` is the stable handle. Individual record names would turn every correction into a breaking change |
 | Poster and derivation APIs | Phase 3. The "8 → 12" direction is recorded UNRESOLVED |
 | `HELD_OUT_FAMILY`, `HELD_OUT_MARKERS`, `FAILURE_KINDS` | Benchmark internals |
@@ -91,7 +89,7 @@ that and would claim the generic names at the root.
 ## 4. The decision in §6 was applied
 
 §6 is the decision in force: an additive `atlas` namespace, Tier 1 only, and `src/atlas/public.ts`
-is the only public list. Tier 2 stays deferred under §2, except the symbols listed at the head of the Tier 2 section.
+is the only public list. Tier 2 stays deferred under §2.
 
 ## 5. Adversarial review ("Adam", Gemini 2.5 Pro) and dispositions
 

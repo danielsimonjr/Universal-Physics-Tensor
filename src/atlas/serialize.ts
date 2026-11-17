@@ -36,7 +36,14 @@ import { deriveEvidence } from './derive-evidence.js';
 import type { WitnessResultsArtifact } from './witness-artifact.js';
 import { artifactPassingWitnessIds } from './witness-artifact.js';
 
-/** Record major version of the emitted artifact. @public */
+/**
+ * Record major version of the atlas artifacts: the `schemaVersion` field of
+ * every record the package ships under `data/atlas/`. A reader compares the
+ * field against this value. No public function emits it; the serializer that
+ * writes the artifacts is internal.
+ *
+ * @public
+ */
 export const ATLAS_RECORD_SCHEMA_VERSION = '0';
 
 /** A JSON value, as emitted. @internal */

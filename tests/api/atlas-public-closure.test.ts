@@ -142,7 +142,7 @@ describe('atlas public namespace — derived from the facade file', () => {
     }
   });
 
-  it('toAtlasJson stays OUT: its signature names the unshipped witness artifact, so promoting it widens the set by Tier 3 types', () => {
+  it('toAtlasJson stays OUT: its signature names WitnessResultsArtifact, so promoting it widens the set by the Tier 3 witness types', () => {
     expect(facadeNames).not.toContain('toAtlasJson');
     expect(facadeNames).not.toContain('WitnessResultsArtifact');
   });

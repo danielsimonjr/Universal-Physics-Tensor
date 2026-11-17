@@ -129,7 +129,7 @@ export interface AtlasBridge {
    * There is NO `evidence` field. Every evidence tag is derived at read time
    * by `deriveEvidence` from the witnesses, the formal reference and the
    * counterexamples a record carries, against the committed witness results;
-   * `toAtlasJson` writes that derivation into the artifact. The sentence
+   * the artifact serializer writes that derivation into the record. The sentence
    * that a record stored its own set is the record from before this field
    * was removed.
    */
