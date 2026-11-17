@@ -160,9 +160,7 @@ in `composeEdges`) are allowed; new modules stay off `src/index.ts` until Phase 
 
 ### Phase 0 — Pilot package: the oscillator family (target: v0.46)
 
-> **Status.** The code and the witnesses shipped on 2026-09-20. On 2026-10-01 the owner
-> removed the two exit criteria that were not code: independent physicist review, and
-> per-bridge curation cost. The phase is closed. The harness and the witnesses stay.
+Status: the table in §7.
 
 **Goal.** Prove the five relation contracts on one family where curation is cheap and every
 contract is exercised, before designing types for all of physics.
@@ -205,36 +203,7 @@ allowed to be throwaway if Phase 1 shows the types were wrong.
 
 ### Phase 1 — Relation contracts as an additive overlay (target: v0.47–v0.48)
 
-> **▶ STATUS 2026-09-21 — IMPLEMENTED; 3 of 4 exit criteria met, and the fourth is named.**
-> On `master`, CI green. `RelationContract` and `Conventions` in `src/atlas/types.ts`; the literal
-> 8×8 `composeRelation` table; `composeEdges` throwing `UndefinedCompositionError` on a refused
-> pair; `derive-evidence.ts` + `coverage.ts`; the `Association` registry seeded from the four
-> `'decoy'` adjudications; `checkConventions` and `unknownConventionKeys`. Full suite 393 files /
-> 4,083 tests.
->
-> **Measured coverage:** schema 55 · audited 10 · not-yet-audited 45 · verified 0; atlas 5 bridges,
-> 0 reviewed.
->
-> | Exit criterion | State |
-> |---|---|
-> | Every field audited or marked `not-yet-audited` | **MET** — `overlayCoverage` classifies all 55 explicitly; nothing is silently unclassified |
-> | Coverage report distinguishes schema / audited / verified | **MET** |
-> | The five pilot bridges re-register through the overlay unchanged | **MET** |
-> | Zero fabricated assumptions, **Eve spot-checking a sample against the cited sources** | **NOT MET** |
->
-> **Why the fourth is not met, stated rather than smoothed over.** Eve reviewed the design and the
-> shipped code and returned two findings that both held — but she has no access to the cited
-> papers and never checked a citation against its source. I verified four of the 22 `// source:`
-> comments myself against known physics (KSS 2005, Shapiro 1964, GRW 1990, Einstein 1915) and
-> confirmed that none cites this project's own documents. That is a weaker claim than the criterion
-> makes, and it is the same shape as Phase 0's open criterion: **a review by someone who is not the
-> author cannot be performed by the author.** `verified: 0` is the honest reading of it.
->
-> **Found while wrapping, and fixed rather than filed:** the deliverable "a
-> `RejectedBridgeAdjudication` ⇒ `contradicted` with the counterexample LINKED" was
-> HALF-implemented — only BE-35 carried the link, and a special case was forcing the tag onto the
-> other four rejected rows from no artifact at all. All five now derive it from a real
-> counterexample, projected from `rejected.ts` rather than copied into any row.
+Status: the table in §7.
 
 **Goal.** Give every edge a relation type with a contract, evidence as a tag vector, a
 conventions record, and the composition table, without replacing any existing type.
