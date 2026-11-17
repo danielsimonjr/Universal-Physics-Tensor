@@ -188,7 +188,7 @@ types are throwaway if Phase 1 disagrees; the curation-cost log format (one row 
 relation type, person-hours authoring, person-hours review, witness count); and the witness
 table with the numeric expectations from §S0.W2 below, **as corrected in revision 2** (R = 2
 for the RLC match, R = 4 for the counterexample; W8b on velocity; W5 at 1e-4 sup-norm; W9 at
-0.5%).
+`(qa)²/80` of itself).
 
 **Scout brief SC0 — pre-flight facts** (`Explore`, "medium" breadth). Return, with file:line:
 
@@ -541,9 +541,9 @@ Tasks:
    reduction map `u_n(t) → u(x = na, t)`, information lost `'modes with q > π/a'`, closure
    `'long-wavelength, qa ≪ 1'`.
    - **W9** (dispersion): lattice `ω(q) = 2√(κ/m)|sin(qa/2)|`, continuum `ω = c q` with
-     `c² = κa²/m`. For `κ = m = a = 1` and `qa ∈ {0.1, 0.2, 0.4}` assert the relative error
-     `1 − ω_lattice/ω_cont` equals `(qa)²/24` **within 0.5% of itself** (the relative
-     deviation is `−(qa)²/80`: 1.3e-4, 5.0e-4, 2.0e-3; the next series term is `(qa)⁴/1920`).
+     `c² = κa²/m`. For `κ = m = a = 1` and `qa ∈ {0.1, 0.2, 0.4, 0.632, 0.8, 0.95, 0.999}` assert the relative error
+     `1 − ω_lattice/ω_cont` equals `(qa)²/24` **within `(qa)²/80` of itself** (the relative
+     deviation is `−(qa)²/80 + (qa)⁴/13440 − …`; a flat 0.5% bound fails for `qa > 0.634`).
      Assert the lattice band edge at `qa = π` has `ω = 2√(κ/m)` and the continuum has no band
      edge (the information-loss witness).
 2. Rejection `ax-cubic-spring-lc`: claimed `exact-equivalence`, premises
@@ -1275,7 +1275,7 @@ codebase-consistency audit of revision 1. Changes that alter what an implementer
   `> 1e-2` position assertions both fail as written).
 - S0.5 W5: sup-norm ratio on a stated interval at `1e-4` (revision 1's pointwise `1e-6` is
   unachievable with second-order stencils and undefined at the zeros of `∂τφ`).
-- S0.5 W9: tolerance 0.5% (5% could not fail).
+- S0.5 W9: tolerance `(qa)²/80` of itself, the derived bound (a flat 5% could not fail; a flat 0.5% fails for `qa > 0.634` inside the regime `qa < 1`).
 - S0.1 W6: associativity triple chosen so the reversed order differs.
 - S0.6: no JSON-Schema validator exists in the tree; replaced "validates against the schema"
   with the `catalog-json` deep-equal pin pattern plus a hand-rolled horizon check and a

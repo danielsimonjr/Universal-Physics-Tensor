@@ -16,6 +16,7 @@ import {
   BRIDGE_CHAIN_WAVE,
   chainWaveSpeed,
   continuumDispersion,
+  dispersionDeviationBound,
   dispersionErrorApproximation,
   latticeBandEdge,
   latticeDispersion,
@@ -32,24 +33,66 @@ describe('W9 — chain → wave coarse-graining, dispersion', () => {
   const m = 1;
   const a = 1;
 
-  it('matches the (qa)²/24 leading-order error within 0.5% of itself', () => {
-    // Convention: with x = qa/2, 1 − sin x / x = x²/6 − x⁴/120, so (qa)²/24
-    // OVERESTIMATES the true error and deviation = (true − approx)/approx is
-    // NEGATIVE, ≈ −(qa)²/80. The assertion below is on the MAGNITUDE, so the
-    // sign convention does not change it.
+  // Relative deviation of the true dispersion error from (qa)²/24, taken over
+  // (qa)²/24 (the "of itself" denominator of the W9 claim), as a magnitude.
+  const dispersionDeviation = (qa: number): number => {
+    const q = qa / a;
+    const trueError = 1 - latticeDispersion(q, a, kappa, m) / continuumDispersion(q, a, kappa, m);
+    const approx = dispersionErrorApproximation(qa);
+    return Math.abs((trueError - approx) / approx);
+  };
+
+  // Samples from the small-qa points up to the declared regime edge (qa < 1).
+  const REGIME_SAMPLES = [0.1, 0.2, 0.4, 0.632, 0.8, 0.95, 0.999];
+
+  // The tolerance is DERIVED, not fitted. With x = qa/2,
+  // 1 − sin x / x = x²/6 − x⁴/120 + x⁶/5040 − …, so over (qa)²/24 the
+  // deviation is −(qa)²/80 + (qa)⁴/13440 − …: an alternating series whose terms
+  // shrink for qa < 1 (each term is at most 1/80 of the one before it at the
+  // regime edge), so the magnitude is below its leading term (qa)²/80 and above
+  // (qa)²/80 · (1 − (qa)²/168), which is 0.99406 · (qa)²/80 at qa = 0.999. No
+  // safety margin is needed on the upper side. The lower side is NOT the exact
+  // two-term floor: at qa = 0.1 the measured deviation exceeds that floor by
+  // 2.8e-9 of itself while 1 − sin x / x loses digits to cancellation (measured
+  // rounding error 7.8e-10 of itself), so the exact floor sits inside the
+  // rounding noise. It is rounded down to 0.99 of the leading term; the gap to
+  // 0.99406 is disclosed here, not hidden.
+  const upperBound = (qa: number): number => dispersionDeviationBound(qa);
+  const lowerBound = (qa: number): number => 0.99 * dispersionDeviationBound(qa);
+
+  it('matches the (qa)²/24 leading-order error within the derived (qa)²/80 over the whole regime qa < 1', () => {
+    for (const qa of REGIME_SAMPLES) {
+      const dev = dispersionDeviation(qa);
+      expect(dev).toBeLessThanOrEqual(upperBound(qa));
+      expect(dev).toBeGreaterThanOrEqual(lowerBound(qa));
+    }
+    // Signed, the approximation overestimates, and for small qa the deviation
+    // is the next Taylor term −(qa)²/80.
     for (const qa of [0.1, 0.2, 0.4]) {
       const q = qa / a;
-      const wLattice = latticeDispersion(q, a, kappa, m);
-      const wContinuum = continuumDispersion(q, a, kappa, m);
-      const trueError = 1 - wLattice / wContinuum;
-      const approx = dispersionErrorApproximation(qa);
-      const deviation = (trueError - approx) / approx;
-
-      expect(deviation).toBeLessThan(0); // the approximation overestimates
-      expect(Math.abs(deviation)).toBeLessThan(0.005);
-      // and the deviation itself is the next Taylor term, −(qa)²/80.
+      const trueError = 1 - latticeDispersion(q, a, kappa, m) / continuumDispersion(q, a, kappa, m);
+      const deviation = (trueError - dispersionErrorApproximation(qa)) / dispersionErrorApproximation(qa);
+      expect(deviation).toBeLessThan(0);
       expect(deviation).toBeCloseTo(-(qa * qa) / 80, 5);
     }
+  });
+
+  it('NEGATIVE CONTROL: the old flat 0.5% claim FAILS inside the regime, at qa = 0.7', () => {
+    // Measured 0.611%, so the flat claim was false for qa > 0.634 although the
+    // regime is qa < 1. The claim held only at the three samples it used.
+    expect(dispersionDeviation(0.7)).toBeGreaterThan(0.005);
+    expect(dispersionDeviation(0.95)).toBeGreaterThan(0.005);
+    // It does hold at the old samples, which is why it went unnoticed.
+    for (const qa of [0.1, 0.2, 0.4]) expect(dispersionDeviation(qa)).toBeLessThan(0.005);
+  });
+
+  it('NEGATIVE CONTROL: a wrong coefficient (qa)²/160 FAILS the derived bound at qa = 0.95', () => {
+    const qa = 0.95;
+    const dev = dispersionDeviation(qa);
+    expect(dev).toBeGreaterThan((qa * qa) / 160); // the halved bound is exceeded
+    expect(dev).toBeLessThanOrEqual(upperBound(qa)); // the derived bound is not
+    // And a too-large coefficient (qa)²/40 fails the lower side.
+    expect(dev).toBeLessThan(0.99 * ((qa * qa) / 40));
   });
 
   it('carries the wave speed c = a √(κ/m) into the continuum model', () => {
@@ -265,10 +308,22 @@ describe('W9 — the registered in-process spec: the ring integrated, against th
     }
   });
 
-  it('checks within 0.5% of (qa)²/24 at N = 32, the deviation is −(qa)²/80, and doubling N cuts it about 4×', () => {
+  it('checks within the derived (qa)²/80 at N = 32, the deviation is −(qa)²/80, and doubling N cuts it about 4×', () => {
     const { spec } = entry();
     const qa = qaAt(spec.fineResolution);
+    // The registered tolerance is the same derived bound W9 asserts, taken at
+    // the fine resolution the runner compares against. The flat 0.005 it
+    // replaced was true at this fixture (qa = 0.39 and 0.20) but 10× looser
+    // than the bound the series gives, and the text beside it claimed (qa)²/80.
+    expect(spec.tolerance).toBe(dispersionDeviationBound(qa));
     expect(spec.evaluate(spec.fineResolution) - 1).toBeCloseTo(-(qa * qa) / 80, 5);
+    // The margin between the fine error and the tolerance is the next series
+    // term (qa)⁴/13440 (1.106e-7 here), less (qa)⁶/3870720 (1.5e-11): series
+    // arithmetic, not rounding, so it is the same on every runtime. The
+    // integration error is bounded at 1e-9 by the test above, 100× below it.
+    const margin = spec.tolerance - Math.abs(spec.evaluate(spec.fineResolution) - 1);
+    expect(Math.abs(margin - qa ** 4 / 13440)).toBeLessThan(1e-9);
+    expect(margin).toBeGreaterThan(1e-7);
     const r = runNumericWitness(spec);
     expect(r.status).toBe('checked');
     expect(r.convergence!.ratio).toBeGreaterThan(3.9);
