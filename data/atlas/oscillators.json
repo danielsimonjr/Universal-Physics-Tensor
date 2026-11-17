@@ -868,7 +868,7 @@
         "K": 1,
         "delta": 1.5,
         "norm": "sup |x − x_reduced| for t ≥ 5 m/b",
-        "domain": "t ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1; norm sup |x − x_reduced|, carried with K = 1",
+        "domain": "t ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1",
         "horizon": "t ≥ 5 m/b (outside the boundary layer)",
         "parameterRange": "m k / b² < 1/4, |v0| ≤ 5; with b = k = 1 this is m < 1/4",
         "limitCharacter": "singular",

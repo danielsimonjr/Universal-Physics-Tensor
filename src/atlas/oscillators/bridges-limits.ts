@@ -304,7 +304,7 @@ export const AB_DAMPED_MASSLESS: AtlasBridge = {
     // finite ε.
     deltaAtBasis: 'numerically-supported',
     norm: 'sup |x − x_reduced| for t ≥ 5 m/b',
-    domain: 't ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1; norm sup |x − x_reduced|, carried with K = 1',
+    domain: 't ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1',
     horizon: 't ≥ 5 m/b (outside the boundary layer)',
     horizonHolds: (t, params) => {
       const { m, b } = params;
