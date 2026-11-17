@@ -16,6 +16,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import Parser from 'tree-sitter';
@@ -323,7 +324,10 @@ export function debtAgainstBase(base: string, root = process.cwd(), only: readon
 }
 
 function scriptPath(): string {
-  return new URL(import.meta.url).pathname;
+  // `fileURLToPath`, not `URL.pathname`: on Windows the pathname is `/C:/...`,
+  // which never equals `resolve(argv[1])`, so the guard below never ran main()
+  // and the command exited 0 with no output.
+  return fileURLToPath(import.meta.url);
 }
 
 function main(): void {

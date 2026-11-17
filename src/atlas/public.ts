@@ -40,6 +40,9 @@ export { composeBoundPath, composeBounds, IDENTITY_BOUND } from './error-algebra
 export type { BoundPair, ComposedPath } from './error-algebra.js';
 export { composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM } from './composition-table.js';
 export type { CompositionResult, NoCompositeClaim } from './composition-table.js';
+/** Every atlas family, admitted: the stable handle on the atlas content. */
 export { ATLAS_FAMILIES } from './families.js';
+/** One family: its models, bridges and rejections. */
 export type { AtlasFamily } from './family.js';
+/** The `schemaVersion` a family record carries; a reader compares against it. */
 export { ATLAS_RECORD_SCHEMA_VERSION } from './serialize.js';
