@@ -103,7 +103,8 @@ theorem dust_trace (gInv g Ric Einstein : M) (u : Fin 4 → ℝ) (Λ κ R ρ c :
 
 /-- `Λ g = −κ T` with `T = −ρ c² g` and `κ = 8π G / c⁴` is `ρ = c² Λ / (8π G)`.
 
-Covers the BE-20 identification on the `be-13` entry. BE-20 has no reference of its own. -/
+Covers the BE-20 identification on the `be-13` entry. The own reference of BE-20 is the exponent
+theorem under the key `be-20`. -/
 theorem vacuum_density (g T : M) (Λ κ G c ρ : ℝ)
     (hg : g ≠ 0) (hG : G ≠ 0) (hc : c ≠ 0)
     (hκ : κ = kappa G c)

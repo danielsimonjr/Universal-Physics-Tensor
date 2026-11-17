@@ -62,6 +62,37 @@ thermal de Broglie wavelength.
 Base dimensions are `(L, M, T, Θ)`. The prefactor is not derived. This is not a statement about a
 gas. The key `be-12` holds a different entry, so this one uses the canonical key.
 
+`be-16.exponent`. Derivation step. The exponent tuple `(1, 1)` on `(temperature, k_B)` is the
+unique rational tuple whose dimension is that of the Landauer erasure energy. Base dimensions are
+`(L, M, T, Θ)`. The prefactor `ln 2` is not derived. This is not the Landauer bound for an
+arbitrary protocol.
+
+`be-21.exponent`. Derivation step. The exponent tuple `(1, -1)` on `(hbar, k_B)` is the unique
+rational tuple whose dimension is that of the ratio of shear viscosity to entropy density. Base
+dimensions are `(L, M, T, Θ)`. The prefactor `1/(4π)` is not derived. This is not the KSS
+inequality.
+
+`be-42`. Derivation step. The exponent tuple `(-1, 1, 1, -1)` on
+`(schwarzschild-radius, hbar, c, k_B)` is the unique rational tuple whose dimension is that of a
+temperature. Base dimensions are `(L, M, T, Θ)`. The edge is `be-42-via-rs`. The prefactor `1/(4π)`
+is not derived. This is not the Hawking effect. The form from the mass is the negative control
+`hawking_exponent_not_unique`, which has no manifest key.
+
+`be-12.exponent`. Derivation step. This is the theorem `thermal_de_broglie_exponent_unique`, the
+same theorem as the key `CE-thermal-de-broglie`. The catalog row `be-12` has the sources `mass`
+and `temperature` and the closure `hbar`, `k_B`, so it is the same dimension system.
+
+`be-20`. Derivation step. The exponent tuple `(1, 2, -1)` on
+`(cosmological-constant-curvature, c, G)` is the unique rational tuple whose dimension is that of
+a mass density. Base dimensions are `(L, M, T)`. The prefactor `1/(8π)` is not derived. This is
+not a statement about the cosmological constant problem.
+
+`be-48`. Derivation step. The exponent tuple `(1, -1, 2)` on `(mass, hbar, c)` is the unique
+rational tuple whose dimension is a rate. Base dimensions are `(L, M, T)`. The constant that the
+catalog recovers is `λ₀ ℏ / (m₀ c²)`, the ratio of the two empirical parameters of the model to the
+closure constants, and it is not derived. The localization rate of the model itself has no `hbar`
+and no `c`. This is not the GRW theory.
+
 `hawking_exponent_not_unique` is the negative control. Over `(ℏ, c, G, M, k_B)`
 with base dimensions `(L, M, T, Θ)`, the exponent tuple for a temperature is not
 unique. The Hawking form and `M c² / k_B` both solve the dimension equation. The
@@ -547,5 +578,212 @@ theorem thermal_de_broglie_exponent_unique (e : Fin 4 → ℚ) :
     fin_cases i <;>
       norm_num [thermalDeBroglieInputs, hbarDim, massDim, kBDim, temperatureDim, lengthDim4,
         thermalDeBroglieExponent, Fin.sum_univ_four]
+
+/-- `[energy] = L² M T⁻²` over `(L, M, T, Θ)`. -/
+def energyDim4 : Dimensional.Dim 4
+  | 0 => 2
+  | 1 => 1
+  | 2 => -2
+  | 3 => 0
+
+/-- Inputs `(temperature, k_B)`. -/
+def landauerInputs : Fin 2 → Dimensional.Dim 4
+  | 0 => temperatureDim
+  | 1 => kBDim
+
+/-- The tuple `(1, 1)`. -/
+def landauerExponent : Fin 2 → ℚ
+  | 0 => 1
+  | 1 => 1
+
+/-- The dimension equation has exactly one rational solution, `(1, 1)`. This covers the exponent
+tuple of `be-16`: the form, not the prefactor `ln 2`. Four rows over two inputs is an overdetermined
+but consistent system. -/
+theorem landauer_exponent_unique (e : Fin 2 → ℚ) :
+    Solves landauerInputs energyDim4 e ↔ e = landauerExponent := by
+  constructor
+  · intro h
+    have h0 := h 0
+    have h1 := h 1
+    have h2 := h 2
+    have h3 := h 3
+    simp [landauerInputs, temperatureDim, kBDim, energyDim4, Fin.sum_univ_two] at h0 h1 h2 h3
+    have e0 : e 0 = 1 := by linarith
+    have e1 : e 1 = 1 := by linarith
+    funext j
+    fin_cases j
+    · simpa [landauerExponent] using e0
+    · simpa [landauerExponent] using e1
+  · rintro rfl i
+    fin_cases i <;>
+      norm_num [landauerInputs, temperatureDim, kBDim, energyDim4, landauerExponent,
+        Fin.sum_univ_two]
+
+/-- `[η/s] = T Θ` over `(L, M, T, Θ)`. -/
+def viscosityEntropyDim4 : Dimensional.Dim 4
+  | 0 => 0
+  | 1 => 0
+  | 2 => 1
+  | 3 => 1
+
+/-- Inputs `(hbar, k_B)`. -/
+def kssInputs : Fin 2 → Dimensional.Dim 4
+  | 0 => hbarDim
+  | 1 => kBDim
+
+/-- The tuple `(1, -1)`. -/
+def kssExponent : Fin 2 → ℚ
+  | 0 => 1
+  | 1 => -1
+
+/-- The dimension equation has exactly one rational solution, `(1, -1)`. This covers the exponent
+tuple of `be-21`: the form, not the prefactor `1/(4π)`. -/
+theorem kss_exponent_unique (e : Fin 2 → ℚ) :
+    Solves kssInputs viscosityEntropyDim4 e ↔ e = kssExponent := by
+  constructor
+  · intro h
+    have h0 := h 0
+    have h1 := h 1
+    have h2 := h 2
+    have h3 := h 3
+    simp [kssInputs, hbarDim, kBDim, viscosityEntropyDim4, Fin.sum_univ_two] at h0 h1 h2 h3
+    have e0 : e 0 = 1 := by linarith
+    have e1 : e 1 = -1 := by linarith
+    funext j
+    fin_cases j
+    · simpa [kssExponent] using e0
+    · simpa [kssExponent] using e1
+  · rintro rfl i
+    fin_cases i <;>
+      norm_num [kssInputs, hbarDim, kBDim, viscosityEntropyDim4, kssExponent, Fin.sum_univ_two]
+
+/-- Inputs `(schwarzschild-radius, hbar, c, k_B)`. -/
+def hawkingRsInputs : Fin 4 → Dimensional.Dim 4
+  | 0 => lengthDim4
+  | 1 => hbarDim
+  | 2 => cDim
+  | 3 => kBDim
+
+/-- The tuple `(-1, 1, 1, -1)`. -/
+def hawkingRsExponent : Fin 4 → ℚ
+  | 0 => -1
+  | 1 => 1
+  | 2 => 1
+  | 3 => -1
+
+/-- The dimension equation has exactly one rational solution, `(-1, 1, 1, -1)`. This covers the
+exponent tuple of `be-42-via-rs`: the form, not the prefactor `1/(4π)`. -/
+theorem hawking_rs_exponent_unique (e : Fin 4 → ℚ) :
+    Solves hawkingRsInputs temperatureDim e ↔ e = hawkingRsExponent := by
+  constructor
+  · intro h
+    have h0 := h 0
+    have h1 := h 1
+    have h2 := h 2
+    have h3 := h 3
+    simp [hawkingRsInputs, lengthDim4, hbarDim, cDim, kBDim, temperatureDim,
+      Fin.sum_univ_four] at h0 h1 h2 h3
+    have e0 : e 0 = -1 := by linarith
+    have e1 : e 1 = 1 := by linarith
+    have e2 : e 2 = 1 := by linarith
+    have e3 : e 3 = -1 := by linarith
+    funext j
+    fin_cases j
+    · simpa [hawkingRsExponent] using e0
+    · simpa [hawkingRsExponent] using e1
+    · simpa [hawkingRsExponent] using e2
+    · simpa [hawkingRsExponent] using e3
+  · rintro rfl i
+    fin_cases i <;>
+      norm_num [hawkingRsInputs, lengthDim4, hbarDim, cDim, kBDim, temperatureDim,
+        hawkingRsExponent, Fin.sum_univ_four]
+
+/-- `[curvature] = L⁻²` over `(L, M, T)`. -/
+def curvatureDim3 : Dimensional.Dim 3
+  | 0 => -2
+  | 1 => 0
+  | 2 => 0
+
+/-- `[mass density] = L⁻³ M` over `(L, M, T)`. -/
+def massDensityDim3 : Dimensional.Dim 3
+  | 0 => -3
+  | 1 => 1
+  | 2 => 0
+
+/-- Inputs `(cosmological-constant-curvature, c, G)`. -/
+def vacuumDensityInputs : Fin 3 → Dimensional.Dim 3
+  | 0 => curvatureDim3
+  | 1 => cDim3
+  | 2 => gDim3
+
+/-- The tuple `(1, 2, -1)`. -/
+def vacuumDensityExponent : Fin 3 → ℚ
+  | 0 => 1
+  | 1 => 2
+  | 2 => -1
+
+/-- The dimension equation has exactly one rational solution, `(1, 2, -1)`. This covers the
+exponent tuple of `be-20`: the form, not the prefactor `1/(8π)`. -/
+theorem vacuum_density_exponent_unique (e : Fin 3 → ℚ) :
+    Solves vacuumDensityInputs massDensityDim3 e ↔ e = vacuumDensityExponent := by
+  constructor
+  · intro h
+    have h0 := h 0
+    have h1 := h 1
+    have h2 := h 2
+    simp [vacuumDensityInputs, curvatureDim3, cDim3, gDim3, massDensityDim3,
+      Fin.sum_univ_three] at h0 h1 h2
+    have e0 : e 0 = 1 := by linarith
+    have e1 : e 1 = 2 := by linarith
+    have e2 : e 2 = -1 := by linarith
+    funext j
+    fin_cases j
+    · simpa [vacuumDensityExponent] using e0
+    · simpa [vacuumDensityExponent] using e1
+    · simpa [vacuumDensityExponent] using e2
+  · rintro rfl i
+    fin_cases i <;>
+      norm_num [vacuumDensityInputs, curvatureDim3, cDim3, gDim3, massDensityDim3,
+        vacuumDensityExponent, Fin.sum_univ_three]
+
+/-- `[rate] = T⁻¹` over `(L, M, T)`. -/
+def rateDim3 : Dimensional.Dim 3
+  | 0 => 0
+  | 1 => 0
+  | 2 => -1
+
+/-- Inputs `(mass, hbar, c)`. -/
+def grwInputs : Fin 3 → Dimensional.Dim 3
+  | 0 => massDim3
+  | 1 => hbarDim3
+  | 2 => cDim3
+
+/-- The tuple `(1, -1, 2)`. -/
+def grwExponent : Fin 3 → ℚ
+  | 0 => 1
+  | 1 => -1
+  | 2 => 2
+
+/-- The dimension equation has exactly one rational solution, `(1, -1, 2)`. This covers the
+exponent tuple of `be-48`: the form, not the constant. -/
+theorem grw_exponent_unique (e : Fin 3 → ℚ) :
+    Solves grwInputs rateDim3 e ↔ e = grwExponent := by
+  constructor
+  · intro h
+    have h0 := h 0
+    have h1 := h 1
+    have h2 := h 2
+    simp [grwInputs, massDim3, hbarDim3, cDim3, rateDim3, Fin.sum_univ_three] at h0 h1 h2
+    have e0 : e 0 = 1 := by linarith
+    have e1 : e 1 = -1 := by linarith
+    have e2 : e 2 = 2 := by linarith
+    funext j
+    fin_cases j
+    · simpa [grwExponent] using e0
+    · simpa [grwExponent] using e1
+    · simpa [grwExponent] using e2
+  · rintro rfl i
+    fin_cases i <;>
+      norm_num [grwInputs, massDim3, hbarDim3, cDim3, rateDim3, grwExponent, Fin.sum_univ_three]
 
 end PhysJS.BuckinghamClassics
