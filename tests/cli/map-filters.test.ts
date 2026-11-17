@@ -123,3 +123,16 @@ describe('upt map — filter flags', () => {
     expect(code).toBe(2);
   });
 });
+
+describe('upt map --help — relation and evidence wording', () => {
+  it('names the catalog row and the atlas bridge as the two relation sources', async () => {
+    const { code, text } = await run(['map', '--help']);
+    expect(code).toBe(0);
+    // Positive control: the real help text is read, not an empty string.
+    expect(text).toMatch(/Filtering changes what a missing overlay means/);
+    expect(text).not.toMatch(/Keep atlas edges/);
+    expect(text).not.toMatch(/recorded Atlas relation/);
+    expect(text).toMatch(/catalog row records/);
+    expect(text).toMatch(/--family\/--observable/);
+  });
+});

@@ -443,9 +443,11 @@ Flags:
         --natural sets ħ = c = 1 for a dimension difference that is a power of
         those constants; --geometrized also allows powers of G. The SI default
         still refuses rest_energy = mass.
-        --relation=TYPE keeps only edges whose recorded Atlas relation is that
-        type; --evidence=TAG keeps only edges whose evidence set, DERIVED from
-        the catalog row at read time, contains that tag.
+        --relation=TYPE keeps only edges whose catalog row records that relation
+        type (atlas model-to-model relations live on --family and --observable;
+        --route rejects --relation); --evidence=TAG keeps only edges whose
+        evidence set, DERIVED from the catalog row at read time, contains that
+        tag.
         ⚠ Filtering changes what a missing overlay means: unfiltered, an edge
         with no overlay is KEPT; filtered, it is DROPPED, because nothing shows
         it satisfies the filter. Those drops are counted and printed separately
@@ -513,9 +515,9 @@ Flags:
   --proposed
         Overlay unadjudicated identity-consequence relations.
   --relation=VALUE
-        Keep atlas edges whose recorded relation is TYPE.
+        Keep edges whose recorded relation is TYPE: on the quantity map, the relation the catalog row records; on --family/--observable, the relation of the atlas bridge itself.
   --evidence=VALUE
-        Keep atlas edges whose derived evidence set contains TAG.
+        Keep edges whose derived evidence set contains TAG: from the catalog row on the quantity map, from the witnesses of the bridge on --family/--observable.
   --around=VALUE (or --around VALUE)
         Keep edges within --depth shared-quantity hops of QUANTITY.
   --depth=VALUE
