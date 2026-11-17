@@ -117,7 +117,26 @@ const atlasRefs = (text: string, self: string): string[] =>
 describe('atlas public namespace — derived from the facade file', () => {
   it('the facade lists 25 distinct names (the count is DERIVED here, stated nowhere else)', () => {
     expect(new Set(facadeNames).size).toBe(facadeNames.length);
-    expect(facadeNames.length).toBe(25);
+    expect(facadeNames.length).toBe(33);
+  });
+
+  it('the Tier 2 promotion is in the facade: the bridge record, its formal reference, the families and the schema version; toAtlasJson stays internal', () => {
+    for (const n of [
+      'AtlasBridge',
+      'FormalRef',
+      'FormalFidelity',
+      'FormalRefKind',
+      'ATLAS_FAMILIES',
+      'AtlasFamily',
+      'ATLAS_RECORD_SCHEMA_VERSION',
+    ]) {
+      expect(facadeNames, n).toContain(n);
+    }
+  });
+
+  it('toAtlasJson stays OUT: its signature names the unshipped witness artifact, so promoting it widens the set by Tier 3 types', () => {
+    expect(facadeNames).not.toContain('toAtlasJson');
+    expect(facadeNames).not.toContain('WitnessResultsArtifact');
   });
 
   it('the root exposes the namespace, and its runtime keys are exactly the facade VALUES', async () => {
@@ -126,6 +145,8 @@ describe('atlas public namespace — derived from the facade file', () => {
     for (const k of keys) expect(facadeNames).toContain(k);
     expect(keys).toEqual(
       [
+        'ATLAS_FAMILIES',
+        'ATLAS_RECORD_SCHEMA_VERSION',
         'COMPOSITION_TABLE',
         'IDENTITY_BOUND',
         'MissingDeltaAtError',

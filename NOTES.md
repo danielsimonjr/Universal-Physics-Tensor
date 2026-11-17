@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-16 (Tier 2 atlas promotion, branch feat/tier2-promotion)
+
+- The facade `src/atlas/public.ts` lists 33 names, was 25. New: `AtlasBridge`, `FormalRef`, `FormalFidelity`, `FormalRefKind`, `NormTransport`, `AtlasFamily` (types) and `ATLAS_FAMILIES`, `ATLAS_RECORD_SCHEMA_VERSION` (values). `toAtlasJson` stays internal because its signature names `WitnessResultsArtifact`. Scoped tests under `tests/api` pass (69). The Tier 2 row in the ACTIVE list is not ticked: Mothership approval is pending.
+
 ## As of 2026-11-16 (Buckingham milestone 3, PR A)
 
 - **The first canonical-equation key is in the Lean manifest.** `CE-pendulum-period`, kind `derivation-step`, theorem `PhysJS.BuckinghamClassics.pendulum_exponent_unique` in `lean/BuckinghamClassics.lean`. The manifest has 231 entries: 208 bridge, 14 derivation-step, 3 cross-check, 3 property, 2 limit, 1 reduction. The counted kinds (reduction, limit, derivation-step) are 17, was 16. The axiom list in the manifest is the expected three (`propext`, `Classical.choice`, `Quot.sound`). CI run 44004377704 (job `lake build and axiom audit`) built `lean.BuckinghamClassics` and audited 4124 declarations under `lean`, all within the allowlist `[propext, Classical.choice, Quot.sound]`, so neither theorem uses `sorry` or an axiom outside that set. The audit bounds the set from above. The exact `#print axioms` list of each theorem is not compared to the manifest.

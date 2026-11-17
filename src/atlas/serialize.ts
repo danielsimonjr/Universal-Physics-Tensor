@@ -36,7 +36,7 @@ import { deriveEvidence } from './derive-evidence.js';
 import type { WitnessResultsArtifact } from './witness-artifact.js';
 import { artifactPassingWitnessIds } from './witness-artifact.js';
 
-/** Record major version of the emitted artifact. @internal */
+/** Record major version of the emitted artifact. @public */
 export const ATLAS_RECORD_SCHEMA_VERSION = '0';
 
 /** A JSON value, as emitted. @internal */

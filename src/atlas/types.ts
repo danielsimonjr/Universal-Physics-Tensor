@@ -64,7 +64,7 @@ export interface Witness {
  * A declaration licenses exactly the norm and direction it names; every other
  * norm, and the reverse direction, stay refused.
  *
- * @internal
+ * @public
  */
 export interface NormTransport {
   /** `'nt-spring-lc-relative-period'`; also the `recordId` of its registered witness. */
@@ -105,7 +105,7 @@ export interface NormTransport {
   readonly basis: 'numerically-supported' | 'symbolically-checked';
 }
 
-/** Field set = Blueprint v2 §3.1 Bridge record + citations. @internal */
+/** Field set = Blueprint v2 §3.1 Bridge record + citations. @public */
 export interface AtlasBridge {
   /** `'ab-spring-lc'`. */
   readonly id: string;

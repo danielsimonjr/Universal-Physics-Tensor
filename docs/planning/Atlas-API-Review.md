@@ -39,6 +39,8 @@ consistently.
 
 ### Tier 2 — DEFER one release (promising, but new in Sprints 4–6)
 
+**Promoted from Tier 2 to the `atlas` namespace:** `AtlasBridge`, `FormalRef`, `FormalFidelity`, `FormalRefKind`, `ATLAS_FAMILIES`, `ATLAS_RECORD_SCHEMA_VERSION`. The closure rule (§6) pulled in two more types. `NormTransport` is a field of `AtlasBridge`. `AtlasFamily` is the element type of `ATLAS_FAMILIES`. All eight carry `@public` and are listed in `src/atlas/public.ts`. `toAtlasJson` did NOT move. Its signature names `WitnessResultsArtifact`, the shape of the unshipped `data/atlas/witness-results.json`, and that type names `WitnessResultRecord`, which names more witness types. Promoting `toAtlasJson` would put Tier 3 witness types in the public set. Every other row below keeps its reason.
+
 | Symbols | Why they wait |
 |---|---|
 | `checkApplicability`, `ApplicabilityFinding*` | Landed in S4.1, and its side-condition matcher is a shallow prose heuristic by its own documentation |
@@ -89,7 +91,7 @@ that and would claim the generic names at the root.
 ## 4. The decision in §6 was applied
 
 §6 is the decision in force: an additive `atlas` namespace, Tier 1 only, and `src/atlas/public.ts`
-is the only public list. Tier 2 stays deferred under §2.
+is the only public list. Tier 2 stays deferred under §2, except the symbols listed at the head of the Tier 2 section.
 
 ## 5. Adversarial review ("Adam", Gemini 2.5 Pro) and dispositions
 

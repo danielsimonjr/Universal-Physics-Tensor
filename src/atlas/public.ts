@@ -17,10 +17,15 @@
 
 export type {
   ApproximationBound,
+  AtlasBridge,
   AtlasRejection,
   Counterexample,
   EvidenceTag,
+  FormalFidelity,
+  FormalRef,
+  FormalRefKind,
   LimitCharacter,
+  NormTransport,
   Regime,
   RegimeInequality,
   RelationType,
@@ -35,3 +40,6 @@ export { composeBoundPath, composeBounds, IDENTITY_BOUND } from './error-algebra
 export type { BoundPair, ComposedPath } from './error-algebra.js';
 export { composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM } from './composition-table.js';
 export type { CompositionResult, NoCompositeClaim } from './composition-table.js';
+export { ATLAS_FAMILIES } from './families.js';
+export type { AtlasFamily } from './family.js';
+export { ATLAS_RECORD_SCHEMA_VERSION } from './serialize.js';
