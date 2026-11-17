@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 76 files
+- **atlas**: 77 files
 - **bridges**: 25 files
 - **canonical**: 20 files
 - **cases**: 7 files
@@ -567,6 +567,23 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./model.js` | `AtlasModel` | Import (type-only) |
 | `./types.js` | `AtlasBridge, AtlasRejection` | Import (type-only) |
+
+---
+
+### `src/atlas/formal-ref-carriers.ts` - The one list of records that can carry a formal reference.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+| `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `../relations/types.js` | `FormalRef` | Import (type-only) |
+| `./catalog-formal-ref.js` | `catalogFormalRef` | Import |
+| `./families.js` | `ATLAS_FAMILIES` | Import |
+| `./physjs-ref.js` | `physjsFormalRef, physjsTheorem` | Import |
+
+**Exports:**
+- Functions: `formalRefCarriers`
 
 ---
 
@@ -7607,7 +7624,7 @@ The codebase is organized into the following modules:
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
 | `bridge-record` | 4 files | 0 files |
-| `catalog-formal-ref` | 4 files | 3 files |
+| `catalog-formal-ref` | 4 files | 4 files |
 | `chain-pipeline` | 16 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
@@ -7622,7 +7639,7 @@ The codebase is organized into the following modules:
 | `numerics` | 2 files | 2 files |
 | `error-algebra` | 1 files | 3 files |
 | `export` | 3 files | 1 files |
-| `families` | 5 files | 3 files |
+| `families` | 5 files | 4 files |
 | `family` | 2 files | 10 files |
 
 ---
@@ -7642,7 +7659,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...71 more]
+        N5[...72 more]
     end
 
     subgraph Bridges
@@ -7778,17 +7795,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 389 |
+| Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 88746 |
-| Total Exports | 2843 |
+| Total Lines of Code | 88796 |
+| Total Exports | 2844 |
 | Total Re-exports | 1397 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 933 |
+| Total Functions | 934 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
-| Type-only Imports | 532 |
+| Type-only Imports | 533 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

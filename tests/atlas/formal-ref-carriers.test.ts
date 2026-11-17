@@ -1,8 +1,9 @@
 /**
  * `formalRefCarriers()` is the one list of reference carriers: every atlas
  * bridge, every catalog row, and every canonical equation whose id is a
- * manifest key. The manifest check reads it. Each control below fails when
- * the canonical part of the list is dropped or widened.
+ * manifest key. The manifest check reads it. Tests 1, 3, 4 and 5 fail when the
+ * canonical part of the list is dropped or widened. The other two tests check
+ * that physjsManifestProblems reports an unresolved key.
  */
 
 import { readFileSync } from 'node:fs';
@@ -23,7 +24,7 @@ describe('formalRefCarriers', () => {
     expect(physjsManifestProblems({ manifest, bridges: formalRefCarriers() })).toEqual([]);
   });
 
-  it('CONTROL: a manifest key that names no bridge and no canonical record is reported', () => {
+  it('physjsManifestProblems reports a manifest key that names no bridge and no canonical record', () => {
     const extra = {
       ...manifest,
       entries: [...manifest.entries, { ...manifest.entries[0]!, key: 'CE-no-such-record', bridgeId: 'CE-no-such-record' }],
@@ -54,7 +55,7 @@ describe('formalRefCarriers', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('CONTROL: without the canonical carriers the real manifest reports its canonical key unresolved', () => {
+  it('physjsManifestProblems reports the canonical key when no canonical carrier is passed', () => {
     const withoutCanonical = formalRefCarriers().filter((c) => canonicalById(c.id) === undefined);
     expect(physjsManifestProblems({ manifest, bridges: withoutCanonical }).join('\n')).toContain(
       "manifest key 'CE-pendulum-period' does not resolve to a bridge",

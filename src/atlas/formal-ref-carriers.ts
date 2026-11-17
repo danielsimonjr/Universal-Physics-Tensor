@@ -2,8 +2,8 @@
  * The one list of records that can carry a formal reference.
  *
  * The Lean manifest check, the generated-table check, the proof-target check
- * and the axiom gate each need this list. Each read it from a local copy
- * before; this module is the one copy. A canonical equation is a carrier when
+ * and the axiom gate each need this list. Before, each check built its own
+ * copy of the list. This module is the one copy. A canonical equation is a carrier when
  * its id is a manifest key. The module reads the generated table and the
  * canonical registry only: it holds no key list and no canonical id.
  *
