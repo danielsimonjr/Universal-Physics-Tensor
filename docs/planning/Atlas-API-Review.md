@@ -37,7 +37,7 @@ consistently.
 | `composeBounds`, `composeBoundPath`, `IDENTITY_BOUND`, `BoundPair`, `ComposedPath` | The Phase 2 error algebra, unchanged |
 | `composeRelation`, `COMPOSITION_TABLE`, `NO_COMPOSITE_CLAIM`, `CompositionResult`, `NoCompositeClaim` | Phase 3 table lookup, unchanged. `NoCompositeClaim` is included because `CompositionResult` names it |
 | `AtlasBridge`, `FormalRef`, `FormalFidelity`, `FormalRefKind`, `NormTransport` | The bridge record and the formal reference it carries. `formalRef` is the one path to `formally-proved` (`AGENTS.md`, law 1), so a caller who reads evidence must be able to read the reference by type. `NormTransport` and `FormalRefKind` are included because `AtlasBridge` and `FormalRef` name them (§6, closure) |
-| `ATLAS_FAMILIES`, `AtlasFamily`, `ATLAS_RECORD_SCHEMA_VERSION` | `ATLAS_FAMILIES` is the stable handle on the atlas content (Tier 3 names it as such). `AtlasFamily` is its element type. The schema version is the `schemaVersion` field of every record under `data/atlas/`, which the package ships; a reader of those files needs the value to compare against |
+| `ATLAS_FAMILIES`, `AtlasFamily`, `ATLAS_RECORD_SCHEMA_VERSION` | `ATLAS_FAMILIES` is the stable handle on the atlas content (Tier 3 names it as such). `AtlasFamily` is its element type. The schema version is the `schemaVersion` field of `atlas.json` and the family files under `data/atlas/`, which the package ships; a reader of those files needs the value to compare against |
 
 ### Tier 2 — DEFER one release (promising, but new in Sprints 4–6)
 

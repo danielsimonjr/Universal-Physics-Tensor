@@ -38,9 +38,11 @@ import { artifactPassingWitnessIds } from './witness-artifact.js';
 
 /**
  * Record major version of the atlas artifacts: the `schemaVersion` field of
- * every record the package ships under `data/atlas/`. A reader compares the
- * field against this value. No public function emits it; the serializer that
- * writes the artifacts is internal.
+ * `atlas.json` and of the family files (`oscillators.json`, `diffusion.json`,
+ * `waves.json`) the package ships under `data/atlas/`. A reader compares the
+ * field against this value. `witness-results.json`, `atlas.jsonld` and
+ * `qudt-resolution.json` do not carry this version. No public function emits
+ * it; the serializer that writes the artifacts is internal.
  *
  * @public
  */
