@@ -17,6 +17,10 @@ updates:
       # Remove this rule once the benches are migrated.
       - dependency-name: vitest
         update-types: [version-update:semver-major]
+      # @vitest/* packages (coverage-v8 and the rest) peer-require the matching vitest major, so
+      # their major bump cannot install until vitest moves too.
+      - dependency-name: "@vitest/*"
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: github-actions
     directory: /
