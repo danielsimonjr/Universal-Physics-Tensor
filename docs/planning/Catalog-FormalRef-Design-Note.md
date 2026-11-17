@@ -52,9 +52,8 @@ light none of the three. `deriveEvidenceForVerdict` is the same predicate
 for a catalog row. A catalog id is not passed to either predicate. Storing
 a `formalRef` on `BridgeEquationEntry` or on `CanonicalEquation` does not
 light a tag. The catalog reference lives in the atlas overlay
-`catalogFormalRef`, not as a second copy on the row. The covers word says
-which kind occupies the reference, except for the two cases in the Kinds
-section.
+`catalogFormalRef`, not as a second copy on the row. The manifest `kind`
+field says which kind occupies the reference (see the Kinds section).
 
 ## Keying
 
@@ -95,7 +94,7 @@ the top-level theorem only. The milestone row is done only when both
 statements are recorded. Each covers line claims its own part.
 
 A property or a cross-check is copied into the vendored manifest and may
-occupy the one catalog `formalRef`. The first word of `covers` is the
+occupy the one catalog `formalRef`. The manifest `kind` field is the
 kind. `property` and `cross-check` are not `reduction`, `limit`, or
 `derivation-step`, so a reader can tell them from a counted statement.
 A cross-check of two ids is one entry. `bridgeId` is one of those ids, and
