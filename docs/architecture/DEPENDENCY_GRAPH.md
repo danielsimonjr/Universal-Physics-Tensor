@@ -752,7 +752,7 @@ The codebase is organized into the following modules:
 | `./dimensions.js` | `SPRING_CONSTANT` | Import |
 
 **Exports:**
-- Functions: `latticeDispersion`, `continuumDispersion`, `chainWaveSpeed`, `latticeBandEdge`, `dispersionErrorApproximation`
+- Functions: `latticeDispersion`, `continuumDispersion`, `chainWaveSpeed`, `latticeBandEdge`, `dispersionErrorApproximation`, `dispersionDeviationBound`
 - Constants: `BRIDGE_CHAIN_WAVE`, `CONTRACT_CHAIN_WAVE`
 
 ---
@@ -1439,7 +1439,7 @@ The codebase is organized into the following modules:
 | `./oscillators/norm-transport.js` | `SPRING_LC_RELATIVE_PERIOD_TRANSPORT, W1TAU_FIXTURE` | Import |
 | `./oscillators/norm-transport-witness.js` | `measureTransportedPeriodError` | Import |
 | `./oscillators/bridges-limits.js` | `dampedOffsetBoundAt` | Import |
-| `./oscillators/bridges-coarse.js` | `dispersionErrorApproximation` | Import |
+| `./oscillators/bridges-coarse.js` | `dispersionDeviationBound, dispersionErrorApproximation` | Import |
 | `./oscillators/limit-witnesses.js` | `measureChainDispersionError, measureMasslessOffset, measurePendulumPeriodRatio, W7_FIXTURE, W8B_FIXTURE, W9_FIXTURE` | Import |
 | `./witness-numeric.js` | `NumericWitnessSpec` | Import (type-only) |
 | `./witness-symbolic.js` | `SymbolicWitnessSpec` | Import (type-only) |
@@ -7802,12 +7802,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89011 |
-| Total Exports | 2852 |
+| Total Lines of Code | 89028 |
+| Total Exports | 2853 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 934 |
+| Total Functions | 935 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |
