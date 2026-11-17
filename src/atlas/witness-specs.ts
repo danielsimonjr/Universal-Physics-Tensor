@@ -67,7 +67,7 @@ import { pendulumPeriodErrorAt } from './oscillators/bridges-limits.js';
 import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT, W1TAU_FIXTURE } from './oscillators/norm-transport.js';
 import { measureTransportedPeriodError } from './oscillators/norm-transport-witness.js';
 import { dampedOffsetBoundAt } from './oscillators/bridges-limits.js';
-import { dispersionErrorApproximation } from './oscillators/bridges-coarse.js';
+import { dispersionDeviationBound, dispersionErrorApproximation } from './oscillators/bridges-coarse.js';
 import {
   measureChainDispersionError,
   measureMasslessOffset,
@@ -604,7 +604,8 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
   },
   {
     // Coarse-graining, long wavelength: 1 − ω/(c q) measured on the integrated
-    // ring, over (qa)²/24, tends to 1 within the (qa)²/80 W9 records.
+    // ring, over (qa)²/24, tends to 1 within the (qa)²/80 W9 records, taken at
+    // the fine resolution the runner compares against (qa = 2π/32).
     recordId: 'ab-chain-wave',
     kind: 'numeric',
     spec: {
@@ -616,7 +617,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       target: 1,
       coarseResolution: 1,
       fineResolution: 2,
-      tolerance: 0.005,
+      tolerance: dispersionDeviationBound((2 * Math.PI) / (W9_FIXTURE.masses * 2)),
     },
     claim: {
       name: 'preserves',

@@ -73,6 +73,22 @@ export function dispersionErrorApproximation(qa: number): number {
   return (qa * qa) / 24;
 }
 
+/**
+ * The W9 tolerance: the magnitude of the relative deviation of the true
+ * dispersion error from `(qa)²/24`, taken over `(qa)²/24`, is at most
+ * `(qa)²/80` for `qa < 1`.
+ *
+ * Derivation: with `x = qa/2`, `1 − sin x / x = x²/6 − x⁴/120 + x⁶/5040 − …`,
+ * so the deviation is `−(qa)²/80 + (qa)⁴/13440 − …`. The series alternates and
+ * each term is at most `1/80` of the one before it for `qa < 1`, so the
+ * magnitude never exceeds the leading term. A flat 0.5% fails for `qa > 0.634`.
+ *
+ * @internal
+ */
+export function dispersionDeviationBound(qa: number): number {
+  return (qa * qa) / 80;
+}
+
 /** Bridge 5: chain → wave equation by coarse-graining. @internal */
 export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
   id: 'ab-chain-wave',
