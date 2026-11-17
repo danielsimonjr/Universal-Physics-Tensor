@@ -38,9 +38,10 @@ import type { ApproximationBound } from '../relations/types.js';
 export interface UncertaintyOptions {
   /**
    * An approximation bound for the map the edge stands in for. Its `delta` —
-   * the uniform model error in `bound.norm` — is added to the statistical
-   * sigma IN QUADRATURE, on the usual independence assumption between input
-   * noise and model error.
+   * the uniform model error in `bound.norm` — is NOT folded into `sigma`.
+   * The result carries `value`, `sigma` and `delta` as separate fields: a
+   * bias bound and a random spread are different kinds of error, so the
+   * caller combines them.
    *
    * `bound.K` is deliberately NOT used. The Lipschitz constant composes bounds
    * ALONG A PATH (`atlas/error-algebra`); applying it here would rescale a

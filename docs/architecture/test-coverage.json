@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 390,
-    "totalTestFiles": 725,
+    "totalTestFiles": 726,
     "testedCount": 380,
     "directlyTestedCount": 348,
     "untestedCount": 10,
@@ -1085,6 +1085,7 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/atlas-json.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/benchmark.test.ts",
@@ -1434,6 +1435,7 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
       "tests/atlas/closure.test.ts",
@@ -1554,6 +1556,7 @@
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/applicability.test.ts",
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
@@ -11903,6 +11906,7 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
       "tests/atlas/closure.test.ts",
@@ -11946,6 +11950,7 @@
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/applicability.test.ts",
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/atlas-json.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
@@ -12180,6 +12185,7 @@
       "tests/atlas/export.test.ts"
     ],
     "src/atlas/families.ts": [
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/atlas-json.test.ts",
       "tests/atlas/benchmark.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
@@ -12375,6 +12381,7 @@
     ],
     "src/atlas/public.ts": [],
     "src/atlas/regime.ts": [
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
@@ -12409,6 +12416,7 @@
     "src/atlas/translation.ts": [],
     "src/atlas/types.ts": [
       "tests/atlas/applicability.test.ts",
+      "tests/atlas/approximation-bound-properties.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
       "tests/atlas/composition-table.test.ts",
       "tests/atlas/conventions.test.ts",
@@ -15605,6 +15613,13 @@
       "src/dimensional/ast-types.ts",
       "src/atlas/applicability.ts",
       "src/atlas/model.ts",
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
+    ],
+    "tests/atlas/approximation-bound-properties.test.ts": [
+      "src/atlas/families.ts",
+      "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
     ],
