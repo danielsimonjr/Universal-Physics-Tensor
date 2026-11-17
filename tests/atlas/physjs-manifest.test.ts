@@ -73,7 +73,9 @@ const SENTINELS: readonly (readonly [string, string, string, RegExp])[] = [
   ['CE-planck-time', 'PhysJS.BuckinghamClassics.planck_time_exponent_unique', 'derivation-step', /\(1\/2, 1\/2, -5\/2\) on \(hbar, G, c\).*prefactor 1 is not derived\. Not a statement about quantum gravity\.$/s],
   ['CE-compton-wavelength', 'PhysJS.BuckinghamClassics.compton_exponent_unique', 'derivation-step', /\(1, -1, -1\) on \(hbar, mass, c\).*prefactor 1 is not derived\. Not a statement about scattering\.$/s],
   ['CE-thermal-de-broglie', 'PhysJS.BuckinghamClassics.thermal_de_broglie_exponent_unique', 'derivation-step', /\(1, -1\/2, -1\/2, -1\/2\) on \(hbar, mass, k_B, temperature\).*The prefactor is not derived\. Not a statement about a gas\.$/s],
-  ['be-42', 'PhysJS.HawkingUnruh.dictionary', 'cross-check', /Not the Hawking effect$/],
+  ['be-42', 'PhysJS.BuckinghamClassics.hawking_rs_exponent_unique', 'derivation-step', /\(-1, 1, 1, -1\) on \(schwarzschild-radius, hbar, c, k_B\).*prefactor 1\/\(4π\) is not derived\..*Not the Hawking effect\.$/s],
+  ['be-20', 'PhysJS.BuckinghamClassics.vacuum_density_exponent_unique', 'derivation-step', /\(1, 2, -1\) on \(cosmological-constant-curvature, c, G\).*prefactor 1\/\(8π\) is not derived\. Not a statement about the cosmological constant problem\.$/s],
+  ['be-48', 'PhysJS.BuckinghamClassics.grw_exponent_unique', 'derivation-step', /\(1, -1, 2\) on \(mass, hbar, c\).*constant equals lambda0 hbar\/\(m0 c\^2\), the ratio of the two empirical parameters.*is not derived\. The localization rate of the model itself has no hbar and no c\. Not GRW theory\.$/s],
   ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', 'bridge', /The id is contested\./],
   ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', 'bridge', /Not a derivation from the five-dimensional Einstein equation$/],
   ['be-60', 'PhysJS.Laughlin.filling_fraction', 'bridge', /Not the Laughlin wavefunction, and not the anyon charge e\/3$/],
@@ -343,8 +345,8 @@ describe('the Lean manifest', () => {
       expect(bridge.formalRef?.statement, label).toBe(entry.theorem);
       expect(bridge.formalRef?.statement, label).not.toBe(statement.theorem);
     }
-    expect(catalogFormalRef(20)).toBeUndefined();
-    expect(manifest.entries.some((entry) => entry.key === 'be-20')).toBe(false);
+    // BE-20 has its own key since the exponent theorem (Buckingham M3, PR C); it is not a nested statement of be-13.
+    expect(catalogFormalRef(20)?.statement).toBe('PhysJS.BuckinghamClassics.vacuum_density_exponent_unique');
   });
 
   it('a nested kind outside the formal-reference kinds fails', () => {
@@ -415,8 +417,8 @@ describe('the Lean manifest', () => {
     const ofKind = (...kinds: string[]) => manifest.entries.filter((entry) => kinds.includes(entry.kind)).map((entry) => entry.key);
     // Each key of a kind other than bridge carries that kind on its reference.
     // The counts are the record at this pin; the keys come from the manifest.
-    expect(ofKind(...COUNTED_KINDS)).toHaveLength(25);
-    expect(ofKind('cross-check')).toHaveLength(3);
+    expect(ofKind(...COUNTED_KINDS)).toHaveLength(28);
+    expect(ofKind('cross-check')).toHaveLength(2);
     expect(ofKind('property')).toHaveLength(3);
     for (const key of ofKind(...COUNTED_KINDS, 'cross-check', 'property')) {
       expect(physjsFormalRef(key).kind, key).toBe(manifest.entries.find((entry) => entry.key === key)!.kind);
@@ -487,7 +489,8 @@ describe('the Lean manifest', () => {
       (bridge) => bridge.formalRef !== undefined && bridge.formalRef.fidelity !== 'unreviewed',
     );
     expect(reviewed).toHaveLength(10);
-    for (const id of [36, 20, 57]) {
+    // be-20 left this list when its exponent theorem became its own key.
+    for (const id of [36, 57]) {
       expect(catalogFormalRef(id)).toBeUndefined();
       expect(manifest.entries.some((entry) => entry.key === `be-${id}`)).toBe(false);
     }

@@ -436,7 +436,7 @@
         "cosmological"
       ],
       "status": "speculative",
-      "proofStatus": "pending",
+      "proofStatus": "weak",
       "context": "Observed cosmological-constant mass density: ρ_Λ = c²Λ/(8πG). With Λ ≈ 1.1×10⁻⁵² m⁻² (Planck 2018), ρ_Λ ≈ 5.4×10⁻²⁷ kg/m³ ≈ 70% of the present-day critical density.",
       "formula_latex": "\\rho_{\\Lambda} = \\frac{c^2 \\Lambda}{8\\pi G}",
       "source_part": "I",
@@ -458,6 +458,8 @@
       "dependencies": [],
       "dimensional_signature": "[L^-3 M]",
       "notes": "Encoded 2026-05-07 (Wave Y): Tier-5 AST encoding for the canonical observed-cosmological-constant mass density ρ_Λ = c²Λ/(8πG) landed (the catalog record (data/bridge-catalog.json)). dimensional_signature null → '[L^-3 M]' (mass density, kg/m³; [c²Λ] = T⁻² and [1/G] = MT²L⁻³, product = ML⁻³ ✓). Numerical bracket: with Λ ≈ 1.1×10⁻⁵² m⁻² (Planck 2018), ρ_Λ ≈ 5.4×10⁻²⁷ kg/m³ matching the observed dark-energy density (~70% of critical density). The energy-density form ρ_Λc² ≈ 7×10⁻¹⁰ J/m³ is the alternate convention; both forms physically equivalent. tractability_class lifted from 'formally-divergent' to 'closed-form'. | Reformulated 2026-05-07 (Wave Y, per the strategic pattern of replacing formally-divergent bridge content with canonical scalar reductions). Replaced the formally-divergent vacuum-fluctuation integral ρ_vac = ρ_0 + ∫d³k (ℏω_k/2)·ζ(k/k_UV) (which produces the famous 10¹²⁰-discrepancy cosmological-constant problem) with the canonical FRW observed-CC relation ρ_Λ = c²Λ/(8πG). The cosmological-constant problem itself is preserved as the famous unfixed problem in known_issues; this reformulation does NOT solve it, only encodes the observed scalar that the problem is *about*. Status remains 'speculative' because the bridge framing — using the observed CC as a quantum-cosmological bridge — is the speculative element. | Earlier history: original arXiv refs 1402.5674 / 1509.07876 (Susskind complexity-volume; off-topic for this entry) replaced with canonical CC literature: Carroll 2001 review, Weinberg 1989 CC problem, Planck 2020 measurement, Riess 1998 / Perlmutter 1999 supernova-acceleration discoveries.",
+      "formalKey": "be-20",
+      "theorem": "PhysJS.BuckinghamClassics.vacuum_density_exponent_unique",
       "dimension": {
         "L": -3,
         "M": 1,
@@ -1526,7 +1528,7 @@
       "dimensional_signature": "[temperature]",
       "notes": "Encoded 2026-05-07 (Wave Y): Tier-5 AST encoding for the canonical Hawking temperature T_H = ℏc³/(8π G M k_B) landed (the catalog record (data/bridge-catalog.json)). dimensional_signature null → '[temperature]' (round-trips cleanly: [ℏc³] = M L⁵ T⁻⁴, [G M k_B] = M L⁵ T⁻⁴ Θ⁻¹, ratio = Θ ✓). Numerical bracket: solar-mass BH (M = 1.989×10³⁰ kg) → T_H ≈ 6.17×10⁻⁸ K (textbook Hawking temperature for stellar-mass BH per Wald §14.3.7). | Reformulated 2026-05-07 (Wave Y, per the strategic pattern of replacing operator-valued / quantum-state bridge content with canonical scalar reductions). Replaced the firewall complement-principle quantum-state superposition |ψ⟩ = α|smooth⟩ + β|firewall⟩ (an AST-unencodable Hilbert-space decomposition without operational predictive content unless |α|² and |β|² were independently specified) with the canonical Hawking temperature T_H = ℏc³/(8π G M k_B) — the temperature scale at which the firewall paradox lives. The bridge framing (firewall paradox / information paradox resolutions, the original BE-42 catalog motivation) is preserved as the speculative element documented in known_issues. Status remains 'highly-speculative' because the firewall-resolution bridge framing — using T_H as the bridge between AMPS / ER=EPR / complementarity / soft-hair / Page-curve resolutions — is the highly-speculative element; T_H itself is canonical Hawking. | Earlier history: BE-42 was originally the firewall complement principle; AMPS 2013 (arXiv:1207.3123), Maldacena-Susskind 2013 ER=EPR (arXiv:1306.0533), Harlow 2016 review (arXiv:1409.1231), Penington 2020 entanglement-wedge (arXiv:1905.08255) all concern dynamics at the Hawking-temperature scale. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown classification applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): NOT-A-BRIDGE. HIGH NOT-A-BRIDGE: audit-S3 confirmed canonical physics mis-filed; single quantum-gravity regime. The bridges array remains [unknown, unknown] as the structural marker for not actually a regime-spanning bridge. Future v0.8+ restructuring may move this entry to a separate LAW_EQUATIONS registry.",
       "formalKey": "be-42",
-      "theorem": "PhysJS.HawkingUnruh.dictionary",
+      "theorem": "PhysJS.BuckinghamClassics.hawking_rs_exponent_unique",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -1757,7 +1759,7 @@
         "classical"
       ],
       "status": "speculative",
-      "proofStatus": "pending",
+      "proofStatus": "weak",
       "context": "GRW mass-amplified spontaneous-localization rate λ_GRW(m) = λ_0 · (m/m_0), the GRW (QMSL) centre-of-mass amplification λ_macro = N λ_micro (Bassi & Ghirardi 2003 §6.4); in CSL the macroscopic rate is γ D_0 n_out instead (§8.3). A particle of mass m localizes at rate proportional to m/m_0, where m_0 is the nucleon mass and λ_0 ≈ 10⁻¹⁶ /s is the canonical GRW 1986 single-nucleon rate. The full Lindblad master equation is the framing; the scalar rate is the AST-encoded bridge content.",
       "formula_latex": "\\lambda_{\\text{GRW}}(m) = \\lambda_0 \\cdot \\frac{m}{m_0}, \\quad \\lambda_0 \\approx 10^{-16}\\,\\text{s}^{-1}, \\quad m_0 = m_{\\text{nucleon}}",
       "source_part": "II",
@@ -1780,6 +1782,8 @@
       "dependencies": [],
       "dimensional_signature": "[frequency]",
       "notes": "Encoded 2026-05-07 (Wave Y): Tier-5 AST encoding for the mass-amplified GRW localization rate λ_GRW(m) = λ_0 · (m/m_0) landed (the catalog record (data/bridge-catalog.json)). dimensional_signature was orphan '[frequency]' (R0 audit pin); now backed by an AST module. The full Lindblad master equation is preserved as the bridge framing / context; the scalar rate is the encoded bridge content (parallel to BE-11 encoding only the Caldeira-Leggett rate γ_k(λ), not the full Lindblad). Numerical bracket: λ_GRW(electron) ≈ 5×10⁻²⁰ /s (negligible for individual electrons); λ_GRW(macroscopic 1 g) ≈ 6×10⁷ /s (rapid collapse, no Schrödinger-cat states). | Reformulated 2026-05-07 (Wave Y, per the strategic pattern of replacing operator-valued master equations with their canonical scalar reductions). Replaced the operator-valued Lindblad master-equation form (dρ/dt = -(i/ℏ)[H,ρ] + λ ∫d³x [L_x ρ L_x† - (1/2){L_x† L_x, ρ}]) with the canonical mass-amplification rate λ_GRW(m) = λ_0 · (m/m_0). Status changed from 'established' to 'speculative' because the bridge framing — using GRW / CSL mass-amplification as a UPT bridge between standard QM and a possible objective-collapse modification — is the speculative element (the rate formula itself is canonical, but the existence of the GRW / CSL effect as a real physical mechanism is the conjectural content). Same pattern as BE-22, BE-26, BE-38 (Kitaev-Preskill / WKB / Milgrom canonical, UPT bridge framing speculative). | Earlier history: Corrected 2026-05-04 R0 audit — added canonical (πσ²)^{-3/4} prefactor to L_x and updated λ from 1e-17 to 1e-16 s^-1 to match the original 1986 GRW value. Citations: Ghirardi-Rimini-Weber 1986 Phys. Rev. D 34:470; Bassi-Ghirardi 2003 Phys. Rep. 379:257 review. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown naming applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): [quantum, classical]. Rationale (HIGH: CSL-extension maps quantum superposition -> classical localization). | Corrected 2026-09-24 (citation census finding F2): the name said \"(CSL extension)\" and the context said \"GRW / CSL\", crediting the linear law λ_0 (m/m_0) to CSL. Bassi & Ghirardi 2003 give it for GRW/QMSL (§6.4, λ_macro = N λ_micro) and give CSL a different macroscopic rate, γ D_0 n_out (§8.3). The name and context now say GRW; the earlier text above is kept as history.",
+      "formalKey": "be-48",
+      "theorem": "PhysJS.BuckinghamClassics.grw_exponent_unique",
       "relation": {
         "type": "derivation",
         "transformation": "single-nucleon GRW localization rate lambda_0 at reference mass m_0 -> composite-mass rate lambda_GRW(m) = lambda_0 (m/m_0) by the GRW (QMSL) centre-of-mass amplification lambda_macro = N lambda_micro"

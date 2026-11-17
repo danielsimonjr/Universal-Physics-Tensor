@@ -89,7 +89,8 @@ describe('catalog formalRef overlay', () => {
 
   it('a key the overlay does not contain resolves to no reference', () => {
     expect(catalogFormalRef(11)).toBeDefined();
-    expect(catalogFormalRef(20)).toBeUndefined();
+    expect(catalogFormalRef(21)).toBeDefined();
+    expect(catalogFormalRef(36)).toBeUndefined();
     expect(catalogFormalRef(999)).toBeUndefined();
   });
 });
