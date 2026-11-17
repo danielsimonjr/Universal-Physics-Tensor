@@ -11,7 +11,14 @@ import { adjudicationFor } from '../../src/composition/adjudication.js';
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
 
 const report = proposeOrphanConnectors(CATALOG_GRAPH);
-const isolated = new Set(linkageMap(CATALOG_GRAPH).isolated);
+// An isolated bridge is a catalog ROW that links no other row: a cluster of one edge, or a
+// cluster whose edges are all relations of one row (be-26 and its second relation be-26-wkb).
+const rowOf = new Map(CATALOG_GRAPH.map((e) => [e.id, e.beId]));
+const isolated = new Set(
+  linkageMap(CATALOG_GRAPH)
+    .clusters.filter((c) => c.size === 1 || new Set(c.edges.map((id) => rowOf.get(id))).size === 1)
+    .flatMap((c) => c.edges),
+);
 
 describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
   it('partitions the isolated bridges: connected (a same-kind connector) and unconnected (no connector), disjoint and sorted', () => {
@@ -62,6 +69,12 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
     const row = adjudicationFor('coarsening-length', 'quantum-correlation-length');
     expect(row?.verdict).toBe('decoy');
     expect(row?.grounds.startsWith('Non-equilibrium vs equilibrium length')).toBe(true);
+  });
+
+  it('a row whose only cluster partner is its own second relation is still an orphan (be-26)', () => {
+    expect(isolated.has('be-26')).toBe(true);
+    expect(isolated.has('be-26-wkb')).toBe(true);
+    expect(linkageMap(CATALOG_GRAPH).isolated).not.toContain('be-26');
   });
 
   it('tunneling-mass ≟ effective-mass shares a token and the ledger calls it a decoy', () => {

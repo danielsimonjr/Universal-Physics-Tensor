@@ -14,15 +14,15 @@
     "unadjudicated": 3
   },
   "relations": {
-    "total": 158,
+    "total": 159,
     "kindBridge": 52,
-    "kindLaw": 106,
+    "kindLaw": 107,
     "bridgeOnStandardRow": 27,
-    "lawOnCrossDomainRow": 16,
+    "lawOnCrossDomainRow": 17,
     "kindDisagreesWithRegimeAttributes": 17
   },
   "graph": {
-    "edges": 158
+    "edges": 159
   },
   "evaluators": {
     "count": 121,
@@ -42,25 +42,25 @@
   },
   "linkage": {
     "components": 133,
-    "isolated": 129,
+    "isolated": 128,
     "compositions": 22,
     "anchoredClusterSize": 22,
     "anchoredClusterEstablished": 11
   },
   "linkCandidates": {
-    "total": 4169,
-    "touchingCore": 4135,
-    "touchingCoreSameKind": 1087
+    "total": 4192,
+    "touchingCore": 4157,
+    "touchingCoreSameKind": 1092
   },
   "discovery": {
     "catalog": {
-      "total": 4169,
+      "total": 4192,
       "promising": 1,
-      "promisingUnchecked": 29,
-      "inert": 2362,
+      "promisingUnchecked": 30,
+      "inert": 2365,
       "magnitudeClash": 20,
       "contradictory": 0,
-      "axisClash": 1757,
+      "axisClash": 1776,
       "shadowedByMagnitudeClash": 10
     },
     "canonical": {
@@ -86,9 +86,9 @@
     "coefficientUnset": 0,
     "decoy": 22,
     "notAMonomial": 25,
-    "open": 74,
+    "open": 75,
     "closable": 64,
-    "freedomOne": 55,
+    "freedomOne": 56,
     "maxFiniteFreedom": 6,
     "unspannable": 1
   },
@@ -102,9 +102,9 @@
     }
   },
   "mapBothFormallyProved": {
-    "total": 267,
+    "total": 268,
     "kept": 118,
-    "droppedNotMatching": 39,
+    "droppedNotMatching": 40,
     "droppedMissingMetadata": 110
   }
 }

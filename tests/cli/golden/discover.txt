@@ -4,9 +4,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  4169 candidates  →  1 promising  ·  29 promising, magnitude unchecked  ·  2362 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1757 axis-clash
+  funnel:  4192 candidates  →  1 promising  ·  30 promising, magnitude unchecked  ·  2365 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1776 axis-clash
   readiness of the 1 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 1 with axis unresolved · 0 with an entailed consequence
-  readiness of the 29 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 29 without magnitude evidence · 26 with axis unresolved · 0 with an entailed consequence
+  readiness of the 30 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 30 without magnitude evidence · 26 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   PROMISING (merges disconnected physics, unlocks quantities, stays consistent, and the magnitude falsifier ran and survived):
@@ -26,6 +26,13 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: landauer-erasure-energy and dark-fermion-mass are the same physical quantity, not only both [energy] · needs a representative magnitude for: dark-fermion-mass · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
         [observation: measure landauer-erasure-energy and dark-fermion-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    grw-localization-rate ≟ wkb-tunneling-rate           [[frequency]]  score 7
+        unlocks: wkb-tunneling-rate
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency, axis-compatible (≥1 regime axis) · gaps: magnitude (no representative value), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: axis (abstained: magnitude, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: grw-localization-rate and wkb-tunneling-rate are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: wkb-tunneling-rate · needs a consequence that re-derives a known law]
+        [observation: measure grw-localization-rate and wkb-tunneling-rate in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     landauer-erasure-energy ≟ ambegaokar-gap             [[energy]]  score 7
         unlocks: ambegaokar-gap, ambegaokar-product
         [consequence: inconclusive]
@@ -2031,6 +2038,25 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     weiss-temperature ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     wiedemann-temperature ≟ critical-temperature         scale: classical ≠ quantum
     wiedemann-temperature ≟ jeans-temperature            force: electromagnetic ≠ gravitational
+    wkb-tunneling-rate ≟ acdrude-radian                  scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ arrhenius-prefactor             scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ arrhenius-rate                  scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ cutoff-cyclotron                scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ cutoff-plasma                   scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ cutoff-r-frequency              scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ debye-cutoff-frequency          scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ eyring-rate                     scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ hubble-rate                     scale: quantum ≠ cosmological
+    wkb-tunneling-rate ≟ ion-acoustic-frequency          scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ landau-gamma                    scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ landau-omega                    scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ lower-hybrid-electron-cyclotron scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ lower-hybrid-frequency          scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ lower-hybrid-ion-cyclotron      scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ lower-hybrid-ion-plasma         scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ planck-frequency                scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ spiral-omega                    scale: quantum ≠ classical
+    wkb-tunneling-rate ≟ upper-hybrid-frequency          scale: quantum ≠ classical
     wormhole-cross-section-area ≟ newton-area            force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     wormhole-cross-section-area ≟ pull-in-area           force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     wormhole-entanglement-entropy ≟ debye-heat-capacity  force: gravitational ≠ electromagnetic; scale: quantum ≠ classical

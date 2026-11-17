@@ -1,10 +1,10 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (160-bridge)]
-  anchored core: the clusters holding at least one of the 125 established-confidence edge(s) of the 158 in this graph
+  anchored core: the clusters holding at least one of the 125 established-confidence edge(s) of the 159 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  4169 total  →  4135 touch the anchored core  →  1087 also same-kind
+  funnel:  4192 total  →  4157 touch the anchored core  →  1092 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     accretor-mass ≟ jeans-mass                               [mass]
@@ -314,6 +314,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     decoherence-rate ≟ eyring-rate                           [rate]
     decoherence-rate ≟ hubble-rate                           [rate]
     decoherence-rate ≟ mutation-rate                         [rate]  [adjudicated: decoy — Same units, no shared meaning; unanimous. A decoherence rate (loss of quantum phase to the environment) vs. a mutation rate (frequency of a permanent, classical change to a DNA sequence). Same units, no shared physical meaning — decoherence may precede a mutation, but they are not one quantity.]
+    decoherence-rate ≟ wkb-tunneling-rate                    [rate]
     defect-rest-mass ≟ accretor-mass                         [mass]
     defect-rest-mass ≟ bohm-ion-mass                         [mass]
     defect-rest-mass ≟ child-carrier-mass                    [mass]
@@ -512,6 +513,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     grw-localization-rate ≟ eyring-rate                      [rate]
     grw-localization-rate ≟ hubble-rate                      [rate]
     grw-localization-rate ≟ mutation-rate                    [rate]
+    grw-localization-rate ≟ wkb-tunneling-rate               [rate]
     hall-conductance ≟ landauer-channel-conductance          [conductance]
     hubble-rate ≟ arrhenius-rate                             [rate]
     hubble-rate ≟ eyring-rate                                [rate]
@@ -875,6 +877,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     relaxation-rate ≟ eyring-rate                            [rate]
     relaxation-rate ≟ hubble-rate                            [rate]
     relaxation-rate ≟ mutation-rate                          [rate]
+    relaxation-rate ≟ wkb-tunneling-rate                     [rate]
     residual-resistivity ≟ lorentz-resistivity               [resistivity]
     resistivity ≟ lorentz-resistivity                        [resistivity]
     reynolds-length ≟ biot-length                            [length]
@@ -1091,11 +1094,13 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     weiss-temperature ≟ wiedemann-temperature                [temperature]
     wiedemann-temperature ≟ critical-temperature             [temperature]
     wiedemann-temperature ≟ jeans-temperature                [temperature]
+    wkb-tunneling-rate ≟ arrhenius-rate                      [rate]
+    wkb-tunneling-rate ≟ eyring-rate                         [rate]
     wormhole-cross-section-area ≟ newton-area                [area]
     wormhole-cross-section-area ≟ pull-in-area               [area]
     wormhole-entanglement-entropy ≟ sackur-entropy           [entropy]
 
-  adjudicated: 4 of 1087 carry a recorded verdict; the rest are unadjudicated.
+  adjudicated: 4 of 1092 carry a recorded verdict; the rest are unadjudicated.
   A shared dimension is a coincidence until a physicist records otherwise. The ledger's sources:
     https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
     https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md

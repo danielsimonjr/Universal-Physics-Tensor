@@ -200,6 +200,29 @@ digraph PhysicsMap {
   }
   subgraph cluster_3 {
     label="anchored cluster (2)";
+    j_be_26 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-26"];
+    q_attempt_frequency [shape=ellipse,label="attempt-frequency"];
+    q_attempt_frequency -> j_be_26;
+    q_tunneling_mass [shape=ellipse,label="tunneling-mass"];
+    q_tunneling_mass -> j_be_26;
+    q_barrier_height [shape=ellipse,label="barrier-height"];
+    q_barrier_height -> j_be_26;
+    q_barrier_width [shape=ellipse,label="barrier-width"];
+    q_barrier_width -> j_be_26;
+    q_biological_rate_correction [shape=ellipse,label="biological-rate-correction"];
+    q_biological_rate_correction -> j_be_26;
+    q_mutation_rate [shape=ellipse,label="mutation-rate"];
+    j_be_26 -> q_mutation_rate;
+    j_be_26_wkb [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-26"];
+    q_attempt_frequency -> j_be_26_wkb;
+    q_tunneling_mass -> j_be_26_wkb;
+    q_barrier_height -> j_be_26_wkb;
+    q_barrier_width -> j_be_26_wkb;
+    q_wkb_tunneling_rate [shape=ellipse,label="wkb-tunneling-rate"];
+    j_be_26_wkb -> q_wkb_tunneling_rate;
+  }
+  subgraph cluster_4 {
+    label="anchored cluster (2)";
     j_be_55 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-55"];
     q_chern_number [shape=ellipse,label="chern-number"];
     q_chern_number -> j_be_55;
@@ -211,7 +234,7 @@ digraph PhysicsMap {
     j_be_60 -> q_hall_conductance;
   }
   subgraph cluster_iso {
-    label="isolated (129)";
+    label="isolated (128)";
     j_be_100 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-100"];
     q_lst_static [shape=ellipse,label="lst-static"];
     q_lst_static -> j_be_100;
@@ -859,19 +882,6 @@ digraph PhysicsMap {
     q_marginal_probability -> j_be_25;
     q_intrinsic_information [shape=ellipse,label="intrinsic-information"];
     j_be_25 -> q_intrinsic_information;
-    j_be_26 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-26"];
-    q_attempt_frequency [shape=ellipse,label="attempt-frequency"];
-    q_attempt_frequency -> j_be_26;
-    q_tunneling_mass [shape=ellipse,label="tunneling-mass"];
-    q_tunneling_mass -> j_be_26;
-    q_barrier_height [shape=ellipse,label="barrier-height"];
-    q_barrier_height -> j_be_26;
-    q_barrier_width [shape=ellipse,label="barrier-width"];
-    q_barrier_width -> j_be_26;
-    q_biological_rate_correction [shape=ellipse,label="biological-rate-correction"];
-    q_biological_rate_correction -> j_be_26;
-    q_mutation_rate [shape=ellipse,label="mutation-rate"];
-    j_be_26 -> q_mutation_rate;
     j_be_30 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-30"];
     q_modular_hamiltonian_variation [shape=ellipse,label="modular-hamiltonian-variation"];
     q_modular_hamiltonian_variation -> j_be_30;
