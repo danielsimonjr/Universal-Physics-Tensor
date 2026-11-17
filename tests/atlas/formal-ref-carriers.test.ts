@@ -1,8 +1,8 @@
 /**
  * `formalRefCarriers()` is the one list of reference carriers: every atlas
  * bridge, every catalog row, and every canonical equation whose id is a
- * manifest key. The manifest check reads it. Tests 1, 3, 4 and 5 fail when the
- * canonical part of the list is dropped or widened. The other two tests check
+ * manifest key. The manifest check reads it. Tests 1, 3, 4, 5 and 6 fail when the
+ * canonical part of the list is dropped or widened. Tests 2 and 7 check
  * that physjsManifestProblems reports an unresolved key.
  */
 
@@ -48,9 +48,11 @@ describe('formalRefCarriers', () => {
   });
 
   it('gives every dimensional classic a reviewed derivation-step carrier', () => {
-    // The set comes from the classics file, not from the manifest, so a forgotten manifest row fails here.
-    // Seven other canonical records are 'dimensional' too (condensed matter, fluids); they are not classics.
-    const classics = DIMENSIONAL_CLASSICS.filter((e) => e.epistemicStatus === 'dimensional');
+    // The set comes from the classics file, not from the generated table, so a classic with no row in the
+    // generated table fails here. Every entry of the classics file is 'dimensional'. Seven other canonical
+    // records are 'dimensional' too (CE-fermi-energy, CE-fermi-velocity, CE-debye-frequency, CE-lc-resonance,
+    // CE-sound-speed, CE-simple-harmonic-frequency, CE-mb-most-probable-speed); they are not classics.
+    const classics = DIMENSIONAL_CLASSICS;
     expect(classics).toHaveLength(9);
     const carriers = formalRefCarriers();
     for (const classic of classics) {
@@ -58,7 +60,11 @@ describe('formalRefCarriers', () => {
       expect(carrier?.formalRef?.kind, classic.id).toBe('derivation-step');
       expect(carrier?.formalRef?.fidelity, classic.id).toBe('reviewed-manifest');
     }
-    expect(carriers.filter((c) => canonicalById(c.id) !== undefined)).toHaveLength(classics.length);
+    // At this pin the canonical carriers are exactly the nine classics.
+    const classicIds = new Set(classics.map((e) => e.id));
+    for (const carrier of carriers.filter((c) => canonicalById(c.id) !== undefined)) {
+      expect(classicIds.has(carrier.id), carrier.id).toBe(true);
+    }
   });
 
   it('counts atlas bridges, catalog rows and canonical manifest keys, each once', () => {
