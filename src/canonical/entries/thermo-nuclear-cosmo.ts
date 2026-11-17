@@ -145,7 +145,8 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     // is the algebraic form up to that factor.
     epistemicStatus: 'scalar-up-to-constant',
     // Mirrors the Jarzynski right-hand side: −1 · k_B · T · ln⟨exp(−βW)⟩, the log encoded
-    // as a dimensionless stub (the AST has no ln primitive). Structurally this
+    // as a dimensionless stub: an ensemble average the row does not fix (the AST
+    // has an ln node; the stub is semantic, not a grammar limit). Structurally this
     // is the k_B·T·(dimensionless) thermodynamic form — the same one Landauer
     // shares, which is exactly why BE-29 "recovers" CE-landauer.
     scalarAst: op('*', [

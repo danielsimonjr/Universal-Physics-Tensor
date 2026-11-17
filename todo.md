@@ -2040,9 +2040,12 @@ warning-silencing, not debug logging).
       bridgeGradientASTById('BE-26',…) now differentiates exactly w.r.t. m, V−E, x₁,
       x₂ (physical signs verified; f(T,pH,EM) stays a stub). **Adam + Eve both GREEN**
       (Eve back on o3 after the reload). Round-trip [frequency] preserved. Published.
-- [x] **Frontier (research-level):** ensemble averages (BE-29 `⟨…⟩`) and
+- [x] **Frontier (research-level):** ~~ensemble averages (BE-29 `⟨…⟩`) and
       interpolation-function stubs (BE-26 `f()`, BE-38 `ν(z)`) remain non-closed-form;
-      `bridgeGradientNumerical` (FD) serves them. No clean lever — large/open scope.
+      `bridgeGradientNumerical` (FD) serves them. No clean lever — large/open scope.~~
+      Retracted in `CHANGELOG.md` [Unreleased]: BE-38 `ν(z)` is the closed Milgrom form in relation `be-38`;
+      no FD spec serves BE-26, 29 or 38; BE-26 and BE-29 keep one leaf stub each, pinned by
+      `tests/diff/ad-stub-census.test.ts`.
       Moved to `ACTIVE.md` on 2026-10-01.
 - [x] **v0.11 headline: full 44-edge catalog→graph migration** + the
       per-edge quantity-NAMESPACING design (the aliasing finding in the
