@@ -7,7 +7,7 @@
       "dependencies": {
         "@danielsimonjr/mathts-autograd": "^0.4.4",
         "@danielsimonjr/mathts-core": "^0.25.3",
-        "@danielsimonjr/mathts-expression": "^0.12.5",
+        "@danielsimonjr/mathts-expression": "^0.14.0",
         "@danielsimonjr/mathts-functions": "^0.79.0",
         "@danielsimonjr/mathts-matrix": "^0.9.5",
         "@danielsimonjr/mathts-tensor": "^0.3.4",
@@ -24,9 +24,11 @@
         "vitest": "^4.1.12",
       },
       "peerDependencies": {
+        "@huggingface/transformers": "^4.3.2",
         "@viz-js/viz": "^3.28.0",
       },
       "optionalPeers": [
+        "@huggingface/transformers",
         "@viz-js/viz",
       ],
     },
@@ -46,7 +48,7 @@
 
     "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.25.3", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-sClVztXoywcJRIWEnTbJI2XjQHKj+92Qp7vtA4jPj6tr6W8C2G+g7wrh/n74E30j2FEOyBWrxvexXAoP3y/q8A=="],
 
-    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.12.5", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0" } }, "sha512-ha4S7zUV99BHeptggiAYEXAT3O1XDe3qoxIjh/dRJb55ffq0KmuAWAWVGtM4q0SsVnCuSc0dT56tR6cQ/7cayg=="],
+    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.14.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0" } }, "sha512-e8QgCY8MbFmQP3UUpbbRGU707TdoGfLljYZjPoigh6OVFtnvrR/qFYQy/qBRm0GYzjPsn0+cz9LonXDkmLogvA=="],
 
     "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.79.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0", "@danielsimonjr/mathts-expression": "^0.12.5", "@danielsimonjr/mathts-gpu": "^0.2.1", "@danielsimonjr/mathts-matrix": "^0.9.5", "@danielsimonjr/mathts-parallel": "^0.9.0", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "javascript-natural-sort": "^0.7.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-xq2bQLU3puck0ktFU5lB4ar9xb3J4nAIG3vaFm1fLXb3lXQHX8u8qLbxJmBJfUnJPIi1UKRbAhHBN38xWfuhOQ=="],
 
@@ -311,5 +313,9 @@
     "why-is-node-running": ["why-is-node-running@2.3.0", "", { "dependencies": { "siginfo": "^2.0.0", "stackback": "0.0.2" }, "bin": { "why-is-node-running": "cli.js" } }, "sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w=="],
 
     "workerpool": ["@danielsimonjr/workerpool@10.2.2", "", {}, "sha512-2ku3pC7MzMWuAbLuS5AxUE3Dh2P75gf891Hi4RPoSkGtgo6ta7XlhOra19wtCea1ci6vcBx7MiMCt6oc9V2gBQ=="],
+
+    "@danielsimonjr/mathts-expression/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.28.0", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-FEgneEvC6NvdP7Xx2GQgYHUYHMYLe5t9ZILfgPeeRwj0//ARg1ZlwSLc9MgRcWXvkfb11Oa1MLvl8MPq2xib3g=="],
+
+    "@danielsimonjr/mathts-functions/@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.12.5", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0" } }, "sha512-ha4S7zUV99BHeptggiAYEXAT3O1XDe3qoxIjh/dRJb55ffq0KmuAWAWVGtM4q0SsVnCuSc0dT56tR6cQ/7cayg=="],
   }
 }

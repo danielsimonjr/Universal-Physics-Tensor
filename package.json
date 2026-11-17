@@ -101,7 +101,7 @@
   "dependencies": {
     "@danielsimonjr/mathts-autograd": "^0.4.4",
     "@danielsimonjr/mathts-core": "^0.25.3",
-    "@danielsimonjr/mathts-expression": "^0.12.5",
+    "@danielsimonjr/mathts-expression": "^0.14.0",
     "@danielsimonjr/mathts-functions": "^0.79.0",
     "@danielsimonjr/mathts-matrix": "^0.9.5",
     "@danielsimonjr/mathts-tensor": "^0.3.4"
