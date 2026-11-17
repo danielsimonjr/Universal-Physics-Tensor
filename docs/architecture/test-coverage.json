@@ -9185,12 +9185,12 @@
       "tests/cli/suggest-token-length.test.ts",
       "tests/composition/evaluate-relation.test.ts",
       "tests/diff/ad-stub-census.test.ts",
-      "tests/diff/be29-jarzynski-sign.test.ts",
       "tests/diff/bridge-ast-gradient-sync.test.ts",
       "tests/diff/bridge-ast-gradient-transcendental.test.ts",
       "tests/diff/bridge-ast-reencode-batch.test.ts",
       "tests/diff/bridge-ast-reencode.test.ts",
       "tests/diff/bridge-gradient.test.ts",
+      "tests/diff/jarzynski-sign.test.ts",
       "tests/dimensional/dimensionful-power-ad.test.ts",
       "tests/dimensional/scalar-lowering.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -10277,8 +10277,8 @@
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/composition/symbolic-constants-extra.test.ts",
       "tests/diff/ad-stub-census.test.ts",
-      "tests/diff/be29-jarzynski-sign.test.ts",
       "tests/diff/bridge-ast-gradient-sync.test.ts",
+      "tests/diff/jarzynski-sign.test.ts",
       "tests/dimensional/ast-leaves.test.ts",
       "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/constants-surface.test.ts",
@@ -13976,11 +13976,11 @@
     ],
     "src/diff/bridge-ast-gradient.ts": [
       "tests/diff/ad-stub-census.test.ts",
-      "tests/diff/be29-jarzynski-sign.test.ts",
       "tests/diff/bridge-ast-gradient-sync.test.ts",
       "tests/diff/bridge-ast-gradient-transcendental.test.ts",
       "tests/diff/bridge-ast-reencode-batch.test.ts",
       "tests/diff/bridge-ast-reencode.test.ts",
+      "tests/diff/jarzynski-sign.test.ts",
       "tests/dimensional/dimensionful-power-ad.test.ts",
       "tests/dimensional/scalar-lowering.test.ts"
     ],
@@ -14312,8 +14312,8 @@
       "tests/composition/scalar-prefactor-consistency.test.ts",
       "tests/composition/symbolic-constants-extra.test.ts",
       "tests/diff/ad-stub-census.test.ts",
-      "tests/diff/be29-jarzynski-sign.test.ts",
       "tests/diff/bridge-ast-gradient-sync.test.ts",
+      "tests/diff/jarzynski-sign.test.ts",
       "tests/dimensional/ast-leaves.test.ts",
       "tests/dimensional/constant-registry.test.ts",
       "tests/dimensional/constants-surface.test.ts",
@@ -25036,10 +25036,6 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
     ],
-    "tests/diff/be29-jarzynski-sign.test.ts": [
-      "src/diff/bridge-ast-gradient.ts",
-      "src/dimensional/symbolic-constants.ts"
-    ],
     "tests/diff/bridge-ast-gradient-sync.test.ts": [
       "src/diff/bridge-ast-gradient.ts",
       "src/bridges/rhs-registry.ts",
@@ -25192,6 +25188,10 @@
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts",
       "src/bridges/catalog-load.ts"
+    ],
+    "tests/diff/jarzynski-sign.test.ts": [
+      "src/diff/bridge-ast-gradient.ts",
+      "src/dimensional/symbolic-constants.ts"
     ],
     "tests/dimensional/algebra-properties.test.ts": [
       "src/dimensional/algebra.ts",
