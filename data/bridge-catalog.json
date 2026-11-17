@@ -892,7 +892,7 @@
         "N": 0,
         "J": 0
       },
-      "scalarExpression": "k_B*temperature*ln_avg_exp_minus_betaW"
+      "scalarExpression": "-1*k_B*temperature*ln_avg_exp_minus_betaW"
     },
     {
       "id": 30,
