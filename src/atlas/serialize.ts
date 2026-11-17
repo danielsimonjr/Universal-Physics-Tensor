@@ -37,12 +37,15 @@ import type { WitnessResultsArtifact } from './witness-artifact.js';
 import { artifactPassingWitnessIds } from './witness-artifact.js';
 
 /**
- * Record major version of the atlas artifacts: the `schemaVersion` field of
- * `atlas.json` and of the family files (`oscillators.json`, `diffusion.json`,
- * `waves.json`) the package ships under `data/atlas/`. A reader compares the
- * field against this value. `witness-results.json`, `atlas.jsonld` and
- * `qudt-resolution.json` do not carry this version. No public function emits
- * it; the serializer that writes the artifacts is internal.
+ * Record major version of a family record: the `schemaVersion` field of the
+ * family files (`oscillators.json`, `diffusion.json`, `waves.json`) and of each
+ * `families[]` entry of `atlas.json`, which the package ships under
+ * `data/atlas/`. A reader compares that field against this value. The
+ * top-level `schemaVersion` of `atlas.json` and the `schemaVersion` of
+ * `witness-results.json` are literals of their own modules, not this constant.
+ * `atlas.jsonld` and `qudt-resolution.json` carry no `schemaVersion`. No
+ * public function emits this value; the serializer that writes the family
+ * records is internal.
  *
  * @public
  */
