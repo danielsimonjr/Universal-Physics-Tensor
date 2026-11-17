@@ -122,6 +122,26 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     expect(tags.has('formally-proved-cross-check')).toBe(false);
   });
 
+  it('be-42: the counted top-level theorem derives no label; the nested cross-check is not a reference', () => {
+    // Before Buckingham M3 PR C, be-42's top-level theorem was the cross-check
+    // `PhysJS.HawkingUnruh.dictionary` and this record derived
+    // `formally-proved-cross-check`. The design note moves a cross-check to a
+    // nested object when its id gains a counted theorem, and a nested statement
+    // is not a formalRef, so the tag set is `{proposed}`. The CROSS_CHECKS loop
+    // above no longer visits be-42; this pins the change it would otherwise hide.
+    const be42 = row(42);
+    expect(be42.formalRef.kind).toBe('derivation-step');
+    expect(be42.formalRef.statement).toBe('PhysJS.BuckinghamClassics.hawking_rs_exponent_unique');
+    expect(be42.formalRef.fidelity).not.toBe('unreviewed');
+    expect([...deriveEvidence(be42, NO_PASSING_WITNESSES)]).toEqual(['proposed']);
+    const entry = MANIFEST.entries.find((candidate) => candidate.key === 'be-42') as (PhysjsManifestFile['entries'][number] & { dictionary?: { theorem: string; kind: string } }) | undefined;
+    expect(entry?.dictionary?.theorem).toBe('PhysJS.HawkingUnruh.dictionary');
+    expect(entry?.dictionary?.kind).toBe('cross-check');
+    // CONTROL: the same reference with the cross-check as its kind does light the label.
+    const asCrossCheck = { ...be42, formalRef: { ...be42.formalRef, kind: 'cross-check' as const } };
+    expect(deriveEvidence(asCrossCheck, NO_PASSING_WITNESSES).has('formally-proved-cross-check')).toBe(true);
+  });
+
   it('an unreviewed property earns no label', () => {
     const tags = deriveEvidence(
       { formalRef: { fidelity: 'unreviewed', kind: 'property' } },
