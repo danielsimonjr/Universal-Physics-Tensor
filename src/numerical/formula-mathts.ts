@@ -9,21 +9,22 @@
  * throws a {@link FormulaError} rather than leaking MathTS types through the
  * seam.
  *
- * Bare `e` is the elementary charge. MathTS `{ physics: true, charge: 'scalar' }`
- * binds that symbol to the SI magnitude `1.602176634e-19`, so `1-e^2` is
- * ordinary arithmetic. `{ physics: true }` without `charge: 'scalar'` is a
- * Unit, and subtract does not accept it. Euler's number is `exp(x)`. The name
- * `euler` is refused. `E` stays unbound.
+ * Bare `e` is the elementary charge. MathTS 0.28 reads bare `e` as Euler's number
+ * in physics mode, so this parser binds `e` to the SI magnitude `E_SI`
+ * (`1.602176634e-19`) in the evaluation scope, and `1-e^2` is ordinary
+ * arithmetic. Euler's number is `exp(x)`. The name `euler` is refused. `E` stays
+ * unbound.
  *
  * @module numerical/formula-mathts
  */
 
 import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
+import { E_SI } from '../core/constants.js';
 import type { CompiledFormula, FormulaParser } from './formula-contract.js';
 import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError } from './formula-contract.js';
 
-/** Bare `e` is the SI magnitude, not the coulomb Unit. */
-const PHYSICS_SCALAR = { physics: true, charge: 'scalar' } as const;
+/** MathTS physics scope: `c`, `G`, `hbar`, `e0`. Bare `e` stays Euler's number there; it is rebound below. */
+const PHYSICS = { physics: true } as const;
 
 /** Minimal structural shape of a MathTS AST node (the bits we use). */
 interface MathNode {
@@ -70,7 +71,7 @@ function createMathtsFormulaParser(
   // `sqrt(gamma*pressure/density)` died as "undeclared symbol 'gamma'".
   // Only a name that evaluates to a number is a MathTS constant (`pi`, `tau`).
   // Bare `e` is one of those under MathTS's default (Euler's number). Evaluation
-  // below reads it as the elementary charge through `{ physics: true, charge: 'scalar' }`.
+  // below reads it as the elementary charge by binding `e` to `E_SI` in the scope.
   // An explicit scope `e` still wins. The name `euler` is refused below.
   // A call such as `gamma(5)` is still a callee, decided separately.
   const valueConstantCache = new Map<string, boolean>();
@@ -136,9 +137,9 @@ function createMathtsFormulaParser(
         ),
       ].sort();
 
-      // `compileExpr` applies `{ physics: true, charge: 'scalar' }` on each
-      // evaluation, so bare `e` is the SI magnitude and a scope entry for `e` wins.
-      const compiled = compileExpr(expr, PHYSICS_SCALAR);
+      // `compileExpr` applies `{ physics: true }` on each evaluation. Bare `e` is the SI
+      // magnitude through the `e: E_SI` default below, and a scope entry for `e` wins.
+      const compiled = compileExpr(expr, PHYSICS);
       return {
         source: expr,
         variables,
@@ -146,7 +147,7 @@ function createMathtsFormulaParser(
           if (unknownCallee !== undefined) throw new FormulaError(unknownFunctionMessage(unknownCallee));
           let result: unknown;
           try {
-            result = compiled.evaluate({ ...shims, ...scope });
+            result = compiled.evaluate({ ...shims, e: E_SI, ...scope });
           } catch (err) {
             // `compileExpr` quotes the name (`Undefined symbol "process"`).
             // The interpreter path reports `Undefined symbol process`.

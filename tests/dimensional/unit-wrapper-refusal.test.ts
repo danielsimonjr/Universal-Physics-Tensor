@@ -1,8 +1,10 @@
 /**
  * Part A step A8: the wrapper refusal layer. `ton` is UPT policy and stays in
- * `data/units.json`; the logarithmic and ratio refusals (`dB`, `dBm`, `dBW`,
- * `Np`, `Mach`, `mach`) are MathTS's `REFUSED_UNIT_SPELLINGS` since 0.21.0,
- * consulted by the wrapper before any parse, compounds included.
+ * `data/units.json`, with the logarithmic refusals (`dB`, `dBm`, `dBW`, `Np`):
+ * MathTS 0.28 parses them as units, and a logarithmic unit has no linear scale
+ * to convert by. The ratio refusals (`Mach`, `mach`) are MathTS's
+ * `REFUSED_UNIT_SPELLINGS`, consulted by the wrapper before any parse, compounds
+ * included.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -20,8 +22,9 @@ import { parseUnit, UnitRefusedError } from '../../src/dimensional/units.js';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const unitsSource = readFileSync(resolve(root, 'src/dimensional/units.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
 
-const mathtsRefused = ['dB', 'dBm', 'dBW', 'Np', 'Mach', 'mach'] as const;
-const denylistSymbols = [...mathtsRefused, 'ton', 'tons'] as const;
+const mathtsRefused = ['Mach', 'mach'] as const;
+const uptLogRefused = ['dB', 'dBm', 'dBW', 'Np'] as const;
+const denylistSymbols = [...mathtsRefused, ...uptLogRefused, 'ton', 'tons'] as const;
 
 describe('wrapper refusal layer (A8)', () => {
   it('unitReadings consults the wrapper refusal layer before MathTS', () => {
@@ -42,6 +45,16 @@ describe('wrapper refusal layer (A8)', () => {
       expect(error).toBeInstanceOf(UnitRefusedError);
       expect((error as UnitRefusedError).message).toBe(reason);
     }
+  });
+
+  it.each(uptLogRefused)('%s is UnitRefusedError with the units.json message, MathTS no longer refuses it', (symbol) => {
+    const reason = UNIT_DATA.refused.get(symbol);
+    expect(reason).toMatch(/logarithmic/);
+    expect(REFUSED_UNIT_SPELLINGS[symbol]).toBeUndefined();
+    expect(mathtsWouldParse(symbol)).toBe(true);
+    expect(uptRefusalReason(symbol)).toBe(reason);
+    expect(refusedTokensIn(symbol)).toContain(symbol);
+    expect(() => parseUnit(symbol)).toThrow(UnitRefusedError);
   });
 
   it('ton is UnitRefusedError with the units.json message', () => {

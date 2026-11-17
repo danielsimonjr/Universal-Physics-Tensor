@@ -66,7 +66,8 @@ export function fractionToNumber(f: Fraction): number {
   return f.toNumber();
 }
 
-/** `9/8`, `2`, `-1/3`: the fraction in lowest terms, no sign on the denominator; MathTS `Fraction#toString`. @internal */
+/** `9/8`, `2`, `-1/3`: the fraction in lowest terms, no sign on the denominator; the parts of a MathTS `Fraction`. @internal */
 export function formatRational(f: Fraction): string {
-  return f.toString();
+  // `Fraction#toString` prints a decimal (`0.(3)`) since MathTS 0.28; the ratio is built from the parts.
+  return f.denominator === 1n ? `${f.numerator}` : `${f.numerator}/${f.denominator}`;
 }
