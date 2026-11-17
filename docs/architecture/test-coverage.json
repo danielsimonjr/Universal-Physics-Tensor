@@ -8359,6 +8359,7 @@
     ],
     "src/composition/rational-exponent.ts": [
       "tests/composition/clean-prefactor.test.ts",
+      "tests/composition/probe/scalar-search-convert.test.ts",
       "tests/composition/rational-exponent-mathts.test.ts"
     ],
     "src/composition/representative-values.ts": [
@@ -13761,6 +13762,7 @@
     ],
     "src/composition/rational-exponent.ts": [
       "tests/composition/clean-prefactor.test.ts",
+      "tests/composition/probe/scalar-search-convert.test.ts",
       "tests/composition/rational-exponent-mathts.test.ts"
     ],
     "src/composition/representative-values.ts": [
@@ -24670,6 +24672,7 @@
     ],
     "tests/composition/probe/scalar-search-convert.test.ts": [
       "src/composition/probe/scalar-search.ts",
+      "src/composition/rational-exponent.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/probe/scalar-search-pipeline.test.ts": [

@@ -10,12 +10,12 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf-8'));
 
 const MATHTS: Record<string, string> = {
-  '@danielsimonjr/mathts-autograd': '^0.4.4',
-  '@danielsimonjr/mathts-core': '^0.25.3',
-  '@danielsimonjr/mathts-expression': '^0.12.5',
-  '@danielsimonjr/mathts-functions': '^0.79.0',
-  '@danielsimonjr/mathts-matrix': '^0.9.5',
-  '@danielsimonjr/mathts-tensor': '^0.3.4',
+  '@danielsimonjr/mathts-autograd': '^0.6.0',
+  '@danielsimonjr/mathts-core': '^0.28.0',
+  '@danielsimonjr/mathts-expression': '^0.14.0',
+  '@danielsimonjr/mathts-functions': '^0.86.0',
+  '@danielsimonjr/mathts-matrix': '^0.11.0',
+  '@danielsimonjr/mathts-tensor': '^0.5.0',
 };
 
 describe('package.json dependency blocks', () => {

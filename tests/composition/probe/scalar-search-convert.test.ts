@@ -9,6 +9,7 @@ import {
   dimensionToRational,
   scalarNodeToExpr,
 } from '../../../src/composition/probe/scalar-search.js';
+import { formatRational } from '../../../src/composition/rational-exponent.js';
 import type { Dimension } from '../../../src/dimensional/types.js';
 
 const Z: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
@@ -68,7 +69,7 @@ describe('dimensionToRational', () => {
   });
 
   it('keeps a half-integer exponent exact and throws on one that does not rationalize', () => {
-    expect(dimensionToRational({ ...Z, L: 0.5 })[0].toString()).toBe('1/2');
+    expect(formatRational(dimensionToRational({ ...Z, L: 0.5 })[0])).toBe('1/2');
     expect(() => dimensionToRational({ ...Z, L: Math.PI })).toThrow(/L = 3.14\d* is not rational/);
   });
 });

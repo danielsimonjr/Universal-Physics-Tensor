@@ -1,6 +1,7 @@
 /**
  * Leverage plan task U2: `fractionToNumber` and `formatRational` are MathTS `Fraction#toNumber`
- * and `Fraction#toString`. The rows hold the plan's edge inputs; the text must be byte-identical.
+ * and the ratio of `Fraction#numerator` to `Fraction#denominator`
+ * (`Fraction#toString` prints a decimal since MathTS 0.28). The rows hold the plan's edge inputs; the text must be byte-identical.
  */
 import { readFileSync } from 'node:fs';
 import { Fraction } from '@danielsimonjr/mathts-core';
@@ -25,9 +26,9 @@ describe('rational-exponent helpers', () => {
     }
   });
 
-  it('are the MathTS Fraction methods, not a second copy', () => {
+  it('read the MathTS Fraction, not a second copy', () => {
     const src = readFileSync(new URL('../../src/composition/rational-exponent.ts', import.meta.url), 'utf8');
     expect(src).toMatch(/return f\.toNumber\(\);/);
-    expect(src).toMatch(/return f\.toString\(\);/);
+    expect(src).toMatch(/f\.numerator.*f\.denominator/);
   });
 });

@@ -39,6 +39,11 @@ function codata(name: string): number {
     const n = (value as { toNumeric: () => unknown }).toNumeric();
     if (typeof n === 'number' && Number.isFinite(n)) return n;
   }
+  // Dimensionless CODATA constants (`fineStructure`) are a `CodataScalar` carrying `.magnitude`.
+  if (typeof value === 'object' && value !== null) {
+    const m = (value as { magnitude?: unknown }).magnitude;
+    if (typeof m === 'number' && Number.isFinite(m)) return m;
+  }
   throw new Error(`MathTS has no numeric constant ${name}`);
 }
 
