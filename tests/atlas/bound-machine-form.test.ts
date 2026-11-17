@@ -117,26 +117,79 @@ describe('ApproximationBound.deltaAt — the machine form of delta', () => {
   });
 });
 
-describe('ab-damped-massless — deltaAt holds only at the witness normalisation (persona finding D2)', () => {
-  it('the formula is NOT a bound away from b = k = x0 = 1: at k = 100 the true error is 20x larger', () => {
-    // m k / b² = 0.1 is inside the declared overdamped range, but the formula has no k in it.
-    const formulaAtK100 = (2 * (1 + 0) * 1e-3) / 1;
-    expect(dampedOuterSup(1e-3, 0, 1, 100)).toBeGreaterThan(20 * formulaAtK100);
+/**
+ * Exact outer-region sup of `|x − x_reduced|` for `m x″ + b x′ + k x = 0`,
+ * `x(0) = x0`, `x′(0) = v0`, over `t ≥ 5 m/b`, sampled on a grid that is dense
+ * near the layer edge and runs to 40 slow time constants.
+ */
+function dampedOuterSupAt(m: number, b: number, k: number, x0: number, v0: number): number {
+  const { slow, fast } = roots(m, b, k);
+  const A = (v0 - fast * x0) / (slow - fast);
+  const B = (slow * x0 - v0) / (slow - fast);
+  const t0 = (5 * m) / b;
+  const tEnd = t0 + (40 * b) / k;
+  let sup = 0;
+  for (let i = 0; i <= 20_000; i++) {
+    const t = t0 + (tEnd - t0) * (i / 20_000) ** 2;
+    sup = Math.max(sup, Math.abs(A * Math.exp(slow * t) + B * Math.exp(fast * t) - x0 * Math.exp((-k / b) * t)));
+  }
+  return sup;
+}
+
+/** The bound with the coefficient of its `k|x0|/b` term set to `c` (c = 1 is the record's). */
+const boundWithC = (c: number, m: number, b: number, k: number, x0: number, v0: number): number =>
+  (m / b) * (Math.abs(v0) + (c * k * Math.abs(x0)) / b);
+
+/** The grid of the derivation: ε = m k/b² inside the overdamped range, up to its open edge. */
+const GRID: { m: number; b: number; k: number; x0: number; v0: number }[] = [];
+for (const eps of [1e-4, 1e-3, 1e-2, 0.05, 0.1, 0.2, 0.24, 0.2499]) {
+  for (const b of [0.5, 1, 2, 4]) {
+    for (const k of [0.3, 1, 3, 10]) {
+      for (const x0 of [1, -2, 0.5]) {
+        for (const v0 of [0, 5, -5, 2]) GRID.push({ m: (eps * b * b) / k, b, k, x0, v0 });
+      }
+    }
+  }
+}
+
+describe('ab-damped-massless — deltaAt = (m/b)(|v0| + k|x0|/b) is dimensionally consistent (panel C3)', () => {
+  it('scales exactly as a length under a consistent change of units (M = 3, T = 0.5, L = 7)', () => {
+    const [M, T, L] = [3, 0.5, 7];
+    const p = { m: 0.02, b: 1, k: 1, x0: 1, v0: 5 };
+    const q = { m: M * p.m, b: (M / T) * p.b, k: (M / T ** 2) * p.k, x0: L * p.x0, v0: (L / T) * p.v0 };
+    expect(dampedOffsetBoundAt(q) / dampedOffsetBoundAt(p)).toBeCloseTo(L, 12);
   });
 
-  it('returns Infinity outside b = k = x0 = 1', () => {
-    expect(dampedOffsetBoundAt({ m: 1e-3, b: 1, k: 100, x0: 1, v0: 0 })).toBe(Infinity);
-    expect(dampedOffsetBoundAt({ m: 1e-3, b: 2, k: 1, x0: 1, v0: 0 })).toBe(Infinity);
-    expect(dampedOffsetBoundAt({ m: 1e-3, b: 1, k: 1, x0: 2, v0: 0 })).toBe(Infinity);
+  it.each([0, 5])('is finite off the normalisation and covers the true error at k = 100, v0 = %s', (v0) => {
+    // m k / b² = 0.1 is inside the declared overdamped range.
+    const bound = dampedOffsetBoundAt({ m: 1e-3, b: 1, k: 100, x0: 1, v0 });
+    expect(Number.isFinite(bound)).toBe(true);
+    expect(dampedOuterSupAt(1e-3, 1, 100, 1, v0)).toBeLessThanOrEqual(bound);
   });
 
-  it('returns Infinity when k or x0 is missing, as it does for a missing v0', () => {
+  it(`covers the exact two-root sup on all ${GRID.length} grid points (c = 1 is a measured claim)`, () => {
+    const misses = GRID.filter((g) => dampedOuterSupAt(g.m, g.b, g.k, g.x0, g.v0) > dampedOffsetBoundAt(g));
+    expect(misses).toEqual([]);
+  });
+
+  it('NEGATIVE CONTROL: c = 0.5 is refuted on the same grid at v0 = 0', () => {
+    const misses = GRID.filter(
+      (g) => g.v0 === 0 && dampedOuterSupAt(g.m, g.b, g.k, g.x0, g.v0) > boundWithC(0.5, g.m, g.b, g.k, g.x0, g.v0),
+    );
+    expect(misses.length).toBeGreaterThan(0);
+  });
+
+  it('returns Infinity when k or x0 is missing, or when b or k is not positive or m is negative', () => {
     expect(dampedOffsetBoundAt({ m: 1e-3, b: 1, v0: 0 })).toBe(Infinity);
     expect(dampedOffsetBoundAt({ m: 1e-3, b: 1, k: 1, v0: 0 })).toBe(Infinity);
+    expect(dampedOffsetBoundAt({ m: 1e-3, b: -1, k: 1, x0: 1, v0: 0 })).toBe(Infinity);
+    expect(dampedOffsetBoundAt({ m: 1e-3, b: 1, k: 0, x0: 1, v0: 0 })).toBe(Infinity);
+    expect(dampedOffsetBoundAt({ m: -1e-3, b: 1, k: 1, x0: 1, v0: 0 })).toBe(Infinity);
   });
 
-  it('keeps the formula at the normalisation, where the edge value is 3', () => {
-    expect(dampedOffsetBoundAt({ m: 0.25, b: 1, k: 1, x0: 1, v0: 5 })).toBeCloseTo(3, 12);
+  it('keeps delta at the witness normalisation, where the edge value is 1.5', () => {
+    expect(dampedOffsetBoundAt({ m: 0.25, b: 1, k: 1, x0: 1, v0: 5 })).toBeCloseTo(1.5, 12);
+    expect(AB_DAMPED_MASSLESS.bound?.delta).toBeCloseTo(1.5, 12);
   });
 });
 
@@ -197,7 +250,7 @@ describe('ab-damped-massless — delta covers the true error AT THE DOMAIN EDGE'
 
   it('declares a delta that covers the edge error', () => {
     const declared = AB_DAMPED_MASSLESS.bound?.delta ?? Number.NaN;
-    expect(declared).toBeCloseTo(3, 12);
+    expect(declared).toBeCloseTo(1.5, 12);
     expect(declared).toBeGreaterThan(dampedOuterSup(EDGE_M, EDGE_V0));
   });
 

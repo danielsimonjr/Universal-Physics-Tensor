@@ -162,7 +162,7 @@ describe('controls: a wrong attribution fails', () => {
     expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/not inside the regime/) });
   });
 
-  it('a non-sharp bound claimed as sharp (W8b as a bound: its error 0.0574 is not deltaAt 0.12)', () => {
+  it('a non-sharp bound claimed as sharp (W8b as a bound: its error 0.0574 is not deltaAt 0.06)', () => {
     const w8b = numeric('W8b');
     const v = checkBoundClaim(w8b, { name: 'bound', at: w8b.claim!.at });
     expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/is not the bound's deltaAt/) });

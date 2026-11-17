@@ -84,7 +84,7 @@ const DELTA_AT_EXEMPT: Readonly<Record<string, string>> = {};
 const DOMAINS: Readonly<Record<string, Domain>> = {
   // θ0 ≤ 0.5 rad.
   'ab-pendulum-linear': { at: (s) => ({ theta0: 0.5 * s, T0: 1 }) },
-  // m k / b² < 1/4 and |v0| ≤ 5, at the b = k = x0 = 1 normalisation `deltaAt` admits.
+  // m k / b² < 1/4 and |v0| ≤ 5, at the b = k = x0 = 1 normalisation where `delta` is stated.
   'ab-damped-massless': { at: (s) => ({ m: 0.25 * s, b: 1, k: 1, x0: 1, v0: 5 * s }) },
   // ε = τ D q² ≤ 0.05.
   'ab-telegraph-diffusion': { at: (s) => ({ tau: 0.05 * s, D: 1, q: 1 }) },
