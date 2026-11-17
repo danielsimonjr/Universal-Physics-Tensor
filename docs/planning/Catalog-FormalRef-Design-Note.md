@@ -21,9 +21,9 @@ A reviewed reference has these fields, and no others:
 |---|---|
 | `system` | `lean4-physjs` for a PhysJS theorem |
 | `statement` | One Lean theorem name, as the manifest's `theorem` |
-| `version` | The PhysJS commit, toolchain, Mathlib pin, and Physlib pin, in the manifest's existing version string |
+| `version` | The release tag of `lean/`, the toolchain, the Mathlib pin, and the Physlib pin, as `upt-lean@v<tag> <toolchain> mathlib:<v> physlib@<sha>` |
 | `axioms` | The axioms `#print axioms` printed for that theorem |
-| `fidelity` | `unreviewed` until a sanity-lemma test exists; a reviewed catalog reference uses `sanity-lemmas`, as the manifest's atlas entries do |
+| `fidelity` | `unreviewed` for a key with no reviewed row; `reviewed-manifest` for a reviewed row; `sanity-lemmas` for a reviewed row that a sanity-lemma test instantiates |
 | `covers` | The part, then the fixed phrase below |
 
 The manifest keeps the fields it already has.
@@ -33,7 +33,8 @@ The manifest keeps the fields it already has.
 | `key` | Unique, and equal to `bridgeId`. A second statement does not get a second key |
 | `bridgeId` | The catalog id this theorem is about |
 | `theorem` | Same string as `FormalRef.statement` |
-| `covers` | The part, beginning with one kind word |
+| `kind` | One of the kinds in the Kinds section. The kind line of the Lean module docstring says the same word |
+| `covers` | The part. It does not begin with the kind word |
 | `coverage` | The fixed phrase `covers its statement only` |
 | `leanProof` | `complete` only when the proof has no `sorry` |
 | `axioms` | Same list as the reference |
@@ -67,9 +68,9 @@ entry's top-level `theorem` and nothing else.
 
 ## Several statements for one id
 
-The manifest schema stays `physjs-bridge-manifest/v1`. A second Lean
+The manifest schema is `upt-lean-manifest/v1`. A second Lean
 statement about the same id is a nested object on that same entry. The
-object has `theorem`, `covers`, `coverage`, `leanProof`, and `axioms`. It
+object has `theorem`, `kind`, `covers`, `coverage`, `leanProof`, and `axioms`. It
 has no `key` and no `bridgeId`. Its `covers` line is its own part. It does
 not replace the top-level `theorem`.
 
@@ -106,7 +107,7 @@ top-level `theorem` and the cross-check moves to a nested object.
 ## Coverage
 
 Every manifest entry and every `formalRef` states which part of the bridge
-the proof certifies. The `covers` line begins with one of these words:
+the proof certifies. The `kind` field is one of these words:
 
 | Word | The proof certifies |
 |---|---|
@@ -129,24 +130,21 @@ conflict 2.
 ## Kinds
 
 Three kinds. They are not one count. Each may occupy the one catalog
-`formalRef`. The first word of `covers` is the kind, with two exceptions.
-Where the theorem states the catalogued equation, the kind is `bridge`
-and the covers line stays the text PhysJS wrote, including a line that
-still begins with `derivation-step`. Where the id is `be-28`, the kind is
-`property` even though the covers line begins with `derivation-step`: the
-theorem is non-negativity of the defining sum, not the variational
-principle. A theorem that proves a weaker or partial statement keeps the
-covers word. Passing a `bridge` reference to `deriveEvidence` lights
+`formalRef`. The manifest `kind` field is the kind. Where the theorem
+states the catalogued equation, the kind is `bridge`. Where the id is
+`be-28`, the kind is `property`: the theorem is non-negativity of the
+defining sum, not the variational principle. A theorem that proves a
+weaker or partial statement keeps its own kind. Passing a `bridge` reference to `deriveEvidence` lights
 `formally-proved`. `catalogEvidenceInput` passes that kind and does not
 pass a derivation-step, a property, or a cross-check, so those kinds do
 not light the tag.
 
-**Counted reduction, limit, or derivation-step.** The `covers` word is
+**Counted reduction, limit, or derivation-step.** The `kind` is
 `reduction`, `limit`, or `derivation-step`. One id is one reference. The
 rows and their sizes are milestone 2b. This kind is not a `property` and
 not a `cross-check`.
 
-**Cross-check.** The word is `cross-check`. A substitution or a
+**Cross-check.** The `kind` is `cross-check`. A substitution or a
 relabelling is a dictionary. These rows fail if a prefactor or a sign is
 wrong, which is why they are proved. They are not the counted kind.
 Scoping §4.3's do-not-count recommendation applied to counting them as
@@ -155,10 +153,10 @@ a stated wrong dictionary. The control is part of the manifest entry, not
 a separate id. A cross-check of two ids is one entry. The covers line
 names the partner. The partner does not receive a second reference.
 
-**Property.** The word is `property`. Scoping §4.2 withheld a
+**Property.** The `kind` is `property`. Scoping §4.2 withheld a
 property-level reference because `deriveEvidence` would attach
 `formally-proved` to the whole record. `catalogEvidenceInput` does not
-pass a property, so the tag stays off, and the covers word keeps the
+pass a property, so the tag stays off, and the kind keeps the
 property from reading as a reduction, a limit, or a derivation-step. The covers
 line says which property, and what is left out. BE-16 is the equal-levels
 entropy `k_B log 2`, not Landauer's bound `E ≥ T ΔS` and not the Bérut
@@ -171,6 +169,15 @@ Milestone 3's Buckingham monomials use this note's key and coverage rule.
 The covers line is the exponent tuple: form, not the prefactor. A decoy
 row is the negative control. They are not milestone 2b rows, and this note
 does not move them.
+
+The first keyed row is `CE-pendulum-period`. Its key is the canonical
+equation id, and the kind is `derivation-step`. Its theorem is
+`pendulum_exponent_unique` in `lean/BuckinghamClassics.lean`. The control
+is `hawking_exponent_not_unique` in the same file. Two exponent tuples
+solve the dimension equation for a temperature over the Hawking set, so
+the tuple there is not unique. The control has no manifest key. A canonical
+key is read by `formalRefCarriers()` in `src/atlas/formal-ref-carriers.ts`,
+and it is not a catalog row.
 
 ## Names
 

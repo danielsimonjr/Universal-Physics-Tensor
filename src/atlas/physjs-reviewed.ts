@@ -192,4 +192,5 @@ export const PHYSJS_REVIEWED_ROWS: Readonly<Record<string, string>> = {
   'be-168': '6c7696962e56f466c016a03947c8b359ae23fd1da6f1eb93e0aab4be117e062c',
   'be-169': '6f4e6c880f33255ed8d2c3d9757ba81e93e3f71b4a5ae8d02cbff0b91e6a244a',
   'be-170': 'f9d8dff51577fe8556593c0a31ca26577d5449864e48c246831aa37612463d48',
+  'CE-pendulum-period': '3ba1bbf1fcd397696ff149991933f4f9c3c2436e7387db755eeb49a1221d21be',
 };

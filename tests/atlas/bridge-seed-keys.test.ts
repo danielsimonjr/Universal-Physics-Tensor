@@ -74,6 +74,8 @@ describe('bridge seeds are kind bridge only', () => {
     }
     for (const key of ATLAS_KEYS) expect(physjsAheadOfCatalog(key), key).toBe(false);
     expect(physjsAheadOfCatalog('be-16')).toBe(false);
+    // A canonical key has no catalog number, so it is never ahead of the catalog.
+    expect(physjsAheadOfCatalog('CE-pendulum-period')).toBe(false);
   });
 
   it('the keys ahead of the catalog are one unbroken run right after its highest id', () => {

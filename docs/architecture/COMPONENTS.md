@@ -381,6 +381,14 @@ a file allow-list lint forbids spelling the tag anywhere a record could set it.
 `provedWithUnresolvedCounterexample` is true when the derived set contains both `formally-proved`
 and `contradicted`. The predicate removes neither tag.
 
+### `formalRefCarriers()` (`src/atlas/formal-ref-carriers.ts`)
+
+`formalRefCarriers(): readonly { id: string; formalRef?: FormalRef }[]`. It returns every atlas bridge,
+every catalog row as `be-<n>`, and every canonical equation whose id is a key of the Lean manifest.
+The manifest check, the generated-table check, the proof-target check and the axiom gate read this
+list. The function is `@internal`. It is not a package export. It holds no key list: a canonical
+equation with no manifest entry has no carrier, and no carrier lights an evidence tag.
+
 ### `checkApplicability(input)` (`src/atlas/applicability.ts`)
 
 `checkApplicability(input: ApplicabilityInput): readonly ApplicabilityFinding[]`. The function returns

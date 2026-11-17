@@ -13,8 +13,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
-import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
+import { formalRefCarriers } from '../../src/atlas/formal-ref-carriers.js';
 import {
   emitProofTarget,
   proofTargetDraft,
@@ -48,13 +47,7 @@ type DraftEntry = Pick<
 /** A covers text that opens with a kind word (`derivation-step:`, `confirmation:`, …). */
 const LEADING_KIND = /^[a-z-]+:/;
 
-const carriers = [
-  ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
-  ...BRIDGE_EQUATIONS.map((entry) => ({
-    id: `be-${entry.id}`,
-    formalRef: catalogFormalRef(entry.id),
-  })),
-];
+const carriers = formalRefCarriers();
 
 const thermal = physjsTheorem('be-12');
 const hall = physjsTheorem('be-55');

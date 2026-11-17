@@ -1,0 +1,63 @@
+/**
+ * `formalRefCarriers()` is the one list of reference carriers: every atlas
+ * bridge, every catalog row, and every canonical equation whose id is a
+ * manifest key. The manifest check reads it. Each control below fails when
+ * the canonical part of the list is dropped or widened.
+ */
+
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
+import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
+import { formalRefCarriers } from '../../src/atlas/formal-ref-carriers.js';
+import { physjsManifestProblems, physjsTheorem, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
+import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { CANONICAL_EQUATIONS, canonicalById } from '../../src/canonical/registry.js';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const manifest = JSON.parse(readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf8')) as PhysjsManifestFile;
+
+describe('formalRefCarriers', () => {
+  it('leaves the real manifest with no problem', () => {
+    expect(physjsManifestProblems({ manifest, bridges: formalRefCarriers() })).toEqual([]);
+  });
+
+  it('CONTROL: a manifest key that names no bridge and no canonical record is reported', () => {
+    const extra = {
+      ...manifest,
+      entries: [...manifest.entries, { ...manifest.entries[0]!, key: 'CE-no-such-record', bridgeId: 'CE-no-such-record' }],
+    };
+    expect(physjsManifestProblems({ manifest: extra, bridges: formalRefCarriers() }).join('\n')).toContain(
+      "manifest key 'CE-no-such-record' does not resolve to a bridge",
+    );
+  });
+
+  it('holds no carrier for a canonical equation with no manifest entry', () => {
+    expect(canonicalById('CE-newton-second-law')).toBeDefined();
+    expect(formalRefCarriers().some((c) => c.id === 'CE-newton-second-law')).toBe(false);
+  });
+
+  it('gives the pendulum record a reviewed derivation-step reference', () => {
+    const carrier = formalRefCarriers().find((c) => c.id === 'CE-pendulum-period');
+    expect(carrier?.formalRef?.system).toBe('lean4-physjs');
+    expect(carrier?.formalRef?.kind).toBe('derivation-step');
+    expect(carrier?.formalRef?.fidelity).toBe('reviewed-manifest');
+  });
+
+  it('counts atlas bridges, catalog rows and canonical manifest keys, each once', () => {
+    const atlas = ATLAS_FAMILIES.flatMap((family) => family.bridges).length;
+    const canonical = CANONICAL_EQUATIONS.filter((e) => physjsTheorem(e.id) !== undefined).length;
+    expect(canonical).toBeGreaterThan(0);
+    expect(formalRefCarriers()).toHaveLength(atlas + BRIDGE_EQUATIONS.length + canonical);
+    const ids = formalRefCarriers().map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('CONTROL: without the canonical carriers the real manifest reports its canonical key unresolved', () => {
+    const withoutCanonical = formalRefCarriers().filter((c) => canonicalById(c.id) === undefined);
+    expect(physjsManifestProblems({ manifest, bridges: withoutCanonical }).join('\n')).toContain(
+      "manifest key 'CE-pendulum-period' does not resolve to a bridge",
+    );
+  });
+});

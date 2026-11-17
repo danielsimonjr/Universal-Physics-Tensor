@@ -12,19 +12,14 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
-import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
-import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { formalRefCarriers } from '../../src/atlas/formal-ref-carriers.js';
 import { physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { PHYSJS_ENTRIES } from '../../src/atlas/physjs-entries.generated.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const generatedPath = resolve(root, 'src/atlas/physjs-entries.generated.ts');
 const manifest = JSON.parse(readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf8')) as PhysjsManifestFile;
-const carriers = [
-  ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
-  ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
-];
+const carriers = formalRefCarriers();
 
 describe('generated PhysJS table', () => {
   it('matches a fresh run of the generator', () => {
