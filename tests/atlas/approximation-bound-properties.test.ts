@@ -33,6 +33,16 @@
  * the regime does not name (`|v0| <= 5` on the damped bridge lives in `parameterRange` prose) is
  * covered by check 4: a sampler that stops short of that edge cannot reach `delta`.
  * A bridge with no sampler fails the census test.
+ *
+ * The direction of check 5 is not the sampler author's choice. Every sample must lie inside the
+ * regime and `at(1)` must sit on the regime bound, so `s -> 1` approaches that bound from inside
+ * whether the bound is an upper limit (`theta0 <= 0.5`) or a lower one (`epsilon >= 25` on the
+ * telegraph wave, whose error DEcreases in epsilon; its sampler is `25 / s`). "Non-decreasing in
+ * `s`" therefore means "non-decreasing toward the regime bound" for every bridge (measured: the
+ * sampler `25 * s` fails every sample as outside the regime). A supremum anywhere else, interior
+ * or at the unbounded end, fails check 4 or check 5, as the interior-maximum control shows.
+ * The 13 samples follow one path through the domain; a bound with two or more free parameters
+ * is proved along that path only.
  */
 import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
@@ -117,14 +127,23 @@ function inRegime(bridge: AtlasBridge, p: Params): boolean {
 }
 
 /**
- * The checking function. Returns every violation of the four properties for one bridge on one
- * domain. An empty array means the bound holds.
+ * The checking function. Returns every violation of the properties listed in the file header for
+ * one bridge on one domain. An empty array means the bound holds.
  */
 function boundViolations(bridge: AtlasBridge, domain: Domain): string[] {
   const out: string[] = [];
   const bound = bridge.bound;
   if (bound === undefined) return [`${bridge.id}: no bound`];
   if (bound.norm.trim() === '') out.push(`${bridge.id}: norm is empty`);
+  // The sampler reaches the regime edge: at s = 1 every regime inequality sits on its bound.
+  // Checked before the deltaAt gate, so an exempt bridge still gets its sampler checked.
+  const edgePoint = domain.at(1);
+  for (const ineq of bridge.regime?.inequalities ?? []) {
+    const g = groupValue(bridge, ineq.group, edgePoint);
+    if (!(Math.abs(g - ineq.bound) <= REL_TOL * Math.abs(ineq.bound))) {
+      out.push(`${bridge.id}: sampler edge gives ${ineq.group} = ${g}, the regime bound is ${ineq.bound}`);
+    }
+  }
   const deltaAt = bound.deltaAt;
   if (deltaAt === undefined) {
     if (DELTA_AT_EXEMPT[bridge.id] === undefined) out.push(`${bridge.id}: no deltaAt and not exempt`);
@@ -140,14 +159,6 @@ function boundViolations(bridge: AtlasBridge, domain: Domain): string[] {
     }
     if (v < prev) out.push(`${bridge.id}: deltaAt(s=${s}) = ${v} is below the value at the previous sample ${prev}`);
     prev = v;
-  }
-  // The sampler reaches the regime edge: at s = 1 every regime inequality sits on its bound.
-  const edgePoint = domain.at(1);
-  for (const ineq of bridge.regime?.inequalities ?? []) {
-    const g = groupValue(bridge, ineq.group, edgePoint);
-    if (!(Math.abs(g - ineq.bound) <= REL_TOL * Math.abs(ineq.bound))) {
-      out.push(`${bridge.id}: sampler edge gives ${ineq.group} = ${g}, the regime bound is ${ineq.bound}`);
-    }
   }
   // delta is the supremum of deltaAt over the domain, so the edge value attains it.
   const edge = deltaAt(edgePoint);
@@ -182,10 +193,13 @@ describe('approximation bridge census', () => {
         expect(DELTA_AT_EXEMPT[b.id], `${b.id} has no deltaAt and no exemption`).toBeTruthy();
       }
     }
-    // An exemption for a bridge that does have deltaAt, or no longer exists, is stale.
+    // An exemption for a bridge that does have deltaAt, or no longer exists, is stale. The two
+    // cases are asserted apart: `b?.bound?.deltaAt` is undefined for a removed bridge too, so one
+    // optional chain passed a planted exemption for a bridge that does not exist (measured).
     for (const id of Object.keys(DELTA_AT_EXEMPT)) {
       const b = APPROXIMATIONS.find((x) => x.id === id);
-      expect(b?.bound?.deltaAt, `stale exemption ${id}`).toBeUndefined();
+      expect(b, `stale exemption ${id}: no such approximation bridge`).toBeDefined();
+      expect(b!.bound?.deltaAt, `stale exemption ${id}: the bridge has deltaAt`).toBeUndefined();
     }
   });
 });
