@@ -193,7 +193,7 @@ export const PHYSJS_REVIEWED_ROWS: Readonly<Record<string, string>> = {
   'be-168': '6c7696962e56f466c016a03947c8b359ae23fd1da6f1eb93e0aab4be117e062c',
   'be-169': '6f4e6c880f33255ed8d2c3d9757ba81e93e3f71b4a5ae8d02cbff0b91e6a244a',
   'be-170': 'f9d8dff51577fe8556593c0a31ca26577d5449864e48c246831aa37612463d48',
-  'be-48': '03f51592f8e6803a66dbe64b98f8d9010a3a1491f050ae6b9bf587c2338ea2f0',
+  'be-48': '29394aff8c2efed0f3d3c31361e64a0a234b0c753b2e122aa29427eabaf88c4b',
   'CE-pendulum-period': '3ba1bbf1fcd397696ff149991933f4f9c3c2436e7387db755eeb49a1221d21be',
   'CE-kepler-third': '8148838b4c6507a992febc556baa28c90ba937523386cafc1295b2d208e46b9a',
   'CE-schwarzschild-radius': '50ae726610e8bed9cf8c47f0932dae03dc2ddf2ef0622f08152e763d27bb4540',

@@ -75,7 +75,7 @@ const SENTINELS: readonly (readonly [string, string, string, RegExp])[] = [
   ['CE-thermal-de-broglie', 'PhysJS.BuckinghamClassics.thermal_de_broglie_exponent_unique', 'derivation-step', /\(1, -1\/2, -1\/2, -1\/2\) on \(hbar, mass, k_B, temperature\).*The prefactor is not derived\. Not a statement about a gas\.$/s],
   ['be-42', 'PhysJS.BuckinghamClassics.hawking_rs_exponent_unique', 'derivation-step', /\(-1, 1, 1, -1\) on \(schwarzschild-radius, hbar, c, k_B\).*prefactor 1\/\(4π\) is not derived\..*Not the Hawking effect\.$/s],
   ['be-20', 'PhysJS.BuckinghamClassics.vacuum_density_exponent_unique', 'derivation-step', /\(1, 2, -1\) on \(cosmological-constant-curvature, c, G\).*prefactor 1\/\(8π\) is not derived\. Not a statement about the cosmological constant problem\.$/s],
-  ['be-48', 'PhysJS.BuckinghamClassics.grw_exponent_unique', 'derivation-step', /\(1, -1, 2\) on \(mass, hbar, c\).*7\.03e-41 equals lambda0 hbar\/\(m0 c\^2\).*is not derived\. The localization rate of the model itself has no hbar and no c\. Not GRW theory\.$/s],
+  ['be-48', 'PhysJS.BuckinghamClassics.grw_exponent_unique', 'derivation-step', /\(1, -1, 2\) on \(mass, hbar, c\).*constant equals lambda0 hbar\/\(m0 c\^2\), the ratio of the two empirical parameters.*is not derived\. The localization rate of the model itself has no hbar and no c\. Not GRW theory\.$/s],
   ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', 'bridge', /The id is contested\./],
   ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', 'bridge', /Not a derivation from the five-dimensional Einstein equation$/],
   ['be-60', 'PhysJS.Laughlin.filling_fraction', 'bridge', /Not the Laughlin wavefunction, and not the anyon charge e\/3$/],

@@ -89,7 +89,8 @@ not a statement about the cosmological constant problem.
 
 `be-48`. Derivation step. The exponent tuple `(1, -1, 2)` on `(mass, hbar, c)` is the unique
 rational tuple whose dimension is a rate. Base dimensions are `(L, M, T)`. The constant that the
-catalog recovers is the empirical rate parameter of the model, and it is not derived. The
+catalog recovers is `λ₀ ℏ / (m₀ c²)`, the ratio of the two empirical parameters of the model to the
+closure constants, and it is not derived. The
 localization rate of the model itself has no `hbar` and no `c`. This is not the GRW theory.
 
 `hawking_exponent_not_unique` is the negative control. Over `(ℏ, c, G, M, k_B)`

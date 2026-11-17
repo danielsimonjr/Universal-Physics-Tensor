@@ -3258,7 +3258,7 @@ export const PHYSJS_ENTRIES = [
     kind: "derivation-step",
     theorem: "PhysJS.BuckinghamClassics.grw_exponent_unique",
     file: "BuckinghamClassics.lean",
-    covers: "the exponent tuple (1, -1, 2) on (mass, hbar, c), base dimensions (L, M, T), is the unique rational solution of the dimension equation for a rate. The recovered constant 7.03e-41 equals lambda0 hbar/(m0 c^2) for the empirical parameters lambda0 and m0 and is not derived. The localization rate of the model itself has no hbar and no c. Not GRW theory.",
+    covers: "the exponent tuple (1, -1, 2) on (mass, hbar, c), base dimensions (L, M, T), is the unique rational solution of the dimension equation for a rate. The recovered constant equals lambda0 hbar/(m0 c^2), the ratio of the two empirical parameters lambda0 and m0 to the closure constants, and is not derived. The localization rate of the model itself has no hbar and no c. Not GRW theory.",
     coverage: "covers its statement only",
     leanProof: "complete",
     axioms: ["propext", "Classical.choice", "Quot.sound"],

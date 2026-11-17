@@ -56,7 +56,7 @@ dimensionless constant the engine itself could never produce.
 | law-schwarzschild | `r_s ∝ G·mass·c⁻²` | **2.0000** |
 | be-12 thermal de Broglie | `λ ∝ ℏ·(mass·k_B·temperature)⁻¹ᐟ²` | **2.5066 = √(2π)** |
 | be-13 Einstein trace | `R ∝ cosmological-constant-curvature` | **4.0000** (R = 4Λ) |
-| be-48 GRW localization | `λ_GRW ∝ mass·c²·ℏ⁻¹` | 7.03×10⁻⁴¹ (the GRW rate, an empirical parameter) |
+| be-48 GRW localization | `λ_GRW ∝ mass·c²·ℏ⁻¹` | 7.03×10⁻⁴¹ (λ₀ ℏ/(m₀ c²), the ratio of two empirical parameters to the closure constants; not the GRW rate λ₀) |
 | be-15 model-A coarsening | `L ∝ (mobility·time)¹ᐟ²` | 1.000 |
 | be-17 torsion–spin | `spin² ∝ coupling²·torsion-scalar` | 1.000 |
 | be-36 GW speed ratio | (dimensionless target — degenerate) | — |
