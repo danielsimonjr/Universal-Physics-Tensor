@@ -1969,7 +1969,6 @@ modules:
           imports:
             - LENGTH
             - MASS
-            - VELOCITY
         - file: ../regime.js
           imports:
             - makeRegime
@@ -19764,7 +19763,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 390
   totalModules: 13
-  totalLinesOfCode: 89022
+  totalLinesOfCode: 89021
   totalExports: 2852
   totalClasses: 86
   totalInterfaces: 523
