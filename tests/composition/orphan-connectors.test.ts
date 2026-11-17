@@ -79,7 +79,7 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
     const m = linkageMap(CATALOG_GRAPH);
     expect(m.isolated).not.toContain('be-26');
     expect(m.isolated).not.toContain('be-26-wkb');
-    expect(m.clusters.find((c) => c.edges.includes('be-26'))?.edges.sort()).toEqual(['be-26', 'be-26-wkb']);
+    expect([...(m.clusters.find((c) => c.edges.includes('be-26'))?.edges ?? [])].sort()).toEqual(['be-26', 'be-26-wkb']);
     // ...but the REPORT still lists both relations as orphans with connectors into the core.
     const orphans = new Set(report.connectors.map((c) => c.orphanEdge));
     expect(orphans.has('be-26')).toBe(true);
