@@ -383,10 +383,10 @@ and `contradicted`. The predicate removes neither tag.
 
 ### `formalRefCarriers()` (`src/atlas/formal-ref-carriers.ts`)
 
-`formalRefCarriers(): readonly { id: string; formalRef?: FormalRef }[]`. It returns every atlas bridge,
+`formalRefCarriers(): readonly { id: string; formalRef?: FormalRef }[]`. The function returns every atlas bridge,
 every catalog row as `be-<n>`, and every canonical equation whose id is a key of the Lean manifest.
 The manifest check, the generated-table check, the proof-target check and the axiom gate read this
-list. The function is `@internal`. It is not a package export. It holds no key list: a canonical
+list. The function is `@internal` and is not a package export. The module holds no key list: a canonical
 equation with no manifest entry has no carrier, and no carrier lights an evidence tag.
 
 ### `checkApplicability(input)` (`src/atlas/applicability.ts`)

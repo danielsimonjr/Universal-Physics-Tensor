@@ -176,8 +176,8 @@ equation id, and the kind is `derivation-step`. Its theorem is
 is `hawking_exponent_not_unique` in the same file. Two exponent tuples
 solve the dimension equation for a temperature over the Hawking set, so
 the tuple there is not unique. The control has no manifest key. A canonical
-key is read by `formalRefCarriers()` in `src/atlas/formal-ref-carriers.ts`,
-and it is not a catalog row.
+key is read by `formalRefCarriers()` in `src/atlas/formal-ref-carriers.ts`.
+A canonical key is not a catalog row.
 
 ## Names
 
