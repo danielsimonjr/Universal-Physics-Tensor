@@ -107,7 +107,7 @@
     "@danielsimonjr/mathts-tensor": "^0.3.4"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^4.1.12",
     "@viz-js/viz": "^3.28.0",
     "fast-check": "^4.8.0",
