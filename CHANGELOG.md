@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **BE-26 reference point and opaque-barrier condition.** The stored reference of relation `be-26` used an electron mass (9.1093837015e-31 kg), a 1 eV barrier and a 3 Å width, value 231202247925.3068 /s. There 2κL = 3.07, so the barrier is not opaque and the prefactor-1 WKB form does not apply. The row's own notes, and `src/composition/representative-values.ts`, name a proton, a 0.4 eV barrier and a 1 Å width. The reference is now that point (1.67262192369e-27 kg, 6.408706536e-20 J, 1e-10 m, ν₀ = 1e13 Hz, f = 0.5), value 4.357625350016062 /s from the engine, where 2κL = 27.77. The relation's `holds` gains `8*tunneling-mass*barrier-height*barrier-width*barrier-width >= 100*hbar*hbar`, which is 2κL >= 10; the old point is now refused with `DomainViolationError`. Why: commit ea699295 introduced the inputs and its hand-check list omitted be-26. `tests/bridges/wkb-reference-point.test.ts` failed 2 of 3 on the previous tree (the old point evaluated, and the stored reference was the electron point). The census and the CLI goldens do not move.
+
 ### Changed
 
 - One SHA-256 function: `src/composition/canonical-json.ts` re-exports `sha256Hex` from `src/core/hash.ts` instead of wrapping it, and the `sha256` alias in `src/cli/record.ts` is removed; its callers call `sha256Hex`. The public `sha256Hex` of the probe entry point keeps its name and now also takes a `Buffer`. Why: two wrappers duplicated the one digest. Hash outputs are unchanged: the full suite, with its pinned digests, passes. The re-export carries its own summary line (the code-docs ratchet reads it), and the `sha256Hex` group in `docs/architecture/duplicate-symbols.md` describes the re-export, not the removed wrapper.
