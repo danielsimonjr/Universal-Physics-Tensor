@@ -91,7 +91,11 @@ jobs:
       - name: Fail when a token of the unit product walk reads wrong
         run: bun scripts/unit-product-walk.ts
       # `npm audit` requires package-lock.json; Bun owns the lockfile now.
-      - run: bun audit --audit-level=high
+      # GHSA-fc5q-39xc-vjpf (picomatch ReDoS, high) has no patched release: every picomatch
+      # up to 4.0.7, the newest, is affected. picomatch reaches this repo only through the
+      # vitest toolchain (vitest > vite > tinyglobby > fdir > picomatch), not the published dist.
+      # Remove the --ignore when a picomatch release above 4.0.7 fixes the advisory.
+      - run: bun audit --audit-level=high --ignore=GHSA-fc5q-39xc-vjpf
 
   docs-fresh:
     runs-on: ubuntu-latest
