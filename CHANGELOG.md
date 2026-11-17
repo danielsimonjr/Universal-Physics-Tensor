@@ -20,6 +20,7 @@ from v0.1.0 onward.
 
 ### Changed
 
+- ACTIVE row "Promote the Tier 2 set" is ticked. Why: Mothership gave this session the Tier 2 call, and the decision keeps `toAtlasJson` internal, so the review's exclusions all stand.
 - `tests/canonical/one-record.test.ts` lets `src/atlas/physjs-reviewed.ts` name a canonical id. Why: that file pins a review hash per Lean manifest key, and a canonical key such as `CE-pendulum-period` is a manifest key. The hash is a reference to the record, not a second copy of a canonical fact.
 - `scripts/lean-index.ts` accepts a canonical-equation key (`CE-<id>`) on a kind line, beside `be-` and `ab-`. Why: the pattern matched only `be-` and `ab-`, so a Lean theorem keyed by a canonical id would have failed `--check` with "0 kind lines". A control in `tests/formal/lean-theorems.test.ts` was red before the change.
 - **`canonicalRetrievalCorpus` stores each canonical entry in residual form.** A record's `expr` is now `canonicalResidual(entry)`, `target − scalarAst`, not the bare `scalarAst`, so a claim written as a relation (`F − m·a`) can key-match its entry in `rankByStructure`. The corpus is public through the atlas namespace. A consumer that read `expr` as the right-hand side now gets the residual, and symbol overlap now also sees the target name. Record text is unchanged. Authority: pre-registration Amendment 9 (`docs/research/atlas-benchmark-preregistration.md:315-317`). The criterion 3 study files are unchanged.
