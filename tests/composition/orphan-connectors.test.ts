@@ -16,7 +16,10 @@ const report = proposeOrphanConnectors(CATALOG_GRAPH);
 const rowOf = new Map(CATALOG_GRAPH.map((e) => [e.id, e.beId]));
 const isolated = new Set(
   linkageMap(CATALOG_GRAPH)
-    .clusters.filter((c) => c.size === 1 || new Set(c.edges.map((id) => rowOf.get(id))).size === 1)
+    .clusters.filter((c) => {
+      const rows = new Set(c.edges.map((id) => rowOf.get(id)));
+      return c.size === 1 || (rows.size === 1 && !rows.has(null));
+    })
     .flatMap((c) => c.edges),
 );
 
@@ -72,9 +75,18 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
   });
 
   it('a row whose only cluster partner is its own second relation is still an orphan (be-26)', () => {
-    expect(isolated.has('be-26')).toBe(true);
-    expect(isolated.has('be-26-wkb')).toBe(true);
-    expect(linkageMap(CATALOG_GRAPH).isolated).not.toContain('be-26');
+    // The structural map sees a two-edge cluster, so neither relation is single-edge isolated...
+    const m = linkageMap(CATALOG_GRAPH);
+    expect(m.isolated).not.toContain('be-26');
+    expect(m.isolated).not.toContain('be-26-wkb');
+    expect(m.clusters.find((c) => c.edges.includes('be-26'))?.edges.sort()).toEqual(['be-26', 'be-26-wkb']);
+    // ...but the REPORT still lists both relations as orphans with connectors into the core.
+    const orphans = new Set(report.connectors.map((c) => c.orphanEdge));
+    expect(orphans.has('be-26')).toBe(true);
+    expect(orphans.has('be-26-wkb')).toBe(true);
+    expect([...report.connectedOrphans, ...report.unconnectedOrphans]).toEqual(
+      expect.arrayContaining(['be-26', 'be-26-wkb']),
+    );
   });
 
   it('tunneling-mass ≟ effective-mass shares a token and the ledger calls it a decoy', () => {
