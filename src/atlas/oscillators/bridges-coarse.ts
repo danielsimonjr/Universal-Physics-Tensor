@@ -11,7 +11,7 @@
  * @module atlas/oscillators/bridges-coarse
  */
 
-import { LENGTH, MASS, VELOCITY } from '../../dimensional/types.js';
+import { LENGTH, MASS } from '../../dimensional/types.js';
 import { makeRegime } from '../regime.js';
 import type { AtlasBridge, RelationContract } from '../types.js';
 import { relationContractOf } from './bridges-exact.js';
@@ -113,7 +113,6 @@ export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
       { name: 'm', dim: MASS },
       { name: 'kappa', dim: SPRING_CONSTANT },
       { name: 'a', dim: LENGTH },
-      { name: 'c', dim: VELOCITY },
     ],
     ['qa'],
     [{ group: 'qa', op: '<', bound: 1, alias: 'qa ≪ 1' }],

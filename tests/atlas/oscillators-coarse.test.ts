@@ -11,7 +11,7 @@ import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 
 import { dim } from '../../src/dimensional/ast-builders.js';
 import { buckinghamPi } from '../../src/dimensional/buckingham.js';
-import { LENGTH, MASS } from '../../src/dimensional/types.js';
+import { LENGTH, MASS, VELOCITY } from '../../src/dimensional/types.js';
 import {
   BRIDGE_CHAIN_WAVE,
   chainWaveSpeed,
@@ -21,7 +21,9 @@ import {
   latticeBandEdge,
   latticeDispersion,
 } from '../../src/atlas/oscillators/bridges-coarse.js';
-import { CUBIC_STIFFNESS, SPRING_CONSTANT } from '../../src/atlas/oscillators/dimensions.js';
+import { CUBIC_STIFFNESS, DAMPING, SPRING_CONSTANT } from '../../src/atlas/oscillators/dimensions.js';
+import { makeRegime } from '../../src/atlas/regime.js';
+import type { Regime } from '../../src/atlas/types.js';
 import { getAtlasModel } from '../../src/atlas/oscillators/models.js';
 import { ATLAS_REJECTIONS } from '../../src/atlas/oscillators/rejections.js';
 import { runNumericWitness } from '../../src/atlas/witness-numeric.js';
@@ -344,5 +346,97 @@ describe('W9 — the registered in-process spec: the ring integrated, against th
 
   it('META-CHECK: the same assertion FAILS on the true spec (the control can fail)', () => {
     expect(runNumericWitness(entry().spec).status).not.toBe('refuted');
+  });
+});
+describe('ab-chain-wave regime — no derived identity among its groups', () => {
+  // Seeded generator (mulberry32), so a failure reproduces.
+  const seeded = (seed: number): (() => number) => {
+    let s = seed >>> 0;
+    return () => {
+      s = (s + 0x6d2b79f5) >>> 0;
+      let t = s;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+
+  /**
+   * The groups of `regime.groupDefinitions` that no inequality names and that
+   * evaluate to one constant (variance below 1e-12) over the samples. Such a
+   * group is a derived identity, not a regime condition.
+   */
+  const constantDerivedGroups = (
+    regime: Regime,
+    samples: readonly Readonly<Record<string, number>>[],
+  ): string[] => {
+    const conditioned = new Set(regime.inequalities.map((g) => g.group));
+    const constant: string[] = [];
+    for (const [name, group] of Object.entries(regime.groupDefinitions)) {
+      if (conditioned.has(name)) continue;
+      const values = samples.map((p) =>
+        Object.entries(group.exponents).reduce((acc, [v, e]) => acc * p[v] ** e, 1),
+      );
+      const mean = values.reduce((x, y) => x + y, 0) / values.length;
+      const variance = values.reduce((x, y) => x + (y - mean) ** 2, 0) / values.length;
+      if (variance < 1e-12) constant.push(name);
+    }
+    return constant;
+  };
+
+  /** 50 seeded points `(m, κ, a, qa)` with `c = factor · a √(κ/m)`. */
+  const chainSamples = (factor: number): Record<string, number>[] => {
+    const rand = seeded(20261117);
+    return Array.from({ length: 50 }, () => {
+      const m = 0.1 + 10 * rand();
+      const kappa = 0.1 + 10 * rand();
+      const a = 0.1 + 10 * rand();
+      return { m, kappa, a, c: factor * a * Math.sqrt(kappa / m), qa: rand() };
+    });
+  };
+
+  it('has exactly the one group qa, and its only inequality reads qa', () => {
+    expect(Object.keys(BRIDGE_CHAIN_WAVE.regime.groupDefinitions)).toEqual(['qa']);
+    expect(BRIDGE_CHAIN_WAVE.regime.inequalities.map((g) => g.group)).toEqual(['qa']);
+  });
+
+  it('has no group that is constant over sampled (m, κ, a) with c = a√(κ/m)', () => {
+    expect(constantDerivedGroups(BRIDGE_CHAIN_WAVE.regime, chainSamples(1))).toEqual([]);
+  });
+
+  it('control: the detector reads constancy, not the value 1 (c = 2a√(κ/m) gives a group of 4)', () => {
+    // The regime that the bridge declared before the fix, with c as a parameter.
+    const withC = makeRegime(
+      'oscillators',
+      [
+        { name: 'm', dim: MASS },
+        { name: 'kappa', dim: SPRING_CONSTANT },
+        { name: 'a', dim: LENGTH },
+        { name: 'c', dim: VELOCITY },
+      ],
+      ['qa'],
+      [{ group: 'qa', op: '<', bound: 1 }],
+    );
+    expect(constantDerivedGroups(withC, chainSamples(1))).toHaveLength(1);
+    expect(constantDerivedGroups(withC, chainSamples(2))).toHaveLength(1);
+  });
+
+  it('negative control: a free damping group b²/(mκ) is not reported', () => {
+    const free = makeRegime(
+      'oscillators',
+      [
+        { name: 'm', dim: MASS },
+        { name: 'kappa', dim: SPRING_CONSTANT },
+        { name: 'a', dim: LENGTH },
+        { name: 'b', dim: DAMPING },
+      ],
+      ['qa'],
+      [{ group: 'qa', op: '<', bound: 1 }],
+    );
+    const rand = seeded(7);
+    const samples = chainSamples(1).map((p) => ({ ...p, b: 0.1 + 10 * rand() }));
+    // The regime holds a group besides qa, and the detector stays silent on it.
+    expect(Object.keys(free.groupDefinitions).length).toBeGreaterThan(1);
+    expect(constantDerivedGroups(free, samples)).toEqual([]);
   });
 });
