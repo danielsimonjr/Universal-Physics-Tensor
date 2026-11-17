@@ -22,8 +22,7 @@ import {
   probedTheorems,
 } from '../../tools/formalref-axiom-gate/gate.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
-import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
-import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
+import { formalRefCarriers } from '../../src/atlas/formal-ref-carriers.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (p: string) => readFileSync(resolve(root, p), 'utf-8');
@@ -82,10 +81,7 @@ describe('formalRef axiom gate — parsing', () => {
   });
 
   it('no live atlas bridge or catalog row has a lean4-physlib formalRef; the pendulum reference is PhysJS', () => {
-    const bridges = [
-      ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
-      ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
-    ];
+    const bridges = formalRefCarriers();
     expect(bridges.length).toBeGreaterThan(ATLAS_FAMILIES.flatMap((family) => family.bridges).length);
     expect(lean4PhyslibReferences(bridges)).toEqual([]);
   });

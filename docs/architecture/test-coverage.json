@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "totalSourceFiles": 389,
-    "totalTestFiles": 723,
-    "testedCount": 379,
-    "directlyTestedCount": 347,
+    "totalSourceFiles": 390,
+    "totalTestFiles": 724,
+    "testedCount": 380,
+    "directlyTestedCount": 348,
     "untestedCount": 10,
     "coveragePercent": "97.4",
     "directCoveragePercent": "89.2"
@@ -51,6 +51,7 @@
     "src/atlas/export.ts",
     "src/atlas/families.ts",
     "src/atlas/family.ts",
+    "src/atlas/formal-ref-carriers.ts",
     "src/atlas/index.ts",
     "src/atlas/link-prediction.ts",
     "src/atlas/model.ts",
@@ -432,6 +433,7 @@
     "src/atlas/export.ts",
     "src/atlas/families.ts",
     "src/atlas/family.ts",
+    "src/atlas/formal-ref-carriers.ts",
     "src/atlas/index.ts",
     "src/atlas/link-prediction.ts",
     "src/atlas/model.ts",
@@ -861,10 +863,8 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/formalref-kind.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
-      "tests/atlas/proof-target.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/structural-classifier.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -881,8 +881,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/retrieve.test.ts",
       "tests/cli/stored-results-module.test.ts",
-      "tests/cli/suggest-token-length.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts"
+      "tests/cli/suggest-token-length.test.ts"
     ],
     "src/atlas/chain-pipeline.ts": [
       "tests/atlas/chain-pipeline-catalog.test.ts",
@@ -1091,6 +1090,7 @@
       "tests/atlas/evidence-rule.test.ts",
       "tests/atlas/export.test.ts",
       "tests/atlas/families.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/lc-analogy-text.test.ts",
@@ -1100,10 +1100,8 @@
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
-      "tests/atlas/proof-target.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/relative-norm-convention.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
@@ -1149,6 +1147,14 @@
       "tests/cli/retrieve.test.ts",
       "tests/cli/stored-results-module.test.ts",
       "tests/cli/suggest-token-length.test.ts"
+    ],
+    "src/atlas/formal-ref-carriers.ts": [
+      "tests/atlas/formal-ref-carriers.test.ts",
+      "tests/atlas/formalref-kind.test.ts",
+      "tests/atlas/physjs-generated-table.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
+      "tests/tools/formalref-axiom-gate.test.ts"
     ],
     "src/atlas/index.ts": [
       "tests/atlas/barrel-completeness.test.ts"
@@ -1325,6 +1331,7 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-generated-table.test.ts",
@@ -1339,6 +1346,7 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-generated-table.test.ts",
@@ -1722,9 +1730,9 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
@@ -1769,7 +1777,6 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/catalog-adapter.ts": [
@@ -1971,9 +1978,9 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
@@ -2047,7 +2054,6 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/evaluator-inputs.ts": [
@@ -2153,9 +2159,9 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
@@ -2197,7 +2203,6 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/input-contract.ts": [
@@ -2421,9 +2426,9 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
@@ -2465,7 +2470,6 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/validity.ts": [],
@@ -2635,6 +2639,7 @@
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/hybrid-retrieval.test.ts",
       "tests/atlas/model.test.ts",
       "tests/atlas/models.test.ts",
@@ -8632,9 +8637,9 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
@@ -8771,7 +8776,6 @@
       "tests/numerical/weyl-schwarzschild.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
       "tests/tensor.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/core/data-file.ts": [
@@ -12035,14 +12039,11 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/formalref-kind.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
-      "tests/atlas/proof-target.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/canonical/structural-classifier.test.ts",
-      "tests/cli/atlas-command.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts"
+      "tests/cli/atlas-command.test.ts"
     ],
     "src/atlas/chain-pipeline.ts": [
       "tests/atlas/chain-pipeline-catalog.test.ts",
@@ -12143,6 +12144,7 @@
       "tests/atlas/evidence-rule.test.ts",
       "tests/atlas/export.test.ts",
       "tests/atlas/families.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/lc-analogy-text.test.ts",
@@ -12152,10 +12154,8 @@
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
-      "tests/atlas/proof-target.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/relative-norm-convention.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
@@ -12174,6 +12174,14 @@
       "tests/atlas/link-prediction-intervals.test.ts",
       "tests/atlas/link-prediction.test.ts",
       "tests/atlas/model.test.ts"
+    ],
+    "src/atlas/formal-ref-carriers.ts": [
+      "tests/atlas/formal-ref-carriers.test.ts",
+      "tests/atlas/formalref-kind.test.ts",
+      "tests/atlas/physjs-generated-table.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
+      "tests/tools/formalref-axiom-gate.test.ts"
     ],
     "src/atlas/index.ts": [
       "tests/atlas/barrel-completeness.test.ts"
@@ -12294,6 +12302,7 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-generated-table.test.ts",
@@ -12594,9 +12603,9 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
-      "tests/atlas/physjs-generated-table.test.ts",
       "tests/atlas/physjs-lean-path.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
@@ -12617,7 +12626,6 @@
       "tests/composition/frontier-account.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
-      "tests/tools/formalref-axiom-gate.test.ts",
       "tests/tools/readme-status.test.ts"
     ],
     "src/bridges/input-contract.ts": [
@@ -12748,6 +12756,7 @@
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/hybrid-retrieval.test.ts",
       "tests/atlas/model.test.ts",
       "tests/atlas/models.test.ts",
@@ -15979,6 +15988,18 @@
       "src/atlas/types.ts",
       "src/relations/types.ts"
     ],
+    "tests/atlas/formal-ref-carriers.test.ts": [
+      "src/atlas/families.ts",
+      "src/atlas/formal-ref-carriers.ts",
+      "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
+      "src/bridges/index.ts",
+      "src/bridges/types.ts",
+      "src/core/constants.ts",
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/canonical/registry.ts"
+    ],
     "tests/atlas/formal-sanity.test.ts": [
       "src/atlas/oscillators/bridges-exact.ts",
       "src/atlas/oscillators/bridges-limits.ts",
@@ -15999,6 +16020,7 @@
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
       "src/atlas/catalog-formal-ref.ts",
+      "src/atlas/formal-ref-carriers.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts",
       "src/bridges/index.ts",
@@ -16230,13 +16252,7 @@
       "src/atlas/witness-dominance.ts"
     ],
     "tests/atlas/physjs-generated-table.test.ts": [
-      "src/atlas/families.ts",
-      "src/atlas/catalog-formal-ref.ts",
-      "src/bridges/index.ts",
-      "src/bridges/types.ts",
-      "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts",
-      "src/bridges/evaluation-errors.ts",
+      "src/atlas/formal-ref-carriers.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts"
     ],
@@ -16256,6 +16272,7 @@
       "src/atlas/derive-evidence.ts",
       "src/cli/map-evidence.ts",
       "src/atlas/catalog-formal-ref.ts",
+      "src/atlas/formal-ref-carriers.ts",
       "src/bridges/index.ts",
       "src/bridges/types.ts",
       "src/core/constants.ts",
@@ -16276,8 +16293,7 @@
       "src/atlas/oscillators/models.ts"
     ],
     "tests/atlas/proof-target.test.ts": [
-      "src/atlas/families.ts",
-      "src/atlas/catalog-formal-ref.ts",
+      "src/atlas/formal-ref-carriers.ts",
       "src/atlas/proof-target.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts",
@@ -26712,12 +26728,7 @@
     "tests/tools/export-star-as-deps.test.ts": [],
     "tests/tools/formalref-axiom-gate.test.ts": [
       "src/atlas/families.ts",
-      "src/bridges/index.ts",
-      "src/bridges/types.ts",
-      "src/core/constants.ts",
-      "src/bridges/carrier-sign.ts",
-      "src/bridges/evaluation-errors.ts",
-      "src/atlas/catalog-formal-ref.ts"
+      "src/atlas/formal-ref-carriers.ts"
     ],
     "tests/tools/hook-git-env.test.ts": [],
     "tests/tools/layer-order.test.ts": [],

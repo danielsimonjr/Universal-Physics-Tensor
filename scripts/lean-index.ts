@@ -15,7 +15,8 @@
  * project builds with (`lean-toolchain`, and the `inputRev` / `rev` of those
  * packages in `lake-manifest.json`); `--check` fails when they are not.
  * Each statement's `kind` is the kind line of the module docstring of the
- * file that declares its theorem (`` `be-80`. Bridge. ``, and for a nested
+ * file that declares its theorem (`` `be-80`. Bridge. ``, a canonical-equation
+ * key `` `CE-pendulum-period`. Derivation step. ``, and for a nested
  * statement `` `be-13.vacuum`. Reduction. ``); `--check` fails on a missing,
  * repeated or different line. PhysJS's CI made that comparison before the
  * move; nothing in this repository did until this check.
@@ -163,7 +164,7 @@ const KIND_WORDS: Readonly<Record<string, string>> = {
 };
 
 /** A kind line: `` `<label>`. <Word>. `` at the start of a docstring line. */
-const KIND_LINE = /^`((?:be|ab)-[a-z0-9-]+(?:\.[A-Za-z_]+)?)`\. ([A-Z][a-z-]+(?: [a-z]+)?)\./;
+const KIND_LINE = /^`((?:be|ab|CE)-[a-z0-9-]+(?:\.[A-Za-z_]+)?)`\. ([A-Z][a-z-]+(?: [a-z]+)?)\./;
 
 /**
  * Each manifest statement whose `kind` is not the kind line labelled with its

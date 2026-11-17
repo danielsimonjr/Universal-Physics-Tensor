@@ -22,6 +22,7 @@
   "lean/BraytonCycle.lean",
   "lean/Bremsstrahlung.lean",
   "lean/BrillouinShift.lean",
+  "lean/BuckinghamClassics.lean",
   "lean/BuiltinVoltage.lean",
   "lean/ButlerVolmer.lean",
   "lean/CantileverFrequency.lean",

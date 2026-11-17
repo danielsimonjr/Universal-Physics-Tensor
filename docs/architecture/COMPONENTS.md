@@ -381,6 +381,14 @@ a file allow-list lint forbids spelling the tag anywhere a record could set it.
 `provedWithUnresolvedCounterexample` is true when the derived set contains both `formally-proved`
 and `contradicted`. The predicate removes neither tag.
 
+### `formalRefCarriers()` (`src/atlas/formal-ref-carriers.ts`)
+
+`formalRefCarriers(): readonly { id: string; formalRef?: FormalRef }[]`. The function returns every atlas bridge,
+every catalog row as `be-<n>`, and every canonical equation whose id is a key of the Lean manifest.
+The manifest check, the generated-table check, the proof-target check and the axiom gate read this
+list. The function is `@internal` and is not a package export. The module holds no key list: a canonical
+equation with no manifest entry has no carrier, and no carrier lights an evidence tag.
+
 ### `checkApplicability(input)` (`src/atlas/applicability.ts`)
 
 `checkApplicability(input: ApplicabilityInput): readonly ApplicabilityFinding[]`. The function returns
@@ -998,7 +1006,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1217 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1219 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 

@@ -96,4 +96,20 @@ describe('lean/ holds every theorem a record names', () => {
       `${bridge.key}: ${file} has 0 kind lines for it, expected one ('Bridge.')`,
     ]);
   });
+
+  it('CONTROL: a canonical-equation key CE-<id> has a kind line, and a wrong word on it is reported', () => {
+    const ce = { ...manifest, entries: [{ key: 'CE-sample-id', theorem: 'Sample.thm', kind: 'derivation-step' }] };
+    const files = { 'Sample.thm': 'lean/Sample.lean' };
+    const doc = (word: string) => () => `/-!
+\`CE-sample-id\`. ${word}.
+-/
+`;
+    expect(kindLineProblems(ce, files, doc('Derivation step'))).toEqual([]);
+    expect(kindLineProblems(ce, files, doc('Bridge'))).toEqual([
+      "CE-sample-id: manifest kind 'derivation-step', lean/Sample.lean says 'Bridge.'",
+    ]);
+    expect(kindLineProblems(ce, files, () => '/-! no line -/')).toEqual([
+      "CE-sample-id: lean/Sample.lean has 0 kind lines for it, expected one ('Derivation step.')",
+    ]);
+  });
 });

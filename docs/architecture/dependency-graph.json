@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "14.0.0",
-    "totalFiles": 389,
+    "totalFiles": 390,
     "totalModules": 13,
-    "totalExports": 2843
+    "totalExports": 2844
   },
   "entryPoints": [
     {
@@ -1583,6 +1583,57 @@
         "exports": [],
         "interfaces": [
           "AtlasFamily"
+        ]
+      },
+      "src/atlas/formal-ref-carriers.ts": {
+        "description": "The one list of records that can carry a formal reference.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS"
+            ]
+          },
+          {
+            "file": "../canonical/registry.js",
+            "imports": [
+              "CANONICAL_EQUATIONS"
+            ]
+          },
+          {
+            "file": "../relations/types.js",
+            "imports": [
+              "FormalRef"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./catalog-formal-ref.js",
+            "imports": [
+              "catalogFormalRef"
+            ]
+          },
+          {
+            "file": "./families.js",
+            "imports": [
+              "ATLAS_FAMILIES"
+            ]
+          },
+          {
+            "file": "./physjs-ref.js",
+            "imports": [
+              "physjsFormalRef",
+              "physjsTheorem"
+            ]
+          }
+        ],
+        "exports": [
+          "formalRefCarriers"
+        ],
+        "functions": [
+          "formalRefCarriers"
         ]
       },
       "src/atlas/index.ts": {
@@ -28007,6 +28058,7 @@
           "src/atlas/export.ts",
           "src/atlas/families.ts",
           "src/atlas/family.ts",
+          "src/atlas/formal-ref-carriers.ts",
           "src/atlas/index.ts",
           "src/atlas/link-prediction.ts",
           "src/atlas/model.ts",
@@ -28431,18 +28483,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 389,
+    "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 88746,
-    "totalExports": 2843,
+    "totalLinesOfCode": 88796,
+    "totalExports": 2844,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 933,
+    "totalFunctions": 934,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 422,
     "totalReExports": 1397,
-    "totalTypeOnlyImports": 532,
+    "totalTypeOnlyImports": 533,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

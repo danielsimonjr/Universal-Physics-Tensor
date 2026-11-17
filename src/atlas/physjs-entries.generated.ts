@@ -3088,4 +3088,16 @@ export const PHYSJS_ENTRIES = [
     axioms: ["propext", "Classical.choice", "Quot.sound"],
     nested: [],
   },
+  {
+    key: "CE-pendulum-period",
+    bridgeId: "CE-pendulum-period",
+    kind: "derivation-step",
+    theorem: "PhysJS.BuckinghamClassics.pendulum_exponent_unique",
+    file: "BuckinghamClassics.lean",
+    covers: "the exponent tuple (1/2, -1/2) on (length, gravity), base dimensions (L, T), is the unique rational solution of the dimension equation for a period. The prefactor 2π is not derived and no monomial form is stated. Not the pendulum equation of motion. The negative control hawking_exponent_not_unique in the same file shows a free group: two exponent tuples for a temperature over (ℏ, c, G, M, k_B), unkeyed.",
+    coverage: "covers its statement only",
+    leanProof: "complete",
+    axioms: ["propext", "Classical.choice", "Quot.sound"],
+    nested: [],
+  },
 ] as const;

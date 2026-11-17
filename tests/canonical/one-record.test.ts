@@ -35,11 +35,15 @@ const stripComments = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').
 /**
  * Files that may name a canonical id in code: the entries themselves, and
  * cross-references FROM another record TO an equation (an atlas model's
- * `canonicalEquation` link, an applied case's comparison target). A new
- * directory on this list is a decision, not a default.
+ * `canonicalEquation` link, an applied case's comparison target, the review
+ * hash of a Lean manifest key in `atlas/physjs-reviewed.ts`). A new directory
+ * on this list is a decision, not a default.
  */
 const MAY_NAME_CANONICAL_IDS = (rel: string): boolean =>
-  rel.startsWith('canonical/entries/') || rel.startsWith('cases/') || /^atlas\/[a-z-]+\/models\.ts$/.test(rel);
+  rel.startsWith('canonical/entries/') ||
+  rel.startsWith('cases/') ||
+  /^atlas\/[a-z-]+\/models\.ts$/.test(rel) ||
+  rel === 'atlas/physjs-reviewed.ts';
 
 describe('a canonical equation is one record', () => {
   it('no id-keyed canonical fact lives outside src/canonical/entries', () => {

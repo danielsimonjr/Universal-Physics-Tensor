@@ -15,8 +15,9 @@ import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
+import { formalRefCarriers } from '../../src/atlas/formal-ref-carriers.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
-import { catalogEntries } from '../../src/bridges/catalog-load.js';
+import { catalogEntries, catalogIdNumber } from '../../src/bridges/catalog-load.js';
 import { FORMAL_REF_KINDS } from '../../src/relations/types.js';
 import { PHYSJS_ENTRIES } from '../../src/atlas/physjs-entries.generated.js';
 import { PHYSJS_REVIEWED_ROWS } from '../../src/atlas/physjs-reviewed.js';
@@ -36,10 +37,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const manifest = JSON.parse(readFileSync(resolve(root, 'formal/lean/manifest.json'), 'utf-8')) as PhysjsManifestFile;
 const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf-8')) as { version: string };
 const atlasBridges = ATLAS_FAMILIES.flatMap((family) => family.bridges);
-const carriers = [
-  ...atlasBridges,
-  ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
-];
+const carriers = formalRefCarriers();
 
 /**
  * The reviewed manifest is pinned PER KEY in `src/atlas/physjs-reviewed.ts`:
@@ -66,6 +64,7 @@ const SENTINELS: readonly (readonly [string, string, string, RegExp])[] = [
   ['be-28', 'PhysJS.EntropyProduction.nonneg', 'property', /Not the variational maximum-entropy-production principle\./],
   ['be-29', 'PhysJS.Jarzynski.jensen_work', 'property', /Not Jarzynski's theorem/],
   ['be-33', 'PhysJS.QuantumCritical.thermal_scaling', 'bridge', /Not Hertz–Millis theory/],
+  ['CE-pendulum-period', 'PhysJS.BuckinghamClassics.pendulum_exponent_unique', 'derivation-step', /Not the pendulum equation of motion\..*negative control/s],
   ['be-42', 'PhysJS.HawkingUnruh.dictionary', 'cross-check', /Not the Hawking effect$/],
   ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', 'bridge', /The id is contested\./],
   ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', 'bridge', /Not a derivation from the five-dimensional Einstein equation$/],
@@ -408,7 +407,7 @@ describe('the Lean manifest', () => {
     const ofKind = (...kinds: string[]) => manifest.entries.filter((entry) => kinds.includes(entry.kind)).map((entry) => entry.key);
     // Each key of a kind other than bridge carries that kind on its reference.
     // The counts are the record at this pin; the keys come from the manifest.
-    expect(ofKind(...COUNTED_KINDS)).toHaveLength(16);
+    expect(ofKind(...COUNTED_KINDS)).toHaveLength(17);
     expect(ofKind('cross-check')).toHaveLength(3);
     expect(ofKind('property')).toHaveLength(3);
     for (const key of ofKind(...COUNTED_KINDS, 'cross-check', 'property')) {
@@ -447,8 +446,8 @@ describe('the Lean manifest', () => {
   it('catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
     const idsOf = (kinds: readonly string[]) =>
       manifest.entries
-        .filter((entry) => kinds.includes(entry.kind) && catalogFormalRef(Number(entry.key.slice(3))) !== undefined)
-        .map((entry) => Number(entry.key.slice(3)));
+        .map((entry) => (kinds.includes(entry.kind) ? catalogIdNumber(entry.key) : undefined))
+        .filter((id): id is number => id !== undefined && catalogFormalRef(id) !== undefined);
     const countedIds = idsOf(COUNTED_KINDS);
     const labeledIds = idsOf(['property', 'cross-check']);
     expect(countedIds.length).toBeGreaterThan(0);

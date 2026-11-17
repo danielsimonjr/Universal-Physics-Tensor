@@ -14,6 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
+import { formalRefCarriers } from '../../src/atlas/formal-ref-carriers.js';
 import { LEAN_SOURCE_TAG, physjsFileUrl, physjsFormalRef, physjsLeanFile, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { catalogEntries } from '../../src/bridges/catalog-load.js';
@@ -159,10 +160,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
 
   it('a reference kind that does not match the manifest kind is a manifest problem', () => {
     const manifest = MANIFEST;
-    const bridges = [
-      ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
-      ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
-    ];
+    const bridges = formalRefCarriers();
     expect(physjsManifestProblems({ manifest, bridges })).toEqual([]);
     const lied = bridges.map((bridge) =>
       bridge.id === 'be-16' && bridge.formalRef !== undefined
