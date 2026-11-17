@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Removed
 
-- **Dated status blocks in `ROADMAP.md`.** The Phase 0 block and the Phase 1 block (`STATUS 2026-09-21`) are removed. Each block repeated a row of the §7 "Phase status" table. The Phase 1 block said "NOT MET" for its fourth exit criterion, and the §7 table says "MET". Each block is now one line: "Status: the table in §7." The §7 table holds the live status. Historical planning documents that quote the old text stay unchanged.
+- **Dated status blocks in `ROADMAP.md`.** The Phase 0 block and the Phase 1 block (`STATUS 2026-09-21`) are each replaced by one line: "Status: the table in §7." Each block repeated a row of the §7 "Phase status" table. The Phase 1 block said "NOT MET" for its fourth exit criterion, and the §7 table says "MET". The §7 table holds the live status.
 
 ### Fixed
 
