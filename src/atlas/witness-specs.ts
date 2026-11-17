@@ -604,7 +604,7 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
   },
   {
     // Coarse-graining, long wavelength: 1 − ω/(c q) measured on the integrated
-    // ring, over (qa)²/24, tends to 1 within the 0.5% W9 records.
+    // ring, over (qa)²/24, tends to 1 within the (qa)²/80 W9 records.
     recordId: 'ab-chain-wave',
     kind: 'numeric',
     spec: {

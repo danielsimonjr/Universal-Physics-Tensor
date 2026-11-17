@@ -116,7 +116,7 @@ export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
       id: 'W9',
       kind: 'numeric',
       test: 'tests/atlas/oscillators-coarse.test.ts',
-      tolerance: 'relative dispersion error matches (qa)²/24 within 0.5% of itself',
+      tolerance: 'relative dispersion error matches (qa)²/24 within (qa)²/80 of itself, for qa < 1',
     },
     {
       id: 'W9b',

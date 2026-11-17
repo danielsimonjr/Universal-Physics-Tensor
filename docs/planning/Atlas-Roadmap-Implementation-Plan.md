@@ -541,9 +541,9 @@ Tasks:
    reduction map `u_n(t) → u(x = na, t)`, information lost `'modes with q > π/a'`, closure
    `'long-wavelength, qa ≪ 1'`.
    - **W9** (dispersion): lattice `ω(q) = 2√(κ/m)|sin(qa/2)|`, continuum `ω = c q` with
-     `c² = κa²/m`. For `κ = m = a = 1` and `qa ∈ {0.1, 0.2, 0.4}` assert the relative error
-     `1 − ω_lattice/ω_cont` equals `(qa)²/24` **within 0.5% of itself** (the relative
-     deviation is `−(qa)²/80`: 1.3e-4, 5.0e-4, 2.0e-3; the next series term is `(qa)⁴/1920`).
+     `c² = κa²/m`. For `κ = m = a = 1` and `qa ∈ {0.1, 0.2, 0.4, 0.632, 0.8, 0.95, 0.999}` assert the relative error
+     `1 − ω_lattice/ω_cont` equals `(qa)²/24` **within `(qa)²/80` of itself** (the relative
+     deviation is `−(qa)²/80 + (qa)⁴/13440 − …`; a flat 0.5% bound fails for `qa > 0.634`).
      Assert the lattice band edge at `qa = π` has `ω = 2√(κ/m)` and the continuum has no band
      edge (the information-loss witness).
 2. Rejection `ax-cubic-spring-lc`: claimed `exact-equivalence`, premises
