@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-16 (Tier 2 atlas promotion, branch feat/tier2-promotion)
+
+- The facade `src/atlas/public.ts` lists 33 names, was 25. New: `AtlasBridge`, `FormalRef`, `FormalFidelity`, `FormalRefKind`, `NormTransport`, `AtlasFamily` (types) and `ATLAS_FAMILIES`, `ATLAS_RECORD_SCHEMA_VERSION` (values). `toAtlasJson` stays internal because its signature names `WitnessResultsArtifact`, which names the witness record types (the artifact file itself ships in `data/`). Mothership's inbox reply of 2026-11-16 22:22 gave the Tier 2 call to this session. The decision is to keep `toAtlasJson` internal. Measured: a facade with `toAtlasJson` added fails the closure test with two leaks, `toAtlasJson → AtlasRecordJson` and `toAtlasJson → WitnessResultsArtifact`; `WitnessResultsArtifact` names `WitnessResultRecord`, which names `WitnessStatus`, `UnresolvedReason` and `Convergence`. The closure scan of `tests/api/atlas-public-closure.test.ts` reads `src/relations/` as well as `src/atlas/`; before that, a facade without `FormalFidelity` passed the closure test (measured again on the final tree: the same mutation now fails it with `FormalRef → FormalFidelity`). Scoped tests under `tests/api` pass (69). The Tier 2 row in the ACTIVE list is ticked in the same change.
+
 ## As of 2026-11-16 (Buckingham milestone 3, PR B)
 
 - **Eight more canonical keys are in the Lean manifest.** The manifest has 239 entries: 208 bridge, 22 derivation-step, 3 cross-check, 3 property, 2 limit, 1 reduction. The counted kinds (reduction, limit, derivation-step) are 25, was 17. All nine classics of `src/canonical/entries/dimensional-classics.ts` now have a key. Seven other canonical records have `epistemicStatus` `dimensional`: `CE-fermi-energy`, `CE-fermi-velocity`, `CE-debye-frequency` (condensed matter), `CE-lc-resonance` (electromagnetism), `CE-sound-speed` (fluids), `CE-simple-harmonic-frequency` (mechanics) and `CE-mb-most-probable-speed` (statistical mechanics). They are not classics and have no key.

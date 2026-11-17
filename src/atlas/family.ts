@@ -17,7 +17,7 @@ import type { AtlasBridge, AtlasRejection } from './types.js';
  * bridges that were refuted. A rejection is evidence, not an omission, so it
  * travels with the family rather than being dropped.
  *
- * @internal
+ * @public
  */
 export interface AtlasFamily {
   /** `'oscillators'`. */

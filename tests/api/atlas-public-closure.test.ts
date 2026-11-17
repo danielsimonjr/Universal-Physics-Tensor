@@ -71,9 +71,16 @@ function walk(dir: string, acc: string[] = []): string[] {
   return acc;
 }
 
-/** Every type-like name DECLARED under src/atlas/ (interfaces, type aliases, classes, enums). */
+/**
+ * Every type-like name DECLARED under src/atlas/ and src/relations/ (interfaces,
+ * type aliases, classes, enums). `src/relations/types.ts` holds the vocabulary
+ * the facade re-exports (`FormalRef`, `FormalFidelity`, `FormalRefKind`, …). A
+ * scan of src/atlas/ alone passed with `FormalFidelity` removed from the facade
+ * while `FormalRef` still named it: the leak was declared outside the scanned
+ * tree.
+ */
 const ATLAS_TYPE_NAMES = new Set(
-  walk(resolve(SRC, 'atlas')).flatMap((f) =>
+  [...walk(resolve(SRC, 'atlas')), ...walk(resolve(SRC, 'relations'))].flatMap((f) =>
     [...stripComments(readFileSync(f, 'utf-8')).matchAll(/export\s+(?:interface|type|class|enum)\s+([A-Za-z_$][\w$]*)/g)].map(
       (m) => m[1]!,
     ),
@@ -115,9 +122,29 @@ const atlasRefs = (text: string, self: string): string[] =>
   [...ATLAS_TYPE_NAMES].filter((t) => t !== self && new RegExp(`\\b${t}\\b`).test(text));
 
 describe('atlas public namespace — derived from the facade file', () => {
-  it('the facade lists 25 distinct names (the count is DERIVED here, stated nowhere else)', () => {
+  it('the facade lists each name once (the count is DERIVED here, stated nowhere else)', () => {
     expect(new Set(facadeNames).size).toBe(facadeNames.length);
-    expect(facadeNames.length).toBe(25);
+    expect(facadeNames.length).toBe(33);
+  });
+
+  it('the Tier 2 promotion is in the facade: the bridge record, its formal reference, the families and the schema version; toAtlasJson stays internal', () => {
+    for (const n of [
+      'AtlasBridge',
+      'FormalRef',
+      'FormalFidelity',
+      'FormalRefKind',
+      'NormTransport',
+      'ATLAS_FAMILIES',
+      'AtlasFamily',
+      'ATLAS_RECORD_SCHEMA_VERSION',
+    ]) {
+      expect(facadeNames, n).toContain(n);
+    }
+  });
+
+  it('toAtlasJson stays OUT: its signature names WitnessResultsArtifact, so promoting it widens the set by the Tier 3 witness types', () => {
+    expect(facadeNames).not.toContain('toAtlasJson');
+    expect(facadeNames).not.toContain('WitnessResultsArtifact');
   });
 
   it('the root exposes the namespace, and its runtime keys are exactly the facade VALUES', async () => {
@@ -126,6 +153,8 @@ describe('atlas public namespace — derived from the facade file', () => {
     for (const k of keys) expect(facadeNames).toContain(k);
     expect(keys).toEqual(
       [
+        'ATLAS_FAMILIES',
+        'ATLAS_RECORD_SCHEMA_VERSION',
         'COMPOSITION_TABLE',
         'IDENTITY_BOUND',
         'MissingDeltaAtError',

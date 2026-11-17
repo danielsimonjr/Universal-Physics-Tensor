@@ -3,7 +3,7 @@ metadata:
   version: 14.0.0
   totalFiles: 390
   totalModules: 13
-  totalExports: 2844
+  totalExports: 2852
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2753,10 +2753,15 @@ modules:
         - file: ./types.js
           imports:
             - ApproximationBound
+            - AtlasBridge
             - AtlasRejection
             - Counterexample
             - EvidenceTag
+            - FormalFidelity
+            - FormalRef
+            - FormalRefKind
             - LimitCharacter
+            - NormTransport
             - Regime
             - RegimeInequality
             - RelationType
@@ -2802,6 +2807,18 @@ modules:
             - CompositionResult
             - NoCompositeClaim
           reExport: true
+        - file: ./families.js
+          imports:
+            - ATLAS_FAMILIES
+          reExport: true
+        - file: ./family.js
+          imports:
+            - AtlasFamily
+          reExport: true
+        - file: ./serialize.js
+          imports:
+            - ATLAS_RECORD_SCHEMA_VERSION
+          reExport: true
       exports:
         - MissingDeltaAtError
         - MissingHorizonError
@@ -2813,11 +2830,18 @@ modules:
         - composeRelation
         - COMPOSITION_TABLE
         - NO_COMPOSITE_CLAIM
+        - ATLAS_FAMILIES
+        - ATLAS_RECORD_SCHEMA_VERSION
         - ApproximationBound
+        - AtlasBridge
         - AtlasRejection
         - Counterexample
         - EvidenceTag
+        - FormalFidelity
+        - FormalRef
+        - FormalRefKind
         - LimitCharacter
+        - NormTransport
         - Regime
         - RegimeInequality
         - RelationType
@@ -2828,12 +2852,18 @@ modules:
         - ComposedPath
         - CompositionResult
         - NoCompositeClaim
+        - AtlasFamily
       reExported:
         - ApproximationBound
+        - AtlasBridge
         - AtlasRejection
         - Counterexample
         - EvidenceTag
+        - FormalFidelity
+        - FormalRef
+        - FormalRefKind
         - LimitCharacter
+        - NormTransport
         - Regime
         - RegimeInequality
         - RelationType
@@ -2854,6 +2884,9 @@ modules:
         - NO_COMPOSITE_CLAIM
         - CompositionResult
         - NoCompositeClaim
+        - ATLAS_FAMILIES
+        - AtlasFamily
+        - ATLAS_RECORD_SCHEMA_VERSION
     src/atlas/regime.ts:
       description: Regime admission, and the re-export of the vocabulary half.
       externalDependencies: []
@@ -19729,15 +19762,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 390
   totalModules: 13
-  totalLinesOfCode: 88900
-  totalExports: 2844
+  totalLinesOfCode: 88923
+  totalExports: 2852
   totalClasses: 86
   totalInterfaces: 523
   totalFunctions: 934
   totalTypeGuards: 16
   totalEnums: 0
   totalConstants: 422
-  totalReExports: 1397
+  totalReExports: 1405
   totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

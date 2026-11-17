@@ -36,7 +36,19 @@ import { deriveEvidence } from './derive-evidence.js';
 import type { WitnessResultsArtifact } from './witness-artifact.js';
 import { artifactPassingWitnessIds } from './witness-artifact.js';
 
-/** Record major version of the emitted artifact. @internal */
+/**
+ * Record major version of a family record: the `schemaVersion` field of the
+ * family files (`oscillators.json`, `diffusion.json`, `waves.json`) and of each
+ * `families[]` entry of `atlas.json`, which the package ships under
+ * `data/atlas/`. A reader compares that field against this value. The
+ * top-level `schemaVersion` of `atlas.json` and the `schemaVersion` of
+ * `witness-results.json` are literals of their own modules, not this constant.
+ * `atlas.jsonld` and `qudt-resolution.json` carry no `schemaVersion`. No
+ * public function emits this value; the serializer that writes the family
+ * records is internal.
+ *
+ * @public
+ */
 export const ATLAS_RECORD_SCHEMA_VERSION = '0';
 
 /** A JSON value, as emitted. @internal */

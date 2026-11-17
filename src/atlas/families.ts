@@ -36,7 +36,7 @@ export function admitFamilies(families: readonly AtlasFamily[]): readonly AtlasF
   return families;
 }
 
-/** All atlas families, admitted. @internal */
+/** All atlas families, admitted. @public */
 export const ATLAS_FAMILIES: readonly AtlasFamily[] = admitFamilies([
   OSCILLATOR_FAMILY,
   DIFFUSION_FAMILY,
