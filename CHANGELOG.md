@@ -19,6 +19,7 @@ from v0.1.0 onward.
 
 ### Changed
 
+- `.github/dependabot.yml` also ignores semver-major updates of `@vitest/*`. Why: `@vitest/coverage-v8` 5 peer-requires vitest 5, so the first bun run's PR #654 cannot install while vitest stays on 4.
 - `.github/dependabot.yml` has the root `package-ecosystem: bun` entry again, with its vitest semver-major ignore rule. Why: Dependabot's bun updater now reads `bun.lock` lockfileVersion 2 (dependabot-core #16485), so updates can be proposed again. The vitest rule stays because vitest 5 needs the benches in `bench/` migrated. `MEMORY.md` (Stack) states the current rule and `NOTES.md` records the vendor evidence; both said the bun parser could not read the lockfile.
 - `tests/canonical/one-record.test.ts` lets `src/atlas/physjs-reviewed.ts` name a canonical id. Why: that file pins a review hash per Lean manifest key, and a canonical key such as `CE-pendulum-period` is a manifest key. The hash is a reference to the record, not a second copy of a canonical fact.
 - `scripts/lean-index.ts` accepts a canonical-equation key (`CE-<id>`) on a kind line, beside `be-` and `ab-`. Why: the pattern matched only `be-` and `ab-`, so a Lean theorem keyed by a canonical id would have failed `--check` with "0 kind lines". A control in `tests/formal/lean-theorems.test.ts` was red before the change.
