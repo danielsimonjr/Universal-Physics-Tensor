@@ -52,8 +52,8 @@ const FLAGS: FlagSpec[] = [
   { name: '--max-orders', valueStyle: 'attached', description: 'Magnitude-clash threshold for the --proposed overlay.', defaultValue: DISCOVER_MAX_ORDERS_DEFAULT },
   { name: '--anchor', valueStyle: 'attached', repeatable: true, description: 'Override a numeric anchor as k=v for the --proposed overlay.', defaultValue: 'mass=M_sun' },
   { name: '--proposed', valueStyle: 'none', description: 'Overlay unadjudicated identity-consequence relations.' },
-  { name: '--relation', valueStyle: 'attached', description: 'Keep atlas edges whose recorded relation is TYPE.' },
-  { name: '--evidence', valueStyle: 'attached', description: 'Keep atlas edges whose derived evidence set contains TAG.' },
+  { name: '--relation', valueStyle: 'attached', description: 'Keep edges whose recorded relation is TYPE: on the quantity map, the relation that the catalog row records; on --family/--observable, the relation that the atlas bridge records.' },
+  { name: '--evidence', valueStyle: 'attached', description: 'Keep edges whose derived evidence set contains TAG: on the quantity map, derived from the catalog row; on --family/--observable, derived from the bridge record and its witness results.' },
   { name: '--around', valueStyle: 'either', description: 'Keep edges within --depth shared-quantity hops of QUANTITY.' },
   { name: '--depth', valueStyle: 'attached', description: 'Hop count for --around.', defaultValue: String(DEFAULT_DEPTH) },
   { name: '--route', valueStyle: 'either', description: 'Map the atlas route FROM,TO instead of the equation graph.' },
@@ -126,9 +126,11 @@ const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|d
         --natural sets ħ = c = 1 for a dimension difference that is a power of
         those constants; --geometrized also allows powers of G. The SI default
         still refuses rest_energy = mass.
-        --relation=TYPE keeps only edges whose recorded Atlas relation is that
-        type; --evidence=TAG keeps only edges whose evidence set, DERIVED from
-        the catalog row at read time, contains that tag.
+        --relation=TYPE keeps only edges whose catalog row records that relation
+        type (atlas model-to-model relations live on --family and --observable;
+        --route rejects --relation); --evidence=TAG keeps only edges whose
+        evidence set, DERIVED from the catalog row at read time, contains that
+        tag.
         ⚠ Filtering changes what a missing overlay means: unfiltered, an edge
         with no overlay is KEPT; filtered, it is DROPPED, because nothing shows
         it satisfies the filter. Those drops are counted and printed separately

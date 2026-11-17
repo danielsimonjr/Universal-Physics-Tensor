@@ -1,5 +1,9 @@
 # UPT TODO
 
+## Relation overlay wording (2026-11-17)
+
+- [x] `upt map --relation/--evidence` help names the catalog row and the atlas bridge as relation sources; regenerate mirrors
+
 ## Bridge-equation document sweep (2026-10-01)
 
 - [x] Living status files, the Lean roadmap, the catalog formal-reference note, and the specification write-ups now follow the PhysJS pin in `src/atlas/physjs-ref.ts`. Dated audits and the changelog entries below this section keep their original text and carry a status note. The gap list is `docs/planning/Bridge-Gap-Inference.md`. No version bump.
