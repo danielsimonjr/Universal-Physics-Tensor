@@ -363,15 +363,16 @@ describe('ab-chain-wave regime — no derived identity among its groups', () => 
 
   /**
    * The groups of `regime.groupDefinitions` that no inequality names and that
-   * evaluate to one constant (variance below 1e-12) over the samples. Such a
-   * group is a derived identity, not a regime condition.
+   * evaluate to one constant (variance below 1e-12) over the samples, with the
+   * constant each one takes. Such a group is a derived identity, not a regime
+   * condition.
    */
   const constantDerivedGroups = (
     regime: Regime,
     samples: readonly Readonly<Record<string, number>>[],
-  ): string[] => {
+  ): { name: string; value: number }[] => {
     const conditioned = new Set(regime.inequalities.map((g) => g.group));
-    const constant: string[] = [];
+    const constant: { name: string; value: number }[] = [];
     for (const [name, group] of Object.entries(regime.groupDefinitions)) {
       if (conditioned.has(name)) continue;
       const values = samples.map((p) =>
@@ -379,7 +380,7 @@ describe('ab-chain-wave regime — no derived identity among its groups', () => 
       );
       const mean = values.reduce((x, y) => x + y, 0) / values.length;
       const variance = values.reduce((x, y) => x + (y - mean) ** 2, 0) / values.length;
-      if (variance < 1e-12) constant.push(name);
+      if (variance < 1e-12) constant.push({ name, value: mean });
     }
     return constant;
   };
@@ -417,8 +418,14 @@ describe('ab-chain-wave regime — no derived identity among its groups', () => 
       ['qa'],
       [{ group: 'qa', op: '<', bound: 1 }],
     );
-    expect(constantDerivedGroups(withC, chainSamples(1))).toHaveLength(1);
-    expect(constantDerivedGroups(withC, chainSamples(2))).toHaveLength(1);
+    const atOne = constantDerivedGroups(withC, chainSamples(1));
+    const atTwo = constantDerivedGroups(withC, chainSamples(2));
+    expect(atOne).toHaveLength(1);
+    expect(atTwo).toHaveLength(1);
+    expect(atOne[0].name).toBe(atTwo[0].name);
+    expect(atOne[0].name).not.toBe('qa');
+    expect(atOne[0].value).toBeCloseTo(1, 9);
+    expect(atTwo[0].value).toBeCloseTo(4, 9);
   });
 
   it('negative control: a free damping group b²/(mκ) is not reported', () => {
