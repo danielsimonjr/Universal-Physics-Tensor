@@ -3311,7 +3311,6 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `RecordEnvironment`, `RecordResult`, `RecordEntry`, `RecordInput`, `EnvironmentChange`, `StreamDifference`, `ReplayEntryReport`
 - Functions: `recordInvocation`, `replayRecord`, `showRecord`
-- Constants: `sha256`
 
 ---
 
@@ -3815,7 +3814,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `RecordEnvironmentSources`, `RecordEnvironmentSnapshot`
-- Functions: `canonicalJson`, `sha256Hex`, `hashCanonical`, `captureEnvironment`, `captureEnvironment`, `captureEnvironment`
+- Functions: `canonicalJson`, `hashCanonical`, `captureEnvironment`, `captureEnvironment`, `captureEnvironment`
 
 ---
 
@@ -7802,12 +7801,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89030 |
-| Total Exports | 2853 |
+| Total Lines of Code | 89022 |
+| Total Exports | 2852 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 935 |
+| Total Functions | 934 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |

@@ -90,14 +90,12 @@ export interface RecordInput {
   sha256: string | null;
 }
 
-export const sha256 = (s: string | Buffer): string => sha256Hex(s);
-
-const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv, 'record'));
+const argvFingerprint = (argv: unknown): string => sha256Hex(canonicalJson(argv, 'record'));
 
 /** Hash a record entry after excluding its stored fingerprint field. */
 function entryFingerprint(entry: Partial<RecordEntry>): string {
   const { entrySha256: _, ...rest } = entry;
-  return sha256(canonicalJson(rest, 'record'));
+  return sha256Hex(canonicalJson(rest, 'record'));
 }
 
 /** The record profile of {@link captureEnvironment}, fed from the CLI toolchain. */
@@ -143,7 +141,7 @@ const TIME_LIMIT_STATED = /(?:\bstop: |"stopReason": ")time-limit\b/;
 
 function hashFile(path: string): string | null {
   try {
-    return sha256(readFileSync(path));
+    return sha256Hex(readFileSync(path));
   } catch {
     // `null` is the record's one word for "no bytes to hash then" (`RecordInput.sha256`): the file
     // is absent or cannot be read, and replay compares that word, not the reason.
@@ -279,7 +277,7 @@ export async function recordInvocation(
   const run = await runCaptured(dispatch, argv, io);
   const artifacts: RecordEntry['artifacts'] = [];
   const outPath = parsed?.flags.out?.[0] ?? '';
-  if (outPath !== '' && existsSync(outPath)) artifacts.push({ path: outPath, sha256: sha256(readFileSync(outPath)) });
+  if (outPath !== '' && existsSync(outPath)) artifacts.push({ path: outPath, sha256: sha256Hex(readFileSync(outPath)) });
   const entry: Omit<RecordEntry, 'entrySha256'> = {
     schema: RECORD_SCHEMA,
     recordedAt,
@@ -293,8 +291,8 @@ export async function recordInvocation(
       threw: run.threw,
       stdout: run.stdout,
       stderr: run.stderr,
-      stdoutSha256: sha256(run.stdout),
-      stderrSha256: sha256(run.stderr),
+      stdoutSha256: sha256Hex(run.stdout),
+      stderrSha256: sha256Hex(run.stderr),
     },
     artifacts,
     inputs,
@@ -432,8 +430,8 @@ function integrityFindings(entry: RecordEntry): string[] {
   };
   hashOf('argvSha256', entry.argvSha256, argvFingerprint(entry.argv));
   const r = entry.result;
-  if (sha256(r.stdout) !== r.stdoutSha256) findings.push('recorded stdout does not match its recorded stdoutSha256');
-  if (sha256(r.stderr) !== r.stderrSha256) findings.push('recorded stderr does not match its recorded stderrSha256');
+  if (sha256Hex(r.stdout) !== r.stdoutSha256) findings.push('recorded stdout does not match its recorded stdoutSha256');
+  if (sha256Hex(r.stderr) !== r.stderrSha256) findings.push('recorded stderr does not match its recorded stderrSha256');
   const tables = entry.environment.constantTables;
   if (typeof tables !== 'object' || tables === null) findings.push('entry has no constantTables');
   else {
@@ -475,8 +473,8 @@ function streamDifference(stream: 'stdout' | 'stderr', recorded: string, replaye
     firstDifferingLine: i + 1,
     recorded: i < a.length ? clip(a[i]) : '<end of output>',
     replayed: i < b.length ? clip(b[i]) : '<end of output>',
-    recordedSha256: sha256(recorded),
-    replayedSha256: sha256(replayed),
+    recordedSha256: sha256Hex(recorded),
+    replayedSha256: sha256Hex(replayed),
   };
 }
 
@@ -697,7 +695,7 @@ function describeEnvironment(env: Partial<RecordEnvironment>): string {
     .map(([k, v]) => `${k} ${v ?? 'absent'}`)
     .join(', ');
   const tables = (typeof env.constantTables === 'object' && env.constantTables) || {};
-  const combined = sha256(
+  const combined = sha256Hex(
     canonicalJson(
       Object.fromEntries(Object.entries(tables).map(([k, t]) => [k, t?.sha256])),
       'record',

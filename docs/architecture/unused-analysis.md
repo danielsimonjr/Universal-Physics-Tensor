@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 20
+- **Potentially unused exports**: 19
 
 ## Potentially Unused Files
 
@@ -36,10 +36,6 @@ These exports are not imported by any other file in the codebase:
 - `brownianSphereRegimeAt` (function)
 - `runCaseBrownianSphere` (function)
 - `CASE_METHODS` (constant)
-
-### `src/cli/record.ts`
-
-- `sha256` (constant)
 
 ### `src/composition/graph-structure.ts`
 
