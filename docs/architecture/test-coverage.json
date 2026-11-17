@@ -2519,6 +2519,7 @@
       "tests/canonical/condensed-matter.test.ts"
     ],
     "src/canonical/entries/dimensional-classics.ts": [
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/canonical/dimensional-classics.test.ts"
     ],
     "src/canonical/entries/electromagnetism.ts": [
@@ -12709,6 +12710,7 @@
       "tests/canonical/condensed-matter.test.ts"
     ],
     "src/canonical/entries/dimensional-classics.ts": [
+      "tests/atlas/formal-ref-carriers.test.ts",
       "tests/canonical/dimensional-classics.test.ts"
     ],
     "src/canonical/entries/electromagnetism.ts": [
@@ -15998,6 +16000,7 @@
       "src/core/constants.ts",
       "src/bridges/carrier-sign.ts",
       "src/bridges/evaluation-errors.ts",
+      "src/canonical/entries/dimensional-classics.ts",
       "src/canonical/registry.ts"
     ],
     "tests/atlas/formal-sanity.test.ts": [

@@ -65,6 +65,14 @@ const SENTINELS: readonly (readonly [string, string, string, RegExp])[] = [
   ['be-29', 'PhysJS.Jarzynski.jensen_work', 'property', /Not Jarzynski's theorem/],
   ['be-33', 'PhysJS.QuantumCritical.thermal_scaling', 'bridge', /Not Hertz–Millis theory/],
   ['CE-pendulum-period', 'PhysJS.BuckinghamClassics.pendulum_exponent_unique', 'derivation-step', /Not the pendulum equation of motion\..*negative control/s],
+  ['CE-kepler-third', 'PhysJS.BuckinghamClassics.kepler_exponent_unique', 'derivation-step', /\(3\/2, -1\/2, -1\/2\) on \(semi-major-axis, G, mass\).*prefactor 2π is not derived\. Not Kepler's third law as a statement about orbits\.$/s],
+  ['CE-schwarzschild-radius', 'PhysJS.BuckinghamClassics.schwarzschild_exponent_unique', 'derivation-step', /\(1, 1, -2\) on \(mass, G, c\).*prefactor 2 is not derived\. Not the Schwarzschild metric\.$/s],
+  ['CE-string-wave-speed', 'PhysJS.BuckinghamClassics.string_wave_exponent_unique', 'derivation-step', /\(1\/2, -1\/2\) on \(tension, linear-density\).*prefactor 1 is not derived\..*Not the wave equation\.$/s],
+  ['CE-planck-length', 'PhysJS.BuckinghamClassics.planck_length_exponent_unique', 'derivation-step', /\(1\/2, 1\/2, -3\/2\) on \(hbar, G, c\).*prefactor 1 is not derived\. Not a statement about quantum gravity\.$/s],
+  ['CE-planck-mass', 'PhysJS.BuckinghamClassics.planck_mass_exponent_unique', 'derivation-step', /\(1\/2, 1\/2, -1\/2\) on \(hbar, c, G\).*prefactor 1 is not derived\. Not a statement about quantum gravity\.$/s],
+  ['CE-planck-time', 'PhysJS.BuckinghamClassics.planck_time_exponent_unique', 'derivation-step', /\(1\/2, 1\/2, -5\/2\) on \(hbar, G, c\).*prefactor 1 is not derived\. Not a statement about quantum gravity\.$/s],
+  ['CE-compton-wavelength', 'PhysJS.BuckinghamClassics.compton_exponent_unique', 'derivation-step', /\(1, -1, -1\) on \(hbar, mass, c\).*prefactor 1 is not derived\. Not a statement about scattering\.$/s],
+  ['CE-thermal-de-broglie', 'PhysJS.BuckinghamClassics.thermal_de_broglie_exponent_unique', 'derivation-step', /\(1, -1\/2, -1\/2, -1\/2\) on \(hbar, mass, k_B, temperature\).*The prefactor is not derived\. Not a statement about a gas\.$/s],
   ['be-42', 'PhysJS.HawkingUnruh.dictionary', 'cross-check', /Not the Hawking effect$/],
   ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', 'bridge', /The id is contested\./],
   ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', 'bridge', /Not a derivation from the five-dimensional Einstein equation$/],
@@ -407,7 +415,7 @@ describe('the Lean manifest', () => {
     const ofKind = (...kinds: string[]) => manifest.entries.filter((entry) => kinds.includes(entry.kind)).map((entry) => entry.key);
     // Each key of a kind other than bridge carries that kind on its reference.
     // The counts are the record at this pin; the keys come from the manifest.
-    expect(ofKind(...COUNTED_KINDS)).toHaveLength(17);
+    expect(ofKind(...COUNTED_KINDS)).toHaveLength(25);
     expect(ofKind('cross-check')).toHaveLength(3);
     expect(ofKind('property')).toHaveLength(3);
     for (const key of ofKind(...COUNTED_KINDS, 'cross-check', 'property')) {

@@ -9,6 +9,14 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-16 (Buckingham milestone 3, PR B)
+
+- **Eight more canonical keys are in the Lean manifest.** The manifest has 239 entries: 208 bridge, 22 derivation-step, 3 cross-check, 3 property, 2 limit, 1 reduction. The counted kinds (reduction, limit, derivation-step) are 25, was 17. All nine classics of `src/canonical/entries/dimensional-classics.ts` now have a key. Seven other canonical records have `epistemicStatus` `dimensional`: `CE-fermi-energy`, `CE-fermi-velocity`, `CE-debye-frequency` (condensed matter), `CE-lc-resonance` (electromagnetism), `CE-sound-speed` (fluids), `CE-simple-harmonic-frequency` (mechanics) and `CE-mb-most-probable-speed` (statistical mechanics). They are not classics and have no key.
+- **The control stays unkeyed.** `CE-hawking-temperature` exists (`src/canonical/entries/relativity.ts`), but a row would give that record a `derivation-step` formal reference for a formula that the theorem shows dimensions do not fix. `FORMAL_REF_KINDS` has no kind for a non-uniqueness statement. The design note already says a control needs no key.
+- **`ab-string-wave` stays unkeyed.** The roadmap places it outside the ranked set. `CE-string-wave-speed` is the carrier.
+- **Lean was not built on Windows.** CI's `lake build and axiom audit` job is the first build of the eight theorems.
+- **Milestone 3 is not closed.** Roadmap section 3 also names the catalog rows of `docs/research/Bridge-Equation-Dimensional-Audit.md`. `be-12`, `be-16`, `be-21` and `be-42` each already hold one manifest entry, and a key holds one entry. Those rows are PR C.
+
 ## As of 2026-11-16 (Dependabot bun entry)
 
 - **The root `package-ecosystem: bun` entry is back in `.github/dependabot.yml`, with the vitest semver-major ignore rule.** dependabot-core #16485 (merged 2026-10-06) sets `MAX_SUPPORTED_LOCKFILE_VERSION = 3` in `bun/lib/dependabot/bun/bun_package_manager.rb:20`, and `bun/Dockerfile` pins `BUN_VERSION=1.4.2`; this repository's `bun.lock` is lockfileVersion 2. The ACTIVE row "Dependabot ignore rules to restore when remediation returns" is ticked. The 2026-10-09 line that says Dependabot's bun parser reads lockfileVersion 1 only, and the 2026-10-18 line that `dependabot.yml` lists `github-actions` only, are the record from before this change. The check is the first Dependabot run of the bun job after the merge. The labels `bun` and `github-actions` named in the file were created on the repository on 2026-11-16; before that, the `github-actions` job ran with a missing label and still succeeded.
@@ -16,7 +24,7 @@ nothing validates prose and the next reader cannot tell.
 ## As of 2026-11-16 (Buckingham milestone 3, PR A)
 
 - **The first canonical-equation key is in the Lean manifest.** `CE-pendulum-period`, kind `derivation-step`, theorem `PhysJS.BuckinghamClassics.pendulum_exponent_unique` in `lean/BuckinghamClassics.lean`. The manifest has 231 entries: 208 bridge, 14 derivation-step, 3 cross-check, 3 property, 2 limit, 1 reduction. The counted kinds (reduction, limit, derivation-step) are 17, was 16. The axiom list in the manifest is the expected three (`propext`, `Classical.choice`, `Quot.sound`). CI run 44004377704 (job `lake build and axiom audit`) built `lean.BuckinghamClassics` and audited 4124 declarations under `lean`, all within the allowlist `[propext, Classical.choice, Quot.sound]`, so neither theorem uses `sorry` or an axiom outside that set. The audit bounds the set from above. The exact `#print axioms` list of each theorem is not compared to the manifest.
-- **The negative control has no key.** `hawking_exponent_not_unique` in the same file shows two exponent tuples for a temperature over the Hawking set. PR B decides whether it gets the key `CE-hawking-temperature`.
+- **The negative control has no key.** `hawking_exponent_not_unique` in the same file shows two exponent tuples for a temperature over the Hawking set. PR B left it unkeyed (see the PR B block).
 - **One carrier list.** `formalRefCarriers()` (`src/atlas/formal-ref-carriers.ts`) replaces six local copies of the carrier list. Counts read through the catalog do not move (`scripts/readme-status.ts`, `scripts/catalog-census.ts`, `tests/atlas/formalref-kind.test.ts`); they loop over `BRIDGE_EQUATIONS`.
 
 ## As of 2026-11-16 (owner rulings)

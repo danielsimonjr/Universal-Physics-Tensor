@@ -178,6 +178,14 @@ the tuple there is not unique. A control does not need a manifest key.
 `formalRefCarriers()` in `src/atlas/formal-ref-carriers.ts` reads a canonical
 key. A canonical key is not a catalog row.
 
+The eight other classics of `src/canonical/entries/dimensional-classics.ts`
+(`CE-kepler-third` to `CE-thermal-de-broglie`) follow the same rule: one key
+each, kind `derivation-step`. The thermal de Broglie key is
+`CE-thermal-de-broglie`, because the key `be-12` holds another entry. A control
+proves non-uniqueness, and `FORMAL_REF_KINDS` has no kind for that statement.
+The control therefore stays without a key, even when a canonical id of that name
+exists (`CE-hawking-temperature`).
+
 ## Names
 
 The ids stay `be-36` and `be-38`. Neither module file is renamed.
