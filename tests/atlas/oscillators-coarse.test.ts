@@ -317,6 +317,13 @@ describe('W9 — the registered in-process spec: the ring integrated, against th
     // than the bound the series gives, and the text beside it claimed (qa)²/80.
     expect(spec.tolerance).toBe(dispersionDeviationBound(qa));
     expect(spec.evaluate(spec.fineResolution) - 1).toBeCloseTo(-(qa * qa) / 80, 5);
+    // The margin between the fine error and the tolerance is the next series
+    // term (qa)⁴/13440 (1.106e-7 here), less (qa)⁶/3870720 (1.5e-11): series
+    // arithmetic, not rounding, so it is the same on every runtime. The
+    // integration error is bounded at 1e-9 by the test above, 100× below it.
+    const margin = spec.tolerance - Math.abs(spec.evaluate(spec.fineResolution) - 1);
+    expect(Math.abs(margin - qa ** 4 / 13440)).toBeLessThan(1e-9);
+    expect(margin).toBeGreaterThan(1e-7);
     const r = runNumericWitness(spec);
     expect(r.status).toBe('checked');
     expect(r.convergence!.ratio).toBeGreaterThan(3.9);
