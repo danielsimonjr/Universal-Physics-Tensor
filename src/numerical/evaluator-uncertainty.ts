@@ -73,7 +73,7 @@ export function propagateEvaluatorUncertainty(
       const h = u > 0 ? u * 1e-3 : Math.abs(x) * 1e-6 || 1e-6;
       const relativeStep = h / Math.max(Math.abs(x), 1e-30);
       let probed: ReturnType<typeof propagateScalarUncertainty> | undefined;
-      // MathTS 0.28 grows or shrinks the step on its own, so it can probe a point the evaluator
+      // MathTS functions 0.86 grows or shrinks the step on its own, so it can probe a point the evaluator
       // refuses (an input of 1 stepped by 1 reaches 0). The base point above evaluated, so a throw
       // at a stepped point is the evaluator's domain edge. The callback answers NaN there, which
       // MathTS reads as "not finite" and shrinks or stops; `undefinedAt` records that this happened.

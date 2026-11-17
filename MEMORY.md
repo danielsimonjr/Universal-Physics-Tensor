@@ -25,8 +25,10 @@ read it.
 - **Bun** is the local and CI package manager and script driver (`bun install`, `bun run …`).
   **Node remains what the published library runs on.** Do not replace `node` in script bodies with
   `bun`; `bun run` already drives them.
-- Test runner: **vitest**. No Python in the codebase. The test suite needs Node ≥ 22.6
-  (`tests/node-floor.test.ts`); `engines.node` is the library's floor, not the suite's.
+- Test runner: **vitest**. No Python in the codebase. The library's Node floor is `engines.node`,
+  which is at least the floor every `@danielsimonjr/mathts-*` dependency declares
+  (`tests/tools/package-deps.test.ts`). The suite's floor is `tests/helpers/node-floor.ts`
+  (`tests/node-floor.test.ts`); CONTRIBUTING.md states both.
 - **Required dependencies:** the `@danielsimonjr/mathts-*` packages (core, expression,
   functions, matrix, tensor, autograd). The library does not
   start without them.

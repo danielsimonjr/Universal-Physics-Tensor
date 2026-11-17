@@ -180,7 +180,8 @@ describe('a catch-all no longer masks a programming error (N15)', () => {
 
   it('a plain Error at a stepped point is the evaluator\'s domain refusal and is reported, not thrown (pin)', () => {
     // `src/cases/engine.ts` refuses an eccentricity of 1.05 with a plain Error; `DomainViolationError`
-    // extends Error. Before MathTS 0.86 the probe at ±u threw that Error out of `upt evaluate --sigma`.
+    // extends Error. With the previous `evaluator-uncertainty.ts` (measured on MathTS functions 0.86)
+    // the probe at ±u threw that Error out of `upt evaluate --sigma`.
     const f = (inputs: Record<string, number>): Record<string, unknown> => {
       if (inputs.x! >= 1) throw new Error('eccentricity must be in [0, 1)');
       return { y: 1 / (1 - inputs.x!) };
