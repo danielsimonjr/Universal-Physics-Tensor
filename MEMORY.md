@@ -31,13 +31,12 @@ read it.
   functions, matrix, tensor, autograd). The library does not
   start without them.
   `@viz-js/viz` (SVG map rendering) stays an optional peer and must degrade when absent.
-- The lockfile is **`bun.lock` only** (no `package-lock.json`). **No Dependabot version-update
-  ecosystem runs on the repository root.** `bun` and `npm` both fail on a Bun-managed root and each
-  error recommends the other, so `.github/dependabot.yml` lists `github-actions` only. Do NOT add an
-  `npm` entry: its job aborts at file fetching and proposes nothing. Re-add `package-ecosystem: bun`
-  only after Dependabot's bun parser reads the `bun.lock` format this repo writes (the two lockfile
-  versions are in `NOTES.md`). Security alerts still come from the dependency graph. A dependency bump
-  is a human action: `bun outdated`, `bun update <pkg>`, then commit the regenerated `bun.lock`.
+- The lockfile is **`bun.lock` only** (no `package-lock.json`). **The repository root runs
+  `package-ecosystem: bun` in `.github/dependabot.yml`**, with the vitest semver-major ignore rule
+  (vitest 5 moves `bench` off the top-level export; the benches in `bench/` must migrate first). Do
+  NOT add an `npm` entry: its job aborts at file fetching on a `bun.lock` root and proposes nothing.
+  Check any change to that file by watching ONE Dependabot run; a parser failure is immediate. A
+  manual bump is `bun outdated`, `bun update <pkg>`, then commit the regenerated `bun.lock`.
 
 ## Source map
 
