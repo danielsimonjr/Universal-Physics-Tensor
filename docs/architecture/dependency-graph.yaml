@@ -3,7 +3,7 @@ metadata:
   version: 14.0.0
   totalFiles: 390
   totalModules: 13
-  totalExports: 2853
+  totalExports: 2852
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7493,7 +7493,6 @@ modules:
             - packageVersion
             - peerVersions
       exports:
-        - sha256
         - recordInvocation
         - replayRecord
         - showRecord
@@ -7509,8 +7508,6 @@ modules:
         - recordInvocation
         - replayRecord
         - showRecord
-      constants:
-        - sha256
     src/cli/search-index.ts:
       description: The word index behind `upt search`, shared with `upt explain`'s NOT COVERED answer (audit I5).
       externalDependencies: []
@@ -9319,8 +9316,8 @@ modules:
             - EnvironmentFingerprint
           typeOnly: true
       exports:
-        - canonicalJson
         - sha256Hex
+        - canonicalJson
         - hashCanonical
         - captureEnvironment
       interfaces:
@@ -9328,7 +9325,6 @@ modules:
         - RecordEnvironmentSnapshot
       functions:
         - canonicalJson
-        - sha256Hex
         - hashCanonical
         - captureEnvironment
         - captureEnvironment
@@ -19768,17 +19764,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 390
   totalModules: 13
-  totalLinesOfCode: 89030
-  totalExports: 2853
+  totalLinesOfCode: 89021
+  totalExports: 2852
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 935
+  totalFunctions: 934
   totalTypeGuards: 16
   totalEnums: 0
-  totalConstants: 422
+  totalConstants: 421
   totalReExports: 1405
   totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 20
+  unusedExportsCount: 19
