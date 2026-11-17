@@ -6822,17 +6822,17 @@
         "biological-rate-correction"
       ],
       "aliases": {},
-      "holds": "isFinite(attempt-frequency) and\n      attempt-frequency >= 0 and\n      isFinite(tunneling-mass) and\n      tunneling-mass > 0 and\n      isFinite(barrier-height) and\n      barrier-height >= 0 and\n      isFinite(barrier-width) and\n      barrier-width > 0 and\n      isFinite(biological-rate-correction)",
+      "holds": "isFinite(attempt-frequency) and\n      attempt-frequency >= 0 and\n      isFinite(tunneling-mass) and\n      tunneling-mass > 0 and\n      isFinite(barrier-height) and\n      barrier-height >= 0 and\n      isFinite(barrier-width) and\n      barrier-width > 0 and\n      isFinite(biological-rate-correction) and\n      8*tunneling-mass*barrier-height*barrier-width*barrier-width >= 100*hbar*hbar",
       "citation": "Löwdin 1963 Adv. Quantum Chem. 2:213; Gamow 1928",
       "reference": {
         "inputs": {
           "attempt-frequency": 10000000000000,
-          "tunneling-mass": 9.1093837015e-31,
-          "barrier-height": 1.602176634e-19,
-          "barrier-width": 3e-10,
+          "tunneling-mass": 1.67262192369e-27,
+          "barrier-height": 6.408706536e-20,
+          "barrier-width": 1e-10,
           "biological-rate-correction": 0.5
         },
-        "value": 231202247925.3068
+        "value": 4.357625350016062
       }
     },
     {
