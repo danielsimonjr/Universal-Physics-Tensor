@@ -79,8 +79,7 @@ id; a relation with no catalog id cannot be made a spec.
   typed stub (a transcendental absorbed into one symbol) differentiates
   with respect to the stub, not the physics inside it. Only a fully
   expanded encoding differentiates exactly.
-  Every encoded bridge RHS lies in the differentiable grammar. Two keep a
-  semantic stub: BE-29 (`ln_avg_exp_minus_betaW`, an ensemble average whose
-  work distribution the row does not fix) and BE-26 (`biological-rate-correction`,
-  a phenomenological prefactor). AD with respect to the stub is exact; the
-  physics inside it has no closed form in the rows' sources.
+  Every encoded bridge RHS lies in the differentiable grammar, so the only
+  limit is a semantic stub: a leaf that stands for physics the row's sources
+  fix no closed form for (an ensemble average, a phenomenological prefactor).
+  `tests/diff/ad-stub-census.test.ts` pins which rows keep one, with the reason.
