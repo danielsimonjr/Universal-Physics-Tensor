@@ -170,7 +170,7 @@ describe('BE-38 is the closed Milgrom form', () => {
 
   /**
    * The wrong forms are compared with respect to the mass. With respect to the Newtonian
-   * force at z=1e4 both wrong forms are within 1e-8 of the true gradient (measured), so
+   * force at z=1e4 both wrong forms are within 2e-8 of the true gradient (measured 1.1e-8 and 2.5e-9), so
    * that variable cannot tell the forms apart there; the mass gradient differs by at
    * least 0.16 relative at every point.
    */
