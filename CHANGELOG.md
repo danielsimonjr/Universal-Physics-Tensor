@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Removed
+
+- **Dated status blocks in `ROADMAP.md`.** The Phase 0 block and the Phase 1 block (`STATUS 2026-09-21`) are each replaced by one line: "Status: the table in §7." Each block repeated a row of the §7 "Phase status" table. The Phase 1 block said "NOT MET" for its fourth exit criterion, and the §7 table says "MET". The §7 table holds the live status.
+
 ### Fixed
 
 - **`ab-chain-wave` regime carried a derived identity as a group.** The regime parameters listed the wave speed `c` beside `m`, `kappa` and `a`. Because `c = a √(κ/m)`, the Buckingham reduction gave a second group `m · kappa^-1 · a^-2 · c^2` that is identically 1 and that no inequality reads. The parameter `c` and the unused `VELOCITY` import are removed, so `groupDefinitions` holds only `qa`. `c` stays in the transformation and preserves text, where it is derived. Why: a constant group is not a regime condition. `tests/atlas/oscillators-coarse.test.ts` failed 2 of 27 on the previous tree: the group keys, and a detector that finds a non-inequality group constant over 50 seeded `(m, κ, a)`. A control that re-declares the regime with `c` as a parameter asserts the constant group is 1 at `c = a√(κ/m)` and 4 at `c = 2a√(κ/m)`, and a free damping group `b²/(mκ)` is not reported. `data/atlas/oscillators.json` and `data/atlas/atlas.json` lose the group block; `atlas.jsonld` and `witness-results.json` do not change. Eight sibling bridges with the same pattern are an open `ACTIVE.md` row.
