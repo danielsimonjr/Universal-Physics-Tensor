@@ -188,7 +188,7 @@ types are throwaway if Phase 1 disagrees; the curation-cost log format (one row 
 relation type, person-hours authoring, person-hours review, witness count); and the witness
 table with the numeric expectations from §S0.W2 below, **as corrected in revision 2** (R = 2
 for the RLC match, R = 4 for the counterexample; W8b on velocity; W5 at 1e-4 sup-norm; W9 at
-0.5%).
+`(qa)²/80` of itself).
 
 **Scout brief SC0 — pre-flight facts** (`Explore`, "medium" breadth). Return, with file:line:
 
@@ -1275,7 +1275,7 @@ codebase-consistency audit of revision 1. Changes that alter what an implementer
   `> 1e-2` position assertions both fail as written).
 - S0.5 W5: sup-norm ratio on a stated interval at `1e-4` (revision 1's pointwise `1e-6` is
   unachievable with second-order stencils and undefined at the zeros of `∂τφ`).
-- S0.5 W9: tolerance 0.5% (5% could not fail).
+- S0.5 W9: tolerance 0.5% (5% could not fail); since replaced by the derived `(qa)²/80` of itself, because the flat 0.5% fails for `qa > 0.634` inside the regime `qa < 1`.
 - S0.1 W6: associativity triple chosen so the reversed order differs.
 - S0.6: no JSON-Schema validator exists in the tree; replaced "validates against the schema"
   with the `catalog-json` deep-equal pin pattern plus a hand-rolled horizon check and a

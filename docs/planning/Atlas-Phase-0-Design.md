@@ -287,7 +287,7 @@ This is a **convention collision, not an arithmetic error**. `1 - sin(x)/x = x^2
 the approximation `(qa)^2/24` **overestimates** the true error. Under `(Approx - True)/Approx` the
 deviation is `+(qa)^2/80`; under `(True - Approx)/Approx` it is `-(qa)^2/80`. The plan uses the
 latter. Both give the same magnitudes, and **W9 asserts a magnitude** ("equals `(qa)^2/24` within
-0.5% of itself"), so no test changes.
+`(qa)^2/80` of itself"), so no test changes.
 
 **Resolution:** the convention is stated here so no implementer has to guess -
 **deviation = (True - Approx) / Approx, hence negative**. Adam's `1.25e-4` for `qa = 0.1` versus

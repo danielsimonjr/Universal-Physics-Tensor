@@ -21,7 +21,7 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 ## Open tasks, easiest first
 
 - [x] `ab-chain-wave` declares the regime qa < 1, and its witness W9 asserts the dispersion error is within 0.5% of (qa)²/24 but samples only qa = 0.1, 0.2, 0.4. The claim fails for 0.634 < qa < 1 (deviation (qa)²/80, 1.24% at qa = 1). Replace the flat 0.5% with the tolerance the series gives, sample up to the regime edge, and add two negative controls.
-  Done: W9 samples qa up to 0.999 and asserts the derived bound (qa)²/80 (no margin needed: alternating series); two negative controls fail as asserted; tolerance text regenerated.
+  Done: W9 samples qa up to 0.999 and asserts the derived bound (qa)²/80 (no margin on the upper side: alternating series; the lower side is 0.99 of the bound, rounded down from the derived 0.99406 because the exact floor sits inside rounding noise at qa = 0.1); the registered in-process W9 spec carries the same derived bound at its fine resolution in place of a flat 0.005; two negative controls fail as asserted; the bridge record text and `data/atlas/witness-results.json` regenerated.
 - [x] `upt retrieve --fetch-model` must not crash when the model JSON files are cached, the ONNX files are not, and the host is unreachable. Probe each missing file before the load, and refuse with `model-not-cached`.
 - [x] `upt retrieve --embed` with the ONNX backend: cache corpus vectors per batch, so a repeat run embeds only the batches that changed and gives the same vectors.
 - [x] Release 14.0.0: bump, regenerate (atlas JSON, Lean table, dependency graph, the two tag goldens), dependency snapshot, release PR, tag `v14.0.0`, registry check. `[Unreleased]` holds Breaking entries since `v13.0.0`, so the version is a major.
