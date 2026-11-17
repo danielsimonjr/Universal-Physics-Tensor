@@ -18,6 +18,33 @@ const MATHTS: Record<string, string> = {
   '@danielsimonjr/mathts-tensor': '^0.5.0',
 };
 
+/** The lowest Node version an `engines.node` range such as `>=22.12` admits, as `[major, minor]`. */
+function floorOf(range: string): [number, number] {
+  const m = /^>=\s*(\d+)(?:\.(\d+))?/.exec(range);
+  if (!m) throw new Error(`not a >= range: ${range}`);
+  return [Number(m[1]), Number(m[2] ?? 0)];
+}
+
+describe('engines.node is at least every MathTS dependency\'s floor', () => {
+  // A library whose floor is below a dependency's installs on a Node the dependency refuses.
+  it.each(Object.keys(MATHTS))('%s', (name) => {
+    const dep = JSON.parse(readFileSync(resolve(root, 'node_modules', name, 'package.json'), 'utf-8')) as {
+      engines?: { node?: string };
+    };
+    const theirs = dep.engines?.node;
+    expect(theirs, `${name} declares engines.node`).toBeDefined();
+    const [tm, tn] = floorOf(theirs!);
+    const [om, on] = floorOf(pkg.engines.node);
+    expect(om > tm || (om === tm && on >= tn), `UPT ${pkg.engines.node} is below ${name} ${theirs}`).toBe(true);
+  });
+
+  it('control: the range reader orders minors numerically', () => {
+    expect(floorOf('>=22.12')).toEqual([22, 12]);
+    expect(floorOf('>=18.0.0')).toEqual([18, 0]);
+    expect(() => floorOf('^22')).toThrow();
+  });
+});
+
 describe('package.json dependency blocks', () => {
   it('requires the published MathTS packages and has no optionalDependencies', () => {
     expect(pkg.optionalDependencies ?? {}).toEqual({});

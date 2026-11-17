@@ -1,16 +1,17 @@
 /**
  * The one statement of the Node version the TEST SUITE needs.
  *
- * `package.json` `engines.node` is the floor of the shipped library (18). The suite spawns
- * `node --experimental-strip-types` (22.6) and reads `import.meta.dirname` (20.11), so its floor
- * is higher. `tests/node-floor.test.ts` checks it first, with a message that names this file;
+ * `package.json` `engines.node` is the floor of the shipped library (22.12, the floor of the
+ * `@danielsimonjr/mathts-*` dependencies). The suite spawns `node --experimental-strip-types`
+ * (22.6) and reads `import.meta.dirname` (20.11), both below that, so the suite's floor is the
+ * library's. `tests/node-floor.test.ts` checks it first, with a message that names this file;
  * CONTRIBUTING.md states the same number.
  *
  * @module tests/helpers/node-floor
  */
 
 /** Lowest Node version the suite runs on, as `major.minor.patch`. */
-export const SUITE_NODE_FLOOR = '22.6.0';
+export const SUITE_NODE_FLOOR = '22.12.0';
 
 function parts(version: string): [number, number, number] {
   const m = /^v?(\d+)\.(\d+)\.(\d+)/.exec(version);
