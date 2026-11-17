@@ -75,10 +75,10 @@
     "rejectedRows": 5
   },
   "formalRefs": {
-    "emitted": 151,
+    "emitted": 153,
     "catalogBridgeKind": 119,
-    "catalogCounted": 16,
-    "catalogCrossCheck": 3,
+    "catalogCounted": 19,
+    "catalogCrossCheck": 2,
     "catalogProperty": 3
   },
   "derivationAudit": {

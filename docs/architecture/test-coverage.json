@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 390,
-    "totalTestFiles": 724,
+    "totalTestFiles": 725,
     "testedCount": 380,
     "directlyTestedCount": 348,
     "untestedCount": 10,
@@ -1357,6 +1357,7 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
@@ -1372,6 +1373,7 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
@@ -6287,6 +6289,7 @@
       "tests/composition/axis-audit.test.ts"
     ],
     "src/composition/bridge-analysis.ts": [
+      "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/canonical/fixed-point-verdicts.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
@@ -6500,6 +6503,7 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
@@ -12342,6 +12346,7 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/atlas/formal-ref-carriers.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
@@ -13200,6 +13205,7 @@
       "tests/composition/axis-audit.test.ts"
     ],
     "src/composition/bridge-analysis.ts": [
+      "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/canonical/fixed-point-verdicts.test.ts",
       "tests/composition/axis-audit.test.ts",
       "tests/composition/axis-gate.test.ts",
@@ -13276,6 +13282,7 @@
     "src/composition/catalog-graph.ts": [
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/chain-pipeline-catalog.test.ts",
+      "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -16030,6 +16037,12 @@
       "src/atlas/oscillators/limit-witnesses.ts",
       "src/atlas/witness-specs.ts",
       "src/numerical/rk4-trajectory.ts"
+    ],
+    "tests/atlas/exponent-record-vs-engine.test.ts": [
+      "src/composition/bridge-analysis.ts",
+      "src/composition/catalog-graph.ts",
+      "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts"
     ],
     "tests/atlas/export.test.ts": [
       "src/atlas/export.ts",

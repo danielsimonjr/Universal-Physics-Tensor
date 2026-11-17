@@ -44,7 +44,7 @@ describe('bridge seeds are kind bridge only', () => {
     expect(physjsFormalRef('be-13').kind).toBe('reduction');
     expect(physjsFormalRef('be-38').kind).toBe('limit');
     expect(physjsFormalRef('be-28').kind).toBe('property');
-    expect(physjsFormalRef('be-42').kind).toBe('cross-check');
+    expect(physjsFormalRef('be-42').kind).toBe('derivation-step');
   });
 
   it('every atlas key is a seed', () => {

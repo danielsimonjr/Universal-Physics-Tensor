@@ -12,7 +12,7 @@ The census is the set of source files that git tracks. Build output, `node_modul
 ignored scratch files are absent because git does not track them. The tool does not guess
 from a directory name.
 
-The scope of this document is the **whole repository**: 1219 source files. The library
+The scope of this document is the **whole repository**: 1220 source files. The library
 alone is smaller. `src/` holds 390 TypeScript files, and `bun run docs:deps` counts the same
 390. The zone `src` below counts 392 files: the 390 files under `src/`, the launcher
 `bin/upt.mjs` and the smoke entry `test-example.js`.
@@ -21,14 +21,14 @@ alone is smaller. `src/` holds 390 TypeScript files, and `bun run docs:deps` cou
 
 | Zone | Files | What lives here |
 |---|---|---|
-| `tests` | 772 | The vitest suite under `tests/` |
+| `tests` | 773 | The vitest suite under `tests/` |
 | `src` | 392 | The library, the CLI and the physics catalog code, plus `bin/upt.mjs` and `test-example.js` |
 | `tools` | 37 | Repository tooling: 18 files under `tools/` and 19 files under `scripts/` |
 | `benchmarks` | 15 | `bench/*.bench.ts` and their fixture, run by `npm run bench` |
 | `examples` | 1 | `examples/basic-usage.ts` |
 | `docs` | 1 | One script under `docs/persona-sessions/` |
 | `config` | 1 | `vitest.config.ts` |
-| **Total** | **1219** | |
+| **Total** | **1220** | |
 
 **Tests outnumber source files: 772 against 392.** The ratio fits a repository whose claims
 are physical: a wrong number is a wrong prediction, not a cosmetic defect.
@@ -59,7 +59,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1219 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1220 | `dependency-graph.json` `statistics.totalSourceFiles` |
 
 The claim counts every tracked source file, tests and tools included. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.
 
