@@ -821,11 +821,13 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 - [x] Record catalog judgments without inventing a verdict, and without treating them as gates: bridges 44, 46, and 50; the novel-candidate verdicts; the quantity-identification review; the bridge 23 check against Hartnoll 2015; the bridge 29 membership reconsider; the bridge 22 and 31 rename review. The bridge 42 membership reversal has already landed.
   Done: `docs/research/Catalog-Judgments-Record.md` records the judgment that the repository holds for each of the eight items, quoted with file and line, or "No verdict is recorded" with the search. The record holds no new verdict. The `todo.md` ticks stay unchanged, because `todo.md:2486` says that they record the move to this file.
 - [ ] Research, and not a small task: ensemble averages and interpolation-function stubs still have no closed form for automatic differentiation. There is no clean lever. Do not invent one.
-- [ ] Dependabot ignore rules to restore when remediation returns. The root Dependabot entry was removed on 2026-10-18, because no updater ecosystem works on a Bun-managed root (the reason is in dependabot.yml). The ignore rule below went with it. It is not obsolete: it is inert only while nothing proposes updates, and it must come back with the entry. Blocked on the vendor: add the entry again when Dependabot's bun parser reads lockfileVersion 2.
+- [x] Dependabot ignore rules to restore when remediation returns. The root Dependabot entry was removed on 2026-10-18, because no updater ecosystem works on a Bun-managed root (the reason is in dependabot.yml). The ignore rule below went with it. It is not obsolete: it is inert only while nothing proposes updates, and it must come back with the entry. Blocked on the vendor: add the entry again when Dependabot's bun parser reads lockfileVersion 2.
   The rule ignores semver-major updates of vitest. Why: vitest 5 is an API migration for this repository, not a version bump. The bench function stopped being a top-level export and became a test-context fixture, so all 31 bench call sites across the 14 files in bench/ must move inside a test and await run. Pull request 177 was closed for this reason on 2026-09-21. Remove the rule once the benches are migrated.
 
       - dependency-name: vitest
         update-types: [version-update:semver-major]
+
+  Done: the root `package-ecosystem: bun` entry is back in `.github/dependabot.yml` with the vitest semver-major rule. The vendor block is gone: dependabot-core #16485 sets `MAX_SUPPORTED_LOCKFILE_VERSION = 3`, and its bundled bun is 1.4.2. The first scheduled run of the entry is the check.
 
 Tiers 8, 10, and 11 are in the tree: the expression-gap listing, cross-family path milestones 1 through 4, and hybrid retrieval. ~~Their npm releases are not.~~ Retracted: they are in the published releases; the 8.0.0 tarball carries `expressionSearchGaps` and `upt retrieve`.
 
