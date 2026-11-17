@@ -4,6 +4,16 @@
  * differentiable grammar, so no integral, tensor or opaque-function node remains.
  * The only blockers are leaf symbols that stand for physics: BE-29 and BE-26.
  * BE-38 is a closed form already. Each claim carries a control that fails.
+ *
+ * How the stub set is decided. BE-29 is found by machine: its stub is the one
+ * dimensionless leaf in the registry that is no constant, no literal and no
+ * declared source. BE-26 is a hand pin: its stub is a declared source, one of
+ * about 84 dimensionless source leaves (model parameters such as
+ * `curie-g-factor`), and no rule in the data tells a parameter from a hidden
+ * function. A new undeclared stub fails the machine test below. A new declared
+ * stub needs a hand entry in `STUBS`; the leaf-owner snapshot
+ * (`tests/atlas/__snapshots__/scalar-leaf-owners.test.ts.snap`) pins every
+ * registry leaf, so a new leaf cannot land unseen.
  */
 import { describe, expect, it } from 'vitest';
 import {
@@ -31,6 +41,9 @@ const STUBS = {
   29: { symbol: 'ln_avg_exp_minus_betaW', reason: 'ensemble average; the row fixes no work distribution' },
 } as const;
 
+/** Catalog rows with no encoded RHS: operator-valued or functional formulas. A row that loses its RHS lands here by id. */
+const UNENCODED = [28, 32, 35, 44];
+
 /** True when MathTS can lower the whole tree: the grammar test, run through the public AD entry. */
 function inGrammar(rhs: ExprNode): boolean {
   const names: string[] = [];
@@ -44,25 +57,32 @@ function inGrammar(rhs: ExprNode): boolean {
   }
 }
 
+/** Dimensionless leaves of `rhs` that are no constant and no literal. */
+function freeDimensionlessLeaves(rhs: ExprNode): string[] {
+  const hits: string[] = [];
+  forEachScalarLeaf(rhs, (l) => {
+    if (equals(l.dim, DIMENSIONLESS) && !isRegisteredConstant(l.name) && !(l.name in scope) && !isDecimalLiteral(l.name)) hits.push(l.name);
+  }, { transcendental: true, abs: true });
+  return hits;
+}
+
 /** Ids whose RHS holds a dimensionless leaf that is no constant, no literal and no declared source. */
 function undeclaredStubIds(map: ReadonlyMap<number, ExprNode>): Map<number, string[]> {
   const out = new Map<number, string[]>();
   for (const [id, rhs] of map) {
     const sources = new Set(primaryRelation(id)?.sources ?? []);
-    const hits: string[] = [];
-    forEachScalarLeaf(rhs, (l) => {
-      if (equals(l.dim, DIMENSIONLESS) && !isRegisteredConstant(l.name) && !(l.name in scope) &&
-        !isDecimalLiteral(l.name) && !sources.has(l.name)) hits.push(l.name);
-    }, { transcendental: true, abs: true });
+    const hits = freeDimensionlessLeaves(rhs).filter((name) => !sources.has(name));
     if (hits.length > 0) out.set(id, hits);
   }
   return out;
 }
 
 describe('grammar census', () => {
-  it('all 156 encoded RHS trees are AD-eligible and the eligible list is the registry', () => {
+  it('every encoded RHS is AD-eligible; the encoded set is the catalog minus the four un-encoded rows', () => {
     const ids = [...BRIDGE_RHS_BY_ID.keys()].sort((a, b) => a - b);
-    expect(ids).toHaveLength(156);
+    const missing = BRIDGE_EQUATIONS.map((e) => e.id).filter((id) => !BRIDGE_RHS_BY_ID.has(id)).sort((a, b) => a - b);
+    expect(missing).toEqual(UNENCODED);
+    expect(ids).toHaveLength(BRIDGE_EQUATIONS.length - UNENCODED.length);
     expect(astDifferentiableBridgeIds()).toEqual(ids);
     expect(ids.filter((id) => !inGrammar(BRIDGE_RHS_BY_ID.get(id)!))).toEqual([]);
   });
@@ -85,12 +105,11 @@ describe('semantic stub set', () => {
   it('BE-26 stub is a declared source, so the leaf scan alone cannot find it; the pin names it', () => {
     expect(primaryRelation(26)!.sources).toContain(STUBS[26].symbol);
     expect(undeclaredStubIds(BRIDGE_RHS_BY_ID).has(26)).toBe(false);
+    expect(freeDimensionlessLeaves(BRIDGE_RHS_BY_ID.get(26)!)).toContain(STUBS[26].symbol);
   });
 
-  it('control: the set {26, 29, 38} is wrong, because BE-38 holds no stub leaf', () => {
-    const found = [...new Set<number>([...undeclaredStubIds(BRIDGE_RHS_BY_ID).keys(), 26])].sort((a, b) => a - b);
-    expect(found).not.toEqual([26, 29, 38]);
-    expect(found).toEqual([26, 29]);
+  it('BE-38 holds no stub leaf: every dimensionless leaf of its RHS is a constant or a literal', () => {
+    expect(freeDimensionlessLeaves(BRIDGE_RHS_BY_ID.get(38)!)).toEqual([]);
   });
 
   it.each([[26], [29]] as const)('BE-%i: the stub is a leaf of the RHS and AD with respect to it is exact', (id) => {
@@ -113,27 +132,35 @@ describe('BE-38 is the closed Milgrom form', () => {
   const ref = r.reference!.inputs as Record<string, number>;
   const VARS = ['newtonian-force', 'mass', 'mond-acceleration-scale'] as const;
   const at = (z: number): Record<string, number> => ({ ...ref, 'newtonian-force': z * ref.mass * ref['mond-acceleration-scale'] });
+  const POINTS = [['reference', ref], ['deep-MOND z=1e-4', at(1e-4)], ['Newtonian z=1e4', at(1e4)]] as const;
+  const CELLS = POINTS.flatMap(([name, b]) => VARS.map((v) => [name, v, b] as const));
   const value = (rhs: ExprNode, b: Record<string, number>): number => bridgeGradientAST(rhs, 'mass', b).value;
-  /** Central difference with a relative step. An absolute step is wrong at 1e-10 N. */
+  /**
+   * Central difference with a relative step of 1e-3. An absolute step is wrong at 1e-10 N.
+   * The step is 1e-3, not 1e-5, because of the Newtonian point: there the gradient with
+   * respect to the mass is about 1e-8 of value/mass, and FD round-off (about 1e-16·value/h)
+   * leaves a relative error of 6e-4 at step 1e-5 and 2e-6 at step 1e-3 (measured).
+   */
   const fd = (rhs: ExprNode, v: string, b: Record<string, number>): number => {
-    const h = Math.abs(b[v]) * 1e-5;
+    const h = Math.abs(b[v]) * 1e-3;
     return (value(rhs, { ...b, [v]: b[v] + h }) - value(rhs, { ...b, [v]: b[v] - h })) / (2 * h);
   };
+  /** The largest measured AD-FD relative error over the nine cells is 2e-6. */
+  const TOL = 1e-5;
   const rhs = BRIDGE_RHS_BY_ID.get(38)!;
   const deep = (e: ExprNode): number => {
     const d = at(1e-4);
     return value(e, d) / Math.sqrt(d['newtonian-force'] * d.mass * d['mond-acceleration-scale']);
   };
 
-  it.each([['reference', ref], ['deep-MOND z=1e-4', at(1e-4)], ['Newtonian z=1e4', at(1e4)]] as const)(
-    'AD equals finite differences at %s for every source', (_name, b) => {
-      for (const v of VARS) {
-        // Scale by the value: at z=1e4 the gradient w.r.t. mass is ~1e-8 of F/m, so FD round-off
-        // (1e-16/step) is only meaningful relative to the value, not to the tiny gradient.
-        const ad = bridgeGradientAST(rhs, v, { ...b });
-        expect(Math.abs(ad.gradient - fd(rhs, v, { ...b })) * Math.abs(b[v]) / ad.value, v).toBeLessThan(1e-6);
-      }
-    });
+  it.each(CELLS)('AD equals finite differences at %s with respect to %s', (_name, v, b) => {
+    expect(rel(bridgeGradientAST(rhs, v, { ...b }).gradient, fd(rhs, v, { ...b }))).toBeLessThan(TOL);
+  });
+
+  it.each(CELLS)('control: a gradient 1e-4 off fails at %s with respect to %s', (_name, v, b) => {
+    const ad = bridgeGradientAST(rhs, v, { ...b }).gradient;
+    expect(rel(ad * (1 + 1e-4), fd(rhs, v, { ...b }))).toBeGreaterThan(TOL);
+  });
 
   it('limits: deep MOND F -> sqrt(F_N m a0); Newtonian F -> F_N', () => {
     expect(Math.abs(deep(rhs) - 1)).toBeLessThan(1e-3);
@@ -141,11 +168,19 @@ describe('BE-38 is the closed Milgrom form', () => {
     expect(Math.abs(value(rhs, n) / n['newtonian-force'] - 1)).toBeLessThan(1e-3);
   });
 
-  it.each([['4/z', '4/ZZ'], ['2/z^2', '2/(ZZ^2)']])('control: the wrong form %s fails both checks', (_n, term) => {
+  /**
+   * The wrong forms are compared with respect to the mass. With respect to the Newtonian
+   * force at z=1e4 both wrong forms are within 1e-8 of the true gradient (measured), so
+   * that variable cannot tell the forms apart there; the mass gradient differs by at
+   * least 0.16 relative at every point.
+   */
+  it.each([['4/z', '4/ZZ'], ['2/z^2', '2/(ZZ^2)']])('control: the wrong form %s fails the gradient at every point and the deep limit', (_n, term) => {
     const zx = '(newtonian-force/(mass*mond-acceleration-scale))';
     const wrong = parseCatalogExpression(`newtonian-force*sqrt((1+sqrt(1+${term.replace('ZZ', zx)}))/2)`);
-    const trueFd = fd(rhs, 'newtonian-force', { ...ref });
-    expect(rel(bridgeGradientAST(wrong, 'newtonian-force', { ...ref }).gradient, trueFd)).toBeGreaterThan(1e-2);
+    for (const [, b] of POINTS) {
+      const trueGrad = bridgeGradientAST(rhs, 'mass', { ...b }).gradient;
+      expect(rel(bridgeGradientAST(wrong, 'mass', { ...b }).gradient, trueGrad)).toBeGreaterThan(1e-2);
+    }
     expect(Math.abs(deep(wrong) - 1)).toBeGreaterThan(1e-3);
   });
 });
