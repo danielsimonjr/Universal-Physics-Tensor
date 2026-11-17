@@ -10,6 +10,11 @@ updates:
     commit-message:
       prefix: chore
     labels: [dependencies, bun]
+    groups:
+      # One PR for all MathTS packages: siblings must share ONE core copy (instanceof across packages).
+      mathts:
+        patterns:
+          - "@danielsimonjr/mathts-*"
     ignore:
       # vitest 5 is an API migration for this repo, not a bump. `bench` is no longer a top-level
       # export; it is a test-context fixture, so every bench() call in the 14 files under bench/

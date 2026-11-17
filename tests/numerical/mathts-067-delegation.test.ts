@@ -15,9 +15,9 @@ function source(rel: string): string {
 }
 
 describe('MathTS 0.67.0 delegation', () => {
-  it('evaluates bare e through physics scalar mode, and a caller binding still wins', () => {
+  it('evaluates bare e as E_SI bound in the evaluation scope, and a caller binding still wins', () => {
     const src = source('../../src/numerical/formula-mathts.ts');
-    expect(src).toMatch(/charge:\s*'scalar'/);
+    expect(src).toMatch(/e: E_SI/);
     expect(src).not.toMatch(/PHYSICS_VALUES/);
     expect(parseFormula('1-e^2').evaluate({})).toBeCloseTo(1 - E_SI ** 2, 12);
     expect(parseFormula('e').evaluate({ e: 4 })).toBe(4);

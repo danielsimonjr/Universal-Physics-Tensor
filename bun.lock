@@ -5,12 +5,12 @@
     "": {
       "name": "universal-physics-tensor",
       "dependencies": {
-        "@danielsimonjr/mathts-autograd": "^0.4.4",
-        "@danielsimonjr/mathts-core": "^0.25.3",
-        "@danielsimonjr/mathts-expression": "^0.12.5",
-        "@danielsimonjr/mathts-functions": "^0.79.0",
-        "@danielsimonjr/mathts-matrix": "^0.9.5",
-        "@danielsimonjr/mathts-tensor": "^0.3.4",
+        "@danielsimonjr/mathts-autograd": "^0.6.0",
+        "@danielsimonjr/mathts-core": "^0.28.0",
+        "@danielsimonjr/mathts-expression": "^0.14.0",
+        "@danielsimonjr/mathts-functions": "^0.86.0",
+        "@danielsimonjr/mathts-matrix": "^0.11.0",
+        "@danielsimonjr/mathts-tensor": "^0.5.0",
       },
       "devDependencies": {
         "@types/node": "^26.6.6",
@@ -44,23 +44,23 @@
 
     "@bcoe/v8-coverage": ["@bcoe/v8-coverage@1.0.2", "", {}, "sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA=="],
 
-    "@danielsimonjr/mathts-autograd": ["@danielsimonjr/mathts-autograd@0.4.4", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0", "@danielsimonjr/mathts-tensor": "^0.3.4" } }, "sha512-K72CP//V+QvJ0MoJ35qe9zbvWb2J61XLVlVWzKgyIVX7DSADlW64i9cfMWT5gGdkGGtMmPtX+4TlB5dZIkXLBw=="],
+    "@danielsimonjr/mathts-autograd": ["@danielsimonjr/mathts-autograd@0.6.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-tensor": "^0.5.0" } }, "sha512-ZQt3yk60OKg1sG5MiLe3Sa6AcXKi4wVO1fYO49eWRYLuVlHYK/bgNVODLgVWSP1tlTCFaXqW5HctcMAxMdhgQw=="],
 
-    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.25.3", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-sClVztXoywcJRIWEnTbJI2XjQHKj+92Qp7vtA4jPj6tr6W8C2G+g7wrh/n74E30j2FEOyBWrxvexXAoP3y/q8A=="],
+    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.28.0", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-FEgneEvC6NvdP7Xx2GQgYHUYHMYLe5t9ZILfgPeeRwj0//ARg1ZlwSLc9MgRcWXvkfb11Oa1MLvl8MPq2xib3g=="],
 
-    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.12.5", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0" } }, "sha512-ha4S7zUV99BHeptggiAYEXAT3O1XDe3qoxIjh/dRJb55ffq0KmuAWAWVGtM4q0SsVnCuSc0dT56tR6cQ/7cayg=="],
+    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.14.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0" } }, "sha512-e8QgCY8MbFmQP3UUpbbRGU707TdoGfLljYZjPoigh6OVFtnvrR/qFYQy/qBRm0GYzjPsn0+cz9LonXDkmLogvA=="],
 
-    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.79.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0", "@danielsimonjr/mathts-expression": "^0.12.5", "@danielsimonjr/mathts-gpu": "^0.2.1", "@danielsimonjr/mathts-matrix": "^0.9.5", "@danielsimonjr/mathts-parallel": "^0.9.0", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "javascript-natural-sort": "^0.7.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-xq2bQLU3puck0ktFU5lB4ar9xb3J4nAIG3vaFm1fLXb3lXQHX8u8qLbxJmBJfUnJPIi1UKRbAhHBN38xWfuhOQ=="],
+    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.86.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-expression": "^0.14.0", "@danielsimonjr/mathts-gpu": "^0.4.0", "@danielsimonjr/mathts-matrix": "^0.11.0", "@danielsimonjr/mathts-parallel": "^0.11.0", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-ynh0uPvQwYv4fG5NY5O/ZhJ8HsaHNRpdwsSLdUjDoKqSU6jSbqS/Zi7d/ak4UkMrzufykfThTd2yURUcforUhQ=="],
 
-    "@danielsimonjr/mathts-gpu": ["@danielsimonjr/mathts-gpu@0.2.1", "", { "peerDependencies": { "@webgpu/types": "^0.1.72" }, "optionalPeers": ["@webgpu/types"] }, "sha512-bxfmnIeM7hhtOoq6EvidPghzpjcxgoi7SWFeVfjU+kxbO/NNbOFo4deYFfvmOjCJ8fNTi/YisxouZHWlPZmfcQ=="],
+    "@danielsimonjr/mathts-gpu": ["@danielsimonjr/mathts-gpu@0.4.0", "", {}, "sha512-vCs1XFPN4ydVC8oB45Ms1Zd+yPVUK/YLogJSRGiUrmqgOAICHyNQ1qF0qJWLL1MrI7chYD6eibiWuMmniSA9Qw=="],
 
-    "@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.9.5", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0", "@danielsimonjr/mathts-gpu": "^0.2.1", "@danielsimonjr/mathts-parallel": "^0.9.0" }, "peerDependencies": { "@webgpu/types": "^0.1.72" }, "optionalPeers": ["@webgpu/types"] }, "sha512-ZSgrSPveahk+InW/XDR5yEk/C8V96mtT8lUfEDUDoWjkG2PXYybDUtfMWJOZNamaO8nt0+6DfaMAdHOdJ9qPnA=="],
+    "@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.11.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-gpu": "^0.4.0", "@danielsimonjr/mathts-parallel": "^0.11.0" } }, "sha512-GzJUql37VR3D18dCYpyOISjpgOuJO859XY7mVbZ/C/2tSsMsqrZ1jXKbt7h9kHP7NDeJ6cTw54hHNvdRoQqbAQ=="],
 
-    "@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.9.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0", "@danielsimonjr/mathts-workerpool": "^0.4.0" } }, "sha512-lsTU8WiBMPbFxphEvTtztmd0kEdet3Emvylfw/RT2QSa7QCX5czwWpWFhEesqZMOzigsTvXpMv6vnZBhDG7cZw=="],
+    "@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.11.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-workerpool": "^0.5.0" } }, "sha512-1AW2w72xoAFcy9+sks18gU7koX5QR/ltahZIs/MTg2225Qf+I2vwrlT4/HrPrXsb98+2nzeMnMyge/FA1P/Ivg=="],
 
-    "@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.3.4", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.25.0", "@danielsimonjr/mathts-matrix": "^0.9.4" } }, "sha512-fBV/ymtb0dhsEyIS9ojPFaECK/+MM65BIGpoOP4IAzxLItPjBHAm/GOEG5AtQzi7sSXhUOYrvK3kdI4/3K60Ow=="],
+    "@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.5.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-matrix": "^0.11.0" } }, "sha512-r3k/4MPedzKJqR5SGzE/CfFJtR7p9qXTGt6WzeNacnQf+rF+sUuMsrKN8Ox6vd+YrynIuBqI1MqAAfkCt9aSZw=="],
 
-    "@danielsimonjr/mathts-workerpool": ["@danielsimonjr/mathts-workerpool@0.4.0", "", { "dependencies": { "workerpool": "npm:@danielsimonjr/workerpool@10.2.2" } }, "sha512-Bj3TtPItE401Igj4gh8s+kaoxQ8hHQ2lhbDIqDQ6CVmq5DK1As7vebbIalTg87l2aqoQkU0+/2Hv9fxcQbSpqg=="],
+    "@danielsimonjr/mathts-workerpool": ["@danielsimonjr/mathts-workerpool@0.5.0", "", { "dependencies": { "workerpool": "npm:@danielsimonjr/workerpool@10.2.2" } }, "sha512-W8FdfsNSZQsch8isye/8w1RA18l9OVw26C9Ff2CzkMtz2Tn3GHwMKBwaXN38YXKWRX2Ade79pGak945yz46Wqg=="],
 
     "@jridgewell/resolve-uri": ["@jridgewell/resolve-uri@3.1.2", "", {}, "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw=="],
 
@@ -213,8 +213,6 @@
     "istanbul-lib-report": ["istanbul-lib-report@3.0.1", "", { "dependencies": { "istanbul-lib-coverage": "^3.0.0", "make-dir": "^4.0.0", "supports-color": "^7.1.0" } }, "sha512-GCfE1mtsHGOELCU8e/Z7YWzpmybrx/+dSTfLrvY8qRmaY6zXTKWn6WQIjaAFw069icm6GVMNkgu0NzI4iPZUNw=="],
 
     "istanbul-reports": ["istanbul-reports@3.2.0", "", { "dependencies": { "html-escaper": "^2.0.0", "istanbul-lib-report": "^3.0.0" } }, "sha512-HGYWWS/ehqTV3xN10i23tkPkpH46MLCIMFNCaaKNavAXTF1RkqxawEPtnjnGZ6XKSInBKkiOA5BKS+aZiY3AvA=="],
-
-    "javascript-natural-sort": ["javascript-natural-sort@0.7.1", "", {}, "sha512-nO6jcEfZWQXDhOiBtG2KvKyEptz7RVbpGP4vTD2hLBdmNQSsCiicO2Ioinv6UI4y9ukqnBpy+XZ9H6uLNgJTlw=="],
 
     "js-tokens": ["js-tokens@10.0.0", "", {}, "sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q=="],
 

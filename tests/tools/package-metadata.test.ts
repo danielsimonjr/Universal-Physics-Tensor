@@ -4,10 +4,11 @@
  * - `repository`, `bugs` and `homepage` must name the repository as the remote and every
  *   in-repo citation spell it (`Universal-Physics-Tensor`); the npm NAME stays lower-case.
  * - `directories.doc` named `docs`, which the tarball does not ship (`files` lists it nowhere).
- * - `engines.node` is the floor of the SHIPPED library. The test suite needs more (Node 22.6 for
- *   `--experimental-strip-types`, 20.11 for `import.meta.dirname`); that floor is
- *   `tests/node-floor.test.ts` and CONTRIBUTING.md, not `engines`. The check here is that
- *   `src/` and `bin/` use nothing above the declared floor, so the declared floor is honest.
+ * - `engines.node` is the floor of the SHIPPED library: 22.12, the floor every
+ *   `@danielsimonjr/mathts-*` dependency declares (`tests/tools/package-deps.test.ts` compares
+ *   the two). The suite's own floor is `tests/node-floor.test.ts` and CONTRIBUTING.md. The check
+ *   here is that `src/` and `bin/` use nothing above the declared floor, so the declared floor
+ *   is honest.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
@@ -56,31 +57,28 @@ describe('package.json directories', () => {
 });
 
 describe('engines.node is the floor of what ships', () => {
-  // Features above Node 18 that the SUITE uses. If one of these appears under src/ or bin/, the
-  // floor must rise with it.
-  const ABOVE_18: readonly [RegExp, string][] = [
-    [/import\.meta\.dirname|import\.meta\.filename/, 'Node 20.11'],
-    [/--experimental-strip-types/, 'Node 22.6'],
-    [/\bArray\.fromAsync\b|\bObject\.groupBy\b|\bPromise\.withResolvers\b/, 'Node 22'],
-    [/\.(toSorted|toReversed|toSpliced)\(/, 'Node 20'],
-    [/\bnavigator\.hardwareConcurrency\b/, 'Node 21'],
+  // Features above Node 22.12. If one of these appears under src/ or bin/, the floor must rise
+  // with it.
+  const ABOVE_FLOOR: readonly [RegExp, string][] = [
+    [/\bError\.isError\b|\bRegExp\.escape\b|\bFloat16Array\b|\bMath\.sumPrecise\b/, 'Node 24'],
+    [/\bUint8Array\.fromBase64\b|\.toBase64\(|\bUint8Array\.fromHex\b|\.toHex\(/, 'Node 25'],
   ];
 
-  it('declares >=18 and src/ and bin/ use nothing that needs more', () => {
-    expect(pkg.engines.node).toBe('>=18.0.0');
+  it('declares >=22.12 and src/ and bin/ use nothing that needs more', () => {
+    expect(pkg.engines.node).toBe('>=22.12.0');
     const offenders: string[] = [];
     for (const file of [...walk(resolve(root, 'src')), ...walk(resolve(root, 'bin'))]) {
       const text = readFileSync(file, 'utf8');
-      for (const [re, floor] of ABOVE_18) {
+      for (const [re, floor] of ABOVE_FLOOR) {
         if (re.test(text)) offenders.push(`${file}: ${re} needs ${floor}`);
       }
     }
     expect(offenders).toEqual([]);
   });
 
-  it('control: the scan sees the test suite\'s own use of the newer features', () => {
-    const suite = walk(resolve(root, 'tests')).map((f) => readFileSync(f, 'utf8'));
-    expect(suite.some((t) => /--experimental-strip-types/.test(t))).toBe(true);
-    expect(suite.some((t) => /import\.meta\.dirname/.test(t))).toBe(true);
+  it('control: the scan matches a planted use of each newer feature', () => {
+    const planted = ['const ok = Error.isError(e);', 'new RegExp(RegExp.escape(s))', 'new Float16Array(4)', 'Math.sumPrecise(xs)', 'Uint8Array.fromBase64(s)', 'bytes.toHex()'];
+    for (const line of planted) expect(ABOVE_FLOOR.some(([re]) => re.test(line)), line).toBe(true);
+    expect(ABOVE_FLOOR.some(([re]) => re.test('Math.sum(xs); toHexString(); isError(e)'))).toBe(false);
   });
 });

@@ -16,18 +16,6 @@ import { eigvals } from '@danielsimonjr/mathts-matrix';
 /** A curvature term above this fraction of the linear term marks the linearization unreliable. */
 const NONLINEAR_FRACTION = 0.1;
 
-/**
- * Thrown inside the finite-difference callback when the evaluator returns no
- * finite number at a stepped point. It is the one outcome the propagation
- * reports as "undefined next to this input"; it is not a programming error.
- */
-class EvaluatorUndefinedError extends Error {
-  constructor(output: string, input: string) {
-    super(`evaluator output '${output}' is not a finite number when '${input}' is stepped`);
-    this.name = 'EvaluatorUndefinedError';
-  }
-}
-
 /** One input's share of an output's uncertainty. */
 export interface UncertaintyContribution {
   readonly sensitivity: number | null;
@@ -85,11 +73,29 @@ export function propagateEvaluatorUncertainty(
       const h = u > 0 ? u * 1e-3 : Math.abs(x) * 1e-6 || 1e-6;
       const relativeStep = h / Math.max(Math.abs(x), 1e-30);
       let probed: ReturnType<typeof propagateScalarUncertainty> | undefined;
+      // MathTS functions 0.86 grows or shrinks the step on its own, so it can probe a point the evaluator
+      // refuses (an input of 1 stepped by 1 reaches 0). The base point above evaluated, so a throw
+      // at a stepped point is the evaluator's domain edge. The callback answers NaN there, which
+      // MathTS reads as "not finite" and shrinks or stops; `undefinedAt` records that this happened.
+      let undefinedAt = false;
       try {
         probed = propagateScalarUncertainty(
           (vals) => {
-            const out = f({ ...inputs, ...vals })[name];
-            if (typeof out !== 'number' || !Number.isFinite(out)) throw new EvaluatorUndefinedError(name, k);
+            let out: unknown;
+            try {
+              out = f({ ...inputs, ...vals })[name];
+            } catch (error) {
+              // A TypeError, ReferenceError or SyntaxError is a programming error and propagates.
+              // Any other throw is the evaluator's refusal of the point: `src/cases/engine.ts` refuses
+              // an input outside its domain with a plain Error, and `DomainViolationError` extends Error.
+              if (error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) throw error;
+              undefinedAt = true;
+              return Number.NaN;
+            }
+            if (typeof out !== 'number' || !Number.isFinite(out)) {
+              undefinedAt = true;
+              return Number.NaN;
+            }
             return out;
           },
           { [k]: x },
@@ -97,11 +103,13 @@ export function propagateEvaluatorUncertainty(
           u > 0 ? { relativeStep, curvatureOffsets: { [k]: u } } : { relativeStep },
         );
       } catch (error) {
+        // A programming error propagates even when an earlier stepped point set `undefinedAt`.
+        if (error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) throw error;
         // Only "the evaluator has no finite value at the stepped point" is the
-        // reported outcome below. A RangeError is the evaluator's own domain
-        // refusal at that point and is the same outcome. Anything else is a
+        // reported outcome below. A RangeError is MathTS's refusal of the probe
+        // (the step is below the resolution) and is the same outcome. Anything else is a
         // programming error and propagates.
-        if (!(error instanceof EvaluatorUndefinedError) && !(error instanceof RangeError)) throw error;
+        if (!undefinedAt && !(error instanceof RangeError)) throw error;
         probed = undefined;
       }
       const ck = probed?.partials[k];

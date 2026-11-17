@@ -26296,6 +26296,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI"
+            ]
+          },
+          {
             "file": "./formula-contract.js",
             "imports": [
               "CompiledFormula",
@@ -28527,7 +28533,7 @@
   "statistics": {
     "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 88993,
+    "totalLinesOfCode": 89009,
     "totalExports": 2852,
     "totalClasses": 86,
     "totalInterfaces": 523,

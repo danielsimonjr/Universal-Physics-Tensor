@@ -14,7 +14,8 @@ import { numberFrom } from '../core/mathts-read.js';
 /** MathTS `mean` of a non-empty number array. @throws RangeError on an empty array. @internal */
 export function meanOf(values: readonly number[]): number {
   if (values.length === 0) throw new RangeError('meanOf: no values');
-  return numberFrom('mean', mean(values));
+  // The `mean` overloads of @danielsimonjr/mathts-functions 0.86 take `number[]`; `mean` reads and does not write its argument.
+  return numberFrom('mean', mean(values as number[]));
 }
 
 /**

@@ -92,15 +92,15 @@ reason with a citation.
 
 ```bash
 git clone https://github.com/danielsimonjr/universal-physics-tensor.git
-bun install        # Bun is the package manager; Node ≥ 18 remains the runtime
+bun install        # Bun is the package manager; Node ≥ 22.12 remains the runtime
 bun run typecheck  # tsc --noEmit (+ tests project)
 bun run test       # vitest full suite; `pretest` runs tsc first
 ```
 
 - TypeScript 7 (native compiler; no compiler API), ESM (`"type": "module"` — relative imports need
-  the `.js` extension), Node ≥ 18 (shipped runtime; the test suite needs
-  Node ≥ 22.6, `tests/node-floor.test.ts`), Bun (install + `bun run`
-  scripts), vitest. Lockfile is `bun.lock` only.
+  the `.js` extension), Bun (install + `bun run` scripts), vitest. Lockfile is `bun.lock` only.
+- Node ≥ 22.12 is the shipped runtime, the floor of the `@danielsimonjr/mathts-*` dependencies.
+  The test suite has the same floor (`tests/node-floor.test.ts`).
 - The default branch is `master`. CI runs type-check + full suite on
   every push/PR.
 - The rules are `AGENTS.md` and the procedure is `WORKFLOWS.md`
