@@ -390,7 +390,11 @@ describe('both limit bridges — K = 1 is the identity on the observable of the 
   const xa = ts.map((t) => Math.exp(-t));
   const xb = ts.map((t) => Math.exp(-t) + 0.01 * Math.sin(3 * t));
 
-  /** The observable maps the two bridges apply, read from their `transformation` text. */
+  /**
+   * The maps the two bridges apply to their observable: neither `transformation`
+   * (`m → 0`; `sin θ → θ`) rescales x or the period, so each is the identity.
+   * `doubled` is the control map that is not.
+   */
   const identity = (x: number): number => x;
   const doubled = (x: number): number => 2 * x;
 
