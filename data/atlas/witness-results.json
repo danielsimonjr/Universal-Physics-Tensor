@@ -238,7 +238,7 @@
       "witnessId": "W9",
       "kind": "numeric",
       "status": "checked",
-      "detail": "Fine error 0.0004818037019190813 is within tolerance 0.005, and refinement reduced the error by a factor of 3.9972474079370457.",
+      "detail": "Fine error 0.0004818037019190813 is within tolerance 0.0004819142773969413, and refinement reduced the error by a factor of 3.9972474079370457.",
       "convergence": {
         "coarse": 0.0019258885986305208,
         "fine": 0.0004818037019190813,
