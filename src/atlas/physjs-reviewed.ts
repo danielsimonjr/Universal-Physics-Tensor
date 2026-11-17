@@ -193,4 +193,12 @@ export const PHYSJS_REVIEWED_ROWS: Readonly<Record<string, string>> = {
   'be-169': '6f4e6c880f33255ed8d2c3d9757ba81e93e3f71b4a5ae8d02cbff0b91e6a244a',
   'be-170': 'f9d8dff51577fe8556593c0a31ca26577d5449864e48c246831aa37612463d48',
   'CE-pendulum-period': '3ba1bbf1fcd397696ff149991933f4f9c3c2436e7387db755eeb49a1221d21be',
+  'CE-kepler-third': '8148838b4c6507a992febc556baa28c90ba937523386cafc1295b2d208e46b9a',
+  'CE-schwarzschild-radius': '50ae726610e8bed9cf8c47f0932dae03dc2ddf2ef0622f08152e763d27bb4540',
+  'CE-string-wave-speed': '4178abc967b31d506b8a5ae4955ed3399ff7d9c27f85c184e504ca22fdd076fa',
+  'CE-planck-length': '3e9fd15d041a65b5e21a2b9f9a882e2ab1bf3e0c1d21ebc5d95c246d1654eefe',
+  'CE-planck-mass': 'd11112ecd2877c510e022b45539818c7f323919071ad709145a76388e21bcfd6',
+  'CE-planck-time': 'b1ebc8791239ed8fdc7bbf02fafb29f3fa7b04a3d42bf5641291da9c3df059de',
+  'CE-compton-wavelength': '560f07595012445d610bf09c800c57d81db418d68f291889ba42249bcc411126',
+  'CE-thermal-de-broglie': 'c34c031f79c858f5c8320ca2d8203a32e0458660aee72c1d1e33a932879a200c',
 };

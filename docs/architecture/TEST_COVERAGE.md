@@ -87,8 +87,8 @@ The following 10 source files are reached by no test file, directly or through a
 | `diffusion/numerics.ts` | `closed-form-bound-precision.test.ts`, `closure.test.ts`, `diffusion.test.ts`, `exact-propagators.test.ts`, `formal-sanity.test.ts`, `negative-controls.test.ts`, `mathts-delegation.test.ts` | — |
 | `atlas/error-algebra.ts` | `error-algebra.test.ts`, `path-bound.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `bound-machine-form.test.ts`, `transported-norm-demo.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `shared-input-spellings.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `clone-helpers.test.ts`, `tensor.test.ts` |
 | `atlas/export.ts` | `export.test.ts` | `barrel-completeness.test.ts` |
-| `atlas/families.ts` | `atlas-json.test.ts`, `benchmark.test.ts`, `bound-machine-form.test.ts`, `bridge-seed-keys.test.ts`, `canonical-links.test.ts`, `delta-at-proven.test.ts`, `evidence-rule.test.ts`, `export.test.ts`, `families.test.ts`, `formal-ref-carriers.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `lc-analogy-text.test.ts`, `link-prediction-intervals.test.ts`, `link-prediction.test.ts`, `make-regime.test.ts`, `oscillators-coarse.test.ts`, `path-bound.test.ts`, `pendulum-phase-translation.test.ts`, `physjs-lean-path.test.ts`, `physjs-manifest.test.ts`, `regime-admission.test.ts`, `relative-norm-convention.test.ts`, `spring-lc-phase-carriage.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `applied-cases.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `norm-transport-fields.test.ts`, `proved-counterexample.test.ts`, `one-copy.test.ts`, `clone-helpers.test.ts`, `formalref-axiom-gate.test.ts` | `barrel-completeness.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
-| `atlas/family.ts` | `link-prediction-intervals.test.ts`, `link-prediction.test.ts`, `model.test.ts` | `barrel-completeness.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
+| `atlas/families.ts` | `atlas-json.test.ts`, `benchmark.test.ts`, `bound-machine-form.test.ts`, `bridge-seed-keys.test.ts`, `canonical-links.test.ts`, `delta-at-proven.test.ts`, `evidence-rule.test.ts`, `export.test.ts`, `families.test.ts`, `formal-ref-carriers.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `lc-analogy-text.test.ts`, `link-prediction-intervals.test.ts`, `link-prediction.test.ts`, `make-regime.test.ts`, `oscillators-coarse.test.ts`, `path-bound.test.ts`, `pendulum-phase-translation.test.ts`, `physjs-lean-path.test.ts`, `physjs-manifest.test.ts`, `regime-admission.test.ts`, `relative-norm-convention.test.ts`, `spring-lc-phase-carriage.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `applied-cases.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `norm-transport-fields.test.ts`, `proved-counterexample.test.ts`, `one-copy.test.ts`, `clone-helpers.test.ts`, `formalref-axiom-gate.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `shared-input-spellings.test.ts`, `kepler-rv.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
+| `atlas/family.ts` | `link-prediction-intervals.test.ts`, `link-prediction.test.ts`, `model.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `shared-input-spellings.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `atlas/formal-ref-carriers.ts` | `formal-ref-carriers.test.ts`, `formalref-kind.test.ts`, `physjs-generated-table.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `formalref-axiom-gate.test.ts` | — |
 | `atlas/index.ts` | `barrel-completeness.test.ts` | — |
 | `atlas/link-prediction.ts` | `link-prediction-intervals.test.ts`, `link-prediction.test.ts` | `barrel-completeness.test.ts` |
@@ -118,7 +118,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `atlas/proof-target.ts` | `proof-target.test.ts` | — |
 | `atlas/public.ts` | — | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `shared-input-spellings.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `atlas/regime.ts` | `bound-machine-form.test.ts`, `closure.test.ts`, `diffusion.test.ts`, `gr-spine-regime.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `relations-shim.test.ts`, `stokes-einstein-regime.test.ts`, `waves.test.ts`, `witness-claims.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `shared-input-spellings.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `atlas/serialize.ts` | `atlas-json.test.ts`, `make-regime.test.ts`, `model.test.ts`, `serialize.test.ts`, `spring-lc-norm-transport.test.ts` | `barrel-completeness.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
+| `atlas/serialize.ts` | `atlas-json.test.ts`, `make-regime.test.ts`, `model.test.ts`, `serialize.test.ts`, `spring-lc-norm-transport.test.ts` | `api-reference-symbols.test.ts`, `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `hand-built-evaluator.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `one-evaluate-path.test.ts`, `public-api-stability.test.ts`, `shared-input-spellings.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts`, `evaluate-relation.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `atlas/statement.ts` | `poster.test.ts`, `statement-derivation.test.ts` | `barrel-completeness.test.ts` |
 | `atlas/text-overlap.ts` | `text-overlap.test.ts` | — |
 | `atlas/translation-registry.ts` | `pendulum-exact.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `spring-lc-phase-carriage.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
@@ -165,7 +165,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `entries/_l1-build.ts` | `gr-formula-compare.test.ts` | — |
 | `entries/atomic.ts` | `atomic.test.ts` | — |
 | `entries/condensed-matter.ts` | `condensed-matter.test.ts` | — |
-| `entries/dimensional-classics.ts` | `dimensional-classics.test.ts` | — |
+| `entries/dimensional-classics.ts` | `formal-ref-carriers.test.ts`, `dimensional-classics.test.ts` | — |
 | `entries/electromagnetism.ts` | `electromagnetism.test.ts` | — |
 | `entries/fluids-waves.ts` | `fluids-waves.test.ts` | — |
 | `entries/mechanics.ts` | `mechanics.test.ts` | — |
@@ -446,14 +446,14 @@ The following 10 source files are reached by no test file, directly or through a
 
 | Test File | Imports from Source |
 |-----------|---------------------|
-| `api/api-reference-symbols.test.ts` | 112 files |
-| `api/atlas-public-closure.test.ts` | 112 files |
-| `api/gm-sun-units-public.test.ts` | 112 files |
-| `api/hand-built-evaluator.test.ts` | 112 files |
+| `api/api-reference-symbols.test.ts` | 115 files |
+| `api/atlas-public-closure.test.ts` | 115 files |
+| `api/gm-sun-units-public.test.ts` | 115 files |
+| `api/hand-built-evaluator.test.ts` | 115 files |
 | `api/namespace-facade-invariant.test.ts` | 0 files |
 | `api/optional-peer-absence.test.ts` | 0 files |
 | `api/package-json-subpath.test.ts` | 0 files |
-| `api/public-surface.test.ts` | 112 files |
+| `api/public-surface.test.ts` | 115 files |
 | `api/public-tag-vs-index-invariant.test.ts` | 0 files |
 | `api/root-public-closure.test.ts` | 0 files |
 | `architecture/reexport-locals.test.ts` | 0 files |
@@ -499,7 +499,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `atlas/export.test.ts` | 3 files |
 | `atlas/exports-subpath.test.ts` | 0 files |
 | `atlas/families.test.ts` | 5 files |
-| `atlas/formal-ref-carriers.test.ts` | 10 files |
+| `atlas/formal-ref-carriers.test.ts` | 11 files |
 | `atlas/formal-sanity.test.ts` | 14 files |
 | `atlas/formalref-kind.test.ts` | 13 files |
 | `atlas/gr-spine-regime.test.ts` | 61 files |
@@ -579,15 +579,15 @@ The following 10 source files are reached by no test file, directly or through a
 | `bridges/membership.test.ts` | 7 files |
 | `bridges/notice-record.test.ts` | 37 files |
 | `bridges/observation-types.test.ts` | 1 files |
-| `bridges/one-evaluate-path.test.ts` | 117 files |
+| `bridges/one-evaluate-path.test.ts` | 120 files |
 | `bridges/one-grammar.test.ts` | 8 files |
 | `bridges/orphan-dimensional-signature.test.ts` | 6 files |
 | `bridges/output-only-inputs.test.ts` | 3 files |
 | `bridges/overlay-registry-quote.test.ts` | 6 files |
-| `bridges/public-api-stability.test.ts` | 113 files |
+| `bridges/public-api-stability.test.ts` | 116 files |
 | `bridges/round9-quantity-names.test.ts` | 3 files |
 | `bridges/sensitivity.test.ts` | 1 files |
-| `bridges/shared-input-spellings.test.ts` | 142 files |
+| `bridges/shared-input-spellings.test.ts` | 145 files |
 | `bridges/spec-vs-index.test.ts` | 0 files |
 | `bridges/tensor-index.test.ts` | 7 files |
 | `tests/bridges-index.test.ts` | 5 files |
@@ -629,7 +629,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `cases/cases-directory.test.ts` | 1 files |
 | `cases/damped-resonator-spectrum.test.ts` | 3 files |
 | `cases/damped-resonator.test.ts` | 3 files |
-| `cases/kepler-rv.test.ts` | 115 files |
+| `cases/kepler-rv.test.ts` | 118 files |
 | `cases/lumped-cooling-inverse-time.test.ts` | 3 files |
 | `cases/lumped-cooling.test.ts` | 4 files |
 | `cases/method-text.test.ts` | 3 files |
@@ -813,7 +813,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `composition/discovery.test.ts` | 26 files |
 | `composition/enumerate-rethrow.test.ts` | 25 files |
 | `composition/evaluate-boundary.test.ts` | 33 files |
-| `composition/evaluate-relation.test.ts` | 113 files |
+| `composition/evaluate-relation.test.ts` | 116 files |
 | `composition/evaluation-result.test.ts` | 37 files |
 | `composition/exact-exponents.test.ts` | 7 files |
 | `composition/explain.test.ts` | 24 files |
@@ -912,7 +912,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `diff/bridge-ast-gradient-transcendental.test.ts` | 8 files |
 | `diff/bridge-ast-reencode-batch.test.ts` | 6 files |
 | `diff/bridge-ast-reencode.test.ts` | 5 files |
-| `diff/bridge-gradient.test.ts` | 113 files |
+| `diff/bridge-gradient.test.ts` | 116 files |
 | `dimensional/algebra-properties.test.ts` | 3 files |
 | `dimensional/algebra.test.ts` | 3 files |
 | `dimensional/ambiguous-reading-order.test.ts` | 1 files |
@@ -1017,7 +1017,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `dimensional/violation-severity.test.ts` | 3 files |
 | `dimensional/weyl-validators.test.ts` | 4 files |
 | `examples/basic-usage.test.ts` | 0 files |
-| `fixtures/confrontation-golden.test.ts` | 112 files |
+| `fixtures/confrontation-golden.test.ts` | 115 files |
 | `fixtures/perfect-fluid.test.ts` | 1 files |
 | `fixtures/schwarzschild-riemann.test.ts` | 4 files |
 | `fixtures/schwarzschild.test.ts` | 1 files |
@@ -1140,7 +1140,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `review/round2-bridges-atlas.test.ts` | 14 files |
 | `review/round2-numerical-dimensional.test.ts` | 8 files |
 | `review/round3-owner-decisions.test.ts` | 8 files |
-| `tests/tensor.test.ts` | 112 files |
+| `tests/tensor.test.ts` | 115 files |
 | `tools/api-surface.test.ts` | 0 files |
 | `tools/catalog-census.test.ts` | 0 files |
 | `tools/ci-workflows.test.ts` | 0 files |

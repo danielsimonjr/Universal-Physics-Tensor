@@ -86,7 +86,7 @@ export const ALL_EVIDENCE_TAGS = [
  *
  * No value here is hand-set on a record: `physjsFormalRef` derives it.
  *
- * @internal
+ * @public
  */
 export type FormalFidelity =
   | 'two-formalizers'
@@ -110,7 +110,7 @@ export const FORMAL_REF_KINDS = ['bridge', 'property', 'cross-check', 'reduction
  * One of {@link FORMAL_REF_KINDS}. A PhysJS reference takes the `kind` its
  * manifest entry records.
  *
- * @internal
+ * @public
  */
 export type FormalRefKind = (typeof FORMAL_REF_KINDS)[number];
 
@@ -123,7 +123,7 @@ export type FormalRefKind = (typeof FORMAL_REF_KINDS)[number];
  * and never set. A property and a cross-check are shown under their own labels
  * and are not a proved bridge.
  *
- * @internal
+ * @public
  */
 export interface FormalRef {
   readonly system: 'lean4-physlib' | 'lean4-physjs' | 'other';

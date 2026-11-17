@@ -1124,7 +1124,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `ApproximationBound, AtlasRejection, Counterexample, EvidenceTag, LimitCharacter, Regime, RegimeInequality, RelationType, Witness` | Re-export |
+| `./types.js` | `ApproximationBound, AtlasBridge, AtlasRejection, Counterexample, EvidenceTag, FormalFidelity, FormalRef, FormalRefKind, LimitCharacter, NormTransport, Regime, RegimeInequality, RelationType, Witness` | Re-export |
 | `./types.js` | `MissingDeltaAtError, MissingHorizonError, MissingLipschitzError` | Re-export |
 | `./model.js` | `AtlasModel` | Re-export |
 | `./regime.js` | `regimeHolds` | Re-export |
@@ -1133,16 +1133,20 @@ The codebase is organized into the following modules:
 | `./error-algebra.js` | `BoundPair, ComposedPath` | Re-export |
 | `./composition-table.js` | `composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM` | Re-export |
 | `./composition-table.js` | `CompositionResult, NoCompositeClaim` | Re-export |
+| `./families.js` | `ATLAS_FAMILIES` | Re-export |
+| `./family.js` | `AtlasFamily` | Re-export |
+| `./serialize.js` | `ATLAS_RECORD_SCHEMA_VERSION` | Re-export |
 
 **Exports:**
 - Re-exports:
 
   ```text
-  ApproximationBound, AtlasRejection, Counterexample, EvidenceTag, LimitCharacter, Regime,
-  RegimeInequality, RelationType, Witness, MissingDeltaAtError, MissingHorizonError,
-  MissingLipschitzError, AtlasModel, regimeHolds, RegimeCheck, composeBoundPath, composeBounds,
-  IDENTITY_BOUND, BoundPair, ComposedPath, composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM,
-  CompositionResult, NoCompositeClaim
+  ApproximationBound, AtlasBridge, AtlasRejection, Counterexample, EvidenceTag, FormalFidelity,
+  FormalRef, FormalRefKind, LimitCharacter, NormTransport, Regime, RegimeInequality, RelationType,
+  Witness, MissingDeltaAtError, MissingHorizonError, MissingLipschitzError, AtlasModel, regimeHolds,
+  RegimeCheck, composeBoundPath, composeBounds, IDENTITY_BOUND, BoundPair, ComposedPath,
+  composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM, CompositionResult, NoCompositeClaim,
+  ATLAS_FAMILIES, AtlasFamily, ATLAS_RECORD_SCHEMA_VERSION
   ```
 
 
@@ -7639,8 +7643,8 @@ The codebase is organized into the following modules:
 | `numerics` | 2 files | 2 files |
 | `error-algebra` | 1 files | 3 files |
 | `export` | 3 files | 1 files |
-| `families` | 5 files | 4 files |
-| `family` | 2 files | 10 files |
+| `families` | 5 files | 5 files |
+| `family` | 2 files | 11 files |
 
 ---
 
@@ -7797,9 +7801,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 88796 |
-| Total Exports | 2844 |
-| Total Re-exports | 1397 |
+| Total Lines of Code | 88923 |
+| Total Exports | 2852 |
+| Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 934 |
