@@ -400,7 +400,8 @@ PhysJS theorem is keyed by the existing `CE-` or `be-` id, under
 [`docs/planning/Catalog-FormalRef-Design-Note.md`](../planning/Catalog-FormalRef-Design-Note.md).
 The covers line is the exponent tuple: form, not the prefactor. A decoy
 row is the negative control, a free π-group. The intended statement is
-uniqueness, or non-uniqueness, of a tuple of Physlib exponents in `ℚ`.
+uniqueness, or non-uniqueness, of a tuple of exponents in `ℚ` over the
+dimension vectors of `lean/Dimensional.lean`.
 `ab-string-wave` is the atlas overlap with that benchmark. §4.3 did not
 rank it, so it is outside the first five.
 

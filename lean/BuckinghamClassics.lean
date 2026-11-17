@@ -12,9 +12,11 @@ import Mathlib.Tactic.NormNum
 /-!
 `CE-pendulum-period`. Derivation step. The exponent tuple `(1/2, -1/2)` on
 `(length, gravity)` is the unique rational tuple whose dimension is the
-period's. Base dimensions are `(L, T)`, index `0` and `1`: the rows
-`src/dimensional/buckingham.ts` keeps for these inputs. The prefactor `C` is
-not fixed and `2π` is not derived. This is not the pendulum equation of motion.
+period's. Base dimensions are `(L, T)`, index `0` and `1`: the `L` and `T`
+components of the `dimensional.governing` and `dimensional.target` entries that
+`src/canonical/entries/dimensional-classics.ts` records for `CE-pendulum-period`.
+The prefactor `C` is not fixed and `2π` is not derived. This is not the pendulum
+equation of motion.
 
 `hawking_exponent_not_unique` is the negative control. Over `(ℏ, c, G, M, k_B)`
 with base dimensions `(L, M, T, Θ)`, the exponent tuple for a temperature is not

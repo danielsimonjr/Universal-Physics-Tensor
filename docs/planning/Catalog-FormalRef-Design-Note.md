@@ -169,14 +169,14 @@ The covers line is the exponent tuple: form, not the prefactor. A decoy
 row is the negative control. They are not milestone 2b rows, and this note
 does not move them.
 
-The first keyed row is `CE-pendulum-period`. Its key is the canonical
-equation id, and the kind is `derivation-step`. Its theorem is
-`pendulum_exponent_unique` in `lean/BuckinghamClassics.lean`. The control
-is `hawking_exponent_not_unique` in the same file. Two exponent tuples
+A keyed Buckingham row has the canonical equation id as its key, and the
+kind `derivation-step`. Example: `CE-pendulum-period`, theorem
+`pendulum_exponent_unique` in `lean/BuckinghamClassics.lean`. Its control
+is `hawking_exponent_not_unique` in the same file: two exponent tuples
 solve the dimension equation for a temperature over the Hawking set, so
-the tuple there is not unique. The control has no manifest key. A canonical
-key is read by `formalRefCarriers()` in `src/atlas/formal-ref-carriers.ts`.
-A canonical key is not a catalog row.
+the tuple there is not unique. A control does not need a manifest key.
+`formalRefCarriers()` in `src/atlas/formal-ref-carriers.ts` reads a canonical
+key. A canonical key is not a catalog row.
 
 ## Names
 
