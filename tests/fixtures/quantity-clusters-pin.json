@@ -68,6 +68,19 @@
       },
       {
         "edges": [
+          "be-26",
+          "be-26-wkb"
+        ],
+        "anchored": false,
+        "hubs": [
+          "attempt-frequency",
+          "barrier-height",
+          "barrier-width",
+          "tunneling-mass"
+        ]
+      },
+      {
+        "edges": [
           "be-55",
           "be-60"
         ],
@@ -631,13 +644,6 @@
       },
       {
         "edges": [
-          "be-26"
-        ],
-        "anchored": false,
-        "hubs": []
-      },
-      {
-        "edges": [
           "be-30"
         ],
         "anchored": false,
@@ -1060,7 +1066,6 @@
       "be-22",
       "be-24",
       "be-25",
-      "be-26",
       "be-30",
       "be-36",
       "be-39",
@@ -1223,6 +1228,22 @@
           "rescaled-cosmological-constant"
         ],
         "anchored": false
+      },
+      {
+        "junctionIds": [
+          "be-26",
+          "be-26-wkb"
+        ],
+        "quantities": [
+          "attempt-frequency",
+          "barrier-height",
+          "barrier-width",
+          "biological-rate-correction",
+          "mutation-rate",
+          "tunneling-mass",
+          "wkb-tunneling-rate"
+        ],
+        "anchored": true
       },
       {
         "junctionIds": [
@@ -2149,20 +2170,6 @@
           "conditional-probability",
           "intrinsic-information",
           "marginal-probability"
-        ],
-        "anchored": false
-      },
-      {
-        "junctionIds": [
-          "be-26"
-        ],
-        "quantities": [
-          "attempt-frequency",
-          "barrier-height",
-          "barrier-width",
-          "biological-rate-correction",
-          "mutation-rate",
-          "tunneling-mass"
         ],
         "anchored": false
       },
@@ -3765,6 +3772,19 @@
       },
       {
         "edges": [
+          "be-26",
+          "be-26-wkb"
+        ],
+        "anchored": false,
+        "hubs": [
+          "attempt-frequency",
+          "barrier-height",
+          "barrier-width",
+          "tunneling-mass"
+        ]
+      },
+      {
+        "edges": [
           "be-41",
           "CE-planck-mass"
         ],
@@ -4361,13 +4381,6 @@
       },
       {
         "edges": [
-          "be-26"
-        ],
-        "anchored": false,
-        "hubs": []
-      },
-      {
-        "edges": [
           "be-30"
         ],
         "anchored": false,
@@ -4878,7 +4891,6 @@
       "be-22",
       "be-24",
       "be-25",
-      "be-26",
       "be-30",
       "be-36",
       "be-39",
@@ -5258,6 +5270,22 @@
           "rescaled-cosmological-constant",
           "rho",
           "scale-factor"
+        ],
+        "anchored": true
+      },
+      {
+        "junctionIds": [
+          "be-26",
+          "be-26-wkb"
+        ],
+        "quantities": [
+          "attempt-frequency",
+          "barrier-height",
+          "barrier-width",
+          "biological-rate-correction",
+          "mutation-rate",
+          "tunneling-mass",
+          "wkb-tunneling-rate"
         ],
         "anchored": true
       },
@@ -6239,20 +6267,6 @@
       },
       {
         "junctionIds": [
-          "be-26"
-        ],
-        "quantities": [
-          "attempt-frequency",
-          "barrier-height",
-          "barrier-width",
-          "biological-rate-correction",
-          "mutation-rate",
-          "tunneling-mass"
-        ],
-        "anchored": false
-      },
-      {
-        "junctionIds": [
           "be-30"
         ],
         "quantities": [
@@ -6905,7 +6919,7 @@
     ]
   },
   "discovery": {
-    "catalogCandidates": 4169,
-    "mergesComponents": 4169
+    "catalogCandidates": 4192,
+    "mergesComponents": 4192
   }
 }

@@ -11,7 +11,17 @@ import { adjudicationFor } from '../../src/composition/adjudication.js';
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
 
 const report = proposeOrphanConnectors(CATALOG_GRAPH);
-const isolated = new Set(linkageMap(CATALOG_GRAPH).isolated);
+// An isolated bridge is a catalog ROW that links no other row: a cluster of one edge, or a
+// cluster whose edges are all relations of one row (be-26 and its second relation be-26-wkb).
+const rowOf = new Map(CATALOG_GRAPH.map((e) => [e.id, e.beId]));
+const isolated = new Set(
+  linkageMap(CATALOG_GRAPH)
+    .clusters.filter((c) => {
+      const rows = new Set(c.edges.map((id) => rowOf.get(id)));
+      return c.size === 1 || (rows.size === 1 && !rows.has(null));
+    })
+    .flatMap((c) => c.edges),
+);
 
 describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
   it('partitions the isolated bridges: connected (a same-kind connector) and unconnected (no connector), disjoint and sorted', () => {
@@ -62,6 +72,21 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
     const row = adjudicationFor('coarsening-length', 'quantum-correlation-length');
     expect(row?.verdict).toBe('decoy');
     expect(row?.grounds.startsWith('Non-equilibrium vs equilibrium length')).toBe(true);
+  });
+
+  it('a row whose only cluster partner is its own second relation is still an orphan (be-26)', () => {
+    // The structural map sees a two-edge cluster, so neither relation is single-edge isolated...
+    const m = linkageMap(CATALOG_GRAPH);
+    expect(m.isolated).not.toContain('be-26');
+    expect(m.isolated).not.toContain('be-26-wkb');
+    expect([...(m.clusters.find((c) => c.edges.includes('be-26'))?.edges ?? [])].sort()).toEqual(['be-26', 'be-26-wkb']);
+    // ...but the REPORT still lists both relations as orphans with connectors into the core.
+    const orphans = new Set(report.connectors.map((c) => c.orphanEdge));
+    expect(orphans.has('be-26')).toBe(true);
+    expect(orphans.has('be-26-wkb')).toBe(true);
+    expect([...report.connectedOrphans, ...report.unconnectedOrphans]).toEqual(
+      expect.arrayContaining(['be-26', 'be-26-wkb']),
+    );
   });
 
   it('tunneling-mass ≟ effective-mass shares a token and the ledger calls it a decoy', () => {
