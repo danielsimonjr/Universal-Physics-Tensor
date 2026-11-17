@@ -849,6 +849,7 @@ Tiers 8, 10, and 11 are in the tree: the expression-gap listing, cross-family pa
 - [x] Clear the high advisory that fails `bun audit --audit-level=high` in the quality job (the nightly run, 2026-10-23).
   `vite` 8.3.0, reached through `vitest > @vitest/mocker`, bundles `launch-editor` versions that the advisories GHSA-587h-7wmj-h5pm (high), GHSA-698v-4r3x-3vcv and GHSA-r825-w8mm-5pxw cover, and has its own advisories GHSA-9jrq-w75r-8gcw, GHSA-rq7h-c2jc-7f22 and GHSA-vfpm-58rq-9qcg. `@vitest/mocker` 4.1.11 has GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp. All are in the test runner, which the package does not ship. Raise `vitest` and `@vitest/coverage-v8` to ^4.1.12 and update `vite` in `bun.lock`.
   Done: `vitest` and `@vitest/coverage-v8` are ^4.1.12 and `vite` is 8.3.5; `bun audit` reports no vulnerabilities and `bun audit --audit-level=high` exits 0.
+- [ ] `ROADMAP.md` carries two dated status blocks (Phase 0 and Phase 1) that repeat the §7 table, and the Phase 1 block says NOT MET where the table says MET. Replace each block with a pointer to §7.
 
 ## Owner decisions
 
