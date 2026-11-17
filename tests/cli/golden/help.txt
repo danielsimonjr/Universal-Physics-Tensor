@@ -515,9 +515,9 @@ Flags:
   --proposed
         Overlay unadjudicated identity-consequence relations.
   --relation=VALUE
-        Keep edges whose recorded relation is TYPE: on the quantity map, the relation the catalog row records; on --family/--observable, the relation of the atlas bridge itself.
+        Keep edges whose recorded relation is TYPE: on the quantity map, the relation that the catalog row records; on --family/--observable, the relation that the atlas bridge records.
   --evidence=VALUE
-        Keep edges whose derived evidence set contains TAG: from the catalog row on the quantity map, from the witnesses of the bridge on --family/--observable.
+        Keep edges whose derived evidence set contains TAG: on the quantity map, derived from the catalog row; on --family/--observable, derived from the witness results of the bridge.
   --around=VALUE (or --around VALUE)
         Keep edges within --depth shared-quantity hops of QUANTITY.
   --depth=VALUE

@@ -200,8 +200,8 @@ upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
 | `--max-orders=VALUE` | `=` value | 3 | Magnitude-clash threshold for the --proposed overlay. |
 | `--anchor=VALUE (repeatable)` | `=` value, repeatable | mass=M_sun | Override a numeric anchor as k=v for the --proposed overlay. |
 | `--proposed` | no |  | Overlay unadjudicated identity-consequence relations. |
-| `--relation=VALUE` | `=` value |  | Keep edges whose recorded relation is TYPE: on the quantity map, the relation the catalog row records; on --family/--observable, the relation of the atlas bridge itself. |
-| `--evidence=VALUE` | `=` value |  | Keep edges whose derived evidence set contains TAG: from the catalog row on the quantity map, from the witnesses of the bridge on --family/--observable. |
+| `--relation=VALUE` | `=` value |  | Keep edges whose recorded relation is TYPE: on the quantity map, the relation that the catalog row records; on --family/--observable, the relation that the atlas bridge records. |
+| `--evidence=VALUE` | `=` value |  | Keep edges whose derived evidence set contains TAG: on the quantity map, derived from the catalog row; on --family/--observable, derived from the witness results of the bridge. |
 | `--around=VALUE (or --around VALUE)` | `=` or next token |  | Keep edges within --depth shared-quantity hops of QUANTITY. |
 | `--depth=VALUE` | `=` value | 1 | Hop count for --around. |
 | `--route=VALUE (or --route VALUE)` | `=` or next token |  | Map the atlas route FROM,TO instead of the equation graph. |

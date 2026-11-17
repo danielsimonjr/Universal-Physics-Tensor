@@ -499,7 +499,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--embed-model` | `retrieve` | Embedding model. For the onnx backend, a Hugging Face model id. For the ollama backend, an Ollama tag. Used with --embed or --fetch-model. |
 | `--equation` | `map` | Inject TARGET = EXPR as a user node and report where it lands. |
 | `--equation-only` | `map` | Print only the equation verdict. Errors when --equation is missing. |
-| `--evidence` | `atlas`, `map` | atlas: With no bridge id, list every bridge's derived evidence and the witness results it observes. map: Keep edges whose derived evidence set contains TAG: from the catalog row on the quantity map, from the witnesses of the bridge on --family/--observable. |
+| `--evidence` | `atlas`, `map` | atlas: With no bridge id, list every bridge's derived evidence and the witness results it observes. map: Keep edges whose derived evidence set contains TAG: on the quantity map, derived from the catalog row; on --family/--observable, derived from the witness results of the bridge. |
 | `--family` | `map` | Map one atlas family by name. |
 | `--fetch-model` | `retrieve` | Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON. |
 | `--format` | `map` | Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer. |
@@ -521,7 +521,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--problem` | `probe` | Problem JSON file for run, candidates, falsify, rank, and reproduce. |
 | `--proposed` | `map` | Overlay unadjudicated identity-consequence relations. |
 | `--rank-hubs` | `map` | Also rank quantities by betweenness centrality (normalised). Computed only when asked. |
-| `--relation` | `map` | Keep edges whose recorded relation is TYPE: on the quantity map, the relation the catalog row records; on --family/--observable, the relation of the atlas bridge itself. |
+| `--relation` | `map` | Keep edges whose recorded relation is TYPE: on the quantity map, the relation that the catalog row records; on --family/--observable, the relation that the atlas bridge records. |
 | `--replication` | `probe` | study: replication rows from a separate JSON or CSV file. |
 | `--require-falsifier` | `discover` | Hide promising rows (either tier) that no independent falsifier ran on and survived, counted per tier. |
 | `--rigor` | `confront` | Show one rigor tier: stringent, moderate, or loose. |
