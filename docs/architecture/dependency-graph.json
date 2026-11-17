@@ -2760,8 +2760,7 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "LENGTH",
-              "MASS",
-              "VELOCITY"
+              "MASS"
             ]
           },
           {
@@ -28531,7 +28530,7 @@
   "statistics": {
     "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 89042,
+    "totalLinesOfCode": 89036,
     "totalExports": 2852,
     "totalClasses": 86,
     "totalInterfaces": 523,

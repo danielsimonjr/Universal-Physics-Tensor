@@ -657,9 +657,10 @@ export function proposeLinkCandidates(edges: readonly BridgeEdge[]): LinkCandida
 // ---------------------------------------------------------------------------
 
 /**
- * A candidate identification with ONE endpoint on an isolated (single-edge)
- * bridge and the OTHER on an anchored-cluster bridge — accepting it would
- * connect orphaned physics to the established core.
+ * A candidate identification with ONE endpoint on an isolated bridge (a
+ * cluster of one edge, or of relations of one catalog row) and the OTHER on
+ * an anchored-cluster bridge — accepting it would connect orphaned physics to
+ * the established core.
  */
 interface OrphanConnector {
   /** The isolated bridge's edge id (the orphan). */
@@ -695,7 +696,11 @@ interface OrphanConnectorReport {
  * via a same-dimension quantity identification? This intersects
  * `proposeLinkCandidates` with the linkage map's isolated/anchored partition:
  * a connector is a cross-cluster candidate whose one side sits on an isolated
- * bridge and whose other side touches an anchored cluster. The same-kind
+ * bridge and whose other side touches an anchored cluster. "Isolated" is
+ * counted by catalog row HERE ONLY: a cluster whose edges are all relations
+ * of one row (`be-26`, `be-26-wkb`) links no second row, so its edges are
+ * orphans. `ClusterMap.isolated` and the census `linkage.isolated` keep the
+ * structural single-edge meaning. The same-kind
  * subset (shared name token) is the least-implausible set worth a physicist's
  * review — the structural frontier of the catalog (the 20 orphaned bridges).
  *
@@ -707,7 +712,17 @@ export function proposeOrphanConnectors(
   edges: readonly BridgeEdge[],
 ): OrphanConnectorReport {
   const m = clusterMap(edges); // clusters/isolated only — skips the composition count
-  const isolated = new Set(m.isolated);
+  // An isolated bridge is counted by catalog row, not by edge: a cluster whose edges are all
+  // relations of ONE row (be-26 and be-26-wkb) links no second bridge, so it stays an orphan.
+  const beIdOf = new Map(edges.map((e) => [e.id, e.beId]));
+  const isolated = new Set(
+    m.clusters
+      .filter((c) => {
+        const rows = new Set(c.edges.map((id) => beIdOf.get(id)));
+        return c.size === 1 || (rows.size === 1 && !rows.has(null));
+      })
+      .flatMap((c) => c.edges),
+  );
   const edgeAnchored = new Map<string, boolean>();
   m.clusters.forEach((c) => c.edges.forEach((id) => edgeAnchored.set(id, c.anchored)));
 
@@ -757,6 +772,6 @@ export function proposeOrphanConnectors(
     connectors,
     sameKindCount: connectors.filter((c) => c.sameKind).length,
     connectedOrphans: [...connectedSameKind].sort(),
-    unconnectedOrphans: m.isolated.filter((id) => !anyConnector.has(id)).sort(),
+    unconnectedOrphans: [...isolated].filter((id) => !anyConnector.has(id)).sort(),
   };
 }

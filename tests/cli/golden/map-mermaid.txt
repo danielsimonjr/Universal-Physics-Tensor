@@ -718,6 +718,29 @@ flowchart LR
   end
   subgraph cl_3["anchored cluster (2)"]
     direction LR
+    j_be_26["BE-26"]:::speculative
+    q_attempt_frequency(["attempt-frequency"]):::qty
+    q_attempt_frequency --> j_be_26
+    q_tunneling_mass(["tunneling-mass"]):::qty
+    q_tunneling_mass --> j_be_26
+    q_barrier_height(["barrier-height"]):::qty
+    q_barrier_height --> j_be_26
+    q_barrier_width(["barrier-width"]):::qty
+    q_barrier_width --> j_be_26
+    q_biological_rate_correction(["biological-rate-correction"]):::qty
+    q_biological_rate_correction --> j_be_26
+    q_mutation_rate(["mutation-rate"]):::qty
+    j_be_26 --> q_mutation_rate
+    j_be_26_wkb["BE-26"]:::law
+    q_attempt_frequency --> j_be_26_wkb
+    q_tunneling_mass --> j_be_26_wkb
+    q_barrier_height --> j_be_26_wkb
+    q_barrier_width --> j_be_26_wkb
+    q_wkb_tunneling_rate(["wkb-tunneling-rate"]):::qty
+    j_be_26_wkb --> q_wkb_tunneling_rate
+  end
+  subgraph cl_4["anchored cluster (2)"]
+    direction LR
     j_be_41["BE-41"]:::speculative
     q_reference_mass(["reference-mass"]):::qty
     q_reference_mass --> j_be_41
@@ -734,7 +757,7 @@ flowchart LR
     j_CE_planck_mass["Planck mass"]:::law
     j_CE_planck_mass --> q_planck_mass
   end
-  subgraph cl_4["anchored cluster (2)"]
+  subgraph cl_5["anchored cluster (2)"]
     direction LR
     j_be_47["BE-47"]:::speculative
     q_hubble_rate(["hubble-rate"]):::qty
@@ -760,7 +783,7 @@ flowchart LR
     q_hubble_distance(["hubble-distance"]):::qty
     j_CE_hubble_distance --> q_hubble_distance
   end
-  subgraph cl_5["anchored cluster (2)"]
+  subgraph cl_6["anchored cluster (2)"]
     direction LR
     j_be_55["BE-55"]:::established
     q_chern_number(["chern-number"]):::qty
@@ -772,7 +795,7 @@ flowchart LR
     q_filling_fraction --> j_be_60
     j_be_60 --> q_hall_conductance
   end
-  subgraph cl_6["anchored cluster (2)"]
+  subgraph cl_7["anchored cluster (2)"]
     direction LR
     j_CE_classical_electron_radius["Classical electron radius"]:::law
     q_classical_electron_radius(["classical-electron-radius"]):::qty
@@ -782,7 +805,7 @@ flowchart LR
     q_thomson_cross_section(["thomson-cross-section"]):::qty
     j_CE_thomson_cross_section --> q_thomson_cross_section
   end
-  subgraph cl_7["anchored cluster (2)"]
+  subgraph cl_8["anchored cluster (2)"]
     direction LR
     j_CE_half_life["Radioactive half-life"]:::law
     q_decay_constant(["decay-constant"]):::qty
@@ -798,7 +821,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (138)"]
+  subgraph cl_iso["isolated (137)"]
     direction LR
     j_be_100["BE-100"]:::law
     q_lst_static(["lst-static"]):::qty
@@ -1440,19 +1463,6 @@ flowchart LR
     q_marginal_probability --> j_be_25
     q_intrinsic_information(["intrinsic-information"]):::qty
     j_be_25 --> q_intrinsic_information
-    j_be_26["BE-26"]:::speculative
-    q_attempt_frequency(["attempt-frequency"]):::qty
-    q_attempt_frequency --> j_be_26
-    q_tunneling_mass(["tunneling-mass"]):::qty
-    q_tunneling_mass --> j_be_26
-    q_barrier_height(["barrier-height"]):::qty
-    q_barrier_height --> j_be_26
-    q_barrier_width(["barrier-width"]):::qty
-    q_barrier_width --> j_be_26
-    q_biological_rate_correction(["biological-rate-correction"]):::qty
-    q_biological_rate_correction --> j_be_26
-    q_mutation_rate(["mutation-rate"]):::qty
-    j_be_26 --> q_mutation_rate
     j_be_30["BE-30"]:::speculative
     q_modular_hamiltonian_variation(["modular-hamiltonian-variation"]):::qty
     q_modular_hamiltonian_variation --> j_be_30

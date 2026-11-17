@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 234 established-confidence edge(s) of the 267 in this graph
+  anchored core: the clusters holding at least one of the 234 established-confidence edge(s) of the 268 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  84 of the isolated bridges share a name token with the core; 23 are truly unconnected.
+  85 of the isolated bridges share a name token with the core; 23 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -438,6 +438,11 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         tunneling-mass ≟ reference-mass                        [[mass]]  → be-41
         tunneling-mass ≟ secondary-mass                        [[mass]]  → CE-newton-gravitation
         tunneling-mass ≟ swampland-tower-mass                  [[mass]]  → be-41
+    ── be-26-wkb (isolated):
+        wkb-tunneling-rate ≟ decoherence-rate                  [[frequency]]  → be-11-zurek
+        wkb-tunneling-rate ≟ grw-localization-rate             [[frequency]]  → be-48
+        wkb-tunneling-rate ≟ hubble-rate                       [[frequency]]  → be-47
+        wkb-tunneling-rate ≟ relaxation-rate                   [[frequency]]  → be-11-zurek
     ── be-36 (isolated):
         gravitational-wave-speed ≟ alfven-speed                [[velocity]]  → be-67
         gravitational-wave-speed ≟ fast-magnetosonic-speed     [[velocity]]  → be-69

@@ -964,20 +964,9 @@
               }
             ],
             "groupDefinitions": {
-              "m · kappa^-1 · a^-2 · c^2": {
-                "exponents": {
-                  "a": -2,
-                  "c": 2,
-                  "kappa": -1,
-                  "m": 1,
-                  "qa": 0
-                },
-                "formula": "m · kappa^-1 · a^-2 · c^2"
-              },
               "qa": {
                 "exponents": {
                   "a": 0,
-                  "c": 0,
                   "kappa": 0,
                   "m": 0,
                   "qa": 1

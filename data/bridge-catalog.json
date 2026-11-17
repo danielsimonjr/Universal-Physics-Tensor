@@ -753,7 +753,7 @@
       ],
       "dependencies": [],
       "dimensional_signature": "[frequency]",
-      "notes": "see source | status_text: Established (WKB). The WKB tunneling rate formula is standard quantum mechanics (Gamow 1928; Landau-Lifshitz QM Section 50). The application to DNA base-pair tautomerization via proton tunneling is a ... | Tier-5 AST encoding landed 2026-05-04 (branch tier-5/wave-1, the catalog record (data/bridge-catalog.json)) — RHS encoded as ν_0 · exp_factor · f_correction; the WKB exponent (2/ℏ)·∫√(2m(V−E))dx is exposed as DNA_TUNNELING_WKB_ARG and verified dimensionless via the AST's integral primitive with caret-0.5 for the square root. dimensional_signature [frequency] is exactly format(infer(rhs)). Bracket-check with proton mass / 0.4 eV barrier / 1 Å width gives Γ ~ 10 /s, in the textbook 10^-3 to 10^3 /s range for hydrogen-bond proton transfer. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown naming applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): [quantum, biological]. Rationale (HIGH: self-explanatory; biological is the existing freeform label).",
+      "notes": "see source | status_text: Established (WKB). The WKB tunneling rate formula is standard quantum mechanics (Gamow 1928; Landau-Lifshitz QM Section 50). The application to DNA base-pair tautomerization via proton tunneling is a ... | Tier-5 AST encoding landed 2026-05-04 (branch tier-5/wave-1, the catalog record (data/bridge-catalog.json)) — RHS encoded as ν_0 · exp_factor · f_correction; the WKB exponent (2/ℏ)·∫√(2m(V−E))dx is exposed as DNA_TUNNELING_WKB_ARG and verified dimensionless via the AST's integral primitive with caret-0.5 for the square root. dimensional_signature [frequency] is exactly format(infer(rhs)). Bracket-check with proton mass / 0.4 eV barrier / 1 Å width gives Γ ~ 10 /s, in the textbook 10^-3 to 10^3 /s range for hydrogen-bond proton transfer. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown naming applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): [quantum, biological]. Rationale (HIGH: self-explanatory; biological is the existing freeform label). | be-26-wkb is the bare WKB factor Γ_WKB = ν₀ exp(−2κL), a second relation of this row; be-26 multiplies it by f, and both relations refuse a barrier below the opaque bound 2κL >= 10.",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6833,6 +6833,32 @@
           "biological-rate-correction": 0.5
         },
         "value": 4.357625350016062
+      }
+    },
+    {
+      "id": "be-26-wkb",
+      "catalogId": 26,
+      "kind": "law",
+      "label": "Γ_WKB = ν₀ exp[−(2/ℏ)√(2m(V−E))·L]",
+      "expression": "attempt-frequency*exp(-(2/hbar)*sqrt(2*tunneling-mass*barrier-height)*barrier-width)",
+      "target": "wkb-tunneling-rate",
+      "sources": [
+        "attempt-frequency",
+        "tunneling-mass",
+        "barrier-height",
+        "barrier-width"
+      ],
+      "aliases": {},
+      "holds": "isFinite(attempt-frequency) and attempt-frequency > 0 and isFinite(tunneling-mass) and tunneling-mass > 0 and isFinite(barrier-height) and barrier-height > 0 and isFinite(barrier-width) and barrier-width > 0 and 8*tunneling-mass*barrier-height*barrier-width*barrier-width >= 100*hbar*hbar",
+      "citation": "Gamow 1928 Z. Phys. 51:204; Landau & Lifshitz QM §50 (bare WKB factor)",
+      "reference": {
+        "inputs": {
+          "attempt-frequency": 10000000000000,
+          "tunneling-mass": 1.67262192369e-27,
+          "barrier-height": 6.408706536e-20,
+          "barrier-width": 1e-10
+        },
+        "value": 8.715250700032124
       }
     },
     {

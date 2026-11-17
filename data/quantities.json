@@ -10063,6 +10063,23 @@
         "force": "electromagnetic"
       },
       "graphNode": false
+    },
+    {
+      "id": "wkb-tunneling-rate",
+      "symbol": "Γ_WKB",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
     }
   ]
 }

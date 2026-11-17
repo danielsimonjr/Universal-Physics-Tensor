@@ -135,7 +135,7 @@ describe('the live graphs, pinned once', () => {
 
   it('layout communities of the catalog graph: a 50-quantity component in six communities', () => {
     const report = communitiesOf(CATALOG_GRAPH);
-    expect(quantityGraph(CATALOG_GRAPH).names).toHaveLength(531);
+    expect(quantityGraph(CATALOG_GRAPH).names).toHaveLength(532);
     expect(report.componentSize).toBe(50);
     expect(report.communities.map((c) => c.size)).toEqual([16, 12, 8, 6, 5, 3]);
     // The two largest hold the map's two hubs, as the drawing has always shown them.

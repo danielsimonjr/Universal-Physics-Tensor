@@ -53,13 +53,14 @@ Deriving the bridge equations by dimensions
     be-19, be-54, be-13, be-23, be-36, be-41, be-47, be-49, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115, be-130, be-144, be-151, be-152, be-160, be-162, be-163
     (not a failed reconstruction of a monomial, and not a physical refutation)
 
-  OPEN (74) — irreducible free dimensionless group(s); by complexity:
+  OPEN (75) — irreducible free dimensionless group(s); by complexity:
     cplx=0  be-82
     cplx=1  be-11-zurek
     cplx=1  be-37
     cplx=1  be-52
     cplx=1  be-18
     cplx=1  be-24
+    cplx=1  be-26-wkb
     cplx=1  be-30
     cplx=1  be-38
     cplx=1  be-55
