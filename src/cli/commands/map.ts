@@ -53,7 +53,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--anchor', valueStyle: 'attached', repeatable: true, description: 'Override a numeric anchor as k=v for the --proposed overlay.', defaultValue: 'mass=M_sun' },
   { name: '--proposed', valueStyle: 'none', description: 'Overlay unadjudicated identity-consequence relations.' },
   { name: '--relation', valueStyle: 'attached', description: 'Keep edges whose recorded relation is TYPE: on the quantity map, the relation that the catalog row records; on --family/--observable, the relation that the atlas bridge records.' },
-  { name: '--evidence', valueStyle: 'attached', description: 'Keep edges whose derived evidence set contains TAG: on the quantity map, derived from the catalog row; on --family/--observable, derived from the witness results of the bridge.' },
+  { name: '--evidence', valueStyle: 'attached', description: 'Keep edges whose derived evidence set contains TAG: on the quantity map, derived from the catalog row; on --family/--observable, derived from the bridge record and its witness results.' },
   { name: '--around', valueStyle: 'either', description: 'Keep edges within --depth shared-quantity hops of QUANTITY.' },
   { name: '--depth', valueStyle: 'attached', description: 'Hop count for --around.', defaultValue: String(DEFAULT_DEPTH) },
   { name: '--route', valueStyle: 'either', description: 'Map the atlas route FROM,TO instead of the equation graph.' },
