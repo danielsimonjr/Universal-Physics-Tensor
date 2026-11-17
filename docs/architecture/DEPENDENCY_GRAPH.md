@@ -745,7 +745,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../../dimensional/types.js` | `LENGTH, MASS, VELOCITY` | Import |
+| `../../dimensional/types.js` | `LENGTH, MASS` | Import |
 | `../regime.js` | `makeRegime` | Import |
 | `../types.js` | `AtlasBridge, RelationContract` | Import (type-only) |
 | `./bridges-exact.js` | `relationContractOf` | Import |
@@ -7801,7 +7801,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89032 |
+| Total Lines of Code | 89036 |
 | Total Exports | 2852 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
