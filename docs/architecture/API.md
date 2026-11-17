@@ -147,7 +147,7 @@ Full list:
 - `BCS_GAP_RATIO` (weak-coupling BCS gap ratio, dimensionless)
 - `LANE_EMDEN_OMEGA3` (Lane–Emden n = 3 dimensionless radius)
 - `THOMSON_CROSS_SECTION_SI` (Thomson cross section)
-- `M_PROTON_SI` (proton mass; tagged `@internal`)
+- `M_PROTON_SI` (proton mass)
 
 The `PhysicalConstants` lookup object (see [Core](#core)) is a separate surface. Prefer the `*_SI` constants.
 
