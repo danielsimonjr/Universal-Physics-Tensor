@@ -301,7 +301,7 @@
       "vacuum": {
         "theorem": "PhysJS.Einstein.vacuum_density",
         "kind": "reduction",
-        "covers": "with κ = 8πG/c⁴, T_μν = −ρ c² g_μν and Λ g = −κ T rearrange to ρ = c² Λ / (8π G). The opposite sign does not. This is the BE-20 density; BE-20 has no reference of its own",
+        "covers": "with κ = 8πG/c⁴, T_μν = −ρ c² g_μν and Λ g = −κ T rearrange to ρ = c² Λ / (8π G). The opposite sign does not. This is the BE-20 density; BE-20's own reference is the exponent theorem under the key be-20",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -313,7 +313,7 @@
       "corollary": {
         "theorem": "PhysJS.Einstein.friedmann_corollary",
         "kind": "derivation-step",
-        "covers": "the vacuum density gives (8πG/3) ρ = Λ c² / 3, the cosmological term of FirstOrderFriedmann. A fluid of this density added to matter, with the explicit Λ set to zero, is that equation at k = 0. The Einstein-static density Λ c²/(4π G) is twice that term. Dropping c² fails when c² ≠ 1. The density is not reproved. BE-20 has no reference of its own",
+        "covers": "the vacuum density gives (8πG/3) ρ = Λ c² / 3, the cosmological term of FirstOrderFriedmann. A fluid of this density added to matter, with the explicit Λ set to zero, is that equation at k = 0. The Einstein-static density Λ c²/(4π G) is twice that term. Dropping c² fails when c² ≠ 1. The density is not reproved. BE-20's own reference is the exponent theorem under the key be-20",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -340,16 +340,28 @@
     {
       "key": "be-42",
       "bridgeId": "be-42",
-      "theorem": "PhysJS.HawkingUnruh.dictionary",
-      "kind": "cross-check",
-      "covers": "T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect",
+      "theorem": "PhysJS.BuckinghamClassics.hawking_rs_exponent_unique",
+      "kind": "derivation-step",
+      "covers": "the exponent tuple (-1, 1, 1, -1) on (schwarzschild-radius, hbar, c, k_B), base dimensions (L, M, T, Θ), is the unique rational solution of the dimension equation for a temperature. The edge is be-42-via-rs. The prefactor 1/(4π) is not derived. The form from the mass over (hbar, c, G, mass, k_B) is not unique: that is the unkeyed control hawking_exponent_not_unique. Not the Hawking effect.",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "dictionary": {
+        "theorem": "PhysJS.HawkingUnruh.dictionary",
+        "kind": "cross-check",
+        "covers": "T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
     },
     {
       "key": "be-24",
@@ -391,7 +403,19 @@
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "exponent": {
+        "theorem": "PhysJS.BuckinghamClassics.landauer_exponent_unique",
+        "kind": "derivation-step",
+        "covers": "the exponent tuple (1, 1) on (temperature, k_B), base dimensions (L, M, T, Θ), is the unique rational solution of the dimension equation for an energy. The prefactor ln 2 is not derived. Not the Landauer bound for an arbitrary protocol.",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
     },
     {
       "key": "be-29",
@@ -475,7 +499,19 @@
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "exponent": {
+        "theorem": "PhysJS.BuckinghamClassics.thermal_de_broglie_exponent_unique",
+        "kind": "derivation-step",
+        "covers": "the exponent tuple (1, -1/2, -1/2, -1/2) on (hbar, mass, k_B, temperature), base dimensions (L, M, T, Θ), is the unique rational solution of the dimension equation for a length. The catalog row be-12 has the sources mass and temperature and the closure hbar, k_B: the same system in another order. The prefactor √(2π) is not derived. Not Caldeira–Leggett dephasing.",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
     },
     {
       "key": "be-59",
@@ -531,7 +567,19 @@
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "exponent": {
+        "theorem": "PhysJS.BuckinghamClassics.kss_exponent_unique",
+        "kind": "derivation-step",
+        "covers": "the exponent tuple (1, -1) on (hbar, k_B), base dimensions (L, M, T, Θ), is the unique rational solution of the dimension equation for the ratio of shear viscosity to entropy density. The prefactor 1/(4π) is not derived. Not the KSS inequality.",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ]
+      }
     },
     {
       "key": "be-14",
@@ -3679,6 +3727,34 @@
       "theorem": "PhysJS.BuckinghamClassics.thermal_de_broglie_exponent_unique",
       "kind": "derivation-step",
       "covers": "the exponent tuple (1, -1/2, -1/2, -1/2) on (hbar, mass, k_B, temperature), base dimensions (L, M, T, Θ), is the unique rational solution of the dimension equation for a length. The prefactor is not derived. Not a statement about a gas.",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-20",
+      "bridgeId": "be-20",
+      "theorem": "PhysJS.BuckinghamClassics.vacuum_density_exponent_unique",
+      "kind": "derivation-step",
+      "covers": "the exponent tuple (1, 2, -1) on (cosmological-constant-curvature, c, G), base dimensions (L, M, T), is the unique rational solution of the dimension equation for a mass density. The prefactor 1/(8π) is not derived. Not a statement about the cosmological constant problem.",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-48",
+      "bridgeId": "be-48",
+      "theorem": "PhysJS.BuckinghamClassics.grw_exponent_unique",
+      "kind": "derivation-step",
+      "covers": "the exponent tuple (1, -1, 2) on (mass, hbar, c), base dimensions (L, M, T), is the unique rational solution of the dimension equation for a rate. The recovered constant 7.03e-41 equals lambda0 hbar/(m0 c^2) for the empirical parameters lambda0 and m0 and is not derived. The localization rate of the model itself has no hbar and no c. Not GRW theory.",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [

@@ -103,6 +103,38 @@ A cross-check of two ids is one entry. `bridgeId` is one of those ids, and
 id later gains a counted theorem, the counted theorem becomes the
 top-level `theorem` and the cross-check moves to a nested object.
 
+## Exponent statements for catalog rows
+
+A theorem that fixes the exponent tuple of a catalog row is a statement about
+that row. It is recorded under the row's own id, by one rule. If the row has
+no counted statement, the exponent theorem is the top-level `theorem` of the
+entry `be-<n>`. If the entry already holds a statement, the exponent theorem is
+the nested object `exponent`. The name `exponent` is distinct from the
+`monomial` objects, which hold `monomial_form` statements.
+
+A row whose encoded formula is a dimensional sum is not a monomial and has no
+exponent record. A row with a free dimensionless group over its governing set
+has no unique tuple and has none either. A row already recorded through
+`monomial_form` gets no second statement.
+
+A theorem may back two keys. The thermal de Broglie theorem is the top-level
+statement of `CE-thermal-de-broglie` and the nested `exponent` of `be-12`. The
+covers line of the nested object names the order of the theorem's inputs, which
+differs from the order of the engine's inputs, and the control compares by input
+name. No check forbids one theorem under two labels, and each label has its own
+kind line.
+
+`be-42` shows the rule for a cross-check. The counted exponent theorem becomes
+its top-level `theorem`, and the cross-check moves to the nested object
+`dictionary`. A nested object holds the six statement fields and nothing else,
+so `key`, `bridgeId` and `imports` do not move with it. `be-42` is the key
+because a key is a catalog id, and `be-42-via-rs` is a relation id.
+
+The recovered constant of a catalog row is not always a derived form. The
+covers line of `be-48` says that the tuple is unique, that the constant is the
+ratio of two empirical parameters to the closure constants, and that the model's
+own rate has no `hbar` and no `c`.
+
 ## Coverage
 
 Every manifest entry and every `formalRef` states which part of the bridge

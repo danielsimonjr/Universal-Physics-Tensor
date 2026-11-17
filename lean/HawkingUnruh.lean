@@ -9,9 +9,10 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 /-!
-`be-42`. Cross-check.
+`be-42.dictionary`. Cross-check.
 
-`be-42`, with BE-57 and the edge `be-42-via-rs`. One entry, key `be-42`.
+`be-42`, with BE-57 and the edge `be-42-via-rs`. The cross-check is the nested statement
+`dictionary` of the entry `be-42`.
 
 ```
 T_H(M)   = ℏ c³ / (8 π G M k_B)

@@ -13,7 +13,8 @@ import Mathlib.Tactic.Ring
 `be-13.corollary`. Derivation step. `friedmann_corollary`.
 
 `be-20`, the Friedmann corollary only. The density is already
-`PhysJS.Einstein.vacuum_density`. There is no `be-20` key.
+`PhysJS.Einstein.vacuum_density`. The own reference of `be-20` is the exponent theorem under
+the key `be-20`.
 
 From `ρ = c² Λ / (8π G)`,
 
@@ -38,7 +39,8 @@ open Cosmology.FLRW.FriedmannEquation
 density reproduces `FirstOrderFriedmann` at `k = 0`.
 
 Covers the Friedmann corollary of `be-20`. The density is
-`vacuum_density` and is not reproved. BE-20 has no reference of its own. -/
+`vacuum_density` and is not reproved. The own reference of BE-20 is the exponent theorem under
+the key `be-20`. -/
 theorem friedmann_corollary (g T : M) (a ρmatter : Time → ℝ) (Λ κ G c ρ : ℝ) (t : Time)
     (hg : g ≠ 0) (hG : G ≠ 0) (hc : c ≠ 0) (hκ : κ = kappa G c)
     (hT : T = -(ρ * c ^ 2) • g) (hid : Λ • g = -κ • T)
