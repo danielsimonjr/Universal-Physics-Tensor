@@ -84,6 +84,7 @@ export function canonicalJson(value: unknown, profile: JsonProfile = 'probe'): s
   return profile === 'record' ? canonicalJsonRecord(value) : canonicalJsonProbe(value);
 }
 
+/** The one SHA-256 digest (`core/hash`), re-exported for the probe subpath. @internal */
 export { sha256Hex };
 
 /**

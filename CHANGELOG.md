@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Changed
 
-- One SHA-256 function: `src/composition/canonical-json.ts` re-exports `sha256Hex` from `src/core/hash.ts` instead of wrapping it, and the `sha256` alias in `src/cli/record.ts` is removed; its callers call `sha256Hex`. The public `sha256Hex` of the probe entry point keeps its name and now also takes a `Buffer`. Why: two wrappers duplicated the one digest. Hash outputs are unchanged: the full suite, with its pinned digests, passes.
+- One SHA-256 function: `src/composition/canonical-json.ts` re-exports `sha256Hex` from `src/core/hash.ts` instead of wrapping it, and the `sha256` alias in `src/cli/record.ts` is removed; its callers call `sha256Hex`. The public `sha256Hex` of the probe entry point keeps its name and now also takes a `Buffer`. Why: two wrappers duplicated the one digest. Hash outputs are unchanged: the full suite, with its pinned digests, passes. The re-export carries its own summary line (the code-docs ratchet reads it), and the `sha256Hex` group in `docs/architecture/duplicate-symbols.md` describes the re-export, not the removed wrapper.
 
 ### Added
 

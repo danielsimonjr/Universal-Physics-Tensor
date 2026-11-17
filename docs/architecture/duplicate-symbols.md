@@ -40,11 +40,10 @@ command modules. A new command adds its module and one line to the barrel. The s
 ### `sha256Hex`: 2 files
 
 `src/core/hash.ts` holds the one SHA-256 implementation. It accepts a `string` or a `Buffer`.
-`src/composition/canonical-json.ts` exports a wrapper with the same name. The wrapper accepts
-a `string` and calls the core function, which it imports as `coreSha256Hex`.
-`src/composition/probe/index.ts` and `src/composition/probe/serialize.ts` re-export the
-wrapper for the probe subpath. Read the hash from `src/core/hash.ts` when you need the
-implementation.
+`src/composition/canonical-json.ts` imports that function and re-exports it under the same
+name (`export { sha256Hex }`); it has no body of its own. `src/composition/probe/index.ts` and
+`src/composition/probe/serialize.ts` forward the re-export for the probe subpath. Read the hash
+from `src/core/hash.ts` when you need the implementation.
 
 ## Type names: 10 groups
 
