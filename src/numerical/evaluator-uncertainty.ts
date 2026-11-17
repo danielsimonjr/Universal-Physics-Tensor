@@ -86,6 +86,8 @@ export function propagateEvaluatorUncertainty(
               out = f({ ...inputs, ...vals })[name];
             } catch (error) {
               // A TypeError, ReferenceError or SyntaxError is a programming error and propagates.
+              // Any other throw is the evaluator's refusal of the point: `src/cases/engine.ts` refuses
+              // an input outside its domain with a plain Error, and `DomainViolationError` extends Error.
               if (error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) throw error;
               undefinedAt = true;
               return Number.NaN;
@@ -101,9 +103,11 @@ export function propagateEvaluatorUncertainty(
           u > 0 ? { relativeStep, curvatureOffsets: { [k]: u } } : { relativeStep },
         );
       } catch (error) {
+        // A programming error propagates even when an earlier stepped point set `undefinedAt`.
+        if (error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) throw error;
         // Only "the evaluator has no finite value at the stepped point" is the
-        // reported outcome below. A RangeError is the evaluator's own domain
-        // refusal at that point and is the same outcome. Anything else is a
+        // reported outcome below. A RangeError is MathTS's refusal of the probe
+        // (the step is below the resolution) and is the same outcome. Anything else is a
         // programming error and propagates.
         if (!undefinedAt && !(error instanceof RangeError)) throw error;
         probed = undefined;

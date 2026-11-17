@@ -29,7 +29,7 @@ import {
 import { parsePhysics, getFormulaParserKind } from '../../src/numerical/formula-registry.js';
 import { FormulaDimensionError } from '../../src/numerical/formula-dimension.js';
 import { readBinding, readNamedBinding } from '../../src/numerical/binding-value.js';
-import { propagateEvaluatorUncertainty } from '../../src/numerical/evaluator-uncertainty.js';
+import { correlationIsPositiveSemidefinite, propagateEvaluatorUncertainty } from '../../src/numerical/evaluator-uncertainty.js';
 import { evaluateNumerical } from '../../src/numerical/index.js';
 import type { ExprNode, TranscendentalFn } from '../../src/dimensional/ast-types.js';
 import { sym } from '../../src/dimensional/ast-builders.js';
@@ -162,6 +162,49 @@ describe('a catch-all no longer masks a programming error (N15)', () => {
     const f = (inputs: Record<string, number>): Record<string, unknown> => ({ y: inputs.x! > 1 ? Number.NaN : 2 });
     const out = propagateEvaluatorUncertainty(f, { x: 1 }, { x: 0.5 }, new Map());
     expect(out.y!.contributions.x!.note).toMatch(/undefined next to this input/);
+  });
+
+  it('a TypeError at a later stepped point propagates after an earlier point was refused', () => {
+    // The callback records a refusal before MathTS probes the next point. The record must not
+    // turn a programming error at that next point into "undefined".
+    let stepped = 0;
+    const f = (inputs: Record<string, number>): Record<string, unknown> => {
+      if (inputs.x === 1) return { y: 2 };
+      stepped += 1;
+      if (stepped === 1) throw new Error('domain refusal at the first stepped point');
+      throw new TypeError('bug in the evaluator');
+    };
+    expect(() => propagateEvaluatorUncertainty(f, { x: 1 }, { x: 0.1 }, new Map())).toThrow(TypeError);
+    expect(stepped).toBeGreaterThan(1);
+  });
+
+  it('a plain Error at a stepped point is the evaluator\'s domain refusal and is reported, not thrown (pin)', () => {
+    // `src/cases/engine.ts` refuses an eccentricity of 1.05 with a plain Error; `DomainViolationError`
+    // extends Error. Before MathTS 0.86 the probe at ±u threw that Error out of `upt evaluate --sigma`.
+    const f = (inputs: Record<string, number>): Record<string, unknown> => {
+      if (inputs.x! >= 1) throw new Error('eccentricity must be in [0, 1)');
+      return { y: 1 / (1 - inputs.x!) };
+    };
+    const out = propagateEvaluatorUncertainty(f, { x: 0.95 }, { x: 0.1 }, new Map());
+    const c = out.y!.contributions.x!;
+    expect(typeof c.sensitivity).toBe('number');
+    expect(c.note).toBe("±u reaches outside the evaluator's domain");
+    expect(out.y!.unreliable).toEqual(['x']);
+  });
+
+  it('an output that is not a number at a stepped point is reported as undefined (pin)', () => {
+    const f = (inputs: Record<string, number>): Record<string, unknown> => ({ y: inputs.x === 1 ? 1 : 'text' });
+    const out = propagateEvaluatorUncertainty(f, { x: 1 }, { x: 0.1 }, new Map());
+    expect(out.y!.contributions.x!.sensitivity).toBeNull();
+    expect(out.y!.contributions.x!.note).toMatch(/undefined next to this input/);
+    expect(out.y!.u).toBeNull();
+  });
+
+  it('a non-finite correlation is refused loudly by MathTS, not read as a refusal (control)', () => {
+    const corr = new Map<string, number>([['a,b', Number.NaN]]);
+    expect(() => correlationIsPositiveSemidefinite(['a', 'b'], corr)).toThrow(RangeError);
+    expect(correlationIsPositiveSemidefinite(['a', 'b'], new Map([['a,b', 0.5]]))).toBe(true);
+    expect(correlationIsPositiveSemidefinite(['a', 'b', 'c'], new Map([['a,b', 0.9], ['b,c', 0.9], ['a,c', -0.9]]))).toBe(false);
   });
 
   it('a sibling binding that does not parse is skipped (control), and the catches are narrowed', () => {
