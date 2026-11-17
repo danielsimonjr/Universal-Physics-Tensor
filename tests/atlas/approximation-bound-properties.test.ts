@@ -1,10 +1,11 @@
 /**
  * Every atlas approximation bridge keeps its declared bound.
  *
- * Per-bridge checks exist (`bound-machine-form.test.ts` for the pendulum and the damped spring,
- * `waves.test.ts` for the wave bridges). No test looped over the whole registry, so a new
- * approximation bridge could freeze a `delta` that under-bounds its own error function and
- * nothing failed. `admitApproximation` checks that a horizon and a `deltaAt` exist. It cannot
+ * Per-bridge checks exist for every bridge the registry holds today (`bound-machine-form.test.ts`
+ * for the pendulum and the damped spring, `waves.test.ts` for the wave bridges, `closure.test.ts`
+ * and `formal-sanity.test.ts` for the telegraph, Klein–Gordon and stiff-string closures). Each names
+ * its bridge. No test looped over the whole registry, so a new approximation bridge could freeze a
+ * `delta` that under-bounds its own error function and nothing failed. `admitApproximation` checks that a horizon and a `deltaAt` exist. It cannot
  * check that `delta` is a true supremum.
  *
  * What this file checks, for every bridge the real registry holds with relation `approximation`:
@@ -14,13 +15,24 @@
  *     `DELTA_AT_EXEMPT`; the list is empty because admission already requires it).
  *  3. `deltaAt(p) <= delta` at every sampled point of the declared regime, the edge approached
  *     from inside included.
- *  4. Where `deltaAtBasis` is `'closed-form'`, `delta` EQUALS `deltaAt` at the regime edge to 1e-12
- *     relative: a loose scalar is not a supremum.
+ *  4. `delta` EQUALS `deltaAt` at the domain edge `s = 1`, to `REL_TOL` relative, for EVERY bridge.
+ *     `ApproximationBound.delta` is declared as the supremum of the bound over the whole domain,
+ *     whatever `deltaAtBasis` says about how that bound was justified. A loose scalar is not a
+ *     supremum.
+ *  5. `deltaAt` is non-decreasing along the sampler. The 13 samples prove the bound only where
+ *     the function is monotone, so a `deltaAt` with an interior maximum fails here instead of
+ *     slipping between two samples.
  *
  * The domain of each bridge is stated by a sampler in `DOMAINS`, because a regime is a set of
  * dimensionless-group inequalities and a bound can need parameters the regime does not name.
- * Every sample is also checked against the bridge's own `regime` (so a sampler cannot drift
- * outside the declared domain), and a bridge with no sampler fails the census test.
+ * Two checks keep a sampler honest. Every sample is checked against the bridge's own `regime`,
+ * so a sampler cannot drift outside the declared domain. And `s = 1` must REACH the regime edge:
+ * for every inequality of the bridge's `regime`, the group value at `at(1)` equals the
+ * inequality's `bound`. A sampler that covers only part of the domain therefore fails (measured:
+ * `m: 0.1 · s` on the damped bridge passed every earlier check and fails this one). A parameter
+ * the regime does not name (`|v0| <= 5` on the damped bridge lives in `parameterRange` prose) is
+ * covered by check 4: a sampler that stops short of that edge cannot reach `delta`.
+ * A bridge with no sampler fails the census test.
  */
 import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
@@ -39,6 +51,17 @@ interface Domain {
 
 /** Closest approach to an open edge. */
 const EDGE_S = 1 - 1e-9;
+
+/**
+ * Relative tolerance of the two equalities (`delta` against `deltaAt(at(1))`, and the group value
+ * at `at(1)` against the regime bound). Every `delta:` line in the registry calls its own
+ * `deltaAt` function at the edge with the same arguments the sampler builds, so the equality is
+ * exact today (measured: the ratio is 1 for all 7 bridges with the tolerance set to 0). The
+ * tolerance absorbs float noise from a `delta` computed by another route or a group value such
+ * as `1/0.01`, and still rejects a hand-rounded literal (an under-bound of 1e-10 relative fails).
+ * The `<=` check at the interior samples uses no tolerance: no sample sits on the edge.
+ */
+const REL_TOL = 1e-12;
 
 /** Sampled `s` values: a log ladder toward 0, a linear ladder, and the approach to the edge. */
 const S_GRID: readonly number[] = [
@@ -107,19 +130,29 @@ function boundViolations(bridge: AtlasBridge, domain: Domain): string[] {
     if (DELTA_AT_EXEMPT[bridge.id] === undefined) out.push(`${bridge.id}: no deltaAt and not exempt`);
     return out;
   }
+  let prev = Number.NEGATIVE_INFINITY;
   for (const s of S_GRID) {
     const p = domain.at(s);
     if (!inRegime(bridge, p)) out.push(`${bridge.id}: sample s=${s} is outside the declared regime`);
     const v = deltaAt(p);
-    if (!Number.isFinite(v) || v > bound.delta * (1 + 1e-12)) {
+    if (!Number.isFinite(v) || v > bound.delta) {
       out.push(`${bridge.id}: deltaAt(s=${s}) = ${v} exceeds delta = ${bound.delta}`);
     }
+    if (v < prev) out.push(`${bridge.id}: deltaAt(s=${s}) = ${v} is below the value at the previous sample ${prev}`);
+    prev = v;
   }
-  if (bound.deltaAtBasis === 'closed-form') {
-    const edge = deltaAt(domain.at(1));
-    if (!(Math.abs(edge - bound.delta) <= 1e-12 * Math.abs(bound.delta))) {
-      out.push(`${bridge.id}: closed-form delta ${bound.delta} is not the edge value ${edge}`);
+  // The sampler reaches the regime edge: at s = 1 every regime inequality sits on its bound.
+  const edgePoint = domain.at(1);
+  for (const ineq of bridge.regime?.inequalities ?? []) {
+    const g = groupValue(bridge, ineq.group, edgePoint);
+    if (!(Math.abs(g - ineq.bound) <= REL_TOL * Math.abs(ineq.bound))) {
+      out.push(`${bridge.id}: sampler edge gives ${ineq.group} = ${g}, the regime bound is ${ineq.bound}`);
     }
+  }
+  // delta is the supremum of deltaAt over the domain, so the edge value attains it.
+  const edge = deltaAt(edgePoint);
+  if (!(Math.abs(edge - bound.delta) <= REL_TOL * Math.abs(bound.delta))) {
+    out.push(`${bridge.id}: delta ${bound.delta} is not the edge value ${edge}`);
   }
   return out;
 }
@@ -159,7 +192,7 @@ describe('approximation bridge census', () => {
 
 describe('every approximation bridge keeps its declared bound', () => {
   for (const bridge of APPROXIMATIONS) {
-    it(`${bridge.id}: norm text, deltaAt <= delta over the regime, closed-form delta is the edge`, () => {
+    it(`${bridge.id}: norm text, deltaAt <= delta and non-decreasing over the regime, sampler reaches the edge, delta is the edge value`, () => {
       expect(boundViolations(bridge, DOMAINS[bridge.id]!)).toEqual([]);
     });
   }
@@ -208,6 +241,47 @@ describe('NEGATIVE CONTROLS: the checking function rejects a planted defect', ()
     const damped = APPROXIMATIONS.find((b) => b.id === 'ab-damped-massless')!;
     expect(damped.bound!.deltaAtBasis).toBe('numerically-supported');
     const v = boundViolations(withBound(damped, { delta: 0.012 }), DOMAINS['ab-damped-massless']!);
+    expect(v.some((m) => m.includes('exceeds delta'))).toBe(true);
+  });
+
+  it('rejects a delta 1e-10 relative above the edge value (REL_TOL is 1e-12, so a hand-rounded literal fails)', () => {
+    const v = boundViolations(withBound(pendulum, { delta: pendulum.bound!.delta * (1 + 1e-10) }), domain);
+    expect(v.some((m) => m.includes('is not the edge value'))).toBe(true);
+  });
+});
+
+describe('NEGATIVE CONTROLS: a sampler narrower than the declared domain is rejected', () => {
+  // The damped bridge is numerically-supported, and before the edge checks existed a narrow
+  // sampler on it passed every check (measured: `m: 0.1 · s, v0: 2 · s` passed 17/17).
+  const damped = APPROXIMATIONS.find((b) => b.id === 'ab-damped-massless')!;
+  const real = DOMAINS['ab-damped-massless']!;
+
+  it('accepts the real damped sampler (the paired pass of the controls below)', () => {
+    expect(boundViolations(damped, real)).toEqual([]);
+  });
+
+  it('rejects a sampler that stops short of the regime edge (m reaches 0.1, the regime bound is 0.25)', () => {
+    const narrow: Domain = { at: (s) => ({ m: 0.1 * s, b: 1, k: 1, x0: 1, v0: 5 * s }) };
+    const v = boundViolations(damped, narrow);
+    expect(v.some((m) => m.includes('the regime bound is 0.25'))).toBe(true);
+  });
+
+  it('rejects a sampler narrow in a parameter the regime does not name (|v0| reaches 2, delta is at 5)', () => {
+    const narrow: Domain = { at: (s) => ({ m: 0.25 * s, b: 1, k: 1, x0: 1, v0: 2 * s }) };
+    const v = boundViolations(damped, narrow);
+    // The regime sees only m k / b², so the regime-edge check passes; the edge-value check fails.
+    expect(v.some((m) => m.includes('the regime bound is'))).toBe(false);
+    expect(v.some((m) => m.includes('is not the edge value'))).toBe(true);
+  });
+
+  it('rejects a deltaAt with an interior maximum (the 13 samples assume a non-decreasing function)', () => {
+    const pendulum = APPROXIMATIONS.find((b) => b.id === 'ab-pendulum-linear')!;
+    const real = pendulum.bound!.deltaAt!;
+    // Peaks at θ0 = 0.25 and falls back to the real value at the edge, so the edge check passes.
+    const humped = (p: Params) => real(p) * (1 + 4 * (p['theta0']! / 0.5) * (1 - p['theta0']! / 0.5));
+    const v = boundViolations(withBound(pendulum, { deltaAt: humped }), DOMAINS['ab-pendulum-linear']!);
+    expect(v.some((m) => m.includes('is not the edge value'))).toBe(false);
+    expect(v.some((m) => m.includes('below the value at the previous sample'))).toBe(true);
     expect(v.some((m) => m.includes('exceeds delta'))).toBe(true);
   });
 });
