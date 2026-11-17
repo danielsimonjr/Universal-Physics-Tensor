@@ -14,6 +14,7 @@ import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { formalRefCarriers } from '../../src/atlas/formal-ref-carriers.js';
 import { physjsManifestProblems, physjsTheorem, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { DIMENSIONAL_CLASSICS } from '../../src/canonical/entries/dimensional-classics.js';
 import { CANONICAL_EQUATIONS, canonicalById } from '../../src/canonical/registry.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -44,6 +45,20 @@ describe('formalRefCarriers', () => {
     expect(carrier?.formalRef?.system).toBe('lean4-physjs');
     expect(carrier?.formalRef?.kind).toBe('derivation-step');
     expect(carrier?.formalRef?.fidelity).toBe('reviewed-manifest');
+  });
+
+  it('gives every dimensional classic a reviewed derivation-step carrier', () => {
+    // The set comes from the classics file, not from the manifest, so a forgotten manifest row fails here.
+    // Seven other canonical records are 'dimensional' too (condensed matter, fluids); they are not classics.
+    const classics = DIMENSIONAL_CLASSICS.filter((e) => e.epistemicStatus === 'dimensional');
+    expect(classics).toHaveLength(9);
+    const carriers = formalRefCarriers();
+    for (const classic of classics) {
+      const carrier = carriers.find((c) => c.id === classic.id);
+      expect(carrier?.formalRef?.kind, classic.id).toBe('derivation-step');
+      expect(carrier?.formalRef?.fidelity, classic.id).toBe('reviewed-manifest');
+    }
+    expect(carriers.filter((c) => canonicalById(c.id) !== undefined)).toHaveLength(classics.length);
   });
 
   it('counts atlas bridges, catalog rows and canonical manifest keys, each once', () => {

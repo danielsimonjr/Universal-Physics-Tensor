@@ -165,7 +165,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `entries/_l1-build.ts` | `gr-formula-compare.test.ts` | — |
 | `entries/atomic.ts` | `atomic.test.ts` | — |
 | `entries/condensed-matter.ts` | `condensed-matter.test.ts` | — |
-| `entries/dimensional-classics.ts` | `dimensional-classics.test.ts` | — |
+| `entries/dimensional-classics.ts` | `formal-ref-carriers.test.ts`, `dimensional-classics.test.ts` | — |
 | `entries/electromagnetism.ts` | `electromagnetism.test.ts` | — |
 | `entries/fluids-waves.ts` | `fluids-waves.test.ts` | — |
 | `entries/mechanics.ts` | `mechanics.test.ts` | — |
@@ -499,7 +499,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `atlas/export.test.ts` | 3 files |
 | `atlas/exports-subpath.test.ts` | 0 files |
 | `atlas/families.test.ts` | 5 files |
-| `atlas/formal-ref-carriers.test.ts` | 10 files |
+| `atlas/formal-ref-carriers.test.ts` | 11 files |
 | `atlas/formal-sanity.test.ts` | 14 files |
 | `atlas/formalref-kind.test.ts` | 13 files |
 | `atlas/gr-spine-regime.test.ts` | 61 files |
