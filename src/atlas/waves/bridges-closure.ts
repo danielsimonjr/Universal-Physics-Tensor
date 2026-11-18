@@ -18,9 +18,8 @@
  */
 
 import type { Dimension } from '../../dimensional/types.js';
-import { ACTION, FORCE, FREQUENCY, MASS, VELOCITY } from '../../dimensional/types.js';
+import { FORCE, FREQUENCY, MASS, VELOCITY } from '../../dimensional/types.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
-import { SPRING_CONSTANT } from '../oscillators/dimensions.js';
 import { makeRegime } from '../regime.js';
 import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
@@ -94,8 +93,6 @@ export const BRIDGE_KG_SCHRODINGER: AtlasBridge = {
       { name: 'c', dim: VELOCITY },
       { name: 'omega0', dim: FREQUENCY },
       { name: 'k', dim: WAVENUMBER },
-      { name: 'hbar', dim: ACTION },
-      { name: 'm', dim: MASS },
     ],
     [{ group: 'c · omega0^-1 · k', op: '<=', bound: KG_NR_MAX_X, alias: 'ck/ω₀ ≤ 0.1' }],
   ),
@@ -143,7 +140,6 @@ export const BRIDGE_KG_OSCILLATOR: AtlasBridge = {
     [
       { name: 'omega0', dim: FREQUENCY },
       { name: 'm', dim: MASS },
-      { name: 'k', dim: SPRING_CONSTANT },
     ],
     [],
   ),

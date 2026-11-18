@@ -362,16 +362,7 @@
       "regime": {
         "family": "waves",
         "inequalities": [],
-        "groupDefinitions": {
-          "F · mu^-1 · c^-2": {
-            "exponents": {
-              "F": 1,
-              "c": -2,
-              "mu": -1
-            },
-            "formula": "F · mu^-1 · c^-2"
-          }
-        }
+        "groupDefinitions": {}
       },
       "counterexamples": [],
       "evidence": [
@@ -688,22 +679,10 @@
           "c · omega0^-1 · k": {
             "exponents": {
               "c": 1,
-              "hbar": 0,
               "k": 1,
-              "m": 0,
               "omega0": -1
             },
             "formula": "c · omega0^-1 · k"
-          },
-          "c^2 · omega0^-1 · hbar^-1 · m": {
-            "exponents": {
-              "c": 2,
-              "hbar": -1,
-              "k": 0,
-              "m": 1,
-              "omega0": -1
-            },
-            "formula": "c^2 · omega0^-1 · hbar^-1 · m"
           }
         }
       },
@@ -774,16 +753,7 @@
       "regime": {
         "family": "waves",
         "inequalities": [],
-        "groupDefinitions": {
-          "omega0^2 · m · k^-1": {
-            "exponents": {
-              "k": -1,
-              "m": 1,
-              "omega0": 2
-            },
-            "formula": "omega0^2 · m · k^-1"
-          }
-        }
+        "groupDefinitions": {}
       },
       "counterexamples": [],
       "evidence": [

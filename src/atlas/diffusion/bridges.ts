@@ -134,7 +134,6 @@ export const BRIDGE_HEAT_DIFFUSION: AtlasBridge = {
       { name: 'kappa', dim: THERMAL_CONDUCTIVITY },
       { name: 'rho', dim: DENSITY },
       { name: 'cp', dim: SPECIFIC_HEAT },
-      { name: 'D', dim: DIFFUSIVITY },
       { name: 'ell', dim: LENGTH },
       { name: 't', dim: TIME },
     ],
@@ -189,7 +188,6 @@ export const BRIDGE_SCHRODINGER_DIFFUSION: AtlasBridge = {
     [
       { name: 'hbar', dim: ACTION },
       { name: 'm', dim: MASS },
-      { name: 'D', dim: DIFFUSIVITY },
     ],
     [],
     [],

@@ -51,7 +51,6 @@ export const BRIDGE_STRING_WAVE: AtlasBridge = {
     [
       { name: 'F', dim: FORCE },
       { name: 'mu', dim: LINEAR_DENSITY },
-      { name: 'c', dim: VELOCITY },
     ],
     [],
     [],

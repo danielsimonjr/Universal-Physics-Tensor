@@ -20,7 +20,7 @@
  * @module atlas/diffusion/bridges-closure
  */
 
-import { ENERGY, LENGTH, MASS, TIME, VELOCITY } from '../../dimensional/types.js';
+import { ENERGY, LENGTH, MASS, TIME } from '../../dimensional/types.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { DAMPING } from '../oscillators/dimensions.js';
 import { makeRegime } from '../regime.js';
@@ -28,7 +28,7 @@ import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { WAVENUMBER } from '../waves/models.js';
 import { DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY } from './dimensions.js';
-import { DIFFUSION_FAMILY_NAME, VISCOSITY } from './models.js';
+import { DIFFUSION_FAMILY_NAME } from './models.js';
 import { telegraphSlowRateExcess, telegraphWaveFrequencyRatio } from './numerics.js';
 
 const TEST = 'tests/atlas/closure.test.ts';
@@ -83,7 +83,6 @@ export const BRIDGE_LANGEVIN_DIFFUSION: AtlasBridge = {
       { name: 'm', dim: MASS },
       { name: 'gamma', dim: DAMPING },
       { name: 'kT', dim: ENERGY },
-      { name: 'D', dim: DIFFUSIVITY },
       { name: 't', dim: TIME },
     ],
     [
@@ -155,9 +154,7 @@ export const BRIDGE_STOKES_EINSTEIN: AtlasBridge = {
       { name: 'gamma', dim: DAMPING },
       { name: 't', dim: TIME },
       { name: 'kT', dim: ENERGY },
-      { name: 'eta', dim: VISCOSITY },
       { name: 'a', dim: LENGTH },
-      { name: 'D', dim: DIFFUSIVITY },
     ],
     ['Re'],
     [
@@ -319,7 +316,6 @@ export const BRIDGE_TELEGRAPH_WAVE: AtlasBridge = {
       { name: 'tau', dim: TIME },
       { name: 'D', dim: DIFFUSIVITY },
       { name: 'q', dim: WAVENUMBER },
-      { name: 'c', dim: VELOCITY },
     ],
     [{ group: 'tau · D · q^2', op: '>=', bound: TELEGRAPH_WAVE_MIN_EPS, alias: 'ε = τDq² ≥ 25' }],
   ),
