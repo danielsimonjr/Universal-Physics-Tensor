@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [15.0.0] - 2026-11-18
+
+Dependency health at this release: `bun audit` finds no vulnerabilities (139 packages). `bun outdated` lists no runtime package. It lists three development packages: `fast-check` 4.10.2 (4.10.3 in range), and `vitest` and `@vitest/coverage-v8` 4.1.12 (5.1.1 latest, a major that `.github/dependabot.yml` ignores until the benches move to vitest 5). This release does not move them. The version is a major because of two breaking entries below: `engines.node` is `>=22.12.0` (was `>=18.0.0`), and `canonicalRetrievalCorpus` stores `expr` in residual form.
+
 ### Removed
 
 - **Dated status blocks in `ROADMAP.md`.** The Phase 0 block and the Phase 1 block (`STATUS 2026-09-21`) are each replaced by one line: "Status: the table in §7." Each block repeated a row of the §7 "Phase status" table. The Phase 1 block said "NOT MET" for its fourth exit criterion, and the §7 table says "MET". The §7 table holds the live status.
