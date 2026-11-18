@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Documented
+
+- Persona dogfood reports, sessions 17 to 20, against the published 15.0.0 (`docs/persona-sessions/2026-11-18-*`): an applied, a theoretical and an engineering physicist, and an undergraduate physics student. Each bug that the rounds found was reproduced on a separate install and filed as one of issues #676 to #695. The refuted leads are recorded as negative results. The reports record what the published package does, so a later fix can be measured against them.
+
 ## [15.0.0] - 2026-11-18
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (139 packages). `bun outdated` lists no runtime package. It lists three development packages: `fast-check` 4.10.2 (4.10.3 in range), and `vitest` and `@vitest/coverage-v8` 4.1.12 (5.1.1 latest, a major that `.github/dependabot.yml` ignores until the benches move to vitest 5). This release does not move them. The version is a major because of two breaking entries below: `engines.node` is `>=22.12.0` (was `>=18.0.0`), and `canonicalRetrievalCorpus` stores `expr` in residual form.
