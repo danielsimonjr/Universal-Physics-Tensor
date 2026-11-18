@@ -1080,8 +1080,7 @@
               "ENERGY",
               "LENGTH",
               "MASS",
-              "TIME",
-              "VELOCITY"
+              "TIME"
             ]
           },
           {
@@ -1133,8 +1132,7 @@
           {
             "file": "./models.js",
             "imports": [
-              "DIFFUSION_FAMILY_NAME",
-              "VISCOSITY"
+              "DIFFUSION_FAMILY_NAME"
             ]
           },
           {
@@ -4506,7 +4504,6 @@
           {
             "file": "../../dimensional/types.js",
             "imports": [
-              "ACTION",
               "FORCE",
               "FREQUENCY",
               "MASS",
@@ -4517,12 +4514,6 @@
             "file": "../oscillators/bridges-limits.js",
             "imports": [
               "makeApproximation"
-            ]
-          },
-          {
-            "file": "../oscillators/dimensions.js",
-            "imports": [
-              "SPRING_CONSTANT"
             ]
           },
           {
@@ -28530,7 +28521,7 @@
   "statistics": {
     "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 89056,
+    "totalLinesOfCode": 89045,
     "totalExports": 2852,
     "totalClasses": 86,
     "totalInterfaces": 523,

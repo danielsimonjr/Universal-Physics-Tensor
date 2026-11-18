@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 390,
-    "totalTestFiles": 730,
+    "totalTestFiles": 731,
     "testedCount": 380,
     "directlyTestedCount": 348,
     "untestedCount": 10,
@@ -1006,12 +1006,14 @@
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/closure.test.ts",
       "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/atlas/witness-results.test.ts"
     ],
     "src/atlas/diffusion/bridges.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/witness-results.test.ts"
     ],
     "src/atlas/diffusion/dimensions.ts": [
@@ -1029,6 +1031,7 @@
       "tests/atlas/diffusion.test.ts",
       "tests/atlas/models.test.ts",
       "tests/atlas/negative-controls.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/witness-numeric-probe.test.ts"
     ],
     "src/atlas/diffusion/numerics.ts": [
@@ -1262,6 +1265,7 @@
       "tests/atlas/negative-controls.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/witness-numeric-probe.test.ts",
       "tests/atlas/witness-results.test.ts"
@@ -1443,6 +1447,7 @@
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/relations-shim.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
@@ -1576,6 +1581,7 @@
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/statement-derivation.test.ts",
       "tests/atlas/transported-norm-demo.test.ts",
@@ -1612,11 +1618,13 @@
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/closure.test.ts",
       "tests/atlas/formal-sanity.test.ts",
-      "tests/atlas/path-bound.test.ts"
+      "tests/atlas/path-bound.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts"
     ],
     "src/atlas/waves/bridges.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/waves.test.ts"
     ],
     "src/atlas/waves/index.ts": [
@@ -1625,7 +1633,8 @@
     ],
     "src/atlas/waves/models.ts": [
       "tests/atlas/barrel-completeness.test.ts",
-      "tests/atlas/models.test.ts"
+      "tests/atlas/models.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts"
     ],
     "src/atlas/waves/numerics.ts": [
       "tests/atlas/closed-form-bound-precision.test.ts",
@@ -10419,6 +10428,7 @@
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/witness-numeric-probe.test.ts",
       "tests/atlas/witness-results.test.ts",
@@ -11982,6 +11992,7 @@
       "tests/atlas/make-regime.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/relations-shim.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
@@ -12044,6 +12055,7 @@
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/statement-derivation.test.ts",
       "tests/atlas/transported-norm-demo.test.ts",
@@ -12215,11 +12227,13 @@
     "src/atlas/diffusion/bridges-closure.ts": [
       "tests/atlas/closure.test.ts",
       "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/atlas/witness-results.test.ts"
     ],
     "src/atlas/diffusion/bridges.ts": [
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/witness-results.test.ts"
     ],
     "src/atlas/diffusion/dimensions.ts": [
@@ -12235,6 +12249,7 @@
       "tests/atlas/diffusion.test.ts",
       "tests/atlas/models.test.ts",
       "tests/atlas/negative-controls.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/witness-numeric-probe.test.ts"
     ],
     "src/atlas/diffusion/numerics.ts": [
@@ -12352,6 +12367,7 @@
       "tests/atlas/negative-controls.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/witness-numeric-probe.test.ts",
       "tests/atlas/witness-results.test.ts"
@@ -12457,6 +12473,7 @@
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/relations-shim.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
@@ -12503,6 +12520,7 @@
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/statement-derivation.test.ts",
       "tests/atlas/transported-norm-demo.test.ts",
@@ -12517,17 +12535,20 @@
     "src/atlas/waves/bridges-closure.ts": [
       "tests/atlas/closure.test.ts",
       "tests/atlas/formal-sanity.test.ts",
-      "tests/atlas/path-bound.test.ts"
+      "tests/atlas/path-bound.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts"
     ],
     "src/atlas/waves/bridges.ts": [
       "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/waves.test.ts"
     ],
     "src/atlas/waves/index.ts": [
       "tests/atlas/waves.test.ts"
     ],
     "src/atlas/waves/models.ts": [
-      "tests/atlas/models.test.ts"
+      "tests/atlas/models.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts"
     ],
     "src/atlas/waves/numerics.ts": [
       "tests/atlas/closed-form-bound-precision.test.ts",
@@ -14446,6 +14467,7 @@
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime-derived-identities.test.ts",
       "tests/atlas/regime.test.ts",
       "tests/atlas/witness-numeric-probe.test.ts",
       "tests/bridges/domain-violations.test.ts",
@@ -16509,6 +16531,20 @@
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/oscillators/dimensions.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/atlas/regime-derived-identities.test.ts": [
+      "src/dimensional/types.ts",
+      "src/atlas/oscillators/dimensions.ts",
+      "src/atlas/diffusion/bridges.ts",
+      "src/atlas/diffusion/bridges-closure.ts",
+      "src/atlas/diffusion/models.ts",
+      "src/atlas/regime.ts",
+      "src/relations/regime.ts",
+      "src/atlas/types.ts",
+      "src/relations/types.ts",
+      "src/atlas/waves/bridges.ts",
+      "src/atlas/waves/bridges-closure.ts",
+      "src/atlas/waves/models.ts"
     ],
     "tests/atlas/regime.test.ts": [
       "src/atlas/regime.ts",

@@ -406,7 +406,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../../dimensional/types.js` | `ENERGY, LENGTH, MASS, TIME, VELOCITY` | Import |
+| `../../dimensional/types.js` | `ENERGY, LENGTH, MASS, TIME` | Import |
 | `../oscillators/bridges-limits.js` | `makeApproximation` | Import |
 | `../oscillators/dimensions.js` | `DAMPING` | Import |
 | `../regime.js` | `makeRegime` | Import |
@@ -414,7 +414,7 @@ The codebase is organized into the following modules:
 | `../types.js` | `AtlasBridge` | Import (type-only) |
 | `../waves/models.js` | `WAVENUMBER` | Import |
 | `./dimensions.js` | `DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY` | Import |
-| `./models.js` | `DIFFUSION_FAMILY_NAME, VISCOSITY` | Import |
+| `./models.js` | `DIFFUSION_FAMILY_NAME` | Import |
 | `./numerics.js` | `telegraphSlowRateExcess, telegraphWaveFrequencyRatio` | Import |
 
 **Exports:**
@@ -1277,9 +1277,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../../dimensional/types.js` | `ACTION, FORCE, FREQUENCY, MASS, VELOCITY` | Import |
+| `../../dimensional/types.js` | `FORCE, FREQUENCY, MASS, VELOCITY` | Import |
 | `../oscillators/bridges-limits.js` | `makeApproximation` | Import |
-| `../oscillators/dimensions.js` | `SPRING_CONSTANT` | Import |
 | `../regime.js` | `makeRegime` | Import |
 | `../physjs-ref.js` | `physjsFormalRef` | Import |
 | `../types.js` | `AtlasBridge` | Import (type-only) |
@@ -7801,7 +7800,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89056 |
+| Total Lines of Code | 89045 |
 | Total Exports | 2852 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |

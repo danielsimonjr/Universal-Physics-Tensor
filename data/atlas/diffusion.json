@@ -491,20 +491,8 @@
         "family": "diffusion",
         "inequalities": [],
         "groupDefinitions": {
-          "kappa · rho^-1 · cp^-1 · D^-1": {
-            "exponents": {
-              "D": -1,
-              "cp": -1,
-              "ell": 0,
-              "kappa": 1,
-              "rho": -1,
-              "t": 0
-            },
-            "formula": "kappa · rho^-1 · cp^-1 · D^-1"
-          },
           "kappa · rho^-1 · cp^-1 · ell^-2 · t": {
             "exponents": {
-              "D": 0,
               "cp": -1,
               "ell": -2,
               "kappa": 1,
@@ -564,16 +552,7 @@
       "regime": {
         "family": "diffusion",
         "inequalities": [],
-        "groupDefinitions": {
-          "hbar · m^-1 · D^-1": {
-            "exponents": {
-              "D": -1,
-              "hbar": 1,
-              "m": -1
-            },
-            "formula": "hbar · m^-1 · D^-1"
-          }
-        }
+        "groupDefinitions": {}
       },
       "counterexamples": [
         {
@@ -643,19 +622,8 @@
           }
         ],
         "groupDefinitions": {
-          "gamma · kT^-1 · D": {
-            "exponents": {
-              "D": 1,
-              "gamma": 1,
-              "kT": -1,
-              "m": 0,
-              "t": 0
-            },
-            "formula": "gamma · kT^-1 · D"
-          },
           "m · gamma^-1 · t^-1": {
             "exponents": {
-              "D": 0,
               "gamma": -1,
               "kT": 0,
               "m": 1,
@@ -735,10 +703,8 @@
         "groupDefinitions": {
           "Re": {
             "exponents": {
-              "D": 0,
               "Re": 1,
               "a": 0,
-              "eta": 0,
               "gamma": 0,
               "kT": 0,
               "m": 0,
@@ -746,25 +712,10 @@
             },
             "formula": "Re"
           },
-          "gamma · kT^-1 · D": {
-            "exponents": {
-              "D": 1,
-              "Re": 0,
-              "a": 0,
-              "eta": 0,
-              "gamma": 1,
-              "kT": -1,
-              "m": 0,
-              "t": 0
-            },
-            "formula": "gamma · kT^-1 · D"
-          },
           "m · gamma^-1 · t^-1": {
             "exponents": {
-              "D": 0,
               "Re": 0,
               "a": 0,
-              "eta": 0,
               "gamma": -1,
               "kT": 0,
               "m": 1,
@@ -774,29 +725,14 @@
           },
           "m · gamma^-2 · kT · a^-2": {
             "exponents": {
-              "D": 0,
               "Re": 0,
               "a": -2,
-              "eta": 0,
               "gamma": -2,
               "kT": 1,
               "m": 1,
               "t": 0
             },
             "formula": "m · gamma^-2 · kT · a^-2"
-          },
-          "m · gamma^-4 · kT · eta^2": {
-            "exponents": {
-              "D": 0,
-              "Re": 0,
-              "a": 0,
-              "eta": 2,
-              "gamma": -4,
-              "kT": 1,
-              "m": 1,
-              "t": 0
-            },
-            "formula": "m · gamma^-4 · kT · eta^2"
           }
         }
       },
@@ -971,20 +907,10 @@
           "tau · D · q^2": {
             "exponents": {
               "D": 1,
-              "c": 0,
               "q": 2,
               "tau": 1
             },
             "formula": "tau · D · q^2"
-          },
-          "tau · D^-1 · c^2": {
-            "exponents": {
-              "D": -1,
-              "c": 2,
-              "q": 0,
-              "tau": 1
-            },
-            "formula": "tau · D^-1 · c^2"
           }
         }
       },
