@@ -2918,7 +2918,7 @@ Assessed while repairing the architecture-docs gate on `master` (it was failing;
 - Maintainability: clones 35 near pairs and 4 exact groups before and after; none in the files of this change. Declined in this commit: all, because they predate U9.
 - [x] Review the 35 near clone pairs and 4 exact groups of `repo-tools clones` (none in `src/diff/`).
   Done: the 2026-11-08 five-axis pass below.
-- [ ] File a MathTS issue: `evaluateScalar` and `compileScalarGradient` read a one-argument `-` as the identity. The control in `tests/dimensional/scalar-lowering.test.ts` fails when MathTS fixes it.
+- [x] File a MathTS issue: `evaluateScalar` and `compileScalarGradient` read a one-argument `-` as the identity. The control in `tests/dimensional/scalar-lowering.test.ts` fails when MathTS fixes it.
 
 ## 2026-11-08 — five-axis pass (clone removal)
 
