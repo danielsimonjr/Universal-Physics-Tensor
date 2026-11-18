@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`upt derive` accepts the circuit dimensions (issue 683).** `x:voltage R:resistance` exited 2 with `unknown base dimension 'voltage'`. The table of named dimensions now has `voltage` (V), `capacitance` (F), `inductance` (H), `permittivity` (F/m), `conductance` (S) and `magnetic_flux` (Wb), each read from the SI unit, so no exponent tuple is typed by hand. The unknown-term error now ends with the list of named dimensions, and the `upt derive` help prints the same list. Both read one exported list, `NAMED_DIMENSION_NAMES`, so a new row appears in both. The error keeps its `unknown base dimension '<id>'` prefix. Tests: `tests/dimensional/dimension-spec.test.ts` and `tests/cli/derive-circuit-dims.test.ts`; `tests/cli/golden/help.txt` is regenerated.
+
 ## [15.0.0] - 2026-11-18
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (139 packages). `bun outdated` lists no runtime package. It lists three development packages: `fast-check` 4.10.2 (4.10.3 in range), and `vitest` and `@vitest/coverage-v8` 4.1.12 (5.1.1 latest, a major that `.github/dependabot.yml` ignores until the benches move to vitest 5). This release does not move them. The version is a major because of two breaking entries below: `engines.node` is `>=22.12.0` (was `>=18.0.0`), and `canonicalRetrievalCorpus` stores `expr` in residual form.

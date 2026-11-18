@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
 import {
   parseDimensionSpec,
   DimensionSpecError,
+  NAMED_DIMENSION_NAMES,
 } from '../../src/dimensional/dimension-spec.js';
 import {
   LENGTH,
@@ -142,5 +143,44 @@ describe('named dimensions are projected from one owner, and N and J have names 
   it('N and J bases are reachable by name inside a product', () => {
     expect(parseDimensionSpec('energy/amount').N).toBe(-1);
     expect(parseDimensionSpec('luminous-intensity/area').J).toBe(1);
+  });
+});
+
+describe('circuit named dimensions (issue 683)', () => {
+  // Explicit exponent tuples, so the test does not share a code path with unitDimension.
+  const z = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+  const cases: Array<[string, Record<string, number>]> = [
+    ['voltage', { L: 2, M: 1, T: -3, I: -1 }],
+    ['capacitance', { L: -2, M: -1, T: 4, I: 2 }],
+    ['inductance', { L: 2, M: 1, T: -2, I: -2 }],
+    ['permittivity', { L: -3, M: -1, T: 4, I: 2 }],
+    ['conductance', { L: -2, M: -1, T: 3, I: 2 }],
+    ['magnetic_flux', { L: 2, M: 1, T: -2, I: -1 }],
+  ];
+  for (const [name, exps] of cases) {
+    it(`${name} has the SI exponents`, () => {
+      expect(parseDimensionSpec(name)).toEqual({ ...z, ...exps });
+    });
+  }
+  it('accepts a hyphen spelling and a capital letter', () => {
+    expect(parseDimensionSpec('magnetic-flux')).toEqual(parseDimensionSpec('magnetic_flux'));
+    expect(parseDimensionSpec('Voltage')).toEqual(parseDimensionSpec('voltage'));
+  });
+  it('agrees with the products it must equal', () => {
+    expect(parseDimensionSpec('voltage/current')).toEqual(parseDimensionSpec('resistance'));
+    expect(parseDimensionSpec('charge/voltage')).toEqual(parseDimensionSpec('capacitance'));
+  });
+  it('an unknown term lists the accepted named dimensions, generated from the table', () => {
+    let message = '';
+    try {
+      parseDimensionSpec('zqx');
+    } catch (e) {
+      message = (e as Error).message;
+    }
+    expect(message).toContain("unknown base dimension 'zqx'");
+    expect(message).toContain('named dimensions:');
+    for (const n of ['voltage', 'permittivity', 'resistance']) expect(message).toContain(n);
+    expect(NAMED_DIMENSION_NAMES.length).toBeGreaterThan(30);
+    for (const n of NAMED_DIMENSION_NAMES) expect(message).toContain(n);
   });
 });

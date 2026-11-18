@@ -7,9 +7,11 @@
  *      `mass`, `velocity`, `acceleration`, `force`, `energy`, `power`,
  *      `action`, `frequency`, `temperature`, `entropy`, `charge`, `area`,
  *      `dimensionless`, `density`) and the dimensions of the SI units
- *      `m^3`, `Pa`, `Pa*s`, `ohm`, `T`, `H/m`, `A`, `mol`, `cd` under the
- *      names `volume`, `pressure`, `viscosity`, `resistance`,
- *      `magnetic-field`, `permeability`, `current`, `amount` (or
+ *      `m^3`, `Pa`, `Pa*s`, `ohm`, `T`, `H/m`, `A`, `mol`, `cd`, `V`, `F`, `H`,
+ *      `F/m`, `S`, `Wb` under the names `volume`, `pressure`, `viscosity`,
+ *      `resistance`, `magnetic-field`, `permeability`, `current`, `voltage`,
+ *      `capacitance`, `inductance`, `permittivity`, `conductance`,
+ *      `magnetic-flux`, `amount` (or
  *      `amount-of-substance`), `luminous-intensity`;
  *   2. a fundamental constant by name — `hbar`/`ℏ`, `c`, `G`, `k_B`/`kB`,
  *      `e` (its SI dimension);
@@ -102,7 +104,19 @@ const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
   resistance: unitDimension('ohm'),
   magnetic_field: unitDimension('T'),
   permeability: unitDimension('H/m'),
+  voltage: unitDimension('V'),
+  capacitance: unitDimension('F'),
+  inductance: unitDimension('H'),
+  permittivity: unitDimension('F/m'),
+  conductance: unitDimension('S'),
+  magnetic_flux: unitDimension('Wb'),
 };
+
+/**
+ * The names of the named dimensions, in table order. The unknown-term error and the
+ * `upt derive` help read this list, so a new row appears in both without a second edit.
+ */
+export const NAMED_DIMENSION_NAMES: readonly string[] = Object.keys(NAMED_DIMS);
 
 /**
  * One constant's exact-case spellings, projected from the constant registry.
@@ -207,7 +221,8 @@ function exponentOf(node: FormulaPNode, spec: string): number {
 function unknownTerm(id: string): DimensionSpecError {
   return new DimensionSpecError(
     `unknown base dimension '${id}' (use L M T I Theta N J, a named dimension, a constant name, ` +
-      'or a named product/quotient like power/area)',
+      'or a named product/quotient like power/area); ' +
+      `named dimensions: ${NAMED_DIMENSION_NAMES.join(', ')}`,
   );
 }
 
