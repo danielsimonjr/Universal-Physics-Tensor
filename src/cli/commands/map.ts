@@ -84,6 +84,32 @@ const HUBS_SHOWN = 10;
 /** Flags that add a structure section to the text and --json forms, and mean nothing on a diagram. */
 const STRUCTURE_FLAGS = ['communities', 'cycles', 'rank-hubs'] as const;
 
+const RELATION_TYPES: readonly RelationType[] = [
+  'derivation',
+  'exact-equivalence',
+  'restriction',
+  'approximation',
+  'coarse-graining',
+  'analytic-continuation',
+  'structural-analogy',
+  'deformation-quantization',
+];
+
+const EVIDENCE_TAGS: readonly EvidenceTag[] = [
+  'proposed',
+  'reviewed',
+  'dimension-checked',
+  'convention-checked',
+  'symbolically-checked',
+  'numerically-supported',
+  'formally-proved',
+  'formally-proved-property',
+  'formally-proved-cross-check',
+  'empirically-supported',
+  'contradicted',
+  'unresolved',
+];
+
 const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
         [--equation "TARGET = EXPR" [--equation-only] [--verbose] [--bind-short]
@@ -131,6 +157,8 @@ const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|d
         --route rejects --relation); --evidence=TAG keeps only edges whose
         evidence set, DERIVED from the catalog row at read time, contains that
         tag.
+        TYPE is one of: ${RELATION_TYPES.join(' | ')}.
+        TAG is one of: ${EVIDENCE_TAGS.join(' | ')}.
         ⚠ Filtering changes what a missing overlay means: unfiltered, an edge
         with no overlay is KEPT; filtered, it is DROPPED, because nothing shows
         it satisfies the filter. Those drops are counted and printed separately
@@ -205,32 +233,6 @@ export function neighbourhood(graph: readonly BridgeEdge[], quantity: string, de
   }
   return graph.filter((e) => kept.has(e));
 }
-
-const RELATION_TYPES: readonly RelationType[] = [
-  'derivation',
-  'exact-equivalence',
-  'restriction',
-  'approximation',
-  'coarse-graining',
-  'analytic-continuation',
-  'structural-analogy',
-  'deformation-quantization',
-];
-
-const EVIDENCE_TAGS: readonly EvidenceTag[] = [
-  'proposed',
-  'reviewed',
-  'dimension-checked',
-  'convention-checked',
-  'symbolically-checked',
-  'numerically-supported',
-  'formally-proved',
-  'formally-proved-property',
-  'formally-proved-cross-check',
-  'empirically-supported',
-  'contradicted',
-  'unresolved',
-];
 
 /** Last value of an `attached` flag, or undefined when the flag is absent. */
 function lastValue(flags: ParsedArgs['flags'], name: string): string | undefined {

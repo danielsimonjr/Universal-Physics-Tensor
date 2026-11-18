@@ -13,6 +13,7 @@ import '../helpers/dist.js';
 import { captureMerged } from '../helpers/cli.js';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { ALL_EVIDENCE_TAGS } from '../../dist/relations/types.js';
 
 async function run(args: string[]): Promise<{ code: number; text: string }> {
   const cap = captureMerged();
@@ -134,5 +135,35 @@ describe('upt map --help â€” relation and evidence wording', () => {
     expect(text).not.toMatch(/recorded Atlas relation/);
     expect(text).toMatch(/catalog row records/);
     expect(text).toMatch(/--family\/--observable/);
+  });
+});
+
+describe('upt map --help — accepted filter values', () => {
+  /** The values the validator accepts, read from its own error text. */
+  async function accepted(flag: string): Promise<string[]> {
+    const { code, text } = await run(['map', `--${flag}=zqx`]);
+    expect(code).toBe(1);
+    const m = /\(expected: ([^)]*)\)/.exec(text);
+    expect(m).not.toBeNull();
+    return m![1]!.split(' | ');
+  }
+
+  it('lists every --relation value the validator accepts', async () => {
+    const values = await accepted('relation');
+    expect(values.length).toBeGreaterThanOrEqual(8);
+    const { text } = await run(['map', '--help']);
+    for (const v of values) expect(text).toContain(v);
+  });
+
+  it('lists every --evidence value the validator accepts', async () => {
+    const values = await accepted('evidence');
+    expect(values.length).toBeGreaterThanOrEqual(12);
+    const { text } = await run(['map', '--help']);
+    for (const v of values) expect(text).toContain(v);
+  });
+
+  it('keeps the --evidence list equal to the library tag list', async () => {
+    const values = await accepted('evidence');
+    expect(values).toEqual([...ALL_EVIDENCE_TAGS]);
   });
 });
