@@ -88,10 +88,16 @@ const constantProducts = (regime: Regime, samples: Point[]): number => {
   return groups.length - basis.length;
 };
 
-/** Each bridge with physical samples: free parameters drawn, derived ones computed. */
-const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
+/**
+ * Each bridge with physical samples (free parameters drawn, derived ones
+ * computed) and the group keys that survive the removal. The pin matters where
+ * no group is left: the detectors below pass vacuously on an empty regime, so
+ * the keys say that the inequality groups were kept and nothing else was lost.
+ */
+const CASES: { bridge: AtlasBridge; samples: Point[]; keys: string[] }[] = [
   {
     bridge: BRIDGE_STRING_WAVE,
+    keys: [],
     samples: sample(1, (u) => {
       const F = u(), mu = u();
       return { F, mu, c: Math.sqrt(F / mu) };
@@ -99,6 +105,7 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
   },
   {
     bridge: BRIDGE_TELEGRAPH_WAVE,
+    keys: ['tau · D · q^2'],
     samples: sample(2, (u) => {
       const tau = u(), D = u(), q = u();
       return { tau, D, q, c: Math.sqrt(D / tau) };
@@ -106,6 +113,7 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
   },
   {
     bridge: BRIDGE_KG_OSCILLATOR,
+    keys: [],
     samples: sample(3, (u) => {
       const omega0 = u(), m = u();
       return { omega0, m, k: m * omega0 ** 2 };
@@ -113,6 +121,7 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
   },
   {
     bridge: BRIDGE_HEAT_DIFFUSION,
+    keys: ['kappa · rho^-1 · cp^-1 · ell^-2 · t'],
     samples: sample(4, (u) => {
       const kappa = u(), rho = u(), cp = u(), ell = u(), t = u();
       return { kappa, rho, cp, ell, t, D: kappa / (rho * cp) };
@@ -120,6 +129,7 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
   },
   {
     bridge: BRIDGE_SCHRODINGER_DIFFUSION,
+    keys: [],
     samples: sample(5, (u) => {
       const hbar = u(), m = u();
       return { hbar, m, D: hbar / (2 * m) };
@@ -127,6 +137,7 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
   },
   {
     bridge: BRIDGE_LANGEVIN_DIFFUSION,
+    keys: ['m · gamma^-1 · t^-1'],
     samples: sample(6, (u) => {
       const m = u(), gamma = u(), kT = u(), t = u();
       return { m, gamma, kT, t, D: kT / gamma };
@@ -134,6 +145,7 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
   },
   {
     bridge: BRIDGE_STOKES_EINSTEIN,
+    keys: ['Re', 'm · gamma^-1 · t^-1', 'm · gamma^-2 · kT · a^-2'],
     samples: sample(7, (u) => {
       const m = u(), t = u(), kT = u(), eta = u(), a = u(), Re = u();
       const gamma = 6 * Math.PI * eta * a;
@@ -142,6 +154,7 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
   },
   {
     bridge: BRIDGE_KG_SCHRODINGER,
+    keys: ['c · omega0^-1 · k'],
     samples: sample(8, (u) => {
       // ħ/m = c²/ω₀ is the identification the bridge makes.
       const c = u(), omega0 = u(), k = u(), hbar = u();
@@ -151,10 +164,17 @@ const CASES: { bridge: AtlasBridge; samples: Point[] }[] = [
 ];
 
 describe('waves and diffusion regimes: no derived identity among the groups', () => {
-  for (const { bridge, samples } of CASES) {
+  for (const { bridge, samples, keys } of CASES) {
     it(`${bridge.id}: no group and no product of groups is constant`, () => {
       expect(constantGroups(bridge.regime, samples)).toEqual([]);
       expect(constantProducts(bridge.regime, samples)).toBe(0);
+    });
+
+    it(`${bridge.id}: the group keys are exactly the pinned set, and every inequality names one`, () => {
+      expect(Object.keys(bridge.regime.groupDefinitions).sort()).toEqual([...keys].sort());
+      for (const ineq of bridge.regime.inequalities) {
+        expect(keys).toContain(ineq.group);
+      }
     });
   }
 
@@ -191,8 +211,10 @@ describe('waves and diffusion regimes: no derived identity among the groups', ()
 
   it('control: a constant PRODUCT of free groups is found (pre-fix Stokes–Einstein, γ = 6πηa)', () => {
     // Each of m·kT·η²/γ⁴ and m·kT/(γ²a²) varies with m·kT; their ratio is (6π)^-2.
+    // D is left out on purpose: with D = kT/γ listed, D·γ/kT would be a constant
+    // SINGLE group, and this control exercises the product detector alone.
     const stokes = CASES.find((c) => c.bridge.id === 'ab-stokes-einstein')!.samples;
-    const withEtaAndD = makeRegime(
+    const withEta = makeRegime(
       'diffusion',
       [
         { name: 'm', dim: MASS },
@@ -205,8 +227,8 @@ describe('waves and diffusion regimes: no derived identity among the groups', ()
       [],
       [],
     );
-    expect(constantGroups(withEtaAndD, stokes)).toEqual([]);
-    expect(constantProducts(withEtaAndD, stokes)).toBe(1);
+    expect(constantGroups(withEta, stokes)).toEqual([]);
+    expect(constantProducts(withEta, stokes)).toBe(1);
   });
 
   it('negative control: free c beside F and μ is not reported', () => {
