@@ -21,6 +21,7 @@
     {
       "id": "acdrude-conduct",
       "symbol": "Re σ",
+      "displayUnit": "S/m",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -829,6 +830,7 @@
     {
       "id": "capacitor-voltage-variance",
       "symbol": "⟨v²⟩",
+      "displayUnit": "V^2",
       "dimension": {
         "L": 4,
         "M": 2,
@@ -1047,6 +1049,7 @@
     {
       "id": "clapeyron-slope",
       "symbol": "dP/dT",
+      "displayUnit": "Pa/K",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -1156,6 +1159,7 @@
     {
       "id": "coax-specific",
       "symbol": "C'",
+      "displayUnit": "F/m",
       "dimension": {
         "L": -3,
         "M": -1,
@@ -1890,6 +1894,7 @@
     {
       "id": "debye-heat-capacity",
       "symbol": "C_V",
+      "displayUnit": "J/K",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -2139,6 +2144,7 @@
     {
       "id": "dos2d-states",
       "symbol": "g_2",
+      "displayUnit": "1/(J*m^2)",
       "dimension": {
         "L": -4,
         "M": -1,
@@ -2193,6 +2199,7 @@
     {
       "id": "dos3d-states",
       "symbol": "g_3",
+      "displayUnit": "1/(J*m^3)",
       "dimension": {
         "L": -5,
         "M": -1,
@@ -2321,6 +2328,7 @@
     {
       "id": "einstein-heat-capacity",
       "symbol": "C_V",
+      "displayUnit": "J/K",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -4014,6 +4022,7 @@
     {
       "id": "lorentz-resistivity",
       "symbol": "η",
+      "displayUnit": "ohm*m",
       "dimension": {
         "L": 3,
         "M": 1,
@@ -6176,6 +6185,7 @@
     {
       "id": "shot-noise",
       "symbol": "S_I",
+      "displayUnit": "A^2/Hz",
       "dimension": {
         "L": 0,
         "M": 0,
@@ -6319,6 +6329,7 @@
     {
       "id": "sommerfeld-heat-capacity",
       "symbol": "c_V",
+      "displayUnit": "J/(m^3*K)",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -7070,6 +7081,7 @@
     {
       "id": "thomson-coefficient",
       "symbol": "μ_T",
+      "displayUnit": "V/K",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -7975,6 +7987,7 @@
     {
       "id": "gibbs-isotherm-dg",
       "symbol": "ΔG°",
+      "displayUnit": "J/mol",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -8862,6 +8875,7 @@
     {
       "id": "fourier-slab-flux",
       "symbol": "q",
+      "displayUnit": "W/m^2",
       "dimension": {
         "L": 0,
         "M": 1,
@@ -9201,6 +9215,7 @@
     {
       "id": "joule-thomson-mu",
       "symbol": "μ_{JT}",
+      "displayUnit": "K/Pa",
       "dimension": {
         "L": 1,
         "M": -1,
@@ -9265,6 +9280,7 @@
     {
       "id": "planck-u",
       "symbol": "u_ν",
+      "displayUnit": "J*s/m^3",
       "dimension": {
         "L": -1,
         "M": 1,
@@ -9286,6 +9302,7 @@
     {
       "id": "stefan-sigma",
       "symbol": "σ",
+      "displayUnit": "W/(m^2*K^4)",
       "dimension": {
         "L": 0,
         "M": 1,
@@ -9412,6 +9429,7 @@
     {
       "id": "sackur-entropy",
       "symbol": "S",
+      "displayUnit": "J/K",
       "dimension": {
         "L": 2,
         "M": 1,
@@ -9776,6 +9794,7 @@
     {
       "id": "voltage-noise-density",
       "symbol": "S_V",
+      "displayUnit": "V^2/Hz",
       "dimension": {
         "L": 4,
         "M": 2,
@@ -9831,6 +9850,7 @@
     {
       "id": "thermal-conductivity",
       "symbol": "κ",
+      "displayUnit": "W/(m*K)",
       "dimension": {
         "L": 1,
         "M": 1,

@@ -905,7 +905,7 @@ Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
 
-  upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
+  upt retrieve <claim> [--expr=FILE] [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
         [--embed-model=NAME] [--ollama-url=URL] [--no-vector-cache]
         upt retrieve --fetch-model [--embed-dtype=q8|fp16|fp32] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
@@ -937,15 +937,24 @@ Flags:
         weight file with its size and SHA-256 (as JSON with --json).
         A missing library exits 1 and prints the install hint.
         --embed-model is used with --embed or --fetch-model. A claim is text. It has
-        no expression, so the atlas search accepts nothing: it ranks by structure,
-        and a text claim has none to rank. The command does not invent one. --embed
-        still proposes an order.
-        e.g.  upt retrieve period of a pendulum
+        no expression, so without --expr the atlas search accepts nothing: it ranks
+        by structure, and a text claim has none to rank. The command does not invent
+        one. --embed still proposes an order.
+        --expr=FILE gives the search an expression: an ExprNode JSON file, the format
+        of `upt probe`, with a dimension on each symbol. The search ranks every
+        corpus record by structure. The text output prints the first 10; --json
+        keeps the full list. The claim words may be empty when --expr is given.
+        A FILE that starts with package: is relative to the package root, so the
+        example works from any directory.
+        e.g.  upt retrieve rest energy --expr=package:data/examples/retrieve-mass-energy.json
+              upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed
               upt retrieve --fetch-model
 Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
+  --expr=VALUE
+        An ExprNode JSON file (the format of `upt probe`). A value that starts with package: names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted.
   --embed
         Embed the claim and every corpus record with the chosen backend. Acceptance stays the atlas search. A failure of the embedder still prints that search and exits 0.
   --embed-backend=VALUE

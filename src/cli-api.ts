@@ -78,7 +78,7 @@ export { catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation } from '.
 /** The graph key of a catalog number (`be-<n>`): the one place that spelling is written. */
 export { catalogEdgeKey } from './bridges/catalog-load.js';
 /** `_` written as `-`: the one fold every spelling comparison uses. */
-export { foldName } from './dimensional/quantity-registry.js';
+export { foldName, quantityRecord } from './dimensional/quantity-registry.js';
 /** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
