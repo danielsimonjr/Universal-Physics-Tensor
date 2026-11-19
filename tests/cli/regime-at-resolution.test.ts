@@ -50,6 +50,16 @@ describe('upt regime --at resolution', () => {
     expect(t).toMatch(/ab-stiff-string: valid/);
   });
 
+  it('names a parameter of a group that no inequality references (rho0 in ab-sound-speed)', async () => {
+    // ab-sound-speed defines the group `rho0 · p0^-1 · c^2` but states no inequality on it.
+    // `c` is not a control here: ab-klein-gordon-wave bounds `c · omega0^-1 · k`.
+    const t = await run(['regime', 'waves', '--at', 'rho0=1']);
+    expect(t).toMatch(/ignored coordinate\(s\): rho0 — no regime inequality of family 'waves' depends on it$/m);
+    const env = JSON.parse(await run(['regime', 'waves', '--at', 'rho0=1', '--json']));
+    expect(env.result.unknownCoordinates).toEqual(['rho0']);
+    expect(env.result.resolvedPoint).toEqual({ rho0: 1 });
+  });
+
   it('--json lists the unknown keys and the derived values', async () => {
     const t = await run(['regime', 'diffusion', '--at', 'tau=1', 'D=1', 'q=1', 'Foo=2', '--json']);
     const env = JSON.parse(t);

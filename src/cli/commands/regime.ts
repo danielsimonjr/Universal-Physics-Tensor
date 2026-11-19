@@ -140,10 +140,15 @@ export function resolveAtPoint(
   point: Readonly<Record<string, number>>,
   regimes: readonly { groupDefinitions: Readonly<Record<string, { exponents: Readonly<Record<string, number>> }>>; inequalities: readonly { group: string }[] }[],
 ): { values: Record<string, number>; unknown: string[] } {
+  // Only a group that an inequality references enters the map: a record may
+  // define a group it never bounds, and a key of that group changes no verdict.
   const groups = new Map<string, Readonly<Record<string, number>>>();
   for (const r of regimes) {
-    for (const [key, g] of Object.entries(r.groupDefinitions)) groups.set(key, g.exponents);
-    for (const i of r.inequalities) if (!groups.has(i.group)) groups.set(i.group, { [i.group]: 1 });
+    for (const i of r.inequalities) {
+      const defined = r.groupDefinitions[i.group];
+      if (defined !== undefined) groups.set(i.group, defined.exponents);
+      else if (!groups.has(i.group)) groups.set(i.group, { [i.group]: 1 });
+    }
   }
   const byNormal = new Map([...groups.keys()].map((k) => [normalizeGroup(k), k]));
   const named = new Set<string>([...groups.keys(), ...[...groups.values()].flatMap((e) => Object.keys(e))]);
