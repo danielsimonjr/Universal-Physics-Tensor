@@ -11,7 +11,7 @@ import { splitPrefix, UNIT_DATA } from '../../src/dimensional/unit-data.js';
 import { convertValue, formatReading, isListedProduct, parseUnit, segmentations, UnknownUnitError } from '../../src/dimensional/units.js';
 
 describe('an unlisted glued product is refused', () => {
-  for (const token of ['kgs', 'kmh', 'gm', 'gc', 'Pac', 'cms', 'kms', 'mms', 'zqx', 'zqxs', 'gzqal', 'kgzqx']) {
+  for (const token of ['kgs', 'kmh', 'gm', 'gc', 'gcm', 'Pac', 'cms', 'kms', 'mms', 'zqx', 'zqxs', 'gzqal', 'kgzqx']) {
     it(`parseUnit refuses ${token}`, () => {
       expect(() => parseUnit(token)).toThrow(UnknownUnitError);
       expect(() => parseUnit(token)).toThrow(`unknown unit '${token}'`);
