@@ -84,7 +84,9 @@ const HUBS_SHOWN = 10;
 /** Flags that add a structure section to the text and --json forms, and mean nothing on a diagram. */
 const STRUCTURE_FLAGS = ['communities', 'cycles', 'rank-hubs'] as const;
 
-const RELATION_TYPES: readonly RelationType[] = [
+// RELATION_TYPES and EVIDENCE_TAGS stay above HELP: HELP interpolates them at module load (TDZ).
+// Each list must name every member of its union; the _Missing checks below fail to compile otherwise.
+const RELATION_TYPES = [
   'derivation',
   'exact-equivalence',
   'restriction',
@@ -93,9 +95,9 @@ const RELATION_TYPES: readonly RelationType[] = [
   'analytic-continuation',
   'structural-analogy',
   'deformation-quantization',
-];
+] as const satisfies readonly RelationType[];
 
-const EVIDENCE_TAGS: readonly EvidenceTag[] = [
+const EVIDENCE_TAGS = [
   'proposed',
   'reviewed',
   'dimension-checked',
@@ -108,7 +110,15 @@ const EVIDENCE_TAGS: readonly EvidenceTag[] = [
   'empirically-supported',
   'contradicted',
   'unresolved',
-];
+] as const satisfies readonly EvidenceTag[];
+
+/** A union member absent from its list. `never` while each list is complete. */
+type _MissingRelation = Exclude<RelationType, (typeof RELATION_TYPES)[number]>;
+type _MissingEvidence = Exclude<EvidenceTag, (typeof EVIDENCE_TAGS)[number]>;
+const _relationListComplete: [_MissingRelation] extends [never] ? true : _MissingRelation = true;
+const _evidenceListComplete: [_MissingEvidence] extends [never] ? true : _MissingEvidence = true;
+void _relationListComplete;
+void _evidenceListComplete;
 
 const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]

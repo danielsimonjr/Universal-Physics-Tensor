@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
-- `upt map --help` lists the accepted values of `--relation` and `--evidence` (#688).
+- `upt map --help` lists the accepted values of `--relation` and `--evidence`. A compile-time check fails the build when either list omits a member of its union (#688).
 
 ## [15.0.0] - 2026-11-18
 

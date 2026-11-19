@@ -138,7 +138,7 @@ describe('upt map --help â€” relation and evidence wording', () => {
   });
 });
 
-describe('upt map --help — accepted filter values', () => {
+describe('upt map --help - accepted filter values', () => {
   /** The values the validator accepts, read from its own error text. */
   async function accepted(flag: string): Promise<string[]> {
     const { code, text } = await run(['map', `--${flag}=zqx`]);
