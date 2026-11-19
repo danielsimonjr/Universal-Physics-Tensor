@@ -21,7 +21,7 @@ alone is smaller. `src/` holds 391 TypeScript files, and `bun run docs:deps` cou
 
 | Zone | Files | What lives here |
 |---|---|---|
-| `tests` | 784 | The vitest suite under `tests/` |
+| `tests` | 785 | The vitest suite under `tests/` |
 | `src` | 393 | The library, the CLI and the physics catalog code, plus `bin/upt.mjs` and `test-example.js` |
 | `tools` | 37 | Repository tooling: 18 files under `tools/` and 19 files under `scripts/` |
 | `benchmarks` | 15 | `bench/*.bench.ts` and their fixture, run by `npm run bench` |
@@ -30,7 +30,7 @@ alone is smaller. `src/` holds 391 TypeScript files, and `bun run docs:deps` cou
 | `config` | 1 | `vitest.config.ts` |
 | **Total** | **1233** | |
 
-**Tests outnumber source files: 784 against 393.** The ratio fits a repository whose claims
+**Tests outnumber source files: 785 against 393.** The ratio fits a repository whose claims
 are physical: a wrong number is a wrong prediction, not a cosmetic defect.
 
 ## The two orphans, and why neither is dead code
