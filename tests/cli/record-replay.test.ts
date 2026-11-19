@@ -219,7 +219,7 @@ describe('upt --replay', () => {
     const line = plain[0].stdout.split('\n').findIndex((l) => l.includes('1.6567788e-17')) + 1;
     expect(line).toBeGreaterThan(0);
     const resultLine = plain[0].stdout.split('\n')[line - 1]!;
-    expect(resultLine).toMatch(/^  voltage-noise-density \[kg\^2\*m\^4\/\(s\^5\*A\^2\)\] = 1\.6567788e-17 — /);
+    expect(resultLine).toMatch(/^  voltage-noise-density \[V\^2\/Hz] = 1\.6567788e-17 — /);
     const { code, env } = await replayJson(file);
     expect(code).toBe(3);
     const [first] = env.result.entries;

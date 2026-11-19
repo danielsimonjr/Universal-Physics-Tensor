@@ -28,6 +28,11 @@ export interface QuantityRecord {
   readonly signRole?: SignRole;
   /** Generic quantities that must carry the same number when a caller binds both. */
   readonly agreesWith?: readonly string[];
+  /**
+   * The unit `upt evaluate` prints for a primary output of this quantity (`V^2/Hz`). It parses to
+   * the quantity's dimension at scale 1. Absent: the label is derived from the dimension.
+   */
+  readonly displayUnit?: string;
   readonly graphNode: boolean;
 }
 

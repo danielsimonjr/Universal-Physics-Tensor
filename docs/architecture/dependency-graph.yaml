@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 390
   totalModules: 13
-  totalExports: 2852
+  totalExports: 2854
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6288,6 +6288,9 @@ modules:
             - closedFormRangeLabel
       exports:
         - command
+        - primaryUnitLabel
+      functions:
+        - primaryUnitLabel
       constants:
         - command
     src/cli/commands/explain.ts:
@@ -7721,6 +7724,7 @@ modules:
         - file: ./dimensional/quantity-registry.js
           imports:
             - foldName
+            - quantityRecord
           reExport: true
         - file: ./composition/catalog-graph.js
           imports:
@@ -8296,6 +8300,7 @@ modules:
         - primaryRelation
         - catalogEdgeKey
         - foldName
+        - quantityRecord
         - demonstrationEdges
         - consistencyComparison
         - decidingMeasurement
@@ -8567,6 +8572,7 @@ modules:
         - primaryRelation
         - catalogEdgeKey
         - foldName
+        - quantityRecord
         - demonstrationEdges
         - ConfrontationEntry
         - RigorTier
@@ -19757,15 +19763,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 390
   totalModules: 13
-  totalLinesOfCode: 89057
-  totalExports: 2852
+  totalLinesOfCode: 89072
+  totalExports: 2854
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 934
+  totalFunctions: 935
   totalTypeGuards: 16
   totalEnums: 0
   totalConstants: 421
-  totalReExports: 1405
+  totalReExports: 1406
   totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
