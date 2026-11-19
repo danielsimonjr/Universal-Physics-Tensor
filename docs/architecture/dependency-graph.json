@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2856
+    "totalExports": 2859
   },
   "entryPoints": [
     {
@@ -185,7 +185,8 @@
           {
             "file": "../../canonical/residual.js",
             "imports": [
-              "canonicalResidual"
+              "canonicalResidual",
+              "monomialResidual"
             ]
           },
           {
@@ -7408,6 +7409,14 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/ast-builders.js",
+            "imports": [
+              "dim",
+              "sym",
+              "symbolPower"
+            ]
+          },
+          {
             "file": "./canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -7416,10 +7425,12 @@
           }
         ],
         "exports": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ],
         "functions": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ]
       },
       "src/canonical/seed-l-layer.ts": {
@@ -9218,7 +9229,11 @@
           }
         ],
         "exports": [
-          "command"
+          "command",
+          "primaryUnitLabel"
+        ],
+        "functions": [
+          "primaryUnitLabel"
         ],
         "constants": [
           "command"
@@ -11582,7 +11597,8 @@
           {
             "file": "./dimensional/quantity-registry.js",
             "imports": [
-              "foldName"
+              "foldName",
+              "quantityRecord"
             ],
             "reExport": true
           },
@@ -12464,6 +12480,7 @@
           "primaryRelation",
           "catalogEdgeKey",
           "foldName",
+          "quantityRecord",
           "demonstrationEdges",
           "consistencyComparison",
           "decidingMeasurement",
@@ -12736,6 +12753,7 @@
           "primaryRelation",
           "catalogEdgeKey",
           "foldName",
+          "quantityRecord",
           "demonstrationEdges",
           "ConfrontationEntry",
           "RigorTier",
@@ -28593,15 +28611,15 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89261,
-    "totalExports": 2856,
+    "totalLinesOfCode": 89323,
+    "totalExports": 2859,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 936,
+    "totalFunctions": 938,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1405,
+    "totalReExports": 1406,
     "totalTypeOnlyImports": 534,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

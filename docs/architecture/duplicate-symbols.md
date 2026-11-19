@@ -85,8 +85,8 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalExports | 3907 | `dependency-graph.json` `statistics.totalExports` |
-| totalReExports | 1405 | `dependency-graph.json` `statistics.totalReExports` |
+| totalExports | 3910 | `dependency-graph.json` `statistics.totalExports` |
+| totalReExports | 1406 | `dependency-graph.json` `statistics.totalReExports` |
 
 Both claims count the whole repository. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.
 

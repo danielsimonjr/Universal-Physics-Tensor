@@ -122,7 +122,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../core/compare.js` | `compareCodepoint` | Import |
 | `../../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `../../canonical/residual.js` | `canonicalResidual` | Import |
+| `../../canonical/residual.js` | `canonicalResidual, monomialResidual` | Import |
 | `./baselines.js` | `rankByStructure, CorpusRecord, RetrievalQuery` | Import |
 
 **Exports:**
@@ -2164,10 +2164,11 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/ast-builders.js` | `dim, sym, symbolPower` | Import |
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 
 **Exports:**
-- Functions: `canonicalResidual`
+- Functions: `canonicalResidual`, `monomialResidual`
 
 ---
 
@@ -2711,6 +2712,7 @@ The codebase is organized into the following modules:
 | `../closed-form-range.js` | `closedFormRangeLabel` | Import |
 
 **Exports:**
+- Functions: `primaryUnitLabel`
 - Constants: `command`
 
 ---
@@ -3427,7 +3429,7 @@ The codebase is organized into the following modules:
 | `./bridges/caller-table.js` | `requestCallerTableConfrontation` | Re-export |
 | `./bridges/catalog-load.js` | `catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation` | Re-export |
 | `./bridges/catalog-load.js` | `catalogEdgeKey` | Re-export |
-| `./dimensional/quantity-registry.js` | `foldName` | Re-export |
+| `./dimensional/quantity-registry.js` | `foldName, quantityRecord` | Re-export |
 | `./composition/catalog-graph.js` | `demonstrationEdges` | Re-export |
 | `./bridges/confrontations.js` | `ConfrontationEntry, RigorTier` | Re-export |
 | `./bridges/observations/types.js` | `consistencyComparison` | Re-export |
@@ -3543,12 +3545,12 @@ The codebase is organized into the following modules:
   ANCHOR_DEFAULT, hasMagnitudeEvidence, isPromisingTier, BRIDGE_EQUATIONS, auditCoverage,
   CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution,
   requestCallerTableConfrontation, catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation,
-  catalogEdgeKey, foldName, demonstrationEdges, ConfrontationEntry, RigorTier, consistencyComparison,
-  ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, DuplicateInputError,
-  InputTypeError, isInputContractError, MissingInputError, NonFiniteInputError, UnknownInputError,
-  EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase,
-  CASE_CONTRACTS, slotForSpelling, AppliedCase, CaseCheck, CaseResult, convertValue, UnitError,
-  unitRows, auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination, AXES, AxisSpec,
+  catalogEdgeKey, foldName, quantityRecord, demonstrationEdges, ConfrontationEntry, RigorTier,
+  consistencyComparison, ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge,
+  DuplicateInputError, InputTypeError, isInputContractError, MissingInputError, NonFiniteInputError,
+  UnknownInputError, EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES,
+  runAppliedCase, CASE_CONTRACTS, slotForSpelling, AppliedCase, CaseCheck, CaseResult, convertValue,
+  UnitError, unitRows, auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination, AXES, AxisSpec,
   simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
   scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
   deriveEdgeEvidence, communitiesOf, derivationCycles, rankHubs, CommunityReport, DerivationCycle,
@@ -7820,12 +7822,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89261 |
-| Total Exports | 2856 |
-| Total Re-exports | 1405 |
+| Total Lines of Code | 89323 |
+| Total Exports | 2859 |
+| Total Re-exports | 1406 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 936 |
+| Total Functions | 938 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 534 |
