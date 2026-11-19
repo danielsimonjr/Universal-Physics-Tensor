@@ -165,6 +165,15 @@ describe('upt retrieve --expr', () => {
     expect(text(c)).toContain(missing);
   });
 
+  it('a package: path that leaves the package root is a usage error (exit 2) that names the value', async () => {
+    for (const value of ['package:../zqx.json', 'package:', `package:${resolve(tmpdir(), 'zqx.json')}`]) {
+      const c = captureMerged();
+      expect(await runCli(['retrieve', `--expr=${value}`], c.io), value).toBe(2);
+      expect(text(c), value).toContain(value);
+      expect(text(c), value).toContain('inside the package root');
+    }
+  });
+
   it('--expr alone, with no claim text, is accepted', async () => {
     const c = captureMerged();
     expect(await runCli(['retrieve', `--expr=${exprFile}`], c.io)).toBe(0);

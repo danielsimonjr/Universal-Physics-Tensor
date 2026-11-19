@@ -30,7 +30,7 @@ alone is smaller. `src/` holds 391 TypeScript files, and `bun run docs:deps` cou
 | `config` | 1 | `vitest.config.ts` |
 | **Total** | **1228** | |
 
-**Tests outnumber source files: 772 against 392.** The ratio fits a repository whose claims
+**Tests outnumber source files: 780 against 393.** The ratio fits a repository whose claims
 are physical: a wrong number is a wrong prediction, not a cosmetic defect.
 
 ## The two orphans, and why neither is dead code

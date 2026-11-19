@@ -10,7 +10,7 @@
  * names the reason. That is exit 0.
  */
 import { statSync } from 'node:fs';
-import { join } from 'node:path';
+import { isAbsolute, relative, resolve } from 'node:path';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
@@ -207,11 +207,26 @@ function refuseFileAsCacheDir(): void {
 }
 
 /**
+ * Resolves a `package:` value to a file inside the package root. The prefix names a file the
+ * package ships, so a value that resolves to the root itself, above it, or on another drive is
+ * refused as a usage error: a path outside the package belongs in the plain FILE form.
+ */
+function packageFile(value: string): string {
+  const root = repoRoot();
+  const path = resolve(root, value.slice(PACKAGE_PREFIX.length));
+  const inside = relative(root, path);
+  if (inside === '' || inside.startsWith('..') || isAbsolute(inside)) {
+    throw new UsageError(`upt retrieve: --expr=${value} does not name a file inside the package root`);
+  }
+  return path;
+}
+
+/**
  * Reads the `--expr` file. A value that starts with `package:` is relative to the package root.
  * A file that cannot be read or is not an ExprNode is exit 1 and names the file.
  */
 function loadExpr(api: CommandCtx['api'], value: string): ReturnType<CommandCtx['api']['parseExprJson']> {
-  const path = value.startsWith(PACKAGE_PREFIX) ? join(repoRoot(), value.slice(PACKAGE_PREFIX.length)) : value;
+  const path = value.startsWith(PACKAGE_PREFIX) ? packageFile(value) : value;
   try {
     return api.parseExprJson(path);
   } catch (e) {
