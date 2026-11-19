@@ -306,6 +306,17 @@
             "minItems": 2,
             "maxItems": 2
           },
+          "domains": {
+            "type": "array",
+            "description": "The application domains of the relation, from a closed list that search indexes. mems: the relation models a microfabricated electromechanical device. A record with no domain declares none; the field is optional.",
+            "items": {
+              "enum": [
+                "mems"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
           "status": {
             "enum": [
               "established",

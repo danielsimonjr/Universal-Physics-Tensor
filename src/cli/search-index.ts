@@ -224,6 +224,7 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
         { label: 'id', text: `be ${b.id}`, exact: [key] },
         ...titleAndGloss('name', b.name),
         { label: 'description', text: affirmativeSentences(b.context ?? '') },
+        ...((b.domains ?? []).length > 0 ? [{ label: 'domain', text: (b.domains ?? []).join(' ') }] : []),
         // One field per input, so a phrase does not run from one input's meaning into the next.
         ...(ev?.parameters ?? []).map((p) => ({ label: 'inputs', text: affirmativeClauses(p.meaning) })),
       ],

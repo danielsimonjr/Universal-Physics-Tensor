@@ -2998,6 +2998,9 @@
         "electromagnetic",
         "continuum"
       ],
+      "domains": [
+        "mems"
+      ],
       "status": "established",
       "proofStatus": "full",
       "context": "C = ε0 A/g has dC/dg = −ε0 A/g². Equilibrium of a linear spring against the coenergy force is k(g0−g) = ε0 A V²/(2 g²). The fold of (g0−g) g² is g = 2 g0/3, and the voltage there is V_pi = sqrt(8 k g0³/(27 ε0 A)). g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses.",
@@ -4644,6 +4647,9 @@
       "bridges": [
         "electromagnetic",
         "mechanical"
+      ],
+      "domains": [
+        "mems"
       ],
       "status": "established",
       "proofStatus": "full",
