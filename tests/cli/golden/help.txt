@@ -188,8 +188,10 @@ Flags:
         A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
-        recover the dimensionless prefactor. A target that is not a unique
-        monomial of the variables exits 3. --debug prints the formula parser
+        recover the dimensionless prefactor. With --formula, the check uses
+        only the declared variables that the formula contains. Each other
+        declared variable is named. A target that is not a unique monomial
+        of those variables exits 3. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \
                        --formula "2*pi*sqrt(length/gravity)"
