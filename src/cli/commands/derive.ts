@@ -151,8 +151,26 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (debug) err(`  [parser: ${formulaParserLabel(await api.getFormulaParserKind())}]`);
 
     const checker = await api.getFormulaDimensionChecker();
-    const declared = new Set(governing.map((g) => g.name));
+    // The target is a declared name too: a hyphenated target name stays one symbol.
+    const declared = new Set([target.name, ...governing.map((g) => g.name)]);
     const formulaSymbols = api.rewriteCatalogHyphens(formula, declared);
+    // One parse. A parse error is thrown at the place it was always thrown, after the
+    // dimension check, so every existing error keeps its order.
+    let cf: ReturnType<typeof parser.parse> | undefined;
+    let parseError: unknown;
+    try {
+      cf = parser.parse(formulaSymbols);
+    } catch (e) {
+      parseError = e;
+    }
+    // The formula defines the target, so the target is not one of its inputs. The
+    // dimension checker applies the same rule below, for a formula this parser rejects.
+    const targetSymbol = formulaSymbol(target.name);
+    const targetInFormula = new UsageError(
+      `upt derive: '${target.name}' is the target and cannot appear in its own formula`
+        + (target.name.includes('-') ? '. For a subtraction, write the minus sign with spaces' : ''),
+    );
+    if (cf !== undefined && cf.variables.includes(targetSymbol)) throw targetInFormula;
     const dims = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), g.dim]));
     const r = checker.check(formulaSymbols, dims);
     formulaCheck = r;
@@ -163,6 +181,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       // declares it as an argument. A registered constant is declared as itself (c:c).
       if (r.undeclaredSymbol !== undefined) {
         const sym = r.undeclaredSymbol;
+        if (sym === targetSymbol) throw targetInFormula;
         const asConstant = api.CONSTANTS[sym] === undefined ? '' : ` ${sym}:${sym} for the registered constant, or`;
         // The checker's own sentence first (with the hyphen note when one remains in the
         // formula), then how to declare the symbol. The report above is not printed: an error
@@ -178,12 +197,9 @@ async function run(ctx: CommandCtx): Promise<number> {
       );
     }
 
-    let cf;
-    try {
-      cf = parser.parse(formulaSymbols);
-    } catch (e) {
+    if (cf === undefined) {
       // The parser's message carries its own `parse error:` label.
-      throw new FormulaUsageError('upt derive: --formula: ' + (e as Error).message, await api.getFormulaParserKind());
+      throw new FormulaUsageError('upt derive: --formula: ' + (parseError as Error).message, await api.getFormulaParserKind());
     }
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This
