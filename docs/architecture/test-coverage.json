@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 390,
-    "totalTestFiles": 734,
+    "totalTestFiles": 735,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 10,
@@ -25216,6 +25216,7 @@
       "src/composition/edge.ts",
       "src/composition/quantity.ts"
     ],
+    "tests/config/vitest-hook-timeout.test.ts": [],
     "tests/core/addCell.test.ts": [
       "src/core/tensor.ts",
       "src/core/cell.ts",
