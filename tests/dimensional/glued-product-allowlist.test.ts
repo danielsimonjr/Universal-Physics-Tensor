@@ -2,6 +2,7 @@
  * A glued unit spelling is a product only when its own key is a row of `data/units.json` `products`.
  * A row with `prefixFirst` true also admits a prefix on its first factor. A prefix on a later
  * factor never matches. Thus `kgs` is not k·g·s or kg·s, and `kmh` is not km·h: both are unknown.
+ * A prefixed first factor keeps the spellings the old grammar read: `J/gK`, `J/kgK` and `kJ/kmolK`.
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
@@ -28,7 +29,7 @@ describe('a listed glued product reads as one product', () => {
   const scales: Array<[string, number]> = [
     ['kWh', 3.6e6], ['MWh', 3.6e9], ['GWh', 3.6e12], ['mWh', 3.6], ['mAh', 3.6], ['kNm', 1e3], ['kNs', 1e3],
     ['Pas', 1], ['mPas', 1e-3], ['mAs', 1e-3], ['kVA', 1e3], ['W/m2K', 1], ['W/µmK', 1e6], ['W/μmK', 1e6],
-    ['W/umK', 1e6], ['J/kgK', 1], ['J/molK', 1], ['cm^2/Vs', 1e-4], ['mmK', 1e-3], ['cmK', 1e-2],
+    ['W/umK', 1e6], ['J/kgK', 1], ['J/gK', 1e3], ['J/mgK', 1e6], ['J/molK', 1], ['kJ/kmolK', 1], ['J/mmolK', 1e3], ['cm^2/Vs', 1e-4], ['mmK', 1e-3], ['cmK', 1e-2],
   ];
   for (const [token, scale] of scales) {
     it(`${token} has scale ${scale}`, () => {

@@ -135,16 +135,6 @@ function dimension(d: DimensionFile): Dimension {
   };
 }
 
-/** True when `symbol` is a prefix of `prefixes` followed by a prefixable unit of `units`. */
-function hasPrefixedUnit(symbol: string, units: ReadonlyMap<string, UnitRow>, prefixes: ReadonlyMap<string, ExactScale>): boolean {
-  for (const prefix of prefixes.keys()) {
-    if (!symbol.startsWith(prefix) || symbol.length === prefix.length) continue;
-    const row = units.get(symbol.slice(prefix.length));
-    if (row !== undefined && row.prefixable) return true;
-  }
-  return false;
-}
-
 /**
  * Validate and read `text`, the contents of `data/units.json`, against `schema`.
  * Throws on a file the schema or the table rules reject. A test passes a broken copy.
@@ -228,10 +218,9 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
   const products = new Map<string, boolean>();
   for (const { factors, prefixFirst } of file.products.rows) {
     const bases = factors.split('·');
-    // A base is an exact unit. A row that permits no prefix may also name a prefixed unit (`kg`).
+    // Every base is an exact unit; a prefixed spelling (`kg`) reaches a row through `prefixFirst`.
     for (const base of bases) {
-      const known = units.has(base) || (!prefixFirst && hasPrefixedUnit(base, units, prefixes));
-      if (!known) throw new Error(`data/units.json: product '${factors}' names '${base}', which is not an exact unit`);
+      if (!units.has(base)) throw new Error(`data/units.json: product '${factors}' names '${base}', which is not an exact unit`);
     }
     if (bases.length < 2) throw new Error(`data/units.json: product '${factors}' has fewer than two factors`);
     if (prefixFirst && units.get(bases[0]!)?.prefixable !== true) {

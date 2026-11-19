@@ -1117,8 +1117,8 @@
       { "factors": "Ω·m", "prefixFirst": true, "comment": "an ohm-metre: `Ωm`" },
       { "factors": "m·K", "prefixFirst": true, "comment": "metre-kelvin: `W/mK`, `W/m2K`, `m2K`, `mmK`, `cmK`, `W/µmK`; every exponent on either factor" },
       { "factors": "m·s", "prefixFirst": false, "comment": "metre-second: `kg/ms`; no prefix, so `kms` and `mms` stay unknown" },
-      { "factors": "kg·K", "prefixFirst": false, "comment": "kilogram-kelvin: `J/kgK`" },
-      { "factors": "mol·K", "prefixFirst": false, "comment": "mole-kelvin: `J/molK`" }
+      { "factors": "g·K", "prefixFirst": true, "comment": "gram-kelvin: `J/gK`, `J/kgK`, `J/mgK`" },
+      { "factors": "mol·K", "prefixFirst": true, "comment": "mole-kelvin: `J/molK`, `kJ/kmolK`, `J/mmolK`" }
     ]
   },
   "affine": {

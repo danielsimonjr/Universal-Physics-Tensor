@@ -126,8 +126,8 @@ describe('a unit file that breaks a rule does not load', () => {
     expect(() => readUnitFile(edited((f) => f.products.rows.push(row('zqx·s', false))), schema)).toThrow(/names 'zqx'/);
     expect(() => readUnitFile(edited((f) => f.products.rows.push({ ...f.products.rows[0]! })), schema)).toThrow(/listed twice/);
     expect(() => readUnitFile(edited((f) => f.products.rows.push(row('nat·s', true))), schema)).toThrow(/'nat' is not prefixable/);
-    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('kg·zqx', false))), schema)).toThrow(/names 'zqx'/);
-    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('kg·s', true))), schema)).toThrow(/names 'kg'/);
+    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('g·zqx', false))), schema)).toThrow(/names 'zqx'/);
+    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('kg·s', false))), schema)).toThrow(/names 'kg'/);
     expect(() => readUnitFile(edited((f) => delete (f.products.rows[0] as Partial<{ prefixFirst: boolean }>).prefixFirst), schema)).toThrow(/prefixFirst/);
   });
 
