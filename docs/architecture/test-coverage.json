@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 390,
-    "totalTestFiles": 734,
+    "totalTestFiles": 735,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 10,
@@ -3047,7 +3047,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/audit.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3155,7 +3156,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/axes.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3263,7 +3265,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/candidates.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3371,7 +3374,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/canonical.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3479,7 +3483,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/chain.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3587,7 +3592,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/confront.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3695,7 +3701,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/connectors.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3803,7 +3810,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/coverage.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -3911,7 +3919,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/derive.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4019,7 +4028,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/discover.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4127,7 +4137,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/eval.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4235,7 +4246,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/evaluate.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4344,7 +4356,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/explain.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4452,7 +4465,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/frontier.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4560,7 +4574,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/ground.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4668,7 +4683,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/index.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4776,7 +4792,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/map.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4884,7 +4901,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/metric.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -4992,7 +5010,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/path.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5101,7 +5120,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/predict.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5209,7 +5229,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/priority.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5317,7 +5338,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/probe.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5426,7 +5448,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/recover.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5534,7 +5557,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/regime.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5642,7 +5666,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/retrieve.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5750,7 +5775,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/search.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5858,7 +5884,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/symbolic.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -5966,7 +5993,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/commands/testplan.ts": [
       "tests/atlas/catalog-proof-status.test.ts",
@@ -6074,7 +6102,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/conventions.ts": [],
     "src/cli/determination.ts": [],
@@ -6210,7 +6239,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/map-evidence.ts": [
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -10242,6 +10272,7 @@
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
+      "tests/dimensional/glued-product-allowlist.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-override-parsec.test.ts",
@@ -10678,11 +10709,13 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
+      "tests/dimensional/glued-product-allowlist.test.ts",
       "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/internal/clone-helpers.test.ts"
     ],
@@ -10722,6 +10755,7 @@
       "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts",
       "tests/dimensional/m6-splitter-refusal.test.ts",
       "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
@@ -13298,7 +13332,8 @@
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/evaluate-boundary.test.ts",
       "tests/composition/evaluation-result.test.ts",
-      "tests/dimensional/derive-grammar.test.ts"
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts"
     ],
     "src/cli/map-evidence.ts": [
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -14405,6 +14440,7 @@
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/mathts-unit-wrapper.ts": [
+      "tests/dimensional/glued-product-allowlist.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-override-parsec.test.ts",
@@ -14702,11 +14738,13 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/unit-data.ts": [
+      "tests/dimensional/glued-product-allowlist.test.ts",
       "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/unit-grammar.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/internal/clone-helpers.test.ts"
     ],
@@ -14722,6 +14760,7 @@
       "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
+      "tests/dimensional/glued-product-allowlist.test.ts",
       "tests/dimensional/m6-splitter-refusal.test.ts",
       "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
@@ -25839,6 +25878,41 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/types.ts"
     ],
+    "tests/dimensional/glued-product-allowlist.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/dimensional/mathts-unit-wrapper.ts",
+      "src/dimensional/unit-data.ts",
+      "src/dimensional/units.ts"
+    ],
     "tests/dimensional/hyphen-names-corpus.test.ts": [
       "src/dimensional/hyphen-names.ts",
       "src/bridges/catalog-load.ts",
@@ -26145,6 +26219,7 @@
       "src/dimensional/algebra.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/units.ts",
+      "src/dimensional/unit-data.ts",
       "src/dimensional/types.ts"
     ],
     "tests/dimensional/unit-override-parsec.test.ts": [
