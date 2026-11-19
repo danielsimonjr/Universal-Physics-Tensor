@@ -37,8 +37,15 @@ describe('upt regime --at resolution', () => {
 
   it('names a key that no record in the family uses', async () => {
     const t = await run(['regime', 'diffusion', '--at', 'Re=1000', 'Foo=2']);
-    expect(t).toMatch(/unknown coordinate\(s\): Foo — no record in family 'diffusion' uses it; ignored/);
+    expect(t).toMatch(/unknown coordinate\(s\): Foo — no regime inequality of family 'diffusion' depends on it; ignored/);
     expect(t).not.toMatch(/unknown coordinate\(s\):.*Re/);
+  });
+
+  it('names a declared parameter that no regime inequality depends on (mu in ab-stiff-string)', async () => {
+    const t = await run(['regime', 'waves', '--at', 'F=100', '--at', 'EI=0.01', '--at', 'k=5', '--at', 'mu=0.01']);
+    expect(t).toMatch(/unknown coordinate\(s\): mu — no regime inequality of family 'waves' depends on it; ignored/);
+    expect(t).not.toMatch(/no record in family/);
+    expect(t).toMatch(/ab-stiff-string: valid/);
   });
 
   it('--json lists the unknown keys and the derived values', async () => {

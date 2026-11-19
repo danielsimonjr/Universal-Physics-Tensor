@@ -131,7 +131,8 @@ const normalizeGroup = (name: string): string => name.replace(/\s+/g, '').replac
  * `*` read as `·`, so `tau*D*q^2` reaches the group `tau · D · q^2`. A group
  * whose parameters are all given, and which the point does not state itself, is
  * derived from them: the product of each parameter to its exponent. `unknown`
- * lists the keys that are neither a group nor a parameter of any regime here.
+ * lists the keys that enter no regime inequality here: neither a group nor a
+ * parameter with a nonzero exponent in one.
  * @internal
  */
 export function resolveAtPoint(
@@ -362,7 +363,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   );
   if (unknown.length > 0) {
     out(
-      `unknown coordinate(s): ${unknown.join(', ')} — no record in family '${registration.name}' uses ` +
+      `unknown coordinate(s): ${unknown.join(', ')} — no regime inequality of family '${registration.name}' depends on ` +
         `${unknown.length === 1 ? 'it' : 'them'}; ignored`,
     );
   }
