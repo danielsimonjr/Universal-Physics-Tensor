@@ -363,8 +363,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   );
   if (unknown.length > 0) {
     out(
-      `unknown coordinate(s): ${unknown.join(', ')} — no regime inequality of family '${registration.name}' depends on ` +
-        `${unknown.length === 1 ? 'it' : 'them'}; ignored`,
+      `ignored coordinate(s): ${unknown.join(', ')} — no regime inequality of family '${registration.name}' depends on ` +
+        `${unknown.length === 1 ? 'it' : 'them'}`,
     );
   }
   for (const { flag, d } of unmatched) {

@@ -5,7 +5,7 @@
  * supplied)": only the exact display string "tau · D · q^2=1", with its middle dots, reached the
  * check. And an unknown key such as `Foo=2` was dropped silently. Now: a group value is derived
  * from its parameters when they are all given; `*` is accepted for `·` and spaces are ignored;
- * and any key no record uses is named.
+ * and any key that no regime inequality depends on is named as ignored.
  */
 import '../helpers/dist.js';
 import { describe, it, expect } from 'vitest';
@@ -35,16 +35,18 @@ describe('upt regime --at resolution', () => {
     expect(t).toMatch(/\[bridge\] ab-telegraph-diffusion: valid/);
   });
 
-  it('names a key that no record in the family uses', async () => {
+  it('names a key that no regime inequality of the family depends on', async () => {
     const t = await run(['regime', 'diffusion', '--at', 'Re=1000', 'Foo=2']);
-    expect(t).toMatch(/unknown coordinate\(s\): Foo — no regime inequality of family 'diffusion' depends on it; ignored/);
-    expect(t).not.toMatch(/unknown coordinate\(s\):.*Re/);
+    expect(t).toMatch(/ignored coordinate\(s\): Foo — no regime inequality of family 'diffusion' depends on it$/m);
+    expect(t).not.toMatch(/ignored coordinate\(s\):.*Re/);
+    expect(t).not.toMatch(/unknown coordinate/);
   });
 
   it('names a declared parameter that no regime inequality depends on (mu in ab-stiff-string)', async () => {
     const t = await run(['regime', 'waves', '--at', 'F=100', '--at', 'EI=0.01', '--at', 'k=5', '--at', 'mu=0.01']);
-    expect(t).toMatch(/unknown coordinate\(s\): mu — no regime inequality of family 'waves' depends on it; ignored/);
+    expect(t).toMatch(/ignored coordinate\(s\): mu — no regime inequality of family 'waves' depends on it$/m);
     expect(t).not.toMatch(/no record in family/);
+    expect(t).not.toMatch(/unknown coordinate/);
     expect(t).toMatch(/ab-stiff-string: valid/);
   });
 
