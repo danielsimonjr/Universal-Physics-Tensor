@@ -3,10 +3,10 @@
     "totalSourceFiles": 390,
     "totalTestFiles": 733,
     "testedCount": 380,
-    "directlyTestedCount": 348,
+    "directlyTestedCount": 349,
     "untestedCount": 10,
     "coveragePercent": "97.4",
-    "directCoveragePercent": "89.2"
+    "directCoveragePercent": "89.5"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
@@ -661,6 +661,7 @@
     "src/dimensional/ast-builders.ts",
     "src/dimensional/ast-leaves.ts",
     "src/dimensional/ast-types.ts",
+    "src/dimensional/bridge-check.ts",
     "src/dimensional/buckingham.ts",
     "src/dimensional/connection-validators.ts",
     "src/dimensional/connection.ts",
@@ -1796,6 +1797,7 @@
       "tests/bridges/confrontation-registry.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/orphan-dimensional-signature.test.ts",
@@ -1842,6 +1844,7 @@
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/bridges/shared-input-spellings.test.ts",
@@ -2050,6 +2053,7 @@
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
       "tests/bridges/domain-violations.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -2233,6 +2237,7 @@
       "tests/bridges/confrontation-registry.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/orphan-dimensional-signature.test.ts",
@@ -2503,6 +2508,7 @@
       "tests/bridges/confrontation-registry.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/orphan-dimensional-signature.test.ts",
@@ -8823,6 +8829,7 @@
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
       "tests/bridges/evaluators.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/orphan-dimensional-signature.test.ts",
@@ -9671,6 +9678,7 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/hand-built-evaluator.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/bridges/shared-input-spellings.test.ts",
@@ -12687,7 +12695,8 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/bridges/catalog-adapter.ts": [
-      "tests/bridges/catalog-adapter.test.ts"
+      "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts"
     ],
     "src/bridges/catalog-load.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
@@ -12834,6 +12843,7 @@
       "tests/bridges/confrontation-registry.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
+      "tests/bridges/expected-dimension-census.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/orphan-dimensional-signature.test.ts",
       "tests/bridges/overlay-registry-quote.test.ts",
@@ -14289,7 +14299,9 @@
       "tests/numerical/one-function-table.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
     ],
-    "src/dimensional/bridge-check.ts": [],
+    "src/dimensional/bridge-check.ts": [
+      "tests/bridges/expected-dimension-census.test.ts"
+    ],
     "src/dimensional/buckingham.ts": [
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/canonical/dimensional-classics.test.ts",
@@ -16978,6 +16990,15 @@
       "src/core/constants.ts",
       "src/cases/index.ts",
       "src/cases/types.ts"
+    ],
+    "tests/bridges/expected-dimension-census.test.ts": [
+      "src/bridges/index.ts",
+      "src/bridges/types.ts",
+      "src/core/constants.ts",
+      "src/bridges/carrier-sign.ts",
+      "src/bridges/evaluation-errors.ts",
+      "src/bridges/catalog-adapter.ts",
+      "src/dimensional/bridge-check.ts"
     ],
     "tests/bridges/expr-parse-memo.test.ts": [
       "src/bridges/expr-parse.ts"
