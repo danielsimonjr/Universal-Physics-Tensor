@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 390 |
-| Total Test Files | 734 |
+| Total Test Files | 735 |
 | Source files imported directly by a test | 349 |
 | Source files reached directly or through a barrel or side-effect import | 380 |
 | Source files no test reaches either way | 10 |
@@ -892,6 +892,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `composition/suggest-ranking.test.ts` | 2 files |
 | `composition/symbolic-constants-extra.test.ts` | 1 files |
 | `composition/user-equation.test.ts` | 6 files |
+| `config/vitest-hook-timeout.test.ts` | 0 files |
 | `core/addCell.test.ts` | 4 files |
 | `core/assignment.test.ts` | 1 files |
 | `core/axes-registry.test.ts` | 1 files |

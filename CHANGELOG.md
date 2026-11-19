@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- `vitest.config.ts` sets `hookTimeout` to the same 60 s as `testTimeout`. Hooks kept the 10 s default, so the `beforeAll` hooks that start the CLI as a subprocess failed with `Hook timed out in 10000ms` under CPU load (#716). `tests/config/vitest-hook-timeout.test.ts` loads the resolved config object and checks `hookTimeout` equals `testTimeout`.
+
 - **Every bridge catalog row now carries `dimension` (#706).** Rows 51 and 52 had no `dimension` object, so the dimensional-consistency check skipped them with an info note. The catalog schema now requires `dimension` on each entry, with all seven SI base exponents as integers, so the catalog does not load when a row has no dimension or an incomplete one. Both rows record the dimensionless vector. A census test checks that the loaded expected-dimension table has one entry for each catalog row, and that the dimension rule skips no row.
 - The `upt map` filter line names the set its total counts. It reads "1 of 10 bridges in this view (5 filed under oscillators, 5 filed elsewhere that touch its models) kept" for `--family`, and "N of M bridges that preserve or translate 'X' kept" for `--observable`. The line said "of 10 bridges" and gave no set name, so it looked like a conflict with the atlas total (20) and with `upt atlas` (5). The `--json` output has a new field `filter.scope` that holds the same set name (additive) (#695).
 - `upt map --help` lists the accepted values of `--relation` and `--evidence`. A compile-time check fails the build when either list omits a member of its union (#688).
