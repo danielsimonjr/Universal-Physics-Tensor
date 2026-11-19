@@ -27,6 +27,8 @@ describe('eval refuses a formula that is not homogeneous under the binding dimen
     ['x+y', ['x=1m', 'y=1s', 'E=5']],
     // An unbound `e` is the elementary charge: mixed with a length it is a mismatch.
     ['x+e', ['x=1m']],
+    // A bound e with a charge unit is a real charge: mixed with a length it is a mismatch.
+    ['x+e', ['x=1m', 'e=1C']],
     ['atan2(x,y)', ['x=1m', 'y=1s']],
     // A synonym spelling reads the dimension of its bound name.
     ['temperature+x', ['T=300K', 'x=1m']],
