@@ -122,7 +122,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../core/compare.js` | `compareCodepoint` | Import |
 | `../../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `../../canonical/residual.js` | `canonicalResidual` | Import |
+| `../../canonical/residual.js` | `canonicalResidual, monomialResidual` | Import |
 | `./baselines.js` | `rankByStructure, CorpusRecord, RetrievalQuery` | Import |
 
 **Exports:**
@@ -2164,10 +2164,11 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/ast-builders.js` | `dim, sym, symbolPower` | Import |
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 
 **Exports:**
-- Functions: `canonicalResidual`
+- Functions: `canonicalResidual`, `monomialResidual`
 
 ---
 
@@ -7820,12 +7821,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89255 |
-| Total Exports | 2856 |
+| Total Lines of Code | 89286 |
+| Total Exports | 2857 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 936 |
+| Total Functions | 937 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 534 |

@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 391
   totalModules: 13
-  totalExports: 2856
+  totalExports: 2857
 entryPoints:
   - file: src/index.ts
     type: main
@@ -123,6 +123,7 @@ modules:
         - file: ../../canonical/residual.js
           imports:
             - canonicalResidual
+            - monomialResidual
         - file: ./baselines.js
           imports:
             - rankByStructure
@@ -5103,14 +5104,21 @@ modules:
           imports:
             - ExprNode
           typeOnly: true
+        - file: ../dimensional/ast-builders.js
+          imports:
+            - dim
+            - sym
+            - symbolPower
         - file: ./canonical-equation.js
           imports:
             - CanonicalEquation
           typeOnly: true
       exports:
         - canonicalResidual
+        - monomialResidual
       functions:
         - canonicalResidual
+        - monomialResidual
     src/canonical/seed-l-layer.ts:
       description: Seed the canonical-equation registry into the tensor's L-layer (Π = L + B + E)
       externalDependencies: []
@@ -19801,11 +19809,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89255
-  totalExports: 2856
+  totalLinesOfCode: 89286
+  totalExports: 2857
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 936
+  totalFunctions: 937
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 423
