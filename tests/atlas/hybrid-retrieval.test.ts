@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { dim, sym, symbolPower } from '../../src/dimensional/ast-builders.js';
+import { dim, sym } from '../../src/dimensional/ast-builders.js';
 import type { ExprNode } from '../../src/dimensional/ast-types.js';
 import { rankBySymbolOverlap, rankByStructure, type CorpusRecord, type RetrievalQuery } from '../../src/atlas/benchmark/baselines.js';
 import {
@@ -31,9 +31,12 @@ import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import { validate } from '../../src/dimensional/validator.js';
 import { parseCatalogExpression } from '../../src/bridges/expr-parse.js';
 
-const COLLISION_GROUP_SIZES_AFTER: number[] = [2, 2, 2, 2]; // before this change: also [2, 2, 2, 2]
 import { leakageKey } from '../../src/atlas/benchmark/leakage.js';
 import { queryInput as registeredQueryInput } from '../../tools/criterion3-study/embedding.js';
+
+// Before the monomial record used '/': [2, 2, 2, 2]. The fifth pair is CE-compton-wavelength with
+// CE-compton-wavelength-full: one relation, hbar/(m c) against h/(m c), and the key drops the constant.
+const COLLISION_GROUP_SIZES_AFTER: number[] = [2, 2, 2, 2, 2];
 
 const L = dim(1);
 const T = dim(0, 0, 1);
@@ -318,7 +321,7 @@ describe('canonicalRetrievalCorpus: residual form', () => {
     expect(missing.sort()).toEqual(neither.sort());
   });
 
-  it('a monomial record is target - product of governing^exponent: same symbols, same exponents, valid dimension', () => {
+  it('a monomial record is target - (numerator / denominator) of governing powers: same symbols, same exponents, valid dimension', () => {
     const corpus = canonicalRetrievalCorpus();
     const monomialOnly = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined && e.dimensional.monomial !== null);
     expect(monomialOnly.length).toBeGreaterThan(0);
@@ -327,13 +330,19 @@ describe('canonicalRetrievalCorpus: residual form', () => {
       if (expr.kind !== 'op' || expr.op !== '-') throw new Error(`${entry.id}: not a residual`);
       expect(expr.args[0]).toEqual({ kind: 'symbol', name: entry.dimensional.target.name, dim: entry.dimensional.target.dim });
       const exponents: Record<string, number> = {};
-      const walk = (n: ExprNode): void => {
-        if (n.kind === 'symbol') exponents[n.name] = 1;
-        else if (n.kind === 'op' && n.op === '*') n.args.forEach(walk);
+      const walk = (n: ExprNode, sign = 1): void => {
+        if (n.kind === 'symbol') {
+          if (n.name !== '1') exponents[n.name] = sign;
+        }
+        else if (n.kind === 'op' && n.op === '*') n.args.forEach((a) => walk(a, sign));
+        else if (n.kind === 'op' && n.op === '/') {
+          walk(n.args[0]!, sign);
+          walk(n.args[1]!, -sign);
+        }
         else if (n.kind === 'op' && n.op === '^') {
           const [b, x] = n.args;
           if (b!.kind !== 'symbol' || x!.kind !== 'symbol') throw new Error(`${entry.id}: bad power`);
-          exponents[b.name] = Number(x.name);
+          exponents[b.name] = sign * Number(x.name);
         } else throw new Error(`${entry.id}: unexpected node`);
       };
       walk(expr.args[1]!);
@@ -351,42 +360,41 @@ describe('canonicalRetrievalCorpus: residual form', () => {
     }
   });
 
-  describe('README pendulum query', () => {
+  describe('a parsed claim key-matches its monomial record', () => {
     const pendulum = 'CE-pendulum-period';
-    const T = sym('T', dim(0, 0, 1));
-    const L = sym('L', dim(1));
-    const g = sym('g', dim(1, 0, -2));
-    const relation = (rhs: ExprNode): ExprNode => ({ kind: 'op', op: '-', args: [T, rhs] }) as ExprNode;
-    const times = (a: ExprNode, b: ExprNode): ExprNode => ({ kind: 'op', op: '*', args: [a, b] }) as ExprNode;
+    const dims: Record<string, ReturnType<typeof dim>> = {
+      T: dim(0, 0, 1),
+      L: dim(1),
+      g: dim(1, 0, -2),
+      a: dim(1),
+      G: dim(3, -1, -2),
+      M: dim(0, 1),
+    };
     // Retype the dimensionless stubs the parser makes, so a parsed claim carries the dimensions of its names.
     const retype = (n: ExprNode): ExprNode => {
-      const dims: Record<string, ReturnType<typeof dim>> = { T: dim(0, 0, 1), L: dim(1), g: dim(1, 0, -2) };
       if (n.kind === 'symbol') return n.name in dims ? { ...n, dim: dims[n.name]! } : n;
       if (n.kind === 'op') return { ...n, args: n.args.map(retype) };
       return n;
     };
-    const parsed = (rhs: string): ExprNode => relation(retype(parseCatalogExpression(rhs)));
+    const parsed = (rhs: string): ExprNode =>
+      ({ kind: 'op', op: '-', args: [sym('T', dims.T!), retype(parseCatalogExpression(rhs))] }) as ExprNode;
+    const first = (expr: ExprNode): string | undefined => rankByStructure({ text: '', expr }, canonicalRetrievalCorpus())[0];
     const record = (): CorpusRecord => canonicalRetrievalCorpus().find((r) => r.id === pendulum)!;
 
-    it('a claim in the record form T = L^0.5 * g^-0.5 ranks CE-pendulum-period first by structure', () => {
-      const q = relation(times(symbolPower(L, 0.5), symbolPower(g, -0.5)));
-      expect(rankByStructure({ text: '', expr: q }, canonicalRetrievalCorpus())[0]).toBe(pendulum);
+    it('T = sqrt(L)/sqrt(g) ranks CE-pendulum-period first by structure', () => {
+      expect(first(parsed('sqrt(L)/sqrt(g)'))).toBe(pendulum);
     });
 
-    it('control: the inverted relation T = L^-0.5 * g^0.5 does not key-match CE-pendulum-period', () => {
-      const q = relation(times(symbolPower(L, -0.5), symbolPower(g, 0.5)));
-      expect(leakageKey(record().expr!)).not.toBe(leakageKey(q));
+    it('T = 2*pi*sqrt(L)/sqrt(g) ranks CE-pendulum-period first: the key drops the constant', () => {
+      expect(first(parsed('2*pi*sqrt(L)/sqrt(g)'))).toBe(pendulum);
     });
 
-    it('the key drops the constant: 2*pi*sqrt(L/g) and sqrt(L/g) have one key', () => {
-      expect(leakageKey(parsed('2*pi*sqrt(L/g)'))).toBe(leakageKey(parsed('sqrt(L/g)')));
+    it('Kepler T = a^1.5/(sqrt(G)*sqrt(M)) ranks CE-kepler-third first by structure', () => {
+      expect(first(parsed('a^1.5/(sqrt(G)*sqrt(M))'))).toBe('CE-kepler-third');
     });
 
-    // KNOWN GAP, not fixed here: the key does not rewrite (L/g)^0.5 as L^0.5 * g^-0.5, so the README
-    // formula as a user writes it does not key-match, although its relation is the same. The gap is in
-    // `normalForm`, not in the corpus. This test records it, and it must change when `normalForm` does.
-    it('known gap: the README formula as parsed does not key-match the record', () => {
-      expect(leakageKey(parsed('2*pi*sqrt(L/g)'))).not.toBe(leakageKey(record().expr!));
+    it('control: the inverted relation T = sqrt(g)/sqrt(L) does not key-match CE-pendulum-period', () => {
+      expect(leakageKey(record().expr!)).not.toBe(leakageKey(parsed('sqrt(g)/sqrt(L)')));
     });
   });
 

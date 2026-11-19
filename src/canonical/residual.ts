@@ -34,23 +34,30 @@ export function canonicalResidual(e: CanonicalEquation): ExprNode | undefined {
 }
 
 /**
- * The residual `target − ∏ governing^exponent` built from the L0 monomial of an entry, or
- * `undefined` when the entry has no monomial. It serves an entry that has no `scalarAst`: the
- * monomial fixes every exponent but not the leading constant, so the residual keeps the exponents
- * and claims no constant. Exponents are decimal literals, the form `pow(x, '0.5')` uses.
+ * The residual `target − (numerator / denominator)` built from the L0 monomial of an entry, or
+ * `undefined` when the entry has no monomial. The numerator is the product of `governing^e` for each
+ * exponent e > 0, and the denominator is the product of `governing^|e|` for each exponent e < 0.
+ * Every exponent is positive, so the record has the form that the parser gives for a claim that a
+ * user writes (`sqrt(L)/sqrt(g)` parses as `L^0.5 / g^0.5`, not as `L^0.5 · g^-0.5`). An empty
+ * denominator is omitted, and an empty numerator is `1`. It serves an entry that has no
+ * `scalarAst`: the monomial fixes every exponent but not the leading constant, so the residual keeps
+ * the exponents and claims no constant. Exponents are decimal literals, the form `pow(x, '0.5')` uses.
  *
  * @internal
  */
 export function monomialResidual(e: CanonicalEquation): ExprNode | undefined {
   const monomial = e.dimensional.monomial;
   if (monomial === null) return undefined;
-  const factors: ExprNode[] = [];
+  const num: ExprNode[] = [];
+  const den: ExprNode[] = [];
   for (const g of e.dimensional.governing) {
     const exponent = monomial[g.name];
-    if (exponent !== undefined && exponent !== 0) factors.push(symbolPower(sym(g.name, g.dim), exponent));
+    if (exponent === undefined || exponent === 0) continue;
+    (exponent > 0 ? num : den).push(symbolPower(sym(g.name, g.dim), Math.abs(exponent)));
   }
-  const rhs: ExprNode =
-    factors.length === 0 ? sym('1', dim()) : factors.length === 1 ? factors[0]! : { kind: 'op', op: '*', args: factors };
+  const product = (fs: ExprNode[]): ExprNode =>
+    fs.length === 0 ? sym('1', dim()) : fs.length === 1 ? fs[0]! : { kind: 'op', op: '*', args: fs };
+  const rhs: ExprNode = den.length === 0 ? product(num) : { kind: 'op', op: '/', args: [product(num), product(den)] };
   const target: ExprNode = { kind: 'symbol', name: e.dimensional.target.name, dim: e.dimensional.target.dim };
   return { kind: 'op', op: '-', args: [target, rhs] };
 }
