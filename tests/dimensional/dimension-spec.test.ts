@@ -214,4 +214,16 @@ describe('the SI special-name units and the named dimensions', () => {
       expect(parseDimensionSpec(name)).toEqual(unitDimension(unit));
     });
   }
+  // The EXCLUDED reasons are checked, so a later change to the unit table or to
+  // NAMED_DIMS moves the unit out of EXCLUDED instead of leaving a stale reason.
+  for (const unit of Object.keys(EXCLUDED).filter((u) => EXCLUDED[u].startsWith('unit not in the unit table'))) {
+    it(`${unit} is not in the unit table`, () => {
+      expect(() => unitDimension(unit)).toThrow();
+    });
+  }
+  it('lx has no named dimension', () => {
+    const lx = unitDimension('lx');
+    const same = NAMED_DIMENSION_NAMES.filter((n) => JSON.stringify(parseDimensionSpec(n)) === JSON.stringify(lx));
+    expect(same).toEqual([]);
+  });
 });
