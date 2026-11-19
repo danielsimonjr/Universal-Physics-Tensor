@@ -398,7 +398,7 @@ describe('canonicalRetrievalCorpus: residual form', () => {
     });
   });
 
-  it('key collisions corpus-wide are recorded (COLLISION_COUNT_AFTER)', () => {
+  it('key collisions corpus-wide are recorded (COLLISION_GROUP_SIZES_AFTER)', () => {
     const byKey = new Map<string, string[]>();
     for (const r of canonicalRetrievalCorpus()) {
       if (r.expr === undefined) continue;
