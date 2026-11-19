@@ -12104,6 +12104,7 @@
       "tests/cli/graphs.test.ts",
       "tests/cli/map-atlas-results.test.ts",
       "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/map-filters.test.ts",
       "tests/cli/norm-transport-fields.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
@@ -15153,6 +15154,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
+      "tests/cli/map-filters.test.ts",
       "tests/composition/chain-regime.test.ts",
       "tests/composition/compose.test.ts",
       "tests/composition/relation-refusal.test.ts",
@@ -21295,7 +21297,8 @@
       "src/cli/commands/search.ts",
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
-      "src/cli/commands/testplan.ts"
+      "src/cli/commands/testplan.ts",
+      "src/relations/types.ts"
     ],
     "tests/cli/map-structure.test.ts": [],
     "tests/cli/metric-guards.test.ts": [
