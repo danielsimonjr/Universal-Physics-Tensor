@@ -3,13 +3,15 @@
  *
  * A token that is exactly one factor (an exact unit, or a prefix plus a
  * unit, with an optional exponent) is that factor. Any other token is a
- * product when exactly one split exists, and an error that names the
- * readings when more than one split exists. The oracle below recognizes
+ * product when a split is a listed row of `products` and exactly one split
+ * exists, an error that names the readings when more than one split exists,
+ * and an unknown unit when no split is listed. The oracle below recognizes
  * only a single factor. It does not search for a product.
  */
 import { describe, expect, it } from 'vitest';
 import { equals, multiply } from '../../src/dimensional/algebra.js';
 import { convertValue, parseUnit, unitTables } from '../../src/dimensional/units.js';
+import { UNIT_DATA } from '../../src/dimensional/unit-data.js';
 import { oneFactor, powerDim, productWalkTokens, sampleTokens, walkProducts } from '../helpers/unit-product-walk.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 
@@ -72,10 +74,17 @@ describe('unit juxtaposition grammar', () => {
     // with no time limit. This test reads a seeded tenth of it. Each failure names its token.
     // This sample is not the gate: the gate is `scripts/unit-product-walk.ts` in the CI quality job.
     const sample = sampleTokens(productWalkTokens(), WALK_FRACTION, WALK_SEED);
-    const result = walkProducts(sample);
+    // A token is a product only when its factor bases match a listed row, so the sample also holds
+    // three tokens of listed products: two with a prefix on the first factor, one without.
+    const forced = [
+      { left: 'kW', right: 'h', token: 'kWh' },
+      { left: 'N', right: 'm', token: 'Nm' },
+      { left: 'mA', right: 's', token: 'mAs' },
+    ];
+    const result = walkProducts([...sample, ...forced]);
     expect(result.failures.slice(0, 20)).toEqual([]);
-    expect(result.products).toBeGreaterThan(0);
-    expect(result.ambiguous).toBeGreaterThan(0);
+    expect(result.products).toBeGreaterThanOrEqual(forced.length);
+    expect(result.refused).toBeGreaterThan(0);
     const metreSquared = oneFactor('m^2')!;
     const kelvin = oneFactor('K')!;
     expectFactor('m2K', { scale: metreSquared.scale * kelvin.scale, dim: multiply(metreSquared.dim, kelvin.dim) });
@@ -86,9 +95,9 @@ describe('unit juxtaposition grammar', () => {
     });
     expect(equals(parseUnit('W/m2K').dim, parseUnit('W/(m^2*K)').dim)).toBe(true);
     expect(parseUnit('W/m2K').scale).toBeCloseTo(parseUnit('W/(m^2*K)').scale, 12);
-    expect(() => parseUnit('mAs')).toThrow(/ambiguous/);
-    expect(() => parseUnit('mAs')).toThrow(/mA·s/);
-    expect(() => parseUnit('mAs')).toThrow(/m·A·s/);
+    // `mAs` is milliampere·second only: `m·A·s` matches no row (issue 676).
+    expect(parseUnit('mAs').scale).toBeCloseTo(1e-3, 15);
+    expect(parseUnit('mAs').dim).toEqual(parseUnit('A*s').dim);
   });
 
   it('keeps an exact symbol and a prefixed symbol that the product reading would split', () => {
@@ -122,7 +131,7 @@ describe('unit juxtaposition grammar', () => {
       }
       return parts.length === 0 ? '1' : parts.join('*');
     };
-    let competed = 0;
+    const competed: string[] = [];
     for (const prefix of prefixes.keys()) {
       if (!units.has(prefix)) continue;
       for (const [symbol, spec] of units) {
@@ -136,6 +145,11 @@ describe('unit juxtaposition grammar', () => {
         // A prefix letter that is also a unit (T, G, P, h, d, M, u, and c since the speed of light
         // became a unit) reads as the prefix: `W/Gyr` is not W/(G·yr), `W/cm` is not W/(c·m).
         if (['T', 'G', 'P', 'h', 'd', 'M', 'u', 'c'].includes(prefix)) {
+          close(parseUnit(`W/${token}`).scale, parseUnit('W').scale / prefixed.scale);
+          continue;
+        }
+        // A product competes only when the pair is a row of `products` (`m·K` and `m·s`).
+        if (!UNIT_DATA.products.has(`${prefix}·${symbol}`)) {
           close(parseUnit(`W/${token}`).scale, parseUnit('W').scale / prefixed.scale);
           continue;
         }
@@ -159,10 +173,10 @@ describe('unit juxtaposition grammar', () => {
             watt.scale / productScale / parseUnit(prodTarget).scale,
           );
         }
-        competed += 1;
+        competed.push(token);
       }
     }
-    expect(competed).toBeGreaterThan(0);
+    expect(competed.sort()).toEqual(['mK', 'ms']);
     expect(() => parseUnit('W/mK')).toThrow(/mK/);
     expect(() => parseUnit('W/mK')).toThrow(/m·K/);
     expect(() => parseUnit('kg/ms')).toThrow(/ambiguous/);
@@ -170,7 +184,8 @@ describe('unit juxtaposition grammar', () => {
     expect(convertValue('1kg/ms', 'Pa*s').value).toBeCloseTo(1, 9);
     expect(convertValue('1kg/ms', 'kg/s').value).toBeCloseTo(1000, 6);
     expect(parseUnit('mm/s').scale).toBeCloseTo(1e-3, 12);
-    expect(() => parseUnit('mPas')).toThrow(/mPa·s/);
-    expect(() => parseUnit('mPas')).toThrow(/m·Pa·s/);
+    // `mPas` is millipascal·second only: `m·Pa·s` matches no row (issue 676).
+    expect(parseUnit('mPas').scale).toBeCloseTo(1e-3, 15);
+    expect(() => parseUnit('W/mmin')).toThrow(/unknown unit 'mmin'/);
   });
 });

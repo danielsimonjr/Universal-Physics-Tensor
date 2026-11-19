@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2855
+    "totalExports": 2856
   },
   "entryPoints": [
     {
@@ -22700,6 +22700,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -22731,6 +22732,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -28591,12 +28593,12 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89171,
-    "totalExports": 2855,
+    "totalLinesOfCode": 89228,
+    "totalExports": 2856,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 935,
-    "totalTypeGuards": 16,
+    "totalFunctions": 936,
+    "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
     "totalReExports": 1405,
