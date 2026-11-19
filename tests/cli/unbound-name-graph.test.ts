@@ -12,6 +12,7 @@ import { buildVizModel } from '../../src/composition/graph-viz.js';
 import { equationLanding } from '../../src/composition/user-equation.js';
 import { QUANTITY_IDENTIFICATIONS } from '../../src/composition/compose.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
+import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { quantityCanonicalizer } from '../../src/composition/quantity-clusters.js';
 import { validityDomain } from '../../src/composition/edge.js';
 import type { BridgeEdge } from '../../src/composition/edge.js';
@@ -90,9 +91,12 @@ describe('unbound names are not graph nodes (#684 F2)', () => {
   });
 
   it('R4c: no catalog quantity name holds whitespace, so no "<name> (unbound)" key can equal one', () => {
+    // The same composition as `map --source=both` (src/cli/graphs.ts): CATALOG_GRAPH alone holds
+    // no one-letter name, so the control below pins that the set includes the names of #684.
     const names = new Set<string>();
-    for (const e of CATALOG_GRAPH) for (const n of [...e.sources, e.target]) names.add(n.name);
-    expect(names.size).toBeGreaterThan(0);
+    for (const e of [...CATALOG_GRAPH, ...CANONICAL_GRAPH]) for (const n of [...e.sources, e.target]) names.add(n.name);
+    expect(names.has('a')).toBe(true);
+    expect(names.has('g')).toBe(true);
     const spaced = [...names].filter((n) => /\s/.test(n));
     expect(spaced).toEqual([]);
   });
@@ -107,5 +111,9 @@ describe('unbound names are not graph nodes (#684 F2)', () => {
     const dot = await run(['map', '--equation', 'F = m*a', '--format=dot']);
     expect(dot).toContain('label="a (unbound)"');
     expect(dot).toContain('label="F (unbound)"');
+    // The user junction has no edge to the catalog nodes `a` and `F` (the old wiring drew both).
+    expect(dot).toContain('q_a__unbound_ -> j_user_equation;');
+    expect(dot).not.toMatch(/^\s*q_a -> j_user_equation;/m);
+    expect(dot).not.toMatch(/^\s*j_user_equation -> q_F;/m);
   });
 });
