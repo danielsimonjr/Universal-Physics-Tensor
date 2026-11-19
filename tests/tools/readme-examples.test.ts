@@ -79,8 +79,8 @@ describe('README.md TypeScript fences', () => {
     const result = runFence(source);
     expect(result.status, result.stderr).toBe(0);
     expect(JSON.parse(result.stdout.trim())).toEqual([1000, 'UnitError']);
-    expect(source).toContain("parseUnit('km/s').scale;");
     expect(source).toContain('// 1000');
+    expect(source).toContain("parseUnit('5 km/s'); } catch (e) { return e instanceof UnitError; } })(); // true");
   });
 });
 
