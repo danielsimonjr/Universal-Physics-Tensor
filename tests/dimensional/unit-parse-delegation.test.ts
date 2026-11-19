@@ -13,8 +13,8 @@ import {
 } from '../../src/dimensional/units.js';
 
 const inSet = ['km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc', 'd', 'day', 'Angstrom', 'K²', 'm2K', 'Vs', 'cm^2/Vs', 'W/m2K'] as const;
-const outOfSetLocal = ['bit', 'mpc'] as const;
-const outOfSetThrow = ['ton', 'dB', 'mAs', 'mol/mL', 'degC/s', 'furlong'] as const;
+const outOfSetLocal = ['bit', 'mpc', 'mAs'] as const;
+const outOfSetThrow = ['ton', 'dB', 'degC/s', 'furlong'] as const;
 
 describe('Unit.parse delegation set (A5)', () => {
   it.each(inSet)('%s uses the MathTS parser path', (text) => {
@@ -51,8 +51,9 @@ describe('Unit.parse delegation set (A5)', () => {
     expect(() => parseUnit('ton')).toThrow(UnitRefusedError);
     expect(() => parseUnit('dB')).toThrow(UnitRefusedError);
     expect(() => parseUnit('furlong')).toThrow(UnknownUnitError);
-    expect(() => parseUnit('mAs')).toThrow(AmbiguousUnitError);
-    expect(() => parseUnit('mol/mL')).toThrow(AmbiguousUnitError);
+    expect(parseUnit('mAs').scale).toBeCloseTo(1e-3, 15);
+    expect(() => parseUnit('kg/ms')).toThrow(AmbiguousUnitError);
+    expect(parseUnit('mol/mL').scale).toBeCloseTo(1e6, 6);
     expect(() => parseUnit('degC/s')).toThrow(UnitRefusedError);
   });
 

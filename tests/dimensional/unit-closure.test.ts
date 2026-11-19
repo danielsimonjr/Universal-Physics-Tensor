@@ -28,8 +28,10 @@ describe('a prefixed numerator token is the prefix reading (issues 469, 477, 475
     ['1mW/mK', 'W/(m*K)', 1e-3],
   ])('%s into %s', (raw, target, want) => close(si(raw, target), want));
 
-  it('still refuses a token that has no single-factor reading and several products (control)', () => {
-    expect(() => parseUnit('mAs')).toThrow(/ambiguous/);
+  it('still refuses a denominator whose prefixed reading competes with a listed product (control)', () => {
+    // `mAs` has one listed reading (mA·s, issue 676); `kg/ms` keeps two.
+    expect(parseUnit('mAs').scale).toBeCloseTo(1e-3, 15);
+    expect(() => parseUnit('kg/ms')).toThrow(/ambiguous/);
   });
 
   it('a prefix letter that is also a unit does not split off a denominator (Gyr, Gpc, hPa)', () => {
