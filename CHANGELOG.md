@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- `upt explain <quantity>` with an empty bound set no longer claims that the graph has no derivation path (#689). The summary, and so the `--json` `summary` text, now says `cannot be determined: no graph quantity is known`. With no arguments, the CLI adds the line `give inputs in the form: upt explain <quantity> [name=value | name] ...`. When every argument names a registered constant, the CLI says so: each value is checked against the registered value, and a constant is not a graph input. A query that binds a graph quantity keeps its current message.
 - `vitest.config.ts` sets `hookTimeout` to the same 60 s as `testTimeout`. Hooks kept the 10 s default, so the `beforeAll` hooks that start the CLI as a subprocess failed with `Hook timed out in 10000ms` under CPU load (#716). `tests/config/vitest-hook-timeout.test.ts` loads the resolved config object and checks `hookTimeout` equals `testTimeout`.
 
 - **Every bridge catalog row now carries `dimension` (#706).** Rows 51 and 52 had no `dimension` object, so the dimensional-consistency check skipped them with an info note. The catalog schema now requires `dimension` on each entry, with all seven SI base exponents as integers, so the catalog does not load when a row has no dimension or an incomplete one. Both rows record the dimensionless vector. A census test checks that the loaded expected-dimension table has one entry for each catalog row, and that the dimension rule skips no row.
