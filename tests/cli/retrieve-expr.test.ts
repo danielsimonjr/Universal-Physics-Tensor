@@ -3,17 +3,26 @@
  * only a typed expression reaches `rankByStructure`. A help example must print a non-empty list.
  */
 import '../helpers/dist.js';
+import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { captureMerged, text } from '../helpers/cli.js';
 import { runCli } from '../../dist/cli/main.js';
 import { command as retrieveCommand } from '../../dist/cli/commands/retrieve.js';
+import { parseArgs } from '../../dist/cli/args.js';
+import * as api from '../../dist/cli-api.js';
+import { CliError } from '../../dist/cli/errors.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
 import { canonicalResidual } from '../../src/canonical/residual.js';
 
 const RECORD = 'CE-mass-energy';
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const SHIM = join(ROOT, 'bin', 'upt.mjs');
+const EXAMPLE_FILE = join('data', 'examples', 'retrieve-mass-energy.json');
+const LABEL = /ranked by structure \(atlas search\), top (\d+) of (\d+):/;
 let dir = '';
 let exprFile = '';
 let badFile = '';
@@ -30,10 +39,10 @@ beforeAll(() => {
 });
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
-/** The accepted ids of a text-mode run: the lines under "accepted (atlas search):". */
+/** The ranked ids of a text-mode run: the lines under the ranked (or the empty accepted) header. */
 function acceptedLines(out: string): string[] {
   const lines = out.split('\n');
-  const at = lines.findIndex((l) => l.includes('accepted (atlas search):'));
+  const at = lines.findIndex((l) => LABEL.test(l) || l.includes('accepted (atlas search):'));
   return lines.slice(at + 1).filter((l) => l.startsWith('    '));
 }
 
@@ -42,6 +51,61 @@ describe('upt retrieve --expr', () => {
     const c = captureMerged();
     expect(await runCli(['retrieve', 'rest', 'energy', `--expr=${exprFile}`], c.io)).toBe(0);
     expect(acceptedLines(text(c))[0]?.trim()).toBe(RECORD);
+  });
+
+  it('the text label says it is a ranking: top 10 of N, N the full ranked count', async () => {
+    const c = captureMerged();
+    expect(await runCli(['retrieve', `--expr=${exprFile}`], c.io)).toBe(0);
+    const j = captureMerged();
+    expect(await runCli(['retrieve', `--expr=${exprFile}`, '--json'], j.io)).toBe(0);
+    const n = JSON.parse(text(j)).result.accepted.length;
+    expect(text(c)).toContain(`top 10 of ${n}:`);
+    expect(text(c)).not.toContain('accepted (atlas search):');
+  });
+
+  it('the help example runs as written from a directory outside the package', () => {
+    const line = retrieveCommand.example ?? '';
+    expect(line).toContain('--expr=package:');
+    const cwd = mkdtempSync(join(tmpdir(), 'upt-retrieve-cwd-'));
+    try {
+      const argv = line.slice('upt '.length).split(/\s+/);
+      const stdout = execFileSync('node', [SHIM, ...argv], { cwd, encoding: 'utf8', stdio: 'pipe' });
+      expect(stdout).toMatch(LABEL);
+      expect(acceptedLines(stdout)[0]?.trim()).toBe(RECORD);
+    } finally {
+      rmSync(cwd, { recursive: true, force: true });
+    }
+  });
+
+  it('every package: path in the help names a file that package.json files ships', () => {
+    const files: string[] = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).files;
+    const paths = [...`${retrieveCommand.help}\n${retrieveCommand.example}`.matchAll(/package:([^\s`]+)/g)].map((m) => m[1]!);
+    expect(paths.length).toBeGreaterThan(0);
+    for (const p of paths) {
+      expect(files.some((f) => p === f || p.startsWith(`${f}/`)), p).toBe(true);
+      expect(() => readFileSync(join(ROOT, p))).not.toThrow();
+    }
+  });
+
+  it('a loader TypeError is a CliError that names the file, with no stack', async () => {
+    const parseExprJson = () => {
+      throw new TypeError('zqx is not a function');
+    };
+    const ctx = {
+      args: parseArgs('retrieve', [`--expr=${exprFile}`], retrieveCommand.flags, retrieveCommand.positionals),
+      api: { ...api, parseExprJson },
+      out: () => {},
+      err: () => {},
+      write: () => {},
+    };
+    const error = await Promise.resolve()
+      .then(() => retrieveCommand.run(ctx as never))
+      .then(() => undefined, (e: unknown) => e);
+    expect(error).toBeInstanceOf(CliError);
+    const message = (error as Error).message;
+    expect(message).toContain(exprFile);
+    expect(message).toContain('internal: zqx is not a function');
+    expect(message).not.toMatch(/\n\s+at /);
   });
 
   it('T1b: --json keeps the full ranked list and the first id', async () => {
@@ -62,7 +126,7 @@ describe('upt retrieve --expr', () => {
       const argv = line
         .slice('upt '.length)
         .split(/\s+/)
-        .map((a) => (a.startsWith('--expr=') ? `--expr=${exprFile}` : a));
+        .map((a) => (a.startsWith('--expr=') && !a.startsWith('--expr=package:') ? `--expr=${exprFile}` : a));
       if (line.includes('--expr=')) withExpr += 1;
       const c = captureMerged();
       expect(await runCli(argv, c.io)).toBe(0);
@@ -75,7 +139,7 @@ describe('upt retrieve --expr', () => {
   });
 
   it('the example file is the residual of the record the help names', () => {
-    expect(JSON.parse(readFileSync(join('examples', 'retrieve-mass-energy.json'), 'utf8'))).toEqual(
+    expect(JSON.parse(readFileSync(join(ROOT, EXAMPLE_FILE), 'utf8'))).toEqual(
       JSON.parse(readFileSync(exprFile, 'utf8')),
     );
   });

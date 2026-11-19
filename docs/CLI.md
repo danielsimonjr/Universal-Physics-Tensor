@@ -531,7 +531,7 @@ upt retrieve <claim> [--expr=FILE] [--embed] [--embed-backend=onnx|ollama] [--em
 | Flag | Value | Default | Description |
 |---|---|---|---|
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
-| `--expr=VALUE` | `=` value |  | An ExprNode JSON file (the format of `upt probe`). The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted. |
+| `--expr=VALUE` | `=` value |  | An ExprNode JSON file (the format of `upt probe`). A value that starts with package: names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted. |
 | `--embed` | no |  | Embed the claim and every corpus record with the chosen backend. Acceptance stays the atlas search. A failure of the embedder still prints that search and exits 0. |
 | `--embed-backend=VALUE` | `=` value | onnx | Embedding backend: onnx (in process) or ollama (a local server). Used only with --embed. |
 | `--embed-dtype=VALUE` | `=` value | fp16 | ONNX weight precision: q8, fp16 or fp32. Used only with the onnx backend or --fetch-model. |
@@ -541,7 +541,7 @@ upt retrieve <claim> [--expr=FILE] [--embed] [--embed-backend=onnx|ollama] [--em
 | `--no-vector-cache` | no |  | Do not read or write the ONNX vector cache. Every batch is embedded again. Used only with --embed and the onnx backend. |
 
 ```
-upt retrieve rest energy --expr=examples/retrieve-mass-energy.json
+upt retrieve rest energy --expr=package:data/examples/retrieve-mass-energy.json
 ```
 
 ### `testplan`

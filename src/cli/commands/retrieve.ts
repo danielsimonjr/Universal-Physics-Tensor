@@ -10,11 +10,14 @@
  * names the reason. That is exit 0.
  */
 import { statSync } from 'node:fs';
+import { join } from 'node:path';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
+import { mapFileError } from '../file-errors.js';
+import { repoRoot } from '../stored-results.js';
 
 /** Where `--embed` looks for Ollama when `--ollama-url` is not given. */
 const OLLAMA_DEFAULT_URL = 'http://127.0.0.1:11434';
@@ -45,6 +48,12 @@ const VECTOR_CACHE_ENV = 'UPT_VECTOR_CACHE';
 /** How many accepted ids the text output prints. `--json` keeps the full ranked list. */
 const TEXT_ACCEPTED_LIMIT = 10;
 
+/** An `--expr` value that starts with this prefix names a file relative to the package root. */
+const PACKAGE_PREFIX = 'package:';
+
+/** The expression file the help example reads. It ships in `data/`. */
+const EXAMPLE_EXPR = `${PACKAGE_PREFIX}data/examples/retrieve-mass-energy.json`;
+
 /** The backends `--embed-backend` accepts. */
 const BACKENDS: readonly string[] = ['onnx', 'ollama'];
 
@@ -58,7 +67,7 @@ const FLAGS: FlagSpec[] = [
     name: '--expr',
     valueStyle: 'attached',
     description:
-      'An ExprNode JSON file (the format of `upt probe`). The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted.',
+      `An ExprNode JSON file (the format of \`upt probe\`). A value that starts with ${PACKAGE_PREFIX} names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted.`,
   },
   {
     name: '--embed',
@@ -142,7 +151,9 @@ const HELP = `upt retrieve <claim> [--expr=FILE] [--embed] [--embed-backend=onnx
         of \`upt probe\`, with a dimension on each symbol. The search ranks every
         corpus record by structure. The text output prints the first ${TEXT_ACCEPTED_LIMIT}; --json
         keeps the full list. The claim words may be empty when --expr is given.
-        e.g.  upt retrieve rest energy --expr=examples/retrieve-mass-energy.json
+        A FILE that starts with ${PACKAGE_PREFIX} is relative to the package root, so the
+        example works from any directory.
+        e.g.  upt retrieve rest energy --expr=${EXAMPLE_EXPR}
               upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed
               upt retrieve --fetch-model`;
@@ -195,18 +206,16 @@ function refuseFileAsCacheDir(): void {
   }
 }
 
-/** Reads the `--expr` file. A file that cannot be read or is not an ExprNode is exit 1 and names the file. */
-function loadExpr(api: CommandCtx['api'], path: string): ReturnType<CommandCtx['api']['parseExprJson']> {
+/**
+ * Reads the `--expr` file. A value that starts with `package:` is relative to the package root.
+ * A file that cannot be read or is not an ExprNode is exit 1 and names the file.
+ */
+function loadExpr(api: CommandCtx['api'], value: string): ReturnType<CommandCtx['api']['parseExprJson']> {
+  const path = value.startsWith(PACKAGE_PREFIX) ? join(repoRoot(), value.slice(PACKAGE_PREFIX.length)) : value;
   try {
     return api.parseExprJson(path);
   } catch (e) {
-    const code: unknown = e instanceof Error && 'code' in e ? e.code : undefined;
-    if (code === 'ENOENT') throw new CliError(`upt retrieve: file not found: ${path}`);
-    if (e instanceof SyntaxError) throw new CliError(`upt retrieve: invalid JSON in ${path}: ${e.message}`);
-    if (e instanceof api.ProblemFileError) {
-      throw new CliError(`upt retrieve: ${path} is not an expression file: ${e.message}. \`upt help retrieve\` shows the format.`);
-    }
-    throw e;
+    mapFileError(api, e, 'retrieve', path, 'an expression file');
   }
 }
 
@@ -296,11 +305,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     out('  proposed (cosine, not accepted):');
     for (const id of result.proposals) out(`    ${id}`);
   }
-  out('  accepted (atlas search):');
-  if (result.accepted.length === 0) out('    none — the claim has no expression to rank by structure');
-  for (const id of result.accepted.slice(0, TEXT_ACCEPTED_LIMIT)) out(`    ${id}`);
-  if (result.accepted.length > TEXT_ACCEPTED_LIMIT) {
-    out(`    ... ${result.accepted.length - TEXT_ACCEPTED_LIMIT} more (--json lists all ${result.accepted.length})`);
+  if (result.accepted.length === 0) {
+    out('  accepted (atlas search):');
+    out('    none — the claim has no expression to rank by structure');
+  } else {
+    const shown = Math.min(TEXT_ACCEPTED_LIMIT, result.accepted.length);
+    out(`  ranked by structure (atlas search), top ${shown} of ${result.accepted.length}:`);
+    for (const id of result.accepted.slice(0, TEXT_ACCEPTED_LIMIT)) out(`    ${id}`);
+    if (result.accepted.length > TEXT_ACCEPTED_LIMIT) out(`    --json lists all ${result.accepted.length}`);
   }
   return 0;
 }
@@ -313,7 +325,7 @@ export const command: Command = {
   help: commandHelp(HELP, FLAGS),
   summary:
     'Search the atlas for a claim. --expr=FILE ranks the corpus by an expression. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model.',
-  example: 'upt retrieve rest energy --expr=examples/retrieve-mass-energy.json',
+  example: `upt retrieve rest energy --expr=${EXAMPLE_EXPR}`,
   group: 'data',
   run,
 };

@@ -500,7 +500,7 @@ Every flag a registered command parses, written by `bun scripts/cli-reference.ts
 | `--equation` | `map` | Inject TARGET = EXPR as a user node and report where it lands. |
 | `--equation-only` | `map` | Print only the equation verdict. Errors when --equation is missing. |
 | `--evidence` | `atlas`, `map` | atlas: With no bridge id, list every bridge's derived evidence and the witness results it observes. map: Keep edges whose derived evidence set contains TAG: on the quantity map, derived from the catalog row; on --family/--observable, derived from the bridge record and its witness results. |
-| `--expr` | `retrieve` | An ExprNode JSON file (the format of `upt probe`). The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted. |
+| `--expr` | `retrieve` | An ExprNode JSON file (the format of `upt probe`). A value that starts with package: names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted. |
 | `--family` | `map` | Map one atlas family by name. |
 | `--fetch-model` | `retrieve` | Download the ONNX model to the local cache and print each ONNX weight file with its size and SHA-256. The claim is not needed. With --json, print the same report as JSON. |
 | `--format` | `map` | Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer. |
