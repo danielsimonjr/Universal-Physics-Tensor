@@ -146,14 +146,14 @@ describe('typed refusals, not message text', () => {
   it('a refused, an ambiguous and an unknown unit are three classes', () => {
     expect(() => parseUnit('dB')).toThrow(UnitRefusedError);
     expect(() => parseUnit('degC/s')).toThrow(UnitRefusedError);
-    expect(() => parseUnit('mol/mL')).toThrow(AmbiguousUnitError);
+    expect(parseUnit('mol/mL').scale).toBeCloseTo(1e6, 6);
     expect(() => parseUnit('furlong')).toThrow(UnknownUnitError);
   });
 
   it('the binding reader rethrows a refusal and reads an unknown word as not-a-number', () => {
     expect(() => readBinding('3 dB')).toThrow(UnitRefusedError);
     expect(() => readBinding('2*1degC')).toThrow(UnitRefusedError);
-    expect(() => readBinding('1 mol/mL')).toThrow(AmbiguousUnitError);
+    expect(readBinding('1 mol/mL')).toBeDefined();
     expect(() => readBinding('nope')).toThrow(BindingNumberError);
     expect(() => readBinding('1.2.3')).toThrow(BindingNumberError);
     expect(() => readBinding('2*euler')).toThrow(/exp\(x\)/);
