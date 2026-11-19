@@ -122,7 +122,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../core/compare.js` | `compareCodepoint` | Import |
 | `../../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `../../canonical/residual.js` | `canonicalResidual` | Import |
+| `../../canonical/residual.js` | `canonicalResidual, monomialResidual` | Import |
 | `./baselines.js` | `rankByStructure, CorpusRecord, RetrievalQuery` | Import |
 
 **Exports:**
@@ -2167,7 +2167,7 @@ The codebase is organized into the following modules:
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 
 **Exports:**
-- Functions: `canonicalResidual`
+- Functions: `canonicalResidual`, `monomialResidual`
 
 ---
 

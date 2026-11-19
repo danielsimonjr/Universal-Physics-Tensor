@@ -306,6 +306,8 @@ The structural hash: "the same relation up to dimensionless **constants**." Nume
 
 The residual form of a canonical entry, `target − scalarAst`. An entry stores the right-hand side of one target, while a claim is a relation `lhs − rhs`. The structural key of a residual and of a right-hand side is never equal, so a structural search must compare residuals on both sides. `canonicalRetrievalCorpus` (`src/atlas/benchmark/hybrid-retrieval.ts`) and the criterion 3 study reach the module.
 
+`monomialResidual` in the same module serves an entry with no `scalarAst`. It builds `target − ∏ governing^exponent` from the L0 monomial. The monomial fixes the exponents and not the leading constant, so the residual claims no constant. `canonicalRetrievalCorpus` uses `canonicalResidual(e) ?? monomialResidual(e)`. An entry with neither has no `expr`.
+
 ### `classifyLinkage` / `scanLinkages` (`src/canonical/linkage.ts`)
 
 The "validate against standard physics" engine + the **F4 circularity guard**. Each bridge↔canonical pair classifies as `restates-canonical` (a declared X≡X, NOT a discovery), `recovers` (an undeclared structural match), `dimensional-only`, or `unrelated`. `upt recover` surfaces the scan. The structural step is `classifyStructure` in `structural.ts`. `linkage.ts` calls it and then runs numerical recovery.

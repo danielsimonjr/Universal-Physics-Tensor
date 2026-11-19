@@ -17,6 +17,7 @@
  */
 
 import type { ExprNode } from '../dimensional/ast-types.js';
+import { dim, sym, symbolPower } from '../dimensional/ast-builders.js';
 import type { CanonicalEquation } from './canonical-equation.js';
 
 /**
@@ -30,4 +31,26 @@ export function canonicalResidual(e: CanonicalEquation): ExprNode | undefined {
   if (e.scalarAst === undefined) return undefined;
   const target: ExprNode = { kind: 'symbol', name: e.dimensional.target.name, dim: e.dimensional.target.dim };
   return { kind: 'op', op: '-', args: [target, e.scalarAst] };
+}
+
+/**
+ * The residual `target − ∏ governing^exponent` built from the L0 monomial of an entry, or
+ * `undefined` when the entry has no monomial. It serves an entry that has no `scalarAst`: the
+ * monomial fixes every exponent but not the leading constant, so the residual keeps the exponents
+ * and claims no constant. Exponents are decimal literals, the form `pow(x, '0.5')` uses.
+ *
+ * @internal
+ */
+export function monomialResidual(e: CanonicalEquation): ExprNode | undefined {
+  const monomial = e.dimensional.monomial;
+  if (monomial === null) return undefined;
+  const factors: ExprNode[] = [];
+  for (const g of e.dimensional.governing) {
+    const exponent = monomial[g.name];
+    if (exponent !== undefined && exponent !== 0) factors.push(symbolPower(sym(g.name, g.dim), exponent));
+  }
+  const rhs: ExprNode =
+    factors.length === 0 ? sym('1', dim()) : factors.length === 1 ? factors[0]! : { kind: 'op', op: '*', args: factors };
+  const target: ExprNode = { kind: 'symbol', name: e.dimensional.target.name, dim: e.dimensional.target.dim };
+  return { kind: 'op', op: '-', args: [target, rhs] };
 }

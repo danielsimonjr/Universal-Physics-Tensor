@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { dim, sym } from '../../src/dimensional/ast-builders.js';
+import { dim, sym, symbolPower } from '../../src/dimensional/ast-builders.js';
 import type { ExprNode } from '../../src/dimensional/ast-types.js';
 import { rankBySymbolOverlap, rankByStructure, type CorpusRecord, type RetrievalQuery } from '../../src/atlas/benchmark/baselines.js';
 import {
@@ -28,6 +28,10 @@ import {
   stubVector,
 } from '../../src/atlas/benchmark/hybrid-retrieval.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
+import { validate } from '../../src/dimensional/validator.js';
+import { parseCatalogExpression } from '../../src/bridges/expr-parse.js';
+
+const COLLISION_GROUP_SIZES_AFTER: number[] = [2, 2, 2, 2]; // before this change: also [2, 2, 2, 2]
 import { leakageKey } from '../../src/atlas/benchmark/leakage.js';
 import { queryInput as registeredQueryInput } from '../../tools/criterion3-study/embedding.js';
 
@@ -290,13 +294,8 @@ describe('canonicalRetrievalCorpus: residual form', () => {
     expect(out.embeddings).toBe('not-requested');
   });
 
-  it('every record is target - scalarAst, and has no expr key without a scalarAst', () => {
+  it('every record is target - scalarAst, or target - monomial when the entry has no scalarAst', () => {
     const corpus = canonicalRetrievalCorpus();
-    const without = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined);
-    expect(without.length).toBeGreaterThan(0);
-    for (const entry of without) {
-      expect('expr' in corpus.find((r) => r.id === entry.id)!).toBe(false);
-    }
     let withAst = 0;
     for (const entry of CANONICAL_EQUATIONS) {
       if (entry.scalarAst === undefined) continue;
@@ -310,5 +309,95 @@ describe('canonicalRetrievalCorpus: residual form', () => {
       expect(expr.args[1]).toBe(entry.scalarAst);
     }
     expect(withAst).toBeGreaterThan(0);
+  });
+
+  it('census: an entry has an expr key exactly when it has a scalarAst or a monomial', () => {
+    const corpus = canonicalRetrievalCorpus();
+    const missing = corpus.filter((r) => r.expr === undefined).map((r) => r.id);
+    const neither = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined && e.dimensional.monomial === null).map((e) => e.id);
+    expect(missing.sort()).toEqual(neither.sort());
+  });
+
+  it('a monomial record is target - product of governing^exponent: same symbols, same exponents, valid dimension', () => {
+    const corpus = canonicalRetrievalCorpus();
+    const monomialOnly = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined && e.dimensional.monomial !== null);
+    expect(monomialOnly.length).toBeGreaterThan(0);
+    for (const entry of monomialOnly) {
+      const expr = corpus.find((r) => r.id === entry.id)!.expr!;
+      if (expr.kind !== 'op' || expr.op !== '-') throw new Error(`${entry.id}: not a residual`);
+      expect(expr.args[0]).toEqual({ kind: 'symbol', name: entry.dimensional.target.name, dim: entry.dimensional.target.dim });
+      const exponents: Record<string, number> = {};
+      const walk = (n: ExprNode): void => {
+        if (n.kind === 'symbol') exponents[n.name] = 1;
+        else if (n.kind === 'op' && n.op === '*') n.args.forEach(walk);
+        else if (n.kind === 'op' && n.op === '^') {
+          const [b, x] = n.args;
+          if (b!.kind !== 'symbol' || x!.kind !== 'symbol') throw new Error(`${entry.id}: bad power`);
+          exponents[b.name] = Number(x.name);
+        } else throw new Error(`${entry.id}: unexpected node`);
+      };
+      walk(expr.args[1]!);
+      const expected = Object.fromEntries(Object.entries(entry.dimensional.monomial!).filter(([, v]) => v !== 0));
+      expect(exponents, entry.id).toEqual(expected);
+      expect(validate(expr).ok, entry.id).toBe(true);
+    }
+  });
+
+  it('fractional exponents render: fermi energy and velocity validate', () => {
+    for (const id of ['CE-fermi-energy', 'CE-fermi-velocity']) {
+      const r = canonicalRetrievalCorpus().find((x) => x.id === id)!;
+      expect(r.expr, id).toBeDefined();
+      expect(validate(r.expr!).ok, id).toBe(true);
+    }
+  });
+
+  describe('README pendulum query', () => {
+    const pendulum = 'CE-pendulum-period';
+    const T = sym('T', dim(0, 0, 1));
+    const L = sym('L', dim(1));
+    const g = sym('g', dim(1, 0, -2));
+    const relation = (rhs: ExprNode): ExprNode => ({ kind: 'op', op: '-', args: [T, rhs] }) as ExprNode;
+    const times = (a: ExprNode, b: ExprNode): ExprNode => ({ kind: 'op', op: '*', args: [a, b] }) as ExprNode;
+    // Retype the dimensionless stubs the parser makes, so a parsed claim carries the dimensions of its names.
+    const retype = (n: ExprNode): ExprNode => {
+      const dims = { T: T.dim, L: L.dim, g: g.dim } as Record<string, typeof T.dim>;
+      if (n.kind === 'symbol') return n.name in dims ? { ...n, dim: dims[n.name]! } : n;
+      if (n.kind === 'op') return { ...n, args: n.args.map(retype) };
+      return n;
+    };
+    const parsed = (rhs: string): ExprNode => relation(retype(parseCatalogExpression(rhs)));
+    const record = (): CorpusRecord => canonicalRetrievalCorpus().find((r) => r.id === pendulum)!;
+
+    it('a claim in the record form T = L^0.5 * g^-0.5 ranks CE-pendulum-period first by structure', () => {
+      const q = relation(times(symbolPower(L, 0.5), symbolPower(g, -0.5)));
+      expect(rankByStructure({ text: '', expr: q }, canonicalRetrievalCorpus())[0]).toBe(pendulum);
+    });
+
+    it('control: the inverted relation T = L^-0.5 * g^0.5 does not key-match CE-pendulum-period', () => {
+      const q = relation(times(symbolPower(L, -0.5), symbolPower(g, 0.5)));
+      expect(leakageKey(record().expr!)).not.toBe(leakageKey(q));
+    });
+
+    it('the key drops the constant: 2*pi*sqrt(L/g) and sqrt(L/g) have one key', () => {
+      expect(leakageKey(parsed('2*pi*sqrt(L/g)'))).toBe(leakageKey(parsed('sqrt(L/g)')));
+    });
+
+    // KNOWN GAP, not fixed here: the key does not rewrite (L/g)^0.5 as L^0.5 * g^-0.5, so the README
+    // formula as a user writes it does not key-match, although its relation is the same. The gap is in
+    // `normalForm`, not in the corpus. This test records it, and it must change when `normalForm` does.
+    it('known gap: the README formula as parsed does not key-match the record', () => {
+      expect(leakageKey(parsed('2*pi*sqrt(L/g)'))).not.toBe(leakageKey(record().expr!));
+    });
+  });
+
+  it('key collisions corpus-wide are recorded (COLLISION_COUNT_AFTER)', () => {
+    const byKey = new Map<string, string[]>();
+    for (const r of canonicalRetrievalCorpus()) {
+      if (r.expr === undefined) continue;
+      const k = leakageKey(r.expr);
+      byKey.set(k, [...(byKey.get(k) ?? []), r.id]);
+    }
+    const groups = [...byKey.values()].filter((g) => g.length > 1);
+    expect(groups.map((g) => g.length)).toEqual(COLLISION_GROUP_SIZES_AFTER);
   });
 });
