@@ -360,7 +360,7 @@ describe('canonicalRetrievalCorpus: residual form', () => {
     const times = (a: ExprNode, b: ExprNode): ExprNode => ({ kind: 'op', op: '*', args: [a, b] }) as ExprNode;
     // Retype the dimensionless stubs the parser makes, so a parsed claim carries the dimensions of its names.
     const retype = (n: ExprNode): ExprNode => {
-      const dims = { T: T.dim, L: L.dim, g: g.dim } as Record<string, typeof T.dim>;
+      const dims: Record<string, ReturnType<typeof dim>> = { T: dim(0, 0, 1), L: dim(1), g: dim(1, 0, -2) };
       if (n.kind === 'symbol') return n.name in dims ? { ...n, dim: dims[n.name]! } : n;
       if (n.kind === 'op') return { ...n, args: n.args.map(retype) };
       return n;
