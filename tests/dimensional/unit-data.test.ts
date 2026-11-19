@@ -24,6 +24,7 @@ const file = JSON.parse(text) as Record<string, unknown> & {
   refused: { symbol: string; reason: string }[];
   prefixLetterUnits: { comment: string; letters: string[] };
   spellingNotes: { spelling: string; note: string }[];
+  products: { comment: string; rows: { factors: string; prefixFirst: boolean; comment: string }[] };
 };
 const edited = (change: (copy: typeof file) => void): string => {
   const copy = JSON.parse(text) as typeof file;
@@ -118,6 +119,16 @@ describe('a unit file that breaks a rule does not load', () => {
     // A constant is named by its registry spelling; a core/constants.ts export name is not a spelling.
     expect(() => readUnitFile(edited((f) => (f.units[0]!.scale = 'G_SI')), schema)).toThrow(/names 'G_SI'/);
     expect(() => readUnitFile(edited((f) => f.refused.push({ symbol: 'm', reason: 'no' })), schema)).toThrow(/refused 'm' is also a unit/);
+  });
+
+  it('a product row with an unknown base, a duplicate key, or a prefix on a non-prefixable unit is an error', () => {
+    const row = (factors: string, prefixFirst: boolean) => ({ factors, prefixFirst, comment: 'test' });
+    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('zqx·s', false))), schema)).toThrow(/names 'zqx'/);
+    expect(() => readUnitFile(edited((f) => f.products.rows.push({ ...f.products.rows[0]! })), schema)).toThrow(/listed twice/);
+    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('nat·s', true))), schema)).toThrow(/'nat' is not prefixable/);
+    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('g·zqx', false))), schema)).toThrow(/names 'zqx'/);
+    expect(() => readUnitFile(edited((f) => f.products.rows.push(row('kg·s', false))), schema)).toThrow(/names 'kg'/);
+    expect(() => readUnitFile(edited((f) => delete (f.products.rows[0] as Partial<{ prefixFirst: boolean }>).prefixFirst), schema)).toThrow(/prefixFirst/);
   });
 
   it('a prefix letter that is not a unit, and a note naming no constant, are errors', () => {
