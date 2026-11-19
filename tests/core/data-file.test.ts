@@ -15,6 +15,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const dataFiles = readdirSync(resolve(root, 'data')).filter((f) => f.endsWith('.json') && !f.endsWith('.schema.json'));
 
 type Catalog = {
+  entries: Record<string, unknown>[];
   relations: Record<string, unknown>[];
   evaluators: { parameters: Record<string, unknown>[] }[];
   confrontations: Record<string, unknown>[];
@@ -43,6 +44,10 @@ describe('a broken bridge catalog does not load', () => {
   it('a relation without a target, and an unknown relation field', () => {
     expect(() => read(edited<Catalog>('bridge-catalog.json', (c) => delete c.relations[0]!.target))).toThrow(/\$\.relations\[0\]: missing 'target'/);
     expect(() => read(edited<Catalog>('bridge-catalog.json', (c) => (c.relations[0]!.targt = 'x')))).toThrow(/\$\.relations\[0\]\.targt: unexpected property/);
+  });
+
+  it('an entry without a dimension', () => {
+    expect(() => read(edited<Catalog>('bridge-catalog.json', (c) => delete c.entries[0]!.dimension))).toThrow(/\$\.entries\[0\]: missing 'dimension'/);
   });
 
   it('an evaluator parameter with a misspelled flag or a bad sign', () => {

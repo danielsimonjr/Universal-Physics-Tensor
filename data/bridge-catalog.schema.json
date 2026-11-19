@@ -272,7 +272,8 @@
           "dependencies",
           "known_issues",
           "notes",
-          "proofStatus"
+          "proofStatus",
+          "dimension"
         ],
         "additionalProperties": false,
         "properties": {
