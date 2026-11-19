@@ -306,6 +306,8 @@ The structural hash: "the same relation up to dimensionless **constants**." Nume
 
 The residual form of a canonical entry, `target − scalarAst`. An entry stores the right-hand side of one target, while a claim is a relation `lhs − rhs`. The structural key of a residual and of a right-hand side is never equal, so a structural search must compare residuals on both sides. `canonicalRetrievalCorpus` (`src/atlas/benchmark/hybrid-retrieval.ts`) and the criterion 3 study reach the module.
 
+`monomialResidual` in the same module serves an entry with no `scalarAst`. It builds `target − (numerator / denominator)` from the L0 monomial. The numerator holds each governing symbol with a positive exponent, and the denominator holds each one with a negative exponent, as a positive power. This is the form the parser gives for a claim such as `sqrt(L)/sqrt(g)`. The monomial fixes the exponents and not the leading constant, so the residual claims no constant. `canonicalRetrievalCorpus` uses `canonicalResidual(e) ?? monomialResidual(e)`. An entry with neither has no `expr`.
+
 ### `classifyLinkage` / `scanLinkages` (`src/canonical/linkage.ts`)
 
 The "validate against standard physics" engine + the **F4 circularity guard**. Each bridge↔canonical pair classifies as `restates-canonical` (a declared X≡X, NOT a discovery), `recovers` (an undeclared structural match), `dimensional-only`, or `unrelated`. `upt recover` surfaces the scan. The structural step is `classifyStructure` in `structural.ts`. `linkage.ts` calls it and then runs numerical recovery.
@@ -1006,7 +1008,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1228 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1234 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 
