@@ -2164,6 +2164,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/ast-builders.js` | `dim, sym, symbolPower` | Import |
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 
 **Exports:**
@@ -7802,12 +7803,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89095 |
-| Total Exports | 2854 |
+| Total Lines of Code | 89119 |
+| Total Exports | 2855 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 934 |
+| Total Functions | 935 |
 | Total Type Guards | 16 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |

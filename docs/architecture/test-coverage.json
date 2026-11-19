@@ -2190,6 +2190,7 @@
       "tests/tensor.test.ts"
     ],
     "src/bridges/expr-parse.ts": [
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
@@ -10718,6 +10719,7 @@
       "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -12759,6 +12761,7 @@
       "tests/numerical/gum-monte-carlo.test.ts"
     ],
     "src/bridges/expr-parse.ts": [
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/bridges/catalog-record.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/constant-inputs.test.ts",
@@ -14706,6 +14709,7 @@
       "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/hybrid-retrieval.test.ts",
       "tests/bridges/dimensional-signature-catalog.test.ts",
       "tests/canonical/atomic.test.ts",
       "tests/canonical/condensed-matter.test.ts",
@@ -16342,6 +16346,8 @@
       "src/atlas/benchmark/baselines.ts",
       "src/atlas/benchmark/hybrid-retrieval.ts",
       "src/canonical/registry.ts",
+      "src/dimensional/validator.ts",
+      "src/bridges/expr-parse.ts",
       "src/atlas/benchmark/leakage.ts"
     ],
     "tests/atlas/import-graph.test.ts": [],

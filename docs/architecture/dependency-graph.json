@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 390,
     "totalModules": 13,
-    "totalExports": 2854
+    "totalExports": 2855
   },
   "entryPoints": [
     {
@@ -185,7 +185,8 @@
           {
             "file": "../../canonical/residual.js",
             "imports": [
-              "canonicalResidual"
+              "canonicalResidual",
+              "monomialResidual"
             ]
           },
           {
@@ -7408,6 +7409,14 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/ast-builders.js",
+            "imports": [
+              "dim",
+              "sym",
+              "symbolPower"
+            ]
+          },
+          {
             "file": "./canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -7416,10 +7425,12 @@
           }
         ],
         "exports": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ],
         "functions": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ]
       },
       "src/canonical/seed-l-layer.ts": {
@@ -28537,11 +28548,11 @@
   "statistics": {
     "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 89095,
-    "totalExports": 2854,
+    "totalLinesOfCode": 89119,
+    "totalExports": 2855,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 934,
+    "totalFunctions": 935,
     "totalTypeGuards": 16,
     "totalEnums": 0,
     "totalConstants": 423,
