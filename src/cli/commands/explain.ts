@@ -407,7 +407,8 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   printExplanation(api, out, target, label, x, inputNote);
   if (partner !== null && partnerExplanation !== undefined) {
-    printExplanation(api, out, partner.name, label, partnerExplanation, inputNote);
+    // The note explains the invocation, not the quantity: print it once, under the first block.
+    printExplanation(api, out, partner.name, label, partnerExplanation, undefined);
     const who = `${partner.canonicalId} restates be-${partner.bridgeId}`;
     if (agree === true) {
       out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}). Values agree.`);

@@ -70,6 +70,13 @@ describe('upt explain with no inputs', () => {
     expect(r.text).toContain(USAGE);
   });
 
+  it('--source=both with a restatement partner prints the usage line once', async () => {
+    const r = await run(['explain', 'light-deflection', '--source=both']);
+    expect(r.code).toBe(0);
+    expect(r.text).toContain('are one restatement');
+    expect(r.text.split(USAGE).length - 1).toBe(1);
+  });
+
   it('guard: a constant with no inputs is still determined', async () => {
     const r = await run(['explain', 'stefan-sigma']);
     expect(r.code).toBe(0);
