@@ -392,6 +392,10 @@ export interface ShortBinding {
  * @public
  */
 export interface EquationAnalysis {
+  /**
+   * The user junction with each resolved name, or the raw name when it did not bind. Use it for
+   * the label and the comparisons. Do not give it to `buildVizModel`: use `graphJunction`.
+   */
   readonly junction: VizJunction;
   /**
    * The junction as the graph reads it. A name that did not bind is keyed `<name> (unbound)`,

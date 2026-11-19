@@ -11,6 +11,7 @@ import { analyzeUserEquation } from '../../src/composition/user-equation.js';
 import { buildVizModel } from '../../src/composition/graph-viz.js';
 import { equationLanding } from '../../src/composition/user-equation.js';
 import { QUANTITY_IDENTIFICATIONS } from '../../src/composition/compose.js';
+import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { quantityCanonicalizer } from '../../src/composition/quantity-clusters.js';
 import { validityDomain } from '../../src/composition/edge.js';
 import type { BridgeEdge } from '../../src/composition/edge.js';
@@ -86,6 +87,20 @@ describe('unbound names are not graph nodes (#684 F2)', () => {
       expect(/\s/.test(id.from)).toBe(false);
       expect(/\s/.test(id.to)).toBe(false);
     }
+  });
+
+  it('R4c: no catalog quantity name holds whitespace, so no "<name> (unbound)" key can equal one', () => {
+    const names = new Set<string>();
+    for (const e of CATALOG_GRAPH) for (const n of [...e.sources, e.target]) names.add(n.name);
+    expect(names.size).toBeGreaterThan(0);
+    const spaced = [...names].filter((n) => /\s/.test(n));
+    expect(spaced).toEqual([]);
+  });
+
+  it('R6: a mixed equation claims only its bound names (g unbound, T bound)', async () => {
+    const t = await run(['map', '--equation', 'T = 2*pi*sqrt(L/g)', '--equation-only'], 3);
+    expect(t).toMatch(/via \{temperature\}/);
+    expect(t).not.toMatch(/via \{[^}]*\bg\b/);
   });
 
   it('R5: the dot drawing shows the unbound name as its own node', async () => {
