@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 25 files
 - **canonical**: 20 files
 - **cases**: 7 files
-- **cli**: 58 files
+- **cli**: 59 files
 - **root**: 1 file
 - **composition**: 83 files
 - **core**: 18 files
@@ -2927,6 +2927,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
+| `../file-errors.js` | `mapFileError` | Import |
 | `../library-defaults.js` | `PROBE_BUDGET_MS_DEFAULT, PROBE_CORRECTION_TERMS_MAX, PROBE_HOLDOUT_TOL_DEFAULT, PROBE_STUDY_ALPHA_DEFAULT` | Import |
 
 **Exports:**
@@ -2974,6 +2975,7 @@ The codebase is organized into the following modules:
 | Module | Import |
 |--------|--------|
 | `fs` | `statSync` |
+| `path` | `isAbsolute, relative, resolve` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -2983,6 +2985,8 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../file-errors.js` | `mapFileError` | Import |
+| `../stored-results.js` | `repoRoot` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3113,6 +3117,19 @@ The codebase is organized into the following modules:
 - Interfaces: `CoherentUnit`
 - Functions: `latexName`, `printLatex`, `coherentUnits`, `derivedUnitOf`
 - Constants: `EVAL_STUBS`, `printDisplay`, `printEval`
+
+---
+
+### `src/cli/file-errors.ts` - Maps a failure to read or parse an input file to a `CliError`, so no stack trace reaches the
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./command.js` | `CommandCtx` | Import (type-only) |
+| `./errors.js` | `CliError, UsageError` | Import |
+
+**Exports:**
+- Functions: `mapFileError`
 
 ---
 
@@ -7701,7 +7718,7 @@ graph TD
         N26[closed-form-range]
         N27[command]
         N28[_atlas-map]
-        N29[...53 more]
+        N29[...54 more]
     end
 
     subgraph Root
@@ -7801,17 +7818,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 390 |
+| Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89179 |
-| Total Exports | 2855 |
+| Total Lines of Code | 89255 |
+| Total Exports | 2856 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 935 |
+| Total Functions | 936 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 533 |
+| Type-only Imports | 534 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
