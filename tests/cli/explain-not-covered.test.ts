@@ -56,7 +56,7 @@ describe('upt explain — not covered vs not derivable', () => {
   it('a real quantity that the inputs cannot reach is an answer: exit 0, and it says it IS in the graph', async () => {
     const r = await run(['explain', 'hawking-temperature']);
     expect(r.code).toBe(0);
-    expect(r.text).toMatch(/is in the graph, but no inputs were given, so it cannot be determined/);
+    expect(r.text).toMatch(/is in the graph, but cannot be determined: no graph quantity is known/);
   });
 });
 

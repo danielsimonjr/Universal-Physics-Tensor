@@ -333,10 +333,10 @@ function buildSummary(
       }
       break;
     case 'under-determined':
-      // An empty input set proves one cause: no inputs were given. A path statement from {} says nothing.
+      // The library sees only the bound set. An empty set shows that no graph quantity is known; it cannot show why.
       s =
         knownNames.length === 0
-          ? `'${target}' is in the graph, but no inputs were given, so it cannot be determined.`
+          ? `'${target}' is in the graph, but cannot be determined: no graph quantity is known.`
           : `'${target}' is in the graph, but cannot be determined from ${known}: the graph has no derivation path.`;
       if (id.blockingFrontier.length) {
         s += ` Knowing one of {${id.blockingFrontier.join(', ')}} would unblock it.`;
