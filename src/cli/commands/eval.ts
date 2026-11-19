@@ -178,8 +178,11 @@ async function run(ctx: CommandCtx): Promise<number> {
       if (constant !== undefined) dims[v] = constant.dim;
     }
     const homogeneous = api.builtinFormulaDimensionChecker().check(expr, dims);
-    // The check runs only when e is unbound or bound with a unit, so a charge mix is a real mismatch.
-    if (!homogeneous.ok && (homogeneous.inhomogeneous === true || homogeneous.elementaryChargeMixed === true)) {
+    // The parser lists no `e` in cf.variables, so a bare e binding does not stop the check above.
+    // A bare e is a caller's own quantity; an unbound e, or an e with a unit, is a charge.
+    const bareE = 'e' in parsed.scope && !('e' in parsed.dims);
+    const chargeMixed = homogeneous.elementaryChargeMixed === true && !bareE;
+    if (!homogeneous.ok && (homogeneous.inhomogeneous === true || chargeMixed)) {
       throw new CliError(
         `upt eval: the formula is not dimensionally homogeneous: ${homogeneous.error?.replace(/\.$/, '')}. A value with a unit keeps its dimension.`,
       );
