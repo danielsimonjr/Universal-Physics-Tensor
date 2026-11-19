@@ -743,6 +743,8 @@ export function buildObservableView(
       ? {
           ...filter,
           total: candidates.length,
+          // The scope names the candidates predicate above: preserves > 0 || translations > 0.
+          scope: `bridges that preserve or translate '${term}'`,
           kept: kept.length,
           droppedNotMatching: n('not-matching'),
           droppedUndecided: n('undecided'),
@@ -838,7 +840,10 @@ export interface AtlasFilter {
 export interface AtlasFilterStats {
   relation?: RelationType;
   evidence?: EvidenceTag;
+  /** The number of bridges the filter judged: the size of the view's candidate set, before any filter. */
   total: number;
+  /** The name of that candidate set. The legend prints it after the total, so a count never stands alone. */
+  scope: string;
   kept: number;
   droppedNotMatching: number;
   /** Bridges whose match depends on witness results the view does not observe. */
@@ -882,7 +887,7 @@ function formatAtlasFilterLegend(s: AtlasFilterStats | null): string | null {
     ...(s.evidence !== undefined ? [`evidence=${s.evidence}`] : []),
   ];
   return (
-    `filter: ${terms.join(' ')} — ${s.kept} of ${s.total} bridges kept; ` +
+    `filter: ${terms.join(' ')} — ${s.kept} of ${s.total} ${s.scope} kept; ` +
     `${s.droppedNotMatching} dropped (did not match); ` +
     `${s.droppedUndecided} dropped (undecided: ${UNOBSERVED[s.results ?? 'none']})`
   );
@@ -947,6 +952,9 @@ export function buildFamilyView(api: Api, name: string, filter: AtlasFilter, res
       ? {
           ...filter,
           total: all.length,
+          scope:
+            `bridges in this view (${filed.length} filed under ${fam.family}, ` +
+            `${touching.length} filed elsewhere that touch its models)`,
           kept: kept.length,
           droppedNotMatching: n('not-matching'),
           droppedUndecided: n('undecided'),

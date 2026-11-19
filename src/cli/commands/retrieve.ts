@@ -10,11 +10,14 @@
  * names the reason. That is exit 0.
  */
 import { statSync } from 'node:fs';
+import { isAbsolute, relative, resolve } from 'node:path';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
+import { mapFileError } from '../file-errors.js';
+import { repoRoot } from '../stored-results.js';
 
 /** Where `--embed` looks for Ollama when `--ollama-url` is not given. */
 const OLLAMA_DEFAULT_URL = 'http://127.0.0.1:11434';
@@ -42,6 +45,15 @@ const ONNX_DEFAULT_DTYPE: EmbedDtype = 'fp16';
  */
 const VECTOR_CACHE_ENV = 'UPT_VECTOR_CACHE';
 
+/** How many accepted ids the text output prints. `--json` keeps the full ranked list. */
+const TEXT_ACCEPTED_LIMIT = 10;
+
+/** An `--expr` value that starts with this prefix names a file relative to the package root. */
+const PACKAGE_PREFIX = 'package:';
+
+/** The expression file the help example reads. It ships in `data/`. */
+const EXAMPLE_EXPR = `${PACKAGE_PREFIX}data/examples/retrieve-mass-energy.json`;
+
 /** The backends `--embed-backend` accepts. */
 const BACKENDS: readonly string[] = ['onnx', 'ollama'];
 
@@ -51,6 +63,12 @@ function isDtype(value: string): value is EmbedDtype {
 
 const FLAGS: FlagSpec[] = [
   JSON_FLAG,
+  {
+    name: '--expr',
+    valueStyle: 'attached',
+    description:
+      `An ExprNode JSON file (the format of \`upt probe\`). A value that starts with ${PACKAGE_PREFIX} names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted.`,
+  },
   {
     name: '--embed',
     valueStyle: 'none',
@@ -94,7 +112,7 @@ const FLAGS: FlagSpec[] = [
   },
 ];
 
-const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
+const HELP = `upt retrieve <claim> [--expr=FILE] [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
         [--embed-model=NAME] [--ollama-url=URL] [--no-vector-cache]
         upt retrieve --fetch-model [--embed-dtype=q8|fp16|fp32] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
@@ -126,10 +144,17 @@ const HELP = `upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--em
         weight file with its size and SHA-256 (as JSON with --json).
         A missing library exits 1 and prints the install hint.
         --embed-model is used with --embed or --fetch-model. A claim is text. It has
-        no expression, so the atlas search accepts nothing: it ranks by structure,
-        and a text claim has none to rank. The command does not invent one. --embed
-        still proposes an order.
-        e.g.  upt retrieve period of a pendulum
+        no expression, so without --expr the atlas search accepts nothing: it ranks
+        by structure, and a text claim has none to rank. The command does not invent
+        one. --embed still proposes an order.
+        --expr=FILE gives the search an expression: an ExprNode JSON file, the format
+        of \`upt probe\`, with a dimension on each symbol. The search ranks every
+        corpus record by structure. The text output prints the first ${TEXT_ACCEPTED_LIMIT}; --json
+        keeps the full list. The claim words may be empty when --expr is given.
+        A FILE that starts with ${PACKAGE_PREFIX} is relative to the package root, so the
+        example works from any directory.
+        e.g.  upt retrieve rest energy --expr=${EXAMPLE_EXPR}
+              upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed
               upt retrieve --fetch-model`;
 
@@ -181,6 +206,34 @@ function refuseFileAsCacheDir(): void {
   }
 }
 
+/**
+ * Resolves a `package:` value to a file inside the package root. The prefix names a file the
+ * package ships, so a value that resolves to the root itself, above it, or on another drive is
+ * refused as a usage error: a path outside the package belongs in the plain FILE form.
+ */
+function packageFile(value: string): string {
+  const root = repoRoot();
+  const path = resolve(root, value.slice(PACKAGE_PREFIX.length));
+  const inside = relative(root, path);
+  if (inside === '' || inside.startsWith('..') || isAbsolute(inside)) {
+    throw new UsageError(`upt retrieve: --expr=${value} does not name a file inside the package root`);
+  }
+  return path;
+}
+
+/**
+ * Reads the `--expr` file. A value that starts with `package:` is relative to the package root.
+ * A file that cannot be read or is not an ExprNode is exit 1 and names the file.
+ */
+function loadExpr(api: CommandCtx['api'], value: string): ReturnType<CommandCtx['api']['parseExprJson']> {
+  const path = value.startsWith(PACKAGE_PREFIX) ? packageFile(value) : value;
+  try {
+    return api.parseExprJson(path);
+  } catch (e) {
+    mapFileError(api, e, 'retrieve', path, 'an expression file');
+  }
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, out, api } = ctx;
   const backendFlag = args.flags.get('embed-backend')?.[0];
@@ -204,9 +257,11 @@ async function run(ctx: CommandCtx): Promise<number> {
     return fetchModel(ctx, modelFlag ?? ONNX_DEFAULT_MODEL, dtype);
   }
   const claim = args.positionals.join(' ').trim();
-  if (claim.length === 0) {
-    throw new UsageError('upt retrieve: give a claim, e.g. `upt retrieve period of a pendulum`');
+  const exprPath = args.flags.get('expr')?.[0];
+  if (claim.length === 0 && exprPath === undefined) {
+    throw new UsageError('upt retrieve: give a claim or --expr=FILE, e.g. `upt retrieve period of a pendulum`');
   }
+  const expr = exprPath === undefined ? undefined : loadExpr(api, exprPath);
   const embed = args.flags.has('embed');
   const embedModel = modelFlag ?? (backend === 'ollama' ? OLLAMA_DEFAULT_MODEL : ONNX_DEFAULT_MODEL);
   const vectorCache = embed && backend === 'onnx' && !args.flags.has('no-vector-cache');
@@ -229,7 +284,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         });
   const corpus = api.canonicalRetrievalCorpus();
   const result = await api.retrieveHybrid({
-    query: { text: claim },
+    query: expr === undefined ? { text: claim } : { text: claim, expr },
     corpus,
     embeddings: embed,
     embedder,
@@ -265,9 +320,15 @@ async function run(ctx: CommandCtx): Promise<number> {
     out('  proposed (cosine, not accepted):');
     for (const id of result.proposals) out(`    ${id}`);
   }
-  out('  accepted (atlas search):');
-  if (result.accepted.length === 0) out('    none — the claim has no expression to rank by structure');
-  for (const id of result.accepted) out(`    ${id}`);
+  if (result.accepted.length === 0) {
+    out('  accepted (atlas search):');
+    out('    none — the claim has no expression to rank by structure');
+  } else {
+    const shown = Math.min(TEXT_ACCEPTED_LIMIT, result.accepted.length);
+    out(`  ranked by structure (atlas search), top ${shown} of ${result.accepted.length}:`);
+    for (const id of result.accepted.slice(0, TEXT_ACCEPTED_LIMIT)) out(`    ${id}`);
+    if (result.accepted.length > TEXT_ACCEPTED_LIMIT) out(`    --json lists all ${result.accepted.length}`);
+  }
   return 0;
 }
 
@@ -278,8 +339,8 @@ export const command: Command = {
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary:
-    'Search the atlas for a claim. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model.',
-  example: 'upt retrieve period of a pendulum',
+    'Search the atlas for a claim. --expr=FILE ranks the corpus by an expression. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model.',
+  example: `upt retrieve rest energy --expr=${EXAMPLE_EXPR}`,
   group: 'data',
   run,
 };
