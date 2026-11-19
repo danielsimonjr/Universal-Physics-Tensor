@@ -48,6 +48,8 @@ describe('a broken bridge catalog does not load', () => {
 
   it('an entry without a dimension', () => {
     expect(() => read(edited<Catalog>('bridge-catalog.json', (c) => delete c.entries[0]!.dimension))).toThrow(/\$\.entries\[0\]: missing 'dimension'/);
+    expect(() => read(edited<Catalog>('bridge-catalog.json', (c) => (c.entries[0]!.dimension = {})))).toThrow(/\$\.entries\[0\]\.dimension: missing 'L'/);
+    expect(() => read(edited<Catalog>('bridge-catalog.json', (c) => (c.entries[0]!.dimension = { L: 0.5, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 })))).toThrow(/\$\.entries\[0\]\.dimension\.L/);
   });
 
   it('an evaluator parameter with a misspelled flag or a bad sign', () => {

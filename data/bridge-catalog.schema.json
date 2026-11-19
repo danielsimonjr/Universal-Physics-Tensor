@@ -439,7 +439,19 @@
             "description": "The Lean theorem the manifest entry of formalKey names, declared in lean/ (formal/lean/theorem-files.json gives the file). Present exactly when formalKey is. catalogFormalRef refuses a record whose theorem is not the manifest's; tests/atlas/catalog-proof-status.test.ts checks every record."
           },
           "dimension": {
-            "type": "object"
+            "description": "SI base exponents of the result, all seven stated. bridge-check.ts reads it as the expected dimension of the row.",
+            "type": "object",
+            "required": ["L", "M", "T", "I", "Theta", "N", "J"],
+            "additionalProperties": false,
+            "properties": {
+              "L": { "type": "integer" },
+              "M": { "type": "integer" },
+              "T": { "type": "integer" },
+              "I": { "type": "integer" },
+              "Theta": { "type": "integer" },
+              "N": { "type": "integer" },
+              "J": { "type": "integer" }
+            }
           },
           "conventions": {
             "type": "object",
