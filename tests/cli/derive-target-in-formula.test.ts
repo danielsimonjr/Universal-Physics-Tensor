@@ -51,6 +51,24 @@ describe('derive: the target cannot appear in its own formula', () => {
     expect(r.err).toMatch(/'x-y' is the target and cannot appear in its own formula/);
   });
 
+  it('a hyphenated target spelled in the formula wins over declared segments; the message gives the spaced form', async () => {
+    const r = await run(['derive', 'x-y:length', 'x:length', 'y:length', '--formula', 'x-y']);
+    expect(r.code).toBe(2);
+    expect(r.err).toMatch(/'x-y' is the target and cannot appear in its own formula\. For a subtraction, write the minus sign with spaces/);
+  });
+
+  it('control: the spaced subtraction is not the target', async () => {
+    const r = await run(['derive', 'x-y:length', 'x:length', 'y:length', '--formula', 'x - y']);
+    expect(r.err).not.toMatch(/is the target/);
+  });
+
+  it('a formula the parser rejects still names the target, not an undeclared symbol', async () => {
+    const r = await run(['derive', 'V:voltage', 'R:resistance', 'I:current', '--formula', 'V*euler']);
+    expect(r.code).toBe(2);
+    expect(r.err).toMatch(/'V' is the target and cannot appear in its own formula/);
+    expect(r.err).not.toMatch(/undeclared symbol/);
+  });
+
   it('--json mode: the same message', async () => {
     const r = await run(['derive', 'V:voltage', 'R:resistance', 'I:current', '--formula', 'V/(R*I)', '--json']);
     expect(r.code).toBe(2);
