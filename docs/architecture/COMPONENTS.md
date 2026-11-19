@@ -878,7 +878,6 @@ Not part of `src/cli/` itself. The barrel is the seam every command reaches inte
 - `euler-guard.ts`: tags an error of the formula parser with the name of the active parser.
 - `eval-numbers.ts`: the numbers that `upt eval` reads: a bare numeral, a numeral with a unit, and the CODATA names. A bare `e` is the elementary charge.
 - `expr-print.ts`: the three printed forms of a scalar composed AST: display, eval and LaTeX.
-- `file-errors.ts`: `mapFileError`, the one map from a failure to read or parse an input file to a CLI error with no stack. `upt probe` and `upt retrieve --expr` use it.
 - `flag-help.ts`: renders flag text for `upt help` and for `docs/CLI.md` from the `FlagSpec` objects that the parser reads. It holds `commandHelp`, `JSON_FLAG` and `GLOBAL_FLAGS`.
 - `library-defaults.ts`: the defaults and limits that a flag's help prints, read from the library constants that hold them.
 - `map-evidence.ts`: the catalog evidence for `upt map`.
@@ -1007,7 +1006,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1228 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1229 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 
