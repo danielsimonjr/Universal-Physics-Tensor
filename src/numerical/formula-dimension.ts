@@ -36,10 +36,10 @@ export class FormulaDimensionError extends Error {
  * The formula adds, compares or passes unlike dimensions. A caller reads it through the check
  * result's `inhomogeneous`. Unsupported syntax, an unknown function and a parse error are not this. @internal
  */
-class DimensionMismatchError extends FormulaDimensionError {
+class FormulaInhomogeneityError extends FormulaDimensionError {
   constructor(message: string) {
     super(message);
-    this.name = 'DimensionMismatchError';
+    this.name = 'FormulaInhomogeneityError';
   }
 }
 
@@ -137,7 +137,7 @@ const ELEMENTARY_CHARGE_MIX_MESSAGE =
 function dimensionOf(node: ExprNode): Dimension {
   const r = validate(node);
   if (!r.ok || r.inferredDimension === null) {
-    throw new DimensionMismatchError(
+    throw new FormulaInhomogeneityError(
       r.violations[0]?.note ?? 'expression is not dimensionally consistent',
     );
   }
@@ -149,7 +149,7 @@ function dimensionOf(node: ExprNode): Dimension {
 function transcendentalStub(fn: string, argExprNode: ExprNode): ExprNode {
   const argDim = dimensionOf(argExprNode);
   if (!equals(argDim, DIMENSIONLESS)) {
-    throw new DimensionMismatchError(
+    throw new FormulaInhomogeneityError(
       `${fn}() requires a dimensionless argument, got ${format(argDim)}`,
     );
   }
@@ -184,7 +184,7 @@ function callToExpr(fn: string, args: readonly PNode[], dims: Readonly<Record<st
     case 'ratio': {
       const [y, x] = [dimensionOf(normToExpr(args[0]!, dims)), dimensionOf(normToExpr(args[1]!, dims))];
       if (!equals(y, x)) {
-        throw new DimensionMismatchError(`${fn}() arguments must have the same dimension, got ${format(y)} and ${format(x)}`);
+        throw new FormulaInhomogeneityError(`${fn}() arguments must have the same dimension, got ${format(y)} and ${format(x)}`);
       }
       return sym(`${fn}(...)`, DIMENSIONLESS);
     }
@@ -378,7 +378,7 @@ function createFormulaDimensionChecker(
         formulaHasBareE(expr) &&
         eIsElementaryCharge(dims) &&
         r.violations.some((v) => dimensionIsCharge(v.expected) || dimensionIsCharge(v.actual));
-      throw chargeMixed ? new ElementaryChargeMixError(note) : new DimensionMismatchError(note);
+      throw chargeMixed ? new ElementaryChargeMixError(note) : new FormulaInhomogeneityError(note);
     }
     return { expr: exprNode, dimension: r.inferredDimension };
   };
@@ -392,7 +392,7 @@ function createFormulaDimensionChecker(
           ok: false,
           error: e instanceof Error ? e.message : String(e),
           ...(e instanceof ElementaryChargeMixError ? { elementaryChargeMixed: true as const } : {}),
-          ...(e instanceof DimensionMismatchError ? { inhomogeneous: true as const } : {}),
+          ...(e instanceof FormulaInhomogeneityError ? { inhomogeneous: true as const } : {}),
           ...(e instanceof UndeclaredSymbolError ? { undeclaredSymbol: e.symbol } : {}),
         };
       }
