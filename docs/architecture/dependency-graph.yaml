@@ -6862,7 +6862,9 @@ modules:
             - statSync
         - module: path
           imports:
-            - join
+            - isAbsolute
+            - relative
+            - resolve
       internalDependencies:
         - file: ../args.js
           imports:
@@ -19787,7 +19789,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89118
+  totalLinesOfCode: 89133
   totalExports: 2853
   totalClasses: 86
   totalInterfaces: 523

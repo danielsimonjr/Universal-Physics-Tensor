@@ -2974,7 +2974,7 @@ The codebase is organized into the following modules:
 | Module | Import |
 |--------|--------|
 | `fs` | `statSync` |
-| `path` | `join` |
+| `path` | `isAbsolute, relative, resolve` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -7817,7 +7817,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89118 |
+| Total Lines of Code | 89133 |
 | Total Exports | 2853 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
