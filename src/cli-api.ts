@@ -317,7 +317,7 @@ export { FormulaError, FormulaValueError } from './numerical/formula-contract.js
 /** The quantity names a target is bound under, the near names of a miss, and the synonym fold. */
 export { aliasesForTarget, nearQuantityNames, shareSynonyms } from './composition/aliases.js';
 /** Synonym agreement and expansion of a binding set. */
-export { assertSynonymAgreement, expandSynonymValues, SYNONYM_GROUPS } from './dimensional/formula-names.js';
+export { assertSynonymAgreement, expandSynonymValues } from './dimensional/formula-names.js';
 /** A dimensionless group a canonical equation multiplies (sound-speed's gamma): an input, not a graph node. */
 export { CANONICAL_GROUP_PREFACTORS } from './composition/canonical-prefactors.js';
 /** The one number formatter of explain text. */

@@ -21,6 +21,15 @@ describe('eval refuses a formula that is not homogeneous under the binding dimen
     ['x-y', ['x=1m', 'y=1s']],
     ['exp(x)', ['x=2m']],
     ['x+c', ['x=1m']],
+    // An unused bare binding does not switch the check off.
+    ['x+y', ['x=1m', 'y=1s', 'z=3']],
+    ['x+y', ['x=1m', 'y=1s', 'T=300']],
+    ['x+y', ['x=1m', 'y=1s', 'E=5']],
+    // The bound charge `e` mixed with a length is a mismatch.
+    ['x+e', ['x=1m']],
+    ['atan2(x,y)', ['x=1m', 'y=1s']],
+    // A synonym spelling reads the dimension of its bound name.
+    ['temperature+x', ['T=300K', 'x=1m']],
   ];
   for (const [expr, bindings] of refused) {
     it(`${expr} ${bindings.join(' ')} exits 1`, async () => {
@@ -41,6 +50,8 @@ describe('controls: a formula that stays computable is not refused', () => {
     ['E+x', ['E=5', 'x=1m'], 6],
     ['T+1', ['T=300'], 301],
     ['sin(x/y)+1', ['x=1m', 'y=2m'], Math.sin(0.5) + 1],
+    ['x+y', ['x=1m', 'y=1m', 'z=3'], 2],
+    ['atan2(x,y)', ['x=1m', 'y=1m'], Math.PI / 4],
   ];
   for (const [expr, bindings, want] of controls) {
     it(`${expr} ${bindings.join(' ')} = ${want}`, async () => {
