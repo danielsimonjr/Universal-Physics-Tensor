@@ -19,25 +19,30 @@
  * A token with no separator is one factor when the whole token is an exact
  * unit or a prefix plus a unit, with an optional exponent. That reading
  * wins on a bare token, so `ms` stays a millisecond, `mm` a millimetre,
- * `mK` a millikelvin, and `Ts` a terasecond. Inside a larger expression the
- * prefixed reading competes with a heterogeneous product (`mK` is millikelvin
- * or metre·kelvin; `ms` is millisecond or metre·second). A split that puts
- * a prefix letter's own unit twice in a row is never a reading, because a
- * power is written `m2` or `m^2`: `mm` is a millimetre, not metre·metre,
- * and `mmin` is metre·minute or millimetre·inch, not metre·metre·inch.
- * A unit that is not a prefix letter still juxtaposes with itself (`NN` is
- * N·N). MathTS `Unit.readingsWithSource` gives the product splits of a
+ * `mK` a millikelvin, and `Ts` a terasecond. A token that is not one factor
+ * is a product only when a split matches a row of `products` in
+ * `data/units.json`. The key of a row is the factor bases as written, joined
+ * by `·`, with no exponent: `m·K` admits `mK`, `m2K`, `m^2K` and `m⁴K`. A
+ * split also matches when its first factor is a prefix and a unit, and the
+ * row of the unprefixed factors has `prefixFirst` true: `kWh` matches `W·h`
+ * and `mAh` matches `A·h`. A prefix on a later factor never matches. A split
+ * that matches no row is not a reading, so `gal` is not gram·`al`, `lbs` is
+ * not pound·second, and `kgs` and `kmh` are not products: each is an unknown
+ * unit. An operator product (`N*m`, `N m`) needs no row. Inside a larger
+ * expression the prefixed reading competes with a listed product (`mK` is
+ * millikelvin or metre·kelvin; `ms` is millisecond or metre·second). A split
+ * that puts a prefix letter's own unit twice in a row is never a reading,
+ * because a power is written `m2` or `m^2`: `mm` is a millimetre, not
+ * metre·metre. MathTS `Unit.readingsWithSource` gives the product splits of a
  * token. UPT reads each factor from the factor's source text with UPT tables.
- * UPT keeps the reading policy below. `parseUnit` names
- * every remaining reading and refuses. `convertValue` keeps the one reading
- * whose dimension is the declared unit. A token that is not one factor is a
- * product when exactly one split exists: `m2K` is `m^2·K`, `Vs` is `V·s`,
- * and `cm^2/Vs` is `cm^2/(V·s)`. Zero splits are an unknown unit. Two or more
- * splits name each reading and are refused (`mAs` is milliampere·second or
- * metre·ampere·second). An unknown token that ends in a digit stays unknown
- * when it is not that product. A numerator that is the single token `1` is
- * the dimensionless unit, so `1/s` is a reciprocal second and `1/m^3` a
- * number density; `1` is not a symbol anywhere else.
+ * `parseUnit` names every remaining reading and refuses.
+ * `convertValue` keeps the one reading whose dimension is the declared unit.
+ * Thus `m2K` is `m^2·K`, `Vs` is `V·s`, and `cm^2/Vs` is `cm^2/(V·s)`. Two
+ * or more readings are named and refused (`kg/ms` is kilogram per
+ * millisecond or kilogram per metre·second). An unknown token that ends in a
+ * digit stays unknown when it is not that product. A numerator that is the
+ * single token `1` is the dimensionless unit, so `1/s` is a reciprocal second
+ * and `1/m^3` a number density; `1` is not a symbol anywhere else.
  * The table is data: `data/units.json`, loaded and validated by
  * `unit-data.ts`. Every row, prefix, refused spelling, prefix letter, affine
  * scale and spelling note is a row there, with the reason as its `comment`;
@@ -294,6 +299,37 @@ export function segmentations(token: string): FactorReading[][] {
 }
 
 /**
+ * The key of a product row: the factor bases joined by `·`, with no exponent.
+ */
+function productKey(bases: readonly string[]): string {
+  return bases.join('·');
+}
+
+/**
+ * True when `way` matches a row of `data/units.json` `products`. The key of the way
+ * itself must be a row (`m·K` for `m2K`). Alternatively, the first base is a prefix
+ * and a prefixable unit X, and X with the remaining bases is a row whose `prefixFirst`
+ * is true (`kW·h` from `W·h`). A prefix on a later factor never matches, so `kg·s`,
+ * `km·h` and `g·al` are not readings.
+ * @internal
+ */
+export function isListedProduct(way: readonly FactorReading[]): boolean {
+  const bases = way.map((factor) => factor.base);
+  if (UNIT_DATA.products.has(productKey(bases))) return true;
+  const first = bases[0]!;
+  const unprefixed = attachedUnit(first);
+  return unprefixed !== null && UNIT_DATA.products.get(productKey([unprefixed, ...bases.slice(1)])) === true;
+}
+
+/**
+ * The product readings of one token: only the splits that `isListedProduct` accepts.
+ * An unlisted split is never a reading, so it can give neither an answer nor an ambiguity.
+ */
+function listedProducts(ways: FactorReading[][]): FactorReading[][] {
+  return ways.filter(isListedProduct);
+}
+
+/**
  * Ways to read one token. A bare expression keeps a one-factor reading and
  * does not also split it. Inside a compound, a prefixed factor also competes
  * with each heterogeneous product; `segmentations` has already dropped the
@@ -308,7 +344,7 @@ function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denomin
   // A denominator keeps the product readings (`W/mK`), and a target dimension chooses.
   if (single !== null && side === 'numerator') return [[single]];
   const prefixWins = single !== null && PREFIX_LETTER_UNITS.has(token[0]!) && attachedUnit(single.base) !== null;
-  const products = prefixWins ? [] : segmentations(token);
+  const products = prefixWins ? [] : listedProducts(segmentations(token));
   const ways: FactorReading[][] = [];
   if (single !== null) ways.push([single]);
   for (const way of products) ways.push(way);

@@ -13,6 +13,7 @@ import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { publishedUrl } from '../published-url.js';
+import { mapFileError } from '../file-errors.js';
 import {
   PROBE_BUDGET_MS_DEFAULT,
   PROBE_CORRECTION_TERMS_MAX,
@@ -240,59 +241,11 @@ function problemPath(flags: Map<string, string[]>): string {
   return p;
 }
 
-/** The `code` and `path` Node puts on a failed file-system call; empty for any other error. */
-function errnoOf(e: unknown): { code?: string; path?: string } {
-  if (!(e instanceof Error)) return {};
-  const code: unknown = 'code' in e ? e.code : undefined;
-  const path: unknown = 'path' in e ? e.path : undefined;
-  return {
-    ...(typeof code === 'string' ? { code } : {}),
-    ...(typeof path === 'string' ? { path } : {}),
-  };
-}
-
-/**
- * Map probe file/parse failures to CLI errors (no stack traces). `kind` names what the file was
- * read as (`a problem file` for `run --problem`, `an expression file` for a `design` hypothesis,
- * `a bounds file` for its bounds), so a refusal of the loader's own checks says the right thing.
- */
-function mapProbeError(api: CommandCtx['api'], e: unknown, context?: string, kind = 'a problem file'): never {
-  if (e instanceof UsageError || e instanceof CliError) throw e;
-  const errno = errnoOf(e);
-  if (errno.code === 'ENOENT') {
-    throw new CliError(`upt probe: file not found: ${errno.path ?? context ?? 'unknown'}`);
-  }
-  if (e instanceof SyntaxError) {
-    // The JSON readers prefix the file's path; a context that names it already drops the repeat.
-    const message = context !== undefined && e.message.startsWith(`${context}: `) ? e.message.slice(context.length + 2) : e.message;
-    throw new CliError(
-      `upt probe: invalid JSON${context ? ` in ${context}` : ''}: ${message}`,
-    );
-  }
-  // The loader checks every field it reads and names the one that is wrong.
-  if (e instanceof api.ProblemFileError) {
-    throw new CliError(
-      `upt probe: ${context ?? 'the file'} is not ${kind}: ${e.message}. \`upt help probe\` shows the format.`,
-    );
-  }
-  // A TypeError or a RangeError past those checks is a field of a shape the loader does not
-  // check. It is reported as that, with the engine's words marked as the engine's.
-  if (e instanceof TypeError || e instanceof RangeError) {
-    throw new CliError(
-      `upt probe: ${context ?? 'the file'} has a field of a shape the probe does not read (internal: ${e.message}). \`upt help probe\` shows the format.`,
-    );
-  }
-  if (e instanceof Error) {
-    throw new CliError(`upt probe: ${e.message}`);
-  }
-  throw e;
-}
-
 function readJsonFile(api: CommandCtx['api'], path: string): unknown {
   try {
     return JSON.parse(readFileSync(path, 'utf8'));
   } catch (e) {
-    mapProbeError(api, e, path);
+    mapFileError(api, e, 'probe', path);
   }
 }
 
@@ -309,7 +262,7 @@ function validateWorkerPath(api: CommandCtx['api'], worker: string): string {
       throw new UsageError(`upt probe: --worker is not a file: ${worker}`);
     }
   } catch (e) {
-    mapProbeError(api, e, worker);
+    mapFileError(api, e, 'probe', worker);
   }
   return worker;
 }
@@ -416,7 +369,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       try {
         return api.parseExprJson(path);
       } catch (e) {
-        mapProbeError(api, e, path, 'an expression file');
+        mapFileError(api, e, 'probe', path, 'an expression file');
       }
     };
     const h1 = parseExpr(h1p);
@@ -425,13 +378,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     try {
       bounds = api.parseDesignBounds(readJsonFile(api, bp), bp);
     } catch (e) {
-      mapProbeError(api, e, bp, 'a bounds file');
+      mapFileError(api, e, 'probe', bp, 'a bounds file');
     }
     let suggestion;
     try {
       suggestion = api.suggestDiscriminatingPoint(h1, h2, bounds);
     } catch (e) {
-      mapProbeError(api, e, `${h1p}, ${h2p}, ${bp}`);
+      mapFileError(api, e, 'probe', `${h1p}, ${h2p}, ${bp}`);
     }
     if (args.flags.has('json')) {
       emitJson({ command: 'probe', epistemics: EPISTEMICS, result: suggestion }, ctx.write);
@@ -455,7 +408,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     problem = api.loadSearchProblemFromJson(pp);
   } catch (e) {
-    mapProbeError(api, e, pp);
+    mapFileError(api, e, 'probe', pp);
   }
   const workerRaw = args.flags.get('worker')?.[0];
   // `--worker=` with nothing after it is not "no worker": it is refused, as `--replication=` is.
@@ -540,13 +493,13 @@ async function runStudy(ctx: CommandCtx, source: ReturnType<typeof resolveGraph>
   try {
     study = api.loadStudyFile(path, replication);
   } catch (e) {
-    mapProbeError(api, e, e instanceof SyntaxError ? undefined : path);
+    mapFileError(api, e, 'probe', e instanceof SyntaxError ? undefined : path);
   }
   let result;
   try {
     result = await api.runProbeStudy(study, { budget, alpha });
   } catch (e) {
-    mapProbeError(api, e, path);
+    mapFileError(api, e, 'probe', path);
   }
   if (args.flags.has('json')) {
     emitJson(
