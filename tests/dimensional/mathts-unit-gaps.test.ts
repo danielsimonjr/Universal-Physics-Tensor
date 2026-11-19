@@ -112,18 +112,19 @@ describe('Unit.readings agrees with the local splitter on °R, pc and the micro 
 
   it('a glued token with °R has a reading (core 0.24.1)', () => {
     expect(names('m°R')).toEqual(['m·degR']);
-    expect(parseUnit('J/m°R').scale).toBe(1.8);
+    // UPT reads a glued product only from a row of data/units.json `products` (issue 676).
+    expect(() => parseUnit('J/m°R')).toThrow(UnknownUnitError);
   });
 
   it('a glued token keeps a sub-kilo prefix on pc (core 0.24.2)', () => {
     expect(names('Hzpc')).toEqual(['H·zpc', 'Hz·pc']);
-    expect(() => parseUnit('1/Hzpc')).toThrow(AmbiguousUnitError);
+    expect(() => parseUnit('1/Hzpc')).toThrow(UnknownUnitError);
   });
 
   it('a micro sign is a prefix only, never the atomic mass unit u (core 0.24.3)', () => {
-    // Control: `umK` is ambiguous on both sides, because `u` is also the atomic mass unit.
+    // Control: MathTS splits `umK` as `u·m·K` too, but UPT reads only `um·K`, the m·K row with a prefix.
     expect(names('umK')).toContain('u·m·K');
-    expect(() => parseUnit('W/umK')).toThrow(AmbiguousUnitError);
+    expect(parseUnit('W/umK').scale).toBe(1e6);
     for (const micro of ['µ', 'μ']) {
       expect(names(`${micro}mK`).some((r) => r.startsWith('u·')), micro).toBe(false);
       expect(() => Unit.parse(`5 ${micro}`), micro).toThrow();
@@ -145,9 +146,11 @@ describe('Unit.readings agrees with the local splitter on °R, pc and the micro 
     expect(names('m⁴K')).toEqual(['m^4·K^1']);
     expect(names('m⁰K')).toEqual(['m^0·K^1']);
     expect(names('m¹⁰K')).toEqual(['m^10·K^1']);
-    for (const [glued, caret] of [['m⁴K', 'm^4K'], ['m⁰K', 'm^0K'], ['m¹⁰K', 'm^10K'], ['sK⁻⁴', 'sK^-4']] as const) {
+    for (const [glued, caret] of [['m⁴K', 'm^4K'], ['m⁰K', 'm^0K'], ['m¹⁰K', 'm^10K']] as const) {
       expect(parseUnit(`W/${glued}`), glued).toEqual(parseUnit(`W/${caret}`));
     }
+    // s·K is not a products row, so both spellings are an unknown unit.
+    for (const glued of ['sK⁻⁴', 'sK^-4']) expect(() => parseUnit(`W/${glued}`), glued).toThrow(UnknownUnitError);
     expect(parseUnit('W/m⁴K')).toEqual(parseUnit('W/(m^4*K)'));
   });
 });

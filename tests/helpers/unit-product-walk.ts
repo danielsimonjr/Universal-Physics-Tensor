@@ -4,8 +4,9 @@
  * A left factor is a unit, a unit with the power `2` or `^2`, or a prefixed unit. The oracle
  * reads one factor only and does not search for a product. A token that is one factor must
  * read as that factor. Any other token is a product only when its factor bases are a row of
- * `data/units.json` `products`. Then it must be the product of its two factors or an ambiguity
- * that names two or more readings. A token with no listed row is a refusal. The vitest file runs a seeded sample, and
+ * `data/units.json` `products`, or a prefix on the first factor of a row with `prefixFirst` true.
+ * Then it must be the product of its two factors or an ambiguity that names two or more
+ * readings. A token with no listed row is a refusal. The vitest file runs a seeded sample, and
  * `scripts/unit-product-walk.ts` runs every token with no time limit.
  */
 import { equals, multiply } from '../../src/dimensional/algebra.js';
@@ -119,8 +120,20 @@ function productKey(left: string, right: string): string {
   return `${baseOf(left)}·${right}`;
 }
 
+/**
+ * True when the pair is a row of `products`, or the left base is a prefix and a prefixable unit X
+ * and `X·right` is a row with `prefixFirst` true. A prefix on the right factor never matches.
+ */
 function isListed(left: string, right: string): boolean {
-  return UNIT_DATA.products.has(productKey(left, right));
+  if (UNIT_DATA.products.has(productKey(left, right))) return true;
+  const base = baseOf(left);
+  if (units.has(base)) return false;
+  for (const prefix of prefixes.keys()) {
+    if (!base.startsWith(prefix)) continue;
+    const unit = base.slice(prefix.length);
+    if (units.get(unit)?.[2] === true && UNIT_DATA.products.get(`${unit}·${right}`) === true) return true;
+  }
+  return false;
 }
 
 const within = (actual: number, expected: number): boolean =>
