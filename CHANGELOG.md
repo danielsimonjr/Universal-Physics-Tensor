@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
-- The README says that `parseUnit` reads a unit expression and `convertValue` reads a number with a unit. The README example runs both, and shows that `parseUnit` throws `UnitError` for `5 km/s` (#692).
+- The README says that `parseUnit` reads a unit expression and `convertValue` reads a number with a unit. The README example runs both, and shows that `parseUnit` throws `UnitError` for `5 km/s`. The `UnitError` JSDoc names every cause the unit readers throw it for (#692).
 - `upt map --help` lists the accepted values of `--relation` and `--evidence`. A compile-time check fails the build when either list omits a member of its union (#688).
 
 ## [15.0.0] - 2026-11-18
