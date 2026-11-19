@@ -893,6 +893,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `composition/suggest-ranking.test.ts` | 2 files |
 | `composition/symbolic-constants-extra.test.ts` | 1 files |
 | `composition/user-equation.test.ts` | 6 files |
+| `config/vitest-hook-timeout.test.ts` | 0 files |
 | `core/addCell.test.ts` | 4 files |
 | `core/assignment.test.ts` | 1 files |
 | `core/axes-registry.test.ts` | 1 files |

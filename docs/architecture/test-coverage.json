@@ -25300,6 +25300,7 @@
       "src/composition/edge.ts",
       "src/composition/quantity.ts"
     ],
+    "tests/config/vitest-hook-timeout.test.ts": [],
     "tests/core/addCell.test.ts": [
       "src/core/tensor.ts",
       "src/core/cell.ts",
