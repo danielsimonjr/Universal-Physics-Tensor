@@ -178,7 +178,9 @@ async function run(ctx: CommandCtx): Promise<number> {
       if (constant !== undefined) dims[v] = constant.dim;
     }
     const homogeneous = api.builtinFormulaDimensionChecker().check(expr, dims);
-    if (!homogeneous.ok && (homogeneous.inhomogeneous === true || homogeneous.elementaryChargeMixed === true)) {
+    // A bare e is the CODATA charge; a caller who bound e chose a different quantity.
+    const chargeMixed = homogeneous.elementaryChargeMixed === true && !('e' in parsed.scope);
+    if (!homogeneous.ok && (homogeneous.inhomogeneous === true || chargeMixed)) {
       throw new CliError(
         `upt eval: the formula is not dimensionally homogeneous: ${homogeneous.error?.replace(/\.$/, '')}. A value with a unit keeps its dimension.`,
       );
