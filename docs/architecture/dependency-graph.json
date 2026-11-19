@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 390,
     "totalModules": 13,
-    "totalExports": 2852
+    "totalExports": 2854
   },
   "entryPoints": [
     {
@@ -8944,6 +8944,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../library-defaults.js",
+            "imports": [
+              "NAMED_DIMENSIONS_HELP"
+            ]
           }
         ],
         "exports": [
@@ -10673,6 +10679,12 @@
               "DEFAULT_ALPHA",
               "MAX_CORRECTION_TERMS"
             ]
+          },
+          {
+            "file": "../dimensional/dimension-spec.js",
+            "imports": [
+              "NAMED_DIMENSION_NAMES"
+            ]
           }
         ],
         "exports": [
@@ -10680,14 +10692,16 @@
           "PROBE_BUDGET_MS_DEFAULT",
           "PROBE_HOLDOUT_TOL_DEFAULT",
           "PROBE_STUDY_ALPHA_DEFAULT",
-          "PROBE_CORRECTION_TERMS_MAX"
+          "PROBE_CORRECTION_TERMS_MAX",
+          "NAMED_DIMENSIONS_HELP"
         ],
         "constants": [
           "DISCOVER_MAX_ORDERS_DEFAULT",
           "PROBE_BUDGET_MS_DEFAULT",
           "PROBE_HOLDOUT_TOL_DEFAULT",
           "PROBE_STUDY_ALPHA_DEFAULT",
-          "PROBE_CORRECTION_TERMS_MAX"
+          "PROBE_CORRECTION_TERMS_MAX",
+          "NAMED_DIMENSIONS_HELP"
         ]
       },
       "src/cli/main.ts": {
@@ -21147,6 +21161,7 @@
           }
         ],
         "exports": [
+          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS",
           "parseDimensionSpec",
           "DimensionSpecError"
@@ -21158,6 +21173,7 @@
           "parseDimensionSpec"
         ],
         "constants": [
+          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS"
         ]
       },
@@ -28521,14 +28537,14 @@
   "statistics": {
     "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 89063,
-    "totalExports": 2852,
+    "totalLinesOfCode": 89101,
+    "totalExports": 2854,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 934,
     "totalTypeGuards": 16,
     "totalEnums": 0,
-    "totalConstants": 421,
+    "totalConstants": 423,
     "totalReExports": 1405,
     "totalTypeOnlyImports": 533,
     "runtimeCircularDeps": 0,
