@@ -393,6 +393,11 @@ export interface ShortBinding {
  */
 export interface EquationAnalysis {
   readonly junction: VizJunction;
+  /**
+   * The junction as the graph reads it. A name that did not bind is keyed `<name> (unbound)`,
+   * so it never joins a catalog node that has the same spelling.
+   */
+  readonly graphJunction: VizJunction;
   /** Set when the RHS is not dimensionally well-formed (then dims are null). */
   readonly parseError: string | null;
   readonly rhsDimension: Dimension | null;
@@ -539,13 +544,21 @@ export async function analyzeUserEquation(
     }
   }
 
+  const junction: VizJunction = {
+    id: 'user-equation',
+    label: eq.text,
+    status: 'user',
+    sources: eq.sources.map((s) => resolve(s) ?? s),
+    target: resolvedTarget ?? eq.target,
+  };
+  const unbound = (n: string): string => `${n} (unbound)`;
+
   return {
-    junction: {
-      id: 'user-equation',
-      label: eq.text,
-      status: 'user',
-      sources: eq.sources.map((s) => resolve(s) ?? s),
-      target: resolvedTarget ?? eq.target,
+    junction,
+    graphJunction: {
+      ...junction,
+      sources: eq.sources.map((s) => resolve(s) ?? unbound(s)),
+      target: resolvedTarget ?? unbound(eq.target),
     },
     parseError,
     rhsDimension,

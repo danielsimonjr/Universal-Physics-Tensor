@@ -766,7 +766,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
     if (user) {
       const model = api.buildVizModel(fullGraph, {
         title: `UPT physics map — ${label}`,
-        extraJunctions: overlay([user.junction]),
+        extraJunctions: overlay([user.graphJunction]),
         ...filterOpts,
       });
       landing = api.equationLanding(model, 'user-equation');
@@ -804,7 +804,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   }
 
   if (fmt === 'mermaid' || fmt === 'dot' || fmt === 'svg') {
-    const extraJunctions = overlay(user ? [user.junction] : []);
+    const extraJunctions = overlay(user ? [user.graphJunction] : []);
     const model = api.buildVizModel(fullGraph, {
       title: `UPT physics map — ${label}`,
       extraJunctions,
@@ -852,7 +852,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   if (user) {
     const model = api.buildVizModel(fullGraph, {
       title: `UPT physics map — ${label}`,
-      extraJunctions: overlay([user.junction]),
+      extraJunctions: overlay([user.graphJunction]),
       ...filterOpts,
     });
     out(`\nYour equation:  ${user.junction.label}`);
