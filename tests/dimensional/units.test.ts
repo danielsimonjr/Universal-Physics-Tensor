@@ -41,18 +41,17 @@ describe('parseUnit', () => {
     expect(parseUnit('Rsun').dim).toMatchObject({ L: 1 });
   });
 
-  it('a glued r or R after degR, sr, hr or Rsun is a second reading, so the token is ambiguous', () => {
-    // The SI lets a prefix attach to any unit. `deg·Rm` (degree times ronnametre) is a reading.
-    // MathTS core 0.24.3 `Unit.readings` gives the same two readings for each token.
+  it('a glued product after degR, sr, hr or Rsun has no products row, so the token is an unknown unit', () => {
+    // `degR·m`, `deg·Rm`, `sr·m` and the others are not rows of data/units.json `products` (issue 676).
     for (const [glued, spaced] of [['W/degRm', 'W/(degR*m)'], ['W/srm', 'W/(sr*m)'], ['W/hrm', 'W/(hr*m)'], ['W/Rsunm', 'W/(Rsun*m)']] as const) {
-      expect(() => parseUnit(glued), glued).toThrow(AmbiguousUnitError);
+      expect(() => parseUnit(glued), glued).toThrow(UnknownUnitError);
       expect(() => parseUnit(spaced), spaced).not.toThrow();
     }
   });
 
   it('a bare degree sign is the angle degree, and the affine spellings read as before', () => {
     expect(parseUnit('°')).toEqual(parseUnit('deg'));
-    expect(() => parseUnit('W/°Rm')).toThrow(AmbiguousUnitError);
+    expect(() => parseUnit('W/°Rm')).toThrow(UnknownUnitError);
     expect(parseUnit('°R').scale).toBe(parseUnit('degR').scale);
     expect(parseUnit('°C').affine).toBe('celsius');
     expect(() => parseUnit('° C/s')).toThrow(UnitError);
@@ -177,7 +176,7 @@ describe('convertValue', () => {
     expect(parseUnit('cP').scale).toBeCloseTo(0.001, 12);
     expect(convertValue('1cP', 'Pa*s').value).toBeCloseTo(0.001, 12);
     expect(convertValue('1mol/mL', 'mol/m^3').value).toBeCloseTo(1e6, 6);
-    expect(() => parseUnit('mol/mL')).toThrow(/ambiguous/);
+    expect(parseUnit('mol/mL').scale).toBeCloseTo(1e6, 6);
     expect(parseUnit('rpm').scale).toBeCloseTo(1 / 60, 12);
     expect(convertValue('60rpm', 'Hz').value).toBeCloseTo(1, 12);
     expect(parseUnit('hp').scale).toBeCloseTo(550 * 0.3048 * pound * gravity, 6);
@@ -274,24 +273,9 @@ describe('a numerator 1 is the dimensionless unit (audit N6)', () => {
 describe('a homogeneous run does not compete inside a split either (audit N14)', () => {
   // The doc says `m·m` never competes, but the rule ran only when the whole
   // token was one factor; `mmin` listed `m·m·in` beside `m·min` and `mm·in`.
-  it('mmin names m·min and mm·in, and not m·m·in', () => {
-    let error: unknown;
-    try {
-      convertValue('1mmin', 's');
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeInstanceOf(AmbiguousUnitError);
-    const readings = (error as AmbiguousUnitError).readings;
-    expect(readings).toContain('m·min');
-    expect(readings).toContain('mm·in');
-    expect(readings).not.toContain('m·m·in');
-    expect(readings).toHaveLength(2);
-  });
-
-  it('a target dimension still picks the one reading of mmin', () => {
-    expect(convertValue('1mmin', 'm*s').value).toBe(60);
-    expect(convertValue('1mmin', 'm^2').value).toBeCloseTo(0.0254e-3, 12);
+  it('mmin is an unknown unit: neither m·min nor mm·in is a products row (issue 676)', () => {
+    expect(() => convertValue('1mmin', 's')).toThrow(UnknownUnitError);
+    expect(() => convertValue('1mmin', 'm*s')).toThrow(UnknownUnitError);
   });
 
   it('a prefixed power keeps its one reading, and a glued product still splits', () => {
@@ -301,14 +285,15 @@ describe('a homogeneous run does not compete inside a split either (audit N14)',
     expect(parseUnit('kg/mm').scale).toBe(1000);
   });
 
-  it('m2min is an area times a minute, and a power written as m2m is not a reading (write m3)', () => {
-    expect(parseUnit('m2min')).toMatchObject({ scale: 60, dim: { L: 2, T: 1 } });
+  it('m2min is an unknown unit (m·min is not a products row), and a power written as m2m is not a reading (write m3)', () => {
+    expect(() => parseUnit('m2min')).toThrow(UnknownUnitError);
     expect(() => parseUnit('m2m')).toThrow(UnknownUnitError);
     expect(parseUnit('m3').dim).toMatchObject({ L: 3 });
   });
 
-  it('a unit that is not a prefix letter still juxtaposes with itself', () => {
-    expect(parseUnit('NN').dim).toEqual(parseUnit('N^2').dim);
-    expect(() => parseUnit('HzHz')).toThrow(AmbiguousUnitError);
+  it('a run of a unit that is not a prefix letter has no products row, so it is an unknown unit', () => {
+    expect(() => parseUnit('NN')).toThrow(UnknownUnitError);
+    expect(() => parseUnit('HzHz')).toThrow(UnknownUnitError);
+    expect(parseUnit('N^2').dim).toMatchObject({ M: 2 });
   });
 });

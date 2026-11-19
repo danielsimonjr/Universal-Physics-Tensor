@@ -12,10 +12,9 @@ function ambiguity(read: () => unknown): AmbiguousUnitError {
 }
 
 describe('AmbiguousUnitError lists the readings in codepoint order', () => {
-  it('umK and mAs print the sorted readings, whatever order the splitter found them in', () => {
-    expect(ambiguity(() => parseUnit('umK')).message).toBe("'umK' is ambiguous: um·K or u·mK or u·m·K");
-    expect(ambiguity(() => parseUnit('mAs')).message).toBe("'mAs' is ambiguous: mA·s or m·A·s");
-    expect(ambiguity(() => parseUnit('W/umK')).readings).toEqual(['W/(um·K)', 'W/(u·mK)', 'W/(u·m·K)']);
+  it('kg/ms and W/mK print the sorted readings, whatever order the grammar found them in', () => {
+    expect(ambiguity(() => parseUnit('kg/ms')).message).toBe("'kg/ms' is ambiguous: kg/(m·s) or kg/ms");
+    expect(ambiguity(() => parseUnit('W/mK')).readings).toEqual(['W/(m·K)', 'W/mK']);
   });
 
   it('the constructor sorts, so a producer that lists the readings in another order prints the same message', () => {
