@@ -214,7 +214,7 @@ describe('upt map --family', () => {
     const { code, stdout } = await run(['map', '--family=diffusion', '--evidence=formally-proved']);
     expect(code).toBe(0);
     expect(stdout).toMatch(
-      /filter: evidence=formally-proved — 3 of \d+ bridges kept; \d+ dropped \(did not match\); 0 dropped \(undecided: depends on witness results this command does not observe\)/,
+      /filter: evidence=formally-proved — 3 of \d+ bridges in this view \(.*\) kept; \d+ dropped \(did not match\); 0 dropped \(undecided: depends on witness results this command does not observe\)/,
     );
   });
 
@@ -250,5 +250,38 @@ describe('upt map --family', () => {
     const r = await run(['map', '--family=osc']);
     expect(r.code).toBe(1);
     expect(r.stderr).toContain(`expected: ${ATLAS_FAMILIES.map((f) => f.family).join(' | ')}`);
+  });
+});
+
+describe('upt map filter legend names the set it counts', () => {
+  const NAMED = /1 of 10 bridges in this view \(5 filed under oscillators, 5 filed elsewhere that touch its models\) kept/;
+
+  it('family text legend: the total names its candidate set, and kept equals the shown line', async () => {
+    const { stdout } = await run(['map', '--relation=derivation', '--family=oscillators']);
+    expect(stdout).toMatch(NAMED);
+    const shown = stdout.match(/(\d+) bridge\(s\) filed under oscillators and (\d+) filed elsewhere that touch its models, of \d+ atlas bridges/)!;
+    const kept = Number(stdout.match(/filter: [^\n]*? — (\d+) of \d+ bridges in this view/)![1]);
+    expect(kept).toBe(Number(shown[1]) + Number(shown[2]));
+  });
+
+  it('family --json: filter.scope is a non-empty string and total is the unfiltered candidate count', async () => {
+    const f = (await json(['map', '--relation=derivation', '--family=oscillators'])).result;
+    const u = (await json(['map', '--family=oscillators'])).result;
+    expect(typeof f.filter.scope).toBe('string');
+    expect(f.filter.scope.length).toBeGreaterThan(0);
+    expect(f.filter.total).toBe(u.denominator.bridgesFiled.shown + u.denominator.bridgesTouching.shown);
+  });
+
+  it('observable legend names its set, never a bare count of bridges', async () => {
+    const { stdout } = await run(['map', '--observable=freq', '--relation=derivation']);
+    const line = stdout.split('\n').find((l) => l.includes('filter: relation=derivation'))!;
+    expect(line).toBeDefined();
+    expect(line).toMatch(/\d+ of \d+ bridges that preserve or translate 'freq' kept/);
+    expect(line).not.toMatch(/of \d+ bridges kept/);
+  });
+
+  it('diagram legend (stderr) names the set', async () => {
+    const dot = await run(['map', '--family=oscillators', '--format=dot', '--relation=derivation']);
+    expect(dot.stderr).toMatch(NAMED);
   });
 });
