@@ -69,6 +69,15 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         registered constant it names, print beside the value.`;
 
 /**
+ * The text label of a primary output. A quantity that declares `displayUnit` uses it: no rule
+ * can choose `V^2/Hz` over `J*ohm` from the dimension alone. Any other quantity gets one
+ * coherent named unit, else the SI base form. Presentation only.
+ */
+export function primaryUnitLabel(api: CommandCtx['api'], name: string, dimension: Parameters<typeof derivedUnitOf>[0]): string {
+  return api.quantityRecord(name)?.displayUnit ?? derivedUnitOf(dimension, coherentUnits(api.unitRows()));
+}
+
+/**
  * An input-contract error (absent, unknown, non-number, non-finite or twice-given
  * input) as the CLI reports it: a bad value (exit 1) under the one `upt evaluate:`
  * prefix. Its message already names the id.
@@ -469,9 +478,10 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
   const relation = api.primaryRelation(id);
   const notices = relation === undefined ? [] : api.relationNotices(relation);
 
-  // The text label is a derived SI unit read from the unit table (`V^2/Hz`); the JSON is the
-  // library result itself, whose `unit` is the base form `parseUnit` reads back.
-  const label = evaluation.kind === 'unset' ? undefined : derivedUnitOf(evaluation.dimension, coherentUnits(api.unitRows()));
+  // The text label is the quantity's declared `displayUnit` (`V^2/Hz`), else one coherent named
+  // SI unit, else the base form. The JSON is the library result itself, whose `unit` is the base
+  // form `parseUnit` reads back.
+  const label = evaluation.kind === 'unset' ? undefined : primaryUnitLabel(api, evaluation.name, evaluation.dimension);
   const unused = api.unusedInputKeys(spec);
   if (args.flags.has('json')) {
     emitJson(
