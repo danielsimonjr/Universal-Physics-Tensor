@@ -6373,8 +6373,9 @@ The codebase is organized into the following modules:
 - Functions:
 
   ```text
-  affineReadingNote, formatReading, segmentations, unitConventionNotes, readUnit, unitReadingsSource,
-  parseUnit, readQuantityLiteral, convertValue, unitDimension, unitRows, unitTables
+  affineReadingNote, formatReading, segmentations, isListedProduct, unitConventionNotes, readUnit,
+  unitReadingsSource, parseUnit, readQuantityLiteral, convertValue, unitDimension, unitRows,
+  unitTables
   ```
 
 
@@ -7800,13 +7801,13 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89057 |
-| Total Exports | 2852 |
+| Total Lines of Code | 89125 |
+| Total Exports | 2853 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 934 |
-| Total Type Guards | 16 |
+| Total Functions | 935 |
+| Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |
 | Runtime Circular Deps | 0 |

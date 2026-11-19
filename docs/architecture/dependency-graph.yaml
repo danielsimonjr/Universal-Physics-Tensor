@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 390
   totalModules: 13
-  totalExports: 2852
+  totalExports: 2853
 entryPoints:
   - file: src/index.ts
     type: main
@@ -15392,6 +15392,7 @@ modules:
         - affineReadingNote
         - formatReading
         - segmentations
+        - isListedProduct
         - unitConventionNotes
         - readUnit
         - unitReadingsSource
@@ -15420,6 +15421,7 @@ modules:
         - affineReadingNote
         - formatReading
         - segmentations
+        - isListedProduct
         - unitConventionNotes
         - readUnit
         - unitReadingsSource
@@ -19757,12 +19759,12 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 390
   totalModules: 13
-  totalLinesOfCode: 89057
-  totalExports: 2852
+  totalLinesOfCode: 89125
+  totalExports: 2853
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 934
-  totalTypeGuards: 16
+  totalFunctions: 935
+  totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 421
   totalReExports: 1405
