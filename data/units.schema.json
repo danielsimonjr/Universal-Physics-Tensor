@@ -4,7 +4,7 @@
   "title": "UPT unit table",
   "description": "The shape of data/units.json. src/dimensional/unit-data.ts validates the file against this schema when it loads, with the keyword subset src/core/json-schema.ts reads.",
   "type": "object",
-  "required": ["schemaVersion", "description", "scales", "prefixes", "units", "refused", "prefixLetterUnits", "affine", "spellingNotes"],
+  "required": ["schemaVersion", "description", "scales", "prefixes", "units", "refused", "prefixLetterUnits", "products", "affine", "spellingNotes"],
   "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string" },
@@ -59,6 +59,27 @@
       "properties": {
         "comment": { "type": "string", "minLength": 1 },
         "letters": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "products": {
+      "type": "object",
+      "required": ["comment", "rows"],
+      "additionalProperties": false,
+      "properties": {
+        "comment": { "type": "string", "minLength": 1 },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["factors", "prefixFirst", "comment"],
+            "additionalProperties": false,
+            "properties": {
+              "factors": { "type": "string", "minLength": 3, "description": "Two or more factor bases, each an exact unit symbol, joined by the middle dot, with no exponent." },
+              "prefixFirst": { "type": "boolean", "description": "True when a prefix on the first factor also matches the row (`kWh` from `W·h`). A prefix on a later factor never matches." },
+              "comment": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
       }
     },
     "affine": {

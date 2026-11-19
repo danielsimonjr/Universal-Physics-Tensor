@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "15.0.0",
-    "totalFiles": 390,
+    "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2852
+    "totalExports": 2857
   },
   "entryPoints": [
     {
@@ -185,7 +185,8 @@
           {
             "file": "../../canonical/residual.js",
             "imports": [
-              "canonicalResidual"
+              "canonicalResidual",
+              "monomialResidual"
             ]
           },
           {
@@ -7408,6 +7409,14 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/ast-builders.js",
+            "imports": [
+              "dim",
+              "sym",
+              "symbolPower"
+            ]
+          },
+          {
             "file": "./canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -7416,10 +7425,12 @@
           }
         ],
         "exports": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ],
         "functions": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ]
       },
       "src/canonical/seed-l-layer.ts": {
@@ -8944,6 +8955,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../library-defaults.js",
+            "imports": [
+              "NAMED_DIMENSIONS_HELP"
+            ]
           }
         ],
         "exports": [
@@ -10038,6 +10055,12 @@
             ]
           },
           {
+            "file": "../file-errors.js",
+            "imports": [
+              "mapFileError"
+            ]
+          },
+          {
             "file": "../library-defaults.js",
             "imports": [
               "PROBE_BUDGET_MS_DEFAULT",
@@ -10171,6 +10194,14 @@
             "imports": [
               "statSync"
             ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "isAbsolute",
+              "relative",
+              "resolve"
+            ]
           }
         ],
         "internalDependencies": [
@@ -10207,6 +10238,18 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../file-errors.js",
+            "imports": [
+              "mapFileError"
+            ]
+          },
+          {
+            "file": "../stored-results.js",
+            "imports": [
+              "repoRoot"
             ]
           }
         ],
@@ -10562,6 +10605,33 @@
           "printEval"
         ]
       },
+      "src/cli/file-errors.ts": {
+        "description": "Maps a failure to read or parse an input file to a `CliError`, so no stack trace reaches the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./command.js",
+            "imports": [
+              "CommandCtx"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./errors.js",
+            "imports": [
+              "CliError",
+              "UsageError"
+            ]
+          }
+        ],
+        "exports": [
+          "mapFileError"
+        ],
+        "functions": [
+          "mapFileError"
+        ]
+      },
       "src/cli/flag-help.ts": {
         "description": "Flag text for `upt help` and for `docs/CLI.md`.",
         "externalDependencies": [],
@@ -10673,6 +10743,12 @@
               "DEFAULT_ALPHA",
               "MAX_CORRECTION_TERMS"
             ]
+          },
+          {
+            "file": "../dimensional/dimension-spec.js",
+            "imports": [
+              "NAMED_DIMENSION_NAMES"
+            ]
           }
         ],
         "exports": [
@@ -10680,14 +10756,16 @@
           "PROBE_BUDGET_MS_DEFAULT",
           "PROBE_HOLDOUT_TOL_DEFAULT",
           "PROBE_STUDY_ALPHA_DEFAULT",
-          "PROBE_CORRECTION_TERMS_MAX"
+          "PROBE_CORRECTION_TERMS_MAX",
+          "NAMED_DIMENSIONS_HELP"
         ],
         "constants": [
           "DISCOVER_MAX_ORDERS_DEFAULT",
           "PROBE_BUDGET_MS_DEFAULT",
           "PROBE_HOLDOUT_TOL_DEFAULT",
           "PROBE_STUDY_ALPHA_DEFAULT",
-          "PROBE_CORRECTION_TERMS_MAX"
+          "PROBE_CORRECTION_TERMS_MAX",
+          "NAMED_DIMENSIONS_HELP"
         ]
       },
       "src/cli/main.ts": {
@@ -21147,6 +21225,7 @@
           }
         ],
         "exports": [
+          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS",
           "parseDimensionSpec",
           "DimensionSpecError"
@@ -21158,6 +21237,7 @@
           "parseDimensionSpec"
         ],
         "constants": [
+          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS"
         ]
       },
@@ -22631,6 +22711,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -22662,6 +22743,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -28255,6 +28337,7 @@
           "src/cli/euler-guard.ts",
           "src/cli/eval-numbers.ts",
           "src/cli/expr-print.ts",
+          "src/cli/file-errors.ts",
           "src/cli/flag-help.ts",
           "src/cli/graphs.ts",
           "src/cli/library-defaults.ts",
@@ -28519,18 +28602,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 390,
+    "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89058,
-    "totalExports": 2852,
+    "totalLinesOfCode": 89286,
+    "totalExports": 2857,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 934,
-    "totalTypeGuards": 16,
+    "totalFunctions": 937,
+    "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 421,
+    "totalConstants": 423,
     "totalReExports": 1405,
-    "totalTypeOnlyImports": 533,
+    "totalTypeOnlyImports": 534,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
