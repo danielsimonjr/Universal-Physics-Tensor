@@ -16,6 +16,7 @@ import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { Dimension } from '../../dimensional/types.js';
+import { NAMED_DIMENSIONS_HELP } from '../library-defaults.js';
 
 /** The parser's symbol for a declared name. A hyphen is subtraction, so a
  *  declared `reduced-planck-constant` is the symbol `reduced_planck_constant`. */
@@ -49,8 +50,9 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         G, k_B, e — e here is the elementary charge's dimension), a named
         product/quotient (power/area, length*temperature),
         or explicit (L^3.M^-1.T^-2). Parentheses group a factor
-        (power/(area*temperature^4)); pressure, density, volume, viscosity,
-        resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
+        (power/(area*temperature^4)); mass/length^3 and M/L^3 work.
+        The named dimensions are:
+${NAMED_DIMENSIONS_HELP}.
         In --formula, a bare e is the elementary charge and E is energy.
         A name from a dimension argument is one symbol, hyphens included.
         A hyphen between other names is subtraction.
