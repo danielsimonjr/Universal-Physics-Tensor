@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 390,
     "totalModules": 13,
-    "totalExports": 2857
+    "totalExports": 2856
   },
   "entryPoints": [
     {
@@ -12195,8 +12195,7 @@
             "file": "./dimensional/formula-names.js",
             "imports": [
               "assertSynonymAgreement",
-              "expandSynonymValues",
-              "SYNONYM_GROUPS"
+              "expandSynonymValues"
             ],
             "reExport": true
           },
@@ -12563,7 +12562,6 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
-          "SYNONYM_GROUPS",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -12885,7 +12883,6 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
-          "SYNONYM_GROUPS",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -28552,15 +28549,15 @@
   "statistics": {
     "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 89197,
-    "totalExports": 2857,
+    "totalLinesOfCode": 89213,
+    "totalExports": 2856,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 935,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1407,
+    "totalReExports": 1406,
     "totalTypeOnlyImports": 534,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

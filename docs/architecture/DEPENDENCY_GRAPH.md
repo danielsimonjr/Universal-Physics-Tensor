@@ -3489,7 +3489,7 @@ The codebase is organized into the following modules:
 | `./dimensional/symbolic-constants.js` | `constantAgreement, ConstantDisagreementError` | Re-export |
 | `./numerical/formula-contract.js` | `FormulaError, FormulaValueError` | Re-export |
 | `./composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Re-export |
-| `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues, SYNONYM_GROUPS` | Re-export |
+| `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues` | Re-export |
 | `./composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Re-export |
 | `./composition/explain.js` | `formatQuantity, formatExact` | Re-export |
 | `./core/format.js` | `formatPercent` | Re-export |
@@ -3566,13 +3566,13 @@ The codebase is organized into the following modules:
   TemperatureBindingError, propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite,
   PropagatedOutput, UncertaintyContribution, constantAgreement, ConstantDisagreementError,
   FormulaError, FormulaValueError, aliasesForTarget, nearQuantityNames, shareSynonyms,
-  assertSynonymAgreement, expandSynonymValues, SYNONYM_GROUPS, CANONICAL_GROUP_PREFACTORS,
-  formatQuantity, formatExact, formatPercent, CarrierSignError, naturalConstantOverrides, UnitMode,
-  escapeRegExp, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved,
-  resolveEvaluable, siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
-  EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder,
-  builtinFormulaDimensionChecker, missingEvaluatorMessage, relationNotices, constantNotes,
-  constantRecord, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
+  assertSynonymAgreement, expandSynonymValues, CANONICAL_GROUP_PREFACTORS, formatQuantity,
+  formatExact, formatPercent, CarrierSignError, naturalConstantOverrides, UnitMode, escapeRegExp,
+  rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved, resolveEvaluable,
+  siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus, EmbeddingUnavailable,
+  ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder, builtinFormulaDimensionChecker,
+  missingEvaluatorMessage, relationNotices, constantNotes, constantRecord, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -7804,9 +7804,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89197 |
-| Total Exports | 2857 |
-| Total Re-exports | 1407 |
+| Total Lines of Code | 89213 |
+| Total Exports | 2856 |
+| Total Re-exports | 1406 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 935 |
