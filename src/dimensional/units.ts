@@ -559,6 +559,13 @@ function siMagnitude(magnitude: ExactScale, unit: UnitReading, temperature: Temp
   return row !== undefined && temperature === 'absolute' ? addScales(scaled, affineOffset(row)) : scaled;
 }
 
+/** The inverse of {@link siMagnitude}: the magnitude in `unit` of an SI value, exactly. */
+function fromSiMagnitude(si: ExactScale, unit: UnitReading, temperature: TemperatureReading): ExactScale {
+  const row = unit.affine === undefined ? undefined : AFFINE.find((candidate) => candidate.id === unit.affine);
+  const shifted = row !== undefined && temperature === 'absolute' ? addScales(si, multiplyScales(ratioScale(-1, 1), affineOffset(row))) : si;
+  return divideScales(shifted, unit.exact);
+}
+
 const FRACTION = /^\s*([+-]?(?:\d+\.?\d*|\.\d+))\s*\/\s*((?:\d+\.?\d*|\.\d+))\s*$/;
 const NUMBER_THEN_REST = /^\s*([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)\s*$/;
 
@@ -645,6 +652,7 @@ export interface ConvertedValue {
  *
  * The magnitude, the unit scales and the target scale are multiplied as
  * exact rationals and rounded once, so `1 g/cm^3` in `kg/m^3` is 1000.
+ * An affine target (`degC`, `degF`) is read with the same `temperature` as the source.
  *
  * @returns the value in `target`, and the unit the user gave (`''` for none).
  * @public
@@ -656,7 +664,6 @@ export function convertValue(raw: string, target: string, temperature: Temperatu
   const given = literal.unit;
   const readings = unitReadings(given);
   const to = readUnit(target);
-  if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
   const matched = readings.filter((candidate) => equals(candidate.dim, to.dim));
   if (matched.length !== 1) {
     if (readings.length > 1) throw new AmbiguousUnitError(given, readings.map((r) => r.label));
@@ -665,7 +672,7 @@ export function convertValue(raw: string, target: string, temperature: Temperatu
     throw new UnitError(`'${given}' is ${format(from.dim)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`);
   }
   const from = matched[0]!;
-  const value = scaleToNumber(divideScales(siMagnitude(literal.magnitude, from, temperature), to.exact));
+  const value = scaleToNumber(fromSiMagnitude(siMagnitude(literal.magnitude, from, temperature), to, temperature));
   return {
     value: finiteLiteral(raw, value),
     given,

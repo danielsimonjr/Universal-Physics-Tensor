@@ -7,7 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import { C_SI, E_SI, G_SI, H_SI, M_SUN_SI } from '../../src/core/constants.js';
 import { CHARGE } from '../../src/dimensional/types.js';
-import { convertValue, unitConventionNotes } from '../../src/dimensional/units.js';
+import { UnitError, convertValue, unitConventionNotes } from '../../src/dimensional/units.js';
 import {
   bindingInUnit,
   readBinding,
@@ -120,5 +120,18 @@ describe('affine temperature role', () => {
     expect(readNamedBinding('T_K', '10degC', { reading: 'difference' }).value).toBe(10);
     expect(readNamedBinding('temperature-change', '10degC', { declaredUnit: 'K' }).value).toBe(10);
     expect(readNamedBinding('T', '25degC', { declaredUnit: 'K' }).value).toBeCloseTo(298.15, 8);
+  });
+});
+
+describe('a binding slot cannot be affine', () => {
+  const refused = /cannot be affine/;
+  it('refuses an affine declared unit for a literal, a bare number and an expression', () => {
+    expect(() => readNamedBinding('x', '25 degC', { declaredUnit: 'degC' })).toThrow(refused);
+    expect(() => readNamedBinding('x', '300 K', { declaredUnit: 'degC' })).toThrow(refused);
+    expect(() => readNamedBinding('x', '25', { declaredUnit: 'degC' })).toThrow(refused);
+    expect(() => bindingInUnit('25 degC', 'degC')).toThrow(refused);
+    expect(() => bindingInUnit('25', 'degC')).toThrow(refused);
+    expect(() => bindingInUnit('1 K + 1 K', 'degC')).toThrow(refused);
+    expect(() => bindingInUnit('25 degC', 'degC')).toThrow(UnitError);
   });
 });

@@ -498,7 +498,7 @@ A unit is a product of factors, each `symbol[^n]`, joined by `*`, `·` or a spac
 The root `src/index.ts` exports these names:
 
 - `parseUnit(text): ParsedUnit`. `ParsedUnit` holds `scale`, `dim` and, for a lone affine temperature, `affine` (`AffineTemperature`). The empty string is dimensionless.
-- `convertValue(raw, target, temperature?): ConvertedValue`. `raw` is `<number>[unit]` and `target` is a unit expression. A bare number is already in `target`. The dimensions must agree. A text with more than one reading keeps the reading whose dimension equals the target's. When a text with more than one reading has no matching reading, or more than one, `AmbiguousUnitError` names the readings. A text with one reading whose dimension differs from the target's throws `UnitError`. A declared target cannot be affine. `temperature` is `'absolute'` (the default) or `'difference'` (`TemperatureReading`), and only an absolute reading adds the affine offset. `ConvertedValue` holds `value`, `given` and, when set, `cycles` and `affine`.
+- `convertValue(raw, target, temperature?): ConvertedValue`. `raw` is `<number>[unit]` and `target` is a unit expression. A bare number is already in `target`. The dimensions must agree. A text with more than one reading keeps the reading whose dimension equals the target's. When a text with more than one reading has no matching reading, or more than one, `AmbiguousUnitError` names the readings. A text with one reading whose dimension differs from the target's throws `UnitError`. An affine target (`degC`, `degF`) is allowed. `temperature` is `'absolute'` (the default) or `'difference'` (`TemperatureReading`). Only an absolute reading applies the affine offset, to the source and to the target. `ConvertedValue` holds `value`, `given` and, when set, `cycles` and `affine`.
 - The error classes. `UnitError` is the base class. `UnknownUnitError` (field `symbol`) means that no table row and no prefix spells the symbol. `UnitRefusedError` means that the reader recognizes the unit and refuses it. The refused units are a logarithmic or ratio unit, an ambiguous name such as `ton`, and an affine temperature inside a compound. `AmbiguousUnitError` (fields `text` and `readings`) means that the text has more than one dimensionally distinct reading.
 
 These functions are `@internal`. `readUnit(text): UnitReading` returns the one reading of a unit text. A reading has `label`, `exact` (an `ExactScale`) and `cycles`. `cycles` is the net power of cycle-counting units: 1 for a lone `kHz`, 0 for `1/s`. `readQuantityLiteral(raw, temperature?)` reads one number with an optional unit and returns a `QuantityLiteral` in SI. The function returns `null` when the text has another form or names a unit that no row spells. The caller can then read the text as an expression. `unitDimension(unit)` gives the dimension of a declared unit. `unitRows()` and `unitTables()` expose the table. A test compares the table with MathTS, and `src/cli/record-tables.ts` fingerprints the table for the CLI record.
@@ -1008,7 +1008,7 @@ Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <rep
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1235 | `dependency-graph.json` `statistics.totalSourceFiles` |
+| totalSourceFiles | 1236 | `dependency-graph.json` `statistics.totalSourceFiles` |
 | runtimeCircularDeps | 0 | `dependency-graph.json` `statistics.runtimeCircularDeps` |
 | typeOnlyCircularDeps | 0 | `dependency-graph.json` `statistics.typeOnlyCircularDeps` |
 

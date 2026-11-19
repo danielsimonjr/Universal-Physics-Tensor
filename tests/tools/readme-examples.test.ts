@@ -64,11 +64,17 @@ describe('README.md TypeScript fences', () => {
   });
 
   it('the unit fence prints the conversion its comment states', () => {
-    const source = fence('convertValue') + "\nconsole.log(JSON.stringify(convertValue('25degC', 'K')));\n";
+    const source =
+      fence('convertValue') +
+      "\nconsole.log(JSON.stringify([convertValue('25degC', 'K'), convertValue('100 degF', 'degC')]));\n";
     const result = runFence(source);
     expect(result.status, result.stderr).toBe(0);
-    expect(JSON.parse(result.stdout.trim())).toEqual({ value: 298.15, given: 'degC', affine: 'celsius' });
+    expect(JSON.parse(result.stdout.trim())).toEqual([
+      { value: 298.15, given: 'degC', affine: 'celsius' },
+      { value: 37.77777777777778, given: 'degF', affine: 'fahrenheit' },
+    ]);
     expect(source).toContain("{ value: 298.15, given: 'degC', affine: 'celsius' }");
+    expect(source).toContain("{ value: 37.77777777777778, given: 'degF', affine: 'fahrenheit' }");
   });
 
   it('the unit fence reads a unit expression with parseUnit and rejects a value with it', () => {
