@@ -10,7 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
-- `upt evaluate` prints a readable unit for the primary output of 20 quantities (`V^2/Hz`, `W/(m*K)`, `J/K`, `F/m`, and others). A quantity may declare `displayUnit` in `data/quantities.json`, and the text label reads it before the derived SI unit. A test checks that each declared unit has the quantity dimension at scale 1, and that no bridge label is a compound base form with `kg`. The JSON `unit` stays the base form. The old comment in `evaluate.ts` claimed the label was `V^2/Hz`, which was false (#681).
+- `upt evaluate` prints a readable unit for the primary output of 20 quantities (`V^2/Hz`, `W/(m*K)`, `J/K`, `F/m`, and others). A quantity may declare `displayUnit` in `data/quantities.json`, and the text label reads it before the derived SI unit. A test checks that each of the 20 declared units has the quantity dimension at scale 1 (the dimensions are compared over the union of their keys, and a missing key is exponent 0). A second test requires a readable label on every bridge: the declared `displayUnit`, one named unit (a bare base unit such as `kg` counts), or a base form with at most 2 base factors and no `kg`. Every SI named unit that has mass needs `kg` or 3 or more base factors, so a base form of such a unit fails that test. The JSON `unit` stays the base form. The old comment in `evaluate.ts` claimed the label was `V^2/Hz`, which was false (#681).
 - `upt map --help` lists the accepted values of `--relation` and `--evidence`. A compile-time check fails the build when either list omits a member of its union (#688).
 
 ## [15.0.0] - 2026-11-18
