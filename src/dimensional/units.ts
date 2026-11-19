@@ -86,7 +86,13 @@ export interface ParsedUnit {
   readonly affine?: AffineTemperature;
 }
 
-/** Thrown for any input that does not parse as a value with a known unit. @public */
+/**
+ * The base of every error the unit readers throw: `parseUnit` for text that
+ * is not a unit expression (for example a number with a unit), `convertValue`
+ * for text that is not a number with a unit, for an affine target, and for a
+ * dimension mismatch. The subclasses name an unknown, refused or ambiguous unit.
+ * @public
+ */
 export class UnitError extends Error {
   constructor(message: string) {
     super(message);
