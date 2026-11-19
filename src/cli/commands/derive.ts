@@ -151,8 +151,22 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (debug) err(`  [parser: ${formulaParserLabel(await api.getFormulaParserKind())}]`);
 
     const checker = await api.getFormulaDimensionChecker();
-    const declared = new Set(governing.map((g) => g.name));
+    // The target is a declared name too: a hyphenated target name stays one symbol.
+    const declared = new Set([target.name, ...governing.map((g) => g.name)]);
     const formulaSymbols = api.rewriteCatalogHyphens(formula, declared);
+    // One parse. A parse error is thrown at the place it was always thrown, after the
+    // dimension check, so every existing error keeps its order.
+    let cf: ReturnType<typeof parser.parse> | undefined;
+    let parseError: unknown;
+    try {
+      cf = parser.parse(formulaSymbols);
+    } catch (e) {
+      parseError = e;
+    }
+    // The formula defines the target, so the target is not one of its inputs.
+    if (cf !== undefined && cf.variables.includes(formulaSymbol(target.name))) {
+      throw new UsageError(`upt derive: '${target.name}' is the target and cannot appear in its own formula`);
+    }
     const dims = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), g.dim]));
     const r = checker.check(formulaSymbols, dims);
     formulaCheck = r;
@@ -178,12 +192,9 @@ async function run(ctx: CommandCtx): Promise<number> {
       );
     }
 
-    let cf;
-    try {
-      cf = parser.parse(formulaSymbols);
-    } catch (e) {
+    if (cf === undefined) {
       // The parser's message carries its own `parse error:` label.
-      throw new FormulaUsageError('upt derive: --formula: ' + (e as Error).message, await api.getFormulaParserKind());
+      throw new FormulaUsageError('upt derive: --formula: ' + (parseError as Error).message, await api.getFormulaParserKind());
     }
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This
