@@ -198,6 +198,9 @@ function printExplanation(
 ): void {
   out(`\n● ${target}  [source: ${label}]`);
   out(`  ${x.summary}`);
+  if (x.identifiability.verdict === 'under-determined' && x.known.length === 0) {
+    out('  give inputs in the form: upt explain <quantity> name=value ...');
+  }
   if (x.derivations.length) {
     out('  derivations:');
     for (const d of x.derivations) {
