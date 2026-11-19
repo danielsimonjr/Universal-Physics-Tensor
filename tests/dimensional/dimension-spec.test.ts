@@ -180,7 +180,38 @@ describe('circuit named dimensions (issue 683)', () => {
     expect(message).toContain("unknown base dimension 'zqx'");
     expect(message).toContain('named dimensions:');
     for (const n of ['voltage', 'permittivity', 'resistance']) expect(message).toContain(n);
-    expect(NAMED_DIMENSION_NAMES.length).toBeGreaterThan(30);
     for (const n of NAMED_DIMENSION_NAMES) expect(message).toContain(n);
   });
+});
+
+describe('the SI special-name units and the named dimensions', () => {
+  // Every SI unit with a special name is COVERED (a named dimension equals its dimension) or EXCLUDED (with a reason).
+  const SI_SPECIAL = [
+    'rad', 'sr', 'Hz', 'N', 'Pa', 'J', 'W', 'C', 'V', 'F', 'ohm',
+    'S', 'Wb', 'T', 'H', 'degC', 'lm', 'lx', 'Bq', 'Gy', 'Sv', 'kat',
+  ];
+  const COVERED: Record<string, string> = {
+    rad: 'dimensionless', sr: 'dimensionless', Hz: 'frequency', N: 'force', Pa: 'pressure',
+    J: 'energy', W: 'power', C: 'charge', V: 'voltage', F: 'capacitance', ohm: 'resistance',
+    S: 'conductance', Wb: 'magnetic_flux', T: 'magnetic_field', H: 'inductance',
+    degC: 'temperature', lm: 'luminous_intensity',
+  };
+  const EXCLUDED: Record<string, string> = {
+    lx: 'no named dimension for illuminance',
+    Bq: 'unit not in the unit table; the same dimension as Hz',
+    Gy: 'unit not in the unit table',
+    Sv: 'unit not in the unit table',
+    kat: 'unit not in the unit table',
+  };
+  it('COVERED and EXCLUDED are disjoint and together are exactly the 22 units', () => {
+    const covered = Object.keys(COVERED);
+    const excluded = Object.keys(EXCLUDED);
+    expect(covered.filter((u) => excluded.includes(u))).toEqual([]);
+    expect([...covered, ...excluded].sort()).toEqual([...SI_SPECIAL].sort());
+  });
+  for (const [unit, name] of Object.entries(COVERED)) {
+    it(`${name} equals the dimension of ${unit}`, () => {
+      expect(parseDimensionSpec(name)).toEqual(unitDimension(unit));
+    });
+  }
 });

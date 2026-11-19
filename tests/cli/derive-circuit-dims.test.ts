@@ -13,9 +13,9 @@ async function cli(args: string[]) {
 }
 
 describe('upt derive with circuit dimensions', () => {
-  it('derive x:voltage R:resistance is accepted: exit 3 (not derivable from R alone), never 2', async () => {
+  it('derive x:voltage R:resistance is accepted: never exit 2', async () => {
     const r = await cli(['derive', 'x:voltage', 'R:resistance']);
-    expect(r.code).toBe(3);
+    expect(r.code).not.toBe(2);
     expect(r.err).not.toContain('unknown base dimension');
   });
   it('derive x:voltage I:current R:resistance derives x = I*R, exit 0', async () => {

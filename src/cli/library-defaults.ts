@@ -28,22 +28,21 @@ export const PROBE_STUDY_ALPHA_DEFAULT = String(DEFAULT_ALPHA);
 export const PROBE_CORRECTION_TERMS_MAX = MAX_CORRECTION_TERMS;
 
 /**
- * The named dimensions `upt derive` accepts, wrapped for its help (8-space indent). The first
- * line follows the 26 characters of "The named dimensions are: ". @internal
+ * The named dimensions `upt derive` accepts, wrapped at about 70 characters for its help.
+ * Each line starts with an 8-space indent. @internal
  */
-export const NAMED_DIMENSIONS_HELP = ((names: readonly string[], lead: number): string => {
+export const NAMED_DIMENSIONS_HELP = ((names: readonly string[]): string => {
   const lines: string[] = [];
   let line = '';
-  let used = lead;
   for (const n of names) {
-    const piece = `${n}, `;
-    if (used + line.length + piece.length > 62 && line !== '') {
-      lines.push(line.trimEnd());
-      line = '';
-      used = 0;
+    const piece = line === '' ? n : `, ${n}`;
+    if (line !== '' && line.length + piece.length > 70) {
+      lines.push(line + ',');
+      line = n;
+    } else {
+      line += piece;
     }
-    line += piece;
   }
-  lines.push(line.replace(/, $/, ''));
-  return lines.join('\n        ');
-})(NAMED_DIMENSION_NAMES, 26);
+  lines.push(line);
+  return lines.map((l) => `        ${l}`).join('\n');
+})(NAMED_DIMENSION_NAMES);

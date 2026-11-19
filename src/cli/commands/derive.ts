@@ -51,7 +51,8 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         product/quotient (power/area, length*temperature),
         or explicit (L^3.M^-1.T^-2). Parentheses group a factor
         (power/(area*temperature^4)); mass/length^3 and M/L^3 work.
-        The named dimensions are: ${NAMED_DIMENSIONS_HELP}.
+        The named dimensions are:
+${NAMED_DIMENSIONS_HELP}.
         In --formula, a bare e is the elementary charge and E is energy.
         A name from a dimension argument is one symbol, hyphens included.
         A hyphen between other names is subtraction.
