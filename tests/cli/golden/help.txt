@@ -175,8 +175,14 @@ Flags:
         G, k_B, e — e here is the elementary charge's dimension), a named
         product/quotient (power/area, length*temperature),
         or explicit (L^3.M^-1.T^-2). Parentheses group a factor
-        (power/(area*temperature^4)); pressure, density, volume, viscosity,
-        resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
+        (power/(area*temperature^4)); mass/length^3 and M/L^3 work.
+        The named dimensions are:
+        dimensionless, length, area, volume, time, frequency, mass, density,
+        velocity, acceleration, force, energy, power, action, temperature,
+        entropy, charge, current, electric_current, amount,
+        amount_of_substance, luminous_intensity, pressure, viscosity,
+        resistance, magnetic_field, permeability, voltage, capacitance,
+        inductance, permittivity, conductance, magnetic_flux.
         In --formula, a bare e is the elementary charge and E is energy.
         A name from a dimension argument is one symbol, hyphens included.
         A hyphen between other names is subtraction.
