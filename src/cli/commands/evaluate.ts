@@ -9,7 +9,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson, emitJsonError } from '../output.js';
-import { coherentUnits, derivedUnitOf } from '../expr-print.js';
+import { primaryUnitLabel } from '../expr-print.js';
 import { splitAssignments } from '../bindings.js';
 import { realFlag } from '../numeric-flag.js';
 import { UsageError } from '../errors.js';
@@ -67,15 +67,6 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         names the condition (a weak-field formula inside 10 Schwarzschild radii,
         a negative temperature). A relation's recorded caveat, and the note of a
         registered constant it names, print beside the value.`;
-
-/**
- * The text label of a primary output. A quantity that declares `displayUnit` uses it: no rule
- * can choose `V^2/Hz` over `J*ohm` from the dimension alone. Any other quantity gets one
- * coherent named unit, else the SI base form. Presentation only.
- */
-export function primaryUnitLabel(api: CommandCtx['api'], name: string, dimension: Parameters<typeof derivedUnitOf>[0]): string {
-  return api.quantityRecord(name)?.displayUnit ?? derivedUnitOf(dimension, coherentUnits(api.unitRows()));
-}
 
 /**
  * An input-contract error (absent, unknown, non-number, non-finite or twice-given

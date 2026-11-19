@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 391
   totalModules: 13
-  totalExports: 2859
+  totalExports: 2857
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6273,8 +6273,7 @@ modules:
             - emitJsonError
         - file: ../expr-print.js
           imports:
-            - coherentUnits
-            - derivedUnitOf
+            - primaryUnitLabel
         - file: ../bindings.js
           imports:
             - splitAssignments
@@ -6299,9 +6298,6 @@ modules:
             - closedFormRangeLabel
       exports:
         - command
-        - primaryUnitLabel
-      functions:
-        - primaryUnitLabel
       constants:
         - command
     src/cli/commands/explain.ts:
@@ -6975,6 +6971,7 @@ modules:
         - file: ../expr-print.js
           imports:
             - EVAL_STUBS
+            - primaryUnitLabel
             - printDisplay
             - printEval
             - printLatex
@@ -7119,15 +7116,13 @@ modules:
         - printEval
         - latexName
         - printLatex
-        - coherentUnits
-        - derivedUnitOf
+        - primaryUnitLabel
       interfaces:
         - CoherentUnit
       functions:
         - latexName
         - printLatex
-        - coherentUnits
-        - derivedUnitOf
+        - primaryUnitLabel
       constants:
         - EVAL_STUBS
         - printDisplay
@@ -19815,11 +19810,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89301
-  totalExports: 2859
+  totalLinesOfCode: 89308
+  totalExports: 2857
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 938
+  totalFunctions: 936
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 423

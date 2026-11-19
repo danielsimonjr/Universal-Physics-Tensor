@@ -131,7 +131,7 @@ export interface CoherentUnit {
  * label: a 1/s output may be an angular frequency, and `Hz` would say it
  * counts cycles. Such an output reads `1/s`, which is its dimension.
  */
-export function coherentUnits(
+function coherentUnits(
   rows: ReadonlyMap<
     string,
     { readonly scale: { readonly num: bigint; readonly den: bigint; readonly irrational: number }; readonly dim: Dimension; readonly cycles?: true }
@@ -161,9 +161,25 @@ export function coherentUnits(
  * voltage-noise density `J*ohm`, readings that are dimensionally right and physically
  * unreadable. Presentation only: the dimension is the fact, the label is a reading of it.
  */
-export function derivedUnitOf(dim: Dimension, units: readonly CoherentUnit[]): string {
+function derivedUnitOf(dim: Dimension, units: readonly CoherentUnit[]): string {
   if (isDimensionless(dim)) return '1';
   const base = new Set(SI_BASE.map(([, u]) => u));
   const named = units.find((u) => !base.has(u.name) && exactlyEquals(u.dim, dim));
   return named === undefined ? siUnitOf(dim) : named.name;
+}
+
+/**
+ * The printed unit of a quantity, the one rule every command uses. A quantity that declares
+ * `displayUnit` uses it: no rule can choose `V^2/Hz` over `J*ohm` from the dimension alone. Any
+ * other quantity gets one coherent named unit, else the SI base form. Presentation only.
+ */
+export function primaryUnitLabel(
+  api: {
+    quantityRecord(name: string): { readonly displayUnit?: string } | undefined;
+    unitRows(): Parameters<typeof coherentUnits>[0];
+  },
+  name: string,
+  dimension: Dimension,
+): string {
+  return api.quantityRecord(name)?.displayUnit ?? derivedUnitOf(dimension, coherentUnits(api.unitRows()));
 }

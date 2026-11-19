@@ -9,7 +9,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import type { ExprNode } from '../../dimensional/validator.js';
-import { EVAL_STUBS, printDisplay, printEval, printLatex, latexName } from '../expr-print.js';
+import { EVAL_STUBS, primaryUnitLabel, printDisplay, printEval, printLatex, latexName } from '../expr-print.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -107,7 +107,7 @@ function symbolTable(
       symbol: name,
       meaning: `input quantity ${q.name} (symbol ${q.symbol}), ${api.format(q.dim)}`,
       value: v,
-      unit: api.siUnitOf(q.dim),
+      unit: primaryUnitLabel(api, q.name, q.dim),
       source: name === 'mass' && v === api.M_SUN_KG ? SOLAR_MASS_SOURCE : 'evaluation point',
     });
   }
@@ -194,7 +194,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         out(`      latex:      ${latexOf(s.name, s.leaves, s.expr) ?? 'none (a node the printer cannot take)'}`);
         out(`      eval form:  ${showEvalForm(evalFormOf(s.expr, api, point))}`);
         showSymbolTable(symbolTable(s.expr, api, inputs, point), out);
-        out(`      value @ mass = M_sun:  ${api.formatQuantity(sNum)}  (= composed, ${api.format(s.dim)})`);
+        out(`      value @ mass = M_sun:  ${api.formatQuantity(sNum)} ${primaryUnitLabel(api, s.name, s.dim)}  (= composed, ${api.format(s.dim)})`);
       }
     } else if (isJson) {
       jsonResult.push({
@@ -214,7 +214,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`      eval form:  ${showEvalForm(evalFormOf(obs.expr, api, point))}`);
       showSymbolTable(symbolTable(obs.expr, api, inputs, point), out);
       out(`      dimension: ${api.format(obs.dim)}   (validated on the composed AST)`);
-      out(`      value @ mass = M_sun:  ${api.formatQuantity(num)}`);
+      out(`      value @ mass = M_sun:  ${api.formatQuantity(num)} ${primaryUnitLabel(api, obs.name, obs.dim)}`);
     }
     if (!isJson && grade !== null) {
       const pages = grade.gradedBy.join(' and ');
