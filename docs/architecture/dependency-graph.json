@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 390,
     "totalModules": 13,
-    "totalExports": 2855
+    "totalExports": 2857
   },
   "entryPoints": [
     {
@@ -9126,6 +9126,13 @@
               "UnitMode"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -12188,7 +12195,8 @@
             "file": "./dimensional/formula-names.js",
             "imports": [
               "assertSynonymAgreement",
-              "expandSynonymValues"
+              "expandSynonymValues",
+              "SYNONYM_GROUPS"
             ],
             "reExport": true
           },
@@ -12328,7 +12336,8 @@
           {
             "file": "./dimensional/symbolic-constants.js",
             "imports": [
-              "constantNotes"
+              "constantNotes",
+              "constantRecord"
             ],
             "reExport": true
           },
@@ -12554,6 +12563,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "SYNONYM_GROUPS",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -12579,6 +12589,7 @@
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "ConfrontationEntry",
           "RigorTier",
           "ConfrontationOutcome",
@@ -12874,6 +12885,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "SYNONYM_GROUPS",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -12900,6 +12912,7 @@
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "BridgeEdge",
           "VizJunction",
           "VizModel",
@@ -28539,16 +28552,16 @@
   "statistics": {
     "totalTypeScriptFiles": 390,
     "totalModules": 13,
-    "totalLinesOfCode": 89152,
-    "totalExports": 2855,
+    "totalLinesOfCode": 89197,
+    "totalExports": 2857,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 935,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1405,
-    "totalTypeOnlyImports": 533,
+    "totalReExports": 1407,
+    "totalTypeOnlyImports": 534,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

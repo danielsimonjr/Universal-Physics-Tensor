@@ -16,6 +16,7 @@ import { FormulaUsageError } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
 import { splitAssignments } from '../bindings.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
+import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
@@ -42,8 +43,10 @@ function parseScope(
   api: CommandCtx['api'],
   args: readonly string[],
   mode: UnitMode,
-): { scope: Record<string, number>; notes: string[] } {
+): { scope: Record<string, number>; notes: string[]; dims: Record<string, Dimension>; allDimensioned: boolean } {
   const scope: Record<string, number> = {};
+  const dims: Record<string, Dimension> = {};
+  let allDimensioned = true;
   const notes: string[] = [];
   const assignments = splitAssignments('eval', args).map((a) => ({ name: a.name, raw: a.raw, assignment: a.token }));
   const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
@@ -51,6 +54,8 @@ function parseScope(
     try {
       const read = api.readNamedBinding(a.name, a.raw, { mode, siblings });
       scope[a.name] = read.value;
+      if (read.dimensioned) dims[a.name] = read.dimension;
+      else allDimensioned = false;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
       if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
@@ -59,7 +64,13 @@ function parseScope(
     }
   }
   try {
-    return { scope: api.expandSynonymValues(scope), notes };
+    const expanded = api.expandSynonymValues(scope);
+    // A spelling copied from a bound name reads the same dimension.
+    for (const group of api.SYNONYM_GROUPS) {
+      const source = group.find((member) => member in dims);
+      if (source !== undefined) for (const member of group) if (!(member in dims)) dims[member] = dims[source]!;
+    }
+    return { scope: expanded, notes, dims, allDimensioned };
   } catch (e) {
     if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
     throw e;
@@ -93,6 +104,9 @@ const HELP = `upt eval "<formula>" name=value ...
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
+        A value with a unit keeps its dimension. A formula that adds or
+        compares unlike dimensions is refused (exit 1). A bare number has no
+        dimension check. The value is converted to SI.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
@@ -154,6 +168,23 @@ async function run(ctx: CommandCtx): Promise<number> {
     const checked = api.builtinFormulaDimensionChecker().check(expr, {});
     if (!checked.ok && checked.elementaryChargeMixed === true) {
       throw new FormulaUsageError(checked.error!, kind);
+    }
+  }
+
+  // A value with a unit keeps its dimension. Run the check only when every binding has one:
+  // the checker gives `E` and `e` a default dimension, which a bare number must not take.
+  if (mode === 'si' && parsed.allDimensioned) {
+    const dims = { ...parsed.dims };
+    for (const v of cf.variables) {
+      if (v in dims) continue;
+      const constant = api.constantRecord(v);
+      if (constant !== undefined) dims[v] = constant.dim;
+    }
+    const homogeneous = api.builtinFormulaDimensionChecker().check(expr, dims);
+    if (!homogeneous.ok && homogeneous.inhomogeneous === true && homogeneous.elementaryChargeMixed !== true) {
+      throw new CliError(
+        `upt eval: the formula is not dimensionally homogeneous: ${homogeneous.error?.replace(/\.$/, '')}. A value with a unit keeps its dimension.`,
+      );
     }
   }
 

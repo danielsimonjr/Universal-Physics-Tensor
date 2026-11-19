@@ -2687,6 +2687,7 @@ The codebase is organized into the following modules:
 | `../eval-numbers.js` | `codataScope` | Import |
 | `../bindings.js` | `splitAssignments` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
 - Constants: `command`
@@ -3488,7 +3489,7 @@ The codebase is organized into the following modules:
 | `./dimensional/symbolic-constants.js` | `constantAgreement, ConstantDisagreementError` | Re-export |
 | `./numerical/formula-contract.js` | `FormulaError, FormulaValueError` | Re-export |
 | `./composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Re-export |
-| `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues` | Re-export |
+| `./dimensional/formula-names.js` | `assertSynonymAgreement, expandSynonymValues, SYNONYM_GROUPS` | Re-export |
 | `./composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Re-export |
 | `./composition/explain.js` | `formatQuantity, formatExact` | Re-export |
 | `./core/format.js` | `formatPercent` | Re-export |
@@ -3507,7 +3508,7 @@ The codebase is organized into the following modules:
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./bridges/notices.js` | `relationNotices` | Re-export |
-| `./dimensional/symbolic-constants.js` | `constantNotes` | Re-export |
+| `./dimensional/symbolic-constants.js` | `constantNotes, constantRecord` | Re-export |
 | `./composition/edge.js` | `BridgeEdge` | Re-export |
 | `./composition/graph-viz.js` | `VizJunction, VizModel` | Re-export |
 | `./atlas/types.js` | `EvidenceTag, RelationType` | Re-export |
@@ -3565,13 +3566,13 @@ The codebase is organized into the following modules:
   TemperatureBindingError, propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite,
   PropagatedOutput, UncertaintyContribution, constantAgreement, ConstantDisagreementError,
   FormulaError, FormulaValueError, aliasesForTarget, nearQuantityNames, shareSynonyms,
-  assertSynonymAgreement, expandSynonymValues, CANONICAL_GROUP_PREFACTORS, formatQuantity,
-  formatExact, formatPercent, CarrierSignError, naturalConstantOverrides, UnitMode, escapeRegExp,
-  rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved, resolveEvaluable,
-  siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus, EmbeddingUnavailable,
-  ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder, builtinFormulaDimensionChecker,
-  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
-  EvidenceTag, RelationType, EquationAnalysis
+  assertSynonymAgreement, expandSynonymValues, SYNONYM_GROUPS, CANONICAL_GROUP_PREFACTORS,
+  formatQuantity, formatExact, formatPercent, CarrierSignError, naturalConstantOverrides, UnitMode,
+  escapeRegExp, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved,
+  resolveEvaluable, siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
+  EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder,
+  builtinFormulaDimensionChecker, missingEvaluatorMessage, relationNotices, constantNotes,
+  constantRecord, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -7803,15 +7804,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89152 |
-| Total Exports | 2855 |
-| Total Re-exports | 1405 |
+| Total Lines of Code | 89197 |
+| Total Exports | 2857 |
+| Total Re-exports | 1407 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 935 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 533 |
+| Type-only Imports | 534 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

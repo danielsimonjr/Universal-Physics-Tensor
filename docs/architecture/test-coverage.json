@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 390,
-    "totalTestFiles": 735,
+    "totalTestFiles": 736,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 10,
@@ -11237,6 +11237,7 @@
       "tests/cli/atlas-route-errors.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/decimal-literal-one-rule.test.ts",
+      "tests/cli/eval-binding-dimensions.test.ts",
       "tests/cli/explain-temperature-binding.test.ts",
       "tests/cli/graphs.test.ts",
       "tests/cli/map-atlas-results.test.ts",
@@ -14947,6 +14948,7 @@
       "tests/numerical/one-function-table.test.ts"
     ],
     "src/numerical/formula-dimension.ts": [
+      "tests/cli/eval-binding-dimensions.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/dimensional/dimension-inference.test.ts",
       "tests/dimensional/hyphen-names-corpus.test.ts",
@@ -19511,6 +19513,9 @@
     ],
     "tests/cli/discover-own-equation.test.ts": [],
     "tests/cli/discover-tiers.test.ts": [],
+    "tests/cli/eval-binding-dimensions.test.ts": [
+      "src/numerical/formula-dimension.ts"
+    ],
     "tests/cli/eval-functions.test.ts": [
       "src/numerical/formula-contract.ts"
     ],
