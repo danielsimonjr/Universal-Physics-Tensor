@@ -2642,6 +2642,7 @@ The codebase is organized into the following modules:
 | `../euler-guard.js` | `FormulaUsageError` | Import |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../library-defaults.js` | `NAMED_DIMENSIONS_HELP` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3152,9 +3153,10 @@ The codebase is organized into the following modules:
 | `../composition/discovery.js` | `DEFAULT_MAX_ORDERS_OF_MAGNITUDE` | Import |
 | `../composition/probe/types.js` | `DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET` | Import |
 | `../composition/probe/study.js` | `DEFAULT_ALPHA, MAX_CORRECTION_TERMS` | Import |
+| `../dimensional/dimension-spec.js` | `NAMED_DIMENSION_NAMES` | Import |
 
 **Exports:**
-- Constants: `DISCOVER_MAX_ORDERS_DEFAULT`, `PROBE_BUDGET_MS_DEFAULT`, `PROBE_HOLDOUT_TOL_DEFAULT`, `PROBE_STUDY_ALPHA_DEFAULT`, `PROBE_CORRECTION_TERMS_MAX`
+- Constants: `DISCOVER_MAX_ORDERS_DEFAULT`, `PROBE_BUDGET_MS_DEFAULT`, `PROBE_HOLDOUT_TOL_DEFAULT`, `PROBE_STUDY_ALPHA_DEFAULT`, `PROBE_CORRECTION_TERMS_MAX`, `NAMED_DIMENSIONS_HELP`
 
 ---
 
@@ -5889,7 +5891,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `DimensionSpecError`
 - Functions: `parseDimensionSpec`
-- Constants: `CONSTANT_SPELLINGS`
+- Constants: `NAMED_DIMENSION_NAMES`, `CONSTANT_SPELLINGS`
 
 ---
 
@@ -7800,8 +7802,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 390 |
 | Total Modules | 13 |
-| Total Lines of Code | 89057 |
-| Total Exports | 2852 |
+| Total Lines of Code | 89095 |
+| Total Exports | 2854 |
 | Total Re-exports | 1405 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |

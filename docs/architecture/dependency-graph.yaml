@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 390
   totalModules: 13
-  totalExports: 2852
+  totalExports: 2854
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6132,6 +6132,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ../library-defaults.js
+          imports:
+            - NAMED_DIMENSIONS_HELP
       exports:
         - command
       constants:
@@ -7182,18 +7185,23 @@ modules:
           imports:
             - DEFAULT_ALPHA
             - MAX_CORRECTION_TERMS
+        - file: ../dimensional/dimension-spec.js
+          imports:
+            - NAMED_DIMENSION_NAMES
       exports:
         - DISCOVER_MAX_ORDERS_DEFAULT
         - PROBE_BUDGET_MS_DEFAULT
         - PROBE_HOLDOUT_TOL_DEFAULT
         - PROBE_STUDY_ALPHA_DEFAULT
         - PROBE_CORRECTION_TERMS_MAX
+        - NAMED_DIMENSIONS_HELP
       constants:
         - DISCOVER_MAX_ORDERS_DEFAULT
         - PROBE_BUDGET_MS_DEFAULT
         - PROBE_HOLDOUT_TOL_DEFAULT
         - PROBE_STUDY_ALPHA_DEFAULT
         - PROBE_CORRECTION_TERMS_MAX
+        - NAMED_DIMENSIONS_HELP
     src/cli/main.ts:
       description: Verb-first dispatcher for the UPT CLI — `upt <command> [args...]`.
       externalDependencies: []
@@ -14347,6 +14355,7 @@ modules:
             - parseFormulaPNode
             - FormulaPNode
       exports:
+        - NAMED_DIMENSION_NAMES
         - CONSTANT_SPELLINGS
         - parseDimensionSpec
         - DimensionSpecError
@@ -14355,6 +14364,7 @@ modules:
       functions:
         - parseDimensionSpec
       constants:
+        - NAMED_DIMENSION_NAMES
         - CONSTANT_SPELLINGS
     src/dimensional/einstein-equation.ts:
       description: Einstein field equation AST node (v0.6.0 Phase 2, Task 2.3).
@@ -19757,14 +19767,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 390
   totalModules: 13
-  totalLinesOfCode: 89057
-  totalExports: 2852
+  totalLinesOfCode: 89095
+  totalExports: 2854
   totalClasses: 86
   totalInterfaces: 523
   totalFunctions: 934
   totalTypeGuards: 16
   totalEnums: 0
-  totalConstants: 421
+  totalConstants: 423
   totalReExports: 1405
   totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
