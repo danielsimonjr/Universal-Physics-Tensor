@@ -11,6 +11,7 @@ from v0.1.0 onward.
 ### Fixed
 
 - `upt map --help` lists the accepted values of `--relation` and `--evidence`. A compile-time check fails the build when either list omits a member of its union (#688).
+- **`upt retrieve` can now take an expression (#679).** The help example `upt retrieve period of a pendulum` could only print `none`: the command built the query as `{ text }`, and the atlas search accepts a query only through `query.expr`, so no input reached `rankByStructure`. The new `--expr=FILE` flag reads an ExprNode JSON file (the format of `upt probe`, read by `parseExprJson`) and passes it as `query.expr`. The claim words may be empty when `--expr` is given. The text output prints the first 10 accepted ids and a count of the rest; `--json` keeps the full list. A text claim without `--expr` still accepts nothing, and the help says so. The help example is now `upt retrieve rest energy --expr=examples/retrieve-mass-energy.json`; the file is the residual of `CE-mass-energy`, and a test binds the file to the registry. `tests/cli/retrieve-expr.test.ts` failed 6 of 8 on the previous tree (the flag did not exist). A formula string is not accepted: its symbols carry no dimension, so the structural key never matches.
 
 ## [15.0.0] - 2026-11-18
 
