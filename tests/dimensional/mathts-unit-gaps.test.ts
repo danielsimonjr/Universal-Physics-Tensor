@@ -186,7 +186,7 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       id: 'mol/mL single reading in MathTS',
       check: () => {
         expect(() => Unit.parse('mol/mL')).not.toThrow();
-        expect(() => parseUnit('mol/mL')).toThrow(AmbiguousUnitError);
+        expect(parseUnit('mol/mL').scale).toBeCloseTo(1e6, 6);
       },
     },
     {

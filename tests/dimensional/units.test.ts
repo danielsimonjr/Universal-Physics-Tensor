@@ -177,7 +177,7 @@ describe('convertValue', () => {
     expect(parseUnit('cP').scale).toBeCloseTo(0.001, 12);
     expect(convertValue('1cP', 'Pa*s').value).toBeCloseTo(0.001, 12);
     expect(convertValue('1mol/mL', 'mol/m^3').value).toBeCloseTo(1e6, 6);
-    expect(() => parseUnit('mol/mL')).toThrow(/ambiguous/);
+    expect(parseUnit('mol/mL').scale).toBeCloseTo(1e6, 6);
     expect(parseUnit('rpm').scale).toBeCloseTo(1 / 60, 12);
     expect(convertValue('60rpm', 'Hz').value).toBeCloseTo(1, 12);
     expect(parseUnit('hp').scale).toBeCloseTo(550 * 0.3048 * pound * gravity, 6);

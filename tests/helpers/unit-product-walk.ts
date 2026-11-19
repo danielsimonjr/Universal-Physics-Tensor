@@ -3,13 +3,15 @@
  *
  * A left factor is a unit, a unit with the power `2` or `^2`, or a prefixed unit. The oracle
  * reads one factor only and does not search for a product. A token that is one factor must
- * read as that factor. Any other token must be the product of its two factors, an ambiguity
- * that names two or more readings, or a refusal. The vitest file runs a seeded sample, and
+ * read as that factor. Any other token is a product only when its factor bases are a row of
+ * `data/units.json` `products`. Then it must be the product of its two factors or an ambiguity
+ * that names two or more readings. A token with no listed row is a refusal. The vitest file runs a seeded sample, and
  * `scripts/unit-product-walk.ts` runs every token with no time limit.
  */
 import { equals, multiply } from '../../src/dimensional/algebra.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 import { parseUnit, unitTables, UnitError } from '../../src/dimensional/units.js';
+import { UNIT_DATA } from '../../src/dimensional/unit-data.js';
 import { mulberry32 } from './mulberry32.js';
 
 const { units, prefixes } = unitTables();
@@ -34,6 +36,8 @@ export interface WalkResult {
   readonly failures: readonly string[];
   readonly products: number;
   readonly ambiguous: number;
+  /** Tokens that no listed product reads: an unknown unit. */
+  readonly refused: number;
 }
 
 /** Exact unit, or prefix plus a unit. No product split. */
@@ -100,6 +104,25 @@ export function sampleTokens(tokens: readonly WalkToken[], fraction: number, see
   return tokens.filter(() => rand() < fraction);
 }
 
+/** A left factor without its exponent: `m2`, `m^2` and `m²` are `m`. */
+function baseOf(factor: string): string {
+  const caret = /^(.+)\^([+-]?\d+)$/.exec(factor);
+  if (caret !== null) return caret[1]!;
+  const sup = /^(.+?)[²³]$/.exec(factor);
+  if (sup !== null) return sup[1]!;
+  const glued = /^(.*?)([1-9]\d*)$/.exec(factor);
+  return glued !== null && glued[1]!.length > 0 && trySymbol(glued[1]!) !== null ? glued[1]! : factor;
+}
+
+/** The `products` key of a left factor and a right unit. */
+function productKey(left: string, right: string): string {
+  return `${baseOf(left)}·${right}`;
+}
+
+function isListed(left: string, right: string): boolean {
+  return UNIT_DATA.products.has(productKey(left, right));
+}
+
 const within = (actual: number, expected: number): boolean =>
   Math.abs(actual - expected) / Math.max(Math.abs(actual), Math.abs(expected), 1) < 1e-9;
 
@@ -110,6 +133,7 @@ const within = (actual: number, expected: number): boolean =>
 export function walkProducts(tokens: readonly WalkToken[], expectScale: (token: string, scale: number) => number = (_t, s) => s): WalkResult {
   let products = 0;
   let ambiguous = 0;
+  let refused = 0;
   const failures: string[] = [];
   const factors = new Map<string, Factor | null>();
   const factorOf = (text: string): Factor | null => {
@@ -152,12 +176,17 @@ export function walkProducts(tokens: readonly WalkToken[], expectScale: (token: 
         continue;
       }
       if (!/Fahrenheit|affine|unknown unit/.test(message)) failures.push(`${token}: ${message}`);
+      else if (/unknown unit/.test(message)) {
+        refused += 1;
+        if (isListed(left, right)) failures.push(`${token}: listed product ${productKey(left, right)} is refused`);
+      }
       continue;
     }
     const want = expectScale(token, a.scale * b.scale);
+    if (!isListed(left, right)) failures.push(`${token}: product ${productKey(left, right)} is not listed`);
     if (!within(got.scale, want)) failures.push(`${token}: product scale ${got.scale} is not ${want}`);
     if (!equals(got.dim, multiply(a.dim, b.dim))) failures.push(`${token}: product dimension`);
     products += 1;
   }
-  return { tokens: tokens.length, failures, products, ambiguous };
+  return { tokens: tokens.length, failures, products, ambiguous, refused };
 }

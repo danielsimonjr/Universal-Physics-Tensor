@@ -62,6 +62,7 @@ interface UnitFile {
   readonly units: readonly UnitFileRow[];
   readonly refused: readonly { readonly symbol: string; readonly reason: string }[];
   readonly prefixLetterUnits: { readonly letters: readonly string[] };
+  readonly products: { readonly rows: readonly { readonly factors: string; readonly comment: string }[] };
   readonly affine: { readonly iceKelvin: string; readonly scales: readonly AffineFileRow[] };
   readonly spellingNotes: readonly { readonly spelling: string; readonly note: string }[];
 }
@@ -97,6 +98,8 @@ export interface UnitTableData {
   /** Refused spelling → the message it prints. */
   readonly refused: ReadonlyMap<string, string>;
   readonly prefixLetterUnits: ReadonlySet<string>;
+  /** The glued products a token may read as, by factor bases joined by `·`, with no exponent. */
+  readonly products: ReadonlySet<string>;
   /** Kelvin at 0 °C, exactly. */
   readonly iceKelvin: ExactScale;
   readonly affine: readonly AffineRow[];
@@ -127,6 +130,16 @@ function dimension(d: DimensionFile): Dimension {
     N: d.N ?? 0,
     J: d.J ?? 0,
   };
+}
+
+/** True when `symbol` is a prefix of `prefixes` followed by a prefixable unit of `units`. */
+function hasPrefixedUnit(symbol: string, units: ReadonlyMap<string, UnitRow>, prefixes: ReadonlyMap<string, ExactScale>): boolean {
+  for (const prefix of prefixes.keys()) {
+    if (!symbol.startsWith(prefix) || symbol.length === prefix.length) continue;
+    const row = units.get(symbol.slice(prefix.length));
+    if (row !== undefined && row.prefixable) return true;
+  }
+  return false;
 }
 
 /**
@@ -209,6 +222,17 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
       throw new Error(`data/units.json: prefix letter '${letter}' is not both a prefix and a unit`);
     }
   }
+  const products = new Set<string>();
+  for (const { factors } of file.products.rows) {
+    const bases = factors.split('·');
+    for (const base of bases) {
+      const known = units.has(base) || hasPrefixedUnit(base, units, prefixes);
+      if (!known) throw new Error(`data/units.json: product '${factors}' names '${base}', which is not a unit or a prefix and a unit`);
+    }
+    if (bases.length < 2) throw new Error(`data/units.json: product '${factors}' has fewer than two factors`);
+    if (products.has(factors)) throw new Error(`data/units.json: product '${factors}' is listed twice`);
+    products.add(factors);
+  }
   const affine = file.affine.scales.map((row) => {
     for (const symbol of row.symbols) {
       if (units.has(symbol) || refused.has(symbol)) throw new Error(`data/units.json: affine '${symbol}' is also a unit or refused`);
@@ -229,6 +253,7 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
     prefixes,
     refused,
     prefixLetterUnits: new Set(file.prefixLetterUnits.letters),
+    products,
     iceKelvin: read(file.affine.iceKelvin, 'affine iceKelvin'),
     affine,
     spellingNotes,

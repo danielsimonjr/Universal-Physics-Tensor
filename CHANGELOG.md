@@ -12,6 +12,10 @@ from v0.1.0 onward.
 
 - `upt map --help` lists the accepted values of `--relation` and `--evidence`. A compile-time check fails the build when either list omits a member of its union (#688).
 
+### Changed
+
+- **BREAKING: a glued unit spelling is a product only when its factor list is in `data/units.json` `products`.** The grammar read any juxtaposition of table symbols as a product, so `gal` (g·al), `lbs` (lb·s), `gm`, `kmh`, `kgs`, `Pac` and `gc` returned a wrong value with exit 0. Such a token is now an unknown unit. The list holds 38 rows (`kW·h`, `Wh`, `m·K`, `V·s` and the others the tests and docs use); a token with one listed split keeps every split, so an ambiguity such as `mAs` still names its readings. An operator product (`N*m`) is unchanged. `mol/mL` is now one reading (millilitre, 10^6 mol/m^3) because metre·litre is not a row. A glued product that is not listed (for example `kNs`, `mWh`) needs a row or an operator. The `products` row is validated at load. The version bump is not part of this entry.
+
 ## [15.0.0] - 2026-11-18
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (139 packages). `bun outdated` lists no runtime package. It lists three development packages: `fast-check` 4.10.2 (4.10.3 in range), and `vitest` and `@vitest/coverage-v8` 4.1.12 (5.1.1 latest, a major that `.github/dependabot.yml` ignores until the benches move to vitest 5). This release does not move them. The version is a major because of two breaking entries below: `engines.node` is `>=22.12.0` (was `>=18.0.0`), and `canonicalRetrievalCorpus` stores `expr` in residual form.

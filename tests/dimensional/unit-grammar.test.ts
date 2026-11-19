@@ -3,13 +3,15 @@
  *
  * A token that is exactly one factor (an exact unit, or a prefix plus a
  * unit, with an optional exponent) is that factor. Any other token is a
- * product when exactly one split exists, and an error that names the
- * readings when more than one split exists. The oracle below recognizes
+ * product when a split is a listed row of `products` and exactly one split
+ * exists, an error that names the readings when more than one split exists,
+ * and an unknown unit when no split is listed. The oracle below recognizes
  * only a single factor. It does not search for a product.
  */
 import { describe, expect, it } from 'vitest';
 import { equals, multiply } from '../../src/dimensional/algebra.js';
 import { convertValue, parseUnit, unitTables } from '../../src/dimensional/units.js';
+import { UNIT_DATA } from '../../src/dimensional/unit-data.js';
 import { oneFactor, powerDim, productWalkTokens, sampleTokens, walkProducts } from '../helpers/unit-product-walk.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 
@@ -72,10 +74,18 @@ describe('unit juxtaposition grammar', () => {
     // with no time limit. This test reads a seeded tenth of it. Each failure names its token.
     // This sample is not the gate: the gate is `scripts/unit-product-walk.ts` in the CI quality job.
     const sample = sampleTokens(productWalkTokens(), WALK_FRACTION, WALK_SEED);
-    const result = walkProducts(sample);
+    // A token is a product only when its factor bases are a listed row, so the sample also holds
+    // one token of a listed unique product and one of a listed ambiguity.
+    const forced = [
+      { left: 'kW', right: 'h', token: 'kWh' },
+      { left: 'N', right: 'm', token: 'Nm' },
+      { left: 'mA', right: 's', token: 'mAs' },
+    ];
+    const result = walkProducts([...sample, ...forced]);
     expect(result.failures.slice(0, 20)).toEqual([]);
     expect(result.products).toBeGreaterThan(0);
     expect(result.ambiguous).toBeGreaterThan(0);
+    expect(result.refused).toBeGreaterThan(0);
     const metreSquared = oneFactor('m^2')!;
     const kelvin = oneFactor('K')!;
     expectFactor('m2K', { scale: metreSquared.scale * kelvin.scale, dim: multiply(metreSquared.dim, kelvin.dim) });
@@ -136,6 +146,11 @@ describe('unit juxtaposition grammar', () => {
         // A prefix letter that is also a unit (T, G, P, h, d, M, u, and c since the speed of light
         // became a unit) reads as the prefix: `W/Gyr` is not W/(G·yr), `W/cm` is not W/(c·m).
         if (['T', 'G', 'P', 'h', 'd', 'M', 'u', 'c'].includes(prefix)) {
+          close(parseUnit(`W/${token}`).scale, parseUnit('W').scale / prefixed.scale);
+          continue;
+        }
+        // A product competes only when the pair is a row of `products` (`m·K`, `m·s`, `m·min`, `m·°R`).
+        if (!UNIT_DATA.products.has(`${prefix}·${symbol}`)) {
           close(parseUnit(`W/${token}`).scale, parseUnit('W').scale / prefixed.scale);
           continue;
         }
