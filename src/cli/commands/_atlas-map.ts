@@ -743,6 +743,7 @@ export function buildObservableView(
       ? {
           ...filter,
           total: candidates.length,
+          // The scope names the candidates predicate above: preserves > 0 || translations > 0.
           scope: `bridges that preserve or translate '${term}'`,
           kept: kept.length,
           droppedNotMatching: n('not-matching'),
