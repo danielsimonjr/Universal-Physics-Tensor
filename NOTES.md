@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-18 (persona dogfood on 15.0.0)
+
+- **Four persona rounds ran against `universal-physics-tensor@15.0.0` from npm:** sessions 17 (applied physicist), 18 (theoretical physicist), 19 (engineering physicist) and 20 (undergraduate physics student), in `docs/persona-sessions/`. Model personas, not human reviewers. Issues #676 to #695 were filed, and each one was reproduced on a second install. Sessions 17, 18 and 20 are outside the rotation. Session 19 is rotation position 1 of 7, so the next rotation round is the condensed-matter physicist (position 2). The 2026-10-08 sentence that the next round starts at the engineering physicist is the record from before session 19.
+
 ## As of 2026-11-17 (relation overlay vs composition graph, master 09d84ea3)
 
 - The catalog-row to edge join is complete: 10 catalog rows carry `relation` (BE-11 coarse-graining; BE-21, 37, 48, 51, 52, 55, 58, 59 derivation; BE-35 exact-equivalence). 9 of them back 10 edges (BE-11 backs be-11-zurek and be-11-master), and each of those edges carries the relation of its row. BE-35 has no `relations[]` entry, so BE-35 has no edge (ROADMAP.md:143). The canonical source records 0 relations. `overlayCoverage().audited` = 10.

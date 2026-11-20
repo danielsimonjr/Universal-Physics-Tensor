@@ -48,6 +48,10 @@ from v0.1.0 onward.
 
 - **BREAKING: a glued unit spelling is a product only when a `products` row of `data/units.json` lists its factors (#676).** The grammar read any juxtaposition of table symbols as a product, so short unknown spellings gave wrong values with exit 0 (`gal` read as g·al, `lbs` as lb·s, `kmh` as km·h). A prefix is allowed only on the first factor of a row that permits it (`prefixFirst`): `kWh`, `MWh`, `mAh` and `kNm` read, `kgs` does not. The table holds 14 unprefixed rows (`W·h`, `A·h`, `A·s`, `N·m`, `N·s`, `V·s`, `V·A`, `J·s`, `Pa·s`, `Ω·m`, `m·K`, `m·s`, `g·K`, `mol·K`), validated at load. `J/gK`, `J/kgK` and `kJ/kmolK` read as before. Now refused as an unknown unit: `kgs`, `kmh`, `gm`, `gal`, `lbs`, `Pac`, `NN`, `HzHz`, `gcm`, `mmin`, `W/°Rm` and similar; they gave wrong values. One reading now: `mAs` (10^-3 C), `mPas` (10^-3 Pa·s), `mmK`, `cmK`, `mAh` (3.6 C) and `mol/mL` (10^6 mol/m^3). An operator product (`N*m`, `W/(m*K)`) is unchanged.
 
+### Documented
+
+- Persona dogfood reports, sessions 17 to 20, against the published 15.0.0 (`docs/persona-sessions/2026-11-18-*`): an applied, a theoretical and an engineering physicist, and an undergraduate physics student. Each bug that the rounds found was reproduced on a separate install and filed as one of issues #676 to #695. The refuted leads are recorded as negative results. The reports record what the published package does, so a later fix can be measured against them.
+
 ## [15.0.0] - 2026-11-18
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (139 packages). `bun outdated` lists no runtime package. It lists three development packages: `fast-check` 4.10.2 (4.10.3 in range), and `vitest` and `@vitest/coverage-v8` 4.1.12 (5.1.1 latest, a major that `.github/dependabot.yml` ignores until the benches move to vitest 5). This release does not move them. The version is a major because of two breaking entries below: `engines.node` is `>=22.12.0` (was `>=18.0.0`), and `canonicalRetrievalCorpus` stores `expr` in residual form.
