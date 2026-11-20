@@ -175,15 +175,23 @@ Flags:
         G, k_B, e — e here is the elementary charge's dimension), a named
         product/quotient (power/area, length*temperature),
         or explicit (L^3.M^-1.T^-2). Parentheses group a factor
-        (power/(area*temperature^4)); pressure, density, volume, viscosity,
-        resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
+        (power/(area*temperature^4)); mass/length^3 and M/L^3 work.
+        The named dimensions are:
+        dimensionless, length, area, volume, time, frequency, mass, density,
+        velocity, acceleration, force, energy, power, action, temperature,
+        entropy, charge, current, electric_current, amount,
+        amount_of_substance, luminous_intensity, pressure, viscosity,
+        resistance, magnetic_field, permeability, voltage, capacitance,
+        inductance, permittivity, conductance, magnetic_flux.
         In --formula, a bare e is the elementary charge and E is energy.
         A name from a dimension argument is one symbol, hyphens included.
         A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
-        recover the dimensionless prefactor. A target that is not a unique
-        monomial of the variables exits 3. --debug prints the formula parser
+        recover the dimensionless prefactor. With --formula, the check uses
+        only the declared variables that the formula contains. Each other
+        declared variable is named. A target that is not a unique monomial
+        of those variables exits 3. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \
                        --formula "2*pi*sqrt(length/gravity)"
@@ -276,12 +284,19 @@ Flags:
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). T, temperature, temp, and
         T_K are kelvin: an energy on that name is k_B T, and any other
-        dimension is an error. A binding is read by the same MathTS
+        dimension is an error. A quantity such as 2mH is a binding value, not a
+        formula: upt eval x x=2mH. A binding is read by the same MathTS
         parser as the formula, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
+        A value with a unit keeps its dimension. A formula that adds or
+        compares unlike dimensions is refused (exit 1). A bare number has no
+        dimension check. The value is converted to SI. When every bound name the
+        formula uses has a unit, the SI unit of the result follows the value.
+        A bare number has no unit, and the result then shows the value only.
+        --natural and --geometrized show the value only.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
@@ -448,6 +463,8 @@ Flags:
         --route rejects --relation); --evidence=TAG keeps only edges whose
         evidence set, DERIVED from the catalog row at read time, contains that
         tag.
+        TYPE is one of: derivation | exact-equivalence | restriction | approximation | coarse-graining | analytic-continuation | structural-analogy | deformation-quantization.
+        TAG is one of: proposed | reviewed | dimension-checked | convention-checked | symbolically-checked | numerically-supported | formally-proved | formally-proved-property | formally-proved-cross-check | empirically-supported | contradicted | unresolved.
         ⚠ Filtering changes what a missing overlay means: unfiltered, an edge
         with no overlay is KEPT; filtered, it is DROPPED, because nothing shows
         it satisfies the filter. Those drops are counted and printed separately
@@ -894,7 +911,7 @@ Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
 
-  upt retrieve <claim> [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
+  upt retrieve <claim> [--expr=FILE | --formula=TEXT --dim=name:dimension ...] [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
         [--embed-model=NAME] [--ollama-url=URL] [--no-vector-cache]
         upt retrieve --fetch-model [--embed-dtype=q8|fp16|fp32] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
@@ -926,15 +943,33 @@ Flags:
         weight file with its size and SHA-256 (as JSON with --json).
         A missing library exits 1 and prints the install hint.
         --embed-model is used with --embed or --fetch-model. A claim is text. It has
-        no expression, so the atlas search accepts nothing: it ranks by structure,
-        and a text claim has none to rank. The command does not invent one. --embed
-        still proposes an order.
-        e.g.  upt retrieve period of a pendulum
+        no expression, so without --expr the atlas search accepts nothing: it ranks
+        by structure, and a text claim has none to rank. The command does not invent
+        one. --embed still proposes an order.
+        --expr=FILE gives the search an expression: an ExprNode JSON file, the format
+        of `upt probe`, with a dimension on each symbol. The search ranks every
+        corpus record by structure. The text output prints the first 10; --json
+        keeps the full list. The claim words may be empty when --expr is given.
+        --formula=TEXT gives the search an expression from text. Each symbol takes the
+        dimension of its --dim=name:dimension. A registered constant (c, G, F, h) is
+        declared too, as itself (--dim=c:c) or as another dimension (--dim=F:force). A
+        name with no --dim is refused. --formula and --expr are exclusive.
+        A FILE that starts with package: is relative to the package root, so the
+        example works from any directory.
+        e.g.  upt retrieve rest energy --expr=package:data/examples/retrieve-mass-energy.json
+              upt retrieve rest energy --formula="E - m*c^2" --dim=E:energy --dim=m:mass --dim=c:c
+              upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed
               upt retrieve --fetch-model
 Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
+  --expr=VALUE
+        An ExprNode JSON file (the format of `upt probe`). A value that starts with package: names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted.
+  --formula=VALUE
+        A formula text, for example "E - m*c^2". The atlas search ranks the corpus by its structure. Every symbol needs a --dim. It is used instead of --expr.
+  --dim=VALUE (repeatable)
+        name:dimension of one --formula symbol, for example --dim=m:mass. A registered constant is declared as itself, for example --dim=c:c. Needs --formula.
   --embed
         Embed the claim and every corpus record with the chosen backend. Acceptance stays the atlas search. A failure of the embedder still prints that search and exits 0.
   --embed-backend=VALUE

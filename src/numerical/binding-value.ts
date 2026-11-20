@@ -16,6 +16,7 @@
  *
  * A unit literal is recognized only where it is glued to a number (`1km`,
  * `1h`, `1G`). A bare name is a constant (`h`, `G`, `c`), never that unit.
+ * A unit literal is one factor: `6m/2s` is (6 m)/(2 s).
  * A temperature name (`T`, `temperature`, `temp`, `T_K`) speaks kelvin. An
  * energy on that name is `k_B T`. Any other dimension on that name is an error.
  *
@@ -226,6 +227,44 @@ function longestUnit(rest: string): string | null {
   return best;
 }
 
+/**
+ * Where the factor that ends with the number at `numberStart` of `out` begins:
+ * the number itself, or the start of a `base^` chain before it. Null when the
+ * number is part of an identifier (`a_0`), which gets no group.
+ */
+function factorStart(out: string, numberStart: number): number | null {
+  if (numberStart > 0 && /[A-Za-z0-9_.]/.test(out[numberStart - 1]!)) return null;
+  let p = numberStart;
+  for (;;) {
+    let q = p - 1;
+    while (q >= 0 && /\s/.test(out[q]!)) q--;
+    // A sign on the exponent belongs to it: `10^-3m` is (10^-3)·m.
+    if (q >= 0 && (out[q] === '-' || out[q] === '+')) {
+      let r = q - 1;
+      while (r >= 0 && /\s/.test(out[r]!)) r--;
+      if (r >= 0 && out[r] === '^') q = r;
+    }
+    if (q < 0 || out[q] !== '^') return p;
+    q--;
+    while (q >= 0 && /\s/.test(out[q]!)) q--;
+    if (q < 0) return p;
+    if (out[q] === ')') {
+      let depth = 0;
+      for (; q >= 0; q--) {
+        if (out[q] === ')') depth++;
+        else if (out[q] === '(' && --depth === 0) break;
+      }
+      if (q < 0) return p;
+      // A call's name belongs to the base: `sqrt(4)^2m`.
+      while (q > 0 && /[A-Za-z0-9_]/.test(out[q - 1]!)) q--;
+    } else {
+      if (!/[A-Za-z0-9_.]/.test(out[q]!)) return p;
+      while (q > 0 && /[A-Za-z0-9_.]/.test(out[q - 1]!)) q--;
+    }
+    p = q;
+  }
+}
+
 interface Splice {
   readonly expr: string;
   readonly slots: Map<string, Qty>;
@@ -259,7 +298,10 @@ function spliceUnits(src: string): Splice {
     for (const note of unitConventionNotes(unit)) {
       if (!notes.includes(note)) notes.push(note);
     }
-    out += `*${name}`;
+    // A quantity literal is one factor (#729): `6m/2s` is (6 m)/(2 s), not ((6 m)/2)·s.
+    // The unit scales the power that ends at its number, so `10^3m` is (10^3)·m.
+    const start = factorStart(out, out.length - m[0].length);
+    out = start === null ? `${out}*${name}` : `${out.slice(0, start)}(${out.slice(start)}*${name})`;
     last = i + unit.length;
     re.lastIndex = last;
   }
@@ -399,6 +441,11 @@ function literalBinding(raw: string, reading: TemperatureReading): BindingValue 
   };
 }
 
+/** A binding slot feeds linear formulas and scales linearly to SI, so its unit cannot be affine. */
+function rejectAffineSlot(unit: string): void {
+  if (parseUnit(unit).affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${unit}')`);
+}
+
 /**
  * A number-plus-unit whose dimension matches `target`, including an ambiguous
  * token that has one reading of that dimension. A unique dimension mismatch
@@ -461,6 +508,7 @@ export function readNamedBinding(
   const declared = opts?.declaredUnit;
   const targetPreview = declared !== undefined ? declared : quantityConventionUnit(name);
   if (targetPreview !== undefined && targetPreview !== '') {
+    rejectAffineSlot(targetPreview);
     const resolved = declaredUnitReading(raw, targetPreview, reading);
     if (resolved !== undefined) return resolved;
   }
@@ -525,11 +573,20 @@ export function readBinding(
   const mode = opts?.mode ?? 'si';
   const reading = opts?.reading ?? 'absolute';
   if (trimmed === '') throw new BindingNumberError(`'${raw}' is not a finite number`);
-  const literal = literalBinding(trimmed, reading);
-  if (literal !== null) return literal;
+  // The literal reader cannot tell a unit from an expression tail (`2pi`), so the expression
+  // reader runs next. Its failure on a bare word leaves the literal reader's error as the cause.
+  let unitError: UnknownUnitError | undefined;
+  try {
+    const literal = literalBinding(trimmed, reading);
+    if (literal !== null) return literal;
+  } catch (e) {
+    if (!(e instanceof UnknownUnitError)) throw e;
+    unitError = e;
+  }
 
   const spliced = spliceUnits(trimmed);
-  const notANumber = (): BindingNumberError => new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
+  const notANumber = (): Error =>
+    unitError ?? new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
   let ast: FormulaPNode;
   try {
     ast = parseFormulaPNode(spliced.expr);
@@ -562,6 +619,16 @@ export function readBinding(
   };
 }
 
+/** True when `raw` is a number with a known optional unit; an unknown unit is not a literal here. */
+function isQuantityLiteral(raw: string, reading: TemperatureReading): boolean {
+  try {
+    return readQuantityLiteral(raw, reading) !== null;
+  } catch (e) {
+    if (e instanceof UnknownUnitError) return false;
+    throw e;
+  }
+}
+
 /**
  * The same reading as {@link convertValue} when `raw` is a number with an
  * optional unit, and an expression otherwise. The result is in `target`.
@@ -573,13 +640,13 @@ export function bindingInUnit(
   reading: TemperatureReading = 'absolute',
   mode: UnitMode = 'si',
 ): { value: number; given: string; cycles?: number; affine?: AffineTemperature } {
+  rejectAffineSlot(target);
   // A literal the one unit reader accepts converts exactly, unit to unit; anything else
   // (an expression such as `1Hz + 1/(1s)`) is read as an expression and converted from SI.
-  if (readQuantityLiteral(raw, reading) !== null) return convertValue(raw, target, reading);
+  if (isQuantityLiteral(raw, reading)) return convertValue(raw, target, reading);
   const b = readBinding(raw, { reading, mode });
   if (!b.dimensioned) return { value: b.value, given: '' };
   const to = parseUnit(target);
-  if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
   if (!equals(b.dimension, to.dim)) {
     throw new UnitError(
       `'${raw.trim()}' is ${format(b.dimension)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`,

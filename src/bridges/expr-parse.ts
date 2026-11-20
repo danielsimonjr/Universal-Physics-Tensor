@@ -274,3 +274,43 @@ function foldKnownConstants(node: ExprNode): ExprNode {
 export function parseCatalogExpression(expression: string): ExprNode {
   return foldKnownConstants(exprOf(parseFormulaPNode(rewritten(expression))));
 }
+
+/** The literals a fold writes as one constant symbol (`8*pi` is `8pi`, `ln(2)` is `ln2`). */
+const FOLDED_CONSTANTS = new Set<string>(['2pi', '4pi', '8pi', 'ln2']);
+
+function declaredOf(node: ExprNode, declared: ReadonlyMap<string, Dimension>): ExprNode {
+  switch (node.kind) {
+    case 'symbol': {
+      const name = node.name;
+      if (Number.isFinite(Number(name)) || FOLDED_CONSTANTS.has(name) || name === 'pi') return node;
+      const dim = declared.get(name);
+      if (dim !== undefined) return { ...node, dim };
+      if (RESERVED.has(name)) {
+        throw new Error(`'${name}' is a registered constant: declare it as itself, ${name}:${name}, or give it your own dimension, ${name}:<dimension>`);
+      }
+      if (quantityNames.has(name)) return node;
+      throw new Error(`undeclared symbol '${name}': declare its dimension, ${name}:<dimension>`);
+    }
+    case 'op':
+      return { ...node, args: node.args.map((arg) => declaredOf(arg, declared)) };
+    case 'transcendental':
+    case 'abs':
+      return { ...node, arg: declaredOf(node.arg, declared) };
+    default:
+      return node;
+  }
+}
+
+/**
+ * Parse a QUERY formula whose free symbols carry the caller's dimensions. A name in
+ * `declared` takes that dimension, also when it is the name of a registered constant.
+ * A registry quantity id and a numeric literal keep theirs. A registered constant that
+ * is not declared, and any other name, is refused: a query symbol is never defaulted to
+ * dimensionless. {@link parseCatalogExpression} keeps that default for catalog trees.
+ */
+export function parseDeclaredExpression(expression: string, declared: ReadonlyMap<string, Dimension>): ExprNode {
+  for (const name of declared.keys()) {
+    if (name.includes('-')) throw new Error(`declared name '${name}' has a hyphen: a declared name is an identifier`);
+  }
+  return declaredOf(parseCatalogExpression(expression), declared);
+}

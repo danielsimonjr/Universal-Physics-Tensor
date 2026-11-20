@@ -570,7 +570,7 @@ A missing `type` is a rejected record. `deriveEvidence`, `catalogEvidenceInput`,
 and the evidence tags are unchanged, because a derivation is a reduction and
 a reduction lights no tag. `type` does not light a tag.
 
-The catalog file is `data/bridge-catalog.json` at `schemaVersion` 3.
+The catalog file is `data/bridge-catalog.json` at `schemaVersion` 4.
 `derivedFrom` and `basis` remain optional in that schema.
 
 No new CLI command is part of this note. A report file is the output.

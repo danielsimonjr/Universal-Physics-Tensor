@@ -25,9 +25,10 @@ import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
 import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
-import { aliasesForTarget, editDistance } from './aliases.js';
-import { resolveQuantityName } from '../dimensional/formula-names.js';
+import { aliasesForTarget, editDistance, symbolIndex } from './aliases.js';
+import { greekLetter, resolveQuantityName } from '../dimensional/formula-names.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
+import { CANONICAL_GRAPH } from './canonical-graph.js';
 import type { VizModel, VizJunction } from './graph-viz.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -378,6 +379,11 @@ export interface ShortBinding {
    * applied. Omitted when the name was bound.
    */
   readonly bound?: false;
+  /**
+   * The other catalog quantities whose symbol or alias is this letter (`a` is also the symbol of
+   * `unruh-acceleration`). Present only when there is one or more.
+   */
+  readonly otherMeanings?: readonly string[];
 }
 
 /**
@@ -392,7 +398,16 @@ export interface ShortBinding {
  * @public
  */
 export interface EquationAnalysis {
+  /**
+   * The user junction with each resolved name, or the raw name when it did not bind. Use it for
+   * the label and the comparisons. Do not give it to `buildVizModel`: use `graphJunction`.
+   */
   readonly junction: VizJunction;
+  /**
+   * The junction as the graph reads it. A name that did not bind is keyed `<name> (unbound)`,
+   * so it never joins a catalog node that has the same spelling.
+   */
+  readonly graphJunction: VizJunction;
   /** Set when the RHS is not dimensionally well-formed (then dims are null). */
   readonly parseError: string | null;
   readonly rhsDimension: Dimension | null;
@@ -446,6 +461,19 @@ export async function analyzeUserEquation(
   const resolve = (n: string): string | null => {
     if (!bindShort && literalShort(n) !== null) return null;
     return resolveQuantityName(n, catalogNames, aliasMap);
+  };
+  // The symbol table `upt search` reads: a quantity's symbol and its edge aliases (#684). A Greek
+  // name (`omega`) also reads its letter (`ω`).
+  const symbols = symbolIndex([...CATALOG_GRAPH, ...CANONICAL_GRAPH]);
+  const symbolOf = (n: string): string[] =>
+    [...new Set([...(symbols.get(n) ?? []), ...(symbols.get(greekLetter(n) ?? '') ?? [])])]
+      .filter((q) => catalogNames.has(q)).sort((x, y) => x.localeCompare(y));
+  // A quantity whose symbol is the name reads before a spelling neighbour.
+  const suggest = (n: string): string[] =>
+    [...new Set([...symbolOf(n), ...suggestQuantities(n, catalogNames, 5)])].slice(0, 5);
+  const withMeanings = <B extends { name: string; quantity: string }>(b: B): B & { otherMeanings?: string[] } => {
+    const others = symbolOf(b.name).filter((q) => q !== b.quantity);
+    return others.length > 0 ? { ...b, otherMeanings: others } : b;
   };
 
   // dims for parsePhysics: physics constants carry their REAL dimensions; matched
@@ -503,11 +531,11 @@ export async function analyzeUserEquation(
       hints.push(
         byDim
           ? { name: s, suggestions: byDim, byDimension: true, ...withConstants }
-          : { name: s, suggestions: suggestQuantities(s, catalogNames, 5), byDimension: false, ...withConstants },
+          : { name: s, suggestions: suggest(s), byDimension: false, ...withConstants },
       );
     }
     if (!resolvedTarget && (bindShort || literalShort(eq.target) === null)) {
-      hints.push({ name: eq.target, suggestions: suggestQuantities(eq.target, catalogNames, 5), byDimension: false });
+      hints.push({ name: eq.target, suggestions: suggest(eq.target), byDimension: false });
     }
   }
 
@@ -539,20 +567,28 @@ export async function analyzeUserEquation(
     }
   }
 
+  const junction: VizJunction = {
+    id: 'user-equation',
+    label: eq.text,
+    status: 'user',
+    sources: eq.sources.map((s) => resolve(s) ?? s),
+    target: resolvedTarget ?? eq.target,
+  };
+  const unbound = (n: string): string => `${n} (unbound)`;
+
   return {
-    junction: {
-      id: 'user-equation',
-      label: eq.text,
-      status: 'user',
-      sources: eq.sources.map((s) => resolve(s) ?? s),
-      target: resolvedTarget ?? eq.target,
+    junction,
+    graphJunction: {
+      ...junction,
+      sources: eq.sources.map((s) => resolve(s) ?? unbound(s)),
+      target: resolvedTarget ?? unbound(eq.target),
     },
     parseError,
     rhsDimension,
     targetDimension,
     consistent,
     hints,
-    shortBindings: [...declined, ...boundShort, ...declinedTarget],
+    shortBindings: [...declined, ...boundShort, ...declinedTarget].map(withMeanings),
     placeholders,
     ...(natural === undefined ? {} : { naturalNote: natural }),
   };

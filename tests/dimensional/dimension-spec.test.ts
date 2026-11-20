@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
 import {
   parseDimensionSpec,
   DimensionSpecError,
+  NAMED_DIMENSION_NAMES,
 } from '../../src/dimensional/dimension-spec.js';
 import {
   LENGTH,
@@ -143,4 +144,84 @@ describe('named dimensions are projected from one owner, and N and J have names 
     expect(parseDimensionSpec('energy/amount').N).toBe(-1);
     expect(parseDimensionSpec('luminous-intensity/area').J).toBe(1);
   });
+});
+
+describe('circuit named dimensions (issue 683)', () => {
+  // Explicit exponent tuples, so the test does not share a code path with unitDimension.
+  const z = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+  const cases: Array<[string, Record<string, number>]> = [
+    ['voltage', { L: 2, M: 1, T: -3, I: -1 }],
+    ['capacitance', { L: -2, M: -1, T: 4, I: 2 }],
+    ['inductance', { L: 2, M: 1, T: -2, I: -2 }],
+    ['permittivity', { L: -3, M: -1, T: 4, I: 2 }],
+    ['conductance', { L: -2, M: -1, T: 3, I: 2 }],
+    ['magnetic_flux', { L: 2, M: 1, T: -2, I: -1 }],
+  ];
+  for (const [name, exps] of cases) {
+    it(`${name} has the SI exponents`, () => {
+      expect(parseDimensionSpec(name)).toEqual({ ...z, ...exps });
+    });
+  }
+  it('accepts a hyphen spelling and a capital letter', () => {
+    expect(parseDimensionSpec('magnetic-flux')).toEqual(parseDimensionSpec('magnetic_flux'));
+    expect(parseDimensionSpec('Voltage')).toEqual(parseDimensionSpec('voltage'));
+  });
+  it('agrees with the products it must equal', () => {
+    expect(parseDimensionSpec('voltage/current')).toEqual(parseDimensionSpec('resistance'));
+    expect(parseDimensionSpec('charge/voltage')).toEqual(parseDimensionSpec('capacitance'));
+  });
+  it('an unknown term lists the accepted named dimensions, generated from the table', () => {
+    let message = '';
+    try {
+      parseDimensionSpec('zqx');
+    } catch (e) {
+      message = (e as Error).message;
+    }
+    expect(message).toContain("unknown base dimension 'zqx'");
+    expect(message).toContain('named dimensions:');
+    for (const n of ['voltage', 'permittivity', 'resistance']) expect(message).toContain(n);
+    for (const n of NAMED_DIMENSION_NAMES) expect(message).toContain(n);
+  });
+});
+
+describe('the SI special-name units and the named dimensions', () => {
+  // Every SI unit with a special name is COVERED (a named dimension equals its dimension) or EXCLUDED (with a reason).
+  const SI_SPECIAL = [
+    'rad', 'sr', 'Hz', 'N', 'Pa', 'J', 'W', 'C', 'V', 'F', 'ohm',
+    'S', 'Wb', 'T', 'H', 'degC', 'lm', 'lx', 'Bq', 'Gy', 'Sv', 'kat',
+  ];
+  const COVERED: Record<string, string> = {
+    rad: 'dimensionless', sr: 'dimensionless', Hz: 'frequency', N: 'force', Pa: 'pressure',
+    J: 'energy', W: 'power', C: 'charge', V: 'voltage', F: 'capacitance', ohm: 'resistance',
+    S: 'conductance', Wb: 'magnetic_flux', T: 'magnetic_field', H: 'inductance',
+    degC: 'temperature', lm: 'luminous_intensity',
+    // Same dimension as frequency; Bq counts no cycles (see the cycles test in si-special-units.test.ts).
+    Bq: 'frequency',
+  };
+  const EXCLUDED: Record<string, string> = {
+    lx: 'no named dimension for illuminance',
+    Gy: 'no named dimension for absorbed dose',
+    Sv: 'no named dimension for dose equivalent',
+    kat: 'no named dimension for catalytic activity',
+  };
+  it('COVERED and EXCLUDED are disjoint and together are exactly the 22 units', () => {
+    const covered = Object.keys(COVERED);
+    const excluded = Object.keys(EXCLUDED);
+    expect(covered.filter((u) => excluded.includes(u))).toEqual([]);
+    expect([...covered, ...excluded].sort()).toEqual([...SI_SPECIAL].sort());
+  });
+  for (const [unit, name] of Object.entries(COVERED)) {
+    it(`${name} equals the dimension of ${unit}`, () => {
+      expect(parseDimensionSpec(name)).toEqual(unitDimension(unit));
+    });
+  }
+  // The EXCLUDED reasons are checked, so a later change to the unit table or to
+  // NAMED_DIMS moves the unit out of EXCLUDED instead of leaving a stale reason.
+  for (const unit of Object.keys(EXCLUDED).filter((u) => EXCLUDED[u].startsWith('no named dimension'))) {
+    it(`${unit} has no named dimension`, () => {
+      const read = unitDimension(unit);
+      const same = NAMED_DIMENSION_NAMES.filter((n) => JSON.stringify(parseDimensionSpec(n)) === JSON.stringify(read));
+      expect(same).toEqual([]);
+    });
+  }
 });

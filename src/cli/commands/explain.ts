@@ -32,7 +32,10 @@ const FLAGS: FlagSpec[] = [
   JSON_FLAG,
 ];
 
-const HELP = `upt explain <quantity> [name=value | name] ...
+/** The input form of `upt explain`. HELP and the usage line both read it. */
+const INPUT_FORM = 'upt explain <quantity> [name=value | name] ...';
+
+const HELP = `${INPUT_FORM}
             [--source=catalog|canonical|both] [--json]
         Explain how the graph determines a quantity: the identifiability
         verdict, recovered value, derivation chains, and whether the inputs
@@ -195,9 +198,13 @@ function printExplanation(
   target: string,
   label: string,
   x: ReturnType<CommandCtx['api']['explainQuantity']>,
+  inputNote: string | undefined,
 ): void {
   out(`\n● ${target}  [source: ${label}]`);
   out(`  ${x.summary}`);
+  if (x.identifiability.verdict === 'under-determined' && x.known.length === 0 && inputNote) {
+    out(`  ${inputNote}`);
+  }
   if (x.derivations.length) {
     out('  derivations:');
     for (const d of x.derivations) {
@@ -209,7 +216,7 @@ function printExplanation(
     }
   }
   if (x.blockingFrontier.length) {
-    out(`  to determine it, also supply: ${x.blockingFrontier.join(', ')}`);
+    out(`  inputs on a path to it: ${x.blockingFrontier.join(', ')}`);
   }
 }
 
@@ -343,6 +350,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
   const rebound = rebind(api, parsed.known, aliases, inputNames);
+  // Only the CLI sees the raw arguments, so only the CLI states why the bound set is empty.
+  const inputNote =
+    rest.length === 0
+      ? `give inputs in the form: ${INPUT_FORM}`
+      : Object.keys(rebound).length === 0
+        ? 'every input names a registered constant: each value is checked against the registered value, and a constant is not a graph input.'
+        : undefined;
   const known = api.shareSynonyms(rebound, names);
   let x;
   try {
@@ -391,9 +405,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  printExplanation(api, out, target, label, x);
+  printExplanation(api, out, target, label, x, inputNote);
   if (partner !== null && partnerExplanation !== undefined) {
-    printExplanation(api, out, partner.name, label, partnerExplanation);
+    // The note explains the invocation, not the quantity: print it once, under the first block.
+    printExplanation(api, out, partner.name, label, partnerExplanation, undefined);
     const who = `${partner.canonicalId} restates be-${partner.bridgeId}`;
     if (agree === true) {
       out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}). Values agree.`);

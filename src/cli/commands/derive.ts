@@ -16,6 +16,7 @@ import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { Dimension } from '../../dimensional/types.js';
+import { NAMED_DIMENSIONS_HELP } from '../library-defaults.js';
 
 /** The parser's symbol for a declared name. A hyphen is subtraction, so a
  *  declared `reduced-planck-constant` is the symbol `reduced_planck_constant`. */
@@ -49,15 +50,18 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         G, k_B, e — e here is the elementary charge's dimension), a named
         product/quotient (power/area, length*temperature),
         or explicit (L^3.M^-1.T^-2). Parentheses group a factor
-        (power/(area*temperature^4)); pressure, density, volume, viscosity,
-        resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
+        (power/(area*temperature^4)); mass/length^3 and M/L^3 work.
+        The named dimensions are:
+${NAMED_DIMENSIONS_HELP}.
         In --formula, a bare e is the elementary charge and E is energy.
         A name from a dimension argument is one symbol, hyphens included.
         A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
-        recover the dimensionless prefactor. A target that is not a unique
-        monomial of the variables exits 3. --debug prints the formula parser
+        recover the dimensionless prefactor. With --formula, the check uses
+        only the declared variables that the formula contains. Each other
+        declared variable is named. A target that is not a unique monomial
+        of those variables exits 3. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
                        --formula "2*pi*sqrt(length/gravity)"`;
@@ -95,7 +99,11 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const target = specs[0];
   const governing = specs.slice(1);
-  const det = api.dimensionallyDetermines(target, governing);
+  // Without --formula the target is determined by every declared variable. With --formula it is
+  // determined by the variables the formula uses (set below): the formula is the claim.
+  let used = governing;
+  let unused: typeof governing = [];
+  let det = api.dimensionallyDetermines(target, governing);
 
   // Text is buffered and written only when the command reaches a result, so an
   // error (exit 1 or 2) leaves stdout empty, as every command's does; a result,
@@ -123,6 +131,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         command: 'derive',
         result: {
           determination: det,
+          ...(unused.length > 0 ? { unusedVariables: unused.map((g) => g.name) } : {}),
           ...(full !== undefined ? { buckingham: full } : {}),
           ...(formulaCheck !== undefined ? { formulaCheck } : {}),
           ...(matchesMonomial === undefined ? {} : { matchesMonomial, prefactor: matchesMonomial ? mean! : null }),
@@ -135,22 +144,53 @@ async function run(ctx: CommandCtx): Promise<number> {
   };
 
   textOut(`\n● ${target.name}  from {${governing.map((g) => g.name).join(', ')}}`);
-  if (det.determined) {
-    textOut(`  dimensionally determined up to a constant:  ${target.name} ∝ ${fmtMono(det.monomial!)}`);
-  } else {
-    full = api.buckinghamPi([target, ...governing]);
-    textOut(`  NOT a unique monomial — ${full.piGroupCount} free dimensionless group(s) (${full.verdict}):`);
-    for (const g of full.piGroups) textOut(`     ${g.formula}`);
-    textOut(`  (${det.reason})`);
-  }
+  const reportDetermination = (): void => {
+    if (unused.length > 0) {
+      textOut(`  declared but not in the formula: ${unused.map((g) => g.name).join(', ')} — checked against {${used.map((g) => g.name).join(', ')}}`);
+    }
+    if (det.determined) {
+      textOut(`  dimensionally determined up to a constant:  ${target.name} ∝ ${fmtMono(det.monomial!)}`);
+    } else {
+      full = api.buckinghamPi([target, ...used]);
+      textOut(`  NOT a unique monomial — ${full.piGroupCount} free dimensionless group(s) (${full.verdict}):`);
+      for (const g of full.piGroups) textOut(`     ${g.formula}`);
+      textOut(`  (${det.reason})`);
+    }
+  };
+  if (!formula) reportDetermination();
 
   if (formula) {
     const parser = await api.getFormulaParser();
     if (debug) err(`  [parser: ${formulaParserLabel(await api.getFormulaParserKind())}]`);
 
     const checker = await api.getFormulaDimensionChecker();
-    const declared = new Set(governing.map((g) => g.name));
+    // The target is a declared name too: a hyphenated target name stays one symbol.
+    const declared = new Set([target.name, ...governing.map((g) => g.name)]);
     const formulaSymbols = api.rewriteCatalogHyphens(formula, declared);
+    // One parse. A parse error is thrown at the place it was always thrown, after the
+    // dimension check, so every existing error keeps its order.
+    let cf: ReturnType<typeof parser.parse> | undefined;
+    let parseError: unknown;
+    try {
+      cf = parser.parse(formulaSymbols);
+    } catch (e) {
+      parseError = e;
+    }
+    // The formula defines the target, so the target is not one of its inputs. The
+    // dimension checker applies the same rule below, for a formula this parser rejects.
+    const targetSymbol = formulaSymbol(target.name);
+    const targetInFormula = new UsageError(
+      `upt derive: '${target.name}' is the target and cannot appear in its own formula`
+        + (target.name.includes('-') ? '. For a subtraction, write the minus sign with spaces' : ''),
+    );
+    if (cf !== undefined && cf.variables.includes(targetSymbol)) throw targetInFormula;
+    if (cf !== undefined) {
+      const formulaVariables = cf.variables;
+      used = governing.filter((g) => formulaVariables.includes(formulaSymbol(g.name)));
+      unused = governing.filter((g) => !used.includes(g));
+      if (unused.length > 0) det = api.dimensionallyDetermines(target, used);
+    }
+    reportDetermination();
     const dims = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), g.dim]));
     const r = checker.check(formulaSymbols, dims);
     formulaCheck = r;
@@ -161,6 +201,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       // declares it as an argument. A registered constant is declared as itself (c:c).
       if (r.undeclaredSymbol !== undefined) {
         const sym = r.undeclaredSymbol;
+        if (sym === targetSymbol) throw targetInFormula;
         const asConstant = api.CONSTANTS[sym] === undefined ? '' : ` ${sym}:${sym} for the registered constant, or`;
         // The checker's own sentence first (with the hyphen note when one remains in the
         // formula), then how to declare the symbol. The report above is not printed: an error
@@ -176,12 +217,9 @@ async function run(ctx: CommandCtx): Promise<number> {
       );
     }
 
-    let cf;
-    try {
-      cf = parser.parse(formulaSymbols);
-    } catch (e) {
+    if (cf === undefined) {
       // The parser's message carries its own `parse error:` label.
-      throw new FormulaUsageError('upt derive: --formula: ' + (e as Error).message, await api.getFormulaParserKind());
+      throw new FormulaUsageError('upt derive: --formula: ' + (parseError as Error).message, await api.getFormulaParserKind());
     }
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This

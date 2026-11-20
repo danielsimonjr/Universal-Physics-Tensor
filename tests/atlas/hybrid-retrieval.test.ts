@@ -28,8 +28,15 @@ import {
   stubVector,
 } from '../../src/atlas/benchmark/hybrid-retrieval.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
+import { validate } from '../../src/dimensional/validator.js';
+import { parseCatalogExpression } from '../../src/bridges/expr-parse.js';
+
 import { leakageKey } from '../../src/atlas/benchmark/leakage.js';
 import { queryInput as registeredQueryInput } from '../../tools/criterion3-study/embedding.js';
+
+// Before the monomial record used '/': [2, 2, 2, 2]. The fifth pair is CE-compton-wavelength with
+// CE-compton-wavelength-full: one relation, hbar/(m c) against h/(m c), and the key drops the constant.
+const COLLISION_GROUP_SIZES_AFTER: number[] = [2, 2, 2, 2, 2];
 
 const L = dim(1);
 const T = dim(0, 0, 1);
@@ -290,13 +297,8 @@ describe('canonicalRetrievalCorpus: residual form', () => {
     expect(out.embeddings).toBe('not-requested');
   });
 
-  it('every record is target - scalarAst, and has no expr key without a scalarAst', () => {
+  it('every record is target - scalarAst, or target - monomial when the entry has no scalarAst', () => {
     const corpus = canonicalRetrievalCorpus();
-    const without = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined);
-    expect(without.length).toBeGreaterThan(0);
-    for (const entry of without) {
-      expect('expr' in corpus.find((r) => r.id === entry.id)!).toBe(false);
-    }
     let withAst = 0;
     for (const entry of CANONICAL_EQUATIONS) {
       if (entry.scalarAst === undefined) continue;
@@ -310,5 +312,100 @@ describe('canonicalRetrievalCorpus: residual form', () => {
       expect(expr.args[1]).toBe(entry.scalarAst);
     }
     expect(withAst).toBeGreaterThan(0);
+  });
+
+  it('census: an entry has an expr key exactly when it has a scalarAst or a monomial', () => {
+    const corpus = canonicalRetrievalCorpus();
+    const missing = corpus.filter((r) => r.expr === undefined).map((r) => r.id);
+    const neither = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined && e.dimensional.monomial === null).map((e) => e.id);
+    expect(missing.sort()).toEqual(neither.sort());
+  });
+
+  it('a monomial record is target - (numerator / denominator) of governing powers: same symbols, same exponents, valid dimension', () => {
+    const corpus = canonicalRetrievalCorpus();
+    const monomialOnly = CANONICAL_EQUATIONS.filter((e) => e.scalarAst === undefined && e.dimensional.monomial !== null);
+    expect(monomialOnly.length).toBeGreaterThan(0);
+    for (const entry of monomialOnly) {
+      const expr = corpus.find((r) => r.id === entry.id)!.expr!;
+      if (expr.kind !== 'op' || expr.op !== '-') throw new Error(`${entry.id}: not a residual`);
+      expect(expr.args[0]).toEqual({ kind: 'symbol', name: entry.dimensional.target.name, dim: entry.dimensional.target.dim });
+      const exponents: Record<string, number> = {};
+      const walk = (n: ExprNode, sign = 1): void => {
+        if (n.kind === 'symbol') {
+          if (n.name !== '1') exponents[n.name] = sign;
+        }
+        else if (n.kind === 'op' && n.op === '*') n.args.forEach((a) => walk(a, sign));
+        else if (n.kind === 'op' && n.op === '/') {
+          walk(n.args[0]!, sign);
+          walk(n.args[1]!, -sign);
+        }
+        else if (n.kind === 'op' && n.op === '^') {
+          const [b, x] = n.args;
+          if (b!.kind !== 'symbol' || x!.kind !== 'symbol') throw new Error(`${entry.id}: bad power`);
+          exponents[b.name] = sign * Number(x.name);
+        } else throw new Error(`${entry.id}: unexpected node`);
+      };
+      walk(expr.args[1]!);
+      const expected = Object.fromEntries(Object.entries(entry.dimensional.monomial!).filter(([, v]) => v !== 0));
+      expect(exponents, entry.id).toEqual(expected);
+      expect(validate(expr).ok, entry.id).toBe(true);
+    }
+  });
+
+  it('fractional exponents render: fermi energy and velocity validate', () => {
+    for (const id of ['CE-fermi-energy', 'CE-fermi-velocity']) {
+      const r = canonicalRetrievalCorpus().find((x) => x.id === id)!;
+      expect(r.expr, id).toBeDefined();
+      expect(validate(r.expr!).ok, id).toBe(true);
+    }
+  });
+
+  describe('a parsed claim key-matches its monomial record', () => {
+    const pendulum = 'CE-pendulum-period';
+    const dims: Record<string, ReturnType<typeof dim>> = {
+      T: dim(0, 0, 1),
+      L: dim(1),
+      g: dim(1, 0, -2),
+      a: dim(1),
+      G: dim(3, -1, -2),
+      M: dim(0, 1),
+    };
+    // Retype the dimensionless stubs the parser makes, so a parsed claim carries the dimensions of its names.
+    const retype = (n: ExprNode): ExprNode => {
+      if (n.kind === 'symbol') return n.name in dims ? { ...n, dim: dims[n.name]! } : n;
+      if (n.kind === 'op') return { ...n, args: n.args.map(retype) };
+      return n;
+    };
+    const parsed = (rhs: string): ExprNode =>
+      ({ kind: 'op', op: '-', args: [sym('T', dims.T!), retype(parseCatalogExpression(rhs))] }) as ExprNode;
+    const first = (expr: ExprNode): string | undefined => rankByStructure({ text: '', expr }, canonicalRetrievalCorpus())[0];
+    const record = (): CorpusRecord => canonicalRetrievalCorpus().find((r) => r.id === pendulum)!;
+
+    it('T = sqrt(L)/sqrt(g) ranks CE-pendulum-period first by structure', () => {
+      expect(first(parsed('sqrt(L)/sqrt(g)'))).toBe(pendulum);
+    });
+
+    it('T = 2*pi*sqrt(L)/sqrt(g) ranks CE-pendulum-period first: the key drops the constant', () => {
+      expect(first(parsed('2*pi*sqrt(L)/sqrt(g)'))).toBe(pendulum);
+    });
+
+    it('Kepler T = a^1.5/(sqrt(G)*sqrt(M)) ranks CE-kepler-third first by structure', () => {
+      expect(first(parsed('a^1.5/(sqrt(G)*sqrt(M))'))).toBe('CE-kepler-third');
+    });
+
+    it('control: the inverted relation T = sqrt(g)/sqrt(L) does not key-match CE-pendulum-period', () => {
+      expect(leakageKey(record().expr!)).not.toBe(leakageKey(parsed('sqrt(g)/sqrt(L)')));
+    });
+  });
+
+  it('key collisions corpus-wide are recorded (COLLISION_GROUP_SIZES_AFTER)', () => {
+    const byKey = new Map<string, string[]>();
+    for (const r of canonicalRetrievalCorpus()) {
+      if (r.expr === undefined) continue;
+      const k = leakageKey(r.expr);
+      byKey.set(k, [...(byKey.get(k) ?? []), r.id]);
+    }
+    const groups = [...byKey.values()].filter((g) => g.length > 1);
+    expect(groups.map((g) => g.length)).toEqual(COLLISION_GROUP_SIZES_AFTER);
   });
 });

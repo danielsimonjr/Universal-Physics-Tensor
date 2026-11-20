@@ -34,19 +34,19 @@ describe('the spelled gauss', () => {
     expect(symbol.code).toBe(0);
     expect(spelled.code).toBe(0);
     expect(spaced.code).toBe(0);
-    expect(Number(symbol.stdout)).toBe(1e-4);
-    expect(Number(spelled.stdout)).toBe(1e-4);
-    expect(Number(spaced.stdout)).toBe(1e-4);
+    expect(parseFloat(symbol.stdout)).toBe(1e-4);
+    expect(parseFloat(spelled.stdout)).toBe(1e-4);
+    expect(parseFloat(spaced.stdout)).toBe(1e-4);
     expect(symbol.stderr).toMatch(/gauss/);
   });
 
   it('keeps GPa a gigapascal and bare G as Newton', async () => {
     const gpa = await run(['eval', 'p', 'p=1GPa']);
     expect(gpa.code).toBe(0);
-    expect(Number(gpa.stdout)).toBe(1e9);
+    expect(parseFloat(gpa.stdout)).toBe(1e9);
     expect(gpa.stderr).not.toMatch(/gauss/);
     const newton = await run(['eval', 'G']);
     expect(newton.code).toBe(0);
-    expect(Number(newton.stdout)).toBeCloseTo(G_SI, 20);
+    expect(parseFloat(newton.stdout)).toBeCloseTo(G_SI, 20);
   });
 });

@@ -47,6 +47,7 @@ interface UnitFileRow {
   readonly dimension: DimensionFile;
   readonly prefixable: boolean;
   readonly cycles?: true;
+  readonly kind?: true;
 }
 
 interface AffineFileRow {
@@ -62,6 +63,7 @@ interface UnitFile {
   readonly units: readonly UnitFileRow[];
   readonly refused: readonly { readonly symbol: string; readonly reason: string }[];
   readonly prefixLetterUnits: { readonly letters: readonly string[] };
+  readonly products: { readonly rows: readonly { readonly factors: string; readonly prefixFirst: boolean; readonly comment: string }[] };
   readonly affine: { readonly iceKelvin: string; readonly scales: readonly AffineFileRow[] };
   readonly spellingNotes: readonly { readonly spelling: string; readonly note: string }[];
 }
@@ -78,6 +80,11 @@ export interface UnitRow {
    * rad/s takes 2π per cycle; the radian itself does not.
    */
   readonly cycles?: true;
+  /**
+   * The unit names one kind of quantity of its dimension (Bq, Gy, Sv, kat, lm, lx, rayl). The
+   * dimension alone does not say it, so a printed label never picks the unit.
+   */
+  readonly kind?: true;
 }
 
 /** One affine temperature scale, read exactly. @internal */
@@ -97,6 +104,11 @@ export interface UnitTableData {
   /** Refused spelling → the message it prints. */
   readonly refused: ReadonlyMap<string, string>;
   readonly prefixLetterUnits: ReadonlySet<string>;
+  /**
+   * The glued products a token may read as, by factor bases joined by `·`, with no exponent.
+   * The value is true when a prefix on the first factor also matches the row.
+   */
+  readonly products: ReadonlyMap<string, boolean>;
   /** Kelvin at 0 °C, exactly. */
   readonly iceKelvin: ExactScale;
   readonly affine: readonly AffineRow[];
@@ -181,7 +193,7 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
   const units = new Map<string, UnitRow>();
   for (const row of file.units) {
     const scale = read(row.scale, `unit ${row.symbols[0]}`);
-    const unit: UnitRow = { scale, dim: dimension(row.dimension), prefixable: row.prefixable, ...(row.cycles ? { cycles: true as const } : {}) };
+    const unit: UnitRow = { scale, dim: dimension(row.dimension), prefixable: row.prefixable, ...(row.cycles ? { cycles: true as const } : {}), ...(row.kind ? { kind: true as const } : {}) };
     for (const symbol of row.symbols) {
       if (units.has(symbol)) throw new Error(`data/units.json: unit '${symbol}' is spelled by two rows`);
       units.set(symbol, unit);
@@ -209,6 +221,20 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
       throw new Error(`data/units.json: prefix letter '${letter}' is not both a prefix and a unit`);
     }
   }
+  const products = new Map<string, boolean>();
+  for (const { factors, prefixFirst } of file.products.rows) {
+    const bases = factors.split('·');
+    // Every base is an exact unit; a prefixed spelling (`kg`) reaches a row through `prefixFirst`.
+    for (const base of bases) {
+      if (!units.has(base)) throw new Error(`data/units.json: product '${factors}' names '${base}', which is not an exact unit`);
+    }
+    if (bases.length < 2) throw new Error(`data/units.json: product '${factors}' has fewer than two factors`);
+    if (prefixFirst && units.get(bases[0]!)?.prefixable !== true) {
+      throw new Error(`data/units.json: product '${factors}' permits a prefix, but '${bases[0]}' is not prefixable`);
+    }
+    if (products.has(factors)) throw new Error(`data/units.json: product '${factors}' is listed twice`);
+    products.set(factors, prefixFirst);
+  }
   const affine = file.affine.scales.map((row) => {
     for (const symbol of row.symbols) {
       if (units.has(symbol) || refused.has(symbol)) throw new Error(`data/units.json: affine '${symbol}' is also a unit or refused`);
@@ -229,6 +255,7 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
     prefixes,
     refused,
     prefixLetterUnits: new Set(file.prefixLetterUnits.letters),
+    products,
     iceKelvin: read(file.affine.iceKelvin, 'affine iceKelvin'),
     affine,
     spellingNotes,

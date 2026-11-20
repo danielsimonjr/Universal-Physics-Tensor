@@ -84,6 +84,42 @@ const HUBS_SHOWN = 10;
 /** Flags that add a structure section to the text and --json forms, and mean nothing on a diagram. */
 const STRUCTURE_FLAGS = ['communities', 'cycles', 'rank-hubs'] as const;
 
+// RELATION_TYPES and EVIDENCE_TAGS stay above HELP: HELP interpolates them at module load (TDZ).
+// Each list must name every member of its union; the _Missing checks below fail to compile otherwise.
+const RELATION_TYPES = [
+  'derivation',
+  'exact-equivalence',
+  'restriction',
+  'approximation',
+  'coarse-graining',
+  'analytic-continuation',
+  'structural-analogy',
+  'deformation-quantization',
+] as const satisfies readonly RelationType[];
+
+const EVIDENCE_TAGS = [
+  'proposed',
+  'reviewed',
+  'dimension-checked',
+  'convention-checked',
+  'symbolically-checked',
+  'numerically-supported',
+  'formally-proved',
+  'formally-proved-property',
+  'formally-proved-cross-check',
+  'empirically-supported',
+  'contradicted',
+  'unresolved',
+] as const satisfies readonly EvidenceTag[];
+
+/** A union member absent from its list. `never` while each list is complete. */
+type _MissingRelation = Exclude<RelationType, (typeof RELATION_TYPES)[number]>;
+type _MissingEvidence = Exclude<EvidenceTag, (typeof EVIDENCE_TAGS)[number]>;
+const _relationListComplete: [_MissingRelation] extends [never] ? true : _MissingRelation = true;
+const _evidenceListComplete: [_MissingEvidence] extends [never] ? true : _MissingEvidence = true;
+void _relationListComplete;
+void _evidenceListComplete;
+
 const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
         [--equation "TARGET = EXPR" [--equation-only] [--verbose] [--bind-short]
@@ -131,6 +167,8 @@ const HELP = `upt map [--source=catalog|canonical|both] [--format=text|mermaid|d
         --route rejects --relation); --evidence=TAG keeps only edges whose
         evidence set, DERIVED from the catalog row at read time, contains that
         tag.
+        TYPE is one of: ${RELATION_TYPES.join(' | ')}.
+        TAG is one of: ${EVIDENCE_TAGS.join(' | ')}.
         ⚠ Filtering changes what a missing overlay means: unfiltered, an edge
         with no overlay is KEPT; filtered, it is DROPPED, because nothing shows
         it satisfies the filter. Those drops are counted and printed separately
@@ -205,32 +243,6 @@ export function neighbourhood(graph: readonly BridgeEdge[], quantity: string, de
   }
   return graph.filter((e) => kept.has(e));
 }
-
-const RELATION_TYPES: readonly RelationType[] = [
-  'derivation',
-  'exact-equivalence',
-  'restriction',
-  'approximation',
-  'coarse-graining',
-  'analytic-continuation',
-  'structural-analogy',
-  'deformation-quantization',
-];
-
-const EVIDENCE_TAGS: readonly EvidenceTag[] = [
-  'proposed',
-  'reviewed',
-  'dimension-checked',
-  'convention-checked',
-  'symbolically-checked',
-  'numerically-supported',
-  'formally-proved',
-  'formally-proved-property',
-  'formally-proved-cross-check',
-  'empirically-supported',
-  'contradicted',
-  'unresolved',
-];
 
 /** Last value of an `attached` flag, or undefined when the flag is absent. */
 function lastValue(flags: ParsedArgs['flags'], name: string): string | undefined {
@@ -408,15 +420,16 @@ function printEquationReport(
       .sort();
     const shown = users.slice(0, 3).join(', ') + (users.length > 3 ? `, +${users.length - 3} more` : '');
     const used = users.length > 0 ? ` (used by ${shown})` : '';
+    const also = (b.otherMeanings ?? []).length > 0 ? `; '${b.name}' is also the symbol of ${b.otherMeanings!.join(', ')}` : '';
     if (b.bound === false) {
       out(
-        `  · '${b.name}' matches the catalog quantity ${b.quantity} ${api.format(b.dim)}${used}, a one-letter name, and is not bound. ` +
+        `  · '${b.name}' matches the catalog quantity ${b.quantity} ${api.format(b.dim)}${used}, a one-letter name, and is not bound${also}. ` +
           'Pass --bind-short to bind it, or write the full name you meant',
       );
     } else {
       out(
         `  · '${b.name}' is bound to the catalog quantity ${b.quantity} ${api.format(b.dim)}, a one-letter name` +
-          `${used}; if you meant another quantity, write its full name`,
+          `${used}${also}; if you meant another quantity, write its full name`,
       );
     }
   }
@@ -754,7 +767,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
     if (user) {
       const model = api.buildVizModel(fullGraph, {
         title: `UPT physics map — ${label}`,
-        extraJunctions: overlay([user.junction]),
+        extraJunctions: overlay([user.graphJunction]),
         ...filterOpts,
       });
       landing = api.equationLanding(model, 'user-equation');
@@ -792,7 +805,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   }
 
   if (fmt === 'mermaid' || fmt === 'dot' || fmt === 'svg') {
-    const extraJunctions = overlay(user ? [user.junction] : []);
+    const extraJunctions = overlay(user ? [user.graphJunction] : []);
     const model = api.buildVizModel(fullGraph, {
       title: `UPT physics map — ${label}`,
       extraJunctions,
@@ -840,7 +853,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   if (user) {
     const model = api.buildVizModel(fullGraph, {
       title: `UPT physics map — ${label}`,
-      extraJunctions: overlay([user.junction]),
+      extraJunctions: overlay([user.graphJunction]),
       ...filterOpts,
     });
     out(`\nYour equation:  ${user.junction.label}`);

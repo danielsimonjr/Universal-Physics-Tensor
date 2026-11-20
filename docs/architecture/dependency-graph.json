@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "15.0.0",
-    "totalFiles": 390,
+    "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2852
+    "totalExports": 2864
   },
   "entryPoints": [
     {
@@ -185,7 +185,8 @@
           {
             "file": "../../canonical/residual.js",
             "imports": [
-              "canonicalResidual"
+              "canonicalResidual",
+              "monomialResidual"
             ]
           },
           {
@@ -5875,7 +5876,8 @@
           "expressionNames",
           "withoutUnreadConstants",
           "evaluateFormula",
-          "parseCatalogExpression"
+          "parseCatalogExpression",
+          "parseDeclaredExpression"
         ],
         "functions": [
           "formulaNames",
@@ -5885,7 +5887,8 @@
           "expressionNames",
           "withoutUnreadConstants",
           "evaluateFormula",
-          "parseCatalogExpression"
+          "parseCatalogExpression",
+          "parseDeclaredExpression"
         ]
       },
       "src/bridges/holds.ts": {
@@ -7408,6 +7411,14 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/ast-builders.js",
+            "imports": [
+              "dim",
+              "sym",
+              "symbolPower"
+            ]
+          },
+          {
             "file": "./canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -7416,10 +7427,12 @@
           }
         ],
         "exports": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ],
         "functions": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ]
       },
       "src/canonical/seed-l-layer.ts": {
@@ -8944,6 +8957,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../library-defaults.js",
+            "imports": [
+              "NAMED_DIMENSIONS_HELP"
+            ]
           }
         ],
         "exports": [
@@ -9115,9 +9134,22 @@
             ]
           },
           {
+            "file": "../expr-print.js",
+            "imports": [
+              "primaryUnitLabel"
+            ]
+          },
+          {
             "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
             ],
             "typeOnly": true
           }
@@ -9166,8 +9198,7 @@
           {
             "file": "../expr-print.js",
             "imports": [
-              "coherentUnits",
-              "derivedUnitOf"
+              "primaryUnitLabel"
             ]
           },
           {
@@ -10038,6 +10069,12 @@
             ]
           },
           {
+            "file": "../file-errors.js",
+            "imports": [
+              "mapFileError"
+            ]
+          },
+          {
             "file": "../library-defaults.js",
             "imports": [
               "PROBE_BUDGET_MS_DEFAULT",
@@ -10171,9 +10208,31 @@
             "imports": [
               "statSync"
             ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "isAbsolute",
+              "relative",
+              "resolve"
+            ]
           }
         ],
         "internalDependencies": [
+          {
+            "file": "../../dimensional/ast-types.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
           {
             "file": "../args.js",
             "imports": [
@@ -10207,6 +10266,18 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../file-errors.js",
+            "imports": [
+              "mapFileError"
+            ]
+          },
+          {
+            "file": "../stored-results.js",
+            "imports": [
+              "repoRoot"
             ]
           }
         ],
@@ -10320,6 +10391,7 @@
             "file": "../expr-print.js",
             "imports": [
               "EVAL_STUBS",
+              "primaryUnitLabel",
               "printDisplay",
               "printEval",
               "printLatex",
@@ -10544,8 +10616,7 @@
           "printEval",
           "latexName",
           "printLatex",
-          "coherentUnits",
-          "derivedUnitOf"
+          "primaryUnitLabel"
         ],
         "interfaces": [
           "CoherentUnit"
@@ -10553,13 +10624,39 @@
         "functions": [
           "latexName",
           "printLatex",
-          "coherentUnits",
-          "derivedUnitOf"
+          "primaryUnitLabel"
         ],
         "constants": [
           "EVAL_STUBS",
           "printDisplay",
           "printEval"
+        ]
+      },
+      "src/cli/file-errors.ts": {
+        "description": "Maps a failure to read or parse an input file to a `CliError`, so no stack trace reaches the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./command.js",
+            "imports": [
+              "CommandCtx"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./errors.js",
+            "imports": [
+              "CliError",
+              "UsageError"
+            ]
+          }
+        ],
+        "exports": [
+          "mapFileError"
+        ],
+        "functions": [
+          "mapFileError"
         ]
       },
       "src/cli/flag-help.ts": {
@@ -10673,6 +10770,12 @@
               "DEFAULT_ALPHA",
               "MAX_CORRECTION_TERMS"
             ]
+          },
+          {
+            "file": "../dimensional/dimension-spec.js",
+            "imports": [
+              "NAMED_DIMENSION_NAMES"
+            ]
           }
         ],
         "exports": [
@@ -10680,14 +10783,16 @@
           "PROBE_BUDGET_MS_DEFAULT",
           "PROBE_HOLDOUT_TOL_DEFAULT",
           "PROBE_STUDY_ALPHA_DEFAULT",
-          "PROBE_CORRECTION_TERMS_MAX"
+          "PROBE_CORRECTION_TERMS_MAX",
+          "NAMED_DIMENSIONS_HELP"
         ],
         "constants": [
           "DISCOVER_MAX_ORDERS_DEFAULT",
           "PROBE_BUDGET_MS_DEFAULT",
           "PROBE_HOLDOUT_TOL_DEFAULT",
           "PROBE_STUDY_ALPHA_DEFAULT",
-          "PROBE_CORRECTION_TERMS_MAX"
+          "PROBE_CORRECTION_TERMS_MAX",
+          "NAMED_DIMENSIONS_HELP"
         ]
       },
       "src/cli/main.ts": {
@@ -11515,7 +11620,8 @@
           {
             "file": "./dimensional/quantity-registry.js",
             "imports": [
-              "foldName"
+              "foldName",
+              "quantityRecord"
             ],
             "reExport": true
           },
@@ -11625,6 +11731,7 @@
             "file": "./dimensional/units.js",
             "imports": [
               "convertValue",
+              "readQuantityLiteral",
               "UnitError",
               "unitRows"
             ],
@@ -12174,7 +12281,8 @@
             "file": "./dimensional/formula-names.js",
             "imports": [
               "assertSynonymAgreement",
-              "expandSynonymValues"
+              "expandSynonymValues",
+              "greekLetter"
             ],
             "reExport": true
           },
@@ -12298,6 +12406,13 @@
             "reExport": true
           },
           {
+            "file": "./bridges/expr-parse.js",
+            "imports": [
+              "parseDeclaredExpression"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/evaluators.js",
             "imports": [
               "missingEvaluatorMessage"
@@ -12314,7 +12429,8 @@
           {
             "file": "./dimensional/symbolic-constants.js",
             "imports": [
-              "constantNotes"
+              "constantNotes",
+              "constantRecord"
             ],
             "reExport": true
           },
@@ -12397,6 +12513,7 @@
           "primaryRelation",
           "catalogEdgeKey",
           "foldName",
+          "quantityRecord",
           "demonstrationEdges",
           "consistencyComparison",
           "decidingMeasurement",
@@ -12414,6 +12531,7 @@
           "CASE_CONTRACTS",
           "slotForSpelling",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12540,6 +12658,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -12562,9 +12681,11 @@
           "fetchOnnxModel",
           "onnxEmbedder",
           "builtinFormulaDimensionChecker",
+          "parseDeclaredExpression",
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "ConfrontationEntry",
           "RigorTier",
           "ConfrontationOutcome",
@@ -12669,6 +12790,7 @@
           "primaryRelation",
           "catalogEdgeKey",
           "foldName",
+          "quantityRecord",
           "demonstrationEdges",
           "ConfrontationEntry",
           "RigorTier",
@@ -12694,6 +12816,7 @@
           "CaseCheck",
           "CaseResult",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12860,6 +12983,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -12883,9 +13007,11 @@
           "fetchOnnxModel",
           "onnxEmbedder",
           "builtinFormulaDimensionChecker",
+          "parseDeclaredExpression",
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "BridgeEdge",
           "VizJunction",
           "VizModel",
@@ -13042,6 +13168,7 @@
         ],
         "exports": [
           "NAME_TABLE",
+          "symbolIndex",
           "aliasesForTarget",
           "editDistance",
           "nearQuantityNames",
@@ -13049,6 +13176,7 @@
           "collapseSynonymGovernors"
         ],
         "functions": [
+          "symbolIndex",
           "aliasesForTarget",
           "editDistance",
           "nearQuantityNames",
@@ -19481,12 +19609,14 @@
             "file": "./aliases.js",
             "imports": [
               "aliasesForTarget",
-              "editDistance"
+              "editDistance",
+              "symbolIndex"
             ]
           },
           {
             "file": "../dimensional/formula-names.js",
             "imports": [
+              "greekLetter",
               "resolveQuantityName"
             ]
           },
@@ -19494,6 +19624,12 @@
             "file": "./catalog-graph.js",
             "imports": [
               "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "./canonical-graph.js",
+            "imports": [
+              "CANONICAL_GRAPH"
             ]
           },
           {
@@ -21147,6 +21283,7 @@
           }
         ],
         "exports": [
+          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS",
           "parseDimensionSpec",
           "DimensionSpecError"
@@ -21158,6 +21295,7 @@
           "parseDimensionSpec"
         ],
         "constants": [
+          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS"
         ]
       },
@@ -21409,6 +21547,7 @@
           "synonymDisagreement",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "resolveQuantityName",
           "SynonymDisagreementError"
         ],
@@ -21428,6 +21567,7 @@
           "synonymDisagreement",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "resolveQuantityName"
         ],
         "constants": [
@@ -22631,6 +22771,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -22662,6 +22803,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -28255,6 +28397,7 @@
           "src/cli/euler-guard.ts",
           "src/cli/eval-numbers.ts",
           "src/cli/expr-print.ts",
+          "src/cli/file-errors.ts",
           "src/cli/flag-help.ts",
           "src/cli/graphs.ts",
           "src/cli/library-defaults.ts",
@@ -28519,18 +28662,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 390,
+    "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89045,
-    "totalExports": 2852,
+    "totalLinesOfCode": 89714,
+    "totalExports": 2864,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 934,
-    "totalTypeGuards": 16,
+    "totalFunctions": 939,
+    "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 421,
-    "totalReExports": 1405,
-    "totalTypeOnlyImports": 533,
+    "totalConstants": 423,
+    "totalReExports": 1410,
+    "totalTypeOnlyImports": 537,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

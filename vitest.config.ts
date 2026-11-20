@@ -9,6 +9,8 @@ export default defineConfig({
     pool: 'forks',
     // Allow individual tests up to 60s (geodesic integration is expensive).
     testTimeout: 60000,
+    // A hook that starts a subprocess does test-sized work: give it the same budget.
+    hookTimeout: 60000,
     coverage: {
       include: ['src/composition/probe/**/*.ts'],
       exclude: ['src/composition/probe/index.ts', 'src/composition/probe/types.ts'],

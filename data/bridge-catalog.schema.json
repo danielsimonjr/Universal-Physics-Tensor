@@ -19,7 +19,7 @@
       "type": "string"
     },
     "schemaVersion": {
-      "const": 3
+      "const": 4
     },
     "packageVersion": {
       "type": "string"
@@ -272,7 +272,8 @@
           "dependencies",
           "known_issues",
           "notes",
-          "proofStatus"
+          "proofStatus",
+          "dimension"
         ],
         "additionalProperties": false,
         "properties": {
@@ -305,6 +306,18 @@
             },
             "minItems": 2,
             "maxItems": 2
+          },
+          "domains": {
+            "type": "array",
+            "description": "The application domains of the relation, from a closed list that search indexes. mems: the relation models a microfabricated electromechanical device. sensor: the relation sets the noise floor of a measuring device (thermal, shot or sampling noise of its readout). A record with no domain declares none; the field is optional.",
+            "items": {
+              "enum": [
+                "mems",
+                "sensor"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
           },
           "status": {
             "enum": [
@@ -438,7 +451,19 @@
             "description": "The Lean theorem the manifest entry of formalKey names, declared in lean/ (formal/lean/theorem-files.json gives the file). Present exactly when formalKey is. catalogFormalRef refuses a record whose theorem is not the manifest's; tests/atlas/catalog-proof-status.test.ts checks every record."
           },
           "dimension": {
-            "type": "object"
+            "description": "SI base exponents of the result, all seven stated. bridge-check.ts reads it as the expected dimension of the row.",
+            "type": "object",
+            "required": ["L", "M", "T", "I", "Theta", "N", "J"],
+            "additionalProperties": false,
+            "properties": {
+              "L": { "type": "integer" },
+              "M": { "type": "integer" },
+              "T": { "type": "integer" },
+              "I": { "type": "integer" },
+              "Theta": { "type": "integer" },
+              "N": { "type": "integer" },
+              "J": { "type": "integer" }
+            }
           },
           "conventions": {
             "type": "object",

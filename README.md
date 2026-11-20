@@ -141,7 +141,7 @@ by the two routes of BE-42 (`be-42` and `be-42-via-rs`). `upt evaluate be-63 mu_
 |---|---|
 | `confront` | Run the committed predicted-versus-observed confrontations. |
 | `coverage` (`grounding`) | Count catalog bridges by empirical grounding tier. |
-| `retrieve` | Search the atlas for a claim. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model. |
+| `retrieve` | Search the atlas for a claim. --expr=FILE or --formula=TEXT with --dim ranks the corpus by an expression. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model. |
 | `testplan` | Print the measurement plan stored on a confrontation or an applied case. |
 
 **Utilities**
@@ -273,13 +273,16 @@ erasureCost.evaluate({ mass: M_SUN_KG }); // ≈ 5.9e-31 J — E_min(M) = ℏc³
 erasureCost.confidence;                   // 'highly-speculative' (min of the operands)
 ```
 
-`GM_SUN_SI` is the IAU 2015 nominal solar gravitational parameter, `1.3271244e20` m³/s², and is not `G_SI * M_SUN_SI`. `parseUnit`, `convertValue`, and `UnitError` read a number with a unit:
+`GM_SUN_SI` is the IAU 2015 nominal solar gravitational parameter, `1.3271244e20` m³/s², and is not `G_SI * M_SUN_SI`. `parseUnit` reads a unit expression, such as `km/s`. `convertValue` reads a number with a unit, such as `25degC`. Both throw `UnitError` for an unknown unit. `parseUnit` also throws `UnitError` for a number with a unit, such as `5 km/s`:
 
 ```typescript
-import { GM_SUN_SI, convertValue } from 'universal-physics-tensor';
+import { GM_SUN_SI, UnitError, convertValue, parseUnit } from 'universal-physics-tensor';
 
 GM_SUN_SI;                    // 1.3271244e20
 convertValue('25degC', 'K'); // { value: 298.15, given: 'degC', affine: 'celsius' }
+convertValue('100 degF', 'degC'); // { value: 37.77777777777778, given: 'degF', affine: 'fahrenheit' }
+parseUnit('km/s').scale;     // 1000
+(() => { try { parseUnit('5 km/s'); } catch (e) { return e instanceof UnitError; } })(); // true
 ```
 
 That derived relation — the minimum erasure cost at a black-hole

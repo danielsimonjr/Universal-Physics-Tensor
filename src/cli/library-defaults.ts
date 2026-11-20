@@ -10,6 +10,7 @@
 import { DEFAULT_MAX_ORDERS_OF_MAGNITUDE } from '../composition/discovery.js';
 import { DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET } from '../composition/probe/types.js';
 import { DEFAULT_ALPHA, MAX_CORRECTION_TERMS } from '../composition/probe/study.js';
+import { NAMED_DIMENSION_NAMES } from '../dimensional/dimension-spec.js';
 
 /** `upt discover --max-orders`, as the help prints it. @internal */
 export const DISCOVER_MAX_ORDERS_DEFAULT = String(DEFAULT_MAX_ORDERS_OF_MAGNITUDE);
@@ -25,3 +26,23 @@ export const PROBE_STUDY_ALPHA_DEFAULT = String(DEFAULT_ALPHA);
 
 /** The most powers a study file's `correction` may list in all. @internal */
 export const PROBE_CORRECTION_TERMS_MAX = MAX_CORRECTION_TERMS;
+
+/**
+ * The named dimensions `upt derive` accepts, wrapped at about 70 characters for its help.
+ * Each line starts with an 8-space indent. @internal
+ */
+export const NAMED_DIMENSIONS_HELP = ((names: readonly string[]): string => {
+  const lines: string[] = [];
+  let line = '';
+  for (const n of names) {
+    const piece = line === '' ? n : `, ${n}`;
+    if (line !== '' && line.length + piece.length > 70) {
+      lines.push(line + ',');
+      line = n;
+    } else {
+      line += piece;
+    }
+  }
+  lines.push(line);
+  return lines.map((l) => `        ${l}`).join('\n');
+})(NAMED_DIMENSION_NAMES);

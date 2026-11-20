@@ -9,7 +9,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson, emitJsonError } from '../output.js';
-import { coherentUnits, derivedUnitOf } from '../expr-print.js';
+import { primaryUnitLabel } from '../expr-print.js';
 import { splitAssignments } from '../bindings.js';
 import { realFlag } from '../numeric-flag.js';
 import { UsageError } from '../errors.js';
@@ -280,8 +280,14 @@ function printInputs(fmt: Fmt, out: CommandCtx['out'], parameters: readonly Eval
   }
 }
 
-const withUnit = (fmt: Fmt, v: number | null, unit: string): string =>
-  v === null ? 'undefined here (its premise fails, or it needs an optional input not given)' : `${fmt(v)}${unit === '' ? '' : ` ${unit}`}`;
+/** A null output has two causes: an optional input it needs is absent, or its premise fails. Name the one that applies. */
+const nullCause = (needs: readonly string[] | undefined, inputs: Readonly<Record<string, number>>): string => {
+  const absent = (needs ?? []).filter((k) => !(k in inputs));
+  return absent.length > 0 ? `needs optional input ${absent.join(', ')}` : 'its premise fails at these inputs';
+};
+
+const withUnit = (fmt: Fmt, v: number | null, o: AppliedCase['outputs'][number], inputs: Readonly<Record<string, number>>): string =>
+  v === null ? `undefined here: ${nullCause(o.needs, inputs)}` : `${fmt(v)}${o.unit === '' ? '' : ` ${o.unit}`}`;
 
 /** A case's parameters with the contract `runAppliedCase` checks them against. */
 function caseInputs(api: CommandCtx['api'], c: AppliedCase): ContractedInputs {
@@ -346,9 +352,9 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   out('  conditions (boundary, initial, equilibrium):');
   for (const s of c.conditions) out(`    - ${s}`);
   out('  outputs:');
-  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(api.formatExact, result.outputs[o.key] ?? null, o.unit)} — ${o.meaning}`);
+  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(api.formatExact, result.outputs[o.key] ?? null, o, inputs)} — ${o.meaning}`);
   const obs = c.outputs.find((o) => o.key === c.observable)!;
-  out(`  observable: ${obs.key} = ${withUnit(api.formatExact, result.outputs[obs.key] ?? null, obs.unit)}`);
+  out(`  observable: ${obs.key} = ${withUnit(api.formatExact, result.outputs[obs.key] ?? null, obs, inputs)}`);
   out('  regime checks (at the given inputs):');
   if (regimeLine !== '') out(`  regime coordinates: ${regimeLine}`);
   for (const k of result.checks) {
@@ -469,9 +475,10 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
   const relation = api.primaryRelation(id);
   const notices = relation === undefined ? [] : api.relationNotices(relation);
 
-  // The text label is a derived SI unit read from the unit table (`V^2/Hz`); the JSON is the
-  // library result itself, whose `unit` is the base form `parseUnit` reads back.
-  const label = evaluation.kind === 'unset' ? undefined : derivedUnitOf(evaluation.dimension, coherentUnits(api.unitRows()));
+  // The text label is the quantity's declared `displayUnit` (`V^2/Hz`), else one coherent named
+  // SI unit, else the base form. The JSON is the library result itself, whose `unit` is the base
+  // form `parseUnit` reads back.
+  const label = evaluation.kind === 'unset' ? undefined : primaryUnitLabel(api, evaluation.name, evaluation.dimension);
   const unused = api.unusedInputKeys(spec);
   if (args.flags.has('json')) {
     emitJson(

@@ -2,7 +2,9 @@
  * The token splitter reads MathTS `Unit.readingsWithSource` and keeps UPT's labels.
  *
  * The labels and error texts below are the values on master at eb8f4bcd, before the
- * splitter moved to MathTS. The swap must not change one byte of them.
+ * splitter moved to MathTS. The swap must not change one byte of them. The readings of
+ * `1/<token>` changed with issue 676: a split is a reading only when it matches a row of
+ * data/units.json `products`, so an unlisted split is an unknown unit.
  */
 import { Unit } from '@danielsimonjr/mathts-core';
 import { describe, expect, it } from 'vitest';
@@ -29,20 +31,20 @@ const readLabel = (text: string): string => {
 describe('M6 splitter: labels keep the token spelling', () => {
   const pins: Array<[string, string[], string]> = [
     ['Ωm', ['Ω·m'], '1/(Ω·m)'],
-    ['°m', ['°·m'], '1/(°·m)'],
-    ['Å2m', ['Å^2·m'], '1/(Å^2·m)'],
-    ['Åm', ['Å·m'], '1/(Å·m)'],
-    ['°Rm', ['°R·m', '°·Rm'], "AmbiguousUnitError: '1/°Rm' is ambiguous: 1/(°R·m) or 1/(°·Rm)"],
+    ['°m', ['°·m'], "UnknownUnitError: unknown unit '°m'"],
+    ['Å2m', ['Å^2·m'], "UnknownUnitError: unknown unit 'Å2m'"],
+    ['Åm', ['Å·m'], "UnknownUnitError: unknown unit 'Åm'"],
+    ['°Rm', ['°R·m', '°·Rm'], "UnknownUnitError: unknown unit '°Rm'"],
     ['µmK', ['µm·K'], '1/(µm·K)'],
     ['μmK', ['μm·K'], '1/(μm·K)'],
     ['m⁺²K', ['m^2·K'], '1/(m^2·K)'],
     ['kWh', ['kW·h'], '1/(kW·h)'],
-    ['umK', ['um·K', 'u·mK', 'u·m·K'], "AmbiguousUnitError: '1/umK' is ambiguous: 1/(um·K) or 1/(u·mK) or 1/(u·m·K)"],
-    ['mmK', ['mm·K', 'm·mK'], "AmbiguousUnitError: '1/mmK' is ambiguous: 1/(mm·K) or 1/(m·mK)"],
+    ['umK', ['um·K', 'u·mK', 'u·m·K'], '1/(um·K)'],
+    ['mmK', ['mm·K', 'm·mK'], '1/(mm·K)'],
     ['mm2K', ['mm^2·K'], '1/(mm^2·K)'],
     ['mm²K', ['mm^2·K'], '1/(mm^2·K)'],
     ['mm2', [], '1/mm^2'],
-    ['mAs', ['mA·s', 'm·A·s'], "AmbiguousUnitError: '1/mAs' is ambiguous: 1/(mA·s) or 1/(m·A·s)"],
+    ['mAs', ['mA·s', 'm·A·s'], '1/(mA·s)'],
   ];
 
   for (const [token, ways, read] of pins) {
@@ -57,15 +59,8 @@ describe('M6 splitter: labels keep the token spelling', () => {
     expect(() => parseUnit('W/℃')).toThrow(UnitRefusedError);
   });
 
-  it('the AmbiguousUnitError text of W/umK is byte for byte the master text', () => {
-    let caught: unknown;
-    try {
-      parseUnit('W/umK');
-    } catch (error) {
-      caught = error;
-    }
-    expect(caught).toBeInstanceOf(AmbiguousUnitError);
-    expect((caught as Error).message).toBe("'W/umK' is ambiguous: W/(um·K) or W/(u·mK) or W/(u·m·K)");
+  it('W/umK is one reading: um·K matches the m·K row with a prefix on its first factor', () => {
+    expect(readLabel('W/umK')).toBe('W/(um·K)');
   });
 
   it('mm is not read as m·m', () => {
@@ -79,10 +74,20 @@ describe('M6 splitter: MathTS drops the plain X·X run, not a run with a power',
   const attachedUnit = (symbol: string): string | null =>
     UNIT_DATA.units.has(symbol) ? null : (splitPrefix(symbol)?.base ?? null);
 
+  const mathtsReadsUnit = (symbol: string): boolean => {
+    try {
+      return Unit.exactScale(symbol) !== null;
+    } catch {
+      return false;
+    }
+  };
+
   it('for every unit X, X·X is a reading of XX exactly when XX is not X with its own prefix', () => {
     const disagree: string[] = [];
     let doubled = 0;
     for (const symbol of UNIT_DATA.units.keys()) {
+      // The comparison needs a MathTS reading of the symbol itself (Bq, Gy, Sv and kat have none).
+      if (!mathtsReadsUnit(symbol)) continue;
       const token = symbol + symbol;
       const run = Unit.readingsWithSource(token).some(
         (reading) => reading.length === 2 && reading[0]!.source === symbol && reading[1]!.source === symbol,
