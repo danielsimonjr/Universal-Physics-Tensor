@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Added
+
+- **`mile`, `mi` and `gallon` are units (#678).** `convertValue('1 mile', 'm')` and `convertValue('1 gallon', 'L')` threw `UnknownUnitError`. UPT reads a unit only when `data/units.json` has a row for it, and nobody had added these two. The international mile is `5280*foot` = 1609.344 m, and the US liquid gallon is `231*inch^3` = 3.785411784e-3 m^3, both exact (NIST SP 811 B.8) and the same expressions MathTS uses. Neither row takes an SI prefix. `gal` stays unknown: it is also the name of the CGS acceleration unit `Gal`. A new test, `tests/dimensional/unit-rows-mathts-parity.test.ts`, fails when any UPT row that MathTS also defines has a different scale. `bit` is the one listed difference (UPT reads it as ln 2 nat by policy), and the test fails when that list is stale.
+
 ### Fixed
 
 - **`convertValue` converts into `degC` and `degF` (issue 693).** `convertValue('100 degF', 'degC')` threw `a declared unit cannot be affine`. A conversion is the source map followed by the inverse of the target map, under one `temperature` reading. `convertValue` now applies the inverse of the target offset for an absolute reading and no offset for a difference reading, in exact rationals with one rounding. A binding slot still cannot be affine, because a binding value is scaled linearly to SI. The binding layer now states that rule before it calls `convertValue`. As a result, a bare number such as `readNamedBinding('x', '25', { declaredUnit: 'degC' })` and `bindingInUnit('25', 'degC')` now throw `UnitError`. Before, both returned 25.
