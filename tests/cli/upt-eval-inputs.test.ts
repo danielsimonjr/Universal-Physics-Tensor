@@ -65,3 +65,20 @@ describe('upt eval — input validation', () => {
     expect(status).toBe(0);
   });
 });
+
+describe('upt eval — unknown unit (#697)', () => {
+  it('names the unknown unit instead of the generic sentence', () => {
+    for (const value of ['x=1zqx', 'x=1 zqx']) {
+      const { status, stderr } = run(['eval', 'x', value]);
+      expect(status).toBe(1);
+      expect(stderr).toContain("unknown unit 'zqx'");
+      expect(stderr).not.toContain('is not a number with an optional unit');
+    }
+  });
+
+  it('controls: an expression with an unknown name keeps its own error', () => {
+    const { status, stderr } = run(['eval', 'x', 'x=1zqx*2']);
+    expect(status).toBe(1);
+    expect(stderr).toContain("unknown name 'zqx'");
+  });
+});
