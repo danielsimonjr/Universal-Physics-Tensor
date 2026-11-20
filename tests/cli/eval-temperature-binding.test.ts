@@ -14,7 +14,7 @@ describe('upt eval temperature bindings', () => {
   it('reads T=22eV as the temperature whose kT is 22 eV', async () => {
     const cap = capture();
     expect(await runCli(['eval', 'k_B*T/e', 'T=22eV'], cap.io)).toBe(0);
-    const volts = Number(text(cap).trim());
+    const volts = parseFloat(text(cap));
     expect(volts / 22).toBeCloseTo(1, 8);
     expect(errText(cap)).toMatch(/k_B T/);
   });
@@ -22,29 +22,29 @@ describe('upt eval temperature bindings', () => {
   it('k_B*T at T=22eV is 22 eV in joules', async () => {
     const cap = capture();
     expect(await runCli(['eval', 'k_B*T', 'T=22eV'], cap.io)).toBe(0);
-    const joules = Number(text(cap).trim());
+    const joules = parseFloat(text(cap));
     expect(joules / (22 * E_SI)).toBeCloseTo(1, 8);
   });
 
   it('keeps T=300K and T=25degC as absolute temperatures', async () => {
     const kelvin = capture();
     expect(await runCli(['eval', 'k_B*T/e', 'T=300K'], kelvin.io)).toBe(0);
-    expect(Number(text(kelvin).trim()) / ((K_B_SI * 300) / E_SI)).toBeCloseTo(1, 8);
+    expect(parseFloat(text(kelvin)) / ((K_B_SI * 300) / E_SI)).toBeCloseTo(1, 8);
     const celsius = capture();
     expect(await runCli(['eval', 'k_B*T/e', 'T=25degC'], celsius.io)).toBe(0);
-    expect(Number(text(celsius).trim()) / ((K_B_SI * 298.15) / E_SI)).toBeCloseTo(1, 8);
+    expect(parseFloat(text(celsius)) / ((K_B_SI * 298.15) / E_SI)).toBeCloseTo(1, 8);
   });
 
   it('a bare T=300 is already kelvin', async () => {
     const cap = capture();
     expect(await runCli(['eval', 'k_B*T/e', 'T=300'], cap.io)).toBe(0);
-    expect(Number(text(cap).trim()) / ((K_B_SI * 300) / E_SI)).toBeCloseTo(1, 8);
+    expect(parseFloat(text(cap)) / ((K_B_SI * 300) / E_SI)).toBeCloseTo(1, 8);
   });
 
   it('uses an explicit k_B so k_B*T/e stays 22 V', async () => {
     const cap = capture();
     expect(await runCli(['eval', 'k_B*T/e', 'k_B=2', 'T=22eV'], cap.io)).toBe(0);
-    expect(Number(text(cap).trim()) / 22).toBeCloseTo(1, 8);
+    expect(parseFloat(text(cap)) / 22).toBeCloseTo(1, 8);
   });
 
   it('rejects a length bound to T and does not print a voltage', async () => {

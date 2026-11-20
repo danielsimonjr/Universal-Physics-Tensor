@@ -76,9 +76,9 @@ describe('upt evaluate refuses a non-finite input, and every input error has one
 
 describe('upt eval reads a unit literal exactly (issue 458, the CLI path)', () => {
   it.each([
-    [['eval', 'rho', 'rho=1g/cm^3'], '1000'],
-    [['eval', 'gamma', 'gamma=72mN/m'], '0.072'],
-    [['eval', 'x', 'x=1ug'], '1e-9'],
+    [['eval', 'rho', 'rho=1g/cm^3'], '1000 kg/m^3'],
+    [['eval', 'gamma', 'gamma=72mN/m'], '0.072 kg/s^2'],
+    [['eval', 'x', 'x=1ug'], '1e-9 kg'],
   ])('upt %j prints %s', (args, printed) => {
     const { status, stdout } = upt(args);
     expect(status).toBe(0);

@@ -216,7 +216,7 @@ function printExplanation(
     }
   }
   if (x.blockingFrontier.length) {
-    out(`  to determine it, also supply: ${x.blockingFrontier.join(', ')}`);
+    out(`  inputs on a path to it: ${x.blockingFrontier.join(', ')}`);
   }
 }
 
