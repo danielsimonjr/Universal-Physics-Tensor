@@ -60,3 +60,13 @@ describe('blockingFrontier — the rank relation', () => {
     expect(r.blockingFrontier).toEqual([]);
   });
 });
+
+describe('blockingFrontier — the identification relation', () => {
+  it('a name that reaches the target only through an identification is on the frontier', () => {
+    const r = classifyIdentifiability([opaque('xt', 'x', 't')], [], 't', {
+      identifications: [{ from: 'y', to: 'x', rationale: 'synthetic' }],
+    });
+    expect(r.verdict).toBe('under-determined');
+    expect(r.blockingFrontier).toEqual(['x', 'y']);
+  });
+});

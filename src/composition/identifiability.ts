@@ -579,11 +579,13 @@ function rankDetermines(
  * The quantities on some path to `targetName` under the relation the verdict
  * uses (target included): a law reaches its target from its sources, and a
  * monomial law also links every name it holds to the others (the rank reads it
- * either way). The cone is the fixpoint of both steps.
+ * either way). An identification reaches its `to` name from its `from` name, as
+ * in the verdict. The cone is the fixpoint of these steps.
  */
 function backwardCone(
   edges: readonly BridgeEdge[],
   targetName: string,
+  identifications: readonly QuantityIdentification[],
 ): Set<string> {
   const index = rankIndex(edges, edgeMonomial, 'default');
   const cone = new Set<string>([targetName]);
@@ -599,6 +601,7 @@ function backwardCone(
     for (const e of edges) {
       if (cone.has(e.target.name)) for (const s of e.sources) add(s.name);
     }
+    for (const ident of identifications) if (cone.has(ident.to)) add(ident.from);
     for (const name of [...cone]) {
       const component = index.componentOf.get(name);
       if (component !== undefined) for (const n of index.components[component]!.names) add(n);
@@ -681,7 +684,7 @@ export function classifyIdentifiability(
   if (verdict === 'under-determined') {
     const knownSet = new Set(known);
     const determinable = determinableOf();
-    blockingFrontier = [...backwardCone(edges, targetName)]
+    blockingFrontier = [...backwardCone(edges, targetName, identifications)]
       .filter(
         (q) => q !== targetName && !determinable.has(q) && !knownSet.has(q),
       )

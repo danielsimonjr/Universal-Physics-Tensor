@@ -12717,4 +12717,4 @@ unreformulable:
 - The `'angular_momentum'` row in `NAMED_DIMENSIONS` is replaced by
   `'action'` (same SI shape J·s). `hbar` is the canonical action-typed
   consumer, so when `format()` renders that shape it now returns
-  `'[action]'` rather than `'[angular_momentum]'`.
+  `'[action]'` rather than `'[angular_momentum]'`. The frontier also follows the quantity identifications the verdict uses: a name that reaches the target only through an identification is now on the frontier.
