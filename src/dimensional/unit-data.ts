@@ -81,7 +81,7 @@ export interface UnitRow {
    */
   readonly cycles?: true;
   /**
-   * The unit names one kind of quantity of its dimension (Bq, Gy, Sv, kat). The
+   * The unit names one kind of quantity of its dimension (Bq, Gy, Sv, kat, lm, lx, rayl). The
    * dimension alone does not say it, so a printed label never picks the unit.
    */
   readonly kind?: true;

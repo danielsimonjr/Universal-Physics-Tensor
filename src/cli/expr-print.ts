@@ -130,8 +130,8 @@ export interface CoherentUnit {
  * A cycle-counting unit (`Hz`, `rpm`; the table's `cycles` flag) is never a
  * label: a 1/s output may be an angular frequency, and `Hz` would say it
  * counts cycles. Such an output reads `1/s`, which is its dimension. A unit
- * that names one kind of its dimension (`Bq`, `Gy`, `Sv`, `kat`; the `kind`
- * flag) is never a label for the same reason.
+ * that names one kind of its dimension (`Bq`, `Gy`, `Sv`, `kat`, `lm`, `lx`,
+ * `rayl`; the `kind` flag) is never a label for the same reason.
  */
 function coherentUnits(
   rows: ReadonlyMap<

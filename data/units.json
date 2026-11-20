@@ -617,7 +617,8 @@
       "dimension": {
         "J": 1
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
     },
     {
       "symbols": [
@@ -628,7 +629,8 @@
         "J": 1,
         "L": -2
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
     },
     {
       "symbols": [
@@ -937,7 +939,8 @@
         "M": 1,
         "T": -1
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
     },
     {
       "symbols": [

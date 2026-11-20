@@ -112,6 +112,15 @@ describe('a unit that names one kind of its dimension is never a printed label',
     expect(primaryUnitLabel(api, 'zqx', dim(2, 0, -2))).toBe('m^2/s^2');
     expect(primaryUnitLabel(api, 'zqx', dim(0, 0, -1, 0, 0, 1))).toBe('mol/s');
   });
+  it('luminance and mass flux print in base form, not as lx or rayl', () => {
+    // cd/m^2 is a luminance, not an illuminance (lx = lm/m^2 = cd*sr/m^2); kg/(m^2*s) is also a mass flux.
+    expect(primaryUnitLabel(api, 'zqx', dim(-2, 0, 0, 0, 0, 0, 1))).toBe('cd/m^2');
+    expect(primaryUnitLabel(api, 'zqx', dim(-2, 1, -1))).toBe('kg/(m^2*s)');
+  });
+  it('the kind flag marks exactly Bq, Gy, Sv, kat, lm, lx and rayl', () => {
+    const flagged = [...unitRows()].filter(([, r]) => (r as { kind?: true }).kind === true).map(([n]) => n).sort();
+    expect(flagged).toEqual(['Bq', 'Gy', 'Sv', 'kat', 'lm', 'lx', 'rayl']);
+  });
   it('control: a named coherent unit is still a label', () => {
     expect(primaryUnitLabel(api, 'zqx', dim(2, 1, -2))).toBe('J');
   });
