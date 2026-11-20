@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 391,
-    "totalTestFiles": 744,
+    "totalTestFiles": 745,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -11595,6 +11595,7 @@
       "tests/composition/evaluation-result.test.ts",
       "tests/core/constants-owner.test.ts",
       "tests/diff/bridge-gradient.test.ts",
+      "tests/dimensional/affine-target.test.ts",
       "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
@@ -15757,6 +15758,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/evaluation-result.test.ts",
       "tests/core/constants-owner.test.ts",
+      "tests/dimensional/affine-target.test.ts",
       "tests/dimensional/ambiguous-reading-order.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
@@ -27543,6 +27545,9 @@
       "src/dimensional/types.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
+    ],
+    "tests/dimensional/affine-target.test.ts": [
+      "src/dimensional/units.ts"
     ],
     "tests/dimensional/algebra-properties.test.ts": [
       "src/dimensional/algebra.ts",
