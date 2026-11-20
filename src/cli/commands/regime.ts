@@ -131,7 +131,8 @@ const normalizeGroup = (name: string): string => name.replace(/\s+/g, '').replac
  * `*` read as `·`, so `tau*D*q^2` reaches the group `tau · D · q^2`. A group
  * whose parameters are all given, and which the point does not state itself, is
  * derived from them: the product of each parameter to its exponent. `unknown`
- * lists the keys that are neither a group nor a parameter of any regime here.
+ * lists the keys that enter no regime inequality here: neither a group nor a
+ * parameter with a nonzero exponent in one.
  * @internal
  */
 export function resolveAtPoint(
@@ -139,10 +140,15 @@ export function resolveAtPoint(
   point: Readonly<Record<string, number>>,
   regimes: readonly { groupDefinitions: Readonly<Record<string, { exponents: Readonly<Record<string, number>> }>>; inequalities: readonly { group: string }[] }[],
 ): { values: Record<string, number>; unknown: string[] } {
+  // Only a group that an inequality references enters the map: a record may
+  // define a group it never bounds, and a key of that group changes no verdict.
   const groups = new Map<string, Readonly<Record<string, number>>>();
   for (const r of regimes) {
-    for (const [key, g] of Object.entries(r.groupDefinitions)) groups.set(key, g.exponents);
-    for (const i of r.inequalities) if (!groups.has(i.group)) groups.set(i.group, { [i.group]: 1 });
+    for (const i of r.inequalities) {
+      const defined = r.groupDefinitions[i.group];
+      if (defined !== undefined) groups.set(i.group, defined.exponents);
+      else if (!groups.has(i.group)) groups.set(i.group, { [i.group]: 1 });
+    }
   }
   const byNormal = new Map([...groups.keys()].map((k) => [normalizeGroup(k), k]));
   const named = new Set<string>([...groups.keys(), ...[...groups.values()].flatMap((e) => Object.keys(e))]);
@@ -362,8 +368,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   );
   if (unknown.length > 0) {
     out(
-      `unknown coordinate(s): ${unknown.join(', ')} — no record in family '${registration.name}' uses ` +
-        `${unknown.length === 1 ? 'it' : 'them'}; ignored`,
+      `ignored coordinate(s): ${unknown.join(', ')} — no regime inequality of family '${registration.name}' depends on ` +
+        `${unknown.length === 1 ? 'it' : 'them'}`,
     );
   }
   for (const { flag, d } of unmatched) {

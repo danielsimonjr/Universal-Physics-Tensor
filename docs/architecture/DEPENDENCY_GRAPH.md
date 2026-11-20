@@ -2688,6 +2688,7 @@ The codebase is organized into the following modules:
 | `../eval-numbers.js` | `codataScope` | Import |
 | `../bindings.js` | `splitAssignments` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
 - Constants: `command`
@@ -3526,7 +3527,7 @@ The codebase is organized into the following modules:
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./bridges/notices.js` | `relationNotices` | Re-export |
-| `./dimensional/symbolic-constants.js` | `constantNotes` | Re-export |
+| `./dimensional/symbolic-constants.js` | `constantNotes, constantRecord` | Re-export |
 | `./composition/edge.js` | `BridgeEdge` | Re-export |
 | `./composition/graph-viz.js` | `VizJunction, VizModel` | Re-export |
 | `./atlas/types.js` | `EvidenceTag, RelationType` | Re-export |
@@ -3589,8 +3590,8 @@ The codebase is organized into the following modules:
   rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved, resolveEvaluable,
   siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus, EmbeddingUnavailable,
   ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder, builtinFormulaDimensionChecker,
-  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
-  EvidenceTag, RelationType, EquationAnalysis
+  missingEvaluatorMessage, relationNotices, constantNotes, constantRecord, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -7822,15 +7823,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89311 |
-| Total Exports | 2859 |
-| Total Re-exports | 1406 |
+| Total Lines of Code | 89416 |
+| Total Exports | 2860 |
+| Total Re-exports | 1407 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 938 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 534 |
+| Type-only Imports | 535 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

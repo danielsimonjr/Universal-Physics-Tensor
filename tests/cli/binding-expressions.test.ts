@@ -182,6 +182,22 @@ describe('binding expressions', () => {
     expect(await runCli(['eval', '1/sqrt(1-v^2/c^2)', 'v=0.6*c*nope'], gamma.io)).not.toBe(0);
   });
 
+  it('--anchor and --sigma name an unknown unit instead of the generic sentence (#697)', async () => {
+    const anchor = capture();
+    expect(await runCli(['discover', '--anchor=mass=1zqx', '--max-orders=1'], anchor.io)).toBe(1);
+    const anchorErr = anchor.err.join('');
+    expect(anchorErr).toMatch(/upt: --anchor 'mass=1zqx': unknown unit 'zqx'/);
+    expect(anchorErr).not.toMatch(/expects k=v with a finite numeric value/);
+
+    const sigma = capture();
+    expect(
+      await runCli(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000', '--sigma', 'T_K=1zqx'], sigma.io),
+    ).toBe(1);
+    const sigmaErr = sigma.err.join('');
+    expect(sigmaErr).toMatch(/upt evaluate: --sigma 'T_K=1zqx': unknown unit 'zqx'/);
+    expect(sigmaErr).not.toMatch(/is not key=<finite/);
+  });
+
   it('Lorentz factor at 0.6c is 1.25 by an independent arithmetic check', () => {
     expect(1 / Math.sqrt(1 - 0.6 * 0.6)).toBeCloseTo(1.25, 12);
     expect(0.6 * C_SI).toBeGreaterThan(1e8);
