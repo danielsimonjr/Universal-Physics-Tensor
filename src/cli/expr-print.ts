@@ -129,12 +129,14 @@ export interface CoherentUnit {
  * (`ohm` before `Ω`). The seven base units are added so a label can mix them.
  * A cycle-counting unit (`Hz`, `rpm`; the table's `cycles` flag) is never a
  * label: a 1/s output may be an angular frequency, and `Hz` would say it
- * counts cycles. Such an output reads `1/s`, which is its dimension.
+ * counts cycles. Such an output reads `1/s`, which is its dimension. A unit
+ * that names one kind of its dimension (`Bq`, `Gy`, `Sv`, `kat`; the `kind`
+ * flag) is never a label for the same reason.
  */
 function coherentUnits(
   rows: ReadonlyMap<
     string,
-    { readonly scale: { readonly num: bigint; readonly den: bigint; readonly irrational: number }; readonly dim: Dimension; readonly cycles?: true }
+    { readonly scale: { readonly num: bigint; readonly den: bigint; readonly irrational: number }; readonly dim: Dimension; readonly cycles?: true; readonly kind?: true }
   >,
 ): CoherentUnit[] {
   const out: CoherentUnit[] = [];
@@ -145,7 +147,7 @@ function coherentUnits(
     out.push({ name, dim });
   };
   for (const [name, row] of rows) {
-    if (row.cycles === true) continue;
+    if (row.cycles === true || row.kind === true) continue;
     if (row.scale.num === 1n && row.scale.den === 1n && row.scale.irrational === 1) add(name, row.dim);
   }
   for (const [k, u] of SI_BASE) {
