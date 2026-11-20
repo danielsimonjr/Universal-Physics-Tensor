@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 391,
-    "totalTestFiles": 757,
+    "totalTestFiles": 758,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -28562,6 +28562,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
     ],
+    "tests/dimensional/schema-version-contract.test.ts": [],
     "tests/dimensional/si-special-units.test.ts": [
       "src/cli/expr-print.ts",
       "src/dimensional/units.ts",

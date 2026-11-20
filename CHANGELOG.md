@@ -44,6 +44,8 @@ from v0.1.0 onward.
 
 ### Changed
 
+- **BREAKING (data contract): `data/units.json` moves to `schemaVersion` 2 and `data/bridge-catalog.json` to `schemaVersion` 4.** Both files ship in the npm package with their JSON Schemas. Since 15.0.0, `units.json` requires `products` (#676), and each catalog row requires `dimension` (#706) and may carry `domains` under `additionalProperties: false` (#691). A validator on the old schema refuses the new files, so the version moves with the shape. The schema `const`, the `BridgeCatalogFile` type, `scripts/check-catalog-json.mjs` and `tests/dimensional/schema-version-contract.test.ts` read the new values.
+
 - **BREAKING: a glued unit spelling is a product only when a `products` row of `data/units.json` lists its factors (#676).** The grammar read any juxtaposition of table symbols as a product, so short unknown spellings gave wrong values with exit 0 (`gal` read as g·al, `lbs` as lb·s, `kmh` as km·h). A prefix is allowed only on the first factor of a row that permits it (`prefixFirst`): `kWh`, `MWh`, `mAh` and `kNm` read, `kgs` does not. The table holds 14 unprefixed rows (`W·h`, `A·h`, `A·s`, `N·m`, `N·s`, `V·s`, `V·A`, `J·s`, `Pa·s`, `Ω·m`, `m·K`, `m·s`, `g·K`, `mol·K`), validated at load. `J/gK`, `J/kgK` and `kJ/kmolK` read as before. Now refused as an unknown unit: `kgs`, `kmh`, `gm`, `gal`, `lbs`, `Pac`, `NN`, `HzHz`, `gcm`, `mmin`, `W/°Rm` and similar; they gave wrong values. One reading now: `mAs` (10^-3 C), `mPas` (10^-3 Pa·s), `mmK`, `cmK`, `mAh` (3.6 C) and `mol/mL` (10^6 mol/m^3). An operator product (`N*m`, `W/(m*K)`) is unchanged.
 
 ## [15.0.0] - 2026-11-18

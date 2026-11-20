@@ -25,7 +25,7 @@ const repoRoot = resolve(here, '..');
  */
 export function crossChecks(catalog, packageVersion, manifestKeys) {
   const errors = [];
-  if (catalog.schemaVersion !== 3) errors.push(`schemaVersion is ${catalog.schemaVersion}`);
+  if (catalog.schemaVersion !== 4) errors.push(`schemaVersion is ${catalog.schemaVersion}`);
   if (catalog.packageVersion !== packageVersion) {
     errors.push(`packageVersion ${catalog.packageVersion} is not package.json ${packageVersion}`);
   }
@@ -65,7 +65,7 @@ if (isMain) {
   }
   const file = loaded.bridgeCatalog();
   console.log(
-    `catalog ok: schema 3, package v${pkg.version}; ${file.entries.length} records in id order, ` +
+    `catalog ok: schema 4, package v${pkg.version}; ${file.entries.length} records in id order, ` +
       `${file.relations.length} relations (confidence derived from the row), ${file.evaluators.length} evaluators, ` +
       `${file.confrontations.length} confrontations (one per id, outcomes checked on kind), ` +
       `${file.adjudications.length} adjudications, ${file.rejections.length} rejections; ` +

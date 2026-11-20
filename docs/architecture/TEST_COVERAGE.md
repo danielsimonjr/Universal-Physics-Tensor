@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 391 |
-| Total Test Files | 757 |
+| Total Test Files | 758 |
 | Source files imported directly by a test | 349 |
 | Source files reached directly or through a barrel or side-effect import | 380 |
 | Source files no test reaches either way | 11 |
@@ -1012,6 +1012,7 @@ The following 11 source files are reached by no test file, directly or through a
 | `dimensional/ricci.test.ts` | 17 files |
 | `dimensional/riemann-tensor.test.ts` | 5 files |
 | `dimensional/scalar-lowering.test.ts` | 6 files |
+| `dimensional/schema-version-contract.test.ts` | 0 files |
 | `dimensional/si-special-units.test.ts` | 3 files |
 | `dimensional/stress-energy-validators.test.ts` | 3 files |
 | `dimensional/superscript-power.test.ts` | 2 files |
