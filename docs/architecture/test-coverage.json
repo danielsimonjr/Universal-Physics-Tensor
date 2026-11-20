@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 391,
-    "totalTestFiles": 750,
+    "totalTestFiles": 751,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -6614,7 +6614,8 @@
       "tests/cli/display-unit-rule.test.ts",
       "tests/cli/evaluate-display-unit.test.ts",
       "tests/cli/numeric-flags.test.ts",
-      "tests/cli/symbolic-latex.test.ts"
+      "tests/cli/symbolic-latex.test.ts",
+      "tests/dimensional/si-special-units.test.ts"
     ],
     "src/cli/file-errors.ts": [],
     "src/cli/flag-help.ts": [
@@ -10378,6 +10379,7 @@
       "tests/dimensional/ast-builders.test.ts",
       "tests/dimensional/dimension-owners.test.ts",
       "tests/dimensional/integral-bounds-validation.test.ts",
+      "tests/dimensional/si-special-units.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
       "tests/dimensional/validator.test.ts",
       "tests/numerical/one-function-table.test.ts",
@@ -11723,6 +11725,7 @@
       "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
+      "tests/dimensional/si-special-units.test.ts",
       "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
@@ -14314,7 +14317,8 @@
       "tests/cli/display-unit-rule.test.ts",
       "tests/cli/evaluate-display-unit.test.ts",
       "tests/cli/numeric-flags.test.ts",
-      "tests/cli/symbolic-latex.test.ts"
+      "tests/cli/symbolic-latex.test.ts",
+      "tests/dimensional/si-special-units.test.ts"
     ],
     "src/cli/file-errors.ts": [],
     "src/cli/flag-help.ts": [
@@ -15403,6 +15407,7 @@
       "tests/dimensional/ast-builders.test.ts",
       "tests/dimensional/dimension-owners.test.ts",
       "tests/dimensional/integral-bounds-validation.test.ts",
+      "tests/dimensional/si-special-units.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
       "tests/dimensional/validator.test.ts",
       "tests/numerical/one-function-table.test.ts",
@@ -15897,6 +15902,7 @@
       "tests/dimensional/m6-splitter-source.test.ts",
       "tests/dimensional/mathts-refusal-delegation.test.ts",
       "tests/dimensional/mathts-unit-gaps.test.ts",
+      "tests/dimensional/si-special-units.test.ts",
       "tests/dimensional/superscript-power.test.ts",
       "tests/dimensional/unit-closure.test.ts",
       "tests/dimensional/unit-data.test.ts",
@@ -28344,6 +28350,11 @@
       "src/dimensional/types.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
+    ],
+    "tests/dimensional/si-special-units.test.ts": [
+      "src/cli/expr-print.ts",
+      "src/dimensional/units.ts",
+      "src/dimensional/ast-builders.ts"
     ],
     "tests/dimensional/stress-energy-validators.test.ts": [
       "src/dimensional/validator.ts",
