@@ -58,8 +58,10 @@ ${NAMED_DIMENSIONS_HELP}.
         A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
-        recover the dimensionless prefactor. A target that is not a unique
-        monomial of the variables exits 3. --debug prints the formula parser
+        recover the dimensionless prefactor. With --formula, the check uses
+        only the declared variables that the formula contains. Each other
+        declared variable is named. A target that is not a unique monomial
+        of those variables exits 3. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
                        --formula "2*pi*sqrt(length/gravity)"`;
@@ -97,7 +99,11 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const target = specs[0];
   const governing = specs.slice(1);
-  const det = api.dimensionallyDetermines(target, governing);
+  // Without --formula the target is determined by every declared variable. With --formula it is
+  // determined by the variables the formula uses (set below): the formula is the claim.
+  let used = governing;
+  let unused: typeof governing = [];
+  let det = api.dimensionallyDetermines(target, governing);
 
   // Text is buffered and written only when the command reaches a result, so an
   // error (exit 1 or 2) leaves stdout empty, as every command's does; a result,
@@ -125,6 +131,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         command: 'derive',
         result: {
           determination: det,
+          ...(unused.length > 0 ? { unusedVariables: unused.map((g) => g.name) } : {}),
           ...(full !== undefined ? { buckingham: full } : {}),
           ...(formulaCheck !== undefined ? { formulaCheck } : {}),
           ...(matchesMonomial === undefined ? {} : { matchesMonomial, prefactor: matchesMonomial ? mean! : null }),
@@ -137,14 +144,20 @@ async function run(ctx: CommandCtx): Promise<number> {
   };
 
   textOut(`\n● ${target.name}  from {${governing.map((g) => g.name).join(', ')}}`);
-  if (det.determined) {
-    textOut(`  dimensionally determined up to a constant:  ${target.name} ∝ ${fmtMono(det.monomial!)}`);
-  } else {
-    full = api.buckinghamPi([target, ...governing]);
-    textOut(`  NOT a unique monomial — ${full.piGroupCount} free dimensionless group(s) (${full.verdict}):`);
-    for (const g of full.piGroups) textOut(`     ${g.formula}`);
-    textOut(`  (${det.reason})`);
-  }
+  const reportDetermination = (): void => {
+    if (unused.length > 0) {
+      textOut(`  declared but not in the formula: ${unused.map((g) => g.name).join(', ')} — checked against {${used.map((g) => g.name).join(', ')}}`);
+    }
+    if (det.determined) {
+      textOut(`  dimensionally determined up to a constant:  ${target.name} ∝ ${fmtMono(det.monomial!)}`);
+    } else {
+      full = api.buckinghamPi([target, ...used]);
+      textOut(`  NOT a unique monomial — ${full.piGroupCount} free dimensionless group(s) (${full.verdict}):`);
+      for (const g of full.piGroups) textOut(`     ${g.formula}`);
+      textOut(`  (${det.reason})`);
+    }
+  };
+  if (!formula) reportDetermination();
 
   if (formula) {
     const parser = await api.getFormulaParser();
@@ -171,6 +184,13 @@ async function run(ctx: CommandCtx): Promise<number> {
         + (target.name.includes('-') ? '. For a subtraction, write the minus sign with spaces' : ''),
     );
     if (cf !== undefined && cf.variables.includes(targetSymbol)) throw targetInFormula;
+    if (cf !== undefined) {
+      const formulaVariables = cf.variables;
+      used = governing.filter((g) => formulaVariables.includes(formulaSymbol(g.name)));
+      unused = governing.filter((g) => !used.includes(g));
+      if (unused.length > 0) det = api.dimensionallyDetermines(target, used);
+    }
+    reportDetermination();
     const dims = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), g.dim]));
     const r = checker.check(formulaSymbols, dims);
     formulaCheck = r;
