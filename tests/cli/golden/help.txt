@@ -290,7 +290,10 @@ Flags:
         --debug prints the parser and its version to stderr.
         A value with a unit keeps its dimension. A formula that adds or
         compares unlike dimensions is refused (exit 1). A bare number has no
-        dimension check. The value is converted to SI.
+        dimension check. The value is converted to SI. When every bound name the
+        formula uses has a unit, the SI unit of the result follows the value.
+        A bare number has no unit, and the result then shows the value only.
+        --natural and --geometrized show the value only.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30

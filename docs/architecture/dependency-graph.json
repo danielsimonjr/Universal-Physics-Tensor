@@ -9132,6 +9132,13 @@
             ]
           },
           {
+            "file": "../expr-print.js",
+            "imports": [
+              "coherentUnits",
+              "derivedUnitOf"
+            ]
+          },
+          {
             "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
@@ -28621,7 +28628,7 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89406,
+    "totalLinesOfCode": 89418,
     "totalExports": 2860,
     "totalClasses": 86,
     "totalInterfaces": 523,

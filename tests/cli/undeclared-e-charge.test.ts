@@ -27,15 +27,15 @@ describe('undeclared 1-e^2 names the elementary charge', () => {
 
     const bound = capture();
     expect(await runCli(['eval', '1-e^2', 'e=0.2'], bound.io)).toBe(0);
-    expect(Number(text(bound).trim())).toBeCloseTo(1 - 0.04, 12);
+    expect(parseFloat(text(bound))).toBeCloseTo(1 - 0.04, 12);
 
     const charge = capture();
     expect(await runCli(['eval', 'e'], charge.io)).toBe(0);
-    expect(Number(text(charge).trim())).toBeCloseTo(E_SI, 15);
+    expect(parseFloat(text(charge))).toBeCloseTo(E_SI, 15);
 
     const euler = capture();
     expect(await runCli(['eval', 'exp(1)'], euler.io)).toBe(0);
-    expect(Number(text(euler).trim())).toBeCloseTo(Math.E, 12);
+    expect(parseFloat(text(euler))).toBeCloseTo(Math.E, 12);
   });
 
   it('upt map names the charge, the binding, and exp(x)', async () => {

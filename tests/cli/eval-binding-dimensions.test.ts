@@ -59,7 +59,7 @@ describe('controls: a formula that stays computable is not refused', () => {
     it(`${expr} ${bindings.join(' ')} = ${want}`, async () => {
       const r = await run(['eval', expr, ...bindings]);
       expect(r.code).toBe(0);
-      expect(Number(r.stdout.trim())).toBeCloseTo(want, 12);
+      expect(parseFloat(r.stdout)).toBeCloseTo(want, 12);
     });
   }
 
@@ -77,7 +77,7 @@ describe('controls: a formula that stays computable is not refused', () => {
   it('the help example is unchanged', async () => {
     const r = await run(['eval', 'hbar*c^3/(8*pi*G*M*k_B)', 'M=1.989e30']);
     expect(r.code).toBe(0);
-    expect(Number(r.stdout.trim())).toBeGreaterThan(0);
+    expect(parseFloat(r.stdout)).toBeGreaterThan(0);
   });
 
   it('1 - e^2 stays the elementary-charge refusal (exit 2)', async () => {

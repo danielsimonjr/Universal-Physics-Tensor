@@ -15,6 +15,7 @@ import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
 import { splitAssignments } from '../bindings.js';
+import { coherentUnits, derivedUnitOf } from '../expr-print.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 import type { Dimension } from '../../dimensional/types.js';
 
@@ -103,7 +104,10 @@ const HELP = `upt eval "<formula>" name=value ...
         --debug prints the parser and its version to stderr.
         A value with a unit keeps its dimension. A formula that adds or
         compares unlike dimensions is refused (exit 1). A bare number has no
-        dimension check. The value is converted to SI.
+        dimension check. The value is converted to SI. When every bound name the
+        formula uses has a unit, the SI unit of the result follows the value.
+        A bare number has no unit, and the result then shows the value only.
+        --natural and --geometrized show the value only.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
@@ -170,6 +174,8 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   // A value with a unit keeps its dimension. Run the check only when every bound name the formula
   // uses has one: the checker gives `E` and `e` a default dimension, which a bare number must not take.
+  // The dimension of the result, known only when the one check below ran and passed.
+  let resultDim: Dimension | undefined;
   if (mode === 'si' && cf.variables.every((v) => v in parsed.dims || !(v in parsed.scope))) {
     const dims = { ...parsed.dims };
     for (const v of cf.variables) {
@@ -182,6 +188,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     // A bare e is a caller's own quantity; an unbound e, or an e with a unit, is a charge.
     const bareE = 'e' in parsed.scope && !('e' in parsed.dims);
     const chargeMixed = homogeneous.elementaryChargeMixed === true && !bareE;
+    if (homogeneous.ok && !bareE) resultDim = homogeneous.dim;
     if (!homogeneous.ok && (homogeneous.inhomogeneous === true || chargeMixed)) {
       throw new CliError(
         `upt eval: the formula is not dimensionally homogeneous: ${homogeneous.error?.replace(/\.$/, '')}. A value with a unit keeps its dimension.`,
@@ -203,18 +210,23 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new FormulaUsageError((e as Error).message, kind);
   }
 
+  const label = resultDim === undefined ? '1' : derivedUnitOf(resultDim, coherentUnits(api.unitRows()));
   if (isJson) {
     emitJson(
       {
         command: 'eval',
-        result: { value, ...(notes.length === 0 ? {} : { notes }), ...(mode === 'si' ? {} : { units: mode }) },
+        result: {
+          value,
+          ...(resultDim === undefined || label === '1' ? {} : { unit: api.siUnitOf(resultDim) }),
+          ...(notes.length === 0 ? {} : { notes }), ...(mode === 'si' ? {} : { units: mode }),
+        },
       },
       ctx.write,
     );
     return 0;
   }
 
-  out(String(value));
+  out(label === '1' ? String(value) : `${value} ${label}`);
   return 0;
 }
 

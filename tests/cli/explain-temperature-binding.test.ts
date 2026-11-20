@@ -194,7 +194,7 @@ describe('explain temperature bindings', () => {
 
     const ev = capture();
     expect(await runCli(['eval', 'T', 'T=10eV'], ev.io)).toBe(0);
-    expect(Number(text(ev).trim())).toBeCloseTo(KELVIN_10EV, 6);
+    expect(parseFloat(text(ev))).toBeCloseTo(KELVIN_10EV, 6);
     expect(errText(ev)).toMatch(/k_B T/);
 
     const anchor = capture();
@@ -229,7 +229,7 @@ describe('explain temperature bindings', () => {
     expect(readNamedBinding('energy', '10eV').value).toBeCloseTo(10 * E_SI, 8);
     const ev = capture();
     expect(await runCli(['eval', 'E', 'E=10eV'], ev.io)).toBe(0);
-    expect(Number(text(ev).trim())).toBeCloseTo(10 * E_SI, 6);
+    expect(parseFloat(text(ev))).toBeCloseTo(10 * E_SI, 6);
     expect(errText(ev)).not.toMatch(/k_B T/);
   });
 
