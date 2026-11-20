@@ -155,7 +155,8 @@ describe('typed refusals, not message text', () => {
     expect(() => readBinding('2*1degC')).toThrow(UnitRefusedError);
     expect(readBinding('1 mol/mL')).toBeDefined();
     expect(() => readBinding('nope')).toThrow(BindingNumberError);
-    expect(() => readBinding('1.2.3')).toThrow(BindingNumberError);
+    // `1.2.3` is the number 1.2 with the text `.3` as its unit (#697).
+    expect(() => readBinding('1.2.3')).toThrow(/unknown unit '.3'/);
     expect(() => readBinding('2*euler')).toThrow(/exp\(x\)/);
   });
 });

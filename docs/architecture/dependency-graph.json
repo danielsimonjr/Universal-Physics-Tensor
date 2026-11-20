@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2857
+    "totalExports": 2858
   },
   "entryPoints": [
     {
@@ -9137,6 +9137,13 @@
               "UnitMode"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -12391,7 +12398,8 @@
           {
             "file": "./dimensional/symbolic-constants.js",
             "imports": [
-              "constantNotes"
+              "constantNotes",
+              "constantRecord"
             ],
             "reExport": true
           },
@@ -12643,6 +12651,7 @@
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "ConfrontationEntry",
           "RigorTier",
           "ConfrontationOutcome",
@@ -12965,6 +12974,7 @@
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "BridgeEdge",
           "VizJunction",
           "VizModel",
@@ -28605,16 +28615,16 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89308,
-    "totalExports": 2857,
+    "totalLinesOfCode": 89413,
+    "totalExports": 2858,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 936,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1406,
-    "totalTypeOnlyImports": 534,
+    "totalReExports": 1407,
+    "totalTypeOnlyImports": 535,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
