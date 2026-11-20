@@ -280,8 +280,14 @@ function printInputs(fmt: Fmt, out: CommandCtx['out'], parameters: readonly Eval
   }
 }
 
-const withUnit = (fmt: Fmt, v: number | null, unit: string): string =>
-  v === null ? 'undefined here (its premise fails, or it needs an optional input not given)' : `${fmt(v)}${unit === '' ? '' : ` ${unit}`}`;
+/** A null output has two causes: an optional input it needs is absent, or its premise fails. Name the one that applies. */
+const nullCause = (needs: readonly string[] | undefined, inputs: Readonly<Record<string, number>>): string => {
+  const absent = (needs ?? []).filter((k) => !(k in inputs));
+  return absent.length > 0 ? `needs optional input ${absent.join(', ')}` : 'its premise fails at these inputs';
+};
+
+const withUnit = (fmt: Fmt, v: number | null, o: AppliedCase['outputs'][number], inputs: Readonly<Record<string, number>>): string =>
+  v === null ? `undefined here: ${nullCause(o.needs, inputs)}` : `${fmt(v)}${o.unit === '' ? '' : ` ${o.unit}`}`;
 
 /** A case's parameters with the contract `runAppliedCase` checks them against. */
 function caseInputs(api: CommandCtx['api'], c: AppliedCase): ContractedInputs {
@@ -346,9 +352,9 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   out('  conditions (boundary, initial, equilibrium):');
   for (const s of c.conditions) out(`    - ${s}`);
   out('  outputs:');
-  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(api.formatExact, result.outputs[o.key] ?? null, o.unit)} — ${o.meaning}`);
+  for (const o of c.outputs) out(`    ${o.key} = ${withUnit(api.formatExact, result.outputs[o.key] ?? null, o, inputs)} — ${o.meaning}`);
   const obs = c.outputs.find((o) => o.key === c.observable)!;
-  out(`  observable: ${obs.key} = ${withUnit(api.formatExact, result.outputs[obs.key] ?? null, obs.unit)}`);
+  out(`  observable: ${obs.key} = ${withUnit(api.formatExact, result.outputs[obs.key] ?? null, obs, inputs)}`);
   out('  regime checks (at the given inputs):');
   if (regimeLine !== '') out(`  regime coordinates: ${regimeLine}`);
   for (const k of result.checks) {
