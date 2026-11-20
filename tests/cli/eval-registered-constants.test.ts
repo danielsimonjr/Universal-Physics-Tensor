@@ -57,7 +57,7 @@ describe('upt eval reads the registered constants', () => {
     for (const name of Object.keys(CONSTANTS).filter((n) => IDENTIFIER.test(n))) {
       const r = await run(['eval', name]);
       expect(r.code, name).toBe(0);
-      expect(Number(r.stdout.trim()), name).toBe(CONSTANTS[name]!.value);
+      expect(parseFloat(r.stdout), name).toBe(CONSTANTS[name]!.value);
     }
   });
 
@@ -65,13 +65,13 @@ describe('upt eval reads the registered constants', () => {
     const T = 300;
     const r = await run(['eval', 'sigma_sb*T^4', `T=${T}`]);
     expect(r.code).toBe(0);
-    expect(Number(r.stdout.trim())).toBeCloseTo(CONSTANTS.sigma_sb.value * T ** 4, 8);
+    expect(parseFloat(r.stdout)).toBeCloseTo(CONSTANTS.sigma_sb.value * T ** 4, 8);
   });
 
   it('an explicit sigma_sb= wins over the registered value', async () => {
     const r = await run(['eval', 'sigma_sb', 'sigma_sb=2']);
     expect(r.code).toBe(0);
-    expect(Number(r.stdout.trim())).toBe(2);
+    expect(parseFloat(r.stdout)).toBe(2);
   });
 
   it('a bare sigma is refused and is not given the Stefan–Boltzmann value', async () => {
@@ -85,7 +85,7 @@ describe('upt eval reads the registered constants', () => {
     for (const name of ['2pi', '4pi', '8pi'] as const) {
       const r = await run(['eval', name]);
       expect(r.code, name).toBe(0);
-      expect(Number(r.stdout.trim()), name).toBeCloseTo(CONSTANTS[name].value, 12);
+      expect(parseFloat(r.stdout), name).toBeCloseTo(CONSTANTS[name].value, 12);
     }
   });
 });
