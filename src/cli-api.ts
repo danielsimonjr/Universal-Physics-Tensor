@@ -366,7 +366,7 @@ export { missingEvaluatorMessage } from './bridges/evaluators.js';
 /** The caveats printed beside a relation's value: its own notice and the notes of the constants it names. */
 export { relationNotices } from './bridges/notices.js';
 /** The notes of the registered constants a formula names. */
-export { constantNotes } from './dimensional/symbolic-constants.js';
+export { constantNotes, constantRecord } from './dimensional/symbolic-constants.js';
 
 /** Quantity-graph edge type for `upt map`. @internal */
 export type { BridgeEdge } from './composition/edge.js';
