@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 391,
-    "totalTestFiles": 751,
+    "totalTestFiles": 753,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -10996,6 +10996,7 @@
       "tests/dimensional/exact-scale-delegation.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/unit-rows-mathts-parity.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/field-equation-helpers.ts": [
@@ -11675,6 +11676,7 @@
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
+      "tests/dimensional/unit-rows-mathts-parity.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/internal/clone-helpers.test.ts"
     ],
@@ -11718,6 +11720,7 @@
       "tests/diff/bridge-gradient.test.ts",
       "tests/dimensional/affine-target.test.ts",
       "tests/dimensional/ambiguous-reading-order.test.ts",
+      "tests/dimensional/customary-mile-gallon.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/glued-product-allowlist.test.ts",
@@ -15533,6 +15536,7 @@
       "tests/dimensional/exact-scale-delegation.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/unit-data.test.ts",
+      "tests/dimensional/unit-rows-mathts-parity.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts"
     ],
     "src/dimensional/field-equation-helpers.ts": [
@@ -15879,6 +15883,7 @@
       "tests/dimensional/unit-cycles-mathts.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/dimensional/unit-grammar.test.ts",
+      "tests/dimensional/unit-rows-mathts-parity.test.ts",
       "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/internal/clone-helpers.test.ts"
     ],
@@ -15895,6 +15900,7 @@
       "tests/core/constants-owner.test.ts",
       "tests/dimensional/affine-target.test.ts",
       "tests/dimensional/ambiguous-reading-order.test.ts",
+      "tests/dimensional/customary-mile-gallon.test.ts",
       "tests/dimensional/dimension-spec.test.ts",
       "tests/dimensional/exact-unit-scale.test.ts",
       "tests/dimensional/glued-product-allowlist.test.ts",
@@ -27957,6 +27963,9 @@
       "src/dimensional/metric-validators.ts"
     ],
     "tests/dimensional/curvature-numerical-imports.test.ts": [],
+    "tests/dimensional/customary-mile-gallon.test.ts": [
+      "src/dimensional/units.ts"
+    ],
     "tests/dimensional/derivation-benchmark.test.ts": [
       "src/dimensional/buckingham.ts",
       "src/dimensional/types.ts"
@@ -28490,6 +28499,10 @@
     ],
     "tests/dimensional/unit-parse-delegation.test.ts": [
       "src/dimensional/units.ts"
+    ],
+    "tests/dimensional/unit-rows-mathts-parity.test.ts": [
+      "src/dimensional/exact-scale.ts",
+      "src/dimensional/unit-data.ts"
     ],
     "tests/dimensional/unit-wrapper-a12-partial.test.ts": [
       "src/dimensional/mathts-unit-wrapper.ts",

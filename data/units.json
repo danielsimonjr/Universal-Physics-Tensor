@@ -5,6 +5,8 @@
   "scales": {
     "inch": "0.0254",
     "foot": "0.3048",
+    "mile": "5280*foot",
+    "us_gallon": "231*inch^3",
     "pound": "0.45359237",
     "standard_gravity": "9.80665",
     "lbf": "pound*standard_gravity",
@@ -962,6 +964,29 @@
         "L": 1
       },
       "prefixable": false
+    },
+    {
+      "symbols": [
+        "mile",
+        "mi"
+      ],
+      "scale": "mile",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false,
+      "comment": "International mile, 5280 ft = 1609.344 m exactly (NIST SP 811 B.8)."
+    },
+    {
+      "symbols": [
+        "gallon"
+      ],
+      "scale": "us_gallon",
+      "dimension": {
+        "L": 3
+      },
+      "prefixable": false,
+      "comment": "US liquid gallon, 231 in^3 = 3.785411784e-3 m^3 exactly (NIST SP 811 B.8). Not the imperial gallon (4.54609 L) or the US dry gallon."
     },
     {
       "symbols": [
