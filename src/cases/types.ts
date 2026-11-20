@@ -23,7 +23,7 @@ export interface CaseOutput {
   /** A unit expression; `''` for dimensionless. */
   readonly unit: string;
   readonly meaning: string;
-  /** The optional parameter keys the output depends on; it is undefined when any is absent. */
+  /** The optional parameter keys the output depends on. The output is undefined when every one of them is absent. */
   readonly needs?: readonly string[];
 }
 
