@@ -78,7 +78,7 @@ export { catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation } from '.
 /** The graph key of a catalog number (`be-<n>`): the one place that spelling is written. */
 export { catalogEdgeKey } from './bridges/catalog-load.js';
 /** `_` written as `-`: the one fold every spelling comparison uses. */
-export { foldName } from './dimensional/quantity-registry.js';
+export { foldName, quantityRecord } from './dimensional/quantity-registry.js';
 /** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
@@ -108,7 +108,7 @@ export { CASE_CONTRACTS } from './cases/index.js';
 export { slotForSpelling } from './bridges/input-contract.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
 /** The unit reader's conversion, its refusal and the rows of the unit table. */
-export { convertValue, UnitError, unitRows } from './dimensional/units.js';
+export { convertValue, readQuantityLiteral, UnitError, unitRows } from './dimensional/units.js';
 /** The axis-discrimination audit and the level (0.05) at which an axis's evidence is earned. */
 export { auditAxisDiscrimination, AUDIT_ALPHA } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';
@@ -366,7 +366,7 @@ export { missingEvaluatorMessage } from './bridges/evaluators.js';
 /** The caveats printed beside a relation's value: its own notice and the notes of the constants it names. */
 export { relationNotices } from './bridges/notices.js';
 /** The notes of the registered constants a formula names. */
-export { constantNotes } from './dimensional/symbolic-constants.js';
+export { constantNotes, constantRecord } from './dimensional/symbolic-constants.js';
 
 /** Quantity-graph edge type for `upt map`. @internal */
 export type { BridgeEdge } from './composition/edge.js';

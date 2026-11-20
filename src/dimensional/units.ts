@@ -19,25 +19,30 @@
  * A token with no separator is one factor when the whole token is an exact
  * unit or a prefix plus a unit, with an optional exponent. That reading
  * wins on a bare token, so `ms` stays a millisecond, `mm` a millimetre,
- * `mK` a millikelvin, and `Ts` a terasecond. Inside a larger expression the
- * prefixed reading competes with a heterogeneous product (`mK` is millikelvin
- * or metre·kelvin; `ms` is millisecond or metre·second). A split that puts
- * a prefix letter's own unit twice in a row is never a reading, because a
- * power is written `m2` or `m^2`: `mm` is a millimetre, not metre·metre,
- * and `mmin` is metre·minute or millimetre·inch, not metre·metre·inch.
- * A unit that is not a prefix letter still juxtaposes with itself (`NN` is
- * N·N). MathTS `Unit.readingsWithSource` gives the product splits of a
+ * `mK` a millikelvin, and `Ts` a terasecond. A token that is not one factor
+ * is a product only when a split matches a row of `products` in
+ * `data/units.json`. The key of a row is the factor bases as written, joined
+ * by `·`, with no exponent: `m·K` admits `mK`, `m2K`, `m^2K` and `m⁴K`. A
+ * split also matches when its first factor is a prefix and a unit, and the
+ * row of the unprefixed factors has `prefixFirst` true: `kWh` matches `W·h`
+ * and `mAh` matches `A·h`. A prefix on a later factor never matches. A split
+ * that matches no row is not a reading, so `gal` is not gram·`al`, `lbs` is
+ * not pound·second, and `kgs` and `kmh` are not products: each is an unknown
+ * unit. An operator product (`N*m`, `N m`) needs no row. Inside a larger
+ * expression the prefixed reading competes with a listed product (`mK` is
+ * millikelvin or metre·kelvin; `ms` is millisecond or metre·second). A split
+ * that puts a prefix letter's own unit twice in a row is never a reading,
+ * because a power is written `m2` or `m^2`: `mm` is a millimetre, not
+ * metre·metre. MathTS `Unit.readingsWithSource` gives the product splits of a
  * token. UPT reads each factor from the factor's source text with UPT tables.
- * UPT keeps the reading policy below. `parseUnit` names
- * every remaining reading and refuses. `convertValue` keeps the one reading
- * whose dimension is the declared unit. A token that is not one factor is a
- * product when exactly one split exists: `m2K` is `m^2·K`, `Vs` is `V·s`,
- * and `cm^2/Vs` is `cm^2/(V·s)`. Zero splits are an unknown unit. Two or more
- * splits name each reading and are refused (`mAs` is milliampere·second or
- * metre·ampere·second). An unknown token that ends in a digit stays unknown
- * when it is not that product. A numerator that is the single token `1` is
- * the dimensionless unit, so `1/s` is a reciprocal second and `1/m^3` a
- * number density; `1` is not a symbol anywhere else.
+ * `parseUnit` names every remaining reading and refuses.
+ * `convertValue` keeps the one reading whose dimension is the declared unit.
+ * Thus `m2K` is `m^2·K`, `Vs` is `V·s`, and `cm^2/Vs` is `cm^2/(V·s)`. Two
+ * or more readings are named and refused (`kg/ms` is kilogram per
+ * millisecond or kilogram per metre·second). An unknown token that ends in a
+ * digit stays unknown when it is not that product. A numerator that is the
+ * single token `1` is the dimensionless unit, so `1/s` is a reciprocal second
+ * and `1/m^3` a number density; `1` is not a symbol anywhere else.
  * The table is data: `data/units.json`, loaded and validated by
  * `unit-data.ts`. Every row, prefix, refused spelling, prefix letter, affine
  * scale and spelling note is a row there, with the reason as its `comment`;
@@ -81,7 +86,13 @@ export interface ParsedUnit {
   readonly affine?: AffineTemperature;
 }
 
-/** Thrown for any input that does not parse as a value with a known unit. @public */
+/**
+ * The base of every error the unit readers throw: `parseUnit` for text that
+ * is not a unit expression (for example a number with a unit), `convertValue`
+ * for text that is not a number with a unit, for an affine target, and for a
+ * dimension mismatch. The subclasses name an unknown, refused or ambiguous unit.
+ * @public
+ */
 export class UnitError extends Error {
   constructor(message: string) {
     super(message);
@@ -288,6 +299,37 @@ export function segmentations(token: string): FactorReading[][] {
 }
 
 /**
+ * The key of a product row: the factor bases joined by `·`, with no exponent.
+ */
+function productKey(bases: readonly string[]): string {
+  return bases.join('·');
+}
+
+/**
+ * True when `way` matches a row of `data/units.json` `products`. The key of the way
+ * itself must be a row (`m·K` for `m2K`). Alternatively, the first base is a prefix
+ * and a prefixable unit X, and X with the remaining bases is a row whose `prefixFirst`
+ * is true (`kW·h` from `W·h`). A prefix on a later factor never matches, so `kg·s`,
+ * `km·h` and `g·al` are not readings.
+ * @internal
+ */
+export function isListedProduct(way: readonly FactorReading[]): boolean {
+  const bases = way.map((factor) => factor.base);
+  if (UNIT_DATA.products.has(productKey(bases))) return true;
+  const first = bases[0]!;
+  const unprefixed = attachedUnit(first);
+  return unprefixed !== null && UNIT_DATA.products.get(productKey([unprefixed, ...bases.slice(1)])) === true;
+}
+
+/**
+ * The product readings of one token: only the splits that `isListedProduct` accepts.
+ * An unlisted split is never a reading, so it can give neither an answer nor an ambiguity.
+ */
+function listedProducts(ways: FactorReading[][]): FactorReading[][] {
+  return ways.filter(isListedProduct);
+}
+
+/**
  * Ways to read one token. A bare expression keeps a one-factor reading and
  * does not also split it. Inside a compound, a prefixed factor also competes
  * with each heterogeneous product; `segmentations` has already dropped the
@@ -302,7 +344,7 @@ function tokenWays(token: string, compete: boolean, side: 'numerator' | 'denomin
   // A denominator keeps the product readings (`W/mK`), and a target dimension chooses.
   if (single !== null && side === 'numerator') return [[single]];
   const prefixWins = single !== null && PREFIX_LETTER_UNITS.has(token[0]!) && attachedUnit(single.base) !== null;
-  const products = prefixWins ? [] : segmentations(token);
+  const products = prefixWins ? [] : listedProducts(segmentations(token));
   const ways: FactorReading[][] = [];
   if (single !== null) ways.push([single]);
   for (const way of products) ways.push(way);
@@ -517,6 +559,13 @@ function siMagnitude(magnitude: ExactScale, unit: UnitReading, temperature: Temp
   return row !== undefined && temperature === 'absolute' ? addScales(scaled, affineOffset(row)) : scaled;
 }
 
+/** The inverse of {@link siMagnitude}: the magnitude in `unit` of an SI value, exactly. */
+function fromSiMagnitude(si: ExactScale, unit: UnitReading, temperature: TemperatureReading): ExactScale {
+  const row = unit.affine === undefined ? undefined : AFFINE.find((candidate) => candidate.id === unit.affine);
+  const shifted = row !== undefined && temperature === 'absolute' ? addScales(si, multiplyScales(ratioScale(-1, 1), affineOffset(row))) : si;
+  return divideScales(shifted, unit.exact);
+}
+
 const FRACTION = /^\s*([+-]?(?:\d+\.?\d*|\.\d+))\s*\/\s*((?:\d+\.?\d*|\.\d+))\s*$/;
 const NUMBER_THEN_REST = /^\s*([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)\s*$/;
 
@@ -558,10 +607,11 @@ function finiteLiteral(raw: string, value: number): number {
 }
 
 /**
- * Read `raw` as one number with an optional unit, in SI. Null when `raw` is
- * not that form or names a unit no row spells, so the caller can read it as
- * an expression. A refused unit and an ambiguous one throw. The value may be
- * non-finite (`1e999`); the caller owns that refusal and its error class.
+ * Read `raw` as one number with an optional unit, in SI. Null only when `raw`
+ * is not that form, so the caller can read it as an expression. A unit no row
+ * spells throws {@link UnknownUnitError}; a refused unit and an ambiguous one
+ * throw. The value may be non-finite (`1e999`); the caller owns that refusal
+ * and its error class.
  * @internal
  */
 export function readQuantityLiteral(raw: string, temperature: TemperatureReading = 'absolute'): QuantityLiteral | null {
@@ -570,13 +620,7 @@ export function readQuantityLiteral(raw: string, temperature: TemperatureReading
   if (literal.unit === '') {
     return { value: scaleToNumber(literal.magnitude), dim: DIMENSIONLESS, unit: '', cycles: 0 };
   }
-  let unit: UnitReading;
-  try {
-    unit = readUnit(literal.unit);
-  } catch (error) {
-    if (error instanceof UnknownUnitError) return null;
-    throw error;
-  }
+  const unit = readUnit(literal.unit);
   return {
     value: scaleToNumber(siMagnitude(literal.magnitude, unit, temperature)),
     dim: unit.dim,
@@ -603,6 +647,7 @@ export interface ConvertedValue {
  *
  * The magnitude, the unit scales and the target scale are multiplied as
  * exact rationals and rounded once, so `1 g/cm^3` in `kg/m^3` is 1000.
+ * An affine target (`degC`, `degF`) is read with the same `temperature` as the source.
  *
  * @returns the value in `target`, and the unit the user gave (`''` for none).
  * @public
@@ -614,7 +659,6 @@ export function convertValue(raw: string, target: string, temperature: Temperatu
   const given = literal.unit;
   const readings = unitReadings(given);
   const to = readUnit(target);
-  if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
   const matched = readings.filter((candidate) => equals(candidate.dim, to.dim));
   if (matched.length !== 1) {
     if (readings.length > 1) throw new AmbiguousUnitError(given, readings.map((r) => r.label));
@@ -623,7 +667,7 @@ export function convertValue(raw: string, target: string, temperature: Temperatu
     throw new UnitError(`'${given}' is ${format(from.dim)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`);
   }
   const from = matched[0]!;
-  const value = scaleToNumber(divideScales(siMagnitude(literal.magnitude, from, temperature), to.exact));
+  const value = scaleToNumber(fromSiMagnitude(siMagnitude(literal.magnitude, from, temperature), to, temperature));
   return {
     value: finiteLiteral(raw, value),
     given,

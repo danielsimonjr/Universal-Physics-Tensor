@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 15.0.0
-  totalFiles: 390
+  totalFiles: 391
   totalModules: 13
-  totalExports: 2854
+  totalExports: 2859
 entryPoints:
   - file: src/index.ts
     type: main
@@ -123,6 +123,7 @@ modules:
         - file: ../../canonical/residual.js
           imports:
             - canonicalResidual
+            - monomialResidual
         - file: ./baselines.js
           imports:
             - rankByStructure
@@ -5103,14 +5104,21 @@ modules:
           imports:
             - ExprNode
           typeOnly: true
+        - file: ../dimensional/ast-builders.js
+          imports:
+            - dim
+            - sym
+            - symbolPower
         - file: ./canonical-equation.js
           imports:
             - CanonicalEquation
           typeOnly: true
       exports:
         - canonicalResidual
+        - monomialResidual
       functions:
         - canonicalResidual
+        - monomialResidual
     src/canonical/seed-l-layer.ts:
       description: Seed the canonical-equation registry into the tensor's L-layer (Π = L + B + E)
       externalDependencies: []
@@ -6233,9 +6241,16 @@ modules:
         - file: ../bindings.js
           imports:
             - splitAssignments
+        - file: ../expr-print.js
+          imports:
+            - primaryUnitLabel
         - file: ../../dimensional/natural-units.js
           imports:
             - UnitMode
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - Dimension
           typeOnly: true
       exports:
         - command
@@ -6265,8 +6280,7 @@ modules:
             - emitJsonError
         - file: ../expr-print.js
           imports:
-            - coherentUnits
-            - derivedUnitOf
+            - primaryUnitLabel
         - file: ../bindings.js
           imports:
             - splitAssignments
@@ -6775,6 +6789,9 @@ modules:
         - file: ../published-url.js
           imports:
             - publishedUrl
+        - file: ../file-errors.js
+          imports:
+            - mapFileError
         - file: ../library-defaults.js
           imports:
             - PROBE_BUDGET_MS_DEFAULT
@@ -6860,6 +6877,11 @@ modules:
         - module: fs
           imports:
             - statSync
+        - module: path
+          imports:
+            - isAbsolute
+            - relative
+            - resolve
       internalDependencies:
         - file: ../args.js
           imports:
@@ -6881,6 +6903,12 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../file-errors.js
+          imports:
+            - mapFileError
+        - file: ../stored-results.js
+          imports:
+            - repoRoot
       exports:
         - command
       constants:
@@ -6950,6 +6978,7 @@ modules:
         - file: ../expr-print.js
           imports:
             - EVAL_STUBS
+            - primaryUnitLabel
             - printDisplay
             - printEval
             - printLatex
@@ -7094,19 +7123,34 @@ modules:
         - printEval
         - latexName
         - printLatex
-        - coherentUnits
-        - derivedUnitOf
+        - primaryUnitLabel
       interfaces:
         - CoherentUnit
       functions:
         - latexName
         - printLatex
-        - coherentUnits
-        - derivedUnitOf
+        - primaryUnitLabel
       constants:
         - EVAL_STUBS
         - printDisplay
         - printEval
+    src/cli/file-errors.ts:
+      description: Maps a failure to read or parse an input file to a `CliError`, so no stack trace reaches the
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./command.js
+          imports:
+            - CommandCtx
+          typeOnly: true
+        - file: ./errors.js
+          imports:
+            - CliError
+            - UsageError
+      exports:
+        - mapFileError
+      functions:
+        - mapFileError
     src/cli/flag-help.ts:
       description: Flag text for `upt help` and for `docs/CLI.md`.
       externalDependencies: []
@@ -7729,6 +7773,7 @@ modules:
         - file: ./dimensional/quantity-registry.js
           imports:
             - foldName
+            - quantityRecord
           reExport: true
         - file: ./composition/catalog-graph.js
           imports:
@@ -7796,6 +7841,7 @@ modules:
         - file: ./dimensional/units.js
           imports:
             - convertValue
+            - readQuantityLiteral
             - UnitError
             - unitRows
           reExport: true
@@ -8237,6 +8283,7 @@ modules:
         - file: ./dimensional/symbolic-constants.js
           imports:
             - constantNotes
+            - constantRecord
           reExport: true
         - file: ./composition/edge.js
           imports:
@@ -8304,6 +8351,7 @@ modules:
         - primaryRelation
         - catalogEdgeKey
         - foldName
+        - quantityRecord
         - demonstrationEdges
         - consistencyComparison
         - decidingMeasurement
@@ -8321,6 +8369,7 @@ modules:
         - CASE_CONTRACTS
         - slotForSpelling
         - convertValue
+        - readQuantityLiteral
         - UnitError
         - unitRows
         - auditAxisDiscrimination
@@ -8472,6 +8521,7 @@ modules:
         - missingEvaluatorMessage
         - relationNotices
         - constantNotes
+        - constantRecord
         - ConfrontationEntry
         - RigorTier
         - ConfrontationOutcome
@@ -8575,6 +8625,7 @@ modules:
         - primaryRelation
         - catalogEdgeKey
         - foldName
+        - quantityRecord
         - demonstrationEdges
         - ConfrontationEntry
         - RigorTier
@@ -8600,6 +8651,7 @@ modules:
         - CaseCheck
         - CaseResult
         - convertValue
+        - readQuantityLiteral
         - UnitError
         - unitRows
         - auditAxisDiscrimination
@@ -8792,6 +8844,7 @@ modules:
         - missingEvaluatorMessage
         - relationNotices
         - constantNotes
+        - constantRecord
         - BridgeEdge
         - VizJunction
         - VizModel
@@ -15402,6 +15455,7 @@ modules:
         - affineReadingNote
         - formatReading
         - segmentations
+        - isListedProduct
         - unitConventionNotes
         - readUnit
         - unitReadingsSource
@@ -15430,6 +15484,7 @@ modules:
         - affineReadingNote
         - formatReading
         - segmentations
+        - isListedProduct
         - unitConventionNotes
         - readUnit
         - unitReadingsSource
@@ -19529,6 +19584,7 @@ dependencyGraph:
         - src/cli/euler-guard.ts
         - src/cli/eval-numbers.ts
         - src/cli/expr-print.ts
+        - src/cli/file-errors.ts
         - src/cli/flag-help.ts
         - src/cli/graphs.ts
         - src/cli/library-defaults.ts
@@ -19765,18 +19821,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 390
+  totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89098
-  totalExports: 2854
+  totalLinesOfCode: 89483
+  totalExports: 2859
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 934
-  totalTypeGuards: 16
+  totalFunctions: 936
+  totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 423
-  totalReExports: 1405
-  totalTypeOnlyImports: 533
+  totalReExports: 1408
+  totalTypeOnlyImports: 535
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

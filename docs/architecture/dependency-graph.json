@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "15.0.0",
-    "totalFiles": 390,
+    "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2854
+    "totalExports": 2859
   },
   "entryPoints": [
     {
@@ -185,7 +185,8 @@
           {
             "file": "../../canonical/residual.js",
             "imports": [
-              "canonicalResidual"
+              "canonicalResidual",
+              "monomialResidual"
             ]
           },
           {
@@ -7408,6 +7409,14 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/ast-builders.js",
+            "imports": [
+              "dim",
+              "sym",
+              "symbolPower"
+            ]
+          },
+          {
             "file": "./canonical-equation.js",
             "imports": [
               "CanonicalEquation"
@@ -7416,10 +7425,12 @@
           }
         ],
         "exports": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ],
         "functions": [
-          "canonicalResidual"
+          "canonicalResidual",
+          "monomialResidual"
         ]
       },
       "src/canonical/seed-l-layer.ts": {
@@ -9121,9 +9132,22 @@
             ]
           },
           {
+            "file": "../expr-print.js",
+            "imports": [
+              "primaryUnitLabel"
+            ]
+          },
+          {
             "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
             ],
             "typeOnly": true
           }
@@ -9172,8 +9196,7 @@
           {
             "file": "../expr-print.js",
             "imports": [
-              "coherentUnits",
-              "derivedUnitOf"
+              "primaryUnitLabel"
             ]
           },
           {
@@ -10044,6 +10067,12 @@
             ]
           },
           {
+            "file": "../file-errors.js",
+            "imports": [
+              "mapFileError"
+            ]
+          },
+          {
             "file": "../library-defaults.js",
             "imports": [
               "PROBE_BUDGET_MS_DEFAULT",
@@ -10177,6 +10206,14 @@
             "imports": [
               "statSync"
             ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "isAbsolute",
+              "relative",
+              "resolve"
+            ]
           }
         ],
         "internalDependencies": [
@@ -10213,6 +10250,18 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../file-errors.js",
+            "imports": [
+              "mapFileError"
+            ]
+          },
+          {
+            "file": "../stored-results.js",
+            "imports": [
+              "repoRoot"
             ]
           }
         ],
@@ -10326,6 +10375,7 @@
             "file": "../expr-print.js",
             "imports": [
               "EVAL_STUBS",
+              "primaryUnitLabel",
               "printDisplay",
               "printEval",
               "printLatex",
@@ -10550,8 +10600,7 @@
           "printEval",
           "latexName",
           "printLatex",
-          "coherentUnits",
-          "derivedUnitOf"
+          "primaryUnitLabel"
         ],
         "interfaces": [
           "CoherentUnit"
@@ -10559,13 +10608,39 @@
         "functions": [
           "latexName",
           "printLatex",
-          "coherentUnits",
-          "derivedUnitOf"
+          "primaryUnitLabel"
         ],
         "constants": [
           "EVAL_STUBS",
           "printDisplay",
           "printEval"
+        ]
+      },
+      "src/cli/file-errors.ts": {
+        "description": "Maps a failure to read or parse an input file to a `CliError`, so no stack trace reaches the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./command.js",
+            "imports": [
+              "CommandCtx"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./errors.js",
+            "imports": [
+              "CliError",
+              "UsageError"
+            ]
+          }
+        ],
+        "exports": [
+          "mapFileError"
+        ],
+        "functions": [
+          "mapFileError"
         ]
       },
       "src/cli/flag-help.ts": {
@@ -11529,7 +11604,8 @@
           {
             "file": "./dimensional/quantity-registry.js",
             "imports": [
-              "foldName"
+              "foldName",
+              "quantityRecord"
             ],
             "reExport": true
           },
@@ -11639,6 +11715,7 @@
             "file": "./dimensional/units.js",
             "imports": [
               "convertValue",
+              "readQuantityLiteral",
               "UnitError",
               "unitRows"
             ],
@@ -12328,7 +12405,8 @@
           {
             "file": "./dimensional/symbolic-constants.js",
             "imports": [
-              "constantNotes"
+              "constantNotes",
+              "constantRecord"
             ],
             "reExport": true
           },
@@ -12411,6 +12489,7 @@
           "primaryRelation",
           "catalogEdgeKey",
           "foldName",
+          "quantityRecord",
           "demonstrationEdges",
           "consistencyComparison",
           "decidingMeasurement",
@@ -12428,6 +12507,7 @@
           "CASE_CONTRACTS",
           "slotForSpelling",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12579,6 +12659,7 @@
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "ConfrontationEntry",
           "RigorTier",
           "ConfrontationOutcome",
@@ -12683,6 +12764,7 @@
           "primaryRelation",
           "catalogEdgeKey",
           "foldName",
+          "quantityRecord",
           "demonstrationEdges",
           "ConfrontationEntry",
           "RigorTier",
@@ -12708,6 +12790,7 @@
           "CaseCheck",
           "CaseResult",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12900,6 +12983,7 @@
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
+          "constantRecord",
           "BridgeEdge",
           "VizJunction",
           "VizModel",
@@ -22647,6 +22731,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -22678,6 +22763,7 @@
           "affineReadingNote",
           "formatReading",
           "segmentations",
+          "isListedProduct",
           "unitConventionNotes",
           "readUnit",
           "unitReadingsSource",
@@ -28271,6 +28357,7 @@
           "src/cli/euler-guard.ts",
           "src/cli/eval-numbers.ts",
           "src/cli/expr-print.ts",
+          "src/cli/file-errors.ts",
           "src/cli/flag-help.ts",
           "src/cli/graphs.ts",
           "src/cli/library-defaults.ts",
@@ -28535,18 +28622,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 390,
+    "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89098,
-    "totalExports": 2854,
+    "totalLinesOfCode": 89483,
+    "totalExports": 2859,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 934,
-    "totalTypeGuards": 16,
+    "totalFunctions": 936,
+    "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1405,
-    "totalTypeOnlyImports": 533,
+    "totalReExports": 1408,
+    "totalTypeOnlyImports": 535,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

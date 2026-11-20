@@ -15,7 +15,9 @@ import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
 import { splitAssignments } from '../bindings.js';
+import { primaryUnitLabel } from '../expr-print.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
+import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
@@ -42,8 +44,9 @@ function parseScope(
   api: CommandCtx['api'],
   args: readonly string[],
   mode: UnitMode,
-): { scope: Record<string, number>; notes: string[] } {
+): { scope: Record<string, number>; notes: string[]; dims: Record<string, Dimension> } {
   const scope: Record<string, number> = {};
+  const dims: Record<string, Dimension> = {};
   const notes: string[] = [];
   const assignments = splitAssignments('eval', args).map((a) => ({ name: a.name, raw: a.raw, assignment: a.token }));
   const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
@@ -51,6 +54,7 @@ function parseScope(
     try {
       const read = api.readNamedBinding(a.name, a.raw, { mode, siblings });
       scope[a.name] = read.value;
+      if (read.dimensioned) dims[a.name] = read.dimension;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
       if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
@@ -59,7 +63,12 @@ function parseScope(
     }
   }
   try {
-    return { scope: api.expandSynonymValues(scope), notes };
+    const expanded = api.expandSynonymValues(scope);
+    // A spelling copied from a bound name reads the same dimension.
+    for (const name of Object.keys(dims)) {
+      for (const member of Object.keys(api.expandSynonymValues({ [name]: 0 }))) dims[member] ??= dims[name]!;
+    }
+    return { scope: expanded, notes, dims };
   } catch (e) {
     if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
     throw e;
@@ -87,12 +96,19 @@ const HELP = `upt eval "<formula>" name=value ...
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). T, temperature, temp, and
         T_K are kelvin: an energy on that name is k_B T, and any other
-        dimension is an error. A binding is read by the same MathTS
+        dimension is an error. A quantity such as 2mH is a binding value, not a
+        formula: upt eval x x=2mH. A binding is read by the same MathTS
         parser as the formula, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
+        A value with a unit keeps its dimension. A formula that adds or
+        compares unlike dimensions is refused (exit 1). A bare number has no
+        dimension check. The value is converted to SI. When every bound name the
+        formula uses has a unit, the SI unit of the result follows the value.
+        A bare number has no unit, and the result then shows the value only.
+        --natural and --geometrized show the value only.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
@@ -141,8 +157,19 @@ async function run(ctx: CommandCtx): Promise<number> {
     const energyHint = missing.includes('E')
       ? ' E is energy. The binding is its own argument: upt eval E E=1eV.'
       : '';
+    // The binding reader accepts a number with a unit and the formula reader
+    // cannot. A unit error (unknown, ambiguous, refused) means no hint.
+    let literalHint = '';
+    try {
+      if (api.readQuantityLiteral(expr) !== null) {
+        const binding = /\s/.test(expr) ? `"x=${expr}"` : `x=${expr}`;
+        literalHint = ` '${expr}' reads as a quantity. A unit goes in a binding: upt eval x ${binding}.`;
+      }
+    } catch (e) {
+      if (!(e instanceof api.UnitError)) throw e;
+    }
     throw new FormulaUsageError(
-      `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}`,
+      `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}${literalHint}`,
       kind,
     );
   }
@@ -154,6 +181,30 @@ async function run(ctx: CommandCtx): Promise<number> {
     const checked = api.builtinFormulaDimensionChecker().check(expr, {});
     if (!checked.ok && checked.elementaryChargeMixed === true) {
       throw new FormulaUsageError(checked.error!, kind);
+    }
+  }
+
+  // A value with a unit keeps its dimension. Run the check only when every bound name the formula
+  // uses has one: the checker gives `E` and `e` a default dimension, which a bare number must not take.
+  // The dimension of the result, known only when the one check below ran and passed.
+  let resultDim: Dimension | undefined;
+  if (mode === 'si' && cf.variables.every((v) => v in parsed.dims || !(v in parsed.scope))) {
+    const dims = { ...parsed.dims };
+    for (const v of cf.variables) {
+      if (v in dims) continue;
+      const constant = api.constantRecord(v);
+      if (constant !== undefined) dims[v] = constant.dim;
+    }
+    const homogeneous = api.builtinFormulaDimensionChecker().check(expr, dims);
+    // The parser lists no `e` in cf.variables, so a bare e binding does not stop the check above.
+    // A bare e is a caller's own quantity; an unbound e, or an e with a unit, is a charge.
+    const bareE = 'e' in parsed.scope && !('e' in parsed.dims);
+    const chargeMixed = homogeneous.elementaryChargeMixed === true && !bareE;
+    if (homogeneous.ok && !bareE) resultDim = homogeneous.dim;
+    if (!homogeneous.ok && (homogeneous.inhomogeneous === true || chargeMixed)) {
+      throw new CliError(
+        `upt eval: the formula is not dimensionally homogeneous: ${homogeneous.error?.replace(/\.$/, '')}. A value with a unit keeps its dimension.`,
+      );
     }
   }
 
@@ -171,18 +222,23 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new FormulaUsageError((e as Error).message, kind);
   }
 
+  const label = resultDim === undefined ? '1' : primaryUnitLabel(api, '', resultDim);
   if (isJson) {
     emitJson(
       {
         command: 'eval',
-        result: { value, ...(notes.length === 0 ? {} : { notes }), ...(mode === 'si' ? {} : { units: mode }) },
+        result: {
+          value,
+          ...(label === '1' ? {} : { unit: label }),
+          ...(notes.length === 0 ? {} : { notes }), ...(mode === 'si' ? {} : { units: mode }),
+        },
       },
       ctx.write,
     );
     return 0;
   }
 
-  out(String(value));
+  out(label === '1' ? String(value) : `${value} ${label}`);
   return 0;
 }
 

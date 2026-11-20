@@ -7,7 +7,14 @@
 import { describe, expect, it } from 'vitest';
 import { C_SI, E_SI, G_SI, H_SI, M_SUN_SI } from '../../src/core/constants.js';
 import { CHARGE } from '../../src/dimensional/types.js';
-import { convertValue, unitConventionNotes } from '../../src/dimensional/units.js';
+import {
+  UnitError,
+  convertValue,
+  readQuantityLiteral,
+  readUnit,
+  UnknownUnitError,
+  unitConventionNotes,
+} from '../../src/dimensional/units.js';
 import {
   bindingInUnit,
   readBinding,
@@ -120,5 +127,64 @@ describe('affine temperature role', () => {
     expect(readNamedBinding('T_K', '10degC', { reading: 'difference' }).value).toBe(10);
     expect(readNamedBinding('temperature-change', '10degC', { declaredUnit: 'K' }).value).toBe(10);
     expect(readNamedBinding('T', '25degC', { declaredUnit: 'K' }).value).toBeCloseTo(298.15, 8);
+  });
+});
+
+describe('a binding slot cannot be affine', () => {
+  const refused = /cannot be affine/;
+  it('refuses an affine declared unit for a literal, a bare number and an expression', () => {
+    expect(() => readNamedBinding('x', '25 degC', { declaredUnit: 'degC' })).toThrow(refused);
+    expect(() => readNamedBinding('x', '300 K', { declaredUnit: 'degC' })).toThrow(refused);
+    expect(() => readNamedBinding('x', '25', { declaredUnit: 'degC' })).toThrow(refused);
+    expect(() => bindingInUnit('25 degC', 'degC')).toThrow(refused);
+    expect(() => bindingInUnit('25', 'degC')).toThrow(refused);
+    expect(() => bindingInUnit('1 K + 1 K', 'degC')).toThrow(refused);
+    expect(() => bindingInUnit('25 degC', 'degC')).toThrow(UnitError);
+  });
+});
+
+describe('a number with an unknown unit names the unit (#697)', () => {
+  const unknown = (text: string): Error => {
+    try {
+      readUnit(text);
+    } catch (e) {
+      return e as Error;
+    }
+    throw new Error(`readUnit('${text}') did not throw`);
+  };
+
+  it('readBinding throws the unit reader error, not the generic sentence', () => {
+    for (const raw of ['1zqx', '1 zqx']) {
+      expect(() => readBinding(raw), raw).toThrow(UnknownUnitError);
+      expect(() => readBinding(raw), raw).toThrow(/unknown unit 'zqx'/);
+    }
+  });
+
+  it('a prefixed unknown unit throws exactly what readUnit throws', () => {
+    const expected = unknown('kzqx');
+    let actual: Error | undefined;
+    try {
+      readBinding('1kzqx');
+    } catch (e) {
+      actual = e as Error;
+    }
+    expect(actual).toBeInstanceOf(expected.constructor);
+    expect(actual?.message).toBe(expected.message);
+  });
+
+  it('a declared unit does not hide the unknown unit', () => {
+    expect(() => readNamedBinding('x', '1zqx', { declaredUnit: 'm' })).toThrow(/unknown unit 'zqx'/);
+  });
+
+  it('readQuantityLiteral returns null only for text that is not a literal, and throws for an unknown unit', () => {
+    expect(readQuantityLiteral('abc')).toBeNull();
+    expect(() => readQuantityLiteral('1zqx')).toThrow(UnknownUnitError);
+  });
+
+  it('controls: an expression that starts with a number still reads', () => {
+    expect(readBinding('2pi').value).toBeCloseTo(2 * Math.PI, 12);
+    expect(bindingInUnit('2pi', '').value).toBeCloseTo(2 * Math.PI, 12);
+    expect(() => readBinding('1zqx*2')).toThrow(/unknown name 'zqx'/);
+    expect(() => readBinding('abc')).toThrow(/is not a number with an optional unit/);
   });
 });

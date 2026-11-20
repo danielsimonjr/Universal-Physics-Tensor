@@ -54,6 +54,7 @@
         "symbol": { "type": "string" },
         "unit": { "type": "string" },
         "meaning": { "type": "string", "minLength": 1 },
+        "needs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "uniqueItems": true },
         "expr": { "type": "string", "minLength": 1 },
         "method": { "type": "string", "minLength": 1 },
         "relation": {

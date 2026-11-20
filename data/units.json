@@ -1102,6 +1102,25 @@
       "c"
     ]
   },
+  "products": {
+    "comment": "The glued products a token may read as. A token such as `kWh` or `W/mK` has no separator, so the grammar splits it into factors. A split is a product only when its own key is listed here. The key is the factor bases as written, joined by `·`, with no exponent: `m·K` admits `mK`, `m2K`, `m^2K` and `m⁴K`. A split whose key is not listed is not a reading, so `gal` is not g·al and `lbs` is not lb·s: both are an unknown unit. A row with `prefixFirst` true also admits a prefix on its first factor (`kWh`, `mAh`, `mmK`). A prefix on any later factor never matches, and a row with `prefixFirst` false admits no prefix (`kms` is unknown). An operator product (`N*m`, `N m`) needs no row.",
+    "rows": [
+      { "factors": "W·h", "prefixFirst": true, "comment": "a watt-hour: `Wh`, `kWh`, `MWh`, `GWh`, `mWh`" },
+      { "factors": "A·h", "prefixFirst": true, "comment": "an ampere-hour: `Ah`, `mAh` (3.6 C)" },
+      { "factors": "A·s", "prefixFirst": true, "comment": "an ampere-second: `As`, `mAs` (1e-3 C)" },
+      { "factors": "N·m", "prefixFirst": true, "comment": "a newton-metre: `Nm`, `kNm`" },
+      { "factors": "N·s", "prefixFirst": true, "comment": "a newton-second: `Ns`, `kNs`" },
+      { "factors": "V·s", "prefixFirst": true, "comment": "a volt-second: `Vs`, `cm^2/Vs`" },
+      { "factors": "V·A", "prefixFirst": true, "comment": "a volt-ampere: `VA`, `kVA`" },
+      { "factors": "J·s", "prefixFirst": true, "comment": "a joule-second: `Js`" },
+      { "factors": "Pa·s", "prefixFirst": true, "comment": "a pascal-second: `Pas`, `mPas` (1e-3 Pa·s)" },
+      { "factors": "Ω·m", "prefixFirst": true, "comment": "an ohm-metre: `Ωm`" },
+      { "factors": "m·K", "prefixFirst": true, "comment": "metre-kelvin: `W/mK`, `W/m2K`, `m2K`, `mmK`, `cmK`, `W/µmK`; every exponent on either factor" },
+      { "factors": "m·s", "prefixFirst": false, "comment": "metre-second: `kg/ms`; no prefix, so `kms` and `mms` stay unknown" },
+      { "factors": "g·K", "prefixFirst": true, "comment": "gram-kelvin: `J/gK`, `J/kgK`, `J/mgK`" },
+      { "factors": "mol·K", "prefixFirst": true, "comment": "mole-kelvin: `J/molK`, `kJ/kmolK`, `J/mmolK`" }
+    ]
+  },
   "affine": {
     "comment": "Lone spellings only; a compound that contains one is refused. The kelvin value of an absolute reading is (reading − icePoint) × scale + iceKelvin; a difference is reading × scale.",
     "iceKelvin": "273.15",

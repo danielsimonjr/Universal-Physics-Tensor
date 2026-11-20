@@ -19,7 +19,7 @@ const errText = (c: ReturnType<typeof capture>) => c.err.join('');
 async function evalOf(args: string[]) {
   const cap = capture();
   const code = await runCli(['eval', ...args], cap.io);
-  return { code, stdout: text(cap), stderr: errText(cap), value: Number(text(cap).trim()) };
+  return { code, stdout: text(cap), stderr: errText(cap), value: parseFloat(text(cap)) };
 }
 
 describe('tesla prefixes and plasma constants', () => {

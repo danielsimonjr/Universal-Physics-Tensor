@@ -399,6 +399,11 @@ function literalBinding(raw: string, reading: TemperatureReading): BindingValue 
   };
 }
 
+/** A binding slot feeds linear formulas and scales linearly to SI, so its unit cannot be affine. */
+function rejectAffineSlot(unit: string): void {
+  if (parseUnit(unit).affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${unit}')`);
+}
+
 /**
  * A number-plus-unit whose dimension matches `target`, including an ambiguous
  * token that has one reading of that dimension. A unique dimension mismatch
@@ -461,6 +466,7 @@ export function readNamedBinding(
   const declared = opts?.declaredUnit;
   const targetPreview = declared !== undefined ? declared : quantityConventionUnit(name);
   if (targetPreview !== undefined && targetPreview !== '') {
+    rejectAffineSlot(targetPreview);
     const resolved = declaredUnitReading(raw, targetPreview, reading);
     if (resolved !== undefined) return resolved;
   }
@@ -525,11 +531,20 @@ export function readBinding(
   const mode = opts?.mode ?? 'si';
   const reading = opts?.reading ?? 'absolute';
   if (trimmed === '') throw new BindingNumberError(`'${raw}' is not a finite number`);
-  const literal = literalBinding(trimmed, reading);
-  if (literal !== null) return literal;
+  // The literal reader cannot tell a unit from an expression tail (`2pi`), so the expression
+  // reader runs next. Its failure on a bare word leaves the literal reader's error as the cause.
+  let unitError: UnknownUnitError | undefined;
+  try {
+    const literal = literalBinding(trimmed, reading);
+    if (literal !== null) return literal;
+  } catch (e) {
+    if (!(e instanceof UnknownUnitError)) throw e;
+    unitError = e;
+  }
 
   const spliced = spliceUnits(trimmed);
-  const notANumber = (): BindingNumberError => new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
+  const notANumber = (): Error =>
+    unitError ?? new BindingNumberError(`'${trimmed}' is not a number with an optional unit`);
   let ast: FormulaPNode;
   try {
     ast = parseFormulaPNode(spliced.expr);
@@ -562,6 +577,16 @@ export function readBinding(
   };
 }
 
+/** True when `raw` is a number with a known optional unit; an unknown unit is not a literal here. */
+function isQuantityLiteral(raw: string, reading: TemperatureReading): boolean {
+  try {
+    return readQuantityLiteral(raw, reading) !== null;
+  } catch (e) {
+    if (e instanceof UnknownUnitError) return false;
+    throw e;
+  }
+}
+
 /**
  * The same reading as {@link convertValue} when `raw` is a number with an
  * optional unit, and an expression otherwise. The result is in `target`.
@@ -573,13 +598,13 @@ export function bindingInUnit(
   reading: TemperatureReading = 'absolute',
   mode: UnitMode = 'si',
 ): { value: number; given: string; cycles?: number; affine?: AffineTemperature } {
+  rejectAffineSlot(target);
   // A literal the one unit reader accepts converts exactly, unit to unit; anything else
   // (an expression such as `1Hz + 1/(1s)`) is read as an expression and converted from SI.
-  if (readQuantityLiteral(raw, reading) !== null) return convertValue(raw, target, reading);
+  if (isQuantityLiteral(raw, reading)) return convertValue(raw, target, reading);
   const b = readBinding(raw, { reading, mode });
   if (!b.dimensioned) return { value: b.value, given: '' };
   const to = parseUnit(target);
-  if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
   if (!equals(b.dimension, to.dim)) {
     throw new UnitError(
       `'${raw.trim()}' is ${format(b.dimension)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`,
