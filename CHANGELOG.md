@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Added
+
+- **`mile`, `mi` and `gallon` are units (#678).** `convertValue('1 mile', 'm')` and `convertValue('1 gallon', 'L')` threw `UnknownUnitError`. UPT reads a unit only when `data/units.json` has a row for it, and nobody had added these two. The international mile is `5280*foot` = 1609.344 m, and the US liquid gallon is `231*inch^3` = 3.785411784e-3 m^3, both exact (NIST SP 811 B.8) and the same expressions MathTS uses. Neither row takes an SI prefix. `gal` stays unknown: it is also the name of the CGS acceleration unit `Gal`. A new test, `tests/dimensional/unit-rows-mathts-parity.test.ts`, fails when any UPT row that MathTS also defines has a different scale. `bit` is the one listed difference (UPT reads it as ln 2 nat by policy), and the test fails when that list is stale.
+
 ### Fixed
 
 - **`upt search mems` finds the MEMS relations (issue 691).** Search read only a relation's name, context and inputs, so a reader found a relation only by the words of its physics prose. The catalog had no field for the application domain of a relation. A catalog entry now has an optional `domains` field, an array drawn from a closed list in `data/bridge-catalog.schema.json`, and search indexes it. The list holds `mems` (the relation models a microfabricated electromechanical device; be-79 and be-126) and `sensor` (the relation sets the noise floor of a measuring device: be-58 Johnson noise, be-85 shot noise, be-87 kTC noise). The schema refuses a word outside the list at load. `schemaVersion` stays 3: the field is optional, so every file valid before the change stays valid. The old schema sets `additionalProperties: false` on an entry, so a validator that uses the old schema refuses the new file. The other rows have no domain yet. `tests/cli/search-domain.test.ts` fails before the change.
