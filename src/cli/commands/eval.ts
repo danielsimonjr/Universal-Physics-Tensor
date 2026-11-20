@@ -15,7 +15,7 @@ import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
 import { splitAssignments } from '../bindings.js';
-import { coherentUnits, derivedUnitOf } from '../expr-print.js';
+import { primaryUnitLabel } from '../expr-print.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 import type { Dimension } from '../../dimensional/types.js';
 
@@ -210,14 +210,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new FormulaUsageError((e as Error).message, kind);
   }
 
-  const label = resultDim === undefined ? '1' : derivedUnitOf(resultDim, coherentUnits(api.unitRows()));
+  const label = resultDim === undefined ? '1' : primaryUnitLabel(api, '', resultDim);
   if (isJson) {
     emitJson(
       {
         command: 'eval',
         result: {
           value,
-          ...(resultDim === undefined || label === '1' ? {} : { unit: api.siUnitOf(resultDim) }),
+          ...(label === '1' ? {} : { unit: label }),
           ...(notes.length === 0 ? {} : { notes }), ...(mode === 'si' ? {} : { units: mode }),
         },
       },

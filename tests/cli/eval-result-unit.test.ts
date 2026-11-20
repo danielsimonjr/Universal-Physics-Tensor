@@ -7,7 +7,7 @@ import '../helpers/dist.js';
 import { run } from '../helpers/cli-run.js';
 import { describe, it, expect } from 'vitest';
 import { parseUnit } from '../../dist/dimensional/units.js';
-import { siUnitOf, exactlyEquals } from '../../dist/dimensional/algebra.js';
+import { exactlyEquals } from '../../dist/dimensional/algebra.js';
 
 const json = async (args: string[]) => JSON.parse((await run(['eval', ...args, '--json'])).stdout).result;
 
@@ -21,12 +21,12 @@ describe('eval prints the unit of a result with a known dimension', () => {
   it('a constant-only formula carries its unit', async () => {
     expect((await run(['eval', 'c'])).stdout.trim()).toBe('299792458 m/s');
   });
-  it('JSON unit is the base form and parses back', async () => {
+  it('JSON unit is the printed unit and parses back', async () => {
     const r = await json(['F/m', 'F=10N', 'm=2kg']);
     expect(r.unit).toBe('m/s^2');
     const e = await json(['x*y', 'x=2N', 'y=3m']);
-    expect(e.unit).toBe(siUnitOf(parseUnit('J').dim));
-    expect(e.unit).not.toBe('J');
+    expect(e.unit).toBe('J');
+    expect(exactlyEquals(parseUnit(r.unit).dim, parseUnit('m/s^2').dim)).toBe(true);
   });
   const table = ['N', 'kg', 'm', 's', 'J', 'W', 'V'];
   for (const u of table) {
