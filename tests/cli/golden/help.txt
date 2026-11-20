@@ -288,6 +288,9 @@ Flags:
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
+        A value with a unit keeps its dimension. A formula that adds or
+        compares unlike dimensions is refused (exit 1). A bare number has no
+        dimension check. The value is converted to SI.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
