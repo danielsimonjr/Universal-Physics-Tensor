@@ -280,6 +280,7 @@ import { GM_SUN_SI, UnitError, convertValue, parseUnit } from 'universal-physics
 
 GM_SUN_SI;                    // 1.3271244e20
 convertValue('25degC', 'K'); // { value: 298.15, given: 'degC', affine: 'celsius' }
+convertValue('100 degF', 'degC'); // { value: 37.77777777777778, given: 'degF', affine: 'fahrenheit' }
 parseUnit('km/s').scale;     // 1000
 (() => { try { parseUnit('5 km/s'); } catch (e) { return e instanceof UnitError; } })(); // true
 ```

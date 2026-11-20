@@ -15,7 +15,7 @@ const unitsSource = readFileSync(resolve(root, 'src/dimensional/units.ts'), 'utf
 
 describe('wrapper cycles count (A11b)', () => {
   it('convertValue uses exact scales, not MathTS Unit.to', () => {
-    expect(unitsSource).toMatch(/divideScales\(siMagnitude/);
+    expect(unitsSource).toMatch(/fromSiMagnitude\(siMagnitude/);
     expect(unitsSource).not.toMatch(/\bUnit\.parse\b.*\.to\(/);
   });
 

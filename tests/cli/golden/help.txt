@@ -188,8 +188,10 @@ Flags:
         A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
-        recover the dimensionless prefactor. A target that is not a unique
-        monomial of the variables exits 3. --debug prints the formula parser
+        recover the dimensionless prefactor. With --formula, the check uses
+        only the declared variables that the formula contains. Each other
+        declared variable is named. A target that is not a unique monomial
+        of those variables exits 3. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \
                        --formula "2*pi*sqrt(length/gravity)"
@@ -289,6 +291,9 @@ Flags:
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
+        A value with a unit keeps its dimension. A formula that adds or
+        compares unlike dimensions is refused (exit 1). A bare number has no
+        dimension check. The value is converted to SI.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30

@@ -9,7 +9,7 @@ import { runCli } from '../../dist/cli/main.js';
 import * as api from '../../dist/cli-api.js';
 import { parseUnit } from '../../dist/dimensional/units.js';
 import { allQuantityRecords, quantityRecord } from '../../dist/dimensional/quantity-registry.js';
-import { primaryUnitLabel } from '../../dist/cli/commands/evaluate.js';
+import { primaryUnitLabel } from '../../dist/cli/expr-print.js';
 
 async function run(args: string[]): Promise<{ out: string }> {
   let out = '';

@@ -16,6 +16,7 @@ import { FormulaUsageError } from '../euler-guard.js';
 import { codataScope } from '../eval-numbers.js';
 import { splitAssignments } from '../bindings.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
+import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
@@ -42,8 +43,9 @@ function parseScope(
   api: CommandCtx['api'],
   args: readonly string[],
   mode: UnitMode,
-): { scope: Record<string, number>; notes: string[] } {
+): { scope: Record<string, number>; notes: string[]; dims: Record<string, Dimension> } {
   const scope: Record<string, number> = {};
+  const dims: Record<string, Dimension> = {};
   const notes: string[] = [];
   const assignments = splitAssignments('eval', args).map((a) => ({ name: a.name, raw: a.raw, assignment: a.token }));
   const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
@@ -51,6 +53,7 @@ function parseScope(
     try {
       const read = api.readNamedBinding(a.name, a.raw, { mode, siblings });
       scope[a.name] = read.value;
+      if (read.dimensioned) dims[a.name] = read.dimension;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
       if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
@@ -59,7 +62,12 @@ function parseScope(
     }
   }
   try {
-    return { scope: api.expandSynonymValues(scope), notes };
+    const expanded = api.expandSynonymValues(scope);
+    // A spelling copied from a bound name reads the same dimension.
+    for (const name of Object.keys(dims)) {
+      for (const member of Object.keys(api.expandSynonymValues({ [name]: 0 }))) dims[member] ??= dims[name]!;
+    }
+    return { scope: expanded, notes, dims };
   } catch (e) {
     if (e instanceof api.SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
     throw e;
@@ -94,6 +102,9 @@ const HELP = `upt eval "<formula>" name=value ...
         sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
+        A value with a unit keeps its dimension. A formula that adds or
+        compares unlike dimensions is refused (exit 1). A bare number has no
+        dimension check. The value is converted to SI.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30
@@ -166,6 +177,27 @@ async function run(ctx: CommandCtx): Promise<number> {
     const checked = api.builtinFormulaDimensionChecker().check(expr, {});
     if (!checked.ok && checked.elementaryChargeMixed === true) {
       throw new FormulaUsageError(checked.error!, kind);
+    }
+  }
+
+  // A value with a unit keeps its dimension. Run the check only when every bound name the formula
+  // uses has one: the checker gives `E` and `e` a default dimension, which a bare number must not take.
+  if (mode === 'si' && cf.variables.every((v) => v in parsed.dims || !(v in parsed.scope))) {
+    const dims = { ...parsed.dims };
+    for (const v of cf.variables) {
+      if (v in dims) continue;
+      const constant = api.constantRecord(v);
+      if (constant !== undefined) dims[v] = constant.dim;
+    }
+    const homogeneous = api.builtinFormulaDimensionChecker().check(expr, dims);
+    // The parser lists no `e` in cf.variables, so a bare e binding does not stop the check above.
+    // A bare e is a caller's own quantity; an unbound e, or an e with a unit, is a charge.
+    const bareE = 'e' in parsed.scope && !('e' in parsed.dims);
+    const chargeMixed = homogeneous.elementaryChargeMixed === true && !bareE;
+    if (!homogeneous.ok && (homogeneous.inhomogeneous === true || chargeMixed)) {
+      throw new CliError(
+        `upt eval: the formula is not dimensionally homogeneous: ${homogeneous.error?.replace(/\.$/, '')}. A value with a unit keeps its dimension.`,
+      );
     }
   }
 

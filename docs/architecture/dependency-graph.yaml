@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 391
   totalModules: 13
-  totalExports: 2860
+  totalExports: 2859
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6245,6 +6245,10 @@ modules:
           imports:
             - UnitMode
           typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
       exports:
         - command
       constants:
@@ -6273,8 +6277,7 @@ modules:
             - emitJsonError
         - file: ../expr-print.js
           imports:
-            - coherentUnits
-            - derivedUnitOf
+            - primaryUnitLabel
         - file: ../bindings.js
           imports:
             - splitAssignments
@@ -6299,9 +6302,6 @@ modules:
             - closedFormRangeLabel
       exports:
         - command
-        - primaryUnitLabel
-      functions:
-        - primaryUnitLabel
       constants:
         - command
     src/cli/commands/explain.ts:
@@ -6975,6 +6975,7 @@ modules:
         - file: ../expr-print.js
           imports:
             - EVAL_STUBS
+            - primaryUnitLabel
             - printDisplay
             - printEval
             - printLatex
@@ -7119,15 +7120,13 @@ modules:
         - printEval
         - latexName
         - printLatex
-        - coherentUnits
-        - derivedUnitOf
+        - primaryUnitLabel
       interfaces:
         - CoherentUnit
       functions:
         - latexName
         - printLatex
-        - coherentUnits
-        - derivedUnitOf
+        - primaryUnitLabel
       constants:
         - EVAL_STUBS
         - printDisplay
@@ -8281,6 +8280,7 @@ modules:
         - file: ./dimensional/symbolic-constants.js
           imports:
             - constantNotes
+            - constantRecord
           reExport: true
         - file: ./composition/edge.js
           imports:
@@ -8518,6 +8518,7 @@ modules:
         - missingEvaluatorMessage
         - relationNotices
         - constantNotes
+        - constantRecord
         - ConfrontationEntry
         - RigorTier
         - ConfrontationOutcome
@@ -8840,6 +8841,7 @@ modules:
         - missingEvaluatorMessage
         - relationNotices
         - constantNotes
+        - constantRecord
         - BridgeEdge
         - VizJunction
         - VizModel
@@ -19818,16 +19820,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89372
-  totalExports: 2860
+  totalLinesOfCode: 89468
+  totalExports: 2859
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 938
+  totalFunctions: 936
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 423
-  totalReExports: 1407
-  totalTypeOnlyImports: 534
+  totalReExports: 1408
+  totalTypeOnlyImports: 535
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

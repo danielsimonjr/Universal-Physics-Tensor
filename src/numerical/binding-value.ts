@@ -399,6 +399,11 @@ function literalBinding(raw: string, reading: TemperatureReading): BindingValue 
   };
 }
 
+/** A binding slot feeds linear formulas and scales linearly to SI, so its unit cannot be affine. */
+function rejectAffineSlot(unit: string): void {
+  if (parseUnit(unit).affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${unit}')`);
+}
+
 /**
  * A number-plus-unit whose dimension matches `target`, including an ambiguous
  * token that has one reading of that dimension. A unique dimension mismatch
@@ -461,6 +466,7 @@ export function readNamedBinding(
   const declared = opts?.declaredUnit;
   const targetPreview = declared !== undefined ? declared : quantityConventionUnit(name);
   if (targetPreview !== undefined && targetPreview !== '') {
+    rejectAffineSlot(targetPreview);
     const resolved = declaredUnitReading(raw, targetPreview, reading);
     if (resolved !== undefined) return resolved;
   }
@@ -592,13 +598,13 @@ export function bindingInUnit(
   reading: TemperatureReading = 'absolute',
   mode: UnitMode = 'si',
 ): { value: number; given: string; cycles?: number; affine?: AffineTemperature } {
+  rejectAffineSlot(target);
   // A literal the one unit reader accepts converts exactly, unit to unit; anything else
   // (an expression such as `1Hz + 1/(1s)`) is read as an expression and converted from SI.
   if (isQuantityLiteral(raw, reading)) return convertValue(raw, target, reading);
   const b = readBinding(raw, { reading, mode });
   if (!b.dimensioned) return { value: b.value, given: '' };
   const to = parseUnit(target);
-  if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
   if (!equals(b.dimension, to.dim)) {
     throw new UnitError(
       `'${raw.trim()}' is ${format(b.dimension)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`,

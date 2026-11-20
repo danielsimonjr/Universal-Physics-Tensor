@@ -26,6 +26,8 @@ export interface AppliedCaseOutputRecord {
   readonly symbol: string;
   readonly unit: string;
   readonly meaning: string;
+  /** The optional parameter keys the output depends on. The output is undefined when every one of them is absent. */
+  readonly needs?: readonly string[];
   readonly expr?: string;
   readonly method?: string;
   readonly relation?: { readonly relation: string; readonly inputs: Readonly<Record<string, string>> };
@@ -141,7 +143,7 @@ export function projectAppliedCaseRecord(
   const { run: _run, regimeAt: _regime, ...rest } = c;
   return {
     ...rest,
-    outputs: rest.outputs.map((o) => ({ key: o.key, symbol: o.symbol, unit: o.unit, meaning: o.meaning })),
+    outputs: rest.outputs.map((o) => ({ key: o.key, symbol: o.symbol, unit: o.unit, meaning: o.meaning, ...(o.needs === undefined ? {} : { needs: o.needs }) })),
     checks: [...checks],
   };
 }
@@ -157,7 +159,7 @@ export function assembleAppliedCase(
     parameters: record.parameters,
     governing: record.governing,
     observable: record.observable,
-    outputs: record.outputs.map((o) => ({ key: o.key, symbol: o.symbol, unit: o.unit, meaning: o.meaning })),
+    outputs: record.outputs.map((o) => ({ key: o.key, symbol: o.symbol, unit: o.unit, meaning: o.meaning, ...(o.needs === undefined ? {} : { needs: o.needs }) })),
     conditions: record.conditions,
     comparison: record.comparison,
     notIncluded: record.notIncluded,
