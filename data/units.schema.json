@@ -35,6 +35,7 @@
           "dimension": { "$ref": "#/$defs/dimension" },
           "prefixable": { "type": "boolean" },
           "cycles": { "const": true, "description": "The unit counts cycles (turns), not radians: an angular input in rad/s takes 2π per cycle." },
+          "kind": { "const": true, "description": "The unit names one kind of quantity of its dimension (decay rate, absorbed dose, illuminance, acoustic impedance): a printed label never picks it from the dimension alone." },
           "comment": { "type": "string", "minLength": 1 }
         }
       }

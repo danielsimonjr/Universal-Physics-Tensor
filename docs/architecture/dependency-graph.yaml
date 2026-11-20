@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 391
   totalModules: 13
-  totalExports: 2859
+  totalExports: 2864
 entryPoints:
   - file: src/index.ts
     type: main
@@ -4084,6 +4084,7 @@ modules:
         - withoutUnreadConstants
         - evaluateFormula
         - parseCatalogExpression
+        - parseDeclaredExpression
       functions:
         - formulaNames
         - reservedFormulaNames
@@ -4093,6 +4094,7 @@ modules:
         - withoutUnreadConstants
         - evaluateFormula
         - parseCatalogExpression
+        - parseDeclaredExpression
     src/bridges/holds.ts:
       description: Interpreter for a catalog validity condition.
       externalDependencies:
@@ -6883,6 +6885,14 @@ modules:
             - relative
             - resolve
       internalDependencies:
+        - file: ../../dimensional/ast-types.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
         - file: ../args.js
           imports:
             - FlagSpec
@@ -8200,6 +8210,7 @@ modules:
           imports:
             - assertSynonymAgreement
             - expandSynonymValues
+            - greekLetter
           reExport: true
         - file: ./composition/canonical-prefactors.js
           imports:
@@ -8271,6 +8282,10 @@ modules:
         - file: ./numerical/formula-dimension.js
           imports:
             - builtinFormulaDimensionChecker
+          reExport: true
+        - file: ./bridges/expr-parse.js
+          imports:
+            - parseDeclaredExpression
           reExport: true
         - file: ./bridges/evaluators.js
           imports:
@@ -8496,6 +8511,7 @@ modules:
         - shareSynonyms
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
         - formatExact
@@ -8518,6 +8534,7 @@ modules:
         - fetchOnnxModel
         - onnxEmbedder
         - builtinFormulaDimensionChecker
+        - parseDeclaredExpression
         - missingEvaluatorMessage
         - relationNotices
         - constantNotes
@@ -8818,6 +8835,7 @@ modules:
         - shareSynonyms
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
         - formatExact
@@ -8841,6 +8859,7 @@ modules:
         - fetchOnnxModel
         - onnxEmbedder
         - builtinFormulaDimensionChecker
+        - parseDeclaredExpression
         - missingEvaluatorMessage
         - relationNotices
         - constantNotes
@@ -8942,12 +8961,14 @@ modules:
             - CANONICAL_EQUATIONS
       exports:
         - NAME_TABLE
+        - symbolIndex
         - aliasesForTarget
         - editDistance
         - nearQuantityNames
         - shareSynonyms
         - collapseSynonymGovernors
       functions:
+        - symbolIndex
         - aliasesForTarget
         - editDistance
         - nearQuantityNames
@@ -13240,12 +13261,17 @@ modules:
           imports:
             - aliasesForTarget
             - editDistance
+            - symbolIndex
         - file: ../dimensional/formula-names.js
           imports:
+            - greekLetter
             - resolveQuantityName
         - file: ./catalog-graph.js
           imports:
             - CATALOG_GRAPH
+        - file: ./canonical-graph.js
+          imports:
+            - CANONICAL_GRAPH
         - file: ./graph-viz.js
           imports:
             - VizModel
@@ -14604,6 +14630,7 @@ modules:
         - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - resolveQuantityName
         - SynonymDisagreementError
       classes:
@@ -14620,6 +14647,7 @@ modules:
         - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - resolveQuantityName
       constants:
         - FORMULA_NAMED
@@ -19823,16 +19851,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89498
-  totalExports: 2859
+  totalLinesOfCode: 89672
+  totalExports: 2864
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 936
+  totalFunctions: 939
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 423
-  totalReExports: 1408
-  totalTypeOnlyImports: 535
+  totalReExports: 1410
+  totalTypeOnlyImports: 537
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

@@ -5,6 +5,8 @@
   "scales": {
     "inch": "0.0254",
     "foot": "0.3048",
+    "mile": "5280*foot",
+    "us_gallon": "231*inch^3",
     "pound": "0.45359237",
     "standard_gravity": "9.80665",
     "lbf": "pound*standard_gravity",
@@ -617,7 +619,8 @@
       "dimension": {
         "J": 1
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
     },
     {
       "symbols": [
@@ -628,7 +631,59 @@
         "J": 1,
         "L": -2
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
+    },
+    {
+      "symbols": [
+        "Bq"
+      ],
+      "scale": "1",
+      "dimension": {
+        "T": -1
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Becquerel: one decay per second. It has the dimension of Hz but counts no cycles."
+    },
+    {
+      "symbols": [
+        "Gy"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "T": -2
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Gray: absorbed dose, J/kg."
+    },
+    {
+      "symbols": [
+        "Sv"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "T": -2
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Sievert: dose equivalent, J/kg. Gy and Sv have one dimension; the table does not tell the quantities apart."
+    },
+    {
+      "symbols": [
+        "kat"
+      ],
+      "scale": "1",
+      "dimension": {
+        "N": 1,
+        "T": -1
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Katal: mol/s."
     },
     {
       "symbols": [
@@ -886,7 +941,8 @@
         "M": 1,
         "T": -1
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
     },
     {
       "symbols": [
@@ -908,6 +964,29 @@
         "L": 1
       },
       "prefixable": false
+    },
+    {
+      "symbols": [
+        "mile",
+        "mi"
+      ],
+      "scale": "mile",
+      "dimension": {
+        "L": 1
+      },
+      "prefixable": false,
+      "comment": "International mile, 5280 ft = 1609.344 m exactly (NIST SP 811 B.8)."
+    },
+    {
+      "symbols": [
+        "gallon"
+      ],
+      "scale": "us_gallon",
+      "dimension": {
+        "L": 3
+      },
+      "prefixable": false,
+      "comment": "US liquid gallon, 231 in^3 = 3.785411784e-3 m^3 exactly (NIST SP 811 B.8). Not the imperial gallon (4.54609 L) or the US dry gallon."
     },
     {
       "symbols": [

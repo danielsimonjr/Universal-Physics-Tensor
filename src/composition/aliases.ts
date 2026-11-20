@@ -41,6 +41,28 @@ export const NAME_TABLE: {
   dimensionRenames: DIMENSION_RENAMES,
 };
 
+/**
+ * Symbol key → the quantity names that carry it, over `edges`. A key is a quantity's `symbol`
+ * and each of its edge `aliases`, the fields `upt search` reads. The match is exact and keeps
+ * case, so `T` and `t` are two keys.
+ *
+ * @param edges - The graph edges to read.
+ * @returns Each key with every quantity name that has that symbol or alias.
+ */
+export function symbolIndex(edges: readonly BridgeEdge[]): ReadonlyMap<string, ReadonlySet<string>> {
+  const index = new Map<string, Set<string>>();
+  const add = (key: string, name: string): void => {
+    const names = index.get(key) ?? new Set<string>();
+    names.add(name);
+    index.set(key, names);
+  };
+  for (const e of edges) {
+    for (const q of [...e.sources, e.target]) add(q.symbol, q.name);
+    for (const [name, keys] of Object.entries(e.aliases ?? {})) for (const key of keys) add(key, name);
+  }
+  return index;
+}
+
 /** Alias key → source name, for edges whose target is `target`. Ambiguous keys are omitted. */
 export function aliasesForTarget(
   edges: readonly BridgeEdge[],

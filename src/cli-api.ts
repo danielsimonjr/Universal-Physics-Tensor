@@ -317,7 +317,7 @@ export { FormulaError, FormulaValueError } from './numerical/formula-contract.js
 /** The quantity names a target is bound under, the near names of a miss, and the synonym fold. */
 export { aliasesForTarget, nearQuantityNames, shareSynonyms } from './composition/aliases.js';
 /** Synonym agreement and expansion of a binding set. */
-export { assertSynonymAgreement, expandSynonymValues } from './dimensional/formula-names.js';
+export { assertSynonymAgreement, expandSynonymValues, greekLetter } from './dimensional/formula-names.js';
 /** A dimensionless group a canonical equation multiplies (sound-speed's gamma): an input, not a graph node. */
 export { CANONICAL_GROUP_PREFACTORS } from './composition/canonical-prefactors.js';
 /** The one number formatter of explain text. */
@@ -355,6 +355,13 @@ export { fetchOnnxModel, onnxEmbedder } from './atlas/benchmark/onnx-embedder.js
  * @internal
  */
 export { builtinFormulaDimensionChecker } from './numerical/formula-dimension.js';
+
+/**
+ * Query-formula parser for `upt retrieve --formula`.
+ *
+ * @internal
+ */
+export { parseDeclaredExpression } from './bridges/expr-parse.js';
 
 /**
  * Missing-evaluator message for `upt evaluate`.

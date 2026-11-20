@@ -47,6 +47,7 @@ interface UnitFileRow {
   readonly dimension: DimensionFile;
   readonly prefixable: boolean;
   readonly cycles?: true;
+  readonly kind?: true;
 }
 
 interface AffineFileRow {
@@ -79,6 +80,11 @@ export interface UnitRow {
    * rad/s takes 2π per cycle; the radian itself does not.
    */
   readonly cycles?: true;
+  /**
+   * The unit names one kind of quantity of its dimension (Bq, Gy, Sv, kat, lm, lx, rayl). The
+   * dimension alone does not say it, so a printed label never picks the unit.
+   */
+  readonly kind?: true;
 }
 
 /** One affine temperature scale, read exactly. @internal */
@@ -187,7 +193,7 @@ export function readUnitFile(text: string, schema: JsonSchema): UnitTableData {
   const units = new Map<string, UnitRow>();
   for (const row of file.units) {
     const scale = read(row.scale, `unit ${row.symbols[0]}`);
-    const unit: UnitRow = { scale, dim: dimension(row.dimension), prefixable: row.prefixable, ...(row.cycles ? { cycles: true as const } : {}) };
+    const unit: UnitRow = { scale, dim: dimension(row.dimension), prefixable: row.prefixable, ...(row.cycles ? { cycles: true as const } : {}), ...(row.kind ? { kind: true as const } : {}) };
     for (const symbol of row.symbols) {
       if (units.has(symbol)) throw new Error(`data/units.json: unit '${symbol}' is spelled by two rows`);
       units.set(symbol, unit);
