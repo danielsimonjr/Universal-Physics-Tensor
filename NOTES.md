@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-20 (persona dogfood on 16.0.0)
+
+- **Session 21 (undergraduate physics student) ran against `universal-physics-tensor@16.0.0` from npm**, CLI and API, in `docs/persona-sessions/`. Model persona, not a human reviewer. Issues #736 to #745 were filed and #684 was reopened; each was reproduced on a second install. Retests: #677, #694 and #683 are fixed; #695 does not reproduce; #679 is by design. No finding has its cause in MathTS. Session 21 is outside the rotation, so the next rotation round is still the condensed-matter physicist (position 2).
+
 ## As of 2026-11-18 (persona dogfood on 15.0.0)
 
 - **Four persona rounds ran against `universal-physics-tensor@15.0.0` from npm:** sessions 17 (applied physicist), 18 (theoretical physicist), 19 (engineering physicist) and 20 (undergraduate physics student), in `docs/persona-sessions/`. Model personas, not human reviewers. Issues #676 to #695 were filed, and each one was reproduced on a second install. Sessions 17, 18 and 20 are outside the rotation. Session 19 is rotation position 1 of 7, so the next rotation round is the condensed-matter physicist (position 2). The 2026-10-08 sentence that the next round starts at the engineering physicist is the record from before session 19.
