@@ -16,6 +16,7 @@
  *
  * A unit literal is recognized only where it is glued to a number (`1km`,
  * `1h`, `1G`). A bare name is a constant (`h`, `G`, `c`), never that unit.
+ * A unit literal is one factor: `6m/2s` is (6 m)/(2 s).
  * A temperature name (`T`, `temperature`, `temp`, `T_K`) speaks kelvin. An
  * energy on that name is `k_B T`. Any other dimension on that name is an error.
  *
@@ -226,6 +227,44 @@ function longestUnit(rest: string): string | null {
   return best;
 }
 
+/**
+ * Where the factor that ends with the number at `numberStart` of `out` begins:
+ * the number itself, or the start of a `base^` chain before it. Null when the
+ * number is part of an identifier (`a_0`), which gets no group.
+ */
+function factorStart(out: string, numberStart: number): number | null {
+  if (numberStart > 0 && /[A-Za-z0-9_.]/.test(out[numberStart - 1]!)) return null;
+  let p = numberStart;
+  for (;;) {
+    let q = p - 1;
+    while (q >= 0 && /\s/.test(out[q]!)) q--;
+    // A sign on the exponent belongs to it: `10^-3m` is (10^-3)·m.
+    if (q >= 0 && (out[q] === '-' || out[q] === '+')) {
+      let r = q - 1;
+      while (r >= 0 && /\s/.test(out[r]!)) r--;
+      if (r >= 0 && out[r] === '^') q = r;
+    }
+    if (q < 0 || out[q] !== '^') return p;
+    q--;
+    while (q >= 0 && /\s/.test(out[q]!)) q--;
+    if (q < 0) return p;
+    if (out[q] === ')') {
+      let depth = 0;
+      for (; q >= 0; q--) {
+        if (out[q] === ')') depth++;
+        else if (out[q] === '(' && --depth === 0) break;
+      }
+      if (q < 0) return p;
+      // A call's name belongs to the base: `sqrt(4)^2m`.
+      while (q > 0 && /[A-Za-z0-9_]/.test(out[q - 1]!)) q--;
+    } else {
+      if (!/[A-Za-z0-9_.]/.test(out[q]!)) return p;
+      while (q > 0 && /[A-Za-z0-9_.]/.test(out[q - 1]!)) q--;
+    }
+    p = q;
+  }
+}
+
 interface Splice {
   readonly expr: string;
   readonly slots: Map<string, Qty>;
@@ -259,7 +298,10 @@ function spliceUnits(src: string): Splice {
     for (const note of unitConventionNotes(unit)) {
       if (!notes.includes(note)) notes.push(note);
     }
-    out += `*${name}`;
+    // A quantity literal is one factor (#729): `6m/2s` is (6 m)/(2 s), not ((6 m)/2)·s.
+    // The unit scales the power that ends at its number, so `10^3m` is (10^3)·m.
+    const start = factorStart(out, out.length - m[0].length);
+    out = start === null ? `${out}*${name}` : `${out.slice(0, start)}(${out.slice(start)}*${name})`;
     last = i + unit.length;
     re.lastIndex = last;
   }
