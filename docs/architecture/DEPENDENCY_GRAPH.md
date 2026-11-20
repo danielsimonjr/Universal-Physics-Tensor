@@ -3444,7 +3444,7 @@ The codebase is organized into the following modules:
 | `./cases/index.js` | `CASE_CONTRACTS` | Re-export |
 | `./bridges/input-contract.js` | `slotForSpelling` | Re-export |
 | `./cases/index.js` | `AppliedCase, CaseCheck, CaseResult` | Re-export |
-| `./dimensional/units.js` | `convertValue, UnitError, unitRows` | Re-export |
+| `./dimensional/units.js` | `convertValue, readQuantityLiteral, UnitError, unitRows` | Re-export |
 | `./composition/axis-audit.js` | `auditAxisDiscrimination, AUDIT_ALPHA` | Re-export |
 | `./composition/axis-audit.js` | `AxisDiscrimination` | Re-export |
 | `./composition/axes.js` | `AXES` | Re-export |
@@ -3551,22 +3551,22 @@ The codebase is organized into the following modules:
   DuplicateInputError, InputTypeError, isInputContractError, MissingInputError, NonFiniteInputError,
   UnknownInputError, EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES,
   runAppliedCase, CASE_CONTRACTS, slotForSpelling, AppliedCase, CaseCheck, CaseResult, convertValue,
-  UnitError, unitRows, auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination, AXES, AxisSpec,
-  simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
-  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
-  deriveEdgeEvidence, communitiesOf, derivationCycles, rankHubs, CommunityReport, DerivationCycle,
-  HubRank, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps,
-  scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson,
-  resolveObservationsPath, parseExprJson, ProblemFileError, runProbeSearch, nodeWorkerArgv,
-  formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
-  formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
-  runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
-  AnnotatedCandidate, CatalogAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
-  ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
-  describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
-  compareUserEquation, describeComparison, describeComparisons, describeKnownRelation,
-  matchingCatalogEdges, CanonicalComparison, CatalogEdgeMatch, ExponentDifference,
-  describeExponentDifference, FIXED_POINT_EXPONENTS, constantRatio, fixedPoint,
+  readQuantityLiteral, UnitError, unitRows, auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination,
+  AXES, AxisSpec, simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS,
+  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
+  filterEdges, formatFilterLegend, deriveEdgeEvidence, communitiesOf, derivationCycles, rankHubs,
+  CommunityReport, DerivationCycle, HubRank, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap,
+  expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap,
+  loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, ProblemFileError, runProbeSearch,
+  nodeWorkerArgv, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy,
+  formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint,
+  parseDesignBounds, runFalsification, rankPareto, annotateAdjudications, adjudicationFor,
+  candidateId, ADJUDICATIONS, AnnotatedCandidate, CatalogAdjudication, annotateConsequences,
+  ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence, checkConventions,
+  unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness, REPRESENTATIVE_VALUES,
+  compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
+  describeKnownRelation, matchingCatalogEdges, CanonicalComparison, CatalogEdgeMatch,
+  ExponentDifference, describeExponentDifference, FIXED_POINT_EXPONENTS, constantRatio, fixedPoint,
   recoverMonomialPrefactor, ConstantRatio, ConstantRatioOptions, FixedPointScheme, PrefactorRecovery,
   PrefactorRecoveryScheme, RatioStatistic, CONSTANTS, CONSTANT_PROVENANCE, isDecimalLiteral,
   forEachScalarLeaf, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
@@ -7823,9 +7823,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89468 |
-| Total Exports | 2858 |
-| Total Re-exports | 1407 |
+| Total Lines of Code | 89480 |
+| Total Exports | 2859 |
+| Total Re-exports | 1408 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 936 |

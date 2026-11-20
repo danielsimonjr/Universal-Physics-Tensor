@@ -96,7 +96,8 @@ const HELP = `upt eval "<formula>" name=value ...
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). T, temperature, temp, and
         T_K are kelvin: an energy on that name is k_B T, and any other
-        dimension is an error. A binding is read by the same MathTS
+        dimension is an error. A quantity such as 2mH is a binding value, not a
+        formula: upt eval x x=2mH. A binding is read by the same MathTS
         parser as the formula, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts and, with no
@@ -156,8 +157,19 @@ async function run(ctx: CommandCtx): Promise<number> {
     const energyHint = missing.includes('E')
       ? ' E is energy. The binding is its own argument: upt eval E E=1eV.'
       : '';
+    // The binding reader accepts a number with a unit and the formula reader
+    // cannot. A unit error (unknown, ambiguous, refused) means no hint.
+    let literalHint = '';
+    try {
+      if (api.readQuantityLiteral(expr) !== null) {
+        const binding = /\s/.test(expr) ? `"x=${expr}"` : `x=${expr}`;
+        literalHint = ` '${expr}' reads as a quantity. A unit goes in a binding: upt eval x ${binding}.`;
+      }
+    } catch (e) {
+      if (!(e instanceof api.UnitError)) throw e;
+    }
     throw new FormulaUsageError(
-      `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}`,
+      `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}${literalHint}`,
       kind,
     );
   }
