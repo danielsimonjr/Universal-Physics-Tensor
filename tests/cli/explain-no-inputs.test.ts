@@ -31,13 +31,13 @@ describe('upt explain with no inputs', () => {
     const r = await run(['explain', 'hawking-temperature']);
     expect(r.code).toBe(0);
     expect(r.text).toContain(EMPTY_SET);
-    expect(r.text).toContain('Knowing one of {');
-    expect(r.text).toContain('to determine it, also supply:');
+    expect(r.text).toContain('Inputs on a path to it: {');
+    expect(r.text).toContain('inputs on a path to it:');
     expect(r.text).toContain(USAGE);
   });
 
   it('guard: with inputs and no path, the graph sentence stays', async () => {
-    const r = await run(['explain', 'kinetic-energy', '--source=canonical', 'mass=2']);
+    const r = await run(['explain', 'curvature-k', '--source=canonical', 'mass=2']);
     expect(r.code).toBe(0);
     expect(r.text).toContain('cannot be determined from {mass}: the graph has no derivation path');
     expect(r.text).not.toContain(EMPTY_SET);
@@ -57,7 +57,7 @@ describe('upt explain with no inputs', () => {
   });
 
   it('guard: a bare name keeps the graph sentence', async () => {
-    const r = await run(['explain', 'kinetic-energy', '--source=canonical', 'mass']);
+    const r = await run(['explain', 'curvature-k', '--source=canonical', 'mass']);
     expect(r.code).toBe(0);
     expect(r.text).toContain('cannot be determined from {mass}: the graph has no derivation path');
     expect(r.text).not.toContain(USAGE);

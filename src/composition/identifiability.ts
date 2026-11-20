@@ -123,7 +123,8 @@ export interface IdentifiabilityResult {
   readonly surplusConstraints: number;
   /**
    * For under-determined targets: the upstream quantities that block
-   * determinability — on some path toward the target, not determinable
+   * determinability — on some path toward the target (a monomial law counts in either
+   * direction), not determinable
    * from the known set, not themselves known. Knowing a sufficient subset
    * moves the target toward determined. Empty when determinable.
    */
@@ -574,24 +575,33 @@ function rankDetermines(
   return solveRank(index, knownNames, identifications, false).determined.has(target);
 }
 
-/** The quantities from which `targetName` is forward-reachable (its
- *  backward cone, target included). */
+/**
+ * The quantities on some path to `targetName` under the relation the verdict
+ * uses (target included): a law reaches its target from its sources, and a
+ * monomial law also links every name it holds to the others (the rank reads it
+ * either way). The cone is the fixpoint of both steps.
+ */
 function backwardCone(
   edges: readonly BridgeEdge[],
   targetName: string,
 ): Set<string> {
+  const index = rankIndex(edges, edgeMonomial, 'default');
   const cone = new Set<string>([targetName]);
   let changed = true;
   while (changed) {
     changed = false;
-    for (const e of edges) {
-      if (!cone.has(e.target.name)) continue;
-      for (const s of e.sources) {
-        if (!cone.has(s.name)) {
-          cone.add(s.name);
-          changed = true;
-        }
+    const add = (name: string): void => {
+      if (!cone.has(name)) {
+        cone.add(name);
+        changed = true;
       }
+    };
+    for (const e of edges) {
+      if (cone.has(e.target.name)) for (const s of e.sources) add(s.name);
+    }
+    for (const name of [...cone]) {
+      const component = index.componentOf.get(name);
+      if (component !== undefined) for (const n of index.components[component]!.names) add(n);
     }
   }
   return cone;
