@@ -2,7 +2,7 @@
  * The word index behind `upt search`, shared with `upt explain`'s NOT COVERED answer (audit I5).
  *
  * It indexes every registry the CLI exposes by WORD: names, ids, symbols, genuine aliases
- * (`resolveQuantityName`) and catalog-bridge descriptions. An equal dimension is never a match: a
+ * (`resolveQuantityName`), catalog-bridge descriptions and declared catalog-bridge domains. An equal dimension is never a match: a
  * radius is not a wavelength, and angular frequency is not frequency, even where the two share a
  * dimension.
  *
@@ -226,6 +226,7 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
         { label: 'id', text: `be ${b.id}`, exact: [key] },
         ...titleAndGloss('name', b.name),
         { label: 'description', text: affirmativeSentences(b.context ?? '') },
+        ...(b.domains?.length ? [{ label: 'domain', text: b.domains.join(' ') }] : []),
         // One field per input, so a phrase does not run from one input's meaning into the next.
         ...(ev?.parameters ?? []).map((p) => ({ label: 'inputs', text: affirmativeClauses(p.meaning) })),
       ],

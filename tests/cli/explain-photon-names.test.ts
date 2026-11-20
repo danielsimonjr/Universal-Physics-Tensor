@@ -26,7 +26,7 @@ describe('nu, photon-frequency, h, and planck-constant are one quantity each (is
     const r = await cli(['explain', 'photon-energy', a, b, '--source=canonical']);
     expect(r.code).toBe(0);
     expect(recovered(r.text)).toBe('3.313035075e-19');
-    expect(r.text).not.toMatch(/Knowing one of \{nu\}/);
+    expect(r.text).not.toMatch(/Inputs on a path to it: \{nu\}/);
   });
   it('the photoelectric entry still reads photon-frequency', async () => {
     const r = await cli([

@@ -307,6 +307,18 @@
             "minItems": 2,
             "maxItems": 2
           },
+          "domains": {
+            "type": "array",
+            "description": "The application domains of the relation, from a closed list that search indexes. mems: the relation models a microfabricated electromechanical device. sensor: the relation sets the noise floor of a measuring device (thermal, shot or sampling noise of its readout). A record with no domain declares none; the field is optional.",
+            "items": {
+              "enum": [
+                "mems",
+                "sensor"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
           "status": {
             "enum": [
               "established",

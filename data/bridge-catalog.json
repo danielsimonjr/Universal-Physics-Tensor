@@ -2241,6 +2241,9 @@
         "quantum",
         "classical"
       ],
+      "domains": [
+        "sensor"
+      ],
       "status": "established",
       "proofStatus": "weak",
       "context": "A resistor R in thermal equilibrium at temperature T generates a fluctuating voltage with one-sided power spectral density S_V = 4 k_B T R. The fluctuation-dissipation theorem for a circuit: equilibrium voltage FLUCTUATIONS are fixed by the DISSIPATION (R). Bridges THERMAL fluctuation to ELECTRICAL dissipation. Johnson 1928 (measurement), Nyquist 1928 (derivation). NOTE: BE-27 is the speculative active-matter FDT VIOLATION; BE-58 is the established theorem it violates.",
@@ -3016,6 +3019,9 @@
         "electromagnetic",
         "continuum"
       ],
+      "domains": [
+        "mems"
+      ],
       "status": "established",
       "proofStatus": "full",
       "context": "C = ε0 A/g has dC/dg = −ε0 A/g². Equilibrium of a linear spring against the coenergy force is k(g0−g) = ε0 A V²/(2 g²). The fold of (g0−g) g² is g = 2 g0/3, and the voltage there is V_pi = sqrt(8 k g0³/(27 ε0 A)). g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses.",
@@ -3228,6 +3234,9 @@
         "quantum",
         "classical"
       ],
+      "domains": [
+        "sensor"
+      ],
       "status": "established",
       "proofStatus": "full",
       "context": "In a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e² and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is Δf = 1/(2 T), and S_I = 2 e I. The two-sided bandwidth Δf = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson–Nyquist. The Poisson variance and the one-sided convention are hypotheses.",
@@ -3297,6 +3306,9 @@
       "bridges": [
         "thermal",
         "electrical"
+      ],
+      "domains": [
+        "sensor"
       ],
       "status": "established",
       "proofStatus": "full",
@@ -4662,6 +4674,9 @@
       "bridges": [
         "electromagnetic",
         "mechanical"
+      ],
+      "domains": [
+        "mems"
       ],
       "status": "established",
       "proofStatus": "full",

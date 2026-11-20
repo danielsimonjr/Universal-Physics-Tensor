@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2858
+    "totalExports": 2862
   },
   "entryPoints": [
     {
@@ -9132,6 +9132,12 @@
             ]
           },
           {
+            "file": "../expr-print.js",
+            "imports": [
+              "primaryUnitLabel"
+            ]
+          },
+          {
             "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
@@ -11709,6 +11715,7 @@
             "file": "./dimensional/units.js",
             "imports": [
               "convertValue",
+              "readQuantityLiteral",
               "UnitError",
               "unitRows"
             ],
@@ -12258,7 +12265,8 @@
             "file": "./dimensional/formula-names.js",
             "imports": [
               "assertSynonymAgreement",
-              "expandSynonymValues"
+              "expandSynonymValues",
+              "greekLetter"
             ],
             "reExport": true
           },
@@ -12500,6 +12508,7 @@
           "CASE_CONTRACTS",
           "slotForSpelling",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12626,6 +12635,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -12782,6 +12792,7 @@
           "CaseCheck",
           "CaseResult",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12948,6 +12959,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -13131,6 +13143,7 @@
         ],
         "exports": [
           "NAME_TABLE",
+          "symbolIndex",
           "aliasesForTarget",
           "editDistance",
           "nearQuantityNames",
@@ -13138,6 +13151,7 @@
           "collapseSynonymGovernors"
         ],
         "functions": [
+          "symbolIndex",
           "aliasesForTarget",
           "editDistance",
           "nearQuantityNames",
@@ -19570,12 +19584,14 @@
             "file": "./aliases.js",
             "imports": [
               "aliasesForTarget",
-              "editDistance"
+              "editDistance",
+              "symbolIndex"
             ]
           },
           {
             "file": "../dimensional/formula-names.js",
             "imports": [
+              "greekLetter",
               "resolveQuantityName"
             ]
           },
@@ -19583,6 +19599,12 @@
             "file": "./catalog-graph.js",
             "imports": [
               "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "./canonical-graph.js",
+            "imports": [
+              "CANONICAL_GRAPH"
             ]
           },
           {
@@ -21500,6 +21522,7 @@
           "synonymDisagreement",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "resolveQuantityName",
           "SynonymDisagreementError"
         ],
@@ -21519,6 +21542,7 @@
           "synonymDisagreement",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "resolveQuantityName"
         ],
         "constants": [
@@ -28615,15 +28639,15 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89456,
-    "totalExports": 2858,
+    "totalLinesOfCode": 89574,
+    "totalExports": 2862,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 936,
+    "totalFunctions": 938,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1407,
+    "totalReExports": 1409,
     "totalTypeOnlyImports": 535,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

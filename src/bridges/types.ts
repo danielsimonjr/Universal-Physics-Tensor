@@ -49,6 +49,8 @@ export interface BridgeEquationEntry {
   category: string;
   category_name: string;
   bridges: [string, string];
+  /** Application domains of the relation, from the closed list in the catalog schema. Search indexes them. */
+  domains?: readonly string[];
   status: BridgeEquationStatus;
   context: string;
   formula_latex: string | null;

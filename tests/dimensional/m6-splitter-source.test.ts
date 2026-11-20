@@ -74,10 +74,20 @@ describe('M6 splitter: MathTS drops the plain X·X run, not a run with a power',
   const attachedUnit = (symbol: string): string | null =>
     UNIT_DATA.units.has(symbol) ? null : (splitPrefix(symbol)?.base ?? null);
 
+  const mathtsReadsUnit = (symbol: string): boolean => {
+    try {
+      return Unit.exactScale(symbol) !== null;
+    } catch {
+      return false;
+    }
+  };
+
   it('for every unit X, X·X is a reading of XX exactly when XX is not X with its own prefix', () => {
     const disagree: string[] = [];
     let doubled = 0;
     for (const symbol of UNIT_DATA.units.keys()) {
+      // The comparison needs a MathTS reading of the symbol itself (Bq, Gy, Sv and kat have none).
+      if (!mathtsReadsUnit(symbol)) continue;
       const token = symbol + symbol;
       const run = Unit.readingsWithSource(token).some(
         (reading) => reading.length === 2 && reading[0]!.source === symbol && reading[1]!.source === symbol,

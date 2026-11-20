@@ -3,7 +3,7 @@ metadata:
   version: 15.0.0
   totalFiles: 391
   totalModules: 13
-  totalExports: 2858
+  totalExports: 2862
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6241,6 +6241,9 @@ modules:
         - file: ../bindings.js
           imports:
             - splitAssignments
+        - file: ../expr-print.js
+          imports:
+            - primaryUnitLabel
         - file: ../../dimensional/natural-units.js
           imports:
             - UnitMode
@@ -7838,6 +7841,7 @@ modules:
         - file: ./dimensional/units.js
           imports:
             - convertValue
+            - readQuantityLiteral
             - UnitError
             - unitRows
           reExport: true
@@ -8196,6 +8200,7 @@ modules:
           imports:
             - assertSynonymAgreement
             - expandSynonymValues
+            - greekLetter
           reExport: true
         - file: ./composition/canonical-prefactors.js
           imports:
@@ -8365,6 +8370,7 @@ modules:
         - CASE_CONTRACTS
         - slotForSpelling
         - convertValue
+        - readQuantityLiteral
         - UnitError
         - unitRows
         - auditAxisDiscrimination
@@ -8491,6 +8497,7 @@ modules:
         - shareSynonyms
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
         - formatExact
@@ -8646,6 +8653,7 @@ modules:
         - CaseCheck
         - CaseResult
         - convertValue
+        - readQuantityLiteral
         - UnitError
         - unitRows
         - auditAxisDiscrimination
@@ -8812,6 +8820,7 @@ modules:
         - shareSynonyms
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - CANONICAL_GROUP_PREFACTORS
         - formatQuantity
         - formatExact
@@ -8936,12 +8945,14 @@ modules:
             - CANONICAL_EQUATIONS
       exports:
         - NAME_TABLE
+        - symbolIndex
         - aliasesForTarget
         - editDistance
         - nearQuantityNames
         - shareSynonyms
         - collapseSynonymGovernors
       functions:
+        - symbolIndex
         - aliasesForTarget
         - editDistance
         - nearQuantityNames
@@ -13234,12 +13245,17 @@ modules:
           imports:
             - aliasesForTarget
             - editDistance
+            - symbolIndex
         - file: ../dimensional/formula-names.js
           imports:
+            - greekLetter
             - resolveQuantityName
         - file: ./catalog-graph.js
           imports:
             - CATALOG_GRAPH
+        - file: ./canonical-graph.js
+          imports:
+            - CANONICAL_GRAPH
         - file: ./graph-viz.js
           imports:
             - VizModel
@@ -14598,6 +14614,7 @@ modules:
         - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - resolveQuantityName
         - SynonymDisagreementError
       classes:
@@ -14614,6 +14631,7 @@ modules:
         - synonymDisagreement
         - assertSynonymAgreement
         - expandSynonymValues
+        - greekLetter
         - resolveQuantityName
       constants:
         - FORMULA_NAMED
@@ -19817,15 +19835,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89456
-  totalExports: 2858
+  totalLinesOfCode: 89574
+  totalExports: 2862
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 936
+  totalFunctions: 938
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 423
-  totalReExports: 1407
+  totalReExports: 1409
   totalTypeOnlyImports: 535
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
