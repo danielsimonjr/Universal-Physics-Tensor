@@ -183,9 +183,9 @@ export type CatalogRelationRecord = Omit<CatalogRelation, 'confidence'> & {
   readonly confidence?: CatalogRelation['confidence'];
 };
 
-/** The loaded catalog: schema 3, entries, relations, evaluators, confrontations, the two ledgers and the spine. */
+/** The loaded catalog: schema 4, entries, relations, evaluators, confrontations, the two ledgers and the spine. */
 export interface CatalogFile {
-  readonly schemaVersion: 3;
+  readonly schemaVersion: 4;
   readonly packageVersion: string;
   readonly entries: readonly CatalogEntry[];
   readonly relations: readonly CatalogRelation[];

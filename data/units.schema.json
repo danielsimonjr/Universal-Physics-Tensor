@@ -8,7 +8,7 @@
   "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string" },
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "description": { "type": "string", "minLength": 1 },
     "scales": {
       "description": "Named exact scales the unit rows share (inch, pound, standard gravity). A name starts lowercase and is neither `pi` nor a registered constant's spelling (src/dimensional/constant-rows.ts), which unit-data.ts checks at load.",

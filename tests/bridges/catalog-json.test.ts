@@ -35,7 +35,7 @@ describe('data/bridge-catalog.json', () => {
   };
   const keys = new Set(manifest.entries.map((entry) => entry.key));
 
-  it('is schema 3, matches the package version, every record has a filing and every relation names a row', () => {
+  it('is schema 4, matches the package version, every record has a filing and every relation names a row', () => {
     expect(crossChecks(catalog, pkg.version, keys)).toEqual([]);
     expect(catalog.entries.length).toBeGreaterThan(0);
   });
