@@ -154,6 +154,7 @@
           "symbol": "V_rms,total",
           "unit": "V",
           "meaning": "what the instrument reads with its amplifier noise added in quadrature; not defined without e_n2/i_n2",
+          "needs": ["e_n2_V2_per_Hz", "i_n2_A2_per_Hz"],
           "method": "runCaseResistorNoise"
         },
         {
@@ -161,6 +162,7 @@
           "symbol": "φ",
           "unit": "",
           "meaning": "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); not defined without e_n2/i_n2",
+          "needs": ["e_n2_V2_per_Hz", "i_n2_A2_per_Hz"],
           "method": "runCaseResistorNoise"
         },
         {
@@ -168,6 +170,7 @@
           "symbol": "T_n",
           "unit": "K",
           "meaning": "the amplifier's noise temperature for the source R_eff, (e_n² + i_n²R_eff²)/(4k_B R_eff); not defined without e_n2/i_n2",
+          "needs": ["e_n2_V2_per_Hz", "i_n2_A2_per_Hz"],
           "method": "runCaseResistorNoise"
         }
       ],
@@ -496,6 +499,7 @@
           "symbol": "D_∥",
           "unit": "m^2/s",
           "meaning": "D beside the wall, parallel to it: D·(Faxén series in a/h); not defined without h_m",
+          "needs": ["h_m"],
           "method": "runCaseBrownianSphere"
         },
         {
@@ -503,6 +507,7 @@
           "symbol": "D_⊥",
           "unit": "m^2/s",
           "meaning": "D normal to the wall: D/λ, λ from Brenner's exact series; not defined without h_m",
+          "needs": ["h_m"],
           "method": "runCaseBrownianSphere"
         },
         {
@@ -510,6 +515,7 @@
           "symbol": "⟨|Δr|²⟩_w",
           "unit": "m^2",
           "meaning": "2t(d_∥ D_∥ + d_⊥ D_⊥): the tracked horizontal axes parallel to the wall, a third one normal to it; not defined without h_m",
+          "needs": ["h_m"],
           "method": "runCaseBrownianSphere"
         },
         {
@@ -517,6 +523,7 @@
           "symbol": "MSD/MSD_w − 1",
           "unit": "",
           "meaning": "signed relative difference of the unbounded-fluid MSD relative to the wall-corrected one; not defined without h_m",
+          "needs": ["h_m"],
           "method": "runCaseBrownianSphere"
         }
       ],
@@ -851,6 +858,7 @@
           "symbol": "√⟨x²⟩_th",
           "unit": "m",
           "meaning": "thermal RMS displacement √(k_BT/k) of the mode (equipartition); not defined without T_K and k_N_per_m",
+          "needs": ["T_K", "k_N_per_m"],
           "expr": "sqrt(k_B*T_K/k_N_per_m)"
         },
         {
@@ -858,6 +866,7 @@
           "symbol": "√⟨A²⟩",
           "unit": "m",
           "meaning": "RMS envelope with the thermal motion added: √(A² + 2k_BT/k), the Rice second moment; not defined without T_K and k_N_per_m",
+          "needs": ["T_K", "k_N_per_m"],
           "expr": "sqrt(envelope_m^2 + 2*x_th_rms_m^2)"
         }
       ],
