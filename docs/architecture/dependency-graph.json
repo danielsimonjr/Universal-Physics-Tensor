@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2860
+    "totalExports": 2861
   },
   "entryPoints": [
     {
@@ -9134,6 +9134,12 @@
             ]
           },
           {
+            "file": "../expr-print.js",
+            "imports": [
+              "primaryUnitLabel"
+            ]
+          },
+          {
             "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
@@ -11725,6 +11731,7 @@
             "file": "./dimensional/units.js",
             "imports": [
               "convertValue",
+              "readQuantityLiteral",
               "UnitError",
               "unitRows"
             ],
@@ -12523,6 +12530,7 @@
           "CASE_CONTRACTS",
           "slotForSpelling",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12806,6 +12814,7 @@
           "CaseCheck",
           "CaseResult",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -28640,15 +28649,15 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89547,
-    "totalExports": 2860,
+    "totalLinesOfCode": 89597,
+    "totalExports": 2861,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 937,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1408,
+    "totalReExports": 1409,
     "totalTypeOnlyImports": 537,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

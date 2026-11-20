@@ -148,7 +148,27 @@ function key(way: readonly FactorReading[], label: string): string {
   return `${label}|${factors.join(';')}`;
 }
 
+/** True when MathTS reads the symbol alone. The comparison needs it: a symbol MathTS lacks has no MathTS split. */
+function mathtsReads(symbol: string): boolean {
+  try {
+    return Unit.exactScale(symbol) !== null;
+  } catch {
+    return false;
+  }
+}
+
 const SYMBOLS = [...UNITS.keys()];
+/**
+ * The table symbols that MathTS does not read (Bq, Gy, Sv, kat). MathTS gives no split with
+ * such a symbol, so a reading (old or new) that has one as a factor base is left out of the comparison.
+ */
+const UNREAD_BY_MATHTS = new Set(SYMBOLS.filter((s) => !mathtsReads(s)));
+
+/** A reading the comparison covers: two or more factors, each on a unit symbol (prefix removed) that MathTS reads. */
+function compared(way: readonly FactorReading[]): boolean {
+  const symbol = (base: string): string => (UNITS.has(base) ? base : (splitPrefix(base)?.base ?? base));
+  return way.length > 1 && way.every((f) => !UNREAD_BY_MATHTS.has(symbol(f.base)));
+}
 const PREFIX_SPELLINGS = [...UNIT_DATA.prefixes.keys()];
 
 function pairs(): string[] {
@@ -234,8 +254,8 @@ function runSet(name: string, tokens: readonly string[], control: boolean): SetR
   let ambiguous = 0;
   let injected = !control;
   for (const token of tokens) {
-    const oldKeys = new Set(oldSegmentations(token).filter((w) => w.length > 1).map((w) => key(w, oldFormatReading(w))));
-    const newWays = segmentations(token).filter((w) => w.length > 1);
+    const oldKeys = new Set(oldSegmentations(token).filter(compared).map((w) => key(w, oldFormatReading(w))));
+    const newWays = segmentations(token).filter(compared);
     const newKeys = new Set(newWays.map((w) => key(w, formatReading(w))));
     if (!injected && newWays.length > 0) {
       newKeys.delete(key(newWays[0]!, formatReading(newWays[0]!)));
@@ -295,7 +315,7 @@ function main(): number {
     ['edge', EDGE],
   ];
   let failed = false;
-  console.log(`core ${CORE_VERSION}; symbols ${SYMBOLS.length}, prefix spellings ${PREFIX_SPELLINGS.length}; frozen blob ${FROZEN_BLOB}; seed ${options.seed}, count ${options.count}`);
+  console.log(`core ${CORE_VERSION}; symbols ${SYMBOLS.length} (readings with these left out, MathTS has no row: ${[...UNREAD_BY_MATHTS].join(', ') || 'none'}), prefix spellings ${PREFIX_SPELLINGS.length}; frozen blob ${FROZEN_BLOB}; seed ${options.seed}, count ${options.count}`);
   console.log('set | tokens | old multi-factor readings | old not in new | new not in old | MathTS drops | ambiguous | outcome digest');
   for (const [name, tokens] of sets) {
     const r = runSet(name, tokens, control && name === 'edge');
