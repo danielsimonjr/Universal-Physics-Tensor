@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 15.0.0
+**Version**: 16.0.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -7848,4 +7848,4 @@ graph TD
 
 ---
 
-*Version*: 15.0.0
+*Version*: 16.0.0
