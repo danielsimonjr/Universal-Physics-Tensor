@@ -420,15 +420,16 @@ function printEquationReport(
       .sort();
     const shown = users.slice(0, 3).join(', ') + (users.length > 3 ? `, +${users.length - 3} more` : '');
     const used = users.length > 0 ? ` (used by ${shown})` : '';
+    const also = (b.otherMeanings ?? []).length > 0 ? `; '${b.name}' is also the symbol of ${b.otherMeanings!.join(', ')}` : '';
     if (b.bound === false) {
       out(
-        `  · '${b.name}' matches the catalog quantity ${b.quantity} ${api.format(b.dim)}${used}, a one-letter name, and is not bound. ` +
+        `  · '${b.name}' matches the catalog quantity ${b.quantity} ${api.format(b.dim)}${used}, a one-letter name, and is not bound${also}. ` +
           'Pass --bind-short to bind it, or write the full name you meant',
       );
     } else {
       out(
         `  · '${b.name}' is bound to the catalog quantity ${b.quantity} ${api.format(b.dim)}, a one-letter name` +
-          `${used}; if you meant another quantity, write its full name`,
+          `${used}${also}; if you meant another quantity, write its full name`,
       );
     }
   }

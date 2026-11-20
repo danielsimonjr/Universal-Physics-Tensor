@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2861
+    "totalExports": 2864
   },
   "entryPoints": [
     {
@@ -12281,7 +12281,8 @@
             "file": "./dimensional/formula-names.js",
             "imports": [
               "assertSynonymAgreement",
-              "expandSynonymValues"
+              "expandSynonymValues",
+              "greekLetter"
             ],
             "reExport": true
           },
@@ -12657,6 +12658,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -12981,6 +12983,7 @@
           "shareSynonyms",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "CANONICAL_GROUP_PREFACTORS",
           "formatQuantity",
           "formatExact",
@@ -13165,6 +13168,7 @@
         ],
         "exports": [
           "NAME_TABLE",
+          "symbolIndex",
           "aliasesForTarget",
           "editDistance",
           "nearQuantityNames",
@@ -13172,6 +13176,7 @@
           "collapseSynonymGovernors"
         ],
         "functions": [
+          "symbolIndex",
           "aliasesForTarget",
           "editDistance",
           "nearQuantityNames",
@@ -19604,12 +19609,14 @@
             "file": "./aliases.js",
             "imports": [
               "aliasesForTarget",
-              "editDistance"
+              "editDistance",
+              "symbolIndex"
             ]
           },
           {
             "file": "../dimensional/formula-names.js",
             "imports": [
+              "greekLetter",
               "resolveQuantityName"
             ]
           },
@@ -19617,6 +19624,12 @@
             "file": "./catalog-graph.js",
             "imports": [
               "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "./canonical-graph.js",
+            "imports": [
+              "CANONICAL_GRAPH"
             ]
           },
           {
@@ -21534,6 +21547,7 @@
           "synonymDisagreement",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "resolveQuantityName",
           "SynonymDisagreementError"
         ],
@@ -21553,6 +21567,7 @@
           "synonymDisagreement",
           "assertSynonymAgreement",
           "expandSynonymValues",
+          "greekLetter",
           "resolveQuantityName"
         ],
         "constants": [
@@ -28649,15 +28664,15 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89604,
-    "totalExports": 2861,
+    "totalLinesOfCode": 89672,
+    "totalExports": 2864,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 937,
+    "totalFunctions": 939,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1409,
+    "totalReExports": 1410,
     "totalTypeOnlyImports": 537,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

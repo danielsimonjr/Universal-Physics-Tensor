@@ -182,6 +182,29 @@ export function expandSynonymValues<T extends Record<string, number>>(values: T)
   return out as T;
 }
 
+/** The Greek letters by their English names, in alphabet order. */
+const GREEK_NAMES = [
+  'alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota', 'kappa', 'lambda', 'mu',
+  'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega',
+] as const;
+
+/**
+ * The Greek letter that `name` spells (`omega` is `ω`, `Omega` is `Ω`), or `undefined`.
+ * A lower-case name is the small letter and a capitalised name is the capital letter, so the
+ * case of the symbol stays. A quantity symbol is written in Greek; a typed name is not.
+ *
+ * @param name - The typed name.
+ * @returns The letter, or `undefined` when `name` is not the name of a Greek letter.
+ */
+export function greekLetter(name: string): string | undefined {
+  const i = GREEK_NAMES.indexOf(name.toLowerCase() as (typeof GREEK_NAMES)[number]);
+  if (i < 0) return undefined;
+  // After rho the small letters skip final sigma (U+03C2) and the capitals skip U+03A2.
+  const small = String.fromCodePoint(0x03b1 + i + (i > 16 ? 1 : 0));
+  if (name === GREEK_NAMES[i]) return small;
+  return name === GREEK_NAMES[i][0]!.toUpperCase() + GREEK_NAMES[i].slice(1) ? small.toUpperCase() : undefined;
+}
+
 /**
  * The catalog or parameter name `name` means.
  *
