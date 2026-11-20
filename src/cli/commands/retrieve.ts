@@ -257,11 +257,18 @@ function loadExpr(api: CommandCtx['api'], value: string): ReturnType<CommandCtx[
 /** The tree of a `--formula` text, each symbol bound to its `--dim`. A refusal is a usage error. */
 function parseFormulaQuery(api: CommandCtx['api'], formula: string, dimFlags: readonly string[]): ExprNode {
   try {
+    if (formula.trim().length === 0) throw new Error('--formula is empty: give a formula text, e.g. --formula="E - m*c^2"');
     const declared = new Map<string, Dimension>();
     for (const spec of dimFlags) {
       const colon = spec.indexOf(':');
       if (colon < 1) throw new Error(`--dim=${spec} must be name:dimension (e.g. --dim=m:mass)`);
-      declared.set(spec.slice(0, colon), api.parseDimensionSpec(spec.slice(colon + 1)));
+      const name = spec.slice(0, colon);
+      const dim = api.parseDimensionSpec(spec.slice(colon + 1));
+      const prior = declared.get(name);
+      if (prior !== undefined && JSON.stringify(prior) !== JSON.stringify(dim)) {
+        throw new Error(`'${name}' is declared twice with two dimensions: give one --dim=${name}:dimension`);
+      }
+      declared.set(name, dim);
     }
     return api.parseDeclaredExpression(formula, declared);
   } catch (e) {

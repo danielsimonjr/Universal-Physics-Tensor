@@ -49,4 +49,19 @@ describe('upt retrieve --formula', () => {
     expect(bad.code).toBe(2);
     expect(bad.out).toMatch(/zqxdim/);
   });
+
+  it('C5: a symbol declared twice with two dimensions is refused, not resolved by order', async () => {
+    const r = await run(['retrieve', 'x', '--formula=m - m', '--dim=m:mass', '--dim=m:length']);
+    expect(r.code).toBe(2);
+    expect(r.out).toMatch(/'m' is declared twice/);
+    const same = await run(['retrieve', 'x', '--formula=E - m*c^2', '--dim=E:energy', '--dim=m:mass', '--dim=m:mass', '--dim=c:c', '--json']);
+    expect(same.code).toBe(0);
+  });
+
+  it('C6: an empty --formula is a usage error that says so', async () => {
+    const r = await run(['retrieve', 'x', '--formula=', '--dim=m:mass']);
+    expect(r.code).toBe(2);
+    expect(r.out).toMatch(/--formula is empty/);
+    expect(r.out).not.toMatch(/NaN/);
+  });
 });
