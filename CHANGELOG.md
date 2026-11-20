@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Documented
+
+- Persona dogfood session 21 (undergraduate physics student) on published 16.0.0, CLI and API: `docs/persona-sessions/2026-11-20-undergraduate-physics-student-session-21.md`. Records the retests of the session 20 issues and the new findings, issues #736 to #745 and the reopened #684.
+
 ## [16.0.0] - 2026-11-20
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (139 packages). `bun outdated` lists six runtime packages with a newer release: `@danielsimonjr/mathts-autograd` 0.6.0 (0.6.1 in range), `mathts-expression` 0.14.0 (0.14.1 in range), `mathts-tensor` 0.5.0 (0.5.1 in range), `mathts-core` 0.28.0 (0.29.0 latest), `mathts-functions` 0.86.0 (0.87.0 latest) and `mathts-matrix` 0.11.0 (0.12.0 latest). It lists three development packages: `fast-check` 4.10.2 (4.10.3 in range), and `vitest` and `@vitest/coverage-v8` 4.1.12 (5.1.1 latest, a major that `.github/dependabot.yml` ignores). This release does not move them. The version is a major because of two breaking entries below. A glued unit spelling is a product only when a `products` row of `data/units.json` lists its factors (#676), so spellings such as `gal`, `lbs`, `kmh` and `kgs` are refused as unknown units. The shipped data files move to `schemaVersion` 2 (`data/units.json`) and 4 (`data/bridge-catalog.json`) (#734).
