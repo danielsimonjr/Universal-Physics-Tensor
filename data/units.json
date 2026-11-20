@@ -619,7 +619,8 @@
       "dimension": {
         "J": 1
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
     },
     {
       "symbols": [
@@ -630,7 +631,59 @@
         "J": 1,
         "L": -2
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
+    },
+    {
+      "symbols": [
+        "Bq"
+      ],
+      "scale": "1",
+      "dimension": {
+        "T": -1
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Becquerel: one decay per second. It has the dimension of Hz but counts no cycles."
+    },
+    {
+      "symbols": [
+        "Gy"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "T": -2
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Gray: absorbed dose, J/kg."
+    },
+    {
+      "symbols": [
+        "Sv"
+      ],
+      "scale": "1",
+      "dimension": {
+        "L": 2,
+        "T": -2
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Sievert: dose equivalent, J/kg. Gy and Sv have one dimension; the table does not tell the quantities apart."
+    },
+    {
+      "symbols": [
+        "kat"
+      ],
+      "scale": "1",
+      "dimension": {
+        "N": 1,
+        "T": -1
+      },
+      "prefixable": true,
+      "kind": true,
+      "comment": "Katal: mol/s."
     },
     {
       "symbols": [
@@ -888,7 +941,8 @@
         "M": 1,
         "T": -1
       },
-      "prefixable": true
+      "prefixable": true,
+      "kind": true
     },
     {
       "symbols": [

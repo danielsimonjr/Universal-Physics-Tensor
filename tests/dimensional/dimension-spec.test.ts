@@ -195,13 +195,14 @@ describe('the SI special-name units and the named dimensions', () => {
     J: 'energy', W: 'power', C: 'charge', V: 'voltage', F: 'capacitance', ohm: 'resistance',
     S: 'conductance', Wb: 'magnetic_flux', T: 'magnetic_field', H: 'inductance',
     degC: 'temperature', lm: 'luminous_intensity',
+    // Same dimension as frequency; Bq counts no cycles (see the cycles test in si-special-units.test.ts).
+    Bq: 'frequency',
   };
   const EXCLUDED: Record<string, string> = {
     lx: 'no named dimension for illuminance',
-    Bq: 'unit not in the unit table; the same dimension as Hz',
-    Gy: 'unit not in the unit table',
-    Sv: 'unit not in the unit table',
-    kat: 'unit not in the unit table',
+    Gy: 'no named dimension for absorbed dose',
+    Sv: 'no named dimension for dose equivalent',
+    kat: 'no named dimension for catalytic activity',
   };
   it('COVERED and EXCLUDED are disjoint and together are exactly the 22 units', () => {
     const covered = Object.keys(COVERED);
@@ -216,14 +217,11 @@ describe('the SI special-name units and the named dimensions', () => {
   }
   // The EXCLUDED reasons are checked, so a later change to the unit table or to
   // NAMED_DIMS moves the unit out of EXCLUDED instead of leaving a stale reason.
-  for (const unit of Object.keys(EXCLUDED).filter((u) => EXCLUDED[u].startsWith('unit not in the unit table'))) {
-    it(`${unit} is not in the unit table`, () => {
-      expect(() => unitDimension(unit)).toThrow();
+  for (const unit of Object.keys(EXCLUDED).filter((u) => EXCLUDED[u].startsWith('no named dimension'))) {
+    it(`${unit} has no named dimension`, () => {
+      const read = unitDimension(unit);
+      const same = NAMED_DIMENSION_NAMES.filter((n) => JSON.stringify(parseDimensionSpec(n)) === JSON.stringify(read));
+      expect(same).toEqual([]);
     });
   }
-  it('lx has no named dimension', () => {
-    const lx = unitDimension('lx');
-    const same = NAMED_DIMENSION_NAMES.filter((n) => JSON.stringify(parseDimensionSpec(n)) === JSON.stringify(lx));
-    expect(same).toEqual([]);
-  });
 });
