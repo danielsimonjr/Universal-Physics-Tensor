@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2858
+    "totalExports": 2859
   },
   "entryPoints": [
     {
@@ -11709,6 +11709,7 @@
             "file": "./dimensional/units.js",
             "imports": [
               "convertValue",
+              "readQuantityLiteral",
               "UnitError",
               "unitRows"
             ],
@@ -12500,6 +12501,7 @@
           "CASE_CONTRACTS",
           "slotForSpelling",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -12782,6 +12784,7 @@
           "CaseCheck",
           "CaseResult",
           "convertValue",
+          "readQuantityLiteral",
           "UnitError",
           "unitRows",
           "auditAxisDiscrimination",
@@ -28615,15 +28618,15 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89456,
-    "totalExports": 2858,
+    "totalLinesOfCode": 89468,
+    "totalExports": 2859,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 936,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1407,
+    "totalReExports": 1408,
     "totalTypeOnlyImports": 535,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
