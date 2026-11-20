@@ -15,7 +15,7 @@ async function ok(args: string[]): Promise<string> {
 }
 
 function first(text: string): number {
-  return Number(text.trim().split('\n')[0]);
+  return parseFloat(text.trim().split('\n')[0]!);
 }
 
 describe('#545 steradian, arcsecond, milliarcsecond', () => {

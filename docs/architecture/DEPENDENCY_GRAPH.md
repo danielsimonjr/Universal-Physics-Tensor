@@ -2687,6 +2687,7 @@ The codebase is organized into the following modules:
 | `../euler-guard.js` | `FormulaUsageError` | Import |
 | `../eval-numbers.js` | `codataScope` | Import |
 | `../bindings.js` | `splitAssignments` | Import |
+| `../expr-print.js` | `primaryUnitLabel` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
@@ -7822,7 +7823,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89468 |
+| Total Lines of Code | 89480 |
 | Total Exports | 2859 |
 | Total Re-exports | 1408 |
 | Total Classes | 86 |

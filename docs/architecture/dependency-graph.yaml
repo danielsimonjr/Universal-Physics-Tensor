@@ -6241,6 +6241,9 @@ modules:
         - file: ../bindings.js
           imports:
             - splitAssignments
+        - file: ../expr-print.js
+          imports:
+            - primaryUnitLabel
         - file: ../../dimensional/natural-units.js
           imports:
             - UnitMode
@@ -19820,7 +19823,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89468
+  totalLinesOfCode: 89480
   totalExports: 2859
   totalClasses: 86
   totalInterfaces: 523

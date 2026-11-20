@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 391,
-    "totalTestFiles": 746,
+    "totalTestFiles": 747,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -10209,6 +10209,7 @@
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/decimal-literal-one-rule.test.ts",
       "tests/cli/display-unit-rule.test.ts",
+      "tests/cli/eval-result-unit.test.ts",
       "tests/cli/evaluate-display-unit.test.ts",
       "tests/cli/evaluate-null-output-cause.test.ts",
       "tests/cli/explain-temperature-binding.test.ts",
@@ -10831,6 +10832,7 @@
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/decimal-literal-one-rule.test.ts",
       "tests/cli/display-unit-rule.test.ts",
+      "tests/cli/eval-result-unit.test.ts",
       "tests/cli/evaluate-display-unit.test.ts",
       "tests/cli/evaluate-null-output-cause.test.ts",
       "tests/cli/explain-temperature-binding.test.ts",
@@ -11607,6 +11609,7 @@
       "tests/cli/cli-boundary.test.ts",
       "tests/cli/decimal-literal-one-rule.test.ts",
       "tests/cli/display-unit-rule.test.ts",
+      "tests/cli/eval-result-unit.test.ts",
       "tests/cli/evaluate-display-unit.test.ts",
       "tests/cli/evaluate-null-output-cause.test.ts",
       "tests/cli/explain-temperature-binding.test.ts",
@@ -15239,6 +15242,7 @@
       "tests/canonical/quantity-names.test.ts",
       "tests/canonical/statistical-mechanics.test.ts",
       "tests/canonical/thermo-nuclear-cosmo.test.ts",
+      "tests/cli/eval-result-unit.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/algebraic-equivalence.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
@@ -15785,6 +15789,7 @@
       "tests/cases/applied-cases.test.ts",
       "tests/cases/unit-table-constants.test.ts",
       "tests/cli/cli-boundary.test.ts",
+      "tests/cli/eval-result-unit.test.ts",
       "tests/cli/evaluate-display-unit.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/evaluation-result.test.ts",
@@ -20932,6 +20937,11 @@
       "src/cli/commands/testplan.ts",
       "src/cli/eval-numbers.ts",
       "src/dimensional/symbolic-constants.ts"
+    ],
+    "tests/cli/eval-result-unit.test.ts": [
+      "src/dimensional/units.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/cli/eval-si-prefix-constants.test.ts": [
       "src/cli/main.ts",

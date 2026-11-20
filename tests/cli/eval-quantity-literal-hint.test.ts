@@ -47,7 +47,7 @@ describe('upt eval: a formula text that is a quantity literal', () => {
   it('a binding of the same text still evaluates', async () => {
     const r = await run(['eval', 'x', 'x=2mH']);
     expect(r.code).toBe(0);
-    expect(Number(r.stdout.trim())).toBe(0.002);
+    expect(r.stdout.trim()).toBe('0.002 H');
   });
 
   it('a bare number still evaluates', async () => {
