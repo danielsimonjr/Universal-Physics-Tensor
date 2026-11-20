@@ -4,7 +4,7 @@
     "version": "15.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2858
+    "totalExports": 2860
   },
   "entryPoints": [
     {
@@ -5876,7 +5876,8 @@
           "expressionNames",
           "withoutUnreadConstants",
           "evaluateFormula",
-          "parseCatalogExpression"
+          "parseCatalogExpression",
+          "parseDeclaredExpression"
         ],
         "functions": [
           "formulaNames",
@@ -5886,7 +5887,8 @@
           "expressionNames",
           "withoutUnreadConstants",
           "evaluateFormula",
-          "parseCatalogExpression"
+          "parseCatalogExpression",
+          "parseDeclaredExpression"
         ]
       },
       "src/bridges/holds.ts": {
@@ -10212,6 +10214,20 @@
         ],
         "internalDependencies": [
           {
+            "file": "../../dimensional/ast-types.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "../args.js",
             "imports": [
               "FlagSpec"
@@ -12382,6 +12398,13 @@
             "reExport": true
           },
           {
+            "file": "./bridges/expr-parse.js",
+            "imports": [
+              "parseDeclaredExpression"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/evaluators.js",
             "imports": [
               "missingEvaluatorMessage"
@@ -12648,6 +12671,7 @@
           "fetchOnnxModel",
           "onnxEmbedder",
           "builtinFormulaDimensionChecker",
+          "parseDeclaredExpression",
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
@@ -12971,6 +12995,7 @@
           "fetchOnnxModel",
           "onnxEmbedder",
           "builtinFormulaDimensionChecker",
+          "parseDeclaredExpression",
           "missingEvaluatorMessage",
           "relationNotices",
           "constantNotes",
@@ -28615,16 +28640,16 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89456,
-    "totalExports": 2858,
+    "totalLinesOfCode": 89547,
+    "totalExports": 2860,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 936,
+    "totalFunctions": 937,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1407,
-    "totalTypeOnlyImports": 535,
+    "totalReExports": 1408,
+    "totalTypeOnlyImports": 537,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

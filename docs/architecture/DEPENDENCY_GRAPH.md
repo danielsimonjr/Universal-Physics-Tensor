@@ -1686,7 +1686,13 @@ The codebase is organized into the following modules:
 | `./evaluation-errors.js` | `ConstantInputError` | Import |
 
 **Exports:**
-- Functions: `formulaNames`, `reservedFormulaNames`, `formulaScope`, `formulaVariables`, `expressionNames`, `withoutUnreadConstants`, `evaluateFormula`, `parseCatalogExpression`
+- Functions:
+
+  ```text
+  formulaNames, reservedFormulaNames, formulaScope, formulaVariables, expressionNames,
+  withoutUnreadConstants, evaluateFormula, parseCatalogExpression, parseDeclaredExpression
+  ```
+
 
 ---
 
@@ -2982,6 +2988,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
@@ -3524,6 +3532,7 @@ The codebase is organized into the following modules:
 | `./atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid` | Re-export |
 | `./atlas/benchmark/onnx-embedder.js` | `fetchOnnxModel, onnxEmbedder` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
+| `./bridges/expr-parse.js` | `parseDeclaredExpression` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./bridges/notices.js` | `relationNotices` | Re-export |
 | `./dimensional/symbolic-constants.js` | `constantNotes, constantRecord` | Re-export |
@@ -3589,8 +3598,8 @@ The codebase is organized into the following modules:
   rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved, resolveEvaluable,
   siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus, EmbeddingUnavailable,
   ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder, builtinFormulaDimensionChecker,
-  missingEvaluatorMessage, relationNotices, constantNotes, constantRecord, BridgeEdge, VizJunction,
-  VizModel, EvidenceTag, RelationType, EquationAnalysis
+  parseDeclaredExpression, missingEvaluatorMessage, relationNotices, constantNotes, constantRecord,
+  BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -7822,15 +7831,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89456 |
-| Total Exports | 2858 |
-| Total Re-exports | 1407 |
+| Total Lines of Code | 89547 |
+| Total Exports | 2860 |
+| Total Re-exports | 1408 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 936 |
+| Total Functions | 937 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 535 |
+| Type-only Imports | 537 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

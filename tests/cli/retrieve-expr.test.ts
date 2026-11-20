@@ -125,7 +125,8 @@ describe('upt retrieve --expr', () => {
     for (const line of shown) {
       const argv = line
         .slice('upt '.length)
-        .split(/\s+/)
+        .match(/(?:[^\s"]+|"[^"]*")+/g)!
+        .map((a) => a.replace(/"/g, ''))
         .map((a) => (a.startsWith('--expr=') && !a.startsWith('--expr=package:') ? `--expr=${exprFile}` : a));
       if (line.includes('--expr=')) withExpr += 1;
       const c = captureMerged();
@@ -133,6 +134,8 @@ describe('upt retrieve --expr', () => {
       const accepted = acceptedLines(text(c));
       // A line without --expr is the documented text-only case and prints "none".
       if (line.includes('--expr=')) expect(accepted[0]?.trim()).toBe(RECORD);
+      // A --formula line names the record in its first two ranks (CE-kinetic-energy shares the key).
+      if (line.includes('--formula=')) expect(accepted.slice(0, 2).map((l) => l.trim())).toContain(RECORD);
     }
     expect(withExpr).toBeGreaterThan(0);
     expect(retrieveCommand.example).toContain('--expr=');

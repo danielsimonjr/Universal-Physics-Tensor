@@ -907,7 +907,7 @@ Flags:
   --json
         Write a JSON envelope to stdout instead of the text report.
 
-  upt retrieve <claim> [--expr=FILE] [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
+  upt retrieve <claim> [--expr=FILE | --formula=TEXT --dim=name:dimension ...] [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
         [--embed-model=NAME] [--ollama-url=URL] [--no-vector-cache]
         upt retrieve --fetch-model [--embed-dtype=q8|fp16|fp32] [--embed-model=NAME]
         Propose canonical relations for a claim. The default is the atlas
@@ -946,9 +946,14 @@ Flags:
         of `upt probe`, with a dimension on each symbol. The search ranks every
         corpus record by structure. The text output prints the first 10; --json
         keeps the full list. The claim words may be empty when --expr is given.
+        --formula=TEXT gives the search an expression from text. Each symbol takes the
+        dimension of its --dim=name:dimension. A registered constant (c, G, F, h) is
+        declared too, as itself (--dim=c:c) or as another dimension (--dim=F:force). A
+        name with no --dim is refused. --formula and --expr are exclusive.
         A FILE that starts with package: is relative to the package root, so the
         example works from any directory.
         e.g.  upt retrieve rest energy --expr=package:data/examples/retrieve-mass-energy.json
+              upt retrieve rest energy --formula="E - m*c^2" --dim=E:energy --dim=m:mass --dim=c:c
               upt retrieve period of a pendulum
               upt retrieve period of a pendulum --embed
               upt retrieve --fetch-model
@@ -957,6 +962,10 @@ Flags:
         Write a JSON envelope to stdout instead of the text report.
   --expr=VALUE
         An ExprNode JSON file (the format of `upt probe`). A value that starts with package: names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted.
+  --formula=VALUE
+        A formula text, for example "E - m*c^2". The atlas search ranks the corpus by its structure. Every symbol needs a --dim. It is used instead of --expr.
+  --dim=VALUE (repeatable)
+        name:dimension of one --formula symbol, for example --dim=m:mass. A registered constant is declared as itself, for example --dim=c:c. Needs --formula.
   --embed
         Embed the claim and every corpus record with the chosen backend. Acceptance stays the atlas search. A failure of the embedder still prints that search and exits 0.
   --embed-backend=VALUE
