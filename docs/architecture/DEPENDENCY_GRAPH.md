@@ -2688,6 +2688,7 @@ The codebase is organized into the following modules:
 | `../eval-numbers.js` | `codataScope` | Import |
 | `../bindings.js` | `splitAssignments` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
 - Constants: `command`
@@ -2703,7 +2704,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson, emitJsonError` | Import |
-| `../expr-print.js` | `coherentUnits, derivedUnitOf` | Import |
+| `../expr-print.js` | `primaryUnitLabel` | Import |
 | `../bindings.js` | `splitAssignments` | Import |
 | `../numeric-flag.js` | `realFlag` | Import |
 | `../errors.js` | `UsageError` | Import |
@@ -2712,7 +2713,6 @@ The codebase is organized into the following modules:
 | `../closed-form-range.js` | `closedFormRangeLabel` | Import |
 
 **Exports:**
-- Functions: `primaryUnitLabel`
 - Constants: `command`
 
 ---
@@ -3022,7 +3022,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `../expr-print.js` | `EVAL_STUBS, printDisplay, printEval, printLatex, latexName` | Import |
+| `../expr-print.js` | `EVAL_STUBS, primaryUnitLabel, printDisplay, printEval, printLatex, latexName` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3117,7 +3117,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `CoherentUnit`
-- Functions: `latexName`, `printLatex`, `coherentUnits`, `derivedUnitOf`
+- Functions: `latexName`, `printLatex`, `primaryUnitLabel`
 - Constants: `EVAL_STUBS`, `printDisplay`, `printEval`
 
 ---
@@ -3526,7 +3526,7 @@ The codebase is organized into the following modules:
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./bridges/notices.js` | `relationNotices` | Re-export |
-| `./dimensional/symbolic-constants.js` | `constantNotes` | Re-export |
+| `./dimensional/symbolic-constants.js` | `constantNotes, constantRecord` | Re-export |
 | `./composition/edge.js` | `BridgeEdge` | Re-export |
 | `./composition/graph-viz.js` | `VizJunction, VizModel` | Re-export |
 | `./atlas/types.js` | `EvidenceTag, RelationType` | Re-export |
@@ -3589,8 +3589,8 @@ The codebase is organized into the following modules:
   rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved, resolveEvaluable,
   siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus, EmbeddingUnavailable,
   ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder, builtinFormulaDimensionChecker,
-  missingEvaluatorMessage, relationNotices, constantNotes, BridgeEdge, VizJunction, VizModel,
-  EvidenceTag, RelationType, EquationAnalysis
+  missingEvaluatorMessage, relationNotices, constantNotes, constantRecord, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -7822,15 +7822,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89337 |
-| Total Exports | 2859 |
-| Total Re-exports | 1406 |
+| Total Lines of Code | 89443 |
+| Total Exports | 2858 |
+| Total Re-exports | 1407 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 938 |
+| Total Functions | 936 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 534 |
+| Type-only Imports | 535 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

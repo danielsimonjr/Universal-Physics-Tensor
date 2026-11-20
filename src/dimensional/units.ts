@@ -86,7 +86,13 @@ export interface ParsedUnit {
   readonly affine?: AffineTemperature;
 }
 
-/** Thrown for any input that does not parse as a value with a known unit. @public */
+/**
+ * The base of every error the unit readers throw: `parseUnit` for text that
+ * is not a unit expression (for example a number with a unit), `convertValue`
+ * for text that is not a number with a unit, for an affine target, and for a
+ * dimension mismatch. The subclasses name an unknown, refused or ambiguous unit.
+ * @public
+ */
 export class UnitError extends Error {
   constructor(message: string) {
     super(message);
@@ -594,10 +600,11 @@ function finiteLiteral(raw: string, value: number): number {
 }
 
 /**
- * Read `raw` as one number with an optional unit, in SI. Null when `raw` is
- * not that form or names a unit no row spells, so the caller can read it as
- * an expression. A refused unit and an ambiguous one throw. The value may be
- * non-finite (`1e999`); the caller owns that refusal and its error class.
+ * Read `raw` as one number with an optional unit, in SI. Null only when `raw`
+ * is not that form, so the caller can read it as an expression. A unit no row
+ * spells throws {@link UnknownUnitError}; a refused unit and an ambiguous one
+ * throw. The value may be non-finite (`1e999`); the caller owns that refusal
+ * and its error class.
  * @internal
  */
 export function readQuantityLiteral(raw: string, temperature: TemperatureReading = 'absolute'): QuantityLiteral | null {
@@ -606,13 +613,7 @@ export function readQuantityLiteral(raw: string, temperature: TemperatureReading
   if (literal.unit === '') {
     return { value: scaleToNumber(literal.magnitude), dim: DIMENSIONLESS, unit: '', cycles: 0 };
   }
-  let unit: UnitReading;
-  try {
-    unit = readUnit(literal.unit);
-  } catch (error) {
-    if (error instanceof UnknownUnitError) return null;
-    throw error;
-  }
+  const unit = readUnit(literal.unit);
   return {
     value: scaleToNumber(siMagnitude(literal.magnitude, unit, temperature)),
     dim: unit.dim,
