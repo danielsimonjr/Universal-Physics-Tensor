@@ -357,6 +357,13 @@ export { fetchOnnxModel, onnxEmbedder } from './atlas/benchmark/onnx-embedder.js
 export { builtinFormulaDimensionChecker } from './numerical/formula-dimension.js';
 
 /**
+ * Query-formula parser for `upt retrieve --formula`.
+ *
+ * @internal
+ */
+export { parseDeclaredExpression } from './bridges/expr-parse.js';
+
+/**
  * Missing-evaluator message for `upt evaluate`.
  *
  * @internal

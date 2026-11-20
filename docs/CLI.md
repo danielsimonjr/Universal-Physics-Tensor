@@ -522,16 +522,18 @@ upt coverage
 
 ### `retrieve`
 
-Search the atlas for a claim. --expr=FILE ranks the corpus by an expression. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model.
+Search the atlas for a claim. --expr=FILE or --formula=TEXT with --dim ranks the corpus by an expression. --embed asks an embedding model (ONNX in process, or Ollama) and does not accept that order. --fetch-model downloads the ONNX model.
 
 ```
-upt retrieve <claim> [--expr=FILE] [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
+upt retrieve <claim> [--expr=FILE | --formula=TEXT --dim=name:dimension ...] [--embed] [--embed-backend=onnx|ollama] [--embed-dtype=q8|fp16|fp32]
 ```
 
 | Flag | Value | Default | Description |
 |---|---|---|---|
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 | `--expr=VALUE` | `=` value |  | An ExprNode JSON file (the format of `upt probe`). A value that starts with package: names a file relative to the package root. The atlas search ranks the corpus by its structure. A text claim has no expression, so without this flag nothing is accepted. |
+| `--formula=VALUE` | `=` value |  | A formula text, for example "E - m*c^2". The atlas search ranks the corpus by its structure. Every symbol needs a --dim. It is used instead of --expr. |
+| `--dim=VALUE (repeatable)` | `=` value, repeatable |  | name:dimension of one --formula symbol, for example --dim=m:mass. A registered constant is declared as itself, for example --dim=c:c. Needs --formula. |
 | `--embed` | no |  | Embed the claim and every corpus record with the chosen backend. Acceptance stays the atlas search. A failure of the embedder still prints that search and exits 0. |
 | `--embed-backend=VALUE` | `=` value | onnx | Embedding backend: onnx (in process) or ollama (a local server). Used only with --embed. |
 | `--embed-dtype=VALUE` | `=` value | fp16 | ONNX weight precision: q8, fp16 or fp32. Used only with the onnx backend or --fetch-model. |
