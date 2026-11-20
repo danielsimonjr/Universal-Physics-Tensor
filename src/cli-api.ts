@@ -108,7 +108,7 @@ export { CASE_CONTRACTS } from './cases/index.js';
 export { slotForSpelling } from './bridges/input-contract.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
 /** The unit reader's conversion, its refusal and the rows of the unit table. */
-export { convertValue, UnitError, unitRows } from './dimensional/units.js';
+export { convertValue, readQuantityLiteral, UnitError, unitRows } from './dimensional/units.js';
 /** The axis-discrimination audit and the level (0.05) at which an axis's evidence is earned. */
 export { auditAxisDiscrimination, AUDIT_ALPHA } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';

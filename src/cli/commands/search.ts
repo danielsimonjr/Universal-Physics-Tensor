@@ -65,7 +65,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       {
         command: 'search',
         epistemics:
-          'Matched by the words of names, ids, symbols, genuine aliases and catalog-bridge descriptions. ' +
+          'Matched by the words of names, ids, symbols, genuine aliases, catalog-bridge descriptions and declared catalog-bridge domains. ' +
           'An equal dimension is never a match. No match means none in these registries, not none in physics.',
         options: { query },
         result: {
