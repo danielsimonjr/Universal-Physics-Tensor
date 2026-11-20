@@ -238,6 +238,12 @@ function factorStart(out: string, numberStart: number): number | null {
   for (;;) {
     let q = p - 1;
     while (q >= 0 && /\s/.test(out[q]!)) q--;
+    // A sign on the exponent belongs to it: `10^-3m` is (10^-3)·m.
+    if (q >= 0 && (out[q] === '-' || out[q] === '+')) {
+      let r = q - 1;
+      while (r >= 0 && /\s/.test(out[r]!)) r--;
+      if (r >= 0 && out[r] === '^') q = r;
+    }
     if (q < 0 || out[q] !== '^') return p;
     q--;
     while (q >= 0 && /\s/.test(out[q]!)) q--;

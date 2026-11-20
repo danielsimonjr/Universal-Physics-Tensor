@@ -45,4 +45,11 @@ describe('a quantity literal after an operator is one factor (#729)', () => {
     same('10^3m', '1000m');
     same('6m/2s^2', '3m/(1s^2)');
   });
+
+  it('a signed exponent stays in the power: 10^-3m is 1 mm', () => {
+    expect(readBinding('2^-3m').value).toBeCloseTo(0.125, 12);
+    same('2^-3m', '0.125m');
+    same('10^-3m/1s', '0.001m/(1s)');
+    same('2^+3m', '8m');
+  });
 });
