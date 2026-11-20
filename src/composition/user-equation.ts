@@ -26,7 +26,7 @@ import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constan
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
 import { aliasesForTarget, editDistance, symbolIndex } from './aliases.js';
-import { resolveQuantityName } from '../dimensional/formula-names.js';
+import { greekLetter, resolveQuantityName } from '../dimensional/formula-names.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { CANONICAL_GRAPH } from './canonical-graph.js';
 import type { VizModel, VizJunction } from './graph-viz.js';
@@ -462,10 +462,12 @@ export async function analyzeUserEquation(
     if (!bindShort && literalShort(n) !== null) return null;
     return resolveQuantityName(n, catalogNames, aliasMap);
   };
-  // The symbol table `upt search` reads: a quantity's symbol and its edge aliases (#684).
+  // The symbol table `upt search` reads: a quantity's symbol and its edge aliases (#684). A Greek
+  // name (`omega`) also reads its letter (`ω`).
   const symbols = symbolIndex([...CATALOG_GRAPH, ...CANONICAL_GRAPH]);
   const symbolOf = (n: string): string[] =>
-    [...(symbols.get(n) ?? [])].filter((q) => catalogNames.has(q)).sort((x, y) => x.localeCompare(y));
+    [...new Set([...(symbols.get(n) ?? []), ...(symbols.get(greekLetter(n) ?? '') ?? [])])]
+      .filter((q) => catalogNames.has(q)).sort((x, y) => x.localeCompare(y));
   // A quantity whose symbol is the name reads before a spelling neighbour.
   const suggest = (n: string): string[] =>
     [...new Set([...symbolOf(n), ...suggestQuantities(n, catalogNames, 5)])].slice(0, 5);

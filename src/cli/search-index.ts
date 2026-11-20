@@ -165,12 +165,14 @@ function affirmativeClauses(text: string): string {
 
 /** The fields of `e` that `q` matches, or `null` when it matches none.
  *  `prefixOf` is set only when no field contains `q` as a whole word. */
-function matchWord(q: string, e: SearchEntry): { labels: string[]; prefixOf?: string } | null {
+function matchWord(q: string, e: SearchEntry, letter?: string): { labels: string[]; prefixOf?: string } | null {
   const short = q.length <= 2;
   const fq = fold(q);
+  // A Greek name (`omega`) also matches its letter (`ω`) as a whole symbol or alias.
+  const isLetter = (x: string): boolean => letter !== undefined && x === letter;
   if (short) {
     const hit = e.fields.filter(
-      (f) => (f.exact ?? []).includes(q) || (f.label === 'id' && words(f.text).includes(fq)),
+      (f) => (f.exact ?? []).some((x) => x === q || isLetter(x)) || (f.label === 'id' && words(f.text).includes(fq)),
     );
     return hit.length === 0 ? null : { labels: hit.map((f) => f.label) };
   }
@@ -179,7 +181,7 @@ function matchWord(q: string, e: SearchEntry): { labels: string[]; prefixOf?: st
   let prefixOf: string | undefined;
   for (const f of e.fields) {
     const ws = words(f.text);
-    const exactHere = ws.includes(fq) || (f.exact ?? []).some((x) => fold(x) === fq);
+    const exactHere = ws.includes(fq) || (f.exact ?? []).some((x) => fold(x) === fq || isLetter(x));
     if (exactHere) {
       labels.push(f.label);
       exact = true;
@@ -415,7 +417,8 @@ export function matchEveryWord(
         if (q.length > 2) continue;
         // The name of a quantity is its id, so a whole segment of it also matches.
         const segment = e.kind === 'quantity' && e.fields.some((f) => f.label === 'name' && words(f.text).includes(q));
-        const hit = segment ? { labels: ['name'] } : matchWord(significant.find((s) => fold(s) === q) ?? q, e);
+        const raw = significant.find((s) => fold(s) === q) ?? q;
+        const hit = segment ? { labels: ['name'] } : matchWord(raw, e, api.greekLetter(raw));
         if (hit === null) continue;
         labels.push(...hit.labels);
         covered.add(q);
@@ -441,7 +444,7 @@ export function matchEveryWord(
     const prefixes: PrefixMatch[] = [];
     let all = true;
     for (const q of significant) {
-      const hit = alias === q ? { labels: ['alias'] } : matchWord(q, e);
+      const hit = alias === q ? { labels: ['alias'] } : matchWord(q, e, api.greekLetter(q));
       if (hit === null) {
         all = false;
         break;

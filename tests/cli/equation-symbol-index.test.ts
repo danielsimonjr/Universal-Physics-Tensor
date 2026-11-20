@@ -11,6 +11,7 @@ import { analyzeUserEquation } from '../../src/composition/user-equation.js';
 import { symbolIndex } from '../../src/composition/aliases.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
+import { greekLetter } from '../../src/dimensional/formula-names.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 
 function catalogDims(): Map<string, Dimension> {
@@ -48,6 +49,32 @@ describe('symbol index (#684 F1, F3)', () => {
     const index = symbolIndex(CATALOG_GRAPH);
     expect(index.get('T')?.has('temperature')).toBe(true);
     expect(index.get('t')?.has('temperature') ?? false).toBe(false);
+  });
+
+  it('reads a Greek letter by its name, in map and in search', async () => {
+    const user = await analyzeUserEquation('omega = sqrt(k/m)', catalogDims());
+    const omega = user.hints.find((h) => h.name === 'omega');
+    // The quantities whose symbol is ω read first, before any spelling neighbour.
+    const letter = [...(symbolIndex([...CATALOG_GRAPH, ...CANONICAL_GRAPH]).get('ω') ?? [])].sort();
+    expect(letter).toContain('ion-acoustic-frequency');
+    expect(omega?.suggestions.slice(0, letter.length)).toEqual(letter);
+    const found = await run(['search', 'omega']);
+    for (const q of letter) expect(found).toContain(q);
+  });
+
+  it('leaves a name that spells no Greek letter as before', async () => {
+    const user = await analyzeUserEquation('omega = sqrt(k/m)', catalogDims());
+    expect(user.hints.find((h) => h.name === 'k')?.suggestions).toEqual([
+      'arrhenius-rate', 'biot-k', 'damping-spring', 'eyring-rate', 'fin-conductivity',
+    ]);
+    expect(await run(['search', 'zqx'])).toContain('no entry matches');
+  });
+
+  it('keeps the case of a Greek name: Omega is the capital letter', () => {
+    expect(greekLetter('omega')).toBe('ω');
+    expect(greekLetter('Omega')).toBe('Ω');
+    expect(greekLetter('omegas')).toBeUndefined();
+    expect(greekLetter('k')).toBeUndefined();
   });
 
   it('names the other quantities of a bound one-letter name', async () => {
