@@ -30,6 +30,12 @@ describe('a quantity literal after an operator is one factor (#729)', () => {
     expect(r.dimension).toEqual(readBinding('2').dimension);
   });
 
+  it('1gallon/1L is the dimensionless 3.785411784 (the issue row)', () => {
+    const r = readBinding('1gallon/1L');
+    expect(r.value).toBeCloseTo(3.785411784, 9);
+    expect(r.dimension).toEqual(readBinding('2').dimension);
+  });
+
   it('controls: forms that were already right keep their value', () => {
     same('3m/s', '3m/(1s)');
     expect(readBinding('6m/(2s)').value).toBe(3);

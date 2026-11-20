@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 391,
-    "totalTestFiles": 756,
+    "totalTestFiles": 757,
     "testedCount": 380,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -12062,7 +12062,8 @@
       "tests/dimensional/unit-closure.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/euler-rejected.test.ts",
-      "tests/numerical/one-function-table.test.ts"
+      "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/quantity-literal-factor.test.ts"
     ],
     "src/numerical/christoffel-flat.ts": [
       "tests/numerical/christoffel-flat-indexing.test.ts",
@@ -16157,7 +16158,8 @@
       "tests/dimensional/unit-closure.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/euler-rejected.test.ts",
-      "tests/numerical/one-function-table.test.ts"
+      "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/quantity-literal-factor.test.ts"
     ],
     "src/numerical/christoffel-flat.ts": [
       "tests/numerical/christoffel-flat-indexing.test.ts",
@@ -29471,6 +29473,9 @@
     ],
     "tests/numerical/perihelion-finder.test.ts": [
       "src/numerical/perihelion-finder.ts"
+    ],
+    "tests/numerical/quantity-literal-factor.test.ts": [
+      "src/numerical/binding-value.ts"
     ],
     "tests/numerical/riemann-tensor-lowering.test.ts": [
       "src/numerical/index.ts",
