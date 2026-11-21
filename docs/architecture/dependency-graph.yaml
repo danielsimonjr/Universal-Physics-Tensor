@@ -572,6 +572,9 @@ modules:
       internalDependencies:
         - file: ../relations/composition-table.js
           imports:
+            - "*"
+        - file: ../relations/composition-table.js
+          imports:
             - COMPOSITION_TABLE
             - composeRelation
             - NO_COMPOSITE_CLAIM
@@ -2900,6 +2903,9 @@ modules:
           imports:
             - MissingDeltaAtError
             - MissingHorizonError
+        - file: ../relations/regime.js
+          imports:
+            - "*"
         - file: ../relations/regime.js
           imports:
             - collidingRegimeGroups
@@ -6587,6 +6593,9 @@ modules:
         - file: ../library-defaults.js
           imports:
             - DISCOVER_MAX_ORDERS_DEFAULT
+        - file: ../../dimensional/types.js
+          imports:
+            - "*"
       exports:
         - command
         - neighbourhood
@@ -6672,6 +6681,9 @@ modules:
             - selectRoute
             - transportReport
             - RouteClaim
+        - file: ../../cli-api.js
+          imports:
+            - "*"
       exports:
         - command
         - parseSweep
@@ -7291,6 +7303,12 @@ modules:
           imports:
             - Io
           typeOnly: true
+        - file: ../cli-api.js
+          imports:
+            - "*"
+        - file: ./commands/index.js
+          imports:
+            - "*"
       exports:
         - reportInternalError
         - runCli
@@ -13285,6 +13303,9 @@ modules:
         - file: ../dimensional/hyphen-names.js
           imports:
             - rewriteCatalogHyphens
+        - file: ../dimensional/validator.js
+          imports:
+            - "*"
       exports:
         - rewriteCatalogHyphens
         - hyphenSubtractHint
@@ -19843,7 +19864,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89755
+  totalLinesOfCode: 89760
   totalExports: 2864
   totalClasses: 86
   totalInterfaces: 523

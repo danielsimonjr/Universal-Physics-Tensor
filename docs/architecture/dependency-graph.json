@@ -864,6 +864,12 @@
           {
             "file": "../relations/composition-table.js",
             "imports": [
+              "*"
+            ]
+          },
+          {
+            "file": "../relations/composition-table.js",
+            "imports": [
               "COMPOSITION_TABLE",
               "composeRelation",
               "NO_COMPOSITE_CLAIM"
@@ -4113,6 +4119,12 @@
             "imports": [
               "MissingDeltaAtError",
               "MissingHorizonError"
+            ]
+          },
+          {
+            "file": "../relations/regime.js",
+            "imports": [
+              "*"
             ]
           },
           {
@@ -9736,6 +9748,12 @@
             "imports": [
               "DISCOVER_MAX_ORDERS_DEFAULT"
             ]
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "*"
+            ]
           }
         ],
         "exports": [
@@ -9874,6 +9892,12 @@
               "selectRoute",
               "transportReport",
               "RouteClaim"
+            ]
+          },
+          {
+            "file": "../../cli-api.js",
+            "imports": [
+              "*"
             ]
           }
         ],
@@ -10853,6 +10877,18 @@
               "Io"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../cli-api.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
+            "file": "./commands/index.js",
+            "imports": [
+              "*"
+            ]
           }
         ],
         "exports": [
@@ -19655,6 +19691,12 @@
             "file": "../dimensional/hyphen-names.js",
             "imports": [
               "rewriteCatalogHyphens"
+            ]
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "*"
             ]
           }
         ],
@@ -28650,7 +28692,7 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89755,
+    "totalLinesOfCode": 89760,
     "totalExports": 2864,
     "totalClasses": 86,
     "totalInterfaces": 523,

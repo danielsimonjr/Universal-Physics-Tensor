@@ -332,6 +332,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../relations/composition-table.js` | `*` | Import |
 | `../relations/composition-table.js` | `COMPOSITION_TABLE, composeRelation, NO_COMPOSITE_CLAIM` | Re-export |
 
 **Exports:**
@@ -1159,6 +1160,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `AtlasBridge` | Import (type-only) |
 | `./types.js` | `MissingDeltaAtError, MissingHorizonError` | Import |
+| `../relations/regime.js` | `*` | Import |
 | `../relations/regime.js` | `collidingRegimeGroups, deriveRegimeGroups, intersectRegimes, makeRegime, regimeOverlap, uncoveredRegions` | Re-export |
 | `../relations/regime.js` | `RegimeBearing, RegimeOverlap, RegionSample` | Re-export |
 | `../relations/regime.js` | `regimeHolds` | Re-export |
@@ -2839,6 +2841,7 @@ The codebase is organized into the following modules:
 | `../../cli-api.js` | `UnitMode` | Import (type-only) |
 | `../map-evidence.js` | `withCatalogEvidence` | Import |
 | `../library-defaults.js` | `DISCOVER_MAX_ORDERS_DEFAULT` | Import |
+| `../../dimensional/types.js` | `*` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -2877,6 +2880,7 @@ The codebase is organized into the following modules:
 | `../numeric-flag.js` | `integerFlag` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
 | `./_atlas-route.js` | `explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, RouteClaim` | Import |
+| `../../cli-api.js` | `*` | Import |
 
 **Exports:**
 - Classes: `TranslationWithoutBoundError`
@@ -3201,6 +3205,8 @@ The codebase is organized into the following modules:
 | `./flag-help.js` | `GLOBAL_FLAGS` | Import |
 | `./top-level-help.js` | `renderTopLevelHelp` | Import |
 | `./record.js` | `Io` | Import (type-only) |
+| `../cli-api.js` | `*` | Import |
+| `./commands/index.js` | `*` | Import |
 
 **Exports:**
 - Functions: `reportInternalError`, `runCli`
@@ -5379,6 +5385,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../dimensional/dimension-inference.js` | `inferUnknownDimension` | Import |
 | `../dimensional/hyphen-names.js` | `rewriteCatalogHyphens` | Import |
+| `../dimensional/validator.js` | `*` | Import |
 
 **Exports:**
 - Classes: `UserEquationError`
@@ -7832,7 +7839,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89755 |
+| Total Lines of Code | 89760 |
 | Total Exports | 2864 |
 | Total Re-exports | 1410 |
 | Total Classes | 86 |
