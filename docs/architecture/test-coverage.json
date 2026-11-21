@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "totalSourceFiles": 391,
-    "totalTestFiles": 760,
-    "testedCount": 381,
+    "totalSourceFiles": 393,
+    "totalTestFiles": 762,
+    "testedCount": 382,
     "directlyTestedCount": 349,
-    "untestedCount": 10,
-    "coveragePercent": "97.4",
-    "directCoveragePercent": "89.3"
+    "untestedCount": 11,
+    "coveragePercent": "97.2",
+    "directCoveragePercent": "88.8"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
@@ -17,6 +17,7 @@
     "src/cli/file-errors.ts",
     "src/cli/library-defaults.ts",
     "src/cli/top-level-help.ts",
+    "src/composition/discovery-defaults.ts",
     "src/dimensional/constant-rows.ts",
     "src/numerical/input-validation.ts"
   ],
@@ -335,6 +336,7 @@
     "src/dimensional/mathts-unit-wrapper.ts",
     "src/dimensional/metric-validators.ts",
     "src/dimensional/metric.ts",
+    "src/dimensional/named-dimension-names.ts",
     "src/dimensional/natural-units.ts",
     "src/dimensional/quantity-registry.ts",
     "src/dimensional/rg-flow.ts",
@@ -4573,6 +4575,7 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/composition/discovery-defaults.ts": [],
     "src/composition/discovery.ts": [
       "tests/api/api-reference-symbols.test.ts",
       "tests/api/atlas-public-closure.test.ts",
@@ -8161,6 +8164,32 @@
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts"
     ],
+    "src/dimensional/named-dimension-names.ts": [
+      "tests/bridges/declared-expression.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/atlas-route-errors.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/decimal-literal-one-rule.test.ts",
+      "tests/cli/display-unit-rule.test.ts",
+      "tests/cli/evaluate-display-unit.test.ts",
+      "tests/cli/evaluate-null-output-cause.test.ts",
+      "tests/cli/explain-temperature-binding.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/norm-transport-fields.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-search.test.ts",
+      "tests/cli/retrieve-expr.test.ts",
+      "tests/cli/retrieve.test.ts",
+      "tests/cli/stored-results-module.test.ts",
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/dimensional/constant-registry.test.ts",
+      "tests/dimensional/derive-grammar.test.ts",
+      "tests/dimensional/dimension-spec-grouping.test.ts",
+      "tests/dimensional/dimension-spec.test.ts",
+      "tests/review/round2-numerical-dimensional.test.ts"
+    ],
     "src/dimensional/natural-units.ts": [
       "tests/api/api-reference-symbols.test.ts",
       "tests/api/atlas-public-closure.test.ts",
@@ -11741,6 +11770,7 @@
     "src/composition/dimension-adjacency.ts": [
       "tests/composition/dimension-adjacency.test.ts"
     ],
+    "src/composition/discovery-defaults.ts": [],
     "src/composition/discovery.ts": [
       "tests/composition/adjudication-annotate.test.ts",
       "tests/composition/axis-audit-evidence.test.ts",
@@ -12656,6 +12686,7 @@
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts"
     ],
+    "src/dimensional/named-dimension-names.ts": [],
     "src/dimensional/natural-units.ts": [],
     "src/dimensional/quantity-registry.ts": [
       "tests/bridges/bridge-definitions.test.ts",
@@ -15019,6 +15050,7 @@
       "src/canonical/registry.ts",
       "src/canonical/residual.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/dimensional/types.ts"
     ],
     "tests/bridges/derived-domains.test.ts": [
@@ -16157,6 +16189,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -16376,6 +16409,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -16618,6 +16652,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -16979,6 +17014,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -17202,6 +17238,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -17455,6 +17492,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -17650,6 +17688,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -17950,6 +17989,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -18164,6 +18204,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -18223,6 +18264,7 @@
       "src/relations/domain-regimes.ts",
       "src/cli/command.ts"
     ],
+    "tests/cli/help-fast-path.test.ts": [],
     "tests/cli/help-flags.test.ts": [
       "src/cli/main.ts",
       "src/cli-api.ts",
@@ -18409,6 +18451,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -18598,6 +18641,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -18813,6 +18857,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -19166,6 +19211,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -19367,6 +19413,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -19563,6 +19610,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -19762,6 +19810,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -20001,6 +20050,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -20192,6 +20242,7 @@
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
       "src/composition/canonical-graph.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/bridges/types.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
@@ -22028,6 +22079,7 @@
       "src/core/constants.ts",
       "src/core/types.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/dimensional/formula-names.ts",
       "src/dimensional/quantity-registry.ts",
       "src/dimensional/symbolic-constants.ts",
@@ -22106,6 +22158,7 @@
       "src/dimensional/algebra.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/cli/main.ts",
       "src/cli-api.ts",
       "src/relations/domain-regimes.ts"
@@ -22126,10 +22179,12 @@
       "src/dimensional/ast-builders.ts"
     ],
     "tests/dimensional/dimension-spec-grouping.test.ts": [
-      "src/dimensional/dimension-spec.ts"
+      "src/dimensional/dimension-spec.ts",
+      "src/dimensional/named-dimension-names.ts"
     ],
     "tests/dimensional/dimension-spec.test.ts": [
       "src/dimensional/dimension-spec.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/dimensional/types.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/errors.ts",
@@ -23463,6 +23518,7 @@
     "tests/review/round2-numerical-dimensional.test.ts": [
       "src/numerical/quadrature.ts",
       "src/dimensional/dimension-spec.ts",
+      "src/dimensional/named-dimension-names.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/ast-builders.ts",
@@ -23619,6 +23675,7 @@
     "tests/tools/criterion3-run.test.ts": [
       "src/atlas/benchmark/stats.ts"
     ],
+    "tests/tools/dependency-graph-type-queries.test.ts": [],
     "tests/tools/dist-freshness.test.ts": [],
     "tests/tools/export-star-as-deps.test.ts": [],
     "tests/tools/formalref-axiom-gate.test.ts": [

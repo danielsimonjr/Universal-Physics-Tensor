@@ -44,10 +44,10 @@ The codebase is organized into the following modules:
 - **cases**: 7 files
 - **cli**: 59 files
 - **root**: 1 file
-- **composition**: 83 files
+- **composition**: 84 files
 - **core**: 18 files
 - **diff**: 3 files
-- **dimensional**: 45 files
+- **dimensional**: 46 files
 - **entry**: 1 file
 - **numerical**: 44 files
 - **relations**: 8 files
@@ -4096,6 +4096,13 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/discovery-defaults.ts` - Pure leaf constants of the discovery pipeline. `src/cli/library-defaults.ts`
+
+**Exports:**
+- Constants: `DEFAULT_MAX_ORDERS_OF_MAGNITUDE`
+
+---
+
 ### `src/composition/discovery.ts` - Discovery loop — vet link candidates through the verification primitives
 
 **External Dependencies:**
@@ -6207,6 +6214,13 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/named-dimension-names.ts` - The names of the named dimensions, as a pure leaf. `src/cli/library-defaults.ts`
+
+**Exports:**
+- Constants: `NAMED_DIMENSION_NAMES`
+
+---
+
 ### `src/dimensional/natural-units.ts` - Opt-in natural units. The default comparison stays SI: an energy written as
 
 **Internal Dependencies:**
@@ -7754,7 +7768,7 @@ graph TD
         N33[aliases]
         N34[audit-coverage]
         N35[axes]
-        N36[...78 more]
+        N36[...79 more]
     end
 
     subgraph Core
@@ -7778,7 +7792,7 @@ graph TD
         N48[ast-leaves]
         N49[ast-types]
         N50[bridge-check]
-        N51[...40 more]
+        N51[...41 more]
     end
 
     subgraph Entry
@@ -7841,10 +7855,10 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 391 |
+| Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89796 |
-| Total Exports | 2866 |
+| Total Lines of Code | 89866 |
+| Total Exports | 2868 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |

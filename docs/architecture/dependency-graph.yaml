@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 16.0.0
-  totalFiles: 391
+  totalFiles: 393
   totalModules: 13
-  totalExports: 2866
+  totalExports: 2868
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9904,6 +9904,15 @@ modules:
         - DimensionAdjacency
       functions:
         - dimensionAdjacency
+    src/composition/discovery-defaults.ts:
+      description: Pure leaf constants of the discovery pipeline. `src/cli/library-defaults.ts`
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
+      constants:
+        - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
     src/composition/discovery.ts:
       description: Discovery loop — vet link candidates through the verification primitives
       externalDependencies:
@@ -15039,6 +15048,15 @@ modules:
         - pderiv
         - raise
         - lower
+    src/dimensional/named-dimension-names.ts:
+      description: The names of the named dimensions, as a pure leaf. `src/cli/library-defaults.ts`
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - NAMED_DIMENSION_NAMES
+      constants:
+        - NAMED_DIMENSION_NAMES
     src/dimensional/natural-units.ts:
       description: "Opt-in natural units. The default comparison stays SI: an energy written as"
       externalDependencies: []
@@ -19693,6 +19711,7 @@ dependencyGraph:
         - src/composition/consistency.ts
         - src/composition/descriptor.ts
         - src/composition/dimension-adjacency.ts
+        - src/composition/discovery-defaults.ts
         - src/composition/discovery.ts
         - src/composition/edge.ts
         - src/composition/enumerate.ts
@@ -19807,6 +19826,7 @@ dependencyGraph:
         - src/dimensional/mathts-unit-wrapper.ts
         - src/dimensional/metric-validators.ts
         - src/dimensional/metric.ts
+        - src/dimensional/named-dimension-names.ts
         - src/dimensional/natural-units.ts
         - src/dimensional/quantity-registry.ts
         - src/dimensional/rg-flow.ts
@@ -19882,16 +19902,16 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 391
+  totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 89796
-  totalExports: 2866
+  totalLinesOfCode: 89866
+  totalExports: 2868
   totalClasses: 86
   totalInterfaces: 523
   totalFunctions: 939
   totalTypeGuards: 17
   totalEnums: 0
-  totalConstants: 421
+  totalConstants: 423
   totalReExports: 1411
   totalTypeOnlyImports: 544
   runtimeCircularDeps: 0
