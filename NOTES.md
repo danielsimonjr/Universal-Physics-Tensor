@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-20 (persona dogfood sessions 22-26 on 16.0.0)
+
+- **Sessions 22 to 26 (undergraduate physics student) ran in parallel against `universal-physics-tensor@16.0.0` from npm**, one area each: mechanics; E&M and circuits; thermodynamics; waves, optics and modern physics; the API and the advanced commands. Model personas, not human reviewers. Issues #747 to #760 were filed; each was reproduced on separate installs. Comments were added to #737, #739, #740 and #741. One wrong value: CE-cyclotron-frequency (#747). No finding has its cause in MathTS. The next rotation round is still the condensed-matter physicist (position 2).
+
 ## As of 2026-11-20 (persona dogfood on 16.0.0)
 
 - **Session 21 (undergraduate physics student) ran against `universal-physics-tensor@16.0.0` from npm**, CLI and API, in `docs/persona-sessions/`. Model persona, not a human reviewer. Issues #736 to #745 were filed and #684 was reopened; each was reproduced on a second install. Retests: #677, #694 and #683 are fixed; #695 does not reproduce; #679 is by design. No finding has its cause in MathTS. Session 21 is outside the rotation, so the next rotation round is still the condensed-matter physicist (position 2).
