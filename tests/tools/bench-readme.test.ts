@@ -2,6 +2,10 @@
  * `bench/README.md` says the Files table is every `*.bench.ts` in `bench/`.
  * A file missing from the table, or listed and absent, is a defect. This test
  * is that defect's detector: the table and the directory are the same set.
+ *
+ * The CONTROL cases mutate the README text and re-parse it. A control that
+ * only shuffled the already-parsed `listed` array would still pass if
+ * `listedBenchFiles` ignored its argument and returned `onDisk`.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -24,6 +28,10 @@ const onDisk = readdirSync(benchDir)
   .filter((name) => name.endsWith('.bench.ts'))
   .sort();
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 describe('bench/README.md Files table matches bench/*.bench.ts', () => {
   it('finds bench files on disk and in the table (the equality is not vacuously true of two empty lists)', () => {
     expect(onDisk.length).toBeGreaterThan(0);
@@ -36,11 +44,17 @@ describe('bench/README.md Files table matches bench/*.bench.ts', () => {
 
   it('CONTROL: dropping a file that is on disk from the table fails the equality', () => {
     expect(onDisk.length).toBeGreaterThan(0);
-    const dropped = listed.filter((name) => name !== onDisk[0]);
-    expect(dropped).not.toEqual(onDisk);
+    const dropped = onDisk[0]!;
+    const edited = readme.replace(new RegExp(`^\\| \`${escapeRegExp(dropped)}\` \\|.*\\n`, 'm'), '');
+    expect(edited).not.toBe(readme);
+    expect(listedBenchFiles(edited).sort()).not.toEqual(onDisk);
   });
 
   it('CONTROL: listing a file that is not on disk fails the equality', () => {
-    expect(listed.concat(['ghost.bench.ts']).sort()).not.toEqual(onDisk);
+    const separator = '|---|---|';
+    expect(readme).toContain(separator);
+    const edited = readme.replace(separator, `${separator}\n| \`ghost.bench.ts\` | ghost |`);
+    expect(edited).not.toBe(readme);
+    expect(listedBenchFiles(edited).sort()).not.toEqual(onDisk);
   });
 });

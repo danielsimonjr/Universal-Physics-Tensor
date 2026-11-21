@@ -1,9 +1,8 @@
 /**
  * Unit-table benchmark: one loop of `parseUnit` over every bare symbol the
  * unit table stores — the `units` alias keys, the affine spellings, and the
- * refused spellings (`data/units.json`). Refused spellings are caught; the
- * table itself decides what refuses, so the loop cost is the reader's, not
- * the throw cost.
+ * refused spellings (`data/units.json`). Refused spellings throw and are
+ * caught, so the loop measures 118 parses plus 6 caught refusal throws.
  *
  * Baselines, not thresholds: no assertion gates the printed hz lines.
  * The symbol array is hoisted outside the bench callback.
@@ -24,7 +23,7 @@ describe('unit table', () => {
       try {
         parseUnit(symbol);
       } catch {
-        // The table stores refusals; the bench measures the reader, not the throw.
+        // Refused spellings throw and are caught; the loop measures 118 parses plus 6 caught refusal throws.
       }
     }
   });
