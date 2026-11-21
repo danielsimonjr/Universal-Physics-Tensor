@@ -1,0 +1,30 @@
+/**
+ * Unit-table benchmark: one loop of `parseUnit` over every bare symbol the
+ * unit table stores — the `units` alias keys, the affine spellings, and the
+ * refused spellings (`data/units.json`). Refused spellings throw and are
+ * caught, so the loop measures 118 parses plus 6 caught refusal throws.
+ *
+ * Baselines, not thresholds: no assertion gates the printed hz lines.
+ * The symbol array is hoisted outside the bench callback.
+ */
+import { bench, describe } from 'vitest';
+import { parseUnit } from '../src/dimensional/units.js';
+import { UNIT_DATA } from '../src/dimensional/unit-data.js';
+
+const SYMBOLS: readonly string[] = [
+  ...UNIT_DATA.units.keys(),
+  ...UNIT_DATA.affine.flatMap((row) => row.symbols),
+  ...UNIT_DATA.refused.keys(),
+];
+
+describe('unit table', () => {
+  bench('parseUnit over every symbol in the table', () => {
+    for (const symbol of SYMBOLS) {
+      try {
+        parseUnit(symbol);
+      } catch {
+        // Refused spellings throw and are caught; the loop measures 118 parses plus 6 caught refusal throws.
+      }
+    }
+  });
+});

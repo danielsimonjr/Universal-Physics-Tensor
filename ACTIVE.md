@@ -20,6 +20,12 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] Neon review: README controls re-parse mutated text; unit-table comments measure throws; CHANGELOG 1254→1258.
+  Done: CONTROLs mutate README text and re-parse (drop `onDisk[0]` row; insert `| \`ghost.bench.ts\` | ghost |`); both fail when `listedBenchFiles` is stubbed to return `onDisk` (`expected [ 'ad.bench.ts', …(15) ] to not deeply equal [ 'ad.bench.ts', …(15) ]`). unit-table comments measure 118 parses plus 6 caught refusal throws. CHANGELOG 1254 → 1258.
+- [x] S1 review: live refusal catch, FILE_INVENTORY 806, CHANGELOG Added, cli-wall-clock node/cwd/median, 121 wording, benchmarks.md hz, README↔bench bijection test.
+  Done: `UNIT_DATA.refused.keys()` joined the unit-table loop (6 throws live); FILE_INVENTORY zone tests 807 / total 1258 (prose was 796, then 806 before the new test file); S1 bullet under `### Added`; `cli-wall-clock.mjs` spawns `node` with absolute `bin/upt.mjs` and even-length median; 121 wording; `benchmarks.md` hz entries; `tests/tools/bench-readme.test.ts` (failed first with catalog-eval dropped from the table).
+- [x] S1 — In-process benches and a CLI wall-clock script (plan `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`, sprint S1).
+  Done: `bench/catalog-eval.bench.ts` and `bench/unit-table.bench.ts` added with their `bench/README.md` rows; `scripts/cli-wall-clock.mjs` prints four median lines. No `src/` change.
 - [x] Write the plan for runtime speed, code reduction, MathTS unit delegation, and user docs. Do not change `src/`.
   Done: `docs/superpowers/specs/2026-11-21-upt-optimization-docs-design.md` and `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`. The baseline is in the plan. No sprint in that plan is authorized by this row.
 - [x] `ab-damped-massless` bound is not dimensionally consistent: `deltaAt = 2(1+|v0|)m/b` adds a pure number to a velocity and holds only at b = k = x0 = 1; the W8 and W8b tolerances compare quantities of different dimensions with `2m`. Replace the bound with `(m/b)(|v0| + k|x0|/b)` (leading order in ε = mk/b², c = 1 checked on a grid), give the W8 roots the tolerances `2mk²/b³` and `2mk/b`, state ε in the prose beside the unchanged `mk/b² < 1/4`, and witness `K = 1` of both limit bridges with a test and a refuted `x ↦ 2x` control.

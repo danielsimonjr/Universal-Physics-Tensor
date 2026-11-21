@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 391 |
-| Total Test Files | 758 |
+| Total Test Files | 759 |
 | Source files imported directly by a test | 349 |
 | Source files reached directly or through a barrel or side-effect import | 380 |
 | Source files no test reaches either way | 11 |
@@ -1177,6 +1177,7 @@ The following 11 source files are reached by no test file, directly or through a
 | `review/round3-owner-decisions.test.ts` | 8 files |
 | `tests/tensor.test.ts` | 115 files |
 | `tools/api-surface.test.ts` | 0 files |
+| `tools/bench-readme.test.ts` | 0 files |
 | `tools/catalog-census.test.ts` | 0 files |
 | `tools/ci-workflows.test.ts` | 0 files |
 | `tools/citation-quote-check.test.ts` | 0 files |
