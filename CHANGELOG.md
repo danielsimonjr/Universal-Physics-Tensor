@@ -10,6 +10,10 @@ from v0.1.0 onward.
 
 ### Added
 
+- `upt version` fast path (S2 of `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`): `src/cli/main.ts` no longer statically imports `cli-api.js`, `commands/index.js` or `record.js`; those load lazily, and the `version`/`--version`/`-v` branch returns before any of them load, so the command pays none of the ~900 ms `mathts-functions`-pulling import cost. Output stays byte-identical (`packageVersion()` line, exit 0), `upt version extra` still refuses with exit 2 on the fast path, and `--record`/`--replay`/`--show-record`/`--json` invocations behave exactly as before. `tests/cli/version-fast-path.test.ts` pins the static-import ban (it failed on the unchanged tree first), the spawned version line, and the fast-path refusal. `upt version` wall clock on this machine: 802.8 ms → 31.1 ms median of 3 (`scripts/cli-wall-clock.mjs`); the numbers are recorded in `NOTES.md`.
+
+### Documented
+
 - Bench harness for the optimization plan (`bench/catalog-eval.bench.ts`, `bench/unit-table.bench.ts`, both rows in `bench/README.md`) and the CLI cold-start wall-clock script `scripts/cli-wall-clock.mjs` (three runs per command, one median line each, no output file). S1 of `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`: it measures the baseline the later sprints improve on and adds no library change. The unit-table loop includes the refused spellings the table stores, so the catch path runs. The wall-clock script always spawns `node` with an absolute `bin/upt.mjs` (so a Bun invocation cannot measure Bun, and a non-root cwd still exits 0) and averages the two central samples when the run count is even.
 - `tests/tools/bench-readme.test.ts` asserts that the `bench/README.md` Files table and the `bench/*.bench.ts` files on disk are the same set. Controls mutate the README text and re-parse it: dropping the `onDisk[0]` table row fails, and inserting `| \`ghost.bench.ts\` | ghost |` into the Files table fails. The test failed first when `catalog-eval.bench.ts` was removed from the table (`expected [ 'ad.bench.ts', …(14) ] to deeply equal [ 'ad.bench.ts', …(15) ]`).
 

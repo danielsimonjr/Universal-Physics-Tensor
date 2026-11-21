@@ -12,6 +12,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+// Side-effect import: these tests read the registry before any runCli call, which
+// no longer populates it (S2 made main.ts load the command barrel lazily).
+import '../../dist/cli/commands/index.js';
 import { listCommandNames, resolveCommand } from '../../dist/cli/command.js';
 import { ADJUDICATIONS, candidateIdIfSlug } from '../../dist/composition/adjudication.js';
 
