@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-20 (persona dogfood sessions 27-32 on 16.0.0)
+
+- **Sessions 27 to 32 (engineering physicist) ran in parallel against `universal-physics-tensor@16.0.0` from npm**, one area each: applied cases and uncertainty; bridges as measurement plans; materials and semiconductors; heat transfer and fluids; EM, RF and noise; a design workflow through the CLI and the library. Model personas, not human reviewers. Issues #762 to #779 were filed; each was reproduced on separate installs. Comments were added to #738, #739, #740, #747, #756 and #760. No wrong catalog value; the `--sigma` sensitivity is wrong at a domain edge (#778). No finding has its cause in MathTS.
+
 ## As of 2026-11-20 (persona dogfood sessions 22-26 on 16.0.0)
 
 - **Sessions 22 to 26 (undergraduate physics student) ran in parallel against `universal-physics-tensor@16.0.0` from npm**, one area each: mechanics; E&M and circuits; thermodynamics; waves, optics and modern physics; the API and the advanced commands. Model personas, not human reviewers. Issues #747 to #760 were filed; each was reproduced on separate installs. Comments were added to #737, #739, #740 and #741. One wrong value: CE-cyclotron-frequency (#747). No finding has its cause in MathTS. The next rotation round is still the condensed-matter physicist (position 2).
