@@ -714,16 +714,22 @@ function parseFile(filePath: string, isTestFile: boolean = false): ParsedFile {
   // file's `await import('./commands/index.js')` and dropped thousands of
   // traced test→source edges. A specifier already recorded (a static
   // `import` / `import type` of the same path) is not upgraded.
-  const dynamicImportRegex = /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+  // A TS type query — `import('…').TypeName` (also in expression position, as
+  // in `new Map<string, import('…').Dimension>()`) — loads nothing at runtime:
+  // it is erased at emit. Record it `typeOnly` (never `sideEffect`), so it adds
+  // no runtime edge and credits no tester through the side-effect closure. A
+  // `import('…')` with no member suffix is a real load and stays `sideEffect`.
+  const dynamicImportRegex = /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)\s*(?:\.\s*([\w$]+))?/g;
   while ((match = dynamicImportRegex.exec(content)) !== null) {
     const source = match[1];
+    const typeQuery = match[2] !== undefined;
     if (source.startsWith('.')) {
       const alreadyTracked = result.internalDependencies.some(d => d.file === source);
       if (!alreadyTracked) {
         result.internalDependencies.push({
           file: source,
           imports: ['*'],
-          sideEffect: true,
+          ...(typeQuery ? { typeOnly: true } : { sideEffect: true }),
         });
       }
     }

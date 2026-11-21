@@ -7,10 +7,10 @@
  * @module cli/library-defaults
  */
 
-import { DEFAULT_MAX_ORDERS_OF_MAGNITUDE } from '../composition/discovery.js';
+import { DEFAULT_MAX_ORDERS_OF_MAGNITUDE } from '../composition/discovery-defaults.js';
 import { DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET } from '../composition/probe/types.js';
-import { DEFAULT_ALPHA, MAX_CORRECTION_TERMS } from '../composition/probe/study.js';
-import { NAMED_DIMENSION_NAMES } from '../dimensional/dimension-spec.js';
+import { DEFAULT_ALPHA, MAX_CORRECTION_TERMS } from '../composition/probe/types.js';
+import { NAMED_DIMENSION_NAMES } from '../dimensional/named-dimension-names.js';
 
 /** `upt discover --max-orders`, as the help prints it. @internal */
 export const DISCOVER_MAX_ORDERS_DEFAULT = String(DEFAULT_MAX_ORDERS_OF_MAGNITUDE);

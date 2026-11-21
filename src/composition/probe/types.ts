@@ -344,3 +344,9 @@ export interface EvidenceProfile {
   readonly regimeCoverage: EvidenceAssessment;
   readonly provenanceQuality: EvidenceAssessment;
 }
+
+/** The χ² test level a study file states none of. @internal */
+export const DEFAULT_ALPHA = 0.001;
+
+/** How many powers a study file's correction may list in all. @internal */
+export const MAX_CORRECTION_TERMS = 6;

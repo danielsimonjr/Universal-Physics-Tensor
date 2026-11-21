@@ -1,95 +1,83 @@
-# Universal Physics Tensor — Duplicate Symbols
+<!-- repo-map:no-verification -->
+<!-- GENERATED FILE -- do not edit by hand.
+     Regenerate with `repo-tools map`. -->
 
-Names that more than one source file declares, and the reason each one is safe.
+# Duplicate Symbols
 
-> **Derived from `duplicate-symbols.json`.** `repo-tools map` writes that report. A person
-> reads each group in the source and writes this file. The report groups by name only. A group
-> means "more than one file declares this name". A group does not mean "the bodies differ".
+A name is listed here when two or more distinct files across the monorepo define it. A file that only re-exports the name does not count. Each name carries one tag (see `DupEntryTag`), so the actionable subset is clear:
 
-## Scope
+- `TRUE_DUPLICATE`: a real merge target.
+- `DISPATCH_VARIANT`: two or more `mathTyped(...)` registrations of the same public name. The registrations are distinct dispatch surfaces, not copy-paste bodies.
+- `ALIAS_DELEGATION`: a `const X = importedY` forward. The entry is excluded once fewer than two real bodies remain.
+- `ALLOWLISTED`: the name matches `duplicate-allowlist.json`. Examples are hot-path `is*` guards, mirrors in another language and per-package `VERSION` strings.
 
-The report covers the **whole repository**: every tracked source file, tests and tools
-included. The groups below all sit under `src/`. `duplicate-owners.md` is a different report.
-The project generator writes it for `src/` only, and it tracks the owner of each concept.
+> **Note:** This report groups names by OWN definition, not by call graph, then classifies each flagged name (see DupEntryTag): TRUE_DUPLICATE (the actionable merge targets), DISPATCH_VARIANT (>=2 mathTyped(...) registrations of the same public name — distinct dispatch surfaces, not copy-paste bodies), ALIAS_DELEGATION (a const-alias forward to an imported symbol, not an independent body — excluded once fewer than 2 real bodies remain), and ALLOWLISTED (matches duplicate-allowlist.json: for example hot-path is* guards, mirrors in another language, per-package VERSION strings). NOT detected: same-file typed-dispatch overload polymorphism for different argument shapes within one registration — a human still triages TRUE_DUPLICATE entries using the defining files + public flags before merging anything.
 
-## Summary
+## Summary — runtime (function/constant/class)
 
-The report holds 12 groups: 2 runtime names and 10 type names. The report tags every group
-`TRUE_DUPLICATE`, because it cannot tell a forwarding alias from a second definition. Source
-reading gives a finer result.
+| Category | Count |
+| --- | --: |
+| **TRUE_DUPLICATE** (actionable) | 1 |
+| DISPATCH_VARIANT | 0 |
+| ALIAS_DELEGATION | 0 |
+| ALLOWLISTED | 0 |
+| _Total flagged names_ | 1 |
 
-| Group | Names | Kind of duplicate | Action |
-|---|---|---|---|
-| Command registration | `command` | One name per module, by convention | None |
-| Hash wrapper | `sha256Hex` | A thin wrapper around one implementation | None |
-| Type forwarding aliases | 10 type names | An alias to one type | None |
+## Summary — types (interface/type/enum)
 
-No group holds two independent implementations.
+| Category | Count |
+| --- | --: |
+| **TRUE_DUPLICATE** (actionable) | 10 |
+| DISPATCH_VARIANT | 0 |
+| ALIAS_DELEGATION | 0 |
+| ALLOWLISTED | 0 |
+| _Total flagged names_ | 10 |
 
-## Runtime names
+## Runtime duplicates
 
-### `command`: 28 files
+### TRUE_DUPLICATE — actionable merge targets
 
-Each command module under `src/cli/commands/` exports `const command`. The registry reads
-that export through `registerCommand`. The directory holds 32 files. Four are helpers that
-export no command: `index.ts`, `_atlas-route.ts`, `_atlas-map.ts` and `_discovery-opts.ts`.
-`index.ts` is a side-effect barrel. It holds one `import './<name>.js'` line for each of the 28
-command modules. A new command adds its module and one line to the barrel. The shape of
-`command` comes from `src/cli/command.ts`.
+| Name | Category | Defining files (package, public?, sub-tag) | Canonical hint |
+| --- | --- | --- | --- |
+| `command` | constant | `src/cli/commands/atlas.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/audit.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/axes.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/candidates.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/canonical.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/chain.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/confront.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/connectors.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/coverage.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/derive.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/discover.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/eval.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/evaluate.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/explain.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/frontier.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/ground.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/map.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/metric.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/path.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/predict.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/priority.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/probe.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/recover.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/regime.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/retrieve.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/search.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/symbolic.ts` (unknown, internal, PLAIN)<br>`src/cli/commands/testplan.ts` (unknown, internal, PLAIN) | `internal-only` |
 
-### `sha256Hex`: 2 files
+### DISPATCH_VARIANT — distinct public typed-dispatch surfaces
 
-`src/core/hash.ts` holds the one SHA-256 implementation. It accepts a `string` or a `Buffer`.
-`src/composition/canonical-json.ts` imports that function and re-exports it under the same
-name (`export { sha256Hex }`); it has no body of its own. `src/composition/probe/index.ts` and
-`src/composition/probe/serialize.ts` forward the re-export for the probe subpath. Read the hash
-from `src/core/hash.ts` when you need the implementation.
+_None._
 
-## Type names: 10 groups
+### ALIAS_DELEGATION — const-alias forwards (not independent bodies)
 
-Each group is a forwarding alias. The alias has the form
-`export type X = import('../relations/<file>.js').X`. One declaration of each type exists, and
-it sits under `src/relations/`. The atlas modules keep the alias so that atlas callers import
-from the atlas layer.
+_None._
 
-| Alias file | Names | Declared in |
-|---|---|---|
-| `src/atlas/types.ts` | `ApproximationBound`, `Counterexample`, `EvidenceTag`, `LimitCharacter`, `Regime`, `RegimeInequality`, `RelationType` | `src/relations/types.ts` |
-| `src/atlas/composition-table.ts` | `CompositionResult`, `NoCompositeClaim` | `src/relations/composition-table.ts` |
-| `src/atlas/regime.ts` | `RegimeCheck` | `src/relations/regime.ts` |
+### ALLOWLISTED — accepted layering (see duplicate-allowlist.json)
 
-## Single owners, re-exported
+_None._
 
-The dependency graph marks these names `reExported`. One file declares each name. A second
-file forwards it with `export { … } from`. The report does not list them as duplicates.
+## Type duplicates (lower priority)
 
-| Name | Declared in | Forwarded by |
-|---|---|---|
-| `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM` | `src/relations/composition-table.ts` | `src/atlas/composition-table.ts` |
-| `regimeHolds` | `src/relations/regime.ts` | `src/atlas/regime.ts` |
-| `DimensionMismatchError` | `src/dimensional/errors.ts` | `src/dimensional/algebra.ts` |
-| `EngineCapabilityError` | `src/numerical/errors.ts` | `src/numerical/tensor-engine.ts` |
-| `DEFAULT_SEARCH_BUDGET` | `src/composition/probe/types.ts` | `src/composition/probe/search-budget.ts` |
-| `IDENTITY_BOUND` | `src/atlas/error-algebra.ts` | `src/atlas/path-bound.ts` |
-| `BCS_GAP_RATIO`, `M_PROTON_SI` | `src/core/constants.ts` | `src/bridges/index.ts` |
-| `evaluateMetricInverse` | `src/numerical/metric-inverse.ts` | `src/numerical/index.ts` |
-| `dim` | `src/dimensional/ast-builders.ts` | `src/canonical/entries/_l1-build.ts` |
-| `LEAN_SOURCE_TAG` | `src/atlas/physjs-entries.generated.ts` | `src/atlas/physjs-ref.ts` |
+### TRUE_DUPLICATE
 
-`MASS_DENSITY` has one declaration, in `src/dimensional/types.ts`. Bridge modules import it.
-They do not assign it again.
+| Name | Category | Defining files (package, public?, sub-tag) | Canonical hint |
+| --- | --- | --- | --- |
+| `ApproximationBound` | interface+type | `src/atlas/types.ts` (unknown, public, PLAIN)<br>`src/relations/types.ts` (unknown, internal, PLAIN) | `src/atlas/types.ts` |
+| `CompositionResult` | type | `src/atlas/composition-table.ts` (unknown, public, PLAIN)<br>`src/relations/composition-table.ts` (unknown, internal, PLAIN) | `src/atlas/composition-table.ts` |
+| `Counterexample` | interface+type | `src/atlas/types.ts` (unknown, public, PLAIN)<br>`src/relations/types.ts` (unknown, internal, PLAIN) | `src/atlas/types.ts` |
+| `EvidenceTag` | type | `src/atlas/types.ts` (unknown, public, PLAIN)<br>`src/relations/types.ts` (unknown, internal, PLAIN) | `src/atlas/types.ts` |
+| `LimitCharacter` | type | `src/atlas/types.ts` (unknown, public, PLAIN)<br>`src/relations/types.ts` (unknown, internal, PLAIN) | `src/atlas/types.ts` |
+| `NoCompositeClaim` | type | `src/atlas/composition-table.ts` (unknown, public, PLAIN)<br>`src/relations/composition-table.ts` (unknown, internal, PLAIN) | `src/atlas/composition-table.ts` |
+| `Regime` | interface+type | `src/atlas/types.ts` (unknown, public, PLAIN)<br>`src/relations/types.ts` (unknown, internal, PLAIN) | `src/atlas/types.ts` |
+| `RegimeCheck` | interface+type | `src/atlas/regime.ts` (unknown, public, PLAIN)<br>`src/relations/regime.ts` (unknown, internal, PLAIN) | `src/atlas/regime.ts` |
+| `RegimeInequality` | interface+type | `src/atlas/types.ts` (unknown, public, PLAIN)<br>`src/relations/types.ts` (unknown, internal, PLAIN) | `src/atlas/types.ts` |
+| `RelationType` | type | `src/atlas/types.ts` (unknown, public, PLAIN)<br>`src/relations/types.ts` (unknown, internal, PLAIN) | `src/atlas/types.ts` |
 
-## Verification
+### DISPATCH_VARIANT
 
-Regenerate: `repo-tools map <repo> --out=<dir>` · Check: `repo-tools check <repo> --docs=docs/architecture`
+_None._
 
-| Claim | Value | Source |
-|---|---|---|
-| totalExports | 3915 | `dependency-graph.json` `statistics.totalExports` |
-| totalReExports | 1410 | `dependency-graph.json` `statistics.totalReExports` |
+### ALIAS_DELEGATION
 
-Both claims count the whole repository. The `dependency-graph.json` in the Source column is the output of `repo-tools map`. The committed `docs/architecture/dependency-graph.json` is a different file, which `bun run docs:deps` writes for `src/`.
+_None._
 
-**Claims the gate cannot hold.** The group counts (12 groups, 2 runtime, 10 type) come from
-`duplicate-symbols.json`, which the gate does not read. The verdict of each group comes from a
-reading of the source files named above.
+### ALLOWLISTED
+
+_None._

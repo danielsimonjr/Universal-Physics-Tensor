@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 391
   totalModules: 13
-  totalExports: 2864
+  totalExports: 2866
 entryPoints:
   - file: src/index.ts
     type: main
@@ -573,6 +573,7 @@ modules:
         - file: ../relations/composition-table.js
           imports:
             - "*"
+          typeOnly: true
         - file: ../relations/composition-table.js
           imports:
             - COMPOSITION_TABLE
@@ -2906,6 +2907,7 @@ modules:
         - file: ../relations/regime.js
           imports:
             - "*"
+          typeOnly: true
         - file: ../relations/regime.js
           imports:
             - collidingRegimeGroups
@@ -5617,9 +5619,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../bridges/evaluators.js
+        - file: ../bridges/catalog-load.js
           imports:
-            - BRIDGE_EVALUATORS
+            - catalogEvaluators
       exports:
         - formatClosedFormRange
         - closedFormRangeLabel
@@ -6140,10 +6142,6 @@ modules:
         - file: ../euler-guard.js
           imports:
             - FormulaUsageError
-        - file: ../conventions.js
-          imports:
-            - canonicalCheckFailed
-            - conventionLines
         - file: ../../dimensional/types.js
           imports:
             - Dimension
@@ -6151,6 +6149,9 @@ modules:
         - file: ../library-defaults.js
           imports:
             - NAMED_DIMENSIONS_HELP
+        - file: ../conventions.js
+          imports:
+            - "*"
       exports:
         - command
       constants:
@@ -6243,9 +6244,6 @@ modules:
         - file: ../euler-guard.js
           imports:
             - FormulaUsageError
-        - file: ../eval-numbers.js
-          imports:
-            - codataScope
         - file: ../bindings.js
           imports:
             - splitAssignments
@@ -6260,6 +6258,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ../eval-numbers.js
+          imports:
+            - "*"
       exports:
         - command
       constants:
@@ -6579,21 +6580,21 @@ modules:
             - VizJunction
             - VizModel
           typeOnly: true
-        - file: ../conventions.js
-          imports:
-            - canonicalCheckFailed
-            - conventionLines
         - file: ../../cli-api.js
           imports:
             - UnitMode
           typeOnly: true
-        - file: ../map-evidence.js
-          imports:
-            - withCatalogEvidence
         - file: ../library-defaults.js
           imports:
             - DISCOVER_MAX_ORDERS_DEFAULT
         - file: ../../dimensional/types.js
+          imports:
+            - "*"
+          typeOnly: true
+        - file: ../conventions.js
+          imports:
+            - "*"
+        - file: ../map-evidence.js
           imports:
             - "*"
       exports:
@@ -6684,6 +6685,7 @@ modules:
         - file: ../../cli-api.js
           imports:
             - "*"
+          typeOnly: true
       exports:
         - command
         - parseSweep
@@ -7240,18 +7242,18 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../composition/discovery.js
+        - file: ../composition/discovery-defaults.js
           imports:
             - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
         - file: ../composition/probe/types.js
           imports:
             - DEFAULT_HOLDOUT_TOL
             - DEFAULT_SEARCH_BUDGET
-        - file: ../composition/probe/study.js
+        - file: ../composition/probe/types.js
           imports:
             - DEFAULT_ALPHA
             - MAX_CORRECTION_TERMS
-        - file: ../dimensional/dimension-spec.js
+        - file: ../dimensional/named-dimension-names.js
           imports:
             - NAMED_DIMENSION_NAMES
       exports:
@@ -7309,6 +7311,7 @@ modules:
         - file: ./commands/index.js
           imports:
             - "*"
+          typeOnly: true
       exports:
         - reportInternalError
         - runCli
@@ -9979,10 +9982,13 @@ modules:
           imports:
             - DerivedMagnitudes
           typeOnly: true
+        - file: ./discovery-defaults.js
+          imports:
+            - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
       exports:
+        - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
         - REGISTRY_ATTRIBUTES_BY_NAME
         - ANCHOR_DEFAULT
-        - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
         - hasMagnitudeEvidence
         - isPromisingTier
         - buildDiscoveryContext
@@ -10010,7 +10016,6 @@ modules:
       constants:
         - REGISTRY_ATTRIBUTES_BY_NAME
         - ANCHOR_DEFAULT
-        - DEFAULT_MAX_ORDERS_OF_MAGNITUDE
     src/composition/edge.ts:
       description: Composition graph — edges (bridges and laws) + validity domains
       externalDependencies: []
@@ -12742,6 +12747,10 @@ modules:
           imports:
             - readFileSync
       internalDependencies:
+        - file: ./types.js
+          imports:
+            - DEFAULT_ALPHA
+            - MAX_CORRECTION_TERMS
         - file: ../../core/mathts-read.js
           imports:
             - numberFrom
@@ -12855,9 +12864,6 @@ modules:
         - effectiveSigma
         - runProbeStudy
         - formatProbeStudy
-      constants:
-        - DEFAULT_ALPHA
-        - MAX_CORRECTION_TERMS
     src/composition/probe/t-tail.ts:
       description: The two-sided tail of Student's t, computed directly.
       externalDependencies:
@@ -12895,6 +12901,8 @@ modules:
         - PROBE_SCHEMA_VERSION
         - DEFAULT_SEARCH_BUDGET
         - DEFAULT_HOLDOUT_TOL
+        - DEFAULT_ALPHA
+        - MAX_CORRECTION_TERMS
       interfaces:
         - SearchBudget
         - DiscrepancyDefinition
@@ -12926,6 +12934,8 @@ modules:
         - PROBE_SCHEMA_VERSION
         - DEFAULT_SEARCH_BUDGET
         - DEFAULT_HOLDOUT_TOL
+        - DEFAULT_ALPHA
+        - MAX_CORRECTION_TERMS
     src/composition/proposed-bridges.ts:
       description: Identity-consequence surfacer — turns a promising (either tier) discovery identification
       externalDependencies:
@@ -13306,6 +13316,7 @@ modules:
         - file: ../dimensional/validator.js
           imports:
             - "*"
+          typeOnly: true
       exports:
         - rewriteCatalogHyphens
         - hyphenSubtractHint
@@ -14446,17 +14457,26 @@ modules:
           imports:
             - parseFormulaPNode
             - FormulaPNode
+        - file: ./named-dimension-names.js
+          imports:
+            - NAMED_DIMENSION_NAMES
+            - NamedDimensionName
+        - file: ./named-dimension-names.js
+          imports:
+            - NAMED_DIMENSION_NAMES
+          reExport: true
       exports:
         - NAMED_DIMENSION_NAMES
         - CONSTANT_SPELLINGS
         - parseDimensionSpec
         - DimensionSpecError
+      reExported:
+        - NAMED_DIMENSION_NAMES
       classes:
         - DimensionSpecError
       functions:
         - parseDimensionSpec
       constants:
-        - NAMED_DIMENSION_NAMES
         - CONSTANT_SPELLINGS
     src/dimensional/einstein-equation.ts:
       description: Einstein field equation AST node (v0.6.0 Phase 2, Task 2.3).
@@ -19864,16 +19884,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89760
-  totalExports: 2864
+  totalLinesOfCode: 89796
+  totalExports: 2866
   totalClasses: 86
   totalInterfaces: 523
   totalFunctions: 939
   totalTypeGuards: 17
   totalEnums: 0
-  totalConstants: 423
-  totalReExports: 1410
-  totalTypeOnlyImports: 538
+  totalConstants: 421
+  totalReExports: 1411
+  totalTypeOnlyImports: 544
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

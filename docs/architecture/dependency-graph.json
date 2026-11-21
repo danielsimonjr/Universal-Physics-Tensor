@@ -4,7 +4,7 @@
     "version": "16.0.0",
     "totalFiles": 391,
     "totalModules": 13,
-    "totalExports": 2864
+    "totalExports": 2866
   },
   "entryPoints": [
     {
@@ -865,7 +865,8 @@
             "file": "../relations/composition-table.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           },
           {
             "file": "../relations/composition-table.js",
@@ -4125,7 +4126,8 @@
             "file": "../relations/regime.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           },
           {
             "file": "../relations/regime.js",
@@ -8136,9 +8138,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../bridges/evaluators.js",
+            "file": "../bridges/catalog-load.js",
             "imports": [
-              "BRIDGE_EVALUATORS"
+              "catalogEvaluators"
             ]
           }
         ],
@@ -8957,13 +8959,6 @@
             ]
           },
           {
-            "file": "../conventions.js",
-            "imports": [
-              "canonicalCheckFailed",
-              "conventionLines"
-            ]
-          },
-          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -8974,6 +8969,12 @@
             "file": "../library-defaults.js",
             "imports": [
               "NAMED_DIMENSIONS_HELP"
+            ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "*"
             ]
           }
         ],
@@ -9134,12 +9135,6 @@
             ]
           },
           {
-            "file": "../eval-numbers.js",
-            "imports": [
-              "codataScope"
-            ]
-          },
-          {
             "file": "../bindings.js",
             "imports": [
               "splitAssignments"
@@ -9164,6 +9159,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../eval-numbers.js",
+            "imports": [
+              "*"
+            ]
           }
         ],
         "exports": [
@@ -9724,24 +9725,11 @@
             "typeOnly": true
           },
           {
-            "file": "../conventions.js",
-            "imports": [
-              "canonicalCheckFailed",
-              "conventionLines"
-            ]
-          },
-          {
             "file": "../../cli-api.js",
             "imports": [
               "UnitMode"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../map-evidence.js",
-            "imports": [
-              "withCatalogEvidence"
-            ]
           },
           {
             "file": "../library-defaults.js",
@@ -9751,6 +9739,19 @@
           },
           {
             "file": "../../dimensional/types.js",
+            "imports": [
+              "*"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
+            "file": "../map-evidence.js",
             "imports": [
               "*"
             ]
@@ -9898,7 +9899,8 @@
             "file": "../../cli-api.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -10776,7 +10778,7 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../composition/discovery.js",
+            "file": "../composition/discovery-defaults.js",
             "imports": [
               "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
             ]
@@ -10789,14 +10791,14 @@
             ]
           },
           {
-            "file": "../composition/probe/study.js",
+            "file": "../composition/probe/types.js",
             "imports": [
               "DEFAULT_ALPHA",
               "MAX_CORRECTION_TERMS"
             ]
           },
           {
-            "file": "../dimensional/dimension-spec.js",
+            "file": "../dimensional/named-dimension-names.js",
             "imports": [
               "NAMED_DIMENSION_NAMES"
             ]
@@ -10888,7 +10890,8 @@
             "file": "./commands/index.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -14834,12 +14837,18 @@
               "DerivedMagnitudes"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./discovery-defaults.js",
+            "imports": [
+              "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
+            ]
           }
         ],
         "exports": [
+          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE",
           "REGISTRY_ATTRIBUTES_BY_NAME",
           "ANCHOR_DEFAULT",
-          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE",
           "hasMagnitudeEvidence",
           "isPromisingTier",
           "buildDiscoveryContext",
@@ -14869,8 +14878,7 @@
         ],
         "constants": [
           "REGISTRY_ATTRIBUTES_BY_NAME",
-          "ANCHOR_DEFAULT",
-          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
+          "ANCHOR_DEFAULT"
         ]
       },
       "src/composition/edge.ts": {
@@ -18812,6 +18820,13 @@
         ],
         "internalDependencies": [
           {
+            "file": "./types.js",
+            "imports": [
+              "DEFAULT_ALPHA",
+              "MAX_CORRECTION_TERMS"
+            ]
+          },
+          {
             "file": "../../core/mathts-read.js",
             "imports": [
               "numberFrom"
@@ -18982,10 +18997,6 @@
           "effectiveSigma",
           "runProbeStudy",
           "formatProbeStudy"
-        ],
-        "constants": [
-          "DEFAULT_ALPHA",
-          "MAX_CORRECTION_TERMS"
         ]
       },
       "src/composition/probe/t-tail.ts": {
@@ -19045,7 +19056,9 @@
           "SCHEMA_VERSION",
           "PROBE_SCHEMA_VERSION",
           "DEFAULT_SEARCH_BUDGET",
-          "DEFAULT_HOLDOUT_TOL"
+          "DEFAULT_HOLDOUT_TOL",
+          "DEFAULT_ALPHA",
+          "MAX_CORRECTION_TERMS"
         ],
         "interfaces": [
           "SearchBudget",
@@ -19078,7 +19091,9 @@
           "SCHEMA_VERSION",
           "PROBE_SCHEMA_VERSION",
           "DEFAULT_SEARCH_BUDGET",
-          "DEFAULT_HOLDOUT_TOL"
+          "DEFAULT_HOLDOUT_TOL",
+          "DEFAULT_ALPHA",
+          "MAX_CORRECTION_TERMS"
         ]
       },
       "src/composition/proposed-bridges.ts": {
@@ -19697,7 +19712,8 @@
             "file": "../dimensional/validator.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -21308,6 +21324,20 @@
               "parseFormulaPNode",
               "FormulaPNode"
             ]
+          },
+          {
+            "file": "./named-dimension-names.js",
+            "imports": [
+              "NAMED_DIMENSION_NAMES",
+              "NamedDimensionName"
+            ]
+          },
+          {
+            "file": "./named-dimension-names.js",
+            "imports": [
+              "NAMED_DIMENSION_NAMES"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -21316,6 +21346,9 @@
           "parseDimensionSpec",
           "DimensionSpecError"
         ],
+        "reExported": [
+          "NAMED_DIMENSION_NAMES"
+        ],
         "classes": [
           "DimensionSpecError"
         ],
@@ -21323,7 +21356,6 @@
           "parseDimensionSpec"
         ],
         "constants": [
-          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS"
         ]
       },
@@ -28692,16 +28724,16 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89760,
-    "totalExports": 2864,
+    "totalLinesOfCode": 89796,
+    "totalExports": 2866,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 939,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 423,
-    "totalReExports": 1410,
-    "totalTypeOnlyImports": 538,
+    "totalConstants": 421,
+    "totalReExports": 1411,
+    "totalTypeOnlyImports": 544,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

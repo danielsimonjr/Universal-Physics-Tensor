@@ -14,7 +14,6 @@ import { UsageError } from '../errors.js';
 import { classifyDetermination } from '../determination.js';
 import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
-import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { Dimension } from '../../dimensional/types.js';
 import { NAMED_DIMENSIONS_HELP } from '../library-defaults.js';
 
@@ -73,6 +72,10 @@ const fmtMono = (m: Readonly<Record<string, number>>): string =>
     .join('·') || '(dimensionless)';
 
 async function run(ctx: CommandCtx): Promise<number> {
+  // Loaded lazily: `conventions.js` reaches the canonical registry and the
+  // MathTS function library, which `upt help` must not pay for (S3). Every
+  // path that prints help returns before `run()` is called.
+  const { canonicalCheckFailed, conventionLines } = await import('../conventions.js');
   const { args, api, out, err } = ctx;
   const isJson = args.flags.has('json');
   const debug = args.flags.has('debug');

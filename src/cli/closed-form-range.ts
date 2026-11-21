@@ -5,7 +5,7 @@
  * @module cli/closed-form-range
  */
 
-import { BRIDGE_EVALUATORS } from '../bridges/evaluators.js';
+import { catalogEvaluators } from '../bridges/catalog-load.js';
 
 /**
  * `BE-51/52/55..87` for the ids that are registered. A run of three or more
@@ -27,7 +27,7 @@ export function formatClosedFormRange(ids: readonly number[]): string {
   return `BE-${parts.join('/')}`;
 }
 
-/** The range of {@link BRIDGE_EVALUATORS}. @internal */
+/** The range of the catalog's evaluator records. @internal */
 export function closedFormRangeLabel(): string {
-  return formatClosedFormRange([...BRIDGE_EVALUATORS.keys()]);
+  return formatClosedFormRange(catalogEvaluators().map((e) => e.catalogId));
 }

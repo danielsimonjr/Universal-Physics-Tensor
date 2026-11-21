@@ -131,11 +131,25 @@ describe('the committed TEST_COVERAGE.md is the two-column form', () => {
     expect(direct).toBeGreaterThan(0);
   });
 
-  it('traced edges stay at or above the master count, and explain.ts is credited to the CLI suite', () => {
+  it('traced edges stay at or above the S3 corrected count, and explain.ts is credited to the CLI suite', () => {
     const tracedEdges = Object.values(coverageJson.coverageMap).reduce((n, testers) => n + testers.length, 0);
-    expect(tracedEdges).toBeGreaterThanOrEqual(11856);
+    // 8785 is the traced-edge count after S3 fixed the type-query defect in the
+    // dependency-graph generator: three `import('…').TypeName` type queries
+    // (`src/cli/commands/map.ts` → `dimensional/types.js`,
+    // `src/cli/commands/path.ts` → `cli-api.js`,
+    // `src/composition/user-equation.ts` → `dimensional/validator.js`) were
+    // recorded as runtime side-effect edges and credited 3426 bogus testers,
+    // dominated by the `path.ts` → `cli-api.js` closure (115 per command
+    // module, plus 102 on `src/dimensional/types.ts` and 7 on
+    // `src/dimensional/validator.ts`). Master's 12211 included them; the count
+    // may only grow from here.
+    expect(tracedEdges).toBeGreaterThanOrEqual(8785);
     const explain = coverageJson.coverageMap['src/cli/commands/explain.ts'];
     expect(explain).toBeDefined();
-    expect(explain.length).toBeGreaterThan(100);
+    // Before the S3 type-query fix this read >100, but 115 of those testers
+    // were credited through the bogus `path.ts` → `cli-api.js` side-effect
+    // closure. The honest count is the CLI tests that reach `explain.ts`.
+    expect(explain.length).toBeGreaterThan(0);
+    for (const tester of explain) expect(tester.startsWith('tests/cli/'), tester).toBe(true);
   });
 });

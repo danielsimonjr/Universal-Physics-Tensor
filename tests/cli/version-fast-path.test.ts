@@ -30,15 +30,44 @@ const bin = join(root, 'bin/upt.mjs');
 /** The specifiers whose static import kept `upt version` at ~646 ms. */
 const BANNED_SPECIFIERS = ['../cli-api.js', './commands/index.js', './record.js'] as const;
 
-/** `src/cli/main.ts` with every `import type` / `export type` statement
- * removed, so a type-only import or re-export of a banned specifier is
- * allowed while a value import or `export … from` is not. */
-const valueStatementsOnly = mainSource.replaceAll(
-  /(?:import|export) type[\s\S]*?from\s*'[^']*';/g,
-  '',
-);
+/** `text` with every `import type` / `export type` statement removed — up to
+ * that statement's terminating semicolon only, in either quote style — so a
+ * type-only import or re-export of a banned specifier is allowed while a
+ * value import or `export … from` is not. */
+const stripTypeStatements = (text: string): string =>
+  text.replaceAll(/(?:import|export) type[^;]*?(?:from\s*['"][^'"]*['"])?\s*;/g, '');
+
+const valueStatementsOnly = stripTypeStatements(mainSource);
 
 describe('upt version fast path — source import graph', () => {
+  it('CONTROLS: stripping stops at the type statement\'s semicolon — a value import after a type alias IS reported', () => {
+    // The old stripping regex (`[\s\S]*?from\s*'…';`) ran from `export type`
+    // to the NEXT `from '…';` in the file, swallowing a following value import
+    // and hiding any banned specifier behind a type alias.
+    const snippet = [
+      'export type CliApiModule = Awaited<ReturnType<typeof loadApi>>;',
+      "import { runCli } from './commands/index.js';",
+      '',
+    ].join('\n');
+    const stripped = stripTypeStatements(snippet);
+    expect(stripped).toContain("./commands/index.js");
+    expect(hasStaticLoad(stripped, './commands/index.js')).toBe(true);
+  });
+
+  it('CONTROLS: a double-quoted type-only import IS stripped (not reported as a violation)', () => {
+    const snippet = 'import type { Io } from "./record.js";\nconst x = 1;\n';
+    const stripped = stripTypeStatements(snippet);
+    expect(stripped).not.toContain('import type');
+    expect(hasStaticLoad(stripped, './record.js')).toBe(false);
+  });
+
+  it('CONTROLS: a single-quoted type-only import IS stripped (not reported as a violation)', () => {
+    const snippet = "import type { Io } from './record.js';\nconst x = 1;\n";
+    const stripped = stripTypeStatements(snippet);
+    expect(stripped).not.toContain('import type');
+    expect(hasStaticLoad(stripped, './record.js')).toBe(false);
+  });
+
   it('CONTROLS: a value import of a banned specifier IS reported', () => {
     const withViolation = valueStatementsOnly.replace(
       "import { UsageError, CliError } from './errors.js';",
@@ -222,7 +251,11 @@ describe('upt version fast path — runtime module graph', () => {
     ].join('\n');
     const spawned = spawnHooked(dir, ['--input-type=module', '-e', code]);
     expect(spawned.status, spawned.stderr).toBe(0);
-    const loaded = heavyLoads(readUrls(dir));
+    const urls = readUrls(dir);
+    // The hook must actually have logged: an empty log would let every
+    // `loaded` expectation below pass vacuously.
+    expect(urls.length, 'the resolve hook logged nothing').toBeGreaterThan(0);
+    const loaded = heavyLoads(urls);
     expect(loaded.functions, 'CONTROL must see mathts-functions').toBe(true);
     expect(loaded.cliApi, 'CONTROL must see cli-api.js').toBe(true);
     expect(loaded.commandsIndex, 'CONTROL must see commands/index.js').toBe(true);
@@ -234,7 +267,13 @@ describe('upt version fast path — runtime module graph', () => {
     writeResolveLogHook(dir);
     const spawned = spawnHooked(dir, [bin, 'version']);
     expect(spawned.status, spawned.stderr).toBe(0);
-    const loaded = heavyLoads(readUrls(dir));
+    const urls = readUrls(dir);
+    // The hook must actually have logged, and the entry module must be among
+    // what it saw: an empty log would let every `loaded` expectation below
+    // pass vacuously.
+    expect(urls.length, 'the resolve hook logged nothing').toBeGreaterThan(0);
+    expect(urls).toContainEqual(expect.stringContaining('/dist/cli/main.js'));
+    const loaded = heavyLoads(urls);
     expect(loaded.functions).toBe(false);
     expect(loaded.cliApi).toBe(false);
     expect(loaded.commandsIndex).toBe(false);

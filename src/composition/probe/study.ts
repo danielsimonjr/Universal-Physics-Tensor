@@ -27,6 +27,7 @@
  * @internal
  */
 
+import { DEFAULT_ALPHA, MAX_CORRECTION_TERMS } from './types.js';
 import { pairwiseDot, pairwiseSum } from '@danielsimonjr/mathts-core';
 import { chiSquaredCDF, chiSquaredSF, fSF, inv, propagateUncertainty } from '@danielsimonjr/mathts-functions';
 import { numberFrom } from '../../core/mathts-read.js';
@@ -37,6 +38,8 @@ import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { equals, format } from '../../dimensional/algebra.js';
 import { convertValue, parseUnit, UnitError } from '../../dimensional/units.js';
+
+export { DEFAULT_ALPHA, MAX_CORRECTION_TERMS };
 import { parseFormula } from '../../numerical/formula-mathts.js';
 import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
 import { evalExpr } from '../expr-eval.js';
@@ -126,9 +129,6 @@ export class StudyRefusal extends Error {
     this.name = 'StudyRefusal';
   }
 }
-
-/** The χ² test level a study file states none of. @internal */
-export const DEFAULT_ALPHA = 0.001;
 const TOP_KEYS = new Set([
   'description', 'gap', 'provenance', 'target', 'governing', 'observations', 'baselines', 'criterion', 'design',
   'correction',
@@ -136,9 +136,6 @@ const TOP_KEYS = new Set([
 const ROW_KEYS = new Set(['id', 'role', 'source', 'values', 'observed', 'sigma', 'inputSigma', 'note']);
 /** The keys a separate replication file may carry; the rest belong in the study file. */
 const REPLICATION_KEYS = new Set(['description', 'provenance', 'target', 'governing', 'observations']);
-/** How many powers a study file's correction may list in all. @internal */
-export const MAX_CORRECTION_TERMS = 6;
-
 function refuse(where: string, why: string): never {
   throw new StudyRefusal(`study refused (${where}): ${why}`);
 }
