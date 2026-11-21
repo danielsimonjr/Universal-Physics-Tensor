@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Documented
 
+- Persona dogfood sessions 27 to 32 (engineering physicist, one subject area each) on published 16.0.0: `docs/persona-sessions/2026-11-20-engineering-physicist-session-27.md` to `-32.md`. Records issues #762 to #779 and new reproductions on #738, #739, #740, #747, #756 and #760.
 - Persona dogfood sessions 22 to 26 (undergraduate physics student, one subject area each) on published 16.0.0: `docs/persona-sessions/2026-11-20-undergraduate-physics-student-session-22.md` to `-26.md`. Records issues #747 to #760 and new reproductions on #737, #739, #740 and #741.
 - Persona dogfood session 21 (undergraduate physics student) on published 16.0.0, CLI and API: `docs/persona-sessions/2026-11-20-undergraduate-physics-student-session-21.md`. Records the retests of the session 20 issues and the new findings, issues #736 to #745 and the reopened #684.
 
