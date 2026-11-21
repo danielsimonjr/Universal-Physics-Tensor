@@ -39,6 +39,12 @@ import type { ExprNode } from '../../dimensional/ast-types.js';
 import { equals, format } from '../../dimensional/algebra.js';
 import { convertValue, parseUnit, UnitError } from '../../dimensional/units.js';
 
+/**
+ * The χ² test level a study file states none of, and how many powers a study file's
+ * correction may list in all. Both live in `types.ts`; re-exported so existing
+ * callers keep their import path.
+ * @internal
+ */
 export { DEFAULT_ALPHA, MAX_CORRECTION_TERMS };
 import { parseFormula } from '../../numerical/formula-mathts.js';
 import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';

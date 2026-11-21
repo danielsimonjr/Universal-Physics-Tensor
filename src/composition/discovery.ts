@@ -357,6 +357,12 @@ function quantityComponents(
 export const ANCHOR_DEFAULT: Readonly<Record<string, number>> = { mass: M_SUN_KG };
 
 import { DEFAULT_MAX_ORDERS_OF_MAGNITUDE } from './discovery-defaults.js';
+
+/**
+ * The magnitude-clash threshold when the caller gives none: how many orders of magnitude two
+ * identified quantities may differ. Exported so the CLI states the default it runs with.
+ * @internal
+ */
 export { DEFAULT_MAX_ORDERS_OF_MAGNITUDE };
 
 /**
