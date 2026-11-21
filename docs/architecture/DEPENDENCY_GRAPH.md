@@ -3193,7 +3193,6 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../cli-api.js` | `* as api` | Import |
 | `./errors.js` | `UsageError, CliError` | Import |
 | `./args.js` | `optionTokens, parseArgs` | Import |
 | `./version.js` | `packageVersion` | Import |
@@ -3201,8 +3200,7 @@ The codebase is organized into the following modules:
 | `./command.js` | `listCommandNames, resolveCommand, Command, CommandCtx` | Import |
 | `./flag-help.js` | `GLOBAL_FLAGS` | Import |
 | `./top-level-help.js` | `renderTopLevelHelp` | Import |
-| `./record.js` | `recordInvocation, replayRecord, showRecord, Io` | Import |
-| `./commands/index.js` | `*` | Import |
+| `./record.js` | `Io` | Import (type-only) |
 
 **Exports:**
 - Functions: `reportInternalError`, `runCli`
@@ -7834,7 +7832,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 391 |
 | Total Modules | 13 |
-| Total Lines of Code | 89714 |
+| Total Lines of Code | 89755 |
 | Total Exports | 2864 |
 | Total Re-exports | 1410 |
 | Total Classes | 86 |
@@ -7842,7 +7840,7 @@ graph TD
 | Total Functions | 939 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 537 |
+| Type-only Imports | 538 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

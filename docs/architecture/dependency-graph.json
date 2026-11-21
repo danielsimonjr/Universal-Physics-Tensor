@@ -10801,12 +10801,6 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../cli-api.js",
-            "imports": [
-              "* as api"
-            ]
-          },
-          {
             "file": "./errors.js",
             "imports": [
               "UsageError",
@@ -10856,17 +10850,9 @@
           {
             "file": "./record.js",
             "imports": [
-              "recordInvocation",
-              "replayRecord",
-              "showRecord",
               "Io"
-            ]
-          },
-          {
-            "file": "./commands/index.js",
-            "imports": [
-              "*"
-            ]
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -28664,7 +28650,7 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89714,
+    "totalLinesOfCode": 89755,
     "totalExports": 2864,
     "totalClasses": 86,
     "totalInterfaces": 523,
@@ -28673,10 +28659,10 @@
     "totalEnums": 0,
     "totalConstants": 423,
     "totalReExports": 1410,
-    "totalTypeOnlyImports": 537,
+    "totalTypeOnlyImports": 538,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 19
+    "unusedExportsCount": 21
   }
 }
