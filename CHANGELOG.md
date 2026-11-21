@@ -8,9 +8,14 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Added
+
+- Bench harness for the optimization plan (`bench/catalog-eval.bench.ts`, `bench/unit-table.bench.ts`, both rows in `bench/README.md`) and the CLI cold-start wall-clock script `scripts/cli-wall-clock.mjs` (three runs per command, one median line each, no output file). S1 of `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`: it measures the baseline the later sprints improve on and adds no library change. The unit-table loop includes the refused spellings the table stores, so the catch path runs. The wall-clock script always spawns `node` with an absolute `bin/upt.mjs` (so a Bun invocation cannot measure Bun, and a non-root cwd still exits 0) and averages the two central samples when the run count is even.
+- `tests/tools/bench-readme.test.ts` asserts that the `bench/README.md` Files table and the `bench/*.bench.ts` files on disk are the same set. Controls: dropping a disk file from the table fails, and listing a filename that is not on disk fails. The test failed first when `catalog-eval.bench.ts` was removed from the table (`expected [ 'ad.bench.ts', …(14) ] to deeply equal [ 'ad.bench.ts', …(15) ]`).
+
 ### Documented
 
-- Bench harness for the optimization plan (`bench/catalog-eval.bench.ts`, `bench/unit-table.bench.ts`, both rows in `bench/README.md`) and the CLI cold-start wall-clock script `scripts/cli-wall-clock.mjs` (three runs per command, one median line each, no output file). S1 of `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`: it measures the baseline the later sprints improve on and adds no library change.
+- S1 bench baselines recorded in `docs/architecture/benchmarks.md` (`catalog-eval` 34.90 hz, `unit-table` 448.52 hz on this machine, refusals in the loop). Architecture `totalSourceFiles` claims 1257 → 1258 after `tests/tools/bench-readme.test.ts`; FILE_INVENTORY zone tests 807 against 393 (the sentence had been 796).
 - Plan for runtime measurement, code reduction, MathTS unit delegation, and in-repo user docs: `docs/superpowers/specs/2026-11-21-upt-optimization-docs-design.md` and `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`. The plan records a baseline taken on `17690f5a` and does not change the library. It does not authorize the sprints; `ACTIVE.md` does that when a row names one.
 - Persona dogfood sessions 33 to 38 (theoretical physicist, one subject area each) on published 16.0.0: `docs/persona-sessions/2026-11-20-theoretical-physicist-session-33.md` to `-38.md`. Records issues #781 to #808 and a new reproduction on #770.
 - Persona dogfood sessions 27 to 32 (engineering physicist, one subject area each) on published 16.0.0: `docs/persona-sessions/2026-11-20-engineering-physicist-session-27.md` to `-32.md`. Records issues #762 to #779 and new reproductions on #738, #739, #740, #747, #756 and #760.

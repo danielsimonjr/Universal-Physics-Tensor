@@ -496,3 +496,30 @@ Same-machine before/after (`bench/kretschmann-symmetry.bench.ts`,
 | riemannLowerAt + computeKretschmann @ r=3·r_s |   765.13 |  **1,644.63** | **2.15×** |
 
 The full pipeline is now dominated by the FD Riemann build, as expected.
+
+## S1 in-process baselines — `catalog-eval.bench.ts` and `unit-table.bench.ts`
+
+Run date: 2026-11-21.
+Machine: this cloud agent VM (Linux, Node v22.23.4, Bun 1.4.2, vitest bench 4.1.12 / tinybench).
+No threshold gates. These are the S1 harness baselines: later optimization sprints
+compare against a re-run on the same machine, not against CI.
+
+**catalog-eval** (`bench/catalog-eval.bench.ts`): one `evaluateBridge` pass over the
+121 bridge catalog evaluators (`BRIDGE_EVALUATORS`), sample inputs copied from
+`tests/bridges/evaluators.test.ts` (`every spec run is callable with its declared
+inputs`), input records hoisted outside the bench callback. Applied-case evaluators
+are a different set and are not in this loop.
+
+**unit-table** (`bench/unit-table.bench.ts`): one `parseUnit` loop over every bare
+symbol the unit table stores — the `units` alias keys, the affine spellings, and
+the refused spellings (`UNIT_DATA.refused`: `dB`, `dBm`, `dBW`, `Np`, `ton`,
+`tons`). Refused spellings are caught; the table itself decides what refuses.
+
+| Benchmark | hz | mean (ms) | rme | samples |
+|---|---:|---:|---:|---:|
+| `evaluateBridge` over the 121 bridge catalog evaluators, sample inputs | **34.90** | 28.65 | ±5.39% | 18 |
+| `parseUnit` over every symbol in the table (118 parseable + 6 refusals) | **448.52** | 2.23 | ±5.37% | 225 |
+
+The earlier S1 author run (PR #811 body, before refused keys joined the loop)
+printed 40.30 hz and 674.92 hz on the same class of machine. The unit-table
+drop is the six throws now inside the loop, not a library change.

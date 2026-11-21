@@ -1,8 +1,9 @@
 /**
- * Catalog-evaluator benchmark: one pass of `evaluateBridge` over every
- * evaluator, using the same sample inputs as the test
+ * Catalog-evaluator benchmark: one pass of `evaluateBridge` over the 121
+ * bridge catalog evaluators, using the same sample inputs as the test
  * `every spec run is callable with its declared inputs`
- * (tests/bridges/evaluators.test.ts).
+ * (tests/bridges/evaluators.test.ts). Applied-case evaluators are a
+ * different set and are not in this loop.
  *
  * Baselines, not thresholds: no assertion gates the printed hz lines.
  * Input records are built OUTSIDE the bench callback so the loop measures
@@ -68,8 +69,8 @@ const EVALUATOR_INPUTS: readonly (readonly [number, Record<string, number>])[] =
   ...BRIDGE_EVALUATORS,
 ].map(([id, spec]) => [id, Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]))]);
 
-describe('bridge catalog evaluators', () => {
-  bench('evaluateBridge over every evaluator, sample inputs', () => {
+describe('121 bridge catalog evaluators', () => {
+  bench('evaluateBridge over the 121 bridge catalog evaluators, sample inputs', () => {
     for (const [id, inputs] of EVALUATOR_INPUTS) evaluateBridge(id, inputs);
   });
 });

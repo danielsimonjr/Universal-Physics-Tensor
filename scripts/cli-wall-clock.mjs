@@ -2,14 +2,19 @@
 /**
  * CLI cold-start wall clock: three runs of each named `node bin/upt.mjs`
  * command, one median line per command in milliseconds. Plain Node, no
- * TypeScript, no output file; exits 0.
+ * TypeScript, no output file; exits 0. The `upt` launcher is resolved from
+ * this file's location, so the script works from any cwd.
  *
  * Usage: node scripts/cli-wall-clock.mjs
  */
 import { spawnSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 
 const RUNS = 3;
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const UPT = join(ROOT, 'bin', 'upt.mjs');
 
 const COMMANDS = [
   ['version', ['version']],
@@ -18,16 +23,18 @@ const COMMANDS = [
   ['audit', ['audit']],
 ];
 
-/** Median of an odd-sized list of numbers. */
+/** Median of a non-empty list: the middle value, or the mean of the two central values when even. */
 function median(values) {
+  if (values.length === 0) throw new Error('median of an empty list');
   const sorted = [...values].sort((a, b) => a - b);
-  return sorted[(sorted.length - 1) / 2];
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
-/** One timed run of `node bin/upt.mjs <args>`, wall clock in ms. */
+/** One timed run of `node <absolute bin/upt.mjs> <args>`, wall clock in ms. */
 function timeRun(args) {
   const started = process.hrtime.bigint();
-  const result = spawnSync(process.execPath, ['bin/upt.mjs', ...args], {
+  const result = spawnSync('node', [UPT, ...args], {
     stdio: ['ignore', 'ignore', 'inherit'],
   });
   const ms = Number(process.hrtime.bigint() - started) / 1e6;

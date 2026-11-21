@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] S1 review: live refusal catch, FILE_INVENTORY 806, CHANGELOG Added, cli-wall-clock node/cwd/median, 121 wording, benchmarks.md hz, README↔bench bijection test.
+  Done: `UNIT_DATA.refused.keys()` joined the unit-table loop (6 throws live); FILE_INVENTORY zone tests 807 / total 1258 (prose was 796, then 806 before the new test file); S1 bullet under `### Added`; `cli-wall-clock.mjs` spawns `node` with absolute `bin/upt.mjs` and even-length median; 121 wording; `benchmarks.md` hz entries; `tests/tools/bench-readme.test.ts` (failed first with catalog-eval dropped from the table).
 - [x] S1 — In-process benches and a CLI wall-clock script (plan `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`, sprint S1).
   Done: `bench/catalog-eval.bench.ts` and `bench/unit-table.bench.ts` added with their `bench/README.md` rows; `scripts/cli-wall-clock.mjs` prints four median lines. No `src/` change.
 - [x] Write the plan for runtime speed, code reduction, MathTS unit delegation, and user docs. Do not change `src/`.

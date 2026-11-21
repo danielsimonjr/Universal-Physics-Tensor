@@ -40,8 +40,8 @@ is a defect in this README.
 | `pderiv-grid.bench.ts` | `pderivNumericalFn` order 2 vs order 4 on a Schwarzschild spatial grid (the cost of the default-order flip). |
 | `ricci-lowering.bench.ts` | PO-2 curvature-cost diagnostic: Riemann → Ricci → metric-lowering pipeline on a Schwarzschild fixture. |
 | `weyl-lowering.bench.ts` | Weyl tensor assembly from a vacuum-like Riemann/Ricci fixture. |
-| `catalog-eval.bench.ts` | `evaluateBridge` over every bridge evaluator, one loop, sample inputs copied from `tests/bridges/evaluators.test.ts`. |
-| `unit-table.bench.ts` | One `parseUnit` loop over every bare symbol in `data/units.json` (the `units` alias keys plus the affine spellings), refusals caught. |
+| `catalog-eval.bench.ts` | `evaluateBridge` over the 121 bridge catalog evaluators, one loop, sample inputs copied from `tests/bridges/evaluators.test.ts`. |
+| `unit-table.bench.ts` | One `parseUnit` loop over every bare symbol in `data/units.json` (the `units` alias keys, the affine spellings, and the refused spellings), refusals caught. |
 
 ## Philosophy
 
