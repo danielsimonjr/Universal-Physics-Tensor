@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] S1 — In-process benches and a CLI wall-clock script (plan `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`, sprint S1).
+  Done: `bench/catalog-eval.bench.ts` and `bench/unit-table.bench.ts` added with their `bench/README.md` rows; `scripts/cli-wall-clock.mjs` prints four median lines. No `src/` change.
 - [x] Write the plan for runtime speed, code reduction, MathTS unit delegation, and user docs. Do not change `src/`.
   Done: `docs/superpowers/specs/2026-11-21-upt-optimization-docs-design.md` and `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`. The baseline is in the plan. No sprint in that plan is authorized by this row.
 - [x] `ab-damped-massless` bound is not dimensionally consistent: `deltaAt = 2(1+|v0|)m/b` adds a pure number to a velocity and holds only at b = k = x0 = 1; the W8 and W8b tolerances compare quantities of different dimensions with `2m`. Replace the bound with `(m/b)(|v0| + k|x0|/b)` (leading order in ε = mk/b², c = 1 checked on a grid), give the W8 roots the tolerances `2mk²/b³` and `2mk/b`, state ε in the prose beside the unchanged `mk/b² < 1/4`, and witness `K = 1` of both limit bridges with a test and a refuted `x ↦ 2x` control.

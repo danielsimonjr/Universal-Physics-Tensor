@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Documented
 
+- Bench harness for the optimization plan (`bench/catalog-eval.bench.ts`, `bench/unit-table.bench.ts`, both rows in `bench/README.md`) and the CLI cold-start wall-clock script `scripts/cli-wall-clock.mjs` (three runs per command, one median line each, no output file). S1 of `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`: it measures the baseline the later sprints improve on and adds no library change.
 - Plan for runtime measurement, code reduction, MathTS unit delegation, and in-repo user docs: `docs/superpowers/specs/2026-11-21-upt-optimization-docs-design.md` and `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`. The plan records a baseline taken on `17690f5a` and does not change the library. It does not authorize the sprints; `ACTIVE.md` does that when a row names one.
 - Persona dogfood sessions 33 to 38 (theoretical physicist, one subject area each) on published 16.0.0: `docs/persona-sessions/2026-11-20-theoretical-physicist-session-33.md` to `-38.md`. Records issues #781 to #808 and a new reproduction on #770.
 - Persona dogfood sessions 27 to 32 (engineering physicist, one subject area each) on published 16.0.0: `docs/persona-sessions/2026-11-20-engineering-physicist-session-27.md` to `-32.md`. Records issues #762 to #779 and new reproductions on #738, #739, #740, #747, #756 and #760.
