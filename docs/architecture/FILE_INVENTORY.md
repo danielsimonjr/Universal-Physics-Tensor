@@ -8,22 +8,22 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 1259
+**Total files**: 1263
 
 ## Disposition counts
 
 | Disposition | Count | Meaning |
 | --- | --: | --- |
-| `reachable` | 363 | A `src`-area file that an entry root reaches. |
+| `reachable` | 365 | A `src`-area file that an entry root reaches. |
 | `build-entry` | 5 | A `src`-area file that is an entry root. |
 | `test-only` | 23 | A `src`-area file that only a test reaches. |
 | `orphan` | 2 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 808 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 810 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 38 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 1 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 2 | A file in `examples/` or `docs/`. |
 | `bench` | 17 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **1259** | |
+| **Total** | **1263** | |
 
 ## Per-area counts
 
@@ -33,16 +33,16 @@ This report lists each source file that the map census finds, with a disposition
 | `config` | 1 |
 | `docs` | 1 |
 | `examples` | 1 |
-| `src` | 393 |
-| `tests` | 808 |
+| `src` | 395 |
+| `tests` | 810 |
 | `tools` | 38 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 868 |
-| `universal-physics-tensor` | 391 |
+| `(root)` | 870 |
+| `universal-physics-tensor` | 393 |
 
 ## All files
 
@@ -303,6 +303,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/composition/consistency.ts` | universal-physics-tensor | src | reachable | 32 |
 | `src/composition/descriptor.ts` | universal-physics-tensor | src | test-only | 89 |
 | `src/composition/dimension-adjacency.ts` | universal-physics-tensor | src | reachable | 56 |
+| `src/composition/discovery-defaults.ts` | universal-physics-tensor | src | reachable | 20 |
 | `src/composition/discovery.ts` | universal-physics-tensor | src | reachable | 888 |
 | `src/composition/edge.ts` | universal-physics-tensor | src | reachable | 408 |
 | `src/composition/enumerate.ts` | universal-physics-tensor | src | reachable | 264 |
@@ -411,6 +412,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/dimensional/mathts-unit-wrapper.ts` | universal-physics-tensor | src | reachable | 163 |
 | `src/dimensional/metric-validators.ts` | universal-physics-tensor | src | reachable | 235 |
 | `src/dimensional/metric.ts` | universal-physics-tensor | src | reachable | 223 |
+| `src/dimensional/named-dimension-names.ts` | universal-physics-tensor | src | reachable | 48 |
 | `src/dimensional/natural-units.ts` | universal-physics-tensor | src | reachable | 64 |
 | `src/dimensional/quantity-registry.ts` | universal-physics-tensor | src | reachable | 125 |
 | `src/dimensional/rg-flow.ts` | universal-physics-tensor | src | reachable | 264 |
@@ -760,6 +762,7 @@ This report lists each source file that the map census finds, with a disposition
 | `tests/cli/ground.test.ts` | (root) | tests | test | 89 |
 | `tests/cli/hardening.test.ts` | (root) | tests | test | 155 |
 | `tests/cli/help-covers-registry.test.ts` | (root) | tests | test | 85 |
+| `tests/cli/help-fast-path.test.ts` | (root) | tests | test | 148 |
 | `tests/cli/help-flags.test.ts` | (root) | tests | test | 80 |
 | `tests/cli/hyphen-formula.test.ts` | (root) | tests | test | 53 |
 | `tests/cli/inprocess-golden.test.ts` | (root) | tests | test | 85 |
@@ -1269,6 +1272,7 @@ This report lists each source file that the map census finds, with a disposition
 | `tests/tools/criterion3-labels.test.ts` | (root) | tests | test | 142 |
 | `tests/tools/criterion3-residual-corpus.test.ts` | (root) | tests | test | 47 |
 | `tests/tools/criterion3-run.test.ts` | (root) | tests | test | 194 |
+| `tests/tools/dependency-graph-type-queries.test.ts` | (root) | tests | test | 90 |
 | `tests/tools/dist-freshness.test.ts` | (root) | tests | test | 70 |
 | `tests/tools/export-star-as-deps.test.ts` | (root) | tests | test | 68 |
 | `tests/tools/formalref-axiom-gate.test.ts` | (root) | tests | test | 212 |
