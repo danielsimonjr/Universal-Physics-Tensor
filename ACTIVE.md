@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] Write the plan for runtime speed, code reduction, MathTS unit delegation, and user docs. Do not change `src/`.
+  Done: `docs/superpowers/specs/2026-11-21-upt-optimization-docs-design.md` and `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`. The baseline is in the plan. No sprint in that plan is authorized by this row.
 - [x] `ab-damped-massless` bound is not dimensionally consistent: `deltaAt = 2(1+|v0|)m/b` adds a pure number to a velocity and holds only at b = k = x0 = 1; the W8 and W8b tolerances compare quantities of different dimensions with `2m`. Replace the bound with `(m/b)(|v0| + k|x0|/b)` (leading order in ε = mk/b², c = 1 checked on a grid), give the W8 roots the tolerances `2mk²/b³` and `2mk/b`, state ε in the prose beside the unchanged `mk/b² < 1/4`, and witness `K = 1` of both limit bridges with a test and a refuted `x ↦ 2x` control.
   Done: `deltaAt = (m/b)(|v0| + k|x0|/b)`, `delta` 3 → 1.5, W8 tolerances `2mk²/b³` and `2mk/b`, W8b tolerance 0.12 → 0.06; 1536-point grid covered (max sup/bound 0.999), c = 0.5 control refuted; K = 1 test with an `x ↦ 2x` control; 7 tests failed on the old source.
 - [x] BE-26 second relation `be-26-wkb`: the bare WKB tunneling rate Γ_WKB = ν₀ exp(−2κL) as a second relation of catalog row 26 (the `be-42-via-rs` pattern), target the new quantity `wkb-tunneling-rate`, with the opaque clause and the proton reference point; no new row, no evaluator.
