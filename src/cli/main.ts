@@ -27,11 +27,13 @@ import type { Io } from './record.js';
 // `cli-api.js` and the command barrel pull `mathts-functions` (~380 ms of eager
 // typed-function dispatch build) and `record.js` pulls `record-tables.js`
 // (~507 ms) through the same dependency, which is most of the old ~650 ms
-// cold-start wall clock. The one-shot `ensureCommands` flag keeps the barrel's
-// side-effect registration a once-per-process event, exactly as the former
-// static import did, so `clearRegistryForTest()` in tests still leaves the
-// registry empty afterwards.
-let commandsLoaded = false;
+// cold-start wall clock. `ensureCommands` caches the barrel's import promise,
+// so overlapping callers share one in-flight load (a boolean set before the
+// import resolved left a second caller on an empty registry) and a rejection
+// is not cached (a failed load is retried). A fulfilled promise is still a
+// once-per-process registration, so `clearRegistryForTest()` in tests still
+// leaves the registry empty afterwards.
+let commandsPromise: Promise<void> | undefined;
 
 /** The `cli-api.js` barrel, typed by the dynamic import itself (no static or
  * type-only import statement, so no reader can mistake it for an eager load). */
@@ -44,9 +46,12 @@ async function loadApi(): Promise<typeof import('../cli-api.js')> {
 }
 
 async function ensureCommands(): Promise<void> {
-  if (!commandsLoaded) {
-    commandsLoaded = true;
-    await import('./commands/index.js');
+  commandsPromise ??= import('./commands/index.js').then(() => undefined);
+  try {
+    await commandsPromise;
+  } catch (e) {
+    commandsPromise = undefined;
+    throw e;
   }
 }
 

@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] S2 review: `ensureCommands()` promise cache, dynamic-`import()` side-effect edges, version-fast-path `export … from` + runtime graph, unusedExportsCount command, CHANGELOG heading, record-hardening non-vacuity.
+  Done: `ensureCommands()` caches the barrel promise and clears it on rejection (two delayed concurrent `runCli` calls both exit 0; a one-shot throw then retries). Dynamic `import()` edges are `sideEffect` for all files; `docs:deps` traced edges 12211, `explain.ts` testers 120. `version-fast-path` bans `export … from` and asserts at runtime that `upt version` never loads the heavy graph. `npx @danielsimonjr/repo-tools@2.6.1 map` is the unusedExportsCount command. Duplicate CHANGELOG `### Documented` removed. `listCommandNames().length > 20` in record-hardening.
 - [x] Neon review: README controls re-parse mutated text; unit-table comments measure throws; CHANGELOG 1254→1258.
   Done: CONTROLs mutate README text and re-parse (drop `onDisk[0]` row; insert `| \`ghost.bench.ts\` | ghost |`); both fail when `listedBenchFiles` is stubbed to return `onDisk` (`expected [ 'ad.bench.ts', …(15) ] to not deeply equal [ 'ad.bench.ts', …(15) ]`). unit-table comments measure 118 parses plus 6 caught refusal throws. CHANGELOG 1254 → 1258.
 - [x] S2 — `upt version` fast path: `upt version` returns before loading `cli-api.js`, `commands/index.js`, and `record.js` (plan `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`, sprint S2).

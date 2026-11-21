@@ -80,8 +80,43 @@ describe('TEST_COVERAGE.md reports direct and traced coverage separately', () =>
   });
 });
 
+/** A source file that reaches a leaf only through `await import('./leaf.js')`. */
+function dynamicImportFixture(): string {
+  const root = mkdtempSync(join(tmpdir(), 'upt-test-coverage-dynamic-'));
+  made.push(root);
+  mkdirSync(join(root, 'src'), { recursive: true });
+  mkdirSync(join(root, 'tests'), { recursive: true });
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'fixture', version: '0.0.0' }));
+  writeFileSync(
+    join(root, 'src/main.ts'),
+    "export async function go(): Promise<unknown> {\n  return await import('./leaf.js');\n}\n",
+  );
+  writeFileSync(join(root, 'src/leaf.ts'), 'export const LEAF = 1;\n');
+  writeFileSync(join(root, 'src/orphan.ts'), 'export const ORPHAN = 1;\n');
+  writeFileSync(join(root, 'tests/go.test.ts'), "import { go } from '../src/main.js';\nexport const T = go;\n");
+  execFileSync('git', ['init', '-b', 'fixture'], { cwd: root });
+  execFileSync('git', ['add', '.'], { cwd: root });
+  return root;
+}
+
+describe('TEST_COVERAGE.md follows a source file dynamic import as a side-effect edge', () => {
+  const report = generate(dynamicImportFixture());
+
+  it('the dynamically imported leaf is traced, not uncovered', () => {
+    const main = row(report, 'src/main.ts');
+    expect(main).toMatch(/\| `go\.test\.ts` \| — \|/);
+    const leaf = row(report, 'src/leaf.ts');
+    expect(leaf).toMatch(/\| — \| `go\.test\.ts` \|/);
+    expect(report).toMatch(/^- `src\/orphan\.ts`$/m);
+    expect(report).not.toMatch(/^- `src\/leaf\.ts`$/m);
+  });
+});
+
 describe('the committed TEST_COVERAGE.md is the two-column form', () => {
   const committed = readFileSync(join(repoRoot, 'docs/architecture/TEST_COVERAGE.md'), 'utf8');
+  const coverageJson = JSON.parse(
+    readFileSync(join(repoRoot, 'docs/architecture/test-coverage.json'), 'utf8'),
+  ) as { coverageMap: Record<string, string[]> };
 
   it('has both summary rows and no tests/unit/ suggestion', () => {
     expect(committed).toMatch(/\| Source files imported directly by a test \| \d+ \|/);
@@ -94,5 +129,13 @@ describe('the committed TEST_COVERAGE.md is the two-column form', () => {
     const traced = Number(/\| Source files reached directly or through a barrel or side-effect import \| (\d+) \|/.exec(committed)?.[1]);
     expect(direct).toBeLessThanOrEqual(traced);
     expect(direct).toBeGreaterThan(0);
+  });
+
+  it('traced edges stay at or above the master count, and explain.ts is credited to the CLI suite', () => {
+    const tracedEdges = Object.values(coverageJson.coverageMap).reduce((n, testers) => n + testers.length, 0);
+    expect(tracedEdges).toBeGreaterThanOrEqual(11856);
+    const explain = coverageJson.coverageMap['src/cli/commands/explain.ts'];
+    expect(explain).toBeDefined();
+    expect(explain.length).toBeGreaterThan(100);
   });
 });
