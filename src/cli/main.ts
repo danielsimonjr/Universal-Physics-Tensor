@@ -14,7 +14,6 @@
  * which is what makes commands testable in-process against `dist/cli/*.js`.
  */
 
-import * as api from '../cli-api.js';
 import { UsageError, CliError } from './errors.js';
 import { optionTokens, parseArgs } from './args.js';
 import { packageVersion } from './version.js';
@@ -22,9 +21,39 @@ import { glossaryText } from './statuses.js';
 import { listCommandNames, resolveCommand, type Command, type CommandCtx } from './command.js';
 import { GLOBAL_FLAGS } from './flag-help.js';
 import { renderTopLevelHelp } from './top-level-help.js';
-import { recordInvocation, replayRecord, showRecord, type Io } from './record.js';
-// Side-effect import: registers every ported command (see commands/index.ts).
-import './commands/index.js';
+import type { Io } from './record.js';
+
+// Lazy module loads. `upt version` must return without importing any of these:
+// `cli-api.js` and the command barrel pull `mathts-functions` (~380 ms of eager
+// typed-function dispatch build) and `record.js` pulls `record-tables.js`
+// (~507 ms) through the same dependency, which is most of the old ~650 ms
+// cold-start wall clock. `ensureCommands` caches the barrel's import promise,
+// so overlapping callers share one in-flight load (a boolean set before the
+// import resolved left a second caller on an empty registry) and a rejection
+// is not cached (a failed load is retried). A fulfilled promise is still a
+// once-per-process registration, so `clearRegistryForTest()` in tests still
+// leaves the registry empty afterwards.
+let commandsPromise: Promise<void> | undefined;
+
+/** The `cli-api.js` barrel, typed by the dynamic import itself (no static or
+ * type-only import statement, so no reader can mistake it for an eager load). */
+type CliApiModule = Awaited<ReturnType<typeof loadApi>>;
+let api: CliApiModule | undefined;
+
+async function loadApi(): Promise<typeof import('../cli-api.js')> {
+  if (api === undefined) api = await import('../cli-api.js');
+  return api;
+}
+
+async function ensureCommands(): Promise<void> {
+  commandsPromise ??= import('./commands/index.js').then(() => undefined);
+  try {
+    await commandsPromise;
+  } catch (e) {
+    commandsPromise = undefined;
+    throw e;
+  }
+}
 
 // `Io` is the writer surface `runCli` needs. In production these wrap
 // `process.stdout`/`process.stderr` with exact `console.log`/`console.error`
@@ -107,13 +136,23 @@ export async function runCli(argv: string[], io: Io = defaultIo): Promise<number
     if (Object.keys(files).length > 1) {
       throw new UsageError('upt: use one of --record, --replay and --show-record at a time');
     }
-    if (files.record !== undefined) return await recordInvocation(files.record, rest, dispatch, io, api);
+    if (files.record !== undefined) {
+      // `recordInvocation` parses the argv against the command registry before
+      // it dispatches, so the barrel must be loaded here, not inside dispatch.
+      await ensureCommands();
+      const { recordInvocation } = await import('./record.js');
+      return await recordInvocation(files.record, rest, dispatch, io, await loadApi());
+    }
     if (files.replay !== undefined || files['show-record'] !== undefined) {
       if (rest.length > 0) {
         throw new UsageError(`upt: '--${files.replay !== undefined ? 'replay' : 'show-record'}' takes no command (got '${rest[0]}')`);
       }
-      if (files.replay !== undefined) return await replayRecord(files.replay, json, dispatch, io, api);
-      return showRecord(files['show-record']!, json, io);
+      const record = await import('./record.js');
+      if (files.replay !== undefined) {
+        await ensureCommands();
+        return await record.replayRecord(files.replay, json, dispatch, io, await loadApi());
+      }
+      return record.showRecord(files['show-record']!, json, io);
     }
     return await dispatch(rest, io);
   } catch (e) {
@@ -134,6 +173,19 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
 
   try {
     const [cmd, ...rest] = argv;
+
+    if (cmd === 'version' || cmd === '--version' || cmd === '-v') {
+      // Fast path: `upt version` prints the version without loading the heavy
+      // module graph (see the lazy-load comment at the top of this file). The
+      // argument refusal keeps its exit-2 contract on the fast path too.
+      if (rest.length > 0) throw new UsageError('upt version takes no arguments');
+      out(packageVersion());
+      return 0;
+    }
+
+    // Everything else needs the registered commands and the real api barrel.
+    await ensureCommands();
+    const api = await loadApi();
 
     if (cmd === undefined) {
       // Byte-identical to bin/upt.mjs's `case undefined` (lines 861-865): a
@@ -179,12 +231,6 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
         if (command !== undefined) commands.push(command);
       }
       out(renderTopLevelHelp(commands, GLOBAL_FLAGS));
-      return 0;
-    }
-
-    if (cmd === 'version' || cmd === '--version' || cmd === '-v') {
-      if (rest.length > 0) throw new UsageError('upt version takes no arguments');
-      out(packageVersion());
       return 0;
     }
 

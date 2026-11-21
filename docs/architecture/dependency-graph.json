@@ -864,6 +864,12 @@
           {
             "file": "../relations/composition-table.js",
             "imports": [
+              "*"
+            ]
+          },
+          {
+            "file": "../relations/composition-table.js",
+            "imports": [
               "COMPOSITION_TABLE",
               "composeRelation",
               "NO_COMPOSITE_CLAIM"
@@ -4113,6 +4119,12 @@
             "imports": [
               "MissingDeltaAtError",
               "MissingHorizonError"
+            ]
+          },
+          {
+            "file": "../relations/regime.js",
+            "imports": [
+              "*"
             ]
           },
           {
@@ -9736,6 +9748,12 @@
             "imports": [
               "DISCOVER_MAX_ORDERS_DEFAULT"
             ]
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "*"
+            ]
           }
         ],
         "exports": [
@@ -9874,6 +9892,12 @@
               "selectRoute",
               "transportReport",
               "RouteClaim"
+            ]
+          },
+          {
+            "file": "../../cli-api.js",
+            "imports": [
+              "*"
             ]
           }
         ],
@@ -10801,12 +10825,6 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../cli-api.js",
-            "imports": [
-              "* as api"
-            ]
-          },
-          {
             "file": "./errors.js",
             "imports": [
               "UsageError",
@@ -10856,10 +10874,14 @@
           {
             "file": "./record.js",
             "imports": [
-              "recordInvocation",
-              "replayRecord",
-              "showRecord",
               "Io"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../cli-api.js",
+            "imports": [
+              "*"
             ]
           },
           {
@@ -19669,6 +19691,12 @@
             "file": "../dimensional/hyphen-names.js",
             "imports": [
               "rewriteCatalogHyphens"
+            ]
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "*"
             ]
           }
         ],
@@ -28664,7 +28692,7 @@
   "statistics": {
     "totalTypeScriptFiles": 391,
     "totalModules": 13,
-    "totalLinesOfCode": 89714,
+    "totalLinesOfCode": 89760,
     "totalExports": 2864,
     "totalClasses": 86,
     "totalInterfaces": 523,
@@ -28673,10 +28701,10 @@
     "totalEnums": 0,
     "totalConstants": 423,
     "totalReExports": 1410,
-    "totalTypeOnlyImports": 537,
+    "totalTypeOnlyImports": 538,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 19
+    "unusedExportsCount": 21
   }
 }

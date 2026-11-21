@@ -572,6 +572,9 @@ modules:
       internalDependencies:
         - file: ../relations/composition-table.js
           imports:
+            - "*"
+        - file: ../relations/composition-table.js
+          imports:
             - COMPOSITION_TABLE
             - composeRelation
             - NO_COMPOSITE_CLAIM
@@ -2900,6 +2903,9 @@ modules:
           imports:
             - MissingDeltaAtError
             - MissingHorizonError
+        - file: ../relations/regime.js
+          imports:
+            - "*"
         - file: ../relations/regime.js
           imports:
             - collidingRegimeGroups
@@ -6587,6 +6593,9 @@ modules:
         - file: ../library-defaults.js
           imports:
             - DISCOVER_MAX_ORDERS_DEFAULT
+        - file: ../../dimensional/types.js
+          imports:
+            - "*"
       exports:
         - command
         - neighbourhood
@@ -6672,6 +6681,9 @@ modules:
             - selectRoute
             - transportReport
             - RouteClaim
+        - file: ../../cli-api.js
+          imports:
+            - "*"
       exports:
         - command
         - parseSweep
@@ -7261,9 +7273,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../cli-api.js
-          imports:
-            - "* as api"
         - file: ./errors.js
           imports:
             - UsageError
@@ -7292,10 +7301,11 @@ modules:
             - renderTopLevelHelp
         - file: ./record.js
           imports:
-            - recordInvocation
-            - replayRecord
-            - showRecord
             - Io
+          typeOnly: true
+        - file: ../cli-api.js
+          imports:
+            - "*"
         - file: ./commands/index.js
           imports:
             - "*"
@@ -13293,6 +13303,9 @@ modules:
         - file: ../dimensional/hyphen-names.js
           imports:
             - rewriteCatalogHyphens
+        - file: ../dimensional/validator.js
+          imports:
+            - "*"
       exports:
         - rewriteCatalogHyphens
         - hyphenSubtractHint
@@ -19851,7 +19864,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 391
   totalModules: 13
-  totalLinesOfCode: 89714
+  totalLinesOfCode: 89760
   totalExports: 2864
   totalClasses: 86
   totalInterfaces: 523
@@ -19860,8 +19873,8 @@ statistics:
   totalEnums: 0
   totalConstants: 423
   totalReExports: 1410
-  totalTypeOnlyImports: 537
+  totalTypeOnlyImports: 538
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 19
+  unusedExportsCount: 21

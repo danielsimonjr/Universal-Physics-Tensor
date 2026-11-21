@@ -461,13 +461,13 @@ function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[])
   };
 
   // Transitive SIDE-EFFECT coverage: a covered file that bare-imports
-  // (`import './x.js';`) another module loads and exercises it — the CLI
-  // command registry is exactly this shape (a test imports `main.ts`, which
-  // side-effect-imports `commands/index.ts`, which side-effect-imports every
-  // command module). Follow ONLY `sideEffect` edges — never an `import * as`
-  // namespace binding of a barrel (e.g. `main.ts`'s `import * as api from
-  // '../cli-api.js'`), which would leak coverage through cli-api's whole
-  // re-export closure and falsely mark the library as tested.
+  // (`import './x.js';`) or dynamically `import('./x.js')` another module
+  // loads and exercises it — the CLI command registry is exactly this shape
+  // (a test imports `main.ts`, which dynamically imports `commands/index.ts`,
+  // which side-effect-imports every command module). Follow ONLY `sideEffect`
+  // edges — never an `import * as` namespace binding of a barrel, which would
+  // leak coverage through that barrel's whole re-export closure and falsely
+  // mark the library as tested.
   const creditSideEffectClosure = (
     fromPath: string, testPath: string, importedSources: string[], visited: Set<string>,
   ) => {
@@ -561,15 +561,15 @@ function analyzeTestCoverage(sourceFiles: ParsedFile[], testFiles: ParsedFile[])
 /**
  * Parse a TypeScript file for imports and exports.
  *
- * `isTestFile` gates the dynamic-`import()` scan (post-v0.32.0 fix, see below) —
- * it is only enabled for test files so a source file's dynamic `import()`
- * (e.g. lazy-loading an optional peer, or `engine-registry.ts` lazily
- * loading `./mathts-engine.js`) never gains a new structural graph edge
- * here, which would perturb the dependency graph's circular-dependency and
- * import-edge counts. Test files carry no structural-graph obligations, so
- * crediting their dynamic imports only affects the coverage/unused reports.
+ * Dynamic `import()` is parsed for every file, as a `sideEffect` edge (the
+ * coverage tracer follows those transitively). The second parameter is kept
+ * so `Array.prototype.map`'s (element, index) cannot leak into it; it does
+ * not change what is scanned. These edges also enter the structural graph
+ * (circular-dependency and import-edge counts), as bare `import './x.js'`
+ * already does.
  */
 function parseFile(filePath: string, isTestFile: boolean = false): ParsedFile {
+  void isTestFile;
   const content = readFileSync(filePath, 'utf-8');
   const relativePath = relative(ROOT_DIR, filePath).replace(/\\/g, '/');
 
@@ -706,25 +706,25 @@ function parseFile(filePath: string, isTestFile: boolean = false): ParsedFile {
     }
   }
 
-  // post-v0.32.0 fix: parse dynamic `import(...)` expressions in TEST files
-  // (e.g. the top-level `await import('../../src/numerical/
-  // formula-mathts.js')` a test uses to probe an optional-peer-gated
-  // module). Without this, a module exercised only via a dynamic import
-  // (never a static `from` import or a bare side-effect import) is
-  // falsely reported as untested/unused. Scoped to `isTestFile` — see the
-  // function-level doc comment for why source files are excluded.
-  if (isTestFile) {
-    const dynamicImportRegex = /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
-    while ((match = dynamicImportRegex.exec(content)) !== null) {
-      const source = match[1];
-      if (source.startsWith('.')) {
-        const alreadyTracked = result.internalDependencies.some(d => d.file === source);
-        if (!alreadyTracked) {
-          result.internalDependencies.push({
-            file: source,
-            imports: ['*'], // Dynamic import: treat as wildcard, same as a side-effect import
-          });
-        }
+  // Dynamic `import('...')` of a relative path loads that module, the same
+  // as a bare `import './x.js';`. The coverage tracer follows `sideEffect`
+  // edges, so a test that reaches `main.ts` is credited for `commands/index.ts`
+  // and every command the barrel registers. Without `sideEffect: true` the
+  // tracer stops at the importer; the former test-only gate hid a source
+  // file's `await import('./commands/index.js')` and dropped thousands of
+  // traced test→source edges. A specifier already recorded (a static
+  // `import` / `import type` of the same path) is not upgraded.
+  const dynamicImportRegex = /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+  while ((match = dynamicImportRegex.exec(content)) !== null) {
+    const source = match[1];
+    if (source.startsWith('.')) {
+      const alreadyTracked = result.internalDependencies.some(d => d.file === source);
+      if (!alreadyTracked) {
+        result.internalDependencies.push({
+          file: source,
+          imports: ['*'],
+          sideEffect: true,
+        });
       }
     }
   }
@@ -2008,7 +2008,6 @@ async function main(): Promise<void> {
       ...getAllTestFiles(SRC_DIR),
     ];
     console.log(`Found ${testFilePaths.length} test files`);
-    // `isTestFile = true` enables the dynamic-import() scan (post-v0.32.0 fix).
     parsedTestFiles = testFilePaths.map((f) => parseFile(f, true));
     console.log('Parsed all test files');
   }

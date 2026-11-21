@@ -12,6 +12,9 @@
 import '../helpers/dist.js';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+// Side-effect import: these tests read the registry before any runCli call, which
+// no longer populates it (S2 made main.ts load the command barrel lazily).
+import '../../dist/cli/commands/index.js';
 import { listCommandNames, resolveCommand } from '../../dist/cli/command.js';
 
 const STRAY = 'zzz-stray-token';

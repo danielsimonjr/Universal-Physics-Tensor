@@ -185,6 +185,7 @@ describe('static attribution', () => {
 
   it('every registered command has a module to attribute from', async () => {
     const file = join(dir, 'all.jsonl');
+    expect(listCommandNames().length).toBeGreaterThan(20);
     for (const name of listCommandNames()) await run([`--record=${file}`, name, '--no-such-flag']);
     const entries = readEntries(file);
     expect(entries.length).toBe(listCommandNames().length);
