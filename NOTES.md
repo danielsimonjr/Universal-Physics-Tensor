@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-20 (persona dogfood sessions 33-38 on 16.0.0)
+
+- **Sessions 33 to 38 (theoretical physicist) ran in parallel against `universal-physics-tensor@16.0.0` from npm**, one area each: general relativity; symbolic and dimensional analysis; bridge composition; atlas limits; discovery tools; quantum, field and statistical bridges. Model personas, not human reviewers. Issues #781 to #808 were filed; each was reproduced on separate installs. A comment was added to #770. Closed forms and prefactors matched hand values; the defects are in conventions (#781), domains and caveats (#800 to #804), confidence grading (#796, #797) and labels. No finding has its cause in MathTS.
+
 ## As of 2026-11-20 (persona dogfood sessions 27-32 on 16.0.0)
 
 - **Sessions 27 to 32 (engineering physicist) ran in parallel against `universal-physics-tensor@16.0.0` from npm**, one area each: applied cases and uncertainty; bridges as measurement plans; materials and semiconductors; heat transfer and fluids; EM, RF and noise; a design workflow through the CLI and the library. Model personas, not human reviewers. Issues #762 to #779 were filed; each was reproduced on separate installs. Comments were added to #738, #739, #740, #747, #756 and #760. No wrong catalog value; the `--sigma` sensitivity is wrong at a domain edge (#778). No finding has its cause in MathTS.
