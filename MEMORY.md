@@ -148,18 +148,26 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   catalog `expr`: at t/tau >~ 745 both theta and the series mean underflow to 0 and the deleted
   JS runner handed the caller `NaN` (silent), which the expr path's non-finite guard would
   turn into a throw. The method reproduces that NaN, and `Infinity` at t/tau ~ 740. `h_rad_max`
-  is a catalog `expr`: 1-arg `abs` is in the grammar, so `max(x,y) = (x+y+|x−y|)/2`.
-- `case-brownian-sphere` runs entirely through the engine (S8): `max(√(k_BT/m), |v_s|)` in `Re`
-  and the Faxén polynomial in `D_parallel_m2_per_s` are catalog `expr`s (`abs`-form max and `^`
-  are bit-exact against the deleted runner — measured, not assumed); the named methods
+  is the named method `lumpedRadiativeConductance` using `Math.max(T0, T∞)`: 2-arg `max` is not
+  in the grammar, and the abs-form `(x+y+|x−y|)/2` is not bit-equal to `Math.max`.
+- `case-brownian-sphere` runs entirely through the engine (S8): `Re` is the named method
+  `brownianReynolds` using `Math.max(√(k_BT/m), |v_s|)` (the abs-form is not bit-equal to
+  `Math.max`); the Faxén polynomial in `D_parallel_m2_per_s` is a catalog `expr` (`^` maps to
+  `**`; the dyadic ratios are exact). Named methods
   (`brownianLangevinMsdM2`, `brownianHydroMsdM2`, `brownianMemoryCorrection`, `brownianMemoryAbs`,
-  `brownianWallPerpD`, `brownianWallMsdM2`) read the wired outputs, and `memory_correction` and
-  the `memory` check stay methods because master returned `NaN` there (`rho_p ≳ 1e300`). The
-  engine's `g_std` binding is the unit table's standard gravity, the same `convertValue`
+  `brownianWallPerpD`, `brownianWallMsdM2`, `brownianLangevinDeviation`, `brownianHydroCorrection`,
+  `brownianHydroDeviation`, `brownianWallDeviation`) read the wired outputs. `memory_correction`
+  and the three deviations stay methods because master returned `NaN` there (`rho_p ≳ 1e300`
+  for memory; `{a_m:1e-30, T_K:1e300}` for the deviations). Catalog `needs` `key=value` is
+  validated at load (exactly one `=`, key in parameters, finite numeric literal, no whitespace).
+  The engine's `g_std` binding is the unit table's standard gravity, the same `convertValue`
   derivation as `G_STANDARD` (`tests/cases/unit-table-constants.test.ts` pins both equal);
   `engine.ts` cannot import `methods.ts`, which imports the engine. `sphereSeries` keeps a
-  per-(Bi, Fo) last-value memo, so one lumped run computes the series once
-  (`sphereSeriesComputations` counts misses).
+  per-(Bi, Fo) last-value memo of a frozen object (`Object.is` keys, so `-0` and `0` miss);
+  `sphereSeriesComputations` counts misses since load or `resetSphereSeriesMemo`.
+  `hydrodynamicMsdRatio` throws when a ln-v edge overflows `Math.exp` (master hung at
+  `t_s=1e308`). Catalog `regimeAt` resolves through `registeredCaseMethod` after
+  `registerCaseMethods` (before `APPLIED_CASE_RUNNERS` is built).
 
 ## Where things live
 

@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 29
+- **Potentially unused exports**: 32
 
 ## Potentially Unused Files
 
@@ -37,6 +37,9 @@ These exports are not imported by any other file in the codebase:
 - `lumpedSphereSurfaceK` (function)
 - `lumpedParentDeviation` (function)
 - `brownianSphereRegimeAt` (function)
+- `brownianLangevinDeviation` (function)
+- `brownianHydroCorrection` (function)
+- `brownianHydroDeviation` (function)
 - `brownianLangevinMsdM2` (function)
 - `brownianHydroMsdM2` (function)
 - `brownianMemoryCorrection` (function)

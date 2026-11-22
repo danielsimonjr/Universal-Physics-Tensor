@@ -30,11 +30,6 @@ export function registeredCaseMethod(name: string): ((...args: never[]) => unkno
   return registeredCaseMethods[name];
 }
 
-/** True when the record drives outputs through the catalog engine rather than a legacy runner. @internal */
-export function usesCatalogEngine(record: AppliedCaseRecord): boolean {
-  return record.outputs.every((o) => o.expr !== undefined || o.relation !== undefined || o.method !== undefined);
-}
-
 function mergeBindings(
   inputs: Readonly<Record<string, number>>,
   outputs: Readonly<Record<string, number | null>>,

@@ -18,12 +18,13 @@ import { describe, expect, it } from 'vitest';
 import { APPLIED_CASES, runAppliedCase } from '../../src/cases/index.js';
 import { FormulaValueError } from '../../src/numerical/formula-contract.js';
 import {
+  appliedCaseCatalog,
   appliedCaseRecord,
   catalogSemanticProblems,
   readAppliedCaseFile,
   type AppliedCaseRecord,
 } from '../../src/cases/catalog.js';
-import { runAppliedCaseEngine, usesCatalogEngine } from '../../src/cases/engine.js';
+import { runAppliedCaseEngine } from '../../src/cases/engine.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
 import {
@@ -32,15 +33,22 @@ import {
   SIGMA_SB_SI,
   ballisticDeficit,
   brennerPerpendicular,
+  brownianReynolds,
+  brownianWallDeviation,
   faxenParallel,
   G_STANDARD,
   hydrodynamicMsdRatio,
   lumpedCoolingQJ,
+  lumpedRadiativeConductance,
   lumpedRadiatingTempK,
   lumpedRadiatingTemperature,
+  resetSphereSeriesMemo,
   sphereSeries,
   sphereSeriesComputations,
 } from '../../src/cases/methods.js';
+import { mulberry32 } from '../helpers/mulberry32.js';
+import { capture, text } from '../helpers/cli.js';
+import { runCli } from '../../src/cli/main.js';
 import type { CaseResult } from '../../src/cases/types.js';
 import { C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, M_SUN_SI, MU0_SI } from '../../src/core/constants.js';
 import { dataSchema, dataText } from '../../src/core/data-file.js';
@@ -416,8 +424,7 @@ describe('applied-case engine — resistor noise', () => {
     ]);
   });
 
-  it('the engine routes the case: usesCatalogEngine is true and no runCaseResistorNoise remains', () => {
-    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+  it('the engine routes the case: no runCaseResistorNoise remains', () => {
     expect([...CASE_METHOD_NAMES]).not.toContain('runCaseResistorNoise');
   });
 
@@ -550,7 +557,6 @@ describe('applied-case engine — resistor noise', () => {
     expect(engineSrc).not.toMatch(/runCaseResistorNoise/);
     expect(engineSrc).not.toMatch(/AMP_GATED_OUTPUTS/);
     expect(engineSrc).not.toMatch(/row\.id !== 'amplifier'/);
-    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
   });
 
   it('allowInfinity: true is passed from evalOutput and evalCheck; evaluateFormula default stays strict', () => {
@@ -621,8 +627,7 @@ describe('applied-case engine — lumped cooling', () => {
     pinCase(ID, lumpedPinned);
   });
 
-  it('the engine routes the case: usesCatalogEngine is true and no runCaseLumpedCooling remains', () => {
-    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+  it('the engine routes the case: no runCaseLumpedCooling remains', () => {
     expect([...CASE_METHOD_NAMES]).not.toContain('runCaseLumpedCooling');
     const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
     expect(engineSrc).not.toMatch(/runCaseLumpedCooling/);
@@ -762,21 +767,52 @@ describe('applied-case engine — lumped cooling', () => {
   });
 
   it('the three sphere outputs share one sphereSeries computation per run (per-(Bi, Fo) memo)', () => {
-    const before = sphereSeriesComputations();
+    resetSphereSeriesMemo();
+    expect(sphereSeriesComputations()).toBe(0);
     runAppliedCaseEngine(appliedCaseRecord(ID), inputs);
     // theta_parent_mean, T_centre_K and T_surface_K read the same (Bi_radius, Fo):
     // one series computation serves all three (was three before the memo).
-    expect(sphereSeriesComputations()).toBe(before + 1);
+    expect(sphereSeriesComputations()).toBe(1);
     // An identical repeat run hits the memo: no new computation.
     runAppliedCaseEngine(appliedCaseRecord(ID), inputs);
-    expect(sphereSeriesComputations()).toBe(before + 1);
+    expect(sphereSeriesComputations()).toBe(1);
   });
 
-  it('h_rad_max is a catalog expr using abs, not a named method', () => {
+  it('sphereSeries returns a frozen result; mutating it does not poison the memo', () => {
+    resetSphereSeriesMemo();
+    const first = sphereSeries(2.25, 0.37);
+    expect(Object.isFrozen(first)).toBe(true);
+    expect(sphereSeriesComputations()).toBe(1);
+    expect(() => {
+      (first as { mean: number }).mean = 999;
+    }).toThrow(/Cannot assign to read only property|read only property|object is not extensible|Cannot set property/i);
+    const second = sphereSeries(2.25, 0.37);
+    expect(sphereSeriesComputations()).toBe(1);
+    expect(second.mean).toBe(first.mean);
+    expect(second.mean).not.toBe(999);
+  });
+
+  it('h_rad_max is the named method lumpedRadiativeConductance using Math.max', () => {
     const row = appliedCaseRecord(ID).outputs.find((o) => o.key === 'h_rad_max_W_per_m2_K')!;
-    expect(row.method).toBeUndefined();
-    expect(row.expr).toMatch(/abs\(T0_K-T_inf_K\)/);
-    expect([...CASE_METHOD_NAMES]).not.toContain('lumpedRadiativeConductance');
+    expect(row.expr).toBeUndefined();
+    expect(row.method).toBe('lumpedRadiativeConductance');
+    expect([...CASE_METHOD_NAMES]).toContain('lumpedRadiativeConductance');
+  });
+
+  it('lumpedRadiativeConductance is bit-equal to Math.max linearization on a 50k seeded sweep', () => {
+    const rand = mulberry32(20261122);
+    let compared = 0;
+    for (let i = 0; i < 50_000; i++) {
+      const T0 = 200 + rand() * 1800;
+      const Tinf = 200 + rand() * 1800;
+      const eps = rand();
+      const inputs = { T0_K: T0, T_inf_K: Tinf, emissivity: eps };
+      const tMax = Math.max(T0, Tinf);
+      const expected = eps * SIGMA_SB_SI * (tMax + Tinf) * (tMax * tMax + Tinf * Tinf);
+      expect(lumpedRadiativeConductance(inputs, {})).toBe(expected);
+      compared += 1;
+    }
+    expect(compared).toBe(50_000);
   });
 
   // Master values recorded by running `runCaseLumpedCooling` at origin/master
@@ -835,7 +871,7 @@ describe('applied-case engine — brownian sphere (S8)', () => {
   const tauF = (998 * 1e-6 * 1e-6) / 1e-3;
   const vSed = ((2 / 9) * (2000 - 998) * G_STANDARD * 1e-6 * 1e-6) / 1e-3;
   const vTh = Math.sqrt((K_B_SI * 293.15) / m);
-  const re = (998 * 1e-6 * (vTh + Math.abs(vSed) + Math.abs(vTh - Math.abs(vSed))) / 2) / 1e-3;
+  const re = (998 * 1e-6 * Math.max(vTh, Math.abs(vSed))) / 1e-3;
   const tauBare = m / gamma;
   const msdLangevin = 2 * 2 * D * tauBare * ballisticDeficit(1 / tauBare);
   const msdHydro = msd * hydrodynamicMsdRatio(tauP / 1, tauF / 1);
@@ -881,8 +917,7 @@ describe('applied-case engine — brownian sphere (S8)', () => {
     pinCase(ID, brownianPinned);
   });
 
-  it('the engine routes the case: usesCatalogEngine is true and no runCaseBrownianSphere remains', () => {
-    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+  it('the engine routes the case: no runCaseBrownianSphere remains', () => {
     expect([...CASE_METHOD_NAMES]).not.toContain('runCaseBrownianSphere');
     const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
     expect(engineSrc).not.toMatch(/runCaseBrownianSphere/);
@@ -1016,6 +1051,102 @@ describe('applied-case engine — brownian sphere (S8)', () => {
     expect(drift.holds).toBe(false);
   });
 
+  it('Re is the named method brownianReynolds using Math.max, bit-equal to master on the deterministic repro', () => {
+    const row = appliedCaseRecord(ID).outputs.find((o) => o.key === 'Re')!;
+    expect(row.expr).toBeUndefined();
+    expect(row.method).toBe('brownianReynolds');
+    // Challenger's deterministic ulp split vs the abs-form: master's Math.max Re.
+    const repro = {
+      T_K: 293.15,
+      eta_Pa_s: 0.0012328,
+      a_m: 0.0000011644,
+      rho_p_kg_per_m3: 2591,
+      rho_f_kg_per_m3: 998,
+      t_s: 1,
+      d: 2,
+    };
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), repro);
+    expect(got.outputs.Re).toBe(0.0004581370306161597);
+    const volumeRepro = (4 / 3) * Math.PI * repro.a_m ** 3;
+    const mRepro = volumeRepro * repro.rho_p_kg_per_m3;
+    const vSedRepro =
+      ((2 / 9) * (repro.rho_p_kg_per_m3 - repro.rho_f_kg_per_m3) * G_STANDARD * repro.a_m * repro.a_m) / repro.eta_Pa_s;
+    const vThRepro = Math.sqrt((K_B_SI * repro.T_K) / mRepro);
+    const absForm =
+      (repro.rho_f_kg_per_m3 *
+        repro.a_m *
+        (vThRepro + Math.abs(vSedRepro) + Math.abs(vThRepro - Math.abs(vSedRepro)))) /
+      2 /
+      repro.eta_Pa_s;
+    expect(absForm).not.toBe(0.0004581370306161597);
+    expect(
+      brownianReynolds(repro, { m_kg: mRepro, v_sed_m_per_s: vSedRepro }),
+    ).toBe(0.0004581370306161597);
+  });
+
+  it('brownianReynolds is bit-equal to Math.max on a 10k seeded physical sweep', () => {
+    const rand = mulberry32(20261122);
+    const logBetween = (lo: number, hi: number) => Math.exp(Math.log(lo) + rand() * (Math.log(hi) - Math.log(lo)));
+    let compared = 0;
+    for (let i = 0; i < 10_000; i++) {
+      const T = 273 + rand() * 100;
+      const eta = logBetween(1e-4, 1e-2);
+      const a = logBetween(1e-8, 1e-4);
+      const rhoP = 500 + rand() * 7500;
+      const rhoF = 500 + rand() * 1500;
+      const volumeI = (4 / 3) * Math.PI * a ** 3;
+      const mI = volumeI * rhoP;
+      const vSedI = ((2 / 9) * (rhoP - rhoF) * G_STANDARD * a * a) / eta;
+      const vThI = Math.sqrt((K_B_SI * T) / mI);
+      const inputs = { T_K: T, eta_Pa_s: eta, a_m: a, rho_f_kg_per_m3: rhoF };
+      const expected = (rhoF * a * Math.max(vThI, Math.abs(vSedI))) / eta;
+      expect(brownianReynolds(inputs, { m_kg: mI, v_sed_m_per_s: vSedI })).toBe(expected);
+      compared += 1;
+    }
+    expect(compared).toBe(10_000);
+  });
+
+  it('master returns NaN in the wired deviations at T_K=1e300, a_m=1e-30 (no throw)', () => {
+    const extreme = { ...base, a_m: 1e-30, rho_p_kg_per_m3: 1e4, T_K: 1e300, d: 2 };
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), extreme);
+    expect(Number.isNaN(got.outputs.langevin_deviation as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.hydro_correction_m2 as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.hydro_deviation as number)).toBe(true);
+    expect(got.outputs.wall_deviation).toBeNull();
+    expect(Number.isNaN(brownianWallDeviation({}, { MSD_m2: Infinity, MSD_wall_m2: Infinity }))).toBe(true);
+  });
+
+  it('CONTROL: wiring the three deviations as exprs throws on those NaNs', () => {
+    const extreme = { ...base, a_m: 1e-30, rho_p_kg_per_m3: 1e4, T_K: 1e300, d: 2 };
+    const patchOne = (key: string, expr: string, inputs: typeof extreme | (typeof extreme & { h_m: number })) => {
+      const wired = structuredClone(appliedCaseRecord(ID)) as AppliedCaseRecord;
+      const row = wired.outputs.find((o) => o.key === key) as { key: string; method?: string; expr?: string };
+      expect(row.method, key).toBeDefined();
+      delete row.method;
+      row.expr = expr;
+      expect(() => runAppliedCaseEngine(wired, inputs)).toThrow(FormulaValueError);
+      expect(() => runAppliedCaseEngine(wired, inputs)).toThrow(
+        /formula did not evaluate to a finite number \(got NaN\)/,
+      );
+    };
+    patchOne('langevin_deviation', 'MSD_m2/MSD_langevin_m2 - 1', extreme);
+    patchOne('hydro_correction_m2', 'MSD_hydro_m2 - MSD_m2', extreme);
+    patchOne('hydro_deviation', 'MSD_m2/MSD_hydro_m2 - 1', extreme);
+    patchOne('wall_deviation', 'MSD_m2/MSD_wall_m2 - 1', { ...extreme, h_m: 1e-28 });
+  });
+
+  it('t_s = 1e308 fails fast: the hydrodynamic quadrature domain overflows', () => {
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, t_s: 1e308 })).toThrow(
+      /hydrodynamicMsdRatio: α = .*, β = .* overflow the branch-cut quadrature domain/,
+    );
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, t_s: 1e300 })).toThrow(
+      /hydrodynamicMsdRatio: α = .*, β = .* overflow the branch-cut quadrature domain/,
+    );
+    expect(() => hydrodynamicMsdRatio(1e-315, 1e-314)).toThrow(
+      /hydrodynamicMsdRatio: α = .*, β = .* overflow the branch-cut quadrature domain/,
+    );
+  }, 2000);
+
   it('CONTROL: wiring memory_correction as an expr throws on the NaN master emits at rho_p = 1e300', () => {
     // The master quantity is MSD_hydro/msdAddedMass − 1 with both parents 0
     // there (an expm1 underflow the grammar cannot express), so the control
@@ -1033,5 +1164,41 @@ describe('applied-case engine — brownian sphere (S8)', () => {
     expect(() => runAppliedCaseEngine(wired, { ...base, rho_p_kg_per_m3: 1e300, d: 3 })).toThrow(
       /formula did not evaluate to a finite number \(got NaN\)/,
     );
+  });
+
+  const MASTER_REGIME =
+    'upt regime diffusion --at Re=0.0006936778535904651 m=8.377580409572781e-15 gamma=1.8849555921538757e-8 t=1';
+  const MASTER_REGIME_ARGS = [
+    'T_K=293.15',
+    'eta_Pa_s=1e-3',
+    'a_m=1e-6',
+    'rho_p_kg_per_m3=2000',
+    'rho_f_kg_per_m3=998',
+    't_s=1',
+    'd=2',
+  ];
+
+  it('regimeAt is a function on every catalog row that names one', () => {
+    const named = appliedCaseCatalog().cases.filter((row) => row.regimeAt !== undefined);
+    expect(named.map((r) => r.id)).toEqual(['case-brownian-sphere']);
+    for (const row of named) {
+      const assembled = APPLIED_CASES.get(row.id)!;
+      expect(typeof assembled.regimeAt).toBe('function');
+      expect(row.regimeAt).toBe('brownianSphereRegimeAt');
+    }
+    const line = APPLIED_CASES.get(ID)!.regimeAt!(base, runAppliedCaseEngine(appliedCaseRecord(ID), base).outputs);
+    expect(line).toBe(MASTER_REGIME);
+  });
+
+  it('CLI prints regime coordinates and JSON carries result.regimeAt matching master 8210e97f', async () => {
+    const textCap = capture();
+    const textCode = await runCli(['evaluate', ID, ...MASTER_REGIME_ARGS], textCap.io);
+    expect(textCode).toBe(0);
+    expect(text(textCap)).toContain(`regime coordinates: ${MASTER_REGIME}`);
+    const jsonCap = capture();
+    const jsonCode = await runCli(['evaluate', ID, ...MASTER_REGIME_ARGS, '--json'], jsonCap.io);
+    expect(jsonCode).toBe(0);
+    const env = JSON.parse(text(jsonCap)) as { result: { regimeAt?: string } };
+    expect(env.result.regimeAt).toBe(MASTER_REGIME);
   });
 });

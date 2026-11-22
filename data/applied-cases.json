@@ -451,7 +451,7 @@
           "symbol": "Re",
           "unit": "",
           "meaning": "ρ_f a max(√(k_BT/m), |v_s|)/η — radius-based; a diameter-based Re is twice this",
-          "expr": "rho_f_kg_per_m3*a_m*(sqrt(k_B*T_K/m_kg) + abs(v_sed_m_per_s) + abs(sqrt(k_B*T_K/m_kg) - abs(v_sed_m_per_s)))/2/eta_Pa_s"
+          "method": "brownianReynolds"
         },
         {
           "key": "MSD_langevin_m2",
@@ -465,7 +465,7 @@
           "symbol": "MSD/MSD_L − 1",
           "unit": "",
           "meaning": "signed relative difference of the diffusive MSD relative to the Langevin one",
-          "expr": "MSD_m2/MSD_langevin_m2 - 1"
+          "method": "brownianLangevinDeviation"
         },
         {
           "key": "MSD_hydro_m2",
@@ -479,14 +479,14 @@
           "symbol": "⟨|Δr|²⟩_H − ⟨|Δr|²⟩",
           "unit": "m^2",
           "meaning": "what inertia and memory change in the MSD at t; ≈ −4dD√(τ_f t/π) at t ≫ τ_f",
-          "expr": "MSD_hydro_m2 - MSD_m2"
+          "method": "brownianHydroCorrection"
         },
         {
           "key": "hydro_deviation",
           "symbol": "MSD/MSD_H − 1",
           "unit": "",
           "meaning": "signed relative difference of the diffusive MSD relative to the Langevin–Basset one",
-          "expr": "MSD_m2/MSD_hydro_m2 - 1"
+          "method": "brownianHydroDeviation"
         },
         {
           "key": "memory_correction",
@@ -525,7 +525,7 @@
           "unit": "",
           "meaning": "signed relative difference of the unbounded-fluid MSD relative to the wall-corrected one; not defined without h_m",
           "needs": ["h_m"],
-          "expr": "MSD_m2/MSD_wall_m2 - 1"
+          "method": "brownianWallDeviation"
         }
       ],
       "comparison": {
@@ -1487,8 +1487,8 @@
           "key": "h_rad_max_W_per_m2_K",
           "symbol": "h_rad",
           "unit": "W/(m^2*K)",
-          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run. T_max = (T0+T∞+|T0−T∞|)/2, the catalog-grammar form of max(T0, T∞)",
-          "expr": "emissivity*sigma_sb*(((T0_K+T_inf_K+abs(T0_K-T_inf_K))/2)+T_inf_K)*((((T0_K+T_inf_K+abs(T0_K-T_inf_K))/2)^2)+T_inf_K^2)"
+          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run. T_max = max(T0, T∞)",
+          "method": "lumpedRadiativeConductance"
         },
         {
           "key": "Bi_radiating",

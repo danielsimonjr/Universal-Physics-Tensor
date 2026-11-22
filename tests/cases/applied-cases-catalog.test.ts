@@ -62,4 +62,29 @@ describe('applied-cases catalog loader', () => {
     expect(catalogSemanticProblems(noExpr)).toContainEqual(expect.stringMatching(/has no expr/));
   });
 
+  it('refuses malformed, non-numeric, whitespace, and unknown-key needs at catalog load', () => {
+    const brownian = structuredClone(appliedCaseCatalog());
+    const drift = brownian.cases.find((c) => c.id === 'case-brownian-sphere')!.checks.find((c) => c.id === 'drift') as {
+      needs?: string[];
+    };
+    expect(drift.needs).toEqual(['d=3']);
+
+    const cases: Array<{ needs: string[]; match: RegExp }> = [
+      { needs: ['d=banana'], match: /needs 'd=banana' value is not a finite number/ },
+      { needs: ['d='], match: /needs 'd=' has a malformed value/ },
+      { needs: ['d==3'], match: /needs 'd==3' must contain exactly one '='/ },
+      { needs: ['d = 2'], match: /needs 'd = 2' has a malformed key/ },
+      { needs: ['foo=3'], match: /needs 'foo=3' names unknown parameter 'foo'/ },
+      { needs: ['not_a_key'], match: /needs 'not_a_key' names unknown parameter 'not_a_key'/ },
+    ];
+    for (const { needs, match } of cases) {
+      drift.needs = needs;
+      expect(catalogSemanticProblems(brownian), needs.join()).toContainEqual(expect.stringMatching(match));
+      expect(() => readAppliedCaseFile(JSON.stringify(brownian), schema)).toThrow(match);
+    }
+
+    drift.needs = ['d=3'];
+    expect(catalogSemanticProblems(brownian).filter((m) => m.includes('needs'))).toEqual([]);
+  });
+
 });

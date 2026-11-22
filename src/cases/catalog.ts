@@ -78,6 +78,51 @@ export interface AppliedCaseFile {
 const OPS = new Set<AppliedCaseCheckRecord['op']>(['<=', '>=', '>']);
 
 /**
+ * Parse one catalog `needs` entry: a parameter key, or `key=value` with
+ * exactly one `=`, a key in the case's parameters, and a finite numeric
+ * literal with no whitespace. Load-time, so a malformed row throws instead
+ * of silently disabling the output or check.
+ */
+function needsEntryProblems(
+  caseId: string,
+  where: string,
+  needs: readonly string[] | undefined,
+  paramKeys: ReadonlySet<string>,
+): string[] {
+  if (needs === undefined) return [];
+  const problems: string[] = [];
+  for (const entry of needs) {
+    const eqCount = (entry.match(/=/g) ?? []).length;
+    if (eqCount === 0) {
+      if (entry.length === 0 || entry !== entry.trim() || /\s/.test(entry)) {
+        problems.push(`${caseId}: ${where} needs '${entry}' is malformed`);
+      } else if (!paramKeys.has(entry)) {
+        problems.push(`${caseId}: ${where} needs '${entry}' names unknown parameter '${entry}'`);
+      }
+      continue;
+    }
+    if (eqCount !== 1) {
+      problems.push(`${caseId}: ${where} needs '${entry}' must contain exactly one '='`);
+      continue;
+    }
+    const eq = entry.indexOf('=');
+    const key = entry.slice(0, eq);
+    const raw = entry.slice(eq + 1);
+    if (key.length === 0 || key !== key.trim() || /\s/.test(key)) {
+      problems.push(`${caseId}: ${where} needs '${entry}' has a malformed key`);
+    } else if (!paramKeys.has(key)) {
+      problems.push(`${caseId}: ${where} needs '${entry}' names unknown parameter '${key}'`);
+    }
+    if (raw.length === 0 || raw !== raw.trim() || /\s/.test(raw)) {
+      problems.push(`${caseId}: ${where} needs '${entry}' has a malformed value`);
+    } else if (!Number.isFinite(Number(raw))) {
+      problems.push(`${caseId}: ${where} needs '${entry}' value is not a finite number`);
+    }
+  }
+  return problems;
+}
+
+/**
  * Per-case module names B8 deleted. The published package has no `src/`, so
  * this list is the loader's record; {@link isForbiddenCaseModule} and the
  * directory test fail if one of these, or a new `case-*.ts`, comes back.
@@ -118,6 +163,7 @@ export function catalogSemanticProblems(file: AppliedCaseFile, methodNames?: Rea
     if (row.id.length === 0) problems.push('applied-cases: a case is missing id');
     if (seen.has(row.id)) problems.push(`applied-cases: duplicate id '${row.id}'`);
     seen.add(row.id);
+    const paramKeys = new Set(row.parameters.map((p) => p.key));
     for (const check of row.checks) {
       if (!OPS.has(check.op)) problems.push(`${row.id}: check '${check.id}' has unknown op '${check.op}'`);
       const kinds = [check.expr !== undefined, check.method !== undefined].filter(Boolean).length;
@@ -126,6 +172,10 @@ export function catalogSemanticProblems(file: AppliedCaseFile, methodNames?: Rea
       else if (check.method !== undefined && methodNames !== undefined && !methodNames.has(check.method)) {
         problems.push(`${row.id}: check '${check.id}' names unknown method '${check.method}'`);
       }
+      problems.push(...needsEntryProblems(row.id, `check '${check.id}'`, check.needs, paramKeys));
+    }
+    for (const output of row.outputs) {
+      problems.push(...needsEntryProblems(row.id, `output '${output.key}'`, output.needs, paramKeys));
     }
     if (methodNames !== undefined) {
       for (const output of row.outputs) {

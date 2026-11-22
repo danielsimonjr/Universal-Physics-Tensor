@@ -2261,7 +2261,7 @@ The codebase is organized into the following modules:
 | `./types.js` | `check, requirePositive, CaseCheck, CaseResult` | Import |
 
 **Exports:**
-- Functions: `registerCaseMethods`, `registeredCaseMethod`, `usesCatalogEngine`, `runAppliedCaseEngine`
+- Functions: `registerCaseMethods`, `registeredCaseMethod`, `runAppliedCaseEngine`
 
 ---
 
@@ -2311,16 +2311,18 @@ The codebase is organized into the following modules:
   ```text
   maxwellDepthFactor, skinDeltaMaxwellM, windowedLinewidthHz, windowedLinewidthCatalogHz,
   resistorParentVrmsV, lumpedRadiatingTemperature, sphereEigenvalues, sphereSeriesComputations,
-  sphereSeries, lumpedCoolingQJ, lumpedSphereMeanK, lumpedSphereCentreK, lumpedSphereSurfaceK,
-  lumpedParentDeviation, lumpedRadiatingTempK, ballisticDeficit, hydrodynamicMsdRatio, faxenParallel,
-  brennerPerpendicular, brownianSphereRegimeAt, brownianLangevinMsdM2, brownianHydroMsdM2,
-  brownianMemoryCorrection, brownianMemoryAbs, brownianWallPerpD, brownianWallMsdM2
+  resetSphereSeriesMemo, sphereSeries, lumpedRadiativeConductance, lumpedCoolingQJ, lumpedSphereMeanK,
+  lumpedSphereCentreK, lumpedSphereSurfaceK, lumpedParentDeviation, lumpedRadiatingTempK,
+  ballisticDeficit, hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular, brownianSphereRegimeAt,
+  brownianReynolds, brownianLangevinDeviation, brownianHydroCorrection, brownianHydroDeviation,
+  brownianWallDeviation, brownianLangevinMsdM2, brownianHydroMsdM2, brownianMemoryCorrection,
+  brownianMemoryAbs, brownianWallPerpD, brownianWallMsdM2
   ```
 
 - Constants:
 
   ```text
-  JULIAN_YEAR_S, MAX_BIOT, G_STANDARD, APPLIED_CASE_RUNNERS, CASE_METHOD_NAMES, CASE_METHODS,
+  JULIAN_YEAR_S, MAX_BIOT, G_STANDARD, CASE_METHOD_NAMES, CASE_METHODS, APPLIED_CASE_RUNNERS,
   SKIN_DEPTH_CASE, KEPLER_RV_CASE, DAMPED_RESONATOR_CASE, RESISTOR_NOISE_CASE, LUMPED_COOLING_CASE,
   BROWNIAN_SPHERE_CASE
   ```
@@ -7853,12 +7855,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89886 |
-| Total Exports | 2857 |
+| Total Lines of Code | 90060 |
+| Total Exports | 2863 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 949 |
+| Total Functions | 955 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

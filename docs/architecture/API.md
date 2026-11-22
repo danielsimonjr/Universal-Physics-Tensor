@@ -1242,10 +1242,10 @@ Regenerate: `npx @danielsimonjr/repo-tools@2.6.1 map . --out=<dir>` · Check: `n
 
 | Claim | Value | Source |
 |---|---|---|
-| totalExports | 3909 | `dependency-graph.json` `statistics.totalExports` |
-| unusedExportsCount | 187 | `dependency-graph.json` `statistics.unusedExportsCount` |
+| totalExports | 3915 | `dependency-graph.json` `statistics.totalExports` |
+| unusedExportsCount | 190 | `dependency-graph.json` `statistics.unusedExportsCount` |
 
-Both counts cover the whole repository, which is the default scope of `repo-tools map`. Reproduce them with the pinned command above; `<dir>/dependency-graph.json` is that run's artifact, not a repository file. The project generator `bun run docs:deps` writes a different `docs/architecture/dependency-graph.json` from `src/` only (`unusedExportsCount` 29, `totalExports` 2857) and is not this table's source. `212 → 202` is a reader artifact of the S2 namespace dynamic `import()` of `record.ts`: the static reader now counts ten exports of that module as referenced (`Dispatch`, `EnvironmentChange`, `Reach`, `RecordEntry`, `RecordEnvironment`, `RecordInput`, `RecordResult`, `ReplayEntryReport`, `ReplayOutcome`, `StreamDifference`) — 7 of them interfaces, and 3 (`Dispatch`, `Reach`, `ReplayOutcome`) type aliases. No export was removed.
+Both counts cover the whole repository, which is the default scope of `repo-tools map`. Reproduce them with the pinned command above; `<dir>/dependency-graph.json` is that run's artifact, not a repository file. The project generator `bun run docs:deps` writes a different `docs/architecture/dependency-graph.json` from `src/` only (`unusedExportsCount` 32, `totalExports` 2863) and is not this table's source. `212 → 202` is a reader artifact of the S2 namespace dynamic `import()` of `record.ts`: the static reader now counts ten exports of that module as referenced (`Dispatch`, `EnvironmentChange`, `Reach`, `RecordEntry`, `RecordEnvironment`, `RecordInput`, `RecordResult`, `ReplayEntryReport`, `ReplayOutcome`, `StreamDifference`) — 7 of them interfaces, and 3 (`Dispatch`, `Reach`, `ReplayOutcome`) type aliases. No export was removed.
 
 The public-surface walk (`--api-surface`, entry `src/index.ts`) lists 481 symbols: 233 runtime symbols and 248 type-only symbols. By kind the walk counts 126 functions, 66 constants, 41 classes, 173 interfaces, 74 type aliases and 1 namespace. By tag it counts 356 `@public`, 18 `@internal` and 107 untagged. This walk is a direct measurement and is not a gated claim. `tests/api/public-surface.test.ts` pins the runtime names.
 

@@ -180,8 +180,9 @@ let sphereSeriesMisses = 0;
 
 /**
  * How many times {@link sphereSeries} computed the series (memo misses since
- * module load). The three sphere outputs of one lumped-cooling run share one
- * series through the per-(Bi, Fo) memo, so one run moves this by exactly 1.
+ * module load or the last {@link resetSphereSeriesMemo}). The three sphere
+ * outputs of one lumped-cooling run share one series through the per-(Bi, Fo)
+ * memo, so one run after a reset moves this by exactly 1.
  * @internal
  */
 export function sphereSeriesComputations(): number {
@@ -189,21 +190,36 @@ export function sphereSeriesComputations(): number {
 }
 
 /**
+ * Drop the last-value memo and the miss counter. Tests that assert the
+ * miss count call this first so they do not depend on earlier cases in the
+ * same module.
+ * @internal
+ */
+export function resetSphereSeriesMemo(): void {
+  sphereSeriesMemoBi = Number.NaN;
+  sphereSeriesMemoFo = Number.NaN;
+  sphereSeriesMemo = undefined;
+  sphereSeriesMisses = 0;
+}
+
+/**
  * θ/θ0 = (T − T∞)/(T0 − T∞) from the series solution of the sphere with a
  * convective surface, at Fourier number Fo = αt/a², for the volume mean, the
  * centre and the surface. Terms are summed until e^{−ζ²Fo} < 1e-18. A
- * last-value memo on (biRadius, fo) serves repeated calls within one run the
- * same object, so the three sphere outputs compute the series once.
+ * last-value memo on (biRadius, fo) serves repeated calls within one run a
+ * frozen object, so the three sphere outputs compute the series once. Keys
+ * use `Object.is`, so `-0` and `0` miss rather than collide.
  * @throws Error when Fo is so small that the series would need over 1e5 terms.
  * @internal
  */
 export function sphereSeries(biRadius: number, fo: number): { mean: number; centre: number; surface: number } {
-  if (biRadius === sphereSeriesMemoBi && fo === sphereSeriesMemoFo && sphereSeriesMemo !== undefined) {
+  if (Object.is(biRadius, sphereSeriesMemoBi) && Object.is(fo, sphereSeriesMemoFo) && sphereSeriesMemo !== undefined) {
     return sphereSeriesMemo;
   }
   sphereSeriesMisses += 1;
+  let next: { mean: number; centre: number; surface: number };
   if (fo === 0) {
-    sphereSeriesMemo = { mean: 1, centre: 1, surface: 1 };
+    next = { mean: 1, centre: 1, surface: 1 };
   } else {
     const terms = Math.ceil(Math.sqrt(42 / fo) / Math.PI) + 2;
     if (terms > 1e5) throw new Error(`${LUMPED_COOLING_ID}: Fo = ${fo} is too small for the series (needs ${terms} terms)`);
@@ -219,12 +235,29 @@ export function sphereSeries(biRadius: number, fo: number): { mean: number; cent
       surface += (cn * decay * s) / z;
       mean += (cn * decay * 3 * (s - z * c)) / z ** 3;
     }
-    sphereSeriesMemo = { mean, centre, surface };
+    next = { mean, centre, surface };
   }
+  sphereSeriesMemo = Object.freeze(next);
   sphereSeriesMemoBi = biRadius;
   sphereSeriesMemoFo = fo;
   return sphereSeriesMemo;
 }
+/**
+ * εσ_SB (T_max + T∞)(T_max² + T∞²) with T_max = Math.max(T0, T∞): the largest
+ * linearized radiative coefficient over the run. Named because 2-arg `max`
+ * is not in the catalog grammar, and the abs-form `(x+y+|x−y|)/2` is not
+ * bit-equal to `Math.max` (see NOTES.md).
+ * @internal
+ */
+export function lumpedRadiativeConductance(
+  inputs: Readonly<Record<string, number>>,
+  _outputs: Readonly<Record<string, number | null>>,
+): number {
+  const tMax = Math.max(inputs.T0_K!, inputs.T_inf_K!);
+  const tInf = inputs.T_inf_K!;
+  return inputs.emissivity! * SIGMA_SB_SI * (tMax + tInf) * (tMax * tMax + tInf * tInf);
+}
+
 /**
  * Q = ρcV(T0 − T(t)) = ρcV(T0 − T∞)(1 − e^{−t/τ}), computed with
  * `-Math.expm1(-t / tau)` so small t/τ keeps its accuracy (`expm1` is not in
@@ -364,9 +397,15 @@ export function ballisticDeficit(x: number): number {
  * whose second derivative is the VACF tail k_BT/(12 ρ_f (πνt)^{3/2}); → t/(2τ_p)
  * for t ≪ τ_p, i.e. ⟨Δx²⟩ → (k_BT/M) t². Requires β > 0: without memory the
  * poles reach the principal sheet and this integral no longer holds them.
+ * @throws Error when α or β is not a finite positive, or the ln-v domain
+ *   overflows `Math.exp` (subnormal α, β: t ≳ 1e300 on the catalog example),
+ *   which used to refine forever instead of returning.
  * @internal
  */
 export function hydrodynamicMsdRatio(alpha: number, beta: number): number {
+  if (!(Number.isFinite(alpha) && alpha > 0 && Number.isFinite(beta) && beta > 0)) {
+    throw new Error(`hydrodynamicMsdRatio: need finite α > 0 and β > 0 (got α = ${alpha}, β = ${beta})`);
+  }
   const f = (y: number) => {
     const v = Math.exp(y);
     const lag = 1 - alpha * v;
@@ -377,6 +416,15 @@ export function hydrodynamicMsdRatio(alpha: number, beta: number): number {
   const points = [0, -Math.log(beta), peak, ...[1, 2, 4].flatMap((k) => [peak - k * w, peak + k * w])].sort((x, y) => x - y);
   // The integrand falls as v^{3/2} below and v^{−3/2} above the breakpoints: e^{−75} at ±50 in ln v.
   const edges = [points[0]! - 50, ...points, points[points.length - 1]! + 50];
+  // v = exp(y) overflows above ln(MAX_VALUE) ≈ 709.78; master's runner hung there
+  // (t_s = 1e308, subnormal α, β) instead of throwing. Finite-time results sit
+  // well below this cap (t_s = 1e20 → peak ≲ 60).
+  const lnOverflow = Math.log(Number.MAX_VALUE);
+  for (const edge of edges) {
+    if (!Number.isFinite(edge) || edge >= lnOverflow) {
+      throw new Error(`hydrodynamicMsdRatio: α = ${alpha}, β = ${beta} overflow the branch-cut quadrature domain`);
+    }
+  }
   let sum = 0;
   for (let k = 1; k < edges.length; k++) if (edges[k]! > edges[k - 1]!) sum += adaptiveQuadrature(f, edges[k - 1]!, edges[k]!, 1e-12);
   return sum / Math.PI;
@@ -440,6 +488,73 @@ export function brownianSphereRegimeAt(
   const t = inputs.t_s;
   if (re == null || m == null || gamma == null || t == null) return '';
   return `upt regime diffusion --at Re=${re} m=${m} gamma=${gamma} t=${t}`;
+}
+
+/**
+ * ρ_f a max(√(k_BT/m), |v_s|)/η, the radius-based Reynolds number. Named
+ * because 2-arg `max` is not in the catalog grammar, and the abs-form
+ * `(x+y+|x−y|)/2` is not bit-equal to `Math.max` (see NOTES.md).
+ * @internal
+ */
+export function brownianReynolds(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const m = outputs.m_kg!;
+  const vSed = outputs.v_sed_m_per_s!;
+  const vTh = Math.sqrt((K_B_SI * inputs.T_K!) / m);
+  return (inputs.rho_f_kg_per_m3! * inputs.a_m! * Math.max(vTh, Math.abs(vSed))) / inputs.eta_Pa_s!;
+}
+
+/**
+ * MSD/MSD_L − 1 against the wired MSD_m2 and MSD_langevin_m2. A named method,
+ * not an expr: when both parents overflow (T_K ≳ 1e300 and a_m ≲ 1e-30)
+ * master's runner returned `Inf/Inf − 1 = NaN` silently, and the expr path
+ * refuses NaN.
+ * @internal
+ */
+export function brownianLangevinDeviation(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  return outputs.MSD_m2! / outputs.MSD_langevin_m2! - 1;
+}
+
+/**
+ * MSD_H − MSD against the wired MSD_hydro_m2 and MSD_m2. Named because
+ * Inf − Inf is `NaN` (same regime as the deviation methods) and the expr
+ * path refuses NaN.
+ * @internal
+ */
+export function brownianHydroCorrection(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  return outputs.MSD_hydro_m2! - outputs.MSD_m2!;
+}
+
+/**
+ * MSD/MSD_H − 1 against the wired MSD_m2 and MSD_hydro_m2. Named for the same
+ * Inf/Inf → NaN reason as {@link brownianLangevinDeviation}.
+ * @internal
+ */
+export function brownianHydroDeviation(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  return outputs.MSD_m2! / outputs.MSD_hydro_m2! - 1;
+}
+
+/**
+ * MSD/MSD_w − 1 against the wired MSD_m2 and MSD_wall_m2. Named for the same
+ * Inf/Inf → NaN reason as {@link brownianLangevinDeviation}.
+ * @internal
+ */
+export function brownianWallDeviation(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  return outputs.MSD_m2! / outputs.MSD_wall_m2! - 1;
 }
 
 /**
@@ -528,20 +643,6 @@ export function brownianWallMsdM2(
   return 2 * inputs.t_s! * (Math.min(d, 2) * dPar + (d === 3 ? dPerp : 0));
 }
 
-function buildAppliedCase(id: string): AppliedCase {
-  const record = appliedCaseRecord(id);
-  const regimeAt =
-    record.regimeAt === undefined
-      ? undefined
-      : (registeredCaseMethod(record.regimeAt) as AppliedCase['regimeAt']);
-  return assembleAppliedCase(record, { run: (inputs) => runAppliedCaseEngine(record, inputs), regimeAt });
-}
-
-/** Case id → case assembled from the catalog and a runner. @internal */
-export const APPLIED_CASE_RUNNERS: ReadonlyMap<string, AppliedCase> = new Map(
-  appliedCaseCatalog().cases.map((row) => [row.id, buildAppliedCase(row.id)]),
-);
-
 /** Names exported numeric methods for catalog validation. @internal */
 export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'maxwellDepthFactor',
@@ -558,11 +659,17 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'brownianSphereRegimeAt',
   'resistorParentVrmsV',
   'lumpedCoolingQJ',
+  'lumpedRadiativeConductance',
   'lumpedParentDeviation',
   'lumpedSphereMeanK',
   'lumpedSphereCentreK',
   'lumpedSphereSurfaceK',
   'lumpedRadiatingTempK',
+  'brownianReynolds',
+  'brownianLangevinDeviation',
+  'brownianHydroCorrection',
+  'brownianHydroDeviation',
+  'brownianWallDeviation',
   'brownianLangevinMsdM2',
   'brownianHydroMsdM2',
   'brownianMemoryCorrection',
@@ -587,11 +694,17 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   brownianSphereRegimeAt,
   resistorParentVrmsV,
   lumpedCoolingQJ,
+  lumpedRadiativeConductance,
   lumpedParentDeviation,
   lumpedSphereMeanK,
   lumpedSphereCentreK,
   lumpedSphereSurfaceK,
   lumpedRadiatingTempK,
+  brownianReynolds,
+  brownianLangevinDeviation,
+  brownianHydroCorrection,
+  brownianHydroDeviation,
+  brownianWallDeviation,
   brownianLangevinMsdM2,
   brownianHydroMsdM2,
   brownianMemoryCorrection,
@@ -600,7 +713,23 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   brownianWallMsdM2,
 };
 
+// Register before assembling cases: `buildAppliedCase` resolves `regimeAt` from
+// this map. Building `APPLIED_CASE_RUNNERS` first left every `regimeAt` undefined.
 registerCaseMethods(CASE_METHODS);
+
+function buildAppliedCase(id: string): AppliedCase {
+  const record = appliedCaseRecord(id);
+  const regimeAt =
+    record.regimeAt === undefined
+      ? undefined
+      : (registeredCaseMethod(record.regimeAt) as AppliedCase['regimeAt']);
+  return assembleAppliedCase(record, { run: (inputs) => runAppliedCaseEngine(record, inputs), regimeAt });
+}
+
+/** Case id → case assembled from the catalog and a runner. @internal */
+export const APPLIED_CASE_RUNNERS: ReadonlyMap<string, AppliedCase> = new Map(
+  appliedCaseCatalog().cases.map((row) => [row.id, buildAppliedCase(row.id)]),
+);
 
 /** Assembled skin-depth applied case (catalog + runner). */
 export const SKIN_DEPTH_CASE = APPLIED_CASE_RUNNERS.get('case-skin-depth')!;

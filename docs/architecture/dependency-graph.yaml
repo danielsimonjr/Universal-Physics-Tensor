@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2857
+  totalExports: 2863
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5304,12 +5304,10 @@ modules:
       exports:
         - registerCaseMethods
         - registeredCaseMethod
-        - usesCatalogEngine
         - runAppliedCaseEngine
       functions:
         - registerCaseMethods
         - registeredCaseMethod
-        - usesCatalogEngine
         - runAppliedCaseEngine
     src/cases/index.ts:
       description: The applied-case registry behind `upt evaluate case-<id>`.
@@ -5423,9 +5421,9 @@ modules:
         - JULIAN_YEAR_S
         - MAX_BIOT
         - G_STANDARD
-        - APPLIED_CASE_RUNNERS
         - CASE_METHOD_NAMES
         - CASE_METHODS
+        - APPLIED_CASE_RUNNERS
         - SKIN_DEPTH_CASE
         - KEPLER_RV_CASE
         - DAMPED_RESONATOR_CASE
@@ -5440,7 +5438,9 @@ modules:
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeriesComputations
+        - resetSphereSeriesMemo
         - sphereSeries
+        - lumpedRadiativeConductance
         - lumpedCoolingQJ
         - lumpedSphereMeanK
         - lumpedSphereCentreK
@@ -5452,6 +5452,11 @@ modules:
         - faxenParallel
         - brennerPerpendicular
         - brownianSphereRegimeAt
+        - brownianReynolds
+        - brownianLangevinDeviation
+        - brownianHydroCorrection
+        - brownianHydroDeviation
+        - brownianWallDeviation
         - brownianLangevinMsdM2
         - brownianHydroMsdM2
         - brownianMemoryCorrection
@@ -5471,7 +5476,9 @@ modules:
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeriesComputations
+        - resetSphereSeriesMemo
         - sphereSeries
+        - lumpedRadiativeConductance
         - lumpedCoolingQJ
         - lumpedSphereMeanK
         - lumpedSphereCentreK
@@ -5483,6 +5490,11 @@ modules:
         - faxenParallel
         - brennerPerpendicular
         - brownianSphereRegimeAt
+        - brownianReynolds
+        - brownianLangevinDeviation
+        - brownianHydroCorrection
+        - brownianHydroDeviation
+        - brownianWallDeviation
         - brownianLangevinMsdM2
         - brownianHydroMsdM2
         - brownianMemoryCorrection
@@ -5493,9 +5505,9 @@ modules:
         - JULIAN_YEAR_S
         - MAX_BIOT
         - G_STANDARD
-        - APPLIED_CASE_RUNNERS
         - CASE_METHOD_NAMES
         - CASE_METHODS
+        - APPLIED_CASE_RUNNERS
         - SKIN_DEPTH_CASE
         - KEPLER_RV_CASE
         - DAMPED_RESONATOR_CASE
@@ -19914,11 +19926,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 89886
-  totalExports: 2857
+  totalLinesOfCode: 90060
+  totalExports: 2863
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 949
+  totalFunctions: 955
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402
@@ -19927,4 +19939,4 @@ statistics:
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 29
+  unusedExportsCount: 32
