@@ -91,63 +91,63 @@
           "symbol": "B",
           "unit": "Hz",
           "meaning": "noise-equivalent bandwidth f_hi − f_lo",
-          "method": "runCaseResistorNoise"
+          "expr": "f_hi_Hz - f_lo_Hz"
         },
         {
           "key": "R_eff_ohm",
           "symbol": "R_eff",
           "unit": "ohm",
           "meaning": "R in parallel with R_in: the resistance the instrument sees",
-          "method": "runCaseResistorNoise"
+          "expr": "R_ohm*R_in_ohm/(R_ohm+R_in_ohm)"
         },
         {
           "key": "S_V_V2_per_Hz",
           "symbol": "S_V",
           "unit": "V^2/Hz",
           "meaning": "flat one-sided spectral density 4k_BT R_eff",
-          "method": "runCaseResistorNoise"
+          "expr": "4*k_B*T_K*R_eff_ohm"
         },
         {
           "key": "V_rms_unloaded_V",
           "symbol": "V_rms,0",
           "unit": "V",
           "meaning": "open-circuit value √(4k_BTRB), with no instrument attached",
-          "method": "runCaseResistorNoise"
+          "expr": "sqrt(4*k_B*T_K*R_ohm*B_Hz)"
         },
         {
           "key": "V_rms_V",
           "symbol": "V_rms",
           "unit": "V",
           "meaning": "the RMS noise voltage the instrument reads (scalar model)",
-          "method": "runCaseResistorNoise"
+          "expr": "sqrt(S_V_V2_per_Hz*B_Hz)"
         },
         {
           "key": "loading_ratio",
           "symbol": "V_rms/V_rms,0",
           "unit": "",
           "meaning": "√(R_in/(R + R_in)): what the input resistance removes",
-          "method": "runCaseResistorNoise"
+          "expr": "sqrt(S_V_V2_per_Hz/(4*k_B*T_K*R_ohm))"
         },
         {
           "key": "V_rms_parent_V",
           "symbol": "V_rms,parent",
           "unit": "V",
           "meaning": "the parent spectrum integrated over the band (MathTS quad, adaptive Gauss–Kronrod)",
-          "method": "runCaseResistorNoise"
+          "method": "resistorParentVrmsV"
         },
         {
           "key": "parent_deviation",
           "symbol": "V_rms/V_rms,parent − 1",
           "unit": "",
           "meaning": "signed relative difference of the scalar result relative to the parent",
-          "method": "runCaseResistorNoise"
+          "expr": "V_rms_V/V_rms_parent_V - 1"
         },
         {
           "key": "V_rms_rel_sigma",
           "symbol": "σ(V_rms)/V_rms",
           "unit": "",
           "meaning": "statistical scatter of an RMS averaged over t_avg: 1/(2√(B t_avg)) (Dicke radiometer relation)",
-          "method": "runCaseResistorNoise"
+          "expr": "1/(2*sqrt(B_Hz*t_avg_s))"
         },
         {
           "key": "V_rms_total_V",
@@ -155,7 +155,7 @@
           "unit": "V",
           "meaning": "what the instrument reads with its amplifier noise added in quadrature; not defined without e_n2/i_n2",
           "needs": ["e_n2_V2_per_Hz", "i_n2_A2_per_Hz"],
-          "method": "runCaseResistorNoise"
+          "expr": "sqrt((S_V_V2_per_Hz + (e_n2_V2_per_Hz + i_n2_A2_per_Hz*R_eff_ohm*R_eff_ohm))*B_Hz)"
         },
         {
           "key": "resistor_fraction",
@@ -163,7 +163,7 @@
           "unit": "",
           "meaning": "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); not defined without e_n2/i_n2",
           "needs": ["e_n2_V2_per_Hz", "i_n2_A2_per_Hz"],
-          "method": "runCaseResistorNoise"
+          "expr": "S_V_V2_per_Hz/(S_V_V2_per_Hz + (e_n2_V2_per_Hz + i_n2_A2_per_Hz*R_eff_ohm*R_eff_ohm))"
         },
         {
           "key": "T_n_K",
@@ -171,7 +171,7 @@
           "unit": "K",
           "meaning": "the amplifier's noise temperature for the source R_eff, (e_n² + i_n²R_eff²)/(4k_B R_eff); not defined without e_n2/i_n2",
           "needs": ["e_n2_V2_per_Hz", "i_n2_A2_per_Hz"],
-          "method": "runCaseResistorNoise"
+          "expr": "(e_n2_V2_per_Hz + i_n2_A2_per_Hz*R_eff_ohm*R_eff_ohm)/(4*k_B*R_eff_ohm)"
         }
       ],
       "conditions": [

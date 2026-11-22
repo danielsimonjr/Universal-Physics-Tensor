@@ -31,7 +31,7 @@ These exports are not imported by any other file in the codebase:
 
 - `skinDeltaMaxwellM` (function)
 - `windowedLinewidthCatalogHz` (function)
-- `runCaseResistorNoise` (function)
+- `resistorParentVrmsV` (function)
 - `runCaseLumpedCooling` (function)
 - `brownianSphereRegimeAt` (function)
 - `runCaseBrownianSphere` (function)

@@ -182,9 +182,63 @@ function runDampedEngine(record: AppliedCaseRecord, inputs: Readonly<Record<stri
   return { outputs, checks, unchecked };
 }
 
+const AMP_GATED_OUTPUTS = new Set(['V_rms_total_V', 'resistor_fraction', 'T_n_K']);
+
+function validateResistorInputs(id: string, inputs: Readonly<Record<string, number>>): { withAmplifier: boolean } {
+  requirePositive(id, inputs, ['T_K', 'R_ohm', 'R_in_ohm', 'f_hi_Hz', 't_avg_s']);
+  const c = inputs.C_in_F;
+  if (!Number.isFinite(c) || c! < 0) throw new Error(`${id}: C_in_F must be a finite number ≥ 0 (got ${c})`);
+  const fLo = inputs.f_lo_Hz;
+  const fHi = inputs.f_hi_Hz;
+  if (!Number.isFinite(fLo) || fLo! < 0 || fLo! >= fHi!) {
+    throw new Error(`${id}: need 0 ≤ f_lo_Hz < f_hi_Hz (got ${fLo}, ${fHi})`);
+  }
+  const withAmplifier = inputs.e_n2_V2_per_Hz !== undefined || inputs.i_n2_A2_per_Hz !== undefined;
+  if (withAmplifier) {
+    for (const [k, v] of [['e_n2_V2_per_Hz', inputs.e_n2_V2_per_Hz ?? 0], ['i_n2_A2_per_Hz', inputs.i_n2_A2_per_Hz ?? 0]] as const) {
+      if (!Number.isFinite(v) || v < 0) throw new Error(`${id}: ${k} must be a finite number ≥ 0 (got ${v})`);
+    }
+  }
+  return { withAmplifier };
+}
+
+function runResistorNoiseEngine(record: AppliedCaseRecord, inputs: Readonly<Record<string, number>>): CaseResult {
+  const { withAmplifier } = validateResistorInputs(record.id, inputs);
+  // A given-but-absent amplifier density is taken as 0, exactly as the deleted
+  // runner did; the optional keys must bind in every amp expr.
+  const extra: Record<string, number> = {
+    e_n2_V2_per_Hz: inputs.e_n2_V2_per_Hz ?? 0,
+    i_n2_A2_per_Hz: inputs.i_n2_A2_per_Hz ?? 0,
+  };
+  const outputs: Record<string, number | null> = {};
+  for (const row of record.outputs) {
+    if (!withAmplifier && AMP_GATED_OUTPUTS.has(row.key)) {
+      outputs[row.key] = null;
+      continue;
+    }
+    outputs[row.key] = evalOutput(row, inputs, outputs, extra);
+  }
+  const checks = record.checks
+    .filter((row) => withAmplifier || row.id !== 'amplifier')
+    .map((row) => evalCheck(row, inputs, outputs, extra));
+  const unchecked = [
+    'R_in is a physical resistance at T; an actively synthesized or cold input adds less noise than its resistance would, ' +
+      'down to the resistor alone divided by the input: V_rms,0 · R_in/(R + R_in)',
+    'no DC current through R, so no 1/f excess noise',
+  ];
+  if (withAmplifier) {
+    unchecked.push(
+      `e_n and i_n are white over the band and uncorrelated${inputs.e_n2_V2_per_Hz === undefined ? '; e_n was not given and is taken as 0' : ''}` +
+        `${inputs.i_n2_A2_per_Hz === undefined ? '; i_n was not given and is taken as 0' : ''}`,
+    );
+  }
+  return { outputs, checks, unchecked };
+}
+
 /** Run one catalog record whose outputs are wired as expressions or methods. @internal */
 export function runAppliedCaseEngine(record: AppliedCaseRecord, inputs: Readonly<Record<string, number>>): CaseResult {
   if (record.id === 'case-damped-resonator') return runDampedEngine(record, inputs);
+  if (record.id === 'case-resistor-noise') return runResistorNoiseEngine(record, inputs);
 
   let extra: Record<string, number> = {};
   if (record.id === 'case-skin-depth') {
