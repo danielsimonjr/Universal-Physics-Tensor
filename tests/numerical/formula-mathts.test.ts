@@ -129,4 +129,21 @@ describe('formula-mathts', () => {
     expect(formula.evaluate({ e: E_SI, e_charge: 3 })).toBeCloseTo(2 * E_SI, 15);
     expect(formula.evaluate({ e: E_SI, e_charge: 3 })).not.toBe(Number(collided));
   });
+
+  it('speed_of_light and mu0 stay the caller identifiers, not c and mu_0', () => {
+    const compileExprCalls: string[] = [];
+    const parserWithSpy = createMathtsFormulaParser({
+      parse: (expr) => parseMathTs(expr) as never,
+      compileExpr: (expr, opts) => {
+        compileExprCalls.push(expr);
+        return compileExpr(expr, opts);
+      },
+    });
+    parserWithSpy.parse('2*mass*speed_of_light^2');
+    parserWithSpy.parse('B/sqrt(mu0*rho)');
+    expect(compileExprCalls).toEqual(['2*mass*speed_of_light^2', 'B/sqrt(mu0*rho)']);
+    // CONTROL: rewriting every alias would compile those as c and mu_0, which
+    // drops a declared derive variable (exit 2 instead of the prefactor check).
+    expect(compileExprCalls).not.toEqual(['2*mass*c^2', 'B/sqrt(mu_0*rho)']);
+  });
 });

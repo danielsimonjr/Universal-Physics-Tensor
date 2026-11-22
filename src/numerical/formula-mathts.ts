@@ -160,10 +160,12 @@ export function createMathtsFormulaParser(
 
       // `compileExpr` applies `{ physics: true }` on each evaluation. Bare `e` is the SI
       // magnitude through the `e: E_SI` default below, and a scope entry for `e` wins.
-      // Aliases (`e_charge`) compile as the canonical name so physics mode cannot
-      // treat `e` as Euler's number beside an independent `e_charge` symbol: the
-      // unre-written `e + e_charge` with `e=E_SI` and `e_charge=3` sums to 3 in float64.
-      const compiled = mod.compileExpr(rewriteConstantSpellings(expr), PHYSICS);
+      // Only the `e` row's aliases (`e_charge`) compile as the canonical name so
+      // physics mode cannot treat `e` as Euler's number beside an independent
+      // `e_charge` symbol: the unre-written `e + e_charge` with `e=E_SI` and
+      // `e_charge=3` sums to 3 in float64. `speed_of_light` and `mu0` stay: they
+      // are the caller's identifiers.
+      const compiled = mod.compileExpr(rewriteConstantSpellings(expr, new Set(['e'])), PHYSICS);
       const formula: CompiledFormula = Object.freeze({
         source: expr,
         variables: Object.freeze(variables),
