@@ -20,6 +20,7 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [ ] S4 — memoize compiled formulas in the MathTS formula parser (plan `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`, sprint S4).
 - [x] Neon review of #813: restore `FILE_INVENTORY.md` and `duplicate-symbols.md` from master, stop `repo-tools map` writing into `docs/architecture`, three comment/count nits.
   Done: restored the 69-line and 95-line hand-authored docs from master; recount at this tree is `totalSourceFiles` 1263, `src/` 393, src zone 395, tests 810, `totalExports` 3920, `totalReExports` 1411 (`git ls-files` source-like 1263 and `repo-tools map . --out=.repo-tools-map-out` agree). Root cause: `repo-tools map` default `--out` is `docs/architecture`; S3 (`72fef8f3`, then `1fe0f76d`) ran it without `--out=<dir>` and the dumps start `<!-- repo-map:no-verification -->`, so `repo-tools check` skipped those claims. `repo-tools.config.json` now sets `map.out` to `.repo-tools-map-out/` (gitignored). Tests in `tests/tools/ci-workflows.test.ts` reject a dump header (CONTROL failed first). `API.md` docs:deps `totalExports` 2868; type-query comment names `map.ts`; `map.ts` module-slot comment no longer mentions `!`.
 
