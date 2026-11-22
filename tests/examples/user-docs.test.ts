@@ -92,13 +92,18 @@ function fenceAfter(section: string, sentence: string): string | undefined {
  */
 function statedOutput(section: string, command: string): string[] | null {
   const leading = /^`([^`]+)`/;
+  const spanOf = (sentence: string) => leading.exec(sentence)?.[1];
   const matching = sentences(section).filter((sentence) => {
-    const span = leading.exec(sentence)?.[1];
+    const span = spanOf(sentence);
     return span !== undefined && span.startsWith('upt ') && command.startsWith(span);
   });
   if (matching.length === 0) return null;
-  expect(matching, `exactly one sentence states what \`${command}\` prints`).toHaveLength(1);
-  const sentence = matching[0]!;
+  // `upt eval "e"` is a prefix of `upt eval "e + e_charge" …`. Keep the
+  // longest span so a short stating sentence does not claim a longer command.
+  const longest = Math.max(...matching.map((sentence) => spanOf(sentence)!.length));
+  const best = matching.filter((sentence) => spanOf(sentence)!.length === longest);
+  expect(best, `exactly one longest sentence states what \`${command}\` prints`).toHaveLength(1);
+  const sentence = best[0]!;
   const following = sentence.endsWith(':') ? fenceAfter(section, sentence) : undefined;
   if (following !== undefined) {
     // One piece per non-empty line: a sampled table is not a contiguous
@@ -254,6 +259,12 @@ describe('docs/user guides', () => {
     expect('1e+109').not.toMatch(DRIFT_COUNT);
     expect('121 nm').not.toMatch(DRIFT_COUNT);
     expect('160 K').not.toMatch(DRIFT_COUNT);
+  });
+
+  it('CONTROL: statedOutput prefers the longest matching command span', () => {
+    const catalog = guides['docs/user/catalog.md']!;
+    expect(statedOutput(catalog, 'upt eval "e"')).toEqual(['1.602176634e-19 C']);
+    expect(statedOutput(catalog, 'upt eval "e + e_charge" e_charge=3C')).toEqual(['6 C']);
   });
 
   it('getting-started describes upt help as full usage, matching the live CLI', () => {

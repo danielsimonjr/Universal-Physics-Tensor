@@ -24,6 +24,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- PR #822 Neon REQUEST CHANGES (non-blocking): `docs/user/catalog.md` runs `upt eval "e + e_charge" e_charge=3C` in a bash fence (prints `6 C`). `statedOutput` keeps the longest matching command span so `` `upt eval "e"` `` does not claim the longer command.
+
 - PR #822 Neon REQUEST CHANGES (non-blocking): the clone path on Node without Bun is `npm install --no-package-lock` then `npm run build` (`bun.lock` is the only lockfile; `package-lock.json` is banned).
 
 - PR #822 Neon REQUEST CHANGES (non-blocking): catalog prose separates a bare `e` inside an expression (the CODATA elementary charge) from an explicit `e=<number>` rebinding (replaces that value for the invocation).
