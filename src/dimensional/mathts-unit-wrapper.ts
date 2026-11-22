@@ -261,9 +261,11 @@ export function tryMathtsA5Reading(text: string): MathtsDelegatedReading | null 
   const core = Unit.exactScale(t);
   if (core === null) return null;
   const scale = exactScaleToNumber(core);
-  // The hint is the UPT row's own dimension (affine rows first), not `DIMENSIONLESS`:
-  // `lm`/`lx` carry an extended MathTS dimension vector, and a dimensionless hint
-  // would erase luminous intensity on the catch path of `mathtsParsedDimension`.
+  // The hint is the UPT row's own dimension (affine rows first), not `DIMENSIONLESS`.
+  // Needed for `lm`/`lx` (luminous intensity: they carry an extended MathTS
+  // dimension vector, and a dimensionless hint would erase J on the catch path of
+  // `mathtsParsedDimension`). The same catch path also uses the row hint for
+  // `rad`, `deg`, `sr`, `arcsec`, `arcsecond`, `arcmin`, `mas`, `uas`.
   const dim = mathtsParsedDimension(t, affineDimHint ?? UNITS.get(t)?.dim ?? DIMENSIONLESS);
   const exact = UNITS.get(t)?.scale ?? uptExactScaleFromCore(core);
   const overridden = applyBitScaleOverride(t, exact, scale);

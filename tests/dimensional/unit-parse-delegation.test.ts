@@ -1,8 +1,23 @@
 /**
  * Part A step A5: agreed spellings parse through `Unit.parse`; gap rows stay local.
+ *
+ * Disclosure (AGENTS.md Law 2): `tryMathtsA5Reading === null` alone does not prove
+ * set exclusion for the 12 guard-excluded names (`Bq`, `Gy`, `Sv`, `kat`, `Pas`,
+ * `mAs`, `mpc`, `ton`, `tons`, `Mach`, `mach`, `ln2`). Those return null from
+ * `isSubKiloParsec` / `Unit.parse` throw / `exactScale === null` before
+ * `isA5DelegatedText` can matter, so a control that only adds the symbol to
+ * `A5_DELEGATED_TEXTS` still passes the null half. The `isA5DelegatedText === false`
+ * assertion is the membership pin for both groups. The 13 set-excluded names
+ * (`bit`, `°`, `°R`, `°C`, `℃`, `°F`, `Hz`, `rpm`, `dB`, `dBm`, `dBW`, `Np`,
+ * `furlong`) also fail `tryMathtsA5Reading === null` when wrongly added to the set.
  */
 import { describe, expect, it } from 'vitest';
-import { tryMathtsA5Reading } from '../../src/dimensional/mathts-unit-wrapper.js';
+import { dim } from '../../src/dimensional/ast-builders.js';
+import {
+  A5_DELEGATED_TEXTS,
+  isA5DelegatedText,
+  tryMathtsA5Reading,
+} from '../../src/dimensional/mathts-unit-wrapper.js';
 import {
   AmbiguousUnitError,
   convertValue,
@@ -93,22 +108,84 @@ const s10Candidates = [
   'ksi', 'mmH2O', 'inHg', 'tonne', 'therm', 'c', 'degF',
 ] as const;
 
-// Excluded from the direct path: `bit` (UPT keeps ln 2), MathTS-absent rows, the
-// five Unicode degree spellings, cycle units, the sub-kilo parsec, refused tokens,
-// ambiguous-in-MathTS spellings, glued products and non-spellings.
-const s10Excluded = [
-  'bit', 'Bq', 'Gy', 'Sv', 'kat', '°', '°R', '°C', '℃', '°F',
-  'Hz', 'rpm', 'mpc', 'dB', 'dBm', 'dBW', 'Np', 'Pas', 'mAs',
-  'furlong', 'ton', 'tons', 'Mach', 'mach', 'ln2',
+// Pre-S10 A5 texts (the original 25). Independent of `A5_DELEGATED_TEXTS` order:
+// a `.slice(25)` would silently pass if a spelling were inserted into the
+// original block. Set equality of `s10Candidates` against everything in the
+// delegated list that is not one of these originals is the sync claim.
+const a5PreS10Texts = [
+  'km', 'degC', 'g/cm^3', 'mN/m', 'kohm', 'GeV', 'km/s/Mpc', 'd', 'day',
+  'Angstrom', 'angstrom', 'Å', 'psi', 'torr', 'kpsi', 'Mpsi', 'mtorr', 'utorr',
+  'kpc', 'Mpc', 'Gpc', 'm2K', 'Vs', 'cm^2/Vs', 'W/m2K',
+] as const;
+
+// Set-excluded (13): MathTS would admit these if they were on `A5_DELEGATED_TEXTS`,
+// so `tryMathtsA5Reading === null` is a real membership pin. Mutating only
+// `A5_DELEGATED_TEXTS` by adding one of these must fail this case.
+const s10SetExcluded = [
+  'bit', '°', '°R', '°C', '℃', '°F', 'Hz', 'rpm', 'dB', 'dBm', 'dBW', 'Np', 'furlong',
+] as const;
+
+// Guard-excluded (12): `tryMathtsA5Reading` returns null from its own guards
+// before set membership can matter. Disclosure (AGENTS.md Law 2):
+// `tryMathtsA5Reading === null` alone does not prove these are off the set — a
+// control that only adds the symbol to `A5_DELEGATED_TEXTS` still passes the
+// null half. `isA5DelegatedText === false` is the membership pin.
+const s10GuardExcluded = [
+  'Bq', 'Gy', 'Sv', 'kat', 'Pas', 'mAs', 'mpc', 'ton', 'tons', 'Mach', 'mach', 'ln2',
 ] as const;
 
 describe('S10: bare shared non-cycle spellings read directly through MathTS', () => {
+  it('s10Candidates is exactly the non-original A5 delegated texts', () => {
+    // Sync guard — `s10Candidates` is the independent predicate oracle (`it.each`
+    // must not be driven from src). The claim is set equality against the
+    // non-original entries, not array order or a magic `.slice(25)` index.
+    const original = new Set<string>(a5PreS10Texts);
+    const s10FromSrc = A5_DELEGATED_TEXTS.filter((text) => !original.has(text));
+    expect(new Set(s10FromSrc)).toEqual(new Set(s10Candidates));
+    expect(s10FromSrc).toHaveLength(s10Candidates.length);
+  });
+
+  it('set-excluded and guard-excluded partition the 25 excluded names', () => {
+    expect(s10SetExcluded).toHaveLength(13);
+    expect(s10GuardExcluded).toHaveLength(12);
+    expect(new Set([...s10SetExcluded, ...s10GuardExcluded])).toEqual(
+      new Set([
+        'bit', 'Bq', 'Gy', 'Sv', 'kat', '°', '°R', '°C', '℃', '°F',
+        'Hz', 'rpm', 'mpc', 'dB', 'dBm', 'dBW', 'Np', 'Pas', 'mAs',
+        'furlong', 'ton', 'tons', 'Mach', 'mach', 'ln2',
+      ]),
+    );
+  });
+
   it.each(s10Candidates)('%s has a direct MathTS A5 reading', (symbol) => {
     expect(tryMathtsA5Reading(symbol)).not.toBeNull();
   });
 
-  it.each(s10Excluded)('%s has no direct MathTS A5 reading', (symbol) => {
-    expect(tryMathtsA5Reading(symbol)).toBeNull();
+  it.each(s10SetExcluded)('%s is off the A5 set (set-excluded)', (symbol) => {
+    expect(isA5DelegatedText(symbol), symbol).toBe(false);
+    expect(tryMathtsA5Reading(symbol), symbol).toBeNull();
+  });
+
+  it.each(s10GuardExcluded)('%s is off the A5 set (guard-excluded)', (symbol) => {
+    expect(isA5DelegatedText(symbol), symbol).toBe(false);
+    expect(tryMathtsA5Reading(symbol), symbol).toBeNull();
+  });
+
+  it.each([
+    ['rad', dim()],
+    ['deg', dim()],
+    ['sr', dim()],
+    ['lm', dim(0, 0, 0, 0, 0, 0, 1)],
+    ['lx', dim(-2, 0, 0, 0, 0, 0, 1)],
+    ['arcsec', dim()],
+    ['arcsecond', dim()],
+    ['arcmin', dim()],
+    ['mas', dim()],
+    ['uas', dim()],
+  ] as const)('%s A5 reading keeps the UPT row dimension (catch-path hint)', (symbol, expected) => {
+    const reading = tryMathtsA5Reading(symbol);
+    expect(reading, symbol).not.toBeNull();
+    expect(reading!.dim).toEqual(expected);
   });
 
   it.each(s10Candidates)('%s still reads with one unchanged reading', (symbol) => {

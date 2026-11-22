@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 35
+- **Potentially unused exports**: 34
 
 ## Potentially Unused Files
 
@@ -78,10 +78,6 @@ These exports are not imported by any other file in the codebase:
 - `everySymbolInBothTables` (function)
 - `_powerDim` (function)
 - `_multiplyDim` (function)
-
-### `src/dimensional/mathts-unit-wrapper.ts`
-
-- `isA5DelegatedText` (function)
 
 ### `src/numerical/spacetime-metrics.ts`
 

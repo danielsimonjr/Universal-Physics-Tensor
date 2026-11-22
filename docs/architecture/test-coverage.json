@@ -11007,6 +11007,7 @@
       "tests/dimensional/dimension-owners.test.ts",
       "tests/dimensional/integral-bounds-validation.test.ts",
       "tests/dimensional/si-special-units.test.ts",
+      "tests/dimensional/unit-parse-delegation.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
       "tests/dimensional/validator.test.ts",
       "tests/numerical/one-function-table.test.ts",
@@ -16213,6 +16214,7 @@
       "tests/dimensional/dimension-owners.test.ts",
       "tests/dimensional/integral-bounds-validation.test.ts",
       "tests/dimensional/si-special-units.test.ts",
+      "tests/dimensional/unit-parse-delegation.test.ts",
       "tests/dimensional/validator-exponent-literal.test.ts",
       "tests/dimensional/validator.test.ts",
       "tests/numerical/one-function-table.test.ts",
@@ -30083,6 +30085,7 @@
       "src/dimensional/units.ts"
     ],
     "tests/dimensional/unit-parse-delegation.test.ts": [
+      "src/dimensional/ast-builders.ts",
       "src/dimensional/mathts-unit-wrapper.ts",
       "src/dimensional/units.ts"
     ],
