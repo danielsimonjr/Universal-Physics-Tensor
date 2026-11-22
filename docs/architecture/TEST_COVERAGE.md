@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 393 |
-| Total Test Files | 767 |
+| Total Test Files | 768 |
 | Source files imported directly by a test | 350 |
 | Source files reached directly or through a barrel or side-effect import | 383 |
 | Source files no test reaches either way | 10 |
@@ -1057,6 +1057,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `dimensional/violation-severity.test.ts` | 3 files |
 | `dimensional/weyl-validators.test.ts` | 4 files |
 | `examples/basic-usage.test.ts` | 0 files |
+| `examples/user-docs.test.ts` | 0 files |
 | `fixtures/confrontation-golden.test.ts` | 115 files |
 | `fixtures/perfect-fluid.test.ts` | 1 files |
 | `fixtures/schwarzschild-riemann.test.ts` | 4 files |

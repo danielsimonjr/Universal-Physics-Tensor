@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 767,
+    "totalTestFiles": 768,
     "testedCount": 383,
     "directlyTestedCount": 350,
     "untestedCount": 10,
@@ -30167,6 +30167,7 @@
       "src/dimensional/errors.ts"
     ],
     "tests/examples/basic-usage.test.ts": [],
+    "tests/examples/user-docs.test.ts": [],
     "tests/fixtures/confrontation-golden.test.ts": [
       "src/index.ts",
       "src/atlas/public.ts",
