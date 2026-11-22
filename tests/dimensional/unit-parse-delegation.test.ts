@@ -3,11 +3,14 @@
  *
  * Disclosure (AGENTS.md Law 2): `tryMathtsA5Reading === null` alone does not prove
  * set exclusion for the 12 guard-excluded names (`Bq`, `Gy`, `Sv`, `kat`, `Pas`,
- * `mAs`, `mpc`, `ton`, `tons`, `Mach`, `mach`, `ln2`). Those return null from
- * `isSubKiloParsec` / `Unit.parse` throw / `exactScale === null` before
- * `isA5DelegatedText` can matter, so a control that only adds the symbol to
- * `A5_DELEGATED_TEXTS` still passes the null half. The `isA5DelegatedText === false`
- * assertion is the membership pin for both groups. The 13 set-excluded names
+ * `mAs`, `mpc`, `ton`, `tons`, `Mach`, `mach`, `ln2`). Only `mpc` is decided
+ * before the membership check: `isSubKiloParsec` runs first and returns null
+ * there. The other 11 are decided AFTER `isA5DelegatedText`: they pass the
+ * membership check and then return null because `Unit.parse` throws or
+ * `exactScale === null`, so a control that adds one of them to
+ * `A5_DELEGATED_TEXTS` still passes the null half. The
+ * `isA5DelegatedText === false` assertion is the membership pin for both
+ * groups. The 13 set-excluded names
  * (`bit`, `°`, `°R`, `°C`, `℃`, `°F`, `Hz`, `rpm`, `dB`, `dBm`, `dBW`, `Np`,
  * `furlong`) also fail `tryMathtsA5Reading === null` when wrongly added to the set.
  */
@@ -126,10 +129,13 @@ const s10SetExcluded = [
 ] as const;
 
 // Guard-excluded (12): `tryMathtsA5Reading` returns null from its own guards
-// before set membership can matter. Disclosure (AGENTS.md Law 2):
-// `tryMathtsA5Reading === null` alone does not prove these are off the set — a
-// control that only adds the symbol to `A5_DELEGATED_TEXTS` still passes the
-// null half. `isA5DelegatedText === false` is the membership pin.
+// even when the symbol is on the set. Disclosure (AGENTS.md Law 2): only
+// `mpc` is null BEFORE set membership (`isSubKiloParsec` runs first); the
+// other 11 reach the membership check and are nulled by the `Unit.parse`
+// throw or `exactScale === null` after it, so `tryMathtsA5Reading === null`
+// alone does not prove they are off the set — a control that only adds the
+// symbol to `A5_DELEGATED_TEXTS` still passes the null half.
+// `isA5DelegatedText === false` is the membership pin.
 const s10GuardExcluded = [
   'Bq', 'Gy', 'Sv', 'kat', 'Pas', 'mAs', 'mpc', 'ton', 'tons', 'Mach', 'mach', 'ln2',
 ] as const;
@@ -188,9 +194,16 @@ describe('S10: bare shared non-cycle spellings read directly through MathTS', ()
     expect(reading!.dim).toEqual(expected);
   });
 
-  it.each(s10Candidates)('%s still reads with one unchanged reading', (symbol) => {
+  it.each(s10Candidates)('%s reads with the scale, dimension and cycles of its direct A5 reading', (symbol) => {
+    // The public parse routes through `tryMathtsA5Reading` for these symbols
+    // (that is the S10 claim), so the composite reading must equal the direct
+    // reading in scale and dimension, and stay cycle-free.
+    const direct = tryMathtsA5Reading(symbol);
+    expect(direct, symbol).not.toBeNull();
     const reading = readUnit(symbol);
-    expect(reading.cycles).toBe(0);
+    expect(reading.scale, `${symbol} scale`).toBe(direct!.scale);
+    expect(reading.dim, `${symbol} dim`).toEqual(direct!.dim);
+    expect(reading.cycles, `${symbol} cycles`).toBe(0);
   });
 
   it('the acceptance invariants survive the expansion', () => {
