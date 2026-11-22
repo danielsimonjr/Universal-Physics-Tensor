@@ -141,6 +141,13 @@ function mutateGuideNumber(piece: string): string | null {
   return piece.replace(token, mutated);
 }
 
+/**
+ * Stale catalog counts that have appeared in this repo's records (bridge,
+ * evaluator, traced-edge, file-census). A hyphenated id (`be-121`) is not a
+ * count: the lookbehind refuses a preceding `-`.
+ */
+const DRIFT_COUNT = /(?<![-\w])(?:109|152|121|696|160)(?![.\w])|^\d+ bridges/m;
+
 function assertStdoutHolds(stdout: string, command: string, prints: string[]): void {
   for (const piece of prints) {
     expect(stdout, `stdout of \`${command}\` holds ${JSON.stringify(piece)}`).toContain(piece);
@@ -188,7 +195,7 @@ describe('docs/user guides', () => {
       }
 
       it('states no catalog count that drifts', () => {
-        expect(text, 'a bridge count in prose or a `text` fence drifts when the catalog changes').not.toMatch(/\b160\b|^\d+ bridges/m);
+        expect(text, 'a bridge count in prose or a `text` fence drifts when the catalog changes').not.toMatch(DRIFT_COUNT);
       });
 
       it('CONTROL: the output matcher is sensitive to the stated value, not only to the words', () => {
@@ -231,6 +238,16 @@ describe('docs/user guides', () => {
       });
     });
   }
+
+  it('CONTROL: the drift guard fails on a stale count and not on a hyphenated id', () => {
+    for (const n of ['109', '152', '121', '696', '160'] as const) {
+      expect(`there are ${n} entries`, n).toMatch(DRIFT_COUNT);
+      expect(`be-${n}`, n).not.toMatch(DRIFT_COUNT);
+      expect(`CE-${n}`, n).not.toMatch(DRIFT_COUNT);
+    }
+    expect('160 bridges in the catalog').toMatch(DRIFT_COUNT);
+    expect('Node >=22.12.0').not.toMatch(DRIFT_COUNT);
+  });
 
   it('the guides link each other and the CLI reference, not the future tutorials directory', () => {
     const started = guides['docs/user/getting-started.md']!;
