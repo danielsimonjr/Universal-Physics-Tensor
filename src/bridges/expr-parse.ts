@@ -163,8 +163,8 @@ export function withoutUnreadConstants(
  * `declared` does not name is a {@link ConstantInputError}, and one it does
  * not read is dropped ({@link withoutUnreadConstants}).
  * Non-finite results throw. Pass `{ allowInfinity: true }` as `opts` to
- * return ±Infinity; NaN still throws. Only the applied-case `expr` output
- * path passes that option.
+ * return ±Infinity; NaN still throws. Applied-case catalog `expr` outputs
+ * and checks pass that option.
  */
 export function evaluateFormula(
   expression: string,

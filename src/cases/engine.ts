@@ -48,7 +48,13 @@ function mergeBindings(
 ): Record<string, number> {
   const merged: Record<string, number> = { ...inputs, ...extra };
   for (const [key, value] of Object.entries(outputs)) {
-    if (value !== null && Number.isFinite(value)) merged[key] = value;
+    // Bind every numeric intermediate, including ±Infinity and NaN: a later
+    // expr that reads an overflowed value must see it (master returned the
+    // record). Dropping non-finite keys made downstream exprs throw
+    // "Undefined symbol" instead. Null is "not defined" and stays unbound.
+    // Output `expr` evaluation still refuses NaN (allowInfinity opts-in only
+    // ±Infinity); methods may return NaN, matching the deleted JS runners.
+    if (value !== null) merged[key] = value;
   }
   return merged;
 }
@@ -114,7 +120,7 @@ function evalCheck(
   outputs: Readonly<Record<string, number | null>>,
   extra: Readonly<Record<string, number>> = {},
 ) {
-  const value = evalOutputExpr(row.expr, inputs, outputs, extra);
+  const value = evalOutputExpr(row.expr, inputs, outputs, extra, { allowInfinity: true });
   return check(row.id, row.premise, row.quantity, value, row.op, row.bound, row.threshold);
 }
 

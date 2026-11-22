@@ -1483,8 +1483,8 @@
           "key": "h_rad_max_W_per_m2_K",
           "symbol": "h_rad",
           "unit": "W/(m^2*K)",
-          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run",
-          "method": "lumpedRadiativeConductance"
+          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run. T_max = (T0+T∞+|T0−T∞|)/2, the catalog-grammar form of max(T0, T∞)",
+          "expr": "emissivity*sigma_sb*(((T0_K+T_inf_K+abs(T0_K-T_inf_K))/2)+T_inf_K)*((((T0_K+T_inf_K+abs(T0_K-T_inf_K))/2)^2)+T_inf_K^2)"
         },
         {
           "key": "Bi_radiating",

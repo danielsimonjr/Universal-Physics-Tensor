@@ -133,15 +133,19 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
 - The public benchmark files never carry the answer; `kind` and `failureKind` live only in
   `tests/fixtures/atlas/benchmark/scorer/labels.json`.
 - `evaluateFormula` and `CompiledFormula.evaluate` refuse NaN and non-numbers always, and refuse
-  ±Infinity unless the caller passes `{ allowInfinity: true }`. Only applied-case catalog `expr`
-  outputs pass that option (a parent integral that underflows to 0 emits `Infinity`, matching the
-  deleted JS runner). Every other caller stays strict. Catalog `needs` on an
-  output or check means that when every listed key is absent from the caller's
-  inputs the engine sets the output to `null` and omits the check.
+  ±Infinity unless the caller passes `{ allowInfinity: true }`. Applied-case catalog `expr`
+  outputs and checks pass that option (a parent integral that underflows to 0, or a check
+  such as h_rad/h at vanishing h, emits `Infinity`, matching the deleted JS runners). Every
+  other caller stays strict. Catalog `needs` on an output or check means that when every listed
+  key is absent from the caller's inputs the engine sets the output to `null` and omits the
+  check. Engine `mergeBindings` binds numeric intermediates including ±Infinity and NaN
+  (null stays unbound), so a later expr that reads an overflowed value sees it rather than
+  throwing `Undefined symbol`.
 - `case-lumped-cooling`'s `parent_deviation` is the named method `lumpedParentDeviation`, not a
   catalog `expr`: at t/tau >~ 745 both theta and the series mean underflow to 0 and the deleted
   JS runner handed the caller `NaN` (silent), which the expr path's non-finite guard would
-  turn into a throw. The method reproduces master exactly, `Infinity` at t/tau ~ 740 included.
+  turn into a throw. The method reproduces that NaN, and `Infinity` at t/tau ~ 740. `h_rad_max`
+  is a catalog `expr`: 1-arg `abs` is in the grammar, so `max(x,y) = (x+y+|x−y|)/2`.
 
 ## Where things live
 

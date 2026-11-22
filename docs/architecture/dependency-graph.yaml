@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2858
+  totalExports: 2857
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5446,7 +5446,6 @@ modules:
         - sphereEigenvalues
         - sphereSeries
         - lumpedCoolingQJ
-        - lumpedRadiativeConductance
         - lumpedSphereMeanK
         - lumpedSphereCentreK
         - lumpedSphereSurfaceK
@@ -5472,7 +5471,6 @@ modules:
         - sphereEigenvalues
         - sphereSeries
         - lumpedCoolingQJ
-        - lumpedRadiativeConductance
         - lumpedSphereMeanK
         - lumpedSphereCentreK
         - lumpedSphereSurfaceK
@@ -19916,11 +19914,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 89797
-  totalExports: 2858
+  totalLinesOfCode: 89807
+  totalExports: 2857
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 943
+  totalFunctions: 942
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 409
@@ -19929,4 +19927,4 @@ statistics:
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 27
+  unusedExportsCount: 24

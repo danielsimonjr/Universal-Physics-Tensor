@@ -117,8 +117,14 @@ const LUMPED_COOLING_ID = 'case-lumped-cooling';
 /** The Stefan–Boltzmann constant (W m⁻² K⁻⁴) is `core/constants`'s; re-exported so the record's module-export table keeps its row. @internal */
 export { SIGMA_SB_SI } from '../core/constants.js';
 
-/** Bi = h L_c/k ceiling, L_c = V/A (Incropera §5.2, eq. 5.10). @internal */
-export const MAX_BIOT = 0.1;
+function lumpedCatalogBiotBound(): number {
+  const bound = appliedCaseRecord(LUMPED_COOLING_ID).checks.find((c) => c.id === 'lumped')?.bound;
+  if (typeof bound !== 'number') throw new Error(`${LUMPED_COOLING_ID}: lumped check is missing a bound`);
+  return bound;
+}
+
+/** Bi = h L_c/k ceiling, L_c = V/A: the catalog `lumped` check bound (Incropera §5.2). @internal */
+export const MAX_BIOT = lumpedCatalogBiotBound();
 
 
 /**
@@ -200,62 +206,60 @@ export function sphereSeries(biRadius: number, fo: number): { mean: number; cent
  */
 export function lumpedCoolingQJ(
   inputs: Readonly<Record<string, number>>,
-  _outputs: Readonly<Record<string, number | null>>,
+  outputs: Readonly<Record<string, number | null>>,
 ): number {
+  const tau = outputs.tau_s;
+  if (typeof tau !== 'number') throw new Error('lumpedCoolingQJ: need tau_s');
   const a = inputs.a_m!;
   const rho = inputs.rho_kg_per_m3!;
   const c = inputs.c_J_per_kg_K!;
-  const h = inputs.h_W_per_m2_K!;
-  const tau = (rho * c * a) / (3 * h);
   const dT0 = inputs.T0_K! - inputs.T_inf_K!;
   const volume = (4 / 3) * Math.PI * a ** 3;
   return rho * c * volume * dT0 * -Math.expm1(-inputs.t_s! / tau);
 }
 
-/**
- * h_rad,max = εσ_SB(T_max + T∞)(T_max² + T∞²) at T_max = max(T0, T∞); the
- * 2-argument `max` is not in the catalog expression grammar, so this stays a
- * named method.
- * @internal
- */
-export function lumpedRadiativeConductance(
-  inputs: Readonly<Record<string, number>>,
-  _outputs: Readonly<Record<string, number | null>>,
+function requireFiniteOutput(
+  outputs: Readonly<Record<string, number | null>>,
+  key: string,
+  method: string,
 ): number {
-  const Tmax = Math.max(inputs.T0_K!, inputs.T_inf_K!);
-  const Tinf = inputs.T_inf_K!;
-  return inputs.emissivity! * SIGMA_SB_SI * (Tmax + Tinf) * (Tmax * Tmax + Tinf * Tinf);
+  const value = outputs[key];
+  if (value === null || value === undefined || !Number.isFinite(value)) {
+    throw new Error(`${method}: need finite ${key}`);
+  }
+  return value;
+}
+
+function lumpedSphereSeriesFromOutputs(
+  outputs: Readonly<Record<string, number | null>>,
+  method: string,
+): { mean: number; centre: number; surface: number } {
+  return sphereSeries(requireFiniteOutput(outputs, 'Bi_radius', method), requireFiniteOutput(outputs, 'Fo', method));
 }
 
 /** Volume-mean excess-temperature ratio of the series solution (convection only). @internal */
 export function lumpedSphereMeanK(
-  inputs: Readonly<Record<string, number>>,
-  _outputs: Readonly<Record<string, number | null>>,
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
 ): number {
-  return sphereSeries((inputs.h_W_per_m2_K! * inputs.a_m!) / inputs.k_W_per_m_K!, (inputs.k_W_per_m_K! / (inputs.rho_kg_per_m3! * inputs.c_J_per_kg_K!) * inputs.t_s!) / (inputs.a_m! * inputs.a_m!)).mean;
+  return lumpedSphereSeriesFromOutputs(outputs, 'lumpedSphereMeanK').mean;
 }
 
 /** Centre temperature T(0, t) from the series solution. @internal */
 export function lumpedSphereCentreK(
   inputs: Readonly<Record<string, number>>,
-  _outputs: Readonly<Record<string, number | null>>,
+  outputs: Readonly<Record<string, number | null>>,
 ): number {
-  const series = sphereSeries(
-    (inputs.h_W_per_m2_K! * inputs.a_m!) / inputs.k_W_per_m_K!,
-    (inputs.k_W_per_m_K! / (inputs.rho_kg_per_m3! * inputs.c_J_per_kg_K!) * inputs.t_s!) / (inputs.a_m! * inputs.a_m!),
-  );
+  const series = lumpedSphereSeriesFromOutputs(outputs, 'lumpedSphereCentreK');
   return inputs.T_inf_K! + (inputs.T0_K! - inputs.T_inf_K!) * series.centre;
 }
 
 /** Surface temperature T(a, t) from the series solution. @internal */
 export function lumpedSphereSurfaceK(
   inputs: Readonly<Record<string, number>>,
-  _outputs: Readonly<Record<string, number | null>>,
+  outputs: Readonly<Record<string, number | null>>,
 ): number {
-  const series = sphereSeries(
-    (inputs.h_W_per_m2_K! * inputs.a_m!) / inputs.k_W_per_m_K!,
-    (inputs.k_W_per_m_K! / (inputs.rho_kg_per_m3! * inputs.c_J_per_kg_K!) * inputs.t_s!) / (inputs.a_m! * inputs.a_m!),
-  );
+  const series = lumpedSphereSeriesFromOutputs(outputs, 'lumpedSphereSurfaceK');
   return inputs.T_inf_K! + (inputs.T0_K! - inputs.T_inf_K!) * series.surface;
 }
 
@@ -281,8 +285,9 @@ export function lumpedParentDeviation(
 
 /**
  * The lumped temperature with the T⁴ loss kept (`lumpedRadiatingTemperature`,
- * RK4), or `null` where the linear-loss premise does not reach:
- * `Bi_radiating > MAX_BIOT` (0.1).
+ * RK4), or `null` where the linear-loss premise does not reach. Master's
+ * runner gated `Bi_radiating <= MAX_BIOT`; `NaN <= bound` is false, so NaN
+ * (and non-finite) yields `null`, not a number.
  * @internal
  */
 export function lumpedRadiatingTempK(
@@ -290,7 +295,7 @@ export function lumpedRadiatingTempK(
   outputs: Readonly<Record<string, number | null>>,
 ): number | null {
   const biRadiating = outputs.Bi_radiating;
-  if (biRadiating === null || biRadiating === undefined || biRadiating > MAX_BIOT) return null;
+  if (typeof biRadiating !== 'number' || !Number.isFinite(biRadiating) || biRadiating > MAX_BIOT) return null;
   return lumpedRadiatingTemperature({
     a: inputs.a_m!,
     rho: inputs.rho_kg_per_m3!,
@@ -561,7 +566,6 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'resistorParentVrmsV',
   'lumpedCoolingQJ',
   'lumpedParentDeviation',
-  'lumpedRadiativeConductance',
   'lumpedSphereMeanK',
   'lumpedSphereCentreK',
   'lumpedSphereSurfaceK',
@@ -586,7 +590,6 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   resistorParentVrmsV,
   lumpedCoolingQJ,
   lumpedParentDeviation,
-  lumpedRadiativeConductance,
   lumpedSphereMeanK,
   lumpedSphereCentreK,
   lumpedSphereSurfaceK,

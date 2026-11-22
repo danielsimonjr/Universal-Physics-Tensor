@@ -5,6 +5,14 @@
  * these migrations. Each case pins the engine's outputs, checks and unchecked
  * strings on a grid of catalog inputs against a committed golden generated
  * from the deleted JS runner; mutating a wired `expr` fails the golden.
+ * Numbers use `expectPinNumber` (1e-12 relative; 1e-15 absolute floor only
+ * for true zeros). `parent_deviation` is a cancellation residual of two
+ * near-1 numbers (θ/θ̄ − 1, or V_rms/V_parent − 1): a last ulp of the
+ * ratio is ~1e-16 absolute, which is ~1e-11 relative at |r| ~ 1e-5, so
+ * 1e-12 relative cannot hold. That key uses mixed 1e-12 relative with a
+ * 1e-15 absolute floor — not the 1e-14 window the lumped harness had
+ * copied from S6. Resistor-noise's engine-test pin against hand quadrature
+ * stays 1e-14 in `applied-case-engine.test.ts` (`absolutePins`).
  */
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
@@ -58,6 +66,11 @@ function expectPinNumber(got: number, expected: number, label: string): void {
   expect(Math.abs(got / expected - 1), label).toBeLessThan(1e-12);
 }
 
+/** 1e-12 relative, 1e-15 absolute floor: a cancellation residual of two near-1 numbers. */
+function expectPinResidual(got: number, expected: number, label: string): void {
+  expect(Math.abs(got - expected), label).toBeLessThanOrEqual(Math.max(1e-15, 1e-12 * Math.abs(expected)));
+}
+
 function assertIdentity(got: CaseResult, expected: IdentitySnapshot, label: string): void {
   const live = snapshot(got);
   expect(Object.keys(live.outputs), `${label} output keys`).toEqual(Object.keys(expected.outputs));
@@ -69,7 +82,7 @@ function assertIdentity(got: CaseResult, expected: IdentitySnapshot, label: stri
     }
     expect(gotValue, `${label}.${key}`).not.toBeNull();
     if (key === 'parent_deviation') {
-      expect(Math.abs((gotValue as number) - value), `${label}.${key}`).toBeLessThan(1e-14);
+      expectPinResidual(gotValue as number, value, `${label}.${key}`);
     } else {
       expectPinNumber(gotValue as number, value, `${label}.${key}`);
     }

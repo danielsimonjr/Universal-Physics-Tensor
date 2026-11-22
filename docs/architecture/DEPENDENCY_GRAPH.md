@@ -2311,9 +2311,9 @@ The codebase is organized into the following modules:
   ```text
   maxwellDepthFactor, skinDeltaMaxwellM, windowedLinewidthHz, windowedLinewidthCatalogHz,
   resistorParentVrmsV, lumpedRadiatingTemperature, sphereEigenvalues, sphereSeries, lumpedCoolingQJ,
-  lumpedRadiativeConductance, lumpedSphereMeanK, lumpedSphereCentreK, lumpedSphereSurfaceK,
-  lumpedParentDeviation, lumpedRadiatingTempK, ballisticDeficit, hydrodynamicMsdRatio, faxenParallel,
-  brennerPerpendicular, brownianSphereRegimeAt, runCaseBrownianSphere
+  lumpedSphereMeanK, lumpedSphereCentreK, lumpedSphereSurfaceK, lumpedParentDeviation,
+  lumpedRadiatingTempK, ballisticDeficit, hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular,
+  brownianSphereRegimeAt, runCaseBrownianSphere
   ```
 
 - Constants:
@@ -7853,12 +7853,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89797 |
-| Total Exports | 2858 |
+| Total Lines of Code | 89807 |
+| Total Exports | 2857 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 943 |
+| Total Functions | 942 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |
