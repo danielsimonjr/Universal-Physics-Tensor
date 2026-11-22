@@ -26,8 +26,10 @@ upt evaluate be-63 mu_e=2
   mass [kg] = 2.895722231692708e+30 — Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2}
 ```
 
-The `mass` line is the evaluated output in SI kilograms. A bridge is only as
-good as its regime and error record — `upt explain be-63` prints those.
+The `mass` line is the evaluated output in SI kilograms. Run `upt confront be-63`
+to see its real-data confrontation and caveats, and `upt atlas be-63` for its
+Lean formal reference (for an atlas bridge with a regime and approximation
+bound, try `upt atlas ab-pendulum-linear`).
 
 ## From the library
 
@@ -42,8 +44,8 @@ console.log(`Chandrasekhar mass: ${result.value} kg`);
 console.log(`in solar masses: ${result.value / M_SUN_SI}`);
 ```
 
-This prints the mass in kilograms and the same mass divided by the IAU 2015
-nominal solar mass, about 1.456 M☉:
+This prints the mass in kilograms and the same mass divided by the nominal
+solar mass `M_SUN_SI` (1.989e30 kg), about 1.456 M☉:
 
 ```text
 Chandrasekhar mass: 2.895722231692708e+30 kg

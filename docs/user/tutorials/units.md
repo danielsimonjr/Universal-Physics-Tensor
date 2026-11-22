@@ -1,14 +1,15 @@
 # Tutorial: units, conversion and the radian
 
-UPT carries a unit registry with affine scales (temperatures), logarithmic
-scales (the bit), and dimensionless radian conversions (hertz to radians per
-second). This tutorial touches one of each through two root exports,
-`parseUnit` and `convertValue`.
+UPT carries a unit registry with affine scales (temperatures), information
+units (the bit, scaled by ln 2 to nats), and cycle-counting frequency
+conversions where the radian is dimensionless (hertz to radians per second).
+This tutorial touches one of each through two root exports, `parseUnit` and
+`convertValue`.
 
 Prerequisites: `npm install universal-physics-tensor` (see
 [getting started](../getting-started.md)).
 
-## The bit is a logarithmic scale
+## The bit scales by ln 2 into nats
 
 The bit's scale is the natural logarithm of 2, not 1, so a bit count
 converts into nats honestly:
@@ -33,11 +34,10 @@ Four lines, four facts:
   25 K. With the third argument omitted the conversion is absolute (298.15 K),
   which is the affine distinction `convertValue` makes.
 - `1 Hz -> rad/s: 1` — `convertValue` returns the *cycle count* (1 cycle/s),
-  not the angular rate. One hertz of angular rate is 2π rad/s; that 2π is
-  not applied here.
-- `1 Hz -> rad/s cycles: 1` — `cycles: 1` marks that angular evaluator paths
-  multiply by 2π. The radian does not hide the cycles factor; the flag is
-  how the evaluator knows to apply it.
+  not the angular rate; a frequency of 1 Hz corresponds to an angular
+  frequency of 2π rad/s, and that 2π is not applied here.
+- `1 Hz -> rad/s cycles: 1` — `cycles: 1` records the net power of
+  cycle-counting units so angular evaluator paths multiply by (2π)^cycles.
 
 ```text
 bit scale: 0.6931471805599453

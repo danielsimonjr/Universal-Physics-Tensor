@@ -20,6 +20,9 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] **PR #830 Neon FIX-NEEDED (12): bash CONTROLs throw on stdout, mu_e status 0, tutorial physics/CLI prose, harness latents.**
+  Done: CONTROLs mutate `statedBlock` and `.toThrow(/stdout of/)`; `mu_e: 3` asserts status 0 and `Chandrasekhar mass:`; `upt explain be-63` prose replaced by confront/atlas; `bit` is an information unit not a logarithmic scale; eval bindings are numeric unless dimensioned (`L=1m "g=9.80665m/s^2"` → `2.0064092925890407 s`); TS CONTROLs call `assertGuideMatchesStdout`; next-fence matching; every ts/bash fence coupled; spawn stderr keeps ETIMEDOUT; double-quoted imports; `M_SUN_SI` 1.989e30 kg; CHANGELOG under `### Fixed`. Full suite **771 files, 9629 passed / 6 skipped**.
+
 - [x] **PR #830 Composer FIX LIST: couple remaining tutorial fences, run every ts fence, Hz/cycles prose, plan L410, spawn timeout.**
   Done: `statedAfterTsFence`; `units.md` and evaluate TypeScript `text` fences coupled to `runFence` stdout; every `ts` fence executed; every `text` line claimed once across all three tutorials; `assertGuideMatchesStdout` scoped to `statedBlock`; evaluate bash CONTROL mutates the `mass [kg] = 2.895722231692708e+30` mantissa; one spawn per CONTROL; `spawnSync` `timeout: 55_000`. `units.md` cycle-count prose; plan L410 `2.0064092925890407` (CLI confirmed); NOTES/CHANGELOG/evaluate prose aligned. Mutations that stayed green on `a5cf737c` now fail. Full suite **771 files, 9628 passed / 6 skipped**.
 

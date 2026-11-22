@@ -1,7 +1,7 @@
 # Tutorial: search, explain and evaluate
 
 Three commands cover the daily loop: find an equation, see how a value is
-derived, and evaluate an expression with units.
+derived, and evaluate an arithmetic expression.
 
 Prerequisites: `npm install universal-physics-tensor` (see
 [getting started](../getting-started.md)).
@@ -42,7 +42,9 @@ upt explain hawking-temperature mass=1Msun
 ## Evaluate an expression
 
 `upt eval "2*pi*sqrt(L/g)" L=1 g=9.80665` evaluates an arithmetic
-expression where each variable carries a unit value:
+expression with numeric variable bindings (variables can also carry units,
+such as `L=1m "g=9.80665m/s^2"`, in which case `upt eval` prints
+`2.0064092925890407 s`):
 
 ```bash
 upt eval "2*pi*sqrt(L/g)" L=1 g=9.80665
@@ -52,8 +54,18 @@ upt eval "2*pi*sqrt(L/g)" L=1 g=9.80665
 2.0064092925890407
 ```
 
+```bash
+upt eval "2*pi*sqrt(L/g)" L=1m "g=9.80665m/s^2"
+```
+
+```text
+2.0064092925890407 s
+```
+
 That is the small-angle period, in seconds, of a 1-metre pendulum under
-standard gravity (9.80665 m/s²).
+standard gravity (9.80665 m/s²). The first command binds bare numbers; the
+second carries metres and metres-per-second-squared, so the CLI prints the
+unit `s`.
 
 ## Where to go next
 
