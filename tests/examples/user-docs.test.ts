@@ -122,11 +122,11 @@ describe('docs/user guides', () => {
       for (const { file: owner, command, prints } of documented) {
         if (owner !== file) continue;
         it(`\`${command}\` prints what the guide states it prints`, () => {
-          expect(text, `the guide states the output of \`${command}\``).toContain(prints[0]!);
           const [, ...args] = argv(command);
           const result = runCli(args);
           expect(result.status, result.stderr).toBe(0);
           for (const piece of prints) {
+            expect(text, `the guide states ${JSON.stringify(piece)}`).toContain(piece);
             expect(result.stdout, `stdout of \`${command}\` holds ${JSON.stringify(piece)}`).toContain(piece);
           }
         });
