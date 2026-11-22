@@ -141,10 +141,6 @@ function presentSpellings(group: readonly string[], values: Readonly<Record<stri
   return Object.keys(values).filter((key) => group.some((member) => member === key || foldName(member) === foldName(key)));
 }
 
-/**
- * Refuse two spellings of one quantity that carry different numbers.
- * The message names the keys the caller typed.
- */
 const CONSTANT_IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
 /**
@@ -157,6 +153,10 @@ const CONSTANT_SPELLING_GROUPS: readonly (readonly string[])[] = CONSTANT_REGIST
   [row.name, ...row.spellings].filter((spelling) => CONSTANT_IDENTIFIER.test(spelling)),
 ).filter((group) => group.length > 1);
 
+/**
+ * Refuse two spellings of one quantity that carry different numbers.
+ * The message names the keys the caller typed.
+ */
 export function assertSynonymAgreement(values: Readonly<Record<string, number>>): void {
   for (const group of [...SYNONYM_GROUPS, ...AGREEMENT_GROUPS, ...CONSTANT_SPELLING_GROUPS]) {
     const disagreement = synonymDisagreement(presentSpellings(group, values), values);
