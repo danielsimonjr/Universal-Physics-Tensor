@@ -3,10 +3,13 @@
  *
  * Every line of a `bash` fence that is an `upt` (or `npx upt`) command is
  * spawned against the built CLI (`bin/upt.mjs`, which needs `bun run build`)
- * and must exit 0. What the guides say a command prints is checked in both
- * directions: the guide text must contain the substring, and the command's
- * stdout must print it. Neither guide may hardcode a catalog count, which
- * drifts the moment the catalog changes.
+ * and must exit 0. What the guides say a command prints is read from the
+ * guide itself, not a parallel table: a sentence whose leading code span is
+ * a prefix of the command names the output in the `text` fence that follows
+ * it (an intervening `bash` fence is skipped) or in the remaining code spans.
+ * Each piece must sit in the guide text and in the command's stdout, so a
+ * fabricated number, table row or `be-NNN` block fails. Neither guide may
+ * hardcode a catalog count, which drifts the moment the catalog changes.
  */
 import '../helpers/dist.js';
 import { spawnSync } from 'node:child_process';
@@ -44,71 +47,100 @@ function commandsOf(text: string): string[] {
   return out;
 }
 
+/**
+ * Prose sentences, outside fences. A sentence ends at a `.` or `:` that sits
+ * outside backticks and is followed by whitespace, so a number inside a code
+ * span does not end one, or at a paragraph break.
+ */
+function sentences(section: string): string[] {
+  const prose = section.replace(/```[\s\S]*?```/g, '\n');
+  const out: string[] = [];
+  let current = '';
+  let inCode = false;
+  const push = () => {
+    if (current.trim()) out.push(current.trim());
+    current = '';
+  };
+  for (let i = 0; i < prose.length; i++) {
+    const ch = prose[i]!;
+    if (ch === '`') inCode = !inCode;
+    current += ch;
+    const next = prose[i + 1];
+    if (!inCode && (ch === '.' || ch === ':') && (next === undefined || /\s/.test(next))) push();
+    else if (ch === '\n' && next === '\n') push();
+  }
+  push();
+  return out;
+}
+
+/**
+ * The `text` fence that follows `sentence`, skipping an intervening `bash`
+ * fence so a stating sentence may sit above the command it names.
+ */
+function fenceAfter(section: string, sentence: string): string | undefined {
+  const at = section.indexOf(sentence);
+  expect(at, sentence).toBeGreaterThanOrEqual(0);
+  const match = /^\s*(?:```bash\n[\s\S]*?```\s*)?```text\n([\s\S]*?)```/.exec(section.slice(at + sentence.length));
+  return match?.[1];
+}
+
+/**
+ * What the guide says `command` prints, or `null` when no sentence states it
+ * (`upt help` lists commands and has no pasted report). Two statements for
+ * one command, or a stating sentence with no fence and no remaining code
+ * spans, fail so a line added to a bash fence must say what it prints.
+ */
+function statedOutput(section: string, command: string): string[] | null {
+  const leading = /^`([^`]+)`/;
+  const matching = sentences(section).filter((sentence) => {
+    const span = leading.exec(sentence)?.[1];
+    return span !== undefined && span.startsWith('upt ') && command.startsWith(span);
+  });
+  if (matching.length === 0) return null;
+  expect(matching, `exactly one sentence states what \`${command}\` prints`).toHaveLength(1);
+  const sentence = matching[0]!;
+  const following = sentence.endsWith(':') ? fenceAfter(section, sentence) : undefined;
+  if (following !== undefined) {
+    // One piece per non-empty line: a sampled table is not a contiguous
+    // stdout substring, but a fabricated row or number still fails.
+    const lines = following.split('\n').map((line) => line.trimEnd()).filter((line) => line.length > 0);
+    expect(lines, `the text fence for \`${command}\` is not empty`).not.toHaveLength(0);
+    return lines;
+  }
+  const spans = [...sentence.matchAll(/`([^`]+)`/g)].map((match) => match[1]!).slice(1);
+  expect(spans, `the sentence for \`${command}\` names its output in a text fence or code spans`).not.toHaveLength(0);
+  return spans;
+}
+
+function textFenceLines(section: string): string[] {
+  return [...section.matchAll(/```text\n([\s\S]*?)```/g)].flatMap((match) =>
+    match[1]!.split('\n').map((line) => line.trimEnd()).filter((line) => line.length > 0),
+  );
+}
+
 function runCli(args: string[]): { status: number; stdout: string; stderr: string } {
   const result = spawnSync(process.execPath, [join(root, 'bin/upt.mjs'), ...args], { cwd: root, encoding: 'utf8' });
   return { status: result.status ?? 1, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
 }
 
-/**
- * What a guide states a command prints: one row per statement. The substring
- * must sit in the guide's own text (as a `text` fence or code span) and come
- * out of the command's stdout, so retyping an invented value fails twice.
- */
-const documented: { file: keyof typeof guides; command: string; prints: string[] }[] = [
-  {
-    file: 'docs/user/getting-started.md',
-    command: 'upt eval "2*pi*sqrt(1/9.81)"',
-    prints: ['2.0060666807106475'],
-  },
-  {
-    file: 'docs/user/getting-started.md',
-    command: 'upt derive period:time length:length gravity:acceleration --formula "2*pi*sqrt(length/gravity)"',
-    prints: ['dimensionally determined up to a constant:  period ∝ length^0.5·gravity^-0.5', 'recovered prefactor ≈ 6.28318530717959'],
-  },
-  {
-    file: 'docs/user/getting-started.md',
-    command: 'upt explain hawking-temperature mass=1Msun',
-    prints: ['Recovered value: 6.16842971641034e-8'],
-  },
-  {
-    file: 'docs/user/getting-started.md',
-    command: 'upt evaluate be-63 mu_e=2',
-    prints: ['mass [kg] = 2.895722231692708e+30'],
-  },
-  {
-    file: 'docs/user/getting-started.md',
-    command: 'upt search pendulum',
-    prints: ['CE-pendulum-period'],
-  },
-  {
-    file: 'docs/user/catalog.md',
-    command: 'upt atlas ab-pendulum-linear',
-    prints: ['model-pendulum (oscillators) → model-spring (oscillators)'],
-  },
-  {
-    file: 'docs/user/catalog.md',
-    command: 'upt eval "2*pi*sqrt(L/g)" L=1 g=9.80665',
-    prints: ['2.0064092925890407'],
-  },
-  {
-    file: 'docs/user/catalog.md',
-    command: 'upt eval "hbar*c/fm" fm=1fm',
-    prints: ['3.1615267734966904e-11 J'],
-  },
-  {
-    file: 'docs/user/catalog.md',
-    command: 'upt eval exp(1)',
-    prints: ['2.718281828459045'],
-  },
-];
-
 describe('docs/user guides', () => {
   for (const [file, text] of Object.entries(guides)) {
     describe(file, () => {
       const commands = commandsOf(text);
+      const stated = commands.map((command) => ({ command, prints: statedOutput(text, command) }));
+      const withOutput = stated.filter((row) => row.prints !== null);
 
       it('has bash-fence commands to run (the check is not vacuous)', () => {
         expect(commands.length).toBeGreaterThanOrEqual(3);
+      });
+
+      it('every pasted text fence is the stated output of exactly one bash command', () => {
+        const fences = textFenceLines(text);
+        expect(fences.length, 'the guide pastes at least one command report').toBeGreaterThan(0);
+        const claimed = withOutput.flatMap((row) => row.prints!);
+        expect(claimed.sort(), 'every text-fence line is claimed by one command, and no command invents a line').toEqual(
+          [...fences].sort(),
+        );
       });
 
       for (const command of commands) {
@@ -119,13 +151,12 @@ describe('docs/user guides', () => {
         });
       }
 
-      for (const { file: owner, command, prints } of documented) {
-        if (owner !== file) continue;
+      for (const { command, prints } of withOutput) {
         it(`\`${command}\` prints what the guide states it prints`, () => {
           const [, ...args] = argv(command);
           const result = runCli(args);
           expect(result.status, result.stderr).toBe(0);
-          for (const piece of prints) {
+          for (const piece of prints!) {
             expect(text, `the guide states ${JSON.stringify(piece)}`).toContain(piece);
             expect(result.stdout, `stdout of \`${command}\` holds ${JSON.stringify(piece)}`).toContain(piece);
           }
@@ -137,14 +168,15 @@ describe('docs/user guides', () => {
       });
 
       it('CONTROL: the output matcher is sensitive to the stated value, not only to the words', () => {
-        // A stated substring without a digit cannot be mutated into a wrong
-        // value; the control therefore uses the first digit-bearing statement.
-        const first = documented.find((entry) => entry.file === file && /\d/.test(entry.prints[0]!))!;
+        // A table row's last digit is often an id (`be-16`); mutate a numeric result.
+        const resultPiece = (prints: string[]) =>
+          prints.find((piece) => /^\s*[+-]?\d+(?:\.\d+)?(?:e[+-]?\d+)?(?:\s+\S+)?\s*$/.test(piece));
+        const first = withOutput.find((entry) => resultPiece(entry.prints!) !== undefined)!;
         const [, ...args] = argv(first.command);
         const result = runCli(args);
-        const [stated] = first.prints;
-        expect(result.stdout).toContain(stated!);
-        expect(result.stdout).not.toContain(stated!.replace(/\d(?=\D*$)/, (d) => String((Number(d) + 1) % 10)));
+        const statedPiece = resultPiece(first.prints!)!;
+        expect(result.stdout).toContain(statedPiece);
+        expect(result.stdout).not.toContain(statedPiece.replace(/\d(?=\D*$)/, (d) => String((Number(d) + 1) % 10)));
       });
     });
   }

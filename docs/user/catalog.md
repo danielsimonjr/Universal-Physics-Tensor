@@ -27,7 +27,7 @@ the atlas, but there is nothing to evaluate yet. That is not a defect: the
 catalog records what is claimed and how well it is grounded, not only what is
 computable.
 
-`upt evaluate` with no id lists what *is* evaluable, one section per kind:
+`upt evaluate` with no id prints what *is* evaluable, one section per kind:
 
 ```bash
 upt evaluate
@@ -58,13 +58,14 @@ bridge equations are validated against. Each entry records its fidelity tier
 (`L0` dimensional, `L1` scalar-AST, `L2` field-equation), its domain, and the
 bridge ids that restate or recover it.
 
+`upt canonical` prints the registry as a table (one row per entry, with the
+fidelity tier, the physics domain, the id and the partner bridges), followed
+by a coverage line stating how many catalog bridges have no canonical partner
+yet:
+
 ```bash
 upt canonical
 ```
-
-prints the registry as a table (one row per entry, with the fidelity tier, the
-physics domain, the id and the partner bridges), followed by a coverage line
-that names the catalog bridges with no canonical partner yet:
 
 ```text
    fid  domain               id                       partners
@@ -91,6 +92,9 @@ transformation, side conditions, regime inequalities, a bound with its horizon
 and uniformity, witnesses, counterexamples, and — where one exists — a reviewed
 formal reference in this repository's Lean proofs, from which the
 `formally-proved` evidence tag is *derived* (never hand-set).
+
+`upt atlas ab-pendulum-linear` prints the linearization that connects the exact
+pendulum to the harmonic oscillator:
 
 ```bash
 upt atlas ab-pendulum-linear
@@ -121,9 +125,8 @@ in-process registered witnesses.)
 
 ### Finding records
 
-`upt search` finds a bridge, canonical equation, model, atlas bridge, quantity,
-applied case or regime by the words in its record, and prints the command that
-opens each match:
+`upt search pendulum` finds the pendulum records by the words in them, and
+prints the command that opens each match:
 
 ```bash
 upt search pendulum
@@ -143,8 +146,9 @@ atlas bridges:
       inspect: upt atlas ab-pendulum-linear
 ```
 
-`upt explain <quantity>` shows how the graph determines a quantity from your
-inputs — which bridges produced it and what value came out:
+`upt explain hawking-temperature mass=1Msun` shows how the graph determines
+that quantity from the solar mass — which bridges produced it and what value
+came out:
 
 ```bash
 upt explain hawking-temperature mass=1Msun
@@ -181,21 +185,21 @@ one place and read by name. The pieces, from the inside out:
   dimension; the composition graph uses it to tell a baked universal constant
   from a physical variable of the same name.
 
-The CLI fills registered constants into your formulas automatically. Ask it:
+The CLI fills registered constants into your formulas automatically.
+`upt eval "G*M_sun/c^2" M_sun=1Msun` prints the gravitational radius of one
+solar mass, in metres:
 
 ```bash
 upt eval "G*M_sun/c^2" M_sun=1Msun
 ```
-
-prints the gravitational radius of one solar mass, in metres:
 
 ```text
 1477.0632775277024 m
 ```
 
 A binding can also be a plain number, with no unit and no dimension check on
-it. The small-angle pendulum period, with the length in metres and gravity in
-m/s² given by hand:
+it. `upt eval "2*pi*sqrt(L/g)" L=1 g=9.80665` prints the small-angle pendulum
+period with the length in metres and gravity in m/s² given by hand:
 
 ```bash
 upt eval "2*pi*sqrt(L/g)" L=1 g=9.80665
@@ -235,7 +239,8 @@ tiers, and the row's `source` field names the tier in words:
 ### Gotchas worth knowing before you write a formula
 
 **A bare `e` is the elementary charge, not Euler's number.** This follows the
-ISO 80000 / CODATA convention, and it matters in a physics formula:
+ISO 80000 / CODATA convention, and it matters in a physics formula.
+`upt eval "e"` prints the CODATA elementary charge:
 
 ```bash
 upt eval "e"
@@ -245,7 +250,7 @@ upt eval "e"
 1.602176634e-19 C
 ```
 
-Euler's number is only `exp(x)`, for example `exp(1)`:
+Euler's number is only `exp(x)`. `upt eval "exp(1)"` prints it:
 
 ```bash
 upt eval "exp(1)"
@@ -274,10 +279,11 @@ digits.
 
 **Unit conventions are chosen per invocation, with flags.** `upt eval` and
 `upt map` take `--natural` (ħ = c = 1, and h = 2π) and `--geometrized` (ħ = c =
-G = 1). Without a flag everything is read and printed in SI. For example, the
-Hawking-temperature formula evaluated with the solar mass gives the SI value
-`6.168429716410344e-8` K; with `--natural` the same formula prints the value
-in natural units:
+G = 1). Without a flag everything is read and printed in SI. `--natural` prints
+a bare value because those units drop out of the dimension; k_B stays the SI
+Boltzmann constant, so the Hawking formula reduces to `1/(8π G M k_B)` and the
+printed number is that combination. `upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30 --natural`
+prints it:
 
 ```bash
 upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30 --natural
@@ -287,8 +293,8 @@ upt eval "hbar*c^3/(8*pi*G*M*k_B)" M=1.989e30 --natural
 21.708826656988485
 ```
 
-`upt eval` also takes a value with a unit, and the result keeps its dimension
-and prints its SI unit. Two constants, one length scale in femtometres:
+`upt eval "hbar*c/fm" fm=1fm` prints the energy scale of a proton-radius
+wavelength (about 197 MeV), keeping the dimension and the SI unit:
 
 ```bash
 upt eval "hbar*c/fm" fm=1fm
@@ -297,8 +303,6 @@ upt eval "hbar*c/fm" fm=1fm
 ```text
 3.1615267734966904e-11 J
 ```
-
-That is the energy scale of a proton-radius wavelength — about 197 MeV.
 
 ### Reading the registry yourself
 

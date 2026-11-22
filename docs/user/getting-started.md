@@ -39,16 +39,16 @@ npx upt evaluate be-63 mu_e=2
 npx upt search pendulum
 ```
 
-`upt eval` evaluates your own scalar formula. This one is the small-angle
-period of a 1-metre pendulum, in seconds:
+`upt eval "2*pi*sqrt(1/9.81)"` prints the small-angle period of a 1-metre
+pendulum, in seconds:
 
 ```text
 2.0060666807106475
 ```
 
 `upt derive` reads the dimensions you declare for each variable, checks your
-formula against them, and recovers the dimensionless prefactor. Here it finds
-2π and matches the canonical registry's pendulum period:
+formula against them, recovers the dimensionless 2π prefactor, and names the
+canonical pendulum period:
 
 ```text
   dimensionally determined up to a constant:  period ∝ length^0.5·gravity^-0.5
@@ -57,11 +57,9 @@ formula against them, and recovers the dimensionless prefactor. Here it finds
   ✓ agrees with CE-pendulum-period (Pendulum period), prefactor included: yours/canonical = 1 at 3 fixed points
 ```
 
-`upt explain` shows how the catalog determines a quantity from the inputs you
-give. The Hawking temperature of a solar-mass black hole comes out through the
-two recorded derivation routes of bridge BE-42, and the report says so plainly
-(including that the agreement between the two routes is by construction, not an
-independent check):
+`upt explain hawking-temperature mass=1Msun` prints the Hawking temperature of
+a solar-mass black hole through the two recorded derivation routes of bridge
+BE-42 (agreement by construction, not an independent check):
 
 ```text
   'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
@@ -70,9 +68,8 @@ independent check):
     - be-42-via-rs (Hawking temperature T_H = ℏc/(4π k_B r_s)) = 6.16842971641034e-8  [from leaves: mass]
 ```
 
-`upt evaluate` evaluates one closed-form bridge (a `be-<id>` record) or one
-applied case, with a unit on every input. This is the Chandrasekhar mass of an
-ideal degenerate gas with mean molecular weight per electron μ_e = 2 (a
+`upt evaluate be-63 mu_e=2` evaluates the Chandrasekhar mass of an ideal
+degenerate gas with mean molecular weight per electron μ_e = 2 (a
 carbon/oxygen white dwarf), about 1.456 solar masses:
 
 ```text
@@ -85,9 +82,10 @@ carbon/oxygen white dwarf), about 1.456 solar masses:
 (Evaluate prints one more line, a note about the exact reduced Planck constant
 `hbar` carries — see [the catalog guide's constants section](catalog.md#the-constant-registry).)
 
-`upt search` finds records by the words in them. The closing line of its report
-lists the corpus sizes; the guide leaves counts to the command itself, since
-they move whenever the catalog moves.
+The closing line of a search report lists the corpus sizes; the guide leaves
+counts to the command itself, since they move whenever the catalog moves.
+`upt search pendulum` names the canonical pendulum period, the pendulum model,
+and the linear atlas bridge:
 
 ```text
 upt search pendulum — 3 match(es); every word matched
