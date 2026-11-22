@@ -24,6 +24,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- PR #822 Neon REQUEST CHANGES (non-blocking): the clone path on Node without Bun is `npm install --no-package-lock` then `npm run build` (`bun.lock` is the only lockfile; `package-lock.json` is banned).
+
 - PR #822 Neon REQUEST CHANGES (non-blocking): catalog prose separates a bare `e` inside an expression (the CODATA elementary charge) from an explicit `e=<number>` rebinding (replaces that value for the invocation).
 
 - PR #822 Neon REQUEST CHANGES (non-blocking): `PhysicalConstants.alpha` is the dimensionless fine-structure constant, not a Planck unit. `docs/user/catalog.md` says so.

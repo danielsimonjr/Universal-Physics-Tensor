@@ -116,8 +116,8 @@ does not install it — get it from <https://bun.sh/install>), then
 - and `node bin/upt.mjs <command>` runs the CLI from the clone exactly as
   `npx upt <command>` runs the installed package.
 
-On a machine that has Node but not Bun, `npm install` and `npm run build` also
-work for a clone.
+On a machine that has Node but not Bun, `npm install --no-package-lock` and
+`npm run build` also work for a clone (the lockfile is `bun.lock` only).
 
 ## Where to go next
 
