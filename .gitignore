@@ -77,3 +77,8 @@ tools/**/dist
 
 # Agent scratch inside a worktree
 scratch.tmp/
+
+# repo-tools map output. A bare `repo-tools map .` defaults to docs/architecture
+# and overwrites the hand-authored FILE_INVENTORY.md and duplicate-symbols.md.
+# This repository's repo-tools.config.json redirects that folder here; never commit it.
+.repo-tools-map-out/

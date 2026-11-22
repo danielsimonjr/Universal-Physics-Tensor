@@ -340,9 +340,9 @@ function tainted(user: EquationAnalysis): boolean {
   return unresolvedNames(user).length > 0;
 }
 
-// The two lazily loaded modules, set once at the top of `runReport()` before
-// any helper that reads them can run. `!` is safe: `runReport()` is the only
-// entry point from `run()`, and it assigns both before any use.
+// The two lazily loaded modules, assigned at the top of `runReport()` before
+// any helper that reads them can run. `runReport()` is the only entry point
+// from `run()`, and it assigns both before any use.
 let conventionsModule: typeof import('../conventions.js');
 let mapEvidenceModule: typeof import('../map-evidence.js');
 

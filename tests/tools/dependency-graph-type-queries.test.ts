@@ -6,8 +6,8 @@
  * dynamic-import scan used to record it as a bare `import()` side-effect edge,
  * which both added a bogus runtime edge in `dependency-graph.json` and credited
  * testers through the side-effect closure (e.g. `src/dimensional/types.ts`
- * gained testers from `src/atlas/composition-table.ts`'s
- * `import('../relations/composition-table.js').NoCompositeClaim`, and
+ * gained testers from `src/cli/commands/map.ts`'s
+ * `import('../../dimensional/types.js').Dimension`, and
  * `validator.ts` from `src/composition/user-equation.ts`'s
  * `import('../dimensional/validator.js').ExprNode`).
  */
