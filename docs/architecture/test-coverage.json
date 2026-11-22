@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 765,
+    "totalTestFiles": 766,
     "testedCount": 383,
     "directlyTestedCount": 350,
     "untestedCount": 10,
@@ -31046,6 +31046,7 @@
     "tests/tools/dependency-graph-type-queries.test.ts": [],
     "tests/tools/dist-freshness.test.ts": [],
     "tests/tools/export-star-as-deps.test.ts": [],
+    "tests/tools/file-inventory-zones.test.ts": [],
     "tests/tools/formalref-axiom-gate.test.ts": [
       "src/atlas/families.ts",
       "src/atlas/formal-ref-carriers.ts"

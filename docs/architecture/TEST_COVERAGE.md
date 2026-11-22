@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 393 |
-| Total Test Files | 765 |
+| Total Test Files | 766 |
 | Source files imported directly by a test | 350 |
 | Source files reached directly or through a barrel or side-effect import | 383 |
 | Source files no test reaches either way | 10 |
@@ -1197,6 +1197,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `tools/dependency-graph-type-queries.test.ts` | 0 files |
 | `tools/dist-freshness.test.ts` | 0 files |
 | `tools/export-star-as-deps.test.ts` | 0 files |
+| `tools/file-inventory-zones.test.ts` | 0 files |
 | `tools/formalref-axiom-gate.test.ts` | 2 files |
 | `tools/hook-git-env.test.ts` | 0 files |
 | `tools/layer-order.test.ts` | 0 files |
