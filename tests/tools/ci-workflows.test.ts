@@ -114,6 +114,16 @@ describe('ci.yml long-tests job', () => {
   });
 });
 
+describe('ci.yml docs-fresh job', () => {
+  it('runs public-tsdoc-gaps --check after the CLI reference, like sibling generated-doc gates', () => {
+    const r = runs(ci.jobs['docs-fresh']!);
+    const cli = r.findIndex((line) => /cli-reference\.ts --check/.test(line));
+    const gaps = r.findIndex((line) => /public-tsdoc-gaps\.ts --check/.test(line));
+    expect(cli, 'CLI reference --check step').toBeGreaterThanOrEqual(0);
+    expect(gaps, 'public-tsdoc-gaps --check step').toBeGreaterThan(cli);
+  });
+});
+
 describe('ci.yml code-docs ratchet', () => {
   it('runs on a push to master as well as on a pull request', () => {
     const job = ci.jobs['code-docs-ratchet']!;

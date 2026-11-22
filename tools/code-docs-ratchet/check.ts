@@ -25,6 +25,10 @@ import grammars from 'tree-sitter-typescript';
 export interface SymbolDoc {
   readonly documented: boolean;
   readonly paramMismatches: readonly string[];
+  /** JSDoc summary text, or null when the comment is missing or tag-only. */
+  readonly summary: string | null;
+  /** First line of the export statement (the declaration header/snippet). */
+  readonly header: string;
 }
 
 export interface FileDocs {
@@ -189,6 +193,8 @@ function sameGroup(previous: SyntaxNode, statement: SyntaxNode): boolean {
 interface MutableSymbol {
   documented: boolean;
   paramMismatches: string[];
+  summary: string | null;
+  header: string;
 }
 
 /** Exported symbols and whether the attached JSDoc has a summary line. */
@@ -212,16 +218,19 @@ export function fileDocs(source: string, fileName = 'fixture.ts'): FileDocs {
     }
     if (names.length > 0) {
       const comment = previousComment(start);
-      const documented = comment !== null && jsdocSummary(comment) !== null;
+      const summary = comment === null ? null : jsdocSummary(comment);
+      const documented = summary !== null;
+      const header = start.text.split('\n')[0]!.trim();
       const mismatches =
         comment === null ? [] : paramTags(comment).filter((tag) => !paramNames(start).includes(tag));
       for (const name of names) {
         const key = `${kind}:${name}`;
         const existing = symbols.get(key);
         if (existing === undefined) {
-          symbols.set(key, { documented, paramMismatches: [...mismatches] });
+          symbols.set(key, { documented, paramMismatches: [...mismatches], summary, header });
         } else if (documented) {
           existing.documented = true;
+          if (existing.summary === null) existing.summary = summary;
         }
       }
     }

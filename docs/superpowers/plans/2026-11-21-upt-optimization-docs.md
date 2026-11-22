@@ -18,7 +18,7 @@ The design is [`docs/superpowers/specs/2026-11-21-upt-optimization-docs-design.m
 
 Tree `17690f5a` (and reviewer verification on `e69aea2a`), package `16.0.0`, Node `v22.23.4` x64, Bun `1.4.5` (reviewer: Bun `1.4.2`), 4 vCPU Intel Xeon. Lockfile pins `@danielsimonjr/mathts-core@0.28.0`, `mathts-functions@0.86.0`, `mathts-expression@0.14.0`, `mathts-matrix@0.11.0`, `mathts-tensor@0.5.0`, `mathts-autograd@0.6.0`. `dist/` was `tsc` of that tree. These are this machine's medians. A later machine re-measures with the same commands. It does not copy these digits into a test.
 
-Catalog load reported 160 `BRIDGE_EQUATIONS`, 121 evaluators, 109 canonical equations. `data/units.json` has 97 unit rows (113 alias keys) plus 5 affine spellings = 118 symbols, and 26 prefix entries (`Q`..`q` including `u`, `µ`, `μ`). MathTS `UNIT_ROWS` has 206 keys. Public root surface: 233 runtime snapshot names (15 undocumented, all in `src/dimensional/types.ts`), 246 root `export type` names (0 undocumented), 33 `atlas.*` namespace exports in `src/atlas/public.ts` (3 undocumented in `src/atlas/types.ts`), and 1 public subpath export (`MathTSEngine`, documented).
+Catalog load reported 160 `BRIDGE_EQUATIONS`, 121 evaluators, 109 canonical equations. `data/units.json` has 97 unit rows (113 alias keys) plus 5 affine spellings = 118 symbols, and 26 prefix entries (`Q`..`q` including `u`, `µ`, `μ`). MathTS `UNIT_ROWS` has 206 keys. Public root surface: 233 runtime snapshot names (15 undocumented, all in `src/dimensional/types.ts`), 248 root type names (0 undocumented; includes inline `type` specifiers inside mixed `export { value, type T }` clauses such as `GeodesicIntegratorInputs` / `GeodesicIntegratorResult`), 33 `atlas.*` namespace exports in `src/atlas/public.ts` (3 undocumented in `src/atlas/types.ts`), and 1 public subpath export (`MathTSEngine`, documented).
 
 ### CLI wall clock and module import costs
 
@@ -348,7 +348,7 @@ S1, S5, S9, S11, and S12 have no upstream sprint. A single worker still runs the
 
 **Verified gap list (18 total, all checked against `fileDocs` in `tools/code-docs-ratchet/check.ts`):**
 - **Root runtime snapshot (`233` names, `15` undocumented):** all 15 are in `src/dimensional/types.ts` — `ACCELERATION`, `ACTION`, `AREA`, `CHARGE`, `DIMENSIONLESS`, `ENERGY`, `ENTROPY`, `FORCE`, `FREQUENCY`, `LENGTH`, `MASS`, `POWER`, `TEMPERATURE`, `TIME`, `VELOCITY`.
-- **Root `export type` (`246` names, `0` undocumented):** already complete.
+- **Root type exports (`248` names, `0` undocumented):** already complete. The two names above 246 are `GeodesicIntegratorInputs` and `GeodesicIntegratorResult`, exported as inline `type` specifiers inside the mixed `export { integrateGeodesic, type GeodesicIntegratorInputs, type GeodesicIntegratorResult }` clause in `src/index.ts`. A census that only reads `export type { … }` clauses drops them.
 - **`atlas` namespace (`export * as atlas from './atlas/public.js'`, `33` exports, `3` undocumented):** all 3 are in `src/atlas/types.ts` — `FormalFidelity`, `FormalRef`, `FormalRefKind`.
 - **Public subpath (`universal-physics-tensor/numerical/mathts-engine`):** `MathTSEngine` is already documented.
 
@@ -356,7 +356,7 @@ S1, S5, S9, S11, and S12 have no upstream sprint. A single worker still runs the
 
 1. Add `scripts/public-tsdoc-gaps.ts`. It collects:
    - the runtime names from `tests/api/__snapshots__/public-surface.test.ts.snap` (handling `export * as atlas from './atlas/public.js'` by scanning the members of `src/atlas/public.ts` rather than looking for `const atlas`),
-   - the explicit `export type { ... }` names from `src/index.ts`, and
+   - the explicit `export type { ... }` names from `src/index.ts` plus inline `type` specifiers inside mixed `export { value, type T }` clauses, and
    - the `MathTSEngine` subpath export from `src/numerical/mathts-engine.ts`.
    For each name it resolves the defining declaration file in `src/` (skipping pure re-export clauses) and checks `documented` via `fileDocs` from `tools/code-docs-ratchet/check.ts`. Prints `<file> <name>` for each undocumented public symbol; supports `--check` (exits 1 when any gap remains, 0 when empty).
 2. RED. Run `bun scripts/public-tsdoc-gaps.ts --check` before editing `src/` and keep the 18-line failure list in the PR body.
@@ -377,10 +377,10 @@ S1, S5, S9, S11, and S12 have no upstream sprint. A single worker still runs the
 
 **Steps.**
 
-1. Add `scripts/api-reference.ts` (reusing the symbol resolver from `scripts/public-tsdoc-gaps.ts` and `fileDocs` from `tools/code-docs-ratchet/check.ts`). Generate `docs/user/api.md` covering the **full public API surface**:
+1. Add `scripts/api-reference.ts` (reusing `publicSymbolMeta` / the symbol resolver from `scripts/public-tsdoc-gaps.ts` and `fileDocs` from `tools/code-docs-ratchet/check.ts`, which expose per-symbol kind, declaration header, and TSDoc summary). Generate `docs/user/api.md` covering the **full public API surface**:
    - Top note linking [`getting-started.md`](getting-started.md), [`catalog.md`](catalog.md), and [`../architecture/API.md`](../architecture/API.md) (the narrative engineering reference), with no hosted URL claims.
    - **Root runtime exports (`universal-physics-tensor`)** — all 233 snapshot names grouped by `src/index.ts` section banner, showing export kind (`function`, `class`, `const`, `namespace`), declaration header/signature extracted from source, and TSDoc summary.
-   - **Root type exports (`universal-physics-tensor`)** — all 246 `export type` / `interface` names, showing kind and TSDoc summary.
+   - **Root type exports (`universal-physics-tensor`)** — all 248 `export type` / `interface` names (including mixed-clause inline `type` specifiers), showing kind and TSDoc summary.
    - **`atlas` namespace (`import { atlas } from 'universal-physics-tensor'`)** — all 33 members of `src/atlas/public.ts` with kind and TSDoc summary.
    - **Subpath export (`universal-physics-tensor/numerical/mathts-engine`)** — `MathTSEngine` with its summary and public method list.
    - Support `--check` (exits 1 if committed `docs/user/api.md` differs from generated output, matching `scripts/cli-reference.ts --check`).

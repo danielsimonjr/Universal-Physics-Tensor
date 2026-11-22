@@ -33,6 +33,7 @@ export interface Dimension {
   J: number;
 }
 
+/** Every base exponent zero: the dimension of a pure number or a dimensionless group. */
 export const DIMENSIONLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 
 // --- Mechanics ---
@@ -46,18 +47,29 @@ export const DIMENSIONLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0
 // more of those modules. A shape named here is NOT a row of NAMED_DIMENSIONS unless
 // `format()` is meant to print its name: adding a row changes every printed
 // dimension of that shape.
+/** Length, metre (L to the first power, every other exponent zero). */
 export const LENGTH:        Dimension = { L: 1, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+/** Area, square metre. */
 export const AREA:          Dimension = { L: 2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+/** Time, second. */
 export const TIME:          Dimension = { L: 0, M: 0, T: 1, I: 0, Theta: 0, N: 0, J: 0 };
+/** Frequency, per second (hertz). */
 export const FREQUENCY:     Dimension = { L: 0, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
+/** Mass, kilogram. */
 export const MASS:          Dimension = { L: 0, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 /** Mass density, kilogram per cubic metre. */
 export const MASS_DENSITY:  Dimension = { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+/** Velocity, metre per second. */
 export const VELOCITY:      Dimension = { L: 1, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
+/** Acceleration, metre per second squared. */
 export const ACCELERATION:  Dimension = { L: 1, M: 0, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
+/** Force, newton (kilogram metre per second squared). */
 export const FORCE:         Dimension = { L: 1, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 }; // newton
+/** Energy, joule (kilogram square metre per second squared). */
 export const ENERGY:        Dimension = { L: 2, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 }; // joule
+/** Power, watt (joule per second). */
 export const POWER:         Dimension = { L: 2, M: 1, T: -3, I: 0, Theta: 0, N: 0, J: 0 }; // watt
+/** Action, joule second (the dimension of hbar). */
 export const ACTION:        Dimension = { L: 2, M: 1, T: -1, I: 0, Theta: 0, N: 0, J: 0 }; // J·s
 /** Volume, cubic metre. */
 export const VOLUME:        Dimension = { L: 3, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
@@ -81,7 +93,9 @@ export const ENERGY_FLUX:   Dimension = { L: 0, M: 1, T: -3, I: 0, Theta: 0, N: 
 export const GRAVITATIONAL_CONSTANT: Dimension = { L: 3, M: -1, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 
 // --- Thermodynamics ---
+/** Thermodynamic temperature, kelvin. */
 export const TEMPERATURE:   Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 1, N: 0, J: 0 };
+/** Entropy, joule per kelvin. */
 export const ENTROPY:       Dimension = { L: 2, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 }; // J/K
 /** Thermal conductivity, watt per metre kelvin. */
 export const THERMAL_CONDUCTIVITY: Dimension = { L: 1, M: 1, T: -3, I: 0, Theta: -1, N: 0, J: 0 };
@@ -89,6 +103,7 @@ export const THERMAL_CONDUCTIVITY: Dimension = { L: 1, M: 1, T: -3, I: 0, Theta:
 export const SPECIFIC_HEAT: Dimension = { L: 2, M: 0, T: -2, I: 0, Theta: -1, N: 0, J: 0 };
 
 // --- Electromagnetism (SI) ---
+/** Electric charge, coulomb (ampere second). */
 export const CHARGE:        Dimension = { L: 0, M: 0, T: 1, I: 1, Theta: 0, N: 0, J: 0 }; // coulomb = A·s
 /** Capacitance, farad. */
 export const CAPACITANCE:   Dimension = { L: -2, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };

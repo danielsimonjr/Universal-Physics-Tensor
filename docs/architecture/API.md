@@ -1242,7 +1242,7 @@ Regenerate: `npx @danielsimonjr/repo-tools@2.6.1 map . --out=<dir>` · Check: `n
 
 | Claim | Value | Source |
 |---|---|---|
-| totalExports | 3919 | `dependency-graph.json` `statistics.totalExports` |
+| totalExports | 3930 | `dependency-graph.json` `statistics.totalExports` |
 | unusedExportsCount | 192 | `dependency-graph.json` `statistics.unusedExportsCount` |
 
 Both counts cover the whole repository, which is the default scope of `repo-tools map`. Reproduce them with the pinned command above; `<dir>/dependency-graph.json` is that run's artifact, not a repository file. The project generator `bun run docs:deps` writes a different `docs/architecture/dependency-graph.json` from `src/` only (`unusedExportsCount` 34, `totalExports` 2867) and is not this table's source. `212 → 202` is a reader artifact of the S2 namespace dynamic `import()` of `record.ts`: the static reader now counts ten exports of that module as referenced (`Dispatch`, `EnvironmentChange`, `Reach`, `RecordEntry`, `RecordEnvironment`, `RecordInput`, `RecordResult`, `ReplayEntryReport`, `ReplayOutcome`, `StreamDifference`) — 7 of them interfaces, and 3 (`Dispatch`, `Reach`, `ReplayOutcome`) type aliases. No export was removed.

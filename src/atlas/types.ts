@@ -25,6 +25,7 @@ export type ApproximationBound = import('../relations/types.js').ApproximationBo
 /** A case a bridge does not cover, and the witness that shows it. @public */
 export type Counterexample = import('../relations/types.js').Counterexample;
 
+/** Shared-vocabulary types declared in `../relations/types.js`, re-exported under their own summaries there. */
 export type {
   Conventions,
   FormalFidelity,
