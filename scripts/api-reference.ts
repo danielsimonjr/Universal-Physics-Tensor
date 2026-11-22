@@ -43,25 +43,44 @@ function cell(value: string): string {
  * clause; a clause adopts the most recent banner above it. Comment runs inside
  * a clause (`// v0.8.0 punch-list …` between specifiers) are not banners.
  */
+function specifierNames(clauseBody: string): string[] {
+  const names: string[] = [];
+  for (const raw of clauseBody.split(',')) {
+    const name = raw.trim().replace(/^type\s+/, '').split(/\s+as\s+/).pop()?.trim();
+    // Identifier only: a trailing `// comment, …` on the specifier must not
+    // survive as a map key (Law 2: without stripComments this filter drops it).
+    if (name !== undefined && /^[A-Za-z_$][\w$]*$/.test(name)) names.push(name);
+  }
+  return names;
+}
+
 function indexBanners(): Map<string, string> {
   const text = readSrcText('index.ts');
   const lines = text.split('\n');
+  // Match on comment-stripped text so a `}` inside an in-clause comment cannot
+  // truncate the clause, and a commented-out `export { }` cannot suppress a
+  // banner. `stripComments` keeps newlines, so line numbers match `lines`.
+  const stripped = stripComments(text);
   const clauseRe = /export\s+(?:type\s+)?\{([^}]*)\}(?:\s*from\s*['"][^'"]+['"])?/g;
-  const spans: { start: number; end: number }[] = [];
+  const declRe =
+    /export\s+(?:declare\s+)?(?:default\s+)?(?:abstract\s+)?(?:async\s+)?(?:const|let|var|function\s*\*?|class|interface|type|enum)\s+([A-Za-z_$][\w$]*)/g;
+  const spans: { startLine: number; endLine: number }[] = [];
   const clauseLines = new Map<number, string[]>();
-  for (const match of text.matchAll(clauseRe)) {
-    const clauseLine = text.slice(0, match.index).split('\n').length - 1;
-    spans.push({ start: match.index, end: match.index + match[0].length });
-    const names: string[] = [];
-    // Strip in-clause `//` and `/* */` before splitting, same helper as
-    // `moduleExports()` — otherwise a comment containing a comma poisons the
-    // next specifier's map key and the export lands in Other exports.
-    const specText = stripComments(match[1]!);
-    for (const raw of specText.split(',')) {
-      const name = raw.trim().replace(/^type\s+/, '').split(/\s+as\s+/).pop()?.trim();
-      if (name !== undefined && name !== '') names.push(name);
-    }
-    clauseLines.set(clauseLine, names);
+  const lineOf = (index: number): number => stripped.slice(0, index).split('\n').length - 1;
+  const addNames = (line: number, names: readonly string[]): void => {
+    const existing = clauseLines.get(line) ?? [];
+    existing.push(...names);
+    clauseLines.set(line, existing);
+  };
+  for (const match of stripped.matchAll(clauseRe)) {
+    const startLine = lineOf(match.index!);
+    spans.push({ startLine, endLine: lineOf(match.index! + match[0].length) });
+    addNames(startLine, specifierNames(match[1]!));
+  }
+  for (const match of stripped.matchAll(declRe)) {
+    const startLine = lineOf(match.index!);
+    spans.push({ startLine, endLine: lineOf(match.index! + match[0].length) });
+    addNames(startLine, [match[1]!]);
   }
   // Contiguous `//` runs outside clauses, in order: [lastLineIndex, cleaned text].
   const bannerRuns: { endLine: number; text: string }[] = [];
@@ -84,9 +103,7 @@ function indexBanners(): Map<string, string> {
       if (cleaned !== '') runLines.push(cleaned);
     }
     if (runLines.length === 0) continue;
-    const runStartOffset = lines.slice(0, runStart).join('\n').length + (runStart > 0 ? 1 : 0);
-    const runEndOffset = lines.slice(0, end + 1).join('\n').length;
-    const overlaps = spans.some((s) => runStartOffset < s.end && s.start < runEndOffset);
+    const overlaps = spans.some((s) => runStart <= s.endLine && s.startLine <= end);
     if (!overlaps) bannerRuns.push({ endLine: end, text: runLines.join('\n') });
   }
   const map = new Map<string, string>();
@@ -134,10 +151,27 @@ function bannerHeading(banner: string): string {
   return cell(firstLine);
 }
 
+function bannerBody(banner: string): string {
+  // Continuation lines of a wrapped `//` banner can start with `+ ` / `- ` /
+  // `* ` (the v0.7 `Axes + LabeledTensor` wrap). Those are markdown list
+  // markers if they begin a paragraph, so strip them before joining.
+  const rest = banner
+    .split('\n')
+    .slice(1)
+    .map((line) => line.replace(/^[+\-*]\s+/, ''))
+    .join(' ')
+    .trim();
+  return cell(rest);
+}
+
 function runtimeSection(names: readonly string[], banners: ReadonlyMap<string, string>): string {
   const groups = new Map<string, string[]>();
   const ordered: string[] = [];
   for (const name of names) {
+    // Filter `atlas` before grouping: it has no declaring module and would
+    // otherwise occupy the bannerless group, which becomes an empty
+    // `### Other exports` table once every other bannerless name gains a banner.
+    if (name === 'atlas') continue;
     const banner = banners.get(name) ?? '';
     if (!groups.has(banner)) {
       groups.set(banner, []);
@@ -148,16 +182,18 @@ function runtimeSection(names: readonly string[], banners: ReadonlyMap<string, s
   const parts: string[] = [];
   for (const banner of ordered) {
     const group = groups.get(banner)!;
+    const rowList = rows(group, 'root');
+    if (rowList.length === 0) continue;
     parts.push(`### ${bannerHeading(banner)}`);
     parts.push('');
     if (banner !== '') {
-      const rest = banner.split('\n').slice(1).join(' ').trim();
+      const rest = bannerBody(banner);
       if (rest !== '') {
-        parts.push(cell(rest));
+        parts.push(rest);
         parts.push('');
       }
     }
-    parts.push(table(rows(group, 'root')));
+    parts.push(table(rowList));
     parts.push('');
   }
   return parts.join('\n');
@@ -196,13 +232,18 @@ function engineMethods(): readonly string[] {
     const name = m[1]!;
     if (name === 'constructor') continue;
     let header = lines[i]!.trim();
-    while (!/[{;]\s*$/.test(header) && i + 1 < lines.length) {
+    // Stop at the signature's opening `{` or trailing `;`, including a
+    // single-line `{ return; }` body. Matching only `/[{;]\s*$/` would keep
+    // consuming the next method's header.
+    while (!/[{;]/.test(header) && i + 1 < lines.length) {
       i += 1;
       header = `${header} ${lines[i]!.trim()}`;
     }
+    const brace = header.indexOf('{');
+    if (brace >= 0) header = header.slice(0, brace);
     out.push(
       header
-        .replace(/\s*\{$/, '')
+        .replace(/;$/, '')
         .replace(/\s+/g, ' ')
         .replace(/\( /g, '(')
         .replace(/, \)/g, ')')
@@ -280,8 +321,13 @@ export function renderApiReference(): string {
   return lines.join('\n');
 }
 
-function main(): void {
-  const check = process.argv.includes('--check');
+/**
+ * CLI entry `main()` uses: rewrite `docs/user/api.md`, or `--check` (exit 1
+ * when the committed page differs). Tests call this instead of copying the
+ * comparison.
+ */
+export function runApiReferenceCli(argv: readonly string[] = process.argv): number {
+  const check = argv.includes('--check');
   const next = renderApiReference();
   let current = '';
   try {
@@ -292,14 +338,20 @@ function main(): void {
   }
   if (current === next) {
     console.log('api-reference: docs/user/api.md matches the public surface.');
-    return;
+    return 0;
   }
   if (check) {
     console.error('api-reference: docs/user/api.md is stale. Run `bun scripts/api-reference.ts` and commit the result.');
-    process.exit(1);
+    return 1;
   }
   writeFileSync(OUT, next);
   console.log('api-reference: rewrote docs/user/api.md.');
+  return 0;
+}
+
+function main(): void {
+  const code = runApiReferenceCli();
+  if (code !== 0) process.exit(code);
 }
 
 if (import.meta.main) main();

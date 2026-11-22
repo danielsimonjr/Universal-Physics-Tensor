@@ -85,7 +85,7 @@ Single source of truth across numerical, dimensional, and bridge layers. See src
 
 ### v0.7 Proposal 1 — Intelligent Index layer (UniversalIndex + Axes
 
-+ LabeledTensor wrapper). Per Decision #10, 10 public symbols. MergedLabels<L,R> and canonicalLabelOrder stay @internal.
+LabeledTensor wrapper). Per Decision #10, 10 public symbols. MergedLabels<L,R> and canonicalLabelOrder stay @internal.
 
 | Name | Kind | Declaration | Summary |
 |---|---|---|---|

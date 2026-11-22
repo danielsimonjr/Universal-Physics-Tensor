@@ -3,10 +3,11 @@
  * the committed `docs/user/api.md`, and the page is grounded in the real
  * surface.
  *
- * The mutation CONTROLs (law 2) change one TSDoc summary, add an async engine
- * method, add a root runtime export, or inject an in-clause comment export in
- * the source the renderer reads and prove the rendered page changes — that is
- * the exact condition `bun scripts/api-reference.ts --check` exits 1 on.
+ * The mutation CONTROLs (law 2) change one TSDoc summary, add a single-line
+ * async engine method before another method, add a root runtime export, inject
+ * a trailing in-clause comment export, or banner UniversalTensor in the source
+ * the renderer reads and prove the rendered page changes — that is the exact
+ * condition `bun scripts/api-reference.ts --check` exits 1 on.
  *
  * @module tests/tools/api-reference
  */
@@ -17,7 +18,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { renderApiReference } from '../../scripts/api-reference.js';
-import { setSourceReaderForTest } from '../../scripts/public-tsdoc-gaps.js';
+import { setSourceReaderForTest, stripComments } from '../../scripts/public-tsdoc-gaps.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const SRC = join(REPO, 'src');
@@ -67,59 +68,84 @@ function checkWouldFail(rendered: string): boolean {
 }
 
 /**
- * Subprocess CONTROL: the same comparison `--check` uses (`render !== committed
- * page`), with `setSourceReaderForTest` overlays, in a fresh bun process. Does
- * not write into this tree (parallel vitest files share the filesystem).
+ * The same specifier split `indexBanners` uses, without stripping comments.
+ * A trailing `// comment, …` on `Name as ALIAS` poisons the identifier.
  */
-function spawnCheckWithOverlays(overrides: Record<string, string>): { status: number | null; stderr: string } {
-  const overlayPath = join(tmpdir(), `upt-api-ref-overlay-${process.pid}-${Date.now()}.json`);
-  writeFileSync(overlayPath, JSON.stringify(overrides));
-  const result = spawnSync(
-    'bun',
-    [
-      '-e',
-      `
-        import { readFileSync } from 'node:fs';
-        import { join } from 'node:path';
-        import { renderApiReference } from './scripts/api-reference.ts';
-        import { setSourceReaderForTest } from './scripts/public-tsdoc-gaps.ts';
-        const src = join(process.cwd(), 'src');
-        const page = join(process.cwd(), 'docs/user/api.md');
-        const overrides = JSON.parse(readFileSync(${JSON.stringify(overlayPath)}, 'utf8'));
-        const restore = setSourceReaderForTest((rel) =>
-          Object.hasOwn(overrides, rel) ? overrides[rel] : readFileSync(join(src, rel), 'utf8'),
-        );
-        try {
-          const next = renderApiReference();
-          const current = readFileSync(page, 'utf8');
-          if (current === next) {
-            console.log('api-reference: docs/user/api.md matches the public surface.');
-            process.exit(0);
-          }
-          console.error('api-reference: docs/user/api.md is stale. Run \`bun scripts/api-reference.ts\` and commit the result.');
-          process.exit(1);
-        } finally {
-          restore();
-        }
-      `,
-    ],
-    { cwd: REPO, encoding: 'utf8' },
-  );
-  rmSync(overlayPath, { force: true });
-  return { status: result.status, stderr: result.stderr };
+function namesFromClauseBody(body: string): string[] {
+  const names: string[] = [];
+  for (const raw of body.split(',')) {
+    const name = raw.trim().replace(/^type\s+/, '').split(/\s+as\s+/).pop()?.trim();
+    if (name !== undefined && /^[A-Za-z_$][\w$]*$/.test(name)) names.push(name);
+  }
+  return names;
 }
 
-function withAsyncProbe(source: string): string {
-  const start = source.indexOf('export class MathTSEngine');
-  if (start < 0) throw new Error('MathTSEngine class not found');
-  const end = source.indexOf('\n}', start);
-  if (end < 0) throw new Error('MathTSEngine class end not found');
-  return `${source.slice(0, end)}\n  async s13ProbeMethod(): Promise<void> { return; }\n${source.slice(end)}`;
+/**
+ * Subprocess CONTROL: the same `runApiReferenceCli` `main()` uses, with
+ * `setSourceReaderForTest` overlays, in a fresh bun process. Does not write
+ * into this tree (parallel vitest files share the filesystem).
+ */
+function spawnCheckWithOverlays(overrides: Record<string, string>): { status: number | null; stderr: string; stdout: string } {
+  const overlayPath = join(tmpdir(), `upt-api-ref-overlay-${process.pid}-${Date.now()}.json`);
+  writeFileSync(overlayPath, JSON.stringify(overrides));
+  try {
+    const result = spawnSync(
+      'bun',
+      [
+        '-e',
+        `
+          import { readFileSync } from 'node:fs';
+          import { join } from 'node:path';
+          import { runApiReferenceCli } from './scripts/api-reference.ts';
+          import { setSourceReaderForTest } from './scripts/public-tsdoc-gaps.ts';
+          const src = join(process.cwd(), 'src');
+          const overrides = JSON.parse(readFileSync(${JSON.stringify(overlayPath)}, 'utf8'));
+          const restore = setSourceReaderForTest((rel) =>
+            Object.hasOwn(overrides, rel) ? overrides[rel] : readFileSync(join(src, rel), 'utf8'),
+          );
+          try {
+            process.exit(runApiReferenceCli(['bun', 'scripts/api-reference.ts', '--check']));
+          } finally {
+            restore();
+          }
+        `,
+      ],
+      { cwd: REPO, encoding: 'utf8' },
+    );
+    return { status: result.status, stderr: result.stderr, stdout: result.stdout };
+  } finally {
+    rmSync(overlayPath, { force: true });
+  }
+}
+
+/** Insert a single-line `{ return; }` method immediately before `fromNested`. */
+function withSingleLineMethodBeforeFromNested(source: string): string {
+  const needle = '  fromNested(data: NestedArray, shape: ReadonlyArray<number>): EngineTensor {';
+  const idx = source.indexOf(needle);
+  if (idx < 0) throw new Error('fromNested method not found');
+  return `${source.slice(0, idx)}  async s13ProbeMethod(): Promise<void> { return; }\n${source.slice(idx)}`;
 }
 
 describe('api-reference', () => {
   it('the rendered page is byte-identical to the committed docs/user/api.md', () => {
     expect(renderApiReference()).toBe(committedPage());
+  });
+
+  it('bun scripts/api-reference.ts --check exits 0 on the committed page', () => {
+    const result = spawnSync('bun', ['scripts/api-reference.ts', '--check'], {
+      cwd: REPO,
+      encoding: 'utf8',
+    });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('docs/user/api.md matches the public surface');
+    expect(result.stderr).not.toContain('docs/user/api.md is stale');
+  });
+
+  it('spawnCheckWithOverlays of the empty overlay is the CLI --check green path', () => {
+    const spawned = spawnCheckWithOverlays({});
+    expect(spawned.status, spawned.stderr).toBe(0);
+    expect(spawned.stdout).toContain('docs/user/api.md matches the public surface');
+    expect(spawned.stderr).not.toContain('docs/user/api.md is stale');
   });
 
   it('the page covers the full public surface: 232 runtime rows, 248 type rows, 33 atlas members', () => {
@@ -203,6 +229,13 @@ describe('api-reference', () => {
     expect(heading!).not.toMatch(/^### ──/);
   });
 
+  it('wrapped banner continuation is prose, not a markdown list item', () => {
+    const page = committedPage();
+    expect(page).not.toMatch(/^\+ LabeledTensor/m);
+    expect(page).toContain('LabeledTensor wrapper)');
+    expect(page).toContain('### v0.7 Proposal 1 — Intelligent Index layer (UniversalIndex + Axes');
+  });
+
   it('CONTROL: changing one TSDoc summary changes the rendered page, so --check fails on drift', () => {
     const path = 'numerical/geodesic-integrator.ts';
     const stripped = stripJsdocBefore(committed(path), 'export interface GeodesicIntegratorInputs');
@@ -219,17 +252,25 @@ describe('api-reference', () => {
     expect(renderApiReference()).toBe(committedPage());
   });
 
-  it('CONTROL: a new async MathTSEngine method makes --check fail', () => {
+  it('CONTROL: a single-line method before fromNested is its own bullet and --check fails', () => {
     const path = 'numerical/mathts-engine.ts';
-    const mutated = withAsyncProbe(committed(path));
+    const mutated = withSingleLineMethodBeforeFromNested(committed(path));
     expect(mutated).not.toBe(committed(path));
     withSrc({ [path]: mutated }, () => {
       const drifted = renderApiReference();
       expect(checkWouldFail(drifted)).toBe(true);
-      expect(drifted).toContain('`async s13ProbeMethod(');
+      expect(drifted).toContain('`async s13ProbeMethod(): Promise<void>`');
+      expect(drifted).not.toContain('{ return; }');
+      const methods = [...drifted.matchAll(/^- `([^`]+)`$/gm)].map((m) => m[1]!);
+      expect(methods.some((row) => row.startsWith('async s13ProbeMethod('))).toBe(true);
+      expect(methods.some((row) => row.startsWith('fromNested('))).toBe(true);
+      const probe = methods.find((row) => row.startsWith('async s13ProbeMethod('));
+      expect(probe).toBe('async s13ProbeMethod(): Promise<void>');
+      expect(methods.length).toBe(15);
     });
     const spawned = spawnCheckWithOverlays({ [path]: mutated });
     expect(spawned.status, spawned.stderr).toBe(1);
+    expect(spawned.stderr).toContain('docs/user/api.md is stale');
     expect(renderApiReference()).toBe(committedPage());
   });
 
@@ -244,17 +285,25 @@ describe('api-reference', () => {
     });
     const spawned = spawnCheckWithOverlays({ [path]: mutated });
     expect(spawned.status, spawned.stderr).toBe(1);
+    expect(spawned.stderr).toContain('docs/user/api.md is stale');
     expect(renderApiReference()).toBe(committedPage());
   });
 
-  it('CONTROL: an in-clause // comment export is grouped under its banner, and --check fails', () => {
+  it('CONTROL: an in-clause trailing // comment export is grouped under its banner, and --check fails', () => {
     const path = 'index.ts';
     const original = committed(path);
+    const probeBody = 'M_SUN_SI as S13_CLAUSE_PROBE // in-clause comment, not a specifier';
+    // Without stripComments, `.split(/\\s+as\\s+/).pop()` leaves the comment on
+    // the name and the identifier filter drops it — the previous form put the
+    // `//` on its own line *before* `as`, so pop() discarded the comment.
+    // Disabling stripComments makes THIS probe fail.
+    expect(namesFromClauseBody(probeBody)).not.toContain('S13_CLAUSE_PROBE');
+    expect(namesFromClauseBody(stripComments(probeBody))).toContain('S13_CLAUSE_PROBE');
     const needle = "  B_WIEN_SI,\n} from './core/constants.js';";
     expect(original).toContain(needle);
     const mutated = original.replace(
       needle,
-      "  B_WIEN_SI,\n  // in-clause comment, not a specifier\n  M_SUN_SI as S13_CLAUSE_PROBE,\n} from './core/constants.js';",
+      `  B_WIEN_SI,\n  ${probeBody}\n} from './core/constants.js';`,
     );
     expect(mutated).not.toBe(original);
     withSrc({ [path]: mutated }, () => {
@@ -268,6 +317,25 @@ describe('api-reference', () => {
       expect(other).not.toContain('| `S13_CLAUSE_PROBE` |');
       expect(other).not.toContain('| `M_SUN_SI` |');
     });
+    expect(renderApiReference()).toBe(committedPage());
+  });
+
+  it('CONTROL: a banner on UniversalTensor drops the empty Other exports heading', () => {
+    const path = 'index.ts';
+    const original = committed(path);
+    const needle = "export { UniversalTensor } from './core/tensor.js';";
+    expect(original).toContain(needle);
+    const mutated = original.replace(needle, `// S13 Other-exports probe\n${needle}`);
+    expect(mutated).not.toBe(original);
+    withSrc({ [path]: mutated }, () => {
+      const drifted = renderApiReference();
+      expect(checkWouldFail(drifted)).toBe(true);
+      expect(drifted).not.toContain('### Other exports');
+      expect(drifted).toContain('### S13 Other-exports probe');
+      const section = sectionAfter(drifted, 'S13 Other-exports probe');
+      expect(section).toContain('| `UniversalTensor` |');
+    });
+    expect(committedPage()).toContain('### Other exports');
     expect(renderApiReference()).toBe(committedPage());
   });
 });
