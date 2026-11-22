@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] Release 16.1.0: bump, regenerate (atlas JSON, Lean table, dependency graph, the two tag goldens), dependency snapshot, clarify Removed as `@internal` not public API, release PR. `[Unreleased]` has no public-API break since `v16.0.0` (snapshot and `src/index.ts` unchanged), so the version is a minor. No tag in this PR.
+
 - [x] **PR #830 Neon FIX-NEEDED (12): bash CONTROLs throw on stdout, mu_e status 0, tutorial physics/CLI prose, harness latents.**
   Done: CONTROLs mutate `statedBlock` and `.toThrow(/stdout of/)`; `mu_e: 3` asserts status 0 and `Chandrasekhar mass:`; `upt explain be-63` prose replaced by confront/atlas; `bit` is an information unit not a logarithmic scale; eval bindings are numeric unless dimensioned (`L=1m "g=9.80665m/s^2"` → `2.0064092925890407 s`); TS CONTROLs call `assertGuideMatchesStdout`; next-fence matching; every ts/bash fence coupled; spawn stderr keeps ETIMEDOUT; double-quoted imports; `M_SUN_SI` 1.989e30 kg; CHANGELOG under `### Fixed`. Full suite **771 files, 9629 passed / 6 skipped**.
 
