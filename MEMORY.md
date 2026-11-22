@@ -138,7 +138,10 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   such as h_rad/h at vanishing h, emits `Infinity`, matching the deleted JS runners). Every
   other caller stays strict. Catalog `needs` on an output or check means that when every listed
   key is absent from the caller's inputs the engine sets the output to `null` and omits the
-  check. Engine `mergeBindings` binds numeric intermediates including ±Infinity and NaN
+  check; an entry of the form `key=value` is unmet unless the input is present with that value
+  (brownian-sphere's `drift` check declares `d=3`). A check record may name a `method` instead
+  of an `expr` (exactly one of the two) for a value master's runner held as `NaN`, which the
+  expr path refuses. Engine `mergeBindings` binds numeric intermediates including ±Infinity and NaN
   (null stays unbound), so a later expr that reads an overflowed value sees it rather than
   throwing `Undefined symbol`.
 - `case-lumped-cooling`'s `parent_deviation` is the named method `lumpedParentDeviation`, not a
@@ -146,6 +149,17 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   JS runner handed the caller `NaN` (silent), which the expr path's non-finite guard would
   turn into a throw. The method reproduces that NaN, and `Infinity` at t/tau ~ 740. `h_rad_max`
   is a catalog `expr`: 1-arg `abs` is in the grammar, so `max(x,y) = (x+y+|x−y|)/2`.
+- `case-brownian-sphere` runs entirely through the engine (S8): `max(√(k_BT/m), |v_s|)` in `Re`
+  and the Faxén polynomial in `D_parallel_m2_per_s` are catalog `expr`s (`abs`-form max and `^`
+  are bit-exact against the deleted runner — measured, not assumed); the named methods
+  (`brownianLangevinMsdM2`, `brownianHydroMsdM2`, `brownianMemoryCorrection`, `brownianMemoryAbs`,
+  `brownianWallPerpD`, `brownianWallMsdM2`) read the wired outputs, and `memory_correction` and
+  the `memory` check stay methods because master returned `NaN` there (`rho_p ≳ 1e300`). The
+  engine's `g_std` binding is the unit table's standard gravity, the same `convertValue`
+  derivation as `G_STANDARD` (`tests/cases/unit-table-constants.test.ts` pins both equal);
+  `engine.ts` cannot import `methods.ts`, which imports the engine. `sphereSeries` keeps a
+  per-(Bi, Fo) last-value memo, so one lumped run computes the series once
+  (`sphereSeriesComputations` counts misses).
 
 ## Where things live
 

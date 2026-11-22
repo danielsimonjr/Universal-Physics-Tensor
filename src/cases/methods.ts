@@ -173,13 +173,6 @@ export function sphereEigenvalues(biRadius: number, n: number): number[] {
   return roots;
 }
 
-/**
- * θ/θ0 = (T − T∞)/(T0 − T∞) from the series solution of the sphere with a
- * convective surface, at Fourier number Fo = αt/a², for the volume mean, the
- * centre and the surface. Terms are summed until e^{−ζ²Fo} < 1e-18.
- * @throws Error when Fo is so small that the series would need over 1e5 terms.
- * @internal
- */
 let sphereSeriesMemoBi = Number.NaN;
 let sphereSeriesMemoFo = Number.NaN;
 let sphereSeriesMemo: { mean: number; centre: number; surface: number } | undefined;
@@ -195,6 +188,15 @@ export function sphereSeriesComputations(): number {
   return sphereSeriesMisses;
 }
 
+/**
+ * θ/θ0 = (T − T∞)/(T0 − T∞) from the series solution of the sphere with a
+ * convective surface, at Fourier number Fo = αt/a², for the volume mean, the
+ * centre and the surface. Terms are summed until e^{−ζ²Fo} < 1e-18. A
+ * last-value memo on (biRadius, fo) serves repeated calls within one run the
+ * same object, so the three sphere outputs compute the series once.
+ * @throws Error when Fo is so small that the series would need over 1e5 terms.
+ * @internal
+ */
 export function sphereSeries(biRadius: number, fo: number): { mean: number; centre: number; surface: number } {
   if (biRadius === sphereSeriesMemoBi && fo === sphereSeriesMemoFo && sphereSeriesMemo !== undefined) {
     return sphereSeriesMemo;
