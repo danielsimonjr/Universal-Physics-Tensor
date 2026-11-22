@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 763,
+    "totalTestFiles": 764,
     "testedCount": 382,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -12869,6 +12869,7 @@
       "tests/composition/retrodiction.test.ts",
       "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parse-cache.test.ts",
       "tests/numerical/formula.test.ts",
       "tests/numerical/one-function-table.test.ts"
     ],
@@ -16860,6 +16861,7 @@
       "tests/composition/retrodiction.test.ts",
       "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parse-cache.test.ts",
       "tests/numerical/formula.test.ts",
       "tests/numerical/one-function-table.test.ts"
     ],
@@ -30406,6 +30408,7 @@
     ],
     "tests/numerical/formula-parse-cache.test.ts": [
       "src/numerical/formula-mathts.ts",
+      "src/numerical/formula-contract.ts",
       "src/core/constants.ts"
     ],
     "tests/numerical/formula-registry.test.ts": [
@@ -30995,6 +30998,7 @@
       "src/core/regime-rule-install.ts",
       "src/core/regimes-builtins.ts"
     ],
+    "tests/tools/api-docs-deps-exports.test.ts": [],
     "tests/tools/api-surface.test.ts": [],
     "tests/tools/bench-readme.test.ts": [],
     "tests/tools/catalog-census.test.ts": [],

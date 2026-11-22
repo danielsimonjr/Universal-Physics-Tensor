@@ -1,8 +1,9 @@
 /**
  * Compiled-formula memoization in the MathTS parser (S4 of the optimization
  * plan): one `compileExpr` per unique expression text, scope never cached,
- * the cached object frozen against caller mutation, the cache bounded, and
- * error inputs never cached.
+ * the cached object frozen against caller mutation, the cache bounded,
+ * parse-time errors never cached, and an unknown-callee formula cached
+ * while `evaluate` still throws.
  *
  * Every test drives a counting spy wrapped around the real mathts-functions
  * module through `createMathtsFormulaParser`, so no module state is mutated
@@ -17,6 +18,7 @@ import {
   createMathtsFormulaParser,
   MAX_FORMULA_CACHE_ENTRIES,
 } from '../../src/numerical/formula-mathts.js';
+import { FormulaError } from '../../src/numerical/formula-contract.js';
 import { E_SI } from '../../src/core/constants.js';
 
 function countingModule() {
@@ -116,5 +118,18 @@ describe('formula parse cache', () => {
     // And a good formula after the errors still compiles and evaluates.
     expect(parser.parse('1+1').evaluate({})).toBe(2);
     expect(compileExprCalls).toEqual(['1+1']);
+  });
+
+  it('an unknown-callee formula is cached, and evaluate still throws FormulaError', () => {
+    const { mod, compileExprCalls } = countingModule();
+    const parser = createMathtsFormulaParser(mod);
+    const first = parser.parse('lnn(2)');
+    const second = parser.parse('lnn(2)');
+    expect(second).toBe(first);
+    expect(Object.isFrozen(first)).toBe(true);
+    expect(compileExprCalls).toEqual(['lnn(2)']);
+    expect(() => first.evaluate({})).toThrow(FormulaError);
+    expect(() => second.evaluate({})).toThrow(/unknown function 'lnn'/);
+    expect(compileExprCalls).toEqual(['lnn(2)']);
   });
 });
