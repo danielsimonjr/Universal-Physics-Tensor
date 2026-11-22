@@ -124,6 +124,8 @@ On a machine that has Node but not Bun, `npm install --no-package-lock` and
 - [The equation and constant catalog guide](catalog.md) — what lives in the
   bridge catalog, the canonical registry and the atlas, and how the physical
   constants are named, sourced and used in formulas.
+- [The API reference](api.md) — every public export of the package, generated
+  from the source TSDoc.
 - [`docs/CLI.md`](../CLI.md) — every command, every flag, generated from the
   registry. The reference shows a registry example for each command; that is
   independent of whether `upt help <command>` includes an `e.g.` line.
