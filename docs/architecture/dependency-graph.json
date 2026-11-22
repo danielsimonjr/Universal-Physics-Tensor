@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "16.0.0",
-    "totalFiles": 391,
+    "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2864
+    "totalExports": 2868
   },
   "entryPoints": [
     {
@@ -865,7 +865,8 @@
             "file": "../relations/composition-table.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           },
           {
             "file": "../relations/composition-table.js",
@@ -4125,7 +4126,8 @@
             "file": "../relations/regime.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           },
           {
             "file": "../relations/regime.js",
@@ -8136,9 +8138,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../bridges/evaluators.js",
+            "file": "../bridges/catalog-load.js",
             "imports": [
-              "BRIDGE_EVALUATORS"
+              "catalogEvaluators"
             ]
           }
         ],
@@ -8957,13 +8959,6 @@
             ]
           },
           {
-            "file": "../conventions.js",
-            "imports": [
-              "canonicalCheckFailed",
-              "conventionLines"
-            ]
-          },
-          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -8975,6 +8970,13 @@
             "imports": [
               "NAMED_DIMENSIONS_HELP"
             ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "*"
+            ],
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -9134,12 +9136,6 @@
             ]
           },
           {
-            "file": "../eval-numbers.js",
-            "imports": [
-              "codataScope"
-            ]
-          },
-          {
             "file": "../bindings.js",
             "imports": [
               "splitAssignments"
@@ -9164,6 +9160,13 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../eval-numbers.js",
+            "imports": [
+              "*"
+            ],
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -9448,169 +9451,197 @@
             "file": "./priority.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./audit.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./coverage.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./canonical.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./recover.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./connectors.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./predict.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./candidates.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./frontier.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./explain.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./symbolic.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./eval.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./derive.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./map.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./discover.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./confront.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./axes.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./evaluate.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./ground.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./probe.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./regime.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./path.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./atlas.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./chain.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./search.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./retrieve.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./metric.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./testplan.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           }
         ],
         "exports": []
@@ -9724,24 +9755,11 @@
             "typeOnly": true
           },
           {
-            "file": "../conventions.js",
-            "imports": [
-              "canonicalCheckFailed",
-              "conventionLines"
-            ]
-          },
-          {
             "file": "../../cli-api.js",
             "imports": [
               "UnitMode"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../map-evidence.js",
-            "imports": [
-              "withCatalogEvidence"
-            ]
           },
           {
             "file": "../library-defaults.js",
@@ -9753,7 +9771,22 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "*"
+            ],
+            "sideEffect": true
+          },
+          {
+            "file": "../map-evidence.js",
+            "imports": [
+              "*"
+            ],
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -9898,7 +9931,8 @@
             "file": "../../cli-api.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -10776,7 +10810,7 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../composition/discovery.js",
+            "file": "../composition/discovery-defaults.js",
             "imports": [
               "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
             ]
@@ -10789,14 +10823,14 @@
             ]
           },
           {
-            "file": "../composition/probe/study.js",
+            "file": "../composition/probe/types.js",
             "imports": [
               "DEFAULT_ALPHA",
               "MAX_CORRECTION_TERMS"
             ]
           },
           {
-            "file": "../dimensional/dimension-spec.js",
+            "file": "../dimensional/named-dimension-names.js",
             "imports": [
               "NAMED_DIMENSION_NAMES"
             ]
@@ -10882,13 +10916,15 @@
             "file": "../cli-api.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./commands/index.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -11495,7 +11531,8 @@
             "file": "./relations/domain-regimes.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./index.js",
@@ -14696,6 +14733,18 @@
           "dimensionAdjacency"
         ]
       },
+      "src/composition/discovery-defaults.ts": {
+        "description": "Pure leaf constants of the discovery pipeline. `src/cli/library-defaults.ts`",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
+        ],
+        "constants": [
+          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
+        ]
+      },
       "src/composition/discovery.ts": {
         "description": "Discovery loop — vet link candidates through the verification primitives",
         "externalDependencies": [
@@ -14834,12 +14883,18 @@
               "DerivedMagnitudes"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./discovery-defaults.js",
+            "imports": [
+              "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
+            ]
           }
         ],
         "exports": [
+          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE",
           "REGISTRY_ATTRIBUTES_BY_NAME",
           "ANCHOR_DEFAULT",
-          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE",
           "hasMagnitudeEvidence",
           "isPromisingTier",
           "buildDiscoveryContext",
@@ -14869,8 +14924,7 @@
         ],
         "constants": [
           "REGISTRY_ATTRIBUTES_BY_NAME",
-          "ANCHOR_DEFAULT",
-          "DEFAULT_MAX_ORDERS_OF_MAGNITUDE"
+          "ANCHOR_DEFAULT"
         ]
       },
       "src/composition/edge.ts": {
@@ -18812,6 +18866,13 @@
         ],
         "internalDependencies": [
           {
+            "file": "./types.js",
+            "imports": [
+              "DEFAULT_ALPHA",
+              "MAX_CORRECTION_TERMS"
+            ]
+          },
+          {
             "file": "../../core/mathts-read.js",
             "imports": [
               "numberFrom"
@@ -18982,10 +19043,6 @@
           "effectiveSigma",
           "runProbeStudy",
           "formatProbeStudy"
-        ],
-        "constants": [
-          "DEFAULT_ALPHA",
-          "MAX_CORRECTION_TERMS"
         ]
       },
       "src/composition/probe/t-tail.ts": {
@@ -19045,7 +19102,9 @@
           "SCHEMA_VERSION",
           "PROBE_SCHEMA_VERSION",
           "DEFAULT_SEARCH_BUDGET",
-          "DEFAULT_HOLDOUT_TOL"
+          "DEFAULT_HOLDOUT_TOL",
+          "DEFAULT_ALPHA",
+          "MAX_CORRECTION_TERMS"
         ],
         "interfaces": [
           "SearchBudget",
@@ -19078,7 +19137,9 @@
           "SCHEMA_VERSION",
           "PROBE_SCHEMA_VERSION",
           "DEFAULT_SEARCH_BUDGET",
-          "DEFAULT_HOLDOUT_TOL"
+          "DEFAULT_HOLDOUT_TOL",
+          "DEFAULT_ALPHA",
+          "MAX_CORRECTION_TERMS"
         ]
       },
       "src/composition/proposed-bridges.ts": {
@@ -19697,7 +19758,8 @@
             "file": "../dimensional/validator.js",
             "imports": [
               "*"
-            ]
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -21308,6 +21370,20 @@
               "parseFormulaPNode",
               "FormulaPNode"
             ]
+          },
+          {
+            "file": "./named-dimension-names.js",
+            "imports": [
+              "NAMED_DIMENSION_NAMES",
+              "NamedDimensionName"
+            ]
+          },
+          {
+            "file": "./named-dimension-names.js",
+            "imports": [
+              "NAMED_DIMENSION_NAMES"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -21316,6 +21392,9 @@
           "parseDimensionSpec",
           "DimensionSpecError"
         ],
+        "reExported": [
+          "NAMED_DIMENSION_NAMES"
+        ],
         "classes": [
           "DimensionSpecError"
         ],
@@ -21323,7 +21402,6 @@
           "parseDimensionSpec"
         ],
         "constants": [
-          "NAMED_DIMENSION_NAMES",
           "CONSTANT_SPELLINGS"
         ]
       },
@@ -22127,6 +22205,18 @@
           "pderiv",
           "raise",
           "lower"
+        ]
+      },
+      "src/dimensional/named-dimension-names.ts": {
+        "description": "The names of the named dimensions, as a pure leaf. `src/cli/library-defaults.ts`",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "NAMED_DIMENSION_NAMES"
+        ],
+        "constants": [
+          "NAMED_DIMENSION_NAMES"
         ]
       },
       "src/dimensional/natural-units.ts": {
@@ -23178,13 +23268,15 @@
             "file": "./core/regime-rule-install.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./core/regimes-builtins.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./atlas/public.js",
@@ -28479,6 +28571,7 @@
           "src/composition/consistency.ts",
           "src/composition/descriptor.ts",
           "src/composition/dimension-adjacency.ts",
+          "src/composition/discovery-defaults.ts",
           "src/composition/discovery.ts",
           "src/composition/edge.ts",
           "src/composition/enumerate.ts",
@@ -28602,6 +28695,7 @@
           "src/dimensional/mathts-unit-wrapper.ts",
           "src/dimensional/metric-validators.ts",
           "src/dimensional/metric.ts",
+          "src/dimensional/named-dimension-names.ts",
           "src/dimensional/natural-units.ts",
           "src/dimensional/quantity-registry.ts",
           "src/dimensional/rg-flow.ts",
@@ -28690,18 +28784,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 391,
+    "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 89760,
-    "totalExports": 2864,
+    "totalLinesOfCode": 89883,
+    "totalExports": 2868,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 939,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 423,
-    "totalReExports": 1410,
-    "totalTypeOnlyImports": 538,
+    "totalReExports": 1411,
+    "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

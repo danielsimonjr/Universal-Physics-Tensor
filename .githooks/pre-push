@@ -205,8 +205,10 @@ if ! rt_out=$("$REPO_TOOLS" check . --docs=docs/architecture 2>&1); then
   echo ""
   echo "PRE-PUSH GATE FAILED: architecture-docs claims do not match the source."
   printf '%s\n' "$rt_out" | tail -40
-  echo "Re-measure with repo-tools map and correct the Verification tables and the"
-  echo "text that restates them. Never edit a generated report to make this pass."
+  echo "Re-measure with repo-tools map . --out=<dir> (never docs/architecture; this"
+  echo "repository writes .repo-tools-map-out/) and copy the counts into the"
+  echo "Verification tables and the text that restates them. Never commit map output."
+  echo "Never edit a generated report to make this pass."
   exit 1
 fi
 

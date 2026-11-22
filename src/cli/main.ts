@@ -183,11 +183,15 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
       return 0;
     }
 
-    // Everything else needs the registered commands and the real api barrel.
+    // Everything else needs the registered commands; only the paths that
+    // EXECUTE a command need the real api barrel. `help`, `--help`, `-h`,
+    // `help <cmd>` and `<cmd> --help` return without it (S3: `upt help` must
+    // not load the MathTS function library), so `loadApi()` is called at each
+    // point of use below, not here.
     await ensureCommands();
-    const api = await loadApi();
 
     if (cmd === undefined) {
+      const api = await loadApi();
       // Byte-identical to bin/upt.mjs's `case undefined` (lines 861-865): a
       // banner line, then dispatch to the registered `explain` + `priority`
       // commands with their historical demo arguments.
@@ -250,6 +254,9 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
 
     // The parser refuses a positional past the command's declared arity (none when it
     // declares none), so a token the command would not read never reaches `run`.
+    // The api barrel loads only here: a command whose flags include `--help`
+    // returned above, so printing help never pays for it.
+    const api = await loadApi();
     const parsed = parseArgs(command.name, rest, command.flags, command.positionals);
     const ctx: CommandCtx = { args: parsed, api, out, err, write };
     return await command.run(ctx);

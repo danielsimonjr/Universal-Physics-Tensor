@@ -159,6 +159,70 @@ describe('ci.yml architecture-docs claims job', () => {
   });
 });
 
+/** A `repo-tools map` dump starts with this marker, which opts the file out of `repo-tools check`. */
+const MAP_DUMP_MARKER = '<!-- repo-map:no-verification -->';
+
+function isRepoToolsMapDump(text: string): boolean {
+  const trimmed = text.trimStart();
+  return trimmed.startsWith(MAP_DUMP_MARKER);
+}
+
+function isHandAuthoredInventory(text: string): boolean {
+  return (
+    !isRepoToolsMapDump(text) &&
+    text.includes('## The two orphans') &&
+    text.includes('## Verification') &&
+    /^\| totalSourceFiles \| \d+ \|/m.test(text)
+  );
+}
+
+function isHandAuthoredDuplicates(text: string): boolean {
+  return (
+    !isRepoToolsMapDump(text) &&
+    text.includes('## Verification') &&
+    /^\| totalExports \| \d+ \|/m.test(text) &&
+    /^\| totalReExports \| \d+ \|/m.test(text)
+  );
+}
+
+function mapOutClobbersArchitectureDocs(out: string): boolean {
+  const n = out.replace(/\\/g, '/').replace(/\/+$/, '');
+  return n === 'docs/architecture' || n.startsWith('docs/architecture/');
+}
+
+describe('architecture census documents are hand-authored, not repo-tools map dumps', () => {
+  const inventory = readFileSync(resolve(root, 'docs/architecture/FILE_INVENTORY.md'), 'utf8');
+  const duplicates = readFileSync(resolve(root, 'docs/architecture/duplicate-symbols.md'), 'utf8');
+
+  it('CONTROL: a repo-tools map dump header is rejected', () => {
+    const dump =
+      '<!-- repo-map:no-verification -->\n<!-- GENERATED FILE -- do not edit by hand.\n     Regenerate with `repo-tools map`. -->\n';
+    expect(isRepoToolsMapDump(dump)).toBe(true);
+    expect(isHandAuthoredInventory(dump)).toBe(false);
+    expect(isHandAuthoredDuplicates(dump)).toBe(false);
+    expect(mapOutClobbersArchitectureDocs('docs/architecture')).toBe(true);
+    expect(mapOutClobbersArchitectureDocs('docs/architecture/')).toBe(true);
+  });
+
+  it('FILE_INVENTORY.md is the gated census, not a map dump', () => {
+    expect(isHandAuthoredInventory(inventory)).toBe(true);
+  });
+
+  it('duplicate-symbols.md is the gated triage, not a map dump', () => {
+    expect(isHandAuthoredDuplicates(duplicates)).toBe(true);
+  });
+
+  it('repo-tools map writes outside docs/architecture', () => {
+    const cfg = JSON.parse(readFileSync(resolve(root, 'repo-tools.config.json'), 'utf8')) as {
+      map?: { out?: string };
+    };
+    expect(cfg.map?.out, 'map.out must be set so a bare `repo-tools map .` cannot clobber the census').toEqual(
+      expect.any(String),
+    );
+    expect(mapOutClobbersArchitectureDocs(cfg.map!.out!)).toBe(false);
+  });
+});
+
 describe('no workflow runs the suite through `bun run test` twice', () => {
   it('each job runs at most one suite', () => {
     for (const [name, job] of Object.entries({ ...ci.jobs, ...publish.jobs })) {

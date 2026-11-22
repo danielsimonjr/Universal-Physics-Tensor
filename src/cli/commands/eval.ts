@@ -13,7 +13,6 @@ import { emitJson } from '../output.js';
 import { CliError, UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { FormulaUsageError } from '../euler-guard.js';
-import { codataScope } from '../eval-numbers.js';
 import { splitAssignments } from '../bindings.js';
 import { primaryUnitLabel } from '../expr-print.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
@@ -149,6 +148,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new UsageError('upt eval: pick one unit mode: --natural (ħ = c = 1) or --geometrized (ħ = c = G = 1)');
   }
   const mode: UnitMode = args.flags.has('geometrized') ? 'geometrized' : args.flags.has('natural') ? 'natural' : 'si';
+  // Loaded lazily: `eval-numbers.js` reaches the constant registry and the
+  // MathTS function library, which `upt help` must not pay for (S3). Every
+  // path that prints help returns before `run()` is called.
+  const { codataScope } = await import('../eval-numbers.js');
   const parsed = parseScope(api, positionals.slice(1), mode);
   const scope = { ...codataScope(mode), ...parsed.scope };
 

@@ -36,9 +36,7 @@ import type {
   VizJunction,
   VizModel,
 } from '../../cli-api.js';
-import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { UnitMode } from '../../cli-api.js';
-import { withCatalogEvidence } from '../map-evidence.js';
 import { DISCOVER_MAX_ORDERS_DEFAULT } from '../library-defaults.js';
 
 /** `--around` reaches this many shared-quantity hops when `--depth` is not given, and at most this many when it is. */
@@ -332,7 +330,7 @@ function equationDetermination(
     asked,
     agrees: comparisons.some((c) => c.kind === 'agrees'),
     checkFailed:
-      (user.consistent === false && unresolved.length === 0) || canonicalCheckFailed(comparisons),
+      (user.consistent === false && unresolved.length === 0) || conventionsModule.canonicalCheckFailed(comparisons),
     notUnique: false,
     unresolved,
   });
@@ -341,6 +339,12 @@ function equationDetermination(
 function tainted(user: EquationAnalysis): boolean {
   return unresolvedNames(user).length > 0;
 }
+
+// The two lazily loaded modules, assigned at the top of `runReport()` before
+// any helper that reads them can run. `runReport()` is the only entry point
+// from `run()`, and it assigns both before any use.
+let conventionsModule: typeof import('../conventions.js');
+let mapEvidenceModule: typeof import('../map-evidence.js');
 
 // Print the dimensional verdict, where the equation landed, and any hints.
 // `out` is ctx.out (text mode → stdout) or ctx.err (visual → stderr).
@@ -382,7 +386,7 @@ function printEquationReport(
   for (const line of api.describeKnownRelation(comparisons, user.junction.target, [...user.junction.sources])) {
     out(`  ${line}`);
   }
-  for (const line of conventionLines(comparisons.map((c) => c.id))) out(`  ${line}`);
+  for (const line of conventionsModule.conventionLines(comparisons.map((c) => c.id))) out(`  ${line}`);
   if (user.naturalNote) out(`  ${user.naturalNote}`);
   const L = api.equationLanding(model, 'user-equation');
   if (L.isolated) {
@@ -630,6 +634,18 @@ async function run(ctx: CommandCtx): Promise<number> {
 }
 
 async function runReport(ctx: CommandCtx): Promise<number> {
+  // Loaded lazily: `conventions.js` (through the canonical registry) and
+  // `map-evidence.js` (through the bridges barrel) both reach the MathTS
+  // function library, which `upt help` must not pay for (S3). Every path that
+  // prints help returns before `run()` — and so `runReport()` — is called.
+  // The helpers below are synchronous and read these two module records, so
+  // they are held at module level once the single lazy load has resolved.
+  const [conventions, mapEvidence] = await Promise.all([
+    import('../conventions.js'),
+    import('../map-evidence.js'),
+  ]);
+  conventionsModule = conventions;
+  mapEvidenceModule = mapEvidence;
   const { args, api, out, err, write } = ctx;
   const route = lastValue(args.flags, 'route');
   const family = lastValue(args.flags, 'family');
@@ -677,7 +693,7 @@ async function runReport(ctx: CommandCtx): Promise<number> {
   // value costs nothing and always exits 1.
   const relation = parseFilter(lastValue(args.flags, 'relation'), RELATION_TYPES, '--relation');
   const evidence = parseFilter(lastValue(args.flags, 'evidence'), EVIDENCE_TAGS, '--evidence');
-  const filterOpts = withCatalogEvidence({
+  const filterOpts = mapEvidenceModule.withCatalogEvidence({
     ...(relation !== undefined ? { relation } : {}),
     ...(evidence !== undefined ? { evidence } : {}),
   });

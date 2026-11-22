@@ -75,8 +75,13 @@ export class DimensionSpecError extends Error {
  * Named dimensions — matched case-insensitively. Each is a `types.ts`
  * constant or the dimension of an SI unit read by the one unit reader; no
  * exponent tuple is typed here.
+ *
+ * The record is keyed by {@link NamedDimensionName}, so the table and the
+ * name list in `named-dimension-names.ts` cannot drift: a name missing here,
+ * an extra key here, or a name in the list this table lacks is a compile
+ * error.
  */
-const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
+const NAMED_DIMS: Readonly<Record<NamedDimensionName, Dimension>> = {
   dimensionless: DIMENSIONLESS,
   length: LENGTH,
   area: AREA,
@@ -115,8 +120,10 @@ const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
 /**
  * The names of the named dimensions, in table order. The unknown-term error and the
  * `upt derive` help read this list, so a new row appears in both without a second edit.
+ * The list lives in `named-dimension-names.ts` (pure leaf, see there).
  */
-export const NAMED_DIMENSION_NAMES: readonly string[] = Object.keys(NAMED_DIMS);
+export { NAMED_DIMENSION_NAMES } from './named-dimension-names.js';
+import { NAMED_DIMENSION_NAMES, type NamedDimensionName } from './named-dimension-names.js';
 
 /**
  * One constant's exact-case spellings, projected from the constant registry.
@@ -152,7 +159,8 @@ function resolveAtom(raw: string): Dimension | null {
   const constant = CONST_DIMS[s] ?? CONST_DIMS[s.replaceAll('_', '-')];
   if (constant) return constant;
   const key = s.toLowerCase().replace(/[\s-]+/g, '_');
-  return NAMED_DIMS[key] ?? NAMED_DIMS[s.toLowerCase()] ?? null;
+  const named = NAMED_DIMS as Readonly<Record<string, Dimension>>;
+  return named[key] ?? named[s.toLowerCase()] ?? null;
 }
 
 function baseAtom(id: string): Dimension | null {

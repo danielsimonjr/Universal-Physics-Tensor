@@ -44,10 +44,10 @@ The codebase is organized into the following modules:
 - **cases**: 7 files
 - **cli**: 59 files
 - **root**: 1 file
-- **composition**: 83 files
+- **composition**: 84 files
 - **core**: 18 files
 - **diff**: 3 files
-- **dimensional**: 45 files
+- **dimensional**: 46 files
 - **entry**: 1 file
 - **numerical**: 44 files
 - **relations**: 8 files
@@ -332,7 +332,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../relations/composition-table.js` | `*` | Import |
+| `../relations/composition-table.js` | `*` | Import (type-only) |
 | `../relations/composition-table.js` | `COMPOSITION_TABLE, composeRelation, NO_COMPOSITE_CLAIM` | Re-export |
 
 **Exports:**
@@ -1160,7 +1160,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `AtlasBridge` | Import (type-only) |
 | `./types.js` | `MissingDeltaAtError, MissingHorizonError` | Import |
-| `../relations/regime.js` | `*` | Import |
+| `../relations/regime.js` | `*` | Import (type-only) |
 | `../relations/regime.js` | `collidingRegimeGroups, deriveRegimeGroups, intersectRegimes, makeRegime, regimeOverlap, uncoveredRegions` | Re-export |
 | `../relations/regime.js` | `RegimeBearing, RegimeOverlap, RegionSample` | Re-export |
 | `../relations/regime.js` | `regimeHolds` | Re-export |
@@ -2394,7 +2394,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS` | Import |
+| `../bridges/catalog-load.js` | `catalogEvaluators` | Import |
 
 **Exports:**
 - Functions: `formatClosedFormRange`, `closedFormRangeLabel`
@@ -2649,9 +2649,9 @@ The codebase is organized into the following modules:
 | `../determination.js` | `classifyDetermination` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `FormulaUsageError` | Import |
-| `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../library-defaults.js` | `NAMED_DIMENSIONS_HELP` | Import |
+| `../conventions.js` | `*` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2693,11 +2693,11 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `FormulaUsageError` | Import |
-| `../eval-numbers.js` | `codataScope` | Import |
 | `../bindings.js` | `splitAssignments` | Import |
 | `../expr-print.js` | `primaryUnitLabel` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../eval-numbers.js` | `*` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -2837,11 +2837,11 @@ The codebase is organized into the following modules:
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `./_atlas-map.js` | `* as atlasMap` | Import |
 | `../../cli-api.js` | `BridgeEdge, CanonicalComparison, CommunityReport, DerivationCycle, EquationAnalysis, EvidenceTag, HubRank, RelationType, VizJunction, VizModel` | Import (type-only) |
-| `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../cli-api.js` | `UnitMode` | Import (type-only) |
-| `../map-evidence.js` | `withCatalogEvidence` | Import |
 | `../library-defaults.js` | `DISCOVER_MAX_ORDERS_DEFAULT` | Import |
-| `../../dimensional/types.js` | `*` | Import |
+| `../../dimensional/types.js` | `*` | Import (type-only) |
+| `../conventions.js` | `*` | Import |
+| `../map-evidence.js` | `*` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -2880,7 +2880,7 @@ The codebase is organized into the following modules:
 | `../numeric-flag.js` | `integerFlag` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
 | `./_atlas-route.js` | `explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, RouteClaim` | Import |
-| `../../cli-api.js` | `*` | Import |
+| `../../cli-api.js` | `*` | Import (type-only) |
 
 **Exports:**
 - Classes: `TranslationWithoutBoundError`
@@ -3182,10 +3182,10 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../composition/discovery.js` | `DEFAULT_MAX_ORDERS_OF_MAGNITUDE` | Import |
+| `../composition/discovery-defaults.js` | `DEFAULT_MAX_ORDERS_OF_MAGNITUDE` | Import |
 | `../composition/probe/types.js` | `DEFAULT_HOLDOUT_TOL, DEFAULT_SEARCH_BUDGET` | Import |
-| `../composition/probe/study.js` | `DEFAULT_ALPHA, MAX_CORRECTION_TERMS` | Import |
-| `../dimensional/dimension-spec.js` | `NAMED_DIMENSION_NAMES` | Import |
+| `../composition/probe/types.js` | `DEFAULT_ALPHA, MAX_CORRECTION_TERMS` | Import |
+| `../dimensional/named-dimension-names.js` | `NAMED_DIMENSION_NAMES` | Import |
 
 **Exports:**
 - Constants: `DISCOVER_MAX_ORDERS_DEFAULT`, `PROBE_BUDGET_MS_DEFAULT`, `PROBE_HOLDOUT_TOL_DEFAULT`, `PROBE_STUDY_ALPHA_DEFAULT`, `PROBE_CORRECTION_TERMS_MAX`, `NAMED_DIMENSIONS_HELP`
@@ -4096,6 +4096,13 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/discovery-defaults.ts` - Pure leaf constants of the discovery pipeline. `src/cli/library-defaults.ts`
+
+**Exports:**
+- Constants: `DEFAULT_MAX_ORDERS_OF_MAGNITUDE`
+
+---
+
 ### `src/composition/discovery.ts` - Discovery loop — vet link candidates through the verification primitives
 
 **External Dependencies:**
@@ -4125,6 +4132,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `format` | Import |
 | `./own-equation-magnitude.js` | `deriveOwnEquationMagnitudes` | Import |
 | `./own-equation-magnitude.js` | `DerivedMagnitudes` | Import (type-only) |
+| `./discovery-defaults.js` | `DEFAULT_MAX_ORDERS_OF_MAGNITUDE` | Import |
 
 **Exports:**
 - Interfaces: `VettedCandidate`, `DiscoveryOptions`, `DiscoveryContext`, `MagnitudeGate`
@@ -4135,7 +4143,7 @@ The codebase is organized into the following modules:
   magnitudeGate, vetLinkCandidate, vetInContext, rankDiscoveries
   ```
 
-- Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`, `DEFAULT_MAX_ORDERS_OF_MAGNITUDE`
+- Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`
 
 ---
 
@@ -5121,6 +5129,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `./types.js` | `DEFAULT_ALPHA, MAX_CORRECTION_TERMS` | Import |
 | `../../core/mathts-read.js` | `numberFrom` | Import |
 | `../../core/data-file.js` | `readJsonFile` | Import |
 | `../../core/json-schema.js` | `isPlainObject` | Import |
@@ -5159,7 +5168,6 @@ The codebase is organized into the following modules:
   formatProbeStudy
   ```
 
-- Constants: `DEFAULT_ALPHA`, `MAX_CORRECTION_TERMS`
 
 ---
 
@@ -5201,7 +5209,7 @@ The codebase is organized into the following modules:
   ScoreVector, EvidenceAssessment, EvidenceProfile
   ```
 
-- Constants: `SCHEMA_VERSION`, `PROBE_SCHEMA_VERSION`, `DEFAULT_SEARCH_BUDGET`, `DEFAULT_HOLDOUT_TOL`
+- Constants: `SCHEMA_VERSION`, `PROBE_SCHEMA_VERSION`, `DEFAULT_SEARCH_BUDGET`, `DEFAULT_HOLDOUT_TOL`, `DEFAULT_ALPHA`, `MAX_CORRECTION_TERMS`
 
 ---
 
@@ -5385,7 +5393,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../dimensional/dimension-inference.js` | `inferUnknownDimension` | Import |
 | `../dimensional/hyphen-names.js` | `rewriteCatalogHyphens` | Import |
-| `../dimensional/validator.js` | `*` | Import |
+| `../dimensional/validator.js` | `*` | Import (type-only) |
 
 **Exports:**
 - Classes: `UserEquationError`
@@ -5923,11 +5931,14 @@ The codebase is organized into the following modules:
 | `./symbolic-constants.js` | `CONSTANT_REGISTRY` | Import |
 | `./units.js` | `unitDimension` | Import |
 | `../numerical/formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
+| `./named-dimension-names.js` | `NAMED_DIMENSION_NAMES, NamedDimensionName` | Import |
+| `./named-dimension-names.js` | `NAMED_DIMENSION_NAMES` | Re-export |
 
 **Exports:**
 - Classes: `DimensionSpecError`
 - Functions: `parseDimensionSpec`
-- Constants: `NAMED_DIMENSION_NAMES`, `CONSTANT_SPELLINGS`
+- Constants: `CONSTANT_SPELLINGS`
+- Re-exports: `NAMED_DIMENSION_NAMES`
 
 ---
 
@@ -6200,6 +6211,13 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `metric`, `kronecker`, `pderiv`, `raise`, `lower`
+
+---
+
+### `src/dimensional/named-dimension-names.ts` - The names of the named dimensions, as a pure leaf. `src/cli/library-defaults.ts`
+
+**Exports:**
+- Constants: `NAMED_DIMENSION_NAMES`
 
 ---
 
@@ -7750,7 +7768,7 @@ graph TD
         N33[aliases]
         N34[audit-coverage]
         N35[axes]
-        N36[...78 more]
+        N36[...79 more]
     end
 
     subgraph Core
@@ -7774,7 +7792,7 @@ graph TD
         N48[ast-leaves]
         N49[ast-types]
         N50[bridge-check]
-        N51[...40 more]
+        N51[...41 more]
     end
 
     subgraph Entry
@@ -7837,17 +7855,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 391 |
+| Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89760 |
-| Total Exports | 2864 |
-| Total Re-exports | 1410 |
+| Total Lines of Code | 89883 |
+| Total Exports | 2868 |
+| Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 939 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 538 |
+| Type-only Imports | 543 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

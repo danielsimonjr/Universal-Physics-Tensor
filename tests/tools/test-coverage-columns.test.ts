@@ -131,9 +131,23 @@ describe('the committed TEST_COVERAGE.md is the two-column form', () => {
     expect(direct).toBeGreaterThan(0);
   });
 
-  it('traced edges stay at or above the master count, and explain.ts is credited to the CLI suite', () => {
+  it('traced edges stay at or above the S3 corrected count, and explain.ts is credited to the CLI suite', () => {
     const tracedEdges = Object.values(coverageJson.coverageMap).reduce((n, testers) => n + testers.length, 0);
-    expect(tracedEdges).toBeGreaterThanOrEqual(11856);
+    // 12475 is the traced-edge count after S3, with type queries recorded as
+    // typeOnly only in TYPE position. Master's 12211 included three genuine
+    // type-query credits (`map.ts` → `dimensional/types.js`, `path.ts` →
+    // `cli-api.js`, `user-equation.ts` → `dimensional/validator.js`) that are
+    // not runtime loads: types.ts 305→203 (−102) and validator.ts 129→122
+    // (−7), total −109, honest master baseline 12102. The S3 source tree with
+    // the corrected classifier is 12473 (262 above master) because
+    // `conventions.ts` / `eval-numbers.ts` / `map-evidence.ts` are reached
+    // through real `await import()` edges (120 / 120 / 130 testers) and
+    // `main.ts` → `commands/index.js` stays a runtime `.then(` load. This
+    // tree is 12475: +2 testers from `closed-form-range.test.ts` importing
+    // `catalog-load.ts` and `evaluators.ts` to pin id equality. An earlier
+    // classifier treated `.then(` as a type query and collapsed the registry
+    // to 8785; that count is not a floor.
+    expect(tracedEdges).toBeGreaterThanOrEqual(12475);
     const explain = coverageJson.coverageMap['src/cli/commands/explain.ts'];
     expect(explain).toBeDefined();
     expect(explain.length).toBeGreaterThan(100);

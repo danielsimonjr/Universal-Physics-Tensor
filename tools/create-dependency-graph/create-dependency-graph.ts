@@ -714,16 +714,28 @@ function parseFile(filePath: string, isTestFile: boolean = false): ParsedFile {
   // file's `await import('./commands/index.js')` and dropped thousands of
   // traced test→source edges. A specifier already recorded (a static
   // `import` / `import type` of the same path) is not upgraded.
+  // A TS type query — `import('…').TypeName` in a TYPE position (`type X =
+  // import('…').T`, `: import('…').T`, `<import('…').T>`) — loads nothing at
+  // runtime: it is erased at emit. Record it `typeOnly` (never `sideEffect`).
+  // A runtime use, including `import('./commands/index.js').then(...)` in
+  // `src/cli/main.ts`, is a real load. TypeScript 7 ships no compiler API
+  // (`MEMORY.md`), so this is decided from the text after `)`: `.Ident(` is
+  // a call (runtime); `.Ident` not followed by `(` is the type-query form; no
+  // member is a real load. An earlier classifier treated any `.Member` as a
+  // type query and collapsed the command-registry credits.
   const dynamicImportRegex = /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
   while ((match = dynamicImportRegex.exec(content)) !== null) {
     const source = match[1];
+    const after = content.slice(match.index + match[0].length);
+    const memberMatch = after.match(/^\s*\.\s*([A-Za-z_$][\w$]*)\s*(\()?/);
+    const typeQuery = memberMatch !== null && memberMatch[2] !== '(';
     if (source.startsWith('.')) {
       const alreadyTracked = result.internalDependencies.some(d => d.file === source);
       if (!alreadyTracked) {
         result.internalDependencies.push({
           file: source,
           imports: ['*'],
-          sideEffect: true,
+          ...(typeQuery ? { typeOnly: true } : { sideEffect: true }),
         });
       }
     }
@@ -1365,7 +1377,8 @@ function generateJSON(files: ParsedFile[], modules: ModuleMap, stats: Statistics
           file: d.file,
           imports: d.imports,
           ...(d.reExport ? { reExport: true } : {}),
-          ...(d.typeOnly ? { typeOnly: true } : {})
+          ...(d.typeOnly ? { typeOnly: true } : {}),
+          ...(d.sideEffect ? { sideEffect: true } : {}),
         })),
         exports: file.exports.named,
         reExported: file.exports.reExported.length > 0 ? file.exports.reExported : undefined,
