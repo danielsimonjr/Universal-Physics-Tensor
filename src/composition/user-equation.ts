@@ -21,7 +21,7 @@
 
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
-import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
+import { rewriteConstantSpellings } from '../dimensional/constant-rows.js';
 import { CONSTANTS, isRegisteredConstant } from '../dimensional/symbolic-constants.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
@@ -112,19 +112,11 @@ export function hyphenSubtractHint(
 
 /**
  * Spellings that must not be a bare `e`. Constant aliases come from
- * {@link CONSTANT_SPELLINGS}. `1-eccentricity^2` is the perihelion factor
+ * {@link rewriteConstantSpellings}. `1-eccentricity^2` is the perihelion factor
  * `one_minus_e_sq`.
  */
 function rewriteFormulaSpellings(text: string): string {
-  let out = text;
-  for (const { names } of CONSTANT_SPELLINGS) {
-    const canonical = names[0]!;
-    for (const alias of names.slice(1)) {
-      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(alias)) continue;
-      out = out.replace(new RegExp(`(?<![A-Za-z0-9_])${alias}(?![A-Za-z0-9_])`, 'g'), canonical);
-    }
-  }
-  return out.replace(
+  return rewriteConstantSpellings(text).replace(
     /(?<![A-Za-z0-9_])1\s*-\s*eccentricity\s*(?:\^|\*\*)\s*2(?![A-Za-z0-9_])/g,
     'one_minus_e_sq',
   );

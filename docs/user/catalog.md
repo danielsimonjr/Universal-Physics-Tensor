@@ -265,8 +265,13 @@ thing (`euler is not Euler's number. Write it as exp(x), for example exp(1). A
 bare e is the elementary charge. E is energy.`). The same rule holds inside
 bindings: a bare `e` in `e=<number>` is the elementary charge, and an explicit
 `e=<number>` binding replaces the CODATA value. `E` is energy and is its own
-binding argument (`upt eval E E=1eV`); `e_charge` is an explicit alias for the
-charge.
+binding argument (`upt eval E E=1eV`). `e_charge` is the same charge as `e`: a
+binding of one spelling fans out to the other, two spellings that disagree are
+refused, and a formula that writes both names is twice that charge, so
+`upt eval "e + e_charge" e_charge=3C` prints `6 C`, not `3 C`. MathTS
+`{ physics: true }` would otherwise treat bare `e` as Euler's number beside an
+independent `e_charge` symbol, dropping the `e` term in float64; the compiled
+formula rewrites the alias to the canonical name so both terms are the charge.
 
 **`hbar` is the exact quotient, not the truncated display value.**
 `HBAR_SI` is computed as `H_SI / (2π)`, both factors exact in the 2019 SI. The

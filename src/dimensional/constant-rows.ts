@@ -183,3 +183,31 @@ for (const constant of CONSTANT_ROWS) {
 export function constantRow(spelling: string): ConstantRow | undefined {
   return BY_SPELLING.get(spelling);
 }
+
+const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+/**
+ * Rewrite every identifier alias of a registered constant to the row's
+ * formula name (`e_charge` → `e`, `kB` → `k_B`). Hyphenated and non-identifier
+ * spellings stay. Longer aliases are replaced first so `electron_mass` is not
+ * eaten as `m_e` plus leftover text.
+ *
+ * MathTS `{ physics: true }` reads bare `e` as Euler's number and does not
+ * treat `e_charge` as the same charge, so a formula that writes both names
+ * must compile as one symbol.
+ * @internal
+ */
+export function rewriteConstantSpellings(text: string): string {
+  const aliases: { alias: string; canonical: string }[] = [];
+  for (const row of CONSTANT_ROWS) {
+    for (const spelling of row.spellings) {
+      if (IDENTIFIER.test(spelling)) aliases.push({ alias: spelling, canonical: row.name });
+    }
+  }
+  aliases.sort((a, b) => b.alias.length - a.alias.length);
+  let out = text;
+  for (const { alias, canonical } of aliases) {
+    out = out.replace(new RegExp(`(?<![A-Za-z0-9_])${alias}(?![A-Za-z0-9_])`, 'g'), canonical);
+  }
+  return out;
+}

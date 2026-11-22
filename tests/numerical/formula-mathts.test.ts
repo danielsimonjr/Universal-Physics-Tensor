@@ -7,8 +7,12 @@
  * parser too; Euler's number is `exp(1)`. The name `euler` is refused.
  */
 import { describe, it, expect } from 'vitest';
+import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { E_SI } from '../../src/core/constants.js';
-import { mathtsFormulaParser as parser } from '../../src/numerical/formula-mathts.js';
+import {
+  createMathtsFormulaParser,
+  mathtsFormulaParser as parser,
+} from '../../src/numerical/formula-mathts.js';
 
 describe('formula-mathts', () => {
   it('reads bare e as a constant and leaves the other factor free', () => {
@@ -104,5 +108,25 @@ describe('formula-mathts', () => {
     const { FormulaError } = await import('../../src/numerical/formula-contract.js');
     // 'q' is never supplied in scope — MathTS throws inside node.evaluate().
     expect(() => parser.parse('q + 1').evaluate({})).toThrow(FormulaError);
+  });
+
+  it('e_charge is rewritten to e before compileExpr so physics mode does not drop the charge term', () => {
+    const compileExprCalls: string[] = [];
+    const parserWithSpy = createMathtsFormulaParser({
+      parse: (expr) => parseMathTs(expr) as never,
+      compileExpr: (expr, opts) => {
+        compileExprCalls.push(expr);
+        return compileExpr(expr, opts);
+      },
+    });
+    const formula = parserWithSpy.parse('e + e_charge');
+    expect(compileExprCalls).toEqual(['e + e']);
+    expect(formula.evaluate({ e: 3, e_charge: 3 })).toBe(6);
+    // CONTROL: MathTS physics mode with the unre-written text and e=E_SI
+    // loses the 1.6e-19 term in float64, so the sum is 3.
+    const collided = compileExpr('e + e_charge', { physics: true }).evaluate({ e: E_SI, e_charge: 3 });
+    expect(Number(collided)).toBe(3);
+    expect(formula.evaluate({ e: E_SI, e_charge: 3 })).toBeCloseTo(2 * E_SI, 15);
+    expect(formula.evaluate({ e: E_SI, e_charge: 3 })).not.toBe(Number(collided));
   });
 });

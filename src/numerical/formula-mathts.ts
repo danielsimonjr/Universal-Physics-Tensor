@@ -20,6 +20,7 @@
 
 import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { E_SI } from '../core/constants.js';
+import { rewriteConstantSpellings } from '../dimensional/constant-rows.js';
 import type { CompiledFormula, FormulaParser } from './formula-contract.js';
 import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError } from './formula-contract.js';
 
@@ -159,7 +160,10 @@ export function createMathtsFormulaParser(
 
       // `compileExpr` applies `{ physics: true }` on each evaluation. Bare `e` is the SI
       // magnitude through the `e: E_SI` default below, and a scope entry for `e` wins.
-      const compiled = mod.compileExpr(expr, PHYSICS);
+      // Aliases (`e_charge`) compile as the canonical name so physics mode cannot
+      // treat `e` as Euler's number beside an independent `e_charge` symbol: the
+      // unre-written `e + e_charge` with `e=E_SI` and `e_charge=3` sums to 3 in float64.
+      const compiled = mod.compileExpr(rewriteConstantSpellings(expr), PHYSICS);
       const formula: CompiledFormula = Object.freeze({
         source: expr,
         variables: Object.freeze(variables),
