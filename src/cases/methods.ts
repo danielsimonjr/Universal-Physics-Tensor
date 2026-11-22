@@ -117,11 +117,14 @@ const LUMPED_COOLING_ID = 'case-lumped-cooling';
 /** The Stefan–Boltzmann constant (W m⁻² K⁻⁴) is `core/constants`'s; re-exported so the record's module-export table keeps its row. @internal */
 export { SIGMA_SB_SI } from '../core/constants.js';
 
-/** Bi = h L_c/k ceiling, L_c = V/A (Incropera §5.2, eq. 5.10). @internal */
-export const MAX_BIOT = 0.1;
+function lumpedCatalogBiotBound(): number {
+  const bound = appliedCaseRecord(LUMPED_COOLING_ID).checks.find((c) => c.id === 'lumped')?.bound;
+  if (typeof bound !== 'number') throw new Error(`${LUMPED_COOLING_ID}: lumped check is missing a bound`);
+  return bound;
+}
 
-/** h_rad,max/h ceiling for a loss linear in T − T∞. @internal */
-export const MAX_RADIATION_RATIO = 0.1;
+/** Bi = h L_c/k ceiling, L_c = V/A: the catalog `lumped` check bound (Incropera §5.2). @internal */
+export const MAX_BIOT = lumpedCatalogBiotBound();
 
 
 /**
@@ -196,60 +199,113 @@ export function sphereSeries(biRadius: number, fo: number): { mean: number; cent
   return { mean, centre, surface };
 }
 /**
- * Evaluate the lumped thermal cooling applied case at the given SI inputs.
+ * Q = ρcV(T0 − T(t)) = ρcV(T0 − T∞)(1 − e^{−t/τ}), computed with
+ * `-Math.expm1(-t / tau)` so small t/τ keeps its accuracy (`expm1` is not in
+ * the catalog expression grammar, so this stays a named method).
  * @internal
  */
-export function runCaseLumpedCooling(i: Readonly<Record<string, number>>): CaseResult {
-    requirePositive(LUMPED_COOLING_ID, i, ['a_m', 'rho_kg_per_m3', 'c_J_per_kg_K', 'k_W_per_m_K', 'h_W_per_m2_K', 'T0_K', 'T_inf_K']);
-    const {
-      a_m: a, rho_kg_per_m3: rho, c_J_per_kg_K: c, k_W_per_m_K: k, h_W_per_m2_K: h,
-      emissivity: eps, T0_K: T0, T_inf_K: Tinf, t_s: t,
-    } = i as Record<string, number>;
-    if (!Number.isFinite(eps) || eps < 0 || eps > 1) throw new Error(`${LUMPED_COOLING_ID}: emissivity must be in [0, 1] (got ${eps})`);
-    if (!Number.isFinite(t) || t < 0) throw new Error(`${LUMPED_COOLING_ID}: t_s must be a finite number ≥ 0 (got ${t})`);
-    const tau = (rho * c * a) / (3 * h);
-    const bi = (h * (a / 3)) / k;
-    const biRadius = (h * a) / k;
-    const alpha = k / (rho * c);
-    const fo = (alpha * t) / (a * a);
-    const theta = Math.exp(-t / tau);
-    const series = sphereSeries(biRadius, fo);
-    const dT0 = T0 - Tinf;
-    const Tmax = Math.max(T0, Tinf);
-    const hRad = eps * SIGMA_SB_SI * (Tmax + Tinf) * (Tmax * Tmax + Tinf * Tinf);
-    const volume = (4 / 3) * Math.PI * a ** 3;
-    const biRadiating = ((h + hRad) * (a / 3)) / k;
-    const tRadiating = biRadiating <= MAX_BIOT ? lumpedRadiatingTemperature({ a, rho, c, h, eps, T0, Tinf, t }) : null;
-    return {
-      outputs: {
-        tau_s: tau,
-        Bi: bi,
-        Bi_radius: biRadius,
-        alpha_m2_per_s: alpha,
-        Fo: fo,
-        theta,
-        T_K: Tinf + dT0 * theta,
-        Q_J: rho * c * volume * dT0 * -Math.expm1(-t / tau),
-        theta_parent_mean: series.mean,
-        parent_deviation: theta / series.mean - 1,
-        T_centre_K: Tinf + dT0 * series.centre,
-        T_surface_K: Tinf + dT0 * series.surface,
-        h_rad_max_W_per_m2_K: hRad,
-        Bi_radiating: biRadiating,
-        T_radiating_K: tRadiating,
-      },
-      checks: [
-        check('lumped', 'one temperature for the sphere: internal conduction fast beside surface loss, Bi ≪ 1', 'h (a/3)/k', bi, '<=', MAX_BIOT,
-          'the conventional criterion Bi ≤ 0.1 with L_c = V/A (Incropera §5.2); parent_deviation shows the error it leaves at t'),
-        check('linear-loss', 'the loss is linear in T − T∞: radiation small beside convection', 'εσ_SB(T_max + T∞)(T_max² + T∞²)/h', hRad / h, '<=', MAX_RADIATION_RATIO,
-          'chosen threshold: the neglected radiative conductance is ≤ 10% of h at the hottest point of the run (Incropera eq. 1.9 linearization)'),
-      ],
-      unchecked: [
-        'h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞',
-        'ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]',
-      ],
-    };
-  
+export function lumpedCoolingQJ(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const tau = outputs.tau_s;
+  if (typeof tau !== 'number') throw new Error('lumpedCoolingQJ: need tau_s');
+  const a = inputs.a_m!;
+  const rho = inputs.rho_kg_per_m3!;
+  const c = inputs.c_J_per_kg_K!;
+  const dT0 = inputs.T0_K! - inputs.T_inf_K!;
+  const volume = (4 / 3) * Math.PI * a ** 3;
+  return rho * c * volume * dT0 * -Math.expm1(-inputs.t_s! / tau);
+}
+
+function requireFiniteOutput(
+  outputs: Readonly<Record<string, number | null>>,
+  key: string,
+  method: string,
+): number {
+  const value = outputs[key];
+  if (value === null || value === undefined || !Number.isFinite(value)) {
+    throw new Error(`${method}: need finite ${key}`);
+  }
+  return value;
+}
+
+function lumpedSphereSeriesFromOutputs(
+  outputs: Readonly<Record<string, number | null>>,
+  method: string,
+): { mean: number; centre: number; surface: number } {
+  return sphereSeries(requireFiniteOutput(outputs, 'Bi_radius', method), requireFiniteOutput(outputs, 'Fo', method));
+}
+
+/** Volume-mean excess-temperature ratio of the series solution (convection only). @internal */
+export function lumpedSphereMeanK(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  return lumpedSphereSeriesFromOutputs(outputs, 'lumpedSphereMeanK').mean;
+}
+
+/** Centre temperature T(0, t) from the series solution. @internal */
+export function lumpedSphereCentreK(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const series = lumpedSphereSeriesFromOutputs(outputs, 'lumpedSphereCentreK');
+  return inputs.T_inf_K! + (inputs.T0_K! - inputs.T_inf_K!) * series.centre;
+}
+
+/** Surface temperature T(a, t) from the series solution. @internal */
+export function lumpedSphereSurfaceK(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const series = lumpedSphereSeriesFromOutputs(outputs, 'lumpedSphereSurfaceK');
+  return inputs.T_inf_K! + (inputs.T0_K! - inputs.T_inf_K!) * series.surface;
+}
+
+/**
+ * θ/θ̄ − 1, the signed relative difference of the lumped ratio against the
+ * parent's volume mean. A named method rather than a catalog `expr` because
+ * at t/τ ≳ 745 both θ and the series mean underflow to 0 and the quotient is
+ * 0/0: the deleted JS runner handed the caller `NaN` there, and the expr
+ * path's non-finite guard would throw instead (see NOTES.md).
+ * @internal
+ */
+export function lumpedParentDeviation(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const theta = outputs.theta;
+  const mean = outputs.theta_parent_mean;
+  if (theta === null || mean === null || theta === undefined || mean === undefined) {
+    throw new Error('lumpedParentDeviation: need finite theta and theta_parent_mean');
+  }
+  return theta / mean - 1;
+}
+
+/**
+ * The lumped temperature with the T⁴ loss kept (`lumpedRadiatingTemperature`,
+ * RK4), or `null` where the linear-loss premise does not reach. Master's
+ * runner gated `Bi_radiating <= MAX_BIOT`; `NaN <= bound` is false, so NaN
+ * (and non-finite) yields `null`, not a number.
+ * @internal
+ */
+export function lumpedRadiatingTempK(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number | null {
+  const biRadiating = outputs.Bi_radiating;
+  if (typeof biRadiating !== 'number' || !Number.isFinite(biRadiating) || biRadiating > MAX_BIOT) return null;
+  return lumpedRadiatingTemperature({
+    a: inputs.a_m!,
+    rho: inputs.rho_kg_per_m3!,
+    c: inputs.c_J_per_kg_K!,
+    h: inputs.h_W_per_m2_K!,
+    eps: inputs.emissivity!,
+    T0: inputs.T0_K!,
+    Tinf: inputs.T_inf_K!,
+    t: inputs.t_s!,
+  });
 }
 
 // --- brownian-sphere.ts ---
@@ -475,7 +531,6 @@ export function runCaseBrownianSphere(i: Readonly<Record<string, number>>): Case
 }
 
 const RUN_BY_ID: Readonly<Record<string, (i: Readonly<Record<string, number>>) => CaseResult>> = {
-  'case-lumped-cooling': runCaseLumpedCooling,
   'case-brownian-sphere': runCaseBrownianSphere,
 };
 
@@ -509,7 +564,12 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'brennerPerpendicular',
   'brownianSphereRegimeAt',
   'resistorParentVrmsV',
-  'runCaseLumpedCooling',
+  'lumpedCoolingQJ',
+  'lumpedParentDeviation',
+  'lumpedSphereMeanK',
+  'lumpedSphereCentreK',
+  'lumpedSphereSurfaceK',
+  'lumpedRadiatingTempK',
   'runCaseBrownianSphere',
 ]);
 
@@ -528,7 +588,12 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   brennerPerpendicular,
   brownianSphereRegimeAt,
   resistorParentVrmsV,
-  runCaseLumpedCooling,
+  lumpedCoolingQJ,
+  lumpedParentDeviation,
+  lumpedSphereMeanK,
+  lumpedSphereCentreK,
+  lumpedSphereSurfaceK,
+  lumpedRadiatingTempK,
   runCaseBrownianSphere,
 };
 

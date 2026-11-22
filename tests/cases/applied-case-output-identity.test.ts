@@ -1,10 +1,18 @@
 /**
- * Falsifiable identity harness for `case-resistor-noise` on the catalog engine
- * (PR #816 F6). `upt audit` walks the bridge graph and never reads applied
- * cases, so audit stdout cannot evidence this migration. This file pins the
- * engine's outputs, checks and unchecked strings on the catalog valid example
- * and the quantum failure example against a committed golden; mutating the
- * `S_V` prefactor (`4` → `5`) fails the golden.
+ * Falsifiable identity harness for `case-resistor-noise` (PR #816 F6) and
+ * `case-lumped-cooling` (S7) on the catalog engine. `upt audit` walks the
+ * bridge graph and never reads applied cases, so audit stdout cannot evidence
+ * these migrations. Each case pins the engine's outputs, checks and unchecked
+ * strings on a grid of catalog inputs against a committed golden generated
+ * from the deleted JS runner; mutating a wired `expr` fails the golden.
+ * Numbers use `expectPinNumber` (1e-12 relative; 1e-15 absolute floor only
+ * for true zeros). `parent_deviation` is a cancellation residual of two
+ * near-1 numbers (θ/θ̄ − 1, or V_rms/V_parent − 1): a last ulp of the
+ * ratio is ~1e-16 absolute, which is ~1e-11 relative at |r| ~ 1e-5, so
+ * 1e-12 relative cannot hold. That key uses mixed 1e-12 relative with a
+ * 1e-15 absolute floor — not the 1e-14 window the lumped harness had
+ * copied from S6. Resistor-noise's engine-test pin against hand quadrature
+ * stays 1e-14 in `applied-case-engine.test.ts` (`absolutePins`).
  */
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
@@ -17,8 +25,10 @@ import type { CaseResult } from '../../src/cases/types.js';
 
 const require = createRequire(import.meta.url);
 const golden = require('./golden/case-resistor-noise.identity.json') as IdentityGolden;
+const lumpedGolden = require('./golden/case-lumped-cooling.identity.json') as Record<string, IdentitySnapshot>;
 const schema = dataSchema('applied-cases.json');
 const ID = 'case-resistor-noise';
+const LUMPED_ID = 'case-lumped-cooling';
 
 interface IdentitySnapshot {
   outputs: Record<string, number | null>;
@@ -56,6 +66,11 @@ function expectPinNumber(got: number, expected: number, label: string): void {
   expect(Math.abs(got / expected - 1), label).toBeLessThan(1e-12);
 }
 
+/** 1e-12 relative, 1e-15 absolute floor: a cancellation residual of two near-1 numbers. */
+function expectPinResidual(got: number, expected: number, label: string): void {
+  expect(Math.abs(got - expected), label).toBeLessThanOrEqual(Math.max(1e-15, 1e-12 * Math.abs(expected)));
+}
+
 function assertIdentity(got: CaseResult, expected: IdentitySnapshot, label: string): void {
   const live = snapshot(got);
   expect(Object.keys(live.outputs), `${label} output keys`).toEqual(Object.keys(expected.outputs));
@@ -67,7 +82,7 @@ function assertIdentity(got: CaseResult, expected: IdentitySnapshot, label: stri
     }
     expect(gotValue, `${label}.${key}`).not.toBeNull();
     if (key === 'parent_deviation') {
-      expect(Math.abs((gotValue as number) - value), `${label}.${key}`).toBeLessThan(1e-14);
+      expectPinResidual(gotValue as number, value, `${label}.${key}`);
     } else {
       expectPinNumber(gotValue as number, value, `${label}.${key}`);
     }
@@ -103,5 +118,47 @@ describe('case-resistor-noise output identity (not audit)', () => {
     const inputs = resolveEvaluatorInputs(APPLIED_CASES.get(ID)!.parameters, [...examples.valid.args]).inputs;
     const got = runAppliedCaseEngine(record, inputs);
     expect(() => assertIdentity(got, golden.valid, 'mutated')).toThrow(/to be less (or equal )?than/);
+  });
+});
+
+describe('case-lumped-cooling output identity (S7)', () => {
+  // The grid the committed golden was generated from master's
+  // runCaseLumpedCooling over: small and large t/tau (including t_s = 0),
+  // Bi above and below 0.1, emissivity 0/0.05/0.8/1, T0 above and below
+  // T_inf. Every value is finite (JSON cannot carry Infinity).
+  const base = {
+    a_m: 5e-3, rho_kg_per_m3: 8933, c_J_per_kg_K: 385, k_W_per_m_K: 401, h_W_per_m2_K: 20,
+    emissivity: 0.05, T0_K: 373.15, T_inf_K: 293.15, t_s: 300,
+  };
+  const grid: Record<string, Record<string, number>> = {
+    valid: { ...base },
+    tZero: { ...base, t_s: 0 },
+    largeT: { ...base, t_s: 2866 },
+    warming: { ...base, T0_K: 293.15, T_inf_K: 373.15, t_s: 286.6 },
+    biAbove: { a_m: 5e-2, rho_kg_per_m3: 7854, c_J_per_kg_K: 434, k_W_per_m_K: 60.5, h_W_per_m2_K: 1000, emissivity: 0, T0_K: 363.15, T_inf_K: 293.15, t_s: 600 },
+    biMid: { a_m: 5e-2, rho_kg_per_m3: 7854, c_J_per_kg_K: 434, k_W_per_m_K: 60.5, h_W_per_m2_K: 100, emissivity: 0, T0_K: 363.15, T_inf_K: 293.15, t_s: 600 },
+    emissivityOne: { ...base, emissivity: 1, T0_K: 1000, T_inf_K: 300, t_s: 60 },
+    hotSteel: { a_m: 5e-3, rho_kg_per_m3: 7854, c_J_per_kg_K: 434, k_W_per_m_K: 60.5, h_W_per_m2_K: 10, emissivity: 0.8, T0_K: 1000, T_inf_K: 300, t_s: 60 },
+  };
+
+  for (const [name, inputs] of Object.entries(grid)) {
+    it(`the ${name} grid point matches the committed golden`, () => {
+      assertIdentity(runAppliedCaseEngine(appliedCaseRecord(LUMPED_ID), inputs), lumpedGolden[name]!, name);
+    });
+  }
+
+  it('CONTROL: mutating the tau_s prefactor (3 → 4, a coefficient change) fails every golden point', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(3*h_W_per_m2_K)"',
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(4*h_W_per_m2_K)"',
+    );
+    expect(mutated, 'the tau_s expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === LUMPED_ID)!;
+    for (const [name, inputs] of Object.entries(grid)) {
+      const got = runAppliedCaseEngine(record, inputs);
+      expect(() => assertIdentity(got, lumpedGolden[name]!, `mutated ${name}`)).toThrow(/to be less (or equal )?than/);
+    }
   });
 });

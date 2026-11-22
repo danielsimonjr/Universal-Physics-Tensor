@@ -9,9 +9,22 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-22 (PR #817 review — S7 lumped-cooling F1–F9 / R1–R2)
+
+- **`h_rad_max` is a catalog `expr`.** 1-arg `abs` is in the grammar; `max(x,y)=(x+y+|x−y|)/2` is bit-equal to `Math.max` on the 8-point golden. `lumpedRadiativeConductance` is removed. The S7 claim that 2-arg `max` is "not in the grammar" (necessity) is retracted in CHANGELOG.
+- **One source of truth for derived fields.** Sphere methods read `outputs.Fo` / `outputs.Bi_radius`; `lumpedCoolingQJ` reads `outputs.tau_s`. Mutating those exprs moves the series / Q and θ together. Small-t `Q_J` at `t_s=1e-12` pins `-Math.expm1(-t/τ)` at 1e-12 relative; `(1-exp)` fails that pin.
+- **`mergeBindings` binds non-finite numeric intermediates** (null stays unbound). `evalCheck` passes `{ allowInfinity: true }`. Master parity, recorded from `runCaseLumpedCooling` at origin/master `dea93eee`: `T0_K=1e200` → `h_rad=Infinity`, `Bi_radiating=Infinity`, `linear-loss.value=Infinity` `holds: false`, no throw; `h=1e-310` → `tau_s=Infinity`, `theta=1`, `Q_J=0`, series/parent_deviation/centre/surface NaN, `linear-loss.value=Infinity` `holds: false`, `T_radiating_K=371.39598398588487`. Ordinary output `expr`s still throw on NaN.
+- **`parent_deviation` NaN at t/τ≈746** is pinned (no throw); wiring it as `expr` `theta/theta_parent_mean - 1` throws `/got NaN/`. `T_radiating_K` is null when `Bi_radiating` is NaN. `MAX_BIOT` is the catalog `lumped` check bound.
+- **Identity `parent_deviation`:** mixed 1e-12 relative / 1e-15 absolute floor (cancellation residual of two near-1 numbers). Not the 1e-14 window copied from S6. Bit-for-bit language is the 8-point golden grid (JSON cannot carry Infinity).
+- **Counts.** Original S7 RED was **14** new tests (5 engine + 9 identity), not 13. This review adds 10 engine tests. `bunx vitest run tests/cases` is 216 passed. repo-tools map unusedExports baseline on master `dea93eee` was **188**, not 191. After this review: docs:deps `totalExports` 2857, `unusedExportsCount` 24; repo-tools map `totalExports` 3909, `unusedExportsCount` 189 (`lumpedRadiativeConductance` removed; tests now import `lumpedCoolingQJ`, `lumpedRadiatingTempK`, `MAX_BIOT`).
+
 ## As of 2026-11-22 (PR #816 Gemini REQUEST CHANGES — zone-gate isolation)
 
 - **The FILE_INVENTORY untracked-file CONTROL no longer writes into this tree's `tests/`.** `tests/tools/file-inventory-zones.test.ts` parameterizes `recount(cwd)` and proves tracked-vs-untracked exclusion in an isolated `mkdtempSync` git repo (`rmSync` in `finally`): one staged `tests/a.ts` counts as 1, an untracked `tests/b.ts` does not bump it, and staging `b.ts` counts as 2. A grep of every `writeFileSync` under `tests/` found no other test that plants a scratch file in this repository's tree (the rest write under `tmpdir()` / `tempDir`). The identity-golden 4→5 mutation is a prefactor change, not an exponent; unmet catalog `needs` set an output to `null` and omit a check.
+
+## As of 2026-11-22 (S7 — `case-lumped-cooling` onto the case engine)
+
+- **Master's `parent_deviation` at extreme t/tau, measured before the deletion (Bun 1.4.5, this tree):** `Infinity` at t/tau ~ 740 (theta subnormal ~4.2e-322, series mean underflowed to 0) and `NaN` at t/tau >~ 745 (both underflowed; `T_K` is then exactly `T_inf`). The catalog-expr path throws on NaN by design, so `parent_deviation` is the named method `lumpedParentDeviation`, reproducing that NaN/Infinity instead of the plan table's `expr` row — a deliberate deviation, recorded in the commit message. Bit-for-bit identity with master's runner is the **8-point golden** `tests/cases/golden/case-lumped-cooling.identity.json` (t/tau ~ 0/1/10, `t_s = 0`, Bi above and below 0.1, emissivity 0/0.05/0.8/1, T0 above and below T_inf; every value finite). Out-of-grid Infinity/NaN intermediates are bound (PR #817 review), not dropped. **14** new tests failed RED on the unchanged tree (not 13). Docs counts on the S7 commit: docs:deps `totalExports` 2853 -> 2858, `unusedExportsCount` 21 -> 27; repo-tools map `totalExports` 3905 -> 3910, `unusedExportsCount` **188 -> 193** (not 191).
 
 ## As of 2026-11-22 (PR #816 review — resistor-noise engine identity)
 

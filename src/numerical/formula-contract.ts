@@ -46,9 +46,10 @@ export interface CompiledFormula {
    * Evaluate against a `name → value` scope. Throws on a missing var.
    * Non-finite results throw {@link FormulaValueError}. Pass
    * `{ allowInfinity: true }` to return ±Infinity; NaN and non-numbers
-   * still throw. Only the applied-case catalog `expr` output path passes
-   * that option, so a parent integral that underflows to 0 can emit
-   * `Infinity` as the deleted JS runner did.
+   * still throw. Applied-case catalog `expr` outputs and checks pass
+   * that option, so a parent integral that underflows to 0, or a check
+   * such as h_rad/h at vanishing h, can emit `Infinity` as the deleted
+   * JS runners did.
    */
   evaluate(scope: Record<string, number>, opts?: { readonly allowInfinity?: boolean }): number;
 }

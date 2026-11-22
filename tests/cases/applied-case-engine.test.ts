@@ -26,7 +26,15 @@ import {
 import { runAppliedCaseEngine, usesCatalogEngine } from '../../src/cases/engine.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
-import { CASE_METHOD_NAMES } from '../../src/cases/methods.js';
+import {
+  CASE_METHOD_NAMES,
+  MAX_BIOT,
+  SIGMA_SB_SI,
+  lumpedCoolingQJ,
+  lumpedRadiatingTempK,
+  lumpedRadiatingTemperature,
+  sphereSeries,
+} from '../../src/cases/methods.js';
 import type { CaseResult } from '../../src/cases/types.js';
 import { C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, M_SUN_SI, MU0_SI } from '../../src/core/constants.js';
 import { dataSchema, dataText } from '../../src/core/data-file.js';
@@ -170,7 +178,7 @@ describe('applied-case engine — skin depth', () => {
     check.expr = `2*(${check.expr})`;
     const mutated = readAppliedCaseFile(JSON.stringify(file), schema);
     const record = mutated.cases.find((c) => c.id === ID)!;
-    expect(() => pinCase(ID, skinPinned, record)).toThrow();
+    expect(() => pinCase(ID, skinPinned, record)).toThrow(/to be less (or equal )?than/);
   });
 });
 
@@ -291,8 +299,12 @@ describe('applied-case engine — damped resonator', () => {
     const inRecordCheck = got.checks.find((c) => c.id === 'in-record')!;
     expect(inRecordCheck.holds).toBe(true);
     expectPinNumber(inRecordCheck.value, 0.01, 'mutated in-record');
-    expect(() => expectPinNumber(inRecordCheck.value, inRecord, 'in-record')).toThrow();
-    expect(() => pinCase('case-damped-resonator', dampedPinned, record)).toThrow();
+    expect(() => expectPinNumber(inRecordCheck.value, inRecord, 'in-record')).toThrow(
+      /to be less (or equal )?than/,
+    );
+    expect(() => pinCase('case-damped-resonator', dampedPinned, record)).toThrow(
+      /to be less (or equal )?than/,
+    );
   });
 });
 
@@ -423,12 +435,12 @@ describe('applied-case engine — resistor noise', () => {
     const got = runAppliedCaseEngine(record, inputs);
     // S′ = 4 k_B T R_eff² = S · R_eff: the exact factor the mutated exponent predicts.
     expectPinNumber(got.outputs.S_V_V2_per_Hz as number, S * rEff, 'mutated S_V');
-    expect(() => pinCase(ID, resistorPinned, record)).toThrow();
+    expect(() => pinCase(ID, resistorPinned, record)).toThrow(/to be less (or equal )?than/);
   });
 
   // Composer review F1: master's JS runner emitted Infinity when the parent
-  // integral underflowed to 0. The engine must match that on the output path
-  // only; checks and every other evaluateFormula caller stay strict.
+  // integral underflowed to 0. Applied-case expr outputs and checks opt in;
+  // every other evaluateFormula caller stays strict, and NaN still throws.
   const PARENT_UNDERFLOW = {
     T_K: 0.02,
     R_ohm: 50,
@@ -460,20 +472,33 @@ describe('applied-case engine — resistor noise', () => {
     expect(() => runAppliedCaseEngine(record, inputs)).toThrow(/got NaN/);
   });
 
-  it('a check still throws on Infinity: the output-path opt-in does not leak', () => {
+  it('a check may return Infinity (master parity); NaN on a check still throws', () => {
     const record = structuredClone(appliedCaseRecord(ID));
     const checks = record.checks as Array<(typeof record.checks)[number]>;
     checks.push({
       id: 'parent-nonzero',
-      premise: 'control: parent integral must be nonzero',
+      premise: 'control: parent integral underflow yields Infinity, matching master',
       quantity: '1/V_rms,parent',
       expr: '1/V_rms_parent_V',
       op: '>',
       bound: 0,
-      threshold: 'CONTROL: proves checks refuse Infinity',
+      threshold: 'CONTROL: checks opt in to Infinity; NaN still throws',
     });
-    expect(() => runAppliedCaseEngine(record, PARENT_UNDERFLOW)).toThrow(FormulaValueError);
-    expect(() => runAppliedCaseEngine(record, PARENT_UNDERFLOW)).toThrow(/got Infinity/);
+    const got = runAppliedCaseEngine(record, PARENT_UNDERFLOW);
+    const overflow = got.checks.find((c) => c.id === 'parent-nonzero')!;
+    expect(overflow.value).toBe(Infinity);
+    expect(overflow.holds).toBe(true);
+    checks.push({
+      id: 'nan-check',
+      premise: 'control: NaN still throws on checks',
+      quantity: '0/0',
+      expr: '(V_rms_V-V_rms_V)/(V_rms_V-V_rms_V)',
+      op: '<=',
+      bound: 1,
+      threshold: 'CONTROL: NaN is still refused on checks',
+    });
+    expect(() => runAppliedCaseEngine(record, inputs)).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(record, inputs)).toThrow(/got NaN/);
   });
 
   it('CONTROL: renaming the amplifier check id does not re-enable it without amp densities', () => {
@@ -522,13 +547,254 @@ describe('applied-case engine — resistor noise', () => {
     expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
   });
 
-  it('allowInfinity: true is passed only from evalOutput, never from evalCheck', () => {
+  it('allowInfinity: true is passed from evalOutput and evalCheck; evaluateFormula default stays strict', () => {
     const stripComments = (src: string) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
     const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
-    expect(stripComments(engineSrc).match(/allowInfinity:\s*true/g)).toEqual(['allowInfinity: true']);
-    expect(engineSrc).toMatch(/function evalCheck[\s\S]*?evalOutputExpr\(row\.expr, inputs, outputs, extra\)/);
+    expect(stripComments(engineSrc).match(/allowInfinity:\s*true/g)).toEqual([
+      'allowInfinity: true',
+      'allowInfinity: true',
+    ]);
+    expect(engineSrc).toMatch(
+      /function evalCheck[\s\S]*?evalOutputExpr\(row\.expr, inputs, outputs, extra, \{ allowInfinity: true \}\)/,
+    );
     const exprParse = readFileSync(new URL('../../src/bridges/expr-parse.ts', import.meta.url), 'utf8');
     expect(stripComments(exprParse)).not.toMatch(/allowInfinity:\s*true/);
     expect(exprParse).toMatch(/\.evaluate\(scope, opts\)/);
+  });
+});
+
+describe('applied-case engine — lumped cooling', () => {
+  // lumped-cooling.test.ts:20 valid args (the catalog valid example).
+  const ID = 'case-lumped-cooling';
+  const inputs = resolveEvaluatorInputs(APPLIED_CASES.get(ID)!.parameters, APPLIED_CASES.get(ID)!.examples.valid.args).inputs;
+  // Hand arithmetic on the exact SI constants (lumped-cooling.test.ts).
+  const a = 5e-3;
+  const rho = 8933;
+  const c = 385;
+  const k = 401;
+  const h = 20;
+  const eps = 0.05;
+  const T0 = 373.15;
+  const Tinf = 293.15;
+  const t = 300;
+  const tau = (rho * c * a) / (3 * h);
+  const bi = (h * (a / 3)) / k;
+  const biRadius = (h * a) / k;
+  const alpha = k / (rho * c);
+  const fo = (alpha * t) / (a * a);
+  const theta = Math.exp(-t / tau);
+  const series = sphereSeries(biRadius, fo);
+  const hRad = eps * SIGMA_SB_SI * (T0 + Tinf) * (T0 * T0 + Tinf * Tinf);
+  const tRad = lumpedRadiatingTemperature({ a, rho, c, h, eps, T0, Tinf, t });
+  const lumpedPinned: PinnedCase = {
+    outputs: {
+      tau_s: tau,
+      Bi: bi,
+      Bi_radius: biRadius,
+      alpha_m2_per_s: alpha,
+      Fo: fo,
+      theta,
+      T_K: Tinf + (T0 - Tinf) * theta,
+      Q_J: rho * c * ((4 / 3) * Math.PI * a ** 3) * (T0 - Tinf) * -Math.expm1(-t / tau),
+      theta_parent_mean: series.mean,
+      parent_deviation: theta / series.mean - 1,
+      T_centre_K: Tinf + (T0 - Tinf) * series.centre,
+      T_surface_K: Tinf + (T0 - Tinf) * series.surface,
+      h_rad_max_W_per_m2_K: hRad,
+      Bi_radiating: ((h + hRad) * (a / 3)) / k,
+      T_radiating_K: tRad,
+    },
+    checks: [
+      { id: 'lumped', holds: true, value: bi },
+      { id: 'linear-loss', holds: true, value: hRad / h },
+    ],
+    uncheckedCount: 2,
+  };
+
+  it('pinned reference: copper 5 mm, h = 20, ε = 0.05, 100 °C → 20 °C at 300 s (engine outputs on the catalog valid example)', () => {
+    pinCase(ID, lumpedPinned);
+  });
+
+  it('the engine routes the case: usesCatalogEngine is true and no runCaseLumpedCooling remains', () => {
+    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+    expect([...CASE_METHOD_NAMES]).not.toContain('runCaseLumpedCooling');
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(engineSrc).not.toMatch(/runCaseLumpedCooling/);
+  });
+
+  it('validation: the engine carries the domain refusals with the same messages', () => {
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, emissivity: 1.2 })).toThrow(
+      /emissivity must be in \[0, 1\] \(got 1\.2\)/,
+    );
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, t_s: -1 })).toThrow(/t_s must be a finite number ≥ 0/);
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, a_m: 0 })).toThrow(/a_m must be/);
+  });
+
+  it('control: mutating the tau_s prefactor (3 → 4, a coefficient change) moves tau_s by exactly 3/4 and fails the pins', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(3*h_W_per_m2_K)"',
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(4*h_W_per_m2_K)"',
+    );
+    expect(mutated, 'the tau_s expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    const got = runAppliedCaseEngine(record, inputs);
+    // τ′ = ρca/(4h) = τ · 3/4: the exact factor the mutated coefficient predicts.
+    expectPinNumber(got.outputs.tau_s as number, tau * (3 / 4), 'mutated tau_s');
+    expect(() => pinCase(ID, lumpedPinned, record)).toThrow(/to be less (or equal )?than/);
+  });
+
+  it('tau_s expr mutation moves Q_J and theta together from the same τ', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(3*h_W_per_m2_K)"',
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(4*h_W_per_m2_K)"',
+    );
+    expect(mutated, 'the tau_s expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    const got = runAppliedCaseEngine(record, inputs);
+    const tauMut = got.outputs.tau_s as number;
+    const volume = (4 / 3) * Math.PI * a ** 3;
+    expectPinNumber(got.outputs.theta as number, Math.exp(-t / tauMut), 'mutated theta from tau_s');
+    expectPinNumber(
+      got.outputs.Q_J as number,
+      rho * c * volume * (T0 - Tinf) * -Math.expm1(-t / tauMut),
+      'mutated Q_J from tau_s',
+    );
+  });
+
+  it('control: mutating Fo or Bi_radius expr moves the series outputs', () => {
+    const text = dataText('applied-cases.json');
+    const foMutated = text.replace(
+      '"expr": "alpha_m2_per_s*t_s/(a_m*a_m)"',
+      '"expr": "alpha_m2_per_s*t_s/a_m"',
+    );
+    expect(foMutated, 'the Fo expr must occur once to replace').not.toBe(text);
+    const foRecord = readAppliedCaseFile(foMutated, schema).cases.find((c) => c.id === ID)!;
+    const foGot = runAppliedCaseEngine(foRecord, inputs);
+    expect(foGot.outputs.Fo).not.toBe(fo);
+    expect(foGot.outputs.theta_parent_mean).not.toBe(series.mean);
+    expect(foGot.outputs.T_centre_K).not.toBe(Tinf + (T0 - Tinf) * series.centre);
+    expect(foGot.outputs.T_surface_K).not.toBe(Tinf + (T0 - Tinf) * series.surface);
+    expect(() => pinCase(ID, lumpedPinned, foRecord)).toThrow(/to be less (or equal )?than/);
+
+    const biMutated = text.replace(
+      '"expr": "h_W_per_m2_K*a_m/k_W_per_m_K"',
+      '"expr": "h_W_per_m2_K*a_m/(2*k_W_per_m_K)"',
+    );
+    expect(biMutated, 'the Bi_radius expr must occur once to replace').not.toBe(text);
+    const biRecord = readAppliedCaseFile(biMutated, schema).cases.find((c) => c.id === ID)!;
+    const biGot = runAppliedCaseEngine(biRecord, inputs);
+    expect(biGot.outputs.Bi_radius).not.toBe(biRadius);
+    expect(biGot.outputs.theta_parent_mean).not.toBe(series.mean);
+    expect(biGot.outputs.T_centre_K).not.toBe(Tinf + (T0 - Tinf) * series.centre);
+    expect(biGot.outputs.T_surface_K).not.toBe(Tinf + (T0 - Tinf) * series.surface);
+    expect(() => pinCase(ID, lumpedPinned, biRecord)).toThrow(/to be less (or equal )?than/);
+  });
+
+  it('Q_J at t_s = 1e-12 matches -expm1(-t/τ); a (1-exp) implementation fails that pin', () => {
+    // Direct method: t this small makes Fo too tiny for the series (needs >1e5 terms).
+    const tSmall = 1e-12;
+    const got = lumpedCoolingQJ({ ...inputs, t_s: tSmall }, { tau_s: tau });
+    const volume = (4 / 3) * Math.PI * a ** 3;
+    const heatScale = rho * c * volume * (T0 - Tinf);
+    const expected = heatScale * -Math.expm1(-tSmall / tau);
+    expectPinNumber(got, expected, 'Q_J small-t expm1');
+    const naive = heatScale * (1 - Math.exp(-tSmall / tau));
+    expect(() => expectPinNumber(naive, expected, '1-exp control')).toThrow(/to be less (or equal )?than/);
+  });
+
+  // Master's JS runner emitted Infinity for parent_deviation when theta is
+  // subnormal but the series mean has underflowed to 0 (t/tau ≈ 740; measured
+  // on master before the deletion). parent_deviation is a named method (see
+  // NOTES.md for why it is not an expr), so the value reaches the caller
+  // unchanged. Overflowed *intermediates* (T0_K=1e200, h=1e-310) still need
+  // mergeBindings to keep Infinity/NaN and evalCheck `{ allowInfinity: true }`.
+  it('parent_deviation is Infinity where the master runner produced Infinity (t/tau ≈ 740)', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, t_s: 740 * tau });
+    expect(got.outputs.theta_parent_mean).toBe(0);
+    expect((got.outputs.theta as number) > 0).toBe(true);
+    expect(got.outputs.parent_deviation).toBe(Infinity);
+    expect(got.outputs.T_K).toBeCloseTo(Tinf, 10);
+  });
+
+  it('parent_deviation is NaN at t/tau ≈ 746 (both underflow) and the run does not throw', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, t_s: 746 * tau });
+    expect(Number.isNaN(got.outputs.parent_deviation as number)).toBe(true);
+    expect(got.outputs.T_K).toBe(Tinf);
+  });
+
+  it('CONTROL: wiring parent_deviation as expr theta/theta_parent_mean - 1 throws on NaN at t/tau ≈ 746', () => {
+    const wired = structuredClone(appliedCaseRecord(ID)) as AppliedCaseRecord;
+    const row = wired.outputs.find((o) => o.key === 'parent_deviation') as {
+      key: string;
+      method?: string;
+      expr?: string;
+    };
+    expect(row.method).toBe('lumpedParentDeviation');
+    delete row.method;
+    row.expr = 'theta/theta_parent_mean - 1';
+    expect(() => runAppliedCaseEngine(wired, { ...inputs, t_s: 746 * tau })).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(wired, { ...inputs, t_s: 746 * tau })).toThrow(
+      /formula did not evaluate to a finite number \(got NaN\)/,
+    );
+  });
+
+  it('T_radiating_K is null when Bi_radiating is NaN (master: NaN <= bound is false)', () => {
+    expect(lumpedRadiatingTempK(inputs, { Bi_radiating: Number.NaN })).toBeNull();
+  });
+
+  it('T_radiating_K gate bound is the catalog lumped check bound, not a second literal', () => {
+    const bound = appliedCaseRecord(ID).checks.find((c) => c.id === 'lumped')!.bound;
+    expect(MAX_BIOT).toBe(bound);
+    expect(lumpedRadiatingTempK(inputs, { Bi_radiating: bound })).not.toBeNull();
+    expect(lumpedRadiatingTempK(inputs, { Bi_radiating: bound + Number.EPSILON })).toBeNull();
+    const methodsSrc = readFileSync(new URL('../../src/cases/methods.ts', import.meta.url), 'utf8');
+    expect(methodsSrc).not.toMatch(/MAX_BIOT\s*=\s*0\.1/);
+  });
+
+  it('h_rad_max is a catalog expr using abs, not a named method', () => {
+    const row = appliedCaseRecord(ID).outputs.find((o) => o.key === 'h_rad_max_W_per_m2_K')!;
+    expect(row.method).toBeUndefined();
+    expect(row.expr).toMatch(/abs\(T0_K-T_inf_K\)/);
+    expect([...CASE_METHOD_NAMES]).not.toContain('lumpedRadiativeConductance');
+  });
+
+  // Master values recorded by running `runCaseLumpedCooling` at origin/master
+  // dea93eee (the S6 merge, the parent of this PR) on the copper valid-example
+  // base with T0_K = 1e200 and with h_W_per_m2_K = 1e-310. The deleted runner
+  // returned the record with Infinity/NaN in it; it did not throw.
+  it('T0_K = 1e200 matches master: no throw, h_rad and Bi_radiating are Infinity, linear-loss is Infinity', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, T0_K: 1e200 });
+    expect(got.outputs.h_rad_max_W_per_m2_K).toBe(Infinity);
+    expect(got.outputs.Bi_radiating).toBe(Infinity);
+    expect(got.outputs.T_radiating_K).toBeNull();
+    const linearLoss = got.checks.find((c) => c.id === 'linear-loss')!;
+    expect(linearLoss.value).toBe(Infinity);
+    expect(linearLoss.holds).toBe(false);
+    expectPinNumber(got.outputs.T_K as number, 3.510756549695627e199, 'T_K at T0=1e200');
+  });
+
+  it('h = 1e-310 matches master: no throw, tau_s Infinity, linear-loss Infinity, series NaN', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, h_W_per_m2_K: 1e-310 });
+    expect(got.outputs.tau_s).toBe(Infinity);
+    expect(got.outputs.theta).toBe(1);
+    expect(got.outputs.T_K).toBe(373.15);
+    expect(got.outputs.Q_J).toBe(0);
+    expect(Number.isNaN(got.outputs.theta_parent_mean as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.parent_deviation as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.T_centre_K as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.T_surface_K as number)).toBe(true);
+    expectPinNumber(got.outputs.h_rad_max_W_per_m2_K as number, 0.4253801428581488, 'h_rad at h=1e-310');
+    expectPinNumber(got.outputs.Bi_radiating as number, 0.0000017679972687371106, 'Bi_radiating at h=1e-310');
+    expectPinNumber(got.outputs.T_radiating_K as number, 371.39598398588487, 'T_radiating_K at h=1e-310');
+    const lumped = got.checks.find((c) => c.id === 'lumped')!;
+    expect(lumped.value).toBe(4.15627596e-316);
+    expect(lumped.holds).toBe(true);
+    const linearLoss = got.checks.find((c) => c.id === 'linear-loss')!;
+    expect(linearLoss.value).toBe(Infinity);
+    expect(linearLoss.holds).toBe(false);
   });
 });
