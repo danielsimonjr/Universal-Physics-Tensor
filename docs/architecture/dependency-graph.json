@@ -4,7 +4,7 @@
     "version": "16.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2866
+    "totalExports": 2867
   },
   "entryPoints": [
     {
@@ -19650,9 +19650,9 @@
             ]
           },
           {
-            "file": "../dimensional/dimension-spec.js",
+            "file": "../dimensional/constant-rows.js",
             "imports": [
-              "CONSTANT_SPELLINGS"
+              "rewriteConstantSpellings"
             ]
           },
           {
@@ -21065,13 +21065,15 @@
         ],
         "exports": [
           "CONSTANT_ROWS",
-          "constantRow"
+          "constantRow",
+          "rewriteConstantSpellings"
         ],
         "interfaces": [
           "ConstantRow"
         ],
         "functions": [
-          "constantRow"
+          "constantRow",
+          "rewriteConstantSpellings"
         ],
         "constants": [
           "CONSTANT_ROWS"
@@ -28778,11 +28780,11 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90233,
-    "totalExports": 2866,
+    "totalLinesOfCode": 90272,
+    "totalExports": 2867,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 958,
+    "totalFunctions": 959,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 402,

@@ -183,3 +183,31 @@ for (const constant of CONSTANT_ROWS) {
 export function constantRow(spelling: string): ConstantRow | undefined {
   return BY_SPELLING.get(spelling);
 }
+
+const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+/**
+ * Rewrite identifier aliases of registered constants to the row's formula
+ * name (`e_charge` → `e`, `kB` → `k_B`). Hyphenated and non-identifier
+ * spellings stay. Longer aliases are replaced first so `electron_mass` is not
+ * eaten as `m_e` plus leftover text.
+ *
+ * Used by the user-equation path so a typed alias is the catalog name.
+ * Formula evaluation does not rewrite: `parseFormula` keeps the caller's
+ * identifiers, and `parseScope` fans synonym spellings instead.
+ * @internal
+ */
+export function rewriteConstantSpellings(text: string): string {
+  const aliases: { alias: string; canonical: string }[] = [];
+  for (const row of CONSTANT_ROWS) {
+    for (const spelling of row.spellings) {
+      if (IDENTIFIER.test(spelling)) aliases.push({ alias: spelling, canonical: row.name });
+    }
+  }
+  aliases.sort((a, b) => b.alias.length - a.alias.length);
+  let out = text;
+  for (const { alias, canonical } of aliases) {
+    out = out.replace(new RegExp(`(?<![A-Za-z0-9_])${alias}(?![A-Za-z0-9_])`, 'g'), canonical);
+  }
+  return out;
+}

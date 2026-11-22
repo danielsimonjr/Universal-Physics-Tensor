@@ -5378,7 +5378,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
-| `../dimensional/dimension-spec.js` | `CONSTANT_SPELLINGS` | Import |
+| `../dimensional/constant-rows.js` | `rewriteConstantSpellings` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS, isRegisteredConstant` | Import |
 | `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `../dimensional/natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
@@ -5839,7 +5839,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ConstantRow`
-- Functions: `constantRow`
+- Functions: `constantRow`, `rewriteConstantSpellings`
 - Constants: `CONSTANT_ROWS`
 
 ---
@@ -7856,12 +7856,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90233 |
-| Total Exports | 2866 |
+| Total Lines of Code | 90272 |
+| Total Exports | 2867 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 958 |
+| Total Functions | 959 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

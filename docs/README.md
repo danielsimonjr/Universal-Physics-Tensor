@@ -31,6 +31,13 @@ Physicist-facing notes: [`research/README.md`](research/README.md). Dated notes 
 
 [`architecture/OVERVIEW.md`](architecture/OVERVIEW.md) is the project overview, including the atlas layer. Module design, components, data flow, and the API are the siblings named at the bottom of that file.
 
+## User guides (`user/`)
+
+For users of the CLI and the npm package:
+
+- **[Getting started](user/getting-started.md)** — install, the first five commands, and running the CLI from a clone.
+- **[Equation and Constant Catalog Guide](user/catalog.md)** — the bridge records, canonical equations and atlas bridges, and how physical constants are named, sourced and used in formulas.
+
 ## Planning (`planning/`)
 
 Historical plans and design notes. Three plans from 2026-05-04 are **superseded**. They describe a v0.1.0 formalization phase (TypeScript 5.x, ESLint, npm, a catalog of about 40 bridges):

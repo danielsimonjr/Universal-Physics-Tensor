@@ -82,7 +82,9 @@ const HELP = `upt eval "<formula>" name=value ...
         or log2 for base 10 or 2. A bare e is the elementary charge (the
         CODATA value). E is energy: the binding is its own argument, \`upt eval E E=1eV\`. Euler's number is
         exp(x), for example exp(1), never a bare e and never the name euler.
-        e_charge is the same charge.
+        e_charge is the same charge: a binding of either spelling fans out
+        to the other, a formula that writes both names is twice that charge,
+        and two spellings that disagree are refused.
         An explicit e=<number> replaces the CODATA value. CODATA
         names are filled in when you omit them: every registered constant
         (G, c, hbar, h, k_B, e, ln2, epsilon_0, sigma_sb, b, GM_sun, Msun_iau)

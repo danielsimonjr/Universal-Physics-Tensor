@@ -7,8 +7,13 @@
  * parser too; Euler's number is `exp(1)`. The name `euler` is refused.
  */
 import { describe, it, expect } from 'vitest';
+import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { E_SI } from '../../src/core/constants.js';
-import { mathtsFormulaParser as parser } from '../../src/numerical/formula-mathts.js';
+import {
+  createMathtsFormulaParser,
+  mathtsFormulaParser as parser,
+  parseFormula,
+} from '../../src/numerical/formula-mathts.js';
 
 describe('formula-mathts', () => {
   it('reads bare e as a constant and leaves the other factor free', () => {
@@ -104,5 +109,46 @@ describe('formula-mathts', () => {
     const { FormulaError } = await import('../../src/numerical/formula-contract.js');
     // 'q' is never supplied in scope — MathTS throws inside node.evaluate().
     expect(() => parser.parse('q + 1').evaluate({})).toThrow(FormulaError);
+  });
+
+  it('e_charge stays the caller identifier; a scope e_charge binds', () => {
+    const compileExprCalls: string[] = [];
+    const parserWithSpy = createMathtsFormulaParser({
+      parse: (expr) => parseMathTs(expr) as never,
+      compileExpr: (expr, opts) => {
+        compileExprCalls.push(expr);
+        return compileExpr(expr, opts);
+      },
+    });
+    const formula = parserWithSpy.parse('e + e_charge');
+    expect(compileExprCalls).toEqual(['e + e_charge']);
+    expect(formula.evaluate({ e: 3, e_charge: 3 })).toBe(6);
+    expect(parseFormula('e_charge').evaluate({ e_charge: 3 })).toBe(3);
+    // CONTROL: rewriting e_charge → e would leave evaluate({ e_charge: 3 })
+    // on the default e: E_SI binding.
+    expect(parseFormula('e_charge').evaluate({ e_charge: 3 })).not.toBe(E_SI);
+    // MathTS { physics: true } does not drop an independent e_charge beside e.
+    expect(Number(compileExpr('e + e_charge', { physics: true }).evaluate({ e: 1, e_charge: 3 }))).toBe(4);
+    // The original CLI '3' was float64 absorption, not an Euler collision.
+    const absorbed = compileExpr('e + e_charge', { physics: true }).evaluate({ e: E_SI, e_charge: 3 });
+    expect(Number(absorbed)).toBe(3);
+    expect(E_SI + 3).toBe(3);
+  });
+
+  it('speed_of_light and mu0 stay the caller identifiers, not c and mu_0', () => {
+    const compileExprCalls: string[] = [];
+    const parserWithSpy = createMathtsFormulaParser({
+      parse: (expr) => parseMathTs(expr) as never,
+      compileExpr: (expr, opts) => {
+        compileExprCalls.push(expr);
+        return compileExpr(expr, opts);
+      },
+    });
+    parserWithSpy.parse('2*mass*speed_of_light^2');
+    parserWithSpy.parse('B/sqrt(mu0*rho)');
+    expect(compileExprCalls).toEqual(['2*mass*speed_of_light^2', 'B/sqrt(mu0*rho)']);
+    // CONTROL: rewriting every alias would compile those as c and mu_0, which
+    // drops a declared derive variable (exit 2 instead of the prefactor check).
+    expect(compileExprCalls).not.toEqual(['2*mass*c^2', 'B/sqrt(mu_0*rho)']);
   });
 });

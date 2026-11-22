@@ -141,12 +141,24 @@ function presentSpellings(group: readonly string[], values: Readonly<Record<stri
   return Object.keys(values).filter((key) => group.some((member) => member === key || foldName(member) === foldName(key)));
 }
 
+const CONSTANT_IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
+
+/**
+ * Identifier spellings of one constant-registry row that has an alias
+ * (`e` / `e_charge`). These are not {@link SYNONYM_GROUPS}: `e` is not a
+ * quantity. A binding still fans out across them, and two spellings that
+ * disagree are refused.
+ */
+const CONSTANT_SPELLING_GROUPS: readonly (readonly string[])[] = CONSTANT_REGISTRY.map((row) =>
+  [row.name, ...row.spellings].filter((spelling) => CONSTANT_IDENTIFIER.test(spelling)),
+).filter((group) => group.length > 1);
+
 /**
  * Refuse two spellings of one quantity that carry different numbers.
  * The message names the keys the caller typed.
  */
 export function assertSynonymAgreement(values: Readonly<Record<string, number>>): void {
-  for (const group of [...SYNONYM_GROUPS, ...AGREEMENT_GROUPS]) {
+  for (const group of [...SYNONYM_GROUPS, ...AGREEMENT_GROUPS, ...CONSTANT_SPELLING_GROUPS]) {
     const disagreement = synonymDisagreement(presentSpellings(group, values), values);
     if (disagreement !== null) throw disagreement;
   }
@@ -171,7 +183,7 @@ const AGREEMENT_GROUPS: readonly (readonly string[])[] = allQuantityRecords()
 export function expandSynonymValues<T extends Record<string, number>>(values: T): T {
   assertSynonymAgreement(values);
   const out: Record<string, number> = { ...values };
-  for (const group of SYNONYM_GROUPS) {
+  for (const group of [...SYNONYM_GROUPS, ...CONSTANT_SPELLING_GROUPS]) {
     const present = presentSpellings(group, values);
     if (present.length === 0) continue;
     const value = values[present[0]!]!;

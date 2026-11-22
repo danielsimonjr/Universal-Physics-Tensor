@@ -88,4 +88,29 @@ describe('upt eval reads the registered constants', () => {
       expect(parseFloat(r.stdout), name).toBeCloseTo(CONSTANTS[name].value, 12);
     }
   });
+
+  it('e_charge is the same charge as e: a binding fans out and a formula that writes both is twice that charge', async () => {
+    const both = await run(['eval', 'e + e_charge', 'e_charge=3C']);
+    expect(both.code, both.stderr).toBe(0);
+    expect(both.stdout.trim()).toBe('6 C');
+    const override = await run(['eval', 'e', 'e_charge=3C']);
+    expect(override.code, override.stderr).toBe(0);
+    expect(override.stdout.trim()).toBe('3 C');
+    // CONTROL: float64 absorption of E_SI + 3 (prints as 3 C) is not this result.
+    expect(both.stdout.trim()).not.toBe('3 C');
+    expect(parseFloat(both.stdout)).not.toBe(3);
+  });
+
+  it('derive: e_charge:charge is a declared identifier (not rewritten to e)', async () => {
+    const r = await run(['derive', 'q:charge', 'e_charge:charge', '--formula', '2*e_charge']);
+    expect(r.code, r.stderr).toBe(0);
+    expect(r.stdout).toMatch(/recovered prefactor ≈ 2(?!\d)/);
+  });
+
+  it('disagreeing e and e_charge bindings are refused', async () => {
+    const r = await run(['eval', 'e + e_charge', 'e=1C', 'e_charge=3C']);
+    expect(r.code).toBe(1);
+    expect(r.stderr).toMatch(/e and e_charge are one quantity and disagree/);
+    expect(r.stdout).toBe('');
+  });
 });

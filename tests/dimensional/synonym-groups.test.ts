@@ -19,6 +19,14 @@ describe('synonym groups', () => {
     expect(SYNONYM_GROUPS.some((group) => group.includes('specific-heat') && group.includes('specific-heat-capacity'))).toBe(true);
   });
 
+  it('e_charge is the same charge as e even though it is not a quantity-registry synonym', () => {
+    expect(SYNONYM_GROUPS.some((group) => group.includes('e') && group.includes('e_charge'))).toBe(false);
+    expect(() => assertSynonymAgreement({ e: 1, e_charge: 3 })).toThrow(SynonymDisagreementError);
+    const agreed: Record<string, number> = expandSynonymValues({ e_charge: 3 });
+    expect(agreed.e).toBe(3);
+    expect(agreed.e_charge).toBe(3);
+  });
+
   it('refuses every group when two spellings disagree, and copies them when they agree', () => {
     expect(SYNONYM_GROUPS.length).toBeGreaterThan(0);
     for (const group of SYNONYM_GROUPS) {

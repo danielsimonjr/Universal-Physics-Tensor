@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2866
+  totalExports: 2867
 entryPoints:
   - file: src/index.ts
     type: main
@@ -13293,9 +13293,9 @@ modules:
         - file: ../numerical/formula-dimension.js
           imports:
             - formulaSymbolDimension
-        - file: ../dimensional/dimension-spec.js
+        - file: ../dimensional/constant-rows.js
           imports:
-            - CONSTANT_SPELLINGS
+            - rewriteConstantSpellings
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
@@ -14292,10 +14292,12 @@ modules:
       exports:
         - CONSTANT_ROWS
         - constantRow
+        - rewriteConstantSpellings
       interfaces:
         - ConstantRow
       functions:
         - constantRow
+        - rewriteConstantSpellings
       constants:
         - CONSTANT_ROWS
     src/dimensional/constants.ts:
@@ -19932,11 +19934,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90233
-  totalExports: 2866
+  totalLinesOfCode: 90272
+  totalExports: 2867
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 958
+  totalFunctions: 959
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402

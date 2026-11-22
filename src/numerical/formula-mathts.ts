@@ -159,6 +159,11 @@ export function createMathtsFormulaParser(
 
       // `compileExpr` applies `{ physics: true }` on each evaluation. Bare `e` is the SI
       // magnitude through the `e: E_SI` default below, and a scope entry for `e` wins.
+      // Identifier aliases are not rewritten: `parseFormula('e_charge')` keeps
+      // `e_charge` so a scope `e_charge` binds. `parseScope` fans synonym spellings
+      // of the same constant-registry row. `{e: E_SI, e_charge: 3}` summing to 3
+      // is float64 absorption (`1.602176634e-19 + 3 === 3`), not an Euler collision
+      // (`{e: 1, e_charge: 3}` is 4).
       const compiled = mod.compileExpr(expr, PHYSICS);
       const formula: CompiledFormula = Object.freeze({
         source: expr,
