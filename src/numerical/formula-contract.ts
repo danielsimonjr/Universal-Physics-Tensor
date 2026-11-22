@@ -42,8 +42,15 @@ export interface CompiledFormula {
   readonly source: string;
   /** Free variable names (excludes built-in constants and functions). */
   readonly variables: readonly string[];
-  /** Evaluate against a `name → value` scope. Throws on a missing var. */
-  evaluate(scope: Record<string, number>): number;
+  /**
+   * Evaluate against a `name → value` scope. Throws on a missing var.
+   * Non-finite results throw {@link FormulaValueError}. Pass
+   * `{ allowInfinity: true }` to return ±Infinity; NaN and non-numbers
+   * still throw. Only the applied-case catalog `expr` output path passes
+   * that option, so a parent integral that underflows to 0 can emit
+   * `Infinity` as the deleted JS runner did.
+   */
+  evaluate(scope: Record<string, number>, opts?: { readonly allowInfinity?: boolean }): number;
 }
 
 /** The MathTS-backed parser implements this. @internal */

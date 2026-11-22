@@ -10,10 +10,14 @@
  * the document was not regenerated against) fails here.
  */
 import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 const SOURCE_LIKE = new Set(['ts', 'mjs', 'js']);
+const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
+const DOC_PATH = new URL('../../docs/architecture/FILE_INVENTORY.md', import.meta.url);
 
 /** Top-level directory → census area, matching the `repo-tools map` areas. */
 const AREA_BY_DIR: Record<string, string> = {
@@ -29,13 +33,12 @@ const AREA_BY_DIR: Record<string, string> = {
 };
 
 function recount(): Map<string, number> {
-  // Cached (tracked or staged) plus untracked-but-not-ignored files, so the
-  // gate also holds on a working tree whose new test files are not yet
-  // committed; once committed they drop out of `--others` and the count is
-  // the census's own "git tracks" rule.
-  const out = execSync('git ls-files -z --cached --others --exclude-standard', {
+  // Tracked (index) files only. Untracked scratch files are absent because git
+  // does not track them — the same census rule FILE_INVENTORY.md states.
+  const out = execSync('git ls-files -z --cached', {
     encoding: 'utf8',
     maxBuffer: 16 * 1024 * 1024,
+    cwd: REPO_ROOT,
   });
   const counts = new Map<string, number>();
   for (const file of out.split('\0')) {
@@ -56,8 +59,7 @@ function recount(): Map<string, number> {
   return counts;
 }
 
-function docZoneRows(): Map<string, number> {
-  const text = readFileSync(new URL('../../docs/architecture/FILE_INVENTORY.md', import.meta.url), 'utf8');
+function parseZoneRows(text: string): Map<string, number> {
   const rows = new Map<string, number>();
   for (const line of text.split('\n')) {
     const zone = line.match(/^\| `([a-z]+)` \| (\d+) \|/);
@@ -69,6 +71,10 @@ function docZoneRows(): Map<string, number> {
     if (total) rows.set('total', Number(total[1]));
   }
   return rows;
+}
+
+function docZoneRows(): Map<string, number> {
+  return parseZoneRows(readFileSync(DOC_PATH, 'utf8'));
 }
 
 describe('FILE_INVENTORY per-zone census', () => {
@@ -92,10 +98,26 @@ describe('FILE_INVENTORY per-zone census', () => {
     expect(doc.get('total')).toBe(sum);
   });
 
-  it('CONTROL: a stale zone count fails the recount', () => {
-    // The same comparison the gate makes, applied to a count doctored as if
-    // the document had drifted: it must fail, proving the matcher fires.
+  it('CONTROL: a stale zone count in the parsed document fails the recount', () => {
     const counted = recount();
-    expect(() => expect(counted.get('tests')! + 1).toBe(counted.get('tests'))).toThrow();
+    const text = readFileSync(DOC_PATH, 'utf8');
+    const staleCount = counted.get('tests')! + 1;
+    const mutated = text.replace(/^\| `tests` \| \d+ \|/m, `| \`tests\` | ${staleCount} |`);
+    expect(mutated, 'the tests-zone row must occur once to replace').not.toBe(text);
+    const staleDoc = parseZoneRows(mutated);
+    expect(staleDoc.get('tests')).toBe(staleCount);
+    expect(() => expect(staleDoc.get('tests'), 'tests zone').toBe(counted.get('tests'))).toThrow();
+  });
+
+  it('CONTROL: an untracked tests/*.ts file is not in the census', () => {
+    const scratch = join(REPO_ROOT, 'tests', 'zz-scratch-untracked-zone-gate.ts');
+    writeFileSync(scratch, 'export {};\n');
+    try {
+      const counted = recount();
+      const doc = docZoneRows();
+      expect(counted.get('tests'), 'untracked file must not bump the tests zone').toBe(doc.get('tests'));
+    } finally {
+      unlinkSync(scratch);
+    }
   });
 });

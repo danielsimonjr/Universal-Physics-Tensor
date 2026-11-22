@@ -18,6 +18,8 @@ export interface AppliedCaseCheckRecord {
   readonly op: '<=' | '>=' | '>';
   readonly bound: number;
   readonly threshold: string;
+  /** The optional parameter keys the check depends on. The check is omitted when every one of them is absent. */
+  readonly needs?: readonly string[];
 }
 
 /** One catalog output before runtime wiring. @internal */

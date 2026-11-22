@@ -132,6 +132,11 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   resolves, and the two result kinds are never merged into one count.
 - The public benchmark files never carry the answer; `kind` and `failureKind` live only in
   `tests/fixtures/atlas/benchmark/scorer/labels.json`.
+- `evaluateFormula` and `CompiledFormula.evaluate` refuse NaN and non-numbers always, and refuse
+  ±Infinity unless the caller passes `{ allowInfinity: true }`. Only applied-case catalog `expr`
+  outputs pass that option (a parent integral that underflows to 0 emits `Infinity`, matching the
+  deleted JS runner). Every other caller stays strict. Catalog `needs` on an output or check means
+  the engine omits it when every listed key is absent from the caller's inputs.
 
 ## Where things live
 

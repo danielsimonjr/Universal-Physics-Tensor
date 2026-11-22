@@ -163,7 +163,7 @@ export function createMathtsFormulaParser(
       const formula: CompiledFormula = Object.freeze({
         source: expr,
         variables: Object.freeze(variables),
-        evaluate(scope: Record<string, number>): number {
+        evaluate(scope: Record<string, number>, opts?: { readonly allowInfinity?: boolean }): number {
           if (unknownCallee !== undefined) throw new FormulaError(unknownFunctionMessage(unknownCallee));
           let result: unknown;
           try {
@@ -178,9 +178,15 @@ export function createMathtsFormulaParser(
             const message = err instanceof Error ? err.message : String(err);
             throw new FormulaError(message.replace(/^Undefined symbol "([^"]+)"$/, 'Undefined symbol $1'));
           }
-          if (typeof result !== 'number' || !Number.isFinite(result)) {
-            // typeof Infinity and NaN is "number", which reads as a type error.
-            // A Complex is an object; "got object" hides that sqrt(-1) left the reals.
+          // typeof Infinity and NaN is "number", which reads as a type error.
+          // A Complex is an object; "got object" hides that sqrt(-1) left the reals.
+          if (typeof result !== 'number') {
+            throw new FormulaValueError(`formula did not evaluate to a finite number (got ${describeNonFinite(result)})`);
+          }
+          if (Number.isNaN(result)) {
+            throw new FormulaValueError('formula did not evaluate to a finite number (got NaN)');
+          }
+          if (!Number.isFinite(result) && opts?.allowInfinity !== true) {
             throw new FormulaValueError(`formula did not evaluate to a finite number (got ${describeNonFinite(result)})`);
           }
           return result;

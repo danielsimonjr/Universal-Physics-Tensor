@@ -82,7 +82,8 @@
         "expr": { "type": "string", "minLength": 1 },
         "op": { "enum": ["<=", ">=", ">"] },
         "bound": { "type": "number" },
-        "threshold": { "type": "string", "minLength": 1 }
+        "threshold": { "type": "string", "minLength": 1 },
+        "needs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "uniqueItems": true }
       }
     },
     "case": {

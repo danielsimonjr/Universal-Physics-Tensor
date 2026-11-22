@@ -299,7 +299,8 @@
           "expr": "1/(resistor_fraction*sqrt(B_Hz*t_avg_s))",
           "op": "<=",
           "bound": 0.01,
-          "threshold": "chosen threshold: after subtracting the amplifier's power (known exactly, e.g. from a long shorted-input run) the resistor's power scatters by ≤ 1%"
+          "threshold": "chosen threshold: after subtracting the amplifier's power (known exactly, e.g. from a long shorted-input run) the resistor's power scatters by ≤ 1%",
+          "needs": ["e_n2_V2_per_Hz", "i_n2_A2_per_Hz"]
         }
       ]
     },

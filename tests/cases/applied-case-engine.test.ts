@@ -13,8 +13,10 @@
  * `damped-resonator.test.ts` (envelope ≈ 7.304e-7 m, x_th ≈ 6.4358e-11 m) and
  * `resistor-noise.test.ts` (V_rms,0 ≈ 4.0704e-7 V, φ ≈ 0.89229, T_n ≈ 36.2 K).
  */
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { APPLIED_CASES, runAppliedCase } from '../../src/cases/index.js';
+import { FormulaValueError } from '../../src/numerical/formula-contract.js';
 import {
   appliedCaseRecord,
   catalogSemanticProblems,
@@ -351,9 +353,13 @@ describe('applied-case engine — resistor noise', () => {
     },
     absolutePins: {
       // Cancellation residual (see PinnedCase.absolutePins): (V_rms − V_parent)/V_parent ≈ 2.6e-7.
-      // The 1e-14 window is ~40× the last-ulp quadrature agreement of the two
-      // integrations (2.4e-15 relative on V_rms_parent_V) and still ~8 decades
-      // below any real model change.
+      // parent_deviation = V_rms/V_parent − 1, so a relative error δ on V_parent
+      // (the independent Simpson vs Gauss–Kronrod agreement, 2.4e-15) shifts the
+      // residual by ≈ (V_rms/V_parent)·δ ≈ 2.4e-15 absolute. The 1e-14 window is
+      // ~4× that propagated last-ulp shift, not ~40×, and still ~8 decades below
+      // any real model change. The 2.4e-15 is already the absolute shift of the
+      // residual; dividing 1e-14 by it again as if it were a relative pin on
+      // parent_deviation is the 10× miscount.
       parent_deviation: { expected: Math.sqrt(S * B) / vParent - 1, tol: 1e-14 },
     },
     checks: [
@@ -418,5 +424,111 @@ describe('applied-case engine — resistor noise', () => {
     // S′ = 4 k_B T R_eff² = S · R_eff: the exact factor the mutated exponent predicts.
     expectPinNumber(got.outputs.S_V_V2_per_Hz as number, S * rEff, 'mutated S_V');
     expect(() => pinCase(ID, resistorPinned, record)).toThrow();
+  });
+
+  // Composer review F1: master's JS runner emitted Infinity when the parent
+  // integral underflowed to 0. The engine must match that on the output path
+  // only; checks and every other evaluateFormula caller stay strict.
+  const PARENT_UNDERFLOW = {
+    T_K: 0.02,
+    R_ohm: 50,
+    R_in_ohm: 1e6,
+    C_in_F: 0,
+    f_lo_Hz: 1e9,
+    f_hi_Hz: 3e18,
+    t_avg_s: 1,
+  };
+
+  it('parent_deviation is Infinity when the parent integral underflows (f_hi 3e18, matching master)', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), PARENT_UNDERFLOW);
+    expect(got.outputs.V_rms_parent_V).toBe(0);
+    expect(got.outputs.parent_deviation).toBe(Infinity);
+    expect(Number.isFinite(got.outputs.V_rms_V as number)).toBe(true);
+    expect((got.outputs.V_rms_V as number) > 0).toBe(true);
+  });
+
+  it('NaN still throws on the applied-case output path', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "V_rms_V/V_rms_parent_V - 1"',
+      '"expr": "(V_rms_V-V_rms_V)/(V_rms_V-V_rms_V)"',
+    );
+    expect(mutated, 'the parent_deviation expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    expect(() => runAppliedCaseEngine(record, inputs)).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(record, inputs)).toThrow(/got NaN/);
+  });
+
+  it('a check still throws on Infinity: the output-path opt-in does not leak', () => {
+    const record = structuredClone(appliedCaseRecord(ID));
+    const checks = record.checks as Array<(typeof record.checks)[number]>;
+    checks.push({
+      id: 'parent-nonzero',
+      premise: 'control: parent integral must be nonzero',
+      quantity: '1/V_rms,parent',
+      expr: '1/V_rms_parent_V',
+      op: '>',
+      bound: 0,
+      threshold: 'CONTROL: proves checks refuse Infinity',
+    });
+    expect(() => runAppliedCaseEngine(record, PARENT_UNDERFLOW)).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(record, PARENT_UNDERFLOW)).toThrow(/got Infinity/);
+  });
+
+  it('CONTROL: renaming the amplifier check id does not re-enable it without amp densities', () => {
+    const record = structuredClone(appliedCaseRecord(ID));
+    const amp = record.checks.find((c) => c.id === 'amplifier')!;
+    expect(amp.needs).toEqual(['e_n2_V2_per_Hz', 'i_n2_A2_per_Hz']);
+    (amp as { id: string }).id = 'amp-resolve';
+    const noAmp = { ...inputs };
+    delete noAmp.e_n2_V2_per_Hz;
+    delete noAmp.i_n2_A2_per_Hz;
+    const got = runAppliedCaseEngine(record, noAmp);
+    expect(got.checks.map((c) => c.id)).toEqual(['classical', 'flat-band']);
+    expect(got.outputs.resistor_fraction).toBeNull();
+  });
+
+  it('CONTROL: a JSON-only needs-gated output is null when those inputs are absent', () => {
+    const text = dataText('applied-cases.json');
+    type MutableFile = {
+      schemaVersion: number;
+      cases: Array<{ id: string; outputs: Array<Record<string, unknown>> }>;
+    };
+    const file = structuredClone(JSON.parse(text)) as MutableFile;
+    const row = file.cases.find((c) => c.id === ID)!;
+    row.outputs.push({
+      key: 'gated_dummy',
+      symbol: 'g',
+      unit: '',
+      meaning: 'JSON-only needs gate control',
+      needs: ['e_n2_V2_per_Hz'],
+      expr: 'e_n2_V2_per_Hz*2',
+    });
+    const mutated = readAppliedCaseFile(JSON.stringify(file), schema);
+    const record = mutated.cases.find((c) => c.id === ID)!;
+    const noAmp = { ...inputs };
+    delete noAmp.e_n2_V2_per_Hz;
+    delete noAmp.i_n2_A2_per_Hz;
+    const got = runAppliedCaseEngine(record, noAmp);
+    expect(got.outputs.gated_dummy).toBeNull();
+  });
+
+  it('the resistor runner is gone from DELEGATED_RUN_METHODS and gating is not id-hardcoded', () => {
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(engineSrc).not.toMatch(/runCaseResistorNoise/);
+    expect(engineSrc).not.toMatch(/AMP_GATED_OUTPUTS/);
+    expect(engineSrc).not.toMatch(/row\.id !== 'amplifier'/);
+    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+  });
+
+  it('allowInfinity: true is passed only from evalOutput, never from evalCheck', () => {
+    const stripComments = (src: string) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(stripComments(engineSrc).match(/allowInfinity:\s*true/g)).toEqual(['allowInfinity: true']);
+    expect(engineSrc).toMatch(/function evalCheck[\s\S]*?evalOutputExpr\(row\.expr, inputs, outputs, extra\)/);
+    const exprParse = readFileSync(new URL('../../src/bridges/expr-parse.ts', import.meta.url), 'utf8');
+    expect(stripComments(exprParse)).not.toMatch(/allowInfinity:\s*true/);
+    expect(exprParse).toMatch(/\.evaluate\(scope, opts\)/);
   });
 });

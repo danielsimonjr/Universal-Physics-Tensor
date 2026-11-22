@@ -104,6 +104,15 @@ describe('holds() decides exactly as the old interpreter did', () => {
     expect(evaluateFormula('ln(mass)', { mass: Math.E })).toBeCloseTo(1, 12);
   });
 
+  it('evaluateFormula refuses Infinity and NaN by default; allowInfinity is opt-in and still refuses NaN', async () => {
+    const { FormulaValueError } = await import('../../src/numerical/formula-contract.js');
+    expect(() => evaluateFormula('x/0', { x: 1 })).toThrow(FormulaValueError);
+    expect(() => evaluateFormula('x/0', { x: 1 })).toThrow(/Infinity/);
+    expect(evaluateFormula('x/0', { x: 1 }, [], { allowInfinity: true })).toBe(Infinity);
+    expect(() => evaluateFormula('0/0', {})).toThrow(/NaN/);
+    expect(() => evaluateFormula('0/0', {}, [], { allowInfinity: true })).toThrow(/NaN/);
+  });
+
   it('a literal ratio exponent is one literal in the tree, so a cube root keeps its dimension', () => {
     const tree = parseCatalogExpression('(3*pi^2*fermi-sea-density)^(1/3)');
     expect(tree.kind === 'op' && tree.op === '^' && tree.args[1]!.kind === 'symbol' && tree.args[1]!.name).toBe(String(1 / 3));

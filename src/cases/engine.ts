@@ -25,7 +25,7 @@ export function registerCaseMethods(map: CaseMethodMap): void {
   registeredCaseMethods = map;
 }
 
-const DELEGATED_RUN_METHODS = new Set(['runCaseResistorNoise', 'runCaseLumpedCooling', 'runCaseBrownianSphere']);
+const DELEGATED_RUN_METHODS = new Set(['runCaseLumpedCooling', 'runCaseBrownianSphere']);
 
 /** True when the record drives outputs through the catalog engine rather than a legacy runner. @internal */
 export function usesCatalogEngine(record: AppliedCaseRecord): boolean {
@@ -58,8 +58,21 @@ function evalOutputExpr(
   inputs: Readonly<Record<string, number>>,
   outputs: Readonly<Record<string, number | null>>,
   extra: Readonly<Record<string, number>> = {},
+  opts?: { readonly allowInfinity?: boolean },
 ): number {
-  return evaluateFormula(expr, mergeBindings(inputs, outputs, extra));
+  return evaluateFormula(expr, mergeBindings(inputs, outputs, extra), [], opts);
+}
+
+/**
+ * Catalog `needs`: the output or check is undefined when every listed key is
+ * absent from the caller's inputs (not from engine `extra` defaults).
+ */
+function needsUnmet(
+  inputs: Readonly<Record<string, number>>,
+  needs: readonly string[] | undefined,
+): boolean {
+  if (needs === undefined || needs.length === 0) return false;
+  return needs.every((key) => inputs[key] === undefined);
 }
 
 function evalRelationOutput(
@@ -83,7 +96,9 @@ function evalOutput(
   extra: Readonly<Record<string, number>> = {},
 ): number | null {
   const bindings = mergeBindings(inputs, outputs, extra);
-  if (row.expr !== undefined) return evalOutputExpr(row.expr, inputs, outputs, extra);
+  if (row.expr !== undefined) {
+    return evalOutputExpr(row.expr, inputs, outputs, extra, { allowInfinity: true });
+  }
   if (row.relation !== undefined) return evalRelationOutput(row.relation.relation, row.relation.inputs, bindings);
   if (row.method !== undefined) {
     const fn = registeredCaseMethods[row.method] as CaseOutputMethod | undefined;
@@ -182,7 +197,24 @@ function runDampedEngine(record: AppliedCaseRecord, inputs: Readonly<Record<stri
   return { outputs, checks, unchecked };
 }
 
-const AMP_GATED_OUTPUTS = new Set(['V_rms_total_V', 'resistor_fraction', 'T_n_K']);
+function evaluateWiredOutputsAndChecks(
+  record: AppliedCaseRecord,
+  inputs: Readonly<Record<string, number>>,
+  extra: Readonly<Record<string, number>> = {},
+): { outputs: Record<string, number | null>; checks: CaseCheck[] } {
+  const outputs: Record<string, number | null> = {};
+  for (const row of record.outputs) {
+    if (needsUnmet(inputs, row.needs)) {
+      outputs[row.key] = null;
+      continue;
+    }
+    outputs[row.key] = evalOutput(row, inputs, outputs, extra);
+  }
+  const checks = record.checks
+    .filter((row) => !needsUnmet(inputs, row.needs))
+    .map((row) => evalCheck(row, inputs, outputs, extra));
+  return { outputs, checks };
+}
 
 function validateResistorInputs(id: string, inputs: Readonly<Record<string, number>>): { withAmplifier: boolean } {
   requirePositive(id, inputs, ['T_K', 'R_ohm', 'R_in_ohm', 'f_hi_Hz', 't_avg_s']);
@@ -210,17 +242,7 @@ function runResistorNoiseEngine(record: AppliedCaseRecord, inputs: Readonly<Reco
     e_n2_V2_per_Hz: inputs.e_n2_V2_per_Hz ?? 0,
     i_n2_A2_per_Hz: inputs.i_n2_A2_per_Hz ?? 0,
   };
-  const outputs: Record<string, number | null> = {};
-  for (const row of record.outputs) {
-    if (!withAmplifier && AMP_GATED_OUTPUTS.has(row.key)) {
-      outputs[row.key] = null;
-      continue;
-    }
-    outputs[row.key] = evalOutput(row, inputs, outputs, extra);
-  }
-  const checks = record.checks
-    .filter((row) => withAmplifier || row.id !== 'amplifier')
-    .map((row) => evalCheck(row, inputs, outputs, extra));
+  const { outputs, checks } = evaluateWiredOutputsAndChecks(record, inputs, extra);
   const unchecked = [
     'R_in is a physical resistance at T; an actively synthesized or cold input adds less noise than its resistance would, ' +
       'down to the resistor alone divided by the input: V_rms,0 · R_in/(R + R_in)',
@@ -255,11 +277,7 @@ export function runAppliedCaseEngine(record: AppliedCaseRecord, inputs: Readonly
     extra = validateKeplerInputs(record.id, inputs);
   }
 
-  const outputs: Record<string, number | null> = {};
-  for (const row of record.outputs) {
-    outputs[row.key] = evalOutput(row, inputs, outputs, extra);
-  }
-  const checks = record.checks.map((row) => evalCheck(row, inputs, outputs, extra));
+  const { outputs, checks } = evaluateWiredOutputsAndChecks(record, inputs, extra);
   const unchecked =
     record.id === 'case-skin-depth'
       ? [...SKIN_UNCHECKED]
