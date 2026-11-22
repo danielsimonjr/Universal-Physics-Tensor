@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2853
+  totalExports: 2858
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5420,7 +5420,6 @@ modules:
         - SIGMA_SB_SI
         - JULIAN_YEAR_S
         - MAX_BIOT
-        - MAX_RADIATION_RATIO
         - G_STANDARD
         - MAX_RE
         - MAX_TAU_P_RATIO
@@ -5446,7 +5445,13 @@ modules:
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
-        - runCaseLumpedCooling
+        - lumpedCoolingQJ
+        - lumpedRadiativeConductance
+        - lumpedSphereMeanK
+        - lumpedSphereCentreK
+        - lumpedSphereSurfaceK
+        - lumpedParentDeviation
+        - lumpedRadiatingTempK
         - ballisticDeficit
         - hydrodynamicMsdRatio
         - faxenParallel
@@ -5466,7 +5471,13 @@ modules:
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
-        - runCaseLumpedCooling
+        - lumpedCoolingQJ
+        - lumpedRadiativeConductance
+        - lumpedSphereMeanK
+        - lumpedSphereCentreK
+        - lumpedSphereSurfaceK
+        - lumpedParentDeviation
+        - lumpedRadiatingTempK
         - ballisticDeficit
         - hydrodynamicMsdRatio
         - faxenParallel
@@ -5476,7 +5487,6 @@ modules:
       constants:
         - JULIAN_YEAR_S
         - MAX_BIOT
-        - MAX_RADIATION_RATIO
         - G_STANDARD
         - MAX_RE
         - MAX_TAU_P_RATIO
@@ -19906,17 +19916,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 89716
-  totalExports: 2853
+  totalLinesOfCode: 89797
+  totalExports: 2858
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 937
+  totalFunctions: 943
   totalTypeGuards: 17
   totalEnums: 0
-  totalConstants: 410
+  totalConstants: 409
   totalReExports: 1411
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 21
+  unusedExportsCount: 27

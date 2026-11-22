@@ -25,7 +25,7 @@ export function registerCaseMethods(map: CaseMethodMap): void {
   registeredCaseMethods = map;
 }
 
-const DELEGATED_RUN_METHODS = new Set(['runCaseLumpedCooling', 'runCaseBrownianSphere']);
+const DELEGATED_RUN_METHODS = new Set(['runCaseBrownianSphere']);
 
 /** True when the record drives outputs through the catalog engine rather than a legacy runner. @internal */
 export function usesCatalogEngine(record: AppliedCaseRecord): boolean {
@@ -257,10 +257,29 @@ function runResistorNoiseEngine(record: AppliedCaseRecord, inputs: Readonly<Reco
   return { outputs, checks, unchecked };
 }
 
+function validateLumpedInputs(id: string, inputs: Readonly<Record<string, number>>): void {
+  requirePositive(id, inputs, ['a_m', 'rho_kg_per_m3', 'c_J_per_kg_K', 'k_W_per_m_K', 'h_W_per_m2_K', 'T0_K', 'T_inf_K']);
+  const eps = inputs.emissivity;
+  if (!Number.isFinite(eps) || eps! < 0 || eps! > 1) throw new Error(`${id}: emissivity must be in [0, 1] (got ${eps})`);
+  const t = inputs.t_s;
+  if (!Number.isFinite(t) || t! < 0) throw new Error(`${id}: t_s must be a finite number ≥ 0 (got ${t})`);
+}
+
+function runLumpedCoolingEngine(record: AppliedCaseRecord, inputs: Readonly<Record<string, number>>): CaseResult {
+  validateLumpedInputs(record.id, inputs);
+  const { outputs, checks } = evaluateWiredOutputsAndChecks(record, inputs);
+  const unchecked = [
+    'h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞',
+    'ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]',
+  ];
+  return { outputs, checks, unchecked };
+}
+
 /** Run one catalog record whose outputs are wired as expressions or methods. @internal */
 export function runAppliedCaseEngine(record: AppliedCaseRecord, inputs: Readonly<Record<string, number>>): CaseResult {
   if (record.id === 'case-damped-resonator') return runDampedEngine(record, inputs);
   if (record.id === 'case-resistor-noise') return runResistorNoiseEngine(record, inputs);
+  if (record.id === 'case-lumped-cooling') return runLumpedCoolingEngine(record, inputs);
 
   let extra: Record<string, number> = {};
   if (record.id === 'case-skin-depth') {

@@ -138,6 +138,10 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   deleted JS runner). Every other caller stays strict. Catalog `needs` on an
   output or check means that when every listed key is absent from the caller's
   inputs the engine sets the output to `null` and omits the check.
+- `case-lumped-cooling`'s `parent_deviation` is the named method `lumpedParentDeviation`, not a
+  catalog `expr`: at t/tau >~ 745 both theta and the series mean underflow to 0 and the deleted
+  JS runner handed the caller `NaN` (silent), which the expr path's non-finite guard would
+  turn into a throw. The method reproduces master exactly, `Infinity` at t/tau ~ 740 included.
 
 ## Where things live
 

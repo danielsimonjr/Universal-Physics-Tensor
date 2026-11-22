@@ -1,0 +1,298 @@
+{
+  "valid": {
+    "outputs": {
+      "Bi": 0.00008312551953449709,
+      "Bi_radiating": 0.0000848935168032342,
+      "Bi_radius": 0.0002493765586034913,
+      "Fo": 1399.1605618158846,
+      "Q_J": 93.48474338669178,
+      "T_K": 321.236052397565,
+      "T_centre_K": 321.2396199639888,
+      "T_radiating_K": 320.70197847106147,
+      "T_surface_K": 321.2361178232887,
+      "alpha_m2_per_s": 0.00011659671348465706,
+      "h_rad_max_W_per_m2_K": 0.4253801428581488,
+      "parent_deviation": -0.00005220324263721654,
+      "tau_s": 286.6004166666667,
+      "theta": 0.3510756549695627,
+      "theta_parent_mean": 0.3510939832139569
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": true,
+        "value": 0.00008312551953449709,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": true,
+        "value": 0.02126900714290744,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  },
+  "tZero": {
+    "outputs": {
+      "Bi": 0.00008312551953449709,
+      "Bi_radiating": 0.0000848935168032342,
+      "Bi_radius": 0.0002493765586034913,
+      "Fo": 0,
+      "Q_J": 0,
+      "T_K": 373.15,
+      "T_centre_K": 373.15,
+      "T_radiating_K": 373.15,
+      "T_surface_K": 373.15,
+      "alpha_m2_per_s": 0.00011659671348465706,
+      "h_rad_max_W_per_m2_K": 0.4253801428581488,
+      "parent_deviation": 0,
+      "tau_s": 286.6004166666667,
+      "theta": 1,
+      "theta_parent_mean": 1
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": true,
+        "value": 0.00008312551953449709,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": true,
+        "value": 0.02126900714290744,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  },
+  "largeT": {
+    "outputs": {
+      "Bi": 0.00008312551953449709,
+      "Bi_radiating": 0.0000848935168032342,
+      "Bi_radius": 0.0002493765586034913,
+      "Fo": 13366.647233881085,
+      "Q_J": 144.05454170442604,
+      "T_K": 293.1536320471842,
+      "T_centre_K": 293.153634130932,
+      "T_radiating_K": 293.15312881424,
+      "T_surface_K": 293.153633677838,
+      "alpha_m2_per_s": 0.00011659671348465706,
+      "h_rad_max_W_per_m2_K": 0.4253801428581488,
+      "parent_deviation": -0.0004986127622003123,
+      "tau_s": 286.6004166666667,
+      "theta": 0.000045400589802520055,
+      "theta_parent_mean": 0.000045423238408891196
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": true,
+        "value": 0.00008312551953449709,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": true,
+        "value": 0.02126900714290744,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  },
+  "warming": {
+    "outputs": {
+      "Bi": 0.00008312551953449709,
+      "Bi_radiating": 0.00008557456274137595,
+      "Bi_radius": 0.0002493765586034913,
+      "Fo": 1336.6647233881088,
+      "Q_J": -91.0638947134753,
+      "T_K": 343.7196019196861,
+      "T_centre_K": 343.7159322268418,
+      "T_radiating_K": 344.4199392365371,
+      "T_surface_K": 343.7196019897952,
+      "alpha_m2_per_s": 0.00011659671348465706,
+      "h_rad_max_W_per_m2_K": 0.5892397955750551,
+      "parent_deviation": -0.000049871508345677995,
+      "tau_s": 286.6004166666667,
+      "theta": 0.3678799760039234,
+      "theta_parent_mean": 0.3678983236482416
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": true,
+        "value": 0.00008312551953449709,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": true,
+        "value": 0.029461989778752758,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  },
+  "biAbove": {
+    "outputs": {
+      "Bi": 0.27548209366391185,
+      "Bi_radiating": 0.27548209366391185,
+      "Bi_radius": 0.8264462809917356,
+      "Fo": 4.259768423498431,
+      "Q_J": 124929.79921718268,
+      "T_K": 293.1518127430704,
+      "T_centre_K": 293.16085783404714,
+      "T_radiating_K": null,
+      "T_surface_K": 293.15742591001737,
+      "alpha_m2_per_s": 0.000017749035097910132,
+      "h_rad_max_W_per_m2_K": 0,
+      "parent_deviation": -0.7924726100627728,
+      "tau_s": 56.81060000000001,
+      "theta": 0.000025896329577418244,
+      "theta_parent_mean": 0.00012478511672724918
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": false,
+        "value": 0.27548209366391185,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": true,
+        "value": 0,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  },
+  "biMid": {
+    "outputs": {
+      "Bi": 0.027548209366391185,
+      "Bi_radiating": 0.027548209366391185,
+      "Bi_radius": 0.08264462809917356,
+      "Fo": 4.259768423498431,
+      "Q_J": 81481.90103851864,
+      "T_K": 317.4956773109072,
+      "T_centre_K": 318.53106897508763,
+      "T_radiating_K": 317.495677313057,
+      "T_surface_K": 317.51194301627646,
+      "alpha_m2_per_s": 0.000017749035097910132,
+      "h_rad_max_W_per_m2_K": 0,
+      "parent_deviation": -0.017029565110633027,
+      "tau_s": 568.1060000000001,
+      "theta": 0.34779539015581695,
+      "theta_parent_mean": 0.35382080458499365
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": true,
+        "value": 0.027548209366391185,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": true,
+        "value": 0,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  },
+  "emissivityOne": {
+    "outputs": {
+      "Bi": 0.00008312551953449709,
+      "Bi_radiating": 0.0004170789921855503,
+      "Bi_radius": 0.0002493765586034913,
+      "Fo": 279.8321123631769,
+      "Q_J": 238.10144429290818,
+      "T_K": 867.7775061973826,
+      "T_centre_K": 867.8259113522023,
+      "T_radiating_K": 654.0019026529702,
+      "T_surface_K": 867.7551162956199,
+      "alpha_m2_per_s": 0.00011659671348465706,
+      "h_rad_max_W_per_m2_K": 80.3492055198434,
+      "parent_deviation": -0.000010440014008850085,
+      "tau_s": 286.6004166666667,
+      "theta": 0.811110723139118,
+      "theta_parent_mean": 0.8111191912348373
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": true,
+        "value": 0.00008312551953449709,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": false,
+        "value": 4.017460275992169,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  },
+  "hotSteel": {
+    "outputs": {
+      "Bi": 0.0002754820936639118,
+      "Bi_radiating": 0.002046263482530984,
+      "Bi_radius": 0.0008264462809917356,
+      "Fo": 42.597684234984314,
+      "Q_J": 125.21812022120979,
+      "T_K": 929.8402664366131,
+      "T_centre_K": 930.0074137061904,
+      "T_radiating_K": 711.2214374702671,
+      "T_surface_K": 929.7471553506474,
+      "alpha_m2_per_s": 0.000017749035097910132,
+      "h_rad_max_W_per_m2_K": 64.27936441587471,
+      "parent_deviation": -0.000017443366142066985,
+      "tau_s": 568.106,
+      "theta": 0.8997718091951615,
+      "theta_parent_mean": 0.8997875045180529
+    },
+    "checks": [
+      {
+        "id": "lumped",
+        "holds": true,
+        "value": 0.0002754820936639118,
+        "bound": 0.1
+      },
+      {
+        "id": "linear-loss",
+        "holds": false,
+        "value": 6.427936441587471,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞",
+      "ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]"
+    ]
+  }
+}

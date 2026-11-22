@@ -120,9 +120,6 @@ export { SIGMA_SB_SI } from '../core/constants.js';
 /** Bi = h L_c/k ceiling, L_c = V/A (Incropera §5.2, eq. 5.10). @internal */
 export const MAX_BIOT = 0.1;
 
-/** h_rad,max/h ceiling for a loss linear in T − T∞. @internal */
-export const MAX_RADIATION_RATIO = 0.1;
-
 
 /**
  * T(t) of ρcV dT/dt = −A[h(T − T∞) + εσ_SB(T⁴ − T∞⁴)] for a sphere (V/A =
@@ -196,60 +193,114 @@ export function sphereSeries(biRadius: number, fo: number): { mean: number; cent
   return { mean, centre, surface };
 }
 /**
- * Evaluate the lumped thermal cooling applied case at the given SI inputs.
+ * Q = ρcV(T0 − T(t)) = ρcV(T0 − T∞)(1 − e^{−t/τ}), computed with
+ * `-Math.expm1(-t / tau)` so small t/τ keeps its accuracy (`expm1` is not in
+ * the catalog expression grammar, so this stays a named method).
  * @internal
  */
-export function runCaseLumpedCooling(i: Readonly<Record<string, number>>): CaseResult {
-    requirePositive(LUMPED_COOLING_ID, i, ['a_m', 'rho_kg_per_m3', 'c_J_per_kg_K', 'k_W_per_m_K', 'h_W_per_m2_K', 'T0_K', 'T_inf_K']);
-    const {
-      a_m: a, rho_kg_per_m3: rho, c_J_per_kg_K: c, k_W_per_m_K: k, h_W_per_m2_K: h,
-      emissivity: eps, T0_K: T0, T_inf_K: Tinf, t_s: t,
-    } = i as Record<string, number>;
-    if (!Number.isFinite(eps) || eps < 0 || eps > 1) throw new Error(`${LUMPED_COOLING_ID}: emissivity must be in [0, 1] (got ${eps})`);
-    if (!Number.isFinite(t) || t < 0) throw new Error(`${LUMPED_COOLING_ID}: t_s must be a finite number ≥ 0 (got ${t})`);
-    const tau = (rho * c * a) / (3 * h);
-    const bi = (h * (a / 3)) / k;
-    const biRadius = (h * a) / k;
-    const alpha = k / (rho * c);
-    const fo = (alpha * t) / (a * a);
-    const theta = Math.exp(-t / tau);
-    const series = sphereSeries(biRadius, fo);
-    const dT0 = T0 - Tinf;
-    const Tmax = Math.max(T0, Tinf);
-    const hRad = eps * SIGMA_SB_SI * (Tmax + Tinf) * (Tmax * Tmax + Tinf * Tinf);
-    const volume = (4 / 3) * Math.PI * a ** 3;
-    const biRadiating = ((h + hRad) * (a / 3)) / k;
-    const tRadiating = biRadiating <= MAX_BIOT ? lumpedRadiatingTemperature({ a, rho, c, h, eps, T0, Tinf, t }) : null;
-    return {
-      outputs: {
-        tau_s: tau,
-        Bi: bi,
-        Bi_radius: biRadius,
-        alpha_m2_per_s: alpha,
-        Fo: fo,
-        theta,
-        T_K: Tinf + dT0 * theta,
-        Q_J: rho * c * volume * dT0 * -Math.expm1(-t / tau),
-        theta_parent_mean: series.mean,
-        parent_deviation: theta / series.mean - 1,
-        T_centre_K: Tinf + dT0 * series.centre,
-        T_surface_K: Tinf + dT0 * series.surface,
-        h_rad_max_W_per_m2_K: hRad,
-        Bi_radiating: biRadiating,
-        T_radiating_K: tRadiating,
-      },
-      checks: [
-        check('lumped', 'one temperature for the sphere: internal conduction fast beside surface loss, Bi ≪ 1', 'h (a/3)/k', bi, '<=', MAX_BIOT,
-          'the conventional criterion Bi ≤ 0.1 with L_c = V/A (Incropera §5.2); parent_deviation shows the error it leaves at t'),
-        check('linear-loss', 'the loss is linear in T − T∞: radiation small beside convection', 'εσ_SB(T_max + T∞)(T_max² + T∞²)/h', hRad / h, '<=', MAX_RADIATION_RATIO,
-          'chosen threshold: the neglected radiative conductance is ≤ 10% of h at the hottest point of the run (Incropera eq. 1.9 linearization)'),
-      ],
-      unchecked: [
-        'h is uniform over the sphere and constant in time; for natural convection it falls as the sphere approaches T∞',
-        'ρ, c and k are constant over [min(T0, T∞), max(T0, T∞)]',
-      ],
-    };
-  
+export function lumpedCoolingQJ(
+  inputs: Readonly<Record<string, number>>,
+  _outputs: Readonly<Record<string, number | null>>,
+): number {
+  const a = inputs.a_m!;
+  const rho = inputs.rho_kg_per_m3!;
+  const c = inputs.c_J_per_kg_K!;
+  const h = inputs.h_W_per_m2_K!;
+  const tau = (rho * c * a) / (3 * h);
+  const dT0 = inputs.T0_K! - inputs.T_inf_K!;
+  const volume = (4 / 3) * Math.PI * a ** 3;
+  return rho * c * volume * dT0 * -Math.expm1(-inputs.t_s! / tau);
+}
+
+/**
+ * h_rad,max = εσ_SB(T_max + T∞)(T_max² + T∞²) at T_max = max(T0, T∞); the
+ * 2-argument `max` is not in the catalog expression grammar, so this stays a
+ * named method.
+ * @internal
+ */
+export function lumpedRadiativeConductance(
+  inputs: Readonly<Record<string, number>>,
+  _outputs: Readonly<Record<string, number | null>>,
+): number {
+  const Tmax = Math.max(inputs.T0_K!, inputs.T_inf_K!);
+  const Tinf = inputs.T_inf_K!;
+  return inputs.emissivity! * SIGMA_SB_SI * (Tmax + Tinf) * (Tmax * Tmax + Tinf * Tinf);
+}
+
+/** Volume-mean excess-temperature ratio of the series solution (convection only). @internal */
+export function lumpedSphereMeanK(
+  inputs: Readonly<Record<string, number>>,
+  _outputs: Readonly<Record<string, number | null>>,
+): number {
+  return sphereSeries((inputs.h_W_per_m2_K! * inputs.a_m!) / inputs.k_W_per_m_K!, (inputs.k_W_per_m_K! / (inputs.rho_kg_per_m3! * inputs.c_J_per_kg_K!) * inputs.t_s!) / (inputs.a_m! * inputs.a_m!)).mean;
+}
+
+/** Centre temperature T(0, t) from the series solution. @internal */
+export function lumpedSphereCentreK(
+  inputs: Readonly<Record<string, number>>,
+  _outputs: Readonly<Record<string, number | null>>,
+): number {
+  const series = sphereSeries(
+    (inputs.h_W_per_m2_K! * inputs.a_m!) / inputs.k_W_per_m_K!,
+    (inputs.k_W_per_m_K! / (inputs.rho_kg_per_m3! * inputs.c_J_per_kg_K!) * inputs.t_s!) / (inputs.a_m! * inputs.a_m!),
+  );
+  return inputs.T_inf_K! + (inputs.T0_K! - inputs.T_inf_K!) * series.centre;
+}
+
+/** Surface temperature T(a, t) from the series solution. @internal */
+export function lumpedSphereSurfaceK(
+  inputs: Readonly<Record<string, number>>,
+  _outputs: Readonly<Record<string, number | null>>,
+): number {
+  const series = sphereSeries(
+    (inputs.h_W_per_m2_K! * inputs.a_m!) / inputs.k_W_per_m_K!,
+    (inputs.k_W_per_m_K! / (inputs.rho_kg_per_m3! * inputs.c_J_per_kg_K!) * inputs.t_s!) / (inputs.a_m! * inputs.a_m!),
+  );
+  return inputs.T_inf_K! + (inputs.T0_K! - inputs.T_inf_K!) * series.surface;
+}
+
+/**
+ * θ/θ̄ − 1, the signed relative difference of the lumped ratio against the
+ * parent's volume mean. A named method rather than a catalog `expr` because
+ * at t/τ ≳ 745 both θ and the series mean underflow to 0 and the quotient is
+ * 0/0: the deleted JS runner handed the caller `NaN` there, and the expr
+ * path's non-finite guard would throw instead (see NOTES.md).
+ * @internal
+ */
+export function lumpedParentDeviation(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const theta = outputs.theta;
+  const mean = outputs.theta_parent_mean;
+  if (theta === null || mean === null || theta === undefined || mean === undefined) {
+    throw new Error('lumpedParentDeviation: need finite theta and theta_parent_mean');
+  }
+  return theta / mean - 1;
+}
+
+/**
+ * The lumped temperature with the T⁴ loss kept (`lumpedRadiatingTemperature`,
+ * RK4), or `null` where the linear-loss premise does not reach:
+ * `Bi_radiating > MAX_BIOT` (0.1).
+ * @internal
+ */
+export function lumpedRadiatingTempK(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number | null {
+  const biRadiating = outputs.Bi_radiating;
+  if (biRadiating === null || biRadiating === undefined || biRadiating > MAX_BIOT) return null;
+  return lumpedRadiatingTemperature({
+    a: inputs.a_m!,
+    rho: inputs.rho_kg_per_m3!,
+    c: inputs.c_J_per_kg_K!,
+    h: inputs.h_W_per_m2_K!,
+    eps: inputs.emissivity!,
+    T0: inputs.T0_K!,
+    Tinf: inputs.T_inf_K!,
+    t: inputs.t_s!,
+  });
 }
 
 // --- brownian-sphere.ts ---
@@ -475,7 +526,6 @@ export function runCaseBrownianSphere(i: Readonly<Record<string, number>>): Case
 }
 
 const RUN_BY_ID: Readonly<Record<string, (i: Readonly<Record<string, number>>) => CaseResult>> = {
-  'case-lumped-cooling': runCaseLumpedCooling,
   'case-brownian-sphere': runCaseBrownianSphere,
 };
 
@@ -509,7 +559,13 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'brennerPerpendicular',
   'brownianSphereRegimeAt',
   'resistorParentVrmsV',
-  'runCaseLumpedCooling',
+  'lumpedCoolingQJ',
+  'lumpedParentDeviation',
+  'lumpedRadiativeConductance',
+  'lumpedSphereMeanK',
+  'lumpedSphereCentreK',
+  'lumpedSphereSurfaceK',
+  'lumpedRadiatingTempK',
   'runCaseBrownianSphere',
 ]);
 
@@ -528,7 +584,13 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   brennerPerpendicular,
   brownianSphereRegimeAt,
   resistorParentVrmsV,
-  runCaseLumpedCooling,
+  lumpedCoolingQJ,
+  lumpedParentDeviation,
+  lumpedRadiativeConductance,
+  lumpedSphereMeanK,
+  lumpedSphereCentreK,
+  lumpedSphereSurfaceK,
+  lumpedRadiatingTempK,
   runCaseBrownianSphere,
 };
 

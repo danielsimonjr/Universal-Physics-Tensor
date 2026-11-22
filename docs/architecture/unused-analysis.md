@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 21
+- **Potentially unused exports**: 27
 
 ## Potentially Unused Files
 
@@ -32,7 +32,13 @@ These exports are not imported by any other file in the codebase:
 - `skinDeltaMaxwellM` (function)
 - `windowedLinewidthCatalogHz` (function)
 - `resistorParentVrmsV` (function)
-- `runCaseLumpedCooling` (function)
+- `lumpedCoolingQJ` (function)
+- `lumpedRadiativeConductance` (function)
+- `lumpedSphereMeanK` (function)
+- `lumpedSphereCentreK` (function)
+- `lumpedSphereSurfaceK` (function)
+- `lumpedParentDeviation` (function)
+- `lumpedRadiatingTempK` (function)
 - `brownianSphereRegimeAt` (function)
 - `runCaseBrownianSphere` (function)
 - `CASE_METHODS` (constant)

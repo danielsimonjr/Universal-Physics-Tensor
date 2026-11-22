@@ -26,7 +26,7 @@ import {
 import { runAppliedCaseEngine, usesCatalogEngine } from '../../src/cases/engine.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
-import { CASE_METHOD_NAMES } from '../../src/cases/methods.js';
+import { CASE_METHOD_NAMES, SIGMA_SB_SI, sphereSeries, lumpedRadiatingTemperature } from '../../src/cases/methods.js';
 import type { CaseResult } from '../../src/cases/types.js';
 import { C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, M_SUN_SI, MU0_SI } from '../../src/core/constants.js';
 import { dataSchema, dataText } from '../../src/core/data-file.js';
@@ -530,5 +530,101 @@ describe('applied-case engine — resistor noise', () => {
     const exprParse = readFileSync(new URL('../../src/bridges/expr-parse.ts', import.meta.url), 'utf8');
     expect(stripComments(exprParse)).not.toMatch(/allowInfinity:\s*true/);
     expect(exprParse).toMatch(/\.evaluate\(scope, opts\)/);
+  });
+});
+
+describe('applied-case engine — lumped cooling', () => {
+  // lumped-cooling.test.ts:20 valid args (the catalog valid example).
+  const ID = 'case-lumped-cooling';
+  const inputs = resolveEvaluatorInputs(APPLIED_CASES.get(ID)!.parameters, APPLIED_CASES.get(ID)!.examples.valid.args).inputs;
+  // Hand arithmetic on the exact SI constants (lumped-cooling.test.ts).
+  const a = 5e-3;
+  const rho = 8933;
+  const c = 385;
+  const k = 401;
+  const h = 20;
+  const eps = 0.05;
+  const T0 = 373.15;
+  const Tinf = 293.15;
+  const t = 300;
+  const tau = (rho * c * a) / (3 * h);
+  const bi = (h * (a / 3)) / k;
+  const biRadius = (h * a) / k;
+  const alpha = k / (rho * c);
+  const fo = (alpha * t) / (a * a);
+  const theta = Math.exp(-t / tau);
+  const series = sphereSeries(biRadius, fo);
+  const hRad = eps * SIGMA_SB_SI * (T0 + Tinf) * (T0 * T0 + Tinf * Tinf);
+  const tRad = lumpedRadiatingTemperature({ a, rho, c, h, eps, T0, Tinf, t });
+  const lumpedPinned: PinnedCase = {
+    outputs: {
+      tau_s: tau,
+      Bi: bi,
+      Bi_radius: biRadius,
+      alpha_m2_per_s: alpha,
+      Fo: fo,
+      theta,
+      T_K: Tinf + (T0 - Tinf) * theta,
+      Q_J: rho * c * ((4 / 3) * Math.PI * a ** 3) * (T0 - Tinf) * -Math.expm1(-t / tau),
+      theta_parent_mean: series.mean,
+      parent_deviation: theta / series.mean - 1,
+      T_centre_K: Tinf + (T0 - Tinf) * series.centre,
+      T_surface_K: Tinf + (T0 - Tinf) * series.surface,
+      h_rad_max_W_per_m2_K: hRad,
+      Bi_radiating: ((h + hRad) * (a / 3)) / k,
+      T_radiating_K: tRad,
+    },
+    checks: [
+      { id: 'lumped', holds: true, value: bi },
+      { id: 'linear-loss', holds: true, value: hRad / h },
+    ],
+    uncheckedCount: 2,
+  };
+
+  it('pinned reference: copper 5 mm, h = 20, ε = 0.05, 100 °C → 20 °C at 300 s (engine outputs on the catalog valid example)', () => {
+    pinCase(ID, lumpedPinned);
+  });
+
+  it('the engine routes the case: usesCatalogEngine is true and no runCaseLumpedCooling remains', () => {
+    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+    expect([...CASE_METHOD_NAMES]).not.toContain('runCaseLumpedCooling');
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(engineSrc).not.toMatch(/runCaseLumpedCooling/);
+  });
+
+  it('validation: the engine carries the domain refusals with the same messages', () => {
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, emissivity: 1.2 })).toThrow(
+      /emissivity must be in \[0, 1\] \(got 1\.2\)/,
+    );
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, t_s: -1 })).toThrow(/t_s must be a finite number ≥ 0/);
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, a_m: 0 })).toThrow(/a_m must be/);
+  });
+
+  it('control: mutating the tau_s prefactor (3 → 4, a coefficient change) moves tau_s by exactly 3/4 and fails the pins', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(3*h_W_per_m2_K)"',
+      '"expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(4*h_W_per_m2_K)"',
+    );
+    expect(mutated, 'the tau_s expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    const got = runAppliedCaseEngine(record, inputs);
+    // τ′ = ρca/(4h) = τ · 3/4: the exact factor the mutated coefficient predicts.
+    expectPinNumber(got.outputs.tau_s as number, tau * (3 / 4), 'mutated tau_s');
+    expect(() => pinCase(ID, lumpedPinned, record)).toThrow(/to be less (or equal )?than/);
+  });
+
+  // Master's JS runner emitted Infinity for parent_deviation when theta is
+  // subnormal but the series mean has underflowed to 0 (t/tau ≈ 740; measured
+  // on master before the deletion). parent_deviation is a named method (see
+  // NOTES.md for why it is not an expr), so the value reaches the caller
+  // unchanged; no allowInfinity opt-in was needed for this case.
+  it('parent_deviation is Infinity where the master runner produced Infinity (t/tau ≈ 740)', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...inputs, t_s: 740 * tau });
+    expect(got.outputs.theta_parent_mean).toBe(0);
+    expect((got.outputs.theta as number) > 0).toBe(true);
+    expect(got.outputs.parent_deviation).toBe(Infinity);
+    expect(got.outputs.T_K).toBeCloseTo(Tinf, 10);
   });
 });

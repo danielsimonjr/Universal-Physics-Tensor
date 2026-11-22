@@ -1400,105 +1400,105 @@
           "symbol": "τ",
           "unit": "s",
           "meaning": "lumped time constant ρcV/(hA) = ρca/(3h)",
-          "method": "runCaseLumpedCooling"
+          "expr": "rho_kg_per_m3*c_J_per_kg_K*a_m/(3*h_W_per_m2_K)"
         },
         {
           "key": "Bi",
           "symbol": "Bi",
           "unit": "",
           "meaning": "Biot number h L_c/k with L_c = V/A = a/3 (the lumped criterion's form)",
-          "method": "runCaseLumpedCooling"
+          "expr": "h_W_per_m2_K*(a_m/3)/k_W_per_m_K"
         },
         {
           "key": "Bi_radius",
           "symbol": "Bi_a",
           "unit": "",
           "meaning": "h a/k: the radius-based Biot number of the series solution (3 Bi)",
-          "method": "runCaseLumpedCooling"
+          "expr": "h_W_per_m2_K*a_m/k_W_per_m_K"
         },
         {
           "key": "alpha_m2_per_s",
           "symbol": "α",
           "unit": "m^2/s",
           "meaning": "thermal diffusivity k/(ρc)",
-          "method": "runCaseLumpedCooling"
+          "expr": "k_W_per_m_K/(rho_kg_per_m3*c_J_per_kg_K)"
         },
         {
           "key": "Fo",
           "symbol": "Fo",
           "unit": "",
           "meaning": "Fourier number αt/a²",
-          "method": "runCaseLumpedCooling"
+          "expr": "alpha_m2_per_s*t_s/(a_m*a_m)"
         },
         {
           "key": "theta",
           "symbol": "θ/θ0",
           "unit": "",
           "meaning": "lumped excess-temperature ratio e^{−t/τ}",
-          "method": "runCaseLumpedCooling"
+          "expr": "exp(-t_s/tau_s)"
         },
         {
           "key": "T_K",
           "symbol": "T(t)",
           "unit": "K",
           "meaning": "the lumped temperature at t: what a thermometer in or on the sphere reads",
-          "method": "runCaseLumpedCooling"
+          "expr": "T_inf_K + (T0_K - T_inf_K)*theta"
         },
         {
           "key": "Q_J",
           "symbol": "Q",
           "unit": "J",
           "meaning": "heat released to the fluid by t, ρcV(T0 − T(t)) (negative when the sphere warms)",
-          "method": "runCaseLumpedCooling"
+          "method": "lumpedCoolingQJ"
         },
         {
           "key": "theta_parent_mean",
           "symbol": "θ̄/θ0",
           "unit": "",
           "meaning": "volume-mean excess-temperature ratio of the series solution (convection only)",
-          "method": "runCaseLumpedCooling"
+          "method": "lumpedSphereMeanK"
         },
         {
           "key": "parent_deviation",
           "symbol": "θ/θ̄ − 1",
           "unit": "",
           "meaning": "signed relative difference of the lumped ratio relative to the parent's volume mean",
-          "method": "runCaseLumpedCooling"
+          "method": "lumpedParentDeviation"
         },
         {
           "key": "T_centre_K",
           "symbol": "T(0, t)",
           "unit": "K",
           "meaning": "temperature at the centre from the series solution",
-          "method": "runCaseLumpedCooling"
+          "method": "lumpedSphereCentreK"
         },
         {
           "key": "T_surface_K",
           "symbol": "T(a, t)",
           "unit": "K",
           "meaning": "temperature at the surface from the series solution",
-          "method": "runCaseLumpedCooling"
+          "method": "lumpedSphereSurfaceK"
         },
         {
           "key": "h_rad_max_W_per_m2_K",
           "symbol": "h_rad",
           "unit": "W/(m^2*K)",
           "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run",
-          "method": "runCaseLumpedCooling"
+          "method": "lumpedRadiativeConductance"
         },
         {
           "key": "Bi_radiating",
           "symbol": "Bi_r",
           "unit": "",
           "meaning": "(h + h_rad)(a/3)/k: the Biot number with the largest radiative conductance added",
-          "method": "runCaseLumpedCooling"
+          "expr": "((h_W_per_m2_K + h_rad_max_W_per_m2_K)*(a_m/3))/k_W_per_m_K"
         },
         {
           "key": "T_radiating_K",
           "symbol": "T_r(t)",
           "unit": "K",
           "meaning": "the lumped temperature with the T⁴ loss kept (RK4). The linear-loss check does not apply to it; its premise is Bi_radiating ≤ 0.1, and it is not defined otherwise",
-          "method": "runCaseLumpedCooling"
+          "method": "lumpedRadiatingTempK"
         }
       ],
       "conditions": [
