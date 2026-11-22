@@ -9,6 +9,17 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-22 (PR #822 Composer FIX LIST)
+
+- **1 `6ac26afe`.** `tests/examples/user-docs.test.ts` asserts every `prints[]` piece in the guide and in stdout. Mutation: recover prefactor `6.28318530717959` → `9.99999999999999` → 1 failed / 32 passed.
+- **2 `da928d04`.** statedOutput / fenceAfter / sentences vs live CLI. Mutations: natural `21.708826656988485` 1/41; G*M_sun 2/40; `CE-totally-invented` 1/41; `be-999` 1/41.
+- **3 `e489840a`.** Guide-text CONTROLs (`mutateGuideNumber` then re-extract statedOutput). Suite 44 passed after; now 45 with the item-4 CONTROL.
+- **6 `de8abc8f`.** MathTS `{ physics: true }` dropped the `e` term of `e + e_charge` (`{e: E_SI, e_charge: 3}` → 3 in float64) and `parseScope` did not fan `e`/`e_charge`. `rewriteConstantSpellings` of the `e` row before `compileExpr`; `CONSTANT_SPELLING_GROUPS` in agreement/expansion. RED 4 failed / 20 passed. CLI `upt eval "e + e_charge" e_charge=3C` → `6 C`; disagreeing bindings exit 1. CONTROL: unre-written compileExpr evaluate is 3; CLI sum is not `3 C`. Typing follow-up `a8235315`. A first rewrite of every alias made `upt derive … speed_of_light:velocity` and `mu0:permeability` exit 2; compileExpr now rewrites only the `e` row (`speed_of_light` / `mu0` stay the caller identifiers).
+- **4 `d6b1aab7`.** Drift guard `(?<![-\w])(?:109|152|121|696|160)(?![.\w])|^\d+ bridges`. CONTROL: each of those five as a bare count matches; `be-121` / `CE-121` / `Node >=22.12.0` do not.
+- **5 `803d6f32`.** `upt help` `e.g.` only where the help has one (`audit`, `canonical`, `priority`, `recover`, `symbolic` have none). Canonical coverage line is a count, not a partner list. `upt eval --help` is the documented sample. Node `>=22.12.0`. `--natural` leaves k_B SI (`1/(8π G M k_B)`).
+- **7 `1d431f9e`.** All 11 non-`mpc` guard names throw in `Unit.parse` on MathTS 0.28.0 (`exactScale` never reached). Law 2 comment narrowed; Unreleased S10 `exactScale === null` clause retracted.
+- **8.** File census **1268** unchanged (no new files). `docs:deps` `totalExports` **2867** / unused **34**; repo-tools map `totalExports` **3919** / unused **192**. FILE_INVENTORY / COMPONENTS `totalSourceFiles` and TEST_COVERAGE unchanged. OVERVIEW / API.md / duplicate-symbols Verification tables updated. No map dump committed.
+
 ## As of 2026-11-22 (S11 — getting-started and catalog user guides)
 
 - **Two user guides plus the test that runs them.** `docs/user/getting-started.md` (install, the README's five first-five-minutes commands with their verified outputs pasted from the built CLI, clone-and-build via Bun 1.4.2/`bun install`/`bun run build`/`node bin/upt.mjs`, links to `../CLI.md` and `catalog.md`, no `tutorials/` link) and `docs/user/catalog.md` (bridge `BE-<id>`/`be-<id>`/`BRIDGE_EQUATIONS`, canonical `CE-<id>` from `src/canonical/registry.ts`/`CANONICAL_EQUATIONS`, atlas bridges, records without an evaluator, the no-id `upt evaluate` listing, the constant registry `src/core/constants.ts`/`CONSTANT_ROWS`/`PhysicalConstants`/`CANONICAL_CONSTANTS`, the three provenance tiers, bare-`e`/`exp(1)`/`euler`, exact `HBAR_SI`, `--natural`/`--geometrized`). A `User guides` section links both from `docs/README.md`.
