@@ -22,7 +22,7 @@ describe('synonym groups', () => {
   it('e_charge is the same charge as e even though it is not a quantity-registry synonym', () => {
     expect(SYNONYM_GROUPS.some((group) => group.includes('e') && group.includes('e_charge'))).toBe(false);
     expect(() => assertSynonymAgreement({ e: 1, e_charge: 3 })).toThrow(SynonymDisagreementError);
-    const agreed = expandSynonymValues({ e_charge: 3 });
+    const agreed: Record<string, number> = expandSynonymValues({ e_charge: 3 });
     expect(agreed.e).toBe(3);
     expect(agreed.e_charge).toBe(3);
   });
