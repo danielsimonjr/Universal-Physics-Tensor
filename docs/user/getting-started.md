@@ -23,8 +23,9 @@ npx upt help
 The npm package ships `dist/`, `bin/`, `data/`, the README and the licence, so
 `npx upt help` works straight after the install and lists every command with a
 one-line description. `upt help <command>` (or `upt <command> --help`) prints
-that command's usage, flags and one example. Nothing else is needed: Node 22 or
-newer is the only requirement.
+that command's usage and flags, and an `e.g.` example when the help text has
+one. `audit`, `canonical`, `priority`, `recover` and `symbolic` have none.
+Nothing else is needed: Node >=22.12.0 is the only requirement.
 
 ## First five minutes
 
@@ -123,4 +124,7 @@ work for a clone.
 - [The equation and constant catalog guide](catalog.md) — what lives in the
   bridge catalog, the canonical registry and the atlas, and how the physical
   constants are named, sourced and used in formulas.
-- [`docs/CLI.md`](../CLI.md) — every command, every flag, one example each.
+- [`docs/CLI.md`](../CLI.md) — every command, every flag, and the registry
+  example for each command (`audit`, `canonical`, `priority`, `recover` and
+  `symbolic` have no `e.g.` in `upt help`; the reference still shows the
+  registry example).

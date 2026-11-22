@@ -60,8 +60,8 @@ bridge ids that restate or recover it.
 
 `upt canonical` prints the registry as a table (one row per entry, with the
 fidelity tier, the physics domain, the id and the partner bridges), followed
-by a coverage line stating how many catalog bridges have no canonical partner
-yet:
+by a coverage line that counts how many catalog bridges have no canonical
+partner yet and does not name those partners:
 
 ```bash
 upt canonical
@@ -311,10 +311,12 @@ upt eval "hbar*c/fm" fm=1fm
 
 ### Reading the registry yourself
 
-`upt eval --help` prints the full list of registered constant names and aliases
-the evaluator knows (`G`, `c`, `hbar`, `h`, `k_B`, `e`, `ln2`, `epsilon_0`,
-`sigma_sb`, `b`, `GM_sun`, `Msun_iau`, and the aliases `e_charge`, `m_e`,
-`m_p`, `m_proton`, `N_A`, `F`, `eps0`, `mu0`, `mu_0`, `kB`, `M_sun`), together
+`upt eval --help` prints the documented list of registered constant names and
+aliases the evaluator fills in (`G`, `c`, `hbar`, `h`, `k_B`, `e`, `ln2`,
+`epsilon_0`, `sigma_sb`, `b`, `GM_sun`, `Msun_iau`, and the aliases
+`e_charge`, `m_e`, `m_p`, `m_proton`, `N_A`, `F`, `eps0`, `mu0`, `mu_0`,
+`kB`, `M_sun` — that parenthetical is the help's own sample, not every
+spelling), together
 with the parser rules quoted above. Two caveats printed there are worth
 repeating: a bare `sigma` is not the Stefan–Boltzmann constant (write
 `sigma_sb`), and `T`, `temperature` and `T_K` are kelvin — an energy written on
