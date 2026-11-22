@@ -68,7 +68,7 @@ function parseZoneRows(text: string): Map<string, number> {
       rows.set(zone[1]!, Number(zone[2]));
       continue;
     }
-    const total = line.match(/^\| \*\*Total\*\* \| \*\*(\d+)\*\* \|/);
+    const total = line.match(/^\| \*\*Total\*\* \| \*\*(\d+)\*\* \| \s*\|$/);
     if (total) rows.set('total', Number(total[1]));
   }
   return rows;
@@ -115,6 +115,22 @@ describe('FILE_INVENTORY per-zone census', () => {
     expect(zones.length).toBeGreaterThanOrEqual(7);
     const sum = zones.reduce((a, [, n]) => a + n, 0);
     expect(doc.get('total')).toBe(sum);
+  });
+
+  it('CONTROL: a malformed Total row is not parsed as the census total', () => {
+    const liveTotal = [...recount().values()].reduce((a, n) => a + n, 0);
+    const text = readFileSync(DOC_PATH, 'utf8');
+    const validRow = text.match(/^\| \*\*Total\*\* \| \*\*(\d+)\*\* \| \s*\|$/m);
+    expect(validRow, 'committed Total must be a valid 3-column count').not.toBeNull();
+    const fromDoc = Number(validRow![1]);
+    // Literals follow the live census so adding a tracked file does not stale
+    // a hardcoded 1272. The recount tests fail if the document drifts.
+    expect(
+      parseZoneRows(`| **Total** | **${liveTotal}** || **${liveTotal - 2}** | |`).has('total'),
+      'stray cells must not parse as total',
+    ).toBe(false);
+    expect(parseZoneRows(`| **Total** | **${liveTotal}** | |`).get('total')).toBe(liveTotal);
+    expect(parseZoneRows(validRow![0]).get('total')).toBe(fromDoc);
   });
 
   it('CONTROL: a stale zone count in the parsed document fails the recount', () => {

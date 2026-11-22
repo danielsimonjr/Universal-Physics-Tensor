@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 769,
+    "totalTestFiles": 770,
     "testedCount": 383,
     "directlyTestedCount": 350,
     "untestedCount": 10,
@@ -31131,6 +31131,7 @@
       "src/core/regimes-builtins.ts"
     ],
     "tests/tools/api-docs-deps-exports.test.ts": [],
+    "tests/tools/api-reference.test.ts": [],
     "tests/tools/api-surface.test.ts": [],
     "tests/tools/bench-readme.test.ts": [],
     "tests/tools/catalog-census.test.ts": [],
