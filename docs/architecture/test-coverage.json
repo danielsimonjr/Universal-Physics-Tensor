@@ -3079,6 +3079,7 @@
     ],
     "src/cases/methods.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/damped-resonator-spectrum.test.ts",
@@ -10298,6 +10299,7 @@
       "tests/canonical/numeric-prefactor.test.ts",
       "tests/canonical/structural-classifier.test.ts",
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/brownian-sphere.test.ts",
@@ -14975,6 +14977,7 @@
     ],
     "src/cases/methods.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/damped-resonator-spectrum.test.ts",
@@ -19896,6 +19899,8 @@
       "src/cases/types.ts",
       "src/cases/catalog-checks.ts",
       "src/cases/catalog.ts",
+      "src/cases/methods.ts",
+      "src/core/constants.ts",
       "src/core/data-file.ts"
     ],
     "tests/cases/applied-cases-output-wiring.test.ts": [

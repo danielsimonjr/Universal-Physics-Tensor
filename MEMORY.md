@@ -156,9 +156,13 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   `**`; the dyadic ratios are exact). Named methods
   (`brownianLangevinMsdM2`, `brownianHydroMsdM2`, `brownianMemoryCorrection`, `brownianMemoryAbs`,
   `brownianWallPerpD`, `brownianWallMsdM2`, `brownianLangevinDeviation`, `brownianHydroCorrection`,
-  `brownianHydroDeviation`, `brownianWallDeviation`) read the wired outputs. `memory_correction`
+  `brownianHydroDeviation`, `brownianWallDeviation`, `brownianFaxenRange`, `brownianWallAbs`,
+  `brownianWallStatic`) read the wired outputs. `memory_correction`
   and the three deviations stay methods because master returned `NaN` there (`rho_p ≳ 1e300`
-  for memory; `{a_m:1e-30, T_K:1e300}` for the deviations). Catalog `needs` `key=value` is
+  for memory; `{a_m:1e-30, T_K:1e300}` for the deviations). The wall checks `faxen-range`,
+  `wall` and `wall-static` are methods because `(D_∥/D)` and `(D/D_⊥)` are Inf/Inf and
+  `abs(wall_deviation)` is `abs(NaN)` in that regime; master divided by `faxenParallel(a/h)`
+  and `brennerPerpendicular(h/a)` and reported `NaN` `holds: false` for `wall`. Catalog `needs` `key=value` is
   validated at load (exactly one `=`, key in parameters, finite numeric literal, no whitespace).
   The engine's `g_std` binding is the unit table's standard gravity, the same `convertValue`
   derivation as `G_STANDARD` (`tests/cases/unit-table-constants.test.ts` pins both equal);

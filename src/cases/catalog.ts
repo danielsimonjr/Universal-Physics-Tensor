@@ -16,9 +16,11 @@ export interface AppliedCaseCheckRecord {
   readonly quantity: string;
   /**
    * The check's value as a formula. Exactly one of `expr` and `method`:
-   * `method` exists for a value master's runner could hold as `NaN` (the
-   * expr path refuses NaN even with the Infinity opt-in), such as the
-   * brownian-sphere memory check at a `0/0` parent ratio.
+   * `method` exists for a value master's runner could hold as `NaN` or for
+   * a ratio that is Inf/Inf through wired outputs (the expr path refuses
+   * NaN even with the Infinity opt-in): the brownian-sphere `memory` and
+   * `wall` checks, and `faxen-range` / `wall-static` which master divided
+   * by `faxenParallel` / `brennerPerpendicular` directly.
    */
   readonly expr?: string;
   /** The named method computing the check's value when `expr` is absent. */
@@ -190,6 +192,9 @@ export function catalogSemanticProblems(file: AppliedCaseFile, methodNames?: Rea
             problems.push(`${row.id}: output '${output.key}' names unknown relation '${output.relation.relation}'`);
           }
         }
+      }
+      if (row.regimeAt !== undefined && !methodNames.has(row.regimeAt)) {
+        problems.push(`${row.id}: regimeAt names unknown method '${row.regimeAt}'`);
       }
     }
   }

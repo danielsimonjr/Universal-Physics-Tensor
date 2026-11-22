@@ -906,9 +906,9 @@ describe('applied-case engine — brownian sphere (S8)', () => {
       { id: 'creeping-flow', holds: true, value: re },
       { id: 'overdamped', holds: true, value: tauP / 1 },
       { id: 'memory', holds: true, value: Math.abs(memory) },
-      { id: 'faxen-range', holds: true, value: (1e-6 / 1e-4) ** 5 / 16 / (dPar / D) },
+      { id: 'faxen-range', holds: true, value: (1e-6 / 1e-4) ** 5 / 16 / faxenParallel(1e-6 / 1e-4) },
       { id: 'wall', holds: true, value: Math.abs(msd / msdWall - 1) },
-      { id: 'wall-static', holds: true, value: (Math.sqrt(2 * dPerp * 1) + Math.abs(vSed) * 1 / (D / dPerp)) / (1e-4 - 1e-6) },
+      { id: 'wall-static', holds: true, value: (Math.sqrt(2 * dPerp * 1) + Math.abs(vSed) * 1 / brennerPerpendicular(1e-4 / 1e-6)) / (1e-4 - 1e-6) },
     ],
     uncheckedCount: 3,
   };
@@ -956,7 +956,7 @@ describe('applied-case engine — brownian sphere (S8)', () => {
     expect(engineSrc).not.toMatch(/'drift'/);
   });
 
-  it('control: mutating the gamma prefactor (6 → 7, a coefficient change) moves gamma and D by exactly 7/6 and 6/7', () => {
+  it('control: mutating the gamma prefactor (6 → 7, a coefficient change) moves gamma by exactly 7/6 and leaves D unchanged', () => {
     const text = dataText('applied-cases.json');
     const mutated = text.replace('"expr": "6*pi*eta_Pa_s*a_m"', '"expr": "7*pi*eta_Pa_s*a_m"');
     expect(mutated, 'the gamma expr must occur once to replace').not.toBe(text);
@@ -1116,23 +1116,124 @@ describe('applied-case engine — brownian sphere (S8)', () => {
     expect(Number.isNaN(brownianWallDeviation({}, { MSD_m2: Infinity, MSD_wall_m2: Infinity }))).toBe(true);
   });
 
-  it('CONTROL: wiring the three deviations as exprs throws on those NaNs', () => {
+  it('CONTROL: wiring the three unbounded deviations as exprs throws on those NaNs', () => {
     const extreme = { ...base, a_m: 1e-30, rho_p_kg_per_m3: 1e4, T_K: 1e300, d: 2 };
-    const patchOne = (key: string, expr: string, inputs: typeof extreme | (typeof extreme & { h_m: number })) => {
+    const patchOne = (key: string, expr: string) => {
       const wired = structuredClone(appliedCaseRecord(ID)) as AppliedCaseRecord;
       const row = wired.outputs.find((o) => o.key === key) as { key: string; method?: string; expr?: string };
       expect(row.method, key).toBeDefined();
       delete row.method;
       row.expr = expr;
-      expect(() => runAppliedCaseEngine(wired, inputs)).toThrow(FormulaValueError);
-      expect(() => runAppliedCaseEngine(wired, inputs)).toThrow(
+      expect(() => runAppliedCaseEngine(wired, extreme)).toThrow(FormulaValueError);
+      expect(() => runAppliedCaseEngine(wired, extreme)).toThrow(
         /formula did not evaluate to a finite number \(got NaN\)/,
       );
     };
-    patchOne('langevin_deviation', 'MSD_m2/MSD_langevin_m2 - 1', extreme);
-    patchOne('hydro_correction_m2', 'MSD_hydro_m2 - MSD_m2', extreme);
-    patchOne('hydro_deviation', 'MSD_m2/MSD_hydro_m2 - 1', extreme);
-    patchOne('wall_deviation', 'MSD_m2/MSD_wall_m2 - 1', { ...extreme, h_m: 1e-28 });
+    patchOne('langevin_deviation', 'MSD_m2/MSD_langevin_m2 - 1');
+    patchOne('hydro_correction_m2', 'MSD_hydro_m2 - MSD_m2');
+    patchOne('hydro_deviation', 'MSD_m2/MSD_hydro_m2 - 1');
+  });
+
+  // Master values reconstructed from `runCaseBrownianSphere` at origin/master
+  // 8210e97f (the helper functions `faxenParallel`, `brennerPerpendicular`,
+  // `ballisticDeficit`, `hydrodynamicMsdRatio` are the same source):
+  // faxen-range = (a/h)^5/16/faxenParallel(a/h);
+  // wall = abs(MSD/MSD_wall − 1);
+  // wall-static = (√(2 D_⊥ t) + |v_s| t / brennerPerpendicular(h/a))/(h − a).
+  // The deleted runner returned that record; it did not throw.
+  const WALL_EXTREME = { T_K: 1e300, eta_Pa_s: 1e-3, a_m: 1e-30, rho_p_kg_per_m3: 1e4, rho_f_kg_per_m3: 998, t_s: 1, d: 2, h_m: 1e-28 };
+
+  it('master parity at T_K=1e300, a_m=1e-30, h_m=1e-28: no throw, wall_deviation NaN, faxen-range finite, wall-static Infinity', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), WALL_EXTREME);
+    expect(got.outputs.D_m2_per_s).toBe(Infinity);
+    expect(got.outputs.MSD_m2).toBe(Infinity);
+    expect(got.outputs.rms_displacement_m).toBe(Infinity);
+    expect(got.outputs.Re).toBe(Infinity);
+    expect(got.outputs.MSD_langevin_m2).toBe(Infinity);
+    expect(got.outputs.MSD_hydro_m2).toBe(Infinity);
+    expect(got.outputs.D_parallel_m2_per_s).toBe(Infinity);
+    expect(got.outputs.D_perp_m2_per_s).toBe(Infinity);
+    expect(got.outputs.MSD_wall_m2).toBe(Infinity);
+    expect(Number.isNaN(got.outputs.langevin_deviation as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.hydro_correction_m2 as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.hydro_deviation as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.memory_correction as number)).toBe(true);
+    expect(Number.isNaN(got.outputs.wall_deviation as number)).toBe(true);
+    expectPinNumber(got.outputs.gamma_kg_per_s as number, 1.884955592153876e-32, 'gamma');
+    expectPinNumber(got.outputs.m_kg as number, 4.188790204786391e-86, 'm');
+    expectPinNumber(got.outputs.tau_p_s as number, 2.3331111111111108e-54, 'tau_p');
+    expectPinNumber(got.outputs.tau_f_s as number, 9.98e-55, 'tau_f');
+    expectPinNumber(got.outputs.v_sed_m_per_s as number, 1.961765851111111e-53, 'v_sed');
+    const byId = Object.fromEntries(got.checks.map((c) => [c.id, c]));
+    expect(byId['creeping-flow']!.value).toBe(Infinity);
+    expect(byId['creeping-flow']!.holds).toBe(false);
+    expectPinNumber(byId['overdamped']!.value, 2.3331111111111108e-54, 'overdamped');
+    expect(byId['overdamped']!.holds).toBe(true);
+    expect(Number.isNaN(byId['memory']!.value)).toBe(true);
+    expect(byId['memory']!.holds).toBe(false);
+    expect(byId['faxen-range']!.value).toBe(6.285354343601227e-12);
+    expect(byId['faxen-range']!.holds).toBe(true);
+    expect(Number.isNaN(byId['wall']!.value)).toBe(true);
+    expect(byId['wall']!.holds).toBe(false);
+    expect(byId['wall-static']!.value).toBe(Infinity);
+    expect(byId['wall-static']!.holds).toBe(false);
+    expect(got.checks.map((c) => c.id)).toEqual(['creeping-flow', 'overdamped', 'memory', 'faxen-range', 'wall', 'wall-static']);
+  });
+
+  it('CONTROL: wiring wall_deviation as an expr throws /got NaN/ on that wall path; the unpatched record succeeds', () => {
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), WALL_EXTREME)).not.toThrow();
+    const unpatched = runAppliedCaseEngine(appliedCaseRecord(ID), WALL_EXTREME);
+    expect(Number.isNaN(unpatched.outputs.wall_deviation as number)).toBe(true);
+    const wired = structuredClone(appliedCaseRecord(ID)) as AppliedCaseRecord;
+    const row = wired.outputs.find((o) => o.key === 'wall_deviation') as { key: string; method?: string; expr?: string };
+    expect(row.method).toBe('brownianWallDeviation');
+    delete row.method;
+    row.expr = 'MSD_m2/MSD_wall_m2 - 1';
+    expect(() => runAppliedCaseEngine(wired, WALL_EXTREME)).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(wired, WALL_EXTREME)).toThrow(
+      /formula did not evaluate to a finite number \(got NaN\)/,
+    );
+  });
+
+  it('S6–S8 remaining check exprs do not throw on master-returning extremes', () => {
+    // Sweep of catalog check exprs on the three migrated cases. Brownian
+    // wall Inf/Inf is the defect this review named; resistor and lumped
+    // already opt in to Infinity on checks (S6/S7). Each input is a corner
+    // where the deleted JS runner returned a record (Infinity/NaN in it,
+    // no throw): resistor T/R/f overflow, lumped T0=T∞=1e200, brownian
+    // wall path at d=3 (drift = tiny/Inf → 0).
+    const resistorId = 'case-resistor-noise';
+    const resistorBase = {
+      T_K: 300, R_ohm: 1000, R_in_ohm: 1e6, C_in_F: 20e-12, f_lo_Hz: 0, f_hi_Hz: 1e4, t_avg_s: 1,
+      e_n2_V2_per_Hz: 1.6e-17, i_n2_A2_per_Hz: 1e-24,
+    };
+    for (const inputs of [
+      { ...resistorBase, T_K: 1e300 },
+      { ...resistorBase, R_ohm: 1e40 },
+      { ...resistorBase, T_K: 1e300, R_ohm: 1e40 },
+      { ...resistorBase, f_hi_Hz: 1e300 },
+      { ...resistorBase, T_K: 1e-300 },
+    ]) {
+      const got = runAppliedCaseEngine(appliedCaseRecord(resistorId), inputs);
+      expect(got.checks.length).toBeGreaterThan(0);
+      for (const c of got.checks) expect(Number.isNaN(c.value), c.id).toBe(false);
+    }
+    const lumpedId = 'case-lumped-cooling';
+    const lumpedBase = {
+      a_m: 0.005, rho_kg_per_m3: 8960, c_J_per_kg_K: 385, k_W_per_m_K: 401, h_W_per_m2_K: 10,
+      emissivity: 0.05, T0_K: 373.15, T_inf_K: 293.15, t_s: 60,
+    };
+    const lumpedHot = runAppliedCaseEngine(appliedCaseRecord(lumpedId), { ...lumpedBase, T0_K: 1e200, T_inf_K: 1e200 });
+    expect(lumpedHot.checks.find((c) => c.id === 'linear-loss')!.value).toBe(Infinity);
+    expect(lumpedHot.checks.find((c) => c.id === 'linear-loss')!.holds).toBe(false);
+    const d3 = runAppliedCaseEngine(appliedCaseRecord(ID), { ...WALL_EXTREME, d: 3 });
+    expect(Number.isNaN(d3.outputs.wall_deviation as number)).toBe(true);
+    const drift = d3.checks.find((c) => c.id === 'drift')!;
+    expect(drift.value).toBe(0);
+    expect(drift.holds).toBe(true);
+    expect(d3.checks.find((c) => c.id === 'faxen-range')!.holds).toBe(true);
+    expect(Number.isNaN(d3.checks.find((c) => c.id === 'wall')!.value)).toBe(true);
+    expect(d3.checks.find((c) => c.id === 'wall-static')!.value).toBe(Infinity);
   });
 
   it('t_s = 1e308 fails fast: the hydrodynamic quadrature domain overflows', () => {

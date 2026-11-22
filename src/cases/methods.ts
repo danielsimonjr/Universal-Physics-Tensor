@@ -616,6 +616,54 @@ export function brownianMemoryAbs(
 }
 
 /**
+ * (a/h)⁵/16 ÷ Faxén(a/h), the faxen-range check. Named because
+ * `(a/h)⁵/16 / (D_∥/D)` is Inf/Inf → NaN when D overflows, and master's
+ * runner divided by {@link faxenParallel} directly (finite, holds true).
+ * @internal
+ */
+export function brownianFaxenRange(
+  inputs: Readonly<Record<string, number>>,
+  _outputs: Readonly<Record<string, number | null>>,
+): number {
+  const a = inputs.a_m!;
+  const h = inputs.h_m!;
+  const faxen = faxenParallel(a / h);
+  return (a / h) ** 5 / 16 / faxen;
+}
+
+/**
+ * |MSD/MSD_w − 1|, the wall check, read from the wired wall_deviation. A
+ * check `method` rather than `abs(wall_deviation)` because master's check
+ * value is `NaN` where wall_deviation is (Inf/Inf − 1), and the expr path
+ * refuses NaN.
+ * @internal
+ */
+export function brownianWallAbs(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const wall = outputs.wall_deviation;
+  return typeof wall === 'number' ? Math.abs(wall) : Number.NaN;
+}
+
+/**
+ * (√(2 D_⊥ t) + |v_s| t/λ)/(h − a), the wall-static check, with
+ * λ = {@link brennerPerpendicular}(h/a). Named because dividing by D/D_⊥ is
+ * Inf/Inf → NaN when D overflows, and master's runner divided by λ
+ * (Infinity, holds false).
+ * @internal
+ */
+export function brownianWallStatic(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const lambda = brennerPerpendicular(inputs.h_m! / inputs.a_m!);
+  const excursion =
+    Math.sqrt(2 * outputs.D_perp_m2_per_s! * inputs.t_s!) + (Math.abs(outputs.v_sed_m_per_s!) * inputs.t_s!) / lambda;
+  return excursion / (inputs.h_m! - inputs.a_m!);
+}
+
+/**
  * D_⊥ = D/λ beside the wall, λ from Brenner's exact series (a loop with
  * `expm1`; not in the catalog grammar), from the wired D_m2_per_s.
  * @internal
@@ -674,6 +722,9 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'brownianHydroMsdM2',
   'brownianMemoryCorrection',
   'brownianMemoryAbs',
+  'brownianFaxenRange',
+  'brownianWallAbs',
+  'brownianWallStatic',
   'brownianWallPerpD',
   'brownianWallMsdM2',
 ]);
@@ -709,6 +760,9 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   brownianHydroMsdM2,
   brownianMemoryCorrection,
   brownianMemoryAbs,
+  brownianFaxenRange,
+  brownianWallAbs,
+  brownianWallStatic,
   brownianWallPerpD,
   brownianWallMsdM2,
 };

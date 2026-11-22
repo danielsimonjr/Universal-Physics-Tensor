@@ -2316,7 +2316,8 @@ The codebase is organized into the following modules:
   ballisticDeficit, hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular, brownianSphereRegimeAt,
   brownianReynolds, brownianLangevinDeviation, brownianHydroCorrection, brownianHydroDeviation,
   brownianWallDeviation, brownianLangevinMsdM2, brownianHydroMsdM2, brownianMemoryCorrection,
-  brownianMemoryAbs, brownianWallPerpD, brownianWallMsdM2
+  brownianMemoryAbs, brownianFaxenRange, brownianWallAbs, brownianWallStatic, brownianWallPerpD,
+  brownianWallMsdM2
   ```
 
 - Constants:
@@ -7855,12 +7856,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90060 |
-| Total Exports | 2863 |
+| Total Lines of Code | 90123 |
+| Total Exports | 2866 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 955 |
+| Total Functions | 958 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

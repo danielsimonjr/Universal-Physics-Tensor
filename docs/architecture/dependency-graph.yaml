@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2863
+  totalExports: 2866
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5461,6 +5461,9 @@ modules:
         - brownianHydroMsdM2
         - brownianMemoryCorrection
         - brownianMemoryAbs
+        - brownianFaxenRange
+        - brownianWallAbs
+        - brownianWallStatic
         - brownianWallPerpD
         - brownianWallMsdM2
         - LumpedRadiating
@@ -5499,6 +5502,9 @@ modules:
         - brownianHydroMsdM2
         - brownianMemoryCorrection
         - brownianMemoryAbs
+        - brownianFaxenRange
+        - brownianWallAbs
+        - brownianWallStatic
         - brownianWallPerpD
         - brownianWallMsdM2
       constants:
@@ -19926,11 +19932,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90060
-  totalExports: 2863
+  totalLinesOfCode: 90123
+  totalExports: 2866
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 955
+  totalFunctions: 958
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402
@@ -19939,4 +19945,4 @@ statistics:
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 32
+  unusedExportsCount: 35

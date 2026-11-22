@@ -13,6 +13,7 @@ import {
   appliedCaseCatalog,
   type AppliedCaseFile,
 } from '../../src/cases/catalog.js';
+import { CASE_METHOD_NAMES } from '../../src/cases/methods.js';
 import { dataSchema } from '../../src/core/data-file.js';
 
 const schema = dataSchema('applied-cases.json');
@@ -85,6 +86,17 @@ describe('applied-cases catalog loader', () => {
 
     drift.needs = ['d=3'];
     expect(catalogSemanticProblems(brownian).filter((m) => m.includes('needs'))).toEqual([]);
+  });
+
+  it('refuses a catalog regimeAt that names an unknown method', () => {
+    const file = structuredClone(appliedCaseCatalog());
+    const brownian = file.cases.find((c) => c.id === 'case-brownian-sphere')!;
+    expect(brownian.regimeAt).toBe('brownianSphereRegimeAt');
+    expect(catalogSemanticProblems(file, CASE_METHOD_NAMES)).toEqual([]);
+    (brownian as { regimeAt: string }).regimeAt = 'notARegisteredMethod';
+    expect(catalogSemanticProblems(file, CASE_METHOD_NAMES)).toContainEqual(
+      expect.stringMatching(/regimeAt names unknown method 'notARegisteredMethod'/),
+    );
   });
 
 });
