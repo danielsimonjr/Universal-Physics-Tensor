@@ -132,10 +132,11 @@ const s10SetExcluded = [
 // even when the symbol is on the set. Disclosure (AGENTS.md Law 2): only
 // `mpc` is null BEFORE set membership (`isSubKiloParsec` runs first); the
 // other 11 reach the membership check and are nulled by the `Unit.parse`
-// throw or `exactScale === null` after it, so `tryMathtsA5Reading === null`
-// alone does not prove they are off the set — a control that only adds the
-// symbol to `A5_DELEGATED_TEXTS` still passes the null half.
-// `isA5DelegatedText === false` is the membership pin.
+// throw (MathTS 0.28.0: none of those 11 return `exactScale === null` — parse
+// throws, so `Unit.exactScale` is never reached), so
+// `tryMathtsA5Reading === null` alone does not prove they are off the set —
+// a control that only adds the symbol to `A5_DELEGATED_TEXTS` still passes
+// the null half. `isA5DelegatedText === false` is the membership pin.
 const s10GuardExcluded = [
   'Bq', 'Gy', 'Sv', 'kat', 'Pas', 'mAs', 'mpc', 'ton', 'tons', 'Mach', 'mach', 'ln2',
 ] as const;
