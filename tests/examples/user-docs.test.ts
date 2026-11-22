@@ -249,6 +249,28 @@ describe('docs/user guides', () => {
     expect('Node >=22.12.0').not.toMatch(DRIFT_COUNT);
   });
 
+  it('getting-started describes upt help as full usage, matching the live CLI', () => {
+    const started = guides['docs/user/getting-started.md']!;
+    expect(started).not.toMatch(/one-line description/);
+    expect(started).toMatch(/full usage and flags/);
+    // A closed "have none" list of command names goes stale the moment HELP
+    // gains or loses an e.g. line. The guide does not enumerate one.
+    expect(started).not.toMatch(/have none/);
+    const help = runCli(['help']);
+    expect(help.status, help.stderr).toBe(0);
+    const blocks = help.stdout
+      .split(/\n(?=  upt )/)
+      .filter((block) => /^  upt /.test(block) && /\nFlags:/m.test(block));
+    expect(blocks.length, 'upt help prints every registered command as a usage block').toBeGreaterThan(10);
+    for (const block of blocks) {
+      expect(block.split('\n').length, block.slice(0, 60)).toBeGreaterThan(2);
+    }
+    const withEg = blocks.filter((block) => /^\s*e\.g\.\s+upt /m.test(block));
+    const withoutEg = blocks.filter((block) => !/^\s*e\.g\.\s+upt /m.test(block));
+    expect(withEg.length, 'some commands include an e.g. line').toBeGreaterThan(0);
+    expect(withoutEg.length, 'some commands have no e.g. line').toBeGreaterThan(0);
+  });
+
   it('the guides link each other and the CLI reference, not the future tutorials directory', () => {
     const started = guides['docs/user/getting-started.md']!;
     const catalog = guides['docs/user/catalog.md']!;
