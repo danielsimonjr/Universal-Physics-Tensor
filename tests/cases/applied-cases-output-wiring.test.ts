@@ -13,7 +13,7 @@ describe('applied-cases catalog output wiring (B12)', () => {
   it('control: an output with no wiring is refused', () => {
     const file = structuredClone(appliedCaseCatalog());
     const row = file.cases.find((c) => c.id === 'case-resistor-noise')!;
-    delete (row.outputs[0] as { method?: string }).method;
+    delete (row.outputs[0] as { expr?: string }).expr;
     expect(catalogSemanticProblems(file, CASE_METHOD_NAMES)).toContainEqual(
       expect.stringMatching(/must have exactly one of expr, relation, method/),
     );

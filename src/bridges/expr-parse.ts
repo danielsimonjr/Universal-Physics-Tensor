@@ -162,11 +162,15 @@ export function withoutUnreadConstants(
  * (the relation's sources); a reserved key the expression reads and
  * `declared` does not name is a {@link ConstantInputError}, and one it does
  * not read is dropped ({@link withoutUnreadConstants}).
+ * Non-finite results throw. Pass `{ allowInfinity: true }` as `opts` to
+ * return ±Infinity; NaN still throws. Only the applied-case `expr` output
+ * path passes that option.
  */
 export function evaluateFormula(
   expression: string,
   inputs: Readonly<Record<string, number>>,
   declared: readonly string[] = [],
+  opts?: { readonly allowInfinity?: boolean },
 ): number {
   // One grammar: the expression must also build a dimensional tree, so a function the tree
   // does not know (`max`) or a call of the wrong arity is refused here too.
@@ -175,7 +179,7 @@ export function evaluateFormula(
     GRAMMAR_CHECKED.add(expression);
   }
   const scope = formulaScope(withoutUnreadConstants(inputs, expressionNames(expression), declared), declared);
-  return parseFormula(rewritten(expression)).evaluate(scope);
+  return parseFormula(rewritten(expression)).evaluate(scope, opts);
 }
 
 const GRAMMAR_CHECKED = new Set<string>();

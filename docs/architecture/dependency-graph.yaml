@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2856
+  totalExports: 2853
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5419,9 +5419,6 @@ modules:
       exports:
         - SIGMA_SB_SI
         - JULIAN_YEAR_S
-        - CLASSICAL_MAX_X
-        - FLAT_BAND_MAX_WRC
-        - AMPLIFIER_MAX_REL_SIGMA
         - MAX_BIOT
         - MAX_RADIATION_RATIO
         - G_STANDARD
@@ -5445,7 +5442,7 @@ modules:
         - skinDeltaMaxwellM
         - windowedLinewidthHz
         - windowedLinewidthCatalogHz
-        - runCaseResistorNoise
+        - resistorParentVrmsV
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
@@ -5465,7 +5462,7 @@ modules:
         - skinDeltaMaxwellM
         - windowedLinewidthHz
         - windowedLinewidthCatalogHz
-        - runCaseResistorNoise
+        - resistorParentVrmsV
         - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
@@ -5478,9 +5475,6 @@ modules:
         - runCaseBrownianSphere
       constants:
         - JULIAN_YEAR_S
-        - CLASSICAL_MAX_X
-        - FLAT_BAND_MAX_WRC
-        - AMPLIFIER_MAX_REL_SIGMA
         - MAX_BIOT
         - MAX_RADIATION_RATIO
         - G_STANDARD
@@ -19912,14 +19906,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 89697
-  totalExports: 2856
+  totalLinesOfCode: 89716
+  totalExports: 2853
   totalClasses: 86
   totalInterfaces: 523
   totalFunctions: 937
   totalTypeGuards: 17
   totalEnums: 0
-  totalConstants: 413
+  totalConstants: 410
   totalReExports: 1411
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0

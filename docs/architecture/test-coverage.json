@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 765,
+    "totalTestFiles": 767,
     "testedCount": 383,
     "directlyTestedCount": 350,
     "untestedCount": 10,
@@ -2251,6 +2251,7 @@
     ],
     "src/bridges/evaluator-inputs.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -3037,6 +3038,7 @@
     ],
     "src/cases/catalog.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/cases-directory.test.ts",
@@ -3044,12 +3046,14 @@
     ],
     "src/cases/engine.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/dead-runners.test.ts"
     ],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/kepler-rv.test.ts",
@@ -3099,6 +3103,7 @@
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/applied-cases.test.ts",
@@ -10389,6 +10394,7 @@
       "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cli/search-domain.test.ts",
       "tests/core/data-file.test.ts",
@@ -12855,6 +12861,8 @@
       "tests/numerical/finite-difference.test.ts"
     ],
     "src/numerical/formula-contract.ts": [
+      "tests/bridges/one-grammar.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -14625,6 +14633,7 @@
     ],
     "src/bridges/evaluator-inputs.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -14909,6 +14918,7 @@
     ],
     "src/cases/catalog.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
       "tests/cases/cases-directory.test.ts",
@@ -14916,12 +14926,14 @@
     ],
     "src/cases/engine.ts": [
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/dead-runners.test.ts"
     ],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cases/kepler-rv.test.ts",
@@ -14950,7 +14962,8 @@
       "tests/numerical/mathts-delegation.test.ts"
     ],
     "src/cases/types.ts": [
-      "tests/cases/applied-case-engine.test.ts"
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts"
     ],
     "src/cli/args.ts": [
       "tests/cli/args.test.ts",
@@ -15988,6 +16001,7 @@
       "tests/atlas/catalog-proof-status.test.ts",
       "tests/bridges/notice-record.test.ts",
       "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/applied-case-output-identity.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cli/search-domain.test.ts",
       "tests/core/data-file.test.ts",
@@ -16871,6 +16885,8 @@
       "tests/numerical/finite-difference.test.ts"
     ],
     "src/numerical/formula-contract.ts": [
+      "tests/bridges/one-grammar.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/numerical/euler-rejected.test.ts",
@@ -19160,7 +19176,8 @@
       "src/composition/catalog-graph.ts",
       "src/bridges/relation-eval.ts",
       "src/bridges/evaluators.ts",
-      "src/canonical/registry.ts"
+      "src/canonical/registry.ts",
+      "src/numerical/formula-contract.ts"
     ],
     "tests/bridges/orphan-dimensional-signature.test.ts": [
       "src/bridges/index.ts",
@@ -19788,12 +19805,21 @@
     "tests/cases/applied-case-engine.test.ts": [
       "src/cases/index.ts",
       "src/cases/types.ts",
+      "src/numerical/formula-contract.ts",
       "src/cases/catalog.ts",
       "src/cases/engine.ts",
       "src/bridges/evaluator-inputs.ts",
       "src/bridges/expr-parse.ts",
       "src/cases/methods.ts",
       "src/core/constants.ts",
+      "src/core/data-file.ts"
+    ],
+    "tests/cases/applied-case-output-identity.test.ts": [
+      "src/cases/index.ts",
+      "src/cases/types.ts",
+      "src/cases/catalog.ts",
+      "src/cases/engine.ts",
+      "src/bridges/evaluator-inputs.ts",
       "src/core/data-file.ts"
     ],
     "tests/cases/applied-cases-catalog.test.ts": [
@@ -31046,6 +31072,7 @@
     "tests/tools/dependency-graph-type-queries.test.ts": [],
     "tests/tools/dist-freshness.test.ts": [],
     "tests/tools/export-star-as-deps.test.ts": [],
+    "tests/tools/file-inventory-zones.test.ts": [],
     "tests/tools/formalref-axiom-gate.test.ts": [
       "src/atlas/families.ts",
       "src/atlas/formal-ref-carriers.ts"

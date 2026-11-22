@@ -1,0 +1,77 @@
+{
+  "valid": {
+    "outputs": {
+      "B_Hz": 10000,
+      "R_eff_ohm": 999.000999000999,
+      "S_V_V2_per_Hz": 1.655123676323676e-17,
+      "T_n_K": 36.21487066953655,
+      "V_rms_V": 4.068321123416484e-7,
+      "V_rms_parent_V": 4.0683200540028815e-7,
+      "V_rms_rel_sigma": 0.0015811388300841895,
+      "V_rms_total_V": 4.3068828355600473e-7,
+      "V_rms_unloaded_V": 4.070354775692163e-7,
+      "loading_ratio": 0.9995003746877732,
+      "parent_deviation": 2.628636852630706e-7,
+      "resistor_fraction": 0.8922865291549466
+    },
+    "checks": [
+      {
+        "id": "classical",
+        "holds": true,
+        "value": 1.5997476911220738e-9,
+        "bound": 0.01
+      },
+      {
+        "id": "flat-band",
+        "holds": true,
+        "value": 0.001255381679756161,
+        "bound": 0.1
+      },
+      {
+        "id": "amplifier",
+        "holds": true,
+        "value": 0.003544015915115587,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "R_in is a physical resistance at T; an actively synthesized or cold input adds less noise than its resistance would, down to the resistor alone divided by the input: V_rms,0 · R_in/(R + R_in)",
+      "no DC current through R, so no 1/f excess noise",
+      "e_n and i_n are white over the band and uncorrelated"
+    ]
+  },
+  "failureQuantum": {
+    "outputs": {
+      "B_Hz": 1000000000,
+      "R_eff_ohm": 49.99750012499375,
+      "S_V_V2_per_Hz": 5.5223198840058e-23,
+      "T_n_K": null,
+      "V_rms_V": 2.3499616771355656e-7,
+      "V_rms_parent_V": 7.929935704479257e-8,
+      "V_rms_rel_sigma": 0.000015811388300841898,
+      "V_rms_total_V": null,
+      "V_rms_unloaded_V": 2.3500204254431493e-7,
+      "loading_ratio": 0.999975000937461,
+      "parent_deviation": 1.9634057131234748,
+      "resistor_fraction": null
+    },
+    "checks": [
+      {
+        "id": "classical",
+        "holds": false,
+        "value": 4.799243073366221,
+        "bound": 0.01
+      },
+      {
+        "id": "flat-band",
+        "holds": true,
+        "value": 0,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "R_in is a physical resistance at T; an actively synthesized or cold input adds less noise than its resistance would, down to the resistor alone divided by the input: V_rms,0 · R_in/(R + R_in)",
+      "no DC current through R, so no 1/f excess noise"
+    ]
+  }
+}

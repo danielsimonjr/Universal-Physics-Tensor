@@ -86,21 +86,6 @@ export function windowedLinewidthCatalogHz(
 }
 
 // --- resistor-noise.ts ---
-const RESISTOR_NOISE_ID = 'case-resistor-noise';
-
-/** h f_hi/(k_B T) ceiling: the Planck factor x/(eˣ−1) is then within x/2 ≤ 0.5% of 1. @internal */
-export const CLASSICAL_MAX_X = 0.01;
-
-/** 2π f_hi R_eff C_in ceiling: the input RC pole then passes 1/(1+w²) ≥ 99% at f_hi. @internal */
-export const FLAT_BAND_MAX_WRC = 0.1;
-
-/**
- * Ceiling on σ(S_R)/S_R = 1/(φ√(B t_avg)): the resistor's noise power, left after
- * subtracting an exactly known amplifier power, scatters by ≤ 1%. The total
- * power scatters by 1/√(B t_avg) (Dicke 1946); φ is the resistor's share of it.
- * @internal
- */
-export const AMPLIFIER_MAX_REL_SIGMA = 0.01;
 
 /** Nyquist's thermal spectral density at f, shaped by the input RC; `x/expm1(x)` → 1 as x → 0. */
 function parentDensity(f: number, T: number, rEff: number, c: number): number {
@@ -109,78 +94,21 @@ function parentDensity(f: number, T: number, rEff: number, c: number): number {
   const w = 2 * Math.PI * f * rEff * c;
   return (4 * K_B_SI * T * rEff * planck) / (1 + w * w);
 }
-/**
- * Evaluate the resistor thermal-noise applied case at the given SI inputs.
- * @internal
- */
-export function runCaseResistorNoise(i: Readonly<Record<string, number>>): CaseResult {
-    requirePositive(RESISTOR_NOISE_ID, i, ['T_K', 'R_ohm', 'R_in_ohm', 'f_hi_Hz', 't_avg_s']);
-    const { T_K: T, R_ohm: R, R_in_ohm: Rin, C_in_F: C, f_lo_Hz: fLo, f_hi_Hz: fHi, t_avg_s: tAvg } = i as Record<string, number>;
-    if (!Number.isFinite(C) || C < 0) throw new Error(`${RESISTOR_NOISE_ID}: C_in_F must be a finite number ≥ 0 (got ${C})`);
-    if (!Number.isFinite(fLo) || fLo < 0 || fLo >= fHi) throw new Error(`${RESISTOR_NOISE_ID}: need 0 ≤ f_lo_Hz < f_hi_Hz (got ${fLo}, ${fHi})`);
-    const B = fHi - fLo;
-    const rEff = (R * Rin) / (R + Rin);
-    const noise = catalogRelations().find((row) => row.target === 'voltage-noise-density');
-    if (noise === undefined) throw new Error(`${RESISTOR_NOISE_ID}: the resistor-noise relation is not in the catalog`);
-    const spectral = (temperature: number, ohms: number): number =>
-      evaluateCatalogRelation(noise, { 'johnson-temperature': temperature, resistance: ohms });
-    const S = spectral(T, rEff);
-    const S0 = spectral(T, R);
-    const vRms = Math.sqrt(S * B);
-    const vParent = Math.sqrt(adaptiveQuadrature((f) => parentDensity(f, T, rEff, C), fLo, fHi));
-    const x = (H_SI * fHi) / (K_B_SI * T);
-    const wrc = 2 * Math.PI * fHi * rEff * C;
-    const checks = [
-      check('classical', 'flat, classical spectrum: hf ≪ k_BT across the band', 'h f_hi/(k_B T)', x, '<=', CLASSICAL_MAX_X,
-        'chosen threshold for ≪ 1: the Planck factor at f_hi is then within x/2 ≤ 0.5% of 1'),
-      check('flat-band', 'the input RC pole lies above the band', '2π f_hi R_eff C_in', wrc, '<=', FLAT_BAND_MAX_WRC,
-        'chosen threshold for ≪ 1: the RC low-pass then passes ≥ 99% of the density at f_hi'),
-    ];
-    const unchecked = [
-      'R_in is a physical resistance at T; an actively synthesized or cold input adds less noise than its resistance would, ' +
-        'down to the resistor alone divided by the input: V_rms,0 · R_in/(R + R_in)',
-      'no DC current through R, so no 1/f excess noise',
-    ];
-    const withAmplifier = i.e_n2_V2_per_Hz !== undefined || i.i_n2_A2_per_Hz !== undefined;
-    let amp: { total: number; fraction: number; tN: number } | null = null;
-    if (withAmplifier) {
-      const en2 = i.e_n2_V2_per_Hz ?? 0;
-      const in2 = i.i_n2_A2_per_Hz ?? 0;
-      for (const [k, v] of [['e_n2_V2_per_Hz', en2], ['i_n2_A2_per_Hz', in2]] as const) {
-        if (!Number.isFinite(v) || v < 0) throw new Error(`${RESISTOR_NOISE_ID}: ${k} must be a finite number ≥ 0 (got ${v})`);
-      }
-      const excess = en2 + in2 * rEff * rEff;
-      const fraction = S / (S + excess);
-      amp = { total: Math.sqrt((S + excess) * B), fraction, tN: excess / (4 * K_B_SI * rEff) };
-      checks.push(
-        check('amplifier', "the resistor's noise is resolved above the amplifier's in t_avg", '1/(φ √(B t_avg))', 1 / (fraction * Math.sqrt(B * tAvg)), '<=',
-          AMPLIFIER_MAX_REL_SIGMA,
-          "chosen threshold: after subtracting the amplifier's power (known exactly, e.g. from a long shorted-input run) the resistor's power scatters by ≤ 1%"),
-      );
-      unchecked.push(
-        `e_n and i_n are white over the band and uncorrelated${i.e_n2_V2_per_Hz === undefined ? '; e_n was not given and is taken as 0' : ''}` +
-          `${i.i_n2_A2_per_Hz === undefined ? '; i_n was not given and is taken as 0' : ''}`,
-      );
-    }
-    return {
-      outputs: {
-        B_Hz: B,
-        R_eff_ohm: rEff,
-        S_V_V2_per_Hz: S,
-        V_rms_unloaded_V: Math.sqrt(S0 * B),
-        V_rms_V: vRms,
-        loading_ratio: Math.sqrt(S / S0),
-        V_rms_parent_V: vParent,
-        parent_deviation: vRms / vParent - 1,
-        V_rms_rel_sigma: 1 / (2 * Math.sqrt(B * tAvg)),
-        V_rms_total_V: amp?.total ?? null,
-        resistor_fraction: amp?.fraction ?? null,
-        T_n_K: amp?.tN ?? null,
-      },
-      checks,
-      unchecked,
-    };
-  
+
+/** Catalog engine: V_rms of the parent Planck/RC spectrum over the band (adaptive quadrature). @internal */
+export function resistorParentVrmsV(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const rEff = outputs.R_eff_ohm;
+  if (rEff === undefined || rEff === null || !Number.isFinite(rEff)) {
+    throw new Error('resistorParentVrmsV: need a finite R_eff_ohm');
+  }
+  const T = inputs.T_K!;
+  const c = inputs.C_in_F!;
+  const fLo = inputs.f_lo_Hz!;
+  const fHi = inputs.f_hi_Hz!;
+  return Math.sqrt(adaptiveQuadrature((f) => parentDensity(f, T, rEff, c), fLo, fHi));
 }
 
 // --- lumped-cooling.ts ---
@@ -547,14 +475,13 @@ export function runCaseBrownianSphere(i: Readonly<Record<string, number>>): Case
 }
 
 const RUN_BY_ID: Readonly<Record<string, (i: Readonly<Record<string, number>>) => CaseResult>> = {
-  'case-resistor-noise': runCaseResistorNoise,
   'case-lumped-cooling': runCaseLumpedCooling,
   'case-brownian-sphere': runCaseBrownianSphere,
 };
 
 function buildAppliedCase(id: string): AppliedCase {
   const record = appliedCaseRecord(id);
-  const legacy = RUN_BY_ID[id]!;
+  const legacy = RUN_BY_ID[id];
   const run = usesCatalogEngine(record)
     ? (inputs: Readonly<Record<string, number>>) => runAppliedCaseEngine(record, inputs)
     : legacy;
@@ -581,7 +508,7 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'faxenParallel',
   'brennerPerpendicular',
   'brownianSphereRegimeAt',
-  'runCaseResistorNoise',
+  'resistorParentVrmsV',
   'runCaseLumpedCooling',
   'runCaseBrownianSphere',
 ]);
@@ -600,7 +527,7 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   faxenParallel,
   brennerPerpendicular,
   brownianSphereRegimeAt,
-  runCaseResistorNoise,
+  resistorParentVrmsV,
   runCaseLumpedCooling,
   runCaseBrownianSphere,
 };

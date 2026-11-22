@@ -163,6 +163,7 @@ export const CHECKS_BY_CASE_ID: Readonly<Record<string, readonly AppliedCaseChec
       bound: 0.01,
       threshold:
         "chosen threshold: after subtracting the amplifier's power (known exactly, e.g. from a long shorted-input run) the resistor's power scatters by ≤ 1%",
+      needs: ['e_n2_V2_per_Hz', 'i_n2_A2_per_Hz'],
     },
   ],
   'case-lumped-cooling': [

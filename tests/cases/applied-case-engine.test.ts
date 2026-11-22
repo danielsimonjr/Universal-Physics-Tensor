@@ -2,29 +2,33 @@
  * Part B steps B9–B11: the catalog engine evaluates wired cases from expr, relation, and method fields.
  *
  * The three cases whose whole-case runners were deleted in S5
- * (`case-skin-depth`, `case-kepler-rv`, `case-damped-resonator`) carry pinned
- * numeric reference expectations on `runAppliedCaseEngine` instead of a
- * legacy-runner comparison. The output keys are engine outputs on the catalog
+ * (`case-skin-depth`, `case-kepler-rv`, `case-damped-resonator`) and the case
+ * migrated in S6 (`case-resistor-noise`) carry pinned numeric reference
+ * expectations on `runAppliedCaseEngine` instead of a legacy-runner
+ * comparison. The output keys are engine outputs on the catalog
  * valid example; check quantities are pinned from catalog `expr`s / hand
  * arithmetic as cited; both are compared at 1e-12 relative (absolute 1e-15
  * floor only for true zeros). Cross-checked against `skin-depth.test.ts`
- * (δ ≈ 65.2 µm), `kepler-rv.test.ts` (K ≈ 12.48 m/s) and
- * `damped-resonator.test.ts` (envelope ≈ 7.304e-7 m, x_th ≈ 6.4358e-11 m).
+ * (δ ≈ 65.2 µm), `kepler-rv.test.ts` (K ≈ 12.48 m/s),
+ * `damped-resonator.test.ts` (envelope ≈ 7.304e-7 m, x_th ≈ 6.4358e-11 m) and
+ * `resistor-noise.test.ts` (V_rms,0 ≈ 4.0704e-7 V, φ ≈ 0.89229, T_n ≈ 36.2 K).
  */
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { APPLIED_CASES, runAppliedCase } from '../../src/cases/index.js';
+import { FormulaValueError } from '../../src/numerical/formula-contract.js';
 import {
   appliedCaseRecord,
   catalogSemanticProblems,
   readAppliedCaseFile,
   type AppliedCaseRecord,
 } from '../../src/cases/catalog.js';
-import { runAppliedCaseEngine } from '../../src/cases/engine.js';
+import { runAppliedCaseEngine, usesCatalogEngine } from '../../src/cases/engine.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
 import { CASE_METHOD_NAMES } from '../../src/cases/methods.js';
 import type { CaseResult } from '../../src/cases/types.js';
-import { C_SI, EPS0_SI, G_SI, K_B_SI, M_SUN_SI, MU0_SI } from '../../src/core/constants.js';
+import { C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, M_SUN_SI, MU0_SI } from '../../src/core/constants.js';
 import { dataSchema, dataText } from '../../src/core/data-file.js';
 
 const schema = dataSchema('applied-cases.json');
@@ -33,6 +37,17 @@ interface PinnedCase {
   outputs: Record<string, number | null>;
   checks: { id: string; holds: boolean; value: number }[];
   uncheckedCount: number;
+  /**
+   * Outputs pinned by an ABSOLUTE window instead of `expectPinNumber`'s
+   * relative one: a residual that is itself a difference of two
+   * nearly-equal numbers (e.g. resistor-noise's `parent_deviation` ≈ 2.6e-7,
+   * (V_rms − V_rms,parent)/V_rms,parent) inherits the reference's own
+   * last-ulp quadrature difference as an absolute shift, so 1e-12 relative
+   * would demand a quadrature accurate to ~2.6e-19. The absolute window is
+   * still far below any real model change (mutating the parent moves the
+   * deviation by orders of magnitude).
+   */
+  absolutePins?: Record<string, { expected: number; tol: number }>;
 }
 
 /**
@@ -56,6 +71,7 @@ function pinCase(id: string, expected: PinnedCase, record: AppliedCaseRecord = a
   expect(Object.keys(got.outputs)).toEqual(Object.keys(expected.outputs));
   for (const [key, value] of Object.entries(expected.outputs)) {
     const gotValue = (got.outputs as Record<string, number | null>)[key];
+    if (key in (expected.absolutePins ?? {})) continue;
     if (value === null) expect(gotValue, key).toBeNull();
     else {
       expect(gotValue, key).not.toBeNull();
@@ -68,6 +84,9 @@ function pinCase(id: string, expected: PinnedCase, record: AppliedCaseRecord = a
   expect(got.checks).toHaveLength(expected.checks.length);
   for (let i = 0; i < expected.checks.length; i++) {
     expectPinNumber(got.checks[i]!.value, expected.checks[i]!.value, expected.checks[i]!.id);
+  }
+  for (const [key, pin] of Object.entries(expected.absolutePins ?? {})) {
+    expect(Math.abs((got.outputs[key] as number) - pin.expected), key).toBeLessThan(pin.tol);
   }
   expect(got.unchecked.length).toBe(expected.uncheckedCount);
   return got;
@@ -140,7 +159,9 @@ describe('applied-case engine — skin depth', () => {
   it('control: a 2× change of good-conductor (~9.35e-13) fails the pins', () => {
     // toBeCloseTo(..., 10) is an absolute 5e-11 window; 2× of ~9.35e-13 sat inside it.
     expect(Math.abs(goodConductor)).toBeLessThan(5e-11);
-    expect(() => expectPinNumber(2 * goodConductor, goodConductor, 'good-conductor')).toThrow();
+    expect(() => expectPinNumber(2 * goodConductor, goodConductor, 'good-conductor')).toThrow(
+      /to be less (or equal )?than/,
+    );
     const text = dataText('applied-cases.json');
     type MutableFile = { schemaVersion: number; cases: Array<{ id: string; checks: Array<{ id: string; expr: string }> }> };
     const file = structuredClone(JSON.parse(text)) as MutableFile;
@@ -272,5 +293,242 @@ describe('applied-case engine — damped resonator', () => {
     expectPinNumber(inRecordCheck.value, 0.01, 'mutated in-record');
     expect(() => expectPinNumber(inRecordCheck.value, inRecord, 'in-record')).toThrow();
     expect(() => pinCase('case-damped-resonator', dampedPinned, record)).toThrow();
+  });
+});
+
+describe('applied-case engine — resistor noise', () => {
+  // resistor-noise.test.ts:12 valid args (the catalog valid example), with the
+  // amplifier noise the example carries; the no-amplifier variant drops them.
+  const ID = 'case-resistor-noise';
+  const validArgs = APPLIED_CASES.get(ID)!.examples.valid.args;
+  const inputs = resolveEvaluatorInputs(APPLIED_CASES.get(ID)!.parameters, validArgs).inputs;
+  // Hand arithmetic on the exact SI constants (resistor-noise.test.ts's K_B/H readings).
+  const T = 300;
+  const R = 1000;
+  const Rin = 1e6;
+  const C = 20e-12;
+  const fLo = 0;
+  const fHi = 1e4;
+  const tAvg = 10;
+  const en2 = 1e-18;
+  const in2 = 1e-24;
+  const B = fHi - fLo;
+  const rEff = (R * Rin) / (R + Rin);
+  const S = 4 * K_B_SI * T * rEff;
+  const S0 = 4 * K_B_SI * T * R;
+  const excess = en2 + in2 * rEff * rEff;
+  const fraction = S / (S + excess);
+  // The parent integral, computed here by composite Simpson over 1000 panels —
+  // an independent quadrature from the engine's adaptive Gauss–Kronrod. The
+  // integrand is the catalog's parent: Nyquist's thermal density through the
+  // input RC (resistor-noise.test.ts:37 closed form at planck = 1; the Planck
+  // factor x/(eˣ−1) at x = hf/k_BT ≤ 1.6e-9 is kept exactly).
+  const parentDensity = (f: number) => {
+    const x = (H_SI * f) / (K_B_SI * T);
+    const planck = x === 0 ? 1 : x / Math.expm1(x);
+    const w = 2 * Math.PI * f * rEff * C;
+    return (4 * K_B_SI * T * rEff * planck) / (1 + w * w);
+  };
+  const simpson = (n: number) => {
+    const h = (fHi - fLo) / n;
+    let s = parentDensity(fLo) + parentDensity(fHi);
+    for (let i = 1; i < n; i++) s += parentDensity(fLo + i * h) * (i % 2 ? 4 : 2);
+    return (s * h) / 3;
+  };
+  const vParent = Math.sqrt(simpson(1000));
+  const resistorPinned: PinnedCase = {
+    outputs: {
+      B_Hz: B,
+      R_eff_ohm: rEff,
+      S_V_V2_per_Hz: S,
+      V_rms_unloaded_V: Math.sqrt(S0 * B),
+      V_rms_V: Math.sqrt(S * B),
+      loading_ratio: Math.sqrt(S / S0),
+      V_rms_parent_V: vParent,
+      parent_deviation: Math.sqrt(S * B) / vParent - 1,
+      V_rms_rel_sigma: 1 / (2 * Math.sqrt(B * tAvg)),
+      V_rms_total_V: Math.sqrt((S + excess) * B),
+      resistor_fraction: fraction,
+      T_n_K: excess / (4 * K_B_SI * rEff),
+    },
+    absolutePins: {
+      // Cancellation residual (see PinnedCase.absolutePins): (V_rms − V_parent)/V_parent ≈ 2.6e-7.
+      // parent_deviation = V_rms/V_parent − 1, so a relative error δ on V_parent
+      // (the independent Simpson vs Gauss–Kronrod agreement, 2.4e-15) shifts the
+      // residual by ≈ (V_rms/V_parent)·δ ≈ 2.4e-15 absolute. The 1e-14 window is
+      // ~4× that propagated last-ulp shift, not ~40×, and still ~8 decades below
+      // any real model change. The 2.4e-15 is already the absolute shift of the
+      // residual; dividing 1e-14 by it again as if it were a relative pin on
+      // parent_deviation is the 10× miscount.
+      parent_deviation: { expected: Math.sqrt(S * B) / vParent - 1, tol: 1e-14 },
+    },
+    checks: [
+      { id: 'classical', holds: true, value: (H_SI * fHi) / (K_B_SI * T) },
+      { id: 'flat-band', holds: true, value: ((2 * Math.PI * fHi) * rEff) * C },
+      { id: 'amplifier', holds: true, value: 1 / (fraction * Math.sqrt(B * tAvg)) },
+    ],
+    uncheckedCount: 3,
+  };
+
+  it('pinned reference: 1 kΩ at 300 K through a 1 MΩ ∥ 20 pF input (engine outputs on the catalog valid example)', () => {
+    const got = pinCase(ID, resistorPinned);
+    expectPinNumber(got.outputs.S_V_V2_per_Hz as number, S, 'S_V_V2_per_Hz');
+    expectPinNumber(got.outputs.V_rms_parent_V as number, vParent, 'V_rms_parent_V');
+  });
+
+  it('pinned reference without the amplifier: the gated outputs are null and the amplifier check is absent', () => {
+    const noAmp = { ...inputs };
+    delete noAmp.e_n2_V2_per_Hz;
+    delete noAmp.i_n2_A2_per_Hz;
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), noAmp);
+    expect(got.outputs.V_rms_total_V).toBeNull();
+    expect(got.outputs.resistor_fraction).toBeNull();
+    expect(got.outputs.T_n_K).toBeNull();
+    for (const key of ['B_Hz', 'R_eff_ohm', 'S_V_V2_per_Hz', 'V_rms_unloaded_V', 'V_rms_V', 'loading_ratio', 'V_rms_parent_V', 'V_rms_rel_sigma']) {
+      expectPinNumber(got.outputs[key] as number, resistorPinned.outputs[key] as number, key);
+    }
+    expect(Math.abs((got.outputs.parent_deviation as number) - (resistorPinned.absolutePins!.parent_deviation!.expected))).toBeLessThan(1e-14);
+    expect(got.checks.map((c) => c.id)).toEqual(['classical', 'flat-band']);
+    expect(got.checks).toHaveLength(2);
+    expectPinNumber(got.checks[0]!.value, (H_SI * fHi) / (K_B_SI * T), 'classical');
+    expectPinNumber(got.checks[1]!.value, ((2 * Math.PI * fHi) * rEff) * C, 'flat-band');
+    expect([...got.unchecked]).toEqual([
+      'R_in is a physical resistance at T; an actively synthesized or cold input adds less noise than its resistance would, down to the resistor alone divided by the input: V_rms,0 · R_in/(R + R_in)',
+      'no DC current through R, so no 1/f excess noise',
+    ]);
+  });
+
+  it('the engine routes the case: usesCatalogEngine is true and no runCaseResistorNoise remains', () => {
+    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+    expect([...CASE_METHOD_NAMES]).not.toContain('runCaseResistorNoise');
+  });
+
+  it('unchecked: the amplifier note names which density was taken as 0', () => {
+    const withBoth = runAppliedCaseEngine(appliedCaseRecord(ID), inputs);
+    expect(withBoth.unchecked).toContain('e_n and i_n are white over the band and uncorrelated');
+    const { i_n2_A2_per_Hz: _in2, ...onlyEnInputs } = inputs;
+    const onlyEn = runAppliedCaseEngine(appliedCaseRecord(ID), onlyEnInputs);
+    expect(onlyEn.unchecked[2]).toBe('e_n and i_n are white over the band and uncorrelated; i_n was not given and is taken as 0');
+    const { e_n2_V2_per_Hz: _en2, ...onlyInInputs } = inputs;
+    const onlyIn = runAppliedCaseEngine(appliedCaseRecord(ID), onlyInInputs);
+    expect(onlyIn.unchecked[2]).toBe('e_n and i_n are white over the band and uncorrelated; e_n was not given and is taken as 0');
+  });
+
+  it('control: mutating the S_V exponent moves S_V_V2_per_Hz by exactly R_eff and fails the pins', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace('"expr": "4*k_B*T_K*R_eff_ohm"', '"expr": "4*k_B*T_K*R_eff_ohm^2"');
+    expect(mutated, 'the S_V expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    const got = runAppliedCaseEngine(record, inputs);
+    // S′ = 4 k_B T R_eff² = S · R_eff: the exact factor the mutated exponent predicts.
+    expectPinNumber(got.outputs.S_V_V2_per_Hz as number, S * rEff, 'mutated S_V');
+    expect(() => pinCase(ID, resistorPinned, record)).toThrow();
+  });
+
+  // Composer review F1: master's JS runner emitted Infinity when the parent
+  // integral underflowed to 0. The engine must match that on the output path
+  // only; checks and every other evaluateFormula caller stay strict.
+  const PARENT_UNDERFLOW = {
+    T_K: 0.02,
+    R_ohm: 50,
+    R_in_ohm: 1e6,
+    C_in_F: 0,
+    f_lo_Hz: 1e9,
+    f_hi_Hz: 3e18,
+    t_avg_s: 1,
+  };
+
+  it('parent_deviation is Infinity when the parent integral underflows (f_hi 3e18, matching master)', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), PARENT_UNDERFLOW);
+    expect(got.outputs.V_rms_parent_V).toBe(0);
+    expect(got.outputs.parent_deviation).toBe(Infinity);
+    expect(Number.isFinite(got.outputs.V_rms_V as number)).toBe(true);
+    expect((got.outputs.V_rms_V as number) > 0).toBe(true);
+  });
+
+  it('NaN still throws on the applied-case output path', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "V_rms_V/V_rms_parent_V - 1"',
+      '"expr": "(V_rms_V-V_rms_V)/(V_rms_V-V_rms_V)"',
+    );
+    expect(mutated, 'the parent_deviation expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    expect(() => runAppliedCaseEngine(record, inputs)).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(record, inputs)).toThrow(/got NaN/);
+  });
+
+  it('a check still throws on Infinity: the output-path opt-in does not leak', () => {
+    const record = structuredClone(appliedCaseRecord(ID));
+    const checks = record.checks as Array<(typeof record.checks)[number]>;
+    checks.push({
+      id: 'parent-nonzero',
+      premise: 'control: parent integral must be nonzero',
+      quantity: '1/V_rms,parent',
+      expr: '1/V_rms_parent_V',
+      op: '>',
+      bound: 0,
+      threshold: 'CONTROL: proves checks refuse Infinity',
+    });
+    expect(() => runAppliedCaseEngine(record, PARENT_UNDERFLOW)).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(record, PARENT_UNDERFLOW)).toThrow(/got Infinity/);
+  });
+
+  it('CONTROL: renaming the amplifier check id does not re-enable it without amp densities', () => {
+    const record = structuredClone(appliedCaseRecord(ID));
+    const amp = record.checks.find((c) => c.id === 'amplifier')!;
+    expect(amp.needs).toEqual(['e_n2_V2_per_Hz', 'i_n2_A2_per_Hz']);
+    (amp as { id: string }).id = 'amp-resolve';
+    const noAmp = { ...inputs };
+    delete noAmp.e_n2_V2_per_Hz;
+    delete noAmp.i_n2_A2_per_Hz;
+    const got = runAppliedCaseEngine(record, noAmp);
+    expect(got.checks.map((c) => c.id)).toEqual(['classical', 'flat-band']);
+    expect(got.outputs.resistor_fraction).toBeNull();
+  });
+
+  it('CONTROL: a JSON-only needs-gated output is null when those inputs are absent', () => {
+    const text = dataText('applied-cases.json');
+    type MutableFile = {
+      schemaVersion: number;
+      cases: Array<{ id: string; outputs: Array<Record<string, unknown>> }>;
+    };
+    const file = structuredClone(JSON.parse(text)) as MutableFile;
+    const row = file.cases.find((c) => c.id === ID)!;
+    row.outputs.push({
+      key: 'gated_dummy',
+      symbol: 'g',
+      unit: '',
+      meaning: 'JSON-only needs gate control',
+      needs: ['e_n2_V2_per_Hz'],
+      expr: 'e_n2_V2_per_Hz*2',
+    });
+    const mutated = readAppliedCaseFile(JSON.stringify(file), schema);
+    const record = mutated.cases.find((c) => c.id === ID)!;
+    const noAmp = { ...inputs };
+    delete noAmp.e_n2_V2_per_Hz;
+    delete noAmp.i_n2_A2_per_Hz;
+    const got = runAppliedCaseEngine(record, noAmp);
+    expect(got.outputs.gated_dummy).toBeNull();
+  });
+
+  it('the resistor runner is gone from DELEGATED_RUN_METHODS and gating is not id-hardcoded', () => {
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(engineSrc).not.toMatch(/runCaseResistorNoise/);
+    expect(engineSrc).not.toMatch(/AMP_GATED_OUTPUTS/);
+    expect(engineSrc).not.toMatch(/row\.id !== 'amplifier'/);
+    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+  });
+
+  it('allowInfinity: true is passed only from evalOutput, never from evalCheck', () => {
+    const stripComments = (src: string) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(stripComments(engineSrc).match(/allowInfinity:\s*true/g)).toEqual(['allowInfinity: true']);
+    expect(engineSrc).toMatch(/function evalCheck[\s\S]*?evalOutputExpr\(row\.expr, inputs, outputs, extra\)/);
+    const exprParse = readFileSync(new URL('../../src/bridges/expr-parse.ts', import.meta.url), 'utf8');
+    expect(stripComments(exprParse)).not.toMatch(/allowInfinity:\s*true/);
+    expect(exprParse).toMatch(/\.evaluate\(scope, opts\)/);
   });
 });

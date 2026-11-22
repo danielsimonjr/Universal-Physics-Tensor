@@ -87,6 +87,19 @@ describe('formula-mathts', () => {
     expect(() => parser.parse('sqrt(-1)').evaluate({})).toThrow(/complex number/);
   });
 
+  it('allowInfinity is a per-call opt-in: Infinity returns, NaN still throws, default stays strict', async () => {
+    const { FormulaValueError } = await import('../../src/numerical/formula-contract.js');
+    const div = parser.parse('x / 0');
+    expect(() => div.evaluate({ x: 1 })).toThrow(FormulaValueError);
+    expect(div.evaluate({ x: 1 }, { allowInfinity: true })).toBe(Infinity);
+    expect(div.evaluate({ x: -1 }, { allowInfinity: true })).toBe(-Infinity);
+    // Opt-in is not sticky on the cached formula: the next default call still throws.
+    expect(() => div.evaluate({ x: 1 })).toThrow(/Infinity/);
+    const nan = parser.parse('0 / 0');
+    expect(() => nan.evaluate({})).toThrow(/NaN/);
+    expect(() => nan.evaluate({}, { allowInfinity: true })).toThrow(/NaN/);
+  });
+
   it('evaluate() wraps a scope-related evaluation failure as FormulaError', async () => {
     const { FormulaError } = await import('../../src/numerical/formula-contract.js');
     // 'q' is never supplied in scope — MathTS throws inside node.evaluate().
