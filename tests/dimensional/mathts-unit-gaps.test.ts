@@ -257,10 +257,11 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
         for (const s of ['Bq', 'Gy', 'Sv', 'kat']) {
           expect(getUnitRow(s), s).toBeUndefined();
           expect(() => Unit.parse(s), s).toThrow(UnitParseError);
-          // Absent, not merely ambiguous: `AmbiguousUnitError extends
-          // UnitParseError`, so a future ambiguous reading of `Gy` must flip
-          // this row too.
-          expect(() => Unit.parse(s), s).not.toBeInstanceOf(MathTSAmbiguousUnitError);
+          // Absent, not merely ambiguous (`AmbiguousUnitError extends
+          // UnitParseError`). `not.toBeInstanceOf` on the thunk is vacuous —
+          // a function is never an error instance. `not.toThrow` matches
+          // the thrown value's class.
+          expect(() => Unit.parse(s), s).not.toThrow(MathTSAmbiguousUnitError);
           expect(parseUnit(s).scale, s).toBe(1);
         }
       },
@@ -277,7 +278,7 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       id: 'mAs a listed glued product in UPT, unknown in MathTS',
       check: () => {
         expect(() => Unit.parse('mAs')).toThrow(UnitParseError);
-        expect(() => Unit.parse('mAs')).not.toBeInstanceOf(MathTSAmbiguousUnitError);
+        expect(() => Unit.parse('mAs')).not.toThrow(MathTSAmbiguousUnitError);
         expect(parseUnit('mAs').scale).toBe(1e-3);
       },
     },
