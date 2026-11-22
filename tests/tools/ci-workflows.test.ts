@@ -115,12 +115,14 @@ describe('ci.yml long-tests job', () => {
 });
 
 describe('ci.yml docs-fresh job', () => {
-  it('runs public-tsdoc-gaps --check after the CLI reference, like sibling generated-doc gates', () => {
+  it('runs api-reference --check after the CLI reference and before public-tsdoc-gaps', () => {
     const r = runs(ci.jobs['docs-fresh']!);
     const cli = r.findIndex((line) => /cli-reference\.ts --check/.test(line));
+    const api = r.findIndex((line) => /api-reference\.ts --check/.test(line));
     const gaps = r.findIndex((line) => /public-tsdoc-gaps\.ts --check/.test(line));
     expect(cli, 'CLI reference --check step').toBeGreaterThanOrEqual(0);
-    expect(gaps, 'public-tsdoc-gaps --check step').toBeGreaterThan(cli);
+    expect(api, 'api-reference --check step').toBeGreaterThan(cli);
+    expect(gaps, 'public-tsdoc-gaps --check step').toBeGreaterThan(api);
   });
 });
 

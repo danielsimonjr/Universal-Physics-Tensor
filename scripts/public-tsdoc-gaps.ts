@@ -67,11 +67,21 @@ interface ModuleExports {
   readonly declared: ReadonlyMap<string, 'type' | 'value'>;
 }
 
-/** Strip line and block comments so clause regexes cannot match inside one. */
-function stripComments(source: string): string {
+/**
+ * Strip line and block comments so clause regexes cannot match inside one.
+ * Block comments become spaces (newlines kept) so later offsets stay aligned.
+ * Shared with `scripts/api-reference.ts` (`indexBanners`) so in-clause `//`
+ * comments cannot poison specifier names there either.
+ */
+export function stripComments(source: string): string {
   return source
     .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '))
     .replace(/\/\/[^\n]*/g, '');
+}
+
+/** Read a `src/`-relative file, honouring `setSourceReaderForTest`. */
+export function readSrcText(rel: string): string {
+  return readSource(rel);
 }
 
 function parseSpecifier(raw: string, clauseTypeOnly: boolean): ExportSpecifier | null {
@@ -200,6 +210,16 @@ export interface PublicCensusBuckets {
   readonly atlasTypes: readonly string[];
   /** Public subpath exports (`MathTSEngine`). */
   readonly subpath: readonly string[];
+}
+
+/**
+ * Root runtime names from live `src/index.ts` (comment-stripped `moduleExports`),
+ * not the public-surface snapshot. The API-reference renderer uses this so a
+ * new root runtime export fails `--check` even when the snapshot is untouched.
+ * The snapshot remains the S12 gap-check pin via `collectPublicNamesForTest`.
+ */
+export function rootRuntimeNamesFromIndex(): readonly string[] {
+  return sorted(topLevelNames('index.ts').runtime);
 }
 
 /** The names each census bucket contributes. Size pins read this helper; deleting a loop from `collect()` fails the per-bucket CONTROL, not these pins. */

@@ -2,12 +2,14 @@
  * Generate `docs/user/api.md`, the full user API reference of the public
  * surface.
  *
- * Covers the 233 root runtime exports grouped by their `src/index.ts` section
- * banner, the 248 root type exports, the members of the `atlas` namespace
- * (`src/atlas/public.ts`), and the `MathTSEngine` subpath export with its
- * public method list. Kind, declaration header, and TSDoc summary come from
- * `publicSymbolMeta` (`scripts/public-tsdoc-gaps.ts`), so the page is grounded
- * in real code and real TSDoc only.
+ * Covers the root runtime exports of live `src/index.ts` grouped by section
+ * banner (in-clause comments stripped before specifier split), the 248 root
+ * type exports, the members of the `atlas` namespace (`src/atlas/public.ts`),
+ * and the `MathTSEngine` subpath export with its public method list (including
+ * `async` methods, cross-checked against required `TensorEngine` members).
+ * Kind, declaration header, and TSDoc summary come from `publicSymbolMeta`
+ * (`scripts/public-tsdoc-gaps.ts`), so the page is grounded in real code and
+ * real TSDoc only. The `./probe` and `./atlas` subpaths are `@internal`.
  *
  * `bun scripts/api-reference.ts` (re)writes `docs/user/api.md`.
  * `bun scripts/api-reference.ts --check` exits 1 when the committed file
@@ -20,7 +22,13 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { collectPublicNamesForTest, publicSymbolMeta, setSourceReaderForTest } from './public-tsdoc-gaps.js';
+import {
+  collectPublicNamesForTest,
+  publicSymbolMeta,
+  readSrcText,
+  rootRuntimeNamesFromIndex,
+  stripComments,
+} from './public-tsdoc-gaps.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(root, 'docs/user/api.md');
@@ -36,7 +44,7 @@ function cell(value: string): string {
  * a clause (`// v0.8.0 punch-list …` between specifiers) are not banners.
  */
 function indexBanners(): Map<string, string> {
-  const text = readFileSync(join(root, 'src/index.ts'), 'utf8');
+  const text = readSrcText('index.ts');
   const lines = text.split('\n');
   const clauseRe = /export\s+(?:type\s+)?\{([^}]*)\}(?:\s*from\s*['"][^'"]+['"])?/g;
   const spans: { start: number; end: number }[] = [];
@@ -45,17 +53,16 @@ function indexBanners(): Map<string, string> {
     const clauseLine = text.slice(0, match.index).split('\n').length - 1;
     spans.push({ start: match.index, end: match.index + match[0].length });
     const names: string[] = [];
-    for (const raw of match[1]!.split(',')) {
+    // Strip in-clause `//` and `/* */` before splitting, same helper as
+    // `moduleExports()` — otherwise a comment containing a comma poisons the
+    // next specifier's map key and the export lands in Other exports.
+    const specText = stripComments(match[1]!);
+    for (const raw of specText.split(',')) {
       const name = raw.trim().replace(/^type\s+/, '').split(/\s+as\s+/).pop()?.trim();
       if (name !== undefined && name !== '') names.push(name);
     }
     clauseLines.set(clauseLine, names);
   }
-  const insideClause = (lineIndex: number): boolean => {
-    const start = lines.slice(0, lineIndex).join('\n').length + (lineIndex > 0 ? 1 : 0);
-    const end = start + lines[lineIndex]!.length;
-    return spans.some((s) => start < s.end && s.start < end);
-  };
   // Contiguous `//` runs outside clauses, in order: [lastLineIndex, cleaned text].
   const bannerRuns: { endLine: number; text: string }[] = [];
   let i = 0;
@@ -70,14 +77,17 @@ function indexBanners(): Map<string, string> {
     if (runStart > end) continue;
     const runLines: string[] = [];
     for (let j = runStart; j <= end; j++) {
-      const cleaned = lines[j]!.replace(/^\/\/ ?/, '').replace(/[-=─\s]+$/, '');
-      runLines.push(cleaned);
+      const cleaned = lines[j]!
+        .replace(/^\/\/ ?/, '')
+        .replace(/^[-=─\s]+/, '')
+        .replace(/[-=─\s]+$/, '');
+      if (cleaned !== '') runLines.push(cleaned);
     }
     if (runLines.length === 0) continue;
     const runStartOffset = lines.slice(0, runStart).join('\n').length + (runStart > 0 ? 1 : 0);
     const runEndOffset = lines.slice(0, end + 1).join('\n').length;
     const overlaps = spans.some((s) => runStartOffset < s.end && s.start < runEndOffset);
-    if (!overlaps) bannerRuns.push({ endLine: end, text: runLines.join(' ') });
+    if (!overlaps) bannerRuns.push({ endLine: end, text: runLines.join('\n') });
   }
   const map = new Map<string, string>();
   const sortedClauseLines = [...clauseLines.keys()].sort((a, b) => a - b);
@@ -120,8 +130,8 @@ function table(rowList: readonly Row[]): string {
 /** Heading for a banner: its first line; the remaining lines render as body text. */
 function bannerHeading(banner: string): string {
   if (banner === '') return 'Other exports';
-  const firstSentenceEnd = banner.indexOf('. ');
-  return cell(firstSentenceEnd < 0 ? banner : banner.slice(0, firstSentenceEnd + 1));
+  const firstLine = banner.split('\n')[0] ?? banner;
+  return cell(firstLine);
 }
 
 function runtimeSection(names: readonly string[], banners: ReadonlyMap<string, string>): string {
@@ -141,8 +151,7 @@ function runtimeSection(names: readonly string[], banners: ReadonlyMap<string, s
     parts.push(`### ${bannerHeading(banner)}`);
     parts.push('');
     if (banner !== '') {
-      const first = bannerHeading(banner);
-      const rest = banner.slice(first.length).trim();
+      const rest = banner.split('\n').slice(1).join(' ').trim();
       if (rest !== '') {
         parts.push(cell(rest));
         parts.push('');
@@ -154,18 +163,57 @@ function runtimeSection(names: readonly string[], banners: ReadonlyMap<string, s
   return parts.join('\n');
 }
 
+/** Required (non-optional) method names on `TensorEngine`. */
+function requiredTensorEngineMethods(source: string): readonly string[] {
+  const start = source.indexOf('export interface TensorEngine');
+  if (start < 0) throw new Error('TensorEngine interface not found');
+  const body = source.slice(source.indexOf('{', start) + 1, source.indexOf('\n}', start));
+  const names: string[] = [];
+  for (const line of body.split('\n')) {
+    const m = /^  (?:readonly\s+)?([A-Za-z_$][\w$]*)(\?)?\s*[<(]/.exec(line);
+    if (m === null || m[2] === '?') continue;
+    names.push(m[1]!);
+  }
+  return names;
+}
+
 /** Public method signatures of `MathTSEngine`, from its source declaration. */
 function engineMethods(): readonly string[] {
-  const text = readFileSync(join(root, 'src/numerical/mathts-engine.ts'), 'utf8');
+  const text = readSrcText('numerical/mathts-engine.ts');
   const start = text.indexOf('export class MathTSEngine');
   if (start < 0) throw new Error('MathTSEngine class declaration not found');
   const body = text.slice(text.indexOf('{', start) + 1, text.indexOf('\n}', start));
   const out: string[] = [];
-  for (const line of body.split('\n')) {
-    const m = /^  (?:readonly\s+)?([A-Za-z_$][\w$]*)\s*\(/.exec(line);
+  const names = new Set<string>();
+  const lines = body.split('\n');
+  // Optional leading modifiers (async, public, static, …). `private` /
+  // `protected` members stay off the public list. `[<(]` catches generics.
+  const methodRe =
+    /^  (?!(?:private|protected)\b)(?:(?:public|async|static|override|abstract|readonly)\s+)*([A-Za-z_$][\w$]*)\s*[<(]/;
+  for (let i = 0; i < lines.length; i++) {
+    const m = methodRe.exec(lines[i]!);
     if (m === null) continue;
-    const header = line.trim();
-    out.push(header.endsWith('{') ? header.slice(0, -1).trim() : header);
+    const name = m[1]!;
+    if (name === 'constructor') continue;
+    let header = lines[i]!.trim();
+    while (!/[{;]\s*$/.test(header) && i + 1 < lines.length) {
+      i += 1;
+      header = `${header} ${lines[i]!.trim()}`;
+    }
+    out.push(
+      header
+        .replace(/\s*\{$/, '')
+        .replace(/\s+/g, ' ')
+        .replace(/\( /g, '(')
+        .replace(/, \)/g, ')')
+        .trim(),
+    );
+    names.add(name);
+  }
+  for (const req of requiredTensorEngineMethods(readSrcText('numerical/tensor-engine.ts'))) {
+    if (!names.has(req)) {
+      throw new Error(`api-reference: MathTSEngine is missing required TensorEngine method ${req}`);
+    }
   }
   return out;
 }
@@ -173,6 +221,7 @@ function engineMethods(): readonly string[] {
 /** The generated reference page. Deterministic; grounded in source and TSDoc. */
 export function renderApiReference(): string {
   const buckets = collectPublicNamesForTest();
+  const liveRuntime = rootRuntimeNamesFromIndex();
   const banners = indexBanners();
   const lines: string[] = [];
   lines.push('# API reference');
@@ -181,7 +230,10 @@ export function renderApiReference(): string {
   lines.push('`bun scripts/api-reference.ts` rewrites it. `bun scripts/api-reference.ts --check` fails when it is stale.');
   lines.push('');
   lines.push(
-    'This page is the machine-generated index of every public export. For a narrative walk through the' +
+    'This page is the machine-generated index of every public export of the package root (runtime and types),' +
+      ' the `atlas` namespace, and the `universal-physics-tensor/numerical/mathts-engine` subpath.' +
+      ' The `./probe` and `./atlas` package subpaths exist but are `@internal` and out of scope here.' +
+      ' For a narrative walk through the' +
       ' architecture see [the engineering API reference](../architecture/API.md); to install and make your' +
       ' first calls see [the getting-started guide](getting-started.md); the catalog layers are described in' +
       ' [the equation and constant catalog guide](catalog.md).',
@@ -190,9 +242,9 @@ export function renderApiReference(): string {
 
   lines.push('## Root runtime exports (`universal-physics-tensor`)');
   lines.push('');
-  lines.push(`${buckets.rootRuntime.length} runtime exports of the package root, grouped by their \`src/index.ts\` section banner. The \`atlas\` namespace binding is its own section below.`);
+  lines.push(`${liveRuntime.length} runtime exports of the package root, grouped by their \`src/index.ts\` section banner. The \`atlas\` namespace binding is its own section below.`);
   lines.push('');
-  lines.push(runtimeSection(buckets.rootRuntime, banners));
+  lines.push(runtimeSection(liveRuntime, banners));
 
   lines.push('## Root type exports (`universal-physics-tensor`)');
   lines.push('');

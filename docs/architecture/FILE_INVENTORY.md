@@ -28,7 +28,7 @@ alone is smaller. `src/` holds 393 TypeScript files, and `bun run docs:deps` cou
 | `examples` | 1 | `examples/basic-usage.ts` |
 | `docs` | 1 | One script under `docs/persona-sessions/` |
 | `config` | 1 | `vitest.config.ts` |
-| **Total** | **1272** || **1270** | |
+| **Total** | **1272** | |
 
 **Tests outnumber source files: 818 against 395.** The ratio fits a repository whose claims
 are physical: a wrong number is a wrong prediction, not a cosmetic defect.

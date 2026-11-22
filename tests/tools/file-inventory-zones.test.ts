@@ -68,7 +68,7 @@ function parseZoneRows(text: string): Map<string, number> {
       rows.set(zone[1]!, Number(zone[2]));
       continue;
     }
-    const total = line.match(/^\| \*\*Total\*\* \| \*\*(\d+)\*\* \|/);
+    const total = line.match(/^\| \*\*Total\*\* \| \*\*(\d+)\*\* \| \s*\|$/);
     if (total) rows.set('total', Number(total[1]));
   }
   return rows;
@@ -115,6 +115,13 @@ describe('FILE_INVENTORY per-zone census', () => {
     expect(zones.length).toBeGreaterThanOrEqual(7);
     const sum = zones.reduce((a, [, n]) => a + n, 0);
     expect(doc.get('total')).toBe(sum);
+  });
+
+  it('CONTROL: a malformed Total row is not parsed as the census total', () => {
+    const corrupted = '| **Total** | **1272** || **1270** | |';
+    expect(parseZoneRows(corrupted).has('total'), 'stray cells must not parse as total').toBe(false);
+    expect(parseZoneRows('| **Total** | **1272** | |').get('total')).toBe(1272);
+    expect(docZoneRows().get('total'), 'the committed Total row is a valid 3-column count').toBe(1272);
   });
 
   it('CONTROL: a stale zone count in the parsed document fails the recount', () => {
