@@ -286,6 +286,9 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       id: 'ln2 is an irrational, not a unit spelling, on either side',
       check: () => {
         expect(() => Unit.parse('ln2')).toThrow(UnitParseError);
+        // Absent, not ambiguous (`AmbiguousUnitError extends UnitParseError`),
+        // matching the Bq-group and `mAs` rows.
+        expect(() => Unit.parse('ln2')).not.toThrow(MathTSAmbiguousUnitError);
         expect(Number(NAMED_IRRATIONALS.ln2)).toBeCloseTo(Math.LN2, 15);
         expect(() => parseUnit('ln2')).toThrow(UnknownUnitError);
       },

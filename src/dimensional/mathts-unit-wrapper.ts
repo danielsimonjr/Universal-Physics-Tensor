@@ -38,7 +38,13 @@ const UNITS = UNIT_DATA.units;
 /** Agreed spellings that fully parse through MathTS (Part A step A5). The 0.21.0
  * core adds the day symbol, the angstrom spellings, and SI prefixes on `psi` and
  * `torr`; the k-and-up parsec spellings agree with the table double for double.
- * The 0.22.0 core adds the glued products `m2K`, `Vs`, `cm^2/Vs` and `W/m2K`. */
+ * The 0.22.0 core adds the glued products `m2K`, `Vs`, `cm^2/Vs` and `W/m2K`.
+ * S10 extends the set to every bare shared non-cycle spelling, derived from the
+ * predicate: `getUnitRow` knows it, it is not `bit`, the UPT row does not count
+ * cycles, `Unit.parse` admits it, and MathTS's exact scale matches the UPT
+ * reading within 1e-15 relative. That excludes `Hz`/`rpm` (cycles), `bit`
+ * (UPT keeps ln 2), the MathTS-absent `Bq`/`Gy`/`Sv`/`kat`, the five Unicode
+ * degree spellings, and every prefixed, refused, ambiguous or glued spelling. */
 export const A5_DELEGATED_TEXTS = [
   'km',
   'degC',
@@ -65,6 +71,105 @@ export const A5_DELEGATED_TEXTS = [
   'Vs',
   'cm^2/Vs',
   'W/m2K',
+  // S10: the bare shared non-cycle spellings, in `UNIT_DATA` predicate order.
+  'm',
+  'g',
+  's',
+  'K',
+  'A',
+  'mol',
+  'N',
+  'Pa',
+  'J',
+  'W',
+  'C',
+  'V',
+  'ohm',
+  'Ω',
+  'Ohm',
+  'S',
+  'F',
+  'eV',
+  'nat',
+  'rad',
+  'deg',
+  'min',
+  'h',
+  'yr',
+  'au',
+  'AU',
+  'Msun',
+  'Msun_iau',
+  'T',
+  'G',
+  'gauss',
+  'Gauss',
+  'bar',
+  'atm',
+  'pc',
+  'ly',
+  'L',
+  'l',
+  'cal',
+  'BTU',
+  'mmHg',
+  'P',
+  'degR',
+  'hp',
+  'H',
+  'Wb',
+  'sr',
+  'cd',
+  'lm',
+  'lx',
+  'arcsec',
+  'arcsecond',
+  'arcmin',
+  'mas',
+  'uas',
+  '%',
+  'percent',
+  'ppm',
+  'ppb',
+  'M',
+  'u',
+  'amu',
+  'Da',
+  'erg',
+  'cc',
+  'dyn',
+  'Jy',
+  'Lsun',
+  'Rsun',
+  'Rearth',
+  'Rjup',
+  'Mearth',
+  'Mjup',
+  'hr',
+  'poise',
+  'St',
+  'rayl',
+  'in',
+  'inch',
+  'ft',
+  'mile',
+  'mi',
+  'gallon',
+  'mil',
+  'lb',
+  'lbm',
+  'lbf',
+  'kgf',
+  'mph',
+  'knot',
+  'psia',
+  'ksi',
+  'mmH2O',
+  'inHg',
+  'tonne',
+  'therm',
+  'c',
+  'degF',
 ] as const;
 
 const A5_DELEGATED = new Set<string>(A5_DELEGATED_TEXTS);
@@ -156,7 +261,10 @@ export function tryMathtsA5Reading(text: string): MathtsDelegatedReading | null 
   const core = Unit.exactScale(t);
   if (core === null) return null;
   const scale = exactScaleToNumber(core);
-  const dim = mathtsParsedDimension(t, affineDimHint ?? DIMENSIONLESS);
+  // The hint is the UPT row's own dimension (affine rows first), not `DIMENSIONLESS`:
+  // `lm`/`lx` carry an extended MathTS dimension vector, and a dimensionless hint
+  // would erase luminous intensity on the catch path of `mathtsParsedDimension`.
+  const dim = mathtsParsedDimension(t, affineDimHint ?? UNITS.get(t)?.dim ?? DIMENSIONLESS);
   const exact = UNITS.get(t)?.scale ?? uptExactScaleFromCore(core);
   const overridden = applyBitScaleOverride(t, exact, scale);
   return { exact: overridden.exact, scale: overridden.scale, dim, cycles: 0 };

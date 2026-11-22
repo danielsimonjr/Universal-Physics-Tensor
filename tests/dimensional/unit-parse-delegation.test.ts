@@ -2,6 +2,7 @@
  * Part A step A5: agreed spellings parse through `Unit.parse`; gap rows stay local.
  */
 import { describe, expect, it } from 'vitest';
+import { tryMathtsA5Reading } from '../../src/dimensional/mathts-unit-wrapper.js';
 import {
   AmbiguousUnitError,
   convertValue,
@@ -72,5 +73,55 @@ describe('Unit.parse delegation set (A5)', () => {
     expect(() => parseUnit('dB')).toThrow(UnitRefusedError);
     expect(() => parseUnit('Np')).toThrow(UnitRefusedError);
     expect(() => parseUnit('Mach')).toThrow(UnitRefusedError);
+  });
+});
+
+// S10 predicate (scratch-derived, 2026-11-22): every bare symbol in
+// `UNIT_DATA.units` plus `UNIT_DATA.affine` where `getUnitRow(symbol) !== undefined`,
+// `symbol !== 'bit'`, `UNIT_DATA.units.get(symbol)?.cycles !== true`, `Unit.parse(symbol)`
+// does not throw, and `exactScaleToNumber(Unit.exactScale(symbol)!)` equals
+// `parseUnit(symbol).scale` within 1e-15 relative. 98 new candidates on top of the
+// 8 existing A5 spellings = 106 total direct bare symbols.
+const s10Candidates = [
+  'm', 'g', 's', 'K', 'A', 'mol', 'N', 'Pa', 'J', 'W', 'C', 'V', 'ohm', 'Ω', 'Ohm', 'S', 'F',
+  'eV', 'nat', 'rad', 'deg', 'min', 'h', 'yr', 'au', 'AU', 'Msun', 'Msun_iau', 'T', 'G',
+  'gauss', 'Gauss', 'bar', 'atm', 'pc', 'ly', 'L', 'l', 'cal', 'BTU', 'mmHg', 'P', 'degR',
+  'hp', 'H', 'Wb', 'sr', 'cd', 'lm', 'lx', 'arcsec', 'arcsecond', 'arcmin', 'mas', 'uas',
+  '%', 'percent', 'ppm', 'ppb', 'M', 'u', 'amu', 'Da', 'erg', 'cc', 'dyn', 'Jy', 'Lsun',
+  'Rsun', 'Rearth', 'Rjup', 'Mearth', 'Mjup', 'hr', 'poise', 'St', 'rayl', 'in', 'inch',
+  'ft', 'mile', 'mi', 'gallon', 'mil', 'lb', 'lbm', 'lbf', 'kgf', 'mph', 'knot', 'psia',
+  'ksi', 'mmH2O', 'inHg', 'tonne', 'therm', 'c', 'degF',
+] as const;
+
+// Excluded from the direct path: `bit` (UPT keeps ln 2), MathTS-absent rows, the
+// five Unicode degree spellings, cycle units, the sub-kilo parsec, refused tokens,
+// ambiguous-in-MathTS spellings, glued products and non-spellings.
+const s10Excluded = [
+  'bit', 'Bq', 'Gy', 'Sv', 'kat', '°', '°R', '°C', '℃', '°F',
+  'Hz', 'rpm', 'mpc', 'dB', 'dBm', 'dBW', 'Np', 'Pas', 'mAs',
+  'furlong', 'ton', 'tons', 'Mach', 'mach', 'ln2',
+] as const;
+
+describe('S10: bare shared non-cycle spellings read directly through MathTS', () => {
+  it.each(s10Candidates)('%s has a direct MathTS A5 reading', (symbol) => {
+    expect(tryMathtsA5Reading(symbol)).not.toBeNull();
+  });
+
+  it.each(s10Excluded)('%s has no direct MathTS A5 reading', (symbol) => {
+    expect(tryMathtsA5Reading(symbol)).toBeNull();
+  });
+
+  it.each(s10Candidates)('%s still reads with one unchanged reading', (symbol) => {
+    const reading = readUnit(symbol);
+    expect(reading.cycles).toBe(0);
+  });
+
+  it('the acceptance invariants survive the expansion', () => {
+    expect(parseUnit('bit').scale).toBe(Math.LN2);
+    expect(() => parseUnit('dB')).toThrow(UnitRefusedError);
+    expect(parseUnit('Bq').scale).toBe(1);
+    expect(parseUnit('Pas').scale).toBe(1);
+    expect(convertValue('1 Hz', 'rad/s')).toMatchObject({ value: 1, cycles: 1 });
+    expect(convertValue('25 degC', 'K', 'difference').value).toBe(25);
   });
 });
