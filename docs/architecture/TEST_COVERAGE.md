@@ -15,7 +15,7 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 393 |
-| Total Test Files | 768 |
+| Total Test Files | 769 |
 | Source files imported directly by a test | 350 |
 | Source files reached directly or through a barrel or side-effect import | 383 |
 | Source files no test reaches either way | 10 |
@@ -1208,6 +1208,7 @@ The following 10 source files are reached by no test file, directly or through a
 | `tools/plan-doc-audit.test.ts` | 0 files |
 | `tools/pre-push-executable.test.ts` | 0 files |
 | `tools/pre-push-gate.test.ts` | 0 files |
+| `tools/public-tsdoc-gaps.test.ts` | 0 files |
 | `tools/publish-version-guard.test.ts` | 0 files |
 | `tools/pushed-head.test.ts` | 0 files |
 | `tools/readme-examples.test.ts` | 0 files |

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 768,
+    "totalTestFiles": 769,
     "testedCount": 383,
     "directlyTestedCount": 350,
     "untestedCount": 10,
@@ -31168,6 +31168,7 @@
     "tests/tools/plan-doc-audit.test.ts": [],
     "tests/tools/pre-push-executable.test.ts": [],
     "tests/tools/pre-push-gate.test.ts": [],
+    "tests/tools/public-tsdoc-gaps.test.ts": [],
     "tests/tools/publish-version-guard.test.ts": [],
     "tests/tools/pushed-head.test.ts": [],
     "tests/tools/readme-examples.test.ts": [],
