@@ -7,7 +7,8 @@
  * itself prove the root-type, atlas-runtime, atlas-type, or MathTSEngine
  * subpath buckets are wired. Those have their own CONTROLs below. A CONTROL
  * that deleted the type buckets from `collect()` would still pass the FORCE
- * test; the per-bucket tests are what fail.
+ * test and the size pins (`collectPublicNamesForTest`); the per-bucket tests
+ * are what fail.
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -190,12 +191,106 @@ describe('public-tsdoc-gaps', () => {
     expect(publicTsdocReport().bareStarFrom).toEqual([]);
   });
 
+  it('CONTROL: double-quoted from still resolves ATLAS_FAMILIES and FormalFidelity', () => {
+    const familiesNeedle = "export { ATLAS_FAMILIES } from './families.js';";
+    const typesNeedle = "from './types.js';";
+    const facade = committed('atlas/public.ts')
+      .replace(familiesNeedle, 'export { ATLAS_FAMILIES } from "./families.js";')
+      .replace(typesNeedle, 'from "./types.js";');
+    expect(facade).not.toBe(committed('atlas/public.ts'));
+    expect(facade).toContain('from "./families.js"');
+    expect(facade).toContain('from "./types.js"');
+    withSrc({ 'atlas/public.ts': facade }, () => {
+      expect(resolvePublicSitesForTest('atlas/public.ts', 'ATLAS_FAMILIES')).toEqual([
+        { file: 'atlas/families.ts', lookupName: 'ATLAS_FAMILIES' },
+      ]);
+      expect(resolvePublicSitesForTest('atlas/public.ts', 'FormalFidelity')).toEqual([
+        { file: 'relations/types.ts', lookupName: 'FormalFidelity' },
+      ]);
+      expect(collectPublicNamesForTest().atlasRuntime).toContain('ATLAS_FAMILIES');
+      expect(collectPublicNamesForTest().atlasTypes).toContain('FormalFidelity');
+      expect(publicTsdocGaps().filter((gap) => gap.name === 'ATLAS_FAMILIES' || gap.name === 'FormalFidelity')).toEqual(
+        [],
+      );
+    });
+  });
+
+  it('CONTROL: double-quoted and export type * from on the package root fail the report', () => {
+    const quoted = `${committed('index.ts')}\nexport * from "./probe.js";\n`;
+    const typeStar = `${committed('index.ts')}\nexport type * from './probe.js';\n`;
+    const typeStarQuoted = `${committed('index.ts')}\nexport type * from "./probe.js";\n`;
+    expect(quoted).toMatch(/export \* from "\.\/probe\.js"/);
+    expect(typeStar).toMatch(/export type \* from '\.\/probe\.js'/);
+    expect(typeStarQuoted).toMatch(/export type \* from "\.\/probe\.js"/);
+    withSrc({ 'index.ts': quoted }, () => {
+      expect(publicTsdocReport().bareStarFrom).toEqual(['./probe.js']);
+    });
+    withSrc({ 'index.ts': typeStar }, () => {
+      expect(publicTsdocReport().bareStarFrom).toEqual(['./probe.js']);
+    });
+    withSrc({ 'index.ts': typeStarQuoted }, () => {
+      expect(publicTsdocReport().bareStarFrom).toEqual(['./probe.js']);
+    });
+    expect(publicTsdocReport().bareStarFrom).toEqual([]);
+  });
+
+  it('CONTROL: a name is a gap if any resolved site is undocumented', () => {
+    const facade = committed('atlas/public.ts').replace(
+      "export { ATLAS_FAMILIES } from './families.js';",
+      "export { ATLAS_FAMILIES } from './families.js';\nexport { ATLAS_FAMILIES } from './serialize.js';",
+    );
+    const serialize = `${committed('atlas/serialize.ts')}\nexport const ATLAS_FAMILIES = 1;\n`;
+    expect(facade).not.toBe(committed('atlas/public.ts'));
+    expect(serialize).not.toBe(committed('atlas/serialize.ts'));
+    withSrc({ 'atlas/public.ts': facade, 'atlas/serialize.ts': serialize }, () => {
+      expect(resolvePublicSitesForTest('atlas/public.ts', 'ATLAS_FAMILIES')).toEqual([
+        { file: 'atlas/families.ts', lookupName: 'ATLAS_FAMILIES' },
+        { file: 'atlas/serialize.ts', lookupName: 'ATLAS_FAMILIES' },
+      ]);
+      expect(publicTsdocGaps()).toContainEqual({
+        name: 'ATLAS_FAMILIES',
+        via: 'atlas',
+        file: 'atlas/serialize.ts',
+      });
+    });
+    expect(publicTsdocGaps()).toEqual([]);
+  });
+
+  it('CONTROL: an inline export interface / export type on the root is a type gap', () => {
+    const injected = `${committed('index.ts')}\nexport interface __InlineUndocType { x: number }\nexport type __InlineUndocAlias = number;\nexport const __InlineRuntime = 1;\n`;
+    expect(injected).not.toBe(committed('index.ts'));
+    withSrc({ 'index.ts': injected }, () => {
+      const buckets = collectPublicNamesForTest();
+      expect(buckets.rootTypes).toContain('__InlineUndocType');
+      expect(buckets.rootTypes).toContain('__InlineUndocAlias');
+      expect(buckets.rootTypes).not.toContain('__InlineRuntime');
+      expect(publicTsdocGaps()).toContainEqual({
+        name: '__InlineUndocType',
+        via: 'root',
+        file: 'index.ts',
+      });
+      expect(publicTsdocGaps()).toContainEqual({
+        name: '__InlineUndocAlias',
+        via: 'root',
+        file: 'index.ts',
+      });
+      expect(publicTsdocGaps().filter((gap) => gap.name === '__InlineRuntime')).toEqual([]);
+    });
+    expect(collectPublicNamesForTest().rootTypes).toHaveLength(248);
+    expect(publicTsdocGaps()).toEqual([]);
+  });
+
   it('src/index.ts has no bare export * from (export * as atlas is allowed)', () => {
     const text = committed('index.ts');
     expect(text).toMatch(/export \* as atlas from '\.\/atlas\/public\.js'/);
     const probe = `${text}\nexport * from './probe.js';\n`;
+    const typeStar = `${text}\nexport type * from './probe.js';\n`;
+    const quoted = `${text}\nexport * from "./probe.js";\n`;
     expect(/export\s+\*\s+from\s+'/.test(text)).toBe(false);
+    expect(/export\s+(type\s+)?\*\s+from\s*['"]/.test(text)).toBe(false);
     expect(/export\s+\*\s+from\s+'/.test(probe)).toBe(true);
+    expect(/export\s+(type\s+)?\*\s+from\s*['"]/.test(typeStar)).toBe(true);
+    expect(/export\s+(type\s+)?\*\s+from\s*['"]/.test(quoted)).toBe(true);
   });
 
   it('publicSymbolMeta returns kind, summary and header for integrateGeodesic', () => {

@@ -3,15 +3,16 @@
  *
  * Collects every public name — the root runtime snapshot, the explicit type
  * exports of `src/index.ts` (including inline `type` specifiers inside mixed
- * `export { value, type T }` clauses), the members of the `atlas` namespace
+ * `export { value, type T }` clauses and inline `export interface` /
+ * `export type` declarations), the members of the `atlas` namespace
  * (`src/atlas/public.ts`), and the `MathTSEngine` subpath export — resolves
  * each to the module holding its declaration (skipping pure re-export
- * clauses), and reports the ones whose JSDoc has no summary line, using
- * `fileDocs` from `tools/code-docs-ratchet/check.ts`.
+ * clauses), and reports a name if any resolved site's JSDoc has no summary
+ * line, using `fileDocs` from `tools/code-docs-ratchet/check.ts`.
  *
  * `--check` exits 1 when any gap remains, when any name is unresolved, or
- * when `src/index.ts` contains a bare `export * from` (namespace
- * `export * as atlas` is allowed).
+ * when `src/index.ts` contains a bare `export * from` or `export type * from`
+ * (namespace `export * as atlas` is allowed). Specifiers may use `'` or `"`.
  *
  * @module scripts/public-tsdoc-gaps
  */
@@ -62,8 +63,8 @@ interface ExportClause {
 interface ModuleExports {
   /** Clauses in source order. */
   readonly clauses: readonly ExportClause[];
-  /** Names declared by an inline `export <decl> name`. */
-  readonly declared: ReadonlySet<string>;
+  /** Inline `export <decl> name` → type (`interface`/`type`) or value. */
+  readonly declared: ReadonlyMap<string, 'type' | 'value'>;
 }
 
 /** Strip line and block comments so clause regexes cannot match inside one. */
@@ -86,11 +87,16 @@ function parseSpecifier(raw: string, clauseTypeOnly: boolean): ExportSpecifier |
   return null;
 }
 
+function declaredKind(keyword: string): 'type' | 'value' {
+  const kind = keyword.replace(/\s/g, '');
+  return kind === 'interface' || kind === 'type' ? 'type' : 'value';
+}
+
 function moduleExports(rel: string): ModuleExports {
   const text = stripComments(readSource(rel));
   const clauses: ExportClause[] = [];
-  const declared = new Set<string>();
-  const clauseRe = /export\s+(type\s+)?\{([^}]*)\}(?:\s*from\s*'([^']+)')?/g;
+  const declared = new Map<string, 'type' | 'value'>();
+  const clauseRe = /export\s+(type\s+)?\{([^}]*)\}(?:\s*from\s*['"]([^'"]+)['"])?/g;
   for (const match of text.matchAll(clauseRe)) {
     const typeOnly = match[1] !== undefined;
     const specifiers: ExportSpecifier[] = [];
@@ -100,17 +106,18 @@ function moduleExports(rel: string): ModuleExports {
     }
     if (specifiers.length > 0) clauses.push({ specifiers, from: match[3] ?? null, typeOnly });
   }
-  const nsRe = /export\s+\*\s+as\s+([A-Za-z_$][\w$]*)\s+from\s*'([^']+)'/g;
+  const nsRe = /export\s+(type\s+)?\*\s+as\s+([A-Za-z_$][\w$]*)\s+from\s*['"]([^'"]+)['"]/g;
   for (const match of text.matchAll(nsRe)) {
+    const typeOnly = match[1] !== undefined;
     clauses.push({
-      specifiers: [{ exported: match[1]!, local: match[1]!, kind: 'value' }],
-      from: match[2]!,
-      typeOnly: false,
+      specifiers: [{ exported: match[2]!, local: match[2]!, kind: typeOnly ? 'type' : 'value' }],
+      from: match[3]!,
+      typeOnly,
     });
   }
   const declRe =
-    /export\s+(?:declare\s+)?(?:default\s+)?(?:abstract\s+)?(?:async\s+)?(?:const|let|var|function\s*\*?|class|interface|type|enum)\s+([A-Za-z_$][\w$]*)/g;
-  for (const match of text.matchAll(declRe)) declared.add(match[1]!);
+    /export\s+(?:declare\s+)?(?:default\s+)?(?:abstract\s+)?(?:async\s+)?(const|let|var|function\s*\*?|class|interface|type|enum)\s+([A-Za-z_$][\w$]*)/g;
+  for (const match of text.matchAll(declRe)) declared.set(match[2]!, declaredKind(match[1]!));
   return { clauses, declared };
 }
 
@@ -143,7 +150,7 @@ function topLevelNames(rel: string): { runtime: Set<string>; types: Set<string> 
   for (const clause of mod.clauses) {
     for (const spec of clause.specifiers) (spec.kind === 'type' ? types : runtime).add(spec.exported);
   }
-  for (const name of mod.declared) runtime.add(name);
+  for (const [name, kind] of mod.declared) (kind === 'type' ? types : runtime).add(name);
   return { runtime, types };
 }
 
@@ -195,7 +202,7 @@ export interface PublicCensusBuckets {
   readonly subpath: readonly string[];
 }
 
-/** The names each census bucket contributes. Removing a bucket from `collect` fails the suite pins. */
+/** The names each census bucket contributes. Size pins read this helper; deleting a loop from `collect()` fails the per-bucket CONTROL, not these pins. */
 export function collectPublicNamesForTest(): PublicCensusBuckets {
   const atlas = topLevelNames('atlas/public.ts');
   return {
@@ -224,11 +231,11 @@ function collect(): { name: string; via: string }[] {
   return entries;
 }
 
-/** `export * from 'spec'` (no `as`). `export * as atlas from` is not one. */
+/** `export * from` / `export type * from` with `'` or `"` (no `as`). `export * as atlas from` is not one. */
 function bareStarFrom(source: string): string[] {
   const out: string[] = [];
-  const re = /export\s+\*\s+from\s+'([^']+)'/g;
-  for (const match of source.matchAll(re)) out.push(match[1]!);
+  const re = /export\s+(type\s+)?\*\s+from\s*['"]([^'"]+)['"]/g;
+  for (const match of source.matchAll(re)) out.push(match[2]!);
   return out;
 }
 
@@ -259,8 +266,9 @@ function report(): PublicTsdocReport {
       unresolved.push({ via: entry.via, name: entry.name });
       continue;
     }
-    if (sites.every((site) => !documented(site))) {
-      found.push({ name: entry.name, via: entry.via, file: sites[0]!.file });
+    const undoc = sites.filter((site) => !documented(site));
+    if (undoc.length > 0) {
+      found.push({ name: entry.name, via: entry.via, file: undoc[0]!.file });
     }
   }
   return {
