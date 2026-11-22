@@ -24,6 +24,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- PR #822 Composer FIX LIST 3: `tests/examples/user-docs.test.ts` CONTROL mutates a distinctive number in the **guide text** (not only stdout) and re-extracts `statedOutput`, so a wrong digit in the guide with unchanged CLI fails the stdout match. The previous CONTROL only mutated stdout and would stay green for findings 1–2.
+
 - PR #822 Composer FIX LIST 2: `tests/examples/user-docs.test.ts` reads stated output from the guides themselves (README `statedOutput` / `fenceAfter` / `sentences`, skipping an intervening bash fence). Every `text` fence line is claimed by exactly one bash command and must appear in real stdout, so a fabricated number or table row fails. Mutations on this tree: `21.708826656988485` → `…88400` (1 failed / 41 passed); `1477.0632775277024 m` → `…77999 m` (2 failed / 40 passed); canonical row `CE-pendulum-period` → `CE-totally-invented` (1 failed / 41 passed); `be-42 Hawking temperature` → `be-999 Fabricated bridge` (1 failed / 41 passed).
 
 - PR #822 Composer FIX LIST 1: `tests/examples/user-docs.test.ts` now asserts every `prints[]` piece in both directions (the guide text contains it, and real stdout contains it). The previous check only pinned `prints[0]` against the guide, so a wrong derive prefactor in `docs/user/getting-started.md` stayed green. Mutation: `6.28318530717959` → `9.99999999999999` at the guide's recover line now fails `the guide states "recovered prefactor ≈ 6.28318530717959"` (1 failed / 32 passed).

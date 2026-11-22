@@ -123,6 +123,30 @@ function runCli(args: string[]): { status: number; stdout: string; stderr: strin
   return { status: result.status ?? 1, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
 }
 
+/** A pasted result line (a number, optionally with a unit), not a table id. */
+function resultPiece(prints: string[]): string | undefined {
+  return prints.find((piece) => /^\s*[+-]?\d+(?:\.\d+)?(?:e[+-]?\d+)?(?:\s+\S+)?\s*$/.test(piece));
+}
+
+/**
+ * Mutate a distinctive number inside a stated piece. Short ids (`be-16`) are
+ * skipped: `be-17` may already be in stdout, which would make the control pass
+ * vacuously.
+ */
+function mutateGuideNumber(piece: string): string | null {
+  const token = piece.match(/\d+\.\d+(?:e[+-]?\d+)?|\d+e[+-]?\d+|\d{8,}/)?.[0];
+  if (token === undefined) return null;
+  const mutated = token.replace(/\d(?=\D*$)/, (d) => String((Number(d) + 1) % 10));
+  if (mutated === token) return null;
+  return piece.replace(token, mutated);
+}
+
+function assertStdoutHolds(stdout: string, command: string, prints: string[]): void {
+  for (const piece of prints) {
+    expect(stdout, `stdout of \`${command}\` holds ${JSON.stringify(piece)}`).toContain(piece);
+  }
+}
+
 describe('docs/user guides', () => {
   for (const [file, text] of Object.entries(guides)) {
     describe(file, () => {
@@ -168,15 +192,42 @@ describe('docs/user guides', () => {
       });
 
       it('CONTROL: the output matcher is sensitive to the stated value, not only to the words', () => {
-        // A table row's last digit is often an id (`be-16`); mutate a numeric result.
-        const resultPiece = (prints: string[]) =>
-          prints.find((piece) => /^\s*[+-]?\d+(?:\.\d+)?(?:e[+-]?\d+)?(?:\s+\S+)?\s*$/.test(piece));
         const first = withOutput.find((entry) => resultPiece(entry.prints!) !== undefined)!;
         const [, ...args] = argv(first.command);
         const result = runCli(args);
         const statedPiece = resultPiece(first.prints!)!;
         expect(result.stdout).toContain(statedPiece);
         expect(result.stdout).not.toContain(statedPiece.replace(/\d(?=\D*$)/, (d) => String((Number(d) + 1) % 10)));
+      });
+
+      it('CONTROL: a wrong digit in the guide fails the guide↔stdout coupling', () => {
+        const mutations: { command: string; original: string; mutated: string }[] = [];
+        for (const { command, prints } of withOutput) {
+          for (const original of prints!) {
+            const mutated = mutateGuideNumber(original);
+            if (mutated === null) continue;
+            mutations.push({ command, original, mutated });
+          }
+        }
+        expect(mutations.length, 'at least one digit-bearing stated line can be mutated').toBeGreaterThan(0);
+        for (const { command, original, mutated } of mutations) {
+          const mutatedGuide = text.replace(original, mutated);
+          expect(mutatedGuide, `the guide text actually changed for ${JSON.stringify(original)}`).not.toBe(text);
+          expect(mutatedGuide, 'the mutated guide no longer states the real value').not.toContain(original);
+          expect(mutatedGuide, 'the mutated guide states the wrong value').toContain(mutated);
+          const extracted = statedOutput(mutatedGuide, command);
+          expect(extracted, `statedOutput still finds \`${command}\` after the guide mutation`).not.toBeNull();
+          expect(extracted).toContain(mutated);
+          const [, ...args] = argv(command);
+          const result = runCli(args);
+          expect(result.status, result.stderr).toBe(0);
+          expect(result.stdout).toContain(original);
+          expect(result.stdout).not.toContain(mutated);
+          expect(
+            () => assertStdoutHolds(result.stdout, command, extracted!),
+            `wrong digit only in the guide must fail for \`${command}\``,
+          ).toThrow();
+        }
       });
     });
   }
