@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [ ] **PR #823 Composer FIX LIST: mixed `export { type X }` census (248 root types), per-bucket CONTROLs, resolver hardening (aliases, kind, UNRESOLVED fail, ban bare `export *`), S13 metadata, pin 248, plan 246→248, docs-fresh `--check`, RED-before 15-gap fixture.**
+
 - [x] **S12 — public-surface TSDoc gaps (plan `docs/superpowers/plans/2026-11-21-upt-optimization-docs.md`, sprint S12).**
   Done: `scripts/public-tsdoc-gaps.ts` (public names from the runtime snapshot, the explicit type exports of `src/index.ts`, the `atlas` members of `src/atlas/public.ts`, and the `MathTSEngine` subpath; each resolved through the re-export clauses to its declaring module and judged by `fileDocs`; `--check` exits 1 on any gap) and `tests/tools/public-tsdoc-gaps.test.ts` (green gate + CONTROL: stripping `FORCE`'s summary puts `FORCE` back on the list). RED first on the unchanged tree: 15 gaps, not the plan's 18 — the plan's three `atlas` types resolve to already-documented declarations in `src/relations/types.ts` under the plan's own skip-re-export rule; the `src/atlas/types.ts` re-export clause got a one-line summary anyway. Fix: one-sentence JSDoc summaries on the 15 undocumented `Dimension` constants in `src/dimensional/types.ts`, grounded in the exponent literals and the units the file states; no value, type or signature changed. Full suite **769 files, 9579 passed / 6 skipped**. typecheck, layer:check, audit:plans, readme-status --check, docs:deps, catalog-census / cli-reference / physjs:table / lean-index `--check`, code-docs ratchet green; FILE_INVENTORY regenerated for the two new files.
 
