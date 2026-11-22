@@ -257,6 +257,10 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
         for (const s of ['Bq', 'Gy', 'Sv', 'kat']) {
           expect(getUnitRow(s), s).toBeUndefined();
           expect(() => Unit.parse(s), s).toThrow(UnitParseError);
+          // Absent, not merely ambiguous: `AmbiguousUnitError extends
+          // UnitParseError`, so a future ambiguous reading of `Gy` must flip
+          // this row too.
+          expect(() => Unit.parse(s), s).not.toBeInstanceOf(MathTSAmbiguousUnitError);
           expect(parseUnit(s).scale, s).toBe(1);
         }
       },
@@ -270,9 +274,10 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       },
     },
     {
-      id: 'mAs a compound in UPT, unknown in MathTS',
+      id: 'mAs a listed glued product in UPT, unknown in MathTS',
       check: () => {
         expect(() => Unit.parse('mAs')).toThrow(UnitParseError);
+        expect(() => Unit.parse('mAs')).not.toBeInstanceOf(MathTSAmbiguousUnitError);
         expect(parseUnit('mAs').scale).toBe(1e-3);
       },
     },
@@ -280,7 +285,7 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       id: 'ln2 is an irrational, not a unit spelling, on either side',
       check: () => {
         expect(() => Unit.parse('ln2')).toThrow(UnitParseError);
-        expect(NAMED_IRRATIONALS.ln2).toBeDefined();
+        expect(Number(NAMED_IRRATIONALS.ln2)).toBeCloseTo(Math.LN2, 15);
         expect(() => parseUnit('ln2')).toThrow(UnknownUnitError);
       },
     },
