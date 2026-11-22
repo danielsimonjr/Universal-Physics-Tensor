@@ -32,9 +32,12 @@ Four lines, four facts:
 - `25 degC -> K (difference): 25` — a temperature *difference* of 25 °C is
   25 K. With the third argument omitted the conversion is absolute (298.15 K),
   which is the affine distinction `convertValue` makes.
-- `1 Hz -> rad/s: 1` — one hertz is one radian per second of angular rate.
-- `1 Hz -> rad/s cycles: 1` — the conversion also reports the cycles factor
-  the radian hides.
+- `1 Hz -> rad/s: 1` — `convertValue` returns the *cycle count* (1 cycle/s),
+  not the angular rate. One hertz of angular rate is 2π rad/s; that 2π is
+  not applied here.
+- `1 Hz -> rad/s cycles: 1` — `cycles: 1` marks that angular evaluator paths
+  multiply by 2π. The radian does not hide the cycles factor; the flag is
+  how the evaluator knows to apply it.
 
 ```text
 bit scale: 0.6931471805599453

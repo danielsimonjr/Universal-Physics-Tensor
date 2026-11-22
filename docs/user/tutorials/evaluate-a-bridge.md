@@ -51,8 +51,9 @@ in solar masses: 1.4558683920023672
 ```
 
 Both routes evaluate the same record, so the two figures agree by
-construction; what the test suite checks is that the tutorial's code and
-prose cannot drift from the catalog.
+construction. The test suite couples the CLI `text` fence to the bash
+command's stdout, and the library `text` fence to the TypeScript sample's
+stdout, so a wrong mass in either fence fails.
 
 ## Where to go next
 
