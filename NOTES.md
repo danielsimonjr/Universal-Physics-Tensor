@@ -18,7 +18,7 @@ nothing validates prose and the next reader cannot tell.
 - **4 `d6b1aab7`.** Drift guard `(?<![-\w])(?:109|152|121|696|160)(?![.\w])|^\d+ bridges`. CONTROL: each of those five as a bare count matches; `be-121` / `CE-121` / `Node >=22.12.0` do not.
 - **5 `803d6f32`.** `upt help` `e.g.` only where the help has one (`audit`, `canonical`, `priority`, `recover`, `symbolic` have none). Canonical coverage line is a count, not a partner list. `upt eval --help` is the documented sample. Node `>=22.12.0`. `--natural` leaves k_B SI (`1/(8π G M k_B)`).
 - **7 `1d431f9e`.** All 11 non-`mpc` guard names throw in `Unit.parse` on MathTS 0.28.0 (`exactScale` never reached). Law 2 comment narrowed; Unreleased S10 `exactScale === null` clause retracted.
-- **8.** File census **1268** unchanged (no new files). `docs:deps` `totalExports` **2867** / unused **34**; repo-tools map `totalExports` **3919** / unused **192**. FILE_INVENTORY / COMPONENTS `totalSourceFiles` and TEST_COVERAGE unchanged. OVERVIEW / API.md / duplicate-symbols Verification tables updated. No map dump committed.
+- **8 `7b417b42`.** File census **1268** unchanged (no new files). `docs:deps` `totalExports` **2867** / unused **34**; repo-tools map `totalExports` **3919** / unused **192**. FILE_INVENTORY / COMPONENTS `totalSourceFiles` and TEST_COVERAGE unchanged. OVERVIEW / API.md / duplicate-symbols Verification tables updated. No map dump committed. CompileExpr rewrite narrowed in `018d70a4` (only the `e` row). Full suite after the FIX LIST: **768 files, 9572 passed / 6 skipped**. typecheck, layer:check, audit:plans, readme-status --check, docs:deps, docs-fresh inputs all green.
 
 ## As of 2026-11-22 (S11 — getting-started and catalog user guides)
 
