@@ -129,3 +129,7 @@ On a machine that has Node but not Bun, `npm install --no-package-lock` and
 - [`docs/CLI.md`](../CLI.md) — every command, every flag, generated from the
   registry. The reference shows a registry example for each command; that is
   independent of whether `upt help <command>` includes an `e.g.` line.
+- [The tutorials](tutorials/evaluate-a-bridge.md) — runnable walkthroughs
+  ([evaluate a bridge](tutorials/evaluate-a-bridge.md), [units](tutorials/units.md),
+  [search and explain](tutorials/search-and-explain.md)) whose code and output
+  the test suite executes.
