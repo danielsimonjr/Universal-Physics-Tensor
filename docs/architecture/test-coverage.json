@@ -12400,6 +12400,7 @@
       "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts",
       "tests/dimensional/units.test.ts",
+      "tests/examples/user-docs.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts",
@@ -16731,6 +16732,7 @@
       "tests/dimensional/unit-wrapper-refusal.test.ts",
       "tests/dimensional/units-exact-scale-delegation.test.ts",
       "tests/dimensional/units.test.ts",
+      "tests/examples/user-docs.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts",
       "tests/review/round3-owner-decisions.test.ts"
@@ -30167,7 +30169,9 @@
       "src/dimensional/errors.ts"
     ],
     "tests/examples/basic-usage.test.ts": [],
-    "tests/examples/user-docs.test.ts": [],
+    "tests/examples/user-docs.test.ts": [
+      "src/dimensional/units.ts"
+    ],
     "tests/fixtures/confrontation-golden.test.ts": [
       "src/index.ts",
       "src/atlas/public.ts",
