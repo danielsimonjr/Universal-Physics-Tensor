@@ -135,8 +135,9 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
 - `evaluateFormula` and `CompiledFormula.evaluate` refuse NaN and non-numbers always, and refuse
   ±Infinity unless the caller passes `{ allowInfinity: true }`. Only applied-case catalog `expr`
   outputs pass that option (a parent integral that underflows to 0 emits `Infinity`, matching the
-  deleted JS runner). Every other caller stays strict. Catalog `needs` on an output or check means
-  the engine omits it when every listed key is absent from the caller's inputs.
+  deleted JS runner). Every other caller stays strict. Catalog `needs` on an
+  output or check means that when every listed key is absent from the caller's
+  inputs the engine sets the output to `null` and omits the check.
 
 ## Where things live
 

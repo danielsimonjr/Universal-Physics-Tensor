@@ -4,7 +4,7 @@
  * cases, so audit stdout cannot evidence this migration. This file pins the
  * engine's outputs, checks and unchecked strings on the catalog valid example
  * and the quantum failure example against a committed golden; mutating the
- * `S_V` exponent fails the golden.
+ * `S_V` prefactor (`4` → `5`) fails the golden.
  */
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
@@ -94,7 +94,7 @@ describe('case-resistor-noise output identity (not audit)', () => {
     assertIdentity(runExample(examples.failures[0]!.args), golden.failureQuantum, 'failureQuantum');
   });
 
-  it('CONTROL: mutating the S_V exponent fails the valid-example golden', () => {
+  it('CONTROL: mutating the S_V prefactor fails the valid-example golden', () => {
     const text = dataText('applied-cases.json');
     const mutated = text.replace('"expr": "4*k_B*T_K*R_eff_ohm"', '"expr": "5*k_B*T_K*R_eff_ohm"');
     expect(mutated, 'the S_V expr must occur once to replace').not.toBe(text);
@@ -102,6 +102,6 @@ describe('case-resistor-noise output identity (not audit)', () => {
     const record = file.cases.find((c) => c.id === ID)!;
     const inputs = resolveEvaluatorInputs(APPLIED_CASES.get(ID)!.parameters, [...examples.valid.args]).inputs;
     const got = runAppliedCaseEngine(record, inputs);
-    expect(() => assertIdentity(got, golden.valid, 'mutated')).toThrow();
+    expect(() => assertIdentity(got, golden.valid, 'mutated')).toThrow(/to be less (or equal )?than/);
   });
 });

@@ -9,9 +9,13 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-22 (PR #816 Gemini REQUEST CHANGES — zone-gate isolation)
+
+- **The FILE_INVENTORY untracked-file CONTROL no longer writes into this tree's `tests/`.** `tests/tools/file-inventory-zones.test.ts` parameterizes `recount(cwd)` and proves tracked-vs-untracked exclusion in an isolated `mkdtempSync` git repo (`rmSync` in `finally`): one staged `tests/a.ts` counts as 1, an untracked `tests/b.ts` does not bump it, and staging `b.ts` counts as 2. A grep of every `writeFileSync` under `tests/` found no other test that plants a scratch file in this repository's tree (the rest write under `tmpdir()` / `tempDir`). The identity-golden 4→5 mutation is a prefactor change, not an exponent; unmet catalog `needs` set an output to `null` and omit a check.
+
 ## As of 2026-11-22 (PR #816 review — resistor-noise engine identity)
 
-- **Case-output identity is pinned by `tests/cases/applied-case-output-identity.test.ts`, not by `upt audit`.** The harness compares `runAppliedCaseEngine` on `case-resistor-noise` against `tests/cases/golden/case-resistor-noise.identity.json` for the catalog valid example and the quantum failure example (output keys, check ids/holds/bound, unchecked strings, numbers at 1e-12 relative with `parent_deviation` at 1e-14 absolute). Mutating the catalog `S_V` exponent (`4*k_B*T_K*R_eff_ohm` → `5*k_B*T_K*R_eff_ohm`) fails that golden. `upt audit` walks the bridge graph and never reads `APPLIED_CASES`; it is not evidence of this migration. `parent_deviation` is `Infinity` when the parent integral underflows to 0 (`f_hi_Hz` ≳ 3e18), matching the deleted runner; that boundary is outside the checked regime. Infinity is an opt-in on applied-case `expr` outputs only; NaN still throws there, and every other `evaluateFormula` caller still throws on non-finite results.
+- **Case-output identity is pinned by `tests/cases/applied-case-output-identity.test.ts`, not by `upt audit`.** The harness compares `runAppliedCaseEngine` on `case-resistor-noise` against `tests/cases/golden/case-resistor-noise.identity.json` for the catalog valid example and the quantum failure example (output keys, check ids/holds/bound, unchecked strings, numbers at 1e-12 relative with `parent_deviation` at 1e-14 absolute). Mutating the catalog `S_V` prefactor (`4*k_B*T_K*R_eff_ohm` → `5*k_B*T_K*R_eff_ohm`) fails that golden. `upt audit` walks the bridge graph and never reads `APPLIED_CASES`; it is not evidence of this migration. `parent_deviation` is `Infinity` when the parent integral underflows to 0 (`f_hi_Hz` ≳ 3e18), matching the deleted runner; that boundary is outside the checked regime. Infinity is an opt-in on applied-case `expr` outputs only; NaN still throws there, and every other `evaluateFormula` caller still throws on non-finite results.
 
 ## As of 2026-11-22 (S4 — compiled-formula memoization in `parseFormula`)
 

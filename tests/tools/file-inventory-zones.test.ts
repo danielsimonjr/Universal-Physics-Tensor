@@ -9,8 +9,9 @@
  * A zone count in the document that no recount supports (or a new source file
  * the document was not regenerated against) fails here.
  */
-import { execSync } from 'node:child_process';
-import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { execFileSync, execSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -32,13 +33,13 @@ const AREA_BY_DIR: Record<string, string> = {
   '': 'config',
 };
 
-function recount(): Map<string, number> {
+function recount(cwd = REPO_ROOT): Map<string, number> {
   // Tracked (index) files only. Untracked scratch files are absent because git
   // does not track them — the same census rule FILE_INVENTORY.md states.
   const out = execSync('git ls-files -z --cached', {
     encoding: 'utf8',
     maxBuffer: 16 * 1024 * 1024,
-    cwd: REPO_ROOT,
+    cwd,
   });
   const counts = new Map<string, number>();
   for (const file of out.split('\0')) {
@@ -77,6 +78,24 @@ function docZoneRows(): Map<string, number> {
   return parseZoneRows(readFileSync(DOC_PATH, 'utf8'));
 }
 
+function gitIn(cwd: string, ...args: string[]): void {
+  execFileSync(
+    'git',
+    [
+      '-c',
+      'user.email=t@example.invalid',
+      '-c',
+      'user.name=t',
+      '-c',
+      'core.autocrlf=false',
+      '-c',
+      'commit.gpgsign=false',
+      ...args,
+    ],
+    { cwd, encoding: 'utf8' },
+  );
+}
+
 describe('FILE_INVENTORY per-zone census', () => {
   it('every zone row matches a fresh recount of the git-tracked source files', () => {
     const counted = recount();
@@ -109,15 +128,23 @@ describe('FILE_INVENTORY per-zone census', () => {
     expect(() => expect(staleDoc.get('tests'), 'tests zone').toBe(counted.get('tests'))).toThrow();
   });
 
+  // Isolated throwaway git repo (see tests/tools/untracked-gate-inputs.test.ts).
+  // Writing into REPO_ROOT/tests/ races with parallel walks of tests/
+  // (no-raw-nul, no-network-in-tests, tmp-dirs-cleaned) and can leave a stray.
   it('CONTROL: an untracked tests/*.ts file is not in the census', () => {
-    const scratch = join(REPO_ROOT, 'tests', 'zz-scratch-untracked-zone-gate.ts');
-    writeFileSync(scratch, 'export {};\n');
+    const tmp = mkdtempSync(join(tmpdir(), 'upt-zone-census-'));
     try {
-      const counted = recount();
-      const doc = docZoneRows();
-      expect(counted.get('tests'), 'untracked file must not bump the tests zone').toBe(doc.get('tests'));
+      gitIn(tmp, 'init', '-q');
+      mkdirSync(join(tmp, 'tests'));
+      writeFileSync(join(tmp, 'tests', 'a.ts'), 'export {};\n');
+      gitIn(tmp, 'add', 'tests/a.ts');
+      expect(recount(tmp).get('tests')).toBe(1);
+      writeFileSync(join(tmp, 'tests', 'b.ts'), 'export {};\n');
+      expect(recount(tmp).get('tests'), 'untracked file must not bump the tests zone').toBe(1);
+      gitIn(tmp, 'add', 'tests/b.ts');
+      expect(recount(tmp).get('tests'), 'staging the same file must bump the tests zone').toBe(2);
     } finally {
-      unlinkSync(scratch);
+      rmSync(tmp, { recursive: true, force: true });
     }
   });
 });
