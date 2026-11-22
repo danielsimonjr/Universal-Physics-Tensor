@@ -2293,7 +2293,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, MU0_SI, SIGMA_SB_SI` | Import |
+| `../core/constants.js` | `H_SI, K_B_SI, SIGMA_SB_SI` | Import |
 | `../dimensional/units.js` | `convertValue` | Import |
 | `../bridges/catalog-load.js` | `catalogRelations` | Import |
 | `../bridges/relation-eval.js` | `evaluateCatalogRelation` | Import |
@@ -2309,24 +2309,20 @@ The codebase is organized into the following modules:
 - Functions:
 
   ```text
-  maxwellDepthFactor, skinDeltaMaxwellM, runCaseSkinDepth, runCaseKeplerRv, windowedLinewidthHz,
-  windowedLinewidthCatalogHz, runCaseDampedResonator, runCaseResistorNoise,
-  lumpedRadiatingTemperature, sphereEigenvalues, sphereSeries, runCaseLumpedCooling, ballisticDeficit,
-  hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular, brownianSphereRegimeAt,
-  runCaseBrownianSphere
+  maxwellDepthFactor, skinDeltaMaxwellM, windowedLinewidthHz, windowedLinewidthCatalogHz,
+  runCaseResistorNoise, lumpedRadiatingTemperature, sphereEigenvalues, sphereSeries,
+  runCaseLumpedCooling, ballisticDeficit, hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular,
+  brownianSphereRegimeAt, runCaseBrownianSphere
   ```
 
 - Constants:
 
   ```text
-  MAX_DISPLACEMENT_RATIO, MAX_MFP_RATIO, MAX_OMEGA_TAU, MIN_THICKNESS_RATIO, JULIAN_YEAR_S,
-  MAX_MASS_RATIO, MAX_RADIUS_RATIO, MAX_WEAK_FIELD, MAX_APSIDAL_MISFIT, MIN_Q_LORENTZIAN,
-  MAX_RESOLUTION_RATIO, MAX_THERMAL_RATIO, CLASSICAL_MAX_X, FLAT_BAND_MAX_WRC,
-  AMPLIFIER_MAX_REL_SIGMA, MAX_BIOT, MAX_RADIATION_RATIO, G_STANDARD, MAX_RE, MAX_TAU_P_RATIO,
-  MAX_MEMORY_CORRECTION, MAX_DRIFT_RATIO, MAX_WALL_CORRECTION, MAX_FAXEN_LAST_TERM,
-  MAX_WALL_EXCURSION, APPLIED_CASE_RUNNERS, CASE_METHOD_NAMES, CASE_METHODS, SKIN_DEPTH_CASE,
-  KEPLER_RV_CASE, DAMPED_RESONATOR_CASE, RESISTOR_NOISE_CASE, LUMPED_COOLING_CASE,
-  BROWNIAN_SPHERE_CASE
+  JULIAN_YEAR_S, MAX_THERMAL_RATIO, CLASSICAL_MAX_X, FLAT_BAND_MAX_WRC, AMPLIFIER_MAX_REL_SIGMA,
+  MAX_BIOT, MAX_RADIATION_RATIO, G_STANDARD, MAX_RE, MAX_TAU_P_RATIO, MAX_MEMORY_CORRECTION,
+  MAX_DRIFT_RATIO, MAX_WALL_CORRECTION, MAX_FAXEN_LAST_TERM, MAX_WALL_EXCURSION, APPLIED_CASE_RUNNERS,
+  CASE_METHOD_NAMES, CASE_METHODS, SKIN_DEPTH_CASE, KEPLER_RV_CASE, DAMPED_RESONATOR_CASE,
+  RESISTOR_NOISE_CASE, LUMPED_COOLING_CASE, BROWNIAN_SPHERE_CASE
   ```
 
 - Re-exports: `LumpedRadiating`, `SIGMA_SB_SI`
@@ -7857,12 +7853,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89911 |
-| Total Exports | 2870 |
+| Total Lines of Code | 89706 |
+| Total Exports | 2857 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 940 |
+| Total Functions | 937 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

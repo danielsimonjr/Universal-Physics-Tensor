@@ -1,13 +1,20 @@
 /**
  * Part B steps B9–B11: the catalog engine evaluates wired cases from expr, relation, and method fields.
+ *
+ * The three cases whose whole-case runners were deleted in S5
+ * (`case-skin-depth`, `case-kepler-rv`, `case-damped-resonator`) carry pinned
+ * numeric reference expectations on `runAppliedCaseEngine` instead of a
+ * legacy-runner comparison: every output key at 1e-12 relative, the check ids
+ * with their `holds` verdicts, and the `unchecked` count. The pinned values
+ * are the runner outputs recorded before deletion, cross-checked against the
+ * hand arithmetic in `tests/cases/skin-depth.test.ts` (δ ≈ 65.2 µm),
+ * `kepler-rv.test.ts` (K ≈ 12.48 m/s) and `damped-resonator.test.ts`
+ * (envelope ≈ 7.304e-7 m, x_th ≈ 6.4358e-11 m).
  */
 import { describe, expect, it } from 'vitest';
 import { APPLIED_CASES, runAppliedCase } from '../../src/cases/index.js';
-import {
-  runCaseDampedResonator,
-  runCaseKeplerRv,
-  runCaseSkinDepth,
-} from '../../src/cases/methods.js';
+import { appliedCaseRecord } from '../../src/cases/catalog.js';
+import { runAppliedCaseEngine } from '../../src/cases/engine.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { evaluateFormula } from '../../src/bridges/expr-parse.js';
 import { catalogSemanticProblems, readAppliedCaseFile } from '../../src/cases/catalog.js';
@@ -17,34 +24,54 @@ import { dataSchema, dataText } from '../../src/core/data-file.js';
 
 const schema = dataSchema('applied-cases.json');
 
-function legacyMatch(id: string, legacy: (i: Readonly<Record<string, number>>) => CaseResult) {
+interface PinnedCase {
+  outputs: Record<string, number | null>;
+  checks: { id: string; holds: boolean }[];
+  uncheckedCount: number;
+}
+
+/** Pin the engine's full result for a case on the catalog valid example. */
+function pinCase(id: string, expected: PinnedCase) {
   const validArgs = APPLIED_CASES.get(id)!.examples.valid.args;
   const inputs = resolveEvaluatorInputs(APPLIED_CASES.get(id)!.parameters, validArgs).inputs;
-  const fromLegacy = legacy(inputs);
-  const fromRegistry = runAppliedCase(id, inputs);
-  for (const [key, value] of Object.entries(fromLegacy.outputs as Record<string, number | null>)) {
-    const got = fromRegistry.outputs[key];
-    if (value === null) expect(got).toBeNull();
-    else if (Math.abs(value) > 1) expect(Math.abs((got as number) / value - 1)).toBeLessThan(1e-12);
-    else expect(got).toBeCloseTo(value, 10);
+  const got = runAppliedCaseEngine(appliedCaseRecord(id), inputs);
+  expect(Object.keys(got.outputs)).toEqual(Object.keys(expected.outputs));
+  for (const [key, value] of Object.entries(expected.outputs)) {
+    const gotValue = (got.outputs as Record<string, number | null>)[key];
+    if (value === null) expect(gotValue, key).toBeNull();
+    else if (Math.abs(value) > 1) expect(Math.abs((gotValue as number) / value - 1), key).toBeLessThan(1e-12);
+    else expect(gotValue, key).toBeCloseTo(value, 10);
   }
-  expect(fromRegistry.checks.map((c) => ({ id: c.id, holds: c.holds }))).toEqual(
-    fromLegacy.checks.map((c) => ({ id: c.id, holds: c.holds })),
-  );
-  for (let i = 0; i < fromLegacy.checks.length; i++) {
-    const legacyVal = fromLegacy.checks[i]!.value;
-    const gotVal = fromRegistry.checks[i]!.value;
-    if (Math.abs(legacyVal) > 1) expect(Math.abs(gotVal / legacyVal - 1)).toBeLessThan(1e-12);
-    else expect(gotVal).toBeCloseTo(legacyVal, 10);
-  }
+  expect(got.checks.map((c) => ({ id: c.id, holds: c.holds }))).toEqual(expected.checks);
+  expect(got.unchecked.length).toBe(expected.uncheckedCount);
 }
 
 describe('applied-case engine — skin depth', () => {
   const ID = 'case-skin-depth';
   const validArgs = APPLIED_CASES.get(ID)!.examples.valid.args;
 
-  it('matches the legacy runner on the catalog valid example', () => {
-    legacyMatch(ID, runCaseSkinDepth);
+  it('pinned reference: copper at 1 MHz (the deleted runner outputs, on the catalog valid example)', () => {
+    pinCase(ID, {
+      outputs: {
+        omega_per_s: 6283185.307179586,
+        displacement_ratio: 9.346260472095563e-13,
+        delta_m: 6.523411464521558e-5,
+        R_s_ohm: 0.00025753396196712467,
+        delta_maxwell_m: 6.523411464524606e-5,
+        maxwell_deviation: -4.671818487622659e-13,
+        mfp_ratio: 0.0005978466974236822,
+        omega_tau: 1.560791254649706e-7,
+        thickness_ratio: 15.329402498043136,
+        back_field_ratio: 2.2005188047747579e-7,
+      },
+      checks: [
+        { id: 'good-conductor', holds: true },
+        { id: 'local', holds: true },
+        { id: 'dc-conductivity', holds: true },
+        { id: 'thick', holds: true },
+      ],
+      uncheckedCount: 2,
+    });
   });
 
   it('control: mutating the skin-depth exponent moves delta_m (expression is not inert prose)', () => {
@@ -73,8 +100,29 @@ describe('applied-case engine — skin depth', () => {
 });
 
 describe('applied-case engine — kepler RV', () => {
-  it('matches the legacy runner on the catalog valid example', () => {
-    legacyMatch('case-kepler-rv', runCaseKeplerRv);
+  it('pinned reference: the Sun and Jupiter, edge-on over one orbit (the deleted runner outputs)', () => {
+    pinCase('case-kepler-rv', {
+      outputs: {
+        q: 0.0009542483660130719,
+        a_m: 778405488388.7231,
+        a_star_m: 742084032.9146931,
+        K_m_per_s: 12.478650981128844,
+        K_two_body_m_per_s: 12.47071880031423,
+        two_body_deviation: 0.0006360644435678964,
+        r_peri_m: 740341460006.5146,
+        weak_field: 1.8993606607363173e-9,
+        dphi_rad_per_orbit: 3.588792054420453e-8,
+        omega_dot_deg_per_yr: 1.7334589385915667e-7,
+        apsidal_misfit: 1.7753379285698968e-9,
+      },
+      checks: [
+        { id: 'test-mass', holds: true },
+        { id: 'point-mass', holds: true },
+        { id: 'weak-field', holds: true },
+        { id: 'apsidal', holds: true },
+      ],
+      uncheckedCount: 2,
+    });
   });
 
   it('refuses an unknown relation id at catalog validation', () => {
@@ -91,8 +139,30 @@ describe('applied-case engine — kepler RV', () => {
 });
 
 describe('applied-case engine — damped resonator', () => {
-  it('matches the legacy runner on the catalog valid example', () => {
-    legacyMatch('case-damped-resonator', runCaseDampedResonator);
+  it('pinned reference: 1 kHz, Q = 1000, 1 N/m at 300 K (the deleted runner outputs)', () => {
+    pinCase('case-damped-resonator', {
+      outputs: {
+        alpha_per_s: 3.141592653589793,
+        tau_s: 0.3183098861837907,
+        linewidth_Hz: 1,
+        f_d_Hz: 999.9998749999922,
+        x_m: 7.304026601130479e-7,
+        envelope_m: 7.30402782348999e-7,
+        resolution_Hz: 0.05,
+        linewidth_windowed_Hz: 1,
+        windowed_excess: 0,
+        x_th_rms_m: 6.435795988065501e-11,
+        envelope_rms_m: 7.304027880197702e-7,
+      },
+      checks: [
+        { id: 'underdamped', holds: true },
+        { id: 'single-lorentzian', holds: true },
+        { id: 'resolved', holds: true },
+        { id: 'in-record', holds: true },
+        { id: 'above-thermal', holds: true },
+      ],
+      uncheckedCount: 2,
+    });
   });
 
   it('control: mutating the envelope decay moves envelope_m', () => {

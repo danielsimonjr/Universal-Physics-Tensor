@@ -4,7 +4,7 @@
  * @module cases/methods
  */
 import { findRoot } from '@danielsimonjr/mathts-functions';
-import { C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, MU0_SI, SIGMA_SB_SI } from '../core/constants.js';
+import { H_SI, K_B_SI, SIGMA_SB_SI } from '../core/constants.js';
 import { convertValue } from '../dimensional/units.js';
 import { catalogRelations } from '../bridges/catalog-load.js';
 import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
@@ -18,19 +18,6 @@ import { check, requirePositive, signedRelativeDifference, type AppliedCase, typ
 export type { LumpedRadiating } from './types.js';
 
 // --- skin-depth.ts ---
-const SKIN_DEPTH_ID = 'case-skin-depth';
-
-/** ωε/σ ceiling: the displacement current then moves the penetration depth by ≈ ωε/(2σ) ≤ 0.5%. @internal */
-export const MAX_DISPLACEMENT_RATIO = 0.01;
-
-/** l/δ ceiling for a local (classical) conductivity. @internal */
-export const MAX_MFP_RATIO = 0.1;
-
-/** ωτ ceiling: the Drude σ(ω) = σ0/(1 − iωτ) is then within 0.5% of σ0 in modulus. @internal */
-export const MAX_OMEGA_TAU = 0.1;
-
-/** d/δ floor: the field reaching the back face is then ≤ e^{−5} ≈ 0.7% of the surface field. @internal */
-export const MIN_THICKNESS_RATIO = 5;
 
 /**
  * δ_Maxwell/δ for the plane wave k² = ω²με + iωμσ, as a function of r = ωε/σ:
@@ -53,128 +40,12 @@ export function skinDeltaMaxwellM(
   }
   return delta * maxwellDepthFactor(r);
 }
-/**
- * Evaluate the skin-depth applied case at the given SI inputs.
- * @internal
- */
-export function runCaseSkinDepth(i: Readonly<Record<string, number>>): CaseResult {
-    requirePositive(SKIN_DEPTH_ID, i, ['rho_ohm_m', 'f_Hz', 'mu_r', 'eps_r', 'l_mfp_m', 'v_carrier_m_per_s', 'thickness_m']);
-    const { rho_ohm_m: rho, f_Hz: f, mu_r: muR, eps_r: epsR, l_mfp_m: l, v_carrier_m_per_s: v, thickness_m: d } = i as Record<string, number>;
-    const omega = 2 * Math.PI * f;
-    const mu = muR * MU0_SI;
-    const delta = Math.sqrt((2 * rho) / (omega * mu));
-    const r = omega * epsR * EPS0_SI * rho;
-    const deltaMaxwell = delta * maxwellDepthFactor(r);
-    const omegaTau = (omega * l) / v;
-    return {
-      outputs: {
-        omega_per_s: omega,
-        delta_m: delta,
-        R_s_ohm: rho / delta,
-        delta_maxwell_m: deltaMaxwell,
-        maxwell_deviation: delta / deltaMaxwell - 1,
-        displacement_ratio: r,
-        mfp_ratio: l / delta,
-        omega_tau: omegaTau,
-        thickness_ratio: d / delta,
-        back_field_ratio: Math.exp(-d / delta),
-      },
-      checks: [
-        check('good-conductor', 'good conductor: conduction current ≫ displacement current', 'ωε/σ', r, '<=', MAX_DISPLACEMENT_RATIO,
-          'chosen threshold for ≪ 1: the parent penetration depth then differs from δ by ≈ ωε/(2σ) ≤ 0.5%'),
-        check('local', 'local conductivity: the carriers\' mean free path well inside the skin depth, l ≪ δ', 'l/δ', l / delta, '<=', MAX_MFP_RATIO,
-          'chosen threshold for ≪ 1; beyond it the current at a point depends on the field over a path l and the anomalous skin effect sets in (Pippard 1947; Reuter & Sondheimer 1948)'),
-        check('dc-conductivity', 'DC conductivity: the drive is slow beside the carrier relaxation, ωτ ≪ 1', 'ω l/v', omegaTau, '<=', MAX_OMEGA_TAU,
-          'chosen threshold for ≪ 1: the Drude σ(ω) = σ0/(1 − iωτ) is then within 0.5% of σ0 in modulus'),
-        check('thick', 'the conductor is a half-space for the field: d ≫ δ', 'd/δ', d / delta, '>=', MIN_THICKNESS_RATIO,
-          'chosen threshold: the half-space field at the back face is then ≤ e^{−5} ≈ 0.7% of the surface field'),
-      ],
-      unchecked: [
-        'ρ, μ_r and ε_r are the values at the conductor\'s temperature and at f; τ = l/v assumes one carrier species with one speed',
-        'the conductor is planar on the scale of δ (a wire of radius a needs a ≫ δ, not checked here)',
-      ],
-    };
-  
-}
-
 // --- kepler-rv.ts ---
-const KEPLER_RV_ID = 'case-kepler-rv';
 
 /** The Julian year, the year BE-52 takes (s): the unit table's `julian_year` row (`yr`). @internal */
 export const JULIAN_YEAR_S = convertValue('1 yr', 's').value;
-
-/** m_p/M_* ceiling: the test-mass K then exceeds the two-body K by (1 + q)^{2/3} − 1 ≤ 0.67%. @internal */
-export const MAX_MASS_RATIO = 0.01;
-
-/** Ceiling on the stellar radius over the periastron separation, for point masses. @internal */
-export const MAX_RADIUS_RATIO = 0.1;
-
-/** G(M_* + m_p)/(c² a) ceiling for Newtonian gravity. @internal */
-export const MAX_WEAK_FIELD = 1e-4;
-
-/** e·Δω accumulated over the record (rad) ceiling for a fixed ellipse. @internal */
-export const MAX_APSIDAL_MISFIT = 0.01;
-/**
- * Evaluate the Kepler radial-velocity applied case at the given SI inputs.
- * @internal
- */
-export function runCaseKeplerRv(i: Readonly<Record<string, number>>): CaseResult {
-    requirePositive(KEPLER_RV_ID, i, ['M_star_kg', 'm_p_kg', 'P_s', 'sin_i', 'R_star_m', 'T_obs_s']);
-    const { M_star_kg: M, m_p_kg: m, P_s: P, eccentricity: e, sin_i: sinI, R_star_m: R, T_obs_s: tObs } = i as Record<string, number>;
-    if (!Number.isFinite(e) || e < 0 || e >= 1) throw new Error(`${KEPLER_RV_ID}: eccentricity must be in [0, 1) (got ${e})`);
-    if (sinI > 1) throw new Error(`${KEPLER_RV_ID}: sin_i must be in (0, 1] (got ${sinI})`);
-    const total = M + m;
-    const a = Math.cbrt((G_SI * total * P * P) / (4 * Math.PI * Math.PI));
-    const root = Math.sqrt(1 - e * e);
-    const n13 = Math.cbrt((2 * Math.PI * G_SI) / P);
-    const K = (n13 * m * sinI) / Math.cbrt(M * M) / root;
-    const K2b = (n13 * m * sinI) / Math.cbrt(total * total) / root;
-    const rPeri = a * (1 - e);
-    const weak = (G_SI * total) / (C_SI * C_SI * a);
-    const advance = catalogRelations().find((row) => row.target === 'perihelion-advance');
-    if (advance === undefined) throw new Error(`${KEPLER_RV_ID}: the perihelion relation is not in the catalog`);
-    const dphi = evaluateCatalogRelation(advance, { mass: total, 'semi-major-axis': a, eccentricity: e });
-    const misfit = (e * dphi * tObs) / P;
-    return {
-      outputs: {
-        q: m / M,
-        a_m: a,
-        a_star_m: (a * m) / total,
-        K_m_per_s: K,
-        K_two_body_m_per_s: K2b,
-        two_body_deviation: K / K2b - 1,
-        r_peri_m: rPeri,
-        weak_field: weak,
-        dphi_rad_per_orbit: dphi,
-        omega_dot_deg_per_yr: ((dphi / P) * JULIAN_YEAR_S * 180) / Math.PI,
-        apsidal_misfit: misfit,
-      },
-      checks: [
-        check('test-mass', 'the companion is light beside the star, m_p ≪ M_*', 'm_p/M_*', m / M, '<=', MAX_MASS_RATIO,
-          'chosen threshold: the test-mass K then exceeds the two-body K by (1 + q)^{2/3} − 1 ≤ 0.67%'),
-        check('point-mass', 'point masses: the star is small beside the closest approach, R_* ≪ r_p', 'R_*/(a(1 − e))', R / rPeri, '<=', MAX_RADIUS_RATIO,
-          'chosen threshold: tidal and rotational quadrupole terms scale as (R_*/r)² times a Love number or J2 (each < 1), kept ≤ 1%'),
-        check('weak-field', 'Newtonian gravity: G(M_* + m_p)/(c²a) ≪ 1', 'G(M_* + m_p)/(c² a)', weak, '<=', MAX_WEAK_FIELD,
-          'chosen threshold: the 1PN corrections to the P–a relation and to the orbital velocity are of this relative order'),
-        check('apsidal', 'a fixed ellipse over the record: the GR apsidal advance does not reshape the RV curve', 'e Δω T_obs/P', misfit, '<=', MAX_APSIDAL_MISFIT,
-          'chosen threshold: beyond the mean longitude (absorbed by the fitted phase), v_r depends on ω only at O(e), so the misfit is of order e Δω K; its coefficient (order one) is not encoded'),
-      ],
-      unchecked: [
-        'no third body: an outer companion adds its own reflex signal and perturbs P and ω',
-        'the companion\'s radius is also small beside r_p (only the star\'s is checked)',
-      ],
-    };
-  
-}
-
 // --- damped-resonator.ts ---
 const DAMPED_RESONATOR_ID = 'case-damped-resonator';
-
-/** Q floor for the single-Lorentzian (near-resonance) form of the spectrum. @internal */
-export const MIN_Q_LORENTZIAN = 10;
-
-/** (1/t_obs)/linewidth ceiling: the record resolves the line. @internal */
-export const MAX_RESOLUTION_RATIO = 0.1;
 
 /**
  * √(k_BT/k)/A ceiling. Thermal motion of one mode is x = X cos ω_d t + Y sin ω_d t
@@ -221,70 +92,6 @@ export function windowedLinewidthCatalogHz(
   const alpha = outputs.alpha_per_s;
   if (alpha === null || !Number.isFinite(alpha)) return null;
   return windowedLinewidthHz(alpha, inputs.t_obs_s!);
-}
-
-/**
- * Evaluate the damped-resonator applied case at the given SI inputs.
- * @internal
- */
-export function runCaseDampedResonator(i: Readonly<Record<string, number>>): CaseResult {
-    requirePositive(DAMPED_RESONATOR_ID, i, ['f0_Hz', 'Q', 't_obs_s']);
-    const { f0_Hz: f0, Q, x0_m: x0, t_s: t, t_obs_s: tObs } = i as Record<string, number>;
-    if (!Number.isFinite(x0)) throw new Error(`${DAMPED_RESONATOR_ID}: x0_m must be finite (got ${x0})`);
-    if (!Number.isFinite(t) || t < 0) throw new Error(`${DAMPED_RESONATOR_ID}: t_s must be a finite number ≥ 0 (got ${t})`);
-    const w0 = 2 * Math.PI * f0;
-    const alpha = w0 / (2 * Q);
-    const linewidth = f0 / Q;
-    const underdamped = Q > 0.5;
-    const root = underdamped ? Math.sqrt(1 - 1 / (4 * Q * Q)) : NaN;
-    const wd = w0 * root;
-    const decay = Math.exp(-alpha * t);
-    const windowed = underdamped ? windowedLinewidthHz(alpha, tObs) : null;
-    const envelope = underdamped ? (Math.abs(x0) * decay) / root : null;
-    const checks = [
-      check('underdamped', 'underdamped: the solution rings (Q > 1/2)', 'Q', Q, '>', 0.5,
-        'exact: at Q ≤ 1/2 the solution is a sum of real exponentials, with no ring-down, f_d or envelope'),
-      check('single-lorentzian', 'high Q: the line near f0 is one Lorentzian', 'Q', Q, '>=', MIN_Q_LORENTZIAN,
-        'chosen threshold for Q ≫ 1: the windowed spectrum drops the negative-frequency pole'),
-      check('resolved', 'the record resolves the line: 1/t_obs ≪ f0/Q', '(1/t_obs)/(f0/Q)', 1 / tObs / linewidth, '<=', MAX_RESOLUTION_RATIO,
-        'chosen threshold for ≪ 1; see windowed_excess for the broadening it allows'),
-      check('in-record', 'the read-out time lies inside the record', 't/t_obs', t / tObs, '<=', 1,
-        'exact: an envelope read after the record ends was not measured'),
-    ];
-    const unchecked = underdamped
-      ? ['the damping is viscous (velocity-proportional) and the same over the whole ring-down']
-      : ['for Q ≤ 1/2 the displacement is x0 (r₂e^{r₁t} − r₁e^{r₂t})/(r₂ − r₁) with real r₁, r₂; this case does not evaluate it'];
-    if ((i.T_K === undefined) !== (i.k_N_per_m === undefined)) throw new Error(`${DAMPED_RESONATOR_ID}: give T_K and k_N_per_m together, or neither`);
-    let xTh: number | null = null;
-    if (i.T_K !== undefined) {
-      requirePositive(DAMPED_RESONATOR_ID, i, ['T_K', 'k_N_per_m']);
-      xTh = Math.sqrt((K_B_SI * i.T_K) / i.k_N_per_m!);
-      if (envelope !== null) {
-        checks.push(
-          check('above-thermal', 'the ring-down stands above the thermal motion at t', '√(k_BT/k)/A(t)', xTh / envelope, '<=', MAX_THERMAL_RATIO,
-            'chosen threshold: the RMS envelope √(A² + 2k_BT/k) then exceeds A by ≤ 1%'),
-        );
-      }
-      unchecked.push('the thermal motion is in equilibrium with the damping bath at T and uncorrelated with the release; the read-out adds no noise of its own');
-    }
-    return {
-      outputs: {
-        alpha_per_s: alpha,
-        tau_s: 1 / alpha,
-        linewidth_Hz: linewidth,
-        f_d_Hz: underdamped ? f0 * root : null,
-        x_m: underdamped ? x0 * decay * (Math.cos(wd * t) + (alpha / wd) * Math.sin(wd * t)) : null,
-        envelope_m: envelope,
-        resolution_Hz: 1 / tObs,
-        linewidth_windowed_Hz: windowed,
-        windowed_excess: windowed === null ? null : windowed / linewidth - 1,
-        x_th_rms_m: xTh,
-        envelope_rms_m: xTh === null || envelope === null ? null : Math.sqrt(envelope * envelope + 2 * xTh * xTh),
-      },
-      checks,
-      unchecked,
-    };
-  
 }
 
 // --- resistor-noise.ts ---
@@ -749,9 +556,6 @@ export function runCaseBrownianSphere(i: Readonly<Record<string, number>>): Case
 }
 
 const RUN_BY_ID: Readonly<Record<string, (i: Readonly<Record<string, number>>) => CaseResult>> = {
-  'case-skin-depth': runCaseSkinDepth,
-  'case-kepler-rv': runCaseKeplerRv,
-  'case-damped-resonator': runCaseDampedResonator,
   'case-resistor-noise': runCaseResistorNoise,
   'case-lumped-cooling': runCaseLumpedCooling,
   'case-brownian-sphere': runCaseBrownianSphere,
@@ -787,9 +591,6 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'brennerPerpendicular',
   'brownianSphereRegimeAt',
   'runCaseResistorNoise',
-  'runCaseSkinDepth',
-  'runCaseKeplerRv',
-  'runCaseDampedResonator',
   'runCaseLumpedCooling',
   'runCaseBrownianSphere',
 ]);
@@ -809,9 +610,6 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   brennerPerpendicular,
   brownianSphereRegimeAt,
   runCaseResistorNoise,
-  runCaseSkinDepth,
-  runCaseKeplerRv,
-  runCaseDampedResonator,
   runCaseLumpedCooling,
   runCaseBrownianSphere,
 };

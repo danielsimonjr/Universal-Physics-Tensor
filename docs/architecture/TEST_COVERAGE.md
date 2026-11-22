@@ -16,25 +16,21 @@ Traced credit through a barrel says the module was LOADED, not that any assertio
 |--------|-------|
 | Total Source Files | 393 |
 | Total Test Files | 764 |
-| Source files imported directly by a test | 349 |
-| Source files reached directly or through a barrel or side-effect import | 382 |
-| Source files no test reaches either way | 11 |
-| Direct coverage | 88.8% |
-| Traced coverage | 97.2% |
+| Source files imported directly by a test | 350 |
+| Source files reached directly or through a barrel or side-effect import | 383 |
+| Source files no test reaches either way | 10 |
+| Direct coverage | 89.1% |
+| Traced coverage | 97.5% |
 
 ---
 
 ## Source Files No Test Reaches
 
-The following 11 source files are reached by no test file, directly or through a barrel or side-effect import:
+The following 10 source files are reached by no test file, directly or through a barrel or side-effect import:
 
 ### bridges/
 
 - `src/bridges/validity.ts`
-
-### cases/
-
-- `src/cases/engine.ts`
 
 ### cli/
 
@@ -186,6 +182,7 @@ The following 11 source files are reached by no test file, directly or through a
 | `canonical/structural.ts` | `structural-classifier.test.ts`, `algebraic-equivalence.test.ts` | — |
 | `cases/catalog-checks.ts` | `applied-cases-catalog.test.ts` | — |
 | `cases/catalog.ts` | `applied-case-engine.test.ts`, `applied-cases-catalog.test.ts`, `applied-cases-output-wiring.test.ts`, `cases-directory.test.ts` | — |
+| `cases/engine.ts` | `applied-case-engine.test.ts` | — |
 | `cases/index.ts` | `evaluators.test.ts`, `one-evaluate-path.test.ts`, `applied-case-engine.test.ts`, `applied-cases-catalog.test.ts`, `applied-cases.test.ts`, `kepler-rv.test.ts`, `applied-cases.test.ts`, `expression-gaps.test.ts` | `atlas-evidence.test.ts`, `atlas-route-errors.test.ts`, `audit-improvements.test.ts`, `decimal-literal-one-rule.test.ts`, `display-unit-rule.test.ts`, `evaluate-display-unit.test.ts`, `evaluate-null-output-cause.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `norm-transport-fields.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `retrieve-expr.test.ts`, `retrieve.test.ts`, `stored-results-module.test.ts`, `suggest-token-length.test.ts` |
 | `cases/methods.ts` | `applied-case-engine.test.ts`, `applied-cases-output-wiring.test.ts`, `brownian-sphere.test.ts`, `damped-resonator-spectrum.test.ts`, `damped-resonator.test.ts`, `kepler-rv.test.ts`, `lumped-cooling-inverse-time.test.ts`, `lumped-cooling.test.ts`, `method-text.test.ts`, `resistor-noise-closed-form.test.ts`, `resistor-noise.test.ts`, `skin-depth.test.ts`, `unit-table-constants.test.ts`, `signed-residual-label.test.ts`, `mathts-delegation.test.ts` | — |
 | `cases/quadrature.ts` | `mathts-delegation.test.ts` | — |
@@ -634,7 +631,7 @@ The following 11 source files are reached by no test file, directly or through a
 | `canonical/statistical-mechanics.test.ts` | 6 files |
 | `canonical/structural-classifier.test.ts` | 16 files |
 | `canonical/thermo-nuclear-cosmo.test.ts` | 6 files |
-| `cases/applied-case-engine.test.ts` | 8 files |
+| `cases/applied-case-engine.test.ts` | 9 files |
 | `cases/applied-cases-catalog.test.ts` | 5 files |
 | `cases/applied-cases-output-wiring.test.ts` | 4 files |
 | `cases/applied-cases.test.ts` | 11 files |

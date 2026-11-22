@@ -39,11 +39,14 @@ function countingModule() {
 
 describe('formula parse cache', () => {
   it('compiles a repeated expression once, but evaluates each scope fresh', () => {
-    const { mod, compileExprCalls } = countingModule();
+    const { mod, compileExprCalls, parseCalls } = countingModule();
     const parser = createMathtsFormulaParser(mod);
     const f = parser.parse('2*pi*sqrt(L/g)');
     const f2 = parser.parse('2*pi*sqrt(L/g)');
     expect(compileExprCalls).toEqual(['2*pi*sqrt(L/g)']);
+    // The underlying MathTS `parse` ran once: the second `parse` call hits the
+    // cache above it and never reaches MathTS.
+    expect(parseCalls.filter((e) => e === '2*pi*sqrt(L/g)')).toEqual(['2*pi*sqrt(L/g)']);
     // Same compiled object is reused (that is the point of the cache)...
     expect(f2).toBe(f);
     // ...but the two evaluations see their own scope values.
@@ -104,8 +107,8 @@ describe('formula parse cache', () => {
     expect(compileExprCalls.length).toBe(MAX_FORMULA_CACHE_ENTRIES + 200);
   });
 
-  it('an error input is never cached: it throws on every call and compiles again after a fix path', () => {
-    const { mod, compileExprCalls } = countingModule();
+  it('a parse-time error is never cached: every attempt re-parses, so no negative cache entry forms', () => {
+    const { mod, compileExprCalls, parseCalls } = countingModule();
     const parser = createMathtsFormulaParser(mod);
     // `euler` is refused before compilation, every time.
     expect(() => parser.parse('euler + 1')).toThrow(/euler/);
@@ -113,7 +116,16 @@ describe('formula parse cache', () => {
     // A syntactically bad formula throws every time too.
     expect(() => parser.parse('2 +* 3')).toThrow();
     expect(() => parser.parse('2 +* 3')).toThrow();
-    // Errors left no cache entry behind: the parse count kept pace with the calls.
+    // The underlying MathTS `parse` ran on every attempt (the shim warm-up runs
+    // its own probe parses first): a negative cache would have swallowed the
+    // four repeats.
+    expect(parseCalls.filter((e) => e === 'euler + 1' || e === '2 +* 3')).toEqual([
+      'euler + 1',
+      'euler + 1',
+      '2 +* 3',
+      '2 +* 3',
+    ]);
+    // No formula was compiled, so no cache entry exists.
     expect(compileExprCalls).toEqual([]);
     // And a good formula after the errors still compiles and evaluates.
     expect(parser.parse('1+1').evaluate({})).toBe(2);

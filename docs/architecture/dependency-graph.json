@@ -4,7 +4,7 @@
     "version": "16.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2870
+    "totalExports": 2857
   },
   "entryPoints": [
     {
@@ -7814,12 +7814,8 @@
           {
             "file": "../core/constants.js",
             "imports": [
-              "C_SI",
-              "EPS0_SI",
-              "G_SI",
               "H_SI",
               "K_B_SI",
-              "MU0_SI",
               "SIGMA_SB_SI"
             ]
           },
@@ -7898,17 +7894,7 @@
         ],
         "exports": [
           "SIGMA_SB_SI",
-          "MAX_DISPLACEMENT_RATIO",
-          "MAX_MFP_RATIO",
-          "MAX_OMEGA_TAU",
-          "MIN_THICKNESS_RATIO",
           "JULIAN_YEAR_S",
-          "MAX_MASS_RATIO",
-          "MAX_RADIUS_RATIO",
-          "MAX_WEAK_FIELD",
-          "MAX_APSIDAL_MISFIT",
-          "MIN_Q_LORENTZIAN",
-          "MAX_RESOLUTION_RATIO",
           "MAX_THERMAL_RATIO",
           "CLASSICAL_MAX_X",
           "FLAT_BAND_MAX_WRC",
@@ -7934,11 +7920,8 @@
           "BROWNIAN_SPHERE_CASE",
           "maxwellDepthFactor",
           "skinDeltaMaxwellM",
-          "runCaseSkinDepth",
-          "runCaseKeplerRv",
           "windowedLinewidthHz",
           "windowedLinewidthCatalogHz",
-          "runCaseDampedResonator",
           "runCaseResistorNoise",
           "lumpedRadiatingTemperature",
           "sphereEigenvalues",
@@ -7959,11 +7942,8 @@
         "functions": [
           "maxwellDepthFactor",
           "skinDeltaMaxwellM",
-          "runCaseSkinDepth",
-          "runCaseKeplerRv",
           "windowedLinewidthHz",
           "windowedLinewidthCatalogHz",
-          "runCaseDampedResonator",
           "runCaseResistorNoise",
           "lumpedRadiatingTemperature",
           "sphereEigenvalues",
@@ -7977,17 +7957,7 @@
           "runCaseBrownianSphere"
         ],
         "constants": [
-          "MAX_DISPLACEMENT_RATIO",
-          "MAX_MFP_RATIO",
-          "MAX_OMEGA_TAU",
-          "MIN_THICKNESS_RATIO",
           "JULIAN_YEAR_S",
-          "MAX_MASS_RATIO",
-          "MAX_RADIUS_RATIO",
-          "MAX_WEAK_FIELD",
-          "MAX_APSIDAL_MISFIT",
-          "MIN_Q_LORENTZIAN",
-          "MAX_RESOLUTION_RATIO",
           "MAX_THERMAL_RATIO",
           "CLASSICAL_MAX_X",
           "FLAT_BAND_MAX_WRC",
@@ -28790,14 +28760,14 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 89911,
-    "totalExports": 2870,
+    "totalLinesOfCode": 89706,
+    "totalExports": 2857,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 940,
+    "totalFunctions": 937,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 424,
+    "totalConstants": 414,
     "totalReExports": 1411,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
