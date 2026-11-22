@@ -395,105 +395,105 @@
           "symbol": "γ",
           "unit": "kg/s",
           "meaning": "Stokes drag coefficient 6πηa",
-          "method": "runCaseBrownianSphere"
+          "expr": "6*pi*eta_Pa_s*a_m"
         },
         {
           "key": "D_m2_per_s",
           "symbol": "D",
           "unit": "m^2/s",
           "meaning": "diffusion coefficient k_BT/(6πηa)",
-          "method": "runCaseBrownianSphere"
+          "expr": "k_B*T_K/(6*pi*eta_Pa_s*a_m)"
         },
         {
           "key": "MSD_m2",
           "symbol": "⟨|Δr|²⟩",
           "unit": "m^2",
           "meaning": "mean-square displacement 2dDt over the tracked axes",
-          "method": "runCaseBrownianSphere"
+          "expr": "2*d*D_m2_per_s*t_s"
         },
         {
           "key": "rms_displacement_m",
           "symbol": "√⟨|Δr|²⟩",
           "unit": "m",
           "meaning": "root-mean-square displacement over the tracked axes",
-          "method": "runCaseBrownianSphere"
+          "expr": "sqrt(MSD_m2)"
         },
         {
           "key": "m_kg",
           "symbol": "m",
           "unit": "kg",
           "meaning": "particle mass (4/3)πa³ρ_p",
-          "method": "runCaseBrownianSphere"
+          "expr": "(4/3)*pi*a_m^3*rho_p_kg_per_m3"
         },
         {
           "key": "tau_p_s",
           "symbol": "τ_p",
           "unit": "s",
           "meaning": "momentum relaxation time (m + m_f/2)/γ, with the displaced-fluid added mass m_f/2",
-          "method": "runCaseBrownianSphere"
+          "expr": "(m_kg + 0.5*(4/3)*pi*a_m^3*rho_f_kg_per_m3)/gamma_kg_per_s"
         },
         {
           "key": "tau_f_s",
           "symbol": "τ_f",
           "unit": "s",
           "meaning": "vorticity diffusion time ρ_f a²/η over one radius (hydrodynamic memory)",
-          "method": "runCaseBrownianSphere"
+          "expr": "rho_f_kg_per_m3*a_m*a_m/eta_Pa_s"
         },
         {
           "key": "v_sed_m_per_s",
           "symbol": "v_s",
           "unit": "m/s",
           "meaning": "Stokes sedimentation speed (2/9)(ρ_p − ρ_f) g a²/η; negative means the sphere rises",
-          "method": "runCaseBrownianSphere"
+          "expr": "(2/9)*(rho_p_kg_per_m3-rho_f_kg_per_m3)*g_std*a_m*a_m/eta_Pa_s"
         },
         {
           "key": "Re",
           "symbol": "Re",
           "unit": "",
           "meaning": "ρ_f a max(√(k_BT/m), |v_s|)/η — radius-based; a diameter-based Re is twice this",
-          "method": "runCaseBrownianSphere"
+          "method": "brownianReynolds"
         },
         {
           "key": "MSD_langevin_m2",
           "symbol": "⟨|Δr|²⟩_L",
           "unit": "m^2",
           "meaning": "the Langevin parent: 2dD[t − τ(1 − e^{−t/τ})], τ = m/γ (bare mass)",
-          "method": "runCaseBrownianSphere"
+          "method": "brownianLangevinMsdM2"
         },
         {
           "key": "langevin_deviation",
           "symbol": "MSD/MSD_L − 1",
           "unit": "",
           "meaning": "signed relative difference of the diffusive MSD relative to the Langevin one",
-          "method": "runCaseBrownianSphere"
+          "method": "brownianLangevinDeviation"
         },
         {
           "key": "MSD_hydro_m2",
           "symbol": "⟨|Δr|²⟩_H",
           "unit": "m^2",
           "meaning": "the Langevin–Basset parent: added mass and hydrodynamic memory, unbounded incompressible fluid (branch-cut integral of its Laplace-domain VACF)",
-          "method": "runCaseBrownianSphere"
+          "method": "brownianHydroMsdM2"
         },
         {
           "key": "hydro_correction_m2",
           "symbol": "⟨|Δr|²⟩_H − ⟨|Δr|²⟩",
           "unit": "m^2",
           "meaning": "what inertia and memory change in the MSD at t; ≈ −4dD√(τ_f t/π) at t ≫ τ_f",
-          "method": "runCaseBrownianSphere"
+          "method": "brownianHydroCorrection"
         },
         {
           "key": "hydro_deviation",
           "symbol": "MSD/MSD_H − 1",
           "unit": "",
           "meaning": "signed relative difference of the diffusive MSD relative to the Langevin–Basset one",
-          "method": "runCaseBrownianSphere"
+          "method": "brownianHydroDeviation"
         },
         {
           "key": "memory_correction",
           "symbol": "MSD_H/MSD_OU − 1",
           "unit": "",
           "meaning": "the memory force's own share: MSD_H against the Ornstein–Uhlenbeck MSD with the same τ_p (added mass, no memory)",
-          "method": "runCaseBrownianSphere"
+          "method": "brownianMemoryCorrection"
         },
         {
           "key": "D_parallel_m2_per_s",
@@ -501,7 +501,7 @@
           "unit": "m^2/s",
           "meaning": "D beside the wall, parallel to it: D·(Faxén series in a/h); not defined without h_m",
           "needs": ["h_m"],
-          "method": "runCaseBrownianSphere"
+          "expr": "D_m2_per_s*(1 - 9/16*(a_m/h_m) + 1/8*(a_m/h_m)^3 - 45/256*(a_m/h_m)^4 - 1/16*(a_m/h_m)^5)"
         },
         {
           "key": "D_perp_m2_per_s",
@@ -509,7 +509,7 @@
           "unit": "m^2/s",
           "meaning": "D normal to the wall: D/λ, λ from Brenner's exact series; not defined without h_m",
           "needs": ["h_m"],
-          "method": "runCaseBrownianSphere"
+          "method": "brownianWallPerpD"
         },
         {
           "key": "MSD_wall_m2",
@@ -517,7 +517,7 @@
           "unit": "m^2",
           "meaning": "2t(d_∥ D_∥ + d_⊥ D_⊥): the tracked horizontal axes parallel to the wall, a third one normal to it; not defined without h_m",
           "needs": ["h_m"],
-          "method": "runCaseBrownianSphere"
+          "method": "brownianWallMsdM2"
         },
         {
           "key": "wall_deviation",
@@ -525,7 +525,7 @@
           "unit": "",
           "meaning": "signed relative difference of the unbounded-fluid MSD relative to the wall-corrected one; not defined without h_m",
           "needs": ["h_m"],
-          "method": "runCaseBrownianSphere"
+          "method": "brownianWallDeviation"
         }
       ],
       "comparison": {
@@ -677,7 +677,7 @@
           "id": "memory",
           "premise": "past the hydrodynamic memory, t ≫ τ_f = ρ_f a²/η",
           "quantity": "|MSD_H/MSD_OU − 1|",
-          "expr": "abs(memory_correction)",
+          "method": "brownianMemoryAbs",
           "op": "<=",
           "bound": 0.01,
           "threshold": "chosen threshold: the Basset memory changes the MSD by ≤ 1% at t (computed, not estimated; ≈ 2√(τ_f/(πt)) at t ≫ τ_f)"
@@ -686,7 +686,8 @@
           "id": "faxen-range",
           "premise": "the Faxén series in a/h holds for D_∥",
           "quantity": "(a/h)⁵/16 ÷ (D_∥/D)",
-          "expr": "pow(a_m/h_m,5)/16/(D_parallel_m2_per_s/D_m2_per_s)",
+          "method": "brownianFaxenRange",
+          "needs": ["h_m"],
           "op": "<=",
           "bound": 0.01,
           "threshold": "chosen threshold: the last retained term is ≤ 1% of the series — a size estimate of the truncation, not a bound; D_⊥ (Brenner) is exact at any h > a"
@@ -695,27 +696,30 @@
           "id": "wall",
           "premise": "the wall correction to the tracked MSD is negligible",
           "quantity": "|MSD/MSD_w − 1|",
-          "expr": "abs(wall_deviation)",
+          "method": "brownianWallAbs",
           "op": "<=",
           "bound": 0.01,
+          "needs": ["h_m"],
           "threshold": "chosen threshold: the unbounded-fluid D is then within 1% for the tracked axes; otherwise read MSD_wall_m2"
         },
         {
           "id": "wall-static",
           "premise": "the height barely changes over t",
           "quantity": "(√(2 D_⊥ t) + |v_s| t/λ)/(h − a)",
-          "expr": "(sqrt(2*D_perp_m2_per_s*t_s)+abs(v_sed_m_per_s)*t_s/(D_m2_per_s/D_perp_m2_per_s))/(h_m-a_m)",
+          "method": "brownianWallStatic",
           "op": "<=",
           "bound": 0.1,
+          "needs": ["h_m"],
           "threshold": "chosen threshold: diffusion plus wall-slowed sedimentation normal to the wall move the sphere by ≤ 10% of the gap, so D_∥, D_⊥ taken at h hold over t"
         },
         {
           "id": "drift",
           "premise": "sedimentation drift negligible along gravity over t",
           "quantity": "(v_s t)²/(2 D t)",
-          "expr": "pow(v_sed_m_per_s*t_s,2)/(2*D_m2_per_s*t_s)",
+          "expr": "(v_sed_m_per_s*t_s)^2/(2*D_m2_per_s*t_s)",
           "op": "<=",
           "bound": 0.01,
+          "needs": ["d=3"],
           "threshold": "chosen threshold: the vertical MSD then carries ≤ 1% from the deterministic drift"
         }
       ],
@@ -1483,8 +1487,8 @@
           "key": "h_rad_max_W_per_m2_K",
           "symbol": "h_rad",
           "unit": "W/(m^2*K)",
-          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run. T_max = (T0+T∞+|T0−T∞|)/2, the catalog-grammar form of max(T0, T∞)",
-          "expr": "emissivity*sigma_sb*(((T0_K+T_inf_K+abs(T0_K-T_inf_K))/2)+T_inf_K)*((((T0_K+T_inf_K+abs(T0_K-T_inf_K))/2)^2)+T_inf_K^2)"
+          "meaning": "εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run. T_max = max(T0, T∞)",
+          "method": "lumpedRadiativeConductance"
         },
         {
           "key": "Bi_radiating",

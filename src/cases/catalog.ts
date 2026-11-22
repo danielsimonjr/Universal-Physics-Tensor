@@ -14,11 +14,25 @@ export interface AppliedCaseCheckRecord {
   readonly id: string;
   readonly premise: string;
   readonly quantity: string;
-  readonly expr: string;
+  /**
+   * The check's value as a formula. Exactly one of `expr` and `method`:
+   * `method` exists for a value master's runner could hold as `NaN` or for
+   * a ratio that is Inf/Inf through wired outputs (the expr path refuses
+   * NaN even with the Infinity opt-in): the brownian-sphere `memory` and
+   * `wall` checks, and `faxen-range` / `wall-static` which master divided
+   * by `faxenParallel` / `brennerPerpendicular` directly.
+   */
+  readonly expr?: string;
+  /** The named method computing the check's value when `expr` is absent. */
+  readonly method?: string;
   readonly op: '<=' | '>=' | '>';
   readonly bound: number;
   readonly threshold: string;
-  /** The optional parameter keys the check depends on. The check is omitted when every one of them is absent. */
+  /**
+   * The optional parameter keys the check depends on. The check is omitted
+   * when every one of them is absent from the caller's inputs; an entry may
+   * also be `key=value`, unmet unless the input is present with that value.
+   */
   readonly needs?: readonly string[];
 }
 
@@ -28,7 +42,11 @@ export interface AppliedCaseOutputRecord {
   readonly symbol: string;
   readonly unit: string;
   readonly meaning: string;
-  /** The optional parameter keys the output depends on. The output is undefined when every one of them is absent. */
+  /**
+   * The optional parameter keys the output depends on. The output is undefined
+   * when every one of them is absent from the caller's inputs; an entry may
+   * also be `key=value`, unmet unless the input is present with that value.
+   */
   readonly needs?: readonly string[];
   readonly expr?: string;
   readonly method?: string;
@@ -60,6 +78,51 @@ export interface AppliedCaseFile {
 }
 
 const OPS = new Set<AppliedCaseCheckRecord['op']>(['<=', '>=', '>']);
+
+/**
+ * Parse one catalog `needs` entry: a parameter key, or `key=value` with
+ * exactly one `=`, a key in the case's parameters, and a finite numeric
+ * literal with no whitespace. Load-time, so a malformed row throws instead
+ * of silently disabling the output or check.
+ */
+function needsEntryProblems(
+  caseId: string,
+  where: string,
+  needs: readonly string[] | undefined,
+  paramKeys: ReadonlySet<string>,
+): string[] {
+  if (needs === undefined) return [];
+  const problems: string[] = [];
+  for (const entry of needs) {
+    const eqCount = (entry.match(/=/g) ?? []).length;
+    if (eqCount === 0) {
+      if (entry.length === 0 || entry !== entry.trim() || /\s/.test(entry)) {
+        problems.push(`${caseId}: ${where} needs '${entry}' is malformed`);
+      } else if (!paramKeys.has(entry)) {
+        problems.push(`${caseId}: ${where} needs '${entry}' names unknown parameter '${entry}'`);
+      }
+      continue;
+    }
+    if (eqCount !== 1) {
+      problems.push(`${caseId}: ${where} needs '${entry}' must contain exactly one '='`);
+      continue;
+    }
+    const eq = entry.indexOf('=');
+    const key = entry.slice(0, eq);
+    const raw = entry.slice(eq + 1);
+    if (key.length === 0 || key !== key.trim() || /\s/.test(key)) {
+      problems.push(`${caseId}: ${where} needs '${entry}' has a malformed key`);
+    } else if (!paramKeys.has(key)) {
+      problems.push(`${caseId}: ${where} needs '${entry}' names unknown parameter '${key}'`);
+    }
+    if (raw.length === 0 || raw !== raw.trim() || /\s/.test(raw)) {
+      problems.push(`${caseId}: ${where} needs '${entry}' has a malformed value`);
+    } else if (!Number.isFinite(Number(raw))) {
+      problems.push(`${caseId}: ${where} needs '${entry}' value is not a finite number`);
+    }
+  }
+  return problems;
+}
 
 /**
  * Per-case module names B8 deleted. The published package has no `src/`, so
@@ -102,9 +165,19 @@ export function catalogSemanticProblems(file: AppliedCaseFile, methodNames?: Rea
     if (row.id.length === 0) problems.push('applied-cases: a case is missing id');
     if (seen.has(row.id)) problems.push(`applied-cases: duplicate id '${row.id}'`);
     seen.add(row.id);
+    const paramKeys = new Set(row.parameters.map((p) => p.key));
     for (const check of row.checks) {
       if (!OPS.has(check.op)) problems.push(`${row.id}: check '${check.id}' has unknown op '${check.op}'`);
-      if (check.expr.trim().length === 0) problems.push(`${row.id}: check '${check.id}' has no expr`);
+      const kinds = [check.expr !== undefined, check.method !== undefined].filter(Boolean).length;
+      if (kinds !== 1) problems.push(`${row.id}: check '${check.id}' must have exactly one of expr, method`);
+      else if (check.expr !== undefined && check.expr.trim().length === 0) problems.push(`${row.id}: check '${check.id}' has no expr`);
+      else if (check.method !== undefined && methodNames !== undefined && !methodNames.has(check.method)) {
+        problems.push(`${row.id}: check '${check.id}' names unknown method '${check.method}'`);
+      }
+      problems.push(...needsEntryProblems(row.id, `check '${check.id}'`, check.needs, paramKeys));
+    }
+    for (const output of row.outputs) {
+      problems.push(...needsEntryProblems(row.id, `output '${output.key}'`, output.needs, paramKeys));
     }
     if (methodNames !== undefined) {
       for (const output of row.outputs) {
@@ -119,6 +192,9 @@ export function catalogSemanticProblems(file: AppliedCaseFile, methodNames?: Rea
             problems.push(`${row.id}: output '${output.key}' names unknown relation '${output.relation.relation}'`);
           }
         }
+      }
+      if (row.regimeAt !== undefined && !methodNames.has(row.regimeAt)) {
+        problems.push(`${row.id}: regimeAt names unknown method '${row.regimeAt}'`);
       }
     }
   }

@@ -25,20 +25,9 @@ export function registerCaseMethods(map: CaseMethodMap): void {
   registeredCaseMethods = map;
 }
 
-const DELEGATED_RUN_METHODS = new Set(['runCaseBrownianSphere']);
-
-/** True when the record drives outputs through the catalog engine rather than a legacy runner. @internal */
-export function usesCatalogEngine(record: AppliedCaseRecord): boolean {
-  const wired = (o: AppliedCaseOutputRecord) =>
-    o.expr !== undefined || o.relation !== undefined || o.method !== undefined;
-  if (!record.outputs.every(wired)) return false;
-  if (record.outputs.every((o) => o.method !== undefined && DELEGATED_RUN_METHODS.has(o.method!))) return false;
-  return record.outputs.some(
-    (o) =>
-      o.expr !== undefined ||
-      o.relation !== undefined ||
-      (o.method !== undefined && !DELEGATED_RUN_METHODS.has(o.method)),
-  );
+/** The registered named method `name`, for a catalog `regimeAt` reference. @internal */
+export function registeredCaseMethod(name: string): ((...args: never[]) => unknown) | undefined {
+  return registeredCaseMethods[name];
 }
 
 function mergeBindings(
@@ -71,14 +60,23 @@ function evalOutputExpr(
 
 /**
  * Catalog `needs`: the output or check is undefined when every listed key is
- * absent from the caller's inputs (not from engine `extra` defaults).
+ * absent from the caller's inputs (not from engine `extra` defaults). An entry
+ * of the form `key=value` is unmet unless the input is present with that
+ * value, which gates a case-dependent check (brownian-sphere's `drift` runs
+ * only for `d=3`) without an id literal in the engine.
  */
 function needsUnmet(
   inputs: Readonly<Record<string, number>>,
   needs: readonly string[] | undefined,
 ): boolean {
   if (needs === undefined || needs.length === 0) return false;
-  return needs.every((key) => inputs[key] === undefined);
+  return needs.every((entry) => {
+    const eq = entry.indexOf('=');
+    if (eq < 0) return inputs[entry] === undefined;
+    const key = entry.slice(0, eq);
+    const got = inputs[key];
+    return got === undefined || got !== Number(entry.slice(eq + 1));
+  });
 }
 
 function evalRelationOutput(
@@ -120,8 +118,23 @@ function evalCheck(
   outputs: Readonly<Record<string, number | null>>,
   extra: Readonly<Record<string, number>> = {},
 ) {
-  const value = evalOutputExpr(row.expr, inputs, outputs, extra, { allowInfinity: true });
+  const value =
+    row.method !== undefined
+      ? evalCheckMethod(row.method, inputs, outputs)
+      : evalOutputExpr(row.expr!, inputs, outputs, extra, { allowInfinity: true });
   return check(row.id, row.premise, row.quantity, value, row.op, row.bound, row.threshold);
+}
+
+function evalCheckMethod(
+  name: string,
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const fn = registeredCaseMethods[name] as CaseOutputMethod | undefined;
+  if (fn === undefined) throw new Error(`applied case: unknown check method '${name}'`);
+  // A check value is a number; the shared CaseOutputMethod type allows null
+  // for outputs, so the check call site narrows it.
+  return fn(inputs, outputs) as number;
 }
 
 const SKIN_UNCHECKED = [
@@ -281,11 +294,48 @@ function runLumpedCoolingEngine(record: AppliedCaseRecord, inputs: Readonly<Reco
   return { outputs, checks, unchecked };
 }
 
+function validateBrownianInputs(id: string, inputs: Readonly<Record<string, number>>): void {
+  requirePositive(id, inputs, ['T_K', 'eta_Pa_s', 'a_m', 'rho_p_kg_per_m3', 'rho_f_kg_per_m3', 't_s']);
+  const d = inputs.d;
+  if (d !== 1 && d !== 2 && d !== 3) throw new Error(`${id}: d must be 1, 2 or 3 (got ${d})`);
+  const h = inputs.h_m;
+  if (h !== undefined && (!Number.isFinite(h) || !(h > inputs.a_m!))) {
+    throw new Error(`${id}: h_m must be a finite distance > a_m, centre to wall (got ${h})`);
+  }
+}
+
+function runBrownianSphereEngine(record: AppliedCaseRecord, inputs: Readonly<Record<string, number>>): CaseResult {
+  validateBrownianInputs(record.id, inputs);
+  // g_std is the unit table's standard gravity, the same `convertValue`
+  // derivation as G_STANDARD in methods.ts (tests/cases/unit-table-constants.test.ts
+  // pins the two equal). The engine cannot import methods.ts: methods.ts
+  // imports this module.
+  const extra = { g_std: convertValue('1 kgf/kg', 'm/s^2').value };
+  const { outputs, checks } = evaluateWiredOutputsAndChecks(record, inputs, extra);
+  const unchecked = [
+    'the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)',
+  ];
+  if (inputs.h_m !== undefined) {
+    unchecked.push(
+      'the wall is plane, rigid, no-slip and horizontal, and the gap h − a is many molecular sizes and roughness heights (no surface forces, no lubrication-scale slip)',
+    );
+  }
+  if (inputs.d !== 3) {
+    const d = inputs.d as number;
+    const vSed = outputs.v_sed_m_per_s as number;
+    unchecked.push(
+      `the ${d === 1 ? 'tracked axis is' : 'tracked axes are'} horizontal, so sedimentation (${Number(Math.abs(vSed * (inputs.t_s as number)).toPrecision(3))} m over t) moves the sphere out of the plane but not along ${d === 1 ? 'it' : 'them'}`,
+    );
+  }
+  return { outputs, checks, unchecked };
+}
+
 /** Run one catalog record whose outputs are wired as expressions or methods. @internal */
 export function runAppliedCaseEngine(record: AppliedCaseRecord, inputs: Readonly<Record<string, number>>): CaseResult {
   if (record.id === 'case-damped-resonator') return runDampedEngine(record, inputs);
   if (record.id === 'case-resistor-noise') return runResistorNoiseEngine(record, inputs);
   if (record.id === 'case-lumped-cooling') return runLumpedCoolingEngine(record, inputs);
+  if (record.id === 'case-brownian-sphere') return runBrownianSphereEngine(record, inputs);
 
   let extra: Record<string, number> = {};
   if (record.id === 'case-skin-depth') {

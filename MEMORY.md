@@ -138,14 +138,40 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
   such as h_rad/h at vanishing h, emits `Infinity`, matching the deleted JS runners). Every
   other caller stays strict. Catalog `needs` on an output or check means that when every listed
   key is absent from the caller's inputs the engine sets the output to `null` and omits the
-  check. Engine `mergeBindings` binds numeric intermediates including ±Infinity and NaN
+  check; an entry of the form `key=value` is unmet unless the input is present with that value
+  (brownian-sphere's `drift` check declares `d=3`). A check record may name a `method` instead
+  of an `expr` (exactly one of the two) for a value master's runner held as `NaN`, which the
+  expr path refuses. Engine `mergeBindings` binds numeric intermediates including ±Infinity and NaN
   (null stays unbound), so a later expr that reads an overflowed value sees it rather than
   throwing `Undefined symbol`.
 - `case-lumped-cooling`'s `parent_deviation` is the named method `lumpedParentDeviation`, not a
   catalog `expr`: at t/tau >~ 745 both theta and the series mean underflow to 0 and the deleted
   JS runner handed the caller `NaN` (silent), which the expr path's non-finite guard would
   turn into a throw. The method reproduces that NaN, and `Infinity` at t/tau ~ 740. `h_rad_max`
-  is a catalog `expr`: 1-arg `abs` is in the grammar, so `max(x,y) = (x+y+|x−y|)/2`.
+  is the named method `lumpedRadiativeConductance` using `Math.max(T0, T∞)`: 2-arg `max` is not
+  in the grammar, and the abs-form `(x+y+|x−y|)/2` is not bit-equal to `Math.max`.
+- `case-brownian-sphere` runs entirely through the engine (S8): `Re` is the named method
+  `brownianReynolds` using `Math.max(√(k_BT/m), |v_s|)` (the abs-form is not bit-equal to
+  `Math.max`); the Faxén polynomial in `D_parallel_m2_per_s` is a catalog `expr` (`^` maps to
+  `**`; the dyadic ratios are exact). Named methods
+  (`brownianLangevinMsdM2`, `brownianHydroMsdM2`, `brownianMemoryCorrection`, `brownianMemoryAbs`,
+  `brownianWallPerpD`, `brownianWallMsdM2`, `brownianLangevinDeviation`, `brownianHydroCorrection`,
+  `brownianHydroDeviation`, `brownianWallDeviation`, `brownianFaxenRange`, `brownianWallAbs`,
+  `brownianWallStatic`) read the wired outputs. `memory_correction`
+  and the three deviations stay methods because master returned `NaN` there (`rho_p ≳ 1e300`
+  for memory; `{a_m:1e-30, T_K:1e300}` for the deviations). The wall checks `faxen-range`,
+  `wall` and `wall-static` are methods because `(D_∥/D)` and `(D/D_⊥)` are Inf/Inf and
+  `abs(wall_deviation)` is `abs(NaN)` in that regime; master divided by `faxenParallel(a/h)`
+  and `brennerPerpendicular(h/a)` and reported `NaN` `holds: false` for `wall`. Catalog `needs` `key=value` is
+  validated at load (exactly one `=`, key in parameters, finite numeric literal, no whitespace).
+  The engine's `g_std` binding is the unit table's standard gravity, the same `convertValue`
+  derivation as `G_STANDARD` (`tests/cases/unit-table-constants.test.ts` pins both equal);
+  `engine.ts` cannot import `methods.ts`, which imports the engine. `sphereSeries` keeps a
+  per-(Bi, Fo) last-value memo of a frozen object (`Object.is` keys, so `-0` and `0` miss);
+  `sphereSeriesComputations` counts misses since load or `resetSphereSeriesMemo`.
+  `hydrodynamicMsdRatio` throws when a ln-v edge overflows `Math.exp` (master hung at
+  `t_s=1e308`). Catalog `regimeAt` resolves through `registeredCaseMethod` after
+  `registerCaseMethods` (before `APPLIED_CASE_RUNNERS` is built).
 
 ## Where things live
 

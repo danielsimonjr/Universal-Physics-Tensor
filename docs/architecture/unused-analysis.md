@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 24
+- **Potentially unused exports**: 35
 
 ## Potentially Unused Files
 
@@ -37,7 +37,18 @@ These exports are not imported by any other file in the codebase:
 - `lumpedSphereSurfaceK` (function)
 - `lumpedParentDeviation` (function)
 - `brownianSphereRegimeAt` (function)
-- `runCaseBrownianSphere` (function)
+- `brownianLangevinDeviation` (function)
+- `brownianHydroCorrection` (function)
+- `brownianHydroDeviation` (function)
+- `brownianLangevinMsdM2` (function)
+- `brownianHydroMsdM2` (function)
+- `brownianMemoryCorrection` (function)
+- `brownianMemoryAbs` (function)
+- `brownianFaxenRange` (function)
+- `brownianWallAbs` (function)
+- `brownianWallStatic` (function)
+- `brownianWallPerpD` (function)
+- `brownianWallMsdM2` (function)
 - `CASE_METHODS` (constant)
 
 ### `src/cli/record.ts`

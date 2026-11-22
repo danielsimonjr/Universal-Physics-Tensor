@@ -2261,7 +2261,7 @@ The codebase is organized into the following modules:
 | `./types.js` | `check, requirePositive, CaseCheck, CaseResult` | Import |
 
 **Exports:**
-- Functions: `registerCaseMethods`, `usesCatalogEngine`, `runAppliedCaseEngine`
+- Functions: `registerCaseMethods`, `registeredCaseMethod`, `runAppliedCaseEngine`
 
 ---
 
@@ -2300,7 +2300,7 @@ The codebase is organized into the following modules:
 | `../numerical/null-ray-integrator.js` | `integrateRK4` | Import |
 | `./quadrature.js` | `adaptiveQuadrature` | Import |
 | `./catalog.js` | `appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase, catalogSemanticProblems` | Import |
-| `./engine.js` | `runAppliedCaseEngine, usesCatalogEngine, registerCaseMethods` | Import |
+| `./engine.js` | `runAppliedCaseEngine, registerCaseMethods, registeredCaseMethod` | Import |
 | `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase, CaseResult, LumpedRadiating` | Import |
 | `./types.js` | `LumpedRadiating` | Re-export |
 | `../core/constants.js` | `SIGMA_SB_SI` | Re-export |
@@ -2310,19 +2310,22 @@ The codebase is organized into the following modules:
 
   ```text
   maxwellDepthFactor, skinDeltaMaxwellM, windowedLinewidthHz, windowedLinewidthCatalogHz,
-  resistorParentVrmsV, lumpedRadiatingTemperature, sphereEigenvalues, sphereSeries, lumpedCoolingQJ,
-  lumpedSphereMeanK, lumpedSphereCentreK, lumpedSphereSurfaceK, lumpedParentDeviation,
-  lumpedRadiatingTempK, ballisticDeficit, hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular,
-  brownianSphereRegimeAt, runCaseBrownianSphere
+  resistorParentVrmsV, lumpedRadiatingTemperature, sphereEigenvalues, sphereSeriesComputations,
+  resetSphereSeriesMemo, sphereSeries, lumpedRadiativeConductance, lumpedCoolingQJ, lumpedSphereMeanK,
+  lumpedSphereCentreK, lumpedSphereSurfaceK, lumpedParentDeviation, lumpedRadiatingTempK,
+  ballisticDeficit, hydrodynamicMsdRatio, faxenParallel, brennerPerpendicular, brownianSphereRegimeAt,
+  brownianReynolds, brownianLangevinDeviation, brownianHydroCorrection, brownianHydroDeviation,
+  brownianWallDeviation, brownianLangevinMsdM2, brownianHydroMsdM2, brownianMemoryCorrection,
+  brownianMemoryAbs, brownianFaxenRange, brownianWallAbs, brownianWallStatic, brownianWallPerpD,
+  brownianWallMsdM2
   ```
 
 - Constants:
 
   ```text
-  JULIAN_YEAR_S, MAX_BIOT, G_STANDARD, MAX_RE, MAX_TAU_P_RATIO, MAX_MEMORY_CORRECTION,
-  MAX_DRIFT_RATIO, MAX_WALL_CORRECTION, MAX_FAXEN_LAST_TERM, MAX_WALL_EXCURSION, APPLIED_CASE_RUNNERS,
-  CASE_METHOD_NAMES, CASE_METHODS, SKIN_DEPTH_CASE, KEPLER_RV_CASE, DAMPED_RESONATOR_CASE,
-  RESISTOR_NOISE_CASE, LUMPED_COOLING_CASE, BROWNIAN_SPHERE_CASE
+  JULIAN_YEAR_S, MAX_BIOT, G_STANDARD, CASE_METHOD_NAMES, CASE_METHODS, APPLIED_CASE_RUNNERS,
+  SKIN_DEPTH_CASE, KEPLER_RV_CASE, DAMPED_RESONATOR_CASE, RESISTOR_NOISE_CASE, LUMPED_COOLING_CASE,
+  BROWNIAN_SPHERE_CASE
   ```
 
 - Re-exports: `LumpedRadiating`, `SIGMA_SB_SI`
@@ -7853,12 +7856,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89807 |
-| Total Exports | 2857 |
+| Total Lines of Code | 90123 |
+| Total Exports | 2866 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 942 |
+| Total Functions | 958 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

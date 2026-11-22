@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2857
+  totalExports: 2866
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5303,11 +5303,11 @@ modules:
             - CaseResult
       exports:
         - registerCaseMethods
-        - usesCatalogEngine
+        - registeredCaseMethod
         - runAppliedCaseEngine
       functions:
         - registerCaseMethods
-        - usesCatalogEngine
+        - registeredCaseMethod
         - runAppliedCaseEngine
     src/cases/index.ts:
       description: The applied-case registry behind `upt evaluate case-<id>`.
@@ -5398,8 +5398,8 @@ modules:
         - file: ./engine.js
           imports:
             - runAppliedCaseEngine
-            - usesCatalogEngine
             - registerCaseMethods
+            - registeredCaseMethod
         - file: ./types.js
           imports:
             - check
@@ -5421,16 +5421,9 @@ modules:
         - JULIAN_YEAR_S
         - MAX_BIOT
         - G_STANDARD
-        - MAX_RE
-        - MAX_TAU_P_RATIO
-        - MAX_MEMORY_CORRECTION
-        - MAX_DRIFT_RATIO
-        - MAX_WALL_CORRECTION
-        - MAX_FAXEN_LAST_TERM
-        - MAX_WALL_EXCURSION
-        - APPLIED_CASE_RUNNERS
         - CASE_METHOD_NAMES
         - CASE_METHODS
+        - APPLIED_CASE_RUNNERS
         - SKIN_DEPTH_CASE
         - KEPLER_RV_CASE
         - DAMPED_RESONATOR_CASE
@@ -5444,7 +5437,10 @@ modules:
         - resistorParentVrmsV
         - lumpedRadiatingTemperature
         - sphereEigenvalues
+        - sphereSeriesComputations
+        - resetSphereSeriesMemo
         - sphereSeries
+        - lumpedRadiativeConductance
         - lumpedCoolingQJ
         - lumpedSphereMeanK
         - lumpedSphereCentreK
@@ -5456,7 +5452,20 @@ modules:
         - faxenParallel
         - brennerPerpendicular
         - brownianSphereRegimeAt
-        - runCaseBrownianSphere
+        - brownianReynolds
+        - brownianLangevinDeviation
+        - brownianHydroCorrection
+        - brownianHydroDeviation
+        - brownianWallDeviation
+        - brownianLangevinMsdM2
+        - brownianHydroMsdM2
+        - brownianMemoryCorrection
+        - brownianMemoryAbs
+        - brownianFaxenRange
+        - brownianWallAbs
+        - brownianWallStatic
+        - brownianWallPerpD
+        - brownianWallMsdM2
         - LumpedRadiating
       reExported:
         - LumpedRadiating
@@ -5469,7 +5478,10 @@ modules:
         - resistorParentVrmsV
         - lumpedRadiatingTemperature
         - sphereEigenvalues
+        - sphereSeriesComputations
+        - resetSphereSeriesMemo
         - sphereSeries
+        - lumpedRadiativeConductance
         - lumpedCoolingQJ
         - lumpedSphereMeanK
         - lumpedSphereCentreK
@@ -5481,21 +5493,27 @@ modules:
         - faxenParallel
         - brennerPerpendicular
         - brownianSphereRegimeAt
-        - runCaseBrownianSphere
+        - brownianReynolds
+        - brownianLangevinDeviation
+        - brownianHydroCorrection
+        - brownianHydroDeviation
+        - brownianWallDeviation
+        - brownianLangevinMsdM2
+        - brownianHydroMsdM2
+        - brownianMemoryCorrection
+        - brownianMemoryAbs
+        - brownianFaxenRange
+        - brownianWallAbs
+        - brownianWallStatic
+        - brownianWallPerpD
+        - brownianWallMsdM2
       constants:
         - JULIAN_YEAR_S
         - MAX_BIOT
         - G_STANDARD
-        - MAX_RE
-        - MAX_TAU_P_RATIO
-        - MAX_MEMORY_CORRECTION
-        - MAX_DRIFT_RATIO
-        - MAX_WALL_CORRECTION
-        - MAX_FAXEN_LAST_TERM
-        - MAX_WALL_EXCURSION
-        - APPLIED_CASE_RUNNERS
         - CASE_METHOD_NAMES
         - CASE_METHODS
+        - APPLIED_CASE_RUNNERS
         - SKIN_DEPTH_CASE
         - KEPLER_RV_CASE
         - DAMPED_RESONATOR_CASE
@@ -19914,17 +19932,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 89807
-  totalExports: 2857
+  totalLinesOfCode: 90123
+  totalExports: 2866
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 942
+  totalFunctions: 958
   totalTypeGuards: 17
   totalEnums: 0
-  totalConstants: 409
+  totalConstants: 402
   totalReExports: 1411
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 24
+  unusedExportsCount: 35

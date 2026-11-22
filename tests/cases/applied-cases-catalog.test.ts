@@ -13,6 +13,7 @@ import {
   appliedCaseCatalog,
   type AppliedCaseFile,
 } from '../../src/cases/catalog.js';
+import { CASE_METHOD_NAMES } from '../../src/cases/methods.js';
 import { dataSchema } from '../../src/core/data-file.js';
 
 const schema = dataSchema('applied-cases.json');
@@ -60,6 +61,42 @@ describe('applied-cases catalog loader', () => {
     const noExpr = structuredClone(base);
     (noExpr.cases[0]!.checks[0] as { expr: string }).expr = '   ';
     expect(catalogSemanticProblems(noExpr)).toContainEqual(expect.stringMatching(/has no expr/));
+  });
+
+  it('refuses malformed, non-numeric, whitespace, and unknown-key needs at catalog load', () => {
+    const brownian = structuredClone(appliedCaseCatalog());
+    const drift = brownian.cases.find((c) => c.id === 'case-brownian-sphere')!.checks.find((c) => c.id === 'drift') as {
+      needs?: string[];
+    };
+    expect(drift.needs).toEqual(['d=3']);
+
+    const cases: Array<{ needs: string[]; match: RegExp }> = [
+      { needs: ['d=banana'], match: /needs 'd=banana' value is not a finite number/ },
+      { needs: ['d='], match: /needs 'd=' has a malformed value/ },
+      { needs: ['d==3'], match: /needs 'd==3' must contain exactly one '='/ },
+      { needs: ['d = 2'], match: /needs 'd = 2' has a malformed key/ },
+      { needs: ['foo=3'], match: /needs 'foo=3' names unknown parameter 'foo'/ },
+      { needs: ['not_a_key'], match: /needs 'not_a_key' names unknown parameter 'not_a_key'/ },
+    ];
+    for (const { needs, match } of cases) {
+      drift.needs = needs;
+      expect(catalogSemanticProblems(brownian), needs.join()).toContainEqual(expect.stringMatching(match));
+      expect(() => readAppliedCaseFile(JSON.stringify(brownian), schema)).toThrow(match);
+    }
+
+    drift.needs = ['d=3'];
+    expect(catalogSemanticProblems(brownian).filter((m) => m.includes('needs'))).toEqual([]);
+  });
+
+  it('refuses a catalog regimeAt that names an unknown method', () => {
+    const file = structuredClone(appliedCaseCatalog());
+    const brownian = file.cases.find((c) => c.id === 'case-brownian-sphere')!;
+    expect(brownian.regimeAt).toBe('brownianSphereRegimeAt');
+    expect(catalogSemanticProblems(file, CASE_METHOD_NAMES)).toEqual([]);
+    (brownian as { regimeAt: string }).regimeAt = 'notARegisteredMethod';
+    expect(catalogSemanticProblems(file, CASE_METHOD_NAMES)).toContainEqual(
+      expect.stringMatching(/regimeAt names unknown method 'notARegisteredMethod'/),
+    );
   });
 
 });
