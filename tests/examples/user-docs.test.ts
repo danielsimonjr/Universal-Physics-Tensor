@@ -345,13 +345,16 @@ describe('docs/user guides', () => {
     expect(withoutEg.length, 'some commands have no e.g. line').toBeGreaterThan(0);
   });
 
-  it('the guides link each other and the CLI reference, not the future tutorials directory', () => {
+  it('the guides link each other, the CLI reference and the tutorials directory', () => {
     const started = guides['docs/user/getting-started.md']!;
     const catalog = guides['docs/user/catalog.md']!;
     expect(started).toContain('](catalog.md)');
     expect(started).toContain('../CLI.md');
     expect(catalog).toContain('](getting-started.md)');
     expect(catalog).toContain('../CLI.md');
-    for (const text of Object.values(guides)) expect(text).not.toContain('tutorials/');
+    for (const tutorial of ['evaluate-a-bridge', 'units', 'search-and-explain']) {
+      expect(started, `getting-started links ${tutorial}`).toContain(`](tutorials/${tutorial}.md)`);
+    }
+    expect(catalog, 'the catalog guide does not link the tutorials').not.toContain('tutorials/');
   });
 });

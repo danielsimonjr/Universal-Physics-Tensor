@@ -38,6 +38,7 @@ For users of the CLI and the npm package:
 - **[Getting started](user/getting-started.md)** — install, the first five commands, and running the CLI from a clone.
 - **[Equation and Constant Catalog Guide](user/catalog.md)** — the bridge records, canonical equations and atlas bridges, and how physical constants are named, sourced and used in formulas.
 - **[API reference](user/api.md)** — every public export of the package (runtime, types, the `atlas` namespace and the `MathTSEngine` subpath), generated from the source TSDoc.
+- **[Tutorials](user/tutorials/evaluate-a-bridge.md)** — [evaluate a bridge](user/tutorials/evaluate-a-bridge.md), [units](user/tutorials/units.md) and [search and explain](user/tutorials/search-and-explain.md): walkthroughs whose code fences and stated outputs the test suite executes.
 
 ## Planning (`planning/`)
 
