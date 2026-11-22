@@ -9,6 +9,12 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-22 (PR #822 merge origin/master + Neon nits)
+
+- **Merge `e7f28a23`.** `origin/master` (`69c1cd9a`, squash of PR #820) merged with a normal merge commit. Kept #820's S9 attribution rows, the `## As of 2026-11-22 (PR #818 Neon REQUEST CHANGES)` heading, the pairing lists (`unit-wrapper-refusal.test.ts` among them), and every S11 entry, newest-first. No rebase, amend, or force-push.
+- **statedOutput prefix comment.** The longest-span comment's true prefix is `` `upt eval` `` of `` `upt eval "e + e_charge" …` ``. `` `upt eval "e"` `` is not a prefix (next character `"` vs space).
+- **Drift-guard general unit rule.** Trailing-unit exemption is any following letter token that is not a count word, not `nm`/`K` only. CONTROL negatives: `160 km`, `152 MeV` (plus the existing `121 nm` / `160 K`). Positives unchanged: `there are 109 entries`, `160 bridges in the catalog`. RED first: `160 km` matched the nm|K-only regex (`AssertionError: expected '160 km' not to match`).
+
 ## As of 2026-11-22 (PR #822 Neon REQUEST CHANGES)
 
 - **1 `da775890`.** `compileExpr` no longer rewrites `e_charge` → `e`. The MathTS `{ physics: true }` Euler-collision diagnosis was wrong: `compileExpr('e + e_charge', { physics: true }).evaluate({ e: 1, e_charge: 3 })` is 4. The original `3` was float64 absorption (`1.602176634e-19 + 3 === 3`). The rewrite broke `parseFormula('e_charge').evaluate({ e_charge: 3 })` (returned `E_SI`) and `upt derive q:charge e_charge:charge --formula "2*e_charge"` (exit 3). `CONSTANT_SPELLING_GROUPS` in `parseScope` stays. `rewriteConstantSpellings` drops the unused `canonicalNames` filter.

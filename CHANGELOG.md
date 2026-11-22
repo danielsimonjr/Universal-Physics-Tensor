@@ -24,6 +24,10 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- PR #822 Neon nits (after #820 merge): the statedOutput longest-span comment's true prefix is `` `upt eval` `` of `` `upt eval "e + e_charge" …` ``. ~~`` `upt eval "e"` `` is a prefix~~ Retracted: the next character is `"` vs space, so that span is not a prefix of the longer command.
+
+- PR #822 Neon nits (after #820 merge): the drift-guard trailing-unit rule is any following unit token (a letter token that is not a count word), not ~~`nm` or `K` only~~. CONTROL negatives include `160 km` and `152 MeV` so a future `121 eV` cannot false-positive. Count-word phrases (`there are 109 entries`, `160 bridges`) still match.
+
 - PR #822 Neon REQUEST CHANGES (non-blocking): `docs/user/catalog.md` runs `upt eval "e + e_charge" e_charge=3C` in a bash fence (prints `6 C`). `statedOutput` keeps the longest matching command span so `` `upt eval "e"` `` does not claim the longer command.
 
 - PR #822 Neon REQUEST CHANGES (non-blocking): the clone path on Node without Bun is `npm install --no-package-lock` then `npm run build` (`bun.lock` is the only lockfile; `package-lock.json` is banned).

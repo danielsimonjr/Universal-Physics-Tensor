@@ -98,8 +98,9 @@ function statedOutput(section: string, command: string): string[] | null {
     return span !== undefined && span.startsWith('upt ') && command.startsWith(span);
   });
   if (matching.length === 0) return null;
-  // `upt eval "e"` is a prefix of `upt eval "e + e_charge" …`. Keep the
-  // longest span so a short stating sentence does not claim a longer command.
+  // `upt eval` is a prefix of `upt eval "e + e_charge" …`. `upt eval "e"` is
+  // not: the next character is `"` vs space. Keep the longest span so a short
+  // stating sentence does not claim a longer command.
   const longest = Math.max(...matching.map((sentence) => spanOf(sentence)!.length));
   const best = matching.filter((sentence) => spanOf(sentence)!.length === longest);
   expect(best, `exactly one longest sentence states what \`${command}\` prints`).toHaveLength(1);
@@ -150,10 +151,13 @@ function mutateGuideNumber(piece: string): string | null {
  * Stale catalog counts that have appeared in this repo's records (bridge,
  * evaluator, traced-edge, file-census). A hyphenated id (`be-121`) is not a
  * count. The lookbehind also refuses a preceding `.`, `+` or word character
- * so `0.109`, `3.109 m` and `1e+109` are not counts, and a following `nm` or
- * `K` is a unit, not a catalog size.
+ * so `0.109`, `3.109 m` and `1e+109` are not counts. A following unit token
+ * is a physical quantity, not a catalog size (`121 nm`, `160 K`, `160 km`,
+ * `152 MeV`, or any other); only a count word (`entries`, `bridges`, …)
+ * keeps the number a count.
  */
-const DRIFT_COUNT = /(?<![-.+\w])(?:109|152|121|696|160)(?![.+\w])(?!\s+(?:nm|K)\b)|^\d+ bridges/m;
+const DRIFT_COUNT =
+  /(?<![-.+\w])(?:109|152|121|696|160)(?![.+\w])(?!\s+(?!(?:catalog\s+)?(?:entries|bridges|records|quantities|models|files|tests|exports|constants)\b)[A-Za-zµμ])|^\d+ bridges/m;
 
 function assertStdoutHolds(stdout: string, command: string, prints: string[]): void {
   for (const piece of prints) {
@@ -259,6 +263,8 @@ describe('docs/user guides', () => {
     expect('1e+109').not.toMatch(DRIFT_COUNT);
     expect('121 nm').not.toMatch(DRIFT_COUNT);
     expect('160 K').not.toMatch(DRIFT_COUNT);
+    expect('160 km').not.toMatch(DRIFT_COUNT);
+    expect('152 MeV').not.toMatch(DRIFT_COUNT);
   });
 
   it('CONTROL: statedOutput prefers the longest matching command span', () => {
