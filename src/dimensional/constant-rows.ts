@@ -192,18 +192,14 @@ const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
  * spellings stay. Longer aliases are replaced first so `electron_mass` is not
  * eaten as `m_e` plus leftover text.
  *
- * `canonicalNames` limits the rewrite to those rows. MathTS `{ physics: true }`
- * reads bare `e` as Euler's number and does not treat `e_charge` as the same
- * charge, so a formula that writes both names must compile as one symbol.
- * Other aliases (`speed_of_light`, `mu0`) stay: they are the caller's
- * identifiers, and rewriting them to `c` / `mu_0` would drop a declared
- * derive variable (W1).
+ * Used by the user-equation path so a typed alias is the catalog name.
+ * Formula evaluation does not rewrite: `parseFormula` keeps the caller's
+ * identifiers, and `parseScope` fans synonym spellings instead.
  * @internal
  */
-export function rewriteConstantSpellings(text: string, canonicalNames?: ReadonlySet<string>): string {
+export function rewriteConstantSpellings(text: string): string {
   const aliases: { alias: string; canonical: string }[] = [];
   for (const row of CONSTANT_ROWS) {
-    if (canonicalNames !== undefined && !canonicalNames.has(row.name)) continue;
     for (const spelling of row.spellings) {
       if (IDENTIFIER.test(spelling)) aliases.push({ alias: spelling, canonical: row.name });
     }

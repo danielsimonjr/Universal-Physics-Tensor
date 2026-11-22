@@ -26542,12 +26542,6 @@
             ]
           },
           {
-            "file": "../dimensional/constant-rows.js",
-            "imports": [
-              "rewriteConstantSpellings"
-            ]
-          },
-          {
             "file": "./formula-contract.js",
             "imports": [
               "CompiledFormula",
@@ -28786,7 +28780,7 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90277,
+    "totalLinesOfCode": 90272,
     "totalExports": 2867,
     "totalClasses": 86,
     "totalInterfaces": 523,

@@ -12,6 +12,7 @@ import { E_SI } from '../../src/core/constants.js';
 import {
   createMathtsFormulaParser,
   mathtsFormulaParser as parser,
+  parseFormula,
 } from '../../src/numerical/formula-mathts.js';
 
 describe('formula-mathts', () => {
@@ -110,7 +111,7 @@ describe('formula-mathts', () => {
     expect(() => parser.parse('q + 1').evaluate({})).toThrow(FormulaError);
   });
 
-  it('e_charge is rewritten to e before compileExpr so physics mode does not drop the charge term', () => {
+  it('e_charge stays the caller identifier; a scope e_charge binds', () => {
     const compileExprCalls: string[] = [];
     const parserWithSpy = createMathtsFormulaParser({
       parse: (expr) => parseMathTs(expr) as never,
@@ -120,14 +121,18 @@ describe('formula-mathts', () => {
       },
     });
     const formula = parserWithSpy.parse('e + e_charge');
-    expect(compileExprCalls).toEqual(['e + e']);
+    expect(compileExprCalls).toEqual(['e + e_charge']);
     expect(formula.evaluate({ e: 3, e_charge: 3 })).toBe(6);
-    // CONTROL: MathTS physics mode with the unre-written text and e=E_SI
-    // loses the 1.6e-19 term in float64, so the sum is 3.
-    const collided = compileExpr('e + e_charge', { physics: true }).evaluate({ e: E_SI, e_charge: 3 });
-    expect(Number(collided)).toBe(3);
-    expect(formula.evaluate({ e: E_SI, e_charge: 3 })).toBeCloseTo(2 * E_SI, 15);
-    expect(formula.evaluate({ e: E_SI, e_charge: 3 })).not.toBe(Number(collided));
+    expect(parseFormula('e_charge').evaluate({ e_charge: 3 })).toBe(3);
+    // CONTROL: rewriting e_charge → e would leave evaluate({ e_charge: 3 })
+    // on the default e: E_SI binding.
+    expect(parseFormula('e_charge').evaluate({ e_charge: 3 })).not.toBe(E_SI);
+    // MathTS { physics: true } does not drop an independent e_charge beside e.
+    expect(Number(compileExpr('e + e_charge', { physics: true }).evaluate({ e: 1, e_charge: 3 }))).toBe(4);
+    // The original CLI '3' was float64 absorption, not an Euler collision.
+    const absorbed = compileExpr('e + e_charge', { physics: true }).evaluate({ e: E_SI, e_charge: 3 });
+    expect(Number(absorbed)).toBe(3);
+    expect(E_SI + 3).toBe(3);
   });
 
   it('speed_of_light and mu0 stay the caller identifiers, not c and mu_0', () => {

@@ -7056,7 +7056,6 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `E_SI` | Import |
-| `../dimensional/constant-rows.js` | `rewriteConstantSpellings` | Import |
 | `./formula-contract.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
 | `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError` | Import |
 
@@ -7857,7 +7856,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90277 |
+| Total Lines of Code | 90272 |
 | Total Exports | 2867 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |

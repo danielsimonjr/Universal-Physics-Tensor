@@ -20,7 +20,6 @@
 
 import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import { E_SI } from '../core/constants.js';
-import { rewriteConstantSpellings } from '../dimensional/constant-rows.js';
 import type { CompiledFormula, FormulaParser } from './formula-contract.js';
 import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError } from './formula-contract.js';
 
@@ -160,12 +159,12 @@ export function createMathtsFormulaParser(
 
       // `compileExpr` applies `{ physics: true }` on each evaluation. Bare `e` is the SI
       // magnitude through the `e: E_SI` default below, and a scope entry for `e` wins.
-      // Only the `e` row's aliases (`e_charge`) compile as the canonical name so
-      // physics mode cannot treat `e` as Euler's number beside an independent
-      // `e_charge` symbol: the unre-written `e + e_charge` with `e=E_SI` and
-      // `e_charge=3` sums to 3 in float64. `speed_of_light` and `mu0` stay: they
-      // are the caller's identifiers.
-      const compiled = mod.compileExpr(rewriteConstantSpellings(expr, new Set(['e'])), PHYSICS);
+      // Identifier aliases are not rewritten: `parseFormula('e_charge')` keeps
+      // `e_charge` so a scope `e_charge` binds. `parseScope` fans synonym spellings
+      // of the same constant-registry row. `{e: E_SI, e_charge: 3}` summing to 3
+      // is float64 absorption (`1.602176634e-19 + 3 === 3`), not an Euler collision
+      // (`{e: 1, e_charge: 3}` is 4).
+      const compiled = mod.compileExpr(expr, PHYSICS);
       const formula: CompiledFormula = Object.freeze({
         source: expr,
         variables: Object.freeze(variables),

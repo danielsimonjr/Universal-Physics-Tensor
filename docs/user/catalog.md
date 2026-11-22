@@ -268,10 +268,7 @@ bindings: a bare `e` in `e=<number>` is the elementary charge, and an explicit
 binding argument (`upt eval E E=1eV`). `e_charge` is the same charge as `e`: a
 binding of one spelling fans out to the other, two spellings that disagree are
 refused, and a formula that writes both names is twice that charge, so
-`upt eval "e + e_charge" e_charge=3C` prints `6 C`, not `3 C`. MathTS
-`{ physics: true }` would otherwise treat bare `e` as Euler's number beside an
-independent `e_charge` symbol, dropping the `e` term in float64; the compiled
-formula rewrites the alias to the canonical name so both terms are the charge.
+`upt eval "e + e_charge" e_charge=3C` prints `6 C`, not `3 C`.
 
 **`hbar` is the exact quotient, not the truncated display value.**
 `HBAR_SI` is computed as `H_SI / (2π)`, both factors exact in the 2019 SI. The
