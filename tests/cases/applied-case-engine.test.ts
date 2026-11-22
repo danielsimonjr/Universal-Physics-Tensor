@@ -30,10 +30,16 @@ import {
   CASE_METHOD_NAMES,
   MAX_BIOT,
   SIGMA_SB_SI,
+  ballisticDeficit,
+  brennerPerpendicular,
+  faxenParallel,
+  G_STANDARD,
+  hydrodynamicMsdRatio,
   lumpedCoolingQJ,
   lumpedRadiatingTempK,
   lumpedRadiatingTemperature,
   sphereSeries,
+  sphereSeriesComputations,
 } from '../../src/cases/methods.js';
 import type { CaseResult } from '../../src/cases/types.js';
 import { C_SI, EPS0_SI, G_SI, H_SI, K_B_SI, M_SUN_SI, MU0_SI } from '../../src/core/constants.js';
@@ -555,7 +561,7 @@ describe('applied-case engine — resistor noise', () => {
       'allowInfinity: true',
     ]);
     expect(engineSrc).toMatch(
-      /function evalCheck[\s\S]*?evalOutputExpr\(row\.expr, inputs, outputs, extra, \{ allowInfinity: true \}\)/,
+      /function evalCheck[\s\S]*?evalOutputExpr\(row\.expr!, inputs, outputs, extra, \{ allowInfinity: true \}\)/,
     );
     const exprParse = readFileSync(new URL('../../src/bridges/expr-parse.ts', import.meta.url), 'utf8');
     expect(stripComments(exprParse)).not.toMatch(/allowInfinity:\s*true/);
@@ -755,6 +761,17 @@ describe('applied-case engine — lumped cooling', () => {
     expect(methodsSrc).not.toMatch(/MAX_BIOT\s*=\s*0\.1/);
   });
 
+  it('the three sphere outputs share one sphereSeries computation per run (per-(Bi, Fo) memo)', () => {
+    const before = sphereSeriesComputations();
+    runAppliedCaseEngine(appliedCaseRecord(ID), inputs);
+    // theta_parent_mean, T_centre_K and T_surface_K read the same (Bi_radius, Fo):
+    // one series computation serves all three (was three before the memo).
+    expect(sphereSeriesComputations()).toBe(before + 1);
+    // An identical repeat run hits the memo: no new computation.
+    runAppliedCaseEngine(appliedCaseRecord(ID), inputs);
+    expect(sphereSeriesComputations()).toBe(before + 1);
+  });
+
   it('h_rad_max is a catalog expr using abs, not a named method', () => {
     const row = appliedCaseRecord(ID).outputs.find((o) => o.key === 'h_rad_max_W_per_m2_K')!;
     expect(row.method).toBeUndefined();
@@ -796,5 +813,225 @@ describe('applied-case engine — lumped cooling', () => {
     const linearLoss = got.checks.find((c) => c.id === 'linear-loss')!;
     expect(linearLoss.value).toBe(Infinity);
     expect(linearLoss.holds).toBe(false);
+  });
+});
+
+describe('applied-case engine — brownian sphere (S8)', () => {
+  // brownian-sphere.test.ts base inputs; the catalog valid example adds h_m.
+  const ID = 'case-brownian-sphere';
+  const base = { T_K: 293.15, eta_Pa_s: 1e-3, a_m: 1e-6, rho_p_kg_per_m3: 2000, rho_f_kg_per_m3: 998, t_s: 1, d: 2 };
+  const inputs = { ...base, h_m: 100e-6 };
+  // Hand arithmetic on the exact SI constants (brownian-sphere.test.ts), with
+  // the exported helpers the wired methods wrap. The two quadrature-backed
+  // numbers (MSD_hydro via hydrodynamicMsdRatio, D_perp via Brenner's series)
+  // are cross-checked against Talbot inversion and the as-printed series in
+  // brownian-sphere.test.ts, so reading them here is not circular.
+  const gamma = 6 * Math.PI * 1e-3 * 1e-6;
+  const D = (K_B_SI * 293.15) / gamma;
+  const msd = 2 * 2 * D * 1;
+  const volume = (4 / 3) * Math.PI * 1e-6 ** 3;
+  const m = volume * 2000;
+  const tauP = (m + 0.5 * volume * 998) / gamma;
+  const tauF = (998 * 1e-6 * 1e-6) / 1e-3;
+  const vSed = ((2 / 9) * (2000 - 998) * G_STANDARD * 1e-6 * 1e-6) / 1e-3;
+  const vTh = Math.sqrt((K_B_SI * 293.15) / m);
+  const re = (998 * 1e-6 * (vTh + Math.abs(vSed) + Math.abs(vTh - Math.abs(vSed))) / 2) / 1e-3;
+  const tauBare = m / gamma;
+  const msdLangevin = 2 * 2 * D * tauBare * ballisticDeficit(1 / tauBare);
+  const msdHydro = msd * hydrodynamicMsdRatio(tauP / 1, tauF / 1);
+  const msdAddedMass = 2 * 2 * D * tauP * ballisticDeficit(1 / tauP);
+  const memory = msdHydro / msdAddedMass - 1;
+  const dPar = D * faxenParallel(1e-6 / 1e-4);
+  const dPerp = D / brennerPerpendicular(1e-4 / 1e-6);
+  const msdWall = 2 * 1 * (2 * dPar + 0);
+  const brownianPinned: PinnedCase = {
+    outputs: {
+      gamma_kg_per_s: gamma,
+      D_m2_per_s: D,
+      MSD_m2: msd,
+      rms_displacement_m: Math.sqrt(msd),
+      m_kg: m,
+      tau_p_s: tauP,
+      tau_f_s: tauF,
+      v_sed_m_per_s: vSed,
+      Re: re,
+      MSD_langevin_m2: msdLangevin,
+      langevin_deviation: msd / msdLangevin - 1,
+      MSD_hydro_m2: msdHydro,
+      hydro_correction_m2: msdHydro - msd,
+      hydro_deviation: msd / msdHydro - 1,
+      memory_correction: memory,
+      D_parallel_m2_per_s: dPar,
+      D_perp_m2_per_s: dPerp,
+      MSD_wall_m2: msdWall,
+      wall_deviation: msd / msdWall - 1,
+    },
+    checks: [
+      { id: 'creeping-flow', holds: true, value: re },
+      { id: 'overdamped', holds: true, value: tauP / 1 },
+      { id: 'memory', holds: true, value: Math.abs(memory) },
+      { id: 'faxen-range', holds: true, value: (1e-6 / 1e-4) ** 5 / 16 / (dPar / D) },
+      { id: 'wall', holds: true, value: Math.abs(msd / msdWall - 1) },
+      { id: 'wall-static', holds: true, value: (Math.sqrt(2 * dPerp * 1) + Math.abs(vSed) * 1 / (D / dPerp)) / (1e-4 - 1e-6) },
+    ],
+    uncheckedCount: 3,
+  };
+
+  it('pinned reference: 1 µm silica sphere in water, 100 µm above the coverslip, d = 2, t = 1 s', () => {
+    pinCase(ID, brownianPinned);
+  });
+
+  it('the engine routes the case: usesCatalogEngine is true and no runCaseBrownianSphere remains', () => {
+    expect(usesCatalogEngine(appliedCaseRecord(ID))).toBe(true);
+    expect([...CASE_METHOD_NAMES]).not.toContain('runCaseBrownianSphere');
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(engineSrc).not.toMatch(/runCaseBrownianSphere/);
+    const methodsSrc = readFileSync(new URL('../../src/cases/methods.ts', import.meta.url), 'utf8');
+    expect(methodsSrc).not.toMatch(/runCaseBrownianSphere/);
+  });
+
+  it('validation: the engine carries the domain refusals with the same messages', () => {
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, d: 4 })).toThrow(/d must be 1, 2 or 3 \(got 4\)/);
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, a_m: 0 })).toThrow(/a_m must be/);
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, eta_Pa_s: 0 })).toThrow(/eta_Pa_s must be/);
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, h_m: 1e-6 })).toThrow(
+      /h_m must be a finite distance > a_m, centre to wall \(got 0\.000001\)/,
+    );
+    expect(() => runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, h_m: Number.NaN })).toThrow(
+      /h_m must be a finite distance > a_m, centre to wall \(got NaN\)/,
+    );
+  });
+
+  it('wall outputs and the wall checks are gated by catalog needs on h_m; the drift check by d=3', () => {
+    const noWall = runAppliedCaseEngine(appliedCaseRecord(ID), base);
+    expect(noWall.outputs.D_parallel_m2_per_s).toBeNull();
+    expect(noWall.outputs.D_perp_m2_per_s).toBeNull();
+    expect(noWall.outputs.MSD_wall_m2).toBeNull();
+    expect(noWall.outputs.wall_deviation).toBeNull();
+    expect(noWall.checks.map((c) => c.id)).toEqual(['creeping-flow', 'overdamped', 'memory']);
+    expect(noWall.unchecked.join(' ')).toMatch(/tracked axes are horizontal/);
+    const d3 = runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, d: 3 });
+    expect(d3.checks.map((c) => c.id)).toEqual(['creeping-flow', 'overdamped', 'memory', 'drift']);
+    expect(d3.unchecked.join(' ')).not.toMatch(/horizontal/);
+    const d1 = runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, d: 1 });
+    expect(d1.unchecked.join(' ')).toMatch(/tracked axis is horizontal/);
+    expect(d1.checks.map((c) => c.id)).toEqual(['creeping-flow', 'overdamped', 'memory']);
+    // The d=3 gate is catalog data ("needs": ["d=3"]), not an engine literal.
+    const engineSrc = readFileSync(new URL('../../src/cases/engine.ts', import.meta.url), 'utf8');
+    expect(engineSrc).not.toMatch(/'drift'/);
+  });
+
+  it('control: mutating the gamma prefactor (6 → 7, a coefficient change) moves gamma and D by exactly 7/6 and 6/7', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace('"expr": "6*pi*eta_Pa_s*a_m"', '"expr": "7*pi*eta_Pa_s*a_m"');
+    expect(mutated, 'the gamma expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    const got = runAppliedCaseEngine(record, inputs);
+    expectPinNumber(got.outputs.gamma_kg_per_s as number, gamma * (7 / 6), 'mutated gamma');
+    // D_m2_per_s is its own catalog expr with its own 6πηa denominator: the
+    // gamma mutation does not move it (the exprs are independent, not chained).
+    expect(got.outputs.D_m2_per_s).toBe(D);
+    expect(() => pinCase(ID, brownianPinned, record)).toThrow(/to be less (or equal )?than/);
+  });
+
+  it('mutating tau_f_s (a 2× coefficient) moves the wired MSD_hydro_m2 and memory_correction but not the Langevin pair', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "rho_f_kg_per_m3*a_m*a_m/eta_Pa_s"',
+      '"expr": "2*rho_f_kg_per_m3*a_m*a_m/eta_Pa_s"',
+    );
+    expect(mutated, 'the tau_f_s expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    const got = runAppliedCaseEngine(record, inputs);
+    expect(got.outputs.tau_f_s).toBe(2 * tauF);
+    expect(got.outputs.MSD_hydro_m2).not.toBe(msdHydro);
+    expect(got.outputs.memory_correction).not.toBe(memory);
+    expect(got.outputs.MSD_langevin_m2).toBe(msdLangevin);
+    expect(got.outputs.langevin_deviation).toBe(msd / msdLangevin - 1);
+  });
+
+  it('mutating m_kg (4/3 → 5/3, a coefficient change) moves the Langevin and memory methods that read it', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "(4/3)*pi*a_m^3*rho_p_kg_per_m3"',
+      '"expr": "(5/3)*pi*a_m^3*rho_p_kg_per_m3"',
+    );
+    expect(mutated, 'the m_kg expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === ID)!;
+    const got = runAppliedCaseEngine(record, inputs);
+    expect(got.outputs.m_kg).not.toBe(m);
+    expect(got.outputs.tau_p_s).not.toBe(tauP);
+    expect(got.outputs.MSD_langevin_m2).not.toBe(msdLangevin);
+    expect(got.outputs.langevin_deviation).not.toBe(msd / msdLangevin - 1);
+    expect(got.outputs.memory_correction).not.toBe(memory);
+    expect(got.outputs.MSD_hydro_m2).not.toBe(msdHydro);
+  });
+
+  // Master values recorded by running `runCaseBrownianSphere` at origin/master
+  // 8210e97f (the S7 merge, the parent of this PR) before the deletion. The
+  // runner returned the record with NaN/Infinity in it; it did not throw.
+  it('master parity at rho_p = 1e300: memory_correction is NaN, the deviations Infinity, the memory check NaN', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, rho_p_kg_per_m3: 1e300, d: 3 });
+    expect(Number.isNaN(got.outputs.memory_correction as number)).toBe(true);
+    expect(got.outputs.langevin_deviation).toBe(Infinity);
+    expect(got.outputs.hydro_deviation).toBe(Infinity);
+    expect(got.outputs.MSD_hydro_m2).toBe(0);
+    expectPinNumber(got.outputs.D_m2_per_s as number, 2.1471978227748074e-13, 'D at rho_p=1e300');
+    // (2/9)(ρ_p − ρ_f) g a²/η in master's op order, G_STANDARD shared with the engine's g_std binding.
+    expectPinNumber(
+      got.outputs.v_sed_m_per_s as number,
+      ((2 / 9) * (1e300 - 998) * G_STANDARD * 1e-6 * 1e-6) / 1e-3,
+      'v_sed at rho_p=1e300',
+    );
+    const memoryCheck = got.checks.find((c) => c.id === 'memory')!;
+    expect(Number.isNaN(memoryCheck.value)).toBe(true);
+    expect(memoryCheck.holds).toBe(false);
+    const drift = got.checks.find((c) => c.id === 'drift')!;
+    expect(drift.value).toBe(Infinity);
+    expect(drift.holds).toBe(false);
+  });
+
+  it('master parity at T_K = 1e300: every output stays finite and matches master', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, T_K: 1e300 });
+    expectPinNumber(got.outputs.D_m2_per_s as number, 7.324570434162742e284, 'D at T=1e300');
+    expectPinNumber(got.outputs.MSD_m2 as number, 2.929828173665097e285, 'MSD at T=1e300');
+    expectPinNumber(got.outputs.Re as number, 4.051472357562446e145, 'Re at T=1e300');
+    expectPinNumber(got.outputs.langevin_deviation as number, 4.4444464175619203e-7, 'langevin_deviation at T=1e300');
+    expectPinNumber(got.outputs.MSD_hydro_m2 as number, 2.926526821325784e285, 'MSD_hydro at T=1e300');
+    expectPinNumber(got.outputs.memory_correction as number, -0.001126252785120796, 'memory_correction at T=1e300');
+    expect(got.checks.map((c) => c.holds)).toEqual([false, true, true]);
+  });
+
+  it('master parity at t_s = 1e20: the Langevin deviation is exactly 0 (bit-equal parents)', () => {
+    const got = runAppliedCaseEngine(appliedCaseRecord(ID), { ...base, t_s: 1e20, d: 3 });
+    expect(got.outputs.langevin_deviation).toBe(0);
+    expectPinNumber(got.outputs.MSD_m2 as number, 128831869.36648846, 'MSD at t=1e20');
+    expectPinNumber(got.outputs.hydro_correction_m2 as number, -0.000014901161193847656, 'hydro_correction at t=1e20');
+    expectPinNumber(got.outputs.memory_correction as number, -1.155742168634788e-13, 'memory_correction at t=1e20');
+    const drift = got.checks.find((c) => c.id === 'drift')!;
+    expectPinNumber(drift.value, 1.1103239630670511e21, 'drift at t=1e20');
+    expect(drift.holds).toBe(false);
+  });
+
+  it('CONTROL: wiring memory_correction as an expr throws on the NaN master emits at rho_p = 1e300', () => {
+    // The master quantity is MSD_hydro/msdAddedMass − 1 with both parents 0
+    // there (an expm1 underflow the grammar cannot express), so the control
+    // wires the same 0/0 shape through the expr path: it must refuse the NaN.
+    const wired = structuredClone(appliedCaseRecord(ID)) as AppliedCaseRecord;
+    const row = wired.outputs.find((o) => o.key === 'memory_correction') as {
+      key: string;
+      method?: string;
+      expr?: string;
+    };
+    expect(row.method).toBe('brownianMemoryCorrection');
+    delete row.method;
+    row.expr = 'MSD_hydro_m2/MSD_hydro_m2 - 1';
+    expect(() => runAppliedCaseEngine(wired, { ...base, rho_p_kg_per_m3: 1e300, d: 3 })).toThrow(FormulaValueError);
+    expect(() => runAppliedCaseEngine(wired, { ...base, rho_p_kg_per_m3: 1e300, d: 3 })).toThrow(
+      /formula did not evaluate to a finite number \(got NaN\)/,
+    );
   });
 });

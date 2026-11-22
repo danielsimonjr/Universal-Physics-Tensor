@@ -150,9 +150,11 @@ describe('named constant tables', () => {
         checked++;
       }
     }
-    expect(checked).toBeGreaterThanOrEqual(10);
     // The Johnson-noise confrontation module's K_B_CODATA_2014 row is the record from before
     // that module was deleted. Case constants are the module-export tables the walk still finds.
+    // The S8 migration deleted the seven brownian-sphere threshold constants (the bounds live
+    // in the catalog record), leaving exactly three exported numeric constants here.
+    expect(checked).toBeGreaterThanOrEqual(3);
     expect(tables['cases/methods'].values.G_STANDARD).toBe(9.80665);
   });
 

@@ -11,7 +11,7 @@ import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { integrateRK4 } from '../numerical/null-ray-integrator.js';
 import { adaptiveQuadrature } from './quadrature.js';
 import { appliedCaseCatalog, appliedCaseRecord, assembleAppliedCase, catalogSemanticProblems } from './catalog.js';
-import { runAppliedCaseEngine, usesCatalogEngine, registerCaseMethods } from './engine.js';
+import { runAppliedCaseEngine, registerCaseMethods, registeredCaseMethod } from './engine.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase, type CaseResult, type LumpedRadiating } from './types.js';
 
 /** Lumped body with radiative cooling parameters (re-export). */
@@ -180,23 +180,48 @@ export function sphereEigenvalues(biRadius: number, n: number): number[] {
  * @throws Error when Fo is so small that the series would need over 1e5 terms.
  * @internal
  */
+let sphereSeriesMemoBi = Number.NaN;
+let sphereSeriesMemoFo = Number.NaN;
+let sphereSeriesMemo: { mean: number; centre: number; surface: number } | undefined;
+let sphereSeriesMisses = 0;
+
+/**
+ * How many times {@link sphereSeries} computed the series (memo misses since
+ * module load). The three sphere outputs of one lumped-cooling run share one
+ * series through the per-(Bi, Fo) memo, so one run moves this by exactly 1.
+ * @internal
+ */
+export function sphereSeriesComputations(): number {
+  return sphereSeriesMisses;
+}
+
 export function sphereSeries(biRadius: number, fo: number): { mean: number; centre: number; surface: number } {
-  if (fo === 0) return { mean: 1, centre: 1, surface: 1 };
-  const terms = Math.ceil(Math.sqrt(42 / fo) / Math.PI) + 2;
-  if (terms > 1e5) throw new Error(`${LUMPED_COOLING_ID}: Fo = ${fo} is too small for the series (needs ${terms} terms)`);
-  let mean = 0;
-  let centre = 0;
-  let surface = 0;
-  for (const z of sphereEigenvalues(biRadius, terms)) {
-    const s = Math.sin(z);
-    const c = Math.cos(z);
-    const cn = (4 * (s - z * c)) / (2 * z - Math.sin(2 * z));
-    const decay = Math.exp(-z * z * fo);
-    centre += cn * decay;
-    surface += (cn * decay * s) / z;
-    mean += (cn * decay * 3 * (s - z * c)) / z ** 3;
+  if (biRadius === sphereSeriesMemoBi && fo === sphereSeriesMemoFo && sphereSeriesMemo !== undefined) {
+    return sphereSeriesMemo;
   }
-  return { mean, centre, surface };
+  sphereSeriesMisses += 1;
+  if (fo === 0) {
+    sphereSeriesMemo = { mean: 1, centre: 1, surface: 1 };
+  } else {
+    const terms = Math.ceil(Math.sqrt(42 / fo) / Math.PI) + 2;
+    if (terms > 1e5) throw new Error(`${LUMPED_COOLING_ID}: Fo = ${fo} is too small for the series (needs ${terms} terms)`);
+    let mean = 0;
+    let centre = 0;
+    let surface = 0;
+    for (const z of sphereEigenvalues(biRadius, terms)) {
+      const s = Math.sin(z);
+      const c = Math.cos(z);
+      const cn = (4 * (s - z * c)) / (2 * z - Math.sin(2 * z));
+      const decay = Math.exp(-z * z * fo);
+      centre += cn * decay;
+      surface += (cn * decay * s) / z;
+      mean += (cn * decay * 3 * (s - z * c)) / z ** 3;
+    }
+    sphereSeriesMemo = { mean, centre, surface };
+  }
+  sphereSeriesMemoBi = biRadius;
+  sphereSeriesMemoFo = fo;
+  return sphereSeriesMemo;
 }
 /**
  * Q = ρcV(T0 − T(t)) = ρcV(T0 − T∞)(1 − e^{−t/τ}), computed with
@@ -272,13 +297,13 @@ export function lumpedSphereSurfaceK(
  * @internal
  */
 export function lumpedParentDeviation(
-  inputs: Readonly<Record<string, number>>,
+  _inputs: Readonly<Record<string, number>>,
   outputs: Readonly<Record<string, number | null>>,
 ): number {
   const theta = outputs.theta;
   const mean = outputs.theta_parent_mean;
   if (theta === null || mean === null || theta === undefined || mean === undefined) {
-    throw new Error('lumpedParentDeviation: need finite theta and theta_parent_mean');
+    throw new Error('lumpedParentDeviation: theta and theta_parent_mean must be present');
   }
   return theta / mean - 1;
 }
@@ -309,30 +334,8 @@ export function lumpedRadiatingTempK(
 }
 
 // --- brownian-sphere.ts ---
-const BROWNIAN_SPHERE_ID = 'case-brownian-sphere';
-
 /** Standard gravity (CGPM 1901), for the sedimentation speed: the unit table's `standard_gravity` row, read as newtons per kilogram-force. @internal */
 export const G_STANDARD = convertValue('1 kgf/kg', 'm/s^2').value;
-
-/** The thresholds `ab-stokes-einstein` states: Re ≤ 0.1 and τ_p/t ≤ 0.01. @internal */
-export const MAX_RE = 0.1;
-/** τ_p/t ceiling beside the Stokes–Einstein regime. @internal */
-export const MAX_TAU_P_RATIO = 0.01;
-
-/** Ceiling on the memory term's own share of the MSD, |MSD_H/MSD_OU − 1|. @internal */
-export const MAX_MEMORY_CORRECTION = 0.01;
-
-/** (v_s t)²/(2Dt) ceiling along gravity when the vertical axis is tracked. @internal */
-export const MAX_DRIFT_RATIO = 0.01;
-
-/** Ceiling on |MSD/MSD_wall − 1|: the wall's correction to the tracked MSD is negligible. @internal */
-export const MAX_WALL_CORRECTION = 0.01;
-
-/** Ceiling on the last retained Faxén term (a/h)⁵/16 over the series' value. @internal */
-export const MAX_FAXEN_LAST_TERM = 0.01;
-
-/** Ceiling on √(2 D_⊥ t)/(h − a): the height, and so D_∥ and D_⊥, barely change over t. @internal */
-export const MAX_WALL_EXCURSION = 0.1;
 
 /** t − τ(1 − e^{−t/τ}) in units of τ, i.e. x − (1 − e^{−x}), without its cancellation at small x. @internal */
 export function ballisticDeficit(x: number): number {
@@ -438,110 +441,98 @@ export function brownianSphereRegimeAt(
 }
 
 /**
- * Evaluate the brownian-sphere applied case at the given SI inputs.
+ * The Langevin parent MSD 2dD[t − τ(1 − e^{−t/τ})] with the bare mass τ = m/γ,
+ * from the wired D_m2_per_s, m_kg and gamma_kg_per_s (`expm1` inside
+ * {@link ballisticDeficit} is not in the catalog grammar).
  * @internal
  */
-export function runCaseBrownianSphere(i: Readonly<Record<string, number>>): CaseResult {
-    requirePositive(BROWNIAN_SPHERE_ID, i, ['T_K', 'eta_Pa_s', 'a_m', 'rho_p_kg_per_m3', 'rho_f_kg_per_m3', 't_s']);
-    const { T_K: T, eta_Pa_s: eta, a_m: a, rho_p_kg_per_m3: rhoP, rho_f_kg_per_m3: rhoF, t_s: t, d } = i as Record<string, number>;
-    if (d !== 1 && d !== 2 && d !== 3) throw new Error(`${BROWNIAN_SPHERE_ID}: d must be 1, 2 or 3 (got ${d})`);
-    const kT = K_B_SI * T;
-    const gamma = 6 * Math.PI * eta * a;
-    const D = kT / gamma;
-    const msd = 2 * d * D * t;
-    const volume = (4 / 3) * Math.PI * a ** 3;
-    const m = volume * rhoP;
-    const tauP = (m + 0.5 * volume * rhoF) / gamma;
-    const tauF = (rhoF * a * a) / eta;
-    const vSed = ((2 / 9) * (rhoP - rhoF) * G_STANDARD * a * a) / eta;
-    const re = (rhoF * a * Math.max(Math.sqrt(kT / m), Math.abs(vSed))) / eta;
-    const tauBare = m / gamma;
-    const msdLangevin = 2 * d * D * tauBare * ballisticDeficit(t / tauBare);
-    const msdHydro = msd * hydrodynamicMsdRatio(tauP / t, tauF / t);
-    const msdAddedMass = 2 * d * D * tauP * ballisticDeficit(t / tauP);
-    const memory = msdHydro / msdAddedMass - 1;
-    const checks = [
-      check('creeping-flow', 'creeping flow around the sphere, Re ≪ 1', 'ρ_f a max(√(k_BT/m), |v_s|)/η', re, '<=', MAX_RE,
-        "the threshold ab-stokes-einstein states: a chosen machine form of Re ≪ 1"),
-      check('overdamped', 'overdamped times t ≫ τ_p', '(m + m_f/2)/(γ t)', tauP / t, '<=', MAX_TAU_P_RATIO,
-        "ab-stokes-einstein's m/(γt) ≤ 0.01, with the added mass m_f/2 included (stricter)"),
-      check('memory', 'past the hydrodynamic memory, t ≫ τ_f = ρ_f a²/η', '|MSD_H/MSD_OU − 1|', Math.abs(memory), '<=', MAX_MEMORY_CORRECTION,
-        'chosen threshold: the Basset memory changes the MSD by ≤ 1% at t (computed, not estimated; ≈ 2√(τ_f/(πt)) at t ≫ τ_f)'),
-    ];
-    const unchecked = ['the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)'];
-    let wall: { dPar: number; dPerp: number; msdWall: number } | null = null;
-    if (i.h_m !== undefined) {
-      const h = i.h_m;
-      if (!Number.isFinite(h) || !(h > a)) throw new Error(`${BROWNIAN_SPHERE_ID}: h_m must be a finite distance > a_m, centre to wall (got ${h})`);
-      const faxen = faxenParallel(a / h);
-      const lambda = brennerPerpendicular(h / a);
-      const dPar = D * faxen;
-      const dPerp = D / lambda;
-      const msdWall = 2 * t * (Math.min(d, 2) * dPar + (d === 3 ? dPerp : 0));
-      wall = { dPar, dPerp, msdWall };
-      const excursion = Math.sqrt(2 * dPerp * t) + (Math.abs(vSed) * t) / lambda;
-      checks.push(
-        check('faxen-range', 'the Faxén series in a/h holds for D_∥', '(a/h)⁵/16 ÷ (D_∥/D)', (a / h) ** 5 / 16 / faxen, '<=', MAX_FAXEN_LAST_TERM,
-          'chosen threshold: the last retained term is ≤ 1% of the series — a size estimate of the truncation, not a bound; D_⊥ (Brenner) is exact at any h > a'),
-        check('wall', 'the wall correction to the tracked MSD is negligible', '|MSD/MSD_w − 1|', Math.abs(msd / msdWall - 1), '<=', MAX_WALL_CORRECTION,
-          'chosen threshold: the unbounded-fluid D is then within 1% for the tracked axes; otherwise read MSD_wall_m2'),
-        check('wall-static', 'the height barely changes over t', '(√(2 D_⊥ t) + |v_s| t/λ)/(h − a)', excursion / (h - a), '<=', MAX_WALL_EXCURSION,
-          'chosen threshold: diffusion plus wall-slowed sedimentation normal to the wall move the sphere by ≤ 10% of the gap, so D_∥, D_⊥ taken at h hold over t'),
-      );
-      unchecked.push(
-        'the wall is plane, rigid, no-slip and horizontal, and the gap h − a is many molecular sizes and roughness heights (no surface forces, no lubrication-scale slip)',
-      );
-    }
-    if (d === 3) {
-      checks.push(
-        check('drift', 'sedimentation drift negligible along gravity over t', '(v_s t)²/(2 D t)', (vSed * t) ** 2 / (2 * D * t), '<=',
-          MAX_DRIFT_RATIO, 'chosen threshold: the vertical MSD then carries ≤ 1% from the deterministic drift'),
-      );
-    } else {
-      unchecked.push(
-        `the ${d === 1 ? 'tracked axis is' : 'tracked axes are'} horizontal, so sedimentation (${Number(Math.abs(vSed * t).toPrecision(3))} m over t) moves the sphere out of the plane but not along ${d === 1 ? 'it' : 'them'}`,
-      );
-    }
-    return {
-      outputs: {
-        gamma_kg_per_s: gamma,
-        D_m2_per_s: D,
-        MSD_m2: msd,
-        rms_displacement_m: Math.sqrt(msd),
-        m_kg: m,
-        tau_p_s: tauP,
-        tau_f_s: tauF,
-        v_sed_m_per_s: vSed,
-        Re: re,
-        MSD_langevin_m2: msdLangevin,
-        langevin_deviation: msd / msdLangevin - 1,
-        MSD_hydro_m2: msdHydro,
-        hydro_correction_m2: msdHydro - msd,
-        hydro_deviation: msd / msdHydro - 1,
-        memory_correction: memory,
-        D_parallel_m2_per_s: wall?.dPar ?? null,
-        D_perp_m2_per_s: wall?.dPerp ?? null,
-        MSD_wall_m2: wall?.msdWall ?? null,
-        wall_deviation: wall === null ? null : msd / wall.msdWall - 1,
-      },
-      checks,
-      unchecked,
-    };
-  
+export function brownianLangevinMsdM2(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const tauBare = outputs.m_kg! / outputs.gamma_kg_per_s!;
+  return 2 * inputs.d! * outputs.D_m2_per_s! * tauBare * ballisticDeficit(inputs.t_s! / tauBare);
 }
 
-const RUN_BY_ID: Readonly<Record<string, (i: Readonly<Record<string, number>>) => CaseResult>> = {
-  'case-brownian-sphere': runCaseBrownianSphere,
-};
+/**
+ * The Langevin–Basset parent MSD 2dD·t·MSD/(2Dt)(τ_p/t, τ_f/t), the branch-cut
+ * VACF integral (adaptive quadrature, not expressible in the catalog grammar),
+ * from the wired MSD_m2, tau_p_s and tau_f_s.
+ * @internal
+ */
+export function brownianHydroMsdM2(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  return outputs.MSD_m2! * hydrodynamicMsdRatio(outputs.tau_p_s! / inputs.t_s!, outputs.tau_f_s! / inputs.t_s!);
+}
+
+/**
+ * MSD_H/MSD_OU − 1 against the wired MSD_hydro_m2, D_m2_per_s and tau_p_s. A
+ * named method, not an expr: when both parents underflow to 0 (ρ_p ≳ 1e300
+ * makes τ_p·(t/τ_p)² vanish) master's runner returned `0/0 − 1 = NaN`
+ * silently, and the expr path refuses NaN.
+ * @internal
+ */
+export function brownianMemoryCorrection(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const tauP = outputs.tau_p_s!;
+  const msdAddedMass = 2 * inputs.d! * outputs.D_m2_per_s! * tauP * ballisticDeficit(inputs.t_s! / tauP);
+  return outputs.MSD_hydro_m2! / msdAddedMass - 1;
+}
+
+/**
+ * |MSD_H/MSD_OU − 1|, the memory check's value, read from the wired
+ * memory_correction. A check `method` rather than an expr because master's
+ * check value is `NaN` where memory_correction is (a NaN the expr path
+ * refuses), and the check must still be reported, not thrown away.
+ * @internal
+ */
+export function brownianMemoryAbs(
+  _inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const memory = outputs.memory_correction;
+  return typeof memory === 'number' ? Math.abs(memory) : Number.NaN;
+}
+
+/**
+ * D_⊥ = D/λ beside the wall, λ from Brenner's exact series (a loop with
+ * `expm1`; not in the catalog grammar), from the wired D_m2_per_s.
+ * @internal
+ */
+export function brownianWallPerpD(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  return outputs.D_m2_per_s! / brennerPerpendicular(inputs.h_m! / inputs.a_m!);
+}
+
+/**
+ * MSD_wall = 2t(d_∥ D_∥ + d_⊥ D_⊥) over the tracked axes, from the wired
+ * D_parallel_m2_per_s and D_perp_m2_per_s (`min` is not in the catalog
+ * grammar; d = 3 tracks the one axis normal to the wall).
+ * @internal
+ */
+export function brownianWallMsdM2(
+  inputs: Readonly<Record<string, number>>,
+  outputs: Readonly<Record<string, number | null>>,
+): number {
+  const d = inputs.d!;
+  const dPar = outputs.D_parallel_m2_per_s!;
+  const dPerp = outputs.D_perp_m2_per_s!;
+  return 2 * inputs.t_s! * (Math.min(d, 2) * dPar + (d === 3 ? dPerp : 0));
+}
 
 function buildAppliedCase(id: string): AppliedCase {
   const record = appliedCaseRecord(id);
-  const legacy = RUN_BY_ID[id];
-  const run = usesCatalogEngine(record)
-    ? (inputs: Readonly<Record<string, number>>) => runAppliedCaseEngine(record, inputs)
-    : legacy;
-  const regimeAt = id === 'case-brownian-sphere' ? brownianSphereRegimeAt : undefined;
-  return assembleAppliedCase(record, { run, regimeAt });
+  const regimeAt =
+    record.regimeAt === undefined
+      ? undefined
+      : (registeredCaseMethod(record.regimeAt) as AppliedCase['regimeAt']);
+  return assembleAppliedCase(record, { run: (inputs) => runAppliedCaseEngine(record, inputs), regimeAt });
 }
 
 /** Case id → case assembled from the catalog and a runner. @internal */
@@ -570,7 +561,12 @@ export const CASE_METHOD_NAMES: ReadonlySet<string> = new Set([
   'lumpedSphereCentreK',
   'lumpedSphereSurfaceK',
   'lumpedRadiatingTempK',
-  'runCaseBrownianSphere',
+  'brownianLangevinMsdM2',
+  'brownianHydroMsdM2',
+  'brownianMemoryCorrection',
+  'brownianMemoryAbs',
+  'brownianWallPerpD',
+  'brownianWallMsdM2',
 ]);
 
 /** Named numeric methods invoked from catalog output `method` fields. */
@@ -594,7 +590,12 @@ export const CASE_METHODS: Record<string, (...args: never[]) => unknown> = {
   lumpedSphereCentreK,
   lumpedSphereSurfaceK,
   lumpedRadiatingTempK,
-  runCaseBrownianSphere,
+  brownianLangevinMsdM2,
+  brownianHydroMsdM2,
+  brownianMemoryCorrection,
+  brownianMemoryAbs,
+  brownianWallPerpD,
+  brownianWallMsdM2,
 };
 
 registerCaseMethods(CASE_METHODS);

@@ -7717,11 +7717,13 @@
         ],
         "exports": [
           "registerCaseMethods",
+          "registeredCaseMethod",
           "usesCatalogEngine",
           "runAppliedCaseEngine"
         ],
         "functions": [
           "registerCaseMethods",
+          "registeredCaseMethod",
           "usesCatalogEngine",
           "runAppliedCaseEngine"
         ]
@@ -7862,8 +7864,8 @@
             "file": "./engine.js",
             "imports": [
               "runAppliedCaseEngine",
-              "usesCatalogEngine",
-              "registerCaseMethods"
+              "registerCaseMethods",
+              "registeredCaseMethod"
             ]
           },
           {
@@ -7897,13 +7899,6 @@
           "JULIAN_YEAR_S",
           "MAX_BIOT",
           "G_STANDARD",
-          "MAX_RE",
-          "MAX_TAU_P_RATIO",
-          "MAX_MEMORY_CORRECTION",
-          "MAX_DRIFT_RATIO",
-          "MAX_WALL_CORRECTION",
-          "MAX_FAXEN_LAST_TERM",
-          "MAX_WALL_EXCURSION",
           "APPLIED_CASE_RUNNERS",
           "CASE_METHOD_NAMES",
           "CASE_METHODS",
@@ -7920,6 +7915,7 @@
           "resistorParentVrmsV",
           "lumpedRadiatingTemperature",
           "sphereEigenvalues",
+          "sphereSeriesComputations",
           "sphereSeries",
           "lumpedCoolingQJ",
           "lumpedSphereMeanK",
@@ -7932,7 +7928,12 @@
           "faxenParallel",
           "brennerPerpendicular",
           "brownianSphereRegimeAt",
-          "runCaseBrownianSphere",
+          "brownianLangevinMsdM2",
+          "brownianHydroMsdM2",
+          "brownianMemoryCorrection",
+          "brownianMemoryAbs",
+          "brownianWallPerpD",
+          "brownianWallMsdM2",
           "LumpedRadiating"
         ],
         "reExported": [
@@ -7947,6 +7948,7 @@
           "resistorParentVrmsV",
           "lumpedRadiatingTemperature",
           "sphereEigenvalues",
+          "sphereSeriesComputations",
           "sphereSeries",
           "lumpedCoolingQJ",
           "lumpedSphereMeanK",
@@ -7959,19 +7961,17 @@
           "faxenParallel",
           "brennerPerpendicular",
           "brownianSphereRegimeAt",
-          "runCaseBrownianSphere"
+          "brownianLangevinMsdM2",
+          "brownianHydroMsdM2",
+          "brownianMemoryCorrection",
+          "brownianMemoryAbs",
+          "brownianWallPerpD",
+          "brownianWallMsdM2"
         ],
         "constants": [
           "JULIAN_YEAR_S",
           "MAX_BIOT",
           "G_STANDARD",
-          "MAX_RE",
-          "MAX_TAU_P_RATIO",
-          "MAX_MEMORY_CORRECTION",
-          "MAX_DRIFT_RATIO",
-          "MAX_WALL_CORRECTION",
-          "MAX_FAXEN_LAST_TERM",
-          "MAX_WALL_EXCURSION",
           "APPLIED_CASE_RUNNERS",
           "CASE_METHOD_NAMES",
           "CASE_METHODS",
@@ -28760,19 +28760,19 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 89807,
+    "totalLinesOfCode": 89884,
     "totalExports": 2857,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 942,
+    "totalFunctions": 949,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 409,
+    "totalConstants": 402,
     "totalReExports": 1411,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 24
+    "unusedExportsCount": 29
   }
 }

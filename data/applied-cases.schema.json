@@ -73,13 +73,14 @@
     },
     "check": {
       "type": "object",
-      "required": ["id", "premise", "quantity", "expr", "op", "bound", "threshold"],
+      "required": ["id", "premise", "quantity", "op", "bound", "threshold"],
       "additionalProperties": false,
       "properties": {
         "id": { "type": "string", "minLength": 1 },
         "premise": { "type": "string", "minLength": 1 },
         "quantity": { "type": "string", "minLength": 1 },
         "expr": { "type": "string", "minLength": 1 },
+        "method": { "type": "string", "minLength": 1 },
         "op": { "enum": ["<=", ">=", ">"] },
         "bound": { "type": "number" },
         "threshold": { "type": "string", "minLength": 1 },

@@ -14,11 +14,23 @@ export interface AppliedCaseCheckRecord {
   readonly id: string;
   readonly premise: string;
   readonly quantity: string;
-  readonly expr: string;
+  /**
+   * The check's value as a formula. Exactly one of `expr` and `method`:
+   * `method` exists for a value master's runner could hold as `NaN` (the
+   * expr path refuses NaN even with the Infinity opt-in), such as the
+   * brownian-sphere memory check at a `0/0` parent ratio.
+   */
+  readonly expr?: string;
+  /** The named method computing the check's value when `expr` is absent. */
+  readonly method?: string;
   readonly op: '<=' | '>=' | '>';
   readonly bound: number;
   readonly threshold: string;
-  /** The optional parameter keys the check depends on. The check is omitted when every one of them is absent. */
+  /**
+   * The optional parameter keys the check depends on. The check is omitted
+   * when every one of them is absent from the caller's inputs; an entry may
+   * also be `key=value`, unmet unless the input is present with that value.
+   */
   readonly needs?: readonly string[];
 }
 
@@ -28,7 +40,11 @@ export interface AppliedCaseOutputRecord {
   readonly symbol: string;
   readonly unit: string;
   readonly meaning: string;
-  /** The optional parameter keys the output depends on. The output is undefined when every one of them is absent. */
+  /**
+   * The optional parameter keys the output depends on. The output is undefined
+   * when every one of them is absent from the caller's inputs; an entry may
+   * also be `key=value`, unmet unless the input is present with that value.
+   */
   readonly needs?: readonly string[];
   readonly expr?: string;
   readonly method?: string;
@@ -104,7 +120,12 @@ export function catalogSemanticProblems(file: AppliedCaseFile, methodNames?: Rea
     seen.add(row.id);
     for (const check of row.checks) {
       if (!OPS.has(check.op)) problems.push(`${row.id}: check '${check.id}' has unknown op '${check.op}'`);
-      if (check.expr.trim().length === 0) problems.push(`${row.id}: check '${check.id}' has no expr`);
+      const kinds = [check.expr !== undefined, check.method !== undefined].filter(Boolean).length;
+      if (kinds !== 1) problems.push(`${row.id}: check '${check.id}' must have exactly one of expr, method`);
+      else if (check.expr !== undefined && check.expr.trim().length === 0) problems.push(`${row.id}: check '${check.id}' has no expr`);
+      else if (check.method !== undefined && methodNames !== undefined && !methodNames.has(check.method)) {
+        problems.push(`${row.id}: check '${check.id}' names unknown method '${check.method}'`);
+      }
     }
     if (methodNames !== undefined) {
       for (const output of row.outputs) {

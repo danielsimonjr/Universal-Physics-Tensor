@@ -1,0 +1,766 @@
+{
+  "valid": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": 2.135120099633636e-13,
+      "D_perp_m2_per_s": 2.1230429095192142e-13,
+      "MSD_hydro_m2": 8.579113376716534e-13,
+      "MSD_langevin_m2": 8.588787473858657e-13,
+      "MSD_m2": 8.58879129109923e-13,
+      "MSD_wall_m2": 8.540480398534544e-13,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -9.677914382695812e-16,
+      "hydro_deviation": 0.0011280786204506121,
+      "langevin_deviation": 4.4444464197823663e-7,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.001126252785120685,
+      "rms_displacement_m": 9.267573194261391e-7,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": 0.005656694976195364
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 5.553333333333333e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.001126252785120685,
+        "bound": 0.01
+      },
+      {
+        "id": "faxen-range",
+        "holds": true,
+        "value": 6.285354343601217e-12,
+        "bound": 0.01
+      },
+      {
+        "id": "wall",
+        "holds": true,
+        "value": 0.005656694976195364,
+        "bound": 0.01
+      },
+      {
+        "id": "wall-static",
+        "holds": true,
+        "value": 0.028390600566412755,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the wall is plane, rigid, no-slip and horizontal, and the gap h − a is many molecular sizes and roughness heights (no surface forces, no lubrication-scale slip)",
+      "the tracked axes are horizontal, so sedimentation (0.00000218 m over t) moves the sphere out of the plane but not along them"
+    ]
+  },
+  "d1": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 4.289556688358267e-13,
+      "MSD_langevin_m2": 4.2943937369293284e-13,
+      "MSD_m2": 4.294395645549615e-13,
+      "MSD_wall_m2": null,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -4.838957191347906e-16,
+      "hydro_deviation": 0.0011280786204506121,
+      "langevin_deviation": 4.4444464197823663e-7,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.001126252785120685,
+      "rms_displacement_m": 6.553163850804903e-7,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 5.553333333333333e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.001126252785120685,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the tracked axis is horizontal, so sedimentation (0.00000218 m over t) moves the sphere out of the plane but not along it"
+    ]
+  },
+  "d3": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 1.2868670065074802e-12,
+      "MSD_langevin_m2": 1.2883181210787986e-12,
+      "MSD_m2": 1.2883186936648846e-12,
+      "MSD_wall_m2": null,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -1.4516871574043718e-15,
+      "hydro_deviation": 0.0011280786204506121,
+      "langevin_deviation": 4.4444464197823663e-7,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.001126252785120796,
+      "rms_displacement_m": 0.0000011350412739917808,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 5.553333333333333e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.001126252785120796,
+        "bound": 0.01
+      },
+      {
+        "id": "drift",
+        "holds": false,
+        "value": 11.103239630670512,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)"
+    ]
+  },
+  "d3wall": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": 2.135120099633636e-13,
+      "D_perp_m2_per_s": 2.1230429095192142e-13,
+      "MSD_hydro_m2": 1.2868670065074802e-12,
+      "MSD_langevin_m2": 1.2883181210787986e-12,
+      "MSD_m2": 1.2883186936648846e-12,
+      "MSD_wall_m2": 1.2786566217572973e-12,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -1.4516871574043718e-15,
+      "hydro_deviation": 0.0011280786204506121,
+      "langevin_deviation": 4.4444464197823663e-7,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.001126252785120796,
+      "rms_displacement_m": 0.0000011350412739917808,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": 0.007556424252750826
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 5.553333333333333e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.001126252785120796,
+        "bound": 0.01
+      },
+      {
+        "id": "faxen-range",
+        "holds": true,
+        "value": 6.285354343601217e-12,
+        "bound": 0.01
+      },
+      {
+        "id": "wall",
+        "holds": true,
+        "value": 0.007556424252750826,
+        "bound": 0.01
+      },
+      {
+        "id": "wall-static",
+        "holds": true,
+        "value": 0.028390600566412755,
+        "bound": 0.1
+      },
+      {
+        "id": "drift",
+        "holds": false,
+        "value": 11.103239630670512,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the wall is plane, rigid, no-slip and horizontal, and the gap h − a is many molecular sizes and roughness heights (no surface forces, no lubrication-scale slip)"
+    ]
+  },
+  "wallNear": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": 1.7493269813536848e-13,
+      "D_perp_m2_per_s": 1.3683344650746511e-13,
+      "MSD_hydro_m2": 8.579113376716534e-13,
+      "MSD_langevin_m2": 8.588787473858657e-13,
+      "MSD_m2": 8.58879129109923e-13,
+      "MSD_wall_m2": 6.997307925414739e-13,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -9.677914382695812e-16,
+      "hydro_deviation": 0.0011280786204506121,
+      "langevin_deviation": 4.4444464197823663e-7,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.001126252785120685,
+      "rms_displacement_m": 9.267573194261391e-7,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": 0.2274422367356601
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 5.553333333333333e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.001126252785120685,
+        "bound": 0.01
+      },
+      {
+        "id": "faxen-range",
+        "holds": true,
+        "value": 0.0003157001637694599,
+        "bound": 0.01
+      },
+      {
+        "id": "wall",
+        "holds": false,
+        "value": 0.2274422367356601,
+        "bound": 0.01
+      },
+      {
+        "id": "wall-static",
+        "holds": false,
+        "value": 0.9573365412767925,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the wall is plane, rigid, no-slip and horizontal, and the gap h − a is many molecular sizes and roughness heights (no surface forces, no lubrication-scale slip)",
+      "the tracked axes are horizontal, so sedimentation (0.00000218 m over t) moves the sphere out of the plane but not along them"
+    ]
+  },
+  "wallJustAbove": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": 1.0600706297087806e-13,
+      "D_perp_m2_per_s": 3.3862737611233114e-14,
+      "MSD_hydro_m2": 8.579113376716534e-13,
+      "MSD_langevin_m2": 8.588787473858657e-13,
+      "MSD_m2": 8.58879129109923e-13,
+      "MSD_wall_m2": 4.2402825188351223e-13,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -9.677914382695812e-16,
+      "hydro_deviation": 0.0011280786204506121,
+      "langevin_deviation": 4.4444464197823663e-7,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.001126252785120685,
+      "rms_displacement_m": 9.267573194261391e-7,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": 1.0255233591036093
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 5.553333333333333e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.001126252785120685,
+        "bound": 0.01
+      },
+      {
+        "id": "faxen-range",
+        "holds": false,
+        "value": 0.05087577560119905,
+        "bound": 0.01
+      },
+      {
+        "id": "wall",
+        "holds": false,
+        "value": 1.0255233591036093,
+        "bound": 0.01
+      },
+      {
+        "id": "wall-static",
+        "holds": false,
+        "value": 3.0230582329482028,
+        "bound": 0.1
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the wall is plane, rigid, no-slip and horizontal, and the gap h − a is many molecular sizes and roughness heights (no surface forces, no lubrication-scale slip)",
+      "the tracked axes are horizontal, so sedimentation (0.00000218 m over t) moves the sphere out of the plane but not along them"
+    ]
+  },
+  "rhoEqual": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 1.28686729304974e-12,
+      "MSD_langevin_m2": 1.2883184079444276e-12,
+      "MSD_m2": 1.2883186936648846e-12,
+      "MSD_wall_m2": null,
+      "Re": 0.0009819911110637235,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -1.4514006151446556e-15,
+      "hydro_deviation": 0.0011278557027469827,
+      "langevin_deviation": 2.2177782699195348e-7,
+      "m_kg": 4.180412624376818e-15,
+      "memory_correction": -0.0011262527853429516,
+      "rms_displacement_m": 0.0000011350412739917808,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 3.326666666666667e-7,
+      "v_sed_m_per_s": 0,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0009819911110637235,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 3.326666666666667e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.0011262527853429516,
+        "bound": 0.01
+      },
+      {
+        "id": "drift",
+        "holds": true,
+        "value": 0,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)"
+    ]
+  },
+  "rhoBelow": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 8.579116236419728e-13,
+      "MSD_langevin_m2": 8.588790336789088e-13,
+      "MSD_m2": 8.58879129109923e-13,
+      "MSD_wall_m2": null,
+      "Re": 0.0013873557071809302,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -9.675054679502276e-16,
+      "hydro_deviation": 0.001127744911350037,
+      "langevin_deviation": 1.1111112341311014e-7,
+      "m_kg": 2.0943951023931953e-15,
+      "memory_correction": -0.0011262527854530857,
+      "rms_displacement_m": 9.267573194261391e-7,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 2.22e-7,
+      "v_sed_m_per_s": -0.0000010852692666666663,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0013873557071809302,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 2.22e-7,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.0011262527854530857,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the tracked axes are horizontal, so sedimentation (0.00000109 m over t) moves the sphere out of the plane but not along them"
+    ]
+  },
+  "tShort": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 1.1595537555528311e-32,
+      "MSD_langevin_m2": 1.4493584216711113e-32,
+      "MSD_m2": 1.2883186936648845e-25,
+      "MSD_wall_m2": null,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -1.2883185777095089e-25,
+      "hydro_deviation": 11110468.760417992,
+      "langevin_deviation": 8888888.555555569,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.0003422381921415196,
+      "rms_displacement_m": 3.5893156641132646e-13,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": false,
+        "value": 5553333.333333333,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.0003422381921415196,
+        "bound": 0.01
+      },
+      {
+        "id": "drift",
+        "holds": true,
+        "value": 1.1103239630670516e-12,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)"
+    ]
+  },
+  "tBallistic": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 6.933482143885331e-23,
+      "MSD_langevin_m2": 9.59032808056694e-23,
+      "MSD_m2": 8.58879129109923e-21,
+      "MSD_wall_m2": null,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -8.519456469660377e-21,
+      "hydro_deviation": 122.87413874965733,
+      "langevin_deviation": 88.55680367705938,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.09800113519620657,
+      "rms_displacement_m": 9.267573194261392e-11,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": false,
+        "value": 55.53333333333333,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": false,
+        "value": 0.09800113519620657,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the tracked axes are horizontal, so sedimentation (2.18e-14 m over t) moves the sphere out of the plane but not along them"
+    ]
+  },
+  "tMemory": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 4.0369693346182085e-19,
+      "MSD_langevin_m2": 7.760827370586393e-19,
+      "MSD_m2": 1.2883186936648846e-18,
+      "MSD_wall_m2": null,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -8.846217602030637e-19,
+      "hydro_deviation": 2.191301659433402,
+      "langevin_deviation": 0.6600275101436017,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.4158207010130466,
+      "rms_displacement_m": 1.1350412739917806e-9,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": false,
+        "value": 0.5553333333333333,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": false,
+        "value": 0.4158207010130466,
+        "bound": 0.01
+      },
+      {
+        "id": "drift",
+        "holds": true,
+        "value": 0.000011103239630670514,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)"
+    ]
+  },
+  "tLong": {
+    "outputs": {
+      "D_m2_per_s": 2.1471978227748074e-13,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 8.588781609386108e-7,
+      "MSD_langevin_m2": 8.588791291095414e-7,
+      "MSD_m2": 8.58879129109923e-7,
+      "MSD_wall_m2": null,
+      "Re": 0.0006936778535904651,
+      "gamma_kg_per_s": 1.8849555921538757e-8,
+      "hydro_correction_m2": -9.68171312219227e-13,
+      "hydro_deviation": 0.0000011272510540560887,
+      "langevin_deviation": 4.4431125445498765e-13,
+      "m_kg": 8.377580409572781e-15,
+      "memory_correction": -0.0000011272492278502355,
+      "rms_displacement_m": 0.0009267573194261392,
+      "tau_f_s": 9.979999999999998e-7,
+      "tau_p_s": 5.553333333333333e-7,
+      "v_sed_m_per_s": 0.0000021836140666666663,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": true,
+        "value": 0.0006936778535904651,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 5.553333333333333e-13,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.0000011272492278502355,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the tracked axes are horizontal, so sedimentation (2.18 m over t) moves the sphere out of the plane but not along them"
+    ]
+  },
+  "reLarge": {
+    "outputs": {
+      "D_m2_per_s": 4.294395645549614e-15,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 2.562060790195823e-12,
+      "MSD_langevin_m2": 2.576525733042984e-12,
+      "MSD_m2": 2.5766373873297683e-12,
+      "MSD_wall_m2": null,
+      "Re": 1.8492062120388888,
+      "gamma_kg_per_s": 9.42477796076938e-7,
+      "hydro_correction_m2": -1.4576597133945376e-14,
+      "hydro_deviation": 0.005689403307573837,
+      "langevin_deviation": 0.0000433352111923746,
+      "m_kg": 4.08407044966673e-9,
+      "memory_correction": -0.005611370277580741,
+      "rms_displacement_m": 0.0000016051907635324123,
+      "tau_f_s": 0.0024950000000000003,
+      "tau_p_s": 0.0046105555555555535,
+      "v_sed_m_per_s": 0.03705824072222222,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": false,
+        "value": 1.8492062120388888,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": true,
+        "value": 0.00004610555555555553,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": true,
+        "value": 0.005611370277580741,
+        "bound": 0.01
+      },
+      {
+        "id": "drift",
+        "holds": false,
+        "value": 15989598057288.537,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)"
+    ]
+  },
+  "reSmall": {
+    "outputs": {
+      "D_m2_per_s": 2.147197822774807e-15,
+      "D_parallel_m2_per_s": null,
+      "D_perp_m2_per_s": null,
+      "MSD_hydro_m2": 7.424515624163957e-19,
+      "MSD_langevin_m2": 1.6034511878784741e-18,
+      "MSD_m2": 8.588791291099228e-18,
+      "MSD_wall_m2": null,
+      "Re": 0.10896277777777778,
+      "gamma_kg_per_s": 0.000001884955592153876,
+      "hydro_correction_m2": -7.846339728682832e-18,
+      "hydro_deviation": 10.568150335822581,
+      "langevin_deviation": 4.356440754809041,
+      "m_kg": 4.39822971502571e-9,
+      "memory_correction": -0.3454990503257438,
+      "rms_displacement_m": 2.9306639676188105e-9,
+      "tau_f_s": 0.01,
+      "tau_p_s": 0.003444444444444444,
+      "v_sed_m_per_s": 0.0010896277777777779,
+      "wall_deviation": null
+    },
+    "checks": [
+      {
+        "id": "creeping-flow",
+        "holds": false,
+        "value": 0.10896277777777778,
+        "bound": 0.1
+      },
+      {
+        "id": "overdamped",
+        "holds": false,
+        "value": 3.4444444444444438,
+        "bound": 0.01
+      },
+      {
+        "id": "memory",
+        "holds": false,
+        "value": 0.3454990503257438,
+        "bound": 0.01
+      }
+    ],
+    "unchecked": [
+      "the particle is a rigid sphere and a is its hydrodynamic radius (a coating or a shell changes it)",
+      "the tracked axes are horizontal, so sedimentation (0.00000109 m over t) moves the sphere out of the plane but not along them"
+    ]
+  }
+}

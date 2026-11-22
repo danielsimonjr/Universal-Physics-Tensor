@@ -26,8 +26,10 @@ import type { CaseResult } from '../../src/cases/types.js';
 const require = createRequire(import.meta.url);
 const golden = require('./golden/case-resistor-noise.identity.json') as IdentityGolden;
 const lumpedGolden = require('./golden/case-lumped-cooling.identity.json') as Record<string, IdentitySnapshot>;
+const brownianGolden = require('./golden/case-brownian-sphere.identity.json') as Record<string, IdentitySnapshot>;
 const schema = dataSchema('applied-cases.json');
 const ID = 'case-resistor-noise';
+const BROWNIAN_ID = 'case-brownian-sphere';
 const LUMPED_ID = 'case-lumped-cooling';
 
 interface IdentitySnapshot {
@@ -159,6 +161,56 @@ describe('case-lumped-cooling output identity (S7)', () => {
     for (const [name, inputs] of Object.entries(grid)) {
       const got = runAppliedCaseEngine(record, inputs);
       expect(() => assertIdentity(got, lumpedGolden[name]!, `mutated ${name}`)).toThrow(/to be less (or equal )?than/);
+    }
+  });
+});
+
+describe('case-brownian-sphere output identity (S8)', () => {
+  // The grid the committed golden was generated from master's
+  // runCaseBrownianSphere before the deletion: d = 1, 2, 3; with and without
+  // h_m (just above a_m at 1.2a and 3a, and far away at 100a); rho_p above,
+  // below and equal to rho_f; t short and long against tau_p (~5.6e-7 s) and
+  // tau_f (~1e-6 s); small and large Reynolds. Every value is finite (JSON
+  // cannot carry Infinity); the master NaN/Infinity corners are pinned in
+  // tests/cases/applied-case-engine.test.ts instead.
+  const base = {
+    T_K: 293.15, eta_Pa_s: 1e-3, a_m: 1e-6, rho_p_kg_per_m3: 2000, rho_f_kg_per_m3: 998, t_s: 1, d: 2,
+  };
+  const grid: Record<string, Record<string, number>> = {
+    valid: { ...base, h_m: 100e-6 },
+    d1: { ...base, d: 1 },
+    d3: { ...base, d: 3 },
+    d3wall: { ...base, d: 3, h_m: 100e-6 },
+    wallNear: { ...base, h_m: 3e-6 },
+    wallJustAbove: { ...base, h_m: 1.2e-6 },
+    rhoEqual: { ...base, rho_p_kg_per_m3: 998, d: 3 },
+    rhoBelow: { ...base, rho_p_kg_per_m3: 500 },
+    tShort: { ...base, t_s: 1e-13, d: 3 },
+    tBallistic: { ...base, t_s: 1e-8, d: 2 },
+    tMemory: { ...base, t_s: 1e-6, d: 3 },
+    tLong: { ...base, t_s: 1e6, d: 2 },
+    reLarge: { T_K: 293.15, eta_Pa_s: 1e-3, a_m: 50e-6, rho_p_kg_per_m3: 7800, rho_f_kg_per_m3: 998, t_s: 100, d: 3 },
+    reSmall: { T_K: 293.15, eta_Pa_s: 1e-3, a_m: 100e-6, rho_p_kg_per_m3: 1050, rho_f_kg_per_m3: 1000, t_s: 1e-3, d: 2 },
+  };
+
+  for (const [name, inputs] of Object.entries(grid)) {
+    it(`the ${name} grid point matches the committed golden`, () => {
+      assertIdentity(runAppliedCaseEngine(appliedCaseRecord(BROWNIAN_ID), inputs), brownianGolden[name]!, name);
+    });
+  }
+
+  it('CONTROL: mutating the D prefactor (6 → 5, a coefficient change) fails every golden point', () => {
+    const text = dataText('applied-cases.json');
+    const mutated = text.replace(
+      '"expr": "k_B*T_K/(6*pi*eta_Pa_s*a_m)"',
+      '"expr": "k_B*T_K/(5*pi*eta_Pa_s*a_m)"',
+    );
+    expect(mutated, 'the D expr must occur once to replace').not.toBe(text);
+    const file = readAppliedCaseFile(mutated, schema);
+    const record = file.cases.find((c) => c.id === BROWNIAN_ID)!;
+    for (const [name, inputs] of Object.entries(grid)) {
+      const got = runAppliedCaseEngine(record, inputs);
+      expect(() => assertIdentity(got, brownianGolden[name]!, `mutated ${name}`)).toThrow(/to be less (or equal )?than/);
     }
   });
 });
