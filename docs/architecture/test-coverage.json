@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 762,
+    "totalTestFiles": 763,
     "testedCount": 382,
     "directlyTestedCount": 349,
     "untestedCount": 11,
@@ -10355,6 +10355,7 @@
       "tests/numerical/einstein-vacuum-schwarzschild.test.ts",
       "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parse-cache.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
       "tests/numerical/geometrized.test.ts",
       "tests/numerical/gl4-integrator.test.ts",
@@ -12917,6 +12918,7 @@
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/formula-conformance.mathts.test.ts",
       "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parse-cache.test.ts",
       "tests/numerical/formula.test.ts",
       "tests/numerical/mathts-067-delegation.test.ts",
       "tests/numerical/parse-physics.test.ts"
@@ -15949,6 +15951,7 @@
       "tests/numerical/einstein-vacuum-schwarzschild.test.ts",
       "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parse-cache.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
       "tests/numerical/geometrized.test.ts",
       "tests/numerical/gl4-integrator.test.ts",
@@ -16875,6 +16878,7 @@
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/formula-conformance.mathts.test.ts",
       "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parse-cache.test.ts",
       "tests/numerical/formula.test.ts",
       "tests/numerical/mathts-067-delegation.test.ts",
       "tests/numerical/parse-physics.test.ts"
@@ -30399,6 +30403,10 @@
       "src/core/constants.ts",
       "src/numerical/formula-mathts.ts",
       "src/numerical/formula-contract.ts"
+    ],
+    "tests/numerical/formula-parse-cache.test.ts": [
+      "src/numerical/formula-mathts.ts",
+      "src/core/constants.ts"
     ],
     "tests/numerical/formula-registry.test.ts": [
       "src/numerical/formula-registry.ts"

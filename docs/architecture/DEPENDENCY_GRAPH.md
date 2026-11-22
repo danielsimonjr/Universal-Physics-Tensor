@@ -7061,8 +7061,8 @@ The codebase is organized into the following modules:
 | `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EulerNumberError, FormulaError, unknownFunctionMessage, FormulaValueError` | Import |
 
 **Exports:**
-- Functions: `parseFormula`
-- Constants: `mathtsFormulaParser`
+- Functions: `createMathtsFormulaParser`, `parseFormula`
+- Constants: `MAX_FORMULA_CACHE_ENTRIES`, `mathtsFormulaParser`
 
 ---
 
@@ -7857,12 +7857,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89883 |
-| Total Exports | 2868 |
+| Total Lines of Code | 89911 |
+| Total Exports | 2870 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 939 |
+| Total Functions | 940 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |
