@@ -27,11 +27,8 @@ export function registerCaseMethods(map: CaseMethodMap): void {
 
 const DELEGATED_RUN_METHODS = new Set(['runCaseResistorNoise', 'runCaseLumpedCooling', 'runCaseBrownianSphere']);
 
-const ENGINE_CASE_IDS = new Set(['case-skin-depth', 'case-kepler-rv', 'case-damped-resonator']);
-
 /** True when the record drives outputs through the catalog engine rather than a legacy runner. @internal */
 export function usesCatalogEngine(record: AppliedCaseRecord): boolean {
-  if (ENGINE_CASE_IDS.has(record.id)) return true;
   const wired = (o: AppliedCaseOutputRecord) =>
     o.expr !== undefined || o.relation !== undefined || o.method !== undefined;
   if (!record.outputs.every(wired)) return false;

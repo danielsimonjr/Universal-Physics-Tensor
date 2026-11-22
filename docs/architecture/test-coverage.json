@@ -1,16 +1,15 @@
 {
   "metadata": {
     "totalSourceFiles": 393,
-    "totalTestFiles": 764,
-    "testedCount": 382,
-    "directlyTestedCount": 349,
-    "untestedCount": 11,
-    "coveragePercent": "97.2",
-    "directCoveragePercent": "88.8"
+    "totalTestFiles": 765,
+    "testedCount": 383,
+    "directlyTestedCount": 350,
+    "untestedCount": 10,
+    "coveragePercent": "97.5",
+    "directCoveragePercent": "89.1"
   },
   "untestedFiles": [
     "src/bridges/validity.ts",
-    "src/cases/engine.ts",
     "src/cli/bindings.ts",
     "src/cli/commands/_discovery-opts.ts",
     "src/cli/determination.ts",
@@ -145,6 +144,7 @@
     "src/canonical/structural.ts",
     "src/cases/catalog-checks.ts",
     "src/cases/catalog.ts",
+    "src/cases/engine.ts",
     "src/cases/index.ts",
     "src/cases/methods.ts",
     "src/cases/quadrature.ts",
@@ -524,6 +524,7 @@
     "src/canonical/structural.ts",
     "src/cases/catalog-checks.ts",
     "src/cases/catalog.ts",
+    "src/cases/engine.ts",
     "src/cases/index.ts",
     "src/cases/methods.ts",
     "src/cases/quadrature.ts",
@@ -3038,9 +3039,13 @@
       "tests/cases/applied-case-engine.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
-      "tests/cases/cases-directory.test.ts"
+      "tests/cases/cases-directory.test.ts",
+      "tests/cases/dead-runners.test.ts"
     ],
-    "src/cases/engine.ts": [],
+    "src/cases/engine.ts": [
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/dead-runners.test.ts"
+    ],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -3075,6 +3080,7 @@
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/damped-resonator-spectrum.test.ts",
       "tests/cases/damped-resonator.test.ts",
+      "tests/cases/dead-runners.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/lumped-cooling-inverse-time.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -3099,6 +3105,7 @@
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/damped-resonator-spectrum.test.ts",
       "tests/cases/damped-resonator.test.ts",
+      "tests/cases/dead-runners.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/lumped-cooling-inverse-time.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -10258,6 +10265,7 @@
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/damped-resonator-spectrum.test.ts",
       "tests/cases/damped-resonator.test.ts",
+      "tests/cases/dead-runners.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/lumped-cooling-inverse-time.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -14903,9 +14911,13 @@
       "tests/cases/applied-case-engine.test.ts",
       "tests/cases/applied-cases-catalog.test.ts",
       "tests/cases/applied-cases-output-wiring.test.ts",
-      "tests/cases/cases-directory.test.ts"
+      "tests/cases/cases-directory.test.ts",
+      "tests/cases/dead-runners.test.ts"
     ],
-    "src/cases/engine.ts": [],
+    "src/cases/engine.ts": [
+      "tests/cases/applied-case-engine.test.ts",
+      "tests/cases/dead-runners.test.ts"
+    ],
     "src/cases/index.ts": [
       "tests/bridges/evaluators.test.ts",
       "tests/bridges/one-evaluate-path.test.ts",
@@ -14922,6 +14934,7 @@
       "tests/cases/brownian-sphere.test.ts",
       "tests/cases/damped-resonator-spectrum.test.ts",
       "tests/cases/damped-resonator.test.ts",
+      "tests/cases/dead-runners.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/lumped-cooling-inverse-time.test.ts",
       "tests/cases/lumped-cooling.test.ts",
@@ -15909,6 +15922,7 @@
       "tests/bridges/evaluators.test.ts",
       "tests/canonical/constant-spellings.test.ts",
       "tests/canonical/numeric-prefactor.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/resistor-noise-closed-form.test.ts",
       "tests/cases/skin-depth.test.ts",
@@ -19774,11 +19788,12 @@
     "tests/cases/applied-case-engine.test.ts": [
       "src/cases/index.ts",
       "src/cases/types.ts",
-      "src/cases/methods.ts",
-      "src/core/constants.ts",
+      "src/cases/catalog.ts",
+      "src/cases/engine.ts",
       "src/bridges/evaluator-inputs.ts",
       "src/bridges/expr-parse.ts",
-      "src/cases/catalog.ts",
+      "src/cases/methods.ts",
+      "src/core/constants.ts",
       "src/core/data-file.ts"
     ],
     "tests/cases/applied-cases-catalog.test.ts": [
@@ -19827,6 +19842,13 @@
       "src/cases/methods.ts",
       "src/cases/types.ts",
       "src/core/constants.ts"
+    ],
+    "tests/cases/dead-runners.test.ts": [
+      "src/cases/catalog.ts",
+      "src/cases/methods.ts",
+      "src/cases/types.ts",
+      "src/core/constants.ts",
+      "src/cases/engine.ts"
     ],
     "tests/cases/kepler-rv.test.ts": [
       "src/cases/methods.ts",

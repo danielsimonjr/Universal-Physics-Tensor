@@ -3,7 +3,7 @@ metadata:
   version: 16.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2870
+  totalExports: 2856
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5371,12 +5371,8 @@ modules:
       internalDependencies:
         - file: ../core/constants.js
           imports:
-            - C_SI
-            - EPS0_SI
-            - G_SI
             - H_SI
             - K_B_SI
-            - MU0_SI
             - SIGMA_SB_SI
         - file: ../dimensional/units.js
           imports:
@@ -5422,18 +5418,7 @@ modules:
           reExport: true
       exports:
         - SIGMA_SB_SI
-        - MAX_DISPLACEMENT_RATIO
-        - MAX_MFP_RATIO
-        - MAX_OMEGA_TAU
-        - MIN_THICKNESS_RATIO
         - JULIAN_YEAR_S
-        - MAX_MASS_RATIO
-        - MAX_RADIUS_RATIO
-        - MAX_WEAK_FIELD
-        - MAX_APSIDAL_MISFIT
-        - MIN_Q_LORENTZIAN
-        - MAX_RESOLUTION_RATIO
-        - MAX_THERMAL_RATIO
         - CLASSICAL_MAX_X
         - FLAT_BAND_MAX_WRC
         - AMPLIFIER_MAX_REL_SIGMA
@@ -5458,11 +5443,8 @@ modules:
         - BROWNIAN_SPHERE_CASE
         - maxwellDepthFactor
         - skinDeltaMaxwellM
-        - runCaseSkinDepth
-        - runCaseKeplerRv
         - windowedLinewidthHz
         - windowedLinewidthCatalogHz
-        - runCaseDampedResonator
         - runCaseResistorNoise
         - lumpedRadiatingTemperature
         - sphereEigenvalues
@@ -5481,11 +5463,8 @@ modules:
       functions:
         - maxwellDepthFactor
         - skinDeltaMaxwellM
-        - runCaseSkinDepth
-        - runCaseKeplerRv
         - windowedLinewidthHz
         - windowedLinewidthCatalogHz
-        - runCaseDampedResonator
         - runCaseResistorNoise
         - lumpedRadiatingTemperature
         - sphereEigenvalues
@@ -5498,18 +5477,7 @@ modules:
         - brownianSphereRegimeAt
         - runCaseBrownianSphere
       constants:
-        - MAX_DISPLACEMENT_RATIO
-        - MAX_MFP_RATIO
-        - MAX_OMEGA_TAU
-        - MIN_THICKNESS_RATIO
         - JULIAN_YEAR_S
-        - MAX_MASS_RATIO
-        - MAX_RADIUS_RATIO
-        - MAX_WEAK_FIELD
-        - MAX_APSIDAL_MISFIT
-        - MIN_Q_LORENTZIAN
-        - MAX_RESOLUTION_RATIO
-        - MAX_THERMAL_RATIO
         - CLASSICAL_MAX_X
         - FLAT_BAND_MAX_WRC
         - AMPLIFIER_MAX_REL_SIGMA
@@ -19944,14 +19912,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 89911
-  totalExports: 2870
+  totalLinesOfCode: 89697
+  totalExports: 2856
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 940
+  totalFunctions: 937
   totalTypeGuards: 17
   totalEnums: 0
-  totalConstants: 424
+  totalConstants: 413
   totalReExports: 1411
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0

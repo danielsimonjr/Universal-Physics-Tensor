@@ -20,8 +20,8 @@ interface DepsStatistics {
   totalExports: number;
 }
 
-function readApiMd(text: string = readFileSync(resolve(root, 'docs/architecture/API.md'), 'utf8')): string {
-  return text;
+function readApiMd(): string {
+  return readFileSync(resolve(root, 'docs/architecture/API.md'), 'utf8');
 }
 
 function graphTotalExports(): number {
@@ -57,8 +57,8 @@ describe('API.md docs:deps totalExports matches dependency-graph.json', () => {
 
   it('CONTROL: a wrong digit in the docs:deps sentence fails the pin', () => {
     const mutated = apiMd.replace(
-      /(`bun run docs:deps`[\s\S]*?`totalExports` )(\d+)/,
-      `$10`,
+      /(`bun run docs:deps`[^\n]*?`totalExports` )(\d+)/,
+      (_, prefix: string) => `${prefix}0`,
     );
     expect(mutated, 'the matcher must have found a docs:deps totalExports digit to replace').not.toBe(apiMd);
     expect(citedDocsDepsTotalExports(mutated)).not.toBe(fromJson);
