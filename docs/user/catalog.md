@@ -262,10 +262,11 @@ upt eval "exp(1)"
 
 and the name `euler` is refused outright, with a message that says the same
 thing (`euler is not Euler's number. Write it as exp(x), for example exp(1). A
-bare e is the elementary charge. E is energy.`). The same rule holds inside
-bindings: a bare `e` in `e=<number>` is the elementary charge, and an explicit
-`e=<number>` binding replaces the CODATA value. `E` is energy and is its own
-binding argument (`upt eval E E=1eV`). `e_charge` is the same charge as `e`: a
+bare e is the elementary charge. E is energy.`). A bare `e` inside an
+expression is the elementary charge (the CODATA value). An explicit
+`e=<number>` binding replaces that CODATA value for that invocation. `E` is
+energy and is its own binding argument (`upt eval E E=1eV`). `e_charge` is the
+same charge as `e`: a
 binding of one spelling fans out to the other, two spellings that disagree are
 refused, and a formula that writes both names is twice that charge, so
 `upt eval "e + e_charge" e_charge=3C` prints `6 C`, not `3 C`.

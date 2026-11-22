@@ -15,7 +15,8 @@ nothing validates prose and the next reader cannot tell.
 - **2 `244a57a2`.** `getting-started.md` describes `upt help` as full usage and flags, not a one-line list, and does not enumerate a closed "have none" set. The user-docs test checks live `upt help` blocks (each more than two lines; some have `e.g.`, some do not).
 - **3 `8dda8148`.** Drift guard lookbehind `(?<![-.+\w])`, plus `(?!\s+(?:nm|K)\b)`. CONTROL negatives: `0.109`, `3.109 m`, `1e+109`, `121 nm`, `160 K`.
 - **NOTES heading restored `d631ffe4`.** Reinserted `## As of 2026-11-22 (PR #821 Composer FIX LIST)` above that PR's five bullets. The S11 edit had overwritten the heading into the S11 section; new entries go above existing headings and do not replace them.
-- **catalog alpha (in progress).** `PhysicalConstants.alpha` is the dimensionless fine-structure constant, not a Planck unit.
+- **catalog alpha `70279024`.** `PhysicalConstants.alpha` is the dimensionless fine-structure constant, not a Planck unit.
+- **e vs e= rebinding (in progress).** Catalog separates a bare `e` in an expression (CODATA charge) from `e=<number>` (replaces that value for the invocation).
 
 ## As of 2026-11-22 (PR #822 Composer FIX LIST)
 

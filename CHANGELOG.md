@@ -24,6 +24,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- PR #822 Neon REQUEST CHANGES (non-blocking): catalog prose separates a bare `e` inside an expression (the CODATA elementary charge) from an explicit `e=<number>` rebinding (replaces that value for the invocation).
+
 - PR #822 Neon REQUEST CHANGES (non-blocking): `PhysicalConstants.alpha` is the dimensionless fine-structure constant, not a Planck unit. `docs/user/catalog.md` says so.
 - PR #822 Neon REQUEST CHANGES (non-blocking): restored `## As of 2026-11-22 (PR #821 Composer FIX LIST)` above that PR's five bullets in `NOTES.md` (`d631ffe4`). New entries go above existing headings and do not replace them.
 
