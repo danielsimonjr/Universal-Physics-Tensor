@@ -40,13 +40,29 @@ interface MathNode {
 /** Minimal structural shape of the @danielsimonjr/mathts-functions module. */
 interface MathtsFunctionsModule {
   parse(expr: string): MathNode;
+  compileExpr(
+    expr: string,
+    options: { physics: true },
+  ): { evaluate(scope: Record<string, number>): unknown };
 }
+
+/** The compiled-formula cache holds at most this many expression texts; the oldest is evicted first. @internal */
+export const MAX_FORMULA_CACHE_ENTRIES = 2048;
 
 /**
  * Build a {@link FormulaParser} bound to an already-loaded mathts-functions
  * module. Pure (no I/O) — the dynamic import lives in the registry.
+ *
+ * Compiled formulas are memoized per expression text in a bounded FIFO map
+ * (`MAX_FORMULA_CACHE_ENTRIES` entries, oldest evicted). Every cached
+ * `CompiledFormula` is frozen before it is cached, so a caller cannot mutate
+ * a shared entry; `evaluate(scope)` still receives the caller's scope on
+ * every call, so no numeric result is cached and a scope entry always wins
+ * over the built-in defaults. A formula that fails to parse is never cached:
+ * it throws before any cache write and recompiles on the next attempt.
+ * @internal
  */
-function createMathtsFormulaParser(
+export function createMathtsFormulaParser(
   mod: MathtsFunctionsModule,
 ): FormulaParser {
   const builtinCache = new Map<string, boolean>();
@@ -96,9 +112,13 @@ function createMathtsFormulaParser(
     if (!isBuiltin(name)) shims[name] = (...args) => callBuiltinFunction(name, args);
   }
 
+  const formulaCache = new Map<string, CompiledFormula>();
+
   return {
     parse(expr: string): CompiledFormula {
       if (!expr || !expr.trim()) throw new FormulaError('empty formula');
+      const cached = formulaCache.get(expr);
+      if (cached !== undefined) return cached;
       let node: MathNode;
       try {
         node = mod.parse(expr);
@@ -139,10 +159,10 @@ function createMathtsFormulaParser(
 
       // `compileExpr` applies `{ physics: true }` on each evaluation. Bare `e` is the SI
       // magnitude through the `e: E_SI` default below, and a scope entry for `e` wins.
-      const compiled = compileExpr(expr, PHYSICS);
-      return {
+      const compiled = mod.compileExpr(expr, PHYSICS);
+      const formula: CompiledFormula = Object.freeze({
         source: expr,
-        variables,
+        variables: Object.freeze(variables),
         evaluate(scope: Record<string, number>): number {
           if (unknownCallee !== undefined) throw new FormulaError(unknownFunctionMessage(unknownCallee));
           let result: unknown;
@@ -165,7 +185,14 @@ function createMathtsFormulaParser(
           }
           return result;
         },
-      };
+      });
+      if (formulaCache.size >= MAX_FORMULA_CACHE_ENTRIES) {
+        // FIFO: drop the oldest entry. `Map` iteration is insertion order.
+        const oldest = formulaCache.keys().next().value;
+        if (oldest !== undefined) formulaCache.delete(oldest);
+      }
+      formulaCache.set(expr, formula);
+      return formula;
     },
   };
 }
@@ -188,6 +215,7 @@ const mathTsModule: MathtsFunctionsModule = {
   // this parser reads (`evaluate`, `filter`, `isSymbolNode`, `isFunctionNode`,
   // `name`, `fn`), every member of which exists on a MathTS node.
   parse: (expr) => parseMathTs(expr) as unknown as MathNode,
+  compileExpr: (expr, options) => compileExpr(expr, options),
 };
 
 /** The MathTS formula parser. @internal */

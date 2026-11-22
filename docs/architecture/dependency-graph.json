@@ -4,7 +4,7 @@
     "version": "16.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2868
+    "totalExports": 2870
   },
   "entryPoints": [
     {
@@ -26572,13 +26572,17 @@
           }
         ],
         "exports": [
+          "MAX_FORMULA_CACHE_ENTRIES",
           "mathtsFormulaParser",
+          "createMathtsFormulaParser",
           "parseFormula"
         ],
         "functions": [
+          "createMathtsFormulaParser",
           "parseFormula"
         ],
         "constants": [
+          "MAX_FORMULA_CACHE_ENTRIES",
           "mathtsFormulaParser"
         ]
       },
@@ -28786,14 +28790,14 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 89883,
-    "totalExports": 2868,
+    "totalLinesOfCode": 89911,
+    "totalExports": 2870,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 939,
+    "totalFunctions": 940,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 423,
+    "totalConstants": 424,
     "totalReExports": 1411,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
