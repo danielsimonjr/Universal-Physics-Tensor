@@ -130,6 +130,8 @@ jobs:
         run: bun scripts/catalog-census.ts --check
       - name: Fail when the CLI reference is stale
         run: bun scripts/cli-reference.ts --check
+      - name: Fail when a public-surface TSDoc gap remains
+        run: bun scripts/public-tsdoc-gaps.ts --check
       - name: Fail when the generated Lean table is stale
         run: bun scripts/generate-physjs-table.ts --check
       # The Lean index (lean/ listing, theorem -> file table) is read from this repository's lean/,
