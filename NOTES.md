@@ -18,7 +18,8 @@ nothing validates prose and the next reader cannot tell.
 - **catalog alpha `70279024`.** `PhysicalConstants.alpha` is the dimensionless fine-structure constant, not a Planck unit.
 - **e vs e= rebinding `f0fc85c2`.** Catalog separates a bare `e` in an expression (CODATA charge) from `e=<number>` (replaces that value for the invocation).
 - **clone install `87bb15eb`.** Node-without-Bun clone path is `npm install --no-package-lock` then `npm run build` (`bun.lock` only).
-- **e_charge bash fence (in progress).** Catalog fence `upt eval "e + e_charge" e_charge=3C` → `6 C`. `statedOutput` longest-span so `` `upt eval "e"` `` does not steal it.
+- **e_charge bash fence `aa25be46`.** Catalog fence `upt eval "e + e_charge" e_charge=3C` → `6 C`. `statedOutput` longest-span so `` `upt eval "e"` `` does not steal it.
+- **Gates.** Full suite **768 files, 9577 passed / 6 skipped** (was 9572 passed; +5: derive `e_charge` regression, help-usage pin, longest-span CONTROL, e_charge fence exit 0, e_charge fence stdout). `bun run typecheck` clean; `bun run layer:check` clean; `docs:deps` `totalExports` **2867** / unused **34** (graph dropped `formula-mathts` → `constant-rows`; no new export); `readme-status --check`, `cli-reference --check`, `catalog-census --check`, `physjs:table --check` green; code-docs **1758/1758**; architecture claims **17 claims in 8 documents**.
 
 ## As of 2026-11-22 (PR #822 Composer FIX LIST)
 
