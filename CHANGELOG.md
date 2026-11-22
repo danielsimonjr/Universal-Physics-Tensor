@@ -24,6 +24,9 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- PR #822 Neon REQUEST CHANGES (non-blocking): `PhysicalConstants.alpha` is the dimensionless fine-structure constant, not a Planck unit. `docs/user/catalog.md` says so.
+- PR #822 Neon REQUEST CHANGES (non-blocking): restored `## As of 2026-11-22 (PR #821 Composer FIX LIST)` above that PR's five bullets in `NOTES.md` (`d631ffe4`). New entries go above existing headings and do not replace them.
+
 - PR #822 Neon REQUEST CHANGES 3: the user-docs drift guard lookbehind is `(?<![-.+\w])`, so `0.109`, `3.109 m` and `1e+109` are not catalog counts, and a following `nm` or `K` is a unit (`121 nm`, `160 K`). CONTROL: those five strings do not match; `there are 109 entries` and `160 bridges` still do.
 
 - PR #822 Neon REQUEST CHANGES 2: `docs/user/getting-started.md` no longer claims `upt help` is a one-line list, and does not enumerate a closed set of commands without an `e.g.` line. The prose says `upt help` prints every command's full usage and flags, and that an `e.g.` line appears only when that command's help text has one. `tests/examples/user-docs.test.ts` checks the live `upt help` blocks: each is more than two lines, some have `e.g.` and some do not.

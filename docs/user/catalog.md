@@ -178,8 +178,8 @@ one place and read by name. The pieces, from the inside out:
   and a `canonical` flag (whether a canonical equation may bake it).
 - **`PhysicalConstants`** (`src/core/types.ts`, public) is a small projection
   of the same values for library callers: `c`, `h`, `hbar`, `G`, `kB`, `e`,
-  the derived Planck units `alpha`, `lP`, `tP`, `mP`, and the cosmological
-  `H0`.
+  the dimensionless fine-structure constant `alpha`, the derived Planck units
+  `lP`, `tP`, `mP`, and the cosmological `H0`.
 - **`CANONICAL_CONSTANTS`** (`src/composition/canonical-graph.ts`, public)
   maps every spelling of every `canonical`-flagged row to its SI value and
   dimension; the composition graph uses it to tell a baked universal constant

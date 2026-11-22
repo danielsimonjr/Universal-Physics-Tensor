@@ -14,7 +14,8 @@ nothing validates prose and the next reader cannot tell.
 - **1 `da775890`.** `compileExpr` no longer rewrites `e_charge` → `e`. The MathTS `{ physics: true }` Euler-collision diagnosis was wrong: `compileExpr('e + e_charge', { physics: true }).evaluate({ e: 1, e_charge: 3 })` is 4. The original `3` was float64 absorption (`1.602176634e-19 + 3 === 3`). The rewrite broke `parseFormula('e_charge').evaluate({ e_charge: 3 })` (returned `E_SI`) and `upt derive q:charge e_charge:charge --formula "2*e_charge"` (exit 3). `CONSTANT_SPELLING_GROUPS` in `parseScope` stays. `rewriteConstantSpellings` drops the unused `canonicalNames` filter.
 - **2 `244a57a2`.** `getting-started.md` describes `upt help` as full usage and flags, not a one-line list, and does not enumerate a closed "have none" set. The user-docs test checks live `upt help` blocks (each more than two lines; some have `e.g.`, some do not).
 - **3 `8dda8148`.** Drift guard lookbehind `(?<![-.+\w])`, plus `(?!\s+(?:nm|K)\b)`. CONTROL negatives: `0.109`, `3.109 m`, `1e+109`, `121 nm`, `160 K`.
-- **NOTES heading restored (in progress).** Reinserted `## As of 2026-11-22 (PR #821 Composer FIX LIST)` above that PR's five bullets. The S11 edit had overwritten the heading into the S11 section; new entries go above existing headings and do not replace them.
+- **NOTES heading restored `d631ffe4`.** Reinserted `## As of 2026-11-22 (PR #821 Composer FIX LIST)` above that PR's five bullets. The S11 edit had overwritten the heading into the S11 section; new entries go above existing headings and do not replace them.
+- **catalog alpha (in progress).** `PhysicalConstants.alpha` is the dimensionless fine-structure constant, not a Planck unit.
 
 ## As of 2026-11-22 (PR #822 Composer FIX LIST)
 
