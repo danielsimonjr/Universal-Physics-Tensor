@@ -1,11 +1,12 @@
 /**
  * S5 of the optimization plan: the three whole-case runners
  * `runCaseSkinDepth`, `runCaseKeplerRv` and `runCaseDampedResonator` are
- * unreachable. `ENGINE_CASE_IDS` routes those case ids through
- * `runAppliedCaseEngine`, so `buildAppliedCase` never selects them, and the
- * catalog wires their outputs through `expr`, `relation` and named methods —
- * never through a `runCase*` runner. The runners, their `RUN_BY_ID` entries
- * and their `CASE_METHODS` / `CASE_METHOD_NAMES` rows are deleted with them.
+ * deleted. `data/applied-cases.json` wires those cases' outputs through
+ * `expr`, `relation` and named methods — never through a `runCase*` runner —
+ * so `usesCatalogEngine` routes all three through `runAppliedCaseEngine` on
+ * the wired-output rule alone and `buildAppliedCase` never selects a legacy
+ * runner. The runners, their `RUN_BY_ID` entries and their `CASE_METHODS` /
+ * `CASE_METHOD_NAMES` rows are deleted with them.
  *
  * The data assertion and the `usesCatalogEngine` assertions are the positive
  * evidence; the `CASE_METHOD_NAMES` assertion is the one that failed on the
@@ -40,8 +41,9 @@ describe('dead case runners are gone', () => {
   });
 
   it('CONTROL: the CASE_METHOD_NAMES pin would catch a reinstated runner name', () => {
-    // Mutated copy of the set, as if a runner row came back.
+    // A set doctored as if a runner row came back: the pin's own assertion
+    // must FAIL on it, proving the matcher fires rather than passing vacuously.
     const reinstated = new Set([...CASE_METHOD_NAMES, 'runCaseSkinDepth']);
-    expect([...reinstated]).toContain('runCaseSkinDepth');
+    expect(() => expect([...reinstated]).not.toContain('runCaseSkinDepth')).toThrow();
   });
 });
