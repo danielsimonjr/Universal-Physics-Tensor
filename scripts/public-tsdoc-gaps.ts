@@ -2,21 +2,23 @@
  * TSDoc gaps on the public surface.
  *
  * Collects every public name — the root runtime snapshot, the explicit type
- * exports of `src/index.ts`, the members of the `atlas` namespace
+ * exports of `src/index.ts` (including inline `type` specifiers inside mixed
+ * `export { value, type T }` clauses), the members of the `atlas` namespace
  * (`src/atlas/public.ts`), and the `MathTSEngine` subpath export — resolves
  * each to the module holding its declaration (skipping pure re-export
  * clauses), and reports the ones whose JSDoc has no summary line, using
  * `fileDocs` from `tools/code-docs-ratchet/check.ts`.
  *
- * `--check` exits 1 when any gap remains, 0 when the surface is fully
- * documented.
+ * `--check` exits 1 when any gap remains, when any name is unresolved, or
+ * when `src/index.ts` contains a bare `export * from` (namespace
+ * `export * as atlas` is allowed).
  *
  * @module scripts/public-tsdoc-gaps
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fileDocs } from '../tools/code-docs-ratchet/check.js';
+import { fileDocs, type SymbolDoc } from '../tools/code-docs-ratchet/check.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = resolve(ROOT, 'src');
@@ -43,9 +45,15 @@ function targetFile(fromRel: string, spec: string): string {
   return base.startsWith(SRC + '/') ? base.slice(SRC.length + 1) : base;
 }
 
+/** One name in an `export { … }` clause, with per-specifier kind. */
+interface ExportSpecifier {
+  readonly exported: string;
+  readonly local: string;
+  readonly kind: 'type' | 'value';
+}
+
 interface ExportClause {
-  /** Exported name → local name (equal without `as`). */
-  readonly names: ReadonlyMap<string, string>;
+  readonly specifiers: readonly ExportSpecifier[];
   /** Re-export target spec, or null for a clause of local declarations. */
   readonly from: string | null;
   readonly typeOnly: boolean;
@@ -65,51 +73,64 @@ function stripComments(source: string): string {
     .replace(/\/\/[^\n]*/g, '');
 }
 
+function parseSpecifier(raw: string, clauseTypeOnly: boolean): ExportSpecifier | null {
+  const spec = raw.trim();
+  if (spec === '') return null;
+  const typePrefixed = /^type\s+/.test(spec);
+  const rest = spec.replace(/^type\s+/, '').trim();
+  const asMatch = rest.match(/^([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)$/);
+  const identMatch = rest.match(/^([A-Za-z_$][\w$]*)$/);
+  const kind: 'type' | 'value' = typePrefixed || clauseTypeOnly ? 'type' : 'value';
+  if (asMatch !== null) return { local: asMatch[1]!, exported: asMatch[2]!, kind };
+  if (identMatch !== null) return { local: identMatch[1]!, exported: identMatch[1]!, kind };
+  return null;
+}
+
 function moduleExports(rel: string): ModuleExports {
   const text = stripComments(readSource(rel));
   const clauses: ExportClause[] = [];
   const declared = new Set<string>();
   const clauseRe = /export\s+(type\s+)?\{([^}]*)\}(?:\s*from\s*'([^']+)')?/g;
   for (const match of text.matchAll(clauseRe)) {
-    const names = new Map<string, string>();
+    const typeOnly = match[1] !== undefined;
+    const specifiers: ExportSpecifier[] = [];
     for (const raw of match[2].split(',')) {
-      const spec = raw.trim();
-      if (spec === '') continue;
-      const asMatch = spec.match(/^type\s+([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)$/);
-      if (asMatch !== null) {
-        names.set(asMatch[2], asMatch[1]);
-        continue;
-      }
-      const parts = spec.split(/\s+as\s+/);
-      const exported = (parts[1] ?? parts[0]).trim();
-      const local = parts[0].replace(/^type\s+/, '').trim();
-      if (/^[A-Za-z_$][\w$]*$/.test(exported)) names.set(exported, local);
+      const parsed = parseSpecifier(raw, typeOnly);
+      if (parsed !== null) specifiers.push(parsed);
     }
-    if (names.size > 0) clauses.push({ names, from: match[3] ?? null, typeOnly: match[1] !== undefined });
+    if (specifiers.length > 0) clauses.push({ specifiers, from: match[3] ?? null, typeOnly });
   }
   const nsRe = /export\s+\*\s+as\s+([A-Za-z_$][\w$]*)\s+from\s*'([^']+)'/g;
   for (const match of text.matchAll(nsRe)) {
-    clauses.push({ names: new Map([[match[1], match[1]]]), from: match[2], typeOnly: false, });
+    clauses.push({
+      specifiers: [{ exported: match[1]!, local: match[1]!, kind: 'value' }],
+      from: match[2]!,
+      typeOnly: false,
+    });
   }
-  const declRe = /export\s+(?:declare\s+)?(?:default\s+)?(?:abstract\s+)?(?:async\s+)?(?:const|let|var|function\s*\*?|class|interface|type|enum)\s+([A-Za-z_$][\w$]*)/g;
-  for (const match of text.matchAll(declRe)) declared.add(match[1]);
+  const declRe =
+    /export\s+(?:declare\s+)?(?:default\s+)?(?:abstract\s+)?(?:async\s+)?(?:const|let|var|function\s*\*?|class|interface|type|enum)\s+([A-Za-z_$][\w$]*)/g;
+  for (const match of text.matchAll(declRe)) declared.add(match[1]!);
   return { clauses, declared };
 }
 
-interface Site {
+/** Declaring file and the local name `fileDocs` keys use (after `as` aliases). */
+export interface Site {
   readonly file: string;
+  readonly lookupName: string;
 }
 
 function resolveName(rel: string, name: string, seen: Set<string>): Site[] {
   if (seen.has(rel)) return [];
   seen.add(rel);
   const mod = moduleExports(rel);
-  if (mod.declared.has(name)) return [{ file: rel }];
+  if (mod.declared.has(name)) return [{ file: rel, lookupName: name }];
   const sites: Site[] = [];
   for (const clause of mod.clauses) {
-    if (!clause.names.has(name)) continue;
-    if (clause.from === null) return [{ file: rel }];
-    sites.push(...resolveName(targetFile(rel, clause.from), clause.names.get(name)!, seen));
+    const spec = clause.specifiers.find((item) => item.exported === name);
+    if (spec === undefined) continue;
+    if (clause.from === null) return [{ file: rel, lookupName: spec.local }];
+    sites.push(...resolveName(targetFile(rel, clause.from), spec.local, seen));
   }
   return sites;
 }
@@ -120,18 +141,33 @@ function topLevelNames(rel: string): { runtime: Set<string>; types: Set<string> 
   const runtime = new Set<string>();
   const types = new Set<string>();
   for (const clause of mod.clauses) {
-    for (const exported of clause.names.keys()) (clause.typeOnly ? types : runtime).add(exported);
+    for (const spec of clause.specifiers) (spec.kind === 'type' ? types : runtime).add(spec.exported);
   }
   for (const name of mod.declared) runtime.add(name);
   return { runtime, types };
 }
 
-function documented(site: Site, name: string): boolean {
+function symbolName(key: string): string {
+  return key.slice(key.indexOf(':') + 1);
+}
+
+function symbolKind(key: string): string {
+  return key.slice(0, key.indexOf(':'));
+}
+
+/**
+ * True only when every `fileDocs` declaration of `lookupName` has a summary.
+ * A documented homonym of a different kind does not mask an undocumented one.
+ */
+function documented(site: Site): boolean {
   const docs = fileDocs(readSource(site.file), site.file);
+  if (docs.unparsed) return false;
+  const matches: SymbolDoc[] = [];
   for (const [key, symbol] of docs.symbols) {
-    if (key.endsWith(`:${name}`) && symbol.documented) return true;
+    if (symbolName(key) === site.lookupName) matches.push(symbol);
   }
-  return false;
+  if (matches.length === 0) return false;
+  return matches.every((symbol) => symbol.documented);
 }
 
 function snapshotRuntimeNames(): Set<string> {
@@ -141,48 +177,179 @@ function snapshotRuntimeNames(): Set<string> {
   return new Set(JSON.parse(match[1].replace(/,(\s*[\]}])/g, '$1')) as string[]);
 }
 
-function collect(): { name: string; via: string }[] {
-  const entries: { name: string; via: string }[] = [];
-  for (const name of snapshotRuntimeNames()) entries.push({ name, via: 'root' });
-  for (const name of topLevelNames('index.ts').types) entries.push({ name, via: 'root' });
+function sorted(names: Iterable<string>): readonly string[] {
+  return [...names].sort();
+}
+
+/** Census buckets the checker walks. Source of truth is this enumeration. */
+export interface PublicCensusBuckets {
+  /** Root runtime snapshot (`tests/api/__snapshots__/public-surface.test.ts.snap`). */
+  readonly rootRuntime: readonly string[];
+  /** Root type exports of `src/index.ts`, including mixed-clause `type` specifiers. */
+  readonly rootTypes: readonly string[];
+  /** Value exports of `src/atlas/public.ts`. */
+  readonly atlasRuntime: readonly string[];
+  /** Type exports of `src/atlas/public.ts`. */
+  readonly atlasTypes: readonly string[];
+  /** Public subpath exports (`MathTSEngine`). */
+  readonly subpath: readonly string[];
+}
+
+/** The names each census bucket contributes. Removing a bucket from `collect` fails the suite pins. */
+export function collectPublicNamesForTest(): PublicCensusBuckets {
   const atlas = topLevelNames('atlas/public.ts');
-  for (const name of atlas.runtime) entries.push({ name, via: 'atlas' });
-  for (const name of atlas.types) entries.push({ name, via: 'atlas' });
-  entries.push({ name: 'MathTSEngine', via: 'numerical/mathts-engine' });
+  return {
+    rootRuntime: sorted(snapshotRuntimeNames()),
+    rootTypes: sorted(topLevelNames('index.ts').types),
+    atlasRuntime: sorted(atlas.runtime),
+    atlasTypes: sorted(atlas.types),
+    subpath: ['MathTSEngine'],
+  };
+}
+
+function entryRootFor(via: string): string {
+  if (via === 'atlas') return 'atlas/public.ts';
+  if (via === 'root') return 'index.ts';
+  return `${via}.ts`;
+}
+
+function collect(): { name: string; via: string }[] {
+  const buckets = collectPublicNamesForTest();
+  const entries: { name: string; via: string }[] = [];
+  for (const name of buckets.rootRuntime) entries.push({ name, via: 'root' });
+  for (const name of buckets.rootTypes) entries.push({ name, via: 'root' });
+  for (const name of buckets.atlasRuntime) entries.push({ name, via: 'atlas' });
+  for (const name of buckets.atlasTypes) entries.push({ name, via: 'atlas' });
+  for (const name of buckets.subpath) entries.push({ name, via: 'numerical/mathts-engine' });
   return entries;
 }
 
-function gaps(): { name: string; via: string; file: string }[] {
+/** `export * from 'spec'` (no `as`). `export * as atlas from` is not one. */
+function bareStarFrom(source: string): string[] {
+  const out: string[] = [];
+  const re = /export\s+\*\s+from\s+'([^']+)'/g;
+  for (const match of source.matchAll(re)) out.push(match[1]!);
+  return out;
+}
+
+/** A public name that did not resolve to a declaring module. */
+export interface UnresolvedPublicName {
+  readonly via: string;
+  readonly name: string;
+}
+
+/** Gaps, unresolved names, and a banned bare `export * from` on the package root. */
+export interface PublicTsdocReport {
+  readonly gaps: readonly { name: string; via: string; file: string }[];
+  readonly unresolved: readonly UnresolvedPublicName[];
+  readonly bareStarFrom: readonly string[];
+}
+
+function report(): PublicTsdocReport {
   const found: { name: string; via: string; file: string }[] = [];
+  const unresolved: UnresolvedPublicName[] = [];
   const seenNames = new Set<string>();
   for (const entry of collect()) {
     const key = `${entry.via}:${entry.name}`;
     if (seenNames.has(key)) continue;
     seenNames.add(key);
-    const entryRoot = entry.via === 'atlas' ? 'atlas/public.ts' : entry.via === 'root' ? 'index.ts' : `${entry.via}.ts`;
     if (entry.name === 'atlas') continue;
-    const sites = resolveName(entryRoot, entry.name, new Set());
+    const sites = resolveName(entryRootFor(entry.via), entry.name, new Set());
     if (sites.length === 0) {
-      console.error(`UNRESOLVED ${entry.via} ${entry.name}`);
+      unresolved.push({ via: entry.via, name: entry.name });
       continue;
     }
-    if (sites.every((site) => !documented(site, entry.name))) {
-      found.push({ name: entry.name, via: entry.via, file: sites[0].file });
+    if (sites.every((site) => !documented(site))) {
+      found.push({ name: entry.name, via: entry.via, file: sites[0]!.file });
     }
   }
-  return found;
+  return {
+    gaps: found,
+    unresolved,
+    bareStarFrom: bareStarFrom(stripComments(readSource('index.ts'))),
+  };
 }
 
 /** Every public symbol whose resolved declaration has no JSDoc summary line. */
 export function publicTsdocGaps(): { name: string; via: string; file: string }[] {
-  return gaps();
+  return [...report().gaps];
+}
+
+/** The full checker report (gaps, unresolved names, banned root `export * from`). */
+export function publicTsdocReport(): PublicTsdocReport {
+  return report();
+}
+
+/** Resolve one exported name through re-exports to its declaring `Site`s (tests). */
+export function resolvePublicSitesForTest(rel: string, name: string): Site[] {
+  return resolveName(rel, name, new Set());
+}
+
+function publicKind(keyKind: string): string {
+  switch (keyKind) {
+    case 'function':
+      return 'function';
+    case 'class_declaration':
+    case 'abstract_class_declaration':
+      return 'class';
+    case 'interface_declaration':
+      return 'interface';
+    case 'type_alias_declaration':
+      return 'type';
+    case 'enum_declaration':
+      return 'enum';
+    case 'lexical_declaration':
+    case 'variable_declaration':
+      return 'const';
+    default:
+      return keyKind;
+  }
+}
+
+/** Kind, TSDoc summary, and declaration header S13 needs for one public name. */
+export interface PublicSymbolMeta {
+  readonly kind: string;
+  readonly summary: string;
+  readonly header: string;
+  readonly file: string;
+  readonly lookupName: string;
+}
+
+/**
+ * Resolve `name` from a census `via` to the declaring module and return the
+ * declaration kind, JSDoc summary, and header snippet. Null when unresolved
+ * or `fileDocs` cannot parse the file.
+ */
+export function publicSymbolMeta(name: string, via = 'root'): PublicSymbolMeta | null {
+  const sites = resolveName(entryRootFor(via), name, new Set());
+  if (sites.length === 0) return null;
+  const site = sites[0]!;
+  const docs = fileDocs(readSource(site.file), site.file);
+  if (docs.unparsed) return null;
+  const matches: { kind: string; symbol: SymbolDoc }[] = [];
+  for (const [key, symbol] of docs.symbols) {
+    if (symbolName(key) === site.lookupName) matches.push({ kind: publicKind(symbolKind(key)), symbol });
+  }
+  if (matches.length === 0) return null;
+  const preferred = matches.find((item) => item.symbol.documented) ?? matches[0]!;
+  return {
+    kind: preferred.kind,
+    summary: preferred.symbol.summary ?? '',
+    header: preferred.symbol.header,
+    file: site.file,
+    lookupName: site.lookupName,
+  };
 }
 
 function main(): void {
   const check = process.argv.includes('--check');
-  const list = gaps();
-  for (const gap of list) console.log(`${gap.file} ${gap.name}`);
-  if (check && list.length > 0) process.exit(1);
+  const result = report();
+  for (const gap of result.gaps) console.log(`${gap.file} ${gap.name}`);
+  for (const item of result.unresolved) console.error(`UNRESOLVED ${item.via} ${item.name}`);
+  for (const spec of result.bareStarFrom) console.error(`BARE_EXPORT_STAR index.ts ${spec}`);
+  if (check && (result.gaps.length > 0 || result.unresolved.length > 0 || result.bareStarFrom.length > 0)) {
+    process.exit(1);
+  }
 }
 
 const entry = process.argv[1];
