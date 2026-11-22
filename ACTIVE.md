@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [ ] **PR #822 Neon drift-guard: DRIFT_COUNT must use parseUnit on the trailing token (no English noun allowlist); statedOutput longest-span CONTROL on a synthetic two-span section.**
+
 - [x] **PR #822 merge origin/master (`69c1cd9a` / #820) plus Neon nits: true prefix example in statedOutput; general trailing-unit drift-guard rule.**
   Done: merge `e7f28a23` kept #820's S9 attribution, the PR #818 NOTES heading, the pairing lists, and every S11 entry, newest-first. Nits `1963c1e6`: statedOutput true prefix `` `upt eval` `` (not `` `upt eval "e"` ``); drift guard any following unit token, CONTROL negatives `160 km` / `152 MeV` (RED: `160 km` matched the nm|K-only regex). Full suite **768 files, 9577 passed / 6 skipped**. typecheck, layer:check, readme-status --check, docs:deps 2867/34 (no tracked diff), catalog-census / cli-reference / physjs:table / lean-index `--check` green.
 

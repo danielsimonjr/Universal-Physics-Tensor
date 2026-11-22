@@ -16,6 +16,11 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import {
+  AmbiguousUnitError,
+  parseUnit,
+  UnitRefusedError,
+} from '../../src/dimensional/units.js';
 
 const root = resolve(import.meta.dirname, '../..');
 const guides: Record<string, string> = {
@@ -151,13 +156,42 @@ function mutateGuideNumber(piece: string): string | null {
  * Stale catalog counts that have appeared in this repo's records (bridge,
  * evaluator, traced-edge, file-census). A hyphenated id (`be-121`) is not a
  * count. The lookbehind also refuses a preceding `.`, `+` or word character
- * so `0.109`, `3.109 m` and `1e+109` are not counts. A following unit token
- * is a physical quantity, not a catalog size (`121 nm`, `160 K`, `160 km`,
- * `152 MeV`, or any other); only a count word (`entries`, `bridges`, …)
- * keeps the number a count.
+ * so `0.109`, `3.109 m` and `1e+109` are not counts. A following token is a
+ * physical quantity only when UPT's own `parseUnit` recognizes it as the
+ * whole trailing unit (`121 nm`, `160 K`, `160 km`, `152 MeV`). English
+ * that is not a unit stays a count (`121 evaluable bridges`, `152 rows`).
+ * `in` is inch in the registry, so `160 in` as a lone quantity is exempt
+ * and `160 in total` is not (`parseUnit('in total')` is not a unit).
  */
-const DRIFT_COUNT =
-  /(?<![-.+\w])(?:109|152|121|696|160)(?![.+\w])(?!\s+(?!(?:catalog\s+)?(?:entries|bridges|records|quantities|models|files|tests|exports|constants)\b)[A-Za-zµμ])|^\d+ bridges/m;
+const BARE_COUNT = /(?<![-.+\w])(?:109|152|121|696|160)(?![.+\w])/g;
+const LINE_START_BRIDGES = /^\d+ bridges/m;
+const FOLLOWING_TOKEN = /^(\s+)([A-Za-zµμ][A-Za-z0-9µμ]*)/;
+
+function recognizedUnitToken(token: string): boolean {
+  try {
+    parseUnit(token);
+    return true;
+  } catch (err) {
+    return err instanceof UnitRefusedError || err instanceof AmbiguousUnitError;
+  }
+}
+
+function isTrailingUnitQuantity(text: string, index: number, digits: string): boolean {
+  const after = text.slice(index + digits.length);
+  const fol = FOLLOWING_TOKEN.exec(after);
+  if (fol === null) return false;
+  if (!recognizedUnitToken(fol[2]!)) return false;
+  return !/^\s+[A-Za-zµμ]/.test(after.slice(fol[0].length));
+}
+
+function hasStaleCatalogCount(text: string): boolean {
+  if (LINE_START_BRIDGES.test(text)) return true;
+  for (const match of text.matchAll(BARE_COUNT)) {
+    if (isTrailingUnitQuantity(text, match.index!, match[0]!)) continue;
+    return true;
+  }
+  return false;
+}
 
 function assertStdoutHolds(stdout: string, command: string, prints: string[]): void {
   for (const piece of prints) {
@@ -206,7 +240,9 @@ describe('docs/user guides', () => {
       }
 
       it('states no catalog count that drifts', () => {
-        expect(text, 'a bridge count in prose or a `text` fence drifts when the catalog changes').not.toMatch(DRIFT_COUNT);
+        expect(hasStaleCatalogCount(text), 'a bridge count in prose or a `text` fence drifts when the catalog changes').toBe(
+          false,
+        );
       });
 
       it('CONTROL: the output matcher is sensitive to the stated value, not only to the words', () => {
@@ -252,25 +288,39 @@ describe('docs/user guides', () => {
 
   it('CONTROL: the drift guard fails on a stale count and not on a hyphenated id', () => {
     for (const n of ['109', '152', '121', '696', '160'] as const) {
-      expect(`there are ${n} entries`, n).toMatch(DRIFT_COUNT);
-      expect(`be-${n}`, n).not.toMatch(DRIFT_COUNT);
-      expect(`CE-${n}`, n).not.toMatch(DRIFT_COUNT);
+      expect(hasStaleCatalogCount(`there are ${n} entries`), n).toBe(true);
+      expect(hasStaleCatalogCount(`be-${n}`), n).toBe(false);
+      expect(hasStaleCatalogCount(`CE-${n}`), n).toBe(false);
     }
-    expect('160 bridges in the catalog').toMatch(DRIFT_COUNT);
-    expect('Node >=22.12.0').not.toMatch(DRIFT_COUNT);
-    expect('0.109').not.toMatch(DRIFT_COUNT);
-    expect('3.109 m').not.toMatch(DRIFT_COUNT);
-    expect('1e+109').not.toMatch(DRIFT_COUNT);
-    expect('121 nm').not.toMatch(DRIFT_COUNT);
-    expect('160 K').not.toMatch(DRIFT_COUNT);
-    expect('160 km').not.toMatch(DRIFT_COUNT);
-    expect('152 MeV').not.toMatch(DRIFT_COUNT);
+    expect(hasStaleCatalogCount('160 bridges in the catalog')).toBe(true);
+    expect(hasStaleCatalogCount('121 evaluable bridges')).toBe(true);
+    expect(hasStaleCatalogCount('121 evaluators')).toBe(true);
+    expect(hasStaleCatalogCount('109 canonical equations')).toBe(true);
+    expect(hasStaleCatalogCount('152 equations')).toBe(true);
+    expect(hasStaleCatalogCount('152 rows')).toBe(true);
+    expect(hasStaleCatalogCount('696 traced edges')).toBe(true);
+    expect(hasStaleCatalogCount('696 edges')).toBe(true);
+    expect(hasStaleCatalogCount('160 bridge records')).toBe(true);
+    expect(hasStaleCatalogCount('160 total bridges')).toBe(true);
+    expect(hasStaleCatalogCount('160 in total')).toBe(true);
+    expect(hasStaleCatalogCount('Node >=22.12.0')).toBe(false);
+    expect(hasStaleCatalogCount('0.109')).toBe(false);
+    expect(hasStaleCatalogCount('3.109 m')).toBe(false);
+    expect(hasStaleCatalogCount('1e+109')).toBe(false);
+    expect(hasStaleCatalogCount('121 nm')).toBe(false);
+    expect(hasStaleCatalogCount('160 K')).toBe(false);
+    expect(hasStaleCatalogCount('160 km')).toBe(false);
+    expect(hasStaleCatalogCount('152 MeV')).toBe(false);
   });
 
   it('CONTROL: statedOutput prefers the longest matching command span', () => {
     const catalog = guides['docs/user/catalog.md']!;
     expect(statedOutput(catalog, 'upt eval "e"')).toEqual(['1.602176634e-19 C']);
     expect(statedOutput(catalog, 'upt eval "e + e_charge" e_charge=3C')).toEqual(['6 C']);
+    // catalog.md has matching.length === 1 for those commands, so it does not
+    // prove the tie-breaker. Two overlapping spans in one section do.
+    const synthetic = '`upt eval` prints `short`.\n\n`upt eval "e"` prints `long`.';
+    expect(statedOutput(synthetic, 'upt eval "e"')).toEqual(['long']);
   });
 
   it('getting-started describes upt help as full usage, matching the live CLI', () => {

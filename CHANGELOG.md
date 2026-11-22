@@ -24,6 +24,10 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- PR #822 Neon REQUEST CHANGES (drift-guard): `DRIFT_COUNT` no longer treats any following `[A-Za-zµμ]` word as a unit unless it sits in a 9-noun allowlist. ~~A letter token that is not a count word is a unit~~ Retracted: that inverted the guard into an allowlist, so `121 evaluable bridges`, `121 evaluators`, `109 canonical equations`, `152 equations`, `152 rows`, `696 traced edges`, `696 edges`, `160 bridge records`, `160 total bridges` and `160 in total` stopped matching (all matched at `21b2eff7`). The trailing token is a quantity only when `parseUnit` recognizes it as the whole trailing unit (`121 nm`, `160 K`, `160 km`, `152 MeV`). RED first: `expected '121 evaluable bridges' to match` the noun-allowlist regex (1 failed / 48 skipped).
+
+- PR #822 Neon REQUEST CHANGES (non-blocking): the statedOutput longest-span CONTROL is a synthetic section with both `` `upt eval` prints `short`. `` and `` `upt eval "e"` prints `long`. `` (`matching.length === 2`). catalog.md alone is vacuous (`matching.length === 1`). Removing the longest-span filter fails `expected [ … ] to have a length of 1 but got 2`.
+
 - PR #822 Neon nits (after #820 merge): the statedOutput longest-span comment's true prefix is `` `upt eval` `` of `` `upt eval "e + e_charge" …` ``. ~~`` `upt eval "e"` `` is a prefix~~ Retracted: the next character is `"` vs space, so that span is not a prefix of the longer command.
 
 - PR #822 Neon nits (after #820 merge): the drift-guard trailing-unit rule is any following unit token (a letter token that is not a count word), not ~~`nm` or `K` only~~. CONTROL negatives include `160 km` and `152 MeV` so a future `121 eV` cannot false-positive. Count-word phrases (`there are 109 entries`, `160 bridges`) still match.

@@ -9,6 +9,11 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-22 (PR #822 Neon drift-guard)
+
+- **1 `parseUnit` trailing unit.** `1963c1e6` inverted `DRIFT_COUNT` into a 9-noun allowlist. The trailing token is a quantity only when `parseUnit` recognizes it (`UnitRefusedError` / `AmbiguousUnitError` count as recognized) and no further word follows, so `160 in total` stays a count (`in` is inch; `parseUnit('in total')` is not a unit). CONTROL positives: `121 evaluable bridges`, `121 evaluators`, `109 canonical equations`, `152 equations`, `152 rows`, `696 traced edges`, `696 edges`, `160 bridge records`, `160 total bridges`, `160 in total`. Negatives unchanged: `121 nm`, `160 K`, `160 km`, `152 MeV`, plus `0.109` / `3.109 m` / `1e+109` / `be-121` / `CE-121` / `Node >=22.12.0`. RED on `5bf3bf73`: `expected '121 evaluable bridges' to match` the noun-allowlist regex (1 failed / 48 skipped).
+- **statedOutput synthetic CONTROL.** catalog.md has `matching.length === 1` for both eval commands. A synthetic section with `` `upt eval` `` and `` `upt eval "e"` `` makes `statedOutput(…, 'upt eval "e"')` return `['long']`. Removing the longest-span filter: `expected [ … ] to have a length of 1 but got 2`.
+
 ## As of 2026-11-22 (PR #822 merge origin/master + Neon nits)
 
 - **Merge `e7f28a23`.** `origin/master` (`69c1cd9a`, squash of PR #820) merged with a normal merge commit. Kept #820's S9 attribution rows, the `## As of 2026-11-22 (PR #818 Neon REQUEST CHANGES)` heading, the pairing lists (`unit-wrapper-refusal.test.ts` among them), and every S11 entry, newest-first. No rebase, amend, or force-push.
