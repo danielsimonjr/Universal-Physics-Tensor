@@ -6,6 +6,15 @@
  *
  * Control: deleting one `expect` in `gapRows` must fail this file — the
  * assertions are wired, not decorative.
+ *
+ * Disclosure (AGENTS.md Law 2): the gap rows below were pinned after observing
+ * the installed MathTS 0.28.0 behavior (a post-hoc gap pin, not a
+ * pre-registered prediction). The RED control was still run by flipping one
+ * new assertion (`parseUnit('dB')` to not throw) on the unchanged tree and
+ * recording the failure before restoring the real expectation. That proves the
+ * assertions fire, not that they were written blind; what they pin is the
+ * measured 0.28.0 behavior, checked probe-by-probe before each assertion was
+ * written.
  */
 import {
   Unit,
@@ -13,6 +22,9 @@ import {
   toSiDimensionVector,
   UnitParseError,
   REFUSED_UNIT_SPELLINGS,
+  getUnitRow,
+  NAMED_IRRATIONALS,
+  AmbiguousUnitError as MathTSAmbiguousUnitError,
 } from '@danielsimonjr/mathts-core';
 import { symmetricRelDiff } from '../../src/core/compare.js';
 import { unit } from '@danielsimonjr/mathts-functions';
@@ -216,6 +228,60 @@ describe('MathTS gaps the UPT wrapper must keep', () => {
       check: () => {
         expect(() => Unit.parse('furlong')).not.toThrow();
         expect(() => parseUnit('furlong')).toThrow(UnknownUnitError);
+      },
+    },
+    {
+      id: 'logarithmic units dB/dBm/dBW/Np parse in MathTS, refused in UPT',
+      check: () => {
+        // Measured on 0.28.0: `1 dB` → 10^0.1 (dimensionless power ratio),
+        // `1 dBm` → 10^0.1 mW (the milli prefix applies), `1 dBW` → 10^0.1 W
+        // (watt reference, same ratio), `1 Np` → e (1 Np = e^(1) in amplitude).
+        for (const s of ['dB', 'dBm', 'dBW', 'Np']) {
+          expect(getUnitRow(s), s).toBeDefined();
+          expect(s in REFUSED_UNIT_SPELLINGS, s).toBe(false);
+          expect(() => parseUnit(s), s).toThrow(UnitRefusedError);
+        }
+        const dB = (Unit.parse('1 dB') as { toSI(): { value: unknown } }).toSI().value;
+        expect(dB).toBeCloseTo(10 ** 0.1, 12);
+        const dBm = (Unit.parse('1 dBm') as { toSI(): { value: unknown } }).toSI().value;
+        expect(dBm).toBeCloseTo(1e-3 * 10 ** 0.1, 12);
+        const dBW = (Unit.parse('1 dBW') as { toSI(): { value: unknown } }).toSI().value;
+        expect(dBW).toBeCloseTo(10 ** 0.1, 12);
+        const np = (Unit.parse('1 Np') as { toSI(): { value: unknown } }).toSI().value;
+        expect(np).toBeCloseTo(Math.E, 12);
+      },
+    },
+    {
+      id: 'Bq/Gy/Sv/kat absent from the MathTS table, present in UPT',
+      check: () => {
+        for (const s of ['Bq', 'Gy', 'Sv', 'kat']) {
+          expect(getUnitRow(s), s).toBeUndefined();
+          expect(() => Unit.parse(s), s).toThrow(UnitParseError);
+          expect(parseUnit(s).scale, s).toBe(1);
+        }
+      },
+    },
+    {
+      id: 'Pas ambiguous in MathTS, single reading in UPT',
+      check: () => {
+        // The MathTS class, not UPT's `AmbiguousUnitError` (also imported above).
+        expect(() => Unit.parse('Pas')).toThrow(MathTSAmbiguousUnitError);
+        expect(parseUnit('Pas').scale).toBe(1);
+      },
+    },
+    {
+      id: 'mAs a compound in UPT, unknown in MathTS',
+      check: () => {
+        expect(() => Unit.parse('mAs')).toThrow(UnitParseError);
+        expect(parseUnit('mAs').scale).toBe(1e-3);
+      },
+    },
+    {
+      id: 'ln2 is an irrational, not a unit spelling, on either side',
+      check: () => {
+        expect(() => Unit.parse('ln2')).toThrow(UnitParseError);
+        expect(NAMED_IRRATIONALS.ln2).toBeDefined();
+        expect(() => parseUnit('ln2')).toThrow(UnknownUnitError);
       },
     },
   ];
