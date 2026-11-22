@@ -4,7 +4,7 @@
     "version": "16.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2857
+    "totalExports": 2856
   },
   "entryPoints": [
     {
@@ -7895,7 +7895,6 @@
         "exports": [
           "SIGMA_SB_SI",
           "JULIAN_YEAR_S",
-          "MAX_THERMAL_RATIO",
           "CLASSICAL_MAX_X",
           "FLAT_BAND_MAX_WRC",
           "AMPLIFIER_MAX_REL_SIGMA",
@@ -7958,7 +7957,6 @@
         ],
         "constants": [
           "JULIAN_YEAR_S",
-          "MAX_THERMAL_RATIO",
           "CLASSICAL_MAX_X",
           "FLAT_BAND_MAX_WRC",
           "AMPLIFIER_MAX_REL_SIGMA",
@@ -28760,14 +28758,14 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 89706,
-    "totalExports": 2857,
+    "totalLinesOfCode": 89697,
+    "totalExports": 2856,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 937,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 414,
+    "totalConstants": 413,
     "totalReExports": 1411,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,

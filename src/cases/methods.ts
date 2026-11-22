@@ -48,15 +48,6 @@ export const JULIAN_YEAR_S = convertValue('1 yr', 's').value;
 const DAMPED_RESONATOR_ID = 'case-damped-resonator';
 
 /**
- * √(k_BT/k)/A ceiling. Thermal motion of one mode is x = X cos ω_d t + Y sin ω_d t
- * with ⟨X²⟩ = ⟨Y²⟩ = k_BT/k (equipartition), so the envelope of the ring-down
- * plus it is Rician with ⟨A_obs²⟩ = A² + 2k_BT/k (Rice 1944); at the ceiling
- * √(1 + 2·0.01) − 1 ≈ 0.0100.
- * @internal
- */
-export const MAX_THERMAL_RATIO = 0.1;
-
-/**
  * FWHM in Hz of |∫₀ᵀ e^{−(α + iΔω)t} dt|², the near-resonance power spectrum of
  * a ring-down x0 e^{−αt} cos(ω_d t) recorded for T. The negative-frequency
  * pole is dropped, which is the Q ≫ 1 approximation. The peak is at Δω = 0:

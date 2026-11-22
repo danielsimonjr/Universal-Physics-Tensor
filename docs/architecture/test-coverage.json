@@ -15922,6 +15922,7 @@
       "tests/bridges/evaluators.test.ts",
       "tests/canonical/constant-spellings.test.ts",
       "tests/canonical/numeric-prefactor.test.ts",
+      "tests/cases/applied-case-engine.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cases/resistor-noise-closed-form.test.ts",
       "tests/cases/skin-depth.test.ts",
