@@ -144,9 +144,11 @@ function mutateGuideNumber(piece: string): string | null {
 /**
  * Stale catalog counts that have appeared in this repo's records (bridge,
  * evaluator, traced-edge, file-census). A hyphenated id (`be-121`) is not a
- * count: the lookbehind refuses a preceding `-`.
+ * count. The lookbehind also refuses a preceding `.`, `+` or word character
+ * so `0.109`, `3.109 m` and `1e+109` are not counts, and a following `nm` or
+ * `K` is a unit, not a catalog size.
  */
-const DRIFT_COUNT = /(?<![-\w])(?:109|152|121|696|160)(?![.\w])|^\d+ bridges/m;
+const DRIFT_COUNT = /(?<![-.+\w])(?:109|152|121|696|160)(?![.+\w])(?!\s+(?:nm|K)\b)|^\d+ bridges/m;
 
 function assertStdoutHolds(stdout: string, command: string, prints: string[]): void {
   for (const piece of prints) {
@@ -247,6 +249,11 @@ describe('docs/user guides', () => {
     }
     expect('160 bridges in the catalog').toMatch(DRIFT_COUNT);
     expect('Node >=22.12.0').not.toMatch(DRIFT_COUNT);
+    expect('0.109').not.toMatch(DRIFT_COUNT);
+    expect('3.109 m').not.toMatch(DRIFT_COUNT);
+    expect('1e+109').not.toMatch(DRIFT_COUNT);
+    expect('121 nm').not.toMatch(DRIFT_COUNT);
+    expect('160 K').not.toMatch(DRIFT_COUNT);
   });
 
   it('getting-started describes upt help as full usage, matching the live CLI', () => {
