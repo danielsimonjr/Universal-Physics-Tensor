@@ -3206,7 +3206,7 @@ The codebase is organized into the following modules:
 | `./top-level-help.js` | `renderTopLevelHelp` | Import |
 | `./record.js` | `Io` | Import (type-only) |
 | `../cli-api.js` | `*` | Import |
-| `./commands/index.js` | `*` | Import (type-only) |
+| `./commands/index.js` | `*` | Import |
 
 **Exports:**
 - Functions: `reportInternalError`, `runCli`
@@ -7857,7 +7857,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 89878 |
+| Total Lines of Code | 89883 |
 | Total Exports | 2868 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |
@@ -7865,7 +7865,7 @@ graph TD
 | Total Functions | 939 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
-| Type-only Imports | 544 |
+| Type-only Imports | 543 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

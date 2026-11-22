@@ -6,6 +6,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { catalogEvaluators } from '../../src/bridges/catalog-load.js';
+import { BRIDGE_EVALUATORS } from '../../src/bridges/evaluators.js';
 import { closedFormRangeLabel, formatClosedFormRange } from '../../src/cli/closed-form-range.js';
 import { CENSUS } from '../helpers/census.js';
 
@@ -24,5 +26,18 @@ describe('formatClosedFormRange', () => {
     // BE-16/42/51/52/55..125 is the record from before be-126..133.
     // BE-51/52/55..102 is the record from before be-103..125.
     // BE-51/52/55..87 is the record from before be-88..102.
+  });
+
+  it('catalog-load evaluator ids equal BRIDGE_EVALUATORS keys', () => {
+    const catalogIds = catalogEvaluators().map((e) => e.catalogId).sort();
+    const registryIds = [...BRIDGE_EVALUATORS.keys()].sort();
+    expect(catalogIds).toEqual(registryIds);
+    expect(catalogIds).toHaveLength(CENSUS.evaluators.count);
+  });
+
+  it('CONTROL: dropping one catalog id is detected as drift from BRIDGE_EVALUATORS', () => {
+    const catalogIds = catalogEvaluators().map((e) => e.catalogId).sort();
+    const registryIds = [...BRIDGE_EVALUATORS.keys()].sort();
+    expect(catalogIds.slice(1), 'a missing id must not equal the registry keys').not.toEqual(registryIds);
   });
 });

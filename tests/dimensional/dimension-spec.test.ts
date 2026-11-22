@@ -3,7 +3,7 @@
  * strings into Dimensions: named dims, constants (exact-case so G ≠ g),
  * explicit base exponents (incl. fractional), and error handling.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import {
   parseDimensionSpec,
   DimensionSpecError,
@@ -170,6 +170,18 @@ describe('circuit named dimensions (issue 683)', () => {
     expect(parseDimensionSpec('voltage/current')).toEqual(parseDimensionSpec('resistance'));
     expect(parseDimensionSpec('charge/voltage')).toEqual(parseDimensionSpec('capacitance'));
   });
+  it('the public NAMED_DIMENSION_NAMES type is readonly string[] (not a narrowed tuple)', () => {
+    // Consumers of the re-export could pass a plain string array, or a string
+    // to `.includes`, before S3 narrowed the emitted .d.ts to a literal tuple.
+    expectTypeOf(NAMED_DIMENSION_NAMES).toEqualTypeOf<readonly string[]>();
+    const someString: string = 'length';
+    expect(NAMED_DIMENSION_NAMES.includes(someString)).toBe(true);
+    const fromPlain: typeof NAMED_DIMENSION_NAMES = ['length', 'mass'];
+    expect(fromPlain).toContain('length');
+    const asList: readonly string[] = NAMED_DIMENSION_NAMES;
+    expect(asList.length).toBeGreaterThan(0);
+  });
+
   it('an unknown term lists the accepted named dimensions, generated from the table', () => {
     let message = '';
     try {

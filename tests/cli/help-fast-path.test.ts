@@ -143,6 +143,10 @@ register(${JSON.stringify(pathToFileURL(join(dir, 'hook.mjs')).href)});
     const { status, stderr } = spawnWithResolveLog(dir, [bin, 'help']);
     expect(status, stderr).toBe(0);
     const urls = readUrls(dir);
+    // The hook must actually have logged, and the entry module must be among
+    // what it saw: an empty log would let the mathts-functions absence pass vacuously.
+    expect(urls.length, 'the resolve hook logged nothing').toBeGreaterThan(0);
+    expect(urls).toContainEqual(expect.stringContaining('/dist/cli/main.js'));
     expect(urls.some((u) => u.includes('@danielsimonjr/mathts-functions'))).toBe(false);
   });
 });

@@ -8975,7 +8975,8 @@
             "file": "../conventions.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -9164,7 +9165,8 @@
             "file": "../eval-numbers.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -9449,169 +9451,197 @@
             "file": "./priority.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./audit.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./coverage.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./canonical.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./recover.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./connectors.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./predict.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./candidates.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./frontier.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./explain.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./symbolic.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./eval.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./derive.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./map.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./discover.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./confront.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./axes.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./evaluate.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./ground.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./probe.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./regime.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./path.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./atlas.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./chain.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./search.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./retrieve.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./metric.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./testplan.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           }
         ],
         "exports": []
@@ -9748,13 +9778,15 @@
             "file": "../conventions.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "../map-evidence.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -10884,14 +10916,15 @@
             "file": "../cli-api.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./commands/index.js",
             "imports": [
               "*"
             ],
-            "typeOnly": true
+            "sideEffect": true
           }
         ],
         "exports": [
@@ -11498,7 +11531,8 @@
             "file": "./relations/domain-regimes.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./index.js",
@@ -23234,13 +23268,15 @@
             "file": "./core/regime-rule-install.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./core/regimes-builtins.js",
             "imports": [
               "*"
-            ]
+            ],
+            "sideEffect": true
           },
           {
             "file": "./atlas/public.js",
@@ -28750,7 +28786,7 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 89878,
+    "totalLinesOfCode": 89883,
     "totalExports": 2868,
     "totalClasses": 86,
     "totalInterfaces": 523,
@@ -28759,7 +28795,7 @@
     "totalEnums": 0,
     "totalConstants": 423,
     "totalReExports": 1411,
-    "totalTypeOnlyImports": 544,
+    "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
