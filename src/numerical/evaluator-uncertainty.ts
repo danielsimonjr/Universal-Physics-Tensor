@@ -10,7 +10,6 @@
  * @internal
  * @module numerical/evaluator-uncertainty
  */
-import { propagateUncertainty as propagateScalarUncertainty } from '@danielsimonjr/mathts-functions';
 import { eigvals } from '@danielsimonjr/mathts-matrix';
 
 /** A curvature term above this fraction of the linear term marks the linearization unreliable. */
@@ -42,8 +41,8 @@ function correlationOf(corr: CorrelationTable, i: string, j: string): number {
 }
 
 /**
- * GUM's law of propagation, u² = Σᵢⱼ cᵢ cⱼ ρᵢⱼ uᵢ uⱼ, with cᵢ by central
- * difference over `f`. Each input is also stepped by ±uᵢ, so a curvature term
+ * GUM's law of propagation, u² = Σᵢⱼ cᵢ cⱼ ρᵢⱼ uᵢ uⱼ, with cᵢ by centered or one-sided
+ * finite difference over `f`. Each input is also stepped by ±uᵢ, so a curvature term
  * comparable to the linear term is reported rather than hidden in a
  * small-looking σ. Every numeric field of `f`'s record that is not an input
  * is an output.
@@ -65,61 +64,58 @@ export function propagateEvaluatorUncertainty(
     for (const k of keys) {
       const u = sigma[k]!;
       const x = inputs[k]!;
-      // The step is per input (`u·10⁻³`, or a relative step when u is 0).
-      // MathTS differentiates every key of `values` with one `relativeStep`, so
-      // this call's values object is only `k`. The callback puts the other
-      // inputs back. Passing them as values would step an exact input (f_lo = 0
-      // goes negative) and discard this partial. The correlation sum stays here.
-      const h = u > 0 ? u * 1e-3 : Math.abs(x) * 1e-6 || 1e-6;
-      const relativeStep = h / Math.max(Math.abs(x), 1e-30);
-      let probed: ReturnType<typeof propagateScalarUncertainty> | undefined;
-      // MathTS functions 0.86 grows or shrinks the step on its own, so it can probe a point the evaluator
-      // refuses (an input of 1 stepped by 1 reaches 0). The base point above evaluated, so a throw
-      // at a stepped point is the evaluator's domain edge. The callback answers NaN there, which
-      // MathTS reads as "not finite" and shrinks or stops; `undefinedAt` records that this happened.
-      let undefinedAt = false;
-      try {
-        probed = propagateScalarUncertainty(
-          (vals) => {
-            let out: unknown;
-            try {
-              out = f({ ...inputs, ...vals })[name];
-            } catch (error) {
-              // A TypeError, ReferenceError or SyntaxError is a programming error and propagates.
-              // Any other throw is the evaluator's refusal of the point: `src/cases/engine.ts` refuses
-              // an input outside its domain with a plain Error, and `DomainViolationError` extends Error.
-              if (error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) throw error;
-              undefinedAt = true;
-              return Number.NaN;
-            }
-            if (typeof out !== 'number' || !Number.isFinite(out)) {
-              undefinedAt = true;
-              return Number.NaN;
-            }
-            return out;
-          },
-          { [k]: x },
-          { [k]: u },
-          u > 0 ? { relativeStep, curvatureOffsets: { [k]: u } } : { relativeStep },
-        );
-      } catch (error) {
-        // A programming error propagates even when an earlier stepped point set `undefinedAt`.
-        if (error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) throw error;
-        // Only "the evaluator has no finite value at the stepped point" is the
-        // reported outcome below. A RangeError is MathTS's refusal of the probe
-        // (the step is below the resolution) and is the same outcome. Anything else is a
-        // programming error and propagates.
-        if (!undefinedAt && !(error instanceof RangeError)) throw error;
-        probed = undefined;
+      const sample = (at: number): number | undefined => {
+        if (!Number.isFinite(at) || at === x) return undefined;
+        try {
+          const y = f({ ...inputs, [k]: at })[name];
+          return typeof y === 'number' && Number.isFinite(y) ? y : undefined;
+        } catch (error) {
+          // Legacy case evaluators signal domain rejection with a plain Error.
+          if (error instanceof TypeError || error instanceof ReferenceError || error instanceof SyntaxError) throw error;
+          if (!(error instanceof Error)) throw error;
+          return undefined;
+        }
+      };
+
+      // Derivative probes and the interval check have different purposes.
+      // Estimate a local derivative from representable points inside the domain;
+      // inspect the full ±u interval separately for curvature or domain loss.
+      const h = Math.max(u * 1e-3, Math.abs(x) * 1e-6) || 1e-6;
+      let ck: number | undefined;
+      let oneSided = false;
+      for (let step = h, attempt = 0; attempt < 12; step /= 2, attempt++) {
+        const lo = x - step;
+        const hi = x + step;
+        const lower = sample(lo);
+        const upper = sample(hi);
+        if (lower !== undefined && upper !== undefined) {
+          ck = (upper - lower) / (hi - lo);
+          oneSided = false;
+          break;
+        }
+        const nearValue = upper ?? lower;
+        if (nearValue === undefined) continue;
+        const near = upper !== undefined ? hi : lo;
+        const far = x + 2 * (near - x);
+        const farValue = sample(far);
+        if (farValue === undefined || far === near) continue;
+        // Extrapolate the two secant slopes to x. This is exact for a quadratic,
+        // including when floating-point rounding makes the spacing unequal.
+        const d1 = near - x;
+        const d2 = far - x;
+        const slope1 = (nearValue - v) / d1;
+        const slope2 = (farValue - v) / d2;
+        ck = slope1 + (slope1 - slope2) * (d1 / (d2 - d1));
+        oneSided = true;
+        break;
       }
-      const ck = probed?.partials[k];
-      if (probed === undefined || typeof ck !== 'number' || !Number.isFinite(ck)) {
+      if (ck === undefined || !Number.isFinite(ck)) {
         c[k] = null;
         contributions[k] = {
           sensitivity: null,
           contribution: null,
           curvatureRatio: null,
-          note: 'the evaluator is undefined next to this input',
+          note: 'the evaluator is undefined next to this input or the derivative cannot be resolved',
         };
         unreliable.push(k);
         continue;
@@ -127,15 +123,25 @@ export function propagateEvaluatorUncertainty(
       c[k] = ck;
       let curvatureRatio: number | null = null;
       let note: string | undefined;
-      if (u > 0 && ck * u !== 0) {
-        const reported = probed.curvature?.[k];
-        if (reported === undefined || reported === null || !Number.isFinite(reported)) {
+      if (u > 0 && x - u !== x && x + u !== x) {
+        const lower = sample(x - u);
+        const upper = sample(x + u);
+        if (lower === undefined || upper === undefined) {
           note = "±u reaches outside the evaluator's domain";
           unreliable.push(k);
         } else {
-          curvatureRatio = reported;
-          if (curvatureRatio > NONLINEAR_FRACTION) unreliable.push(k);
+          const departure = Math.abs((upper - v) + (lower - v)) / 2;
+          const noise = 8 * Number.EPSILON * Math.max(Math.abs(v), Math.abs(upper), Math.abs(lower));
+          if (departure <= noise) curvatureRatio = 0;
+          else if (ck * u !== 0) curvatureRatio = departure / Math.abs(ck * u);
+          if (departure > noise && (curvatureRatio === null || curvatureRatio > NONLINEAR_FRACTION)) {
+            unreliable.push(k);
+          }
         }
+      }
+      if (oneSided && note === undefined) {
+        note = 'sensitivity uses a one-sided stencil at the evaluator domain';
+        if (!unreliable.includes(k)) unreliable.push(k);
       }
       contributions[k] = { sensitivity: ck, contribution: ck * u, curvatureRatio, ...(note === undefined ? {} : { note }) };
     }

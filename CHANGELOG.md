@@ -8,6 +8,11 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- Grid partial derivatives preserve the grid shape through tensor construction and reject insufficient clamp samples or invalid spacing. Explicit finite-difference steps must produce distinct representable coordinates.
+- Evaluator uncertainty uses representable centered or one-sided sensitivity probes and checks the full uncertainty interval separately. A domain edge or curvature above the roundoff floor is reported with the uncertainty result.
+
 ## [17.0.0] - 2026-11-22
 
 Dependency health at this release: `bun audit` finds no vulnerabilities (139 packages). `bun outdated` lists six runtime packages with a newer release: `@danielsimonjr/mathts-autograd` 0.6.0 (0.6.2 in range), `mathts-expression` 0.14.0 (0.14.2 in range), `mathts-tensor` 0.5.0 (0.5.2 in range), `mathts-core` 0.28.0 (0.30.0 latest), `mathts-functions` 0.86.0 (0.88.0 latest) and `mathts-matrix` 0.11.0 (0.13.0 latest). It lists three development packages: `fast-check` 4.10.2 (4.11.0 in range), and `vitest` and `@vitest/coverage-v8` 4.1.12 (5.1.1 latest, a major that `.github/dependabot.yml` ignores). This release does not move them. The version is a major because `data/applied-cases.json` moves to `schemaVersion` 2: a validator on the 16.0.0 schema refuses the file. The public-surface snapshot and `src/index.ts` are unchanged since 16.0.0. The `### Removed` entries are `@internal` case runners, not public API.

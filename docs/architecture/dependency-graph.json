@@ -26345,12 +26345,6 @@
         "description": "First-order propagation of input uncertainties through a closed-form",
         "externalDependencies": [
           {
-            "package": "@danielsimonjr/mathts-functions",
-            "imports": [
-              "propagateUncertainty"
-            ]
-          },
-          {
             "package": "@danielsimonjr/mathts-matrix",
             "imports": [
               "eigvals"
@@ -28780,7 +28774,7 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90288,
+    "totalLinesOfCode": 90308,
     "totalExports": 2867,
     "totalClasses": 86,
     "totalInterfaces": 523,

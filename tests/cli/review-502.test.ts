@@ -80,7 +80,7 @@ describe('3. and 4. a statistic prints at three significant digits', () => {
     const r = await run(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000', '--sigma', 'T_K=3', '--sigma', 'R_ohm=10']);
     expect(r.code, r.err).toBe(0);
     expect(r.out).toMatch(/value = 1\.6567788e-17 ± 2\.34e-19 \(1σ; relative 1\.41%\)/);
-    expect(r.out).toMatch(/from T_K: c = 5\.52e-20, c·u = 1\.66e-19, curvature\/linear at ±u = 1\.86e-14/);
+    expect(r.out).toMatch(/from T_K: c = 5\.52e-20, c·u = 1\.66e-19, curvature\/linear at ±u = 0/);
   });
 });
 

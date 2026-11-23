@@ -11263,6 +11263,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
       "tests/numerical/weyl-lowering-value.test.ts",
@@ -11701,6 +11702,7 @@
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
       "tests/numerical/parse-physics.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -12206,6 +12208,7 @@
       "tests/numerical/lowering-utils.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts"
     ],
@@ -12410,6 +12413,7 @@
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
       "tests/numerical/parse-physics.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts",
@@ -12794,6 +12798,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -12900,6 +12905,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -12966,6 +12972,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-engine-types.test.ts",
       "tests/tensor.test.ts"
@@ -13246,6 +13253,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/perihelion-finder-roundtrip.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
@@ -13355,6 +13363,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -13582,6 +13591,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -13654,6 +13664,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/perihelion-finder-roundtrip.test.ts",
       "tests/numerical/perihelion-finder.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
@@ -13761,6 +13772,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-engine-types.test.ts",
       "tests/tensor.test.ts"
@@ -16625,6 +16637,7 @@
       "tests/numerical/lowering-utils.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts"
     ],
@@ -16796,6 +16809,7 @@
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
       "tests/numerical/parse-physics.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
@@ -17127,6 +17141,7 @@
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/one-function-table.test.ts",
+      "tests/numerical/pderiv.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts"
     ],
     "src/numerical/input-validation.ts": [],
@@ -31098,8 +31113,20 @@
     ],
     "tests/numerical/pderiv.test.ts": [
       "src/numerical/pderiv.ts",
+      "src/numerical/index.ts",
+      "src/numerical/tensor-engine.ts",
+      "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
-      "src/numerical/types.ts"
+      "src/numerical/engine-registry.ts",
+      "src/numerical/errors.ts",
+      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
+      "src/numerical/covariant-eikonal.ts",
+      "src/numerical/gl4-integrator.ts",
+      "src/numerical/perihelion-finder.ts",
+      "src/dimensional/tensor.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/types.ts"
     ],
     "tests/numerical/perihelion-finder-roundtrip.test.ts": [
       "src/numerical/gl4-integrator.ts",

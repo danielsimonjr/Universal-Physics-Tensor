@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [ ] **F1–F12 issue batches.** Start with a shared numerical differentiation and uncertainty contract (#778, #779, #832–#834), then address each subsequent batch in order.
+
 - [x] **PR #831 Neon re-review FIX-NEEDED: vendor v16.0.0 applied-cases schema; no `git show` in the contract test.** CI/publish are depth-1 tagless, so `git show v16.0.0:...` fails there and would fail `prepublishOnly`. Frozen fixture + SHA-256 pin; `control:` v2 rejects version 1 and the frozen v1 schema accepts a v1-shaped record. Prove in `git clone --depth=1 --no-tags`. No tag.
 
 - [x] **PR #831 Neon FIX-NEEDED (Option A): applied-cases schemaVersion 1→2, release as 17.0.0.** S6/S8 changed the shipped check shape (`expr` no longer required; `method` and `needs` added under `additionalProperties: false`) without moving `schemaVersion`. Same data-contract rule that made 16.0.0 a major. RED contract test, bump, CHANGELOG BREAKING, retarget the 16.1.0 heading, regenerate, gates. No tag.

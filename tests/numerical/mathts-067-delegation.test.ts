@@ -46,9 +46,8 @@ describe('MathTS 0.67.0 delegation', () => {
     ]);
   });
 
-  it('both uncertainty contracts and the GL4 step call MathTS', () => {
+  it('graph uncertainty and the GL4 step call MathTS', () => {
     expect(source('../../src/composition/uncertainty.ts')).toMatch(/relativeStep/);
-    expect(source('../../src/numerical/evaluator-uncertainty.ts')).toMatch(/curvatureOffsets/);
     const gl4 = source('../../src/numerical/gl4-integrator.ts');
     expect(gl4).toMatch(/gaussLegendre4/);
     expect(gl4).not.toMatch(/solveODE/);

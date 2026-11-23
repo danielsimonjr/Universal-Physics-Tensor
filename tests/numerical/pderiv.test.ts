@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { pderivGrid, pderivNumericalFn, pderivSymbolic } from '../../src/numerical/pderiv.js';
+import { evaluateNumerical } from '../../src/numerical/index.js';
+import { tsym } from '../../src/dimensional/tensor.js';
+import { DIMENSIONLESS, LENGTH } from '../../src/dimensional/types.js';
 import type { GridField } from '../../src/numerical/grid-field.js';
 
 describe('numerical partial derivative', () => {
@@ -53,4 +56,29 @@ describe('pderivNumericalFn: a component that does not move differentiates to ex
     const d = pderivNumericalFn(moving, [3, 0, 0, 0], 0, { order: 4 }) as number;
     expect(d).toBeCloseTo(-cSquared * 1e-3, -6);
   });
+});
+
+describe('finite differences require usable sample geometry', () => {
+  it('rejects a clamped singleton axis and non-finite spacing', () => {
+    expect(() => pderivGrid({shape: [1, 3], spacing: [1, 1], data: [[1, 2, 3]], boundary: 'clamp'}, 0)).toThrow(/samples/);
+    expect(() => pderivGrid({shape: [2], spacing: [Infinity], data: [0, 1], boundary: 'clamp'}, 0)).toThrow(/spacing/);
+  });
+
+  it.each([2, 4] as const)('refuses a collapsed stencil (order %d)', (order) => {
+    expect(() => pderivNumericalFn(([x]) => x!, [1e20], 0, {order, h: 1})).toThrow(/representable/);
+  });
+});
+
+it.each([
+  ['x', [[3, 3, 3], [3, 3, 3]]],
+  ['y', [[2, 2, 2], [2, 2, 2]]],
+] as const)('lowers a non-square grid derivative along %s through the numerical API', async (axis, expected) => {
+  const grid: GridField = { shape: [2, 3], spacing: [2, 1], data: [[0, 2, 4], [6, 8, 10]], boundary: 'clamp' };
+  const result = await evaluateNumerical({
+    kind: 'tensor-partial-derivative',
+    of: tsym('S', [], DIMENSIONLESS, undefined, 'grid'),
+    wrt: tsym(axis, [], LENGTH, 'coordinate'),
+    wrtIndex: { label: axis, variance: 'lower' },
+  }, { dimension: 2, tensors: new Map(), grids: new Map([['S', grid]]), coords: new Map([['x', 0], ['y', 0]]) });
+  expect(result.value).toEqual(expected);
 });
