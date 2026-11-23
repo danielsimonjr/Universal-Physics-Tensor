@@ -13,7 +13,7 @@
  *   - new ⊆ old: the reverse, for the record (every new field comes from `tryOneFactor`);
  *   - drops: MathTS readings that the new code refuses because a source is unreadable;
  *   - outcomes: a SHA-256 of every `parseUnit('1/<token>')` result or error text.
- * The script exits 1 on any difference in either direction.
+ * The script exits 1 on any difference in either direction for factors shared by both splitters.
  *
  * Usage:
  *   bun scripts/m6-readings-agreement.ts            the gate
@@ -148,26 +148,35 @@ function key(way: readonly FactorReading[], label: string): string {
   return `${label}|${factors.join(';')}`;
 }
 
-/** True when MathTS reads the symbol alone. The comparison needs it: a symbol MathTS lacks has no MathTS split. */
-function mathtsReads(symbol: string): boolean {
-  try {
-    return Unit.exactScale(symbol) !== null;
-  } catch {
-    return false;
+const SHARED_ATOMIC_FACTORS = new Map<string, boolean>();
+
+/**
+ * A factor both splitters can read as one atom. A successful parse that
+ * decomposes a new registry spelling (for example gpm) does not supply the
+ * same atom. Check full spellings so an absent prefix family is recognized
+ * as well. The frozen splitter did not decompose affine factors.
+ */
+function sharedAtomicFactor(base: string): boolean {
+  const cached = SHARED_ATOMIC_FACTORS.get(base);
+  if (cached !== undefined) return cached;
+  let shared = false;
+  if (trySymbol(base) !== null) {
+    try {
+      shared = Unit.parse(base).units.length === 1;
+    } catch {
+      // The peer does not accept this spelling as a unit factor.
+    }
   }
+  SHARED_ATOMIC_FACTORS.set(base, shared);
+  return shared;
 }
 
 const SYMBOLS = [...UNITS.keys()];
-/**
- * The table symbols that MathTS does not read (Bq, Gy, Sv, kat). MathTS gives no split with
- * such a symbol, so a reading (old or new) that has one as a factor base is left out of the comparison.
- */
-const UNREAD_BY_MATHTS = new Set(SYMBOLS.filter((s) => !mathtsReads(s)));
+const UNREAD_BY_MATHTS = new Set(SYMBOLS.filter((s) => !sharedAtomicFactor(s)));
 
-/** A reading the comparison covers: two or more factors, each on a unit symbol (prefix removed) that MathTS reads. */
+/** Compare multi-factor readings over the common atomic vocabulary. */
 function compared(way: readonly FactorReading[]): boolean {
-  const symbol = (base: string): string => (UNITS.has(base) ? base : (splitPrefix(base)?.base ?? base));
-  return way.length > 1 && way.every((f) => !UNREAD_BY_MATHTS.has(symbol(f.base)));
+  return way.length > 1 && way.every((factor) => sharedAtomicFactor(factor.base));
 }
 const PREFIX_SPELLINGS = [...UNIT_DATA.prefixes.keys()];
 
@@ -315,7 +324,7 @@ function main(): number {
     ['edge', EDGE],
   ];
   let failed = false;
-  console.log(`core ${CORE_VERSION}; symbols ${SYMBOLS.length} (readings with these left out, MathTS has no row: ${[...UNREAD_BY_MATHTS].join(', ') || 'none'}), prefix spellings ${PREFIX_SPELLINGS.length}; frozen blob ${FROZEN_BLOB}; seed ${options.seed}, count ${options.count}`);
+  console.log(`core ${CORE_VERSION}; symbols ${SYMBOLS.length} (readings with these left out, no shared atomic reading: ${[...UNREAD_BY_MATHTS].join(', ') || 'none'}), prefix spellings ${PREFIX_SPELLINGS.length}; frozen blob ${FROZEN_BLOB}; seed ${options.seed}, count ${options.count}`);
   console.log('set | tokens | old multi-factor readings | old not in new | new not in old | MathTS drops | ambiguous | outcome digest');
   for (const [name, tokens] of sets) {
     const r = runSet(name, tokens, control && name === 'edge');
