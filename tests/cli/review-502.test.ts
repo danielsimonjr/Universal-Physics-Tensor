@@ -85,10 +85,12 @@ describe('3. and 4. a statistic prints at three significant digits', () => {
 });
 
 describe('5. ground: a valid pair with no candidate is a computed absence, exit 0', () => {
-  it('text and --json exit 0 and say no candidate pairs the two', async () => {
+  it('text exits 0 and says no candidate pairs the two', async () => {
     const text = await runFunnel(['ground', 'temperature', 'mass']);
     expect(text.code, text.stderr).toBe(0);
     expect(text.stdout).toMatch(/no discovery candidate pairs 'temperature' with 'mass'/);
+  });
+  it('JSON exits 0 and records the absent candidate and searched graphs', async () => {
     const json = await runFunnel(['ground', 'temperature', 'mass', '--json']);
     expect(json.code, json.stderr).toBe(0);
     const env = JSON.parse(json.stdout);
