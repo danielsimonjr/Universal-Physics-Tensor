@@ -95,6 +95,8 @@ export interface CatalogRelation {
 
 /** One named input of a catalog evaluator. */
 export interface CatalogEvaluatorParameter {
+  /** Value in the parameter unit when no binding is supplied. */
+  readonly defaultValue?: number;
   readonly key: string;
   readonly quantity: string;
   readonly symbol: string;

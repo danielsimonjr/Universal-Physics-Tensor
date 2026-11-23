@@ -107,7 +107,7 @@ function describeParameter(p: EvaluatorParameter): string {
   const extras = [
     ...(p.geometry === undefined ? [] : [`geometry: ${p.geometry}`]),
     ...(p.temperature === undefined ? [] : ['an absolute temperature; degC adds 273.15; degF is (degF − 32)×5/9 + 273.15']),
-    ...(p.optional === true ? ['optional'] : []),
+    ...(p.defaultValue !== undefined ? [`default: ${p.defaultValue}`] : p.optional === true ? ['optional'] : []),
   ];
   const alts = (p.alternates ?? []).map((a) => `or give ${a.key}, ${a.meaning}`);
   return (
@@ -460,6 +460,7 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
   }
   const spec = found.evaluator;
   const key = api.catalogEdgeKey(spec.bridgeId);
+  const relation = api.primaryRelation(id);
   const { inputs, resolved } = resolveInputs(api, key, spec, rest);
 
   // The one evaluation, the library's result builder: `run` checks the inputs (missing, unknown,
@@ -468,11 +469,14 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
   try {
     evaluation = api.evaluateResolved(found, inputs, 'all');
   } catch (e) {
-    throw evaluationFailure(api, e, key);
+    const failure = evaluationFailure(api, e, key);
+    if (failure instanceof CliError && relation?.notice !== undefined && e instanceof api.DomainViolationError) {
+      throw new CliError(`${failure.message} ${relation.notice.text}`);
+    }
+    throw failure;
   }
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i), NOT_INCLUDED);
-  const relation = api.primaryRelation(id);
   const notices = relation === undefined ? [] : api.relationNotices(relation);
 
   // The text label is the quantity's declared `displayUnit` (`V^2/Hz`), else one coherent named

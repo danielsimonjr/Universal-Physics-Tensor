@@ -950,6 +950,18 @@
       "sideConditions": [
         "long-wavelength, qa ≪ 1"
       ],
+      "bound": {
+        "K": 1,
+        "delta": 0.041666666666666664,
+        "norm": "relative frequency error normalized by the continuum frequency, extended continuously at q = 0",
+        "domain": "0 ≤ |qa| < 1; the alternating sine series gives 1 − sinc(qa/2) ≤ (qa)²/24",
+        "horizon": "all t ≥ 0 for the dispersion relation",
+        "limitCharacter": "regular",
+        "uniformity": [
+          "all time for the modal frequencies",
+          "positive mass, spring constant and spacing"
+        ]
+      },
       "regime": {
         "family": "oscillators",
         "inequalities": [

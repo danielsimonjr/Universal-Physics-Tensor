@@ -953,6 +953,18 @@
           "sideConditions": [
             "long-wavelength, qa ≪ 1"
           ],
+          "bound": {
+            "K": 1,
+            "delta": 0.041666666666666664,
+            "norm": "relative frequency error normalized by the continuum frequency, extended continuously at q = 0",
+            "domain": "0 ≤ |qa| < 1; the alternating sine series gives 1 − sinc(qa/2) ≤ (qa)²/24",
+            "horizon": "all t ≥ 0 for the dispersion relation",
+            "limitCharacter": "regular",
+            "uniformity": [
+              "all time for the modal frequencies",
+              "positive mass, spring constant and spacing"
+            ]
+          },
           "regime": {
             "family": "oscillators",
             "inequalities": [
@@ -1648,6 +1660,18 @@
             "overdamped observation times: τ_p/t ≪ 1",
             "white thermal noise, fluctuation–dissipation 2γk_BT"
           ],
+          "bound": {
+            "K": 1,
+            "delta": 0.01,
+            "norm": "relative mean-square displacement error normalized by 2Dt",
+            "domain": "stationary thermal velocity, m, γ, T > 0 and τ_p/t ≤ 0.01; exact error is (τ_p/t)(1 − exp(−t/τ_p))",
+            "horizon": "t ≥ 100τ_p",
+            "limitCharacter": "singular",
+            "uniformity": [
+              "positive temperature",
+              "times in the stated horizon"
+            ]
+          },
           "regime": {
             "family": "diffusion",
             "inequalities": [
@@ -1721,6 +1745,17 @@
             "no-slip boundary",
             "overdamped times t ≫ m/γ (machine form m/(γt) ≤ 0.01: a chosen threshold for \"≪ 1\", as in ab-langevin-diffusion)"
           ],
+          "bound": {
+            "K": 1,
+            "delta": 0.037500000000000006,
+            "norm": "relative change of D normalized by the Stokes–Einstein value under first-order Oseen drag",
+            "domain": "0 ≤ Re ≤ 0.1 (radius-based Re); with γ_Oseen = γ_Stokes(1 + 3Re/8), the error is (3Re/8)/(1 + 3Re/8). This bound compares the two drag closures.",
+            "horizon": "long-time diffusion coefficient, with observation time t ≥ 100τ_p",
+            "limitCharacter": "regular",
+            "uniformity": [
+              "positive sphere radius, viscosity and temperature within the drag closures"
+            ]
+          },
           "regime": {
             "family": "diffusion",
             "inequalities": [
@@ -2507,6 +2542,18 @@
             "adiabatic compression (no heat exchange within a wavelength)",
             "fluid at rest, no ambient flow"
           ],
+          "bound": {
+            "K": 1,
+            "delta": 0,
+            "norm": "relative error of sound speed in the linearized adiabatic equations",
+            "domain": "positive background density and pressure, adiabatic linear closure, and the stated small-perturbation regime",
+            "horizon": "all t ≥ 0 for the linearized sound speed",
+            "limitCharacter": "regular",
+            "uniformity": [
+              "background states in the stated domain",
+              "time within the linearized model"
+            ]
+          },
           "regime": {
             "family": "waves",
             "inequalities": [

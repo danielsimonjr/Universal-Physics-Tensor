@@ -817,6 +817,9 @@
                 "angular": {
                   "const": true
                 },
+                "defaultValue": {
+                  "type": "number"
+                },
                 "alternates": {
                   "type": "array",
                   "items": {

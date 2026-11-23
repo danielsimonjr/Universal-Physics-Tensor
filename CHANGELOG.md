@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Evaluators report the scope of the Casimir, lower-critical-field, Debye, radiation-pressure, and Onsager models. The atlas records analytic agreement bounds for dispersion, diffusion, first-order Oseen drag, and the linearized acoustic closure.
+
 - Cyclotron frequency is returned in signed cycles per second. Evaluators state the Maxwellian and Saha assumptions and can report a standoff radius ratio or a Shockley current at a supplied ideality.
 
 - Confrontation reports distinguish encoded references from measured comparisons and exclude them from frontier rankings. A refusal exits 3. The Johnson-noise record explains its historical CODATA reference.

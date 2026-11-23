@@ -31,6 +31,8 @@ export interface ParameterAlternate {
 
 /** One named input of an evaluator. @public */
 export interface EvaluatorParameter {
+  /** Value in the parameter unit when no binding is supplied. */
+  readonly defaultValue?: number;
   readonly key: string;
   readonly quantity: string;
   readonly symbol: string;
@@ -43,7 +45,7 @@ export interface EvaluatorParameter {
   /** An angular frequency in rad/s. A cycle unit (Hz, rpm) given to it is multiplied by 2π. */
   readonly angular?: true;
   readonly alternates?: readonly ParameterAlternate[];
-  /** Derived: the parameter binds no relation source, so only an extra output reads it. */
+  /** Derived: the parameter has a default or only an extra output reads it. */
   readonly optional?: true;
 }
 
@@ -79,7 +81,8 @@ function toParameter(row: CatalogEvaluatorParameter, optional: boolean): Evaluat
     ...(row.sign !== undefined ? { sign: row.sign } : {}),
     ...(row.angular === true ? { angular: true as const } : {}),
     ...(row.alternates !== undefined ? { alternates: row.alternates } : {}),
-    ...(optional ? { optional: true as const } : {}),
+    ...(row.defaultValue === undefined ? {} : { defaultValue: row.defaultValue }),
+    ...(optional || row.defaultValue !== undefined ? { optional: true as const } : {}),
   };
 }
 
@@ -117,7 +120,7 @@ export function unusedInputKeys(spec: EvaluatorSpec): string[] {
     .filter((parameter) => {
       const source = sourceOfParameter(relation, parameter);
       // A parameter that owns no relation source is read only by an extra output.
-      return (source === undefined || !used.has(source)) && !readByOutput(parameter.key);
+      return parameter.optional !== true && (source === undefined || !used.has(source)) && !readByOutput(parameter.key);
     })
     .map((parameter) => parameter.key);
 }
@@ -265,6 +268,11 @@ function buildSpec(
     contract,
     run(inputs, want = 'all') {
       const given = checkInputs(contract, inputs, want);
+      for (const parameter of parameters) {
+        if (given[parameter.key] === undefined && parameter.defaultValue !== undefined) {
+          given[parameter.key] = parameter.defaultValue;
+        }
+      }
       const bound = bindRelationInputs(relation, parameters, given);
       const violated = [
         ...relationDomain(relation).violations(bound, (source) => keyOfSource.get(source) ?? source),

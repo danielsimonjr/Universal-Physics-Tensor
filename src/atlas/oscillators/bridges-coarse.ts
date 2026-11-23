@@ -117,6 +117,17 @@ export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
     ['qa'],
     [{ group: 'qa', op: '<', bound: 1, alias: 'qa ≪ 1' }],
   ),
+  bound: {
+    K: 1,
+    delta: dispersionErrorApproximation(1),
+    deltaAt: ({ qa }) => dispersionErrorApproximation(qa),
+    norm: 'relative frequency error normalized by the continuum frequency, extended continuously at q = 0',
+    domain: '0 ≤ |qa| < 1; the alternating sine series gives 1 − sinc(qa/2) ≤ (qa)²/24',
+    horizon: 'all t ≥ 0 for the dispersion relation',
+    horizonHolds: (t) => Number.isFinite(t) && t >= 0,
+    limitCharacter: 'regular',
+    uniformity: ['all time for the modal frequencies', 'positive mass, spring constant and spacing'],
+  },
   counterexamples: [
     {
       description:

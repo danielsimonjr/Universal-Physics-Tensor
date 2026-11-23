@@ -460,6 +460,18 @@
         "adiabatic compression (no heat exchange within a wavelength)",
         "fluid at rest, no ambient flow"
       ],
+      "bound": {
+        "K": 1,
+        "delta": 0,
+        "norm": "relative error of sound speed in the linearized adiabatic equations",
+        "domain": "positive background density and pressure, adiabatic linear closure, and the stated small-perturbation regime",
+        "horizon": "all t ≥ 0 for the linearized sound speed",
+        "limitCharacter": "regular",
+        "uniformity": [
+          "background states in the stated domain",
+          "time within the linearized model"
+        ]
+      },
       "regime": {
         "family": "waves",
         "inequalities": [

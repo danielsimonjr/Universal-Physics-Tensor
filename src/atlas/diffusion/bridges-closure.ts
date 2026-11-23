@@ -94,6 +94,17 @@ export const BRIDGE_LANGEVIN_DIFFUSION: AtlasBridge = {
       },
     ],
   ),
+  bound: {
+    K: 1,
+    delta: LANGEVIN_MAX_TAU_RATIO,
+    deltaAt: ({ m, gamma, t }) => m / (gamma * t),
+    norm: 'relative mean-square displacement error normalized by 2Dt',
+    domain: 'stationary thermal velocity, m, γ, T > 0 and τ_p/t ≤ 0.01; exact error is (τ_p/t)(1 − exp(−t/τ_p))',
+    horizon: 't ≥ 100τ_p',
+    horizonHolds: (t, { m, gamma }) => Number.isFinite(t) && m > 0 && gamma > 0 && t >= m / (gamma * LANGEVIN_MAX_TAU_RATIO),
+    limitCharacter: 'singular',
+    uniformity: ['positive temperature', 'times in the stated horizon'],
+  },
   counterexamples: [
     {
       description:
@@ -167,6 +178,17 @@ export const BRIDGE_STOKES_EINSTEIN: AtlasBridge = {
       },
     ],
   ),
+  bound: {
+    K: 1,
+    delta: (3 / 8) * STOKES_MAX_RE,
+    deltaAt: ({ Re }) => (3 / 8) * Re,
+    norm: 'relative change of D normalized by the Stokes–Einstein value under first-order Oseen drag',
+    domain: '0 ≤ Re ≤ 0.1 (radius-based Re); with γ_Oseen = γ_Stokes(1 + 3Re/8), the error is (3Re/8)/(1 + 3Re/8). This bound compares the two drag closures.',
+    horizon: 'long-time diffusion coefficient, with observation time t ≥ 100τ_p',
+    horizonHolds: (t, { m, gamma }) => Number.isFinite(t) && m > 0 && gamma > 0 && t >= m / (gamma * STOKES_MAX_TAU_RATIO),
+    limitCharacter: 'regular',
+    uniformity: ['positive sphere radius, viscosity and temperature within the drag closures'],
+  },
   counterexamples: [],
   witnesses: [
     {

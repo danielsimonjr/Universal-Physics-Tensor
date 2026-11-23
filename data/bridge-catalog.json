@@ -7425,6 +7425,9 @@
       },
       "holds": "isFinite(poynting-flux) and\n      poynting-flux >= 0 and\n      isFinite(reflectance) and\n      reflectance >= 0 and\n      reflectance <= 1 and\n      isFinite(incidence-angle) and incidence-angle >= 0 and incidence-angle < pi / 2",
       "citation": "OpenStax University Physics Volume 2, https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog's assembly.",
+      "notice": {
+        "text": "Use reflectance for the supplied angle and beam polarization. The formula does not compute the Fresnel reflectance."
+      },
       "reference": {
         "inputs": {
           "poynting-flux": 1361,
@@ -9872,6 +9875,9 @@
       },
       "holds": "isFinite(lowercrit-xi) and\n      lowercrit-xi > 0 and\n      isFinite(lowercrit-pen) and\n      lowercrit-pen > lowercrit-xi",
       "citation": "PhysJS.LowerCritical.lower_critical. Not be-96.",
+      "notice": {
+        "text": "Leading logarithmic type-II result, valid for κ = λ/ξ ≫ 1. Near κ of order one, neglected contributions to the vortex energy are comparable to the logarithm."
+      },
       "reference": {
         "inputs": {
           "lowercrit-pen": 1e-07,
@@ -10792,12 +10798,15 @@
           "onsager_B_T"
         ]
       },
-      "holds": "isFinite(onsager-b0) and abs(onsager-b0) <= 1e-12 and isFinite(onsager-l12)",
+      "holds": "isFinite(onsager-b0) and onsager-b0 == 0 and isFinite(onsager-l12)",
       "citation": "PhysJS.OnsagerReciprocity.onsager_eq. L12(B) = L21(−B) is not this row.",
+      "notice": {
+        "text": "Zero-field reciprocity with equal time-reversal parity. Finite fields require Onsager–Casimir reciprocity L_ij(B) = ε_iε_j L_ji(−B)."
+      },
       "reference": {
         "inputs": {
           "onsager-l12": 3,
-          "onsager-b0": 5e-13
+          "onsager-b0": 0
         },
         "value": 3
       }
@@ -10819,6 +10828,9 @@
       },
       "holds": "isFinite(plate-separation) and plate-separation > 0",
       "citation": "Casimir 1948 Proc. Kon. Ned. Akad. Wet. 51:793",
+      "notice": {
+        "text": "Ideal parallel perfectly conducting plates at zero temperature. Real metals need optical-response corrections when the gap approaches their penetration length and thermal corrections as it approaches ℏc/(k_BT)."
+      },
       "reference": {
         "inputs": {
           "plate-separation": 1e-06
@@ -11319,7 +11331,7 @@
           "quantity": "reflectance",
           "symbol": "R",
           "unit": "",
-          "meaning": "intensity reflectance on [0, 1]; transmission is 0"
+          "meaning": "intensity reflectance at the supplied incidence angle and polarization, on [0, 1]; transmission is 0"
         },
         {
           "key": "theta_rad",
@@ -11903,7 +11915,7 @@
     },
     {
       "catalogId": 90,
-      "name": "Debye heat",
+      "name": "Debye heat capacity, low-temperature T³ limit",
       "parameters": [
         {
           "key": "N",
@@ -14114,7 +14126,8 @@
           "quantity": "onsager-b0",
           "symbol": "B",
           "unit": "T",
-          "meaning": "magnetic field, |B| ≤ 1 pT"
+          "meaning": "magnetic field. Finite fields require the Onsager–Casimir relation",
+          "defaultValue": 0
         }
       ]
     }
