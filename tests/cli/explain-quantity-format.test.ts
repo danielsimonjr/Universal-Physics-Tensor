@@ -64,22 +64,22 @@ describe('explain text formats a recovered value at 15 significant digits', () =
 
 describe('explain bounds', () => {
   it.each([
-    ['position-momentum-uncertainty-product', [], 'lower', '≥'],
-    ['orthogonalization-time-lower-bound', ['mean-energy-above-ground=1J'], 'lower', '≥'],
-    ['bekenstein-entropy-upper-bound', ['system-energy=1J', 'enclosing-radius=1m'], 'upper', '≤'],
-  ] as const)('reports the direction of the %s bound in text and JSON', async (target, bindings, bound, operator) => {
+    ['position-momentum-uncertainty-product', [], 'lower'],
+    ['orthogonalization-time-lower-bound', ['mean-energy-above-ground=1J'], 'lower'],
+    ['bekenstein-entropy-upper-bound', ['system-energy=1J', 'enclosing-radius=1m'], 'upper'],
+  ] as const)('reports the direction of the %s bound in text and JSON', async (target, bindings, bound) => {
     const args = ['explain', target, '--source=canonical', ...bindings];
     const text = capture();
     expect(await runCli(args, text.io)).toBe(0);
-    expect(text.lines.join('\n')).toContain(`A ${bound} bound on '${target}'`);
+    expect(text.lines.join('\n')).toContain(`computes the ${bound} bound reported as '${target}'`);
     expect(text.lines.join('\n')).toContain('Bound value:');
-    expect(text.lines.join('\n')).toContain(` ${operator} `);
+    expect(text.lines.join('\n')).toContain(` — ${bound} bound: `);
     const json = capture();
     expect(await runCli([...args, '--json'], json.io)).toBe(0);
     expect(JSON.parse(json.lines.join('\n')).result).toMatchObject({
       bound,
       recoveredValue: expect.any(Number),
-      summary: expect.stringContaining(`A ${bound} bound`),
+      summary: expect.stringContaining(`computes the ${bound} bound`),
     });
   });
 

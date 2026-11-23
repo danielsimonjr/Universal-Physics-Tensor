@@ -1,8 +1,8 @@
 # Theoretical physicist dogfood, session 39, 2026-11-23
 
-Persona: Theoretical physicist (outside the rotation)  
-Area: asymptotic spectra, quantum bounds, and signed paraxial optics  
-Package under test: universal-physics-tensor@18.0.0 (installed from npm), Node v24.22.3  
+Persona: Theoretical physicist (outside the rotation)
+Area: asymptotic spectra, quantum bounds, and signed paraxial optics
+Package under test: universal-physics-tensor@18.0.0 (installed from npm), Node v24.22.3
 Next persona: Condensed-matter physicist (rotation position 2 of 7)
 
 This model-led session followed the theoretical physicist reports in sessions 33–38. It used the installed CLI and library in two independent empty directories. Both installs reported 18.0.0. Each filed finding reproduced on both installs. The Planck reference used 60-digit decimal arithmetic and the exact SI values of h, k_B and c.

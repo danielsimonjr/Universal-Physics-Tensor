@@ -337,7 +337,7 @@ function buildSummary(
     const route = derivations.length === 1 ? `${ids} (${derivations[0]!.label})` : ids;
     const value = recoveredValue === undefined ? '' : ` Bound value: ${formatQuantity(recoveredValue)}.`;
     const unusedNote = unused.length === 0 ? '' : ` Given but not used: {${unused.join(', ')}}.`;
-    return `A ${bound} bound on '${target}' follows from ${known} via ${route}.${value}${unusedNote}`;
+    return `From ${known}, ${route} computes the ${bound} bound reported as '${target}'.${value}${unusedNote}`;
   }
 
   let s: string;

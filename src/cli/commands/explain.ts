@@ -214,8 +214,9 @@ function printExplanation(
   if (x.derivations.length) {
     out('  derivations:');
     for (const d of x.derivations) {
-      const relation = d.bound === 'lower' ? '≥' : d.bound === 'upper' ? '≤' : '=';
-      const val = d.value !== undefined ? ` ${relation} ${api.formatQuantity(d.value)}${displayUnit}` : '';
+      const val = d.value === undefined ? '' : d.bound === undefined
+        ? ` = ${api.formatQuantity(d.value)}${displayUnit}`
+        : ` — ${d.bound} bound: ${api.formatQuantity(d.value)}${displayUnit}`;
       const chain =
         d.leafInputs.join(',') !== d.sources.join(',') ? `  [from leaves: ${d.leafInputs.join(', ')}]` : '';
       const grade = d.confidence === undefined ? '' : ` [${d.confidence}]`;
