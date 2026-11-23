@@ -415,8 +415,8 @@ export interface EquationAnalysis {
   readonly shortBindings: readonly ShortBinding[];
   /**
    * RHS names given a dimensionless placeholder because they did not resolve.
-   * The reported RHS dimension treats them as dimensionless, so it is not a
-   * check of the formula until they are bound.
+   * The placeholder supports parsing and hints. The RHS dimension is withheld
+   * until these names are bound.
    */
   readonly placeholders: readonly string[];
   /** Set when `--natural` / `--geometrized` reconciled the two dimensions. */
@@ -542,6 +542,9 @@ export async function analyzeUserEquation(
     .filter((s) => s.length === 1 && resolve(s) !== null)
     .map((s) => ({ name: s, quantity: resolve(s)!, dim: dimsIn.get(resolve(s)!) as Dimension }));
 
+  // Placeholder dimensions are useful for inferring hints, but cannot establish
+  // the dimension of the formula.
+  if (placeholders.length > 0) rhsDimension = null;
   let consistent = rhsDimension && targetDimension ? equals(rhsDimension, targetDimension) : null;
   let natural: string | undefined;
   if (

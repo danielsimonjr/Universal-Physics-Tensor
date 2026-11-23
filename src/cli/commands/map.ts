@@ -330,14 +330,10 @@ function equationDetermination(
     asked,
     agrees: comparisons.some((c) => c.kind === 'agrees'),
     checkFailed:
-      (user.consistent === false && unresolved.length === 0) || conventionsModule.canonicalCheckFailed(comparisons),
+      user.consistent === false || conventionsModule.canonicalCheckFailed(comparisons),
     notUnique: false,
     unresolved,
   });
-}
-
-function tainted(user: EquationAnalysis): boolean {
-  return unresolvedNames(user).length > 0;
 }
 
 // The two lazily loaded modules, assigned at the top of `runReport()` before
@@ -356,29 +352,25 @@ function printEquationReport(
   comparisons: readonly CanonicalComparison[] = [],
 ): void {
   out('');
-  const unresolved = unresolvedNames(user);
-  const verdict = equationDetermination(user, comparisons);
   if (user.consistent === true) {
     out(`  ✓ dimensionally consistent: ${api.format(user.rhsDimension!)}`);
-  } else if (verdict.report === 'not-established') {
-    const names = unresolved.map((n) => `'${n}'`).join(', ');
+  } else if (user.targetDimension !== null && user.placeholders.length > 0) {
+    const names = user.placeholders.map((n) => `'${n}'`).join(', ');
     out(
-      `  · NOT ESTABLISHED: ${names} ${unresolved.length > 1 ? 'have' : 'has'} no catalog dimension, ` +
+      `  · NOT ESTABLISHED: ${names} ${user.placeholders.length > 1 ? 'have' : 'has'} no catalog dimension, ` +
         'so the right-hand side dimension was not established and is not reported.',
     );
-  } else if (verdict.report === 'established' && unresolved.length > 0) {
-    // A canonical agreement ran. The placeholder dimension is not that result.
   } else if (user.consistent === false) {
     out(
       `  ⚠ dimensional MISMATCH: RHS is ${api.format(user.rhsDimension!)} but the target is ${api.format(
         user.targetDimension!
       )}`
     );
-  } else if (user.rhsDimension && (user.placeholders ?? []).length > 0) {
+  } else if (user.placeholders.length > 0) {
     const names = user.placeholders.map((n) => `'${n}'`).join(', ');
     out(
       `  · UNKNOWN: ${names} ${user.placeholders.length === 1 ? 'was' : 'were'} taken as dimensionless. ` +
-        'That is not the dimension of the formula, and the target is not a bound catalog name, so nothing was checked',
+        'The target is unbound and the right-hand side dimension is undetermined.',
     );
   } else if (user.rhsDimension) {
     out(`  · RHS dimension: ${api.format(user.rhsDimension)} (target not in the catalog, so no comparison)`);
@@ -789,8 +781,8 @@ async function runReport(ctx: CommandCtx): Promise<number> {
       landing = api.equationLanding(model, 'user-equation');
       userEquation = {
         equation: user.junction.label,
-        consistent: tainted(user) ? null : user.consistent,
-        rhsDimension: tainted(user) ? null : user.rhsDimension,
+        consistent: user.consistent,
+        rhsDimension: user.rhsDimension,
         targetDimension: user.targetDimension,
         hints: user.hints,
         shortBindings: user.shortBindings,

@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Equation mapping withholds the RHS dimension when a name is unbound and reports canonical comparisons independently.
+
 - `upt explain` looks up exact canonical quantities absent from the default catalog. Explicit source selections restrict lookup and derivation.
 
 - An unbounded coarse-graining path reports no numeric error estimate instead of a zero identity bound.

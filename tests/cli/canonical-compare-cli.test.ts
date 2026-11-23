@@ -188,6 +188,18 @@ describe('N3: a mismatch caused by an unresolved placeholder is not established'
     expect(t).not.toMatch(/dimensional MISMATCH/);
   });
 
+  it('reports an unbound radius separately from a failed prefactor comparison', async () => {
+    const equation = 'coulomb_force = q_1*q_2/(2*pi*epsilon_0*r^2)';
+    const unbound = await text(['map', '--equation', equation, '--equation-only'], 3);
+    expect(unbound).toContain("NOT ESTABLISHED: 'r'");
+    expect(unbound).not.toContain('dimensional MISMATCH');
+    expect(unbound).toContain('by a constant factor');
+
+    const bound = await text(['map', '--equation', equation, '--equation-only', '--bind-short'], 3);
+    expect(bound).toContain('dimensionally consistent: [force]');
+    expect(bound).toContain('by a constant factor');
+  });
+
   it('control: with every name resolved, a mismatch is still a MISMATCH and exits 3', async () => {
     const t = await text(['map', '--equation', 'period = 2*pi*sqrt(gravity/length)'], 3);
     expect(t).toMatch(/⚠ dimensional MISMATCH: RHS is \[frequency\] but the target is \[time\]/);
