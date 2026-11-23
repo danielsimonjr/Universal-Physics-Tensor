@@ -330,6 +330,7 @@ function shortestChain(
 export type NoClaimReason =
   /** The relations along the path do not compose to a relation at all. */
   | 'no-composite-claim'
+  | 'bound-not-stated'
   /** An edge on the path states no norm, so the composite holds in none. */
   | 'norm-not-stated'
   /** Two edges state DIFFERENT norms; composing across norms is unsound. */
@@ -641,6 +642,11 @@ export function boundPath(bridges: readonly AtlasBridge[]): PathBoundResult {
   // composite is a harder failure than an unstatable norm, and reporting the
   // softer one would mask it.
   const composed = composeBoundPath(pairs);
+  if (!bridges.some(bridge => bridge.bound !== undefined) && bridges.some(bridge => bridge.relation !== 'exact-equivalence')) {
+    return { kind: 'no-claim', reason: 'bound-not-stated',
+      detail: 'No step states a bound, so the path carries no numeric error estimate' };
+  }
+
 
   // ── Gate 5: a family boundary is not string equality ──────────────────────
   // After the Lipschitz gate, so a missing constant is still the harder failure.

@@ -25,7 +25,9 @@ function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): Bridg
     label: relation.label,
     sources: relation.sources.map((name) => quantityByName(name)),
     ...(Object.keys(relation.aliases).length > 0 ? { aliases: relation.aliases } : {}),
-    target: quantityByName(relation.target),
+    target: relation.catalogId === 63
+      ? { ...quantityByName(relation.target), identity: 'chandrasekhar-mass-limit' }
+      : quantityByName(relation.target),
     confidence: relation.confidence,
     domain: relationDomain(relation),
     evaluate: (inputs) => evaluateCatalogRelation(relation, inputs),

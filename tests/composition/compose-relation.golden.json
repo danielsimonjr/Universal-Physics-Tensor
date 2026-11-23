@@ -43046,38 +43046,9 @@
   },
   {
     "pair": "be-63>>be-12",
-    "outcome": "composed",
-    "id": "be-63>>be-12",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ Thermal de Broglie wavelength λ_T = √(2πℏ²/(m k_B T))",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "temperature:T:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":1,\"N\":0,\"J\":0}"
-    ],
-    "target": "thermal-de-broglie-wavelength:λ_T",
-    "confidence": "speculative",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(mass) and mass > 0 and isFinite(temperature) and temperature > 0)",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Pathria 2011 Statistical Mechanics §7.1; de Broglie 1924",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:2.969630484019524e-38"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-12: target quantity 'mass' matches none of ['mass', 'temperature'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-16",
@@ -43087,74 +43058,15 @@
   },
   {
     "pair": "be-63>>be-37",
-    "outcome": "composed",
-    "id": "be-63>>be-37",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ Shapiro delay Δt = (2GM/c³)·ln(R_far/R_near)",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "far-radius:R_far:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "near-radius:R_near:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
-    ],
-    "target": "shapiro-delay:Δt",
-    "confidence": "speculative",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(mass) and mass > 0 and isFinite(near-radius) and near-radius > 0 and isFinite(far-radius) and far-radius >= near-radius)",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Shapiro 1964 PRL 13:789",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "regime",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:0"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-37: target quantity 'mass' matches none of ['mass', 'far-radius', 'near-radius'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-42",
-    "outcome": "composed",
-    "id": "be-63>>be-42",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ Hawking temperature T_H = ℏc³/(8πGMk_B)",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
-    ],
-    "target": "hawking-temperature:T_H",
-    "confidence": "highly-speculative",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(mass) and mass > 0)",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Hawking 1975 CMP 43:199",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:2.137791379227184e-8"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-42: target quantity 'mass' matches none of ['mass'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-42-via-rs",
@@ -43164,110 +43076,21 @@
   },
   {
     "pair": "be-63>>be-51",
-    "outcome": "composed",
-    "id": "be-63>>be-51",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ Gravitational lensing α = 4GM/(bc²)",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "impact-parameter:b:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
-    ],
-    "target": "deflection-angle:α",
-    "confidence": "established",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(mass) and mass > 0 and isFinite(impact-parameter) and impact-parameter > 0 and impact-parameter >= (10 * 2 * G * mass) / (c * c))",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Dyson, Eddington & Davidson 1920 Phil. Trans. R. Soc. A 220:291",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "regime",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:false",
-    "evaluateAtOnes": "throw:DomainViolationError"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-51: target quantity 'mass' matches none of ['mass', 'impact-parameter'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-52",
-    "outcome": "composed",
-    "id": "be-63>>be-52",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ Perihelion precession Δφ = 6πGM/(a(1−e²)c²)",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "semi-major-axis:a:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "eccentricity:e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
-    ],
-    "target": "perihelion-advance:Δφ",
-    "confidence": "established",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(mass) and mass > 0 and isFinite(semi-major-axis) and semi-major-axis > 0 and isFinite(eccentricity) and eccentricity >= 0 and eccentricity < 1 and semi-major-axis * (1 - eccentricity) >= (10 * 2 * G * mass) / (c * c))",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Einstein 1915 Preuss. Akad. Wiss. 831",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "regime",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:false",
-    "evaluateAtOnes": "throw:DomainViolationError"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-52: target quantity 'mass' matches none of ['mass', 'semi-major-axis', 'eccentricity'] by name or registered identification"
   },
   {
     "pair": "be-63>>law-schwarzschild-radius",
-    "outcome": "composed",
-    "id": "be-63>>law-schwarzschild-radius",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ Schwarzschild radius r_s = 2GM/c²",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
-    ],
-    "target": "schwarzschild-radius:r_s",
-    "confidence": "established",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(mass) and mass > 0)",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Schwarzschild 1916; Carroll 2004 Spacetime and Geometry §5.4",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:8523.900978040281"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> law-schwarzschild-radius: target quantity 'mass' matches none of ['mass'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-14",
@@ -43289,37 +43112,9 @@
   },
   {
     "pair": "be-63>>be-48",
-    "outcome": "composed",
-    "id": "be-63>>be-48",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ GRW localization rate λ_GRW = λ_0 (m/m_0)",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
-    ],
-    "target": "grw-localization-rate:λ_GRW",
-    "confidence": "speculative",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(mass) and mass > 0)",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Ghirardi, Rimini & Weber 1986 PRD 34:470",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:3.4365891235912997e+41"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-48: target quantity 'mass' matches none of ['mass'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-53",
@@ -43437,39 +43232,9 @@
   },
   {
     "pair": "be-63>>be-38",
-    "outcome": "composed",
-    "id": "be-63>>be-38",
-    "beId": null,
-    "kind": "bridge",
-    "label": "Chandrasekhar mass M = (ω₃⁰ √(3π)/2) (ℏc/G)^{3/2} (μ_e m_u)^{−2} ∘ MOND force F = F_N·ν(F_N/(m a_0))",
-    "sources": [
-      "lane-emden-omega-3:ω₃⁰:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mean-molecular-weight-per-electron:μ_e:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "newtonian-force:F_N:{\"L\":1,\"M\":1,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
-      "mond-acceleration-scale:a_0:{\"L\":1,\"M\":0,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
-    ],
-    "target": "mond-force:F",
-    "confidence": "speculative",
-    "domainDescription": "(isFinite(mean-molecular-weight-per-electron) and mean-molecular-weight-per-electron > 0 and isFinite(lane_emden_omega_3)) AND, on the piped mass, (isFinite(newtonian-force) and newtonian-force > 0 and isFinite(mass) and mass > 0 and isFinite(mond-acceleration-scale) and mond-acceleration-scale > 0)",
-    "citation": "Chandrasekhar 1931 ApJ 74:81 | Milgrom 1983 ApJ 270:365; Famaey & McGaugh 2012 Living Rev. Relativity 15:10",
-    "identificationUsed": null,
-    "aliasDispositionsUsed": [],
-    "extraKeys": [
-      "aliases",
-      "beId",
-      "citation",
-      "confidence",
-      "domain",
-      "evaluate",
-      "id",
-      "kind",
-      "label",
-      "sources",
-      "symbolic",
-      "target"
-    ],
-    "predicateAtOnes": "ok:true",
-    "evaluateAtOnes": "ok:2395642677111399"
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-38: target quantity 'mass' matches none of ['newtonian-force', 'mass', 'mond-acceleration-scale'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-39",

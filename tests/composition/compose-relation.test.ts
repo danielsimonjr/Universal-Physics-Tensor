@@ -59,7 +59,7 @@ type Outcome = 'junction' | 'dimension' | 'alias' | 'table' | 'composed';
  * operator, so a change in the operator and a change in the data cannot cancel.
  */
 function predictedOutcome(first: BridgeEdge, second: BridgeEdge): Outcome {
-  let junction = second.sources.find((s) => s.name === first.target.name);
+  let junction = second.sources.find((s) => s.name === first.target.name && (s.identity ?? s.name) === (first.target.identity ?? first.target.name));
   if (junction === undefined) {
     for (const ident of QUANTITY_IDENTIFICATIONS) {
       if (ident.from !== first.target.name) continue;

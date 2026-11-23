@@ -34,3 +34,15 @@ describe('a registered constant is an explain input that must agree (issue 473)'
     expect(bad.code).toBe(1);
   });
 });
+
+it('compares a capacitance formula whose permittivity pairs with the vacuum constant', async () => {
+  const { runCli } = await import('../../dist/cli/main.js');
+  const output: string[] = [];
+  const errors: string[] = [];
+  const code = await runCli(['derive', 'capacitance:capacitance', 'permittivity:permittivity', 'area:area', 'distance:length', '--formula', 'permittivity*area/distance'], {
+    out: (s = '') => output.push(s), err: (s = '') => errors.push(s), write: s => output.push(s),
+  });
+  expect(code).not.toBe(70);
+  expect(errors.join('')).toBe('');
+  expect(output.join('\n')).toContain('agrees with CE-capacitance-parallel-plate');
+});

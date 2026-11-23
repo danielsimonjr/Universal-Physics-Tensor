@@ -47,21 +47,13 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
     expect(stubs[0]?.text).toContain('-- not a formalRef');
     expect(stubs[0]?.text).toContain('leanProof": "absent"');
     const rejected = result.filter((row) => row.kind === 'rejected: regime mismatch');
-    expect(rejected.map((row) => row.edgeIds)).toEqual([
-      ['be-63', 'be-12'],
-      ['be-63', 'be-37'],
-    ]);
+    expect(rejected.map((row) => row.edgeIds)).toEqual([]);
   });
 
-  it('still proposes the rejected pairs as proof targets', () => {
+  it('excludes junctions whose physical identity does not match', () => {
     const seeded = enumerateCompositions(CATALOG_GRAPH, { seedIds: new Set(bridgeSeedKeys()) });
     const pairs = seeded.proofTargets.map((target) => [target.first.id, target.second.id]);
-    expect(pairs).toEqual(
-      expect.arrayContaining([
-        ['be-63', 'be-12'],
-        ['be-63', 'be-37'],
-      ]),
-    );
+    expect(pairs).toEqual([['be-74', 'be-76']]);
   });
 
   it('records one provisional stub', () => {

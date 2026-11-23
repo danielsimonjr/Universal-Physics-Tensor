@@ -3786,7 +3786,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
-| `../dimensional/symbolic-constants.js` | `CONSTANTS, isRegisteredConstant, piMultipleValue` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, constantRecord, isRegisteredConstant, piMultipleValue` | Import |
 | `../dimensional/ast-leaves.js` | `forEachScalarLeaf, isDecimalLiteral` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
@@ -7855,7 +7855,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90308 |
+| Total Lines of Code | 90328 |
 | Total Exports | 2867 |
 | Total Re-exports | 1411 |
 | Total Classes | 86 |

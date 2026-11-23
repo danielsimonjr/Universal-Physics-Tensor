@@ -33,6 +33,8 @@ import { BASES } from './algebra.js';
 /** A named physical quantity with a dimension — the enumerator's input.
  *  Structurally satisfied by a composition `Quantity`. @public */
 export interface DimensionalVariable {
+  /** Physical meaning when a formula name is shared by distinct observables. */
+  readonly identity?: string;
   readonly name: string;
   readonly dim: Dimension;
 }

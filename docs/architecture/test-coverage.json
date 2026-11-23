@@ -15528,6 +15528,7 @@
       "tests/composition/consequence.test.ts",
       "tests/composition/discovery-calibration.test.ts",
       "tests/composition/discovery-own-equation.test.ts",
+      "tests/composition/explain.test.ts",
       "tests/composition/graph-structure.test.ts",
       "tests/composition/graph-viz-filters.test.ts",
       "tests/composition/identifiability-rank.test.ts",

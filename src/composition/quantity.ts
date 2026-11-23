@@ -60,6 +60,8 @@ export interface RegimeAttributes {
  * @public
  */
 export interface Quantity {
+  /** Physical identity of this port when its formula name is ambiguous. */
+  readonly identity?: string;
   /** Canonical graph identity, e.g. 'temperature', 'schwarzschild-radius'. */
   readonly name: string;
   /** Display symbol, e.g. 'T_H', 'r_s'. */

@@ -29,7 +29,7 @@ import type { Dimension } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
-import { CONSTANTS, isRegisteredConstant, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { CONSTANTS, constantRecord, isRegisteredConstant, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { forEachScalarLeaf, isDecimalLiteral } from '../dimensional/ast-leaves.js';
 import { evalExpr } from './expr-eval.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
@@ -568,7 +568,8 @@ export function compareWithCanonical(
     // lookup), not to a fixed-point sample — otherwise the ratio would wander with the points.
     const constBindings = Object.fromEntries(
       [...constPairs].map(([u, cName]) => {
-        const c = CONSTANTS[cName];
+        const canonicalName = constants.find(g => normalize(g.name) === cName)?.name ?? cName;
+        const c = constantRecord(canonicalName);
         if (c === undefined) {
           throw new Error(`compareWithCanonical: governing constant '${cName}' is not in CONSTANTS`);
         }

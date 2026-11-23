@@ -1,6 +1,6 @@
 
 Linkage map — how the equations connect via shared quantities  [source: canonical (standard-physics L-layer, bridges excluded)]
-(26 components over 109 edges; 71 compose into chains)
+(26 components over 109 edges; 67 compose into chains)
   anchored core: the clusters holding at least one of the 109 established-confidence edge(s) of the 109 in this graph
 
   ● cluster of 81  [ANCHORED to known physics]

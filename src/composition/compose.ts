@@ -284,7 +284,7 @@ function findJunction(
   viaIdentification: QuantityIdentification | null;
 } {
   for (const [index, src] of second.sources.entries()) {
-    if (src.name === first.target.name) {
+    if (src.name === first.target.name && (src.identity ?? src.name) === (first.target.identity ?? first.target.name)) {
       return { junction: src, index, viaIdentification: null };
     }
   }
@@ -333,6 +333,11 @@ export function composeEdges(
   second: BridgeEdge,
   opts: ComposeOptions = {},
 ): BridgeEdge {
+  for (const [name, edge] of [['first', first], ['second', second]] as const) {
+    if (edge === undefined || edge === null || !Array.isArray(edge.sources) || edge.target === undefined) {
+      throw new CompositionJunctionError(`composeEdges: ${name} must be a bridge edge with sources and a target`);
+    }
+  }
   const identifications = [
     ...QUANTITY_IDENTIFICATIONS,
     ...(opts.identifications ?? []),

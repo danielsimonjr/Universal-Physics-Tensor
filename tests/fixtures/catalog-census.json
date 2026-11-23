@@ -43,7 +43,7 @@
   "linkage": {
     "components": 133,
     "isolated": 128,
-    "compositions": 22,
+    "compositions": 14,
     "anchoredClusterSize": 22,
     "anchoredClusterEstablished": 11
   },

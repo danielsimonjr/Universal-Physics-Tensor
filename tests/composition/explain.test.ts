@@ -188,3 +188,12 @@ describe('explainQuantity — the real catalog graph', () => {
     expect(x.summary).toMatch(/identification hawking-temperature ≡ temperature/);
   });
 });
+
+it('withholds an aggregate when a competing physical model refuses the inputs', async () => {
+  const { CANONICAL_GRAPH } = await import('../../src/composition/canonical-graph.js');
+  const result = explainQuantity(CANONICAL_GRAPH, 'hubble-rate-squared',
+    {rho: 1e-26, 'curvature-k': 1, 'scale-factor': 1e26});
+  expect(result.recoveredValue).toBeUndefined();
+  expect(result.refusals?.some(refusal => refusal.kind === 'domain')).toBe(true);
+  expect(result.summary).toContain('No recovered value');
+});

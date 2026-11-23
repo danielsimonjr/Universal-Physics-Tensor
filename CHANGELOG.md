@@ -10,8 +10,13 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- An unbounded coarse-graining path reports no numeric error estimate instead of a zero identity bound.
+
 - Grid partial derivatives preserve the grid shape through tensor construction and reject insufficient clamp samples or invalid spacing. Explicit finite-difference steps must produce distinct representable coordinates.
 - Evaluator uncertainty uses representable centered or one-sided sensitivity probes and checks the full uncertainty interval separately. A domain edge or curvature above the roundoff floor is reported with the uncertainty result.
+- Composition junctions can carry physical identity independently of formula names. String phase speed and the Chandrasekhar mass limit no longer implicitly bind to generic particle speed or mass. Missing composition operands produce a named junction error.
+- Canonical comparison resolves constant aliases through the constant registry.
+
 
 ## [17.0.0] - 2026-11-22
 

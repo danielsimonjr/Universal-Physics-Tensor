@@ -9258,6 +9258,7 @@ modules:
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
+            - constantRecord
             - isRegisteredConstant
             - piMultipleValue
         - file: ../dimensional/ast-leaves.js
@@ -19931,7 +19932,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90308
+  totalLinesOfCode: 90328
   totalExports: 2867
   totalClasses: 86
   totalInterfaces: 523
