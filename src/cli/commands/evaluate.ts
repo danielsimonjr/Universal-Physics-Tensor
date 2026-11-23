@@ -58,7 +58,7 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         With no bridge id, lists the evaluable bridges and their declared inputs.
         --sigma key=u (repeatable) gives an input's standard uncertainty;
         --corr a,b=rho its correlation. Propagated to first order (GUM law,
-        central-difference sensitivities), with a curvature check per input
+        domain-aware finite-difference sensitivities), with a curvature check per input
         that flags where the linearization is unreliable. An input without
         --sigma is treated as exact. Not included: the evaluator's numerical
         error and model discrepancy (whether the bridge applies).
@@ -222,7 +222,7 @@ function uncertaintyOf(
   const exactInputs = Object.keys(inputs).filter((k) => !(k in sigma));
   return {
     block: {
-      method: 'first-order propagation (GUM law), central-difference sensitivities, curvature check at ±u per input',
+      method: 'first-order propagation (GUM law), domain-aware finite-difference sensitivities, curvature check at ±u per input',
       sigma,
       correlations: Object.fromEntries(corr),
       outputs: propagated,
@@ -240,7 +240,7 @@ type Fmt = CommandCtx['api']['formatExact'];
 
 /**
  * The value is echoed exactly; σ, the relative %, a sensitivity, a contribution and the
- * curvature ratio are statistics (the sensitivity is a central difference whose trailing
+ * curvature ratio are statistics (the sensitivity is a finite difference whose trailing
  * digits are noise), so they print at three significant digits.
  */
 function printUncertainty(api: CommandCtx['api'], out: CommandCtx['out'], u: Uncertainty): void {

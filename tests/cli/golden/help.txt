@@ -340,7 +340,7 @@ Flags:
         With no bridge id, lists the evaluable bridges and their declared inputs.
         --sigma key=u (repeatable) gives an input's standard uncertainty;
         --corr a,b=rho its correlation. Propagated to first order (GUM law,
-        central-difference sensitivities), with a curvature check per input
+        domain-aware finite-difference sensitivities), with a curvature check per input
         that flags where the linearization is unreliable. An input without
         --sigma is treated as exact. Not included: the evaluator's numerical
         error and model discrepancy (whether the bridge applies).

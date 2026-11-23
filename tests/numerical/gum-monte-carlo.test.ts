@@ -134,3 +134,11 @@ describe('GUM propagation against seeded Monte Carlo', () => {
     // 20000 evaluator runs take about 20 s on one idle core; the suite runs four files at once.
   }, 180_000);
 });
+
+describe('GUM at an evaluator boundary', () => {
+  it('recovers a one-sided linear sensitivity and marks the unsupported interval', () => {
+    const result = propagateEvaluatorUncertainty(({x}) => ({y: x! <= 1 ? 12.48 * x! : NaN}), {x: 1}, {x: 0.01}, new Map()).y!;
+    expect(result.contributions.x!.sensitivity).toBeCloseTo(12.48, 7);
+    expect(result.unreliable).toEqual(['x']);
+  });
+});

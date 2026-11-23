@@ -23,12 +23,12 @@ import { rowMajorStrides } from './strides.js';
  * @internal — consumed by the lowering pass; not part of the consumer surface.
  */
 export function pderivGrid(grid: GridField, axis: number): number[] {
-  if (axis < 0 || axis >= grid.shape.length) {
+  if (!Number.isInteger(axis) || axis < 0 || axis >= grid.shape.length) {
     throw new NumericalBackendError(`pderivGrid: axis ${axis} out of range for shape [${grid.shape}]`);
   }
   const h = grid.spacing[axis];
-  if (!(h > 0)) {
-    throw new NumericalBackendError(`pderivGrid: non-positive spacing ${h} on axis ${axis}`);
+  if (!(h > 0) || !Number.isFinite(h)) {
+    throw new NumericalBackendError(`pderivGrid: non-positive or non-finite spacing ${h} on axis ${axis}`);
   }
   const flat = flattenNA(grid.data);
   const shape = grid.shape;
@@ -36,6 +36,13 @@ export function pderivGrid(grid: GridField, axis: number): number[] {
   const out = new Array<number>(flat.length).fill(0);
   const n = shape[axis];
   const step = strides[axis];
+  if (shape.some(size => !Number.isSafeInteger(size) || size < 1)
+      || shape.reduce((total, size) => total * size, 1) !== flat.length) {
+    throw new NumericalBackendError(`pderivGrid: sample count does not match grid shape [${shape}]`);
+  }
+  if (n < 2 && grid.boundary === 'clamp') {
+    throw new NumericalBackendError(`pderivGrid: clamped axis ${axis} needs at least two samples`);
+  }
 
   // Walk every multi-index; compute the axis position from the flat index.
   for (let f = 0; f < flat.length; f++) {
@@ -100,7 +107,7 @@ export function pderivNumericalFn(
   axis: number,
   options?: PderivOptions,
 ): NestedArray {
-  if (axis < 0 || axis >= coords.length) {
+  if (!Number.isInteger(axis) || axis < 0 || axis >= coords.length) {
     throw new NumericalBackendError(`pderivNumericalFn: axis ${axis} out of range`);
   }
   const order = options?.order ?? 4;
@@ -118,6 +125,13 @@ export function pderivNumericalFn(
     );
   }
 
+  const radius = order === 4 ? 2 : 1;
+  if (![x - radius * h, x - h, x, x + h, x + radius * h].every(Number.isFinite)
+      || !(x - h < x && x < x + h)
+      || (radius === 2 && !(x - 2 * h < x - h && x + h < x + 2 * h))) {
+    throw new NumericalBackendError(`pderivNumericalFn: step h=${h} does not give distinct representable stencil points at x=${x}`);
+  }
+
   if (order === 2) {
     const plus = [...coords]; plus[axis] = x + h;
     const minus = [...coords]; minus[axis] = x - h;
@@ -128,7 +142,7 @@ export function pderivNumericalFn(
     }
     const len = fp.length;
     const d = new Array(len);
-    const inv2h = 1 / (2 * h);
+    const inv2h = 1 / (plus[axis] - minus[axis]);
     for (let i = 0; i < len; i++) {
       // A component that is the same number at every stencil point does not
       // move: its derivative is exactly 0, not the stencil's roundoff over h.

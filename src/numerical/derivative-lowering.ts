@@ -176,7 +176,7 @@ export function lowerTensorPartialDerivative(
   }
   const gridAxis = inputs.coords ? [...inputs.coords.keys()].indexOf(coordLabel) : 0;
   const flat = pderivGrid(grid, gridAxis < 0 ? 0 : gridAxis);
-  return engine.fromNested(flat.length === 1 ? flat[0] : flat, grid.shape);
+  return engine.fromNested(flatToNested(flat, grid.shape), grid.shape);
 }
 
 // ---------------------------------------------------------------------------

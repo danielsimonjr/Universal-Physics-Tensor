@@ -161,7 +161,8 @@ describe('a catch-all no longer masks a programming error (N15)', () => {
   it('an evaluator that is undefined next to an input is still reported, not thrown (control)', () => {
     const f = (inputs: Record<string, number>): Record<string, unknown> => ({ y: inputs.x! > 1 ? Number.NaN : 2 });
     const out = propagateEvaluatorUncertainty(f, { x: 1 }, { x: 0.5 }, new Map());
-    expect(out.y!.contributions.x!.note).toMatch(/undefined next to this input/);
+    expect(out.y!.contributions.x!.note).toMatch(/outside the evaluator.s domain/);
+    expect(out.y!.contributions.x!.sensitivity).toBe(0);
   });
 
   it('a TypeError at a later stepped point propagates after an earlier point was refused', () => {
