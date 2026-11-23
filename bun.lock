@@ -6,10 +6,10 @@
       "name": "universal-physics-tensor",
       "dependencies": {
         "@danielsimonjr/mathts-autograd": "^0.6.0",
-        "@danielsimonjr/mathts-core": "^0.28.0",
+        "@danielsimonjr/mathts-core": "^0.29.0",
         "@danielsimonjr/mathts-expression": "^0.14.0",
-        "@danielsimonjr/mathts-functions": "^0.86.0",
-        "@danielsimonjr/mathts-matrix": "^0.11.0",
+        "@danielsimonjr/mathts-functions": "^0.87.0",
+        "@danielsimonjr/mathts-matrix": "^0.12.0",
         "@danielsimonjr/mathts-tensor": "^0.5.0",
       },
       "devDependencies": {
@@ -44,23 +44,23 @@
 
     "@bcoe/v8-coverage": ["@bcoe/v8-coverage@1.0.2", "", {}, "sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA=="],
 
-    "@danielsimonjr/mathts-autograd": ["@danielsimonjr/mathts-autograd@0.6.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-tensor": "^0.5.0" } }, "sha512-ZQt3yk60OKg1sG5MiLe3Sa6AcXKi4wVO1fYO49eWRYLuVlHYK/bgNVODLgVWSP1tlTCFaXqW5HctcMAxMdhgQw=="],
+    "@danielsimonjr/mathts-autograd": ["@danielsimonjr/mathts-autograd@0.6.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.29.0", "@danielsimonjr/mathts-tensor": "^0.5.1" } }, "sha512-Vbp2d3T7Tgl90GgCh8m8DRrfsDsI7+bXAwv5uqb6LYeyL41QX4btY6ytY+zqNEEGTkhDK6aN9wL09dKkLkOdig=="],
 
-    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.28.0", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-FEgneEvC6NvdP7Xx2GQgYHUYHMYLe5t9ZILfgPeeRwj0//ARg1ZlwSLc9MgRcWXvkfb11Oa1MLvl8MPq2xib3g=="],
+    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.29.0", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-ZheTEm+w2BtKY6OzaTo3omm60jLRB5kLqJ1wsa3Gj+Jg6nR76ty0rflp7IqkoTKIeo5+Gl5nI4uLApqW5Rawkw=="],
 
-    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.14.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0" } }, "sha512-e8QgCY8MbFmQP3UUpbbRGU707TdoGfLljYZjPoigh6OVFtnvrR/qFYQy/qBRm0GYzjPsn0+cz9LonXDkmLogvA=="],
+    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.14.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.29.0" } }, "sha512-x76hhaPQwucDKdHKOwgZCjss+mT6PDsx00j+/AIfKR7w8AMn7hi97/YnouAQ91jnCEXwAvpjRJw3+MoNM5J19Q=="],
 
-    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.86.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-expression": "^0.14.0", "@danielsimonjr/mathts-gpu": "^0.4.0", "@danielsimonjr/mathts-matrix": "^0.11.0", "@danielsimonjr/mathts-parallel": "^0.11.0", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-ynh0uPvQwYv4fG5NY5O/ZhJ8HsaHNRpdwsSLdUjDoKqSU6jSbqS/Zi7d/ak4UkMrzufykfThTd2yURUcforUhQ=="],
+    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.87.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.29.0", "@danielsimonjr/mathts-expression": "^0.14.1", "@danielsimonjr/mathts-gpu": "^0.4.0", "@danielsimonjr/mathts-matrix": "^0.12.0", "@danielsimonjr/mathts-parallel": "^0.12.0", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-hmeEkXLxkfR/c854DjoNa80s4Gv/rwThcdRKuyded+xfXLBtmOJJuyZJqZqtjMzapMWDOV8Z/Moc/QcPm0TYKg=="],
 
     "@danielsimonjr/mathts-gpu": ["@danielsimonjr/mathts-gpu@0.4.0", "", {}, "sha512-vCs1XFPN4ydVC8oB45Ms1Zd+yPVUK/YLogJSRGiUrmqgOAICHyNQ1qF0qJWLL1MrI7chYD6eibiWuMmniSA9Qw=="],
 
-    "@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.11.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-gpu": "^0.4.0", "@danielsimonjr/mathts-parallel": "^0.11.0" } }, "sha512-GzJUql37VR3D18dCYpyOISjpgOuJO859XY7mVbZ/C/2tSsMsqrZ1jXKbt7h9kHP7NDeJ6cTw54hHNvdRoQqbAQ=="],
+    "@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.12.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.29.0", "@danielsimonjr/mathts-gpu": "^0.4.0", "@danielsimonjr/mathts-parallel": "^0.12.0" } }, "sha512-RyFMkjDpCZJ1F4wXx6+biB0oWu4MOdjn4Qj1nkLGdVOPgUXZjyQvZ+M18l/+UC9EdMr/elm1THejxmfUkVpgJg=="],
 
-    "@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.11.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-workerpool": "^0.5.0" } }, "sha512-1AW2w72xoAFcy9+sks18gU7koX5QR/ltahZIs/MTg2225Qf+I2vwrlT4/HrPrXsb98+2nzeMnMyge/FA1P/Ivg=="],
+    "@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.12.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.30.0", "@danielsimonjr/mathts-workerpool": "^0.5.2" } }, "sha512-nfTT76LLpixE8TxmeNJtoVlNxwNjuPtqdUhVEZ03HSxw8JwLwR/cpCqZ+TOfss1sUNLNj3tgGzj5xd5IC1xwsw=="],
 
-    "@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.5.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.28.0", "@danielsimonjr/mathts-matrix": "^0.11.0" } }, "sha512-r3k/4MPedzKJqR5SGzE/CfFJtR7p9qXTGt6WzeNacnQf+rF+sUuMsrKN8Ox6vd+YrynIuBqI1MqAAfkCt9aSZw=="],
+    "@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.5.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.29.0", "@danielsimonjr/mathts-matrix": "^0.12.0" } }, "sha512-DorBCm9pxuGUvL6SZkaAPqA8OQsXK6duoJ7ZaZFpeuhsZ5L77tZV/bzwL7L72H31hnJ2bEknJoFr5g8MyWSSCw=="],
 
-    "@danielsimonjr/mathts-workerpool": ["@danielsimonjr/mathts-workerpool@0.5.0", "", { "dependencies": { "workerpool": "npm:@danielsimonjr/workerpool@10.2.2" } }, "sha512-W8FdfsNSZQsch8isye/8w1RA18l9OVw26C9Ff2CzkMtz2Tn3GHwMKBwaXN38YXKWRX2Ade79pGak945yz46Wqg=="],
+    "@danielsimonjr/mathts-workerpool": ["@danielsimonjr/mathts-workerpool@0.5.2", "", { "dependencies": { "workerpool": "npm:@danielsimonjr/workerpool@10.2.2" } }, "sha512-1TUcJrZkWKTWkTBjRKQdvUy7vfBxprNyoEtPXXyJi1OJrHCsdn13BJtIPNqZPoV3i/2WgSCxEORd3yrr3ZsEzA=="],
 
     "@jridgewell/resolve-uri": ["@jridgewell/resolve-uri@3.1.2", "", {}, "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw=="],
 
@@ -311,5 +311,17 @@
     "why-is-node-running": ["why-is-node-running@2.3.0", "", { "dependencies": { "siginfo": "^2.0.0", "stackback": "0.0.2" }, "bin": { "why-is-node-running": "cli.js" } }, "sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w=="],
 
     "workerpool": ["@danielsimonjr/workerpool@10.2.2", "", {}, "sha512-2ku3pC7MzMWuAbLuS5AxUE3Dh2P75gf891Hi4RPoSkGtgo6ta7XlhOra19wtCea1ci6vcBx7MiMCt6oc9V2gBQ=="],
+
+    "@danielsimonjr/mathts-autograd/@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.5.2", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.30.0", "@danielsimonjr/mathts-matrix": "^0.13.0" } }, "sha512-FAhObT7WIyOORAHIPaHxW8VHKPw8aVfMPh1lb4QSB6cpm/HZHktvaiPgJLVijiBLgrucNn0UUYt1JyA4IfUWCQ=="],
+
+    "@danielsimonjr/mathts-functions/@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.14.2", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.30.0" } }, "sha512-Vicrpt9D4Fw+2Rmwjh9VJdprGYTm55IqNEk6/Ul0qY83EMUO23OCwQExRj7JfoHxm5KG3YpwPWRxqBsWkXR7xQ=="],
+
+    "@danielsimonjr/mathts-parallel/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.30.0", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-FjI8eYZFzCV4A4Eu3+CVuuklQ7JjkLm32a42W9FiOuOxjoNtst7ytK0oadm3r0he4Co5G6zdZUX809qXe/pirA=="],
+
+    "@danielsimonjr/mathts-autograd/@danielsimonjr/mathts-tensor/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.30.0", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-FjI8eYZFzCV4A4Eu3+CVuuklQ7JjkLm32a42W9FiOuOxjoNtst7ytK0oadm3r0he4Co5G6zdZUX809qXe/pirA=="],
+
+    "@danielsimonjr/mathts-autograd/@danielsimonjr/mathts-tensor/@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.13.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.30.0", "@danielsimonjr/mathts-gpu": "^0.4.0", "@danielsimonjr/mathts-parallel": "^0.12.1" } }, "sha512-jSieAtwwDa8m+7beIUssq730iCC/5h+uu7Sg+G69H2bVhH3wRaPlB50Q9g7ryHF5W30WvJckYqyPgvKCXN7pzg=="],
+
+    "@danielsimonjr/mathts-functions/@danielsimonjr/mathts-expression/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.30.0", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-FjI8eYZFzCV4A4Eu3+CVuuklQ7JjkLm32a42W9FiOuOxjoNtst7ytK0oadm3r0he4Co5G6zdZUX809qXe/pirA=="],
   }
 }
