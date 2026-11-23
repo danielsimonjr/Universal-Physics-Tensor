@@ -5,7 +5,7 @@
  *   `θ'' + ω0² θ = 0` as `θ0 → 0`. The order of the system does not drop, the
  *   error is `O(θ0²)` in the relative period, and the approximation is
  *   NON-UNIFORM in time: a fixed relative period error accumulates phase
- *   without bound, so the bound carries the horizon `t ≪ 16 T0/θ0²`.
+ *   without bound. The recorded horizon uses the π/2 phase-drift time.
  * - `ab-damped-massless` — a SINGULAR limit. `m x'' + b x' + k x = 0` reduces
  *   to `b x' + k x = 0` as `m → 0`. The order DROPS from two to one, one
  *   initial condition is lost, and the reduced model cannot satisfy `x'(0)`.
@@ -173,7 +173,7 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
   conclusion: 'model-spring',
   transformation: 'sin θ → θ, with x ↔ ℓ θ and ω0² = g/ℓ',
   preserves: ['harmonic frequency ω0 to O(θ0²)', 'energy conservation', 'time-reversal symmetry'],
-  doesNotPreserve: ['the amplitude dependence of the period', 'phase over times t ≳ 16 T0/θ0²'],
+  doesNotPreserve: ['the amplitude dependence of the period', 'phase over time (the phase drift accumulates)'],
   sideConditions: ['θ0 ≤ 0.5 rad', 'the bound is a PERIOD error and is not uniform in time'],
   bound: makeApproximation({
     // K = 1: the map carries the observable period unchanged (period ↦ period

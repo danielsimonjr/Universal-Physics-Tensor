@@ -208,7 +208,7 @@ export interface ApproximationBound {
   readonly norm: string;
   /** Where the bound holds. */
   readonly domain: string;
-  /** MANDATORY prose horizon: `'t ≪ 16 T0/θ0²'`. */
+  /** MANDATORY prose description of the time interval. */
   readonly horizon: string;
   /** MANDATORY machine form of `horizon`: true while the bound is claimed to hold. */
   readonly horizonHolds: (t: number, params: Readonly<Record<string, number>>) => boolean;

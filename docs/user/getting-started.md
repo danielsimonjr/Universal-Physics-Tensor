@@ -63,10 +63,10 @@ a solar-mass black hole through the two recorded derivation routes of bridge
 BE-42 (agreement by construction, not an independent check):
 
 ```text
-  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
+  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8 K [highly-speculative]. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
   derivations:
-    - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B)) = 6.16842971641034e-8
-    - be-42-via-rs (Hawking temperature T_H = ℏc/(4π k_B r_s)) = 6.16842971641034e-8  [from leaves: mass]
+    - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B)) = 6.16842971641034e-8 K [highly-speculative]
+    - be-42-via-rs (Hawking temperature T_H = ℏc/(4π k_B r_s)) = 6.16842971641034e-8 K [highly-speculative]  [from leaves: mass]
 ```
 
 `upt evaluate be-63 mu_e=2` evaluates the Chandrasekhar mass of an ideal

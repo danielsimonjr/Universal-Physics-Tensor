@@ -3,7 +3,7 @@
  * surface.
  *
  * Covers the root runtime exports of live `src/index.ts` grouped by section
- * banner (in-clause comments stripped before specifier split), the 248 root
+ * banner (in-clause comments stripped before specifier split), the 249 root
  * type exports, the members of the `atlas` namespace (`src/atlas/public.ts`),
  * and the `MathTSEngine` subpath export with its public method list (including
  * `async` methods, cross-checked against required `TensorEngine` members).

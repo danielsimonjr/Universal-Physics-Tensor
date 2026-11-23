@@ -755,7 +755,7 @@
           ],
           "doesNotPreserve": [
             "the amplitude dependence of the period",
-            "phase over times t ≳ 16 T0/θ0²"
+            "phase over time (the phase drift accumulates)"
           ],
           "sideConditions": [
             "θ0 ≤ 0.5 rad",

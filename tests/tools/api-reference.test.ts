@@ -148,12 +148,12 @@ describe('api-reference', () => {
     expect(spawned.stderr).not.toContain('docs/user/api.md is stale');
   });
 
-  it('the page covers the full public surface: 232 runtime rows, 248 type rows, 33 atlas members', () => {
+  it('the page covers the full public surface: 232 runtime rows, 249 type rows, 33 atlas members', () => {
     const page = committedPage();
     // 233 snapshot runtime names minus the `atlas` namespace binding, which is
     // its own section (publicSymbolMeta('atlas') resolves to null by design).
     const runtimeRows = (page.match(/^\| `[A-Za-z_$][\w$]*` \| `[\w/-]+` \|/gm) ?? []).length;
-    expect(runtimeRows).toBe(232 + 248 + 33);
+    expect(runtimeRows).toBe(232 + 249 + 33);
     expect(page).toContain('## Root runtime exports (`universal-physics-tensor`)');
     expect(page).toContain('## Root type exports (`universal-physics-tensor`)');
     expect(page).toContain("## The `atlas` namespace (`import { atlas } from 'universal-physics-tensor'`)");
