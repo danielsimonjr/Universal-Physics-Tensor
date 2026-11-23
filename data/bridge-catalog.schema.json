@@ -136,6 +136,9 @@
                   }
                 }
               },
+              "comparisonBasis": {
+                "const": "encoded-reference"
+              },
               "predicted": {
                 "type": "number"
               },

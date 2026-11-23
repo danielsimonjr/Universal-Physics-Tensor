@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] F8: distinguish recorded reference values from tested comparisons in confrontations (#762, #771, #757).
+
 - [x] F7: require dimensional agreement before comparing a derived formula with a canonical law (#752).
 
 - [x] F6: withhold dimensional verdicts until equation inputs are bound (#807, #684).

@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Confrontation reports distinguish encoded references from measured comparisons and exclude them from frontier rankings. A refusal exits 3. The Johnson-noise record explains its historical CODATA reference.
+
 - Derivation checks canonical agreement only after validating the formula dimension, recognizes declared elementary charge, and distinguishes an unreachable dimension from redundant inputs. Derive and retrieve accept both formula flag forms. Canonical variable listings include formula inputs such as ideal-gas particle count.
 
 - Equation mapping withholds the RHS dimension when a name is unbound and reports canonical comparisons independently.

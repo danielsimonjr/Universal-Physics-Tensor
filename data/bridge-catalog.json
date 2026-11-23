@@ -14094,6 +14094,7 @@
       "rigor": "loose",
       "outcome": {
         "kind": "consistency",
+        "comparisonBasis": "encoded-reference",
         "predicted": 1,
         "approaches": 1,
         "fractionalGap": 0.15,
@@ -14142,6 +14143,7 @@
       "rigor": "stringent",
       "outcome": {
         "kind": "consistency",
+        "comparisonBasis": "encoded-reference",
         "predicted": 1,
         "approaches": 1,
         "fractionalGap": 8.6e-11,
@@ -14186,6 +14188,7 @@
       "rigor": "moderate",
       "outcome": {
         "kind": "consistency",
+        "comparisonBasis": "encoded-reference",
         "predicted": 1,
         "approaches": 1,
         "fractionalGap": 0.01,
@@ -14237,7 +14240,7 @@
           "citation": "Flowers-Jacobs, Pollarolo, Coakley, Fox, Rogalla, Tew & Benz 2017, Metrologia 54:730, \"A Boltzmann constant determination based on Johnson noise thermometry\"",
           "year": 2017,
           "retrieved": "2026-07-05",
-          "note": "k_B measured via S_V=4k_BTR = 1.3806429(69)e-23 J/K, relative offset -4.05e-6 +/- 5.0e-6 from CODATA 2014 -> 0.81 sigma. NON-CIRCULAR: resistance traceable to the quantum Hall effect (BE-55), temperature to acoustic/ITS-90 thermometry, both independent of the noise relation. A deviation from the factor-of-4 relation would make this k_B inconsistent with acoustic-gas-thermometry k_B. Factor-of-4 confirmed to < ppm (Eve)."
+          "note": "k_B measured via S_V=4k_BTR = 1.3806429(69)e-23 J/K, relative offset -4.05e-6 +/- 5.0e-6 from CODATA 2014 -> 0.81 sigma. This record retains the reference used by the 2017 comparison to reproduce its published-era residual. The current SI value is exact and is used for present-day evaluations. NON-CIRCULAR: resistance traceable to the quantum Hall effect (BE-55), temperature to acoustic/ITS-90 thermometry, both independent of the noise relation. A deviation from the factor-of-4 relation would make this k_B inconsistent with acoustic-gas-thermometry k_B. Factor-of-4 confirmed to < ppm (Eve)."
         },
         "preprocessing": {
           "state": "not-recorded"
@@ -14266,6 +14269,7 @@
       "rigor": "stringent",
       "outcome": {
         "kind": "consistency",
+        "comparisonBasis": "encoded-reference",
         "predicted": 1,
         "approaches": 1,
         "fractionalGap": 1e-09,
@@ -14306,6 +14310,7 @@
       "rigor": "stringent",
       "outcome": {
         "kind": "consistency",
+        "comparisonBasis": "encoded-reference",
         "predicted": 1,
         "approaches": 1,
         "fractionalGap": 1e-05,
@@ -14346,6 +14351,7 @@
       "rigor": "loose",
       "outcome": {
         "kind": "consistency",
+        "comparisonBasis": "encoded-reference",
         "predicted": 2.443004509073667e-08,
         "approaches": 2.443004509073667e-08,
         "fractionalGap": 0.1,
@@ -14507,6 +14513,7 @@
       "rigor": "loose",
       "outcome": {
         "kind": "consistency",
+        "comparisonBasis": "encoded-reference",
         "predicted": 1,
         "approaches": 1,
         "fractionalGap": 0.5,
@@ -14703,6 +14710,7 @@
       "rigor": "loose",
       "outcome": {
         "kind": "value",
+        "comparisonBasis": "encoded-reference",
         "predicted": 1,
         "observed": 1,
         "sigma": 0.4,

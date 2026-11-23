@@ -93,12 +93,12 @@ describe('K3: a result carries the envelope and exits 0 or 3; an error (1, 2) wr
     expect(json.code).toBe(0);
     expect(JSON.parse(json.out).result.matches).toEqual([]);
   });
-  it('confront be-53 is a refusal the command computed: exit 0, status refused, no residual', async () => {
+  it('confront be-53 is a refusal the command computed: exit 3, status refused, no residual', async () => {
     const text = await run(['confront', 'be-53']);
-    expect(text.code).toBe(0);
+    expect(text.code).toBe(3);
     expect(text.out).toMatch(/refused/);
     const json = await run(['confront', 'be-53', '--json']);
-    expect(json.code).toBe(0);
+    expect(json.code).toBe(3);
     const env = JSON.parse(json.out);
     expect(env.result.status).toBe('refused');
     expect(env.result).not.toHaveProperty('residual');

@@ -78,6 +78,8 @@ export type ConfrontationIndependence =
 export interface ConfrontationDataHandling {
   readonly preprocessing: ConfrontationPreprocessing;
   readonly independence: ConfrontationIndependence;
+  /** The numeric comparison uses a reference value to encode a qualitative or aggregate source statement. */
+  readonly comparisonBasis?: 'encoded-reference';
 }
 
 /**
@@ -210,6 +212,9 @@ export function consistencyComparison(
   const relativeDifference = (o.approaches - o.predicted) / o.predicted;
   const agreementBound = o.fractionalGapIs === 'agreement-bound' ? o.fractionalGap : null;
   const definition = '(observed − predicted) / predicted' as const;
+  if (o.comparisonBasis === 'encoded-reference') {
+    return { relativeDifference, definition, agreementBound, rule: null, withinBound: null };
+  }
   if (o.predictedIs === 'lower-limit') {
     if (agreementBound !== null) {
       throw new RangeError('consistencyComparison: a lower limit carries no agreement bound');

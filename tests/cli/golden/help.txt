@@ -132,7 +132,7 @@ Flags:
         confrontation needs a caller-supplied measured-coupling table and a
         running procedure, neither of which the library ships. The refusal names
         each missing input, prints no residual, and does not change the
-        catalog status. It is not a pass and not a fail. The one-loop
+        catalog status. A refusal exits 3. The one-loop
         coefficient's sign is oneLoopCoefficientStatement, not this command.
 Flags:
   --bridge=VALUE

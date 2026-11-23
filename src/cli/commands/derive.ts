@@ -275,6 +275,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (canonicalCheckFailed(canonicalComparisons)) failed = true;
 
     if (!dimensionsMatch) {
+      matchesMonomial = false;
       printComparisons();
       if (isJson) emitEnvelope();
       else flush();
