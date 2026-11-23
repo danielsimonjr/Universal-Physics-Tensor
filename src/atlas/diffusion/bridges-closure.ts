@@ -244,6 +244,7 @@ function telegraphDiffusionHorizonAt(params: Readonly<Record<string, number>>) {
   return { minimum: 5 * tau, maximum: pointDelta === 0 ? Infinity : 0.1 / (pointDelta * D * q * q), pointDelta };
 }
 
+/** The telegrapher-to-Fick approximation with a pointwise slow-mode time window. */
 export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
   id: 'ab-telegraph-diffusion',
   relation: 'approximation',

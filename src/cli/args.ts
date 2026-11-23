@@ -163,6 +163,6 @@ export function parseArgs(
   return { flags, positionals };
 }
 
-/** Quote one CLI argument for a copyable POSIX shell command. */
 const SAFE_TOKEN = /^[A-Za-z0-9_\-=.,:/+@%]+$/;
+/** Quote one CLI argument for a copyable POSIX shell command. */
 export const shellQuote = (t: string): string => (SAFE_TOKEN.test(t) ? t : `'${t.replace(/'/g, `'\\''`)}'`);

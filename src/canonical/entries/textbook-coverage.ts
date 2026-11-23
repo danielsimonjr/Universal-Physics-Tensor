@@ -34,6 +34,7 @@ const thermalEnergy = times(entropyConstant, sym('temperature', TEMPERATURE));
 const halfPlanckExponent = over(times(h, frequency), times(literal('2'), thermalEnergy));
 const halfPlanckDecay: ExprNode = { kind: 'transcendental', fn: 'exp', arg: op('-', [halfPlanckExponent]) };
 
+/** Canonical textbook relations, including typed bounds and scope assumptions. */
 export const TEXTBOOK_COVERAGE: readonly CanonicalEquation[] = [
   l1(sym('observed-acoustic-frequency', FREQUENCY), [
     sym('source-frequency', FREQUENCY), sym('sound-speed', VELOCITY), sym('source-approach-speed', VELOCITY),
