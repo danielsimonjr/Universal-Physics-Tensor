@@ -44,10 +44,11 @@ function groupValues(bridge: AtlasBridge, p: Readonly<Record<string, number>>): 
   return Object.fromEntries(
     bridge.regime.inequalities.map((i) => {
       const def = bridge.regime.groupDefinitions[i.group];
-      const value =
+      const value = p[i.group] ?? (
         def === undefined
           ? Number.NaN
-          : Object.entries(def.exponents).reduce((acc, [name, e]) => acc * (p[name] ?? Number.NaN) ** e, 1);
+          : Object.entries(def.exponents).reduce((acc, [name, e]) => acc * (p[name] ?? Number.NaN) ** e, 1)
+      );
       return [i.group, value];
     }),
   );

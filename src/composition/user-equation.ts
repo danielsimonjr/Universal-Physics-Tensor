@@ -473,9 +473,16 @@ export async function analyzeUserEquation(
   // placeholder so the RHS still parses.
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
-  for (const s of eq.sources) {
-    const r = resolve(s);
-    dims[s] = r ? (dimsIn.get(r) as Dimension) : (formulaSymbolDimension(s) ?? DIMENSIONLESS);
+  const placeholders: string[] = [];
+  for (const source of eq.sources) {
+    const resolved = resolve(source);
+    const knownDimension = resolved !== null
+      ? dimsIn.get(resolved)
+      : !bindShort && literalShort(source) !== null
+        ? undefined
+        : formulaSymbolDimension(source);
+    if (knownDimension === undefined) placeholders.push(source);
+    dims[source] = knownDimension ?? DIMENSIONLESS;
   }
   // Use the rewritten equation's RHS (eq.text) so planck-length has already
   // become planck_length before dimensional parse.
@@ -499,7 +506,6 @@ export async function analyzeUserEquation(
   const resolvedTarget = resolve(eq.target);
   const targetDimension = resolvedTarget ? (dimsIn.get(resolvedTarget) as Dimension) : null;
 
-  const placeholders = eq.sources.filter((s) => !resolve(s));
   const hints: EquationHint[] = [];
   if (exprForInference) {
     const unmatchedSources = placeholders.filter((s) => bindShort || literalShort(s) === null);
