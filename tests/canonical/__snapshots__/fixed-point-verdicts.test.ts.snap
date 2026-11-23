@@ -21,7 +21,7 @@ exports[`verdicts that rest on the fixed-point sample scheme > derivation audit:
   "CE-compton-wavelength": "derived | ℏ,c | 1.00000000000",
   "CE-compton-wavelength-full": "derived | ℏ,c | 6.28318530718",
   "CE-coulomb": "open |  | ",
-  "CE-cyclotron-frequency": "derived |  | 1.00000000000",
+  "CE-cyclotron-frequency": "derived |  | 0.159154943092",
   "CE-de-broglie": "derived | ℏ | 6.28318530718",
   "CE-debye-frequency": "coefficient-unset |  | ",
   "CE-density-definition": "derived |  | 1.00000000000",

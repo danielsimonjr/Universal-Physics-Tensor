@@ -239,7 +239,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const variables = governing.filter((g) => !isConstant(g));
     const compiled = cf;
     const dimensionsMatch = !failed;
-    canonicalComparisons = dimensionsMatch ? api.compareWithCanonical(
+    canonicalComparisons = r.ok ? api.compareWithCanonical(
       target.name,
       variables.map((g) => ({ name: g.name, dim: g.dim })),
       (values) =>
@@ -251,15 +251,15 @@ async function run(ctx: CommandCtx): Promise<number> {
             ]),
           ),
         ),
-    ) : [];
+    ).filter((comparison) => dimensionsMatch || comparison.kind === 'form') : [];
     const relationSources = variables.map((g) => ({ name: g.name, dim: g.dim }));
     catalogEdges = api.matchingCatalogEdges(target.name, relationSources);
     const printComparisons = (): void => {
       // describeKnownRelation's first lines are one per comparison, in order (then the catalog
       // edges), so line i belongs to comparison i when i is below the comparison count.
       if (!dimensionsMatch) {
-        textOut('  Canonical comparison requires a formula dimension matching the target.');
-        return;
+        textOut('  Canonical agreement requires a formula dimension matching the target.');
+        if (canonicalComparisons!.length === 0) return;
       }
       api.describeKnownRelation(canonicalComparisons!, target.name, relationSources).forEach((line, i) => {
         textOut(`  ${line}`);

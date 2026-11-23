@@ -16,7 +16,7 @@ describe('an input only an extra output reads', () => {
     const outputOnly = [...BRIDGE_EVALUATORS.values()].flatMap((spec) =>
       spec.contract.slots.filter((slot) => slot.listed && slot.readBy === 'outputs').map((slot) => [spec.bridgeId, slot.key, slot.optional] as const),
     );
-    expect(outputOnly.map(([id, key]) => `${id}:${key}`)).toEqual(['52:T_yr', '88:m_kg', '139:Nc_per_m3', '139:ND_per_m3', '144:C_ohm_m_s', '146:lambda0_m']);
+    expect(outputOnly.map(([id, key]) => `${id}:${key}`)).toEqual(['52:T_yr', '82:n', '88:m_kg', '139:Nc_per_m3', '139:ND_per_m3', '144:C_ohm_m_s', '146:lambda0_m']);
     for (const [id, key, optional] of outputOnly) {
       expect(optional, `be-${id} ${key}`).toBe(true);
       expect(BRIDGE_EVALUATORS.get(id)!.parameters.find((p) => p.key === key)!.optional, `be-${id} ${key}`).toBe(true);
