@@ -20,6 +20,12 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] **PR #831 Neon re-review FIX-NEEDED: vendor v16.0.0 applied-cases schema; no `git show` in the contract test.** CI/publish are depth-1 tagless, so `git show v16.0.0:...` fails there and would fail `prepublishOnly`. Frozen fixture + SHA-256 pin; `control:` v2 rejects version 1 and the frozen v1 schema accepts a v1-shaped record. Prove in `git clone --depth=1 --no-tags`. No tag.
+
+- [x] **PR #831 Neon FIX-NEEDED (Option A): applied-cases schemaVersion 1→2, release as 17.0.0.** S6/S8 changed the shipped check shape (`expr` no longer required; `method` and `needs` added under `additionalProperties: false`) without moving `schemaVersion`. Same data-contract rule that made 16.0.0 a major. RED contract test, bump, CHANGELOG BREAKING, retarget the 16.1.0 heading, regenerate, gates. No tag.
+
+- [x] Release 16.1.0: bump, regenerate (atlas JSON, Lean table, dependency graph, the two tag goldens), dependency snapshot, clarify Removed as `@internal` not public API, release PR. `[Unreleased]` has no public-API break since `v16.0.0` (snapshot and `src/index.ts` unchanged), ~~so the version is a minor~~ Retracted (PR #831 Neon): `data/applied-cases.json` broke `schemaVersion` 1 without moving it; Option A retargets the release to 17.0.0. No tag in this PR.
+
 - [x] **PR #830 Neon FIX-NEEDED (12): bash CONTROLs throw on stdout, mu_e status 0, tutorial physics/CLI prose, harness latents.**
   Done: CONTROLs mutate `statedBlock` and `.toThrow(/stdout of/)`; `mu_e: 3` asserts status 0 and `Chandrasekhar mass:`; `upt explain be-63` prose replaced by confront/atlas; `bit` is an information unit not a logarithmic scale; eval bindings are numeric unless dimensioned (`L=1m "g=9.80665m/s^2"` → `2.0064092925890407 s`); TS CONTROLs call `assertGuideMatchesStdout`; next-fence matching; every ts/bash fence coupled; spawn stderr keeps ETIMEDOUT; double-quoted imports; `M_SUN_SI` 1.989e30 kg; CHANGELOG under `### Fixed`. Full suite **771 files, 9629 passed / 6 skipped**.
 

@@ -10615,6 +10615,7 @@
       "tests/atlas/catalog-proof-status.test.ts",
       "tests/core/data-file.test.ts",
       "tests/core/json-file.test.ts",
+      "tests/dimensional/schema-version-contract.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
@@ -16179,6 +16180,7 @@
       "tests/atlas/catalog-proof-status.test.ts",
       "tests/core/data-file.test.ts",
       "tests/core/json-file.test.ts",
+      "tests/dimensional/schema-version-contract.test.ts",
       "tests/dimensional/unit-data.test.ts",
       "tests/review/round2-bridges-atlas.test.ts",
       "tests/review/round2-numerical-dimensional.test.ts"
@@ -30064,7 +30066,9 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
     ],
-    "tests/dimensional/schema-version-contract.test.ts": [],
+    "tests/dimensional/schema-version-contract.test.ts": [
+      "src/core/json-schema.ts"
+    ],
     "tests/dimensional/si-special-units.test.ts": [
       "src/cli/expr-print.ts",
       "src/dimensional/units.ts",

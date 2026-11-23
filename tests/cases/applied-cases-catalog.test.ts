@@ -20,7 +20,7 @@ const schema = dataSchema('applied-cases.json');
 
 function projectionFile(): AppliedCaseFile {
   const cases = [...APPLIED_CASES.values()].map((c) => projectAppliedCaseRecord(c, CHECKS_BY_CASE_ID[c.id]!));
-  return { schemaVersion: 1, cases };
+  return { schemaVersion: 2, cases };
 }
 
 describe('applied-cases catalog loader', () => {
@@ -31,7 +31,7 @@ describe('applied-cases catalog loader', () => {
   });
 
   it('loads data/applied-cases.json matching the live cases\' declarative fields', () => {
-    const text = `${JSON.stringify({ schemaVersion: 1, cases: appliedCaseCatalog().cases.map((row) => {
+    const text = `${JSON.stringify({ schemaVersion: 2, cases: appliedCaseCatalog().cases.map((row) => {
       const live = APPLIED_CASES.get(row.id)!;
       return projectAppliedCaseRecord(live, row.checks);
     }) })}\n`;

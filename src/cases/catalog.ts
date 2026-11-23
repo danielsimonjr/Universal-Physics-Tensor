@@ -73,7 +73,7 @@ export interface AppliedCaseRecord {
 
 /** The on-disk catalog shape. @internal */
 export interface AppliedCaseFile {
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   readonly cases: readonly AppliedCaseRecord[];
 }
 

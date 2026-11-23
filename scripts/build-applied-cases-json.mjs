@@ -21,5 +21,5 @@ const cases = [...APPLIED_CASES.values()].map((c) => {
 
 writeFileSync(
   new URL('../data/applied-cases.json', import.meta.url),
-  `${JSON.stringify({ schemaVersion: 1, cases }, null, 2)}\n`,
+  `${JSON.stringify({ schemaVersion: 2, cases }, null, 2)}\n`,
 );
