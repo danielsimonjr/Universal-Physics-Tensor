@@ -471,7 +471,8 @@ export function explainQuantity(
     if (retro.predictions.length >= 2) consistency = retro;
     if (
       (retro.outcome === 'consistent' || retro.outcome === 'single') &&
-      retro.predictions.length > 0
+      retro.predictions.length > 0 &&
+      !(retro.refusals ?? []).some(refusal => refusal.kind !== 'coefficient-unset')
     ) {
       recoveredValue =
         retro.predictions.reduce((a, p) => a + p.value, 0) /

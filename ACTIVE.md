@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [ ] F5: a competing domain refusal prevents reporting an aggregate recovered value (#783).
+
 - [ ] F3/F4: resolve normalized constant identities and refuse an error estimate for a path with no stated bounds (#805, #792).
 
 - [ ] **F1–F12 issue batches.** Start with a shared numerical differentiation and uncertainty contract (#778, #779, #832–#834), then address each subsequent batch in order.
