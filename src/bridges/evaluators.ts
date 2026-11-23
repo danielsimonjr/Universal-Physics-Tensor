@@ -10,6 +10,8 @@
  * @module bridges/evaluators
  */
 
+import { equals } from '../dimensional/algebra.js';
+import { quantityRecord } from '../dimensional/quantity-registry.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { catalogEntries, catalogEntry, catalogEvaluators, primaryRelation } from './catalog-load.js';
 import type { CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
@@ -52,6 +54,8 @@ export interface EvaluatorParameter {
 /** A callable bridge evaluator with its input contract. @public */
 export interface EvaluatorSpec {
   readonly bridgeId: number;
+  /** The formula evaluated by this specification. */
+  readonly relation?: CatalogRelation;
   readonly name: string;
   readonly inputKeys: readonly string[];
   readonly parameters: readonly EvaluatorParameter[];
@@ -110,7 +114,7 @@ function symbolNames(node: ExprNode): string[] {
  * the value, so a caller who varies one sees no effect.
  */
 export function unusedInputKeys(spec: EvaluatorSpec): string[] {
-  const relation = primaryRelation(spec.bridgeId);
+  const relation = spec.relation ?? primaryRelation(spec.bridgeId);
   if (relation === undefined) return [];
   const used = new Set(symbolNames(parseCatalogExpression(relation.expression)));
   // An output reads the scope names its parsed expression names, the same parse `run` evaluates.
@@ -224,22 +228,29 @@ function unsignedOptional(parameter: EvaluatorParameter, value: number | undefin
  * @internal
  */
 export function buildEvaluatorSpec(row: CatalogEvaluator): EvaluatorSpec {
-  const relation = primaryRelation(row.catalogId);
-  if (relation === undefined) throw new Error(missingEvaluatorMessage(row.catalogId));
+  const primary = primaryRelation(row.catalogId);
+  if (primary === undefined) throw new Error(missingEvaluatorMessage(row.catalogId));
+  const relation = row.formula === undefined ? primary : { ...primary, ...row.formula, reference: undefined };
+  if (relation.target !== primary.target) {
+    const target = quantityRecord(relation.target);
+    const original = quantityRecord(primary.target);
+    if (target === undefined || original === undefined || !equals(target.dimension, original.dimension)) {
+      throw new Error(`be-${row.catalogId}: the evaluator's alternate target must preserve the catalog dimension`);
+    }
+  }
   const parameters = row.parameters.map((p) => toParameter(p, sourceOfParameter(relation, p) === undefined));
   const elsewhere = row.refusedInputs === undefined ? undefined : Object.fromEntries(row.refusedInputs.map((r) => [r.key, r.use]));
-  return buildSpec(row.catalogId, row.name, parameters, row.outputs ?? [], elsewhere);
+  return buildSpec(relation, row.catalogId, row.name, parameters, row.outputs ?? [], elsewhere);
 }
 
 function buildSpec(
+  relation: CatalogRelation,
   catalogId: number,
   name: string,
   parameters: readonly EvaluatorParameter[],
   outputs: readonly CatalogEvaluatorOutput[],
   elsewhere?: Readonly<Record<string, string>>,
 ): EvaluatorSpec {
-  const relation = primaryRelation(catalogId);
-  if (relation === undefined) throw new Error(missingEvaluatorMessage(catalogId));
   const contract = evaluatorContract(catalogId, relation, parameters, elsewhere);
   const keys = parameters.map((parameter) => parameter.key);
   const reserved = reservedFormulaNames();
@@ -261,6 +272,7 @@ function buildSpec(
   );
   return {
     bridgeId: catalogId,
+    relation,
     name,
     inputKeys: parameters.filter((parameter) => parameter.optional !== true).map((parameter) => parameter.key),
     parameters,

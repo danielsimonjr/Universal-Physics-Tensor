@@ -158,14 +158,14 @@ function closedFormEvaluation(
   want: EvaluationWant,
 ): Evaluation {
   const numbers = spec.run(bindings, want);
-  const relation = primaryRelation(spec.bridgeId);
+  const relation = spec.relation ?? primaryRelation(spec.bridgeId);
   const dimension = edge?.target.dim ?? EXPECTED_DIMENSION_BY_BRIDGE.get(spec.bridgeId);
   if (dimension === undefined) {
     throw new Error(`evaluateRelation: be-${spec.bridgeId} has no catalog dimension`);
   }
   const value = numbers.value!;
   // `run` refused a non-finite input, so a non-finite value here comes from the closed form.
-  if (!Number.isFinite(value)) return { kind: 'unset', formula: edge?.label ?? relation?.label ?? spec.name };
+  if (!Number.isFinite(value)) return { kind: 'unset', formula: relation?.label ?? edge?.label ?? spec.name };
   return {
     kind: 'value',
     value,

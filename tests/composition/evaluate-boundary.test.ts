@@ -68,7 +68,7 @@ describe('a declared alternate works in the library, and T_yr only adds the per-
 describe('the output carries its name and unit (issue 460)', () => {
   it('evaluateRelation names the target and its SI unit', () => {
     const o = evaluateRelation('be-120', { B_E_T: 3.1e-5, rho_kg_per_m3: 8.36e-21, v_m_per_s: 4e5 });
-    expect(o).toMatchObject({ kind: 'value', name: 'standoff-sixth', unit: '1' });
+    expect(o).toMatchObject({ kind: 'value', name: 'standoff-radius-ratio', unit: '1' });
     expect(evaluateRelation('be-67', { B_T: 1e-8, rho_kg_per_m3: 1.67e-21 })).toMatchObject({ name: 'alfven-speed', unit: 'm/s' });
   });
   it('the text line names it', async () => {

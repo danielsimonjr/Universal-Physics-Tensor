@@ -11756,18 +11756,23 @@
           "quantity": "shockley-ideality",
           "symbol": "n",
           "unit": "",
-          "meaning": "diode ideality factor; the primary current uses n = 1",
-          "sign": "positive"
+          "meaning": "diode ideality factor",
+          "sign": "positive",
+          "defaultValue": 1
         }
       ],
-      "outputs": [
-        {
-          "name": "current-with-ideality",
-          "unit": "A",
-          "meaning": "Shockley current at the supplied ideality factor n",
-          "expression": "I_s_A*(exp(e*V_volts/(n*k_B*T_K)) + -1)"
-        }
-      ]
+      "formula": {
+        "label": "Shockley diode I = I_s (exp(e V/(n k_B T)) − 1), with the formal result scoped to n = 1",
+        "expression": "shockley-saturation*(exp(e*shockley-voltage/(shockley-ideality*k_B*shockley-temperature)) + -1)",
+        "target": "shockley-current",
+        "sources": [
+          "shockley-saturation",
+          "shockley-voltage",
+          "shockley-temperature",
+          "shockley-ideality"
+        ],
+        "holds": "isFinite(shockley-saturation) and\n      isFinite(shockley-voltage) and\n      isFinite(shockley-temperature) and\n      shockley-temperature != 0 and shockley-ideality > 0"
+      }
     },
     {
       "catalogId": 83,
@@ -12709,12 +12714,23 @@
       ],
       "outputs": [
         {
-          "name": "standoff-radius-ratio",
+          "name": "standoff-sixth",
           "unit": "1",
-          "meaning": "magnetopause standoff radius R/R_E",
-          "expression": "value^(1/6)"
+          "meaning": "sixth power of the magnetopause radius ratio",
+          "expression": "value^6"
         }
-      ]
+      ],
+      "formula": {
+        "label": "Chapman–Ferraro magnetopause radius R/R_E",
+        "expression": "(2*standoff-field^2/((1/(epsilon_0*c^2))*standoff-density*standoff-speed^2))^(1/6)",
+        "target": "standoff-radius-ratio",
+        "sources": [
+          "standoff-field",
+          "standoff-density",
+          "standoff-speed"
+        ],
+        "holds": "standoff-density != 0 and standoff-speed != 0"
+      }
     },
     {
       "catalogId": 121,

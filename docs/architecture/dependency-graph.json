@@ -5711,6 +5711,18 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/quantity-registry.js",
+            "imports": [
+              "quantityRecord"
+            ]
+          },
+          {
             "file": "../dimensional/formula-names.js",
             "imports": [
               "FORMULA_NAMED"
@@ -28778,7 +28790,7 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90478,
+    "totalLinesOfCode": 90501,
     "totalExports": 2870,
     "totalClasses": 86,
     "totalInterfaces": 523,

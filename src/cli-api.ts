@@ -82,6 +82,7 @@ export { foldName, quantityRecord } from './dimensional/quantity-registry.js';
 /** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
+/** A bridge evaluator rejected an input outside its model domain. */
 export { DomainViolationError } from './bridges/evaluation-errors.js';
 export { consistencyComparison } from './bridges/observations/types.js';
 export type { ConfrontationOutcome } from './bridges/observations/types.js';

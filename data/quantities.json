@@ -6566,6 +6566,13 @@
       "graphNode": true
     },
     {
+      "id": "standoff-radius-ratio",
+      "symbol": "R/R_E",
+      "dimension": { "L": 0, "M": 0, "T": 0, "I": 0, "Theta": 0, "N": 0, "J": 0 },
+      "attributes": { "scale": "classical", "force": "electromagnetic" },
+      "graphNode": false
+    },
+    {
       "id": "standoff-sixth",
       "symbol": "(R/R_E)^6",
       "dimension": {

@@ -77,7 +77,11 @@ export const BRIDGE_LANGEVIN_DIFFUSION: AtlasBridge = {
     'the ballistic regime t ≲ τ_p, where ⟨x²⟩ ≈ (k_B T/m) t²',
     'the momentum relaxation time τ_p as an independent scale',
   ],
-  sideConditions: ['overdamped observation times: τ_p/t ≪ 1', 'white thermal noise, fluctuation–dissipation 2γk_BT'],
+  sideConditions: [
+    'overdamped observation times: τ_p/t ≪ 1',
+    'white thermal noise, fluctuation–dissipation 2γk_BT',
+    'velocity initially at thermal equilibrium, with variance k_BT/m',
+  ],
   regime: regime(
     [
       { name: 'm', dim: MASS },
@@ -86,6 +90,7 @@ export const BRIDGE_LANGEVIN_DIFFUSION: AtlasBridge = {
       { name: 't', dim: TIME },
     ],
     [
+      { group: 'm · gamma^-1 · t^-1', op: '>', bound: 0 },
       {
         group: 'm · gamma^-1 · t^-1',
         op: '<=',
@@ -97,7 +102,8 @@ export const BRIDGE_LANGEVIN_DIFFUSION: AtlasBridge = {
   bound: {
     K: 1,
     delta: LANGEVIN_MAX_TAU_RATIO,
-    deltaAt: ({ m, gamma, t }) => {
+    deltaAt: ({ m, gamma, t, kT }) => {
+      if (!(m > 0 && gamma > 0 && t > 0) || (kT !== undefined && !(kT > 0))) return Infinity;
       const ratio = m / (gamma * t);
       return -ratio * Math.expm1(-1 / ratio);
     },
@@ -105,7 +111,8 @@ export const BRIDGE_LANGEVIN_DIFFUSION: AtlasBridge = {
     norm: 'relative mean-square displacement error normalized by 2Dt',
     domain: 'stationary thermal velocity, m, γ, T > 0 and τ_p/t ≤ 0.01; exact error is (τ_p/t)(1 − exp(−t/τ_p))',
     horizon: 't ≥ 100τ_p',
-    horizonHolds: (t, { m, gamma }) => Number.isFinite(t) && m > 0 && gamma > 0 && t >= m / (gamma * LANGEVIN_MAX_TAU_RATIO),
+    horizonHolds: (t, { m, gamma, kT }) =>
+      Number.isFinite(t) && m > 0 && gamma > 0 && (kT === undefined || kT > 0) && t >= m / (gamma * LANGEVIN_MAX_TAU_RATIO),
     limitCharacter: 'singular',
     uniformity: ['positive temperature', 'times in the stated horizon'],
   },
@@ -173,6 +180,7 @@ export const BRIDGE_STOKES_EINSTEIN: AtlasBridge = {
     ],
     ['Re'],
     [
+      { group: 'Re', op: '>=', bound: 0 },
       { group: 'Re', op: '<=', bound: STOKES_MAX_RE, alias: 'Re ≪ 1 (machine form Re ≤ 0.1)' },
       {
         group: 'm · gamma^-1 · t^-1',
@@ -185,7 +193,7 @@ export const BRIDGE_STOKES_EINSTEIN: AtlasBridge = {
   bound: {
     K: 1,
     delta: (3 * STOKES_MAX_RE) / (8 + 3 * STOKES_MAX_RE),
-    deltaAt: ({ Re }) => (3 * Re) / (8 + 3 * Re),
+    deltaAt: ({ Re }) => Re >= 0 && Re <= STOKES_MAX_RE ? (3 * Re) / (8 + 3 * Re) : Infinity,
     deltaAtBasis: 'closed-form',
     norm: 'relative change of D normalized by the Stokes–Einstein value under first-order Oseen drag',
     domain: '0 ≤ Re ≤ 0.1 (radius-based Re); with γ_Oseen = γ_Stokes(1 + 3Re/8), the error is (3Re/8)/(1 + 3Re/8). This bound compares the two drag closures.',

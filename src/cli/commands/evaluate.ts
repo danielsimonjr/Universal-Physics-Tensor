@@ -460,7 +460,7 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
   }
   const spec = found.evaluator;
   const key = api.catalogEdgeKey(spec.bridgeId);
-  const relation = api.primaryRelation(id);
+  const relation = spec.relation ?? api.primaryRelation(id);
   const { inputs, resolved } = resolveInputs(api, key, spec, rest);
 
   // The one evaluation, the library's result builder: `run` checks the inputs (missing, unknown,

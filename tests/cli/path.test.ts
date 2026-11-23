@@ -528,6 +528,14 @@ describe('upt path', () => {
       });
     });
 
+    it('withholds the Langevin point bound for negative thermal energy', async () => {
+      const cap = captureMerged();
+      const code = await runCli(['path', 'model-langevin', 'model-fick', '--at', 'm=1', 'gamma=1', 't=100', 'kT=-1'], cap.io);
+      expect(code).toBe(3);
+      expect(cap.lines.join('')).toContain('velocity initially at thermal equilibrium');
+      expect(cap.lines.join('')).toContain('bound at this point: none');
+    });
+
     it('Stokes drag → Fick names the hyperedge and has no chain', async () => {
       const cap = captureMerged();
       const code = await runCli(['path', 'model-stokes-drag', 'model-fick', '--json'], cap.io);

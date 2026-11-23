@@ -1663,7 +1663,8 @@
           ],
           "sideConditions": [
             "overdamped observation times: τ_p/t ≪ 1",
-            "white thermal noise, fluctuation–dissipation 2γk_BT"
+            "white thermal noise, fluctuation–dissipation 2γk_BT",
+            "velocity initially at thermal equilibrium, with variance k_BT/m"
           ],
           "bound": {
             "K": 1,
@@ -1681,6 +1682,11 @@
           "regime": {
             "family": "diffusion",
             "inequalities": [
+              {
+                "group": "m · gamma^-1 · t^-1",
+                "op": ">",
+                "bound": 0
+              },
               {
                 "group": "m · gamma^-1 · t^-1",
                 "op": "<=",
@@ -1766,6 +1772,11 @@
           "regime": {
             "family": "diffusion",
             "inequalities": [
+              {
+                "group": "Re",
+                "op": ">=",
+                "bound": 0
+              },
               {
                 "group": "Re",
                 "op": "<=",

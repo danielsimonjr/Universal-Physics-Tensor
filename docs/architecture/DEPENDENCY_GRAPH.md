@@ -1653,6 +1653,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/quantity-registry.js` | `quantityRecord` | Import |
 | `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
 | `./catalog-load.js` | `catalogEntries, catalogEntry, catalogEvaluators, primaryRelation` | Import |
 | `./catalog-types.js` | `CatalogEvaluator, CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation` | Import (type-only) |
@@ -7854,7 +7856,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90478 |
+| Total Lines of Code | 90501 |
 | Total Exports | 2870 |
 | Total Re-exports | 1413 |
 | Total Classes | 86 |
