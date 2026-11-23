@@ -49,7 +49,7 @@ import {
   type AffineTemperature,
   type TemperatureReading,
 } from '../dimensional/units.js';
-import { arityMessage, EulerNumberError, FormulaError, SCALAR_FUNCTIONS, unknownFunctionMessage } from './formula-contract.js';
+import { arityMessage, callBuiltinFunction, EulerNumberError, FormulaError, SCALAR_FUNCTIONS, unknownFunctionMessage } from './formula-contract.js';
 import { constantExponent, parseFormulaPNode, UnsupportedSyntaxError, type FormulaPNode } from './formula-dimension.js';
 import { mathtsFormulaParser } from './formula-mathts.js';
 
@@ -560,6 +560,37 @@ export function readNamedBinding(
   };
 }
 
+/** Interpret an unresolved formula as a unit-root or reciprocal literal. */
+function unitExpressionBinding(trimmed: string, reading: TemperatureReading): BindingValue | undefined {
+  if (/^(?:sqrt\s*\(|\(\s*1\s*\/)/.test(trimmed)) {
+    const unitText = trimmed.startsWith('(') && trimmed.endsWith(')') ? trimmed.slice(1, -1) : trimmed;
+    try {
+      const unit = readUnit(unitText);
+      return { value: unit.scale, dimensioned: true, dimension: unit.dim, notes: unitConventionNotes(unitText), cycles: unit.cycles };
+    } catch (error) {
+      if (!(error instanceof UnknownUnitError)) throw error;
+    }
+  }
+
+  const squareRoot = /^sqrt\s*\((.*)\)$/.exec(trimmed);
+  if (squareRoot !== null) {
+    try {
+      const quantity = literalBinding(squareRoot[1]!, reading);
+      if (quantity?.dimensioned && quantity.affine === undefined) {
+        return {
+          ...quantity,
+          value: finite(trimmed, callBuiltinFunction('sqrt', [quantity.value])),
+          dimension: power(quantity.dimension, 0.5),
+          cycles: quantity.cycles / 2,
+        };
+      }
+    } catch (error) {
+      if (!(error instanceof UnknownUnitError)) throw error;
+    }
+  }
+  return undefined;
+}
+
 /**
  * Read one binding. `mode` selects the constant values (`--natural`,
  * `--geometrized`). `reading` is how a lone `degC` is taken.
@@ -607,7 +638,11 @@ export function readBinding(
   try {
     shape = dimensionWalk(ast, scope, spliced.slots);
   } catch (e) {
-    if (e instanceof UnknownNameError && spliced.slots.size === 0 && !hasOperator(trimmed)) throw notANumber();
+    if (e instanceof UnknownNameError) {
+      const unit = unitExpressionBinding(trimmed, reading);
+      if (unit !== undefined) return unit;
+      if (spliced.slots.size === 0 && !hasOperator(trimmed)) throw notANumber();
+    }
     throw e;
   }
   return {

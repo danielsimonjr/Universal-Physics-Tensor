@@ -3456,6 +3456,7 @@ The codebase is organized into the following modules:
 | `./bridges/input-contract.js` | `slotForSpelling` | Re-export |
 | `./cases/index.js` | `AppliedCase, CaseCheck, CaseResult` | Re-export |
 | `./dimensional/units.js` | `convertValue, readQuantityLiteral, UnitError, unitRows` | Re-export |
+| `./dimensional/units.js` | `unitHelpText` | Re-export |
 | `./composition/axis-audit.js` | `auditAxisDiscrimination, AUDIT_ALPHA` | Re-export |
 | `./composition/axis-audit.js` | `AxisDiscrimination` | Re-export |
 | `./composition/axes.js` | `AXES` | Re-export |
@@ -3564,7 +3565,7 @@ The codebase is organized into the following modules:
   BRIDGE_EVALUATORS, evaluateBridge, DuplicateInputError, InputTypeError, isInputContractError,
   MissingInputError, NonFiniteInputError, UnknownInputError, EvaluatorSpec, EvaluatorParameter,
   resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, CASE_CONTRACTS, slotForSpelling, AppliedCase,
-  CaseCheck, CaseResult, convertValue, readQuantityLiteral, UnitError, unitRows,
+  CaseCheck, CaseResult, convertValue, readQuantityLiteral, UnitError, unitRows, unitHelpText,
   auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination, AXES, AxisSpec, simplifyObservable,
   isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner, scanLinkages,
   deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend, deriveEdgeEvidence,
@@ -6419,7 +6420,7 @@ The codebase is organized into the following modules:
 | `../core/compare.js` | `compareCodepoint` | Import |
 | `./algebra.js` | `equals, format, multiply, power` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, solidusSides, UNIT_SCALE, ExactScale` | Import |
+| `./exact-scale.js` | `addScales, decimalScale, divideScales, multiplyScales, powerScale, ratioScale, scaleToNumber, scaleOf, solidusSides, UNIT_SCALE, ExactScale` | Import |
 | `./mathts-unit-delegation.js` | `mathtsParsedDimension, unitExactScaleViaMathts, unitParserViaMathts` | Import |
 | `./mathts-unit-wrapper.js` | `applyBitScaleOverride, tryMathtsA5Reading, uptRefusalReason` | Import |
 | `./unit-data.js` | `superscriptPower, UNIT_DATA, sideTokens, splitPrefix, AffineRow` | Import |
@@ -6431,8 +6432,8 @@ The codebase is organized into the following modules:
 
   ```text
   affineReadingNote, formatReading, segmentations, isListedProduct, unitConventionNotes, readUnit,
-  unitReadingsSource, parseUnit, readQuantityLiteral, convertValue, unitDimension, unitRows,
-  unitTables
+  unitReadingsSource, parseUnit, readQuantityLiteral, convertValue, unitHelpText, unitDimension,
+  unitRows, unitTables
   ```
 
 
@@ -6808,7 +6809,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, TEMPERATURE, Dimension` | Import |
 | `../dimensional/units.js` | `AmbiguousUnitError, convertValue, parseUnit, readQuantityLiteral, readUnit, unitConventionNotes, UnitError, UnitRefusedError, UnknownUnitError, AffineTemperature, TemperatureReading` | Import |
-| `./formula-contract.js` | `arityMessage, EulerNumberError, FormulaError, SCALAR_FUNCTIONS, unknownFunctionMessage` | Import |
+| `./formula-contract.js` | `arityMessage, callBuiltinFunction, EulerNumberError, FormulaError, SCALAR_FUNCTIONS, unknownFunctionMessage` | Import |
 | `./formula-dimension.js` | `constantExponent, parseFormulaPNode, UnsupportedSyntaxError, FormulaPNode` | Import |
 | `./formula-mathts.js` | `mathtsFormulaParser` | Import |
 
@@ -7857,12 +7858,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90520 |
-| Total Exports | 2872 |
-| Total Re-exports | 1414 |
+| Total Lines of Code | 90648 |
+| Total Exports | 2874 |
+| Total Re-exports | 1415 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 961 |
+| Total Functions | 962 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

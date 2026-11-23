@@ -4,7 +4,7 @@
     "version": "17.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2872
+    "totalExports": 2874
   },
   "entryPoints": [
     {
@@ -11789,6 +11789,13 @@
             "reExport": true
           },
           {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "unitHelpText"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./composition/axis-audit.js",
             "imports": [
               "auditAxisDiscrimination",
@@ -12594,6 +12601,7 @@
           "readQuantityLiteral",
           "UnitError",
           "unitRows",
+          "unitHelpText",
           "auditAxisDiscrimination",
           "AUDIT_ALPHA",
           "AXES",
@@ -12882,6 +12890,7 @@
           "readQuantityLiteral",
           "UnitError",
           "unitRows",
+          "unitHelpText",
           "auditAxisDiscrimination",
           "AUDIT_ALPHA",
           "AxisDiscrimination",
@@ -22868,6 +22877,7 @@
               "powerScale",
               "ratioScale",
               "scaleToNumber",
+              "scaleOf",
               "solidusSides",
               "UNIT_SCALE",
               "ExactScale"
@@ -22911,6 +22921,7 @@
           "parseUnit",
           "readQuantityLiteral",
           "convertValue",
+          "unitHelpText",
           "unitDimension",
           "unitRows",
           "unitTables",
@@ -22943,6 +22954,7 @@
           "parseUnit",
           "readQuantityLiteral",
           "convertValue",
+          "unitHelpText",
           "unitDimension",
           "unitRows",
           "unitTables"
@@ -25802,6 +25814,7 @@
             "file": "./formula-contract.js",
             "imports": [
               "arityMessage",
+              "callBuiltinFunction",
               "EulerNumberError",
               "FormulaError",
               "SCALAR_FUNCTIONS",
@@ -28801,15 +28814,15 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90520,
-    "totalExports": 2872,
+    "totalLinesOfCode": 90648,
+    "totalExports": 2874,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 961,
+    "totalFunctions": 962,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 402,
-    "totalReExports": 1414,
+    "totalReExports": 1415,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

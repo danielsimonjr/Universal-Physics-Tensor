@@ -22,8 +22,8 @@ describe('mile and gallon (issue 678)', () => {
   it('keeps the new rows prefix-free and leaves other spellings unknown', () => {
     expect(() => parseUnit('kmile')).toThrow(UnknownUnitError);
     expect(() => parseUnit('mgallon')).toThrow(UnknownUnitError);
-    // `gal` names the CGS acceleration unit Gal too; it stays unknown by decision.
-    expect(() => parseUnit('gal')).toThrow(UnknownUnitError);
+    expect(parseUnit('gal')).toEqual(parseUnit('gallon'));
+    expect(() => parseUnit('Gal')).toThrow(UnknownUnitError);
     expect(() => parseUnit('gzqal')).toThrow(UnknownUnitError);
     expect(convertValue('1 min', 's').value).toBe(60);
     expect(parseUnit('mil').scale).toBe(2.54e-5);

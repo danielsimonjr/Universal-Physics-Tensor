@@ -95,9 +95,9 @@ describe('MathTS agrees with UPT on delegated readings', () => {
     }
   });
 
-  it('an affine unit inside a compound is refused on both sides (closed by 0.22.0)', () => {
+  it('UPT interprets compound temperatures as intervals even when MathTS refuses the spelling', () => {
     expect(() => Unit.parse('degC/s')).toThrow(/affine/);
-    expect(() => parseUnit('degC/s')).toThrow(UnitRefusedError);
+    expect(parseUnit('degC/s')).toEqual(parseUnit('K/s'));
   });
 
   it('a difference reading omits the offset on both sides (closed by 0.22.0)', () => {

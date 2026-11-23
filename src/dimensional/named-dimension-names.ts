@@ -44,6 +44,8 @@ const NAMED_DIMENSION_NAME_LIST = [
   'permittivity',
   'conductance',
   'magnetic_flux',
+  'momentum',
+  'resistivity',
 ] as const;
 
 /** Every name `dimension-spec.ts` accepts as a named dimension, in table order. */

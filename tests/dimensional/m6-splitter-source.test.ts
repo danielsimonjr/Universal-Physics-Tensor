@@ -15,7 +15,6 @@ import {
   parseUnit,
   readUnit,
   segmentations,
-  UnitRefusedError,
 } from '../../src/dimensional/units.js';
 
 const labels = (token: string): string[] => segmentations(token).filter((way) => way.length > 1).map(formatReading).sort();
@@ -54,9 +53,9 @@ describe('M6 splitter: labels keep the token spelling', () => {
     });
   }
 
-  it('a degree-Celsius spelling inside a compound is still refused', () => {
-    expect(readLabel('1/°Cm')).toBe('UnitRefusedError: an affine temperature cannot be part of a compound unit; give K');
-    expect(() => parseUnit('W/℃')).toThrow(UnitRefusedError);
+  it('accepts a degree-Celsius interval and refuses an unlisted glued token', () => {
+    expect(readLabel('1/°Cm')).toBe("UnknownUnitError: unknown unit '°Cm'");
+    expect(parseUnit('W/℃')).toEqual(parseUnit('W/K'));
   });
 
   it('W/umK is one reading: um·K matches the m·K row with a prefix on its first factor', () => {
@@ -96,7 +95,8 @@ describe('M6 splitter: MathTS drops the plain X·X run, not a run with a power',
       if (run !== (attachedUnit(token) !== symbol)) disagree.push(token);
     }
     expect(doubled).toBeGreaterThan(0);
-    expect(disagree).toEqual([]);
+    // MathTS reads these spellings as products. UPT defines explicit unit rows.
+    expect(disagree).toEqual(['BtuBtu', 'gpmgpm', 'cfmcfm']);
   });
 
   it('MathTS keeps m·m^2 in mm2, so UPT keeps its own prefix-run rule', () => {

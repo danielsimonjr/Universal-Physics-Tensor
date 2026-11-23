@@ -1,12 +1,12 @@
 /**
  * Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.
  *
- * A unit is a product of factors, each `symbol[^n]`, joined by `*`, `·` or a
+ * A unit is a product of factors, each `symbol[^n] or sqrt(unit)`, joined by `*`, `·` or a
  * space; everything after a single `/` is the denominator (`W/(m*K)` and
  * `W/m*K` both mean W·m⁻¹·K⁻¹). An exact symbol is matched before a prefixed
  * one, so `min` is a minute, `Pa` a pascal and `mm` a millimetre.
  *
- * An affine temperature (`degC`, `°C`, `degF`, `°F`) is accepted only alone.
+ * A compound uses temperature intervals. A lone affine temperature (`degC`, `°C`, `degF`, `°F`) can be an absolute reading.
  * The kelvin value is `value × scale + offset` for an absolute reading and
  * `value × scale` for a difference. Rankine is proportional (`°R × 5/9`), not
  * affine. The caller decides which reading, from the quantity's role.
@@ -63,6 +63,7 @@ import {
   powerScale,
   ratioScale,
   scaleToNumber,
+  scaleOf,
   solidusSides,
   UNIT_SCALE,
   type ExactScale,
@@ -110,7 +111,7 @@ export class UnknownUnitError extends UnitError {
 
 /**
  * A unit the reader recognizes and refuses: a logarithmic or ratio unit, an
- * ambiguous name such as `ton`, or an affine temperature inside a compound.
+ * ambiguous name such as `ton`, or an invalid temperature spelling.
  * @public
  */
 export class UnitRefusedError extends UnitError {
@@ -162,7 +163,7 @@ interface AffineRow extends UnitDataAffineRow {
 }
 
 /**
- * Lone spellings. A compound that contains one is refused. The schema's `id`
+ * Temperature spellings whose scale also states the interval size. The schema's `id`
  * enum is {@link AffineTemperature}, held equal by a test: the public type
  * promises callers these ids, so a new affine scale is an API change.
  */
@@ -219,11 +220,15 @@ export interface FactorReading {
   readonly cycles: number;
 }
 
+function caretPower(token: string): RegExpExecArray | null {
+  return /^(.+)\^([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)$/.exec(token);
+}
+
 /** One factor, or null when `token` is not exactly one unit with an optional exponent. */
 function tryOneFactor(token: string): FactorReading | null {
   let base = token;
   let exp = 1;
-  const caret = /^(.+)\^([+-]?\d+)$/.exec(token);
+  const caret = caretPower(token);
   if (caret !== null) {
     base = caret[1]!;
     exp = Number(caret[2]);
@@ -240,7 +245,8 @@ function tryOneFactor(token: string): FactorReading | null {
       }
     }
   }
-  const parsed = trySymbol(base);
+  const affine = affineRow(base);
+  const parsed = affine === undefined ? trySymbol(base) : { scale: affine.scale, dim: D({ Theta: 1 }), cycles: 0 };
   if (parsed === null || !Number.isFinite(exp)) return null;
   return { base, exp, scale: parsed.scale, dim: parsed.dim, cycles: parsed.cycles };
 }
@@ -388,6 +394,13 @@ function formatExpression(
   return denominator.includes('·') ? `${numerator}/(${denominator})` : `${numerator}/${denominator}`;
 }
 
+/** Fractional powers can make a rational scale irrational. */
+function fractionalScale(scale: ExactScale, exponent: number): ExactScale {
+  const result = scaleToNumber(scale) ** exponent;
+  if (!Number.isFinite(result) || result === 0) throw new UnitRefusedError('unit scale is out of range');
+  return scaleOf(result);
+}
+
 function accumulate(
   tokens: readonly (readonly FactorReading[])[],
   sign: 1 | -1,
@@ -398,7 +411,8 @@ function accumulate(
   for (const factors of tokens) {
     for (const factor of factors) {
       const n = sign * factor.exp;
-      scale = multiplyScales(scale, powerScale(factor.scale, n));
+      const powered = Number.isInteger(n) ? powerScale(factor.scale, n) : fractionalScale(factor.scale, n);
+      scale = multiplyScales(scale, powered);
       dim = multiply(dim, power(factor.dim, n));
       cycles += factor.cycles * n;
     }
@@ -442,11 +456,49 @@ function localUnitReadings(text: string): UnitReading[] {
   if (t === '' || t === '1') return [reading(UNIT_SCALE, DIMENSIONLESS, '1', 0)];
   const affine = affineRow(t);
   if (affine !== undefined) return [reading(affine.scale, D({ Theta: 1 }), t, 0, affine.id)];
-  if (
-    AFFINE.some((candidate) => candidate.symbols.some((symbol) => t.includes(symbol))) ||
-    /deg\s+[CFcf]|°\s*[CFcf]/.test(t)
-  ) {
-    throw new UnitRefusedError('an affine temperature cannot be part of a compound unit; give K');
+  if (/deg\s+[CFcf]|°\s+[CFcf]/.test(t)) throw new UnitRefusedError('write degC or degF without spaces');
+  return compoundUnitReadings(t);
+}
+
+/**
+ * Extract square-root groups before the solidus split. The recursive read retains
+ * each group's denominator convention and every ambiguous token reading.
+ */
+function compoundUnitReadings(text: string): UnitReading[] {
+  // Group names are private to this invocation and cannot collide with input tokens.
+  let groupPrefix = '@root';
+  while (text.includes(groupPrefix)) groupPrefix += '@';
+  const groups = new Map<string, FactorReading[][]>();
+  let t = text.replace(/\^\(\s*([+-]?\d+)\s*\/\s*(\d+)\s*\)|\^([+-]?\d+)\/(\d+)(?![A-Za-z0-9_])/g,
+    (_, a: string, b: string, c: string, d: string) => {
+      const exponent = Number(a ?? c) / Number(b ?? d);
+      if (!Number.isFinite(exponent)) throw new UnknownUnitError(text);
+      return `^${exponent}`;
+    });
+  let cursor = 0;
+  for (;;) {
+    const match = /(?<![\p{L}\p{N}_])sqrt\s*\(/u.exec(t.slice(cursor));
+    if (match === null) break;
+    const start = cursor + match.index;
+    const inside = start + match[0].length;
+    let end = inside;
+    let depth = 1;
+    while (end < t.length && depth > 0) {
+      if (t[end] === '(') depth += 1;
+      if (t[end] === ')') depth -= 1;
+      end += 1;
+    }
+    if (depth !== 0) throw new UnknownUnitError(text);
+    const name = `${groupPrefix}${groups.size}@`;
+    const nested = t.slice(inside, end - 1).trim();
+    if (nested === '') throw new UnknownUnitError(text);
+    // Wrap the factor label so slash and product spellings remain unambiguous.
+    groups.set(name, localUnitReadings(nested).map((r) => [{
+      base: `sqrt(${r.label})`, exp: 1, scale: fractionalScale(r.exact, 0.5),
+      dim: power(r.dim, 0.5), cycles: r.cycles / 2,
+    }]));
+    t = t.slice(0, start) + name + t.slice(end);
+    cursor = start + name.length;
   }
   // An operator with nothing on one side (`m/`, `m//s`, `m*`, `*m`, `m/*s`) is not a unit
   // text; it was read as if the empty factor were 1 (Tom's second round). A leading `/`
@@ -461,8 +513,17 @@ function localUnitReadings(text: string): UnitReading[] {
   const denominator = sides.denominator === '' ? [] : sideTokens(sides.denominator);
   // `/s` is a dimensionless numerator over seconds. A bare `/` is not a unit.
   if (numerator.length === 0 && denominator.length === 0) throw new UnknownUnitError(t);
-  const numWays = numerator.map((token) => tokenWays(token, compete, 'numerator'));
-  const denWays = denominator.map((token) => tokenWays(token, compete, 'denominator'));
+  const ways = (token: string, side: 'numerator' | 'denominator'): FactorReading[][] => {
+    const exponent = caretPower(token);
+    const group = groups.get(exponent?.[1] ?? token);
+    if (group === undefined) return tokenWays(token, compete, side);
+    if (exponent === null) return group;
+    const exp = Number(exponent[2]);
+    if (!Number.isFinite(exp)) throw new UnknownUnitError(text);
+    return group.map((factors) => factors.map((factor) => ({ ...factor, exp })));
+  };
+  const numWays = numerator.map((token) => ways(token, 'numerator'));
+  const denWays = denominator.map((token) => ways(token, 'denominator'));
   const numCombos = numerator.length === 0 ? [[]] : cartesian(numWays);
   const denCombos = denominator.length === 0 ? [[]] : cartesian(denWays);
   const unique = new Map<string, UnitReading>();
@@ -674,6 +735,24 @@ export function convertValue(raw: string, target: string, temperature: Temperatu
     ...(from.cycles === 0 ? {} : { cycles: from.cycles }),
     ...(from.affine === undefined ? {} : { affine: from.affine }),
   };
+}
+
+/** Unit spellings and composition rules displayed by the CLI help topic. @internal */
+export function unitHelpText(): string {
+  const units = [...UNITS.keys(), ...AFFINE.flatMap((row) => row.symbols)].sort(compareCodepoint);
+  const prefixes = [...PREFIXES.keys()].join(', ');
+  return [
+    'upt help units — unit spellings are case-sensitive',
+    'Use a value and a unit in a binding, such as x=4nV/sqrt(Hz).',
+    'Products use *, · or spaces. A slash places subsequent factors in the denominator.',
+    'Powers can be integers, decimals or fractions. For example V/Hz^(1/2).',
+    'A lone degC or degF uses the reading context. In a compound it denotes an interval.',
+    '',
+    'Accepted unit spellings',
+    ...Array.from({ length: Math.ceil(units.length / 10) }, (_, i) => `  ${units.slice(i * 10, i * 10 + 10).join(', ')}`),
+    '',
+    `SI prefixes for prefixable units: ${prefixes}`,
+  ].join('\n');
 }
 
 /** The dimension of a declared unit expression. @internal */

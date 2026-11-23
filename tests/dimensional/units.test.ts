@@ -102,15 +102,29 @@ describe('parseUnit', () => {
     expect(parseUnit('Myr').scale).toBe(1e6 * 365.25 * 86400);
   });
 
+  it('reads equivalent fractional noise-density units and compound temperature intervals', () => {
+    const expected = { L: 2, M: 1, T: -2.5, I: -1 };
+    for (const unit of ['V/sqrt(Hz)', 'V*Hz^-0.5', 'V/Hz^0.5', 'V/Hz^(1/2)']) {
+      expect(parseUnit(unit)).toMatchObject({ scale: 1, dim: expected });
+    }
+    expect(convertValue('1BTU/(h*ft*degF)', 'W/(m*K)').value).toBeCloseTo(1.730735, 5);
+    expect(parseUnit('degF/s')).toMatchObject({ scale: 5 / 9, dim: { Theta: 1, T: -1 } });
+    expect(parseUnit('degF/s').affine).toBeUndefined();
+  });
+
   it('refuses what it cannot read rather than guessing', () => {
     // The candela is a unit now (issue 475); an unknown letter run still refuses.
+    expect(parseUnit('V/sqrt(Hz)^2')).toEqual(parseUnit('V/Hz'));
+    expect(parseUnit('s^(1/10000000)').dim.T).toBe(1e-7);
+    expect(() => parseUnit('sqrt(Hz) @root0@')).toThrow(UnitError);
+    expect(() => parseUnit('sqrt(\t)')).toThrow(UnitError);
     expect(() => parseUnit('cdx')).toThrow(UnitError);
     expect(() => parseUnit('furlong')).toThrow(/unknown unit 'furlong'/);
     // A chain of slashes reads left to right (issue 477): m/s/s is m/s².
     expect(parseUnit('m/s/s')).toEqual(parseUnit('m/s^2'));
     expect(parseUnit('degF').affine).toBe('fahrenheit');
     expect(parseUnit('degF').scale).toBeCloseTo(5 / 9, 12);
-    expect(() => parseUnit('degC/s')).toThrow(/affine/);
+    expect(parseUnit('degC/s')).toEqual(parseUnit('K/s'));
   });
 });
 

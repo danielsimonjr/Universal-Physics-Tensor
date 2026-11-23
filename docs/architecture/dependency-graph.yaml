@@ -3,7 +3,7 @@ metadata:
   version: 17.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2872
+  totalExports: 2874
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7894,6 +7894,10 @@ modules:
             - UnitError
             - unitRows
           reExport: true
+        - file: ./dimensional/units.js
+          imports:
+            - unitHelpText
+          reExport: true
         - file: ./composition/axis-audit.js
           imports:
             - auditAxisDiscrimination
@@ -8432,6 +8436,7 @@ modules:
         - readQuantityLiteral
         - UnitError
         - unitRows
+        - unitHelpText
         - auditAxisDiscrimination
         - AUDIT_ALPHA
         - AXES
@@ -8719,6 +8724,7 @@ modules:
         - readQuantityLiteral
         - UnitError
         - unitRows
+        - unitHelpText
         - auditAxisDiscrimination
         - AUDIT_ALPHA
         - AxisDiscrimination
@@ -15553,6 +15559,7 @@ modules:
             - powerScale
             - ratioScale
             - scaleToNumber
+            - scaleOf
             - solidusSides
             - UNIT_SCALE
             - ExactScale
@@ -15584,6 +15591,7 @@ modules:
         - parseUnit
         - readQuantityLiteral
         - convertValue
+        - unitHelpText
         - unitDimension
         - unitRows
         - unitTables
@@ -15613,6 +15621,7 @@ modules:
         - parseUnit
         - readQuantityLiteral
         - convertValue
+        - unitHelpText
         - unitDimension
         - unitRows
         - unitTables
@@ -17862,6 +17871,7 @@ modules:
         - file: ./formula-contract.js
           imports:
             - arityMessage
+            - callBuiltinFunction
             - EulerNumberError
             - FormulaError
             - SCALAR_FUNCTIONS
@@ -19952,15 +19962,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90520
-  totalExports: 2872
+  totalLinesOfCode: 90648
+  totalExports: 2874
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 961
+  totalFunctions: 962
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402
-  totalReExports: 1414
+  totalReExports: 1415
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

@@ -256,8 +256,8 @@
       ],
       "scale": "ln2",
       "dimension": {},
-      "prefixable": false,
-      "comment": "A bit is ln 2 nat. Exact, so kbit is not a kilobit."
+      "prefixable": true,
+      "comment": "A bit is ln 2 nat. Takes decimal SI prefixes such as kbit and Mbit."
     },
     {
       "symbols": [
@@ -278,7 +278,8 @@
     },
     {
       "symbols": [
-        "min"
+        "min",
+        "minute"
       ],
       "scale": "60",
       "dimension": {
@@ -288,7 +289,8 @@
     },
     {
       "symbols": [
-        "h"
+        "h",
+        "hour"
       ],
       "scale": "3600",
       "dimension": {
@@ -464,7 +466,8 @@
     },
     {
       "symbols": [
-        "BTU"
+        "BTU",
+        "Btu"
       ],
       "scale": "4.1868*453.59237/1.8",
       "dimension": {
@@ -978,8 +981,37 @@
       "comment": "International mile, 5280 ft = 1609.344 m exactly (NIST SP 811 B.8)."
     },
     {
+      "symbols": ["gpm"],
+      "scale": "us_gallon/60",
+      "dimension": { "L": 3, "T": -1 },
+      "prefixable": false,
+      "comment": "US liquid gallons per minute."
+    },
+    {
+      "symbols": ["cfm"],
+      "scale": "foot^3/60",
+      "dimension": { "L": 3, "T": -1 },
+      "prefixable": false,
+      "comment": "Cubic feet per minute."
+    },
+    {
+      "symbols": ["kip"],
+      "scale": "1000*lbf",
+      "dimension": { "L": 1, "M": 1, "T": -2 },
+      "prefixable": false,
+      "comment": "A kip is 1000 pounds-force."
+    },
+    {
+      "symbols": ["in-lbf"],
+      "scale": "inch*lbf",
+      "dimension": { "L": 2, "M": 1, "T": -2 },
+      "prefixable": false,
+      "comment": "Inch pound-force, an energy or torque unit."
+    },
+    {
       "symbols": [
-        "gallon"
+        "gallon",
+        "gal"
       ],
       "scale": "us_gallon",
       "dimension": {
@@ -1226,6 +1258,7 @@
     ]
   },
   "spellingNotes": [
+    { "spelling": "gal", "note": "gal is the US liquid gallon; Gal is the CGS acceleration unit" },
     {
       "spelling": "myr",
       "note": "myr is a milliyear (the SI prefix m on yr = 0.001 yr), not a million years; a million years is Myr"

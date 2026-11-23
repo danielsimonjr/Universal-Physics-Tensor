@@ -25,6 +25,17 @@ import { temperatureQuantityRole } from '../../src/dimensional/formula-names.js'
 import { MASS, TIME } from '../../src/dimensional/types.js';
 
 describe('readBinding', () => {
+  it('resolves registered constants before trying a square root as a unit expression', () => {
+    for (const name of ['h', 'G']) {
+      const formula = readBinding(`${name}^(1/2)`);
+      const root = readBinding(`sqrt(${name})`);
+      expect(root.dimension).toEqual(formula.dimension);
+      expect(root.value / formula.value).toBeCloseTo(1, 14);
+    }
+    expect(readBinding('sqrt(1/s)').dimension.T).toBe(-0.5);
+    expect(readBinding('sqrt(2/V)').value).toBe(Math.SQRT2);
+  });
+
   it('keeps a bare number and a scientific literal in the caller unit', () => {
     expect(readBinding('1')).toMatchObject({ value: 1, dimensioned: false });
     expect(readBinding('1e-10').value).toBe(1e-10);

@@ -145,7 +145,7 @@ describe('one reader: parseUnit, convertValue and the binding reader agree exact
 describe('typed refusals, not message text', () => {
   it('a refused, an ambiguous and an unknown unit are three classes', () => {
     expect(() => parseUnit('dB')).toThrow(UnitRefusedError);
-    expect(() => parseUnit('degC/s')).toThrow(UnitRefusedError);
+    expect(parseUnit('degC/s')).toEqual(parseUnit('K/s'));
     expect(parseUnit('mol/mL').scale).toBeCloseTo(1e6, 6);
     expect(() => parseUnit('furlong')).toThrow(UnknownUnitError);
   });
@@ -216,7 +216,8 @@ describe('MathTS states the same unit scales (the independent second method)', (
   it('disagrees only where the table is the definition and MathTS rounds or differs by convention', () => {
     // bit: ln 2 nat here, 1 in MathTS, a convention difference. mathts-core 0.18.0 states torr (101325/760 Pa),
     // mmHg (133.322387415 Pa, NIST SP 811), hp (550 ft·lbf/s) and psi (lbf/in²) exactly, so they agree.
-    expect(disagree.sort()).toEqual(['bit']);
+    // MathTS segments Btu, cfm and gpm as products with different dimensions.
+    expect(disagree.sort()).toEqual(['Btu', 'bit', 'cfm', 'gpm']);
   });
 });
 
