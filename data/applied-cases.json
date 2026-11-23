@@ -249,7 +249,7 @@
               "f_hi_Hz=100kHz",
               "t_avg_s=1"
             ],
-            "note": "a 1 MΩ resistor through 100 pF: the RC pole sits near 1.7 Hz, far below the 100 kHz band edge",
+            "note": "a 1 MΩ resistor through 100 pF: the RC pole sits near 1.75 kHz, far below the 100 kHz band edge",
             "fails": [
               "flat-band"
             ]

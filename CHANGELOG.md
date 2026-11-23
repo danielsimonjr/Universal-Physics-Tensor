@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Catalog descriptions identify the encoded holographic area law and the thermoelectric Onsager premise. Test plans report the correct RC pole, measurement provenance, and the recorded comparison criterion.
+
 - Evaluators report the scope of the Casimir, lower-critical-field, Debye, radiation-pressure, and Onsager models. The atlas records analytic agreement bounds for dispersion, diffusion, first-order Oseen drag, and the linearized acoustic closure.
 
 - Cyclotron frequency is returned in signed cycles per second. Evaluators state the Maxwellian and Saha assumptions and can report a standoff radius ratio or a Shockley current at a supplied ideality.

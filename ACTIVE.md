@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] F11: align catalog and test-plan wording with their encoded evidence (#763, #777, #799).
+
 - [x] F10: state model limits and encode agreement bounds within their mathematical domains (#772, #774, #802, #803, #827, #828).
 
 - [x] F9: make evaluator outputs and assumptions match the physical model (#747, #776, #800, #801, #804).

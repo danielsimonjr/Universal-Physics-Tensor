@@ -149,7 +149,7 @@
     {
       "id": 14,
       "type": "cross-domain",
-      "name": "Quantum Error Correction Holographic Mapping",
+      "name": "Holographic area-law entropy",
       "category": "B",
       "category_name": "Information-Physical Bridges",
       "bridges": [
@@ -2809,7 +2809,7 @@
       ],
       "status": "established",
       "proofStatus": "full",
-      "context": "The isothermal Peltier coefficient and the open-circuit Seebeck coefficient satisfy Π = S T when the Onsager coefficients agree. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom and not a measured thermopower. Without it the two coefficients disagree. The first Thomson relation is a different equation.",
+      "context": "The isothermal Peltier coefficient and the open-circuit Seebeck coefficient satisfy Π = S T when the Onsager coefficients agree. That equality is the thermoelectric Onsager structure field naming microscopic reversibility, not an axiom and not a measured thermopower. Without it the two coefficients disagree. The first Thomson relation is a different equation.",
       "formula_latex": "\\Pi = S T",
       "source_part": "III",
       "source_section": "Applied-physicist catalog (be-73) — established textbook relation, PhysJS.KelvinRelation.peltier_eq",
@@ -6478,7 +6478,7 @@
       "id": "be-14",
       "catalogId": 14,
       "kind": "bridge",
-      "label": "Ryu-Takayanagi entropy S = k_B c³ A / (4 G_N ℏ)",
+      "label": "Holographic area-law entropy S = k_B c³ A / (4 G_N ℏ)",
       "expression": "(k_B * c^3 * minimal-surface-area) / (4 * G * hbar)",
       "target": "boundary-entanglement-entropy",
       "sources": [

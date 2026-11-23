@@ -38,15 +38,21 @@ interface Plan {
 }
 
 function linesOf(outcome: ConfrontationOutcome): { confirm: string[]; falsify: string[] } {
+  if (outcome.comparisonBasis === 'encoded-reference') {
+    return {
+      confirm: ['The source records a qualitative or aggregate comparison.'],
+      falsify: ['An independently measured value and a specified comparison criterion are needed.'],
+    };
+  }
   if (outcome.kind === 'value') {
     return {
       confirm: [
-        `predicted ${outcome.predicted} ${outcome.units}, observed ${outcome.observed} ± ${outcome.sigma} ${outcome.units}`,
+        `predicted ${outcome.predicted} ${outcome.units}, observed ${outcome.observed} ± ${outcome.sigma}`,
         `within the stated comparison: ${outcome.withinObserved}`,
       ],
       falsify: [
         outcome.withinObserved
-          ? 'a later measurement outside that comparison falsifies the recorded agreement'
+          ? `compare a new measurement with the prediction using |observed − predicted| > 1σ as the recorded decision threshold (σ = ${outcome.sigma})`
           : 'the recorded comparison is already outside the stated band',
       ],
     };
@@ -106,10 +112,15 @@ function fromConfrontation(api: CommandCtx['api'], id: number): Plan {
     confirm,
     falsify,
     notIncluded: [],
-    measurement: [],
+    measurement: [
+      outcome.provenance.citation,
+      ...(outcome.kind === 'value' && outcome.measured !== undefined
+        ? [`${outcome.measured.quantity}: ${outcome.measured.value} ± ${outcome.measured.sigma}; ${outcome.measured.source}`]
+        : []),
+    ],
     links: [key],
-    preprocessing: outcome.preprocessing.state === 'recorded' ? outcome.preprocessing.statement : 'preprocessing: not-recorded',
-    independence: outcome.independence.state === 'not-recorded' ? 'independence: not-recorded' : outcome.independence.statement,
+    preprocessing: outcome.preprocessing.state === 'recorded' ? outcome.preprocessing.statement : 'not recorded',
+    independence: outcome.independence.state === 'not-recorded' ? 'not recorded' : outcome.independence.statement,
   };
 }
 
