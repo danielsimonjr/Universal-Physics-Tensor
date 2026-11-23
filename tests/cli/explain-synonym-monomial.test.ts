@@ -17,7 +17,7 @@ const Q = -1.602176634e-19;
 const M = 9.1093837015e-31;
 
 function recoveredFrequency(text: string): number {
-  return Number(/Recovered value: ([-+eE0-9.]+)/.exec(text)?.[1]);
+  return Number(/Recovered value: ([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/.exec(text)?.[1]);
 }
 
 const signedFrequency = Q / (2 * Math.PI * M);
