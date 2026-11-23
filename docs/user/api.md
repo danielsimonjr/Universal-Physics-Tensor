@@ -575,7 +575,7 @@ K = R_{ρσμν} R^{ρσμν} is the canonical curvature invariant; scalar (rank
 
 ## Root type exports (`universal-physics-tensor`)
 
-248 type exports of the package root.
+249 type exports of the package root.
 
 | Name | Kind | Declaration | Summary |
 |---|---|---|---|
@@ -755,6 +755,7 @@ K = R_{ρσμν} R^{ρσμν} is the canonical curvature invariant; scalar (rank
 | `RGCouplingNode` | `interface` | `export interface RGCouplingNode {` | AST node for a single dimensionless RG coupling (e.g. `g`, `λ`).  By RG-discipline every coupling appearing in a β-function expression is dimensionless: physical dimensionful couplings `G_n` are made dimensionless via the RG scale `k` (e.g. `g = G·k²`, `λ = Λ/k²`). The `dim` field is therefore hardcoded to `DIMENSIONLESS`; it is exposed for type-system symmetry with `{ kind: 'symbol' }` so a future ExprNode-union integration is mechanical. |
 | `RankIdentifiability` | `interface` | `export interface RankIdentifiability {` | What the log-space rank says about one known set, over the monomial edges of the graph. See the module docs: this is the second instrument beside the forward closure, and its numbers are not the closure's. |
 | `RecoveryOutcome` | `interface` | `export interface RecoveryOutcome {` | Best-effort numerical-recovery outcome. |
+| `RecoveryStep` | `type` | `export type RecoveryStep =` | One operation that supplied a recovered value, in dependency order. |
 | `RegimeAttributes` | `interface` | `export interface RegimeAttributes {` | Sparse regime attributes — the classification axes demoted from container dimensions to node attributes. Values + the gated flags live in the `axes.ts` registry. |
 | `RegimeProvenance` | `interface` | `export interface RegimeProvenance {` | Provenance for a registered regime. Tracks WHO registered the regime (the catalog source or downstream package name) and WHEN. Per P5 Decision #4. |
 | `RegimeSpec` | `interface` | `export interface RegimeSpec<Axis extends AxisName = AxisName> {` | Spec passed to `defineRegime` to register a new regime value under a given axis. The `provenance.registeredAt` field is filled by `defineRegime` (so callers don't have to thread the timestamp themselves). |

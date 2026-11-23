@@ -6640,7 +6640,7 @@ The codebase is organized into the following modules:
 | `./composition/index.js` | `classifyIdentifiability, classifyAll, forwardClosure, identifiabilityByRank` | Re-export |
 | `./composition/index.js` | `IdentifiabilityVerdict, IdentifiabilityResult, IdentifiabilityOptions, RankIdentifiability` | Re-export |
 | `./composition/index.js` | `retrodict, retrodictNode` | Re-export |
-| `./composition/index.js` | `RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionRefusal, RetrodictionReport, RetrodictionOptions` | Re-export |
+| `./composition/index.js` | `RetrodictionOutcome, RetrodictionPrediction, RecoveryStep, RetrodictionResult, RetrodictionRefusal, RetrodictionReport, RetrodictionOptions` | Re-export |
 | `./composition/index.js` | `explainQuantity` | Re-export |
 | `./composition/index.js` | `DerivationExplanation, ExplainOptions, QuantityExplanation` | Re-export |
 | `./composition/index.js` | `composeSymbolic, SymbolicCompositionError, SymbolicEvalError` | Re-export |
@@ -6772,8 +6772,8 @@ The codebase is organized into the following modules:
   REGISTERED_COMPOSITION_IDS, propagateUncertainty, CompositionCandidate, EnumerationReport,
   UncertaintyResult, classifyIdentifiability, classifyAll, forwardClosure, identifiabilityByRank,
   IdentifiabilityVerdict, IdentifiabilityResult, IdentifiabilityOptions, RankIdentifiability,
-  retrodict, retrodictNode, RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult,
-  RetrodictionRefusal, RetrodictionReport, RetrodictionOptions, explainQuantity,
+  retrodict, retrodictNode, RetrodictionOutcome, RetrodictionPrediction, RecoveryStep,
+  RetrodictionResult, RetrodictionRefusal, RetrodictionReport, RetrodictionOptions, explainQuantity,
   DerivationExplanation, ExplainOptions, QuantityExplanation, composeSymbolic,
   SymbolicCompositionError, SymbolicEvalError, Observable, ComposeSymbolicOptions, buildVizModel,
   edgeToJunction, VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats,
@@ -7893,9 +7893,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 395 |
 | Total Modules | 13 |
-| Total Lines of Code | 91370 |
-| Total Exports | 2881 |
-| Total Re-exports | 1417 |
+| Total Lines of Code | 91371 |
+| Total Exports | 2882 |
+| Total Re-exports | 1418 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
 | Total Functions | 965 |

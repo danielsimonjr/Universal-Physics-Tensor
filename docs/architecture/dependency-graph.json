@@ -4,7 +4,7 @@
     "version": "17.0.0",
     "totalFiles": 395,
     "totalModules": 13,
-    "totalExports": 2881
+    "totalExports": 2882
   },
   "entryPoints": [
     {
@@ -24307,6 +24307,7 @@
             "imports": [
               "RetrodictionOutcome",
               "RetrodictionPrediction",
+              "RecoveryStep",
               "RetrodictionResult",
               "RetrodictionRefusal",
               "RetrodictionReport",
@@ -25258,6 +25259,7 @@
           "RankIdentifiability",
           "RetrodictionOutcome",
           "RetrodictionPrediction",
+          "RecoveryStep",
           "RetrodictionResult",
           "RetrodictionRefusal",
           "RetrodictionReport",
@@ -25678,6 +25680,7 @@
           "retrodictNode",
           "RetrodictionOutcome",
           "RetrodictionPrediction",
+          "RecoveryStep",
           "RetrodictionResult",
           "RetrodictionRefusal",
           "RetrodictionReport",
@@ -28983,15 +28986,15 @@
   "statistics": {
     "totalTypeScriptFiles": 395,
     "totalModules": 13,
-    "totalLinesOfCode": 91370,
-    "totalExports": 2881,
+    "totalLinesOfCode": 91371,
+    "totalExports": 2882,
     "totalClasses": 86,
     "totalInterfaces": 523,
     "totalFunctions": 965,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 404,
-    "totalReExports": 1417,
+    "totalReExports": 1418,
     "totalTypeOnlyImports": 544,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
