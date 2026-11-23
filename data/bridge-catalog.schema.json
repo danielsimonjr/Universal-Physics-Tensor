@@ -765,14 +765,14 @@
           },
           "formula": {
             "type": "object",
-            "required": ["label", "expression", "target", "sources", "holds"],
+            "required": ["label", "expression", "target", "sources"],
             "additionalProperties": false,
             "properties": {
               "label": { "type": "string", "minLength": 1 },
               "expression": { "type": "string", "minLength": 1 },
               "target": { "type": "string", "minLength": 1 },
               "sources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-              "holds": { "type": "string", "minLength": 1 }
+              "additionalCondition": { "type": "string", "minLength": 1 }
             }
           },
           "parameters": {

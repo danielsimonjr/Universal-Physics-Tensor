@@ -1666,7 +1666,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
-- Functions: `unusedInputKeys`, `buildEvaluatorSpec`, `missingEvaluatorMessage`, `evaluateBridge`
+- Functions: `evaluatorRelation`, `unusedInputKeys`, `buildEvaluatorSpec`, `missingEvaluatorMessage`, `evaluateBridge`
 - Constants: `BRIDGE_EVALUATORS`
 
 ---
@@ -3532,6 +3532,7 @@ The codebase is organized into the following modules:
 | `./composition/evaluate-relation.js` | `evaluateResolved, resolveEvaluable` | Re-export |
 | `./dimensional/algebra.js` | `siUnitOf` | Re-export |
 | `./bridges/evaluators.js` | `unusedInputKeys` | Re-export |
+| `./bridges/evaluators.js` | `evaluatorRelation` | Re-export |
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid` | Re-export |
 | `./atlas/benchmark/onnx-embedder.js` | `fetchOnnxModel, onnxEmbedder` | Re-export |
@@ -3600,11 +3601,11 @@ The codebase is organized into the following modules:
   shareSynonyms, assertSynonymAgreement, expandSynonymValues, greekLetter, CANONICAL_GROUP_PREFACTORS,
   formatQuantity, formatExact, formatPercent, CarrierSignError, naturalConstantOverrides, UnitMode,
   escapeRegExp, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved,
-  resolveEvaluable, siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
-  EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid, fetchOnnxModel, onnxEmbedder,
-  builtinFormulaDimensionChecker, formulaHasBareE, parseDeclaredExpression, missingEvaluatorMessage,
-  relationNotices, constantNotes, constantRecord, BridgeEdge, VizJunction, VizModel, EvidenceTag,
-  RelationType, EquationAnalysis
+  resolveEvaluable, siUnitOf, unusedInputKeys, evaluatorRelation, SynonymDisagreementError,
+  canonicalRetrievalCorpus, EmbeddingUnavailable, ollamaEmbedder, retrieveHybrid, fetchOnnxModel,
+  onnxEmbedder, builtinFormulaDimensionChecker, formulaHasBareE, parseDeclaredExpression,
+  missingEvaluatorMessage, relationNotices, constantNotes, constantRecord, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -4194,9 +4195,9 @@ The codebase is organized into the following modules:
 | `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
 | `../dimensional/algebra.js` | `siUnitOf` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, EvaluatorSpec` | Import |
+| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, evaluatorRelation, EvaluatorSpec` | Import |
 | `../bridges/input-contract.js` | `checkInputs, inputContract, EvaluationWant, InputContract` | Import |
-| `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId, primaryRelation` | Import |
+| `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `./canonical-graph.js` | `CANONICAL_GRAPH` | Import |
@@ -7856,12 +7857,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90501 |
-| Total Exports | 2870 |
-| Total Re-exports | 1413 |
+| Total Lines of Code | 90520 |
+| Total Exports | 2872 |
+| Total Re-exports | 1414 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 960 |
+| Total Functions | 961 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

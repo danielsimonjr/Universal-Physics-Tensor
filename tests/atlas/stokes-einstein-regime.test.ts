@@ -18,9 +18,10 @@ import { runCli } from '../../dist/cli/main.js';
 const TAU = 'm · gamma^-1 · t^-1';
 
 describe('ab-stokes-einstein — the regime is machine-checked', () => {
-  it('states Re ≤ 0.1 and m/(γt) ≤ 0.01, both on derived groups', () => {
+  it('states 0 ≤ Re ≤ 0.1 and m/(γt) ≤ 0.01 on derived groups', () => {
     const r = BRIDGE_STOKES_EINSTEIN.regime;
     expect(r.inequalities.map((i) => [i.group, i.op, i.bound])).toEqual([
+      ['Re', '>=', 0],
       ['Re', '<=', 0.1],
       [TAU, '<=', 0.01],
     ]);

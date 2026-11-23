@@ -344,6 +344,8 @@ export { evaluateResolved, resolveEvaluable } from './composition/evaluate-relat
 export { siUnitOf } from './dimensional/algebra.js';
 /** The required inputs of an evaluator that no relation source reads. They do not change the value. */
 export { unusedInputKeys } from './bridges/evaluators.js';
+/** The formula and output metadata used by a closed-form evaluator. */
+export { evaluatorRelation } from './bridges/evaluators.js';
 /** Two spellings of one quantity were given different numbers. The formula is not run. */
 export { SynonymDisagreementError } from './dimensional/formula-names.js';
 /** `upt retrieve`: the canonical corpus, the optional embedders (Ollama and ONNX), and the atlas-accepted hybrid search. */

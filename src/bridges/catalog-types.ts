@@ -139,7 +139,7 @@ export interface CatalogEvaluator {
   readonly parameters: readonly CatalogEvaluatorParameter[];
   readonly outputs?: readonly CatalogEvaluatorOutput[];
   /** Evaluator formula when it differs from the catalog graph statement. */
-  readonly formula?: Pick<CatalogRelation, 'label' | 'expression' | 'target' | 'sources' | 'holds'>;
+  readonly formula?: Pick<CatalogRelation, 'label' | 'expression' | 'target' | 'sources'> & { readonly additionalCondition?: string };
   /** Keys that the evaluator refuses, each with the API that reads the key. */
   readonly refusedInputs?: readonly { readonly key: string; readonly use: string }[];
 }

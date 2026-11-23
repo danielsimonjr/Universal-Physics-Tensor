@@ -1003,7 +1003,7 @@ describe('I7 — a premise checklist: machine-checked, declared by you, denied b
   it('--json keeps the states apart, with the basis of each', async () => {
     const env = await json(['regime', 'diffusion', ...STOKES_AT, '--assume', 'no-slip']);
     const r = env.result.records.find((x: any) => x.id === 'ab-stokes-einstein');
-    expect(r.premises.machine.satisfied).toHaveLength(2);
+    expect(r.premises.machine.satisfied).toHaveLength(3);
     expect(r.premises.machine.violated).toEqual([]);
     expect(r.premises.machine.unchecked).toEqual([]);
     expect(r.premises.declaredByUser).toEqual(['no-slip boundary']);

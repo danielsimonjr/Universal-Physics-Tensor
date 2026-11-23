@@ -11771,7 +11771,7 @@
           "shockley-temperature",
           "shockley-ideality"
         ],
-        "holds": "isFinite(shockley-saturation) and\n      isFinite(shockley-voltage) and\n      isFinite(shockley-temperature) and\n      shockley-temperature != 0 and shockley-ideality > 0"
+        "additionalCondition": "shockley-ideality > 0"
       }
     },
     {
@@ -12729,7 +12729,7 @@
           "standoff-density",
           "standoff-speed"
         ],
-        "holds": "standoff-density != 0 and standoff-speed != 0"
+        "additionalCondition": "standoff-density > 0"
       }
     },
     {

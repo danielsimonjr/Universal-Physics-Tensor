@@ -3,7 +3,7 @@ metadata:
   version: 17.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2870
+  totalExports: 2872
 entryPoints:
   - file: src/index.ts
     type: main
@@ -4027,6 +4027,7 @@ modules:
             - InputSlot
       exports:
         - BRIDGE_EVALUATORS
+        - evaluatorRelation
         - unusedInputKeys
         - buildEvaluatorSpec
         - missingEvaluatorMessage
@@ -4036,6 +4037,7 @@ modules:
         - EvaluatorParameter
         - EvaluatorSpec
       functions:
+        - evaluatorRelation
         - unusedInputKeys
         - buildEvaluatorSpec
         - missingEvaluatorMessage
@@ -8300,6 +8302,10 @@ modules:
           imports:
             - unusedInputKeys
           reExport: true
+        - file: ./bridges/evaluators.js
+          imports:
+            - evaluatorRelation
+          reExport: true
         - file: ./dimensional/formula-names.js
           imports:
             - SynonymDisagreementError
@@ -8565,6 +8571,7 @@ modules:
         - resolveEvaluable
         - siUnitOf
         - unusedInputKeys
+        - evaluatorRelation
         - SynonymDisagreementError
         - canonicalRetrievalCorpus
         - EmbeddingUnavailable
@@ -8892,6 +8899,7 @@ modules:
         - resolveEvaluable
         - siUnitOf
         - unusedInputKeys
+        - evaluatorRelation
         - SynonymDisagreementError
         - canonicalRetrievalCorpus
         - EmbeddingUnavailable
@@ -10179,6 +10187,7 @@ modules:
         - file: ../bridges/evaluators.js
           imports:
             - BRIDGE_EVALUATORS
+            - evaluatorRelation
             - EvaluatorSpec
         - file: ../bridges/input-contract.js
           imports:
@@ -10190,7 +10199,6 @@ modules:
           imports:
             - catalogEdgeKey
             - parseBridgeId
-            - primaryRelation
         - file: ../canonical/registry.js
           imports:
             - CANONICAL_EQUATIONS
@@ -19944,15 +19952,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90501
-  totalExports: 2870
+  totalLinesOfCode: 90520
+  totalExports: 2872
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 960
+  totalFunctions: 961
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402
-  totalReExports: 1413
+  totalReExports: 1414
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

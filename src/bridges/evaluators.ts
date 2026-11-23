@@ -54,8 +54,6 @@ export interface EvaluatorParameter {
 /** A callable bridge evaluator with its input contract. @public */
 export interface EvaluatorSpec {
   readonly bridgeId: number;
-  /** The formula evaluated by this specification. */
-  readonly relation?: CatalogRelation;
   readonly name: string;
   readonly inputKeys: readonly string[];
   readonly parameters: readonly EvaluatorParameter[];
@@ -71,6 +69,13 @@ export interface EvaluatorSpec {
    * alone, and an input only an extra output reads is not required.
    */
   run(inputs: Readonly<Record<string, number>>, want?: EvaluationWant): Record<string, number>;
+}
+
+const evaluatorRelations = new WeakMap<EvaluatorSpec, CatalogRelation>();
+
+/** The closed form run by the evaluator, including any evaluator-specific formula. @internal */
+export function evaluatorRelation(spec: EvaluatorSpec): CatalogRelation | undefined {
+  return evaluatorRelations.get(spec) ?? primaryRelation(spec.bridgeId);
 }
 
 function toParameter(row: CatalogEvaluatorParameter, optional: boolean): EvaluatorParameter {
@@ -114,7 +119,7 @@ function symbolNames(node: ExprNode): string[] {
  * the value, so a caller who varies one sees no effect.
  */
 export function unusedInputKeys(spec: EvaluatorSpec): string[] {
-  const relation = spec.relation ?? primaryRelation(spec.bridgeId);
+  const relation = evaluatorRelation(spec);
   if (relation === undefined) return [];
   const used = new Set(symbolNames(parseCatalogExpression(relation.expression)));
   // An output reads the scope names its parsed expression names, the same parse `run` evaluates.
@@ -230,7 +235,18 @@ function unsignedOptional(parameter: EvaluatorParameter, value: number | undefin
 export function buildEvaluatorSpec(row: CatalogEvaluator): EvaluatorSpec {
   const primary = primaryRelation(row.catalogId);
   if (primary === undefined) throw new Error(missingEvaluatorMessage(row.catalogId));
-  const relation = row.formula === undefined ? primary : { ...primary, ...row.formula, reference: undefined };
+  const formula = row.formula;
+  const relation = formula === undefined ? primary : {
+    ...primary,
+    label: formula.label,
+    expression: formula.expression,
+    target: formula.target,
+    sources: formula.sources,
+    holds: formula.additionalCondition === undefined
+      ? primary.holds
+      : `(${primary.holds}) and (${formula.additionalCondition})`,
+    reference: undefined,
+  };
   if (relation.target !== primary.target) {
     const target = quantityRecord(relation.target);
     const original = quantityRecord(primary.target);
@@ -270,9 +286,8 @@ function buildSpec(
       return source === undefined ? [] : [[source, parameter.key] as const];
     }),
   );
-  return {
+  const spec: EvaluatorSpec = {
     bridgeId: catalogId,
-    relation,
     name,
     inputKeys: parameters.filter((parameter) => parameter.optional !== true).map((parameter) => parameter.key),
     parameters,
@@ -300,6 +315,8 @@ function buildSpec(
       return result;
     },
   };
+  evaluatorRelations.set(spec, relation);
+  return spec;
 }
 
 /** Bridge id → evaluator. @internal */

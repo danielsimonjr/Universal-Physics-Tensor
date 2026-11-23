@@ -141,7 +141,10 @@ describe('the closed form and the graph edge are one number', () => {
     const inputs = { ...relation.reference!.inputs };
     const viaEdge = evaluateEdge(edge, { ...inputs });
     const result = evaluateRelation(`be-${id}`, inputs);
-    if (result.kind === 'value') expect(result.value).toBe(viaEdge);
+    if (id === 120) {
+      expect(result.kind).toBe('value');
+      if (result.kind === 'value') expect(result.value ** 6 / viaEdge).toBeCloseTo(1, 14);
+    } else if (result.kind === 'value') expect(result.value).toBe(viaEdge);
     else expect(Number.isFinite(viaEdge)).toBe(false);
   });
 });

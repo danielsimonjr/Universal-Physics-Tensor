@@ -13,7 +13,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-import { BRIDGE_EVALUATORS } from '../../src/bridges/evaluators.js';
+import { BRIDGE_EVALUATORS, evaluatorRelation } from '../../src/bridges/evaluators.js';
 import { primaryRelation } from '../../src/bridges/catalog-load.js';
 import { formulaVariables } from '../../src/bridges/expr-parse.js';
 import { evaluateRelation, evaluateResolved, resolveEvaluable } from '../../src/composition/evaluate-relation.js';
@@ -78,7 +78,7 @@ describe('every evaluation names its quantity, unit and meaning', () => {
   });
 
   it.each(WITH_REFERENCE.map((spec) => [spec.bridgeId, spec] as const))('be-%i', (id, spec) => {
-    const relation = spec.relation ?? primaryRelation(id)!;
+    const relation = evaluatorRelation(spec)!;
     const result = evaluateRelation(`be-${id}`, fullInputs(spec)!);
     if (result.kind === 'unset') return;
     expect(result.name).toBe(relation.target);

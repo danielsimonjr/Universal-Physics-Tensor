@@ -4,7 +4,7 @@
     "version": "17.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2870
+    "totalExports": 2872
   },
   "entryPoints": [
     {
@@ -5790,6 +5790,7 @@
         ],
         "exports": [
           "BRIDGE_EVALUATORS",
+          "evaluatorRelation",
           "unusedInputKeys",
           "buildEvaluatorSpec",
           "missingEvaluatorMessage",
@@ -5801,6 +5802,7 @@
           "EvaluatorSpec"
         ],
         "functions": [
+          "evaluatorRelation",
           "unusedInputKeys",
           "buildEvaluatorSpec",
           "missingEvaluatorMessage",
@@ -12423,6 +12425,13 @@
             "reExport": true
           },
           {
+            "file": "./bridges/evaluators.js",
+            "imports": [
+              "evaluatorRelation"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./dimensional/formula-names.js",
             "imports": [
               "SynonymDisagreementError"
@@ -12724,6 +12733,7 @@
           "resolveEvaluable",
           "siUnitOf",
           "unusedInputKeys",
+          "evaluatorRelation",
           "SynonymDisagreementError",
           "canonicalRetrievalCorpus",
           "EmbeddingUnavailable",
@@ -13052,6 +13062,7 @@
           "resolveEvaluable",
           "siUnitOf",
           "unusedInputKeys",
+          "evaluatorRelation",
           "SynonymDisagreementError",
           "canonicalRetrievalCorpus",
           "EmbeddingUnavailable",
@@ -15111,6 +15122,7 @@
             "file": "../bridges/evaluators.js",
             "imports": [
               "BRIDGE_EVALUATORS",
+              "evaluatorRelation",
               "EvaluatorSpec"
             ]
           },
@@ -15127,8 +15139,7 @@
             "file": "../bridges/catalog-load.js",
             "imports": [
               "catalogEdgeKey",
-              "parseBridgeId",
-              "primaryRelation"
+              "parseBridgeId"
             ]
           },
           {
@@ -28790,15 +28801,15 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90501,
-    "totalExports": 2870,
+    "totalLinesOfCode": 90520,
+    "totalExports": 2872,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 960,
+    "totalFunctions": 961,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 402,
-    "totalReExports": 1413,
+    "totalReExports": 1414,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
