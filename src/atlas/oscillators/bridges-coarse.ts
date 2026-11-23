@@ -11,11 +11,8 @@
  * @module atlas/oscillators/bridges-coarse
  */
 
-import { LENGTH, MASS } from '../../dimensional/types.js';
-import { makeRegime } from '../regime.js';
 import type { AtlasBridge, RelationContract } from '../types.js';
 import { relationContractOf } from './bridges-exact.js';
-import { SPRING_CONSTANT } from './dimensions.js';
 
 const FAMILY = 'oscillators';
 
@@ -89,6 +86,18 @@ export function dispersionDeviationBound(qa: number): number {
   return (qa * qa) / 80;
 }
 
+// On |qa| < 1 the alternating series avoids cancellation near q = 0.
+function dispersionRelativeError(qa: number): number {
+  const xSquared = (qa / 2) ** 2;
+  let term = xSquared / 6;
+  let error = term;
+  for (let order = 2; order <= 8; order++) {
+    term *= -xSquared / ((2 * order) * (2 * order + 1));
+    error += term;
+  }
+  return error;
+}
+
 /** Bridge 5: chain → wave equation by coarse-graining. @internal */
 export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
   id: 'ab-chain-wave',
@@ -107,20 +116,21 @@ export const BRIDGE_CHAIN_WAVE: AtlasBridge = {
     'the discrete lattice spacing a as an independent scale',
   ],
   sideConditions: ['long-wavelength, qa ≪ 1'],
-  regime: makeRegime(
-    FAMILY,
-    [
-      { name: 'm', dim: MASS },
-      { name: 'kappa', dim: SPRING_CONSTANT },
-      { name: 'a', dim: LENGTH },
+  regime: {
+    family: FAMILY,
+    // qa is the conventional name for the dimensionless product of the
+    // wavenumber and lattice spacing. A caller may supply either form.
+    groupDefinitions: { qa: { formula: 'qa', exponents: { q: 1, a: 1 } } },
+    inequalities: [
+      { group: 'qa', op: '<', bound: 1, alias: '|qa| ≪ 1' },
+      { group: 'qa', op: '>', bound: -1, alias: '|qa| ≪ 1' },
     ],
-    ['qa'],
-    [{ group: 'qa', op: '<', bound: 1, alias: 'qa ≪ 1' }],
-  ),
+  },
   bound: {
     K: 1,
-    delta: dispersionErrorApproximation(1),
-    deltaAt: ({ qa }) => dispersionErrorApproximation(qa),
+    delta: dispersionRelativeError(1),
+    deltaAt: ({ qa, q, a }) => dispersionRelativeError(qa ?? q * a),
+    deltaAtBasis: 'closed-form',
     norm: 'relative frequency error normalized by the continuum frequency, extended continuously at q = 0',
     domain: '0 ≤ |qa| < 1; the alternating sine series gives 1 − sinc(qa/2) ≤ (qa)²/24',
     horizon: 'all t ≥ 0 for the dispersion relation',

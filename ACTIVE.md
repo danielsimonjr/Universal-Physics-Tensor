@@ -20,6 +20,8 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 ## Open tasks, easiest first
 
+- [x] F12: preserve regime coordinates, bound meaning, and crossing brackets (#791, #793, #795, #835).
+
 - [x] F11: align catalog and test-plan wording with their encoded evidence (#763, #777, #799).
 
 - [x] F10: state model limits and encode agreement bounds within their mathematical domains (#772, #774, #802, #803, #827, #828).
@@ -34,12 +36,12 @@ Code review is a standing gate. ~~The owner's rule (2026-10-06): Tom deep-review
 
 - [x] F5: use canonical coverage for an exact quantity absent from the implicit catalog (#742).
 
-- [ ] F5: a competing domain refusal prevents reporting an aggregate recovered value (#783).
+- [x] F5: a competing domain refusal prevents reporting an aggregate recovered value (#783).
 
-- [ ] F3/F4: resolve normalized constant identities and refuse an error estimate for a path with no stated bounds (#805, #792).
+- [x] F3/F4: resolve normalized constant identities and refuse an error estimate for a path with no stated bounds (#805, #792).
 
-- [ ] **F1–F12 issue batches.** Start with a shared numerical differentiation and uncertainty contract (#778, #779, #832–#834), then address each subsequent batch in order.
-- [ ] F2: explicit physical identity at composition junctions and missing-operand diagnostics (#797, #759).
+- [x] **F1–F12 issue batches.** Start with a shared numerical differentiation and uncertainty contract (#778, #779, #832–#834), then address each subsequent batch in order.
+- [x] F2: explicit physical identity at composition junctions and missing-operand diagnostics (#797, #759).
 
 - [x] **PR #831 Neon re-review FIX-NEEDED: vendor v16.0.0 applied-cases schema; no `git show` in the contract test.** CI/publish are depth-1 tagless, so `git show v16.0.0:...` fails there and would fail `prepublishOnly`. Frozen fixture + SHA-256 pin; `control:` v2 rejects version 1 and the frozen v1 schema accepts a v1-shaped record. Prove in `git clone --depth=1 --no-tags`. No tag.
 

@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- Regime checks derive the chain coordinate from wavenumber and spacing, and atlas listings identify domains with no models or bridges. The damped-spring report identifies what its bound supremum measures. Hermite crossing keeps the sign bracket and handles stationary roots.
+
 - Catalog descriptions identify the encoded holographic area law and the thermoelectric Onsager premise. Test plans report the correct RC pole, measurement provenance, and the recorded comparison criterion.
 
 - Evaluators report the scope of the Casimir, lower-critical-field, Debye, radiation-pressure, and Onsager models. The atlas records analytic agreement bounds for dispersion, diffusion, first-order Oseen drag, and the linearized acoustic closure.

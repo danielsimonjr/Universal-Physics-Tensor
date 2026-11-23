@@ -4,7 +4,7 @@
     "version": "17.0.0",
     "totalFiles": 393,
     "totalModules": 13,
-    "totalExports": 2867
+    "totalExports": 2869
   },
   "entryPoints": [
     {
@@ -2763,19 +2763,6 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../../dimensional/types.js",
-            "imports": [
-              "LENGTH",
-              "MASS"
-            ]
-          },
-          {
-            "file": "../regime.js",
-            "imports": [
-              "makeRegime"
-            ]
-          },
-          {
             "file": "../types.js",
             "imports": [
               "AtlasBridge",
@@ -2787,12 +2774,6 @@
             "file": "./bridges-exact.js",
             "imports": [
               "relationContractOf"
-            ]
-          },
-          {
-            "file": "./dimensions.js",
-            "imports": [
-              "SPRING_CONSTANT"
             ]
           }
         ],
@@ -8762,6 +8743,7 @@
             "file": "../errors.js",
             "imports": [
               "CliError",
+              "EXIT_CHECK_FAILED",
               "UsageError"
             ]
           },
@@ -8925,6 +8907,7 @@
           {
             "file": "../errors.js",
             "imports": [
+              "EXIT_CHECK_FAILED",
               "UsageError"
             ]
           },
@@ -8952,6 +8935,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../numerical/formula-dimension.js",
+            "imports": [
+              "formulaHasBareE"
+            ]
           },
           {
             "file": "../library-defaults.js",
@@ -11688,6 +11677,13 @@
             "reExport": true
           },
           {
+            "file": "./bridges/evaluation-errors.js",
+            "imports": [
+              "DomainViolationError"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/observations/types.js",
             "imports": [
               "consistencyComparison"
@@ -12562,6 +12558,7 @@
           "foldName",
           "quantityRecord",
           "demonstrationEdges",
+          "DomainViolationError",
           "consistencyComparison",
           "decidingMeasurement",
           "BRIDGE_EVALUATORS",
@@ -12841,6 +12838,7 @@
           "demonstrationEdges",
           "ConfrontationEntry",
           "RigorTier",
+          "DomainViolationError",
           "consistencyComparison",
           "ConfrontationOutcome",
           "decidingMeasurement",
@@ -26496,6 +26494,7 @@
         ],
         "exports": [
           "formulaSymbolDimension",
+          "formulaHasBareE",
           "constantExponent",
           "parseFormulaPNode",
           "builtinFormulaDimensionChecker",
@@ -26512,6 +26511,7 @@
         ],
         "functions": [
           "formulaSymbolDimension",
+          "formulaHasBareE",
           "constantExponent",
           "parseFormulaPNode",
           "builtinFormulaDimensionChecker"
@@ -28775,15 +28775,15 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 13,
-    "totalLinesOfCode": 90328,
-    "totalExports": 2867,
+    "totalLinesOfCode": 90471,
+    "totalExports": 2869,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 959,
+    "totalFunctions": 960,
     "totalTypeGuards": 17,
     "totalEnums": 0,
     "totalConstants": 402,
-    "totalReExports": 1411,
+    "totalReExports": 1412,
     "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

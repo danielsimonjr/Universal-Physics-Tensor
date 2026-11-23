@@ -746,11 +746,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../../dimensional/types.js` | `LENGTH, MASS` | Import |
-| `../regime.js` | `makeRegime` | Import |
 | `../types.js` | `AtlasBridge, RelationContract` | Import (type-only) |
 | `./bridges-exact.js` | `relationContractOf` | Import |
-| `./dimensions.js` | `SPRING_CONSTANT` | Import |
 
 **Exports:**
 - Functions: `latticeDispersion`, `continuumDispersion`, `chainWaveSpeed`, `latticeBandEdge`, `dispersionErrorApproximation`, `dispersionDeviationBound`
@@ -2593,7 +2590,7 @@ The codebase is organized into the following modules:
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
-| `../errors.js` | `CliError, UsageError` | Import |
+| `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
 | `../../cli-api.js` | `RigorTier` | Import (type-only) |
@@ -2644,11 +2641,12 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../errors.js` | `UsageError` | Import |
+| `../errors.js` | `EXIT_CHECK_FAILED, UsageError` | Import |
 | `../determination.js` | `classifyDetermination` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `FormulaUsageError` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../../numerical/formula-dimension.js` | `formulaHasBareE` | Import |
 | `../library-defaults.js` | `NAMED_DIMENSIONS_HELP` | Import |
 | `../conventions.js` | `*` | Import |
 
@@ -3444,6 +3442,7 @@ The codebase is organized into the following modules:
 | `./dimensional/quantity-registry.js` | `foldName, quantityRecord` | Re-export |
 | `./composition/catalog-graph.js` | `demonstrationEdges` | Re-export |
 | `./bridges/confrontations.js` | `ConfrontationEntry, RigorTier` | Re-export |
+| `./bridges/evaluation-errors.js` | `DomainViolationError` | Re-export |
 | `./bridges/observations/types.js` | `consistencyComparison` | Re-export |
 | `./bridges/observations/types.js` | `ConfrontationOutcome` | Re-export |
 | `./bridges/sensitivity.js` | `decidingMeasurement` | Re-export |
@@ -3559,45 +3558,45 @@ The codebase is organized into the following modules:
   CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution,
   requestCallerTableConfrontation, catalogEntry, catalogIdNumber, parseBridgeId, primaryRelation,
   catalogEdgeKey, foldName, quantityRecord, demonstrationEdges, ConfrontationEntry, RigorTier,
-  consistencyComparison, ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge,
-  DuplicateInputError, InputTypeError, isInputContractError, MissingInputError, NonFiniteInputError,
-  UnknownInputError, EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES,
-  runAppliedCase, CASE_CONTRACTS, slotForSpelling, AppliedCase, CaseCheck, CaseResult, convertValue,
-  readQuantityLiteral, UnitError, unitRows, auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination,
-  AXES, AxisSpec, simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS,
-  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
-  filterEdges, formatFilterLegend, deriveEdgeEvidence, communitiesOf, derivationCycles, rankHubs,
-  CommunityReport, DerivationCycle, HubRank, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap,
-  expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap,
-  loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, ProblemFileError, runProbeSearch,
-  nodeWorkerArgv, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy,
-  formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint,
-  parseDesignBounds, runFalsification, rankPareto, annotateAdjudications, adjudicationFor,
-  candidateId, ADJUDICATIONS, AnnotatedCandidate, CatalogAdjudication, annotateConsequences,
-  ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence, checkConventions,
-  unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness, REPRESENTATIVE_VALUES,
-  compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
-  describeKnownRelation, matchingCatalogEdges, CanonicalComparison, CatalogEdgeMatch,
-  ExponentDifference, describeExponentDifference, FIXED_POINT_EXPONENTS, constantRatio, fixedPoint,
-  recoverMonomialPrefactor, ConstantRatio, ConstantRatioOptions, FixedPointScheme, PrefactorRecovery,
-  PrefactorRecoveryScheme, RatioStatistic, CONSTANTS, CONSTANT_PROVENANCE, isDecimalLiteral,
-  forEachScalarLeaf, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
-  normTransportFields, deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES,
-  provedWithUnresolvedCounterexample, summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry,
-  WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf,
-  runTranslationCheck, translationsOf, ObservableCarriage, ObservableTranslation, PointCheck,
-  AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions,
-  domainRegimeRegistrations, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon,
-  findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels,
-  allAtlasBridges, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
-  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
-  catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
-  kerrTurningPointOrbit, MetricMassError, MetricValueError, schwarzschildCircularOrbit, type MetricId,
-  splitAssignment, readBinding, bindingInUnit, readNamedBinding, BindingNumberError,
-  TemperatureBindingError, propagateEvaluatorUncertainty, correlationIsPositiveSemidefinite,
-  PropagatedOutput, UncertaintyContribution, constantAgreement, ConstantDisagreementError,
-  FormulaError, FormulaValueError, aliasesForTarget, nearQuantityNames, shareSynonyms,
-  assertSynonymAgreement, expandSynonymValues, greekLetter, CANONICAL_GROUP_PREFACTORS,
+  DomainViolationError, consistencyComparison, ConfrontationOutcome, decidingMeasurement,
+  BRIDGE_EVALUATORS, evaluateBridge, DuplicateInputError, InputTypeError, isInputContractError,
+  MissingInputError, NonFiniteInputError, UnknownInputError, EvaluatorSpec, EvaluatorParameter,
+  resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, CASE_CONTRACTS, slotForSpelling, AppliedCase,
+  CaseCheck, CaseResult, convertValue, readQuantityLiteral, UnitError, unitRows,
+  auditAxisDiscrimination, AUDIT_ALPHA, AxisDiscrimination, AXES, AxisSpec, simplifyObservable,
+  isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner, scanLinkages,
+  deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend, deriveEdgeEvidence,
+  communitiesOf, derivationCycles, rankHubs, CommunityReport, DerivationCycle, HubRank,
+  DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps,
+  problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath,
+  parseExprJson, ProblemFileError, runProbeSearch, nodeWorkerArgv, formatProbeReport,
+  loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan,
+  formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto,
+  annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate,
+  CatalogAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal,
+  ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey, describeGrounding,
+  describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation,
+  describeComparison, describeComparisons, describeKnownRelation, matchingCatalogEdges,
+  CanonicalComparison, CatalogEdgeMatch, ExponentDifference, describeExponentDifference,
+  FIXED_POINT_EXPONENTS, constantRatio, fixedPoint, recoverMonomialPrefactor, ConstantRatio,
+  ConstantRatioOptions, FixedPointScheme, PrefactorRecovery, PrefactorRecoveryScheme, RatioStatistic,
+  CONSTANTS, CONSTANT_PROVENANCE, isDecimalLiteral, forEachScalarLeaf, CandidateGrounding,
+  CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, normTransportFields, deriveEvidence,
+  deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample,
+  summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
+  OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
+  ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups,
+  regimeHolds, regimeOverlap, uncoveredRegions, domainRegimeRegistrations, RegimeCheck, RegimeOverlap,
+  RegionSample, familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath,
+  horizonOnRoute, routeEntryModels, allAtlasBridges, composeRelation, PathBoundResult, PathBoundClaim,
+  PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError,
+  AtlasModel, ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport,
+  kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, MetricMassError, MetricValueError,
+  schwarzschildCircularOrbit, type MetricId, splitAssignment, readBinding, bindingInUnit,
+  readNamedBinding, BindingNumberError, TemperatureBindingError, propagateEvaluatorUncertainty,
+  correlationIsPositiveSemidefinite, PropagatedOutput, UncertaintyContribution, constantAgreement,
+  ConstantDisagreementError, FormulaError, FormulaValueError, aliasesForTarget, nearQuantityNames,
+  shareSynonyms, assertSynonymAgreement, expandSynonymValues, greekLetter, CANONICAL_GROUP_PREFACTORS,
   formatQuantity, formatExact, formatPercent, CarrierSignError, naturalConstantOverrides, UnitMode,
   escapeRegExp, rewriteCatalogHyphens, candidateIdIfSlug, resolveQuantityName, evaluateResolved,
   resolveEvaluable, siUnitOf, unusedInputKeys, SynonymDisagreementError, canonicalRetrievalCorpus,
@@ -7040,7 +7039,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `FormulaDimensionError`, `UnsupportedSyntaxError`
 - Interfaces: `ParsedPhysics`, `FormulaDimensionChecker`
-- Functions: `formulaSymbolDimension`, `constantExponent`, `parseFormulaPNode`, `builtinFormulaDimensionChecker`
+- Functions: `formulaSymbolDimension`, `formulaHasBareE`, `constantExponent`, `parseFormulaPNode`, `builtinFormulaDimensionChecker`
 
 ---
 
@@ -7855,12 +7854,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 13 |
-| Total Lines of Code | 90328 |
-| Total Exports | 2867 |
-| Total Re-exports | 1411 |
+| Total Lines of Code | 90471 |
+| Total Exports | 2869 |
+| Total Re-exports | 1412 |
 | Total Classes | 86 |
 | Total Interfaces | 523 |
-| Total Functions | 959 |
+| Total Functions | 960 |
 | Total Type Guards | 17 |
 | Total Enums | 0 |
 | Type-only Imports | 543 |

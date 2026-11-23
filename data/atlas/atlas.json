@@ -870,7 +870,7 @@
           "bound": {
             "K": 1,
             "delta": 1.5,
-            "norm": "sup |x − x_reduced| for t ≥ 5 m/b",
+            "norm": "position error |x − x_reduced| for t ≥ 5 m/b, bounded by (m/b)(|v0| + k|x0|/b); delta is the supremum of this bound formula",
             "domain": "t ≥ 5 m/b, overdamped; delta at the witness normalisation b = k = x0 = 1",
             "horizon": "t ≥ 5 m/b (outside the boundary layer)",
             "parameterRange": "m k / b² < 1/4, |v0| ≤ 5; with b = k = 1 this is m < 1/4",
@@ -955,7 +955,7 @@
           ],
           "bound": {
             "K": 1,
-            "delta": 0.041666666666666664,
+            "delta": 0.04114892279159401,
             "norm": "relative frequency error normalized by the continuum frequency, extended continuously at q = 0",
             "domain": "0 ≤ |qa| < 1; the alternating sine series gives 1 − sinc(qa/2) ≤ (qa)²/24",
             "horizon": "all t ≥ 0 for the dispersion relation",
@@ -963,7 +963,8 @@
             "uniformity": [
               "all time for the modal frequencies",
               "positive mass, spring constant and spacing"
-            ]
+            ],
+            "deltaAtBasis": "closed-form"
           },
           "regime": {
             "family": "oscillators",
@@ -972,16 +973,20 @@
                 "group": "qa",
                 "op": "<",
                 "bound": 1,
-                "alias": "qa ≪ 1"
+                "alias": "|qa| ≪ 1"
+              },
+              {
+                "group": "qa",
+                "op": ">",
+                "bound": -1,
+                "alias": "|qa| ≪ 1"
               }
             ],
             "groupDefinitions": {
               "qa": {
                 "exponents": {
-                  "a": 0,
-                  "kappa": 0,
-                  "m": 0,
-                  "qa": 1
+                  "a": 1,
+                  "q": 1
                 },
                 "formula": "qa"
               }
@@ -1670,7 +1675,8 @@
             "uniformity": [
               "positive temperature",
               "times in the stated horizon"
-            ]
+            ],
+            "deltaAtBasis": "closed-form"
           },
           "regime": {
             "family": "diffusion",
@@ -1747,14 +1753,15 @@
           ],
           "bound": {
             "K": 1,
-            "delta": 0.037500000000000006,
+            "delta": 0.03614457831325302,
             "norm": "relative change of D normalized by the Stokes–Einstein value under first-order Oseen drag",
             "domain": "0 ≤ Re ≤ 0.1 (radius-based Re); with γ_Oseen = γ_Stokes(1 + 3Re/8), the error is (3Re/8)/(1 + 3Re/8). This bound compares the two drag closures.",
             "horizon": "long-time diffusion coefficient, with observation time t ≥ 100τ_p",
             "limitCharacter": "regular",
             "uniformity": [
               "positive sphere radius, viscosity and temperature within the drag closures"
-            ]
+            ],
+            "deltaAtBasis": "closed-form"
           },
           "regime": {
             "family": "diffusion",

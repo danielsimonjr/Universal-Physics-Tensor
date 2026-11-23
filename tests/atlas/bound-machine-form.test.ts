@@ -104,7 +104,7 @@ describe('ApproximationBound.deltaAt — the machine form of delta', () => {
   });
 
   it('admits the chain coarse-graining with its dispersion-error bound', () => {
-    expect(BRIDGE_CHAIN_WAVE.bound?.deltaAt?.({ qa: 0.5 })).toBe(1 / 96);
+    expect(BRIDGE_CHAIN_WAVE.bound?.deltaAt?.({ qa: 0.5 })).toBeCloseTo(1 - Math.sin(0.25) / 0.25, 14);
     expect(admitApproximation(BRIDGE_CHAIN_WAVE as AtlasBridge)).toBe(BRIDGE_CHAIN_WAVE);
   });
 

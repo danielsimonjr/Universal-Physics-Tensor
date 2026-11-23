@@ -22,4 +22,5 @@
   ab-stiff-string              approximation          [waves]
 
 Run `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge's derived evidence.
+Regime-only domains with no atlas models or bridges: plasma, piezoelectricity, tolman.
 A catalog equation with a stored formal reference is `upt atlas be-<n>`.

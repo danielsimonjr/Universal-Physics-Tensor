@@ -396,9 +396,10 @@ describe('ab-chain-wave regime — no derived identity among its groups', () => 
     });
   };
 
-  it('has exactly the one group qa, and its only inequality reads qa', () => {
+  it('uses the product of q and a as its only regime coordinate', () => {
     expect(Object.keys(BRIDGE_CHAIN_WAVE.regime.groupDefinitions)).toEqual(['qa']);
-    expect(BRIDGE_CHAIN_WAVE.regime.inequalities.map((g) => g.group)).toEqual(['qa']);
+    expect(BRIDGE_CHAIN_WAVE.regime.groupDefinitions.qa?.exponents).toEqual({ q: 1, a: 1 });
+    expect(BRIDGE_CHAIN_WAVE.regime.inequalities.map((g) => g.group)).toEqual(['qa', 'qa']);
   });
 
   it('has no group that is constant over sampled (m, κ, a) with c = a√(κ/m)', () => {

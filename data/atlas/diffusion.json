@@ -621,7 +621,8 @@
         "uniformity": [
           "positive temperature",
           "times in the stated horizon"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "diffusion",
@@ -698,14 +699,15 @@
       ],
       "bound": {
         "K": 1,
-        "delta": 0.037500000000000006,
+        "delta": 0.03614457831325302,
         "norm": "relative change of D normalized by the Stokes–Einstein value under first-order Oseen drag",
         "domain": "0 ≤ Re ≤ 0.1 (radius-based Re); with γ_Oseen = γ_Stokes(1 + 3Re/8), the error is (3Re/8)/(1 + 3Re/8). This bound compares the two drag closures.",
         "horizon": "long-time diffusion coefficient, with observation time t ≥ 100τ_p",
         "limitCharacter": "regular",
         "uniformity": [
           "positive sphere radius, viscosity and temperature within the drag closures"
-        ]
+        ],
+        "deltaAtBasis": "closed-form"
       },
       "regime": {
         "family": "diffusion",

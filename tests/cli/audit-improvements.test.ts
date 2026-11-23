@@ -372,7 +372,7 @@ describe('I8 — a phase tolerance gets a phase-based horizon through the declar
   it('a bridge with no declared translation refuses: UNDETERMINED, naming that none is encoded', async () => {
     const r = await runText([...DAMPED_AT, 't=1', '--tolerance=phase:0.1']);
     expect(r.code).toBe(0);
-    expect(r.text).toMatch(/\n {2}tolerance phase:0\.1: UNDETERMINED — no translation from 'sup \|x − x_reduced\| for t ≥ 5 m\/b' into 'phase' is encoded for ab-damped-massless\n/);
+    expect(r.text).toMatch(/\n {2}tolerance phase:0\.1: UNDETERMINED — no translation from 'position error \|x − x_reduced\|[^']*' into 'phase' is encoded for ab-damped-massless\n/);
     const env = await json([...DAMPED_AT, 't=1', '--tolerance=phase:0.1']);
     expect(env.result.tolerance).toEqual(expect.objectContaining({ verdict: 'undetermined', translation: null }));
     expect(env.result.tolerance.horizon).toBeUndefined();

@@ -261,7 +261,7 @@ describe('upt path', () => {
     await runCli(['path', 'model-rlc', 'model-first-order'], cap.io);
     const text = cap.lines.join('');
     expect(text).toMatch(/a composition-table cell for exact-equivalence then approximation/);
-    expect(text).toMatch(/'ab-damped-rlc' to state how its mapping acts on 'sup \|x − x_reduced\|[^']*', the norm of the later bound on 'ab-damped-massless'/);
+    expect(text).toMatch(/'ab-damped-rlc' to state how its mapping acts on 'position error \|x − x_reduced\|[^']*', the norm of the later bound on 'ab-damped-massless'/);
     const json: string[] = [];
     await runCli(['path', 'model-rlc', 'model-first-order', '--json'], { out: () => {}, err: () => {}, write: (s: string) => json.push(s) });
     expect(JSON.parse(json.join('')).result.missing).toHaveLength(2);
@@ -516,9 +516,8 @@ describe('upt path', () => {
       expect(r.path.map((s: { id: string }) => s.id)).toEqual(['ab-langevin-diffusion']);
       expect(r.path.some((s: { id: string }) => s.id === 'ab-stokes-einstein')).toBe(false);
       expect(r.multiPremise.map((m: { id: string }) => m.id)).toEqual(['ab-stokes-einstein']);
-      expect(r.kind).toBe('no-claim');
-      expect(r.reason).toBe('bound-not-stated');
-      expect(r.bound).toBeUndefined();
+      expect(r.kind).toBe('bound');
+      expect(r.bound.delta).toBeCloseTo(0.01, 14);
       expect(r.crossFamily).toBe(false);
       expect(r.modelFamilies).toEqual(['diffusion']);
       expect(r.path[0]).toMatchObject({
@@ -575,7 +574,7 @@ describe('upt path', () => {
       { args: ['model-klein-gordon', 'model-schrodinger-free'], exit: 0, kind: 'bound', regimes: 'unknown' },
       { args: ['model-klein-gordon', 'model-fick'], exit: 0, kind: 'no-claim', reason: 'no-composite-claim' },
       { args: ['model-klein-gordon', 'model-lc'], exit: 0, kind: 'no-claim', reason: 'missing-lipschitz' },
-      { args: ['model-langevin', 'model-fick'], exit: 0, kind: 'no-claim', reason: 'bound-not-stated' },
+      { args: ['model-langevin', 'model-fick'], exit: 0, kind: 'bound', regimes: 'unknown' },
       { args: ['model-stokes-drag', 'model-fick'], exit: 0, kind: 'missing-chain' },
     ];
     for (const c of cases) {

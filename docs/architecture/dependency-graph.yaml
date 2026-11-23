@@ -3,7 +3,7 @@ metadata:
   version: 17.0.0
   totalFiles: 393
   totalModules: 13
-  totalExports: 2867
+  totalExports: 2869
 entryPoints:
   - file: src/index.ts
     type: main
@@ -1968,13 +1968,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../../dimensional/types.js
-          imports:
-            - LENGTH
-            - MASS
-        - file: ../regime.js
-          imports:
-            - makeRegime
         - file: ../types.js
           imports:
             - AtlasBridge
@@ -1983,9 +1976,6 @@ modules:
         - file: ./bridges-exact.js
           imports:
             - relationContractOf
-        - file: ./dimensions.js
-          imports:
-            - SPRING_CONSTANT
       exports:
         - BRIDGE_CHAIN_WAVE
         - CONTRACT_CHAIN_WAVE
@@ -6023,6 +6013,7 @@ modules:
         - file: ../errors.js
           imports:
             - CliError
+            - EXIT_CHECK_FAILED
             - UsageError
         - file: ../output.js
           imports:
@@ -6120,6 +6111,7 @@ modules:
             - emitJson
         - file: ../errors.js
           imports:
+            - EXIT_CHECK_FAILED
             - UsageError
         - file: ../determination.js
           imports:
@@ -6134,6 +6126,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ../../numerical/formula-dimension.js
+          imports:
+            - formulaHasBareE
         - file: ../library-defaults.js
           imports:
             - NAMED_DIMENSIONS_HELP
@@ -7829,6 +7824,10 @@ modules:
             - ConfrontationEntry
             - RigorTier
           reExport: true
+        - file: ./bridges/evaluation-errors.js
+          imports:
+            - DomainViolationError
+          reExport: true
         - file: ./bridges/observations/types.js
           imports:
             - consistencyComparison
@@ -8403,6 +8402,7 @@ modules:
         - foldName
         - quantityRecord
         - demonstrationEdges
+        - DomainViolationError
         - consistencyComparison
         - decidingMeasurement
         - BRIDGE_EVALUATORS
@@ -8681,6 +8681,7 @@ modules:
         - demonstrationEdges
         - ConfrontationEntry
         - RigorTier
+        - DomainViolationError
         - consistencyComparison
         - ConfrontationOutcome
         - decidingMeasurement
@@ -18314,6 +18315,7 @@ modules:
             - unknownFunctionMessage
       exports:
         - formulaSymbolDimension
+        - formulaHasBareE
         - constantExponent
         - parseFormulaPNode
         - builtinFormulaDimensionChecker
@@ -18327,6 +18329,7 @@ modules:
         - FormulaDimensionChecker
       functions:
         - formulaSymbolDimension
+        - formulaHasBareE
         - constantExponent
         - parseFormulaPNode
         - builtinFormulaDimensionChecker
@@ -19932,15 +19935,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 13
-  totalLinesOfCode: 90328
-  totalExports: 2867
+  totalLinesOfCode: 90471
+  totalExports: 2869
   totalClasses: 86
   totalInterfaces: 523
-  totalFunctions: 959
+  totalFunctions: 960
   totalTypeGuards: 17
   totalEnums: 0
   totalConstants: 402
-  totalReExports: 1411
+  totalReExports: 1412
   totalTypeOnlyImports: 543
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
