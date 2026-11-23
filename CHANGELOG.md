@@ -8,6 +8,15 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+## [18.0.0] - 2026-11-23
+
+Dependency health at this release: `bun audit` reported zero vulnerabilities across 139 packages. `bun outdated` reported in-range updates for MathTS autograd, expression and tensor, and fast-check. The latest MathTS core, functions and matrix releases and Vitest and its V8 coverage provider are outside the current ranges. The lockfile already includes the MathTS and fast-check updates merged since v17.0.0.
+
+### Changed
+
+- The Chapman–Ferraro evaluator (`be-120`) returns the standoff radius ratio `R/R_E` as its primary value. Request the extra output `standoff-sixth` for the former primary value `(R/R_E)⁶`.
+- Cyclotron frequency is signed and expressed in cycles per second. Consumers that need angular frequency should multiply by `2π`.
+
 ### Fixed
 
 - Graph reports distinguish catalog entries from encoded routes, show discovery verdicts and candidate dimensions, and separate audit eligibility from reconstruction outcomes.
