@@ -2631,6 +2631,7 @@
     ],
     "src/bridges/relation-eval.ts": [
       "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/derived-domains.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts"
@@ -14922,6 +14923,7 @@
     ],
     "src/bridges/relation-eval.ts": [
       "tests/bridges/constant-inputs.test.ts",
+      "tests/bridges/derived-domains.test.ts",
       "tests/bridges/one-grammar.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/numerical/covariant-eikonal-step-sweep.test.ts"
@@ -19066,7 +19068,8 @@
       "src/bridges/catalog-load.ts",
       "src/bridges/catalog-types.ts",
       "src/bridges/evaluation-errors.ts",
-      "src/bridges/evaluators.ts"
+      "src/bridges/evaluators.ts",
+      "src/bridges/relation-eval.ts"
     ],
     "tests/bridges/descriptor-consistency.test.ts": [
       "src/bridges/index.ts",

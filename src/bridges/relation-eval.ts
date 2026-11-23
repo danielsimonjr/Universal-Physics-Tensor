@@ -15,7 +15,7 @@ import { conditionDomain, type ConditionDomain } from './validity.js';
 /** Thrown when two carrier roles have opposite signs. */
 export { CarrierSignError };
 
-const parityCache = new Map<string, { readonly even: readonly string[]; readonly pair?: { readonly charge: string; readonly mobility: string } }>();
+const parityCache = new WeakMap<CatalogRelation, { readonly even: readonly string[]; readonly pair?: { readonly charge: string; readonly mobility: string } }>();
 
 function named(rel: CatalogRelation, name: string): string {
   const alias = rel.aliases[name]?.[0];
@@ -33,7 +33,7 @@ function sampleInputs(rel: CatalogRelation): Record<string, number> | null {
 }
 
 function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { charge: string; mobility: string } } {
-  const cached = parityCache.get(rel.id);
+  const cached = parityCache.get(rel);
   if (cached !== undefined) return cached;
   const base = sampleInputs(rel);
   const even: string[] = [];
@@ -69,21 +69,21 @@ function classify(rel: CatalogRelation): { even: readonly string[]; pair?: { cha
     even,
     ...(charge !== undefined && mobility !== undefined ? { pair: { charge, mobility } } : {}),
   };
-  parityCache.set(rel.id, found);
+  parityCache.set(rel, found);
   return found;
 }
 
-const domainCache = new Map<string, ConditionDomain>();
+const domainCache = new WeakMap<CatalogRelation, ConditionDomain>();
 
 /**
  * The relation's validity domain, read from its `holds`: the predicate, the
  * description and the violated conditions all come from that one text.
  */
 export function relationDomain(rel: CatalogRelation): ConditionDomain {
-  const hit = domainCache.get(rel.id);
+  const hit = domainCache.get(rel);
   if (hit !== undefined) return hit;
   const domain = conditionDomain(rel.holds, formulaNames, formulaScope, rel.sources);
-  domainCache.set(rel.id, domain);
+  domainCache.set(rel, domain);
   return domain;
 }
 

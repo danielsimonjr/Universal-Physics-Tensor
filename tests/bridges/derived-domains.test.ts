@@ -79,6 +79,15 @@ describe('derived validity domains', () => {
     expect(sampled).toBeGreaterThan(100);
   });
 
+  it('does not reuse the graph domain for an evaluator-specific formula with the same id', async () => {
+    const { relationDomain } = await import('../../src/bridges/relation-eval.js');
+    const inputs = { 'standoff-field': 3.1e-5, 'standoff-density': -8.4e-21, 'standoff-speed': 4e5 };
+    const graphRelation = catalogRelations().find((relation) => relation.id === 'be-120')!;
+    expect(relationDomain(graphRelation).violations(inputs)).toEqual([]);
+    expect(() => BRIDGE_EVALUATORS.get(120)!.run(inputs)).toThrow(DomainViolationError);
+    expect(() => BRIDGE_EVALUATORS.get(120)!.run(inputs)).toThrow(/rho_kg_per_m3 > 0/);
+  });
+
   it('a flag that states nothing adds nothing: a parameter signed any has no derived clause', () => {
     for (const evaluator of raw.evaluators) {
       for (const p of evaluator.parameters) {
