@@ -12,25 +12,25 @@ The census is the set of source files that git tracks. Build output, `node_modul
 ignored scratch files are absent because git does not track them. The tool does not guess
 from a directory name.
 
-The scope of this document is the **whole repository**: 1273 source files. The library
-alone is smaller. `src/` holds 393 TypeScript files, and `bun run docs:deps` counts the same
-393. The zone `src` below counts 395 files: the 393 files under `src/`, the launcher
+The scope of this document is the **whole repository**: 1276 source files. The library
+alone is smaller. `src/` holds 395 TypeScript files, and `bun run docs:deps` counts the same
+395. The zone `src` below counts 397 files: the 395 files under `src/`, the launcher
 `bin/upt.mjs` and the smoke entry `test-example.js`.
 
 ## By zone
 
 | Zone | Files | What lives here |
 |---|---|---|
-| `tests` | 819 | The vitest suite under `tests/` |
-| `src` | 395 | The library, the CLI and the physics catalog code, plus `bin/upt.mjs` and `test-example.js` |
+| `tests` | 820 | The vitest suite under `tests/` |
+| `src` | 397 | The library, the CLI and the physics catalog code, plus `bin/upt.mjs` and `test-example.js` |
 | `tools` | 39 | Repository tooling: 18 files under `tools/` and 21 files under `scripts/` |
 | `benchmarks` | 17 | `bench/*.bench.ts` and their fixture, run by `npm run bench` |
 | `examples` | 1 | `examples/basic-usage.ts` |
 | `docs` | 1 | One script under `docs/persona-sessions/` |
 | `config` | 1 | `vitest.config.ts` |
-| **Total** | **1273** | |
+| **Total** | **1276** | |
 
-**Tests outnumber source files: 819 against 395.** The ratio fits a repository whose claims
+**Tests outnumber source files: 820 against 397.** The ratio fits a repository whose claims
 are physical: a wrong number is a wrong prediction, not a cosmetic defect.
 
 ## The two orphans, and why neither is dead code

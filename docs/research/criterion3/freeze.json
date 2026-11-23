@@ -1,9 +1,9 @@
 {
   "files": {
     "corpus.json": {
-      "sha256": "5665c7e9f06c5eb55a7dac22a088067938d8a604c7b00351114c9b36ba52542f",
-      "records": 109,
-      "withExpr": 93
+      "sha256": "518c75b7a7252d3aaaf9f8416ff1f3244c70f94c2fb802ae4e6420118f3a698b",
+      "records": 122,
+      "withExpr": 106
     },
     "queries.json": {
       "sha256": "dea19d47606ca6c59eb5e73fb2487a111c9d38cca17a0e0603dc39c38cc367f0",
@@ -37,7 +37,7 @@
   },
   "leakage": {
     "idHits": 0,
-    "verdictHits": 10,
+    "verdictHits": 11,
     "provenanceHits": 0,
     "controlFound": "6/6"
   }
