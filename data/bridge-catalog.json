@@ -8924,6 +8924,9 @@
       },
       "holds": "landau-wavenumber != 0 and landau-thermal != 0",
       "citation": "PhysJS.LandauDamping.damping_eq. The residue formula γ = (π ω³/(2 n k²)) (∂f/∂v)|_{ω/k} is a hypothesis, not a contour integral.",
+      "notice": {
+        "text": "The Maxwellian residue model substitutes the real wave frequency for the plasma frequency in the prefactor. This approximation assumes a weakly damped long-wavelength Langmuir mode (|k| v_t ≪ ω_p and ω ≈ ω_p)."
+      },
       "reference": {
         "inputs": {
           "landau-omega": 200000000,
@@ -9152,6 +9155,9 @@
       },
       "holds": "standoff-density != 0 and standoff-speed != 0",
       "citation": "PhysJS.ChapmanFerraro.standoff_eq. A doubled dipole is a hypothesis. Specular 2 ρ v² replaces the numerator 2 by 1.",
+      "notice": {
+        "text": "The standoff assumes the magnetopause field is twice the incident dipole field and wind pressure is ρv². Using specular reflection with pressure 2ρv² reduces R/R_E by 2^(-1/6)."
+      },
       "reference": {
         "inputs": {
           "standoff-field": 3.1e-05,
@@ -10721,6 +10727,9 @@
       },
       "holds": "isFinite(saha-mass) and saha-mass > 0 and isFinite(saha-warmth) and saha-warmth > 0",
       "citation": "PhysJS.Saha.saha_eq. The electron weight 2 is not in this statement.",
+      "notice": {
+        "text": "This expression assumes a unit statistical factor 2g_ion/g_neutral = 1, as for ground-state hydrogen with electron spin included. Other ionization stages can require a different partition-function ratio."
+      },
       "reference": {
         "inputs": {
           "saha-mass": 9.1093837015e-31,
@@ -11720,7 +11729,7 @@
           "quantity": "shockley-voltage",
           "symbol": "V",
           "unit": "V",
-          "meaning": "bias voltage; ideality is 1"
+          "meaning": "bias voltage"
         },
         {
           "key": "T_K",
@@ -11729,6 +11738,22 @@
           "unit": "K",
           "meaning": "absolute temperature, nonzero",
           "temperature": "absolute"
+        },
+        {
+          "key": "n",
+          "quantity": "shockley-ideality",
+          "symbol": "n",
+          "unit": "1",
+          "meaning": "diode ideality factor; the primary current uses n = 1",
+          "sign": "positive"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "current-with-ideality",
+          "unit": "A",
+          "meaning": "Shockley current at the supplied ideality factor n",
+          "expression": "I_s_A*(exp(e*V_volts/(n*k_B*T_K)) + -1)"
         }
       ]
     },
@@ -12668,6 +12693,14 @@
           "symbol": "v",
           "unit": "m/s",
           "meaning": "wind speed"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "standoff-radius-ratio",
+          "unit": "1",
+          "meaning": "magnetopause standoff radius R/R_E",
+          "expression": "value^(1/6)"
         }
       ]
     },
