@@ -31,7 +31,7 @@ describe('criterion 3 exploratory — the residual corpus', () => {
       if (f.expr === undefined) expect(r.expr).toBeUndefined();
       else expect(r.expr).toEqual(canonicalResidual(registry.get(f.id)!));
     }
-    expect(residual.filter((r) => r.expr !== undefined)).toHaveLength(106);
+    expect(residual.filter((r) => r.expr !== undefined)).toHaveLength(107);
   });
 
   it('REFUSES a frozen expression that is not the registry scalarAst (the targets would not match it)', () => {

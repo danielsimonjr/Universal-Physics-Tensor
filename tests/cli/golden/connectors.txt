@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 247 established-confidence edge(s) of the 281 in this graph
+  anchored core: the clusters holding at least one of the 248 established-confidence edge(s) of the 282 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  88 of the isolated bridges share a name token with the core; 24 are truly unconnected.
+  87 of the isolated bridges share a name token with the core; 24 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -185,6 +185,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         debye-sphere-density ≟ proton-density                  [[L^-3]]  → be-47
         debye-sphere-length ≟ coarsening-length                [[length]]  → be-15
         debye-sphere-length ≟ length                           [[length]]  → CE-pendulum-period
+        debye-sphere-length ≟ paraxial-focal-length            [[length]]  → CE-thin-lens-mirror
         debye-sphere-length ≟ pipe-length                      [[length]]  → be-77
         debye-sphere-length ≟ planck-length                    [[length]]  → be-31
         debye-sphere-length ≟ quantum-correlation-length       [[length]]  → be-33
@@ -192,6 +193,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-115 (isolated):
         multi-debye-length ≟ coarsening-length                 [[length]]  → be-15
         multi-debye-length ≟ length                            [[length]]  → CE-pendulum-period
+        multi-debye-length ≟ paraxial-focal-length             [[length]]  → CE-thin-lens-mirror
         multi-debye-length ≟ pipe-length                       [[length]]  → be-77
         multi-debye-length ≟ planck-length                     [[length]]  → be-31
         multi-debye-length ≟ quantum-correlation-length        [[length]]  → be-33
@@ -340,6 +342,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-155 (isolated):
         reynolds-length ≟ coarsening-length                    [[length]]  → be-15
         reynolds-length ≟ length                               [[length]]  → CE-pendulum-period
+        reynolds-length ≟ paraxial-focal-length                [[length]]  → CE-thin-lens-mirror
         reynolds-length ≟ pipe-length                          [[length]]  → be-77
         reynolds-length ≟ planck-length                        [[length]]  → be-31
         reynolds-length ≟ quantum-correlation-length           [[length]]  → be-33
@@ -352,6 +355,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-156 (isolated):
         biot-length ≟ coarsening-length                        [[length]]  → be-15
         biot-length ≟ length                                   [[length]]  → CE-pendulum-period
+        biot-length ≟ paraxial-focal-length                    [[length]]  → CE-thin-lens-mirror
         biot-length ≟ pipe-length                              [[length]]  → be-77
         biot-length ≟ planck-length                            [[length]]  → be-31
         biot-length ≟ quantum-correlation-length               [[length]]  → be-33
@@ -359,6 +363,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-157 (isolated):
         nusselt-length ≟ coarsening-length                     [[length]]  → be-15
         nusselt-length ≟ length                                [[length]]  → CE-pendulum-period
+        nusselt-length ≟ paraxial-focal-length                 [[length]]  → CE-thin-lens-mirror
         nusselt-length ≟ pipe-length                           [[length]]  → be-77
         nusselt-length ≟ planck-length                         [[length]]  → be-31
         nusselt-length ≟ quantum-correlation-length            [[length]]  → be-33
@@ -370,6 +375,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         sherwood-diffusivity ≟ thermal-diffusivity             [[L^2 T^-1]]  → CE-thermal-diffusivity
         sherwood-length ≟ coarsening-length                    [[length]]  → be-15
         sherwood-length ≟ length                               [[length]]  → CE-pendulum-period
+        sherwood-length ≟ paraxial-focal-length                [[length]]  → CE-thin-lens-mirror
         sherwood-length ≟ pipe-length                          [[length]]  → be-77
         sherwood-length ≟ planck-length                        [[length]]  → be-31
         sherwood-length ≟ quantum-correlation-length           [[length]]  → be-33
@@ -379,6 +385,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         fourier-slab-flux ≟ radiative-flux                     [[M T^-3]]  → CE-stefan-boltzmann
         fourier-slab-length ≟ coarsening-length                [[length]]  → be-15
         fourier-slab-length ≟ length                           [[length]]  → CE-pendulum-period
+        fourier-slab-length ≟ paraxial-focal-length            [[length]]  → CE-thin-lens-mirror
         fourier-slab-length ≟ pipe-length                      [[length]]  → be-77
         fourier-slab-length ≟ planck-length                    [[length]]  → be-31
         fourier-slab-length ≟ quantum-correlation-length       [[length]]  → be-33
@@ -433,6 +440,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-22 (isolated):
         boundary-length ≟ coarsening-length                    [[length]]  → be-15
         boundary-length ≟ length                               [[length]]  → CE-pendulum-period
+        boundary-length ≟ paraxial-focal-length                [[length]]  → CE-thin-lens-mirror
         boundary-length ≟ pipe-length                          [[length]]  → be-77
         boundary-length ≟ planck-length                        [[length]]  → be-31
         boundary-length ≟ quantum-correlation-length           [[length]]  → be-33
@@ -440,6 +448,8 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-24 (isolated):
         donor-acceptor-distance ≟ distance                     [[length]]  → CE-work
         donor-acceptor-distance ≟ hubble-distance              [[length]]  → CE-hubble-distance
+        donor-acceptor-distance ≟ image-distance               [[length]]  → CE-thin-lens-mirror
+        donor-acceptor-distance ≟ object-distance              [[length]]  → CE-thin-lens-mirror
         donor-acceptor-distance ≟ screen-distance              [[length]]  → CE-double-slit-interference
         foerster-radius ≟ classical-electron-radius            [[length]]  → CE-classical-electron-radius
         foerster-radius ≟ far-radius                           [[length]]  → be-37
@@ -620,6 +630,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-78 (isolated):
         column-length ≟ coarsening-length                      [[length]]  → be-15
         column-length ≟ length                                 [[length]]  → CE-pendulum-period
+        column-length ≟ paraxial-focal-length                  [[length]]  → CE-thin-lens-mirror
         column-length ≟ pipe-length                            [[length]]  → be-77
         column-length ≟ planck-length                          [[length]]  → be-31
         column-length ≟ quantum-correlation-length             [[length]]  → be-33
@@ -800,6 +811,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         upper-critical-field ≟ solenoid-field                  [[M T^-2 I^-1]]  → CE-solenoid-field
         upper-critical-length ≟ coarsening-length              [[length]]  → be-15
         upper-critical-length ≟ length                         [[length]]  → CE-pendulum-period
+        upper-critical-length ≟ paraxial-focal-length          [[length]]  → CE-thin-lens-mirror
         upper-critical-length ≟ pipe-length                    [[length]]  → be-77
         upper-critical-length ≟ planck-length                  [[length]]  → be-31
         upper-critical-length ≟ quantum-correlation-length     [[length]]  → be-33
@@ -1021,19 +1033,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         rydberg-energy ≟ spring-potential-energy               [[energy]]  → CE-spring-potential-energy
         rydberg-energy ≟ state-energy                          [[energy]]  → CE-boltzmann-factor
         rydberg-energy ≟ thermal-energy                        [[energy]]  → CE-equipartition
-    ── CE-thin-lens-mirror (isolated):
-        image-distance ≟ distance                              [[length]]  → CE-work
-        image-distance ≟ hubble-distance                       [[length]]  → CE-hubble-distance
-        image-distance ≟ screen-distance                       [[length]]  → CE-double-slit-interference
-        object-distance ≟ distance                             [[length]]  → CE-work
-        object-distance ≟ hubble-distance                      [[length]]  → CE-hubble-distance
-        object-distance ≟ screen-distance                      [[length]]  → CE-double-slit-interference
-        paraxial-focal-length ≟ coarsening-length              [[length]]  → be-15
-        paraxial-focal-length ≟ length                         [[length]]  → CE-pendulum-period
-        paraxial-focal-length ≟ pipe-length                    [[length]]  → be-77
-        paraxial-focal-length ≟ planck-length                  [[length]]  → be-31
-        paraxial-focal-length ≟ quantum-correlation-length     [[length]]  → be-33
-        paraxial-focal-length ≟ reference-correlation-length   [[length]]  → be-33
     ── CE-tolman-oppenheimer-volkoff (isolated):
         areal-radius ≟ classical-electron-radius               [[length]]  → CE-classical-electron-radius
         areal-radius ≟ far-radius                              [[length]]  → be-37

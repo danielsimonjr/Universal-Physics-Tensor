@@ -38,7 +38,7 @@ completion ledger. Do not "fix" them; the sprint's `ACTIVE.md` line is the audit
   64, 65). Of the ten S1.5 audit targets, BE-37 and BE-48 are catalog-status `speculative`;
   the other eight are `established`. BE-35 is **both** confronted (`stringent`) and in
   `REJECTED_BRIDGE_ADJUDICATIONS` (`not-a-bridge`).
-- 122 canonical entries; since Sprint 3 `tests/canonical/canonical-count-prose.test.ts` pins
+- 123 canonical entries; since Sprint 3 `tests/canonical/canonical-count-prose.test.ts` pins
   every prose statement of the number against `CANONICAL_EQUATIONS.length`.
 - The named dimension constants the oscillator entries use are **module-local** except
   `FREQUENCY` and `MASS` (`src/dimensional/types.ts`); `SPRING_CONSTANT`, `INDUCTANCE`,

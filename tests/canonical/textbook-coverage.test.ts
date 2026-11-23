@@ -1,7 +1,9 @@
 /** Textbook catalog additions execute the expressions advertised in their registry records. */
 import { describe, expect, it } from 'vitest';
 import { C_SI, G_SI, H_SI, HBAR_SI, K_B_SI } from '../../src/core/constants.js';
+import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
+import { attemptDerivation } from '../../src/composition/bridge-analysis.js';
 import { evaluateEdge } from '../../src/composition/edge.js';
 import { explainQuantity } from '../../src/composition/explain.js';
 
@@ -23,12 +25,25 @@ describe('textbook coverage', () => {
     expect(evaluate('CE-single-slit-diffraction', { 'optical-wavelength': 5e-7, 'slit-width': 1e-6 })).toBe(0.5);
   });
 
+  it('finds signed virtual and real images and refuses the focal-plane singularity', () => {
+    const focal = { 'paraxial-focal-length': 0.1 };
+    expect(evaluate('CE-thin-lens-image-distance', { ...focal, 'object-distance': 0.05 })).toBeCloseTo(-0.1, 14);
+    expect(evaluate('CE-thin-lens-image-distance', { ...focal, 'object-distance': 0.2 })).toBeCloseTo(0.2, 14);
+    expect(() => evaluate('CE-thin-lens-image-distance', { ...focal, 'object-distance': 0.1 })).toThrow(/outside/);
+    for (const target of ['image-distance', 'paraxial-focal-length']) {
+      expect(explainQuantity(CANONICAL_GRAPH, target, { 'object-distance': 0.2 }).identifiability.verdict).toBe('under-determined');
+    }
+  });
+
   it('keeps the Planck spectrum finite and accurate in the low-frequency limit', () => {
-    const frequency = 1e-4;
+    const frequency = 1e-6;
     const temperature = 300;
     const expected = 8 * Math.PI * H_SI * frequency ** 3 /
       (C_SI ** 3 * Math.expm1(H_SI * frequency / (K_B_SI * temperature)));
     expect(evaluate('CE-planck-blackbody-spectrum', { frequency, temperature }) / expected).toBeCloseTo(1, 12);
+    expect(evaluateEdge(CATALOG_GRAPH.find((edge) => edge.id === 'be-164')!, {
+      'planck-frequency': frequency, 'planck-warmth': temperature,
+    }) / expected).toBeCloseTo(1, 12);
   });
 
   it('keeps a representable Planck tail when exp(−x) alone underflows', () => {
@@ -37,6 +52,13 @@ describe('textbook coverage', () => {
     const frequency = x * K_B_SI * temperature / H_SI;
     const expected = Math.exp(Math.log(8 * Math.PI * H_SI * (frequency / C_SI) ** 3) - x);
     expect(evaluate('CE-planck-blackbody-spectrum', { frequency, temperature }) / expected).toBeCloseTo(1, 3);
+    expect(evaluateEdge(CATALOG_GRAPH.find((edge) => edge.id === 'be-164')!, {
+      'planck-frequency': frequency, 'planck-warmth': temperature,
+    }) / expected).toBeCloseTo(1, 3);
+  });
+
+  it('does not mistake the Rayleigh–Jeans asymptote for the full Planck relation', () => {
+    expect(attemptDerivation(CATALOG_GRAPH.find((edge) => edge.id === 'be-164')!).status).toBe('not-a-monomial');
   });
 
   it('computes the low-energy coupling and the two theoretical bound values', () => {

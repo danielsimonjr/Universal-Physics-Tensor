@@ -8,6 +8,12 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Fixed
+
+- Catalog Planck evaluation preserves the Rayleigh–Jeans and representable Wien limits. The input report reads its strict temperature range from the same contract as evaluation.
+- Canonical explanations label computed bounds with their direction in text and JSON.
+- The paraxial optics graph predicts signed image distance from focal length and object distance.
+
 ## [18.0.0] - 2026-11-23
 
 Dependency health at this release: `bun audit` reported zero vulnerabilities across 139 packages. `bun outdated` reported in-range updates for MathTS autograd, expression and tensor, and fast-check. The latest MathTS core, functions and matrix releases and Vitest and its V8 coverage provider are outside the current ranges. The lockfile already includes the MathTS and fast-check updates merged since v17.0.0.

@@ -6177,6 +6177,80 @@
     }
   },
   {
+    "id": "CE-thin-lens-image-distance",
+    "text": "Thin lens and spherical mirror image distance\nelectromagnetism\nparaxial rays\nthin lens or spherical mirror\nreal-is-positive signed distances",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "paraxial-focal-length",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "object-distance",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "-",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "object-distance",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "paraxial-focal-length",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "id": "CE-planck-blackbody-spectrum",
     "text": "Planck blackbody spectrum\nthermodynamics\nthermal equilibrium\nspectral energy density per volume per cycle frequency\ntwo polarizations",
     "expr": {

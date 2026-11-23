@@ -61,3 +61,34 @@ describe('explain text formats a recovered value at 15 significant digits', () =
     expect(formatQuantity(Math.LN2)).not.toBe(Math.LN2.toExponential(4));
   });
 });
+
+describe('explain bounds', () => {
+  it.each([
+    ['position-momentum-uncertainty-product', [], 'lower'],
+    ['orthogonalization-time-lower-bound', ['mean-energy-above-ground=1J'], 'lower'],
+    ['bekenstein-entropy-upper-bound', ['system-energy=1J', 'enclosing-radius=1m'], 'upper'],
+  ] as const)('reports the direction of the %s bound in text and JSON', async (target, bindings, bound) => {
+    const args = ['explain', target, '--source=canonical', ...bindings];
+    const text = capture();
+    expect(await runCli(args, text.io)).toBe(0);
+    expect(text.lines.join('\n')).toContain(`computes the ${bound} bound reported as '${target}'`);
+    expect(text.lines.join('\n')).toContain('Bound value:');
+    expect(text.lines.join('\n')).toContain(` — ${bound} bound: `);
+    const json = capture();
+    expect(await runCli([...args, '--json'], json.io)).toBe(0);
+    expect(JSON.parse(json.lines.join('\n')).result).toMatchObject({
+      bound,
+      recoveredValue: expect.any(Number),
+      summary: expect.stringContaining(`computes the ${bound} bound`),
+    });
+  });
+
+  it('renders and enforces the Planck evaluator temperature sign from its input contract', async () => {
+    const valid = capture();
+    expect(await runCli(['evaluate', 'be-164', 'nu_Hz=1e12Hz', 'T_K=300K'], valid.io)).toBe(0);
+    expect(valid.lines.join('\n')).toMatch(/T_K \[K\].*\(> 0;/);
+    const invalid = capture();
+    expect(await runCli(['evaluate', 'be-164', 'nu_Hz=1e12Hz', 'T_K=0K'], invalid.io)).toBe(1);
+    expect(invalid.lines.join('\n')).toContain('T_K = 0 violates T_K > 0');
+  });
+});

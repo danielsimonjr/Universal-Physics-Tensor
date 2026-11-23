@@ -558,7 +558,21 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (27)"]
+  subgraph cl_5["anchored cluster (2)"]
+    direction LR
+    j_CE_thin_lens_mirror["Thin lens and spherical mirror equation"]:::law
+    q_object_distance(["object-distance"]):::qty
+    q_object_distance --> j_CE_thin_lens_mirror
+    q_image_distance(["image-distance"]):::qty
+    q_image_distance --> j_CE_thin_lens_mirror
+    q_paraxial_focal_length(["paraxial-focal-length"]):::qty
+    j_CE_thin_lens_mirror --> q_paraxial_focal_length
+    j_CE_thin_lens_image_distance["Thin lens and spherical mirror image distance"]:::law
+    q_object_distance --> j_CE_thin_lens_image_distance
+    q_paraxial_focal_length --> j_CE_thin_lens_image_distance
+    j_CE_thin_lens_image_distance --> q_image_distance
+  end
+  subgraph cl_iso["isolated (26)"]
     direction LR
     j_CE_bekenstein_bound["Bekenstein entropy bound"]:::law
     q_system_energy(["system-energy"]):::qty
@@ -692,13 +706,6 @@ flowchart LR
     q_angle_of_refraction --> j_CE_snell_law
     q_refracted_index(["refracted-index"]):::qty
     j_CE_snell_law --> q_refracted_index
-    j_CE_thin_lens_mirror["Thin lens and spherical mirror equation"]:::law
-    q_object_distance(["object-distance"]):::qty
-    q_object_distance --> j_CE_thin_lens_mirror
-    q_image_distance(["image-distance"]):::qty
-    q_image_distance --> j_CE_thin_lens_mirror
-    q_paraxial_focal_length(["paraxial-focal-length"]):::qty
-    j_CE_thin_lens_mirror --> q_paraxial_focal_length
     j_CE_tolman_oppenheimer_volkoff["Tolman–Oppenheimer–Volkoff equilibrium and mass limit"]:::law
     q_enclosed_mass(["enclosed-mass"]):::qty
     q_enclosed_mass --> j_CE_tolman_oppenheimer_volkoff

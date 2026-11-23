@@ -206,7 +206,7 @@ function printExplanation(
   out(`\n● ${target}  [source: ${label}]`);
   const displayUnit = unit === undefined || unit === '1' ? '' : ` ${unit}`;
   const confidence = x.confidence === undefined ? '' : ` [${x.confidence}]`;
-  out(`  ${x.summary.replace(/(Recovered value: [^ ]+)\./, (_whole, value: string) => `${value}${displayUnit}${confidence}.`)}`);
+  out(`  ${x.summary.replace(/((?:Recovered|Bound) value: [^ ]+)\./, (_whole, value: string) => `${value}${displayUnit}${confidence}.`)}`);
   for (const note of notes) out(`  ${note}`);
   if (x.identifiability.verdict === 'under-determined' && x.known.length === 0 && inputNote) {
     out(`  ${inputNote}`);
@@ -214,7 +214,9 @@ function printExplanation(
   if (x.derivations.length) {
     out('  derivations:');
     for (const d of x.derivations) {
-      const val = d.value !== undefined ? ` = ${api.formatQuantity(d.value)}${displayUnit}` : '';
+      const val = d.value === undefined ? '' : d.bound === undefined
+        ? ` = ${api.formatQuantity(d.value)}${displayUnit}`
+        : ` — ${d.bound} bound: ${api.formatQuantity(d.value)}${displayUnit}`;
       const chain =
         d.leafInputs.join(',') !== d.sources.join(',') ? `  [from leaves: ${d.leafInputs.join(', ')}]` : '';
       const grade = d.confidence === undefined ? '' : ` [${d.confidence}]`;
@@ -226,7 +228,7 @@ function printExplanation(
       }
       const convention = api.CANONICAL_EQUATIONS.find((entry) => entry.id === d.edge)?.conventionNote;
       if (convention !== undefined && d.value !== undefined) out(`        ${convention}`);
-      if (d.dimensionalForm) out(`        ${d.dimensionalForm.formula}`);
+      if (d.dimensionalForm && d.bound === undefined) out(`        ${d.dimensionalForm.formula}`);
     }
   }
   if (x.blockingFrontier.length) {

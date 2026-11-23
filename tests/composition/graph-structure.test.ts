@@ -126,11 +126,14 @@ describe('derivationCycles — strongly connected components of the directed sou
 describe('the live graphs, pinned once', () => {
   // A number here is a measurement, not a target: when the catalog changes, re-measure, read
   // the diff, and record the move in the change's CHANGELOG entry.
-  it('NEGATIVE RESULT: no graph has a derivation cycle — the source→target quantity graph is acyclic', () => {
-    // The hand-built A→B→C→A case above is the positive control that the listing can fire.
+  it('reports the reciprocal imaging routes as the only structural cycle', () => {
     expect(derivationCycles(CATALOG_GRAPH)).toEqual([]);
-    expect(derivationCycles(CANONICAL_GRAPH)).toEqual([]);
-    expect(derivationCycles([...CATALOG_GRAPH, ...CANONICAL_GRAPH])).toEqual([]);
+    const imaging = derivationCycles(CANONICAL_GRAPH);
+    expect(imaging).toEqual([{
+      quantities: ['image-distance', 'paraxial-focal-length'],
+      edges: ['CE-thin-lens-mirror', 'CE-thin-lens-image-distance'],
+    }]);
+    expect(derivationCycles([...CATALOG_GRAPH, ...CANONICAL_GRAPH])).toEqual(imaging);
   });
 
   it('layout communities of the catalog graph: a 51-quantity component in six communities', () => {

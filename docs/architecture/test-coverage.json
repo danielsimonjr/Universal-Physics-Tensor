@@ -7631,6 +7631,7 @@
     "src/composition/bridge-analysis.ts": [
       "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/canonical/fixed-point-verdicts.test.ts",
+      "tests/canonical/textbook-coverage.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -7885,6 +7886,7 @@
       "tests/bridges/wkb-tunneling-rate.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/canonical/fixed-point-verdicts.test.ts",
+      "tests/canonical/textbook-coverage.test.ts",
       "tests/cases/kepler-rv.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/atlas-route-errors.test.ts",
@@ -15504,6 +15506,7 @@
     "src/composition/bridge-analysis.ts": [
       "tests/atlas/exponent-record-vs-engine.test.ts",
       "tests/canonical/fixed-point-verdicts.test.ts",
+      "tests/canonical/textbook-coverage.test.ts",
       "tests/composition/axis-audit.test.ts",
       "tests/composition/axis-gate.test.ts",
       "tests/composition/bridge-analysis.test.ts",
@@ -15593,6 +15596,7 @@
       "tests/bridges/wkb-tunneling-rate.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/canonical/fixed-point-verdicts.test.ts",
+      "tests/canonical/textbook-coverage.test.ts",
       "tests/cli/axes-evidence.test.ts",
       "tests/cli/equation-symbol-index.test.ts",
       "tests/cli/probe.test.ts",
@@ -20009,7 +20013,9 @@
     ],
     "tests/canonical/textbook-coverage.test.ts": [
       "src/core/constants.ts",
+      "src/composition/catalog-graph.ts",
       "src/composition/canonical-graph.ts",
+      "src/composition/bridge-analysis.ts",
       "src/composition/edge.ts",
       "src/composition/explain.ts",
       "src/core/format.ts"

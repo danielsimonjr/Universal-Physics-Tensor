@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-11-23 (persona session 39)
+
+- The [theoretical physicist session](docs/persona-sessions/2026-11-23-theoretical-physicist-bridges-session-39.md) ran against two clean npm installs of `universal-physics-tensor@18.0.0`. The four findings are #845–#848. This round is outside the rotation. The next rotation persona is the condensed-matter physicist (position 2).
+
 ## As of 2026-11-22 (PR #830 Neon FIX-NEEDED)
 
 - **Harness.** Bash CONTROLs mutate `statedBlock` and `.toThrow(/stdout of/)` after `expect(result.status).toBe(0)` — deleting the stdout `toContain` in `assertGuideMatchesStdout` reddens both bash CONTROLs (4 failed / 13 passed: mass, solar/ts, Hz, pendulum). The foreign-fence CONTROL `.toThrow(/text fence for/)` reddens when that `statedBlock` line is deleted (1 failed / 16 passed). `mu_e: 3` asserts status 0 and `Chandrasekhar mass:` before the absent figures; a throwing fence fails on status 0. TS CONTROLs call `assertGuideMatchesStdout` (not an inline `toContain` copy). `statedOutput` / `statedFenceBody` / `statedAfterTsFence` take the next fence (`/```(\w*)\n/`); an intervening `ts` fence between evaluate bash and its text makes `statedOutput` undefined. Every `ts` fence and every `bash` command is stdout-coupled; bash counts pinned (evaluate=1, units=0, search=4). `spawnIo` types `SpawnSyncReturns<string>` and joins `[result.stderr, result.error?.message]`. Imports match `/from\s+['"]([^'"]+)['"]/g` (single-quote-only regex stays green on `from "universal-physics-tensor/atlas"`; the widened regex fails).

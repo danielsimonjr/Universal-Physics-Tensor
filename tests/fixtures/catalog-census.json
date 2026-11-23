@@ -84,8 +84,8 @@
   "derivationAudit": {
     "derived": 37,
     "coefficientUnset": 0,
-    "decoy": 22,
-    "notAMonomial": 25,
+    "decoy": 21,
+    "notAMonomial": 26,
     "notUnique": 0,
     "noSamples": 16,
     "open": 59,
@@ -100,16 +100,16 @@
       "derived": 83,
       "coefficientUnset": 6,
       "decoy": 0,
-      "notAMonomial": 9,
+      "notAMonomial": 10,
       "notUnique": 23,
       "noSamples": 1,
       "open": 0
     }
   },
   "mapBothFormallyProved": {
-    "total": 281,
+    "total": 282,
     "kept": 118,
     "droppedNotMatching": 40,
-    "droppedMissingMetadata": 123
+    "droppedMissingMetadata": 124
   }
 }

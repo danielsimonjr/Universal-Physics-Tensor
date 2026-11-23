@@ -10610,7 +10610,7 @@
       "catalogId": 164,
       "kind": "law",
       "label": "u (exp(hν/kT) − 1) c³ = 8 π h ν³",
-      "expression": "((8*pi)*h*planck-frequency^3)/(c^3*(exp(h*planck-frequency/(k_B*planck-warmth))-1))",
+      "expression": "((4*pi)*h*planck-frequency^3*(1+1/tanh((h*planck-frequency/(2*k_B*planck-warmth))))/c^3)*exp(-(h*planck-frequency/(2*k_B*planck-warmth)))*exp(-(h*planck-frequency/(2*k_B*planck-warmth)))",
       "target": "planck-u",
       "sources": [
         "planck-frequency",
@@ -10624,7 +10624,7 @@
           "T_K"
         ]
       },
-      "holds": "isFinite(planck-frequency) and planck-frequency > 0 and isFinite(planck-warmth) and planck-warmth > 0",
+      "holds": "isFinite(planck-frequency) and isFinite(planck-warmth)",
       "citation": "PhysJS.PlanckSpectrum.planck_eq. Two polarizations. One polarization is not this density.",
       "reference": {
         "inputs": {
@@ -14012,14 +14012,16 @@
           "quantity": "planck-frequency",
           "symbol": "ν",
           "unit": "Hz",
-          "meaning": "frequency, > 0"
+          "meaning": "cycle frequency",
+          "sign": "positive"
         },
         {
           "key": "T_K",
           "quantity": "planck-warmth",
           "symbol": "T",
           "unit": "K",
-          "meaning": "absolute temperature, ≥ 0",
+          "meaning": "blackbody temperature",
+          "sign": "positive",
           "temperature": "absolute"
         }
       ]
