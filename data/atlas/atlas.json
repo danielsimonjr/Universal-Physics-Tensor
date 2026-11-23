@@ -755,7 +755,7 @@
           ],
           "doesNotPreserve": [
             "the amplitude dependence of the period",
-            "phase over times t ≳ 16 T0/θ0²"
+            "phase over time (the phase drift accumulates)"
           ],
           "sideConditions": [
             "θ0 ≤ 0.5 rad",
@@ -766,7 +766,7 @@
             "delta": 0.015852531101436806,
             "norm": "relative period error, normalized by the value of the reduced model",
             "domain": "θ0 ≤ 0.5 rad",
-            "horizon": "t ≪ 16 T0/θ0²; machine form t < 4 T0/θ0², the π/2-drift time",
+            "horizon": "t < 4 T0/θ0² (π/2-drift time)",
             "parameterRange": "θ0 ≤ 0.5 rad",
             "limitCharacter": "regular",
             "uniformity": [
@@ -1876,7 +1876,7 @@
             "delta": 0.055728090000841224,
             "norm": "relative error of the slow-mode decay rate of a Fourier mode, normalized by the value of the reduced model",
             "domain": "ε = τDq² ≤ 0.05",
-            "horizon": "τ ≪ t ≪ 1/(δ D q²): after the initial layer and before the decay-rate error accumulates; machine form 5τ < t < 0.1/(δ D q²)",
+            "horizon": "5τ < t < 0.1/(δ_at D q²), where δ_at is the slow-mode rate error at this point",
             "parameterRange": "ε = τDq² ≤ 0.05",
             "limitCharacter": "singular",
             "uniformity": [

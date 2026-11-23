@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (119)"]
+  subgraph cl_0["anchored cluster (126)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -213,6 +213,10 @@ flowchart LR
     q_parker_mass --> j_be_118
     q_parker_radius(["parker-radius"]):::qty
     j_be_118 --> q_parker_radius
+    j_be_57["BE-57"]:::established
+    q_unruh_acceleration(["unruh-acceleration"]):::qty
+    q_unruh_acceleration --> j_be_57
+    j_be_57 --> q_temperature
     j_be_58["BE-58"]:::established
     q_johnson_temperature(["johnson-temperature"]):::qty
     q_johnson_temperature --> j_be_58
@@ -274,6 +278,11 @@ flowchart LR
     q_one_minus_e_sq --> j_CE_perihelion_precession
     q_perihelion_precession(["perihelion-precession"]):::qty
     j_CE_perihelion_precession --> q_perihelion_precession
+    j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
+    q_A(["A"]):::qty
+    q_A --> j_CE_bekenstein_hawking
+    q_bh_entropy(["bh-entropy"]):::qty
+    j_CE_bekenstein_hawking --> q_bh_entropy
     j_CE_newton_gravitation["Newton's law of gravitation"]:::law
     q_mass --> j_CE_newton_gravitation
     q_secondary_mass(["secondary-mass"]):::qty
@@ -395,8 +404,6 @@ flowchart LR
     q_current --> j_CE_inductor_energy
     j_CE_inductor_energy --> q_energy
     j_CE_magnetic_field_wire["Magnetic field of a long straight wire"]:::law
-    q_mu_0(["mu_0"]):::qty
-    q_mu_0 --> j_CE_magnetic_field_wire
     q_current --> j_CE_magnetic_field_wire
     q_distance --> j_CE_magnetic_field_wire
     q_magnetic_field(["magnetic-field"]):::qty
@@ -441,10 +448,8 @@ flowchart LR
     j_CE_poynting_flux["Poynting vector (magnitude)"]:::law
     q_electric_field --> j_CE_poynting_flux
     q_magnetic_flux_density --> j_CE_poynting_flux
-    q_mu_0 --> j_CE_poynting_flux
     j_CE_poynting_flux --> q_poynting_flux
     j_CE_solenoid_field["Solenoid magnetic field"]:::law
-    q_mu_0 --> j_CE_solenoid_field
     q_turn_density(["turn-density"]):::qty
     q_turn_density --> j_CE_solenoid_field
     q_current --> j_CE_solenoid_field
@@ -677,6 +682,34 @@ flowchart LR
     q_velocity --> j_CE_lorentz_factor
     q_lorentz_factor(["lorentz-factor"]):::qty
     j_CE_lorentz_factor --> q_lorentz_factor
+    j_CE_acoustic_doppler["Acoustic Doppler effect"]:::law
+    q_source_frequency(["source-frequency"]):::qty
+    q_source_frequency --> j_CE_acoustic_doppler
+    q_sound_speed --> j_CE_acoustic_doppler
+    q_source_approach_speed(["source-approach-speed"]):::qty
+    q_source_approach_speed --> j_CE_acoustic_doppler
+    q_observed_acoustic_frequency(["observed-acoustic-frequency"]):::qty
+    j_CE_acoustic_doppler --> q_observed_acoustic_frequency
+    j_CE_planck_blackbody_spectrum["Planck blackbody spectrum"]:::law
+    q_frequency --> j_CE_planck_blackbody_spectrum
+    q_temperature --> j_CE_planck_blackbody_spectrum
+    q_blackbody_spectral_energy_density(["blackbody-spectral-energy-density"]):::qty
+    j_CE_planck_blackbody_spectrum --> q_blackbody_spectral_energy_density
+    j_CE_level_projectile_range["Projectile motion on level ground"]:::law
+    q_launch_speed(["launch-speed"]):::qty
+    q_launch_speed --> j_CE_level_projectile_range
+    q_launch_angle(["launch-angle"]):::qty
+    q_launch_angle --> j_CE_level_projectile_range
+    q_gravity --> j_CE_level_projectile_range
+    q_projectile_horizontal_range(["projectile-horizontal-range"]):::qty
+    j_CE_level_projectile_range --> q_projectile_horizontal_range
+    j_CE_unruh_temperature["Unruh temperature of an accelerated detector"]:::law
+    q_proper_acceleration(["proper-acceleration"]):::qty
+    q_proper_acceleration --> j_CE_unruh_temperature
+    j_CE_unruh_temperature --> q_temperature
+    j_CE_schwarzschild_horizon_area["Schwarzschild horizon area"]:::law
+    q_mass --> j_CE_schwarzschild_horizon_area
+    j_CE_schwarzschild_horizon_area --> q_A
     j_IC_erasure_energy__photon_energy__nu["IC-erasure-energy--photon-energy--nu"]:::proposed
     q_temperature --> j_IC_erasure_energy__photon_energy__nu
     j_IC_erasure_energy__photon_energy__nu --> q_nu
@@ -846,6 +879,24 @@ flowchart LR
   end
   subgraph cl_8["anchored cluster (2)"]
     direction LR
+    j_CE_double_slit_interference["Double-slit interference fringe spacing"]:::law
+    q_optical_wavelength(["optical-wavelength"]):::qty
+    q_optical_wavelength --> j_CE_double_slit_interference
+    q_screen_distance(["screen-distance"]):::qty
+    q_screen_distance --> j_CE_double_slit_interference
+    q_slit_separation(["slit-separation"]):::qty
+    q_slit_separation --> j_CE_double_slit_interference
+    q_double_slit_fringe_spacing(["double-slit-fringe-spacing"]):::qty
+    j_CE_double_slit_interference --> q_double_slit_fringe_spacing
+    j_CE_single_slit_diffraction["Single-slit diffraction first minimum"]:::law
+    q_optical_wavelength --> j_CE_single_slit_diffraction
+    q_slit_width(["slit-width"]):::qty
+    q_slit_width --> j_CE_single_slit_diffraction
+    q_first_diffraction_minimum_sine(["first-diffraction-minimum-sine"]):::qty
+    j_CE_single_slit_diffraction --> q_first_diffraction_minimum_sine
+  end
+  subgraph cl_9["anchored cluster (2)"]
+    direction LR
     j_CE_half_life["Radioactive half-life"]:::law
     q_decay_constant(["decay-constant"]):::qty
     q_decay_constant --> j_CE_half_life
@@ -860,7 +911,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (134)"]
+  subgraph cl_iso["isolated (138)"]
     direction LR
     j_be_100["BE-100"]:::law
     q_lst_static(["lst-static"]):::qty
@@ -1579,11 +1630,6 @@ flowchart LR
     q_plate_separation --> j_be_56
     q_casimir_pressure(["casimir-pressure"]):::qty
     j_be_56 --> q_casimir_pressure
-    j_be_57["BE-57"]:::established
-    q_unruh_acceleration(["unruh-acceleration"]):::qty
-    q_unruh_acceleration --> j_be_57
-    q_unruh_temperature(["unruh-temperature"]):::qty
-    j_be_57 --> q_unruh_temperature
     j_be_62["BE-62"]:::established
     q_critical_temperature(["critical-temperature"]):::qty
     q_critical_temperature --> j_be_62
@@ -1798,11 +1844,13 @@ flowchart LR
     q_mass_action_temperature --> j_be_99
     q_mass_action_density(["mass-action-density"]):::qty
     j_be_99 --> q_mass_action_density
-    j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
-    q_A(["A"]):::qty
-    q_A --> j_CE_bekenstein_hawking
-    q_bh_entropy(["bh-entropy"]):::qty
-    j_CE_bekenstein_hawking --> q_bh_entropy
+    j_CE_bekenstein_bound["Bekenstein entropy bound"]:::law
+    q_system_energy(["system-energy"]):::qty
+    q_system_energy --> j_CE_bekenstein_bound
+    q_enclosing_radius(["enclosing-radius"]):::qty
+    q_enclosing_radius --> j_CE_bekenstein_bound
+    q_bekenstein_entropy_upper_bound(["bekenstein-entropy-upper-bound"]):::qty
+    j_CE_bekenstein_bound --> q_bekenstein_entropy_upper_bound
     j_CE_bohr_magneton["Bohr magneton"]:::law
     q_bohr_magneton(["bohr-magneton"]):::qty
     j_CE_bohr_magneton --> q_bohr_magneton
@@ -1831,6 +1879,16 @@ flowchart LR
     q_stress_energy_density --> j_CE_einstein_field_eq
     q_efe_curvature(["efe-curvature"]):::qty
     j_CE_einstein_field_eq --> q_efe_curvature
+    j_CE_faraday_induction["Faraday’s law of induction"]:::law
+    q_flux_linkage_change(["flux-linkage-change"]):::qty
+    q_flux_linkage_change --> j_CE_faraday_induction
+    q_time_interval(["time-interval"]):::qty
+    q_time_interval --> j_CE_faraday_induction
+    q_average_induced_emf(["average-induced-emf"]):::qty
+    j_CE_faraday_induction --> q_average_induced_emf
+    j_CE_fine_structure_constant["Fine-structure constant"]:::law
+    q_fine_structure_constant(["fine-structure-constant"]):::qty
+    j_CE_fine_structure_constant --> q_fine_structure_constant
     j_CE_first_law_thermodynamics["First law of thermodynamics"]:::law
     q_heat_added(["heat-added"]):::qty
     q_heat_added --> j_CE_first_law_thermodynamics
@@ -1861,6 +1919,11 @@ flowchart LR
     q_polarization_angle --> j_CE_malus_law
     q_transmitted_intensity(["transmitted-intensity"]):::qty
     j_CE_malus_law --> q_transmitted_intensity
+    j_CE_margolus_levitin_bound["Margolus–Levitin quantum speed limit"]:::law
+    q_mean_energy_above_ground(["mean-energy-above-ground"]):::qty
+    q_mean_energy_above_ground --> j_CE_margolus_levitin_bound
+    q_orthogonalization_time_lower_bound(["orthogonalization-time-lower-bound"]):::qty
+    j_CE_margolus_levitin_bound --> q_orthogonalization_time_lower_bound
     j_CE_normal_distribution["Normal (Gaussian) distribution"]:::law
     q_standard_deviation(["standard-deviation"]):::qty
     q_standard_deviation --> j_CE_normal_distribution
@@ -1897,6 +1960,24 @@ flowchart LR
     q_angle_of_refraction --> j_CE_snell_law
     q_refracted_index(["refracted-index"]):::qty
     j_CE_snell_law --> q_refracted_index
+    j_CE_thin_lens_mirror["Thin lens and spherical mirror equation"]:::law
+    q_object_distance(["object-distance"]):::qty
+    q_object_distance --> j_CE_thin_lens_mirror
+    q_image_distance(["image-distance"]):::qty
+    q_image_distance --> j_CE_thin_lens_mirror
+    q_paraxial_focal_length(["paraxial-focal-length"]):::qty
+    j_CE_thin_lens_mirror --> q_paraxial_focal_length
+    j_CE_tolman_oppenheimer_volkoff["Tolman–Oppenheimer–Volkoff equilibrium and mass limit"]:::law
+    q_enclosed_mass(["enclosed-mass"]):::qty
+    q_enclosed_mass --> j_CE_tolman_oppenheimer_volkoff
+    q_areal_radius(["areal-radius"]):::qty
+    q_areal_radius --> j_CE_tolman_oppenheimer_volkoff
+    q_fluid_pressure(["fluid-pressure"]):::qty
+    q_fluid_pressure --> j_CE_tolman_oppenheimer_volkoff
+    q_mass_energy_density(["mass-energy-density"]):::qty
+    q_mass_energy_density --> j_CE_tolman_oppenheimer_volkoff
+    q_tov_pressure_gradient(["tov-pressure-gradient"]):::qty
+    j_CE_tolman_oppenheimer_volkoff --> q_tov_pressure_gradient
     j_CE_uncertainty_principle["Heisenberg uncertainty principle"]:::law
     q_position_momentum_uncertainty_product(["position-momentum-uncertainty-product"]):::qty
     j_CE_uncertainty_principle --> q_position_momentum_uncertainty_product

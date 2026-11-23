@@ -328,6 +328,7 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'capacitance', dim: CAPACITANCE },
   ], {
     id: 'CE-rc-time-constant',
+    searchTerms: ['RC circuit', 'resistor capacitor circuit'],
     name: 'RC time constant',
     domain: 'electromagnetism',
     formula_latex: '\\tau = R C',

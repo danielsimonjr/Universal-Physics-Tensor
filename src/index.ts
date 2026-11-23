@@ -547,6 +547,7 @@ export { retrodict, retrodictNode } from './composition/index.js';
 export type {
   RetrodictionOutcome,
   RetrodictionPrediction,
+  RecoveryStep,
   RetrodictionResult,
   RetrodictionRefusal,
   RetrodictionReport,

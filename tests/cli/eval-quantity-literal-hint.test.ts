@@ -29,7 +29,7 @@ describe('upt eval: a formula text that is a quantity literal', () => {
   it('quotes the suggested binding when the text has a space', async () => {
     const r = await run(['eval', '9.8 m/s^2']);
     expect(r.code).toBe(2);
-    expect(r.stderr).toContain('upt eval x "x=9.8 m/s^2"');
+    expect(r.stderr).toContain("upt eval x 'x=9.8 m/s^2'");
   });
 
   it.each([
@@ -42,6 +42,21 @@ describe('upt eval: a formula text that is a quantity literal', () => {
     expect(r.code).toBe(2);
     expect(r.stderr).toMatch(/missing values for/);
     expect(r.stderr).not.toMatch(/reads as a quantity/);
+  });
+
+  it('suggests runnable bindings for a quantity inside a formula', async () => {
+    const glued = await run(['eval', '13.6eV/n^2', 'n=2']);
+    const separated = await run(['eval', '13.6*eV/n^2', 'n=2']);
+    expect(glued.stderr).toContain("upt eval 'x/n^2' x=13.6eV n=2");
+    expect(separated.stderr).toContain("upt eval '13.6*eV/n^2' eV=1eV n=2");
+    expect((await run(['eval', 'x/n^2', 'x=13.6eV', 'n=2'])).stdout).toContain('5.4474005556e-19');
+  });
+
+  it('quotes grouped units and original binding expressions in a shell command', async () => {
+    const grouped = await run(['eval', '1W/(m*K)']);
+    expect(grouped.stderr).toContain("upt eval x 'x=1W/(m*K)'\n");
+    const existing = await run(['eval', '13.6eV/n^2', 'n=1 + 1']);
+    expect(existing.stderr).toContain("upt eval 'x/n^2' x=13.6eV 'n=1 + 1'\n");
   });
 
   it('a binding of the same text still evaluates', async () => {

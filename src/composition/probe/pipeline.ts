@@ -534,9 +534,11 @@ export async function runProbeSearch(
         c.status === 'insufficient-evidence',
     )
   ) {
-    stopReason = 'no-credible-candidate';
+    const hasHoldout = (problem.holdout?.rows.length ?? 0) > 0;
+    stopReason = !hasHoldout && all.some((record) => record.status === 'insufficient-evidence')
+      ? 'awaiting-validation' : 'no-credible-candidate';
     wording.push(
-      (problem.holdout?.rows.length ?? 0) > 0
+      hasHoldout
         ? 'no candidate survived holdout / falsification'
         : NO_HOLDOUT_WORDING,
     );

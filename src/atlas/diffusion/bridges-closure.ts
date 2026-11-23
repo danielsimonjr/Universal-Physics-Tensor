@@ -236,6 +236,15 @@ export const BRIDGE_STOKES_EINSTEIN: AtlasBridge = {
  *
  * @internal
  */
+function telegraphDiffusionHorizonAt(params: Readonly<Record<string, number>>) {
+  const { tau, D, q } = params;
+  if (tau === undefined || D === undefined || q === undefined) return null;
+  const pointDelta = telegraphSlowRateExcess(tau, D, q);
+  if (!Number.isFinite(pointDelta)) return null;
+  return { minimum: 5 * tau, maximum: pointDelta === 0 ? Infinity : 0.1 / (pointDelta * D * q * q), pointDelta };
+}
+
+/** The telegrapher-to-Fick approximation with a pointwise slow-mode time window. */
 export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
   id: 'ab-telegraph-diffusion',
   relation: 'approximation',
@@ -257,16 +266,11 @@ export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
     deltaAtBasis: 'closed-form',
     norm: 'relative error of the slow-mode decay rate of a Fourier mode, normalized by the value of the reduced model',
     domain: 'ε = τDq² ≤ 0.05',
-    horizon:
-      'τ ≪ t ≪ 1/(δ D q²): after the initial layer and before the decay-rate error accumulates; ' +
-      'machine form 5τ < t < 0.1/(δ D q²)',
-    horizonHolds: (t, p) => {
-      const { tau, D, q } = p;
-      if (tau === undefined || D === undefined || q === undefined) return false;
-      const delta = telegraphSlowRateExcess(tau, D, q);
-      if (!Number.isFinite(delta)) return false;
-      if (t <= 5 * tau) return false;
-      return delta === 0 || t < 0.1 / (delta * D * q * q);
+    horizon: '5τ < t < 0.1/(δ_at D q²), where δ_at is the slow-mode rate error at this point',
+    horizonAt: telegraphDiffusionHorizonAt,
+    horizonHolds: (t, params) => {
+      const limits = telegraphDiffusionHorizonAt(params);
+      return limits !== null && t > limits.minimum && t < limits.maximum;
     },
     parameterRange: 'ε = τDq² ≤ 0.05',
     limitCharacter: 'singular',

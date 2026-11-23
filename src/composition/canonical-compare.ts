@@ -35,7 +35,7 @@ import { evalExpr } from './expr-eval.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { NAME_TABLE } from './aliases.js';
-import { parseUserEquation } from './user-equation.js';
+import { equationSymbolBindings, parseUserEquation } from './user-equation.js';
 import { resolveQuantityName } from '../dimensional/formula-names.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
@@ -737,14 +737,16 @@ export async function compareUserEquation(
   }
   const catalogNames = new Set(dimsIn.keys());
   const bindShort = options?.bindShortNames === true;
-  const declined = (token: string): boolean => !bindShort && token.length === 1 && catalogNames.has(token);
   // W2: same kebab→underscore rewrite as analyzeUserEquation, so comparison and
   // dimensional check see one formula.
   const eq = await parseUserEquation(equation, catalogNames);
+  const contextual = equationSymbolBindings(eq, catalogNames);
+  const declined = (token: string): boolean =>
+    !bindShort && token.length === 1 && catalogNames.has(token) && !contextual.has(token);
   const resolved = new Map(
-    eq.sources.map((s) => [s, declined(s) ? s : (resolveQuantityName(s, catalogNames) ?? s)]),
+    eq.sources.map((s) => [s, declined(s) ? s : (contextual.get(s) ?? resolveQuantityName(s, catalogNames) ?? s)]),
   );
-  const target = declined(eq.target) ? eq.target : (resolveQuantityName(eq.target, catalogNames) ?? eq.target);
+  const target = declined(eq.target) ? eq.target : (contextual.get(eq.target) ?? resolveQuantityName(eq.target, catalogNames) ?? eq.target);
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
   for (const [s, r] of resolved) {

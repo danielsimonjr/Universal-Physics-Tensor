@@ -42,7 +42,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--budget-ms', valueStyle: 'attached', description: 'Wall-clock cap in milliseconds.', defaultValue: PROBE_BUDGET_MS_DEFAULT },
   { name: '--holdout-tol', valueStyle: 'attached', description: 'Relative holdout RMSE cap.', defaultValue: PROBE_HOLDOUT_TOL_DEFAULT },
   { name: '--worker', valueStyle: 'attached', description: 'Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file.' },
-  { name: '--bounds', valueStyle: 'attached', description: 'Bounds for design, as the design subverb reads them.' },
+  { name: '--bounds', valueStyle: 'attached', description: 'Design bounds JSON file with variables mapped to {min, max, steps?}.' },
   { name: '--h1', valueStyle: 'attached', description:
       "First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused." },
   { name: '--h2', valueStyle: 'attached', description: 'Second hypothesis for design, an expression-tree JSON file in the form --h1 takes.' },
@@ -111,7 +111,7 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
         --alpha=X            study: χ² test level (default: the file's, else ${PROBE_STUDY_ALPHA_DEFAULT})
         --json               machine envelope
 
-        PROBLEM FILE (--problem=FILE, JSON)
+        PROBLEM FILE (run/candidates/falsify/rank/reproduce --problem=FILE, JSON)
         target       {"name", "dim"}: the observable to explain. "dim" is a named
                      dimension (time, length, mass, acceleration, ...) or explicit
                      L^a.M^b.T^c (e.g. "L^3.M^-1.T^-2").
@@ -142,7 +142,16 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
             {"length": 1.5, "gravity": 3.71, "period": 3.995}]}
         }
 
-        STUDY FILE (--data=FILE, JSON, or CSV when FILE ends in .csv)
+        DESIGN FILES (design --h1=FILE --h2=FILE --bounds=FILE, all JSON)
+        Each hypothesis is a bare expression tree. A leaf, for example:
+          {"kind":"symbol","name":"length","dim":{"L":1,"M":0,"T":0,"I":0,"Theta":0,"N":0,"J":0}}
+        A product, quotient or power is {"kind":"op","op":"*|/|^","args":[...]}.
+        A number is a symbol named by its decimal text with all exponents 0.
+        Bounds example: {"variables":{"length":{"min":0.1,"max":10,"steps":41}}}
+        Use SI values. Optional sigma is a positive output standard uncertainty.
+        Optional forbidden is an array of regions mapping names to {min,max}.
+
+        STUDY FILE (study --data=FILE, JSON, or CSV when FILE ends in .csv)
         provenance   {"synthetic": true|false (required, never inferred),
                      "source", "acquisition"?, "calibration"?}
         target       {"name", "unit", "sigma"?}  sigma: default row uncertainty
@@ -162,7 +171,7 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                      repeats an exploratory row's inputs, or a replication row
                      sharing an exploratory row's source, refuses the file.
         baselines    optional [{"name", "formula", "fitPrefactor"?}]: competing
-                     models over the governing names in SI units, e.g.
+                     models over the governing names and registered SI constants, e.g.
                      "2*pi*sqrt(length/gravity)"; must have the target's dimension.
                      fitPrefactor (default false) fits one scale on exploratory rows.
         criterion    optional {"alpha"} (default ${PROBE_STUDY_ALPHA_DEFAULT})
@@ -195,6 +204,9 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                      χ² test at α/2. Either firing makes replication too-close:
                      a copy, or an overstated σ. Rows at other inputs are not
                      tested, so a copy at altered inputs is not caught.
+        Search stop awaiting-validation means the exploratory search produced
+        candidates and had no holdout. The study applies its own credibility test
+        and withholds its holdout and replication rows from the search.
         Verdicts: no-credible-candidate | refuted-on-holdout | survives-holdout |
         untested-on-holdout; replication is reported separately
         (survives-replication | refuted-on-replication | too-close |

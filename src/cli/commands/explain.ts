@@ -12,6 +12,7 @@
  * unchanged, with `process.exit(2)` sites converted to `UsageError` (same
  * message text; `main.ts`'s catch maps it to exit 2).
  */
+import { primaryUnitLabel } from '../expr-print.js';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
@@ -86,7 +87,7 @@ function parseKnown(
   dimensions: BindingDimensions,
 ): { known: string[] | Record<string, number>; notes: string[] } {
   const valued = args.filter((a) => a.includes('='));
-  if (valued.length === 0) return { known: [...args], notes: [] }; // names mode
+  if (valued.length === 0) return { known: args.length === 0 ? {} : [...args], notes: [] }; // names mode
 
   if (valued.length !== args.length) {
     const bare = args.filter((a) => !a.includes('=')).join(', ');
@@ -122,11 +123,11 @@ function parseKnown(
     // The message is the same sentence `bindingInUnit` gives `upt evaluate`,
     // with the quantity's own dimension where evaluate states a declared unit.
     const resolved = api.resolveQuantityName(a.name, dimensions.inputNames, dimensions.aliases);
-    const quantityDim = resolved === null ? undefined : dimensions.dims.get(resolved);
+    const quantityDim = resolved === null ? api.constantRecord(a.name)?.dim : dimensions.dims.get(resolved);
     if (read.dimensioned && quantityDim !== undefined && !api.dimensionsEqual(read.dimension, quantityDim)) {
       throw new CliError(
         `upt explain: '${a.assignment}': '${a.raw.trim()}' is ${api.format(read.dimension)}, ` +
-          `but this input is ${api.format(quantityDim)} (${resolved})`,
+          `but this input is ${api.format(quantityDim)} (${resolved ?? a.name})`,
       );
     }
     // Unit-convention notes were already on the binding and explain did not
@@ -199,19 +200,32 @@ function printExplanation(
   label: string,
   x: ReturnType<CommandCtx['api']['explainQuantity']>,
   inputNote: string | undefined,
+  unit: string | undefined,
+  notes: readonly string[],
 ): void {
   out(`\n● ${target}  [source: ${label}]`);
-  out(`  ${x.summary}`);
+  const displayUnit = unit === undefined || unit === '1' ? '' : ` ${unit}`;
+  const confidence = x.confidence === undefined ? '' : ` [${x.confidence}]`;
+  out(`  ${x.summary.replace(/(Recovered value: [^ ]+)\./, (_whole, value: string) => `${value}${displayUnit}${confidence}.`)}`);
+  for (const note of notes) out(`  ${note}`);
   if (x.identifiability.verdict === 'under-determined' && x.known.length === 0 && inputNote) {
     out(`  ${inputNote}`);
   }
   if (x.derivations.length) {
     out('  derivations:');
     for (const d of x.derivations) {
-      const val = d.value !== undefined ? ` = ${api.formatQuantity(d.value)}` : '';
+      const val = d.value !== undefined ? ` = ${api.formatQuantity(d.value)}${displayUnit}` : '';
       const chain =
         d.leafInputs.join(',') !== d.sources.join(',') ? `  [from leaves: ${d.leafInputs.join(', ')}]` : '';
-      out(`    - ${d.edge} (${d.label})${val}${chain}`);
+      const grade = d.confidence === undefined ? '' : ` [${d.confidence}]`;
+      out(`    - ${d.edge} (${d.label})${val}${grade}${chain}`);
+      if (d.route !== undefined && d.route.length > 1) {
+        out('        route: ' + d.route.map((step) => step.kind === 'edge'
+          ? `${step.id} [${step.confidence}]`
+          : `${step.from} → ${step.to} [identification, ${step.confidence}]`).join(' >> '));
+      }
+      const convention = api.CANONICAL_EQUATIONS.find((entry) => entry.id === d.edge)?.conventionNote;
+      if (convention !== undefined && d.value !== undefined) out(`        ${convention}`);
       if (d.dimensionalForm) out(`        ${d.dimensionalForm.formula}`);
     }
   }
@@ -233,6 +247,7 @@ function rebind(
   known: string[] | Record<string, number>,
   aliases: ReadonlyMap<string, string>,
   graphNames: ReadonlySet<string>,
+  notes: string[],
 ): string[] | Record<string, number> {
   const rewrite = (key: string): string => {
     const hit = api.resolveQuantityName(key, graphNames, aliases);
@@ -250,14 +265,19 @@ function rebind(
     if (api.resolveQuantityName(key, graphNames, aliases) === null) {
       // A constant is not a graph quantity: the equation already uses the
       // registered value, so a stated value is checked, never bound.
-      let constant: string | null;
+      let constant: ReturnType<typeof api.constantAgreement>;
       try {
         constant = api.constantAgreement(key, value);
       } catch (e) {
         if (e instanceof api.ConstantDisagreementError) throw new CliError(`upt explain: ${e.message}`);
         throw e;
       }
-      if (constant !== null) continue;
+      if (constant !== null) {
+        if (constant.value !== value) {
+          notes.push(`Entered ${key} = ${value} SI. Used registered ${constant.name} = ${constant.value} SI (agreement: ${100 * constant.tolerance}% relative tolerance).`);
+        }
+        continue;
+      }
     }
     const name = rewrite(key);
     if (Object.hasOwn(out, name) && out[name] !== value) {
@@ -361,7 +381,8 @@ async function run(ctx: CommandCtx): Promise<number> {
       throw e;
     }
   }
-  const rebound = rebind(api, parsed.known, aliases, inputNames);
+  const substitutions: string[] = [];
+  const rebound = rebind(api, parsed.known, aliases, inputNames, substitutions);
   // Only the CLI sees the raw arguments, so only the CLI states why the bound set is empty.
   const inputNote =
     rest.length === 0
@@ -391,6 +412,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;
   const partnerKnown = partner !== null && names.has(partner.name);
   const partnerExplanation = partnerKnown ? api.explainQuantity(graph, partner!.name, known) : undefined;
+  const reportedUnit = (name: string, explanation: typeof x): string | undefined => {
+    const dim = dims.get(name);
+    return dim === undefined || explanation.recoveredValue === undefined
+      ? undefined : (api.quantityConventionUnit(name) ?? primaryUnitLabel(api, name, dim));
+  };
+  const unit = reportedUnit(resolvedTarget, x);
+  const partnerUnit = partnerExplanation === undefined || partner === null ? undefined : reportedUnit(partner.name, partnerExplanation);
+  const evidence = { ...x, ...(unit === undefined ? {} : { unit }), ...(substitutions.length === 0 ? {} : { constantSubstitutions: substitutions }) };
   const agree = valuesAgree(x.recoveredValue, partnerExplanation?.recoveredValue);
 
   if (args.flags.has('json')) {
@@ -401,26 +430,26 @@ async function run(ctx: CommandCtx): Promise<number> {
         result:
           partner !== null && partnerExplanation !== undefined
             ? {
-                ...x,
+                ...evidence,
                 restatement: {
                   canonicalId: partner.canonicalId,
                   bridgeId: partner.bridgeId,
                   otherName: partner.name,
                   valuesAgree: agree,
-                  explanation: partnerExplanation,
+                  explanation: { ...partnerExplanation, ...(partnerUnit === undefined ? {} : { unit: partnerUnit }) },
                 },
               }
-            : x,
+            : evidence,
       },
       ctx.write,
     );
     return 0;
   }
 
-  printExplanation(api, out, target, label, x, inputNote);
+  printExplanation(api, out, target, label, x, inputNote, unit, substitutions);
   if (partner !== null && partnerExplanation !== undefined) {
     // The note explains the invocation, not the quantity: print it once, under the first block.
-    printExplanation(api, out, partner.name, label, partnerExplanation, undefined);
+    printExplanation(api, out, partner.name, label, partnerExplanation, undefined, partnerUnit, []);
     const who = `${partner.canonicalId} restates be-${partner.bridgeId}`;
     if (agree === true) {
       out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}). Values agree.`);

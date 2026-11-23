@@ -46,6 +46,14 @@ describe('upt search indexes domain regimes', () => {
     const cap = captureMerged();
     // No match is a result (exit 0); the scope line names every registry searched.
     expect(await runCli(['search', 'zzqqxx'], cap.io)).toBe(0);
-    expect(cap.lines.join('')).toMatch(/applied cases, \d+ regimes; this registry only/);
+    expect(cap.lines.join('')).toMatch(/applied cases, \d+ regimes, \d+ spacetime metrics; this registry only/);
+  });
+});
+
+describe('upt search indexes metric report terminology', () => {
+  it.each(['isco', 'Kerr', 'Kretschmann'])('routes %s to the Kerr metric report', async (query) => {
+    const cap = captureMerged();
+    expect(await runCli(['search', query, '--json'], cap.io)).toBe(0);
+    expect(cap.lines.join('')).toContain('upt metric kerr');
   });
 });

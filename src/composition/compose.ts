@@ -104,6 +104,8 @@ export interface QuantityIdentification {
   readonly from: string;
   readonly to: string;
   readonly rationale: string;
+  /** Confidence in the physical identification. Omitted judgments default to speculative. */
+  readonly confidence?: EdgeConfidence;
   readonly citation?: string;
 }
 
@@ -116,6 +118,7 @@ export interface QuantityIdentification {
 export const QUANTITY_IDENTIFICATIONS: readonly QuantityIdentification[] = [
   {
     from: 'hawking-temperature',
+    confidence: 'established',
     to: 'temperature',
     rationale:
       'The Hawking temperature of a black-hole horizon is a genuine ' +
@@ -126,7 +129,15 @@ export const QUANTITY_IDENTIFICATIONS: readonly QuantityIdentification[] = [
     citation: 'Hawking 1975 CMP 43:199; Bekenstein 1973 PRD 7:2333',
   },
   {
+    from: 'unruh-temperature',
+    confidence: 'established',
+    to: 'temperature',
+    rationale: 'The Unruh response of a uniformly accelerated detector in Minkowski vacuum is thermal at the detector temperature. This identification applies under those assumptions.',
+    citation: 'Unruh 1976, Phys. Rev. D 14:870',
+  },
+  {
     from: 'de-broglie-wavelength',
+    confidence: 'speculative',
     to: 'compton-wavelength',
     rationale:
       'The de Broglie wavelength λ = h/p and the Compton wavelength ' +
@@ -142,6 +153,7 @@ export const QUANTITY_IDENTIFICATIONS: readonly QuantityIdentification[] = [
   },
   {
     from: 'thermal-de-broglie-wavelength',
+    confidence: 'established',
     to: 'thermal-wavelength',
     rationale:
       'The catalog names the thermal de Broglie wavelength ' +
@@ -530,7 +542,10 @@ export function composeEdges(
     label: `${first.label} ∘ ${second.label}`,
     sources: [...first.sources, ...finalRemaining],
     target: second.target,
-    confidence: minConfidence(first.confidence, second.confidence),
+    confidence: minConfidence(
+      minConfidence(first.confidence, second.confidence),
+      viaIdentification === null ? 'established' : (viaIdentification.confidence ?? 'speculative'),
+    ),
     domain: composedDomain,
     evaluate: (inputs) => {
       if (!first.domain.predicate(inputs)) {
@@ -550,7 +565,7 @@ export function composeEdges(
     },
     citation: `${first.citation} | ${second.citation}`,
     ...(viaIdentification !== null
-      ? { identificationUsed: viaIdentification }
+      ? { identificationUsed: { ...viaIdentification, confidence: viaIdentification.confidence ?? 'speculative' } }
       : {}),
     ...(dispositionsUsed.length > 0
       ? { aliasDispositionsUsed: dispositionsUsed }

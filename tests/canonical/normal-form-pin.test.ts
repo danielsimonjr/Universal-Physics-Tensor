@@ -41,5 +41,5 @@ describe('normalForm pin', () => {
   });
 });
 
-const PINNED_ROWS = 342;
-const PINNED_HASH = '3b6c7a9d1188dbc72e7aa3fb009f2b1348e9b36191a78826935d02808e370d5d';
+const PINNED_ROWS = 368;
+const PINNED_HASH = 'f5ac890a377572c5e2d724b662475d59cea83a504c5daaf10283f9f6f6db7059';

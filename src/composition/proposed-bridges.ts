@@ -365,7 +365,7 @@ export function resolveSources(name: string): EquationSource[] {
     if (
       e.scalarAst &&
       e.dimensional.monomial !== null &&
-      e.epistemicStatus === 'fully-quantitative'
+      e.epistemicStatus === 'fully-quantitative' && e.bound === undefined
     ) {
       // Align the AST's private leaf symbols (`T`) with the governing quantity
       // names (`temperature`) so canonical- and bridge-sourced derivations of the

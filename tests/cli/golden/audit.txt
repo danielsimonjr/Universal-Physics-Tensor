@@ -2,13 +2,12 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (37) — recognized monomial, prefactor recovered:
+  DERIVED (36) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.506628274631 (= √(2π))
     be-16                  +[k_B]  ×0.693147180559945 (= ln 2)
     be-42-via-rs           +[ℏ,c,k_B]  ×0.0795774715459477 (= 1/(4π))
-    law-schwarzschild-radius +[c,G]  ×2
     be-21                  +[ℏ,k_B]  ×0.0795774715459477 (= 1/(4π))
-    be-48                  +[ℏ,c]  ×7.02616402405127e-41  (empirical/tuned constant)
+    be-48                  +[ℏ,c]  ×7.02616402405127e-41  (prefactor without a recognized exact form)
     be-15                  +[]  ×1
     be-17                  +[]  ×1
     be-20                  +[c,G]  ×0.0397887357729738 (= 1/(8π))
@@ -22,15 +21,15 @@ Deriving the bridge equations by dimensions
     be-84                  +[]  ×4.53236014182719 (= π/ln 2)
     be-85                  +[e]  ×2
     be-87                  +[k_B]  ×1
-    be-88                  +[]  ×3.09366772628014  (empirical/tuned constant)
-    be-89                  +[]  ×3.89777708972075  (empirical/tuned constant)
+    be-88                  +[]  ×3.09366772628014  (prefactor without a recognized exact form)
+    be-89                  +[]  ×3.89777708972075  (prefactor without a recognized exact form)
     be-96                  +[ℏ,e]  ×0.5 (= 1/2)
     be-97                  +[e]  ×1.5707963267949 (= π/2)
     be-101                 +[k_B]  ×1.5707963267949 (= π/2)
     be-103                 +[k_B]  ×1
     be-109                 +[c,k_B,epsilon_0]  ×7.08981540362206 (= √(16π))
     be-118                 +[G]  ×0.5 (= 1/2)
-    be-135                 +[ℏ]  ×0.143289792062689  (empirical/tuned constant)
+    be-135                 +[ℏ]  ×0.143289792062689  (prefactor without a recognized exact form)
     be-136                 +[ℏ]  ×0.318309886183791 (= 1/π)
     be-140                 +[ℏ,e]  ×0.159154943091895 (= 1/(2π))
     be-141                 +[ℏ,e]  ×0.5 (= 1/2)
@@ -39,7 +38,7 @@ Deriving the bridge equations by dimensions
     be-57                  +[ℏ,c,k_B]  ×0.159154943091895 (= 1/(2π))
     be-58                  +[k_B]  ×4
     be-61                  +[k_B,e]  ×3.28986813369645 (= π²/3)
-    be-62                  +[k_B]  ×1.76387698886205  (empirical/tuned constant)
+    be-62                  +[k_B]  ×1.76387698886205  (prefactor without a recognized exact form)
 
   COEFFICIENT UNSET (0) — dimensional, and no sourced prefactor multiplies the monomial. The evaluator's 1 is that absence, not a recovered constant:
     none
@@ -49,21 +48,22 @@ Deriving the bridge equations by dimensions
     be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-117, be-120, be-121, be-137, be-147, be-148, be-149, be-164, be-168, be-169, be-64
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
-  NOT A MONOMIAL (25) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
+  NOT A MONOMIAL (25) — the encoded formula uses a dimensionful sum or a transcendental function. A monomial reconstruction does not apply:
     be-19, be-54, be-13, be-23, be-36, be-41, be-47, be-49, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115, be-130, be-144, be-151, be-152, be-160, be-162, be-163
     (not a failed reconstruction of a monomial, and not a physical refutation)
 
-  OPEN (75) — irreducible free dimensionless group(s); by complexity:
-    cplx=0  be-82
+  NOT UNIQUE (0) — the declared variables leave free dimensionless groups:
+    none
+
+  INSUFFICIENT SAMPLES (16): be-37, be-52, be-25, be-55, be-66, be-72, be-82, be-90, be-100, be-128, be-142, be-145, be-153, be-166, be-167, be-170
+
+  OPEN (59) — irreducible free dimensionless group(s); by complexity:
     cplx=1  be-11-zurek
-    cplx=1  be-37
-    cplx=1  be-52
     cplx=1  be-18
     cplx=1  be-24
     cplx=1  be-26-wkb
     cplx=1  be-30
     cplx=1  be-38
-    cplx=1  be-55
     cplx=1  be-60
     cplx=1  be-68
     cplx=1  be-77
@@ -82,35 +82,25 @@ Deriving the bridge equations by dimensions
     cplx=1  be-122
     cplx=1  be-123
     cplx=1  be-127
-    cplx=1  be-128
     cplx=1  be-132
     cplx=1  be-133
     cplx=1  be-134
     cplx=1  be-139
-    cplx=1  be-142
     cplx=1  be-143
     cplx=1  be-146
-    cplx=1  be-153
     cplx=1  be-154
     cplx=1  be-155
     cplx=1  be-156
     cplx=1  be-157
     cplx=1  be-158
     cplx=1  be-159
-    cplx=1  be-166
-    cplx=1  be-170
     cplx=1  be-65
     cplx=2  be-11-master
     cplx=2  be-22
-    cplx=2  be-25
     cplx=2  be-26
     cplx=2  be-33
     cplx=2  be-63
-    cplx=2  be-66
-    cplx=2  be-72
-    cplx=2  be-90
     cplx=2  be-91
-    cplx=2  be-100
     cplx=2  be-116
     cplx=2  be-119
     cplx=2  be-124
@@ -118,8 +108,6 @@ Deriving the bridge equations by dimensions
     cplx=2  be-126
     cplx=2  be-129
     cplx=2  be-138
-    cplx=2  be-145
-    cplx=2  be-167
     cplx=3  be-53
     cplx=3  be-45
     cplx=3  be-46
@@ -129,5 +117,8 @@ Deriving the bridge equations by dimensions
     cplx=4  be-34
     cplx=5  be-39
     cplx=∞ (unspannable)  be-150
+
+  CATALOG ENTRIES WITHOUT AN AUDIT ROUTE (5): be-28, be-29, be-32, be-35, be-44
+  NON-BRIDGE CATALOG LAWS (1): law-schwarzschild-radius
 
   (derivability is ORTHOGONAL to credibility — see the priority command)

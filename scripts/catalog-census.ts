@@ -139,6 +139,8 @@ export interface CatalogCensus {
     readonly coefficientUnset: number;
     readonly decoy: number;
     readonly notAMonomial: number;
+    readonly notUnique: number;
+    readonly noSamples: number;
     readonly open: number;
     readonly closable: number;
     readonly freedomOne: number;
@@ -151,6 +153,9 @@ export interface CatalogCensus {
       readonly derived: number;
       readonly coefficientUnset: number;
       readonly decoy: number;
+      readonly notAMonomial: number;
+      readonly notUnique: number;
+      readonly noSamples: number;
       readonly open: number;
     };
   };
@@ -170,7 +175,7 @@ function ofKind(kinds: readonly FormalRefKind[]): number {
 }
 
 function auditCounts(graph: typeof CATALOG_GRAPH): CatalogCensus['derivationAudit'] {
-  const status = { derived: 0, coefficientUnset: 0, decoy: 0, notAMonomial: 0, open: 0 };
+  const status = { derived: 0, coefficientUnset: 0, decoy: 0, notAMonomial: 0, notUnique: 0, noSamples: 0, open: 0 };
   const histogram = new Map<number, number>();
   for (const edge of graph) {
     const d = attemptDerivation(edge);
@@ -178,6 +183,8 @@ function auditCounts(graph: typeof CATALOG_GRAPH): CatalogCensus['derivationAudi
     else if (d.status === 'coefficient-unset') status.coefficientUnset += 1;
     else if (d.status === 'decoy') status.decoy += 1;
     else if (d.status === 'not-a-monomial') status.notAMonomial += 1;
+    else if (d.status === 'not-unique') status.notUnique += 1;
+    else if (d.status === 'no-samples') status.noSamples += 1;
     else status.open += 1;
     const freedom = dimensionalFreedom(edge);
     histogram.set(freedom, (histogram.get(freedom) ?? 0) + 1);
@@ -338,6 +345,9 @@ export function deriveCensus(): CatalogCensus {
         derived: canonicalAudit.derived,
         coefficientUnset: canonicalAudit.coefficientUnset,
         decoy: canonicalAudit.decoy,
+        notAMonomial: canonicalAudit.notAMonomial,
+        notUnique: canonicalAudit.notUnique,
+        noSamples: canonicalAudit.noSamples,
         open: canonicalAudit.open,
       },
     },

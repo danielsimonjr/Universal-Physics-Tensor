@@ -28,6 +28,15 @@ describe('eval prints the unit of a result with a known dimension', () => {
     expect(e.unit).toBe('J');
     expect(exactlyEquals(parseUnit(r.unit).dim, parseUnit('m/s^2').dim)).toBe(true);
   });
+  it.each([
+    ['sigma_sb*T^4', ['T=300K'], 'W/m^2', 'kg/s^3'],
+    ['1/(4*pi*eps0)', [], 'm/F', 'kg*m^3/(s^4*A^2)'],
+    ['k_B*N_A*T/V', ['T=300K', 'V=0.0248m^3'], 'Pa/mol', 'kg/(m*s^2*mol)'],
+  ] as const)('prints the compact coherent unit of %s', async (formula, bindings, label, base) => {
+    const result = await json([formula, ...bindings]);
+    expect(result.unit).toBe(label);
+    expect(parseUnit(label)).toEqual(parseUnit(base));
+  });
   const table = ['N', 'kg', 'm', 's', 'J', 'W', 'V'];
   for (const u of table) {
     it(`a single binding in ${u} prints a unit of the same dimension`, async () => {

@@ -19,7 +19,7 @@ import { appendFileSync, closeSync, existsSync, mkdtempSync, openSync, readFileS
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
 import type * as cliApi from '../cli-api.js';
-import { parseArgs } from './args.js';
+import { parseArgs, shellQuote } from './args.js';
 import { resolveCommand } from './command.js';
 import { storedResultsFile } from './stored-results.js';
 import { CliError, UsageError } from './errors.js';
@@ -357,8 +357,6 @@ function readRecord(file: string): Line[] {
   return lines;
 }
 
-const SAFE_TOKEN = /^[A-Za-z0-9_\-=.,:/+@%]+$/;
-const shellQuote = (t: string): string => (SAFE_TOKEN.test(t) ? t : `'${t.replace(/'/g, `'\\''`)}'`);
 const commandLine = (argv: string[]): string => ['$ upt', ...argv.map(shellQuote)].join(' ');
 
 /**

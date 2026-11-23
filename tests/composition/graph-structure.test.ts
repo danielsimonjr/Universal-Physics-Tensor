@@ -133,11 +133,11 @@ describe('the live graphs, pinned once', () => {
     expect(derivationCycles([...CATALOG_GRAPH, ...CANONICAL_GRAPH])).toEqual([]);
   });
 
-  it('layout communities of the catalog graph: a 50-quantity component in six communities', () => {
+  it('layout communities of the catalog graph: a 51-quantity component in six communities', () => {
     const report = communitiesOf(CATALOG_GRAPH);
-    expect(quantityGraph(CATALOG_GRAPH).names).toHaveLength(532);
-    expect(report.componentSize).toBe(50);
-    expect(report.communities.map((c) => c.size)).toEqual([16, 12, 8, 6, 5, 3]);
+    expect(quantityGraph(CATALOG_GRAPH).names).toHaveLength(531);
+    expect(report.componentSize).toBe(51);
+    expect(report.communities.map((c) => c.size)).toEqual([16, 13, 8, 6, 5, 3]);
     // The two largest hold the map's two hubs, as the drawing has always shown them.
     expect(report.communities[0].quantities).toContain('mass');
     expect(report.communities[1].quantities).toContain('temperature');
@@ -145,17 +145,17 @@ describe('the live graphs, pinned once', () => {
 
   it('layout communities of the canonical and both graphs', () => {
     const canonical = communitiesOf(CANONICAL_GRAPH);
-    expect(canonical.componentSize).toBe(124);
-    expect(canonical.communities.map((c) => c.size)).toEqual([28, 23, 18, 18, 15, 8, 7, 7]);
+    expect(canonical.componentSize).toBe(133);
+    expect(canonical.communities.map((c) => c.size)).toEqual([30, 22, 16, 15, 14, 12, 10, 8, 6]);
     const both = communitiesOf([...CATALOG_GRAPH, ...CANONICAL_GRAPH]);
-    expect(both.componentSize).toBe(183);
-    expect(both.communities.map((c) => c.size)).toEqual([40, 27, 26, 22, 18, 18, 11, 9, 7, 5]);
+    expect(both.componentSize).toBe(193);
+    expect(both.communities.map((c) => c.size)).toEqual([43, 29, 27, 21, 19, 18, 11, 9, 7, 5, 4]);
   });
 
   it('hubs by betweenness on the catalog graph: temperature, then mass', async () => {
     const hubs = await rankHubs(CATALOG_GRAPH);
     expect(hubs.slice(0, 2).map((h) => h.quantity)).toEqual(['temperature', 'mass']);
-    expect(hubs[0].degree).toBe(17);
+    expect(hubs[0].degree).toBe(18);
     expect(hubs[1].degree).toBe(17);
   });
 });

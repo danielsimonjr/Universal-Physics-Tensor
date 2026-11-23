@@ -188,6 +188,27 @@ export async function parseUserEquation(
   return { target, sources, text: rewritten.trim() };
 }
 
+/** Resolve equation-local symbols when exactly one declared variable mapping fits. @internal */
+export function equationSymbolBindings(eq: UserEquation, catalog: ReadonlySet<string>): ReadonlyMap<string, string> {
+  const sameToken = (token: string, quantity: { name: string; symbol: string }): boolean =>
+    token === quantity.name || token.replaceAll('_', '-') === quantity.name ||
+    token === quantity.symbol || greekLetter(token) === quantity.symbol;
+  const alternatives = new Map<string, ReadonlyMap<string, string>>();
+  for (const edge of CANONICAL_GRAPH) {
+    if (![edge.target, ...edge.sources].some((quantity) => quantity.symbol !== quantity.name) ||
+        !catalog.has(edge.target.name) || edge.sources.length !== eq.sources.length ||
+        !sameToken(eq.target, edge.target)) continue;
+    const bindings = new Map<string, string>([[eq.target, edge.target.name]]);
+    for (const token of eq.sources) {
+      const possible = edge.sources.filter((quantity) => catalog.has(quantity.name) && sameToken(token, quantity));
+      if (possible.length === 1) bindings.set(token, possible[0]!.name);
+    }
+    if (bindings.size !== eq.sources.length + 1 || new Set(bindings.values()).size !== bindings.size) continue;
+    alternatives.set(JSON.stringify([...bindings]), bindings);
+  }
+  return alternatives.size === 1 ? alternatives.values().next().value! : new Map();
+}
+
 /** Normalize for comparison: lowercase, `_`/`-` unified. */
 const normalizeForCompare = (s: string): string => s.toLowerCase().replace(/[_-]/g, '-');
 
@@ -442,18 +463,19 @@ export async function analyzeUserEquation(
   const bindShort = options?.bindShortNames === true;
   // W2: rewrite catalog kebabs before either parser sees `-` as subtraction.
   const eq = await parseUserEquation(equation, catalogNames);
+  const contextual = equationSymbolBindings(eq, catalogNames);
   const literalShort = (n: string): string | null =>
-    n.length === 1 && catalogNames.has(n) ? n : null;
+    n.length === 1 && catalogNames.has(n) && !contextual.has(n) ? n : null;
   const resolveCatalog = (n: string): string | null => {
     if (!bindShort && literalShort(n) !== null) return null;
-    return resolveQuantityName(n, catalogNames);
+    return contextual.get(n) ?? resolveQuantityName(n, catalogNames);
   };
   // Evaluate keys are aliases of this target's sources. `R` is reflectance
   // on radiation-pressure and is not a global name.
   const aliasMap = aliasesForTarget(CATALOG_GRAPH, resolveCatalog(eq.target) ?? '');
   const resolve = (n: string): string | null => {
     if (!bindShort && literalShort(n) !== null) return null;
-    return resolveQuantityName(n, catalogNames, aliasMap);
+    return contextual.get(n) ?? resolveQuantityName(n, catalogNames, aliasMap);
   };
   // The symbol table `upt search` reads: a quantity's symbol and its edge aliases (#684). A Greek
   // name (`omega`) also reads its letter (`ω`).
@@ -465,7 +487,8 @@ export async function analyzeUserEquation(
   const suggest = (n: string): string[] =>
     [...new Set([...symbolOf(n), ...suggestQuantities(n, catalogNames, 5)])].slice(0, 5);
   const withMeanings = <B extends { name: string; quantity: string }>(b: B): B & { otherMeanings?: string[] } => {
-    const others = symbolOf(b.name).filter((q) => q !== b.quantity);
+    const alternatives = [...symbolOf(b.name), ...(catalogNames.has(b.name) ? [b.name] : [])];
+    const others = [...new Set(alternatives)].filter((q) => q !== b.quantity);
     return others.length > 0 ? { ...b, otherMeanings: others } : b;
   };
 
@@ -546,7 +569,7 @@ export async function analyzeUserEquation(
     !bindShort && literalShort(eq.target) !== null
       ? [{ name: eq.target, quantity: eq.target, dim: dimsIn.get(eq.target) as Dimension, bound: false as const }]
       : [];
-  const boundShort = eq.sources
+  const boundShort = [...new Set([...eq.sources, eq.target])]
     .filter((s) => s.length === 1 && resolve(s) !== null)
     .map((s) => ({ name: s, quantity: resolve(s)!, dim: dimsIn.get(resolve(s)!) as Dimension }));
 

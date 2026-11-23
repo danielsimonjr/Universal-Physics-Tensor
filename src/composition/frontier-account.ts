@@ -7,7 +7,7 @@
  * @module composition/frontier-account
  * @internal
  */
-import { proposeLinkCandidates } from './bridge-analysis.js';
+import { rankDiscoveries } from './discovery.js';
 import { catalogEntries } from '../bridges/catalog-load.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import type { BridgeEdge } from './edge.js';
@@ -16,15 +16,6 @@ import { expressionSearchGaps } from './probe/expression-gaps.js';
 import type { FrontierGap } from './probe/types.js';
 import { REJECTED_BRIDGE_ADJUDICATIONS } from '../bridges/rejected.js';
 import { listConfrontations } from '../bridges/confrontations.js';
-
-/**
- * The link proposer's existing label, quoted from `upt candidates`.
- * Not a new verdict.
- *
- * @internal
- */
-export const CANDIDATE_NOT_A_BRIDGE_REASON =
-  'a coincidence-heavy REVIEW SURFACE, NOT discovered bridges';
 
 /**
  * Bridge ids whose catalog row is marked `contested` in `data/bridge-catalog.json`.
@@ -87,7 +78,7 @@ export interface FrontierAccountOptions {
 const OBSERVATION_ABSENT = 'observation absent';
 
 function byId<T extends { id: string }>(rows: readonly T[]): T[] {
-  return [...rows].sort((a, b) => a.id.localeCompare(b.id) || a.id.localeCompare(b.id));
+  return [...rows].sort((a, b) => a.id.localeCompare(b.id));
 }
 
 /** Read marks only where an entry already carries the status. Invent none. @internal */
@@ -110,13 +101,14 @@ function sidesOf(gap: FrontierGap): { left: string; right: string } {
   return { left: gap.id, right: gap.evidence.summary };
 }
 
-function frontierRow(gap: FrontierGap): FrontierAccountRow {
+function frontierRow(gap: FrontierGap, verdicts: ReadonlyMap<string, string>): FrontierAccountRow {
   const sides = sidesOf(gap);
   return {
     id: gap.id,
     left: sides.left,
     right: sides.right,
-    reason: gap.kind,
+    reason: [verdicts.get(JSON.stringify([sides.left, sides.right])), gap.evidence.summary]
+      .filter((part) => part !== undefined).join(' — '),
     observation: gap.observations.length > 0 ? gap.observations.join(', ') : OBSERVATION_ABSENT,
   };
 }
@@ -138,10 +130,13 @@ export function accountFromGraph(
   for (const rejection of options.rejections ?? []) {
     nullResults.push({ id: rejection.id, reason: rejection.reason, source: 'membership-rejection' });
   }
-  for (const candidate of proposeLinkCandidates(edges)) {
+  const verdicts = new Map<string, string>();
+  for (const candidate of rankDiscoveries(edges)) {
+    const reason = candidate.verdict;
+    verdicts.set(JSON.stringify([candidate.a, candidate.b]), reason);
     nullResults.push({
       id: `candidate:${candidate.a}:${candidate.b}`,
-      reason: CANDIDATE_NOT_A_BRIDGE_REASON,
+      reason,
       source: 'candidate',
     });
   }
@@ -156,7 +151,7 @@ export function accountFromGraph(
   ];
   return {
     nullResults: byId(nullResults),
-    frontier: byId(gaps.map(frontierRow)),
+    frontier: byId(gaps.map((gap) => frontierRow(gap, verdicts))),
   };
 }
 

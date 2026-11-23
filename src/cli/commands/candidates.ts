@@ -51,7 +51,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const record = api.candidateIdIfSlug(c.a, c.b) === undefined ? undefined : api.adjudicationFor(c.a, c.b);
     if (record !== undefined) adjudicated++;
     const trailer = record === undefined ? '' : `  [adjudicated: ${record.verdict} — ${record.grounds}]`;
-    out(`    ${(c.a + ' ≟ ' + c.b).padEnd(56)} [${c.sharedToken}]${trailer}`);
+    out(`    ${(c.a + ' ≟ ' + c.b).padEnd(56)} ${c.dim}${trailer}`);
   }
   out(`\n  adjudicated: ${adjudicated} of ${ck.length} carry a recorded verdict; the rest are unadjudicated.`);
   out('  A shared dimension is a coincidence until a physicist records otherwise. The ledger\'s sources:');

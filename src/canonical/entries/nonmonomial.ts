@@ -208,6 +208,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-lorentz-factor',
+    searchTerms: ['time dilation', 'special relativity time dilation'],
       holds: 'abs(velocity) < c',
       name: 'Lorentz factor',
       domain: 'mechanics', // SR precedent — matches CE-mass-energy's domain

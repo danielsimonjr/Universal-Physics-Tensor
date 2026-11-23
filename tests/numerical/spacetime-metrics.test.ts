@@ -35,6 +35,40 @@ describe('closed forms', () => {
     expect(kerrKretschmann(3, 10, 0, 1)).toBeCloseTo(48 * 9 / 1e6, 12);
   });
 
+  it('labels the Kerr time coordinate and reconciles its components in the Schwarzschild limit', () => {
+    const args = ['M=1.989e30', 'r=1e8', 't=2'];
+    const kerr = curvatureReport('kerr', args);
+    const schwarzschild = curvatureReport('schwarzschild', args);
+    expect(kerr.coordinates).toBe('(T, r, θ, φ)');
+    expect(kerr.point.T).toBe(2 * C_SI);
+    const k = kerr.christoffel.find((symbol) => symbol.index === 'Γ^r_TT')!.value;
+    const s = schwarzschild.christoffel.find((symbol) => symbol.index === 'Γ^r_tt')!.value;
+    expect(rel(k * C_SI ** 2, s)).toBeLessThan(1e-8);
+    expect(kerr.closedForm).toMatchObject({
+      outer_horizon_m: schwarzschild.closedForm.horizon_m,
+      inner_horizon_m: 0,
+      isco_prograde_r_over_M: 6,
+      isco_retrograde_r_over_M: 6,
+      photon_prograde_r_over_M: 3,
+      photon_retrograde_r_over_M: 3,
+    });
+  });
+
+  it('starts weak-field circular and spherical orbits at their turning point across spin values', () => {
+    const M = 1477.0632775277025;
+    const rOverM = 1e8 / M;
+    const theta = 1.2;
+    for (const a of [0, 1, 10, 50, 100, 200, 500, 1000, -1000]) {
+      const options = { M, aOverM: a / M, rOverM, fraction: 0.005, steps: 40, prograde: a >= 0 };
+      const equatorial = kerrEquatorialCircular(options);
+      expect(equatorial.rEnd).toBe(equatorial.r0);
+      expect(equatorial.affineLength).toBeGreaterThan(0);
+      const inclined = kerrGeodesic({ ...options, theta, ...kerrTurningPointOrbit({ ...options, theta }) });
+      expect(rel(inclined.rEnd, inclined.r0)).toBeLessThan(1e-12);
+      expect(inclined.normEnd).toBeCloseTo(-1, 12);
+    }
+  });
+
   it('flat dust Friedmann holds, and a curvature term moves the right-hand side', () => {
     const flat = friedmannSides({ t: 2, a0: 1, t0: 1, n: 2 / 3, k: 0, r: 0.3, rho: 0, lambda: 0 });
     const rho = (3 * flat.H2) / (8 * Math.PI * G_SI);
@@ -86,7 +120,7 @@ describe('finite-difference curvature', () => {
     const r = curvatureReport('schwarzschild');
     expect(r.ricciScalar).toBe(0);
     expect(r.ricci).toEqual([]);
-    expect(r.notes.join(' ')).toMatch(/finite-difference residual is not listed/);
+    expect(r.notes.join(' ')).toMatch(/numerical curvature residual is within its estimated error bound/);
   });
 
   it('Kerr a is a length, and a near-unity metre on a solar mass is not a spin', () => {

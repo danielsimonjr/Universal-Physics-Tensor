@@ -4374,19 +4374,38 @@
   },
   {
     "id": "CE-uncertainty-principle",
-    "text": "Heisenberg uncertainty principle\nquantum\na LOWER BOUND, not an equality; the scalarAst is its saturating case\nsaturated only by minimum-uncertainty (Gaussian) states",
+    "text": "Heisenberg uncertainty principle\nquantum\nthe scalar expression gives the lower bound on the uncertainty product\nsaturated only by minimum-uncertainty (Gaussian) states",
     "expr": {
-      "kind": "symbol",
-      "name": "hbar",
-      "dim": {
-        "L": 2,
-        "M": 1,
-        "T": -1,
-        "I": 0,
-        "Theta": 0,
-        "N": 0,
-        "J": 0
-      }
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "hbar",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "2",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
     }
   },
   {
@@ -6005,6 +6024,1702 @@
             "N": 0,
             "J": 0
           }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-acoustic-doppler",
+    "text": "Acoustic Doppler effect\nmechanics\nuniform stationary medium\nstationary observer\nsubsonic source moving along the line of sight, positive toward the observer",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "source-frequency",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "sound-speed",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "-",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "sound-speed",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "source-approach-speed",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-thin-lens-mirror",
+    "text": "Thin lens and spherical mirror equation\nelectromagnetism\nparaxial rays\nthin lens or spherical mirror\nreal-is-positive signed distances",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "object-distance",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "image-distance",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "+",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "object-distance",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "image-distance",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-planck-blackbody-spectrum",
+    "text": "Planck blackbody spectrum\nthermodynamics\nthermal equilibrium\nspectral energy density per volume per cycle frequency\ntwo polarizations",
+    "expr": {
+      "kind": "op",
+      "op": "*",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "op",
+              "op": "/",
+              "args": [
+                {
+                  "kind": "op",
+                  "op": "*",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "4pi",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "h",
+                      "dim": {
+                        "L": 2,
+                        "M": 1,
+                        "T": -1,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "op",
+                      "op": "^",
+                      "args": [
+                        {
+                          "kind": "symbol",
+                          "name": "frequency",
+                          "dim": {
+                            "L": 0,
+                            "M": 0,
+                            "T": -1,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
+                        {
+                          "kind": "symbol",
+                          "name": "3",
+                          "dim": {
+                            "L": 0,
+                            "M": 0,
+                            "T": 0,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "op",
+                      "op": "+",
+                      "args": [
+                        {
+                          "kind": "symbol",
+                          "name": "1",
+                          "dim": {
+                            "L": 0,
+                            "M": 0,
+                            "T": 0,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
+                        {
+                          "kind": "op",
+                          "op": "/",
+                          "args": [
+                            {
+                              "kind": "symbol",
+                              "name": "1",
+                              "dim": {
+                                "L": 0,
+                                "M": 0,
+                                "T": 0,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            },
+                            {
+                              "kind": "transcendental",
+                              "fn": "tanh",
+                              "arg": {
+                                "kind": "op",
+                                "op": "/",
+                                "args": [
+                                  {
+                                    "kind": "op",
+                                    "op": "*",
+                                    "args": [
+                                      {
+                                        "kind": "symbol",
+                                        "name": "h",
+                                        "dim": {
+                                          "L": 2,
+                                          "M": 1,
+                                          "T": -1,
+                                          "I": 0,
+                                          "Theta": 0,
+                                          "N": 0,
+                                          "J": 0
+                                        }
+                                      },
+                                      {
+                                        "kind": "symbol",
+                                        "name": "frequency",
+                                        "dim": {
+                                          "L": 0,
+                                          "M": 0,
+                                          "T": -1,
+                                          "I": 0,
+                                          "Theta": 0,
+                                          "N": 0,
+                                          "J": 0
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "kind": "op",
+                                    "op": "*",
+                                    "args": [
+                                      {
+                                        "kind": "symbol",
+                                        "name": "2",
+                                        "dim": {
+                                          "L": 0,
+                                          "M": 0,
+                                          "T": 0,
+                                          "I": 0,
+                                          "Theta": 0,
+                                          "N": 0,
+                                          "J": 0
+                                        }
+                                      },
+                                      {
+                                        "kind": "op",
+                                        "op": "*",
+                                        "args": [
+                                          {
+                                            "kind": "symbol",
+                                            "name": "k_B",
+                                            "dim": {
+                                              "L": 2,
+                                              "M": 1,
+                                              "T": -2,
+                                              "I": 0,
+                                              "Theta": -1,
+                                              "N": 0,
+                                              "J": 0
+                                            }
+                                          },
+                                          {
+                                            "kind": "symbol",
+                                            "name": "temperature",
+                                            "dim": {
+                                              "L": 0,
+                                              "M": 0,
+                                              "T": 0,
+                                              "I": 0,
+                                              "Theta": 1,
+                                              "N": 0,
+                                              "J": 0
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "op",
+                  "op": "^",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "c",
+                      "dim": {
+                        "L": 1,
+                        "M": 0,
+                        "T": -1,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "3",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "transcendental",
+              "fn": "exp",
+              "arg": {
+                "kind": "op",
+                "op": "-",
+                "args": [
+                  {
+                    "kind": "op",
+                    "op": "/",
+                    "args": [
+                      {
+                        "kind": "op",
+                        "op": "*",
+                        "args": [
+                          {
+                            "kind": "symbol",
+                            "name": "h",
+                            "dim": {
+                              "L": 2,
+                              "M": 1,
+                              "T": -1,
+                              "I": 0,
+                              "Theta": 0,
+                              "N": 0,
+                              "J": 0
+                            }
+                          },
+                          {
+                            "kind": "symbol",
+                            "name": "frequency",
+                            "dim": {
+                              "L": 0,
+                              "M": 0,
+                              "T": -1,
+                              "I": 0,
+                              "Theta": 0,
+                              "N": 0,
+                              "J": 0
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "op",
+                        "op": "*",
+                        "args": [
+                          {
+                            "kind": "symbol",
+                            "name": "2",
+                            "dim": {
+                              "L": 0,
+                              "M": 0,
+                              "T": 0,
+                              "I": 0,
+                              "Theta": 0,
+                              "N": 0,
+                              "J": 0
+                            }
+                          },
+                          {
+                            "kind": "op",
+                            "op": "*",
+                            "args": [
+                              {
+                                "kind": "symbol",
+                                "name": "k_B",
+                                "dim": {
+                                  "L": 2,
+                                  "M": 1,
+                                  "T": -2,
+                                  "I": 0,
+                                  "Theta": -1,
+                                  "N": 0,
+                                  "J": 0
+                                }
+                              },
+                              {
+                                "kind": "symbol",
+                                "name": "temperature",
+                                "dim": {
+                                  "L": 0,
+                                  "M": 0,
+                                  "T": 0,
+                                  "I": 0,
+                                  "Theta": 1,
+                                  "N": 0,
+                                  "J": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "transcendental",
+          "fn": "exp",
+          "arg": {
+            "kind": "op",
+            "op": "-",
+            "args": [
+              {
+                "kind": "op",
+                "op": "/",
+                "args": [
+                  {
+                    "kind": "op",
+                    "op": "*",
+                    "args": [
+                      {
+                        "kind": "symbol",
+                        "name": "h",
+                        "dim": {
+                          "L": 2,
+                          "M": 1,
+                          "T": -1,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      },
+                      {
+                        "kind": "symbol",
+                        "name": "frequency",
+                        "dim": {
+                          "L": 0,
+                          "M": 0,
+                          "T": -1,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "op",
+                    "op": "*",
+                    "args": [
+                      {
+                        "kind": "symbol",
+                        "name": "2",
+                        "dim": {
+                          "L": 0,
+                          "M": 0,
+                          "T": 0,
+                          "I": 0,
+                          "Theta": 0,
+                          "N": 0,
+                          "J": 0
+                        }
+                      },
+                      {
+                        "kind": "op",
+                        "op": "*",
+                        "args": [
+                          {
+                            "kind": "symbol",
+                            "name": "k_B",
+                            "dim": {
+                              "L": 2,
+                              "M": 1,
+                              "T": -2,
+                              "I": 0,
+                              "Theta": -1,
+                              "N": 0,
+                              "J": 0
+                            }
+                          },
+                          {
+                            "kind": "symbol",
+                            "name": "temperature",
+                            "dim": {
+                              "L": 0,
+                              "M": 0,
+                              "T": 0,
+                              "I": 0,
+                              "Theta": 1,
+                              "N": 0,
+                              "J": 0
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-faraday-induction",
+    "text": "Faraday’s law of induction\nelectromagnetism\nflux linkage includes all turns\naverage over a finite interval\nconsistent contour and flux orientation",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "-",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "flux-linkage-change",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": -1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "time-interval",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-level-projectile-range",
+    "text": "Projectile motion on level ground\nmechanics\nno drag\nconstant gravity\nlaunch and landing at the same height",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "launch-speed",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": -1,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "transcendental",
+              "fn": "sin",
+              "arg": {
+                "kind": "op",
+                "op": "*",
+                "args": [
+                  {
+                    "kind": "symbol",
+                    "name": "2",
+                    "dim": {
+                      "L": 0,
+                      "M": 0,
+                      "T": 0,
+                      "I": 0,
+                      "Theta": 0,
+                      "N": 0,
+                      "J": 0
+                    }
+                  },
+                  {
+                    "kind": "symbol",
+                    "name": "launch-angle",
+                    "dim": {
+                      "L": 0,
+                      "M": 0,
+                      "T": 0,
+                      "I": 0,
+                      "Theta": 0,
+                      "N": 0,
+                      "J": 0
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "gravity",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": -2,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-double-slit-interference",
+    "text": "Double-slit interference fringe spacing\nelectromagnetism\ncoherent monochromatic light\nfar field and small observation angles",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "optical-wavelength",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "screen-distance",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "slit-separation",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-single-slit-diffraction",
+    "text": "Single-slit diffraction first minimum\nelectromagnetism\nFraunhofer diffraction\nsingle rectangular slit\nmonochromatic illumination",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "optical-wavelength",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "symbol",
+          "name": "slit-width",
+          "dim": {
+            "L": 1,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-tolman-oppenheimer-volkoff",
+    "text": "Tolman–Oppenheimer–Volkoff equilibrium and mass limit\ngeneral-relativity\nstatic spherical nonrotating perfect fluid\nmass-energy-density is energy density divided by c²",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "-",
+          "args": [
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "G",
+                  "dim": {
+                    "L": 3,
+                    "M": -1,
+                    "T": -2,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "op",
+                  "op": "+",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "mass-energy-density",
+                      "dim": {
+                        "L": -3,
+                        "M": 1,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "op",
+                      "op": "/",
+                      "args": [
+                        {
+                          "kind": "symbol",
+                          "name": "fluid-pressure",
+                          "dim": {
+                            "L": -1,
+                            "M": 1,
+                            "T": -2,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
+                        {
+                          "kind": "op",
+                          "op": "^",
+                          "args": [
+                            {
+                              "kind": "symbol",
+                              "name": "c",
+                              "dim": {
+                                "L": 1,
+                                "M": 0,
+                                "T": -1,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "2",
+                              "dim": {
+                                "L": 0,
+                                "M": 0,
+                                "T": 0,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "op",
+                  "op": "+",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "enclosed-mass",
+                      "dim": {
+                        "L": 0,
+                        "M": 1,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "op",
+                      "op": "/",
+                      "args": [
+                        {
+                          "kind": "op",
+                          "op": "*",
+                          "args": [
+                            {
+                              "kind": "symbol",
+                              "name": "4pi",
+                              "dim": {
+                                "L": 0,
+                                "M": 0,
+                                "T": 0,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            },
+                            {
+                              "kind": "op",
+                              "op": "^",
+                              "args": [
+                                {
+                                  "kind": "symbol",
+                                  "name": "areal-radius",
+                                  "dim": {
+                                    "L": 1,
+                                    "M": 0,
+                                    "T": 0,
+                                    "I": 0,
+                                    "Theta": 0,
+                                    "N": 0,
+                                    "J": 0
+                                  }
+                                },
+                                {
+                                  "kind": "symbol",
+                                  "name": "3",
+                                  "dim": {
+                                    "L": 0,
+                                    "M": 0,
+                                    "T": 0,
+                                    "I": 0,
+                                    "Theta": 0,
+                                    "N": 0,
+                                    "J": 0
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "fluid-pressure",
+                              "dim": {
+                                "L": -1,
+                                "M": 1,
+                                "T": -2,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "kind": "op",
+                          "op": "^",
+                          "args": [
+                            {
+                              "kind": "symbol",
+                              "name": "c",
+                              "dim": {
+                                "L": 1,
+                                "M": 0,
+                                "T": -1,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "2",
+                              "dim": {
+                                "L": 0,
+                                "M": 0,
+                                "T": 0,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "areal-radius",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "-",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "1",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "op",
+                  "op": "/",
+                  "args": [
+                    {
+                      "kind": "op",
+                      "op": "*",
+                      "args": [
+                        {
+                          "kind": "symbol",
+                          "name": "2",
+                          "dim": {
+                            "L": 0,
+                            "M": 0,
+                            "T": 0,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
+                        {
+                          "kind": "symbol",
+                          "name": "G",
+                          "dim": {
+                            "L": 3,
+                            "M": -1,
+                            "T": -2,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
+                        {
+                          "kind": "symbol",
+                          "name": "enclosed-mass",
+                          "dim": {
+                            "L": 0,
+                            "M": 1,
+                            "T": 0,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "op",
+                      "op": "*",
+                      "args": [
+                        {
+                          "kind": "symbol",
+                          "name": "areal-radius",
+                          "dim": {
+                            "L": 1,
+                            "M": 0,
+                            "T": 0,
+                            "I": 0,
+                            "Theta": 0,
+                            "N": 0,
+                            "J": 0
+                          }
+                        },
+                        {
+                          "kind": "op",
+                          "op": "^",
+                          "args": [
+                            {
+                              "kind": "symbol",
+                              "name": "c",
+                              "dim": {
+                                "L": 1,
+                                "M": 0,
+                                "T": -1,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            },
+                            {
+                              "kind": "symbol",
+                              "name": "2",
+                              "dim": {
+                                "L": 0,
+                                "M": 0,
+                                "T": 0,
+                                "I": 0,
+                                "Theta": 0,
+                                "N": 0,
+                                "J": 0
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-fine-structure-constant",
+    "text": "Fine-structure constant\nquantum\nlow-energy electromagnetic coupling\nSI vacuum constants",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "e",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 1,
+                "I": 1,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "4pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "epsilon_0",
+              "dim": {
+                "L": -3,
+                "M": -1,
+                "T": 4,
+                "I": 2,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "hbar",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-bekenstein-bound",
+    "text": "Bekenstein entropy bound\ninformation\ncomplete isolated system\nweak self-gravity for the ordinary matter form",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "2pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "k_B",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": -1,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "enclosing-radius",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "system-energy",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "hbar",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-margolus-levitin-bound",
+    "text": "Margolus–Levitin quantum speed limit\nquantum\ntime-independent Hamiltonian\nmean energy measured above the ground state\northogonal final state",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "hbar",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "mean-energy-above-ground",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-unruh-temperature",
+    "text": "Unruh temperature of an accelerated detector\nquantum\nuniform proper acceleration\nMinkowski vacuum\nthermal detector response",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "hbar",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "proper-acceleration",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "2pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "k_B",
+              "dim": {
+                "L": 2,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": -1,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-schwarzschild-horizon-area",
+    "text": "Schwarzschild horizon area\ngeneral-relativity\nSchwarzschild black hole\nno charge or spin\narea A is the event-horizon area",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "16pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "G",
+                  "dim": {
+                    "L": 3,
+                    "M": -1,
+                    "T": -2,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "mass",
+                  "dim": {
+                    "L": 0,
+                    "M": 1,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "4",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
         }
       ]
     }

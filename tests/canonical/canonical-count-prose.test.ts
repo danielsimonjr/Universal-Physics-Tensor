@@ -116,7 +116,11 @@ describe('the stated canonical-entry count matches the registry', () => {
       if (statesCount(measured).some((re) => re.test(text))) hits.push(rel);
     }
     // If this ever drops to zero the test above has stopped checking anything, whatever it reports.
-    expect(hits.length, 'no product doc states the count — the matcher has gone blind').toBeGreaterThan(3);
+    expect(hits).toEqual(expect.arrayContaining([
+      'README.md',
+      join('docs', 'architecture', 'COMPONENTS.md'),
+      join('docs', 'planning', 'Atlas-Roadmap-Implementation-Plan.md'),
+    ]));
   });
 
   /**

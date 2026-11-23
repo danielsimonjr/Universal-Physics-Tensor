@@ -183,13 +183,15 @@ describe('the audit reads the rule', () => {
 
   it('the catalog audit tallies are the census; the canonical tallies are the census once it records the two moves above', () => {
     const tally = (graph: typeof CATALOG_GRAPH) => {
-      const t = { derived: 0, coefficientUnset: 0, decoy: 0, notAMonomial: 0, open: 0 };
+      const t = { derived: 0, coefficientUnset: 0, decoy: 0, notAMonomial: 0, notUnique: 0, noSamples: 0, open: 0 };
       for (const e of graph) {
         const d = attemptDerivation(e);
         if (d.status === 'derived') t.derived += 1;
         else if (d.status === 'coefficient-unset') t.coefficientUnset += 1;
         else if (d.status === 'decoy') t.decoy += 1;
         else if (d.status === 'not-a-monomial') t.notAMonomial += 1;
+        else if (d.status === 'not-unique') t.notUnique += 1;
+        else if (d.status === 'no-samples') t.noSamples += 1;
         else t.open += 1;
       }
       return t;
@@ -200,6 +202,8 @@ describe('the audit reads the rule', () => {
       coefficientUnset: CENSUS.derivationAudit.coefficientUnset,
       decoy: CENSUS.derivationAudit.decoy,
       notAMonomial: CENSUS.derivationAudit.notAMonomial,
+      notUnique: CENSUS.derivationAudit.notUnique,
+      noSamples: CENSUS.derivationAudit.noSamples,
       open: CENSUS.derivationAudit.open,
     });
     const canonical = tally(CANONICAL_GRAPH);
@@ -207,7 +211,9 @@ describe('the audit reads the rule', () => {
       derived: CENSUS.canonical.audit.derived,
       coefficientUnset: CENSUS.canonical.audit.coefficientUnset,
       decoy: CENSUS.canonical.audit.decoy,
-      notAMonomial: 0,
+      notAMonomial: CENSUS.canonical.audit.notAMonomial,
+      notUnique: CENSUS.canonical.audit.notUnique,
+      noSamples: CENSUS.canonical.audit.noSamples,
       open: CENSUS.canonical.audit.open,
     });
   });

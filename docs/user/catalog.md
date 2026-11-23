@@ -113,7 +113,7 @@ regime:
 bound:
   K = 1, delta = 0.015852531101436806 (relative period error, normalized by the value of the reduced model)
   domain: θ0 ≤ 0.5 rad
-  horizon: t ≪ 16 T0/θ0²; machine form t < 4 T0/θ0², the π/2-drift time
+  horizon: t < 4 T0/θ0² (π/2-drift time)
   limit: regular
   uniformity: one period, for θ0 in the stated domain
 ```
@@ -155,10 +155,10 @@ upt explain hawking-temperature mass=1Msun
 ```
 
 ```text
-  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
+  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8 K [highly-speculative]. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
   derivations:
-    - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B)) = 6.16842971641034e-8
-    - be-42-via-rs (Hawking temperature T_H = ℏc/(4π k_B r_s)) = 6.16842971641034e-8  [from leaves: mass]
+    - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B)) = 6.16842971641034e-8 K [highly-speculative]
+    - be-42-via-rs (Hawking temperature T_H = ℏc/(4π k_B r_s)) = 6.16842971641034e-8 K [highly-speculative]  [from leaves: mass]
 ```
 
 And `upt evaluate be-63 mu_e=2` evaluates a closed-form bridge directly (shown

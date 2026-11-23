@@ -41,12 +41,12 @@ describe('name registry — explain, search, derive', () => {
     const pressureJson = await runText(['explain', 'radiation-pressure', 'I=1e6', 'R=0', 'theta=0', '--json']);
     const pressureValue = (JSON.parse(pressureJson.text) as { result: { recoveredValue: number } }).result.recoveredValue;
     expect(Math.abs(pressureValue - 3.3356e-3) / 3.3356e-3).toBeLessThan(1e-4);
-    expect(pressure.text).toContain(`Recovered value: ${formatQuantity(pressureValue)}.`);
+    expect(pressure.text).toContain(`Recovered value: ${formatQuantity(pressureValue)} Pa [established].`);
     expect(pressure.text).not.toMatch(/3\.3356e-3/);
 
     const listed = await runText(['explain', 'radiation-pressure', 'I_W_per_m2=1e6', 'R=0', 'theta_rad=0']);
     expect(listed.code).toBe(0);
-    expect(listed.text).toContain(`Recovered value: ${formatQuantity(pressureValue)}.`);
+    expect(listed.text).toContain(`Recovered value: ${formatQuantity(pressureValue)} Pa [established].`);
 
     const alfven = await runText(['explain', 'alfven-speed', 'B_T=12e-9', 'rho_kg_per_m3=2.34e-20']);
     expect(alfven.code).toBe(0);
@@ -56,7 +56,7 @@ describe('name registry — explain, search, derive', () => {
     const tolman = await runText(['explain', 'tolman-invariant', 'T_K=5800', 'g_00=-1']);
     expect(tolman.code).toBe(0);
     expect(tolman.text).not.toMatch(/cannot be determined/);
-    expect(tolman.text).toContain(`Recovered value: ${formatQuantity(5800)}.`);
+    expect(tolman.text).toContain(`Recovered value: ${formatQuantity(5800)} K [established].`);
     expect(tolman.text).not.toMatch(/5\.8000e\+3/);
   });
 

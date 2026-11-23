@@ -29,14 +29,20 @@ async function run(args: string[]): Promise<string> {
 
 describe('symbol index (#684 F1, F3)', () => {
   it('ranks the quantities whose symbol is the name before spelling neighbours', async () => {
-    const user = await analyzeUserEquation('omega = sqrt(k/m)', catalogDims());
+    const user = await analyzeUserEquation('omega = sqrt(k/m)*zqx', catalogDims());
     const k = user.hints.find((h) => h.name === 'k');
     expect(k?.suggestions).toContain('damping-spring');
     expect(k?.suggestions).not.toContain('A');
     const bySymbol = symbolIndex(CATALOG_GRAPH).get('k') ?? new Set<string>();
     expect(bySymbol.has(k!.suggestions[0]!)).toBe(true);
     const m = user.hints.find((h) => h.name === 'm');
-    expect(m?.suggestions.every((s) => (symbolIndex(CATALOG_GRAPH).get('m') ?? new Set()).has(s))).toBe(true);
+    expect(m?.suggestions.every((s) => (symbolIndex([...CATALOG_GRAPH, ...CANONICAL_GRAPH]).get('m') ?? new Set()).has(s))).toBe(true);
+  });
+
+  it('resolves a complete oscillator equation through the canonical symbol declaration', async () => {
+    const text = await run(['map', '--equation', 'omega = sqrt(k/m)', '--equation-only']);
+    expect(text).toContain('agrees with CE-simple-harmonic-frequency');
+    expect(text).toContain('via {angular-velocity, mass, spring-constant}');
   });
 
   it('keeps the spelling ranking for a name that is no symbol', async () => {
@@ -52,18 +58,18 @@ describe('symbol index (#684 F1, F3)', () => {
   });
 
   it('reads a Greek letter by its name, in map and in search', async () => {
-    const user = await analyzeUserEquation('omega = sqrt(k/m)', catalogDims());
+    const user = await analyzeUserEquation('omega = sqrt(k/m)*zqx', catalogDims());
     const omega = user.hints.find((h) => h.name === 'omega');
     // The quantities whose symbol is ω read first, before any spelling neighbour.
     const letter = [...(symbolIndex([...CATALOG_GRAPH, ...CANONICAL_GRAPH]).get('ω') ?? [])].sort();
     expect(letter).toContain('ion-acoustic-frequency');
     expect(omega?.suggestions.slice(0, letter.length)).toEqual(letter);
-    const found = await run(['search', 'omega']);
-    for (const q of letter) expect(found).toContain(q);
+    const found = JSON.parse(await run(['search', 'omega', '--json'])).result.matches;
+    for (const q of letter) expect(found.some((row: { id: string }) => row.id === q), q).toBe(true);
   });
 
   it('leaves a name that spells no Greek letter as before', async () => {
-    const user = await analyzeUserEquation('omega = sqrt(k/m)', catalogDims());
+    const user = await analyzeUserEquation('omega = sqrt(k/m)*zqx', catalogDims());
     expect(user.hints.find((h) => h.name === 'k')?.suggestions).toEqual([
       'arrhenius-rate', 'biot-k', 'damping-spring', 'eyring-rate', 'fin-conductivity',
     ]);
@@ -83,6 +89,6 @@ describe('symbol index (#684 F1, F3)', () => {
     expect(a?.otherMeanings).toContain('unruh-acceleration');
     expect(a?.otherMeanings).not.toContain(a!.quantity);
     const text = await run(['map', '--equation', 'F = m*a', '--equation-only', '--bind-short']);
-    expect(text).toMatch(/'a' is bound to the catalog quantity a .*also the symbol of [^\n]*unruh-acceleration/);
+    expect(text).toMatch(/'a' is bound to the catalog quantity acceleration .*also the symbol of [^\n]*unruh-acceleration/);
   });
 });

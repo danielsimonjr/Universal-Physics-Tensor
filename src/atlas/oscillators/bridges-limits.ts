@@ -5,7 +5,7 @@
  *   `θ'' + ω0² θ = 0` as `θ0 → 0`. The order of the system does not drop, the
  *   error is `O(θ0²)` in the relative period, and the approximation is
  *   NON-UNIFORM in time: a fixed relative period error accumulates phase
- *   without bound, so the bound carries the horizon `t ≪ 16 T0/θ0²`.
+ *   without bound. The recorded horizon uses the π/2 phase-drift time.
  * - `ab-damped-massless` — a SINGULAR limit. `m x'' + b x' + k x = 0` reduces
  *   to `b x' + k x = 0` as `m → 0`. The order DROPS from two to one, one
  *   initial condition is lost, and the reduced model cannot satisfy `x'(0)`.
@@ -142,6 +142,13 @@ const DAMPED_REGIME: Regime = makeRegime(
   [{ group: 'm · b^-2 · k', op: '<', bound: 0.25, alias: 'ζ > 1' }],
 );
 
+function pendulumHorizonAt(params: Readonly<Record<string, number>>) {
+  const { T0, theta0 } = params;
+  if (T0 === undefined || theta0 === undefined || !Number.isFinite(T0) || !Number.isFinite(theta0) || theta0 === 0) return null;
+  // π/2 of drift is one quarter of the full 2π slip time.
+  return { maximum: (4 * T0) / theta0 ** 2 };
+}
+
 /**
  * `ab-pendulum-linear` — small-angle pendulum → harmonic spring.
  *
@@ -166,7 +173,7 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
   conclusion: 'model-spring',
   transformation: 'sin θ → θ, with x ↔ ℓ θ and ω0² = g/ℓ',
   preserves: ['harmonic frequency ω0 to O(θ0²)', 'energy conservation', 'time-reversal symmetry'],
-  doesNotPreserve: ['the amplitude dependence of the period', 'phase over times t ≳ 16 T0/θ0²'],
+  doesNotPreserve: ['the amplitude dependence of the period', 'phase over time (the phase drift accumulates)'],
   sideConditions: ['θ0 ≤ 0.5 rad', 'the bound is a PERIOD error and is not uniform in time'],
   bound: makeApproximation({
     // K = 1: the map carries the observable period unchanged (period ↦ period
@@ -181,19 +188,11 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
     deltaAtBasis: 'closed-form',
     norm: RELATIVE_PERIOD_NORM,
     domain: 'θ0 ≤ 0.5 rad',
-    horizon: 't ≪ 16 T0/θ0²; machine form t < 4 T0/θ0², the π/2-drift time',
-    // ⚠ The machine form is a QUARTER of the prose scale, and it must be.
-    // `16 T0/θ0²` is the time at which the accumulated phase drift reaches a
-    // FULL 2π (measured: 400 T0 at θ0 = 0.2, drift 6.2976 rad) — by then the
-    // approximation has lapped, so `t < 16 T0/θ0²` is not a horizon at all.
-    // The `≪` is what carries the whole claim, and `<` does not render it.
-    // `4 T0/θ0²` is the π/2-drift time, which is exactly what W7b measures
-    // independently (99.77 cycles at θ0 = 0.2). It is also what makes
-    // `horizonHolds(200 T0)` false and `horizonHolds(10 T0)` true.
+    horizon: 't < 4 T0/θ0² (π/2-drift time)',
+    horizonAt: pendulumHorizonAt,
     horizonHolds: (t, params) => {
-      const { T0, theta0 } = params;
-      if (!Number.isFinite(T0) || !Number.isFinite(theta0) || theta0 === 0) return false;
-      return t < (4 * T0) / theta0 ** 2;
+      const limits = pendulumHorizonAt(params);
+      return limits !== null && t < limits.maximum;
     },
     parameterRange: 'θ0 ≤ 0.5 rad',
     limitCharacter: 'regular',

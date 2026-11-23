@@ -185,3 +185,38 @@ export function primaryUnitLabel(
 ): string {
   return api.quantityRecord(name)?.displayUnit ?? derivedUnitOf(dimension, coherentUnits(api.unitRows()));
 }
+
+/**
+ * A compact coherent SI reading of a formula dimension. One named unit can
+ * replace a group of base units if the remainder is a single base unit.
+ * Retain the original label whenever the substitution saves no powers.
+ */
+export function compactFormulaUnit(api: Parameters<typeof primaryUnitLabel>[0], dim: Dimension): string {
+  const baseLabel = siUnitOf(dim);
+  const units = coherentUnits(api.unitRows());
+  const label = derivedUnitOf(dim, units);
+  if (label !== baseLabel || label === '1') return label;
+
+  const base = new Set(SI_BASE.map(([, name]) => name));
+  let best = baseLabel;
+  let cost = BASES.reduce((sum, key) => sum + Math.abs(dim[key]), 0);
+  if (cost < 4) return label;
+  for (const unit of units) {
+    if (base.has(unit.name)) continue;
+    for (const direction of [1, -1]) {
+      const residual = SI_BASE
+        .map(([key, name]) => ({ name, power: dim[key] - direction * unit.dim[key] }))
+        .filter((factor) => factor.power !== 0);
+      const factor = residual[0];
+      if (residual.length !== 1 || factor === undefined || !Number.isInteger(factor.power)) continue;
+      const candidateCost = 1 + Math.abs(factor.power);
+      if (candidateCost >= cost) continue;
+      const power = Math.abs(factor.power);
+      const other = power === 1 ? factor.name : `${factor.name}^${power}`;
+      if (direction === 1) best = factor.power > 0 ? `${unit.name}*${other}` : `${unit.name}/${other}`;
+      else best = factor.power > 0 ? `${other}/${unit.name}` : `1/(${unit.name}*${other})`;
+      cost = candidateCost;
+    }
+  }
+  return best;
+}

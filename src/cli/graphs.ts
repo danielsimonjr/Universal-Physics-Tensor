@@ -45,6 +45,18 @@ export function resolveGraph(
   }
 }
 
+/** Catalog inventory for graph commands that report how many bridges they cover. */
+export function catalogGraphCoverage(api: CommandCtx['api'], graph: readonly BridgeEdge[], source: SourceName, speculativeOnly = false) {
+  const eligible = source === 'canonical' ? [] : api.BRIDGE_EQUATIONS.filter(
+    (entry) => !speculativeOnly || entry.status !== 'established',
+  );
+  const represented = new Set(graph.map((edge) => edge.beId));
+  return {
+    total: eligible.length,
+    withoutRoutes: eligible.filter((entry) => !represented.has(entry.id)).map((entry) => `be-${entry.id}`),
+  };
+}
+
 /**
  * What a result is anchored to (audit I3), printed beside the source in text and carried as the
  * envelope's `anchor` in `--json`. Two different anchors exist and are never merged:

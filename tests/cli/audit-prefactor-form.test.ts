@@ -6,7 +6,7 @@
  * from a fitted 1.125. A derived row whose prefactor is clean now prints `×<number> (= <form>)`,
  * and the form is omitted when it is the number's own text (`×1`, `×2`). The JSON row carries
  * `prefactorForm` whenever the prefactor is clean. An empirical row has no form and keeps its
- * `(empirical/tuned constant)` mark.
+ * `(prefactor without a recognized exact form)` mark.
  */
 import { capture } from '../helpers/cli.js';
 import { describe, expect, it } from 'vitest';
@@ -27,7 +27,7 @@ describe('upt audit prints the exact form of a clean prefactor', () => {
     expect(r.stdout).toMatch(/^ +be-56 +\+\[ℏ,c\] +×-0\.0411233516712057 \(= -π²\/240\)$/m);
     expect(r.stdout).toMatch(/^ +be-15 +\+\[\] +×1$/m);
     expect(r.stdout).toMatch(/^ +be-58 +\+\[k_B\] +×4$/m);
-    expect(r.stdout).toMatch(/^ +be-62 +\+\[k_B\] +×1\.76387698886205 +\(empirical\/tuned constant\)$/m);
+    expect(r.stdout).toMatch(/^ +be-62 +\+\[k_B\] +×1\.76387698886205 +\(prefactor without a recognized exact form\)$/m);
   });
 
   it('JSON: each clean derived row carries prefactorForm, an empirical row does not', async () => {

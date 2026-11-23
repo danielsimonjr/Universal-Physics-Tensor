@@ -5,7 +5,7 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  4192 candidates  →  1 promising  ·  30 promising, magnitude unchecked  ·  2365 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1776 axis-clash
+  funnel:  4137 candidates  →  1 promising  ·  30 promising, magnitude unchecked  ·  2363 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1723 axis-clash
   readiness of the 1 promising: 0 mechanism-tested · 0 data-tested · 0 without magnitude evidence · 1 with axis unresolved · 0 with an entailed consequence
   readiness of the 30 promising, magnitude unchecked: 0 mechanism-tested · 0 data-tested · 30 without magnitude evidence · 26 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
@@ -282,7 +282,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     resistivity ≟ lorentz-resistivity                    [[L^3 M T^-3 I^-2]]
     sheet-resistance ≟ resistance                        [[L^2 M T^-3 I^-2]]
     sound-speed ≟ debye-sound-speed                      [[velocity]]
-    temperature ≟ unruh-temperature                      [[temperature]]
     time ≟ microscopic-relaxation-time                   [[time]]
     time ≟ newton-time                                   [[time]]
     time ≟ slab-time                                     [[time]]
@@ -319,7 +318,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     area-law-coefficient ≟ landau-wavenumber             scale: quantum ≠ classical
     arrhenius-warmth ≟ critical-temperature              scale: classical ≠ quantum
     arrhenius-warmth ≟ jeans-temperature                 force: electromagnetic ≠ gravitational
-    arrhenius-warmth ≟ unruh-temperature                 force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     attempt-frequency ≟ acdrude-radian                   scale: quantum ≠ classical
     attempt-frequency ≟ arrhenius-prefactor              scale: quantum ≠ classical
     attempt-frequency ≟ arrhenius-rate                   scale: quantum ≠ classical
@@ -384,18 +382,14 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     barrier-width ≟ upper-critical-length                scale: quantum ≠ classical
     bennett-temperature ≟ critical-temperature           scale: classical ≠ quantum
     bennett-temperature ≟ jeans-temperature              force: electromagnetic ≠ gravitational
-    bennett-temperature ≟ unruh-temperature              force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     biot-length ≟ plate-separation                       scale: classical ≠ quantum
     bkt-stiffness ≟ gap-energy                           scale: classical ≠ quantum
     bkt-temperature ≟ critical-temperature               scale: classical ≠ quantum
     bkt-temperature ≟ jeans-temperature                  force: electromagnetic ≠ gravitational
-    bkt-temperature ≟ unruh-temperature                  force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     blochlaw-warmth ≟ critical-temperature               scale: classical ≠ quantum
     blochlaw-warmth ≟ jeans-temperature                  force: electromagnetic ≠ gravitational
-    blochlaw-warmth ≟ unruh-temperature                  force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     bohm-electron-temperature ≟ critical-temperature     scale: classical ≠ quantum
     bohm-electron-temperature ≟ jeans-temperature        force: electromagnetic ≠ gravitational
-    bohm-electron-temperature ≟ unruh-temperature        force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     bohm-ion-mass ≟ accretor-mass                        force: electromagnetic ≠ gravitational
     bohm-ion-mass ≟ jeans-mass                           force: electromagnetic ≠ gravitational
     boundary-entanglement-entropy ≟ debye-heat-capacity  force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -442,10 +436,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     buckling-load ≟ comb-lateral                         force: emergent ≠ electromagnetic
     builtin-warmth ≟ critical-temperature                scale: classical ≠ quantum
     builtin-warmth ≟ jeans-temperature                   force: electromagnetic ≠ gravitational
-    builtin-warmth ≟ unruh-temperature                   force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     capacitor-temperature ≟ critical-temperature         scale: classical ≠ quantum
     capacitor-temperature ≟ jeans-temperature            force: electromagnetic ≠ gravitational
-    capacitor-temperature ≟ unruh-temperature            force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     carrier-density ≟ acdrude-n3                         scale: quantum ≠ classical
     carrier-density ≟ builtin-acceptor                   scale: quantum ≠ classical
     carrier-density ≟ builtin-donor                      scale: quantum ≠ classical
@@ -515,16 +507,13 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     clapeyron-temperature ≟ teg-sink                     force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ teg-source                   force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ thomson-temperature          force: emergent ≠ electromagnetic
-    clapeyron-temperature ≟ unruh-temperature            force: emergent ≠ gravitational; scale: classical ≠ quantum
     clapeyron-temperature ≟ vanthoff-warmth              force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ weiss-temperature            force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ wiedemann-temperature        force: emergent ≠ electromagnetic
     clausius-warmth-1 ≟ critical-temperature             scale: classical ≠ quantum
     clausius-warmth-1 ≟ jeans-temperature                force: electromagnetic ≠ gravitational
-    clausius-warmth-1 ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     clausius-warmth-2 ≟ critical-temperature             scale: classical ≠ quantum
     clausius-warmth-2 ≟ jeans-temperature                force: electromagnetic ≠ gravitational
-    clausius-warmth-2 ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     coarsening-length ≟ barrier-width                    scale: mesoscopic ≠ quantum
     coarsening-length ≟ biot-length                      force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     coarsening-length ≟ boundary-length                  scale: mesoscopic ≠ quantum
@@ -609,7 +598,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     critical-temperature ≟ jeans-temperature             force: electromagnetic ≠ gravitational; scale: quantum ≠ classical
     curie-temperature ≟ critical-temperature             scale: classical ≠ quantum
     curie-temperature ≟ jeans-temperature                force: electromagnetic ≠ gravitational
-    curie-temperature ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     damping-inertia ≟ accretor-mass                      force: electromagnetic ≠ gravitational
     damping-inertia ≟ jeans-mass                         force: electromagnetic ≠ gravitational
     dark-fermion-mass ≟ active-noise-energy              force: weak ≠ emergent; scale: quantum ≠ mesoscopic
@@ -651,10 +639,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     debye-sphere-length ≟ plate-separation               scale: classical ≠ quantum
     debye-temperature ≟ critical-temperature             scale: classical ≠ quantum
     debye-temperature ≟ jeans-temperature                force: electromagnetic ≠ gravitational
-    debye-temperature ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     debye-theta ≟ critical-temperature                   scale: classical ≠ quantum
     debye-theta ≟ jeans-temperature                      force: electromagnetic ≠ gravitational
-    debye-theta ≟ unruh-temperature                      force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     defect-rest-mass ≟ accretor-mass                     scale: cosmological ≠ classical
     defect-rest-mass ≟ acdrude-bandmass                  scale: cosmological ≠ classical
     defect-rest-mass ≟ bohm-ion-mass                     scale: cosmological ≠ classical
@@ -788,24 +774,19 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     effective-temperature ≟ teg-source                   force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ thomson-temperature          force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ tolman-invariant             force: emergent ≠ gravitational; scale: mesoscopic ≠ classical
-    effective-temperature ≟ unruh-temperature            force: emergent ≠ gravitational; scale: mesoscopic ≠ quantum
     effective-temperature ≟ vanthoff-warmth              force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ weiss-temperature            force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ wiedemann-temperature        force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     einstein-solid-temperature ≟ critical-temperature    scale: classical ≠ quantum
     einstein-solid-temperature ≟ jeans-temperature       force: electromagnetic ≠ gravitational
-    einstein-solid-temperature ≟ unruh-temperature       force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     einstein-temperature ≟ clapeyron-temperature         force: electromagnetic ≠ emergent
     einstein-temperature ≟ critical-temperature          scale: classical ≠ quantum
     einstein-temperature ≟ jeans-temperature             force: electromagnetic ≠ gravitational
-    einstein-temperature ≟ unruh-temperature             force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     einstein-theta ≟ critical-temperature                scale: classical ≠ quantum
     einstein-theta ≟ jeans-temperature                   force: electromagnetic ≠ gravitational
-    einstein-theta ≟ unruh-temperature                   force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     eyring-barrier ≟ gap-energy                          scale: classical ≠ quantum
     eyring-warmth ≟ critical-temperature                 scale: classical ≠ quantum
     eyring-warmth ≟ jeans-temperature                    force: electromagnetic ≠ gravitational
-    eyring-warmth ≟ unruh-temperature                    force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     far-radius ≟ barrier-width                           scale: classical ≠ quantum
     far-radius ≟ biot-length                             force: gravitational ≠ electromagnetic
     far-radius ≟ boundary-length                         scale: classical ≠ quantum
@@ -850,7 +831,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     fermioffset-muoff ≟ gap-energy                       scale: classical ≠ quantum
     fermioffset-warmth ≟ critical-temperature            scale: classical ≠ quantum
     fermioffset-warmth ≟ jeans-temperature               force: electromagnetic ≠ gravitational
-    fermioffset-warmth ≟ unruh-temperature               force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     fin-span ≟ plate-separation                          scale: classical ≠ quantum
     fin-web ≟ plate-separation                           scale: classical ≠ quantum
     foerster-radius ≟ barrier-width                      scale: mesoscopic ≠ quantum
@@ -890,20 +870,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     foerster-radius ≟ upper-critical-length              scale: mesoscopic ≠ classical
     fourier-slab-end ≟ critical-temperature              scale: classical ≠ quantum
     fourier-slab-end ≟ jeans-temperature                 force: electromagnetic ≠ gravitational
-    fourier-slab-end ≟ unruh-temperature                 force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     fourier-slab-length ≟ plate-separation               scale: classical ≠ quantum
     fourier-slab-start ≟ critical-temperature            scale: classical ≠ quantum
     fourier-slab-start ≟ jeans-temperature               force: electromagnetic ≠ gravitational
-    fourier-slab-start ≟ unruh-temperature               force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     gibbs-isotherm-warmth ≟ critical-temperature         scale: classical ≠ quantum
     gibbs-isotherm-warmth ≟ jeans-temperature            force: electromagnetic ≠ gravitational
-    gibbs-isotherm-warmth ≟ unruh-temperature            force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     gortercas-tc ≟ critical-temperature                  scale: classical ≠ quantum
     gortercas-tc ≟ jeans-temperature                     force: electromagnetic ≠ gravitational
-    gortercas-tc ≟ unruh-temperature                     force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     gortercas-warmth ≟ critical-temperature              scale: classical ≠ quantum
     gortercas-warmth ≟ jeans-temperature                 force: electromagnetic ≠ gravitational
-    gortercas-warmth ≟ unruh-temperature                 force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     gradb-mass ≟ accretor-mass                           force: electromagnetic ≠ gravitational
     gradb-mass ≟ jeans-mass                              force: electromagnetic ≠ gravitational
     gravitational-wave-speed ≟ alfven-speed              force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
@@ -1052,7 +1027,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     joukowsky-wallmod ≟ casimir-pressure                 scale: classical ≠ quantum
     joule-thomson-warmth ≟ critical-temperature          scale: classical ≠ quantum
     joule-thomson-warmth ≟ jeans-temperature             force: electromagnetic ≠ gravitational
-    joule-thomson-warmth ≟ unruh-temperature             force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     lambda-mass-density ≟ jeans-density                  scale: cosmological ≠ classical
     lambda-mass-density ≟ joukowsky-rho                  force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     lambda-mass-density ≟ newton-rho                     force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
@@ -1063,7 +1037,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     lawson-energy ≟ gap-energy                           scale: classical ≠ quantum
     lawson-temperature ≟ critical-temperature            scale: classical ≠ quantum
     lawson-temperature ≟ jeans-temperature               force: electromagnetic ≠ gravitational
-    lawson-temperature ≟ unruh-temperature               force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     london-penetration-depth ≟ biot-length               scale: quantum ≠ classical
     london-penetration-depth ≟ child-gap                 scale: quantum ≠ classical
     london-penetration-depth ≟ coax-inner                scale: quantum ≠ classical
@@ -1098,7 +1071,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     lorentz-mass ≟ jeans-mass                            force: electromagnetic ≠ gravitational
     lorentz-temperature ≟ critical-temperature           scale: classical ≠ quantum
     lorentz-temperature ≟ jeans-temperature              force: electromagnetic ≠ gravitational
-    lorentz-temperature ≟ unruh-temperature              force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     lowercrit-pen ≟ plate-separation                     scale: classical ≠ quantum
     lowercrit-xi ≟ plate-separation                      scale: classical ≠ quantum
     magnetic-pressure ≟ casimir-pressure                 scale: classical ≠ quantum
@@ -1107,7 +1079,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     mass-action-gap ≟ gap-energy                         scale: classical ≠ quantum
     mass-action-temperature ≟ critical-temperature       scale: classical ≠ quantum
     mass-action-temperature ≟ jeans-temperature          force: electromagnetic ≠ gravitational
-    mass-action-temperature ≟ unruh-temperature          force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     mass-density ≟ jeans-density                         scale: cosmological ≠ classical
     mass-density ≟ joukowsky-rho                         force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     mass-density ≟ newton-rho                            force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
@@ -1126,14 +1097,11 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     minimal-surface-area ≟ wormhole-cross-section-area   scale: classical ≠ quantum
     mirror-t-parallel ≟ critical-temperature             scale: classical ≠ quantum
     mirror-t-parallel ≟ jeans-temperature                force: electromagnetic ≠ gravitational
-    mirror-t-parallel ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     mirror-t-perp ≟ critical-temperature                 scale: classical ≠ quantum
     mirror-t-perp ≟ jeans-temperature                    force: electromagnetic ≠ gravitational
-    mirror-t-perp ≟ unruh-temperature                    force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     model-a-mobility ≟ diffusivity                       force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     model-a-mobility ≟ schmidt-diffusivity               force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     model-a-mobility ≟ sherwood-diffusivity              force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
-    mond-acceleration-scale ≟ unruh-acceleration         scale: classical ≠ quantum
     mond-force ≟ buckling-load                           force: gravitational ≠ emergent
     mond-force ≟ comb-lateral                            force: gravitational ≠ electromagnetic
     mott-thickness ≟ plate-separation                    scale: classical ≠ quantum
@@ -1198,7 +1166,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     near-radius ≟ upper-critical-length                  force: gravitational ≠ electromagnetic
     nernst-warmth ≟ critical-temperature                 scale: classical ≠ quantum
     nernst-warmth ≟ jeans-temperature                    force: electromagnetic ≠ gravitational
-    nernst-warmth ≟ unruh-temperature                    force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     neutron-density ≟ acdrude-n3                         scale: cosmological ≠ classical
     neutron-density ≟ builtin-acceptor                   scale: cosmological ≠ classical
     neutron-density ≟ builtin-donor                      scale: cosmological ≠ classical
@@ -1220,10 +1187,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     newton-rho ≟ jeans-density                           force: electromagnetic ≠ gravitational
     newton-theta ≟ critical-temperature                  scale: classical ≠ quantum
     newton-theta ≟ jeans-temperature                     force: electromagnetic ≠ gravitational
-    newton-theta ≟ unruh-temperature                     force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     newton-theta-0 ≟ critical-temperature                scale: classical ≠ quantum
     newton-theta-0 ≟ jeans-temperature                   force: electromagnetic ≠ gravitational
-    newton-theta-0 ≟ unruh-temperature                   force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     newtonian-force ≟ buckling-load                      force: gravitational ≠ emergent
     newtonian-force ≟ comb-lateral                       force: gravitational ≠ electromagnetic
     nucleon-yield-density ≟ acdrude-n3                   scale: cosmological ≠ classical
@@ -1251,7 +1216,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     pauli-fermi-energy ≟ gap-energy                      scale: classical ≠ quantum
     peltier-temperature ≟ critical-temperature           scale: classical ≠ quantum
     peltier-temperature ≟ jeans-temperature              force: electromagnetic ≠ gravitational
-    peltier-temperature ≟ unruh-temperature              force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     pipe-length ≟ biot-length                            force: emergent ≠ electromagnetic
     pipe-length ≟ child-gap                              force: emergent ≠ electromagnetic
     pipe-length ≟ coax-inner                             force: emergent ≠ electromagnetic
@@ -1381,7 +1345,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     planck-mass-energy ≟ tfscreen-chemical               force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-warmth ≟ critical-temperature                 scale: classical ≠ quantum
     planck-warmth ≟ jeans-temperature                    force: electromagnetic ≠ gravitational
-    planck-warmth ≟ unruh-temperature                    force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     plasma-mass-density ≟ jeans-density                  force: electromagnetic ≠ gravitational
     poiseuille-flow ≟ lawson-reactivity                  force: emergent ≠ electromagnetic
     probe-electron-mass ≟ accretor-mass                  force: electromagnetic ≠ gravitational
@@ -1432,7 +1395,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     proper-temperature ≟ teg-sink                        force: gravitational ≠ electromagnetic
     proper-temperature ≟ teg-source                      force: gravitational ≠ electromagnetic
     proper-temperature ≟ thomson-temperature             force: gravitational ≠ electromagnetic
-    proper-temperature ≟ unruh-temperature               scale: classical ≠ quantum
     proper-temperature ≟ vanthoff-warmth                 force: gravitational ≠ electromagnetic
     proper-temperature ≟ weiss-temperature               force: gravitational ≠ electromagnetic
     proper-temperature ≟ wiedemann-temperature           force: gravitational ≠ electromagnetic
@@ -1640,7 +1602,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reheating-temperature ≟ teg-source                   scale: cosmological ≠ classical
     reheating-temperature ≟ thomson-temperature          scale: cosmological ≠ classical
     reheating-temperature ≟ tolman-invariant             scale: cosmological ≠ classical
-    reheating-temperature ≟ unruh-temperature            scale: cosmological ≠ quantum
     reheating-temperature ≟ vanthoff-warmth              scale: cosmological ≠ classical
     reheating-temperature ≟ weiss-temperature            scale: cosmological ≠ classical
     reheating-temperature ≟ wiedemann-temperature        scale: cosmological ≠ classical
@@ -1653,13 +1614,11 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     richardson-phi ≟ gap-energy                          scale: classical ≠ quantum
     richardson-warmth ≟ critical-temperature             scale: classical ≠ quantum
     richardson-warmth ≟ jeans-temperature                force: electromagnetic ≠ gravitational
-    richardson-warmth ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     saha-ionization ≟ gap-energy                         scale: classical ≠ quantum
     saha-mass ≟ accretor-mass                            force: electromagnetic ≠ gravitational
     saha-mass ≟ jeans-mass                               force: electromagnetic ≠ gravitational
     saha-warmth ≟ critical-temperature                   scale: classical ≠ quantum
     saha-warmth ≟ jeans-temperature                      force: electromagnetic ≠ gravitational
-    saha-warmth ≟ unruh-temperature                      force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     scalar-field-reference ≟ accretor-mass               scale: quantum ≠ classical
     scalar-field-reference ≟ acdrude-bandmass            scale: quantum ≠ classical
     scalar-field-reference ≟ bohm-ion-mass               scale: quantum ≠ classical
@@ -1776,14 +1735,12 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     sherwood-length ≟ plate-separation                   scale: classical ≠ quantum
     shockley-temperature ≟ critical-temperature          scale: classical ≠ quantum
     shockley-temperature ≟ jeans-temperature             force: electromagnetic ≠ gravitational
-    shockley-temperature ≟ unruh-temperature             force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     slab-width ≟ plate-separation                        scale: classical ≠ quantum
     sm-reaction-rate-coefficient ≟ lawson-reactivity     scale: cosmological ≠ classical
     sm-reaction-rate-coefficient ≟ poiseuille-flow       scale: cosmological ≠ classical
     sommerfeld-fermi-energy ≟ gap-energy                 scale: classical ≠ quantum
     sommerfeld-temperature ≟ critical-temperature        scale: classical ≠ quantum
     sommerfeld-temperature ≟ jeans-temperature           force: electromagnetic ≠ gravitational
-    sommerfeld-temperature ≟ unruh-temperature           force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     specific-volume-change ≟ joule-thomson-volume        force: emergent ≠ electromagnetic
     spiral-radius ≟ plate-separation                     scale: classical ≠ quantum
     standoff-density ≟ jeans-density                     force: electromagnetic ≠ gravitational
@@ -1850,13 +1807,10 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     swampland-tower-mass ≟ upper-hybrid-mass             scale: quantum ≠ classical
     swing-kelvin ≟ critical-temperature                  scale: classical ≠ quantum
     swing-kelvin ≟ jeans-temperature                     force: electromagnetic ≠ gravitational
-    swing-kelvin ≟ unruh-temperature                     force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     teg-sink ≟ critical-temperature                      scale: classical ≠ quantum
     teg-sink ≟ jeans-temperature                         force: electromagnetic ≠ gravitational
-    teg-sink ≟ unruh-temperature                         force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     teg-source ≟ critical-temperature                    scale: classical ≠ quantum
     teg-source ≟ jeans-temperature                       force: electromagnetic ≠ gravitational
-    teg-source ≟ unruh-temperature                       force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     temperature ≟ arrhenius-warmth                       force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ bennett-temperature                    force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ bkt-temperature                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -1941,7 +1895,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     thermal-wavelength ≟ upper-critical-length           scale: quantum ≠ classical
     thomson-temperature ≟ critical-temperature           scale: classical ≠ quantum
     thomson-temperature ≟ jeans-temperature              force: electromagnetic ≠ gravitational
-    thomson-temperature ≟ unruh-temperature              force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     tolman-invariant ≟ arrhenius-warmth                  force: gravitational ≠ electromagnetic
     tolman-invariant ≟ bennett-temperature               force: gravitational ≠ electromagnetic
     tolman-invariant ≟ bkt-temperature                   force: gravitational ≠ electromagnetic
@@ -1986,7 +1939,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     tolman-invariant ≟ teg-sink                          force: gravitational ≠ electromagnetic
     tolman-invariant ≟ teg-source                        force: gravitational ≠ electromagnetic
     tolman-invariant ≟ thomson-temperature               force: gravitational ≠ electromagnetic
-    tolman-invariant ≟ unruh-temperature                 scale: classical ≠ quantum
     tolman-invariant ≟ vanthoff-warmth                   force: gravitational ≠ electromagnetic
     tolman-invariant ≟ weiss-temperature                 force: gravitational ≠ electromagnetic
     tolman-invariant ≟ wiedemann-temperature             force: gravitational ≠ electromagnetic
@@ -2009,10 +1961,6 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     tunneling-mass ≟ richardson-mass                     scale: quantum ≠ classical
     tunneling-mass ≟ saha-mass                           scale: quantum ≠ classical
     tunneling-mass ≟ upper-hybrid-mass                   scale: quantum ≠ classical
-    unruh-temperature ≟ critical-temperature             force: gravitational ≠ electromagnetic
-    unruh-temperature ≟ jeans-temperature                scale: quantum ≠ classical
-    unruh-temperature ≟ johnson-temperature              force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
-    unruh-temperature ≟ wiedemann-temperature            force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     upper-critical-length ≟ plate-separation             scale: classical ≠ quantum
     upper-hybrid-mass ≟ accretor-mass                    force: electromagnetic ≠ gravitational
     upper-hybrid-mass ≟ jeans-mass                       force: electromagnetic ≠ gravitational
@@ -2033,10 +1981,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     vacuum-expectation-value ≟ tfscreen-chemical         force: weak ≠ electromagnetic; scale: quantum ≠ classical
     vanthoff-warmth ≟ critical-temperature               scale: classical ≠ quantum
     vanthoff-warmth ≟ jeans-temperature                  force: electromagnetic ≠ gravitational
-    vanthoff-warmth ≟ unruh-temperature                  force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     weiss-temperature ≟ critical-temperature             scale: classical ≠ quantum
     weiss-temperature ≟ jeans-temperature                force: electromagnetic ≠ gravitational
-    weiss-temperature ≟ unruh-temperature                force: electromagnetic ≠ gravitational; scale: classical ≠ quantum
     wiedemann-temperature ≟ critical-temperature         scale: classical ≠ quantum
     wiedemann-temperature ≟ jeans-temperature            force: electromagnetic ≠ gravitational
     wkb-tunneling-rate ≟ acdrude-radian                  scale: quantum ≠ classical

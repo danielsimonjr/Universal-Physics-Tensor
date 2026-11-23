@@ -18,6 +18,12 @@ function accepted(out: string): string[] {
 }
 
 describe('upt retrieve --formula', () => {
+  it.each(['2*pi*sqrt(L/g)', 'T - 2*pi*sqrt(L/g)'])('ranks the pendulum first for %s', async (formula) => {
+    const r = await run(['retrieve', `--formula=${formula}`, '--dim=L:length', '--dim=g:acceleration', '--dim=T:time', '--json']);
+    expect(r.code).toBe(0);
+    expect(accepted(r.out)[0]).toBe('CE-pendulum-period');
+  });
+
   it('C1: mass-energy with declared dimensions finds CE-mass-energy', async () => {
     const r = await run(['retrieve', 'rest', 'energy', '--formula=E - m*c^2', '--dim=E:energy', '--dim=m:mass', '--dim=c:c', '--json']);
     expect(r.code).toBe(0);

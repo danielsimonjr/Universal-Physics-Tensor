@@ -30,6 +30,13 @@ describe('TensorConfig axis values', () => {
     );
   });
 
+  it('checks query axes against the same registry', () => {
+    const tensor = new UniversalTensor(good);
+    expect(() => tensor.queryLaws({ scale: 'galactic' } as never)).toThrow(/queryLaws.scale.*galactic/);
+    expect(() => tensor.queryLaws({ force: 'magnetism' } as never)).toThrow(RangeError);
+    expect(tensor.queryLaws({ scale: 'classical' })).toEqual([]);
+  });
+
   it('the control: every registered value is admitted', () => {
     const t = new UniversalTensor({
       rank: 6,

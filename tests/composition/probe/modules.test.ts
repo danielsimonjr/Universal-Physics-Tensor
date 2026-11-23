@@ -223,7 +223,12 @@ describe('frontier', () => {
   });
   it('keeps the ledger slug guard and still lists a canonical symbol that is not a slug', () => {
     expect(() => candidateId('A', 'area')).toThrow(/kebab-case slugs/);
-    const links = wrapRelationLinkGaps(CANONICAL_GRAPH);
+    const horizon = CANONICAL_GRAPH.find((edge) => edge.target.name === 'A')!;
+    const area = CANONICAL_GRAPH.flatMap((edge) => [...edge.sources, edge.target]).find((q) => q.name === 'area')!;
+    const links = wrapRelationLinkGaps([
+      { ...horizon, sources: [] },
+      { ...horizon, id: 'area-fixture', target: area, sources: [] },
+    ]);
     const hit = links.find(
       (g) => g.participants.some((p) => p.id === 'A') && g.participants.some((p) => p.id === 'area'),
     );

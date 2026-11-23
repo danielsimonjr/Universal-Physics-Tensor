@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "17.0.0",
-    "totalFiles": 393,
+    "totalFiles": 395,
     "totalModules": 13,
-    "totalExports": 2874
+    "totalExports": 2882
   },
   "entryPoints": [
     {
@@ -138,6 +138,33 @@
             "file": "./leakage.js",
             "imports": [
               "leakageKey"
+            ]
+          },
+          {
+            "file": "../../dimensional/algebra.js",
+            "imports": [
+              "BASES",
+              "exactlyEquals"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-leaves.js",
+            "imports": [
+              "ALL_SCALAR_ARMS",
+              "forEachScalarLeaf",
+              "isDecimalLiteral"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "constantRecord"
+            ]
+          },
+          {
+            "file": "../../composition/formula-shape.js",
+            "imports": [
+              "monomialExponentsExact"
             ]
           }
         ],
@@ -7062,6 +7089,71 @@
           "STATISTICAL_MECHANICS"
         ]
       },
+      "src/canonical/entries/textbook-coverage.ts": {
+        "description": "textbook-coverage module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../canonical-equation.js",
+            "imports": [
+              "CanonicalEquation"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/ast-types.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/algebra.js",
+            "imports": [
+              "divide"
+            ]
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "ACCELERATION",
+              "ACTION",
+              "AREA",
+              "CHARGE",
+              "DIMENSIONLESS",
+              "ENERGY",
+              "ENTROPY",
+              "FREQUENCY",
+              "GRAVITATIONAL_CONSTANT",
+              "LENGTH",
+              "MASS",
+              "MASS_DENSITY",
+              "PERMITTIVITY",
+              "PRESSURE",
+              "TEMPERATURE",
+              "TIME",
+              "VELOCITY",
+              "Dimension"
+            ]
+          },
+          {
+            "file": "./_l1-build.js",
+            "imports": [
+              "dim",
+              "l1",
+              "op",
+              "pow"
+            ]
+          }
+        ],
+        "exports": [
+          "TEXTBOOK_COVERAGE"
+        ],
+        "constants": [
+          "TEXTBOOK_COVERAGE"
+        ]
+      },
       "src/canonical/entries/thermo-nuclear-cosmo.ts": {
         "description": "L1 (scalar-AST) canonical entries — thermodynamic, statistical, nuclear, and",
         "externalDependencies": [],
@@ -7377,6 +7469,12 @@
             "file": "./entries/statistical-mechanics.js",
             "imports": [
               "STATISTICAL_MECHANICS"
+            ]
+          },
+          {
+            "file": "./entries/textbook-coverage.js",
+            "imports": [
+              "TEXTBOOK_COVERAGE"
             ]
           },
           {
@@ -8067,6 +8165,7 @@
         "exports": [
           "END_OF_OPTIONS",
           "NO_POSITIONALS",
+          "shellQuote",
           "optionTokens",
           "refuseExtraPositionals",
           "parseArgs"
@@ -8083,7 +8182,8 @@
         ],
         "constants": [
           "END_OF_OPTIONS",
-          "NO_POSITIONALS"
+          "NO_POSITIONALS",
+          "shellQuote"
         ]
       },
       "src/cli/bindings.ts": {
@@ -8526,6 +8626,7 @@
           {
             "file": "../graphs.js",
             "imports": [
+              "catalogGraphCoverage",
               "resolveGraph"
             ]
           },
@@ -9076,9 +9177,9 @@
           {
             "file": "../args.js",
             "imports": [
+              "shellQuote",
               "FlagSpec"
-            ],
-            "typeOnly": true
+            ]
           },
           {
             "file": "../command.js",
@@ -9129,7 +9230,7 @@
           {
             "file": "../expr-print.js",
             "imports": [
-              "primaryUnitLabel"
+              "compactFormulaUnit"
             ]
           },
           {
@@ -9254,6 +9355,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../expr-print.js",
+            "imports": [
+              "primaryUnitLabel"
+            ]
+          },
           {
             "file": "../args.js",
             "imports": [
@@ -9791,6 +9898,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../metric-topics.js",
+            "imports": [
+              "METRIC_TOPICS"
+            ]
+          },
+          {
             "file": "../args.js",
             "imports": [
               "FlagSpec"
@@ -10027,6 +10140,7 @@
           {
             "file": "../graphs.js",
             "imports": [
+              "catalogGraphCoverage",
               "resolveGraph"
             ]
           },
@@ -10659,7 +10773,8 @@
           "printEval",
           "latexName",
           "printLatex",
-          "primaryUnitLabel"
+          "primaryUnitLabel",
+          "compactFormulaUnit"
         ],
         "interfaces": [
           "CoherentUnit"
@@ -10667,7 +10782,8 @@
         "functions": [
           "latexName",
           "printLatex",
-          "primaryUnitLabel"
+          "primaryUnitLabel",
+          "compactFormulaUnit"
         ],
         "constants": [
           "EVAL_STUBS",
@@ -10773,6 +10889,7 @@
         ],
         "exports": [
           "resolveGraph",
+          "catalogGraphCoverage",
           "groundTruthAnchor",
           "coreAnchor",
           "groundTruthLine",
@@ -10783,6 +10900,7 @@
         ],
         "functions": [
           "resolveGraph",
+          "catalogGraphCoverage",
           "groundTruthAnchor",
           "coreAnchor",
           "groundTruthLine",
@@ -10961,6 +11079,18 @@
         "functions": [
           "deriveEdgeEvidence",
           "withCatalogEvidence"
+        ]
+      },
+      "src/cli/metric-topics.ts": {
+        "description": "metric-topics module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "METRIC_TOPICS"
+        ],
+        "constants": [
+          "METRIC_TOPICS"
         ]
       },
       "src/cli/numeric-flag.ts": {
@@ -11254,7 +11384,8 @@
           {
             "file": "./args.js",
             "imports": [
-              "parseArgs"
+              "parseArgs",
+              "shellQuote"
             ]
           },
           {
@@ -11344,6 +11475,12 @@
               "CommandCtx"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./metric-topics.js",
+            "imports": [
+              "METRIC_TOPICS"
+            ]
           }
         ],
         "exports": [
@@ -11775,6 +11912,13 @@
               "AppliedCase",
               "CaseCheck",
               "CaseResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/unit-convention.js",
+            "imports": [
+              "quantityConventionUnit"
             ],
             "reExport": true
           },
@@ -12597,6 +12741,7 @@
           "runAppliedCase",
           "CASE_CONTRACTS",
           "slotForSpelling",
+          "quantityConventionUnit",
           "convertValue",
           "readQuantityLiteral",
           "UnitError",
@@ -12886,6 +13031,7 @@
           "AppliedCase",
           "CaseCheck",
           "CaseResult",
+          "quantityConventionUnit",
           "convertValue",
           "readQuantityLiteral",
           "UnitError",
@@ -13410,6 +13556,12 @@
             ]
           },
           {
+            "file": "../canonical/registry.js",
+            "imports": [
+              "canonicalById"
+            ]
+          },
+          {
             "file": "../canonical/fixed-points.js",
             "imports": [
               "constantRatio",
@@ -13699,6 +13851,7 @@
           {
             "file": "./user-equation.js",
             "imports": [
+              "equationSymbolBindings",
               "parseUserEquation"
             ]
           },
@@ -15209,7 +15362,8 @@
           {
             "file": "./edge.js",
             "imports": [
-              "BridgeEdge"
+              "BridgeEdge",
+              "EdgeConfidence"
             ],
             "typeOnly": true
           },
@@ -15223,6 +15377,7 @@
           {
             "file": "./compose.js",
             "imports": [
+              "minConfidence",
               "QUANTITY_IDENTIFICATIONS"
             ]
           },
@@ -15249,6 +15404,7 @@
           {
             "file": "./retrodiction.js",
             "imports": [
+              "RecoveryStep",
               "RetrodictionResult"
             ],
             "typeOnly": true
@@ -15607,9 +15763,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./bridge-analysis.js",
+            "file": "./discovery.js",
             "imports": [
-              "proposeLinkCandidates"
+              "rankDiscoveries"
             ]
           },
           {
@@ -15664,7 +15820,6 @@
           }
         ],
         "exports": [
-          "CANDIDATE_NOT_A_BRIDGE_REASON",
           "CONTESTED_BRIDGE_IDS",
           "marksFromEntries",
           "accountFromGraph",
@@ -15685,7 +15840,6 @@
           "formatFrontierAccount"
         ],
         "constants": [
-          "CANDIDATE_NOT_A_BRIDGE_REASON",
           "CONTESTED_BRIDGE_IDS"
         ]
       },
@@ -16113,7 +16267,8 @@
               "RetrodictionResult",
               "RetrodictionRefusal",
               "RetrodictionReport",
-              "RetrodictionOptions"
+              "RetrodictionOptions",
+              "RecoveryStep"
             ],
             "reExport": true
           },
@@ -16334,6 +16489,7 @@
           "RetrodictionRefusal",
           "RetrodictionReport",
           "RetrodictionOptions",
+          "RecoveryStep",
           "DerivationExplanation",
           "ExplainOptions",
           "QuantityExplanation",
@@ -16409,6 +16565,7 @@
           "RetrodictionRefusal",
           "RetrodictionReport",
           "RetrodictionOptions",
+          "RecoveryStep",
           "retrodict",
           "retrodictNode",
           "DerivationExplanation",
@@ -18928,6 +19085,13 @@
             ]
           },
           {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "constantRecord",
+              "constantScope"
+            ]
+          },
+          {
             "file": "../../dimensional/units.js",
             "imports": [
               "convertValue",
@@ -19526,7 +19690,8 @@
           {
             "file": "./edge.js",
             "imports": [
-              "BridgeEdge"
+              "BridgeEdge",
+              "EdgeConfidence"
             ],
             "typeOnly": true
           },
@@ -19788,6 +19953,7 @@
           "rewriteCatalogHyphens",
           "hyphenSubtractHint",
           "parseUserEquation",
+          "equationSymbolBindings",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
@@ -19809,6 +19975,7 @@
         "functions": [
           "hyphenSubtractHint",
           "parseUserEquation",
+          "equationSymbolBindings",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
@@ -24140,6 +24307,7 @@
             "imports": [
               "RetrodictionOutcome",
               "RetrodictionPrediction",
+              "RecoveryStep",
               "RetrodictionResult",
               "RetrodictionRefusal",
               "RetrodictionReport",
@@ -25091,6 +25259,7 @@
           "RankIdentifiability",
           "RetrodictionOutcome",
           "RetrodictionPrediction",
+          "RecoveryStep",
           "RetrodictionResult",
           "RetrodictionRefusal",
           "RetrodictionReport",
@@ -25511,6 +25680,7 @@
           "retrodictNode",
           "RetrodictionOutcome",
           "RetrodictionPrediction",
+          "RecoveryStep",
           "RetrodictionResult",
           "RetrodictionRefusal",
           "RetrodictionReport",
@@ -28478,6 +28648,7 @@
           "src/canonical/entries/nonmonomial.ts",
           "src/canonical/entries/relativity.ts",
           "src/canonical/entries/statistical-mechanics.ts",
+          "src/canonical/entries/textbook-coverage.ts",
           "src/canonical/entries/thermo-nuclear-cosmo.ts",
           "src/canonical/fixed-points.ts",
           "src/canonical/linkage.ts",
@@ -28551,6 +28722,7 @@
           "src/cli/library-defaults.ts",
           "src/cli/main.ts",
           "src/cli/map-evidence.ts",
+          "src/cli/metric-topics.ts",
           "src/cli/numeric-flag.ts",
           "src/cli/output.ts",
           "src/cli/published-url.ts",
@@ -28812,18 +28984,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 393,
+    "totalTypeScriptFiles": 395,
     "totalModules": 13,
-    "totalLinesOfCode": 90648,
-    "totalExports": 2874,
+    "totalLinesOfCode": 91374,
+    "totalExports": 2882,
     "totalClasses": 86,
     "totalInterfaces": 523,
-    "totalFunctions": 962,
+    "totalFunctions": 965,
     "totalTypeGuards": 17,
     "totalEnums": 0,
-    "totalConstants": 402,
-    "totalReExports": 1415,
-    "totalTypeOnlyImports": 543,
+    "totalConstants": 404,
+    "totalReExports": 1418,
+    "totalTypeOnlyImports": 544,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,

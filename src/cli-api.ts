@@ -109,7 +109,9 @@ export { CASE_CONTRACTS } from './cases/index.js';
 /** The one lookup of the slot that a key binds in an input contract. */
 export { slotForSpelling } from './bridges/input-contract.js';
 export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
-/** The unit reader's conversion, its refusal and the rows of the unit table. */
+/** Choose the unit spelling for the evaluator's quantity convention. */
+export { quantityConventionUnit } from './dimensional/unit-convention.js';
+/** Convert and read quantities, report unit errors, and enumerate the unit table. */
 export { convertValue, readQuantityLiteral, UnitError, unitRows } from './dimensional/units.js';
 /** The unit spellings and syntax listed by the units help topic. */
 export { unitHelpText } from './dimensional/units.js';

@@ -8,7 +8,7 @@ Tokens searched: 317 (171 id, 21 verdict, 125 provenance), whole-word and case-i
 
 | File | id hits (must be 0) | verdict-word hits | provenance hits |
 |---|---|---|---|
-| corpus.json | 0 | 0 | 0 |
+| corpus.json | 0 | 1 | 0 |
 | queries.json | 0 | 10 | 0 |
 
 A verdict word in a text is not by itself leakage: "approximation" or "valid" can be natural
@@ -17,7 +17,9 @@ bridge by its bare number; that number is searched in its BE-<n> form, not as a 
 
 ## corpus.json hits
 
-None.
+| Record | Field | Token | Class | Context |
+|---|---|---|---|---|
+| CE-margolus-levitin-bound | text | independent | verdict | evitin quantum speed limit quantum time-independent Hamiltonian mean energy measured above  |
 
 ## queries.json hits
 

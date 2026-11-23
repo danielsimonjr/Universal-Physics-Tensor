@@ -476,14 +476,14 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
   const target: Quantity = {
     name: eq.dimensional.target.name,
     ...(eq.dimensional.target.identity === undefined ? {} : { identity: eq.dimensional.target.identity }),
-    symbol: eq.dimensional.target.name,
+    symbol: eq.dimensional.target.symbol ?? eq.dimensional.target.name,
     dim: eq.dimensional.target.dim,
     attributes,
   };
   const factors = formulaFactorExponents(eq);
   const sources: Quantity[] = eq.dimensional.governing
     .filter((g) => constantValue(g.name, g.dim) === null)
-    .map((g) => ({ name: g.name, symbol: g.name, dim: g.dim, attributes }));
+    .map((g) => ({ name: g.name, symbol: g.symbol ?? g.name, dim: g.dim, attributes }));
   for (const name of Object.keys(factors)) {
     sources.push({ name, symbol: name, dim: DIMENSIONLESS, attributes });
   }

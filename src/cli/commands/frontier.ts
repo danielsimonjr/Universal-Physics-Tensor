@@ -19,7 +19,7 @@ const HELP = `upt frontier [--json]
         neither list changes a score. A missing observation stays missing.`;
 
 const EPISTEMICS =
-  'Two lists, not one score. A null result was examined and rejected. A frontier row is a connection the catalog does not contain. Neither changes a score.';
+  'Two lists, not one score. A null result was examined and did not become an accepted connection. A frontier row is a connection the catalog does not contain. Neither changes a score.';
 
 async function run(ctx: CommandCtx): Promise<number> {
   const account = ctx.api.catalogFrontierAccount();

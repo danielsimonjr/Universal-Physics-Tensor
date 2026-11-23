@@ -144511,15 +144511,72 @@
   },
   {
     "pair": "be-57>>be-12",
-    "outcome": "error",
-    "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-12: target quantity 'unruh-temperature' matches none of ['mass', 'temperature'] by name or registered identification"
+    "outcome": "composed",
+    "id": "be-57>>be-12",
+    "beId": null,
+    "kind": "bridge",
+    "label": "Unruh temperature T = ℏ a / (2π c k_B) ∘ Thermal de Broglie wavelength λ_T = √(2πℏ²/(m k_B T))",
+    "sources": [
+      "unruh-acceleration:a:{\"L\":1,\"M\":0,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "mass:M:{\"L\":0,\"M\":1,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
+    ],
+    "target": "thermal-de-broglie-wavelength:λ_T",
+    "confidence": "speculative",
+    "domainDescription": "(isFinite(unruh-acceleration) and unruh-acceleration >= 0) AND, on the piped temperature, (isFinite(mass) and mass > 0 and isFinite(temperature) and temperature > 0)",
+    "citation": "Unruh 1976 Phys. Rev. D 14:870 | Pathria 2011 Statistical Mechanics §7.1; de Broglie 1924",
+    "identificationUsed": "unruh-temperature->temperature",
+    "aliasDispositionsUsed": [],
+    "extraKeys": [
+      "aliases",
+      "beId",
+      "citation",
+      "confidence",
+      "domain",
+      "evaluate",
+      "id",
+      "identificationUsed",
+      "kind",
+      "label",
+      "sources",
+      "symbolic",
+      "target"
+    ],
+    "predicateAtOnes": "ok:true",
+    "evaluateAtOnes": "ok:1.1171932430491113e-12"
   },
   {
     "pair": "be-57>>be-16",
-    "outcome": "error",
-    "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-16: target quantity 'unruh-temperature' matches none of ['temperature'] by name or registered identification"
+    "outcome": "composed",
+    "id": "be-57>>be-16",
+    "beId": null,
+    "kind": "bridge",
+    "label": "Unruh temperature T = ℏ a / (2π c k_B) ∘ Landauer's bound E_min = k_B T ln2",
+    "sources": [
+      "unruh-acceleration:a:{\"L\":1,\"M\":0,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
+    ],
+    "target": "landauer-erasure-energy:E_min",
+    "confidence": "speculative",
+    "domainDescription": "(isFinite(unruh-acceleration) and unruh-acceleration >= 0) AND, on the piped temperature, (isFinite(temperature) and temperature >= 0)",
+    "citation": "Unruh 1976 Phys. Rev. D 14:870 | Landauer 1961 IBM JRD 5:183",
+    "identificationUsed": "unruh-temperature->temperature",
+    "aliasDispositionsUsed": [],
+    "extraKeys": [
+      "aliases",
+      "beId",
+      "citation",
+      "confidence",
+      "domain",
+      "evaluate",
+      "id",
+      "identificationUsed",
+      "kind",
+      "label",
+      "sources",
+      "symbolic",
+      "target"
+    ],
+    "predicateAtOnes": "ok:true",
+    "evaluateAtOnes": "ok:3.8806194032144794e-44"
   },
   {
     "pair": "be-57>>be-37",
@@ -144637,9 +144694,41 @@
   },
   {
     "pair": "be-57>>be-23",
-    "outcome": "error",
-    "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-23: target quantity 'unruh-temperature' matches none of ['residual-resistivity', 'effective-mass', 'carrier-density', 'temperature', 'syk-coefficient'] by name or registered identification"
+    "outcome": "composed",
+    "id": "be-57>>be-23",
+    "beId": null,
+    "kind": "bridge",
+    "label": "Unruh temperature T = ℏ a / (2π c k_B) ∘ SYK Planckian resistivity ρ(T) = ρ_0 + (m* k_B T)/(n_e e² ℏ)·α_SYK",
+    "sources": [
+      "unruh-acceleration:a:{\"L\":1,\"M\":0,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "residual-resistivity:ρ_0:{\"L\":3,\"M\":1,\"T\":-3,\"I\":-2,\"Theta\":0,\"N\":0,\"J\":0}",
+      "effective-mass:m*:{\"L\":0,\"M\":1,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "carrier-density:n_e:{\"L\":-3,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "syk-coefficient:α_SYK:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
+    ],
+    "target": "resistivity:ρ",
+    "confidence": "speculative",
+    "domainDescription": "(isFinite(unruh-acceleration) and unruh-acceleration >= 0) AND, on the piped temperature, (isFinite(residual-resistivity) and residual-resistivity >= 0 and isFinite(effective-mass) and effective-mass > 0 and isFinite(carrier-density) and carrier-density > 0 and isFinite(temperature) and temperature >= 0 and isFinite(syk-coefficient))",
+    "citation": "Unruh 1976 Phys. Rev. D 14:870 | Sachdev & Ye 1993 PRL 70:3339; Hartnoll 2015 Nature Phys. 11:54",
+    "identificationUsed": "unruh-temperature->temperature",
+    "aliasDispositionsUsed": [],
+    "extraKeys": [
+      "aliases",
+      "beId",
+      "citation",
+      "confidence",
+      "domain",
+      "evaluate",
+      "id",
+      "identificationUsed",
+      "kind",
+      "label",
+      "sources",
+      "symbolic",
+      "target"
+    ],
+    "predicateAtOnes": "ok:true",
+    "evaluateAtOnes": "ok:2.068133841877804e+28"
   },
   {
     "pair": "be-57>>be-24",
@@ -144661,9 +144750,38 @@
   },
   {
     "pair": "be-57>>be-27",
-    "outcome": "error",
-    "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-27: target quantity 'unruh-temperature' matches none of ['temperature', 'active-noise-energy'] by name or registered identification"
+    "outcome": "composed",
+    "id": "be-57>>be-27",
+    "beId": null,
+    "kind": "bridge",
+    "label": "Unruh temperature T = ℏ a / (2π c k_B) ∘ Effective temperature T_eff = T(1 + Σ_active/(k_B T))",
+    "sources": [
+      "unruh-acceleration:a:{\"L\":1,\"M\":0,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "active-noise-energy:Σ_active:{\"L\":2,\"M\":1,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
+    ],
+    "target": "effective-temperature:T_eff",
+    "confidence": "speculative",
+    "domainDescription": "(isFinite(unruh-acceleration) and unruh-acceleration >= 0) AND, on the piped temperature, (isFinite(temperature) and temperature > 0 and isFinite(active-noise-energy))",
+    "citation": "Unruh 1976 Phys. Rev. D 14:870 | Cugliandolo & Kurchan 1993 J. Phys. A 26:L401",
+    "identificationUsed": "unruh-temperature->temperature",
+    "aliasDispositionsUsed": [],
+    "extraKeys": [
+      "aliases",
+      "beId",
+      "citation",
+      "confidence",
+      "domain",
+      "evaluate",
+      "id",
+      "identificationUsed",
+      "kind",
+      "label",
+      "sources",
+      "symbolic",
+      "target"
+    ],
+    "predicateAtOnes": "ok:true",
+    "evaluateAtOnes": "ok:7.242970516039921e+22"
   },
   {
     "pair": "be-57>>be-30",
@@ -144679,9 +144797,40 @@
   },
   {
     "pair": "be-57>>be-33",
-    "outcome": "error",
-    "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-33: target quantity 'unruh-temperature' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'dynamic-exponent-z'] by name or registered identification"
+    "outcome": "composed",
+    "id": "be-57>>be-33",
+    "beId": null,
+    "kind": "bridge",
+    "label": "Unruh temperature T = ℏ a / (2π c k_B) ∘ Quantum-critical thermal scaling ξ(T) = ξ_0 (T/T_0)^(−1/z)",
+    "sources": [
+      "unruh-acceleration:a:{\"L\":1,\"M\":0,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "reference-correlation-length:ξ_0:{\"L\":1,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "reference-temperature:T_0:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":1,\"N\":0,\"J\":0}",
+      "dynamic-exponent-z:z:{\"L\":0,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
+    ],
+    "target": "quantum-correlation-length:ξ_quantum",
+    "confidence": "speculative",
+    "domainDescription": "(isFinite(unruh-acceleration) and unruh-acceleration >= 0) AND, on the piped temperature, (isFinite(reference-correlation-length) and reference-correlation-length > 0 and isFinite(temperature) and temperature > 0 and isFinite(reference-temperature) and reference-temperature > 0 and isFinite(dynamic-exponent-z) and dynamic-exponent-z != 0)",
+    "citation": "Unruh 1976 Phys. Rev. D 14:870 | Hertz 1976 PRB 14:1165; Millis 1993 PRB 48:7183; Sachdev 2011 QPT 2nd ed. Ch.11",
+    "identificationUsed": "unruh-temperature->temperature",
+    "aliasDispositionsUsed": [],
+    "extraKeys": [
+      "aliases",
+      "beId",
+      "citation",
+      "confidence",
+      "domain",
+      "evaluate",
+      "id",
+      "identificationUsed",
+      "kind",
+      "label",
+      "sources",
+      "symbolic",
+      "target"
+    ],
+    "predicateAtOnes": "ok:true",
+    "evaluateAtOnes": "ok:246608301989159400000"
   },
   {
     "pair": "be-57>>be-34",
@@ -144841,9 +144990,39 @@
   },
   {
     "pair": "be-57>>be-76",
-    "outcome": "error",
-    "error": "CompositionJunctionError",
-    "message": "Cannot compose be-57 -> be-76: target quantity 'unruh-temperature' matches none of ['carrier-density', 'temperature', 'magnetic-pressure'] by name or registered identification"
+    "outcome": "composed",
+    "id": "be-57>>be-76",
+    "beId": null,
+    "kind": "bridge",
+    "label": "Unruh temperature T = ℏ a / (2π c k_B) ∘ Plasma beta β = n k_B T / p_B",
+    "sources": [
+      "unruh-acceleration:a:{\"L\":1,\"M\":0,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "carrier-density:n_e:{\"L\":-3,\"M\":0,\"T\":0,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}",
+      "magnetic-pressure:p_B:{\"L\":-1,\"M\":1,\"T\":-2,\"I\":0,\"Theta\":0,\"N\":0,\"J\":0}"
+    ],
+    "target": "plasma-beta:β",
+    "confidence": "established",
+    "domainDescription": "(isFinite(unruh-acceleration) and unruh-acceleration >= 0) AND, on the piped temperature, (isFinite(carrier-density) and isFinite(temperature) and isFinite(magnetic-pressure) and magnetic-pressure != 0 and carrier-density >= 0 and temperature >= 0 and magnetic-pressure > 0)",
+    "citation": "Unruh 1976 Phys. Rev. D 14:870 | PhysJS.PlasmaBeta.beta_eq. p_B is PhysJS.MagneticPressure.pressure_eq. Using B²/μ0 is half of this beta. Not a plasma-β inequality.",
+    "identificationUsed": "unruh-temperature->temperature",
+    "aliasDispositionsUsed": [],
+    "extraKeys": [
+      "aliases",
+      "beId",
+      "citation",
+      "confidence",
+      "domain",
+      "evaluate",
+      "id",
+      "identificationUsed",
+      "kind",
+      "label",
+      "sources",
+      "symbolic",
+      "target"
+    ],
+    "predicateAtOnes": "ok:true",
+    "evaluateAtOnes": "ok:5.598550368595018e-44"
   },
   {
     "pair": "be-57>>be-77",

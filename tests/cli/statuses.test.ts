@@ -37,7 +37,8 @@ function textStatuses(text: string, command: string): Set<string> {
 
 function jsonStatuses(v: unknown, command: string, found = new Set<string>()): Set<string> {
   if (typeof v === 'string') {
-    const k = keyFor(v, command);
+    const k = v === 'decoy' && command === 'discover' ? 'adjudicated-decoy'
+      : v === 'decoy' && command === 'audit' ? 'decoy' : keyFor(v, command);
     if (k !== undefined) found.add(k);
   } else if (Array.isArray(v)) v.forEach((x) => jsonStatuses(x, command, found));
   else if (v !== null && typeof v === 'object') {
@@ -121,7 +122,7 @@ describe('audit I13: every status a command emits is defined in its envelope', (
 describe('audit I13: one glossary, reached by upt help statuses', () => {
   const REQUIRED = [
     'VACUOUS', 'UNKNOWN', 'unchecked', 'VIOLATED', 'valid', 'ADEQUATE', 'INADEQUATE', 'UNDETERMINED',
-    'NEITHER', 'DECOY', 'NOT COVERED', 'no composite claim', 'promising', 'inert', 'contradictory',
+    'NEITHER', 'DIMENSIONAL-RECONSTRUCTION MISMATCH', 'RECORDED CANDIDATE DECOY', 'NOT COVERED', 'no composite claim', 'promising', 'inert', 'contradictory',
     'reproduced', 'differs', 'not replayable', 'checked', 'refuted', 'unresolved',
   ];
 

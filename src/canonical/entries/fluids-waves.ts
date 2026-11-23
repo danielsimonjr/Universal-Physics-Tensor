@@ -105,6 +105,7 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'g', dim: ACCELERATION },
   ], {
     id: 'CE-buoyant-force',
+    searchTerms: ['buoyancy', 'Archimedes principle'],
     name: "Buoyant force (Archimedes')",
     domain: 'mechanics',
     formula_latex: 'F_b = \\rho V g',

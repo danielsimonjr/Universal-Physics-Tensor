@@ -51,18 +51,18 @@ describe('unbound names are not graph nodes (#684 F2)', () => {
     expect(a.graphJunction).toEqual(a.junction);
   });
 
-  it('R2: map --equation F = m*a does not claim a cluster through the unbound a', async () => {
-    const t = await run(['map', '--equation', 'F = m*a', '--equation-only'], 0);
+  it('R2: map does not claim a cluster through the unbound a', async () => {
+    const t = await run(['map', '--equation', 'F = m*a*zqx', '--equation-only'], 0);
     expect(t).not.toMatch(/joins the .* via \{/);
     expect(t).toMatch(/ISOLATED/);
-    const j = JSON.parse(await run(['map', '--equation', 'F = m*a', '--equation-only', '--json']));
+    const j = JSON.parse(await run(['map', '--equation', 'F = m*a*zqx', '--equation-only', '--json']));
     expect(j.result.landing.sharedQuantities).not.toContain('a');
     expect(j.result.landing.sharedQuantities).not.toContain('F');
     expect(j.result.landing.isolated).toBe(true);
   });
 
   it('R3 (control): with --bind-short the bound a still joins the cluster', async () => {
-    const t = await run(['map', '--equation', 'F = m*a', '--equation-only', '--bind-short'], 3);
+    const t = await run(['map', '--equation', 'F = m*a*zqx', '--equation-only', '--bind-short'], 3);
     expect(t).toMatch(/via \{a\}/);
   });
 
@@ -108,7 +108,7 @@ describe('unbound names are not graph nodes (#684 F2)', () => {
   });
 
   it('R5: the dot drawing shows the unbound name as its own node', async () => {
-    const dot = await run(['map', '--equation', 'F = m*a', '--format=dot']);
+    const dot = await run(['map', '--equation', 'F = m*a*zqx', '--format=dot']);
     expect(dot).toContain('label="a (unbound)"');
     expect(dot).toContain('label="F (unbound)"');
     // The user junction has no edge to the catalog nodes `a` and `F` (the old wiring drew both).

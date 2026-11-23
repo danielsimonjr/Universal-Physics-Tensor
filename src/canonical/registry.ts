@@ -16,6 +16,7 @@ import { THERMO_NUCLEAR_COSMO } from './entries/thermo-nuclear-cosmo.js';
 import { ATOMIC } from './entries/atomic.js';
 import { CONDENSED_MATTER } from './entries/condensed-matter.js';
 import { STATISTICAL_MECHANICS } from './entries/statistical-mechanics.js';
+import { TEXTBOOK_COVERAGE } from './entries/textbook-coverage.js';
 import { NONMONOMIAL } from './entries/nonmonomial.js';
 
 /**
@@ -35,6 +36,7 @@ export const CANONICAL_EQUATIONS: readonly CanonicalEquation[] = [
   ...CONDENSED_MATTER,
   ...STATISTICAL_MECHANICS,
   ...NONMONOMIAL,
+  ...TEXTBOOK_COVERAGE,
 ];
 
 /** Id → entry. */

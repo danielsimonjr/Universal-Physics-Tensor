@@ -44,7 +44,7 @@ export type DatasetRole =
 export type SearchStopReason =
   | 'exhausted-space' | 'candidate-limit' | 'evaluation-limit' | 'time-limit'
   | 'memory-limit' | 'cancelled' | 'sufficient-candidates' | 'non-identifiable'
-  | 'no-credible-candidate';
+  | 'awaiting-validation' | 'no-credible-candidate';
 
 /** Typed frontier gap. `relation-link` wraps Product A; residual is Product B. @internal */
 export type FrontierGapKind =

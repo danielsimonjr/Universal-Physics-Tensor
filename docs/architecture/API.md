@@ -591,7 +591,7 @@ Everything in this section is `@public` and re-exported from `src/index.ts` unle
 - **`propagateUncertainty(edge, inputs, sigmas, opts?)`** — first-order uncertainty propagation over an edge's transfer function. The function calls `evaluateEdge` for the central value and MathTS `propagateUncertainty` for the partial derivatives. The function returns an `UncertaintyResult`. It works on composed edges for free. The `opts` type `UncertaintyOptions` is tagged `@internal`.
 - **`runConfrontation(bridgeId)`** — the catalog confrontation for that id.
 - **`classifyIdentifiability(edges, knownNames, targetName, opts?)`** / **`classifyAll(...)`** / **`forwardClosure(...)`** — the structural identifiability classifier. Counts a target's independent derivations from a known-quantity set. Returns an `IdentifiabilityResult` with an `IdentifiabilityVerdict`: `under-determined` / `exactly-determined` / `over-determined` / `given`. The over-determined surplus are falsifiable consistency constraints. Structural, not parametric; honors `QUANTITY_IDENTIFICATIONS`; excludes circular self-support. Types: `IdentifiabilityVerdict`, `IdentifiabilityResult`, `IdentifiabilityOptions`.
-- **`retrodict(edges, groundTruth, opts?)`** / **`retrodictNode(...)`** — the retrodiction harness (the framework's own falsification benchmark). Masks each over-determined node, recomputes it via every independent derivation from `groundTruth` values, and scores the spread (`consistent` / `inconsistent` / `single` / `unrecoverable`; headline `allConsistent`). Optional `references` add external-value scoring. The default tolerance is a relative spread of 1e-6. Types: `RetrodictionOutcome`, `RetrodictionPrediction`, `RetrodictionResult`, `RetrodictionReport`, `RetrodictionOptions`.
+- **`retrodict(edges, groundTruth, opts?)`** / **`retrodictNode(...)`** — the retrodiction harness (the framework's own falsification benchmark). Masks each over-determined node, recomputes it via every independent derivation from `groundTruth` values, and scores the spread (`consistent` / `inconsistent` / `single` / `unrecoverable`; headline `allConsistent`). Optional `references` add external-value scoring. The default tolerance is a relative spread of 1e-6. Types: `RetrodictionOutcome`, `RetrodictionPrediction`, `RecoveryStep`, `RetrodictionResult`, `RetrodictionReport`, `RetrodictionOptions`.
 - **`explainQuantity(edges, target, known, opts?)`** — the unified entry point. It combines the identifiability classifier, the retrodiction harness and the Buckingham-π check into one `QuantityExplanation`, which holds:
   - the identifiability verdict;
   - per-derivation values + the consistency check (when `known` is a `name → value` map);
@@ -1046,6 +1046,7 @@ This section lists each root export that no other section of this document names
 | `InformationAxis` | `type` | internal | `src/composition/axes.ts` |
 | `ProposedBridge` | `interface` | internal | `src/composition/proposed-bridges.ts` |
 | `RankIdentifiability` | `interface` | public | `src/composition/identifiability.ts` |
+| `RecoveryStep` | `type` | public | `src/composition/retrodiction.ts` |
 | `RepresentativeValue` | `interface` | internal | `src/composition/representative-values.ts` |
 | `RetrodictionRefusal` | `interface` | public | `src/composition/retrodiction.ts` |
 | `ScaleAxis` | `type` | internal | `src/composition/axes.ts` |
@@ -1242,12 +1243,12 @@ Regenerate: `npx @danielsimonjr/repo-tools@2.6.1 map . --out=<dir>` · Check: `n
 
 | Claim | Value | Source |
 |---|---|---|
-| totalExports | 3942 | `dependency-graph.json` `statistics.totalExports` |
+| totalExports | 3951 | `dependency-graph.json` `statistics.totalExports` |
 | unusedExportsCount | 192 | `dependency-graph.json` `statistics.unusedExportsCount` |
 
-Both counts cover the whole repository, which is the default scope of `repo-tools map`. Reproduce them with the pinned command above; `<dir>/dependency-graph.json` is that run's artifact, not a repository file. The project generator `bun run docs:deps` writes a different `docs/architecture/dependency-graph.json` from `src/` only (`unusedExportsCount` 34, `totalExports` 2874) and is not this table's source. `212 → 202` is a reader artifact of the S2 namespace dynamic `import()` of `record.ts`: the static reader now counts ten exports of that module as referenced (`Dispatch`, `EnvironmentChange`, `Reach`, `RecordEntry`, `RecordEnvironment`, `RecordInput`, `RecordResult`, `ReplayEntryReport`, `ReplayOutcome`, `StreamDifference`) — 7 of them interfaces, and 3 (`Dispatch`, `Reach`, `ReplayOutcome`) type aliases. No export was removed.
+Both counts cover the whole repository, which is the default scope of `repo-tools map`. Reproduce them with the pinned command above; `<dir>/dependency-graph.json` is that run's artifact, not a repository file. The project generator `bun run docs:deps` writes a different `docs/architecture/dependency-graph.json` from `src/` only (`unusedExportsCount` 34, `totalExports` 2882) and is not this table's source. `212 → 202` is a reader artifact of the S2 namespace dynamic `import()` of `record.ts`: the static reader now counts ten exports of that module as referenced (`Dispatch`, `EnvironmentChange`, `Reach`, `RecordEntry`, `RecordEnvironment`, `RecordInput`, `RecordResult`, `ReplayEntryReport`, `ReplayOutcome`, `StreamDifference`) — 7 of them interfaces, and 3 (`Dispatch`, `Reach`, `ReplayOutcome`) type aliases. No export was removed.
 
-The public-surface walk (`--api-surface`, entry `src/index.ts`) lists 481 symbols: 233 runtime symbols and 248 type-only symbols. By kind the walk counts 126 functions, 66 constants, 41 classes, 173 interfaces, 74 type aliases and 1 namespace. By tag it counts 356 `@public`, 18 `@internal` and 107 untagged. This walk is a direct measurement and is not a gated claim. `tests/api/public-surface.test.ts` pins the runtime names.
+The public-surface walk (`--api-surface`, entry `src/index.ts`) lists 482 symbols: 233 runtime symbols and 249 type-only symbols. By kind the walk counts 126 functions, 66 constants, 41 classes, 173 interfaces, 75 type aliases and 1 namespace. By tag it counts 361 `@public`, 15 `@internal` and 106 untagged. This walk is a direct measurement and is not a gated claim. `tests/api/public-surface.test.ts` pins the runtime names.
 
 **`unusedExportsCount` is not a deletion list.** It counts exports with no importer *inside
 this repository*. The package is a published library: its public surface exists for consumers who are

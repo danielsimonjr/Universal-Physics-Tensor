@@ -112,11 +112,13 @@ describe('OPEN-bridge coverage (F2 — gaps are logged, not silent)', () => {
       '12',
       '13',
       '16',
+      '164',
       '29',
       '41',
       '42',
       '51',
       '52',
+      '57',
     ]);
   });
 

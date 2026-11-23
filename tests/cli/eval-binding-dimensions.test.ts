@@ -106,3 +106,16 @@ describe('check() flags a homogeneity failure only', () => {
     expect(checker.check('x+1', {}).inhomogeneous).toBeUndefined();
   });
 });
+
+it('discloses skipped dimensional and physical-domain checks', async () => {
+  for (const expression of ['B+T', 'exp(B/T)']) {
+    const mixed = await run(['eval', expression, 'B=3950', 'T=350K', '--json']);
+    expect(mixed.code).toBe(0);
+    expect(JSON.parse(mixed.stdout).result.notes.join(' ')).toMatch(/skipped the dimension check with bare bindings B/);
+  }
+  const belowAbsoluteZero = await run(['eval', 'T', 'T=-300K']);
+  expect(belowAbsoluteZero.stdout.trim()).toBe('-300 K');
+  expect(belowAbsoluteZero.stderr).toContain('eval does not check physical validity domains');
+  const allDimensions = await run(['eval', 'exp(B/T)', 'B=3950K', 'T=350K']);
+  expect(allDimensions.stderr).not.toContain('skipped the dimension check');
+});

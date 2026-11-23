@@ -67,7 +67,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--equation', valueStyle: 'either', optionalValue: true, description: 'Inject TARGET = EXPR as a user node and report where it lands.' },
   { name: '--equation-only', valueStyle: 'none', description: 'Print only the equation verdict. Errors when --equation is missing.' },
   { name: '--verbose', valueStyle: 'none', description: 'With --equation, also print the linkage map.' },
-  { name: '--bind-short', valueStyle: 'none', description: 'Bind a one-letter catalog name in --equation. Without it, those names are reported and not bound.' },
+  { name: '--bind-short', valueStyle: 'none', description: 'Bind an exact one-letter catalog name beyond those resolved by the equation context.' },
   { name: '--natural', valueStyle: 'none', description: 'Set ħ = c = 1 when a dimension difference is a power of those constants.' },
   { name: '--geometrized', valueStyle: 'none', description: 'With the natural-unit rules, also set G = 1.' },
   { name: '--communities', valueStyle: 'none', description: 'Also print the layout communities (Louvain, heuristic) of the largest component. A drawing aid, not physics.' },

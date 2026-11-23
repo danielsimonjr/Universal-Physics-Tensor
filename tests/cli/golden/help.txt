@@ -53,16 +53,17 @@ Flags:
         re-derive as a recognized monomial (with the prefactor recovered),
         which are dimensional with no sourced prefactor (the evaluator's 1
         is that absence), which are decoys, which add dimensionful terms
-        (not a monomial), which are dimensionally open.
+        (not a monomial), which have non-unique dimensional forms, and
+        which remain dimensionally open.
         A recovered prefactor of the form p/(π^a·ln2^b), a small rational p,
         or the square root of one, is clean and prints its exact form after
-        the number, ×1.125 (= 9/8); any other prints (empirical/tuned constant).
+        the number, ×1.125 (= 9/8); any other prints (prefactor without a recognized exact form).
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.
-        NOT A MONOMIAL means the encoded formula adds dimensionful terms, so
-        a monomial reconstruction does not apply. It is not a failed
-        reconstruction and not a physical refutation.
+        NOT A MONOMIAL covers sums of dimensionful terms and standalone
+        transcendental formulas. NOT UNIQUE means the declared variables
+        leave one or more free dimensionless groups.
         --source picks the graph (default catalog).
 Flags:
   --source=VALUE
@@ -298,7 +299,10 @@ Flags:
         compares unlike dimensions is refused (exit 1). A bare number has no
         dimension check. The value is converted to SI. When every bound name the
         formula uses has a unit, the SI unit of the result follows the value.
-        A bare number has no unit, and the result then shows the value only.
+        Mixed bare and dimensioned inputs are evaluated with a warning when
+        the dimension check is skipped. This command checks arithmetic and
+        dimensions where available. Physical validity domains are checked by
+        upt evaluate or upt explain for a registered relation.
         --natural and --geometrized show the value only.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
@@ -563,7 +567,7 @@ Flags:
   --verbose
         With --equation, also print the linkage map.
   --bind-short
-        Bind a one-letter catalog name in --equation. Without it, those names are reported and not bound.
+        Bind an exact one-letter catalog name beyond those resolved by the equation context.
   --natural
         Set ħ = c = 1 when a dimension difference is a power of those constants.
   --geometrized
@@ -584,16 +588,16 @@ Flags:
         signature as the canonical Einstein-equation metric node.
         Schwarzschild Kretschmann is checked against 48 G² M² / (c⁴ r⁶).
         FLRW prints the Friedmann equation including the curvature term
-        −k c²/a² and Λ. Kerr Kretschmann uses the Boyer–Lindquist closed form.
+        −k c²/a² and Λ. Kerr uses T = ct in metres for tensor components.
+        For |a/M| ≤ 1 it reports both horizons in metres and prograde and
+        retrograde ISCO and photon radii in r/M.
         --geodesic integrates a short Schwarzschild circular orbit, or a Kerr
         geodesic (equatorial and circular at θ = π/2; inclined, with that
         polar turning point, at any other θ). Kerr's a is a length in metres;
-        the report prints a/M = a/(GM/c²). A Ricci scalar that has a closed
-        form is that form; a vacuum finite-difference residual is not listed
-        as Ricci. Each Ricci component, the Ricci scalar and the Kretschmann
-        scalar carry an upper bound of their finite-difference error; a
-        value within its bound is marked "unresolved: |R| <= bound" (|K|
-        for the Kretschmann scalar). A
+        the report prints a/M = a/(GM/c²). Exact vacuum and trace-free Ricci
+        scalars are labeled as closed forms. The numerical tensors also carry
+        finite-difference error bounds. A numerical value within its bound
+        is marked unresolved. A
         parameter is a number, a unit (M=1Msun, r=1km) or a
         constant expression (theta=pi/2). A bare number is already in the
         parameter's SI unit; a dimensioned quantity must match it.
@@ -741,7 +745,7 @@ Flags:
         --alpha=X            study: χ² test level (default: the file's, else 0.001)
         --json               machine envelope
 
-        PROBLEM FILE (--problem=FILE, JSON)
+        PROBLEM FILE (run/candidates/falsify/rank/reproduce --problem=FILE, JSON)
         target       {"name", "dim"}: the observable to explain. "dim" is a named
                      dimension (time, length, mass, acceleration, ...) or explicit
                      L^a.M^b.T^c (e.g. "L^3.M^-1.T^-2").
@@ -772,7 +776,16 @@ Flags:
             {"length": 1.5, "gravity": 3.71, "period": 3.995}]}
         }
 
-        STUDY FILE (--data=FILE, JSON, or CSV when FILE ends in .csv)
+        DESIGN FILES (design --h1=FILE --h2=FILE --bounds=FILE, all JSON)
+        Each hypothesis is a bare expression tree. A leaf, for example:
+          {"kind":"symbol","name":"length","dim":{"L":1,"M":0,"T":0,"I":0,"Theta":0,"N":0,"J":0}}
+        A product, quotient or power is {"kind":"op","op":"*|/|^","args":[...]}.
+        A number is a symbol named by its decimal text with all exponents 0.
+        Bounds example: {"variables":{"length":{"min":0.1,"max":10,"steps":41}}}
+        Use SI values. Optional sigma is a positive output standard uncertainty.
+        Optional forbidden is an array of regions mapping names to {min,max}.
+
+        STUDY FILE (study --data=FILE, JSON, or CSV when FILE ends in .csv)
         provenance   {"synthetic": true|false (required, never inferred),
                      "source", "acquisition"?, "calibration"?}
         target       {"name", "unit", "sigma"?}  sigma: default row uncertainty
@@ -792,7 +805,7 @@ Flags:
                      repeats an exploratory row's inputs, or a replication row
                      sharing an exploratory row's source, refuses the file.
         baselines    optional [{"name", "formula", "fitPrefactor"?}]: competing
-                     models over the governing names in SI units, e.g.
+                     models over the governing names and registered SI constants, e.g.
                      "2*pi*sqrt(length/gravity)"; must have the target's dimension.
                      fitPrefactor (default false) fits one scale on exploratory rows.
         criterion    optional {"alpha"} (default 0.001)
@@ -825,6 +838,9 @@ Flags:
                      χ² test at α/2. Either firing makes replication too-close:
                      a copy, or an overstated σ. Rows at other inputs are not
                      tested, so a copy at altered inputs is not caught.
+        Search stop awaiting-validation means the exploratory search produced
+        candidates and had no holdout. The study applies its own credibility test
+        and withholds its holdout and replication rows from the search.
         Verdicts: no-credible-candidate | refuted-on-holdout | survives-holdout |
         untested-on-holdout; replication is reported separately
         (survives-replication | refuted-on-replication | too-close |
@@ -849,7 +865,7 @@ Flags:
   --worker=VALUE
         Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file.
   --bounds=VALUE
-        Bounds for design, as the design subverb reads them.
+        Design bounds JSON file with variables mapped to {min, max, steps?}.
   --h1=VALUE
         First hypothesis for design: an expression-tree JSON file. A symbol node's dim carries all seven exponents, L, M, T, I, Theta, N and J (a dimensionless symbol writes each as 0); a partial record is refused.
   --h2=VALUE
@@ -990,7 +1006,7 @@ Flags:
 
   upt search <word> ...
         Find a catalog bridge, canonical equation, atlas model, atlas bridge,
-        quantity, applied case, or regime registration by the words in its name, id, symbol, alias
+        quantity, applied case, regime registration, or spacetime metric by its name, id, symbol, alias
         or bridge description, and print the command that inspects each match. Every
         word must match. Two or more words that share a field must sit together
         there, in either order, and a word in that phrase is not a prefix of a

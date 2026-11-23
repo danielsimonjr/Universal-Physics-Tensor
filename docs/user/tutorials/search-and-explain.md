@@ -36,7 +36,7 @@ upt explain hawking-temperature mass=1Msun
 ```
 
 ```text
-  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
+  'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8 K [highly-speculative]. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
 ```
 
 ## Evaluate an expression

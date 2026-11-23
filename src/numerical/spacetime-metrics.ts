@@ -78,9 +78,13 @@ export interface CurvatureReport {
   readonly christoffel: readonly Component[];
   readonly ricci: readonly Component[];
   readonly ricciScalar: number;
-  /** Upper bound of the finite-difference error of `ricciScalar`. */
+  /** Provenance of the reported Ricci scalar. */
+  readonly ricciScalarSource: 'closed-form' | 'finite-difference';
+  /** The Ricci scalar computed by finite difference, even when a closed form is reported. */
+  readonly ricciScalarFiniteDifference: number;
+  /** Error bound for the finite-difference Ricci scalar. */
   readonly ricciScalarBound: number;
-  /** `|ricciScalar| > ricciScalarBound`. */
+  /** A closed form is available or the finite-difference value exceeds its bound. */
   readonly ricciScalarResolved: boolean;
   readonly kretschmann: number;
   /** Upper bound of the finite-difference error of `kretschmann`. */
@@ -200,8 +204,7 @@ function nonzeroMatrix(m: number[][], bound: number[][], label: (i: number, j: n
  * indices), so all symbols in a class have one SI dimension. There is no
  * absolute floor: Γ^t_rr = a ȧ/c² is about 1e-17 s/m² in SI.
  */
-function nonzeroGamma(G: Gamma): Component[] {
-  const names = ['t', 'r', 'θ', 'φ'];
+function nonzeroGamma(G: Gamma, names: readonly string[]): Component[] {
   const out: Component[] = [];
   const cls = (rho: number, mu: number, nu: number) => (rho === 0 ? 3 : 0) + (mu === 0 ? 1 : 0) + (nu === 0 ? 1 : 0);
   const scale = [0, 0, 0, 0, 0, 0];
@@ -571,24 +574,45 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
   if (!(p.r! > 0)) throw new MetricValueError(`r must be positive and outside the singularity (got r = ${p.r} m)`);
   if (Math.abs(p.a!) >= p.r!) throw new MetricValueError('Kerr finite difference wants |a| < r and r outside the ring');
   const g = kerrMetric(Mgeom, p.a!);
-  const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
+  const x: Pt = [p.c! * p.t!, p.r!, p.theta!, p.phi!];
   const t = tensorsOf(g, x);
   const K = kerrKretschmann(Mgeom, p.r!, p.a!, p.theta!);
   const aOverM = p.a! / Mgeom;
+  let radii: Record<string, number> = {};
   const kerrNotes = [
-    'Boyer–Lindquist, geometrized lengths: M stands for GM/c² and a is a length. Kretschmann is 1/length⁴.',
+    'Boyer–Lindquist time coordinate T = ct is in metres. The input t is in seconds. M stands for GM/c² and a is a length. Kretschmann is 1/length⁴.',
   ];
+  if (Math.abs(aOverM) <= 1) {
+    const spin = Math.abs(aOverM);
+    const gap = Math.sqrt((1 - spin) * (1 + spin));
+    const isco = kerrIscoRadius(spin);
+    const photon = kerrPhotonRadius(spin);
+    radii = {
+      outer_horizon_m: Mgeom * (1 + gap),
+      // Rationalizing 1 − gap preserves the inner horizon at small spin.
+      inner_horizon_m: Mgeom * (spin * spin) / (1 + gap),
+      isco_prograde_r_over_M: isco.prograde,
+      isco_retrograde_r_over_M: isco.retrograde,
+      photon_prograde_r_over_M: photon.prograde,
+      photon_retrograde_r_over_M: photon.retrograde,
+    };
+    kerrNotes.push('Closed-form characteristic radii include both horizon roots in metres and the equatorial ISCO and photon orbits in r/M.');
+    if (spin === 0) kerrNotes.push('At zero spin, the inner root is the r = 0 singularity. Schwarzschild has only one horizon.');
+    if (spin === 1) kerrNotes.push('At extremal spin, the prograde ISCO and photon radii are limiting values at the degenerate horizon.');
+  } else {
+    kerrNotes.push('The real black-hole horizons and equatorial orbit pairs are reported for |a/M| ≤ 1.');
+  }
   if (p.a! !== 0 && Math.abs(p.a!) <= 1 && Mgeom > 10) {
     kerrNotes.push(
       `a = ${p.a} m is a length, so a/M = ${aOverM}. A dimensionless spin is a/(GM/c²), not the number passed as a.`,
     );
   }
-  return stateCurvature(pack('kerr', { ...p, M_geom_m: Mgeom, a_over_M: aOverM }, x, t, { kretschmann: K, ricciScalar: 0 }, [
+  return stateCurvature(pack('kerr', { ...p, M_geom_m: Mgeom, a_over_M: aOverM }, x, t, { kretschmann: K, ricciScalar: 0, ...radii }, [
     ...paramNotes,
     ...kerrNotes,
     'Closed form: K = 48 M² (r² − a² cos²θ) [(r² + a² cos²θ)² − 16 r² a² cos²θ] / (r² + a² cos²θ)⁶.',
     'a = 0 reduces to the Schwarzschild Kretschmann 48 M²/r⁶.',
-    'Geodesics (--geodesic) use the Carter constant. θ = π/2 is an equatorial circular orbit. Any other θ is an inclined spherical orbit with that polar turning point. ISCO and photon radii are closed forms in r/M.',
+    'Geodesics (--geodesic) use the Carter constant. θ = π/2 is an equatorial circular orbit. Any other θ is an inclined spherical orbit with that polar turning point.',
   ]), true);
 }
 
@@ -604,10 +628,13 @@ function stateCurvature(report: CurvatureReport, vacuum: boolean): CurvatureRepo
   const exactR = report.closedForm.ricciScalar;
   // The order is part of the rule: a vacuum metric first, then a source with
   // R = 0. A relative difference against a zero closed form is not a test.
-  if (vacuum && exactR === 0 && !report.ricciScalarResolved) {
+  if (vacuum && exactR === 0) {
     ricciScalar = 0;
     ricci = [];
-    notes.push('Ricci is 0 for this vacuum metric. A finite-difference residual is not listed: it is within its error bound.');
+    const residual = report.ricciScalarResolved
+      ? 'The numerical curvature residual exceeds its estimated error bound.'
+      : 'The numerical curvature residual is within its estimated error bound.';
+    notes.push(`Ricci is exactly 0 for this vacuum metric. ${residual}`);
   } else if (!vacuum && exactR === 0) {
     ricciScalar = 0;
     notes.push(
@@ -626,7 +653,13 @@ function stateCurvature(report: CurvatureReport, vacuum: boolean): CurvatureRepo
         : 'With k = 0, the stated ρ and Λ do not give the H² of this scale factor (flat, Λ = 0: ρ = 3 H²/(8πG)).',
     );
   }
-  return { ...report, ricci, ricciScalar, notes };
+  return {
+    ...report, ricci, ricciScalar, notes,
+    ...(exactR === 0 && ricciScalar === 0 ? {
+      ricciScalarSource: 'closed-form',
+      ricciScalarResolved: true,
+    } : {}),
+  };
 }
 
 function pack(
@@ -637,17 +670,19 @@ function pack(
   closedForm: Readonly<Record<string, number>>,
   notes: readonly string[],
 ): CurvatureReport {
-  const names = ['t', 'r', 'θ', 'φ'];
+  const names = [metric === 'kerr' ? 'T' : 't', 'r', 'θ', 'φ'];
   return {
     metric,
     signature: METRIC_SIGNATURE,
     signatureNote: METRIC_SIGNATURE_NOTE,
-    coordinates: '(t, r, θ, φ)',
+    coordinates: `(${names.join(', ')})`,
     parameters,
-    point: { t: x[0], r: x[1], theta: x[2], phi: x[3] },
-    christoffel: nonzeroGamma(t.christoffel),
+    point: { [names[0]!]: x[0], r: x[1], theta: x[2], phi: x[3] },
+    christoffel: nonzeroGamma(t.christoffel, names),
     ricci: nonzeroMatrix(t.ricci, t.ricciBound, (i, j) => `R_${names[i]}${names[j]}`),
     ricciScalar: t.ricciScalar,
+    ricciScalarSource: 'finite-difference',
+    ricciScalarFiniteDifference: t.ricciScalar,
     ricciScalarBound: t.ricciScalarBound,
     ricciScalarResolved: Math.abs(t.ricciScalar) > t.ricciScalarBound,
     kretschmann: t.kretschmann,
@@ -731,6 +766,8 @@ export interface KerrGeodesicSample {
   readonly thetaEnd: number;
   readonly phiAdvance: number;
   readonly steps: number;
+  /** Elapsed affine parameter in geometrized length units (cΔτ for a timelike orbit). */
+  readonly affineLength: number;
   readonly E0: number;
   readonly EEnd: number;
   readonly L0: number;
@@ -748,10 +785,15 @@ interface SphericalConstants {
   readonly Q: number;
 }
 
-function radialPotential(M: number, a: number, r: number, E: number, L: number, Q: number, mu2: number): number {
+function radialPotentialTerms(M: number, a: number, r: number, E: number, L: number, Q: number, mu2: number): [number, number] {
   const Delta = r * r - 2 * M * r + a * a;
   const P = E * (r * r + a * a) - a * L;
-  return P * P - Delta * (mu2 * r * r + (L - a * E) ** 2 + Q);
+  return [P * P, Delta * (mu2 * r * r + (L - a * E) ** 2 + Q)];
+}
+
+function radialPotential(M: number, a: number, r: number, E: number, L: number, Q: number, mu2: number): number {
+  const [left, right] = radialPotentialTerms(M, a, r, E, L, Q, mu2);
+  return left - right;
 }
 
 function radialPotentialPrime(M: number, a: number, r: number, E: number, L: number, Q: number, mu2: number): number {
@@ -803,22 +845,35 @@ function sphericalJacobian(
   };
 }
 
-function solveSpherical(M: number, a: number, r: number, Q: number, mu2: number, prograde: boolean): { readonly E: number; readonly L: number } {
+function solveSpherical(M: number, a: number, r: number, Q: number, mu2: number, prograde: boolean, theta?: number): SphericalConstants {
   // R is a difference of terms ~ r⁴. Solve in units of M so a solar radius
   // does not wipe the L-column of a finite-difference Jacobian.
   const aHat = a / M;
   const rHat = r / M;
-  const QHat = Q / (M * M);
+  const c2 = theta === undefined ? 0 : Math.cos(theta) ** 2;
+  const s2 = theta === undefined ? 1 : Math.sin(theta) ** 2;
+  const qAt = (E: number, L: number) => theta === undefined
+    ? Q / (M * M)
+    : c2 * (aHat * aHat * (mu2 - E * E) + (L * L) / s2);
+  const delta = rHat * rHat - 2 * rHat + aHat * aHat;
+  const dDelta = 2 * (rHat - 1);
   const seed = equatorialCircular(1, aHat, rHat, prograde);
   let E = seed.E;
-  let L = seed.L;
+  let L = seed.L * Math.sqrt(s2);
   for (let n = 0; n < 30; n++) {
+    const QHat = qAt(E, L);
     const f1 = radialPotential(1, aHat, rHat, E, L, QHat, mu2);
     const f2 = radialPotentialPrime(1, aHat, rHat, E, L, QHat, mu2);
-    const { j11, j12, j21, j22 } = sphericalJacobian(aHat, rHat, E, L);
+    const jacobian = sphericalJacobian(aHat, rHat, E, L);
+    const dQdE = -2 * E * aHat * aHat * c2;
+    const dQdL = (2 * L * c2) / s2;
+    const j11 = jacobian.j11 - delta * dQdE;
+    const j12 = jacobian.j12 - delta * dQdL;
+    const j21 = jacobian.j21 - dDelta * dQdE;
+    const j22 = jacobian.j22 - dDelta * dQdL;
     const det = j11 * j22 - j12 * j21;
-    const scale = Math.max(1, Math.abs(j11), Math.abs(j12), Math.abs(j21), Math.abs(j22));
-    if (!Number.isFinite(det) || Math.abs(det) < 1e-18 * scale * scale) throw new MetricValueError('spherical-orbit Jacobian is singular');
+    const determinantScale = Math.abs(j11 * j22) + Math.abs(j12 * j21);
+    if (!Number.isFinite(det) || Math.abs(det) <= 32 * Number.EPSILON * determinantScale) throw new MetricValueError('spherical-orbit Jacobian is singular');
     const stepE = (j22 * f1 - j12 * f2) / det;
     const stepL = (-j21 * f1 + j11 * f2) / det;
     E -= stepE;
@@ -830,7 +885,7 @@ function solveSpherical(M: number, a: number, r: number, Q: number, mu2: number,
       Math.abs(stepL) < 1e-8 * Math.max(1, Math.abs(L)) &&
       Math.abs(f1) < 1e-6 * room &&
       Math.abs(f2) < 1e-6 * room;
-    if (settled) return { E, L: L * M };
+    if (settled) return { E, L: L * M, Q: qAt(E, L) * M * M };
   }
   throw new MetricValueError('spherical orbit did not converge');
 }
@@ -915,25 +970,10 @@ export function kerrTurningPointOrbit(opts: {
   const a = chi * M;
   const r = (opts.rOverM ?? 10) * M;
   const theta = opts.theta;
-  const s = Math.sin(theta);
-  const c = Math.cos(theta);
-  if (!(Math.abs(s) > 1e-3) || !(Math.abs(c) > 1e-4)) {
-    throw new MetricValueError('turning-point θ must sit off the equator and off the pole');
+  if (!(Math.abs(Math.sin(theta)) > 1e-3)) {
+    throw new MetricValueError('turning-point θ must sit off the pole');
   }
-  const seed = equatorialCircular(M, a, r, opts.prograde !== false);
-  let Q = seed.L * seed.L * c * c;
-  let E = seed.E;
-  let L = seed.L;
-  for (let n = 0; n < 16; n++) {
-    const solved = solveSpherical(M, a, r, Q, 1, opts.prograde !== false);
-    E = solved.E;
-    L = solved.L;
-    const next = c * c * (a * a * (1 - E * E) + (L * L) / (s * s));
-    if (!Number.isFinite(next) || next < 0) throw new MetricValueError('turning-point Carter constant left the physical range');
-    if (withinMixed(Q, next, 1e-9)) return { E, L, Q: next };
-    Q = next;
-  }
-  throw new MetricValueError('turning-point Carter constant did not converge');
+  return solveSpherical(M, a, r, 0, 1, opts.prograde !== false, theta);
 }
 
 function kerrMetricDerivatives(M: number, a: number, r: number, theta: number): { readonly dr: number[][]; readonly dth: number[][] } {
@@ -1025,10 +1065,20 @@ function conservedOf(metric: MetricFn, a: number, y: readonly number[], mu2: num
   const E = -(g[0]![0]! * u[0]! + g[0]![3]! * u[3]!);
   const L = g[3]![0]! * u[0]! + g[3]![3]! * u[3]!;
   const pTheta = g[2]![2]! * u[2]!;
-  const c = Math.cos(y[2]!);
+  const c = y[2] === Math.PI / 2 ? 0 : Math.cos(y[2]!);
   const s = Math.sin(y[2]!);
   const Q = pTheta * pTheta + c * c * (a * a * (mu2 - E * E) + (L * L) / (s * s));
   return { E, L, Q, norm };
+}
+
+/** A cancellation in a squared potential is ambiguous within its own term scale. */
+function turningVelocity(left: number, right: number, axis: string, allowOffShell: boolean): number {
+  const potential = left - right;
+  if (!Number.isFinite(potential)) throw new MetricValueError(`${axis} potential is nonfinite at the start`);
+  const roundoff = 32 * Number.EPSILON * Math.max(Math.abs(left), Math.abs(right));
+  if (Math.abs(potential) <= roundoff) return 0;
+  if (potential < 0 && !allowOffShell) throw new MetricValueError(`${axis} potential is negative at the start`);
+  return Math.sqrt(Math.max(potential, 0));
 }
 
 function carterState(
@@ -1044,23 +1094,22 @@ function carterState(
   signTheta: number,
   allowOffShell: boolean,
 ): number[] {
-  const c = Math.cos(theta);
+  const c = theta === Math.PI / 2 ? 0 : Math.cos(theta);
   const s = Math.sin(theta);
   if (!(Math.abs(s) > 1e-6)) throw new MetricValueError('Boyer–Lindquist geodesic wants θ away from the poles');
   const Sigma = r * r + a * a * c * c;
   const Delta = r * r - 2 * M * r + a * a;
   if (!(Delta > 0)) throw new MetricValueError('geodesic start must be outside the horizon');
-  const R = radialPotential(M, a, r, E, L, Q, mu2);
-  const Theta = Q - c * c * (a * a * (mu2 - E * E) + (L * L) / (s * s));
-  const scale = Math.max(1, E * E, L * L, Math.abs(Q));
-  if (R < -1e-8 * scale && !allowOffShell) throw new MetricValueError('radial potential is negative at the start');
-  if (Theta < -1e-8 * scale && !allowOffShell) throw new MetricValueError('polar potential is negative at the start');
+  const [radialLeft, radialRight] = radialPotentialTerms(M, a, r, E, L, Q, mu2);
+  const polarRight = c * c * (a * a * (mu2 - E * E) + (L * L) / (s * s));
+  const radialSpeed = turningVelocity(radialLeft, radialRight, 'radial', allowOffShell);
+  const polarSpeed = turningVelocity(Q, polarRight, 'polar', allowOffShell);
   const g = kerrMetric(M, a)([0, r, theta, 0]);
   const det = g[0]![0]! * g[3]![3]! - g[0]![3]! * g[0]![3]!;
   const ut = (g[3]![3]! * -E - g[0]![3]! * L) / det;
   const uphi = (g[0]![0]! * L - g[0]![3]! * -E) / det;
-  const ur = signR * Math.sqrt(Math.max(R, 0)) / Sigma;
-  const uth = signTheta * Math.sqrt(Math.max(Theta, 0)) / Sigma;
+  const ur = signR * radialSpeed / Sigma;
+  const uth = signTheta * polarSpeed / Sigma;
   return [0, r, theta, 0, ut, ur, uth, uphi];
 }
 
@@ -1103,7 +1152,7 @@ function orbitExtent(y0: readonly number[], fraction: number): number {
   return ((2 * Math.PI) / angular) * fraction;
 }
 
-function sampleOf(metric: MetricFn, a: number, y0: readonly number[], y1: readonly number[], steps: number, mu2: number): KerrGeodesicSample {
+function sampleOf(metric: MetricFn, a: number, y0: readonly number[], y1: readonly number[], steps: number, mu2: number, affineLength: number): KerrGeodesicSample {
   const start = conservedOf(metric, a, y0, mu2);
   const end = conservedOf(metric, a, y1, mu2);
   return {
@@ -1113,6 +1162,7 @@ function sampleOf(metric: MetricFn, a: number, y0: readonly number[], y1: readon
     thetaEnd: y1[2]!,
     phiAdvance: y1[3]!,
     steps,
+    affineLength,
     E0: start.E,
     EEnd: end.E,
     L0: start.L,
@@ -1160,8 +1210,9 @@ export function kerrGeodesic(opts: {
   const fraction = opts.fraction ?? 0.01;
   const metric = kerrMetric(M, a);
   const y0 = carterState(M, a, r, theta, opts.E, opts.L, opts.Q, mu2, opts.signR ?? 1, opts.signTheta ?? 1, opts.allowOffShell === true);
-  const y1 = integrateWithChristoffel((rr, th) => kerrChristoffel(M, a, rr, th), y0, orbitExtent(y0, fraction), steps);
-  return sampleOf(metric, a, y0, y1, steps, mu2);
+  const extent = orbitExtent(y0, fraction);
+  const y1 = integrateWithChristoffel((rr, th) => kerrChristoffel(M, a, rr, th), y0, extent, steps);
+  return sampleOf(metric, a, y0, y1, steps, mu2, extent);
 }
 
 /**
@@ -1190,8 +1241,9 @@ export function schwarzschildGeodesic(opts: {
   const fraction = opts.fraction ?? 0.01;
   const metric = schwarzschildMetric(M, 1, 1);
   const y0 = carterState(M, 0, r, theta, opts.E, opts.L, opts.Q, 1, opts.signR ?? 1, opts.signTheta ?? 1, false);
-  const y1 = integrateWithChristoffel((rr, th) => schwarzschildChristoffel(M, rr, th), y0, orbitExtent(y0, fraction), steps);
-  return sampleOf(metric, 0, y0, y1, steps, 1);
+  const extent = orbitExtent(y0, fraction);
+  const y1 = integrateWithChristoffel((rr, th) => schwarzschildChristoffel(M, rr, th), y0, extent, steps);
+  return sampleOf(metric, 0, y0, y1, steps, 1, extent);
 }
 
 /**

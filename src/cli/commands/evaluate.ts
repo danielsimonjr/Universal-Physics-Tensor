@@ -459,6 +459,7 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
     throw new CliError(`upt evaluate: ${api.missingEvaluatorMessage(id)}`);
   }
   const spec = found.evaluator;
+  const confidence = found.edge?.confidence ?? api.BRIDGE_EQUATIONS.find((entry) => entry.id === id)?.status;
   const key = api.catalogEdgeKey(spec.bridgeId);
   const relation = api.evaluatorRelation(spec);
   const { inputs, resolved } = resolveInputs(api, key, spec, rest);
@@ -490,6 +491,7 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
         command: 'evaluate',
         result: {
           bridgeId: id,
+          ...(confidence === undefined ? {} : { confidence }),
           inputs,
           parameters: spec.parameters,
           conversions: conversionsOf(resolved),
@@ -503,7 +505,7 @@ async function evaluate(ctx: CommandCtx): Promise<number> {
     );
     return 0;
   }
-  out(`\n● be-${id}  ${spec.name}`);
+  out(`\n● be-${id}  ${spec.name}${confidence === undefined ? '' : ` [${confidence}]`}`);
   printInputs(api.formatExact, out, spec.parameters, inputs, resolved);
   if (evaluation.kind === 'unset') {
     out(`  value is unset: ${evaluation.formula} is not finite at these inputs (a dropped factor or a singularity)`);

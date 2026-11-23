@@ -36,6 +36,8 @@ export interface DimensionalVariable {
   /** Physical meaning when a formula name is shared by distinct observables. */
   readonly identity?: string;
   readonly name: string;
+  /** Equation-local mathematical symbol, when declared. */
+  readonly symbol?: string;
   readonly dim: Dimension;
 }
 

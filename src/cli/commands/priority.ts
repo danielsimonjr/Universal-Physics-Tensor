@@ -7,7 +7,7 @@
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
-import { resolveGraph } from '../graphs.js';
+import { catalogGraphCoverage, resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
@@ -25,11 +25,15 @@ const EPISTEMICS = '(review/confrontation priority — NOT a credibility ranking
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, source } = resolveGraph(api, args.flags);
-  const board = api.bridgePriority(graph);
+  const coverage = catalogGraphCoverage(api, graph, source, true);
+  const board = api.bridgePriority(graph).map((entry) => ({
+    ...entry,
+    routeOf: entry.beId !== null && entry.id !== `be-${entry.beId}` ? `be-${entry.beId}` : null,
+  }));
 
   if (args.flags.has('json')) {
     emitJson(
-      { command: 'priority', source, epistemics: EPISTEMICS, result: board },
+      { command: 'priority', source, epistemics: EPISTEMICS, coverage, result: board },
       ctx.write
     );
     return 0;
@@ -66,12 +70,15 @@ async function run(ctx: CommandCtx): Promise<number> {
         String(e.complexity).padStart(3),
         e.hasDataConfrontation ? ' DATA' : '     ',
         ' ' + e.id.padEnd(20),
-        e.status,
+        e.status + (e.routeOf === null ? '' : `  (route of ${e.routeOf})`),
       ].join(' ')
     );
   }
   const tiers = board.reduce<Record<number, number>>((m, e) => ((m[e.tier] = (m[e.tier] || 0) + 1), m), {});
-  out(`\n   Tiers: ${JSON.stringify(tiers)}  (of ${board.length} non-established bridges)`);
+  out(`\n   Tiers: ${JSON.stringify(tiers)}  (${board.length} graph routes for ${coverage.total - coverage.withoutRoutes.length} of ${coverage.total} non-established catalog bridges)`);
+  if (coverage.withoutRoutes.length > 0) {
+    out(`   No encoded composition route: ${coverage.withoutRoutes.join(', ')}`);
+  }
   out('   Reminder: tier ranks decidability/anchoring, not truth.');
   return 0;
 }

@@ -40,9 +40,9 @@ const G_DIM = GRAVITATIONAL_CONSTANT; // Newton's constant [L³ M⁻¹ T⁻²]
 
 export const MECHANICS: readonly CanonicalEquation[] = [
   // ── foundational ──────────────────────────────────────────────────────────
-  l1({ name: 'force', dim: FORCE }, [
-    { name: 'mass', dim: MASS },
-    { name: 'acceleration', dim: ACCELERATION },
+  l1({ name: 'force', symbol: 'F', dim: FORCE }, [
+    { name: 'mass', symbol: 'm', dim: MASS },
+    { name: 'acceleration', symbol: 'a', dim: ACCELERATION },
   ], {
     id: 'CE-newton-second-law',
     name: "Newton's second law",
@@ -310,9 +310,9 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     partnerBridges: [],
   }),
   // ── oscillations (√-law: dimensional-only, engine-derived fractional monomial)
-  l1({ name: 'angular-velocity', dim: FREQUENCY }, [
-    { name: 'spring-constant', dim: SPRING_CONSTANT },
-    { name: 'mass', dim: MASS },
+  l1({ name: 'angular-velocity', symbol: 'ω', dim: FREQUENCY }, [
+    { name: 'spring-constant', symbol: 'k', dim: SPRING_CONSTANT },
+    { name: 'mass', symbol: 'm', dim: MASS },
   ], {
     id: 'CE-simple-harmonic-frequency',
     prefactor: {

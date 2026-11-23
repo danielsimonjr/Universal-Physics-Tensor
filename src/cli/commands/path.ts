@@ -168,6 +168,7 @@ interface HorizonReport {
   bridgeId: string;
   horizon: string;
   holds: boolean | null;
+  readonly limits?: { readonly minimum?: number; readonly maximum: number; readonly pointDelta?: number };
   /** The transports that restated this horizon for the end of the route; absent when none did. */
   restatedBy?: { transport: string; horizon: string }[];
   /** Set when a family change reached this step with no time map. Unevaluated, not violated. */
@@ -1051,11 +1052,13 @@ function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteCl
       // transport on that step restates the clock. The earlier horizon stays
       // in the time of the model where it was stated.
       const blocked = api.familyChangeBlocksHorizon(bridges, carried, i);
+      const limits = !blocked && h.restatedBy.length === 0 ? b.bound?.horizonAt?.(at) : undefined;
       return [
         {
           bridgeId: b.id,
           horizon: h.horizon,
           holds: at['t'] === undefined || blocked ? null : h.holds(at['t'], at),
+          ...(limits == null ? {} : { limits }),
           ...(h.restatedBy.length > 0
             ? { restatedBy: h.restatedBy.map((a) => ({ transport: a.transport.id, horizon: a.transport.timeMap.horizon })) }
             : {}),
@@ -1390,6 +1393,13 @@ async function run(ctx: CommandCtx): Promise<number> {
       if (r.premisesNotChecked !== undefined) out(`    ${r.bridgeId}: ${r.premisesNotChecked.join('; ')}`);
     }
   }
+  const horizonAtText = (h: HorizonReport): string => {
+    if (h.limits === undefined) return h.horizon;
+    const { maximum, minimum, pointDelta } = h.limits;
+    const lower = minimum === undefined ? '' : `${api.formatQuantity(minimum, 8)} < `;
+    const point = pointDelta === undefined ? '' : `, δ_at = ${api.formatQuantity(pointDelta, 8)}`;
+    return `${lower}t < ${api.formatQuantity(maximum, 8)} (${h.horizon}${point})`;
+  };
   if (horizons.length === 0) {
     out('  horizons: none on this path (no step carries a bound)');
   } else if (t === undefined) {
@@ -1402,14 +1412,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  horizons at t=${t}: NOT EVALUATED — a family change does not restate a horizon onto the next clock`);
     for (const h of horizons) {
       const state = h.holds === null ? 'unevaluated' : h.holds ? 'holds' : 'VIOLATED';
-      out(`    ${h.bridgeId}: ${state} — ${h.horizon}`);
+      out(`    ${h.bridgeId}: ${state} — ${horizonAtText(h)}`);
       for (const r of h.restatedBy ?? []) out(`      restated by '${r.transport}': ${r.horizon}`);
     }
   } else {
     out(`  horizons at t=${t}: ${allHold ? 'all hold' : 'NOT all hold'}`);
     for (const h of horizons) {
       const state = h.holds === null ? 'unevaluated' : h.holds ? 'holds' : 'VIOLATED';
-      out(`    ${h.bridgeId}: ${state} — ${h.horizon}`);
+      out(`    ${h.bridgeId}: ${state} — ${horizonAtText(h)}`);
       for (const r of h.restatedBy ?? []) out(`      restated by '${r.transport}': ${r.horizon}`);
     }
   }

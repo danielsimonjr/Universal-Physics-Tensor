@@ -10,7 +10,6 @@ import type { Quantity } from '../../src/composition/quantity.js';
 import { REJECTED_BRIDGE_ADJUDICATIONS } from '../../src/bridges/rejected.js';
 import { listConfrontations } from '../../src/bridges/confrontations.js';
 import {
-  CANDIDATE_NOT_A_BRIDGE_REASON,
   CONTESTED_BRIDGE_IDS,
   accountFromGraph,
   catalogFrontierAccount,
@@ -102,11 +101,11 @@ describe('frontier account', () => {
       { rejections: [], includeExpressionGaps: false },
     );
     const candidate = account.nullResults.find((row) => row.source === 'candidate');
-    expect(candidate?.reason).toBe(CANDIDATE_NOT_A_BRIDGE_REASON);
+    expect(candidate?.reason).toBe('inert');
     expect(candidate?.id).toContain('length');
     expect(candidate?.id).toContain('length-b');
     const frontier = account.frontier.find((row) => row.left === 'length' || row.right === 'length-b' || row.left === 'length-b');
-    expect(frontier?.reason).toBe('relation-link');
+    expect(frontier?.reason).toMatch(/^inert — .*share \[length\]/);
     expect(frontier?.observation).toBe('observation absent');
     expect(account.nullResults.some((row) => row.id === frontier?.id)).toBe(false);
   });
@@ -134,9 +133,7 @@ describe('frontier account', () => {
     expect(read).toEqual([{ id: 'be-16', status: 'data-pending', reason: 'queued for a dataset' }]);
   });
 
-  it('quotes the link proposer instead of writing a new verdict', () => {
-    const source = readFileSync(new URL('../../src/cli/commands/candidates.ts', import.meta.url), 'utf8');
-    expect(source).toContain(CANDIDATE_NOT_A_BRIDGE_REASON);
+  it('keeps the source note for pending adjudications', () => {
     const rejected = readFileSync(new URL('../../src/bridges/rejected.ts', import.meta.url), 'utf8');
     expect(rejected).toContain('BE-44/46/50 remain contested');
   });

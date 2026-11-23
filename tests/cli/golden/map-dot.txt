@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (111)";
+    label="anchored cluster (118)";
     j_be_11_zurek [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-11"];
     q_relaxation_rate [shape=ellipse,label="relaxation-rate"];
     q_relaxation_rate -> j_be_11_zurek;
@@ -201,6 +201,10 @@ digraph PhysicsMap {
     q_capacitance -> j_be_87;
     q_capacitor_voltage_variance [shape=ellipse,label="capacitor-voltage-variance"];
     j_be_87 -> q_capacitor_voltage_variance;
+    j_be_57 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-57"];
+    q_unruh_acceleration [shape=ellipse,label="unruh-acceleration"];
+    q_unruh_acceleration -> j_be_57;
+    j_be_57 -> q_temperature;
     j_be_58 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-58"];
     q_johnson_temperature [shape=ellipse,label="johnson-temperature"];
     q_johnson_temperature -> j_be_58;
@@ -262,6 +266,11 @@ digraph PhysicsMap {
     q_one_minus_e_sq -> j_CE_perihelion_precession;
     q_perihelion_precession [shape=ellipse,label="perihelion-precession"];
     j_CE_perihelion_precession -> q_perihelion_precession;
+    j_CE_bekenstein_hawking [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bekenstein–Hawking entropy"];
+    q_A [shape=ellipse,label="A"];
+    q_A -> j_CE_bekenstein_hawking;
+    q_bh_entropy [shape=ellipse,label="bh-entropy"];
+    j_CE_bekenstein_hawking -> q_bh_entropy;
     j_CE_newton_gravitation [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Newton's law of gravitation"];
     q_mass -> j_CE_newton_gravitation;
     q_secondary_mass [shape=ellipse,label="secondary-mass"];
@@ -383,8 +392,6 @@ digraph PhysicsMap {
     q_current -> j_CE_inductor_energy;
     j_CE_inductor_energy -> q_energy;
     j_CE_magnetic_field_wire [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Magnetic field of a long straight wire"];
-    q_mu_0 [shape=ellipse,label="mu_0"];
-    q_mu_0 -> j_CE_magnetic_field_wire;
     q_current -> j_CE_magnetic_field_wire;
     q_distance -> j_CE_magnetic_field_wire;
     q_magnetic_field [shape=ellipse,label="magnetic-field"];
@@ -429,10 +436,8 @@ digraph PhysicsMap {
     j_CE_poynting_flux [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Poynting vector (magnitude)"];
     q_electric_field -> j_CE_poynting_flux;
     q_magnetic_flux_density -> j_CE_poynting_flux;
-    q_mu_0 -> j_CE_poynting_flux;
     j_CE_poynting_flux -> q_poynting_flux;
     j_CE_solenoid_field [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Solenoid magnetic field"];
-    q_mu_0 -> j_CE_solenoid_field;
     q_turn_density [shape=ellipse,label="turn-density"];
     q_turn_density -> j_CE_solenoid_field;
     q_current -> j_CE_solenoid_field;
@@ -660,6 +665,34 @@ digraph PhysicsMap {
     q_velocity -> j_CE_lorentz_factor;
     q_lorentz_factor [shape=ellipse,label="lorentz-factor"];
     j_CE_lorentz_factor -> q_lorentz_factor;
+    j_CE_acoustic_doppler [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Acoustic Doppler effect"];
+    q_source_frequency [shape=ellipse,label="source-frequency"];
+    q_source_frequency -> j_CE_acoustic_doppler;
+    q_sound_speed -> j_CE_acoustic_doppler;
+    q_source_approach_speed [shape=ellipse,label="source-approach-speed"];
+    q_source_approach_speed -> j_CE_acoustic_doppler;
+    q_observed_acoustic_frequency [shape=ellipse,label="observed-acoustic-frequency"];
+    j_CE_acoustic_doppler -> q_observed_acoustic_frequency;
+    j_CE_planck_blackbody_spectrum [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Planck blackbody spectrum"];
+    q_frequency -> j_CE_planck_blackbody_spectrum;
+    q_temperature -> j_CE_planck_blackbody_spectrum;
+    q_blackbody_spectral_energy_density [shape=ellipse,label="blackbody-spectral-energy-density"];
+    j_CE_planck_blackbody_spectrum -> q_blackbody_spectral_energy_density;
+    j_CE_level_projectile_range [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Projectile motion on level ground"];
+    q_launch_speed [shape=ellipse,label="launch-speed"];
+    q_launch_speed -> j_CE_level_projectile_range;
+    q_launch_angle [shape=ellipse,label="launch-angle"];
+    q_launch_angle -> j_CE_level_projectile_range;
+    q_gravity -> j_CE_level_projectile_range;
+    q_projectile_horizontal_range [shape=ellipse,label="projectile-horizontal-range"];
+    j_CE_level_projectile_range -> q_projectile_horizontal_range;
+    j_CE_unruh_temperature [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Unruh temperature of an accelerated detector"];
+    q_proper_acceleration [shape=ellipse,label="proper-acceleration"];
+    q_proper_acceleration -> j_CE_unruh_temperature;
+    j_CE_unruh_temperature -> q_temperature;
+    j_CE_schwarzschild_horizon_area [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Schwarzschild horizon area"];
+    q_mass -> j_CE_schwarzschild_horizon_area;
+    j_CE_schwarzschild_horizon_area -> q_A;
   }
   subgraph cluster_1 {
     label="anchored cluster (4)";
@@ -809,6 +842,24 @@ digraph PhysicsMap {
   }
   subgraph cluster_8 {
     label="anchored cluster (2)";
+    j_CE_double_slit_interference [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Double-slit interference fringe spacing"];
+    q_optical_wavelength [shape=ellipse,label="optical-wavelength"];
+    q_optical_wavelength -> j_CE_double_slit_interference;
+    q_screen_distance [shape=ellipse,label="screen-distance"];
+    q_screen_distance -> j_CE_double_slit_interference;
+    q_slit_separation [shape=ellipse,label="slit-separation"];
+    q_slit_separation -> j_CE_double_slit_interference;
+    q_double_slit_fringe_spacing [shape=ellipse,label="double-slit-fringe-spacing"];
+    j_CE_double_slit_interference -> q_double_slit_fringe_spacing;
+    j_CE_single_slit_diffraction [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Single-slit diffraction first minimum"];
+    q_optical_wavelength -> j_CE_single_slit_diffraction;
+    q_slit_width [shape=ellipse,label="slit-width"];
+    q_slit_width -> j_CE_single_slit_diffraction;
+    q_first_diffraction_minimum_sine [shape=ellipse,label="first-diffraction-minimum-sine"];
+    j_CE_single_slit_diffraction -> q_first_diffraction_minimum_sine;
+  }
+  subgraph cluster_9 {
+    label="anchored cluster (2)";
     j_CE_half_life [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Radioactive half-life"];
     q_decay_constant [shape=ellipse,label="decay-constant"];
     q_decay_constant -> j_CE_half_life;
@@ -824,7 +875,7 @@ digraph PhysicsMap {
     j_CE_radioactive_decay -> q_remaining_nuclei;
   }
   subgraph cluster_iso {
-    label="isolated (137)";
+    label="isolated (141)";
     j_be_100 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-100"];
     q_lst_static [shape=ellipse,label="lst-static"];
     q_lst_static -> j_be_100;
@@ -1556,11 +1607,6 @@ digraph PhysicsMap {
     q_plate_separation -> j_be_56;
     q_casimir_pressure [shape=ellipse,label="casimir-pressure"];
     j_be_56 -> q_casimir_pressure;
-    j_be_57 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-57"];
-    q_unruh_acceleration [shape=ellipse,label="unruh-acceleration"];
-    q_unruh_acceleration -> j_be_57;
-    q_unruh_temperature [shape=ellipse,label="unruh-temperature"];
-    j_be_57 -> q_unruh_temperature;
     j_be_62 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-62"];
     q_critical_temperature [shape=ellipse,label="critical-temperature"];
     q_critical_temperature -> j_be_62;
@@ -1775,11 +1821,13 @@ digraph PhysicsMap {
     q_mass_action_temperature -> j_be_99;
     q_mass_action_density [shape=ellipse,label="mass-action-density"];
     j_be_99 -> q_mass_action_density;
-    j_CE_bekenstein_hawking [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bekenstein–Hawking entropy"];
-    q_A [shape=ellipse,label="A"];
-    q_A -> j_CE_bekenstein_hawking;
-    q_bh_entropy [shape=ellipse,label="bh-entropy"];
-    j_CE_bekenstein_hawking -> q_bh_entropy;
+    j_CE_bekenstein_bound [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bekenstein entropy bound"];
+    q_system_energy [shape=ellipse,label="system-energy"];
+    q_system_energy -> j_CE_bekenstein_bound;
+    q_enclosing_radius [shape=ellipse,label="enclosing-radius"];
+    q_enclosing_radius -> j_CE_bekenstein_bound;
+    q_bekenstein_entropy_upper_bound [shape=ellipse,label="bekenstein-entropy-upper-bound"];
+    j_CE_bekenstein_bound -> q_bekenstein_entropy_upper_bound;
     j_CE_bohr_magneton [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bohr magneton"];
     q_bohr_magneton [shape=ellipse,label="bohr-magneton"];
     j_CE_bohr_magneton -> q_bohr_magneton;
@@ -1808,6 +1856,16 @@ digraph PhysicsMap {
     q_stress_energy_density -> j_CE_einstein_field_eq;
     q_efe_curvature [shape=ellipse,label="efe-curvature"];
     j_CE_einstein_field_eq -> q_efe_curvature;
+    j_CE_faraday_induction [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Faraday’s law of induction"];
+    q_flux_linkage_change [shape=ellipse,label="flux-linkage-change"];
+    q_flux_linkage_change -> j_CE_faraday_induction;
+    q_time_interval [shape=ellipse,label="time-interval"];
+    q_time_interval -> j_CE_faraday_induction;
+    q_average_induced_emf [shape=ellipse,label="average-induced-emf"];
+    j_CE_faraday_induction -> q_average_induced_emf;
+    j_CE_fine_structure_constant [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Fine-structure constant"];
+    q_fine_structure_constant [shape=ellipse,label="fine-structure-constant"];
+    j_CE_fine_structure_constant -> q_fine_structure_constant;
     j_CE_first_law_thermodynamics [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="First law of thermodynamics"];
     q_heat_added [shape=ellipse,label="heat-added"];
     q_heat_added -> j_CE_first_law_thermodynamics;
@@ -1838,6 +1896,11 @@ digraph PhysicsMap {
     q_polarization_angle -> j_CE_malus_law;
     q_transmitted_intensity [shape=ellipse,label="transmitted-intensity"];
     j_CE_malus_law -> q_transmitted_intensity;
+    j_CE_margolus_levitin_bound [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Margolus–Levitin quantum speed limit"];
+    q_mean_energy_above_ground [shape=ellipse,label="mean-energy-above-ground"];
+    q_mean_energy_above_ground -> j_CE_margolus_levitin_bound;
+    q_orthogonalization_time_lower_bound [shape=ellipse,label="orthogonalization-time-lower-bound"];
+    j_CE_margolus_levitin_bound -> q_orthogonalization_time_lower_bound;
     j_CE_normal_distribution [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Normal (Gaussian) distribution"];
     q_standard_deviation [shape=ellipse,label="standard-deviation"];
     q_standard_deviation -> j_CE_normal_distribution;
@@ -1879,6 +1942,24 @@ digraph PhysicsMap {
     q_angle_of_refraction -> j_CE_snell_law;
     q_refracted_index [shape=ellipse,label="refracted-index"];
     j_CE_snell_law -> q_refracted_index;
+    j_CE_thin_lens_mirror [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Thin lens and spherical mirror equation"];
+    q_object_distance [shape=ellipse,label="object-distance"];
+    q_object_distance -> j_CE_thin_lens_mirror;
+    q_image_distance [shape=ellipse,label="image-distance"];
+    q_image_distance -> j_CE_thin_lens_mirror;
+    q_paraxial_focal_length [shape=ellipse,label="paraxial-focal-length"];
+    j_CE_thin_lens_mirror -> q_paraxial_focal_length;
+    j_CE_tolman_oppenheimer_volkoff [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Tolman–Oppenheimer–Volkoff equilibrium and mass limit"];
+    q_enclosed_mass [shape=ellipse,label="enclosed-mass"];
+    q_enclosed_mass -> j_CE_tolman_oppenheimer_volkoff;
+    q_areal_radius [shape=ellipse,label="areal-radius"];
+    q_areal_radius -> j_CE_tolman_oppenheimer_volkoff;
+    q_fluid_pressure [shape=ellipse,label="fluid-pressure"];
+    q_fluid_pressure -> j_CE_tolman_oppenheimer_volkoff;
+    q_mass_energy_density [shape=ellipse,label="mass-energy-density"];
+    q_mass_energy_density -> j_CE_tolman_oppenheimer_volkoff;
+    q_tov_pressure_gradient [shape=ellipse,label="tov-pressure-gradient"];
+    j_CE_tolman_oppenheimer_volkoff -> q_tov_pressure_gradient;
     j_CE_uncertainty_principle [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Heisenberg uncertainty principle"];
     q_position_momentum_uncertainty_product [shape=ellipse,label="position-momentum-uncertainty-product"];
     j_CE_uncertainty_principle -> q_position_momentum_uncertainty_product;

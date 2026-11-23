@@ -161,10 +161,13 @@ export function decodeFloat32(encoded: string): Float32Array {
 export function canonicalRetrievalCorpus(): CorpusRecord[] {
   return CANONICAL_EQUATIONS.map((equation) => {
     const expr = canonicalResidual(equation) ?? monomialResidual(equation);
+    const left = expr?.kind === 'op' ? expr.args[0] : undefined;
+    const rhs = expr?.kind === 'op' ? expr.args[1] : undefined;
     return {
       id: equation.id,
       text: `${equation.name}. ${equation.formula_latex}`,
       ...(expr === undefined ? {} : { expr }),
+      ...(left?.kind === 'symbol' && rhs !== undefined ? { solved: { target: left, rhs } } : {}),
     };
   });
 }
